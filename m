@@ -2,190 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055DB6A0056
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB386A005C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjBWA7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S231952AbjBWBAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbjBWA6u (ORCPT
+        with ESMTP id S230176AbjBWBAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:58:50 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2129.outbound.protection.outlook.com [40.107.255.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9F24108D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:58:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b7X8+CCTBodF+m/7OzFQl5EkTpur2IeJURx0HPxw9NOCuTJbOrOy+kDnTfehRwY2zWNLfVhl55c5SYCgL+aSSMvW5uKZqSEiot8pRy2inZAftVzwvCXCX5DmKHApn+Ybl4WJPaNdVv3Plg58fWQCLwvZ5g4SO5CipQxGN/11nIY1k0mAGP+sogar8esQzZ7jxUGkIX8d6pXiO9JmfwTgrMPCsFtYkGAXjpL8kyFn8fCHuWdlPRNxsVUWxoYLS316Uskxqwa1xayZ7yYgY0frRflFqIv3DA8ZdO/aNqkVtsxYo9/JEXZanuFchvSQwzn7aNW2t7X7NyijR7wea4D3+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/PbP+Oj+hTN6YEnR63chlq+d0CMISxcu+eBkVO2K4Ss=;
- b=ly6COu2+ghDQ4Es7zjULyswHHqY16559to6IQOaqB2vUofPtyAAQAUST6o/wUMiqNir5usTQwKjoTtiL6kQIEBIChCziyh1onzxYmZyRonbfg8sBoZlplhtLbF8AQgFpfDDaunbl6xzRJHcEMTF11nyr4eq+cPt2j+tAxUfE94urP6cGDqUCd369ToutHNjQsnTI57dM66Qndqh0KSimLVX8HL5M/Jn7gMgZEdZUOLpzDBnI4yJgC5qBtVmXKC7MRPkq/SmF+fVymtpzdFC+e76Z0RkUCzSglFwFmAmn64Fnlf9jRoVxytbfa3Zn/0eHlWWmo/8wPlFVndbrGUfMag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/PbP+Oj+hTN6YEnR63chlq+d0CMISxcu+eBkVO2K4Ss=;
- b=x2k2JB8kWdkn/1s01gFmZE1T+vvhbFUtT2DZQgrLrT8FVyBl6SgIUaC1l/b33bX356bzC7th2olp8gf0k27t+h5A5yLLk8P04B3+YtPeQUNGIjuafTedd5bIxCrQRPyJQcl2R808S0+3PdmtakV3UTovvN8QmaMKbdgfhkY8SIuz4cvd4F011UpTUIk8raP36FoK+K1RNhUw8e92IWX3pOx5p0OL2TYVjJjBXgYKR0vOWPKnBuW6hU4eWTwsefHR76EHwsWl3dETnXqk5MJkfoRYl6oVdG70mYt0pM/kFXTS8AO55uE22j8bpSVXqV/SHhQZVS4l0vkTfwqqcKpf6Q==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB5172.apcprd06.prod.outlook.com (2603:1096:4:1bf::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.15; Thu, 23 Feb
- 2023 00:58:14 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6111.010; Thu, 23 Feb 2023
- 00:58:14 +0000
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v5 2/2] i2c: aspeed: support ast2600 i2cv2 new register
- mode driver
-Thread-Topic: [PATCH v5 2/2] i2c: aspeed: support ast2600 i2cv2 new register
- mode driver
-Thread-Index: AQHZRPMRywH1bqUtTEmyVqt5fP7yF67XhPmAgALHOPCAAFktAIABE1kg
-Date:   Thu, 23 Feb 2023 00:58:14 +0000
-Message-ID: <SEZPR06MB526909B8D4313CA5F33074C5F2AB9@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
- <20230220061745.1973981-3-ryan_chen@aspeedtech.com>
- <63986fb1-f8d4-f348-bae9-72e08369213b@linaro.org>
- <SEZPR06MB5269B032022D3D7286E59D36F2AA9@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <77480142-a2c0-f6da-af0e-d3f01f72ac53@linaro.org>
-In-Reply-To: <77480142-a2c0-f6da-af0e-d3f01f72ac53@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|SI2PR06MB5172:EE_
-x-ms-office365-filtering-correlation-id: f8cae16a-6272-4e5c-cd9d-08db15390b06
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tfkQmNciLfPsfvJHTA38fwRMvF+m7UmbJ4XRol0m5un0HlpANoklwcJKILI3LWlwQx0I5zt2tVqomHKZweKSg10/ijBDYKWgqP+CPMOn23g75AHAtYxWPCMk3r96pubSHVxOZ0S8UV2jkcHiGPIvNGQ/weyOwYcuObu0Mqger08L3GZf23a7tVrlis8/qgABaVbKaCRzCEii0GKG+SK0CFAQjWjkLJwPNxLQO8dl0WV01/uHUu8xLeAotn6RmnaiETonhBn+/xroKmbasZq+KUFtHglG70P2w6SwDTI8cAhUuqwRZYTIP08iQ5dnX0j7BGvjvcAafbhVJfK3flHxjQyLah2UpWFGm4umybaSP6RyPJOHUCeDeizvfCbGv4u9qnpnfa2s7/H6bZhm1kjFMdN7/l9N4mAaIvmZBrmlzExb84+WxsYJtIQ+HSl1O+7oZjAeEflEUnaF6pnxd89tPqSBDIA1TxuQkaElnuo7atYUcxtAgK0y9/a4Tz/YvnKS5WBPsKwWbVsQ1AU3XpVdje5S4GmsIuY6LAvUAIrCrNqGy4n8G/jEa8FBH5Ano2wATmee5Qtig7WGV+B8bcX+tnE1MPVcxZAmyyio/X3maRDbyawvTcPt/g3FNGsdu+361bpElp8UKPrQrBt/yQrymKTvl1xxiHBZ4OKLHtwLk5fRr5quwifxWywkrrcm/7YHeZgsoDOSrRAPNDZ2nSwGI5Ki/4h27A2Oai5jESsBTHc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(366004)(136003)(346002)(39850400004)(451199018)(66476007)(66446008)(83380400001)(64756008)(66946007)(316002)(7416002)(8936002)(5660300002)(52536014)(8676002)(41300700001)(66556008)(76116006)(921005)(478600001)(53546011)(186003)(6506007)(38070700005)(71200400001)(9686003)(110136005)(55016003)(26005)(7696005)(33656002)(2906002)(38100700002)(122000001)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q2JiNVlVNGhCS0Z5QmVpamVCbG93d09JeldTUXlNRnE5N1gyN3JGbnR2QVJx?=
- =?utf-8?B?ZjdXcjBqZGNJT0ZHblJHWVRLcFpVV0dMV2xIcXMrQzk4Z20ydFBHeDNnVU5q?=
- =?utf-8?B?M3VyWXVySUhhbTlIN1oxaFFZYzVZNUNwaSs5cVZWRmhsZlk3TlRqdElkWHpG?=
- =?utf-8?B?eklVcnN0YzhIS25FWjA4cWNoZjBBSE5pajg3VzNLUDhiOXN4VkdzTEZKSnhz?=
- =?utf-8?B?SE90aGhacHo2MlZEUXRpcUxpNGJCUVhRZWI2eWIyU2hxQ2JiVGZCN3dVY0lr?=
- =?utf-8?B?M2FlMzIwbnhlVStVUTdnTGRoUDdZaE90NThWbUh6cEVqRmNGSiswL0hGa2d5?=
- =?utf-8?B?WXdtZHc1Y0dKR2dxdW5ndnlKaEZzQTNscndCWDVPempMdS9FWFdzWXQwc3Zk?=
- =?utf-8?B?RUFvU05xR0taeVlMSks0SEZmS1kyVlcxcFhHeDNjL20vT20vSWxxRjJjZ0RZ?=
- =?utf-8?B?c0syQzZJNytTbWRQNDNHaERtaFg5K0hHUjRVTXpsOHZwWnlMS04reVBxMXZR?=
- =?utf-8?B?NCtRc2lsMDVvb0pZQnVwZDJMOFhuTkFVa2htclh3dExiOTFQVlFsa2Q4N2xP?=
- =?utf-8?B?RW90WTI3WExRWEg1MklLbGo1cS9sWFZRQUwwc1c1V01jSzhtbkFPNVJ4OEE1?=
- =?utf-8?B?WGFwRm1JQWd6eXNvN0QxcEZQNDk1N0EyREVsRnVYaGVJTFgrcGtUcmxtdytr?=
- =?utf-8?B?bzkrNDdOOXFnWmNkZnB4VHh6c0dMazY2STg1VWFRSHY4QnVUU2VXTUJtV3g4?=
- =?utf-8?B?UUxLU2xjZytldDFkNUU4eDN0dmhXVE9hWDJFbnpxdDRYbnNyNVNIYnc3aWc0?=
- =?utf-8?B?WndRVzVrcm5pMk9hOGJTNDFDcTVIZUpManRMc0NjSG9mdjYyc2tzVTZwcGVk?=
- =?utf-8?B?OU9xcFFSSVB3em8zVGM0eWFrbFNqR29CaTRXc21hVENtUnYwR09oTlRucGZs?=
- =?utf-8?B?UDRZcTA4SzE1d2tOelVhNFFuWWdyOHhCdFAzeW1aa0tmQllEa1lySUpCWEJ1?=
- =?utf-8?B?NXY1YVZUNWM2Z2lTeTVmQjRrcnlMM3lvWmpmdUxSK1NDWmRGR3l3Q295WHVj?=
- =?utf-8?B?ZS96ZGRqTGRXNmM4bHc5YXZtcnBEaUdRUU1pd2RJY3h5aVNHOExuQ0pLUWZj?=
- =?utf-8?B?aXFybWdnbDZkVzZiTmdqSVhlS0EySi8wVlBKOFRpUGhMdWhKYzFrdjhJLzd1?=
- =?utf-8?B?ODdacTV0emJYQWtvOVEvZEpiK290ZUI3WWp2cXc0SUpHU21sTCs3cElxYXB4?=
- =?utf-8?B?UitaNWdVUE9KcG5CTXRRVExqblZWWVJKZFBTckVpK0ZSRnB5bStUUkt5bmZl?=
- =?utf-8?B?NlNRNDVid2F0VlJFL1EyRllGTjBWQ2FCZ1VXT1lIQXIzQ1RsdldvdEpNZjN5?=
- =?utf-8?B?Tmx5ODVGQmFHNmdCYnFNZkc1VWRMWHYyMGtVVGhEVTNaWExOYzQ2bXRHQW1Z?=
- =?utf-8?B?Mnl3MmZaOHBSd0xWWjErSnBScHJRdWprckhjSUpIOXNITlFEM25IdWcrakxL?=
- =?utf-8?B?ZXNUV2hUbEVreHNvU3lXaGtGR0JtUXNsQXJneDRpMStmU1hYWldUT1VsZnZy?=
- =?utf-8?B?b0lhU09GTWtlQWFSYU9qSkllU3lnOUZuQXNaS1hJVWhIMERKRjRwRU1rYnFS?=
- =?utf-8?B?dGl4dkNXRUYzUTR2R1ZUbnl3VENSUTE2Kzl6MUNkcDdXbVpaNE1KTGdRVWFB?=
- =?utf-8?B?TGpPUkFsTGFDcElZN1RsMHh1MGhCYzVwOENkdUJESkpnbFVWczlGVGd0L0FY?=
- =?utf-8?B?azl6RHlSZmJGclVpYmZNS0RHN0VkK0MrZmJqc01pbFI2Q2E0cDVaRFFYRDJk?=
- =?utf-8?B?TGFMZ1IxSTYvZW1oZUY3dWF5MlF2Z0ZKdGVNMnVFOEdEQ0hGcFlya25tVWRa?=
- =?utf-8?B?bldDSmM2S3RhOFEzZEd3a2VBcHA0S3o1VWg3bjUxYUtpQlo0TXpXc1BRdnNL?=
- =?utf-8?B?aTBBbmlEOUx2eDNpbkZGaEJBZG9ob0huNzAwZFdvUXBwYjFvQTNnQmxjYkND?=
- =?utf-8?B?NHlGaE9aM1hUeGpBUmdVdHhqWGZUVXJydWVnYlMwWlFSS28vOTg4TDNDVk42?=
- =?utf-8?B?amJuRUQ4eTJHSHhoN0QwOXhnWVUweXljVWtENGwraklrNEZWbW90cVRocUdh?=
- =?utf-8?B?OU8rSjNEZmFlVTdhcjF4dk55VGFnR1BxWGZnL015VVVCUUpKdElDeEV1T2p0?=
- =?utf-8?B?SEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8cae16a-6272-4e5c-cd9d-08db15390b06
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 00:58:14.5054
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xp6RsGNJekLl/97Ef6jlOlub7QbABqb6TZwz5pVJhoA9byJbdeF/rKXz0CGmugNgUZp1I/fZuG7QGVhkN5eaDUz9MaCCrd9pBe5YaG61eu8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5172
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 20:00:32 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280B23A08D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:59:48 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 068A43200904;
+        Wed, 22 Feb 2023 19:58:49 -0500 (EST)
+Received: from imap42 ([10.202.2.92])
+  by compute2.internal (MEProxy); Wed, 22 Feb 2023 19:58:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
+        :content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677113929; x=
+        1677200329; bh=V2sN4OfMvu3bnv2/mlmQDmBGr4HiekDa+UHfQEC9w8Y=; b=p
+        VTY0QYRbA6n+YlASiFgA4bfeJrpfbMHnS7V/NlckURLyogMjLjFqfA7cQ4ZAMLj2
+        Ojn5WU+VIBKld95bBoRurV7bUg2NXvGcBQncDovi8MkvfOw3Lr1k2xMRFNAp3noO
+        uJpXiTmQrm0e3Tv1fwh8WO7T/A8QMby0rKg7u6x4SZJ/eDkwRnwdtt6s1sASbTqY
+        dJn6UNxrmL0YOiuSRO8HIIoQwE7outaH29x4V/NuNdfjCl9wghf8RbP8GSyhZwdl
+        5z5UdKuuXwhJEFinP1UEKiulXz9gCLg4BS+lnbt9zaugbVogz10Uk6EQBNSAcMlG
+        QHt/QHZKksRUVepNvQnzw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677113929; x=
+        1677200329; bh=V2sN4OfMvu3bnv2/mlmQDmBGr4HiekDa+UHfQEC9w8Y=; b=K
+        WIsUuXzWtk6hdMmrJ4hwkbgMtlKz1gJC7kudr8v24+WwnU72LrVM8bwxO8DU6qkU
+        g4L34FsytgQ0YhBDZXxA7ybeGn2gRvdOZhyu38rnxmY6Y0dWcc6IPBAvTLVdYphB
+        IyUfjenhlYpdAZPC6j80SAfhh4MWjrcmO0qFMzRDsAiShA3s15z7Geqi7z2IQ4Nb
+        8TgE7GSw+XlGBzzZvKsV+kgkBKJwaWd813qyJ/iuUH39of97cBv3ARx6HfzgH8Bj
+        YeiTFUUXZBpsOq1ZwJJv/4Q0kfus3O6HMHd+x4mIeqn87jCQKoQ6SB0aZFytn6Jt
+        a93M/kThPcWXwDDjltp6w==
+X-ME-Sender: <xms:Sbr2Y-omnhdtWKdkbq_Nh_wNk4JmGCIYQ5Pp6WJnFOvp63zD1eVb3g>
+    <xme:Sbr2Y8rp-jgCZBJiM-84PdvQmE2Qo7ZHLkW4nZzqB2kBwHEMzVT-o_3ul3095IxgC
+    XRBKirQ_Frc_6iBhEs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudektddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdgg
+    ihhntggvnhhtucffrghgohhnnhgvrghufdcuoehvsehvuggrrdhioheqnecuggftrfgrth
+    htvghrnhepteduvedvtdfhffetvdethfekteejtdejfeevvddvfeeivdevffetieduuddt
+    gfefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepvh
+    esvhgurgdrihho
+X-ME-Proxy: <xmx:Sbr2YzNfeVqfDwAu3vcqwgkz5jaUXyp9z2DXTCjp7NzGfoCStkwVKA>
+    <xmx:Sbr2Y97GHNMGtsIv2FJMW_lC4PyTOiiTkmq0x9bcP7QGdn2C43aCog>
+    <xmx:Sbr2Y97k19LHGY7yveCwSskwqeFstIY3G5056NfmeO79wHEtuEsVaw>
+    <xmx:Sbr2Y6gPcqO3Qqam5VALbLvzgKHWp45Tlu2RcrdXeoTvPY8OJcJbOA>
+Feedback-ID: ic7094478:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0F410BC0078; Wed, 22 Feb 2023 19:58:49 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <1e6ce105-261a-4985-83b7-69fc57beb1c5@app.fastmail.com>
+In-Reply-To: <3db10837-b632-4df6-9d5f-199fca0eca87@t-8ch.de>
+References: <20230220202010.37475-1-v@vda.io>
+ <20230220202010.37475-5-v@vda.io>
+ <3db10837-b632-4df6-9d5f-199fca0eca87@t-8ch.de>
+Date:   Wed, 22 Feb 2023 19:58:28 -0500
+From:   "Vincent Dagonneau" <v@vda.io>
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     linux-kernel@vger.kernel.org, "Willy Tarreau" <w@1wt.eu>
+Subject: Re: [PATCH v5 4/4] tools/nolibc: add tests for the integer limits in stdint.h
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gS3J6eXN6dG9mLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
-IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4g
-U2VudDogV2VkbmVzZGF5LCBGZWJydWFyeSAyMiwgMjAyMyA0OjI4IFBNDQo+IFRvOiBSeWFuIENo
-ZW4gPHJ5YW5fY2hlbkBhc3BlZWR0ZWNoLmNvbT47IFJvYiBIZXJyaW5nDQo+IDxyb2JoK2R0QGtl
-cm5lbC5vcmc+OyBLcnp5c3p0b2YgS296bG93c2tpDQo+IDxrcnp5c3p0b2Yua296bG93c2tpK2R0
-QGxpbmFyby5vcmc+OyBKb2VsIFN0YW5sZXkgPGpvZWxAam1zLmlkLmF1PjsgQW5kcmV3DQo+IEpl
-ZmZlcnkgPGFuZHJld0Bhai5pZC5hdT47IFBoaWxpcHAgWmFiZWwgPHAuemFiZWxAcGVuZ3V0cm9u
-aXguZGU+Ow0KPiBvcGVuYm1jQGxpc3RzLm96bGFicy5vcmc7IGxpbnV4LWFybS1rZXJuZWxAbGlz
-dHMuaW5mcmFkZWFkLm9yZzsNCj4gbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmc7IGxpbnV4
-LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NSAyLzJdIGky
-YzogYXNwZWVkOiBzdXBwb3J0IGFzdDI2MDAgaTJjdjIgbmV3IHJlZ2lzdGVyDQo+IG1vZGUgZHJp
-dmVyDQo+IA0KPiBPbiAyMi8wMi8yMDIzIDA0OjM2LCBSeWFuIENoZW4gd3JvdGU6DQo+IA0KPiA+
-Pj4gKw0KPiA+Pj4gKwlyZXR1cm4gMDsNCj4gPj4+ICsNCj4gPj4+ICtmcmVlX2lycToNCj4gPj4+
-ICsJZGV2bV9mcmVlX2lycSgmcGRldi0+ZGV2LCBpMmNfYnVzLT5pcnEsIGkyY19idXMpOw0KPiA+
-Pg0KPiA+PiBXaHk/DQo+ID4+DQo+ID4+PiArdW5tYXA6DQo+ID4+PiArCWRldm1faW91bm1hcCgm
-cGRldi0+ZGV2LCBpMmNfYnVzLT5yZWdfYmFzZSk7DQo+ID4+DQo+ID4+IFdoeT8NCj4gPj4NCj4g
-Pj4+ICtmcmVlX21lbToNCj4gPj4+ICsJZGV2bV9rZnJlZSgmcGRldi0+ZGV2LCBpMmNfYnVzKTsN
-Cj4gPj4NCj4gPj4gV2h5Pw0KPiA+Pg0KPiA+DQo+ID4gU29ycnksIHRob3NlIGFyZSBwcm9iZSBm
-b2xsb3dpbmcsIGlmIGFueSBlcnJvciwgd2lsbCBnb3RvIHRoaXMgbGFiZWwuDQo+ID4gVG8gcmVs
-ZWFzZSBtZW0vdW5tYXAvZnJlZV9pcnEuIElzIHRoaXMgdW5uZWNlc3Nhcnk/DQo+IA0KPiBSZWxl
-YXNpbmcgbWFuYWdlZCByZXNvdXJjZXMgaXMgdXN1YWx5bCB1bm5lY2Vzc2FyeS4gVGhlcmVmb3Jl
-IEkgYW0gYXNraW5nDQo+IHdoeSBkbyB5b3UgdGhpbmsgaXQgaXMgbmVjZXNzYXJ5IGhlcmU/DQo+
-IA0KPiA+IEkgc2F3IG1hbnkgZHJpdmVyIHN1Ym1pdCBpcyByZW1vdmUgYWxsIHByb2JlIGZhaWwg
-Z290byBsYWJlbCwgaXMganVzdCByZXR1cm4NCj4gRVJSLg0KPiA+IERvIHlvdSBtZWFuIEkgZGly
-ZWN0IGdvIGZvciB0aGlzIHdheT8NCj4gDQo+IFdoeSB3b3VsZCB5b3UgZG8gaXQgZGlmZmVyZW50
-bHk/DQoNClRoYW5rcywgSSB3aWxsIHJlbW92ZSB0aG9zZSBsYWJlbHMsIGFuZCBtb2RpZnkgdG8g
-ZGV2X2Vycl9wcm9iZSBpbiBwcmV2aW91cyBwcm9iZSByZXR1cm4uDQoNCj4gPg0KPiA+Pj4gKw0K
-PiA+Pj4gKwlyZXR1cm4gcmV0Ow0KPiA+Pj4gK30NCj4gPj4+ICsNCj4gPj4+ICtzdGF0aWMgaW50
-IGFzdDI2MDBfaTJjX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSB7DQo+ID4+
-PiArCXN0cnVjdCBhc3QyNjAwX2kyY19idXMgKmkyY19idXMgPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0
-YShwZGV2KTsNCj4gPj4+ICsNCj4gPj4+ICsJLyogRGlzYWJsZSBldmVyeXRoaW5nLiAqLw0KPiA+
-Pj4gKwl3cml0ZWwoMCwgaTJjX2J1cy0+cmVnX2Jhc2UgKyBBU1QyNjAwX0kyQ0NfRlVOX0NUUkwp
-Ow0KPiA+Pj4gKwl3cml0ZWwoMCwgaTJjX2J1cy0+cmVnX2Jhc2UgKyBBU1QyNjAwX0kyQ01fSUVS
-KTsNCj4gPj4+ICsNCj4gPj4+ICsJZGV2bV9mcmVlX2lycSgmcGRldi0+ZGV2LCBpMmNfYnVzLT5p
-cnEsIGkyY19idXMpOw0KPiA+Pj4gKw0KPiA+Pj4gKwlpMmNfZGVsX2FkYXB0ZXIoJmkyY19idXMt
-PmFkYXApOw0KPiA+Pg0KPiA+PiBXcm9uZyBvcmRlciBvZiBjbGVhbnVwLiBJdCBzaG91bGQgYmUg
-cmV2ZXJzZWQgdG8gdGhlIHByb2JlLCB1bmxlc3MNCj4gPj4geW91IGhhdmUgc29tZSByZWFzb24s
-IGJ1dCB0aGVuIHBsZWFzZSBleHBsYWluLg0KPiA+DQo+ID4gU29ycnksIHRoaXMgaW4gcmVtb3Zl
-IGZ1bmN0aW9uLCBpdCBzaG91bGQgZG8gaTJjX2RlbF9hZGFwdGVyKCZpMmNfYnVzLT5hZGFwKQ0K
-PiBpbiB0aGUgZW5kLg0KPiA+IFdoeSB0aGlzIHNob3VsZCByZXZlcmVkIHRvIHByb2JlPw0KPiAN
-Cj4gQmVjYXVzZSBpdCdzIGxvZ2ljYWwsIHlvdSBkbyB0aGUgc2FtZSB3aXRoIGVycm9yIHBhdGhz
-IG9mIHByb2JlLCBpdCBpdCB1c3VhbGx5IHRoZQ0KPiBvbmx5IHdheSB0byBtYWtlIHN1cmUgc29t
-ZSBvZiB0aGUgcmVzb3VyY2VzIGFyZSBub3QgdXNlZCBieSBzb21lIG90aGVyIHBpZWNlDQo+IChl
-LmcuIGludGVycnVwdCBoYW5kbGVyIGlzIGNhbGxlZCB3aGlsZSBpMmMgYWRhcHRlciBpcyB1bnJl
-Z2lzdGVyZWQpLg0KDQpTb3JyeSwgSSBjYW4ndCBjYXRjaCB5b3VyIHBvaW50Lg0KRG8geW91IG1l
-YW4gcmVtb3ZlIGRldm1fZnJlZV9pcnEoJnBkZXYtPmRldiwgaTJjX2J1cy0+aXJxLCBpMmNfYnVz
-KTsNCktlZXAgaTJjX2RlbF9hZGFwdGVyKCZpMmNfYnVzLT5hZGFwKSBoZXJlLCBiZWNhdXNlIGlu
-dGVycnVwdCBpcyBjYWxsZWQgd2hpbGUgaTJjIGFkYXB0ZXIgaXMgdW5yZWdpc3RlcmVkID8NCg0K
-QmVzdCByZWdhcmRzLA0KUnlhbiBDaGVuDQoNCg==
+On Tue, Feb 21, 2023, at 12:34, Thomas Wei=C3=9Fschuh wrote:
+> I think some comments from my last review got lost; see inline.
+>
+
+Yes, sorry, I hope the new version addresses them.
+
+> On Mon, Feb 20, 2023 at 03:20:10PM -0500, Vincent Dagonneau wrote:
+>> This commit adds tests for the limits added in a previous commit. The
+>> limits are defined in decimal in stdint.h and as hexadecimal in the
+>> tests (e.g. 0x7f =3D 127 or 0x80 =3D -128). Hopefully it catches some=
+ of the
+>> most egregious mistakes.
+>>=20
+>> As we rely on the compiler to provide __SIZEOF_LONG__, we also test
+>> whether it is defined.
+>>=20
+>> Signed-off-by: Vincent Dagonneau <v@vda.io>
+>> Signed-off-by: Willy Tarreau <w@1wt.eu>
+>> ---
+>>  tools/testing/selftests/nolibc/nolibc-test.c | 62 ++++++++++++++++++=
++-
+>>  1 file changed, 61 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/tes=
+ting/selftests/nolibc/nolibc-test.c
+>> index 882140508d56..ceaf60075331 100644
+>> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+>> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+>> @@ -561,7 +561,67 @@ int run_syscall(int min, int max)
+>>  		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &t=
+mp, WNOHANG), -1, ECHILD); break;
+>>  		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), =
+-1, EBADF); break;
+>>  		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); =
+break;
+>> -		case __LINE__:
+>> +		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,   (int8=
+_t)   0x7f); break;
+>> +		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,   (int8=
+_t)   0x80); break;
+>> +		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,  (uint=
+8_t)  0xff); break;
+>> +		CASE_TEST(limit_int16_max);         EXPECT_EQ(1, INT16_MAX,  (int1=
+6_t)  0x7fff); break;
+>> +		CASE_TEST(limit_int16_min);         EXPECT_EQ(1, INT16_MIN,  (int1=
+6_t)  0x8000); break;
+>> +		CASE_TEST(limit_uint16_max);        EXPECT_EQ(1, UINT16_MAX, (uint=
+16_t) 0xffff); break;
+>> +		CASE_TEST(limit_int32_max);         EXPECT_EQ(1, INT32_MAX,  (int3=
+2_t)  0x7fffffff); break;
+>> +		CASE_TEST(limit_int32_min);         EXPECT_EQ(1, INT32_MIN,  (int3=
+2_t)  0x80000000); break;
+>> +		CASE_TEST(limit_uint32_max);        EXPECT_EQ(1, UINT32_MAX, (uint=
+32_t) 0xffffffff); break;
+>> +		CASE_TEST(limit_int64_max);         EXPECT_EQ(1, INT64_MAX,  (int6=
+4_t)  0x7fffffffffffffff); break;
+>> +		CASE_TEST(limit_int64_min);         EXPECT_EQ(1, INT64_MIN,  (int6=
+4_t)  0x8000000000000000); break;
+>> +		CASE_TEST(limit_uint64_max);        EXPECT_EQ(1, UINT64_MAX, (uint=
+64_t) 0xffffffffffffffff); break;
+>> +		CASE_TEST(limit_int_least8_max);    EXPECT_EQ(1, INT_LEAST8_MAX,  =
+ (int_least8_t)    0x7f); break;
+>> +		CASE_TEST(limit_int_least8_min);    EXPECT_EQ(1, INT_LEAST8_MIN,  =
+ (int_least8_t)    0x80); break;
+>> +		CASE_TEST(limit_uint_least8_max);   EXPECT_EQ(1, UINT_LEAST8_MAX, =
+ (uint_least8_t)   0xff); break;
+>> +		CASE_TEST(limit_int_least16_max);   EXPECT_EQ(1, INT_LEAST16_MAX, =
+ (int_least16_t)   0x7fff); break;
+>> +		CASE_TEST(limit_int_least16_min);   EXPECT_EQ(1, INT_LEAST16_MIN, =
+ (int_least16_t)   0x8000); break;
+>> +		CASE_TEST(limit_uint_least16_max);  EXPECT_EQ(1, UINT_LEAST16_MAX,=
+ (uint_least16_t)  0xffff); break;
+>> +		CASE_TEST(limit_int_least32_max);   EXPECT_EQ(1, INT_LEAST32_MAX, =
+ (int_least32_t)   0x7fffffff); break;
+>> +		CASE_TEST(limit_int_least32_min);   EXPECT_EQ(1, INT_LEAST32_MIN, =
+ (int_least32_t)   0x80000000); break;
+>> +		CASE_TEST(limit_uint_least32_max);  EXPECT_EQ(1, UINT_LEAST32_MAX,=
+ (uint_least32_t)  0xffffffffU); break;
+>> +		CASE_TEST(limit_int_fast8_max);     EXPECT_EQ(1, INT_FAST8_MAX,   =
+ (int_fast8_t)     0x7f); break;
+>> +		CASE_TEST(limit_int_fast8_min);     EXPECT_EQ(1, INT_FAST8_MIN,   =
+ (int_fast8_t)     0x80); break;
+>> +		CASE_TEST(limit_uint_fast8_max);    EXPECT_EQ(1, UINT_FAST8_MAX,  =
+ (uint_fast8_t)    0xff); break;
+>> +#if __SIZEOF_LONG__ =3D=3D 8
+>> +		CASE_TEST(limit_int_least64_min);   EXPECT_EQ(1, INT_LEAST64_MIN, =
+ (int_least64_t)   0x8000000000000000LL); break;
+>> +		CASE_TEST(limit_int_least64_max);   EXPECT_EQ(1, INT_LEAST64_MAX, =
+ (int_least64_t)   0x7fffffffffffffffLL); break;
+>> +		CASE_TEST(limit_uint_least64_max);  EXPECT_EQ(1, UINT_LEAST64_MAX,=
+ (uint_least64_t)  0xffffffffffffffffULL); break;
+>
+> The _least64 tests should also apply to 32bit, no?
+> And moved before the _fast8 tests.
+>
+
+You are right. I got confused. I added the fast64/least64 tests to 32 bi=
+ts as well.
+
+>> +		CASE_TEST(limit_int_fast16_max);    EXPECT_EQ(1, INT_FAST16_MAX,  =
+ (int_fast16_t)    0x7fffffffffffffffLL); break;
+>> +		CASE_TEST(limit_int_fast16_min);    EXPECT_EQ(1, INT_FAST16_MIN,  =
+ (int_fast16_t)    0x8000000000000000LL); break;
+>> +		CASE_TEST(limit_uint_fast16_max);   EXPECT_EQ(1, UINT_FAST16_MAX, =
+ (uint_fast16_t)   0xffffffffffffffffULL); break;
+>> +		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,  =
+ (int_fast32_t)    0x7fffffffffffffffLL); break;
+>> +		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,  =
+ (int_fast32_t)    0x8000000000000000LL); break;
+>> +		CASE_TEST(limit_uint_fast32_max);   EXPECT_EQ(1, UINT_FAST32_MAX, =
+ (uint_fast32_t)   0xffffffffffffffffULL); break;
+>> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (int=
+ptr_t)  0x8000000000000000LL); break;
+>> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (int=
+ptr_t)  0x7fffffffffffffffLL); break;
+>> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uin=
+tptr_t) 0xffffffffffffffffULL); break;
+>> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptr=
+diff_t) 0x8000000000000000LL); break;
+>> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptr=
+diff_t) 0x7fffffffffffffffLL); break;
+>> +		CASE_TEST(limit_ssize_min);         EXPECT_EQ(1, SSIZE_MIN,   (ssi=
+ze_t)   0x8000000000000000LL); break;
+>> +		CASE_TEST(limit_ssize_max);         EXPECT_EQ(1, SSIZE_MAX,   (ssi=
+ze_t)   0x7fffffffffffffffLL); break;
+>> +		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    (siz=
+e_t)    0xffffffffffffffffULL); break;
+>> +#elif __SIZEOF_LONG__ =3D=3D 4
+>> +		CASE_TEST(limit_int_fast16_max);    EXPECT_EQ(1, INT_FAST16_MAX,  =
+(int_fast16_t)   0x7fffffff); break;
+>> +		CASE_TEST(limit_int_fast16_min);    EXPECT_EQ(1, INT_FAST16_MIN,  =
+(int_fast16_t)   0x80000000); break;
+>> +		CASE_TEST(limit_uint_fast16_max);   EXPECT_EQ(1, UINT_FAST16_MAX, =
+(uint_fast16_t)  0xffffffffU); break;
+>> +		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,  =
+(int_fast32_t)   0x7fffffff); break;
+>> +		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,  =
+(int_fast32_t)   0x80000000); break;
+>> +		CASE_TEST(limit_uint_fast32_max);   EXPECT_EQ(1, UINT_FAST32_MAX, =
+(uint_fast32_t)  0xffffffffU); break;
+>> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (int=
+ptr_t)  0x80000000); break;
+>> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (int=
+ptr_t)  0x7fffffff); break;
+>> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uin=
+tptr_t) 0xffffffffU); break;
+>> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptr=
+diff_t) 0x80000000); break;
+>> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptr=
+diff_t) 0x7fffffff); break;
+>> +		CASE_TEST(limit_ssize_min);         EXPECT_EQ(1, SSIZE_MIN,   (ssi=
+ze_t)   0x80000000); break;
+>> +		CASE_TEST(limit_ssize_max);         EXPECT_EQ(1, SSIZE_MAX,   (ssi=
+ze_t)   0x7fffffff); break;
+>> +		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    (siz=
+e_t)    0xffffffffU); break;
+>> +#else
+>> +# warning "__SIZEOF_LONG__ is undefined"
+>> +#endif /* __SIZEOF_LONG__ */
+>> +			case __LINE__:
+>
+> The case __LINE__  still seems to be misindented, at least different
+> than before.
+>
+
+Should be fixed in the new version.
+
+>>  			return ret; /* must be last */
+>>  		/* note: do not set any defaults so as to permit holes above */
+>>  		}
+>> --=20
+>> 2.39.2
