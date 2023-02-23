@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7016A0219
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34466A021E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbjBWEoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 23:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S233243AbjBWEqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 23:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbjBWEoR (ORCPT
+        with ESMTP id S233212AbjBWEp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 23:44:17 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438CF1B562
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:44:16 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N4P9JK018050;
-        Thu, 23 Feb 2023 04:44:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=tOPu+8AR0Tb7GAwyJHfbA0kiiTWqUMKgPivx8Ui7wPQ=;
- b=X39UayOsKtlSeFIO5klrBN5WSd+GfFO5516rl0t3FFf7vWSlJe6Kmp3ZXpmSi02Xw8SC
- x4nxlCeXFsfUah7hVNdGm3REm7MOfHjd0YO2wQLHGsBz+FM4Q9LWYwOTuVpqMCPc+Vae
- b/WiF3V5EayioZqQYq1Z6pLldHah2X3Bb7fUmtuJBtq4LzgmW4rEyXl0+g4bC2Iuv+ye
- 2OkX+7PTXZweeGqZ5gEvVQmObi+Kb9u3G2vlu0HIhNvgwyfZPvxhGX30FptYQmyTPWkw
- 3TXGYLRLmUNdhEGcFxhKrssjMuHihgc+fp7hjJUxZI2FIuISwifVDGuMHrc4ObW4aeNs yw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nx13nr9n7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 04:44:03 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31N4QHHa023969;
-        Thu, 23 Feb 2023 04:44:03 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nx13nr9mu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 04:44:03 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31MACCeH020323;
-        Thu, 23 Feb 2023 04:44:01 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ntpa64ntq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 04:44:01 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31N4hw2f47579626
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Feb 2023 04:43:58 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 832A12005A;
-        Thu, 23 Feb 2023 04:43:58 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A71D02004D;
-        Thu, 23 Feb 2023 04:43:56 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.109.216.99])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 23 Feb 2023 04:43:56 +0000 (GMT)
-Date:   Thu, 23 Feb 2023 10:13:54 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     paulmck@kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
- wmb to  lwsync
-Message-ID: <Y/bvClrV60CXK79G@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
- <20230222174719.GA1400185@paulmck-ThinkPad-P17-Gen-1>
- <87fsaxavk2.fsf@mpe.ellerman.id.au>
+        Wed, 22 Feb 2023 23:45:56 -0500
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924941B562;
+        Wed, 22 Feb 2023 20:45:55 -0800 (PST)
+Received: by mail-pl1-f193.google.com with SMTP id e5so12496859plg.8;
+        Wed, 22 Feb 2023 20:45:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DprxN7O14xjPIePWpRkm0bD78pGEpcOS4w+9+vyIqHo=;
+        b=OfVjDQWIdlcrnO8w7K+iBH25FuOrXnfYq2+WT4Dj3DFf6rkQQEZB3dWhSQQc+GVOxt
+         mBkQ/B9s4FPGEHMA6Nx6QVPmIvjfvmfZSFbyqYlduZx7D5XnGvla0JEegv8m/EeC8OR1
+         xdyywYrq0OvzZVnddR7SgXF4LrYEFmwiCe9Q+ymylkIdRn37XBh5MASjQa6dVIX5KpBW
+         92N0x2reWSlHOjlM69vwncUT9qaKPwn95pVGM+kNq95ekTA9H/GzKISZ23bvbJXh1oxg
+         inY5wx0mYL92NjB3FdMHdXrFFueqtO1T21sIPjkddWj1XF91Yx1EWdB+9e+3nbVqDe8a
+         JHLw==
+X-Gm-Message-State: AO0yUKWv2Dw0nId4XD0kbFYswaHkQeHsTk2LFlp8vRZCCrzV6aicg6cp
+        PQ+yWnglseGws5V/6/tYPv8f09TPpn7urfDB
+X-Google-Smtp-Source: AK7set/yZ9WqKfIoJ/60JFqVq8kMpo1svcmV2bkETxPzTOumJrgwGfp4QnIvqnz21i2lsUc7Vvl+mQ==
+X-Received: by 2002:a05:6a20:8e05:b0:bf:269e:9644 with SMTP id y5-20020a056a208e0500b000bf269e9644mr12817764pzj.45.1677127554942;
+        Wed, 22 Feb 2023 20:45:54 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id t10-20020a62ea0a000000b005d3901948d8sm2507402pfh.44.2023.02.22.20.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 20:45:54 -0800 (PST)
+From:   Xueqin Luo <luoxueqin@kylinos.cn>
+To:     todd.e.brandt@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH -next] PM: tools: add "CPU killed" timeline on arm64 platform
+Date:   Thu, 23 Feb 2023 12:45:50 +0800
+Message-Id: <20230223044550.339811-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fsaxavk2.fsf@mpe.ellerman.id.au>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JXL-DZjTI8sgHlLsb-RDXvtha1t3n8rW
-X-Proofpoint-ORIG-GUID: zv3HLh0Lqu0squ-vI-fDiTIrrKUWSLV9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_12,2023-02-22_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=974
- priorityscore=1501 impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302230038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- 
-> You are correct, the patch is wrong because it fails to account for IO
-> accesses.
+On the arm64 platform, the core log of cpu offline is as follows:
 
-Okay, I looked at the PowerPC ISA and found:
-"The memory barrier provides an ordering function for the storage accesses
-caused by Load, Store,and dcbz instructions that are executed by the processor
-executing the sync instruction and for which the specified storage location
-is in storage that is Memory Coherence Required and is neitherWrite Through
-Required nor Caching Inhibited.The applicable pairs are all pairs ai ,bj of
-such accesses except those in which ai is an accesscaused by a Store or dcbz
-instruction and bj is anaccess caused by a Load instruction."
+[  100.431501] CPU1: shutdown
+[  100.454820] psci: CPU1 killed (polled 20 ms)
+[  100.459266] CPU2: shutdown
+[  100.482575] psci: CPU2 killed (polled 20 ms)
+[  100.486057] CPU3: shutdown
+[  100.513974] psci: CPU3 killed (polled 28 ms)
+[  100.518068] CPU4: shutdown
+[  100.541481] psci: CPU4 killed (polled 24 ms)
 
-Thanks for your time, Michael. Sorry for the noise.
-> 
-> Kautuk, I'm not sure what motivated you to look at these barriers, was
-> it just the documentation you linked to?
-I read the basic documentation. Now that I have access to the PowerISA
-document I guess I'll go through it more thoroughly.
-> 
+'smpboot: CPU (?P<cpu>[0-9]*) is now offline' cannot be applied
+to the arm64 platform, which caused the loss of the suspend
+machine stage in S3. Here I added core code to fix this issue.
+
+Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+---
+ tools/power/pm-graph/sleepgraph.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
+index 82c09cd25cc2..d816970b0a3d 100755
+--- a/tools/power/pm-graph/sleepgraph.py
++++ b/tools/power/pm-graph/sleepgraph.py
+@@ -4132,9 +4132,12 @@ def parseKernelLog(data):
+ 			elif(re.match('Enabling non-boot CPUs .*', msg)):
+ 				# start of first cpu resume
+ 				cpu_start = ktime
+-			elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)):
++			elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)) \
++				or re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)):
+ 				# end of a cpu suspend, start of the next
+ 				m = re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)
++				if(not m):
++					m = re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)
+ 				cpu = 'CPU'+m.group('cpu')
+ 				if(cpu not in actions):
+ 					actions[cpu] = []
+-- 
+2.25.1
+
