@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14586A0578
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD956A0576
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjBWJ4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S234253AbjBWJ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbjBWJ4Y (ORCPT
+        with ESMTP id S234245AbjBWJ4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:56:24 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB3851FA3
+        Thu, 23 Feb 2023 04:56:23 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEDB51FA5
         for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:56:06 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id i11so4016187wrp.5
+Received: by mail-lf1-x12f.google.com with SMTP id g8so9384456lfj.2
         for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:56:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zqMvyew1VuvLR+5MrHi+CVRR54Ec9Hg3AWm5Uzuvhkk=;
-        b=y7DPYrkGk9xCwkGpaQAeXdWfCjSmojs2x7UvFOZ+JGW+Um8i0jZjaVS/JoDxV3yUZ0
-         r2mzgdIy6vEOoh0l3o6m0w1lKsOZgXuQqbdwACzgM/m1DpSE+5//S4EF3vj81Dbd1bLm
-         O4drKYRElSQ+HYorlA1n5JY9qwn/cNvnG0dTpi7UPGpPhIeDGCGUamJ8HfxuemB1tIsZ
-         5NptNCmJtIF7INhKAxupGcRrEHkhAFbInzl5ei9Zqhy18pNNqLHEl5mIWMHcxWTaF7TL
-         Lpib0IIgJrbiFYLDfpwk8fax+5qTX5rFXQOM1RvNC/rEYzOahY/lMrmWjmfm5Iwh/+xS
-         BCWw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nwjx+ZOED7Wobs6quU4tNJOEoXoe/5qPUT1I33Kgdms=;
+        b=gWRVQNR0H0qODu8fPV4Bd2TdTdahh7pXPWiNR8Lcb7m/uB7aE8M/fcjQrBx/9NEV27
+         h/Ml9IBS0DVJvhNqB+oVnJtcIih88SGv7F3B/mfdyw+oEgzxW73mgOrqZ/sHIKN1H96Y
+         R24bUdO2FwyjUBALkZvcScf/ce+kypTjmvfPmuYm7MqbRJWIxNgN3R/Eoa3Sok5vgQ27
+         d+NKZT2+RUn75sKjgoNNTn3p/nm49FqWm5kJI2ZY2ZqHWYvdrMU1CLv2edAYfuQySYKU
+         RGh7th6weBDe4JkDXbJjDVzm3vt5JM/nufX52O76//lYl2zUb0hlYZbESVjXS8cPskfu
+         /BTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zqMvyew1VuvLR+5MrHi+CVRR54Ec9Hg3AWm5Uzuvhkk=;
-        b=u+pavbYiusTWS4YYNUv6ZqBaudHbry1bA0RVavpP4+/T2QbeHDXYcJNAVn/06m4FmN
-         3oqARltShcyDNe65nwuBJKfGCcpcqPLNhPVO8VutuxdFSPo2KFMgAD2KBFtdf/eL9s77
-         cB5798jQybaM0UUuXYwurHZtKjmumaghyK2mhVb4rXZ++qkxKNJFww3z1Gr3BKMn1UUY
-         ucU5OFXpVs3lGRp0E0vS9tZlGHq76gxFTkqT9krTo+803JgxSk9pGlC3l3bTQ4ysgv2I
-         1sFe8GnybS2u5shI7GhwMHPYmi37h2xMnl+nYbrB3LU0pORL8ljqD0d3QBo+HDMAFwY9
-         fSWQ==
-X-Gm-Message-State: AO0yUKUipFtQotOOxKkT0kHT3TnaT7/mOBVI7VzZ0LONNQQY5WGMM18n
-        d2RoOWwMPdDw6lZ7tNkVxN3/wA==
-X-Google-Smtp-Source: AK7set9wKGyiCs4mhXfwoAzjxI0hINeis8DMPCt/2knY34phjllU4IYlzLKUeg8KQ1/3trkYX25LXw==
-X-Received: by 2002:a5d:4806:0:b0:2c5:5a68:958 with SMTP id l6-20020a5d4806000000b002c55a680958mr10075206wrq.33.1677146164810;
-        Thu, 23 Feb 2023 01:56:04 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c265:a8c7:c71d:6e47? ([2a05:6e02:1041:c10:c265:a8c7:c71d:6e47])
-        by smtp.googlemail.com with ESMTPSA id u4-20020adfed44000000b002c706c754fesm6399145wro.32.2023.02.23.01.56.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 01:56:04 -0800 (PST)
-Message-ID: <2b843912-cc9b-f1ac-1f81-28e3ecf8daba@linaro.org>
-Date:   Thu, 23 Feb 2023 10:56:02 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nwjx+ZOED7Wobs6quU4tNJOEoXoe/5qPUT1I33Kgdms=;
+        b=unI0Z75Zolqvlo9lbWVmP3xCKtaz9X4TeIdHRUnPv5uooM65BGWPzIdVjWfSjm4ziC
+         E7RHDiwr2YYhkC8/XqyZYGcqSro+L9S2H1KCDqK9aeR+/nEPmTprx4do01GTnK26+AUg
+         wxJgJIyYPuBhkbZXwAJUyC1B29u4xOcVIU49lrK3W1GP71Y0MnqcSBJkW/WNYiNFw/op
+         CM8Vf4akom/W1pX4KN7XbPuFdHE9Tj97b58src7T6N84Zgsh6qDWOGkThkSlW/v/DBQr
+         xQk8zWtnPCYi6BfNTo14O5ELHyDvrrc3zxKAEKuedzW/W+KUDHr36OSDpieNUUmuNDJz
+         MjNQ==
+X-Gm-Message-State: AO0yUKWPs8kvQf3hJcnDEaxng0uDZExcKpg/xGjBla3EjNdBWDmk2YiK
+        IYvgSHSKQ4jnrKAPUAv5HpUmKWVoLxlz8w0P3KZL0A==
+X-Google-Smtp-Source: AK7set/2IzEs80I6VQ5xxvoEXEeAkyLScM1pXX242UbJrr1zvk6DMp4+qZQdwr9tE4wvNNE3BUPg6FbszDw2vk3Zg04=
+X-Received: by 2002:ac2:5a41:0:b0:4dd:805b:5b75 with SMTP id
+ r1-20020ac25a41000000b004dd805b5b75mr3431425lfn.7.1677146164295; Thu, 23 Feb
+ 2023 01:56:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 06/16] thermal: Don't use 'device' internal thermal
- zone structure field
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
- <20230221180710.2781027-7-daniel.lezcano@linaro.org>
- <CAJZ5v0gTmi7ZeDDdHWGWju4m3bv2366oVqSP1dGOT+3jLV-jaw@mail.gmail.com>
- <0889767f-d187-0cb4-895e-c149517b6636@linaro.org>
- <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <cover.1677063656.git.viresh.kumar@linaro.org>
+In-Reply-To: <cover.1677063656.git.viresh.kumar@linaro.org>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Thu, 23 Feb 2023 17:56:28 +0800
+Message-ID: <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
+Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
+To:     Viresh Kumar <viresh.kumar@linaro.org>, cw00.choi@samsung.com
+Cc:     Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,73 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 21:06, Rafael J. Wysocki wrote:
-> On Wed, Feb 22, 2023 at 9:00 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 22/02/2023 20:43, Rafael J. Wysocki wrote:
->>> On Tue, Feb 21, 2023 at 7:07 PM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> Some drivers are directly using the thermal zone's 'device' structure
->>>> field.
->>>>
->>>> Use the driver device pointer instead of the thermal zone device when
->>>> it is available.
->>>>
->>>> Remove the traces when they are duplicate with the traces in the core
->>>> code.
->>>>
->>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek LVTS
->>>> ---
->>
->> [ ... ]
->>
->>>>           thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
->>>>
->>>> -       dev_dbg(&data->ti_thermal->device, "updated thermal zone %s\n",
->>>> +       dev_dbg(data->bgp->dev, "updated thermal zone %s\n",
->>>>                   data->ti_thermal->type);
->>>
->>> The code before the change is more consistent, because it refers to
->>> the same object in both instances.
->>>
->>> It looks like a type field accessor is needed, eg. thermal_zone_device_type()?
->>>
->>> Or move the debug message to thermal_zone_device_update()?
->>
->> Actually it is done on purpose because the patch 9 replaces the accesses
->> to 'type' by 'id', the thermal_zone_device_type() accessor won't be needed.
-> 
-> Cool.
-> 
-> However, this is a change in behavior (albeit small) which doesn't
-> appear to be necessary.
-> 
-> What would be wrong with having a tz->type accessor too?
+Viresh Kumar <viresh.kumar@linaro.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=8822=
+=E6=97=A5=E5=91=A8=E4=B8=89 19:06=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hello,
+>
+> The required-opps configuration is closely tied to genpd and performance
+> states at the moment and it is not very obvious that required-opps can
+> live without genpds. Though we don't support configuring required-opps
+> for non-genpd cases currently.
+>
+> This patchset aims at cleaning up this a bit, just like what's done for c=
+lk and
+> regulators. This also makes it possible for platforms to provide their ow=
+n
+> version of set_required_opps() helper, which can be used to configure the
+> devfreq device propertly.
+>
+> Jun,
+>
+> I haven't found time to test this through yet, though there isn't much an=
+yway I
+> guess. Can you see if these can solve your problem properly ?
 
-I can add the 'type' accessor but from my point of view it is not 
-correct because the information belongs to the thermal framework and it 
-is used to export the information in the sysfs which is along with the 
-directory name giving the id of the thermal zone.
+Hi Viresh,
 
-Actually, the useful information is the id of the thermal zone, not the 
-type. This one can be duplicate, for instance:
+It looks promising. The function get_target_freq_with_cpufreq() can be wrap=
+ped
+to act as set_required_opps() callback. But my case is a bit
+complicated. CPU opp
+depends on both genpd opp and devfreq opp. So the genpd_virt_devs array nee=
+d
+to be modified or add another array for devfreq case. While genpd_virt_devs=
+ is
+bounded with genpd directly and coupled with "power-domains" list in
+device tree.
+Current required-opp nodes are designed to be aligned with the list. I
+am considering
+what's the best way for back compatibility.
 
-cat /sys/class/thermal/thermal_zone*/type
-acpitz
-acpitz
+Hi Chanwoo,
 
-Given there are few places where 'type' is used in the drivers, I prefer 
-to directly change that to 'id' in the next patch instead of creating 
-the accessor for 'type', then send another series removing it.
+Do you have any comments on this proposal? This proposal arise because opp
+lib reports error when cpufreq driver try to set required opp for
+non-genpd case.
+Another possible fix is to ignore non-genpd opp in opp lib. But a
+unified and recursive
+opp management looks nicer, just like clock tree management.
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+>
+> Viresh Kumar (3):
+>   OPP: Handle all genpd cases together in _set_required_opps()
+>   OPP: Move required opps configuration to specialized callback
+>   OPP: Allow platforms to add a set_required_opps() callback
+>
+>  drivers/opp/core.c     | 113 ++++++++++++++++++++++++++++-------------
+>  drivers/opp/of.c       |   3 ++
+>  drivers/opp/opp.h      |   4 ++
+>  include/linux/pm_opp.h |   5 ++
+>  4 files changed, 91 insertions(+), 34 deletions(-)
+>
+> --
+> 2.31.1.272.g89b43f80a514
+>
