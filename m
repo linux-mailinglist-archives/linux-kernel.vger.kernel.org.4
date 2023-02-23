@@ -2,110 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BE26A0EBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 827AD6A0EAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjBWRaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S229909AbjBWR2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBWRaE (ORCPT
+        with ESMTP id S229803AbjBWR2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:30:04 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4D4570A3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:30:02 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DE6F65D9BF;
-        Thu, 23 Feb 2023 17:30:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1677173400;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfD7bVI37Hoten2JJxqaA5DYKUJRjUgORtyVUH4ACFU=;
-        b=MpwUzLjQnKBehag874uU2dxJQZU3M1AtVM0EGiXceD+WpkQfCzXPvbppMLlEFth+Mh0Sp6
-        T2hDOF9Ndkt3RzaoxW0UW+/4YPlf59SBkSDhX4onjeF+Fqwq995tMd+yGVon/pi9V7lOxu
-        erkb4J1WqxZSV0EW+WFn9VUfH7mzhZ8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1677173400;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfD7bVI37Hoten2JJxqaA5DYKUJRjUgORtyVUH4ACFU=;
-        b=+/ToPFoO4p+tOcuI7IwO8Yxghyeo7tXa6VgiZVxISpZPCFPMbaDPY2+Y226QsXIvsaCB+k
-        tRKbsqvTPvsopBCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9801D139B5;
-        Thu, 23 Feb 2023 17:30:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nkPgI5ii92NsBgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 23 Feb 2023 17:30:00 +0000
-Date:   Thu, 23 Feb 2023 18:24:03 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        David Sterba <dsterba@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [PATCH 1/2] tty: ipwireless: move Kconfig entry to tty
-Message-ID: <20230223172403.GW10580@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20230222085013.32331-1-jirislaby@kernel.org>
- <86e99adb-eccd-4c78-8128-b3690aa559c9@app.fastmail.com>
+        Thu, 23 Feb 2023 12:28:10 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD7D18B2F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:28:08 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id f31so16664552vsv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:28:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=31utYDCC/yFLRWwC2RwKHXn6KsflDX7hvn7iHrUw04E=;
+        b=Sdd7hPKBaEt1PTDPKGEhKh0cFLRe2Yx/VuUuv6kAhuhnM7to0TDCYi0R2J/otk8Pqf
+         WFH1iwbnoqpP/v6V7RkdAn0TCtMw+bMz5fesA/ftTwiR+QHmhj3jPqvv34rbMtH5k4mx
+         LVXXTy4uUcoL8wRogYukxUCPXiCr52gBF9hpwOqQXVG//efJB+iA/i1h5bRi46cz85UA
+         QDpWpWIYko0qEJvG3g8TiGlELNr7ETuVi9loLgEJ1ij4s7YECfz3SGeC0/wkvXK7pfdA
+         6sIAcR+uGf57sDBqQ/Wl/1ZePGl/tOoVcoXWej/gPVtiCBhyJJkY59Si4B+jFdVsUklV
+         jhtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=31utYDCC/yFLRWwC2RwKHXn6KsflDX7hvn7iHrUw04E=;
+        b=yxPMICijvccKTDrxg58KUoFzlfT0JSiFp5uDWrjOvF99Jw8dR1gRYnNjIWMOugYf/T
+         5P0vZWz5tSqnIE9XW+8CNkorgOJbXkTDJ5ny9rj54okZwybWNtxX62omXjVX6J51LuuB
+         Npf9lp7Gt+e6AP0ozYw9hqrOSwPwDqFTZYNLBnGVdp6gzJW3odlXme620l7k72+I6OHF
+         B9BgRTTpEojRg4Ndsoh0xSID4wmarb+Eug9LXuX1A5+nPNotQyFTfidpF1X7Wp+NmBDU
+         67/Q+IuTmapICJKVQ85BnHxZ7zYBWmOLtDMm1T3R5xMTA7fd+ZaEIZB76NaR2+8a9wmB
+         b5EA==
+X-Gm-Message-State: AO0yUKUh2p8dG2lIhM+CC+iE34qsKW7gwoIrTGfgVNwBuADSPnD+PhdS
+        wjucV4Tpb2sCmWKrJJsVjm+xGErcGYKqopRW2s8jxhg6eqcVMbGn
+X-Google-Smtp-Source: AK7set9ipf4JKgksfIPCGz7YusAkR8fyQ5wmRY52KwjPqGlUX+CfhrQnWSITtgynuYdihY0faOT9Lz6HbOuMIKjb8/I=
+X-Received: by 2002:ab0:38d3:0:b0:67a:2833:5ceb with SMTP id
+ l19-20020ab038d3000000b0067a28335cebmr3475904uaw.0.1677173287566; Thu, 23 Feb
+ 2023 09:28:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86e99adb-eccd-4c78-8128-b3690aa559c9@app.fastmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-3-yuzhao@google.com>
+ <Y++q/lglE6FJBdjt@google.com> <CAOUHufaK-BHdajDZJKjn_LU-gMkUTKa_9foMB8g-u9DyrVhPwg@mail.gmail.com>
+ <Y/ed0XYAPx+7pukA@google.com>
+In-Reply-To: <Y/ed0XYAPx+7pukA@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 23 Feb 2023 10:27:31 -0700
+Message-ID: <CAOUHufYw9Mc-w1E-Jkqnt869bVJ0AxOB5_grSEMcdMdDODDdCw@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 2/5] kvm/x86: add kvm_arch_test_clear_young()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 09:20:53AM +0100, Arnd Bergmann wrote:
-> On Wed, Feb 22, 2023, at 09:50, Jiri Slaby (SUSE) wrote:
-> > The ipwireless' Kconfig entry is currently sitting in char/pcmcia. But
-> > the driver is in tty/. So move the entry to tty/ too.
+On Thu, Feb 23, 2023 at 10:09=E2=80=AFAM Sean Christopherson <seanjc@google=
+.com> wrote:
+>
+> On Wed, Feb 22, 2023, Yu Zhao wrote:
+> > On Fri, Feb 17, 2023 at 9:27 AM Sean Christopherson <seanjc@google.com>=
+ wrote:
+> > >
+> > > On Thu, Feb 16, 2023, Yu Zhao wrote:
+> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm=
+/kvm_host.h
+> > > > index 6aaae18f1854..d2995c9e8f07 100644
+> > > > --- a/arch/x86/include/asm/kvm_host.h
+> > > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > > @@ -1367,6 +1367,12 @@ struct kvm_arch {
+> > > >        *      the MMU lock in read mode + the tdp_mmu_pages_lock or
+> > > >        *      the MMU lock in write mode
+> > > >        *
+> > > > +      * kvm_arch_test_clear_young() is a special case. It relies o=
+n two
+> > >
+> > > No, it's not.  The TDP MMU already employs on RCU and CMPXCHG.
 > >
-> > First, it makes sense to have the entry along the driver. Second, whole
-> > char/pcmcia is about to pass away.
+> > It is -- you read it out of context :)
+>
+> Ah, the special case is that it's fully lockless.  That's still not all t=
+hat
+> special, e.g. see kvm_tdp_mmu_walk_lockless_{begin,end}().
+>
+> >          * For reads, this list is protected by:
+> >          *      the MMU lock in read mode + RCU or
+> >          *      the MMU lock in write mode
+> >          *
+> >          * For writes, this list is protected by:
+> >          *      the MMU lock in read mode + the tdp_mmu_pages_lock or
+> >          *      the MMU lock in write mode
+> >          *
+> >          * kvm_arch_test_clear_young() is a special case.
+> >          ...
 > >
-> > Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> > Cc: Jiri Kosina <jikos@kernel.org>
-> > Cc: David Sterba <dsterba@suse.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> This is clearly correct
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> In Dominik's list from
-> https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
-> 
-> he had listed this driver as 'some activity in 2021', but all I can
-> find are treewide cleanups (mostly from you) after some work by David
-> in 2008 and Dominik's own PCMCIA rework in 2010. My guess is that
-> most likely this driver can be removed entirely, but you and David
-> are the ones who know if there are still users.
+> >         struct list_head tdp_mmu_roots;
+> >
+> > > Just drop the
+> > > entire comment.
+> >
+> > Let me move it into kvm_arch_test_clear_young().
+>
+> No, I do not want kvm_arch_test_clear_young(), or any other one-off funct=
+ion, to
+> be "special".  I love the idea of a lockless walk, but I want it to be a =
+formal,
+> documented way to walk TDP MMU roots.  I.e. add macro to go with for_each=
+_tdp_mmu_root()
+> and the yield-safe variants.
 
-The driver works and did not need any development, so the treewide or
-minor bugfixes are understandable. I had some discussions with a user in
-2011 regarding card detection but otherwise nothing. I can't tell how
-many users are there, there are some IPWireless cards in second hand
-market and cards for pcmcia can be bought in local shops.
-I'd vote for keeping the driver as long as the pcmcia subsystem exists
-(option a).
+I see what you mean now. will do.
+
+> /* blah blah blah */
+> #define for_each_tdp_mmu_root_lockless(_kvm, _root, _as_id)             \
+>         list_for_each_entry_rcu(_root, &kvm->arch.tdp_mmu_roots, link)  \
+>                 if (refcount_read(&root->tdp_mmu_root_count) &&         \
+>                     kvm_mmu_page_as_id(_root) !=3D _as_id) {             =
+ \
+>                 } else
+>
+> > Also I want to be clear:
+> > 1. We can't just focus on here and now; we need to consider the distant=
+ future.
+>
+> I 100% agree, but those words need to be backed up by actions.  This seri=
+es is
+> littered with code that is not maintainable long term, e.g. open coding s=
+tuff
+> that belongs in helpers and/or for which KVM already provides helpers, co=
+py-pasting
+> __kvm_handle_hva_range() instead of extending it to have a lockless optio=
+n, poking
+> directly into KVM from mm/ code, etc.
+>
+> I apologize for being so blunt.  My intent isn't to be rude/snarky, it's =
+to set
+> very clear expectations for getting any of these changes merges.
+
+No worries at all. I appreciate you directly telling me how you prefer
+it to be done, and that makes the job easier for both of us. Please do
+bear with me though, because I'm very unfamiliar with the KVM side of
+expectations.
+
+> I asbolutely do
+> want to land improvments to KVM's test+clear young flows, but it needs to=
+ be done
+> in a way that is maintainable and doesn't saddle KVM with more tech debt.
+
+Agreed.
+
+> > 2. From my POV, "see the comments on ..." is like the index of a book.
+>
+> And my _very_ strong preference is to provide the "index" via code, not c=
+omments.
+
+Will do.
+
+> > > Clearing a single bit doesn't need a CMPXCHG.  Please weigh in on a r=
+elevant series
+> > > that is modifying the aging flows[*], I want to have exactly one help=
+er for aging
+> > > TDP MMU SPTEs.
+> > >
+> > > [*] https://lore.kernel.org/all/20230211014626.3659152-5-vipinsh@goog=
+le.com
+> >
+> > I'll take a look at that series. clear_bit() probably won't cause any
+> > practical damage but is technically wrong because, for example, it can
+> > end up clearing the A-bit in a non-leaf PMD. (cmpxchg will just fail
+> > in this case, obviously.)
+>
+> Eh, not really.  By that argument, clearing an A-bit in a huge PTE is als=
+o technically
+> wrong because the target gfn may or may not have been accessed.
+
+Sorry, I don't understand. You mean clear_bit() on a huge PTE is
+technically wrong? Yes, that's what I mean. (cmpxchg() on a huge PTE
+is not.)
+
+> The only way for
+> KVM to clear a A-bit in a non-leaf entry is if the entry _was_ a huge PTE=
+, but was
+> replaced between the "is leaf" and the clear_bit().
+
+I think there is a misunderstanding here. Let me be more specific:
+1. Clearing the A-bit in a non-leaf entry is technically wrong because
+that's not our intention.
+2. When we try to clear_bit() on a leaf PMD, it can at the same time
+become a non-leaf PMD, which causes 1) above, and therefore is
+technically wrong.
+3. I don't think 2) could do any real harm, so no practically no problem.
+4. cmpxchg() can avoid 2).
+
+Does this make sense?
+
+Thanks.
