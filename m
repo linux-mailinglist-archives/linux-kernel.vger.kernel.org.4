@@ -2,152 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF956A025F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28AC6A0262
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbjBWF36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 00:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S233008AbjBWFcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 00:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBWF3z (ORCPT
+        with ESMTP id S229461AbjBWFc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 00:29:55 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24B3CA05;
-        Wed, 22 Feb 2023 21:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677130193; x=1708666193;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=K8IMeI4Bvp4oHzpdzTBMsmizPfZAgqXCDZxNy/3Bn1k=;
-  b=dPSW90Hrbt3dBW2+kwmBglQiU77wCdG0gd40pddHm1bMUctH+rDZjLoS
-   SqxntP+k0CmQJMVXRhqNKSqF7m5NgNhWeFulEgEkSgPe1zOhnPmLAkond
-   wN840y+AfRFac0ts+W8RtvrLjR5uxP1PtdhnSuSfM3ZcU+w+RjeYuuJpv
-   jwdsk+i60fQ0M6MebuFvPnd+RhEA7F1D84HTVfJTWr1y6jlkiDCptz0tt
-   7uC2Kvpuyq/dwNqKce6eVXxik/bmrsCz38uh9oJybwdvchy6K1k6DQ48q
-   /jF6QGqQXG9PSmM8CyETlcStlCehLHw+8JjfEA/L6UX68zAn31O47ys/d
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="331789151"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="331789151"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 21:29:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="672342758"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="672342758"
-Received: from ubuntu.bj.intel.com ([10.238.155.108])
-  by orsmga002.jf.intel.com with ESMTP; 22 Feb 2023 21:29:50 -0800
-From:   Jun Miao <jun.miao@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com
-Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jun.miao@intel.com
-Subject: [PATCH v2] KVM: Fix comments that refer to the non-existent install_new_memslots()
-Date:   Thu, 23 Feb 2023 13:28:51 +0800
-Message-Id: <20230223052851.1054799-1-jun.miao@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 23 Feb 2023 00:32:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26165BB99;
+        Wed, 22 Feb 2023 21:32:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0423F615E6;
+        Thu, 23 Feb 2023 05:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155EEC4339B;
+        Thu, 23 Feb 2023 05:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677130347;
+        bh=tZWvuFXOQ4HwnaliWoOMC+207at9HmW9RXIymVau3A4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=E0dB585LAZLCX8ruBHtIf+NtLVABjw/UDMACwB8krHa2waxmtdBimKuK7FU1c9vOs
+         zhKmbQTZw+6MSsxeqBYk/xN66IXjPnFnlF503tLXDFrwlkdwFvvnC9UYZ5f+vJ8SNK
+         5Z4jrS5lVWzWNTDpTLioIck6EKsY/s8fSt0wNDenL0siGW2Bxw/lYwkwsegBt8eMeu
+         gF0tshBVpBXMUcqUE59bLjQE6LxZSp41mSVmklHaJZHEBwdUnEQJljwGj0zKfcXB4/
+         Kual9bWMqtlEVvWqY6etRfc4lcPRpQgvpRvmqupiUmAz4D+4qi2DOv1bfBxV+QEM84
+         4ivZeTDkCqZAw==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-172094e10e3so13299533fac.10;
+        Wed, 22 Feb 2023 21:32:27 -0800 (PST)
+X-Gm-Message-State: AO0yUKWtCVgD6OvTcKWFryVMmkLFENG32Y2GV+8vJQDLA3z6n7qxZSg8
+        dtqwaFXLcqe1Lq+zlD+MWAtZ78yBJf7qoPYqF1M=
+X-Google-Smtp-Source: AK7set+JB77wQ5G/FBB0pH45ZewGFfkSLhtrofRqARHBfcEbCECO742zGSvt2l5pqjgTieH+tNqylMJOGX5Vo6DqUjY=
+X-Received: by 2002:a05:6870:65a4:b0:163:a45a:9e41 with SMTP id
+ fp36-20020a05687065a400b00163a45a9e41mr1075917oab.194.1677130346275; Wed, 22
+ Feb 2023 21:32:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net> <63c2936e-6bc7-67e3-eaf3-0123333381f8@landley.net>
+In-Reply-To: <63c2936e-6bc7-67e3-eaf3-0123333381f8@landley.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 23 Feb 2023 14:31:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
+Message-ID: <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] try generic compiler name "cc" before falling back to "gcc".
+To:     Rob Landley <rob@landley.net>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function of install_new_memslots() was replaced by kvm_swap_active_memslots().
-In order to avoid confusion, fix the comments that refer the non-existent name of
-install_new_memslots which always be ignored.
+On Wed, Feb 22, 2023 at 5:41 AM Rob Landley <rob@landley.net> wrote:
+>
+> Distros like debian install the generic "cc" name for both gcc and clang,
+> and the plumbing already does CC_VERSION_TEXT to include Makefile.clang.
+>
+> Previously: https://lkml.iu.edu/hypermail/linux/kernel/2202.0/01505.html
+> Signed-off-by: Rob Landley <rob@landley.net>
+> ---
+>  Makefile | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 3f6628780eb2..0ac57ae3b45f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -456,7 +456,7 @@ endif
+>  HOSTCC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+>  HOSTCXX        = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
+>  else
+> -HOSTCC = gcc
+> +HOSTCC := $(shell cc --version >/dev/null 2>&1 && echo cc || echo gcc)
 
-Fixes: a54d806688fe ("KVM: Keep memslots in tree-based structures instead of array-based ones")
-Signed-off-by: Jun Miao <jun.miao@intel.com>
----
- Documentation/virt/kvm/locking.rst |  2 +-
- include/linux/kvm_host.h           |  4 ++--
- virt/kvm/kvm_main.c                | 10 +++++-----
- 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
-index 14c4e9fa501d..6e03ad853c27 100644
---- a/Documentation/virt/kvm/locking.rst
-+++ b/Documentation/virt/kvm/locking.rst
-@@ -21,7 +21,7 @@ The acquisition orders for mutexes are as follows:
- - kvm->mn_active_invalidate_count ensures that pairs of
-   invalidate_range_start() and invalidate_range_end() callbacks
-   use the same memslots array.  kvm->slots_lock and kvm->slots_arch_lock
--  are taken on the waiting side in install_new_memslots, so MMU notifiers
-+  are taken on the waiting side in kvm_swap_active_memslots(), so MMU notifiers
-   must not take either kvm->slots_lock or kvm->slots_arch_lock.
- 
- For SRCU:
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 8ada23756b0e..98605bd25060 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -58,7 +58,7 @@
- 
- /*
-  * Bit 63 of the memslot generation number is an "update in-progress flag",
-- * e.g. is temporarily set for the duration of install_new_memslots().
-+ * e.g. is temporarily set for the duration of kvm_swap_active_memslots().
-  * This flag effectively creates a unique generation number that is used to
-  * mark cached memslot data, e.g. MMIO accesses, as potentially being stale,
-  * i.e. may (or may not) have come from the previous memslots generation.
-@@ -713,7 +713,7 @@ struct kvm {
- 	 * use by the VM. To be used under the slots_lock (above) or in a
- 	 * kvm->srcu critical section where acquiring the slots_lock would
- 	 * lead to deadlock with the synchronize_srcu in
--	 * install_new_memslots.
-+	 * kvm_swap_active_memslots().
- 	 */
- 	struct mutex slots_arch_lock;
- 	struct mm_struct *mm; /* userspace tied to this vm */
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index d255964ec331..9f9077a898dc 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1298,7 +1298,7 @@ static void kvm_destroy_vm(struct kvm *kvm)
- 	 * At this point, pending calls to invalidate_range_start()
- 	 * have completed but no more MMU notifiers will run, so
- 	 * mn_active_invalidate_count may remain unbalanced.
--	 * No threads can be waiting in install_new_memslots as the
-+	 * No threads can be waiting in kvm_swap_active_memslots() as the
- 	 * last reference on KVM has been dropped, but freeing
- 	 * memslots would deadlock without this manual intervention.
- 	 */
-@@ -1742,13 +1742,13 @@ static void kvm_invalidate_memslot(struct kvm *kvm,
- 	kvm_arch_flush_shadow_memslot(kvm, old);
- 	kvm_arch_guest_memory_reclaimed(kvm);
- 
--	/* Was released by kvm_swap_active_memslots, reacquire. */
-+	/* Was released by kvm_swap_active_memslots(), reacquire. */
- 	mutex_lock(&kvm->slots_arch_lock);
- 
- 	/*
- 	 * Copy the arch-specific field of the newly-installed slot back to the
- 	 * old slot as the arch data could have changed between releasing
--	 * slots_arch_lock in install_new_memslots() and re-acquiring the lock
-+	 * slots_arch_lock in kvm_swap_active_memslots() and re-acquiring the lock
- 	 * above.  Writers are required to retrieve memslots *after* acquiring
- 	 * slots_arch_lock, thus the active slot's data is guaranteed to be fresh.
- 	 */
-@@ -1810,11 +1810,11 @@ static int kvm_set_memslot(struct kvm *kvm,
- 	int r;
- 
- 	/*
--	 * Released in kvm_swap_active_memslots.
-+	 * Released in kvm_swap_active_memslots().
- 	 *
- 	 * Must be held from before the current memslots are copied until
- 	 * after the new memslots are installed with rcu_assign_pointer,
--	 * then released before the synchronize srcu in kvm_swap_active_memslots.
-+	 * then released before the synchronize srcu in kvm_swap_active_memslots().
- 	 *
- 	 * When modifying memslots outside of the slots_lock, must be held
- 	 * before reading the pointer to the current memslots until after all
+
+'cc' only makes sense for the host compiler,
+which is configured by 'update-alternative'.
+
+I tried it before, but LLVM folks preferred
+using $(LLVM) to choose clang/gcc.
+
+
+
+
+
+
+>  HOSTCXX        = g++
+>  endif
+>  HOSTRUSTC = rustc
+> @@ -503,7 +503,8 @@ OBJDUMP             = $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+>  READELF                = $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+>  STRIP          = $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+>  else
+> -CC             = $(CROSS_COMPILE)gcc
+> +CC             := $(CROSS_COMPILE)$(shell $(CROSS_COMPILE)cc --version \
+> +                       >/dev/null 2>&1 && echo cc || echo gcc)
+
+This hunk sets up GCC/binutils.
+So, cc does not make sense.  NACK.
+
+
+
+
+
+
+>  LD             = $(CROSS_COMPILE)ld
+>  AR             = $(CROSS_COMPILE)ar
+>  NM             = $(CROSS_COMPILE)nm
+
+
+
 -- 
-2.32.0
-
+Best Regards
+Masahiro Yamada
