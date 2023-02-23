@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCE46A0482
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0BE6A0488
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjBWJJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
+        id S233841AbjBWJLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbjBWJJe (ORCPT
+        with ESMTP id S232644AbjBWJLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:09:34 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469154C03
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:09:31 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id eg37so35872635edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:09:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WTHH9zlDbccoeTvmUDLrTEqObJ4nge6CNLgpKIfq2Nc=;
-        b=L0TWocZdfOWbL96bTpIQDkvaSs7o3o4cO16HwuUxwlTvaIlvDlGhPqNlwkQFCz2BZH
-         tbmfoULCqeCg9jidx+1+SLITPxcXi0ZzwEjg8Ue9fKJcw9dRqMcNmrSoIr+EHp3gEr9+
-         GkOWxjHXVtSPWqXFyuQ4zjDCqG2G07kCCPXr2gttwyBYdchCl3x0vUoc3XDrN0vcV+Tw
-         p8sXVg4Ic+4PJsZuJsOpHdLmiJ5RsJoXOmGTt60sx6qtXKQI4r2VU5NRT9w90aEOSHaS
-         3clRGn+HvwmrCabpgXVtqto8lUvXDB7rwOcvTA3x2WSJDeCMeLzMDCmH64BaYoTUrUaC
-         PMUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTHH9zlDbccoeTvmUDLrTEqObJ4nge6CNLgpKIfq2Nc=;
-        b=BzpTwA7ZhJBk0kn0gNfd1bijvfajOMEEJH9CobAIRcDWGugAkTuQECdHOOX1d20sCi
-         YRVW4n+pbzfYQJa+emQ1UjyF4gOkjn3oYG4PfGCrfrNt1XM9YfMM+rfiQBIqMqFXBOAR
-         Kna237eyyUHcmQdQChe9gMnaHFh3d5+q8nIlk9xBGzG09DEHzPpcNPM5Z8kXaIw10RZb
-         LfMv/alrDtRgkdPl1fHMp0s9DBkQxkDlZcX9PoZy6BeD6A0PBCLs6XAn/va25YWaFAJC
-         kfM4dUEws835Rf3Bm2hgNCq6jpZ2R4/P/ydWaJfVe2ZyQWNqwykbncEkKSveJQv0wPJk
-         3aZA==
-X-Gm-Message-State: AO0yUKWr0Shx1yKGrm2ohbykoWbG8+I3a391oI2k9+FLzFZnZAXReksU
-        +rADmW3NrFcqRIQqGwIUcAxHJw==
-X-Google-Smtp-Source: AK7set9zgkcJ/Ydry/Spnvy0EWMQ98kUtwo44jN+5Rz6tMBQUI/yAHDbBTpVQg27blmc1k0bmHFKng==
-X-Received: by 2002:aa7:c98a:0:b0:4ae:eb17:3afc with SMTP id c10-20020aa7c98a000000b004aeeb173afcmr11652406edt.7.1677143369613;
-        Thu, 23 Feb 2023 01:09:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b15-20020a1709062b4f00b008db605598b9sm3847171ejg.67.2023.02.23.01.09.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 01:09:27 -0800 (PST)
-Message-ID: <d5d9a1fe-2f66-66e3-d88a-76a12f2ec55e@linaro.org>
-Date:   Thu, 23 Feb 2023 10:09:25 +0100
+        Thu, 23 Feb 2023 04:11:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0F54ECEE;
+        Thu, 23 Feb 2023 01:11:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 068A861633;
+        Thu, 23 Feb 2023 09:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21305C4339B;
+        Thu, 23 Feb 2023 09:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677143512;
+        bh=FLuwj3WwRqTNxwF4ZE4nzwojL2qEu+/Jiah69XSHx10=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QCVLmQJEhrn21VIbUWi7BowrFreR2G9DLG4EaBGKnFyeVy8e8FSYXjatNe0p3+ich
+         VuXiGb4vG3evb30BOFnGFow1RIhyM6z7QFwGkG3ezBfuSA/lqumW2lSMv1yadHcZqs
+         XskTpn0JmvRivoJ/DGIHOll7aQqed+hmuFQHBLqE=
+Date:   Thu, 23 Feb 2023 10:11:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     stable@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bob Copeland <me@bobcopeland.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+860268315ba86ea6b96b@syzkaller.appspotmail.com,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [PATCH 5.4/5.10 1/1] mac80211: mesh: embedd mesh_paths and
+ mpp_paths into ieee80211_if_mesh
+Message-ID: <Y/ctyzCtbPwyrrDI@kroah.com>
+References: <20230222200301.254791-1-pchelkin@ispras.ru>
+ <20230222200301.254791-2-pchelkin@ispras.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 3/3] arch/arm: dts: introduce meson-a1 device tree
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alexey Romanov <avromanov@sberdevices.ru>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, linus.walleij@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-References: <20230222115020.55867-1-avromanov@sberdevices.ru>
- <20230222115020.55867-4-avromanov@sberdevices.ru>
- <bc514ba7-406e-bca8-4d3a-4f8997cd3241@linaro.org>
-In-Reply-To: <bc514ba7-406e-bca8-4d3a-4f8997cd3241@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222200301.254791-2-pchelkin@ispras.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 10:08, Krzysztof Kozlowski wrote:
-> On 22/02/2023 12:50, Alexey Romanov wrote:
->> Add basic support for the 32-bit Amlogic A1. This device tree
+On Wed, Feb 22, 2023 at 11:03:01PM +0300, Fedor Pchelkin wrote:
+> From: Pavel Skripkin <paskripkin@gmail.com>
 > 
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
+> commit 8b5cb7e41d9d77ffca036b0239177de123394a55 upstream.
 > 
->> describes following compontents: CPU, GIC, IRQ, Timer, UART,
->> PIN controller. It's capable of booting up into
->> the serial console.
->>
->> This is based on arm64 version of meson-a1.dtsi.
->>
->> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
->> ---
->>  arch/arm/boot/dts/meson-a1.dtsi | 151 ++++++++++++++++++++++++++++++++
+> Syzbot hit NULL deref in rhashtable_free_and_destroy(). The problem was
+> in mesh_paths and mpp_paths being NULL.
 > 
-> There is such file and there is such DTS/hardware support. I don't see
-> any reason why entire DTSI should be duplicated. What's more, your
-> commit does not explain it - does not justify duplication.
+> mesh_pathtbl_init() could fail in case of memory allocation failure, but
+> nobody cared, since ieee80211_mesh_init_sdata() returns void. It led to
+> leaving 2 pointers as NULL. Syzbot has found null deref on exit path,
+> but it could happen anywhere else, because code assumes these pointers are
+> valid.
+> 
+> Since all ieee80211_*_setup_sdata functions are void and do not fail,
+> let's embedd mesh_paths and mpp_paths into parent struct to avoid
+> adding error handling on higher levels and follow the pattern of others
+> setup_sdata functions
+> 
+> Fixes: 60854fd94573 ("mac80211: mesh: convert path table to rhashtable")
+> Reported-and-tested-by: syzbot+860268315ba86ea6b96b@syzkaller.appspotmail.com
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> Link: https://lore.kernel.org/r/20211230195547.23977-1-paskripkin@gmail.com
+> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+> [pchelkin@ispras.ru: adapt a comment spell fixing issue]
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> ---
 
-One more comment - I think you just added dead code. It's
-uncompilable/untestable. Otherwise, please share how to build this DTSI
-without DTS.
+This also worked for 4.19.y, but not 4.14.y, care to also fix it there?
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
