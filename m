@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999C06A08A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E5C6A08AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjBWMew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 07:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S234106AbjBWMfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 07:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbjBWMeq (ORCPT
+        with ESMTP id S233926AbjBWMes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:34:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40FA5328E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:34:44 -0800 (PST)
+        Thu, 23 Feb 2023 07:34:48 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB217532B2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:34:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=K2pbR4KcjJRNdFn1g/z74LmAo74CzFbj013dia1RVO0=; b=PRPzLnSuPGsvGIsJRSbHD0VRiV
-        ihE23ztaDlrwM3vlsaRthWGH3RjdLuoNFUiF980Y3ooo6TNnxOvl5xY6brBTGdLcOdVpBxMFRi2D8
-        5Z446BNMSyDKBaGxjMJ4McatOq8txUJjFsOg1hSFuINTpcGi+87dMEq3DQ3LoQcf0o9KS0N7l6FG3
-        jdKa1GY+lobwSY+qrgfRQnmcwD2at3VcOklQIzIeGvAyTheDgbqVUThV/Pd8EIutPw19Git9e/erf
-        bl1lGvd9/3xImJH8zF6dcajFRaXyg0WqMbbX2G/oihGsEBNc0GYtVR4+PTqqvyHrpo3CDJi9tbJfS
-        6IbWalKQ==;
+        bh=Yu4KpcpLybjLjkU3gNwo4HWX9o49wsMDX9ywKwgjG5w=; b=oEmKyGJAp3cZqg6dOxsAhotOOm
+        V/RmkQGNhhpdFNV30VD5UkNxtCeFjGdGqC5wwbUw7WA2HPa+y8u2h64SooSNAn7xSjGkDnaHvM2CP
+        abhJV5F33gmn0YSaE+JkK1xYIG40nuLQXXUX+LjG5aiMvcLI5Cbbq0mRS3yZbPCZfRS3PZX27f2VW
+        A5ItRTO9mHUgrvi1cyMuAwftC0KCyXCfYRKbEzg39w1SvAzGaRkvmymfTO+di2+OQRk22kaM2txSv
+        QdvyWcY9il9aaSodAEIhAotg51acDtP0il9EnDPPoXvSKPmLekTmAuR+0VNtpVwXeEXNWN+gvB+BE
+        //e2JLnQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVAo0-00EMIl-Ok; Thu, 23 Feb 2023 12:34:37 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pVAo1-00CuVB-1h;
+        Thu, 23 Feb 2023 12:34:40 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D9F10300820;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E057A300C50;
         Thu, 23 Feb 2023 13:34:35 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id C0E2C2C86FE06; Thu, 23 Feb 2023 13:34:35 +0100 (CET)
-Message-ID: <20230223123319.548254615@infradead.org>
+        id C4C442C86FE07; Thu, 23 Feb 2023 13:34:35 +0100 (CET)
+Message-ID: <20230223123319.608133045@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 23 Feb 2023 13:26:46 +0100
+Date:   Thu, 23 Feb 2023 13:26:47 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     longman@redhat.com, mingo@redhat.com, will@kernel.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         boqun.feng@gmail.com
-Subject: [PATCH 4/6] locking/rwsem: Split out rwsem_reader_wake()
+Subject: [PATCH 5/6] locking/rwsem: Unify wait loop
 References: <20230223122642.491637862@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,140 +57,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To provide symmetry with rwsem_writer_wake().
+Now that the reader and writer wait loops are identical, share the
+code.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/locking/rwsem.c |   84 +++++++++++++++++++++++++++----------------------
- 1 file changed, 47 insertions(+), 37 deletions(-)
+ kernel/locking/rwsem.c |  117 +++++++++++++++++++------------------------------
+ 1 file changed, 47 insertions(+), 70 deletions(-)
 
 --- a/kernel/locking/rwsem.c
 +++ b/kernel/locking/rwsem.c
-@@ -106,9 +106,9 @@
-  * atomic_long_cmpxchg() will be used to obtain writer lock.
-  *
-  * There are three places where the lock handoff bit may be set or cleared.
-- * 1) rwsem_mark_wake() for readers		-- set, clear
-+ * 1) rwsem_reader_wake() for readers	-- set, clear
-  * 2) rwsem_writer_wake() for writers	-- set, clear
-- * 3) rwsem_del_waiter()			-- clear
-+ * 3) rwsem_del_waiter()		-- clear
-  *
-  * For all the above cases, wait_lock will be held. A writer must also
-  * be the first one in the wait_list to be eligible for setting the handoff
-@@ -377,8 +377,8 @@ rwsem_add_waiter(struct rw_semaphore *se
- /*
-  * Remove a waiter from the wait_list and clear flags.
-  *
-- * Both rwsem_mark_wake() and rwsem_writer_wake() contain a full 'copy' of
-- * this function. Modify with care.
-+ * Both rwsem_{reader,writer}_wake() contain a full 'copy' of this function.
-+ * Modify with care.
-  *
-  * Return: true if wait_list isn't empty and false otherwise
+@@ -650,13 +650,11 @@ static void rwsem_mark_wake(struct rw_se
+  * optionally wake up waiters before it returns.
   */
-@@ -488,42 +488,15 @@ static void rwsem_writer_wake(struct rw_
- 	rwsem_waiter_wake(waiter, wake_q);
- }
- 
--/*
-- * handle the lock release when processes blocked on it that can now run
-- * - if we come here from up_xxxx(), then the RWSEM_FLAG_WAITERS bit must
-- *   have been set.
-- * - there must be someone on the queue
-- * - the wait_lock must be held by the caller
-- * - tasks are marked for wakeup, the caller must later invoke wake_up_q()
-- *   to actually wakeup the blocked task(s) and drop the reference count,
-- *   preferably when the wait_lock is released
-- * - woken process blocks are discarded from the list after having task zeroed
-- * - writers are only marked woken if downgrading is false
-- *
-- * Implies rwsem_del_waiter() for all woken readers.
-- */
--static void rwsem_mark_wake(struct rw_semaphore *sem,
--			    enum rwsem_wake_type wake_type,
--			    struct wake_q_head *wake_q)
-+static void rwsem_reader_wake(struct rw_semaphore *sem,
-+			      enum rwsem_wake_type wake_type,
-+			      struct rwsem_waiter *waiter,
-+			      struct wake_q_head *wake_q)
+ static inline void
+-rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter,
+-		      struct wake_q_head *wake_q)
++rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter)
+ 		      __releases(&sem->wait_lock)
  {
--	struct rwsem_waiter *waiter, *tmp;
- 	long count, woken = 0, adjustment = 0;
-+	struct rwsem_waiter *tmp;
- 	struct list_head wlist;
+ 	bool first = rwsem_first_waiter(sem) == waiter;
+-
+-	wake_q_init(wake_q);
++	DEFINE_WAKE_Q(wake_q);
  
--	lockdep_assert_held(&sem->wait_lock);
--
--	/*
--	 * Take a peek at the queue head waiter such that we can determine
--	 * the wakeup(s) to perform.
--	 */
--	waiter = rwsem_first_waiter(sem);
--
--	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
--		if (wake_type == RWSEM_WAKE_ANY)
--			rwsem_writer_wake(sem, waiter, wake_q);
--		return;
--	}
--
  	/*
- 	 * No reader wakeup if there are too many of them already.
+ 	 * If the wait_list isn't empty and the waiter to be deleted is
+@@ -664,10 +662,10 @@ rwsem_del_wake_waiter(struct rw_semaphor
+ 	 * be eligible to acquire or spin on the lock.
  	 */
-@@ -635,6 +608,42 @@ static void rwsem_mark_wake(struct rw_se
+ 	if (rwsem_del_waiter(sem, waiter) && first)
+-		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, wake_q);
++		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
+ 	raw_spin_unlock_irq(&sem->wait_lock);
+-	if (!wake_q_empty(wake_q))
+-		wake_up_q(wake_q);
++	if (!wake_q_empty(&wake_q))
++		wake_up_q(&wake_q);
  }
  
  /*
-+ * handle the lock release when processes blocked on it that can now run
-+ * - if we come here from up_xxxx(), then the RWSEM_FLAG_WAITERS bit must
-+ *   have been set.
-+ * - there must be someone on the queue
-+ * - the wait_lock must be held by the caller
-+ * - tasks are marked for wakeup, the caller must later invoke wake_up_q()
-+ *   to actually wakeup the blocked task(s) and drop the reference count,
-+ *   preferably when the wait_lock is released
-+ * - woken process blocks are discarded from the list after having task zeroed
-+ * - writers are only marked woken if downgrading is false
-+ *
-+ * Implies rwsem_del_waiter() for all woken waiters.
-+ */
-+static void rwsem_mark_wake(struct rw_semaphore *sem,
-+			    enum rwsem_wake_type wake_type,
-+			    struct wake_q_head *wake_q)
+@@ -993,6 +991,46 @@ static inline void rwsem_cond_wake_waite
+ 	rwsem_mark_wake(sem, wake_type, wake_q);
+ }
+ 
++#define waiter_type(_waiter, _r, _w)	\
++	((_waiter)->type == RWSEM_WAITING_FOR_READ ? (_r) : (_w))
++
++static __always_inline struct rw_semaphore *
++rwsem_waiter_wait(struct rw_semaphore *sem, struct rwsem_waiter *waiter, int state)
 +{
-+	struct rwsem_waiter *waiter;
++	trace_contention_begin(sem, waiter_type(waiter, LCB_F_READ, LCB_F_WRITE));
 +
-+	lockdep_assert_held(&sem->wait_lock);
-+
-+	/*
-+	 * Take a peek at the queue head waiter such that we can determine
-+	 * the wakeup(s) to perform.
-+	 */
-+	waiter = rwsem_first_waiter(sem);
-+
-+	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
-+		if (wake_type == RWSEM_WAKE_ANY)
-+			rwsem_writer_wake(sem, waiter, wake_q);
-+	} else {
-+		rwsem_reader_wake(sem, wake_type, waiter, wake_q);
++	/* wait to be given the lock */
++	for (;;) {
++		set_current_state(state);
++		if (!smp_load_acquire(&waiter->task)) {
++			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
++			break;
++		}
++		if (signal_pending_state(state, current)) {
++			raw_spin_lock_irq(&sem->wait_lock);
++			if (waiter->task)
++				goto out_nolock;
++			raw_spin_unlock_irq(&sem->wait_lock);
++			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
++			break;
++		}
++		schedule_preempt_disabled();
++		lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
 +	}
++
++	__set_current_state(TASK_RUNNING);
++	lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
++	trace_contention_end(sem, 0);
++	return sem;
++
++out_nolock:
++	rwsem_del_wake_waiter(sem, waiter);
++	__set_current_state(TASK_RUNNING);
++	lockevent_inc(waiter_type(waiter, rwsem_rlock_fail, rwsem_wlock_fail));
++	trace_contention_end(sem, -EINTR);
++	return ERR_PTR(-EINTR);
 +}
 +
-+/*
-  * Remove a waiter and try to wake up other waiters in the wait queue
-  * This function is called from the out_nolock path of both the reader and
-  * writer slowpaths with wait_lock held. It releases the wait_lock and
-@@ -1017,9 +1026,10 @@ rwsem_down_read_slowpath(struct rw_semap
- 		 */
- 		if ((rcnt == 1) && (count & RWSEM_FLAG_WAITERS)) {
- 			raw_spin_lock_irq(&sem->wait_lock);
--			if (!list_empty(&sem->wait_list))
-+			if (!list_empty(&sem->wait_list)) {
- 				rwsem_mark_wake(sem, RWSEM_WAKE_READ_OWNED,
- 						&wake_q);
-+			}
- 			raw_spin_unlock_irq(&sem->wait_lock);
- 			wake_up_q(&wake_q);
- 		}
+ /*
+  * Wait for the read lock to be granted
+  */
+@@ -1071,38 +1109,7 @@ rwsem_down_read_slowpath(struct rw_semap
+ 	if (!wake_q_empty(&wake_q))
+ 		wake_up_q(&wake_q);
+ 
+-	trace_contention_begin(sem, LCB_F_READ);
+-
+-	/* wait to be given the lock */
+-	for (;;) {
+-		set_current_state(state);
+-		if (!smp_load_acquire(&waiter.task)) {
+-			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+-			break;
+-		}
+-		if (signal_pending_state(state, current)) {
+-			raw_spin_lock_irq(&sem->wait_lock);
+-			if (waiter.task)
+-				goto out_nolock;
+-			raw_spin_unlock_irq(&sem->wait_lock);
+-			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
+-			break;
+-		}
+-		schedule_preempt_disabled();
+-		lockevent_inc(rwsem_sleep_reader);
+-	}
+-
+-	__set_current_state(TASK_RUNNING);
+-	lockevent_inc(rwsem_rlock);
+-	trace_contention_end(sem, 0);
+-	return sem;
+-
+-out_nolock:
+-	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+-	__set_current_state(TASK_RUNNING);
+-	lockevent_inc(rwsem_rlock_fail);
+-	trace_contention_end(sem, -EINTR);
+-	return ERR_PTR(-EINTR);
++	return rwsem_waiter_wait(sem, &waiter, state);
+ }
+ 
+ /*
+@@ -1150,37 +1157,7 @@ rwsem_down_write_slowpath(struct rw_sema
+ 	}
+ 	raw_spin_unlock_irq(&sem->wait_lock);
+ 
+-	/* wait until we successfully acquire the lock */
+-	trace_contention_begin(sem, LCB_F_WRITE);
+-
+-	for (;;) {
+-		set_current_state(state);
+-		if (!smp_load_acquire(&waiter.task)) {
+-			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+-			break;
+-		}
+-		if (signal_pending_state(state, current)) {
+-			raw_spin_lock_irq(&sem->wait_lock);
+-			if (waiter.task)
+-				goto out_nolock;
+-			raw_spin_unlock_irq(&sem->wait_lock);
+-			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
+-			break;
+-		}
+-		schedule_preempt_disabled();
+-		lockevent_inc(rwsem_sleep_writer);
+-	}
+-	__set_current_state(TASK_RUNNING);
+-	lockevent_inc(rwsem_wlock);
+-	trace_contention_end(sem, 0);
+-	return sem;
+-
+-out_nolock:
+-	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+-	__set_current_state(TASK_RUNNING);
+-	lockevent_inc(rwsem_wlock_fail);
+-	trace_contention_end(sem, -EINTR);
+-	return ERR_PTR(-EINTR);
++	return rwsem_waiter_wait(sem, &waiter, state);
+ }
+ 
+ /*
 
 
