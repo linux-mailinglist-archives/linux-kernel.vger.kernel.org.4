@@ -2,62 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0E66A05A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C9F6A05AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbjBWKJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S233556AbjBWKKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjBWKJN (ORCPT
+        with ESMTP id S229745AbjBWKJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:09:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31D842BDD;
-        Thu, 23 Feb 2023 02:09:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 151FEB819A1;
-        Thu, 23 Feb 2023 10:09:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E63C433EF;
-        Thu, 23 Feb 2023 10:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677146948;
-        bh=ltP+sqQ59O17JJFCXy0EhCXvNdKIgKqIbNAMj0PypVw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YCi0EnFWBDgzKvrjBRjBgH8/MnsbEY22udCE488IaaU5CiIrwnq+kcdKiQ7m4yXDJ
-         3HEOtZMpgb8byjEoyQW/WSK0uToHXdI0nSTTYsLzaVomssyj9Q9lXwyO70VMHnRTiG
-         9I8Jc0MrU3BiPWt7cxlRfuY2rdyxiCyH9BWpYfEZAZDYWQv+XowV6NV+bJqLOhahMd
-         3rvGyqugMiVIXAcrMBiKwJzSgQKzw1t2P1/qu8gz5h3pltg5NFzHHBWATG8yi+Ahf0
-         80JxzFBZT2Xv/ZV7VUqzFLUglxf+Bm/vDQd41ZGKujeE9JzrPYY6NMT7QfQCyghg0q
-         tJfUs83Nm8A3g==
-Message-ID: <bc67a5c3-a844-472a-74bf-f08f49ca99bb@kernel.org>
-Date:   Thu, 23 Feb 2023 11:09:01 +0100
+        Thu, 23 Feb 2023 05:09:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1351942BE3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:09:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677146950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MwNi2R/qfei2F24G6SnycO92yZ0kjnuQBMoTKw0Q4E8=;
+        b=cMfY8bHRP5ZYwBWBPRf5TZXkW1GdG9+vTry1GMjpyOAM8VqUIpLHE6+KpUWw0NQ6GLH+sm
+        8fZ+jMfT3W+/TSiXtijWGv4HdRFSP8uiUPA1MUoQKWc5Tgowx19is/2zOQrT0YMXWiwKUB
+        zINuuVAPHI2JsbXS+URQY3Sg2/BufK8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-16-A_hnEPmVOGeS62o8J-8How-1; Thu, 23 Feb 2023 05:09:09 -0500
+X-MC-Unique: A_hnEPmVOGeS62o8J-8How-1
+Received: by mail-qk1-f197.google.com with SMTP id x4-20020a05620a448400b007283b33bfb3so5069526qkp.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:09:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677146949;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MwNi2R/qfei2F24G6SnycO92yZ0kjnuQBMoTKw0Q4E8=;
+        b=S67Dem5iTcLLxm7gygU52WcOwKVPY9BAPdzlMK+6c3LWT/mgMbG1QaH+aB/9f/pHse
+         iSIjlC1iq+sMoGEb173UvFMEIcJRmCslEaK9f9urtURxlJytVC38SeIEezhOuDhkBU2j
+         oaKbhe8rBiPAYOiBz7MMab82v2tDPXh1Cpfa8BBZS8LT5EY87xUR1A7GWIAoFslBLj0+
+         MTjD9DyJAhSYlfTQhZWE72BLKX5taEgD01TlGmuZvC7nWLqraiwkXq46p1Fik9B0Me9J
+         N3F+00krcilP1R22jdJj5v07A+vhXa/GVL/0DzzN6jk6DTCaUU04zWl3Ig0cHphObhWF
+         hAsw==
+X-Gm-Message-State: AO0yUKVVF0BcZK+4elXIxQzlwLqc2Ei/TheKLo7XeYwwYDZnqcTYJwWF
+        8dhvKg5HxJCq8cVlTnh2/hKmRfxG2kxANniFA30AXJosao2UleRiDqasExE81d7te8NdTFz5KVM
+        aSvemm1Ivr1OfuoBsDGXtDTS1
+X-Received: by 2002:ac8:5cd4:0:b0:3bb:75c7:9326 with SMTP id s20-20020ac85cd4000000b003bb75c79326mr22869250qta.0.1677146949160;
+        Thu, 23 Feb 2023 02:09:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set/koRPNANUmknQG+7kAuYwa4ay569snO2eNYzEq0HDqUGBTIoDvfkqm5FimiOMJ/yChM2nVyQ==
+X-Received: by 2002:ac8:5cd4:0:b0:3bb:75c7:9326 with SMTP id s20-20020ac85cd4000000b003bb75c79326mr22869227qta.0.1677146948834;
+        Thu, 23 Feb 2023 02:09:08 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id x191-20020a3763c8000000b007402fdda195sm6650615qkb.123.2023.02.23.02.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 02:09:08 -0800 (PST)
+Message-ID: <83a8fb89ac7a69d08c9ea1422dade301dcc87297.camel@redhat.com>
+Subject: Re: [PATCH V3 1/2] net: phylink: add a function to resume phy alone
+ to fix resume issue with WoL enabled
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Clark Wang <xiaoning.wang@nxp.com>, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        mcoquelin.stm32@gmail.com, linux@armlinux.org.uk, andrew@lunn.ch,
+        hkallweit1@gmail.com
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Date:   Thu, 23 Feb 2023 11:09:04 +0100
+In-Reply-To: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
+References: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] dt-bindings: display: Add Loongson display controller
-To:     suijingfeng <suijingfeng@loongson.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230222165514.684729-1-suijingfeng@loongson.cn>
- <20230222165514.684729-2-suijingfeng@loongson.cn>
- <76bc79c9-a892-c43e-1f49-d07b54f52c90@kernel.org>
- <84796070-7740-eb69-65c0-9a3d8e464a0f@loongson.cn>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <84796070-7740-eb69-65c0-9a3d8e464a0f@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,77 +85,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 10:51, suijingfeng wrote:
->>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>> new file mode 100644
->>> index 000000000000..98b78f449a80
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> Filename based on compatible, so "loongson,ls2k1000-dc.yaml"
-> 
-> what if we have more than one SoC,
-> 
-> we have  loongson,ls2k1000-dc, loongson,ls2k2000-dc and loongson,ls2k0500-dc
-> 
-> we will have loongson,ls2k3000-dc in the future, then how should i write 
-> this?
+On Thu, 2023-02-02 at 16:15 +0800, Clark Wang wrote:
+> Issue we met:
+> On some platforms, mac cannot work after resumed from the suspend with Wo=
+L
+> enabled.
+>=20
+> The cause of the issue:
+> 1. phylink_resolve() is in a workqueue which will not be executed immedia=
+tely.
+>    This is the call sequence:
+>        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
+>    For stmmac driver, mac_link_up() will set the correct speed/duplex...
+>    values which are from link_state.
+> 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
+>    phylink_resume(), because mac need phy rx_clk to do the reset.
+>    stmmac_core_init() is called in function stmmac_hw_setup(), which will
+>    reset the mac and set the speed/duplex... to default value.
+> Conclusion: Because phylink_resolve() cannot determine when it is called,=
+ it
+>             cannot be guaranteed to be called after stmmac_core_init().
+> 	    Once stmmac_core_init() is called after phylink_resolve(),
+> 	    the mac will be misconfigured and cannot be used.
+>=20
+> In order to avoid this problem, add a function called phylink_phy_resume(=
+)
+> to resume phy separately. This eliminates the need to call phylink_resume=
+()
+> before stmmac_hw_setup().
+>=20
+> Add another judgement before called phy_start() in phylink_start(). This =
+way
+> phy_start() will not be called multiple times when resumes. At the same t=
+ime,
+> it may not affect other drivers that do not use phylink_phy_resume().
+>=20
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+> ---
+> V2 change:
+>  - add mac_resume_phy_separately flag to struct phylink to mark if the ma=
+c
+>    driver uses the phylink_phy_resume() first.
+> V3 change:
+>  - add brace to avoid ambiguous 'else'
+>    Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  drivers/net/phy/phylink.c | 32 ++++++++++++++++++++++++++++++--
+>  include/linux/phylink.h   |  1 +
+>  2 files changed, 31 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index 319790221d7f..c2fe66f0b78f 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
+> @@ -80,6 +80,8 @@ struct phylink {
+>  	DECLARE_PHY_INTERFACE_MASK(sfp_interfaces);
+>  	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_support);
+>  	u8 sfp_port;
+> +
+> +	bool mac_resume_phy_separately;
+>  };
+> =20
+>  #define phylink_printk(level, pl, fmt, ...) \
+> @@ -1509,6 +1511,7 @@ struct phylink *phylink_create(struct phylink_confi=
+g *config,
+>  		return ERR_PTR(-EINVAL);
+>  	}
+> =20
+> +	pl->mac_resume_phy_separately =3D false;
+>  	pl->using_mac_select_pcs =3D using_mac_select_pcs;
+>  	pl->phy_state.interface =3D iface;
+>  	pl->link_interface =3D iface;
+> @@ -1943,8 +1946,12 @@ void phylink_start(struct phylink *pl)
+>  	}
+>  	if (poll)
+>  		mod_timer(&pl->link_poll, jiffies + HZ);
+> -	if (pl->phydev)
+> -		phy_start(pl->phydev);
+> +	if (pl->phydev) {
+> +		if (!pl->mac_resume_phy_separately)
+> +			phy_start(pl->phydev);
+> +		else
+> +			pl->mac_resume_phy_separately =3D false;
+> +	}
+>  	if (pl->sfp_bus)
+>  		sfp_upstream_start(pl->sfp_bus);
+>  }
+> @@ -2024,6 +2031,27 @@ void phylink_suspend(struct phylink *pl, bool mac_=
+wol)
+>  }
+>  EXPORT_SYMBOL_GPL(phylink_suspend);
+> =20
+> +/**
+> + * phylink_phy_resume() - resume phy alone
+> + * @pl: a pointer to a &struct phylink returned from phylink_create()
+> + *
+> + * In the MAC driver using phylink, if the MAC needs the clock of the ph=
+y
+> + * when it resumes, can call this function to resume the phy separately.
+> + * Then proceed to MAC resume operations.
+> + */
+> +void phylink_phy_resume(struct phylink *pl)
+> +{
+> +	ASSERT_RTNL();
+> +
+> +	if (!test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)
+> +	    && pl->phydev) {
+> +		phy_start(pl->phydev);
+> +		pl->mac_resume_phy_separately =3D true;
+> +	}
+> +
 
-Then it is fine.
+Minor nit: the empty line here is not needed.
 
-> 
-> I want a single file yaml file include them all.
-> 
-> I'm asking because we don't know which method is good, write three piece 
-> of yaml or just one.
-> 
-> Just tell me how to write this, i will follow you instruction.
-> 
->>> @@ -0,0 +1,58 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
->>>
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Loongson Display Controller Device Tree Bindings
->> Drop "Device Tree Bindings"
-> OK,
->>> +
->>> +maintainers:
->>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->>> +
->>> +description: |+
->> Drop |+
->>
->>> +
->> No need for blank line. Do you see it anywhere else in the bindings?
-> OK, acceptable.
->>> +  The display controller is a PCI device, it has two display pipe.
->>> +  For the DC in LS2K1000 each way has a DVO output interface which
->>> +  provide RGB888 signals, vertical & horizontal synchronisations
->>> +  and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
->>> +  the maximum resolution is 2048x2048 according to the hardware spec.
->>> +
->>> +properties:
->>> +  $nodename:
->>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
->> Drop nodename.
-> 
-> Are you sure about this?  When i  write this property, I'm reference the 
-> ingenic,lcd.yaml .
-> 
-> ingenic,lcd.yaml has nodename too.
-> 
-> If I delete $nodename, then the test results say 
-> '^display-controller@[0-9a-f],[0-9a-f]$'  is not of type 'object'.
-> 
-> log is pasted at below.
+Cheers,
 
-I meant, drop entire nodename and pattern.
-
-
-
-Best regards,
-Krzysztof
+Paolo
 
