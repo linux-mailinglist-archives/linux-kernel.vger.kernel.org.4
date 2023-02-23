@@ -2,199 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904256A027E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A666A0286
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbjBWFnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 00:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S233200AbjBWFqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 00:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBWFnp (ORCPT
+        with ESMTP id S229452AbjBWFqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 00:43:45 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C6522020
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:43:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 659243768C;
-        Thu, 23 Feb 2023 05:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677131023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IHejay9Cos6UnBIHVby2h+E6MdwHaWOzzvaCEWnrVvY=;
-        b=qRvWcxOJtWBACJ32nfR9kQdfXGU8GxwXREVdzbS1/skSX6gmr0kZGd3R7gxT8UsrC7w9aC
-        vIK5COUmX/pmX8cMvObyQlm/mf0tL0Sw6+7NL74LgKAFiZmgTpfnkZVdShsfI6NfFV+E8H
-        M7t5aRULTTI87Gs73jX5d/2Q7Ia51z4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2D4A13524;
-        Thu, 23 Feb 2023 05:43:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HYwiNQ799mMlJAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 23 Feb 2023 05:43:42 +0000
-Message-ID: <98d0ac9a-66af-6fdd-ff19-d4805a57f8d9@suse.com>
-Date:   Thu, 23 Feb 2023 06:43:42 +0100
+        Thu, 23 Feb 2023 00:46:50 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1E2D153;
+        Wed, 22 Feb 2023 21:46:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677131206; x=1708667206;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=5LUNYswzjNRR62NCzZouZlNn0t25R/Y0NvLZYy4sFJw=;
+  b=VDcPoTjapyPXdmEvrJ/Ul1EWBBDCvUNXD3/kgjHTMNQD1G9+t89RQ6Yq
+   PljBkcXmgXt6i1sVEirsDbnQKT6Xzbl9LhjQV75WRDEnT0Jvm25GLrSj9
+   SNUX8+eWQsYIFwJj4d0fa/J9HfFKkXiYUBZ5KiGfz2XwpNSGWBPLBdswf
+   X2L5EKxxU9pG/3B+5ygUpdFpOSTWq80dC7K0MZzpKia/ahbG+qlZmhfdy
+   cb8uStmxqMKkunc++hE2E+PkZOXi2+E4fVdjnb5c4w8NsOj1d8/tNxd8z
+   sjl2G9wuiNlKajl1zdhQ3A29yQtWH6UcEgKTLZI06S15bPgrZKYN9l5Eg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="360610228"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="asc'?scan'208";a="360610228"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 21:46:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="674390236"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="asc'?scan'208";a="674390236"
+Received: from debian-skl.sh.intel.com (HELO debian-skl) ([10.239.159.40])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2023 21:46:42 -0800
+Date:   Thu, 23 Feb 2023 13:44:55 +0800
+From:   Zhenyu Wang <zhenyuw@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] i915/gvt: Fix spelling mistake "vender" -> "vendor"
+Message-ID: <Y/b9V321SlQt9wWS@debian-scheme>
+Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
+References: <20230202125018.285523-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH linux-next v2 0/2] x86/xen TSC related cleanups
-Content-Language: en-US
-To:     Krister Johansen <kjlx@templeofstupid.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Anthony Liguori <aliguori@amazon.com>,
-        David Reaver <me@davidreaver.com>,
-        Brendan Gregg <brendan@intel.com>
-References: <cover.1677038165.git.kjlx@templeofstupid.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <cover.1677038165.git.kjlx@templeofstupid.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------XPqT0GIeb0bfN0VKqzFykd2d"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="HzSWUdm6s+7n4EaD"
+Content-Disposition: inline
+In-Reply-To: <20230202125018.285523-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------XPqT0GIeb0bfN0VKqzFykd2d
-Content-Type: multipart/mixed; boundary="------------Y0rDYZBjuwBEPs36bRHEABMN";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Krister Johansen <kjlx@templeofstupid.com>,
- xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc: Jan Beulich <jbeulich@suse.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Marcelo Tosatti <mtosatti@redhat.com>, Anthony Liguori
- <aliguori@amazon.com>, David Reaver <me@davidreaver.com>,
- Brendan Gregg <brendan@intel.com>
-Message-ID: <98d0ac9a-66af-6fdd-ff19-d4805a57f8d9@suse.com>
-Subject: Re: [PATCH linux-next v2 0/2] x86/xen TSC related cleanups
-References: <cover.1677038165.git.kjlx@templeofstupid.com>
-In-Reply-To: <cover.1677038165.git.kjlx@templeofstupid.com>
 
---------------Y0rDYZBjuwBEPs36bRHEABMN
-Content-Type: multipart/mixed; boundary="------------FdNJxns2APFImyPwxgf1iouK"
-
---------------FdNJxns2APFImyPwxgf1iouK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjIuMDIuMjMgMTg6NTQsIEtyaXN0ZXIgSm9oYW5zZW4gd3JvdGU6DQo+IEhpLA0KPiBF
-bmNsb3NlZCBwbGVhc2UgZmluZCBhIHBhaXIgb2YgcGF0Y2hlcyB0aGF0IHBlcmZvcm0gc29t
-ZSBhZGRpdGlvbmFsIGNsZWFudXANCj4gdGhhdCB3YXMgc3VnZ2VzdGVkIGJ5IEJvcmlzLCBK
-YW4gYW5kIFRob21hcy4NCj4gDQo+IFNwZWNpZmljYWxseTogdGhpcyByZXN5bmMncyBhcmNo
-L3g4Ni9pbmNsdWRlL2FzbS94ZW4vY3B1aWQuaCBmcm9tIGl0cw0KPiB1cHN0cmVhbSBzb3Vy
-Y2UgaW4gdGhlIFhlbiB0cmVlLCBhbmQgdGhlbiB1c2VzIG9uZSBvZiB0aGUgbmV3ICNkZWZp
-bmUtcyB0bw0KPiByZXBsYWNlIGEgY29uc3RhbnQgaW4geDg2L3hlbi90aW1lLmMgdGhhdCB3
-YXMgcHJldmlvdXNseSBvbmx5IG51bWVyaWNhbGx5DQo+IGRlZmluZWQuICBQZWRhbnRpYyBj
-b2RlIGZyb20gdjEgaXMgZHJvcHBlZCBpbiBmYXZvciBvZiBhIG1vcmUgYXBwcm9wcmlhdGUN
-Cj4gcmV0dXJuIHN0YXRlbWVudC4NCj4gDQo+IENoYW5nZXMgZnJvbSB2MToNCj4gDQo+IC0g
-Q29kaW5nIHN0eWxlIGZpeHVwIGluIGFyY2gveDg2L3hlbi90aW1lLmMgKEZlZWRiYWNrIGZy
-b20gVGhvbWFzIEdsZWl4bmVyKQ0KPiANCj4gDQo+IEtyaXN0ZXIgSm9oYW5zZW4gKDIpOg0K
-PiAgICB4ZW46IHVwZGF0ZSBhcmNoL3g4Ni9pbmNsdWRlL2FzbS94ZW4vY3B1aWQuaA0KPiAg
-ICB4ODYveGVuL3RpbWU6IGNsZWFudXAgeGVuX3RzY19zYWZlX2Nsb2Nrc291cmNlDQo+IA0K
-PiAgIGFyY2gveDg2L2luY2x1ZGUvYXNtL3hlbi9jcHVpZC5oIHwgMjIgKysrKysrKysrKysr
-KysrKysrLS0tLQ0KPiAgIGFyY2gveDg2L3hlbi90aW1lLmMgICAgICAgICAgICAgIHwgIDcg
-KystLS0tLQ0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgOSBkZWxl
-dGlvbnMoLSkNCj4gDQoNCkZvciBib3RoIHBhdGNoZXM6DQoNClJldmlld2VkLWJ5OiBKdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
---------------FdNJxns2APFImyPwxgf1iouK
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
+--HzSWUdm6s+7n4EaD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+On 2023.02.02 12:50:18 +0000, Colin Ian King wrote:
+> There is a spelling mistake in a literal string. Fix it.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/gpu/drm/i915/gvt/firmware.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/g=
+vt/firmware.c
+> index dce93738e98a..4dd52ac2043e 100644
+> --- a/drivers/gpu/drm/i915/gvt/firmware.c
+> +++ b/drivers/gpu/drm/i915/gvt/firmware.c
+> @@ -171,7 +171,7 @@ static int verify_firmware(struct intel_gvt *gvt,
+>  	mem =3D (fw->data + h->cfg_space_offset);
+> =20
+>  	id =3D *(u16 *)(mem + PCI_VENDOR_ID);
+> -	VERIFY("vender id", id, pdev->vendor);
+> +	VERIFY("vendor id", id, pdev->vendor);
+> =20
+>  	id =3D *(u16 *)(mem + PCI_DEVICE_ID);
+>  	VERIFY("device id", id, pdev->device);
+> --=20
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Thanks, Colin.
 
---------------FdNJxns2APFImyPwxgf1iouK--
+Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+>=20
 
---------------Y0rDYZBjuwBEPs36bRHEABMN--
-
---------------XPqT0GIeb0bfN0VKqzFykd2d
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+--HzSWUdm6s+7n4EaD
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmP2/Q4FAwAAAAAACgkQsN6d1ii/Ey8C
-wwgAhnL8X2zH5z7EA+RoNKpROeQo1zhcJRQo6ThHhQXu+1WiKD0CQtD7LdyFXSrwKpa6nEOh1Efq
-EtfNrZD8D/QVCPRz5E+JkaFdG5P+wD0rIpZTv/R+zm6Rs9jpiyMG5SNKS+V8YtO8SzHp9cVJIL4W
-gbRrYo4oxtkvWhq8y6RnrZ12/F52VPIrIycaW0pE6jj1ZEp1IgWYIyLyX5JBL+W0LVGRMXK25gQz
-FfxCYYapsq9DOByLNCRs/csbdvo6NKSgXzDuJwbOr5MtIts1zJl7WSDde6LpCmC3XAewPzdTnyJE
-a634XwoTPaowTktpbAoGLzkxqb3OJ9gLtDviZDO0wQ==
-=KuN2
+iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCY/b9VwAKCRCxBBozTXgY
+J6YGAJ9xp830QGO5I7mHfJCVb6JRefE6tgCgi00lyStr8rW5AvDfi8sjBs32WoQ=
+=sHmJ
 -----END PGP SIGNATURE-----
 
---------------XPqT0GIeb0bfN0VKqzFykd2d--
+--HzSWUdm6s+7n4EaD--
