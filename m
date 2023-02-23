@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9078A6A0645
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29046A0644
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbjBWKaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S233628AbjBWKaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbjBWK35 (ORCPT
+        with ESMTP id S233682AbjBWK3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:29:57 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC802B634
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:29:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=qP1lk9slP6spetwfnNzelgnbPMU/
-        UDdBf8vESAlYVE8=; b=OjJm45iiKTQq3XEmfZeyq3V0hF/ep5jLABrvU4Ta2wEr
-        i2us02y/e6ZKMDWHk3/oK5y69qPFHkbrhWnfU8GwmU+Gm3hl5bKqW4/92xBc7my3
-        CbAA1oOfAq0593OqV66mZHpCTX2re3yDqKk5a2ZFfTf6Rwg+hO6ec5L58uAPKZs=
-Received: (qmail 885260 invoked from network); 23 Feb 2023 11:29:51 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Feb 2023 11:29:51 +0100
-X-UD-Smtp-Session: l3s3148p1@PRoCflv1QJFehh92
-Date:   Thu, 23 Feb 2023 11:29:47 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION PATCH RFC] net: phy: don't resume PHY via MDIO when
- iface is not up
-Message-ID: <Y/dAG8aJEmQREuKR@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-renesas-soc@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230223070519.2211-1-wsa+renesas@sang-engineering.com>
- <CAMuHMdVzzzztNU6dNFN30k4h4FheD2-439vaiY4AnGJz4EuwoQ@mail.gmail.com>
+        Thu, 23 Feb 2023 05:29:54 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090D62ED52;
+        Thu, 23 Feb 2023 02:29:52 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 39457123A;
+        Thu, 23 Feb 2023 11:29:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1677148189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ce0djBkbgIfPJp0Z94KT92OljnaqxS9qhflvWJOeC8w=;
+        b=CzegLmDGtXalVclPYQ2HDEDV4zmlUkIQ3F8o4lnGd0VtN5m+/l02eyMW+FUw+ukA9zTw3d
+        0E5Uctt1F8mZSMrnrklOgRPqzKDjLXeF+eHVqMQC4ZpqrEzbfFv/f+tcNOQJY0pnil3AD+
+        P8LXDnqgHYprGa+KZbEVwcccZ6o9yyiubWVAF6QI0AEYqCQFFMjvJg8gv2t69DVwYFFbbS
+        Q9XQhwUXseZqtpiwZmTIhXgblcfBZ2xGP6CxvpXw0MaEBVZ+4G74xzSbWcP6uEUe7q4s6R
+        VvQNPxLjGLXgV8K0jU0tK+oNwMfwFuMsEa/m8nChwBbcKRUoDqHhgIGH2MVuPA==
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="quG3KrzwVuVHDyF+"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVzzzztNU6dNFN30k4h4FheD2-439vaiY4AnGJz4EuwoQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Date:   Thu, 23 Feb 2023 11:29:49 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kumaravel.thiagarajan@microchip.com, UNGLinuxDriver@microchip.com,
+        arnd@arndb.de, derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        gregkh@linuxfoundation.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 char-misc-next 2/5] misc: microchip: pci1xxxx: load
+ gpio driver for the gpio controller auxiliary device enumerated by the
+ auxiliary bus driver.
+In-Reply-To: <CACRpkda5NjddOUdqjg4b9YmJizd7Q0576S-nj4M=aw3xPF2Ywg@mail.gmail.com>
+References: <20220824200047.150308-3-kumaravel.thiagarajan@microchip.com>
+ <20230217103116.2126311-1-michael@walle.cc>
+ <CACRpkda5NjddOUdqjg4b9YmJizd7Q0576S-nj4M=aw3xPF2Ywg@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <cbd3adea51843a4528506ded927f1023@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 2023-02-23 11:23, schrieb Linus Walleij:
+> On Fri, Feb 17, 2023 at 11:31 AM Michael Walle <michael@walle.cc> 
+> wrote:
+>> [+ GPIO maintainers]
+>> 
+>> > PIO function's auxiliary bus driver enumerates separate child devices for
+>> > GPIO controller and OTP/EEPROM interface. This gpio driver implemented
+>> > based on the gpio framework is loaded for the gpio auxiliary device.
+>> >
+>> > Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+>> > ---
+>> >  MAINTAINERS                                   |   1 +
+>> >  drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
+>> >  .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 163 ++++++++++++++++++
+>> 
+>> Why doesn't this file live in the GPIO subsystem? Seems like this 
+>> haven't
+>> got a proper review from the GPIO people (probably due to the "misc:"
+>> subject). Maybe even GPIO_REGMAP could be used.
+> 
+> I agree, plese resend this patch with the linux-gpio mailing list and 
+> the GPIO
+> maintainers on CC.
 
---quG3KrzwVuVHDyF+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is already in drivers/misc. There should be a follow up patch.
 
-Hi Geert,
-
-> > TLDR; Commit 96fb2077a517 ("net: phy: consider that suspend2ram may cut
-> > off PHY power") caused regressions for us when resuming an interface
->=20
-> That is actually an LTS commit.  Upstream is commit 4c0d2e96ba055bd8
-> ("net: phy: consider that suspend2ram may cut off PHY power") in
-> v5.12-rc1.
-
-Oh, thank you for correcting me!
-
-All the best,
-
-   Wolfram
-
-
---quG3KrzwVuVHDyF+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP3QBcACgkQFA3kzBSg
-KbZadw//eZeHoqtatcfoxTTnniDmRrudmUAV79sYIHXf2BelftolojiuaYjlgPUe
-WjJxt8TV/kkXS2MExCfTZTbORHAZY618Ocwu9XTJ21HWiCcoDOORcPXG3jxnvtqp
-w70t9W5eMsgcMztILHbtN2pEQIZ/ltZyEo2DOf0hrZ8NvdT40Biwp1bBQ7eJJF+f
-bHuK7WbAARkYv9YW36TdCHXLm2WZvsjQvHeazfSBKn304ru7WOfovHErG826fP2J
-nY3sauTR86rFAIWz7fifulFhNZ1Xd0DLlJ5/xudce2zfAd+XtcD0VNdfek76dEN2
-mRSKTIhSI5J38Xwy4tUfPl2PBlVUqq38b6554kBfsLpphV7ayJldnKhWyC6Q/ppA
-o2LMflW2SmiHkTe/1z1WRBqVuYwp2XiVQmbOLyi23T+Dr7+AvRkbbt6p5NJUkRhD
-4vMgtGIFzHzb6rTr47OHufidQ4MEIwp1M+yrfXyh5kKCsddcTHTPb6b4l1ykO2Cz
-m+jceMNmIBgwzwVnlfENfY6OAJQTd2EenotB8DTTu7TlLBAy0JTNLm8ADlIJcVVE
-L/XAZ9azQqG0zACTOqq589XB2VWXmiLcB7sHqOpSF+Ia3hpMU38+M6b0V8pHxvwc
-Wxro5hOiaC72TnU6z3tvnorPFXXhi1LJgs5EP7e7Y16fJpLBn+s=
-=gpeL
------END PGP SIGNATURE-----
-
---quG3KrzwVuVHDyF+--
+-michael
