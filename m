@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D676A01B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE016A01B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbjBWEEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 23:04:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S233014AbjBWEHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 23:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjBWEEm (ORCPT
+        with ESMTP id S230281AbjBWEHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 23:04:42 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E642360BD;
-        Wed, 22 Feb 2023 20:04:41 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so1988087wms.1;
-        Wed, 22 Feb 2023 20:04:41 -0800 (PST)
+        Wed, 22 Feb 2023 23:07:30 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0043E600;
+        Wed, 22 Feb 2023 20:07:28 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso11357997pjb.5;
+        Wed, 22 Feb 2023 20:07:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y8To/H78yTZd9LcMUadl3BIzH4V/slxywotjiMrN3r4=;
-        b=o1HfscIQJCjgVCd5hYUh26OcPHizZ5M2fUPOAzI2VhcOC/xLKjGGbFhBjD6r4NN691
-         ksofcihZiLa/50yf+G3ytaKA22JrL4aVoiS0d6xvhYkTKkunv0nKyfxAe9ITNAL4uiw4
-         0E7ktlJk7Eq/eN7Q5oejnu/sNlw7qq5RtfdlP6YNJYPTqtA7dA1Yp9jybYGUwgaT2BMR
-         rer5IJhQGfkn+Dnd25z6rfEakUF1uhPIfF1TPZoguC9KaEfDtr69TIQgkPpNKZgHLdtH
-         /YUZPS5Zgcfa7Q66RpJE+DMrWarAQGm7sewJSdCio3cmTmgBa+IgToVgr8g82OunuKzy
-         Ei9w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to:date
+         :cc:to:from:subject:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oWSEd1NxYC11TmhqLYnTRyNanS7IntnXRdA2JcgjIq4=;
+        b=A6xKQmhsb0+t3BEJkyFlkIOkRBQwx77Yv4++QoGR7PUIzHXLjhkzOpopYLPVx2BbWb
+         NrSAfaSlzVUD4fy7wK2vqi2cqNG1hkR4qFHoPL2IyNJx6yXu1Cy5anJhi901uCzcICRQ
+         QAYsMD9+qVsQfbz9+xGLl665DurwWY9iITEFqxZRwSptRfZZtrMTNvWYE0RmFmMNASgY
+         cj9QBxrskW20mNqSplSd5GCQTNEMRXSO/n7Rv0O2s1WhlAnV42j/mRUf/sO0ulhQpZwQ
+         3SIaY/osDqNjJfx9llwn3UoRBGclW7PwsZW0ejABRIu7YQh0xtbrlAF9dOnure6b6LoA
+         hxPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y8To/H78yTZd9LcMUadl3BIzH4V/slxywotjiMrN3r4=;
-        b=mzLiNLpZUrNhjtz19efJsd3lJdaKmMboOmZ+Kzj3uA2uElKV2Tgl6KFwHnBywo6k8H
-         tfKv24Kx9d3qLQCM/DUwZxo8cK35VjvmAo4Qd9XQfdci+XVKNjsK2pel0SYQ2s75vFh0
-         clAvCAi0iXXbgUBAGiNvf+q6jEDVph5xf3KdBq48+6oFQd6Xe67V8S17YQnAetGgEX1C
-         Z7gKKL/28LjHOolXO+LvwtnmUWqjX+yuzLVsUnug6MJTb5PtTjWr8T6Evm9/dXd2Kmqf
-         n0vD/scujO9CNNwFPKD7OoaT0nqMxhLIkj46qZrn3/p8V3/TMXAKuMT5ciG3aRr4R3Xq
-         fGYw==
-X-Gm-Message-State: AO0yUKXWfIJkdZHdIXnDh/m/GHRbATt2XdI+ea4XZwDND5ghAa1wJVZY
-        h9t//7rKpninsx8JmC6ucHE=
-X-Google-Smtp-Source: AK7set8lUfwhlzbXCtwlmrIXwAi6xDALa5tCJgndDsO1par4fyPiz+VkoSeL+uaFG8HiH9ECUi9obw==
-X-Received: by 2002:a05:600c:2ad6:b0:3e8:fade:3795 with SMTP id t22-20020a05600c2ad600b003e8fade3795mr3343342wme.17.1677125079485;
-        Wed, 22 Feb 2023 20:04:39 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm8986413wmi.26.2023.02.22.20.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 20:04:38 -0800 (PST)
-Date:   Thu, 23 Feb 2023 07:04:35 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     oe-kbuild@lists.linux.dev, tytso@mit.edu, adilger.kernel@dilger.ca,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] ext4: improve inode table blocks counting in
- ext4_num_overhead_clusters
-Message-ID: <Y/bl05WBDNT8FPoi@kadam>
-References: <202302222219.u328sqfs-lkp@intel.com>
- <1802222f-9c10-9ea3-93fb-6fce086e201a@huaweicloud.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1802222f-9c10-9ea3-93fb-6fce086e201a@huaweicloud.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=content-transfer-encoding:mime-version:references:in-reply-to:date
+         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oWSEd1NxYC11TmhqLYnTRyNanS7IntnXRdA2JcgjIq4=;
+        b=gzsLz2ugzgy4hgyvOyMMTN68WeNYpAZEkLBopKcKb+S91NNeX8FiaCe/edsFnixsJB
+         tpC7As/YGdQ5vHx7Mb6at08+V8wOu5HPTMdcYNIiOk5XqZe9GEsnjgCl7JtNy10bngVv
+         yu96bReIRPEXim/LFQwu7IcTrYrxWeTj1O0efeO5bJUZFehAYyRmaQGHOqTEWIYH+Qpy
+         o3uyoowRmG+NkfODyRs6k2Uzuf8cYnGzsKy4+VdYR8FEDmo/AgwWpzUxH5FdKN0GDtzN
+         7BX0SRSA7Z0rRX2ZZtbd214Ko2NRNNK4RIsXhf0utGL3s/Og5WMABpI5VVssX3PzvGV2
+         2WiQ==
+X-Gm-Message-State: AO0yUKVzRO8TQXoGSCd2svecqUFAa9jfK5kRmnQ8I+p3ptNvu6MJKIoD
+        cHbhFycd9Vzm/LZpeRyDNeM=
+X-Google-Smtp-Source: AK7set+JvYa165vssA3FxAgXlIB6DbNGxRw2hl3MGkRtnutUbOSThX5fn9dhRPgrTQR7/O7qY8zBIQ==
+X-Received: by 2002:a17:90b:4a4d:b0:234:148:4b27 with SMTP id lb13-20020a17090b4a4d00b0023401484b27mr13371708pjb.17.1677125247646;
+        Wed, 22 Feb 2023 20:07:27 -0800 (PST)
+Received: from cdg1-dhcp-7-226.amazon.fr ([54.240.193.0])
+        by smtp.googlemail.com with ESMTPSA id gi4-20020a17090b110400b00230ab56a1f3sm5802814pjb.51.2023.02.22.20.07.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 Feb 2023 20:07:26 -0800 (PST)
+Message-ID: <88ab8c8348373e5c7c90c985dd92b5e06f32b16b.camel@gmail.com>
+Subject: Re: [RFC PATCH v3 19/22] arm64: unwinder: Add a reliability check
+ in the unwinder based on ORC
+From:   Suraj Jitindar Singh <sjitindarsingh@gmail.com>
+To:     madvenka@linux.microsoft.com
+Cc:     poimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 23 Feb 2023 14:07:19 +1000
+In-Reply-To: <20230202074036.507249-20-madvenka@linux.microsoft.com>
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+         <20230202074036.507249-1-madvenka@linux.microsoft.com>
+         <20230202074036.507249-20-madvenka@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,63 +79,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 09:31:54AM +0800, Kemeng Shi wrote:
+On Thu, 2023-02-02 at 01:40 -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 > 
+> Introduce a reliability flag in struct unwind_state. This will be set
+> to
+> false if the PC does not have a valid ORC or if the frame pointer
+> computed
+> from the ORC does not match the actual frame pointer.
 > 
-> on 2/22/2023 11:13 PM, Dan Carpenter wrote:
-> > Hi Kemeng,
-> > 
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-properly-handle-error-of-ext4_init_block_bitmap-in-ext4_read_block_bitmap_nowait/20230221-115830
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-> > patch link:    https://lore.kernel.org/r/20230221115919.1918161-8-shikemeng%40huaweicloud.com
-> > patch subject: [PATCH 7/7] ext4: improve inode table blocks counting in ext4_num_overhead_clusters
-> > config: riscv-randconfig-m031-20230219 (https://download.01.org/0day-ci/archive/20230222/202302222219.u328sqfs-lkp@intel.com/config)
-> > compiler: riscv32-linux-gcc (GCC) 12.1.0
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Reported-by: Dan Carpenter <error27@gmail.com>
-> > | Link: https://lore.kernel.org/r/202302222219.u328sqfs-lkp@intel.com/
-> > 
-> > New smatch warnings:
-> > fs/ext4/balloc.c:153 ext4_num_overhead_clusters() error: uninitialized symbol 'block_cluster'.
-> > 
-> > vim +/block_cluster +153 fs/ext4/balloc.c
-> [...]
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  128  	/*
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  129  	 * For the allocation bitmaps, we first need to check to see
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  130  	 * if the block is in the block group.  If it is, then check
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  131  	 * to see if the cluster is already accounted for in the clusters
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  132  	 * used for the base metadata cluster and inode tables cluster.
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  133  	 * Normally all of these blocks are contiguous, so the special
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  134  	 * case handling shouldn't be necessary except for *very*
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  135  	 * unusual file system layouts.
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  136  	 */
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  137  	if (ext4_block_in_group(sb, ext4_block_bitmap(sb, gdp), block_group)) {
-> > b0dd6b70f0fda1 Theodore Ts'o     2012-06-07  138  		block_cluster = EXT4_B2C(sbi,
-> > b0dd6b70f0fda1 Theodore Ts'o     2012-06-07  139  					 ext4_block_bitmap(sb, gdp) - start);
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  140  		if (block_cluster >= base_clusters &&
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  141  		    (block_cluster < itbl_cluster_start ||
-> > 2b59a2fd93873a Kemeng Shi        2023-02-21  142  		    block_cluster > itbl_cluster_end))
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  143  			num_clusters++;
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  144  	}
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  145  
-> > d5b8f31007a937 Theodore Ts'o     2011-09-09  146  	if (ext4_block_in_group(sb, ext4_inode_bitmap(sb, gdp), block_group)) {
-> > 
-> > These two conditions are exactly the same so I don't see why they can't
-> > be combined into one condition.  I have read the comment, but I guess I
-> > don't understand ext4 well enough to really understand it.
-> These two conditions check two kinds of bitmap block: *block* bitmap block
-> and *inode* bitmap block.
+> Now that the unwinder can validate the frame pointer, introduce
+> arch_stack_walk_reliable().
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com
+> >
+> ---
+>  arch/arm64/include/asm/stacktrace/common.h |  15 ++
+>  arch/arm64/kernel/stacktrace.c             | 167
+> ++++++++++++++++++++-
+>  2 files changed, 175 insertions(+), 7 deletions(-)
+> 
 
-Ah right.  When I was reviewing this code, I copy and pasted the if
-conditions so they were exactly lined up with each other and I still
-didn't see the block vs inode difference until you pointed it out.  :P
+[snip]
+ 
+> -static void notrace unwind(struct unwind_state *state,
+> +static int notrace unwind(struct unwind_state *state, bool
+> need_reliable,
+>  			   stack_trace_consume_fn consume_entry, void
+> *cookie)
+>  {
+> -	while (1) {
+> -		int ret;
+> +	int ret = 0;
+>  
+> +	while (1) {
+> +		if (need_reliable && !state->reliable)
+> +			return -EINVAL;
+>  		if (!consume_entry(cookie, state->pc))
+>  			break;
+>  		ret = unwind_next(state);
+> +		if (need_reliable && !ret)
+> +			unwind_check_reliable(state);
+>  		if (ret < 0)
+>  			break;
+>  	}
+> +	return ret;
 
-Thanks!
+nit:
 
-regards,
-dan carpenter
+I think you're looking more for comments on the approach and the
+correctness of these patches, but from an initial read I'm still
+putting it all together in my head. So this comment is on the coding
+style.
+
+The above loop seems to check the current reliability state, then
+unwind a frame then check the reliability, and then break based of
+something which couldn't have been updated by the line immediately
+above. I propose something like:
+
+unwind(...) {
+	ret = 0;
+
+	while (!ret) {
+		if (need_reliable) {
+			unwind_check_reliable(state);
+			if (!state->reliable)
+				return -EINVAL;
+		}
+		if (!consume_entry(cookie, state->pc))
+			return -EINVAL;
+		ret = unwind_next(state);
+	}
+
+	return ret;
+}
+
+This also removes the need for the call to unwind_check_reliable()
+before the first unwind() below in arch_stack_walk_reliable().
+
+- Suraj
+
+>  }
+>  NOKPROBE_SYMBOL(unwind);
+>  
+> @@ -216,5 +337,37 @@ noinline notrace void
+> arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  		unwind_init_from_task(&state, task);
+>  	}
+>  
+> -	unwind(&state, consume_entry, cookie);
+> +	unwind(&state, false, consume_entry, cookie);
+> +}
+> +
+> +noinline notrace int arch_stack_walk_reliable(
+> +				stack_trace_consume_fn consume_entry,
+> +				void *cookie, struct task_struct *task)
+> +{
+> +	struct stack_info stacks[] = {
+> +		stackinfo_get_task(task),
+> +		STACKINFO_CPU(irq),
+> +#if defined(CONFIG_VMAP_STACK)
+> +		STACKINFO_CPU(overflow),
+> +#endif
+> +#if defined(CONFIG_VMAP_STACK) && defined(CONFIG_ARM_SDE_INTERFACE)
+> +		STACKINFO_SDEI(normal),
+> +		STACKINFO_SDEI(critical),
+> +#endif
+> +	};
+> +	struct unwind_state state = {
+> +		.stacks = stacks,
+> +		.nr_stacks = ARRAY_SIZE(stacks),
+> +	};
+> +	int ret;
+> +
+> +	if (task == current)
+> +		unwind_init_from_caller(&state);
+> +	else
+> +		unwind_init_from_task(&state, task);
+> +	unwind_check_reliable(&state);
+> +
+> +	ret = unwind(&state, true, consume_entry, cookie);
+> +
+> +	return ret == -ENOENT ? 0 : -EINVAL;
+>  }
 
