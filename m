@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3726A0296
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C153A6A0297
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbjBWFx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 00:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S233274AbjBWFxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 00:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjBWFx0 (ORCPT
+        with ESMTP id S233287AbjBWFxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 00:53:26 -0500
+        Thu, 23 Feb 2023 00:53:35 -0500
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6427F2A6DB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:53:25 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536cad819c7so98421057b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:53:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862AE4A1E1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:53:32 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536be78056eso107924827b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:53:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DDgXS1ftumo1r65N+SbOeCecYRv//vJu/P3chpFR5JQ=;
-        b=nm+fgnXRAHDlICA2dS9MgRkbQs2nSJVBBOYglg3/KRf4PfqmJIHgcrQMjNcz9Imaye
-         3XuYy/14YPK1YzI98f3OtdXzP+LyJywgOkBk7gjTk3Lg0WkzEGFjbSGpHQOBMOBY13o5
-         GvW0Iku8BKE9SFt7eW9e3BOTuaCs685odbhFnO/6TdUKtAyk9qKZXplCsm/3S6+PmCwO
-         XX13ETDSg5gEUyBVnFGjBmB6KLBP1gCFpnpBTr+GxC5ACwJdH+N/hl2Ak3tvry1+zALV
-         DBWZ3fXGZbPzZnekrzozq9Zc2vGygAMxvhQUj/Ve9RgEBEi/kvOp2xU4EvY1gIuWjJkt
-         caIg==
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gHV2MWu6hcWn6rb2AA6nCC6xX1C2U+LxMx/784jLbgQ=;
+        b=b+sJ4qcNYrXX3lgmlyz7ajioBwI7xUmqQ0p39YD+7sXChu2TyyNWFjBmX4K9fzz7oj
+         PNjOx5RHw9LxYTy1kdkoxXh9G1GdybQd0eN0rT7Ip9f+fAYxuS6WrCk8KBq39VaUX5FP
+         BTGHXBu1ycoSpDu+VfFY1ufcZBhnqTzbIZPfmnCvxNZfCYPyZcyYdBtj00+O84X+0J6I
+         HMpNSyUTXrNp55LHRlJxd6UADKhnw3Gu+PP6cvKwdsHLiYLzpAouhUN+r1zheRBtX0c8
+         7jkBk2cMopk4Wz030UDTRY8G788A3VR6AXZXyQOTfPF00rD8TgOwS6kWADDSfiLPDz0P
+         XuSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DDgXS1ftumo1r65N+SbOeCecYRv//vJu/P3chpFR5JQ=;
-        b=Z7MdbwFvzCO6tdFNlYs90Ae7KwJJ1m15LY/MLr+WSkKKKrRdv1SOlWpITklhF2/I7b
-         I8TQA+dTe0oHnj0ce9WLQLh2v9JWfKwn0mpnKD0PmA8yE3D4Kw9R0qq0J7I8CqKvlbHf
-         3VB+qx748PpNj9bYizebbbSv1FvQLGM/Wpfuv3mtb+O5FS5S57DPf3Ofgw57thJjuGg3
-         Kw55rzr96m2fOa3fyJbs04XogSVcAH1dnuKLWYAGkl9xd0vFQnOE8itryOrVy1XICnOq
-         sasE5VIbI8REAyUv1yQh0dBdixHYXm0xmXsncH9Ahh4WwJCi5Si5DepTkOFnW1t427JX
-         7PeQ==
-X-Gm-Message-State: AO0yUKXc38V7etGooXGBDj2t9GHpj9F+o9GSn5me8OQDiv0rgXLmvNLf
-        SBEAQ2EPIn9TlbsxgUBdOfqNTJpLgINq
-X-Google-Smtp-Source: AK7set+p2Eid2y8XQfngFt7UiVeZneEnwLO+j03PtLgelli3+OybfcZRHUyv64woWmRAA9xg93yark0S4EKT
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gHV2MWu6hcWn6rb2AA6nCC6xX1C2U+LxMx/784jLbgQ=;
+        b=n3mqM0+LM0QEtbWHCOXx7DIbRuNwHKXZeNkYnjK+cLRo+1hzJs84iPea4yY0q+nHKP
+         SPA8YBiTb/CDqn51t1NIU4LIA5Ta+KMTUmaotTjwf/eZR5epYqOu69XX/VQEiJJ4/Bny
+         l/tmHaSHQXjZxypHfPFZC06fzbwfyuYkROiu92BItGVjK1pL8welCL1uUYNXNC6zBYoL
+         2LOHycTPS5GQYEIej1x5uzP7DQi8xBV56xX3XJNtqQJNYBsYva6CK2muq2qRV1tXYOTp
+         TUWSGFiFPQTQxA+sXyLPN7sHlQ/1Z6lUPTxdAQB3vT0kLK2vhUzW6GvQPHzqSQNfKrQt
+         Rung==
+X-Gm-Message-State: AO0yUKWHsrfGP3Hq/zT/kwwrHjvhgJNFzYu9wDu11axUIUcWm1JCSarP
+        cns416jT1hW22dCc/zn/wy12+oIjny8L
+X-Google-Smtp-Source: AK7set8sCVMO2ZfpFgOc4CNK1UZmo85h06F0hzI1Lmu31q+Jq7r6ZZvo4+WZAgMEX8QjLocqm6C7ISGbSfC0
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9002:67cd:9e6b:7083])
- (user=irogers job=sendgmr) by 2002:a05:6902:138d:b0:a09:314f:9f09 with SMTP
- id x13-20020a056902138d00b00a09314f9f09mr1623114ybu.6.1677131604657; Wed, 22
- Feb 2023 21:53:24 -0800 (PST)
-Date:   Wed, 22 Feb 2023 21:53:03 -0800
-Message-Id: <20230223055306.296179-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:ae57:0:b0:52e:b235:cd22 with SMTP id
+ g23-20020a81ae57000000b0052eb235cd22mr1696413ywk.8.1677131611611; Wed, 22 Feb
+ 2023 21:53:31 -0800 (PST)
+Date:   Wed, 22 Feb 2023 21:53:04 -0800
+In-Reply-To: <20230223055306.296179-1-irogers@google.com>
+Message-Id: <20230223055306.296179-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230223055306.296179-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v1 0/3] Update Alderlake and IcelakeX events
+Subject: [PATCH v1 1/3] perf vendor events intel: Update alderlake to v1.19
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -75,25 +77,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update Alderlake and IcelakeX events to v1.19.
+Update alderlake perf json from v1.18 to v1.19.
 
-Developed on the perf-tools-next branch of:
-git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+Based on:
+https://github.com/intel/perfmon/pull/58
+perf json files created using:
+https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
 
-Ian Rogers (3):
-  perf vendor events intel: Update alderlake to v1.19
-  perf vendor events intel: Update alderlaken to v1.19
-  perf vendor events intel: Update icelakex to v1.19
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/pmu-events/arch/x86/alderlake/memory.json   |  8 ++++++++
+ tools/perf/pmu-events/arch/x86/alderlake/pipeline.json | 10 ++++++++++
+ tools/perf/pmu-events/arch/x86/mapfile.csv             |  2 +-
+ 3 files changed, 19 insertions(+), 1 deletion(-)
 
- .../pmu-events/arch/x86/alderlake/memory.json |  8 +++++
- .../arch/x86/alderlake/pipeline.json          | 10 ++++++
- .../arch/x86/alderlaken/memory.json           |  7 +++++
- .../pmu-events/arch/x86/icelakex/cache.json   |  8 +++++
- .../arch/x86/icelakex/floating-point.json     | 31 +++++++++++++++++++
- .../arch/x86/icelakex/pipeline.json           | 10 ++++++
- tools/perf/pmu-events/arch/x86/mapfile.csv    |  6 ++--
- 7 files changed, 77 insertions(+), 3 deletions(-)
-
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/memory.json b/tools/perf/pmu-events/arch/x86/alderlake/memory.json
+index 37f3d062a788..55827b276e6e 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlake/memory.json
++++ b/tools/perf/pmu-events/arch/x86/alderlake/memory.json
+@@ -24,6 +24,14 @@
+         "UMask": "0xf4",
+         "Unit": "cpu_atom"
+     },
++    {
++        "BriefDescription": "Counts the number of cycles that the head (oldest load) of the load buffer and retirement are both stalled due to a DL1 miss.",
++        "EventCode": "0x05",
++        "EventName": "LD_HEAD.L1_MISS_AT_RET",
++        "SampleAfterValue": "1000003",
++        "UMask": "0x81",
++        "Unit": "cpu_atom"
++    },
+     {
+         "BriefDescription": "Counts the number of cycles that the head (oldest load) of the load buffer and retirement are both stalled due to other block cases.",
+         "EventCode": "0x05",
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
+index 2dba3a115f97..f848530fbf07 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
+@@ -361,6 +361,16 @@
+         "UMask": "0xeb",
+         "Unit": "cpu_atom"
+     },
++    {
++        "BriefDescription": "Miss-predicted near indirect branch instructions retired (excluding returns)",
++        "EventCode": "0xc5",
++        "EventName": "BR_MISP_RETIRED.INDIRECT",
++        "PEBS": "1",
++        "PublicDescription": "Counts miss-predicted near indirect branch instructions retired excluding returns. TSX abort is an indirect branch.",
++        "SampleAfterValue": "100003",
++        "UMask": "0x80",
++        "Unit": "cpu_core"
++    },
+     {
+         "BriefDescription": "Counts the number of mispredicted near indirect CALL branch instructions retired.",
+         "EventCode": "0xc5",
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
+index 1c6eef118e61..e69b29123327 100644
+--- a/tools/perf/pmu-events/arch/x86/mapfile.csv
++++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+@@ -1,5 +1,5 @@
+ Family-model,Version,Filename,EventType
+-GenuineIntel-6-(97|9A|B7|BA|BF),v1.18,alderlake,core
++GenuineIntel-6-(97|9A|B7|BA|BF),v1.19,alderlake,core
+ GenuineIntel-6-BE,v1.18,alderlaken,core
+ GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
+ GenuineIntel-6-(3D|47),v26,broadwell,core
 -- 
 2.39.2.637.g21b0678d19-goog
 
