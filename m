@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712156A00C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5877C6A00C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjBWBrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S232969AbjBWBrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjBWBrn (ORCPT
+        with ESMTP id S232867AbjBWBro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:47:43 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646A741B6E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:47:41 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m7so12385159lfj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:47:41 -0800 (PST)
+        Wed, 22 Feb 2023 20:47:44 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2F441B7F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:47:42 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id k14so11480213lfj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:47:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nxn/W/DZi3qbxg4e9X034UdXsXls711+0gs5673NuBI=;
-        b=mCAik50eLZjjGB53EUXjlQ5ftpVIcO95aPBhIKa/11Adc/DTAgpknKq1Sp1NMU+MX2
-         LPN/BAwSeR4NHu/IYKaW4gQb3pnWmpO9OU0+EPQTJ0B/uDuky4PjtNTp3j5N0FkfwjpG
-         eiAtCMfumMH5/BTUt1x3H9AsXmykakC9N0eHVRGjzVzkLK58G7Bqarhqc9H9KmheUFlS
-         cZfRUg/Wesq7FFWT5xU59mbI95pHHXT7eCaSIWBlKzcfeihI/EaTMc33SBNsBW8UEjjB
-         sTW89Djj1aZ3tZuaayLZcO6YiHzUerqs2CbL+IC6/mZuZCZ8HBRhAXdRzG2OgkD7heIl
-         oRYA==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mCGO18fFeWFx1/oqatAOPTvgztN8ex2StTWWkNQew7c=;
+        b=UqcUrP62HrsiAt9Q6uCcF6e86j+YbcDvjBn5qnC2A5wInQidrtGebmp12w1PhJijsf
+         eyyLLK+0Rm3o/ycFDsAVvXQrUhPkj2xMqrFkW7yEsYmVAlXyab1/4iezenzh/33xuY4f
+         qO08D8OrbEZsTLr2Hi+HxZ++iooZdvz9tTCCMeCktzMRjEpCNl2lgAUFHcpQezwWShrh
+         bFyLHOsPYMlgsJwEkMRMJKFpeZJSH9PBiPY4/O/dfUl66wOLOhAi0oLCpH6RUurVYfz0
+         LBcVg7pdRIZT6JXurlxjAukXhHn9BDVoNUhMytj/JFr2dKZn5z9f7LzE4iEBt8ElWAJ4
+         zC5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nxn/W/DZi3qbxg4e9X034UdXsXls711+0gs5673NuBI=;
-        b=mcMJtbIrxzoyAlNfrEso/+ssyQTpP8SZOGEry8VbpPwowfWP/GIZBJoyKfJmPL6Vu3
-         Om4z8cDJecRKF7wJIi4jBcevx/C6Ear64AnaxD1aWvpa3OpIUTptqSN12MPnKkeknkOf
-         4c/FnPu1Zcjzgcgoxg6TDmpisGTqWeyDsBC+ySSTRHHMJ0nnxDEsVu+nAuYOO0muHmRP
-         oTI4ZsfwSJj88zX69PvS6r7GqstdBRXx4eYCE/fR7MCXq4arix7Wr2+9uKckhi8yJN8v
-         Lp+5cOiKWbDw1fWF0OCbVKBA2v6/FnlI6EkiOlaxKv0kLhTGgKilO4LtA2nrmgZj2ouu
-         nvJA==
-X-Gm-Message-State: AO0yUKWBeBmHtmZrtQYDMd0O4JjUMdyq7ws2X2FN+hKkKtYpf8rnptfj
-        iKbpaTNUTUWxwROj5e8e3nZBBg==
-X-Google-Smtp-Source: AK7set/yIipOLIpZGix3iM4th6CUQGlXFXdTgXbTsnVX9emoOTi2dQH/cBV6Nyg50Y8Wz7PP6kqF9A==
-X-Received: by 2002:ac2:5fca:0:b0:4db:3890:cb4e with SMTP id q10-20020ac25fca000000b004db3890cb4emr3538750lfg.4.1677116859655;
-        Wed, 22 Feb 2023 17:47:39 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mCGO18fFeWFx1/oqatAOPTvgztN8ex2StTWWkNQew7c=;
+        b=FFBSEUytH3PuRTo5plchu7uyXMaQku03JyU0ILpauuySHBKxN3ZuqqPwDEnL1UuGTq
+         n4RlhPSFd0vViS0FVl4T8Kb7iotAwvAjJp4VXnjmdIAZYW/ldOKRyRdPPUoABamexi9P
+         NCGBPAdlUROQxUls3VJzeg8SZt8x0EbCRfzV8dCDIAZfvku3stKLdNVgltQGvsZPPkja
+         wXsfNSLcGZShy6BiLyM+NK9VvAK0LBcFQKXFvncwRQgAoS9WFI3tFwQ+S+vcoH0D4v16
+         8JQGdqpQGvvjh7crpTZeBBHvVGFwNUQSGEBFFzC7xy32hXRodMF7k9+P6MzMICJg2eG4
+         4V0Q==
+X-Gm-Message-State: AO0yUKW7V0oIIQEQs2ygR9YaoxSN8CpUMeox8PLDu3vxYMtlpBioWakF
+        axo4mC/uKRtXO/DjU+TD/jadeA==
+X-Google-Smtp-Source: AK7set8xB6MQPyyJqTPpJqKVNCu8vdvqHdvsXstaNqRHFGhNsyhWgBlzm2zLSO/JTK2EEOF8sAaHlA==
+X-Received: by 2002:a05:6512:3988:b0:4a4:68b7:deb7 with SMTP id j8-20020a056512398800b004a468b7deb7mr4160498lfu.19.1677116860797;
+        Wed, 22 Feb 2023 17:47:40 -0800 (PST)
 Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id 12-20020ac2482c000000b004dc807b904bsm427376lft.120.2023.02.22.17.47.38
+        by smtp.gmail.com with ESMTPSA id 12-20020ac2482c000000b004dc807b904bsm427376lft.120.2023.02.22.17.47.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 17:47:39 -0800 (PST)
+        Wed, 22 Feb 2023 17:47:40 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v2 0/6] OPP and devfreq for all Adrenos
-Date:   Thu, 23 Feb 2023 02:47:36 +0100
-Message-Id: <20230223-topic-opp-v2-0-24ed24cd7358@linaro.org>
+Date:   Thu, 23 Feb 2023 02:47:37 +0100
+Subject: [PATCH v2 1/6] drm/msm/a2xx: Include perf counter reg values in
+ XML
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALjF9mMC/x2NQQrDIBBFrxJm3QGdQBNyldCFmmkcEBVtSyHk7
- hmyfJ/3eQd0bsIdluGAxj/pUrICPQYI0eWdUTZlIEOjIRrxU6oELLWisTxZS35+Thuo711n9M3
- lEPWRvynpWBu/5X8H1td5XsvAkPZwAAAA
+Message-Id: <20230223-topic-opp-v2-1-24ed24cd7358@linaro.org>
+References: <20230223-topic-opp-v2-0-24ed24cd7358@linaro.org>
+In-Reply-To: <20230223-topic-opp-v2-0-24ed24cd7358@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -68,83 +69,51 @@ Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677116858; l=2510;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677116858; l=830;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=qfYEQNocMpdpOTn7eel7AhIAvweJRI9r+7Gb86qiMPo=;
- b=E56dXGGVbqioi2hquaXMAnNHLk/bie6SAc+/Kdk47Bh6BiOLpXxDSBY+nspd3UPHVOQaDR11+OLB
- AxaSlPj5BmPRuDXLcRyhNLVTWYqGL/H0Gs8O7ITG338sFf19M6i/
+ bh=mzjSUO+qHIiKaLiyXFVom/GoyNVpw37b+tvLzQHI5RY=;
+ b=sOt90zAVghwEBEdFaBDhwOmr+WDEq6xWWtPbhadU8HLedLihLtGPgw3G+utNjj5nKzLKe9UXi7Sp
+ /8dBYiuOABV7JJpxXdNZpynZqYX62ZFL3PLs9g7th7h4bt1MOJga
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
+This is a partial merge of [1], subject to be dropped if a header
+update is executed.
 
-- Move a2xx #defines to XML
-- Use dev_pm_opp_find_freq_floor in the common path in [2/6]
-- Clarify a comment in [2/6]
-- Move voting from a5xx to Adreno-wide [6/6]
-- Pick up tags
-
-v1: https://lore.kernel.org/linux-arm-msm/20230222-konrad-longbois-next-v1-0-01021425781b@linaro.org
-
-This series is a combination of [1] and a subset of [2] and some new
-stuff.
-
-With it, devfreq is used on all a2xx-a6xx (including gmu and
-gmu-wrapper) and all clk_set_rate(core clock) calls are dropped in
-favour of dev_pm_opp_set_rate, which - drumroll - lets us scale
-the voltage domain. DT patches making use of that will be sent
-separately.
-
-On top of that, a5xx gets a call to enable icc scaling from the OPP
-tables. No SoCs implementing a2xx have icc support yet and a3/4xx
-SoCs have separate logic for that, which will be updated at a later
-time.
-
-Getting this in for 6.4 early would be appreciated, as that would
-allow for getting GMU wrapper GPUs up (without VDD&icc scaling they
-can only run at lower freqs, which is.. ehhh..)
-
-Changes:
-- a3xx busy: use the _1 counter as per msm-3.x instead of _0
-- a6xx-series-opp: basically rewrite, ensure compat with all gens
-- a2/4xx busy: new patch
-- a5xx icc: new patch
-
-[1] https://lore.kernel.org/linux-arm-msm/20230130093809.2079314-1-konrad.dybcio@linaro.org/
-[2] https://lore.kernel.org/linux-arm-msm/20230214173145.2482651-1-konrad.dybcio@linaro.org/
+[1] https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/21480/
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (6):
-      drm/msm/a2xx: Include perf counter reg values in XML
-      drm/msm/adreno: Use OPP for every GPU generation
-      drm/msm/a2xx: Implement .gpu_busy
-      drm/msm/a3xx: Implement .gpu_busy
-      drm/msm/a4xx: Implement .gpu_busy
-      drm/msm/adreno: Enable optional icc voting from OPP tables
+ drivers/gpu/drm/msm/adreno/a2xx.xml.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- drivers/gpu/drm/msm/adreno/a2xx.xml.h      |  6 ++
- drivers/gpu/drm/msm/adreno/a2xx_gpu.c      | 24 ++++++++
- drivers/gpu/drm/msm/adreno/a3xx_gpu.c      | 11 ++++
- drivers/gpu/drm/msm/adreno/a4xx_gpu.c      | 11 ++++
- drivers/gpu/drm/msm/adreno/adreno_device.c |  4 ++
- drivers/gpu/drm/msm/adreno/adreno_gpu.c    | 99 ++++++++++++++----------------
- drivers/gpu/drm/msm/msm_gpu.c              |  4 +-
- drivers/gpu/drm/msm/msm_gpu_devfreq.c      |  2 +-
- 8 files changed, 104 insertions(+), 57 deletions(-)
----
-base-commit: aaf70d5ad5e2b06a8050c51e278b0c3a14fabef5
-change-id: 20230223-topic-opp-01e7112b867d
+diff --git a/drivers/gpu/drm/msm/adreno/a2xx.xml.h b/drivers/gpu/drm/msm/adreno/a2xx.xml.h
+index afa6023346c4..b85fdc082bc1 100644
+--- a/drivers/gpu/drm/msm/adreno/a2xx.xml.h
++++ b/drivers/gpu/drm/msm/adreno/a2xx.xml.h
+@@ -1060,6 +1060,12 @@ enum a2xx_mh_perfcnt_select {
+ 	AXI_TOTAL_READ_REQUEST_DATA_BEATS = 181,
+ };
+ 
++enum perf_mode_cnt {
++	PERF_STATE_RESET = 0,
++	PERF_STATE_ENABLE = 1,
++	PERF_STATE_FREEZE = 2,
++};
++
+ enum adreno_mmu_clnt_beh {
+ 	BEH_NEVR = 0,
+ 	BEH_TRAN_RNG = 1,
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.39.2
 
