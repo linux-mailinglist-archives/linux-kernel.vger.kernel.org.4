@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D62D6A0337
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A209C6A0320
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjBWHND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S233318AbjBWHEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjBWHNB (ORCPT
+        with ESMTP id S232470AbjBWHEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:13:01 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6889E17CD9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:13:00 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id e5so12783077plg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:13:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6QTGm81phs1BDTIrGmL3AE+q+u9INzAv0b8ooL163Q=;
-        b=qw6kU8IOs9YLnPcnx7k3brP0v/xsrbYbyyTADSWojaS3kGHoqpazneINsSl1LpCiF4
-         z8kAT7JDnA7fI2KCP1/J0AhohtooNBj144mMfJIN0LogYQ7FN/e5P0ls0Gly6PuYCuAW
-         cateNSima5wp7fKbcBQex/Lkk+KA6WjbzQVI1DeoRlN54tI7p8BSqmi1xXAMAzCnz9+/
-         kk6g2RSEfyJVHutk26XlLurkGhUiBGgm7d6PVJ1EZQr0cJAsxzrjSqSsyyiWUG3uDCg5
-         TuzwG8I0EmDlGc590Zg9IWhjwRK15xzOpOMIZTOE1kC2eBLscO4/VHdoc494DXQZbpD5
-         KUiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A6QTGm81phs1BDTIrGmL3AE+q+u9INzAv0b8ooL163Q=;
-        b=v9G04wy2pnzFQ/EUUhnzHmhd+YPT90upSNkdpwrxCfy7j5rKtuXUF8qTOxUI3EBgaY
-         D/cj/ReNzroAtiQUXnXlt/wjPD61Hv586ikz2dFY8cfhd1XPRXYEup0G8wBTGykEH6Iy
-         9ir0q2uxhHDs3xUZ0rGvII4dFu1iB4BVEH/YTotqvrno0RmXoRcyfCUGrXWLEuhI0/9t
-         RhzJhC4th5z77FhMxKV2zDi+8hVa9fjl8bstrAgbPk5VlO4aTkUcR9JOc264I2wFF7xh
-         Sat5bQJeE8XQmU9pclLlEDmcO7YBDgZmQQNNZKYL3I/klLB1lMcRpUJllU3JZ3nZ8dbh
-         4EIQ==
-X-Gm-Message-State: AO0yUKXuhSfEqU1zd+Nx5JUkjQAmanU/sMk7Lj9aC+tOnMbJJr2cyizw
-        VsKQePgsFzAy9bdnOdScPsgICw==
-X-Google-Smtp-Source: AK7set+Tp6YAU+VuewoLRDk/J3IiEoVCKpv3GmkSgsu7IaZt4N4jGYkQc3wV37sh3+9U7WFried9GQ==
-X-Received: by 2002:a17:90b:4a85:b0:230:3af9:174 with SMTP id lp5-20020a17090b4a8500b002303af90174mr13622969pjb.5.1677136379844;
-        Wed, 22 Feb 2023 23:12:59 -0800 (PST)
-Received: from PXLDJ45XCM.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0019ab6beea1esm2501639plg.87.2023.02.22.23.12.56
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 22 Feb 2023 23:12:59 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        muchun.song@linux.dev
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH] mm: hugetlb_vmemmap: simplify hugetlb_vmemmap_init() a bit
-Date:   Thu, 23 Feb 2023 14:59:47 +0800
-Message-Id: <20230223065947.64134-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Thu, 23 Feb 2023 02:04:05 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05A84AFE9;
+        Wed, 22 Feb 2023 23:03:48 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 1CC6B3F116;
+        Thu, 23 Feb 2023 07:03:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677135827;
+        bh=CcSI32gZ7c8S1OzBEvrF82hTekSR867LXozzHErLs6A=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=L4BExEmNk2RJDQrEB+V+MfwoSGnpouK0snNESz7nMrwsaL5QBVo8j1c72eRpu3vxj
+         nxt6awngHrHP4dZfjLxKYgtUuMbY511t+gWMI3sO6qdGpsY2BXPETS5d5L0eTM4i8b
+         n6vUGHCX6kNX0vg7FKGJf4S/lnR6YmnNxPdCokMY58FVViSN4XGps/hqi60ZbWvxjM
+         2yHE/a3kWM/i6G/jQhooA8lfAFcDhSDXVRY3CHfZ/6PNuPogfuPhk/YEe/XlZ1oDx6
+         G6z1LSQWKqvy9+qB5hFmH5YS5nIcCvJyipzcFnpQFMiqbcFjVNG0kPJ7/Sg+4bdrzh
+         4H/ey04Lyd6PA==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     ray.huang@amd.com
+Cc:     mario.limonciello@amd.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] cpufreq: amd-pstate: Let user know amd-pstate is disabled
+Date:   Thu, 23 Feb 2023 15:02:52 +0800
+Message-Id: <20230223070252.2029174-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check of IS_ENABLED(CONFIG_PROC_SYSCTL) is unnecessary since
-register_sysctl_init() will be empty in this case. So, there is
-no warnings after removing the check.
+Commit 202e683df37c ("cpufreq: amd-pstate: add amd-pstate driver
+parameter for mode selection") changed the driver to be disabled by
+default, and this can surprise users.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Let users know what happened so they can decide what to do next.
+
+Link: https://bugs.launchpad.net/bugs/2006942
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- mm/hugetlb_vmemmap.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+v2:
+ - Remove redundancy in pr_info().
+ - Fix spelling and URL tag.
 
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index 45e93a545dd7..274b91d408c3 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -590,17 +590,15 @@ static struct ctl_table hugetlb_vmemmap_sysctls[] = {
- 
- static int __init hugetlb_vmemmap_init(void)
- {
-+	const struct hstate *h;
-+
- 	/* HUGETLB_VMEMMAP_RESERVE_SIZE should cover all used struct pages */
- 	BUILD_BUG_ON(__NR_USED_SUBPAGE * sizeof(struct page) > HUGETLB_VMEMMAP_RESERVE_SIZE);
- 
--	if (IS_ENABLED(CONFIG_PROC_SYSCTL)) {
--		const struct hstate *h;
--
--		for_each_hstate(h) {
--			if (hugetlb_vmemmap_optimizable(h)) {
--				register_sysctl_init("vm", hugetlb_vmemmap_sysctls);
--				break;
--			}
-+	for_each_hstate(h) {
-+		if (hugetlb_vmemmap_optimizable(h)) {
-+			register_sysctl_init("vm", hugetlb_vmemmap_sysctls);
-+			break;
- 		}
+ drivers/cpufreq/amd-pstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 45c88894fd8e..f965f54f7ae7 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -1263,7 +1263,7 @@ static int __init amd_pstate_init(void)
+ 	 * with amd_pstate=passive or other modes in kernel command line
+ 	 */
+ 	if (cppc_state == AMD_PSTATE_DISABLE) {
+-		pr_debug("driver load is disabled, boot with specific mode to enable this\n");
++		pr_info("driver load is disabled, boot with specific mode to enable this\n");
+ 		return -ENODEV;
  	}
- 	return 0;
+ 
 -- 
-2.11.0
+2.34.1
 
