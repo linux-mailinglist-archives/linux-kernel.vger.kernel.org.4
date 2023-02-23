@@ -2,155 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747CD6A0865
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B61D6A0880
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbjBWMQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 07:16:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S233532AbjBWMWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 07:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbjBWMQZ (ORCPT
+        with ESMTP id S229448AbjBWMV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:16:25 -0500
-Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73282138
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:16:22 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 65698C8008D;
-        Thu, 23 Feb 2023 13:16:20 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id L8LRnpStdvmA; Thu, 23 Feb 2023 13:16:20 +0100 (CET)
-Received: from [192.168.176.165] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id BEE2EC8008A;
-        Thu, 23 Feb 2023 13:16:18 +0100 (CET)
-Message-ID: <aac0ea4e-ce96-f487-9567-83ad9913b306@tuxedocomputers.com>
-Date:   Thu, 23 Feb 2023 13:16:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Intel-gfx] [PATCH 2/2] Apply quirk to disable PSR 2 on Tongfang
- PHxTxX1 and PHxTQx1
-To:     "Hogander, Jouni" <jouni.hogander@intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>
-Cc:     "Souza, Jose" <jose.souza@intel.com>,
-        "Santa Cruz, Diego" <Diego.SantaCruz@spinetix.com>,
-        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "Kahola, Mika" <mika.kahola@intel.com>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "De Marchi, Lucas" <lucas.demarchi@intel.com>
-References: <20230222141755.1060162-1-wse@tuxedocomputers.com>
- <20230222141755.1060162-3-wse@tuxedocomputers.com>
- <Y/Z3ZJjYQIKb2LQ0@intel.com>
- <d254b88a99e0a979efb07d9298afdeb7016f0e0f.camel@intel.com>
-Content-Language: en-US
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <d254b88a99e0a979efb07d9298afdeb7016f0e0f.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 23 Feb 2023 07:21:59 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2025.outbound.protection.outlook.com [40.92.99.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58C216ADD;
+        Thu, 23 Feb 2023 04:21:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZulHtvecCiWPuoUIa4UOenLnzn1YBZ0iHOB3cNYaOMdn9y+jrXBLpdIjhvVKtnpOO0hNSGhQuAMxGL1OiVoJ645uAthWmSA+Sq0RarRn39CfKIERAIb5R+qZ0hQoabrdZ7Tk3kWbIE+S4WmvCyty2xQWfJtBw7mnwPdQlj0FRRvVVGOYpRSjyjrr8m6+5yoFNBvBLXV62WbxUYnlZJA0pQcfkfglsU3ds/pk9nIoOXIpLGXUMKKzzsG9QQBneMH35EM7TOMDiSOFhXWPdvqG8fIR+BjZ0LiTNhsDKzPUkklbGmLmpZgNl8G2RGX/D28QwE3/mGeOAoAO5qulV8SeKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zfqIsdLUPcNrhfCnr5z9SOneA6iMpD1o72aa9LR7pjo=;
+ b=W0nvsTprEe/0SO97XdJfyCg2cLRKO2g1JNv7oK8oSC9uoyB6AXFGPvXaxaJtW3wEguxgRYlnxGX55kXgy3fBiz22v/7Vwb7RueF2jk6Sa3ipCyVht7V7iiBwUG+SbwwuwiaE8NO/u1vAx3JXM+NbLk+jneg3G6l0Woi6Hv2VFqBVAMJdYJ2kbKFLhYZUrHEI891KNPAJB8DwZR0kpZZKi2+BCUCP5QOW1zNxEuwOkE2VEyLiVBiPFZAPi8Lz8sT6hW1dzymjJvyx7E8kiZCYKO0vkXANEEogojXqmcyHTf77In7kiggIRFROBlrn69R3oqCVTwe8IuVBUn5v09SBDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zfqIsdLUPcNrhfCnr5z9SOneA6iMpD1o72aa9LR7pjo=;
+ b=Q/pY0JvvyAOk6AGM6r9/vrRMDhNCuTiv4kXLiLqN8a02MKsQZab7LQlJ7S6kPNcaBsHCOXNsgr1+776SNrgzlnFVrHjkpdjGVu6zJW8v8u6V+6AY18zFNih5Ym1/DmeyHP7eGsib5l7w9DaRyZVhjUYjwSoFMx0nCyJ7n8AxxaMNYrPXb/JW70RPaIelj5EaJ7dq57aKUwIAT5yu0tGGjQpCx0hEK0Ot8ApQ40XOuFP/o3C9F1DQTp6K9QlSE/XKHxJdLi79a1HMWHJnSSoELfVkfyYhJEn7di8jOW4hdzYXF2H3jv/AjHrrOrRXDqVOMAYdQ4A1ftgb5NJ9lle6OQ==
+Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
+ by TYCP286MB3487.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:3a3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
+ 2023 12:21:51 +0000
+Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9a1d:12f5:126c:9068%3]) with mapi id 15.20.6111.018; Thu, 23 Feb 2023
+ 12:21:51 +0000
+From:   Eddy Tao <taoyuan_eddy@hotmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Eddy Tao <taoyuan_eddy@hotmail.com>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 1/1] net: openvswitch: Use on stack sw_flow_key in ovs_packet_cmd_execute
+Date:   Thu, 23 Feb 2023 20:21:31 +0800
+Message-ID: <OS3P286MB229572718C0B4E7229710062F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.27.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TMN:  [JVVSBEExtTqqZDbQBD2hKR0AekIwGIC8]
+X-ClientProxiedBy: SG2PR06CA0198.apcprd06.prod.outlook.com (2603:1096:4:1::30)
+ To OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
+X-Microsoft-Original-Message-ID: <20230223122133.495666-1-taoyuan_eddy@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3P286MB2295:EE_|TYCP286MB3487:EE_
+X-MS-Office365-Filtering-Correlation-Id: f17065d9-440a-414b-9928-08db15988ab0
+X-MS-Exchange-SLBlob-MailProps: C/ir7cSdGlt58y46nZpUh6gN7novD8TGFdRbwVdZjGSq0BZLdQKhz8qMPD6uHsEvcbfZv5Vq0I0mGmYoH4Au1W/L2LHzZ1qvDwKVywcUE32dwEo/z9pxOoedzaL4b28QC7QLTdRuqqffsyqat5fNDDs2x4PghMAjDnNiO20ZpGeGpuOeSiOLZD8dxujdPzsVRAr8W3C1NsGeAzi24e+lTR1lmOsT1FKfd+k0qYq7/TyOjLmnx0Fgk84SGLe9bvmMH/WVcQf4GbKm0Y37RT4pJ0oxnd38ReZfhUswGwqj5mYPA9QTVc/8B8KQ83fBHSo+S+OMUlRxz1m8kWbLRUn5u/6VOFC5fZWfAkD29XJPMKUPIVGiy9MiNAMuWI9ohzJwdEUfUOt7usnaYE61tGNABO68/TeYp7AW+jEx6sHWrI2IAZXWU+ClkYQd3qtVsRYWABUVpUTGmC6JJktjPHsuTyLh3k/EJS+R/XKD7QWmA9GuWZgaabUU8nebjKJFg2y6Kk5tIe14PKS0+6hSazwfoHoS+eldA8ZjAc8NpKtxYQGZndq4qqvimgxeJNkrOwAt9mlFGWikaWrK/HSeg5fhasmODlRLF4freuR3f3+PEKJcyJLJryp2UqC29KXayaYO8vn7FJOmqwgPALY7fPML53j8cb7O9oojCO4Xmc0dNJvK7kT1E9ltuw8Y1f+klguN8tOGkyoqGzRXgdWhaFeMcYYJt8M8rfJ2U/wRtxEjOm0OGqgx+ZZxc8/JBwS87uzO
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C/yqc0//S4t9dX2e5rBSd8IjPsze30O9oWuS/saNV+CLI9vreb7V5P4QJHWfCai4pAr1ucGViT2PVtOvmVW4+Csdp4Pe28EIoSD5hutOYg2PZaFkr8clK/rqYceycpUAGYsXWnTLZrL8qhl5Jy9w9WwmBZ3ftFtFmIiTr0nXZ3T7hYVghWTfC/FvPbyaSc2qOvpE/xlHblQbJs4hDe1ZLHPAYTyKv0TM1HdvOzO/psSNic9gLqfbAFkxXl/6xv8lV0FXzvvQ0mBp5z5IuVr16i/nifxsLQw5lIZzAVCZUqHpnU8ZVHgpqX/oEIRY/Iqn3+Tb8U4VOgth2Nfq2Pxc7lyZqoStBnQKEOT/QYLde5flEjha8HpOwBjUoBukHMSTXaqsNkzgRe/Zw+eEaSY+AZjZnkyuT/I8JIzb2f9DWKzB/dq+FkbxcWni8OOCuXAaajezmGW9BlpagnMIIotUTIFYDJgPdWt8O/6C0OeKUx9r7LdgKoc8sXe+7IOEp0vjfBgJfw6UNKGNRungAoH8+/ssjMq6hFqLYy69ahxKeaFFU2Pw2xFi7Lstl/F2EevTyeYuI4LtOqqNLopbOLYuEnUk7Kx9bqUJ7E0wfhcdFipZm9cZFL+O5eCT6Ve3aXjelR3lNQXNbstPQ6XVfojabA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?S/bTqzifzGusXFMfx+LCPscKHYX4ljrH2ODAEb4cAlVEn/k0ly2P8n5pEl1t?=
+ =?us-ascii?Q?eavlcKOTk6v7PTV7wMR0b7iwk0VMNwL8fKY87LhOaQ2SwbTz1riViDf3GQfc?=
+ =?us-ascii?Q?JcSbC5iV32lE/RvPtAT2r/t4za1VX6Q4ZyXxQ2MAkAuwQoRGu0IARQH/DFJb?=
+ =?us-ascii?Q?Dj+6bYPC/ajG8Us8r1wGncWNTz58wHk0v9H3sNhU9simHia29v4Vni5tnPVL?=
+ =?us-ascii?Q?958NRF9NyFSjTQJ1K7K8T1HTYVnOcB04c0s3paRL5vYHnDHBMg1OP8Y/0eW4?=
+ =?us-ascii?Q?OFOOf2Gn6kE1asIBnm/m9s8TqO8f+ofvVk67LBuMjj6aSdPPo4x0iidxsIcl?=
+ =?us-ascii?Q?cVUB4YBusDd0PiwgTo508tVbtILF4TS0pDSr3XfsDTAgH2Mige9qQZxL71ds?=
+ =?us-ascii?Q?1WOu1PK+gC4Ep30Oq+HNjuIdmYR2nE/4QJHNk6eNW+jqMZoxQYNct/YqwBs9?=
+ =?us-ascii?Q?rUHXzlPM874TJUudkcZR+Os9qI/QaUmJTBEy1HyP26OtwMjSqk5JheBHke04?=
+ =?us-ascii?Q?Rg2fiPhvWML6mwRsNCCczw/fY/iwgSa/RPt0uclp0Q07UfrVvwhgtmmJkv9Y?=
+ =?us-ascii?Q?6olUvaDTjuiFWbByOOErpbrwnu5zo63pJ8naIlq7F+JmsXu9G5JzIOnlr2Ad?=
+ =?us-ascii?Q?GLudd0KYrSXCqC/rsDQL9comDiV+WYiWmXCgVe9HxJlbF9OQiRXak4grPpw8?=
+ =?us-ascii?Q?TXJVYsTkxKeUE1ESqzS5BA/aCdIHvnvSiJHVoPb9VU1D4wc5iYGlfSq2yLdD?=
+ =?us-ascii?Q?hensdQgHtQTpcntDLWylg31uciDdXBurYsMmyBtqHqiNdUrtubuDh7tVH7TO?=
+ =?us-ascii?Q?nbQFQJwrwjjpvom2a3FyTVGFaTwlc/4KfJZtamxbfGv08baWzk7VPnQ8JN81?=
+ =?us-ascii?Q?SysZuydX5uCaqKLPdfYn3PT/NuC+CPugcE8qZgip8HFfUrtoXIFqnjjFyrix?=
+ =?us-ascii?Q?PwDGLSoqOiNnUXQHN7DW0hqsm4eC/3TxlAomWI9s0Em4cIaP+kg5g+X9GIvm?=
+ =?us-ascii?Q?O2H/PU/MPQ/buqzCZS960s9stLBLjFJtzpO8YmDe9JP3GjYdd+8sRS3FLdP9?=
+ =?us-ascii?Q?iQIPfhNOtObiSAAVTdYlD8Z6xAz2ny5NVhMjI86zJnjI8Elhp01vs4dJMDHA?=
+ =?us-ascii?Q?D+/cNMuIqnK92TAOM/VVv5/6yFOWnL0EQZJ4P3kBmfDhPUlJQadC595a87gJ?=
+ =?us-ascii?Q?M2k5lTGxALY0rNodDMkzqME8eZt/iU4GbTPs3PFq3l9nDiFFPfspkQWZXN9T?=
+ =?us-ascii?Q?C8g6vp5vVuXTeXHjBJ0le3d+fmOXUy9LHxs5JCamRA=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: f17065d9-440a-414b-9928-08db15988ab0
+X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 12:21:51.3172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB3487
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use on stack sw_flow_key in ovs_packet_cmd_execute
 
-Am 23.02.23 um 07:27 schrieb Hogander, Jouni:
-> On Wed, 2023-02-22 at 15:13 -0500, Rodrigo Vivi wrote:
->> On Wed, Feb 22, 2023 at 03:17:55PM +0100, Werner Sembach wrote:
->>> On these Barebones PSR 2 is recognized as supported but is very
->>> buggy:
->>> - Upper third of screen does sometimes not updated, resulting in
->>> disappearing cursors or ghosts of already closed Windows saying
->>> behind.
->>> - Approximately 40 px from the bottom edge a 3 pixel wide strip of
->>> randomly
->>> colored pixels is flickering.
->>>
->>> PSR 1 is working fine however.
->> I wonder if this is really about the panel's PSR2 or about the
->> userspace
->> there not marking the dirtyfb? I know I know... it is not userspace
->> fault...
->>
->> But I wonder if the case you got here highlights the fact that we
->> have
->> a substantial bug in the i915 itself in regards to PSR2 API.
->>
->> Jose, Jouni, ideas on how to check what could be happening here?
-> There is already fix for this (Thanks to Werner Sembach for testing the
-> patch):
->
-> https://patchwork.freedesktop.org/series/114217/
+Reason: As key function in slow-path, ovs_packet_cmd_execute and
+        ovs_flow_cmd_new allocate transient memory for sw_flow
+        and frees it at the end of function.
+        The procedure is not efficient in 2 aspects
+        1. actuall sw_flow_key is what the function need
+        2. free/alloc involves kmem_cache operations
+        when system under frequent slow path operation
 
-Yes, thanks for creating that patch ^^
+        Existing code in ovs_flow_cmd_new/set/get use stack
+        to store sw_flow_mask and sw_flow_key deliberately
 
-I posted this quirk patch just as an possible alternative for stable if that 
-other patch is considered not suitable for it (lets wait and see).
+Performance benefit:
+        ovs_packet_cmd_execute efficiency improved
+        Avoid 2 calls to kmem_cache alloc
+        Avoid memzero of 200 bytes
+        6% less instructions
 
-And to get some feedback if something like this could be a viable workaround if 
-similar bugs appear in the future.
+Testing topology
+            +-----+
+      nic1--|     |--nic1
+      nic2--|     |--nic2
+VM1(16cpus) | ovs |   VM2(16 cpus)
+      nic3--|4cpus|--nic3
+      nic4--|     |--nic4
+            +-----+
+   2 threads on each vnic with affinity set on client side
 
->
->> oh, btw, Werner, do we have an  open gilab issue for this?
-> https://gitlab.freedesktop.org/drm/intel/-/issues/7347
->
->> Thanks,
->> Rodrigo.
->>
->>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->>> Cc: <stable@vger.kernel.org>
->>> ---
->>>   drivers/gpu/drm/i915/display/intel_quirks.c | 8 ++++++++
->>>   1 file changed, 8 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/i915/display/intel_quirks.c
->>> b/drivers/gpu/drm/i915/display/intel_quirks.c
->>> index ce6d0fe6448f5..eeb32d3189f5c 100644
->>> --- a/drivers/gpu/drm/i915/display/intel_quirks.c
->>> +++ b/drivers/gpu/drm/i915/display/intel_quirks.c
->>> @@ -65,6 +65,10 @@ static void
->>> quirk_no_pps_backlight_power_hook(struct drm_i915_private *i915)
->>>          drm_info(&i915->drm, "Applying no pps backlight power
->>> quirk\n");
->>>   }
->>>   
->>> +/*
->>> + * Tongfang PHxTxX1 and PHxTQx1 devices have support for PSR 2 but
->>> it is broken
->>> + * on Linux. PSR 1 however works just fine.
->>> + */
->>>   static void quirk_no_psr2(struct drm_i915_private *i915)
->>>   {
->>>          intel_set_quirk(i915, QUIRK_NO_PSR2);
->>> @@ -205,6 +209,10 @@ static struct intel_quirk intel_quirks[] = {
->>>          /* ECS Liva Q2 */
->>>          { 0x3185, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time
->>> },
->>>          { 0x3184, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time
->>> },
->>> +
->>> +       /* Tongfang PHxTxX1 and PHxTQx1/TUXEDO InfinityBook 14 Gen6
->>> */
->>> +       { 0x9a49, 0x1d05, 0x1105, quirk_no_psr2 },
->>> +       { 0x9a49, 0x1d05, 0x114c, quirk_no_psr2 },
->>>   };
->>>   
->>>   void intel_init_quirks(struct drm_i915_private *i915)
->>> -- 
->>> 2.34.1
->>>
+netperf -H $peer -p $((port+$i)) -t UDP_RR  -l 60 -- -R 1 -r 8K,8K
+netperf -H $peer -p $((port+$i)) -t TCP_RR  -l 60 -- -R 1 -r 120,240
+netperf -H $peer -p $((port+$i)) -t TCP_CRR -l 60 -- -R 1 -r 120,240
+
+Before the fix
+      Mode Iterations   Variance    Average
+    UDP_RR         10      %1.31      46724
+    TCP_RR         10      %6.26      77188
+   TCP_CRR         10      %0.10      20505
+UDP_STREAM         10      %4.55      19907
+TCP_STREAM         10      %9.93      28942
+
+After the fix
+      Mode Iterations   Variance    Average
+    UDP_RR         10      %1.51      49097
+    TCP_RR         10      %5.58      78540
+   TCP_CRR         10      %0.14      20542
+UDP_STREAM         10     %11.17      22532
+TCP_STREAM         10     %11.14      28579
+
+Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+---
+ V1 -> V2: Further reduce memory usage by using sw_flow_key instead
+           of sw_flow, revise description of change and provide data
+
+ net/openvswitch/datapath.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
+
+diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+index fcee6012293b..ae3146d51079 100644
+--- a/net/openvswitch/datapath.c
++++ b/net/openvswitch/datapath.c
+@@ -596,8 +596,7 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
+ 	struct nlattr **a = info->attrs;
+ 	struct sw_flow_actions *acts;
+ 	struct sk_buff *packet;
+-	struct sw_flow *flow;
+-	struct sw_flow_actions *sf_acts;
++	struct sw_flow_key key;
+ 	struct datapath *dp;
+ 	struct vport *input_vport;
+ 	u16 mru = 0;
+@@ -636,24 +635,20 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
+ 	}
+ 
+ 	/* Build an sw_flow for sending this packet. */
+-	flow = ovs_flow_alloc();
+-	err = PTR_ERR(flow);
+-	if (IS_ERR(flow))
+-		goto err_kfree_skb;
++	memset(&key, 0, sizeof(key));
+ 
+ 	err = ovs_flow_key_extract_userspace(net, a[OVS_PACKET_ATTR_KEY],
+-					     packet, &flow->key, log);
++					     packet, &key, log);
+ 	if (err)
+-		goto err_flow_free;
++		goto err_kfree_skb;
+ 
+ 	err = ovs_nla_copy_actions(net, a[OVS_PACKET_ATTR_ACTIONS],
+-				   &flow->key, &acts, log);
++				   &key, &acts, log);
+ 	if (err)
+-		goto err_flow_free;
++		goto err_kfree_skb;
+ 
+-	rcu_assign_pointer(flow->sf_acts, acts);
+-	packet->priority = flow->key.phy.priority;
+-	packet->mark = flow->key.phy.skb_mark;
++	packet->priority = key.phy.priority;
++	packet->mark = key.phy.skb_mark;
+ 
+ 	rcu_read_lock();
+ 	dp = get_dp_rcu(net, ovs_header->dp_ifindex);
+@@ -661,7 +656,7 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
+ 	if (!dp)
+ 		goto err_unlock;
+ 
+-	input_vport = ovs_vport_rcu(dp, flow->key.phy.in_port);
++	input_vport = ovs_vport_rcu(dp, key.phy.in_port);
+ 	if (!input_vport)
+ 		input_vport = ovs_vport_rcu(dp, OVSP_LOCAL);
+ 
+@@ -670,20 +665,17 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
+ 
+ 	packet->dev = input_vport->dev;
+ 	OVS_CB(packet)->input_vport = input_vport;
+-	sf_acts = rcu_dereference(flow->sf_acts);
+ 
+ 	local_bh_disable();
+-	err = ovs_execute_actions(dp, packet, sf_acts, &flow->key);
++	err = ovs_execute_actions(dp, packet, acts, &key);
+ 	local_bh_enable();
+ 	rcu_read_unlock();
+ 
+-	ovs_flow_free(flow, false);
++	ovs_nla_free_flow_actions(acts);
+ 	return err;
+ 
+ err_unlock:
+ 	rcu_read_unlock();
+-err_flow_free:
+-	ovs_flow_free(flow, false);
+ err_kfree_skb:
+ 	kfree_skb(packet);
+ err:
+-- 
+2.27.0
+
