@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782B86A109E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3A36A10A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjBWThE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S229729AbjBWTik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjBWThC (ORCPT
+        with ESMTP id S232107AbjBWTic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:37:02 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CAC59E46
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:00 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id l1so3831982pjt.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rQq/mm4mVMTZxYtA4ktk06ZMrV8tkbfv6EC6oErMWRs=;
-        b=yk/31gPQIW8T+JwtNs9NMWW5pAjbGRjZGw4JzJfVBGGg9YdO/8usKXYUnWm9BkUrrk
-         7Ul+EqakaIJH31edVRc8mKMcD5WdJZrZLE2JdC62vgdhiOWElxJae/Qtw32Yw/VlT1yd
-         QMbxK28NiowSYMQuIGLpYaa0sYwNdyXGZXAp2QXkr+Td9ZVhg2KAF9S2zMYGZzQ8zAtR
-         wvLP+jLEYHkk4SIC6RGfvZOZOibsO4TwTOy4CeWxAL9DAFUxV/ClCxVzxoZGxJYHxJ6i
-         KWIF+aZD9Hti8gMd57T2Zufn9NPd1b7rsOARyN2UyV81xnkvwPOHQ+O2Cch/WKKP03hB
-         7pKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQq/mm4mVMTZxYtA4ktk06ZMrV8tkbfv6EC6oErMWRs=;
-        b=b3b1+j6jb5WX1OCKonYROd19+QyFfhaukCC3Vwwr2jV6dLm3CdvoUCNPuQpHJs3WnO
-         TDf974qvoxQoc5aEEnAcpfUOdbKaMol2GYve1/M2Sk5d3KWejEsQpi/BS1xyAn7+5CNe
-         +iZGQok+jqlx4I3GobS/uPWT0g9DCXOtBD8xMXRNYNrZ6t7rkf9PgMGxH+OXaIMKz3xB
-         ywQWq//KyCYxgnNoI/dbLinUWCcTsByw2tUYoCdyewIQ0JbJdDlmn2GARKtBTMssQ0S2
-         luXF+r5eC8JOxXz5hbCKLPF1VmbIr0JvFEcdeOxpJpA8F+X9uXU3+Nb2QayiMtQ2eJG2
-         4YKg==
-X-Gm-Message-State: AO0yUKWQFG9neKpeRu2M5qVEZfLTugqOUziU3MhgO1W6sMRBUgiBLQYd
-        kzhH4t4OVSgGQ/eofR/nGdh47g==
-X-Google-Smtp-Source: AK7set9NH5+hrOF1a5TsdpFpUrS3bE2ZL0vGh7moKt24R5JglynJw+bnqDgX30BvoT3U7PSauYjLXg==
-X-Received: by 2002:a17:902:e80d:b0:19a:a815:2877 with SMTP id u13-20020a170902e80d00b0019aa8152877mr13564702plg.6.1677181019801;
-        Thu, 23 Feb 2023 11:36:59 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b00196519d8647sm5041338pln.4.2023.02.23.11.36.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 11:36:59 -0800 (PST)
-Message-ID: <ae3a6434-1b3a-b848-c8f9-bf6b3d0521e6@kernel.dk>
-Date:   Thu, 23 Feb 2023 12:36:57 -0700
+        Thu, 23 Feb 2023 14:38:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2098517CD5;
+        Thu, 23 Feb 2023 11:38:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD61C61783;
+        Thu, 23 Feb 2023 19:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1153EC433D2;
+        Thu, 23 Feb 2023 19:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677181110;
+        bh=50Uq2Bu/rHCvXQ+Dw+P6dFUdv/HzaQSqr7wkeVVzNFs=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=cvpUwng9VbfFkgpXYYyfQ6+rjqGBVT3gNxYe1eKMLJ+Q9h56NRxacDrdZglE6fpku
+         SCY1PuezaRWpeu8X0YaLsrUoXYiywyqd92aLw54mAxxHlIPv8WXsNrFsfiUfM33Yr1
+         mwzkW6QRz1I1bySWu9p2E6O5UySAC8YzkcdpMPhM6zHgjBna33N1pr4mj7kWjCMY93
+         UhuzjclImtKollNh8f0FHQjnGFu3lFdmHluCQGnizrVpayOdIOw8Rg1Q07Ro0AmCn9
+         JcYG89aiWgEOsMfczPu8YntBSpqO+1o0Tzz5C2WvrMyyAlh5AU99XYMZM6pojozRvm
+         YA0RBRPZFCslA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id EAD8FC64ED8;
+        Thu, 23 Feb 2023 19:38:29 +0000 (UTC)
+From:   Rob Bradford via B4 Relay 
+        <devnull+rbradford.rivosinc.com@kernel.org>
+Date:   Thu, 23 Feb 2023 19:38:25 +0000
+Subject: [PATCH v2] virtio-net: Fix probe of virtio-net on kvmtool
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
- k[v]free_rcu_mightsleep()
-To:     paulmck@kernel.org
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIALDA92MC/32OwQrCMAxAf2X0bGRNGXOe/A/Zoe0yF3SttKUoY
+ /9uN/AmXgIv4YW3iEiBKYpztYhAmSN7VwAPlbCTdjcCHgoLrFHViAoyh8QeHCW45zl5/4BTO6q
+ 2kY0hRFFEoyOBCdrZ6atCjVDmyK8fDzbnGagc95BrX3jimHx4711Zbtu/CVmChNGiGrAz3dDqS
+ +DsIzt7tH4W/bquH/BJxl/rAAAA
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-References: <20230201150815.409582-1-urezki@gmail.com>
- <84fd00b0-aa87-e4b7-e0a4-d57b720216c0@kernel.dk>
- <20230223183124.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230223183124.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Bradford <rbradford@rivosinc.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677181108; l=1940;
+ i=rbradford@rivosinc.com; s=20230223; h=from:subject:message-id;
+ bh=VRhqKw5Ze722O7VxR9BzREUmJZpHoDBohCxS8RVhlls=;
+ b=cFs6kjrwj/vcHdFLZkpxyr5YrACaF7Ip9rtA8yDfpIuWFLvfTLJDYeBYyR/Doso4g2Cm6+lVV
+ KyVlZUK+bqnB6PyV8LOWqUsTFCsHnfateDZfGbOwk/2y8nCmOTg6jqN
+X-Developer-Key: i=rbradford@rivosinc.com; a=ed25519;
+ pk=LZhCh/kJ+nOqxgEGWkLfx2jKUM5LlyU0Jlip8qsjuA8=
+X-Endpoint-Received: by B4 Relay for rbradford@rivosinc.com/20230223 with auth_id=34
+X-Original-From: Rob Bradford <rbradford@rivosinc.com>
+Reply-To: <rbradford@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 11:31 AM, Paul E. McKenney wrote:
-> On Thu, Feb 23, 2023 at 07:57:13AM -0700, Jens Axboe wrote:
->> On 2/1/23 8:08 AM, Uladzislau Rezki (Sony) wrote:
->>> This small series is based on Paul's "dev" branch. Head is 6002817348a1c610dc1b1c01ff81654cdec12be4
->>> it renames a single argument of k[v]free_rcu() to its new k[v]free_rcu_mightsleep() name.
->>>
->>> 1.
->>> The problem is that, recently we have run into a precedent when
->>> a user intended to give a second argument to kfree_rcu() API but
->>> forgot to do it in a code so a call became as a single argument
->>> of kfree_rcu() API.
->>>
->>> 2.
->>> Such mistyping can lead to hidden bags where sleeping is forbidden.
->>>
->>> 3.
->>> _mightsleep() prefix gives much more information for which contexts
->>> it can be used for.
->>
->> This patchset seems weird to me. We have a LOT of calls that might
->> sleep, yet we don't suffix them all with _mightsleep(). Why is this
->> any different? Why isn't this just a might_sleep() call in the
->> actual helper, which will suffice for checkers and catch it at
->> runtime as well.
-> 
-> Fair enough, and the situation that this patchset is addressing is also a
-> bit unusual.  This change was requested by Eric Dumazet due to a situation
-> where someone forgot the optional second argument to kfree_rcu().  Now,
-> you are right that this would be caught if invoked from a non-sleepable
-> context, but there are also cases where sleeping is legal, but where the
-> occasional wait for an RCU grace period would be a problem.  The checkers
-> cannot easily catch this sort of thing, and hence the change in name.
-> 
-> Hey, the combined one/two-argument form seemed like a good idea at
-> the time!  ;-)
+From: Rob Bradford <rbradford@rivosinc.com>
 
-Hah, not sure what you were smoking back then!
+kvmtool does not support the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature
+but does advertise the VIRTIO_NET_F_GUEST_TSO{4,6} features. Check that
+the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature is present before setting
+the NETIF_F_GRO_HW feature bit as otherwise an attempt will be made to
+program the virtio-net device using the ctrl queue which will fail.
 
+This resolves the following error when running on kvmtool:
+
+[    1.865992] net eth0: Fail to set guest offload.
+[    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wanted 0x0000000000134829, left 0x0080000000134829
+
+Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+---
+Changes in v2:
+- Use parentheses to group logical OR of features 
+- Link to v1:
+  https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d7a@rivosinc.com
+---
+ drivers/net/virtio_net.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 61e33e4dd0cd..f8341d1a4ccd 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3780,10 +3780,9 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	}
+ 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
+ 		dev->features |= NETIF_F_RXCSUM;
+-	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+-	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
+-		dev->features |= NETIF_F_GRO_HW;
+-	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
++	if ((virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
++	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6)) &&
++	    virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+ 		dev->hw_features |= NETIF_F_GRO_HW;
+ 
+ 	dev->vlan_features = dev->features;
+
+---
+base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
+change-id: 20230223-virtio-net-kvmtool-87f37515be22
+
+Best regards,
 -- 
-Jens Axboe
-
+Rob Bradford <rbradford@rivosinc.com>
 
