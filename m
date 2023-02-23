@@ -2,104 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78236A0FC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4A76A0FC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBWSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S229672AbjBWSxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBWSwm (ORCPT
+        with ESMTP id S229649AbjBWSxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:52:42 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9848890
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677178361; x=1708714361;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T5c5dYd/7o6Mp7o1b1NX72cb1jT5ZAgXikuuyX1CoQk=;
-  b=APcbSEzQTcov0Jkj2E3xZdS54oNSKfYOlQUsfidTc47OtQC7GNu1om/s
-   Et7lrVryzHvwxBwdNTNZS3wEopIo3BCXLmSGtJMLuvq9okvhrXYkj9Hnf
-   kUOT6rRu9j0FfrcZdR/b+d9g5zF+3Bk4cEaJN8/hTCPVk5WeOVxizgx2y
-   wsut3pk0MXIbwbMfPd/nMtgcNqQ5LWcjN3WWUO9wBom+NbR4dNm9UneVk
-   3/CmcJnlHyrb1KgBff4BoGDW4DGOBjwtyRm3NAnNZV0hFxhaKShypu2sr
-   HpNc6LlUICCPE6/RfxSEMJHvNydx668XV2WawH+uqda8WBkn5yI15jQ29
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="312930513"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="312930513"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 10:52:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="665896092"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="665896092"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 23 Feb 2023 10:52:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pVGhp-00B7dk-0N;
-        Thu, 23 Feb 2023 20:52:37 +0200
-Date:   Thu, 23 Feb 2023 20:52:36 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] regmap-irq: Place kernel doc of struct
- regmap_irq_chip in order
-Message-ID: <Y/e19Oqf1XwDo/aw@smile.fi.intel.com>
-References: <20230220153334.87049-1-andriy.shevchenko@linux.intel.com>
- <Y/ZGMDI9wcOwMUWI@fedora>
+        Thu, 23 Feb 2023 13:53:01 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D724F10F9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:52:59 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VcLG3xX_1677178375;
+Received: from 30.25.216.19(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VcLG3xX_1677178375)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Feb 2023 02:52:57 +0800
+Message-ID: <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
+Date:   Fri, 24 Feb 2023 02:52:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/ZGMDI9wcOwMUWI@fedora>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an
+ option
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Sandeep Dhavale <dhavale@google.com>, kernel-team@android.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>
+References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
+ <Y/ewpGQkpWvOf7qh@gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <Y/ewpGQkpWvOf7qh@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 11:43:28AM -0500, William Breathitt Gray wrote:
-> On Mon, Feb 20, 2023 at 05:33:34PM +0200, Andy Shevchenko wrote:
-> > It seems that a couple of members got lost theirorder, put them back.
+Hi Eric,
+
+On 2023/2/24 02:29, Eric Biggers wrote:
+> Hi,
 > 
-> Looks like a typographical error here: "theirorder".
-
-Ah, thanks!
-
-...
-
-> >  	unsigned int use_ack:1;
-> >  	unsigned int ack_invert:1;
-> >  	unsigned int clear_ack:1;
-> > +	unsigned int status_invert:1;
-> >  	unsigned int wake_invert:1;
-> > -	unsigned int runtime_pm:1;
-> >  	unsigned int type_in_mask:1;
-> >  	unsigned int clear_on_unmask:1;
-> > +	unsigned int runtime_pm:1;
-> >  	unsigned int not_fixed_stride:1;
-> > -	unsigned int status_invert:1;
+> On Wed, Feb 08, 2023 at 05:33:22PM +0800, Gao Xiang wrote:
+>> From: Sandeep Dhavale <dhavale@google.com>
+>>
+>> Using per-cpu thread pool we can reduce the scheduling latency compared
+>> to workqueue implementation. With this patch scheduling latency and
+>> variation is reduced as per-cpu threads are high priority kthread_workers.
+>>
+>> The results were evaluated on arm64 Android devices running 5.10 kernel.
 > 
-> These don't look alphabetical, so what is the order for these?
+> I see that this patch was upstreamed.  Meanwhile, commit c25da5b7baf1d
+> ("dm verity: stop using WQ_UNBOUND for verify_wq") was also upstreamed.
+> 
+> Why is this more complex solution better than simply removing WQ_UNBOUND?
 
-Nope, the order is to follow:
-a) kernel doc
-b) semantics of each of the groups
+I do think it's a specific issue on specific arm64 hardwares (assuming
+qualcomm, I don't know) since WQ_UNBOUND decompression once worked well
+on the hardwares I once used (I meant Hisilicon, and most x86_64 CPUs,
+I tested at that time) compared with per-cpu workqueue.
 
-Do you think the order can be improved? Can you point out how?
+Also RT threads are also matchable with softirq approach.  In addition,
+many configurations work without dm-verity.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I don't have more time to dig into it for now but it's important to
+resolve this problem on some arm64 hardwares first.  Also it's an
+optional stuff, if the root cause of workqueue issue can be resolved,
+we could consider drop it then.
 
+Thsnka,
+Gao Xiang
 
+> 
+> - Eric
