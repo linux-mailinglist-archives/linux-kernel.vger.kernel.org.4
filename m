@@ -2,115 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5090C6A0F4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20FD6A0F51
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjBWSPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S229895AbjBWSQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjBWSPW (ORCPT
+        with ESMTP id S229635AbjBWSQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:15:22 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8587F311EB;
-        Thu, 23 Feb 2023 10:15:21 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id h14so14157791plf.10;
-        Thu, 23 Feb 2023 10:15:21 -0800 (PST)
+        Thu, 23 Feb 2023 13:16:45 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17CB15CB8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:16:43 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id o12so45826488edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8d7vX3E+ECjlUByBWqhgNH3zgRhrlRHARhFD6gKgnHo=;
-        b=YsUR1lwIJ38Ov5JOW2ShHLFcBQ/c0Vk2KqH2W0Jbc/vG+sGRZc6BBQOQvLelLNYW9p
-         HlXLF2BaPoW97W+6oRtYzKixKIWsdLn1O4atcHCtUkFSZkrW/ywq4NrVSiYjzr5O0oSP
-         yeLzDepp1Ce0bM0ax7IUdduGgc7iSL9s+A/Wqr7H45ViOiAKPZqB5YQRXPcfcH4wVMb1
-         1LtR3S9wkcNzbCNjHi3fGXtM673CohikPkEs62vny/l91HxSYv96VsXIXV8EIzcXpjj6
-         SrJU6gdUPUwmLQbG9k3TwoZ9mF0ghAK2EUTzLiuT2Uao4ILwH/F9Ca4ud03lzsZVNJdr
-         Rtng==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NAKmPlt3HMp+iJ3UA1PfQ0U1bsXsZD8PkIPjZhpTYVM=;
+        b=jNQj2ONFVOd9bz28/6IO4uEAjhmzYt7iZqGM1zGHKkdXFSqnmLGmBch46/lr/YlIZx
+         oesU1DyGRyV35d5NZTj9WbbtW52N8Z6iLsNwIES+3O+gbbrcot/muH7kTTg096S1lJ8S
+         F3WTUlhx32NqgI4KNxSZerRsYGneCEQlIW24JK2dW/gT9fju+kNuzPpDLF8FmoWNz86+
+         S/UYp1OmJZHuqeOWtaoqol13M9FtuTh+Han4/9jUoJvkFRhT6YkY/h3WYrRmp++X/Sre
+         IupZV3nGvSlFZGmeyjgkQEOZ8r8zUdrfXJNE5sHTs5mk9Jyq+OAkfI+RabF90TVz+ZCe
+         OJfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8d7vX3E+ECjlUByBWqhgNH3zgRhrlRHARhFD6gKgnHo=;
-        b=u2Q2nqb/A6bPxx5fjz6MS0ZIQCxqtZfQdIKlZmm5wG+o2YPanljvFBValurSPrGHEB
-         +wOw+GKg3fzEWFwCY3KV5A7tqDSV9UnK1KMlvClUA35258Uvx2arHRA1k9j6zNY/7JiR
-         XVnT+v3mvR0biqnzpYOhXB+2nKBDjZi93VKKArYPoH0L76bdNRj1Ete0+NNw/wsWT5eb
-         XBDQOuVaKOxK1bBdPN8HMaw4uhtfvS4tO7KKdeQAki7kypaQLXqtgmiKUIDcbg/2f1Rn
-         +9dgVsEUfAvthCM1qWnEpkasGv0MEzE1CLRsnn7wkEVyStx7ix53R7BpzIz+BzvAD3xh
-         ZFOw==
-X-Gm-Message-State: AO0yUKUqLozxqttqQFMPmcGt/XkRa+hvEpRdQgSUsz9ukm+5LQHVn1/s
-        DwC92Gxx2X70ZEzPNrwBLdY=
-X-Google-Smtp-Source: AK7set828WW2VZJrKJqxcYHH7mRvhdS/p2ou/zMJ1zI+FJVS4CMBjR17NqxVH2NjppS0+ryRflfHnA==
-X-Received: by 2002:a17:902:f552:b0:19a:a822:f670 with SMTP id h18-20020a170902f55200b0019aa822f670mr13890907plf.6.1677176120621;
-        Thu, 23 Feb 2023 10:15:20 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:e5b4])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902c10400b001978e84753asm125966pli.65.2023.02.23.10.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 10:15:19 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 23 Feb 2023 08:15:17 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-Message-ID: <Y/etNfwxHv8XO3iC@slm.duckdns.org>
-References: <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
- <Y/UiQmuVwh2eqrfA@nvidia.com>
- <87o7pmnd0p.fsf@nvidia.com>
- <Y/YRJNwwvqp7nKKt@nvidia.com>
- <87k009nvnr.fsf@nvidia.com>
- <Y/bHNO7A8T3QQ5T+@nvidia.com>
- <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
- <Y/eiLBo88pgr2IUm@nvidia.com>
- <CAJD7tkadBRP22qP63-SjKSch1im9sHLoMzc6c2h10+ggbuxqMg@mail.gmail.com>
- <Y/esMBOyTaJnv5CW@nvidia.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NAKmPlt3HMp+iJ3UA1PfQ0U1bsXsZD8PkIPjZhpTYVM=;
+        b=N+yeEd2rFWWNzAcfDiWu9+L+oTWmPAlAv5ekf6+8wPbQ2xS3peB2BuAI7j0hWAFPT9
+         ++ncG4kTCwnrVu+Mife94Oici+mgRSYR5dvbj5IHE4yNoVdMXHlZ70rV6njVQAOGsgTw
+         NKaIqxcIOlrZcyyAjEGNMc+DDPjii0Rx9Sx4OWzJGukY3YA7MxCPBflq/m+dXYjRbhf9
+         Dy4HXYRnryhdswmdDqWKfOeQSIyofT6rxG+rs88/YPPCrcsyR4+d41HXuiftDN3RBta6
+         1L6U+nOSeUYt2W2q/0vZ6pW2MjW1fpz8sS4U0Uwo0J8Uy0uiPNWX4enGzI4t1yKBMzwc
+         KDnQ==
+X-Gm-Message-State: AO0yUKVUmae3Yt8u+LzYSDx1xsdQueYBrvv3M5+oAQTNIqDMlPCDHBQx
+        pE1Q5NP7/4riUSgnl0tpkeUYkQ==
+X-Google-Smtp-Source: AK7set+nIoffNUvEtSh+I8BOqy3r0e6DE7CgCN2UQ4YNUI0vZLIdUYAxyNM1aElIr5tackiZW46CXA==
+X-Received: by 2002:a17:906:8601:b0:89c:d072:e33e with SMTP id o1-20020a170906860100b0089cd072e33emr18515563ejx.49.1677176202399;
+        Thu, 23 Feb 2023 10:16:42 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z26-20020a170906945a00b008b23b22b062sm8673148ejx.114.2023.02.23.10.16.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 10:16:42 -0800 (PST)
+Message-ID: <ab160cc9-0a52-e448-9cc6-a7424c0cf560@linaro.org>
+Date:   Thu, 23 Feb 2023 19:16:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/esMBOyTaJnv5CW@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 7/7] PCI: dwc: Introduce region limit from DT
+Content-Language: en-US
+To:     Elad Nachman <enachman@marvell.com>, thomas.petazzoni@bootlin.com,
+        bhelgaas@google.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230223180531.15148-1-enachman@marvell.com>
+ <20230223180531.15148-8-enachman@marvell.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230223180531.15148-8-enachman@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 02:10:56PM -0400, Jason Gunthorpe wrote:
-> > I am not familiar with memfd, but based on
-> > mem_cgroup_swapin_charge_folio() it seems like if cgroup B swapped in
-> > the pages they will remain charged to cgroup A, unless cgroup A is
-> > removed/offlined. Am I missing something?
+On 23/02/2023 19:05, Elad Nachman wrote:
+> From: Elad Nachman <enachman@marvell.com>
 > 
-> Ah, I don't know, Tejun said:
+> Allow dts override of region limit for SOCs with older Synopsis
+> Designware PCIe IP but with greater than 32-bit address range support,
+> such as the Armada 7020/7040/8040 family of SOCs by Marvell,
+> when the DT file places the PCIe window above the 4GB region.
+> The Synopsis Designware PCIe IP in these SOCs is too old to specify the
+> highest memory location supported by the PCIe, but practically supports
+> such locations. Allow these locations to be specified in the DT file.
+> DT property is called num-regionmask , and can range between 33 and 64.
 > 
-> "but it can converge when page usage transfers across cgroups
-> if needed."
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> Which I assumed was swap related but I don't know how convergence
-> works.
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 53a16b8b6ac2..429594e853ae 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -401,7 +401,6 @@ static void dw_pcie_writel_atu(struct dw_pcie *pci, u32 dir, u32 index,
+>  	int ret;
+>  
+>  	base = dw_pcie_select_atu(pci, dir, index);
+> -
+>  	if (pci->ops && pci->ops->write_dbi) {
+>  		pci->ops->write_dbi(pci, base, reg, 4, val);
+>  		return;
+> @@ -735,10 +734,13 @@ static void dw_pcie_link_set_max_speed(struct dw_pcie *pci, u32 link_gen)
+>  void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  {
+>  	int max_region, ob, ib;
+> -	u32 val, min, dir;
+> +	u32 val, min, dir, ret, num_region_maskbits;
 
-That'd work for pagecache. For swap-backed, I think Yosry is right. Is
-MAP_SHARED | MAP_ANONYMOUS a concern? Such mappings can only be shared
-through forking, so it's not a common thing to be shared across different
-resource domains.
+No need to use num_region_maskbits in function scope.
 
-Thanks.
+>  	u64 max;
+> +	struct device *dev = pci->dev;
+> +	struct device_node *np = dev->of_node;
+>  
+>  	val = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT);
+> +
 
--- 
-tejun
+You need to fix this random changes in unrelated places...
+
+Best regards,
+Krzysztof
+
