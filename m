@@ -2,163 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843CA6A11C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559786A11C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjBWVMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
+        id S229643AbjBWVOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBWVMt (ORCPT
+        with ESMTP id S229522AbjBWVOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:12:49 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5E461ED7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:12:26 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id oa16-20020a17090b1bd000b0023465ea4b65so197584pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:12:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jZqpqHNnDrkVf5YnH4C4p2Du+MWFI+rsSboHjRikfo0=;
-        b=cstTUl3cDjETi7Uy5k8lUK4jDXVH5n84ULJ8Qdzf8KUig6GFtpHB7w0eoI8Plhg2NM
-         6FWa3l7sXNc+M6YDtvaFjXzlpRtWBMe5SojZXE91tPmgJMlFF/CW1ZZv81jiCr0fXexK
-         lScdHryZlveE1J+z0J2TIi81MbXXQWHYdNInuM44+8VugSDN/fGG/tYGrW4Jcvq/Dl9n
-         Ek7HnOVQiTB+e4FM6RTzQyIV1EEstxc2pOWecp5NaX9GOemJJxxrazzswOceIxFVcfln
-         /s7eha+SalTSQycIbbCTH+sAFv5dgkYSrn8AD1goiYFHWVwKHCsyUeb7nev3pGjb/y5j
-         CUrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jZqpqHNnDrkVf5YnH4C4p2Du+MWFI+rsSboHjRikfo0=;
-        b=8OoP/tlHcmxzRuM3wS6b2FZIegqLoX9nZ809XPB3r5ONicxg1EyuI9uyxWwxTdnuGZ
-         ngK7l+yZKypRyfI/PRfrgqRwiOnWGu0OjNcj1mawXK/ahOWcjYJJMtt5rA2/CfyHTGFv
-         /NFOghxFrT3BoTKnpNz+OMtX1MHRgNyJ4yChD+7XME122pmXPL+ySHconPf4WS6nkxl4
-         Yk8vpy863kLHbdt0t1O3UKDZuCpf97UFMKUTLmKuUInGxv0Nj2PYdQWdpx7tW5hE3DTh
-         qS1HIYi+NT39G3Ai9q9pPEm0Hf+EBqVd2yFsqK0Lv3EqygaCSxWRukFZEqVOWQBo5aju
-         DqDg==
-X-Gm-Message-State: AO0yUKVGWRp6QJdfU2EJHAubj8TKojK+9wMeIiiIROAuNMd7zwXTMFTx
-        0Wnzlqy1VQHc4Ea+sggaapQSY+jaIE4=
-X-Google-Smtp-Source: AK7set8UOj7NygywK+cGr/Rmvj7I4XEunDNhPQJfW5dsIVprbIkkXYFIqYFcViXFQ9A3GP588Pa1F52horE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:fa4b:b0:237:2106:a861 with SMTP id
- dt11-20020a17090afa4b00b002372106a861mr826705pjb.0.1677186745595; Thu, 23 Feb
- 2023 13:12:25 -0800 (PST)
-Date:   Thu, 23 Feb 2023 13:12:24 -0800
-In-Reply-To: <CAOUHufZ0Ep4_Edo4OoeUVpVK4uFJF6_yVL=xSrQM8an_Vw4VKw@mail.gmail.com>
+        Thu, 23 Feb 2023 16:14:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E3E524E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:14:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 631146179A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 21:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5107DC433D2;
+        Thu, 23 Feb 2023 21:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1677186843;
+        bh=MUhUqx7vVGAnxY5zruGpqZ5Pgz60Ct8/k1u12vDjbB0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vr/NHquQcar3bzTBEBn18RM6nlYOT2OfmkLSV0rpGdT9H0K3qFFFTstH8jfO1Xfor
+         PP4ypsuevUPYWyWM5cW9FBu9DMxOKMIgyoGRTBoJCzTfhiQ+UwWEr/ar88eAaAVfw9
+         E2HQa7TJiVTR84KhzRqvyO3sQ6NnIhZgCZQmXwWE=
+Date:   Thu, 23 Feb 2023 13:14:02 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Glenn Washburn <development@efficientek.com>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        linux-um <linux-um@lists.infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Anton Ivanov <anton.ivanov@kot-begemot.co.uk>
+Subject: Re: [PATCH v2 0/2] GDB: Support getting current task struct in UML
+Message-Id: <20230223131402.6d6a662f76348b14574121d3@linux-foundation.org>
+In-Reply-To: <cover.1676532759.git.development@efficientek.com>
+References: <cover.1676532759.git.development@efficientek.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-2-yuzhao@google.com>
- <Y/ee1s3XPGa62SFV@google.com> <CAOUHufZ0Ep4_Edo4OoeUVpVK4uFJF6_yVL=xSrQM8an_Vw4VKw@mail.gmail.com>
-Message-ID: <Y/fWuGL5RN8fUIr5@google.com>
-Subject: Re: [PATCH mm-unstable v1 1/5] mm/kvm: add mmu_notifier_test_clear_young()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023, Yu Zhao wrote:
-> On Thu, Feb 23, 2023 at 10:14=E2=80=AFAM Sean Christopherson <seanjc@goog=
-le.com> wrote:
-> >
-> > On Thu, Feb 16, 2023, Yu Zhao wrote:
-> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > index 9c60384b5ae0..1b465df4a93d 100644
-> > > --- a/virt/kvm/kvm_main.c
-> > > +++ b/virt/kvm/kvm_main.c
-> > > @@ -875,6 +875,63 @@ static int kvm_mmu_notifier_clear_young(struct m=
-mu_notifier *mn,
-> > >       return kvm_handle_hva_range_no_flush(mn, start, end, kvm_age_gf=
-n);
-> > >  }
-> > >
-> > > +static bool kvm_test_clear_young(struct kvm *kvm, unsigned long star=
-t,
-> > > +                              unsigned long end, unsigned long *bitm=
-ap)
-> > > +{
-> > > +     int i;
-> > > +     int key;
-> > > +     bool success =3D true;
-> > > +
-> > > +     trace_kvm_age_hva(start, end);
-> > > +
-> > > +     key =3D srcu_read_lock(&kvm->srcu);
-> > > +
-> > > +     for (i =3D 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> > > +             struct interval_tree_node *node;
-> > > +             struct kvm_memslots *slots =3D __kvm_memslots(kvm, i);
-> > > +
-> > > +             kvm_for_each_memslot_in_hva_range(node, slots, start, e=
-nd - 1) {
-> > > +                     gfn_t lsb_gfn;
-> > > +                     unsigned long hva_start, hva_end;
-> > > +                     struct kvm_gfn_range range =3D {
-> > > +                             .slot =3D container_of(node, struct kvm=
-_memory_slot,
-> > > +                                                  hva_node[slots->no=
-de_idx]),
-> > > +                     };
-> > > +
-> > > +                     hva_start =3D max(start, range.slot->userspace_=
-addr);
-> > > +                     hva_end =3D min(end - 1, range.slot->userspace_=
-addr +
-> > > +                                            range.slot->npages * PAG=
-E_SIZE - 1);
-> > > +
-> > > +                     range.start =3D hva_to_gfn_memslot(hva_start, r=
-ange.slot);
-> > > +                     range.end =3D hva_to_gfn_memslot(hva_end, range=
-.slot) + 1;
-> > > +
-> > > +                     if (WARN_ON_ONCE(range.end <=3D range.start))
-> > > +                             continue;
-> >
-> > Extend __kvm_handle_hva_range() instead of copy-pasting.  At a very qui=
-ck glance,
-> > I believe all that is needed is (minus sanity checks):
->=20
-> Yes, will do.
->=20
-> I do need to add one more parameter to kvm_gfn_range, because that's
-> what the current kvm_arch_test_clear_young() needs, assuming that
-> function is acceptable.
->=20
-> Also, just a side note, from MM's POV, the following in
-> __kvm_handle_hva_range() seems to forget to handle end =3D=3D 0, if that'=
-s
-> possible?
+On Fri, 17 Feb 2023 19:11:52 -0600 Glenn Washburn <development@efficientek.com> wrote:
 
-It's handled by the WARN_ON_ONCE() at the very top:
+> Added suggestions from Jan.
+> 
+> Glenn
+> 
+> Glenn Washburn (2):
+>   scripts/gdb: Correct indentation in get_current_task
+>   scripts/gdb: Support getting current task struct in UML
+> 
 
-static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
-						  const struct kvm_hva_range *range)
-{
-	if (WARN_ON_ONCE(range->end <=3D range->start))
-		return 0;
+For some reason I get a bunch of rejects when applying these on top of
+the latest patchpile.  Please check my end result:
+
+def get_current_task(cpu):
+    task_ptr_type = task_type.get_type().pointer()
+
+    if utils.is_target_arch("x86"):
+        if gdb.lookup_global_symbol("cpu_tasks"):
+            # This is a UML kernel, which stores the current task
+            # differently than other x86 sub architectures
+            var_ptr = gdb.parse_and_eval("(struct task_struct *)cpu_tasks[0].task")
+            return var_ptr.dereference()
+        else:
+            var_ptr = gdb.parse_and_eval("&current_task")
+            return per_cpu(var_ptr, cpu).dereference()
+    elif utils.is_target_arch("aarch64"):
+        current_task_addr = gdb.parse_and_eval("$SP_EL0")
+        if((current_task_addr >> 63) != 0):
+            current_task = current_task_addr.cast(task_ptr_type)
+            return current_task.dereference()
+        else:
+            raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+                                "while running in userspace(EL0)")
+    else:
+        raise gdb.GdbError("Sorry, obtaining the current task is not yet "
+                           "supported with this arch")
 
 
->=20
->   hva_end =3D min(range->end, slot->userspace_addr + (slot->npages <<
-> PAGE_SHIFT));
+
