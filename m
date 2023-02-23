@@ -2,157 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B986A046D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0976A0471
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbjBWJE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S232644AbjBWJFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbjBWJE4 (ORCPT
+        with ESMTP id S232954AbjBWJFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:04:56 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DFC1EFF2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:04:55 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so40073620edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:04:54 -0800 (PST)
+        Thu, 23 Feb 2023 04:05:39 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524014A1EF;
+        Thu, 23 Feb 2023 01:05:29 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so3598538pja.5;
+        Thu, 23 Feb 2023 01:05:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8RmO4b5hhwebSj5Cj50iTEF8PxEqggdJHWYbDNzOlRM=;
-        b=O+4WkHK2t+oozA7GD5sbtbrdpKW4pqbPFGy6aDnYXl9BzRPgRkKmX7qCo6iDFyJVvb
-         Qfr4AHufrzEOqYmHDTbP4QbQgGQOXVzmQMb84SjZrALszYSSA658zSP0quiqlu/62Qjz
-         A6+4wAB/wMnSRzmAE04EwuXoWGxOFJL7Xs91N94iY2ZraaAgdB8/H5r0WwNiSvhlalc8
-         Nn+9SquFmNLf7/KcZ6LqMEcioiRTWxdlqmDqeqVkFOpOjbysj/GvLF6KyMyZJ7Nx8OR8
-         vQEpYg43Cbn32zSWbsMF6PFBIiHx8n5NFI4SDWhkhKSIF20qXgB5bD9BKAml7wwXjXJQ
-         nB3A==
+        d=gmail.com; s=20210112; t=1677143129;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ABFyAb/K2zI5FCoqs7l1h895rViJiGUkMa/G+N7XXR0=;
+        b=eRYg5gH5jZG9aubphPCvLc7x5upjysQQzZyXoF2V6WJV3eOrk4Pz2H1BYlFUqeK38j
+         P3skW/zOEMjWTeVniLFSlSZErJUhu5c9CaJFai7KroP67RquxbqDI/lgfUpZk962ZJJb
+         1xFHcbShqatmg9lVYCtdPk5gH/uUvyeToDoXHHkz5YQUf0CChpd4XhfHWWhoNfe7/Us5
+         rC+xV72hcFA7e/HJ2K8LXSAIzJmhsATUTifQ0uTYbw9TsjmF7j3GrkLpvGQ6h/NfInLF
+         4PUIFbBbHIOQA8/jCd4z33An0lj5BcEmxnBqcDK4xdhozuVUZD4FkG4eAveWM99V42gY
+         Q52w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8RmO4b5hhwebSj5Cj50iTEF8PxEqggdJHWYbDNzOlRM=;
-        b=dX+M0O4bVdkZ5WV68WkHag+mavF+0bJhQOa/w3UdZrCMibi6O18LaHUSCIVBatQm1e
-         uSk4pIUkesC2TwIfv2Oi10oeiUcMq1aAYyB4cYeYIiPQu1X5SjU0pytT/x0TggP55NYr
-         Kw4SQFNWphhiv8a9sUxx/kildDS2IW47IuL0HbLjk4LTZrDJlNYA1boJw61scllqzJu6
-         jfEOMWLecxHpZUmOdAXmDaSo25M3/+zdO3/TIG1p+6KL831h33Q934vxU5cHgz/Q68Wr
-         SBixZ0G0poNhL8P/KTyxhSFCxi64t0sKRhB1fMEft8R52LLQSzUdH+MomJiuitjDtQ1w
-         xz5g==
-X-Gm-Message-State: AO0yUKWOTyQ70FBCWczJmJYVaw+bIF8bROanOyzWsJUOmQWZ2Avq8Vmc
-        UGcWZqhwf1PArgNCYcvY2bbMAQ==
-X-Google-Smtp-Source: AK7set+3/2aqYsFGt0VD4bmZlatErnbLDJU/4VZzq7ckU0T/EaM6DW2wHb7xPgo8rQ5md5gIhk/yqg==
-X-Received: by 2002:a17:907:2da8:b0:8b1:7274:1a72 with SMTP id gt40-20020a1709072da800b008b172741a72mr19780103ejc.6.1677143093583;
-        Thu, 23 Feb 2023 01:04:53 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b42-20020a509f2d000000b004ad72045ed9sm4325306edf.65.2023.02.23.01.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 01:04:52 -0800 (PST)
-Message-ID: <3dd8c78b-20ea-24c8-4019-cc03ebbcad71@linaro.org>
-Date:   Thu, 23 Feb 2023 10:04:50 +0100
+        d=1e100.net; s=20210112; t=1677143129;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ABFyAb/K2zI5FCoqs7l1h895rViJiGUkMa/G+N7XXR0=;
+        b=HX1japHiXhrV415gTxwDe2aeyCN5+wGFmNi4SVnjew6p+V2B+PFts5MRzBQzyjezje
+         CtA8RKJaqWr2M3GwwYU7arlt/2VCTjuv/oDfviwM+e1br1m/PBzeq1AZA+LTnYaO+WCM
+         8Yo5UVbz64zoX+/dVno2kljyk+oqP3G/lBCK87ZR9SYW9QQgUgIaFVfpzi59alSRj+fr
+         Nr/6LCLgbvoSiTD/6+mnho6FMae2NQYKXE0gfB2QYR4qnUpfOui+jTuwV5qLaE8eJW0Y
+         dYeOOXcM5IrOG9usgMfpco4qkZf8ENU9Hu+Xy+aF6ngUwAZD5OLxDxh5eA6dH0CyfJ+8
+         LA5w==
+X-Gm-Message-State: AO0yUKU+y7vk+7WEaQlr60TSxJOp0l3txiuRGd0mSExPNjCh5ZvLBdM1
+        mKCxVU8TlOeQQa5lmmKYWyKUa3lUD0TK5A==
+X-Google-Smtp-Source: AK7set/cLiqDH9td3Ix/MImyJJRskXHJc8NAsXDMSGpR6L0vJoZH1SZeMvotWBoOIkThtpTsx4lPNw==
+X-Received: by 2002:a05:6a20:548a:b0:c6:d235:ac8c with SMTP id i10-20020a056a20548a00b000c6d235ac8cmr13335584pzk.4.1677143128961;
+        Thu, 23 Feb 2023 01:05:28 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id u16-20020aa78390000000b005cdf83e4513sm4733214pfm.145.2023.02.23.01.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 01:05:28 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] net: tls: fix possible info leak in tls_set_device_offload()
+Date:   Thu, 23 Feb 2023 17:05:08 +0800
+Message-Id: <20230223090508.443157-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: jh7110: Add PLL clock node
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
- <20230221141147.303642-4-xingyu.wu@starfivetech.com>
- <a799e064-b0ac-7300-b706-0c33e2d3610a@linaro.org>
- <842e5825-07ad-1806-d969-f54d9a9eed5a@starfivetech.com>
- <a8f723cf-d120-0102-d9b2-d40bfbf78349@linaro.org>
- <84a785bb-8a48-fa55-ea64-29c21ac42cf8@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <84a785bb-8a48-fa55-ea64-29c21ac42cf8@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 10:03, Xingyu Wu wrote:
-> On 2023/2/23 16:52, Krzysztof Kozlowski wrote:
->> On 23/02/2023 09:47, Xingyu Wu wrote:
->>> On 2023/2/22 17:09, Krzysztof Kozlowski wrote:
->>>> On 21/02/2023 15:11, Xingyu Wu wrote:
->>>>> Add the PLL clock node for the Starfive JH7110 SoC and
->>>>> modify the SYSCRG node to add PLL clocks.
->>>>>
->>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>> ---
->>>>>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 15 +++++++++++++--
->>>>>  1 file changed, 13 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->>>>> index b6612c53d0d2..0cb8d86ebce5 100644
->>>>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->>>>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->>>>> @@ -461,12 +461,16 @@ syscrg: clock-controller@13020000 {
->>>>>  				 <&gmac1_rgmii_rxin>,
->>>>>  				 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
->>>>>  				 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
->>>>> -				 <&tdm_ext>, <&mclk_ext>;
->>>>> +				 <&tdm_ext>, <&mclk_ext>,
->>>>> +				 <&pllclk JH7110_CLK_PLL0_OUT>,
->>>>> +				 <&pllclk JH7110_CLK_PLL1_OUT>,
->>>>> +				 <&pllclk JH7110_CLK_PLL2_OUT>;
->>>>>  			clock-names = "osc", "gmac1_rmii_refin",
->>>>>  				      "gmac1_rgmii_rxin",
->>>>>  				      "i2stx_bclk_ext", "i2stx_lrck_ext",
->>>>>  				      "i2srx_bclk_ext", "i2srx_lrck_ext",
->>>>> -				      "tdm_ext", "mclk_ext";
->>>>> +				      "tdm_ext", "mclk_ext",
->>>>> +				      "pll0_out", "pll1_out", "pll2_out";
->>>>>  			#clock-cells = <1>;
->>>>>  			#reset-cells = <1>;
->>>>>  		};
->>>>> @@ -476,6 +480,13 @@ sys_syscon: syscon@13030000 {
->>>>>  			reg = <0x0 0x13030000 0x0 0x1000>;
->>>>>  		};
->>>>>  
->>>>> +		pllclk: pll-clock-controller {
->>>>
->>>> Does not look like you tested the DTS against bindings. Please run `make
->>>> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
->>>> for instructions). You should see here warnings of mixing non-MMIO nodes
->>>> in MMIO-bus.
->>>>
->>>
->>> Oh I cherry-pick the commit of syscon node and it also include the MMC node.
->>> I will remove the MMC node. 
->>> I used dtbs_check and get the error 'should not be valid under {'type': 'object'}',
->>> If I move this node out of the 'soc' node, the dtbs_check will be pass.
->>> Is it OK to move the PLL node out of the 'soc' node? Thanks.
->>
->> Shall it be out side of soc? How it can then do anything with registers?
->> This does not look like correct representation of hardware.
-> 
-> The error appears to be due to a lack of reg base about PLL node. PLL do something with register
-> by 'sys_syscon' node and the syscon node is in the soc node.
+After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
+tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL if it fails
+before kmalloc cctx->iv. This may cause info leak when we call
+do_tls_getsockopt_conf().
 
-Again: And how is this correct representation of hardware?
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ net/tls/tls_device.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index 6c593788dc25..a63f6f727f58 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -1241,8 +1241,10 @@ int tls_set_device_offload(struct sock *sk, struct tls_context *ctx)
+ 	kfree(start_marker_record);
+ free_rec_seq:
+ 	kfree(ctx->tx.rec_seq);
++	ctx->tx.rec_seq = NULL;
+ free_iv:
+ 	kfree(ctx->tx.iv);
++	ctx->tx.iv = NULL;
+ release_netdev:
+ 	dev_put(netdev);
+ 	return rc;
+-- 
+2.34.1
 
