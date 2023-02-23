@@ -2,103 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590A46A0498
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CF16A04A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbjBWJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
+        id S229502AbjBWJTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjBWJR7 (ORCPT
+        with ESMTP id S233442AbjBWJTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:17:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0989298CA;
-        Thu, 23 Feb 2023 01:17:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 613886162F;
-        Thu, 23 Feb 2023 09:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D451C433EF;
-        Thu, 23 Feb 2023 09:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677143878;
-        bh=T56qU1zrO2f5+K1m/Z6RBr2ce1etS1rt6dWCDZpakl8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bs1Xqmlv+nia1vrclkQDK/+JL/H1bK/qHyJAptXZmpvv3RsxbWUKWYV9RjB+C9G94
-         fw1OUgN/YOilIvBcmVTLyEwtRmnjPklNiT9QAcAqff1bNZy8FA/NuFDFcaCV0Mwbt9
-         LGhBk6AvfmnsdTE1GG3+2nOmcdNFq3oyKb86WtBE=
-Date:   Thu, 23 Feb 2023 10:17:55 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     maennich@google.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH 4/5] lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
-Message-ID: <Y/cvQ4WfpKRrzKKK@kroah.com>
-References: <20220201205624.652313-1-nathan@kernel.org>
- <20230222112141.278066-5-maennich@google.com>
+        Thu, 23 Feb 2023 04:19:02 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545A37289
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:19:01 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id j14so14181542vse.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:19:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677143940;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jJG07+p6MKBGS+KUMirk1JxFZsTo6RYQStGyBrR/Eec=;
+        b=VTUwGjwxIdIk+8DQo1F08zqK342XkE0IyISiKy445xlO4gn5BcvtIN8ObhUibjnPdh
+         +8QCDzAGRnNMibyH/sRteQ9ut7OJkOEsJ8kPkEGYc9OBnih7SfNQpowLXMcwoFUvs1K0
+         6ELBLUgwh0HmEnFhlM7FrYYPj3mzKwUNEEOe1h31zEj9FFkZtgtvcDAl/ADLU4zCLTaC
+         CZOb1xxY9uT50WPXBxvhwk3EuLggirXkkdcMLU8rlZo6fi998cB25h17CFWSnwQ6kgUi
+         scHNy8oFEGRxc67FjqT0UL/HkF89zud1sd74gtEScsUHorUBPQzjefZ88i8TDYmSUg2T
+         qgLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677143940;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jJG07+p6MKBGS+KUMirk1JxFZsTo6RYQStGyBrR/Eec=;
+        b=OeNsQMJSNu6aQEAK01gs4/0SaQK+WihTt+jAw/m1o252ZZ3IMwUaCX7wP6/x4CTFyo
+         y9vqNlApjr7LbWpWfqZUt6NPXhXPvy0ng/6rYXX6GAxpg5NPFQ39/Ym/aS8cVOjZmAbF
+         Kuki2FBvoGqqOyndOvxQmkyNAKVUvgII48NVBc9p0YW3g+l08fcdEZ+vc+59wgfwFivW
+         F228oncxtldKYoIMxUklUOEkIH+kxWTxmCumbz9F2ai81IAJxLyQt9u5/tiUt9gJepK7
+         o2WWwmTqOdyjBjpEd5B+6DcvMtwjBm9rpG4eobzizUypeBuA3tiZbJq7C+0YowHMlYTG
+         0CAQ==
+X-Gm-Message-State: AO0yUKUJJWKKJ5qSeCtRN55M2lotY012JQBcWAvyf0b/6LEMNle94oke
+        r2k7CBWiVVFRUyzKLkWkcoUPTJP8ECRa1dOuTio0ig==
+X-Google-Smtp-Source: AK7set+fL9K7BQue1MVWJ997o1Uw4HQUESRxfTJt3q61lF9gsBJ2K4+iBi+Hrae4wfMfj+Ek0HWi8Lg5PF2Mvbw7Sx4=
+X-Received: by 2002:a1f:aa41:0:b0:412:948:73ff with SMTP id
+ t62-20020a1faa41000000b00412094873ffmr251161vke.13.1677143940266; Thu, 23 Feb
+ 2023 01:19:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230222112141.278066-5-maennich@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-4-yuzhao@google.com>
+ <CAOUHufYSx-edDVCZSauOzwOJG6Av0++0TFT4ko8qWq7vLi_mjw@mail.gmail.com>
+ <86lekwy8d7.wl-maz@kernel.org> <CAOUHufbbs2gG+DPvSOw_N_Kx7FWdZvpdJUvLzko-BDQ8vfd6Xg@mail.gmail.com>
+ <86a614ycs3.wl-maz@kernel.org>
+In-Reply-To: <86a614ycs3.wl-maz@kernel.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 23 Feb 2023 02:18:24 -0700
+Message-ID: <CAOUHufYLmu7oowXZ5YmVJqgx5dHWdz-1eaqPiVzUq3RAY4e_6A@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 3/5] kvm/arm64: add kvm_arch_test_clear_young()
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com, Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 11:21:45AM +0000, maennich@google.com wrote:
-> From: Nathan Chancellor <nathan@kernel.org>
-> 
-> Now that CONFIG_PAHOLE_VERSION exists, use it in the definition of
-> CONFIG_PAHOLE_HAS_SPLIT_BTF and CONFIG_PAHOLE_HAS_BTF_TAG to reduce the
-> amount of duplication across the tree.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Link: https://lore.kernel.org/bpf/20220201205624.652313-5-nathan@kernel.org
-> Signed-off-by: Matthias Maennich <maennich@google.com>
-> ---
->  lib/Kconfig.debug | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index f71db0cc3bf1..0743c9567d7e 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -328,7 +328,15 @@ config DEBUG_INFO_BTF
->  	  DWARF type info into equivalent deduplicated BTF type info.
->  
->  config PAHOLE_HAS_SPLIT_BTF
-> -	def_bool $(success, test `$(PAHOLE) --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'` -ge "119")
-> +	def_bool PAHOLE_VERSION >= 119
-> +
-> +config PAHOLE_HAS_BTF_TAG
-> +	def_bool PAHOLE_VERSION >= 123
-> +	depends on CC_IS_CLANG
-> +	help
-> +	  Decide whether pahole emits btf_tag attributes (btf_type_tag and
-> +	  btf_decl_tag) or not. Currently only clang compiler implements
-> +	  these attributes, so make the config depend on CC_IS_CLANG.
+On Thu, Feb 23, 2023 at 2:03=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
+:
+>
+> On Thu, 23 Feb 2023 03:58:47 +0000,
+> Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > On Fri, Feb 17, 2023 at 2:00=E2=80=AFAM Marc Zyngier <maz@kernel.org> w=
+rote:
+> > >
+> > > On Fri, 17 Feb 2023 04:21:28 +0000,
+> > > Yu Zhao <yuzhao@google.com> wrote:
+> > > >
+> > > > On Thu, Feb 16, 2023 at 9:12 PM Yu Zhao <yuzhao@google.com> wrote:
+> > > > >
+> > > > > This patch adds kvm_arch_test_clear_young() for the vast majority=
+ of
+> > > > > VMs that are not pKVM and run on hardware that sets the accessed =
+bit
+> > > > > in KVM page tables.
+> > >
+> > > I'm really interested in how you can back this statement. 90% of the
+> > > HW I have access to is not FEAT_HWAFDB capable, either because it
+> > > predates the feature or because the feature is too buggy to be useful=
+.
+> >
+> > This is my expericen too -- most devices are pre v8.2.
+>
+> And yet you have no issue writing the above. Puzzling.
 
-Note, this is very different from the original commit, are you sure this
-is correct?
+That's best to my knowledge. Mind enlightening me?
 
-You took a MAINTAINERS file update in patch 1/5 to make a later patch
-simpler, but yet you massively changed this commit and included stuff
-from a different one and did not mention it anywhere?
+> > > Do you have numbers?
+> >
+> > Let's do a quick market survey by segment. The following only applies
+> > to ARM CPUs:
+> >
+> > 1. Phones: none of the major Android phone vendors sell phones running
+> > VMs; no other major Linux phone vendors.
+>
+> Maybe you should have a reality check and look at what your own
+> employer is shipping.
 
-Please fix this commit up, and resubmit the whole series with the git
-commit ids in the commits to make it easier for me to review and apply
-properly.
+Which model? I'll look it up and see how/how I missed it.
 
-thanks,
+> > 2. Laptops: only a very limited number of Chromebooks run VMs, namely
+> > ACRVM. No other major Linux laptop vendors.
+>
+> Again, your employer disagree.
 
-greg k-h
+What do you mean? Sorry, I'm a little surprised here... I do know *a
+lot* about Chromebooks.
+
+> > 3. Desktops: no major Linux desktop vendors.
+>
+> My desktop disagree (I send this from my arm64 desktop VM ).
+
+A model number please?
+
+> > 4. Embedded/IoT/Router: no major Linux vendors run VMs (Android Auto
+> > can be a VM guest on QNX host).
+>
+> This email is brought to you via a router VM on an arm64 box.
+
+More details?
+
+> > 5. Cloud: this is where the vast majority VMs come from. Among the
+> > vendors available to the general public, Ampere is the biggest player.
+> > Here [1] is a list of its customers. The A-bit works well even on its
+> > EVT products (Neoverse cores).
+>
+> Just the phone stuff dwarfs the number of cloud hosts.
+
+Please point me to something that I can work on so that I wouldn't
+sound so ignorant next time.
