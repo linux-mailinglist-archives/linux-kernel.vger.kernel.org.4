@@ -2,68 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5676A072F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47F86A0735
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjBWLRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 06:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S233808AbjBWLSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 06:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjBWLRR (ORCPT
+        with ESMTP id S229583AbjBWLSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 06:17:17 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA34753294
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:17:16 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-SdHWv8HcNEia4nmSBJEwSQ-1; Thu, 23 Feb 2023 06:15:55 -0500
-X-MC-Unique: SdHWv8HcNEia4nmSBJEwSQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F24B8800B23;
-        Thu, 23 Feb 2023 11:15:54 +0000 (UTC)
-Received: from hog (unknown [10.39.192.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95448492B00;
-        Thu, 23 Feb 2023 11:15:53 +0000 (UTC)
-Date:   Thu, 23 Feb 2023 12:15:52 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: tls: fix possible info leak in
- tls_set_device_offload()
-Message-ID: <Y/dK6OoNpYswIqrD@hog>
-References: <20230223090508.443157-1-hbh25y@gmail.com>
+        Thu, 23 Feb 2023 06:18:21 -0500
+Received: from out28-49.mail.aliyun.com (out28-49.mail.aliyun.com [115.124.28.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC9166C3;
+        Thu, 23 Feb 2023 03:18:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07649013|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0871468-0.0143109-0.898542;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.RUpMKkG_1677151093;
+Received: from 192.168.220.144(mailfrom:michael@allwinnertech.com fp:SMTPD_---.RUpMKkG_1677151093)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Feb 2023 19:18:14 +0800
+Message-ID: <9bf4463c-6541-a6cb-9bbc-6d070118509a@allwinnertech.com>
+Date:   Thu, 23 Feb 2023 19:18:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230223090508.443157-1-hbh25y@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mice
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
+        richard.gong@amd.com
+References: <20230222013944.31095-1-michael@allwinnertech.com>
+ <Y/WwXBF37hoZBbQa@kroah.com>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <Y/WwXBF37hoZBbQa@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-02-23, 17:05:08 +0800, Hangyu Hua wrote:
-> After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
-> tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL if it fails
-> before kmalloc cctx->iv. This may cause info leak when we call
-> do_tls_getsockopt_conf().
+Dear Greg,
 
-Is there really an issue here?
+On 2/22/2023 2:04 PM, Greg KH wrote:
+> On Wed, Feb 22, 2023 at 09:39:44AM +0800, Michael Wu wrote:
+>> This patch fixes a problem that USB mouse can't wake up the device that
+>> enters standby.
+> 
+> This not a problem, it is that way by design.
 
-If both tls_set_device_offload and tls_set_sw_offload fail,
-do_tls_setsockopt_conf will clear crypto_{send,recv} from the context.
-Then the TLS_CRYPTO_INFO_READY in do_tls_getsockopt_conf will fail, so
-we won't try to access iv or rec_seq.
+I got it, maybe it's a little problem to say that.
+
+> 
+>> At present, the kernel only checks whether certain USB manufacturers
+>> support wake-up, which will easily cause inconvenience to the
+>> development work of other manufacturers and add unnecessary work to the
+>> maintenance of kernel.
+>>
+>> The USB protocol supports judging whether a usb supports the wake-up
+>> function, so it should be more reasonable to add a wake-up source by
+>> directly checking the settings from the USB protocol.
+> 
+> But you do not do that in this patch, why not?
+
+I just want to explain the background of my patch, to prove we could use 
+a similar way to avoid such a "disturbing" situation.
+To reduce the influence, my patch enables remote wakeup for USB mouse 
+devices refer to what keyboard do.
+
+> 
+>> There was a similar issue on the keyboard before, which was fixed by
+>> this patch (3d61510f4eca), but now the problem happened on the mouse.
+>> This patch uses a similar idea to fix this problem.
+>>
+>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+>> ---
+>>   drivers/hid/usbhid/hid-core.c | 8 ++++++++
+>>   drivers/hid/usbhid/usbmouse.c | 1 +
+>>   2 files changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+>> index be4c731aaa65..d3a6755cca09 100644
+>> --- a/drivers/hid/usbhid/hid-core.c
+>> +++ b/drivers/hid/usbhid/hid-core.c
+>> @@ -1189,6 +1189,14 @@ static int usbhid_start(struct hid_device *hid)
+>>   		device_set_wakeup_enable(&dev->dev, 1);
+>>   	}
+>>   
+>> +	/**
+>> +	 * NOTE: enable remote wakeup by default for all mouse devices
+>> +	 * supporting the boot protocol.
+>> +	 */
+>> +	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
+>> +	    interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE)
+>> +		device_set_wakeup_enable(&dev->dev, 1);
+> 
+> Sorry, but we can not take this unless it is proven that this will work
+> properly for all of these devices.  Other operating systems do not do
+> this last I checked, so there will be problems.
+
+As Mario Limonciello says, they has confirmed that the Microsoft Windows 
+does set a similar policy as well. Can we talk about more in this topic: 
+why does Linux not support it?
+Of course, if you have other great idea, I will appreciate that if we 
+can have some further discussion.
+
+> 
+> thanks,
+> 
+> greg k-h
 
 -- 
-Sabrina
-
+Regards,
+Michael Wu
