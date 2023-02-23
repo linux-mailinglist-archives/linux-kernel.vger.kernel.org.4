@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2986A0C45
+	by mail.lfdr.de (Postfix) with ESMTP id A169C6A0C44
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbjBWOyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S234593AbjBWOyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbjBWOyi (ORCPT
+        with ESMTP id S234409AbjBWOyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Feb 2023 09:54:38 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B15952DE6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA80C4ECDE;
         Thu, 23 Feb 2023 06:54:37 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BCEE06602218;
-        Thu, 23 Feb 2023 14:54:35 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B5306602219;
+        Thu, 23 Feb 2023 14:54:36 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1677164076;
-        bh=2FDlNqFMvv568OceJDLOHaVPuNkoQcOewFS48O2E3K8=;
+        bh=EMwmDgqiKXB9Dx2NxJ/NhHjgvpsexC8a5B3Qc0K2qvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hDuVc56t9YVqQsWw8Z293SKRKZ++z7sXiXURKBM0uIr8fSXw2qoC0Flal9G2n9Bcg
-         SJlLEncNL/dQTjNkoAB0Qt+TbHNsxdhXxzPkWqHT5LNMdaIStRygUpMt9pGEU2K0qH
-         GX/rEaCMSNZZrP+4LW1dvGsAazCto1QUVBQrkGKm6n833DL1oN5pKUtODo9/CQfhDX
-         eA/DBDYqicqHknC5cwT0n7F+sRhsU+PFKKUiIAyKGaKGJ88BVhQ11nuFdcPPX6HXf9
-         QwYGebToYhxPkP0bV1voaQDykZpFsLMF5eVw67S91vtBG+WPaobCGd+ng9l+NX22Qb
-         u31Q5TMDaTu5w==
+        b=KruIvXwfhBJ1KgQJ8MomBQ7ddTMRxdJFkotOKOZNKWW2puLevwEou1ipTyayhMYWD
+         +RG5lQP49nVFlAmbJqLdHw6tddeqQx3O966PhIeYsTHtLsjONtLEKZCeuxstRVtlXl
+         GgBxgCU107vCmvk288rcgohAJoP5oc5e0YcUYLCUiKlYVlY7gSMx7ip+WZraEazNIP
+         fDumET3XZBY1J6PrGU0yI1d8nV2V1Bu3T/HsFrZIkGXrPpz05xc1uNMq/MNXHhGcOG
+         e8hu3/KYlj9qvPWO+VqfTI97mkRag8BJuQty6SgdBhKI4f7QEXDE5lH7pjqlsJ9JPG
+         9vItNLGbkzOkQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -41,9 +41,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-mediatek@lists.infradead.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v1 3/4] arm64: dts: mediatek: mt8195: Add display pwm nodes
-Date:   Thu, 23 Feb 2023 15:54:25 +0100
-Message-Id: <20230223145426.193590-4-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 4/4] arm64: dts: mediatek: cherry: Add configuration for display backlight
+Date:   Thu, 23 Feb 2023 15:54:26 +0100
+Message-Id: <20230223145426.193590-5-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230223145426.193590-1-angelogioacchino.delregno@collabora.com>
 References: <20230223145426.193590-1-angelogioacchino.delregno@collabora.com>
@@ -58,48 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the two hardware PWMs for display backlighting but keep them
-disabled by default, as usage is board-specific.
+Configure the hardware PWM for the integrated display's backlight:
+all Cherry devices enable the backlight with GPIO82 and manage the
+PWM via MediaTek disp-pwm on GPIO97.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index fecb41104193..c86c4b48dc3f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -1102,6 +1102,29 @@ lvts_ap: thermal-sensor@1100b000 {
- 			#thermal-sensor-cells = <1>;
- 		};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+index d679a04207d8..c50f1e2914b2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+@@ -22,6 +22,16 @@ aliases {
+ 		serial0 = &uart0;
+ 	};
  
-+		disp_pwm0: pwm@1100e000 {
-+			compatible = "mediatek,mt8195-disp-pwm", "mediatek,mt8183-disp-pwm";
-+			reg = <0 0x1100e000 0 0x1000>;
-+			interrupts = <GIC_SPI 203 IRQ_TYPE_LEVEL_LOW 0>;
-+			power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS0>;
-+			#pwm-cells = <2>;
-+			clocks = <&topckgen CLK_TOP_DISP_PWM0>,
-+				 <&infracfg_ao CLK_INFRA_AO_DISP_PWM>;
-+			clock-names = "main", "mm";
-+			status = "disabled";
-+		};
++	backlight_lcd0: backlight-lcd0 {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 1023>;
++		default-brightness-level = <576>;
++		enable-gpios = <&pio 82 GPIO_ACTIVE_HIGH>;
++		num-interpolated-steps = <1023>;
++		pwms = <&disp_pwm0 0 500000>;
++		power-supply = <&ppvar_sys>;
++	};
 +
-+		disp_pwm1: pwm@1100f000 {
-+			compatible = "mediatek,mt8195-disp-pwm", "mediatek,mt8183-disp-pwm";
-+			reg = <0 0x1100f000 0 0x1000>;
-+			interrupts = <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH 0>;
-+			#pwm-cells = <2>;
-+			clocks = <&topckgen CLK_TOP_DISP_PWM1>,
-+				 <&infracfg_ao CLK_INFRA_AO_DISP_PWM1>;
-+			clock-names = "main", "mm";
-+			status = "disabled";
-+		};
+ 	chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+@@ -349,6 +359,13 @@ &auxadc {
+ 	status = "okay";
+ };
+ 
++&disp_pwm0 {
++	status = "okay";
 +
- 		spi1: spi@11010000 {
- 			compatible = "mediatek,mt8195-spi",
- 				     "mediatek,mt6765-spi";
++	pinctrl-names = "default";
++	pinctrl-0 = <&disp_pwm0_pin_default>;
++};
++
+ &i2c0 {
+ 	status = "okay";
+ 
+@@ -773,6 +790,13 @@ pins-cmd-dat {
+ 		};
+ 	};
+ 
++	disp_pwm0_pin_default: disp-pwm0-default-pins {
++		pins-disp-pwm {
++			pinmux = <PINMUX_GPIO82__FUNC_GPIO82>,
++				 <PINMUX_GPIO97__FUNC_DISP_PWM0>;
++		};
++	};
++
+ 	i2c0_pins: i2c0-default-pins {
+ 		pins-bus {
+ 			pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
 -- 
 2.39.2
 
