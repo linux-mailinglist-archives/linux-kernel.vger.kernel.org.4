@@ -2,220 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A1A6A0F91
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456B86A0F9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjBWSjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S231534AbjBWSl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBWSjX (ORCPT
+        with ESMTP id S231508AbjBWSl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:39:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816F93A0BA
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:39:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E36C6176D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F1DC433EF;
-        Thu, 23 Feb 2023 18:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677177557;
-        bh=doLTJ2ETftqjtUwc1scT/ezCCnw14uI7u07rZHPGFeQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=k1WbLL/tl+Mt/nlu1jRTmFPK14CnsP7F/kaUc6xNOdfLYYmwhR1q96IKVuD5oLykb
-         mT9+cRp7/bmecTggw6y2l3UzjuxAbODXLxT1yAZzKReNwjwZoLcnCLkHHN7tZ5HLfN
-         yCD5CzH8czKZwI1lbN9lmiHtBDaFsCB9/vLOGjBUB2YJm4DW6EldIubWK1wQjhZNgE
-         sPFsS7Ncw6cI+2wfEY9DBqRytRl8qw5dfM1dP00+p5CTMNzeiQ9Sm60muag1XmNdox
-         YgOqfln7mPmKZgIanFDfcZixg/mhHCYmtZWuYY5ftmSAoiVYsaryTZDvtxl9gatdvO
-         mDElGARGHt2wQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 138E45C0DBB; Thu, 23 Feb 2023 10:39:17 -0800 (PST)
-Date:   Thu, 23 Feb 2023 10:39:17 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
-        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
-        david@redhat.com, shy828301@gmail.com, dave@stgolabs.net,
-        penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
-Message-ID: <20230223183917.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
- <20230223132725.11685-3-zhengqi.arch@bytedance.com>
- <Y/evb+PBeaahx9Os@sultan-box.localdomain>
-MIME-Version: 1.0
+        Thu, 23 Feb 2023 13:41:56 -0500
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D25545BBBE;
+        Thu, 23 Feb 2023 10:41:51 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 31NIfNDg025492;
+        Thu, 23 Feb 2023 12:41:23 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 31NIfLQ4025490;
+        Thu, 23 Feb 2023 12:41:21 -0600
+Date:   Thu, 23 Feb 2023 12:41:21 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/14] Add namespace implementation.
+Message-ID: <20230223184121.GA25233@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20230204050954.11583-1-greg@enjellic.com> <20230204115917.1015-1-hdanton@sina.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/evb+PBeaahx9Os@sultan-box.localdomain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230204115917.1015-1-hdanton@sina.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 23 Feb 2023 12:41:23 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:24:47AM -0800, Sultan Alsawaf wrote:
-> On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
-> > The shrinker_rwsem is a global lock in shrinkers subsystem,
-> > it is easy to cause blocking in the following cases:
-> > 
-> > a. the write lock of shrinker_rwsem was held for too long.
-> >    For example, there are many memcgs in the system, which
-> >    causes some paths to hold locks and traverse it for too
-> >    long. (e.g. expand_shrinker_info())
-> > b. the read lock of shrinker_rwsem was held for too long,
-> >    and a writer came at this time. Then this writer will be
-> >    forced to wait and block all subsequent readers.
-> >    For example:
-> >    - be scheduled when the read lock of shrinker_rwsem is
-> >      held in do_shrink_slab()
-> >    - some shrinker are blocked for too long. Like the case
-> >      mentioned in the patchset[1].
-> > 
-> > Therefore, many times in history ([2],[3],[4],[5]), some
-> > people wanted to replace shrinker_rwsem reader with SRCU,
-> > but they all gave up because SRCU was not unconditionally
-> > enabled.
-> > 
-> > But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
-> > the SRCU is unconditionally enabled. So it's time to use
-> > SRCU to protect readers who previously held shrinker_rwsem.
-> > 
-> > [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
-> > [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
-> > [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
-> > [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
-> > [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
-> > 
-> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> > ---
-> >  mm/vmscan.c | 27 +++++++++++----------------
-> >  1 file changed, 11 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 9f895ca6216c..02987a6f95d1 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
-> >  
-> >  LIST_HEAD(shrinker_list);
-> >  DECLARE_RWSEM(shrinker_rwsem);
-> > +DEFINE_SRCU(shrinker_srcu);
-> >  
-> >  #ifdef CONFIG_MEMCG
-> >  static int shrinker_nr_max;
-> > @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
-> >  void register_shrinker_prepared(struct shrinker *shrinker)
-> >  {
-> >  	down_write(&shrinker_rwsem);
-> > -	list_add_tail(&shrinker->list, &shrinker_list);
-> > +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
-> >  	shrinker->flags |= SHRINKER_REGISTERED;
-> >  	shrinker_debugfs_add(shrinker);
-> >  	up_write(&shrinker_rwsem);
-> > @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
-> >  		return;
-> >  
-> >  	down_write(&shrinker_rwsem);
-> > -	list_del(&shrinker->list);
-> > +	list_del_rcu(&shrinker->list);
-> >  	shrinker->flags &= ~SHRINKER_REGISTERED;
-> >  	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
-> >  		unregister_memcg_shrinker(shrinker);
-> >  	debugfs_entry = shrinker_debugfs_remove(shrinker);
-> >  	up_write(&shrinker_rwsem);
-> >  
-> > +	synchronize_srcu(&shrinker_srcu);
+On Sat, Feb 04, 2023 at 07:59:17PM +0800, Hillf Danton wrote:
+
+Good afternoon Hillf, I hope this note finds your week going well.
+
+Sorry for the delay in getting back to you on this, had some travel
+and we are now in the process of readying the second spin of the
+patches.
+
+Thank you, up front, for taking the time to comment on the series.
+
+> [with lkml Cced]
+
+Noted.
+
+> On Fri, 3 Feb 2023 23:09:49 -0600 Dr. Greg <greg@enjellic.com>
+> > +/**
+> > + * tsem_ns_free() - Releases the namespace model infrastructure.
+> > + * @kref: A pointer to the reference counting structure for the namespace.
+> > + *
+> > + * This function is called when the last reference to a kernel
+> > + * based TMA model structure is released.
+> > + */
+> > +void tsem_ns_free(struct kref *kref)
+> > +{
+> > +	struct tsem_TMA_context *ctx;
 > > +
-> >  	debugfs_remove_recursive(debugfs_entry);
-> >  
-> >  	kfree(shrinker->nr_deferred);
-> > @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
-> >  {
-> >  	down_write(&shrinker_rwsem);
-> >  	up_write(&shrinker_rwsem);
-> > +	synchronize_srcu(&shrinker_srcu);
-> >  }
-> >  EXPORT_SYMBOL(synchronize_shrinkers);
-> >  
-> > @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
-> >  {
-> >  	unsigned long ret, freed = 0;
-> >  	struct shrinker *shrinker;
-> > +	int srcu_idx;
-> >  
-> >  	/*
-> >  	 * The root memcg might be allocated even though memcg is disabled
-> > @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
-> >  	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
-> >  		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
-> >  
-> > -	if (!down_read_trylock(&shrinker_rwsem))
-> > -		goto out;
-> > +	srcu_idx = srcu_read_lock(&shrinker_srcu);
-> >  
-> > -	list_for_each_entry(shrinker, &shrinker_list, list) {
-> > +	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
-> > +				 srcu_read_lock_held(&shrinker_srcu)) {
-> >  		struct shrink_control sc = {
-> >  			.gfp_mask = gfp_mask,
-> >  			.nid = nid,
-> > @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
-> >  		if (ret == SHRINK_EMPTY)
-> >  			ret = 0;
-> >  		freed += ret;
-> > -		/*
-> > -		 * Bail out if someone want to register a new shrinker to
-> > -		 * prevent the registration from being stalled for long periods
-> > -		 * by parallel ongoing shrinking.
-> > -		 */
-> > -		if (rwsem_is_contended(&shrinker_rwsem)) {
-> > -			freed = freed ? : 1;
-> > -			break;
-> > -		}
-> >  	}
-> >  
-> > -	up_read(&shrinker_rwsem);
-> > -out:
-> > +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
-> >  	cond_resched();
-> >  	return freed;
-> >  }
-> > -- 
-> > 2.20.1
-> > 
-> > 
-> 
-> Hi Qi,
-> 
-> A different problem I realized after my old attempt to use SRCU was that the
-> unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
-> call. Both register_shrinker() *and* unregister_shrinker() are called frequently
-> these days, and SRCU is too unfair to the unregister path IMO.
-> 
-> Although I never got around to submitting it, I made a non-SRCU solution [1]
-> that uses fine-grained locking instead, which is fair to both the register path
-> and unregister path. (The patch I've linked is a version of this adapted to an
-> older 4.14 kernel FYI, but it can be reworked for the current kernel.)
-> 
-> What do you think about the fine-grained locking approach?
+> > +	ctx = container_of(kref, struct tsem_TMA_context, kref);
+> > +
+> > +	if (ctx->external) {
+> > +		tsem_fs_remove_external(ctx->external->dentry);
+> > +		kfree(ctx->external);
+> > +	} else
+> > +		tsem_model_free(ctx);
+> > +
+> > +	kfree(ctx);
+> > +}
+> > +
+> > +static void wq_put(struct work_struct *work)
+> > +{
+> > +	struct tsem_TMA_work *tsem_work;
+> > +	struct tsem_TMA_context *ctx;
+> > +
+> > +	tsem_work = container_of(work, struct tsem_TMA_work, work);
+> > +	ctx = tsem_work->ctx;
+> > +	kref_put(&ctx->kref, tsem_ns_free);
+> > +}
+> > +
+> > +/**
+> > + * tsem_ns_get() - Obtain a reference on a TSEM TMA namespace.
+> > + * @ctx: A pointer to the TMA modeling context for which a reference is
+> > + *	 to be released.
+> > + *
+> > + * This function is called to release a reference to a TMA modeling
+> > + * domain.
+> > + */
+> > +void tsem_ns_put(struct tsem_TMA_context *ctx)
+> > +{
+> > +	if (kref_read(&ctx->kref) > 1) {
+> > +		kref_put(&ctx->kref, tsem_ns_free);
+> > +		return;
+> > +	}
 
-Another approach is to use synchronize_srcu_expedited(), which avoids
-the sleeps that are otherwise used to encourage sharing of grace periods
-among concurrent requests.  It might be possible to use call_srcu(),
-but I don't claim to know the shrinker code well enough to say for sure.
-
-							Thanx, Paul
-
-> Thanks,
-> Sultan
+> Given ctx->kref is 2, in the below scenario
 > 
-> [1] https://github.com/kerneltoast/android_kernel_google_floral/commit/012378f3173a82d2333d3ae7326691544301e76a
+> 	cpu 0		cpu 2
+> 	---		---
+> 	ctx->kref > 1
+> 			ctx->kref > 1
+> 			kref_put
+> 	kref_put
+> 
+> no work will be scheduled, so it makes sense to move scheduling work to
+> tsem_ns_free() by making tsem_ns_put() only a wrapper of kref_put(), if
+> ctx has to be released in workqueue.
+> 
+> void tsem_ns_put(struct tsem_TMA_context *ctx)
+> {
+> 	kref_put(&ctx->kref, tsem_ns_free);
+> }
+
+Missed this issue, thank you for pointing it out.
+
+Based on your observations we re-worked the handling of the modeling
+context reference handling and release and we should have the issue
+addressed.
+
+In the process we managed to clean up and simplify the implementation
+as well, always good.
+
+The changes will be in the second version of the patch series.
+
+> > +
+> > +	INIT_WORK(&ctx->work.work, wq_put);
+> > +	ctx->work.ctx = ctx;
+> > +	if (!queue_work(release_wq, &ctx->work.work))
+> > +		WARN_ON_ONCE(1);
+> > +}
+
+> PS given system_unbound_wq and system_wq for instance, release_wq looks
+> not mandatory if kfree is the major job.
+
+Based on this observation, we also dropped the TSEM specific workqueue
+and the code is now scheduling the modeling domain release work onto
+the system_wq queue, given that there is nothing sophisticated about
+the work that is being scheduled.
+
+This work includes the freeing of the memory for the structure that
+defines the external modeling context, or in the case of an internally
+modeled domain, the internal model description state.
+
+In addition, in the case of an externally modeled domain, the
+workqueue also handles the removal of the securityfs based pseudo-file
+that surfaces the event descriptions to the trust orchestrator.
+
+The use of the workqueue silences a series of lock debugging
+complaints about the release of the modeling domain/namespace
+infrastructure.
+
+Thanks again for your comments, have a good day.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
