@@ -2,169 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF426A0401
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 271386A0406
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbjBWIkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S233659AbjBWIlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbjBWIkN (ORCPT
+        with ESMTP id S232954AbjBWIlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:40:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F1D1422A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677141562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5sPuPMmKl8Fh55oJyqKfdWjSTl4UX6ztUqAWilF1Ap8=;
-        b=WoxGTWYjPziAI076K06HglUX3Ov4DLC5GDT9UeMgHiRsyU7nGtvfO/f0o7tEmWCc6jyGFw
-        Bsi18+a8Cq5VCSbYGSqImBAlwL2K43QDSP+AQOdnmklI/c3ipLkfUJWZLlWX6bgMDIMwzo
-        ZNxVFVXecmISy0TFQJb5D+svpMN3ZGQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-313-3-F7ZLJZNN6mzO3kEDxWIQ-1; Thu, 23 Feb 2023 03:39:21 -0500
-X-MC-Unique: 3-F7ZLJZNN6mzO3kEDxWIQ-1
-Received: by mail-wr1-f70.google.com with SMTP id i6-20020adffc06000000b002c5669766a8so2260510wrr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:39:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677141560;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5sPuPMmKl8Fh55oJyqKfdWjSTl4UX6ztUqAWilF1Ap8=;
-        b=YJW6wEqu7/vQbok1p8SqiylG97JQKFcu4FGR7GCaRP+3BogPHVm15frgeODLzPI+Fm
-         4J7hF1mk2abDjxcrvfojE++u+oTgFr7CVShvmxOB+dR/l9fGyDzZGAyUH/bfu7lHjrOH
-         GHH/6M5Yh4nFvmFmQqj2IYuMpe0cjIFs4vKcI0bHLyOT42VT1ps/+IG+4Vza16ELYGm5
-         5Q6w9UfbPMlKE2YQHqxC772FcFnTPq2XEocuhpSEDOB2W7up55jLJ8xlqQC/eUmtt1Vx
-         27lrI8rjbvH6vrawAtUXZ1zBlPChDlWWu3BPev287kB5spERzzYaIkgdmUtfgaOINk8H
-         aI2w==
-X-Gm-Message-State: AO0yUKWyDWn3LA/GN6v90nn7L4zeuJpLdhB8m74gPiT7fHFhZt5RK7lL
-        t4dLJ7+AhMk6yZfrcs7M697E3YiLcVpSEAV2V9E9gW5/V2itG9Rl7845pdwECQaGxD1WQOI6d49
-        UI6se43tAh9ABNAohdP4v0con
-X-Received: by 2002:a1c:741a:0:b0:3e2:415:f09f with SMTP id p26-20020a1c741a000000b003e20415f09fmr10130676wmc.3.1677141559962;
-        Thu, 23 Feb 2023 00:39:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set98+o6jJ1qOgbToOoRq/imOK3FoKhZ+VL6UYssekxL/stE0Ck+L7wA5jcx60YYmNlFc6d2hsA==
-X-Received: by 2002:a1c:741a:0:b0:3e2:415:f09f with SMTP id p26-20020a1c741a000000b003e20415f09fmr10130657wmc.3.1677141559590;
-        Thu, 23 Feb 2023 00:39:19 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b003e21f20b646sm12230241wmq.21.2023.02.23.00.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 00:39:18 -0800 (PST)
-Message-ID: <795aed3f0e433a89fb72a8af3fc736f58dea1bf1.camel@redhat.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Date:   Thu, 23 Feb 2023 09:39:17 +0100
-In-Reply-To: <CAL+tcoBGFkXea-GyzbO41Ve8_wUF3PT=YF43TxuzgM+adVa8gw@mail.gmail.com>
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
-         <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
-         <CAL+tcoD8PzL4khHq44z27qSHHGkcC4YUa91E3h+ki7O0u3SshQ@mail.gmail.com>
-         <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
-         <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
-         <CAL+tcoBGFkXea-GyzbO41Ve8_wUF3PT=YF43TxuzgM+adVa8gw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 23 Feb 2023 03:41:02 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5211E13DC2;
+        Thu, 23 Feb 2023 00:40:39 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8Axkk6FJvdjYw0EAA--.2595S3;
+        Thu, 23 Feb 2023 16:40:37 +0800 (CST)
+Received: from [10.20.42.133] (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+SBJvdjAIQ5AA--.4780S3;
+        Thu, 23 Feb 2023 16:40:35 +0800 (CST)
+Message-ID: <6662546a-2c83-71bd-7050-903331201bdc@loongson.cn>
+Date:   Thu, 23 Feb 2023 16:40:33 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
+ device node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+ <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
+ <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
+From:   suijingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxX+SBJvdjAIQ5AA--.4780S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGFyDtryUCrWDZF4rCr18AFb_yoWrJFW3pF
+        nxAanrKr40yF17ZryFq348JrnIvFyrAF1DWFsrtw1UJ3sIva12vr4rJr1ruF48ZrW7Za4j
+        vF1rKrWIgF1kAaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-22 at 11:47 +0800, Jason Xing wrote:
-> On Tue, Feb 21, 2023 at 11:46 PM Jason Xing <kerneljasonxing@gmail.com> w=
-rote:
-> >=20
-> > On Tue, Feb 21, 2023 at 10:46 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > >=20
-> > > On Tue, 2023-02-21 at 21:39 +0800, Jason Xing wrote:
-> > > > On Tue, Feb 21, 2023 at 8:27 PM Paolo Abeni <pabeni@redhat.com> wro=
-te:
-> > > > >=20
-> > > > > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > > >=20
-> > > > > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedul=
-e()
-> > > > > > and sk_rmem_schedule() errors"):
-> > > > > >=20
-> > > > > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150=
-001 bytes,
-> > > > > > we want to allocate 1 byte more (rounded up to one page),
-> > > > > > instead of 150001"
-> > > > >=20
-> > > > > I'm wondering if this would cause measurable (even small) perform=
-ance
-> > > > > regression? Specifically under high packet rate, with BH and user=
--space
-> > > > > processing happening on different CPUs.
-> > > > >=20
-> > > > > Could you please provide the relevant performance figures?
-> > > >=20
-> > > > Sure, I've done some basic tests on my machine as below.
-> > > >=20
-> > > > Environment: 16 cpus, 60G memory
-> > > > Server: run "iperf3 -s -p [port]" command and start 500 processes.
-> > > > Client: run "iperf3 -u -c 127.0.0.1 -p [port]" command and start 50=
-0 processes.
-> > >=20
-> > > Just for the records, with the above command each process will send
-> > > pkts at 1mbs - not very relevant performance wise.
-> > >=20
-> > > Instead you could do:
-> > >=20
-> >=20
-> > > taskset 0x2 iperf -s &
-> > > iperf -u -c 127.0.0.1 -b 0 -l 64
-> > >=20
-> >=20
-> > Thanks for your guidance.
-> >=20
-> > Here're some numbers according to what you suggested, which I tested
-> > several times.
-> > ----------|IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
-> > Before: lo 411073.41 411073.41  36932.38  36932.38
-> > After:   lo 410308.73 410308.73  36863.81  36863.81
-> >=20
-> > Above is one of many results which does not mean that the original
-> > code absolutely outperforms.
-> > The output is not that constant and stable, I think.
->=20
-> Today, I ran the same test on other servers, it looks the same as
-> above. Those results fluctuate within ~2%.
->=20
-> Oh, one more thing I forgot to say is the output of iperf itself which
-> doesn't show any difference.
-> Before: Bitrate is 211 - 212 Mbits/sec
-> After: Bitrate is 211 - 212 Mbits/sec
-> So this result is relatively constant especially if we keep running
-> the test over 2 minutes.
 
-Thanks for the testing. My personal take on this one is that is more a
-refactor than a bug fix - as the amount forward allocated memory should
-always be negligible for UDP.=20
+On 2023/2/23 15:58, Krzysztof Kozlowski wrote:
+> On 23/02/2023 04:19, Sui jingfeng wrote:
+>> Hi,
+>>
+>> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+>>> On 22/02/2023 17:55, suijingfeng wrote:
+>>>> The display controller is a pci device, it's pci vendor id is
+>>>> 0x0014, it's pci device id is 0x7a06.
+>>>>
+>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>>>> ---
+>>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>>>    1 file changed, 21 insertions(+)
+>>>>
+>>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>> index 8143a61111e3..a528af3977d9 100644
+>>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>> @@ -31,6 +31,18 @@ memory@200000 {
+>>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>>>    	};
+>>>>    
+>>>> +	reserved-memory {
+>>>> +		#address-cells = <2>;
+>>>> +		#size-cells = <2>;
+>>>> +		ranges;
+>>>> +
+>>>> +		display_reserved: framebuffer@30000000 {
+>>>> +			compatible = "shared-dma-pool";
+>>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>>>> +			linux,cma-default;
+>>>> +		};
+>>>> +	};
+>>>> +
+>>>>    	cpu_clk: cpu_clk {
+>>>>    		#clock-cells = <0>;
+>>>>    		compatible = "fixed-clock";
+>>>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>>>    				interrupt-parent = <&liointc0>;
+>>>>    			};
+>>>>    
+>>>> +			display-controller@6,0 {
+>>>> +				compatible = "loongson,ls2k1000-dc";
+>>>> +
+>>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>>>> +				interrupt-parent = <&liointc0>;
+>>>> +				memory-region = <&display_reserved>;
+>>> NAK.
+>> Err :(,  please give me a chance to explain
+>>> Test your code against the bindings you send.
+>> I can guarantee to you that I test may code more than twice. The code
+>> used to testing is listed at link [1].
+> I wrote - test against the bindings. I don't believe that it was tested.
+> Please paste the output of the testing (dtbs_check).
 
-Still it could make sense keep the accounting schema consistent across
-different protocols. I suggest to repost for net-next, when it will re-
-open, additionally introducing __sk_mem_schedule() usage to avoid code
-duplication.
+I *do* run the test against the bindings and the test result say nothing.
 
-Thanks,
+I reset my modify today made, then re-run the test again.
 
-Paolo
+I'm telling the truth: the test result say nothing. I paste the log at 
+below:
+
+make -j$(nproc) ARCH=loongarch 
+CROSS_COMPILE=loongarch64-unknown-linux-gnu- dt_binding_check 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml 
+dtbs_check 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+
+   DTEX 
+Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dts
+   DTC_CHK 
+Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dtb
+
+
+I remember, if there anything wrong, rob's test robot will complain.
+
+let's wait and witness.
+
+>> This patchset  mainly used to illustrate how  we made the driver in [1]
+>> usable on our SoC platform.
+>>
+>>> It's the same
+>>> patchset. You basically send something which the same moment is incorrect.
+>> Loongson display controller IP has been integrated in both Loongson
+>> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
+>> and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
+>> products.
+> I don't understand how your reply here is relevant to incorrect bindings
+> or incorrect DTS according to bindings.
+
+Ok, now I know that you refer to the bindings.
+
+I'm a newbie at DT bindings, but i will correct all of the problem you 
+mentioned.
+
+It takes a few time, thanks for  your valuable advice.
+
+>
+> Best regards,
+> Krzysztof
 
