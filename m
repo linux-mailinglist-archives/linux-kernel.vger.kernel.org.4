@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30166A05AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070986A05B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjBWKKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S233696AbjBWKKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjBWKKB (ORCPT
+        with ESMTP id S233752AbjBWKK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:10:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 755B04DE25
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:00 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C220DC14;
-        Thu, 23 Feb 2023 02:10:42 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D58D3F587;
-        Thu, 23 Feb 2023 02:09:56 -0800 (PST)
-Message-ID: <183aec1b-5626-e972-bbed-aca038280828@arm.com>
-Date:   Thu, 23 Feb 2023 11:09:55 +0100
+        Thu, 23 Feb 2023 05:10:29 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A640B515C6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:18 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id d1-20020a17090a3b0100b00229ca6a4636so12412934pjc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q8pTyXMbqgjmHwENw9d+YaYdxp8SYMRKyJFLzvCwDT8=;
+        b=pr+OJuJc0aIQruCQBm/G/I0SmMi+9ve74/N02LFBP2SF9YF1UCP9B0lIgbsJQ7wdZz
+         RT9/2kaH0WUYA1nfmPjFddcx8OY7O5EndTfpmV0+lZsEVYSMrkP7VcYZtGWC8rbqSYsB
+         LhfUz5KB1QoRcvaHPPxKWlUww2/C5cj3ApuLobKu5JmhQkgoirvXRIT9MBnYSQZuJIti
+         vAmxndH/YLCvSjNSEgbodAt0gyY2dp6SYvfhmqAobI4nqmYYAOBqgvK4Hms6q/xsa7dZ
+         CSwKzq0ivytwyXfzyUhQPm8jehE/P18C+7osTa5kwBDthfy8UPebUW3q+gtExz2VVyzn
+         d2uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q8pTyXMbqgjmHwENw9d+YaYdxp8SYMRKyJFLzvCwDT8=;
+        b=0WU4h+61OSj99vITlorqFiiwUfxGo3z8A2aScNdk7KiHfsMbCtNRIYp/0x4jAoQMql
+         yM+iDq5x5X5FQP2slnOCLnOhuw+2xtFkVWy2sLIogUJWy+EGykTn/QjjkiyIDwZuW6vg
+         zBV8xc1Nw2m63qkjOXy7dbx2bvW4BhkEfOD4tl9irGT8PdX+8gamiimtFWmkCOdT5gx+
+         mWIY/7C/I1XfUHF8wnS6iqX0lYjKPr62hLL+hOnW1YKTmr7UWbKt0oUVKWcar9TKBcMy
+         4vHcaD+/rgRNNKsV7vI7bm0m8IrA6Y6bZcnpYHWf1mSbxAdxQJHCXl3xXZov9ar8xqbK
+         oaVw==
+X-Gm-Message-State: AO0yUKWG84qtS1hze4a0rlqM8x8gWCTb8DTlnuYYuCWTTDDkjowTd/XY
+        T684hH/s9Qc5fxTRjqmBXx8BMMcMrSlR66AVfZpqrA==
+X-Google-Smtp-Source: AK7set/yNWJYaO4UBy+wk5SROh+wtuNxdnuOXVrvBeF3/ECsNSOG69Dgi0lLlVMfqwUfcoUOs63KHq0HprhgR9E35jc=
+X-Received: by 2002:a17:90b:384d:b0:237:50b6:983c with SMTP id
+ nl13-20020a17090b384d00b0023750b6983cmr1044697pjb.116.1677147018158; Thu, 23
+ Feb 2023 02:10:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
- current sched domain
-Content-Language: en-US
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
- <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
- <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
- <Y+Z2b/OtZDk9cT53@hirez.programming.kicks-ass.net>
- <xhsmhk00pqwap.mognet@vschneid.remote.csb>
- <20230210183155.GA11997@ranerica-svr.sc.intel.com>
- <8300f288-7157-5e2d-3bb3-badcffd15d34@arm.com>
- <20230214064328.GA11859@ranerica-svr.sc.intel.com>
- <20230216052105.GA20785@ranerica-svr.sc.intel.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230216052105.GA20785@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com> <20230222161222.11879-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230222161222.11879-2-jiaxun.yang@flygoat.com>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Thu, 23 Feb 2023 11:10:07 +0100
+Message-ID: <CAM1=_QQRmTaAnn0w6wteQ_FKgoF=vGX_okfbiUHdyUB0ZzNghQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, paulburton@kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,56 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 06:21, Ricardo Neri wrote:
-> On Mon, Feb 13, 2023 at 10:43:28PM -0800, Ricardo Neri wrote:
->> On Mon, Feb 13, 2023 at 01:17:09PM +0100, Dietmar Eggemann wrote:
->>> On 10/02/2023 19:31, Ricardo Neri wrote:
->>>> On Fri, Feb 10, 2023 at 05:12:30PM +0000, Valentin Schneider wrote:
->>>>> On 10/02/23 17:53, Peter Zijlstra wrote:
->>>>>> On Fri, Feb 10, 2023 at 02:54:56PM +0000, Valentin Schneider wrote:
+On Wed, Feb 22, 2023 at 5:12 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> For DADDI errata we just workaround by disable immediate operation
+> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
 
-[...]
+Good, this is an elegant solution to trigger fallback to the
+register-only operation. Does the DADDI errata only affect the DADDIU,
+not DADDI?
 
->>> Can you not detect the E-core dst_cpu case on MC with:
->>>
->>> +       if (child)
->>> +               sds->prefer_sibling = child->flags & SD_PREFER_SIBLING;
->>> +       else if (sds->busiest)
->>> +               sds->prefer_sibling = sds->busiest->group_weight > 1;
->>
->> Whose child wants the prefer_sibling setting? In update_sd_lb_stats(), it
->> is set based on the flags of the destination CPU's sched domain. But when
->> used in find_busiest_group() tasks are spread from the busiest group's
->> child domain.
->>
->> Your proposed code, also needs a check for SD_PREFER_SIBLING, no?
-> 
-> I tweaked the solution that Dietmar proposed:
-> 
-> -	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
-> +	if (sds->busiest)
-> +		sds->prefer_sibling = sds->busiest->flags & SD_PREFER_SIBLING;
+>
+> All other use cases in JIT won't cause overflow thus they are all safe.
 
-Maybe:
+There are quite a few other places where DADDIU is emitted. How do you
+know those are safe? I am interested in your reasoning here, as I
+don't know what would be safe and not.
 
-sds->prefer_sibling = !!(sds->busiest->flags & SD_PREFER_SIBLING);
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/Kconfig            | 1 -
+>  arch/mips/net/bpf_jit_comp.c | 8 ++++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 37072e15b263..df0910e3895c 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -64,7 +64,6 @@ config MIPS
+>         select HAVE_DMA_CONTIGUOUS
+>         select HAVE_DYNAMIC_FTRACE
+>         select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> -                               !CPU_DADDI_WORKAROUNDS && \
+>                                 !CPU_R4000_WORKAROUNDS && \
+>                                 !CPU_R4400_WORKAROUNDS
+>         select HAVE_EXIT_THREAD
+> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+> index b17130d510d4..7110a6687f7a 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -218,9 +218,17 @@ bool valid_alu_i(u8 op, s32 imm)
+>                 /* All legal eBPF values are valid */
+>                 return true;
+>         case BPF_ADD:
+> +#ifdef CONFIG_64BIT
 
-1 vs 2048 ?
+DADDI/DADDIU are only available on 64-bit CPUs, so the errata would
+only be applicable to that. No need for the CONFIG_64BIT conditional.
 
-> This comes from the observation that the prefer_sibling setting acts on
-> busiest group. It then depends on whether the busiest group, not the local
-> group, has child sched sched domains. Today it works because in most cases
-> both the local and the busiest groups have child domains with the SD_
-> PREFER_SIBLING flag.
-> 
-> This would also satisfy sched domains with the SD_ASYM_CPUCAPACITY flag as
-> prefer_sibling would not be set in that case.
-> 
-> It would also conserve the current behavior at the NUMA level. We would
-> not need to implement SD_SPREAD_TASKS.
-> 
-> This would both fix the SMT vs non-SMT bug and be less invasive.
-
-Yeah, much better! I always forget that we have those flags on SGs now
-as well. Luckily, we just need to check busiest sg to cover all cases.
-
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+> +#endif
+>                 /* imm must be 16 bits */
+>                 return imm >= -0x8000 && imm <= 0x7fff;
+>         case BPF_SUB:
+> +#ifdef CONFIG_64BIT
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+> +#endif
+>                 /* -imm must be 16 bits */
+>                 return imm >= -0x7fff && imm <= 0x8000;
+>         case BPF_AND:
+> --
+> 2.37.1 (Apple Git-137.1)
+>
