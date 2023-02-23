@@ -2,94 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446516A0B1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0141A6A0B24
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbjBWNsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S234488AbjBWNs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233987AbjBWNsQ (ORCPT
+        with ESMTP id S234272AbjBWNsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:48:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCBB512BEB
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:47:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8137FEC;
-        Thu, 23 Feb 2023 05:48:20 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA2273F881;
-        Thu, 23 Feb 2023 05:47:36 -0800 (PST)
-Date:   Thu, 23 Feb 2023 13:47:34 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH V7 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
-Message-ID: <Y/dudjSnIFtHzNRI@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230105031039.207972-1-anshuman.khandual@arm.com>
- <20230105031039.207972-6-anshuman.khandual@arm.com>
- <Y8AZXQJUO6h5mlgq@FVFF77S0Q05N>
- <bdcc2d71-b216-ade6-203d-0a527d0503ff@arm.com>
- <Y+P5oGRfdaCYRkbL@FVFF77S0Q05N.cambridge.arm.com>
- <f952612b-db37-c21e-4dde-12202768cb44@arm.com>
+        Thu, 23 Feb 2023 08:48:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88CD1EBDC;
+        Thu, 23 Feb 2023 05:47:58 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 669341EC06C0;
+        Thu, 23 Feb 2023 14:47:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677160075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=hO7XAwGHrh7jFk3tHCK0hu6b1iYy4OafzVQ/2u7pgt0=;
+        b=XfrOb7PSES+S6B9eQEkNsjlZRHVF4TWjOqGoeG4O4dPJLEYmxc8q1Ehl5tvde40+rpKH68
+        3wN/883J0piBys3sMxNwuV9jX8TKi5vKKbjvvJPUrReZ+bzfj4BeS2P9fQiRfrIHpbz3Bl
+        1WIZQ+6CUY+TxMk/R6vjW/NeYUVVxE8=
+Date:   Thu, 23 Feb 2023 14:47:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v6 37/41] selftests/x86: Add shadow stack test
+Message-ID: <Y/duhySUieqUWoGX@zn.tnic>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-38-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f952612b-db37-c21e-4dde-12202768cb44@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230218211433.26859-38-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:53:56PM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 2/9/23 01:06, Mark Rutland wrote:
-> > On Fri, Jan 13, 2023 at 10:41:51AM +0530, Anshuman Khandual wrote:
-> >>
-> >>
-> >> On 1/12/23 19:59, Mark Rutland wrote:
-> >>> On Thu, Jan 05, 2023 at 08:40:38AM +0530, Anshuman Khandual wrote:
-> >>>> @@ -878,6 +890,13 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
-> >>>>  		if (!armpmu_event_set_period(event))
-> >>>>  			continue;
-> >>>>  
-> >>>> +		if (has_branch_stack(event)) {
-> >>>> +			WARN_ON(!cpuc->branches);
-> >>>> +			armv8pmu_branch_read(cpuc, event);
-> >>>> +			data.br_stack = &cpuc->branches->branch_stack;
-> >>>> +			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
-> >>>> +		}
-> >>>
-> >>> How do we ensure the data we're getting isn't changed under our feet? Is BRBE
-> >>> disabled at this point?
-> >>
-> >> Right, BRBE is paused after a PMU IRQ. We also ensure the buffer is disabled for
-> >> all exception levels, i.e removing BRBCR_EL1_E0BRE/E1BRE from the configuration,
-> >> before initiating the actual read, which eventually populates the data.br_stack.
-> > 
-> > Ok; just to confirm, what exactly is the condition that enforces that BRBE is
-> > disabled? Is that *while* there's an overflow asserted, or does something else
-> > get set at the instant the overflow occurs?
-> 
-> - BRBE can be disabled completely via BRBCR_EL1_E0BRE/E1BRE irrespective of PMU interrupt
-> - But with PMU interrupt, it just pauses if BRBCR_EL1_FZP is enabled
+On Sat, Feb 18, 2023 at 01:14:29PM -0800, Rick Edgecombe wrote:
+> Since this test exercises a recently added syscall manually, it needs
+> to find the automatically created __NR_foo defines. Per the selftest
+> documentation, KHDR_INCLUDES can be used to help the selftest Makefile's
 
-IIUC the distinction between "disabled completely" and "just pauses" doesn't
-really matter to us, and a pause is sufficient for use to be able to read and
-manipulate the records.
+Well, why don't you make it easier for the user of this to not have to
+jump through hoops to get the test built?
 
-I also note that we always set BRBCR_EL1.FZP.
+IOW, something like the below ontop.
 
-Am I missing something?
+It works if I do
 
-Thanks,
-Mark.
+$ make -j<num> test_shadow_stack_64
+
+It would only need to be fixed to work when you do
+
+$ make -j<num>
+
+without arguments as then make does a parallel build.
+
+I guess something like
+
+ifneq ($(filter test_shadow_stack_64, $(MAKECMDGOALS)),)
+.NOTPARALLEL:
+endif
+
+needs to happen but I'm not sure...
+
+Thx.
+
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index a5c5ee73052a..9287dc7c0263 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -14,6 +14,10 @@ top_srcdir ?= ../../..
+ abs_srctree := $(shell cd $(top_srcdir) && pwd)
+ KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+ 
++test_shadow_stack_64: test_shadow_stack.c helpers.h
++	cd $(top_srcdir) && $(MAKE) headers
++	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $^ -lrt -ldl
++
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vsyscall mov_ss_trap \
+@@ -22,7 +26,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+-			corrupt_xstate_header amx test_shadow_stack
++			corrupt_xstate_header amx
+ # Some selftests require 32bit support enabled also on 64bit systems
+ TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+ 
+@@ -38,7 +42,7 @@ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+ 
+-CFLAGS := -O2 -g -std=gnu99 -pthread -Wall $(KHDR_INCLUDES)
++CFLAGS := -O2 -g -std=gnu99 -pthread -Wall
+ 
+ # call32_from_64 in thunks.S uses absolute addresses.
+ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
