@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3FA6A0BCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C582D6A0BD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbjBWOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S234760AbjBWOWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234365AbjBWOU4 (ORCPT
+        with ESMTP id S234617AbjBWOWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:20:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65F2A15A;
-        Thu, 23 Feb 2023 06:20:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AA45B1FD92;
-        Thu, 23 Feb 2023 14:20:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677162054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kav8FmN/Pj89hSxrGp53cgOm8Q4RadxShRyIj0aVt2M=;
-        b=KCM/GkDJ5CtrBapJmm08Wf0Llp3zhiGYXKrM4uUOajtjgJm1kj8pXs2eksaizhJIHaIvux
-        giEr4JnWA2DcaeQVK7kAsTR0tU68shsJhTBm4/Q/OyvKGeQp1CKXopYhQCk/ovC0IJ/keI
-        QnKHkQpZqz8LzK3EIVQZqqymtg9rcKQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6519D13928;
-        Thu, 23 Feb 2023 14:20:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YQxiF0Z292NNFgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 23 Feb 2023 14:20:54 +0000
-Date:   Thu, 23 Feb 2023 15:20:53 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Matthew Chae <matthew.chae@axis.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@axis.com,
-        christopher.wong@axis.com, Muchun Song <muchun.song@linux.dev>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memcontrol: add memory.peak in cgroup root
-Message-ID: <20230223142053.ejpygn4asiks7uue@blackpad>
-References: <20230221143421.10385-1-matthew.chae@axis.com>
+        Thu, 23 Feb 2023 09:22:42 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6A798;
+        Thu, 23 Feb 2023 06:22:36 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id cb13so6007920pfb.5;
+        Thu, 23 Feb 2023 06:22:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Df2kcb9Fa+/xlXDRcFOVdiKkKZQ4UA4GN+Niz/IaFGY=;
+        b=dDDb2iwNNGaMTeIc1qMo7svx2r4R+utlG6gTR7e0Xw32OkSbgxC24UQZUKiPfk8WjC
+         53cc0NzaSzJPunKpBS3l2mljrXPWSniAMhbJJO537xm+0msdx/seYZ+NhILDMZIFzpUg
+         ZflWJDLUUrrIeu7iZTlYo86fpUa+MSEGFI4hhrA2owqdaSeLDFf4mndjK+zRXXy70KHA
+         N2mU7a0gTFc4NeJqcu9igBf2S1Ap93I5MmoPqGBaJIYAcy5ALGXyfjq3+LYzfBCukCiS
+         RX7kM1gPMT+TaLWRZZABBGRJk2VxO26U1AowLs7iBQc0VbjnMFAymrUJleHyA0kYPNED
+         ccfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Df2kcb9Fa+/xlXDRcFOVdiKkKZQ4UA4GN+Niz/IaFGY=;
+        b=gMSERteqhY2G5O0OH1neluDqUFyJdGARyjDeHrgZt9sIwGkbDCyHH5mRylk6HROQ4U
+         7TegSktZfwhfXwjFVavCMJZJ0Sg/FNwU+toG6KNok3kmW+NlYBUt87Qruvvs3XH0xKqC
+         5ziT5kn6pHAIef1v59GexOZZo6KHDsokg65WSRLgALnQE3jdSRxefMGhYfW/n+1W/Lda
+         sVfwu+FS0zj3BT/Hw+n1FPNAx8e8D4fZwHfkI1olJgCNSNxyw6gEsAeNvGvzZ09T8cQd
+         f7x0yokmP5/sDfQBQeZJ8dpamD7j+Zxmr4zpjmSnaESDueKpjbZLJcwEgegqphxFCEUj
+         HcFg==
+X-Gm-Message-State: AO0yUKVMPwtlge8p6AxyDvI+C543GTn2FOSqivdw6NnZXJVcz0phySdP
+        cUcutrA/cHSzWebHr1FzNYLg1rOfzQE=
+X-Google-Smtp-Source: AK7set/zoYmzVaHcTkg857OZuezh2/+lfyOqvAaSI1g0rzTElQyXGlqmfLgBFKbImpD58rxqjF/GMQ==
+X-Received: by 2002:a62:1dd0:0:b0:5aa:6125:dbf4 with SMTP id d199-20020a621dd0000000b005aa6125dbf4mr9746988pfd.11.1677162156222;
+        Thu, 23 Feb 2023 06:22:36 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id h23-20020aa786d7000000b005cc52ea452csm5346193pfo.100.2023.02.23.06.22.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 06:22:35 -0800 (PST)
+From:   Quanfa Fu <quanfafu@gmail.com>
+To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quanfa Fu <quanfafu@gmail.com>
+Subject: [PATCH] KVM/x86: fix comment that should be user fault
+Date:   Thu, 23 Feb 2023 22:21:30 +0800
+Message-Id: <20230223142130.2338972-1-quanfafu@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q22yp5mylqojoxly"
-Content-Disposition: inline
-In-Reply-To: <20230221143421.10385-1-matthew.chae@axis.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The content of comment should be user fault not read. In order to avoid
+confusion, fix the comment.
 
---q22yp5mylqojoxly
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hello Matthew.
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 7eec0226d56a..3c1012039517 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -5668,7 +5668,7 @@ static int handle_ept_violation(struct kvm_vcpu *vcpu)
+ 	gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
+ 	trace_kvm_page_fault(vcpu, gpa, exit_qualification);
+ 
+-	/* Is it a read fault? */
++	/* Is it a user fault? */
+ 	error_code = (exit_qualification & EPT_VIOLATION_ACC_READ)
+ 		     ? PFERR_USER_MASK : 0;
+ 	/* Is it a write fault? */
+-- 
+2.31.1
 
-On Tue, Feb 21, 2023 at 03:34:20PM +0100, Matthew Chae <matthew.chae@axis.com> wrote:
-> The kernel currently doesn't provide any method to show the overall
-> system's peak memory usage recorded. Instead, only each slice's peak
-> memory usage recorded except for cgroup root is shown through each
-> memory.peak.
-
-The memory.peak value is useful as a calibration insight when you want to
-configure memcg limit.
-But there is no global (memcg) limit on memory. So what would be this
-(not clearly) defined value good for? Or better then userspace sampling
-of chosen available metric?
-
-Thanks,
-Michal
-
---q22yp5mylqojoxly
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY/d2QgAKCRAkDQmsBEOq
-uZKPAP0XDln51ca97Q7J1pGYE4mYyE5HiobHbhWmbtWeDr85qwD9GTceOFjkX9Xb
-q33nFRFD1ixImjgy/z6X9cnP0dK/WQ4=
-=3ruE
------END PGP SIGNATURE-----
-
---q22yp5mylqojoxly--
