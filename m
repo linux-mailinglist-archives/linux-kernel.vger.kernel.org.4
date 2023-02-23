@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B856A1256
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87196A1259
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjBWVyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S229784AbjBWVyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBWVyK (ORCPT
+        with ESMTP id S229778AbjBWVyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:54:10 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4FD3D092;
-        Thu, 23 Feb 2023 13:54:08 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j3so8132394wms.2;
-        Thu, 23 Feb 2023 13:54:08 -0800 (PST)
+        Thu, 23 Feb 2023 16:54:16 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167FA4741C;
+        Thu, 23 Feb 2023 13:54:14 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id y12so12147211qvt.8;
+        Thu, 23 Feb 2023 13:54:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cnf188iR/tvAsm2WYE+b4Ycz9c+bAZHE51WtPBLYK6Q=;
-        b=MhW4haD4Lhbbin77nq10waiTDTz/XAwM3yIxnPpqoG6rxtyRhy7aaDuoOehGwWAl41
-         8U/V5TSuHWNpvL/kz9e/A4V/6AXYmulmKZamzTNukbdVmHsh2xy1WnYBZ8XojDQrHi4G
-         graY2OIRAUGPdNh/K2Cm3AAo6pFqTrPOaf21wrS+G0NV3CJV9WkzBWuDrpu6RVVrysWM
-         KC1i2VA+2a/Y0O80EUjVeXUtw8jrl6ztXX5NJVphir4GSh/H85IOFVu3OQi4I7cO6Qos
-         dyPWvckd1fBTTMNUSuljpIIZyBymCuL5dlLTieCpbf2hB5NzE6Uvo8nM3O3RMo4K+Pq8
-         brmQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mhDdt0fMRr1vot8arPkCNh+wXMPBtnxO+GXM3kSrfBE=;
+        b=PISFKTE8TM6sQSy1pBwZQI3u/FYQ14vkOaC/RCP1BrAipVymVttA0bLTmJjirxfNrX
+         5o8h95DpGXbCuVOFh5tziZ+NXPrX71dUMKRzGEkobDZBbA9JLfjoWXaNJJEO53RcxY7v
+         fm6zQHfxKYLvHNA47/9eR4LRs89UcMrAGBfWZL1nqOAquJrumq3aL1Mg/glmVNG6zsJV
+         kRNV+w2DSoJtKyUA6GTXqZ/HiAa2PMDNL1s5aKqF+1gfb/QOqKGXf2uoUttcXRYCgzEE
+         LVglo9IJJFOWySdneEpSw6VWeLHI8zsZyC3ojV6mS4Jy5Ws827yvaxd4Wek9sJ+dZgKp
+         Y6KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cnf188iR/tvAsm2WYE+b4Ycz9c+bAZHE51WtPBLYK6Q=;
-        b=fv8aZelsvMHE4KsOzGb+gBHzdJIY5Q34McnCSpx3WhX6ToKAG1dlHtL/7k5cS+ICL8
-         +VAo5VoJxQyBiSCVLLYwJPVMQm6SMllYroFGs7mhmXxro0qAQanQnDf9NoJTpdAdBDXS
-         tN7Dp1z9Wvdeom+vV/IciRg+1UIUYPQbwSE/C0/apk9OLrgae3lJlCZhsiyr/kYlhs8p
-         JQYa/mv9LwPNjiSKkjAV0yhFkasXvagjVb3bQsASikmOIJJq1Ckj97V0FN+P1tWzxUpS
-         4VzmxZ93M5/c4JbLclwddF758rsU/94ihnhDdjKzmZMktHvKpTtSWvYGRBX3bQJvjdPW
-         ELCw==
-X-Gm-Message-State: AO0yUKVhx3VMiRFEl8nYBSCRlSFP00Nn019i/0B+c7cYUuTddGIge+Pt
-        BgyJ4g8rVYdWFG+Uv1n+Od2QBwaRDZh2jpZzbq4=
-X-Google-Smtp-Source: AK7set/Y607YByKtpt2CfjK1Grnqn9NwL8hFS+0E7zqzm/O5s4grTI4xHe+wh1+ct/hTKg5jMqICYlZ57I+vdf/+Ml4=
-X-Received: by 2002:a05:600c:1c89:b0:3e2:669:f04e with SMTP id
- k9-20020a05600c1c8900b003e20669f04emr589797wms.2.1677189246968; Thu, 23 Feb
- 2023 13:54:06 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mhDdt0fMRr1vot8arPkCNh+wXMPBtnxO+GXM3kSrfBE=;
+        b=LpMuNvb/emAfpTDdFajfbx1c0IaUCsPp/Ak2RMzG+1yNEK/r4kw3FS4FpW5G8ywRNm
+         lNB7fTFeT5CQ8v+2YVct8lQsnuZMbsdyUFUKNlQ/zv6SOkGi7wvminfU1kawsG7v1zw2
+         i01TH0DjvsygjU4eLRaZTPz3hd6A1rLeSdCV3rtyCwHQjNvw+47iCSrWmnkNvA+CPUXC
+         GE4R0hplnVwULuxi4u9PZ8qizfQOg71n0E3ryZQgFWDjHED5C5bXX8JSu02woAlQZsZU
+         8rOqmUDM/gd46V59cI3+KKp/pqZ9bXQz0k5GGS9BopYxcKBUSQJ5QmDKlXqcqbV69x7I
+         ZQwA==
+X-Gm-Message-State: AO0yUKXd46DNWJwdV19icrMMibGJ3EiN/W7boLvFgLpf7+1T+uzh0pOI
+        FEksGd0bcHuPIfP7xjiEUCk=
+X-Google-Smtp-Source: AK7set+8DThh2Mijo2u7YMM3UZhA44f0vpc4gUZlHdvfSjAp1w1r64513HiUfo8NsrWaPkl3D+3lQA==
+X-Received: by 2002:a05:6214:528b:b0:56e:982c:30 with SMTP id kj11-20020a056214528b00b0056e982c0030mr27247064qvb.16.1677189253033;
+        Thu, 23 Feb 2023 13:54:13 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d191-20020a3768c8000000b0073b4d8cb4a5sm5489949qkc.60.2023.02.23.13.54.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 13:54:12 -0800 (PST)
+Message-ID: <ceea2630-7c1e-6fde-cf2f-d4e36e292e59@gmail.com>
+Date:   Thu, 23 Feb 2023 13:54:09 -0800
 MIME-Version: 1.0
-References: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
- <CAMdYzYrZvHLFdhn_qYadYbDDnnC+16pkM_kWXiU16u_6XNHEMg@mail.gmail.com> <5650057.DvuYhMxLoT@archbox>
-In-Reply-To: <5650057.DvuYhMxLoT@archbox>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 23 Feb 2023 16:53:53 -0500
-Message-ID: <CAMdYzYrQRmOu_Q5n0t=TV2EZE9jh1OKqy5h5nnRt4NO+QDixJQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Always enable sd regulator on
- SOQuartz CM4IO
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230223141542.672463796@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230223141542.672463796@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,93 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 12:53 AM Nicolas Frattaroli
-<frattaroli.nicolas@gmail.com> wrote:
->
-> On Thursday, 23 February 2023 01:29:39 CET Peter Geis wrote:
-> > On Tue, Feb 14, 2023 at 8:09 PM Nicolas Frattaroli
-> >
-> > <frattaroli.nicolas@gmail.com> wrote:
-> > > The 3.3V line coming from the SDMMC regulator is required for USB
-> > > on the CM4IO board. Without it, the USB mux (U13 in the CM4IO
-> > > schematic[1]) that's used likely remains unpowered, and no USB
-> > > devices show up.
-> > >
-> > > The consequence of this was the behaviour of an inserted SD card
-> > > allowing USB to work, while pulling it out turned off all USB
-> > > devices.
-> > >
-> > > [1]: https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
-> >
-> > I disagree with this. According to the datasheet u13 and half a dozen
-> > other devices are powered by 3.3v sourced from the SOM. sdmmc_pwr
-> > triggers SD_PWR_ON which serves only to provide an enable signal to
-> > u18, the regulator that powers the sdmmc slot from the same 3.3v. If
-> > you are having problems with USB working, you likely have something
-> > else going wrong here.
-> >
-> > Very Respectfully,
-> > Peter Geis
->
-> Hello,
->
-> I don't see how else the observed behaviour would be triggered.
-> As far as I can tell, the sdmmc_pwr regulator is the name of the
-> 3.3V regulator on the SOM, which is what powers the 3.3V on the
-> USB mux chip.
->
-> Do you have an alternate explanation for why this patch works?
+On 2/23/23 06:16, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.96 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.96-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-If you have the new variant of the SoQuartz, that pin is no longer
-sdmmc power and now feeds nEXTRST. As the variant I built this device
-tree from was not the final production version and is only operated by
-a few individuals (such as myself) you should probably just adjust
-this to the production variant.
+On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
+BMIPS_GENERIC:
 
-On the production variant the sdmmc power pin is pulled high to 3.3v
-and cannot be controlled, which lead to the issues observed with the
-prototype model a baseboard.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Very Respectfully,
-Peter Geis
+with fixing the permissions of scripts/pahole-version.sh
+-- 
+Florian
 
->
-> Kind regards,
-> Nicolas Frattaroli
->
-> >
-> > > Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
-> > > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > > ---
-> > >
-> > >  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> > > b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts index
-> > > 263ce40770dd..88a61fa8a95c 100644
-> > > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> > > @@ -135,6 +135,12 @@ &sdmmc0 {
-> > >
-> > >  };
-> > >
-> > >  &sdmmc_pwr {
-> > >
-> > > +       /*
-> > > +        * USB also needs this regulator to work on this board, so just
-> > > enable +        * it unconditionally.
-> > > +        */
-> > > +       regulator-always-on;
-> > > +       regulator-boot-on;
-> > >
-> > >         regulator-min-microvolt = <3300000>;
-> > >         regulator-max-microvolt = <3300000>;
-> > >         status = "okay";
-> > >
-> > > --
-> > > 2.39.1
->
->
->
->
