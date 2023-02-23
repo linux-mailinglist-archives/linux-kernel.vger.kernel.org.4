@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6F26A0012
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24ABE6A001A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjBWA35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S232804AbjBWAdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjBWA3z (ORCPT
+        with ESMTP id S229446AbjBWAdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:29:55 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FC43B67A;
-        Wed, 22 Feb 2023 16:29:53 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so1634596wmb.3;
-        Wed, 22 Feb 2023 16:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SHpIcdcfu2QwzrdJ1uxO4xocrtfBEjCJ4RxVjp9sgOU=;
-        b=Yf87uJwGYliNd36S+sLgfWBAXTfQdhy1VzIRp0KbxYTA13uM2Vk4OWlfwfZ8E+sBw9
-         rHf5SOJ5EFBzJFv3MrdQdMWxy7N+gTQMaeCms+aC8UnM5WpNHutGu+wxxa4g1UQkE0UJ
-         GxAKSo9TTFoLNVici8/GAA152nmmzB67+508enIPb9kr/wuqWrwWk57PYWIB95w0r6jL
-         kHqrqL0FiTh4Nna2PE029De37GGCBBmz6m/4WuLZQixpJxBhDSPCAwYUmn5IzmxJwdiI
-         +wLbt0zc9XlQaGHE2rkNJHpS64o3L3karkRifDEBat9HU2Hfu++S6F1PJ3RG5AngjB2a
-         riGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SHpIcdcfu2QwzrdJ1uxO4xocrtfBEjCJ4RxVjp9sgOU=;
-        b=sKIVjBtid7RBTkgiWaFIiI+fPgqR17a6lq2578YoTEDyXpnBue9tVQ5YxGWz6DRnvi
-         97OoAGnPQyBuI0lZSxDhFp87xaBgpgUM13+oKNPMfEKwe0UIvNgGOcAQsDYiY69F9H5Z
-         PeiUGT1Y94l96v5Ql8Wjxxr/u+XiQw7bEw0uS4JJnH+ggtNNSCSI0nJHfysoGZRKu2jc
-         YPWlk78hlCCtDFJ/oxXd5oYY3V0LO2OAz74AR3B6HAfkL/M+HCrqcWMJuyKkYjYQ/lY6
-         wIi7QH/fz4f3fWC1S/nmgRTGHU5kOpzjUYnT73+cvw/SHfp2QM1RBrVBwC7dMBmJ7/Fv
-         HAeQ==
-X-Gm-Message-State: AO0yUKWZPG54Vnjsy64HcFgt0r84PUP5X1PNhTx0aBuvge4dbfnJtg/X
-        5KgQdzzPAMsAd2xqchtThux9AqezocN2sYq5AFo=
-X-Google-Smtp-Source: AK7set9+nca08kKpI5Y0oddvQU4q0ca+jRk0wYzFD9uskGKw3ptLxN4A9hJufyTdsalyMjsQtHx1TFHNYxnv/hI5Q6Q=
-X-Received: by 2002:a05:600c:34d2:b0:3df:f9e6:72d6 with SMTP id
- d18-20020a05600c34d200b003dff9e672d6mr432569wmq.102.1677112191500; Wed, 22
- Feb 2023 16:29:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
-In-Reply-To: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 22 Feb 2023 19:29:39 -0500
-Message-ID: <CAMdYzYrZvHLFdhn_qYadYbDDnnC+16pkM_kWXiU16u_6XNHEMg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Always enable sd regulator on
- SOQuartz CM4IO
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 22 Feb 2023 19:33:19 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE9383C5;
+        Wed, 22 Feb 2023 16:33:18 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N0Of9U001037;
+        Thu, 23 Feb 2023 00:33:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=QFCsR5onlgCwc3c942GZhCrGtr2gtf/luBe3NddelDs=;
+ b=nqPLnmEICg9DHLdeVHufPNzax6szYovKR0IrosQL/yA9Z6cE3oitOhL2mI0mJ8g0ZOtO
+ zjxCFUdpabqq4c9W4bkjIIRkJEQvU2dcvUXfGrBBLhAjf6Po8F6OwKnJa9aATZOH2Q86
+ hF5V9P+1GGM9rol//07HFNIlXecHBSpBz2Z9DJ9Y7azawj386/7a5B8ka6wSG7xnaIu1
+ SWmsM+E5OLO1DeOQ5WMLsow+Vgq6YY1lOjjbZP2NyBJeVOJwI5I/xRP9hljv7m13xldO
+ lkni9gu6UudXpzcbE831qPRlO91AAvKqn+8mrmzRTi5jbbOYiJGNTudhHhOKCyu5U1+w Vg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntpja99bg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Feb 2023 00:33:15 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31MNcV1T006773;
+        Thu, 23 Feb 2023 00:33:14 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn4dvreu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Feb 2023 00:33:13 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31N0XDXV013669;
+        Thu, 23 Feb 2023 00:33:13 GMT
+Received: from ca-qasparc-x86-2.us.oracle.com (ca-qasparc-x86-2.us.oracle.com [10.147.24.103])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ntn4dvreh-1;
+        Thu, 23 Feb 2023 00:33:13 +0000
+From:   Anthony Yznaga <anthony.yznaga@oracle.com>
+To:     daniel.m.jordan@oracle.com, steffen.klassert@secunet.com
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] padata: use alignment when calculating the number of worker threads
+Date:   Wed, 22 Feb 2023 16:33:12 -0800
+Message-Id: <1677112392-17332-1-git-send-email-anthony.yznaga@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_12,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302230002
+X-Proofpoint-ORIG-GUID: TLVlqTZedShvIlPqMn2a0gER4aEQT1es
+X-Proofpoint-GUID: TLVlqTZedShvIlPqMn2a0gER4aEQT1es
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 8:09 PM Nicolas Frattaroli
-<frattaroli.nicolas@gmail.com> wrote:
->
-> The 3.3V line coming from the SDMMC regulator is required for USB
-> on the CM4IO board. Without it, the USB mux (U13 in the CM4IO
-> schematic[1]) that's used likely remains unpowered, and no USB
-> devices show up.
->
-> The consequence of this was the behaviour of an inserted SD card
-> allowing USB to work, while pulling it out turned off all USB
-> devices.
->
-> [1]: https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
+For multithreaded jobs the computed chunk size is rounded up by the
+caller-specified alignment. However, the number of worker threads to
+use is computed using the minimum chunk size without taking alignment
+into account. A sufficiently large alignment value can result in too
+many worker threads being allocated for the job.
 
-I disagree with this. According to the datasheet u13 and half a dozen
-other devices are powered by 3.3v sourced from the SOM. sdmmc_pwr
-triggers SD_PWR_ON which serves only to provide an enable signal to
-u18, the regulator that powers the sdmmc slot from the same 3.3v. If
-you are having problems with USB working, you likely have something
-else going wrong here.
+Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+---
+ kernel/padata.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Very Respectfully,
-Peter Geis
+diff --git a/kernel/padata.c b/kernel/padata.c
+index e007b8a4b738..4abc536ecdb1 100644
+--- a/kernel/padata.c
++++ b/kernel/padata.c
+@@ -491,7 +491,7 @@ void __init padata_do_multithreaded(struct padata_mt_job *job)
+ 		return;
+ 
+ 	/* Ensure at least one thread when size < min_chunk. */
+-	nworks = max(job->size / job->min_chunk, 1ul);
++	nworks = max(job->size / max(job->min_chunk, job->align), 1ul);
+ 	nworks = min(nworks, job->max_threads);
+ 
+ 	if (nworks == 1) {
+-- 
+1.8.3.1
 
->
-> Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
-> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> index 263ce40770dd..88a61fa8a95c 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> @@ -135,6 +135,12 @@ &sdmmc0 {
->  };
->
->  &sdmmc_pwr {
-> +       /*
-> +        * USB also needs this regulator to work on this board, so just enable
-> +        * it unconditionally.
-> +        */
-> +       regulator-always-on;
-> +       regulator-boot-on;
->         regulator-min-microvolt = <3300000>;
->         regulator-max-microvolt = <3300000>;
->         status = "okay";
-> --
-> 2.39.1
->
