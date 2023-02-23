@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390DF6A064D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923416A064F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjBWKcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:32:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S233452AbjBWKd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbjBWKcJ (ORCPT
+        with ESMTP id S229583AbjBWKdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:32:09 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553BA2CFEA;
-        Thu, 23 Feb 2023 02:32:08 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 309CC320091A;
-        Thu, 23 Feb 2023 05:32:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 23 Feb 2023 05:32:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677148326; x=
-        1677234726; bh=fc6qcoPy6n7YikuoryogjuIfcTxPHRlRaGS0scjDKWc=; b=J
-        BYJ0M43GhECBwOqalrZnwTDLimk3b5QRFq8imVP6LpkqwN8p0WK7T3GL/GFPf8Po
-        j3ukVk6cV8BzzjwmeRlMmKGQEGNzSZ1O+KxVScWfq+JqpqXVBZTFB5DPSQ5TtZrO
-        7iMCZ6qAKd8qqEcJ1VcMRzTqCrgJFqQRwFP7RcDKBFgMq8sTeVfiWnL1pokHFhE3
-        zX8d8vWMkeOoNOQr12nLh3xjEiY+HhC9sVVoQHQFumgbZORU9/etqwNBCDXTONwd
-        eUkaJONBOXwkQtSBkakqQU2vSCwfssZ4UtZMacllPBYWxzsZUv4j/iV9YToqcAPq
-        z8S+WY08tSNSa4I4Q1MDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677148326; x=
-        1677234726; bh=fc6qcoPy6n7YikuoryogjuIfcTxPHRlRaGS0scjDKWc=; b=n
-        k5Yf6muj/fSpns25I0A9XuM1Xj8rENVZGu/ujbjJPTXMSpe1zPCkm/pmRdVQ1K3T
-        UD+cs3f8DWRm02K8IUJdIxXncakskm+4ltBAgEAVSyHKndkQybgk71ZxFKmnFKB0
-        deifqzKj7EbyNEwir+vsx7qndZaf/ZAiI0RvZwv1IExQvVsR9wuuxkivhZFC402R
-        wSq4xAtyvK21i0hUQQ5hNuSAZ58fjEi5qIWEIVBGzltv19YXf99XJ8ung5Ml0sjg
-        s+E/mXchymMlWYRDWgqDrXgddsizkwq89V8P7ytZAULW32jnegQof+ButKDdYeRZ
-        1rRUtBeviLQsFzrtQ0m+A==
-X-ME-Sender: <xms:pkD3YxXqElu85bywT2wMPkTuCHtFE9GOT7eZijsfBcbuIklO7Wy-mg>
-    <xme:pkD3Yxmlrg6A1gF24O6ZbyzkPKuEsZJEK21H9on5xpmgQPluIp-c0Qg6TTjMLNpKB
-    LRQrh5YNmRJ8PCI5lI>
-X-ME-Received: <xmr:pkD3Y9YZHQHP3gK6OZ5ZFRorDQgEF2dVePLnHaOJGN84QUAmEmmfYvWTjEKpRfon8pUJ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekuddgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:pkD3Y0WwxUj4P88dPhx5khsK2sT9atie-6Sc2lPhnnp_XooL65pZdw>
-    <xmx:pkD3Y7nPaSo-xRi_k-EaJrsxkLZxLS4N68mkovRQ5DLhOsQXtqKTGg>
-    <xmx:pkD3YxdEII287xNhn5yEmb4-Hu8tiYxjYoX8DrCNBBMwjCjLKZ3dWg>
-    <xmx:pkD3Y5WnXzn9o5oM8ryb90cQ5AjPVqGflRPoLRa8DGwoGPlDJM8ZnQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Feb 2023 05:32:05 -0500 (EST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
-Date:   Thu, 23 Feb 2023 10:31:54 +0000
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <70C80F6D-A727-48FD-A767-A2CA54AA7C1E@flygoat.com>
-References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
- <20230222161222.11879-3-jiaxun.yang@flygoat.com>
- <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
-To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Thu, 23 Feb 2023 05:33:25 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8996C49884;
+        Thu, 23 Feb 2023 02:33:24 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N8bksZ018368;
+        Thu, 23 Feb 2023 10:32:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FiIjYCibcng5pWI5Vn82J5Qpk5rLTpSd4Rwvvgpmky0=;
+ b=GxDI/dFN9HDIIo7Uzp1dCAbChw1Q1KWDzyiXfVKB95DDDBTi4WCXEfk2gF4UKU7FzImS
+ 6Namq5MQL3kgoWnALZKsZEYTVQMFbpTIGpokSIuunQE+3upl14YsfK4OfLHNMvJWYj3z
+ Gh7etsxTRlGrjZcnByiadczxXgyXF9HOkAPTh1V1KOaHiQe3xCFu7C0B890+7sxMHChr
+ 9zEZejYUEozvy/G8XnFcIBO/B+FciqUHdxikxUAXtDVgSSPwK2sMjB3vGtUGZcrKv6hm
+ OL6D3ULN5m4XsGeRmn27+/BmjORYSQlXpmuX6TzJJxS6VD5QQR2cNaIGJGgDZQQqii1V Yg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwywd0x36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:32:56 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NAWsJl016690
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:32:54 GMT
+Received: from [10.239.155.136] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 02:32:48 -0800
+Message-ID: <58244768-33ad-21d6-d88d-93e7fdd0ba27@quicinc.com>
+Date:   Thu, 23 Feb 2023 18:32:45 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 3/7] scsi: ufs: core: Fix mcq nr_hw_queues
+Content-Language: en-US
+To:     Po-Wen Kao <powen.kao@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <quic_ziqichen@quicinc.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <alice.chao@mediatek.com>,
+        <naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <cc.chou@mediatek.com>, <eddie.huang@mediatek.com>,
+        <mason.zhang@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <quic_cang@quicinc.com>,
+        <quic_asutoshd@quicinc.com>
+References: <20230222030427.957-1-powen.kao@mediatek.com>
+ <20230222030427.957-4-powen.kao@mediatek.com>
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+In-Reply-To: <20230222030427.957-4-powen.kao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KkQ6qnJqZ8YOH38mukRGEjyuDaGido5k
+X-Proofpoint-ORIG-GUID: KkQ6qnJqZ8YOH38mukRGEjyuDaGido5k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_06,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230089
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,114 +94,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Po-Wen,
 
+On 2/22/2023 11:04 AM, Po-Wen Kao wrote:
+> Need to add one to MAXQ to obtain number of hardware queue.
+>
+> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+> ---
+>   drivers/ufs/core/ufs-mcq.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+> index a39746b2a8be..5d5bc0bc6e88 100644
+> --- a/drivers/ufs/core/ufs-mcq.c
+> +++ b/drivers/ufs/core/ufs-mcq.c
+> @@ -150,7 +150,7 @@ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
+>   	u32 hba_maxq, rem, tot_queues;
+>   	struct Scsi_Host *host = hba->host;
+>   
+> -	hba_maxq = FIELD_GET(MAX_QUEUE_SUP, hba->mcq_capabilities);
+> +	hba_maxq = FIELD_GET(MAX_QUEUE_SUP, hba->mcq_capabilities) + 1 ;
+Can we add one line comment why need to  add one to hba_maxq  here or in 
+commit message?
+>   
+>   	tot_queues = UFS_MCQ_NUM_DEV_CMD_QUEUES + read_queues + poll_queues +
+>   			rw_queues;
 
-> 2023=E5=B9=B42=E6=9C=8823=E6=97=A5 10:22=EF=BC=8CJohan Almbladh =
-<johan.almbladh@anyfinetworks.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Wed, Feb 22, 2023 at 5:12 PM Jiaxun Yang <jiaxun.yang@flygoat.com> =
-wrote:
->>=20
->> For R4000 erratas around multiplication and division instructions,
->> as our use of those instructions are always followed by mflo/mfhi
->> instructions, the only issue we need care is
->>=20
->> "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0" Errata 28:
->> "A double-word or a variable shift may give an incorrect result if
->> executed while an integer multiplication is in progress."
->>=20
->> We just emit a mfhi $0 to ensure the operation is completed after
->> every multiplication instruction accorading to workaround suggestion
->> in the document.
->>=20
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->> arch/mips/Kconfig              | 4 +---
->> arch/mips/net/bpf_jit_comp32.c | 4 ++++
->> arch/mips/net/bpf_jit_comp64.c | 3 +++
->> 3 files changed, 8 insertions(+), 3 deletions(-)
->>=20
->> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->> index df0910e3895c..5ea07c833c5b 100644
->> --- a/arch/mips/Kconfig
->> +++ b/arch/mips/Kconfig
->> @@ -63,9 +63,7 @@ config MIPS
->>        select HAVE_DEBUG_STACKOVERFLOW
->>        select HAVE_DMA_CONTIGUOUS
->>        select HAVE_DYNAMIC_FTRACE
->> -       select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
->> -                               !CPU_R4000_WORKAROUNDS && \
->> -                               !CPU_R4400_WORKAROUNDS
->=20
-> Is the R4400 errata also covered by this workaround?
+Best Regards.
 
-Yes, R4400 errata is basically a reduced version of R4000 one.
-They managed to fix some parts of the issue but not all.
-
->=20
->> +       select HAVE_EBPF_JIT if !CPU_MICROMIPS
->>        select HAVE_EXIT_THREAD
->>        select HAVE_FAST_GUP
->>        select HAVE_FTRACE_MCOUNT_RECORD
->> diff --git a/arch/mips/net/bpf_jit_comp32.c =
-b/arch/mips/net/bpf_jit_comp32.c
->> index ace5db3fbd17..fee334544d2f 100644
->> --- a/arch/mips/net/bpf_jit_comp32.c
->> +++ b/arch/mips/net/bpf_jit_comp32.c
->> @@ -446,6 +446,9 @@ static void emit_mul_i64(struct jit_context *ctx, =
-const u8 dst[], s32 imm)
->>                } else {
->>                        emit(ctx, multu, hi(dst), src);
->>                        emit(ctx, mflo, hi(dst));
->> +                       /* Ensure multiplication is completed */
->> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
->> +                               emit(ctx, mfhi, MIPS_R_ZERO);
->>                }
->>=20
->>                /* hi(dst) =3D hi(dst) - lo(dst) */
->> @@ -504,6 +507,7 @@ static void emit_mul_r64(struct jit_context *ctx,
->>        } else {
->>                emit(ctx, multu, lo(dst), lo(src));
->>                emit(ctx, mflo, lo(dst));
->> +               /* No need for workaround because we have this mfhi =
-*/
->>                emit(ctx, mfhi, tmp);
->>        }
->=20
-> R4000 is a 64-bit CPU, so the 32-bit JIT implementation will not be
-> used. =46rom the Makefile:
->=20
-> ifeq ($(CONFIG_32BIT),y)
->        obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp32.o
-> else
->        obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp64.o
-> endif
-
-It=E2=80=99s common practice to run 32-bit kernel on R4000 based systems =
-to save some memory :-)
-
-Thanks.
-- Jiaxun
-
->=20
->>=20
->> diff --git a/arch/mips/net/bpf_jit_comp64.c =
-b/arch/mips/net/bpf_jit_comp64.c
->> index 0e7c1bdcf914..5f5a93f997bc 100644
->> --- a/arch/mips/net/bpf_jit_comp64.c
->> +++ b/arch/mips/net/bpf_jit_comp64.c
->> @@ -228,6 +228,9 @@ static void emit_alu_r64(struct jit_context *ctx, =
-u8 dst, u8 src, u8 op)
->>                } else {
->>                        emit(ctx, dmultu, dst, src);
->>                        emit(ctx, mflo, dst);
->> +                       /* Ensure multiplication is completed */
->> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
->> +                               emit(ctx, mfhi, MIPS_R_ZERO);
->>                }
->>                break;
->>        /* dst =3D dst / src */
->> --
->> 2.37.1 (Apple Git-137.1)
-
+Ziqi
 
