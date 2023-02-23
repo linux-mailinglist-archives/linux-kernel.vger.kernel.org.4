@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C046A1009
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AB66A100C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjBWTDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        id S230125AbjBWTDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjBWTDA (ORCPT
+        with ESMTP id S230424AbjBWTDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:03:00 -0500
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3916E5BBF;
-        Thu, 23 Feb 2023 11:02:53 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id s26so45858403edw.11;
-        Thu, 23 Feb 2023 11:02:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+0zHO1uw3aFMg8wBsIwWiNbY+2MxzsmFELdpO0ONlaI=;
-        b=oRaMdzUuFwpybTq6hbSZlf2+7pCH1L2Xcsb+PIsFZ3oe5+xogSEiBCO03ZdSnkdNFe
-         ZSw/SuVV1/YtTzz0MYlYAu0hqBh0k1KLsnd8KklkFxUsrcSfGi84jsDrONevYRU1T/o4
-         r7ow8NXUEih1xFJcCdd96wYedG5NtN9pM+VnASGmHQshdnP2uEk5SsI19KWFpkfS6BMk
-         7i00g9KSDzOnTbTww0/z9S1QzYqky06qBQsPPAZWQwT78aaVMpCX/tJ4azhYG+94VEJu
-         RG9e2uTZ8k78kjbnZSAhVer0Tnxm0g7JB7FhpW9niB2LtImxoDf1VGql+TT2u7ERI/No
-         NhqA==
-X-Gm-Message-State: AO0yUKVPgTuseSe3Vm1mjWioboH8U3R++lqdvXua2Q5G0zLJVArmZF9y
-        I/2SDfliGHu/MlYNTRfvp1r4XOqTwvw5a87LEsw=
-X-Google-Smtp-Source: AK7set8lGpDJq6NWH3PQGPB8Bx+/IEKdtHDSVLSbwu0PmInP01f5vEhCemaF1Zfydo02A4+gfP0sFu4Yzy+w1lhP8bM=
-X-Received: by 2002:a17:906:194f:b0:8b1:76b8:9834 with SMTP id
- b15-20020a170906194f00b008b176b89834mr11216475eje.5.1677178971506; Thu, 23
- Feb 2023 11:02:51 -0800 (PST)
+        Thu, 23 Feb 2023 14:03:08 -0500
+Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335DD869E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:03:00 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id 658D2C8008D;
+        Thu, 23 Feb 2023 20:02:58 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id sTEe5keq6-lp; Thu, 23 Feb 2023 20:02:58 +0100 (CET)
+Received: from [192.168.176.165] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPSA id 32B14C8008A;
+        Thu, 23 Feb 2023 20:02:57 +0100 (CET)
+Message-ID: <edafaf88-cf58-8cc0-8466-aa14794e8673@tuxedocomputers.com>
+Date:   Thu, 23 Feb 2023 20:02:56 +0100
 MIME-Version: 1.0
-References: <20230217141059.392471-1-nick.alcock@oracle.com> <20230217141059.392471-6-nick.alcock@oracle.com>
-In-Reply-To: <20230217141059.392471-6-nick.alcock@oracle.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Feb 2023 20:02:40 +0100
-Message-ID: <CAJZ5v0h6LiifjEQRJrWkSc4MT-7GJbEkoaxA1nWj6oALwEH6gg@mail.gmail.com>
-Subject: Re: [PATCH 05/24] kbuild, cpufreq: amd-pstate: remove MODULE_LICENSE
- in non-modules
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/2] Add quirk to disable PSR 2 on Tongfang PHxTxX1 and
+ PHxTQx1
+Content-Language: en-US
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     "Hogander, Jouni" <jouni.hogander@intel.com>,
+        "Souza, Jose" <jose.souza@intel.com>,
+        "Santa Cruz, Diego" <Diego.SantaCruz@spinetix.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Kahola, Mika" <mika.kahola@intel.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "De Marchi, Lucas" <lucas.demarchi@intel.com>
+References: <20230222141755.1060162-1-wse@tuxedocomputers.com>
+ <9b0e29f15f3e8799256c425f06b36a70ec04522f.camel@intel.com>
+ <52f48cb2-ce54-854f-3bec-44c40c6ad07f@tuxedocomputers.com>
+In-Reply-To: <52f48cb2-ce54-854f-3bec-44c40c6ad07f@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 3:11 PM Nick Alcock <nick.alcock@oracle.com> wrote:
->
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->
-> So remove it in the files in this commit, none of which can be built as
-> modules.
->
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Huang Rui <ray.huang@amd.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/cpufreq/amd-pstate.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index c17bd845f5fc..adbc7b0921aa 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -686,4 +686,3 @@ early_param("amd_pstate", amd_pstate_param);
->
->  MODULE_AUTHOR("Huang Rui <ray.huang@amd.com>");
->  MODULE_DESCRIPTION("AMD Processor P-state Frequency Driver");
-> -MODULE_LICENSE("GPL");
-> --
 
-Applied as 6.3-rc material, thanks!
+Am 23.02.23 um 19:56 schrieb Werner Sembach:
+>
+> Am 23.02.23 um 19:26 schrieb Hogander, Jouni:
+>> On Wed, 2023-02-22 at 15:17 +0100, Werner Sembach wrote:
+>>> On these Barebones PSR 2 is recognized as supported but is very
+>>> buggy:
+>>> - Upper third of screen does sometimes not updated, resulting in
+>>> disappearing cursors or ghosts of already closed Windows saying
+>>> behind.
+>>> - Approximately 40 px from the bottom edge a 3 pixel wide strip of
+>>> randomly
+>>> colored pixels is flickering.
+>>>
+>>> PSR 1 is working fine however.
+>>>
+>>> This patchset introduces a new quirk to disable PSR 2 specifically on
+>>> known
+>>> buggy devices and applies it to the Tongfang PHxTxX1 and PHxTQx1
+>>> barebones.
+>> I've been thinking something similar as there is still at least one
+>> issue which seems to be like panel side issue:
+>>
+>> https://gitlab.freedesktop.org/drm/intel/-/issues/7836
+>>
+>> Did you considered dpcd_quirk_list in drivers/gpu/drm/drm_dp_helper.c?
+>>
+>> I'm not sure which one is more correct though...
+> Imho, since the proper fix lies within the Intel driver the quirk should also 
+> lie within the Intel driver, because even if the panel has the same problem 
+> combined with an AMD or NVIDIA card the proper fix for them will most likely 
+> be land in the same kernel version. So there could be a period where you no 
+> longer want the quirk for devices combining the panel with an Intel gpu but 
+> still with an AMD GPU or vice versa.
+*the proper fix for them will most likely not be in the same kernel version.
+>>
+>>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+>>> Cc: <stable@vger.kernel.org>
+>>>
+>>>
