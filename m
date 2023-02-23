@@ -2,314 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450D46A0F2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDE76A0F40
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjBWSKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S229780AbjBWSL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjBWSKc (ORCPT
+        with ESMTP id S231192AbjBWSLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:10:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174642A6EA;
-        Thu, 23 Feb 2023 10:10:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C95C4B81AB7;
-        Thu, 23 Feb 2023 18:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18877C433D2;
-        Thu, 23 Feb 2023 18:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677175812;
-        bh=FiDOcwrpBh62X/8FrHN4IMGEpJnmx6Eu4Ea64vzU8VE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EKIO+U0N83T77sxqZ9nPUP5m02l8DQtyc4Ad059mZPwEJRdbyuHIePDHayBqrDp5v
-         9zHmDA56xX37mtIBpRq3EqhnBsu+HR3XJItrXK564vJM6VnzYcxUiRR2HhjOAqDgkC
-         /f/p7vAkocnSVl2MbWxI/OZ8O90jbWNJP0AwjkgNGPdeZJdmPGZyJgkjSC9ochcjqh
-         KUWSCL1PvOARvR1ntmTApeNnOtHSOSxrn9lkbFJ1U1km2fiPwWpfCo3TzU65sLwJMP
-         kDwiXndj7Y4meFkWycdedrrrTbqTEd9L1Ok0DCqAkO/tou2XXHMl5LoRiFrhTFa8DH
-         Yu7Ydx2SzVlZQ==
-Date:   Thu, 23 Feb 2023 19:10:09 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.3-rc1
-Message-ID: <Y/esAfKcQpM77Gql@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="G3R8IQbuJf0ZzKYp"
+        Thu, 23 Feb 2023 13:11:11 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2074.outbound.protection.outlook.com [40.107.244.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E19522A24;
+        Thu, 23 Feb 2023 10:10:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J8tswUcRcFsfK6jH1WRB0H2wCG7d/fUHXOnj1dneJkGuWF+gqAjr08d+nKB1OwB/w3BwFq55idfojIYZOySLBr+ZUjwfbXHaSuaIFOhdfzDFbR8jd7VeeZiCVwGMCqrUjwxkvp+A49BhPh+TQ6W2y1w3lkQSDn0qrXOP7FHFkdQM1GRobelthfg7tuDe2gJx45bhTjEyObQWvzF3jM6IiDM4Uic4wfArpSSIO/9KeXKcNnq/jPIh5bSbREY+2tFgAlD4VtkOKq5PWQUIAFrlueB3rrgH5X1njLaXnl33e/+eeHnPIUByx2KDqBljg4a6bxW4/mjXrGmKq7Zn1zykZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WAXBMEHjkUp+0vj7OPO2O5OssGr66dDJpPIUENBFNto=;
+ b=TbijRjsJXdssdKYqphBLZV8wq9vPZYcVYEIqlA1teAtki2aB6+1bd5PXw7bHjCZDbVTdM5ehsSJDy3g27h1GcEWoxLFN9UlGBbt3WypVp38KRyK2Eiazm964C85+TzZd91flt9ATfkrGQTzzmVBrmlVvkB6V7HSipyeNQYVC+uE3V2etAzQkEN97vL+7CPxKGP2hElwMbpcnAbpiJIs87zJ0T5dRbQCk9iP38alLUA0coPZFWutQdZ1MiAKdKEcFN4F/FjmIm/tx1o2TSIMN7w5ZzhWmufb0WbRnyEC2HTiFrPGOIBXYzpuZb7PAdRS9Zk9uTI9+dsByxDMHR+GutQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WAXBMEHjkUp+0vj7OPO2O5OssGr66dDJpPIUENBFNto=;
+ b=UrxhiQNhhKH+ARXM51IYi1pNkKVfnnT1IppB4U4Mr68nBbhNJbMs0xIZE0nu7g2VTYk7ZyU3Te0q3o7XiwFal3UvSBmcXSFSI6MOCBM2X1j22PpExMQozyDnRXZRFqpXZfOYk7sGnU5sMwCL1wlxOqSGSe8mzYmvQ5PP2ELRSkWof82teI4o2No2DLazb36a8tvl1Qr6MTflCN/uIMlG0e8FusM7zfoOplQWy7vwAuWEMb0mZxrYp9JJAKB/no+YWpOBHjkcB4uxA05e9X2KJgHJosdF++IDwJg/giCJamjg6nvYybXZsxEa+E745aBWApAyTTdF+/cUopglqk2rUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4355.namprd12.prod.outlook.com (2603:10b6:5:2a3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
+ 2023 18:10:57 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
+ 18:10:57 +0000
+Date:   Thu, 23 Feb 2023 14:10:56 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
+        hannes@cmpxchg.org, surenb@google.com, mkoutny@suse.com,
+        daniel@ffwll.ch, "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Message-ID: <Y/esMBOyTaJnv5CW@nvidia.com>
+References: <Y/Ua6VcNe/DFh7X4@nvidia.com>
+ <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
+ <Y/UiQmuVwh2eqrfA@nvidia.com>
+ <87o7pmnd0p.fsf@nvidia.com>
+ <Y/YRJNwwvqp7nKKt@nvidia.com>
+ <87k009nvnr.fsf@nvidia.com>
+ <Y/bHNO7A8T3QQ5T+@nvidia.com>
+ <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
+ <Y/eiLBo88pgr2IUm@nvidia.com>
+ <CAJD7tkadBRP22qP63-SjKSch1im9sHLoMzc6c2h10+ggbuxqMg@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJD7tkadBRP22qP63-SjKSch1im9sHLoMzc6c2h10+ggbuxqMg@mail.gmail.com>
+X-ClientProxiedBy: MN2PR20CA0028.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::41) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4355:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7caabec5-fefe-4683-076a-08db15c94f7a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NbcMAZXQuQz8lUtCXtVq8154Uz+CPUT0Ud51u5k3zjaUF+JmCVbA70H7vyOEI0Vjt5wU23wsgSwZEkB5J2wT00DG1Md9IBJNIo0S9w74cMeLxYzzADYTE0sm1CTIneCFmqx57HKdNDj9W2CsucaO94j7aNYJNTtul7Flzoqd5tUq/zcnYAGD+A2Hb6xIJ4GRF1L+muPVDRJoyxO6WEdn7xVCRVhfyY4UHWtc53x7d6EOg/mSUBkNH8w18IKszNSo5lXsXUZWSrho/gkWlJLPmM+BygJpIMnODRb9kjk+woDTH786/4a/QMMLDDLslgDy9FT1v7N2UtcnUobykTm4fszFCDIefF1RB50cAtE1/+PZBVCnniSzRF6X8YrSA+xlOerGMwt2RWsSgg6klmSw3lQGExo/I2CItVsxh/+7jEoYdM7aFQVedZidDRvgBPHqmu7rlcCvLrVSOFHTpDNbAhxNWJx+Nl3McrLXgiy2yPmvVOdza603ehqToXdNUuZmkgiVNgLTHJ1SkeFUmJeRfIu1qZCqxv86+sEhw+wWbUI1C0uk/z5Y4b94c94Bkb7qKuRSkwos/KJTZ2BmMS3bm0fj3qOtt8Bcm/m0M2j/sKmBSjKSLMBOFSX9jp2q2anS+FlIrb5NC2Xge/8AiBndow==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(136003)(376002)(451199018)(86362001)(36756003)(2616005)(54906003)(316002)(41300700001)(66556008)(66946007)(66476007)(6916009)(8676002)(4326008)(53546011)(6486002)(6506007)(6512007)(478600001)(186003)(26005)(38100700002)(7416002)(5660300002)(8936002)(83380400001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?F8BS+5wpS1p7jnfRKneLY7201Qn0jCflI5BRLafA7R1jyCtLP/DwgmaO+4of?=
+ =?us-ascii?Q?iJVBtfXNyrNWzCASXNcEC2mz303KWS2lf/4qvWPSJPcnH7CbsD0A02IbIvej?=
+ =?us-ascii?Q?eRZSLT2WouusZsO8CTEmYdGseGKMoiiZIytFPonMntwKlkmL74m061aQNei4?=
+ =?us-ascii?Q?uq9uC5Fuiwa8ZwxB7kBy2YGVoN62+legFVV7t9Nw5rPBNOHNbAgEfdAOsSWf?=
+ =?us-ascii?Q?wV5K0MHHtR5Y96eYsnUZRNw9vZO5gjQcvyyhxP2OdduZ7RZfVm6DDkBvWxJQ?=
+ =?us-ascii?Q?PEgLjIOxyTCvKNZMlAPN5r4yg8evkmLNBunLd/qTDb+j9d3KC4MpzwgY9wx/?=
+ =?us-ascii?Q?b8TwOQTY35gwk81oKnk9I6tFseatcuIwIdDvwtDUKkVKWPD4zg4/QR/j4E4J?=
+ =?us-ascii?Q?6GkjFkFH9NzaZPIQR8GBSYdm/mQ6gbqdrXBnnrWkCCbgYe5Kf2NSTFtoWfuy?=
+ =?us-ascii?Q?igrQLf3j7nqgDhlTUAZ678gpLLLYdNLmqHvXLMhn2YBfuNtk+bTBuR/khe3m?=
+ =?us-ascii?Q?SdlDdRrCh68sZ8+J94BDINI+QhRsGXswgy0ZS1Tvip+zOwJpuS4c4GgxyhHW?=
+ =?us-ascii?Q?I4v4nDaHdf9R+WPJuzsAffMhDtD+kWVSyv8PD17Gg5JYC7XEiXJCI93FKVGU?=
+ =?us-ascii?Q?f0DUy67Ldmgm8+ipQ1LV6GYBNV/m2Ym5u4sTzl1wSTLhEpOQw+WI3M/Y+ZAG?=
+ =?us-ascii?Q?ytUc+iisnjNMcEoIkB5LuL5CWBn0zu0TafcpjD/1vRF74J7rj3WwH6RS73gC?=
+ =?us-ascii?Q?sV/NqMKfnWVh5NEi9yCiBzsIC0O3EN/6W9MqPLdc0e5Zyoqq0IH67jXYjt4d?=
+ =?us-ascii?Q?5M76wKL9cQFU+FB0DT2LvCx1oBigelsbxHGy0Jy93E7gOqir3qlpSRlEdB5v?=
+ =?us-ascii?Q?92R0TpdRE7Tg9J7NwihAO+uXZhAlN5Am6JCr6IhQkJtzH+HwIiH1jI101xkn?=
+ =?us-ascii?Q?0mX7JyuzMhPFbLPOlKrpFJtdZek10qaUNg1n9+Sff5iZOi4ggKe6ObqGOfN5?=
+ =?us-ascii?Q?liGEunca9gPMyn8n/aQ0+oe01t/LqI2c8trdHdlq9/Sx+YyljV9yVaxvJ+25?=
+ =?us-ascii?Q?2jUc2iirkCVxBx4Zr1pYzzOUlAsSerjpht/1UmTYXamjNjO0eAbuSRkwaBfP?=
+ =?us-ascii?Q?Gpejpw8WdF2JN9Fap4ZBasP94mH0hmcSRCTx5xaem6BGNjKFF/toVtUP9l65?=
+ =?us-ascii?Q?jgIrc3rNpNOFRON6ev/6uvRkMw6zM4wZGuOWoksbPpjvSTzi1LIorDhhL3gO?=
+ =?us-ascii?Q?Pd0vSZoegIten3RPVwoNkHZQntvHW0ETKTUuuAjSQmidu6S/17hxypZ+Sw/V?=
+ =?us-ascii?Q?2WREv2vOnkhQNi44wVwXazKFa2XCXNuVpsCJm6fOsVcssWBCz9fi8dfYw6L8?=
+ =?us-ascii?Q?zHdGfBRutnfwwf1Rong4rnCVT96/NT4SSZHupTQ97sdfk+LoacznZxhp6e8R?=
+ =?us-ascii?Q?zdgnWzNiT8+KlushFbbwPy+AZaexu7Llez2YSb2fu8MUVn4iximanhZFO+KK?=
+ =?us-ascii?Q?5/v58uqDf3CV1MU49VAIFMtmHNz0r1yEzsrNGC+TnJdtzrkFJZ008nNH4dWa?=
+ =?us-ascii?Q?cG84/tyIA/cMpW3CvuoMhrRmCcnsUmkkcenGzql3?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7caabec5-fefe-4683-076a-08db15c94f7a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 18:10:57.0451
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q+2jp3Gg951800U1wXfEWiGl1DOjJwHfpQjlqbPLzwokoW2uGiLY/xP6aQ/1sbPC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4355
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 23, 2023 at 10:03:50AM -0800, Yosry Ahmed wrote:
+> On Thu, Feb 23, 2023 at 9:28 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > On Thu, Feb 23, 2023 at 09:18:23AM -0800, T.J. Mercier wrote:
+> >
+> > > > Solving that problem means figuring out when every cgroup stops using
+> > > > the memory - pinning or not. That seems to be very costly.
+> > > >
+> > > This is the current behavior of accounting for memfds, and I suspect
+> > > any kind of shared memory.
+> > >
+> > > If cgroup A creates a memfd, maps and faults in pages, shares the
+> > > memfd with cgroup B and then A unmaps and closes the memfd, then
+> > > cgroup A is still charged for the pages it faulted in.
+> >
+> > As we discussed, as long as the memory is swappable then eventually
+> > memory pressure on cgroup A will evict the memfd pages and then cgroup
+> > B will swap it in and be charged for it.
+> 
+> I am not familiar with memfd, but based on
+> mem_cgroup_swapin_charge_folio() it seems like if cgroup B swapped in
+> the pages they will remain charged to cgroup A, unless cgroup A is
+> removed/offlined. Am I missing something?
 
---G3R8IQbuJf0ZzKYp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah, I don't know, Tejun said:
 
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
+"but it can converge when page usage transfers across cgroups
+if needed."
 
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+Which I assumed was swap related but I don't know how convergence
+works.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc1
-
-for you to fetch changes up to e8444bb9fd77f153adcc263eab28e3c2bc1cf540:
-
-  MAINTAINERS: Add HPE GXP I2C Support (2023-02-17 23:18:31 +0100)
-
-----------------------------------------------------------------
-I2C for 6.3:
-
-* new drivers for HPE GXP and Loongson 2K/LS7A
-* bigger refactorings for i801 and xiic
-* gpio driver gained ACPI and SDA-write only support
-* the core converted some OF helpers to fwnode helpers
-* usual bunch of driver updates
-
-----------------------------------------------------------------
-Alain Volmat (2):
-      i2c: st: use pm_sleep_ptr to avoid ifdef CONFIG_PM_SLEEP
-      dt-bindings: i2c: i2c-st: convert to DT schema
-
-Bartosz Golaszewski (1):
-      i2c: dev: fix notifier return values
-
-Binbin Zhou (4):
-      i2c: gpio: Add support on ACPI-based system
-      dt-bindings: i2c: Add Loongson LS2X I2C controller
-      i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
-      MAINTAINERS: Add entry for the Loongson LS2X I2C driver
-
-Christophe JAILLET (1):
-      i2c: xiic: Remove some dead code
-
-Fabien Parent (1):
-      dt-bindings: i2c: i2c-mt65xx: add binding for MT8365 SoC
-
-Hanna Hawa (3):
-      i2c: designware: fix i2c_dw_clk_rate() return size to be u32
-      pinctrl: Add an API to get the pinctrl pins if initialized
-      i2c: Set i2c pinctrl recovery info from it's device pinctrl
-
-Heiner Kallweit (13):
-      dt-bindings: i2c: gpio: Add properties for dealing with write-only SDA/SCL w/o pullup
-      i2c: algo: bit: allow getsda to be NULL
-      i2c: gpio: support write-only sda/scl w/o pull-up
-      i2c: i801: improve interrupt handler
-      i2c: i801: make FEATURE_HOST_NOTIFY dependent on FEATURE_IRQ
-      i2c: i801: make FEATURE_BLOCK_PROC dependent on FEATURE_BLOCK_BUFFER
-      i2c: i801: add helper i801_set_hstadd()
-      i2c: i801: Add i801_simple_transaction(), complementing i801_block_transaction()
-      i2c: i801: Handle SMBAUXCTL_E32B in i801_block_transaction_by_block only
-      i2c: i801: Centralize configuring non-block commands in i801_simple_transaction
-      i2c: i801: Centralize configuring block commands in i801_block_transaction
-      i2c: i801: Call i801_check_pre() from i801_access()
-      i2c: i801: Call i801_check_post() from i801_access()
-
-Konrad Dybcio (2):
-      dt-bindings: i2c: qcom,i2c-cci: Fall back to common compatibles
-      i2c: qcom-cci: Deprecate duplicated compatibles
-
-Kunihiko Hayashi (1):
-      dt-bindings: i2c: uniphier: Add resets property
-
-Lars-Peter Clausen (3):
-      i2c: cadence: Remove unused CDNS_I2C_DATA_INTR_DEPTH define
-      i2c: cadence: Remove `irq` field from driver state struct
-      i2c: cadence: Remove redundant expression in if clause
-
-Luca Weiss (1):
-      dt-bindings: i2c: qcom-cci: Document SM6350 compatible
-
-Nick Hawkins (3):
-      dt-bindings: i2c: Add hpe,gxp-i2c
-      i2c: Add GXP SoC I2C Controller
-      MAINTAINERS: Add HPE GXP I2C Support
-
-Randy Dunlap (1):
-      Documentation: i2c: correct spelling
-
-Raviteja Narayanam (9):
-      i2c: xiic: Add standard mode support for > 255 byte
-      i2c: xiic: Fix Rx and Tx paths in standard mode
-      i2c: xiic: Switch to Xiic standard mode for i2c-read
-      i2c: xiic: Add wait for FIFO empty in send_tx
-      i2c: xiic: Add smbus_block_read functionality
-      i2c: xiic: Remove interrupt enable/disable in Rx path
-      dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
-      i2c: xiic: Update compatible with new IP version
-      i2c: xiic: Add SCL frequency configuration support
-
-Russell King (Oracle) (1):
-      i2c: add fwnode APIs
-
-Shyam Sundar S K (2):
-      i2c: designware: add a new bit check for IC_CON control
-      i2c: designware: Change from u32 to unsigned int for regmap_read() calls
-
-Wolfram Sang (1):
-      Merge branch 'i2c/fwnode-api' into i2c/for-mergewindow
-
-Yang Yingliang (1):
-      i2c: qcom-geni: change i2c_master_hub to static
-
-ye xingchen (4):
-      i2c: aspeed: Use devm_platform_get_and_ioremap_resource()
-      i2c: bcm2835: Use devm_platform_get_and_ioremap_resource()
-      i2c: mt65xx: Use devm_platform_get_and_ioremap_resource()
-      i2c: au1550: Use devm_platform_get_and_ioremap_resource()
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andrew Jeffery (1):
-      (Rev.) i2c: aspeed: Use devm_platform_get_and_ioremap_resource()
-
-Andy Shevchenko (7):
-      (Rev.) i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
-      (Rev.) i2c: designware: Change from u32 to unsigned int for regmap_read() calls
-      (Rev.) i2c: designware: add a new bit check for IC_CON control
-      (Rev.) i2c: gpio: Add support on ACPI-based system
-      (Rev.) i2c: Set i2c pinctrl recovery info from it's device pinctrl
-      (Rev.) pinctrl: Add an API to get the pinctrl pins if initialized
-      (Rev.) i2c: designware: fix i2c_dw_clk_rate() return size to be u32
-
-AngeloGioacchino Del Regno (2):
-      (Rev.) i2c: mt65xx: Use devm_platform_get_and_ioremap_resource()
-      (Rev.) dt-bindings: i2c: i2c-mt65xx: add binding for MT8365 SoC
-
-Bjorn Andersson (1):
-      (Rev.) i2c: qcom-geni: change i2c_master_hub to static
-
-Florian Fainelli (1):
-      (Rev.) i2c: bcm2835: Use devm_platform_get_and_ioremap_resource()
-
-Jean Delvare (10):
-      (Rev.) i2c: i801: Call i801_check_post() from i801_access()
-      (Rev.) i2c: i801: Call i801_check_pre() from i801_access()
-      (Rev.) i2c: i801: Centralize configuring block commands in i801_block_transaction
-      (Rev.) i2c: i801: Centralize configuring non-block commands in i801_simple_transaction
-      (Rev.) i2c: i801: Handle SMBAUXCTL_E32B in i801_block_transaction_by_block only
-      (Rev.) i2c: i801: Add i801_simple_transaction(), complementing i801_block_transaction()
-      (Rev.) i2c: i801: add helper i801_set_hstadd()
-      (Rev.) i2c: i801: make FEATURE_BLOCK_PROC dependent on FEATURE_BLOCK_BUFFER
-      (Rev.) i2c: i801: make FEATURE_HOST_NOTIFY dependent on FEATURE_IRQ
-      (Rev.) i2c: i801: improve interrupt handler
-
-Joel Stanley (1):
-      (Rev.) i2c: Add GXP SoC I2C Controller
-
-Krzysztof Kozlowski (5):
-      (Rev.) dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
-      (Rev.) dt-bindings: i2c: i2c-st: convert to DT schema
-      (Rev.) dt-bindings: i2c: Add Loongson LS2X I2C controller
-      (Rev.) i2c: qcom-cci: Deprecate duplicated compatibles
-      (Rev.) dt-bindings: i2c: qcom,i2c-cci: Fall back to common compatibles
-
-Linus Walleij (1):
-      (Rev.) pinctrl: Add an API to get the pinctrl pins if initialized
-
-Matthias Brugger (1):
-      (Rev.) dt-bindings: i2c: i2c-mt65xx: add binding for MT8365 SoC
-
-Michal Simek (4):
-      (Rev.) i2c: xiic: Remove some dead code
-      (Rev.) i2c: cadence: Remove redundant expression in if clause
-      (Rev.) i2c: cadence: Remove `irq` field from driver state struct
-      (Rev.) i2c: cadence: Remove unused CDNS_I2C_DATA_INTR_DEPTH define
-
-Mika Westerberg (1):
-      (Rev.) i2c: add fwnode APIs
-
-Peibao Liu (1):
-      (Test) i2c: gpio: Add support on ACPI-based system
-
-Rob Herring (1):
-      (Rev.) dt-bindings: i2c: gpio: Add properties for dealing with write-only SDA/SCL w/o pullup
-
- .../devicetree/bindings/i2c/hpe,gxp-i2c.yaml       |  59 ++
- .../devicetree/bindings/i2c/i2c-gpio.yaml          |  26 +
- .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |   4 +
- Documentation/devicetree/bindings/i2c/i2c-st.txt   |  41 --
- .../devicetree/bindings/i2c/loongson,ls2x-i2c.yaml |  51 ++
- .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      |  49 +-
- .../bindings/i2c/socionext,uniphier-fi2c.yaml      |   3 +
- .../bindings/i2c/socionext,uniphier-i2c.yaml       |   3 +
- .../devicetree/bindings/i2c/st,sti-i2c.yaml        |  71 +++
- .../bindings/i2c/xlnx,xps-iic-2.00.a.yaml          |  11 +-
- Documentation/i2c/gpio-fault-injection.rst         |   2 +-
- Documentation/i2c/smbus-protocol.rst               |   2 +-
- MAINTAINERS                                        |  11 +-
- drivers/i2c/algos/i2c-algo-bit.c                   |  77 ++-
- drivers/i2c/busses/Kconfig                         |  18 +
- drivers/i2c/busses/Makefile                        |   2 +
- drivers/i2c/busses/i2c-aspeed.c                    |   4 +-
- drivers/i2c/busses/i2c-au1550.c                    |   4 +-
- drivers/i2c/busses/i2c-bcm2835.c                   |   4 +-
- drivers/i2c/busses/i2c-cadence.c                   |  23 +-
- drivers/i2c/busses/i2c-designware-common.c         |  13 +-
- drivers/i2c/busses/i2c-designware-core.h           |   5 +-
- drivers/i2c/busses/i2c-designware-master.c         |  33 +-
- drivers/i2c/busses/i2c-designware-slave.c          |   4 +-
- drivers/i2c/busses/i2c-gpio.c                      |  47 +-
- drivers/i2c/busses/i2c-gxp.c                       | 620 +++++++++++++++++++++
- drivers/i2c/busses/i2c-i801.c                      | 310 +++++------
- drivers/i2c/busses/i2c-ls2x.c                      | 370 ++++++++++++
- drivers/i2c/busses/i2c-mt65xx.c                    |   7 +-
- drivers/i2c/busses/i2c-qcom-cci.c                  |   8 +-
- drivers/i2c/busses/i2c-qcom-geni.c                 |   2 +-
- drivers/i2c/busses/i2c-st.c                        |   9 +-
- drivers/i2c/busses/i2c-xiic.c                      | 586 +++++++++++++++++--
- drivers/i2c/i2c-core-acpi.c                        |  13 +-
- drivers/i2c/i2c-core-base.c                        | 103 +++-
- drivers/i2c/i2c-core-of.c                          |  66 ---
- drivers/i2c/i2c-dev.c                              |  16 +-
- include/linux/i2c.h                                |  24 +-
- include/linux/pinctrl/devinfo.h                    |  15 +
- include/linux/platform_data/i2c-gpio.h             |   9 +
- 40 files changed, 2248 insertions(+), 477 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-st.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
- create mode 100644 Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
- create mode 100644 drivers/i2c/busses/i2c-gxp.c
- create mode 100644 drivers/i2c/busses/i2c-ls2x.c
-
---G3R8IQbuJf0ZzKYp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP3rAEACgkQFA3kzBSg
-KbYztRAAo4Er8S+XHvhJfe1l3xIvq/CbZHidoXTX4/UeHLvG81BcNcrwAsfmkTFb
-c2LDQbR3ZsERQDgCuzuNmHwVJ+/0g7thR27YjYuAegMwYDmPc4iif8nDjT+iE+Xz
-ksFDLIVUutaMDs0BUqlJ/O2YvZZRYCablGy2NURdeMcmIEJWUafCxb+rlTrNO9KS
-455Fyb9wW3CqeCcOZQovLq4QERFz2aIZigsO5pW8KNPNwWWDHAkfUUbFH+TEjMiQ
-lFlso5iD6+cv6eG6AF9SQiexTvdeSBMy/Ih64zvtBmSjMANpPHloXRh79erYjGZy
-vbGmhTaNpGKr7wuCSZCNUOI66y3AmJJ0XE24uRvV8xOiRXO0KWtR71VlAYxdIguu
-kM2qEIYiu5qtPl0Bzm8XPvWeKsPTDS+KOSjPzqIDY3srY2z504TqddYlflf2PNUi
-3P1OAm9JWt5KXohuBZGQ9GV+bXlvOMlO0P9f+1F1DsLp30+Fjs8Cj5lhxh00Qn6H
-XdbSFbTNAbznaXiroXAhBLa6XaUEzbW6/+uMyDX+lDGk98ov7EZu7CET3KBKplgP
-wHDOLU5V97DHDZeq3NOP798RNgxU5yO0UJlFaM1WWQ2XMJiELcKg/jPaLqD6CPQu
-55lpvd5UWw/CEi4kO7DHV8DqBKQrGbFT41LderlcEDk2qH2FAN4=
-=HKMw
------END PGP SIGNATURE-----
-
---G3R8IQbuJf0ZzKYp--
+Jason
