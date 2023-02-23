@@ -2,72 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C266A12E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF386A129C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBWWl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 17:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S229530AbjBWWK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 17:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjBWWly (ORCPT
+        with ESMTP id S229478AbjBWWK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 17:41:54 -0500
-X-Greylist: delayed 1879 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Feb 2023 14:41:41 PST
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354705DCD4;
-        Thu, 23 Feb 2023 14:41:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:
-        Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=CslzAJiIp7r58RKv96q1x1gc0Bf7YcbpzDSzziIZkhc=; b=Q
-        kGA+Somztr9qy6v8Jgb8XuuJEMWjE7kfwks7O1Y18KNURgMnzCjZjwRM4l8lvdI6sWHszxpfyu1QN
-        c4jlsjwBjO66azqrKVu8msEZGbCFd5z7tNFkl5NV8P/u8p2FhvDKk258iMI7rV9/UL2Yu342hPvRn
-        A5Z2rNo2f3nXSZmfqVVNRBn7WcSOuEuLMwFNRBPr2yFVLWAg3oyy/tGBwkMuLSs8UMIDm2lR16+Nh
-        X+bTj+pQcdDQeZfb1HLshjI74WpGwTWz53YSuO8Ce159jT7ZvVr21zPfRsW+5Ext4rvmBIEt0fl5S
-        EBm1+trDYu2cYbhjs+FFgkKrklHXAqgpg==;
-Received: from [2001:4d48:ad59:1403::17ca] (helo=sevai.o362.us)
-        by the.earth.li with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1pVJmu-0047nl-G5; Thu, 23 Feb 2023 22:10:04 +0000
-Date:   Thu, 23 Feb 2023 22:10:00 +0000
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Antoine Tenart <atenart@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] crypto: inside-secure: Handle load errors better
-Message-ID: <Y/fkOF31BTQVocSe@sevai.o362.us>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 17:10:26 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822E196A1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 14:10:25 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id 202-20020a6218d3000000b005a89856900eso1434745pfy.14
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 14:10:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yypR5SWr5fAuROcOSsEI5X6eT6hSchBRQPrL8thWA1U=;
+        b=Jwv6kgov7x4dkPOvT37pVWQMD8Sxulc331jV+U+RIv1e1GNNNH3O2x/Z2djCWe0h7A
+         Vu2hLZhFLTSCCY7aLleOLB7viUmS+j1BnXMWTUgMoKo3Hc71KYI4ULXXgTG8yPmpVNLL
+         +6DO7D628eoUBDXU9Yus+s7IgPoJjWTxUXAIFbDU+7Tj64sGbYuOWSe1d5Xz+Yn9r65X
+         nWN65qOi3vwmEmFmwmWGAdDdUvSAn200wpPrRJhtXfNIn/XujWRvK8y/21gWqdsf1zWk
+         G+kuE/NWbz29bKhFsL0N2NoAtAsxmpDb0Z5E9MDs0LnP60S/oYkNCO+by4+ftUNWmYME
+         yAdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yypR5SWr5fAuROcOSsEI5X6eT6hSchBRQPrL8thWA1U=;
+        b=fmumZPZXL0Qt8wuHbY7SAHlPfTTG7t6/tUB2zb1z+IhOU36aLWwjV12TE7PH0xmj8W
+         VZv4AJsjqN9rXra/YgLSbWUTvrzlxKnJnZ2FUdwacxPi3OiMY0UsppESE4qfNz2yjyaO
+         7HORKqw/J06ZkW0ZCsvOSE9dWd04fqpZr9BeFL3VLKxYZxST4l6vxFzkDZ9Uhv/hxXEi
+         6XOrI7pXwKZa6Ln+Yw6dpdH7/mdHLsyI/o1YVNC0dWGTP3Tx1c5YJfnzQRo0zw1SEvTh
+         JNh/+Fwbw3k9UW/Sywk7OcUsVy+ZVtbUpSEdpRzDQE37/1rk4Xv6YgaL3EpNSkst76TW
+         ltFw==
+X-Gm-Message-State: AO0yUKUB0bIGLuHTCUnF1m8mhS8ViGb7G761J5a2hrRkOevaD8jGEMU3
+        9oy67l+QeOHsoVq0yr14l3KWbJLNxyk=
+X-Google-Smtp-Source: AK7set/mTkvRAH6S3QvmwPwwMO1+qJXpKcN7A7wBH4UY6Rz/dgjxv7hA4d9WaGpDXpcjxAn6zfGPBHiU4R4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:284b:b0:233:d613:a9ae with SMTP id
+ p11-20020a17090a284b00b00233d613a9aemr868033pjf.3.1677190224408; Thu, 23 Feb
+ 2023 14:10:24 -0800 (PST)
+Date:   Thu, 23 Feb 2023 14:10:22 -0800
+In-Reply-To: <092591cbcc40fbbcc42abd3f603b6d782f411770.camel@redhat.com>
+Mime-Version: 1.0
+References: <15291c3f-d55c-a206-9261-253a1a33dce1@redhat.com>
+ <YzRycXDnWgMDgbD7@google.com> <ad97d0671774a873175c71c6435763a33569f669.camel@redhat.com>
+ <YzSKhUEg3L1eMKOR@google.com> <08dab49f-9ca4-4978-4482-1815cf168e74@redhat.com>
+ <b8fa9561295bb6af2b7fcaa8125c6a3b89b305c7.camel@redhat.com>
+ <06d04f32-8403-4d7f-76a1-11a7fac3078e@redhat.com> <Y/aWx4EiDzKW6RHe@google.com>
+ <05144c6d-922c-e70d-e625-c60952b60f3c@redhat.com> <092591cbcc40fbbcc42abd3f603b6d782f411770.camel@redhat.com>
+Message-ID: <Y/fkTs5ajFy0hP1U@google.com>
+Subject: Re: [PATCH] KVM: x86: disable on 32-bit unless CONFIG_BROKEN
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Thomas Huth <thuth@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        "Daniel P. Berrange" <berrange@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2 minor patches to improve the error handling of the safexcel driver
-when it fails to load.
+On Thu, Feb 23, 2023, Maxim Levitsky wrote:
+> On Thu, 2023-02-23 at 08:01 +0100, Thomas Huth wrote:
+> > On 22/02/2023 23.27, Sean Christopherson wrote:
+> > > On Fri, Feb 17, 2023, Thomas Huth wrote:
+> > > > On 29/09/2022 15.52, Maxim Levitsky wrote:
+> > > > > On Thu, 2022-09-29 at 15:26 +0200, Paolo Bonzini wrote:
+> > > > > > On 9/28/22 19:55, Sean Christopherson wrote:
+> > > > > > > > As far as my opinion goes I do volunteer to test this code more often,
+> > > > > > > > and I do not want to see the 32 bit KVM support be removed*yet*.
+> > > > > > > 
+> > > > > > > Yeah, I 100% agree that it shouldn't be removed until we have equivalent test
+> > > > > > > coverage.  But I do think it should an "off-by-default" sort of thing.  Maybe
+> > > > > > > BROKEN is the wrong dependency though?  E.g. would EXPERT be a better option?
+> > > > > > 
+> > > > > > Yeah, maybe EXPERT is better but I'm not sure of the equivalent test
+> > > > > > coverage.  32-bit VMX/SVM kvm-unit-tests are surely a good idea, but
+> > > > > > what's wrong with booting an older guest?
+> > > > > >  From my point of view, using the same kernel source for host and the guest
+> > > > > is easier because you know that both kernels behave the same.
+> > > > > 
+> > > > > About EXPERT, IMHO these days most distros already dropped 32 bit suport thus anyway
+> > > > > one needs to compile a recent 32 bit kernel manually - thus IMHO whoever
+> > > > > these days compiles a 32 bit kernel, knows what they are doing.
+> > > > > 
+> > > > > I personally would wait few more releases when there is a pressing reason to remove
+> > > > > this support.
+> > > > 
+> > > > FWIW, from the QEMU perspective, it would be very helpful to remove 32-bit
+> > > > KVM support from the kernel. The QEMU project currently struggles badly with
+> > > > keeping everything tested in the CI in a reasonable amount of time. The
+> > > > 32-bit KVM kernel support is the only reason to keep the qemu-system-i386
+> > > > binary around - everything else can be covered with the qemu-system-x86_64
+> > > > binary that is a superset of the -i386 variant (except for the KVM part as
+> > > > far as I know).
+> > > > Sure, we could also drop qemu-system-i386 from the CI without dropping the
+> > > > 32-bit KVM code in the kernel, but I guess things will rather bitrot there
+> > > > even faster in that case, so I'd appreciate if the kernel could drop the
+> > > > 32-bit in the near future, too.
+> > > 
+> > > Ya, I would happily drop support for 32-bit kernels today, the only sticking point
+> > > is the lack of 32-bit shadow paging test coverage, which unfortunately is a rather
+> > > large point.  :-(
+> > 
+> >  From your point of view, would it be OK if QEMU dropped qemu-system-i386? 
+> > I.e. would it be fine to use older versions of QEMU only for that test 
+> > coverage (or do you even use a different userspace for testing that)?
 
-Firstly, make it clear when the reason for a load failure is because the
-firmware is not available.
+For me personally, I have no objection to dropping qemu-system-i386 support in
+future QEMU releases.  I update my 32-bit images very, very infrequently, so I
+probably wouldn't even notice for like 5 years :-)
 
-Secondly, ensure we clean up the ring workqueues / IRQ affinity settings
-to avoid a kernel warning when the driver fails to load.
+> From my point of view qemu-system-x86_64 does run 32 bit guests just fine.
 
-Jonathan McDowell (2):
-  crypto: inside-secure: Raise firmware load failure message to error
-  crypto: inside-secure: Cleanup ring IRQ workqueues on load failure
-
- drivers/crypto/inside-secure/safexcel.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
--- 
-2.39.1
-
+Right, but unless I seriously misunderstand what qemu-system-x86_64 ecompasses,
+it can't be used to run guests of 32-bit _hosts_, which is what we need to test
+shadowing of 32-bit NPT.
