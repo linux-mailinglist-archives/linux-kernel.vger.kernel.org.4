@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03AE6A0E20
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2472E6A0E2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbjBWQkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 11:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S234655AbjBWQoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 11:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjBWQkU (ORCPT
+        with ESMTP id S232923AbjBWQoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 11:40:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEF742BEF;
-        Thu, 23 Feb 2023 08:40:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 973086176B;
-        Thu, 23 Feb 2023 16:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BBB2C4339C;
-        Thu, 23 Feb 2023 16:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677170418;
-        bh=TW4fl3bLDzHaGU8jprSYUuolBkfbQmM6d1zvy/iB5ls=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ABLEcpjn7CTQs1kz1ldEl7TyRr/LIabQu8ogMtBXd6h5sH72itUpNko3nZ1axe8Zv
-         PMn/klvoQeRxivqZSC+NDCNN8h6yEcDVpzgcMsgtyMzuXqm0i7qXLndB3+RPICHuVy
-         pHC0k/TcTZ+8hSKxfuD/dxSHxnNc208QvwpIZv0K3IE9YvTLNXfxT6Tep2rKBrLLiD
-         2P8us6mOPtCqlqpTTi9wfnbuXigzCWzRD0SujphLMpZDxxcL3e7WAQzVcyBs64xAz1
-         At38j9PWkfzXUjJV4RWa/WH+eqbYGwxOEFFw+Zl3A12Z8mENYRpGktLqyBWhGihf2L
-         7qfnuIKnTMhEw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D3F8C395E0;
-        Thu, 23 Feb 2023 16:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 23 Feb 2023 11:44:22 -0500
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AD414EAB;
+        Thu, 23 Feb 2023 08:44:20 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so6818742wmq.2;
+        Thu, 23 Feb 2023 08:44:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eruQWB2/18nDotnnWoGStXzb4aFnYUrYHZ3mQIMO230=;
+        b=QuyPSrLGWROMJuZb1HAn3ZGgmbOJpN2xa73jfdZ7EJKAfQU7VGI0aST583uzA+3Wo5
+         0qz8g/ecB64R2KzmZYgQ8N5++ulSe4z5otpHQI9FOyyQsyeG+6rxy2m3RR6P6k+y9pNR
+         QY1/iAhBXe03mTYz6YRMZU1HVRppLECBakeVA8105aLOqJ0yRWm9I10JbvfGLjWzp4WB
+         54C8URzCyfKCWP5/zF6uc9CBnKI5lIZE2ciXGBJc8Q2x8NekfhA4KNxSn2Vjd7vwwvoK
+         zQgtrsHrlqZ+HQAS8uN8zd0FQOtwyESYky7vYmrQv7IXs2XThC6C9uju4UCT8BFkPwD5
+         jTMw==
+X-Gm-Message-State: AO0yUKWPCBrzKIkHEZ+vRehFO9A5h61Q/QfJVSHugeW23gq7jKvDvEsU
+        xY8Ru1a4UuM/Bgy0lzdGGH4=
+X-Google-Smtp-Source: AK7set/jDHcM+n4wOut1aNg2wr8xBwY7DveDGuxa+7+xqu8SYgHdOb/H74Wx+XiE/Lx0/wHBIro4OQ==
+X-Received: by 2002:a05:600c:331b:b0:3dc:4318:d00d with SMTP id q27-20020a05600c331b00b003dc4318d00dmr9262047wmp.11.1677170659002;
+        Thu, 23 Feb 2023 08:44:19 -0800 (PST)
+Received: from localhost (fwdproxy-cln-013.fbsv.net. [2a03:2880:31ff:d::face:b00c])
+        by smtp.gmail.com with ESMTPSA id m6-20020a05600c4f4600b003df245cd853sm14739855wmq.44.2023.02.23.08.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 08:44:18 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gustavold@meta.com, leit@meta.com,
+        kasan-dev@googlegroups.com
+Subject: [PATCH v3 0/2] io_uring: Add KASAN support for alloc caches
+Date:   Thu, 23 Feb 2023 08:43:51 -0800
+Message-Id: <20230223164353.2839177-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 1/2 bpf-next] bpf: Add bpf_cgroup_from_id() kfunc
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167717041811.11071.10181818674097772190.git-patchwork-notify@kernel.org>
-Date:   Thu, 23 Feb 2023 16:40:18 +0000
-References: <Y/bBaG96t0/gQl9/@slm.duckdns.org>
-In-Reply-To: <Y/bBaG96t0/gQl9/@slm.duckdns.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        davemarchevsky@meta.com, void@manifault.com,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+This patchset enables KASAN for alloc cache buffers. These buffers are
+used by apoll and netmsg code path. These buffers will now be poisoned
+when not used, so, if randomly touched, a KASAN warning will pop up.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+This patchset moves the alloc_cache from using double linked list to single
+linked list, so, we do not need to touch the poisoned node when adding
+or deleting a sibling node.
 
-On Wed, 22 Feb 2023 15:29:12 -1000 you wrote:
-> cgroup ID is an userspace-visible 64bit value uniquely identifying a given
-> cgroup. As the IDs are used widely, it's useful to be able to look up the
-> matching cgroups. Add bpf_cgroup_from_id().
-> 
-> v2: Separate out selftest into its own patch as suggested by Alexei.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> 
-> [...]
+Changes from v1 to v2:
+   * Get rid of an extra "struct io_wq_work_node" variable in
+     io_alloc_cache_get() (suggested by Pavel Begunkov)
+   * Removing assignement during "if" checks (suggested by Pavel Begunkov
+     and Jens Axboe)
+   * Do not use network structs if CONFIG_NET is disabled (as reported
+     by kernel test robot)
 
-Here is the summary with links:
-  - [v2,1/2,bpf-next] bpf: Add bpf_cgroup_from_id() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/332ea1f697be
-  - [v2,2/2,bpf-next] selftests/bpf: Add a test case for bpf_cgroup_from_id()
-    https://git.kernel.org/bpf/bpf-next/c/d0093aaefa35
+Changes from v2 to v3:
+   * Store elem_size in the io_alloc_cache, so, we don't need to pass
+     the size when getting the cache element.
 
-You are awesome, thank you!
+
+Breno Leitao (2):
+  io_uring: Move from hlist to io_wq_work_node
+  io_uring: Add KASAN support for alloc_caches
+
+ include/linux/io_uring_types.h |  3 ++-
+ io_uring/alloc_cache.h         | 30 ++++++++++++++++++------------
+ io_uring/io_uring.c            |  4 ++--
+ io_uring/net.h                 |  5 ++++-
+ 4 files changed, 26 insertions(+), 16 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.30.2
+
 
 
