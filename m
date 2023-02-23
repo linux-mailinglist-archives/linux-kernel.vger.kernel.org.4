@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E436A0BEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CB36A0C02
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbjBWOdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S233953AbjBWOkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjBWOdr (ORCPT
+        with ESMTP id S234311AbjBWOkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:33:47 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD6E53EE1;
-        Thu, 23 Feb 2023 06:33:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677162824; x=1708698824;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TdcLlbwPrbAqnbdqrVt/ZtbrBIOSSfvtTcMwq+CpbUo=;
-  b=fsdqqtk6+zYWex0WCPWq7w0NCWB/9tfgZAcopF7mtwJWaBWTLJiKiUcB
-   gRwr9TLUr7Y22xBsJ+PHe6gWjuxADrg3IrPealzTL1ADkl13xA/cRC80Q
-   xGeJAKZTXwvECLlFu65j0tS5j/BZEiPXVwoRf7VhplIzW0nf3gbinH0PI
-   c9pMChcuDDDWLJw8oLM6XhANN4T+r2AZbBzbBNT5V6GdcbeaRhSEdpf85
-   rLyf1ycOi/a6BStx+iZL/ea4yko18AGym5SQXFEt3tWI+TWWTz1dDxvic
-   aZmYVoIAYGBwvuyL5DeLZBPGouSwaq103om0BUgK3Pvp5NVspiXftG1ZW
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,320,1669100400"; 
-   d="asc'?scan'208";a="213363677"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Feb 2023 07:33:43 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 23 Feb 2023 07:33:42 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Thu, 23 Feb 2023 07:33:40 -0700
-Date:   Thu, 23 Feb 2023 14:33:13 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.1 00/46] 6.1.14-rc1 review
-Message-ID: <Y/d5KdOfh5rXUeqk@wendy>
-References: <20230223130431.553657459@linuxfoundation.org>
+        Thu, 23 Feb 2023 09:40:08 -0500
+X-Greylist: delayed 360 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Feb 2023 06:40:06 PST
+Received: from mail.nearlyone.de (mail.nearlyone.de [IPv6:2a01:4f8:1c1e:abde::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE7C57093;
+        Thu, 23 Feb 2023 06:40:05 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id ABD2ADAD33;
+        Thu, 23 Feb 2023 15:33:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
+        t=1677162842; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         in-reply-to:references; bh=gSBnOAKSlwYgZRq5lZL+i93DmKNx4vzN6Q9wkUn3Q5k=;
+        b=gxFRh++8hGnMi3A97kGudlj0tNF002PWwqVliQqG+Q9Fu5eYM3Q6h9ylLfDKxWUJw8/Hh9
+        cAW2HKc1eBrrD8N6ANprgekyaRnJXQSIrYMUEM5857MQ6chxe5+hne57xRvTItGUPWc10c
+        /tbNx0rlrHDiulWdrVq+XE2m8t3ezPnHJ+6wrGsMqteAyWxnLkaQx/jn+z5vVsKH/Hqmp0
+        O10wu8pAx+JsvPdeqv7SwqezScqxAMNYrRnYBmk/A8s4Zak/C6/hOXmuTm71xgq9zPewqw
+        xjcXCPVK8dYsvH1MfmrcwDohKjvgSk1oBB+Q4ytmsxN3LRBeIIVGOicJ1T+haA==
+Date:   Thu, 23 Feb 2023 15:33:56 +0100
+From:   Daniel Wagner <wagi@monom.org>
+To:     Florian Bezdeka <florian.bezdeka@siemens.com>
+Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [ANNOUNCE] 5.10.162-rt79
+Message-ID: <20230223143356.fa6tqrflmhrcqx33@carbon.lan>
+References: <Y9KOvZH61omPpn/3@uudg.org>
+ <2ad9f8a7528818b9509f62278b42e5bc6d210054.camel@siemens.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="y89pGdxxUDHJUbhU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223130431.553657459@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2ad9f8a7528818b9509f62278b42e5bc6d210054.camel@siemens.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---y89pGdxxUDHJUbhU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Florian,
 
-On Thu, Feb 23, 2023 at 02:06:07PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.14 release.
-> There are 46 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.14-=
-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
- linux-6.1.y
-> and the diffstat can be found below.
+On Thu, Jan 26, 2023 at 06:41:27PM +0100, Florian Bezdeka wrote:
+> From the CIP projects perspective we would like to improve the
+> situation.
+> 
+> From my perspective the following could be done:
+> 
+>   - Instead of (or in addition to) building and testing released -rt
+>     branches enable testing of -rt release candidates
+>   - Make sure the build results get back to the maintainers
+> 
+> I'm not sure if every -rt branch has a -rc branch. I'm not familiar
+> with the -rt release process yet.
 
-> Dave Hansen <dave.hansen@linux.intel.com>
->     uaccess: Add speculation barrier to copy_from_user()
+The process so far is, that every stable maintainer updates his tree (merges the
+stable tree) and does a local build and local tests. Usually when merging latest
+upstream stable release there are no or little fallouts. When the maintainer is
+happy he does the release by pushing the changes to the usptream branch. The
+release candiates come only into play when there is something the maintainer is
+not sure how to handle or -rt patches are backported which need some more eyes
+to look on. That means Sebastian's approval :)
 
-This breaks the build for me on RISC-V, you need to take f3dd0c53370e
-("bpf: add missing header file include") from Linus' tree.
-It was broken in mainline too, so it is probably broken everywhere you
-backported it :(
+IIRC, I did give a presentation on the workflow some time ago...
+
+https://lpc.events/event/4/contributions/293/attachments/237/416/maintaining-out-of-tree-patches-over-the-long-term.pdf
+https://www.youtube.com/watch?v=2ab4Knwlmo4
+
+When we started with this process kernelci didn't build these branches but that
+is long time ago.
+
+Personally, I don't mind doing an official -rc for every release and getting
+some additional builds and tests run by kernelci.
+
+Though just piping the results back is the easy thing, the time consuming task
+is to fix those problems. Do you plan to help out here?
 
 Thanks,
-Conor.
-
-
---y89pGdxxUDHJUbhU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/d5HgAKCRB4tDGHoIJi
-0oPNAQCHF1hz7H+ejba8MQkummME6T5j0mlx07U1M6JjNEx+XQD/RYtmDiPzp6pW
-gI2X3S3tPZ56lpCyy098jne0tTMBaQ4=
-=n2Cu
------END PGP SIGNATURE-----
-
---y89pGdxxUDHJUbhU--
+Daniel
