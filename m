@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF626A0ED5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4476A0ED8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjBWRlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S230163AbjBWRms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBWRk7 (ORCPT
+        with ESMTP id S230152AbjBWRmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:40:59 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510EF521E0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:40:56 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id s1so386185vsk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:40:56 -0800 (PST)
+        Thu, 23 Feb 2023 12:42:46 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9067532B0;
+        Thu, 23 Feb 2023 09:42:44 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id il18-20020a17090b165200b0023127b2d602so69545pjb.2;
+        Thu, 23 Feb 2023 09:42:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fo7AgQ2bct21yLgbxRinWk51c7Sq7xFh6y+K3L6/tTM=;
-        b=GBvZr3FRKM3NOesy8gVSZUY02Sq7aNLAUfDffqGDvKf740Ehqv8nBE7Oi8FsVIN6J1
-         JkZFMoh+qCPEAzymwVHG0z1bBMx/KYg6SymF2QTZuOLraOywk3TLiLhpYUErfPSbomdU
-         FdELqyo5w45/teVQSzUk24vH1+jYHCr88FiP2s8cZmTnhZ/p9c9I1VeiW+nF0kurnbWN
-         zU2trwEFNYfVM5n6sxlFHrJwWriTlH1Yux1MJGSccWSU+BwuGOcqC/WBw7sP08hDnexG
-         HURlUENH3H2vj5o3TSRbImMuccAeHy0C5gzNj/u3KE2SP/RtkjYxI2vBWBhCxO8K3UcO
-         df/g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YUQnTxCw0HRxUaX138YoYVUi4ja1Ry/gLGuor7Mye68=;
+        b=mlDZ/lbQiBqIVVlqw25sMUcTj9Je6SbGrXb7urUz8nf7RxL2CQmWlJNYxr4t1Tw4FX
+         6XZSMT7C4b29T4smnW1QaKZi8Htrij9UNHtmgrjbUjOSCbW8arnUA3eCZAX1J1ZbK10w
+         R214O65KuiZwBSmSkhDKa25vUNEXERu115XdIU3srWU37pJW1/0vNlUSHwZKEJzOw7AH
+         vbgbmNJHw/bfnAlLGyiZU6JHoC9uBF/E1K76ZXrCmNMI1TaqenddTagol24bqRt4ePZz
+         a8RXHUSiBuJ8PlcWNanwFhutdWo33V9ODbOHDrxd53wFLXsh10mp5hBdDt/AyUUiXPZh
+         RhFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fo7AgQ2bct21yLgbxRinWk51c7Sq7xFh6y+K3L6/tTM=;
-        b=vNYkpCk6uy3z3jyPAZffwLOw0Yh4Gsf3UnKbS9xGZ3p5vHAzfPSz51kSWvzshinCOp
-         CSbPxQcjVxdfAXl0fesEYP1PnSC3bXR2tue/bHYjXSbGV/a0IcazKlGQkx/bUDKDoZE2
-         HcoLbA6ZrpB1qOv0HCYoAo4PM5UIF+/wwK4RVLPJ7D8w1vujK8+YBt8T5UYX5o50FAID
-         Md/OI1TuI9qDDtraoemDiDxUYXy67LjEShPHriLlYo08yREI7dHb0Eclt24ZPCFIt9m/
-         WEJE440usZW++9AfbOfII1HJLDXz85clh10HWVgdPDe0FmkC9o2HEG39mXaCbEqFGTFv
-         4P6Q==
-X-Gm-Message-State: AO0yUKXHq7bpY/fZoiiUVMbMt27CfFr159auWsWjch+CAbU56er2STqb
-        RvfK2JX1FPPvvGnB/KRagG1jFUx5QnQYIPwABcAwXA==
-X-Google-Smtp-Source: AK7set9wJbC1t128b6r/YElZqMz+AmeZGkkjsbu1lRieG6NYjdy/fQfX1OM7M72E6+9T9qCprQHwdxazlikgHRzNMDs=
-X-Received: by 2002:a05:6102:108f:b0:41e:d8b5:ee40 with SMTP id
- s15-20020a056102108f00b0041ed8b5ee40mr899877vsr.26.1677174055279; Thu, 23 Feb
- 2023 09:40:55 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YUQnTxCw0HRxUaX138YoYVUi4ja1Ry/gLGuor7Mye68=;
+        b=dapSMiz7VcQwNWH4OVDxR/kM/URut+7atmvYK2+7K5B4IUWaDvD8x0pqMfQaWRrKwg
+         vqt371aPIty08KfHPKWYniem9RSmv1Ef9dhq2gIYfR74aFQujeJlDUqAuUPZswUPYrgK
+         xae+YL4ZTwfETU5D7LIDGV7+s0Jrg8kSFNmsgCj3IAMbixXHeZhgVzUjQBuZFDGogtCr
+         bxtgtTaNhOtxwAK65TRkDQ3Hjir4b+Bsjro1Iz793Ex9x4LRgFsWwJBvbhElEWUORhEV
+         dBUnuNFlp8FgbJXYO8z86vAW4kGkMF/yHq2nq9lR5QyIiw/gOH1P9sqhaUCGvw/vhh29
+         l6mw==
+X-Gm-Message-State: AO0yUKVN3KnvYPp6JiOKVCwIN/nRbn0RcDArxAwfWPhLjJmPej/EUK8z
+        qG+RZnk5pW8k4Z1sPLyfZiw=
+X-Google-Smtp-Source: AK7set9NeiIltv+d6Vr8lPtbiRtFk0vymU/QzZJd14XxNmFpFzI0KAJkBY6t/JiW9w+bJUXoRlcr/g==
+X-Received: by 2002:a05:6a20:9383:b0:b0:c30:1de with SMTP id x3-20020a056a20938300b000b00c3001demr3706303pzh.61.1677174164269;
+        Thu, 23 Feb 2023 09:42:44 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id k13-20020a636f0d000000b004fbb48e3e5csm6682556pgc.77.2023.02.23.09.42.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 09:42:43 -0800 (PST)
+Message-ID: <31f37158-13f5-a0c4-c477-b6202d48f429@gmail.com>
+Date:   Thu, 23 Feb 2023 09:42:41 -0800
 MIME-Version: 1.0
-References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-2-yuzhao@google.com>
- <Y/ee1s3XPGa62SFV@google.com>
-In-Reply-To: <Y/ee1s3XPGa62SFV@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 23 Feb 2023 10:40:19 -0700
-Message-ID: <CAOUHufZ0Ep4_Edo4OoeUVpVK4uFJF6_yVL=xSrQM8an_Vw4VKw@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 1/5] mm/kvm: add mmu_notifier_test_clear_young()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.10 00/26] 5.10.170-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230223141540.701637224@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230223141540.701637224@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,117 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:14=E2=80=AFAM Sean Christopherson <seanjc@google=
-.com> wrote:
->
-> On Thu, Feb 16, 2023, Yu Zhao wrote:
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 9c60384b5ae0..1b465df4a93d 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -875,6 +875,63 @@ static int kvm_mmu_notifier_clear_young(struct mmu=
-_notifier *mn,
-> >       return kvm_handle_hva_range_no_flush(mn, start, end, kvm_age_gfn)=
-;
-> >  }
-> >
-> > +static bool kvm_test_clear_young(struct kvm *kvm, unsigned long start,
-> > +                              unsigned long end, unsigned long *bitmap=
-)
-> > +{
-> > +     int i;
-> > +     int key;
-> > +     bool success =3D true;
-> > +
-> > +     trace_kvm_age_hva(start, end);
-> > +
-> > +     key =3D srcu_read_lock(&kvm->srcu);
-> > +
-> > +     for (i =3D 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> > +             struct interval_tree_node *node;
-> > +             struct kvm_memslots *slots =3D __kvm_memslots(kvm, i);
-> > +
-> > +             kvm_for_each_memslot_in_hva_range(node, slots, start, end=
- - 1) {
-> > +                     gfn_t lsb_gfn;
-> > +                     unsigned long hva_start, hva_end;
-> > +                     struct kvm_gfn_range range =3D {
-> > +                             .slot =3D container_of(node, struct kvm_m=
-emory_slot,
-> > +                                                  hva_node[slots->node=
-_idx]),
-> > +                     };
-> > +
-> > +                     hva_start =3D max(start, range.slot->userspace_ad=
-dr);
-> > +                     hva_end =3D min(end - 1, range.slot->userspace_ad=
-dr +
-> > +                                            range.slot->npages * PAGE_=
-SIZE - 1);
-> > +
-> > +                     range.start =3D hva_to_gfn_memslot(hva_start, ran=
-ge.slot);
-> > +                     range.end =3D hva_to_gfn_memslot(hva_end, range.s=
-lot) + 1;
-> > +
-> > +                     if (WARN_ON_ONCE(range.end <=3D range.start))
-> > +                             continue;
->
-> Extend __kvm_handle_hva_range() instead of copy-pasting.  At a very quick=
- glance,
-> I believe all that is needed is (minus sanity checks):
+On 2/23/23 06:16, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.170 release.
+> There are 26 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.170-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Yes, will do.
+On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
+BMIPS_GENERIC:
 
-I do need to add one more parameter to kvm_gfn_range, because that's
-what the current kvm_arch_test_clear_young() needs, assuming that
-function is acceptable.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Also, just a side note, from MM's POV, the following in
-__kvm_handle_hva_range() seems to forget to handle end =3D=3D 0, if that's
-possible?
-
-  hva_end =3D min(range->end, slot->userspace_addr + (slot->npages <<
-PAGE_SHIFT));
-
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d255964ec331..3296ae2cf6fa 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -544,6 +544,7 @@ struct kvm_hva_range {
->         hva_handler_t handler;
->         on_lock_fn_t on_lock;
->         on_unlock_fn_t on_unlock;
-> +       bool lockless;
->         bool flush_on_ret;
->         bool may_block;
->  };
-> @@ -616,7 +617,7 @@ static __always_inline int __kvm_handle_hva_range(str=
-uct kvm *kvm,
->                         gfn_range.end =3D hva_to_gfn_memslot(hva_end + PA=
-GE_SIZE - 1, slot);
->                         gfn_range.slot =3D slot;
->
-> -                       if (!locked) {
-> +                       if (!range->lockless && !locked) {
->                                 locked =3D true;
->                                 KVM_MMU_LOCK(kvm);
->                                 if (!IS_KVM_NULL_FN(range->on_lock))
->
-> > +
-> > +                     /* see the comments on the generic kvm_arch_has_t=
-est_clear_young() */
-> > +                     lsb_gfn =3D hva_to_gfn_memslot(end - 1, range.slo=
-t);
-> > +
-> > +                     success =3D kvm_arch_test_clear_young(kvm, &range=
-, lsb_gfn, bitmap);
-> > +                     if (!success)
-> > +                             break;
-> > +             }
-> > +     }
-> > +
-> > +     srcu_read_unlock(&kvm->srcu, key);
-> > +
-> > +     return success;
-> > +}
