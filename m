@@ -2,176 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271386A0406
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374636A040B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbjBWIlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S233699AbjBWImZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbjBWIlC (ORCPT
+        with ESMTP id S233696AbjBWImV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:41:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5211E13DC2;
-        Thu, 23 Feb 2023 00:40:39 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8Axkk6FJvdjYw0EAA--.2595S3;
-        Thu, 23 Feb 2023 16:40:37 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+SBJvdjAIQ5AA--.4780S3;
-        Thu, 23 Feb 2023 16:40:35 +0800 (CST)
-Message-ID: <6662546a-2c83-71bd-7050-903331201bdc@loongson.cn>
-Date:   Thu, 23 Feb 2023 16:40:33 +0800
+        Thu, 23 Feb 2023 03:42:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590DF32E44
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:41:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677141694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SmdTtDQ2mjq0WzUoKIpi/WB/3RUaciUEZ6ilHbrlMPI=;
+        b=Ly0O7a7JSw0Tt7log+KORNSfwVJVohZb4sF8cPYwZ92MP0+b1B9a5sa9+2gdQEzDLTGvG7
+        P0rkYphXqlZdcjGRvjXelSEoprX7LzPX9Nzyi3LRveFq8V4THa379Jl0X6qfKLkZpOs+hG
+        yAqK4PzQPFRB/9foRfbCBPfeE8IiK6Q=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-528-wjiXz2gvM8OEcMF2xcNsdQ-1; Thu, 23 Feb 2023 03:41:33 -0500
+X-MC-Unique: wjiXz2gvM8OEcMF2xcNsdQ-1
+Received: by mail-ed1-f69.google.com with SMTP id cf11-20020a0564020b8b00b0049ec3a108beso13745208edb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:41:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SmdTtDQ2mjq0WzUoKIpi/WB/3RUaciUEZ6ilHbrlMPI=;
+        b=fkiFKFijIks18NExs7tblYAUDtz1p/J95yIzyCXQZxGlOlMMNp4XlnMfcGijRsirK1
+         L2zcPDWqZRbcYQdetAN2jPgGrg9ksOmN64rgcKqQWtV2ctOea6GAdCu99Xk9BlZiuMue
+         KEplDwoFlban7VngYhKuVyYEvFLDqy70Hq/H+0Vp18q2FTqPXIm2ROCBzOx9tY3S3C2w
+         SPWl/iuPqRCGjEp8jufqG8c4sHRk9YE6pvL6/ixy/vgFYm9nYX6wxgXFoi2iTnX+F/rJ
+         TWoa5SKaNwH1FOMoLk0ZJZkkVgAQU+jIDN46Y13TpUqgVh51/jjq//Tc8fBasLnCt0ia
+         tNuA==
+X-Gm-Message-State: AO0yUKVJZ75E0QoD9MOFFuYtZZbUIvAGvzn2DPzTE8s3x5i5PgULbvnY
+        t0IwVIAEeAVcOZMk65TFxsKznWSUcEI7EibeOn0g2vFVd3l2vbV/7iqdjcZa6D3/Wc1rcXk0BMl
+        g6Nd3cCZ5LSG3OX2efaPmNO09nZ5xtw==
+X-Received: by 2002:a17:906:5f89:b0:8c3:3439:24d9 with SMTP id a9-20020a1709065f8900b008c3343924d9mr16623938eju.24.1677141691720;
+        Thu, 23 Feb 2023 00:41:31 -0800 (PST)
+X-Google-Smtp-Source: AK7set9bKjW9ItVZ1ldmAq+rxBMd/u+ZhxSimq8PX0SH6U2iyRLZNPPOSSXjU33eVJFsjmgRH9wEKg==
+X-Received: by 2002:a17:906:5f89:b0:8c3:3439:24d9 with SMTP id a9-20020a1709065f8900b008c3343924d9mr16623922eju.24.1677141691427;
+        Thu, 23 Feb 2023 00:41:31 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170906038b00b008e17dc10decsm2754595eja.52.2023.02.23.00.41.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 00:41:30 -0800 (PST)
+Message-ID: <031354f0-be2f-fe59-4ca9-b8196e5e87fa@redhat.com>
+Date:   Thu, 23 Feb 2023 09:41:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
- device node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230222165514.684729-1-suijingfeng@loongson.cn>
- <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
- <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
- <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxX+SBJvdjAIQ5AA--.4780S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGFyDtryUCrWDZF4rCr18AFb_yoWrJFW3pF
-        nxAanrKr40yF17ZryFq348JrnIvFyrAF1DWFsrtw1UJ3sIva12vr4rJr1ruF48ZrW7Za4j
-        vF1rKrWIgF1kAaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4] iio: light: cm32181: Unregister second I2C client if
+ present
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jic23@kernel.org,
+        lars@metafoo.de
+Cc:     Kevin Tsai <ktsai@capellamicro.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230223020059.2013993-1-kai.heng.feng@canonical.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230223020059.2013993-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 2023/2/23 15:58, Krzysztof Kozlowski wrote:
-> On 23/02/2023 04:19, Sui jingfeng wrote:
->> Hi,
->>
->> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
->>> On 22/02/2023 17:55, suijingfeng wrote:
->>>> The display controller is a pci device, it's pci vendor id is
->>>> 0x0014, it's pci device id is 0x7a06.
->>>>
->>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>>> ---
->>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
->>>>    1 file changed, 21 insertions(+)
->>>>
->>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>> index 8143a61111e3..a528af3977d9 100644
->>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>> @@ -31,6 +31,18 @@ memory@200000 {
->>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
->>>>    	};
->>>>    
->>>> +	reserved-memory {
->>>> +		#address-cells = <2>;
->>>> +		#size-cells = <2>;
->>>> +		ranges;
->>>> +
->>>> +		display_reserved: framebuffer@30000000 {
->>>> +			compatible = "shared-dma-pool";
->>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
->>>> +			linux,cma-default;
->>>> +		};
->>>> +	};
->>>> +
->>>>    	cpu_clk: cpu_clk {
->>>>    		#clock-cells = <0>;
->>>>    		compatible = "fixed-clock";
->>>> @@ -198,6 +210,15 @@ sata@8,0 {
->>>>    				interrupt-parent = <&liointc0>;
->>>>    			};
->>>>    
->>>> +			display-controller@6,0 {
->>>> +				compatible = "loongson,ls2k1000-dc";
->>>> +
->>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
->>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
->>>> +				interrupt-parent = <&liointc0>;
->>>> +				memory-region = <&display_reserved>;
->>> NAK.
->> Err :(,  please give me a chance to explain
->>> Test your code against the bindings you send.
->> I can guarantee to you that I test may code more than twice. The code
->> used to testing is listed at link [1].
-> I wrote - test against the bindings. I don't believe that it was tested.
-> Please paste the output of the testing (dtbs_check).
+On 2/23/23 03:00, Kai-Heng Feng wrote:
+> If a second dummy client that talks to the actual I2C address was
+> created in probe(), there should be a proper cleanup on driver and
+> device removal to avoid leakage.
+> 
+> So unregister the dummy client via another callback.
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Fixes: c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices with 2 I2C resources")
+> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-I *do* run the test against the bindings and the test result say nothing.
+Thanks this patch looks good to me now, and you
+already added my Reviewed-by, so from my POV this
+is ready for merging now.
 
-I reset my modify today made, then re-run the test again.
+Regards,
 
-I'm telling the truth: the test result say nothing. I paste the log at 
-below:
+Hans
 
-make -j$(nproc) ARCH=loongarch 
-CROSS_COMPILE=loongarch64-unknown-linux-gnu- dt_binding_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml 
-dtbs_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-
-   DTEX 
-Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dts
-   DTC_CHK 
-Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dtb
-
-
-I remember, if there anything wrong, rob's test robot will complain.
-
-let's wait and witness.
-
->> This patchset  mainly used to illustrate how  we made the driver in [1]
->> usable on our SoC platform.
->>
->>> It's the same
->>> patchset. You basically send something which the same moment is incorrect.
->> Loongson display controller IP has been integrated in both Loongson
->> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
->> and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
->> products.
-> I don't understand how your reply here is relevant to incorrect bindings
-> or incorrect DTS according to bindings.
-
-Ok, now I know that you refer to the bindings.
-
-I'm a newbie at DT bindings, but i will correct all of the problem you 
-mentioned.
-
-It takes a few time, thanks for  your valuable advice.
-
->
-> Best regards,
-> Krzysztof
+> ---
+> v4:
+>  - Remove logging kmalloc failures.
+> 
+> v3:
+>  - Use devm_add_action_or_reset() in a correct place.
+>  - Wording.
+> 
+> v2:
+>  - Use devm_add_action_or_reset() instead of remove() callback to avoid
+>    race.
+> 
+>  drivers/iio/light/cm32181.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+> index b1674a5bfa368..d4a34a3bf00d9 100644
+> --- a/drivers/iio/light/cm32181.c
+> +++ b/drivers/iio/light/cm32181.c
+> @@ -429,6 +429,14 @@ static const struct iio_info cm32181_info = {
+>  	.attrs			= &cm32181_attribute_group,
+>  };
+>  
+> +static void cm32181_unregister_dummy_client(void *data)
+> +{
+> +	struct i2c_client *client = data;
+> +
+> +	/* Unregister the dummy client */
+> +	i2c_unregister_device(client);
+> +}
+> +
+>  static int cm32181_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+> @@ -460,6 +468,10 @@ static int cm32181_probe(struct i2c_client *client)
+>  		client = i2c_acpi_new_device(dev, 1, &board_info);
+>  		if (IS_ERR(client))
+>  			return PTR_ERR(client);
+> +
+> +		ret = devm_add_action_or_reset(dev, cm32181_unregister_dummy_client, client);
+> +		if (ret)
+> +			return ret;
+>  	}
+>  
+>  	cm32181 = iio_priv(indio_dev);
 
