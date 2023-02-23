@@ -2,123 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90126A1010
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C67BB6A1014
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjBWTEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S230424AbjBWTGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBWTEi (ORCPT
+        with ESMTP id S229518AbjBWTGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:04:38 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35F331E24
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:04:36 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id j17so12007281ljq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gX7QhWX8iQivKPSPekH4AH3P6f8FH7Ng/txrWhsq3BI=;
-        b=rryl29Z+VPN0/H7Xx2tRtQhAtWz+1bWdopkxj7YsNgAfMDH6XoykE2VF/qJrPvoQZ4
-         wMaL75cdyFi4FlzTMfr5HMRkv1/WwyvWpShSRUkUqYRxAq6oW4JI38zpKMK5C7QUpCNv
-         j2oLuOYmQU9htXpps+UCrDAEoxMzFD3jSf8RQREUl94z4DqMuPeij1KWClWB60QwDD3w
-         PXFIHhmiwpIpN1oAQqZ8ldYUVsLTO2Yk9gJx5ORzahZ1fHhA+uNrDBk5a4l05PBanIOJ
-         YGlNwKL073WNmbFWhZ7gxtPAG6fdzLEoNaaPHjTzmSS5EyOeGaorKpiFagra5jwCSpnj
-         hY8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gX7QhWX8iQivKPSPekH4AH3P6f8FH7Ng/txrWhsq3BI=;
-        b=lptor8AkdhhcI+5zzAdNugNuzLfjwqqNXQ04Njg9vDOmg3RdDg4TkPfOJ3YV0X4bCk
-         k0rdFLd5F46IDi8ItMTwbN/q5RtvfwY+fnEqhFLp+iI4eCUMzNmtpdMWoWGS0jRMHOJe
-         RlX+xvZ2eLMmXCPgw3LQWv1MulxzLBEHdF6gNnf7dfC4nbx5SGLxzR/geJ6P0Tp1/6Fe
-         oZ5b8E9gcOeEf450j26pVXf9QZ6PTxiLs1Yp0CEMM5A7aIVdfxpJu8xYb88fJY7Tl5Zw
-         u0bhxCToIH+y86cwriZKVa+l/pMCe2bkXR7qXzUHvK323hRnic9DNDjhb2ynNDGqlS+f
-         zTEg==
-X-Gm-Message-State: AO0yUKXyJBjeJToxuFUTiF+agtMGSBGyA4aJRm6XGxRiUf+pynfLZMJ2
-        Wi3tJuGTamLbi3HrhYDSCJLiDs7ZRGz2FEgx76j0Qg==
-X-Google-Smtp-Source: AK7set/5wjxRhOgUKDeWCKEsXZ58YkdXG/NZo9H3PQT6/dkYtyZwIuorwOkoEgM0jcsygHkOtz30w9CMZYXtRMP7b/I=
-X-Received: by 2002:a2e:aa1c:0:b0:293:4ed3:a404 with SMTP id
- bf28-20020a2eaa1c000000b002934ed3a404mr3984302ljb.2.1677179074637; Thu, 23
- Feb 2023 11:04:34 -0800 (PST)
+        Thu, 23 Feb 2023 14:06:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100EF52DE4;
+        Thu, 23 Feb 2023 11:06:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99A97616DE;
+        Thu, 23 Feb 2023 19:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46BBDC433D2;
+        Thu, 23 Feb 2023 19:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677179164;
+        bh=XppVl+0anAeipNeoaerXbgrBjpojEcKUhkLAUcnE1uE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=oRT8O74pTNHQpp23rqc9KuvLMNsX1iIT7PCSAdC88ZyuIMYn3GUMaWVhGWbVl6283
+         Ny3vPGC5st/yninLEDXSKQ+cq9/KwkyCb03e3p8qnLeGkevdAWc327BrvxVi+ecGDU
+         hdR4bX/koQCxiYpBfyMBk+Y1jyNEWVKLgr0ZTKjtFFzsMfTTdrUxlhx4YXwUtn6M/J
+         eblZqx0j/HXbn/PtTVO+byYmaTndjuGAP7Iizv4Q9jW1lLFVTALHK2V8HwVkvOFpS1
+         0Tr29M4EL6faUmknHO6KMJknGhwKiJukPd6v+2ronylL4x6znIKnaiEZ81upAE6mo3
+         x5mO2ukHt2eYQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pabeni@redhat.com, bpf@vger.kernel.org, ast@kernel.org
+Subject: Re: [PULL] Networking for v6.3
+References: <20230221233808.1565509-1-kuba@kernel.org>
+        <CAHk-=wjTMgB0=PQt8synf1MRTfetVXAWWLOibnMKvv1ETn_1uw@mail.gmail.com>
+Date:   Thu, 23 Feb 2023 21:06:00 +0200
+In-Reply-To: <CAHk-=wjTMgB0=PQt8synf1MRTfetVXAWWLOibnMKvv1ETn_1uw@mail.gmail.com>
+        (Linus Torvalds's message of "Thu, 23 Feb 2023 09:21:38 -0800")
+Message-ID: <87pma02odj.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230223005754.2700663-1-axelrasmussen@google.com>
- <20230223005754.2700663-4-axelrasmussen@google.com> <F3D3DA6C-0AEC-4947-9E2F-7A9773296A5D@vmware.com>
-In-Reply-To: <F3D3DA6C-0AEC-4947-9E2F-7A9773296A5D@vmware.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 23 Feb 2023 11:03:58 -0800
-Message-ID: <CAJHvVcj_NKp8wOUL5D2GX61xp0Rvzy6Z8gvL_G=qogsJreiGTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:51 AM Nadav Amit <namit@vmware.com> wrote:
->
->
->
-> > On Feb 22, 2023, at 4:57 PM, Axel Rasmussen <axelrasmussen@google.com> =
-wrote:
-> >
-> > Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
-> > argument. In future commits we plan to plumb the flags through to more
-> > places, so we'd be proliferating the very long argument list even
-> > further.
-> >
-> > Let's take the time to simplify the argument list. Combine the two
-> > arguments into one - and generalize, so when we add more flags in the
-> > future, it doesn't imply more function arguments.
-> >
-> > Since the modes (copy, zeropage, continue) are mutually exclusive, stor=
-e
-> > them as an integer value (0, 1, 2) in the low bits. Place combine-able
-> > flag bits in the high bits.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->
-> Hi Axel,
->
-> I sent a patch a long time ago called =E2=80=9Cuserfaultfd: introduce uff=
-d_flags=E2=80=9D.
-> For some reason it does not appear on lore, but you were a recipient.
->
-> It was pretty similar, but one thing that I preferred in my version is
-> that it defined a different type to avoid confusion. Since =E2=80=9Cflags=
-=E2=80=9D is
-> a very generic name, perhaps you=E2=80=99d like to adapt this approach.
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-Oh! I must have missed it, or just forgot. I'll take a look and see
-about making some improvements. I'll also be sure to credit you in the
-commit message.
-
+> On Tue, Feb 21, 2023 at 3:38 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> --
+>> Networking changes for 6.3.
 >
+> Hmm. I just noticed another issue on my laptop: I get an absolute *flood* of
+>
+>   warning: 'ThreadPoolForeg' uses wireless extensions that are
+> deprecated for modern drivers: use nl80211
+>
+> introduced in commit dc09766c755c ("wifi: wireless: warn on most
+> wireless extension usage").
+>
+> This is on my xps13 with Atheros QCA6174 wireless ("Killer 1435
+> Wireless-AC", PCI ID 168c:003e, subsystem 1a56:143a).
+>
+> And yes, it uses 'pr_warn_ratelimited()', but the ratelimiting is a
+> joke. That means that I "only" get five warnings a second, and then it
+> pauses for a minute or two until it does it again.
+>
+> So that warning needs to go away - it flushed the whole kernel printk
+> buffer in no time.
+
+Ouch, sorry about that. The ratelimiting is really a joke here. We'll
+send a patch tomorrow.
+
+So that we can file a bug report about use of Wireless Extensions, what
+process is ThreadPoolForeg? I did a quick search and it seems to be
+Chromium related, but is it really from Chromium? The warning was
+applied over a month ago, I'm surprised nobody else has reported
+anything. I would expect that there are more Chromium users :)
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
