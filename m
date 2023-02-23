@@ -2,155 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F866A05B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 583E26A0649
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbjBWKK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S233132AbjBWKbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjBWKKv (ORCPT
+        with ESMTP id S232867AbjBWKbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:10:51 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A7B5191F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:35 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bo30so9666285wrb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:35 -0800 (PST)
+        Thu, 23 Feb 2023 05:31:00 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B435E51F9E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:30:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id l1so10001043wry.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:30:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=236jNw2fdr9Ea0T8DRQtB95xL/LfM7SEmL07d5doxEI=;
-        b=ZtE+5wrQI/aif/9mX+GzeECglq+rya2NBAbX4l/F8gOQuxQ64tRpYmvz2K+iPD+iRi
-         FX2kjQlnERR3iD4J9hQcp7FC9vLxwzW9ysOx0CBBhx95BGmlo6YUtmW+nIKJS6vRF5lF
-         v5SAdJrArDyAHgoRSHYNGfg+pkeqyivxvM7gdyOm7raI6+KDI+FWm2TvQ3kseNQ21HAw
-         CyodKqSgbGdbk+hKzXfdQIib2y0x11z83OR/1nECGh27E0nBe3GhE5+nJTgxeXqnwfZ2
-         leYq7e0iCLRZF1skW9jmfOEesbj7G7HXE5SgPzB9zgE8T1sgbFt6WZPvVZ7l0sz8SUGL
-         NxRw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=3/d1V97xfn1urp1yFSAFHB4bA8otMHdcMdq0yddMNFI=;
+        b=hcoIV/z8lyL+ysVNVs6Y6+yJCu00ToOB1RctbNGmzn6TVnVvxY7XobmvDx0cUkA2xQ
+         xfM4zr3AWE+b2Gtowo9aLR8xr2kvlYJfKxP9Itoq39971OTw4jDjtvXuJIaW6qUeofV5
+         EQWm9Hn8VbRrY4wbZjRT+ENuVYy9Veq5SwjN8cFj2tCHTSpNKWogtut2gHDMrwDsU5cZ
+         ZKqDIGyOhckxOd0wsydnj2kidFvup2vNd5mqGZHNZgcLygtgv2+azbCyRnBMohLbAGHA
+         LQxmw22JVxiWV5822JzZZs1rVzyf1J1uIGehZSU3KFmWDRLsvMPcd89e+agLiMmUJ+0h
+         ah3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=236jNw2fdr9Ea0T8DRQtB95xL/LfM7SEmL07d5doxEI=;
-        b=aRUu/cL4oiFl+I3f9VJIF54PBbsYcpHKkwwFWcHyG2i41VGV6O1FW5toiJ5FPA5aPO
-         fwiVs4q0hWk+0C8Q9m+P23+815WFm5Pp0qQn+m6VwJ83Zdv/vdIBrbas579dk2PhmH46
-         HHJaBjtMWsWweax/Mgg6VnTtUlKqLkVKv/kvkGCFlQpZCjZYpPNmNJyFUd6bUlakxBPq
-         TSTXOP3deBw/l6m0+C6F9GQ+XkHRx1UssdlpXjMpPwxGS9OW84ljKyT0JrV8kL8vIySc
-         ayeuqvp+yIWdMQjjVQ3rtl2RYf9YWUlEBDdjnbdGoB6blompXIJq8Z47Ifm/zdldb6eh
-         /SYw==
-X-Gm-Message-State: AO0yUKXH5ZD2E0DAce72p+4rISUXm2CpU+pwDD7Pm4wSQQnJjsVs81aR
-        hG/+96Ucf/oQZieEqRbCoswfqcXFrSLLu7wN
-X-Google-Smtp-Source: AK7set/V8KugWpjfN68Fyoyg3SD+cgyUxwVIdwLNmTr3PEuuNKfYqQ7a5WZX5OBj0FuoZwkno1MZZA==
-X-Received: by 2002:a5d:6284:0:b0:2bd:d34e:5355 with SMTP id k4-20020a5d6284000000b002bdd34e5355mr9395008wru.20.1677147034466;
-        Thu, 23 Feb 2023 02:10:34 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s17-20020a5d4ed1000000b002c4084d3472sm6574836wrv.58.2023.02.23.02.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 02:10:34 -0800 (PST)
-Message-ID: <d76f25ff-3c60-4e9b-87d7-8c4043b2e47f@linaro.org>
-Date:   Thu, 23 Feb 2023 11:10:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/3] clk: starfive: Add StarFive JH7110 PLL clock
- driver
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3/d1V97xfn1urp1yFSAFHB4bA8otMHdcMdq0yddMNFI=;
+        b=wklDvJSiTndaRq9IauUM3Sp6sHk6rU+1cW3q8o5eqxJHROxbEVcVxMUdKfQo5hTc7v
+         5biIRTtMrn7uU5XHfE5HIRTVPHMyq79jWAs3zKVGvG/4HLYTZ/vjG4LNsqD+JQC+pODM
+         UwKY2QU8SWE+IlshVspkdAHxa5JN63ap+Bc/30LF5r2hl3pTWqXyoTHoDrEw7/MISLft
+         g7q2R+3Wq7OreDA/rcsDwZwpjDP4j5cIbvpeKf4oGfu+Vd7qT7MWSD3UoR4x/vZcRsLY
+         rzXPgAT1Uj6+GMV5iJGpOCf/sK6gKXcqZ7khTMo3s+i30vWQUio6CJJnvNBf0zaLzjc/
+         s4Xg==
+X-Gm-Message-State: AO0yUKVr4LIvQFCNKnesfFH/QS+pNxDWyDBPp66oyma7YXk7tjQ4Cj4V
+        sptQpWhpyJl8XA+5yMdLPn3ERw==
+X-Google-Smtp-Source: AK7set/AJ/sQ293L1C/QDJKZNG/kThSW0HregqvGRPQyAGhtGjSWliE7pQlcCpSYC0riIpZo4sB8jQ==
+X-Received: by 2002:a5d:6190:0:b0:2c7:a0b:e8d2 with SMTP id j16-20020a5d6190000000b002c70a0be8d2mr5185559wru.19.1677148226407;
+        Thu, 23 Feb 2023 02:30:26 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id t6-20020a5d4606000000b002c55306f6edsm13119455wrq.54.2023.02.23.02.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 02:30:25 -0800 (PST)
+References: <20230223062723.4770-1-yu.tu@amlogic.com>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
- <20230221141147.303642-3-xingyu.wu@starfivetech.com>
- <3f50066b-f967-b9fa-1e0d-5337ec1ed194@linaro.org>
- <5e4007b7-6522-4c81-ca15-15a98c586aad@starfivetech.com>
- <50b6fb73-afb2-051b-7969-d7fbbe1e6175@linaro.org>
- <f23b3755-e2dd-f858-02ad-3f1b58934bc6@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f23b3755-e2dd-f858-02ad-3f1b58934bc6@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
+Subject: Re: [PATCH] clk: meson: vid-pll-div: added meson_vid_pll_div_ops
+ support to enable vid_pll_div to meet clock setting requirements,
+ especially for late chip
+Date:   Thu, 23 Feb 2023 11:11:29 +0100
+In-reply-to: <20230223062723.4770-1-yu.tu@amlogic.com>
+Message-ID: <1jv8jsoerm.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 11:03, Xingyu Wu wrote:
-> On 2023/2/23 17:35, Krzysztof Kozlowski wrote:
->> On 23/02/2023 10:32, Xingyu Wu wrote:
->>> On 2023/2/23 16:56, Krzysztof Kozlowski wrote:
->>>> On 21/02/2023 15:11, Xingyu Wu wrote:
->>>>> Add driver for the StarFive JH7110 PLL clock controller and
->>>>> modify the JH7110 system clock driver to rely on this PLL clocks.
->>>>>
->>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>> ---
->>>>
->>>>
->>>>> +
->>>>> +static int jh7110_pll_clk_probe(struct platform_device *pdev)
->>>>> +{
->>>>> +	int ret;
->>>>> +	struct of_phandle_args args;
->>>>> +	struct regmap *pll_syscon_regmap;
->>>>> +	unsigned int idx;
->>>>> +	struct jh7110_clk_pll_priv *priv;
->>>>> +	struct jh7110_clk_pll_data *data;
->>>>> +	char *pll_name[JH7110_PLLCLK_END] = {
->>>>> +		"pll0_out",
->>>>> +		"pll1_out",
->>>>> +		"pll2_out"
->>>>> +	};
->>>>> +
->>>>> +	priv = devm_kzalloc(&pdev->dev,
->>>>> +			    struct_size(priv, data, JH7110_PLLCLK_END),
->>>>> +			    GFP_KERNEL);
->>>>> +	if (!priv)
->>>>> +		return -ENOMEM;
->>>>> +
->>>>> +	priv->dev = &pdev->dev;
->>>>> +	ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node, "starfive,sysreg", 0, 0, &args);
->>>>
->>>> 1. Wrong wrapping. Wrap code at 80 as coding style asks.
->>>>
->>>> 2. Why you are using syscon for normal, device MMIO operation? Your DTS
->>>> also points that this is incorrect, hacky representation of hardware.
->>>> Don't add devices to DT to fake places and then overuse syscon to fix
->>>> that fake placement. The clock is in system registers, thus it must be
->>>> there.
->>>>
->>>> 3. Even if this stays, why so complicated code instead of
->>>> syscon_regmap_lookup_by_phandle()?
->>>>
->>>
->>> Thanks for your advice. Will use syscon_regmap_lookup_by_phandle instead it
->>> and remove useless part.
->>
->> So you ignored entirely part 2? This was the main comment... I am going
->> to keep NAK-ing it then.
-> 
-> What I understand to mean is that I cannot use a fake node to operate syscon
-> registers. So I should move the PLL node under syscon node directly. Is it ok?
 
-Yes, because it looks like entire PLL clock control is from the syscon
-node, thus the clocks are there.
+On Thu 23 Feb 2023 at 14:27, Yu Tu <yu.tu@amlogic.com> wrote:
 
-Best regards,
-Krzysztof
+Title is way too long, 75 char max
+
+> The previous chip only provides "ro_ops" for the vid_pll_div clock,
+
+The driver does. Other chip could use RW ops I suppose.
+
+> which is not satisfied with the operation requirements of the later
+> chip for this clock, so the ops that can be set for the clock is added.
+>
+
+What requirements ? What "late" chip ? all this is quite vague.
+
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
+>  drivers/clk/meson/vid-pll-div.c | 59 +++++++++++++++++++++++++++++++++
+>  drivers/clk/meson/vid-pll-div.h |  1 +
+>  2 files changed, 60 insertions(+)
+>
+> diff --git a/drivers/clk/meson/vid-pll-div.c b/drivers/clk/meson/vid-pll-div.c
+> index daff235bc763..e75fa6f75efe 100644
+> --- a/drivers/clk/meson/vid-pll-div.c
+> +++ b/drivers/clk/meson/vid-pll-div.c
+> @@ -89,6 +89,65 @@ static unsigned long meson_vid_pll_div_recalc_rate(struct clk_hw *hw,
+>  	return DIV_ROUND_UP_ULL(parent_rate * div->multiplier, div->divider);
+>  }
+>  
+> +static int meson_vid_pll_div_determine_rate(struct clk_hw *hw,
+> +					    struct clk_rate_request *req)
+> +{
+> +	unsigned long best = 0, now = 0;
+> +	unsigned int i, best_i = 0;
+> +
+> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
+
+It would be nice to actually describe how this vid pll work so we can
+stop using precompute "magic" values and actually use the IP to its full
+capacity.
+
+> +		now = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
+
+This effectively stops rate propagation. That's not how determine_rate()
+call back should work. Have a look a clk-divider.c and how it calls
+clk_hw_round_rate().
+
+> +					    vid_pll_div_table[i].multiplier,
+> +					    vid_pll_div_table[i].divider);
+> +		if (req->rate == now) {
+> +			return 0;
+> +		} else if (abs(now - req->rate) < abs(best - req->rate)) {
+> +			best = now;
+> +			best_i = i;
+> +		}
+> +	}
+> +
+> +	if (best_i < ARRAY_SIZE(vid_pll_div_table))
+> +		req->rate = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
+> +						  vid_pll_div_table[best_i].multiplier,
+> +						  vid_pll_div_table[best_i].divider);
+> +	else
+
+What is the point of this 'if' clause ?
+It looks like the 'else' part is dead code. 
+
+> +		req->rate = meson_vid_pll_div_recalc_rate(hw, req->best_parent_rate);
+> +
+> +	return 0;
+> +}
+> +
+> +static int meson_vid_pll_div_set_rate(struct clk_hw *hw, unsigned long rate,
+> +				      unsigned long parent_rate)
+> +{
+> +	struct clk_regmap *clk = to_clk_regmap(hw);
+> +	struct meson_vid_pll_div_data *pll_div = meson_vid_pll_div_data(clk);
+> +	int i;
+> +
+> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
+> +		if (DIV_ROUND_CLOSEST_ULL(parent_rate * vid_pll_div_table[i].multiplier,
+> +					  vid_pll_div_table[i].divider) == rate) {
+
+This assumes the set_rate() is going to have a perfect match and
+otherwise fail. You should not assume that. Have a look at clk-divider.c
+for examples.
+
+> +			meson_parm_write(clk->map, &pll_div->val, vid_pll_div_table[i].shift_val);
+> +			meson_parm_write(clk->map, &pll_div->sel, vid_pll_div_table[i].shift_sel);
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (i >= ARRAY_SIZE(vid_pll_div_table)) {
+> +		pr_debug("%s: Invalid rate value for vid_pll_div\n", __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +const struct clk_ops meson_vid_pll_div_ops = {
+> +	.recalc_rate	= meson_vid_pll_div_recalc_rate,
+> +	.determine_rate	= meson_vid_pll_div_determine_rate,
+> +	.set_rate	= meson_vid_pll_div_set_rate,
+> +};
+> +EXPORT_SYMBOL_GPL(meson_vid_pll_div_ops);
+> +
+>  const struct clk_ops meson_vid_pll_div_ro_ops = {
+>  	.recalc_rate	= meson_vid_pll_div_recalc_rate,
+>  };
+> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vid-pll-div.h
+> index c0128e33ccf9..3ab729b85fde 100644
+> --- a/drivers/clk/meson/vid-pll-div.h
+> +++ b/drivers/clk/meson/vid-pll-div.h
+> @@ -16,5 +16,6 @@ struct meson_vid_pll_div_data {
+>  };
+>  
+>  extern const struct clk_ops meson_vid_pll_div_ro_ops;
+> +extern const struct clk_ops meson_vid_pll_div_ops;
+>  
+>  #endif /* __MESON_VID_PLL_DIV_H */
+>
+> base-commit: 8a9fbf00acfeeeaac8efab8091bb464bd71b70ea
 
