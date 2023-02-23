@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDCC6A11D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017D56A11D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjBWVS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S229477AbjBWVUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjBWVSy (ORCPT
+        with ESMTP id S229505AbjBWVUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:18:54 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1694218B0A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:18:53 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x10so46441982edd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:18:53 -0800 (PST)
+        Thu, 23 Feb 2023 16:20:05 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009A52F78A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:20:04 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id k17-20020a170902d59100b0019abcf45d75so5376071plh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:20:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5EaUMxUu98mAPL68+dXX7WmuwtBVQHznLgjebwlQ4I=;
-        b=Pl3dZ9xTbzURMJzx/eGGIQXnmfoYM03pN0WhMPpwPgnrLPDyz+genkT2s+ds1BpkV6
-         twgQRI8jT/MQAGxLGHvJ8M2g8/XP/ZqA8moBtTkD1S/r7vQSfaSuRiHAxK/lkLQc1hyl
-         4pyuSAjtf+qu+jr1Ej+LvtHyHtN7af3Z5Hg1Y=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gNgxyf5ZIkce464IQDHHZkijTrv0R2pfEAseu26ip9E=;
+        b=EbhTZGxG3nziz49+s10XnqL/SmZQW6LUzAPCdULgIQtypbd7vDsyBxjHvPYzRUYdgI
+         L1/kb2+rwpfJcekrCwPeXI6n8Hv+my8NJWBc6gBCKQ4fkcb4ZqK1MVJVRZmDTTQpYUm8
+         IJO7fBKPgPdQhGKCMqXQoBz8drTGNkTmuFrm6z5inGGs3g9oswb8EvA1KvWakqcHWjaW
+         vY2R+D8YtYslFlObZQlyrYztXrnbv7Mvaj32eyBxdGKI1IHCWMhdxzIqyvdxT/SMMmBH
+         NZYojQN+BkBOwrxZEC0zvsp+tDun0IvIaX2hLZ2Rv1qwwrnYznRbj8grCIjBQuIK7zA0
+         F/aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o5EaUMxUu98mAPL68+dXX7WmuwtBVQHznLgjebwlQ4I=;
-        b=PpGsn3tZSLLsZObTP0oKiCrwIeBx6AMwCdNqhGmnx0Q+Ayxh+alkwgYwSjjmGNgtXZ
-         q+K/cBiaX/K9YM7f7AjyaCMTXyt2WK1KcdbvdCFO7UWz6dYFScecbe9zTkHqeY4JOJQB
-         OL1mCpkbchxERJlO9FBsnyWroAN0vbjOpY1X4/LqpfxwgJ+W8Hi+4K+9cEDLqTNtsGOO
-         rsl+sdZYiIewgbmU0s4iit4mCKAabD6GDzPp5MEJjOTBl5ZeuMNRy89GSB7wjRlOjR0W
-         dCK0p6naQfh7/X286y+v84egp144taQnMtfctUhzH2YI7DkC7yYBcXT3MbgAwqTbsmP4
-         z5Hw==
-X-Gm-Message-State: AO0yUKVcU/xhxj14dvRxBGX2ndk/PZmHzNK6sl6KIjODM6C23qE5zXwq
-        G+l159/Ir5qfz3AipY1uRav9dqWXZD45KgCvbUxyXg==
-X-Google-Smtp-Source: AK7set//pIpic6Wb8kn185AOWPIUI34sPAlAZA//XbRsW5xTl92otKG7wpWW/o7Py7ZVEM6VIi/sFw==
-X-Received: by 2002:a17:907:a801:b0:8a9:e031:c4ae with SMTP id vo1-20020a170907a80100b008a9e031c4aemr21861998ejc.2.1677187130909;
-        Thu, 23 Feb 2023 13:18:50 -0800 (PST)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id jx14-20020a170907760e00b008cc920469b5sm6313976ejc.18.2023.02.23.13.18.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 13:18:50 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id f13so46706081edz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:18:49 -0800 (PST)
-X-Received: by 2002:a17:906:8508:b0:8d0:2c55:1aa with SMTP id
- i8-20020a170906850800b008d02c5501aamr7232357ejx.0.1677187129340; Thu, 23 Feb
- 2023 13:18:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20230223141542.672463796@linuxfoundation.org> <adc1b0b7-f837-fbb4-332b-4ce18fc55709@roeck-us.net>
- <Y/eVSi4ZTcOmPBTv@kroah.com> <cfd03ee0-b47a-644d-4364-79601025f35f@roeck-us.net>
- <CAHk-=whCG1zudvDsqdFo89pHARvDv4=r6vaZ8GWc_Q9amxBM6Q@mail.gmail.com> <Y/fC3d3RqoeawG0Y@dev-arch.thelio-3990X>
-In-Reply-To: <Y/fC3d3RqoeawG0Y@dev-arch.thelio-3990X>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 23 Feb 2023 13:18:31 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whkNnShBugM01Kzcypkp+f-uHeBWuAgtUiMpiSZuW+QDQ@mail.gmail.com>
-Message-ID: <CAHk-=whkNnShBugM01Kzcypkp+f-uHeBWuAgtUiMpiSZuW+QDQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gNgxyf5ZIkce464IQDHHZkijTrv0R2pfEAseu26ip9E=;
+        b=TAhDbZtHfA9exOklQF2ZozDqOCkBy9LZkndrMHwU/1Jchu1hyTqReWhB6OWfDlMnmU
+         IeQmR6LkayTXwEYYtzafSM1L8BRkFd/xVhPiAeqi+W1f98SJCUKeXggavLdVylrtJvPq
+         VbbKrtQwwJ0mzC6TfSQHM68EbFvD2I0OtLq7V8nKvMXPShlIC4rSWKbUOqGs8h64jVBA
+         ROumM61D+BNfWmFG9/hhlDOYymD/Ny+Oh1FHepdfNQPjMBUYlI6Ytax32Df1rvM2TtmH
+         f7z3t6NWrAJo7H5t+nLs+qKfYWpGvMt5Kf3qcqECW9d1xnCTQn3qzzD2aLwJgZlAP22r
+         VHTA==
+X-Gm-Message-State: AO0yUKU3IGxyZ3tB7wKkaa+TtBMSlsb0cN6E3URrEOwOnyZ99LWqfIon
+        RVjONK6WLsSJfgUedxz/FX1xr1H8YPY=
+X-Google-Smtp-Source: AK7set8dHi3Wk8rAFW1xUD9L5+LI9InhIbHn4QwDSPEAQUaGaVmvY+6bNISvRfmJTHjQc1J6PKpcIeFahkU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1494:b0:234:925b:7d61 with SMTP id
+ js20-20020a17090b149400b00234925b7d61mr824826pjb.9.1677187204400; Thu, 23 Feb
+ 2023 13:20:04 -0800 (PST)
+Date:   Thu, 23 Feb 2023 21:20:02 +0000
+In-Reply-To: <20230223231127.000045e2@gmail.com>
+Mime-Version: 1.0
+References: <20230222162511.7964-1-rdunlap@infradead.org> <Y/ZG8u6/aUtpsVDa@google.com>
+ <27364a82-fa60-1454-e25d-15239905baf3@redhat.com> <20230223231127.000045e2@gmail.com>
+Message-ID: <Y/fYgvfifh5EJcwD@google.com>
+Subject: Re: [PATCH v2] KVM: SVM: hyper-v: placate modpost section mismatch error
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,27 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 11:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> I can send a patch unless you want to take those changes directly, you
-> have half a commit message there already I think :)
+On Thu, Feb 23, 2023, Zhi Wang wrote:
+> On Wed, 22 Feb 2023 19:32:53 +0100
+> Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> Maybe we can use __always_inline? I just noticed this thread today by chance.
 
-Not being one of those old fogeys myself, I don't feel hugely motivated to care.
+Using __always_inline will "fix" the problem, but it's not necessary in this case,
+and in some ways it's less correct.  The noinstr case you linked is different
+because the helpers in question can (and are) be used in noinstr and regular
+sections, i.e. shouldn't be tagged noinstr.  In this case, svm_hv_hardware_setup()
+must be called from __init functions, i.e. doesn't need to be unopinionated.
 
-In fact, I think GNU patch implemented the git patch format extensions
-more than a decade ago, so we might even simply decide that it's past
-time to even worry about this at all.
+And FWIW, svm_hv_hardware_setup() really doesn't need to be inlined.
 
-In fact, with all the base infrastructure supporting git patches, I'm
-not quite sure just _how_ quilt is able to apply patches without
-dealing with mode bits.
-
-Does quilt parse the patches and actively remove those lines before
-applying them? Or does quilt have some actual built-in patch
-application code that doesn't depend on GNU patch?
-
-(Side note: GNU patch may support git patches, but I don't think GNU
-diffutils will generate them, so I guess not all base infrastructure
-supports that fancy new "mode" line)
-
-             Linus
+> https://lore.kernel.org/all/20210624095147.880513802@infradead.org/
+> 
+> > On 2/22/23 17:46, Sean Christopherson wrote:
+> > >    Tag svm_hv_hardware_setup() with __init to fix a modpost warning as the
+> > >    non-stub implementation accesses __initdata (svm_x86_ops), i.e. would
+> > >    generate a use-after-free if svm_hv_hardware_setup() were actually invoked
+> > >    post-init.  The helper is only called from svm_hardware_setup(), which is
+> > >    also __init, i.e. other than the modpost warning, lack of __init is benign.
+> > 
+> > Done.  It's caused by the compiler deciding not to inline the function, 
+> > probably.
+> > 
+> > Also Cc'ed stable.
+> > 
+> > Paolo
+> > 
+> 
