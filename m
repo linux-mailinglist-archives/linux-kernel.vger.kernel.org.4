@@ -2,190 +2,470 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642266A10CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC83D6A10D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBWTsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:48:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S229578AbjBWTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBWTsr (ORCPT
+        with ESMTP id S229481AbjBWTtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:48:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8A2699;
-        Thu, 23 Feb 2023 11:48:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F47861775;
-        Thu, 23 Feb 2023 19:48:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD32C433D2;
-        Thu, 23 Feb 2023 19:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677181720;
-        bh=hDMlJ4mrMn3xHfWUWcjO9FR25t96BbUjPBdSDm11BJw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LHW2fwg5l3mU58E14JJrY2YRQGLFcCnFdi2udgGcLswUpwVqBA8wyDH8c+ZfTByRT
-         qquB6Nm1qoDGNKDBHLtHXfdxu3pmtf4Cx1tC5OYuQgdqIJhwqsYP1OExDeN4Aydgg4
-         TWkvOQcR8/hRPxvriD6Qmij4Cnb4W0q/I6wp54Ac0wRTCKjbtKZxPi3AZ4iDGIj6z1
-         LA0MpXr5Ww/HN/6q/DkfnoFXNFSAcJHBH7U/HkWmtELQNDawaWddenHKOO37Ex2zWz
-         WlIgbthq/3JtuqolC+5LGcaRn1PBAWKZbfblzH/MeyIGIsnrVB9QCphETVuoK819jr
-         FYeGw0nMcHi1w==
-Date:   Thu, 23 Feb 2023 13:48:39 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Elad Nachman <enachman@marvell.com>
-Cc:     thomas.petazzoni@bootlin.com, bhelgaas@google.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] PCI: dwc: support AC5 Legacy PCIe interrupts
-Message-ID: <20230223194839.GA3889231@bhelgaas>
+        Thu, 23 Feb 2023 14:49:11 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21E92699;
+        Thu, 23 Feb 2023 11:49:04 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id ec43so45842988edb.8;
+        Thu, 23 Feb 2023 11:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qzt8yxD7MB84K4NU+FdHUSQig+TVrzn7l2Slui+HDWU=;
+        b=NFZxhAJwbG9c1mm6PENk+YaRTbcAGk7rFmIEguiDAS7zDD+lZcNxg+YF2M5e8rXQCg
+         fBI0RKNRf1MQrBTIDFBuRbKwqGjmeb9MUlvgzTFTh8K5I9gs+zTihlvoNZUZuPi47l0f
+         DYN9upkpGqrPMKVmeAd8aPSGmSNZIalg+AozRJIjWWWIwii552WVhwler6JEatIKsY4R
+         udrTLSXqncSfmS9FhSC4voeN6n+a+69xdtHwipfwWTu03Hqno8l5Hh7fOkLQkwMQ/+S6
+         cgkkq9wEoJ/4JwaV0n4dJiPZN3yCcQ1ViLbmT/7W+H7gcsuV0ksM7OM/A7WP+F5M4ksU
+         Mizg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qzt8yxD7MB84K4NU+FdHUSQig+TVrzn7l2Slui+HDWU=;
+        b=erCtRFkwTjKcgTOlYCSEt0ENclBYCBhQn7lJKz4lqtTfcxvfaDCUaE9eyKDE1QokDb
+         pcIufIDnBmrs7/Fi8VMojUe+Nsy1sNlZp2g1I4apvohKeyFxAO4mkYX7+q4rqMXnx1ht
+         Pksk8qXkMFJkJP2WguRduJZUA7Vqal5yG5bXwnx/zF0NmJml2L/QgY4I1zqiEtJfRHwv
+         V+bn0+590ue1taQl/hMxFJdi9QlRB9O+Ouu4MreEN4uxF44N9sVUc6QX6rLBoaMjHKps
+         xjvwxEq2YBVU4mIMIh5bpVZa8luINZ8tl6Y2GYQ6AqObboJDDkHCdP8YAEZY1/+bbUlg
+         v8Kg==
+X-Gm-Message-State: AO0yUKWqHfQKJ7H4p0TVaoSKqSMRRJjdfqEi8LlumTFx9Hu8h70VebFo
+        tO049BYS5GZXYCZAExkM7j0=
+X-Google-Smtp-Source: AK7set9nzFpd/ej2J6fHpIUzMxxfa3fl0pqc2KHvwsmT47yQbyweX3maz1est/wZCeRedQI1xFoSmw==
+X-Received: by 2002:a17:906:e59:b0:88e:2ff5:85d2 with SMTP id q25-20020a1709060e5900b0088e2ff585d2mr20235437eji.25.1677181743139;
+        Thu, 23 Feb 2023 11:49:03 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id q20-20020a170906771400b008e57b5e0ce9sm2634435ejm.108.2023.02.23.11.49.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 11:49:02 -0800 (PST)
+Message-ID: <7425b6bc-8cfd-4db0-9545-89e2951d2a26@gmail.com>
+Date:   Thu, 23 Feb 2023 20:48:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223180531.15148-6-enachman@marvell.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v4 6/7] ARM: dts: rockchip: replace compatible gpio nodes
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <3eeaa940-9d40-5e33-bc36-c9b0449ded9f@gmail.com>
+Content-Language: en-US
+In-Reply-To: <3eeaa940-9d40-5e33-bc36-c9b0449ded9f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 08:05:29PM +0200, Elad Nachman wrote:
-> From: Elad Nachman <enachman@marvell.com>
-> 
-> Support message emulation of Legacy PCIe interrupts for Marvell AC5/X.
-> These message emulations require writing an additional status register
-> with acknowledge bits.
-> 
-> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> ---
->  drivers/pci/controller/dwc/pcie-armada8k.c | 41 +++++++++++++++-------
->  1 file changed, 28 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-armada8k.c b/drivers/pci/controller/dwc/pcie-armada8k.c
-> index 02481ecadd25..145434c7a9fb 100644
-> --- a/drivers/pci/controller/dwc/pcie-armada8k.c
-> +++ b/drivers/pci/controller/dwc/pcie-armada8k.c
-> @@ -46,7 +46,7 @@ struct armada8k_pcie_of_data {
->  	const struct dw_pcie_ops *pcie_ops;
->  };
->  
-> -#define PCIE_VENDOR_REGS_OFFSET		0x8000	/* in ac5 is 0x10000 */
-> +#define PCIE_VENDOR_REGS_OFFSET		0x8000	/* in ac5 is in another region */
->  
->  #define PCIE_GLOBAL_CONTROL_REG		(PCIE_VENDOR_REGS_OFFSET + 0x0)
->  #define PCIE_APP_LTSSM_EN		BIT(2)
-> @@ -61,6 +61,7 @@ struct armada8k_pcie_of_data {
->  
->  #define PCIE_GLOBAL_INT_CAUSE1_REG	(PCIE_VENDOR_REGS_OFFSET + 0x1C)
->  #define PCIE_GLOBAL_INT_MASK1_REG	(PCIE_VENDOR_REGS_OFFSET + 0x20)
-> +#define PCIE_GLOBAL_INT_CAUSE2_REG	(PCIE_VENDOR_REGS_OFFSET + 0x24)
->  #define PCIE_GLOBAL_INT_MASK2_REG	(PCIE_VENDOR_REGS_OFFSET + 0x28)
->  #define PCIE_INT_A_ASSERT_MASK		BIT(9)
->  #define PCIE_INT_B_ASSERT_MASK		BIT(10)
-> @@ -267,8 +268,14 @@ static irqreturn_t armada8k_pcie_irq_handler(int irq, void *arg)
->  	 */
->  	val = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_CAUSE1_REG);
->  	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_CAUSE1_REG, val);
-> -	if ((PCIE_MSI_MASK_AC5 & val) && (pcie->pcie_type == ARMADA8K_PCIE_TYPE_AC5))
-> -		dw_handle_msi_irq(&pci->pp);
-> +	if (pcie->pcie_type == ARMADA8K_PCIE_TYPE_AC5) {
-> +		if (PCIE_MSI_MASK_AC5 & val)
-> +			dw_handle_msi_irq(&pci->pp);
-> +
-> +		val = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_CAUSE2_REG);
-> +		/* Now clear the second interrupt cause. */
-> +		dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_CAUSE2_REG, val);
-> +	}
->  
->  	return IRQ_HANDLED;
->  }
-> @@ -307,24 +314,29 @@ static int armada8k_add_pcie_port(struct armada8k_pcie *pcie,
->  	return 0;
->  }
->  
-> -static u32 ac5_xlate_dbi_reg(u32 reg)
-> +static void __iomem *ac5_xlate_dbi_reg(struct dw_pcie *pci,
-> +				       void __iomem *base,
-> +				       u32 reg)
->  {
->  	/* Handle AC5 ATU access */
->  	if ((reg & ~0xfffff) == PCIE_ATU_ACCESS_MASK_AC5) {
->  		reg &= 0xfffff;
-> -		/* ATU registers offset is 0xC00 + 0x200 * n,
-> +		/* ATU registers offset is 0xC000 + 0x200 * n,
->  		 * from RFU registers.
->  		 */
-> -		reg = 0xc000 | (0x200 * (reg >> 9)) | (reg & 0xff);
-> +		reg = (0x200 * (reg >> 9)) | (reg & 0xff);
+Currently all Rockchip gpio nodes have the same compatible.
+Compatible strings should be SoC related.
 
-Is this change from 0xC00 to 0xC000 a bug fix?  This purports to only
-add functionality.  A bug fix should be split to its own patch.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ arch/arm/boot/dts/rk3036.dtsi  |  6 +++---
+ arch/arm/boot/dts/rk3066a.dtsi | 12 ++++++------
+ arch/arm/boot/dts/rk3128.dtsi  |  8 ++++----
+ arch/arm/boot/dts/rk3188.dtsi  |  6 +++---
+ arch/arm/boot/dts/rk322x.dtsi  |  8 ++++----
+ arch/arm/boot/dts/rk3288.dtsi  | 18 +++++++++---------
+ arch/arm/boot/dts/rv1108.dtsi  |  8 ++++----
+ arch/arm/boot/dts/rv1126.dtsi  | 10 +++++-----
+ 8 files changed, 38 insertions(+), 38 deletions(-)
 
-The armada8k_pcie_irq_handler() change above looks like it goes with
-the commit log, but all this other stuff looks like separate logical
-changes that should be in separate patches.
+diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
+index ef748dc5d..fc71801bd 100644
+--- a/arch/arm/boot/dts/rk3036.dtsi
++++ b/arch/arm/boot/dts/rk3036.dtsi
+@@ -576,7 +576,7 @@
+ 		ranges;
 
-> +		return pci->atu_base + reg;
->  	} else if ((reg & 0xfffff000) == PCIE_VENDOR_REGS_OFFSET) {
->  		/* PCIe RFU registers in A8K are at offset 0x8000 from base
->  		 * (0xf2600000) while in AC5 offset is 0x10000 from base
-> -		 * (0x800a0000) therefore need the addition of 0x8000.
-> +		 * (0x800a0000) therefore need to be reduced by 0x8000
-> +		 * and rebased from dbi2 base, which is set to the PCIe rfu
-> +		 * base in the AC5 dts:
->  		 */
-> -		reg += PCIE_VENDOR_REGS_OFFSET;
-> +		reg -= PCIE_VENDOR_REGS_OFFSET;
-> +		return pci->dbi_base2 + reg;
->  	}
-> -
-> -	return reg;
-> +	return base + reg;
->  }
->  
->  static u32 ac5_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base,
-> @@ -332,14 +344,14 @@ static u32 ac5_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base,
->  {
->  	u32 val;
->  
-> -	dw_pcie_read(base + ac5_xlate_dbi_reg(reg), size, &val);
-> +	dw_pcie_read(ac5_xlate_dbi_reg(pci, base, reg), size, &val);
->  	return val;
->  }
->  
->  static void ac5_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base,
->  			       u32 reg, size_t size, u32 val)
->  {
-> -	dw_pcie_write(base + ac5_xlate_dbi_reg(reg), size, val);
-> +	dw_pcie_write(ac5_xlate_dbi_reg(pci, base, reg), size, val);
->  }
->  
->  static const struct dw_pcie_ops armada8k_dw_pcie_ops = {
-> @@ -418,7 +430,6 @@ static int armada8k_pcie_probe(struct platform_device *pdev)
->  		ret = PTR_ERR(pci->dbi_base);
->  		goto fail_clkreg;
->  	}
-> -
->  	ret = armada8k_pcie_setup_phys(pcie);
->  	if (ret)
->  		goto fail_clkreg;
-> @@ -429,6 +440,10 @@ static int armada8k_pcie_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto disable_phy;
->  
-> +	/* backwards compatibility with older dts files: */
-> +	if (!pci->dbi_base2)
-> +		pci->dbi_base2 = pci->dbi_base;
-> +
->  	return 0;
->  
->  disable_phy:
-> -- 
-> 2.17.1
-> 
+ 		gpio0: gpio@2007c000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3036-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2007c000 0x100>;
+ 			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO0>;
+@@ -590,7 +590,7 @@
+ 		};
+
+ 		gpio1: gpio@20080000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3036-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20080000 0x100>;
+ 			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -604,7 +604,7 @@
+ 		};
+
+ 		gpio2: gpio@20084000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3036-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20084000 0x100>;
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+diff --git a/arch/arm/boot/dts/rk3066a.dtsi b/arch/arm/boot/dts/rk3066a.dtsi
+index cc20b4214..92f48a9eb 100644
+--- a/arch/arm/boot/dts/rk3066a.dtsi
++++ b/arch/arm/boot/dts/rk3066a.dtsi
+@@ -274,7 +274,7 @@
+ 		ranges;
+
+ 		gpio0: gpio@20034000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20034000 0x100>;
+ 			interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO0>;
+@@ -288,7 +288,7 @@
+ 		};
+
+ 		gpio1: gpio@2003c000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2003c000 0x100>;
+ 			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -302,7 +302,7 @@
+ 		};
+
+ 		gpio2: gpio@2003e000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2003e000 0x100>;
+ 			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+@@ -316,7 +316,7 @@
+ 		};
+
+ 		gpio3: gpio@20080000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20080000 0x100>;
+ 			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>;
+@@ -330,7 +330,7 @@
+ 		};
+
+ 		gpio4: gpio@20084000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20084000 0x100>;
+ 			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO4>;
+@@ -344,7 +344,7 @@
+ 		};
+
+ 		gpio6: gpio@2000a000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2000a000 0x100>;
+ 			interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO6>;
+diff --git a/arch/arm/boot/dts/rk3128.dtsi b/arch/arm/boot/dts/rk3128.dtsi
+index 01c8a6b33..78e43a0b5 100644
+--- a/arch/arm/boot/dts/rk3128.dtsi
++++ b/arch/arm/boot/dts/rk3128.dtsi
+@@ -471,7 +471,7 @@
+ 		ranges;
+
+ 		gpio0: gpio@2007c000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3128-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2007c000 0x100>;
+ 			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO0>;
+@@ -483,7 +483,7 @@
+ 		};
+
+ 		gpio1: gpio@20080000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3128-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20080000 0x100>;
+ 			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -495,7 +495,7 @@
+ 		};
+
+ 		gpio2: gpio@20084000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3128-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20084000 0x100>;
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+@@ -507,7 +507,7 @@
+ 		};
+
+ 		gpio3: gpio@20088000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3128-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20088000 0x100>;
+ 			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>;
+diff --git a/arch/arm/boot/dts/rk3188.dtsi b/arch/arm/boot/dts/rk3188.dtsi
+index 583ba942c..b414eb7ac 100644
+--- a/arch/arm/boot/dts/rk3188.dtsi
++++ b/arch/arm/boot/dts/rk3188.dtsi
+@@ -239,7 +239,7 @@
+ 		};
+
+ 		gpio1: gpio@2003c000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3188-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2003c000 0x100>;
+ 			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -253,7 +253,7 @@
+ 		};
+
+ 		gpio2: gpio@2003e000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3188-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x2003e000 0x100>;
+ 			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+@@ -267,7 +267,7 @@
+ 		};
+
+ 		gpio3: gpio@20080000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3188-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20080000 0x100>;
+ 			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>;
+diff --git a/arch/arm/boot/dts/rk322x.dtsi b/arch/arm/boot/dts/rk322x.dtsi
+index e03203bc1..a1d76e53c 100644
+--- a/arch/arm/boot/dts/rk322x.dtsi
++++ b/arch/arm/boot/dts/rk322x.dtsi
+@@ -949,7 +949,7 @@
+ 		ranges;
+
+ 		gpio0: gpio@11110000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3228-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x11110000 0x100>;
+ 			interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO0>;
+@@ -963,7 +963,7 @@
+ 		};
+
+ 		gpio1: gpio@11120000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3228-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x11120000 0x100>;
+ 			interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -977,7 +977,7 @@
+ 		};
+
+ 		gpio2: gpio@11130000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3228-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x11130000 0x100>;
+ 			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+@@ -991,7 +991,7 @@
+ 		};
+
+ 		gpio3: gpio@11140000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3228-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x11140000 0x100>;
+ 			interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>;
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 937fec4b8..8faf7445b 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -1425,7 +1425,7 @@
+ 		ranges;
+
+ 		gpio0: gpio@ff750000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff750000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO0>;
+@@ -1439,7 +1439,7 @@
+ 		};
+
+ 		gpio1: gpio@ff780000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff780000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -1453,7 +1453,7 @@
+ 		};
+
+ 		gpio2: gpio@ff790000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff790000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+@@ -1467,7 +1467,7 @@
+ 		};
+
+ 		gpio3: gpio@ff7a0000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff7a0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>;
+@@ -1481,7 +1481,7 @@
+ 		};
+
+ 		gpio4: gpio@ff7b0000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff7b0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO4>;
+@@ -1495,7 +1495,7 @@
+ 		};
+
+ 		gpio5: gpio@ff7c0000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff7c0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO5>;
+@@ -1509,7 +1509,7 @@
+ 		};
+
+ 		gpio6: gpio@ff7d0000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff7d0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO6>;
+@@ -1523,7 +1523,7 @@
+ 		};
+
+ 		gpio7: gpio@ff7e0000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff7e0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO7>;
+@@ -1537,7 +1537,7 @@
+ 		};
+
+ 		gpio8: gpio@ff7f0000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rk3288-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x0 0xff7f0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO8>;
+diff --git a/arch/arm/boot/dts/rv1108.dtsi b/arch/arm/boot/dts/rv1108.dtsi
+index 0dca27d09..3db2dbf1b 100644
+--- a/arch/arm/boot/dts/rv1108.dtsi
++++ b/arch/arm/boot/dts/rv1108.dtsi
+@@ -596,7 +596,7 @@
+ 		ranges;
+
+ 		gpio0: gpio@20030000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1108-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x20030000 0x100>;
+ 			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO0_PMU>;
+@@ -610,7 +610,7 @@
+ 		};
+
+ 		gpio1: gpio@10310000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1108-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x10310000 0x100>;
+ 			interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>;
+@@ -624,7 +624,7 @@
+ 		};
+
+ 		gpio2: gpio@10320000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1108-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x10320000 0x100>;
+ 			interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>;
+@@ -638,7 +638,7 @@
+ 		};
+
+ 		gpio3: gpio@10330000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1108-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0x10330000 0x100>;
+ 			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>;
+diff --git a/arch/arm/boot/dts/rv1126.dtsi b/arch/arm/boot/dts/rv1126.dtsi
+index 51e8e1741..0b2d2af87 100644
+--- a/arch/arm/boot/dts/rv1126.dtsi
++++ b/arch/arm/boot/dts/rv1126.dtsi
+@@ -428,7 +428,7 @@
+ 		ranges;
+
+ 		gpio0: gpio@ff460000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1126-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0xff460000 0x100>;
+ 			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&pmucru PCLK_GPIO0>, <&pmucru DBCLK_GPIO0>;
+@@ -440,7 +440,7 @@
+ 		};
+
+ 		gpio1: gpio@ff620000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1126-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0xff620000 0x100>;
+ 			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>, <&cru DBCLK_GPIO1>;
+@@ -452,7 +452,7 @@
+ 		};
+
+ 		gpio2: gpio@ff630000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1126-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0xff630000 0x100>;
+ 			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>, <&cru DBCLK_GPIO2>;
+@@ -464,7 +464,7 @@
+ 		};
+
+ 		gpio3: gpio@ff640000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1126-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0xff640000 0x100>;
+ 			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>, <&cru DBCLK_GPIO3>;
+@@ -476,7 +476,7 @@
+ 		};
+
+ 		gpio4: gpio@ff650000 {
+-			compatible = "rockchip,gpio-bank";
++			compatible = "rockchip,rv1126-gpio-bank", "rockchip,gpio-bank";
+ 			reg = <0xff650000 0x100>;
+ 			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO4>, <&cru DBCLK_GPIO4>;
+--
+2.20.1
+
