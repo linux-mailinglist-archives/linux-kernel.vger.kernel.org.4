@@ -2,299 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350EF6A032D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F37E6A032C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbjBWHHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S233354AbjBWHGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbjBWHHA (ORCPT
+        with ESMTP id S232420AbjBWHG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:07:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C9A2132
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:06:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677135969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j8n/Wv6kU7iSp+dPiMj/81T7Py6OyQC7ue6nMiAoTAs=;
-        b=VndYIuBcnvKZz2UtC4iiDPgcNqh+rm/f3X4qonqQuUCUqY5he1e2gCF2nrtqxioCVcTC8l
-        i4Gyqmmeu+2NeXY1aZICB2ARq2XxkwUblEIfMO/q4xTFSgSq0Ay9gKLZjh+zc/xIENw6pV
-        H4GtGHdLkJRJOEdMMVrJXcQ02ucRPR8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-620-PRDEklYbOVa40yqSj8p_eg-1; Thu, 23 Feb 2023 02:06:08 -0500
-X-MC-Unique: PRDEklYbOVa40yqSj8p_eg-1
-Received: by mail-wm1-f71.google.com with SMTP id j32-20020a05600c1c2000b003e9bdf02c9fso1310806wms.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:06:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j8n/Wv6kU7iSp+dPiMj/81T7Py6OyQC7ue6nMiAoTAs=;
-        b=sdN2Th8Ay9RPAqhgMMmaFn/aeT1p6DMoZ1vOui6JwdPgpC4q+8UffyY20VIhU3ITt0
-         cFSKH2mW8o8SncAveevVfsH4S+K9qn8e8L93uA+/969Zmh1Xb1L6hZ8o7yG5FnV3jLVm
-         AlwPc46zi503DT9a1Kg33mznNOY8nPQbPpfVY7GKUU5ECeJL8QyaNZWae2BbWmKTPzEq
-         0cBX9MQ9BaDzOpu1JqDRayoxqzcUaMaI6ZZW7Cb1QKaWbFUL4XpTAGhS2WYSB5e4Vg+x
-         UmZZ3xFchDDdB+Q3Ihft9Hhl5nQng0Vz9qLyBgAA4KAiZd0LUN0NOVCI+26Ntt8xc+rd
-         CZwQ==
-X-Gm-Message-State: AO0yUKXQk7ObJZAZMrF/EfsM8iP4WGynv2K6ET2KTZS/gmMiu/tkLugr
-        637UOkdEsnYPUm1pm5Oi2rDILk8c0YBpkcOUJEO8HHmjI8eGsnJ4X7PFiylfIijT30RRlCMcfVg
-        4TzWMUuMmPWKIrJUGGIiGLtqx
-X-Received: by 2002:a05:600c:70a:b0:3df:eecc:de2b with SMTP id i10-20020a05600c070a00b003dfeeccde2bmr2662938wmn.11.1677135967119;
-        Wed, 22 Feb 2023 23:06:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set9kWHaMSO72DiFEqLeHQCXNe9kA/HmTOUXVMAe2UhB1KXGu+g3pDG7XYUK9hZYW8K7uthiIbQ==
-X-Received: by 2002:a05:600c:70a:b0:3df:eecc:de2b with SMTP id i10-20020a05600c070a00b003dfeeccde2bmr2662902wmn.11.1677135966702;
-        Wed, 22 Feb 2023 23:06:06 -0800 (PST)
-Received: from redhat.com ([2.52.2.78])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b003e21f20b646sm11912450wmq.21.2023.02.22.23.06.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 23:06:06 -0800 (PST)
-Date:   Thu, 23 Feb 2023 02:05:59 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        almasrymina@google.com, alvaro.karsz@solid-run.com,
-        anders.roxell@linaro.org, bagasdotme@gmail.com,
-        bhelgaas@google.com, colin.i.king@gmail.com,
-        dmitry.fomichev@wdc.com, elic@nvidia.com, eperezma@redhat.com,
-        hch@lst.de, jasowang@redhat.com, kangjie.xu@linux.alibaba.com,
-        leiyang@redhat.com, liming.wu@jaguarmicro.com,
-        lingshan.zhu@intel.com, liubo03@inspur.com, lkft@linaro.org,
-        mie@igel.co.jp, m.szyprowski@samsung.com,
-        ricardo.canuelo@collabora.com, sammler@google.com,
-        sebastien.boeuf@intel.com, sfr@canb.auug.org.au,
-        si-wei.liu@oracle.com, stable@vger.kernel.org, stefanha@gmail.com,
-        suwan.kim027@gmail.com, xuanzhuo@linux.alibaba.com,
-        yangyingliang@huawei.com, zyytlz.wz@163.com
-Subject: Re: [GIT PULL] virtio,vhost,vdpa: features, fixes
-Message-ID: <20230223020356-mutt-send-email-mst@kernel.org>
-References: <20230220194045-mutt-send-email-mst@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Thu, 23 Feb 2023 02:06:28 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20608.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::608])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A5A3AAF;
+        Wed, 22 Feb 2023 23:06:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iaBVVkVmKbIs1YhkIo2Pit1GaQ+/43X5vo/wTD+Yh/PJMTQyekGNERnygshj5B+LOvsQslC2jRPxcXuCHskHcFxs5XjAnciHJiEjQjAVFhDXGxP6pWIallic13cQOIHiNv4usJtGnMCbvzReuJZlkzq6v1nxd+Tc2VIUAXQ6xTf8+kvXQVGxeU5p7DnmDOoLLYlUvTR1q3iafSHxcu254X6OWrXJ2kSF6r+qWmn7HF8nVUVzf/mN4G56kDwfUSaiftfKIH+i/jvucZRTXmXd6wfSoDV7H3ebdS769ssSAvJ7smngC26AutVyTM8b8Jhvv6S74j0E2hVyMkBwvaDn/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=12hp1L0CE5xXc/fbwY6OdlqjOQE8NxQBiHNdhdTm8RY=;
+ b=g6ZI7qY9z5OqldCzeqtiefoRpFas8REW28yx/q5JbF/1URMZRf/4373Ajgl0d04PRNkZM1qGiJXosE1aZDPCltm465E/2ueIRmFyTgdNDiJXgfx17n/0ejed3vBBQ0PqSykStb+iiNsr1d8SUAlh3cUQAQFc300RaHs9L5tRSZDDBKELNWjovXf36sfjzUcbB7z4HvM05eFfgmpdmOuTAvxR01PFYbrLVJu/OyaTVoXK/2MDxeAkXhlqwbytTpjT9dT1+s9ZmHvUR5MiRUNViy0k8wDEIgl3XNe26IaKhQO7L+jgXlsBYvhDeVAB5nG5B2RGzufPym/QIAuzHDFMWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=12hp1L0CE5xXc/fbwY6OdlqjOQE8NxQBiHNdhdTm8RY=;
+ b=26w41dGRXRwS+oJrSryf0kurwbOPlFL8CvbebtJXiD7y1YWUuE0Cr9PG2S10vbT436yMbct5knDnnUzNrPdDpRxoiirs+yqiTO9vwb82EILKzBOX3IpR9hjENpA2/GpwkbhkNDLnhI4IcSBUwmH+actyWDuSn+rnJ83RS9J77ps=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by IA1PR12MB6113.namprd12.prod.outlook.com (2603:10b6:208:3eb::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
+ 2023 07:06:21 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
+ 07:06:19 +0000
+Message-ID: <7780a9b9-d6bd-6f3f-9c31-aafacb09db1f@amd.com>
+Date:   Thu, 23 Feb 2023 08:06:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 05/16] drm: manager to keep track of GPUs VA
+ mappings
+Content-Language: en-US
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+        jason@jlekstrand.net, linux-doc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Dave Airlie <airlied@redhat.com>
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-6-dakr@redhat.com>
+ <70ba382f-1559-289a-4922-ca9c371aaf59@amd.com>
+ <cc8eeaf4-31e7-98e4-a712-012fc604e985@redhat.com>
+ <29ea3705-5634-c204-c1da-d356b6dfbafc@amd.com>
+ <83755119-083d-7d66-fca0-ca306c841d9c@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <83755119-083d-7d66-fca0-ca306c841d9c@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230220194045-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0016.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::26) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|IA1PR12MB6113:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6afd23c3-edc4-434e-7e13-08db156c76b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hRzwlwtWXdobZWGkDUSjCk6sfYkX/LQBRC+lTwxTLbvvOTqf24cuZavVHGJbEJ2XCVx3OM0JSpH3aPw8IK1g5P37AZGW/Xblbz6ohxK+aC6VHEcs0nPPCW62VU6P2yNp9AmdbrpFmGsqm0rZwCD3PqbfG6rhsYKksEklPXb3H4DkmCUL+WmmsBZopvUySrDDwVfH0zR+pipZuP+yp62TT3cZs0iWw0N5i3V1SWdUm8FbAo3be7PF4B3H2UQPZAeM1XoTQCjgDKkjWhFTPjqL70QMya00FrvRGHOw8lat9UAUgnLBdsscuz/PrZJS03U6yHiNbmtdFfqqaqPsRzODIDBSjzj5Cm0LYudXzKK/nuiZOR9RsX+g/uHmO8BEjW682mqS7cnJCi3ytaUglrn3ECv4uPqEAkb531In232GLPeuLmXPFX4e+ZU5AXNMxN3k990/eNYuky6XbuPEmJEvSiEYncdKPlpR17xvePcgglSnuNSCS+rzZwoXlBalK2uX0mO51pT4mCkC8LFgj4R5FRRZrIuJtyZIFLvdv/88DzwRLro6Wow82Txthl+AKmlWY1eXgVvvzG0CJDrfiT/ERhHZzdssOfYMe4tw5LNBoJ5sx93Wqj35CuhqLFqadiEdjNe/gPR8YPql6XZByKI+X98baQPdYJZxryE687av0jxk1mMd8AT6Ou6Ng5Ivssv2yKNeIthmo8c7PlTjujp//ryqk+7gXYcUVWUNAX/UWLA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199018)(36756003)(83380400001)(66574015)(6506007)(6512007)(53546011)(6486002)(26005)(186003)(478600001)(4326008)(86362001)(2616005)(41300700001)(66556008)(31696002)(8676002)(66946007)(66476007)(6916009)(8936002)(2906002)(5660300002)(38100700002)(6666004)(7416002)(316002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aExpRFdXVUkrMlRIV2x5MzhBaU9Ob2kxU1orM2ZXN1RvUTU3a2ZqdHV2aFNF?=
+ =?utf-8?B?T1FXOWFWU2RwUVNoZ25wV0J5c0RwU0x5VCtJQUg3MU52M2dLNUFJNW5hRHha?=
+ =?utf-8?B?WTE0Q281aWdCTktjQnFpVmdhZ3NLVTBMY3JGMjltb01CMjBMV1ZsU0hEeC9V?=
+ =?utf-8?B?dnQvTVFLbFpHaXhNZ0dLTXMrZWlXVmxXNy82QnQwR01LWHY0NnpVNzZoWUJI?=
+ =?utf-8?B?dkNtZ0pWVUJ5UGZVcTRRSkR0TXhoQWdBRzdsU0ZiY0F5MG1iSWVhS2UyUlFP?=
+ =?utf-8?B?RGJrakpOYTJpU3ZLSDFvUStkcGk3WnVucjJXK0V0VTVWejN4ZjhtUDlCdDhQ?=
+ =?utf-8?B?MjlXZmxlMXJaSE5KYmVpT0t3azJ4MS95VlQzR3luaURhWjBNSElXaUkzVVdJ?=
+ =?utf-8?B?STd0emRiaEJINjF6VThmQjRWRXF6T0JSNlk2NGJkVTJ4ZlR6T0k0SFhnYkR1?=
+ =?utf-8?B?aXA1V0ExSHNmN29pNjg3L1FCTkthcTdxYkx1VVpxeC9MU09nY3dMd2srMjk5?=
+ =?utf-8?B?ai9lbU9XNjJBTjdwYVFIWFIzMFZYWktFNzJlcml4UUxpMnVRUTZ1VlQxaTEz?=
+ =?utf-8?B?ZFJGT1pyUGtOOGdENTduS3NjekVMOUx3bm53L2IxeDRhRUJocFVncjd4bURC?=
+ =?utf-8?B?SUE5Qmc2WTZkL29icDZra1BsRk90a0ZWNDBnWnBkMlNERkdRckdZNm5GalI0?=
+ =?utf-8?B?ek9zV2VyMUR1NjJWa0pOSlczbVd4bUlZT055Q3E1dXpySHA2S1o4SnpkYlRH?=
+ =?utf-8?B?dkltYnFURjQzYzhSamUvYlM4dVZBV2lJZSs3dWlnVkJ2UzhpZDIrdDFISXRD?=
+ =?utf-8?B?bU0zWHhKMUhkWW1IMkxWOThYb2FVYUk4eCtjSGZaZXByK3BIU00zNjltdThv?=
+ =?utf-8?B?Z0dQZC9jS3FsUUxQOFJKTE9ZclRzRGp4Y21xNXExY1U0aG80dW9jMHVsK0li?=
+ =?utf-8?B?NWxZTC9vcnYzSnRqSXYvaDZTTkdnOGlvNTRhVVY0N2dQWGd5WlkwanNKWnQ5?=
+ =?utf-8?B?YytWNUI3bnVhUUlTV01kMlV5Y0lKUm43Z1Z4L3RVOVRYblJBemV6b2lnY1J5?=
+ =?utf-8?B?WkswaDhwbDZGdkxDdzQ0aW12QWxwTkJ1T1ZZZGpwSDBDendDVEd6L3dvK2ND?=
+ =?utf-8?B?cDBLK2IzdEllWW5jeUxqd1lMWUdTVlNwYTU4enFTSkU5cVpUbnVBZzhaYlYr?=
+ =?utf-8?B?RFVUZGpsckh3THJPdkp5Vmc3WU9pUFpCZmlQSVJOdWhJNmd6cDhqV2pRdzIv?=
+ =?utf-8?B?cTAxMlZ3bEs0WFRoZU50R0Uwb0FlODZCZnZSeGJaRi9RNGlxMXNmSWE5N0cv?=
+ =?utf-8?B?bVVxbmpUd0loSDM3VTJHR3hMRmMrK2tlTlRTQzJBRzMySEp2QVBsakNjUTR6?=
+ =?utf-8?B?eXUwSXgvZWVTbHpTelFOT1VmZjRBTUp0OWt6RUpsd3lTT0dXNlplU3hDZGM1?=
+ =?utf-8?B?ampsTFRXK0p2UWpwamFDMnlNUVRrSXZzTzdySEtSOFE0ZWRYRkIrTkpEdkxJ?=
+ =?utf-8?B?TGpHV2VCaHl1b2lRY250eTdaSU5SblVhNUR2bHBEVXdneTJQWFN2emh3SUZP?=
+ =?utf-8?B?My9QbTNnT3JOTzZJZU9EbktlbHJ3K2daTkFFOWJtdDZZdFNQWWNmOWprb3Ev?=
+ =?utf-8?B?LzFIajhkZVRJTU83Smw5VzFkUGFXV1RDQ3h0aEJqRnBNa053cEtTZlVLd2FE?=
+ =?utf-8?B?K2xSUk1ZQjVrZlJXWVg2UmdqdVRyNUR2UUsyc1E5anpnNE1LWmpydk1pU2h6?=
+ =?utf-8?B?T2xLN3VvcGszL1RKWlZ0bWZEcmY5SDZXTm5YN3cyM0FtdTd1N2d3cjNxL1hl?=
+ =?utf-8?B?c3ZIMXlYV0UxTlRjcjB4SGJ3Ym1qNVV2b0dyTk9ValJFSUo0NGNpWnp6cTda?=
+ =?utf-8?B?Q2QvbXVHRERxVmxKUDJtRG00eGZod1djUlpZUFdvdDBKRi9VZWQ3YU5adCtP?=
+ =?utf-8?B?OFYxdDB2Yjl3K3plU0RHOE1Md1JqRHZBUmk0TnM4b2xkM0locFZ1Kzd4dksz?=
+ =?utf-8?B?ZHA5T3FtSEVTSHpTb0hTQjZtV0RFeTlENWRMN3h6SnIydHRKOEw5MHgrOVUv?=
+ =?utf-8?B?OXEybS9GRDlsM2szbVhZNXNMakJYRytJbHM1NUpPVU1UNUVpMmhXVExKUkM2?=
+ =?utf-8?Q?HSIYvlWNbja73LoT7X3bXZlya?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6afd23c3-edc4-434e-7e13-08db156c76b6
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 07:06:19.6942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F6px0+NpN9VG5b6rvdqS2zHy1+TU3vzyCPcH0f8t7OuZ7PP4ktrpeb9XbyVOU/+j
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6113
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Am 22.02.23 um 17:40 schrieb Danilo Krummrich:
+> On 2/22/23 16:14, Christian KÃ¶nig wrote:
+>> Am 22.02.23 um 16:07 schrieb Danilo Krummrich:
+>>> On 2/22/23 11:25, Christian KÃ¶nig wrote:
+>>>> Am 17.02.23 um 14:44 schrieb Danilo Krummrich:
+>>>
+>>> <snip>
+>>>
+>>>>> +/**
+>>>>> + * DOC: Overview
+>>>>> + *
+>>>>> + * The DRM GPU VA Manager, represented by struct 
+>>>>> drm_gpuva_manager keeps track
+>>>>> + * of a GPU's virtual address (VA) space and manages the 
+>>>>> corresponding virtual
+>>>>> + * mappings represented by &drm_gpuva objects. It also keeps 
+>>>>> track of the
+>>>>> + * mapping's backing &drm_gem_object buffers.
+>>>>> + *
+>>>>> + * &drm_gem_object buffers maintain a list (and a corresponding 
+>>>>> list lock) of
+>>>>> + * &drm_gpuva objects representing all existent GPU VA mappings 
+>>>>> using this
+>>>>> + * &drm_gem_object as backing buffer.
+>>>>> + *
+>>>>> + * If the &DRM_GPUVA_MANAGER_REGIONS feature is enabled, a GPU VA 
+>>>>> mapping can
+>>>>> + * only be created within a previously allocated 
+>>>>> &drm_gpuva_region, which
+>>>>> + * represents a reserved portion of the GPU VA space. GPU VA 
+>>>>> mappings are not
+>>>>> + * allowed to span over a &drm_gpuva_region's boundary.
+>>>>> + *
+>>>>> + * GPU VA regions can also be flagged as sparse, which allows 
+>>>>> drivers to create
+>>>>> + * sparse mappings for a whole GPU VA region in order to support 
+>>>>> Vulkan
+>>>>> + * 'Sparse Resources'.
+>>>>
+>>>> Well since we have now found that there is absolutely no technical 
+>>>> reason for having those regions could we please drop them?
+>>>
+>>> I disagree this was the outcome of our previous discussion.
+>>>
+>>> In nouveau I still need them to track the separate sparse page 
+>>> tables and, as you confirmed previously, Nvidia cards are not the 
+>>> only cards supporting this feature.
+>>>
+>>> The second reason is that with regions we can avoid merging between 
+>>> buffers, which saves some effort. However, I agree that this 
+>>> argument by itself probably doesn't hold too much, since you've 
+>>> pointed out in a previous mail that:
+>>>
+>>> <cite>
+>>> 1) If we merge and decide to only do that inside certain boundaries 
+>>> then those boundaries needs to be provided and checked against. This 
+>>> burns quite some CPU cycles
+>>>
+>>> 2) If we just merge what we can we might have extra page table 
+>>> updates which cost time and could result in undesired side effects.
+>>>
+>>> 3) If we don't merge at all we have additional housekeeping for the 
+>>> mappings and maybe hw restrictions.
+>>> </cite>
+>>>
+>>> However, if a driver uses regions to track its separate sparse page 
+>>> tables anyway it gets 1) for free, which is a nice synergy.
+>>>
+>>> I totally agree that regions aren't for everyone though. Hence, I 
+>>> made them an optional feature and by default regions are disabled. 
+>>> In order to use them drm_gpuva_manager_init() must be called with 
+>>> the DRM_GPUVA_MANAGER_REGIONS feature flag.
+>>>
+>>> I really would not want to open code regions or have two GPUVA 
+>>> manager instances in nouveau to track sparse page tables. That would 
+>>> be really messy, hence I hope we can agree on this to be an optional 
+>>> feature.
+>>
+>> I absolutely don't think that this is a good idea then. This separate 
+>> handling of sparse page tables is completely Nouveau specific.
+>
+> Actually, I rely on what you said in a previous mail when I say it's, 
+> potentially, not specific to nouveau.
+>
+> <cite>
+> This sounds similar to what AMD hw used to have up until gfx8 (I 
+> think), basically sparse resources where defined through a separate 
+> mechanism to the address resolution of the page tables. I won't rule 
+> out that other hardware has similar approaches.
+> </cite>
 
-On Mon, Feb 20, 2023 at 07:40:52PM -0500, Michael S. Tsirkin wrote:
-> The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
-> 
->   Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-> 
-> for you to fetch changes up to deeacf35c922da579637f5db625af20baafc66ed:
-> 
->   vdpa/mlx5: support device features provisioning (2023-02-20 19:27:00 -0500)
-> 
-> Note: dropped a patch close to the bottom of the stack at the last
-> minute so the commits differ but all of these have been in next already.
-> The dropped patch just added a new query ioctl so not interacting with
-> anything else in the pull.
-> 
-> ----------------------------------------------------------------
-> virtio,vhost,vdpa: features, fixes
-> 
-> device feature provisioning in ifcvf, mlx5
-> new SolidNET driver
-> support for zoned block device in virtio blk
-> numa support in virtio pmem
-> VIRTIO_F_RING_RESET support in vhost-net
-> more debugfs entries in mlx5
-> resume support in vdpa
-> completion batching in virtio blk
-> cleanup of dma api use in vdpa
-> now simulating more features in vdpa-sim
-> documentation, features, fixes all over the place
-> 
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> 
-> ----------------------------------------------------------------
+Ok, sounds like I didn't made my point here clear: AMD does have that 
+same mechanism for older hw you try to implement here for Nouveau, but 
+we have *abandoned* it because it is to much trouble and especially 
+overhead to support! In other words we have said "Ok we would need two 
+separate components to cleanly handle that, one for newer hw and one for 
+older hw.".
 
+What you now try to do is to write one component which works for both. 
+We have already exercised this idea and came to the conclusion that it's 
+not a good path to go down. So you're basically just repeating our mistake.
 
-Did I muck this one up?  Pls let me know and maybe I can fix it up
-before the merge window closes.
+I mean if it's just for Nouveau then I would say feel free to do 
+whatever you want, but since this component is supposed to be used by 
+more drivers then I strongly think we need to tackle this from a 
+different side.
 
-Thanks!
+>> Even when it's optional feature mixing this into the common handling 
+>> is exactly what I pointed out as not properly separating between 
+>> hardware specific and hardware agnostic functionality.
+>
+> Optionally having regions is *not* a hardware specific concept, 
+> drivers might use it for a hardware specific purpose though. Which 
+> potentially is is the case for almost every DRM helper.
+>
+> Drivers can use regions only for the sake of not merging between 
+> buffer boundaries as well. Some drivers might prefer this over "never 
+> merge" or "always merge", depending on the cost of re-organizing page 
+> tables for unnecessary splits/merges, without having the need of 
+> tracking separate sparse page tables.
+>
+> Its just that I think *if* a driver needs to track separate sparse 
+> page tables anyways its a nice synergy since then there is no extra 
+> cost for getting this optimization.
 
+Well exactly that's the point: I really don't believe that this comes 
+without extra costs.
 
-> Alvaro Karsz (4):
->       PCI: Add SolidRun vendor ID
->       PCI: Avoid FLR for SolidRun SNET DPU rev 1
->       virtio: vdpa: new SolidNET DPU driver.
->       vhost-vdpa: print warning when vhost_vdpa_alloc_domain fails
-> 
-> Bagas Sanjaya (3):
->       docs: driver-api: virtio: parenthesize external reference targets
->       docs: driver-api: virtio: slightly reword virtqueues allocation paragraph
->       docs: driver-api: virtio: commentize spec version checking
-> 
-> Bo Liu (1):
->       vhost-scsi: convert sysfs snprintf and sprintf to sysfs_emit
-> 
-> Colin Ian King (1):
->       vdpa: Fix a couple of spelling mistakes in some messages
-> 
-> Dmitry Fomichev (1):
->       virtio-blk: add support for zoned block devices
-> 
-> Eli Cohen (6):
->       vdpa/mlx5: Move some definitions to a new header file
->       vdpa/mlx5: Add debugfs subtree
->       vdpa/mlx5: Add RX counters to debugfs
->       vdpa/mlx5: Directly assign memory key
->       vdpa/mlx5: Don't clear mr struct on destroy MR
->       vdpa/mlx5: Initialize CVQ iotlb spinlock
-> 
-> Eugenio Pérez (2):
->       vdpa_sim: not reset state in vdpasim_queue_ready
->       vdpa_sim_net: Offer VIRTIO_NET_F_STATUS
-> 
-> Jason Wang (11):
->       vdpa_sim: use weak barriers
->       vdpa_sim: switch to use __vdpa_alloc_device()
->       vdpasim: customize allocation size
->       vdpa_sim: support vendor statistics
->       vdpa_sim_net: vendor satistics
->       vdpa_sim: get rid of DMA ops
->       virtio_ring: per virtqueue dma device
->       vdpa: introduce get_vq_dma_device()
->       virtio-vdpa: support per vq dma device
->       vdpa: set dma mask for vDPA device
->       vdpa: mlx5: support per virtqueue dma device
-> 
-> Kangjie Xu (1):
->       vhost-net: support VIRTIO_F_RING_RESET
-> 
-> Liming Wu (2):
->       vhost-test: remove meaningless debug info
->       vhost: remove unused paramete
-> 
-> Michael S. Tsirkin (3):
->       virtio_blk: temporary variable type tweak
->       virtio_blk: zone append in header type tweak
->       virtio_blk: mark all zone fields LE
-> 
-> Michael Sammler (1):
->       virtio_pmem: populate numa information
-> 
-> Ricardo Cañuelo (1):
->       docs: driver-api: virtio: virtio on Linux
-> 
-> Sebastien Boeuf (4):
->       vdpa: Add resume operation
->       vhost-vdpa: Introduce RESUME backend feature bit
->       vhost-vdpa: uAPI to resume the device
->       vdpa_sim: Implement resume vdpa op
-> 
-> Shunsuke Mie (2):
->       vringh: fix a typo in comments for vringh_kiov
->       tools/virtio: enable to build with retpoline
-> 
-> Si-Wei Liu (6):
->       vdpa: fix improper error message when adding vdpa dev
->       vdpa: conditionally read STATUS in config space
->       vdpa: validate provisioned device features against specified attribute
->       vdpa: validate device feature provisioning against supported class
->       vdpa/mlx5: make MTU/STATUS presence conditional on feature bits
->       vdpa/mlx5: support device features provisioning
-> 
-> Suwan Kim (2):
->       virtio-blk: set req->state to MQ_RQ_COMPLETE after polling I/O is finished
->       virtio-blk: support completion batching for the IRQ path
-> 
-> Zheng Wang (1):
->       scsi: virtio_scsi: fix handling of kmalloc failure
-> 
-> Zhu Lingshan (12):
->       vDPA/ifcvf: decouple hw features manipulators from the adapter
->       vDPA/ifcvf: decouple config space ops from the adapter
->       vDPA/ifcvf: alloc the mgmt_dev before the adapter
->       vDPA/ifcvf: decouple vq IRQ releasers from the adapter
->       vDPA/ifcvf: decouple config IRQ releaser from the adapter
->       vDPA/ifcvf: decouple vq irq requester from the adapter
->       vDPA/ifcvf: decouple config/dev IRQ requester and vectors allocator from the adapter
->       vDPA/ifcvf: ifcvf_request_irq works on ifcvf_hw
->       vDPA/ifcvf: manage ifcvf_hw in the mgmt_dev
->       vDPA/ifcvf: allocate the adapter in dev_add()
->       vDPA/ifcvf: retire ifcvf_private_to_vf
->       vDPA/ifcvf: implement features provisioning
-> 
->  Documentation/driver-api/index.rst                 |    1 +
->  Documentation/driver-api/virtio/index.rst          |   11 +
->  Documentation/driver-api/virtio/virtio.rst         |  145 +++
->  .../driver-api/virtio/writing_virtio_drivers.rst   |  197 ++++
->  MAINTAINERS                                        |    5 +
->  drivers/block/virtio_blk.c                         |  468 ++++++++-
->  drivers/nvdimm/virtio_pmem.c                       |   11 +-
->  drivers/pci/quirks.c                               |    8 +
->  drivers/scsi/virtio_scsi.c                         |   14 +-
->  drivers/vdpa/Kconfig                               |   30 +
->  drivers/vdpa/Makefile                              |    1 +
->  drivers/vdpa/ifcvf/ifcvf_base.c                    |   32 +-
->  drivers/vdpa/ifcvf/ifcvf_base.h                    |   10 +-
->  drivers/vdpa/ifcvf/ifcvf_main.c                    |  162 ++-
->  drivers/vdpa/mlx5/Makefile                         |    2 +-
->  drivers/vdpa/mlx5/core/mr.c                        |    1 -
->  drivers/vdpa/mlx5/core/resources.c                 |    3 +-
->  drivers/vdpa/mlx5/net/debug.c                      |  152 +++
->  drivers/vdpa/mlx5/net/mlx5_vnet.c                  |  261 +++--
->  drivers/vdpa/mlx5/net/mlx5_vnet.h                  |   94 ++
->  drivers/vdpa/solidrun/Makefile                     |    6 +
->  drivers/vdpa/solidrun/snet_hwmon.c                 |  188 ++++
->  drivers/vdpa/solidrun/snet_main.c                  | 1111 ++++++++++++++++++++
->  drivers/vdpa/solidrun/snet_vdpa.h                  |  194 ++++
->  drivers/vdpa/vdpa.c                                |  110 +-
->  drivers/vdpa/vdpa_sim/vdpa_sim.c                   |  233 ++--
->  drivers/vdpa/vdpa_sim/vdpa_sim.h                   |    7 +-
->  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c               |    1 +
->  drivers/vdpa/vdpa_sim/vdpa_sim_net.c               |  219 +++-
->  drivers/vhost/net.c                                |    5 +-
->  drivers/vhost/scsi.c                               |    6 +-
->  drivers/vhost/test.c                               |    3 -
->  drivers/vhost/vdpa.c                               |   39 +-
->  drivers/vhost/vhost.c                              |    2 +-
->  drivers/vhost/vhost.h                              |    2 +-
->  drivers/vhost/vsock.c                              |    2 +-
->  drivers/virtio/virtio_ring.c                       |  133 ++-
->  drivers/virtio/virtio_vdpa.c                       |   13 +-
->  include/linux/pci_ids.h                            |    2 +
->  include/linux/vdpa.h                               |   12 +-
->  include/linux/virtio_config.h                      |    8 +-
->  include/linux/virtio_ring.h                        |   16 +
->  include/linux/vringh.h                             |    2 +-
->  include/uapi/linux/vhost.h                         |    8 +
->  include/uapi/linux/vhost_types.h                   |    2 +
->  include/uapi/linux/virtio_blk.h                    |  105 ++
->  tools/virtio/Makefile                              |    2 +-
->  47 files changed, 3536 insertions(+), 503 deletions(-)
->  create mode 100644 Documentation/driver-api/virtio/index.rst
->  create mode 100644 Documentation/driver-api/virtio/virtio.rst
->  create mode 100644 Documentation/driver-api/virtio/writing_virtio_drivers.rst
->  create mode 100644 drivers/vdpa/mlx5/net/debug.c
->  create mode 100644 drivers/vdpa/mlx5/net/mlx5_vnet.h
->  create mode 100644 drivers/vdpa/solidrun/Makefile
->  create mode 100644 drivers/vdpa/solidrun/snet_hwmon.c
->  create mode 100644 drivers/vdpa/solidrun/snet_main.c
->  create mode 100644 drivers/vdpa/solidrun/snet_vdpa.h
+What we could maybe do is to have an two separate functions, one for 
+updating the data structures and one for merging. When you now call the 
+merging function with a limit you don't get mappings merged over that 
+limit and if you don't call the merging function at all you don't get 
+merges.
+
+But we should have definitely not have the tracking of the ranges inside 
+the common component. This is something separated.
+
+>> This is exactly the problem we ran into with TTM as well and I've 
+>> spend a massive amount of time to clean that up again. >
+>
+> Admittedly, I don't know what problems you are referring to. However, 
+> I don't see which kind of trouble it could cause by allowing drivers 
+> to track regions optionally.
+
+Take a look at my 2020 presentation about TTM on FOSDEM.
+
+Regards,
+Christian.
+
+>
+>> Regards,
+>> Christian.
+>>
+>>>
+>>>>
+>>>> I don't really see a need for them any more.
+>>>>
+>>>> Regards,
+>>>> Christian.
+>>>>
+>>>
+>>
+>
 
