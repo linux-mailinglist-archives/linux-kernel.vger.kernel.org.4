@@ -2,276 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B5D6A13EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 00:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0136A13F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 00:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjBWXoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 18:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S229619AbjBWXqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 18:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBWXoe (ORCPT
+        with ESMTP id S229446AbjBWXq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 18:44:34 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A6D1557A;
-        Thu, 23 Feb 2023 15:44:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677195873; x=1708731873;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=lXhvd3Wmt7gptkKe8EFcee5uM2la3riwwUv/+l5C8T0=;
-  b=nypDNmoxfdpZwWx/6I0k4bJ3Ief22dk95OYEdG7rVcEar7GRfEVzISnv
-   jbrvIP7u8hPD8ifMaG+lf8BizFAkPJ2f+es5ioEYXCCB8vm4qzEKMxEO4
-   hZ6ZO8TTurhFPAzac6kb1yzoyrzZWVFv1IxbjwFUCBvOxMFAHaqJf60/d
-   PEcdq8n82ozUzl2fNUBquAAQgA+4FZwYgTfCWRIiO+Hfy8zcFlxqxes2x
-   +HCWJ5/f5zI09QOhAij+kR8RUetquZ2wVqK8UDr0DHHjkirsEA2OdowTe
-   pGmP9Pq5mbftub3xJtRd/5VRg5M9bLE5g/lKe2z97qc34L9hyMs3c9cLu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="419587990"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="419587990"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 15:44:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="782117541"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="782117541"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2023 15:43:18 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 23 Feb 2023 15:42:15 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 23 Feb 2023 15:42:15 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 23 Feb 2023 15:42:15 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SfhbrI0gwss+ZerR1sCFDk8wBj15hiIEmHuWNuRjvK3sLaF86OlTURj2Q4+79PJVRQtM/ofsc6c/CRBWh85srJLSWGigkyNA+Q7cQjwWHcwY6xboc9/BYGr5K2v/ZtJA5gTlFVnA+Z0DJncBThULJo29SAsPtshOc04YKK3CrUl8GAc3vPbKx7UcEwsBc06bOHKtGNURN4gJLF5KUtBcuv8Q9rQf4Az3HMT1UGZNdafBNughnoSh1Ogzvy9uzUAw39FpOCv8Kxd5+6SXMuYBnLs8iD4w0VoomamlyL1zeIDDQcLtMjisN3vdSEF2sqk96OUFUtHng6PN6tBUws+kPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lXhvd3Wmt7gptkKe8EFcee5uM2la3riwwUv/+l5C8T0=;
- b=dA2CG67RlJCUDIgsopIntEcDn1+TB0qcOXKgfIcyaz++7/fROGe5bRvqLx33+41g2lhgCxtTunG+Wr4PbN4FKqz7D7Yq62tze9UHaTyZZK6gQBJ1RkctP9v0E1p2Xoepb05WNnHfzFP0oMwbBIqnQWGSwL/GODrfmGiGuOR6/z7UxSmpUiAAj2pNRLyycDZcjFN/oO4v/T5kmRhzIQx6V601QhkOqRv0GB+/nOKq8RWg48NP+Jvo3Gvy9LfgxRaHwSpzUrC3LAKRUglzVJt65KKhFS/Kr5xmj5QkK3B2s+RWq2392xj6xg1vJBb3dDc3CgCCnCekOravkhsKkkoR6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by CH3PR11MB8238.namprd11.prod.outlook.com (2603:10b6:610:155::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
- 2023 23:42:11 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
- 23:42:11 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "debug@rivosinc.com" <debug@rivosinc.com>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v6 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Thread-Topic: [PATCH v6 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Thread-Index: AQHZQ95FnziH/18UIkugiXvZUjmnPK7brNUAgAAS0YCAAVHQAIAAJ7IA
-Date:   Thu, 23 Feb 2023 23:42:11 +0000
-Message-ID: <3006cca47feff431feb9dae48a2b8c997569ad5c.camel@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
-         <20230218211433.26859-34-rick.p.edgecombe@intel.com>
-         <20230223000340.GB945966@debug.ba.rivosinc.com>
-         <49a151d5a704487d541e421699cf798c87a80ca5.camel@intel.com>
-         <CAKC1njSXDY_NUxLdrbJbF6zGaP4aifAh3g1ku0E5RkAxK4tqLA@mail.gmail.com>
-In-Reply-To: <CAKC1njSXDY_NUxLdrbJbF6zGaP4aifAh3g1ku0E5RkAxK4tqLA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|CH3PR11MB8238:EE_
-x-ms-office365-filtering-correlation-id: 8a907cdc-1650-427b-5a54-08db15f7956c
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tMqe8+CF9+Z+CMsbFA030Z3Su7Ld7VTsFXXlIDQwX4+4aubRO3Dm2Ml0XChpuhtulkiyNw9ACd0eUbjtdec5Ij62f56lmhZvD28WY4fTNHOjyIV/G5mkyMnKes/EPtqBl4Zpqd6UqweGz1Rzyb+kJ1w076k/4C4vHiqHJAE8I5is9J2vcPe7blLJCpkBcKnwsWhiAhJ963kbpJU5ZJJ5W334jEnMfrA7aejsiE/8921U+QZsScPVulIPFmRj756Zc7XjliWWZdTEidbbnRG2UJJefhHo4MovEudFRoeWfgc8Ij4aKfuDShnxoHxqz/DlOOxTIoXm8dmrRqD1+wwkBqaltU+VTF0y4hohaAk4E7VL22PbrywMFwsuRfcRPeFpywlFo3sEvdrxw7G/pzrT/HdVb8aJYSANzBKXdnmvuGAro3ukvibwVlA9QQsSvG7nUzyJc7LIreWNnP4K3FefTP8undXUnBV9szdHA3PUy749aFXQ007Xot2VkTP5aNpwXRJAM8c8KDKfzcZgtlyWuh70x7Ok980iwJTDypBJyz5M3b61fB5TSJNTGcNFDZgNRhLSiuy1+ZxDDwEXs+exFd6zqSFdUAnWn/mtY5ebSQUF6oanwNrcWq6tpAo8F4WYAGCcssJuu5QZFQIqCEPC0I6NdE9nW+pnVnoncFsm6AeEnh0LTZc90YHzifBXC71f9iaEtWrzGVhPJ7nWPrRCjY+Ewb8XVnC3n3bLWWpo1FE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(346002)(396003)(136003)(376002)(451199018)(54906003)(41300700001)(5660300002)(26005)(316002)(478600001)(76116006)(86362001)(6486002)(7416002)(7406005)(66946007)(66446008)(64756008)(66476007)(4326008)(8676002)(6916009)(38070700005)(8936002)(66556008)(82960400001)(71200400001)(122000001)(38100700002)(6512007)(6506007)(2906002)(83380400001)(2616005)(186003)(36756003)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?azE5Z2gvTENrTElSMlF4SXlKekhVV09TTHErNEYvcm9nRzNUZFZ3Qmt6UzJq?=
- =?utf-8?B?dTR0RVZtM09aYjViMS95Z3h2L3R6YlFLaGI3RjZINWt2cG1YeWJiZ2JxbWxm?=
- =?utf-8?B?MThybHZOaWtELzZmNEJkWEVLeVRJZzlUeTFlcUtQTjlGME1qSE1oQTZIUTdW?=
- =?utf-8?B?akRuemV2U3ZIejVRY3plcSs0eXdqRGpFa0Z0bjFXZk9VNENJYTU1OHhkb1dE?=
- =?utf-8?B?T3hBTUhHTlRaN1lwZG9CZklJRklSL1NoaC9ZWTVJd1NsZVY3UHNGMUpzRXRj?=
- =?utf-8?B?MVBWbUMvMVl1QTN6UDVFVVU3K2pCbEsyNFNXZVlJUU9pOHloeVhMMTdzcVdN?=
- =?utf-8?B?VGJuMmZEdWhpaWJWeHpKZ1FNT0ZiUmNzVFhZWEprV1NaK3J4bnNHaEcwekxZ?=
- =?utf-8?B?ZW5oWHZKQ3BUek1uclhNbmZxY3VJWUtNbUJreStLamlZR2M1N0MzclUzRGFr?=
- =?utf-8?B?Y0tZRno3VCtPMHJpUEVabUYrVENrRldmWDFiUzdtQjF5ZVh2QU0ySU8wVExR?=
- =?utf-8?B?Zmx4bFErRHp4dU9SdlpkZ2g4MXN0TkNtQTFDZ1lJaTNKUHp5K3M4cTBVYVFX?=
- =?utf-8?B?RzdJeXd4blQzTWVFckRQWXYvMGxPRHdqR1U3QXdLMm9JT3ZWTHJUZW9kbXdB?=
- =?utf-8?B?Tm1EMk1QVXk2bzRvZ0dsV1lvWnJ0WnFJcWppZXhkeWpDUk4xTmxjUkkveXd5?=
- =?utf-8?B?UDlpWGhPRDJXUEdhNGZiQ0REbDFlQlNxdlZRUDIxOW5aOWNTRWgwU1dneTdv?=
- =?utf-8?B?UzRWRjVGbWhxQ2t2T29zVlB2dVBQOFRqZUNKNUZieGlKU3BkdHdjd2dWaS9s?=
- =?utf-8?B?Q3E1NFoxNEhPeDRUb1htMkhMK0oxMDlwdFcyQ3hwTFk0QkwyWVIzOEVsdGto?=
- =?utf-8?B?Sm9lbGhrN1ZTYlI5emJaZjJYSlZMaml5ZFhvOWdLaldFckNGUXhUVHV4bEZm?=
- =?utf-8?B?Y3VheThERkhvTU05YzRhSzlsNHhwc3AyOFFtRzBUczlvVmJ3VGpvY0FWelYv?=
- =?utf-8?B?VFVKYU1HM2RPbDRwSGQxNGZYV3U5aXJmYzUxbndPaWpDQWtOOXpZNEFCN1JB?=
- =?utf-8?B?bXl1UncxdWs1VEMvOFA0ZUd5MzdURzV4Vlh0SnhIUlRWVXMwbkhJSklNZHV0?=
- =?utf-8?B?NSs2K0FSN1hwUVN2U3d5ZFJYRzFpTzFWUE44b1ZXaENLYVZKdkhjaEhMS2hH?=
- =?utf-8?B?TzBaMDdNbnc4bldINm55dHllS0tqN05OY3lHckVmbnFENmU1M04xNXVMMzZ4?=
- =?utf-8?B?OTBKUDdMSE0yQXVrZnFpcEdkOCtYSytRamlLcXMvcjRQZjVUVXJBUjhkRUs1?=
- =?utf-8?B?T3F1SllYd2xyeW9FNHYrcTNNenR1WkpqdmFsRjEvOFFSUkNQQTAvellaSko1?=
- =?utf-8?B?eGl0a2NyK203V1pNKytvdFZxdXRLamw0V2QybGxuUFhyWVVmenUvZ3czWW9q?=
- =?utf-8?B?dnUrZllPOXE4YVNsb3VQSStzUFNlWTlZaDI3Y01aenc5alFYclNva1hwbk5X?=
- =?utf-8?B?UkttREsyV2YrVXFDVGI5UnpqSjE0Q2cwMTQvbXIzSzgrK0k0Y1duMzlyNFRS?=
- =?utf-8?B?Uno1N3BpM3c5YWVBWDA5QmtGQ1lLQm1wbmFUN05xdmd1TFBuSGg0bG85MkJF?=
- =?utf-8?B?MG5yakpLMFBkTk5YeHNXTC9ZNHFHeXNHRG1oVmhqdlVJZVk4VWVBTUJCZjVV?=
- =?utf-8?B?ZnV0WGRucmc4MlBIZUVhVWp3TlpQM0pWakNOVWRISkw4d3JYNEpUZXZ4OGpq?=
- =?utf-8?B?SUpzSElGejl2NGJuNHgzdUJPcE5IQVJrQmRwUUJYMlFUQnlpOWRJdzJpR091?=
- =?utf-8?B?N1V6NE1mZ1RHSCt5RmxScmZPMVQzZk9jWi9NcVRZekV4MFZ5TXRNcTlwcUJh?=
- =?utf-8?B?TmpjZHplOVNJUEt5V2MweWg3MmhwSVd3V25ISmVWdWE4bWY3cTA0UjFycjZB?=
- =?utf-8?B?Z2dsTGxMR1I3ZWFNZ3E5SkFoS212RUQzMjJEQjhGdk9FTldlK2gvSnlmUDZy?=
- =?utf-8?B?bFdUTG96WGc5djFuTFY0VlZCMm56UlpoRlBvN1BDWC8yLzJ5bUlMUmVIWGdI?=
- =?utf-8?B?c0Q5cHdZcVV5eXlmbGNGRXhaNkRkZk0zZ3dpYTMwbm04SXVGTTR1KzFHdVVZ?=
- =?utf-8?B?K0pNeUlURXJyb1lvM3ppc0l3YWVxMDdmNTRKaG1aZ2tIVDFzTllGUlZmR3JL?=
- =?utf-8?Q?edOhH0mqEpplMuVN6H60Yek=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A1EAEBDDE98A8D4EBE6B37AF8D5EBA5B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 23 Feb 2023 18:46:29 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C9236FC9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:46:28 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so987638pjz.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:46:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677195988;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LUsoETvpcOqiI6sggxMzGrA7yADLPKc9REkQGUWXyIY=;
+        b=igwJZZBd/7G2tpJHLBI9j/0I/4gIhm8JvRoToGo/WGOiCm/npZgYMVJxmgdCbh1hPM
+         zokYeHhHBAPhWggGsfrk6/CkVAeoA7ssIsJCbXKhSttBgPAJmsCSRmqLbvcEieuOQ/So
+         MR6Xuqq30UwHSxl7sjWBFvEwuzWGIyEmNphDnGSKxEIQnmVnT5bNmhqHuQahoGRlQCNv
+         CLOU10q09fBIy/ZP+8lztgKgOH6EKgwTD+aVWzYWj9v0x6bUDVFOpvgXmQ5ESNeP3x3+
+         M0VU0xLPSw0obQHO3hkdrL0Bn4OUkxYAYfvIboXmmS5ZBg4ZU9bkMo1bpxQ1XGCK3qoy
+         R1ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677195988;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LUsoETvpcOqiI6sggxMzGrA7yADLPKc9REkQGUWXyIY=;
+        b=NfNItHNxzEMgdRVv56tsoeeztLetsELXpWvpkWsGe2WqXlBTMk4LSLVaca7EtA2Qw1
+         8FHQ4cxdbtKntpY/4M//4pkXpx2omnrbe3ofDRD/tuFD9IyU/NCOkDrVRxOTKeZornqG
+         AjXOHAAJl4FjTow3Ot93fUFjLaNBmrU7R9k4ZG68sKEKUe5f1ZZPtd15nnGCjNldamlN
+         Sno4BAZuLylU8SU6ibX62fZma9+ojG7RbI8Iv1Al3Pe40OSauyQ1NIsuX8EndVd70iNx
+         H13H2ImG6Um+LNyB7JT2IBbde1aUMRk5x0IfUWBASSRoYGd7zlQnIr97g0nTYYVV+Vft
+         56Mw==
+X-Gm-Message-State: AO0yUKXxF2A4wf94UR1NzD7zKlLKJPM4F1LYBPD+l+O9eCJ33viGXrWw
+        PN7zTdFK9CO5s0rqw2/LpPs=
+X-Google-Smtp-Source: AK7set8bIWofM3SorkwUKjw3N5BkXFgXlakZ6DuEJndggtAGtfKcdDg7oAScOvZ7rQwrvBJxIJ+Q0g==
+X-Received: by 2002:a17:90b:164f:b0:230:8ec4:3c0c with SMTP id il15-20020a17090b164f00b002308ec43c0cmr13403479pjb.18.1677195987892;
+        Thu, 23 Feb 2023 15:46:27 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:be5:a687:1e9d:ec53])
+        by smtp.gmail.com with ESMTPSA id x7-20020a17090aca0700b0023317104415sm253000pjt.17.2023.02.23.15.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 15:46:27 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 23 Feb 2023 15:46:25 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 4/6] zsmalloc: rework compaction algorithm
+Message-ID: <Y/f60c25V4oiIeMN@google.com>
+References: <20230223030451.543162-1-senozhatsky@chromium.org>
+ <20230223030451.543162-5-senozhatsky@chromium.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a907cdc-1650-427b-5a54-08db15f7956c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 23:42:11.0756
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EjEbKyZCifvLKid6sHbwWcq9LNAGmLZHrRu9oVMjqxeEgw+fcyIocRWG5F4yTJOrOkja8Pr3c37Ju0AS/u0LWPMQQkuw8zZE0iKcvA0S2KM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8238
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223030451.543162-5-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAyLTIzIGF0IDEzOjIwIC0wODAwLCBEZWVwYWsgR3VwdGEgd3JvdGU6DQo+
-ID4gSXQgZG9lc24ndCBzZWVtIGxpa2UgdGhlIGNvbXBsZXhpdHkgb2YgdGhlIGNoZWNrcyBpcyB3
-b3J0aCBzYXZpbmcNCj4gPiB0aGUNCj4gPiB0aW55IHN5c2NhbGwuIElzIHRoZXJlIHNvbWUgcmVh
-c29uIHdoeSByaXNjdiBjYW4ndCB1c2UgdGhlIHNhbWUNCj4gPiBzeXNjYWxsDQo+ID4gc3R1Yj8g
-SXQgZG9lc24ndCBuZWVkIHRvIGxpdmUgZm9yZXZlciBpbiB4ODYgY29kZS4gTm90IHN1cmUgd2hh
-dA0KPiA+IHRoZQ0KPiA+IHNhdmluZ3MgYXJlIGZvciByaXNjdiBvZiB0aGUgbW1hcCtjaGVja3Mg
-YXBwcm9hY2ggYXJlIGVpdGhlci4uLg0KPiANCj4gSSBkb24ndCBzZWUgYSBsb3Qgb2YgZXh0cmEg
-Y29tcGxleGl0eSBoZXJlLg0KPiBJZiBgbXByb3RlY3RgIGFuZCBmcmllbmRzIGRvbid0IGtub3cg
-YWJvdXQgYFBST1RfU0hBRE9XU1RBQ0tgLA0KPiB0aGV5J2xsDQo+IGp1c3QgZmFpbCBieSBkZWZh
-dWx0ICh3aGljaCBpcyBkZXNpcmVkKQ0KDQpUbyBtZSwgdGhlIG9wdGlvbnMgbG9vayBsaWtlOiBj
-cmFtIGl0IGludG8gYW4gZXhpc3Rpbmcgc3lzY2FsbCBvcg0KY3JlYXRlIG9uZSB0aGF0IGRvZXMg
-ZXhhY3RseSB3aGF0IGlzIG5lZWRlZC4NCg0KVG8gcmVwbGFjZSB0aGUgbmV3IHN5c2NhbGwgd2l0
-aCBtbWFwKCksIHdpdGggdGhlIGV4aXN0aW5nIE1NDQppbXBsZW1lbnRhdGlvbiwgSSB0aGluayB5
-b3Ugd291bGQgbmVlZCB0byBhZGQgdG8gbW1hcDoNCjEuIExpbWl0IFBST1RfU0hBRE9XX1NUQUNL
-IHRvIGFub255bW91cywgcHJpdmF0ZSBtZW1vcnkuDQoyLiBMaW1pdCBQUk9UX1NIQURPV19TVEFD
-SyB0byBNQVBfQUJPVkU0RyAob3IgY3JlYXRlIGEgTUFQX1NIQURPV19TVEFDSw0KdGhhdCBkb2Vz
-IGJvdGgpLiBNQVBfQUJPVkU0RyBwcm90ZWN0cyBmcm9tIHVzaW5nIHNoYWRvdyBzdGFjayBpbiAz
-MiBiaXQNCm1vZGUsIGFmdGVyIHNvbWUgQUJJIGlzc3VlcyB3ZXJlIHJhaXNlZC4gU28gaXQgaXMg
-c3VwcG9zZWQgdG8gYmUNCmVuZm9yY2VkLg0KMy4gQWRkIGFkZGl0aW9uYWwgbG9naWMgZm9yIE1B
-UF9BQk9WRTRHIHRvIHdvcmsgd2l0aCBNQVBfRklYRUQgYXMgaXMNCnJlcXVpcmVkIGJ5IENSSVUu
-DQo0LiBBZGQgYW5vdGhlciBNQVBfIGZsYWcgdG8gc3BlY2lmeSB3aGV0aGVyIHRvIHdyaXRlIHRo
-ZSB0b2tlbiAoQUZBSUsNCnRoZSBmaXJzdCBmbGFnIHRoYXQgd291bGQgZG8gc29tZXRoaW5nIGxp
-a2UgdGhhdC4gU28gdGhlbiBsaWtlbHkgaGF2ZQ0KZGViYXRlcyBhYm91dCB3aGV0aGVyIGl0IGZp
-dHMgaW50byB0aGUgZmxhZ3MpLiBTb3J0IG91dCB0aGUgYmVoYXZpb3Igb2YNCnRyeWluZyB0byB3
-cml0ZSB0aGUgdG9rZW4gdG8gYSBub24tUFJPVF9TSEFET1dfU1RBQ0sgbW1hcCBjYWxsLg0KNS4g
-QWRkIGFyY2ggYnJlYWtvdXQgZm9yIG1tYXAgdG8gY2FsbCBpbnRvIHRoZSB0b2tlbiB3cml0aW5n
-Lg0KDQpJIHRoaW5rIHlvdSBhcmUgcmlnaHQgdGhhdCBubyBtcHJvdGVjdCgpIGNoYW5nZXMgd291
-bGQgYmUgbmVlZGVkIHdpdGgNCnRoZSBjdXJyZW50IHNoYWRvdyBzdGFjayBNTSBpbXBsZW1lbnRh
-dGlvbiAoaXQgd2Fzbid0IHRoZSBjYXNlIGZvciB0aGUNCm9yaWdpbmFsIFBST1RfU0hBRE9XX1NU
-QUNLKS4gQnV0IEknbSBzdGlsbCBub3Qgc3VyZSBpZiBpdCBpcyBzaW1wbGVyDQp0aGVuIHRoZSBz
-eXNjYWxsLg0KDQpJIGRvIHdvbmRlciBhIGxpdHRsZSBiaXQgYWJvdXQgdHJ5aW5nIHRvIHJlbW92
-ZSBzb21lIG9mIHRoZXNlDQpsaW1pdGF0aW9ucyBvZiB0aGUgZXhpc3Rpbmcgc2hhZG93IHN0YWNr
-IE1NIGltcGxlbWVudGF0aW9uLCB3aGljaCBjb3VsZA0KbWFrZSBhbiBtbWFwIGJhc2VkIGludGVy
-ZmFjZSBhIGxpdHRsZSBiZXR0ZXIgZml0LiBMaWtlIGlmIHNvbWVkYXkNCnNoYWRvdyBzdGFjayBt
-ZW1vcnkgYWRkZWQgc3VwcG9ydCBmb3IgYWxsIHRoZSBvcHRpb25zIHRoYXQgbW1hcA0Kc3VwcG9y
-dHMuIEJ1dCBJJ20gbm90IHN1cmUgaWYgdGhhdCB3b3VsZCBqdXN0IHJlc3VsdCBpbiBtb3JlIGNv
-bXBsZXhpdHkNCmluIG90aGVyIHBsYWNlcyAoTU0sIHNpZ25hbHMpIHRoYXQgd291bGQgYmFyZWx5
-IGdldCB1c2VkLiBMaWtlLCBJJ20gbm90DQpzdXJlIGhvdyBzaGFkb3cgc3RhY2sgcGVybWlzc2lv
-bmVkIG1tYXAoKWVkIGZpbGVzIHNob3VsZCB3b3JrLiBZb3UNCndvdWxkIGhhdmUgdG8gcmVxdWly
-ZSB3cml0YWJsZSBmaWxlcyB0byBtYXAgdGhlbSBhcyBzaGFkb3cgc3RhY2ssIGJ1dA0KdGhlbiB0
-aGF0IGlzIG5vdCBhcyBsb2NrZWQgZG93biBhcyB3ZSBoYXZlIHRvZGF5IHdpdGggdGhlIGFub255
-bW91cw0KbWVtb3J5LiBBbmQgYSAic2hhZG93IHN0YWNrIiBmaWxlIHBlcm1pc3Npb24gd291bGQg
-c2VlbSBhIGJpdA0Kb3ZlcmJvYXJkLg0KDQpUaGVuIHByb2JhYmx5IHNvbWUgbW9yZSBkaXJ0eSBi
-aXQgaXNzdWVzIHdpdGggbW1hcGVkIGZpbGVzLiBJJ20gbm90DQpmdWxseSBzdXJlLiBUaGF0IG9u
-ZSB3YXMgZGVmaW5pdGVseSBhbiBpc3N1ZSB3aGVuIFBST1RfU0hBRE9XX1NUQUNLIHdhcw0KZHJv
-cHBlZCwgYnV0IERhdmlkIEhpbGRlbmJyYW5kIGhhcyBub3cgcmVtb3ZlZCBhdCBsZWFzdCBzb21l
-IG9mIHRoZQ0KaXNzdWVzIGl0IGhpdC4NCg0KU28gdGhlIG9wdGltdW0gc29sdXRpb24gbWlnaHQg
-ZGVwZW5kIG9uIGlmIHdlIGFkZCBtb3JlIHNoYWRvdyBzdGFjayBNTQ0Kc3VwcG9ydCBsYXRlci4g
-QnV0IGl0IGlzIGFsd2F5cyBwb3NzaWJsZSB0byBhZGQgbW1hcCBzdXBwb3J0IGxhdGVyIHRvby4N
-Cg0KPiANCj4gSXQncyBvbmx5IGBtbWFwYCB0aGF0IG5lZWRzIHRvIGJlIGVubGlnaHRlbmVkLiBB
-bmQgaXQgY2FuIGp1c3QgcGFzcw0KPiBgVk1BX1NIQURPV19TVEFDS2AgdG8gYGRvX21tYXBgIGlm
-IGlucHV0IGlzIGBQUk9UX1NIQURPV1NUQUNLYC4NCj4gDQo+IEFkZGluZyBhIHN5c2NhbGwganVz
-dCBmb3IgbWFwcGluZyBzaGFkb3cgc3RhY2sgaXMgd2VpcmQgd2hlbiBpdCBjYW4NCj4gYmUNCj4g
-c29sdmVkIHdpdGggZXhpc3Rpbmcgc3lzdGVtIGNhbGxzLg0KPiBBcyB5b3Ugc2F5IGluIHlvdXIg
-cmVzcG9uc2UgYmVsb3csIGl0IHdvdWxkIGJlIGdvb2QgdG8gaGF2ZSBzdWNoIGENCj4gc3lzY2Fs
-bCB3aGljaCBzZXJ2ZSBsYXJnZXIgcHVycG9zZXMgKGUuZy4gcHJvdmlzaW9uaW5nIHNwZWNpYWwN
-Cj4gc2VjdXJpdHktdHlwZSBtZW1vcnkpDQo+IA0KPiBhcm02NCdzIG1lbW9yeSB0YWdnaW5nIGlz
-IG9uZSBzdWNoIGV4YW1wbGUuIE5vdCBleGFjdGx5IHNlY3VyaXR5LXR5cGUNCj4gbWVtb3J5IChi
-dXQgZXZlbnR1YWwgYXBwbGljYXRpb24gaXMgc2VjdXJpdHkgZm9yIHRoaXMgZmVhdHVyZSkgLg0K
-PiBJdCBhZGRzIGV4dHJhIG1lYW5pbmcgdG8gdmlydHVhbCBhZGRyZXNzZXMgKGkuZS4gYW4gYWRk
-cmVzcyBoYXMNCj4gdGFncykuDQo+IGFybTY0IHdlbnQgYWJvdXQgdXNpbmcgYSBwcm90ZWN0aW9u
-IGZsYWcgYFBST1RfTVRFYCBpbnN0ZWFkIG9mIGENCj4gc3BlY2lhbCBzeXN0ZW0gY2FsbC4NCg0K
-SXQgbG9va3MgbGlrZSB0aGF0IG1lbW9yeSBjYW4gYmUgd3JpdHRlbiB3aXRoIGEgc3BlY2lhbCBp
-bnN0cnVjdGlvbj8NCkFuZCBzbyBpdCBkb2Vzbid0IG5lZWQgdG8gYmUgcHJvdmlzaW9uZWQgYnkg
-dGhlIGtlcm5lbCwgYXMgaXMgdGhlIGNhc2UNCmhlcmUuDQoNCj4gDQo+IEJlaW5nIHNhaWQgdGhh
-dCBzaW5jZSB0aGlzIHBhdGNoIGhhcyBnb25lIHRocm91Z2ggbXVsdGlwbGUgcmV2aXNpb25zDQo+
-IGFuZCBJIGFtIG5ldyB0byB0aGUgcGFydHkuIElmIG90aGVycyBkb250IGhhdmUgaXNzdWVzIG9u
-IHRoaXMgc3BlY2lhbA0KPiBzeXN0ZW0gY2FsbCwNCj4gSSB0aGluayBpdCdzIGZpbmUgdGhlbi4g
-SW4gY2FzZSBvZiByaXNjdiBJIGNhbiBjaG9vc2UgdG8gdXNlIHRoaXMNCj4gbWVjaGFuaXNtIG9y
-IGdvIHZpYSBhcm0ncyByb3V0ZSB0byBkZWZpbmUgUFJPVF9TSEFET1dTVEFDSyB3aGljaCBpcw0K
-PiBhcmNoIHNwZWNpZmljLg0KDQpPaywgc291bmRzIGdvb2QuIFRoZSBhZHZpY2UgSSBnb3QgZnJv
-bSBtYWludGFpbmVycyBhZnRlciB0aGUgbWFueQ0KYXR0ZW1wdHMgdG8gY3JhbSBpdCBpbnRvIHRo
-ZSBleGlzdGluZyBpbnRlcmZhY2VzIHdhczogZG9uJ3QgYmUgYWZyYWlkDQp0byBhZGQgYSBzeXNj
-YWxsLiBBbmQgc3VyZSBlbm91Z2gsIHdoZW4gTUFQX0FCT1ZFNEcgY2FtZSBhbG9uZyBpdA0KY29u
-dGludWVkIHRvIG1ha2UgdGhpbmdzIHNpbXBsZXIuDQo=
+On Thu, Feb 23, 2023 at 12:04:49PM +0900, Sergey Senozhatsky wrote:
+> The zsmalloc compaction algorithm has the potential to
+> waste some CPU cycles, particularly when compacting pages
+> within the same fullness group. This is due to the way it
+> selects the head page of the fullness list for source and
+> destination pages, and how it reinserts those pages during
+> each iteration. The algorithm may first use a page as a
+> migration destination and then as a migration source,
+> leading to an unnecessary back-and-forth movement of
+> objects.
+> 
+> Consider the following fullness list:
+> 
+> PageA PageB PageC PageD PageE
+> 
+> During the first iteration, the compaction algorithm will
+> select PageA as the source and PageB as the destination.
+> All of PageA's objects will be moved to PageB, and then
+> PageA will be released while PageB is reinserted into the
+> fullness list.
+> 
+> PageB PageC PageD PageE
+> 
+> During the next iteration, the compaction algorithm will
+> again select the head of the list as the source and destination,
+> meaning that PageB will now serve as the source and PageC as
+> the destination. This will result in the objects being moved
+> away from PageB, the same objects that were just moved to PageB
+> in the previous iteration.
+> 
+> To prevent this avalanche effect, the compaction algorithm
+
+Good point.
+
+> should not reinsert the destination page between iterations.
+> By doing so, the most optimal page will continue to be used
+> and its usage ratio will increase, reducing internal
+> fragmentation. The destination page should only be reinserted
+> into the fullness list if:
+> - It becomes full
+> - No source page is available.
+
+I think that's really better option, yeah.
+
+> 
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  mm/zsmalloc.c | 82 ++++++++++++++++++++++++---------------------------
+>  1 file changed, 38 insertions(+), 44 deletions(-)
+> 
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 1a92ebe338eb..eacf9e32da5c 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -1786,15 +1786,14 @@ struct zs_compact_control {
+>  	int obj_idx;
+>  };
+>  
+> -static int migrate_zspage(struct zs_pool *pool, struct size_class *class,
+> -				struct zs_compact_control *cc)
+> +static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
+> +			   struct zs_compact_control *cc)
+>  {
+>  	unsigned long used_obj, free_obj;
+>  	unsigned long handle;
+>  	struct page *s_page = cc->s_page;
+>  	struct page *d_page = cc->d_page;
+>  	int obj_idx = cc->obj_idx;
+> -	int ret = 0;
+>  
+>  	while (1) {
+>  		handle = find_alloced_obj(class, s_page, &obj_idx);
+> @@ -1807,10 +1806,8 @@ static int migrate_zspage(struct zs_pool *pool, struct size_class *class,
+>  		}
+>  
+>  		/* Stop if there is no more space */
+> -		if (zspage_full(class, get_zspage(d_page))) {
+> -			ret = -ENOMEM;
+> +		if (zspage_full(class, get_zspage(d_page)))
+>  			break;
+> -		}
+>  
+>  		used_obj = handle_to_obj(handle);
+>  		free_obj = obj_malloc(pool, get_zspage(d_page), handle);
+> @@ -1823,8 +1820,6 @@ static int migrate_zspage(struct zs_pool *pool, struct size_class *class,
+>  	/* Remember last position in this iteration */
+>  	cc->s_page = s_page;
+>  	cc->obj_idx = obj_idx;
+> -
+> -	return ret;
+>  }
+>  
+>  static struct zspage *isolate_src_zspage(struct size_class *class)
+> @@ -2228,57 +2223,56 @@ static unsigned long __zs_compact(struct zs_pool *pool,
+>  	 * as well as zpage allocation/free
+>  	 */
+>  	spin_lock(&pool->lock);
+> -	while ((src_zspage = isolate_src_zspage(class))) {
+> -		/* protect someone accessing the zspage(i.e., zs_map_object) */
+> -		migrate_write_lock(src_zspage);
+> -
+> -		if (!zs_can_compact(class))
+> -			break;
+> -
+> -		cc.obj_idx = 0;
+> -		cc.s_page = get_first_page(src_zspage);
+> -
+> -		while ((dst_zspage = isolate_dst_zspage(class))) {
+> -			migrate_write_lock_nested(dst_zspage);
+> -
+> +	while (1) {
+
+Hmm, I preferred the old loop structure. Did you see any problem
+to keep old code structure?
+
+Can't we just add checking logic whether destination zspage page
+is full after migrate_zspage and the putback if it is. Otherwise,
+keep continuing with the source zspage or new zspage we completely
+migrate all zpages in the zspage. If there is no more source zspages
+in the list, we can break the loop and then putback the dest zspage
+into right class group at out of end loop.
+
+> +		if (!dst_zspage) {
+> +			dst_zspage = isolate_dst_zspage(class);
+> +			if (!dst_zspage)
+> +				goto out;
+> +			migrate_write_lock(dst_zspage);
+>  			cc.d_page = get_first_page(dst_zspage);
+> -			/*
+> -			 * If there is no more space in dst_page, resched
+> -			 * and see if anyone had allocated another zspage.
+> -			 */
+> -			if (!migrate_zspage(pool, class, &cc))
+> -				break;
+> +		}
+>  
+> +		if (!zs_can_compact(class)) {
+>  			putback_zspage(class, dst_zspage);
+>  			migrate_write_unlock(dst_zspage);
+> -			dst_zspage = NULL;
+> -			if (spin_is_contended(&pool->lock))
+> -				break;
+> +			goto out;
+>  		}
+>  
+> -		/* Stop if we couldn't find slot */
+> -		if (dst_zspage == NULL)
+> -			break;
+> +		src_zspage = isolate_src_zspage(class);
+> +		if (!src_zspage) {
+> +			putback_zspage(class, dst_zspage);
+> +			migrate_write_unlock(dst_zspage);
+> +			goto out;
+> +		}
+>  
+> -		putback_zspage(class, dst_zspage);
+> -		migrate_write_unlock(dst_zspage);
+> +		migrate_write_lock_nested(src_zspage);
+> +
+> +		cc.obj_idx = 0;
+> +		cc.s_page = get_first_page(src_zspage);
+> +		migrate_zspage(pool, class, &cc);
+>  
+>  		if (putback_zspage(class, src_zspage) == ZS_INUSE_RATIO_0) {
+>  			migrate_write_unlock(src_zspage);
+>  			free_zspage(pool, class, src_zspage);
+>  			pages_freed += class->pages_per_zspage;
+> -		} else
+> +		} else {
+>  			migrate_write_unlock(src_zspage);
+> -		spin_unlock(&pool->lock);
+> -		cond_resched();
+> -		spin_lock(&pool->lock);
+> -	}
+> +		}
+>  
+> -	if (src_zspage) {
+> -		putback_zspage(class, src_zspage);
+> -		migrate_write_unlock(src_zspage);
+> -	}
+> +		if (get_fullness_group(class, dst_zspage) == ZS_INUSE_RATIO_100
+> +		    || spin_is_contended(&pool->lock)) {
+> +			putback_zspage(class, dst_zspage);
+> +			migrate_write_unlock(dst_zspage);
+> +			dst_zspage = NULL;
+> +		}
+>  
+> +		if (!dst_zspage) {
+> +			spin_unlock(&pool->lock);
+> +			cond_resched();
+> +			spin_lock(&pool->lock);
+> +		}
+> +	}
+> +out:
+>  	spin_unlock(&pool->lock);
+>  
+>  	return pages_freed;
+> -- 
+> 2.39.2.637.g21b0678d19-goog
+> 
