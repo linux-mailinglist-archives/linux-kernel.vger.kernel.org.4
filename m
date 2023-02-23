@@ -2,70 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6DD6A04C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A6D6A04C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbjBWJ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S233985AbjBWJ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233945AbjBWJ2u (ORCPT
+        with ESMTP id S233957AbjBWJ2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:28:50 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8214AFEB
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:28:48 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id oe18-20020a17090b395200b00236a0d55d3aso11867732pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:28:48 -0800 (PST)
+        Thu, 23 Feb 2023 04:28:54 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4364C6D2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:28:52 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id h14so1442330wru.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:28:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UjYf5J3J9XUndvOCZh6Z2mddp8OlC3USsn2OpMMQFcQ=;
-        b=fzy43LkRNYzLBqeigNgTlVG3MgLUKnye9UyydsNIaeLaWFKo+evR+6Os+9PGcUOG8G
-         apL/w9t1Uuf57Uo75+X97K7KP2LjXJy93YK3ueA56y02wPibb2CctXAwhOzkfe/zFP5n
-         cNzTMz433bVZosZhDkFI48gQgs0mctxXyc4k4=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gb2qxqmKS0rtdO++khKuhDFOUfUplSmtQFJjeC7elRk=;
+        b=KN2AKHoO96bfhSZx+IPwU/tbpQPchmaFp81rNz+ltuEuiZU09uMVGjD1JKiKbjRmRa
+         OQcqfWt7sTKFnS1LK56f5SAunmpKwGUI93gfW3wxd8rWUrU5SGkAKGfnZUn3R0L8QWHq
+         8WyXfLzZdyI5vM6uqx84dNcvxQuRjeUNW81mPEEaZhDcdDiyvSUNPDP65Jt5VrDt/faD
+         c1FkM9GWtxEA+juEK/t9LIfKYc3RfzgqZDQ5tJoG5u3j8DTl/xBTMPV2ruhLZnmnc7mY
+         1I5tjLKZ8bIFIQM+lVlGnU7OXnmfHfbpU8E6qozvdCp9B/+hr5FdmcRVuR/y8q0yEDIB
+         flcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UjYf5J3J9XUndvOCZh6Z2mddp8OlC3USsn2OpMMQFcQ=;
-        b=NS/fYIezsi/Gw6m5eQHrEqTX3s2awQZCS1p+H5mAzpj8m3BjTkiwLGHlTa9ms9B2R0
-         mDsXXP6gqHif9llnfh9TTwmFOH+7gjGGAoR8JP0Mcl9mZHYi1TPbdRMmj9EWFHnKa/rb
-         RHk4aKkoy5okBeuyzFoBCLoiCJzF6X0Kkx63WiD6uPxrLtsSstU63Ar98msDJJ+tBwbW
-         DLLRBQylajNsskYFTOt2/xY67I/WDKWhcf9/evOelGoqDf9BHn4OYHRhyTaXP/2HU2YW
-         fQz/KNPGc+j6U8DyWu+glAttxQGAdNR/WEpDYS7NR2O+ghdqI8FNXbYyS81Bf/xk1hjl
-         h4fg==
-X-Gm-Message-State: AO0yUKXPDtS6ArZoTsCXv+S7ChQl5+EgmZP72ZWrn0UTHl0JlfAFroq7
-        fYjOnTDyXqkOvEfaDUS6l4UzmA==
-X-Google-Smtp-Source: AK7set8uXHWcK3Hy+r3E1WdhKcS7IcC6e6RewXaM+OA3MLeiDF94C8dGG47KHbC0gVknZdGAQrZdIQ==
-X-Received: by 2002:a05:6a20:7f8a:b0:b8:841d:85bb with SMTP id d10-20020a056a207f8a00b000b8841d85bbmr12167567pzj.0.1677144527784;
-        Thu, 23 Feb 2023 01:28:47 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:24fe:6a37:3375:c5bc])
-        by smtp.gmail.com with ESMTPSA id c17-20020aa78c11000000b0056d7cc80ea4sm6642222pfd.110.2023.02.23.01.28.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 01:28:47 -0800 (PST)
-Date:   Thu, 23 Feb 2023 17:28:43 +0800
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, ndesaulniers@google.com, ojeda@kernel.org,
-        peterz@infradead.org, rafael.j.wysocki@intel.com,
-        revest@chromium.org, robert.moore@intel.com, will@kernel.org
-Subject: Re: [PATCH v3 0/8] arm64/ftrace: Add support for
- DYNAMIC_FTRACE_WITH_CALL_OPS
-Message-ID: <Y/cxy1RY+Bex1qzG@google.com>
-References: <20230123134603.1064407-1-mark.rutland@arm.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gb2qxqmKS0rtdO++khKuhDFOUfUplSmtQFJjeC7elRk=;
+        b=STeezRdWDT7ymL2KQ2k+02rLpmxy/Muzl5TAvVXbOcGFLT1hQLW2JcMbUP9MevCO/D
+         4Ep9f06ghydtEy/uECzed+dZnB045sLMLk3pSGPAHsAEPlrLhdrSKdaLZXYGW2BaPy7R
+         VDWVHwVg7JINc9/TQECvv1BTqRWXGTk2WyjmFyV65IYgh2oTH5pZtWP61qF5BwJLL1lE
+         03okzH/xcSM3Opn2W7Onl/aT/tXtHpHDibPqAl6SFJs7z8oaK5vW3qB/mk3OO4PCt+Pr
+         J+Jd2OoZnbFxW2juW3iRtOcVKnaLhk6C4x5h77fPYaopldQ0zaD7KVBk9/uI/oo0+d0u
+         HGkw==
+X-Gm-Message-State: AO0yUKVrs1JjRCPbmwOCCm6KkMpMMjyOKwxSI3lCRPXf5/T/JRN7lRt3
+        1/pWIddVMNyH/80y24GM0ypqyw==
+X-Google-Smtp-Source: AK7set+MOmXu33I9nFWggqC/PShcnHbeYlNKSpRLAYvmxxPXpSzF23457FlD7byxWvQBb18MzZRLYA==
+X-Received: by 2002:a5d:4b81:0:b0:2c5:4de1:ba23 with SMTP id b1-20020a5d4b81000000b002c54de1ba23mr9910494wrt.19.1677144530866;
+        Thu, 23 Feb 2023 01:28:50 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id d8-20020adffbc8000000b002c5d3f0f737sm8757431wrs.30.2023.02.23.01.28.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 01:28:50 -0800 (PST)
+Message-ID: <5c255eb3-ec9e-d66f-4a2b-ccc32edf5672@linaro.org>
+Date:   Thu, 23 Feb 2023 10:28:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123134603.1064407-1-mark.rutland@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
+ <20230220061745.1973981-2-ryan_chen@aspeedtech.com>
+ <676c7777-635c-cc1f-b919-d33e84a45442@linaro.org>
+ <TYZPR06MB527427ADCCD29DFD77FB0EE3F2A59@TYZPR06MB5274.apcprd06.prod.outlook.com>
+ <80d873d4-d813-6c25-8f47-f5ff9af718ec@linaro.org>
+ <SEZPR06MB5269502D7CBCD5698B65FF9FF2A59@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <c0ac0ab3-87fc-e74a-b4e2-3cf1b3a8a5e2@linaro.org>
+ <SEZPR06MB52698CCA6AE59DDC6C15CBE4F2AA9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <94238c42-1250-4d51-86e5-0a960dea0ffc@linaro.org>
+ <SEZPR06MB52696835ED8E2709D6A454DAF2AA9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <b7ca24ea-a265-81cb-3da6-19f938b35878@linaro.org>
+ <SEZPR06MB5269052D7ADCD0D0F939E60DF2AA9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SEZPR06MB5269052D7ADCD0D0F939E60DF2AA9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,228 +93,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:45:55PM +0000, Mark Rutland wrote:
-> Hi Catalin, Steve,
+On 22/02/2023 11:47, Ryan Chen wrote:
+>>>> connector. That slave will keep state to drive clock stretching.
+>>>>> So it is specific enable in i2c bus#1. Others is not needed enable timeout.
+>>>>> Does this draw is more clear in scenario?
+>>>>
+>>>> I2C bus #1 works in slave mode? So you always need it for slave work?
+>>>
+>>> Yes, it is both slave/master mode. It is always dual role. Slave must always
+>> work.
+>>> Due to another board master will send.
+>>
+>> I meant that you need this property when it works in slave mode? It would be
+>> then redundant to have in DT as it is implied by the mode.
 > 
-> I'm not sure how we want to merge this, so I've moved the core ftrace
-> patch to the start of the series so that it can more easily be placed on
-> a stable branch if we want that to go via the ftrace tree and the rest
-> to go via arm64.
-> 
-> This is cleanly pasing the ftrace selftests from v6.2-rc3 (results in
-> the final patch).
-> 
-> Aside from that, usual cover letter below.
-> 
-> This series adds a new DYNAMIC_FTRACE_WITH_CALL_OPS mechanism, and
-> enables support for this on arm64. This significantly reduces the
-> overhead of tracing when a callsite/tracee has a single associated
-> tracer, avoids a number of issues that make it undesireably and
-> infeasible to use dynamically-allocated trampolines (e.g. branch range
-> limitations), and makes it possible to implement support for
-> DYNAMIC_FTRACE_WITH_DIRECT_CALLS in future.
-> 
-> The main idea is to give each ftrace callsite an associated pointer to
-> an ftrace_ops. The architecture's ftrace_caller trampoline can recover
-> the ops pointer and invoke ops->func from this without needing to use
-> ftrace_ops_list_func, which has to iterate through all registered ops.
-> 
-> To make this work, we use -fpatchable-function-entry=M,N, there N NOPs
-> are placed before the function entry point. On arm64 NOPs are always 4
-> bytes, so by allocating 2 per-function NOPs, we have enough space to
-> place a 64-bit value. So that we can manipulate the pointer atomically,
-> we need to align instrumented functions to at least 8 bytes, which we
-> can ensure using -falign-functions=8.
+> But timeout feature is also apply in master. It for avoid suddenly slave miss(un-plug) 
+> Master can timeout and release the SDA/SCL, return. 
 
-Does this work all the time? Or is it influenced by other Kconfig
-options?
+OK, yet the property should describe the hardware, not the register
+feature you want to program. You need to properly model it in DT binding
+to represent hardware setup, not your desired Linux driver behavior.
 
-I'm getting random misaligned patch-site warnings like the following:
+>>>>> The same draw, in this case, i2c bus#1 that is multi-master transfer
+>>>> architecture.
+>>>>> Both will inactive with trunk data. That cane enable i2c#1 use DMA
+>>>>> transfer
+>>>> to reduce CPU utilized.
+>>>>> Others (bus#2/3) can keep byte/buff mode.
+>>>>
+>>>> Isn't then current bus configuration for I2C#1 known to the driver?
+>>>> Jeremy asked few other questions around here...
+>>>
+>>> No, The driver don't know currently board configuration.
+>>
+>> It knows whether it is working in multi-master/slave mode.
+> 
+> But in DT can decide which i2c bus number can use dma or buffer mode transfer.
+> If in another i2c bus support master only, also can use dma to transfer trunk data to another slave. 
 
-Misaligned patch-site gic_handle_irq+0x0/0x12c
-Misaligned patch-site __traceiter_initcall_level+0x0/0x60
-Misaligned patch-site __traceiter_initcall_start+0x0/0x60
-Misaligned patch-site __traceiter_initcall_finish+0x0/0x68
-Misaligned patch-site do_one_initcall+0x0/0x300
-Misaligned patch-site do_one_initcall+0x2b0/0x300
-Misaligned patch-site match_dev_by_label+0x0/0x50
-Misaligned patch-site match_dev_by_uuid+0x0/0x48
-Misaligned patch-site wait_for_initramfs+0x0/0x68
-Misaligned patch-site panic_show_mem+0x0/0x88
-Misaligned patch-site 0xffffffd3b4fef074
-[...]
-(I assume the unresolved symbol(s) are from modules.)
+and none of these were explained in commit msg or device description.
 
-The warnings were seen on next-20230223 and many versions before, with
-Debian's GCC 12.2 cross compile toolchain. I also tried next-20230223
-with Linaro's toolchains gcc-linaro-12.2.1-2023.01-x86_64_aarch64-linux-gnu
-and gcc-linaro-13.0.0-2022.11-x86_64_aarch64-linux-gnu and the warnings
-appeared as well.
+Best regards,
+Krzysztof
 
-Checking panic_show_mem in various places from the Debian GCC's build:
-
-$ aarch64-linux-gnu-nm init/initramfs.o | grep panic_show_mem
-0000000000000070 t panic_show_mem
-$ aarch64-linux-gnu-nm init/built-in.a | grep panic_show_mem
-0000000000000070 t panic_show_mem
-$ aarch64-linux-gnu-nm built-in.a | grep panic_show_mem
-0000000000000070 t panic_show_mem
-$ aarch64-linux-gnu-nm vmlinux.a | grep panic_show_mem
-0000000000000070 t panic_show_mem
-$ aarch64-linux-gnu-nm vmlinux.o | grep panic_show_mem
-0000000000001534 t panic_show_mem
-$ aarch64-linux-gnu-nm vmlinux | grep panic_show_mem
-ffffffc0080158dc t panic_show_mem
-
-Looks like individual object files do have functions aligned at 8-byte
-boundaries, but when all the object files are collected and linked
-together into vmlinux.o, the higher alignment gets dropped and some
-functions end up on 4-byte boundaries.
-
-
-Regards
-ChenYu
-
-> 
-> Each callsite ends up looking like:
-> 
-> 	# Aligned to 8 bytes
-> 	func - 8:
-> 		< pointer to ops >
-> 	func:
-> 		BTI		// optional
-> 		MOV	X9, LR
-> 		NOP		// patched to `BL ftrace_caller`
-> 	func_body:
-> 
-> When entering ftrace_caller, the LR points at func_body, and the
-> ftrace_ops can be recovered at a negative offset from this the LR value:
-> 
-> 	BIC	<tmp>, LR, 0x7		// Align down (skips BTI)
-> 	LDR	<tmp>, [<tmp>, #-16]	// load ops pointer
-> 
-> The ftrace_ops::func (and any other ftrace_ops fields) can then be
-> recovered from this pointer to the ops.
-> 
-> The first three patches enable the function alignment, working around
-> cases where GCC drops alignment for cold functions or when building with
-> '-Os'.
-> 
-> The final four patches implement support for
-> DYNAMIC_FTRACE_WITH_CALL_OPS on arm64. As noted in the final patch, this
-> results in a significant reduction in overhead:
-> 
->   Before this series:
-> 
->   Number of tracers     || Total time  | Per-call average time (ns)
->   Relevant | Irrelevant || (ns)        | Total        | Overhead
->   =========+============++=============+==============+============
->          0 |          0 ||      94,583 |         0.95 |           -
->          0 |          1 ||      93,709 |         0.94 |           -
->          0 |          2 ||      93,666 |         0.94 |           -
->          0 |         10 ||      93,709 |         0.94 |           -
->          0 |        100 ||      93,792 |         0.94 |           -
->   ---------+------------++-------------+--------------+------------
->          1 |          1 ||   6,467,833 |        64.68 |       63.73
->          1 |          2 ||   7,509,708 |        75.10 |       74.15
->          1 |         10 ||  23,786,792 |       237.87 |      236.92
->          1 |        100 || 106,432,500 |     1,064.43 |     1063.38
->   ---------+------------++-------------+--------------+------------
->          1 |          0 ||   1,431,875 |        14.32 |       13.37
->          2 |          0 ||   6,456,334 |        64.56 |       63.62
->         10 |          0 ||  22,717,000 |       227.17 |      226.22
->        100 |          0 || 103,293,667 |      1032.94 |     1031.99
->   ---------+------------++-------------+--------------+--------------
-> 
->   Note: per-call overhead is estiamated relative to the baseline case
->   with 0 relevant tracers and 0 irrelevant tracers.
-> 
->   After this series:
-> 
->   Number of tracers     || Total time  | Per-call average time (ns)
->   Relevant | Irrelevant || (ns)        | Total        | Overhead
->   =========+============++=============+==============+============
->          0 |          0 ||      94,541 |         0.95 |           -
->          0 |          1 ||      93,666 |         0.94 |           -
->          0 |          2 ||      93,709 |         0.94 |           -
->          0 |         10 ||      93,667 |         0.94 |           -
->          0 |        100 ||      93,792 |         0.94 |           -
->   ---------+------------++-------------+--------------+------------
->          1 |          1 ||     281,000 |         2.81 |        1.86
->          1 |          2 ||     281,042 |         2.81 |        1.87
->          1 |         10 ||     280,958 |         2.81 |        1.86
->          1 |        100 ||     281,250 |         2.81 |        1.87
->   ---------+------------++-------------+--------------+------------
->          1 |          0 ||     280,959 |         2.81 |        1.86
->          2 |          0 ||   6,502,708 |        65.03 |       64.08
->         10 |          0 ||  18,681,209 |       186.81 |      185.87
->        100 |          0 || 103,550,458 |     1,035.50 |     1034.56
->   ---------+------------++-------------+--------------+------------
-> 
->   Note: per-call overhead is estiamated relative to the baseline case
->   with 0 relevant tracers and 0 irrelevant tracers.
-> 
-> 
-> This version of the series can be found in my kernel.org git repo:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-> 
-> Tagged as:
-> 
->   arm64-ftrace-per-callsite-ops-20230113
-> 
-> Since v1 [1]:
-> * Fold in Ack from Rafael
-> * Update comments/commits with description of the GCC issue
-> * Move the cold attribute changes to compiler_types.h
-> * Drop the unnecessary changes to the weak attribute
-> * Move declaration of ftrace_ops earlier
-> * Clean up and improve commit messages
-> * Regenerate statistics on misaligned text symbols
-> 
-> Since v2 [2]:
-> * Fold in Steve's Reviewed-by tag
-> * Move core ftrace patch to the start of the series
-> * Add ftrace selftest reults to final patch
-> * Use FUNCTION_ALIGNMENT_4B by default
-> * Fix commit message typos
-> 
-> [1] https://lore.kernel.org/linux-arm-kernel/20230109135828.879136-1-mark.rutland@arm.com/
-> [2] https://lore.kernel.org/linux-arm-kernel/20230113180355.2930042-1-mark.rutland@arm.com/
-> 
-> Thanks,
-> Mark.
-> 
-> Mark Rutland (8):
->   ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
->   Compiler attributes: GCC cold function alignment workarounds
->   ACPI: Don't build ACPICA with '-Os'
->   arm64: Extend support for CONFIG_FUNCTION_ALIGNMENT
->   arm64: insn: Add helpers for BTI
->   arm64: patching: Add aarch64_insn_write_literal_u64()
->   arm64: ftrace: Update stale comment
->   arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
-> 
->  arch/arm64/Kconfig                  |   4 +
->  arch/arm64/Makefile                 |   5 +-
->  arch/arm64/include/asm/ftrace.h     |  15 +--
->  arch/arm64/include/asm/insn.h       |   1 +
->  arch/arm64/include/asm/linkage.h    |   4 +-
->  arch/arm64/include/asm/patching.h   |   2 +
->  arch/arm64/kernel/asm-offsets.c     |   4 +
->  arch/arm64/kernel/entry-ftrace.S    |  32 +++++-
->  arch/arm64/kernel/ftrace.c          | 158 +++++++++++++++++++++++++++-
->  arch/arm64/kernel/patching.c        |  17 +++
->  drivers/acpi/acpica/Makefile        |   2 +-
->  include/linux/compiler_attributes.h |   6 --
->  include/linux/compiler_types.h      |  27 +++++
->  include/linux/ftrace.h              |  18 +++-
->  kernel/exit.c                       |   9 +-
->  kernel/trace/Kconfig                |   7 ++
->  kernel/trace/ftrace.c               | 109 ++++++++++++++++++-
->  17 files changed, 380 insertions(+), 40 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
-> 
