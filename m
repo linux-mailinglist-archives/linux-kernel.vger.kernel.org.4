@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58266A04C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6E16A04C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbjBWJ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S233930AbjBWJ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbjBWJ0L (ORCPT
+        with ESMTP id S233253AbjBWJ13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:26:11 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA42F4FCB5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:26:06 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id ee7so24732830edb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:26:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HTPqrdza57b/i0tF7P2H8m7ScdoQn+qvmHPmvgYAlqM=;
-        b=Kpl3Odd4DfBUatb+oUK4znvf4vqZg3bbXOmt3y7b/E+DPaI/gE12tUOCiR/FjbV5JJ
-         6w6RXUF7W2FciZwCyPDh7smq2MG4bag+omm7dbln5jie3+XiohRPegmJPOPAqfAlDDhf
-         HV1omLLRQdKooO2h2AG52SBuE9oa0AD5G9LhvBFgL4Hm6sCgkFy/UmpBNUKAgnSODv3t
-         okWqDePClnW0n8/aNof0A57v2RhzS2M5Ub3VluMjEJ1paLklRK1x9FN3RvHvefTY9S29
-         GBq6F0zB3TD3ooncvX50e4+b9kjdrG5Yeg/sMS/30l/gH9PvuRTQzR0SXezQ59siL4j5
-         QTLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTPqrdza57b/i0tF7P2H8m7ScdoQn+qvmHPmvgYAlqM=;
-        b=wUNSotCw4SiBbJzOOcylyQTFcBLRzb/6GzOorI71faMpFfBcZT1RgwFFi7iNGp8KG1
-         Ubfm5/UBpWuxE5nxhs5FE2oJ7qr5Gb+9GR75G6i5tHHF4o3lTcsHClB5VkjcpbPBA03k
-         xkF1JOJ4nLzqy64cQuhFW6BhuEv0dBoEzEqobH7m2RC0bx4blk9/0zQNoMvFxJ0xrq0s
-         XtJhkC8e6l+joYjugFH9RfSLmo+5edZrOL6DGjIPqGMDIpsQv21iPML0+BRLXNGnaQma
-         2NlFxdC6+OAQ8hUNBR/InLC+0iJs7GE8nvzXxrgK3Wivv9tttcvWPWe0Oin8wwBZQNTv
-         7cEA==
-X-Gm-Message-State: AO0yUKXiqFNqlUcCLi8V0JWfFdk2u9ppBkqhaCvDLVN19EuGoNJyaHuP
-        h+id0ts/5D864PheZjMxuTsEEQ==
-X-Google-Smtp-Source: AK7set/3HmjmvJmIpPFWFLcD2qUG14pxGYDBL5y9WyM5aGAIcsmY6YRkED/94Lksw1wMaVEbv9pNVg==
-X-Received: by 2002:a05:6402:31ee:b0:4ae:eae1:1458 with SMTP id dy14-20020a05640231ee00b004aeeae11458mr11824256edb.31.1677144365246;
-        Thu, 23 Feb 2023 01:26:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id gk7-20020a17090790c700b008c673cd9ba2sm6230616ejb.126.2023.02.23.01.26.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 01:26:04 -0800 (PST)
-Message-ID: <33abc8a3-39f7-af7c-9676-723228624b0f@linaro.org>
-Date:   Thu, 23 Feb 2023 10:26:02 +0100
+        Thu, 23 Feb 2023 04:27:29 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5D13B85F;
+        Thu, 23 Feb 2023 01:27:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMnjj5JdLz4x7s;
+        Thu, 23 Feb 2023 20:27:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1677144442;
+        bh=w6iPW4WhwcbH0XSafbFocLwM4VdQ80W+0qYJi1TJx2I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AUh9HNys5xsavyoA8u6//YrgqyqLBRKTp58XK4cpdSmdWPcChijJb3hpBn3qR4AC5
+         1WSK+b/ugJn89w7rD2V6W4SbNMdM3ZnSSpO3EClXrpv0oTLOmA3UlYbURstPF0q6sB
+         6gssL1Wyzk1XWiafGltuCxC3YHVAf1iMQRr3Qt/OgeIm+KboBi4H2FD8tcC7ggjBv1
+         0IE6RJoskngzhts6DZhjlmlbW+d/njzbtfTUn+yJJ1Ap9Vi893E50VCm0oiP/FExH6
+         NfoiPKZUYgUHyHG/wT68KdlpEwIjx2+pPOwE8luupQZ3spF4QT1DM+ORoU8HGgkkxs
+         poozQFf1cc/Sw==
+Date:   Thu, 23 Feb 2023 20:27:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: linux-next: Tree for Feb 23
+Message-ID: <20230223202719.4b3b7d6f@canb.auug.org.au>
+In-Reply-To: <CAMuHMdUa+RiSx1SdKSbYb6mCbQHY6V2oer=awkaWCuHuk1cayQ@mail.gmail.com>
+References: <20230223145519.11eb6515@canb.auug.org.au>
+        <CAMuHMdUa+RiSx1SdKSbYb6mCbQHY6V2oer=awkaWCuHuk1cayQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 1/6] dt-bindings: iio: light: Support ROHM BU27034
-Content-Language: en-US
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1677080089.git.mazziesaccount@gmail.com>
- <af211ec180d91a13862630e635019ebe03d4be31.1677080089.git.mazziesaccount@gmail.com>
- <e6b2a6f4-d710-7f74-e85d-1cd3f5b96460@linaro.org>
- <101db5e2-e878-b751-9679-6ea45eb24c26@fi.rohmeurope.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <101db5e2-e878-b751-9679-6ea45eb24c26@fi.rohmeurope.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/VKCI/Uq++vb3t5G1ZgLg/lC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 07:20, Vaittinen, Matti wrote:
-> Hi dee Ho Krzysztof,
-> 
-> Thanks for the review! It's nice you had the time to take a look on RFC :)
-> 
-> On 2/22/23 20:57, Krzysztof Kozlowski wrote:
->> On 22/02/2023 17:14, Matti Vaittinen wrote:
->>> ROHM BU27034 is an ambient light sesnor with 3 channels and 3 photo diodes
->>> capable of detecting a very wide range of illuminance. Typical application
->>> is adjusting LCD and backlight power of TVs and mobile phones.
->>>
->>> Add initial dt-bindings.
->>
->> Driver can be "initial", but bindings better to be closer to complete,
->> even if not used by the driver currently.
-> 
-> Out of the curiosity - why is that? (Please, don't take me wrong, I am 
-> not trying to argue against this - just learn the reason behind). I 
-> can't immediately see the harm caused by adding new properties later 
-> when we learn more of hardware. (and no, I don't expect this simple IC 
-> to gain at least many properties).
+--Sig_/VKCI/Uq++vb3t5G1ZgLg/lC
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Linux drivers change, but the hardware does not, thus DTS, which
-describes the hardware, can be complete. It should be written based on
-the hardware, not based on Linux drivers. If you add incomplete
-bindings, this suggests you wrote them to match your driver, not to
-match hardware. This in turn (adjusting bindings to driver) makes them
-less portable, narrowed to one specific driver implementation and more
-ABI-break-prone later.
+Hi Geert,
 
-Imagine you that clock inputs, which you skipped in the binding, were
-actually needed but on your board they were enabled by bootloader. The
-binding is then used on other systems or by out of tree users. On your
-new system the clocks are not enabled by bootloader anymore, thus you
-add them to the binding. They are actually required for device to work,
-so you make them required. But all these other users cannot be fixed...
+On Thu, 23 Feb 2023 09:22:50 +0100 Geert Uytterhoeven <geert@linux-m68k.org=
+> wrote:
+>
+> On Thu, Feb 23, 2023 at 5:18 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> > Merging net/master (5b7c4cabbb65 Merge tag 'net-next-6.3' of git://git.=
+kernel.org/pub/scm/linux/kernel/git/netdev/net-next) =20
+>=20
+> > Merging net-next/master (5b7c4cabbb65 Merge tag 'net-next-6.3' of git:/=
+/git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next) =20
+>=20
+> Niklas S=C3=B6derlund has just made me aware of the following "private"
+> netdev announcement, which you seem to have missed:
+> "[ANN] netdev master branches going away tomorrow!"
+> https://lore.kernel.org/netdev/20230222102946.7912b1b9@kernel.org
 
-What's more, incomplete binding/DTS is then used together with other
-pieces - DTS and driver, e.g. via some graphs or other
-phandles/supplies/pinctrl. So some other DTS or driver code might rely
-on your particular binding. Imagine you had only vdd-supply regulator,
-but no reset pins, so the only way to power-cycle device was to turn
-off/on regulator supply. Then you figure out that you have reset pins
-and it would be useful to add and use it. But already drivers are
-written to power cycle via regulator... or even someone wrote new driver
-regulator-pwrseq to power cycle your device due to missing reset GPIOs...
+Nice to be kept informed :-)  I have updated my repo to use the "main"
+branches.
 
+Thanks for letting me know.
+--=20
+Cheers,
+Stephen Rothwell
 
-Best regards,
-Krzysztof
+--Sig_/VKCI/Uq++vb3t5G1ZgLg/lC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP3MXcACgkQAVBC80lX
+0GzdQwgAigrvJUzvtmMMDeS2S/CEyuH+kVD/+oU8kHDpNu9eX2JgUc+59bTqeQzK
+zOBKmfhznK2taMLzyrjMDzP+s7n7mDnJDerxgT5ucU8LxN4NE1rTgw6Z/5OkIClt
+abzJMSb1V880VpqTySm1FsroZ8Fjj8dChVOoPSNsrZNL+TUY56Vdy+DjemRSCmp6
+h5VyU4HXRj7ksk7zDeiZXwqDHilBHPEU3FrTnERMTvGVm2KHiqzcB0VDKaYvM+/2
+oTajGfYVUBh0HDWK+Lp4+vT6wRYWhqtna4u7Mo5d+X/HKK+0UICwB6M3TpFwY7pq
+0GxqTCuIptJCezNSeCEEfnzm++xPcg==
+=oNR0
+-----END PGP SIGNATURE-----
+
+--Sig_/VKCI/Uq++vb3t5G1ZgLg/lC--
