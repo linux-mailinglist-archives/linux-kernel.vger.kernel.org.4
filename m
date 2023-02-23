@@ -2,139 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40BF6A02FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8316A0302
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbjBWG52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 01:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S233459AbjBWHAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbjBWG51 (ORCPT
+        with ESMTP id S232627AbjBWHAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 01:57:27 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE13D4A1E9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:57:24 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id 6so9405012wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:57:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KD2BbHM42s+qBr4AAb9fqsLLnrBN9ef1lpzrqkSofU8=;
-        b=I+KKZ9EwPLLCgyLBn1Nfv7AXEZy2LHfIYVutHsCPPlix2651u56DQIMYSbi1kUNEzJ
-         JrB1eBqntxgCvv0LVgGtwAZkb7TU0OynhwmQRhqRw83/cuu7tf+w8ipQ4WPw/BkwjhSd
-         y3nER6oRYsi2nnXzJZxVNLzpWa1m41ZWBs6BBfVuxjXo0CSeR0bFW4CSoxOf7atfyo/J
-         FaBoHU9LXIcJKBwCX92gv8O99kEFk8Ik3XPSBV49gWZHiGCXXNgkx4z4lqkxEn9TMAk5
-         29GFaQz5ggMtjjDooLwmpEgDycRGGb6rFQDFwnJ+MmCGClMf818KrrGyhQc3NlQ2EqEH
-         62tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KD2BbHM42s+qBr4AAb9fqsLLnrBN9ef1lpzrqkSofU8=;
-        b=Vn1Q5w8IjZQTL2potusB8guewVwhJ7q+Uyr/O3LLlw3IU+sBFXAygue/ry30Lzl3d+
-         BGv7LPSKMFT6KgXPa2clv+mAXW/SvEHp6ncmXkZMnfstIq6f9PQSpDj9kBwHWYKE3TEv
-         pO51sW/w6Ww4KtfAGM2f8HZf3G0I/b1jEG9+kFTJu/iWfeoxQ0aexVfijYqNQVLEtK6w
-         BbatUXRs8RH3sqQQgvLWwfMna/yMAWK2PB/hDx94twKcdMTn5H6YI0FVxHF8UX3c4PTd
-         XjKUp6sa1olARaA0AbsxvQh72EfdRMeFtAXQQd25QNPiaqR/ahEhYrcRRZtlihOifptB
-         YTUQ==
-X-Gm-Message-State: AO0yUKUyrnp995Z6fWRyNth/PyBGL5qIza38PKT1beE0btwqO5HZpb/S
-        YYYm8UbcrmU4LXtk+tuuAvWk1A==
-X-Google-Smtp-Source: AK7set+Ho9MkNNLGFSCQSbmPjDo0YWzb+lX1SEoWKWu62OlrzVjdAzu7byOiHrA41Htt3R7JCZN6ng==
-X-Received: by 2002:a5d:5848:0:b0:2c5:98f2:486 with SMTP id i8-20020a5d5848000000b002c598f20486mr10548278wrf.11.1677135443421;
-        Wed, 22 Feb 2023 22:57:23 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id c15-20020adfef4f000000b002c54c9bd71fsm7148700wrp.93.2023.02.22.22.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 22:57:23 -0800 (PST)
-Date:   Thu, 23 Feb 2023 07:57:17 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com
-Subject: Re: [PATCH v4 3/4] RISC-V: mm: Enable huge page support to
- kernel_page_present() function
-Message-ID: <20230223065717.zmlf2gxmtsgqperw@orel>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-4-jeeheng.sia@starfivetech.com>
+        Thu, 23 Feb 2023 02:00:00 -0500
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5C449885
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:59:56 -0800 (PST)
+X-QQ-mid: bizesmtp75t1677135567t3kjq54g
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 23 Feb 2023 14:59:20 +0800 (CST)
+X-QQ-SSF: 01400000002000I0Z000B00A0000000
+X-QQ-FEAT: +ynUkgUhZJkR9eQJ/nI+SMX4brfSTlyTxBOx61PeeOB0U47PjI8FKsWbVuDlL
+        vFlTnbMWRIjBsweExC4iGsfJC6eo+WGMhnRo8uI/EZm/OaE2sv9b9rI9dUnPzo7A8+vkwHL
+        EmSsV6p2O/MfIr8ZA4loWwHSenXZs//hvHKf8s1rIqS5Qqbqvg+M+fZlmVX1VvlrYSJoIZJ
+        h+a2O0okQXoMTdrBtH6WoYrvGtLKiURV+eFxgvGkzp9/6nmuiFQt92vyhP/H7ug+6PdMKKq
+        nWlF9ITVcWVOVyOryddPaO+YfHYqWFw5OFYXgSsXyHzyg4lRSNJMvLnaCfJgkrkOlhh/X8A
+        Aj3SodCETO0iEucjHFHISIKisidiAYGFZL9NNtyb9CeEyB125cR+yKOr1gALG8CHTrHcHqd
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+        airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
+Date:   Thu, 23 Feb 2023 14:59:18 +0800
+Message-Id: <20230223065918.19644-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221023523.1498500-4-jeeheng.sia@starfivetech.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:35:22AM +0800, Sia Jee Heng wrote:
-> Currently kernel_page_present() function doesn't support huge page
-> detection causes the function to mistakenly return false to the
-> hibernation core.
-> 
-> Add huge page detection to the function to solve the problem.
-> 
-> Fixes tag: commit 9e953cda5cdf ("riscv:
-> Introduce huge page support for 32/64bit kernel")
+A privilege escalation vulnerability was found in vmwgfx driver
+in drivers/gpu/drm/vmwgfx/vmwgfx_drv.c in GPU component of Linux
+kernel with device file '/dev/dri/renderD128 (or Dxxx)'. This flaw
+allows a local attacker with a user account on the system to gain
+privilege, causing a denial of service(DoS).
 
-This should be formatted as below (no line wrap and no 'tag' in the tag)
+This vulnerability can be quickly verified by the following code
+logic:
+...
+dri_fd = open("/dev/dri/renderD128", O_RDWR);
+ret = ioctl(dri_fd, 0xC0186441, &arg);
+if (ret == 0) {
+	printf("[*] VMW_ALLOC_DMABUF Success!\n");
+}
+...
 
-Fixes: 9e953cda5cdf ("riscv: Introduce huge page support for 32/64bit kernel")
+Submit this commit to fix it.
 
-> 
-> Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> ---
->  arch/riscv/mm/pageattr.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-> index 86c56616e5de..ea3d61de065b 100644
-> --- a/arch/riscv/mm/pageattr.c
-> +++ b/arch/riscv/mm/pageattr.c
-> @@ -217,18 +217,26 @@ bool kernel_page_present(struct page *page)
->  	pgd = pgd_offset_k(addr);
->  	if (!pgd_present(*pgd))
->  		return false;
-> +	if (pgd_leaf(*pgd))
-> +		return true;
->  
->  	p4d = p4d_offset(pgd, addr);
->  	if (!p4d_present(*p4d))
->  		return false;
-> +	if (p4d_leaf(*p4d))
-> +		return true;
->  
->  	pud = pud_offset(p4d, addr);
->  	if (!pud_present(*pud))
->  		return false;
-> +	if (pud_leaf(*pud))
-> +		return true;
->  
->  	pmd = pmd_offset(pud, addr);
->  	if (!pmd_present(*pmd))
->  		return false;
-> +	if (pmd_leaf(*pmd))
-> +		return true;
->  
->  	pte = pte_offset_kernel(pmd, addr);
->  	return pte_present(*pte);
-> -- 
-> 2.34.1
-> 
->
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ drivers/gpu/drm/vmwgfx/vmwgfx_drv.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Otherwise,
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c
+index bd02cb0e6837..0166f98be9df 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c
+@@ -1244,6 +1244,7 @@ static long vmw_generic_ioctl(struct file *filp, unsigned int cmd,
+ 						 unsigned long))
+ {
+ 	struct drm_file *file_priv = filp->private_data;
++
+ 	struct drm_device *dev = file_priv->minor->dev;
+ 	unsigned int nr = DRM_IOCTL_NR(cmd);
+ 	unsigned int flags;
+@@ -1263,6 +1264,10 @@ static long vmw_generic_ioctl(struct file *filp, unsigned int cmd,
+ 			if (!drm_is_current_master(file_priv) &&
+ 			    !capable(CAP_SYS_ADMIN))
+ 				return -EACCES;
++		} else if (nr == DRM_COMMAND_BASE + DRM_VMW_ALLOC_DMABUF) {
++			if (!drm_is_current_master(file_priv) &&
++			    !capable(CAP_SYS_ADMIN))
++				return -EPERM;
+ 		}
+ 
+ 		if (unlikely(ioctl->cmd != cmd))
+-- 
+2.20.1
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
