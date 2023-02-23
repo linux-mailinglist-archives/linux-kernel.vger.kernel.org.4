@@ -2,166 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4596A138D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 00:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53466A1395
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 00:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBWXMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 18:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S229697AbjBWXNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 18:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjBWXL4 (ORCPT
+        with ESMTP id S229445AbjBWXNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 18:11:56 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4430F580CD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:11:53 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id o12so48605670edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eitmlabs-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZhcqxXFunyKmJAnTkBe/sYveKPMZiCHLdgGndCIvmw=;
-        b=RPm9ajGg+bpqPeCQ1T7jJwujkrC4b1kK2z76ktAQ91JHtEA7+I+szu01tvj9rAzM/6
-         YY+DVjRz2xFvARlTc6YLhn/CVGCjezw0WG0Nj9o08eMCQtsn4Ni0kQQ5hrisWocExNpl
-         QQXcRsZzf84o4wLtmHyJAVsELWiYpMAwBqsm3cfAIM8uzGMuPECGV+gOy3kw5UpACdbf
-         0Z/jcSjufhR8XAucuecmqwEZSK+mn9OLMordC8aoOMK3pbuKCjbqjaDq+ajY2nEi44B5
-         0l0AwBlR1tI9XjcOVBg6vkqMnpys15syHbxbKQ0PE1ZWaL+cMY526C+3g3CBl5OaIf30
-         aPyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ZhcqxXFunyKmJAnTkBe/sYveKPMZiCHLdgGndCIvmw=;
-        b=wRYW6jbOkfw4W22kaYb3VqJmXHlfQBKHSduUF99zea36vomnhL1FtHnAKvZVIljg+b
-         LWhPIyAgsMDJfl2A0saii7/Lz0tOBCHOqn0w/oD1FY1Pjwn5FjcjlBT9FQS4TtqOVQx+
-         YZNyAqD2OClus00CNDlPkaGTHz5ViKstnp0PsscVgO+EIZQEV1UbfdIzdSq0gkt17gkh
-         3QsOJcKOBNxh2WozNcEnG1ufehbs7dUwdaUdqaHVr76hBOA2iKytgwtRAtymI9ANqJG6
-         pxy0Q5GIKC8NJNPZnsy3zg8HcBjLSMSy0VshKBJc/8nw4ItCEqt2c6Eme+wQMIBAIXoC
-         GSSw==
-X-Gm-Message-State: AO0yUKWs0U9Xx70cnyDJ2LdsiLO39CRBB1esPArFQqEzPwaND6mGD6cD
-        RpdFnLlClCKnD4c1oa063yhyD4zuxiWzArtdSmuuHw==
-X-Google-Smtp-Source: AK7set/bDMEFLOb9zD5mIiYLI3kJ4oUZ7FKxuHEIh9/zbBkhb+idLsQElu6vADg4xiN5SGB6/VWABvfcrsDnri21a74=
-X-Received: by 2002:a17:906:3388:b0:8af:b63:b4ba with SMTP id
- v8-20020a170906338800b008af0b63b4bamr9918125eja.3.1677193911673; Thu, 23 Feb
- 2023 15:11:51 -0800 (PST)
+        Thu, 23 Feb 2023 18:13:40 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BB6234D3;
+        Thu, 23 Feb 2023 15:13:37 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NMmMS8032137;
+        Thu, 23 Feb 2023 23:13:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zpwN53LM2dkZyG0/s3KuwKkrMrPixKOghZlenMmKrlg=;
+ b=j8Dg0aRhJc07FdrPVqvcjFvAUzuXXz1eX+IWcJP2lC6ggoARjjLaiCOfnKM3pdQTUDbQ
+ dFH7nzmRBpq4t68bBJbFFMu8FvGq2SzPRyhYcdc4edmHzFVsqXNJ7gxEsfnwj9YVBwCz
+ IIB9KwpEdX+ULTMFA+v7q2alTWXEWaN3o3PibKxHOdHNL7tEWtjr49WkdoyFNo0bIUD6
+ 5vN8+8tq/npgsAn6p44lNHCZv5wxw+KwKmNPaDW3JTr6cDBwYIpSzw8OLagN1/V+I/lQ
+ cz7o+NRxrP4OxqcUHex/0QYSQjWnkVryCB5b+ZJN9Brp6Enmr1LVXt42WEZQKjaOTMMr lw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwyc5jx9v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 23:13:22 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NNDL06013275
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 23:13:21 GMT
+Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 15:13:20 -0800
+Message-ID: <cd61963d-eb4c-9a4f-d48f-7a633bfd4be3@quicinc.com>
+Date:   Thu, 23 Feb 2023 15:13:20 -0800
 MIME-Version: 1.0
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
- <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
- <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
- <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
- <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
- <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
- <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com> <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
-In-Reply-To: <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
-Reply-To: jonathan@eitm.org
-From:   Jonathan Katz <jkatz@eitmlabs.org>
-Date:   Thu, 23 Feb 2023 15:11:35 -0800
-Message-ID: <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com>
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 08/26] gunyah: rsc_mgr: Add resource manager RPC core
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212327.3310128-1-quic_eberman@quicinc.com>
+ <d69f9699-b4d9-7a3a-71b1-7e6fe72c4f82@linaro.org>
+ <94ebe2f0-0baf-21c0-45d5-c5bc4df9ad94@quicinc.com>
+ <44a59ea4-da6e-e96a-5e89-dfd41db72823@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <44a59ea4-da6e-e96a-5e89-dfd41db72823@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -izvg1txNj7hY26iLrmzHV-Ay6Er-7gz
+X-Proofpoint-GUID: -izvg1txNj7hY26iLrmzHV-Ay6Er-7gz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_13,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230193
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-Problem persists with me with 6.2.0
-# mainline --install-latest
-# reboot
-
-# uname -r
-6.2.0-060200-generic
 
 
-Representative log messages when mounting:
-Feb 23 22:50:43 instance-20220314-1510-fileserver-for-overlay kernel:
-[   44.641683] overlayfs: null uuid detected in lower fs '/', falling
-back to xino=off,index=off,nfs_export=off.
+On 2/23/2023 2:29 AM, Srinivas Kandagatla wrote:
+> 
+> 
+> On 22/02/2023 23:18, Elliot Berman wrote:
+>>>>
+>>>> +EXPORT_SYMBOL_GPL(gh_rm_notifier_unregister);
+>>>> +
+>>>> +void get_gh_rm(struct gh_rm *rm)
+>>>> +{
+>>>> +    get_device(rm->dev);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(get_gh_rm);
+>>>
+>>> Can we have some consistency in the exported symbol naming,
+>>> we have two combinations now.
+>>>
+>>> EXPORT_SYMBOL_GPL(gh_rm_notifier_register);
+>>> EXPORT_SYMBOL_GPL(get_gh_rm);
+>>>
+>>> lets stick to one.
+>>
+>> done.
+>>
+>>>> +
+>>>> +void put_gh_rm(struct gh_rm *rm)
+>>>> +{
+>>>> +    put_device(rm->dev);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(put_gh_rm);
+>>>>
+>>> ...
+>>>
+>>>> +
+>>>> +static int gh_rm_drv_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +    struct gh_msgq_tx_data *msg;
+>>>> +    struct gh_rm *rm;
+>>>> +    int ret;
+>>>> +
+>>> How are we ensuring that gunyah driver is probed before this driver?
+>>>
+>>>
+>>
+>> Which driver?
+> 
+> Am referring to gunyah.ko
+> 
+> TBH, gunyah.c should be merged as part of resource manager, and check if 
+> uuids and features in probe before proceeding further.
+> 
 
 
+Ah -- gunyah_rsc_mgr.ko has symbol dependency on gunyah-msgq.ko. 
+gunyah-msgq.ko has symbol dependency on gunyah.ko. gunyah.ko doesn't 
+have any probe and does all its work on module_init.
 
-Representative log messages when accessing files:
-eb 23 23:06:31 instance-20220314-1510-fileserver-for-overlay kernel: [
- 992.505357] overlayfs: failed to retrieve lower fileattr (8020
-MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
-err=-38)
-Feb 23 23:06:32 instance-20220314-1510-fileserver-for-overlay kernel:
-[  993.523712] overlayfs: failed to retrieve lower fileattr (8020
-MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
-err=-38)
+In order to merge gunyah.c with resource manager, I would need to 
+incorporate message queue mailbox into resource manager. IMO, this 
+rapidly moves towards a mega-module which was discouraged previously.
 
-
-On Mon, Jan 30, 2023 at 11:27 AM Jonathan Katz <jkatz@eitmlabs.org> wrote:
->
-> On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> >
-> > On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wrote:
-> >
-> > > I believe that I am still having issues occur within Ubuntu 22.10 with
-> > > the 5.19 version of the kernel that might be associated with this
-> > > discussion.  I apologize up front for any faux pas I make in writing
-> > > this email.
-> >
-> > No need to apologize.   The fix in question went into v6.0 of the
-> > upstream kernel.  So apparently it's still missing from the distro you
-> > are using.
->
-> Thank you for the reply! ---  I have upgraded the Kernel and it still
-> seems to be throwing errors.  Details follow:
->
-> Distro: Ubuntu 22.10.
-> Upgraded kernel using mainline (mainline --install-latest)
->
-> # uname -a
-> Linux instance-20220314-1510-fileserver-for-overlay
-> 6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
-> 08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
->
-> On mount I still get the following notice in syslog (representative):
-> Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kernel:
-> [   71.613334] overlayfs: null uuid detected in lower fs '/', falling
-> back to xino=off,index=off,nfs_export=off.
->
-> And on access (via samba) I still see the following errors in the
-> syslog (representative):
-> Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kernel:
-> [  539.181858] overlayfs: failed to retrieve lower fileattr (8020
-> MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
-> err=-38)
->
-> And on the Windows client, the software still fails with the same symptomology.
->
->
->
->
-> >
-> > > An example error from our syslog:
-> > >
-> > > kernel: [2702258.538549] overlayfs: failed to retrieve lower fileattr
-> > > (8020 MeOHH2O
-> > > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/analysis.tsf,
-> > > err=-38)
-> >
-> > Yep, looks like the same bug.
-> >
-> > Thanks,
-> > Miklos
+Thanks,
+Elliot
