@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15816A0EBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CE16A0EC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjBWRbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S230037AbjBWRcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjBWRbF (ORCPT
+        with ESMTP id S230038AbjBWRcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:31:05 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3526F39286;
-        Thu, 23 Feb 2023 09:31:04 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id b12so2932310ils.8;
-        Thu, 23 Feb 2023 09:31:04 -0800 (PST)
+        Thu, 23 Feb 2023 12:32:07 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F46E580D6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:32:03 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id a3so3655112vsi.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:32:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4+n5maBm19ijOUWMlLkRAAT2cHaeu2CizSqx/+2ysvQ=;
-        b=mYEW8MOtUe2vgI43aBQRNSI0XiKiGPLn+NI1lVY2wuTH5rDT00ejDKts6v7GUFFlxK
-         bdx+wtGnd40oKfiN6+9SxleClAgQlsEsHMh35/2g6rj/q/ukPHoOeAmCB0+RACvxX8hJ
-         O3X8GwOKtolTSB4t63ERs4wyAFJzH7alk6p+XYvd+ytLmZw/Thv28PPSs4FKB9mPjN3f
-         kVgT2cgpa4J0r9dAj+1okvUFc43ti0/aHMjT4N1t6CsgvvdwNNHcjzcLO0R8G+seon3J
-         sH6xczvVs3HVAuIfomSHoW5PW1LDfPutcTcnyzJlvxiN+MX24sDlDQHE1E8TQi5CDJAe
-         TCMw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iNwsirsHSitd5ovdXTVmlUwXEHgLLx0BuoMwSCFrYuo=;
+        b=tH4QkN1zPxvtTatEQOkk9r1/iGdRQFuYysFRTZcgRpbcmNxoeg/uYpN3ZQfa+cPCen
+         jggGGGFxjXslx5oGdMiL/tvObVKcw0ecdp2/CcO5zbm8xQpJs/pwF7D4kKvUXs0iwaxQ
+         oXwY5zClEIEeN720v3xTOUKzXxR1PLnCYMPNAsNDP2Llzcsp44z/7LBpt5BglyFOQHR7
+         3hJHXN1SDu+tGfdCAKWpJOpJG8h2TLGAp71csUBXz0Tq1DhijbFq8GaQEusaqUQ+14ZB
+         DeGzAXw43XINQGLD0tyCLLmMYbxCP5u78jqcf1jZgmexpO08XLOZ7C4jbbukMlCaZlNj
+         x9pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4+n5maBm19ijOUWMlLkRAAT2cHaeu2CizSqx/+2ysvQ=;
-        b=qMRHKbcjQBJ0rRFEvGRy36UIy+AXK5GcqpWpiAq4tjgfFhRYY/SZYo7HmdfOOqnI+5
-         ATQTj/IzmpkjircvvLSa5V/QKnOW6S3ESA8vffMc8qeqtviVtceQLV9B7XeBYI8y0Qoq
-         yo4VoZIfQ7fHX9kCNoekhDREjnzv39HqYE/JWc1X/QbAuXwN0JubOSgUMM01vAWCvfBt
-         HR98rAKWdugwdC6WOsjid/nw2ndypxBmSrmwiSWJBvdtqntgAF7xA2Z12kwmvAvbUCdK
-         c3PFg6SCV3jnQfLI39weq0U8tefGFFLUKtxG0mJjL0wgOsuDhRHVC5jmVeUo/GgTWNoA
-         17xQ==
-X-Gm-Message-State: AO0yUKVs/JtsNOUrEQJQGQG9Lfxgl3OZqTFSzZVlypb7dteU7QFQxIf8
-        BbErq2lA6JB1NwzHjA5scME=
-X-Google-Smtp-Source: AK7set/Aq8T7UiZIBQo/J34rkNRvZlstU1hzYah+NudNHk3QZrLEGEVCG1YBdhcITS2hmxt3idILzQ==
-X-Received: by 2002:a05:6e02:1d1c:b0:313:cb9e:8026 with SMTP id i28-20020a056e021d1c00b00313cb9e8026mr11584453ila.11.1677173463505;
-        Thu, 23 Feb 2023 09:31:03 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l11-20020a02a88b000000b003ba4aea63d1sm2171417jam.117.2023.02.23.09.31.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 09:31:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cfd03ee0-b47a-644d-4364-79601025f35f@roeck-us.net>
-Date:   Thu, 23 Feb 2023 09:30:59 -0800
+        bh=iNwsirsHSitd5ovdXTVmlUwXEHgLLx0BuoMwSCFrYuo=;
+        b=FdHJg82mLXY3W2twx4lymrJ69sdF/HO6uuCY6S1Ee5XM7RSY1qKsNY0pfnPx7xz4gH
+         iaq7AVOYuFBX6P9jaE8VBU2hzy0wqNfMpEcHViHBHN0fZDuU/BJ5wg3uoJRoiLt5pnZe
+         TViVE9SlyJdNyBr1P6RxKh68I7f8aRVSHm8tp4KI/j0PJQ82aXaFs+rEUiUJAvgd4gDL
+         gY2o4PF+v7uUHlGCLOSiOt3j8vA1jqn2uZQrngSOY99M478vyjnExJQceuUUIfsplcjt
+         TjsJdDKHwjGTlMKi0Zs/DC4qouwBbtH0hsyhlBNLVk2/ehRD4O9LlMD8Q/uIT/XXb9VQ
+         Yf1g==
+X-Gm-Message-State: AO0yUKW6W8tOWJhlzbs+asQVpXJG47P5uXiMAvY/ANLxTJmMKpKQuXZE
+        XZE5uBN1l7sz8SSGJMpg2o3HmfIgU3n+WqOqy7wAcQ==
+X-Google-Smtp-Source: AK7set8oRuO7MAtve7f+P56pgl8X3cg9W3IMKZZftNya4jBm7eT5RaRh7hAOVcui96sC9p7fepjw4G5RQvt5EhcCloc=
+X-Received: by 2002:a1f:5fc1:0:b0:412:611a:dce5 with SMTP id
+ t184-20020a1f5fc1000000b00412611adce5mr349173vkb.0.1677173522541; Thu, 23 Feb
+ 2023 09:32:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230223141542.672463796@linuxfoundation.org>
- <adc1b0b7-f837-fbb4-332b-4ce18fc55709@roeck-us.net>
- <Y/eVSi4ZTcOmPBTv@kroah.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Y/eVSi4ZTcOmPBTv@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230223005754.2700663-1-axelrasmussen@google.com> <20230223005754.2700663-4-axelrasmussen@google.com>
+In-Reply-To: <20230223005754.2700663-4-axelrasmussen@google.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 23 Feb 2023 09:31:26 -0800
+Message-ID: <CADrL8HXQTbqNAYW4h-EXe=wBmAQ15Ta1K5my9xXKPPz0vKX4XA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,43 +78,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 08:33, Greg Kroah-Hartman wrote:
-> On Thu, Feb 23, 2023 at 07:36:39AM -0800, Guenter Roeck wrote:
->> On 2/23/23 06:16, Greg Kroah-Hartman wrote:
->>> This is the start of the stable review cycle for the 5.15.96 release.
->>> There are 37 patches in this series, all will be posted as a response
->>> to this one.  If anyone has any issues with these being applied, please
->>> let me know.
->>>
->>> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
->>> Anything received after that time might be too late.
->>>
->>
->>
->> $ git describe
->> v5.15.95-38-gd6f4f9746d40
->> groeck@server:~/src/linux-stable$ !ls
->> ls -l scripts/pahole-version.sh
->> -rw-rw-r-- 1 groeck groeck 269 Feb 23 07:33 scripts/pahole-version.sh
->>
->> This results in:
->>
->> make[1]: Entering directory '/tmp/buildbot-builddir'
->> scripts/pahole-flags.sh: 10: /opt/buildbot/slave/stable-queue-5.15/build/scripts/pahole-version.sh: Permission denied
->> scripts/pahole-flags.sh: 12: [: Illegal number:
->> scripts/pahole-flags.sh: 16: [: Illegal number:
->> scripts/pahole-flags.sh: 20: [: Illegal number:
->>
->> and all builds fail for me.
-> 
-> This is a fun thing, the patch shows it being set to 0755, so `git am`
-> should be doing the right thing here.  Let me dig to see if I can change
-> something in my scripts to resolve this...
-> 
+On Wed, Feb 22, 2023 at 4:58 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+>
+> Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
+> argument. In future commits we plan to plumb the flags through to more
+> places, so we'd be proliferating the very long argument list even
+> further.
+>
+> Let's take the time to simplify the argument list. Combine the two
+> arguments into one - and generalize, so when we add more flags in the
+> future, it doesn't imply more function arguments.
+>
+> Since the modes (copy, zeropage, continue) are mutually exclusive, store
+> them as an integer value (0, 1, 2) in the low bits. Place combine-able
+> flag bits in the high bits.
+>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-This isn't the first time this happens. I seem to recall that you mentioned
-some time ago that whatever you use to apply patches (quilt ?) doesn't
-handle executable permission bits correctly.
+Acked-by: James Houghton <jthoughton@google.com>
 
-Guenter
-
+I don't see anything wrong with this patch. Thanks, Axel.
