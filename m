@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A0D6A1174
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402116A117B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjBWUtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 15:49:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S229502AbjBWUvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 15:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBWUtV (ORCPT
+        with ESMTP id S229448AbjBWUvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 15:49:21 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995ED28213
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 12:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677185360; x=1708721360;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V40Vnadec9CtIPBADiEO6DI6SZdq/i5OZmg4vFhAJGg=;
-  b=Q6CaWKlAveyQxqxWcdy1MWn9a9os/4csYUMFSzn13ufZTB1hfPb+yN1x
-   BuJtxu3pGeb3qR/ue2k61rijI4ZJj0a9e9PjlUWaFIzq6VN3rg5UX2yq3
-   JGGrxgKF4N5NzKPR28KURZXOdQ+Gg6ao2s936HbSXwYZ2Wxj8/+3aMU72
-   4u6P/m1PwyEmSvRdJAZdngIqg57jEfJOx0q0PQn67bivccNap2UMXR2TU
-   8oLcdcow/FM7X/rni381e44uxdBytgmUO3JGMVstaAS+EeLCEQldxAfyA
-   uTRdYETY9/HjJCDrBHtFkgNJYPUaIwiiry0UnGpZ20dJ5pZ3vKfV6ioKc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331057116"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="331057116"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 12:49:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="674664868"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="674664868"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2023 12:49:19 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVIWk-0001jt-1n;
-        Thu, 23 Feb 2023 20:49:18 +0000
-Date:   Fri, 24 Feb 2023 04:49:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- f426f069f03e3fadfca05b7c365ea806a1812eac
-Message-ID: <63f7d14a.P9zJU/6SeOwb9WT9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 23 Feb 2023 15:51:35 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F58215540;
+        Thu, 23 Feb 2023 12:51:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7DGlfUnvfYwWSCguIE8WPkrvQTnToMa0+8F0V8cNuK4=; b=SSJshkyAK6myKyRuj/x4FeypBG
+        bOOgui2oKkxOQjbvkfDpyqI6t6jR6wKjOlCisEHEKbXk6T3tvNpJrr00V5LSDQNWQVzOBVse4g8Hj
+        KG8ZVeu8hoxbaU3SdL3fI1D1iFnHOil7jkHZQxtgfTZ7+6TtPin0pVbFevZoKqDGwpqElKRakJdSG
+        u8jeBOI94RgPzxlfFOxk4T7SJQxITvCaDwq6BgW8MbcE68XBs88+EToJmEeASSyBk8DMncP+D2sOz
+        bDs6xzdXUVfUGa0eGdXM3t4Zr1OiBacm1JDZcY+42+JNIebkHUjSBvRNhjexJuLDsmQ0iNJqD7cMJ
+        y3Qa2Txw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVIYq-000JbX-G5; Thu, 23 Feb 2023 20:51:28 +0000
+Date:   Thu, 23 Feb 2023 12:51:28 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH 21/27] kbuild, dma-mapping: benchmark: remove
+ MODULE_LICENSE in non-modules
+Message-ID: <Y/fR0KnxKP2rF3Da@bombadil.infradead.org>
+References: <20230222121453.91915-1-nick.alcock@oracle.com>
+ <20230222121453.91915-22-nick.alcock@oracle.com>
+ <20230222144856.GA14220@lst.de>
+ <Y/acoc6MDKNnrG+g@bombadil.infradead.org>
+ <878rgopfdl.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
+Content-Disposition: inline
+In-Reply-To: <878rgopfdl.fsf@esperi.org.uk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,100 +60,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: f426f069f03e3fadfca05b7c365ea806a1812eac  Merge branch 'x86/tdx'
+On Thu, Feb 23, 2023 at 03:31:50PM +0000, Nick Alcock wrote:
+> On 22 Feb 2023, Luis Chamberlain spake thusly:
+> > Then we look for an optimal way to address the final step:
+> >
+> >  * remove all MODULE_LICENSE() and autogenerate them from SPDX
+> 
+> Ooh that would be nice!
+> 
+> > The difficulty in this will be that we want to upkeep existing build
+> > heuristics and avoid to have to traverse the tree twice (see details
+> > on commit 8b41fc4454e). I can't think of an easy way to do this that
+> > does not involve using kconfig tristate somehow.
+> 
+> Nor can I -- and more generally I can't figure out a way to get from the
+> Kconfig symbols to the source files that constitute them without
+> retraversing the tree, since the only place the relationship is recorded
+> is in makefiles, and those makefiles use a lot of make functionality
+> (including more or less arbitrary make functions).
 
-elapsed time: 728m
+$ grep "_MODULE 1" ./include/generated/autoconf.h| wc -l
+560
 
-configs tested: 79
-configs skipped: 3
+$ grep "_MODULE 1" ./include/generated/autoconf.h| grep XFS
+#define CONFIG_XFS_FS_MODULE 1
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I *think* the trick will likely be to have new a possibilities.h or just
+agument autoconf.h with POSSIBLE_MODULE for each module.
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230222
-arc                  randconfig-r043-20230223
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230222
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                randconfig-r042-20230223
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230223
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
+The next complexity lies in inferring the license and doing the license
+output given a combination. I *think* you already figured out the objs
+from the module, and in fact your new kallsyms extension I think prints
+these out right (which I find highly useful)? If so then we use these as
+input source for an SPDX license lookup. Instead of having this
+relationship grep'd after at build time, I wonder if might be good to
+just collect all license associates to all files in a header file
+similar to _MODULE prefix so maybe SPDX_$(file_path)_LICENSE_$license
+which creates a header file 1-1 mapping.
 
-clang tested configs:
-arm                  randconfig-r046-20230223
-hexagon              randconfig-r041-20230222
-hexagon              randconfig-r041-20230223
-hexagon              randconfig-r045-20230222
-hexagon              randconfig-r045-20230223
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20230222
-s390                 randconfig-r044-20230222
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
+Not sure if that's too much noise.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Just a thought, to get the wheels spinning.
+
+  Luis
