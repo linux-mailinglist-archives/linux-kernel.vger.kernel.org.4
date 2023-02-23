@@ -2,193 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7FD6A0B2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DF76A0AC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbjBWNty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S233925AbjBWNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbjBWNtq (ORCPT
+        with ESMTP id S233473AbjBWNhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:49:46 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D7927491
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:49:39 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id t22so12724890oiw.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:49:39 -0800 (PST)
+        Thu, 23 Feb 2023 08:37:39 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0A24DBE5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:37:01 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id u6so5197883ilk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:37:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EWQTfJ5YqMEb0/gtO5TDI9wfdh4CmPiWsPEKemNGlJk=;
-        b=eURITKW8QYP9z92PoD7ZmDI2nN6q/tVUjqh4DU5g7kqwgmH0DJ+idqfmNyhvv7lQbp
-         3eb+abJHt14JfyhHmXB/0dVfm/Oeh2xwUhZLk07+xIGuT1JaRLV1oQL/hHr6MVCyfH2K
-         lByNBEJIJvIwi7fkOz7kDE0UXCEE732PJ4tL3dIETG+Wy/hOv5dX1tvsCL3resXFYrZw
-         Nc3i4/NnPFah7Md9ZtOEMjfFs7d/GX4Czek8Yljmkt4OMuiSQmjeKxCHhRBOiYqt18mG
-         n4cwyY89NB9RQZ5M/tBamhcXxVA4YE0p+rwps38LTEZN8c7+Kf2IHyXAiu3bv5eLWLxN
-         5GbQ==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sP7OO7pY75acB3j8P2/QK5gFH3RzazXAttowMP569Uc=;
+        b=B0wEgD1OktVXylPcjRbi2nRQHBVhpToHa9Bs7dtRBLVtufrGjxxvz645NbsDMVbw6W
+         eeb7ylEzAaptkvUpmha7xX4qP7n+5d+skBXS5g0HN7ikUjDE+YZRZtW7s0OfIPXpN1+g
+         FdgoDBJp4S9TSdxJs7yNO3KVmb8bTDPdjYKDiHbgSeoHOqbXn4soJni7MIC+ZT8pRWC/
+         m4bGNyk3jL8QQYL3J1klGLbUjZfaauQNsSjr5lzbw0pcre8IXpOmCh8x682cnrtaYitG
+         MVeatK0sAVwWiV4ZiO346DNslIlpgywLwZxguNiylMUtoLHSF6q5lmoBM7zIRhaObwBS
+         jXJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EWQTfJ5YqMEb0/gtO5TDI9wfdh4CmPiWsPEKemNGlJk=;
-        b=7XGWPvX92wk1QSacvBAYS6vcxuEib4K+vqZAMwtbCjYOEt2WoVnSSta8ln5TQ5Sn13
-         ae1pg3Z0d19DZTwPrc7QpV9opdvS8TiTFobvJmARNwtaFzXTMZG+WYPZ328xlMTfFkVI
-         aEaINEcXf0inWwj0dmnUJjc/oOBrtWvNc/g9QO3/6r5YWqAWacjhruh5wUh/ZULv5uLG
-         ulUXKbXKfRlUBHs+R3AbC9nxRR9b6yZVXnzfUbs2KRy8QG5IozZr4y2dlz45kd5IU/Ie
-         8LUC9PyYwIGVlnq2Y9QL+4GvC070HvPl8CPI7T6FAl7SRqFRA3R4YuM/ADvHBdMOhYsb
-         ycdg==
-X-Gm-Message-State: AO0yUKWiwcUdKdqXyzfohyHZCyuy52dSfVCMP64sO82zuSwTLS5e8LXm
-        X4cM7zs2Pa4Fia1huCdDV1vh/FiJyBT7ibgnNTn67g8P
-X-Google-Smtp-Source: AK7set/2aMgF/LtaBUGb/KDdK5anSKBLMsRG6+EGNVCXpx0Q67zEslFcgOl1UjgJDQPL36+f5p7Oyzpjr86cKjsh3PE=
-X-Received: by 2002:a05:6808:1690:b0:35b:d93f:cbc4 with SMTP id
- bb16-20020a056808169000b0035bd93fcbc4mr1087264oib.96.1677160178686; Thu, 23
- Feb 2023 05:49:38 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sP7OO7pY75acB3j8P2/QK5gFH3RzazXAttowMP569Uc=;
+        b=nXsHSAsw91BuHIDjoUUUvOk80X/ABqOMo7rKYrlob6EZYWQelXVag2pypb1x2f3O4o
+         C9MGR+52IWhOuEzCnHs+sCP8RwQejnjtJ7wxwOHs3QnC5E7ic8iR/hAiWi10KQGWcQ+M
+         zjfpKZa1m3Q8qqiaotdFVPqo8DZEaeZCZkvK9qnHluOR/UrAC83bMoYIy1aC41GNyj9U
+         6duML1hG0Zl8Jlr+FbTDRw92P1RQc7cDqjxPS5PZSB6qYfzp+XBx8kU8ZW+uyfX0jW5q
+         9U/rgb4EdXPichjS/5dQC38rSD8Ty6c19oapW8M8UMEbPt4Xim4l9J47bs+21xepg07U
+         IHBw==
+X-Gm-Message-State: AO0yUKVDmWAmFcoVmUrNN4xbKh0lEL18F/sFm6VzbYRWnoLDHBGe5Gf2
+        iPcrEb7ZruUixOVpQSuyIbtcrQ==
+X-Google-Smtp-Source: AK7set8z948GTlC8szDcOc8/WvlQxm1HwvJ/L6g9lQOWBvpyyqSSClk3PfhXNX0GkRjSC03LuFlClA==
+X-Received: by 2002:a05:6e02:198a:b0:315:4a48:aaf with SMTP id g10-20020a056e02198a00b003154a480aafmr8322244ilf.14.1677159411062;
+        Thu, 23 Feb 2023 05:36:51 -0800 (PST)
+Received: from [172.16.32.78] ([198.232.126.202])
+        by smtp.gmail.com with ESMTPSA id p12-20020a0566380e8c00b003a2a167e7d9sm3547827jas.96.2023.02.23.05.36.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 05:36:50 -0800 (PST)
+Message-ID: <380c88ef-eb19-e73e-0ec9-805b8b90e957@landley.net>
+Date:   Thu, 23 Feb 2023 07:50:14 -0600
 MIME-Version: 1.0
-References: <20230221034445.60034-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20230221034445.60034-1-jiapeng.chong@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 23 Feb 2023 08:49:27 -0500
-Message-ID: <CADnq5_OnEHV4QzicX5zTu=QP3KjH0b1piweEhzkegSn0qXbvNw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Clean up some inconsistent indenting
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     patrik.r.jakobsson@gmail.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/5] try generic compiler name "cc" before falling back to
+ "gcc".
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
+ <63c2936e-6bc7-67e3-eaf3-0123333381f8@landley.net>
+ <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrong subject line?  Should be drm/gma500?
+On 2/22/23 23:31, Masahiro Yamada wrote:
+> On Wed, Feb 22, 2023 at 5:41 AM Rob Landley <rob@landley.net> wrote:
+>>
+>> Distros like debian install the generic "cc" name for both gcc and clang,
+>> and the plumbing already does CC_VERSION_TEXT to include Makefile.clang.
+>>
+>> Previously: https://lkml.iu.edu/hypermail/linux/kernel/2202.0/01505.html
+>> Signed-off-by: Rob Landley <rob@landley.net>
+>> ---
+>>  Makefile | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 3f6628780eb2..0ac57ae3b45f 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -456,7 +456,7 @@ endif
+>>  HOSTCC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+>>  HOSTCXX        = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
+>>  else
+>> -HOSTCC = gcc
+>> +HOSTCC := $(shell cc --version >/dev/null 2>&1 && echo cc || echo gcc)
+> 
+> 'cc' only makes sense for the host compiler,
 
-Alex
+It was the generic posix name for "C compiler" until posix decided to put an
+expiration date in the command name, which seems as widely honored as the
+tar->pax switch or the removal of cpio.
 
-On Mon, Feb 20, 2023 at 10:45 PM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> No functional modification involved.
->
-> drivers/gpu/drm/gma500/cdv_device.c:218 cdv_errata() warn: inconsistent indenting.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4126
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/gma500/cdv_device.c | 27 ++++++++++++++++-----------
->  1 file changed, 16 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/gma500/cdv_device.c b/drivers/gpu/drm/gma500/cdv_device.c
-> index 3e83299113e3..765f359365b9 100644
-> --- a/drivers/gpu/drm/gma500/cdv_device.c
-> +++ b/drivers/gpu/drm/gma500/cdv_device.c
-> @@ -78,7 +78,8 @@ static u32 cdv_get_max_backlight(struct drm_device *dev)
->         if (max == 0) {
->                 DRM_DEBUG_KMS("LVDS Panel PWM value is 0!\n");
->                 /* i915 does this, I believe which means that we should not
-> -                * smash PWM control as firmware will take control of it. */
-> +                * smash PWM control as firmware will take control of it.
-> +                */
->                 return 1;
->         }
->
-> @@ -149,6 +150,7 @@ static inline u32 CDV_MSG_READ32(int domain, uint port, uint offset)
->         int mcr = (0x10<<24) | (port << 16) | (offset << 8);
->         uint32_t ret_val = 0;
->         struct pci_dev *pci_root = pci_get_domain_bus_and_slot(domain, 0, 0);
-> +
->         pci_write_config_dword(pci_root, 0xD0, mcr);
->         pci_read_config_dword(pci_root, 0xD4, &ret_val);
->         pci_dev_put(pci_root);
-> @@ -160,6 +162,7 @@ static inline void CDV_MSG_WRITE32(int domain, uint port, uint offset,
->  {
->         int mcr = (0x11<<24) | (port << 16) | (offset << 8) | 0xF0;
->         struct pci_dev *pci_root = pci_get_domain_bus_and_slot(domain, 0, 0);
-> +
->         pci_write_config_dword(pci_root, 0xD4, value);
->         pci_write_config_dword(pci_root, 0xD0, mcr);
->         pci_dev_put(pci_root);
-> @@ -180,10 +183,8 @@ static void cdv_init_pm(struct drm_device *dev)
->         int domain = pci_domain_nr(pdev->bus);
->         int i;
->
-> -       dev_priv->apm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT,
-> -                                                       PSB_APMBA) & 0xFFFF;
-> -       dev_priv->ospm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT,
-> -                                                       PSB_OSPMBA) & 0xFFFF;
-> +       dev_priv->apm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT, PSB_APMBA) & 0xFFFF;
-> +       dev_priv->ospm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT, PSB_OSPMBA) & 0xFFFF;
->
->         /* Power status */
->         pwr_cnt = inl(dev_priv->apm_base + PSB_APM_CMD);
-> @@ -196,6 +197,7 @@ static void cdv_init_pm(struct drm_device *dev)
->         /* Wait for the GPU power */
->         for (i = 0; i < 5; i++) {
->                 u32 pwr_sts = inl(dev_priv->apm_base + PSB_APM_STS);
-> +
->                 if ((pwr_sts & PSB_PWRGT_GFX_MASK) == 0)
->                         return;
->                 udelay(10);
-> @@ -215,7 +217,7 @@ static void cdv_errata(struct drm_device *dev)
->          *      Bonus Launch to work around the issue, by degrading
->          *      performance.
->          */
-> -        CDV_MSG_WRITE32(pci_domain_nr(pdev->bus), 3, 0x30, 0x08027108);
-> +       CDV_MSG_WRITE32(pci_domain_nr(pdev->bus), 3, 0x30, 0x08027108);
->  }
->
->  /**
-> @@ -401,20 +403,21 @@ static int cdv_power_up(struct drm_device *dev)
->
->  static void cdv_hotplug_work_func(struct work_struct *work)
->  {
-> -        struct drm_psb_private *dev_priv = container_of(work, struct drm_psb_private,
-> +       struct drm_psb_private *dev_priv = container_of(work, struct drm_psb_private,
->                                                         hotplug_work);
->         struct drm_device *dev = &dev_priv->dev;
->
-> -        /* Just fire off a uevent and let userspace tell us what to do */
-> -        drm_helper_hpd_irq_event(dev);
-> +       /* Just fire off a uevent and let userspace tell us what to do */
-> +       drm_helper_hpd_irq_event(dev);
->  }
->
->  /* The core driver has received a hotplug IRQ. We are in IRQ context
-> -   so extract the needed information and kick off queued processing */
-> -
-> + * so extract the needed information and kick off queued processing
-> + */
->  static int cdv_hotplug_event(struct drm_device *dev)
->  {
->         struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
-> +
->         schedule_work(&dev_priv->hotplug_work);
->         REG_WRITE(PORT_HOTPLUG_STAT, REG_READ(PORT_HOTPLUG_STAT));
->         return 1;
-> @@ -424,6 +427,7 @@ static void cdv_hotplug_enable(struct drm_device *dev, bool on)
->  {
->         if (on) {
->                 u32 hotplug = REG_READ(PORT_HOTPLUG_EN);
-> +
->                 hotplug |= HDMIB_HOTPLUG_INT_EN | HDMIC_HOTPLUG_INT_EN |
->                            HDMID_HOTPLUG_INT_EN | CRT_HOTPLUG_INT_EN;
->                 REG_WRITE(PORT_HOTPLUG_EN, hotplug);
-> @@ -549,6 +553,7 @@ static const struct psb_offset cdv_regmap[2] = {
->  static int cdv_chip_setup(struct drm_device *dev)
->  {
->         struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
-> +
->         INIT_WORK(&dev_priv->hotplug_work, cdv_hotplug_work_func);
->
->         dev_priv->use_msi = true;
-> --
-> 2.20.1.7.g153144c
->
+The name "gcc" was like "gmake" and "gawk". (On macos homebrew there's "gsed".)
+
+> which is configured by 'update-alternative'.
+
+Hexagon only has llvm support, not gcc, so I had to add an llvm cross compiler
+to my cross compiler set, prefixed hexagon-unknown-linux-musl-*, but the linux
+kernel wants to call it as hexagon-unknown-linux-musl-gcc.
+
+The kernel builds find with a "gcc" symlink to clang, but there _is_ a generic
+name, which is widely installed.
+
+> I tried it before, but LLVM folks preferred
+> using $(LLVM) to choose clang/gcc.
+
+So if we want generic behavior without having to specify, we should create a
+"gcc" symlink to clang?
+
+>>  HOSTCXX        = g++
+>>  endif
+>>  HOSTRUSTC = rustc
+>> @@ -503,7 +503,8 @@ OBJDUMP             = $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+>>  READELF                = $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+>>  STRIP          = $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+>>  else
+>> -CC             = $(CROSS_COMPILE)gcc
+>> +CC             := $(CROSS_COMPILE)$(shell $(CROSS_COMPILE)cc --version \
+>> +                       >/dev/null 2>&1 && echo cc || echo gcc)
+> 
+> This hunk sets up GCC/binutils.
+
+This is the codepath that's taken when you don't explicitly specify "LLVM=1".
+The test there is falling back to (appropriately prefixed) gcc when it can't
+find a working (appropriately prefixed) cc.
+
+> So, cc does not make sense.  NACK.
+
+Do you explicitly specify the "gold" linker vs the previous gnu one vs
+lld.llvm.org on the kernel build command line?
+
+Rob
