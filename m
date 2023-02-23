@@ -2,150 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889C16A0524
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25F36A051F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbjBWJmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S233941AbjBWJlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbjBWJmU (ORCPT
+        with ESMTP id S233633AbjBWJld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:42:20 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2078.outbound.protection.outlook.com [40.107.21.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21EF43925;
-        Thu, 23 Feb 2023 01:42:18 -0800 (PST)
+        Thu, 23 Feb 2023 04:41:33 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2081.outbound.protection.outlook.com [40.107.243.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6823843925;
+        Thu, 23 Feb 2023 01:41:32 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N+Dnz84Gnzj7D7t4swqL298hutsOXHC2ltex2z/TOh/JOn6aX99OapBpLHuxvx1w0ZQqOcpX6r+lAv/BfZT+ABnkStnt4HoNczbBuY8I8P6rdR8N1wr7+ydzOWts7XDJT5+hwLF/5FMbgHSCq2FQvRNH/CZ75Pz7UzluWu3xBlK8GAlHnjUHAKN806d2WZwsxrjlfAhAZjex4CTzWp9SryAkdnXDhepV8gX6hFmTUHWRIf+PrH2aLGpVil7XYeHS4X8jkrbQmiEvQJvy/FHg8f9FWcWpDyOQGH6znvKn/Ynl6tKKS5qs/2GpD8J/59tAZNWhymX538snUUdIoGaEYA==
+ b=XWd792yO4gZHbOgop0TNi63aKqK00R63t+H0bCNesa4YvBgJWLRmxsFoLdi/jpOQDyv5pO0mFOT17mOW9aFINgdW/tM6qDA5Ft0amNEx+iWRrR6XukrBUyqpxTyE7srPDyTPWwZNn7fQZXnldtuhSxVbZEPkWBv7K5TP9zrK9WCpsiSbQ0hHV4FIwEbtFXwMSosqWbtCtmzKnA8kUkexVK1MKwje+XhBTggU4QzxF+15IQJsNgDjyvKU6P+VaTz20s2pzMHg7IDzwkpWJuDfPkaD6syOzdlZDqvXuyIS2uhfq5ksl5roPX/bJgbCIy9zLtSsR2Ll4YvWbV9TV2vhmQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VPt/Pz5/4hJ+xBG1HaScEJ0pc/8Wg9pdpikmyYbPvL8=;
- b=m48P+5F9ChPlFmRt6hp5n+xBUHOCxrfltnlTbLS1lv+hw0lfqKJjeLe/yzEyQxsV9wnZge4tF+b8Yjh/lONZ0VrE0yDRKayUanHZClQSEhzZAmjsGFoVHZormyxNreC1MqHQvsacEOBmHKLhUxGoGZ/WpGGzaWFDFR3laH7NwAt4ck4l8UPyBmrLYADy2I1i3R+zmsx5zDeE+RzEWyiJwd6vuBU4sCjnzUpT9oGGtGHRBJd+Js94X5w4UVL/4+YQISWkseeRp20FBuJXnXrkm+M89CNXgFPoSehKLwqKWc3n5b3P1wO8wUUU+aqgVEfba0ZGWq7XPORgW8k3dKAqsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=WQKMSKq4P/fnXqH34nzY5+YLuj055J6J1InyvVqMZ3Y=;
+ b=gmKiDxEQTgQHrBKKK/9Z1cF6rZ89yl38+AalnJPqXWL6F6spxBZKzt4OHa4MNmewovbWX1AGj2WACjVHr63TiL4MIs5eFyqWraTlLzXMnjV+7ag09zsNsk0fe+qR9hTMkWAES3CwcBaAPr/yGEn1VSRaHoqS46TbPZuz1nk7w13MqAbGDg7Jdv8soIegskN2olzVgKbylWOaJjLy0VLUaFkqANaHQnoPlI1n0DYq6JJXvzlMEnChfCThx841qhRkplIeuQV8jAEar4hQLvJTKvZ7QhuG84z4CGPtXaZn+gQBrEPd8iWURxelB+DFocjJyEic4MR2mZLT+47Eqrb4ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VPt/Pz5/4hJ+xBG1HaScEJ0pc/8Wg9pdpikmyYbPvL8=;
- b=cLg0P54U6b/8oujdTrpGrxcNBtdynTxO9ht2+fHx8L9APh0QMCQYj0n0oMioyiXtHLrUSvX/tfcoMjU4hCIpOFw39v4tSxP+scSqLGJfWO49oXZjzed/AqIe+ASEOYdf8Skj8IFP+JALANCRuc24ZMvVcgfx4TqxnUyKvOjmzhY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by DB9PR04MB8329.eurprd04.prod.outlook.com (2603:10a6:10:24c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
- 2023 09:42:16 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::3079:f55a:740e:c103]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::3079:f55a:740e:c103%6]) with mapi id 15.20.6134.019; Thu, 23 Feb 2023
- 09:42:16 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH] tty: serial: fsl_lpuart: skip waiting for transmission complete when UARTCTRL_SBK is asserted
-Date:   Thu, 23 Feb 2023 17:39:41 +0800
-Message-Id: <20230223093941.31790-1-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0019.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::12) To AS8PR04MB8404.eurprd04.prod.outlook.com
- (2603:10a6:20b:3f8::7)
+ bh=WQKMSKq4P/fnXqH34nzY5+YLuj055J6J1InyvVqMZ3Y=;
+ b=mkrOpcU+RB2+oa9oWBUhA5wKAOXUMGnSnsIitk1/IZLcgFhzhEIHSExrZ7wO03rgwZC0Oho/rFEw8ZlGOacnr6XjJYl/SG0r6hHJbbbgkIPFHNWnIUeQYH75y+pbl8IdcJ4JKn6uv7O5gT+Uonp9CczfhYVVX7BkCRUwaoKqerY=
+Received: from DM6PR03CA0030.namprd03.prod.outlook.com (2603:10b6:5:40::43) by
+ DM6PR12MB4482.namprd12.prod.outlook.com (2603:10b6:5:2a8::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.21; Thu, 23 Feb 2023 09:41:28 +0000
+Received: from DS1PEPF0000E640.namprd02.prod.outlook.com
+ (2603:10b6:5:40:cafe::50) by DM6PR03CA0030.outlook.office365.com
+ (2603:10b6:5:40::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21 via Frontend
+ Transport; Thu, 23 Feb 2023 09:41:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E640.mail.protection.outlook.com (10.167.17.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.14 via Frontend Transport; Thu, 23 Feb 2023 09:41:28 +0000
+Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 23 Feb
+ 2023 03:40:36 -0600
+Message-ID: <b11cd9f2-3759-1df2-ea00-50c574668c28@amd.com>
+Date:   Thu, 23 Feb 2023 10:40:18 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Tanmay Shah <tanmay.shah@amd.com>
+CC:     <andersson@kernel.org>, <jaswinder.singh@linaro.org>,
+        <ben.levinsky@amd.com>, <shubhrajyoti.datta@amd.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>
+References: <20230213211825.3507034-1-tanmay.shah@amd.com>
+ <20230213211825.3507034-2-tanmay.shah@amd.com> <20230222173448.GA909075@p14s>
+From:   Michal Simek <michal.simek@amd.com>
+Subject: Re: [PATCH v3 1/3] drivers: mailbox: zynqmp: handle multiple child
+ nodes
+In-Reply-To: <20230222173448.GA909075@p14s>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|DB9PR04MB8329:EE_
-X-MS-Office365-Filtering-Correlation-Id: a8935851-87c8-4c50-ab99-08db15823f61
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E640:EE_|DM6PR12MB4482:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18272a3e-dc2e-4ef9-cf99-08db1582237b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ApF792noZiVFjLInTk4hKXxnw/ypyeT/aRqzPLIQFmIU54JJbvjmD1iGr7MLoJ/iHJmsWqi8fTMAR/jL8LWAdJbKZqPxuNuMP3JSmFJKRAFFy/PwUX4MLlwnSckMnHwGzedvKkD0RcHQEyk4CM403adCFPUN/hEMflIfmEZY39JVvDUp817LY6BITcdbVgPZZMH8lGdL0HU9JIV8bSzOERS1mS5CpzzgKPr1Q3pVgJKDLC5zMAsUAfVjnSuO5EnWeVzSsyIYcaL46cFxlaKU+RkffVKYRMi1jVJ3WXWjxpD6zSYOim0iYUafepgt8gFTxvD0y8Pl5StFucaywkPnS2YbiHt7HC4q/hKQ/2l9Mk4u+QWorrhR/4US6qc8K+ZLQrczseZ2xGNZZ19z+RjJfQkmTb4FZxQK6TT85JdP2lWmw3lUd17AYJGzWbpz2QB9yPrr/9Rgof9jRGeKiw58v8WfO4uSkpVzfn/EoNUUlsCBt7EVng5LknsrT1mFpvTi8k7ZdRuKnHXTZUp8HyYSRQorQKRmgLGNeCzL8/hfWuYm1UtTEF2ale0YbBQzfv74VdBKobMeZYDono3dveSRHoDYsZ82gT3r24/NPDg0xhQr/T0UgFKsvg5XesdN/vOlVxeD3dYEdtIMDqqi1Y3bM9YG42TqpbPe2SUPkHUiwNPFelIK1LxFXQRAUjWPottzvfFZy89QGqgOAMuRYfK3Dw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(136003)(396003)(366004)(451199018)(36756003)(52116002)(41300700001)(6506007)(8676002)(6512007)(66476007)(66556008)(4326008)(186003)(8936002)(1076003)(86362001)(2616005)(44832011)(5660300002)(83380400001)(6486002)(6666004)(478600001)(316002)(26005)(66946007)(38100700002)(2906002)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4rEcjjXeIL/y/6iY80DvCZK/kQym5v9HGrkWeIyxQGcry1b4yommf8zc2swe?=
- =?us-ascii?Q?Mc+VEM1qkjeJWUkmXxOTm9rewrqTe9dXTte1Tg26CGxlyQ63qDpjEcFoq+HZ?=
- =?us-ascii?Q?VQ5q7whMN+Ct7FC9Ou9w5p5xQ+iYsVfE3TDuxclOxObrNhD49TfBynZj7liD?=
- =?us-ascii?Q?Ci5ODGFTO6K9+y8s32BwHblGqzFg8dqRlncNeaENlDz3fl8NyDkh23Otzpvr?=
- =?us-ascii?Q?DORU7BMAE1QepyBRihOlsILHFhtekEPVE7FZGhVroMEXSxvoS0q8kOPInLU/?=
- =?us-ascii?Q?Zya79HWO3yWpN6YMjo++z9G5IODDsnM0dVYGL0MwJc62uAovnqQZ1uO1vdqY?=
- =?us-ascii?Q?8I2108lUovPnGxmKuQodtSbkQOlQKQudX+83a0/l9AFJjBu0ATrgEwnYKLoT?=
- =?us-ascii?Q?N8BvFMjOxKFRkBFTP9EMqoWIurpSQr5bg0eHs55Fw3lMnm5BwGClihUQDvll?=
- =?us-ascii?Q?OhwUslz1Hne9Bn8FY4P29q0r3VQZlu4qHU9nFvySK3IQocbbBF8JTP4/SJUl?=
- =?us-ascii?Q?dweVhDYIQ2pMzfzg9eF6om0lhzNC7H30iXvOEu/LGGwiLAj6wfq9lakk5aQ/?=
- =?us-ascii?Q?MSwl+D3G47+Kha9ajfL4CVnbal/afMm2150Vv/muJAZA76QONPMXAyHmFy6a?=
- =?us-ascii?Q?rNy0mrffnbsRTIgGYnnCsiE1M8TyKVNGdUXyPd8DGoUHjNjjtd3IJH4PKdR/?=
- =?us-ascii?Q?AwUDF81+G4XnNi/Z0BUmfZVa/galR/9zhG3pWlVzaU6tbagOpjEcrkGH/Yel?=
- =?us-ascii?Q?OUGqtkh0i64qmS/wYrWUWoSwymuakBTmQO1E+RVe5Z/fh8sdnmJlstY7uwgc?=
- =?us-ascii?Q?0m6iBYu0Ux8AjkIS8kLeGLa9aFLHEBJtMsfF+Zw0PPaXuDZAAPAQDqFjP6TG?=
- =?us-ascii?Q?IjncRU7lOCIPDBDtEZ7cgrp9npeuNCb9MoIWEb7KSLAxeOSnq4ojgNZt74vq?=
- =?us-ascii?Q?yew2dBuJxw6K2MmTuPWtZyQCSq5SrqXAUT6xKq+qv+aTgYyLA3VIvySiDwPv?=
- =?us-ascii?Q?C1kWOaWYRvEXn79fjxPCl1Z91jX5QJ7nM1aZj736Z7m8g0x4DfCfH1IgA0vv?=
- =?us-ascii?Q?BcNApkD/1YGLhOzAZRKTXL0e2SpWtoc3IUxM2JSt2LAAiKDm3+zCT379LyN1?=
- =?us-ascii?Q?q0HejiVa3hBMNMdV8GqpRebRyP3hWZSvT6mKCNlVEwrsXcrqw982AsiMoQOh?=
- =?us-ascii?Q?gMMd9j7EehzygdiY9wu9Y/98uSwUHZO7bzUQeiowte+EwQea8JB/O8Dd93zj?=
- =?us-ascii?Q?M03YBUjdHZNeqJ0KarDmh1fIdY0Av09NRIQvsdqnWdDFqMLvgl+O/bGrBeyq?=
- =?us-ascii?Q?k8GQRx4T7YQd7nDCV0OR6gNmna/x67tVY+ruX5wjOqinWs5wDhl6a0jQODe9?=
- =?us-ascii?Q?zUMNb0ZvWUzG8V97Bp7cGU6bwenY4O9UFJ+08vN4rdCuQSAE+4caVuZCzXeY?=
- =?us-ascii?Q?6fWZOAW/7KqI0yV4YRXJqtxsd+QLocfS+ng83N8kVZii3KDg0YdgHgkVSLYg?=
- =?us-ascii?Q?lPV8+fyuPXApMb2ovyJotbRwDM+xZhMkg49J95CGL1QC3rIBNVuqw49lSAxN?=
- =?us-ascii?Q?21YXz0k7xYb2rZ3ajDTYVGwV2yDWaFLoqALJXbEQ?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8935851-87c8-4c50-ab99-08db15823f61
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 09:42:15.9947
+X-Microsoft-Antispam-Message-Info: PnwtANdzsnEyipmeLQHOgjdTi/JzTMzAoJ+SwYbvGMbD/dM/6/K+rO2Nk1kvZ3UnTrh0sYAaIMexyC2x40dM9oFvHgz8HKe9TXKgSBTTgzGsQktw6j+d0NT1c2ZFEKZlSdRKYDFmCAqZijnbXTWcWvBGezMlepR0Gvb2xxoMdxoVB3p+hRjX8C8BJjmRD0Mxe3cMeg2DRLxP0biyXSgzAYFvvTZc6okF3sHMoPNC3O5yYpF/wasJKhE4d2s5+TZ6kwoEQIGtg7QbUpZ/i7VTRAaKFV0MyPLv+0VyYdA5blOxGonAqXRybOgKprfi6yUTyHsDs87l75flbHl33LcW7K9bmYEsP7t2HCCVSKQMaGkN9r4SqJSOSzwgIz1kL2p/32bj7qxitPyHurqatDZdr1DfGSbKY1sEy0r0O6SaIfn77o491ApddhBGSMWGTIAP0pynmJ8exJ6vPxNlOFZwVVSuMEpvb8w/9uIfTkKGvs+gpZj/LXrp/IALOa/xu6tSyQrX0HI81PxJ6mSkxWVv8gsr5MyutrwrTqg1Kqg8Kj6vuLg7ayf+nwOziR0AZJviUdqmpiTREOcTtN9TaEv2sgOLJWSeQFK9RIMQaibfce2AS4QuzYi3ujP9uGWT9amRwPA2p80DogwttEE1d0HrKfQV9lBc+gTOckmAsZw/GoNLElQ/V3cl5QV1+Yu8nQ+QNJwMLVpQkQMPLnNlqTfW5zl8cFaQEdbBaRgfpawik1x8DgswpK8nBOH39B9TZZte
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199018)(36840700001)(46966006)(40470700004)(2616005)(41300700001)(36860700001)(83380400001)(31696002)(5660300002)(478600001)(44832011)(82310400005)(16526019)(26005)(186003)(8936002)(86362001)(6636002)(110136005)(54906003)(8676002)(16576012)(4326008)(356005)(53546011)(426003)(40480700001)(47076005)(70206006)(70586007)(40460700003)(316002)(81166007)(336012)(966005)(36756003)(82740400003)(15650500001)(31686004)(2906002)(6666004)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 09:41:28.6430
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GQ015d4oMKr5Vmivy93QT4puS+/dLyL+VG4SyS9jJWuei+efBIOqJ84YQ2ns5dxnBqgv1QY453BXf9op8apM4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8329
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18272a3e-dc2e-4ef9-cf99-08db1582237b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E640.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4482
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to LPUART RM, Transmission Complete Flag becomes 0 if queuing
-a break character by writing 1 to CTRL[SBK], so here need to skip
-waiting for transmission complete when UARTCTRL_SBK is asserted,
-otherwise the kernel may stuck here.
-And actually set_termios() adds transmission completion waiting to avoid
-data loss or data breakage when changing the baud rate, but we don't
-need to worry about this when queuing break characters.
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
- drivers/tty/serial/fsl_lpuart.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index e945f41b93d4..f9e164abf920 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2240,9 +2240,15 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/* update the per-port timeout */
- 	uart_update_timeout(port, termios->c_cflag, baud);
- 
--	/* wait transmit engin complete */
--	lpuart32_write(&sport->port, 0, UARTMODIR);
--	lpuart32_wait_bit_set(&sport->port, UARTSTAT, UARTSTAT_TC);
-+	/*
-+	 * LPUART Transmission Complete Flag may never be set while queuing a break
-+	 * character, so skip waiting for transmission complete when UARTCTRL_SBK is
-+	 * asserted.
-+	 */
-+	if (!(old_ctrl & UARTCTRL_SBK)) {
-+		lpuart32_write(&sport->port, 0, UARTMODIR);
-+		lpuart32_wait_bit_set(&sport->port, UARTSTAT, UARTSTAT_TC);
-+	}
- 
- 	/* disable transmit and receive */
- 	lpuart32_write(&sport->port, old_ctrl & ~(UARTCTRL_TE | UARTCTRL_RE),
--- 
-2.17.1
+On 2/22/23 18:34, Mathieu Poirier wrote:
+> On Mon, Feb 13, 2023 at 01:18:24PM -0800, Tanmay Shah wrote:
+>> As of now only one child node is handled by zynqmp-ipi
+>> mailbox driver. Upon introducing remoteproc r5 core mailbox
+>> nodes, found few enhancements in Xilinx zynqmp mailbox driver
+>> as following:
+>>
+>> - fix mailbox child node counts
+>>    If child mailbox node status is disabled it causes
+>>    crash in interrupt handler. Fix this by assigning
+>>    only available child node during driver probe.
+>>
+>> - fix typo in IPI documentation %s/12/32/
+>>    Xilinx IPI message buffers allows 32-byte data transfer.
+>>    Fix documentation that says 12 bytes
+>>
+>> - fix bug in zynqmp-ipi isr handling
+>>    Multiple IPI channels are mapped to same interrupt handler.
+>>    Current isr implementation handles only one channel per isr.
+>>    Fix this behavior by checking isr status bit of all child
+>>    mailbox nodes.
+>>
+>> Fixes: 4981b82ba2ff ("mailbox: ZynqMP IPI mailbox controller")
+>> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+>> ---
+>>
+>> Changelog:
+>>    - This is first version of this change, however posting as part of the series
+>>      that has version v3.
+>>
+>> v2: https://lore.kernel.org/all/20230126213154.1707300-1-tanmay.shah@amd.com/
+>>
+>>   drivers/mailbox/zynqmp-ipi-mailbox.c       | 8 ++++----
+>>   include/linux/mailbox/zynqmp-ipi-message.h | 2 +-
+>>   2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
+>> index 12e004ff1a14..b1498f6f06e1 100644
+>> --- a/drivers/mailbox/zynqmp-ipi-mailbox.c
+>> +++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
+>> @@ -152,7 +152,7 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
+>>   	struct zynqmp_ipi_message *msg;
+>>   	u64 arg0, arg3;
+>>   	struct arm_smccc_res res;
+>> -	int ret, i;
+>> +	int ret, i, status = IRQ_NONE;
+>>   
+>>   	(void)irq;
+>>   	arg0 = SMC_IPI_MAILBOX_STATUS_ENQUIRY;
+>> @@ -170,11 +170,11 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
+>>   				memcpy_fromio(msg->data, mchan->req_buf,
+>>   					      msg->len);
+>>   				mbox_chan_received_data(chan, (void *)msg);
+>> -				return IRQ_HANDLED;
+>> +				status = IRQ_HANDLED;
+>>   			}
+>>   		}
+>>   	}
+>> -	return IRQ_NONE;
+>> +	return status;
+>>   }
+>>   
+>>   /**
+>> @@ -634,7 +634,7 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
+>>   	struct zynqmp_ipi_mbox *mbox;
+>>   	int num_mboxes, ret = -EINVAL;
+>>   
+>> -	num_mboxes = of_get_child_count(np);
+>> +	num_mboxes = of_get_available_child_count(np);
+>>   	pdata = devm_kzalloc(dev, sizeof(*pdata) + (num_mboxes * sizeof(*mbox)),
+>>   			     GFP_KERNEL);
+>>   	if (!pdata)
+>> diff --git a/include/linux/mailbox/zynqmp-ipi-message.h b/include/linux/mailbox/zynqmp-ipi-message.h
+>> index 35ce84c8ca02..31d8046d945e 100644
+>> --- a/include/linux/mailbox/zynqmp-ipi-message.h
+>> +++ b/include/linux/mailbox/zynqmp-ipi-message.h
+>> @@ -9,7 +9,7 @@
+>>    * @data: message payload
+>>    *
+>>    * This is the structure for data used in mbox_send_message
+>> - * the maximum length of data buffer is fixed to 12 bytes.
+>> + * the maximum length of data buffer is fixed to 32 bytes.
+>>    * Client is supposed to be aware of this.
+> 
+> I agree that this should be split in 3 patches but the fixes are so small that
+> it is hardly required.  I'll leave it up to Michal to decide.
+
+Generic guidance is saying that you should split that patches. I personally 
+prefer to have one patch per change. It is useful for bisecting and faster for 
+reviewing.
+I would expect that this patch should go via mailbox tree and the rest via 
+remoteproc tree. That's why maintainer should say what it is preferred way.
+
+In connection mailbox. I recently had some time to look at this driver and I 
+didn't really get why there are registers listed. Because all that addresses can 
+be calculated based on soc compatible string and by xlnx,ipi-id for both sides.
+
+Thanks,
+Michal
 
