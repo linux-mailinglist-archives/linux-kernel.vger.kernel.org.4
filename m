@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AA16A0D7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC6A6A0D84
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234451AbjBWQBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 11:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S233695AbjBWQEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 11:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbjBWQB2 (ORCPT
+        with ESMTP id S233162AbjBWQEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 11:01:28 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C875193F;
-        Thu, 23 Feb 2023 08:01:21 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pVE23-0007wG-N0; Thu, 23 Feb 2023 17:01:19 +0100
-Message-ID: <c7a7e21a-0eac-8e84-aa8e-59ba4116e6af@leemhuis.info>
-Date:   Thu, 23 Feb 2023 17:01:19 +0100
+        Thu, 23 Feb 2023 11:04:36 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602F852DE7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 08:04:35 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso13357940pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 08:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SWBJJpfLbxHJ1BO+V07dvblOffLSc664lqCbo/zUG3o=;
+        b=nb+OVzwomSctOUhThvUmOR2NlmDGFcwq8cza1TWz8E3LfhcMPPxcdw1NNU9rZ0aSmb
+         m01LIL+Rz+e8c2LDjGr4FOLqp1jEDJjuuqycCfdOawPUgM2TK39nOj5d3hT4BTUBRFmX
+         SkCEFiY5lyteAKcVFm09fTDfZCiCpRtjAW81OAAHUdO98fUIVP2xRqMCVlnmyemTONvO
+         nbz4QlPKW+HYaE8OD4XZw37IPJcPt3DqzjE7prqAEcqPXZ5o0xS1mBU70Y5M3Ajrudej
+         fxMZghivVYhEBjyZie4GYaz2cCcgdYytjSjAwYWZiVH3/fvGl0G95KFjnf2iUe0MLPK/
+         PKXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SWBJJpfLbxHJ1BO+V07dvblOffLSc664lqCbo/zUG3o=;
+        b=rJBBXjwIXKJ/qpxmFIUb3jSNWZlXtAVJWs8dC+ptG5krQx5z1bqgj6/rUKDv8foEsN
+         6S510dhaGKDXH5zWW4qW0IHY05FnM1MX5W+VM3eg8dhgsHIzfRDstBAvZhmNJT7WCcyu
+         PzhLyWC1H1RlDbLzJESHvMd3yq4Gy9j2TlWzwR9s3TuyHxoy66SGOH/SzmQRowpkvedw
+         9OG1A8oHPlP8aJNg9pNYA6CGW56ZFnMJQwY0aIBcieZLiRB8LDEJwtqeuDZU1v/e1DlV
+         osunx52Gh+lZYuqyVuWENNquQDG9gwe0R4ps6UIPTA7cUzyn0DFHxMXCkNjgmFIV1BnI
+         XKLg==
+X-Gm-Message-State: AO0yUKWzCk7yQx+gwhFRKui0pXx5xyKQ+Id6p4BtCNfmKvkpxiugV7n+
+        oqGL2OTp+bmn/Puq2d9W0eN+8Q==
+X-Google-Smtp-Source: AK7set8FUWAzS0RHvJ6iPvjFW5jpiDSUmBL6pJlKnGaoF9JksZsQhiJmEwf042gy9Zi9Rf2tS/pF3w==
+X-Received: by 2002:a05:6a20:6918:b0:cb:7cc4:3ddb with SMTP id q24-20020a056a20691800b000cb7cc43ddbmr11699984pzj.3.1677168274239;
+        Thu, 23 Feb 2023 08:04:34 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k184-20020a6384c1000000b004fb26a80875sm4931360pgd.22.2023.02.23.08.04.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 08:04:33 -0800 (PST)
+Message-ID: <36c3acf2-dd51-f8a5-47d0-043848639cf0@kernel.dk>
+Date:   Thu, 23 Feb 2023 09:04:32 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     ath11k <ath11k@lists.infradead.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        mani@kernel.org
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217070 - ath11k: QCA6390: Regression on 6.2-rc1
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] driver core: remove CONFIG_SYSFS_DEPRECATED and
+ CONFIG_SYSFS_DEPRECATED_V2
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20230223073326.2073220-1-gregkh@linuxfoundation.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230223073326.2073220-1-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677168082;ee9f2f80;
-X-HE-SMSGID: 1pVE23-0007wG-N0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217070 :
-
->  mani@kernel.org 2023-02-22 08:43:15 UTC
+On 2/23/23 12:33 AM, Greg Kroah-Hartman wrote:
+> CONFIG_SYSFS_DEPRECATED was added in commit 88a22c985e35
+> ("CONFIG_SYSFS_DEPRECATED") in 2006 to allow systems with older versions
+> of some tools (i.e. Fedora 3's version of udev) to boot properly.  Four
+> years later, in 2010, the option was attempted to be removed as most of
+> userspace should have been fixed up properly by then, but some kernel
+> developers clung to those old systems and refused to update, so we added
+> CONFIG_SYSFS_DEPRECATED_V2 in commit e52eec13cd6b ("SYSFS: Allow boot
+> time switching between deprecated and modern sysfs layout") to allow
+> them to continue to boot properly, and we allowed a boot time parameter
+> to be used to switch back to the old format if needed.
 > 
-> Hi,
+> Over time, the logic that was covered under these config options was
+> slowly removed from individual driver subsystems successfully, removed,
+> and the only thing that is now left in the kernel are some changes in
+> the block layer's representation in sysfs where real directories are
+> used instead of symlinks like normal.
 > 
-> With the firmware from linux-firmware and vendor SDK, ath11k used to
-> work on kernel v5.19-rc6 but it is now failing on kernel v6.2-rc1.
-> 
-> dmesg of the failure with firmware from linux-firmware:
-> 
-> [   33.224148] ath11k_pci 0000:01:00.0: Adding to iommu group 1
-> [   33.238000] ath11k_pci 0000:01:00.0: BAR 0: assigned [mem 0x40300000-0x403fffff 64bit]
-> [   33.238260] ath11k_pci 0000:01:00.0: enabling device (0140 -> 0142)
-> [   33.275898] ath11k_pci 0000:01:00.0: MSI vectors: 32
-> [   33.276053] ath11k_pci 0000:01:00.0: qca6390 hw2.0
-> [   35.901819] ath11k_pci 0000:01:00.0: chip_id 0x0 chip_family 0xb board_id 0xff soc_id 0xffffffff
-> [   35.902011] ath11k_pci 0000:01:00.0: fw_version 0x10121492 fw_build_timestamp 2021-11-04 11:23 fw_build_id 
-> [   38.134029] ath11k_pci 0000:01:00.0: failed to receive control response completion, polling..
-> [   39.173898] ath11k_pci 0000:01:00.0: ctl_resp never came in (-110)
-> [   39.174022] ath11k_pci 0000:01:00.0: failed to connect to HTC: -110
-> [   39.280618] ath11k_pci 0000:01:00.0: failed to start core: -110
-> 
-> dmesg of the failure with firmware from vendor SDK:
-> 
-> [   33.294291] ath11k_pci 0000:01:00.0: Adding to iommu group 1
-> [   33.295671] ath11k_pci 0000:01:00.0: BAR 0: assigned [mem 0x40300000-0x403fffff 64bit]
-> [   33.299223] ath11k_pci 0000:01:00.0: enabling device (0140 -> 0142)
-> [   33.338562] ath11k_pci 0000:01:00.0: MSI vectors: 32
-> [   33.338711] ath11k_pci 0000:01:00.0: qca6390 hw2.0
-> [   38.506850] ath11k_pci 0000:01:00.0: ignore reset dev flags 0x8000
-> [   38.507181] ath11k_pci 0000:01:00.0: failed to power up mhi: -110
-> [   38.520546] ath11k_pci 0000:01:00.0: failed to start mhi: -110
-> [   38.520665] ath11k_pci 0000:01:00.0: failed to power up :-110
-> [   38.554297] ath11k_pci 0000:01:00.0: failed to create soc core: -110
-> [   38.554424] ath11k_pci 0000:01:00.0: failed to init core: -110
-> [   38.888539] ath11k_pci: probe of 0000:01:00.0 failed with error -110
-> 
-> [tag] [reply] [−]
-> Private
-> Comment 1 mani@kernel.org 2023-02-22 08:45:27 UTC
-> 
-> Host platform is Thundercomm T55 board based on Qualcomm SDX55 SoC (ARM32).
+> Because the original changes were done to userspace tools in 2006, and
+> all distros that use those tools are long end-of-life, and older
+> non-udev-based systems do not care about the block layer's sysfs
+> representation, it is time to finally remove this old logic and the
+> config entries from the kernel.
 
-See the ticket for more details.
+Acked-by: Jens Axboe <axboe@kernel.dk>
+
+-- 
+Jens Axboe
 
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v5.19-rc6..v6.2-rc1
-https://bugzilla.kernel.org/show_bug.cgi?id=217070
-#regzbot title: net: wireless: ath11k: QCA6390
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
