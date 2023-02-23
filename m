@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A406A10DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD3D6A10E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBWTxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S229579AbjBWTxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBWTxc (ORCPT
+        with ESMTP id S229578AbjBWTxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:53:32 -0500
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D7B199E1;
-        Thu, 23 Feb 2023 11:53:30 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id ck15so47684610edb.0;
-        Thu, 23 Feb 2023 11:53:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IZIzqGdZRyWKbXrRJe16s42mfqNVQ/FkSeeNmQnErqM=;
-        b=lvRPP03tU4dnWgRYNKu0JEM13PORJY1vKuuB5XiA7glfzLkdPz3I0oOKWLM8XYjiQh
-         F53dgpAygMncMPI/4LtX1/w9njpFut/hC+Df71ntmEgKpjwpCdjAdh2rN3UtHxZAzWep
-         hoBKPt50yabk+Ld8m+P1M4UbFIOr6tgwjylw/1H7Cnw9KzJuCym4Qp8yBJHs+jSUdugb
-         7tpmNNYZXUEUTVrJgYjRp5A1iL2I+l4ngGZGOA4vefnTdHFeVSv49wAsAfkR7Q+aHTBW
-         Naw6Kp2Dmczia3WoXfTPohKsCx8gJ/STCobTWWpiF6FRDUdZOjpiydSWSwqklHDtxUnm
-         xq5w==
-X-Gm-Message-State: AO0yUKXrAYsQDammqNF06pPuQ8PZfBkJR8BtfU1cVpQA3eojut8ZWD5d
-        3JG2/H8FLyKv1zOAMhkgEdXv+g/LjKyrshLQLSxlA1zpJmc=
-X-Google-Smtp-Source: AK7set9cwGypVN2kUcpo9eQ91rAglE05AsZTeOthBSGDMurOl7/mHFcktGjvu0nrm+WAf9SgMdXUJi/VjCgjItMWk/E=
-X-Received: by 2002:a17:906:195b:b0:8a6:91d9:c7ac with SMTP id
- b27-20020a170906195b00b008a691d9c7acmr10267468eje.5.1677182009048; Thu, 23
- Feb 2023 11:53:29 -0800 (PST)
+        Thu, 23 Feb 2023 14:53:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF542BCE;
+        Thu, 23 Feb 2023 11:53:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C454BB81A82;
+        Thu, 23 Feb 2023 19:53:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C28BC433EF;
+        Thu, 23 Feb 2023 19:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677182027;
+        bh=SSOQNYeYFZZOIjsfPQ19zg07NDj4ObUBeG+UVqlyzNI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WdSg0Yst8gvHcFCTNT9jmxs5GM7Cc64y/gJ4PCOK7I1iItEe+0uPJDMm6LbaE78h7
+         z1yfqys+WCwtuHnKllj+b5QKQDJ0skUENW+aeW7u73QlULdT/fGC2ubvP8r9B/JSQ/
+         Zncjn+NmuaQRkwu0b4KfAacRGE26fMrXKsN2b/O5KfMlboi0wqdA/JLpykLNFlgeWF
+         nLcSM4Fv7mnD5u0PN73jF1zuOsB8eEjUpHGRt7gSXoEjdXkG5YniJqNPomgLP2f3jZ
+         F/dl2LrF4Th/QIpi6G8BLCMzpOFVbMUaqbGionZ22jomAbS+LtcnYQmGvqOxI1CNvO
+         glws4nYbft3uQ==
+Date:   Thu, 23 Feb 2023 13:53:45 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
+ resources with s390 per-function hotplug
+Message-ID: <20230223195345.GA3805039@bhelgaas>
 MIME-Version: 1.0
-References: <20230223070252.2029174-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20230223070252.2029174-1-kai.heng.feng@canonical.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Feb 2023 20:53:17 +0100
-Message-ID: <CAJZ5v0iHgsY4rm-mx67bUO7wc3ZXWU48QAXHERLAQyJRtLEi2g@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: amd-pstate: Let user know amd-pstate is disabled
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     ray.huang@amd.com, mario.limonciello@amd.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1793b3cd12921b7a3fa8b3ee7e20b7cf1df1eca1.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 8:03 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> Commit 202e683df37c ("cpufreq: amd-pstate: add amd-pstate driver
-> parameter for mode selection") changed the driver to be disabled by
-> default, and this can surprise users.
->
-> Let users know what happened so they can decide what to do next.
->
-> Link: https://bugs.launchpad.net/bugs/2006942
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v2:
->  - Remove redundancy in pr_info().
->  - Fix spelling and URL tag.
->
->  drivers/cpufreq/amd-pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 45c88894fd8e..f965f54f7ae7 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1263,7 +1263,7 @@ static int __init amd_pstate_init(void)
->          * with amd_pstate=passive or other modes in kernel command line
->          */
->         if (cppc_state == AMD_PSTATE_DISABLE) {
-> -               pr_debug("driver load is disabled, boot with specific mode to enable this\n");
-> +               pr_info("driver load is disabled, boot with specific mode to enable this\n");
->                 return -ENODEV;
->         }
->
-> --
+[+cc Lukas]
 
-Applied as 6.3-rc material, thanks!
+On Wed, Feb 22, 2023 at 05:54:55PM +0100, Niklas Schnelle wrote:
+> On Mon, 2023-02-20 at 13:53 +0100, Niklas Schnelle wrote:
+> > On Fri, 2023-02-17 at 17:15 -0600, Bjorn Helgaas wrote:
+> > > On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
+> ---8<---
+
+> > >   - What about zpci_bus_scan_device()?  Why does it call both
+> > >     pci_bus_add_device() and pci_bus_add_devices()?  The latter will
+> > >     just call the former, so it looks redundant.  And the latter is
+> > >     locked but not the former?
+> > 
+> > Hmm. great find. This seems to have been weird and redundant since I
+> > first used that pattern in 3047766bc6ec ("s390/pci: fix enabling a
+> > reserved PCI function"). I think maybe then the reason for this was
+> > that prior to 960ac3626487 ("s390/pci: allow zPCI zbus without a
+> > function zero") when the newly enabled is devfn == 0 there could be
+> > functions from the same bus which would not have been added yet. I'm
+> > not sure though. That was definitely the idea behind the
+> > zpci_bus_scan_bus() in zpci_scan_configured_devices() that is also
+> > redundant now as we can now scan each function as it appears.
+> 
+> I'm working on cleaning this up but I'm a little confused by what
+> exactly needs to be under the pci_rescan_remove lock. For example the
+> pci_bus_add_device(virtfn) at the end of pci_iov_add_virtfn() doesn't
+> seem to be under the lock while most calls to pci_bus_add_devices()
+> are, most prominently the one in acpi_pci_root_add() which I assume is
+> what is used on most x86 systems. Any hints?
+> 
+> Also I think my original thought here might have been a premature worry
+> about PCI-to-PCI bridges thinking that adding the new device could lead
+> to more devices appearing. Of course actually thinking about it a bit
+> more there are quite a few other things that won't work without further
+> changes if we wanted to add bridges e.g. we would need to create
+> zpci_dev structs for these somewhere.
+
+Hmm.  Good question.  Off the top of my head, I can't explain the
+difference between pci_rescan_remove_lock and pci_bus_sem, so I'm
+confused, too.  I added Lukas in case he has a ready explanation.
+
+Bjorn
