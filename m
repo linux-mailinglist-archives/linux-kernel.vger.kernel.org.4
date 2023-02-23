@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B16D6A02EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE906A02F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbjBWGri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 01:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S231849AbjBWGsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 01:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjBWGrg (ORCPT
+        with ESMTP id S233169AbjBWGsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 01:47:36 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1C54BE86
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:47:32 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id f13so38392555edz.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677134850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6CjMSX3fCv/Qr1M0aeSG/e+l/GblnDne7N25TnEl9vI=;
-        b=MAwUCEBEIh7x0Lr0V2oLN8HKK9Nn5ZwZbIFA//ovhuOIgajx6fkWg56JTkjQrQbr9t
-         L/WXYNqVV2McAS71EAQB3Oo63SZOXkxPMEZTnDRn1kjmtCytieBTNbkYu7RwpXp2A7Vs
-         TaDYpPzcRqwaCxu47TH/JDCV+SwjIc7PGhyJPFPNHb2FBTEH8ASwhJyY+mQsOGW6G7lr
-         YSkm4xBhXb/W9eGRCH41G14c2QaQ8nmPlypW7Wnwu2GQzk9K2DMVpV6U5P5HK5iDPK0c
-         +8lQwbpLbxcBUEmXnmbkb1QHbPp2kyBnUqZpWt5CNRoNdasziBejSfiGYIvHIPhBnn0X
-         4rFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677134850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6CjMSX3fCv/Qr1M0aeSG/e+l/GblnDne7N25TnEl9vI=;
-        b=xAH0lUKYyeoFHe7yS3vEgUzqQwtLqiMW2h49msnT+CEY2oJolFUQkQDOUh+Fgx8ZgC
-         kmevn59Bit4pdiTVh2aNesz0LhKDSU8OHLHu6NMCvL9KpkEI5kA+5T+8To/bZUsMx4sd
-         cFPPS/HSjpJ82NuGB2Xcb05C5dyAk3qP8rPbbvRbqRSMv9i2o9ngfvq3PEA0cNMlgakI
-         d2olE/VzvPPfRVThguenU2TiVAXFX0lv2BKy8LGZogR33lH0sNKGJpt9pjfcqJucyF4Q
-         rae8y4Np8dt/SQIm36xlHwNX0gFe9K0XkCr/TU4EWNY0z5Cl7ZTvjZj49W4ulJOeGr+D
-         bSmg==
-X-Gm-Message-State: AO0yUKV8hsGSOzQDsgVTwFNNCHEijtECVCXaldAvWh0B+Dn2cn9kNvA5
-        86sq/NuGeJ/R7pd/bD0hzuM=
-X-Google-Smtp-Source: AK7set89d0/XCAaY6TDRJ0GNgheYEinTgayLhXErICIVlYtWFn5N4+TqzuXiuKgyZjytwk16GCoecg==
-X-Received: by 2002:a05:6402:1e8e:b0:4ad:de7:253f with SMTP id f14-20020a0564021e8e00b004ad0de7253fmr11531165edf.3.1677134850536;
-        Wed, 22 Feb 2023 22:47:30 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id h21-20020a50cdd5000000b004af5968cb3bsm2614654edj.17.2023.02.22.22.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 22:47:29 -0800 (PST)
-Date:   Thu, 23 Feb 2023 07:47:28 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] staging: rtl8192e: Remove empty struct rtl819x_ops
-Message-ID: <31b5b0ba88d7b07b0407956d56446e8f0e62e3e7.1677133271.git.philipp.g.hortmann@gmail.com>
-References: <cover.1677133271.git.philipp.g.hortmann@gmail.com>
+        Thu, 23 Feb 2023 01:48:20 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6681C7EB;
+        Wed, 22 Feb 2023 22:48:05 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B4B4B24DCBE;
+        Thu, 23 Feb 2023 14:48:04 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
+ 2023 14:48:04 +0800
+Received: from [192.168.125.82] (113.72.147.165) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
+ 2023 14:48:03 +0800
+Message-ID: <e0d8f9ba-5bf4-d7dd-5110-20d4196556f9@starfivetech.com>
+Date:   Thu, 23 Feb 2023 14:48:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1677133271.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v4 13/19] reset: starfive: Add StarFive JH7110 reset
+ driver
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <20230221024645.127922-14-hal.feng@starfivetech.com>
+ <CAJM55Z_O9K=sCRXga9pMOXk9YjXc1v_V0e5S-8xN9Mi8gvHzvg@mail.gmail.com>
+ <Y/TygwbxyuhbDooX@spud>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y/TygwbxyuhbDooX@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.165]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,67 +70,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove empty struct rtl819x_ops as it is dead code.
+On Tue, 21 Feb 2023 16:34:11 +0000, Conor Dooley wrote:
+> On Tue, Feb 21, 2023 at 04:33:09PM +0100, Emil Renner Berthing wrote:
+>> On Tue, 21 Feb 2023 at 03:47, Hal Feng <hal.feng@starfivetech.com> wrote:
+>> >
+>> > Add auxiliary driver to support StarFive JH7110 system
+>> > and always-on resets.
+>> >
+>> > Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Drop the reported-by here too please Hal.
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 6 ------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 4 ----
- 2 files changed, 10 deletions(-)
+OK.
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index f5a155d1a81a..718d69b4ce16 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -25,9 +25,6 @@
- int hwwep = 1;
- static char *ifname = "wlan%d";
- 
--static const struct rtl819x_ops rtl819xp_ops = {
--};
--
- static struct pci_device_id rtl8192_pci_id_tbl[] = {
- 	{PCI_DEVICE(0x10ec, 0x8192)},
- 	{PCI_DEVICE(0x07aa, 0x0044)},
-@@ -2190,7 +2187,6 @@ static int _rtl92e_pci_probe(struct pci_dev *pdev,
- 	unsigned long ioaddr = 0;
- 	struct net_device *dev = NULL;
- 	struct r8192_priv *priv = NULL;
--	struct rtl819x_ops *ops = (struct rtl819x_ops *)(id->driver_data);
- 	unsigned long pmem_start, pmem_len, pmem_flags;
- 	int err = -ENOMEM;
- 	u8 revision_id;
-@@ -2257,8 +2253,6 @@ static int _rtl92e_pci_probe(struct pci_dev *pdev,
- 	if (pdev->device == 0x8192 && revision_id == 0x10)
- 		goto err_unmap;
- 
--	priv->ops = ops;
--
- 	if (!rtl92e_check_adapter(pdev, dev))
- 		goto err_unmap;
- 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index c2a4b2ae6a81..c8816c44ca51 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -198,9 +198,6 @@ struct rtl8192_tx_ring {
- 	struct sk_buff_head queue;
- };
- 
--struct rtl819x_ops {
--};
--
- struct r8192_priv {
- 	struct pci_dev *pdev;
- 	struct pci_dev *bridge_pdev;
-@@ -218,7 +215,6 @@ struct r8192_priv {
- 	struct delayed_work		txpower_tracking_wq;
- 	struct delayed_work		rfpath_check_wq;
- 	struct delayed_work		gpio_change_rf_wq;
--	struct rtl819x_ops			*ops;
- 	struct rtllib_device			*rtllib;
- 
- 	struct work_struct				reset_wq;
--- 
-2.39.2
+> 
+>> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> 
+>> > +static int jh7110_reset_probe(struct auxiliary_device *adev,
+>> > +                             const struct auxiliary_device_id *id)
+>> > +{
+>> > +       struct reset_info *info = (struct reset_info *)(id->driver_data);
+>> > +       void __iomem **base = (void __iomem **)dev_get_drvdata(adev->dev.parent);
+>> 
+>> Hi Hal,
+>> 
+>> I saw the kernel test robot complain about this, but I still wonder if
+>> the extra level of indirection is really needed. Isn't it enough to
+>> just add the explicit casts, so
+>> 
+>> dev_set_drvdata(priv->dev, (void *)priv->base);
+>> 
+>> in the clock drivers and here just
+>> 
+>> void __iomem *base = (void __iomem *)dev_get_drvdata(adev->dev.parent);
+> 
+> I *think* if you do that, sparse will complain that you cast away the
+> __iomem. The complaint is something like "cast removes address space
+> qualifier from expression".
+> 
+> The other option is, rather than set the base as the drvdata, just pass
+> the whole priv struct. That's what I did for mpfs at least & I thought I
+> had suggested it on v3, but must not have.
+> It looks prettier than the casting madness at least ;)
+
+I modified this just because we need to use container_of() to get some
+struct in [1].
+
++struct isp_top_crg {
++	struct clk_bulk_data *top_clks;
++	struct reset_control *top_rsts;
++	int top_clks_num;
++	void __iomem *base;
++};
+
++static struct isp_top_crg *top_crg_from(void __iomem **base)
++{
++	return container_of(base, struct isp_top_crg, base);
++}
+
+[1] https://lore.kernel.org/all/20230221083323.302471-7-xingyu.wu@starfivetech.com/
+
+If we pass the whole priv struct, we need to make the priv struct
+public. I think setting the address of "base" as the drvdata is
+enough and easier.
+
+Best regards,
+Hal
+
+> 
+>> > +
+>> > +       if (!info || !base)
+>> > +               return -ENODEV;
+>> > +
+>> > +       return reset_starfive_jh71x0_register(&adev->dev, adev->dev.parent->of_node,
+>> > +                                             *base + info->assert_offset,
+>> > +                                             *base + info->status_offset,
+>> > +                                             NULL,
+>> > +                                             info->nr_resets,
+>> > +                                             NULL);
+>> > +}
 
