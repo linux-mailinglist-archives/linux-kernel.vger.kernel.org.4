@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED106A0E7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BFC6A0E85
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjBWROv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S229709AbjBWRSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjBWROq (ORCPT
+        with ESMTP id S229454AbjBWRR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:14:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF40058B5E;
-        Thu, 23 Feb 2023 09:14:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1429861730;
-        Thu, 23 Feb 2023 17:14:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92D4C433EF;
-        Thu, 23 Feb 2023 17:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172472;
-        bh=x8N8/5LVobu3IXMwbblz267vMr2GCiwLlkT8WTPQP9M=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=RYyi6g4qSl4RhOsjMuzc3djlrnir45c9kHFKHOXCZmmdljNCvUWboi7xdWh+cBcug
-         pwnrkkhavx1Jhntb9hT0bB9rK6zwqhjeVROMYJfZRLMO6TFvcWpDt+hV0rMU9DhYbI
-         F98/IGijMh2JR0ZqW7GzNv89GVuabulOqvw1zLXcNiaDpXGmdbBmijZ2aV0CYW3Jlf
-         rrv5HECGgN7vM/X9dHuzb3R9GLwnC/s8vH8XpXy+fC/Q9SnJqGQwtA2OT6UKbmXbrk
-         ze/nJqxO27ukYEAyjX9QJ/Ep7byk3+HxX4oEtlFMkWup9g5XDWls1ItCPSDxLya/5j
-         /WY61BpZNq3hw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5994C5C0DBB; Thu, 23 Feb 2023 09:14:32 -0800 (PST)
-Date:   Thu, 23 Feb 2023 09:14:32 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, pablo@netfilter.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
- k[v]free_rcu_mightsleep()
-Message-ID: <20230223171432.GC2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230201150815.409582-1-urezki@gmail.com>
- <Y/df4xtTQ14w/2m4@lothringen>
- <IA1PR11MB6171CE257AC58265B8B7CC9889AB9@IA1PR11MB6171.namprd11.prod.outlook.com>
- <20230223155415.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <44eeb053-addd-263e-90d3-131598cfef6c@ssi.bg>
+        Thu, 23 Feb 2023 12:17:58 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7395FF8;
+        Thu, 23 Feb 2023 09:17:56 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31NHHXY2037741;
+        Thu, 23 Feb 2023 11:17:33 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1677172653;
+        bh=o2Nb7KbFzvIYkv4sc2lMJ4n5HXWpmBwMln8gTDzt9K0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=wMrtpCCafkPOnQwzlEcjxQqTlNCsWd4DnQS5l+Sq2uI++DrbqQIimEHXpsvDka0oT
+         AzyGhbYvxo2IU9+JFFcrrmN/A8I/voZQOy/QOZIS+gseGrCJDGS7CQe1y1+spFJD7C
+         MOoJHPc5W6N2YRtl3hIHBDIKr3TFfDI5LbLSIIck=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31NHHXUP072344
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Feb 2023 11:17:33 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
+ Feb 2023 11:17:32 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 23 Feb 2023 11:17:32 -0600
+Received: from [10.250.32.101] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31NHHWVx058665;
+        Thu, 23 Feb 2023 11:17:32 -0600
+Message-ID: <a3819147-dc7b-ecbf-107e-88f88be33825@ti.com>
+Date:   Thu, 23 Feb 2023 11:17:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <44eeb053-addd-263e-90d3-131598cfef6c@ssi.bg>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: omap: add phytec pcm-049 som and
+ pcm-959 dev board
+Content-Language: en-US
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20230222203847.2664903-1-colin.foster@in-advantage.com>
+ <20230222203847.2664903-2-colin.foster@in-advantage.com>
+ <dd67f7c9-0867-47d0-a201-9316908d9d62@ti.com>
+ <Y/eTZONJh8QdJVP8@COLIN-DESKTOP1.localdomain>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <Y/eTZONJh8QdJVP8@COLIN-DESKTOP1.localdomain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 06:21:46PM +0200, Julian Anastasov wrote:
+On 2/23/23 10:25 AM, Colin Foster wrote:
+> On Thu, Feb 23, 2023 at 10:00:50AM -0600, Andrew Davis wrote:
+>> On 2/22/23 2:38 PM, Colin Foster wrote:
+>>> Add yaml documentation for TI OMAP devices for the Phytec PCM-049 SoM and
+>>> the Phytec PCM-959 development kit.
+>>>
+>>> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+>>> ---
+>>>
+>>> v4
+>>>       * New patch, based on a WIP from Andrew Davis <afd@ti.com>
+>>>
+>>> ---
+>>>    .../devicetree/bindings/arm/ti,omap.yaml      | 29 +++++++++++++++++++
+>>>    1 file changed, 29 insertions(+)
+>>>    create mode 100644 Documentation/devicetree/bindings/arm/ti,omap.yaml
+>>
+>> How will this work if I add the same file? Why not take my WIP patch, make
+>> the suggested changes from Rob, then have it as your first patch in this
+>> series?
 > 
-> 	Hello,
+> Is your WIP intended to convert all omap.txt to ti,omap.yaml? Or chunk
+> off devices one at a time?
 > 
-> On Thu, 23 Feb 2023, Paul E. McKenney wrote:
+> If the former, when your patch is done it should be a pretty simple
+> rebase conflict resolution. If the latter (which feels more digestable)
+> this offers that template. This was Rob's / Tony's suggestion, albeit
+> before you sent your patch set.
 > 
-> > > > Not sure if you guys noticed but on latest rcu/dev:
-> > > > 
-> > > > net/netfilter/ipvs/ip_vs_est.c: In function ‘ip_vs_stop_estimator’:
-> > > > net/netfilter/ipvs/ip_vs_est.c:552:15: error: macro "kfree_rcu" requires 2
-> > > > arguments, but only 1 given
-> > > >    kfree_rcu(td);
-> > > >                ^
-> > > > net/netfilter/ipvs/ip_vs_est.c:552:3: error: ‘kfree_rcu’ undeclared (first use in
-> > > > this function); did you mean ‘kfree_skb’?
-> > > >    kfree_rcu(td);
-> > > >    ^~~~~~~~~
-> > > >    kfree_skb
-> > > > net/netfilter/ipvs/ip_vs_est.c:552:3: note: each undeclared identifier is
-> > > > reported only once for each function it appears in
-> > > 
-> > > Hi Frederic Weisbecker,
-> > > 
-> > > I encountered the same build error as yours. 
-> > > Per the discussion link below, the fix for this build error by Uladzislau Rezki will be picked up by some other maintainer's branch?
-> > > @Paul E . McKenney, please correct me if my understanding is wrong. 😊
-> > > 
-> > >     https://lore.kernel.org/rcu/Y9qc+lgR1CgdszKs@salvia/
-> > 
-> > Pablo and Julian, how are things coming with that patch?
 > 
-> 	Fix is already in net and net-next tree
+> Anyway, I'm happy to do any of the following:
+> 
+> 1. Take Andrew's patches, add these references and re-submit.
+> 2. Keep this set as-is (with the typo fix) and when Andrew's WIP is done
+>     it should be an easy rebase before submission.
+> 3. Wait for Andrew's WIP to be done, then submit with this update.
+> 
+> 
+> I'd like to avoid #3 because I don't know where this might fall on your
+> priorities list.
 
-Very good, thank you!  Is this going into this merge window or is it
-expected to wait for v6.4?
+Low priority for me, I'd suggest #1 or they probably will not be
+converted anytime soon.
 
-							Thanx, Paul
+Andrew
