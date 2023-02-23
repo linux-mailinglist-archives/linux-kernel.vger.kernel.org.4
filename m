@@ -2,227 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B436A06D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DAD6A06DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbjBWK6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
+        id S233687AbjBWK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjBWK6v (ORCPT
+        with ESMTP id S233525AbjBWK7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:58:51 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708C49740;
-        Thu, 23 Feb 2023 02:58:49 -0800 (PST)
-Received: from ideasonboard.com (host-87-16-53-160.retail.telecomitalia.it [87.16.53.160])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 84A7C4DE;
-        Thu, 23 Feb 2023 11:58:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1677149926;
-        bh=ykZ6O0AnbceQWgdSWq/0czBCFAMEGPVFDYg0sfPzC3Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fgRFMMmDgBZA68w4BeUm4PB3UMouz8nrE4xJZ95Zhmp080fiW+ysN9PHonUqWUjzI
-         31ZB0f+7At4L2miOxZcc98q9rt2ayPUJ0UBgO6Tx2M6x2vKRVITuXjZuKfBI4jLe2T
-         giztLAVOND5z5sRRPBiK45Y/uTrjPrZqbUoFeLF0=
-Date:   Thu, 23 Feb 2023 11:58:44 +0100
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thu, 23 Feb 2023 05:59:36 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6156EB474;
+        Thu, 23 Feb 2023 02:59:33 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id k14so12313561lfj.7;
+        Thu, 23 Feb 2023 02:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rwgI0W9mSCQx+OfiolXpoLKChj85RiWCAIb74m80ZB8=;
+        b=cybRpt1DGb0ASh4VUJ6VVn96cG+t5goJa6YbJdgl5GKyQmMk32wtUI1tV55azLI1Aw
+         OUJW6QRWrhoKXprvfyVA6Hf7Z61bovHOQU57fpITgDtTAXoQS3wLdylkN0pgFbloPH2d
+         IRzxvtdx1I6P+4PI+bG7jF9jYk0GBWQJzV5FIIksys8Zk8sUtpdLE6d6XKpVQzwjB3TM
+         NrQZfO0uA0/Mpd0oeyEKudaidEYItb1loct2/YxC9Qj+M6Ug2//PCcg0gB4CagswBTJ8
+         ZvUMPJ+f4A10byo+OivJ4INWTUL8AKwfdgF5Fb7xfD12h38ShI0idKDXj+GiiAGLfzIh
+         LLLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rwgI0W9mSCQx+OfiolXpoLKChj85RiWCAIb74m80ZB8=;
+        b=kue0wf9sUOYzf/4po1F25INGKo0s6urv5H5ueg9blX2/qk7lgyXaOYIMnHz9OjAYrv
+         zS12Hjgh96spCp9+3xuFtNGaSutJAK7v2eKCOrEhM3kh6U4s/GZKYpw6P+fmI/1eamo1
+         AU7cj/NHYNXyKoRERgA/ObNzPeQ/ZHbcIYNrYqu0lGEbIfyVxDS7CLs1piAtq0aofidx
+         veZ/4GSeVAK515Ymk2q0SUsq01oursLSpucf6o+xQelSNJGAxYP/ZDNaiywQNmD2DumS
+         QXBmBieUxXKVOEbXNrj1tFSoQxoKG8mI09zvTlTUFpbBC5vMo9AlzLxBW6krINZDbaSw
+         Mk9w==
+X-Gm-Message-State: AO0yUKVSrpx678kfVo4Zd2VkZgKPd+wBV/8HyiGzOgiYozjhzymEhCX7
+        KoZ2y6+DyATPgXUBfEUD6f0=
+X-Google-Smtp-Source: AK7set9v8Ue/45J6ZfsE0E1+iF169cfZ/M8pzKAeEBsk1kGvMnjX/nJuYEEhpM/6mxK2Vrr803o+Rg==
+X-Received: by 2002:a05:6512:48c:b0:4db:ee9:7684 with SMTP id v12-20020a056512048c00b004db0ee97684mr3653596lfq.56.1677149971482;
+        Thu, 23 Feb 2023 02:59:31 -0800 (PST)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id b1-20020a056512218100b004db3aa3c542sm448442lft.47.2023.02.23.02.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 02:59:31 -0800 (PST)
+Message-ID: <f8b2115d-b0ea-75f9-b76f-b7979d705362@gmail.com>
+Date:   Thu, 23 Feb 2023 12:59:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Helen Koike <helen.koike@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/14] media: rkisp1: Add support for i.MX8MP
-Message-ID: <20230223105844.cqhkxoypkl5v24h2@uno.localdomain>
-References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
- <CAHCN7x+9E8qcBVOQZKTKagDkvkKVnqDtjvpNX-iNFYwCLRoYug@mail.gmail.com>
- <Y+1xCtdxIoPtnOws@pendragon.ideasonboard.com>
- <CAHCN7xLQ2+EuwByr_S9LJjPOtNJncDEHJmBkiLqfEdG4P7gTkw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHCN7xLQ2+EuwByr_S9LJjPOtNJncDEHJmBkiLqfEdG4P7gTkw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1677080089.git.mazziesaccount@gmail.com>
+ <af211ec180d91a13862630e635019ebe03d4be31.1677080089.git.mazziesaccount@gmail.com>
+ <e6b2a6f4-d710-7f74-e85d-1cd3f5b96460@linaro.org>
+ <101db5e2-e878-b751-9679-6ea45eb24c26@fi.rohmeurope.com>
+ <33abc8a3-39f7-af7c-9676-723228624b0f@linaro.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH 1/6] dt-bindings: iio: light: Support ROHM BU27034
+In-Reply-To: <33abc8a3-39f7-af7c-9676-723228624b0f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam
-   sorry to jump up without being involved in the conversation
+On 2/23/23 11:26, Krzysztof Kozlowski wrote:
+> On 23/02/2023 07:20, Vaittinen, Matti wrote:
+>> On 2/22/23 20:57, Krzysztof Kozlowski wrote:
+>>> On 22/02/2023 17:14, Matti Vaittinen wrote:
+>>>> ROHM BU27034 is an ambient light sesnor with 3 channels and 3 photo diodes
+>>>> capable of detecting a very wide range of illuminance. Typical application
+>>>> is adjusting LCD and backlight power of TVs and mobile phones.
+>>>>
+>>>> Add initial dt-bindings.
+>>>
+>>> Driver can be "initial", but bindings better to be closer to complete,
+>>> even if not used by the driver currently.
+>>
+>> Out of the curiosity - why is that? (Please, don't take me wrong, I am
+>> not trying to argue against this - just learn the reason behind). I
+>> can't immediately see the harm caused by adding new properties later
+>> when we learn more of hardware. (and no, I don't expect this simple IC
+>> to gain at least many properties).
+> 
+> Linux drivers change, but the hardware does not, thus DTS, which
+> describes the hardware, can be complete. It should be written based on
+> the hardware, not based on Linux drivers. If you add incomplete
+> bindings, this suggests you wrote them to match your driver, not to
+> match hardware. This in turn (adjusting bindings to driver) makes them
+> less portable, narrowed to one specific driver implementation and more
+> ABI-break-prone later.
+> 
+> Imagine you that clock inputs, which you skipped in the binding, were
+> actually needed but on your board they were enabled by bootloader. The
+> binding is then used on other systems or by out of tree users. On your
+> new system the clocks are not enabled by bootloader anymore, thus you
+> add them to the binding. They are actually required for device to work,
+> so you make them required. But all these other users cannot be fixed...
+> 
+> What's more, incomplete binding/DTS is then used together with other
+> pieces - DTS and driver, e.g. via some graphs or other
+> phandles/supplies/pinctrl. So some other DTS or driver code might rely
+> on your particular binding. Imagine you had only vdd-supply regulator,
+> but no reset pins, so the only way to power-cycle device was to turn
+> off/on regulator supply. Then you figure out that you have reset pins
+> and it would be useful to add and use it. But already drivers are
+> written to power cycle via regulator... or even someone wrote new driver
+> regulator-pwrseq to power cycle your device due to missing reset GPIOs...
 
-On Sat, Feb 18, 2023 at 10:14:08AM -0600, Adam Ford wrote:
-> On Wed, Feb 15, 2023 at 5:55 PM Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
-> >
-> > Hi Adam,
-> >
-> > On Wed, Feb 15, 2023 at 07:57:53AM -0600, Adam Ford wrote:
-> > > On Fri, Nov 18, 2022 at 3:44 AM Paul Elder wrote:
-> > >
-> > > > This series depends on v3 of "dt-bindings: media: Add macros for video
-> > > > interface bus types" [1].
-> > > >
-> > > > This series extends the rkisp1 driver to support the ISP found in the
-> > > > NXP i.MX8MP SoC.
-> > >
-> > > I'm going to spend some time testing this over the weekend.  Is there a V4
-> > > pending, or should I just test whatever is in Laurent's repo?
-> >
-> > I've updated all the v6.2-based branches on
-> > https://gitlab.com/ideasonboard/nxp/linux.git (and renamed them to
-> > v6.2/*). Beside a rebase, the v6.2/isp branch contains (at the bottom) 6
-> > additional patches that I've previously posted to the linux-media
-> > mailing list (feel free to review them ;-)).
->
-> I grabbed your v6.2 series, and applied some updates to enable an
-> imx219 camera and routed it through the ISP and configured the camera
-> to SRGGB10_1X10/640x480 and had the ISP convert to YUYV8_2X8/640x480
-> and it captured just fine.
->
-> With that, I think you can add
->
-> Tested-by: Adam Ford <aford173@gmail.com> #imx8mp-beacon
->
-> I haven't experimented with the resizer yet,but  I did have some
-> questions on the AWB.  The AWB appears to be available on the 8MP per
-> the TRM, and  I see reference to AWB in the driver, but when I query
-> the subdev via yavta, I didn't see anything obvious on how to enable
-> it.  My pipeline (attached) shows klisp1_params as video2 and
-> rkisp1_stats as video1.  I attempted to query both without much
-> success.
+Thanks for explanation Krzysztof. I think that what you wrote here makes 
+sense. Still, I don't think this "adding features only later can cause 
+problems to others" is in any way fundamentally different for bindings 
+and software. Sure this clock example is a valid thing, adding a clock 
+later could cause kernel to suddenly be aware of it can disable it - but 
+disabling the clock would still require a new piece of clk driver too...
 
-As you might be aware there's no magic button to "turn AWB on". The
-ISP enables the implementation of AWB algorithms that consumes the
-statistics the ISP produces on the raw images it is fed with and
-allows to program the color gains to realize colors balancing.
+I think same problems can happen when lower layer SW does not implement 
+all the features - upper layers may need to implement some odd quircks 
+and workarounds to get things working, and all that can be useless or 
+even incompatible with the new low-level SW which finally adds the 
+missing implementation.
 
-The implementation of such algorithms doesn't live in the driver but
-rather in a separate component usually running in user space. With
-libcamera we're creating a userspace camera stack where it is possible
-to implement such algorithms, and the i.MX8MP is fairly well supported
-by the "rkisp1" component.
-https://git.libcamera.org/libcamera/libcamera.git/tree/src/libcamera/pipeline/rkisp1
-https://git.libcamera.org/libcamera/libcamera.git/tree/src/ipa/rkisp1/algorithms
+I guess the 'fundamental' difference I was looking for is that the 
+hardware itself should not change - so in theory we should know the HW 
+from the day 1. Still, we (I) at times notice we need some information 
+about the hardware only when we are (I am) writing the drivers ;) 
+Unfortunately there are companies where all the information about the 
+hardware is not immediately available ...
 
-There's probably one single patch still out of tree in libcamera to flip
-the switch and enable i.MX8MP support through the RkISP1 component.
+Out of the curiosity 2 (an no need to respond if you're in hurry) - how 
+should one treat hardware logic which is implemented on FPGA? I have in 
+the past worked for a good while on a project where FPGA blocks were 
+also described in dt - but this _really_ blurs the line between 
+"immutable" hardware and "mutable" software. (And yes, we had a great 
+deal of "fun" with updating the FPGA images, FPGA device-trees, linux 
+images and board device-trees...)
 
-If you're willing to give it a spin let me know and I can try
-support you in testing it.
+Anyways, I agree with you. It would be good to have as complete bindings 
+as possible from the day 1.
 
+By the way - planning to attend ELCE next summer? It'd be great to have 
+a lecture part II about writing the bindings ;)
 
->
-> root@beacon-imx8mp-kit:~# yavta -l /dev/video2
-> Device /dev/video2 opened.
-> Device `rkisp1_params' on `platform:rkisp1' (driver 'rkisp1') supports
-> meta-data, output, without mplanes.
-> unable to query control 0xc0000000: Inappropriate ioctl for device (25).
-> Meta-data format: RK1P (50314b52) buffer size 3048
-> root@beacon-imx8mp-kit:~# yavta -l /dev/video1
-> Device /dev/video1 opened.
-> Device `rkisp1_stats' on `platform:rkisp1' (driver 'rkisp1') supports
-> meta-data, capture, without mplanes.
-> unable to query control 0xc0000000: Inappropriate ioctl for device (25).
-> Meta-data format: RK1S (53314b52) buffer size 260
-> root@beacon-imx8mp-kit:~#
->
-> Is there documentation somewhere on where to test the AWB?  This is of
-> particular interest to me, because the RGGB format of the camera comes
-> across with a green tint.  I am able to remove this green-ness on a
-> different platform using some AWB on the ARM, but I'd rather do it in
-> hardware if possible.
->
-> Thanks
->
-> adam
->
->
-> >
-> > My only concern with this series is with patch "media: rkisp1: Add match
-> > data for i.MX8MP ISP", and in particular with the following hunk:
-> >
-> >  enum rkisp1_cif_isp_version {
-> >         RKISP1_V10 = 10,
-> >         RKISP1_V11,
-> >         RKISP1_V12,
-> >         RKISP1_V13,
-> > +       IMX8MP_V10,
-> >  };
-> >
-> > It's not a very nice versioning scheme :-S I'll see if I can find
-> > something better, but regardless of that, I'll post v4 with the goal of
-> > merging it in v6.4.
-> >
-> > > I have an IMX219 camera with 4-lane support and an i.MX8M Plus kit from
-> > > Beacon, and I want to test the RGGB bayer conversion to see how well it
-> > > works.
-> > >
-> > > > The ISP IP cores in the Rockchip RK3399 (known as the "Rockchip ISP1")
-> > > > and in the NXP i.MX8MP have the same origin, and have slightly diverged
-> > > > over time as they are now independently developed (afaik) by Rockchip
-> > > > and VeriSilicon. The latter is marketed under the name "ISP8000Nano",
-> > > > and is close enough to the RK3399 ISP that it can easily be supported by
-> > > > the same driver.
-> > >
-> > > Is there a reason the driver cannot be renamed to a more generic name than
-> > > rkisp1 if the Rockchip and VeriSilicon had similar origins?  Having the
-> > > name Rockchip referenced from an NXP i.MX8M Plus seems odd to me.
-> >
-> > The common roots of the IP core predate both Rockchip and VeriSilicon.
-> > Those two implementations have now diverged (as with all forks), so
-> > either name would be wrong in some cases :-S
-> >
-> > > > The last two patches add support for UYVY output format, which can be
-> > > > implemented on the ISP version in the i.MX8MP but not in the one in the
-> > > > RK3399.
-> > > >
-> > > > This version of the series specifically has been tested on a Polyhex
-> > > > Debix model A with an imx219 (Raspberry Pi cam v2).
-> > > >
-> > > > [1] https://lore.kernel.org/linux-media/20220615221410.27459-2-laurent.pinchart@ideasonboard.com/
-> > > >
-> > > > Laurent Pinchart (3):
-> > > >   dt-bindings: media: rkisp1: Add i.MX8MP ISP example
-> > > >   media: rkisp1: Add and use rkisp1_has_feature() macro
-> > > >   media: rkisp1: Configure gasket on i.MX8MP
-> > > >
-> > > > Paul Elder (11):
-> > > >   dt-bindings: media: rkisp1: Add i.MX8MP ISP to compatible
-> > > >   media: rkisp1: Add match data for i.MX8MP ISP
-> > > >   media: rkisp1: Add and set registers for crop for i.MX8MP
-> > > >   media: rkisp1: Add and set registers for output size config on i.MX8MP
-> > > >   media: rkisp1: Add i.MX8MP-specific registers for MI and resizer
-> > > >   media: rkisp1: Shift DMA buffer addresses on i.MX8MP
-> > > >   media: rkisp1: Add register definitions for the test pattern generator
-> > > >   media: rkisp1: Fix RSZ_CTRL bits for i.MX8MP
-> > > >   media: rkisp1: Support devices without self path
-> > > >   media: rkisp1: Add YC swap capability
-> > > >   media: rkisp1: Add UYVY as an output format
-> > > >
-> > > >  .../bindings/media/rockchip-isp1.yaml         |  79 ++++++++++-
-> > > >  .../platform/rockchip/rkisp1/rkisp1-capture.c | 102 +++++++++++---
-> > > >  .../platform/rockchip/rkisp1/rkisp1-common.h  |  32 +++++
-> > > >  .../platform/rockchip/rkisp1/rkisp1-debug.c   |  14 +-
-> > > >  .../platform/rockchip/rkisp1/rkisp1-dev.c     |  67 +++++++--
-> > > >  .../platform/rockchip/rkisp1/rkisp1-isp.c     | 128 +++++++++++++++++-
-> > > >  .../platform/rockchip/rkisp1/rkisp1-regs.h    |  90 ++++++++++++
-> > > >  .../platform/rockchip/rkisp1/rkisp1-resizer.c |  35 ++++-
-> > > >  include/uapi/linux/rkisp1-config.h            |   2 +
-> > > >  9 files changed, 509 insertions(+), 40 deletions(-)
-> >
-> > --
-> > Regards,
-> >
-> > Laurent Pinchart
+Yours,
+	--Matti
 
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
