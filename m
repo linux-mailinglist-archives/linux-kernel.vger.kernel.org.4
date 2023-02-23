@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CB06A0D03
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA7C6A0D0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbjBWPeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S234855AbjBWPgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjBWPeI (ORCPT
+        with ESMTP id S233711AbjBWPgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:34:08 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C710919A0;
-        Thu, 23 Feb 2023 07:34:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677166447; x=1708702447;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0QQngnPj0KYq88epAkjtpHhVWThg+EKfq84nRKBsT4I=;
-  b=FbTjzUBN+YPmlWLiN+KdciP1botS8MNBi1LnV14bstOjN5kTzo6SP6th
-   PC3hNK0c5vV6toDyfEz6kAutnFyvNdg+EBl38QisiO7krsXPUwbznRX8i
-   Ol3mf4K7NAXTsA35ahQ1Qx78T5LaZwMPhzpq21vEiDHu6B+EV/eBHN0RM
-   i3OWcwGiMH/E7GbmlMgX5BxTf3/GxibMKtAd67z/G+fhNSE0CeJB2kX7a
-   axorV4JH2b8m6Io1t+MLhe+NohYYTQmcFZwPCKJeIeGhhCGRNvA8T5Z2z
-   KpojpkYIZLRL9hDLpmiFP8af/un+ZO63qmVFscb5D/TC4ArST/EJ7E8z4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="335469013"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="335469013"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 07:34:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="702827230"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="702827230"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2023 07:34:06 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVDbh-0001Qd-0n;
-        Thu, 23 Feb 2023 15:34:05 +0000
-Date:   Thu, 23 Feb 2023 23:33:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>, linux-doc@vger.kernel.org
-Subject: htmldocs: Warning:
- Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml references a file
- that doesn't exist:
- Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
-Message-ID: <202302232316.L6gzJade-lkp@intel.com>
+        Thu, 23 Feb 2023 10:36:44 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83B117166;
+        Thu, 23 Feb 2023 07:36:43 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id z5so2043375ilq.0;
+        Thu, 23 Feb 2023 07:36:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=36iVwpCV67m9Prkpccx9jdmSBAdJURQNVTWbUuLnUCY=;
+        b=BNBb0KjMyeaKHRnNZ7WDhi75KijWDQMh8N6WQCf/Da2M5bwNApRq0nANHRIiNxNKMh
+         s3a7nWHBM7ERmCJ6SW3A5VaqmL4mJsqlN0r2aGAf8b1UFo71ejGmLUPGKayOD4R52M+W
+         U5UB9KRiWaIQLlOtV4ewfv8naNzKpoqVf3wgNE27maLBb19NcikXU+5vyY0qMd9lIfwH
+         jrD0J+XorA/GpgwJP3ohaKVGCD5SQOf4H5oOTn20H3VKoNiCPFZhYEh6UD0L4Q+BUHsS
+         UxFg8/Qo8VV3Bu7P2Sbd3CwR4gJLhUVKMpZMLdoqeoGjpRY4I3FTV0kPqh1LnXI8qUzI
+         eULA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=36iVwpCV67m9Prkpccx9jdmSBAdJURQNVTWbUuLnUCY=;
+        b=yIbZ31FbpZg2Wz5lb6vRWOPyqOyCG9xUdATzoY/Fhx+Brn2V2tJ0ZnccFR6WA7RFXp
+         Clg3To8W9tyrrqHy3M4ZnG5im4v4zNaT6tS/iil6Sfh05+iZcz8403PwoHoyJzdfaN8b
+         W25EaOoE/nSAhsvXBw2FJTl3kjg1xf3gAgfj3mPqpBeSIn6+fBGHapwcAR0n9vq+zalK
+         3hRJJvM5exliAdGW2uH/hEclvZBw6TEU7VmFOoZiZxAaoGQBlPZklpka7LDfB8tJwIS/
+         TdKZBQaJUipB7lKGonWc4oCPhjpENySB+XW8DfG2HixAHx8N0803o3m9p2cOAbV31NCL
+         x5cg==
+X-Gm-Message-State: AO0yUKXkfzapqz6TimbfAITjYffVbZdiV4TnynDDRK/ZFnRFHJ7NSMiZ
+        udKlFuSUV2ZobEt+rdqrx2Y=
+X-Google-Smtp-Source: AK7set/d8ce+nfx1wyPSU2mw0vavT9Dq+UFpy2YXezikwY4hedoZNNyao43+7ZYzg0jJvyuAATDYBA==
+X-Received: by 2002:a05:6e02:12c8:b0:316:fcbe:53c0 with SMTP id i8-20020a056e0212c800b00316fcbe53c0mr2230885ilm.6.1677166602642;
+        Thu, 23 Feb 2023 07:36:42 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a22-20020a056638005600b003a9962a24d1sm1972834jap.122.2023.02.23.07.36.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 07:36:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <adc1b0b7-f837-fbb4-332b-4ce18fc55709@roeck-us.net>
+Date:   Thu, 23 Feb 2023 07:36:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230223141542.672463796@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230223141542.672463796@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On 2/23/23 06:16, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.96 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
+> 
 
-FYI, the error/warning still remains.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a5c95ca18a98d742d0a4a04063c32556b5b66378
-commit: 0f48b0ed356d8868f62f7c6814fc2edcd70d1816 dt-bindings: phy: rename phy-rockchip-inno-usb2.yaml
-date:   3 weeks ago
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0f48b0ed356d8868f62f7c6814fc2edcd70d1816
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0f48b0ed356d8868f62f7c6814fc2edcd70d1816
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+$ git describe
+v5.15.95-38-gd6f4f9746d40
+groeck@server:~/src/linux-stable$ !ls
+ls -l scripts/pahole-version.sh
+-rw-rw-r-- 1 groeck groeck 269 Feb 23 07:33 scripts/pahole-version.sh
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302232316.L6gzJade-lkp@intel.com/
+This results in:
 
-All warnings (new ones prefixed by >>):
+make[1]: Entering directory '/tmp/buildbot-builddir'
+scripts/pahole-flags.sh: 10: /opt/buildbot/slave/stable-queue-5.15/build/scripts/pahole-version.sh: Permission denied
+scripts/pahole-flags.sh: 12: [: Illegal number:
+scripts/pahole-flags.sh: 16: [: Illegal number:
+scripts/pahole-flags.sh: 20: [: Illegal number:
 
->> Warning: Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml references a file that doesn't exist: Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
+and all builds fail for me.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Guenter
+
