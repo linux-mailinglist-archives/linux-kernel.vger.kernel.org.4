@@ -2,140 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4656A0B2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7FD6A0B2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234454AbjBWNt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S234624AbjBWNty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbjBWNtO (ORCPT
+        with ESMTP id S234681AbjBWNtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:49:14 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2DC51917
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:49:05 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id z5so10895772ljc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:49:05 -0800 (PST)
+        Thu, 23 Feb 2023 08:49:46 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D7927491
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:49:39 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id t22so12724890oiw.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:49:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=frB7bLXBAzoLz+jz9s0Y5YZS3DoAI1c5p0MiOZAyg3g=;
-        b=RA0VXA2x0u01eDdYnr9UigJZ2T1pl4zDq8NqGuMX5UnjXPlLjgeKxRXqQy3vLOU12v
-         JOabwvQh9gnxhIhomkRifz1DnoOv8cMNPI5C3oGD3qTtgEDAJlv9pyLmdK1/0qjsHPfj
-         U2Z1q4rG9HVbRdYmcIHenKEEwsYrYbK5Rp0UL378bayXIRu4HhAz8f2Zh/U1VoN0okaj
-         JYMBS/y+fs2BCN2jjRr2X4uO7SqfsyTE8yYoMc6vhpr7G+nepm2paL4jH0Uo3u/KrpTz
-         5z7zCPtZ0HtSWnEisORbCgNNTNWpeBL5SeW8HQrJZH9LlemOnWAbmLySna534kXjaGsw
-         92Lg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EWQTfJ5YqMEb0/gtO5TDI9wfdh4CmPiWsPEKemNGlJk=;
+        b=eURITKW8QYP9z92PoD7ZmDI2nN6q/tVUjqh4DU5g7kqwgmH0DJ+idqfmNyhvv7lQbp
+         3eb+abJHt14JfyhHmXB/0dVfm/Oeh2xwUhZLk07+xIGuT1JaRLV1oQL/hHr6MVCyfH2K
+         lByNBEJIJvIwi7fkOz7kDE0UXCEE732PJ4tL3dIETG+Wy/hOv5dX1tvsCL3resXFYrZw
+         Nc3i4/NnPFah7Md9ZtOEMjfFs7d/GX4Czek8Yljmkt4OMuiSQmjeKxCHhRBOiYqt18mG
+         n4cwyY89NB9RQZ5M/tBamhcXxVA4YE0p+rwps38LTEZN8c7+Kf2IHyXAiu3bv5eLWLxN
+         5GbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=frB7bLXBAzoLz+jz9s0Y5YZS3DoAI1c5p0MiOZAyg3g=;
-        b=X5y8j0RhC5+jLu4DcB8+gWPhcqr4lIVZ5SAn8YPcuuRvwSPlrhOCyJ4z1vzzPIhdR+
-         mlbq7Vum5IKOuZsq+uChkarLu0Py0QZP9V4Lkoniz7L7pgcTyx+8DHwwCwizCH32fh8C
-         IDHqMS7LQ1SB5G4UDkzDVRjIGTdA1WetUubdzGBmE15RWUYsmjTLtLlWoHjN/bRaWPWi
-         TBvxanYAJHkJCqWmdXAG2Rw/kAoa4FVABHO//tpEeiR4maLFKIh+VQ5Ca7QMXJRSUnk4
-         O0HPc72LFaArlnNEV1IdUSRHLVNfA/pu/auh0ZkRJoz1LdSBfjySo6t+1JNQkUkZcXZz
-         DrAA==
-X-Gm-Message-State: AO0yUKULlGeyUOtpThmdsj6WgXm4TqPsos66zixrbH69ZnKsd8L42owZ
-        M2O38JOPFlR6gcKdytpFGwEEeg==
-X-Google-Smtp-Source: AK7set/+fzhm8Q7+85CuVpa/CC2T12Ib2EKLG78RC9QKfOzgfhUM/TMMpg4QaxdhhCQesbzSHPM6AA==
-X-Received: by 2002:a05:651c:1614:b0:293:45f1:c1a6 with SMTP id f20-20020a05651c161400b0029345f1c1a6mr3959697ljq.0.1677160143636;
-        Thu, 23 Feb 2023 05:49:03 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id n16-20020ac24910000000b004b7033da2d7sm799123lfi.128.2023.02.23.05.49.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 05:49:03 -0800 (PST)
-Message-ID: <761e0aba-9364-557a-e6e5-e21494597dbc@linaro.org>
-Date:   Thu, 23 Feb 2023 14:49:00 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EWQTfJ5YqMEb0/gtO5TDI9wfdh4CmPiWsPEKemNGlJk=;
+        b=7XGWPvX92wk1QSacvBAYS6vcxuEib4K+vqZAMwtbCjYOEt2WoVnSSta8ln5TQ5Sn13
+         ae1pg3Z0d19DZTwPrc7QpV9opdvS8TiTFobvJmARNwtaFzXTMZG+WYPZ328xlMTfFkVI
+         aEaINEcXf0inWwj0dmnUJjc/oOBrtWvNc/g9QO3/6r5YWqAWacjhruh5wUh/ZULv5uLG
+         ulUXKbXKfRlUBHs+R3AbC9nxRR9b6yZVXnzfUbs2KRy8QG5IozZr4y2dlz45kd5IU/Ie
+         8LUC9PyYwIGVlnq2Y9QL+4GvC070HvPl8CPI7T6FAl7SRqFRA3R4YuM/ADvHBdMOhYsb
+         ycdg==
+X-Gm-Message-State: AO0yUKWiwcUdKdqXyzfohyHZCyuy52dSfVCMP64sO82zuSwTLS5e8LXm
+        X4cM7zs2Pa4Fia1huCdDV1vh/FiJyBT7ibgnNTn67g8P
+X-Google-Smtp-Source: AK7set/2aMgF/LtaBUGb/KDdK5anSKBLMsRG6+EGNVCXpx0Q67zEslFcgOl1UjgJDQPL36+f5p7Oyzpjr86cKjsh3PE=
+X-Received: by 2002:a05:6808:1690:b0:35b:d93f:cbc4 with SMTP id
+ bb16-20020a056808169000b0035bd93fcbc4mr1087264oib.96.1677160178686; Thu, 23
+ Feb 2023 05:49:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 10/15] drm/msm/a6xx: Fix A680 highest bank bit value
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>
-References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org>
- <20230223-topic-gmuwrapper-v3-10-5be55a336819@linaro.org>
- <CAA8EJppi45K0hQ=1fZvf+Mps+4uEkXmLFeqdmyk-yk31CNvUsw@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJppi45K0hQ=1fZvf+Mps+4uEkXmLFeqdmyk-yk31CNvUsw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230221034445.60034-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230221034445.60034-1-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 23 Feb 2023 08:49:27 -0500
+Message-ID: <CADnq5_OnEHV4QzicX5zTu=QP3KjH0b1piweEhzkegSn0qXbvNw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Clean up some inconsistent indenting
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     patrik.r.jakobsson@gmail.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Wrong subject line?  Should be drm/gma500?
 
+Alex
 
-On 23.02.2023 14:06, Dmitry Baryshkov wrote:
-> On Thu, 23 Feb 2023 at 14:07, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> According to the vendor sources, it's equal to 16, which makes hbb_lo
->> equal to 3.
-> 
-> I think we might be stricken with the ddr kind difference here, but I
-> would not bet on it.
-It totally is, but it also seems to be SoC-dependent..
-I think all 8180x devices shipped with LPDDR4X FWIW
-
-Konrad
-> 
->>
->> Fixes: 840d10b64dad ("drm: msm: Add 680 gpu to the adreno gpu list")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> index b5017c56fa1b..2c4afecdd213 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> @@ -885,12 +885,18 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
->>                 hbb_lo = 2;
->>         }
->>
->> -       if (adreno_is_a640_family(adreno_gpu)) {
->> +       if (adreno_is_a640(adreno_gpu)) {
->>                 amsbc = 1;
->>                 /* HBB = 15 */
->>                 hbb_lo = 2;
->>         }
->>
->> +       if (adreno_is_a680(adreno_gpu)) {
->> +               amsbc = 1;
->> +               /* HBB = 16 */
->> +               hbb_lo = 3;
->> +       }
->> +
->>         if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
->>                 amsbc = 1;
->>                 /* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
->>
->> --
->> 2.39.2
->>
-> 
-> 
+On Mon, Feb 20, 2023 at 10:45 PM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> No functional modification involved.
+>
+> drivers/gpu/drm/gma500/cdv_device.c:218 cdv_errata() warn: inconsistent indenting.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4126
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/gma500/cdv_device.c | 27 ++++++++++++++++-----------
+>  1 file changed, 16 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/gma500/cdv_device.c b/drivers/gpu/drm/gma500/cdv_device.c
+> index 3e83299113e3..765f359365b9 100644
+> --- a/drivers/gpu/drm/gma500/cdv_device.c
+> +++ b/drivers/gpu/drm/gma500/cdv_device.c
+> @@ -78,7 +78,8 @@ static u32 cdv_get_max_backlight(struct drm_device *dev)
+>         if (max == 0) {
+>                 DRM_DEBUG_KMS("LVDS Panel PWM value is 0!\n");
+>                 /* i915 does this, I believe which means that we should not
+> -                * smash PWM control as firmware will take control of it. */
+> +                * smash PWM control as firmware will take control of it.
+> +                */
+>                 return 1;
+>         }
+>
+> @@ -149,6 +150,7 @@ static inline u32 CDV_MSG_READ32(int domain, uint port, uint offset)
+>         int mcr = (0x10<<24) | (port << 16) | (offset << 8);
+>         uint32_t ret_val = 0;
+>         struct pci_dev *pci_root = pci_get_domain_bus_and_slot(domain, 0, 0);
+> +
+>         pci_write_config_dword(pci_root, 0xD0, mcr);
+>         pci_read_config_dword(pci_root, 0xD4, &ret_val);
+>         pci_dev_put(pci_root);
+> @@ -160,6 +162,7 @@ static inline void CDV_MSG_WRITE32(int domain, uint port, uint offset,
+>  {
+>         int mcr = (0x11<<24) | (port << 16) | (offset << 8) | 0xF0;
+>         struct pci_dev *pci_root = pci_get_domain_bus_and_slot(domain, 0, 0);
+> +
+>         pci_write_config_dword(pci_root, 0xD4, value);
+>         pci_write_config_dword(pci_root, 0xD0, mcr);
+>         pci_dev_put(pci_root);
+> @@ -180,10 +183,8 @@ static void cdv_init_pm(struct drm_device *dev)
+>         int domain = pci_domain_nr(pdev->bus);
+>         int i;
+>
+> -       dev_priv->apm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT,
+> -                                                       PSB_APMBA) & 0xFFFF;
+> -       dev_priv->ospm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT,
+> -                                                       PSB_OSPMBA) & 0xFFFF;
+> +       dev_priv->apm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT, PSB_APMBA) & 0xFFFF;
+> +       dev_priv->ospm_base = CDV_MSG_READ32(domain, PSB_PUNIT_PORT, PSB_OSPMBA) & 0xFFFF;
+>
+>         /* Power status */
+>         pwr_cnt = inl(dev_priv->apm_base + PSB_APM_CMD);
+> @@ -196,6 +197,7 @@ static void cdv_init_pm(struct drm_device *dev)
+>         /* Wait for the GPU power */
+>         for (i = 0; i < 5; i++) {
+>                 u32 pwr_sts = inl(dev_priv->apm_base + PSB_APM_STS);
+> +
+>                 if ((pwr_sts & PSB_PWRGT_GFX_MASK) == 0)
+>                         return;
+>                 udelay(10);
+> @@ -215,7 +217,7 @@ static void cdv_errata(struct drm_device *dev)
+>          *      Bonus Launch to work around the issue, by degrading
+>          *      performance.
+>          */
+> -        CDV_MSG_WRITE32(pci_domain_nr(pdev->bus), 3, 0x30, 0x08027108);
+> +       CDV_MSG_WRITE32(pci_domain_nr(pdev->bus), 3, 0x30, 0x08027108);
+>  }
+>
+>  /**
+> @@ -401,20 +403,21 @@ static int cdv_power_up(struct drm_device *dev)
+>
+>  static void cdv_hotplug_work_func(struct work_struct *work)
+>  {
+> -        struct drm_psb_private *dev_priv = container_of(work, struct drm_psb_private,
+> +       struct drm_psb_private *dev_priv = container_of(work, struct drm_psb_private,
+>                                                         hotplug_work);
+>         struct drm_device *dev = &dev_priv->dev;
+>
+> -        /* Just fire off a uevent and let userspace tell us what to do */
+> -        drm_helper_hpd_irq_event(dev);
+> +       /* Just fire off a uevent and let userspace tell us what to do */
+> +       drm_helper_hpd_irq_event(dev);
+>  }
+>
+>  /* The core driver has received a hotplug IRQ. We are in IRQ context
+> -   so extract the needed information and kick off queued processing */
+> -
+> + * so extract the needed information and kick off queued processing
+> + */
+>  static int cdv_hotplug_event(struct drm_device *dev)
+>  {
+>         struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
+> +
+>         schedule_work(&dev_priv->hotplug_work);
+>         REG_WRITE(PORT_HOTPLUG_STAT, REG_READ(PORT_HOTPLUG_STAT));
+>         return 1;
+> @@ -424,6 +427,7 @@ static void cdv_hotplug_enable(struct drm_device *dev, bool on)
+>  {
+>         if (on) {
+>                 u32 hotplug = REG_READ(PORT_HOTPLUG_EN);
+> +
+>                 hotplug |= HDMIB_HOTPLUG_INT_EN | HDMIC_HOTPLUG_INT_EN |
+>                            HDMID_HOTPLUG_INT_EN | CRT_HOTPLUG_INT_EN;
+>                 REG_WRITE(PORT_HOTPLUG_EN, hotplug);
+> @@ -549,6 +553,7 @@ static const struct psb_offset cdv_regmap[2] = {
+>  static int cdv_chip_setup(struct drm_device *dev)
+>  {
+>         struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
+> +
+>         INIT_WORK(&dev_priv->hotplug_work, cdv_hotplug_work_func);
+>
+>         dev_priv->use_msi = true;
+> --
+> 2.20.1.7.g153144c
+>
