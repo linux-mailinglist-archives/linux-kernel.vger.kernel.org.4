@@ -2,93 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9455E6A0F8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A1A6A0F91
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjBWSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S231475AbjBWSjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBWSi7 (ORCPT
+        with ESMTP id S229582AbjBWSjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:38:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341B726CF2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677177491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DLzkYWlqDfHO1zvCfSXGiM4cVbbzITU5Ng0iiPPY5/U=;
-        b=aQgZbFSuZFjmRKPcUzpi/E2V3fLQkao6IlIP+4+uOrlCf1kAb+Hjv2FFZ6n/dh6Tm3scKw
-        /x8+n5KEiiWRknCYPSStj9vOCaCAsJG6xjckJpCftXaxYCZBy1O85AeMKKD6yZT1QnjbcS
-        rQrt47wWI89udWaHlRUJbUw95ecYUYI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-CUN6l3LlNvmpVV9oob4o8Q-1; Thu, 23 Feb 2023 13:38:08 -0500
-X-MC-Unique: CUN6l3LlNvmpVV9oob4o8Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 23 Feb 2023 13:39:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816F93A0BA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:39:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E1D719711D0;
-        Thu, 23 Feb 2023 18:38:05 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.239])
-        by smtp.corp.redhat.com (Postfix) with SMTP id F2C2A404BEC6;
-        Thu, 23 Feb 2023 18:38:02 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 23 Feb 2023 19:38:00 +0100 (CET)
-Date:   Thu, 23 Feb 2023 19:37:56 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        avagin@gmail.com, peterz@infradead.org, luto@kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, corbet@lwn.net,
-        shuah@kernel.org
-Subject: Re: [PATCH v11 2/2] ptrace,syscall_user_dispatch: checkpoint/restore
- support for SUD
-Message-ID: <20230223183756.GB26182@redhat.com>
-References: <20230221201740.2236-1-gregory.price@memverge.com>
- <20230221201740.2236-3-gregory.price@memverge.com>
- <20230222124834.GA15591@redhat.com>
- <Y/YzloHpiyOSvZfK@memverge.com>
- <20230223123020.GA26182@redhat.com>
- <Y/eG4oHc2jz6uSfi@memverge.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E36C6176D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F1DC433EF;
+        Thu, 23 Feb 2023 18:39:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677177557;
+        bh=doLTJ2ETftqjtUwc1scT/ezCCnw14uI7u07rZHPGFeQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=k1WbLL/tl+Mt/nlu1jRTmFPK14CnsP7F/kaUc6xNOdfLYYmwhR1q96IKVuD5oLykb
+         mT9+cRp7/bmecTggw6y2l3UzjuxAbODXLxT1yAZzKReNwjwZoLcnCLkHHN7tZ5HLfN
+         yCD5CzH8czKZwI1lbN9lmiHtBDaFsCB9/vLOGjBUB2YJm4DW6EldIubWK1wQjhZNgE
+         sPFsS7Ncw6cI+2wfEY9DBqRytRl8qw5dfM1dP00+p5CTMNzeiQ9Sm60muag1XmNdox
+         YgOqfln7mPmKZgIanFDfcZixg/mhHCYmtZWuYY5ftmSAoiVYsaryTZDvtxl9gatdvO
+         mDElGARGHt2wQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 138E45C0DBB; Thu, 23 Feb 2023 10:39:17 -0800 (PST)
+Date:   Thu, 23 Feb 2023 10:39:17 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        tkhai@ya.ru, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, dave@stgolabs.net,
+        penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
+Message-ID: <20230223183917.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+ <20230223132725.11685-3-zhengqi.arch@bytedance.com>
+ <Y/evb+PBeaahx9Os@sultan-box.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/eG4oHc2jz6uSfi@memverge.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y/evb+PBeaahx9Os@sultan-box.localdomain>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/23, Gregory Price wrote:
->
-> On Thu, Feb 23, 2023 at 01:30:20PM +0100, Oleg Nesterov wrote:
-> >
-> > Well, if this is the only reason then this check and the "size" argument
-> > ahould be removed, imo.
-> >
-> > But perhaps it can be useful for future extensions, I dunno.
-> >
-> > Oleg.
-> >
->
-> I suppose yes it could also be used to detect differences in versioning
-> if the struct changes in the future, and that would not require an API
-> change in the future to support it.
+On Thu, Feb 23, 2023 at 10:24:47AM -0800, Sultan Alsawaf wrote:
+> On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
+> > The shrinker_rwsem is a global lock in shrinkers subsystem,
+> > it is easy to cause blocking in the following cases:
+> > 
+> > a. the write lock of shrinker_rwsem was held for too long.
+> >    For example, there are many memcgs in the system, which
+> >    causes some paths to hold locks and traverse it for too
+> >    long. (e.g. expand_shrinker_info())
+> > b. the read lock of shrinker_rwsem was held for too long,
+> >    and a writer came at this time. Then this writer will be
+> >    forced to wait and block all subsequent readers.
+> >    For example:
+> >    - be scheduled when the read lock of shrinker_rwsem is
+> >      held in do_shrink_slab()
+> >    - some shrinker are blocked for too long. Like the case
+> >      mentioned in the patchset[1].
+> > 
+> > Therefore, many times in history ([2],[3],[4],[5]), some
+> > people wanted to replace shrinker_rwsem reader with SRCU,
+> > but they all gave up because SRCU was not unconditionally
+> > enabled.
+> > 
+> > But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
+> > the SRCU is unconditionally enabled. So it's time to use
+> > SRCU to protect readers who previously held shrinker_rwsem.
+> > 
+> > [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
+> > [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
+> > [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
+> > [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
+> > [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
+> > 
+> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> > ---
+> >  mm/vmscan.c | 27 +++++++++++----------------
+> >  1 file changed, 11 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 9f895ca6216c..02987a6f95d1 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+> >  
+> >  LIST_HEAD(shrinker_list);
+> >  DECLARE_RWSEM(shrinker_rwsem);
+> > +DEFINE_SRCU(shrinker_srcu);
+> >  
+> >  #ifdef CONFIG_MEMCG
+> >  static int shrinker_nr_max;
+> > @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+> >  void register_shrinker_prepared(struct shrinker *shrinker)
+> >  {
+> >  	down_write(&shrinker_rwsem);
+> > -	list_add_tail(&shrinker->list, &shrinker_list);
+> > +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
+> >  	shrinker->flags |= SHRINKER_REGISTERED;
+> >  	shrinker_debugfs_add(shrinker);
+> >  	up_write(&shrinker_rwsem);
+> > @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
+> >  		return;
+> >  
+> >  	down_write(&shrinker_rwsem);
+> > -	list_del(&shrinker->list);
+> > +	list_del_rcu(&shrinker->list);
+> >  	shrinker->flags &= ~SHRINKER_REGISTERED;
+> >  	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+> >  		unregister_memcg_shrinker(shrinker);
+> >  	debugfs_entry = shrinker_debugfs_remove(shrinker);
+> >  	up_write(&shrinker_rwsem);
+> >  
+> > +	synchronize_srcu(&shrinker_srcu);
+> > +
+> >  	debugfs_remove_recursive(debugfs_entry);
+> >  
+> >  	kfree(shrinker->nr_deferred);
+> > @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
+> >  {
+> >  	down_write(&shrinker_rwsem);
+> >  	up_write(&shrinker_rwsem);
+> > +	synchronize_srcu(&shrinker_srcu);
+> >  }
+> >  EXPORT_SYMBOL(synchronize_shrinkers);
+> >  
+> > @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+> >  {
+> >  	unsigned long ret, freed = 0;
+> >  	struct shrinker *shrinker;
+> > +	int srcu_idx;
+> >  
+> >  	/*
+> >  	 * The root memcg might be allocated even though memcg is disabled
+> > @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+> >  	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+> >  		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+> >  
+> > -	if (!down_read_trylock(&shrinker_rwsem))
+> > -		goto out;
+> > +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+> >  
+> > -	list_for_each_entry(shrinker, &shrinker_list, list) {
+> > +	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+> > +				 srcu_read_lock_held(&shrinker_srcu)) {
+> >  		struct shrink_control sc = {
+> >  			.gfp_mask = gfp_mask,
+> >  			.nid = nid,
+> > @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+> >  		if (ret == SHRINK_EMPTY)
+> >  			ret = 0;
+> >  		freed += ret;
+> > -		/*
+> > -		 * Bail out if someone want to register a new shrinker to
+> > -		 * prevent the registration from being stalled for long periods
+> > -		 * by parallel ongoing shrinking.
+> > -		 */
+> > -		if (rwsem_is_contended(&shrinker_rwsem)) {
+> > -			freed = freed ? : 1;
+> > -			break;
+> > -		}
+> >  	}
+> >  
+> > -	up_read(&shrinker_rwsem);
+> > -out:
+> > +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+> >  	cond_resched();
+> >  	return freed;
+> >  }
+> > -- 
+> > 2.20.1
+> > 
+> > 
+> 
+> Hi Qi,
+> 
+> A different problem I realized after my old attempt to use SRCU was that the
+> unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
+> call. Both register_shrinker() *and* unregister_shrinker() are called frequently
+> these days, and SRCU is too unfair to the unregister path IMO.
+> 
+> Although I never got around to submitting it, I made a non-SRCU solution [1]
+> that uses fine-grained locking instead, which is fair to both the register path
+> and unregister path. (The patch I've linked is a version of this adapted to an
+> older 4.14 kernel FYI, but it can be reworked for the current kernel.)
+> 
+> What do you think about the fine-grained locking approach?
 
-Yes this is what I tried to say. So I won't argue.
+Another approach is to use synchronize_srcu_expedited(), which avoids
+the sleeps that are otherwise used to encourage sharing of grace periods
+among concurrent requests.  It might be possible to use call_srcu(),
+but I don't claim to know the shrinker code well enough to say for sure.
 
-Oleg.
+							Thanx, Paul
 
+> Thanks,
+> Sultan
+> 
+> [1] https://github.com/kerneltoast/android_kernel_google_floral/commit/012378f3173a82d2333d3ae7326691544301e76a
