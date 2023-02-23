@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8706A0E53
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498E96A0E58
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjBWRHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S229470AbjBWRJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBWRHr (ORCPT
+        with ESMTP id S229445AbjBWRJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:07:47 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E94DBE6;
-        Thu, 23 Feb 2023 09:07:42 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id ay18so126205pfb.2;
-        Thu, 23 Feb 2023 09:07:42 -0800 (PST)
+        Thu, 23 Feb 2023 12:09:42 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC346190
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:09:40 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c039f859so135158177b3.21
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:09:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wa/UzGyQDBMefYBiQESGpwhapQ4idUbLe6ID5walvV0=;
-        b=HHa+hxiUtYH+XZPnVyEe9J1v5M9eo8BAz4RfQ/dT3ofq5PK5mIT2hMY+0S9ODdpzGT
-         c/P2w7oBXBc4Rz6h1/qQyyU49q0EzluvqRfJ6fAYuh9Ltq+pV6lBPJI6WQ5kquf0J0WZ
-         GYZV+4clHK2dZo8ra3dMBlbYimVopIeBmyn1ReqL0Lb6fhVzvgapFNb0O0eLeF3L9GPt
-         Xm/AgQW2+mcACNXItRX6ZvnzHz7ApZe1cUd79v2Nx/vZxTcjvjURm/wqhloi5pyQZQMt
-         +3P+0pBWVVvKJCnemUjSB89ksyqTjzY9arTOaaYgIPJ88ZxxlcLOmCE2vdSHpfoVFMZT
-         Enpg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ESEYfucHSnOWaZatj5hNQPiLl3UqdNvq9+VGnD33XD0=;
+        b=eacT4PM6bk+JAGYX8AtEreTJLTfD+mSJsjox9puZbiJhIzz/wIxHhoNqBFIAXYayu7
+         ix2AdCa9GlyQPz6wKG3LR8o4NT+280wasX8/AykGzPPWlG6F17mnxqyPEg7H8lCLwAiX
+         eXH6zqI0g24xM5ZEDyA5U2YNv7s9H603+yWuiAeHry6HpCAAUQ5/Ypm3z9qWSoASZAJv
+         GIl+kmJbNVHeS7mmPwXAdOExvjZqQ9ItW1uw3DrabrHDmj3KBFLmoGmyQYc+K7/u+5MN
+         XBySfkomcCwXORKGamuW5yTLWSpURcpZFsI0uJbe36YJ/e/6tvZI8z6lN62S38fr6TXv
+         yALQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wa/UzGyQDBMefYBiQESGpwhapQ4idUbLe6ID5walvV0=;
-        b=HlCTQXUJuNOLASnzR6v+a3ynW5jcMHSRvruReAEDonHr0lsUExjbnPQNB4vD4Cvy0a
-         PjbA4r/EzBvCqkShKlBsRHZDQEcadhXyInueID+G7e4AUZM9zIwgBfaeshYIP2K4RhgM
-         kYv0tk0x6WKtUTLcDjJg4wRKIe6d2IjSnYEm7k+7nocbNPWBgqiqqbxW/WM68uQolAPn
-         3phiL+RB/nRY41h+XgZsHv4jQzYRYq47Wm6OdqVO+UQQ8Q46YonmEqJuyGTUDWesCz1z
-         pJuGw0UPFJKccVpVvw+zaoiAQqztJZTx0xZ3Ir3M6Unl/FsZHDlo1ewVUbK2TGGUw0hN
-         2LVQ==
-X-Gm-Message-State: AO0yUKV4j+hDETy3KvQRm9s7e0NlkV7exnJk2wLBrnNutcXTI2R6/zN1
-        eGyuxc4Zt0At+3MKP3n24wx9G6bdy97gOwOSmas=
-X-Google-Smtp-Source: AK7set8eYk9XZY9hlTLkfI6zqrLU2JHutM80UFVX+j0Nz7E+y8A+CDttLk8pNQEuY71QIVxCIQvjtAgqop2Yko1g7zI=
-X-Received: by 2002:a62:86c8:0:b0:5a8:168b:4110 with SMTP id
- x191-20020a6286c8000000b005a8168b4110mr1951081pfd.3.1677172062027; Thu, 23
- Feb 2023 09:07:42 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:7022:f8b:b0:5e:61ba:8807 with HTTP; Thu, 23 Feb 2023
- 09:07:41 -0800 (PST)
-In-Reply-To: <20230223141539.893173089@linuxfoundation.org>
-References: <20230223141539.893173089@linuxfoundation.org>
-From:   Luna Jernberg <droidbittin@gmail.com>
-Date:   Thu, 23 Feb 2023 18:07:41 +0100
-Message-ID: <CADo9pHgOp6hHC396k9yE4e1i=0U=_ca-tNtbYNd=Br0tzEWqqg@mail.gmail.com>
-Subject: Re: [PATCH 6.2 00/12] 6.2.1-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        droidbittin@gmail.com
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ESEYfucHSnOWaZatj5hNQPiLl3UqdNvq9+VGnD33XD0=;
+        b=RlvQ3kiVZTLteOe8crzkQbWeaWeiAI0kxRk/IhAOWIKh9t2llFGKQT314czL7gblb5
+         IT467XuwzLgRWLcECT//GW7DT8U8RLYbgLOc3YPBWBsySVEs6BGiFJxd6Fu90UtMI7UX
+         kiOPfIgp1VU1IZUEb7CyQsQs3T/3WLqHvRe3u13z05iGDxvoOYlHK3bCUoFZTpB+4ATy
+         DxUDUEHpM6eEGtvF+IWZtwyFpYfpKXxWJC3fXuVu/elBIQTdgBLOFlN6Gw5PAcivLsZO
+         2NGqNXxHzNYl4/e3/5Re/CcHRM6GWBOeTeHAyXrq4UFZvELi3FMXor3lKL8v3ESvwJRg
+         nd0Q==
+X-Gm-Message-State: AO0yUKW5WUneSG9ZVF4D9aMMs+lScvpz+OLp2jGcqBDtj0omMeq5B3NC
+        naTzXnmTsA19w8U2jo37yV4kkEOFaNI=
+X-Google-Smtp-Source: AK7set+o4nZnorUIfwBQUKqlnrrJeoYQJz7sG9NME5jj+i7H5Ea4MTUvMN+YCmQEaMe31ZnG3Fe5siKK8IQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:b60b:0:b0:52f:45a:5b00 with SMTP id
+ u11-20020a81b60b000000b0052f045a5b00mr2611344ywh.2.1677172179211; Thu, 23 Feb
+ 2023 09:09:39 -0800 (PST)
+Date:   Thu, 23 Feb 2023 09:09:37 -0800
+In-Reply-To: <CAOUHufaK-BHdajDZJKjn_LU-gMkUTKa_9foMB8g-u9DyrVhPwg@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-3-yuzhao@google.com>
+ <Y++q/lglE6FJBdjt@google.com> <CAOUHufaK-BHdajDZJKjn_LU-gMkUTKa_9foMB8g-u9DyrVhPwg@mail.gmail.com>
+Message-ID: <Y/ed0XYAPx+7pukA@google.com>
+Subject: Re: [PATCH mm-unstable v1 2/5] kvm/x86: add kvm_arch_test_clear_young()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,6 +74,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Working on my Arch Linux Server with an i5-6400
+On Wed, Feb 22, 2023, Yu Zhao wrote:
+> On Fri, Feb 17, 2023 at 9:27 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Thu, Feb 16, 2023, Yu Zhao wrote:
+> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > index 6aaae18f1854..d2995c9e8f07 100644
+> > > --- a/arch/x86/include/asm/kvm_host.h
+> > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > @@ -1367,6 +1367,12 @@ struct kvm_arch {
+> > >        *      the MMU lock in read mode + the tdp_mmu_pages_lock or
+> > >        *      the MMU lock in write mode
+> > >        *
+> > > +      * kvm_arch_test_clear_young() is a special case. It relies on two
+> >
+> > No, it's not.  The TDP MMU already employs on RCU and CMPXCHG.
+> 
+> It is -- you read it out of context :)
 
-Tested-by: Luna Jernberg <droidbittin@gmail.com>
+Ah, the special case is that it's fully lockless.  That's still not all that
+special, e.g. see kvm_tdp_mmu_walk_lockless_{begin,end}().
+
+>          * For reads, this list is protected by:
+>          *      the MMU lock in read mode + RCU or
+>          *      the MMU lock in write mode
+>          *
+>          * For writes, this list is protected by:
+>          *      the MMU lock in read mode + the tdp_mmu_pages_lock or
+>          *      the MMU lock in write mode
+>          *
+>          * kvm_arch_test_clear_young() is a special case.
+>          ...
+> 
+>         struct list_head tdp_mmu_roots;
+> 
+> > Just drop the
+> > entire comment.
+> 
+> Let me move it into kvm_arch_test_clear_young().
+
+No, I do not want kvm_arch_test_clear_young(), or any other one-off function, to
+be "special".  I love the idea of a lockless walk, but I want it to be a formal,
+documented way to walk TDP MMU roots.  I.e. add macro to go with for_each_tdp_mmu_root()
+and the yield-safe variants.
+
+/* blah blah blah */
+#define for_each_tdp_mmu_root_lockless(_kvm, _root, _as_id)		\
+	list_for_each_entry_rcu(_root, &kvm->arch.tdp_mmu_roots, link)	\
+		if (refcount_read(&root->tdp_mmu_root_count) &&		\
+		    kvm_mmu_page_as_id(_root) != _as_id) {		\
+		} else
+
+> Also I want to be clear:
+> 1. We can't just focus on here and now; we need to consider the distant future.
+
+I 100% agree, but those words need to be backed up by actions.  This series is
+littered with code that is not maintainable long term, e.g. open coding stuff
+that belongs in helpers and/or for which KVM already provides helpers, copy-pasting
+__kvm_handle_hva_range() instead of extending it to have a lockless option, poking
+directly into KVM from mm/ code, etc.
+
+I apologize for being so blunt.  My intent isn't to be rude/snarky, it's to set
+very clear expectations for getting any of these changes merges.  I asbolutely do
+want to land improvments to KVM's test+clear young flows, but it needs to be done
+in a way that is maintainable and doesn't saddle KVM with more tech debt.
+
+> 2. From my POV, "see the comments on ..." is like the index of a book.
+
+And my _very_ strong preference is to provide the "index" via code, not comments.
+
+> > Clearing a single bit doesn't need a CMPXCHG.  Please weigh in on a relevant series
+> > that is modifying the aging flows[*], I want to have exactly one helper for aging
+> > TDP MMU SPTEs.
+> >
+> > [*] https://lore.kernel.org/all/20230211014626.3659152-5-vipinsh@google.com
+> 
+> I'll take a look at that series. clear_bit() probably won't cause any
+> practical damage but is technically wrong because, for example, it can
+> end up clearing the A-bit in a non-leaf PMD. (cmpxchg will just fail
+> in this case, obviously.)
+
+Eh, not really.  By that argument, clearing an A-bit in a huge PTE is also technically
+wrong because the target gfn may or may not have been accessed.  The only way for
+KVM to clear a A-bit in a non-leaf entry is if the entry _was_ a huge PTE, but was
+replaced between the "is leaf" and the clear_bit().
