@@ -2,81 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A826A0010
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6F26A0012
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjBWA3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
+        id S232925AbjBWA35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjBWA3e (ORCPT
+        with ESMTP id S232903AbjBWA3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:29:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7E14981;
-        Wed, 22 Feb 2023 16:29:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=TiNRSj4+ZSGQutD518+MqWdMvhGuHDdDC01fM8azAzY=; b=iWCl64GZ5mut3hpbv5f5+rGK1y
-        gV9YgHPEUbchM9n4rUVss1dWd7ttjDHzA1RjT7QKM+tpx9xYnb1Fnj2T8ITpjytmH3cgP0FM6loy1
-        KPvOwap0HKYkxNDpXhccsJosGQ3SPaiIFOJhY02ONs/CguLrr1Xom1jIA3wke3bUQkJc9p6pYQxqG
-        0SKy7teVaSTlbLT6Nof4CCmmEBeChL1X2/C6uECO4hkQNeIOOKy8LpLoG+7YFL/r3h9XCHAikXWbN
-        ps0uhcS3aRdw+H4sJcBXxo2GRN29URENt3UR4zs113hSzKYbuUXSrz480f1xDnsPLqMQ5C2KjJ1UQ
-        26y+m+1g==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUzUK-00EXgZ-Ce; Thu, 23 Feb 2023 00:29:32 +0000
-Message-ID: <6dc4d3ce-005c-13be-971b-1c026e3272c1@infradead.org>
-Date:   Wed, 22 Feb 2023 16:29:31 -0800
+        Wed, 22 Feb 2023 19:29:55 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FC43B67A;
+        Wed, 22 Feb 2023 16:29:53 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so1634596wmb.3;
+        Wed, 22 Feb 2023 16:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SHpIcdcfu2QwzrdJ1uxO4xocrtfBEjCJ4RxVjp9sgOU=;
+        b=Yf87uJwGYliNd36S+sLgfWBAXTfQdhy1VzIRp0KbxYTA13uM2Vk4OWlfwfZ8E+sBw9
+         rHf5SOJ5EFBzJFv3MrdQdMWxy7N+gTQMaeCms+aC8UnM5WpNHutGu+wxxa4g1UQkE0UJ
+         GxAKSo9TTFoLNVici8/GAA152nmmzB67+508enIPb9kr/wuqWrwWk57PYWIB95w0r6jL
+         kHqrqL0FiTh4Nna2PE029De37GGCBBmz6m/4WuLZQixpJxBhDSPCAwYUmn5IzmxJwdiI
+         +wLbt0zc9XlQaGHE2rkNJHpS64o3L3karkRifDEBat9HU2Hfu++S6F1PJ3RG5AngjB2a
+         riGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SHpIcdcfu2QwzrdJ1uxO4xocrtfBEjCJ4RxVjp9sgOU=;
+        b=sKIVjBtid7RBTkgiWaFIiI+fPgqR17a6lq2578YoTEDyXpnBue9tVQ5YxGWz6DRnvi
+         97OoAGnPQyBuI0lZSxDhFp87xaBgpgUM13+oKNPMfEKwe0UIvNgGOcAQsDYiY69F9H5Z
+         PeiUGT1Y94l96v5Ql8Wjxxr/u+XiQw7bEw0uS4JJnH+ggtNNSCSI0nJHfysoGZRKu2jc
+         YPWlk78hlCCtDFJ/oxXd5oYY3V0LO2OAz74AR3B6HAfkL/M+HCrqcWMJuyKkYjYQ/lY6
+         wIi7QH/fz4f3fWC1S/nmgRTGHU5kOpzjUYnT73+cvw/SHfp2QM1RBrVBwC7dMBmJ7/Fv
+         HAeQ==
+X-Gm-Message-State: AO0yUKWZPG54Vnjsy64HcFgt0r84PUP5X1PNhTx0aBuvge4dbfnJtg/X
+        5KgQdzzPAMsAd2xqchtThux9AqezocN2sYq5AFo=
+X-Google-Smtp-Source: AK7set9+nca08kKpI5Y0oddvQU4q0ca+jRk0wYzFD9uskGKw3ptLxN4A9hJufyTdsalyMjsQtHx1TFHNYxnv/hI5Q6Q=
+X-Received: by 2002:a05:600c:34d2:b0:3df:f9e6:72d6 with SMTP id
+ d18-20020a05600c34d200b003dff9e672d6mr432569wmq.102.1677112191500; Wed, 22
+ Feb 2023 16:29:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: .config and "make" / turning off all debug
-Content-Language: en-US
-To:     Hanasaki Jiji <hanasaki@gmail.com>,
-        LIST - Linux Kernel <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-References: <CAMr-kF1LxzoOShd7nkE1Pc0ZZgTusB42rDep5ROPirLK9xK55g@mail.gmail.com>
- <1c1c0a3b-10d0-ef9c-e96c-a415bbe0bf33@infradead.org>
- <CAMr-kF0rCQZ6OQkb5g5pAzWddFKDv4CGYLFzDQs=hYLjJMsuQw@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAMr-kF0rCQZ6OQkb5g5pAzWddFKDv4CGYLFzDQs=hYLjJMsuQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
+In-Reply-To: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 22 Feb 2023 19:29:39 -0500
+Message-ID: <CAMdYzYrZvHLFdhn_qYadYbDDnnC+16pkM_kWXiU16u_6XNHEMg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: rockchip: Always enable sd regulator on
+ SOQuartz CM4IO
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Feb 14, 2023 at 8:09 PM Nicolas Frattaroli
+<frattaroli.nicolas@gmail.com> wrote:
+>
+> The 3.3V line coming from the SDMMC regulator is required for USB
+> on the CM4IO board. Without it, the USB mux (U13 in the CM4IO
+> schematic[1]) that's used likely remains unpowered, and no USB
+> devices show up.
+>
+> The consequence of this was the behaviour of an inserted SD card
+> allowing USB to work, while pulling it out turned off all USB
+> devices.
+>
+> [1]: https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
 
-On 2/22/23 16:21, Hanasaki Jiji wrote:
-> Hello,
-> 
-> Thank you so much for helping out.
-> 
-> Might the below accomplish the task?
-> 
-> cat f | grep -v DEBUG| grep -v TRACE | grep -v TRACING > newConfigFileWithout
+I disagree with this. According to the datasheet u13 and half a dozen
+other devices are powered by 3.3v sourced from the SOM. sdmmc_pwr
+triggers SD_PWR_ON which serves only to provide an enable signal to
+u18, the regulator that powers the sdmmc slot from the same 3.3v. If
+you are having problems with USB working, you likely have something
+else going wrong here.
 
-It will disable CONFIG_DEBUG_FS.  That's OK if that's what you want to do.
+Very Respectfully,
+Peter Geis
 
-But this will just give you something to begin with. It will need more work.
-There are lots of config options that use "select" to force another config
-option to be set/enabled. Even if you disable an option and you have one of
-these other options set/enabled, they will just enable the DEBUG/TRACE options
-again for you.
-
-When you find one of these, they pretty much have to be checked and tuned
-one-by-one. It can take a lot of time to do that.
-
-
--- 
-~Randy
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> index 263ce40770dd..88a61fa8a95c 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> @@ -135,6 +135,12 @@ &sdmmc0 {
+>  };
+>
+>  &sdmmc_pwr {
+> +       /*
+> +        * USB also needs this regulator to work on this board, so just enable
+> +        * it unconditionally.
+> +        */
+> +       regulator-always-on;
+> +       regulator-boot-on;
+>         regulator-min-microvolt = <3300000>;
+>         regulator-max-microvolt = <3300000>;
+>         status = "okay";
+> --
+> 2.39.1
+>
