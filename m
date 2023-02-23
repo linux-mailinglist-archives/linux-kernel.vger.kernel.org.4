@@ -2,206 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553606A0953
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976396A096C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234261AbjBWNEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S233987AbjBWNFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbjBWNEt (ORCPT
+        with ESMTP id S234297AbjBWNFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:04:49 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA3E49898
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:04:46 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so4002944pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JDkAyTl4e5Pg7c9IntJyDDk2YT+I/mT8i4BOda6y2xY=;
-        b=nBsez7fHRRIiINSdFLPvlrg8TZchD4wKhnS1nlLN1Hk9OXSJ19hvMaV/2ZF/XX0WDk
-         kdCw9easfSZyFfb0Qu51theWgnSRm54ROwWtJySpxSlhhJhx0xfU2u1zT54zrOWdmc9Y
-         a9AUkEp2t4ZRy2QeSiEOTNCmQDJwGqBLgSFTL9YfTZYp57i8r1l/W+1EA01VDVkLeHJw
-         3zHh3UaTFkbrlT+chwl/6mOIumbi/97rhE4pntxkc/T1cZ9lXW4MeCQQkvacJwzbB7Pf
-         pZkCyU2uT3Y5Ed9s5swPMNScYpw8LY4G9MORJ/huzHTesbnSRvVs2IRnGyq/11VFR4cv
-         UQYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JDkAyTl4e5Pg7c9IntJyDDk2YT+I/mT8i4BOda6y2xY=;
-        b=ty+APCkueWZH65FPIjaoXlXXQfpk6WzVyAYRy4bEjh7zUSfKTID8G0F4A84Am5Ej8P
-         +mTf+9PqwAU93SB0Xf0rhzEs9CvDWq6RP+OGKEbvZKJ7s0/Ucq/sPONE4lavCKmdlmq6
-         J4NdF0uH3ZtotprN8dsGTYe8r4NoRYy3py74N8dwOPUdp96P29fGXOJz6d0SPVsqpkka
-         yyXkaoxkJOBecnfAX7mN98+z9wDVhZhlLJzB/HJFixlVTQUb/YJ95b8np3yMQnDAX6ya
-         pgdKaBcYkcFcpybeIkF9KBGcjiw5JaED1YDPmNnFbVAalmzM/L6v6H1E+cH8xE+HhRgp
-         bMEw==
-X-Gm-Message-State: AO0yUKV7e8GcsEHkds2QaLS7os4VPBkWHClc7C2lYyL36Rq6exH+6wtt
-        WL5ugoBWNNZ8+ip6S8qslZE/
-X-Google-Smtp-Source: AK7set9yzaubAFiFFmxHybxYsis4ROkd2GJ3XyKkK0PglYAtJDCPH1KeLOw8n7C3jddbCjDO/uWWjw==
-X-Received: by 2002:a17:902:dac7:b0:19a:aa9c:c66f with SMTP id q7-20020a170902dac700b0019aaa9cc66fmr14188841plx.21.1677157486080;
-        Thu, 23 Feb 2023 05:04:46 -0800 (PST)
-Received: from workstation ([59.97.53.124])
-        by smtp.gmail.com with ESMTPSA id e1-20020a170902b78100b001967580f60fsm8675022pls.260.2023.02.23.05.04.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Feb 2023 05:04:45 -0800 (PST)
-Date:   Thu, 23 Feb 2023 18:34:40 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhelgaas@google.com, kishon@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 05/11] ARM: dts: qcom: sdx55: Fix the unit address of
- PCIe EP node
-Message-ID: <20230223130440.GB6422@workstation>
-References: <20230222153251.254492-1-manivannan.sadhasivam@linaro.org>
- <20230222153251.254492-6-manivannan.sadhasivam@linaro.org>
- <4e61522d-075d-c77d-b1f6-c9f4c25e1cf2@linaro.org>
+        Thu, 23 Feb 2023 08:05:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9C7521EC;
+        Thu, 23 Feb 2023 05:05:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE34C616EC;
+        Thu, 23 Feb 2023 13:05:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F37DC433EF;
+        Thu, 23 Feb 2023 13:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677157540;
+        bh=s/3X5WKvxANkXgmh1rxHMNlACBOamk359pLX18ncpxk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sEwEdIU+9+KOXE8jUCm0F9Phv+lgpBmW2OHTKzv8decWUl9tquJFw3Q2Fl0blYhRR
+         eoUEeANMMEUZN6k7aF4y5/k98BP0rt2zJDi2qPalOyl4yHHOpdYG8MsEVePi/kA/Ni
+         iKdOJ6D2pwyHP1zSWF9KRH93yziLp9z3yyNEwyOM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 4.19 00/11] 4.19.274-rc1 review
+Date:   Thu, 23 Feb 2023 14:04:41 +0100
+Message-Id: <20230223130424.079732181@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e61522d-075d-c77d-b1f6-c9f4c25e1cf2@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.274-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.274-rc1
+X-KernelTest-Deadline: 2023-02-25T13:04+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 05:02:08PM +0100, Konrad Dybcio wrote:
-> 
-> 
-> On 22.02.2023 16:32, Manivannan Sadhasivam wrote:
-> > Unit address of PCIe EP node should be 0x1c00000 as it has to match the
-> > first address specified in the reg property.
-> > 
-> > This also requires sorting the node in the ascending order.
-> > 
-> > Fixes: 31c9ef002580 ("dt-bindings: PCI: Add Qualcomm PCIe Endpoint controller")
-> Unsure, we aren't fixing the bindings..
-> 
+This is the start of the stable review cycle for the 4.19.274 release.
+There are 11 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Err... will fix the tag in next version.
+Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000.
+Anything received after that time might be too late.
 
-Thanks,
-Mani
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.274-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-> 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> For the dt change:
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
-> >  arch/arm/boot/dts/qcom-sdx55.dtsi | 78 +++++++++++++++----------------
-> >  1 file changed, 39 insertions(+), 39 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
-> > index 93d71aff3fab..e84ca795cae6 100644
-> > --- a/arch/arm/boot/dts/qcom-sdx55.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
-> > @@ -303,6 +303,45 @@ qpic_nand: nand-controller@1b30000 {
-> >  			status = "disabled";
-> >  		};
-> >  
-> > +		pcie_ep: pcie-ep@1c00000 {
-> > +			compatible = "qcom,sdx55-pcie-ep";
-> > +			reg = <0x01c00000 0x3000>,
-> > +			      <0x40000000 0xf1d>,
-> > +			      <0x40000f20 0xc8>,
-> > +			      <0x40001000 0x1000>,
-> > +			      <0x40200000 0x100000>,
-> > +			      <0x01c03000 0x3000>;
-> > +			reg-names = "parf", "dbi", "elbi", "atu", "addr_space",
-> > +				    "mmio";
-> > +
-> > +			qcom,perst-regs = <&tcsr 0xb258 0xb270>;
-> > +
-> > +			clocks = <&gcc GCC_PCIE_AUX_CLK>,
-> > +				 <&gcc GCC_PCIE_CFG_AHB_CLK>,
-> > +				 <&gcc GCC_PCIE_MSTR_AXI_CLK>,
-> > +				 <&gcc GCC_PCIE_SLV_AXI_CLK>,
-> > +				 <&gcc GCC_PCIE_SLV_Q2A_AXI_CLK>,
-> > +				 <&gcc GCC_PCIE_SLEEP_CLK>,
-> > +				 <&gcc GCC_PCIE_0_CLKREF_CLK>;
-> > +			clock-names = "aux", "cfg", "bus_master", "bus_slave",
-> > +				      "slave_q2a", "sleep", "ref";
-> > +
-> > +			interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
-> > +			interrupt-names = "global", "doorbell";
-> > +			reset-gpios = <&tlmm 57 GPIO_ACTIVE_LOW>;
-> > +			wake-gpios = <&tlmm 53 GPIO_ACTIVE_LOW>;
-> > +			resets = <&gcc GCC_PCIE_BCR>;
-> > +			reset-names = "core";
-> > +			power-domains = <&gcc PCIE_GDSC>;
-> > +			phys = <&pcie0_lane>;
-> > +			phy-names = "pciephy";
-> > +			max-link-speed = <3>;
-> > +			num-lanes = <2>;
-> > +
-> > +			status = "disabled";
-> > +		};
-> > +
-> >  		pcie0_phy: phy@1c07000 {
-> >  			compatible = "qcom,sdx55-qmp-pcie-phy";
-> >  			reg = <0x01c07000 0x1c4>;
-> > @@ -400,45 +439,6 @@ sdhc_1: mmc@8804000 {
-> >  			status = "disabled";
-> >  		};
-> >  
-> > -		pcie_ep: pcie-ep@40000000 {
-> > -			compatible = "qcom,sdx55-pcie-ep";
-> > -			reg = <0x01c00000 0x3000>,
-> > -			      <0x40000000 0xf1d>,
-> > -			      <0x40000f20 0xc8>,
-> > -			      <0x40001000 0x1000>,
-> > -			      <0x40200000 0x100000>,
-> > -			      <0x01c03000 0x3000>;
-> > -			reg-names = "parf", "dbi", "elbi", "atu", "addr_space",
-> > -				    "mmio";
-> > -
-> > -			qcom,perst-regs = <&tcsr 0xb258 0xb270>;
-> > -
-> > -			clocks = <&gcc GCC_PCIE_AUX_CLK>,
-> > -				 <&gcc GCC_PCIE_CFG_AHB_CLK>,
-> > -				 <&gcc GCC_PCIE_MSTR_AXI_CLK>,
-> > -				 <&gcc GCC_PCIE_SLV_AXI_CLK>,
-> > -				 <&gcc GCC_PCIE_SLV_Q2A_AXI_CLK>,
-> > -				 <&gcc GCC_PCIE_SLEEP_CLK>,
-> > -				 <&gcc GCC_PCIE_0_CLKREF_CLK>;
-> > -			clock-names = "aux", "cfg", "bus_master", "bus_slave",
-> > -				      "slave_q2a", "sleep", "ref";
-> > -
-> > -			interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>,
-> > -				     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
-> > -			interrupt-names = "global", "doorbell";
-> > -			reset-gpios = <&tlmm 57 GPIO_ACTIVE_LOW>;
-> > -			wake-gpios = <&tlmm 53 GPIO_ACTIVE_LOW>;
-> > -			resets = <&gcc GCC_PCIE_BCR>;
-> > -			reset-names = "core";
-> > -			power-domains = <&gcc PCIE_GDSC>;
-> > -			phys = <&pcie0_lane>;
-> > -			phy-names = "pciephy";
-> > -			max-link-speed = <3>;
-> > -			num-lanes = <2>;
-> > -
-> > -			status = "disabled";
-> > -		};
-> > -
-> >  		remoteproc_mpss: remoteproc@4080000 {
-> >  			compatible = "qcom,sdx55-mpss-pas";
-> >  			reg = <0x04080000 0x4040>;
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.274-rc1
+
+Kees Cook <keescook@chromium.org>
+    ext4: Fix function prototype mismatch for ext4_feat_ktype
+
+Lukas Wunner <lukas@wunner.de>
+    wifi: mwifiex: Add missing compatible string for SD8787
+
+Dave Hansen <dave.hansen@linux.intel.com>
+    uaccess: Add speculation barrier to copy_from_user()
+
+Pavel Skripkin <paskripkin@gmail.com>
+    mac80211: mesh: embedd mesh_paths and mpp_paths into ieee80211_if_mesh
+
+Zheng Wang <zyytlz.wz@163.com>
+    drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+
+Thomas Gleixner <tglx@linutronix.de>
+    alarmtimer: Prevent starvation by small intervals and SIG_IGN
+
+Sean Anderson <sean.anderson@seco.com>
+    powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
+
+Marc Kleine-Budde <mkl@pengutronix.de>
+    can: kvaser_usb: hydra: help gcc-13 to figure out cmd_len
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always mix cycle counter in add_latent_entropy()
+
+Sean Anderson <sean.anderson@seco.com>
+    powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G
+
+Bitterblue Smith <rtl8821cerfe2@gmail.com>
+    wifi: rtl8xxxu: gen2: Turn on the rate control
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +-
+ arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi | 44 +++++++++++
+ arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi | 44 +++++++++++
+ arch/powerpc/boot/dts/fsl/t2081si-post.dtsi        | 20 ++++-
+ drivers/gpu/drm/i915/gvt/gtt.c                     | 17 ++++-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  | 33 +++++---
+ drivers/net/wireless/marvell/mwifiex/sdio.c        |  1 +
+ .../net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c  |  8 +-
+ fs/ext4/sysfs.c                                    |  7 +-
+ include/linux/nospec.h                             |  4 +
+ include/linux/random.h                             |  6 +-
+ kernel/bpf/core.c                                  |  2 -
+ kernel/time/alarmtimer.c                           | 33 +++++++-
+ lib/usercopy.c                                     |  7 ++
+ net/mac80211/ieee80211_i.h                         | 24 +++++-
+ net/mac80211/mesh.h                                | 22 +-----
+ net/mac80211/mesh_pathtbl.c                        | 89 ++++++++--------------
+ 17 files changed, 251 insertions(+), 114 deletions(-)
+
+
