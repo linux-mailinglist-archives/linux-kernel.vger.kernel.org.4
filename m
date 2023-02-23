@@ -2,184 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E8A6A0D6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D525E6A0D78
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234854AbjBWP7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S234881AbjBWQBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 11:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjBWP7o (ORCPT
+        with ESMTP id S234880AbjBWQBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:59:44 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486BB18B26
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:59:43 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id c19so886984qtn.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:59:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6btNxmPTA9mFQHtoTcPKUI3lR43VlkT+xc7DS18jvNI=;
-        b=GoOcq8BONrLPlKqCYRfk7T6PYpQQ4FwaeF3Nq4wWTWq4rpe5qyd6EXPxvJbFuYgAtW
-         9U3h7hWcVyTyloSb+kPhtg1A49WcSlZmmG+KaE4ZDLD6dpMFT5yGULhKF2E4bv0BDyEz
-         ZSjlLMdzPxCBU0iNA26btRn7+MxtFa3wPndwHJTUjrfjo/Q4IDpEyacUt0wXR7xhjJ0r
-         HrUzbpQleJuchyEmPjYgls7014UwIFf/i6EUw4L91Edh4T5uPqSI4Re2z5DxjUU/eb1K
-         rLJUGNir+Th4pMafvUwe5E9NJ3WzcQ3CtVmAwQC/IBKjZaZxg1caxSH5oZUdRb0S53+a
-         3QPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6btNxmPTA9mFQHtoTcPKUI3lR43VlkT+xc7DS18jvNI=;
-        b=7XIXtom8t1SpXdaeyUTIimISEj2WO31erbGavSWek6MR27Wm6wupxp6ufm4AkrG5KH
-         58NgNJW4QZ5UoIdMmNgnUqCmnSax+ezD8/TRhjmB29KtHrooc54RpgRMmGguRFHHCCqD
-         lBRzzocNbIfeCOI5elFLHmuMfVemKvjDLwoV/+DkQtYLg8WcjfA/8weSn4jqfGlWLzZ5
-         gJ1eu09Ntp4mBI3nyL59kxVpBWBi1pi5IMu70dq4zg7smaGSr++yg/f0BmVgJgScmVvK
-         FwyK8FMP/H3RwASSvc+o/M/xffe4opzCSbHnv1rKDFCEP6Il9VNaBDv2GNXmoAC7R48r
-         gw7g==
-X-Gm-Message-State: AO0yUKUbpZYyUuHG5hsM+rgCbwEgbDMFq0aYXp/4NWhegHejujAa82Jh
-        JQqpkMR8ZZSrMgxufXx18LNSqBsu2BnpsWmn
-X-Google-Smtp-Source: AK7set8dEE6rVuQ7r5OUj0cZfYhECEQL9icEk2cth6CTRhdt3mKhJU7iPbbm0VokAbVDlhn7tITKrA==
-X-Received: by 2002:a05:622a:170a:b0:3b8:6aff:9b58 with SMTP id h10-20020a05622a170a00b003b86aff9b58mr23466107qtk.35.1677167982344;
-        Thu, 23 Feb 2023 07:59:42 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id o16-20020a374110000000b0074266529b50sm489651qka.94.2023.02.23.07.59.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 07:59:41 -0800 (PST)
-Date:   Wed, 22 Feb 2023 11:43:28 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] regmap-irq: Place kernel doc of struct
- regmap_irq_chip in order
-Message-ID: <Y/ZGMDI9wcOwMUWI@fedora>
-References: <20230220153334.87049-1-andriy.shevchenko@linux.intel.com>
+        Thu, 23 Feb 2023 11:01:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781F137726
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 08:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677168031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vf5SCrPN7PXFqJ124Pgf7U6gRRFbIhLBQzEmAht0jJg=;
+        b=LxAgFT6TtR/00NtWGtG4+E4/LNVEmgzM693KvN3b3UVWCWSG02E2M25lRjC8WRfOebO0IK
+        XJskJ23o0f1ihglvdxxP3Y/Z/ZBWHDsCP/+Kfq3LzdYMz6B0t2rZQ0eyGpmy29AK5TVbIM
+        uz76gVPxytcgJBSWHjLkImclSjkRbNU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607--1jXzU_7PRmVsIqEwn375g-1; Thu, 23 Feb 2023 11:00:18 -0500
+X-MC-Unique: -1jXzU_7PRmVsIqEwn375g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1014A85D18D;
+        Thu, 23 Feb 2023 16:00:13 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7638B404BEC0;
+        Thu, 23 Feb 2023 16:00:12 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 46AF0400DC95C; Thu, 23 Feb 2023 11:34:06 -0300 (-03)
+Date:   Thu, 23 Feb 2023 11:34:06 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Krister Johansen <kjlx@templeofstupid.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Anthony Liguori <aliguori@amazon.com>,
+        David Reaver <me@davidreaver.com>,
+        Brendan Gregg <brendan@intel.com>
+Subject: Re: [PATCH linux-next 2/2] x86/xen/time: cleanup
+ xen_tsc_safe_clocksource
+Message-ID: <Y/d5XhtOaYkNRnpQ@tpad>
+References: <cover.1676610413.git.kjlx@templeofstupid.com>
+ <f6bab47230b00cecb67f2c5d94716c8236609967.1676610413.git.kjlx@templeofstupid.com>
+ <87h6vgov2p.ffs@tglx>
+ <20230221041440.GA1934@templeofstupid.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QZuyeSJ5jh8ff65q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220153334.87049-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+In-Reply-To: <20230221041440.GA1934@templeofstupid.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 20, 2023 at 08:14:40PM -0800, Krister Johansen wrote:
+> On Mon, Feb 20, 2023 at 11:01:18PM +0100, Thomas Gleixner wrote:
+> > On Mon, Feb 20 2023 at 09:17, Krister Johansen wrote:
+> > > @@ -495,8 +496,7 @@ static int __init xen_tsc_safe_clocksource(void)
+> > >  	/* Leaf 4, sub-leaf 0 (0x40000x03) */
+> > >  	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
+> > >  
+> > > -	/* tsc_mode = no_emulate (2) */
+> > > -	if (ebx != 2)
+> > > +	if (ebx != XEN_CPUID_TSC_MODE_NEVER_EMULATE)
+> > >  		return 0;
+> > >  
+> > >  	return 1;
+> > 
+> > What about removing more stupidity from that function?
+> > 
+> > static bool __init xen_tsc_safe_clocksource(void)
+> > {
+> > 	u32 eax, ebx. ecx, edx;
+> >  
+> > 	/* Leaf 4, sub-leaf 0 (0x40000x03) */
+> > 	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
+> > 
+> > 	return ebx == XEN_CPUID_TSC_MODE_NEVER_EMULATE;
+> > }
+> 
+> I'm all for simplifying.  I'm happy to clean up that return to be more
+> idiomatic.  I was under the impression, perhaps mistaken, though, that
+> the X86_FEATURE_CONSTANT_TSC, X86_FEATURE_NONSTOP_TSC, and
+> check_tsc_unstable() checks were actually serving a purpose: to ensure
+> that we don't rely on the tsc in environments where it's being emulated
+> and the OS would be better served by using a PV clock.  Specifically,
+> kvmclock_init() makes a very similar set of checks that I also thought
+> were load-bearing.
 
---QZuyeSJ5jh8ff65q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kvmclock_init will lower the rating of kvmclock so that TSC clocksource
+can be used instead:
 
-On Mon, Feb 20, 2023 at 05:33:34PM +0200, Andy Shevchenko wrote:
-> It seems that a couple of members got lost theirorder, put them back.
+        /*
+         * X86_FEATURE_NONSTOP_TSC is TSC runs at constant rate
+         * with P/T states and does not stop in deep C-states.
+         *
+         * Invariant TSC exposed by host means kvmclock is not necessary:
+         * can use TSC as clocksource.
+         *
+         */
+        if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+            boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+            !check_tsc_unstable())
+                kvm_clock.rating = 299;
 
-Looks like a typographical error here: "theirorder".
 
-> Besides that, split field descriptions into groups in the same way
-> as it's done in the structure definition.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: rebased on the latest Linux Next (Mark)
->  include/linux/regmap.h | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->=20
-> diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-> index 4d10790adeb0..1c777566fb7d 100644
-> --- a/include/linux/regmap.h
-> +++ b/include/linux/regmap.h
-> @@ -1551,6 +1551,7 @@ struct regmap_irq_chip_data;
->   * @use_ack:     Use @ack register even if it is zero.
->   * @ack_invert:  Inverted ack register: cleared bits for ack.
->   * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupt=
-s.
-> + * @status_invert: Inverted status register: cleared bits are active int=
-errupts.
->   * @wake_invert: Inverted wake register: cleared bits are wake enabled.
->   * @type_in_mask: Use the mask registers for controlling irq type. Use t=
-his if
->   *		  the hardware provides separate bits for rising/falling edge
-> @@ -1560,18 +1561,19 @@ struct regmap_irq_chip_data;
->   * @clear_on_unmask: For chips with interrupts cleared on read: read the=
- status
->   *                   registers before unmasking interrupts to clear any =
-bits
->   *                   set when they were masked.
-> + * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
->   * @not_fixed_stride: Used when chip peripherals are not laid out with f=
-ixed
->   *		      stride. Must be used with sub_reg_offsets containing the
->   *		      offsets to each peripheral. Deprecated; the same thing
->   *		      can be accomplished with a @get_irq_reg callback, without
->   *		      the need for a @sub_reg_offsets table.
-> - * @status_invert: Inverted status register: cleared bits are active int=
-errupts.
-> - * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
->   *
->   * @num_regs:    Number of registers in each control bank.
-> + *
->   * @irqs:        Descriptors for individual IRQs.  Interrupt numbers are
->   *               assigned based on the index in the array of the interru=
-pt.
->   * @num_irqs:    Number of descriptors.
-> + *
->   * @num_type_reg:    Number of type registers. Deprecated, use config re=
-gisters
->   *		     instead.
->   * @num_virt_regs:   Number of non-standard irq configuration registers.
-> @@ -1579,6 +1581,7 @@ struct regmap_irq_chip_data;
->   *		     instead.
->   * @num_config_bases:	Number of config base registers.
->   * @num_config_regs:	Number of config registers for each config base reg=
-ister.
-> + *
->   * @handle_pre_irq:  Driver specific callback to handle interrupt from d=
-evice
->   *		     before regmap_irq_handler process the interrupts.
->   * @handle_post_irq: Driver specific callback to handle interrupt from d=
-evice
-> @@ -1625,12 +1628,12 @@ struct regmap_irq_chip {
->  	unsigned int use_ack:1;
->  	unsigned int ack_invert:1;
->  	unsigned int clear_ack:1;
-> +	unsigned int status_invert:1;
->  	unsigned int wake_invert:1;
-> -	unsigned int runtime_pm:1;
->  	unsigned int type_in_mask:1;
->  	unsigned int clear_on_unmask:1;
-> +	unsigned int runtime_pm:1;
->  	unsigned int not_fixed_stride:1;
-> -	unsigned int status_invert:1;
 
-These don't look alphabetical, so what is the order for these?
-
-William Breathitt Gray
-
-> =20
->  	int num_regs;
-> =20
-> --=20
-> 2.39.1
->=20
-
---QZuyeSJ5jh8ff65q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY/ZGMAAKCRC1SFbKvhIj
-K0RVAP4115MuM9UpsVt5YhzZLGrZqzO2wxd3tdW/Q8Ekq8kBlgEA/AL2+yMaYMjR
-WkbDTKSY97gjSK5no7rDItNXiNbwjwo=
-=mrgx
------END PGP SIGNATURE-----
-
---QZuyeSJ5jh8ff65q--
