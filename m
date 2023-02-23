@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58786A059A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006516A0460
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbjBWKGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S233762AbjBWJDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbjBWKGg (ORCPT
+        with ESMTP id S232983AbjBWJDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:06:36 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E92F39CF1;
-        Thu, 23 Feb 2023 02:06:29 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PMpWd5ZDszRs8M;
-        Thu, 23 Feb 2023 18:03:41 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 23 Feb 2023 18:05:21 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hui Wang <hw.huiwang@huawei.com>,
-        Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH] perf: fix counting when initial delay configured
-Date:   Thu, 23 Feb 2023 15:58:00 +0800
-Message-ID: <20230223075800.1795777-1-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Thu, 23 Feb 2023 04:03:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07114469E;
+        Thu, 23 Feb 2023 01:03:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE38DB811EC;
+        Thu, 23 Feb 2023 09:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE73C433EF;
+        Thu, 23 Feb 2023 09:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677142991;
+        bh=A6FgptrrYUoOz1tvlLQnDnjqNkLOWOvmXcwfXX55TRM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Sxh03O33j2ejJ4jpoNj45YBc0t3nTQjBMx6/t1CIuoWEq6bq6RJ5MbkMXBaziU7XB
+         jBiG0NPfBzCsygzhwl7U70Ww5RfkjSnt+X2BTV6rjwgAaGTiYqUcba9/0pT+io/mCD
+         qZjDVFRaRc9HIBivB+ue1JGVXAtvvm1UbhzqMGcLED1yhWHHCkwegOuY4HGxgzRiCg
+         f0Bo1SH/aireTElW18d3BAsiBz7JJnD51MrXyy0cHzXaSpbqcVGW4LFW+QXo/O27ev
+         dYaWcQfX+BrgYmW9lN4LpflDeWLq0Uvns/HwiYnDQcTdPzrAi97W/g4IH1TOpboAVX
+         U2MKuHMptf1ug==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pV7VM-00CaNM-TI;
+        Thu, 23 Feb 2023 09:03:08 +0000
+Date:   Thu, 23 Feb 2023 09:03:08 +0000
+Message-ID: <86a614ycs3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com, Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH mm-unstable v1 3/5] kvm/arm64: add kvm_arch_test_clear_young()
+In-Reply-To: <CAOUHufbbs2gG+DPvSOw_N_Kx7FWdZvpdJUvLzko-BDQ8vfd6Xg@mail.gmail.com>
+References: <20230217041230.2417228-1-yuzhao@google.com>
+        <20230217041230.2417228-4-yuzhao@google.com>
+        <CAOUHufYSx-edDVCZSauOzwOJG6Av0++0TFT4ko8qWq7vLi_mjw@mail.gmail.com>
+        <86lekwy8d7.wl-maz@kernel.org>
+        <CAOUHufbbs2gG+DPvSOw_N_Kx7FWdZvpdJUvLzko-BDQ8vfd6Xg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yuzhao@google.com, will@kernel.org, corbet@lwn.net, michael@michaellarabel.com, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org, linux-mm@google.com, akpm@linux-foundation.org, pbonzini@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,58 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When creating counters with initial delay configured, the enable_on_exec
-field is not set. So we need to enable the counters later. The problem
-is, when a workload is specified the target__none() is still true. So
-we also need to check stat_config.initial_delay.
+On Thu, 23 Feb 2023 03:58:47 +0000,
+Yu Zhao <yuzhao@google.com> wrote:
+>=20
+> On Fri, Feb 17, 2023 at 2:00=E2=80=AFAM Marc Zyngier <maz@kernel.org> wro=
+te:
+> >
+> > On Fri, 17 Feb 2023 04:21:28 +0000,
+> > Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > On Thu, Feb 16, 2023 at 9:12 PM Yu Zhao <yuzhao@google.com> wrote:
+> > > >
+> > > > This patch adds kvm_arch_test_clear_young() for the vast majority of
+> > > > VMs that are not pKVM and run on hardware that sets the accessed bit
+> > > > in KVM page tables.
+> >
+> > I'm really interested in how you can back this statement. 90% of the
+> > HW I have access to is not FEAT_HWAFDB capable, either because it
+> > predates the feature or because the feature is too buggy to be useful.
+>=20
+> This is my expericen too -- most devices are pre v8.2.
 
-Before this fix the event is not counted:
-$ ./perf stat -e instructions -D 100 sleep 2
-Events disabled
-Events enabled
+And yet you have no issue writing the above. Puzzling.
 
- Performance counter stats for 'sleep 2':
+>=20
+> > Do you have numbers?
+>=20
+> Let's do a quick market survey by segment. The following only applies
+> to ARM CPUs:
+>=20
+> 1. Phones: none of the major Android phone vendors sell phones running
+> VMs; no other major Linux phone vendors.
 
-     <not counted>      instructions
+Maybe you should have a reality check and look at what your own
+employer is shipping.
 
-       1.901661124 seconds time elapsed
+> 2. Laptops: only a very limited number of Chromebooks run VMs, namely
+> ACRVM. No other major Linux laptop vendors.
 
-       0.001602000 seconds user
-       0.000000000 seconds sys
+Again, your employer disagree.
 
-After fix it works:
-$ ./perf stat -e instructions -D 100 sleep 2
-Events disabled
-Events enabled
+> 3. Desktops: no major Linux desktop vendors.
 
- Performance counter stats for 'sleep 2':
+My desktop disagree (I send this from my arm64 desktop VM ).
 
-           404,214      instructions
+> 4. Embedded/IoT/Router: no major Linux vendors run VMs (Android Auto
+> can be a VM guest on QNX host).
 
-       1.901743475 seconds time elapsed
+This email is brought to you via a router VM on an arm64 box.
 
-       0.001617000 seconds user
-       0.000000000 seconds sys
+> 5. Cloud: this is where the vast majority VMs come from. Among the
+> vendors available to the general public, Ampere is the biggest player.
+> Here [1] is a list of its customers. The A-bit works well even on its
+> EVT products (Neoverse cores).
 
-Fixes: c587e77e100f ("perf stat: Do not delay the workload with --delay")
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
- tools/perf/builtin-stat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Just the phone stuff dwarfs the number of cloud hosts.
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 9f3e4b257516..c71d85577de6 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -544,7 +544,7 @@ static int enable_counters(void)
- 	 * - we don't have tracee (attaching to task or cpu)
- 	 * - we have initial delay configured
- 	 */
--	if (!target__none(&target)) {
-+	if (!target__none(&target) || stat_config.initial_delay) {
- 		if (!all_counters_use_bpf)
- 			evlist__enable(evsel_list);
- 	}
--- 
-2.25.1
+Hopefully your patches are better than your market analysis...
 
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
