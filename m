@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191F86A1065
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5156A1064
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbjBWTNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S232631AbjBWTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbjBWTNN (ORCPT
+        with ESMTP id S231882AbjBWTNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Feb 2023 14:13:13 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6155BBBB
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:23 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so194802wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:23 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E385C15F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:27 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id i11so5397837wrp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wL4H6dkwiqQh7dcmIrLqt3HZrti5VJpIfMc44frmzHc=;
-        b=Z+5BzDDrPRuwK1aoLnVaWnL5dhdfm1qA4XC8szYEgLwxcNNkKR7N1jrdZUW8KEWp0r
-         ooYGJUtsbba00Y/hcT4cdNn2uc+6w59DOT51XHq8wkNlj1qgwWVTvjDjUiFC3ZFQToAM
-         Ms/4rjIXTj2kdOLZklcn7MemtWoO5VOYBGMjSb5QcoQKZg2bNnOZRgeY3otdukJX0KNl
-         BffMhFJReoM18BJOkeYVYcZVKuaGFxn5NJNeSccfuIgvSMAAOL6Gq4tvOWjQeorYSe8d
-         JHZI4Woj5seaPOAbsH+RKe4gXlSOJ5xsX4e0EjXjAxBad9J0hkle5NxDW9QiNVwK7Dd4
-         3Jng==
+        bh=Ydn+N8Ta2/l5mmEEZ9zQwSQU4fOYRVeCJFh5IKZvP2o=;
+        b=XMP+3c7uJ0e3rUuqE3xP3n2bcdkHaye4xq0doQzwnAtiZpHBt0EhXEMjBGyfdkJC8L
+         XdmwsDBHG5CJlyC7g/3t/QfN3zXpeVAwxeCVNr5p+a6HiWka/VvuOsIibLUKaMN3eYz7
+         A+Z5tUhdCDd9x2Tetmn6oO8DU3AUjzxV5kNC4yA1qaEmjknk3zJoKfv6pCtCJ6dG25Y1
+         LzKe2S/ieY3a+EZQCkkI2msPad7Kphbtlfo/Aum/h/WBHYqyeLQR4CUZRxjypWZcVWwl
+         fCaY119EFubhBbWFfX3bJEW3UWJotvmlglZvJHStOoUXGebQaJZWF7P0X7ZOnIZvFLJT
+         0DMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wL4H6dkwiqQh7dcmIrLqt3HZrti5VJpIfMc44frmzHc=;
-        b=WXY848qiE8f7JCNeCRy2fzHG5k29GatnNIrWmU2HMBeMMWz/6z+mR3Q8ergrhYIOGa
-         D91NihJx5/9vzqfPwKFZEcZViAH/RYVI0NtNGHCDc8ayDBOvXVJN7Zop/TmTIIT5AaZL
-         YVq9em0MR5o9J3C9V+CI3iaPAL8TYXd/62XqySimmdZBhKP7HW2IW1i+ZaQk0O88WnEq
-         afsIpqtKC1XiUEA7E47flV+PHfJYUfvKvVfmAJFyEC7F9SAhe9tB+CWdTCxOVTav4qWF
-         lZjNu8EE7ryKTRdUMirvvQIvGzcc8G3ik9LsHO2RmIPilmPKuXPKqpTbCywd9h8Q5KId
-         iriQ==
-X-Gm-Message-State: AO0yUKV7+vyb5Km3iLoz7MiY0QPVjNTGOxQjbqgBB84CfK+so+ZBfqo+
-        zibZ2maOFLIYHnMIsAfBSjnMrw==
-X-Google-Smtp-Source: AK7set/i/tUmeSAqCjCLwUvGyPjzOdFNkTGXwh64luEnmTYt0vhptfrKuJRFKMaio2gKHRJgbXUy3w==
-X-Received: by 2002:a05:600c:3b9f:b0:3e9:9fc5:2c6d with SMTP id n31-20020a05600c3b9f00b003e99fc52c6dmr4257178wms.14.1677179511475;
-        Thu, 23 Feb 2023 11:11:51 -0800 (PST)
+        bh=Ydn+N8Ta2/l5mmEEZ9zQwSQU4fOYRVeCJFh5IKZvP2o=;
+        b=H4xGtR9n6ZGLfc9yktblREtZk58dFm2KOGDSgqwIxG/KfJtfjMhAgf2Vo0E4ovkgJi
+         dJw/dCBaIIl6RsfkIATdV8diIXYX8H5QTdUxikJ8q9kteUYZLEsBygf6XhycrDu9usmY
+         cSK4j5bl1i8YMnLkZWsfPgGC/hMLgKf+nJ839/GdYo4rabDgFxHIbSPU4mYI/3VxAWmp
+         GJkjg5+QXKV0s6x4INeYZfy62peCMckGhN9e1L9jKRDpavGllWzT/eWibO4WHoFaB0Yq
+         E4vh6NHUF6s7MZvKaUao9voXLoB2CO9Cw/wNq9bf+iaocslJsyPcxaN9LrECzCwL2NBN
+         SdcQ==
+X-Gm-Message-State: AO0yUKXdA5ARot62v9msh6M7181Nukpvw75jy4zatYEpJ79O7MjvP4nh
+        la4TL57QRpk1bToZHghSC85fzw==
+X-Google-Smtp-Source: AK7set+RzpW2Z067J+esL8OAcAyTvdMn1W6zmBe1bpVMCdOkL8SWAErbcP2lhujxblJRKjS5mOkVBQ==
+X-Received: by 2002:a05:6000:1007:b0:2c3:da8a:192 with SMTP id a7-20020a056000100700b002c3da8a0192mr10542698wrx.15.1677179512258;
+        Thu, 23 Feb 2023 11:11:52 -0800 (PST)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:5ee0:5af0:64bd:6198])
-        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b002c561805a4csm12957286wrt.45.2023.02.23.11.11.50
+        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b002c561805a4csm12957286wrt.45.2023.02.23.11.11.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 23 Feb 2023 11:11:51 -0800 (PST)
 From:   Usama Arif <usama.arif@bytedance.com>
@@ -64,9 +64,9 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         simon.evans@bytedance.com, liangma@liangbit.com,
         David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v11 09/12] x86/smpboot: Remove initial_stack on 64-bit
-Date:   Thu, 23 Feb 2023 19:11:37 +0000
-Message-Id: <20230223191140.4155012-10-usama.arif@bytedance.com>
+Subject: [PATCH v11 10/12] x86/smpboot: Remove early_gdt_descr on 64-bit
+Date:   Thu, 23 Feb 2023 19:11:38 +0000
+Message-Id: <20230223191140.4155012-11-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230223191140.4155012-1-usama.arif@bytedance.com>
 References: <20230223191140.4155012-1-usama.arif@bytedance.com>
@@ -74,7 +74,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,7 +84,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Brian Gerst <brgerst@gmail.com>
 
-Load RSP from current_task->thread.sp instead.
+Build the GDT descriptor on the stack instead.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
@@ -91,142 +92,74 @@ Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Tested-by: Usama Arif <usama.arif@bytedance.com>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- arch/x86/include/asm/processor.h |  6 +++++-
- arch/x86/kernel/acpi/sleep.c     |  2 +-
- arch/x86/kernel/head_64.S        | 35 ++++++++++++++++++--------------
- arch/x86/xen/xen-head.S          |  2 +-
- 4 files changed, 27 insertions(+), 18 deletions(-)
+ arch/x86/kernel/acpi/sleep.c |  2 --
+ arch/x86/kernel/head_64.S    | 19 +++++++------------
+ 2 files changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 4e35c66edeb7..9c4a5c4d46c1 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -648,7 +648,11 @@ static inline void spin_lock_prefetch(const void *x)
- #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
- 
- #else
--#define INIT_THREAD { }
-+extern unsigned long __end_init_task[];
-+
-+#define INIT_THREAD {							\
-+	.sp	= (unsigned long)&__end_init_task - PTREGS_SIZE,	\
-+}
- 
- extern unsigned long KSTK_ESP(struct task_struct *task);
- 
 diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-index 47e75c056cb5..008fda8b1982 100644
+index 008fda8b1982..6538ddb55f28 100644
 --- a/arch/x86/kernel/acpi/sleep.c
 +++ b/arch/x86/kernel/acpi/sleep.c
-@@ -113,7 +113,7 @@ int x86_acpi_suspend_lowlevel(void)
- 	saved_magic = 0x12345678;
+@@ -114,8 +114,6 @@ int x86_acpi_suspend_lowlevel(void)
  #else /* CONFIG_64BIT */
  #ifdef CONFIG_SMP
--	initial_stack = (unsigned long)temp_stack + sizeof(temp_stack);
-+	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
- 	early_gdt_descr.address =
- 			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
+ 	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+-	early_gdt_descr.address =
+-			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
  	initial_gs = per_cpu_offset(smp_processor_id());
+ 	/* Force the startup into boot mode */
+ 	saved_smpboot_ctrl = xchg(&smpboot_control, 0);
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index c32e5b06a9ce..f7905ba4b992 100644
+index f7905ba4b992..0dd57d573a0e 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -62,8 +62,8 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	 * tables and then reload them.
- 	 */
- 
--	/* Set up the stack for verify_cpu(), similar to initial_stack below */
--	leaq	(__end_init_task - FRAME_SIZE)(%rip), %rsp
-+	/* Set up the stack for verify_cpu() */
-+	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
- 
- 	leaq	_text(%rip), %rdi
- 
-@@ -245,11 +245,11 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+@@ -245,7 +245,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
  #ifdef CONFIG_SMP
  	/*
  	 * Is this the boot CPU coming up? If so everything is available
--	 * in initial_gs, initial_stack and early_gdt_descr.
-+	 * in initial_gs and early_gdt_descr.
+-	 * in initial_gs and early_gdt_descr.
++	 * in initial_gs.
  	 */
  	movl	smpboot_control(%rip), %edx
  	testl	$STARTUP_SECONDARY, %edx
--	jz	.Lsetup_cpu
-+	jz	.Linit_cpu0_data
+@@ -313,11 +313,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	/* Save it for GS BASE setup */
+ 	movq	%rbx, initial_gs(%rip)
  
- 	/*
- 	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
-@@ -302,6 +302,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	hlt
- 	jmp	1b
- 
-+.Linit_cpu0_data:
-+	movq	__per_cpu_offset(%rip), %rdx
-+	jmp	.Lsetup_cpu
-+
- .Linit_cpu_data:
- 	/* Get the per cpu offset for the given CPU# which is in ECX */
- 	leaq	__per_cpu_offset(%rip), %rbx
-@@ -314,13 +318,21 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	addq	%rbx, %rcx
- 	movq	%rcx, early_gdt_descr_base(%rip)
- 
--	/* Find the idle task stack */
--	movq	pcpu_hot + X86_current_task(%rbx), %rcx
--	movq	TASK_threadsp(%rcx), %rcx
--	movq	%rcx, initial_stack(%rip)
-+	movq	%rbx, %rdx
-+#else
-+	xorl	%edx, %edx
- #endif /* CONFIG_SMP */
- 
- .Lsetup_cpu:
-+	/*
-+	 * Setup a boot time stack - Any secondary CPU will have lost its stack
-+	 * by now because the cr3-switch above unmaps the real-mode stack
-+	 *
-+	 * RDX contains the per-cpu offset
-+	 */
-+	movq	pcpu_hot + X86_current_task(%rdx), %rax
-+	movq	TASK_threadsp(%rax), %rsp
-+
- 	/*
- 	 * We must switch to a new descriptor in kernel space for the GDT
- 	 * because soon the kernel won't have access anymore to the userspace
-@@ -355,12 +367,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	movl	initial_gs+4(%rip),%edx
- 	wrmsr
- 
--	/*
--	 * Setup a boot time stack - Any secondary CPU will have lost its stack
--	 * by now because the cr3-switch above unmaps the real-mode stack
--	 */
--	movq initial_stack(%rip), %rsp
+-	/* Calculate the GDT address */
+-	movq	$gdt_page, %rcx
+-	addq	%rbx, %rcx
+-	movq	%rcx, early_gdt_descr_base(%rip)
 -
- 	/* Drop the realmode protection. For the boot CPU the pointer is NULL! */
- 	movq	trampoline_lock(%rip), %rax
- 	testq	%rax, %rax
-@@ -517,7 +523,6 @@ SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
-  * The FRAME_SIZE gap is a convention which helps the in-kernel unwinder
-  * reliably detect the end of the stack.
-  */
--SYM_DATA(initial_stack, .quad init_thread_union + THREAD_SIZE - FRAME_SIZE)
- SYM_DATA(trampoline_lock, .quad 0);
- 	__FINITDATA
+ 	movq	%rbx, %rdx
+ #else
+ 	xorl	%edx, %edx
+@@ -339,7 +334,12 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * addresses where we're currently running on. We have to do that here
+ 	 * because in 32bit we couldn't load a 64bit linear address.
+ 	 */
+-	lgdt	early_gdt_descr(%rip)
++	subq	$16, %rsp
++	movw	$(GDT_SIZE-1), (%rsp)
++	leaq	gdt_page(%rdx), %rax
++	movq	%rax, 2(%rsp)
++	lgdt	(%rsp)
++	addq	$16, %rsp
  
-diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-index ffaa62167f6e..6bd391476656 100644
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -49,7 +49,7 @@ SYM_CODE_START(startup_xen)
- 	ANNOTATE_NOENDBR
- 	cld
+ 	/* set up data segments */
+ 	xorl %eax,%eax
+@@ -754,11 +754,6 @@ SYM_DATA_END(level1_fixmap_pgt)
  
--	mov initial_stack(%rip), %rsp
-+	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 	.data
+ 	.align 16
+-
+-SYM_DATA(early_gdt_descr,		.word GDT_ENTRIES*8-1)
+-SYM_DATA_LOCAL(early_gdt_descr_base,	.quad INIT_PER_CPU_VAR(gdt_page))
+-
+-	.align 16
+ SYM_DATA(smpboot_control,		.long 0)
  
- 	/* Set up %gs.
- 	 *
+ 	.align 16
 -- 
 2.25.1
 
