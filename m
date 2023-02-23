@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355DC6A1113
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBC36A1115
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjBWUO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 15:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S229579AbjBWUPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 15:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBWUO2 (ORCPT
+        with ESMTP id S229436AbjBWUPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 15:14:28 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC9B279B8;
-        Thu, 23 Feb 2023 12:14:26 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ec43so46102447edb.8;
-        Thu, 23 Feb 2023 12:14:26 -0800 (PST)
+        Thu, 23 Feb 2023 15:15:01 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A244DE25;
+        Thu, 23 Feb 2023 12:14:59 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id h16so46798776edz.10;
+        Thu, 23 Feb 2023 12:14:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXQwgZeL/74hBPgk1C6lmiCQBoirI87Yxu5xfVbpD0E=;
-        b=kp4aGFtBZoyz9uLGKkaytsS+5gzhr8kJblMcm4O8bMhUdVveKduwcGDToWZdCu8C6U
-         oHuVUSL9A3XeOwyooSkxHqEAPbVvTDZrtvm05NO4YYqWxlUeJ/uD44RPCyvOd/xrERnK
-         M4DA2hTux8/h75fhMHSAq11A8Tw5KGpsHZx9dPnBe3rgW/DPuEGCSZZs9179fR+5eZYj
-         k2XlixpKN4cSE0/eyVllpcVap3faX5SV1R+tN89zygSmUYBO+T6RxrnZT0BZwzgGWE2f
-         9eFnYqn4BmHqgyZyFu/PVU2H0XkVAlF9aoUFmg6fE3JT28MBoX09iMoPkVjxyShzJDbb
-         9vyQ==
+        d=gmail.com; s=20210112; t=1677183298;
+        h=content-transfer-encoding:in-reply-to:cc:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kAb0qzqWSP/U+Kj5L5nLqdqYurAmo6JZhKfQvH683Pk=;
+        b=BaLgVKhuX1clAmVVahaKedAK7xDb7n37VgbEl5j85och7Y9+re7M8ZB/GCXlN0iW4P
+         RpY+bsTzN0egXJpJpNN6fArx526j4YSZMdYk9+RQAwoSaK8RddM/LoJ7NJ4WNge1jI4W
+         293i+uUBsLoU17XWO6XQoOMRekI+h/hSXlrVMYaHq9e9lyshfu5uXQ+L7ErgJk07+5VO
+         wf5Y+moJHpgaDl2hpoPsc/ktmPyHoaI1J4Y6eO9UQJ0D8/75X+SR2Hgj3Kz+Q7PDGUwJ
+         wEKJF4emYuhPovJsIuKN13NKtTWZayn5CQ7InFhtxFJueiuJvH7c89YgRPQnJjKVVYvb
+         GSwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gXQwgZeL/74hBPgk1C6lmiCQBoirI87Yxu5xfVbpD0E=;
-        b=7n5zQoy+++aRZcgnN5dxLGna7UXS41nKUzPWvrQDsir2SnWgvewg3ExV0sH3SD8pG0
-         XSshW7KADeKFW7kMiT2tSaVr1+4ok+uGHdmioGTLq1nSbLBA0EIPrWWHh2JvZRWruKST
-         UkCLkRn7szNwpeCpj/lUpErNw9H7g7uNDcgUyQhVlSBp0+iJyGF24V0Z7wEP0Kj8Z/7i
-         1Kuop+elAl8B/eDJb9pHysGaVYK7gjFIJkxm1c3WkCOKeHDkvvPpkeY2KwljAzRZRIhC
-         b1flnPgozQ1p2baHlEs9DStIxMK7t8EEFEgpC679VFmBBFJ7YHsvD2uv5q33jlzcTzxt
-         ezfg==
-X-Gm-Message-State: AO0yUKVhSI8fkprilOeSbNk4C7xwn0dspz7FaM34nYTi6JKsDyE5E15J
-        ExXogG4FQL9mWEUTfpDRX/D/RHcRwZszFtddglKchKEhUwE=
-X-Google-Smtp-Source: AK7set+K+d19g2bT7E4AGeiww4cIACa6p2T/f4jZGdZ4GqaW13JJLwZ8A9ecbJyX+VWi4I3RE+Lg+gFmzolWCQyCzss=
-X-Received: by 2002:a50:d544:0:b0:4ad:6e3e:7da6 with SMTP id
- f4-20020a50d544000000b004ad6e3e7da6mr6163318edj.6.1677183264974; Thu, 23 Feb
- 2023 12:14:24 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677183298;
+        h=content-transfer-encoding:in-reply-to:cc:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kAb0qzqWSP/U+Kj5L5nLqdqYurAmo6JZhKfQvH683Pk=;
+        b=vHiNqAvc/PccALmoQ0EPjlIY/OOZ0T01LA7r3KzASoyJEByGIW/NZH+tGAtqUSElAJ
+         oLoYWD3vgMROaHvbYPmHWE8FlDLzWEkJdE8YcNPPgGKqLFccypZuJS1EfamoahoR7AFb
+         V0HRvl49KfDJo1oqZOBrrDvotbcZxP7OyL0TdlJeUkX+WFJjkKKWjzYY/h0Z6XoCH5AD
+         lCumtMaP8W6dYssV33AtZNI6jPeIt/7W/oR8vuT2NzxECTUMhOETYgwLinwIOWiTYKC/
+         L7R+HPg7+WyqrOTXovSMZ17OCejv66ti4tSgFp4FyogNaxlyGBKVfEa4WiBKq04XY7jL
+         qPyg==
+X-Gm-Message-State: AO0yUKX6gTOje0S46Up/4t35JVEHzME9YEEBEzM1O9oh7+lbpnmwz7Rh
+        A17AcOpU+FIoKXEXv1AjA7liXXlvyaA0VM71
+X-Google-Smtp-Source: AK7set+fyV8NY7swJO99sprnqCQsbhtz4OVtCCE4+qb/xglPT66O02/tvTfiEpZ9YzNZX/uhSq5ksQ==
+X-Received: by 2002:a05:6402:34d5:b0:4ac:8e63:300a with SMTP id w21-20020a05640234d500b004ac8e63300amr12695555edc.3.1677183298324;
+        Thu, 23 Feb 2023 12:14:58 -0800 (PST)
+Received: from [192.168.88.131] ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id s21-20020a50d495000000b004aee548b3e2sm5338830edi.69.2023.02.23.12.14.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 12:14:58 -0800 (PST)
+Message-ID: <1db3bfe5-0982-b445-9c94-784478279028@gmail.com>
+Date:   Thu, 23 Feb 2023 23:14:56 +0300
 MIME-Version: 1.0
-References: <20230222210425.626474-1-martin.blumenstingl@googlemail.com>
- <20230222210425.626474-2-martin.blumenstingl@googlemail.com> <319cb654-51f6-6241-802b-22ee0d5b0aab@linaro.org>
-In-Reply-To: <319cb654-51f6-6241-802b-22ee0d5b0aab@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 23 Feb 2023 21:14:14 +0100
-Message-ID: <CAFBinCCzXb2Ty3TaZatEKQyxJmYPhHDL7SeLfF5-3PsDKBznWw@mail.gmail.com>
-Subject: Re: [PATCH v1 RFC 1/3] dt-bindings: serial: amlogic,meson-uart: Add
- compatible string for G12A
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jirislaby@kernel.org, neil.armstrong@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org,
-        Christian Hewitt <christianshewitt@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] Fix snprintf format warnings during 'alsa' kselftest
+ compilation
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+References: <20230223143214.16564-1-ivan.orlov0322@gmail.com>
+ <Y/eAyrYs+wEu180d@sirena.org.uk>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, shuah@kernel.org,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+In-Reply-To: <Y/eAyrYs+wEu180d@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+On 23.02.2023 18:05, Mark Brown wrote:
 
-On Thu, Feb 23, 2023 at 10:12 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 22/02/2023 22:04, Martin Blumenstingl wrote:
-> > Amlogic G12A SoCs gained a new "divide XTAL by 2" bit. Everything else
-> > (we know about) is identical to the UART IP on GX (GXBB/GXL/GXM) SoCs.
-> > Add a new compatible string for this SoC so this new bit can be managed
-> > accordingly.
-> >
-> > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > ---
-> > Why am I sending this as RFC? The last change in this series means
-> > that the resulting .dtbs are not compatible with old kernels anymore.
-> > My understanding is that this is fine and only the opposite case (using
-> > old .dtbs on new kernels) has to be supported (which is still the case
-> > with this series). I'd like to get some confirmation for this.
->
-> The other way around is also nice to have, because DTS is used in other
-> projects. You fixed here Linux kernel, but what about all other
-> out-of-tree kernels, BSDs, firmwares and bootloaders? Did you fix them
-> as well?
-Indeed, u-boot is of concern here (as mainline u-boot does have Meson
-G12A SoC support).
+> What warnings are you seeing in what configuration (arch, toolchain, any
+> custom options...)?  I'm not seeing anything when I test.  Are these
+> perhaps architecture dependent warnings?
+> 
+> Please submit patches using subject lines reflecting the style for the
+> subsystem, this makes it easier for people to identify relevant patches.
+> Look at what existing commits in the area you're changing are doing and
+> make sure your subject lines visually resemble what they're doing.
+> There's no need to resubmit to fix this alone.
 
-> The question is whether the devices can be made compatible thus keeping
-> DTS working on older kernel. This commit suggests they are. Your DTS
-> commit is written in different tone - something was broken and is being
-> fixed.
-If we keep "amlogic,meson-gx-uart" as fallback compatible string then
-old kernels (or other .dtb consumers - like u-boot) would still work.
-Without the new "amlogic,meson-g12a-uart" compatible string we're
-unable to make use of a newly added clock divider within the UART IP
-block which allows baud rates such as 1500000 to work without (a lot
-of) jitter. Old kernels - with the new .dtb - would still be able to
-use serial (thanks to the "amlogic,meson-gx-uart" fallback compatible
-string) albeit with limited divider support (so not all baud rates can
-be used).
-Is this a valid plan?
+Thank you for the review! I will follow the common subject lines style 
+in the future.
 
-
-Best regards,
-Martin
+I compiled the test via gcc 11.3.0 without any custom options, the arch 
+is x86_64. There were five warnings during the test compilation, and all 
+of them were caused by incorrect format in 'snprintf' function calls. As 
+I know, using incorrect format in 'snprintf' creates an undefined 
+behavior. Maybe there is a point to fix it?
