@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1EA69FFD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B08669FFDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbjBWAFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S232836AbjBWAGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBWAFj (ORCPT
+        with ESMTP id S232816AbjBWAGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:05:39 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8A836FD1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:05:38 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id 76so4278365iou.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgrFNSuf34jbNpz3PEJghPmkNt6YOqZyHs66V60GvNY=;
-        b=dmuypTWNxR5hndIsnbz1GwRwVLYiQ/+uKQgrIpLxAcdFGeu+t4MYTdMrqvk0/qWj6X
-         D0LsEIAm6qjNOp4LrZFR56gDcaYPhe33sKYWnrNTxD6PI3kL5+as7NF8YQ9aGNwH5oub
-         jjP5LtbcO5iXrtjbVK7j47ExnrRe5uG6gbx48=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZgrFNSuf34jbNpz3PEJghPmkNt6YOqZyHs66V60GvNY=;
-        b=W4bPJdXPEJnmnPeNnYkOB2IkBjep6OONFby88guKMlba28YQ91v8Ley9fOfJpTcH/5
-         tn6E3l6aXfup0d9CdQq0G4Jw7+6eHC2W/mfPlsWRW79EL0p6scsrDtt9aKeu7zMK+xgN
-         KHKX5HalSppA/KDDqmqC9UwiGyADyEKLstPErrLeNUm8Zh90qRF7T3q52s5kcWTuGwGj
-         9CflClle8jVoPx4tbOqR4IKGSwWap9udOBpQFZP3qR0cNsqmY1tuol2hwJGRbtMf3ZCt
-         0HKT2tzlpeldsgDsOjYAC9dtXBBHgX3vU7ejgk6MBPlxGfpSbX74fT+O67kZF7UYulB/
-         y2ew==
-X-Gm-Message-State: AO0yUKUMl9QKmmhVfdTCSzpPKnYD2ltZQJVQ2RD33j2Lm+e4zXbMw0sc
-        uMwME/BsfsLwxMfSQ85rQtmzzg==
-X-Google-Smtp-Source: AK7set/Z0RlD4bIBUoxcAs3D7T9MbOgQ9R0Ibfy95mgsWYXG4eNOd9ajL6uIa6Eov1FlwSI5FC9Wnw==
-X-Received: by 2002:a05:6602:3149:b0:723:fa7:fb6a with SMTP id m9-20020a056602314900b007230fa7fb6amr6545960ioy.2.1677110738088;
-        Wed, 22 Feb 2023 16:05:38 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id a13-20020a5d89cd000000b007457f5ab197sm1475082iot.38.2023.02.22.16.05.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 16:05:37 -0800 (PST)
-Date:   Thu, 23 Feb 2023 00:05:37 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regulator: core: Use ktime_get_boottime() to determine
- how long a regulator was off
-Message-ID: <Y/at0SrG+q2AOtuZ@google.com>
-References: <20230222191537.1.I9719661b8eb0a73b8c416f9c26cf5bd8c0563f99@changeid>
- <CAE-0n51P-nXPKmcN9K5RtdFJh5EQ3M_hm2LjBicfegWKUda2Dw@mail.gmail.com>
+        Wed, 22 Feb 2023 19:06:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A46457CB;
+        Wed, 22 Feb 2023 16:06:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SGz5nzrr6kl9XQ1Pjiut45xDaCZGappO0V2Hw2xCxOo=; b=Y32WBerE9lXfZSywGU2o8Xqhfu
+        B54C6eYhk9WRm6mS49oYuznaXhzjq+W9GbNkfnBFw6Dlsvxra3TmcZ6krBqbr6R+rmZse3gGsc70W
+        atJ36URTU6qbLRw4nbhCl1yBBW+oa5k1S51zib8X0je8tk60pud15Q/Ay9O1jUhWOO5V/TcjPNz6X
+        PdC/gRekMkwnFTvVbRJGmpGlyIJRE6L+OgaKRwmu4mMx2TrxghBaIyk8xVNkcyeA6aKzE6nCvdhUX
+        /UDH22TYGx6LGYGM/2HC3twxSMXDHi8IVScnXquQvTeAqXoFsHkInvrzalhHk45x5ld5F9qfSiYQ1
+        Xx8uhgvw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUz7O-00EVDc-Ts; Thu, 23 Feb 2023 00:05:50 +0000
+Date:   Wed, 22 Feb 2023 16:05:50 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
+        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Message-ID: <Y/at3iYz/xBSPPM+@infradead.org>
+References: <Y/T+pw25oGmKqz1k@nvidia.com>
+ <Y/T/bkcYc9Krw4rE@slm.duckdns.org>
+ <Y/UEkNn0O65Pfi4e@nvidia.com>
+ <Y/UIURDjR9pv+gzx@slm.duckdns.org>
+ <Y/Ua6VcNe/DFh7X4@nvidia.com>
+ <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
+ <Y/UiQmuVwh2eqrfA@nvidia.com>
+ <87o7pmnd0p.fsf@nvidia.com>
+ <Y/YRJNwwvqp7nKKt@nvidia.com>
+ <87k009nvnr.fsf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE-0n51P-nXPKmcN9K5RtdFJh5EQ3M_hm2LjBicfegWKUda2Dw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87k009nvnr.fsf@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 03:46:39PM -0500, Stephen Boyd wrote:
-> Quoting Matthias Kaehlcke (2023-02-22 11:15:46)
-> > For regulators with 'off-on-delay-us' the regulator framework currently
-> > uses ktime_get() to determine how long the regulator has been off
-> > before re-enabling it (after a delay if needed). A problem with using
-> > ktime_get() is that it doesn't account for the time the system is
-> > suspended. As a result a regulator with a longer 'off-on-delay' (e.g.
-> > 500ms) that was switched off during suspend might still incurr in a
-> > delay on resume before it is re-enabled, even though the regulator
-> > might have been off for hours. ktime_get_boottime() accounts for
-> > suspend time, use it instead of ktime_get().
-> >
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
+On Thu, Feb 23, 2023 at 09:59:35AM +1100, Alistair Popple wrote:
+> The idea was every driver already needs to allocate a pages array to
+> pass to pin_user_pages(), and by necessity drivers have to keep a
+> reference to the contents of that in one form or another. So
+> conceptually the equivalent of:
 > 
-> Is it fixing something in stable kernels? Should it be tagged for
-> stable?
+> struct vm_account {
+>        struct list_head possible_pinners;
+>        struct mem_cgroup *memcg;
+>        struct pages **pages;
+>        [...]
+> };
+> 
+> Unpinnig involves finding a new owner by traversing the list of
+> page->memcg_data->possible_pinners and iterating over *pages[] to figure
+> out if that vm_account actually has this page pinned or not and could
+> own it.
+> 
+> Agree this is costly though. And I don't think all drivers keep the
+> array around so "iterating over *pages[]" may need to be a callback.
 
-It's not a super-critical fix, but it could improve resume time for
-some devices with stable kernels, so it might be worth adding it to
-stable. I'll send out a a v2 with the corresponding tags.
+Is pinning in this context referring to FOLL_LONGTERM pins or any
+FOLL_PIN?  In the latter case block based direct I/O does not keep
+the pages array around, and also is absolutely not willing to pay
+for the overhead.
+
+For FOLL_LONGTERM the schemes sounds vaguely reasonable to me.
