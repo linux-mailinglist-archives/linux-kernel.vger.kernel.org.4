@@ -2,74 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0266A0FAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5F26A0FB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbjBWSri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S231791AbjBWSsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjBWSrZ (ORCPT
+        with ESMTP id S230153AbjBWSsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:47:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA81158AE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:47:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26028B81AD0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:47:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8CB3C433D2;
-        Thu, 23 Feb 2023 18:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677178032;
-        bh=oCXQhGhSENSn01bOtNfJL4N3xMVyEF9AfrM1uwx/hFI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=rhkWUwEUiUIvE7FHH6ob5EUX/waV9Wtu//PGDvwehTBI2k+FISGfwv/LKDxFfxXTl
-         B1CShSFQXL+706eitk87VXxXA1JphjnNO5HIfd8i63NP5z3Ft0vnb626jZTTQVnpFi
-         NpKD9neMZMw/+ey72W0Uva0YoYNsL2PaCSuG/OVL3Wdee/zJ3RDnDI9HUcyEw4QZGB
-         dwpuTPE08b6V1xSVMkVGqE9p5YcJqAKJLZwTYgfQfgU6kIVTpZxIbGLY/p1xhrMC3y
-         gYiu7VY9Cv51wzyfCd4Tj7quuVTvLMSVB98LXcFtMU5/BySH5UCa66VlZHGVYeJZR3
-         wABQFtMpG1VMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7F8BE68D31;
-        Thu, 23 Feb 2023 18:47:12 +0000 (UTC)
-Subject: Re: [GIT PULL] nolibc changes for v6.3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230222020708.GA1345661@paulmck-ThinkPad-P17-Gen-1>
-References: <20230222020708.GA1345661@paulmck-ThinkPad-P17-Gen-1>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230222020708.GA1345661@paulmck-ThinkPad-P17-Gen-1>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/nolibc.2023.02.06a
-X-PR-Tracked-Commit-Id: c54ba4178159e440bea3826d22d43a9d0d94b071
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f01d4c8a22908956f4018ed334bb6713e41b37c1
-Message-Id: <167717803274.14005.17460044613769697368.pr-tracker-bot@kernel.org>
-Date:   Thu, 23 Feb 2023 18:47:12 +0000
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     torvalds@linux-foundation.org, w@1wt.eu, svens@linux.ibm.com,
-        imp@bsdimp.com, ammarfaizi2@gnuweeb.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 13:48:18 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5854810F9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:47:50 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z1-20020a170902d54100b00198bc9ba4edso5446975plf.21
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:47:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Ny3Ht+RWz/HwV/rhms1DlUfHO1U87sDcU+U5kFbTW4=;
+        b=lNvI/2rgj77Ic7ZvRg0lZ3CNmRucFlSj1+rQwgfvitkvy19Jw0pxzNMx6FDvqCPFgd
+         fn7VvVppBKZsXPQhRzKJCkooJ1oyseISzoGS+zDrrC4kbkpz6pSAbvEq8JhS6plQEk9q
+         GaU9E7UQAt/0o4s9nTWcnmlOZZQZR7Wez5KV2PxLO0WB0tDVrdFUyd+T6Hyj40TI2nEx
+         H7df+dSoERd5mIARNVp4RJW9qzoqsk1dw8VWiF+VkWBRU5oX4U7Ze618a/cVc1xIOtFm
+         XTxfpiw3IlfubSNl590W+AZZI8EVvNZsS+T/gWaccOVxmQJj2hJcgPaJQSqH67nvLspK
+         7zGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9Ny3Ht+RWz/HwV/rhms1DlUfHO1U87sDcU+U5kFbTW4=;
+        b=5bJxJKMvtUV35QH4WYMRuJw21vNOpTq/1SI0e9lozumqvHYdcFR2pBIcnPfjeVxaae
+         b0dYQj+eXsk//0qvL8SA7/EN9HCFJ+cvyhNLOVHhvQHc9MdjPHFvbIXVYd1aufOKy7A6
+         Yrh5popOFhl+J4qlMbnymaN0FYBDToWTFpzPcPloStP2dG0m9dm6W/P9+HWsj7Q7DNyG
+         IPzBZgMlfJ3HSK8fvHDAAKZYEI2vojgCBwlUZb8L9Qobusi8VTlXwadUg4IAF+78pZ7P
+         TmAenTtVIVCrzRQ3AIO6NbFaJ7cmedgdtoRySf+YOeSX0T6wqf7ONSPzIgQEHFKmqd83
+         uiPA==
+X-Gm-Message-State: AO0yUKXBDklUz4dz/CLfcKRMdf6sizJyUQxaOab70/52fbCv4NpkO0Wv
+        pfyvak8QiTTQbyN6ntAxi0Vp788aPzI=
+X-Google-Smtp-Source: AK7set8sDaiXwAv5raafMe6W95s8Ae365ZmaLbZB81kaT6psKhE8P1bs3HjFLIj62NtTvEiT8J5dndICUjg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:3282:b0:19a:7e00:da70 with SMTP id
+ jh2-20020a170903328200b0019a7e00da70mr1903601plb.12.1677178068660; Thu, 23
+ Feb 2023 10:47:48 -0800 (PST)
+Date:   Thu, 23 Feb 2023 10:47:47 -0800
+In-Reply-To: <CAOUHufYx8JUT0T11jxuqknHzUHOYm7kLm_JfgP3LmRrFe=E20Q@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-3-yuzhao@google.com>
+ <Y++q/lglE6FJBdjt@google.com> <CAOUHufaK-BHdajDZJKjn_LU-gMkUTKa_9foMB8g-u9DyrVhPwg@mail.gmail.com>
+ <Y/ed0XYAPx+7pukA@google.com> <CAOUHufYw9Mc-w1E-Jkqnt869bVJ0AxOB5_grSEMcdMdDODDdCw@mail.gmail.com>
+ <Y/evPJg9gvXxO1hs@google.com> <CAOUHufYx8JUT0T11jxuqknHzUHOYm7kLm_JfgP3LmRrFe=E20Q@mail.gmail.com>
+Message-ID: <Y/e006bZOYXIFE/j@google.com>
+Subject: Re: [PATCH mm-unstable v1 2/5] kvm/x86: add kvm_arch_test_clear_young()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 21 Feb 2023 18:07:08 -0800:
+On Thu, Feb 23, 2023, Yu Zhao wrote:
+> On Thu, Feb 23, 2023 at 11:24=E2=80=AFAM Sean Christopherson <seanjc@goog=
+le.com> wrote:
+> >
+> > On Thu, Feb 23, 2023, Yu Zhao wrote:
+> > > On Thu, Feb 23, 2023 at 10:09=E2=80=AFAM Sean Christopherson <seanjc@=
+google.com> wrote:
+> > > > > I'll take a look at that series. clear_bit() probably won't cause=
+ any
+> > > > > practical damage but is technically wrong because, for example, i=
+t can
+> > > > > end up clearing the A-bit in a non-leaf PMD. (cmpxchg will just f=
+ail
+> > > > > in this case, obviously.)
+> > > >
+> > > > Eh, not really.  By that argument, clearing an A-bit in a huge PTE =
+is also technically
+> > > > wrong because the target gfn may or may not have been accessed.
+> > >
+> > > Sorry, I don't understand. You mean clear_bit() on a huge PTE is
+> > > technically wrong? Yes, that's what I mean. (cmpxchg() on a huge PTE
+> > > is not.)
+> > >
+> > > > The only way for
+> > > > KVM to clear a A-bit in a non-leaf entry is if the entry _was_ a hu=
+ge PTE, but was
+> > > > replaced between the "is leaf" and the clear_bit().
+> > >
+> > > I think there is a misunderstanding here. Let me be more specific:
+> > > 1. Clearing the A-bit in a non-leaf entry is technically wrong becaus=
+e
+> > > that's not our intention.
+> > > 2. When we try to clear_bit() on a leaf PMD, it can at the same time
+> > > become a non-leaf PMD, which causes 1) above, and therefore is
+> > > technically wrong.
+> > > 3. I don't think 2) could do any real harm, so no practically no prob=
+lem.
+> > > 4. cmpxchg() can avoid 2).
+> > >
+> > > Does this make sense?
+> >
+> > I understand what you're saying, but clearing an A-bit on a non-leaf PM=
+D that
+> > _just_ got converted from a leaf PMD is "wrong" if and only if the inte=
+nted
+> > behavior is nonsensical.
+>=20
+> Sorry, let me rephrase:
+> 1. Clearing the A-bit in a non-leaf entry is technically wrong because
+> we didn't make sure there is the A-bit there --  the bit we are
+> clearing can be something else. (Yes, we know it's not, but we didn't
+> define this behavior, e.g., a macro to designate that bit for non-leaf
+> entries.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/nolibc.2023.02.06a
+Heh, by that definition, anything and everything is "technically wrong".  A=
+n Intel
+CPU might support SVM, even though we know no such CPUs exist, so requiring=
+ AMD or
+Hygon to enable SVM is technically wrong.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f01d4c8a22908956f4018ed334bb6713e41b37c1
+> Also I didn't check the spec -- does EPT actually support the
+> A-bit in non-leaf entries? My guess is that NPT does.)
 
-Thank you!
+If A/D bits are enabled, both EPT and 64-bit NPT support the Accessed bit a=
+t all
+levels irrespective of whether or not the entry maps a huge page.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+PAE NPT is a different story, but the TDP MMU is limited to 64-bit kernels,=
+ i.e.
+requires 64-bit NPT.
