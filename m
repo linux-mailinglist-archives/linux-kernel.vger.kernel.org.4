@@ -2,114 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C616A05E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8371D6A05F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbjBWKU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
+        id S233518AbjBWKWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbjBWKUo (ORCPT
+        with ESMTP id S233993AbjBWKVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:20:44 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BEC515C6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:20:41 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id cq23so39996741edb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5JZ+d4keOM3Q3zQN27hdiAOtmuIEuYd9JoJG8TNKmKg=;
-        b=n7vK1uti/NJxOe2l5pgWT9fnzleJ4H03NITi75Q2bs5brLlwGt6RsM+ucCorwglL9U
-         hX/eV5362EwCuFAcSZYB/qUT/5AuR+Ae2z/L32yPCdKtA8hzuYSJ94QQ6a+cMa8bDbrg
-         LjjTw8FC8z3fmRp4qOCpQZmosXXb65XVuQgtjQpKH95GCYCbJ5pHKwWg24lQpWJfjxND
-         pcqmEfmhueC7JrByWbZlaorKfQ+CAiQZ5r3CkxdFR7eGh6sQEvF7EwAecofYDqlSoY6e
-         By3NtLox/iaZcp3cF4l/k9nLgPxZlXnIg/eBvvlJIjP0ZJo2n69bXrNwuSGMS7FZzjP+
-         CniA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JZ+d4keOM3Q3zQN27hdiAOtmuIEuYd9JoJG8TNKmKg=;
-        b=4oeTXbxspa2z62h2ojuXpQl56eoHk9wEGt8IJLs0j+Fkn+AoDAM1Z2GKZb7um8n4MH
-         RKVfE/jWLUf6Mfa3ueqqtj/bgtxpKc5kY1Gxi1Hln/6LLIlXqi1hFbywCTzkXwn/mC3H
-         9gGAfviduzTpc+UpsMUKymp81W4qwG/jtcoF2pfw2jBgX6XnPflvmOmFZZD4lqlz+qMm
-         MVpTRmgFnEZIk9/MXmduaA8Oa/AOimyY69HIQ68thdZsDUyRPsTuA82kUN1r7fgNgEg4
-         cpx0/8v0Klm58oCLZuILkKWT4vIxBoKGFSnvOSqQF29KuvP0WAK8DO7VUfA0eN13YhaH
-         XDHA==
-X-Gm-Message-State: AO0yUKVLiXy3wu1LJPG/wpZEmFNhEnbPkAm8BQo8OP367oiJX8+sSX+w
-        82alJ8FcyWJkQg801qEpRc6U2w==
-X-Google-Smtp-Source: AK7set93FtHW6w3W7U3tQiQ6L+JtvumwzgUUgSyJVkmq59feUx9y/URkmGf7hA4biCkBF+LMcfgelA==
-X-Received: by 2002:a05:6402:b2f:b0:4ab:4be9:5dcf with SMTP id bo15-20020a0564020b2f00b004ab4be95dcfmr10929013edb.4.1677147639370;
-        Thu, 23 Feb 2023 02:20:39 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m21-20020a170906849500b008d269233bd4sm5010633ejx.204.2023.02.23.02.20.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 02:20:38 -0800 (PST)
-Message-ID: <ffa1d5ff-3046-95f5-062b-9833cc4f3127@linaro.org>
-Date:   Thu, 23 Feb 2023 11:20:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFC 3/4] dt-bindings: clock: break out
- mediatek,filogic-apmixed
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-clk@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
+        Thu, 23 Feb 2023 05:21:51 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC8B51902;
+        Thu, 23 Feb 2023 02:21:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2qAVv/2mOlvFxStqbQsgpUYCmjvX2Lnr+60Cn2DTsOU=; b=TgElQnDUMw4O3xsGHQ0dJdiheG
+        URc397+tCp3J+KSSx6tAGEb40b5LerjygN7eqjHeDDLjIbUAwMETKH1QXycPPHcohlNmZ8zzIRUXd
+        lcte98hg035mDkUfApbK+yWYolqKTcS2kpGizXeQIy2VW0+n5JwVo2K1te5F9PePE2GWmMNFc5RLi
+        5rLcGiuZPxdW/mVv7KRFIoceqh84SpXo2KufB2nel69UKrokaSiQbbSI160tCl3lsHw70i8sXSDR/
+        /jiZjwtQCyyYIPCGYC/w1IFGhgRZkviu9ZbFFeqOawrElgIUsFJc8wr4X3m308XILDYsCRfeQDN1T
+        1FDZX5rQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41264)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pV8jM-0007tA-RL; Thu, 23 Feb 2023 10:21:40 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pV8jJ-00045z-AR; Thu, 23 Feb 2023 10:21:37 +0000
+Date:   Thu, 23 Feb 2023 10:21:37 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Clark Wang <xiaoning.wang@nxp.com>, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        mcoquelin.stm32@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>
-References: <cover.1677089171.git.daniel@makrotopia.org>
- <177707569882ff308d375aae3e2936a60ea483c7.1677089171.git.daniel@makrotopia.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <177707569882ff308d375aae3e2936a60ea483c7.1677089171.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-imx@nxp.com
+Subject: Re: [PATCH V3 1/2] net: phylink: add a function to resume phy alone
+ to fix resume issue with WoL enabled
+Message-ID: <Y/c+MQtgtKFDjEZF@shell.armlinux.org.uk>
+References: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
+ <83a8fb89ac7a69d08c9ea1422dade301dcc87297.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <83a8fb89ac7a69d08c9ea1422dade301dcc87297.camel@redhat.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 19:09, Daniel Golle wrote:
-> The apmixed clocks of MT7981 and MT7986 are identical. In order to
-> de-duplicate both clock drivers, start with putting apmixed into a
-> header files of its own, so it can be used by both SoCs.
-> Propagate this change also to mt7986a.dtsi which is the only user.
+On Thu, Feb 23, 2023 at 11:09:04AM +0100, Paolo Abeni wrote:
+> On Thu, 2023-02-02 at 16:15 +0800, Clark Wang wrote:
+> > Issue we met:
+> > On some platforms, mac cannot work after resumed from the suspend with WoL
+> > enabled.
+> > 
+> > The cause of the issue:
+> > 1. phylink_resolve() is in a workqueue which will not be executed immediately.
+> >    This is the call sequence:
+> >        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
+> >    For stmmac driver, mac_link_up() will set the correct speed/duplex...
+> >    values which are from link_state.
+> > 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
+> >    phylink_resume(), because mac need phy rx_clk to do the reset.
+> >    stmmac_core_init() is called in function stmmac_hw_setup(), which will
+> >    reset the mac and set the speed/duplex... to default value.
+> > Conclusion: Because phylink_resolve() cannot determine when it is called, it
+> >             cannot be guaranteed to be called after stmmac_core_init().
+> > 	    Once stmmac_core_init() is called after phylink_resolve(),
+> > 	    the mac will be misconfigured and cannot be used.
+> > 
+> > In order to avoid this problem, add a function called phylink_phy_resume()
+> > to resume phy separately. This eliminates the need to call phylink_resume()
+> > before stmmac_hw_setup().
+> > 
+> > Add another judgement before called phy_start() in phylink_start(). This way
+> > phy_start() will not be called multiple times when resumes. At the same time,
+> > it may not affect other drivers that do not use phylink_phy_resume().
+> > 
+> > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+> > ---
+> > V2 change:
+> >  - add mac_resume_phy_separately flag to struct phylink to mark if the mac
+> >    driver uses the phylink_phy_resume() first.
+> > V3 change:
+> >  - add brace to avoid ambiguous 'else'
+> >    Reported-by: kernel test robot <lkp@intel.com>
+> > ---
+> >  drivers/net/phy/phylink.c | 32 ++++++++++++++++++++++++++++++--
+> >  include/linux/phylink.h   |  1 +
+> >  2 files changed, 31 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> > index 319790221d7f..c2fe66f0b78f 100644
+> > --- a/drivers/net/phy/phylink.c
+> > +++ b/drivers/net/phy/phylink.c
+> > @@ -80,6 +80,8 @@ struct phylink {
+> >  	DECLARE_PHY_INTERFACE_MASK(sfp_interfaces);
+> >  	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_support);
+> >  	u8 sfp_port;
+> > +
+> > +	bool mac_resume_phy_separately;
+> >  };
+> >  
+> >  #define phylink_printk(level, pl, fmt, ...) \
+> > @@ -1509,6 +1511,7 @@ struct phylink *phylink_create(struct phylink_config *config,
+> >  		return ERR_PTR(-EINVAL);
+> >  	}
+> >  
+> > +	pl->mac_resume_phy_separately = false;
+> >  	pl->using_mac_select_pcs = using_mac_select_pcs;
+> >  	pl->phy_state.interface = iface;
+> >  	pl->link_interface = iface;
+> > @@ -1943,8 +1946,12 @@ void phylink_start(struct phylink *pl)
+> >  	}
+> >  	if (poll)
+> >  		mod_timer(&pl->link_poll, jiffies + HZ);
+> > -	if (pl->phydev)
+> > -		phy_start(pl->phydev);
+> > +	if (pl->phydev) {
+> > +		if (!pl->mac_resume_phy_separately)
+> > +			phy_start(pl->phydev);
+> > +		else
+> > +			pl->mac_resume_phy_separately = false;
+> > +	}
+> >  	if (pl->sfp_bus)
+> >  		sfp_upstream_start(pl->sfp_bus);
+> >  }
+> > @@ -2024,6 +2031,27 @@ void phylink_suspend(struct phylink *pl, bool mac_wol)
+> >  }
+> >  EXPORT_SYMBOL_GPL(phylink_suspend);
+> >  
+> > +/**
+> > + * phylink_phy_resume() - resume phy alone
+> > + * @pl: a pointer to a &struct phylink returned from phylink_create()
+> > + *
+> > + * In the MAC driver using phylink, if the MAC needs the clock of the phy
+> > + * when it resumes, can call this function to resume the phy separately.
+> > + * Then proceed to MAC resume operations.
+> > + */
+> > +void phylink_phy_resume(struct phylink *pl)
+> > +{
+> > +	ASSERT_RTNL();
+> > +
+> > +	if (!test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)
+> > +	    && pl->phydev) {
+> > +		phy_start(pl->phydev);
+> > +		pl->mac_resume_phy_separately = true;
+> > +	}
+> > +
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  1 +
->  drivers/clk/mediatek/clk-mt7986-apmixed.c     |  2 +-
->  .../clock/mediatek,filogic-apmixed.h          | 21 +++++++++++++++++++
->  .../dt-bindings/clock/mediatek,mt7981-clk.h   | 10 ---------
->  .../dt-bindings/clock/mediatek,mt7986-clk.h   | 11 ----------
->  5 files changed, 23 insertions(+), 22 deletions(-)
+> Minor nit: the empty line here is not needed.
 
-Same comments as previous patch:
-1. Too generic name.
-2. Mixed code with bindings with DTS.
+The author appears to have become non-responsive after sending half of
+the two patch series, and hasn't addressed previous feedback.
 
-Best regards,
-Krzysztof
+In any case, someone else was also having similar issues with stmmac,
+and proposing different patches, so I've requested that they work
+together to solve what looks like one common problem, instead of us
+ending up with two patch series potentially addressing that same
+issue.
 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
