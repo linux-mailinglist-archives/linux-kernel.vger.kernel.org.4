@@ -2,147 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E990369FFE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F378669FFEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbjBWANt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S232796AbjBWAPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBWANr (ORCPT
+        with ESMTP id S229446AbjBWAPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:13:47 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81EA24109;
-        Wed, 22 Feb 2023 16:13:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMYQt6zc5z4x4n;
-        Thu, 23 Feb 2023 11:13:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677111224;
-        bh=rHOQEcCUbLerBSAXShl1mdrbfj1msY+pPXnEyEd1HJw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QAn6JR03eA2ghJS4i9SOe4U3zUfoIoCyTMKnxfcqPM/40oD/NN01oadwXeK/hx3jf
-         C/DmkDaHlbhXIfalxAIK4Ca9MFdmxCMIGU2D/UEavsM//hjG0p5DDM/JmewH8X8pSo
-         x+AQlXjZR8GoCYKZiKQ+a3Xs5vai8oMCIPUNuQqaa6PZSo0L3W3bpTYswGjzJR7Vw7
-         h6rhzfjXYQnCjcKOjMcsIsYh3kP8iy7FXioup4+jeHTYMaHKF8spLPiA01FXjTsO6m
-         XvVYM6uE0zTtQatSixu7vGdN3NYEDyJT/MXPMJl2cSA/bylTDA6/PAQkqkNPFL3Cb6
-         w+HxaAl15Kcgg==
-Date:   Thu, 23 Feb 2023 11:13:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        William Qiu <william.qiu@starfivetech.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the mmc tree
-Message-ID: <20230223111342.7177513b@canb.auug.org.au>
-In-Reply-To: <20230216124004.2be84a01@canb.auug.org.au>
-References: <20230216124004.2be84a01@canb.auug.org.au>
+        Wed, 22 Feb 2023 19:15:37 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0030934C34;
+        Wed, 22 Feb 2023 16:15:35 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MLUZPe015607;
+        Thu, 23 Feb 2023 00:15:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=HCL+ctSWpGnB2xaBRX9FLVk33q+txzOX1BjEyAyM2K0=;
+ b=Y6V03bqm8Ox+5JXvn6CCmdL61OJKZwt7q48MV7231XVhUB2fTcgUCPLPmB99q3XKp78q
+ rZTLKNk8qJQgW9D4suC3OrX4NuSCKR2vVErbh6obdwoCeRwG5D8MqP7eNGpErbFwh5UK
+ ttU2z4A/MA5Ceig5hr2GVRc7QT9fap1xpem2HbPNGGeydazceldLvceYGzC9VM4EEb+2
+ WLhhvhkqAvPP4UAsrFL2dTVSChNAxCsgQu/tUd4qnEt/esA5M3Y5ORyb3A4xLbvYjtPj
+ z4S4jE0yogBQCgGEbNJvTfjJ5yk8EQdPMlLzJzI9rsiCvj6uFmDw3OSUJUe3aHgIBCfm 7A== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwn389afs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 00:15:16 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N0FFLA010669
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 00:15:15 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Feb
+ 2023 16:15:15 -0800
+Message-ID: <576aed85-a566-3645-559e-06b2135cf57f@quicinc.com>
+Date:   Wed, 22 Feb 2023 16:15:14 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_9=sdbnY1po0KZ9=MCz8NlM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v10 07/26] mailbox: Add Gunyah message queue mailbox
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jassi Brar <jassisinghbrar@gmail.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212316.3309053-1-quic_eberman@quicinc.com>
+ <c8161a4c-fa45-cb9e-7211-5486ece1fc2d@linaro.org>
+Content-Language: en-US
+In-Reply-To: <c8161a4c-fa45-cb9e-7211-5486ece1fc2d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: K53N7I3HpO79FCEwWKk2fCSWW6GikGMq
+X-Proofpoint-ORIG-GUID: K53N7I3HpO79FCEwWKk2fCSWW6GikGMq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_11,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 phishscore=0 spamscore=0 priorityscore=1501
+ mlxlogscore=883 adultscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302230000
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_9=sdbnY1po0KZ9=MCz8NlM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Thu, 16 Feb 2023 12:40:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the pinctrl tree got a conflict in:
->=20
->   MAINTAINERS
->=20
-> between commit:
->=20
->   9e622229bbf4 ("mmc: starfive: Add sdio/emmc driver support")
->=20
-> from the mmc tree and commit:
->=20
->   d6e0a660097d ("dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl")
->=20
-> from the pinctrl tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc MAINTAINERS
-> index 1208b0380fa5,8a851eb053ca..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -19914,19 -19890,15 +19914,21 @@@ F:	Documentation/devicetree/binding=
-s/cl
->   F:	drivers/clk/starfive/clk-starfive-jh7100*
->   F:	include/dt-bindings/clock/starfive-jh7100*.h
->  =20
->  +STARFIVE JH7110 MMC/SD/SDIO DRIVER
->  +M:	William Qiu <william.qiu@starfivetech.com>
->  +S:	Supported
->  +F:	Documentation/devicetree/bindings/mmc/starfive*
->  +F:	drivers/mmc/host/dw_mmc-starfive.c
->  +
-> - STARFIVE JH7100 PINCTRL DRIVER
-> + STARFIVE JH71X0 PINCTRL DRIVERS
->   M:	Emil Renner Berthing <kernel@esmil.dk>
-> + M:	Jianlong Huang <jianlong.huang@starfivetech.com>
->   L:	linux-gpio@vger.kernel.org
->   S:	Maintained
-> - F:	Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.ya=
-ml
-> - F:	drivers/pinctrl/starfive/
-> + F:	Documentation/devicetree/bindings/pinctrl/starfive,jh71*.yaml
-> + F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
->   F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
-> + F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
->  =20
->   STARFIVE JH7100 RESET CONTROLLER DRIVER
->   M:	Emil Renner Berthing <kernel@esmil.dk>
+On 2/20/2023 5:59 AM, Srinivas Kandagatla wrote:
+> 
+> 
+> On 14/02/2023 21:23, Elliot Berman wrote:
+>> Gunyah message queues are a unidirectional inter-VM pipe for messages up
+>> to 1024 bytes. This driver supports pairing a receiver message queue and
+>> a transmitter message queue to expose a single mailbox channel.
+>>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   Documentation/virt/gunyah/message-queue.rst |   8 +
+>>   drivers/mailbox/Makefile                   |   2 +
+>>   drivers/mailbox/gunyah-msgq.c               | 214 ++++++++++++++++++++
+>>   include/linux/gunyah.h                      |  56 +++++
+>>   4 files changed, 280 insertions(+)
+>>   create mode 100644 drivers/mailbox/gunyah-msgq.c
+>>
+>> diff --git a/Documentation/virt/gunyah/message-queue.rst 
+>> b/Documentation/virt/gunyah/message-queue.rst
+>> index 0667b3eb1ff9..082085e981e0 100644
+>> --- a/Documentation/virt/gunyah/message-queue.rst
+>> +++ b/Documentation/virt/gunyah/message-queue.rst
+>> @@ -59,3 +59,11 @@ vIRQ: two TX message queues will have two vIRQs 
+>> (and two capability IDs).
+>>         |               |         |                 |         
+>> |               |
+>>         |               |         |                 |         
+>> |               |
+>>         +---------------+         +-----------------+         
+>> +---------------+
+>> +
+>> +Gunyah message queues are exposed as mailboxes. To create the 
+>> mailbox, create
+>> +a mbox_client and call `gh_msgq_init`. On receipt of the RX_READY 
+>> interrupt,
+>> +all messages in the RX message queue are read and pushed via the 
+>> `rx_callback`
+>> +of the registered mbox_client.
+>> +
+>> +.. kernel-doc:: drivers/mailbox/gunyah-msgq.c
+>> +   :identifiers: gh_msgq_init
+>> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+>> index fc9376117111..5f929bb55e9a 100644
+>> --- a/drivers/mailbox/Makefile
+>> +++ b/drivers/mailbox/Makefile
+>> @@ -55,6 +55,8 @@ obj-$(CONFIG_MTK_CMDQ_MBOX)    += mtk-cmdq-mailbox.o
+>>   obj-$(CONFIG_ZYNQMP_IPI_MBOX)    += zynqmp-ipi-mailbox.o
+>> +obj-$(CONFIG_GUNYAH)        += gunyah-msgq.o
+> 
+> Why are we reusing CONFIG_GUNYAH Kconfig symbol for mailbox, why not 
+> CONFIG_GUNYAH_MBOX?
+> 
 
-This is now a conflict between the mmc tree and Linus' tree.
+There was some previous discussion about this:
 
---=20
-Cheers,
-Stephen Rothwell
+https://lore.kernel.org/all/2a7bb5f2-1286-b661-659a-a5037150eae8@quicinc.com/
 
---Sig_/_9=sdbnY1po0KZ9=MCz8NlM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+>> +
+>>   obj-$(CONFIG_SUN6I_MSGBOX)    += sun6i-msgbox.o
+>>   obj-$(CONFIG_SPRD_MBOX)       += sprd-mailbox.o
+>> diff --git a/drivers/mailbox/gunyah-msgq.c 
+>> b/drivers/mailbox/gunyah-msgq.c
+>> new file mode 100644
+>> index 000000000000..03ffaa30ce9b
+>> --- /dev/null
+>> +++ b/drivers/mailbox/gunyah-msgq.c
+>> @@ -0,0 +1,214 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>> rights reserved.
+>> + */
+>> +
+>> +#include <linux/mailbox_controller.h>
+>> +#include <linux/module.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/gunyah.h>
+>> +#include <linux/printk.h>
+>> +#include <linux/init.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/wait.h>
+> 
+> ...
+> 
+>> +/* Fired when message queue transitions from "full" to "space 
+>> available" to send messages */
+>> +static irqreturn_t gh_msgq_tx_irq_handler(int irq, void *data)
+>> +{
+>> +    struct gh_msgq *msgq = data;
+>> +
+>> +    mbox_chan_txdone(gh_msgq_chan(msgq), 0);
+>> +
+>> +    return IRQ_HANDLED;
+>> +}
+>> +
+>> +/* Fired after sending message and hypercall told us there was more 
+>> space available. */
+>> +static void gh_msgq_txdone_tasklet(struct tasklet_struct *tasklet)
+> 
+> Tasklets have been long deprecated, consider using workqueues in this 
+> particular case.
+> 
 
------BEGIN PGP SIGNATURE-----
+Workqueues have higher latency and tasklets came as recommendation from 
+Jassi. drivers/mailbox/imx-mailbox.c uses tasklets in the same way.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP2r7YACgkQAVBC80lX
-0Gw58Qf/aL6sDMlZhTKxlEKQfAFa7xFCJJ3ol8+Ax+U31sRQ5GIMjgS5MHmyhwK3
-0ElS1IewbjdtXInsg1g+JfMKEHb33qjsY+WTrtp5CXgaXWmGCfuBG2UTaHJqxkVc
-QJ/dupzye+qqeauNnorPi1qdKn6EajhKSC/Mfspo2gbNYxT/Huy94Wi1BHCMOV2I
-Caznw7EY9nztB40JHIsM+iKDsLZHCOH0dAEP79OL1dRblWnmXoSklafTJrYg8kbX
-ih7uBKBskwGYLk/RmETrFhJW+OCVa9RMUMEcWTXZb4vQgL1sj3J1uWFYnKRqUCaR
-fNa+wDKf8F40zKHlATVOlm++yXB8sg==
-=QN80
------END PGP SIGNATURE-----
+I did some quick unscientific measurements of ~1000x samples. The median 
+latency for resource manager went from 25.5 us (tasklet) to 26 us 
+(workqueue) (2% slower). The mean went from 28.7 us to 32.5 us (13% 
+slower). Obviously, the outliers for workqueues were much more extreme.
 
---Sig_/_9=sdbnY1po0KZ9=MCz8NlM--
+> 
+>> +{
+>> +    struct gh_msgq *msgq = container_of(tasklet, struct gh_msgq, 
+>> txdone_tasklet);
+>> +
+>> +    mbox_chan_txdone(gh_msgq_chan(msgq), msgq->last_ret);
+>> +}
+>> +
+>> +static int gh_msgq_send_data(struct mbox_chan *chan, void *data)
+>> +{
+> ..
+> 
+>> +    tasklet_schedule(&msgq->txdone_tasklet);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static struct mbox_chan_ops gh_msgq_ops = {
+>> +    .send_data = gh_msgq_send_data,
+>> +};
+>> +
+>> +/**
+>> + * gh_msgq_init() - Initialize a Gunyah message queue with an 
+>> mbox_client
+>> + * @parent: optional, device parent used for the mailbox controller
+>> + * @msgq: Pointer to the gh_msgq to initialize
+>> + * @cl: A mailbox client to bind to the mailbox channel that the 
+>> message queue creates
+>> + * @tx_ghrsc: optional, the transmission side of the message queue
+>> + * @rx_ghrsc: optional, the receiving side of the message queue
+>> + *
+>> + * At least one of tx_ghrsc and rx_ghrsc should be not NULL. Most 
+>> message queue use cases come with
+>> + * a pair of message queues to facilitate bidirectional 
+>> communication. When tx_ghrsc is set,
+>> + * the client can send messages with 
+>> mbox_send_message(gh_msgq_chan(msgq), msg). When rx_ghrsc
+>> + * is set, the mbox_client should register an .rx_callback() and the 
+>> message queue driver will
+>> + * push all available messages upon receiving the RX ready interrupt. 
+>> The messages should be
+>> + * consumed or copied by the client right away as the gh_msgq_rx_data 
+>> will be replaced/destroyed
+>> + * after the callback.
+>> + *
+>> + * Returns - 0 on success, negative otherwise
+>> + */
+>> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct 
+>> mbox_client *cl,
+>> +             struct gunyah_resource *tx_ghrsc, struct gunyah_resource 
+>> *rx_ghrsc)
+>> +{
+>> +    int ret;
+>> +
+>> +    /* Must have at least a tx_ghrsc or rx_ghrsc and that they are 
+>> the right device types */
+>> +    if ((!tx_ghrsc && !rx_ghrsc) ||
+>> +        (tx_ghrsc && tx_ghrsc->type != GUNYAH_RESOURCE_TYPE_MSGQ_TX) ||
+>> +        (rx_ghrsc && rx_ghrsc->type != GUNYAH_RESOURCE_TYPE_MSGQ_RX))
+>> +        return -EINVAL;
+>> +
+>> +    if (gh_api_version() != GUNYAH_API_V1) {
+>> +        pr_err("Unrecognized gunyah version: %u. Currently supported: 
+>> %d\n",
+> dev_err(parent
+> 
+> would make this more useful
+> 
+
+Done.
+
+- Elliot
