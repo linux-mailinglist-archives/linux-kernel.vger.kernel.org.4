@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9666E6A097E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4535A6A0A33
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbjBWNGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S234537AbjBWNN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbjBWNGi (ORCPT
+        with ESMTP id S234528AbjBWNNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:06:38 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8084855C30
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:06:35 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536bf92b55cso182113157b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:06:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=l976B99XbUna08WmeRhXUm4UkQfISnSwvYYzr2+N86c=;
-        b=qCFX28+RmwbMs9tpeR19tdUmhwjV+3IV4aF4Gydv6qUmejZ3SQkwml0zKgGQqTA5xf
-         X87HDDK8AjUvFyv20SDTeZykRVX6IHWtD50HEih7dCcq5NnMleFAr+IBxzoP0o+CR+q5
-         8tSUkIN9QpxSaGMo6trcYpUNBPxbBzI4Yqltz+Wb+a0YGnm+W3kPkf3Wssh6QAsX1Vum
-         c8AFxcbjdk+HNUEYWbU/Epcwpq0GliRbp7PS7iqSwwWRclarjnxBsKhQU9+MyKI+gtI4
-         HMD9W+g8dl1VxiDvITDL+L2EwaNSFADD1Cq8iaV1qBArlRlnem9lsC/LuL5RaWe9kKTj
-         F6FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l976B99XbUna08WmeRhXUm4UkQfISnSwvYYzr2+N86c=;
-        b=EUyZMzYe2+kkrsSWrNm34YNRWnbv/CaHxSwQdaq8wZJbLJBpEaTfM7KcJX96A9E82+
-         x4pER4ABA2pKm2YP1iyqhwSUvx9LJ1UzatB3iNTz2No2VmkWDhW3hGiaFX0W5RfXtcEJ
-         /kAUDeDN1TN2rNN+CrvpmYJLFBQv3RFBcKt5K9NGjFc1s+ATo3aoKJB8DNwNpFP256Rn
-         1mA8A8C6RrCvyY4n9BvrexGByfLtC3xOc7tv9N5dUw7We2DZT+Wk1HsKCFzkWJJFkUhJ
-         EbxEmXJaMDM9cbAT/Kaiyi/qh5Frv6XM4eyGgRM+i1Lu3Dhhhr6uR9XJ1GJ+GN9l9WzS
-         1kLQ==
-X-Gm-Message-State: AO0yUKXxPDgA1XmurO7s/To3TuIzfksRBuHSWuaT8QYH+j8LOGcOD6i+
-        +nG6/GEwNu1uw+0MaIvVJTxv63YfHh9odteNBCVd1A==
-X-Google-Smtp-Source: AK7set/2vMOCqRHFpmTtAlE31OFzB2vTZ54A1Ly7Gmtm4/ZMrRWyA2L4L3oNl/nq0kGy+urTZ86JLF9PtiPqWxqc8CU=
-X-Received: by 2002:a05:6902:138d:b0:a09:314f:9f09 with SMTP id
- x13-20020a056902138d00b00a09314f9f09mr2255202ybu.6.1677157594719; Thu, 23 Feb
- 2023 05:06:34 -0800 (PST)
+        Thu, 23 Feb 2023 08:13:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE911AD09;
+        Thu, 23 Feb 2023 05:12:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E852EB81A27;
+        Thu, 23 Feb 2023 13:12:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A300C433EF;
+        Thu, 23 Feb 2023 13:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677157940;
+        bh=hmwBEY9lOp9OIoKwQUe+3HQgpbQ2awX8Bpb2QgkdhUM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=spgUWjJ5AFmjIjNZtSBIVZnqBTzcVGzSSqOsUbDGI+8Zjp7gaM4qTnn/u6hSPpPyo
+         fTRbz5/bKg+pc8zMxmn6gdTgz+zgg6Vbmogl/8WylRhCyQWBWzixFJ09HdMYinxcX/
+         +PXll7JI7eYhQ/aFpNIRCD/Epyal+LjFm/C/qPR8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.15 00/36] 5.15.96-rc1 review
+Date:   Thu, 23 Feb 2023 14:06:36 +0100
+Message-Id: <20230223130429.072633724@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org> <20230223-topic-gmuwrapper-v3-10-5be55a336819@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v3-10-5be55a336819@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 23 Feb 2023 15:06:24 +0200
-Message-ID: <CAA8EJppi45K0hQ=1fZvf+Mps+4uEkXmLFeqdmyk-yk31CNvUsw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/15] drm/msm/a6xx: Fix A680 highest bank bit value
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.96-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.96-rc1
+X-KernelTest-Deadline: 2023-02-25T13:04+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,51 +62,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 14:07, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> According to the vendor sources, it's equal to 16, which makes hbb_lo
-> equal to 3.
+This is the start of the stable review cycle for the 5.15.96 release.
+There are 36 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-I think we might be stricken with the ddr kind difference here, but I
-would not bet on it.
+Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000.
+Anything received after that time might be too late.
 
->
-> Fixes: 840d10b64dad ("drm: msm: Add 680 gpu to the adreno gpu list")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index b5017c56fa1b..2c4afecdd213 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -885,12 +885,18 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
->                 hbb_lo = 2;
->         }
->
-> -       if (adreno_is_a640_family(adreno_gpu)) {
-> +       if (adreno_is_a640(adreno_gpu)) {
->                 amsbc = 1;
->                 /* HBB = 15 */
->                 hbb_lo = 2;
->         }
->
-> +       if (adreno_is_a680(adreno_gpu)) {
-> +               amsbc = 1;
-> +               /* HBB = 16 */
-> +               hbb_lo = 3;
-> +       }
-> +
->         if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
->                 amsbc = 1;
->                 /* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
->
-> --
-> 2.39.2
->
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.96-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.96-rc1
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    Revert "net/sched: taprio: make qdisc_leaf() see the per-netdev-queue pfifo child qdiscs"
+
+Nathan Chancellor <nathan@kernel.org>
+    lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+
+Nathan Chancellor <nathan@kernel.org>
+    lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+
+Nathan Chancellor <nathan@kernel.org>
+    scripts/pahole-flags.sh: Use pahole-version.sh
+
+Nathan Chancellor <nathan@kernel.org>
+    kbuild: Add CONFIG_PAHOLE_VERSION
+
+Kees Cook <keescook@chromium.org>
+    ext4: Fix function prototype mismatch for ext4_feat_ktype
+
+Paul Moore <paul@paul-moore.com>
+    audit: update the mailing list in MAINTAINERS
+
+Lukas Wunner <lukas@wunner.de>
+    wifi: mwifiex: Add missing compatible string for SD8787
+
+Zhang Wensheng <zhangwensheng5@huawei.com>
+    nbd: fix possible overflow on 'first_minor' in nbd_dev_add()
+
+Alessandro Astone <ales.astone@gmail.com>
+    binder: Gracefully handle BINDER_TYPE_FDA objects with num_fds=0
+
+Alessandro Astone <ales.astone@gmail.com>
+    binder: Address corner cases in deferred copy and fixup
+
+Arnd Bergmann <arnd@arndb.de>
+    binder: fix pointer cast warning
+
+Todd Kjos <tkjos@google.com>
+    binder: defer copies of pre-patched txn data
+
+Todd Kjos <tkjos@google.com>
+    binder: read pre-translated fds from sender buffer
+
+Dave Hansen <dave.hansen@linux.intel.com>
+    uaccess: Add speculation barrier to copy_from_user()
+
+Zheng Wang <zyytlz.wz@163.com>
+    drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc/64s/radix: Fix RWX mapping with relocated kernel
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc/64s/radix: Fix crash with unaligned relocated kernel
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc/vmlinux.lds: Add an explicit symbol for the SRWX boundary
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc/vmlinux.lds: Ensure STRICT_ALIGN_SIZE is at least page aligned
+
+Christophe Leroy <christophe.leroy@csgroup.eu>
+    powerpc: use generic version of arch_is_kernel_initmem_freed()
+
+Sean Anderson <sean.anderson@seco.com>
+    powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
+
+Marc Kleine-Budde <mkl@pengutronix.de>
+    can: kvaser_usb: hydra: help gcc-13 to figure out cmd_len
+
+Jim Mattson <jmattson@google.com>
+    KVM: VMX: Execute IBPB on emulated VM-exit when guest has IBRS
+
+Sean Christopherson <seanjc@google.com>
+    KVM: SVM: Skip WRMSR fastpath on VM-Exit if next RIP isn't valid
+
+Sean Christopherson <seanjc@google.com>
+    KVM: x86: Fail emulation during EMULTYPE_SKIP on any exception
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always mix cycle counter in add_latent_entropy()
+
+Rahul Tanwar <rtanwar@maxlinear.com>
+    clk: mxl: syscon_node_to_regmap() returns error pointers
+
+Sean Anderson <sean.anderson@seco.com>
+    powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G
+
+Rahul Tanwar <rtanwar@maxlinear.com>
+    clk: mxl: Fix a clk entry by adding relevant flags
+
+Rahul Tanwar <rtanwar@maxlinear.com>
+    clk: mxl: Add option to override gate clks
+
+Rahul Tanwar <rtanwar@maxlinear.com>
+    clk: mxl: Remove redundant spinlocks
+
+Rahul Tanwar <rtanwar@maxlinear.com>
+    clk: mxl: Switch from direct readl/writel based IO to regmap based IO
+
+Ankit Nautiyal <ankit.k.nautiyal@intel.com>
+    drm/edid: Fix minimum bpc supported with DSC1.2 for HDMI sink
+
+Bitterblue Smith <rtl8821cerfe2@gmail.com>
+    wifi: rtl8xxxu: gen2: Turn on the rate control
+
+Lucas Stach <l.stach@pengutronix.de>
+    drm/etnaviv: don't truncate physical page address
 
 
--- 
-With best wishes
-Dmitry
+-------------
+
+Diffstat:
+
+ MAINTAINERS                                        |   3 +-
+ Makefile                                           |   4 +-
+ arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-2.dtsi |  44 +++
+ arch/powerpc/boot/dts/fsl/qoriq-fman3-0-10g-3.dtsi |  44 +++
+ arch/powerpc/boot/dts/fsl/t2081si-post.dtsi        |  20 +-
+ arch/powerpc/include/asm/sections.h                |  14 +-
+ arch/powerpc/kernel/vmlinux.lds.S                  |  14 +-
+ arch/powerpc/mm/book3s32/mmu.c                     |   2 +-
+ arch/powerpc/mm/book3s64/radix_pgtable.c           |  28 +-
+ arch/x86/kvm/svm/svm.c                             |  10 +-
+ arch/x86/kvm/vmx/nested.c                          |  11 +
+ arch/x86/kvm/vmx/vmx.c                             |   6 +-
+ arch/x86/kvm/x86.c                                 |   4 +-
+ drivers/android/binder.c                           | 343 +++++++++++++++++++--
+ drivers/block/nbd.c                                |  23 +-
+ drivers/clk/x86/Kconfig                            |   5 +-
+ drivers/clk/x86/clk-cgu-pll.c                      |  23 +-
+ drivers/clk/x86/clk-cgu.c                          | 106 ++-----
+ drivers/clk/x86/clk-cgu.h                          |  46 +--
+ drivers/clk/x86/clk-lgm.c                          |  18 +-
+ drivers/gpu/drm/drm_edid.c                         |   3 +-
+ drivers/gpu/drm/etnaviv/etnaviv_mmu.c              |   4 +-
+ drivers/gpu/drm/i915/gvt/gtt.c                     |  17 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  |  33 +-
+ drivers/net/wireless/marvell/mwifiex/sdio.c        |   1 +
+ .../net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c  |   8 +-
+ fs/ext4/sysfs.c                                    |   7 +-
+ include/linux/nospec.h                             |   4 +
+ include/linux/random.h                             |   6 +-
+ init/Kconfig                                       |   4 +
+ kernel/bpf/core.c                                  |   2 -
+ lib/Kconfig.debug                                  |   4 +-
+ lib/usercopy.c                                     |   7 +
+ net/sched/sch_taprio.c                             |   8 +-
+ scripts/pahole-flags.sh                            |   2 +-
+ scripts/pahole-version.sh                          |  13 +
+ 36 files changed, 660 insertions(+), 231 deletions(-)
+
+
