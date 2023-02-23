@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A02A6A003A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FB76A0043
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjBWAzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S232484AbjBWA6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbjBWAzU (ORCPT
+        with ESMTP id S232981AbjBWA6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:55:20 -0500
+        Wed, 22 Feb 2023 19:58:03 -0500
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC3537717
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:55:18 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c6ce8d74so92610357b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:55:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265421D92A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:58:02 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-53700262a47so59044717b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:58:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3azLqXR2vSKV5L2PaJh+3T6s1vBztgHEFOD2woEyPYw=;
-        b=ll/kgw4EhN1QBjkzhFZB0Ail1ORJy+AyUBj3Zon2zA6YZR6bvv6MRVw4xL88tq8Az8
-         UNfJYuIlxPRqkMZxma4EfhQVLDz+WB3n7N3GgnS6/N71B9VGL9L1wJxicWIzPEsnhNbY
-         jwqQtYqGUwQCJ7O/Ie7nc1bEP4GmGEJpB8DCFusadZrYSFRLnQZARIT1I0plRhGyCTgj
-         klqga5wY1X/qhy0ohB1y16mctfilFHsYR3l8CX6UQd0Ok2HUyZRCt5JjEmEyFz3N4ySp
-         AUxoMU/xS8Z5QEE7WS4WTYYb6USgkUVSpxiH8hOE9if2xvRinxF+p0VrjEGBhDPd5C7e
-         03hg==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5DZ3zrglXkc4zRJ24Mq++0gtFytF9RdLpBxclVHmdr8=;
+        b=P+0z1HKgEn/jmZlepeouDrAc3nsZOERgHaJzjMzI0moOn4Q1pfkcsgiN2ROL3srMPJ
+         9ZxjgHEw5llWiD79l0pJMTARN5/8hGRbMIa8H6z3gJqfI2s9Rl31staN5cKjCnKcvT9y
+         UhcLs/Nejr1R69gb/NRqPIUXT75aZIqW3n66ae1dAwxzWpi2f3Nwhc51Gr+lnGFVjuPb
+         x/duqcnpvsCEjLSPrm+XlIvPEbkEVFZRl7i94LhnhE+9C0yAm0OxXnRGwK2Qp0THJWoh
+         yAVA6FQvNP7gm/zHD775wLwrx2HjOCX/uEcb2ENEkxOekuVJ4iyxSd4/R18rdQY8yBfZ
+         09Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3azLqXR2vSKV5L2PaJh+3T6s1vBztgHEFOD2woEyPYw=;
-        b=iDNbsnQlmEUnn6LDWwS5ziI9BjoN9XQMZSMLT0GLdaOnnvyncC8ohmIMxCCL/1aNhx
-         JkbUyI7gHQAV6S7Rq368YBtPz1gE4JCBxBGiucBy0ZR3bu0hrVlMOsnStt1U0opz5/+q
-         iKaVN4r4e9CZzwJL1jOaYCkYgSMDX8rPY2vEgcSKp1XCdg8qjdOSn7Lo5IP9WBxnfcwz
-         RfE5gSzerpky299f6DZnCqVk30xQ5nxijBGhY9ihS46xm3bXExDXtjuNxVb3Bn96KQem
-         mlG6VBxnRz8Il7HDDEdGT6ylA+TzSJ6K5H8/2bcBWrXWg98/ZwuU3I7mFrIaXpy5cTS1
-         sbZQ==
-X-Gm-Message-State: AO0yUKUNgnN2+h5NZo04hUcSizaFHfQGWODV4din/wpLTgkmdiK5m2n/
-        bXhQX4CUi7wLiovdNFoFYuSyxFG5s1ktC8Qc8Q==
-X-Google-Smtp-Source: AK7set/bRW8kyMySNfR/6zy0z0kR68DNc8Wiwl2R9ueq8c35MSB8zjbIqdtnOK6awXZtxDJCM5SBJnFOM9ODRuSA8Q==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:1028:b0:a27:3ecd:6 with SMTP
- id x8-20020a056902102800b00a273ecd0006mr761629ybt.1.1677113717462; Wed, 22
- Feb 2023 16:55:17 -0800 (PST)
-Date:   Thu, 23 Feb 2023 00:55:16 +0000
-In-Reply-To: <20230216100150.yv2ehwrdcfzbdhcq@box.shutemov.name> (kirill@shutemov.name)
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5DZ3zrglXkc4zRJ24Mq++0gtFytF9RdLpBxclVHmdr8=;
+        b=us/dJ0GeKHoovv6p75MCc44sfqx8PT7kwC5jF3h7jYMW1LSefD3xm8/pwxVxBeblZR
+         /rrcYGw8WFZA+wA2MITWqx1OyY7LV/xs52qYGkguh1NcGkszqyDdysK7gKYCXuLRZ239
+         L05TiOlE8L0eJrj1dL5V51/Iq9zE9C1Q0I12x5UGKyNhSXXXuwYmmj8BRO42Sncgt7TV
+         svduCGNT6g34kYtaHEN4ck/fx8OzI2GSBIOU3q6Du7gKgvfeO1PcyZYxTbDCe/tACsGz
+         oPJiwIDPJOv6vA74I3nPU9GzKLTEq+ueaUpaIPxBjU390G4R8wOxny55unFtrsp9cf8o
+         jhxA==
+X-Gm-Message-State: AO0yUKUFXHKBekoEMJTBQHrHVnxEAEh5+XClXrHUgjCTYUwYVDwu1nrE
+        NvbQU0I8dMNJ54nfyiw6KVIC1NeGLO8/vV8sNo6X
+X-Google-Smtp-Source: AK7set+ca5/1tSRd8ROL/oWP5K4ZtIIh8sTd53BHUWCNXoZKgAxJ64umNuEDbtxRJDoupAyNyi/vB1QCOZlH8L9UioVS
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:3e99:dd9e:9db9:449c])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:af07:0:b0:52e:bb19:26c0 with
+ SMTP id n7-20020a81af07000000b0052ebb1926c0mr1506007ywh.2.1677113881400; Wed,
+ 22 Feb 2023 16:58:01 -0800 (PST)
+Date:   Wed, 22 Feb 2023 16:57:49 -0800
 Mime-Version: 1.0
-Message-ID: <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [RFC PATCH 1/2] mm: restrictedmem: Allow userspace to specify
- mount_path for memfd_restricted
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230223005754.2700663-1-axelrasmussen@google.com>
+Subject: [PATCH v2 0/5] mm: userfaultfd: refactor and add UFFDIO_CONTINUE_MODE_WP
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     James Houghton <jthoughton@google.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org,
-        chao.p.peng@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
-        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
-        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
-        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
-        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
-        yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,64 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series, currently based on 6.2, is divided into two parts:
 
-"Kirill A. Shutemov" <kirill@shutemov.name> writes:
+- Commits 1-4 refactor userfaultfd ioctl code without behavior changes, with the
+  main goal of improving consistency and reducing the number of function args.
+- Commit 5 adds UFFDIO_CONTINUE_MODE_WP.
 
-> On Thu, Feb 16, 2023 at 12:41:16AM +0000, Ackerley Tng wrote:
->> By default, the backing shmem file for a restrictedmem fd is created
->> on shmem's kernel space mount.
+The refactors are sorted by increasing controversial-ness, the idea being we
+could drop some of the refactors if they are deemed not worth it.
 
->> With this patch, an optional tmpfs mount can be specified, which will
->> be used as the mountpoint for backing the shmem file associated with a
->> restrictedmem fd.
+Changelog:
+v1->v2: refactor before adding the new flag, to avoid perpetuating messiness
 
->> This change is modeled after how sys_open() can create an unnamed
->> temporary file in a given directory with O_TMPFILE.
+Axel Rasmussen (5):
+  mm: userfaultfd: rename functions for clarity + consistency
+  mm: userfaultfd: don't pass around both mm and vma
+  mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
+  mm: userfaultfd: don't separate addr + len arguments
+  mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install WP PTEs
 
->> This will help restrictedmem fds inherit the properties of the
->> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
->> binding hints, etc.
+ fs/userfaultfd.c                         | 121 +++++-------
+ include/linux/hugetlb.h                  |  28 ++-
+ include/linux/shmem_fs.h                 |   8 +-
+ include/linux/userfaultfd_k.h            |  57 +++---
+ include/uapi/linux/userfaultfd.h         |   7 +
+ mm/hugetlb.c                             |  35 ++--
+ mm/shmem.c                               |  13 +-
+ mm/userfaultfd.c                         | 236 +++++++++++------------
+ tools/testing/selftests/vm/userfaultfd.c |   4 +
+ 9 files changed, 245 insertions(+), 264 deletions(-)
 
->> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->> ---
->>   include/linux/syscalls.h           |  2 +-
->>   include/uapi/linux/restrictedmem.h |  8 ++++
->>   mm/restrictedmem.c                 | 63 +++++++++++++++++++++++++++---
->>   3 files changed, 66 insertions(+), 7 deletions(-)
->>   create mode 100644 include/uapi/linux/restrictedmem.h
+--
+2.39.2.637.g21b0678d19-goog
 
->> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
->> index f9e9e0c820c5..4b8efe9a8680 100644
->> --- a/include/linux/syscalls.h
->> +++ b/include/linux/syscalls.h
->> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int  
->> flags);
->>   asmlinkage long sys_set_mempolicy_home_node(unsigned long start,  
->> unsigned long len,
->>   					    unsigned long home_node,
->>   					    unsigned long flags);
->> -asmlinkage long sys_memfd_restricted(unsigned int flags);
->> +asmlinkage long sys_memfd_restricted(unsigned int flags, const char  
->> __user *mount_path);
-
->>   /*
->>    * Architecture-specific system calls
-
-> I'm not sure what the right practice now: do we provide string that
-> contains mount path or fd that represents the filesystem (returned from
-> fsmount(2) or open_tree(2)).
-
-> fd seems more flexible: it allows to specify unbind mounts.
-
-I tried out the suggestion of passing fds to memfd_restricted() instead
-of strings.
-
-One benefit I see of using fds is interface uniformity: it feels more
-aligned with other syscalls like fsopen(), fsconfig(), and fsmount() in
-terms of using and passing around fds.
-
-Other than being able to use a mount without a path attached to the
-mount, are there any other benefits of using fds over using the path string?
-
-Should I post the patches that allows specifying a mount using fds?
-Should I post them as a separate RFC, or as a new revision to this RFC?
