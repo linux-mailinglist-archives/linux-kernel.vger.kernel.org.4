@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CCE6A08C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44686A08C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234021AbjBWMm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 07:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S234104AbjBWMpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 07:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbjBWMm0 (ORCPT
+        with ESMTP id S233795AbjBWMpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:42:26 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8876954A3E;
-        Thu, 23 Feb 2023 04:42:22 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NCO52u019294;
-        Thu, 23 Feb 2023 12:42:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=MM0qQty+voAnaENBBVdRbuianxgy+a6YzP501pjWE/8=;
- b=Fsvtn6blOcOlLdJwdm0eECdRKGcn6pKPvTWxxQepjdEqqayFU9u8jQuL23M0aATavvPA
- DuWLmvJEkhux1H2ZR7mgDfWnL6zPILSffIKFG0gKpLA9Mu2EMlcKnBsDujP7hqy3D+L9
- HEOOZGUkjy/3KlmrbIZd5x1sytF9L+cVKON7XCp2tGSggH1NPSfh8jGSckq1LtolwPQm
- ABJqueTtnlGkJoFMLGsqjw/erJ1qVU9VeQYeMUhXFChGWbIIqSU8o60WUdUUVXjWmgv5
- 3OFeKjMcYf0C6Pp9TcBWfRUQAaeYzgKlyAWYQ61wiAyf5X7BbXLFa/evXu2ZXuyvM/Bk vQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwy9gha7q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 12:42:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NCgHuT016399
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 12:42:17 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 23 Feb 2023 04:42:13 -0800
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH v3 2/2] usb: gadget: composite: Draw 100mA current if not configured
-Date:   Thu, 23 Feb 2023 18:12:01 +0530
-Message-ID: <1677156121-30364-3-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1677156121-30364-1-git-send-email-quic_prashk@quicinc.com>
-References: <1677156121-30364-1-git-send-email-quic_prashk@quicinc.com>
+        Thu, 23 Feb 2023 07:45:06 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D0F199E1;
+        Thu, 23 Feb 2023 04:45:04 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DFC881EC06D8;
+        Thu, 23 Feb 2023 13:45:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677156303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uBXtEygduuVXSSy+78MnNbkRrkX7wpGw6EZNum6TMUY=;
+        b=AC+1Q4NPrx8mIbgOCWkhSXIDlDW3j9I038W0cfelKe+WYSPhnV9xnafU/R/N2a9mTo/6Ds
+        Q7FrAgfcxRBOzQ4djCVcaFAzWzROB5RlNRUmkNt2hWdqllA/+xXnxU5LLJiHpDtur19qZg
+        3oOXwplENb5PhN0oRX4Ir/O9K9QXzBw=
+Date:   Thu, 23 Feb 2023 13:44:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
+        jmattson@google.com,
+        =?utf-8?B?Sm9zw6k=?= Oliveira <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy
+ IBRS
+Message-ID: <Y/dfyh1U/qDR1Ymw@zn.tnic>
+References: <20230221184908.2349578-1-kpsingh@kernel.org>
+ <Y/YJisQdorH1aAKV@zn.tnic>
+ <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com>
+ <Y/ZVaBKwbWUbF7u+@zn.tnic>
+ <CACYkzJ4WigzaOCR4V9=e60ka=NNncWRB-j78DLRuzdSOZXvwrA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: arqHJS_I9qyKZNVlz-FYHgcn3QxI3bSO
-X-Proofpoint-ORIG-GUID: arqHJS_I9qyKZNVlz-FYHgcn3QxI3bSO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-23_07,2023-02-23_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=646
- spamscore=0 malwarescore=0 adultscore=0 impostorscore=0 mlxscore=0
- suspectscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302230103
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CACYkzJ4WigzaOCR4V9=e60ka=NNncWRB-j78DLRuzdSOZXvwrA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we don't change the current value if device isn't in
-configured state. But the battery charging specification says,
-device can draw up to 100mA of current if its in unconfigured
-state. Hence add a Vbus_draw work in composite_resume to draw
-100mA if the device isn't configured.
+On Wed, Feb 22, 2023 at 11:41:59AM -0800, KP Singh wrote:
+> Sure, I think the docs do already cover it,
 
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/gadget/composite.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I mean *our docs*. The stuff you're adding in your patch 2.
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 403563c..386140f 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2449,6 +2449,10 @@ void composite_resume(struct usb_gadget *gadget)
- 			usb_gadget_clear_selfpowered(gadget);
- 
- 		usb_gadget_vbus_draw(gadget, maxpower);
-+	} else {
-+		maxpower = CONFIG_USB_GADGET_VBUS_DRAW;
-+		maxpower = min(maxpower, 100U);
-+		usb_gadget_vbus_draw(gadget, maxpower);
- 	}
- 
- 	cdev->suspended = 0;
+> but I sort of disagree with your statement around the commit message.
+> I feel the more context you can add in the commit message, the better
+> it is.
+
+That's ofc wrong. And you'll find that out when you do git archeology
+and you come across a huuuge wall of text explaining the world and some
+more.
+
+No, commit messages should be to the point with a structure similar to
+something like this:
+
+1. Prepare the context for the explanation briefly.
+
+2. Explain the problem at hand.
+
+3. "It happens because of <...>"
+
+4. "Fix it by doing X"
+
+5. "(Potentially do Y)."
+
+concentrating on *why* the fix is being done.
+
+> When I am looking at the change log, it would be helpful to have the
+> information that I mentioned in the Q&A. Small things like, "eIBRS
+> needs the IBRS bit set which also enables cross-thread protections" is
+> a very important context for this patch IMHO. Without this one is just
+> left head scratching and scrambling to read lengthy docs and processor
+> manuals.
+
+Yes, that's why you say in the commit message: "For more details, see
+Documentation/admin-guide/hw-vuln/spectre.rst." where:
+
+1. you can explain in a lot more detail
+
+2. put it in place where people can find it *easily*
+
+> This sort of loosely implies that the IBRS bit also enables
+> cross-thread protections. Can you atleast add this one explicitly?
+> 
+> "Setting the IBRS bit also enables cross thread protections"
+
+Ok.
+
+> Not at the stage when the kernel decides to drop the STIBP protection
+> when eIBRS is enabled.
+
+We can't dump every possible interaction between the mitigations. It is
+a huge mess already. But I'm open to looking at improvements of the
+situation *and* documenting stuff as we go.
+
+Thx.
+
 -- 
-2.7.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
