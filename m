@@ -2,227 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F166A05BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F866A05B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjBWKLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S234094AbjBWKK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbjBWKKy (ORCPT
+        with ESMTP id S233846AbjBWKKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:10:54 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECC651F9D;
-        Thu, 23 Feb 2023 02:10:39 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pV8YL-00Epv7-PF; Thu, 23 Feb 2023 18:10:18 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 23 Feb 2023 18:10:17 +0800
-Date:   Thu, 23 Feb 2023 18:10:17 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Subject: [PATCH] crypto: stm32 - Save and restore between each request
-Message-ID: <Y/c7iVW67Xhhdu8e@gondor.apana.org.au>
-References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au>
- <20230224231430.2948-1-kunyu@nfschina.com>
- <Y/cy5wUtk10OahpO@gondor.apana.org.au>
- <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
+        Thu, 23 Feb 2023 05:10:51 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A7B5191F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:35 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bo30so9666285wrb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=236jNw2fdr9Ea0T8DRQtB95xL/LfM7SEmL07d5doxEI=;
+        b=ZtE+5wrQI/aif/9mX+GzeECglq+rya2NBAbX4l/F8gOQuxQ64tRpYmvz2K+iPD+iRi
+         FX2kjQlnERR3iD4J9hQcp7FC9vLxwzW9ysOx0CBBhx95BGmlo6YUtmW+nIKJS6vRF5lF
+         v5SAdJrArDyAHgoRSHYNGfg+pkeqyivxvM7gdyOm7raI6+KDI+FWm2TvQ3kseNQ21HAw
+         CyodKqSgbGdbk+hKzXfdQIib2y0x11z83OR/1nECGh27E0nBe3GhE5+nJTgxeXqnwfZ2
+         leYq7e0iCLRZF1skW9jmfOEesbj7G7HXE5SgPzB9zgE8T1sgbFt6WZPvVZ7l0sz8SUGL
+         NxRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=236jNw2fdr9Ea0T8DRQtB95xL/LfM7SEmL07d5doxEI=;
+        b=aRUu/cL4oiFl+I3f9VJIF54PBbsYcpHKkwwFWcHyG2i41VGV6O1FW5toiJ5FPA5aPO
+         fwiVs4q0hWk+0C8Q9m+P23+815WFm5Pp0qQn+m6VwJ83Zdv/vdIBrbas579dk2PhmH46
+         HHJaBjtMWsWweax/Mgg6VnTtUlKqLkVKv/kvkGCFlQpZCjZYpPNmNJyFUd6bUlakxBPq
+         TSTXOP3deBw/l6m0+C6F9GQ+XkHRx1UssdlpXjMpPwxGS9OW84ljKyT0JrV8kL8vIySc
+         ayeuqvp+yIWdMQjjVQ3rtl2RYf9YWUlEBDdjnbdGoB6blompXIJq8Z47Ifm/zdldb6eh
+         /SYw==
+X-Gm-Message-State: AO0yUKXH5ZD2E0DAce72p+4rISUXm2CpU+pwDD7Pm4wSQQnJjsVs81aR
+        hG/+96Ucf/oQZieEqRbCoswfqcXFrSLLu7wN
+X-Google-Smtp-Source: AK7set/V8KugWpjfN68Fyoyg3SD+cgyUxwVIdwLNmTr3PEuuNKfYqQ7a5WZX5OBj0FuoZwkno1MZZA==
+X-Received: by 2002:a5d:6284:0:b0:2bd:d34e:5355 with SMTP id k4-20020a5d6284000000b002bdd34e5355mr9395008wru.20.1677147034466;
+        Thu, 23 Feb 2023 02:10:34 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s17-20020a5d4ed1000000b002c4084d3472sm6574836wrv.58.2023.02.23.02.10.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 02:10:34 -0800 (PST)
+Message-ID: <d76f25ff-3c60-4e9b-87d7-8c4043b2e47f@linaro.org>
+Date:   Thu, 23 Feb 2023 11:10:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 2/3] clk: starfive: Add StarFive JH7110 PLL clock
+ driver
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
+ <20230221141147.303642-3-xingyu.wu@starfivetech.com>
+ <3f50066b-f967-b9fa-1e0d-5337ec1ed194@linaro.org>
+ <5e4007b7-6522-4c81-ca15-15a98c586aad@starfivetech.com>
+ <50b6fb73-afb2-051b-7969-d7fbbe1e6175@linaro.org>
+ <f23b3755-e2dd-f858-02ad-3f1b58934bc6@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f23b3755-e2dd-f858-02ad-3f1b58934bc6@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:52:17AM +0100, Linus Walleij wrote:
->
-> Can we fix the actual problem? It seems to have been there since the
-> initial submission in 2017.
+On 23/02/2023 11:03, Xingyu Wu wrote:
+> On 2023/2/23 17:35, Krzysztof Kozlowski wrote:
+>> On 23/02/2023 10:32, Xingyu Wu wrote:
+>>> On 2023/2/23 16:56, Krzysztof Kozlowski wrote:
+>>>> On 21/02/2023 15:11, Xingyu Wu wrote:
+>>>>> Add driver for the StarFive JH7110 PLL clock controller and
+>>>>> modify the JH7110 system clock driver to rely on this PLL clocks.
+>>>>>
+>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>>> ---
+>>>>
+>>>>
+>>>>> +
+>>>>> +static int jh7110_pll_clk_probe(struct platform_device *pdev)
+>>>>> +{
+>>>>> +	int ret;
+>>>>> +	struct of_phandle_args args;
+>>>>> +	struct regmap *pll_syscon_regmap;
+>>>>> +	unsigned int idx;
+>>>>> +	struct jh7110_clk_pll_priv *priv;
+>>>>> +	struct jh7110_clk_pll_data *data;
+>>>>> +	char *pll_name[JH7110_PLLCLK_END] = {
+>>>>> +		"pll0_out",
+>>>>> +		"pll1_out",
+>>>>> +		"pll2_out"
+>>>>> +	};
+>>>>> +
+>>>>> +	priv = devm_kzalloc(&pdev->dev,
+>>>>> +			    struct_size(priv, data, JH7110_PLLCLK_END),
+>>>>> +			    GFP_KERNEL);
+>>>>> +	if (!priv)
+>>>>> +		return -ENOMEM;
+>>>>> +
+>>>>> +	priv->dev = &pdev->dev;
+>>>>> +	ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node, "starfive,sysreg", 0, 0, &args);
+>>>>
+>>>> 1. Wrong wrapping. Wrap code at 80 as coding style asks.
+>>>>
+>>>> 2. Why you are using syscon for normal, device MMIO operation? Your DTS
+>>>> also points that this is incorrect, hacky representation of hardware.
+>>>> Don't add devices to DT to fake places and then overuse syscon to fix
+>>>> that fake placement. The clock is in system registers, thus it must be
+>>>> there.
+>>>>
+>>>> 3. Even if this stays, why so complicated code instead of
+>>>> syscon_regmap_lookup_by_phandle()?
+>>>>
+>>>
+>>> Thanks for your advice. Will use syscon_regmap_lookup_by_phandle instead it
+>>> and remove useless part.
+>>
+>> So you ignored entirely part 2? This was the main comment... I am going
+>> to keep NAK-ing it then.
 > 
-> I guess the right fix is to export the *actual* hardware state into "out"
-> and read it back from there instead of copying out the rctx struct.
-> Also .statesize needs to be fixed to correspond to that.
-> I can just use a roof:ed constant size for this.
+> What I understand to mean is that I cannot use a fake node to operate syscon
+> registers. So I should move the PLL node under syscon node directly. Is it ok?
 
-Indeed.  It looks like the driver already has everything we need
-but it's just in the wrong place.
+Yes, because it looks like entire PLL clock control is from the syscon
+node, thus the clocks are there.
 
-Here's my completely untested patch to move the hardware state
-reading/writing to where I think it should be.  As it stands,
-not only is export/import broken, but multiple hashing requests
-occuring concurrently will overwrite each other's state.
+Best regards,
+Krzysztof
 
----8<---
-The Crypto API hashing paradigm requires the hardware state to
-be exported between *each* request because multiple unrelated
-hashes may be processed concurrently.
-
-The stm32 hardware is capable of producing the hardware hashing
-state but it was only doing it in the export function.  This is
-not only broken for export as you can't export a kernel pointer
-and reimport it, but it also means that concurrent hashing was
-fundamentally broken.
-
-Fix this by moving the saving and restoring of hardware hash
-state between each and every hashing request.
-
-Fixes: 8a1012d3f2ab ("crypto: stm32 - Support for STM32 HASH module")
-Reported-by: Li kunyu <kunyu@nfschina.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index 7bf805563ac2..4bc69677a861 100644
---- a/drivers/crypto/stm32/stm32-hash.c
-+++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -148,11 +148,12 @@ struct stm32_hash_request_ctx {
- 	int			nents;
- 
- 	u8			data_type;
-+	bool			started;
- 
- 	u8 buffer[HASH_BUFLEN] __aligned(sizeof(u32));
- 
--	/* Export Context */
--	u32			*hw_context;
-+	/* hash state */
-+	u32			hw_context[3 + HASH_CSR_REGISTER_NUMBER];
- };
- 
- struct stm32_hash_algs_info {
-@@ -441,8 +442,20 @@ static int stm32_hash_update_cpu(struct stm32_hash_dev *hdev)
- 			hdev->flags |= HASH_FLAGS_OUTPUT_READY;
- 			err = 0;
- 		}
-+	} else {
-+		u32 *preg = rctx->hw_context;
-+		int i;
-+
-+		if (!hdev->pdata->ux500)
-+			*preg++ = stm32_hash_read(hdev, HASH_IMR);
-+		*preg++ = stm32_hash_read(hdev, HASH_STR);
-+		*preg++ = stm32_hash_read(hdev, HASH_CR);
-+		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
-+			*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
- 	}
- 
-+	rctx->started = !final;
-+
- 	return err;
- }
- 
-@@ -754,6 +767,7 @@ static int stm32_hash_init(struct ahash_request *req)
- 	rctx->total = 0;
- 	rctx->offset = 0;
- 	rctx->data_type = HASH_DATA_8_BITS;
-+	rctx->started = false;
- 
- 	memset(rctx->buffer, 0, HASH_BUFLEN);
- 
-@@ -959,6 +973,22 @@ static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
- 
- 	rctx = ahash_request_ctx(req);
- 
-+	if (rctx->started) {
-+		u32 *preg = rctx->hw_context;
-+		u32 reg;
-+		int i;
-+
-+		if (!hdev->pdata->ux500)
-+			stm32_hash_write(hdev, HASH_IMR, *preg++);
-+		stm32_hash_write(hdev, HASH_STR, *preg++);
-+		stm32_hash_write(hdev, HASH_CR, *preg);
-+		reg = *preg++ | HASH_CR_INIT;
-+		stm32_hash_write(hdev, HASH_CR, reg);
-+
-+		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
-+			stm32_hash_write(hdev, HASH_CSR(i), *preg++);
-+	}
-+
- 	if (rctx->op == HASH_OP_UPDATE)
- 		err = stm32_hash_update_req(hdev);
- 	else if (rctx->op == HASH_OP_FINAL)
-@@ -1044,33 +1074,6 @@ static int stm32_hash_digest(struct ahash_request *req)
- static int stm32_hash_export(struct ahash_request *req, void *out)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
--	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
--	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
--	u32 *preg;
--	unsigned int i;
--	int ret;
--
--	pm_runtime_get_sync(hdev->dev);
--
--	ret = stm32_hash_wait_busy(hdev);
--	if (ret)
--		return ret;
--
--	rctx->hw_context = kmalloc_array(3 + HASH_CSR_REGISTER_NUMBER,
--					 sizeof(u32),
--					 GFP_KERNEL);
--
--	preg = rctx->hw_context;
--
--	if (!hdev->pdata->ux500)
--		*preg++ = stm32_hash_read(hdev, HASH_IMR);
--	*preg++ = stm32_hash_read(hdev, HASH_STR);
--	*preg++ = stm32_hash_read(hdev, HASH_CR);
--	for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
--		*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
--
--	pm_runtime_mark_last_busy(hdev->dev);
--	pm_runtime_put_autosuspend(hdev->dev);
- 
- 	memcpy(out, rctx, sizeof(*rctx));
- 
-@@ -1080,33 +1083,9 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
- static int stm32_hash_import(struct ahash_request *req, const void *in)
- {
- 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
--	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
--	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
--	const u32 *preg = in;
--	u32 reg;
--	unsigned int i;
- 
- 	memcpy(rctx, in, sizeof(*rctx));
- 
--	preg = rctx->hw_context;
--
--	pm_runtime_get_sync(hdev->dev);
--
--	if (!hdev->pdata->ux500)
--		stm32_hash_write(hdev, HASH_IMR, *preg++);
--	stm32_hash_write(hdev, HASH_STR, *preg++);
--	stm32_hash_write(hdev, HASH_CR, *preg);
--	reg = *preg++ | HASH_CR_INIT;
--	stm32_hash_write(hdev, HASH_CR, reg);
--
--	for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
--		stm32_hash_write(hdev, HASH_CSR(i), *preg++);
--
--	pm_runtime_mark_last_busy(hdev->dev);
--	pm_runtime_put_autosuspend(hdev->dev);
--
--	kfree(rctx->hw_context);
--
- 	return 0;
- }
- 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
