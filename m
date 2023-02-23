@@ -2,202 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B8F6A0670
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D746A0674
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbjBWKjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S233883AbjBWKkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbjBWKjU (ORCPT
+        with ESMTP id S233851AbjBWKkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:39:20 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660315A3AA
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:38:26 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s5so12201471plg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:38:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fVSa2HEsQUgf21db/3wCzFJNJMjWdnCpTJDc8PUFVUg=;
-        b=lU8FgkKvew6zeeC7G69X4TxFJBb6QWZlDuZ9v7A0KzpCZLQyd29EW+Na2IinIktbsa
-         3MjN3Fuwg3McSkkeOZ4E7Yohs6gz03s/dGdfUhKDTrC2pdJMfPjsX+FB6rMSohUykLiN
-         VtwNNUPznaDrmtLGDMEoU1kFhT7MHvN/OFEFn/WlKJigKPpkArcaOEDC9y5m9ZxwQxon
-         9UYmUk2BCOnm6xBdo7L9U7MM/56n8lPPC1lWhvv9r0iexkhYJwAF65D56uvpPtqAeIQA
-         v9Y5zP8xzKuVVMgFP9mFRcciYNwRzeGbOCsEWYA5kt0z9xL1N8uI7Ga+Te/Jq1Tpa6Eb
-         oGYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fVSa2HEsQUgf21db/3wCzFJNJMjWdnCpTJDc8PUFVUg=;
-        b=J46B8Al97rsqXNYR4kIz6MOBGcSPJ6ehxbKzQspZtHx2s0nxzYEw0Dhm5RmzZWuqQ/
-         NmyTd39lFjajOQ0wSbMzdSvXB1NJXfzxpS2/j0VLkobF/JJV5vQJ2ZzdbpxfE+RZPVsl
-         jgFJ2yJ288n47hXnKd6KRUNPilXMC/xwLWHSF2AhDgEEeWXtKIo3YlmXAmWJ+r/ProFQ
-         KRRpngFf6pWPpIzHIq++iIN8ftWNF7LIQCEOzch3qouDWStBe9pz9W/uwM8PazMbPTDu
-         4P5DyeZNBZdwyXsurb77x9ZBg08dcTdp+B1KBjW6i8Bs+JAEN+3OrgZMabWaZLK7St5h
-         QNfA==
-X-Gm-Message-State: AO0yUKVybfGr4cL694McFPh/ZJTeEIK21XlMLQUtDYCNTksBI1SYMcPH
-        5BXG6aIsMc/cVhT3ip0wBfJqNA==
-X-Google-Smtp-Source: AK7set+0jn8Cq1tdeYA8ETTeDoEUzWWKCbB49zI0EQps1JzP1Nkvgo7c6CHnCE4d8nV1/gVLsQdesw==
-X-Received: by 2002:a17:902:d2ca:b0:19a:e762:a1af with SMTP id n10-20020a170902d2ca00b0019ae762a1afmr12972180plc.33.1677148705621;
-        Thu, 23 Feb 2023 02:38:25 -0800 (PST)
-Received: from yinxin.bytedance.net ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id g2-20020a170902868200b0019896d29197sm5639913plo.46.2023.02.23.02.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 02:38:25 -0800 (PST)
-From:   Xin Yin <yinxin.x@bytedance.com>
-To:     xiang@kernel.org
-Cc:     kernel-team@android.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lsf-pc@lists.linuxfoundation.org, dhowells@redhat.com,
-        jefflexu@linux.alibaba.com, Xin Yin <yinxin.x@bytedance.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Image-based read-only filesystem: further use cases & directions
-Date:   Thu, 23 Feb 2023 18:38:16 +0800
-Message-Id: <20230223103816.2623-1-yinxin.x@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Y7vTpeNRaw3Nlm9B@debian>
-References: <Y7vTpeNRaw3Nlm9B@debian>
+        Thu, 23 Feb 2023 05:40:05 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29280521CD;
+        Thu, 23 Feb 2023 02:40:00 -0800 (PST)
+Received: from fpc (unknown [10.10.165.5])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 8DE0740737C4;
+        Thu, 23 Feb 2023 10:39:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 8DE0740737C4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1677148797;
+        bh=rOgvnxN4F4u6VvOH7B7HyxPqwYamMpp+JH8vZmNlrQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pXebvjmfaTl73E+eNq07GzxRwDuBJXFzsREDKdYRkcak8K5M03JURKPbFZYrhIGGO
+         shPPr/D6TyvxcTOVR8bngr+U19tVUpuBimoKE8d9A7h3pfyfj1NG8I4Vwxr6cGi/Ea
+         B/l/6AxQ3wbhyKKdpDnLRhVO7Y55Mzbk1LG/Wz0I=
+Date:   Thu, 23 Feb 2023 13:39:51 +0300
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bob Copeland <me@bobcopeland.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+860268315ba86ea6b96b@syzkaller.appspotmail.com,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [PATCH 5.4/5.10 1/1] mac80211: mesh: embedd mesh_paths and
+ mpp_paths into ieee80211_if_mesh
+Message-ID: <20230223103951.5hw3wtzx5rbhcbfb@fpc>
+References: <20230222200301.254791-1-pchelkin@ispras.ru>
+ <20230222200301.254791-2-pchelkin@ispras.ru>
+ <Y/ctyzCtbPwyrrDI@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/ctyzCtbPwyrrDI@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/9 16:43, Gao Xiang wrote:
-> Hi folks,
-> 
-> * Background *
-> 
-> We've been continuously working on forming a useful read-only
-> (immutable) image solution since the end of 2017 (as a part of our
-> work) until now as everyone may know:  EROFS.
-> 
-> Currently it has already successfully landed to (about) billions of
-> Android-related devices, other types of embedded devices and containers
-> with many vendors involved, and we've always been seeking more use
-> cases such as incremental immutable rootfs, app sandboxes or packages
-> (Android apk? with many duplicated libraries), dataset packages, etc.
-> 
-> The reasons why we always do believe immutable images can benefit
-> various use cases are:
-> 
->   - much easier for all vendors to ship/distribute/keep original signing
->     (golden) images to each instance;
-> 
->   - (combined with the writable layer such as overlayfs) easy to roll
->     back to the original shipped state or do incremental updates;
-> 
->   - easy to check data corruption or do data recovery (no matter
->     whether physical device or network errors);
-> 
->   - easy for real storage devices to do hardware write-protection for
->     immutable images;
-> 
->   - can do various offline algorithms (such as reduced metadata,
->     content-defined rolling hash deduplication, compression) to minimize
->     image sizes;
-> 
->   - initrd with FSDAX to avoid double caching with advantages above;
-> 
->   - and more.
-> 
-> In 2019, a LSF/MM/BPF topic was put forward to show EROFS initial use
-> cases [1] as the read-only Android rootfs of a single instance on
-> resource-limited devices so that effective compression became quite
-> important at that time.
-> 
-> 
-> * Problem *
-> 
-> In addition to enhance data compression for single-instance deployment,
-> as a self-contained approach (so that all use cases can share the only
-> _one_ signed image), we've also focusing on multiple instances (such as
-> containers or apps, each image represents a complete filesystem tree)
-> all together on one device with similar data recently years so that
-> effective data deduplication, on-demand lazy pulling, page cache
-> sharing among such different golden images became vital as well.
-> 
-> 
-> * Current progresses *
-> 
-> In order to resolve the challenges above, we've worked out:
-> 
->   - (v5.15) chunk-based inodes (to form inode extents) to do data
->     deduplication among a single image;
-> 
->   - (v5.16) multiple shared blobs (to keep content-defined data) in
->     addition to the primary blob (to keep filesystem metadata) for wider
->     deduplication across different images:
-> 
->   - (v5.19) file-based distribution by introducing in-kernel local
->     caching fscache and on-demand lazy pulling feature [2];
-> 
->   - (v6.1) shared domain to share such multiple shared blobs in
->     fscache mode [3];
-> 
->   - [RFC] preliminary page cache sharing between diffenent images [4].
-> 
-> 
-> * Potential topics to discuss *
-> 
->   - data verification of different images with thousands (or more)
->     shared blobs [5];
-> 
->   - encryption with per-extent keys for confidential containers [5][6];
-> 
->   - current page cache sharing limitation due to mm reserve mapping and
->     finer (folio or page-based) page cache sharing among images/blobs
->     [4][7];
-> 
->   - more effective in-kernel local caching features for fscache such as
->     failover and daemonless;
-> 
->   - (wild preliminary ideas, maybe) overlayfs partial copy-up with
->     fscache as the upper layer in order to form a unique caching
->     subsystem for better space saving?
->
+On Thu, Feb 23, 2023 at 10:11:39AM +0100, Greg Kroah-Hartman wrote:
+> This also worked for 4.19.y, but not 4.14.y, care to also fix it there?
 
-We also interested in these topic, page cache sharing is an exciting feature, and may can save 
-a lot of memory in high-density deployment scenarios, cause we already can share blobs.
+Yes, thank you. I missed 4.19.y - the bug can be triggered there and the fix
+can be applied.
 
-Hope to have further discussion on the failover, mutiple daemons/dirs and daemonless feature of fscache & cachefiles.
-So we can have a better form for our production.
-
-And Looking forward to the opportunity to discuss online, if I can't attend offline.
-
-Thanks,
-Xin Yin
-
->   - FSDAX enhancements for initial ramdisk or other use cases;
-> 
->   - other issues when landing.
-> 
-> 
-> Finally, if our efforts (or plans) also make sense to you, we do hope
-> more people could join us, Thanks!
-> 
-> [1] https://lore.kernel.org/r/f44b1696-2f73-3637-9964-d73e3d5832b7@huawei.com
-> [2] https://lore.kernel.org/r/Yoj1AcHoBPqir++H@debian
-> [3] https://lore.kernel.org/r/20220918043456.147-1-zhujia.zj@bytedance.com
-> [4] https://lore.kernel.org/r/20230106125330.55529-1-jefflexu@linux.alibaba.com
-> [5] https://lore.kernel.org/r/Y6KqpGscDV6u5AfQ@B-P7TQMD6M-0146.local
-> [6] https://lwn.net/SubscriberLink/918893/4d389217f9b8d679
-> [7] https://lwn.net/Articles/895907
-> 
-> Thanks,
-> Gao Xiang
-
--- 
-2.25.1
-
+As for 4.14.y, there were some untrivial changes in the code so the
+current fix cannot be backported safely.
