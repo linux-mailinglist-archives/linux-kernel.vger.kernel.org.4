@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C9F6A05AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30166A05AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbjBWKKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S233738AbjBWKKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjBWKJ5 (ORCPT
+        with ESMTP id S233674AbjBWKKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:09:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1351942BE3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:09:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677146950;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MwNi2R/qfei2F24G6SnycO92yZ0kjnuQBMoTKw0Q4E8=;
-        b=cMfY8bHRP5ZYwBWBPRf5TZXkW1GdG9+vTry1GMjpyOAM8VqUIpLHE6+KpUWw0NQ6GLH+sm
-        8fZ+jMfT3W+/TSiXtijWGv4HdRFSP8uiUPA1MUoQKWc5Tgowx19is/2zOQrT0YMXWiwKUB
-        zINuuVAPHI2JsbXS+URQY3Sg2/BufK8=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-16-A_hnEPmVOGeS62o8J-8How-1; Thu, 23 Feb 2023 05:09:09 -0500
-X-MC-Unique: A_hnEPmVOGeS62o8J-8How-1
-Received: by mail-qk1-f197.google.com with SMTP id x4-20020a05620a448400b007283b33bfb3so5069526qkp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:09:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677146949;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MwNi2R/qfei2F24G6SnycO92yZ0kjnuQBMoTKw0Q4E8=;
-        b=S67Dem5iTcLLxm7gygU52WcOwKVPY9BAPdzlMK+6c3LWT/mgMbG1QaH+aB/9f/pHse
-         iSIjlC1iq+sMoGEb173UvFMEIcJRmCslEaK9f9urtURxlJytVC38SeIEezhOuDhkBU2j
-         oaKbhe8rBiPAYOiBz7MMab82v2tDPXh1Cpfa8BBZS8LT5EY87xUR1A7GWIAoFslBLj0+
-         MTjD9DyJAhSYlfTQhZWE72BLKX5taEgD01TlGmuZvC7nWLqraiwkXq46p1Fik9B0Me9J
-         N3F+00krcilP1R22jdJj5v07A+vhXa/GVL/0DzzN6jk6DTCaUU04zWl3Ig0cHphObhWF
-         hAsw==
-X-Gm-Message-State: AO0yUKVVF0BcZK+4elXIxQzlwLqc2Ei/TheKLo7XeYwwYDZnqcTYJwWF
-        8dhvKg5HxJCq8cVlTnh2/hKmRfxG2kxANniFA30AXJosao2UleRiDqasExE81d7te8NdTFz5KVM
-        aSvemm1Ivr1OfuoBsDGXtDTS1
-X-Received: by 2002:ac8:5cd4:0:b0:3bb:75c7:9326 with SMTP id s20-20020ac85cd4000000b003bb75c79326mr22869250qta.0.1677146949160;
-        Thu, 23 Feb 2023 02:09:09 -0800 (PST)
-X-Google-Smtp-Source: AK7set/koRPNANUmknQG+7kAuYwa4ay569snO2eNYzEq0HDqUGBTIoDvfkqm5FimiOMJ/yChM2nVyQ==
-X-Received: by 2002:ac8:5cd4:0:b0:3bb:75c7:9326 with SMTP id s20-20020ac85cd4000000b003bb75c79326mr22869227qta.0.1677146948834;
-        Thu, 23 Feb 2023 02:09:08 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id x191-20020a3763c8000000b007402fdda195sm6650615qkb.123.2023.02.23.02.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 02:09:08 -0800 (PST)
-Message-ID: <83a8fb89ac7a69d08c9ea1422dade301dcc87297.camel@redhat.com>
-Subject: Re: [PATCH V3 1/2] net: phylink: add a function to resume phy alone
- to fix resume issue with WoL enabled
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Clark Wang <xiaoning.wang@nxp.com>, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        mcoquelin.stm32@gmail.com, linux@armlinux.org.uk, andrew@lunn.ch,
-        hkallweit1@gmail.com
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Date:   Thu, 23 Feb 2023 11:09:04 +0100
-In-Reply-To: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
-References: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 23 Feb 2023 05:10:01 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 755B04DE25
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:10:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C220DC14;
+        Thu, 23 Feb 2023 02:10:42 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D58D3F587;
+        Thu, 23 Feb 2023 02:09:56 -0800 (PST)
+Message-ID: <183aec1b-5626-e972-bbed-aca038280828@arm.com>
+Date:   Thu, 23 Feb 2023 11:09:55 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
+ current sched domain
+Content-Language: en-US
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+ <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
+ <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
+ <Y+Z2b/OtZDk9cT53@hirez.programming.kicks-ass.net>
+ <xhsmhk00pqwap.mognet@vschneid.remote.csb>
+ <20230210183155.GA11997@ranerica-svr.sc.intel.com>
+ <8300f288-7157-5e2d-3bb3-badcffd15d34@arm.com>
+ <20230214064328.GA11859@ranerica-svr.sc.intel.com>
+ <20230216052105.GA20785@ranerica-svr.sc.intel.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230216052105.GA20785@ranerica-svr.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,120 +68,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-02 at 16:15 +0800, Clark Wang wrote:
-> Issue we met:
-> On some platforms, mac cannot work after resumed from the suspend with Wo=
-L
-> enabled.
->=20
-> The cause of the issue:
-> 1. phylink_resolve() is in a workqueue which will not be executed immedia=
-tely.
->    This is the call sequence:
->        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
->    For stmmac driver, mac_link_up() will set the correct speed/duplex...
->    values which are from link_state.
-> 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
->    phylink_resume(), because mac need phy rx_clk to do the reset.
->    stmmac_core_init() is called in function stmmac_hw_setup(), which will
->    reset the mac and set the speed/duplex... to default value.
-> Conclusion: Because phylink_resolve() cannot determine when it is called,=
- it
->             cannot be guaranteed to be called after stmmac_core_init().
-> 	    Once stmmac_core_init() is called after phylink_resolve(),
-> 	    the mac will be misconfigured and cannot be used.
->=20
-> In order to avoid this problem, add a function called phylink_phy_resume(=
-)
-> to resume phy separately. This eliminates the need to call phylink_resume=
-()
-> before stmmac_hw_setup().
->=20
-> Add another judgement before called phy_start() in phylink_start(). This =
-way
-> phy_start() will not be called multiple times when resumes. At the same t=
-ime,
-> it may not affect other drivers that do not use phylink_phy_resume().
->=20
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> ---
-> V2 change:
->  - add mac_resume_phy_separately flag to struct phylink to mark if the ma=
-c
->    driver uses the phylink_phy_resume() first.
-> V3 change:
->  - add brace to avoid ambiguous 'else'
->    Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/net/phy/phylink.c | 32 ++++++++++++++++++++++++++++++--
->  include/linux/phylink.h   |  1 +
->  2 files changed, 31 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 319790221d7f..c2fe66f0b78f 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -80,6 +80,8 @@ struct phylink {
->  	DECLARE_PHY_INTERFACE_MASK(sfp_interfaces);
->  	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_support);
->  	u8 sfp_port;
-> +
-> +	bool mac_resume_phy_separately;
->  };
-> =20
->  #define phylink_printk(level, pl, fmt, ...) \
-> @@ -1509,6 +1511,7 @@ struct phylink *phylink_create(struct phylink_confi=
-g *config,
->  		return ERR_PTR(-EINVAL);
->  	}
-> =20
-> +	pl->mac_resume_phy_separately =3D false;
->  	pl->using_mac_select_pcs =3D using_mac_select_pcs;
->  	pl->phy_state.interface =3D iface;
->  	pl->link_interface =3D iface;
-> @@ -1943,8 +1946,12 @@ void phylink_start(struct phylink *pl)
->  	}
->  	if (poll)
->  		mod_timer(&pl->link_poll, jiffies + HZ);
-> -	if (pl->phydev)
-> -		phy_start(pl->phydev);
-> +	if (pl->phydev) {
-> +		if (!pl->mac_resume_phy_separately)
-> +			phy_start(pl->phydev);
-> +		else
-> +			pl->mac_resume_phy_separately =3D false;
-> +	}
->  	if (pl->sfp_bus)
->  		sfp_upstream_start(pl->sfp_bus);
->  }
-> @@ -2024,6 +2031,27 @@ void phylink_suspend(struct phylink *pl, bool mac_=
-wol)
->  }
->  EXPORT_SYMBOL_GPL(phylink_suspend);
-> =20
-> +/**
-> + * phylink_phy_resume() - resume phy alone
-> + * @pl: a pointer to a &struct phylink returned from phylink_create()
-> + *
-> + * In the MAC driver using phylink, if the MAC needs the clock of the ph=
-y
-> + * when it resumes, can call this function to resume the phy separately.
-> + * Then proceed to MAC resume operations.
-> + */
-> +void phylink_phy_resume(struct phylink *pl)
-> +{
-> +	ASSERT_RTNL();
-> +
-> +	if (!test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)
-> +	    && pl->phydev) {
-> +		phy_start(pl->phydev);
-> +		pl->mac_resume_phy_separately =3D true;
-> +	}
-> +
+On 16/02/2023 06:21, Ricardo Neri wrote:
+> On Mon, Feb 13, 2023 at 10:43:28PM -0800, Ricardo Neri wrote:
+>> On Mon, Feb 13, 2023 at 01:17:09PM +0100, Dietmar Eggemann wrote:
+>>> On 10/02/2023 19:31, Ricardo Neri wrote:
+>>>> On Fri, Feb 10, 2023 at 05:12:30PM +0000, Valentin Schneider wrote:
+>>>>> On 10/02/23 17:53, Peter Zijlstra wrote:
+>>>>>> On Fri, Feb 10, 2023 at 02:54:56PM +0000, Valentin Schneider wrote:
 
-Minor nit: the empty line here is not needed.
+[...]
 
-Cheers,
+>>> Can you not detect the E-core dst_cpu case on MC with:
+>>>
+>>> +       if (child)
+>>> +               sds->prefer_sibling = child->flags & SD_PREFER_SIBLING;
+>>> +       else if (sds->busiest)
+>>> +               sds->prefer_sibling = sds->busiest->group_weight > 1;
+>>
+>> Whose child wants the prefer_sibling setting? In update_sd_lb_stats(), it
+>> is set based on the flags of the destination CPU's sched domain. But when
+>> used in find_busiest_group() tasks are spread from the busiest group's
+>> child domain.
+>>
+>> Your proposed code, also needs a check for SD_PREFER_SIBLING, no?
+> 
+> I tweaked the solution that Dietmar proposed:
+> 
+> -	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
+> +	if (sds->busiest)
+> +		sds->prefer_sibling = sds->busiest->flags & SD_PREFER_SIBLING;
 
-Paolo
+Maybe:
+
+sds->prefer_sibling = !!(sds->busiest->flags & SD_PREFER_SIBLING);
+
+1 vs 2048 ?
+
+> This comes from the observation that the prefer_sibling setting acts on
+> busiest group. It then depends on whether the busiest group, not the local
+> group, has child sched sched domains. Today it works because in most cases
+> both the local and the busiest groups have child domains with the SD_
+> PREFER_SIBLING flag.
+> 
+> This would also satisfy sched domains with the SD_ASYM_CPUCAPACITY flag as
+> prefer_sibling would not be set in that case.
+> 
+> It would also conserve the current behavior at the NUMA level. We would
+> not need to implement SD_SPREAD_TASKS.
+> 
+> This would both fix the SMT vs non-SMT bug and be less invasive.
+
+Yeah, much better! I always forget that we have those flags on SGs now
+as well. Luckily, we just need to check busiest sg to cover all cases.
 
