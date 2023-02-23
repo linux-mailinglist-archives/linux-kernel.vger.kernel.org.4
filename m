@@ -2,209 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25F36A051F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B468C6A0526
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbjBWJlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S233374AbjBWJma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbjBWJld (ORCPT
+        with ESMTP id S234024AbjBWJmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:41:33 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2081.outbound.protection.outlook.com [40.107.243.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6823843925;
-        Thu, 23 Feb 2023 01:41:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XWd792yO4gZHbOgop0TNi63aKqK00R63t+H0bCNesa4YvBgJWLRmxsFoLdi/jpOQDyv5pO0mFOT17mOW9aFINgdW/tM6qDA5Ft0amNEx+iWRrR6XukrBUyqpxTyE7srPDyTPWwZNn7fQZXnldtuhSxVbZEPkWBv7K5TP9zrK9WCpsiSbQ0hHV4FIwEbtFXwMSosqWbtCtmzKnA8kUkexVK1MKwje+XhBTggU4QzxF+15IQJsNgDjyvKU6P+VaTz20s2pzMHg7IDzwkpWJuDfPkaD6syOzdlZDqvXuyIS2uhfq5ksl5roPX/bJgbCIy9zLtSsR2Ll4YvWbV9TV2vhmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WQKMSKq4P/fnXqH34nzY5+YLuj055J6J1InyvVqMZ3Y=;
- b=gmKiDxEQTgQHrBKKK/9Z1cF6rZ89yl38+AalnJPqXWL6F6spxBZKzt4OHa4MNmewovbWX1AGj2WACjVHr63TiL4MIs5eFyqWraTlLzXMnjV+7ag09zsNsk0fe+qR9hTMkWAES3CwcBaAPr/yGEn1VSRaHoqS46TbPZuz1nk7w13MqAbGDg7Jdv8soIegskN2olzVgKbylWOaJjLy0VLUaFkqANaHQnoPlI1n0DYq6JJXvzlMEnChfCThx841qhRkplIeuQV8jAEar4hQLvJTKvZ7QhuG84z4CGPtXaZn+gQBrEPd8iWURxelB+DFocjJyEic4MR2mZLT+47Eqrb4ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WQKMSKq4P/fnXqH34nzY5+YLuj055J6J1InyvVqMZ3Y=;
- b=mkrOpcU+RB2+oa9oWBUhA5wKAOXUMGnSnsIitk1/IZLcgFhzhEIHSExrZ7wO03rgwZC0Oho/rFEw8ZlGOacnr6XjJYl/SG0r6hHJbbbgkIPFHNWnIUeQYH75y+pbl8IdcJ4JKn6uv7O5gT+Uonp9CczfhYVVX7BkCRUwaoKqerY=
-Received: from DM6PR03CA0030.namprd03.prod.outlook.com (2603:10b6:5:40::43) by
- DM6PR12MB4482.namprd12.prod.outlook.com (2603:10b6:5:2a8::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.21; Thu, 23 Feb 2023 09:41:28 +0000
-Received: from DS1PEPF0000E640.namprd02.prod.outlook.com
- (2603:10b6:5:40:cafe::50) by DM6PR03CA0030.outlook.office365.com
- (2603:10b6:5:40::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21 via Frontend
- Transport; Thu, 23 Feb 2023 09:41:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E640.mail.protection.outlook.com (10.167.17.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6134.14 via Frontend Transport; Thu, 23 Feb 2023 09:41:28 +0000
-Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 23 Feb
- 2023 03:40:36 -0600
-Message-ID: <b11cd9f2-3759-1df2-ea00-50c574668c28@amd.com>
-Date:   Thu, 23 Feb 2023 10:40:18 +0100
+        Thu, 23 Feb 2023 04:42:24 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52785515CE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:42:22 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id eg37so36137160edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ecq76MOyjJbouEEYrBGWIv8bJtN500LoCU0lJZ9XGak=;
+        b=eXToJJmIw51YrtYOygLqqPIeSzpSM2S5WHaK56xWG2I5QDaQToqq4NX0NdYMb7Mi4t
+         OTuIpaLudTWPja/vdYRVEQ/DHBiZXUYRn4TyHtBYnKTAu3jCl+HXCEzaSdhGaLMxrqXN
+         JxA1Kbg5ci1GgbgwOg4TdrG9eIG8QWEEJJToBCxOERyrzw/8A9UPr+1uU+dSQoFPNwUG
+         qiPMUZ6YNEXHglgKz9Y/A3lHwr/ctbmo5BvuxwnpWPf4Bsbg+e9qO98dFXYhJeC6Dt0P
+         joA2xZpxkvrrfbJvFygOKt7iF6gvn8k2BNfONQxjHmYS8nrlgzY6NjMMFuPvBezUYfGQ
+         jigw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ecq76MOyjJbouEEYrBGWIv8bJtN500LoCU0lJZ9XGak=;
+        b=udiR/jAIcg3QKt+CLnPcEgv4cP6SHzYST+3fW9Yg2u90vyuuL0MqM3eZLo63lfubQT
+         v0scwc/txL99tFdTlU/BdwaOHnwgHZYuCH16P4YJED4a5fwtUh88IUixFYt5S549uVnL
+         gAc/gvYDP08gDt+0YKaWp5BdWZ8X/L4wjcRTW62jB8x1q1q0VGmwQRzSW/W3i8tw887k
+         2gubNhXA0VeMNUi8JmbmVGoHXyKQtHLJ08XM6z5Hf4DN4q9R6uF6GZtFA4Hm7sn8ZpBt
+         1NU3pVS45ht4MPnVZY6zRRmggPAIcUzI2KleEkTr+05WMc4udZ1go2K57LElwBgcPil8
+         hW3A==
+X-Gm-Message-State: AO0yUKWSZNtTIvqnlDEwtRsP/D/SdqoCph3ZTiFJ2lPfJ3V41U+da3lK
+        Rsw0uM+ioiYLWPPJdbW7lizVXN4+IFSMuXo8wm+Y7w==
+X-Google-Smtp-Source: AK7set8g3+NL8qMaNsG/P3D3VCYixxEJX8SEXwcgNz0g/mt9FnFBM8cKN/Y+zJ2o4H4P8mxzDQH5vHGQgfvmedL5IRA=
+X-Received: by 2002:a50:d086:0:b0:4ad:72b2:cf57 with SMTP id
+ v6-20020a50d086000000b004ad72b2cf57mr4996730edd.0.1677145340537; Thu, 23 Feb
+ 2023 01:42:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Tanmay Shah <tanmay.shah@amd.com>
-CC:     <andersson@kernel.org>, <jaswinder.singh@linaro.org>,
-        <ben.levinsky@amd.com>, <shubhrajyoti.datta@amd.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>
-References: <20230213211825.3507034-1-tanmay.shah@amd.com>
- <20230213211825.3507034-2-tanmay.shah@amd.com> <20230222173448.GA909075@p14s>
-From:   Michal Simek <michal.simek@amd.com>
-Subject: Re: [PATCH v3 1/3] drivers: mailbox: zynqmp: handle multiple child
- nodes
-In-Reply-To: <20230222173448.GA909075@p14s>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E640:EE_|DM6PR12MB4482:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18272a3e-dc2e-4ef9-cf99-08db1582237b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PnwtANdzsnEyipmeLQHOgjdTi/JzTMzAoJ+SwYbvGMbD/dM/6/K+rO2Nk1kvZ3UnTrh0sYAaIMexyC2x40dM9oFvHgz8HKe9TXKgSBTTgzGsQktw6j+d0NT1c2ZFEKZlSdRKYDFmCAqZijnbXTWcWvBGezMlepR0Gvb2xxoMdxoVB3p+hRjX8C8BJjmRD0Mxe3cMeg2DRLxP0biyXSgzAYFvvTZc6okF3sHMoPNC3O5yYpF/wasJKhE4d2s5+TZ6kwoEQIGtg7QbUpZ/i7VTRAaKFV0MyPLv+0VyYdA5blOxGonAqXRybOgKprfi6yUTyHsDs87l75flbHl33LcW7K9bmYEsP7t2HCCVSKQMaGkN9r4SqJSOSzwgIz1kL2p/32bj7qxitPyHurqatDZdr1DfGSbKY1sEy0r0O6SaIfn77o491ApddhBGSMWGTIAP0pynmJ8exJ6vPxNlOFZwVVSuMEpvb8w/9uIfTkKGvs+gpZj/LXrp/IALOa/xu6tSyQrX0HI81PxJ6mSkxWVv8gsr5MyutrwrTqg1Kqg8Kj6vuLg7ayf+nwOziR0AZJviUdqmpiTREOcTtN9TaEv2sgOLJWSeQFK9RIMQaibfce2AS4QuzYi3ujP9uGWT9amRwPA2p80DogwttEE1d0HrKfQV9lBc+gTOckmAsZw/GoNLElQ/V3cl5QV1+Yu8nQ+QNJwMLVpQkQMPLnNlqTfW5zl8cFaQEdbBaRgfpawik1x8DgswpK8nBOH39B9TZZte
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199018)(36840700001)(46966006)(40470700004)(2616005)(41300700001)(36860700001)(83380400001)(31696002)(5660300002)(478600001)(44832011)(82310400005)(16526019)(26005)(186003)(8936002)(86362001)(6636002)(110136005)(54906003)(8676002)(16576012)(4326008)(356005)(53546011)(426003)(40480700001)(47076005)(70206006)(70586007)(40460700003)(316002)(81166007)(336012)(966005)(36756003)(82740400003)(15650500001)(31686004)(2906002)(6666004)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 09:41:28.6430
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18272a3e-dc2e-4ef9-cf99-08db1582237b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E640.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4482
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+ <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
+ <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com> <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
+ <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com> <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
+ <473b32fd-24f9-88fd-602f-3ba11d725472@collabora.com> <CABb0KFFSUeu76O9K_Q7PTQVEXJaauyOc0yF-T1uubWsYAq8cOg@mail.gmail.com>
+ <324564ba-2cdc-258e-1f57-d0a1d27e9da5@collabora.com>
+In-Reply-To: <324564ba-2cdc-258e-1f57-d0a1d27e9da5@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Thu, 23 Feb 2023 10:42:08 +0100
+Message-ID: <CABb0KFEcTpdUW9q8AVyyTu0erPdd8w4T+P8zV+T=wDk1x7fGqw@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 23 Feb 2023 at 10:23, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> On 2/23/23 1:41=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Thu, 23 Feb 2023 at 07:44, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >>
+> >> On 2/22/23 4:48=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> > [...]
+> >>>>>>> BTW, I think I assumed that both conditions (all flags in
+> >>>>>>> required_flags and at least one in anyof_flags is present) need t=
+o be
+> >>>>>>> true for the page to be selected - is this your intention?
+> >>>>>> All the masks are optional. If all or any of the 3 masks are speci=
+fied, the
+> >>>>>> page flags must pass these masks to get selected.
+> >>>>>
+> >>>>> This explanation contradicts in part the introductory paragraph, bu=
+t
+> >>>>> this version seems more useful as you can pass all masks zero to ha=
+ve
+> >>>>> all pages selected.
+> >>>> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
+> >>>> rephrase. All or at least any 1 of the 3 masks (required, any, exclu=
+de)
+> >>>> must be specified. The return_mask must always be specified. Error i=
+s
+> >>>> returned if all 3 masks (required, anyof, exclude) are zero or retur=
+n_mask
+> >>>> is zero.
+> >>>
+> >>> Why do you need those restrictions? I'd guess it is valid to request =
+a
+> >>> list of all pages with zero return_mask - this will return a compact
+> >>> list of used ranges of the virtual address space.
+> >> At the time, we are supporting 4 flags (PAGE_IS_WRITTEN, PAGE_IS_FILE,
+> >> PAGE_IS_PRESENT and PAGE_IS_SWAPPED). The idea is that user mention hi=
+s
+> >> flags of interest in the return_mask. If he wants only 1 flag, he'll
+> >> specify it. Definitely if user wants only 1 flag, initially it doesn't=
+ make
+> >> any sense to mention in the return mask. But we want uniformity. If us=
+er
+> >> want, 2 or more flags in returned, return_mask becomes compulsory. So =
+to
+> >> keep things simple and generic for any number of flags of interest
+> >> returned, the return_mask must be specified even if the flag of intere=
+st is
+> >> only 1.
+> >
+> > I'm not sure why do we want uniformity in the case of 1 flag? If a
+> > user specifies a single required flag, I'd expect he doesn't need to
+> > look at the flags returned as those will duplicate the information
+> > from mere presence of a page. A user might also require a single flag,
+> > but want all of them returned. Both requests - return 1 flag and
+> > return 0 flags would give meaningful output, so why force one way or
+> > the other? Allowing two will also enable users to express the intent:
+> > they need either just a list of pages, or they need a list with
+> > per-page flags - the need would follow from the code structure or
+> > other factors.
+> We can add as much flexibility as much people ask by keeping code simple.
+> But it is going to be dirty to add error check which detects if return_ma=
+sk
+> =3D 0 and if there is only 1 flag of interest mentioned by the user. The
+> following mentioned error check is essential to return deterministic
+> output. Do you think this case is worth it to support and we don't want t=
+o
+> go with the generality for both 1 or more flag cases?
+>
+> if (return_mask =3D=3D 0 && hweight_long(required_mask | any_mask) !=3D 1=
+)
+>         return error;
 
+Why would you want to add this error check? If a user requires
+multiple flags but cares only about a list of matching pages, then it
+would be natural to express this intent as return_mask =3D 0.
 
-On 2/22/23 18:34, Mathieu Poirier wrote:
-> On Mon, Feb 13, 2023 at 01:18:24PM -0800, Tanmay Shah wrote:
->> As of now only one child node is handled by zynqmp-ipi
->> mailbox driver. Upon introducing remoteproc r5 core mailbox
->> nodes, found few enhancements in Xilinx zynqmp mailbox driver
->> as following:
->>
->> - fix mailbox child node counts
->>    If child mailbox node status is disabled it causes
->>    crash in interrupt handler. Fix this by assigning
->>    only available child node during driver probe.
->>
->> - fix typo in IPI documentation %s/12/32/
->>    Xilinx IPI message buffers allows 32-byte data transfer.
->>    Fix documentation that says 12 bytes
->>
->> - fix bug in zynqmp-ipi isr handling
->>    Multiple IPI channels are mapped to same interrupt handler.
->>    Current isr implementation handles only one channel per isr.
->>    Fix this behavior by checking isr status bit of all child
->>    mailbox nodes.
->>
->> Fixes: 4981b82ba2ff ("mailbox: ZynqMP IPI mailbox controller")
->> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
->> ---
->>
->> Changelog:
->>    - This is first version of this change, however posting as part of the series
->>      that has version v3.
->>
->> v2: https://lore.kernel.org/all/20230126213154.1707300-1-tanmay.shah@amd.com/
->>
->>   drivers/mailbox/zynqmp-ipi-mailbox.c       | 8 ++++----
->>   include/linux/mailbox/zynqmp-ipi-message.h | 2 +-
->>   2 files changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
->> index 12e004ff1a14..b1498f6f06e1 100644
->> --- a/drivers/mailbox/zynqmp-ipi-mailbox.c
->> +++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
->> @@ -152,7 +152,7 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
->>   	struct zynqmp_ipi_message *msg;
->>   	u64 arg0, arg3;
->>   	struct arm_smccc_res res;
->> -	int ret, i;
->> +	int ret, i, status = IRQ_NONE;
->>   
->>   	(void)irq;
->>   	arg0 = SMC_IPI_MAILBOX_STATUS_ENQUIRY;
->> @@ -170,11 +170,11 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
->>   				memcpy_fromio(msg->data, mchan->req_buf,
->>   					      msg->len);
->>   				mbox_chan_received_data(chan, (void *)msg);
->> -				return IRQ_HANDLED;
->> +				status = IRQ_HANDLED;
->>   			}
->>   		}
->>   	}
->> -	return IRQ_NONE;
->> +	return status;
->>   }
->>   
->>   /**
->> @@ -634,7 +634,7 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
->>   	struct zynqmp_ipi_mbox *mbox;
->>   	int num_mboxes, ret = -EINVAL;
->>   
->> -	num_mboxes = of_get_child_count(np);
->> +	num_mboxes = of_get_available_child_count(np);
->>   	pdata = devm_kzalloc(dev, sizeof(*pdata) + (num_mboxes * sizeof(*mbox)),
->>   			     GFP_KERNEL);
->>   	if (!pdata)
->> diff --git a/include/linux/mailbox/zynqmp-ipi-message.h b/include/linux/mailbox/zynqmp-ipi-message.h
->> index 35ce84c8ca02..31d8046d945e 100644
->> --- a/include/linux/mailbox/zynqmp-ipi-message.h
->> +++ b/include/linux/mailbox/zynqmp-ipi-message.h
->> @@ -9,7 +9,7 @@
->>    * @data: message payload
->>    *
->>    * This is the structure for data used in mbox_send_message
->> - * the maximum length of data buffer is fixed to 12 bytes.
->> + * the maximum length of data buffer is fixed to 32 bytes.
->>    * Client is supposed to be aware of this.
-> 
-> I agree that this should be split in 3 patches but the fixes are so small that
-> it is hardly required.  I'll leave it up to Michal to decide.
+> >>>>>> After taking a while to understand this and compare with already p=
+resent
+> >>>>>> flag system, `negated flags` is comparatively difficult to underst=
+and while
+> >>>>>> already present flags seem easier.
+> >>>>>
+> >>>>> Maybe replacing negated_flags in the API with matched_values =3D
+> >>>>> ~negated_flags would make this better?
+> >>>>>
+> >>>>> We compare having to understand XOR vs having to understand orderin=
+g
+> >>>>> of required_flags and excluded_flags.
+> >>>> There is no ordering in current masks scheme. No mask is preferable.=
+ For a
+> >>>> page to get selected, all the definitions of the masks must be fulfi=
+lled.
+> >>>> You have come up with good example that what if required_mask =3D
+> >>>> exclude_mask. In this case, no page will fulfill the criterion and h=
+ence no
+> >>>> page would be selected. It is user's fault that he isn't understandi=
+ng the
+> >>>> definitions of these masks correctly.
+> >>>>
+> >>>> Now thinking about it, I can add a error check which would return er=
+ror if
+> >>>> a bit in required and excluded masks matches. Would you like it? Let=
+s put
+> >>>> this check in place.
+> >>>> (Previously I'd left it for user's wisdom not to do this. If he'll s=
+pecify
+> >>>> same masks in them, he'll get no addresses out of the syscall.)
+> >>>
+> >>> This error case is (one of) the problems I propose avoiding. You also
+> >>> need much more text to describe the requred/excluded flags
+> >>> interactions and edge cases than saying that a flag must have a value
+> >>> equal to corresponding bit in ~negated_flags to be matched by
+> >>> requried/anyof masks.
+> >> I've found excluded_mask very intuitive as compared to negated_mask wh=
+ich
+> >> is so difficult to understand that I don't know how to use it correctl=
+y.
+> >> Lets take an example, I want pages which are PAGE_IS_WRITTEN and are n=
+ot
+> >> PAGE_IS_FILE. In addition, the pages must be PAGE_IS_PRESENT or
+> >> PAGE_IS_SWAPPED. This can be specified as:
+> >>
+> >> required_mask =3D PAGE_IS_WRITTEN
+> >> excluded_mask =3D PAGE_IS_FILE
+> >> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
+> >>
+> >> (a) assume page_flags =3D 0b1111
+> >> skip page as 0b1111 & 0b0010 =3D true
+> >>
+> >> (b) assume page_flags =3D 0b1001
+> >> select page as 0b1001 & 0b0010 =3D false
+> >>
+> >> It seemed intuitive. Right? How would you achieve same thing with nega=
+ted_mask?
+> >>
+> >> required_mask =3D PAGE_IS_WRITTEN
+> >> negated_mask =3D PAGE_IS_FILE
+> >> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
+> >>
+> >> (1) assume page_flags =3D 0b1111
+> >> tested_flags =3D 0b1111 ^ 0b0010 =3D 0b1101
+> >>
+> >> (2) assume page_flags =3D 0b1001
+> >> tested_flags =3D 0b1001 ^ 0b0010 =3D 0b1011
+> >>
+> >> In (1), we wanted to skip pages which have PAGE_IS_FILE set. But
+> >> negated_mask has just masked it and page is still getting tested if it
+> >> should be selected and it would get selected. It is wrong.
+> >>
+> >> In (2), the PAGE_IS_FILE bit of page_flags was 0 and got updated to 1 =
+or
+> >> PAGE_IS_FILE in tested_flags.
+> >
+> > I require flags PAGE_IS_WRITTEN=3D1, PAGE_IS_FILE=3D0, so:
+> >
+> > required_mask =3D PAGE_IS_WRITTEN | PAGE_IS_FILE;
+> > negated_flags =3D PAGE_IS_FILE; // flags I want zero
+> You want PAGE_IS_FILE to be zero and at the same time you are requiring t=
+he
+> PAGE_IS_FILE. It is confusing.
 
-Generic guidance is saying that you should split that patches. I personally 
-prefer to have one patch per change. It is useful for bisecting and faster for 
-reviewing.
-I would expect that this patch should go via mailbox tree and the rest via 
-remoteproc tree. That's why maintainer should say what it is preferred way.
+Ok, I believe the misunderstanding comes from the naming. I "require"
+the flag to be a particular value - hence include it in
+"required_flags" and specify the required value in ~negated_flags. You
+"require" the flag to be set (equal 1) and so include it in
+"required_flags" and you "require" the flag to be clear (equal to 0)
+so include it in "excluded_flags". Both approaches are correct, but I
+would not consider one "easier" than the other. The former is more
+general, though - makes any_of also able to match on flags cleared and
+removes the possibility of a conflicting case of a flag present in
+both sets.
 
-In connection mailbox. I recently had some time to look at this driver and I 
-didn't really get why there are registers listed. Because all that addresses can 
-be calculated based on soc compatible string and by xlnx,ipi-id for both sides.
+Maybe considered_flags or matched_flags then would make the field
+better understandable?
 
-Thanks,
-Michal
-
+Best Regards
+Micha=C5=82 Miros=C5=82aw
