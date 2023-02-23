@@ -2,193 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D36A0332
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 699F26A0335
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbjBWHKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S233254AbjBWHK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjBWHKE (ORCPT
+        with ESMTP id S229646AbjBWHKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:10:04 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DFE20D32;
-        Wed, 22 Feb 2023 23:10:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OUs9chhs89nLiOSeipVpCazJWgd0iyobrFXrdH7MZOIwZam5Y+2UW/bmyn1q3/WTeZXRjRrh8cX2vmW4x6vsxuiuFF3ueIrQct2Ih3ttAZkKQGBc2+4QJO3DiBNBlH7g92G4udRDmehc10jBKYygyhRAr2heh/dZ7tPjY0QKgYNrp6WuNXk5Q6Juwe8wzluihzOp8QhWN/AacNmoM3odHcYz4iio/Bvwv8qeerMjQCx5F1PySXX4PEtBaNiRaFGSEC60kZ5vxIseVQZ6FE2CAx42YeBOVg2d7Bpe05JGb3/vjZCYuF68Z337HJawhWrtpKDzxIPHfVAUA9r/Y1c9Dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/TtZxxq+zd0GBXY9jeF3E5yoj8SvoyP/gC6PptZeg+c=;
- b=ZoJFS836Np+lFMAy/DZneoLa+S88II5ggwjpIH8VPoS3zbJ1Y3/bxx5NhQhMxFvv4du4xBAR2f+ypVY55pq97u51jS76t6BXWYsrHj5d+Hh80PaUbcgqzHpLj3l2qKdWbRSDNe6bO9jy1sV8WVfoIaAmxdtMentpYwimsoogj5OhcW0aDniKHqIeBAtmA8mjkNmddHvm1WUatPQY8HSd2HKK7BHGHKXzooEn67EBOfmeOy4jEe0GIK8AkTjshMX3riAbzi6YYdt5PlRqnkOvbBuuRNbsjKHZaEIUhmGeUNeH3AQsriLrd1ntJ4PDIcTG3v6JmN5+zWeaxVO9Uoph9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/TtZxxq+zd0GBXY9jeF3E5yoj8SvoyP/gC6PptZeg+c=;
- b=EMwrFOR3WKWaNcMrIsCYbhjCKmLtn9CXkrGHWkD+1HjPUW5gwwGCMU7hihrJ0AfacyehvlYNcBHUhhZvV80m5JezYn+9Sy7XZ5UHydfdChCBU1+9USKpdHk0ACLe1RJu9TX7Lus7W1RL6DtPjJFiw5/OCqJ3UnC/b5bCsXGzzP0=
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
- by IA0PR12MB7532.namprd12.prod.outlook.com (2603:10b6:208:43e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
- 2023 07:10:00 +0000
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::21db:f27a:291b:c35d]) by DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::21db:f27a:291b:c35d%6]) with mapi id 15.20.6134.019; Thu, 23 Feb 2023
- 07:10:00 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>
-CC:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>
-Subject: RE: [PATCH v2] cpufreq: amd-pstate: Let user know amd-pstate is
- disabled
-Thread-Topic: [PATCH v2] cpufreq: amd-pstate: Let user know amd-pstate is
- disabled
-Thread-Index: AQHZR1UVixwoC/iNGkSQ6E9mO/3C167cHFeg
-Date:   Thu, 23 Feb 2023 07:10:00 +0000
-Message-ID: <DM4PR12MB527834BFE80456BF1F3907559CAB9@DM4PR12MB5278.namprd12.prod.outlook.com>
-References: <20230223070252.2029174-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20230223070252.2029174-1-kai.heng.feng@canonical.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-02-23T07:09:57Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=fcaeb415-6637-4e51-896e-271bef3f8e93;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-02-23T07:09:57Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: d4af6f84-8e80-4b0a-b46e-68f9267c996f
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|IA0PR12MB7532:EE_
-x-ms-office365-filtering-correlation-id: c0ae1195-38ce-4084-a838-08db156cfa56
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SW5OKLHKUEgwhQpbiedMSVc5GRPzAC9H49/n3x5DicKPCFcZR9ZilfxxIv//ZJczlWiwRGuLrnWglbREpVjtkh9BX47P19OEHkXxUS4c50Iv4JmE0Qxjq4WgAYgpyI2DOghcnwBhwtWIUvwno1HlPVd/XDaR9ERwrrCDhlxpPvIflZQq5AYzvsjGFq9Y09oOLwbB2gnRXjoS+0ep4bxNmWgoxS2bmhJjfQqJjeytmaTtyWZN7H15H2X6Ez6U0eBB1wm0TWROrK5lq9ItiFI9q7CFaLQPX3ugR63hmo4sFAzszh5wOAXrXkTO61AkaKhnBZVwAL1MvU/Wf/b7SGs2Jm7AGZxcfTBqJKYNVb44sbZuBv3CV42X02xHknhq7b8wmXoMsaDe1Ib1AXnYNoAXVAoUP2+ZjQj2rQ0mRFye+AmcZhs02Cj0sNIBkXK9N87rnJPtKQN5zJQjW9Wiur1biqUHX/d+sL9qzK04TwShYRC7CBRfDfLhqzpLB+rR0h8yeFCoH88IxcNeqLTSYzZoM0iDmO29f1xKspy4SFiDmx+8XUi4QJPAW4ZJxlL4mPHXWdHP3fXbpxNovWXWcUNy7rag/alQK1w4gTfQWSVJY8gTfK+pIiArfusp30FNJsLShiZbWhX50yLi1ZZvXufz8jiW0i7mcvwYf5CnU4SyxZKxFuzBk42FLWpoXnDkMVnm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(346002)(376002)(366004)(451199018)(110136005)(83380400001)(71200400001)(2906002)(5660300002)(9686003)(6636002)(41300700001)(478600001)(966005)(86362001)(52536014)(8936002)(7696005)(33656002)(55016003)(53546011)(122000001)(38100700002)(26005)(186003)(38070700005)(54906003)(6506007)(66946007)(64756008)(66476007)(316002)(66446008)(8676002)(66556008)(4326008)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bjQVn5Yqdb2IEOR8fXFha0DoBq4ljribe7qdQEnpqbqMMLy6zZkjXbBWNwbr?=
- =?us-ascii?Q?upDU2D+CKrGRNuI/NxGSN7ncTi78EdRmORr9XWNzbenVUKRNwW4vE8g4G12x?=
- =?us-ascii?Q?IvTvvFgSPcLttvHnx1kPcF6GP+bxOnVOhgmzkoDY2X+OKQOyfoYAgQSGkxRC?=
- =?us-ascii?Q?nebniBhpGjq0xcm5vzaZTjJZP77d8oD3YgALJwajtotdiN0hdPeLSay8uuEx?=
- =?us-ascii?Q?zpcpEzQpLu9YVLwz033QRQvQ7uuFja3WBQjzFeS+L/i5oI8rThIHxzcvfv00?=
- =?us-ascii?Q?swKsl+V/YXyEck32XGCaBG8hdGPbEBQEI/R5ZzvzhgaVj9x2tRMuoQiG51ou?=
- =?us-ascii?Q?zOcXU5qIYq+goakQ37ypkWNMybhmmY8GRdNQPO299J6Mp1HAdjlbByEokr0z?=
- =?us-ascii?Q?7IYPFs6HvBiP6apLMaZ3xu8dJmC0cEUkRFvU2PvuFShxrmmST/+efj5WSeDc?=
- =?us-ascii?Q?xT0K58PybTYBfvIkzdumLSNYYrpr/A3mWB0SZizV9VW9I4TvA4pX51yF0sYR?=
- =?us-ascii?Q?8+Vwo8WwP/X5FgN3Dxss7WgZ5bG47bQQ4njRSvQ+LlPNHrXGKWzLFit8KD+x?=
- =?us-ascii?Q?PX/51P1NVOevlFaDBsYl806Va1LtWTnyRCNfiBUgCHvv2/EQkUPwKwjL8GS6?=
- =?us-ascii?Q?mdviMURqj9L7SH7I0S1iyVdXhkSvzRS+1fv3Qj2zJZAWQFzQK924FUtnbANN?=
- =?us-ascii?Q?3G8g+O53TaMxA9Bl6QjRfVLrn/1pp/iBIwkfU6iZZCRng376mGbKuJ6eQN02?=
- =?us-ascii?Q?rZvW2y0uf+PJRQXktDlXk7LPQh+Y1gwmgL+UNwUUbwCIfm/6/AAamTA11Yqh?=
- =?us-ascii?Q?OObMw7CiG91sbqQaaUg0yCb5kh4NQL3loMiewnE6BQcfrcO8C6jxLbLMfXN2?=
- =?us-ascii?Q?uCMosuJLQH7GWBo1YW92Rz/4z97PO4GlQU/qWercbU5sDGp2gWu6VizZ0m8u?=
- =?us-ascii?Q?GC+dHsyrpxyeZ6NU11/R0WmW5Obwr6GD6VSFNoTv+nR0XaDaeLxfLFv4tmvV?=
- =?us-ascii?Q?00amHKzWdLGgCphWvcgtUFibDamBMbtxPmOFVVDtkO9UkCIdFmrRYvoe7m9s?=
- =?us-ascii?Q?6zNyqpMAAgBRkjyRyOGZGnbgfLuYOMPRMAohTNFwpA9MhuiK5vyt4qiq0/Xk?=
- =?us-ascii?Q?DNh6rnBKRBAdOb6xXz2qLhZ9HBeq5ICA457dkuBsQj23BJkMGKI8ihafbZf4?=
- =?us-ascii?Q?Bs+qP3vYybtC/ix08cbMSt9plOvp9vWchGMSmOoC9ST54F7L3LOc+o03S1uy?=
- =?us-ascii?Q?gkteQtTUiM7apn2Hp47ZCda1OYtNseQTSRFP7WEa0M/KMNLNeRj3GNC2uglB?=
- =?us-ascii?Q?ViM4OIymoZG/r4zkR+LqgSCbEuU0cH+44tJuCE0nP69rWkNCde0+M+xQr1Zp?=
- =?us-ascii?Q?98bNGEMxdqLLbEjazUh1aiLwJkilynGOWO82pKhIaewc8B0vusCiQ4DV8IIY?=
- =?us-ascii?Q?S2sVjM0YuWHQMxKruR1asPY/0I/SryXjZmwvj9vl6+AkZkGt4A2qI7eawuwE?=
- =?us-ascii?Q?i3g2cXjVyANoXEHEoaJTENbWdzpwf7W30i4wDxIq141MK2geK3FYb/+ohx8e?=
- =?us-ascii?Q?EysouNl58baTdOwnrJ31ObhdIcYhCrEmkzsNb3sQ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 23 Feb 2023 02:10:53 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991304A1D2;
+        Wed, 22 Feb 2023 23:10:52 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5A5D366021EE;
+        Thu, 23 Feb 2023 07:10:44 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677136250;
+        bh=l/p5o6Wgs9SQqz6XM6V90URqUHPwWct0pb1tZfq2qT8=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=jXxbccMkuSbQ+H0cNGv5LnGxMywISsVIclNBnzIYcGl/abV5K/IO87gZ9YKhN9rKS
+         Ld/QTGNc6sMW8SwKqk+sQAFtffKPP53Yp+tQZCvgePK8Oa4gI6FPlge1jetOe+0Bt8
+         rxidSPecRM2vLvm8Khloj5UfIEd0mFSPieVa1VzFUNGXmrMAsBdEezU3I+sL9o9sTW
+         z6Qmee2QXBwWbVfxr6n4KnbkKpO4A9heQ7n9fD0BeGu7nsUFvTIoo51fcyaHl9fY2O
+         vqv4Ed4Iv0fwynrOvQVtaEuzUKKkrvMqX5s4kHvFydWBJeqgRw/ZOrn9qcBDdF52Wc
+         QcvwF/s72GgyA==
+Message-ID: <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
+Date:   Thu, 23 Feb 2023 12:10:40 +0500
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0ae1195-38ce-4084-a838-08db156cfa56
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 07:10:00.3222
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A0b3SEGh/OZhTNuiaCFtM53VxoTs88Z4KawrIPHFFJHmyUqV0DFX868BmUWCP2r8xKQo7ZufzI6d8emqUFMUnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7532
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Cyrill Gorcunov <gorcunov@gmail.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>, Mike Rapoport <rppt@kernel.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
+ <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
+ <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hi Nadav, Mike, Michał,
 
+Can you please share your thoughts at [A] below?
 
-> -----Original Message-----
-> From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Sent: Thursday, February 23, 2023 3:03 PM
-> To: Huang, Ray <Ray.Huang@amd.com>
-> Cc: Limonciello, Mario <Mario.Limonciello@amd.com>; Kai-Heng Feng
-> <kai.heng.feng@canonical.com>; Rafael J. Wysocki <rafael@kernel.org>; Vir=
-esh
-> Kumar <viresh.kumar@linaro.org>; linux-pm@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: [PATCH v2] cpufreq: amd-pstate: Let user know amd-pstate is disa=
-bled
->=20
-> Commit 202e683df37c ("cpufreq: amd-pstate: add amd-pstate driver paramete=
-r
-> for mode selection") changed the driver to be disabled by default, and th=
-is can
-> surprise users.
->=20
-> Let users know what happened so they can decide what to do next.
->=20
-> Link: https://bugs.launchpad.net/bugs/2006942
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v2:
->  - Remove redundancy in pr_info().
->  - Fix spelling and URL tag.
->=20
->  drivers/cpufreq/amd-pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c =
-index
-> 45c88894fd8e..f965f54f7ae7 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1263,7 +1263,7 @@ static int __init amd_pstate_init(void)
->  	 * with amd_pstate=3Dpassive or other modes in kernel command line
->  	 */
->  	if (cppc_state =3D=3D AMD_PSTATE_DISABLE) {
-> -		pr_debug("driver load is disabled, boot with specific mode to
-> enable this\n");
-> +		pr_info("driver load is disabled, boot with specific mode to
-> enable
-> +this\n");
->  		return -ENODEV;
->  	}
->=20
-> --
-> 2.34.1
-Thanks for the change.=20
+On 2/23/23 12:10 AM, Nadav Amit wrote:
+> 
+> 
+>> On Feb 20, 2023, at 5:24 AM, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+>>
+>>>> +static inline int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>>>> +                     unsigned long end, struct mm_walk *walk)
+>>>> +{
+>>>> +    struct pagemap_scan_private *p = walk->private;
+>>>> +    struct vm_area_struct *vma = walk->vma;
+>>>> +    unsigned long addr = end;
+>>>> +    spinlock_t *ptl;
+>>>> +    int ret = 0;
+>>>> +    pte_t *pte;
+>>>> +
+>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>>> +    ptl = pmd_trans_huge_lock(pmd, vma);
+>>>> +    if (ptl) {
+>>>> +        bool pmd_wt;
+>>>> +
+>>>> +        pmd_wt = !is_pmd_uffd_wp(*pmd);
+>>>> +        /*
+>>>> +         * Break huge page into small pages if operation needs to be
+>>>> performed is
+>>>> +         * on a portion of the huge page.
+>>>> +         */
+>>>> +        if (pmd_wt && IS_WP_ENGAGE_OP(p) && (end - start < HPAGE_SIZE)) {
+>>>> +            spin_unlock(ptl);
+>>>> +            split_huge_pmd(vma, pmd, start);
+>>>> +            goto process_smaller_pages;
+>>> I think that such goto's are really confusing and should be avoided. And
+>>> using 'else' (could have easily prevented the need for goto). It is not the
+>>> best solution though, since I think it would have been better to invert the
+>>> conditions.
+>> Yeah, else can be used here. But then we'll have to add a tab to all the
+>> code after adding else. We have already so many tabs and very less space to
+>> right code. Not sure which is better.
+> 
+> goto’s are usually not the right solution. You can extract things into a different
+> function if you have to.
+> 
+> I’m not sure why IS_GET_OP(p) might be false and what’s the meaning of taking the
+> lock and dropping it in such a case. I think that the code can be simplified and
+> additional condition nesting can be avoided.
+Lock is taken and we check if pmd has UFFD_WP set or not. In the next
+version, the GET check has been removed as we have dropped WP_ENGAGE + !GET
+operation. So get is always specified and condition isn't needed.
 
-Reviewed-by : Yuan Perry <Perry.Yuan@amd.com>
-=20
+Please comment on next version if you want anything more optimized.
+
+> 
+>>>> --- a/include/uapi/linux/fs.h
+>>>> +++ b/include/uapi/linux/fs.h
+>>>> @@ -305,4 +305,54 @@ typedef int __bitwise __kernel_rwf_t;
+>>>>  #define RWF_SUPPORTED    (RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>>>>               RWF_APPEND)
+>>>>  +/* Pagemap ioctl */
+>>>> +#define PAGEMAP_SCAN    _IOWR('f', 16, struct pagemap_scan_arg)
+>>>> +
+>>>> +/* Bits are set in the bitmap of the page_region and masks in
+>>>> pagemap_scan_args */
+>>>> +#define PAGE_IS_WRITTEN        (1 << 0)
+>>>> +#define PAGE_IS_FILE        (1 << 1)
+>>>> +#define PAGE_IS_PRESENT        (1 << 2)
+>>>> +#define PAGE_IS_SWAPPED        (1 << 3)
+>>>
+>>> These names are way too generic and are likely to be misused for the wrong
+>>> purpose. The "_IS_" part seems confusing as well. So I think the naming
+>>> needs to be fixed and some new type (using typedef) or enum should be
+>>> introduced to hold these flags. I understand it is part of uapi and it is
+>>> less common there, but it is not unheard of and does make things clearer.
+>> Do you think PM_SCAN_PAGE_IS_* work here?
+> 
+> Can we lose the IS somehow?
+[A] Do you think these names would work better: PM_SCAN_WRITTEN_PAGE,
+PM_SCAN_FILE_PAGE, PM_SCAN_SWAP_PAGE, PM_SCAN_PRESENT_PAGE?
+
+> 
+>>
+>>>
+>>>
+>>>> +
+>>>> +/*
+>>>> + * struct page_region - Page region with bitmap flags
+>>>> + * @start:    Start of the region
+>>>> + * @len:    Length of the region
+>>>> + * bitmap:    Bits sets for the region
+>>>> + */
+>>>> +struct page_region {
+>>>> +    __u64 start;
+>>>> +    __u64 len;
+>>>
+>>> I presume in bytes. Would be useful to mention.
+>> Length of region in pages.
+> 
+> Very unintuitive to me I must say. If the start is an address, I would expect
+> the len to be in bytes.
+The PAGEMAP_SCAN ioctl is working on page granularity level. We tell the
+user if a page has certain flags are not. Keeping length in bytes doesn't
+makes sense.
+
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
