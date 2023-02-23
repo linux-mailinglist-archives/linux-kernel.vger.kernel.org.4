@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF7F6A0609
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2B26A060F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234008AbjBWKXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S233358AbjBWKYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbjBWKXD (ORCPT
+        with ESMTP id S233964AbjBWKX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:23:03 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4905F3AB0;
-        Thu, 23 Feb 2023 02:23:00 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 1D09424E289;
-        Thu, 23 Feb 2023 18:22:59 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
- 2023 18:22:59 +0800
-Received: from [192.168.125.82] (113.72.147.165) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
- 2023 18:22:57 +0800
-Message-ID: <04e071d8-3195-d065-d33f-ef81e3fcfb22@starfivetech.com>
-Date:   Thu, 23 Feb 2023 18:22:52 +0800
+        Thu, 23 Feb 2023 05:23:58 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0FE4D62B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:23:49 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536cb25982eso152966907b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:23:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/OPltVfi8Fzilwf7h+y32kT/iTrktLLKyywaCM3Qp5Q=;
+        b=LZ0tkeRhsbUpNedDVvt4VYjZq+7WKrzgnIwhuGkbcmbX0D1fmMZek4v01V0nUnkYwz
+         8o1Gkd9ORHLBaYQeU3fZeb1lG54I3umPRNbTQRRRVbunGdT6a2O2o4WPeT+pu/LnTL4m
+         v8zFxOBSl7qD+QEcRvlbS7CC/y8tMX/j4KPN5SgQOdoz6tu8C5zKLA/eyGdILhQFMuDD
+         c1ITwTNBlpekxokU2u5kxqns4xu1rj2PM1n3I2FYaA5BBF9nS8DshqKN0izRRDlhRn6m
+         qvSZ1VSGryGiOIV2Y29q1hDkVF4T8fJzCrXm7vvTovdJXYuFOJzQ8mxFxJm6ZV7KOVrS
+         lo5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/OPltVfi8Fzilwf7h+y32kT/iTrktLLKyywaCM3Qp5Q=;
+        b=wqOP+5v9HYwHxKY/PDTAaxDQvdCG60fS/0mF2mtdf8EQcISZcZyrbTUCwR3fsLbM7c
+         hFe46ytpehsYdF2R1cx2lPS3W7sGUb8DlsRwppg0Ac7q7FLopoU4V5OFZiHkV13/dLb3
+         30ACi65ZNxBiLQPO+FWM1i35ViRV0BriQqknpGcLMG2B0n+GOPJl35BA442AkM6aDx8G
+         ifBSVf0N2nEAnQr8SLiS9kj7Pf3dJDYP5oTSK++2Fb0igMFe2/OsBC1IImvgYzxSkXu4
+         I4A2yvEMOO5yuAqYz6I/r0HiktCWjgaMZ1GsMoFcYE8n++SespozSdAvNJahAJviW+K+
+         QUvg==
+X-Gm-Message-State: AO0yUKXRaWt9zhOobpmGIkh5/4bGV+Em8akQ+XRQvy/iN21MsarEaA0p
+        0EgOEyel/kwM6UxNe3djAgpi6sJbiouRf2aJaxdRyQ==
+X-Google-Smtp-Source: AK7set+2ojjQW5QQ/ilb4x2UBbu2SgJC9wup1NY46kvQY3tCj+N/uP264ehmBWBwxxSqLZw8xltjx/QvBE4qPX1kIYw=
+X-Received: by 2002:a81:af50:0:b0:533:9ffb:cb12 with SMTP id
+ x16-20020a81af50000000b005339ffbcb12mr1972874ywj.10.1677147828802; Thu, 23
+ Feb 2023 02:23:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v4 09/19] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-10-hal.feng@starfivetech.com>
- <e4c2b711-7953-821b-4281-04e4b40154ea@linaro.org> <Y/XxOw+T0WdYY7jP@wendy>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y/XxOw+T0WdYY7jP@wendy>
+References: <20220824200047.150308-3-kumaravel.thiagarajan@microchip.com> <20230217103116.2126311-1-michael@walle.cc>
+In-Reply-To: <20230217103116.2126311-1-michael@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 23 Feb 2023 11:23:37 +0100
+Message-ID: <CACRpkda5NjddOUdqjg4b9YmJizd7Q0576S-nj4M=aw3xPF2Ywg@mail.gmail.com>
+Subject: Re: [PATCH v1 char-misc-next 2/5] misc: microchip: pci1xxxx: load
+ gpio driver for the gpio controller auxiliary device enumerated by the
+ auxiliary bus driver.
+To:     Michael Walle <michael@walle.cc>
+Cc:     kumaravel.thiagarajan@microchip.com, UNGLinuxDriver@microchip.com,
+        arnd@arndb.de, derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        gregkh@linuxfoundation.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.165]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Feb 2023 10:40:59 +0000, Conor Dooley wrote:
-> On Wed, Feb 22, 2023 at 10:13:19AM +0100, Krzysztof Kozlowski wrote:
->> On 21/02/2023 03:46, Hal Feng wrote:
->> > From: Emil Renner Berthing <kernel@esmil.dk>
->> > 
->> > Add bindings for the system clock and reset generator (SYSCRG) on the
->> > JH7110 RISC-V SoC by StarFive Ltd.
->> > 
->> > Reviewed-by: Rob Herring <robh@kernel.org>
->> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> 
->> I don't know what is happening here as neither this nor other patchset
->> explains anything. Please stop writing what you do in the patches, but
->> explain why. What is easy to get.
->> 
->> (...)
->> 
->> 
->> > +
->> > +#define JH7110_SYSCLK_PLL0_OUT			190
->> > +#define JH7110_SYSCLK_PLL1_OUT			191
->> > +#define JH7110_SYSCLK_PLL2_OUT			192
->> 
->> NAK. Do not add incorrect bindings just to remove it THE SAME TIME.
-> 
-> For some context, the PLL driver series [1] does the following, which is
-> where this complaint stems from:
->> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
->> index 5e4f21ca0642..086a6ddcf380 100644
->> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
->> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
->> @@ -6,6 +6,12 @@
->>  #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
->>  #define __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
->>  
->> +/* PLL clocks */
->> +#define JH7110_CLK_PLL0_OUT			0
->> +#define JH7110_CLK_PLL1_OUT			1
->> +#define JH7110_CLK_PLL2_OUT			2
->> +#define JH7110_PLLCLK_END			3
->> +
->>  /* SYSCRG clocks */
->>  #define JH7110_SYSCLK_CPU_ROOT			0
->>  #define JH7110_SYSCLK_CPU_CORE			1
->> @@ -198,11 +204,7 @@
->>  #define JH7110_SYSCLK_TDM_TDM_INV		188
->>  #define JH7110_SYSCLK_JTAG_CERTIFICATION_TRNG	189
->>  
->> -#define JH7110_SYSCLK_PLL0_OUT			190
->> -#define JH7110_SYSCLK_PLL1_OUT			191
->> -#define JH7110_SYSCLK_PLL2_OUT			192
-> 
-> I was talking to Emil, who pointed out that these defines aren't
-> actually ever used in the dts, so there's nothing really gained
-> by adding them here in the first place.
-> Seems like this series could simply move these defines into the driver
-> (as the PLL addition series also does) and then we would not have to
-> be worried about breaking the ABI in the future?
+On Fri, Feb 17, 2023 at 11:31 AM Michael Walle <michael@walle.cc> wrote:
+> [+ GPIO maintainers]
+>
+> > PIO function's auxiliary bus driver enumerates separate child devices for
+> > GPIO controller and OTP/EEPROM interface. This gpio driver implemented
+> > based on the gpio framework is loaded for the gpio auxiliary device.
+> >
+> > Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> > ---
+> >  MAINTAINERS                                   |   1 +
+> >  drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
+> >  .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 163 ++++++++++++++++++
+>
+> Why doesn't this file live in the GPIO subsystem? Seems like this haven't
+> got a proper review from the GPIO people (probably due to the "misc:"
+> subject). Maybe even GPIO_REGMAP could be used.
 
-Sorry for that I didn't synchronize this with Xingyu. I'll move these
-PLL definitions into the driver in the next version.
+I agree, plese resend this patch with the linux-gpio mailing list and the GPIO
+maintainers on CC.
 
-Best regards,
-Hal
-
-> 
-> 1 - https://patchwork.kernel.org/project/linux-riscv/patch/20230221141147.303642-3-xingyu.wu@starfivetech.com/
-> 
-
+Yours,
+Linus Walleij
