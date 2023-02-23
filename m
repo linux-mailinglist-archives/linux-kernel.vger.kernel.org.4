@@ -2,185 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416286A0B11
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446516A0B1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbjBWNqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:46:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S233928AbjBWNsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234409AbjBWNqc (ORCPT
+        with ESMTP id S233987AbjBWNsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:46:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B4C584BD;
-        Thu, 23 Feb 2023 05:46:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 469916170C;
-        Thu, 23 Feb 2023 13:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F5AC433D2;
-        Thu, 23 Feb 2023 13:45:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677159915;
-        bh=2pri+T/s3WCeS8rc0Z1BvEcngNYcJQ1Atpo18KxCzEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rl7xb/+rSv7I+dvIXh90eCDQkh1VnIAC5dOu+0gUuKGlIuNMURPtlxq9LZWmOyFUa
-         sD2ihI+ZlnCj4Kji00LahaWxVNtnyEf3+MioiYaENBUC+hvfNMH+pfskrEyq7B0VEi
-         Zysq2gqfcczMuUTCGIOiCzmLC+Eov9hX/BOiD++RcK3bMhZgIrIjG73tvc0A3DMZku
-         UtcMoL9eJpJIDpn6qHT8nIXEB0uqrbng3+UuW5F/ERwPsK5J8dUTjM+XgT4SJQAKmA
-         TNSGcFXaDQHHK4D33jwnHMnVNmJms9cgVD4/b/g/QBSz5MeT52CySdyvy6Op9e1dwd
-         hL5ZPuUzg4SYg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1B8714049F; Thu, 23 Feb 2023 10:45:13 -0300 (-03)
-Date:   Thu, 23 Feb 2023 10:45:13 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Changbin Du <changbin.du@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hui Wang <hw.huiwang@huawei.com>
-Subject: Re: [PATCH] perf: fix counting when initial delay configured
-Message-ID: <Y/dt6QpsCj5AAUE/@kernel.org>
-References: <20230223075800.1795777-1-changbin.du@huawei.com>
+        Thu, 23 Feb 2023 08:48:16 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCBB512BEB
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:47:54 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8137FEC;
+        Thu, 23 Feb 2023 05:48:20 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA2273F881;
+        Thu, 23 Feb 2023 05:47:36 -0800 (PST)
+Date:   Thu, 23 Feb 2023 13:47:34 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <Catalin.Marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH V7 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
+Message-ID: <Y/dudjSnIFtHzNRI@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+ <20230105031039.207972-6-anshuman.khandual@arm.com>
+ <Y8AZXQJUO6h5mlgq@FVFF77S0Q05N>
+ <bdcc2d71-b216-ade6-203d-0a527d0503ff@arm.com>
+ <Y+P5oGRfdaCYRkbL@FVFF77S0Q05N.cambridge.arm.com>
+ <f952612b-db37-c21e-4dde-12202768cb44@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223075800.1795777-1-changbin.du@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f952612b-db37-c21e-4dde-12202768cb44@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Feb 23, 2023 at 03:58:00PM +0800, Changbin Du escreveu:
-> When creating counters with initial delay configured, the enable_on_exec
-> field is not set. So we need to enable the counters later. The problem
-> is, when a workload is specified the target__none() is still true. So
-> we also need to check stat_config.initial_delay.
+On Mon, Feb 13, 2023 at 01:53:56PM +0530, Anshuman Khandual wrote:
 > 
-> Before this fix the event is not counted:
-> $ ./perf stat -e instructions -D 100 sleep 2
-> Events disabled
-> Events enabled
 > 
->  Performance counter stats for 'sleep 2':
+> On 2/9/23 01:06, Mark Rutland wrote:
+> > On Fri, Jan 13, 2023 at 10:41:51AM +0530, Anshuman Khandual wrote:
+> >>
+> >>
+> >> On 1/12/23 19:59, Mark Rutland wrote:
+> >>> On Thu, Jan 05, 2023 at 08:40:38AM +0530, Anshuman Khandual wrote:
+> >>>> @@ -878,6 +890,13 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
+> >>>>  		if (!armpmu_event_set_period(event))
+> >>>>  			continue;
+> >>>>  
+> >>>> +		if (has_branch_stack(event)) {
+> >>>> +			WARN_ON(!cpuc->branches);
+> >>>> +			armv8pmu_branch_read(cpuc, event);
+> >>>> +			data.br_stack = &cpuc->branches->branch_stack;
+> >>>> +			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+> >>>> +		}
+> >>>
+> >>> How do we ensure the data we're getting isn't changed under our feet? Is BRBE
+> >>> disabled at this point?
+> >>
+> >> Right, BRBE is paused after a PMU IRQ. We also ensure the buffer is disabled for
+> >> all exception levels, i.e removing BRBCR_EL1_E0BRE/E1BRE from the configuration,
+> >> before initiating the actual read, which eventually populates the data.br_stack.
+> > 
+> > Ok; just to confirm, what exactly is the condition that enforces that BRBE is
+> > disabled? Is that *while* there's an overflow asserted, or does something else
+> > get set at the instant the overflow occurs?
 > 
->      <not counted>      instructions
-> 
->        1.901661124 seconds time elapsed
-> 
->        0.001602000 seconds user
->        0.000000000 seconds sys
-> 
-> After fix it works:
-> $ ./perf stat -e instructions -D 100 sleep 2
-> Events disabled
-> Events enabled
-> 
->  Performance counter stats for 'sleep 2':
-> 
->            404,214      instructions
-> 
->        1.901743475 seconds time elapsed
-> 
->        0.001617000 seconds user
->        0.000000000 seconds sys
-> 
-> Fixes: c587e77e100f ("perf stat: Do not delay the workload with --delay")
+> - BRBE can be disabled completely via BRBCR_EL1_E0BRE/E1BRE irrespective of PMU interrupt
+> - But with PMU interrupt, it just pauses if BRBCR_EL1_FZP is enabled
 
-Yeap, even the comment states that we need to enable when initial_delay
-is set :-)
+IIUC the distinction between "disabled completely" and "just pauses" doesn't
+really matter to us, and a pause is sufficient for use to be able to read and
+manipulate the records.
 
-I added the additional test output below.
+I also note that we always set BRBCR_EL1.FZP.
 
-Namhyung, can you please ack it?
+Am I missing something?
 
-- Arnaldo
-
-Committer testing:
-
-Before:
-
-Lets use stress-ng so that we have lots of samples using a CPU stressor
-and also intermingle the workload output with the messages about when
-the events get enabled (i.e. later on in the workload):
-
-  $ perf stat -e instructions -D 100 stress-ng -c 32 -t 1
-  Events disabled
-  stress-ng: info:  [38361] setting to a 1 second run per stressor
-  stress-ng: info:  [38361] dispatching hogs: 32 cpu
-  Events enabled
-  stress-ng: info:  [38361] successful run completed in 1.01s
-
-   Performance counter stats for 'stress-ng -c 32 -t 1':
-
-       <not counted>      instructions:u
-
-         0.916479141 seconds time elapsed
-
-        30.868003000 seconds user
-         0.049851000 seconds sys
-
-
-  Some events weren't counted. Try disabling the NMI watchdog:
-        echo 0 > /proc/sys/kernel/nmi_watchdog
-        perf stat ...
-        echo 1 > /proc/sys/kernel/nmi_watchdog
-  $
-
-After the fix:
-
-  $ perf stat -e instructions -D 100 stress-ng -c 32 -t 1
-  Events disabled
-  stress-ng: info:  [40429] setting to a 1 second run per stressor
-  stress-ng: info:  [40429] dispatching hogs: 32 cpu
-  Events enabled
-  stress-ng: info:  [40429] successful run completed in 1.01s
-
-   Performance counter stats for 'stress-ng -c 32 -t 1':
-
-        154117865145      instructions:u
-
-         0.920827644 seconds time elapsed
-
-        30.864753000 seconds user
-         0.073862000 seconds sys
-
-
-  $
-
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> ---
->  tools/perf/builtin-stat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 9f3e4b257516..c71d85577de6 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -544,7 +544,7 @@ static int enable_counters(void)
->  	 * - we don't have tracee (attaching to task or cpu)
->  	 * - we have initial delay configured
->  	 */
-> -	if (!target__none(&target)) {
-> +	if (!target__none(&target) || stat_config.initial_delay) {
->  		if (!all_counters_use_bpf)
->  			evlist__enable(evsel_list);
->  	}
-> -- 
-> 2.25.1
-> 
-
--- 
-
-- Arnaldo
+Thanks,
+Mark.
