@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE336A0F4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DC96A0F48
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjBWSOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S229919AbjBWSOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBWSOo (ORCPT
+        with ESMTP id S229463AbjBWSOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:14:44 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD0B55060
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:14:42 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cq23so45098002edb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:14:42 -0800 (PST)
+        Thu, 23 Feb 2023 13:14:35 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D28C30B03
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:14:34 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id o12so45803651edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:14:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VG9TRi7KY1FPj+JgMoZ9/Bap5BH1LM2HcOOT/7ev4eA=;
-        b=D2wc9ublqoinhiPSET5Dt0IY9YkjUb0e1mbrI5aveVWbYaT5mTOY1SmpkdzdcDCXhy
-         0tKgbqq35FTY2mCV9OliNawcLPyYie3JC/ov3fv+B8xEzv008yfXCoExBDaHBPUFIGQ9
-         XcSO0t72+wVLJSh7AyZjyJdtIqHS30Q6JS3FZAWYfJQCWaOeuiKlk7PWsh5/OSZrnz5S
-         hHJwPirimq5+UX1iA5mmqF6u7koMXvksCK4sS9mgfpt+uQJwsnQSVfzocj0q4CNGiWOc
-         29XttugOluiL6gDHvkBeGMLGDVE5ZWt+GrVdqPTAnU4uE3qHk1suzlCFjuCHJJfJismS
-         +Smg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IyflQVVwXeb5AvJ8ieB1zva/SpJtnyUqfmOLbvj381o=;
+        b=s/s5Uz+Re3+6YJofbnJiPLaTUE/w4RXgh1drZ7YIvA7ZMykCU7j1woPcJLKdNgO7Ko
+         tT1GXuW5jHg3tumyetGmYuZ4+zvCeI/s8g7jwv+Dj2mMCIqi89a3w6Qsba94acJ12xYP
+         tzbJs7Hh+H9nXClBRoKoxADCgP3tB9P4QzbagtaSAVOK726hg+yi8Fmrc7H879BXF9Dy
+         nvepjHYGi5VuBtlIRsKtHKvcuopkziY09+u9JDwR97w/V239zuMKqK5aB7nGk8I9pkeH
+         lFS4TlajdeAbHGqJE/JWov89M7fOAgdT04GhTyEb3y7yHvyaqCxjYW9os/9x7fcQtKvm
+         29OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VG9TRi7KY1FPj+JgMoZ9/Bap5BH1LM2HcOOT/7ev4eA=;
-        b=V5v+lWeKAlsZaWWHxdb0f/TU1A989R392s3BR/F5FhUkHoeAQoKm6nYapoj9LtditO
-         nXKW+6gPe6Bw3lb/gxzklpR8HgzwtjzxuKGCNr1s1C71cIZ2F35nlsss0FViaxNIzI1g
-         J4iykxQ4kV6o3STx9uLxcqCcu7oR2bwpuSGU8ProewsMP4TmaBy2BZaJyAfx+tAAiiiA
-         a886UW6WAz6vY9eitCdZoc5ITN/HIUnBONVTtk4DWpj78VZq+0aMCCqf7SeWBCfK8/KR
-         dotTtglIwMoUz384C9Cpy6CvU654+QvNU+n9c3VCrqHd3v8gShmlQvuV9YB8uJWpi1M7
-         N9rA==
-X-Gm-Message-State: AO0yUKWdj/BWsbE+l1pPrtut8XQ5JGct/AXsZ1ZAzB5gZxynJ6jjiEzR
-        gzSydNb7LmXQWE34ALf2MVoFMoeOVp+oeqipQcdK+g==
-X-Google-Smtp-Source: AK7set/fznoiZVzWuf/NgldnM/1EIBNaNGC+xwH7MsYZEI1nAXsD+W5oxnFFkoYiFjJHmikErXMuBVLtqBs4WAeI1M4=
-X-Received: by 2002:a17:907:c907:b0:8d8:4578:18e0 with SMTP id
- ui7-20020a170907c90700b008d8457818e0mr5898667ejc.10.1677176080683; Thu, 23
- Feb 2023 10:14:40 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IyflQVVwXeb5AvJ8ieB1zva/SpJtnyUqfmOLbvj381o=;
+        b=42BXg0k2n51SpCNMtD1GWdPBKg381R6KkS1/hJb4Ap0mQuvCPoERikxWagZ4NQcI9e
+         HbvvM22BBDuDvq+nHmKptRgOep2/n7x42tasRm8mRX8/Pb1mUXXS0JkwG8Cg2oVCj+FB
+         2lNOjfWIoB8LhtljtUNqklDjXl5hnEO3Rl0bjKB31szJaSOHENSGpCRasGDXmOebJBCp
+         AX7awEHbRgfIS0MVnLuGx5VRRkt5mOYqmgn59RDZ2UMiMCvYXwCIn6f03KauL3jEVAEL
+         6JWj7cEWIxOBYH/ggcOE3o8DaAaEVWp7a3rDu569QWVkw4A5xwsFBPNduK6dFv7xWh93
+         yyCQ==
+X-Gm-Message-State: AO0yUKWLrOSfXArfSqoGNFCN5etVioAS6HJGq4uB0BsN1Pp7Yyq6IAEf
+        I2jizOwRMa+8nj42C87fy6Sj0g==
+X-Google-Smtp-Source: AK7set+UQ75tmGpCQdvgOJYBTZjEj/qTw1mk0lIHl/SjuHjnofALCmeBtK7NBEzh+vThGIDrX/rcdA==
+X-Received: by 2002:a05:6402:686:b0:4a2:5f73:d3d2 with SMTP id f6-20020a056402068600b004a25f73d3d2mr11524887edy.41.1677176073043;
+        Thu, 23 Feb 2023 10:14:33 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u9-20020a056402110900b004af6a7cf249sm1394030edv.61.2023.02.23.10.14.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 10:14:32 -0800 (PST)
+Message-ID: <0c3abe84-0cac-40c9-9e1b-8057ac510ed2@linaro.org>
+Date:   Thu, 23 Feb 2023 19:14:31 +0100
 MIME-Version: 1.0
-References: <Y/Ua6VcNe/DFh7X4@nvidia.com> <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
- <Y/UiQmuVwh2eqrfA@nvidia.com> <87o7pmnd0p.fsf@nvidia.com> <Y/YRJNwwvqp7nKKt@nvidia.com>
- <87k009nvnr.fsf@nvidia.com> <Y/bHNO7A8T3QQ5T+@nvidia.com> <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
- <Y/eiLBo88pgr2IUm@nvidia.com> <CAJD7tkadBRP22qP63-SjKSch1im9sHLoMzc6c2h10+ggbuxqMg@mail.gmail.com>
- <Y/esMBOyTaJnv5CW@nvidia.com>
-In-Reply-To: <Y/esMBOyTaJnv5CW@nvidia.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 23 Feb 2023 10:14:04 -0800
-Message-ID: <CAJD7tkZHZrxK_szH=5tdDZzhDTNXpBVD-e+79RzFmpp_ZYMcBA@mail.gmail.com>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "T.J. Mercier" <tjmercier@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
-        hannes@cmpxchg.org, surenb@google.com, mkoutny@suse.com,
-        daniel@ffwll.ch, "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 6/7] PCI: dwc: Introduce Configurable DMA mask
+Content-Language: en-US
+To:     Elad Nachman <enachman@marvell.com>, thomas.petazzoni@bootlin.com,
+        bhelgaas@google.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230223180531.15148-1-enachman@marvell.com>
+ <20230223180531.15148-7-enachman@marvell.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230223180531.15148-7-enachman@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:11 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> On Thu, Feb 23, 2023 at 10:03:50AM -0800, Yosry Ahmed wrote:
-> > On Thu, Feb 23, 2023 at 9:28 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > >
-> > > On Thu, Feb 23, 2023 at 09:18:23AM -0800, T.J. Mercier wrote:
-> > >
-> > > > > Solving that problem means figuring out when every cgroup stops using
-> > > > > the memory - pinning or not. That seems to be very costly.
-> > > > >
-> > > > This is the current behavior of accounting for memfds, and I suspect
-> > > > any kind of shared memory.
-> > > >
-> > > > If cgroup A creates a memfd, maps and faults in pages, shares the
-> > > > memfd with cgroup B and then A unmaps and closes the memfd, then
-> > > > cgroup A is still charged for the pages it faulted in.
-> > >
-> > > As we discussed, as long as the memory is swappable then eventually
-> > > memory pressure on cgroup A will evict the memfd pages and then cgroup
-> > > B will swap it in and be charged for it.
-> >
-> > I am not familiar with memfd, but based on
-> > mem_cgroup_swapin_charge_folio() it seems like if cgroup B swapped in
-> > the pages they will remain charged to cgroup A, unless cgroup A is
-> > removed/offlined. Am I missing something?
->
-> Ah, I don't know, Tejun said:
->
-> "but it can converge when page usage transfers across cgroups
-> if needed."
->
-> Which I assumed was swap related but I don't know how convergence
-> works.
+On 23/02/2023 19:05, Elad Nachman wrote:
+> From: Elad Nachman <enachman@marvell.com>
+> 
+> Some devices, such as AC5 and AC5X have their physical DDR memory
+> start at address 0x2_0000_0000 . In order to have the DMA
 
-I believe that's the case for file-backed pages, but I do not believe
-it's the case for swap-backed pages.
+There is no space before full stop and comma. Also fix wrapping.
 
->
-> Jason
+> coherent allocation succeed later, a different DMA mask is
+> required, as defined in the DT file for such SOCs.
+> If not defined, fallback to 32-bit as previously done in the code.
+> DT property is called num-dmamask , and can range between 33 and 64.
+> 
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> ---
+>  .../pci/controller/dwc/pcie-designware-host.c | 23 ++++++++++++++-----
+>  1 file changed, 17 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index 9952057c8819..ac851b065325 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -204,7 +204,6 @@ static int dw_pcie_irq_domain_alloc(struct irq_domain *domain,
+>  				    pp->msi_irq_chip,
+>  				    pp, handle_edge_irq,
+>  				    NULL, NULL);
+> -
+
+How this is related to the commit?
+
+>  	return 0;
+>  }
+>  
+> @@ -250,7 +249,6 @@ int dw_pcie_allocate_domains(struct dw_pcie_rp *pp)
+>  		irq_domain_remove(pp->irq_domain);
+>  		return -ENOMEM;
+>  	}
+> -
+
+Same problem... and later in the code as well.
+
+Best regards,
+Krzysztof
+
