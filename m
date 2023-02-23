@@ -2,132 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7656A0E8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743FD6A0E90
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjBWRTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S229768AbjBWRUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBWRTE (ORCPT
+        with ESMTP id S229477AbjBWRUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:19:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A1A16302;
-        Thu, 23 Feb 2023 09:19:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A076170B;
-        Thu, 23 Feb 2023 17:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0384FC433D2;
-        Thu, 23 Feb 2023 17:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172742;
-        bh=aZu6ntK+R/n0LBJGGEpFgcMMTDGBBpmpfVg/f1+RK30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UX1oaKX1mIA/ZgsOM53jj21anheNjYm8fQL2pMg4sEg9IwL9m1G5bUbp7L1KTr10y
-         vbqx0ThlabpbAVYmk8BqIk4/sDk91aRrGSQ6vXpNOMI44hTNqyKj5OPZkIikNyJHxs
-         ceuErG78iFZk8LGF85v4+AGsmFs/t/60tK3DlyP1fY6ZhOoDRx+TrwOHl+cJCD9BlB
-         qA2yMfWv7ThH8HrFDGGZiPRHIeKhr5RjYo+e5LC2DyDb36GxVrySMuJIILVi44k/Pu
-         GabcD9LSvpGHxQHXcI5WnMXTc2VUUbSCkSAimm1/JcEgHmRzTbCa0ezciVaGwYWt4q
-         NwRF/I8fnEPbg==
-Date:   Thu, 23 Feb 2023 17:18:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V3 1/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/egACRAp6nKZWdN@sirena.org.uk>
-References: <20230223162635.19747-1-kyarlagadda@nvidia.com>
- <20230223162635.19747-2-kyarlagadda@nvidia.com>
+        Thu, 23 Feb 2023 12:20:13 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDC54E5EE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:20:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=zrfI7CilhOCa+PtfPUy1z9S6Br3AxmLJ0p9AfsQK+cw=; b=YPFeEJ/NV4N+4HkDFrodNyL7pw
+        hPGri4q6s4RWw1Wpj8zNo1+9ggeTOqETGnYlpjlPoTFXS7UV90Gjgm+5v9qKJktfHKwhQFyfVlDE/
+        OHfdjHNP/UaduZdFHR7AacTSR6l1QP7QEJFe8LFgj1v8tiKNhH3F4wAWf/DDAGu7f9l8EDLzeG9Fw
+        J/CWsiDoPcPuJvxXZ0qvnB0E/a3r7YmFyGIlupwFH6/bvxsg6cTqyUnB0wOZnlIOwoxh5qISKdfqT
+        V8d2XmSTDKPehmGq+lJCPH+51rG1MbC49+f9bgcByNQmn/XZsnuy6BcV7gVIa7PJJUySEWmqX6KCH
+        iHcEKSNg==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVFGN-00HLtl-Ak; Thu, 23 Feb 2023 17:20:11 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Elimar Riesebieter <riesebie@lxtec.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v3] macintosh: via-pmu-led: fix Kconfig for ADB_PMU_LED_DISK
+Date:   Thu, 23 Feb 2023 09:20:10 -0800
+Message-Id: <20230223172010.21780-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jD9PyuoFogP+Kbsz"
-Content-Disposition: inline
-In-Reply-To: <20230223162635.19747-2-kyarlagadda@nvidia.com>
-X-Cookie: Hindsight is an exact science.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+LEDS_TRIGGER_DISK depends on ATA, so selecting LEDS_TRIGGER_DISK
+when ATA is not set/enabled causes a Kconfig warning:
 
---jD9PyuoFogP+Kbsz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+WARNING: unmet direct dependencies detected for LEDS_TRIGGER_DISK
+  Depends on [n]: NEW_LEDS [=y] && LEDS_TRIGGERS [=y] && ATA [=n]
+  Selected by [y]:
+  - ADB_PMU_LED_DISK [=y] && MACINTOSH_DRIVERS [=y] && ADB_PMU_LED [=y] && LEDS_CLASS [=y]
 
-On Thu, Feb 23, 2023 at 09:56:33PM +0530, Krishna Yarlagadda wrote:
+Fix this by making ADB_PMU_LED_DISK depend on LEDS_TRIGGER_DISK
+instead of selecting it.
 
-> +       spi_bus_lock(phy->spi_device->master);
-> +
-> +       while (len) {
+Seen on both PPC32 and PPC64.
 
-Why?
+Fixes: 0e865a80c135 ("macintosh: Remove dependency on IDE_GD_ATA if ADB_PMU_LED_DISK is selected")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Elimar Riesebieter <riesebie@lxtec.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: linuxppc-dev@lists.ozlabs.org
+---
+v2: add a complete Subject: line
+v3: change select to depends on (Michael)
 
-> +		spi_xfer[0].tx_buf = phy->iobuf;
-> +		spi_xfer[0].len = 1;
-> +		spi_message_add_tail(&spi_xfer[0], &m);
-> +
-> +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> +		spi_xfer[1].len = 3;
-> +		spi_message_add_tail(&spi_xfer[1], &m);
+ drivers/macintosh/Kconfig |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Why would we make these two separate transfers?
-
-> +		if (out) {
-> +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> +			spi_xfer[2].rx_buf = NULL;
-> +			memcpy(&phy->iobuf[4], out, transfer_len);
-> +			out += transfer_len;
-> +		}
-> +
-> +		if (in) {
-> +			spi_xfer[2].tx_buf = NULL;
-> +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> +		}
-
-This will use the same buffer for rx and tx if some bug manages to leave
-them both set.  That shouldn't be an issue but it's an alarm bell
-reading the code.
-
-> index 988aabc31871..b88494e31239 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -184,8 +184,9 @@ struct spi_device {
->  	u8			chip_select;
->  	u8			bits_per_word;
->  	bool			rt;
-> -#define SPI_NO_TX	BIT(31)		/* No transmit wire */
-> -#define SPI_NO_RX	BIT(30)		/* No receive wire */
-> +#define SPI_NO_TX		BIT(31)		/* No transmit wire */
-> +#define SPI_NO_RX		BIT(30)		/* No receive wire */
-> +#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM flow control */
-
-Additions to the SPI API should be a separate commit for SPI rather than
-merged into a driver change.
-
---jD9PyuoFogP+Kbsz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP3n/8ACgkQJNaLcl1U
-h9CRtAf9FFsG6QfCTNSairafqsZ3vz7HSuZQD2JqZrR15XiModR6Vy+VZVPY8CZX
-202aKZVbykOJWqUuYHa2peCZzZzEbPJwCJCTebUK10mNNOuVZimWm6bgM+CjeK1v
-FXO9+inTecIXDuaOWQAyuPcLZ/RzX+Yslb3oG/QdWrdnDlCdOrpHbcdj4UzMO1Us
-3rYWvFeznoJuIG/KPs0T8rVW7f+Ayofa+gzAMdX+nJLNM8+weCX0G1ygPZlr0YMa
-PAV3Kmxex68xxsRxbN4nSPaPEh42oTsRHUfeIRPEBWGjh1rw6oipkgrB4fr1ziXY
-7yma0+7zY30UX8NsLhsSzAobhEI2rA==
-=rA+v
------END PGP SIGNATURE-----
-
---jD9PyuoFogP+Kbsz--
+diff -- a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
+--- a/drivers/macintosh/Kconfig
++++ b/drivers/macintosh/Kconfig
+@@ -88,8 +88,7 @@ config ADB_PMU_LED_DISK
+ 	bool "Use front LED as DISK LED by default"
+ 	depends on ADB_PMU_LED
+ 	depends on LEDS_CLASS
+-	select LEDS_TRIGGERS
+-	select LEDS_TRIGGER_DISK
++	depends on LEDS_TRIGGER_DISK
+ 	help
+ 	  This option makes the front LED default to the disk trigger
+ 	  so that it blinks on disk activity.
