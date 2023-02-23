@@ -2,99 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020866A0385
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9565B6A0382
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbjBWIGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S233136AbjBWIFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbjBWIFs (ORCPT
+        with ESMTP id S230048AbjBWIFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:05:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861E42BEFA
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677139505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1+ueFbDYI2fCK6KAGkfWDv0qOw1/uXZTIg/vtWRlPiU=;
-        b=cq26F0Z+wJIM66dgiU3PXLHLYmxaC5g8BmUEIg9pNep9Su9pbvqoZxEqiZi5hzZ6jDmRSl
-        8VyJI7h+9/e+IO0i9nwqHL18WrE4H82XgO5dgsKsiaaMWCIswfXJuk+SrT1ylDkP7ODFdW
-        ITs/lk9vV8DFG6lOpgJeJ7PSiOIQEvY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-Jp_cEiK_MYCaFKqcqQN_Rw-1; Thu, 23 Feb 2023 03:05:03 -0500
-X-MC-Unique: Jp_cEiK_MYCaFKqcqQN_Rw-1
-Received: by mail-wm1-f69.google.com with SMTP id f14-20020a7bcc0e000000b003dd41ad974bso4012376wmh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:05:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1+ueFbDYI2fCK6KAGkfWDv0qOw1/uXZTIg/vtWRlPiU=;
-        b=eBsbHSFz+ZuYCIA4JMh+df9U+xjbWmh56uVwlj5VMPbDDTIPPjeZVSCqR6fdn+37BD
-         Kjmu5ZPfYyzQzAB5R/WkiN9J3iuo9I42vYnT5AGvZnJl9M3UIQLXzsWNJZU6YjGgW1pG
-         UPjygKsVlETXjEsqk0a4ZZAjRFGDbLAMmY0/kYEW04gWK07j2CTB32t3zPX7qIEd9AYW
-         mrvFJpSNA3d8SQWK18aKjR+P+7Zse1amZnWyW5uFDj9bGmtYeAp6Qc+xO8mnLJbfwrqP
-         T1l9+hua1OtlAvDhT4AdoEjpWz/26EAsPHsZYLKFZ0CIRltRD40QtsZtISRORsIcaovA
-         8DYg==
-X-Gm-Message-State: AO0yUKWQBjTLhUeXunBWKMg70M5iN0k1xgp8QrMsgKcCk61AOYhAuDsz
-        V9/fSxT4lwFdPMPo/EEdrz12rf7SdAxQeIO+l8EYKs+ea1ZuBHHjcyV0RDT+xcQ87/+/rUo3qTp
-        8N5M004XMPwxAtXoxPbyc/8nH
-X-Received: by 2002:a05:600c:3093:b0:3dc:555c:dd30 with SMTP id g19-20020a05600c309300b003dc555cdd30mr1930917wmn.27.1677139502051;
-        Thu, 23 Feb 2023 00:05:02 -0800 (PST)
-X-Google-Smtp-Source: AK7set8C2KkhdFOu+LnX9wVb8yRJ6czYkak4zwJwTlRC59nu1vtOB2+Qi4rT251F92cwGEsPeVo5bw==
-X-Received: by 2002:a05:600c:3093:b0:3dc:555c:dd30 with SMTP id g19-20020a05600c309300b003dc555cdd30mr1930899wmn.27.1677139501762;
-        Thu, 23 Feb 2023 00:05:01 -0800 (PST)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c510b00b003e1f2e43a1csm10728694wms.48.2023.02.23.00.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 00:05:01 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Vikash Garodia <vgarodia@qti.qualcomm.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mka@chromium.org" <mka@chromium.org>,
-        Albert Esteve <aesteve@redhat.com>,
-        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fritz Koenig <frkoenig@google.com>,
-        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
-        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: RE: [PATCH] Revert "venus: firmware: Correct non-pix start and end
- addresses"
-In-Reply-To: <DM8PR02MB8169E16569616870A583B376F3AB9@DM8PR02MB8169.namprd02.prod.outlook.com>
-References: <20230207102254.1446461-1-javierm@redhat.com>
- <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
- <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
- <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
- <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
- <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
- <6f97a117-0d9c-e21b-9adf-50f2233ba9e3@leemhuis.info>
- <ea283f0a-ca72-447e-ce87-68c1bbee793e@leemhuis.info>
- <CAFOAJEdBbzqkGVqw+vgNYNxyaTHwvjFyskTwjycP820L2tOctA@mail.gmail.com>
- <b548da46-bf91-6f1c-4b63-4002109056bc@leemhuis.info>
- <9a0bfef8-0b5d-f4d0-a8a5-4bbcacc5c0fb@leemhuis.info>
- <DM8PR02MB8169E16569616870A583B376F3AB9@DM8PR02MB8169.namprd02.prod.outlook.com>
-Date:   Thu, 23 Feb 2023 09:05:00 +0100
-Message-ID: <87356wn6xf.fsf@minerva.mail-host-address-is-not-set>
+        Thu, 23 Feb 2023 03:05:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389542BEF8;
+        Thu, 23 Feb 2023 00:05:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD6E4B81977;
+        Thu, 23 Feb 2023 08:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC9AC433D2;
+        Thu, 23 Feb 2023 08:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677139515;
+        bh=k4PgJ+r3/+Al+F8IRjbgHFh3Bx1C+z9IdSSuseSYm0A=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=JoEcs+HD4LfnnWaSclPQSvevNxcim6Tucuoo2FG8khSHM5ZRBM9hMPJU9JEKkLKCv
+         KaIBdbPipiBDR8Yve/azeCtbepWIeo0lPlPMjdprM0ongKTKevKRKNGAj12VrKfbWj
+         RZ33Zu+e+hV4GWPjlBq/uz48B3M/PShNePiw9Jz/fkkNAKj9c5FCfxEvjbybqCHt1G
+         Vg6rpP/DOA/QbW+Nr1/tuHmzcMlQ6IWMIHdKZPa71MZoTbBXVXzxpXFIkahnaW9npb
+         tODZKGFN2SDVjrBNmT+6MA2Ikhq/IHKfOXkwmEzzV3T1jAc6FKoIdxoPhA3mrs2QkR
+         9ga6Dg/n0giPA==
+Message-ID: <9e890c83-495b-87d5-68bf-838c7cf0c003@kernel.org>
+Date:   Thu, 23 Feb 2023 09:05:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
+ device node
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sui jingfeng <suijingfeng@loongson.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+ <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
+ <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
+In-Reply-To: <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,41 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vikash Garodia <vgarodia@qti.qualcomm.com> writes:
-
-Hello Vikash,
-
-> Hi All,
->
-
-[...]
-
+On 23/02/2023 08:58, Krzysztof Kozlowski wrote:
+> On 23/02/2023 04:19, Sui jingfeng wrote:
+>> Hi,
 >>
->>No reply from Mauro and Linus chose to not apply the revert I pointed him to.
->>That at this point leads to the question:
+>> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+>>> On 22/02/2023 17:55, suijingfeng wrote:
+>>>> The display controller is a pci device, it's pci vendor id is
+>>>> 0x0014, it's pci device id is 0x7a06.
+>>>>
+>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>>>> ---
+>>>>   .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>>>   1 file changed, 21 insertions(+)
+>>>>
+>>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>> index 8143a61111e3..a528af3977d9 100644
+>>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>> @@ -31,6 +31,18 @@ memory@200000 {
+>>>>   			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>>>   	};
+>>>>   
+>>>> +	reserved-memory {
+>>>> +		#address-cells = <2>;
+>>>> +		#size-cells = <2>;
+>>>> +		ranges;
+>>>> +
+>>>> +		display_reserved: framebuffer@30000000 {
+>>>> +			compatible = "shared-dma-pool";
+>>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>>>> +			linux,cma-default;
+>>>> +		};
+>>>> +	};
+>>>> +
+>>>>   	cpu_clk: cpu_clk {
+>>>>   		#clock-cells = <0>;
+>>>>   		compatible = "fixed-clock";
+>>>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>>>   				interrupt-parent = <&liointc0>;
+>>>>   			};
+>>>>   
+>>>> +			display-controller@6,0 {
+>>>> +				compatible = "loongson,ls2k1000-dc";
+>>>> +
+>>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>>>> +				interrupt-parent = <&liointc0>;
+>>>> +				memory-region = <&display_reserved>;
+>>> NAK.
+>> Err :(,  please give me a chance to explain
+>>> Test your code against the bindings you send.
 >>
->>Vikash, did you or somebody else make any progress to fix this properly?
->
-> We tried with different settings for the registers and arrive at a conclusion that
-> the original configuration was proper. There is no need to explicitly configure
-> the secure non-pixel region when there is no support for the usecase. So, in summary,
-> we are good to have the revert.
->
+>> I can guarantee to you that I test may code more than twice. The code 
+>> used to testing is listed at link [1].
+> 
+> I wrote - test against the bindings. I don't believe that it was tested.
+> Please paste the output of the testing (dtbs_check).
 
-Perfect. Thanks a lot for looking at this.
+OTOH, dtschema has some hickups on loongsoon DTS, so I doubt you could
+even test it. Anyway, where is above property memory-region described in
+the bindings?
 
-> Stan, could you please help with the revert and a pull request having this revert
-> alongwith other pending changes ?
->
-
-Other fix posted is "media: venus: dec: Fix capture formats enumeration order":
-
-https://patchwork.kernel.org/project/linux-media/patch/20230210081835.2054482-1-javierm@redhat.com/
-
--- 
 Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Krzysztof
 
