@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AACD6A094C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6296A094E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbjBWNDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S234237AbjBWNDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbjBWNDI (ORCPT
+        with ESMTP id S232906AbjBWNDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:03:08 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4526CD0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:03:05 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id s17so5707102pgv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VDOFit7llw2/gJ6jzLJCmahPdSfAi0DepjG1IAxiPnw=;
-        b=sFy4typzM2eOLsbkJQe+vXY8RZQNu0UdpoVzLNcyjTzyvY1oK49i4XDePvX1aB125R
-         XNv/2o3Ztp2tdRZ0zvW+XJhKCPpk6o0XUVYD7bfzdJcX00NNg5bI90fC80Zgt0MLgJXB
-         OKgZ4ehTF3EDtLwRDn9QFxSYWRTamgHmr0Beo49Z0Jlb9K8y7eTR2oDziqTNJe0vOSDZ
-         fSIVMAsqiJaffVjtzZ41Lsh9MNQksmZenPta7WOeF8F5sOb9DO/wCzWIT2I2f4FWEC0s
-         LlEgrTxnkXzHkfk5sMOg5SGwdAGYSKn4jSb+Is/Hobn2TTTUYIvo8FyqAcZsML3EtHlh
-         PF4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VDOFit7llw2/gJ6jzLJCmahPdSfAi0DepjG1IAxiPnw=;
-        b=SkQ6QiAocdr5ZT7cieRAfCSYMvuMgJiLzMs6egiqtLYrnUNmGyOMEzWP9AzLkdlXZF
-         eLUYmaD8lPMHwGQoip2cyzFO+SuJQAU/Aja45N1likoqA5DkdcA9NQOvB2bASz9AJ2Yp
-         nd1wNXvBik/qwNCNRSVHAiUyt5M5nUcl2zi8xoup5lS7HpYW90dkGWrdWvLxrbvjnFOS
-         Zumr23GarIAyspaUQ+674N/C0lBUvTp0Zmm6jMvruAYBuwatLA8AheSDqEMYMpW9jz2X
-         +ZPWs50zn1T9+7m1MLTEG889y3OyFKnA8qir3cJ+VT1p7/ZDIct7TWRql0kuDYNduUlI
-         RgZA==
-X-Gm-Message-State: AO0yUKX/8LZ8BrKK0+LlrkFavOj1LZQOYKmVJQLjIWcyC9u2YQYlw8PO
-        IgkHZoP7kYyw5K28I/NZz5YC
-X-Google-Smtp-Source: AK7set8RmPOqlaqJ5BqWR398VXNl+vStS+Es8uuVnuZgEnR0iokSb0dH7fO5GrQxrllNTeFi14oscA==
-X-Received: by 2002:aa7:952f:0:b0:5df:421d:1962 with SMTP id c15-20020aa7952f000000b005df421d1962mr661952pfp.2.1677157384106;
-        Thu, 23 Feb 2023 05:03:04 -0800 (PST)
-Received: from workstation ([59.97.53.124])
-        by smtp.gmail.com with ESMTPSA id j15-20020a62e90f000000b0058bc7453285sm7145680pfh.217.2023.02.23.05.03.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Feb 2023 05:03:03 -0800 (PST)
-Date:   Thu, 23 Feb 2023 18:32:58 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 02/11] dt-bindings: PCI: qcom: Add iommu properties
-Message-ID: <20230223130258.GA6422@workstation>
-References: <20230222153251.254492-1-manivannan.sadhasivam@linaro.org>
- <20230222153251.254492-3-manivannan.sadhasivam@linaro.org>
- <896e047a-9188-de5d-d3fd-197b3fa208da@linaro.org>
+        Thu, 23 Feb 2023 08:03:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C04C51FA3;
+        Thu, 23 Feb 2023 05:03:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D71CB81A13;
+        Thu, 23 Feb 2023 13:03:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392C1C433D2;
+        Thu, 23 Feb 2023 13:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677157399;
+        bh=3T3zjuJ4D9MS4kWsEp9XXb1UBO6gK0qhHxG1BbhHOE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Su6iP3jQwjNWfZyDA2MQZG7ScRildoyIKyfy+lhDUhL9i9pr5/6hxbsFGoUH2Ws3V
+         rAfMHgyPSKxbvooRaoKbm8AxaXmhIqsNMTRl4UUAzjJ9TH1qWjr5Cnl/iOwEcnl56A
+         jJqw+FUaQgXFIuGkyrxQO47kfbDXNxvpF+S5RYoQ=
+Date:   Thu, 23 Feb 2023 14:03:17 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Kurt Kanzenbach <kurt@linutronix.de>,
+        Sasha Levin <sashal@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2 net 2/2] net/sched: taprio: make qdisc_leaf() see the
+ per-netdev-queue pfifo child qdiscs
+Message-ID: <Y/dkFcqSdLK+jEMK@kroah.com>
+References: <20220915100802.2308279-1-vladimir.oltean@nxp.com>
+ <20220915100802.2308279-3-vladimir.oltean@nxp.com>
+ <874jrdvluv.fsf@kurt>
+ <20230222142507.hapqjfhswhlq42ay@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <896e047a-9188-de5d-d3fd-197b3fa208da@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230222142507.hapqjfhswhlq42ay@skbuf>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:37:27AM +0100, Krzysztof Kozlowski wrote:
-> On 22/02/2023 16:32, Manivannan Sadhasivam wrote:
-> > Most of the PCIe controllers require iommu support to function properly.
-> > So let's add them to the binding.
+On Wed, Feb 22, 2023 at 04:25:07PM +0200, Vladimir Oltean wrote:
+> +Greg, Sasha.
+
+Hint, in the future, please cc: stable@vger.kernel.org with stable
+kernel requests, I know I don't see stuff that isn't cc:ed there
+normally when working on that tree.
+
+> 
+> Hi Kurt,
+> 
+> On Wed, Feb 22, 2023 at 03:03:04PM +0100, Kurt Kanzenbach wrote:
+> > This commit was backported to v5.15-LTS which results in NULL pointer
+> > dereferences e.g., when attaching an ETF child qdisc to taprio.
 > > 
+> > From what I can see is, that the issue was reported back then and this
+> > commit was reverted [1]. However, the revert didn't make it into
+> > v5.15-LTS? Is there a reason for it? I'm testing 5.15.94-rt59 here.
+> > 
+> > Thanks,
+> > Kurt
+> > 
+> > [1] - https://lore.kernel.org/all/20221004220100.1650558-1-vladimir.oltean@nxp.com/
 > 
-> If most of them require iommu, why not adding it as a required property
-> to respective (or new) "if:then:" part?
+> You are right; the patchwork-bot clearly says that the revert was
+> applied to net.git as commit af7b29b1deaa ("Revert "net/sched: taprio:
+> make qdisc_leaf() see the per-netdev-queue pfifo child qdiscs""), but
+> the revert never made it to stable.
 > 
-
-Well, I thought about it but then followed the convention of
-"dma-coherent" property. I asked this same question while adding that
-property but I didn't get a clear answer (or maybe I missed something).
-
-So if you want me to add iommu properties to individual SoCs, then please
-explain why the same cannot be done for "dma-coherent" as not all SoCs
-support dma coherency for PCIe controllers.
-
-Thanks,
-Mani
-
-> Best regards,
-> Krzysztof
+> OTOH, the original patch did make it to, and still is in, linux-stable.
+> I have backport notification emails of the original to 5.4, 5.10, 5.15, 5.19.
 > 
+> Greg, Sasha, can you please pick up and backport commit af7b29b1deaa
+> ("Revert "net/sched: taprio: make qdisc_leaf() see the per-netdev-queue
+> pfifo child qdiscs"") to the currently maintained stable kernels?
+
+Now queued up, thanks.
+
+greg k-h
