@@ -2,172 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F2C6A039B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A316F6A039E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbjBWINp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S233398AbjBWIPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbjBWIN3 (ORCPT
+        with ESMTP id S233298AbjBWIPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:13:29 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AD0498B1;
-        Thu, 23 Feb 2023 00:13:27 -0800 (PST)
-X-UUID: f0adf95ab35111eda06fc9ecc4dadd91-20230223
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rnHDPaF+R8FF8PJd9FlWmcGdhDJGTaMa9mgP/cJusow=;
-        b=iyvZhzs/d+X6uWsDwkbwMsoSy8H+T4dCVr3oJ3NWVZcpgOczFwdH+AfbVcMDxdugTsIof8mhtuDUKe5XLZYFSg4IhzufZlgrtpBRoRi5LLvmzLoGL0l1ShKCZVG21Wc1tZsVTA6JS+zTz249d2DsQjbQqlVajpk36w+eFLsZPZo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:fa71ef87-f3c7-40c4-9acd-59da380a80c5,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.20,REQID:fa71ef87-f3c7-40c4-9acd-59da380a80c5,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:25b5999,CLOUDID:85607826-564d-42d9-9875-7c868ee415ec,B
-        ulkID:230223161325QJPJ32VM,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: f0adf95ab35111eda06fc9ecc4dadd91-20230223
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1498509786; Thu, 23 Feb 2023 16:13:22 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 23 Feb 2023 16:13:21 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 23 Feb 2023 16:13:20 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        "Irui Wang" <irui.wang@mediatek.com>
-Subject: [V1,7/7] media: mtk-jpeg: refactor hw dev initializaiton
-Date:   Thu, 23 Feb 2023 16:13:12 +0800
-Message-ID: <20230223081312.29296-8-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230223081312.29296-1-irui.wang@mediatek.com>
-References: <20230223081312.29296-1-irui.wang@mediatek.com>
+        Thu, 23 Feb 2023 03:15:45 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDE74D62E;
+        Thu, 23 Feb 2023 00:15:03 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z42so2391758ljq.13;
+        Thu, 23 Feb 2023 00:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=433bYYY/TmoUpHBBY/tF9/GMluKPjfLdJmiTSrcvVWQ=;
+        b=ktgvXtmjePsRRHA2T3w8lM2xrjXS/08CD5atW+arTYAcRj8dsMzcBKjOLIP5saXWZx
+         vMYppLTWw+nrGswXuDS6tugtxeNF9G9TDd3bvsTcgCzQcdHWqKD3aES8A2O76C6tHgcm
+         vBeXi6ziB7vO6zOA26AEOu9fPi98odlT/tYmiE2VwQ/feJ8JAeaKO+1V6B8CI4TwR/aM
+         0NmuvOYBPLsCifYLfuNIPpbGWgpblX1/72Xk+KuO8WMwkVyEC2iIAQYx6b5LlxHKFOdM
+         ne5mpbMdbr+HsuO8kWAIhw2gL6U2pQA11lN2DbL30A+8Mbba0JbRa1QKOP1AvyB4A4fE
+         4lpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=433bYYY/TmoUpHBBY/tF9/GMluKPjfLdJmiTSrcvVWQ=;
+        b=1G2B1KiqUoWjOw88QwjSbZvt43UBHQg76yjOIUw6xCJ4518GohjfgoaHNgr6DSJ2IJ
+         /r8kIgvGq45xDbIiN10CPOFFDhnA7lFzUFqd9oSW2hP7zuYaCSZgm7X8BznJBtO541I0
+         PM2Cgv8w6xfinn6rqVfdPs9Vi3AkYcrLL2x6DVdYo3pIFb+mZVmUgXvRyX6/ztuDB2E8
+         dFp6jloIE4IGc72vB/+4ZGA38JCr5p2SU/UajFaAN9ExRIltxfb8534uhZkzMwnMKYBN
+         URkSlwyla4jp23zfnP/bI/OiTjheMZ1SZrAv+QNNDH3WsF1KQuGAUUofboMr77KiWRxy
+         S10A==
+X-Gm-Message-State: AO0yUKVJoVnNduvIMarEds4ys5cSsyDAvcvIwzqP/C0qEIdW6ttb+/P8
+        t27F5vTaJePQTnhaaW6SHKwUq6abSiI=
+X-Google-Smtp-Source: AK7set/Ixb3WSqFMEhxCzQ689X3ZTVmK8ruI8pPEZ7ylGKFiKBp4ONoeUFKy8Fks/gcWB3v04QjpIw==
+X-Received: by 2002:a2e:bd06:0:b0:290:6302:8c7e with SMTP id n6-20020a2ebd06000000b0029063028c7emr4290489ljq.3.1677140099620;
+        Thu, 23 Feb 2023 00:14:59 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id 10-20020ac2568a000000b004db39e80733sm1244450lfr.155.2023.02.23.00.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 00:14:59 -0800 (PST)
+Date:   Thu, 23 Feb 2023 10:14:57 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, nikunj.dadhania@amd.com,
+        Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v8 28/56] crypto: ccp: Provide APIs to query
+ extended attestation report
+Message-ID: <20230223101457.000051ae@gmail.com>
+In-Reply-To: <8462a7e8-f021-6b55-75b4-5dbdaf013897@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+        <20230220183847.59159-29-michael.roth@amd.com>
+        <20230222222421.00001a62@gmail.com>
+        <8462a7e8-f021-6b55-75b4-5dbdaf013897@amd.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+On Wed, 22 Feb 2023 16:35:43 -0600
+"Kalra, Ashish" <ashish.kalra@amd.com> wrote:
 
-Add a atomic_t variable for initialization of hw dev.
+> On 2/22/2023 2:24 PM, Zhi Wang wrote:
+> > On Mon, 20 Feb 2023 12:38:19 -0600
+> > Michael Roth <michael.roth@amd.com> wrote:
+> > 
+> > It seems in the discussion:
+> > https://lore.kernel.org/lkml/f18fae8b-a928-cd82-e0b3-eac62ad3e106@amd.com/,
+> > this API is going to be removed. Will that fix land in this patch series or not?
+> > If not, It would be better to mention it in the comment message of this one
+> > or patch 45.
+> > If yes, I guess this patch is not needed.
+> >   
+> 
+> This API is definitely not going to be removed.
+> 
+> There will be some fixes and optimizations added to the API 
+> implementation (as per the discussions) and that will be included in v9.
+> 
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c |  1 +
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h |  2 ++
- .../media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c   | 12 ++++--------
- .../media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c   | 12 ++++--------
- 4 files changed, 11 insertions(+), 16 deletions(-)
+Thanks.
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index ab06c1ee80d4..1dd03938df7e 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1742,6 +1742,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 			num_child++;
- 
- 		atomic_set(&jpeg->hw_rdy, num_child);
-+		atomic_set(&jpeg->hw_index, 0);
- 
- 		jpeg->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
- 							  WQ_MEM_RECLAIM
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index 89242e407dc9..8ba6e757e11a 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -208,6 +208,7 @@ struct mtk_jpegdec_comp_dev {
-  * @hw_rdy:		jpg hw ready flag
-  * @reg_decbase:	jpg decode register base addr
-  * @dec_hw_dev:	jpg decode hardware device
-+ * @hw_index:		jpg hw index
-  */
- struct mtk_jpeg_dev {
- 	struct mutex		lock;
-@@ -229,6 +230,7 @@ struct mtk_jpeg_dev {
- 
- 	void __iomem *reg_decbase[MTK_JPEGDEC_HW_MAX];
- 	struct mtk_jpegdec_comp_dev *dec_hw_dev[MTK_JPEGDEC_HW_MAX];
-+	atomic_t hw_index;
- };
- 
- /**
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index b7c2de2489b0..869068fac5e2 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -638,14 +638,10 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, ret,
- 				     "Failed to register JPEGDEC irq handler.\n");
- 
--	for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++) {
--		if (master_dev->dec_hw_dev[i])
--			continue;
--
--		master_dev->dec_hw_dev[i] = dev;
--		master_dev->reg_decbase[i] = dev->reg_base;
--		dev->master_dev = master_dev;
--	}
-+	i = atomic_add_return(1, &master_dev->hw_index) - 1;
-+	master_dev->dec_hw_dev[i] = dev;
-+	master_dev->reg_decbase[i] = dev->reg_base;
-+	dev->master_dev = master_dev;
- 
- 	platform_set_drvdata(pdev, dev);
- 	pm_runtime_enable(&pdev->dev);
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index e35ee1bdce3d..71e85b4bbf12 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -362,14 +362,10 @@ static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	for (i = 0; i < MTK_JPEGENC_HW_MAX; i++) {
--		if (master_dev->enc_hw_dev[i])
--			continue;
--
--		master_dev->enc_hw_dev[i] = dev;
--		master_dev->reg_encbase[i] = dev->reg_base;
--		dev->master_dev = master_dev;
--	}
-+	i = atomic_add_return(1, &master_dev->hw_index) - 1;
-+	master_dev->enc_hw_dev[i] = dev;
-+	master_dev->reg_encbase[i] = dev->reg_base;
-+	dev->master_dev = master_dev;
- 
- 	platform_set_drvdata(pdev, dev);
- 	pm_runtime_enable(&pdev->dev);
--- 
-2.18.0
+I should use the term "this API is going to be refined" as
+snp_guest_ext_guest_request() is going to be renamed and refined. I gave
+this comment because when digging this patch, I found this API was going to be
+changed in the discussion based on v7 when digging this patch. It would be
+really nice to mention it in the v8 so that some review efforts can be saved.
+For example, some people might choose to skip reviewing this one in v8 and get
+back on it in the next version when it is ready. Or people can also evaluate
+the possible changes in v9 when reviewing this part.
+
+> Thanks,
+> Ashish
+> 
+> >> From: Brijesh Singh <brijesh.singh@amd.com>
+> >>
+> >> Version 2 of the GHCB specification defines VMGEXIT that is used to get
+> >> the extended attestation report. The extended attestation report includes
+> >> the certificate blobs provided through the SNP_SET_EXT_CONFIG.
+> >>
+> >> The snp_guest_ext_guest_request() will be used by the hypervisor to get
+> >> the extended attestation report. See the GHCB specification for more
+> >> details.
+> >>
+> >> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> >> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> >> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> >> ---
+> >>   drivers/crypto/ccp/sev-dev.c | 47 ++++++++++++++++++++++++++++++++++++
+> >>   include/linux/psp-sev.h      | 33 +++++++++++++++++++++++++
+> >>   2 files changed, 80 insertions(+)
+> >>
+> >> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> >> index b56b00ca2cd4..e65563bc8298 100644
+> >> --- a/drivers/crypto/ccp/sev-dev.c
+> >> +++ b/drivers/crypto/ccp/sev-dev.c
+> >> @@ -2017,6 +2017,53 @@ int sev_guest_df_flush(int *error)
+> >>   }
+> >>   EXPORT_SYMBOL_GPL(sev_guest_df_flush);
+> >>   
+> >> +int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
+> >> +				unsigned long vaddr, unsigned long *npages, unsigned long *fw_err)
+> >> +{
+> >> +	unsigned long expected_npages;
+> >> +	struct sev_device *sev;
+> >> +	int rc;
+> >> +
+> >> +	if (!psp_master || !psp_master->sev_data)
+> >> +		return -ENODEV;
+> >> +
+> >> +	sev = psp_master->sev_data;
+> >> +
+> >> +	if (!sev->snp_initialized)
+> >> +		return -EINVAL;
+> >> +
+> >> +	mutex_lock(&sev->snp_certs_lock);
+> >> +	/*
+> >> +	 * Check if there is enough space to copy the certificate chain. Otherwise
+> >> +	 * return ERROR code defined in the GHCB specification.
+> >> +	 */
+> >> +	expected_npages = sev->snp_certs_len >> PAGE_SHIFT;
+> >> +	if (*npages < expected_npages) {
+> >> +		*npages = expected_npages;
+> >> +		*fw_err = SNP_GUEST_REQ_INVALID_LEN;
+> >> +		mutex_unlock(&sev->snp_certs_lock);
+> >> +		return -EINVAL;
+> >> +	}
+> >> +
+> >> +	rc = sev_do_cmd(SEV_CMD_SNP_GUEST_REQUEST, data, (int *)fw_err);
+> >> +	if (rc) {
+> >> +		mutex_unlock(&sev->snp_certs_lock);
+> >> +		return rc;
+> >> +	}
+> >> +
+> >> +	/* Copy the certificate blob */
+> >> +	if (sev->snp_certs_data) {
+> >> +		*npages = expected_npages;
+> >> +		memcpy((void *)vaddr, sev->snp_certs_data, *npages << PAGE_SHIFT);
+> >> +	} else {
+> >> +		*npages = 0;
+> >> +	}
+> >> +
+> >> +	mutex_unlock(&sev->snp_certs_lock);
+> >> +	return rc;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(snp_guest_ext_guest_request);
+> >> +
+> >>   static void sev_exit(struct kref *ref)
+> >>   {
+> >>   	misc_deregister(&misc_dev->misc);
+> >> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> >> index d19744807471..81bafc049eca 100644
+> >> --- a/include/linux/psp-sev.h
+> >> +++ b/include/linux/psp-sev.h
+> >> @@ -931,6 +931,32 @@ void snp_free_firmware_page(void *addr);
+> >>    */
+> >>   void snp_mark_pages_offline(unsigned long pfn, unsigned int npages);
+> >>   
+> >> +/**
+> >> + * snp_guest_ext_guest_request - perform the SNP extended guest request command
+> >> + *  defined in the GHCB specification.
+> >> + *
+> >> + * @data: the input guest request structure
+> >> + * @vaddr: address where the certificate blob need to be copied.
+> >> + * @npages: number of pages for the certificate blob.
+> >> + *    If the specified page count is less than the certificate blob size, then the
+> >> + *    required page count is returned with error code defined in the GHCB spec.
+> >> + *    If the specified page count is more than the certificate blob size, then
+> >> + *    page count is updated to reflect the amount of valid data copied in the
+> >> + *    vaddr.
+> >> + *
+> >> + * @sev_ret: sev command return code
+> >> + *
+> >> + * Returns:
+> >> + * 0 if the sev successfully processed the command
+> >> + * -%ENODEV    if the sev device is not available
+> >> + * -%ENOTSUPP  if the sev does not support SEV
+> >> + * -%ETIMEDOUT if the sev command timed out
+> >> + * -%EIO       if the sev returned a non-zero return code
+> >> + */
+> >> +int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
+> >> +				unsigned long vaddr, unsigned long *npages,
+> >> +				unsigned long *error);
+> >> +
+> >>   #else	/* !CONFIG_CRYPTO_DEV_SP_PSP */
+> >>   
+> >>   static inline int
+> >> @@ -968,6 +994,13 @@ static inline void *snp_alloc_firmware_page(gfp_t mask)
+> >>   
+> >>   static inline void snp_free_firmware_page(void *addr) { }
+> >>   
+> >> +static inline int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
+> >> +					      unsigned long vaddr, unsigned long *n,
+> >> +					      unsigned long *error)
+> >> +{
+> >> +	return -ENODEV;
+> >> +}
+> >> +
+> >>   #endif	/* CONFIG_CRYPTO_DEV_SP_PSP */
+> >>   
+> >>   #endif	/* __PSP_SEV_H__ */  
+> >   
 
