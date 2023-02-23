@@ -2,147 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288D16A020C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC0A6A020A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbjBWEdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 23:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S233073AbjBWEdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 23:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbjBWEdd (ORCPT
+        with ESMTP id S232785AbjBWEdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 23:33:33 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on20612.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8d::612])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29532279B;
-        Wed, 22 Feb 2023 20:33:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mnCXK0GX2jMr3aGxS4NuRY1l/3/idvvwxeqdD2Zz7I5zvzEBDkfeSc9vbRAFZ2Y60s1Un27cOQRsZJgflMLmlItkeKyfed1GcBbZNQlBCR4zM9dFys3q86CMTYPxJlrtcs3GUnVmt2q3U/R0pE34B+PTMVkDuqmIGzevLn1yG3UBFp8LhzfNw3xxHBX+QAsbfJkC51Rki9G+5ZIsALiTh8zWDcsxmWYtXWrbaDXAWaCc4aV+jUqxIGeIdFFJsekEUhSUQRT4wNd1q5/2fL280RkCIp58d07Z6oEEVPSv07KnJTwlUyRd3VOTxT99rvEyHYWrOci5AXzpN9QT9oampA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dUJRO+gRNk5wv/Ha21TVltvgi+XXx5WFk5QC25TmBhA=;
- b=h7WkHG7vR2DAbED1i/ReUhBev1Pvw0IVx4m79JWXGtGYv6/kE3Lv4Y8Fgo968BxKQUWmBHfZciQ56zD4iIgmpM3u8VBVkOmpccpFx77JkoxfEOj9eqZIvGzpD4yb8KQqtlBWyDz+DHbBgk4a5g1nDH9tO+QjeliFh2CktpsSm9sS+slkjvp3tgAF48ZDWDNzMyDB0riocXUgeE9HCw90SOBdC8PQ03F2X/SWgWamY6gF4rBXlcsahjhn1IQFfZS35hGZFBnHIodeZs4DZguHBJYc/EZT16gEjpeu35weqtd+A3jxK/t2++rYxMAWgYRqBanNw2Wg7TWq/4fPQ0g5TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dUJRO+gRNk5wv/Ha21TVltvgi+XXx5WFk5QC25TmBhA=;
- b=DutYB1ELXAs1vQcR1HG3aY35MhZ7i6c+6LLT06bgOxP6L3bfuNnoVpqqOvNF1gXNdr5bT1poR46hNaOn6PAzd5qhi/8jaTDzQg/h48NjmWk9O7HH/tPmCqxQWxlSI0nchNJJK9u5pPitPk9ffY60/eCHOR4vnLyOiCB5L1EeUT8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- SN7PR12MB7911.namprd12.prod.outlook.com (2603:10b6:806:32a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
- 2023 04:33:27 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b%7]) with mapi id 15.20.6086.024; Thu, 23 Feb 2023
- 04:33:27 +0000
-Date:   Thu, 23 Feb 2023 12:33:04 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: amd-pstate: Let user know amd-pstate is disabled
-Message-ID: <Y/bsgIipfVLXXvhw@amd.com>
-References: <20230223013032.2011601-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223013032.2011601-1-kai.heng.feng@canonical.com>
-X-ClientProxiedBy: SG2PR03CA0113.apcprd03.prod.outlook.com
- (2603:1096:4:91::17) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        Wed, 22 Feb 2023 23:33:18 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25D82310E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:33:16 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id u14so7499680ple.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:33:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wG/6wi8FA7LC2E67A3OVEJ/iTQlZXTd9mLmf0AaucdY=;
+        b=h/L9Lg3IsZ1aj36X6s/a1fkapT+vTbUin8UyP/ZvKZBKLjP7+Emtg1fhUTmaCo55Xb
+         K1bg6Qtxn07LPbab2qvPTE7Zf7DL+2g8nwam0cRUx58+0nLFn1FHUQV+wVoK65Boq84L
+         IT9w2+pD2UouMdXb8LJJIkXq6eI6S4cIOdSNVxF+DpgrHw9ppwSOU1oc8wYPYo/sw5Pl
+         ycnJyTZHc0ZICLfgsiYc14TNmo8UxBJ8MqdmE9jJyBWK1Nhghb5Zk3W56nRGBzAjxAcb
+         zmfp5BVdKAuYjHsVVw4tV8HkTedlUYpiFnrQ3B/ZJo3gmf69l2Vzh4QwEL8icXO1KlQw
+         miaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wG/6wi8FA7LC2E67A3OVEJ/iTQlZXTd9mLmf0AaucdY=;
+        b=cWNBPm2lBHqUuR/odgpZUjegYLd2760JyQEWnG1tMAnE8QrdaxuNU/cDcZ/EkxntKV
+         b+FmDQTl+bnXaaWnUpVibWT5E0Q78sbehaYGWuJHYj+r0SPjUVqvfgFMv7bR6d2yrKUp
+         ej08oxUK+maEqV3vRI56l/nS5g/BMuF/gam7cGCMIkcYPMsUnkxBaaVFS9CLoX0eJfS0
+         yvIBEG7lfT1t1zJids3REL6vdCRfeF3lwKzoWBbcBGHm++KKIHKI7+/NafIRnB8aDX6S
+         ufCVmDrHMN1B1MoyiA4sKnyEQhd6Leakjfskmh34GPnQSNa43m1Mx1iCARsDM6dbPbPU
+         oX2Q==
+X-Gm-Message-State: AO0yUKUJdZnYq//3VW5BrvwIHKtD11UMC8Bi/1UBoNzjaJjRfUa7hmAk
+        byL1Te66aJVfuaGxnTtCaMDM0iztOMK0j1Ih5gIBQg==
+X-Google-Smtp-Source: AK7set9Q1XGuOAuksQMQTUHoBleoXSQcBUcmi3gyIMaZGRBCN4TnDKJ2kRdHm6Gg8wKbRn7Zg9tIscJflmguP5aSZps=
+X-Received: by 2002:a17:90b:4d0d:b0:233:e8b8:5d4e with SMTP id
+ mw13-20020a17090b4d0d00b00233e8b85d4emr1752957pjb.73.1677126796191; Wed, 22
+ Feb 2023 20:33:16 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|SN7PR12MB7911:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00e984f3-3cb5-41a4-c624-08db15571b73
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BkcJ5QNgUzlWJjOT4jB6VZT6L9STNE0Ylu6tYumdT32381YlLUWYZItVedFf240Ny5DRARlYVIdk9KvQ4YKK/3ohdhyIZRPZ9XtLipvTrYWdrB6nMJOseZPbPVlkUU2VotKFop0iDZga1q5lGlkNlgFuGOXSuaFS50/cUApsMfpUutnDJ33shIClGt7p/kSPjO+joKEnN6/xotk+M23o3C2ZpRz0Ciwfpfsuy7ZVORXe5tMKIZTwaxq1uCLa01IUdcjG1kk9cqoW5PAlYLuZaIn4xnq93ww5SS5bkQEtyCAT/Ym7FmHV/XHUK9t10KHsvhhEzI7IU41mtG/qBlhf9C3eROlLVQUf1XftXTp/xMF70mYDRkcQ3cETyCNapYeaXWkCZ2Z/axjBTqjoXg3cawS6G0sPFg6tqrU+GMEc3lnaM83HnIZ63sKLHdHTqDkyznFoCHMmWVgilW5paaF8jU7LFBu1mvn+CvfGwIZM+0kLnfjLFetsIegiYDbYuBd2II7pu5bSDG7R1lwPbwuAtHN5hm/oecIPCLjgFe2fqfW23esWnoJVnv2FYzbW+nsDi5cOPLcbePgcgmWtKOF849W1ABcXocJIbpzx/1QXSitI2zbAHsxPXnJ5Bgv0HYKq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39860400002)(136003)(346002)(376002)(451199018)(2906002)(5660300002)(36756003)(83380400001)(26005)(2616005)(186003)(6506007)(54906003)(38100700002)(4326008)(66556008)(316002)(6916009)(8676002)(66476007)(66946007)(8936002)(86362001)(966005)(6666004)(6512007)(41300700001)(478600001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a+B/CBF11r1AQHxB4FXY926iW+2zZBPpOut7esCkjb3QyURYcL5wjDtYqsuf?=
- =?us-ascii?Q?hmXnFyEwU9kRGuRvatsUobUaKgld2hI6Z1ui2eouc6nDcHMENn24cZvWtWAy?=
- =?us-ascii?Q?W9r4tLEzSKzUFZoYWAhtnlQMNKqqssxq3veim7teJGHvF1OVxMuctTE1l2DC?=
- =?us-ascii?Q?lgAOMog5M+JeOrKWrI2Z+MmCkiNhb0qJd+Fjc+dzpOKxOwp59WC3WxwmB9TP?=
- =?us-ascii?Q?G7ahnWrCFgeMsTPQ3Gv5EN5NAPFqJyLcxaSWLvlGG4sTLoi3vhcsx/TlwbF4?=
- =?us-ascii?Q?AtM3N71omzJUilwn1FALTI+h4QxtqWmmbMK5MCq7o7FovTliLUDOLQm98wyz?=
- =?us-ascii?Q?c20Hp5Sq5o1FdWhHv1r3do1w2VgrWiWzN5U5rsplTk6piJAz3PxzCOeIWoBs?=
- =?us-ascii?Q?1Zz+Sstjpkf1nydy0Ug4s/lKmqPII/gSkB//PxUSi9MEm8+zOJxwJaIWHm1G?=
- =?us-ascii?Q?C2zPJLNaXeFIpC8AyRq409BDxSPFab8yN8/31b2iPqOZx+uZz2fRi2V/UPVJ?=
- =?us-ascii?Q?1RmW30Ny8vaPWI2yI5tE9BBxWnB8mE2pYVA6o12oC4/kZD4wSc3V83meCVuo?=
- =?us-ascii?Q?zYz4eSjjcJQBGvHgXKDxeoI6SQmqV8/h/dISpX3PuMYDB60S604ER8G7LGpg?=
- =?us-ascii?Q?eBEdu9ITRtep/rYWZ7dYQ3rrptmY39YBiACj/dBT/UXKjZ8Ki/4CBdJ5Tttb?=
- =?us-ascii?Q?C9xrdkyTh2u9XYgik43RbvXOlA/u84tA+sKRrXjVnZZ/wfkP+BNEzN5L1PE9?=
- =?us-ascii?Q?5CcU9l4iaF6c+P/BsEGPjplLGrNYPI0pSqSA+Pb6ntSCJ/0XfltrNiRCUO1F?=
- =?us-ascii?Q?VcXTFeye0rMLue76erHt1crBkrhPAVkT//c4SxXYwABR7FUz8a14A8ZcJ5WB?=
- =?us-ascii?Q?PvokDBCJfeLmjK0XQ3Siyihq6MF15YbIF/Nbf03VOuXJP1mTXmWiF1CusT8F?=
- =?us-ascii?Q?dTPdZwQ8Gw4Zi04wE3dn/yUc7Cr3T+IR7M5s2MLQu9hVz4liyiJNKadYz2bQ?=
- =?us-ascii?Q?ooiC5hWL4aoGasF+IsGlWLNn/kakc57DkXob8aK/7yipeR6TvzRsdgg3reZ3?=
- =?us-ascii?Q?38oeZ8IGadZOGRaztIfqDoHxaruv6Vi+U08EapCXLJI1qXXSM1ee260yccRT?=
- =?us-ascii?Q?yXGLy7vxUM76ZGQlfw7DHhgBJdStO9m2TBFbpDx2aKVa9ZW4njUpUjH2ADMI?=
- =?us-ascii?Q?QjqNDM5vmkv6wbJLpLOtDu3JzsdouqNTNMEhGwF7iK3xMx7zEM+2w7G9I50s?=
- =?us-ascii?Q?VE5hQkA7iSUaLpbDpZQG1oT5ZEBoEjvm690eSsSAtZEuwnqOyuals+g5PGDQ?=
- =?us-ascii?Q?TzTTJYNOvzGq58cxc1afkhRG+XJIzqb0HKWSumRsf+LgQq1+XigHXfBW4XIj?=
- =?us-ascii?Q?WaotBIN8RSawWOr35h6SqXkUAqF5VkNqyYQeTiTxH8v1Dbcmc+sGqcVBEu4J?=
- =?us-ascii?Q?RdIHCXtZtNbOnvnsmKSzI0rqdFULZJYs+B7xVAqZiLdkNST9/zKesZ6/I875?=
- =?us-ascii?Q?Kpj6Cy63vz/fycC/XNEQAjCKYGBwS3Gg0X+xxMT9ylmt+YLXJjyJxaL+xzvB?=
- =?us-ascii?Q?vNpO6ol6MmJrY0U/a791Y3DneI+/GjWisz3ZfhyS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00e984f3-3cb5-41a4-c624-08db15571b73
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 04:33:27.1529
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rc3UpU3qB8ajhlMtOMEDrHPJZy21XoR4aZsZYCTGXIswzU8RUsVxarXI7cafLjVA1qOVpOrXUXMU/z2NNsaLrw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7911
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <CGME20221103195201eucas1p2a6ec2df41ebac3d9ccbb0b252c2cad34@eucas1p2.samsung.com>
+ <20221103195154.21495-1-semen.protsenko@linaro.org> <a7d9cd18-a328-209c-c89f-afdcb7db3eb0@samsung.com>
+ <b7ad6444-e7d2-1150-6134-3dae8129dcdb@samsung.com> <CAPLW+4=Y6qZG2XjJR_BkX-ar4GWdETKO1tteJjfbxVc664e4Kg@mail.gmail.com>
+ <CAGETcx9ApZFvKjEaxvvgsoHDzOq06ZiROZ5npYt+suNdE4KWDg@mail.gmail.com>
+In-Reply-To: <CAGETcx9ApZFvKjEaxvvgsoHDzOq06ZiROZ5npYt+suNdE4KWDg@mail.gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Wed, 22 Feb 2023 22:33:20 -0600
+Message-ID: <CAPLW+4kbi3cDNu7wXTjeDskk40da5vhAVXG8Am-MHN+REuLDrw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] iommu/exynos: Convert to a module
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 09:30:32AM +0800, Kai-Heng Feng wrote:
-> Commit 202e683df37c ("cpufreq: amd-pstate: add amd-pstate driver
-> parameter for mode selection") changed the driver to be disabled by
-> default, and this can suprise users.
-> 
-> Let users know what happened so they can decide what to do next.
-> 
-> BugLink: https://bugs.launchpad.net/bugs/2006942
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+On Mon, 6 Feb 2023 at 21:33, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Fri, Nov 11, 2022 at 5:30 AM Sam Protsenko
+> <semen.protsenko@linaro.org> wrote:
+> >
+> > On Thu, 10 Nov 2022 at 15:36, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+> >
+> > [snip]
+>
+> Hi Marek and Sam,
+>
+> I'm replying to both of your comments in this email.
+>
+> > > I've finally made Exynos IOMMU working as a module on Exynos5433 based
+> > > TM2e board. It looks that this will be a bit longer journey that I've
+> > > initially thought. I've posted a simple update of the fix for the driver
+> > > initialization sequence, but the real problem is in the platform driver
+> > > framework and OF helpers.
+> > >
+> > > Basically to get it working as a module I had to apply the following
+> > > changes:
+> > >
+> > > diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> > > index 3dda62503102..f6921f5fcab6 100644
+> > > --- a/drivers/base/dd.c
+> > > +++ b/drivers/base/dd.c
+> > > @@ -257,7 +257,7 @@ static int deferred_devs_show(struct seq_file *s,
+> > > void *data)
+> > >   DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+> > >
+> > >   #ifdef CONFIG_MODULES
+> > > -int driver_deferred_probe_timeout = 10;
+> > > +int driver_deferred_probe_timeout = 30;
+> > >   #else
+> > >   int driver_deferred_probe_timeout;
+> > >   #endif
+> > > diff --git a/drivers/of/property.c b/drivers/of/property.c
+> > > index 967f79b59016..e5df6672fee6 100644
+> > > --- a/drivers/of/property.c
+> > > +++ b/drivers/of/property.c
+> > > @@ -1384,7 +1384,7 @@ static struct device_node *parse_interrupts(struct
+> > > device_node *np,
+> > >   static const struct supplier_bindings of_supplier_bindings[] = {
+> > >          { .parse_prop = parse_clocks, },
+> > >          { .parse_prop = parse_interconnects, },
+> > > -       { .parse_prop = parse_iommus, .optional = true, },
+> > > +       { .parse_prop = parse_iommus, },
+> > >          { .parse_prop = parse_iommu_maps, .optional = true, },
+> > >          { .parse_prop = parse_mboxes, },
+> > >          { .parse_prop = parse_io_channels, },
+> > >
+> > > Without that a really nasty things happened.
+>
+> I have a command line option to do this without code changes. Use
+> fw_devlink.strict=1. That makes all optional properties into mandatory
+> ones.
+>
+> I sent out a series[1] that tried to make fw_devlink.strict=1 the
+> default and then use the timeout behavior (more details) to handle
+> cases where iommu and dmas (or any other supplier) are optional on a
+> specific board. The cover letter of [1] should give some more context.
+>
+> > > Initialization of the built-in drivers and loading modules takes time,
+> > > so the default 10s deferred probe timeout is not enough to ensure that
+> > > the built-in driver won't be probed before the Exynos IOMMU driver is
+> > > loaded.
+>
+> The 10 second is the minimum delay from the time we hit late_initcall.
+> If a driver is registered before the 10s expires, then the timer will
+> be extended by another 10s. This behavior landed sometime around the
+> end of May 2022. So it should have been in your tree when you tested
+> this. I'm surprised this isn't sufficient for your case. Is there
+> really a 10s gap in your boot sequence where no module is being loaded
+> and then IOMMU modules get loaded later on? I'm kinda surprised by
+> this. Is it this long because some serial UART is enabled and it's
+> slowing down boot? Or something else?
+>
+> I'm not saying your case isn't valid or we shouldn't extend the
+> timeout. I'm just trying to understand why the current timer behavior
+> wasn't able to cover your case.
+>
+> > Yeah, the whole time-based sync looks nasty... I remember coming
+> > across the slides by Andrzej Hajda called "Deferred Problem" [1], but
+> > I guess the proposed solution was never applied. Just hope that
+> > increasing the timeout is upstreamable solution.
+> >
+> > [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
+>
+> Sam, I kinda skimmed the slides right now. Looks like it talks about
+> device links and why they aren't sufficient and makes an alternate
+> proposal. fw_devlink is a solution that uses device links and I think
+> addresses a lot of the issues that were raised about device links.
+> There's still a bunch of TODOs left, but I think the end goal is the
+> same. I'm hoping to keep chipping away at it. For now, I've tried to
+> make the timer a bit more smart about detecting when modules are
+> getting loaded and extending the timer. fw_devlink also enables
+> something called sync_state() that's invaluable on a fully modular
+> system (search lore for references to that to get some idea).
+>
+> The slides talk about a solution that will allow devices to probe with
+> limited functionality with whatever suppliers are available and then
+> reprobe as more suppliers are available. I'm not sure how well that'll
+> work across the board. It's going to be a bit weird if your phone
+> display goes off and then comes on again because an IOMMU driver got
+> loaded (and it can now do DRM playback). For now, I'm not going to
+> focus on that option because there are enough existing issues/TODOs to
+> work on for fw_devlink.
+>
+> > > The second change fixes the problem that driver core probes Exynos IOMMU
+> > > controllers in parallel to probing the master devices, what results in
+> > > calling exynos_iommu_of_xlate() and exynos_iommu_probe_device() even on
+> > > the partially initialized IOMMU controllers or initializing the dma_ops
+> > > under the already probed and working master device. This was easy to
+> > > observe especially on the master devices with multiple IOMMU
+> > > controllers. I wasn't able to solve this concurrency/race issues inside
+> > > the Exynos IOMMU driver.
+> > >
+> > > Frankly speaking I don't know what is the rationale for making the
+> > > 'iommus' property optional, but this simply doesn't work well with IOMMU
+> > > driver being a module. CCed Saravana and Rob for this.
+> > >
+> >
+> > The patch which makes 'iommus' optional doesn't provide much of
+> > insight on reasons in commit message either.
+>
+> This was the commit text:
+>
+>     Not all DT bindings are mandatory bindings. Add support for optional DT
+>     bindings and mark iommus, iommu-map, dmas as optional DT bindings.
+>
+> I thought it was obvious enough, but I guess I could have done better.
+> Geert convinced me that iommu's aren't always necessary and devices
+> could work perfectly well without them or dmas. And he has a bunch of
+> boards like that. So I went with adding optional and then introducing
+> fw_devlink.strict.
+>
+> However, at this point in time, I believe none of them should be
+> marked as optional because technically any property can be optional
+> depending on what the firmware has set up and what the driver does. We
+> should figure this out at runtime on a board level -- which is what
+> [1] is trying to do. Yeah, not very pretty, but there hasn't been a
+> better solution that's not "have userspace tell us it's done loading
+> modules" (that's a "kernel depends on userspace to work correctly"
+> thing that no one likes). I've fixed some of the issues raised in [1]
+> in a fw_devlink improvement series[2] and I plan on continuing to work
+> on this until hopefully [1] can land.
+>
+> > > Without fixing the above issues, I would add a warning that compiling
+> > > the driver as a module leads to serious issues.
+> > >
+> >
+> > Nice catch! It doesn't reproduce on my platform, alas. Can I expect
+> > you to submit those patches? If so, I'll probably just wait for those
+> > to be applied, and then re-send my modularization series on top of it.
+> > Does that sounds reasonable?
+>
+> For now, maybe we could add a config to enable fw_devlink.strict=1 by
+> default and then select it if you make specific iommu drivers into
+> modules? And then Geert won't set it for his driver, but you can set
+> it for your driver?
+>
 
-Acked-by: Huang Rui <ray.huang@amd.com>
+Marek, what is your take on this? I probably can't provide any useful
+comments, as the issue is not even reproducible on my platform. Do you
+think some easy solution exists to make modularized IOMMU driver work?
+That series has been sitting for a while on ML now, so I wonder if we
+can handle it somehow, w.r.t. Saravana's input.
 
-> ---
->  drivers/cpufreq/amd-pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 45c88894fd8e..305f73f657ed 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1263,7 +1263,7 @@ static int __init amd_pstate_init(void)
->  	 * with amd_pstate=passive or other modes in kernel command line
->  	 */
->  	if (cppc_state == AMD_PSTATE_DISABLE) {
-> -		pr_debug("driver load is disabled, boot with specific mode to enable this\n");
-> +		pr_info("amd_pstate is disabled, boot with specific mode to enable this\n");
->  		return -ENODEV;
->  	}
->  
-> -- 
-> 2.34.1
-> 
+> Thanks,
+> Saravana
+>
+> [1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
+> [2] - https://lore.kernel.org/lkml/20230207014207.1678715-1-saravanak@google.com/
