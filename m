@@ -2,203 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583E26A0649
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0166A05D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjBWKbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S234185AbjBWKPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjBWKbA (ORCPT
+        with ESMTP id S233955AbjBWKPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:31:00 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B435E51F9E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:30:29 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id l1so10001043wry.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:30:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/d1V97xfn1urp1yFSAFHB4bA8otMHdcMdq0yddMNFI=;
-        b=hcoIV/z8lyL+ysVNVs6Y6+yJCu00ToOB1RctbNGmzn6TVnVvxY7XobmvDx0cUkA2xQ
-         xfM4zr3AWE+b2Gtowo9aLR8xr2kvlYJfKxP9Itoq39971OTw4jDjtvXuJIaW6qUeofV5
-         EQWm9Hn8VbRrY4wbZjRT+ENuVYy9Veq5SwjN8cFj2tCHTSpNKWogtut2gHDMrwDsU5cZ
-         ZKqDIGyOhckxOd0wsydnj2kidFvup2vNd5mqGZHNZgcLygtgv2+azbCyRnBMohLbAGHA
-         LQxmw22JVxiWV5822JzZZs1rVzyf1J1uIGehZSU3KFmWDRLsvMPcd89e+agLiMmUJ+0h
-         ah3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3/d1V97xfn1urp1yFSAFHB4bA8otMHdcMdq0yddMNFI=;
-        b=wklDvJSiTndaRq9IauUM3Sp6sHk6rU+1cW3q8o5eqxJHROxbEVcVxMUdKfQo5hTc7v
-         5biIRTtMrn7uU5XHfE5HIRTVPHMyq79jWAs3zKVGvG/4HLYTZ/vjG4LNsqD+JQC+pODM
-         UwKY2QU8SWE+IlshVspkdAHxa5JN63ap+Bc/30LF5r2hl3pTWqXyoTHoDrEw7/MISLft
-         g7q2R+3Wq7OreDA/rcsDwZwpjDP4j5cIbvpeKf4oGfu+Vd7qT7MWSD3UoR4x/vZcRsLY
-         rzXPgAT1Uj6+GMV5iJGpOCf/sK6gKXcqZ7khTMo3s+i30vWQUio6CJJnvNBf0zaLzjc/
-         s4Xg==
-X-Gm-Message-State: AO0yUKVr4LIvQFCNKnesfFH/QS+pNxDWyDBPp66oyma7YXk7tjQ4Cj4V
-        sptQpWhpyJl8XA+5yMdLPn3ERw==
-X-Google-Smtp-Source: AK7set/AJ/sQ293L1C/QDJKZNG/kThSW0HregqvGRPQyAGhtGjSWliE7pQlcCpSYC0riIpZo4sB8jQ==
-X-Received: by 2002:a5d:6190:0:b0:2c7:a0b:e8d2 with SMTP id j16-20020a5d6190000000b002c70a0be8d2mr5185559wru.19.1677148226407;
-        Thu, 23 Feb 2023 02:30:26 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id t6-20020a5d4606000000b002c55306f6edsm13119455wrq.54.2023.02.23.02.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 02:30:25 -0800 (PST)
-References: <20230223062723.4770-1-yu.tu@amlogic.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
-Subject: Re: [PATCH] clk: meson: vid-pll-div: added meson_vid_pll_div_ops
- support to enable vid_pll_div to meet clock setting requirements,
- especially for late chip
-Date:   Thu, 23 Feb 2023 11:11:29 +0100
-In-reply-to: <20230223062723.4770-1-yu.tu@amlogic.com>
-Message-ID: <1jv8jsoerm.fsf@starbuckisacylon.baylibre.com>
+        Thu, 23 Feb 2023 05:15:19 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27BE2724;
+        Thu, 23 Feb 2023 02:15:17 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N8aZtB008148;
+        Thu, 23 Feb 2023 10:15:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=c4clivKo9ew/gC6glkZCR3DQPjKGD10Y+BS6SNEcx2U=;
+ b=HQelw0SCfCU+hhSgZeziCRuJD3nMy6SoQKGzELPo/X5tXsnhHcXjzmvWjoCO1k8KmAQE
+ v4RB9gW6rITARmBnle2P/MGWrDDJwY4Ge6bba/YMk6kuA7rOK6taAHVjBmoZua/ajSdp
+ WR4BEs7uI9H7T3eSu3myhN0zjtaIMG3bcGzq0cvzeLHRcUyAXloxFqQ2BlbG+KwyJnM6
+ qyuWd396wuUovkb/fEbXE+uHvNEptkDBdT2unu2logt1J2w4gBVoWH/SEKBVyt/jooUP
+ tYthtvGgThjCdk8mi7gQxKMDEmMvhp8fs8ukQ0xloC3OCdCinBpLTiHJYV0sU0/zH2vJ 9A== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwybm0yfa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:15:00 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NAEmfF027674
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:14:49 GMT
+Received: from [10.239.155.136] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 02:14:44 -0800
+Message-ID: <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
+Date:   Thu, 23 Feb 2023 18:14:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 4/7] scsi: ufs: core: Add hwq print for debug
+Content-Language: en-US
+To:     Po-Wen Kao <powen.kao@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <alice.chao@mediatek.com>,
+        <naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <cc.chou@mediatek.com>, <eddie.huang@mediatek.com>,
+        <mason.zhang@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>
+References: <20230222030427.957-1-powen.kao@mediatek.com>
+ <20230222030427.957-5-powen.kao@mediatek.com>
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+In-Reply-To: <20230222030427.957-5-powen.kao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fa3l4AGteW8PYg206KGl-rGssUA6d6Ga
+X-Proofpoint-GUID: fa3l4AGteW8PYg206KGl-rGssUA6d6Ga
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_06,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230087
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Po-Wen,
 
-On Thu 23 Feb 2023 at 14:27, Yu Tu <yu.tu@amlogic.com> wrote:
-
-Title is way too long, 75 char max
-
-> The previous chip only provides "ro_ops" for the vid_pll_div clock,
-
-The driver does. Other chip could use RW ops I suppose.
-
-> which is not satisfied with the operation requirements of the later
-> chip for this clock, so the ops that can be set for the clock is added.
->
-
-What requirements ? What "late" chip ? all this is quite vague.
-
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->  drivers/clk/meson/vid-pll-div.c | 59 +++++++++++++++++++++++++++++++++
->  drivers/clk/meson/vid-pll-div.h |  1 +
->  2 files changed, 60 insertions(+)
->
-> diff --git a/drivers/clk/meson/vid-pll-div.c b/drivers/clk/meson/vid-pll-div.c
-> index daff235bc763..e75fa6f75efe 100644
-> --- a/drivers/clk/meson/vid-pll-div.c
-> +++ b/drivers/clk/meson/vid-pll-div.c
-> @@ -89,6 +89,65 @@ static unsigned long meson_vid_pll_div_recalc_rate(struct clk_hw *hw,
->  	return DIV_ROUND_UP_ULL(parent_rate * div->multiplier, div->divider);
->  }
->  
-> +static int meson_vid_pll_div_determine_rate(struct clk_hw *hw,
-> +					    struct clk_rate_request *req)
+On 2/22/2023 11:04 AM, Po-Wen Kao wrote:
+> +void ufshcd_mcq_print_hwqs(struct ufs_hba *hba, unsigned long bitmap)
 > +{
-> +	unsigned long best = 0, now = 0;
-> +	unsigned int i, best_i = 0;
+> +	int id, i;
+> +	char prefix[15];
 > +
-> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
+> +	if (!is_mcq_enabled(hba))
+> +		return;
+> +
+> +	for_each_set_bit(id, &bitmap, hba->nr_hw_queues) {
+> +		snprintf(prefix, sizeof(prefix), "q%d SQCFG: ", id);
+> +		ufshcd_hex_dump(prefix,
+> +			hba->mcq_base + MCQ_QCFG_SIZE * id, MCQ_QCFG_SQ_SIZE);
 
-It would be nice to actually describe how this vid pll work so we can
-stop using precompute "magic" values and actually use the IP to its full
-capacity.
+Is your purpose dump per hardware queue registers here?  If yes, why 
+don't use ufsmcq_readl() to save to a buffer and then use ufshcd_hex_dump()
 
-> +		now = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
+to dump ? Are you sure ufshcd_hex_dump() can dump register directly?
 
-This effectively stops rate propagation. That's not how determine_rate()
-call back should work. Have a look a clk-divider.c and how it calls
-clk_hw_round_rate().
-
-> +					    vid_pll_div_table[i].multiplier,
-> +					    vid_pll_div_table[i].divider);
-> +		if (req->rate == now) {
-> +			return 0;
-> +		} else if (abs(now - req->rate) < abs(best - req->rate)) {
-> +			best = now;
-> +			best_i = i;
+> +
+> +		snprintf(prefix, sizeof(prefix), "q%d CQCFG: ", id);
+> +		ufshcd_hex_dump(prefix,
+> +			hba->mcq_base + MCQ_QCFG_SIZE * id + MCQ_QCFG_SQ_SIZE, MCQ_QCFG_CQ_SIZE);
+Same to above comment.
+> +
+> +		for (i = 0; i < OPR_MAX ; i++) {
+> +			snprintf(prefix, sizeof(prefix), "q%d OPR%d: ", id, i);
+> +			ufshcd_hex_dump(prefix, mcq_opr_base(hba, i, id), mcq_opr_size[i]);
+Same.
 > +		}
 > +	}
-> +
-> +	if (best_i < ARRAY_SIZE(vid_pll_div_table))
-> +		req->rate = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
-> +						  vid_pll_div_table[best_i].multiplier,
-> +						  vid_pll_div_table[best_i].divider);
-> +	else
-
-What is the point of this 'if' clause ?
-It looks like the 'else' part is dead code. 
-
-> +		req->rate = meson_vid_pll_div_recalc_rate(hw, req->best_parent_rate);
-> +
-> +	return 0;
 > +}
 > +
-> +static int meson_vid_pll_div_set_rate(struct clk_hw *hw, unsigned long rate,
-> +				      unsigned long parent_rate)
-> +{
-> +	struct clk_regmap *clk = to_clk_regmap(hw);
-> +	struct meson_vid_pll_div_data *pll_div = meson_vid_pll_div_data(clk);
-> +	int i;
-> +
-> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
-> +		if (DIV_ROUND_CLOSEST_ULL(parent_rate * vid_pll_div_table[i].multiplier,
-> +					  vid_pll_div_table[i].divider) == rate) {
-
-This assumes the set_rate() is going to have a perfect match and
-otherwise fail. You should not assume that. Have a look at clk-divider.c
-for examples.
-
-> +			meson_parm_write(clk->map, &pll_div->val, vid_pll_div_table[i].shift_val);
-> +			meson_parm_write(clk->map, &pll_div->sel, vid_pll_div_table[i].shift_sel);
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (i >= ARRAY_SIZE(vid_pll_div_table)) {
-> +		pr_debug("%s: Invalid rate value for vid_pll_div\n", __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +const struct clk_ops meson_vid_pll_div_ops = {
-> +	.recalc_rate	= meson_vid_pll_div_recalc_rate,
-> +	.determine_rate	= meson_vid_pll_div_determine_rate,
-> +	.set_rate	= meson_vid_pll_div_set_rate,
-> +};
-> +EXPORT_SYMBOL_GPL(meson_vid_pll_div_ops);
-> +
->  const struct clk_ops meson_vid_pll_div_ro_ops = {
->  	.recalc_rate	= meson_vid_pll_div_recalc_rate,
->  };
-> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vid-pll-div.h
-> index c0128e33ccf9..3ab729b85fde 100644
-> --- a/drivers/clk/meson/vid-pll-div.h
-> +++ b/drivers/clk/meson/vid-pll-div.h
-> @@ -16,5 +16,6 @@ struct meson_vid_pll_div_data {
->  };
->  
->  extern const struct clk_ops meson_vid_pll_div_ro_ops;
-> +extern const struct clk_ops meson_vid_pll_div_ops;
->  
->  #endif /* __MESON_VID_PLL_DIV_H */
 >
-> base-commit: 8a9fbf00acfeeeaac8efab8091bb464bd71b70ea
+>   
+> @@ -574,7 +569,16 @@ void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
+>   		if (pr_prdt)
+>   			ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
+>   				ufshcd_sg_entry_size(hba) * prdt_length);
+> +
+> +		if (is_mcq_enabled(hba)) {
+> +			cmd = lrbp->cmd;
+> +			if (!cmd)
+> +				return;
+> +			hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(cmd));
+> +			ufshcd_mcq_print_hwqs(hba, 1 << hwq->id);
+
+Calling registers dump function in ufshcd_print_trs() is not reasonable, 
+eg.. for each aborted request, it would print out all hwq registers, 
+it's not make sense.
+
+I think we should move it out of ufshcd_print_trs().
+
+> +		}
+>   	}
+> +
+>   }
+
+
+Best Regards,
+
+Ziqi
 
