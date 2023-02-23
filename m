@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7EF6A10C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482B26A10C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjBWTqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:46:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S230038AbjBWTrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjBWTqf (ORCPT
+        with ESMTP id S229928AbjBWTq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:46:35 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1DE4A1ED;
-        Thu, 23 Feb 2023 11:46:33 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id ee7so31237516edb.2;
-        Thu, 23 Feb 2023 11:46:33 -0800 (PST)
+        Thu, 23 Feb 2023 14:46:58 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015864FAA8;
+        Thu, 23 Feb 2023 11:46:52 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id cq23so46069222edb.1;
+        Thu, 23 Feb 2023 11:46:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=7LRpyWijqVyBIlwSuNRfzUQ+ZyqaAsfdjoJlUPAZASg=;
-        b=eiKKSe9UeePiVEO64ojOtxKiPLmGaZ/nMjseZGtFE1mHQ/dw/eAfDtPDodcqVozXUA
-         8ouHsxCJDV/s9IRvv4PDdc+v3FSNXivEqL48uYolADGle5prCL6/1cVeB+2iC4rY2Qtg
-         ju8Tb28IBNNKtcX810XhnsoV33LxMT/2YBLUVwr90z6SHsyB0XxvEWB4mjy6l5ZS2B5u
-         8imWQ5oG70AF5JpbyjhPLKN/9aO2P0QFL4zqltsEVWFAtji6yf+9IuJS2t+K1YQFIy4M
-         yaexE1Dk/dyUSLhc0m4Wn7nXEEEYmxSy22sJYCXYK8vmuuVlpFT6hCwMeJCERZYrFFAY
-         UGxw==
+        bh=Ef/IxwVqWizxA0usa6LnkU7NUiiONXkz62uBg/LMdV0=;
+        b=DHpjhYh63B43zvg0u2ye7FkhNr6DMcDzU0v8Dm1bTpckJKsmkMIGJv7V+rPcmepQBF
+         udAz1vgLNTHQ1dYC5ct/f33z1N0ny5xl19DFfnNqaRrwms/gFmhzEr+C1G27iZh/G4bF
+         mCboVX629DJzjaVurtnSsxSaY8E+bKxPVavDvzvSh6Fv5sll6lbR9bohhdYkuxpr2Uiu
+         90HVob01i3LNMs8l0dC6hjfMEq0082vxUez3MpadcZSr6k+fKGoNis0jyHwSf6c0xCsO
+         OBpsX8C23nhLDDSrXRnp2AUIlfOVF9f+q6U4vst7em1X9VtWmNl3BJOgfaX/4MVmFKw2
+         gLow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LRpyWijqVyBIlwSuNRfzUQ+ZyqaAsfdjoJlUPAZASg=;
-        b=Y7w2RgUZawc5cqTq3OxWLWj90+9iOgrXIoozo6HNaaY8/8bzxEDNP07+5M0BM1TkIf
-         eL8r8CVDqiOCO4vemQ8MptB/4AH5fHvm6RJzCXa2F+vBcDWw2sc/DMAVodnc52nbHv9Z
-         lwjKUIK1ThB8Fc5qOiM/LUhpOphAAwp5hnC4xgPvj9mUFrGR/qVVib8zxrMCzryNNOsc
-         OH006YExXVPMppatfzVneJsoRLvyR+1MuVW+BTJ6k6SNwfKv8aJ37QVOMypYodNq0OHr
-         IHp/AuxUQdiZi2aqAHenyOUb7qv3Ha46IIaRZLtZPxXZNgLaaYJY5EcNS+/3cFcNBCmt
-         oALA==
-X-Gm-Message-State: AO0yUKVrf8AnZZyYipgPJ+MTmq4eqO1z4PYrTsQGfsf5kluC/blF+MQS
-        Np6tRlDRhWHzXtkxxWqJs3I=
-X-Google-Smtp-Source: AK7set/L1t843g5XkUkLOvox4r8KPibycedF4hiL/gNFQX5exFdwNgcdM0cnvDhKLdr/jDZ0jWjWcw==
-X-Received: by 2002:a17:906:44b:b0:839:74cf:7c4f with SMTP id e11-20020a170906044b00b0083974cf7c4fmr20087502eja.8.1677181591729;
-        Thu, 23 Feb 2023 11:46:31 -0800 (PST)
+        bh=Ef/IxwVqWizxA0usa6LnkU7NUiiONXkz62uBg/LMdV0=;
+        b=WJTSbZyFW47xtYcpH4U7i4db0gxq9fiG8GYzqaQZi2Pbgqm5jR5QAg4frSAEGmuDR3
+         rX4E44Egwy9mJKW3CFzFXDrcjaf57xlYqdKKm0ZKOlAm93at58yEhZwyApmq6YkFTrXj
+         GnnhsjJnBKL+YePpmGkr4RxvTxHfw/4WBqRsnBdsBE4ndzr4ADlHnPQy//1OZrikwHl3
+         MCuOEyNf8Lpz2hlgzTkuHlMaXDFJyThzgcQG8k7JBqkZyIGXChezcMDTdQYF1yC+NdNS
+         2SF8gYrq1fca8JWThftmf5FH1ieU7uxhUe0zRU5FqdLeYvFCXOho/MwZ5zsRG1lgieC+
+         NhnA==
+X-Gm-Message-State: AO0yUKWq9ZUp7hMpt+vWA8REB9NvJuqlo3rvy496ndgXOPu3PEZ7l6uV
+        BFrzGHbDOS8kX1U84JGNB9xIerC+8Fk=
+X-Google-Smtp-Source: AK7set/31K5DJ6qn1JJs6uRxQx06XyLdkNkcHNdxs6bHWakbmS54DnLSUgse5hWxoGh8etM4sdztuQ==
+X-Received: by 2002:a17:906:d118:b0:8d9:383a:be39 with SMTP id b24-20020a170906d11800b008d9383abe39mr14476208ejz.41.1677181611487;
+        Thu, 23 Feb 2023 11:46:51 -0800 (PST)
 Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id mi10-20020a1709071a8a00b008e938e98046sm1960676ejc.223.2023.02.23.11.46.26
+        by smtp.gmail.com with ESMTPSA id g3-20020a170906538300b008ee5356801dsm992464ejo.187.2023.02.23.11.46.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 11:46:28 -0800 (PST)
-Message-ID: <774d712d-bcdf-677a-2d9c-a49ed829e965@gmail.com>
-Date:   Thu, 23 Feb 2023 20:46:24 +0100
+        Thu, 23 Feb 2023 11:46:49 -0800 (PST)
+Message-ID: <4a18d6b6-a8a4-a2e6-6841-fa78951792e7@gmail.com>
+Date:   Thu, 23 Feb 2023 20:46:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v4 2/7] dt-bindings: gpio: rockchip,gpio-bank: add unique
- hardware GPIO ID
+Subject: [PATCH v4 3/7] gpio: gpio-rockchip: parse rockchip,gpio-controller
+ property for bank id
 To:     linus.walleij@linaro.org, brgl@bgdev.pl
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         heiko@sntech.de, linux-gpio@vger.kernel.org,
@@ -78,37 +78,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a unique hardware GPIO ID to the Rockchip GPIO nodes with
-the "rockchip,gpio-controller" property to be independent from aliases
-and probe order. "gpio-ranges" can't be used for that, because there is
-no semantic restrictions on how they are set up.
+Parse the rockchip,gpio-controller property in Rockchip gpio nodes to be
+independent from aliases and probe order for our bank id.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
+ drivers/gpio/gpio-rockchip.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
-See discussion:
-https://lore.kernel.org/u-boot/CACRpkdZx8EaSFLeh4vruRsdC+Sx_ieBiKmuE7t37zhiYqtS3WQ@mail.gmail.com/
----
- .../devicetree/bindings/gpio/rockchip,gpio-bank.yaml        | 6 ++++++
- 1 file changed, 6 insertions(+)
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index e5de15a2a..47e45299f 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -702,24 +702,38 @@ static int rockchip_gpio_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np = dev->of_node;
+-	struct device_node *pctlnp = of_get_parent(np);
++	struct device_node *pctlnp;
+ 	struct pinctrl_dev *pctldev = NULL;
+ 	struct rockchip_pin_bank *bank = NULL;
+ 	struct rockchip_pin_deferred *cfg;
++	struct of_phandle_args args;
+ 	static int gpio;
+ 	int id, ret;
 
-diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-index 2e9a5179c..39ac41e9d 100644
---- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-+++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-@@ -52,6 +52,12 @@ properties:
+-	if (!np || !pctlnp)
++	if (!np)
+ 		return -ENODEV;
 
-   gpio-line-names: true
-
-+  rockchip,gpio-controller:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    maximum: 8
-+    description:
-+      Unique hardware GPIO ID.
++	ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &args);
++	if (!ret)
++		pctlnp = args.np;
++	else
++		pctlnp = of_get_parent(np);
 +
-   "#gpio-cells":
-     const: 2
++	if (!pctlnp)
++		return -ENODEV;
++
++	ret = of_property_read_u32(np, "rockchip,gpio-controller", &id);
++	if (ret)  {
++		id = of_alias_get_id(np, "gpio");
++		if (id < 0)
++			id = gpio++;
++	}
++
+ 	pctldev = of_pinctrl_get(pctlnp);
++	of_node_put(pctlnp);
+ 	if (!pctldev)
+ 		return -EPROBE_DEFER;
 
+-	id = of_alias_get_id(np, "gpio");
+-	if (id < 0)
+-		id = gpio++;
+-
+ 	bank = rockchip_gpio_find_bank(pctldev, id);
+ 	if (!bank)
+ 		return -EINVAL;
 --
 2.20.1
 
