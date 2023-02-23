@@ -2,137 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A3B6A10FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A670B6A1100
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjBWUEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 15:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S229693AbjBWUGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 15:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBWUEk (ORCPT
+        with ESMTP id S229652AbjBWUGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 15:04:40 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8727158B1;
-        Thu, 23 Feb 2023 12:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677182679; x=1708718679;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bMM8jrE3GaTMJ5jxYncWrywv+nAQI6dAHrUKTQF4Qzg=;
-  b=mFP//MjPxzKA9B3xb6NT+3US68x3dOC/RTDTJtU6kWq6CzXicoGI91BU
-   JI4SjVSPaU2p2bgNnoa8LDf8ocr70LBU40lrlP97gsFyfiKO54dV76ca7
-   aCNv/3aX96F3XZzzFdoDzs3ohqrdTai5TnmDVZ66CAqXCs9HXwlkwEfCi
-   ouZPVlKXPRUAolCMmaBbydPT5bunTTLA8i76qRV/UN4rwuuM/vLtEU2mm
-   EcBfO9H7UfMJjX/OdjvgRy3bTL0jR7vjmopuHF2jMWVDkoOrtOwYeABhn
-   ZcfrDkr6/joUhNVXMcflj04XeqwtTAeu0XOuOl5BrpsRoEto2FJ+st4w7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="312947304"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="312947304"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 12:04:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="702921729"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="702921729"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2023 12:04:17 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVHpB-0001hR-0R;
-        Thu, 23 Feb 2023 20:04:17 +0000
-Date:   Fri, 24 Feb 2023 04:03:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v6 1/1] riscv: Allow to downgrade paging mode from the
- command line
-Message-ID: <202302240308.1CC475U8-lkp@intel.com>
-References: <20230223082434.1280957-2-alexghiti@rivosinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223082434.1280957-2-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 15:06:09 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8A852DC5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 12:06:07 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536cb268ab8so135046877b3.17
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 12:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6N1IAbMZXgFwFEOkFJcbYB8nDboKn/68jPGNYqSKxI0=;
+        b=q2Js9Cld34qqjbO7Zg63Ee9ul39CuXnk+1EubK3O1slRp1637n2G1k5Qj6pMMNIGPq
+         i09Rld7gESiFAbyGF1RrQ5RrivQbz/6CBEgK+dupU4HlnFR98rUT3WVtcBm1zN7ez+lY
+         TUy0VmFPbm5Jeb5FDt//XHD34hjAFBxzvqrRxplaU10IYR3XARq52zbUA0EoawjueX5A
+         6h1L7kc4k7L9ZsfxYMkxpRzMH7TBF9/sNA8B2an4svtD6TL+zHAcsWwob7pnoYJ9tOZ9
+         fsXUED7Tv+pkN2EruxLUEZoo77QEMSU5Av3ZjsDyyXAGYXqQ+sCHA6AXMQNwsMcQzqxp
+         294Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6N1IAbMZXgFwFEOkFJcbYB8nDboKn/68jPGNYqSKxI0=;
+        b=z8uKAttaCwob3+BEG0ejXJc2Un7Igc3iqsEi2Z1yZPOh3/gIYx1NbEoA6ZJ53U6s5w
+         oy+do2G3YkxeRk/E2mvmLZIY/0sFTfc4eACQt7gKC9YW7RZYHMyKJWnQtJ3OZqGjX0ye
+         vacjf5pjZ/T0YoXPX+8wxl/WAr7IAB5BwRTMXvDx/WpfTc0Xboq8n+2HLSpRYT1HkKr6
+         EmOtLkvDdTe/bkuAQHuc465fqgAltcbk3FJ4kKioSn95CNTD33wraCVwcTQpWm74y8Fd
+         IAFFzV9TDboBWT7tFyiL0B9xD2vp0Yy1sv0Z/55bmsU7Fmh1fzQzopKlbiW4Yk/RP/NB
+         +X8w==
+X-Gm-Message-State: AO0yUKUm1KkKWSyxGB/qjguQNdot5PaCg/0bdrkFaG69gO9K02bfc4PL
+        1KOWjQEJIw7o+I00n2ZTlee80NW/HrI=
+X-Google-Smtp-Source: AK7set8zNfJDzrThhh/Jx4CC8+hGZexDHztCADdftejm653o2aDDXf3Brf36Bz7ctvay6KYVJfM9/MY4sWA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:4509:0:b0:52e:ee55:a81e with SMTP id
+ s9-20020a814509000000b0052eee55a81emr2912465ywa.7.1677182766817; Thu, 23 Feb
+ 2023 12:06:06 -0800 (PST)
+Date:   Thu, 23 Feb 2023 12:06:05 -0800
+In-Reply-To: <32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com>
+Mime-Version: 1.0
+References: <32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com>
+Message-ID: <Y/fHLdvKHlK6D/1v@google.com>
+Subject: Re: [PATCH 1/1] KVM: selftests: Adjust VM's initial stack address to
+ align with SysV ABI spec
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     pbonzini@redhat.com, shuah@kernel.org, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erdemaktas@google.com,
+        vannapurve@google.com, sagis@google.com, mail@maciej.szmigiero.name
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
+On Fri, Feb 17, 2023, Ackerley Tng wrote:
+> Align stack to match calling sequence requirements in section "The
+> Stack Frame" of the System V ABI AMD64 Architecture Processor
+> Supplement, which requires the value (%rsp + 8) to be a multiple of 16
+> when control is transferred to the function entry point.
 
-Thank you for the patch! Yet something to improve:
+To make it slightly more clear what is wrong:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.2 next-20230223]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  Align the guest stack to match calling sequence requirements in section
+  "The Stack Frame" of the System V ABI AMD64 Architecture Processor
+  Supplement, which requires the value (%rsp + 8), NOT %rsp, to be a
+  multiple of 16 when control is transferred to the function entry point.
+  I.e. in a normal function call, %rsp needs to be 16-byte aligned
+  _before_ CALL, not after.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Allow-to-downgrade-paging-mode-from-the-command-line/20230223-162702
-patch link:    https://lore.kernel.org/r/20230223082434.1280957-2-alexghiti%40rivosinc.com
-patch subject: [PATCH v6 1/1] riscv: Allow to downgrade paging mode from the command line
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230224/202302240308.1CC475U8-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7e18f795579f897e63812ca9dcb5b48ef2b7b4d2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Allow-to-downgrade-paging-mode-from-the-command-line/20230223-162702
-        git checkout 7e18f795579f897e63812ca9dcb5b48ef2b7b4d2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+> This is required because GCC is already aligned with the SysV ABI
+> spec, and compiles code resulting in (%rsp + 8) being a multiple of 16
+> when control is transferred to the function entry point.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302240308.1CC475U8-lkp@intel.com/
+I'd leave out this paragraph, any sane compiler, not just gcc, will adhere to the
+SysV ABI.
 
-All errors (new ones prefixed by >>):
+> This fixes guest crashes when compiled guest code contains certain SSE
 
-   arch/riscv/kernel/pi/cmdline_early.c: In function 'match_noXlvl':
->> arch/riscv/kernel/pi/cmdline_early.c:50:24: error: 'SATP_MODE_48' undeclared (first use in this function); did you mean 'SATP_MODE_32'?
-      50 |                 return SATP_MODE_48;
-         |                        ^~~~~~~~~~~~
-         |                        SATP_MODE_32
-   arch/riscv/kernel/pi/cmdline_early.c:50:24: note: each undeclared identifier is reported only once for each function it appears in
->> arch/riscv/kernel/pi/cmdline_early.c:52:24: error: 'SATP_MODE_57' undeclared (first use in this function); did you mean 'SATP_MODE_32'?
-      52 |                 return SATP_MODE_57;
-         |                        ^~~~~~~~~~~~
-         |                        SATP_MODE_32
+Nit, explicitly call out that #GP behavior, e.g. if/when KVM installs exception
+handlers by default, there will be no crash.
 
+E.g.
 
-vim +50 arch/riscv/kernel/pi/cmdline_early.c
+  This fixes unexpected #GPs in guest code when the compiler uses SSE
+  instructions, e.g. to initialize memory, as many SSE instruction require
+  memory operands (including those on the stack) to be 16-byte aligned.
 
-    46	
-    47	static u64 __init match_noXlvl(char *cmdline)
-    48	{
-    49		if (strstr(cmdline, "no4lvl"))
-  > 50			return SATP_MODE_48;
-    51		else if (strstr(cmdline, "no5lvl"))
-  > 52			return SATP_MODE_57;
-    53	
-    54		return 0;
-    55	}
-    56	
+> instructions, because thes SSE instructions expect memory
+> references (including those on the stack) to be 16-byte-aligned.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+> 
+> This patch is a follow-up from discussions at
+> https://lore.kernel.org/lkml/20230121001542.2472357-9-ackerleytng@google.com/
+> 
+> ---
+>  .../selftests/kvm/include/linux/align.h        | 15 +++++++++++++++
+>  .../selftests/kvm/lib/x86_64/processor.c       | 18 +++++++++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kvm/include/linux/align.h
+> 
+> diff --git a/tools/testing/selftests/kvm/include/linux/align.h b/tools/testing/selftests/kvm/include/linux/align.h
+> new file mode 100644
+> index 000000000000..2b4acec7b95a
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/linux/align.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_ALIGN_H
+> +#define _LINUX_ALIGN_H
+> +
+> +#include <linux/const.h>
+> +
+> +/* @a is a power of 2 value */
+> +#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
+> +#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
+> +#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
+> +#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
+> +#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
+> +#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I agree it's high time align.h is pulled into tools/ but it belongs in
+tools/include/linux/, not in KVM selftests.
+
+For this fix specifically, tools/include/linux/bitmap.h already #defines IS_ALIGNED(),
+so just use that, and pull in align.h (and remove the definition in bitmap.h) in
+a separate patch (and let us maintainers will deal with the conflicts).
+
+> +
+> +#endif	/* _LINUX_ALIGN_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index acfa1d01e7df..09b48ae96fdd 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -5,6 +5,7 @@
+>   * Copyright (C) 2018, Google LLC.
+>   */
+> 
+> +#include "linux/align.h"
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+>  #include "processor.h"
+> @@ -569,6 +570,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+>  				       DEFAULT_GUEST_STACK_VADDR_MIN,
+>  				       MEM_REGION_DATA);
+> 
+> +	stack_vaddr += DEFAULT_STACK_PGS * getpagesize();
+> +
+> +	/*
+> +	 * Align stack to match calling sequence requirements in section "The
+> +	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
+> +	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
+> +	 * 16 when control is transferred to the function entry point.
+> +	 *
+> +	 * If this code is ever used to launch a vCPU with 32-bit entry point it
+> +	 * may need to subtract 4 bytes instead of 8 bytes.
+> +	 */
+> +	TEST_ASSERT(IS_ALIGNED(stack_vaddr, PAGE_SIZE),
+> +		"stack_vaddr must be page aligned for stack adjustment of -8 to work");
+
+Nit, for the message, tie it to the allocation, not to the usage, e.g.
+
+	TEST_ASSERT(IS_ALIGNED(stack_vaddr, PAGE_SIZE),
+		    "__vm_vaddr_alloc() did not provide a page-aligned address");
+
+The assert exists to verify an assumption (that the allocator always provides
+page-aligned addresses), and the error message should capture that.  Explaining
+what will break isn't as helpful because it doesn't help understand what went
+wrong
+
+> +	stack_vaddr -= 8;
+> +
+>  	vcpu = __vm_vcpu_add(vm, vcpu_id);
+>  	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+>  	vcpu_setup(vm, vcpu);
+> @@ -576,7 +592,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+>  	/* Setup guest general purpose registers */
+>  	vcpu_regs_get(vcpu, &regs);
+>  	regs.rflags = regs.rflags | 0x2;
+> -	regs.rsp = stack_vaddr + (DEFAULT_STACK_PGS * getpagesize());
+> +	regs.rsp = stack_vaddr;
+>  	regs.rip = (unsigned long) guest_code;
+>  	vcpu_regs_set(vcpu, &regs);
+> 
+> --
+> 2.39.2.637.g21b0678d19-goog
+> 
