@@ -2,227 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3AE6A10A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782B86A109E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbjBWThj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S230448AbjBWThE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbjBWThI (ORCPT
+        with ESMTP id S230206AbjBWThC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:37:08 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF7C59E51
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:06 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id o2so3875229vss.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:06 -0800 (PST)
+        Thu, 23 Feb 2023 14:37:02 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CAC59E46
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:00 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id l1so3831982pjt.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VQKTd1mzsg/pi2cH97hh9NzvK6Pa7c5BewHqL7hHt/g=;
-        b=WVsEQT6PPy34hEkjLZAQ1Q4pou3W21hsg4lj+Y9rlbMvhBUpDkgNnnyF1+9kH4FqAn
-         qTUy0r7+8+kyQgV0L8sMPzZ963+pTxRWWEu1N2Swdx0P+IVuT1Tp0Lq2NHGTYZZWsKf+
-         kCn6QOqveulzJ4bhrYdghA2c7pAlxBLF4NVOD75oVbMiMWgxJh7o5GeWiUK7cHiSmf6k
-         xSBQ0cwHc0NlX3NKUWdMRAPRU2xunE6JyEtgyJBIjQIEp+ql/nZZCSVk/HxaAL8d0g6r
-         sVBLv2wm5MgsxZft5qwDVO4U+vYcyEgqCLaG3xdWMDMWg1qZsODxo7jaPyxqfa+SdBtj
-         FkXQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rQq/mm4mVMTZxYtA4ktk06ZMrV8tkbfv6EC6oErMWRs=;
+        b=yk/31gPQIW8T+JwtNs9NMWW5pAjbGRjZGw4JzJfVBGGg9YdO/8usKXYUnWm9BkUrrk
+         7Ul+EqakaIJH31edVRc8mKMcD5WdJZrZLE2JdC62vgdhiOWElxJae/Qtw32Yw/VlT1yd
+         QMbxK28NiowSYMQuIGLpYaa0sYwNdyXGZXAp2QXkr+Td9ZVhg2KAF9S2zMYGZzQ8zAtR
+         wvLP+jLEYHkk4SIC6RGfvZOZOibsO4TwTOy4CeWxAL9DAFUxV/ClCxVzxoZGxJYHxJ6i
+         KWIF+aZD9Hti8gMd57T2Zufn9NPd1b7rsOARyN2UyV81xnkvwPOHQ+O2Cch/WKKP03hB
+         7pKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VQKTd1mzsg/pi2cH97hh9NzvK6Pa7c5BewHqL7hHt/g=;
-        b=BBNASQeVAZ424BJ98ypW6u38doN7f8cnM8t+h9BH2POnMd5UUbVqP5DQ+8Ib5DMuKQ
-         Bu6ow/Rezbp7GShRGtQN5kzy5eSSC0uVdZhLTzc5eDttxcxJiCBSgyPvRa+lJnHi5M9y
-         /jxXIGKJfCGkpz+KkniWOUYOqJdAbHXZXHIF9V00b8UEhMyojy4bsl6pbPDTfZtYQIcI
-         IPqrngf6vPFbuME8rMG4nDRkeYfW030pDIji+vOx1AdThJdLAi4bSx6Ict/+QoQNovnl
-         Vo6JMIrYF6/diJYaEfTkoGwE6bSHmPbewAoROQ+sywNyapyw1TRsHof/bb4pcmjg9bZJ
-         RLjQ==
-X-Gm-Message-State: AO0yUKXJEcD5gEeSFl5mMyGZhwoZuaMHIyiAK1yN0uLo/+dqlOt4l643
-        4BgkuJPwZLNUHSj1/uP07R5TZQy9dWeGvgxOsOv5HQ==
-X-Google-Smtp-Source: AK7set8VQE1ZUs/DARz1uDJOtOd3y5APdCNGehQzmQqDg5Sq2V+KxGB+BR0gjpLPcgnhYR5yHSA4XUwuxFt6OaxzPsA=
-X-Received: by 2002:a05:6102:5d9:b0:415:74b4:6067 with SMTP id
- v25-20020a05610205d900b0041574b46067mr658682vsf.6.1677181024793; Thu, 23 Feb
- 2023 11:37:04 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rQq/mm4mVMTZxYtA4ktk06ZMrV8tkbfv6EC6oErMWRs=;
+        b=b3b1+j6jb5WX1OCKonYROd19+QyFfhaukCC3Vwwr2jV6dLm3CdvoUCNPuQpHJs3WnO
+         TDf974qvoxQoc5aEEnAcpfUOdbKaMol2GYve1/M2Sk5d3KWejEsQpi/BS1xyAn7+5CNe
+         +iZGQok+jqlx4I3GobS/uPWT0g9DCXOtBD8xMXRNYNrZ6t7rkf9PgMGxH+OXaIMKz3xB
+         ywQWq//KyCYxgnNoI/dbLinUWCcTsByw2tUYoCdyewIQ0JbJdDlmn2GARKtBTMssQ0S2
+         luXF+r5eC8JOxXz5hbCKLPF1VmbIr0JvFEcdeOxpJpA8F+X9uXU3+Nb2QayiMtQ2eJG2
+         4YKg==
+X-Gm-Message-State: AO0yUKWQFG9neKpeRu2M5qVEZfLTugqOUziU3MhgO1W6sMRBUgiBLQYd
+        kzhH4t4OVSgGQ/eofR/nGdh47g==
+X-Google-Smtp-Source: AK7set9NH5+hrOF1a5TsdpFpUrS3bE2ZL0vGh7moKt24R5JglynJw+bnqDgX30BvoT3U7PSauYjLXg==
+X-Received: by 2002:a17:902:e80d:b0:19a:a815:2877 with SMTP id u13-20020a170902e80d00b0019aa8152877mr13564702plg.6.1677181019801;
+        Thu, 23 Feb 2023 11:36:59 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b00196519d8647sm5041338pln.4.2023.02.23.11.36.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 11:36:59 -0800 (PST)
+Message-ID: <ae3a6434-1b3a-b848-c8f9-bf6b3d0521e6@kernel.dk>
+Date:   Thu, 23 Feb 2023 12:36:57 -0700
 MIME-Version: 1.0
-References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-6-yuzhao@google.com>
- <Y/elw7CTvVWt0Js6@google.com> <CAOUHufbAKpv95k6rVedstjD_7JzP0RrbOD652gyZh2vbAjGPOg@mail.gmail.com>
- <Y/e6Z+KIl6sYJoRg@google.com>
-In-Reply-To: <Y/e6Z+KIl6sYJoRg@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 23 Feb 2023 12:36:26 -0700
-Message-ID: <CAOUHufbwcqx21T=zmvYpnX_Mnd2A0KkPORbtxnJEwKuUKVSPzA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 5/5] mm: multi-gen LRU: use mmu_notifier_test_clear_young()
-To:     Sean Christopherson <seanjc@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
+ k[v]free_rcu_mightsleep()
+To:     paulmck@kernel.org
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <84fd00b0-aa87-e4b7-e0a4-d57b720216c0@kernel.dk>
+ <20230223183124.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230223183124.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 12:11=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
->
-> On Thu, Feb 23, 2023, Yu Zhao wrote:
-> > On Thu, Feb 23, 2023 at 10:43=E2=80=AFAM Sean Christopherson <seanjc@go=
-ogle.com> wrote:
-> > >
-> > > On Thu, Feb 16, 2023, Yu Zhao wrote:
-> > > >   kswapd (MGLRU before)
-> > > >     100.00%  balance_pgdat
-> > > >       100.00%  shrink_node
-> > > >         100.00%  shrink_one
-> > > >           99.97%  try_to_shrink_lruvec
-> > > >             99.06%  evict_folios
-> > > >               97.41%  shrink_folio_list
-> > > >                 31.33%  folio_referenced
-> > > >                   31.06%  rmap_walk_file
-> > > >                     30.89%  folio_referenced_one
-> > > >                       20.83%  __mmu_notifier_clear_flush_young
-> > > >                         20.54%  kvm_mmu_notifier_clear_flush_young
-> > > >   =3D>                      19.34%  _raw_write_lock
-> > > >
-> > > >   kswapd (MGLRU after)
-> > > >     100.00%  balance_pgdat
-> > > >       100.00%  shrink_node
-> > > >         100.00%  shrink_one
-> > > >           99.97%  try_to_shrink_lruvec
-> > > >             99.51%  evict_folios
-> > > >               71.70%  shrink_folio_list
-> > > >                 7.08%  folio_referenced
-> > > >                   6.78%  rmap_walk_file
-> > > >                     6.72%  folio_referenced_one
-> > > >                       5.60%  lru_gen_look_around
-> > > >   =3D>                    1.53%  __mmu_notifier_test_clear_young
-> > >
-> > > Do you happen to know how much of the improvement is due to batching,=
- and how
-> > > much is due to using a walkless walk?
-> >
-> > No. I have three benchmarks running at the moment:
-> > 1. Windows SQL server guest on x86 host,
-> > 2. Apache Spark guest on arm64 host, and
-> > 3. Memcached guest on ppc64 host.
-> >
-> > If you are really interested in that, I can reprioritize -- I need to
-> > stop 1) and use that machine to get the number for you.
->
-> After looking at the "MGLRU before" stack again, it's definitely worth ge=
-tting
-> those numbers.  The "before" isn't just taking mmu_lock, it's taking mmu_=
-lock for
-> write _and_ flushing remote TLBs on _every_ PTE.
+On 2/23/23 11:31 AM, Paul E. McKenney wrote:
+> On Thu, Feb 23, 2023 at 07:57:13AM -0700, Jens Axboe wrote:
+>> On 2/1/23 8:08 AM, Uladzislau Rezki (Sony) wrote:
+>>> This small series is based on Paul's "dev" branch. Head is 6002817348a1c610dc1b1c01ff81654cdec12be4
+>>> it renames a single argument of k[v]free_rcu() to its new k[v]free_rcu_mightsleep() name.
+>>>
+>>> 1.
+>>> The problem is that, recently we have run into a precedent when
+>>> a user intended to give a second argument to kfree_rcu() API but
+>>> forgot to do it in a code so a call became as a single argument
+>>> of kfree_rcu() API.
+>>>
+>>> 2.
+>>> Such mistyping can lead to hidden bags where sleeping is forbidden.
+>>>
+>>> 3.
+>>> _mightsleep() prefix gives much more information for which contexts
+>>> it can be used for.
+>>
+>> This patchset seems weird to me. We have a LOT of calls that might
+>> sleep, yet we don't suffix them all with _mightsleep(). Why is this
+>> any different? Why isn't this just a might_sleep() call in the
+>> actual helper, which will suffice for checkers and catch it at
+>> runtime as well.
+> 
+> Fair enough, and the situation that this patchset is addressing is also a
+> bit unusual.  This change was requested by Eric Dumazet due to a situation
+> where someone forgot the optional second argument to kfree_rcu().  Now,
+> you are right that this would be caught if invoked from a non-sleepable
+> context, but there are also cases where sleeping is legal, but where the
+> occasional wait for an RCU grace period would be a problem.  The checkers
+> cannot easily catch this sort of thing, and hence the change in name.
+> 
+> Hey, the combined one/two-argument form seemed like a good idea at
+> the time!  ;-)
 
-Correct.
+Hah, not sure what you were smoking back then!
 
-> I suspect the batching is a
-> tiny percentage of the overall win (might be larger with RETPOLINE and fr=
-iends),
+-- 
+Jens Axboe
 
-Same here.
 
-> and that the bulk of the improvement comes from avoiding the insanity of
-> kvm_mmu_notifier_clear_flush_young().
->
-> Speaking of which, what would it take to drop mmu_notifier_clear_flush_yo=
-ung()
-> entirely?
-
-That's not my call :)
-
-Adding Johannes.
-
-> I.e. why can MGLRU tolerate stale information but !MGLRU cannot?
-
-Good question. The native clear API doesn't flush:
-
-  int ptep_clear_flush_young(struct vm_area_struct *vma,
-                             unsigned long address, pte_t *ptep)
-  {
-          /*
-           * On x86 CPUs, clearing the accessed bit without a TLB flush
-           * doesn't cause data corruption. [ It could cause incorrect
-           * page aging and the (mistaken) reclaim of hot pages, but the
-           * chance of that should be relatively low. ]
-           *
-           * So as a performance optimization don't flush the TLB when
-           * clearing the accessed bit, it will eventually be flushed by
-           * a context switch or a VM operation anyway. [ In the rare
-           * event of it not getting flushed for a long time the delay
-           * shouldn't really matter because there's no real memory
-           * pressure for swapout to react to. ]
-           */
-          return ptep_test_and_clear_young(vma, address, ptep);
-  }
-
-> If
-> we simply deleted mmu_notifier_clear_flush_young() and used mmu_notifier_=
-clear_young()
-> instead, would anyone notice, let alone care?
-
-I tend to agree.
-
-> > > > @@ -5699,6 +5797,9 @@ static ssize_t show_enabled(struct kobject *k=
-obj, struct kobj_attribute *attr, c
-> > > >       if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEA=
-F_YOUNG))
-> > > >               caps |=3D BIT(LRU_GEN_NONLEAF_YOUNG);
-> > > >
-> > > > +     if (kvm_arch_has_test_clear_young() && get_cap(LRU_GEN_SPTE_W=
-ALK))
-> > > > +             caps |=3D BIT(LRU_GEN_SPTE_WALK);
-> > >
-> > > As alluded to in patch 1, unless batching the walks even if KVM does =
-_not_ support
-> > > a lockless walk is somehow _worse_ than using the existing mmu_notifi=
-er_clear_flush_young(),
-> > > I think batching the calls should be conditional only on LRU_GEN_SPTE=
-_WALK.  Or
-> > > if we want to avoid batching when there are no mmu_notifier listeners=
-, probe
-> > > mmu_notifiers.  But don't call into KVM directly.
-> >
-> > I'm not sure I fully understand. Let's present the problem on the MM
-> > side: assuming KVM supports lockless walks, batching can still be
-> > worse (very unlikely), because GFNs can exhibit no memory locality at
-> > all. So this option allows userspace to disable batching.
->
-> I'm asking the opposite.  Is there a scenario where batching+lock is wors=
-e than
-> !batching+lock?  If not, then don't make batching depend on lockless walk=
-s.
-
-Yes, absolutely. batching+lock means we take/release mmu_lock for
-every single PTE in the entire VA space -- each small batch contains
-64 PTEs but the entire batch is the whole KVM.
-
-> > I fully understand why you don't want MM to call into KVM directly. No
-> > acceptable ways to set up a clear interface between MM and KVM other
-> > than the MMU notifier?
->
-> There are several options I can think of, but before we go spend time des=
-igning
-> the best API, I'd rather figure out if we care in the first place.
-
-This is self serving -- MGLRU would be the only user in the near
-future. But I never assume there will be no common ground, at least it
-doesn't hurt to check.
