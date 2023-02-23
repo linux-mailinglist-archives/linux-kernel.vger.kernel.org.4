@@ -2,277 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E3F6A0BF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF38C6A0BF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234344AbjBWOf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S234655AbjBWOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjBWOf4 (ORCPT
+        with ESMTP id S229555AbjBWOgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:35:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0845652A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:35:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677162917;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rmG/J6UhZEyANxVD1qAQonZ8Jg4WYoKnPifDyYlQWJU=;
-        b=EUVNMqEnIL2Rl0X5etG5lfdOiMUruiIhUEVRjNcAwNUBO31eMEcFO91OyyrRucLYyUnnJ9
-        R/VetnmqMuuUbYTZkFBdIrQCDQZHJK2Qcej82T8JykCed8R0qnxtNl/ZFksAh8wGlQ2OE4
-        0ya/u/Zx2wSarRO6GKPGwAnzO8Nje1k=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-190-JvlLZfJnO2eTckIWMgTtlw-1; Thu, 23 Feb 2023 09:35:16 -0500
-X-MC-Unique: JvlLZfJnO2eTckIWMgTtlw-1
-Received: by mail-wm1-f71.google.com with SMTP id l16-20020a05600c1d1000b003e77552705cso3407925wms.7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:35:16 -0800 (PST)
+        Thu, 23 Feb 2023 09:36:07 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B8858B7E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:36:01 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o14so9373168wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5A8UeRr2Gc2z9WOFsL/7qhv/YNUuwYHZ6QFgk2PLkf4=;
+        b=G/KnzB+TqsBI8cevd406M1H2uS/axQyn5O3J8LbGgYCVum00LDCUcdsLRO4e+PYdTW
+         U53td03TDwO3oqU/DfyEACJp3u8kqk/fQs1hqFQfHLbFvVaGxAxtxfhj20dVBDn/KocL
+         bRm4dGcQ8RneN0QZZOclkTDXg5Tz49YHzlv2KJwX01gmRldUTxSI9wx6CwNtT7JS4MpX
+         XQc/ceZ/Ksf8XK7DsOO+WaVEgFWi4+WZcf9lLCMAByGprBtrAIY/OBJ06L3/FJ6oVN0s
+         EtSN5c388v7cMmniaxK9MZ4F5hupqKl7pkEC/gfUk5A76nvfNX4TMsgdKEROOksO965j
+         GZ+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rmG/J6UhZEyANxVD1qAQonZ8Jg4WYoKnPifDyYlQWJU=;
-        b=c9iSzYpNBZ2JsyvSURFsSCnukfgfZ53zuKmOaOQgfMbXuEMEu7066q7+4arbfDBonR
-         Mvc27d0o6RqJLxRw6OprWZBOJdI7fq3Wg4VFXW7GlzLt4NYQPsbmxGcDKf448v6bEHty
-         uFxyi0pHdrNZc4OsLJ5k0+nt7XgwCle8oPB2VxgaPgcBAk3KXwPn9RZHeAHOUNhOFDMp
-         JS0f2Kao64vkp6MqhgAmr3GbXFM2G9hBMVdlPutXtSLXnFRsgOf0yW13erB6AL+BQjzg
-         irfUGMeG7u9lrpLwpHQNbIIuGQJU/SkxQ2CulG1vayjUKUc71tqRUbV32jDN4jHOZ7US
-         7kgA==
-X-Gm-Message-State: AO0yUKUbDliwNElh1xFs4ju10lOdxQnXhM+vGzmWmXy4ruH3vpBA5Ho1
-        kCqmA5NAd7S+nnkx2bAINstkdOoXNKNUF9BEzsmmv7dZOQvt8RX2sY+Ky8QkdYkYmJgXCY6ODzw
-        SpSU23ZFLZ3+Mp8oVwAGImYAC
-X-Received: by 2002:a5d:4a01:0:b0:2c5:530d:4045 with SMTP id m1-20020a5d4a01000000b002c5530d4045mr11841391wrq.20.1677162915102;
-        Thu, 23 Feb 2023 06:35:15 -0800 (PST)
-X-Google-Smtp-Source: AK7set+fw4lGLcgaVgQXgtzIDuIzXyxRS3R9Jj8mBI/xsumulea9jkr+bg2pIWA4Y7ahPlxcPNY/uQ==
-X-Received: by 2002:a5d:4a01:0:b0:2c5:530d:4045 with SMTP id m1-20020a5d4a01000000b002c5530d4045mr11841366wrq.20.1677162914664;
-        Thu, 23 Feb 2023 06:35:14 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c510b00b003e1f2e43a1csm12165392wms.48.2023.02.23.06.35.13
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5A8UeRr2Gc2z9WOFsL/7qhv/YNUuwYHZ6QFgk2PLkf4=;
+        b=kfBjTSiDrL1VAUEWxJwZVkeSls2+P2pdT5zMX3u8+D8vQE2aAz/f1uk80w5LRVujfE
+         Bro48HQYCRRp3g4LTDvNji8ec6APUO5mR1IwzVGr82TS/kNMzm6nfFIJPOkZWsNcL2jm
+         pKBhO1ZJMBwbhLCApauaB/fS8JRSmY2xEbMxxiT7aDzXpQJ01kYH3JmY/wxJ3vlfGZb0
+         m50PrtAOiDiz6a9AUnbZQ7yvUK8Gl+YQtKbznr36o/O98j0t+7dqFT0YC46n+y7dCsPK
+         zeUJg2omYx2JDqGFSEfti15JOGU+xn7mdtV/YqvvkkK5rR5muPYnqftRqbk7C96IYsHs
+         D5Cg==
+X-Gm-Message-State: AO0yUKX8cUdhz6agPDUChxbiJDo3uqcbyDJYcLK4YlS/7iGHwu7/MYmI
+        ZjpJmFRoyLnYjxecutiK2DrVKw==
+X-Google-Smtp-Source: AK7set8m6oTFiOFyJ69IZZpXnSY707D1wGVpzvSHc156iH26zK9yl1Et8LQfhfLoNB4CqfmWsB2ihw==
+X-Received: by 2002:a05:600c:43c9:b0:3e1:f8af:7942 with SMTP id f9-20020a05600c43c900b003e1f8af7942mr3008298wmn.22.1677162958724;
+        Thu, 23 Feb 2023 06:35:58 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c265:a8c7:c71d:6e47? ([2a05:6e02:1041:c10:c265:a8c7:c71d:6e47])
+        by smtp.googlemail.com with ESMTPSA id n15-20020a05600c3b8f00b003e224ff61a8sm12388179wms.43.2023.02.23.06.35.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 06:35:14 -0800 (PST)
-Message-ID: <4b3c2f37-3b84-3147-7513-4293e5408fdd@redhat.com>
-Date:   Thu, 23 Feb 2023 15:35:13 +0100
+        Thu, 23 Feb 2023 06:35:58 -0800 (PST)
+Message-ID: <abac6405-6a09-4267-a5ec-626e92f08f30@linaro.org>
+Date:   Thu, 23 Feb 2023 15:35:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 06/16] thermal: Don't use 'device' internal thermal
+ zone structure field
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-References: <Y+5Z+88Z3T2TyxUI@x1n>
- <4f64d62f-c21d-b7c8-640e-d41742bbbe7b@redhat.com> <Y+5uIS5E9sTLi41T@x1n>
- <456f8e2e-9554-73a3-4fdb-be21f9cc54b6@redhat.com> <Y+6NKPuty9V3nycI@x1n>
- <4dbc9913-3483-d22d-bbd2-e4f510fff56d@redhat.com> <Y/AIEvHJoMUnh4b6@x1n>
- <c463c421-2f33-9ae3-7d41-b394d1737d42@redhat.com> <Y/VQMyssclyIGa5i@x1n>
- <91d7c512-ee57-7d71-34b7-90e45f5c109b@redhat.com> <Y/Z9ACW8l2E3kOVk@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm/uffd: UFFD_FEATURE_WP_ZEROPAGE
-In-Reply-To: <Y/Z9ACW8l2E3kOVk@x1n>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
+ <20230221180710.2781027-7-daniel.lezcano@linaro.org>
+ <CAJZ5v0gTmi7ZeDDdHWGWju4m3bv2366oVqSP1dGOT+3jLV-jaw@mail.gmail.com>
+ <0889767f-d187-0cb4-895e-c149517b6636@linaro.org>
+ <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
+ <2b843912-cc9b-f1ac-1f81-28e3ecf8daba@linaro.org>
+ <CAJZ5v0g+fkX=ZUJ0MgENy2SmMv98wD0dApVwU352OS4ZXpDDCw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0g+fkX=ZUJ0MgENy2SmMv98wD0dApVwU352OS4ZXpDDCw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.02.23 21:37, Peter Xu wrote:
->> Allocating all these page tables to install uffd-wp flags is also one of the
->> things I actually dislike about the new approach just to get more precision.
-> 
-> My take is that this is unavoidable if we need the accuracy.  More below.
-
-Yes, it's tricky. Ideally, we'd be able to not allocate any page tables 
-at all, and only handle the unmap+remap case in a special way, hmmm
-
-> 
->> I wondered if it could be avoided, but my brain started to hurt. Just an
->> idea how to eventually avoid it:
+On 23/02/2023 12:43, Rafael J. Wysocki wrote:
+> On Thu, Feb 23, 2023 at 10:56 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
 >>
->>
->> We can catch access to these virtual memory that are not populated using
->> UFFD_MISSING mode. When installing a zeropage, we could set the uffd-wp bit.
-> 
-> Good point. :)
-> 
->> But we don't want to mix in the missing mode I guess. But maybe we could use
->> a similar approach for the uffd-wp async mode? Something like the following.
->>
->>
->> We'd want another mode(s?) for that, in addition to _ASYNC mode:
->>
->> (a) When we hit an unpopulated PTE using read-access, we map a fresh page
->> (e.g., zeropage) and set the uffd-wp bit. This will make sure that the next
->> write access triggers uffd-wp.
->>
->> (b) When we hit an unpopulated PTE using write-access, we only map a fresh
->> page (not setting the bit). We would want to trigger uffd-wp in !_ASYNC mode
-> 
-> Not setting uffd-wp bit sounds dangerous here.  What if right after the
-> pgtable pte got setup then another thread writting to it?  I think it's
-> data loss.
-
-Sorry, I think what I meant is that we don't set the bit for _ASYNC 
-mode. For !_ASYNC mode, we have to set the bit and notify.
-
-> 
->> after that. In _ASYNC mode, all is good.
-> 
-> IIUC you're suggesting to have a new vma flag (or VM_UFFD_WP + some other
-> feature bit, which is fundamentally similar to a new vma flag) to show that
-> "when register uffd-wp on this region, protection starts right away".  Then
-> it's not pte based, and we don't have problem on pgtable populations
-> either.
-
-Yes, that's the problematic bit I've mentioned, thanks for spelling it out.
-
-> 
-> True, but it goes back to why we need pte markers.  It has the accuracy,
-> alongside with the trade off of using the pgtables.
-> 
-> Without pte markers and uffd-wp bits everywhere, how do we tell "this pte
-> is none" or "even if this pte is none, it has been written before but just
-> got zapped, so we don't need to notify again"?
-
-I agree that we do need pte markers. And it's all very tricky :)
-
-I had some idea of using two markers: PTE_UFFD_WP and PT_UFFD_NO_WP, and 
-being pte_none() being something fuzzy in between that the application 
-knows how to deal with ("not touched since we registered uffd-wp").
-
-The goal would be to not populate page tables just to insert PTE 
-markers/zeropages, but to only special case on the "there is a page 
-table with a present PTE and we're unmapping something with uffd-wp set 
-or uffd-wp not set". Because when we're unmapping we already have a page 
-table entry we can just set instead of allocating a page table.
-
-Sorry for throwing semi-finished ideas at you, but the basic idea would 
-be to only special case when we're unmapping something: there, we 
-already do have a page mapped and can remember uffd-wp-set (clean) vs. 
-!uffd-wp-set (dirty).
-
-
-uffd-wp protecting a range:
-* !pte_none() -> set uffd-wp bit and wrprotect
-* pte_none() -> nothing to do
-* PTE_UFFD_WP -> nothing to do
-* PTE_UFFD_NO_WP -> set PTE_UFFD_WP
-
-unmapping a page (old way: !pte_none() -> pte_none()):
-* uffd-wp bit set: set PTE_UFFD_WP
-* uffd-wp bit not set: set PTE_UFFD_NO_WP
-
-(re)mapping a page (old: pte_none() -> !pte_none()):
-* PTE_UFFD_WP -> set pte bit for new PTE
-* PTE_UFFD_NO_WP -> don't set pte bit for new PTE
-* pte_none() -> set pte bit for new PTE
-
-Zapping an anon page using MADV_DONTNEED is a bit confusing. It's 
-actually similar to a memory write (-> write zeroes), but we don't 
-notify uffd-wp for that (I think that's something you comment on below). 
-Theoretically, we'd want to set PTE_UFFD_NO_WP ("dirty") in the async 
-mode. But that might need more thought of what the expected semantics 
-actually are.
-
-
-When we walk over the page tables we would get the following information 
-after protecting the range:
-
-* PTE_UFFD_WP -> clean, not modified since last protection round
-* PTE_UFFD_NO_WP -> dirty, modified since last protection round
-* pte_none() -> not mapped and therefore not modified since beginning of
-                 protection.
-* !pte_none() -> uffd-wp bit decides
-
-[...]
-
+>> On 22/02/2023 21:06, Rafael J. Wysocki wrote:
+>>> On Wed, Feb 22, 2023 at 9:00 PM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
 >>>>
->>>> Fair enough, I won't interfere. The natural way for me to tackle this would
->>>> be to try fixing soft-dirty instead, or handle the details on how soft-dirty
->>>> is implemented internally: not exposing to user space that we are using
->>>> uffd-wp under the hood, for example.
+>>>> On 22/02/2023 20:43, Rafael J. Wysocki wrote:
+>>>>> On Tue, Feb 21, 2023 at 7:07 PM Daniel Lezcano
+>>>>> <daniel.lezcano@linaro.org> wrote:
+>>>>>>
+>>>>>> Some drivers are directly using the thermal zone's 'device' structure
+>>>>>> field.
+>>>>>>
+>>>>>> Use the driver device pointer instead of the thermal zone device when
+>>>>>> it is available.
+>>>>>>
+>>>>>> Remove the traces when they are duplicate with the traces in the core
+>>>>>> code.
+>>>>>>
+>>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>>>> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek LVTS
+>>>>>> ---
 >>>>
+>>>> [ ... ]
 >>>>
->>>> Maybe that would be a reasonable approach? Handle this all internally if
->>>> possible, and remove the old soft-dirty infrastructure once it's working.
->>>>
->>>> We wouldn't be able to use uffd-wp + softdirty, but who really cares I guess
->>>> ...
->>>
->>> The thing is userfaultfd is an exposed and formal kernel interface to
->>> userspace already, before / if this new async mode will land.  IMHO it's
->>> necessary in this case to let the user know what's happening inside rather
->>> than thinking this is not important and make decision for the user. We
->>> don't want to surprise anyone I guess..
->>>
->>> It's not only from the angle where an user may be using userfault in its
->>> tracee app, so the user will know why the "new soft-dirty" won't work.
->>>
->>> It's also about maintaining compatible with soft-dirty even if we want to
->>> replace it some day with uffd-wp - it means there'll at least be a period
->>> of having both of them exist, not until we know they're solidly replaceable
->>> between each other.
->>>
->>> So far it's definitely not in that stage.. and they're not alike - it's
->>> just that some of us wanted to have soft-dirty change into something like
->>> uffd-wp, then since the 1st way is not easily achievable, we can try the
->>> other way round.
->>
->> Right. And uffd-wp even supports hugetlb :)
->>
+>>>>>>            thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
+>>>>>>
+>>>>>> -       dev_dbg(&data->ti_thermal->device, "updated thermal zone %s\n",
+>>>>>> +       dev_dbg(data->bgp->dev, "updated thermal zone %s\n",
+>>>>>>                    data->ti_thermal->type);
 >>>>>
->>>>> While the other "uffd cannot be nested" defect is actually the same to
->>>>> soft-dirty (no way to have a tracee being able to clear_refs itself or
->>>>> it'll also go a mess), it's just that we can still use soft-dirty to track
->>>>> an uffd application.
+>>>>> The code before the change is more consistent, because it refers to
+>>>>> the same object in both instances.
+>>>>>
+>>>>> It looks like a type field accessor is needed, eg. thermal_zone_device_type()?
+>>>>>
+>>>>> Or move the debug message to thermal_zone_device_update()?
 >>>>
->>>> I wonder if we really care about that. Would be good to know if there are
->>>> any relevant softdirty users still around ... from what I understoodm even
->>>> CRIU wants to handle it using uffd-wp.
+>>>> Actually it is done on purpose because the patch 9 replaces the accesses
+>>>> to 'type' by 'id', the thermal_zone_device_type() accessor won't be needed.
 >>>
->>> Yeah I don't know either.
+>>> Cool.
 >>>
->>>> Jup.
+>>> However, this is a change in behavior (albeit small) which doesn't
+>>> appear to be necessary.
 >>>
->>> What does this mean?
+>>> What would be wrong with having a tz->type accessor too?
 >>
->> Yes to the statement "So I assume there's no major issue to not continue
->> with a new version, then I'll move on." :)
->>
->> But my idea at the very beginning might make sense to consider: can we
->> instead handle this at fault time and avoid allocating all these page
->> tables. Happy to hear if I am missing something important.
+>> I can add the 'type' accessor but from my point of view it is not
+>> correct because the information belongs to the thermal framework and it
+>> is used to export the information in the sysfs which is along with the
+>> directory name giving the id of the thermal zone.
 > 
-> I've raised my questions above.  I had a feeling that you're thinking for
-> anonymous mostly, because shmem is even trickier IIUC, because ptes can
-> easily got zapped, then if we only rely on a per-vma attribute, there'll be
-> tons of false positives.
+> I'm not sure what you mean here.
+> 
+> Surely, the 'type' is provided by whoever registers the thermal zone,
+> so I'm not sure in what way it "belongs" to the framework.
 
-Yes, I focused on anon. Let's see if any of the above I said makes sense. :)
+I meant the goal of 'type' is to be exported to sysfs, nothing else.
 
+That is the reason why I used the word 'belongs', because it was 
+introduced to stay in the scope of the thermal framework, but then its 
+usage has been diverted to a name.
 
-Anyhow, what we're discussing here is yet another uffd-wp addition, if 
-ever, so don't feel blocked by my comments.
+Anyway, from my POV having traces in the ops is not a good thing, so 
+I'll propose later to remove them and add a single message in the call 
+sites.
+
+Meanwhile, I'll provide the accessor for 'type' and hopefully we do not 
+end up with a plethora of accessors to be used in the core code.
+
 
 -- 
-Thanks,
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-David / dhildenb
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
