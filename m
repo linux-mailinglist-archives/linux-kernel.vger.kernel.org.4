@@ -2,204 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B19C6A00E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2D86A00E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjBWByD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S233048AbjBWBzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232468AbjBWByC (ORCPT
+        with ESMTP id S230048AbjBWBzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:54:02 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2077.outbound.protection.outlook.com [40.107.93.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44AFCDE3;
-        Wed, 22 Feb 2023 17:54:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XYLK4W+k3lHg0TVv/f6uc8XzEaxeGpoxrHN3l9nFa15OEM3gOSaWmNbTF0wpoVTMDsF+qXazy67u9xN3VxA/0neR8/gG8wNP775ioJMv9PdNcoIDbm67aD17DoXpKLOXOJioYIaplRmyUzDnpKi6r432kHazqoGdDbYxXOjTbkmVknbhF8IlIJiF6+q2fJ+mSE8UqmG/BpEmrM+w5EHt+HM0eUUwkVUuJ+OkKrRS7WMLa48ZyQsM7izsWxpkPrb1M2xBv2VBcFtgWLDm0ImDstVpwYFTqvFvVf7PU1k2I4xZvz+h1z71qFc+1yMwtYYQysmznio6HpFhEd6bGGd6ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5VSvVJDLYm3I4TVhgPviimt37DwUtMl1cULco1UlQLk=;
- b=FrCkk0UoO69sbLjPQgOS6F3by+QSH66Y4wtM/QGfPNisozk15VZCfpKibSd8SDA5XoglcBOXoBw1qI7fWT/FXcYSYuXVS4II+RA0KzkDjkFJFWpALunBe0mWU5JKfRv9ibymqcSyvdHZEPGowbmyUlY9rcGWeRRmxKDyD5xXu6a+PXAOe5hr2zd88Xb3ritlKasVDFTmp8sdnJEXo9StQ7hGVp4uCcyJqF613ibJlq6K6bWbuMOInDHSjGYrw/ve7NsvXt2+gMOblcGeRV5i6qnQWXM5/bXhylR7PUL1mympSvT0idftF+Y3Q843O2dF6t1AlvDLswgxE8VqCGIi2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5VSvVJDLYm3I4TVhgPviimt37DwUtMl1cULco1UlQLk=;
- b=bOpQo3Od3xaxzT3jCmjSOW/RN+6DFEuTM3Ci9nqjb1X/7uqP5NZ5Hk3wJqWoFefnFXgzPl1VaK5ywKXgi74Org5nDJctbCjKAT2ZEMV0ohWoPYHSHP2HA76wKJevWlrbwLprTkoX/4vkukRnGfmq1Z0cOH+ciYdwNSweQ1Fb9YZfsYiAgug4cocqZESYjt6pRzaid3w6/ETaSg8vWeMFW9HNf5MuXSLVQ9PZCHa4a3rG26s1QNlbbbr7n2cRvKQlP8azVXzJatOJqO4Uh3Wg6+CP4zCncGi4svAWH7Uo5XZULbu3c/SelWXoitcsLYaww056uk170umjF9b9cM+1lQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CYYPR12MB8730.namprd12.prod.outlook.com (2603:10b6:930:c1::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Thu, 23 Feb
- 2023 01:53:58 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6111.021; Thu, 23 Feb 2023
- 01:53:58 +0000
-Date:   Wed, 22 Feb 2023 21:53:56 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
-        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-Message-ID: <Y/bHNO7A8T3QQ5T+@nvidia.com>
-References: <Y/T+pw25oGmKqz1k@nvidia.com>
- <Y/T/bkcYc9Krw4rE@slm.duckdns.org>
- <Y/UEkNn0O65Pfi4e@nvidia.com>
- <Y/UIURDjR9pv+gzx@slm.duckdns.org>
- <Y/Ua6VcNe/DFh7X4@nvidia.com>
- <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
- <Y/UiQmuVwh2eqrfA@nvidia.com>
- <87o7pmnd0p.fsf@nvidia.com>
- <Y/YRJNwwvqp7nKKt@nvidia.com>
- <87k009nvnr.fsf@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k009nvnr.fsf@nvidia.com>
-X-ClientProxiedBy: BL1P223CA0007.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 22 Feb 2023 20:55:36 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7064113FF;
+        Wed, 22 Feb 2023 17:55:34 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N1C773023643;
+        Thu, 23 Feb 2023 01:55:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3tFARqURuZ0F1rOR81RT4P4rlziCK2DZUB77v3kvH7M=;
+ b=AMGNodXn4Y29uW5OlaNtyn9tzLIbKVI36n0RUEmh+0TQAaoCOVY4hO4UwUadhSqfrR7H
+ 4H1pFG+wxD8ufh2dzQvpIApoHE4oavkUpqIUZH6dxd266GbRnkiohSiihoK755YgZZsR
+ SddGexoYxswWbqGfuKtgYJTq0Hb2fDl/oB+VlduiMLMt3vvAtM+3ZJxXD0R1yFokD1fJ
+ YgiDz+iVZ4IQj6dFTRPqA7phk6zaQDcAzxE5/pt90olazG/aNpaEhU6li7EbNjE84FvM
+ +zw42R3Xg+K9U6Fcw9mOHVSUeikL9bPx5prOP+HN6N9M2JsJolEoTaAprVJlknLEQHDn KA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwfh02gqc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 01:55:18 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N1tII2021720
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 01:55:18 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Feb
+ 2023 17:55:17 -0800
+Message-ID: <74c19e48-481a-7be9-e287-ca1f7a659c21@quicinc.com>
+Date:   Wed, 22 Feb 2023 17:55:17 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CYYPR12MB8730:EE_
-X-MS-Office365-Filtering-Correlation-Id: b63d4094-47df-4f5f-17ca-08db1540d3c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YVRVIMlPaItfaJPWiKT3CncKvsYqLixUAZ/oq1zhiEsD1VsZtMB6YeNMocvr8Cppf0cDeTRW+NXL5xh4fRrCHW2VuafoxsX8meZ2Wjwg9ynw6/OhYURz2kK6CA4Fv8/s5RwU0x2uI9Hpq9ZhDvO6+Oa5KoUkjShZLMmcSM4zAjy+B45Hx/BbxPkfE9fSPwnBksW0ce0ywMIfsOjILp3G0pAGuDWGi3gUP7B7K0mMFFzJpIMlUVpIlonCiBpiXeb344warp8dYNV4weCv1LHybcVUQ5/3WetRI1G0QJdQ1DZcw3KwhlvQityJCxtf3bf8Go56lZGQZzOtXLo88YiJdKKjAZ7335hXdfwXUlg2o7fIl7CnEa08LbmdMbcEfzupv0G5IYyn9vjyvOZJWatwjouWOyUfglSea8Twl04aQz+Z40+DsQk3r2MdDkIcZ/16W1VaTrFbtywdsChIDAczT0oWPmz6m6WGBZ68C6bgeNw8KRwcBEsjkEfHu/Vs1eVreLzr4E6pSE78qEbTGMaSWON++4/oEqBqK3qa9k+DvKOApcBndGLbcKvrZg9K4wuczpJcZz+bH8tXTgV6Z3NtB8oJiyw3bf8ZaNPu5ywQHfOY8KhaX2z2JjTxYka25kGbENoc8u/07AXQLq96wZRdcg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(39860400002)(396003)(136003)(376002)(451199018)(36756003)(66946007)(6636002)(54906003)(83380400001)(316002)(37006003)(6506007)(478600001)(4326008)(186003)(41300700001)(26005)(2616005)(6512007)(5660300002)(86362001)(8936002)(2906002)(7416002)(6862004)(66556008)(66476007)(6486002)(8676002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?58vWHRxx/J5K5EnV6Au/F9xn9ZHc3dy7B/ZEw6UaWYjdkd9IUNuai0qvkcOC?=
- =?us-ascii?Q?+BOfJWRryF1Iw16MEbQX6mjP65cep51p8zsWL8TMuvRahXt8h/vT7GLK/a+K?=
- =?us-ascii?Q?ew/xWb2W8JNnt8B62m+9baa74P90wlZe3F/c27IjteELTtjW/zmcV9JEDqjq?=
- =?us-ascii?Q?Gr3sTYpzMZLXpUCgo1VxIdYzOHx2M2Zrb3XtS+DK6M92q2VdP7sJCY0xJwF2?=
- =?us-ascii?Q?hh84Fg9mqdsKurwT6SMG1Ww8Uwvmu7vUQI2L6XT3k7uRx/0z5XxyBXv/sk/W?=
- =?us-ascii?Q?qT7BxsE4SHThQZZu7/oGRjiV8kXrrFUmOWpNJQvv8wzAnLrSTTAiB9yrSqM9?=
- =?us-ascii?Q?UhQjUbC9svYt08nJ8H2iN2abvPFdJyEhnXwm02VrOVfyqqUc0aT+4UeppGMn?=
- =?us-ascii?Q?w1dMsAUwRPLjZuAoNxKaMmg5ITHd8LWUWAsMdwHmEyKLSnho0f+h4wCvZ8Du?=
- =?us-ascii?Q?rV7nLsGXMIvQI6srzoObmA0P3S0FcD57I2J6IRXlMuju7y/JDzj5q/D8W/Ep?=
- =?us-ascii?Q?7SAkz8/CN4TjSU2iCEjPshyZhho/Q4IDD9aCH8qqa3k/HrXIic6K4iYzl0Jq?=
- =?us-ascii?Q?KV5k5nrUf6ynZfgk5IK9ZFVGKNtx+O7Uw6n7XCIZYUXBHbAuRenJJVEr/s6x?=
- =?us-ascii?Q?X7atA4ycY4qnF49GQ7bcfMe6W7w+cuQvQ8M7yFK6UZXPuLAFVu4ERJGFrfqq?=
- =?us-ascii?Q?WioY4IYUQlOQxFldndei/QxdPC3Ry8jRH/7d/y/ObjKRJmA7a4fb1jPrMegt?=
- =?us-ascii?Q?IcfglwFO09tatAzhzSkomu0QnI3uXGh8Yt3DAiQ/M3jW5oT/IPq1wSVGGAWg?=
- =?us-ascii?Q?ZH7RItbP3JombDx7G4Vwrq2jt+mh9l1pxggXdZ6CXFkk6McsB+o28Gnj7gIF?=
- =?us-ascii?Q?MXHJIxJMdlT91JotbnQAihVxpbEiQjBc7ET7QkuHIx8Z6PB5D6+Yzj70Q1eQ?=
- =?us-ascii?Q?xZtXOH2b/M2XxwRl2JnEPHYkdyH6dPh9xB+0x09T7cvI/50yCWwHpmVbKnMp?=
- =?us-ascii?Q?qXn3+upZpkOdfcfAf8b13GzifyY08kRDqek2GDi4W7DwgqBlzlVimhWyzPPn?=
- =?us-ascii?Q?wYDoxpI9lzJMwHtU6CLRrZ4lTXk62GvhRa7e8Rq2FiarP2dHWMS4PhXLf2XK?=
- =?us-ascii?Q?sYciAsExdfT+eoo2hDZ2j6fgfbfAuoF0urwI0W7hB38od2qinSzVePya/8O5?=
- =?us-ascii?Q?QDh/kRsesAB3IMjJYoe+LNJ1bVn72VfdAEwylI+Sb5hkvdDAWz9XF6Pm8tLW?=
- =?us-ascii?Q?IPbpI+dq6S7KTcnmsUmznFcxiTeA/GsNWbOZufweYO6CIqbA1GtT2f68XeXt?=
- =?us-ascii?Q?bpHleXW8M54WOzeyMAbXY64LdMCGn2ZPUXtro/fXlE0J4RjjxOSSrMs1XDfr?=
- =?us-ascii?Q?rrMQNwwImPQe0q83BQJVG8nBji4xiVyPSPVUcakoeoDAnl3IR6T2fxA7T98B?=
- =?us-ascii?Q?daxD7MPegFzrpN+NSSeYTlL1dEMrbGtr+2idiMgXezq+YnacABWXZ72LkvFM?=
- =?us-ascii?Q?c2YU1rsojDbDdmSBVtFz2wXGcuux2yLOJGrqYkdTis6ycKTaqpmC0AWGf21U?=
- =?us-ascii?Q?ugUydk2r5GpDt9dhVmYf8qsXj2fI0RYKs9hWiuVc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b63d4094-47df-4f5f-17ca-08db1540d3c3
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 01:53:57.9644
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 56I4QJdC8L1YDG6Hzkz+a/7yjDkLVs40jIukv0SxHe2fzYr6t9Usou9OdaHe7yPR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8730
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 15/26] gunyah: rsc_mgr: Add platform ops on
+ mem_lend/mem_reclaim
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212448.3318756-1-quic_eberman@quicinc.com>
+ <963d84e8-7b91-c278-1978-4e73d73f7c6f@linaro.org>
+ <7aa025a1-b211-f04c-9169-236102fe27fe@quicinc.com>
+ <dea710b6-b627-08e9-3d26-d73e6be2e852@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <dea710b6-b627-08e9-3d26-d73e6be2e852@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Zxazv_018zfZqQGMD80Fr5WUnEbIOd2X
+X-Proofpoint-GUID: Zxazv_018zfZqQGMD80Fr5WUnEbIOd2X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_12,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230015
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 09:59:35AM +1100, Alistair Popple wrote:
+
+On 2/22/2023 2:21 AM, Srinivas Kandagatla wrote:
 > 
-> Jason Gunthorpe <jgg@nvidia.com> writes:
 > 
-> > On Wed, Feb 22, 2023 at 10:38:25PM +1100, Alistair Popple wrote:
-> >> When a driver unpins a page we scan the pinners list and assign
-> >> ownership to the next driver pinning the page by updating memcg_data and
-> >> removing the vm_account from the list.
-> >
-> > I don't see how this works with just the data structure you outlined??
-> > Every unique page needs its own list_head in the vm_account, it is
-> > doable just incredibly costly.
+> On 21/02/2023 21:22, Elliot Berman wrote:
+>>
+>>
+>> On 2/21/2023 6:51 AM, Srinivas Kandagatla wrote:
+>>>
+>>>
+>>> On 14/02/2023 21:24, Elliot Berman wrote:
+>> [snip]
+>>>> +
+>>>> +static struct gunyah_rm_platform_ops *rm_platform_ops;
+>>>> +static DECLARE_RWSEM(rm_platform_ops_lock);
+>>>
+>>> Why do we need this read/write lock or this global rm_platform_ops 
+>>> here, AFAIU, there will be only one instance of platform_ops per 
+>>> platform.
+>>>
+>>> This should be a core part of the gunyah and its driver early setup, 
+>>> that should give us pretty much lock less behaviour.
+>>>
+>>> We should be able to determine by Hypervisor UUID that its on 
+>>> Qualcomm platform or not, during early gunyah setup which should help 
+>>> us setup the platfrom ops accordingly.
+>>>
+>>> This should also help cleanup some of the gunyah code that was added 
+>>> futher down in this patchset.
+>>
+>> I'm guessing the direction to take is:
+>>
+>>    config GUNYAH
+>>      select QCOM_SCM if ARCH_QCOM
 > 
-> The idea was every driver already needs to allocate a pages array to
-> pass to pin_user_pages(), and by necessity drivers have to keep a
-> reference to the contents of that in one form or another. So
-> conceptually the equivalent of:
+> This is how other kernel drivers use SCM.
 > 
-> struct vm_account {
->        struct list_head possible_pinners;
->        struct mem_cgroup *memcg;
->        struct pages **pages;
->        [...]
-> };
+>>
+>> and have vm_mgr call directly into qcom_scm driver if the UID matches?
 > 
-> Unpinnig involves finding a new owner by traversing the list of
-> page->memcg_data->possible_pinners and iterating over *pages[] to figure
-> out if that vm_account actually has this page pinned or not and could
-> own it.
+> Yes that is the plan, we could have these callbacks as part key data 
+> structure like struct gh_rm and update it at very early in setup stage 
+> based on UUID match.
+> 
+> 
+>>
+>> We have an Android requirement to enable CONFIG_GUNYAH=y and 
+>> CONFIG_QCOM_SCM=m, but it wouldn't be possible with this design. The 
+> 
+> Am not sure how this will work, if gunyah for QCOM Platform is depended 
+> on SCM then there is no way that gunyah could be a inbuilt and make scm 
+> a module. >
+> On the other hand with the existing design gunyah will not be functional 
+> until scm driver is loaded and platform hooks are registered. This 
+> runtime dependency design does not express the dependency correctly and 
+> the only way to know if gunyah is functional is keep trying which can 
+> only work after scm driver is probed.
+> 
+> This also raises the design question on how much of platform hooks 
+> dependency is captured at gunyah core and api level, with state of 
+> current code /dev/gunyah will be created even without platform hooks and 
+> let the userspace use it which then only fail at hyp call level.
+> 
+> Other issue with current design is, scm module can be unloaded under the 
+> hood leaving gunyah with NULL pointers to those platform hook functions. 
 
-Oh, you are focusing on Tejun's DOS scenario. 
 
-The DOS problem is to prevent a pin users in cgroup A from keeping
-memory charged to cgroup B that it isn't using any more.
+This is not possible because SCM module can't be unloaded (except with 
+CONFIG_MODULE_FORCE_UNLOAD). I can also increase refcount of qcom_scm.ko 
+module to be more correct.
 
-cgroup B doesn't need to be pinning the memory, it could just be
-normal VMAs and "isn't using anymore" means it has unmapped all the
-VMAs.
+> This is the kind of issues we could see if the dependency is not 
+> expressed from bottom up. >
+> The current design is not really capturing the depended components 
+> accurately.
+> 
+> Considering platform hooks as a core resource to gunyah on Qualcomm 
+> platform is something that needs attention. If we can fix that then it 
+> might be doable to have QCOM_SCM=m and CONFIG_GUNYAH=y.
+> 
 
-Solving that problem means figuring out when every cgroup stops using
-the memory - pinning or not. That seems to be very costly.
+I'm open to ideas. I don't see this as being a real-world issue because 
+default defconfig has QCOM_SCM=y and all Qualcomm platforms enable 
+QCOM_SCM at least as =m.
 
-AFAIK this problem also already exists today as the memcg of a page
-doesn't change while it is pinned. So maybe we don't need to address
-it.
+Thanks,
+Elliot
 
-Arguably the pins are not the problem. If we want to treat the pin
-like allocation then we simply charge the non-owning memcg's for the
-pin as though it was an allocation. Eg go over every page and if the
-owning memcg is not the current memcg then charge the current memcg
-for an allocation of the MAP_SHARED memory. Undoing this is trivial
-enoug.
-
-This doesn't fix the DOS problem but it does sort of harmonize the pin
-accounting with the memcg by multi-accounting every pin of a
-MAP_SHARED page.
-
-The other drawback is that this isn't the same thing as the current
-rlimit. The rlimit is largely restricting the creation of unmovable
-memory.
-
-Though, AFAICT memcg seems to bundle unmovable memory (eg GFP_KERNEL)
-along with movable user pages so it would be self-consistent.
-
-I'm unclear if this is OK for libvirt..
-
-> Agree this is costly though. And I don't think all drivers keep the
-> array around so "iterating over *pages[]" may need to be a callback.
-
-I think searching lists of pages is not reasonable. Things like VFIO &
-KVM use cases effectively pin 90% of all system memory, that is
-potentially TB of page lists that might need linear searching!
-
-Jason
+> 
+> --srini
+>> platform hooks implementation allows GUNYAH and QCOM_SCM to be enabled 
+>> without setting lower bound of the other.
+>>
+>> - Elliot
