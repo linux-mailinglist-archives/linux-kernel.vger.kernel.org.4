@@ -2,167 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE516A11A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9D46A11A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjBWVHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S229631AbjBWVIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjBWVHw (ORCPT
+        with ESMTP id S229620AbjBWVHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:07:52 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8882D59E51
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:07:47 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-538116920c3so96205197b3.15
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eDy3vPr0qJRCA9dsWL1NmUMORzwIvttYPURltbFZMpc=;
-        b=qsPE+UzcPzty9BFn6i2GGc1XS/LiY6mDx3u6bSw5CfBlMQflGXG8kD42uIiEB2AWNS
-         4dFUL7wB9tqtDXyvHDP+y2oMv5JEqfp+WjLmt3Ziws78zc75n0eoHhz+4OyJu7ZL+4T1
-         6yYwYADt4nzJNT/7/KFqstg5HWZXn3wfcyGrx5q+gj0GT/l68gf4/17J3Y2cfdstZgul
-         lhULaPr7fDFDDnymEJPnUoWZ7fXQrAc+3tn4oGGFz2WbB8+AuiVQ7JQo+ubZHRBNMNAd
-         GZbmLVvMXHX7kdehsO+emNo4UTDXbxZPFnUI9LcMiMG0NWB/G9TQhtlG8zqj5wASBmr9
-         nqAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eDy3vPr0qJRCA9dsWL1NmUMORzwIvttYPURltbFZMpc=;
-        b=09bef3hrnp5a0SdiGOk6u9JoltcO1A5VN/r8Cd4alSleK2xJExrw3IhtrcngB1DmyP
-         FeDaL4S66tvJyYumn45BIp/lYH7gQo3D8PcHTok7HaSXY5+Y8yqpsJdEMiuMHT74KOYm
-         q20hHKbhOQhVgmVA72WYDAFF6vtt8DIGvzf/4jAu9fEp6r2i0DVSUjSfmBXbX88jKyHS
-         De4tnxNY5IRaCyjRblTfP9N9UeeAxjJAUbYe9PJ2oPPqS03GCJGBRMSeG1i4xEH1MJvi
-         5b8M0JloKjQkn272NRVp0S4vmdgQ64gHUAptaAu7vTlZX2oh53brvkULLL9GvfBlNd56
-         H7iw==
-X-Gm-Message-State: AO0yUKWAJ0ou5Uyi4R4qCb8G0w8D4bIlKGrxAvBNnkc/KjwZNFTPBclz
-        /3TsNWRToHeeZqiWm05McXF//tb/cS4=
-X-Google-Smtp-Source: AK7set89gIznAxeDfaUj5caiC9RMffToP6dOxix8kVKieHwPx9MzyFKOjKWtkt7UHWZt7FyQXZHW+fjVykA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:287:b0:8de:ddd5:7f8e with SMTP id
- v7-20020a056902028700b008deddd57f8emr2447294ybh.4.1677186466736; Thu, 23 Feb
- 2023 13:07:46 -0800 (PST)
-Date:   Thu, 23 Feb 2023 13:07:45 -0800
-In-Reply-To: <BYAPR21MB168836495869ABB4E3D61D61D7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Mime-Version: 1.0
-References: <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aczIbbQm/ZNunZ@zn.tnic> <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
- <Y+auMQ88In7NEc30@google.com> <Y+av0SVUHBLCVdWE@google.com>
- <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+bXjxUtSf71E5SS@google.com> <e15a1d20-5014-d704-d747-01069b5f4c88@intel.com>
- <e517d9dd-c1a2-92f6-6b4b-c77d9ea47546@intel.com> <BYAPR21MB168836495869ABB4E3D61D61D7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Message-ID: <Y/fVoc4C5BNI+i7l@google.com>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
+        Thu, 23 Feb 2023 16:07:55 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A78C6A6F;
+        Thu, 23 Feb 2023 13:07:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VBDBbKr0O1cKb+kkhh/UjK1F2R2o5k+AgjJToNZvuKUzJGySouGSffO8FicBJOBIdvSCa11ffRc8t3JHS/3RA5T3AWl1h82ITqhrLLQCagtZCH6RbCKOv5n/8d56Wd1cF37V2ekifl8lgKkoRKQz33XYakhDI6boc8yHYAyCNbMVKsAdDRkFUysPFkDstvPx7kiREm4E2xMw7tXOSUMaTfjcJl9/M/7jSui+R+MEY18xUVTd482Mv8oK0TglNKi1UO4DzYUC+Um/Gwn0Iz3mmyG2Jw9/oFYYknbo1gXxjbP6ziYjPO3hCOVDtqpEEuXVpQKNsbKuAJh8vP/G9362rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QO6G3CIudMv0TbNjexOchWmlGf/ugxzqjVwfh7YZf2s=;
+ b=cEutV0Yt9VdMeI8/TRPGvWvrOsQOkUICDgwmfbENmPMgKsCWaWOsOJS2rpKg6RcgEGiO2i222gFOW4zg35EFVMgG4k3UEyik2FCfKaK+ojHRkK8dVUaEH7sWafOxfBMPcM5ul/7bjckQ5bG6QfDqDVQiJ8VxUMxSg8z6vzzyQhWRHVXqdMqqgmDhzILGEr5dwwmCnVTYPUsuBG/H5qMDDTB3Do0WDYRfOxCHYgo0TeNaK45O3kbMuqm8ZAo5aPzAgBBKiZFW5pJVi4WD4hi+V12hd70wo9JO6cB9uhGCYx8qzmTuBiywY4Qa9dLYjlS2s9ni4Qf6qbhtl0LdILbMXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QO6G3CIudMv0TbNjexOchWmlGf/ugxzqjVwfh7YZf2s=;
+ b=BQ08E7l1xmfvVCthk6PI10jUJbQ9oduhIi6INoHon8c38xQ1OyPdMuJBVVf6XgHX/Bv7ADyJ30K+2HcG7ocJj/QbFQq7mcKjAgOMkeKalJCmLo3MqYPbnXMWjGSfY8jiuV1XAvEHK60ZFJqTJhewAwwFXTiWLL7ONeaaV+t1JuWxzh/rvjhZr42mem8B0JcYHWLlDVC/eZcWWf/rEu1L3k3ROaq2+LqTZ08Hmq0ZT5bW/ZksbUGpy5Td/8FJtPf4wVdY4mXq7mp5PuPjBZrFHb546VcV3ZNELDo6zVUli73ee89wF2UKVpfAVXjwmXUH21kDd4/puL/gnW6if3D+gQ==
+Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
+ by DS0PR12MB8220.namprd12.prod.outlook.com (2603:10b6:8:f5::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
+ 2023 21:07:50 +0000
+Received: from CH2PR12MB3895.namprd12.prod.outlook.com
+ ([fe80::5f35:2f2d:94a4:f7c3]) by CH2PR12MB3895.namprd12.prod.outlook.com
+ ([fe80::5f35:2f2d:94a4:f7c3%4]) with mapi id 15.20.6134.019; Thu, 23 Feb 2023
+ 21:07:50 +0000
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "niyas.sait@linaro.org" <niyas.sait@linaro.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v4 2/2] pinctrl: pinctrl-mlxbf: Add pinctrl driver support
+Thread-Topic: [PATCH v4 2/2] pinctrl: pinctrl-mlxbf: Add pinctrl driver
+ support
+Thread-Index: AQHZQxaXis8h0J8vyUGnQ7U8Uh2ONa7Tx+kAgAlAt3A=
+Date:   Thu, 23 Feb 2023 21:07:50 +0000
+Message-ID: <CH2PR12MB38959833A5A4073F8B2A84FDD7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
+References: <cover.1676042188.git.asmaa@nvidia.com>
+ <cover.1676668853.git.asmaa@nvidia.com>
+ <4cda8cfc37fb15a0c3b180ab4c34a6f6f859fe3c.1676668853.git.asmaa@nvidia.com>
+ <CAHp75VeTbV7CyVZrXsrm8rqLnYdOunzTDhanqzceyJ3KyPjdwA@mail.gmail.com>
+In-Reply-To: <CAHp75VeTbV7CyVZrXsrm8rqLnYdOunzTDhanqzceyJ3KyPjdwA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|DS0PR12MB8220:EE_
+x-ms-office365-filtering-correlation-id: 29c74630-9276-4862-fb9d-08db15e2058a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: txi3fC6DlVGy7oFZ9luyDUuPUkjLv50jsft6NxPa9WJ41NYx6FU2qwmeFbY6o1f5oTX9+nmafu51Q9VntzYEI2Xq6HwNF/j0U/WqlZjys9CbWj8C7yk6fecAbct+ylrREnJuU21MCrsBh1yaFAYD/9Jjs03/+XemSODWen+MBFrk+xFFW5uGBuUXXFLFQGMUIa31z0BjpIguuwDb7uShydZk39GOLpGlzXtWfiryC6bRBbFHbsv8kz6Ryf0JS617bJbjiAjykSEZzqfu67HEU5d9AiZVu/qbLx3WcnzkypAwa/ce1Lkipn3tgN+j3dDTws0VPQo7mNAJze+kp6lw/HKIrChaUOm0boyu4mWOuRGI0zN5Gtqa079Nukow5P/q/6TY2MwVDTOMWi8MQ3XhODB1ou4lEL+PY0pi21ozp0C67i2z5fUuDZXr3XogDXUxqbuPq7WFNgyUnu5sAJxgO7QYG5TOAMyYGBdqCpNCn46p++wlwSnzEF+GaCXhM034nhA/7kfiVnHq9VFjROu4nn0BDtJ2l4HD6/iRbXBZhmqZTGS6WCWxNSao2yjeQ7zVvlWf2xhUHUehOM6uIi8+j03JoGq7pdIIgF8EVezNBilbruG7OkNoi1RbabsZqENDpo4/RGEPUjqwwVZtRIgA1Qni3Q+/LN4V5dE4VqzGVh4v9RqU4MDQP/2MnfxDLySIMGWEwdwPRFV+IHuI4DeGQO3OgwUc8iGV5v3VTQb+i4UyEfo1bc6XLPGUqPbzfSCF
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199018)(4744005)(5660300002)(9686003)(2906002)(478600001)(71200400001)(83380400001)(26005)(186003)(6506007)(38070700005)(54906003)(122000001)(38100700002)(55016003)(66946007)(76116006)(66476007)(66446008)(6916009)(64756008)(316002)(8676002)(8936002)(66556008)(4326008)(33656002)(7696005)(52536014)(86362001)(966005)(41300700001)(84970400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWtUcVFadDlQV241eUlMei9NS3BTMVh0YjFBc0hKTWMwS0l4YVR2TlFYM0JN?=
+ =?utf-8?B?TDB5d0lFTnU4UGkxQTQ4ZHkwTlNIclBzS1FmUjQ3OVJWVUhERUw1WFZHSXVq?=
+ =?utf-8?B?cGxqV0VEMlZWUFZySXludDY3bnlCY2JvdTBXNUUvYWw4dzZhejh2YlUxQnNk?=
+ =?utf-8?B?NnlxeWpNZHZEemV5dG1PV3F5RzIzRlZPam1FTFpwMDczdEFxNjJQcVlOUkhR?=
+ =?utf-8?B?MlJaRStpTjMreENlcjBnNEdWMkNoa2xVL01SNkp5MzA1VzRCOTZEMGpGUjVT?=
+ =?utf-8?B?UkFTdVNGRnZtb1pkOVR4SGk0S3NUR3FVNmNCU1V5TlFyMkQwRFVFQktZQVlz?=
+ =?utf-8?B?ZERsU3JQTUd1bjIvTGlPc1JCMXlpRThwb04wcDlmdkJiSkc4M1pONktVeHox?=
+ =?utf-8?B?TW0xTnJrK3pSL2kycExSajVtUVFXWnZNalh3TWxIbGRIMEhaZzArYy9Kdjcy?=
+ =?utf-8?B?eENwVzB6UmZxUUpjT0ljQjdBUTZldzE4eGV6YjRTY2NWNE5yb292U3pDU2d1?=
+ =?utf-8?B?Qml2YjJjNkNlRHFpV056NnBKNGJVdDJ5N2xaN1crZUllNzNBQkQwamxiRGVT?=
+ =?utf-8?B?NWMxd3VvMmlQSTBySDd5cEpLcUxIT256REt4dXpTeTFtZWJ6WmwvdXVYc2dN?=
+ =?utf-8?B?WnNMcmdJeHhwTkkxeEZTcldmMHdmZU1qaUc1aVpBVFF4RzlObVJEbkdwZDFO?=
+ =?utf-8?B?YzRDai9EZGJCN1ZiTnFYUDEyTUxMMENoejBoUS9xQWZlOUtUajhoOVl0dHo4?=
+ =?utf-8?B?VCtndnBMMzRZRnVraldtYnBPYXl6NENFc1pNZGNrT1Z2ZC96MTQ4TmVHZTZm?=
+ =?utf-8?B?bE55emlEK1JVeWx0Y0t6U2Q3cmxkd3h1TzVETCsyQitNcU1zRUNLejI3NUxj?=
+ =?utf-8?B?MWJhZFNvVm5LRGJocDM1S25yZ3p5TTk2SWdFVVhjNC9pWVdCdVF5NVIzVHB5?=
+ =?utf-8?B?MTNTUi9oOG1KSWlEZ2pyZDE2b1hIOWV4N2pQMFdBb3pHTXFSc2F5N3pLL1N0?=
+ =?utf-8?B?YWhOL21DaFdadk1EQXBLSStKMnB6NDBpbWJkb0M5NGRqdjV0a3Yrd0JJakl2?=
+ =?utf-8?B?WGxVUDJqa29uQ3ZHZTkzdzlabGgwemZYYmpkcjBTNnJLbGpvNXVZdUFuaTRm?=
+ =?utf-8?B?TTF1UjJ3RUxUd3hvazZwdThCUWtMeEdBL0lJNlZpR2xJaHdVeHpEUndsTk1S?=
+ =?utf-8?B?U08zcCt1azBXc3NpMDhwTGxBS3lSd1pzTUdicnJWZHEyc2paQ053OWhxQlVX?=
+ =?utf-8?B?cG5nay9IMTEwd21lZ29iRUJIUTZiM2hUV0pXWlVVTnFOZjI0T0lPRVNOMDFl?=
+ =?utf-8?B?V1RxamwzbTdWT0ZZUEkyUDFaejBqVGpCeU5qM2pBRURvLzE4T09KSCs5aU41?=
+ =?utf-8?B?bk1PTnlUcnh1OUxCK1RqZmk0Z29jclJEcnZ2d2s2NS9RT1BpNVY1YnF2ckh6?=
+ =?utf-8?B?U3hkelplSC9rOURYNnVBWGVWay9ibFRGZHlweXJlVHRoQnp4c2tjTFZFUmZj?=
+ =?utf-8?B?N05LcFE5c09mTGFEQ2l6bE5Fc2UvaTdzWFg1eW9yMzB1SDRVdlV3c3lUZGNY?=
+ =?utf-8?B?aURBRmtBTGNwNTg4ZUJZa21ienJYYkIzSzFNZEFQWUNKNSs5eVBDWXJFOHpE?=
+ =?utf-8?B?RnFpVWd0aS9oNGlCazZUWVRQWmZRRXNqaEZhN1REcTBTV2Nla0ZKYkROSUEr?=
+ =?utf-8?B?cmF3Q2FSa2kwY3dSbGhJZk5rWFk0ZklQM0lXRk93cmJqYUNsL3YxOUxLakZw?=
+ =?utf-8?B?QjJnV3cvNU43c0JLYnlTQUY4OGozOGdYSU9TakdjVmFUNExQOFlKL0tPS05W?=
+ =?utf-8?B?SFJka29hLzE5N1VKWWJtTkRhUUpNVDR4LzJrU3lzSzR3eFE2MlR5SmtNWU05?=
+ =?utf-8?B?SlMxTWlxMFJVNkNCOUltL0diSmtubDJTbURFSjNrajluSnI3bmE2S25EOXBH?=
+ =?utf-8?B?NjY3LzZhSTdvSEl1TGh3QUZQdkN1QVFONGVVaXl0cG5sV1VXNDRrTUhjNE41?=
+ =?utf-8?B?YjI4M095YkpreWJucUp0d0FTR2ZFc1lselIwQkpPMUh5cTFaWkxtODRJQlVq?=
+ =?utf-8?B?a2t0VlJRSzVhMDlSRDBsamJuTWRwK3RHMjE3QjE1cnJ0UlpScVRvcFI3WVEv?=
+ =?utf-8?Q?NGuw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29c74630-9276-4862-fb9d-08db15e2058a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 21:07:50.2531
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6TP3je8cm2gGESU/aB2b2KnrS99bh1QQbzv3rCUsjf9FB4QFnZzjAbxxHZFNMHVaG6HEeQO5M1sjLRSWH+ujMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8220
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023, Michael Kelley (LINUX) wrote:
-> From: Dave Hansen <dave.hansen@intel.com> Sent: Thursday, February 23, 2023 12:42 PM
-> > 
-> > On 2/23/23 12:26, Dave Hansen wrote:
-> > >> +       if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
-> > >> +               /*
-> > >> +               * Ensure fixmaps for IOAPIC MMIO respect memory encryption pgprot
-> > >> +               * bits, just like normal ioremap():
-> > >> +               */
-> > >> +               if (x86_platform.hyper.is_private_mmio(phys))
-> > >> +                       flags = pgprot_encrypted(flags);
-> > >> +               else
-> > >> +                       flags = pgprot_decrypted(flags);
-> > >> +       }
-> > ...
-> > > It does seem a bit odd that there's a new CC_ATTR_GUEST_MEM_ENCRYPT
-> > > check wrapping this whole thing.  I guess the trip through
-> > > pgprot_decrypted() is harmless on normal platforms, though.
-> > 
-> > Yeah, that's _really_ odd.  Sean, were you trying to optimize away the
-> > indirect call or something?
-
-No, my thought was simply to require platforms that support GUEST_MEM_ENCRYPT to
-implement x86_platform.hyper.is_private_mmio, e.g. to avoid having to check if
-is_private_mmio is NULL, to explicit document that non-Hyper-V encrypted guests
-don't (yet) support private MMIO, and to add a bit of documentation around the
-{de,en}crypted logic.
-
-> > I would just expect the Hyper-V/vTOM code to leave
-> > x86_platform.hyper.is_private_mmio alone unless it *knows* the platform has
-> > private MMIO *and* CC_ATTR_GUEST_MEM_ENCRYPT.
-> 
-> Agreed.
-> 
-> > 
-> > Is there ever a case where CC_ATTR_GUEST_MEM_ENCRYPT==0 and he
-> > Hyper-V/vTOM code would need to set x86_platform.hyper.is_private_mmio?
-> 
-> There's no such case. 
-> 
-> I agree that gating with CC_ATTR_GUEST_MEM_ENCRYPT isn't really necessary.
-> Current upstream code always does the pgprot_decrypted(), and as you said,
-> that's a no-op on platforms with no memory encryption.
-
-Right, but since is_private_mmio can be NULL, unless I'm missing something we'll
-need an extra check no matter what, i.e. the alternative would be
-
-	if (x86_platform.hyper.is_private_mmio &&
-	    x86_platform.hyper.is_private_mmio(phys))
-		flags = pgprot_encrypted(flags);
-	else
-		flags = pgprot_decrypted(flags);
-
-I have no objection to that approach.  It does have the advantage of not needing
-an indirect call for encrypted guests that don't support private MMIO, though
-I can't imagine this code is performance sensitive.
+PiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHsNCj4gPiArICAgICAgIGNvbnN0IGNoYXIgKm5hbWU7
+DQo+ID4gKyAgICAgICBjb25zdCBjaGFyICogY29uc3QgKmdyb3VwX25hbWVzOw0KPiANCj4gVXNl
+IHRoaXMgaW5zdGVhZA0KPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
+bmVsL2dpdC9saW51c3cvbGludXgtDQo+IHBpbmN0cmwuZ2l0L3RyZWUvaW5jbHVkZS9saW51eC9w
+aW5jdHJsL3BpbmN0cmwuaD9oPWRldmVsI24yMTUNCj4gYW5kIHRoaXMNCj4gaHR0cHM6Ly9naXQu
+a2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvbGludXN3L2xpbnV4LQ0KPiBwaW5j
+dHJsLmdpdC90cmVlL2luY2x1ZGUvbGludXgvcGluY3RybC9waW5jdHJsLmg/aD1kZXZlbCNuMjIy
+DQo+IA0KPiA+ICt9IG1seGJmX3BteF9mdW5jc1tdID0gew0KPiANCj4gPiArfTsNCg0Kc28gY29w
+eSB0aGF0IHN0cnVjdCBkZWZpbml0aW9uIGFuZCBtYWNybyB0byBteSBkcml2ZXI/IChJIGRvbuKA
+mXQgc2VlIHRoZXNlIGNvZGUgY2hhbmdlcyBpbiBtYXN0ZXIpICANCg0KPiANCj4gPiArICAgICAg
+IC8qIFRoaXMgcmVzb3VyY2UgaXMgc2hhcmVkIHNvIHVzZSBkZXZtX2lvcmVtYXAgKi8NCj4gDQo+
+IENhbiB5b3UgZWxhYm9yYXRlIG9uIHdobyBhY3R1YWxseSByZXF1ZXN0cyB0aGUgcmVnaW9uPyBB
+bmQgd2h5IGlzIGl0IG5vdA0KPiBfdGhpc18gZHJpdmVyPw0KDQpUaGlzIHJlc291cmNlIGlzIHNo
+YXJlZCB3aXRoIHRoZSBncGlvLW1seGJmMy5jIGRyaXZlci4gVGhlIGdwaW8tbWx4YmYzLmMgZHJp
+dmVyIGRvZXMgbm90IGFjY2VzcyB0aGUgc2FtZSBvZmZzZXRzIGFzIHRoZSBwaW5jdHJsLW1seGJm
+My5jIGRyaXZlciwgYnV0IGl0IGFjY2Vzc2VzIHNldmVyYWwgb3RoZXIgcmVnaXN0ZXJzIG9mZnNl
+dHMgaW4gYmV0d2Vlbi4NCg0KDQo=
