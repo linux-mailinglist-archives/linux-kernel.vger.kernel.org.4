@@ -2,87 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587E26A1233
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495706A123B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjBWVlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S229643AbjBWVpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBWVlS (ORCPT
+        with ESMTP id S229477AbjBWVpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:41:18 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F423218A9E;
-        Thu, 23 Feb 2023 13:41:16 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id f41so15471499lfv.13;
-        Thu, 23 Feb 2023 13:41:16 -0800 (PST)
+        Thu, 23 Feb 2023 16:45:22 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D36B1ADE6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:45:20 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso1412088oti.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:45:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1677188719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3qJoM4vXaENPXqnrETZsBVfs8/JYjXs2/pFDbVazfCI=;
-        b=f0c2b3ELsp/c031R0kg+iSLzD0LVA6+fDyAotS8+QsQEyDgaokMu43dNRkg9cEAUr9
-         yvQIKt4anc5575bqMD4JqnPvpJ8m0ITobP/94FC3ZFkRedzAu3dJ7hE0L65kMWHi7WVJ
-         m/UttK05vmOWJ7F4+SBnaezcoEO6kQbc09/gBnTuECJueFXDxatVeCc34hqsvM3J3L7q
-         1IsZNrROjDcIjKr1e1skVXxTNdwIynMVTJSHn1UKgrESeDrphkVVjJt9DBWkTx9g29w8
-         uQVmRkxcZ0dQ4w2Ez78CnQ0lnJkNoF75/MTEZbRD+nP8Mjbu5hrgdLV4WB9n9OIjGhKu
-         T8Hw==
+        bh=1OfiwbKNrqZqdva9KRQDaA1tAlOSC4p+inOs83fHUCo=;
+        b=SfBdi2Sy7cIrVnRA8wIG0sAfShM4PckxXaDeF4xGX2gLoYJIVUMJfQNH5c9Cr5xjIt
+         tTZkD0BtIrJYr1b6lxKoeAojqR5kTHOPziBCM/mCtIm7qtUO34tWcWroKnvHZ96h6yYH
+         SCn3YGdgouGe5X3BtJc1t3txep/d4v7J7lY948sxpfm7bGRUHwNqaUdCqqDXsx89Ur+M
+         yC51Drlbszy9BVYOxI5mjqMbw4Dg4bAUAvLMOx7ER9aJAwb4l7Jjobhg+9p5CVLWyacD
+         IsrmH36niQ9Y1JkJRwesM16cFIIrhMmvCQTHySxkp+rAL5yAcw7Elgm8uQ/RJlM+Q4Iz
+         GzXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1677188719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3qJoM4vXaENPXqnrETZsBVfs8/JYjXs2/pFDbVazfCI=;
-        b=vQFn6xnkBXxGQZelSABUPa0yoI2YpCB63keEMsWJZm5NLEXZB8TacP9Y+LYfCZTqpM
-         KMv4kSipGFPlE9u11pPv2fd9kuv5/0tPuxrDTJQ7n6O9SNieYYPfBaXx++zrAtO1j7N5
-         7h3O9iDb58z+L/KD72PRWEcqkwjFn5P+q8PDgiB3fPiWUZZdU3N/RIEuoQdG483WILcm
-         jwA+z8Uzh0kkkulhKG5Mzv0TbDH4aEhyVSoLSahs5ZbI7OZSxZTPXjX7Hn/cjyrL9OdR
-         acNQckmU9wElChUShDxQZMoNWM3p0Ls+wbxshhCLMKL2zMF/7HPCeu1mKw6YJtsXPI00
-         ljlA==
-X-Gm-Message-State: AO0yUKUWeVGQcAD5rNkR+gA3QCyQz432p+dRUb7+3XNK+1oC2wqiqIGl
-        oZJgjLYVciSPxujr95XwdzU=
-X-Google-Smtp-Source: AK7set8yK0DzArIbIqTuKw/72Q4C0axGvD9qC9p/0DSpcksqSIjNWFglrSiJJvsBLG6slbfPJDUHVA==
-X-Received: by 2002:a19:f00c:0:b0:4db:1e4a:749c with SMTP id p12-20020a19f00c000000b004db1e4a749cmr4421782lfc.0.1677188474998;
-        Thu, 23 Feb 2023 13:41:14 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id m22-20020ac24256000000b004b57bbaef87sm529496lfl.224.2023.02.23.13.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 13:41:14 -0800 (PST)
-Date:   Thu, 23 Feb 2023 23:41:12 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v8 34/56] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_START
- command
-Message-ID: <20230223234112.000030ac@gmail.com>
-In-Reply-To: <20230220183847.59159-35-michael.roth@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
-        <20230220183847.59159-35-michael.roth@amd.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        bh=1OfiwbKNrqZqdva9KRQDaA1tAlOSC4p+inOs83fHUCo=;
+        b=tRQ7uARlHYoHE67SIiLQjjLTQelnPQ4PmeCGkmbpup5ftzdKJcDGyXgOINiZ7h+Rvp
+         vZOJGSpt9g66Eg1ii76ndosJkrukfYCu+GXxFxY+eTcfqZLkVBOcMxP8PBgETUypUZeO
+         QVd3cQ1vsbCFHwpy3U3JhTgCZ77IuUbeOUxcKlTCSDYPob+g1kGCweIDNAARpNiCrSJw
+         2OUmXHDFE3piiCiQNLCoNp8DsNHJwx9MP7VxejbBv5uAXWy1qXrneKtyG8xn8sJcFEtv
+         g7y2Tw/+47I3aD3wlYnL5YzV/bpNUhw97Z1VVsKppmoeDDiGKdz+pD6uXpcAM5fBH2N2
+         Qb3A==
+X-Gm-Message-State: AO0yUKVsL2nOvax0jzeis7pZXLlizfA7+qYhqynn/tsMwbuFqD44XOj8
+        MNdPQwLx4tF2BfeV0q7SPoXxeDgUCCVFoVZhcW4CKA==
+X-Google-Smtp-Source: AK7set8FZ7qRWd1aOZ2OeE1vGBCfqUYTK06Q1pg5RF8MtU9Dq4n+YFV15FAPfTDrSNqr2fBaCFbKsAf7Z8/EhYOncuw=
+X-Received: by 2002:a05:6830:33d1:b0:693:c98d:f9fd with SMTP id
+ q17-20020a05683033d100b00693c98df9fdmr586581ott.5.1677188719449; Thu, 23 Feb
+ 2023 13:45:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230222182740.254087-1-rmoar@google.com> <20230222182740.254087-3-rmoar@google.com>
+ <CABVgOSmJRxCT=NZ7ZWMwCrpHJHnHBAa=XmuNcLAJd_FrBvMZBw@mail.gmail.com>
+In-Reply-To: <CABVgOSmJRxCT=NZ7ZWMwCrpHJHnHBAa=XmuNcLAJd_FrBvMZBw@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Thu, 23 Feb 2023 16:45:07 -0500
+Message-ID: <CA+GJov6cGOu0+F=N9qvv2NTCro7YhHZJxi1UuJCCus9a17yH=g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] kunit: fix bug of extra newline characters in
+ debugfs logs
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,291 +73,262 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 12:38:25 -0600
-Michael Roth <michael.roth@amd.com> wrote:
+On Thu, Feb 23, 2023 at 12:51 AM David Gow <davidgow@google.com> wrote:
+>
+> On Thu, 23 Feb 2023 at 02:27, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Fix bug of the extra newline characters in debugfs logs. When a line is
+> > added to debugfs with a newline character at the end, an extra line app=
+ears
+> > in the debugfs log.
+> >
+> > This is due to a discrepancy between how the lines are printed and how =
+they
+> > are added to the logs. Remove this discrepancy by checking if the a new=
+line
+>
+> Nit: "if the a"?
 
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> KVM_SEV_SNP_LAUNCH_START begins the launch process for an SEV-SNP guest.
-> The command initializes a cryptographic digest context used to construct
-> the measurement of the guest. If the guest is expected to be migrated,
-> the command also binds a migration agent (MA) to the guest.
-> 
-> For more information see the SEV-SNP specification.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  .../virt/kvm/x86/amd-memory-encryption.rst    |  24 ++++
->  arch/x86/kvm/svm/sev.c                        | 121 +++++++++++++++++-
->  arch/x86/kvm/svm/svm.h                        |   1 +
->  include/uapi/linux/kvm.h                      |  10 ++
->  4 files changed, 153 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> index 2432213bd0ea..58971fc02a15 100644
-> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> @@ -461,6 +461,30 @@ The flags bitmap is defined as::
->  If the specified flags is not supported then return -EOPNOTSUPP, and the supported
->  flags are returned.
->  
-> +19. KVM_SNP_LAUNCH_START
-> +------------------------
-> +
-> +The KVM_SNP_LAUNCH_START command is used for creating the memory encryption
-> +context for the SEV-SNP guest. To create the encryption context, user must
-> +provide a guest policy, migration agent (if any) and guest OS visible
-> +workarounds value as defined SEV-SNP specification.
-> +
-> +Parameters (in): struct  kvm_snp_launch_start
-> +
-> +Returns: 0 on success, -negative on error
-> +
-> +::
-> +
-> +        struct kvm_sev_snp_launch_start {
-> +                __u64 policy;           /* Guest policy to use. */
-> +                __u64 ma_uaddr;         /* userspace address of migration agent */
-> +                __u8 ma_en;             /* 1 if the migration agent is enabled */
-> +                __u8 imi_en;            /* set IMI to 1. */
-> +                __u8 gosvw[16];         /* guest OS visible workarounds */
-> +        };
-> +
-> +See the SEV-SNP specification for further detail on the launch input.
-> +
->  References
->  ==========
->  
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index a8efe1f6bf77..097bb2138360 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -22,6 +22,7 @@
->  #include <asm/pkru.h>
->  #include <asm/trapnr.h>
->  #include <asm/fpu/xcr.h>
-> +#include <asm/sev.h>
->  
->  #include "mmu.h"
->  #include "x86.h"
-> @@ -75,6 +76,8 @@ static unsigned int nr_asids;
->  static unsigned long *sev_asid_bitmap;
->  static unsigned long *sev_reclaim_asid_bitmap;
->  
-> +static int snp_decommission_context(struct kvm *kvm);
-> +
->  struct enc_region {
->  	struct list_head list;
->  	unsigned long npages;
-> @@ -100,12 +103,17 @@ static int sev_flush_asids(int min_asid, int max_asid)
->  	down_write(&sev_deactivate_lock);
->  
->  	wbinvd_on_all_cpus();
-> -	ret = sev_guest_df_flush(&error);
-> +
-> +	if (sev_snp_enabled)
-> +		ret = sev_do_cmd(SEV_CMD_SNP_DF_FLUSH, NULL, &error);
-> +	else
-> +		ret = sev_guest_df_flush(&error);
->  
->  	up_write(&sev_deactivate_lock);
->  
->  	if (ret)
-> -		pr_err("SEV: DF_FLUSH failed, ret=%d, error=%#x\n", ret, error);
-> +		pr_err("SEV%s: DF_FLUSH failed, ret=%d, error=%#x\n",
-> +		       sev_snp_enabled ? "-SNP" : "", ret, error);
->  
->  	return ret;
->  }
-> @@ -2011,6 +2019,80 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
->  	return ret;
->  }
->  
-> +/*
-> + * The guest context contains all the information, keys and metadata
-> + * associated with the guest that the firmware tracks to implement SEV
-> + * and SNP features. The firmware stores the guest context in hypervisor
-> + * provide page via the SNP_GCTX_CREATE command.
-> + */
-> +static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct sev_data_snp_addr data = {};
-> +	void *context;
-> +	int rc;
-> +
-> +	/* Allocate memory for context page */
-> +	context = snp_alloc_firmware_page(GFP_KERNEL_ACCOUNT);
-> +	if (!context)
-> +		return NULL;
-> +
-> +	data.gctx_paddr = __psp_pa(context);
-> +	rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_GCTX_CREATE, &data, &argp->error);
-> +	if (rc) {
-> +		snp_free_firmware_page(context);
-> +		return NULL;
-> +	}
-> +
-> +	return context;
-> +}
-> +
-> +static int snp_bind_asid(struct kvm *kvm, int *error)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_activate data = {0};
-> +
-> +	data.gctx_paddr = __psp_pa(sev->snp_context);
-> +	data.asid   = sev_get_asid(kvm);
-> +	return sev_issue_cmd(kvm, SEV_CMD_SNP_ACTIVATE, &data, error);
+Thanks for catching this. I will change this to "if a."
 
-According to the SNP ABI specification[1] 8.10 SNP_ACTIVATE:
+>
+> > character is present before adding a newline character to the log. This
+> > should closely match the printk behavior.
+> >
+> > Add kunit_log_newline_test to provide test coverage for this issue. (Al=
+so,
+> > move kunit_log_test above suite definition to remove the unnecessary
+> > declaration prior to the suite definition)
+> >
+> > As an example, say we add these two lines to the log:
+> >
+> > kunit_log(..., =E2=80=9CKTAP version 1\n=E2=80=9D);
+> > kunit_log(..., =E2=80=9C1..1=E2=80=9D);
+>
+> Nit: Please use regular quotes here ("), rather than the "smart quotes" (=
+=E2=80=9C=E2=80=9D).
 
-"The firmware checks that a DF_FLUSH is not required. If a DF_FLUSH is
-required, the firmware returns DFFLUSH_REQUIRED. Note that all ASIDs are
-marked to require a DF_FLUSH at reset."
+Oops. Thanks. I will change these quotes.
 
-Do we need a SNP_DF_FLUSH here before calling SNP_ACTIVATE or handle the
-situation if the PSP firmware returns DFFLUSH_REQUIRED?
+>
+> >
+> > The debugfs log before this fix:
+> >
+> >  KTAP version 1
+> >
+> >  1..1
+> >
+> > The debugfs log after this fix:
+> >
+> >  KTAP version 1
+> >  1..1
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+> >
+> This overall seems better. I haven't finished reviewing the series
+> yet, but there are a few obvious issues with this patch still...
+>
+> Most notably, kunit-log-test.kunit_log_test now fails.
+>
+> -- David
+>
+> > Changes from v1 -> v2:
+> > - Changed the way extra newlines are removed. Instead of removing extra
+> >   newline characters, add a newline if one is not present. This is a bi=
+t
+> >   cleaner.
+> > - Add before and after results to the commit message.
+> > - Note: I looked into using KERN_CONT to match the printk behavior to
+> >   vsnprintf but this could cause issues with KTAP printing on the same =
+line
+> >   as interrupting kernel messages. I also looked at adding KERN_CONT
+> >   functionality to kunit_log and I did get this to work but it was a bi=
+t
+> >   messy because it required a few calls to kunit_log_newline in
+> >   kunit_run_tests. If this is very desired functionality, happy to add =
+this
+> >   to version 3.
+> >
+> >  include/kunit/test.h   |  9 ++++++++-
+> >  lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
+> >  lib/kunit/test.c       | 14 ++++++++++++++
+> >  3 files changed, 45 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 0668d29f3453..3031ad29718b 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -375,6 +375,13 @@ static inline void *kunit_kcalloc(struct kunit *te=
+st, size_t n, size_t size, gfp
+> >
+> >  void kunit_cleanup(struct kunit *test);
+> >
+> > +/**
+> > + * kunit_log_newline() - Add newline to the end of log if not already
+> > + * present at the end of the log.
+> > + * @log: The log to add the newline to.
+> > + */
+> > +void kunit_log_newline(char *log);
+> > +
+>
+> I don't think this function needs to be public. Maybe keep it static
+> and internal to test.c?
 
-[1] https://www.amd.com/system/files/TechDocs/56860.pdf
+Changing this to static makes sense. I will update this.
 
-> +}
-> +
-> +static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_launch_start start = {0};
-> +	struct kvm_sev_snp_launch_start params;
-> +	int rc;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	sev->snp_context = snp_context_create(kvm, argp);
-> +	if (!sev->snp_context)
-> +		return -ENOTTY;
-> +
-> +	start.gctx_paddr = __psp_pa(sev->snp_context);
-> +	start.policy = params.policy;
-> +	memcpy(start.gosvw, params.gosvw, sizeof(params.gosvw));
-> +	rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_START, &start, &argp->error);
-> +	if (rc)
-> +		goto e_free_context;
-> +
-> +	sev->fd = argp->sev_fd;
-> +	rc = snp_bind_asid(kvm, &argp->error);
-> +	if (rc)
-> +		goto e_free_context;
-> +
-> +	return 0;
-> +
-> +e_free_context:
-> +	snp_decommission_context(kvm);
-> +
-> +	return rc;
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_sev_cmd sev_cmd;
-> @@ -2101,6 +2183,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  	case KVM_SEV_RECEIVE_FINISH:
->  		r = sev_receive_finish(kvm, &sev_cmd);
->  		break;
-> +	case KVM_SEV_SNP_LAUNCH_START:
-> +		r = snp_launch_start(kvm, &sev_cmd);
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		goto out;
-> @@ -2292,6 +2377,28 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
->  	return ret;
->  }
->  
-> +static int snp_decommission_context(struct kvm *kvm)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_addr data = {};
-> +	int ret;
-> +
-> +	/* If context is not created then do nothing */
-> +	if (!sev->snp_context)
-> +		return 0;
-> +
-> +	data.gctx_paddr = __sme_pa(sev->snp_context);
-> +	ret = sev_do_cmd(SEV_CMD_SNP_DECOMMISSION, &data, NULL);
-> +	if (WARN_ONCE(ret, "failed to release guest context"))
-> +		return ret;
-> +
-> +	/* free the context page now */
-> +	snp_free_firmware_page(sev->snp_context);
-> +	sev->snp_context = NULL;
-> +
-> +	return 0;
-> +}
-> +
->  void sev_vm_destroy(struct kvm *kvm)
->  {
->  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> @@ -2333,7 +2440,15 @@ void sev_vm_destroy(struct kvm *kvm)
->  		}
->  	}
->  
-> -	sev_unbind_asid(kvm, sev->handle);
-> +	if (sev_snp_guest(kvm)) {
-> +		if (snp_decommission_context(kvm)) {
-> +			WARN_ONCE(1, "Failed to free SNP guest context, leaking asid!\n");
-> +			return;
-> +		}
-> +	} else {
-> +		sev_unbind_asid(kvm, sev->handle);
-> +	}
-> +
->  	sev_asid_free(sev);
->  }
->  
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 56a5c96d8a36..740969b57425 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -92,6 +92,7 @@ struct kvm_sev_info {
->  	struct misc_cg *misc_cg; /* For misc cgroup accounting */
->  	atomic_t migration_in_progress;
->  	u64 snp_init_flags;
-> +	void *snp_context;      /* SNP guest context page */
->  };
->  
->  struct kvm_svm {
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 499cc323f793..cf19799ca5ce 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1919,6 +1919,7 @@ enum sev_cmd_id {
->  
->  	/* SNP specific commands */
->  	KVM_SEV_SNP_INIT,
-> +	KVM_SEV_SNP_LAUNCH_START,
->  
->  	KVM_SEV_NR_MAX,
->  };
-> @@ -2026,6 +2027,15 @@ struct kvm_snp_init {
->  	__u64 flags;
->  };
->  
-> +struct kvm_sev_snp_launch_start {
-> +	__u64 policy;
-> +	__u64 ma_uaddr;
-> +	__u8 ma_en;
-> +	__u8 imi_en;
-> +	__u8 gosvw[16];
-> +	__u8 pad[6];
-> +};
-> +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
+>
+> >  void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+> >
+> >  /**
+> > @@ -420,7 +427,7 @@ void __printf(2, 3) kunit_log_append(char *log, con=
+st char *fmt, ...);
+> >  #define kunit_log(lvl, test_or_suite, fmt, ...)                       =
+         \
+> >         do {                                                           =
+ \
+> >                 printk(lvl fmt, ##__VA_ARGS__);                        =
+ \
+> > -               kunit_log_append((test_or_suite)->log,  fmt "\n",      =
+ \
+> > +               kunit_log_append((test_or_suite)->log,  fmt,    \
+> >                                  ##__VA_ARGS__);                       =
+ \
+> >         } while (0)
+> >
+> > diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> > index 4df0335d0d06..b63595d3e241 100644
+> > --- a/lib/kunit/kunit-test.c
+> > +++ b/lib/kunit/kunit-test.c
+> > @@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suit=
+e =3D {
+> >         .test_cases =3D kunit_resource_test_cases,
+> >  };
+> >
+> > -static void kunit_log_test(struct kunit *test);
+> > -
+> > -static struct kunit_case kunit_log_test_cases[] =3D {
+> > -       KUNIT_CASE(kunit_log_test),
+> > -       {}
+> > -};
+> > -
+> > -static struct kunit_suite kunit_log_test_suite =3D {
+> > -       .name =3D "kunit-log-test",
+> > -       .test_cases =3D kunit_log_test_cases,
+> > -};
+> > -
+> >  static void kunit_log_test(struct kunit *test)
+> >  {
+> >         struct kunit_suite suite;
+> > @@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
+> >  #endif
+> >  }
+> >
+> > +static void kunit_log_newline_test(struct kunit *test)
+> > +{
+> > +       kunit_info(test, "Add newline\n");
+> > +       if (test->log) {
+> > +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add =
+newline\n"),
+> > +                       "Missing log line, full log:\n%s", test->log);
+> > +               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\=
+n\n"));
+> > +       } else {
+> > +               kunit_skip(test, "only useful when debugfs is enabled")=
+;
+> > +       }
+> > +}
+> > +
+> > +static struct kunit_case kunit_log_test_cases[] =3D {
+> > +       KUNIT_CASE(kunit_log_test),
+>
+> This test is failing now:
+> [13:42:51] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit-log-test (=
+2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [13:42:51] put this in log.
+> [13:42:51] this too.
+> [13:42:51] add to suite log.
+> [13:42:51] along with this.
+> [13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+> lib/kunit/kunit-test.c:459
+> [13:42:51]     Expected strstr(test->log, "put this in log.") is not
+> null, but is
+> [13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+> lib/kunit/kunit-test.c:461
+> [13:42:51]     Expected strstr(test->log, "this too.") is not null, but i=
+s
+> [13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+> lib/kunit/kunit-test.c:463
+> [13:42:51]     Expected strstr(suite.log, "add to suite log.") is not
+> null, but is
+> [13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+> lib/kunit/kunit-test.c:465
+> [13:42:51]     Expected strstr(suite.log, "along with this.") is not
+> null, but is
+> [13:42:51] [FAILED] kunit_log_test
+> [13:42:51] [PASSED] kunit_log_newline_test
+> [13:42:51] # kunit-log-test: pass:1 fail:1 skip:0 total:2
+> [13:42:51] # Totals: pass:1 fail:1 skip:0 total:2
+> [13:42:51] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [FAILED] k=
+unit-log-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
 
+Sorry I did not catch this earlier. I must have tested on an outdated
+version of my code. The fix here is I am missing a "+ 1" in
+kunit_log_append(). This fix is for the first patch in this series and
+the specific line change is:
+
+- len =3D vsnprintf(NULL, 0, fmt, args);
++ len =3D vsnprintf(NULL, 0, fmt, args) + 1;
+
+I will update this in the next version.
+
+> > +       KUNIT_CASE(kunit_log_newline_test),
+> > +       {}
+> > +};
+> > +
+> > +static struct kunit_suite kunit_log_test_suite =3D {
+> > +       .name =3D "kunit-log-test",
+> > +       .test_cases =3D kunit_log_test_cases,
+> > +};
+> > +
+> >  static void kunit_status_set_failure_test(struct kunit *test)
+> >  {
+> >         struct kunit fake;
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index fb6b39cca0ae..1ea981392af3 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -108,6 +108,17 @@ static void kunit_print_test_stats(struct kunit *t=
+est,
+> >                   stats.total);
+> >  }
+> >
+> > +void kunit_log_newline(char *log)
+> > +{
+> > +       int log_len, len_left;
+> > +
+> > +       log_len =3D strlen(log);
+> > +       len_left =3D KUNIT_LOG_SIZE - log_len - 1;
+> > +
+> > +       if (log_len > 0 && log[log_len - 1] !=3D '\n')
+> > +               strncat(log, "\n", len_left);
+> > +}
+> > +
+> >  /*
+> >   * Append formatted message to log, size of which is limited to
+> >   * KUNIT_LOG_SIZE bytes (including null terminating byte).
+> > @@ -134,6 +145,9 @@ void kunit_log_append(char *log, const char *fmt, .=
+..)
+> >         va_start(args, fmt);
+> >         vsnprintf(log + log_len, min(len, len_left), fmt, args);
+> >         va_end(args);
+> > +
+> > +       /* Add newline to end of log if not already present. */
+> > +       kunit_log_newline(log);
+> >  }
+> >  EXPORT_SYMBOL_GPL(kunit_log_append);
+> >
+> > --
+> > 2.39.2.637.g21b0678d19-goog
+> >
