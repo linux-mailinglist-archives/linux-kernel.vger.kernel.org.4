@@ -2,160 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3747E6A0479
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB4B6A047D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjBWJHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S233509AbjBWJIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbjBWJHq (ORCPT
+        with ESMTP id S233560AbjBWJIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:07:46 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437FB4BE94;
-        Thu, 23 Feb 2023 01:07:45 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so5620000wmq.2;
-        Thu, 23 Feb 2023 01:07:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HnQXK2gjczB2ZF+Tg148J7R6douhmpCC9lTEcuUAcS8=;
-        b=MnFd0ndH9sx0lsllqrqddOkUXNXh6hC1qZtoQQVW/BCTJYvcvJybvmNQTWXoacZzW/
-         Eel0CMWNmX6hNJCqTjxvbK8Wuidm1GRpu2iKurAi49jvb4yfv8D4L1tUNclZDy9YJvZ7
-         rDuhsEXS9UFbB2IFX9JepEpC202Xa2P9AF9DHZpTIguttBce8Y6lp157jeq0nj78y3Gy
-         L8m25a2eFKK2mZEb5dpoxA5Su+ebYrt5CYnKJdy6hz99AXlKCQHqbpeGBsC7B4B7Y9gM
-         CX/WdYubw2pq+yebT9fXyhGqrwcfT3LM3RwWQ/NKZYPIFyRM+Nl4THY1KIp8vbae8lZs
-         bfSw==
+        Thu, 23 Feb 2023 04:08:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E801EFF2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677143262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E/BAL2p+AIRztx0whTYatHzYBA8FlxWN8hYeshAkNjI=;
+        b=BKIxgD1mPMUqNP8Tvdl8M+n2ZYS7mXw4gm+jUyFnC0T7LdpKB2Km6n7n0YDWyBfggDpg8B
+        ORqdXArU82DhZ0p7wJUQNQ01NP0mEokwWUq8U2ZKATHTTGlywkVXfCJR2rPx8A8dbdN96p
+        nQ8zY2n4BaUrcAcYt2jAJAsZOdDn4jc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-644-gFGA5TIbOc22GBzRIq3J2Q-1; Thu, 23 Feb 2023 04:07:38 -0500
+X-MC-Unique: gFGA5TIbOc22GBzRIq3J2Q-1
+Received: by mail-wr1-f70.google.com with SMTP id z6-20020a5d4c86000000b002c54ce46094so2290934wrs.17
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:07:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HnQXK2gjczB2ZF+Tg148J7R6douhmpCC9lTEcuUAcS8=;
-        b=EMODG43ZWdw52Z0VRzTij6uE7wEmLEiAD41LCC070waoAmkw4KeWK5UejzwkuAlMhB
-         furkW/VVdg0U6HybEpNjJ6G/t8vQ+FuEt6yWmSHDmOm2G6qM22C7DmX5ygUy+FWfb07A
-         kkq7UFOSr+BJ7FrdWvYsMFcPT9EjpBd39Jfv3L0ZGohGWghmtypx4ix9ykZ5AotFZCNW
-         25QOJVNlPRd4HxoIcBhOe5GVGMyj7ADYWlZ0iaxav6M9ZedMUFjoELOIZ/aYJ53pNQqB
-         Vd06k3VpNoCvJyAYq6tNgtvCMYqp3aND5v4yKgVugNLFfSw1cmHl4FYwPj7+83sQn8/7
-         /7fQ==
-X-Gm-Message-State: AO0yUKUAfALsVEnK7Y1P00mWj1rr1apN8/qJJU4o4te7epj1A0jCB/IF
-        kqUcmBQBL2T9J1ikoUOqFB3hfzKRI1RWOlpisr4=
-X-Google-Smtp-Source: AK7set8zo0tWDkLqcDs6tf/q37PjH+sBC1k9Rw51OnZNwCBWtuzaX2gfp5tygs/qSzmxRr0tjp5TT/ZxLDl3Ie65naM=
-X-Received: by 2002:a05:600c:19c6:b0:3de:e8c5:d827 with SMTP id
- u6-20020a05600c19c600b003dee8c5d827mr628705wmq.118.1677143263536; Thu, 23 Feb
- 2023 01:07:43 -0800 (PST)
+        bh=E/BAL2p+AIRztx0whTYatHzYBA8FlxWN8hYeshAkNjI=;
+        b=UI4haM69zClGK1jz5PB2QOqAQT5yCBfZ+npl8q3hvtps/lkBYLdUQSTV4ZmYTvsoVH
+         rBgWWx3UA+X0vEvhSzEt6BFOyOSuIcTkhV9LmSYH3ImRagDuM3hgxIAQHsevbGUXIs+D
+         asNvv2BnfRBIaMVtG/VtLw7y0IFxWiGTS+a1R8euqJZ+SYQOBc8/5b/VHQeL/nJ1V5hf
+         STyyqAbwzudx8ryRUqAr2ULg1azDGQxueSP3pQUlE1gaskW1kpC71K3e9x+2LHfDGd4W
+         niVBJJEWvma08b7dku1h6ViBdot/BR4sXVc1k2mS5ba3QpBKblYiFYOrvERxIm38bykm
+         lQHQ==
+X-Gm-Message-State: AO0yUKXIeOtcTm2jBzFOgn3OwwRizH354Ru1vv+fIDgKfNgjtiAOuSNt
+        VYEcYwjomVpybr22PuQg/jJ0Watzwe5HC5nemfkhb6aU6MJqGMvm3jfql0w4vVOEVQHrBjbuvzJ
+        BWPXyJ/pw4ATRDYLbiRg+v7l4
+X-Received: by 2002:a05:600c:328a:b0:3dc:50bc:da70 with SMTP id t10-20020a05600c328a00b003dc50bcda70mr7957847wmp.10.1677143257501;
+        Thu, 23 Feb 2023 01:07:37 -0800 (PST)
+X-Google-Smtp-Source: AK7set9RfY0vcBnPlzesx2HPB/lwsM3Xewi6Cu7IlK2PdBhnzLKimFGqKFnsMpy3GzL7gL20mRDDag==
+X-Received: by 2002:a05:600c:328a:b0:3dc:50bc:da70 with SMTP id t10-20020a05600c328a00b003dc50bcda70mr7957827wmp.10.1677143257112;
+        Thu, 23 Feb 2023 01:07:37 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id 15-20020a05600c22cf00b003e11f280b8bsm11307836wmg.44.2023.02.23.01.07.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 01:07:36 -0800 (PST)
+Message-ID: <94a10407-ebcb-7090-ef92-2bbc9416d6fa@redhat.com>
+Date:   Thu, 23 Feb 2023 10:07:35 +0100
 MIME-Version: 1.0
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
- <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
- <CAL+tcoD8PzL4khHq44z27qSHHGkcC4YUa91E3h+ki7O0u3SshQ@mail.gmail.com>
- <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
- <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
- <CAL+tcoBGFkXea-GyzbO41Ve8_wUF3PT=YF43TxuzgM+adVa8gw@mail.gmail.com> <795aed3f0e433a89fb72a8af3fc736f58dea1bf1.camel@redhat.com>
-In-Reply-To: <795aed3f0e433a89fb72a8af3fc736f58dea1bf1.camel@redhat.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Thu, 23 Feb 2023 17:07:07 +0800
-Message-ID: <CAL+tcoAwFH3t=KL9cLFT5eo2eaF66hUw5rZr0+VKgrY89K-_xQ@mail.gmail.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 00/46] hugetlb: introduce HugeTLB high-granularity
+ mapping
+Content-Language: en-US
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230218002819.1486479-1-jthoughton@google.com>
+ <Y/U7ngTyPlg2XCRj@monkey> <28a7208c-939c-19ea-1cf0-298444dffe85@redhat.com>
+ <CAHS8izNPr+TfxLL_dBitKAgd11rPhjHx+10Nn96TD3HXzUSevQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHS8izNPr+TfxLL_dBitKAgd11rPhjHx+10Nn96TD3HXzUSevQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 4:39 PM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Wed, 2023-02-22 at 11:47 +0800, Jason Xing wrote:
-> > On Tue, Feb 21, 2023 at 11:46 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
-> > >
-> > > On Tue, Feb 21, 2023 at 10:46 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > > >
-> > > > On Tue, 2023-02-21 at 21:39 +0800, Jason Xing wrote:
-> > > > > On Tue, Feb 21, 2023 at 8:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > > > > >
-> > > > > > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > > > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > > > >
-> > > > > > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> > > > > > > and sk_rmem_schedule() errors"):
-> > > > > > >
-> > > > > > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> > > > > > > we want to allocate 1 byte more (rounded up to one page),
-> > > > > > > instead of 150001"
-> > > > > >
-> > > > > > I'm wondering if this would cause measurable (even small) performance
-> > > > > > regression? Specifically under high packet rate, with BH and user-space
-> > > > > > processing happening on different CPUs.
-> > > > > >
-> > > > > > Could you please provide the relevant performance figures?
-> > > > >
-> > > > > Sure, I've done some basic tests on my machine as below.
-> > > > >
-> > > > > Environment: 16 cpus, 60G memory
-> > > > > Server: run "iperf3 -s -p [port]" command and start 500 processes.
-> > > > > Client: run "iperf3 -u -c 127.0.0.1 -p [port]" command and start 500 processes.
-> > > >
-> > > > Just for the records, with the above command each process will send
-> > > > pkts at 1mbs - not very relevant performance wise.
-> > > >
-> > > > Instead you could do:
-> > > >
-> > >
-> > > > taskset 0x2 iperf -s &
-> > > > iperf -u -c 127.0.0.1 -b 0 -l 64
-> > > >
-> > >
-> > > Thanks for your guidance.
-> > >
-> > > Here're some numbers according to what you suggested, which I tested
-> > > several times.
-> > > ----------|IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
-> > > Before: lo 411073.41 411073.41  36932.38  36932.38
-> > > After:   lo 410308.73 410308.73  36863.81  36863.81
-> > >
-> > > Above is one of many results which does not mean that the original
-> > > code absolutely outperforms.
-> > > The output is not that constant and stable, I think.
-> >
-> > Today, I ran the same test on other servers, it looks the same as
-> > above. Those results fluctuate within ~2%.
-> >
-> > Oh, one more thing I forgot to say is the output of iperf itself which
-> > doesn't show any difference.
-> > Before: Bitrate is 211 - 212 Mbits/sec
-> > After: Bitrate is 211 - 212 Mbits/sec
-> > So this result is relatively constant especially if we keep running
-> > the test over 2 minutes.
->
-> Thanks for the testing. My personal take on this one is that is more a
-> refactor than a bug fix - as the amount forward allocated memory should
-> always be negligible for UDP.
->
+On 22.02.23 21:57, Mina Almasry wrote:
+> On Wed, Feb 22, 2023 at 7:49 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 21.02.23 22:46, Mike Kravetz wrote:
+>>> On 02/18/23 00:27, James Houghton wrote:
+>>>> This series introduces the concept of HugeTLB high-granularity mapping
+>>>> (HGM). This series teaches HugeTLB how to map HugeTLB pages at
+>>>> high-granularity, similar to how THPs can be PTE-mapped.
+>>>>
+>>>> Support for HGM in this series is for MAP_SHARED VMAs on x86_64 only. Other
+>>>> architectures and (some) support for MAP_PRIVATE will come later.
+>>>>
+>>>> This series is based on latest mm-unstable (ccd6a73daba9).
+>>>>
+>>>> Notable changes with this series
+>>>> ================================
+>>>>
+>>>>    - hugetlb_add_file_rmap / hugetlb_remove_rmap are added to handle
+>>>>      mapcounting for non-anon hugetlb.
+>>>>    - The mapcounting scheme uses subpages' mapcounts for high-granularity
+>>>>      mappings, but it does not use subpages_mapcount(). This scheme
+>>>>      prevents the HugeTLB VMEMMAP optimization from being used, so it
+>>>>      will be improved in a later series.
+>>>>    - page_add_file_rmap and page_remove_rmap are updated so they can be
+>>>>      used by hugetlb_add_file_rmap / hugetlb_remove_rmap.
+>>>>    - MADV_SPLIT has been added to enable the userspace API changes that
+>>>>      HGM allows for: high-granularity UFFDIO_CONTINUE (and maybe other
+>>>>      changes in the future). MADV_SPLIT does NOT force all the mappings to
+>>>>      be PAGE_SIZE.
+>>>>    - MADV_COLLAPSE is expanded to include HugeTLB mappings.
+>>>>
+>>>> Old versions:
+>>>> v1: https://lore.kernel.org/linux-mm/20230105101844.1893104-1-jthoughton@google.com/
+>>>> RFC v2: https://lore.kernel.org/linux-mm/20221021163703.3218176-1-jthoughton@google.com/
+>>>> RFC v1: https://lore.kernel.org/linux-mm/20220624173656.2033256-1-jthoughton@google.com/
+>>>>
+>>>> Changelog:
+>>>> v1 -> v2 (thanks Peter for all your suggestions!):
+>>>> - Changed mapcount to be more THP-like, and make HGM incompatible with
+>>>>     HVO.
+>>>> - HGM is now disabled by default to leave HVO enabled by default.
+>>>
+>>> I understand the reasoning behind the move to THP-like mapcounting, and the
+>>> incompatibility with HVO.  However, I just got to patch 5 and realized either
+>>> HGM or HVO will need to be chosen at kernel build time.  That may not be an
+>>> issue for cloud providers or others building their own kernels for internal
+>>> use.  However, distro kernels will need to pick one option or the other.
+>>> Right now, my Fedora desktop has HVO enabled so it would likely not have
+>>> HGM enabled.  That is not a big deal for a desktop.
+>>>
+>>> Just curious, do we have distro kernel users that want to use HGM?
+>>
+>> Most certainly I would say :)
+>>
+> 
+> Is it a blocker to merge in an initial implementation though? Do
+> distro kernel users have a pressing need for HVO + HGM used in tandem?
 
-> Still it could make sense keep the accounting schema consistent across
-> different protocols. I suggest to repost for net-next, when it will re-
-> open, additionally introducing __sk_mem_schedule() usage to avoid code
-> duplication.
->
+At least RHEL9 seems to include HVO. It's not enabled as default 
+(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON not set), but compiled 
+in so it can be runtime-enabled. Disabling HVO is not an option IMHO.
 
-Thanks for the review. I will replace this part with
-__sk_mem_schedule() and then repost it after Mar 6th.
+Maybe, one could make both features compile-time compatible but 
+runtime-mutually exclusive. Or work on a way to make them fully 
+compatible right from the start.
 
+-- 
 Thanks,
-Jason
 
-> Thanks,
->
-> Paolo
->
+David / dhildenb
+
