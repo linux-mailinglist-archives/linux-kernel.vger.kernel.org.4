@@ -2,220 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799D76A0066
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8076A0068
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbjBWBDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S233051AbjBWBEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbjBWBDQ (ORCPT
+        with ESMTP id S233038AbjBWBEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:03:16 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C5F37717
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:02:39 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m6so12438343lfq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:02:39 -0800 (PST)
+        Wed, 22 Feb 2023 20:04:20 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9332CC46
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:03:57 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id l1so729529pjt.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:03:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aUt5vaFiY/J1KCTPCZXw/K5A7JAcWXv/cCQm11f+4ro=;
-        b=Ch0VGZ+U75F2E2CirtARLx8hxhiBsU9cDaTjVTNpYu9vh2l2DCG7Bc9gqLk46oANI7
-         fIqWGQMuJate23sClgAK8oQXtn9mglLbZDjfFc0baMRRnOr7heAdaxBQ3hHXeC6O87iY
-         ZNDSveoEo342j38hFdLuGYJDnx2VJpBIyFaMK9dFnQOdGigyCetkynJ42783vJUIT7mo
-         9gDm5luZ1F3K29jwP3PAXMUiId+VXRqS7f0bUKwrYscPRnbbq/BCnC8ECMs4rKObX65l
-         IhlZ33XQYeKM3p4RZ5GIS+TRj5O6UzFNeRTdZJqmT2ZTr7HJ97Vciy9BJN434H7anlGd
-         qmSA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WeVf+lvGNeVYubOJ3KmhlwMD0qDbcIcPAA2fSn/VLqI=;
+        b=eUM2OCcj2hc2PrhAjQULqh1Ap6c6rwgKSXbSnPKR3n7tl9VN6COEM/V7oa6XtHgc1o
+         8DouMvF8dGS+e5bk9wKEM24Rvk5WogEf9k+aIzh52nH7XmqZVOHxCUkjICO0qMR1aiqq
+         gm+t9gGJBUgTjaCAGYSZk1TFzoPhhTNuIO2SgjD75/lyc0QSdTZL0r6/6vmWi4EQeXGk
+         zbEdur62BFlMDqX9n5dSHCmpWd3rkWvwwlqPAqeA+6RGWHYsD5lhFLnvgBWjVFdr9lXu
+         IT7v6+pbqT4CXHTmaFIEIpYFWy+GCUVd5iS5UjkKtAEBhG9aZI4Z10Iq5cqF+4ezx51z
+         y1Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aUt5vaFiY/J1KCTPCZXw/K5A7JAcWXv/cCQm11f+4ro=;
-        b=rVy/nnMRChx6ctfhBxVtQDqJzU8VvH1C0uiMSxHWn2q1i63PCAfJhx36KmSTMu2H/c
-         0VK2mbGKf1rCT/vY2/jTHg2h8bVs+3fsnyZxsJeFHm+sVp4TttT8VMXiiqDMcgp5AHCn
-         IOm8XwTCmIg5Y0nypa5mJs8MguLzEkRdGmJNSypZdS++zZO3XYU92/encqTbsD5awIR7
-         1DQmquA7SxxYIY707xYY/fblmgXfchOlJUPmcsWCaArCw5jdGTYSCDVQLgeZ/Zz3eyb/
-         DssGpbgr+boCRgLqyt9oT24F3DRw6KjVDiLBizRsAEHXMJOpzoHWt40DuJuCDvxKwaIe
-         8+LQ==
-X-Gm-Message-State: AO0yUKVOFwboxc11QOZ4huIWZh2T9/xX7U4ywdBc0CHlz9A2gOdsjbyv
-        Stm0oqev5YEUfUzrzUWtao1O2w==
-X-Google-Smtp-Source: AK7set/CK9Ov90Csl9IShFHW2HdeuqQpyirSA4ksEniWlvrsIbIQBmOQURoXaT/NNXkxEkm37+k0cA==
-X-Received: by 2002:a05:6512:239b:b0:4a4:68b7:deab with SMTP id c27-20020a056512239b00b004a468b7deabmr4136958lfv.7.1677114157363;
-        Wed, 22 Feb 2023 17:02:37 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id y19-20020ac24213000000b004cb35b31b96sm2314974lfh.257.2023.02.22.17.02.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 17:02:36 -0800 (PST)
-Message-ID: <8db1a336-1ba7-202b-8036-f3a522a96ea0@linaro.org>
-Date:   Thu, 23 Feb 2023 02:02:35 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WeVf+lvGNeVYubOJ3KmhlwMD0qDbcIcPAA2fSn/VLqI=;
+        b=auNjOwvtSiQlxRFkjusAfB6ajt63EWn6SlygZFmdwn7LkXlTIl6XIWGHtii8n3ATvu
+         0eYCrckEQt1JmYC/7/d2McR8Ow5lEq+QzI7WH5dMquObyjyd2DAA5FiGJBb8kACvbAzN
+         eRUAgRn8dnnmEVPwN2F90fCEk2v5FSwu4zdlWsMISmNB44m9GHzuKmY3sSOB56hUV1DG
+         U1FeVEIcKiBCaztMYutMDWiGcMAPTuTkV6CA4Bk/HRdz9d6G91bpddxNfYL+IGCARlgf
+         M5qgec/4iZLsernBT6JjGz3NAy+JSxYOK0ARkuBz2fePLJh96Mf8qT47LfeVAugU1HpY
+         t0Gg==
+X-Gm-Message-State: AO0yUKX4x8Tu+2aj9Ng6Mx9d8k8GYN9ZvBUChrkwTjExqE2lJO56E29X
+        I+OCbeqa8+Jvl4528XA71d3KVNscRlA=
+X-Google-Smtp-Source: AK7set8TXzXaC2/fn0bf1HEdmolAPvXAKURAvIMr8ybRUcpKdxXj2NVbwHr01MjBJ8TL++W/fB2HVA==
+X-Received: by 2002:a05:6a21:329e:b0:c2:b249:fe9a with SMTP id yt30-20020a056a21329e00b000c2b249fe9amr12729950pzb.18.1677114236845;
+        Wed, 22 Feb 2023 17:03:56 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id n15-20020aa7904f000000b005a8da960fa8sm5648149pfo.144.2023.02.22.17.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 17:03:55 -0800 (PST)
+Date:   Thu, 23 Feb 2023 01:03:49 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vernon Yang <vernon2gm@gmail.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: fix help comment of SLUB_DEBUG[_ON]
+Message-ID: <Y/a7db7v9zJJnX30@localhost>
+References: <20230222232058.66971-1-vernon2gm@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/5] drm/msm/adreno: Use OPP for every GPU generation
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230222-konrad-longbois-next-v1-0-01021425781b@linaro.org>
- <20230222-konrad-longbois-next-v1-1-01021425781b@linaro.org>
- <6ff7aea6-6535-3f54-b8d2-718d9a38a1be@linaro.org>
- <180a33e7-d7b0-1b7f-9b91-20eb81d377dc@linaro.org>
- <c19b24d0-bb20-37ec-09dc-fb57aa8b4750@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <c19b24d0-bb20-37ec-09dc-fb57aa8b4750@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222232058.66971-1-vernon2gm@gmail.com>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23.02.2023 00:16, Dmitry Baryshkov wrote:
-> On 23/02/2023 00:40, Konrad Dybcio wrote:
->>
->>
->> On 22.02.2023 23:38, Dmitry Baryshkov wrote:
->>> On 22/02/2023 23:47, Konrad Dybcio wrote:
->>>> Some older GPUs (namely a2xx with no opp tables at all and a320 with
->>>> downstream-remnants gpu pwrlevels) used not to have OPP tables. They
->>>> both however had just one frequency defined, making it extremely easy
->>>> to construct such an OPP table from within the driver if need be.
->>>>
->>>> Do so and switch all clk_set_rate calls on core_clk to their OPP
->>>> counterparts.
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>    drivers/gpu/drm/msm/adreno/adreno_gpu.c | 94 +++++++++++++++------------------
->>>>    drivers/gpu/drm/msm/msm_gpu.c           |  4 +-
->>>>    drivers/gpu/drm/msm/msm_gpu_devfreq.c   |  2 +-
->>>>    3 files changed, 45 insertions(+), 55 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>>> index ce6b76c45b6f..9b940c0f063f 100644
->>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>>> @@ -922,73 +922,50 @@ void adreno_wait_ring(struct msm_ringbuffer *ring, uint32_t ndwords)
->>>>                ring->id);
->>>>    }
->>>>    -/* Get legacy powerlevels from qcom,gpu-pwrlevels and populate the opp table */
->>>> -static int adreno_get_legacy_pwrlevels(struct device *dev)
->>>> -{
->>>> -    struct device_node *child, *node;
->>>> -    int ret;
->>>> -
->>>> -    node = of_get_compatible_child(dev->of_node, "qcom,gpu-pwrlevels");
->>>> -    if (!node) {
->>>> -        DRM_DEV_DEBUG(dev, "Could not find the GPU powerlevels\n");
->>>> -        return -ENXIO;
->>>> -    }
->>>> -
->>>> -    for_each_child_of_node(node, child) {
->>>> -        unsigned int val;
->>>> -
->>>> -        ret = of_property_read_u32(child, "qcom,gpu-freq", &val);
->>>> -        if (ret)
->>>> -            continue;
->>>> -
->>>> -        /*
->>>> -         * Skip the intentionally bogus clock value found at the bottom
->>>> -         * of most legacy frequency tables
->>>> -         */
->>>> -        if (val != 27000000)
->>>> -            dev_pm_opp_add(dev, val, 0);
->>>> -    }
->>>> -
->>>> -    of_node_put(node);
->>>> -
->>>> -    return 0;
->>>> -}
->>>> -
->>>> -static void adreno_get_pwrlevels(struct device *dev,
->>>> +static int adreno_get_pwrlevels(struct device *dev,
->>>>            struct msm_gpu *gpu)
->>>>    {
->>>> +    struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->>>>        unsigned long freq = ULONG_MAX;
->>>>        struct dev_pm_opp *opp;
->>>>        int ret;
->>>>          gpu->fast_rate = 0;
->>>>    -    /* You down with OPP? */
->>>> -    if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
->>>> -        ret = adreno_get_legacy_pwrlevels(dev);
->>>> -    else {
->>>> -        ret = devm_pm_opp_of_add_table(dev);
->>>> -        if (ret)
->>>> -            DRM_DEV_ERROR(dev, "Unable to set the OPP table\n");
->>>> -    }
->>>> -
->>>> -    if (!ret) {
->>>> +    /* devm_pm_opp_of_add_table may error out but will still create an OPP table */
->>>> +    ret = devm_pm_opp_of_add_table(dev);
->>>> +    if (ret == -ENODEV) {
->>>> +        /* Special cases for ancient hw with ancient DT bindings */
->>>> +        if (adreno_is_a2xx(adreno_gpu)) {
->>>> +            dev_warn(dev, "Unable to find the OPP table. Falling back to 200 MHz.\n");
->>>> +            dev_pm_opp_add(dev, 200000000, 0);
->>>> +            gpu->fast_rate = 200000000;
->>>
->>> We can skip setting the fast_rate, dev_pm_opp_find_freq_floor below will get it from our freshly generated opp table.
->> It's not reached in this code path.
+On Thu, Feb 23, 2023 at 07:20:58AM +0800, Vernon Yang wrote:
+> Since commit 081248de0a02 ("kset: move /sys/slab to /sys/kernel/slab"),
+> the SYSFS path of slab was modified, so fix up the help comment of
+> SLUB_DEBUG to use the correct one.
 > 
-> I see. I got lost in all the ifs. What do you think about turning it into the main code path, since after this code block we always have a valid OPP table?
-Sounds good!
-
-Konrad
+> And now the "slub_debug" parameter on boot that is support for more
+> fine grained debug control, so fix up help comment of SLUB_DEBUG_ON
+> for "no support" to "support".
 > 
->>
->>>
->>>> +        } else if (adreno_is_a320(adreno_gpu)) {
->>>> +            dev_warn(dev, "Unable to find the OPP table. Falling back to 450 MHz.\n");
->>>> +            dev_pm_opp_add(dev, 450000000, 0);
->>>> +            gpu->fast_rate = 450000000;
->>>> +        } else {
->>>> +            DRM_DEV_ERROR(dev, "Unable to find the OPP table\n");
->>>> +            return -ENODEV;
->>>> +        }
->>>> +    } else if (ret) {
->>>> +        DRM_DEV_ERROR(dev, "Unable to set the OPP table\n");
->>>> +        return ret;
->>>> +    } else {
->>>>            /* Find the fastest defined rate */
->>>>            opp = dev_pm_opp_find_freq_floor(dev, &freq);
->>>> -        if (!IS_ERR(opp)) {
->>>> +
->>>> +        if (IS_ERR(opp))
->>>> +            return PTR_ERR(opp);
->>>> +        else {
->>>>                gpu->fast_rate = freq;
->>>>                dev_pm_opp_put(opp);
->>>>            }
->>>>        }
->>>>    -    if (!gpu->fast_rate) {
->>>> -        dev_warn(dev,
->>>> -            "Could not find a clock rate. Using a reasonable default\n");
->>>> -        /* Pick a suitably safe clock speed for any target */
->>>> -        gpu->fast_rate = 200000000;
->>>> -    }
->>>> -
->>>>        DBG("fast_rate=%u, slow_rate=27000000", gpu->fast_rate);
->>>> +
->>>> +    return 0;
->>>>    }
->>>>      int adreno_gpu_ocmem_init(struct device *dev, struct adreno_gpu *adreno_gpu,
+> Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
+> ---
+>  mm/Kconfig.debug | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+> index fca699ad1fb0..732043bf56c6 100644
+> --- a/mm/Kconfig.debug
+> +++ b/mm/Kconfig.debug
+> @@ -61,8 +61,8 @@ config SLUB_DEBUG
+>  	help
+>  	  SLUB has extensive debug support features. Disabling these can
+>  	  result in significant savings in code size. This also disables
+> -	  SLUB sysfs support. /sys/slab will not exist and there will be
+> -	  no support for cache validation etc.
+> +	  SLUB sysfs support. /sys/kernel/slab will not exist and there
+> +	  will be no support for cache validation etc.
+
+After commit ab4d5ed5eeda ("slub: Enable sysfs support for !CONFIG_SLUB_DEBUG"),
+"Disabling SLUB_DEBUG also disables SLUB sysfs support" is not true anymore.
+
+>  config SLUB_DEBUG_ON
+>  	bool "SLUB debugging on by default"
+> @@ -73,10 +73,10 @@ config SLUB_DEBUG_ON
+>  	  Boot with debugging on by default. SLUB boots by default with
+>  	  the runtime debug capabilities switched off. Enabling this is
+>  	  equivalent to specifying the "slub_debug" parameter on boot.
+> -	  There is no support for more fine grained debug control like
+> -	  possible with slub_debug=xxx. SLUB debugging may be switched
+> -	  off in a kernel built with CONFIG_SLUB_DEBUG_ON by specifying
+> -	  "slub_debug=-".
+> +	  There is support for more fine grained debug control like
+> +	  possible with slub_debug=xxx, details in Documentation/mm/slub.rst.
+> +	  SLUB debugging may be switched off in a kernel built with
+> +	  CONFIG_SLUB_DEBUG_ON by specifying "slub_debug=-".
+
+I think this is a misunderstanding. SLUB_DEBUG_ON is equivalent to
+passing boot parameter slub_debug=FUPZ, and what the help text says is that
+
+"You can enable slub debugging by default using this config option but
+ there is no support for fine-grained control like what slub_debug
+ boot parameter provides."
+
+ IOW SLUB_DEBUG_ON cannot be used to have same effect as passing
+ something like slub_debug=F.
+
+>  
+>  config PAGE_OWNER
+>  	bool "Track page owner"
+> -- 
+> 2.34.1
 > 
 > 
