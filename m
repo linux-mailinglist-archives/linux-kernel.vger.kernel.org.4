@@ -2,269 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387796A0211
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E656A021B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbjBWEh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 23:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S233238AbjBWEog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 23:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbjBWEhz (ORCPT
+        with ESMTP id S233214AbjBWEoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 23:37:55 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3929298CA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:37:27 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id c1so11672040plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:37:27 -0800 (PST)
+        Wed, 22 Feb 2023 23:44:32 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF6F3644F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:44:28 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id m10so11232393vso.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 20:44:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112; t=1677127047;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bgEUJI1FbPYHDyZTL+1aW43M1EL7Z5ld07eE1dMmj9I=;
-        b=jzTvOXJ6rPYIaMB7arzhn/vdCZ3Nirr0e9iwyS8dc50XLFgECg0anfkCbeFhYAWm5Q
-         SzSA55KxTB7pSx5sHwJMsU2XkmwPM6W0nu9igVyVH+D8UxroXEhD4gupD+bp7cIO3daA
-         ZfL2wAnEq2MEb0ww4KVv08NUR+KH0SDiCcs5epaTkv/0SeyYZhtHOKb5jPH6GzD9+CXf
-         aBWMOKq9ruA/poVC0KNQrNCb/R0hzk/xC7tN5LkY/g0GhHvkDWV6PeSGvh/EoQhlZMep
-         KJiw2u+1/SBr4urHhFgEPccJBy4hkcJSrYaOoYJIjdQ693nPcCH60yMof6iRaZzvJHIv
-         jjxA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sKMjr7Rxqbv+CnGa/A6QjHWJcmQnXCdCgOjEl0O2AyY=;
+        b=KldsSOrZ+whK6GS8ItSI8GbaPaoingpbkITCbC8iP5Na/f3qE/94VIvTGsXwpStTyv
+         ddVVxE76Gx+CXC/H2DcqfgLyyTBpBHBW5mzkGI2ZnS6m0IzP/tDpXvfGxtyfGFilFaKj
+         OTTPcr8H+2ptLKE6RF/rfsTjbPNX+q6CK6ONaeEAXLmImm1NN78/Lbrtaa6+3h5ipNHO
+         sHF4B3yOY/jqYcmshXwQeMtLBPsbrZ/cL1JBO+1pEwI8mNxyoNXQ0K5rkZDljelRyozy
+         U7mIOiWqy2V7XOTkoLzOhwaDPQvmoQfBh3wSTsduMBudpdNMgB9FZIgyrubGZL7RBld3
+         WCOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677127047;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bgEUJI1FbPYHDyZTL+1aW43M1EL7Z5ld07eE1dMmj9I=;
-        b=Gh11HsaWyciJoWEAQMXDgc1PYtesxzWytHQ2waKYUm6WhoffP4bkQK5zopFm/jCz09
-         o8/kKwWEFtvu599nRYddOfqZ3f8vL96+FpLTxumnnHcU3iu4KbQr+EFZ3cKIKdrAeAnw
-         vdwJtVlD1w1KAhzl+91U9nKg6zvfkhI3b+yJmYbtgBk8UZS7++MnQOwUxB0ZYl3uWjV5
-         pkVtQCtjxaoMWP9ul0IsrErutj5JJgnGksgTDoP8IrXGEGwabMZUKgz+pBtjZAjeIef5
-         eRq9qYEKwex8GVdkJ6JZtt+mvgriVIYh9HrNE4ajZdt11XM73ifNIl/peg9aJ9j8FgsL
-         He9w==
-X-Gm-Message-State: AO0yUKWP5rKbJ/FqOJ8ks02nGQJXii8qECqe5mOLVfnnW0brflhFGWgY
-        dyNKsFFeh4W2ua49R4HA8C26Ow==
-X-Google-Smtp-Source: AK7set+ENtMToE9BflcUsG3cSpXaHfuxXF93DgKsQa7jBdodIEfy25+u20zZPnr4l1O1SdzOgIBdcw==
-X-Received: by 2002:a17:902:d48d:b0:19a:a815:2853 with SMTP id c13-20020a170902d48d00b0019aa8152853mr11741156plg.1.1677127047388;
-        Wed, 22 Feb 2023 20:37:27 -0800 (PST)
-Received: from [10.70.252.135] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id u5-20020a17090282c500b0019c2d664869sm859813plz.298.2023.02.22.20.37.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 20:37:27 -0800 (PST)
-Message-ID: <ee7852cc-e37e-5602-7729-5bb1500a1f2a@bytedance.com>
-Date:   Thu, 23 Feb 2023 12:37:19 +0800
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sKMjr7Rxqbv+CnGa/A6QjHWJcmQnXCdCgOjEl0O2AyY=;
+        b=I9fEgd0y9UlwwzvEsGevrTte3A0I78cd7MKkbe7f/HxBTX3rBw6ixQ3jkTcpdgExec
+         XNZDDAYXuzCBd2t7T+f7adiwEXWXs88AYR5/QUxsK9UGJXFcFLUUgaMuJ76PkUucQoUK
+         rRN5rc3klbVE/mmos6GNMpQYIQZQNDU5S9psgbxjdA4I7aCsvKxWC9/YESFbSX9c90xP
+         tAQyUpEFaltQFtr1dMruqS6z8vno/fqxxvrJ4WwL8ASHMsGDtZpXQ4Kau1depiontdkF
+         mqEUFNKIaDb51TFF6VhK7jl1jCJpCkkpfx8+g4AHUumf8sAOdUXyWC3S0Zp+ZUv90gAp
+         CP0g==
+X-Gm-Message-State: AO0yUKXbqIC4Qx1icqTjNraTJ+8GgeByz/QQYtAAyWOEoVacMzxUByhw
+        CC4ai47fNfIGMBJ/5tTOucrrdyb6rDGwqHQQ8D8Nqw==
+X-Google-Smtp-Source: AK7set/jYL42RVs45A2l6N3tK6qvlX8e/whXZCANHirepJNMIs4VP2TB3H12vFITACk4sHqNPjUBk2Ol9OD0H+8R24k=
+X-Received: by 2002:a05:6102:108f:b0:41e:d8b5:ee40 with SMTP id
+ s15-20020a056102108f00b0041ed8b5ee40mr545448vsr.26.1677127467563; Wed, 22 Feb
+ 2023 20:44:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH 2/5] mm: vmscan: make memcg slab shrink lockless
-Content-Language: en-US
-To:     Kirill Tkhai <tkhai@ya.ru>
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>
-References: <20230220091637.64865-1-zhengqi.arch@bytedance.com>
- <20230220091637.64865-3-zhengqi.arch@bytedance.com>
- <dc279728-4cd4-0453-1a28-fe076f254641@ya.ru>
- <39cf7fa7-5dd6-0424-23de-1c33e948a201@bytedance.com>
- <b9d344d0-9d27-034d-d59e-9e880318906b@bytedance.com>
- <23fde2e7-e9e2-2b0d-dfd8-1a654bc5503c@ya.ru>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <23fde2e7-e9e2-2b0d-dfd8-1a654bc5503c@ya.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-4-yuzhao@google.com>
+ <Y+9EUeUIS/ZUe2vw@linux.dev>
+In-Reply-To: <Y+9EUeUIS/ZUe2vw@linux.dev>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 22 Feb 2023 21:43:51 -0700
+Message-ID: <CAOUHufa9UEPVZTKUfm2UAOAkQ+abSwhupdX_7_=vZAQSqs8yng@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 3/5] kvm/arm64: add kvm_arch_test_clear_young()
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 17, 2023 at 2:09=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> Hi Yu,
+>
+> scripts/get_maintainers.pl is your friend for getting the right set of
+> emails for a series :) Don't know about others, but generally I would
+> prefer to be Cc'ed on an entire series (to gather context) than just an
+> individual patch.
 
+Will do. Thank you.
 
-On 2023/2/23 04:05, Kirill Tkhai wrote:
-> On 22.02.2023 11:21, Qi Zheng wrote:
->>
->>
->> On 2023/2/22 16:16, Qi Zheng wrote:
->>> Hi Kirill,
->>>
->>> On 2023/2/22 05:43, Kirill Tkhai wrote:
->>>> On 20.02.2023 12:16, Qi Zheng wrote:
->>>>> Like global slab shrink, since commit 1cd0bd06093c<...>
->>>>>    static bool cgroup_reclaim(struct scan_control *sc)
->>>>> @@ -891,15 +905,14 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
->>>>>    {
->>>>>        struct shrinker_info *info;
->>>>>        unsigned long ret, freed = 0;
->>>>> +    int srcu_idx;
->>>>>        int i;
->>>>>        if (!mem_cgroup_online(memcg))
->>>>>            return 0;
->>>>> -    if (!down_read_trylock(&shrinker_rwsem))
->>>>> -        return 0;
->>>>> -
->>>>> -    info = shrinker_info_protected(memcg, nid);
->>>>> +    srcu_idx = srcu_read_lock(&shrinker_srcu);
->>>>> +    info = shrinker_info_srcu(memcg, nid);
->>>>>        if (unlikely(!info))
->>>>>            goto unlock;
->>>>
->>>> There is shrinker_nr_max dereference under this hunk. It's not in the patch:
->>>>
->>>>           for_each_set_bit(i, info->map, shrinker_nr_max) {
->>>>
->>>> Since shrinker_nr_max may grow in parallel, this leads to access beyond allocated memory :(
->>>
->>> Oh, indeed.
->>>
->>>>
->>>> It looks like we should save size of info->map as a new member of struct shrinker_info.
->>>
->>> Agree, then we only traverse info->map_size each time. Like below:
->>>
->>> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
->>> index b6eda2ab205d..f1b5d2803007 100644
->>> --- a/include/linux/memcontrol.h
->>> +++ b/include/linux/memcontrol.h
->>> @@ -97,6 +97,7 @@ struct shrinker_info {
->>>           struct rcu_head rcu;
->>>           atomic_long_t *nr_deferred;
->>>           unsigned long *map;
->>> +       int map_size;
-> 
-> Sure, like this. The only thing (after rethinking) I want to say is that despite "size" was
-> may suggestion, now it makes me think that name "size" is about size in bytes.
-> 
-> Possible, something like map_nr_max would be better here.
+> On Thu, Feb 16, 2023 at 09:12:28PM -0700, Yu Zhao wrote:
+> > This patch adds kvm_arch_test_clear_young() for the vast majority of
+> > VMs that are not pKVM and run on hardware that sets the accessed bit
+> > in KVM page tables.
+> >
+> > It relies on two techniques, RCU and cmpxchg, to safely test and clear
+> > the accessed bit without taking the MMU lock. The former protects KVM
+> > page tables from being freed while the latter clears the accessed bit
+> > atomically against both the hardware and other software page table
+> > walkers.
+> >
+> > Signed-off-by: Yu Zhao <yuzhao@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_host.h       |  7 +++
+> >  arch/arm64/include/asm/kvm_pgtable.h    |  8 +++
+> >  arch/arm64/include/asm/stage2_pgtable.h | 43 ++++++++++++++
+> >  arch/arm64/kvm/arm.c                    |  1 +
+> >  arch/arm64/kvm/hyp/pgtable.c            | 51 ++--------------
+> >  arch/arm64/kvm/mmu.c                    | 77 ++++++++++++++++++++++++-
+> >  6 files changed, 141 insertions(+), 46 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm=
+/kvm_host.h
+> > index 35a159d131b5..572bcd321586 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -1031,4 +1031,11 @@ static inline void kvm_hyp_reserve(void) { }
+> >  void kvm_arm_vcpu_power_off(struct kvm_vcpu *vcpu);
+> >  bool kvm_arm_vcpu_stopped(struct kvm_vcpu *vcpu);
+> >
+> > +/* see the comments on the generic kvm_arch_has_test_clear_young() */
+> > +#define kvm_arch_has_test_clear_young kvm_arch_has_test_clear_young
+> > +static inline bool kvm_arch_has_test_clear_young(void)
+> > +{
+> > +     return IS_ENABLED(CONFIG_KVM) && cpu_has_hw_af() && !is_protected=
+_kvm_enabled();
+> > +}
+>
+> Why does the lack of FEAT_HAFDBS preclude the use of the test-and-clear
+> notifier?
 
-Agree. Will change to it.
+This all comes down to the return on investment. We could
+theoretically make it work but the complexity and the poor performance
+would outweigh the benefits -- VM memory overcommit mostly happens in
+Cloud and none of the major Cloud vendors use pre v8.2 [1].
 
-> 
->>>    };
->>>
->>>    struct lruvec_stats_percpu {
->>> diff --git a/mm/vmscan.c b/mm/vmscan.c
->>> index f94bfe540675..dd07eb107915 100644
->>> --- a/mm/vmscan.c
->>> +++ b/mm/vmscan.c
->>> @@ -239,14 +239,20 @@ static void free_shrinker_info_rcu(struct rcu_head *head)
->>>           kvfree(container_of(head, struct shrinker_info, rcu));
->>>    }
->>>
->>> -static int expand_one_shrinker_info(struct mem_cgroup *memcg,
->>> -                                   int map_size, int defer_size,
->>> -                                   int old_map_size, int old_defer_size)
->>> +static int expand_one_shrinker_info(struct mem_cgroup *memcg, int new_nr_max,
->>> +                                   int old_nr_max)
->>>    {
->>> +       int map_size, defer_size, old_map_size, old_defer_size;
->>>           struct shrinker_info *new, *old;
->>>           struct mem_cgroup_per_node *pn;
->>>           int nid;
->>> -       int size = map_size + defer_size;
->>> +       int size;
->>> +
->>> +       map_size = shrinker_map_size(new_nr_max);
->>> +       defer_size = shrinker_defer_size(new_nr_max);
->>> +       old_map_size = shrinker_map_size(shrinker_nr_max);
->>> +       old_defer_size = shrinker_defer_size(shrinker_nr_max);
->>
->> Perhaps these should still be calculated outside the loop as before.
-> 
-> Yeah, for me it's also better.
->   
->>> +       size = map_size + defer_size;
->>>
->>>           for_each_node(nid) {
->>>                   pn = memcg->nodeinfo[nid];
->>> @@ -261,6 +267,7 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
->>>
->>>                   new->nr_deferred = (atomic_long_t *)(new + 1);
->>>                   new->map = (void *)new->nr_deferred + defer_size;
->>> +               new->map_size = new_nr_max;
->>>
->>>                   /* map: set all old bits, clear all new bits */
->>>                   memset(new->map, (int)0xff, old_map_size);
->>> @@ -310,6 +317,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
->>>                   }
->>>                   info->nr_deferred = (atomic_long_t *)(info + 1);
->>>                   info->map = (void *)info->nr_deferred + defer_size;
->>> +               info->map_size = shrinker_nr_max;
->>>                   rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
->>>           }
->>>           mutex_unlock(&shrinker_mutex);
->>> @@ -327,8 +335,6 @@ static int expand_shrinker_info(int new_id)
->>>    {
->>>           int ret = 0;
->>>           int new_nr_max = new_id + 1;
->>> -       int map_size, defer_size = 0;
->>> -       int old_map_size, old_defer_size = 0;
->>>           struct mem_cgroup *memcg;
->>>
->>>           if (!need_expand(new_nr_max))
->>> @@ -339,15 +345,9 @@ static int expand_shrinker_info(int new_id)
->>>
->>>           lockdep_assert_held(&shrinker_mutex);
->>>
->>> -       map_size = shrinker_map_size(new_nr_max);
->>> -       defer_size = shrinker_defer_size(new_nr_max);
->>> -       old_map_size = shrinker_map_size(shrinker_nr_max);
->>> -       old_defer_size = shrinker_defer_size(shrinker_nr_max);
->>> -
->>>           memcg = mem_cgroup_iter(NULL, NULL, NULL);
->>>           do {
->>> -               ret = expand_one_shrinker_info(memcg, map_size, defer_size,
->>> -                                              old_map_size, old_defer_size);
->>> +               ret = expand_one_shrinker_info(memcg, new_nr_max, shrinker_nr_max);
->>>                   if (ret) {
->>>                           mem_cgroup_iter_break(NULL, memcg);
->>>                           goto out;
->>> @@ -912,7 +912,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
->>>           if (unlikely(!info))
->>>                   goto unlock;
->>>
->>> -       for_each_set_bit(i, info->map, shrinker_nr_max) {
->>> +       for_each_set_bit(i, info->map, info->map_size) {
->>>                   struct shrink_control sc = {
->>>                           .gfp_mask = gfp_mask,
->>>                           .nid = nid,
->>>
->>> I will send the v2.
->>>
->>> Thanks,
->>> Qi
->>>
->>>>
->>>>> @@ -949,14 +962,9 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
->>>>>                    set_shrinker_bit(memcg, nid, i);
->>>>>            }
->>>>>            freed += ret;
->>>>> -
->>>>> -        if (rwsem_is_contended(&shrinker_rwsem)) {
->>>>> -            freed = freed ? : 1;
->>>>> -            break;
->>>>> -        }
->>>>>        }
->>>>>    unlock:
->>>>> -    up_read(&shrinker_rwsem);
->>>>> +    srcu_read_unlock(&shrinker_srcu, srcu_idx);
->>>>>        return freed;
->>>>>    }
->>>>>    #else /* CONFIG_MEMCG */
->>>>
->>>
->>
-> 
+[1] https://lore.kernel.org/linux-mm/CAOUHufbbs2gG+DPvSOw_N_Kx7FWdZvpdJUvLz=
+ko-BDQ8vfd6Xg@mail.gmail.com/
 
--- 
-Thanks,
-Qi
+> On implementations without FEAT_HAFDBS, hardware will generate a data
+> abort for software to set the access flag. Regardless of whether
+> software or hardware is responsible for updating the PTE that
+> information is available in the page tables.
+
+Agreed, the s/w emulation of the A-bit has poor performance. With the
+forward looking in mind, businesses who wish to overcommit host memory
+will eventually all move onto v8.2 and later. This is another reason
+not to worry about pre v8.2 (or 32-bit for that matter).
+
+> Also, I'm at a loss for why we'd need to test if CONFIG_KVM is enabled.
+> My expectation is that we should provide an implementation that returns
+> false if !CONFIG_KVM, avoiding the need to repeat that bit in every
+> single implementation of the function.
+
+We do have that default implementation. But we still need to disable
+this implementation when !CONFIG_KVM (it isn't protected by #ifdef
+CONFIG_KVM).
+
+> > +
+> >  #endif /* __ARM64_KVM_HOST_H__ */
+> > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/=
+asm/kvm_pgtable.h
+> > index 63f81b27a4e3..8c9a04388c88 100644
+> > --- a/arch/arm64/include/asm/kvm_pgtable.h
+> > +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> > @@ -105,6 +105,7 @@ static inline bool kvm_level_supports_block_mapping=
+(u32 level)
+> >   * @put_page:                        Decrement the refcount on a page.=
+ When the
+> >   *                           refcount reaches 0 the page is automatica=
+lly
+> >   *                           freed.
+> > + * @put_page_rcu:            RCU variant of put_page().
+> >   * @page_count:                      Return the refcount of a page.
+> >   * @phys_to_virt:            Convert a physical address into a virtual
+> >   *                           address mapped in the current context.
+> > @@ -122,6 +123,7 @@ struct kvm_pgtable_mm_ops {
+> >       void            (*free_removed_table)(void *addr, u32 level);
+> >       void            (*get_page)(void *addr);
+> >       void            (*put_page)(void *addr);
+> > +     void            (*put_page_rcu)(void *addr);
+>
+> Why do we need this? We already defer dropping the last reference count
+> on a page to an RCU callback. Have you observed issues with the existing
+> implementation?
+
+That's on the reader path, i.e., collapsing PTEs into a PMD, which
+RCU-frees the PTE table.
+
+On the writer path, unmapping wasn't protected by RCU before this
+patch, and put_page_rcu() makes it so.
+
+> >       int             (*page_count)(void *addr);
+> >       void*           (*phys_to_virt)(phys_addr_t phys);
+> >       phys_addr_t     (*virt_to_phys)(void *addr);
+> > @@ -188,6 +190,12 @@ typedef bool (*kvm_pgtable_force_pte_cb_t)(u64 add=
+r, u64 end,
+> >   *                                   children.
+> >   * @KVM_PGTABLE_WALK_SHARED:         Indicates the page-tables may be =
+shared
+> >   *                                   with other software walkers.
+> > + *
+> > + * kvm_arch_test_clear_young() is a special case. It relies on two
+> > + * techniques, RCU and cmpxchg, to safely test and clear the accessed
+> > + * bit without taking the MMU lock. The former protects KVM page table=
+s
+> > + * from being freed while the latter clears the accessed bit atomicall=
+y
+> > + * against both the hardware and other software page table walkers.
+> >   */
+> >  enum kvm_pgtable_walk_flags {
+> >       KVM_PGTABLE_WALK_LEAF                   =3D BIT(0),
+> > diff --git a/arch/arm64/include/asm/stage2_pgtable.h b/arch/arm64/inclu=
+de/asm/stage2_pgtable.h
+> > index c8dca8ae359c..350437661d4b 100644
+> > --- a/arch/arm64/include/asm/stage2_pgtable.h
+> > +++ b/arch/arm64/include/asm/stage2_pgtable.h
+> > @@ -30,4 +30,47 @@
+> >   */
+> >  #define kvm_mmu_cache_min_pages(kvm) (kvm_stage2_levels(kvm) - 1)
+> >
+> > +#define KVM_PTE_TYPE                 BIT(1)
+> > +#define KVM_PTE_TYPE_BLOCK           0
+> > +#define KVM_PTE_TYPE_PAGE            1
+> > +#define KVM_PTE_TYPE_TABLE           1
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_LO         GENMASK(11, 2)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_ATTRIDX      GENMASK(4, 2)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_AP   GENMASK(7, 6)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_AP_RO        3
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_AP_RW        1
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_SH   GENMASK(9, 8)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_SH_IS        3
+> > +#define KVM_PTE_LEAF_ATTR_LO_S1_AF   BIT(10)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_LO_S2_MEMATTR      GENMASK(5, 2)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R       BIT(6)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W       BIT(7)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S2_SH   GENMASK(9, 8)
+> > +#define KVM_PTE_LEAF_ATTR_LO_S2_SH_IS        3
+> > +#define KVM_PTE_LEAF_ATTR_LO_S2_AF   BIT(10)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_HI         GENMASK(63, 51)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_HI_SW              GENMASK(58, 55)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_HI_S1_XN   BIT(54)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_HI_S2_XN   BIT(54)
+> > +
+> > +#define KVM_PTE_LEAF_ATTR_S2_PERMS   (KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R |=
+ \
+> > +                                      KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W |=
+ \
+> > +                                      KVM_PTE_LEAF_ATTR_HI_S2_XN)
+> > +
+> > +#define KVM_INVALID_PTE_OWNER_MASK   GENMASK(9, 2)
+> > +#define KVM_MAX_OWNER_ID             1
+> > +
+> > +/*
+> > + * Used to indicate a pte for which a 'break-before-make' sequence is =
+in
+> > + * progress.
+> > + */
+> > +#define KVM_INVALID_PTE_LOCKED               BIT(10)
+> > +
+>
+> If there is a need to do these sort of moves, please do it in a separate
+> patch. It pollutes the context of the functional change you're making.
+>
+> >  #endif       /* __ARM64_S2_PGTABLE_H_ */
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 9c5573bc4614..6770bc47f5c9 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -191,6 +191,7 @@ vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcp=
+u, struct vm_fault *vmf)
+> >   */
+> >  void kvm_arch_destroy_vm(struct kvm *kvm)
+> >  {
+> > +     kvm_free_stage2_pgd(&kvm->arch.mmu);
+> >
+> >       bitmap_free(kvm->arch.pmu_filter);
+> >       free_cpumask_var(kvm->arch.supported_cpus);
+> >
+>
+> [...]
+>
+> > +struct test_clear_young_arg {
+> > +     struct kvm_gfn_range *range;
+> > +     gfn_t lsb_gfn;
+> > +     unsigned long *bitmap;
+> > +};
+> > +
+> > +static int stage2_test_clear_young(const struct kvm_pgtable_visit_ctx =
+*ctx,
+> > +                                enum kvm_pgtable_walk_flags flags)
+> > +{
+> > +     struct test_clear_young_arg *arg =3D ctx->arg;
+> > +     gfn_t gfn =3D ctx->addr / PAGE_SIZE;
+> > +     kvm_pte_t new =3D ctx->old & ~KVM_PTE_LEAF_ATTR_LO_S2_AF;
+> > +
+> > +     VM_WARN_ON_ONCE(!page_count(virt_to_page(ctx->ptep)));
+> > +     VM_WARN_ON_ONCE(gfn < arg->range->start || gfn >=3D arg->range->e=
+nd);
+>
+> Do we really need to be _this_ pedantic about sanity checking?
+
+Will remove them. (My experience with the world's large fleets is that
+Murphy's law is always true.)
+
+> > +     if (!kvm_pte_valid(new))
+> > +             return 0;
+> > +
+> > +     if (new =3D=3D ctx->old)
+> > +             return 0;
+> > +
+> > +     /* see the comments on the generic kvm_arch_has_test_clear_young(=
+) */
+> > +     if (__test_and_change_bit(arg->lsb_gfn - gfn, arg->bitmap))
+> > +             cmpxchg64(ctx->ptep, ctx->old, new);
+>
+> Why not use stage2_try_set_pte()? Not only is it idiomatic with the rest
+> of the stage-2 code, it also will 'do the right thing' according to the
+> locking scheme of the caller if we decide to change it at some point.
+
+It's not exported. Do you prefer it to be exported?
+
+> > +     return 0;
+> > +}
+> > +
+> > +bool kvm_arch_test_clear_young(struct kvm *kvm, struct kvm_gfn_range *=
+range,
+> > +                            gfn_t lsb_gfn, unsigned long *bitmap)
+> > +{
+> > +     u64 start =3D range->start * PAGE_SIZE;
+> > +     u64 end =3D range->end * PAGE_SIZE;
+> > +     struct test_clear_young_arg arg =3D {
+> > +             .range          =3D range,
+> > +             .lsb_gfn        =3D lsb_gfn,
+> > +             .bitmap         =3D bitmap,
+> > +     };
+> > +     struct kvm_pgtable_walker walker =3D {
+> > +             .cb             =3D stage2_test_clear_young,
+> > +             .arg            =3D &arg,
+> > +             .flags          =3D KVM_PGTABLE_WALK_LEAF,
+> > +     };
+> > +
+> > +     BUILD_BUG_ON(is_hyp_code());
+>
+> See prior comment about sanity checking.
+>
+> > +     if (WARN_ON_ONCE(!kvm_arch_has_test_clear_young()))
+> > +             return false;
+>
+> Same here...
+>
+> > +     /* see the comments on kvm_pgtable_walk_flags */
+> > +     rcu_read_lock();
+> > +
+> > +     kvm_pgtable_walk(kvm->arch.mmu.pgt, start, end - start, &walker);
+> > +
+> > +     rcu_read_unlock();
+>
+> The rcu_read_{lock,unlock}() is entirely superfluous.
+
+Not really. I didn't use the KVM_PGTABLE_WALK_SHARED flag above. Yes,
+it would be more consistent with the rest of the ARM code. My POV is
+that it would be less consistent with other archs, which I fully
+expect you to disagree :)
+
+I could add it and remove rcu_read_{lock,unlock}() if you prefer that way.
+
+> Of course, it is somewhat hidden by the fact that we must use
+> abstractions to support host and EL2 use of the page table code, but we
+> already make use of RCU to protect the stage-2 of a 'regular' VM.
+>
+> > +     return true;
+> > +}
+> > +
+> >  bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+> >  {
+> >       if (!kvm->arch.mmu.pgt)
+> > @@ -1848,7 +1924,6 @@ void kvm_arch_memslots_updated(struct kvm *kvm, u=
+64 gen)
+> >
+> >  void kvm_arch_flush_shadow_all(struct kvm *kvm)
+> >  {
+> > -     kvm_free_stage2_pgd(&kvm->arch.mmu);
+> >  }
+>
+> Doesn't this become a blatant correctness issue? This entirely fails to
+> uphold the exact expectations of the call.
+
+I moved kvm_free_stage2_pgd() into kvm_arch_destroy_vm()  above so
+that the mmu notifer SRCU will protect pgd at destruction. Don't worry
+about this for now. I refactor this change and put_page_rcu() into a
+separate patch to make it more clearer -- without them, RCU page table
+walkers won't be safe against VM destruction and unmap.
