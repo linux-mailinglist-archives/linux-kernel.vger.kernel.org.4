@@ -2,454 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CF76A0F68
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDC16A0F70
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjBWSZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S230318AbjBWS0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBWSZE (ORCPT
+        with ESMTP id S229990AbjBWS0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:25:04 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495E35AB51
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:25:02 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id oe18-20020a17090b395200b00236a0d55d3aso185555pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:25:02 -0800 (PST)
+        Thu, 23 Feb 2023 13:26:39 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8315BBA5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:26:37 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NGwlev016293;
+        Thu, 23 Feb 2023 18:25:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=liGim/yxm3G5DHs2B+aar2vaa6dxAIF3Vr9z49zS9UY=;
+ b=2qFZEbYnqNmzU/Ee32s8rVMGHjQ0ok3ig607AkLFxm0I/MUm08ocvg0CSnohOMqSygit
+ LJGDYfbalRzqyK7aLupFZG1HofZSoRoCRxsPZEGiiwEeBCyVIMq7wH9hy/W6z51nT6si
+ XTYdIje6s5cLSOMMm5bVlZbZbuHTsx3VMo2i+vCb4alNREVLvmTa72dpNI5+jk3eoaDf
+ ChgR4QkEILBGyld1DeioLkJHSsDLroSZnWGgGRVXAxBgof6VFz5q0Ihlz9an6EM/3Qb+
+ w8SBkgNaT10JW02iyHKvWYkCFihbmVulvNxj/uHsM26aIhpC4+Re8GDIKRYAls2oVKYt Rw== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntpqckcxv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Feb 2023 18:25:42 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31NIKHWn025912;
+        Thu, 23 Feb 2023 18:25:41 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn48dt0f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Feb 2023 18:25:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WFflQUkrAZjzrXDPKQ7t+9zxkBlAGD6Mzgm85yrnLWYu3mrbjXN2VJJr6ZxzCCtVohq5NyGW48H9bXa2GSL0tPSYFWmsL0BSnGvZ6u+CL+Uffnqk2zJEE2zaveboRzLgNSwPgK+oSWaGQ8xgCS65fNo8BKLrrcGmJBnCGMLttqSvSTWCvElSv33zA4IFiE1VddHidVaQ4wDitJceaBWpRiZ9CHwOOW28lveQzmKnLRMnkm1KAOzcka6qpDHIyER9ahE8+x9tnCGrqVS4Ku2HkwLAFg8lM4/bmSM4vNeyOcohq747FQlnrHmIVSK0sLwsQvmwEClpzBYUaiSFZXZIeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=liGim/yxm3G5DHs2B+aar2vaa6dxAIF3Vr9z49zS9UY=;
+ b=Vbu9/T07nBH4cBg0LvPfNJ/ox/bUdvwpv2HJP2iGD/M5m3Obm8mkOFOsso9HNqM5ksPheGgbqc3DtXLLUjFxLvho2SiuMt6riCmN5/QMLGxDvCCa2bD4lF79sp8xRnOau9lWudZBFY8Tb33DT06yBXh8Yu66I6vNJ/KoWIBPsqPIEyGHFMEFbwmtIZ1H4dfxsm/RfAtWIqZDWCeLY3S4+sALCbmaqOhw0DUqCA6aeftKD5v3mYCtFyY91EI1NIGlfAMSN/rIgGjwjY5+iJuz1yay3ChJSeE/nmRTwvUp0G2owdF9kf0xs/LcxSMfpl+x5hJygAAQpzN+QuONjWSDIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bVwEscz/Y+saDO3etwQYIKRQGuuetgmWTZiefuu5kco=;
-        b=NlC/idhqV9P0E/O6ydhIrMg+1dYJ0NDCsEwRKT1eKrL5KMy35xw49Fdot+vX3XpGTE
-         NcKP4Z64VvBRZhGdvEUp43smXAI7i99CcYzVmI1lPx+vjNINXICb4ZA7hyQczarzmeUr
-         q1tfDLtw/4yqKWukmFSDuc2cwdFWYRdhemWWbUInI/wiX0/CmwyUVw+jNVpTcWD37u5/
-         S1HEgtTXu6r8y22rMtwYn9Zi47S2gsoZOyO+uRxtfEyWRczNaGRgXrNn4qrSjQqh20tp
-         URav5aFh0jENZesypnGQu/q9/hsRYyHFV6qNCNb38yEbgTnBZW6b973XzEAgkgBVVee/
-         f4ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bVwEscz/Y+saDO3etwQYIKRQGuuetgmWTZiefuu5kco=;
-        b=ufajswUj/pgV1AGh/5/2VU9SZtH0a/lhURlDDb2ml6wu/l7exJdoWX6lNyhMKaNDJh
-         kAYBOYpLIcPIJHwcA00LTI3wcptsMFb6j+vDQqAXrtDcIaY292ZJ90gfHIc66lb0h1oG
-         ymjXs2J6KtLjbjnyNVYk+3RSA7xDxBWPcthOuW7k66LOVC2NinrrUBEyag47910YK8WF
-         5JMigotj6YMO5BMNNp+C53gcsxt9VUeoVP3PPgY3IfuogIuUUkRjIYVeP8DryCatyYVz
-         F50H36srr0vw+/jPJM4rSj2a5MUsIuydyCD5gIuLG3bxXL4PlpG3/quJ7My1/HBJjzvh
-         D5vw==
-X-Gm-Message-State: AO0yUKUPAJEysJ4LEXWeGJ5fz97M//kLoKMo74hzWupriGIx+ZCyD4hf
-        yOUzdqZrsQUGXFLUlD22y2swQWivnNwaP5OG
-X-Google-Smtp-Source: AK7set+54NYIyG+rKqashp041S2yrG/uGzg64/ZsISfO06ELYtkPlOWa5CGZiELDsnrScAzjs8CxsA==
-X-Received: by 2002:a17:902:ecc4:b0:19a:9945:a7aa with SMTP id a4-20020a170902ecc400b0019a9945a7aamr18203955plh.20.1677176701626;
-        Thu, 23 Feb 2023 10:25:01 -0800 (PST)
-Received: from [10.211.55.3] (c-73-221-130-71.hsd1.wa.comcast.net. [73.221.130.71])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902700b00b0019ac9c4f32esm5992380plk.309.2023.02.23.10.24.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 10:25:01 -0800 (PST)
-Message-ID: <18e90758-472e-31b2-65d4-c2504b185d4e@linaro.org>
-Date:   Thu, 23 Feb 2023 12:24:57 -0600
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=liGim/yxm3G5DHs2B+aar2vaa6dxAIF3Vr9z49zS9UY=;
+ b=bLO4rqkpY831ztdpNlAbSQ+JPfKkXXm38QqYUKqOkS/tJafTb+emgS4zCK6pTmGRF0Tg4FuqwpKqTVEgsCIcmMw/eR3eCJfhi9btajF1+m8pCdFHah/MqwBPpQmGVGeBURWP9x25t/J6v1jJqkd0Ex6auRJqeItWZDPLY7/03ng=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DM4PR10MB6863.namprd10.prod.outlook.com (2603:10b6:8:104::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.7; Thu, 23 Feb
+ 2023 18:25:38 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3db5:6e11:9aca:708a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3db5:6e11:9aca:708a%8]) with mapi id 15.20.6156.007; Thu, 23 Feb 2023
+ 18:25:38 +0000
+Date:   Thu, 23 Feb 2023 10:25:34 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/46] hugetlb: introduce HugeTLB high-granularity
+ mapping
+Message-ID: <Y/evnsBk/OtjqjAQ@monkey>
+References: <20230218002819.1486479-1-jthoughton@google.com>
+ <Y/U7ngTyPlg2XCRj@monkey>
+ <28a7208c-939c-19ea-1cf0-298444dffe85@redhat.com>
+ <CAHS8izNPr+TfxLL_dBitKAgd11rPhjHx+10Nn96TD3HXzUSevQ@mail.gmail.com>
+ <94a10407-ebcb-7090-ef92-2bbc9416d6fa@redhat.com>
+ <CADrL8HVYBEJrn2BnXEzenTxmxgqCwg5EM+ow509TBCPQrDxsNQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADrL8HVYBEJrn2BnXEzenTxmxgqCwg5EM+ow509TBCPQrDxsNQ@mail.gmail.com>
+X-ClientProxiedBy: MW4PR03CA0342.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::17) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 07/26] mailbox: Add Gunyah message queue mailbox
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212316.3309053-1-quic_eberman@quicinc.com>
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <20230214212316.3309053-1-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|DM4PR10MB6863:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fcabbad-7d84-47ec-675d-08db15cb5cbf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6w8yIEjGaSr7Th+qc7voSZZ0rtBn7IyLw45ywjVb08ct6nx84PWOGKDEGUWfdtOUiWVT2Ll+akwDw8UNRQEoSQxELAe4ocFFe8HOU3o1tqMk5Jm6BVoNNeaVw5H9RbJGsO+B0wcXUvuIoIiFSZmoMOwjyYVKOxYjU6DqJjvjvJpjN+7g8g2QZYGAIShyGUHIYzWbqGzkt1/J53WwJZed2pATtoEbND58/FCgUN0wQq1E1sujSK1ugw0PIqNgOsQ0WSXXzVyMV0hPZOt+R+5fRJlRghUXnh/Qj9C4KhTJlUIcvkFO5eReqQqfDKewchO7pqJTxj2OUUthEiVXs2JhD2g9qOzv3xlMsujpLBUQ3cZXxMAk6gFfO27BCpl5CSics3hTQCKMSaZO1/dkjFWsX5D3FKklOQ/+ePrPcE7xmX58+C1Hc0RMbrMZHsCWtS/R4IG+rat0xv0EA3ZSwdBrM60YceB9bfb7BXcOGJ+/X1yxS3Il/vVgG4kdraQQY3I3z1/OUGj6PkLEz4enlabjpah+ogENp69fe73slIiU/ElZkp2o+9yrNzMNAAHmPgCjjzqdr9aJG8kb4TFVMyBT7AGpXgWQkW0bnD2acRkzJy8/b2j5jHfRjhmvL5ta8oOHf0Y7gyA3/p7wfFK5hxfJ21CIu998NyDUo93Xq+/vEog=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(396003)(346002)(39860400002)(376002)(366004)(136003)(451199018)(38100700002)(6506007)(6512007)(9686003)(6666004)(26005)(186003)(33716001)(53546011)(66476007)(66556008)(6916009)(4326008)(8676002)(66946007)(2906002)(7416002)(41300700001)(5660300002)(44832011)(8936002)(478600001)(966005)(6486002)(316002)(54906003)(83380400001)(86362001)(66899018);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y3WAy5YT2aJby1sjI1m0o++go2/K2yJoic9pmTLnJk/CBOUyp/e401Dy2fJ6?=
+ =?us-ascii?Q?hdstDvFa1K5gWFBQu+yrUAgDMKT/zF6YiLqQ9g4Jmdh28IVudDHt24D8QUTE?=
+ =?us-ascii?Q?2nH4UZBARCjD4FEGkrxAi8ZJRfTImULHHmctZFsBqMfqoTMHMLBXGaCtv402?=
+ =?us-ascii?Q?mzecHLiKBodwTDMIhbXX5d8XnDBZax2X4SkjmhEoqZrloIf7srv2W//z/Agj?=
+ =?us-ascii?Q?WRcgees8DIbcmsVNDo3GC0FgRA5QBPdFsA7B2EvpQYxOCWhK6++lUzbn+NvE?=
+ =?us-ascii?Q?sJFy1qgY7wtyqx7FbMsInnxvTSmeOD66+CWb4O+LlnIVZSvft/IrSA8LhcIU?=
+ =?us-ascii?Q?40aRZmewIwO6ONUBb9DjqLzpUcXp+h7jf3kk5BAmQoj/6kzN6TCJCm0w6z/J?=
+ =?us-ascii?Q?w8NCuhhKxNuZO9EeSv8BmIF6lPKlm/9TmBk+1vJNc4aJcCZLr5DHglNSjKje?=
+ =?us-ascii?Q?2ZLkyLV1mw+cHCNME1prWQyjPD8bwKcZ1ymOowxFYA6ybooWj23lQ3KJhz3A?=
+ =?us-ascii?Q?TVSuiGUnM2BCQ5pnE9tgpYYPA2EA6EHWfbtBPBRdm4cQvmgXlTOiXgTggAX0?=
+ =?us-ascii?Q?cAdIM2THg6I/wFcuHw7D4taW78Q+xqhcQyT9YUyzL+X9892ZsFdYh7FR+Atx?=
+ =?us-ascii?Q?Tg3Jw1mPWko+OsBldm/UV4p8+aKuUJDe5snaxF06xTSfcEOqBoJOqNT+Vj6G?=
+ =?us-ascii?Q?tQGei7vEw5zbWIb3i6/hbwcIv1+0N8LlFV4fWHvrPBulc+mXi8y98y5+qg5I?=
+ =?us-ascii?Q?W8bD7xa6Q/SHC+VIv6ZI1taGGwbs2xOwG+3p4yZm436J6K+Fk0KmgMqlFm+e?=
+ =?us-ascii?Q?+9g6RShOgW18gw6O+LPYPP+HhMdK5/1JdIjzRS+bpKFz87RiDTDp4JwOy7zM?=
+ =?us-ascii?Q?uiEKewJDuDYJJmeeQcLxKtNb5jIiKYMwIbDsMQ7wcj/RIE4YOIFtV+r+SAQq?=
+ =?us-ascii?Q?U+Bh8byBDALHBtwCp8HtlR2IIYwW77lH43prE4KHRz+M9CtnoZwn2z65FuJ8?=
+ =?us-ascii?Q?IyP/WFjE46uQAxgl8NBspvcoSyIi08972V6P6ttyRhAw022RAtustuuuVTvG?=
+ =?us-ascii?Q?No9YV44RYqFiRxWB6043WYNTqU0/GPgA0Syk3dyD5UkEfE7syhCqNj/NuqIp?=
+ =?us-ascii?Q?FpQW+kYAoMbt3Fr0pVXVK4G4bXx2e+7Rzh+2bwk/vagZCRc5LQMvp257oHpm?=
+ =?us-ascii?Q?aaQut34YTT5JHJl23oiCfbYP6ZE31RC/5mcLUecVMvU5+V8NG02F8x4kg05z?=
+ =?us-ascii?Q?q0mCDXjVrH+fEWKF0S2oYDs/YCQxsyOKba0IANCY9CrG+oA+K7hbWwHMgq9D?=
+ =?us-ascii?Q?K/AxqUYMbAeZ8H8HDmONNWKtwCiqcH/hKKlxUgXef4uYZ47ChUxfiwEecv0h?=
+ =?us-ascii?Q?JXnTw5tzf6qfzVU/LIhKpEPcuIN9poTngN9klyFIoU7iuDAciGrYK1VFXc7X?=
+ =?us-ascii?Q?B7V8rPC9//0XINH7aEbcailJZlfcckKmj043WOnT4cMWlhMMa7o99sMs18rk?=
+ =?us-ascii?Q?45jd/QNRwft0BkyjV1jIXxL8StvdHQQTV6UO7IPOSXVMgnESUdB0zNpwIW7+?=
+ =?us-ascii?Q?YU84iIEn5SfPRYNnQwGdkbvyaN9Le3mBE8d7bl6jyyiSY9+nR9GOSTofmkTv?=
+ =?us-ascii?Q?cw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?E9hPK1T2DgWBHqyx2in3S9HgGCowtQYowEfOwu3GdCcLSeRlN+I4FBwitd2x?=
+ =?us-ascii?Q?QUR599J7SkP7K7iWv6zh74EdM/Dc4fjVdJIB0l1ur7USD7ErE8yIWlD1mo8d?=
+ =?us-ascii?Q?gyD83HSIH1Wdl5BcUwjUZ7RBIc07CAITAPT4Slj02Znr0LUQRHXo1LntjqF5?=
+ =?us-ascii?Q?4ouuX/En41pMzQ4VEwlhSJwYc3dy0I4ry6ue3srZc92gDLHAi5sap/hOcn8R?=
+ =?us-ascii?Q?ojxogeeoB1lQ1QUFH0DqrPtZi3Bfo7d0ZdM5xhtd/SdidXcVkOFpXR/5CQY0?=
+ =?us-ascii?Q?M34FcF/ZiHGxC33guaMvdnvfw3AVVgr0YvumXtTyT/G+EwRl+cowFljmmTW5?=
+ =?us-ascii?Q?ew7T8P9gFCAA8dryiqttSsv7SrWUgdtVAFAD0qksuT9q6Y0fj5KT9CN89yeB?=
+ =?us-ascii?Q?pEUK9jKCUWEFC5i8SXVOF2CCMjeYSVhfWe0m6oEqWXZmKD89oYonRMZh6UnP?=
+ =?us-ascii?Q?/AwwAWiUFWdjxWGqzwpG/uhpWWrDAIvqLdAZla51Wv4xg+pnbpaSWqW5zo71?=
+ =?us-ascii?Q?9i8qQBQ9egOBLPgZtZQRC4t/fJP9ouD3WwCDjTCyloQkgVcpo6jjEsy/wVNY?=
+ =?us-ascii?Q?MbdiLVT+e0BbAzNLYzc7WeIp2gxtnJxB3vvDThCHjhjv810+dWixV2qBJd9k?=
+ =?us-ascii?Q?5tT+ccHigXD7rnKx9jM1o2qnkOZhwOOemLhyPX0r9+V9vIZE4tHG2/PcDvBh?=
+ =?us-ascii?Q?ol2TMZurgxSHYG/Dm+CQ+qsz+uK0DqsaKgL1Rsvr5QIHd6TSrAX4DyW1eVxg?=
+ =?us-ascii?Q?t2h6nNecU+wTxUqISCN9nPks8CRs2yD4Y84RkYQXdA+GWiarADP8+9ddZtzM?=
+ =?us-ascii?Q?klNlfZM7xUs30VviWGs3UNGKfcYtUSe40py0WiPRUYy8vDASQuDqKPVIhbfL?=
+ =?us-ascii?Q?kKJXHqiSmqqpKPN9MbJO4Me32L/PWOS3NmLRQUZ4bkhWyrV5h6eXyLOHPeMZ?=
+ =?us-ascii?Q?XvztMNBOdj2JSN1iAFpR3xmHMPtjNMYQH7Yry/K+1d9nYKJI24q/s4vjYWbm?=
+ =?us-ascii?Q?Ga6M06G3FBp9CgE7dPw+M6mPty2aE6SLcfTu1hlG1D0mmqkJgztiFg5DBCv9?=
+ =?us-ascii?Q?leUKQUeyOSX9PN8FV3uPQegHaPT65I4e9PVNw6GGZGJygOK6r3gkHFrXzb/H?=
+ =?us-ascii?Q?zWLe7Rk9TyJHDaHk4A6SSfJNAGtrh7OnPA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fcabbad-7d84-47ec-675d-08db15cb5cbf
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 18:25:38.4161
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cFAEExxEy6+eXnFGxQX3IlSxq3kVAJWkrfZa6bc9r37ASj6ZWfP22QHn3X+4hzpbzx0I2m7ws77fuc60rpQ6JQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6863
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_11,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230152
+X-Proofpoint-GUID: h3gqGWELnCGwAgkjYlRRhRdjEiFLQD1c
+X-Proofpoint-ORIG-GUID: h3gqGWELnCGwAgkjYlRRhRdjEiFLQD1c
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 3:23 PM, Elliot Berman wrote:
-> Gunyah message queues are a unidirectional inter-VM pipe for messages up
-> to 1024 bytes. This driver supports pairing a receiver message queue and
-> a transmitter message queue to expose a single mailbox channel.
+On 02/23/23 07:53, James Houghton wrote:
+> On Thu, Feb 23, 2023 at 1:07 AM David Hildenbrand <david@redhat.com> wrote:
+> >
+> > On 22.02.23 21:57, Mina Almasry wrote:
+> > > On Wed, Feb 22, 2023 at 7:49 AM David Hildenbrand <david@redhat.com> wrote:
+> > >>
+> > >> On 21.02.23 22:46, Mike Kravetz wrote:
+> > >>> On 02/18/23 00:27, James Houghton wrote:
+> > >>>> This series introduces the concept of HugeTLB high-granularity mapping
+> > >>>> (HGM). This series teaches HugeTLB how to map HugeTLB pages at
+> > >>>> high-granularity, similar to how THPs can be PTE-mapped.
+> > >>>>
+> > >>>> Support for HGM in this series is for MAP_SHARED VMAs on x86_64 only. Other
+> > >>>> architectures and (some) support for MAP_PRIVATE will come later.
+> > >>>>
+> > >>>> This series is based on latest mm-unstable (ccd6a73daba9).
+> > >>>>
+> > >>>> Notable changes with this series
+> > >>>> ================================
+> > >>>>
+> > >>>>    - hugetlb_add_file_rmap / hugetlb_remove_rmap are added to handle
+> > >>>>      mapcounting for non-anon hugetlb.
+> > >>>>    - The mapcounting scheme uses subpages' mapcounts for high-granularity
+> > >>>>      mappings, but it does not use subpages_mapcount(). This scheme
+> > >>>>      prevents the HugeTLB VMEMMAP optimization from being used, so it
+> > >>>>      will be improved in a later series.
+> > >>>>    - page_add_file_rmap and page_remove_rmap are updated so they can be
+> > >>>>      used by hugetlb_add_file_rmap / hugetlb_remove_rmap.
+> > >>>>    - MADV_SPLIT has been added to enable the userspace API changes that
+> > >>>>      HGM allows for: high-granularity UFFDIO_CONTINUE (and maybe other
+> > >>>>      changes in the future). MADV_SPLIT does NOT force all the mappings to
+> > >>>>      be PAGE_SIZE.
+> > >>>>    - MADV_COLLAPSE is expanded to include HugeTLB mappings.
+> > >>>>
+> > >>>> Old versions:
+> > >>>> v1: https://lore.kernel.org/linux-mm/20230105101844.1893104-1-jthoughton@google.com/
+> > >>>> RFC v2: https://lore.kernel.org/linux-mm/20221021163703.3218176-1-jthoughton@google.com/
+> > >>>> RFC v1: https://lore.kernel.org/linux-mm/20220624173656.2033256-1-jthoughton@google.com/
+> > >>>>
+> > >>>> Changelog:
+> > >>>> v1 -> v2 (thanks Peter for all your suggestions!):
+> > >>>> - Changed mapcount to be more THP-like, and make HGM incompatible with
+> > >>>>     HVO.
+> > >>>> - HGM is now disabled by default to leave HVO enabled by default.
+> > >>>
+> > >>> I understand the reasoning behind the move to THP-like mapcounting, and the
+> > >>> incompatibility with HVO.  However, I just got to patch 5 and realized either
+> > >>> HGM or HVO will need to be chosen at kernel build time.  That may not be an
+> > >>> issue for cloud providers or others building their own kernels for internal
+> > >>> use.  However, distro kernels will need to pick one option or the other.
+> > >>> Right now, my Fedora desktop has HVO enabled so it would likely not have
+> > >>> HGM enabled.  That is not a big deal for a desktop.
+> > >>>
+> > >>> Just curious, do we have distro kernel users that want to use HGM?
+> > >>
+> > >> Most certainly I would say :)
 > 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-
-I have a general comment for "include/linux/gunyah.h".
-
-You sometimes use "gunyah" in exported names (for example,
-enum gunyah_resource_type, or struct gunyah_resource).  In
-many cases, though, you use "gh_ or "GH_" (such as in
-struct gh_msgq, or GH_DBL_NONBLOCK).  Is there a reason
-that you don't pick one and use it everywhere?
-
-I think it would be best--certainly for exported symbols
-like these--to use a single symbol prefix for all cases.
-
-Sometimes there might be a reason to distinguish two names
-(maybe "gunyah_" symbols are truly public, while "gh_"
-symbols are helpers meant generally to be private).  But
-I don't think that's the case here.
-
-It seems that "gh" is your most frequent prefix, so that
-might be easier to implement.  But "gunyah" is more expressive
-and is only 4 characters wider.
-
-					-Alex
-
-> ---
->   Documentation/virt/gunyah/message-queue.rst |   8 +
->   drivers/mailbox/Makefile                    |   2 +
->   drivers/mailbox/gunyah-msgq.c               | 214 ++++++++++++++++++++
->   include/linux/gunyah.h                      |  56 +++++
->   4 files changed, 280 insertions(+)
->   create mode 100644 drivers/mailbox/gunyah-msgq.c
+> I'm not sure. Maybe distros want the hwpoison benefits HGM provides?
+> But that's not implemented in this series.
 > 
-> diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/virt/gunyah/message-queue.rst
-> index 0667b3eb1ff9..082085e981e0 100644
-> --- a/Documentation/virt/gunyah/message-queue.rst
-> +++ b/Documentation/virt/gunyah/message-queue.rst
-> @@ -59,3 +59,11 @@ vIRQ: two TX message queues will have two vIRQs (and two capability IDs).
->         |               |         |                 |         |               |
->         |               |         |                 |         |               |
->         +---------------+         +-----------------+         +---------------+
-> +
-> +Gunyah message queues are exposed as mailboxes. To create the mailbox, create
-> +a mbox_client and call `gh_msgq_init`. On receipt of the RX_READY interrupt,
-> +all messages in the RX message queue are read and pushed via the `rx_callback`
-> +of the registered mbox_client.
-> +
-> +.. kernel-doc:: drivers/mailbox/gunyah-msgq.c
-> +   :identifiers: gh_msgq_init
-> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-> index fc9376117111..5f929bb55e9a 100644
-> --- a/drivers/mailbox/Makefile
-> +++ b/drivers/mailbox/Makefile
-> @@ -55,6 +55,8 @@ obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
->   
->   obj-$(CONFIG_ZYNQMP_IPI_MBOX)	+= zynqmp-ipi-mailbox.o
->   
-> +obj-$(CONFIG_GUNYAH)		+= gunyah-msgq.o
-> +
->   obj-$(CONFIG_SUN6I_MSGBOX)	+= sun6i-msgbox.o
->   
->   obj-$(CONFIG_SPRD_MBOX)		+= sprd-mailbox.o
-> diff --git a/drivers/mailbox/gunyah-msgq.c b/drivers/mailbox/gunyah-msgq.c
-> new file mode 100644
-> index 000000000000..03ffaa30ce9b
-> --- /dev/null
-> +++ b/drivers/mailbox/gunyah-msgq.c
-> @@ -0,0 +1,214 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/mailbox_controller.h>
-> +#include <linux/module.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/gunyah.h>
-> +#include <linux/printk.h>
-> +#include <linux/init.h>
-> +#include <linux/slab.h>
-> +#include <linux/wait.h>
-> +
-> +#define mbox_chan_to_msgq(chan) (container_of(chan->mbox, struct gh_msgq, mbox))
-> +
-> +static irqreturn_t gh_msgq_rx_irq_handler(int irq, void *data)
-> +{
-> +	struct gh_msgq *msgq = data;
-> +	struct gh_msgq_rx_data rx_data;
-> +	enum gh_error err;
-> +	bool ready = true;
-> +
-> +	while (ready) {
-> +		err = gh_hypercall_msgq_recv(msgq->rx_ghrsc->capid,
-> +				(uintptr_t)&rx_data.data, sizeof(rx_data.data),
-> +				&rx_data.length, &ready);
-> +		if (err != GH_ERROR_OK) {
-> +			if (err != GH_ERROR_MSGQUEUE_EMPTY)
-> +				pr_warn("Failed to receive data from msgq for %s: %d\n",
-> +					msgq->mbox.dev ? dev_name(msgq->mbox.dev) : "", err);
-> +			break;
-> +		}
-> +		mbox_chan_received_data(gh_msgq_chan(msgq), &rx_data);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/* Fired when message queue transitions from "full" to "space available" to send messages */
-> +static irqreturn_t gh_msgq_tx_irq_handler(int irq, void *data)
-> +{
-> +	struct gh_msgq *msgq = data;
-> +
-> +	mbox_chan_txdone(gh_msgq_chan(msgq), 0);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/* Fired after sending message and hypercall told us there was more space available. */
-> +static void gh_msgq_txdone_tasklet(struct tasklet_struct *tasklet)
-> +{
-> +	struct gh_msgq *msgq = container_of(tasklet, struct gh_msgq, txdone_tasklet);
-> +
-> +	mbox_chan_txdone(gh_msgq_chan(msgq), msgq->last_ret);
-> +}
-> +
-> +static int gh_msgq_send_data(struct mbox_chan *chan, void *data)
-> +{
-> +	struct gh_msgq *msgq = mbox_chan_to_msgq(chan);
-> +	struct gh_msgq_tx_data *msgq_data = data;
-> +	u64 tx_flags = 0;
-> +	enum gh_error gh_error;
-> +	bool ready;
-> +
-> +	if (msgq_data->push)
-> +		tx_flags |= GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH;
-> +
-> +	gh_error = gh_hypercall_msgq_send(msgq->tx_ghrsc->capid, msgq_data->length,
-> +					(uintptr_t)msgq_data->data, tx_flags, &ready);
-> +
-> +	/**
-> +	 * unlikely because Linux tracks state of msgq and should not try to
-> +	 * send message when msgq is full.
-> +	 */
-> +	if (unlikely(gh_error == GH_ERROR_MSGQUEUE_FULL))
-> +		return -EAGAIN;
-> +
-> +	/**
-> +	 * Propagate all other errors to client. If we return error to mailbox
-> +	 * framework, then no other messages can be sent and nobody will know
-> +	 * to retry this message.
-> +	 */
-> +	msgq->last_ret = gh_remap_error(gh_error);
-> +
-> +	/**
-> +	 * This message was successfully sent, but message queue isn't ready to
-> +	 * receive more messages because it's now full. Mailbox framework
-> +	 * requires that we only report that message was transmitted when
-> +	 * we're ready to transmit another message. We'll get that in the form
-> +	 * of tx IRQ once the other side starts to drain the msgq.
-> +	 */
-> +	if (gh_error == GH_ERROR_OK && !ready)
-> +		return 0;
-> +
-> +	/**
-> +	 * We can send more messages. Mailbox framework requires that tx done
-> +	 * happens asynchronously to sending the message. Gunyah message queues
-> +	 * tell us right away on the hypercall return whether we can send more
-> +	 * messages. To work around this, defer the txdone to a tasklet.
-> +	 */
-> +	tasklet_schedule(&msgq->txdone_tasklet);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct mbox_chan_ops gh_msgq_ops = {
-> +	.send_data = gh_msgq_send_data,
-> +};
-> +
-> +/**
-> + * gh_msgq_init() - Initialize a Gunyah message queue with an mbox_client
-> + * @parent: optional, device parent used for the mailbox controller
-> + * @msgq: Pointer to the gh_msgq to initialize
-> + * @cl: A mailbox client to bind to the mailbox channel that the message queue creates
-> + * @tx_ghrsc: optional, the transmission side of the message queue
-> + * @rx_ghrsc: optional, the receiving side of the message queue
-> + *
-> + * At least one of tx_ghrsc and rx_ghrsc should be not NULL. Most message queue use cases come with
-> + * a pair of message queues to facilitate bidirectional communication. When tx_ghrsc is set,
-> + * the client can send messages with mbox_send_message(gh_msgq_chan(msgq), msg). When rx_ghrsc
-> + * is set, the mbox_client should register an .rx_callback() and the message queue driver will
-> + * push all available messages upon receiving the RX ready interrupt. The messages should be
-> + * consumed or copied by the client right away as the gh_msgq_rx_data will be replaced/destroyed
-> + * after the callback.
-> + *
-> + * Returns - 0 on success, negative otherwise
-> + */
-> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct mbox_client *cl,
-> +		     struct gunyah_resource *tx_ghrsc, struct gunyah_resource *rx_ghrsc)
-> +{
-> +	int ret;
-> +
-> +	/* Must have at least a tx_ghrsc or rx_ghrsc and that they are the right device types */
-> +	if ((!tx_ghrsc && !rx_ghrsc) ||
-> +	    (tx_ghrsc && tx_ghrsc->type != GUNYAH_RESOURCE_TYPE_MSGQ_TX) ||
-> +	    (rx_ghrsc && rx_ghrsc->type != GUNYAH_RESOURCE_TYPE_MSGQ_RX))
-> +		return -EINVAL;
-> +
-> +	if (gh_api_version() != GUNYAH_API_V1) {
-> +		pr_err("Unrecognized gunyah version: %u. Currently supported: %d\n",
-> +			gh_api_version(), GUNYAH_API_V1);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (!gh_api_has_feature(GH_API_FEATURE_MSGQUEUE))
-> +		return -EOPNOTSUPP;
-> +
-> +	msgq->tx_ghrsc = tx_ghrsc;
-> +	msgq->rx_ghrsc = rx_ghrsc;
-> +
-> +	msgq->mbox.dev = parent;
-> +	msgq->mbox.ops = &gh_msgq_ops;
-> +	msgq->mbox.num_chans = 1;
-> +	msgq->mbox.txdone_irq = true;
-> +	msgq->mbox.chans = kcalloc(msgq->mbox.num_chans, sizeof(*msgq->mbox.chans), GFP_KERNEL);
-> +	if (!msgq->mbox.chans)
-> +		return -ENOMEM;
-> +
-> +	if (msgq->tx_ghrsc) {
-> +		ret = request_irq(msgq->tx_ghrsc->irq, gh_msgq_tx_irq_handler, 0, "gh_msgq_tx",
-> +				msgq);
-> +		if (ret)
-> +			goto err_chans;
-> +	}
-> +
-> +	if (msgq->rx_ghrsc) {
-> +		ret = request_threaded_irq(msgq->rx_ghrsc->irq, NULL, gh_msgq_rx_irq_handler,
-> +						IRQF_ONESHOT, "gh_msgq_rx", msgq);
-> +		if (ret)
-> +			goto err_tx_irq;
-> +	}
-> +
-> +	tasklet_setup(&msgq->txdone_tasklet, gh_msgq_txdone_tasklet);
-> +
-> +	ret = mbox_controller_register(&msgq->mbox);
-> +	if (ret)
-> +		goto err_rx_irq;
-> +
-> +	ret = mbox_bind_client(gh_msgq_chan(msgq), cl);
-> +	if (ret)
-> +		goto err_mbox;
-> +
-> +	return 0;
-> +err_mbox:
-> +	mbox_controller_unregister(&msgq->mbox);
-> +err_rx_irq:
-> +	if (msgq->rx_ghrsc)
-> +		free_irq(msgq->rx_ghrsc->irq, msgq);
-> +err_tx_irq:
-> +	if (msgq->tx_ghrsc)
-> +		free_irq(msgq->tx_ghrsc->irq, msgq);
-> +err_chans:
-> +	kfree(msgq->mbox.chans);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_msgq_init);
-> +
-> +void gh_msgq_remove(struct gh_msgq *msgq)
-> +{
-> +	mbox_controller_unregister(&msgq->mbox);
-> +
-> +	if (msgq->rx_ghrsc)
-> +		free_irq(msgq->rx_ghrsc->irq, msgq);
-> +
-> +	if (msgq->tx_ghrsc)
-> +		free_irq(msgq->tx_ghrsc->irq, msgq);
-> +
-> +	kfree(msgq->mbox.chans);
-> +}
-> +EXPORT_SYMBOL_GPL(gh_msgq_remove);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Gunyah Message Queue Driver");
-> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-> index cb6df4eec5c2..2e13669c6363 100644
-> --- a/include/linux/gunyah.h
-> +++ b/include/linux/gunyah.h
-> @@ -8,11 +8,67 @@
->   
->   #include <linux/bitfield.h>
->   #include <linux/errno.h>
-> +#include <linux/interrupt.h>
->   #include <linux/limits.h>
-> +#include <linux/mailbox_controller.h>
-> +#include <linux/mailbox_client.h>
->   #include <linux/types.h>
->   
-> +/* Follows resource manager's resource types for VM_GET_HYP_RESOURCES */
-> +enum gunyah_resource_type {
-> +	GUNYAH_RESOURCE_TYPE_BELL_TX	= 0,
-> +	GUNYAH_RESOURCE_TYPE_BELL_RX	= 1,
-> +	GUNYAH_RESOURCE_TYPE_MSGQ_TX	= 2,
-> +	GUNYAH_RESOURCE_TYPE_MSGQ_RX	= 3,
-> +	GUNYAH_RESOURCE_TYPE_VCPU	= 4,
-> +};
-> +
-> +struct gunyah_resource {
-> +	enum gunyah_resource_type type;
-> +	u64 capid;
-> +	int irq;
-> +};
-> +
-> +/**
-> + * Gunyah Message Queues
-> + */
-> +
-> +#define GH_MSGQ_MAX_MSG_SIZE	240
-> +
-> +struct gh_msgq_tx_data {
-> +	size_t length;
-> +	bool push;
-> +	char data[];
-> +};
-> +
-> +struct gh_msgq_rx_data {
-> +	size_t length;
-> +	char data[GH_MSGQ_MAX_MSG_SIZE];
-> +};
-> +
-> +struct gh_msgq {
-> +	struct gunyah_resource *tx_ghrsc;
-> +	struct gunyah_resource *rx_ghrsc;
-> +
-> +	/* msgq private */
-> +	int last_ret; /* Linux error, not GH_STATUS_* */
-> +	struct mbox_controller mbox;
-> +	struct tasklet_struct txdone_tasklet;
-> +};
-> +
-> +
-> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct mbox_client *cl,
-> +		     struct gunyah_resource *tx_ghrsc, struct gunyah_resource *rx_ghrsc);
-> +void gh_msgq_remove(struct gh_msgq *msgq);
-> +
-> +static inline struct mbox_chan *gh_msgq_chan(struct gh_msgq *msgq)
-> +{
-> +	return &msgq->mbox.chans[0];
-> +}
-> +
->   /******************************************************************************/
->   /* Common arch-independent definitions for Gunyah hypercalls                  */
-> +
->   #define GH_CAPID_INVAL	U64_MAX
->   #define GH_VMID_ROOT_VM	0xff
->   
+> > >>
+> > >
+> > > Is it a blocker to merge in an initial implementation though? Do
+> > > distro kernel users have a pressing need for HVO + HGM used in tandem?
+> 
+> +1. I don't see why this should be a blocker.
+> 
+> >
+> > At least RHEL9 seems to include HVO. It's not enabled as default
+> > (CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON not set), but compiled
+> > in so it can be runtime-enabled. Disabling HVO is not an option IMHO.
+> 
+> I agree!
+> 
+> CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP=y is still the default here; I
+> made sure not to change that. :)
+> 
+> >
+> > Maybe, one could make both features compile-time compatible but
+> > runtime-mutually exclusive. Or work on a way to make them fully
+> > compatible right from the start.
+> 
+> For the sake of simplifying this series as much as possible, going
+> with the THP-like mapcount scheme that we know works properly seems
+> like the right decision to me, even though it is incompatible with
+> HVO.
+> 
+> Making HGM and HVO play nice at runtime is a little bit complicated,
+> and it becomes worthless as soon as we optimize the mapcount strategy.
+> So let's just optimize the mapcount strategy, but in a later series.
+> 
+> As soon as this series has been fully reviewed, patches will be sent up to:
+> 1. Change the mapcount scheme to make HGM and HVO compatible again
+> (and make MADV_COLLAPSE faster)
+> 2. Add arm64 support
+> 3. Add hwpoison support
+> 
+> If we try to integrate #1 with this series now, I fear that that will
+> just slow things down more than if #1 is sent up by itself later.
+> 
+> (FWIW, #2 is basically fully implemented and #3 is basically done for
+> MAP_SHARED. Each of these series are MUCH smaller than this main one.)
 
+By asking this question, my intention was NOT to force HGM and HVO
+compatibility now.  Rather, just to ask if there were any distro kernels
+or environments that enable HVO now, and want HGM ASAP.  Was hoping someone
+from Red Hat would chime in: thanks David!
+
+FYI - Oracle is keen on HVO to use every possible bit of memory. See,
+https://lore.kernel.org/linux-mm/20221110121214.6297-1-joao.m.martins@oracle.com/
+In addition, Oracle kernel has CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON=y,
+so it can not immediately take advantage of HGM.  That is OK 'for now'.
+
+I will try to ignore the mapcount issue right now and focus on the rest
+of the series.  Thanks for all your efforts James!
+-- 
+Mike Kravetz
