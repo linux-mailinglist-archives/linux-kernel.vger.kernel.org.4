@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CE96A03BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3698B6A03BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbjBWIWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S233598AbjBWIXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbjBWIV6 (ORCPT
+        with ESMTP id S233560AbjBWIW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:21:58 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 006B5149BA;
-        Thu, 23 Feb 2023 00:21:56 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8Cxf80iIvdj6QsEAA--.2497S3;
-        Thu, 23 Feb 2023 16:21:54 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK74gIvdjK4I5AA--.39097S3;
-        Thu, 23 Feb 2023 16:21:52 +0800 (CST)
-Message-ID: <61df255c-1637-ed60-7542-4b00e41597e6@loongson.cn>
-Date:   Thu, 23 Feb 2023 16:21:52 +0800
+        Thu, 23 Feb 2023 03:22:58 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698E025BA2;
+        Thu, 23 Feb 2023 00:22:57 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N4Rqqe028908;
+        Thu, 23 Feb 2023 08:22:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=irwNEIwjU/aOQgKDPC8WClp9r0SmDm+bSdGgwdt5bnI=;
+ b=Sqjee2jGAKmJz87Xb2LOSlOXau7dPNTBMzC+miA/Q3MjS7scQVM+QCm6Na+QwxE4Juy0
+ O9Hnrl2RxerKDJPl4djgQ3ITr5P4GiMdbmTIzR7AGiVGohy70EP785bmeozFna1beGNf
+ 8xkGvRbTaZfR4BUaLORdK0xJ5vue+5AT0v2xc4Uojsxsl/9AjxxHTTFudF77yefUXXxy
+ OqRPDbX9347Xqlt0DgbZDC078RLm3SM2yMnW1IsSPJvICBZNS4pElsFtbiHc8WZCJJCX
+ 23EI743GIKUxocwB/i//jjbtGdVQyio3ugce45PtmlUvo2QSXGneQFSS4E2X2sReHvzm xw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwybm0r6g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 08:22:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N8MVYS019166
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 08:22:31 GMT
+Received: from [10.206.28.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 00:22:25 -0800
+Message-ID: <699d0d70-4d83-7bc6-e152-0a352a016e71@quicinc.com>
+Date:   Thu, 23 Feb 2023 13:52:22 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
- device node
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 2/2] usb: gadget: composite: Draw 100mA current if not
+ configured
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230222165514.684729-1-suijingfeng@loongson.cn>
- <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
- <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
- <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
- <9e890c83-495b-87d5-68bf-838c7cf0c003@kernel.org>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <9e890c83-495b-87d5-68bf-838c7cf0c003@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxK74gIvdjK4I5AA--.39097S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXrW8ur47JF1DKrWfArWDurg_yoW5Xr4DpF
-        1UAa1DKr40yF17Xr4Sq34UJrnIvFWFyF1DWrsrGr1UJ3sIv3W2vr1fJr1rGry8Xry3Aayj
-        v3W8CF42gFn8AaUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Jack Pham <quic_jackp@quicinc.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1677129510-10283-1-git-send-email-quic_prashk@quicinc.com>
+ <1677129510-10283-3-git-send-email-quic_prashk@quicinc.com>
+ <20230223073329.GA3727894@hu-jackp-lv.qualcomm.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <20230223073329.GA3727894@hu-jackp-lv.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: LpXwxortHBBHV1yhtcGhZUhYwbdRZOlS
+X-Proofpoint-GUID: LpXwxortHBBHV1yhtcGhZUhYwbdRZOlS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_04,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=849
+ suspectscore=0 phishscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230072
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,77 +87,47 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2023/2/23 16:05, Krzysztof Kozlowski wrote:
-> On 23/02/2023 08:58, Krzysztof Kozlowski wrote:
->> On 23/02/2023 04:19, Sui jingfeng wrote:
->>> Hi,
->>>
->>> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
->>>> On 22/02/2023 17:55, suijingfeng wrote:
->>>>> The display controller is a pci device, it's pci vendor id is
->>>>> 0x0014, it's pci device id is 0x7a06.
->>>>>
->>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>>>> ---
->>>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
->>>>>    1 file changed, 21 insertions(+)
->>>>>
->>>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>>> index 8143a61111e3..a528af3977d9 100644
->>>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>>> @@ -31,6 +31,18 @@ memory@200000 {
->>>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
->>>>>    	};
->>>>>    
->>>>> +	reserved-memory {
->>>>> +		#address-cells = <2>;
->>>>> +		#size-cells = <2>;
->>>>> +		ranges;
->>>>> +
->>>>> +		display_reserved: framebuffer@30000000 {
->>>>> +			compatible = "shared-dma-pool";
->>>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
->>>>> +			linux,cma-default;
->>>>> +		};
->>>>> +	};
->>>>> +
->>>>>    	cpu_clk: cpu_clk {
->>>>>    		#clock-cells = <0>;
->>>>>    		compatible = "fixed-clock";
->>>>> @@ -198,6 +210,15 @@ sata@8,0 {
->>>>>    				interrupt-parent = <&liointc0>;
->>>>>    			};
->>>>>    
->>>>> +			display-controller@6,0 {
->>>>> +				compatible = "loongson,ls2k1000-dc";
->>>>> +
->>>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
->>>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
->>>>> +				interrupt-parent = <&liointc0>;
->>>>> +				memory-region = <&display_reserved>;
->>>> NAK.
->>> Err :(,  please give me a chance to explain
->>>> Test your code against the bindings you send.
->>> I can guarantee to you that I test may code more than twice. The code
->>> used to testing is listed at link [1].
->> I wrote - test against the bindings. I don't believe that it was tested.
->> Please paste the output of the testing (dtbs_check).
-> OTOH, dtschema has some hickups on loongsoon DTS, so I doubt you could
-> even test it. Anyway, where is above property memory-region described in
-> the bindings?
 
-Yes, you are right. I forget to write memory-region property.
-
-but the code provided in  loongson64-2k1000.dtsi is correct.
-
-I do run dt_binding_check, the results seems good.
-
-there are some problem when make dtbs_check, but it seems not relevant 
-to me.
-
-please give me more time to figure it out, i will reply to you later.
-
-> Best regards,
-> Krzysztof
-
+On 23-02-23 01:03 pm, Jack Pham wrote:
+> Hi Prashanth,
+> 
+> On Thu, Feb 23, 2023 at 10:48:30AM +0530, Prashanth K wrote:
+>> Currently we don't change the current value if device isn't in
+>> configured state. But the battery charging specification says,
+>> the device can draw upto 100mA of current if its in unconfigured
+> 
+> Here you say spec says "up to" (BTW you have a typo) 100mA...
+> 
+Will fix it in v2
+>> state. Hence add a Vbus_draw work in composite_resume to draw
+>> 100mA if the device isn't configured.
+> 
+> But here and in the patch you are calling the function to draw exactly
+> 100mA.  Consider the possibility that a gadget could be configured to
+> draw less current than that or not anything at all, we should make sure
+> to honor that as an absolute maximum.
+That's right
+> 
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>> ---
+>>   drivers/usb/gadget/composite.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+>> index fa7dd6c..147d278 100644
+>> --- a/drivers/usb/gadget/composite.c
+>> +++ b/drivers/usb/gadget/composite.c
+>> @@ -2531,6 +2531,8 @@ void composite_resume(struct usb_gadget *gadget)
+>>   			usb_gadget_clear_selfpowered(gadget);
+>>   
+>>   		usb_gadget_vbus_draw(gadget, maxpower);
+>> +	} else {
+>> +		usb_gadget_vbus_draw(gadget, 100);
+> 
+> Similar to the configured case, maybe you can perform a min()
+> calculation against either or both the config->MaxPower or
+> CONFIG_USB_GADGET_VBUS_DRAW.
+> 
+Thanks for the suggestion, will update it in v2 patch
+> Thanks,
+> Jack
