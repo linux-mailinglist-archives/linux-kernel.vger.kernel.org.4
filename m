@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027316A0BF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC736A0BF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234809AbjBWOhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S234812AbjBWOiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbjBWOhG (ORCPT
+        with ESMTP id S229502AbjBWOh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:37:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB75F5653E;
-        Thu, 23 Feb 2023 06:37:04 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677163022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L1i/E/hYtCftNsRnUTWnUECaLl9fsvytYNRbunmNW3s=;
-        b=UkafJkNw5zLNA3Yc/q1fXXmlhkW9bhjLSl8yJpG9m7SrY6oq3GOHEVhuDrd5qbMQMP5G/5
-        ojXfgkfHAkacJzUYbBDN1sAR8qKx3r0ZnIKEmiQDkSJXc+/rXue93rcAbD1IiiVr44cR6f
-        VL0O7d3939bD8KBgjH2FhldvHoE0sXclIKJVVI4ej9VwPkV3nad9QlHiR5/aozUSRGBmSh
-        qw8B586mCtGEcI1JUA6+LPO7nga/PbQmhd5ACYXVqPgEIVFM6+tIEc9NRtr6vtSfNlcgH2
-        Lp9RaZ27VxeLEfuIMKTprrty9e4iHJ5DrXIBCYKy7pdIjjghWU4sjwH91URi2g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677163022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L1i/E/hYtCftNsRnUTWnUECaLl9fsvytYNRbunmNW3s=;
-        b=eyUDoEWFudH4HN/PKnP9dg1kuHMHVwtZSw2MDQAk8/mYfAbyQP9jSU46W95tDF6K2Xbg2U
-        wsHz4fDQa22gzpDg==
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com
-Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <701ce2da00e559d517d4e48bd5d88ccae1198e44.camel@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <62ee53770b4010f065346b7f2a1200013836be97.camel@infradead.org>
- <87a615mz2x.ffs@tglx>
- <701ce2da00e559d517d4e48bd5d88ccae1198e44.camel@infradead.org>
-Date:   Thu, 23 Feb 2023 15:37:02 +0100
-Message-ID: <87zg94la7l.ffs@tglx>
+        Thu, 23 Feb 2023 09:37:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E76822A3B;
+        Thu, 23 Feb 2023 06:37:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FF4161726;
+        Thu, 23 Feb 2023 14:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB954C433D2;
+        Thu, 23 Feb 2023 14:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677163077;
+        bh=k8OZ+XKI9h2PK95SecGRPfXbOpiiARbQmbsuznL8wIA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YN0SoJ3dmPlBwrhLPPSiZacoHO52wE2yZaD0LGTTun7f7je9CdXpZ2Rxwgs/tbDNx
+         29nMxiqwifAQuy26jWehz0d6eRUzAG++Xjgtxtj7erQ7Mp7Nh+FKbhRgx9qd4shNRg
+         xOhFiynwVVpJtyJYhQh7ccW9TYKzUnT2B9bNT0A0=
+Date:   Thu, 23 Feb 2023 15:37:54 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/46] 6.1.14-rc1 review
+Message-ID: <Y/d6QnQrVMK8DHUK@kroah.com>
+References: <20230223130431.553657459@linuxfoundation.org>
+ <Y/d5KdOfh5rXUeqk@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/d5KdOfh5rXUeqk@wendy>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David!
+On Thu, Feb 23, 2023 at 02:33:13PM +0000, Conor Dooley wrote:
+> On Thu, Feb 23, 2023 at 02:06:07PM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.1.14 release.
+> > There are 46 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.14-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > and the diffstat can be found below.
+> 
+> > Dave Hansen <dave.hansen@linux.intel.com>
+> >     uaccess: Add speculation barrier to copy_from_user()
+> 
+> This breaks the build for me on RISC-V, you need to take f3dd0c53370e
+> ("bpf: add missing header file include") from Linus' tree.
+> It was broken in mainline too, so it is probably broken everywhere you
+> backported it :(
 
-On Thu, Feb 23 2023 at 11:07, David Woodhouse wrote:
-> On Wed, 2023-02-22 at 17:42 +0100, Thomas Gleixner wrote:
->> The low hanging fruit which brings most is the identification/topology
->> muck and the microcode loading. That needs to be addressed first anyway.
->
-> Agreed, thanks.
+Already fixed up and in -rc2.
 
-So the problem with microcode loading is that we must ensure that a HT
-sibling is not executing anything else than a trivial loop waiting for
-the update to complete. So something like this should work:
+thanks,
 
-   1) Kick all CPUs into life and let them run up to cpu_init() and
-      retrieve only the topology information.
-
-   2) Wait for all CPUs to reach this point
-
-   3) Release all primary HT threads so they can load microcode in
-      parallel. The secondary HT threads stay in the wait loop and are
-      released once the primary thread has finished the microcode
-      update.
-
-   4) Let the CPUs do the full CPUID readout and let them synchronize
-      with the control CPU again.
-
-   5) Complete bringup one by one
-
-Thanks,
-
-        tglx
-      
-
-
-   
-
-
+greg k-h
