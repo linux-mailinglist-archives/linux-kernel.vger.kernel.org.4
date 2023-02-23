@@ -2,97 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3016F6A0198
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F386A019A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbjBWDqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
+        id S232788AbjBWDrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjBWDqH (ORCPT
+        with ESMTP id S230412AbjBWDru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:46:07 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889DF460A0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:46:06 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id ko13so11972044plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LsgXVTuZ5gs8wY39tz46RZqNBvlD333pgaPRJ3xqlZg=;
-        b=qlC+p2Rdq3pYGwEVGIAMHRp3nzx64w5WuzpwaQfLOLpRkoPzRCOYdyfUOq6/I7DelG
-         2OuJexCcdH0gupdMgYyxe02V8tzeasqGpUoHSps+8ooCW85Lu3iF+wEt0x6Yn6N5R3Lb
-         Tyk/Y8zHBqggc76GNRIQ8ayKorAX90lzJbRARYXqT88JsLBYqVFgIt5+cbQeYy8MvKs7
-         B6XF4nMVJnysxWOznRoobyoOL+Lr1iJaS2B3n82mQ3s/eF2biuwWorDk0cBG0Kv1my+O
-         JknoUcI947WvqidBV04HOwEIwUYkmqIUdyywmEiv9PrJ+2mi7Zn+rz76exdAJIscEvfi
-         Gl8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LsgXVTuZ5gs8wY39tz46RZqNBvlD333pgaPRJ3xqlZg=;
-        b=Jgvkik1kWzWrX2haxl28R7ZbWJ/6SScglpa/b3iAFaz2P/vRoTch9RsxSIof74PqJW
-         jyZgigfzC7Zh17jy9SSJoymiJCd1nH9JpDt/6sIyTk7k094GAV2pjMPpt082PzPTNaAp
-         VV99LUibT2rHMQZZLOxTsw/sTqW4Juk9eV9LO26/Ktl/7vEtGtNFXuw+x+c61/18BH9E
-         dJoYMITfayO89EWo7wi6mJ9ICR+xrB49keLnIEHP8XYNgpJ1Ne2JWbKwvCbOiF+7rJZO
-         ZIGT4/msdl5XaKs/wCWO43h3sWUqOGUxnhigUDnrieCZ0gzayN3S/OyhkTwWxD1r8c24
-         1rFg==
-X-Gm-Message-State: AO0yUKUTWEGVOz8zkqsy3DaA/YPOb6GvR9SwLpqfbitLBnmk7xW/Arnx
-        8STDR/9azx1iBuso+i0eUqZ9AA==
-X-Google-Smtp-Source: AK7set9ok2v/n765ixz4FIIK/4MnZhyIh/0UbCdNki1gtDZ8OHx9TQFlgU2Nztf+yyJzSfLGf8Lb2w==
-X-Received: by 2002:a05:6a21:3399:b0:c7:6a98:5bd9 with SMTP id yy25-20020a056a21339900b000c76a985bd9mr13844647pzb.3.1677123965911;
-        Wed, 22 Feb 2023 19:46:05 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x24-20020a63db58000000b004fb71d96d78sm5558269pgi.2.2023.02.22.19.46.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 19:46:05 -0800 (PST)
-Message-ID: <55a01e39-c28c-dde0-172c-feee378c2f74@kernel.dk>
-Date:   Wed, 22 Feb 2023 20:46:04 -0700
+        Wed, 22 Feb 2023 22:47:50 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6FA2CC46;
+        Wed, 22 Feb 2023 19:47:47 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMf9n6YFdz4x7s;
+        Thu, 23 Feb 2023 14:47:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1677124062;
+        bh=qh5OKshcNENkBWhRvJdOjGZQdwgyHk3KfwbjJb1kZFk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a0OnEUsNFuvHM+fj2DAE0CA7PLAHPTnJrUK9tvwkXMeR6SMmmbRhd1bgHKP7fM4O9
+         q+tXDU3vlliM6rHWzJJjSTgI3fkTX22u6yg4lbTNIB6Vt3ZWZd8NKJONf6YAGvJxDH
+         d5lsEWuJxNCtyk3KlXroRFbD3bBB3Kfp298qvSmDcQhsZpPuYeWY4EWlsF3CJvzq0X
+         abzmMdbM7bWgTTM31EzaFzv6cvOFTbS4YJbjf9kgOEsRo7iSYN7YG3IvntqhAPeZEn
+         g5CDfdpAjwq0YG2JgSMl8xS4J415SGLWRH7tfYnJEoyttsTpebFReuh4LeYuV/miq2
+         s8n5rn/oRsEhg==
+Date:   Thu, 23 Feb 2023 14:47:22 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the ext4
+ tree
+Message-ID: <20230223144722.635ab483@canb.auug.org.au>
+In-Reply-To: <20230221175436.599166f9@canb.auug.org.au>
+References: <20230220152938.45f62d5a@canb.auug.org.au>
+        <Y/ODNJ3MfoD6dUru@casper.infradead.org>
+        <20230221175436.599166f9@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH tools/io_uring] tools/io_uring: correctly set "ret" for
- sq_poll case
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>,
-        asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230221073736.628851-1-ZiyangZhang@linux.alibaba.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230221073736.628851-1-ZiyangZhang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/eWRXW5OJlOcuX.QMv2J1f+=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 12:37?AM, Ziyang Zhang wrote:
-> For sq_poll case, "ret" is not initialized or cleared/set. In this way,
-> output of this test program is incorrect and we can not even stop this
-> program by pressing CTRL-C.
-> 
-> Reset "ret" to zero in each submission/completion round, and assign
-> "ret" to "this_reap".
+--Sig_/eWRXW5OJlOcuX.QMv2J1f+=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Can you check if this issue also exists in the fio copy of this, which
-is t/io_uring.c in:
+Hi all,
 
-git://git.kernel.dk/fio
+On Tue, 21 Feb 2023 17:54:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Mon, 20 Feb 2023 14:27:00 +0000 Matthew Wilcox <willy@infradead.org> w=
+rote:
+> >
+> > On Mon, Feb 20, 2023 at 03:29:38PM +1100, Stephen Rothwell wrote: =20
+> > >=20
+> > > Today's linux-next merge of the mm-stable tree got a conflict in:
+> > >=20
+> > >   fs/ext4/inode.c
+> > >=20
+> > > between commits:
+> > >=20
+> > >   726432969963 ("ext4: use nr_to_write directly in mpage_prepare_exte=
+nt_to_map()")
+> > >   9ff6a9153c8f ("ext4: move page unlocking out of mpage_submit_page()=
+")
+> > >   b4d26e70a755 ("ext4: move mpage_page_done() calls after error handl=
+ing")
+> > >   9b18c23c131a ("ext4: convert data=3Djournal writeback to use ext4_w=
+ritepages()")
+> > >=20
+> > > from the ext4 tree and commits:
+> > >=20
+> > >   50ead2537441 ("ext4: convert mpage_prepare_extent_to_map() to use f=
+ilemap_get_folios_tag()")
+> > >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
+> > >=20
+> > > from the mm-stable tree.
+> > >=20
+> > > I have no idea how to fix this up, so I have used the ext4 tree from
+> > > next-20230217 for today.   =20
+> >=20
+> > Yeah, this one's a mess.  Probably the easiest solution is for Ted to
+> > pull in 247f9e1feef4 and 50ead2537441 and then redo Jan's patches on
+> > top of them. =20
+>=20
+> I am still using the ext4 tree from next-20230217 (which was empty
+> relative to Linus' tree).
+>=20
+> So, I have to ask why all these commits were only published to
+> linux-next over the weekend?
 
-The copy in the kernel is pretty outdated at this point, and should
-probably get removed. But if the bug is in the above main version, then
-we should fix it there and then ponder if we want to remove the one in
-the kernel or just get it updated to match the upstream version.
+I still have not been able to figure out a merge resolution for this,
+so the ext4 tree still has had no testing in linux-next and the merge
+window is progressing.  Does anyone want to help with this?
 
--- 
-Jens Axboe
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/eWRXW5OJlOcuX.QMv2J1f+=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP24coACgkQAVBC80lX
+0GypqQf+PIi0cmCr6h401CaWIBwMYGN4QwhYA7SZST9SSaCjhcx1r7AJOT+uAf4l
+d9vQZvTh85wINBXjEzR3A7CVDEmA5aUv9P9/8f/nW6NCQZJVGJdfrscy0iIJJyUQ
+BsHxJ8fEsGEKjDE8WYi8kRHhe+C7tqFkwqLRArSA59zxyJ/7qSo7D0UmCEMJmQmj
+RKLeBENaeLArA5DH2B4w3b/NWf0IG6baGPBMb/uP3wTJnbTgCQBjAaQV2vvyJqfK
+bfTkPk12b6Hr3yNfzOkNqMoJC0UXtUa75FhzOCJEA517mVm0WsyYze+dWpvi3Pu+
+97BTm+2sQpBRUhRDOXwIo9xjSkPWng==
+=yems
+-----END PGP SIGNATURE-----
+
+--Sig_/eWRXW5OJlOcuX.QMv2J1f+=--
