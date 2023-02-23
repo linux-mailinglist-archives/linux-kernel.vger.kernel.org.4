@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F386A019A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836446A019C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjBWDrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S232468AbjBWDva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjBWDru (ORCPT
+        with ESMTP id S230412AbjBWDv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:47:50 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6FA2CC46;
-        Wed, 22 Feb 2023 19:47:47 -0800 (PST)
+        Wed, 22 Feb 2023 22:51:29 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4592F78A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:51:27 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMf9n6YFdz4x7s;
-        Thu, 23 Feb 2023 14:47:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677124062;
-        bh=qh5OKshcNENkBWhRvJdOjGZQdwgyHk3KfwbjJb1kZFk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a0OnEUsNFuvHM+fj2DAE0CA7PLAHPTnJrUK9tvwkXMeR6SMmmbRhd1bgHKP7fM4O9
-         q+tXDU3vlliM6rHWzJJjSTgI3fkTX22u6yg4lbTNIB6Vt3ZWZd8NKJONf6YAGvJxDH
-         d5lsEWuJxNCtyk3KlXroRFbD3bBB3Kfp298qvSmDcQhsZpPuYeWY4EWlsF3CJvzq0X
-         abzmMdbM7bWgTTM31EzaFzv6cvOFTbS4YJbjf9kgOEsRo7iSYN7YG3IvntqhAPeZEn
-         g5CDfdpAjwq0YG2JgSMl8xS4J415SGLWRH7tfYnJEoyttsTpebFReuh4LeYuV/miq2
-         s8n5rn/oRsEhg==
-Date:   Thu, 23 Feb 2023 14:47:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the ext4
- tree
-Message-ID: <20230223144722.635ab483@canb.auug.org.au>
-In-Reply-To: <20230221175436.599166f9@canb.auug.org.au>
-References: <20230220152938.45f62d5a@canb.auug.org.au>
-        <Y/ODNJ3MfoD6dUru@casper.infradead.org>
-        <20230221175436.599166f9@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMfG55sTQz4x7j;
+        Thu, 23 Feb 2023 14:51:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677124286;
+        bh=Jk12t1d/8CCUAhLuiUFLJlrM8fox37bxK3nSPYln3Jg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fHTt5AnV5s70i67q52BaKCDK25ED4ijqU7oaFL/XqxqbXHrW7SC0u37PocupIQjBQ
+         t/bWkmDSsHBxZK9/KqXMw45i4aRRSkZkL7Nzn0THlIiSa1zr7DlRzy/fiAEVap2EF3
+         J1yYnD+o3bP3ufaGayNeGo6YaEKLR9cOaLuKO0rqeXCuNR9d7HvFhWYUVwElkGY+y4
+         n9XGjnGRLax8YgipEm3ZwJNHgoSxuYBpJNSV0m+5bm162sjTsbsLYe/dqrfeX/eJzN
+         aimYhlDQivOf8/DrRo5YPhQWdOiezwV9Vc1/fUwEvDXv+gSbM1nvlGM5vYVxX8kAEg
+         BCNqSGuV6WTMQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     paulmck@kernel.org, Kautuk Consul <kconsul@linux.vnet.ibm.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
+ wmb to  lwsync
+In-Reply-To: <20230222174719.GA1400185@paulmck-ThinkPad-P17-Gen-1>
+References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
+ <20230222174719.GA1400185@paulmck-ThinkPad-P17-Gen-1>
+Date:   Thu, 23 Feb 2023 14:51:25 +1100
+Message-ID: <87fsaxavk2.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eWRXW5OJlOcuX.QMv2J1f+=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,78 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/eWRXW5OJlOcuX.QMv2J1f+=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Paul,
 
-Hi all,
-
-On Tue, 21 Feb 2023 17:54:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+"Paul E. McKenney" <paulmck@kernel.org> writes:
+> On Wed, Feb 22, 2023 at 02:33:44PM +0530, Kautuk Consul wrote:
+>> A link from ibm.com states:
+>> "Ensures that all instructions preceding the call to __lwsync
+>>  complete before any subsequent store instructions can be executed
+>>  on the processor that executed the function. Also, it ensures that
+>>  all load instructions preceding the call to __lwsync complete before
+>>  any subsequent load instructions can be executed on the processor
+>>  that executed the function. This allows you to synchronize between
+>>  multiple processors with minimal performance impact, as __lwsync
+>>  does not wait for confirmation from each processor."
+>> 
+>> Thats why smp_rmb() and smp_wmb() are defined to lwsync.
+>> But this same understanding applies to parallel pipeline
+>> execution on each PowerPC processor.
+>> So, use the lwsync instruction for rmb() and wmb() on the PPC
+>> architectures that support it.
+>> 
+>> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+>> ---
+>>  arch/powerpc/include/asm/barrier.h | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>> 
+>> diff --git a/arch/powerpc/include/asm/barrier.h b/arch/powerpc/include/asm/barrier.h
+>> index b95b666f0374..e088dacc0ee8 100644
+>> --- a/arch/powerpc/include/asm/barrier.h
+>> +++ b/arch/powerpc/include/asm/barrier.h
+>> @@ -36,8 +36,15 @@
+>>   * heavy-weight sync, so smp_wmb() can be a lighter-weight eieio.
+>>   */
+>>  #define __mb()   __asm__ __volatile__ ("sync" : : : "memory")
+>> +
+>> +/* The sub-arch has lwsync. */
+>> +#if defined(CONFIG_PPC64) || defined(CONFIG_PPC_E500MC)
+>> +#define __rmb() __asm__ __volatile__ ("lwsync" : : : "memory")
+>> +#define __wmb() __asm__ __volatile__ ("lwsync" : : : "memory")
 >
-> On Mon, 20 Feb 2023 14:27:00 +0000 Matthew Wilcox <willy@infradead.org> w=
-rote:
-> >
-> > On Mon, Feb 20, 2023 at 03:29:38PM +1100, Stephen Rothwell wrote: =20
-> > >=20
-> > > Today's linux-next merge of the mm-stable tree got a conflict in:
-> > >=20
-> > >   fs/ext4/inode.c
-> > >=20
-> > > between commits:
-> > >=20
-> > >   726432969963 ("ext4: use nr_to_write directly in mpage_prepare_exte=
-nt_to_map()")
-> > >   9ff6a9153c8f ("ext4: move page unlocking out of mpage_submit_page()=
-")
-> > >   b4d26e70a755 ("ext4: move mpage_page_done() calls after error handl=
-ing")
-> > >   9b18c23c131a ("ext4: convert data=3Djournal writeback to use ext4_w=
-ritepages()")
-> > >=20
-> > > from the ext4 tree and commits:
-> > >=20
-> > >   50ead2537441 ("ext4: convert mpage_prepare_extent_to_map() to use f=
-ilemap_get_folios_tag()")
-> > >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
-> > >=20
-> > > from the mm-stable tree.
-> > >=20
-> > > I have no idea how to fix this up, so I have used the ext4 tree from
-> > > next-20230217 for today.   =20
-> >=20
-> > Yeah, this one's a mess.  Probably the easiest solution is for Ted to
-> > pull in 247f9e1feef4 and 50ead2537441 and then redo Jan's patches on
-> > top of them. =20
->=20
-> I am still using the ext4 tree from next-20230217 (which was empty
-> relative to Linus' tree).
->=20
-> So, I have to ask why all these commits were only published to
-> linux-next over the weekend?
+> Hmmm...
+>
+> Does the lwsync instruction now order both cached and uncached accesses?
 
-I still have not been able to figure out a merge resolution for this,
-so the ext4 tree still has had no testing in linux-next and the merge
-window is progressing.  Does anyone want to help with this?
+No.
 
---=20
-Cheers,
-Stephen Rothwell
+> Or have there been changes so that smp_rmb() and smp_wmb() get this
+> definition, while rmb() and wmb() still get the sync instruction?
 
---Sig_/eWRXW5OJlOcuX.QMv2J1f+=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+No.
 
------BEGIN PGP SIGNATURE-----
+They come from:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP24coACgkQAVBC80lX
-0GypqQf+PIi0cmCr6h401CaWIBwMYGN4QwhYA7SZST9SSaCjhcx1r7AJOT+uAf4l
-d9vQZvTh85wINBXjEzR3A7CVDEmA5aUv9P9/8f/nW6NCQZJVGJdfrscy0iIJJyUQ
-BsHxJ8fEsGEKjDE8WYi8kRHhe+C7tqFkwqLRArSA59zxyJ/7qSo7D0UmCEMJmQmj
-RKLeBENaeLArA5DH2B4w3b/NWf0IG6baGPBMb/uP3wTJnbTgCQBjAaQV2vvyJqfK
-bfTkPk12b6Hr3yNfzOkNqMoJC0UXtUa75FhzOCJEA517mVm0WsyYze+dWpvi3Pu+
-97BTm+2sQpBRUhRDOXwIo9xjSkPWng==
-=yems
------END PGP SIGNATURE-----
+include/asm-generic/barrier.h:#define rmb()        do { kcsan_rmb(); __rmb(); } while (0)
+include/asm-generic/barrier.h:#define wmb()        do { kcsan_wmb(); __wmb(); } while (0)
 
---Sig_/eWRXW5OJlOcuX.QMv2J1f+=--
+> (Not seeing this, but I could easily be missing something.)
+
+You are correct, the patch is wrong because it fails to account for IO
+accesses.
+
+Kautuk, I'm not sure what motivated you to look at these barriers, was
+it just the documentation you linked to?
+
+Maybe we need some better documentation in the kernel explaining why we
+use the barriers we do?
+
+Although there's already a pretty decent comment above the definitions,
+but maybe it needs further clarification:
+
+  /*
+   * Memory barrier.
+   * The sync instruction guarantees that all memory accesses initiated
+   * by this processor have been performed (with respect to all other
+   * mechanisms that access memory).  The eieio instruction is a barrier
+   * providing an ordering (separately) for (a) cacheable stores and (b)
+   * loads and stores to non-cacheable memory (e.g. I/O devices).
+   *
+   * mb() prevents loads and stores being reordered across this point.
+   * rmb() prevents loads being reordered across this point.
+   * wmb() prevents stores being reordered across this point.
+   *
+   * *mb() variants without smp_ prefix must order all types of memory
+   * operations with one another. sync is the only instruction sufficient
+   * to do this.
+   *
+   * For the smp_ barriers, ordering is for cacheable memory operations
+   * only. We have to use the sync instruction for smp_mb(), since lwsync
+   * doesn't order loads with respect to previous stores.  Lwsync can be
+   * used for smp_rmb() and smp_wmb().
+
+
+cheers
