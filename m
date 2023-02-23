@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF286A0787
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4716D6A0778
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbjBWLiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 06:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S234094AbjBWLhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 06:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbjBWLiT (ORCPT
+        with ESMTP id S233986AbjBWLg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 06:38:19 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC128A7F;
-        Thu, 23 Feb 2023 03:37:47 -0800 (PST)
-Received: from maxwell ([213.61.141.186]) by mrelayeu.kundenserver.de
- (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis) id
- 1Mr8SG-1ohIIB3HAU-00oBky; Thu, 23 Feb 2023 12:37:05 +0100
-References: <87y1oq5es0.fsf@henneberg-systemdesign.com>
- <Y/XbXwKYpy3+pTah@corigine.com>
- <87lekp66ko.fsf@henneberg-systemdesign.com> <Y/ZY/o5HvNCPLfFg@lunn.ch>
-User-agent: mu4e 1.8.14; emacs 28.2
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net V3] net: stmmac: Premature loop termination check
- was ignored
-Date:   Thu, 23 Feb 2023 12:34:18 +0100
-In-reply-to: <Y/ZY/o5HvNCPLfFg@lunn.ch>
-Message-ID: <87v8js4nqa.fsf@henneberg-systemdesign.com>
+        Thu, 23 Feb 2023 06:36:57 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73074C6C9;
+        Thu, 23 Feb 2023 03:36:56 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 4F13C3200903;
+        Thu, 23 Feb 2023 06:36:55 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 23 Feb 2023 06:36:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1677152214; x=1677238614; bh=T8PK2cQRLY5A4FxRWK8i+aaat
+        tnc3laKSanQcycFaLk=; b=d/Brj8CoyOxr+FX8rjApAyHLj8+0+L5/R+SFdsgHl
+        YNU/mVw/fZAbKmb6HOzQWEXlYO0O/siHHu90N9nna5M7Dh23Y/UWWIoVolKCCTQf
+        gQ0+WFr+bbJuMAlllLbygp2Ha5tspYQ3+o5sLSqo/vt8DpcPUjb8GjoDqOgYhUa7
+        s26FcE9GflBxxraMzH/MnAWUc4Faqwpina4odmEJZJSPmnecDY3j/BeH88dyOYxA
+        k25rpqeQH+Lhi0mL3dv9E2JodaprQyX/gQEhCmbTryFkw+9/oSb9fuK4WEFhpMj/
+        5u0yxBbdeGq9xvrPJ4gtgTrmTs9hJsiLGJg4n+gbL0f9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1677152214; x=1677238614; bh=T8PK2cQRLY5A4FxRWK8i+aaattnc3laKSan
+        QcycFaLk=; b=K4CuWUtFqoffTZpcwTRNJph6ugM/Wlx2m9JxCmfh/EJc+pP2b0a
+        H37hoMSzVu6TC23e6sD7KZOhFR5+xVb14xZcXtDgW/bBn7iNh0Yc8r8iCz8SVOm4
+        QGIGZculzBn0kr/ujNwu3LxVMxN+YB+rZp4boOkQh05VZm9BTx40J109BqsFsgKY
+        hIJTZVZtHjCpJzh2WT5FHzeWHD0kPW5tXrDtttPmxr6pybBMqwUR/cPFj4IXdYuC
+        XNeX9Nx313DO9Vj7jHgcWX4OudYbOw8CxVWjowalRH57mXj0BPPtaeWGzVrZtcv5
+        Ik6WAy6++wQKjdypKrEpNaGVLmbFNr/HcZg==
+X-ME-Sender: <xms:1U_3Y-VwM6tOAt27z_ZWQ4aaIhYaB8PkJEjHvCVWupIv0zsM-2fl4g>
+    <xme:1U_3Y6nrZg1JNb983p5QOdW7XUjWlOcTkm-mrZnjECeT384QxYQoRAF6jI2tJ74ac
+    tX8J4HdB_a-t_Gt87c>
+X-ME-Received: <xmr:1U_3YyaFuPEjnNRrvCgR2_zbyOO8fM3D1bqYWcTextYAsRBYfcTvfVs3WUpGNOSh7hKWLK6oLMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekuddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:1U_3Y1VBHKtdGY1xhPJnBF6tJ66MM-ANNNtkzETAnFuwJsjvQp1-gg>
+    <xmx:1U_3Y4nzWWpI-snQ807urQ_E8PuPUTyuTs1BHQX-n6T7ezi-uh94mw>
+    <xmx:1U_3Y6djTOrM1OBan_sRPcnI2zL3mnty-jwsphOCqSbR-3y52XXBIA>
+    <xmx:1k_3YyeubhykCZ8ltxSt1YHSxkIp3PYJSO_4UV-_WL84Y4vZKNfjGw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Feb 2023 06:36:50 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-riscv@lists.infradead.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 0/5] Use dma_default_coherent for devicetree default coherency
+Date:   Thu, 23 Feb 2023 11:36:39 +0000
+Message-Id: <20230223113644.23356-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Provags-ID: V03:K1:Tp18kdHUx4peZI5q9H44bLg0H5sfi0/5HbgR2C4BrUBu9c6GFih
- KLg1c7spaS/bksijW33N/vG/iMR9WCkKBCbbOoIEO7N4GZOUJUNQNhqGSe98dmnTwY3UJ8l
- VXaM+iUCPtxGrcciIOIUIrrmlmnmEvvtbLms227JsVsHimqHfOeue4yq4erQzYRaM7PJ3KC
- VBW7GDdmnDuWaZ+yWTcrg==
-UI-OutboundReport: notjunk:1;M01:P0:6/GP2YKieoI=;s72evEBC3vLskuzAwIujN9nVreW
- bj+zhsX7z84myEV/hIJdLRxvEB3QHwx0LEwK3Wsc5oL4WOhbAHq2/Rh/wiAlAPLONtofcIKlU
- ub5U2e5i/ptYOZN3lETfF7fV360W7+G/ThzQmWeb67wXpN4/HihFWGsW8oBSh00JORJkEAigk
- lovHkbt0PbkeHG3Hkn4LimIjhcG+Ggz4A/pROiDTmQbNkZmyRgVRi3cHPYbWDhPvN4dp+R5fd
- prKk4ZPVQv98+qW9FIIviV2TBz4Z6fp/N1Gq7Pl9y7LBat1A7qYZ/rywWN1Xz4B2FSZ2WRJLG
- r+cDm1xdvDo3qb/22PMAquz1Bq/GCW3iPsqV4xbsS3sgn7xCMUDqlvg35kBH562jcDbFCb15g
- rVQHXG7vd++U8wNJBuMHva55Hi/YsBShC0+8eBSo695bbrHhdBVtXgg+76pOe9ienVU6HZS9V
- TJh+aTocr+nROMozuLwuPB7ZHGERePLaLp0diKiB8uSjzER7M69jASmEiCaMawuxAiLv/aL3p
- DrKKCsJBZ+fJIPidKPoctWjSsa1ZpBiCO2iLRdnRniTTT648KYC8XmDzgCDXAgR9mlWR6WKzT
- kW2kW9b6rUz3IJk63vqvuTKVEujiWSL/7EAHF4B4F0chKTaw9OactTyaUgbvnpBGb1hE4z/FC
- HPvLoCnLOymTAI7voPetQkSkVeaic8qbrHzWKu2ZDg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,57 +85,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
-Andrew Lunn <andrew@lunn.ch> writes:
+This series split out second half of my previous series
+"[PATCH 0/4] MIPS DMA coherence fixes".
 
-> On Wed, Feb 22, 2023 at 04:49:55PM +0100, Henneberg - Systemdesign wrote:
->> 
->> Simon Horman <simon.horman@corigine.com> writes:
->> 
->> > On Wed, Feb 22, 2023 at 08:38:28AM +0100, Jochen Henneberg wrote:
->> >> 
->> >> The premature loop termination check makes sense only in case of the
->> >> jump to read_again where the count may have been updated. But
->> >> read_again did not include the check.
->> >> 
->> >> Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
->> >
->> > This commit was included in v5.13
->> >
->> >> Fixes: ec222003bd94 ("net: stmmac: Prepare to add Split Header support")
->> >
->> > While this one was included in v5.4
->> >
->> > It seems to me that each of the above commits correspond to one
->> > of the two hunks below. I don't know if that means this
->> > patch should be split in two to assist backporting.
->> >
->> 
->> I was thinking about this already but the change was so trivial that I
->> hesitated to split it into two commits. I wanted I will surely change
->> this.
->
-> The advantage of splitting is that it makes back porting easy. Both
-> parts are needed for 6.1 and 5.15. 5.10 only needs the fix for
-> ec222003bd94. It if does not easily apply to 5.10 it could get
-> dropped. By splitting it, the backporting probably happens fully
-> automated, no human involved.
+It intends to use dma_default_coherent to determine the default coherency of
+devicetree probed devices instead of hardcoding it with Kconfig options.
 
-Understood. Will do the split and send two new patches. I will not
-continue with version upcounting and not send a patch series but two
-completly independent patches.
+For some MIPS systems, dma_default_coherent is determined with either
+bootloader or hardware registers in platform initilization code, and devicetree
+does not explicility specify the coherency of the device, so we need the ability
+to change the default coherency of devicetree probed devices.
 
-Jochen
+For other platforms that supports noncoherent, dma_default_coherent is a fixed
+value set by arch code. It's defaulted to false for most archs except RISC-V.
 
->
-> 	Andrew
+Thanks
+- Jiaxun
+---
+v2:
+  - Add PATCH 1 to help with backporting
+  - Use Kconfig option to set dma_default_coherent 
 
+Jiaxun Yang (5):
+  of: address: Fix default coherency for MIPS
+  dma-mapping: Provide a fallback dma_default_coherent
+  dma-mapping: Provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
+  riscv: Select ARCH_DMA_DEFAULT_COHERENT
+  of: address: Always use dma_default_coherent for default coherency
+
+ arch/powerpc/Kconfig        | 1 -
+ arch/riscv/Kconfig          | 2 +-
+ drivers/of/Kconfig          | 4 ----
+ drivers/of/address.c        | 2 +-
+ include/linux/dma-map-ops.h | 1 +
+ kernel/dma/Kconfig          | 3 +++
+ kernel/dma/mapping.c        | 6 +++++-
+ 7 files changed, 11 insertions(+), 8 deletions(-)
 
 -- 
-Henneberg - Systemdesign
-Jochen Henneberg
-Loehnfeld 26
-21423 Winsen (Luhe)
---
-Fon: +49 172 160 14 69
-Url: https://www.henneberg-systemdesign.com
+2.37.1 (Apple Git-137.1)
+
