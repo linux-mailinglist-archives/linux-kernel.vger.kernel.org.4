@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69AC6A10B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060556A10B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjBWTml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S229768AbjBWTn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjBWTmf (ORCPT
+        with ESMTP id S229689AbjBWTnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:42:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3346A5D444;
-        Thu, 23 Feb 2023 11:42:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEA4F6177E;
-        Thu, 23 Feb 2023 19:42:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C292BC433EF;
-        Thu, 23 Feb 2023 19:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677181352;
-        bh=yBmZi1dgHiYx3f1jIdVOufjs7LlM8Rf+8jsvfrqP5eI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jjYxMDUKZhonBr9WaQk+3e1oaOg71ENniA+tkDkWixIxikS5zJ1MOKKipwjbNj5N/
-         O6JkZLgXAlb0SGWKstzO8DbFZw8uGn2RD3riEpNvJq1ZxA3tU4Z4hMq0kZagAW9haq
-         nyyXcsWo6PgF0NGDmG5ZsAeMmOk+OvAVsS7yPvBuEwu48VEzW1O4/co3ps993eBuqJ
-         ldpaqS2tGq2MuGRV2hbHBZeN+BwC5uT/gHtOJpwcV7EXZLEC2yG9OEPX4hjbRhDz8r
-         ZUixli7uPsQHdBQ3TEba70j5CHzzHYkmuz3vXZn/HtFPMLS5STqwg9fuKqDWTbv8hx
-         fVC5+6MFFdVVA==
-Date:   Thu, 23 Feb 2023 13:42:30 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Elad Nachman <enachman@marvell.com>
-Cc:     thomas.petazzoni@bootlin.com, bhelgaas@google.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] PCI: dwc: Add support for Marvell AC5 SoC
-Message-ID: <20230223194230.GA3888258@bhelgaas>
+        Thu, 23 Feb 2023 14:43:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC602D5F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NVZb1Kw2FmNDMOjOwuTzqSEDiuj+5VoxP2eTw4On0pE=; b=qYE1tLntalOV4p5Sdahb7kYLAh
+        Fq2blhmozsVIHX4c2ONgkcjKdfgNAN2g9Ql7iAU6frxprhdLbQKFE6yA4pPACZVwmK15A2rUsLPSO
+        X7Tq1Sm/KBoNtvDPfqcVOdGCUEvVMewfOhC9PQFIraoGydWNBwTuWf2DveQIK07z8DzZEUsIC7mVo
+        +xzQjXy4kP7tXfSZuQVKbHajfby6R/79dhw5OpzYNETaUPjvo8ZsakCu+PsM6Du/HasOpFIPsvgk8
+        3QnZ2G9rmZrMNUT8grZl17VT4rqNWdGwtKGBziBQ8SYwweJTMJN8cEUY0dSZUy6Utj7By+dCocgH2
+        AVcUJaUQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVHUp-00089d-1J; Thu, 23 Feb 2023 19:43:15 +0000
+Date:   Thu, 23 Feb 2023 11:43:14 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>, hughd@google.com,
+        akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org,
+        p.raghav@samsung.com, dave@stgolabs.net, a.manzanares@samsung.com,
+        yosryahmed@google.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC v2 5/5] shmem: add support to ignore swap
+Message-ID: <Y/fB0mcvwsp/YX4A@bombadil.infradead.org>
+References: <20230223024412.3522465-1-mcgrof@kernel.org>
+ <20230223024412.3522465-6-mcgrof@kernel.org>
+ <20230223122631.hwvhbqxadvbm23nb@wittgenstein>
+ <Y/eDOXC4+vpCCBic@infradead.org>
+ <20230223160914.cwvt53drn2bckpdc@wittgenstein>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223180531.15148-1-enachman@marvell.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230223160914.cwvt53drn2bckpdc@wittgenstein>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 08:05:24PM +0200, Elad Nachman wrote:
-> From: Elad Nachman <enachman@marvell.com>
+On Thu, Feb 23, 2023 at 05:09:14PM +0100, Christian Brauner wrote:
+> On Thu, Feb 23, 2023 at 07:16:09AM -0800, Christoph Hellwig wrote:
+> > On Thu, Feb 23, 2023 at 01:26:31PM +0100, Christian Brauner wrote:
+> > > We would have use-cases for this in systemd. We currently use ramfs for
+> > > systemd's credential logic since ramfs is unswappable. It'd be very neat
+> > > if we could use tmpfs instead,
+> > 
+> > What is the advantage of using a swapless tmpfs over ramf?
 > 
-> Add support for AC5 SoC with MSI and in message emulated legacy mode.
-> There are differences in the registers addresses, blocks, DDR location
-> for coherent DMA allocation and additional implementation specific registers.
-> In addition, support cases of older Designware IP (Armada 7020) which supports
-> above 4GB PCIe physical memory window by use of device tree.
-> ...
+> There are a few reasons we usually prefer tmpfs over ramfs. Iirc, ramfs
+> doesn't have limits and grows dynamically. So we currently only use it
+> from the most privileged process where we do our own accounting and
+> immediately remount the superblock read-only. Tmpfs on the other hand
+> offers various ways to restrict memory consumption.
 
-> Elad Nachman (4):
->   dt-bindings: PCI: dwc: add DMA, region mask bits
->   PCI: dwc: support AC5 Legacy PCIe interrupts
->   PCI: dwc: Introduce Configurable DMA mask
->   PCI: dwc: Introduce region limit from DT
-> 
-> Raz Adashi (1):
->   PCI: armada8k: Add AC5 SoC support
-> 
-> Vadym Kochan (1):
->   dt-bindings: PCI: armada8k: Add compatible string for AC5 SoC
-> 
-> Yuval Shaia (1):
->   PCI: armada8k: Add MSI support for AC5 SoC
+Size limits is just one bell, in fact ramfs has no configurable options.
+So in fact *all* options parsed on shmem_parse_options() are only
+available with tmpfs, some of the options are:
 
-Capitalize subject consistently.  Use consistent driver tags.  Use
-parallel sentence structure.
+  * size
+  * number of blocks
+  * number of inodes
+  * NUMA memory allocation policy
+  * huge pages
 
-s/add DMA/Add DMA/
-s/PCI: dwc: support/PCI: armada8k: Support/
-  (this particular patch only affects armada8k, so don't label it "dwc")
-s/support/Support/
-s/Configurable/configurable/
-s/Add MSI support for AC5 SoC/Add AC5 MSI support/
-  (parallel to "Add AC5 SoC support")
+> Other reasons are that ramfs doesn't support selinux labels, xattrs, and
+> acls in general which come in quite handy. Starting with kernel v6.3
+> tmpfs does also support idmapped mounts. So we usually always prefer
+> ramfs over tmpfs unless we have a very specific need such as the memory
+> not being swapped out.
 
-The PCIe spec doesn't really use "legacy" when defining the interrupt
-model.  I think you're referring to INTx, which it *does* use and is
-more specific.  If so, please say "INTx interrupts" instead of "legacy
-PCIe interrupts".
+I guess its time to update Documentation/filesystems/tmpfs.rst.
+
+  Luis
