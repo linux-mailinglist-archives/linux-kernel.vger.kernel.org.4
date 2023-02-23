@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671146A12C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF22B6A12C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBWWWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 17:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S229515AbjBWWXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 17:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBWWWB (ORCPT
+        with ESMTP id S229379AbjBWWXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 17:22:01 -0500
+        Thu, 23 Feb 2023 17:23:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2214560123;
-        Thu, 23 Feb 2023 14:21:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D3F14208;
+        Thu, 23 Feb 2023 14:23:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FEE66179B;
-        Thu, 23 Feb 2023 22:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242CDC433EF;
-        Thu, 23 Feb 2023 22:20:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4F33617AB;
+        Thu, 23 Feb 2023 22:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66A8C433EF;
+        Thu, 23 Feb 2023 22:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677190832;
-        bh=/RlH+uTaquKSn6/TiMh8xypzok73Zt8sPG8pAcmRmTM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZqvoO2IVOtcWr342wVoa8dpa33bpVLtuRSUYfEPcNnBl2AVduvoZmVu7l/xjE073r
-         7agFjiIId/cqkG1fHGZ/+aWjvkI57OT4L6wkVbP6cC7gt5j/fN+iTzEMjoyfIfNM19
-         wkEuxsSU5mPVRQtXCK5GY9NQnQ3NhGZU0/itVdkSlh0ZnZkIMVD8ZZgtjT0j8UCkiW
-         PN+0ECz8fyhhRN5pd7gxZxwLEawkUL7+DYpSLCVocr1fLoyk1wbkR9Ho0BRjy+xi8+
-         PRNHezUHVBpoqeJ8ZwIsVEZDEZ9D/VQlNFZafspIKpVpK/oQqLCB7NbAO+ei6lffjK
-         rPt63LArumsZg==
-Date:   Thu, 23 Feb 2023 22:20:27 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, tsbogend@alpha.franken.de,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        robh+dt@kernel.org, hch@lst.de, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 4/5] riscv: Select ARCH_DMA_DEFAULT_COHERENT
-Message-ID: <Y/fmqwboOv/JhWf/@spud>
-References: <20230223113644.23356-1-jiaxun.yang@flygoat.com>
- <20230223113644.23356-5-jiaxun.yang@flygoat.com>
+        s=k20201202; t=1677191028;
+        bh=Fol8hNvH87YYIF1bZR/i5khr1RuizrUI3aldcifhpdo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KlZ4KxorGS+Tmv4YDi68lA4C7GenBJGAldBLipR+XVJ+TdU0ThBXzflYyNrY6xxIQ
+         b7cQ+STaqzkGVaEsnx1j+ycXkWXj0+CrV1cHmiTEWDwVUsrQhzYliNgZgxYqpWyACj
+         U0WYnPsGNwgGZAPJYSye/Qz8V8VEemCB6flLvhnna9vsY4nPjtWEwGwW3gki1avqYK
+         v8pgnh3UKBba7DGwYDKadKxMvlG8zkZCLuizcb9P2kvsHYmSSldqJ4mmyXTz3FdQaX
+         83mV6xnjW2+EE2XdQd3w5F7Ec4sWhhnOgoQl1QuwnPxxHoNb+O0avPxSvRizNrSuys
+         gEIzCfTOptEyA==
+Date:   Thu, 23 Feb 2023 16:24:13 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [GIT PULL] flexible-array transformations for 6.3-rc1
+Message-ID: <Y/fnjS5eHNauiUUR@work>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QTYFjkFK/Dt5/rMq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223113644.23356-5-jiaxun.yang@flygoat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,57 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
 
---QTYFjkFK/Dt5/rMq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
 
-On Thu, Feb 23, 2023 at 11:36:43AM +0000, Jiaxun Yang wrote:
-> For riscv our assumption is unless a device states it is non-coherent,
-> we take it to be DMA coherent.
->=20
-> Select ARCH_DMA_DEFAULT_COHERENT to ensure dma_default_coherent
-> is always initialized to true.
->=20
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/riscv/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 1d46a268ce16..b71ce992c0c0 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -233,6 +233,7 @@ config LOCKDEP_SUPPORT
-> =20
->  config RISCV_DMA_NONCOHERENT
->  	bool
-> +	select ARCH_DMA_DEFAULT_COHERENT
+are available in the Git repository at:
 
-Since we are always coherent by default, I feel like you should put this
-in the main "config RISCV" section, where OF_DMA_DEFAULT_COHERENT
-currently is, no?
+  git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git tags/flex-array-transformations-6.3-rc1
 
-Wouldn't bother respinning for that unless the dma folk have comments
-for you.
+for you to fetch changes up to b942a520d9e43bc31f0808d2f2267a1ddba75518:
 
->  	select ARCH_HAS_DMA_PREP_COHERENT
->  	select ARCH_HAS_SETUP_DMA_OPS
->  	select ARCH_HAS_SYNC_DMA_FOR_CPU
-> --=20
-> 2.37.1 (Apple Git-137.1)
->=20
+  bcache: Replace zero-length arrays with DECLARE_FLEX_ARRAY() helper (2023-01-05 17:48:45 -0600)
 
---QTYFjkFK/Dt5/rMq
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+flexible-array transformations for 6.3-rc1
 
------BEGIN PGP SIGNATURE-----
+Hi Linus,
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/fmqwAKCRB4tDGHoIJi
-0leFAP9uQuy0NP1f84CZIhkE/FTxQbCtqVp7mJK2gG8h1AzO+AD+I8qU90iT/HH9
-zh/cOUlKSuqIp7B4dD2guraiIpMV2gc=
-=YsJz
------END PGP SIGNATURE-----
+Please, pull the following patches that transform zero-length arrays,
+in unions, into flexible arrays. These patches have been baking in
+linux-next for the whole development cycle.
 
---QTYFjkFK/Dt5/rMq--
+Thanks
+--
+Gustavo
+
+----------------------------------------------------------------
+Gustavo A. R. Silva (3):
+      exportfs: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+      mm/memremap: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+      bcache: Replace zero-length arrays with DECLARE_FLEX_ARRAY() helper
+
+ drivers/md/bcache/bcache_ondisk.h | 8 ++++----
+ include/linux/exportfs.h          | 2 +-
+ include/linux/memremap.h          | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
