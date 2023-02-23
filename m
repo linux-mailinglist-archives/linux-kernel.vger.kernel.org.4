@@ -2,141 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C926A0F47
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE336A0F4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjBWSMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S230200AbjBWSOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjBWSMW (ORCPT
+        with ESMTP id S229516AbjBWSOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:12:22 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1720710DE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:12:21 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id f13so44809180edz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:12:21 -0800 (PST)
+        Thu, 23 Feb 2023 13:14:44 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD0B55060
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:14:42 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id cq23so45098002edb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:14:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+XcNcjTbGilqBFvSaP95ds+AOY0Sg3ycWjre6wkeObA=;
-        b=vgTBIVEy5TmD7m/Nin7C3TEn+OkXdt/iTICubDVjjr7vgx8mJNAwWkyk8CdTzKGoxw
-         62Pc4ghtUJmbrccf791CV/wmpWuK7Tma/NbVNV4Zg2dOLWrd0gMNB4O/i0FwPqFSzG3C
-         2tcnB7KtfVMa+kYzWEFhGNAkEJtNmS/QXCDreDM9pjeJxEIJIAcegEjKBOQJXDBQx/34
-         JLk514sQBQcsAs7YpCjNm4NzvBSAhKTLK5EcQkzXIW+sEtkiJk1Ru1d+Rjx5uNxiKIkS
-         84SrX1A+QeTPFj28+VNrvRZNzBO7j5cD3IKWQPy5FDewbUEkMDOriFiWUB5YUM8C5qoQ
-         6U5w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VG9TRi7KY1FPj+JgMoZ9/Bap5BH1LM2HcOOT/7ev4eA=;
+        b=D2wc9ublqoinhiPSET5Dt0IY9YkjUb0e1mbrI5aveVWbYaT5mTOY1SmpkdzdcDCXhy
+         0tKgbqq35FTY2mCV9OliNawcLPyYie3JC/ov3fv+B8xEzv008yfXCoExBDaHBPUFIGQ9
+         XcSO0t72+wVLJSh7AyZjyJdtIqHS30Q6JS3FZAWYfJQCWaOeuiKlk7PWsh5/OSZrnz5S
+         hHJwPirimq5+UX1iA5mmqF6u7koMXvksCK4sS9mgfpt+uQJwsnQSVfzocj0q4CNGiWOc
+         29XttugOluiL6gDHvkBeGMLGDVE5ZWt+GrVdqPTAnU4uE3qHk1suzlCFjuCHJJfJismS
+         +Smg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XcNcjTbGilqBFvSaP95ds+AOY0Sg3ycWjre6wkeObA=;
-        b=LPSYdx3qPzn6MfqxxfI29Og6TM2g7eQFcJtWzUA2YIpumkla+QvkzjKjjOI3gBK08g
-         arY7iUWKmLpSqx7ZBO1g5G0jcOT42wLKVvIOeCabcimAHil+3n2VuKNOsFvaBSuw9Tyf
-         PMVXTcaqwhhR8apEUY98PItiMgmgNDYMIzJIl6efP2PsHb7yvx7KooYTr53dgeTbizWM
-         HgAEmOOuNNUR0YMat6A5CKIJgyJFRfQlaonF30kCpT4JbmKDFX4j97XWYL7GAudwgKll
-         wI0l4DUJE9Y0UG4jBMvy/cJdJEcC9XSLVWnJzImvzpPa1R3agvhqhZA2cmFIxKzLISVR
-         ZTXg==
-X-Gm-Message-State: AO0yUKVT8UqPNhks0XWt6ZUMx8Bm6xNi1tWMsNSItgKhO/4OCz0EapmA
-        r/J6zctMISE42R9cyxcB3xYd5LurDVsHx6FP
-X-Google-Smtp-Source: AK7set/0TI9/IGIRPb7wNuaey7VzvLJXk2ZeAmp0C8JDikvIw28X7Dd+4ZC8Bot5PtmWvbcilYfCsA==
-X-Received: by 2002:a05:6402:8d0:b0:4ac:be7c:4bf9 with SMTP id d16-20020a05640208d000b004acbe7c4bf9mr11858209edz.10.1677175939608;
-        Thu, 23 Feb 2023 10:12:19 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u23-20020a50d517000000b004acdf09027esm5360874edi.4.2023.02.23.10.12.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 10:12:19 -0800 (PST)
-Message-ID: <6dfde695-16d5-57ac-fbdd-b86ec91322a9@linaro.org>
-Date:   Thu, 23 Feb 2023 19:12:17 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VG9TRi7KY1FPj+JgMoZ9/Bap5BH1LM2HcOOT/7ev4eA=;
+        b=V5v+lWeKAlsZaWWHxdb0f/TU1A989R392s3BR/F5FhUkHoeAQoKm6nYapoj9LtditO
+         nXKW+6gPe6Bw3lb/gxzklpR8HgzwtjzxuKGCNr1s1C71cIZ2F35nlsss0FViaxNIzI1g
+         J4iykxQ4kV6o3STx9uLxcqCcu7oR2bwpuSGU8ProewsMP4TmaBy2BZaJyAfx+tAAiiiA
+         a886UW6WAz6vY9eitCdZoc5ITN/HIUnBONVTtk4DWpj78VZq+0aMCCqf7SeWBCfK8/KR
+         dotTtglIwMoUz384C9Cpy6CvU654+QvNU+n9c3VCrqHd3v8gShmlQvuV9YB8uJWpi1M7
+         N9rA==
+X-Gm-Message-State: AO0yUKWdj/BWsbE+l1pPrtut8XQ5JGct/AXsZ1ZAzB5gZxynJ6jjiEzR
+        gzSydNb7LmXQWE34ALf2MVoFMoeOVp+oeqipQcdK+g==
+X-Google-Smtp-Source: AK7set/fznoiZVzWuf/NgldnM/1EIBNaNGC+xwH7MsYZEI1nAXsD+W5oxnFFkoYiFjJHmikErXMuBVLtqBs4WAeI1M4=
+X-Received: by 2002:a17:907:c907:b0:8d8:4578:18e0 with SMTP id
+ ui7-20020a170907c90700b008d8457818e0mr5898667ejc.10.1677176080683; Thu, 23
+ Feb 2023 10:14:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 4/7] dt-bindings: PCI: dwc: add DMA, region mask bits
-Content-Language: en-US
-To:     Elad Nachman <enachman@marvell.com>, thomas.petazzoni@bootlin.com,
-        bhelgaas@google.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230223180531.15148-1-enachman@marvell.com>
- <20230223180531.15148-5-enachman@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230223180531.15148-5-enachman@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/Ua6VcNe/DFh7X4@nvidia.com> <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
+ <Y/UiQmuVwh2eqrfA@nvidia.com> <87o7pmnd0p.fsf@nvidia.com> <Y/YRJNwwvqp7nKKt@nvidia.com>
+ <87k009nvnr.fsf@nvidia.com> <Y/bHNO7A8T3QQ5T+@nvidia.com> <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
+ <Y/eiLBo88pgr2IUm@nvidia.com> <CAJD7tkadBRP22qP63-SjKSch1im9sHLoMzc6c2h10+ggbuxqMg@mail.gmail.com>
+ <Y/esMBOyTaJnv5CW@nvidia.com>
+In-Reply-To: <Y/esMBOyTaJnv5CW@nvidia.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 23 Feb 2023 10:14:04 -0800
+Message-ID: <CAJD7tkZHZrxK_szH=5tdDZzhDTNXpBVD-e+79RzFmpp_ZYMcBA@mail.gmail.com>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
+        hannes@cmpxchg.org, surenb@google.com, mkoutny@suse.com,
+        daniel@ffwll.ch, "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 19:05, Elad Nachman wrote:
-> From: Elad Nachman <enachman@marvell.com>
-> 
-> Add properties to support configurable DMA mask bits
-> and region mask bits.
-> configurable DMA mask bits is needed for Marvell AC5/AC5X SOCs which
-> have their physical DDR memory start at address 0x2_0000_0000.
-> Configurable region mask bits is needed for the Marvell Armada
-> 7020/7040/8040 SOCs when the DT file places the PCIe window above the
-> 4GB region.
-> The Synopsis Designware PCIe IP in these SOCs is too old to specify the
-> highest memory location supported by the PCIe, but practically supports
-> such locations. Allow these locations to be specified in the DT file.
+On Thu, Feb 23, 2023 at 10:11 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> On Thu, Feb 23, 2023 at 10:03:50AM -0800, Yosry Ahmed wrote:
+> > On Thu, Feb 23, 2023 at 9:28 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > >
+> > > On Thu, Feb 23, 2023 at 09:18:23AM -0800, T.J. Mercier wrote:
+> > >
+> > > > > Solving that problem means figuring out when every cgroup stops using
+> > > > > the memory - pinning or not. That seems to be very costly.
+> > > > >
+> > > > This is the current behavior of accounting for memfds, and I suspect
+> > > > any kind of shared memory.
+> > > >
+> > > > If cgroup A creates a memfd, maps and faults in pages, shares the
+> > > > memfd with cgroup B and then A unmaps and closes the memfd, then
+> > > > cgroup A is still charged for the pages it faulted in.
+> > >
+> > > As we discussed, as long as the memory is swappable then eventually
+> > > memory pressure on cgroup A will evict the memfd pages and then cgroup
+> > > B will swap it in and be charged for it.
+> >
+> > I am not familiar with memfd, but based on
+> > mem_cgroup_swapin_charge_folio() it seems like if cgroup B swapped in
+> > the pages they will remain charged to cgroup A, unless cgroup A is
+> > removed/offlined. Am I missing something?
+>
+> Ah, I don't know, Tejun said:
+>
+> "but it can converge when page usage transfers across cgroups
+> if needed."
+>
+> Which I assumed was swap related but I don't know how convergence
+> works.
 
-This formatting is so bad it makes difficult to read. Make these proper
-sentences with proper wrapping.
+I believe that's the case for file-backed pages, but I do not believe
+it's the case for swap-backed pages.
 
-
-> First DT property is called num-dmamask,
-> and can range between 33 and 64.
-
-Wrong mapping and we see it in the code. No need to code it again in
-commit msg. Especially that you already said it in the first sentence.
-
-> Second DT property is called num-regionmask,
-> and can range between 33 and 64.
-
-
-> 
-> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> ---
->  .../devicetree/bindings/pci/snps,dw-pcie-common.yaml   | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> index d87e13496834..a1b06ff19ca7 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> @@ -261,6 +261,16 @@ properties:
->  
->    dma-coherent: true
->  
-> +  num-dmamask:
-> +    description: |
-> +      number of dma mask bits to use, if different than default 32
-
-minimum: 33 (from commit msg)
-default: 32... which does not make now sense...
-
-> +    maximum: 64
-> +
-> +  num-regionmask:
-> +    description: |
-> +      number of region limit mask bits to use, if different than default 32
-> +    maximum: 64
-> +
->  additionalProperties: true
->  
->  ...
-
-Best regards,
-Krzysztof
-
+>
+> Jason
