@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69556A0322
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278896A0326
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjBWHFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S233400AbjBWHFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbjBWHFJ (ORCPT
+        with ESMTP id S233320AbjBWHFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:05:09 -0500
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C2410CE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:05:06 -0800 (PST)
-X-QQ-mid: bizesmtp84t1677135853tqyp6rcl
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Feb 2023 15:04:08 +0800 (CST)
-X-QQ-SSF: 01400000002000I0Z000B00A0000000
-X-QQ-FEAT: QityeSR92A2+ZDiL078F7dx9NzgCrHZf3hKY4jiHovEDkRbY5wSRSIpUcYd8e
-        h9RJvN2p4uegxhSrC89atZeSSkHIpJxRFNcob+iNie78BnTsRYPNiuMi+c4dp/icfL1mta+
-        OLjXgubLx90fyWUCsjue/SswG+D64XrLaS76WE+S6Jn5lUtxHmttJpn96K8nXixdEmO00ho
-        aTjE0eH49/u7DKqoaG/4R50ChZinchhQpdw3E/LqDPbQ3evXhNpZ8VpLurso/5C7nfjAfLy
-        yUjPoWk0AFdY8vn0CY5ZT+yBG658tRHvn4sJR1gJMFRY2KuXVj54kDYmSP3gJmiOHIoVmCY
-        1Cl4dQn1T4LYpqAoRRweLHH97+Vn/J+kyds27ANTNQhuziGk4zk4/1wXw46av2xTtB+QFAB
-        R3FB0iOfFqs=
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
-        airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH v2] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
-Date:   Thu, 23 Feb 2023 15:04:05 +0800
-Message-Id: <20230223070405.20228-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 23 Feb 2023 02:05:35 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6157698
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=OIOomp7cpAJjsuC0dN7moT40lIm
+        w7FjKpciZCFaEvBE=; b=MxxxE1GA5YlhSuMFni3q8w57S5/1NfReO2W82rAEdhK
+        gIywXuwwBh1hNR6Wx2PnrEtijLodgJqlWpbwSw1lV1Bys3V6m6wfHTdfNGY/m3TE
+        HSpZbD0ZMf2B3AqMUXmxS2TmpxTmtllSEzcNBcNcid71wU25xIUQSTt+FSt0Q7LI
+        =
+Received: (qmail 829236 invoked from network); 23 Feb 2023 08:05:28 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Feb 2023 08:05:28 +0100
+X-UD-Smtp-Session: l3s3148p1@Bx5Eo1j1XuJehh92
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [REGRESSION PATCH RFC] net: phy: don't resume PHY via MDIO when iface is not up
+Date:   Thu, 23 Feb 2023 08:05:19 +0100
+Message-Id: <20230223070519.2211-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A privilege escalation vulnerability was found in vmwgfx driver
-in drivers/gpu/drm/vmwgfx/vmwgfx_drv.c in GPU component of Linux
-kernel with device file '/dev/dri/renderD128 (or Dxxx)'. This flaw
-allows a local attacker with a user account on the system to gain
-privilege, causing a denial of service(DoS).
+TLDR; Commit 96fb2077a517 ("net: phy: consider that suspend2ram may cut
+off PHY power") caused regressions for us when resuming an interface
+which is not up. It turns out the problem is another one, the above
+commit only makes it visible. The attached patch is probably not the
+right fix, but at least is proving my assumptions AFAICS.
 
-This vulnerability can be quickly verified by the following code
-logic:
-...
-dri_fd = open("/dev/dri/renderD128", O_RDWR);
-ret = ioctl(dri_fd, 0xC0186441, &arg);
-if (ret == 0) {
-	printf("[*] VMW_ALLOC_DMABUF Success!\n");
-}
-...
+Setup: I used Renesas boards for my tests, namely Salvator-XS and Ebisu.
+They both use RAVB driver (drivers/net/ethernet/renesas/ravb_main.c) and
+a Micrel KSZ9031 PHY (drivers/net/phy/micrel.c). I think the problems
+are generic, though.
 
-Submit this commit to fix it.
+Long text: After the above commit, we could see various resume failures
+on our boards, like timeouts when resetting the MDIO bus, or warning
+about skew values in non-RGMII mode, although RGMII was used. All of
+these happened, because phy_init_hw() was now called in
+mdio_bus_phy_resume() which wasn't the case before. But the interface
+was not up yet, e.g. phydev->interface was still the default and not
+RGMII, so the initialization didn't work properly. phy_attach_direct()
+pays attention to this:
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+1504         /* Do initial configuration here, now that
+1505          * we have certain key parameters
+1506          * (dev_flags and interface)
+1507          */
+1508         err = phy_init_hw(phydev);
+
+But phy_init_hw() doesn't if the interface is not up, AFAICS.
+
+This may be a problem in itself, but I then wondered why
+mdio_bus_phy_resume() gets called anyhow because the RAVB driver sets
+'phydev->mac_managed_pm = true' so once the interface is up
+mdio_bus_phy_resume() never gets called. But again, the interface was
+not up yet, so mac_managed_pm was not set yet.
+
+So, in my quest to avoid mdio_bus_phy_resume() being called, I tried
+this patch declaring the PHY being in suspend state when being probed.
+The KSZ9031 has a soft_reset() callback, so phy_init_hw() will reset the
+suspended flag when the PHY is attached. It works for me(tm),
+suspend/resume now works independently of the interface being up or not.
+
+I don't think this is the proper solution, though. It will e.g. fail if
+some PHY is not using the soft_reset() callback. And I am missing the
+experience in this subsystem to decide if we can clear the resume flag
+in phy_init_hw() unconditionally. My gut feeling is that we can't.
+
+So, this patch mostly demonstrates the issues we have and the things I
+found out. I'd be happy if someone could point me to a proper solution,
+or more information that I am missing here. Thank you in advance and
+happy hacking!
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/gpu/drm/vmwgfx/vmwgfx_drv.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/phy/phy_device.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c
-index bd02cb0e6837..115787697957 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.c
-@@ -1263,6 +1263,10 @@ static long vmw_generic_ioctl(struct file *filp, unsigned int cmd,
- 			if (!drm_is_current_master(file_priv) &&
- 			    !capable(CAP_SYS_ADMIN))
- 				return -EACCES;
-+		} else if (nr == DRM_COMMAND_BASE + DRM_VMW_ALLOC_DMABUF) {
-+			if (!drm_is_current_master(file_priv) &&
-+			    !capable(CAP_SYS_ADMIN))
-+				return -EPERM;
- 		}
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 8cff61dbc4b5..5cbb471700a8 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -3108,6 +3108,7 @@ static int phy_probe(struct device *dev)
  
- 		if (unlikely(ioctl->cmd != cmd))
+ 	/* Set the state to READY by default */
+ 	phydev->state = PHY_READY;
++	phydev->suspended = 1;
+ 
+ out:
+ 	/* Assert the reset signal */
 -- 
-2.20.1
+2.30.2
 
