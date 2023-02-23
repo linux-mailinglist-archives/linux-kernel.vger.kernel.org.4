@@ -2,150 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533A06A138A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 00:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4596A138D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 00:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBWXLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 18:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S229692AbjBWXMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 18:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjBWXLb (ORCPT
+        with ESMTP id S229625AbjBWXL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 18:11:31 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719A94DE00
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:11:30 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id y2so10380062pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:11:30 -0800 (PST)
+        Thu, 23 Feb 2023 18:11:56 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4430F580CD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:11:53 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id o12so48605670edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 15:11:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677193890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZMPTwn6A1SJ1IFAEdre49nDDwVXbknbqks5KCgESScg=;
-        b=FVvpdyBXZvuPwD2DHr3E2e4M11bO2iyWULgET72pY/dqODfAzGkwrghbnLPa6U0gic
-         4XQ97gMXC2btoOwB1tfzjNrG5eKtyJHSAL4VDP/Ltpe3y80GVwWAOGyOyzo0JCC6tUO7
-         Z4X6WA+NRxsWEln/Jrf5a7SvdiRaQE+lgd30JiWR04CSzUr6cEUMqBsHCLqqvQI2Fhzc
-         MPidMqO2dtPeXht9yCJGgRbt4Aga9+HvQCy8Px0ZFO0QjOFdfRvVmWJE8Rjl1P6bxYKR
-         FKBMtSOgbs1wQCfkR6cxla4lYWVNI8CmVHOIV3Vg5tY33gCJOrjuAtXpBTZwEe80VrfK
-         rBlQ==
+        d=eitmlabs-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZhcqxXFunyKmJAnTkBe/sYveKPMZiCHLdgGndCIvmw=;
+        b=RPm9ajGg+bpqPeCQ1T7jJwujkrC4b1kK2z76ktAQ91JHtEA7+I+szu01tvj9rAzM/6
+         YY+DVjRz2xFvARlTc6YLhn/CVGCjezw0WG0Nj9o08eMCQtsn4Ni0kQQ5hrisWocExNpl
+         QQXcRsZzf84o4wLtmHyJAVsELWiYpMAwBqsm3cfAIM8uzGMuPECGV+gOy3kw5UpACdbf
+         0Z/jcSjufhR8XAucuecmqwEZSK+mn9OLMordC8aoOMK3pbuKCjbqjaDq+ajY2nEi44B5
+         0l0AwBlR1tI9XjcOVBg6vkqMnpys15syHbxbKQ0PE1ZWaL+cMY526C+3g3CBl5OaIf30
+         aPyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677193890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZMPTwn6A1SJ1IFAEdre49nDDwVXbknbqks5KCgESScg=;
-        b=tY6JckfhUz8css4m+A8/aRhLuZt+oLVnWmOcFI2Z/gE3tdRb7ODKU6z9BfzGN0ofax
-         f7sFWVpsDKQqg8+q2ouS2BNWYAr1ybanEeggu1UI6eh5SW4YAwdIZpWxLe9CDuEjqUns
-         wNz5czCM2a3JD7rUfCSBT/X40ZCVxLLWozUDFNVrPq/joBJ0eFovztnqsocjiorfVj5N
-         dmTK05IRSxBincyuL5VegbzTCElzmzwB6xRjy8nKpM+Yu/TStmSnWV8vF8ilvvaSIvPi
-         /C8eBzQwDTMbDZyIGZRrnCoYd9j92uiG4MjbOvElZ28XZI21OCLT2vf4g85HKmkgpnft
-         bRHA==
-X-Gm-Message-State: AO0yUKVuQ+SjQu/aYmuIqKyX4o5BRee8+lTfaJu5Dg373ikYk8DDF7eA
-        JJfG/tuAJPYogiP9ZSKh2QbGzqeJnw4=
-X-Google-Smtp-Source: AK7set9GZqJGj4EAL6Agk48dPwa/lldbWp0ErKJKTubGj6DHDIKo/TWBCeW7Oanq/NRfGRS7Dis/2g==
-X-Received: by 2002:a17:90b:1e02:b0:233:af77:c075 with SMTP id pg2-20020a17090b1e0200b00233af77c075mr14177342pjb.36.1677193889885;
-        Thu, 23 Feb 2023 15:11:29 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:be5:a687:1e9d:ec53])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090a2a0900b00230b572e90csm223340pjd.35.2023.02.23.15.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 15:11:29 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 23 Feb 2023 15:11:27 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 2/6] zsmalloc: remove stat and fullness enums
-Message-ID: <Y/fyn1u5RhDwgG1J@google.com>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
- <20230223030451.543162-3-senozhatsky@chromium.org>
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ZhcqxXFunyKmJAnTkBe/sYveKPMZiCHLdgGndCIvmw=;
+        b=wRYW6jbOkfw4W22kaYb3VqJmXHlfQBKHSduUF99zea36vomnhL1FtHnAKvZVIljg+b
+         LWhPIyAgsMDJfl2A0saii7/Lz0tOBCHOqn0w/oD1FY1Pjwn5FjcjlBT9FQS4TtqOVQx+
+         YZNyAqD2OClus00CNDlPkaGTHz5ViKstnp0PsscVgO+EIZQEV1UbfdIzdSq0gkt17gkh
+         3QsOJcKOBNxh2WozNcEnG1ufehbs7dUwdaUdqaHVr76hBOA2iKytgwtRAtymI9ANqJG6
+         pxy0Q5GIKC8NJNPZnsy3zg8HcBjLSMSy0VshKBJc/8nw4ItCEqt2c6Eme+wQMIBAIXoC
+         GSSw==
+X-Gm-Message-State: AO0yUKWs0U9Xx70cnyDJ2LdsiLO39CRBB1esPArFQqEzPwaND6mGD6cD
+        RpdFnLlClCKnD4c1oa063yhyD4zuxiWzArtdSmuuHw==
+X-Google-Smtp-Source: AK7set/bDMEFLOb9zD5mIiYLI3kJ4oUZ7FKxuHEIh9/zbBkhb+idLsQElu6vADg4xiN5SGB6/VWABvfcrsDnri21a74=
+X-Received: by 2002:a17:906:3388:b0:8af:b63:b4ba with SMTP id
+ v8-20020a170906338800b008af0b63b4bamr9918125eja.3.1677193911673; Thu, 23 Feb
+ 2023 15:11:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223030451.543162-3-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+ <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+ <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
+ <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+ <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
+ <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
+ <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
+ <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com> <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
+In-Reply-To: <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
+Reply-To: jonathan@eitm.org
+From:   Jonathan Katz <jkatz@eitmlabs.org>
+Date:   Thu, 23 Feb 2023 15:11:35 -0800
+Message-ID: <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com>
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 12:04:47PM +0900, Sergey Senozhatsky wrote:
-> The fullness_group enum is nested (sub-enum) within the
-> class_stat_type enum. zsmalloc requires the values in both
-> enums to match, because zsmalloc passes these values to
-> generic functions, e.g. class_stat_inc() and class_stat_dec(),
-> after casting them to integers.
-> 
-> Replace these enums (and enum nesting) and use simple defines
-> instead. Also rename some of zsmalloc stats defines, as they
-> sort of clash with zspage object tags.
-> 
-> Suggested-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  mm/zsmalloc.c | 104 ++++++++++++++++++++++----------------------------
->  1 file changed, 45 insertions(+), 59 deletions(-)
-> 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index b57a89ed6f30..38ae8963c0eb 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -159,26 +159,18 @@
->  #define ZS_SIZE_CLASSES	(DIV_ROUND_UP(ZS_MAX_ALLOC_SIZE - ZS_MIN_ALLOC_SIZE, \
->  				      ZS_SIZE_CLASS_DELTA) + 1)
->  
-> -enum fullness_group {
-> -	ZS_EMPTY,
-> -	ZS_ALMOST_EMPTY,
-> -	ZS_ALMOST_FULL,
-> -	ZS_FULL,
-> -	NR_ZS_FULLNESS,
-> -};
-> +#define ZS_EMPTY		0
-> +#define ZS_ALMOST_EMPTY		1
-> +#define ZS_ALMOST_FULL		2
-> +#define ZS_FULL			3
-> +#define ZS_OBJS_ALLOCATED	4
-> +#define ZS_OBJS_INUSE		5
->  
-> -enum class_stat_type {
-> -	CLASS_EMPTY,
-> -	CLASS_ALMOST_EMPTY,
-> -	CLASS_ALMOST_FULL,
-> -	CLASS_FULL,
-> -	OBJ_ALLOCATED,
-> -	OBJ_USED,
-> -	NR_ZS_STAT_TYPE,
-> -};
-> +#define NR_ZS_STAT		6
-> +#define NR_ZS_FULLNESS		4
+Hi all,
 
-Using define list instead of enum list looks like going backward. :)
+Problem persists with me with 6.2.0
+# mainline --install-latest
+# reboot
 
-Why can't we do this?
-
-enum class_stat_type {
-    ZS_EMPTY,
-    ZS_ALMOST_EMPTY,
-    ZS_ALMOST_FULL,
-    ZS_FULL,
-    NR_ZS_FULLNESS,
-    ZS_OBJ_ALLOCATED = NR_ZS_FULLNESS,
-    ZS_OBJ_USED,
-    NR_ZS_STAT,
-}
+# uname -r
+6.2.0-060200-generic
 
 
-};
->  
->  struct zs_size_stat {
-> -	unsigned long objs[NR_ZS_STAT_TYPE];
-> +	unsigned long objs[NR_ZS_STAT];
->  };
->  
+Representative log messages when mounting:
+Feb 23 22:50:43 instance-20220314-1510-fileserver-for-overlay kernel:
+[   44.641683] overlayfs: null uuid detected in lower fs '/', falling
+back to xino=off,index=off,nfs_export=off.
+
+
+
+Representative log messages when accessing files:
+eb 23 23:06:31 instance-20220314-1510-fileserver-for-overlay kernel: [
+ 992.505357] overlayfs: failed to retrieve lower fileattr (8020
+MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
+err=-38)
+Feb 23 23:06:32 instance-20220314-1510-fileserver-for-overlay kernel:
+[  993.523712] overlayfs: failed to retrieve lower fileattr (8020
+MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
+err=-38)
+
+
+On Mon, Jan 30, 2023 at 11:27 AM Jonathan Katz <jkatz@eitmlabs.org> wrote:
+>
+> On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> >
+> > On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+> >
+> > > I believe that I am still having issues occur within Ubuntu 22.10 with
+> > > the 5.19 version of the kernel that might be associated with this
+> > > discussion.  I apologize up front for any faux pas I make in writing
+> > > this email.
+> >
+> > No need to apologize.   The fix in question went into v6.0 of the
+> > upstream kernel.  So apparently it's still missing from the distro you
+> > are using.
+>
+> Thank you for the reply! ---  I have upgraded the Kernel and it still
+> seems to be throwing errors.  Details follow:
+>
+> Distro: Ubuntu 22.10.
+> Upgraded kernel using mainline (mainline --install-latest)
+>
+> # uname -a
+> Linux instance-20220314-1510-fileserver-for-overlay
+> 6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
+> 08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+>
+> On mount I still get the following notice in syslog (representative):
+> Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kernel:
+> [   71.613334] overlayfs: null uuid detected in lower fs '/', falling
+> back to xino=off,index=off,nfs_export=off.
+>
+> And on access (via samba) I still see the following errors in the
+> syslog (representative):
+> Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kernel:
+> [  539.181858] overlayfs: failed to retrieve lower fileattr (8020
+> MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
+> err=-38)
+>
+> And on the Windows client, the software still fails with the same symptomology.
+>
+>
+>
+>
+> >
+> > > An example error from our syslog:
+> > >
+> > > kernel: [2702258.538549] overlayfs: failed to retrieve lower fileattr
+> > > (8020 MeOHH2O
+> > > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/analysis.tsf,
+> > > err=-38)
+> >
+> > Yep, looks like the same bug.
+> >
+> > Thanks,
+> > Miklos
