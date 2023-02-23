@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B714B6A0264
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6965C6A0271
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjBWFjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 00:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S229453AbjBWFlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 00:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjBWFjF (ORCPT
+        with ESMTP id S232802AbjBWFls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 00:39:05 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3822DFE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:39:02 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id f23so13019303vsa.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:39:02 -0800 (PST)
+        Thu, 23 Feb 2023 00:41:48 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149F6497CF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:41:47 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id il18-20020a17090b165200b0023127b2d602so10888509pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:41:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EwdWdKQBGyREoqdrHRFF8oqp7s6Uz5ClfcqZzsKL7No=;
-        b=Q6tozNeCjntUtDQYGvefiA222AnJLm965VDgazVsMkdLHlxWsdPC8Zx17M6vEGc2pm
-         jwFNavb1eQw6ZXcGwlg2N7A+F8CqZv+KWwOzY66fsETyrjwvkOJ2lIE3pKKO9FISymG+
-         gPLYqpS8Wjr81tlelDflIOqWDo5chXw0R6ophpTh7c+VLAWgiBKDckeLW0jXrmXtu7Lq
-         GcqdKD2VyMHM4BRVSOjJcWnGowB9ffF0QqIdGSmpGR4W1wrkRE3ZsLVaTZrmx3d6RH8S
-         vOvvlAtWbdUOr241xQdoLppIpmD/Irq5JgO+RTm8/jqgmJ2HzJZA69KEpmsW/1Demto7
-         yu1Q==
+        d=wistron-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FEXPPCK8RfqWIy61SdJSATTm4fO5IDc6+VUaQzEmh4E=;
+        b=Iaoybi9FTzh6C/4Q1uAlBnnpbXHAaChef57PMz+L5CNynKlpOVTV1yvWjcgHGLqLdO
+         GsdRImZTtGpvoveMc5Q+0hD0MiBMi9/qPjfLkxgGrd9VbQ3ZWkO7LABV3eH+H5wr8Mx2
+         xI/dc+0n5Ev0Varn6blZ48V6CSDbiYz+iP+A30M/BwpIwfHkHtJLeItKxus6j9hLd8DX
+         mkIFrnsXKUcO7ybl5xvaqzT21jnAvqjKMQHmH1lMkRKM0EioeKEtN1BpWicIw0vz6+oz
+         ujFisqnfE9cIiCg5swTO1vOnkrV9rW8RaDgpNhL+e972+kSkdQFk9GOuyYlL4+Gl0HTh
+         8KrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EwdWdKQBGyREoqdrHRFF8oqp7s6Uz5ClfcqZzsKL7No=;
-        b=nPuxAAD9x8GmB7KsDJFgPgPIg7Y60wxYYpqAs2En0L7dLDSg5PMWimTfikLVEgOPhc
-         XPfijgksqvD3ngcZA3lzMM0417o0LjHxZHbxW6lHlTkXS+KYVtRDQpzWAUxZSaFkSntG
-         mkIcshIjgkS0DN2tvRHlTGYn8LpT+y1H6fyxKnIxWhvJ8Wfeyqr7cfO5eQsASIjjegQh
-         A3xe442jVxxJs+/+PL706TOnFDBQkRJDPGbkmt8/nGTDVWlN8JzHx1k9yAea/PmFkX61
-         l7AZcfnmk0Z6V1c/9Bgj5KG4/2Ieryu1F8axXY2Cr4qwItbNCjsgJwNWBg0uPwz8t2Iv
-         3BWA==
-X-Gm-Message-State: AO0yUKXvMgxtSjnVIspxY/x9SwbDNHH1s0D/IzlRfWwjW47RJPk+Vn75
-        WRDHzo7IPcYRO95qVtdbNvhQLB3xRJKKPnYVB+iK+HkgZ/aC01J9
-X-Google-Smtp-Source: AK7set+Ram5ewAZuH5S7R/yDexCEcjuud2K1qMLqNSVvpWLc0aAP+cp0wrIsKR+cCWrRtaXbGblekV4O1IvGemhctxE=
-X-Received: by 2002:a1f:bdcd:0:b0:40f:2033:6994 with SMTP id
- n196-20020a1fbdcd000000b0040f20336994mr202255vkf.2.1677130741499; Wed, 22 Feb
- 2023 21:39:01 -0800 (PST)
+        bh=FEXPPCK8RfqWIy61SdJSATTm4fO5IDc6+VUaQzEmh4E=;
+        b=g0sa8DMHS4/uPVD/FCPcMPBx/Vvt39lfqS7EeW4wRgs6ElB3ptzNdb1VQO7Nn0HWTE
+         gz0gk0OxSnUHz5YT7BJ9MCh1J7MtsCrTZSFrkU6oETl3q61dDyKlZRdSLOGzZJpDK94P
+         pcIOnHtlXe/jkTgDLMs1UfFRMRK6KPpyk6y48VGzKt0eiwNlDb1s+FHUyF3+ImB+nU+S
+         42wX+4hos7/ope2P2+w7AbPSrGSamLbVgHMdF/jrKP/VXkH6089dbjbmAjCv8+G3mauz
+         nhYHK4zjtVSa0oES/DjEuu0tdwX5vaO/O4DNBkYVKbgfjSDGwMXshXBcmq4zvvSGyv3M
+         sN9Q==
+X-Gm-Message-State: AO0yUKU/blXfx6yb2gsa3BOKzm9llNl71bHm17zc3VTNbBCucT3rRRhU
+        sD7c1OduOaAjPvuqIw7hlzZRTw==
+X-Google-Smtp-Source: AK7set9EfGInk0g9nPYWg1g2YklQ06/aSqmHefF8nH7RZ19edO7NzOiLMGFwQuZ5jFmjjxfAJx84rw==
+X-Received: by 2002:a17:902:e1cc:b0:19c:9420:6236 with SMTP id t12-20020a170902e1cc00b0019c94206236mr6420380pla.22.1677130906465;
+        Wed, 22 Feb 2023 21:41:46 -0800 (PST)
+Received: from localhost.localdomain ([2401:e180:8812:cac3:129e:5c16:92e6:e867])
+        by smtp.gmail.com with ESMTPSA id g12-20020a170902c38c00b0019c90f8c831sm4455256plg.242.2023.02.22.21.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 21:41:46 -0800 (PST)
+From:   Zoey Wu <zoey_wu@wistron.corp-partner.google.com>
+To:     hverkuil-cisco@xs4all.nl
+Cc:     mchehab@kernel.org, bleung@chromium.org, groeck@chromium.org,
+        scott_chao@wistron.corp-partner.google.com,
+        ajye_huang@compal.corp-partner.google.com,
+        zoey_wu@wistron.corp-partner.google.com,
+        hellojacky0226@hotmail.com, linux-media@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: platform: cros-ec: Add aurash to the match table
+Date:   Thu, 23 Feb 2023 13:41:38 +0800
+Message-Id: <20230223054138.267849-1-zoey_wu@wistron.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230222173009.19874-1-jmaselbas@kalray.eu>
-In-Reply-To: <20230222173009.19874-1-jmaselbas@kalray.eu>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 23 Feb 2023 11:08:49 +0530
-Message-ID: <CAFA6WYPGF3Q=_U-rZGyyH=ouunwT=9nx7j+pueCVS5jLng4fxA@mail.gmail.com>
-Subject: Re: [PATCH] tee: optee: Fix typo Unuspported -> Unsupported
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Feb 2023 at 23:00, Jules Maselbas <jmaselbas@kalray.eu> wrote:
->
-> Fix typo Unuspported -> Unsupported
->
-> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-> ---
->  drivers/tee/optee/call.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
+The Google aurash device uses the same approach as the Google Brask
+which enables the HDMI CEC via the cros-ec-cec driver.
 
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Zoey Wu <zoey_wu@wistron.corp-partner.google.com>
+---
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
--Sumit
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index 6ebedc71d67d..e7cb9509e967 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -225,6 +225,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
+ 	{ "Google", "Kinox", "0000:00:02.0", "Port B" },
+ 	/* Google Kuldax */
+ 	{ "Google", "Kuldax", "0000:00:02.0", "Port B" },
++	/* Google Aurash */
++	{ "Google", "Aurash", "0000:00:02.0", "Port B" },
+ };
+ 
+ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+-- 
+2.25.1
 
-> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> index 290b1bb0e9cd..df5fb5410b72 100644
-> --- a/drivers/tee/optee/call.c
-> +++ b/drivers/tee/optee/call.c
-> @@ -488,7 +488,7 @@ static bool is_normal_memory(pgprot_t p)
->  #elif defined(CONFIG_ARM64)
->         return (pgprot_val(p) & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL);
->  #else
-> -#error "Unuspported architecture"
-> +#error "Unsupported architecture"
->  #endif
->  }
->
-> --
-> 2.17.1
->
