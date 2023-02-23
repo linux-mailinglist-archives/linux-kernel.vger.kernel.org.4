@@ -2,141 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E946A0442
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCA86A043B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbjBWI5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S233594AbjBWIw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233299AbjBWI5D (ORCPT
+        with ESMTP id S233299AbjBWIwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:57:03 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1DD498AB
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:56:57 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id p8so10147307wrt.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mRdDSbS7nEkJ9kdJNqP0X8nEH0I1zPFXRhFF4w2M6FM=;
-        b=uof/8xpGNMHg7iY5wJ+1UskO3GHuWWbi+LCRXKfXoZp2VNoFZYGNSfC72Z09UgZuCO
-         wvvGj3qqdHqtvjdlCxmiW7a55/x93iaXFJk+1+8i+ITCkmBjBfPy/Bsw17U9V+3dNvND
-         zAYnX97eEp4ZXVGmB67Pw5pkjXmKm1SmQuFMUotL0HzqbJbo8kqrONfhTbJ3APnVcQkX
-         LRVXogPcFOujMToZtiqtWvsO871CuUA6fSe93FxaLsfCTqQETsXT1zARS2EKYNyXjzcs
-         PlthB+V+Ieinf7X2oLasgtlIiiR3fopI6hlQxEEPE0RRdKhpCkWP9ygPo33quzqAPoY6
-         Sk4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRdDSbS7nEkJ9kdJNqP0X8nEH0I1zPFXRhFF4w2M6FM=;
-        b=hy7O4Q/u2GLGVcr7GkNcPIyb0iGvY0qfzZxcD2NSFkup4FRHAyJ4/AoFh2YTObDO+m
-         fiYnlCiT2vVXM49jaDUUXGY4xjKQAVsTsnoeJpL7/4QR9Zwdof0eThX1gLITaTYfsaKr
-         BqP7Km7Nzc9qup315MrEaq8srNAT8+VpF0Vo3cm7Qq6O2V+qDlADLSTY7qy8GhkmheFF
-         trH93d7EpWnUt+/JLx427AZ39iyQDKyqA7OGcMgLoLO2twCCILC3TlHPc+oeu5PZrf1Z
-         CXe1Z647MY4ZMBGp3sAmEimMTRW5WEqHjFakrpvP3XGpbhGbTnHWOmmz1QjPO1zvjKmO
-         0MTg==
-X-Gm-Message-State: AO0yUKWE17hUuHuKriZu0uOzzxHoh0xWcKoYxTIXrUbomyQF5579g9J6
-        frbvkE3v8bs573u821QSgEy84w==
-X-Google-Smtp-Source: AK7set8NKlL8SHoM9z9qqJPq+MxNrjGbRtINAlauiFot2x6JL9A+CeI+ByZ3GoT99Y+o5rWLUelBvw==
-X-Received: by 2002:a5d:5f03:0:b0:2c3:be89:7c2b with SMTP id cl3-20020a5d5f03000000b002c3be897c2bmr9576815wrb.14.1677142616464;
-        Thu, 23 Feb 2023 00:56:56 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l18-20020a5d4112000000b002c56179d39esm10760022wrp.44.2023.02.23.00.56.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 00:56:56 -0800 (PST)
-Message-ID: <3f50066b-f967-b9fa-1e0d-5337ec1ed194@linaro.org>
-Date:   Thu, 23 Feb 2023 09:56:54 +0100
+        Thu, 23 Feb 2023 03:52:54 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED216468A;
+        Thu, 23 Feb 2023 00:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677142373; x=1708678373;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0Ie5tVgztugX8zVKgtvT55Wl799Y51l0mPbQolcRB38=;
+  b=mhhOqsLmYIOM4iHwVq2jvyu7kldtcZ31AM22J5fPd9FzsX7aJ4dAw4F/
+   5NpEBV2YzrndfFXMmQ+KjDeVJ7Gf4yxYAoz3KFaN5hMKG6+wtOQnxRZuI
+   wVlGi1QXyCopb30kKp6n84+FOldj8glwqL/D/WS00jU5l3PmQnABWyYkm
+   Fj+f1x4Sx9sfhDciBamII9WQr82pby+kexzu3yeUtKvnLhp0dxzE3gz16
+   3pfIhxrPGZRnskGEpEf2shTcTIKBJk18UDjAm1Y0cVbFEGWptUPIfGnNB
+   Vp/vUTESOBZhDCdhfFLLb7zoGIfhMnrtD+3n44v+ElqrbpNuhHTrhRzZO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="335359285"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="335359285"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 00:52:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="846478575"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="846478575"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 00:52:46 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rcu-tasks: Directly invoke rcuwait_wake_up() in call_rcu_tasks_generic()
+Date:   Thu, 23 Feb 2023 16:57:39 +0800
+Message-Id: <20230223085739.2594570-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/3] clk: starfive: Add StarFive JH7110 PLL clock
- driver
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Cc:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
- <20230221141147.303642-3-xingyu.wu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221141147.303642-3-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 15:11, Xingyu Wu wrote:
-> Add driver for the StarFive JH7110 PLL clock controller and
-> modify the JH7110 system clock driver to rely on this PLL clocks.
-> 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
+According to commit '3063b33a347c ("Avoid raw-spinlocked wakeups
+from call_rcu_tasks_generic()")', the grace-period kthread is delayed
+to wakeup using irq_work_queue() is because if the caller of
+call_rcu_tasks_generic() holds a raw-spinlock, when the kernel is
+built with CONFIG_PROVE_RAW_LOCK_NESTING=y, due to a spinlock will
+be hold in wake_up(), so the lockdep splats will happen. but now
+using rcuwait_wake_up() to wakeup grace-period kthread instead of
+wake_up(), in rcuwait_wake_up() using raw-spinlock instead of spinlock,
+so this commit remove using irq_work_queue(), invoke rcuwait_wake_up()
+directly in call_rcu_tasks_generic().
 
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tasks.h | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-> +
-> +static int jh7110_pll_clk_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	struct of_phandle_args args;
-> +	struct regmap *pll_syscon_regmap;
-> +	unsigned int idx;
-> +	struct jh7110_clk_pll_priv *priv;
-> +	struct jh7110_clk_pll_data *data;
-> +	char *pll_name[JH7110_PLLCLK_END] = {
-> +		"pll0_out",
-> +		"pll1_out",
-> +		"pll2_out"
-> +	};
-> +
-> +	priv = devm_kzalloc(&pdev->dev,
-> +			    struct_size(priv, data, JH7110_PLLCLK_END),
-> +			    GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->dev = &pdev->dev;
-> +	ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node, "starfive,sysreg", 0, 0, &args);
-
-1. Wrong wrapping. Wrap code at 80 as coding style asks.
-
-2. Why you are using syscon for normal, device MMIO operation? Your DTS
-also points that this is incorrect, hacky representation of hardware.
-Don't add devices to DT to fake places and then overuse syscon to fix
-that fake placement. The clock is in system registers, thus it must be
-there.
-
-3. Even if this stays, why so complicated code instead of
-syscon_regmap_lookup_by_phandle()?
-
-
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to parse starfive,sys-syscon : %d\n", ret);
-
-dev_err_probe and in other places as well, if applicable.
-
-
-Best regards,
-Krzysztof
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index baf7ec178155..757b8c6da1ad 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -39,7 +39,6 @@ struct rcu_tasks_percpu {
+ 	unsigned long rtp_jiffies;
+ 	unsigned long rtp_n_lock_retries;
+ 	struct work_struct rtp_work;
+-	struct irq_work rtp_irq_work;
+ 	struct rcu_head barrier_q_head;
+ 	struct list_head rtp_blkd_tasks;
+ 	int cpu;
+@@ -112,12 +111,9 @@ struct rcu_tasks {
+ 	char *kname;
+ };
+ 
+-static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp);
+-
+ #define DEFINE_RCU_TASKS(rt_name, gp, call, n)						\
+ static DEFINE_PER_CPU(struct rcu_tasks_percpu, rt_name ## __percpu) = {			\
+ 	.lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name ## __percpu.cbs_pcpu_lock),		\
+-	.rtp_irq_work = IRQ_WORK_INIT_HARD(call_rcu_tasks_iw_wakeup),			\
+ };											\
+ static struct rcu_tasks rt_name =							\
+ {											\
+@@ -273,16 +269,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 	pr_info("%s: Setting shift to %d and lim to %d.\n", __func__, data_race(rtp->percpu_enqueue_shift), data_race(rtp->percpu_enqueue_lim));
+ }
+ 
+-// IRQ-work handler that does deferred wakeup for call_rcu_tasks_generic().
+-static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp)
+-{
+-	struct rcu_tasks *rtp;
+-	struct rcu_tasks_percpu *rtpcp = container_of(iwp, struct rcu_tasks_percpu, rtp_irq_work);
+-
+-	rtp = rtpcp->rtpp;
+-	rcuwait_wake_up(&rtp->cbs_wait);
+-}
+-
+ // Enqueue a callback for the specified flavor of Tasks RCU.
+ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+ 				   struct rcu_tasks *rtp)
+@@ -334,7 +320,7 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+ 	rcu_read_unlock();
+ 	/* We can't create the thread unless interrupts are enabled. */
+ 	if (needwake && READ_ONCE(rtp->kthread_ptr))
+-		irq_work_queue(&rtpcp->rtp_irq_work);
++		rcuwait_wake_up(&rtp->cbs_wait);
+ }
+ 
+ // RCU callback function for rcu_barrier_tasks_generic().
+-- 
+2.25.1
 
