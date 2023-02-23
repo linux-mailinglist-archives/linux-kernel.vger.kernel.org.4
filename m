@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763B66A0CB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5231E6A0CCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbjBWPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
+        id S234271AbjBWPWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbjBWPTE (ORCPT
+        with ESMTP id S233861AbjBWPWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:19:04 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0945567BD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:19:02 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536cb25982eso174746067b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:19:02 -0800 (PST)
+        Thu, 23 Feb 2023 10:22:47 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D0E57D21
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:22:46 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so5024526wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:22:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LwN6HfLSUE5ZKSAzD6kxZTBLoYaNfg1FJI6Ev8TDx4M=;
-        b=hY5XLuPCYfHmjKHQuLwKYFlB4WfA4hoN+aNfzERLVE6508A9iiPyioey5culYB5CI+
-         ESYRSZAB2d9XOnbo+cPZOt5OLd7wLWB7difGrXDNSB7/03o81Ll8EMoLuzLSK2QUGew9
-         awH6Y8ox1ORqwCp48m3OlXmzoIArA44JwGCBbwPMQ6k/CBSrsn6n1K6I40hBbX92WHjT
-         DZ76eQqiDDhgz+O0wScTmQJ73Oa6UEiDlkgSHwECcXczHmoGueOLa/ZMalhUxiInxmv5
-         MzDYTNI52JhbmS6KV9LughkC8xGgkDEItI0FrO9gg6tlDmWfV0LX6bJHB0udKm29d9zM
-         Bz9w==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Cwbrse9pZAxCvyGzfZ4RNvckcnZylA2fH9zi27S+QI=;
+        b=NOruivWnthOebJDqC4gaJPdYD62QJ09c3qsdWWT1Bhwb1c4svUr8/bYY8ZmlqHVwst
+         uXphoclV4DxL49Vu703Cpn82F0jT40Z73ayldO4wq1OA9AYkTQ0d/exfG7pZK33Oglon
+         xG10fGCoFhKNeMEvggIC1YTE/i71GROkyL4kmxaVT0nlwRPOjfDS1PR9s+I8XZPiHTnV
+         mHQaa+AZjdRvWf+Fa1C4A8r6tM9NKIZSMtUs9sygQou/pt8VIOlcsdb8dQ/9nFsJ8ncx
+         aCFNzb5KOPija2h2uB1a3dgS0lqz0ef3WTlDWuAyv+6aUb0jcsjUejallakvNjDsHGuF
+         Evfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LwN6HfLSUE5ZKSAzD6kxZTBLoYaNfg1FJI6Ev8TDx4M=;
-        b=YYHcTzLkHuQcxTYadgdd7vppyIjHICI3BWXOWLAnTicSKq9/12AfQXTeczqrmYkB6E
-         v46sVL4ELabllkB+Zk4NpZYNu0yvW+5j1cYbbkWrG46ugfKzhKXTpSP1rmB0JY0gFuQD
-         ILekcXKUn8U8JcRtaYpeaebDPXD8DwESCvV7mWXOYtUAyv0nnfmpfLb0BsNXPEpxwAfr
-         29kdzM63gMR/n+eZhNRk/BRW4VCnundfY0QCVPmyJFBIeYGyafkCbG11mVMlxIndQxPS
-         yw6YqzK0FABTfalE81OhDnP1Tc/je5TuaJgKc8/AvJKJYxG8pM61C4Ebf2dKK0lHHYJC
-         QO8w==
-X-Gm-Message-State: AO0yUKX72mNXY1dP8lKFYwWV5iLn4o9XCzI/PjaImAYNoNAj3+m4KXfz
-        ihOhYyYJtDbWHl98lKAKV4NR4vxPmSXO2tyQsAcRxA==
-X-Google-Smtp-Source: AK7set/MGnbOMGB+D2Et65I+FbFHFBA3n+THAUTHlhkT5fuvYhaHgIJXj5QE6uw1NwL5PDsQmt26jDgvePFLaYbOwRQ=
-X-Received: by 2002:a5b:b8b:0:b0:a28:737a:b214 with SMTP id
- l11-20020a5b0b8b000000b00a28737ab214mr1359757ybq.10.1677165542095; Thu, 23
- Feb 2023 07:19:02 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Cwbrse9pZAxCvyGzfZ4RNvckcnZylA2fH9zi27S+QI=;
+        b=ERwf+RCRjU1ptOPg7zteYsLe/N63zSrGtxlcez8aEtgxbh3ybzwpL7ikW8ouJ3Y6iC
+         pBTISAGQJDcL5UDFmCgbkxbOGxFuZBBQEMrsBSCmKuKkj2As4ZHvThFz2ajgjZ4fNiKO
+         6i4BGeeijyq+mY7qgSxMbM2rPEZwu4ep+gSClrCR+qCWr9Rg3YMtCpvylErKIyxR2+YK
+         7d+w4wAfDOyUBnWxh3SZSCJxa3xWLcg5EkHnfRBKSibTRhuLFqK31YwKHcfLvjHAr+yn
+         O+4wxX18FuWIlE3gvKyocThy2pk5HnhJ02e6bO74urw6bbor+SFG/kAdKZzIicxjKOjG
+         CPsQ==
+X-Gm-Message-State: AO0yUKWZvDoBXCwVp7lfOUJ/8C7jBjLDxwELSswX1AHp4QNEjUIUQNCR
+        Gii3nLQ8+4galGoXYZnZLw5SKg==
+X-Google-Smtp-Source: AK7set++SQwiX6anztrdTaCyOV4SjeN7vFMHvuxS//fEFz98O8goJ7YLvAky+T/G+gUg5Pn95Q+aDA==
+X-Received: by 2002:a05:600c:2b46:b0:3e0:14a:697a with SMTP id e6-20020a05600c2b4600b003e0014a697amr10024326wmf.6.1677165765179;
+        Thu, 23 Feb 2023 07:22:45 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l3-20020a1ced03000000b003e0015c8618sm4984762wmh.6.2023.02.23.07.22.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 07:22:44 -0800 (PST)
+Message-ID: <6aa802c2-fe0d-f830-dc4d-3a139003e137@linaro.org>
+Date:   Thu, 23 Feb 2023 16:22:43 +0100
 MIME-Version: 1.0
-References: <20230223135635.30659-1-quic_sbillaka@quicinc.com>
-In-Reply-To: <20230223135635.30659-1-quic_sbillaka@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 23 Feb 2023 17:18:51 +0200
-Message-ID: <CAA8EJppZ+Hyhb9MacaFX6xTrJ9XyYbbCRrBvO+yE0=-Bztk7CQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] drm/msm/dp: refactor the msm dp driver resources
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        robdclark@gmail.com, seanpaul@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
-        dianders@chromium.org, quic_khsieh@quicinc.com,
-        quic_bjorande@quicinc.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, quic_vproddut@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] rtc: s5m: Drop S5M8763 support
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lee Jones <lee@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+References: <20230131183008.4451-1-virag.david003@gmail.com>
+ <20230131183008.4451-3-virag.david003@gmail.com>
+ <Y/d1DY/mXe7R5q8W@google.com> <Y/d1omGzBMFqjQx+@google.com>
+ <Y/eAPXwdv0kclEVA@mail.local>
+ <3a8e24921b9b47834199a7ca78af4d22ed370586.camel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3a8e24921b9b47834199a7ca78af4d22ed370586.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,61 +82,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 15:57, Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
->
-> The DP driver resources are currently enabled and disabled directly based on code flow.
-> As mentioned in bug 230631602, we want to do the following:
+On 23/02/2023 16:11, David Virag wrote:
+> On Thu, 2023-02-23 at 16:03 +0100, Alexandre Belloni wrote:
+>> On 23/02/2023 14:18:10+0000, Lee Jones wrote:
+>>> On Thu, 23 Feb 2023, Lee Jones wrote:
+>>>
+>>>> On Tue, 31 Jan 2023, David Virag wrote:
+>>>>
+>>>>> The S5M8763 MFD has no device tree compatible, and since board
+>>>>> file
+>>>>> support for it was removed, there's no way to use this MFD.
+>>>>> After
+>>>>> removing the remaining code for it from the MFD driver, also
+>>>>> remove
+>>>>> support for it in the s5m RTC driver, and all remaining
+>>>>> references to
+>>>>> it.
+>>>>>
+>>>>> Signed-off-by: David Virag <virag.david003@gmail.com>
+>>>>> ---
+>>>>>  drivers/rtc/rtc-s5m.c            | 82 ++----------------------
+>>>>> --------
+>>>>
+>>>>>  include/linux/mfd/samsung/core.h |  1 -
+>>>>>  include/linux/mfd/samsung/irq.h  | 50 -------------------
+>>>>
+>>>> Acked-by: Lee Jones <lee@kernel.org>
+>>>
+>>> Actually, looks like this should probably go in via MFD, so I need
+>>> an
+>>> RTC Ack.
+>>
+>> There were comments on 1/2 so I was expecting a v2.
+>>
+>>
+> 
+> Krzysztof commented there about the removal of an enum value that's
+> actually removed in 2/2 since it would break the RTC driver if it was
+> removed in 1/2. He realised that and corrected himself. No need for v2
+> AFAIK, unless something else is found.
 
-private bug tracker
+Yep. I also gave review tags for both of these.
 
->
-> 1) Refactor the dp/edp parsing code to move it to probe (it is currently done in bind).
+Best regards,
+Krzysztof
 
-This is good. I'd suggest splitting this into smaller chunks. First,
-move all resource binding, then move the actual dp_aux handling. It
-would be easier to review it this way.
-
-> 2) Then bind all the power resources needed for AUX in pm_runtime_ops.
->
-> 3) Handle EPROBE_DEFER cases of the panel-eDP aux device.
-
-This is not handled properly. The eDP aux probing is asynchronous, so
-you should move the second stage into the done_probing() part, rather
-than relying on the -EPROBE_DEFER. There can be cases, when the panel
-driver is not available at the DP's probe time. In such cases we
-should leave the DP driver probed, then wait for the panel before
-binding the component.
-
-> 4) Verify DP functionality is unaffected.
->
-> These code changes will parse the resources and get the edp panel during probe.
-> All the necessary resources required for the aux transactions are moved to pm_runtime ops.
-> They are enabled or disabled via get/put sync functions.
->
-> This is a RFC to verify with the community if the approach we are taking is correct.
->
-> https://partnerissuetracker.corp.google.com/issues/230631602
-
-This link is useless, since its contents are not public.
-
->
-> Sankeerth Billakanti (2):
->   drm/msm/dp: enumerate edp panel during driver probe
->   drm/msm/dp: enable pm_runtime support for dp driver
->
->  drivers/gpu/drm/msm/dp/dp_aux.c     | 155 +++++++++++++++++++++--
->  drivers/gpu/drm/msm/dp/dp_catalog.c |  12 ++
->  drivers/gpu/drm/msm/dp/dp_catalog.h |   1 +
->  drivers/gpu/drm/msm/dp/dp_display.c | 185 ++++++++++++++--------------
->  drivers/gpu/drm/msm/dp/dp_power.c   |   7 --
->  5 files changed, 250 insertions(+), 110 deletions(-)
->
-> --
-> 2.39.0
->
-
-
--- 
-With best wishes
-Dmitry
