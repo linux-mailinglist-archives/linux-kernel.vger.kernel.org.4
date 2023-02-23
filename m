@@ -2,74 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846966A1202
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FFF6A1206
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjBWV3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S229706AbjBWVaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjBWV3j (ORCPT
+        with ESMTP id S229802AbjBWVaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:29:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018AF166C8;
-        Thu, 23 Feb 2023 13:29:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6577B81A2A;
-        Thu, 23 Feb 2023 21:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026CDC4339B;
-        Thu, 23 Feb 2023 21:29:34 +0000 (UTC)
-Date:   Thu, 23 Feb 2023 16:29:33 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the ktest tree
-Message-ID: <20230223162933.44766b78@gandalf.local.home>
-In-Reply-To: <20230223162452.454a3fd6@gandalf.local.home>
-References: <20230224081708.383a5e57@canb.auug.org.au>
-        <20230223162452.454a3fd6@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 23 Feb 2023 16:30:13 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB34E55070
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:30:09 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536bf92b55cso221408227b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:30:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BG68yXM18nFMzuEzbEzhZY3lfpTIMaOZoRW5LPn/4U=;
+        b=XAWHipEydWosQe7fBGUUK9UuovN2s9ZKRyuQW/oaNSj0SWXsr6WzXFeVbbDIoqQikJ
+         Pe71LIcOsrYOTfPNrHcLux7Ma3XOTFPj4C1MRUY6twF2ryGEkv6zyLpYuaV99Z4OcHkE
+         pBul/hMpDr/QRJei3RUd9fKo+m2or4ifdc7w6JUA7CJKMJbgtkep8KNSFAIKB+Hl4FYO
+         KQxaSLBFYycFnLaTStcZDsoJDlT00DB43TPnBxAS3A06ifUG099brQcEFc1eo3WcnZvN
+         gJNSO3DucWmpIFeywBFiivezFuwKM7ErozjmwEakq+OFqBjxBN7+WLRf6xvx6YmN/Giw
+         KeNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4BG68yXM18nFMzuEzbEzhZY3lfpTIMaOZoRW5LPn/4U=;
+        b=Y5Z1XUY3B/BGMtYnwNPAyPh2Obq0Q0cvyB/cAx2Yu5eoNaB3hlqZ3IFDKbCpQt6tQw
+         mSumrC1fmyDvzJf2nYxDe40fDPsMROXKaAyxdK2YrhbXxEUKFkLC/JQQh7Z+0uBnm9WL
+         kwsRCrke9iaj1YCIXB5JIpX5gcMHZhzqLYHk3hVddlal3DKwOVvfJ3i8ju0vWGAds2RK
+         J+SwiphWPpj2lj635YYdnqQiJ0FAU8y9wKjeFqSrMCOu83SifXNfeDKxHAmJ4hosExvl
+         syLJ9j3oeSXwnbz4QkYkP/eQ05RjK7eslVTgNKUmisYIm3rH3sVwHR3mJkzoUaGhaGbW
+         HiUw==
+X-Gm-Message-State: AO0yUKVAt5KN5/Ki503Hnexn8GK8QLWEpzUJ9sTHPDPEhEyC6FzFbJCk
+        Glm07L7SUngW+ajtnCg45CNMIN3eJCd0bkhqVBBCMg==
+X-Google-Smtp-Source: AK7set8l+TkygtQKb7Ixt4MGhRzD9YVKljUVzE98UjYgby3O4tm9YSA8eAfzUYY0kMgJlyCSQrnXMA9FedWkysuvO1I=
+X-Received: by 2002:a05:6902:1143:b0:90d:a6c0:6870 with SMTP id
+ p3-20020a056902114300b0090da6c06870mr4442145ybu.2.1677187808837; Thu, 23 Feb
+ 2023 13:30:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222192925.1778183-1-edliaw@google.com> <20230222192925.1778183-2-edliaw@google.com>
+ <Y/crdG+quVvKMF0m@kroah.com> <CAG4es9Wa+PxomxmK348O8nxfXny8jo=9kqQ0KOYgQq82gTNeaQ@mail.gmail.com>
+ <Y/fICk4NYFEF9EoS@kroah.com>
+In-Reply-To: <Y/fICk4NYFEF9EoS@kroah.com>
+From:   Edward Liaw <edliaw@google.com>
+Date:   Thu, 23 Feb 2023 13:29:42 -0800
+Message-ID: <CAG4es9WoVhTEGLmokfXA8YaJC+nWBOicFKpuePbidtm9cd0c2g@mail.gmail.com>
+Subject: Re: [PATCH 4.14 v2 1/4] bpf: Do not use ax register in interpreter on div/mod
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>, bpf@vger.kernel.org,
+        kernel-team <kernel-team@android.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 16:24:52 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Thu, Feb 23, 2023 at 10:46:50AM -0800, Edward Liaw wrote:
+> > > What is the git commit id in Linus's tree of this commit?
+> >
+> > Hi Greg,
+> > It is a partial revert of 144cd91c4c2bced6eb8a7e25e590f6618a11e854.
+>
+> Please document that in the changelog text very very well when you
+> resend this.
 
-> On Fri, 24 Feb 2023 08:17:08 +1100
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> Ah sorry. When I was doing my pull request for Linus, I realized I
-> accidentally had a commit that wasn't to go upstream. I rebased to remove
-> it, but never updated my for-next branch.
-
-The commit message even had:
-
-    ktest.pl: Process variables within variables
-    
-    Allow a variable to contain another variable. This will allow the
-    ${shell <command>} to have its command include variables.
-    
-    [ When I remember the use case for this, I'll send out the real patch ]
-
-Which is what reminded me that it wasn't suppose to have been in for-next
-to begin with.
-
-> 
-> Doing that now.
-
-Done.
-
--- Steve
+Sorry, I made a mistake.  The original commit was made to 4.19.y with
+commit id c348d806ed1d3075af52345344243824d72c4945.
