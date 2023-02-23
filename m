@@ -2,106 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0EA6A12CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D586A12D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjBWWZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 17:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
+        id S229584AbjBWW24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 17:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBWWZq (ORCPT
+        with ESMTP id S229441AbjBWW2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 17:25:46 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C69A1969B;
-        Thu, 23 Feb 2023 14:25:46 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id z20-20020a17090a8b9400b002372d7f823eso807608pjn.4;
-        Thu, 23 Feb 2023 14:25:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rjj3snMpxZB2TRf050gHgvkyriwKTyczDaG6fgrNL/c=;
-        b=bVHd1RSNG5SuUmtpJ0EPODD/jURN/Khhs6pYxikjWpkwxBOHWujluJ3ZskB8bygbth
-         PFr8gRn3hbG8JoisOn9r9ZHFF9t/54QDTEx7unR3E1r1EGa3htXMarBzmcFnVOLLsRrj
-         obIZzkeeFH+3fPnjii1089Y1an1l4bTFiVDVQgYM6mWuRG+nJOxAPafuqD/Zrz1I1who
-         e4VEL9ir7Qh/oPwZSOrCkz7yImlNa9xTACmKshxGeRg3CsEJWb6Rz55ZgnrewjlC5YaK
-         LSv1VgnhkB8qwBu4zXqhk7tF7slEE9YSxu5w2f+H2Ia5mwIcSAx5SR6AMRoJ/j3Q959H
-         61lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rjj3snMpxZB2TRf050gHgvkyriwKTyczDaG6fgrNL/c=;
-        b=pG3Hmo6XwBMA1zDg+8x8BrM28iDKP00vTBPe1uBErK1cr7B8Nei/AkJ+/CTOMHqeWc
-         ZAyPTAXNFLWdfLew1bOIe2MHXOfbcmRiFw1wlo9k5jr01sx7n7E+bzZTWotL9Z1FfO1k
-         MnCgShR20mSGJE91a+KN8uNAcQyzl5swqunboD0iCwYsF7Q0G3icY7QhlNxrAl3UFzXr
-         vekYtJq97F9FDtkXFWg2dwKqWnHRCftA3fHZSDqdsCDwreiLsOze7qSLYNrTSn6x1M1b
-         KBF2d9blXTMvf7niajCVQhYe63fJmKlG+V/LWe0uZ+OgMHVBPQG6oe8CQ0SISoupzBef
-         aEYg==
-X-Gm-Message-State: AO0yUKXS5Wy14QJ7NOJlqRdj1KDtmGML5vZgdg568K9kZF5tIU3LUprx
-        Jp0/GTtunssm9XI//xq89UU=
-X-Google-Smtp-Source: AK7set/pU1PTFiTw6yudCDS+Er13fStt9pnicY4aT3l0MFg815gT5EYNWEtUXWxCPRcjymPiOnT/YQ==
-X-Received: by 2002:a17:90a:199:b0:234:b23:ead3 with SMTP id 25-20020a17090a019900b002340b23ead3mr14228561pjc.3.1677191145493;
-        Thu, 23 Feb 2023 14:25:45 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ji10-20020a170903324a00b00198f256a192sm7862497plb.171.2023.02.23.14.25.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 14:25:44 -0800 (PST)
-Message-ID: <b24ddcf2-0f9d-f96a-7a6a-8bdbc0904600@gmail.com>
-Date:   Thu, 23 Feb 2023 14:25:42 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.2 00/12] 6.2.1-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230223141539.893173089@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230223141539.893173089@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 17:28:54 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2061716F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 14:28:51 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230223222847epoutp04e5ab0e4b170849facf917c3669f83a10~GlKBhqwpC1215512155epoutp04y
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 22:28:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230223222847epoutp04e5ab0e4b170849facf917c3669f83a10~GlKBhqwpC1215512155epoutp04y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677191327;
+        bh=o9KYta4ctbL2UStjOW/LIGMt7jOHPPBKftbnoGU4ZZ0=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=qJnjWkMELnQc0NLoy23WntwXsIEP2P6PdDEUYyWYE1ATbvPhbJ4yBM9ynH1N1DDfa
+         XC/YkDsIP2UXiIkO3PdqjU5AQSnlTrtRyb0wFXGxQT5ltc9BCKKZ1mZKZSBSJvfSGT
+         YY8gSRr68+jDH54cB/FQnGarJs6DasqPptYQSZTU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230223222846epcas2p2292a4cfaf6bc6db9830c3e18c4fa3edc~GlKArIbP51775317753epcas2p2S;
+        Thu, 23 Feb 2023 22:28:46 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4PN73L3MPtz4x9Ps; Thu, 23 Feb
+        2023 22:28:46 +0000 (GMT)
+X-AuditID: b6c32a46-743fa70000007a4b-fb-63f7e89e4442
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        17.84.31307.E98E7F36; Fri, 24 Feb 2023 07:28:46 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH v3] scsi: ufs: core: Add trace event for MCQ
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Ziqi Chen <quic_ziqichen@quicinc.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        JunWoo Lee <junwoo80.lee@samsung.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Daejun Park <daejun7.park@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <1677051569-81113-1-git-send-email-quic_ziqichen@quicinc.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230223222745epcms2p2a85ca78bc48f366869fa224afa18799d@epcms2p2>
+Date:   Fri, 24 Feb 2023 07:27:45 +0900
+X-CMS-MailID: 20230223222745epcms2p2a85ca78bc48f366869fa224afa18799d
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPJsWRmVeSWpSXmKPExsWy7bCmqe68F9+TDS7tl7A4+WQNm8WDedvY
+        LF7+vMpmcfBhJ4vFtA8/mS1eHtK0WPUg3GLRjW1MFrv+NjNZXN41h82i+/oONosDH1YxWiw/
+        /o/JYvFyNYuFHXNZLCZd28Bm8fv7JDaLfR0PmCyWbr3J6CDscfmKt0fLvlvsHov3vGTy2LSq
+        k81jwqIDjB4tJ/ezeHxf38Hm8fHpLRaPiXvqPPq2rGL0+LxJzqP9QDdTAE9Utk1GamJKapFC
+        al5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0INKCmWJOaVAoYDE4mIl
+        fTubovzSklSFjPziElul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMP8cSCq5LV9yb
+        NZW9gfGaVBcjB4eEgInEgzfWXYxcHEICOxgl9vT3MoHEeQUEJf7uEO5i5OQQFnCQ+HnnNyuI
+        LSSgJLH+4ix2iLiexK2HaxhBbDYBHYnpJ+6zg8wREZjJIjHz1m8wh1lgJ5NE8+0uJpAqCQFe
+        iRntT1kgbGmJ7cu3gnVzCnhJHN2wkRkiriHxY1kvlC0qcXP1W3YY+/2x+YwQtohE672zUDWC
+        Eg9+7oaKS0rcnrsJqj5f4v+V5VB2jcS2A/OgbH2Jax0bwW7gFfCV+PjxNFicRUBVYtayfVC3
+        uUise74EzGYW0JZYtvA1MyhQmAU0Jdbv0oeEm7LEkVssMF81bPzNjs5mFuCT6Dj8Fy6+Y94T
+        aCioSaz7uZ5pAqPyLERIz0KyaxbCrgWMzKsYxVILinPTU4uNCozgUZucn7uJEZzStdx2ME55
+        +0HvECMTB+MhRgkOZiUR3qlM35OFeFMSK6tSi/Lji0pzUosPMZoCfTmRWUo0OR+YVfJK4g1N
+        LA1MzMwMzY1MDcyVxHmlbU8mCwmkJ5akZqemFqQWwfQxcXBKNTAZJRXqx308UZAv5ZvZ75d2
+        r+ZJ3gPplqvLxbb+qQtdFq4jrKm896DG1ZT1wgEyhxyrY/+4rT1dIxej8uckG+uT7iWHX9Sa
+        dPjdPaE2u7TOVEZe5vkP7W89Zl94b/yuaRDa3FgZGrH+UW6JLguPb8jPFL+Yls2Mmct7T1/4
+        vSdX+5A14/XHTCGBfC87dgaIv1y+5OZZk2yX+wc3qCwV4BaWtp7e03rIfbpc+tU/E7Yd9lrt
+        3XB7wgFx/95u6ftageodpjeFKx+/eTnf/e7Cn/M8BNl1Q8128hofvl3Op/ThXnbgBkmOqvwt
+        GXzftHQW6DSseDfXJjfcpLb18eEslT5rlfWdwe7P5p1Js3sYpcRSnJFoqMVcVJwIAK6ABtZy
+        BAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230222074027epcas2p4138c95d79ac3cd7dca4745080c747fa1
+References: <1677051569-81113-1-git-send-email-quic_ziqichen@quicinc.com>
+        <CGME20230222074027epcas2p4138c95d79ac3cd7dca4745080c747fa1@epcms2p2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 06:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.1 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.1-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Ziqi Chen,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+...
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 3b3cf78..67cb90d 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> =40=40 -426,6 +426,7 =40=40 static void ufshcd_add_command_trace(struct u=
+fs_hba *hba, unsigned int tag,
+>  =C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20ufshcd_lrb=20*lrbp=20=3D=
+=20&hba->lrb=5Btag=5D;=0D=0A>=20=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0s=
+truct=20scsi_cmnd=20*cmd=20=3D=20lrbp->cmd;=0D=0A>=20=20=C2=A0=C2=A0=20=C2=
+=A0=20=C2=A0=20=C2=A0struct=20request=20*rq=20=3D=20scsi_cmd_to_rq(cmd);=0D=
+=0A>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20ufs_hw_queue=20*hwq;=
+=0D=0A>=20=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0int=20transfer_len=20=
+=3D=20-1;=0D=0A>=20=C2=A0=0D=0A>=20=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=
+=A0if=20(=21cmd)=0D=0A>=20=40=40=20-456,9=20+457,16=20=40=40=20static=20voi=
+d=20ufshcd_add_command_trace(struct=20ufs_hba=20*hba,=20unsigned=20int=20ta=
+g,=0D=0A>=20=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=0A>=20=C2=A0=
+=0D=0A>=20=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0intr=20=3D=20ufshcd_rea=
+dl(hba,=20REG_INTERRUPT_STATUS);=0D=0A>=20-=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0doorbell=20=3D=20ufshcd_readl(hba,=20REG_UTP_TRANSFER_REQ_DOOR_BELL);=
+=0D=0A>=20-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_ufshcd_command(dev_nam=
+e(hba->dev),=20str_t,=20tag,=0D=0A>=20-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0doo=
+rbell,=20transfer_len,=20intr,=20lba,=20opcode,=20group_id);=0D=0A>=20+=0D=
+=0A>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(is_mcq_enabled(hba))=20=
+=7B=0D=0A>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
+=A0=20=C2=A0hwq=20=3D=20ufshcd_mcq_req_to_hwq(hba,=20rq);=0D=0A>=20+=20=C2=
+=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_ufs=
+hcd_command_mcq(dev_name(hba->dev),=20str_t,=20tag,=0D=0A>=20+=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
+=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0hwq,=20transfer_le=
+n,=20intr,=20lba,=20opcode,=20group_id);=0D=0AHow=20about=20passing=20membe=
+r=20variables=20of=20hwq=20instead=20of=20passing=20hwq?=0D=0A=0D=0A>=20+=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=20else=20=7B=0D=0A>=20+=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0doorbell=20=3D=
+=20ufshcd_readl(hba,=20REG_UTP_TRANSFER_REQ_DOOR_BELL);=0D=0A>=20+=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_ufshcd=
+_command(dev_name(hba->dev),=20str_t,=20tag,=0D=0A>=20+=20=C2=A0=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0doorbell,=20transfer_len=
+,=20intr,=20lba,=20opcode,=20group_id);=0D=0A>=20+=20=C2=A0=20=C2=A0=20=C2=
+=A0=20=C2=A0=7D=0D=0A>=20=20=7D=0D=0A>=20=C2=A0=0D=0A>=20=20static=20void=
+=20ufshcd_print_clk_freqs(struct=20ufs_hba=20*hba)=0D=0A>=20diff=20--git=20=
+a/include/trace/events/ufs.h=20b/include/trace/events/ufs.h=0D=0A>=20index=
+=20599739e..604b2cd=20100644=0D=0A>=20---=20a/include/trace/events/ufs.h=0D=
+=0A>=20+++=20b/include/trace/events/ufs.h=0D=0A>=20=40=40=20-10,6=20+10,7=
+=20=40=40=0D=0A>=20=20=23define=20_TRACE_UFS_H=0D=0A>=20=C2=A0=0D=0A>=20=20=
+=23include=20<linux/tracepoint.h>=0D=0A>=20+=23include=20<ufs/ufshcd.h>=0D=
+=0AThen,=20it=20can=20be=20removed.=0D=0A=0D=0AThanks,=0D=0ADaejun
