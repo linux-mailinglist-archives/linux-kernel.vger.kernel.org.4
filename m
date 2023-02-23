@@ -2,79 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D406A00B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342CD6A00B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjBWBix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S229646AbjBWBl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjBWBiw (ORCPT
+        with ESMTP id S229446AbjBWBl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:38:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633F414981;
-        Wed, 22 Feb 2023 17:38:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CD0BB818D7;
-        Thu, 23 Feb 2023 01:38:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44689C433D2;
-        Thu, 23 Feb 2023 01:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677116328;
-        bh=bNLHDlH6yDQLmQ8YuQKYOawIa8uHrdxhLzACJX0hLos=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lJGlf3wNUcHVR5UBeF7qNVwHURa2UoL5tpzkdnZkaFqNyt+56xvabjA9onpByclxh
-         Yx9UaaTFlV2NJ9eOUvd7tFQ54lGRN5+fEXxylimaEmuLgiGSTG+DYLzG7RjkfLBeTY
-         f7om8L3XsMzjuLjA/5K+J4QepluGokljcNxzK/op4jvXvBhqZqAaeuXiUb6rHn7ncV
-         7dR11RWtIUwXradvsLH/gBO6w1r5kAsVkpzr6geWmejrEH6sFXPEoEadNRntElwECz
-         5+Enuxqolk8xOU03NXZJK3KvxHPZTzQHpP1ADQ4JPV0X9ue9OCpB1iJifssP4wZFZ6
-         VrCO0g/3raE4A==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH] clk: qcom: apcs-msm8986: Include bitfield.h for FIELD_PREP
-Date:   Wed, 22 Feb 2023 17:38:47 -0800
-Message-Id: <20230223013847.1218900-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+        Wed, 22 Feb 2023 20:41:56 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B473BD87
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=4Y/vUgi+zlUePCC78E4DGLn2+CH9ssQFh6vEdznAP9w=; b=LZPK0iLJzCjnUGWbq8qCOx/93y
+        LjP0q1Pvaf5mPsdHgFYtqgrVhncPKPbprYF2m04fLaAjC+IJ7MRaedgo/awUyMcHVCQ+kjAtbN8a2
+        tr3T56MJikybyESRgRxDAOp/W+s+X0o2aRrYwn6f94VmWEQ1DPMGpRslDyQeDA+3dcnouvXOjRrGO
+        Og91Oj5NpfUTq4NGJQCr+2CNllFw9YLWTQyWU644YtdxlhW2LjkCJ9hDURofNTIHwEohG+W6CFWOI
+        EPf1U+ZZAZKMhFzpEQPPYgyaP0IEyFkF6xlpDR9180sPojTZRINoy1XENEgCWTu2RcESrFmo+ZyBV
+        6ugW3KMg==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pV0cK-00EgHt-Ln; Thu, 23 Feb 2023 01:41:52 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Elimar Riesebieter <riesebie@lxtec.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] macintosh: via-pmu-led: *********************************
+Date:   Wed, 22 Feb 2023 17:41:51 -0800
+Message-Id: <20230223014151.19270-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise some configurations fail.
+LEDS_TRIGGER_DISK depends on ATA, so selecting LEDS_TRIGGER_DISK
+when ATA is not set/enabled causes a Kconfig warning:
 
-Fixes: 027726365906 ("clk: qcom: add the driver for the MSM8996 APCS clocks")
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+WARNING: unmet direct dependencies detected for LEDS_TRIGGER_DISK
+  Depends on [n]: NEW_LEDS [=y] && LEDS_TRIGGERS [=y] && ATA [=n]
+  Selected by [y]:
+  - ADB_PMU_LED_DISK [=y] && MACINTOSH_DRIVERS [=y] && ADB_PMU_LED [=y] && LEDS_CLASS [=y]
+
+Fix this by making ADB_PMU_LED_DISK depend on ATA.
+
+Seen on both PPC32 and PPC64.
+
+Fixes: 0e865a80c135 ("macintosh: Remove dependency on IDE_GD_ATA if ADB_PMU_LED_DISK is selected")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Elimar Riesebieter <riesebie@lxtec.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: linuxppc-dev@lists.ozlabs.org
 ---
- drivers/clk/qcom/apcs-msm8996.c | 1 +
+ drivers/macintosh/Kconfig |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
-index 7ec4022c5b43..3e91e9e6da74 100644
---- a/drivers/clk/qcom/apcs-msm8996.c
-+++ b/drivers/clk/qcom/apcs-msm8996.c
-@@ -7,6 +7,7 @@
-  */
+diff -- a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
+--- a/drivers/macintosh/Kconfig
++++ b/drivers/macintosh/Kconfig
+@@ -86,6 +86,7 @@ config ADB_PMU_LED
  
- #include <linux/bits.h>
-+#include <linux/bitfield.h>
- #include <linux/clk-provider.h>
- #include <linux/delay.h>
- #include <linux/module.h>
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
-
+ config ADB_PMU_LED_DISK
+ 	bool "Use front LED as DISK LED by default"
++	depends on ATA
+ 	depends on ADB_PMU_LED
+ 	depends on LEDS_CLASS
+ 	select LEDS_TRIGGERS
