@@ -2,86 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFD66A0BA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BFD6A0BA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbjBWOQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S234720AbjBWOQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234574AbjBWOQO (ORCPT
+        with ESMTP id S234326AbjBWOQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:16:14 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A7049893;
-        Thu, 23 Feb 2023 06:16:05 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 23 Feb 2023 09:16:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A64580F3;
+        Thu, 23 Feb 2023 06:16:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1F0A66020E0;
-        Thu, 23 Feb 2023 14:16:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677161764;
-        bh=DExPf9AiH1cBAor2LPRH1UeqVdtp1oO6LQZ563fjEng=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dsUs87YSLJdFMEq9PSAxDC+rpYg2aXK2Qpjs3fSO9JLTNEBfhj4dKDV35d53ENrIG
-         ik/GD3J2rRYfOH4aV621pksA42WOyrMifzEsMVFC2dTnUo10aHGsarvvS/zor8jrH4
-         Mm3XH+MUT41o+eNIUwaMxRBqkkrIT1pAdkm21iXswxm5Dk1/ay+DA45sbI5arubUnG
-         BBXgs90RU82vQHaEAee3cuupalTLyjrIBi32XNb8u00XbENb6BhLiExorMEk7oDTqp
-         JHQ1DBVUxcrouQRkXA50mjpU7AozR2srp6R/fQZN3w1xQK9sUgNXAApNP/l+qBR67y
-         f6TiGHdA/WnmQ==
-Message-ID: <06918fde-64ea-37b2-da1a-1c8316457223@collabora.com>
-Date:   Thu, 23 Feb 2023 15:16:01 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CAC4B81A3D;
+        Thu, 23 Feb 2023 14:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C3CC433EF;
+        Thu, 23 Feb 2023 14:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677161771;
+        bh=n5lLF48zao6NpX2/boUarV1jQqNQRnmYvign2Kja02g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eGJdoXPySPMWyy2dfQXi5uEGOVFYjkWsjFW7gNo4fd1OljeB6nFKcCAK4cBebYKiv
+         jNjZdHgmD88+RQWgiFGeoKSKz5tt7EAPiBKHSGMSC6yvcxK1nVqSsrrPUV5UrNGkaz
+         8g+6v9wKA2jC7P0zvtB+rLdC19c34C7m4RxpH27M=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 6.2 00/12] 6.2.1-rc2 review
+Date:   Thu, 23 Feb 2023 15:16:08 +0100
+Message-Id: <20230223141539.893173089@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] pwm: mtk-disp: Fix backlight configuration at boot
-Content-Language: en-US
-To:     thierry.reding@gmail.com
-Cc:     u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
-        weiqing.kong@mediatek.com, jitao.shi@mediatek.com,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.1-rc2.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-6.2.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 6.2.1-rc2
+X-KernelTest-Deadline: 2023-02-25T14:15+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/01/23 17:06, AngeloGioacchino Del Regno ha scritto:
-> Since the pwm-mtk-disp driver was fixed to get PWM_EN state from the
-> right register, an old two-wrongs-make-one-right issue emerged: as a
-> result, MT8192 Asurada Spherion got no backlight at boot unless a
-> suspend/resume cycle was performed.
-> Also, the backlight would sometimes not get updated with the requested
-> value, requiring the user to change it back and forth until it worked.
-> 
-> This series fixes both of the aforementioned issues found on MT8192.
-> 
-> AngeloGioacchino Del Regno (2):
->    pwm: mtk-disp: Disable shadow registers before setting backlight
->      values
->    pwm: mtk-disp: Configure double buffering before reading in
->      .get_state()
-> 
->   drivers/pwm/pwm-mtk-disp.c | 34 +++++++++++++++++++++++-----------
->   1 file changed, 23 insertions(+), 11 deletions(-)
-> 
+This is the start of the stable review cycle for the 6.2.1 release.
+There are 12 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Gentle ping for this one: this is fixing backlight issues on multiple MediaTek
-SoCs and was well tested.
+Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+Anything received after that time might be too late.
 
-Thanks,
-Angelo
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.1-rc2.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 6.2.1-rc2
+
+Linus Torvalds <torvalds@linux-foundation.org>
+    bpf: add missing header file include
+
+Eric Biggers <ebiggers@google.com>
+    randstruct: disable Clang 15 support
+
+Kees Cook <keescook@chromium.org>
+    ext4: Fix function prototype mismatch for ext4_feat_ktype
+
+Hans de Goede <hdegoede@redhat.com>
+    platform/x86: nvidia-wmi-ec-backlight: Add force module parameter
+
+Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+    platform/x86/amd/pmf: Add depends on CONFIG_POWER_SUPPLY
+
+Paul Moore <paul@paul-moore.com>
+    audit: update the mailing list in MAINTAINERS
+
+Lukas Wunner <lukas@wunner.de>
+    wifi: mwifiex: Add missing compatible string for SD8787
+
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
+    HID: mcp-2221: prevent UAF in delayed work
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/static_call: Add support for Jcc tail-calls
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/alternatives: Teach text_poke_bp() to patch Jcc.d32 instructions
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/alternatives: Introduce int3_emulate_jcc()
+
+Dave Hansen <dave.hansen@linux.intel.com>
+    uaccess: Add speculation barrier to copy_from_user()
+
+
+-------------
+
+Diffstat:
+
+ MAINTAINERS                                    |  2 +-
+ Makefile                                       |  4 +-
+ arch/x86/include/asm/text-patching.h           | 31 +++++++++++++
+ arch/x86/kernel/alternative.c                  | 62 +++++++++++++++++++-------
+ arch/x86/kernel/kprobes/core.c                 | 38 ++++------------
+ arch/x86/kernel/static_call.c                  | 50 +++++++++++++++++++--
+ drivers/hid/hid-mcp2221.c                      |  3 ++
+ drivers/net/wireless/marvell/mwifiex/sdio.c    |  1 +
+ drivers/platform/x86/amd/pmf/Kconfig           |  1 +
+ drivers/platform/x86/nvidia-wmi-ec-backlight.c |  6 ++-
+ fs/ext4/sysfs.c                                |  7 ++-
+ include/linux/nospec.h                         |  4 ++
+ kernel/bpf/core.c                              |  3 +-
+ lib/usercopy.c                                 |  7 +++
+ security/Kconfig.hardening                     |  3 ++
+ 15 files changed, 167 insertions(+), 55 deletions(-)
+
+
