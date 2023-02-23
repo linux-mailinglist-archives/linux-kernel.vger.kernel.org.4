@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA716A0FC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E6A6A0FF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjBWSwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S229844AbjBWS5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBWSwD (ORCPT
+        with ESMTP id S229507AbjBWS5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:52:03 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A125ED;
-        Thu, 23 Feb 2023 10:52:00 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id bl7so13817602oib.0;
-        Thu, 23 Feb 2023 10:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9etLRVSdOXaCscwmv+H7k7gnP7xVJUcjkddH6jLBVsc=;
-        b=lApunCCDvEH6I8seeTQWVdZ9Rl8Q3moAjjItt8N6ft0ZoY70iHtjuSJdHugMxX07r1
-         ZtN3GKSVJ6bGdeUS2EWN3DOTkVdp65ta/gpjbkPAVViT37G9Po3tAlvjabbXl0jXA/4t
-         TxHjG4Vt+3Bl+ud85wIvvNKQzKcMczMIlpIDMgeRO5xQpSqkMyhj0OO0F+R8HPKdVZlp
-         Bh3SZk0qNo7WV2lwvQcmGEZXAwkV9ADO7wWlgznwn0YlZ5+DaPfXsLsLJMYBVirNrcpY
-         L9kQ6IoEXtYM0e81IJqNHDgCa9E0j8yJaPuQwN/E5oPbXKA6/RQlDkPWxVNXZnoLiYk6
-         fLYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9etLRVSdOXaCscwmv+H7k7gnP7xVJUcjkddH6jLBVsc=;
-        b=Bv4X3BePZmB3An257A2w59s1iyoGl06OifL9WXLDJ5oNRbZcgICEYQj+OH3fTx1l4f
-         X50ln9+1G3gR/rI3M2ekcZ8R5QZISdstakWq75tb47h82ctpSR2pM4rfFjiZETUeL7um
-         F7g81boaTdtL0YCJglwHo2EFhJsF8cdBfloqpOFMFE+CEQQvK7fiNLXIJ/01e/b+IlJN
-         mjVPW2FG0LdyVfvKuG8VWRPgf9IPExuVMfv1+aZq316xSSr7c6iGOPwQTNlby4AzBxs+
-         yg50mPEF603pG0+SaIWnWRLfyeBVzV+ftPYDNvO++jIMTpUhMfsbKEds6L/yUDLwNImJ
-         jHaQ==
-X-Gm-Message-State: AO0yUKXfYEsmwYjbFlFFg8vYdunc7VIV0tWRRzuGxTGgOQnKdldKzzEb
-        RdWPx56odzS22ailsG3Yo/GS3UmdyUNytAYPtro=
-X-Google-Smtp-Source: AK7set/2kHcAeaPabhjfKagmHPvKDBzXht3PAv66qqwhYDd8r2Wthl7b7KZTXESDtH12eZQLfwEOP6txv1t+qNTMPqE=
-X-Received: by 2002:a05:6808:610:b0:37a:fd14:1246 with SMTP id
- y16-20020a056808061000b0037afd141246mr278284oih.3.1677178319578; Thu, 23 Feb
- 2023 10:51:59 -0800 (PST)
+        Thu, 23 Feb 2023 13:57:49 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684718153
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:57:47 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NHsedG023980;
+        Thu, 23 Feb 2023 18:57:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=pgHJVP5VYAB4nsdnPBhd1aExXHIe+MpwPHey0VXdhgM=;
+ b=VDW8qB50NrHE1RSeniGpzk+a/1od6Nqu7eA63AL2Msf2RFhNU2V1nKmRSIWGFiTVP9uu
+ kXFoLWjZtb0CB6VT/lTDpJcq81hu4OAUIgEDGTvyAQ9BiIcVNRBecBzj1YotDBPDhtLh
+ cD2HSgCxRLz+HQyYyjV1Etp8sbVXxOe7kZ099aHW1iVuNJV/RfnYnBI7WRAyB6IL7SKX
+ v3fGYoXBwNaIGOrPoZaz1pDkEvrAQTjgpuQ+fKHEwTkBbDGzOa7mDGEmk73kPYyn9wu5
+ BL2KALkIYXGl861rVvP2IZScOppfUbzF1mED1AZNPflANt+DJ9b/cP7TT7l6hofUKyzh HQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nxcy61hes-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 18:57:36 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31NIoKNh010903;
+        Thu, 23 Feb 2023 18:57:35 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nxcy61hdp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 18:57:35 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31N866Sx031457;
+        Thu, 23 Feb 2023 18:57:32 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6db40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 18:57:32 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31NIvUFB45613400
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Feb 2023 18:57:30 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4395020043;
+        Thu, 23 Feb 2023 18:57:30 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEE2720040;
+        Thu, 23 Feb 2023 18:57:27 +0000 (GMT)
+Received: from li-c1fdab4c-355a-11b2-a85c-ef242fe9efb4.ibm.com.com (unknown [9.43.26.209])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Feb 2023 18:57:27 +0000 (GMT)
+From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
+To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org
+Cc:     dietmar.eggemann@arm.com, bsegall@google.com, tglx@linutronix.de,
+        srikar@linux.vnet.ibm.com, arjan@linux.intel.com,
+        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org,
+        sshegde@linux.vnet.ibm.com
+Subject: [PATCH V3] Interleave cfs bandwidth timers for improved single thread performance at low utilization
+Date:   Fri, 24 Feb 2023 00:21:53 +0530
+Message-Id: <20230223185153.1499710-1-sshegde@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LxoVlSwyMARh1WDY1MXcCaV2kYP4TLJG
+X-Proofpoint-ORIG-GUID: jcF7URTAT3B57kuBAp90vfLqD51pdX6z
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-7-robdclark@gmail.com>
- <20230220105345.70e46fa5@eldfell> <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
- <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com> <CAF6AEGuMn3FywPkEtfJ7oZ16A0Bk2aiaRvj4si4od1d3wzXkPw@mail.gmail.com>
- <20230222114900.1b6baf95@eldfell> <CAF6AEGs1_75gg+LCBj6=PH8Jn60PXiE+Kx_2636nP-+pajN8Hg@mail.gmail.com>
- <20230223113814.3010cedc@eldfell>
-In-Reply-To: <20230223113814.3010cedc@eldfell>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 23 Feb 2023 10:51:48 -0800
-Message-ID: <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
-Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_11,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230153
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,115 +90,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
->
-> On Wed, 22 Feb 2023 07:37:26 -0800
-> Rob Clark <robdclark@gmail.com> wrote:
->
-> > On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > >
-> > > On Tue, 21 Feb 2023 09:53:56 -0800
-> > > Rob Clark <robdclark@gmail.com> wrote:
-> > >
-> > > > On Tue, Feb 21, 2023 at 8:48 AM Luben Tuikov <luben.tuikov@amd.com> wrote:
-> > > > >
-> > > > > On 2023-02-20 11:14, Rob Clark wrote:
-> > > > > > On Mon, Feb 20, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > > > > >>
-> > > > > >> On Sat, 18 Feb 2023 13:15:49 -0800
-> > > > > >> Rob Clark <robdclark@gmail.com> wrote:
-> > > > > >>
-> > > > > >>> From: Rob Clark <robdclark@chromium.org>
-> > > > > >>>
-> > > > > >>> Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
-> > > > > >>> wait (as opposed to a "housekeeping" wait to know when to cleanup after
-> > > > > >>> some work has completed).  Usermode components of GPU driver stacks
-> > > > > >>> often poll() on fence fd's to know when it is safe to do things like
-> > > > > >>> free or reuse a buffer, but they can also poll() on a fence fd when
-> > > > > >>> waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
-> > > > > >>> lets the kernel differentiate these two cases.
-> > > > > >>>
-> > > > > >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > >>
-> > > > > >> Hi,
-> > > > > >>
-> > > > > >> where would the UAPI documentation of this go?
-> > > > > >> It seems to be missing.
-> > > > > >
-> > > > > > Good question, I am not sure.  The poll() man page has a description,
-> > > > > > but my usage doesn't fit that _exactly_ (but OTOH the description is a
-> > > > > > bit vague).
-> > > > > >
-> > > > > >> If a Wayland compositor is polling application fences to know which
-> > > > > >> client buffer to use in its rendering, should the compositor poll with
-> > > > > >> PRI or not? If a compositor polls with PRI, then all fences from all
-> > > > > >> applications would always be PRI. Would that be harmful somehow or
-> > > > > >> would it be beneficial?
-> > > > > >
-> > > > > > I think a compositor would rather use the deadline ioctl and then poll
-> > > > > > without PRI.  Otherwise you are giving an urgency signal to the fence
-> > > > > > signaller which might not necessarily be needed.
-> > > > > >
-> > > > > > The places where I expect PRI to be useful is more in mesa (things
-> > > > > > like glFinish(), readpix, and other similar sorts of blocking APIs)
-> > > > > Hi,
-> > > > >
-> > > > > Hmm, but then user-space could do the opposite, namely, submit work as usual--never
-> > > > > using the SET_DEADLINE ioctl, and then at the end, poll using (E)POLLPRI. That seems
-> > > > > like a possible usage pattern, unintended--maybe, but possible. Do we want to discourage
-> > > > > this? Wouldn't SET_DEADLINE be enough? I mean, one can call SET_DEADLINE with the current
-> > > > > time, and then wouldn't that be equivalent to (E)POLLPRI?
-> > > >
-> > > > Yeah, (E)POLLPRI isn't strictly needed if we have SET_DEADLINE.  It is
-> > > > slightly more convenient if you want an immediate deadline (single
-> > > > syscall instead of two), but not strictly needed.  OTOH it piggy-backs
-> > > > on existing UABI.
-> > >
-> > > In that case, I would be conservative, and not add the POLLPRI
-> > > semantics. An UAPI addition that is not strictly needed and somewhat
-> > > unclear if it violates any design principles is best not done, until it
-> > > is proven to be beneficial.
-> > >
-> > > Besides, a Wayland compositor does not necessary need to add the fd
-> > > to its main event loop for poll. It could just SET_DEADLINE, and then
-> > > when it renders simply check if the fence passed or not already. Not
-> > > polling means the compositor does not need to wake up at the moment the
-> > > fence signals to just record a flag.
-> >
-> > poll(POLLPRI) isn't intended for wayland.. but is a thing I want in
-> > mesa for fence waits.  I _could_ use SET_DEADLINE but it is two
-> > syscalls and correspondingly more code ;-)
->
-> But is it actually beneficial? "More code" seems quite irrelevant.
->
-> Would there be a hundred or more of those per frame? Or would it be
-> always limited to one or two? Or totally depend on what the application
-> is doing? Is it a significant impact?
+CPU cfs bandwidth controller uses hrtimer. Currently there is no initial
+value set. Hence all period timers would align at expiry.
+This happens when there are multiple CPU cgroup's.
 
-In general, any time the CPU is waiting on the GPU, you have already
-lost.  So I don't think the extra syscall is too much of a problem.
-Just less convenient.
+There is a performance gain that can be achieved here if the timers are
+interleaved when the utilization of each CPU cgroup is low and total
+utilization of all the CPU cgroup's is less than 50%. If the timers are
+interleaved, then the unthrottled cgroup can run freely without many
+context switches and can also benefit from SMT Folding. This effect will
+be further amplified in SPLPAR environment.
 
-> > > On another matter, if the application uses SET_DEADLINE with one
-> > > timestamp, and the compositor uses SET_DEADLINE on the same thing with
-> > > another timestamp, what should happen?
-> >
-> > The expectation is that many deadline hints can be set on a fence.
-> > The fence signaller should track the soonest deadline.
->
-> You need to document that as UAPI, since it is observable to userspace.
-> It would be bad if drivers or subsystems would differ in behaviour.
->
+This commit adds a random offset after initializing each hrtimer. This
+would result in interleaving the timers at expiry, which helps in achieving
+the said performance gain.
 
-It is in the end a hint.  It is about giving the driver more
-information so that it can make better choices.  But the driver is
-even free to ignore it.  So maybe "expectation" is too strong of a
-word.  Rather, any other behavior doesn't really make sense.  But it
-could end up being dictated by how the hw and/or fw works.
+This was tested on powerpc platform with 8 core SMT=8. Socket power was
+measured when the workload. Benchmarked the stress-ng with power
+information. Throughput oriented benchmarks show significant gain up to
+25% while power consumption increases up to 15%.
 
-BR,
--R
+Workload: stress-ng --cpu=32 --cpu-ops=50000.
+1CG - 1 cgroup is running.
+2CG - 2 cgroups are running together.
+Time taken to complete stress-ng in seconds and power is in watts.
+each cgroup is throttled at 25% with 100ms as the period value.
+           6.2-rc6                     |   with patch
+8 core   1CG    power   2CG     power  |  1CG    power  2 CG    power
+        27.5    80.6    40      90     |  27.3    82    32.3    104
+        27.5    81      40.2    91     |  27.5    81    38.7     96
+        27.7    80      40.1    89     |  27.6    80    29.7    106
+        27.7    80.1    40.3    94     |  27.6    80    31.5    105
 
->
-> Thanks,
-> pq
+Latency might be affected by this change. That could happen if the CPU was
+in a deep idle state which is possible if we interleave the timers. Used
+schbench for measuring the latency. Each cgroup is throttled at 25% with
+period value is set to 100ms. Numbers are when both the cgroups are
+running simultaneously. Latency values don't degrade much. Some
+improvement is seen in tail latencies.
+
+		6.2-rc6        with patch
+Groups: 16
+50.0th:          39.5            42.5
+75.0th:         924.0           922.0
+90.0th:         972.0           968.0
+95.0th:        1005.5           994.0
+99.0th:        4166.0          2287.0
+99.5th:        7314.0          7448.0
+99.9th:       15024.0         13600.0
+
+Groups: 32
+50.0th:         819.0           463.0
+75.0th:        1596.0           918.0
+90.0th:        5992.0          1281.5
+95.0th:       13184.0          2765.0
+99.0th:       21792.0         14240.0
+99.5th:       25696.0         18920.0
+99.9th:       33280.0         35776.0
+
+Groups: 64
+50.0th:        4806.0          3440.0
+75.0th:       31136.0         33664.0
+90.0th:       54144.0         58752.0
+95.0th:       66176.0         67200.0
+99.0th:       84736.0         91520.0
+99.5th:       97408.0        114048.0
+99.9th:      136448.0        140032.0
+
+Signed-off-by: Shrikanth Hegde<sshegde@linux.vnet.ibm.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+
+Initial RFC PATCH, discussions and details on the problem:
+Link1: https://lore.kernel.org/lkml/5ae3cb09-8c9a-11e8-75a7-cc774d9bc283@linux.vnet.ibm.com/
+Link2: https://lore.kernel.org/lkml/9c57c92c-3e0c-b8c5-4be9-8f4df344a347@linux.vnet.ibm.com/
+
+---
+ kernel/sched/fair.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index ff4dbbae3b10..2a4a0969e04f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5923,6 +5923,10 @@ void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+ 	INIT_LIST_HEAD(&cfs_b->throttled_cfs_rq);
+ 	hrtimer_init(&cfs_b->period_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
+ 	cfs_b->period_timer.function = sched_cfs_period_timer;
++
++	/* Add a random offset so that timers interleave */
++	hrtimer_set_expires(&cfs_b->period_timer,
++			    get_random_u32_below(cfs_b->period));
+ 	hrtimer_init(&cfs_b->slack_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	cfs_b->slack_timer.function = sched_cfs_slack_timer;
+ 	cfs_b->slack_started = false;
+--
+2.31.1
+
