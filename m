@@ -2,123 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117366A0175
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE836A017A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbjBWDOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S232801AbjBWDTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjBWDON (ORCPT
+        with ESMTP id S230114AbjBWDTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:14:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1F5212AA;
-        Wed, 22 Feb 2023 19:14:12 -0800 (PST)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PMdKM68dZzKmMq;
-        Thu, 23 Feb 2023 11:09:11 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 23 Feb 2023 11:14:01 +0800
-Message-ID: <0e26e06a-37af-8905-5b87-d1f96a74ab67@huawei.com>
-Date:   Thu, 23 Feb 2023 11:14:00 +0800
+        Wed, 22 Feb 2023 22:19:33 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C97FE31E1D;
+        Wed, 22 Feb 2023 19:19:30 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8Axkk5A2_ZjoPUDAA--.2443S3;
+        Thu, 23 Feb 2023 11:19:28 +0800 (CST)
+Received: from [10.20.42.133] (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxOL0+2_ZjXWQ5AA--.38818S3;
+        Thu, 23 Feb 2023 11:19:26 +0800 (CST)
+Message-ID: <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
+Date:   Thu, 23 Feb 2023 11:19:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH v4] x86/kdump: terminate watchdog NMI interrupt to
- avoid kdump crashes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
+ device node
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
 Content-Language: en-US
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     <alexander.shishkin@linux.intel.com>, <tglx@linutronix.de>,
-        <tiwai@suse.de>, <jolsa@kernel.org>, <vbabka@suse.cz>,
-        <keescook@chromium.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <namhyung@kernel.org>, <bp@alien8.de>, <bhe@redhat.com>,
-        <eric.devolder@oracle.com>, <hpa@zytor.com>, <jroedel@suse.de>,
-        <dave.hansen@linux.intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
-        <x86@kernel.org>, <xiexiuqi@huawei.com>, <liaochang1@huawei.com>
-References: <20230217120604.435608-1-zengheng4@huawei.com>
- <Y/ZMEesgPnRR3LsG@hirez.programming.kicks-ass.net>
- <87r0uh5yud.fsf@email.froward.int.ebiederm.org>
- <81f5d521-bc8a-4d1a-fe7e-55487f3d25b3@huawei.com>
-In-Reply-To: <81f5d521-bc8a-4d1a-fe7e-55487f3d25b3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Sui jingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8AxOL0+2_ZjXWQ5AA--.38818S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXF17try5AF4DZw1UJF13Jwb_yoW5ur17pF
+        sxCanxKr4kJF12vr4rXryUJrn3Za95AFyDCrsrKr1Uu3sxZ3Wqvry8JF4FgrWxZr17Ja4j
+        vF1rWr4I9Fn8CaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-在 2023/2/23 10:29, Zeng Heng 写道:
->
-> 在 2023/2/23 2:39, Eric W. Biederman 写道:
->> Peter Zijlstra <peterz@infradead.org> writes:
+On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+> On 22/02/2023 17:55, suijingfeng wrote:
+>> The display controller is a pci device, it's pci vendor id is
+>> 0x0014, it's pci device id is 0x7a06.
 >>
->>> On Fri, Feb 17, 2023 at 08:06:04PM +0800, Zeng Heng wrote:
->>>> If the cpu panics within the NMI interrupt context, there could be
->>>> unhandled NMI interrupts in the background which are blocked by 
->>>> processor
->>>> until next IRET instruction executes. Since that, it prevents nested
->>>> NMI handler execution.
->>>>
->>>> In case of IRET execution during kdump reboot and no proper NMIs 
->>>> handler
->>>> registered at that point (such as during EFI loader)
->> EFI loader?  kexec on panic is supposed to be kernel to kernel.
->> If someone is getting EFI involved that is a bug.
->
-> In kdump path, kexec would start purgatory to verify the secondary 
-> kernel by
->
-> sha256. If verify passed, it would turn the control to EFI loader, and 
-> call the second
->
-> kernel to capture the environment as vmcore file.
->
-> As the mail said, if panic appears within NMI context, we never exit 
-> from that until
->
-> EFI loader handles page fault exception and executes IRET instruction 
-> when exit
->
-> from PF. At this moment, processor would allow the blocked NMI 
-> interrupt raise.
->
->
->>> This kills all of perf, including but not limited to the hardware
->>> watchdog. However, it does nothing to external NMI sources like the NMI
->>> button found on some HP machines.
->>>
->>> Still I suppose it is sufficient for the normal case.
->> I can't think of one why we don't just leave
->> NMIs deliberately disabled
->
-Inative_machine_crash_shutdown() has called lapic_shutdown() to disable 
-any kind of
-
-irq, but EFI loader assumes there is no any residual NMIs in the background.
-
-
-Here is the first version for this issue:
-
-https://lore.kernel.org/all/20230110102745.2514694-1-zengheng4@huawei.com/
-
-Zeng Heng
-
->
->> until the crash recover kernel figured out how to enable them safely.
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>   1 file changed, 21 insertions(+)
 >>
->
+>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> index 8143a61111e3..a528af3977d9 100644
+>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> @@ -31,6 +31,18 @@ memory@200000 {
+>>   			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>   	};
+>>   
+>> +	reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		display_reserved: framebuffer@30000000 {
+>> +			compatible = "shared-dma-pool";
+>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>> +			linux,cma-default;
+>> +		};
+>> +	};
+>> +
+>>   	cpu_clk: cpu_clk {
+>>   		#clock-cells = <0>;
+>>   		compatible = "fixed-clock";
+>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>   				interrupt-parent = <&liointc0>;
+>>   			};
+>>   
+>> +			display-controller@6,0 {
+>> +				compatible = "loongson,ls2k1000-dc";
+>> +
+>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>> +				interrupt-parent = <&liointc0>;
+>> +				memory-region = <&display_reserved>;
+> NAK.
+Err :(,  please give me a chance to explain
+> Test your code against the bindings you send.
+
+I can guarantee to you that I test may code more than twice. The code 
+used to testing is listed at link [1].
+
+This patchset  mainly used to illustrate how  we made the driver in [1] 
+usable on our SoC platform.
+
+> It's the same
+> patchset. You basically send something which the same moment is incorrect.
+
+Loongson display controller IP has been integrated in both Loongson
+North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
+and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
+products.
+
+When use this driver on Loongson embedded platform(say ls2k2000, 
+ls2k1000 and ls2k0500)  ,
+
+the PMON/Uboot firmware(my company using pmon most of time) will pass a 
+DT to the kernel.
+
+Different boards will pass different DTs. But when using this driver on 
+Loongson server and
+
+PC platform( ls3c5000/ls3a5000+ls7a1000/ls7a2000), there will no DT 
+supplied. The firmware
+
+and kernel side developer of Loongson choose ACPI+UEFI for such 
+platform, more discussion
+
+can be found at [2]. Therefore, on such a situation we decide to send 
+the patch at separate patchset.
+
+It is not like the arm  and risc-v, as the binding would not be always 
+exits. If we put those patches
+
+into a same patchset, some reviewers would suggest us to revise our code.
+
+To a form that the code *ALWAYS*  probed from the DT, this is not desired.
+
+Besides, the driver code + dt support is petty large, separate it is 
+more easy to review and manage.
+
+
+Finally,  Thanks your kindly guiding and valuable reviews.
+
+
+[1] https://patchwork.freedesktop.org/patch/523409/?series=113566&rev=4
+
+[2] https://lkml.org/lkml/2022/7/15/135
+
+> Best regards,
+> Krzysztof
+
