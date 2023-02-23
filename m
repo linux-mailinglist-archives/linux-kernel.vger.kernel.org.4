@@ -2,169 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A686A0E89
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F876A0E8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjBWRSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        id S229747AbjBWRTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjBWRSh (ORCPT
+        with ESMTP id S229543AbjBWRTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:18:37 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610DA15CB5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:18:35 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-536cd8f6034so177570457b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:18:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXkdUZpJKaU09VaQ11AXT4xG/p6acp3mSex2EZ+R/lU=;
-        b=amR2wqzsiprwfbFfrHgh/xz4XLutJ3c00Gafi0Ekj78VHQ5IN4mpuEdlqhd28ZVClG
-         NDVIiG3v9u7xZUsI/c1zW8Op2nY4ImR5hHrbVIXKjbh3AhUWJjKBUun5hc4jk5M6whAH
-         XohUicGhtRUkFJX5+lGP5KjRtM8AK0HfOk/5JreQGUPbXNDo0IaxOHgDftk2gatqvc28
-         MxifB1DnuNVrochCNXSxYqoarvF5v0iZSGIiWU+RZF4ZkxVkv8H0uZaA3FArkHB2wh1N
-         zNo5avGuoaprTtskjyY7JRz9BnJ+04L8/3li4c2c3ASaRx0txg3+0DmfnIF4Nu+Xx/QI
-         7nfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fXkdUZpJKaU09VaQ11AXT4xG/p6acp3mSex2EZ+R/lU=;
-        b=k2WZ+97lrxFYBM0+r7ebteOZk7QpVgbGQDdHLJN5R5PNKQmOPD4yTiHx/rjbmbxSqZ
-         3bNtRUbK/PfZZnDhLvQES80LhefdlZnj8oyVVJ22m7vPGujVVf3/JNE+dtHYQ/PLysUG
-         KwD9aU20Q8XS0lt6y+2oeQack3UdC9aRJLjhuSGTamyfgYOrzC4kAZhrvWzE1Pt0gtyR
-         6a+cmSMf35hdfIAT3O5jZWLQx7LL7ErjzvtfJhsYGgAShHv+qBdlInjc8jMR4HoSorXa
-         9dsE0Kr2mG6D6jrWhrwwKWaRgK5KR1D9JdpMugES8MxTnpuSV94GLttVqq8YkHq1pP3q
-         pXzQ==
-X-Gm-Message-State: AO0yUKUTLmpI2l3C6fUJmxmsWvbSSXDEK5uO1P9z8SPcFS3mEZRDgix1
-        Ss6oqzEtN43Ek0p6fIv+1G1aNuARDWlbE8zBh3Sudg==
-X-Google-Smtp-Source: AK7set/109onC8O9mQ+fgqczof5Q1xgM8SjIoBSgBRTTXUGTsjg8B6X/1jkPbZEf5JSZ6RXqt3UYWPqhdy2n76KUnM0=
-X-Received: by 2002:a5b:c41:0:b0:8f2:9e6:47a4 with SMTP id d1-20020a5b0c41000000b008f209e647a4mr2382178ybr.7.1677172714363;
- Thu, 23 Feb 2023 09:18:34 -0800 (PST)
+        Thu, 23 Feb 2023 12:19:03 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD0616302
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:18:59 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 4976C8C0EEE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 17:18:58 +0000 (UTC)
+Received: from pdx1-sub0-mail-a304.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id DACDB8C12FD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 17:18:57 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677172737; a=rsa-sha256;
+        cv=none;
+        b=4+oESQwNJfbueXlX4z0ZDT25lmI2rmWc2tJeZMuWsfUj0KKAGj9D/vr1eUpxbAtP4U7oN2
+        K/OfziNEpRuHA0D2qcatGZQlqqY4n8+MuINu+Vf6uav07slFTq4E5kfWAzs2MmLJokpJs9
+        ZM+db0CumZ6x5fp+/TfHtxxOrTg4F2xgXB+blJuDN8DfWtGsJ8Zmx2wIHs7jyLeddgJJvp
+        SLgcXVxq2cipjexUYH2VJGzQRAE9D4ARzXeJGHhAj2a1fqEpQVwdnUcVxCqSB6pmPEGPNo
+        RuYDFTpDElYnHoQxbmEhBH3BBz47wlLwSuDvVdOJnUTYiZ+hysD3Yp9fpiHSdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1677172737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=lRYce4KCQENlo/4Iyy0wDSPQmcZweRPYZ7BvHZ9CWRo=;
+        b=V6BKmAHgsomefRwdKSThgaX2R7oGzr+lBxoYDj+3/vwtQlwE4SqkL+D6un6pZ8LA0Pa3au
+        9aEAwuUWglj/11VDdegPoEPuA8tZdGcgxG/95rG0LQRYTSUepaLjyI0d0Is21KtjBM5kug
+        c2hGZTcgVUHQSF+2QiLqIZKleCQ1sePjmS/bM9bwi1kFrDQF6a0fpXhJ/c0T7eN7bd7Uxp
+        66qzCfZLLm/5SC2Ak6D4yAux+gNBeItjD6Eug1NQknMzKetn7Bw+GKfque3+rO1Sv9Bna/
+        Tf4L3RoldC4tyHbwKbNRDbpiRPuBAFvAJtLeatJrYuAWwk6bdhR70XI3WeRLYQ==
+ARC-Authentication-Results: i=1;
+        rspamd-9788b98bc-ft5nn;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Left-Callous: 66854b6c52088cf3_1677172738119_1153397040
+X-MC-Loop-Signature: 1677172738119:128349036
+X-MC-Ingress-Time: 1677172738119
+Received: from pdx1-sub0-mail-a304.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.97.74.37 (trex/6.7.1);
+        Thu, 23 Feb 2023 17:18:58 +0000
+Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a304.dreamhost.com (Postfix) with ESMTPSA id 4PN09s3bH1z1G
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:18:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1677172737;
+        bh=lRYce4KCQENlo/4Iyy0wDSPQmcZweRPYZ7BvHZ9CWRo=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=oPIxTFyZbMU3AEcozwC1RmCJGc00jusHFNFoQQEuMMaPyjzSDKAvMkKTIAJVzWzng
+         DZkvMkL0LeNHmwVu0fJkiqnT43AE8G/dQY83QZlEwNOFV5S/bKAcBW+5LtE+QN2Wnb
+         Ftx4k00m5JnHe3CXR598SkIRB4GertoqAtjZQMao=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e0084
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Thu, 23 Feb 2023 09:18:54 -0800
+Date:   Thu, 23 Feb 2023 09:18:54 -0800
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Anthony Liguori <aliguori@amazon.com>,
+        David Reaver <me@davidreaver.com>,
+        Brendan Gregg <brendan@intel.com>
+Subject: Re: [PATCH linux-next 2/2] x86/xen/time: cleanup
+ xen_tsc_safe_clocksource
+Message-ID: <20230223171854.GA1963@templeofstupid.com>
+References: <cover.1676610413.git.kjlx@templeofstupid.com>
+ <f6bab47230b00cecb67f2c5d94716c8236609967.1676610413.git.kjlx@templeofstupid.com>
+ <87h6vgov2p.ffs@tglx>
+ <20230221041440.GA1934@templeofstupid.com>
+ <Y/d5XhtOaYkNRnpQ@tpad>
 MIME-Version: 1.0
-References: <Y/T+pw25oGmKqz1k@nvidia.com> <Y/T/bkcYc9Krw4rE@slm.duckdns.org>
- <Y/UEkNn0O65Pfi4e@nvidia.com> <Y/UIURDjR9pv+gzx@slm.duckdns.org>
- <Y/Ua6VcNe/DFh7X4@nvidia.com> <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
- <Y/UiQmuVwh2eqrfA@nvidia.com> <87o7pmnd0p.fsf@nvidia.com> <Y/YRJNwwvqp7nKKt@nvidia.com>
- <87k009nvnr.fsf@nvidia.com> <Y/bHNO7A8T3QQ5T+@nvidia.com>
-In-Reply-To: <Y/bHNO7A8T3QQ5T+@nvidia.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Thu, 23 Feb 2023 09:18:23 -0800
-Message-ID: <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alistair Popple <apopple@nvidia.com>, Tejun Heo <tj@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/d5XhtOaYkNRnpQ@tpad>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 5:54 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> On Thu, Feb 23, 2023 at 09:59:35AM +1100, Alistair Popple wrote:
-> >
-> > Jason Gunthorpe <jgg@nvidia.com> writes:
-> >
-> > > On Wed, Feb 22, 2023 at 10:38:25PM +1100, Alistair Popple wrote:
-> > >> When a driver unpins a page we scan the pinners list and assign
-> > >> ownership to the next driver pinning the page by updating memcg_data and
-> > >> removing the vm_account from the list.
-> > >
-> > > I don't see how this works with just the data structure you outlined??
-> > > Every unique page needs its own list_head in the vm_account, it is
-> > > doable just incredibly costly.
-> >
-> > The idea was every driver already needs to allocate a pages array to
-> > pass to pin_user_pages(), and by necessity drivers have to keep a
-> > reference to the contents of that in one form or another. So
-> > conceptually the equivalent of:
-> >
-> > struct vm_account {
-> >        struct list_head possible_pinners;
-> >        struct mem_cgroup *memcg;
-> >        struct pages **pages;
-> >        [...]
-> > };
-> >
-> > Unpinnig involves finding a new owner by traversing the list of
-> > page->memcg_data->possible_pinners and iterating over *pages[] to figure
-> > out if that vm_account actually has this page pinned or not and could
-> > own it.
->
-> Oh, you are focusing on Tejun's DOS scenario.
->
-> The DOS problem is to prevent a pin users in cgroup A from keeping
-> memory charged to cgroup B that it isn't using any more.
->
-> cgroup B doesn't need to be pinning the memory, it could just be
-> normal VMAs and "isn't using anymore" means it has unmapped all the
-> VMAs.
->
-> Solving that problem means figuring out when every cgroup stops using
-> the memory - pinning or not. That seems to be very costly.
->
-This is the current behavior of accounting for memfds, and I suspect
-any kind of shared memory.
+Hi Marcelo,
 
-If cgroup A creates a memfd, maps and faults in pages, shares the
-memfd with cgroup B and then A unmaps and closes the memfd, then
-cgroup A is still charged for the pages it faulted in.
+On Thu, Feb 23, 2023 at 11:34:06AM -0300, Marcelo Tosatti wrote:
+> On Mon, Feb 20, 2023 at 08:14:40PM -0800, Krister Johansen wrote:
+> > On Mon, Feb 20, 2023 at 11:01:18PM +0100, Thomas Gleixner wrote:
+> > > On Mon, Feb 20 2023 at 09:17, Krister Johansen wrote:
+> > > > @@ -495,8 +496,7 @@ static int __init xen_tsc_safe_clocksource(void)
+> > > >  	/* Leaf 4, sub-leaf 0 (0x40000x03) */
+> > > >  	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
+> > > >  
+> > > > -	/* tsc_mode = no_emulate (2) */
+> > > > -	if (ebx != 2)
+> > > > +	if (ebx != XEN_CPUID_TSC_MODE_NEVER_EMULATE)
+> > > >  		return 0;
+> > > >  
+> > > >  	return 1;
+> > > 
+> > > What about removing more stupidity from that function?
+> > > 
+> > > static bool __init xen_tsc_safe_clocksource(void)
+> > > {
+> > > 	u32 eax, ebx. ecx, edx;
+> > >  
+> > > 	/* Leaf 4, sub-leaf 0 (0x40000x03) */
+> > > 	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
+> > > 
+> > > 	return ebx == XEN_CPUID_TSC_MODE_NEVER_EMULATE;
+> > > }
+> > 
+> > I'm all for simplifying.  I'm happy to clean up that return to be more
+> > idiomatic.  I was under the impression, perhaps mistaken, though, that
+> > the X86_FEATURE_CONSTANT_TSC, X86_FEATURE_NONSTOP_TSC, and
+> > check_tsc_unstable() checks were actually serving a purpose: to ensure
+> > that we don't rely on the tsc in environments where it's being emulated
+> > and the OS would be better served by using a PV clock.  Specifically,
+> > kvmclock_init() makes a very similar set of checks that I also thought
+> > were load-bearing.
+> 
+> kvmclock_init will lower the rating of kvmclock so that TSC clocksource
+> can be used instead:
+> 
+>         /*
+>          * X86_FEATURE_NONSTOP_TSC is TSC runs at constant rate
+>          * with P/T states and does not stop in deep C-states.
+>          *
+>          * Invariant TSC exposed by host means kvmclock is not necessary:
+>          * can use TSC as clocksource.
+>          *
+>          */
+>         if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+>             boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+>             !check_tsc_unstable())
+>                 kvm_clock.rating = 299;
 
-FWIW this is also the behavior I was trying to use to attribute
-dma-buffers to their original allocators. Whoever touches it first
-gets charged as long as the memory is alive somewhere.
+Yes, I saw the change you made to the kvmclock to do this and was
+inspired to try to do something similar for Xen:
 
-Can't we do the same thing for pins?
+https://lore.kernel.org/xen-devel/20221216162118.GB2633@templeofstupid.com/
 
-> AFAIK this problem also already exists today as the memcg of a page
-> doesn't change while it is pinned. So maybe we don't need to address
-> it.
->
-> Arguably the pins are not the problem. If we want to treat the pin
-> like allocation then we simply charge the non-owning memcg's for the
-> pin as though it was an allocation. Eg go over every page and if the
-> owning memcg is not the current memcg then charge the current memcg
-> for an allocation of the MAP_SHARED memory. Undoing this is trivial
-> enoug.
->
-> This doesn't fix the DOS problem but it does sort of harmonize the pin
-> accounting with the memcg by multi-accounting every pin of a
-> MAP_SHARED page.
->
-> The other drawback is that this isn't the same thing as the current
-> rlimit. The rlimit is largely restricting the creation of unmovable
-> memory.
->
-> Though, AFAICT memcg seems to bundle unmovable memory (eg GFP_KERNEL)
-> along with movable user pages so it would be self-consistent.
->
-> I'm unclear if this is OK for libvirt..
->
-> > Agree this is costly though. And I don't think all drivers keep the
-> > array around so "iterating over *pages[]" may need to be a callback.
->
-> I think searching lists of pages is not reasonable. Things like VFIO &
-> KVM use cases effectively pin 90% of all system memory, that is
-> potentially TB of page lists that might need linear searching!
->
-> Jason
+Thanks,
+
+-K
