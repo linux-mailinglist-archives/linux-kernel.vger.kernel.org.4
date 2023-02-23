@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F9D6A00E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07BC6A00E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbjBWBv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
+        id S232944AbjBWBxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbjBWBv0 (ORCPT
+        with ESMTP id S232468AbjBWBxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:51:26 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184A75FDE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:51:22 -0800 (PST)
-Received: from fsav313.sakura.ne.jp (fsav313.sakura.ne.jp [153.120.85.144])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 31N1pDD2024309;
-        Thu, 23 Feb 2023 10:51:13 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav313.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp);
- Thu, 23 Feb 2023 10:51:13 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 31N1pDqV024305
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 23 Feb 2023 10:51:13 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <3d82949d-9951-abf3-134a-8734ec81af3b@I-love.SAKURA.ne.jp>
-Date:   Thu, 23 Feb 2023 10:51:14 +0900
+        Wed, 22 Feb 2023 20:53:13 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA5CA5E5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:53:11 -0800 (PST)
+Date:   Thu, 23 Feb 2023 01:53:06 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1677117189; bh=EmqQ91mcbYJIWc4nC8fhMHyVlPDFa7UyaC6JIek+qdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IolI9Hho9X3nu2XEFASu5nFj6ncV86jhVzYzhN8/QSuxzSpr48jqW6Q+vF0jA38J6
+         dP83CxNaWtXS/mT5Fsnw8jwCZZ2yHNkZtoAbBuQliU6mi6sG4XmYy57lWCowsbNxdY
+         4X3NuYdu3LCIgwsu4yjorKFIYzW3odmoEHvIWA3o=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Vincent Dagonneau <v@vda.io>
+Cc:     linux-kernel@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v6 0/4] tools/nolibc: Adding stdint.h, more integer types
+ and tests
+Message-ID: <b9df4ad5-0a4a-4061-a645-bda9fc42a874@t-8ch.de>
+References: <20230223010025.11092-1-v@vda.io>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Intel-gfx] How is the progress for removing
- flush_scheduled_work() callers?
-Content-Language: en-US
-To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <e170edc2-e5b9-4c8b-4ed3-7e2d7a2850dc@I-love.SAKURA.ne.jp>
- <877czv2ov8.fsf@intel.com> <Y3TgO7pHo9z9FINO@intel.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y3TgO7pHo9z9FINO@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230223010025.11092-1-v@vda.io>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/16 22:06, Ville Syrjälä wrote:
-> On Wed, Nov 16, 2022 at 12:08:27PM +0200, Jani Nikula wrote:
->> On Sun, 06 Nov 2022, Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
->>> Like commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue() using a
->>> macro") says, flush_scheduled_work() is dangerous and will be forbidden.
->>> We are on the way for removing all flush_scheduled_work() callers from
->>> the kernel, and there are only 4 callers remaining as of linux-20221104.
->>>
->>>   drivers/gpu/drm/i915/display/intel_display.c:8997:      flush_scheduled_work();
->>
->> Thanks for the reminder, I've pinged folks to get someone working on
->> this. We do schedule quite a bunch of work, so it's not immediately
->> obvious (at least to me) what exactly needs flushing.
+On Wed, Feb 22, 2023 at 08:00:21PM -0500, Vincent Dagonneau wrote:
+> Hi,
 > 
-> Here's my earlier cursory analysis of the subject:
-> https://lore.kernel.org/intel-gfx/Yy3byxFrfAfQL9xK@intel.com/
-
-Now that a patch for mptscsih.c was proposed as
-https://lkml.kernel.org/r/0b9ebcfb-b647-1381-0653-b54528a64a86@I-love.SAKURA.ne.jp ,
-intel_display.c is going to become the last flush_scheduled_work() user.
-
-If fixing the hpd disable path takes more time, should we start with moving
-related works from system_wq to a local workqueue dedicated for intel_display.c ?
-
+> This is version 6 of the patch to add stdint.h to nolibc. Previous
+> versions of this patch are available here:
 > 
->>
->> https://gitlab.freedesktop.org/drm/intel/-/issues/7546
->>
->>>   drivers/gpu/drm/i915/gt/selftest_execlists.c:88:        flush_scheduled_work();
->>
->> Removed by commit 7d33fd02dd94 ("drm/i915/selftests: Remove
->> flush_scheduled_work() from live_execlists") in drm-next.
->>
->> BR,
->> Jani.
->>
->> -- 
->> Jani Nikula, Intel Open Source Graphics Center
+> * v5: https://lore.kernel.org/all/20230220202010.37475-1-v@vda.io/
+> * v4: https://lore.kernel.org/all/20230209024044.13127-1-v@vda.io/
+> * v3: https://lore.kernel.org/all/20230206013248.471664-1-v@vda.io/
+> * v2: https://lore.kernel.org/all/20230202201101.43160-1-v@vda.io/
+> * v1: https://lore.kernel.org/all/20230202160236.25342-1-v@vda.io/
 > 
+> This version integrates the feedback from Thomas, removing the limits
+> for ssize_t (not required by the standard) as well as multiple cosmetic
+>   issues.
 
+Thanks, for the whole series:
+
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+
+Note:
+
+When sending new revisions it makes sense to add reviewers and
+commenters of the previous versions on Cc.
+
+It makes it easier for them and gives you a faster review or
+Reviewed-by.
+
+> Vincent.
+> 
+> Vincent Dagonneau (4):
+>   tools/nolibc: Adding stdint.h
+>   tools/nolibc: Adding integer types and integer limit macros
+>   tools/nolibc: Enlarging column width of tests
+>   tools/nolibc: Adds tests for the integer limits in stdint.h
+> 
+>  tools/include/nolibc/Makefile                |   4 +-
+>  tools/include/nolibc/std.h                   |  15 +-
+>  tools/include/nolibc/stdint.h                |  84 +++++++++++
+>  tools/testing/selftests/nolibc/nolibc-test.c | 139 ++++++++++++-------
+>  4 files changed, 177 insertions(+), 65 deletions(-)
+>  create mode 100644 tools/include/nolibc/stdint.h
+> 
+> -- 
+> 2.39.1
+> 
