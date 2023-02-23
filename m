@@ -2,174 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE836A017A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5D66A0181
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbjBWDTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S232871AbjBWDYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjBWDTd (ORCPT
+        with ESMTP id S229461AbjBWDYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:19:33 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C97FE31E1D;
-        Wed, 22 Feb 2023 19:19:30 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8Axkk5A2_ZjoPUDAA--.2443S3;
-        Thu, 23 Feb 2023 11:19:28 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxOL0+2_ZjXWQ5AA--.38818S3;
-        Thu, 23 Feb 2023 11:19:26 +0800 (CST)
-Message-ID: <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
-Date:   Thu, 23 Feb 2023 11:19:25 +0800
+        Wed, 22 Feb 2023 22:24:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC012A6E6;
+        Wed, 22 Feb 2023 19:24:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86492B81733;
+        Thu, 23 Feb 2023 03:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C19BC433D2;
+        Thu, 23 Feb 2023 03:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677122643;
+        bh=e1QIQuOBVdmi2tiHZ/xai1rSaIqCT7wlBRBcoAQUl/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LYROHYabF4OwV2y+2tpoWXpS++YNKSDKWR/wwgY/5yxwFL99FKYmmhLFr70YilVCQ
+         MjU/ruelGPqs/OPeiAvxjIWDdSDIGNk5Umh8nSjltjErwFkTMHNfjaLoRrlgcsTfkI
+         VslW/fIOc0L5Ls2wRmOrOXr74E2u6uJEBDfI//VpEKEqgrI89oJVhhKn2zqlgIYdgc
+         s9Sc9f/BRSZ+QtjDtIxNmmJ8MCPYu7FJwrvrWogRErmnKsKr6nM0zwvUbWi9Fb5zch
+         ey8HwLL2IDer4ej5TVnYDB6pVVzuzPtj9KMUl9WRXYkEh7oYtC6NP/eG6C/H6mn0wR
+         r9UMIJB5S2mvA==
+Date:   Wed, 22 Feb 2023 19:27:30 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        marijn.suijten@somainline.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: qcom-hw: Simplify counting frequency domains
+Message-ID: <20230223032730.fhnxjzfwralkexun@ripper>
+References: <20230216105140.3938749-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
- device node
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230222165514.684729-1-suijingfeng@loongson.cn>
- <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
-Content-Language: en-US
-From:   Sui jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxOL0+2_ZjXWQ5AA--.38818S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF17try5AF4DZw1UJF13Jwb_yoW5ur17pF
-        sxCanxKr4kJF12vr4rXryUJrn3Za95AFyDCrsrKr1Uu3sxZ3Wqvry8JF4FgrWxZr17Ja4j
-        vF1rWr4I9Fn8CaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216105140.3938749-1-konrad.dybcio@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Feb 16, 2023 at 11:51:40AM +0100, Konrad Dybcio wrote:
+> For quite some time, this driver has been performing some quite
+> low-level DT operations. Simplify that using platform_get_resource.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
-> On 22/02/2023 17:55, suijingfeng wrote:
->> The display controller is a pci device, it's pci vendor id is
->> 0x0014, it's pci device id is 0x7a06.
->>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> ---
->>   .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
->>   1 file changed, 21 insertions(+)
->>
->> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->> index 8143a61111e3..a528af3977d9 100644
->> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->> @@ -31,6 +31,18 @@ memory@200000 {
->>   			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
->>   	};
->>   
->> +	reserved-memory {
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges;
->> +
->> +		display_reserved: framebuffer@30000000 {
->> +			compatible = "shared-dma-pool";
->> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
->> +			linux,cma-default;
->> +		};
->> +	};
->> +
->>   	cpu_clk: cpu_clk {
->>   		#clock-cells = <0>;
->>   		compatible = "fixed-clock";
->> @@ -198,6 +210,15 @@ sata@8,0 {
->>   				interrupt-parent = <&liointc0>;
->>   			};
->>   
->> +			display-controller@6,0 {
->> +				compatible = "loongson,ls2k1000-dc";
->> +
->> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
->> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
->> +				interrupt-parent = <&liointc0>;
->> +				memory-region = <&display_reserved>;
-> NAK.
-Err :(,  please give me a chance to explain
-> Test your code against the bindings you send.
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-I can guarantee to you that I test may code more than twice. The code 
-used to testing is listed at link [1].
+Regards,
+Bjorn
 
-This patchset  mainly used to illustrate how  we made the driver in [1] 
-usable on our SoC platform.
-
-> It's the same
-> patchset. You basically send something which the same moment is incorrect.
-
-Loongson display controller IP has been integrated in both Loongson
-North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
-and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
-products.
-
-When use this driver on Loongson embedded platform(say ls2k2000, 
-ls2k1000 and ls2k0500)  ,
-
-the PMON/Uboot firmware(my company using pmon most of time) will pass a 
-DT to the kernel.
-
-Different boards will pass different DTs. But when using this driver on 
-Loongson server and
-
-PC platform( ls3c5000/ls3a5000+ls7a1000/ls7a2000), there will no DT 
-supplied. The firmware
-
-and kernel side developer of Loongson choose ACPI+UEFI for such 
-platform, more discussion
-
-can be found at [2]. Therefore, on such a situation we decide to send 
-the patch at separate patchset.
-
-It is not like the arm  and risc-v, as the binding would not be always 
-exits. If we put those patches
-
-into a same patchset, some reviewers would suggest us to revise our code.
-
-To a form that the code *ALWAYS*  probed from the DT, this is not desired.
-
-Besides, the driver code + dt support is petty large, separate it is 
-more easy to review and manage.
-
-
-Finally,  Thanks your kindly guiding and valuable reviews.
-
-
-[1] https://patchwork.freedesktop.org/patch/523409/?series=113566&rev=4
-
-[2] https://lkml.org/lkml/2022/7/15/135
-
-> Best regards,
-> Krzysztof
-
+> ---
+> v1 -> v2:
+> - remove stray newline near probe return
+> - s/doing performing/performing/
+> 
+> v1: https://lore.kernel.org/linux-arm-msm/20230216102956.3933639-1-konrad.dybcio@linaro.org/T/#u
+> 
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 29 ++++++-----------------------
+>  1 file changed, 6 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 2f581d2d617d..575a4461c25a 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -29,6 +29,8 @@
+>  
+>  #define GT_IRQ_STATUS			BIT(2)
+>  
+> +#define MAX_FREQ_DOMAINS		3
+> +
+>  struct qcom_cpufreq_soc_data {
+>  	u32 reg_enable;
+>  	u32 reg_domain_state;
+> @@ -651,10 +653,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  {
+>  	struct clk_hw_onecell_data *clk_data;
+>  	struct device *dev = &pdev->dev;
+> -	struct device_node *soc_node;
+>  	struct device *cpu_dev;
+>  	struct clk *clk;
+> -	int ret, i, num_domains, reg_sz;
+> +	int ret, i, num_domains;
+>  
+>  	clk = clk_get(dev, "xo");
+>  	if (IS_ERR(clk))
+> @@ -681,24 +682,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
+> -	soc_node = of_get_parent(dev->of_node);
+> -	if (!soc_node)
+> -		return -EINVAL;
+> -
+> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
+> -	if (ret)
+> -		goto of_exit;
+> -
+> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
+> -	if (ret)
+> -		goto of_exit;
+> -
+> -	reg_sz += i;
+> -
+> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
+> -	if (num_domains <= 0)
+> -		return num_domains;
+> +	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
+> +		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
+> +			break;
+>  
+>  	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
+>  					 GFP_KERNEL);
+> @@ -762,9 +748,6 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	else
+>  		dev_dbg(dev, "QCOM CPUFreq HW driver initialized\n");
+>  
+> -of_exit:
+> -	of_node_put(soc_node);
+> -
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.39.1
+> 
