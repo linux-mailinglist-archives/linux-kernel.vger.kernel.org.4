@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA77E6A06BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5550D6A06C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjBWKwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S233488AbjBWKxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbjBWKwT (ORCPT
+        with ESMTP id S232166AbjBWKxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:52:19 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345A072E43
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:52:13 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id i9so13106457lfc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:52:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=312OV1ExLaf1docfwSJg/DyYHuD2OoIvYCwHKB24HQI=;
-        b=Ce/cN8SJNqmnOLGti7C/wIYSkPwOXN+WsO7YJlUi1HVGSsH4IugGMhdMSOArjMUlwz
-         AfXqXzfVXH7StipBipyI9C3rVs/AfBEsOlpjoGUJH6oUehAIfEiVTE3C8iOSLzVu/Lym
-         /2bcRB2hfvVFzai8oYsySHFBGqcL9QaQK0N/izI0yShx3HtY8Ngi1xEHljGpBafM+oCJ
-         SCvH6y3c6LpK5hC/pNqwwIfaGs4EQfZlF7AyG9hek48zBPsI3xMZUy97nqProR/RqSYk
-         lJOjp5loyoTQHXMZpg7J2h+5BR/glkMobFjQAxPjq9GGDGwqLeYNFHMwlydmAu+ROLIU
-         iwfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=312OV1ExLaf1docfwSJg/DyYHuD2OoIvYCwHKB24HQI=;
-        b=E5s2q+n/ZTfxkveElizBfZhR9qfJnZ+28sNDIkpErjwEgm5+9FZ4/bBvRBVblEL7Sj
-         cpDRD7LNp8NAhUsFe0bTKglV1YW4DJCUrWOUnNvt3KZ6eetxTdo4Utku8MSd+c3Rop6F
-         f+1QfODzKSpaR1cwu4WxtN6V+yAzjRsenX121PHoOSEC/h21KtRf4X5dm7vJxZop5wBD
-         UVI0l3pjVNDvrt/1QQvkHbVhw75OR+FGDSYxB2nsOM+VYC741ftPto+WzIjQDCAVSydy
-         yw5OTHk4jlqA7Q53lRwXkEp/fgaRMHn82zEHTDKSk2Ws7vZqhMHM9e6qRUJjLw1r5K+C
-         YVvw==
-X-Gm-Message-State: AO0yUKXVhYPpGNepJ5lAlxfCJg23sw1CMimXQF0Az/sjRDUAr0vSXs4z
-        drbG648FW5dsQDfJPyXnfX08hQ==
-X-Google-Smtp-Source: AK7set8osHC1BKuwQhKilzcKra4Qow5sccaKlgb33WRhd1YaD6tJd1VO+rXTjbpXroqZwNqtZ8dETQ==
-X-Received: by 2002:ac2:5225:0:b0:4dc:4bda:c26f with SMTP id i5-20020ac25225000000b004dc4bdac26fmr3063427lfl.23.1677149532652;
-        Thu, 23 Feb 2023 02:52:12 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id m25-20020ac24ad9000000b004cf07a0051csm262304lfp.228.2023.02.23.02.52.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 02:52:12 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Thu, 23 Feb 2023 11:52:03 +0100
-Subject: [PATCH v3 7/7] drm/msm/adreno: Enable optional icc voting from OPP
- tables
+        Thu, 23 Feb 2023 05:53:42 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB452DD8;
+        Thu, 23 Feb 2023 02:52:47 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NA129N011643;
+        Thu, 23 Feb 2023 10:52:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9RtgpJu54slfX0JMTbbQkMovmg0D++50tTf8IWA0C08=;
+ b=LwRRgaN8B3sh7qymZkrsX+ItdZFDNAhy4qrR07c3ANwOYOzwqL7YKo5W0W6x+bUc+Dex
+ siYi0XieoVojDtpI/Zv9XD2PNCit61B2bVVT1Ar92Lruf/o2gYrHSrXricPelIssrfg1
+ 2OUSo8hk4LnrKhp2srWv2RxquudoiEdHIBLbijEErHSCmiCJaYqPuBA1+FcTQXSlWIC4
+ pFJX3GvVCYIK/XQoD/I76pBOzUAHxazt3eyG586q8dpiY9UvK47ixrU4BHp7FTC9Jwvz
+ fOobsUvwW6GPt/HCxhl+HnWUgXIaWFtRKUd6986BkrQ8yepN056CK3NcnwUZaLI8x8al hQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwy8m11hs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:52:18 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NAqIMr017618
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:52:18 GMT
+Received: from [10.239.155.136] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 02:52:12 -0800
+Message-ID: <27d2a4c4-2a4c-7fc6-4afb-cf5792e91d85@quicinc.com>
+Date:   Thu, 23 Feb 2023 18:52:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230223-topic-opp-v3-7-5f22163cd1df@linaro.org>
-References: <20230223-topic-opp-v3-0-5f22163cd1df@linaro.org>
-In-Reply-To: <20230223-topic-opp-v3-0-5f22163cd1df@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677149522; l=828;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Yh6pwT6P3XDwmr1GaQu8MRHxTbI8EpTO/tdF6ItczWk=;
- b=2rrRDrTtljtkMy2NiIvypriRAjz8Zl6PZhh4lLLHUrTd/4LPzZWyfiOavFuEJQnJLGhxCc/L8cSg
- DQgfDp28B0bz+/nmo/25V3K4pnLZVeMgAtqBwOy48QqoAzn8bDYx
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 5/7] scsi: ufs: core: Remove redundant check
+Content-Language: en-US
+To:     Po-Wen Kao <powen.kao@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <quic_ziqichen@quicinc.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <alice.chao@mediatek.com>,
+        <naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <cc.chou@mediatek.com>, <eddie.huang@mediatek.com>,
+        <mason.zhang@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <quic_cang@quicinc.com>,
+        <quic_asutoshd@quicinc.com>
+References: <20230222030427.957-1-powen.kao@mediatek.com>
+ <20230222030427.957-6-powen.kao@mediatek.com>
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+In-Reply-To: <20230222030427.957-6-powen.kao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kJ6tIHn7zTNWGPlxe8BKBPgyRbxF6M0C
+X-Proofpoint-ORIG-GUID: kJ6tIHn7zTNWGPlxe8BKBPgyRbxF6M0C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_06,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 spamscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302230092
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the dev_pm_opp_of_find_icc_paths() call to let the OPP framework
-handle bus voting as part of power level setting.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/msm/adreno/adreno_device.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-index 36f062c7582f..5142a4c72cfc 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-@@ -548,6 +548,10 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
- 		return PTR_ERR(gpu);
- 	}
- 
-+	ret = dev_pm_opp_of_find_icc_paths(dev, NULL);
-+	if (ret)
-+		return ret;
-+
- 	return 0;
- }
- 
-
--- 
-2.39.2
-
+On 2/22/2023 11:04 AM, Po-Wen Kao wrote:
+> is_mcq_supported() already check on use_mcq_mode.
+>
+> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+reviewed-by:  Ziqi Chen <quic_ziqichen@quicinc.com>
+> ---
+>   drivers/ufs/core/ufshcd.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index a15a5a78160c..21e3bf5d8f08 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -8548,7 +8548,7 @@ static int ufshcd_device_init(struct ufs_hba *hba, bool init_dev_params)
+>   			hba->scsi_host_added = true;
+>   		}
+>   		/* MCQ may be disabled if ufshcd_alloc_mcq() fails */
+> -		if (is_mcq_supported(hba) && use_mcq_mode)
+> +		if (is_mcq_supported(hba))
+>   			ufshcd_config_mcq(hba);
+>   	}
+>   
