@@ -2,148 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187C66A02A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD18E6A02AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbjBWGCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 01:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S233320AbjBWGOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 01:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbjBWGCf (ORCPT
+        with ESMTP id S229583AbjBWGOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 01:02:35 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4EC28228;
-        Wed, 22 Feb 2023 22:02:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677132127; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=DIzq2l3H4WTqdlWLW2VWNcBP97sE4gt5oo+hksxZCt//lBhPoIP/lExLhjp94atUtFHgN4EyPPVfYbin64IVUB86UOrokuDHfgKbHe3veGP9nIfT3Qr3O1FgMvNgPUFrytwpLymruJDBrVa7zhzO6ElX5vTcyV4Lz7giutoiYYA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677132127; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=fY/rYZ/QSdL3EXsPZDuBUtoL1olQYQkD3lDEY+ykYo8=; 
-        b=Bl11M0rzEUMQIlZf06U01wkUBGWse4NxABzpXv1O7tVKSrujJuJ+PBz0/0TEjslrJcwvrkzGay5YxY2GJtQMt2wt0QSJBCBCY3b7cD+S1V2Hr+xG/1GH+03br8QLlf5M4AzcdJ/S871a4PZIQUGm+Mx2vJULXQoWyEYIuOR3Mws=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677132127;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=fY/rYZ/QSdL3EXsPZDuBUtoL1olQYQkD3lDEY+ykYo8=;
-        b=ImdvYPi59x5HDhSWSS9w6Fiep1G2P1O8DhCt1FsW2I50vp33aQNz3VDmdDlYslDD
-        wO7wgx8nLmuPJvZgdREzQTkYbIcsKJmAXNFbOTZRtDmB2f0UOttqfCinJDMSr2nZuoE
-        IKgny9ZRGAZx7RA/Nk7bRp2c/3qsNOUdHsjomhHc=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 167713212609062.82464009307694; Wed, 22 Feb 2023 22:02:06 -0800 (PST)
-Message-ID: <286c6f85-8c5c-907f-a77b-b0c62e97a18a@arinc9.com>
-Date:   Thu, 23 Feb 2023 09:01:59 +0300
+        Thu, 23 Feb 2023 01:14:01 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6851EBCF;
+        Wed, 22 Feb 2023 22:13:59 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N49Ddh004525;
+        Thu, 23 Feb 2023 06:13:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=itMCcoMGHXoMQVi/aVCtN40n9UEt67oMQzhzDLbvy84=;
+ b=bFVSo/7sOHx8DQoT8gOOFGmrLRXCJxUES14zAvEMZhV+hxW9VHoy9NX5m7qIbkdEDTz0
+ 7fBlCS6ERvnMdGReL59fO2U+tqTwKlGSohSSJSQNNqN8fkgCSKSCgF4O1Xm8FkV5W/eQ
+ InalrN4Ejz8MvQKFeaFOljhozFq+ZaYKUfxi7nuHGSfERQXqaqmGkNkJemCosQNdy69a
+ 1GsxX8TXlynsFQQLl/9Zl9WdqbFXuxOh32nZ1JQpwmEBWYBqV0uiUW3eOT95VMiVFpX4
+ /bggUqQxhrXzhFpMaVlZAXr4qCN+eVoSlxr0i4pg8ZAEclbbOo3FA41UFDWlEumRtGSR OQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwywd0c1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 06:13:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N6DtKB022001
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 06:13:55 GMT
+Received: from hyiwei-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 22 Feb 2023 22:13:52 -0800
+From:   Huang Yiwei <quic_hyiwei@quicinc.com>
+To:     <mani@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <jassisinghbrar@gmail.com>
+CC:     Huang Yiwei <quic_hyiwei@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_satyap@quicinc.com>, <quic_aiquny@quicinc.com>,
+        <quic_gurus@quicinc.com>
+Subject: [PATCH] mailbox: qcom-ipcc: Support multiple channels for a given client
+Date:   Thu, 23 Feb 2023 14:13:18 +0800
+Message-ID: <20230223061318.1793-1-quic_hyiwei@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 00/16] pinctrl: ralink: fix ABI, improve driver, move
- to mediatek, improve dt-bindings
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <CAMhs-H8cKG_aQaE_JBuEfchQ4jNZT5NRPEypywWFuFtsc2MiZg@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H8cKG_aQaE_JBuEfchQ4jNZT5NRPEypywWFuFtsc2MiZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4cWtDjFRIY_Ft_6VATCQ9SSs1DNfE43A
+X-Proofpoint-ORIG-GUID: 4cWtDjFRIY_Ft_6VATCQ9SSs1DNfE43A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_02,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=747
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230052
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.02.2023 07:58, Sergio Paracuellos wrote:
-> Hi Arınç,
-> 
-> All of this looks pretty good to me. You did a really big effort with
-> this series. Thanks for doing this!
-> 
-> On Wed, Feb 22, 2023 at 7:39 PM <arinc9.unal@gmail.com> wrote:
->>
->> This is an ambitious effort I've been wanting to do for months.
->>
->> Straight off the bat, I'm fixing the ABI that I broke a while back, by
->> reintroducing the ralink,rt2880-pinmux compatible string.
->>
->> If you take a look at the schema for mt7620 and rt305x, some functions got
->> multiple lists for groups. Like refclk on mt7620. Because mt7620 and
->> mt7628/mt7688 SoCs use the same compatible string, it's impossible to
->> differentiate on the binding which SoC a devicetree is actually for.
->> Therefore, the binding will allow all groups listed for that function. For
->> example, if the SoC is mt7620, only the refclk function for the mdio group
->> can be used. If one were to put "spi cs1" as the function there, there
->> wouldn't be a warning.
->>
->> I address this by introducing new compatible strings for these SoCs, then
->> split the schemas. I also separate mt7628/mt7688 from mt7620 pinctrl
->> subdriver in the process.
->>
->> I wanted to split the rt305x driver too but too much code would be reused
->> so I backed down from that.
->>
->> Ralink was acquired by MediaTek in 2011. These SoCs have been rebranded as
->> MediaTek. We're moving the Ralink pinctrl driver to MediaTek, and rename
->> the schemas to mediatek.
->>
->> I've renamed the ralink core driver to mtmips. I decided to call the core
->> mtmips as I've seen folks from MediaTek use the same name when they added
->> support for MT7621 pinctrl on U-Boot. Feel free to comment on this.
->>
->> The MTMIPS pinctrl driver requires rt_sysc_membase from
->> arch/mips/ralink/of.c, so, for COMPILE_TEST to be useful, RALINK must be
->> selected. These headers, asm/mach-ralink/ralink_regs.h and
->> asm/mach-ralink/mt7620.h, from arch/mips/include are also required but
->> they can easily be included:
->>
->> ifeq ($(CONFIG_COMPILE_TEST),y)
->> CFLAGS_pinctrl-mtmips.o                 += -I$(srctree)/arch/mips/include
->> endif
->>
->> Sergio, do you see a way to make the pinctrl driver independent of
->> architecture code? At least avoid using rt_sysc_membase.
-> 
-> The only really dependent architecture code in these drivers now is
-> because of the use of
-> 'rt_sysc_r32()' and 'rt_sysc_w32()' in 'ralink_pmx_group_enable()'
-> function [0]. This is just to set the gpio mode. The read and write
-> registers here  SYSC_REG_GPIO_MODE and  SYSC_REG_GPIO_MODE2 are in the
-> system controller area. In all single ralink platform 'sysc' nodes
-> should be a syscon that can be accessed from the driver side. That way
-> you can just get those syscon areas via regmap APIs and properly read
-> and write desired registers. For the mt7621.dtsi file, the node is
-> already a syscon [1]. Other ralink device tree files should also be
-> modified to include this in its 'sysc' node (I think in openWRT dts
-> files at least for mt7620 is already included). You have to add that
-> in all of them since 'ralink_pmx_group_enable()' is common code for
-> all. I think this can be done in a different patch series. I can help
-> you to do this after this series is reviewed and accepted.
+Recently a new use case where two signals for the same protocol and
+client is needed, that means there will be more than one channel
+for a mbox node. Current driver only supports one channel, so need
+to remove the limitation and let the driver find every channel
+correctly.
 
-Awesome, thanks a lot! Note to self, "depends on RALINK" menu entries 
-should be changed to "depends on OF" when this happens.
+Signed-off-by: Huang Yiwei <quic_hyiwei@quicinc.com>
+---
+ drivers/mailbox/qcom-ipcc.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Arınç
+diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
+index 7e27acf6c0cc..367658af089e 100644
+--- a/drivers/mailbox/qcom-ipcc.c
++++ b/drivers/mailbox/qcom-ipcc.c
+@@ -226,11 +226,9 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
+ 		for (j = 0; j < i; j++) {
+ 			ret = of_parse_phandle_with_args(client_dn, "mboxes",
+ 						"#mbox-cells", j, &curr_ph);
+-			of_node_put(curr_ph.np);
+-			if (!ret && curr_ph.np == controller_dn) {
++			if (!ret && curr_ph.np == controller_dn)
+ 				ipcc->num_chans++;
+-				break;
+-			}
++			of_node_put(curr_ph.np);
+ 		}
+ 	}
+ 
+-- 
+2.17.1
+
