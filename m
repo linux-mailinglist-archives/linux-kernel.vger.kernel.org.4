@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDAF6A03E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFBF6A03E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbjBWIc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S233692AbjBWIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjBWIcN (ORCPT
+        with ESMTP id S233627AbjBWIcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:32:13 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B38E4D61C;
+        Thu, 23 Feb 2023 03:32:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697724D62A;
         Thu, 23 Feb 2023 00:32:12 -0800 (PST)
-Date:   Thu, 23 Feb 2023 08:32:07 -0000
+Date:   Thu, 23 Feb 2023 08:32:08 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677141127;
+        s=2020; t=1677141128;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EwrNXKne5HFSSFx4JRcNK7XBvrwT67vvQbynXrqu29I=;
-        b=sewb1GiaNKXzHcGfnKramAq3JUbWX6u9jIEN3xN7FT7xwYpF3M0aGpRIY/wDBhyCay10Q1
-        OKi3A43o3SsOE4zkfaImcVREV77ZD/NHLhilARbdexxVOWypgJ3Mn934aAOW3umulo5Jib
-        RLV/EDU5FFYh2wkr8V8iwY59YOgFJ8HPhgxjpOOgWrjLlQM4tjC7E2jVLDdqyoF9BzIIyy
-        uBNOPTl0Wm3n9CPDHO5+/beILT5/ZfEsYKHWp+AaFItaHsU1e8fcN8wNLBmRGYt3qdk6FT
-        Lk6Z/NYxonleswsSQa7LaATOgXtVTXkuoGq8dP5LDy81dyp/Ko4feMqaUU2jGg==
+        bh=u07I37ByhY40t8hLdmLMw8EH5xS12E4Tf4Iu8Sbndu4=;
+        b=R5JYqvIGAsedlbqCvjA2ns/YjZ8PLscfTkVHZts00EMxfdpsOdfew8C0FoctsL6ouxg6sU
+        F2VZT/9LRI/fTQXtOugdBWGjKFyazbs5kBTVRoAfYb7xE8NoeCYQk3JJt1ad7AATeJMjLd
+        aVk1ebZsBZZpUIX3P+KXvU8n+BVfkT7Ebz/F3NdIH0eUuuqWYfRQgZ8LyCE7MHxLDu5DCZ
+        9GvnINVbEPk0IhrY6xx26SNBiJ0kmn7DTmtDNeb4LhUIi6Ma8GgIuZULjU/OA99U6v1Mg6
+        Zti5YcQurbunIZlDkCZ6c04VCyU5h+J75POaKllLXZ1j9c7gpDLUV6pcI/Cb+g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677141127;
+        s=2020e; t=1677141128;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EwrNXKne5HFSSFx4JRcNK7XBvrwT67vvQbynXrqu29I=;
-        b=Yksa79cls4Z+m/mHfdXOIeXs0w4+kIxzarKneeAQcqXwafzBcgIJ0RvZ5i2zLmukk+Yub/
-        W2nSf6BvbX/XkHCg==
+        bh=u07I37ByhY40t8hLdmLMw8EH5xS12E4Tf4Iu8Sbndu4=;
+        b=w2/Tv38BXnxoLX05QtDrprLK+epWlID4xft7fzA1m2rxH0HjfG1DNXm41W7jd+7xRaar4U
+        yWifngS/zkbDoqAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool: Shrink instruction::{type,visited}
+Subject: [tip: objtool/core] objtool: Change arch_decode_instruction() signature
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>, linux@weissschuh.net,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230208172245.501847188@infradead.org>
-References: <20230208172245.501847188@infradead.org>
+In-Reply-To: <20230208172245.291087549@infradead.org>
+References: <20230208172245.291087549@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167714112746.5837.4736451316414863518.tip-bot2@tip-bot2>
+Message-ID: <167714112824.5837.1419941749511176470.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,138 +68,455 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     8b2de412158ecdb312c707918432e6650df808cc
-Gitweb:        https://git.kernel.org/tip/8b2de412158ecdb312c707918432e6650df=
-808cc
+Commit-ID:     20a554638dd2665a88d3d68a68f7981480a27f36
+Gitweb:        https://git.kernel.org/tip/20a554638dd2665a88d3d68a68f7981480a=
+27f36
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 08 Feb 2023 18:18:00 +01:00
+AuthorDate:    Wed, 08 Feb 2023 18:17:57 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 23 Feb 2023 09:21:12 +01:00
+CommitterDate: Thu, 23 Feb 2023 09:20:50 +01:00
 
-objtool: Shrink instruction::{type,visited}
+objtool: Change arch_decode_instruction() signature
 
-Since we don't have that many types in enum insn_type, force it into a
-u8 and re-arrange member to get rid of the holes, saves another 8
-bytes.
+In preparation to changing struct instruction around a bit, avoid
+passing it's members by pointer and instead pass the whole thing.
 
- struct instruction {
- 	struct list_head           list;                 /*     0    16 */
- 	struct hlist_node          hash;                 /*    16    16 */
- 	struct list_head           call_node;            /*    32    16 */
- 	struct section *           sec;                  /*    48     8 */
- 	long unsigned int          offset;               /*    56     8 */
- 	/* --- cacheline 1 boundary (64 bytes) --- */
--	unsigned int               len;                  /*    64     4 */
--	enum insn_type             type;                 /*    68     4 */
--	long unsigned int          immediate;            /*    72     8 */
--	u16                        dead_end:1;           /*    80: 0  2 */
--	u16                        ignore:1;             /*    80: 1  2 */
--	u16                        ignore_alts:1;        /*    80: 2  2 */
--	u16                        hint:1;               /*    80: 3  2 */
--	u16                        save:1;               /*    80: 4  2 */
--	u16                        restore:1;            /*    80: 5  2 */
--	u16                        retpoline_safe:1;     /*    80: 6  2 */
--	u16                        noendbr:1;            /*    80: 7  2 */
--	u16                        entry:1;              /*    80: 8  2 */
-+	long unsigned int          immediate;            /*    64     8 */
-+	unsigned int               len;                  /*    72     4 */
-+	u8                         type;                 /*    76     1 */
-
--	/* XXX 7 bits hole, try to pack */
-+	/* Bitfield combined with previous fields */
-
--	s8                         instr;                /*    82     1 */
--	u8                         visited;              /*    83     1 */
-+	u16                        dead_end:1;           /*    76: 8  2 */
-+	u16                        ignore:1;             /*    76: 9  2 */
-+	u16                        ignore_alts:1;        /*    76:10  2 */
-+	u16                        hint:1;               /*    76:11  2 */
-+	u16                        save:1;               /*    76:12  2 */
-+	u16                        restore:1;            /*    76:13  2 */
-+	u16                        retpoline_safe:1;     /*    76:14  2 */
-+	u16                        noendbr:1;            /*    76:15  2 */
-+	u16                        entry:1;              /*    78: 0  2 */
-+	u16                        visited:4;            /*    78: 1  2 */
-
--	/* XXX 4 bytes hole, try to pack */
-+	/* XXX 3 bits hole, try to pack */
-+	/* Bitfield combined with next fields */
-
--	struct alt_group *         alt_group;            /*    88     8 */
--	struct symbol *            call_dest;            /*    96     8 */
--	struct instruction *       jump_dest;            /*   104     8 */
--	struct instruction *       first_jump_src;       /*   112     8 */
--	struct reloc *             jump_table;           /*   120     8 */
-+	s8                         instr;                /*    79     1 */
-+	struct alt_group *         alt_group;            /*    80     8 */
-+	struct symbol *            call_dest;            /*    88     8 */
-+	struct instruction *       jump_dest;            /*    96     8 */
-+	struct instruction *       first_jump_src;       /*   104     8 */
-+	struct reloc *             jump_table;           /*   112     8 */
-+	struct reloc *             reloc;                /*   120     8 */
- 	/* --- cacheline 2 boundary (128 bytes) --- */
--	struct reloc *             reloc;                /*   128     8 */
--	struct alternative *       alts;                 /*   136     8 */
--	struct symbol *            sym;                  /*   144     8 */
--	struct stack_op *          stack_ops;            /*   152     8 */
--	struct cfi_state *         cfi;                  /*   160     8 */
-+	struct alternative *       alts;                 /*   128     8 */
-+	struct symbol *            sym;                  /*   136     8 */
-+	struct stack_op *          stack_ops;            /*   144     8 */
-+	struct cfi_state *         cfi;                  /*   152     8 */
-
--	/* size: 168, cachelines: 3, members: 29 */
--	/* sum members: 162, holes: 1, sum holes: 4 */
--	/* sum bitfield members: 9 bits, bit holes: 1, sum bit holes: 7 bits */
--	/* last cacheline: 40 bytes */
-+	/* size: 160, cachelines: 3, members: 29 */
-+	/* sum members: 158 */
-+	/* sum bitfield members: 13 bits, bit holes: 1, sum bit holes: 3 bits */
-+	/* last cacheline: 32 bytes */
- };
-
-pre:	5:48.86 real,   220.30 user,    128.34 sys,     24834672 mem
-post:	5:48.89 real,   220.96 user,    127.55 sys,     24834672 mem
+A cleanup in it's own right too.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Tested-by: Nathan Chancellor <nathan@kernel.org> # build only
 Tested-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net> # compile and run
-Link: https://lore.kernel.org/r/20230208172245.501847188@infradead.org
+Link: https://lore.kernel.org/r/20230208172245.291087549@infradead.org
 ---
- tools/objtool/include/objtool/check.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/objtool/arch/powerpc/decode.c  |  22 ++---
+ tools/objtool/arch/x86/decode.c      | 105 ++++++++++++--------------
+ tools/objtool/check.c                |   4 +-
+ tools/objtool/include/objtool/arch.h |   4 +-
+ 4 files changed, 64 insertions(+), 71 deletions(-)
 
-diff --git a/tools/objtool/include/objtool/check.h b/tools/objtool/include/ob=
-jtool/check.h
-index 7966f60..a497ee7 100644
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -42,9 +42,9 @@ struct instruction {
- 	struct list_head call_node;
- 	struct section *sec;
- 	unsigned long offset;
--	unsigned int len;
--	enum insn_type type;
- 	unsigned long immediate;
-+	unsigned int len;
-+	u8 type;
+diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc=
+/decode.c
+index 9c65380..53b5569 100644
+--- a/tools/objtool/arch/powerpc/decode.c
++++ b/tools/objtool/arch/powerpc/decode.c
+@@ -41,38 +41,36 @@ const char *arch_ret_insn(int len)
 =20
- 	u16 dead_end		: 1,
- 	   ignore		: 1,
-@@ -54,11 +54,11 @@ struct instruction {
- 	   restore		: 1,
- 	   retpoline_safe	: 1,
- 	   noendbr		: 1,
--	   entry		: 1;
--		/* 7 bit hole */
-+	   entry		: 1,
-+	   visited		: 4;
-+		/* 3 bit hole */
+ int arch_decode_instruction(struct objtool_file *file, const struct section =
+*sec,
+ 			    unsigned long offset, unsigned int maxlen,
+-			    unsigned int *len, enum insn_type *type,
+-			    unsigned long *immediate,
+-			    struct list_head *ops_list)
++			    struct instruction *insn)
+ {
+ 	unsigned int opcode;
+ 	enum insn_type typ;
+ 	unsigned long imm;
+-	u32 insn;
++	u32 ins;
 =20
- 	s8 instr;
--	u8 visited;
+-	insn =3D bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
+-	opcode =3D insn >> 26;
++	ins =3D bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
++	opcode =3D ins >> 26;
+ 	typ =3D INSN_OTHER;
+ 	imm =3D 0;
 =20
- 	struct alt_group *alt_group;
- 	struct symbol *call_dest;
+ 	switch (opcode) {
+ 	case 18: /* b[l][a] */
+-		if ((insn & 3) =3D=3D 1) /* bl */
++		if ((ins & 3) =3D=3D 1) /* bl */
+ 			typ =3D INSN_CALL;
+=20
+-		imm =3D insn & 0x3fffffc;
++		imm =3D ins & 0x3fffffc;
+ 		if (imm & 0x2000000)
+ 			imm -=3D 0x4000000;
+ 		break;
+ 	}
+=20
+ 	if (opcode =3D=3D 1)
+-		*len =3D 8;
++		insn->len =3D 8;
+ 	else
+-		*len =3D 4;
++		insn->len =3D 4;
+=20
+-	*type =3D typ;
+-	*immediate =3D imm;
++	insn->type =3D typ;
++	insn->immediate =3D imm;
+=20
+ 	return 0;
+ }
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index e7b030f..c5c4927 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -146,12 +146,11 @@ static bool has_notrack_prefix(struct insn *insn)
+=20
+ int arch_decode_instruction(struct objtool_file *file, const struct section =
+*sec,
+ 			    unsigned long offset, unsigned int maxlen,
+-			    unsigned int *len, enum insn_type *type,
+-			    unsigned long *immediate,
+-			    struct list_head *ops_list)
++			    struct instruction *insn)
+ {
++	struct list_head *ops_list =3D &insn->stack_ops;
+ 	const struct elf *elf =3D file->elf;
+-	struct insn insn;
++	struct insn ins;
+ 	int x86_64, ret;
+ 	unsigned char op1, op2, op3, prefix,
+ 		      rex =3D 0, rex_b =3D 0, rex_r =3D 0, rex_w =3D 0, rex_x =3D 0,
+@@ -165,42 +164,42 @@ int arch_decode_instruction(struct objtool_file *file, =
+const struct section *sec
+ 	if (x86_64 =3D=3D -1)
+ 		return -1;
+=20
+-	ret =3D insn_decode(&insn, sec->data->d_buf + offset, maxlen,
++	ret =3D insn_decode(&ins, sec->data->d_buf + offset, maxlen,
+ 			  x86_64 ? INSN_MODE_64 : INSN_MODE_32);
+ 	if (ret < 0) {
+ 		WARN("can't decode instruction at %s:0x%lx", sec->name, offset);
+ 		return -1;
+ 	}
+=20
+-	*len =3D insn.length;
+-	*type =3D INSN_OTHER;
++	insn->len =3D ins.length;
++	insn->type =3D INSN_OTHER;
+=20
+-	if (insn.vex_prefix.nbytes)
++	if (ins.vex_prefix.nbytes)
+ 		return 0;
+=20
+-	prefix =3D insn.prefixes.bytes[0];
++	prefix =3D ins.prefixes.bytes[0];
+=20
+-	op1 =3D insn.opcode.bytes[0];
+-	op2 =3D insn.opcode.bytes[1];
+-	op3 =3D insn.opcode.bytes[2];
++	op1 =3D ins.opcode.bytes[0];
++	op2 =3D ins.opcode.bytes[1];
++	op3 =3D ins.opcode.bytes[2];
+=20
+-	if (insn.rex_prefix.nbytes) {
+-		rex =3D insn.rex_prefix.bytes[0];
++	if (ins.rex_prefix.nbytes) {
++		rex =3D ins.rex_prefix.bytes[0];
+ 		rex_w =3D X86_REX_W(rex) >> 3;
+ 		rex_r =3D X86_REX_R(rex) >> 2;
+ 		rex_x =3D X86_REX_X(rex) >> 1;
+ 		rex_b =3D X86_REX_B(rex);
+ 	}
+=20
+-	if (insn.modrm.nbytes) {
+-		modrm =3D insn.modrm.bytes[0];
++	if (ins.modrm.nbytes) {
++		modrm =3D ins.modrm.bytes[0];
+ 		modrm_mod =3D X86_MODRM_MOD(modrm);
+ 		modrm_reg =3D X86_MODRM_REG(modrm) + 8*rex_r;
+ 		modrm_rm  =3D X86_MODRM_RM(modrm)  + 8*rex_b;
+ 	}
+=20
+-	if (insn.sib.nbytes) {
+-		sib =3D insn.sib.bytes[0];
++	if (ins.sib.nbytes) {
++		sib =3D ins.sib.bytes[0];
+ 		/* sib_scale =3D X86_SIB_SCALE(sib); */
+ 		sib_index =3D X86_SIB_INDEX(sib) + 8*rex_x;
+ 		sib_base  =3D X86_SIB_BASE(sib)  + 8*rex_b;
+@@ -254,7 +253,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 		break;
+=20
+ 	case 0x70 ... 0x7f:
+-		*type =3D INSN_JUMP_CONDITIONAL;
++		insn->type =3D INSN_JUMP_CONDITIONAL;
+ 		break;
+=20
+ 	case 0x80 ... 0x83:
+@@ -278,7 +277,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 		if (!rm_is_reg(CFI_SP))
+ 			break;
+=20
+-		imm =3D insn.immediate.value;
++		imm =3D ins.immediate.value;
+ 		if (op1 & 2) { /* sign extend */
+ 			if (op1 & 1) { /* imm32 */
+ 				imm <<=3D 32;
+@@ -309,7 +308,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 			ADD_OP(op) {
+ 				op->src.type =3D OP_SRC_AND;
+ 				op->src.reg =3D CFI_SP;
+-				op->src.offset =3D insn.immediate.value;
++				op->src.offset =3D ins.immediate.value;
+ 				op->dest.type =3D OP_DEST_REG;
+ 				op->dest.reg =3D CFI_SP;
+ 			}
+@@ -356,7 +355,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 					op->src.reg =3D CFI_SP;
+ 					op->dest.type =3D OP_DEST_REG_INDIRECT;
+ 					op->dest.reg =3D modrm_rm;
+-					op->dest.offset =3D insn.displacement.value;
++					op->dest.offset =3D ins.displacement.value;
+ 				}
+ 				break;
+ 			}
+@@ -389,7 +388,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 				op->src.reg =3D modrm_reg;
+ 				op->dest.type =3D OP_DEST_REG_INDIRECT;
+ 				op->dest.reg =3D CFI_BP;
+-				op->dest.offset =3D insn.displacement.value;
++				op->dest.offset =3D ins.displacement.value;
+ 			}
+ 			break;
+ 		}
+@@ -402,7 +401,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 				op->src.reg =3D modrm_reg;
+ 				op->dest.type =3D OP_DEST_REG_INDIRECT;
+ 				op->dest.reg =3D CFI_SP;
+-				op->dest.offset =3D insn.displacement.value;
++				op->dest.offset =3D ins.displacement.value;
+ 			}
+ 			break;
+ 		}
+@@ -419,7 +418,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 			ADD_OP(op) {
+ 				op->src.type =3D OP_SRC_REG_INDIRECT;
+ 				op->src.reg =3D CFI_BP;
+-				op->src.offset =3D insn.displacement.value;
++				op->src.offset =3D ins.displacement.value;
+ 				op->dest.type =3D OP_DEST_REG;
+ 				op->dest.reg =3D modrm_reg;
+ 			}
+@@ -432,7 +431,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 			ADD_OP(op) {
+ 				op->src.type =3D OP_SRC_REG_INDIRECT;
+ 				op->src.reg =3D CFI_SP;
+-				op->src.offset =3D insn.displacement.value;
++				op->src.offset =3D ins.displacement.value;
+ 				op->dest.type =3D OP_DEST_REG;
+ 				op->dest.reg =3D modrm_reg;
+ 			}
+@@ -464,7 +463,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+=20
+ 		/* lea disp(%src), %dst */
+ 		ADD_OP(op) {
+-			op->src.offset =3D insn.displacement.value;
++			op->src.offset =3D ins.displacement.value;
+ 			if (!op->src.offset) {
+ 				/* lea (%src), %dst */
+ 				op->src.type =3D OP_SRC_REG;
+@@ -487,7 +486,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 		break;
+=20
+ 	case 0x90:
+-		*type =3D INSN_NOP;
++		insn->type =3D INSN_NOP;
+ 		break;
+=20
+ 	case 0x9c:
+@@ -511,39 +510,39 @@ int arch_decode_instruction(struct objtool_file *file, =
+const struct section *sec
+ 		if (op2 =3D=3D 0x01) {
+=20
+ 			if (modrm =3D=3D 0xca)
+-				*type =3D INSN_CLAC;
++				insn->type =3D INSN_CLAC;
+ 			else if (modrm =3D=3D 0xcb)
+-				*type =3D INSN_STAC;
++				insn->type =3D INSN_STAC;
+=20
+ 		} else if (op2 >=3D 0x80 && op2 <=3D 0x8f) {
+=20
+-			*type =3D INSN_JUMP_CONDITIONAL;
++			insn->type =3D INSN_JUMP_CONDITIONAL;
+=20
+ 		} else if (op2 =3D=3D 0x05 || op2 =3D=3D 0x07 || op2 =3D=3D 0x34 ||
+ 			   op2 =3D=3D 0x35) {
+=20
+ 			/* sysenter, sysret */
+-			*type =3D INSN_CONTEXT_SWITCH;
++			insn->type =3D INSN_CONTEXT_SWITCH;
+=20
+ 		} else if (op2 =3D=3D 0x0b || op2 =3D=3D 0xb9) {
+=20
+ 			/* ud2 */
+-			*type =3D INSN_BUG;
++			insn->type =3D INSN_BUG;
+=20
+ 		} else if (op2 =3D=3D 0x0d || op2 =3D=3D 0x1f) {
+=20
+ 			/* nopl/nopw */
+-			*type =3D INSN_NOP;
++			insn->type =3D INSN_NOP;
+=20
+ 		} else if (op2 =3D=3D 0x1e) {
+=20
+ 			if (prefix =3D=3D 0xf3 && (modrm =3D=3D 0xfa || modrm =3D=3D 0xfb))
+-				*type =3D INSN_ENDBR;
++				insn->type =3D INSN_ENDBR;
+=20
+=20
+ 		} else if (op2 =3D=3D 0x38 && op3 =3D=3D 0xf8) {
+-			if (insn.prefixes.nbytes =3D=3D 1 &&
+-			    insn.prefixes.bytes[0] =3D=3D 0xf2) {
++			if (ins.prefixes.nbytes =3D=3D 1 &&
++			    ins.prefixes.bytes[0] =3D=3D 0xf2) {
+ 				/* ENQCMD cannot be used in the kernel. */
+ 				WARN("ENQCMD instruction at %s:%lx", sec->name,
+ 				     offset);
+@@ -591,29 +590,29 @@ int arch_decode_instruction(struct objtool_file *file, =
+const struct section *sec
+=20
+ 	case 0xcc:
+ 		/* int3 */
+-		*type =3D INSN_TRAP;
++		insn->type =3D INSN_TRAP;
+ 		break;
+=20
+ 	case 0xe3:
+ 		/* jecxz/jrcxz */
+-		*type =3D INSN_JUMP_CONDITIONAL;
++		insn->type =3D INSN_JUMP_CONDITIONAL;
+ 		break;
+=20
+ 	case 0xe9:
+ 	case 0xeb:
+-		*type =3D INSN_JUMP_UNCONDITIONAL;
++		insn->type =3D INSN_JUMP_UNCONDITIONAL;
+ 		break;
+=20
+ 	case 0xc2:
+ 	case 0xc3:
+-		*type =3D INSN_RETURN;
++		insn->type =3D INSN_RETURN;
+ 		break;
+=20
+ 	case 0xc7: /* mov imm, r/m */
+ 		if (!opts.noinstr)
+ 			break;
+=20
+-		if (insn.length =3D=3D 3+4+4 && !strncmp(sec->name, ".init.text", 10)) {
++		if (ins.length =3D=3D 3+4+4 && !strncmp(sec->name, ".init.text", 10)) {
+ 			struct reloc *immr, *disp;
+ 			struct symbol *func;
+ 			int idx;
+@@ -661,17 +660,17 @@ int arch_decode_instruction(struct objtool_file *file, =
+const struct section *sec
+=20
+ 	case 0xca: /* retf */
+ 	case 0xcb: /* retf */
+-		*type =3D INSN_CONTEXT_SWITCH;
++		insn->type =3D INSN_CONTEXT_SWITCH;
+ 		break;
+=20
+ 	case 0xe0: /* loopne */
+ 	case 0xe1: /* loope */
+ 	case 0xe2: /* loop */
+-		*type =3D INSN_JUMP_CONDITIONAL;
++		insn->type =3D INSN_JUMP_CONDITIONAL;
+ 		break;
+=20
+ 	case 0xe8:
+-		*type =3D INSN_CALL;
++		insn->type =3D INSN_CALL;
+ 		/*
+ 		 * For the impact on the stack, a CALL behaves like
+ 		 * a PUSH of an immediate value (the return address).
+@@ -683,30 +682,30 @@ int arch_decode_instruction(struct objtool_file *file, =
+const struct section *sec
+ 		break;
+=20
+ 	case 0xfc:
+-		*type =3D INSN_CLD;
++		insn->type =3D INSN_CLD;
+ 		break;
+=20
+ 	case 0xfd:
+-		*type =3D INSN_STD;
++		insn->type =3D INSN_STD;
+ 		break;
+=20
+ 	case 0xff:
+ 		if (modrm_reg =3D=3D 2 || modrm_reg =3D=3D 3) {
+=20
+-			*type =3D INSN_CALL_DYNAMIC;
+-			if (has_notrack_prefix(&insn))
++			insn->type =3D INSN_CALL_DYNAMIC;
++			if (has_notrack_prefix(&ins))
+ 				WARN("notrack prefix found at %s:0x%lx", sec->name, offset);
+=20
+ 		} else if (modrm_reg =3D=3D 4) {
+=20
+-			*type =3D INSN_JUMP_DYNAMIC;
+-			if (has_notrack_prefix(&insn))
++			insn->type =3D INSN_JUMP_DYNAMIC;
++			if (has_notrack_prefix(&ins))
+ 				WARN("notrack prefix found at %s:0x%lx", sec->name, offset);
+=20
+ 		} else if (modrm_reg =3D=3D 5) {
+=20
+ 			/* jmpf */
+-			*type =3D INSN_CONTEXT_SWITCH;
++			insn->type =3D INSN_CONTEXT_SWITCH;
+=20
+ 		} else if (modrm_reg =3D=3D 6) {
+=20
+@@ -723,7 +722,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 		break;
+ 	}
+=20
+-	*immediate =3D insn.immediate.nbytes ? insn.immediate.value : 0;
++	insn->immediate =3D ins.immediate.nbytes ? ins.immediate.value : 0;
+=20
+ 	return 0;
+ }
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index ba07a8e..b3b423d 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -406,9 +406,7 @@ static int decode_instructions(struct objtool_file *file)
+=20
+ 			ret =3D arch_decode_instruction(file, sec, offset,
+ 						      sec->sh.sh_size - offset,
+-						      &insn->len, &insn->type,
+-						      &insn->immediate,
+-						      &insn->stack_ops);
++						      insn);
+ 			if (ret)
+ 				goto err;
+=20
+diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/obj=
+tool/arch.h
+index 4ecb480..73149f8 100644
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -75,9 +75,7 @@ void arch_initial_func_cfi_state(struct cfi_init_state *sta=
+te);
+=20
+ int arch_decode_instruction(struct objtool_file *file, const struct section =
+*sec,
+ 			    unsigned long offset, unsigned int maxlen,
+-			    unsigned int *len, enum insn_type *type,
+-			    unsigned long *immediate,
+-			    struct list_head *ops_list);
++			    struct instruction *insn);
+=20
+ bool arch_callee_saved_reg(unsigned char reg);
+=20
