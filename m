@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E9C6A0310
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589916A0318
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbjBWHBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S233248AbjBWHCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233463AbjBWHBX (ORCPT
+        with ESMTP id S233493AbjBWHC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:01:23 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977D24A1D2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:01:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=gOBRECxsXsY6lxgL+yYcrF7OI+VSzF/GHUkcveTa3Y4=; b=E0B4Od0+YUf0HMfrRW98qlx/Pm
-        bb0bbRFi23gnlkWdNNS2iWUUGZDCUJmZihFuZAgTskDBIJs4+pbqICdR6W7CuIejiUX4LpfBs8ntm
-        hnOQpJXi12b86slXUf3V4N6UpnD09KoKmzvmUYgN782NjTfa9wICrkCje6gA+Mwl+RCrJEPR3tcc0
-        oJkqTZxrilBCEj5gVaoYksy2v8eBTJsWptkjvwAdrvUAvKZQXQOqQCsm3bLVrrC7qdhYS2l8iS8TC
-        on0CPSFOJRJnB0jbO/oQ7+pnbX1nn1juZLlrhLV1Fw09wtcqBVzSmHn0Ihjxd7pDWcZDWdmMXvxr9
-        47fFimUw==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pV5bU-00FMG2-5G; Thu, 23 Feb 2023 07:01:20 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Roy Zang <tie-fei.zang@freescale.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Alexandre Bounine <alexandreb@tundra.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 4/4] POWERPC: sysdev/tsi108: fix resource printk format warnings
-Date:   Wed, 22 Feb 2023 23:01:16 -0800
-Message-Id: <20230223070116.660-5-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230223070116.660-1-rdunlap@infradead.org>
-References: <20230223070116.660-1-rdunlap@infradead.org>
+        Thu, 23 Feb 2023 02:02:28 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397244AFE2;
+        Wed, 22 Feb 2023 23:02:02 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id e9so6677917plh.2;
+        Wed, 22 Feb 2023 23:02:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdqKjDpknoldjbXgVeqUHUTykf5w/8lk9H2d441sxtg=;
+        b=FJ/Zl852LRpZfzweW3XjqZItvLfXb8d10BfQXkfC2dq/ORvjq0DRh2POWz/HnulYAQ
+         4s1nItn+GP1RK5xIn6OcxS4NyMvRYRUjEtDNnG8+a9du+Cyn5edhETRqk6OB+CHljcTt
+         hcwkzFIqZxJvusfp6Fm1QCXB8SYNY4PaFl3vYzapey6bNc0mnE+WedBtkBQiX3EwXLCZ
+         uKGY7+RpaIRB8n3J6XOFVkcBhu1YQnZID2osD6tTQX02JqCSxv912Bjnj7tMrIdxeQV1
+         q1DK/B2dPv6TAIKF1zhNDvELiyLz1uvW3X7KwDcnuf1pvlHKtsYejVasiHjmqvRXZ+u8
+         YJFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mdqKjDpknoldjbXgVeqUHUTykf5w/8lk9H2d441sxtg=;
+        b=VkoHq/C/7ISfvqTBNNrh7upVm7ed5/xuz8QlWk33HYKeeAPTxoFyosNLU5+8/i+St2
+         8LcP+H06bxdL00Bip2HA4D9Inr2hZPF0OZgVg0xTxpfRSqaUBU55VdKUhQRrELhrxLk/
+         TolJssWcq7aMnkAyG30g7v8sxAsiYh+cBP2+PD1Q80z1vlpqzPa0GW+lHhnnEBdhg5eU
+         Fx+JC48AVa0cY7kZmTCrV8KWDS6I5L7TehrxxsuGdYWDj8+rihUWrAAGz0XrHztxFzTS
+         JyRYmohDQ22Biw5eFRxH6OiCLX67kpPWAV+Vy2CENZTFK0q3kUkOs/HAskD5E73/dmH9
+         aeoA==
+X-Gm-Message-State: AO0yUKU3+tdqb1aLtn2pL3ssG4UOSr0uwofjHGPIiqC5KW9SKMGsi/nY
+        faBxhFJbpkrPmeLo+vCXPRQ=
+X-Google-Smtp-Source: AK7set82OYyCXPIb5mj39rMPSTyj4k8FAK3ZXtDeewEo0KuLS+Wd5dbFCKODHxACj0b43P/ArJPTlw==
+X-Received: by 2002:a17:903:41cd:b0:19a:a6cd:35a8 with SMTP id u13-20020a17090341cd00b0019aa6cd35a8mr12692150ple.25.1677135718170;
+        Wed, 22 Feb 2023 23:01:58 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:44b0:ad80:6c0b:4a23:5c4f])
+        by smtp.gmail.com with ESMTPSA id gj5-20020a17090b108500b00231227781d5sm4570725pjb.2.2023.02.22.23.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 23:01:57 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] perf inject: Fix --buildid-all not to eat up MMAP2
+Date:   Wed, 22 Feb 2023 23:01:55 -0800
+Message-Id: <20230223070155.54251-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use "%pa" format specifier for resource_size_t to avoid a compiler
-printk format warning.
+When MMAP2 has PERF_RECORD_MISC_MMAP_BUILD_ID flag, it means the record
+already has the build-id info.  So it marks the DSO as hit, to skip if
+the same DSO is not processed if it happens to miss the build-id later.
 
-../arch/powerpc/sysdev/tsi108_pci.c: In function 'tsi108_setup_pci':
-../include/linux/kern_levels.h:5:25: error: format '%x' expects argument of type 'unsigned int', but argument 2 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
+But it missed to copy the MMAP2 record itself so it'd fail to symbolize
+samples for those regions.
 
-Fixes: c4342ff92bed ("[POWERPC] Update mpc7448hpc2 board irq support using device tree")
-Fixes: 2b9d7467a6db ("[POWERPC] Add tsi108 pci and platform device data register function")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Roy Zang <tie-fei.zang@freescale.com>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Alexandre Bounine <alexandreb@tundra.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: linuxppc-dev@lists.ozlabs.org
+For example, the following generates 249 MMAP2 events.
+
+  $ perf record --buildid-mmap -o- true | perf report --stat -i- | grep MMAP2
+           MMAP2 events:        249  (86.8%)
+
+Adding perf inject should not change the number of events like this
+
+  $ perf record --buildid-mmap -o- true | perf inject -b | \
+  > perf report --stat -i- | grep MMAP2
+           MMAP2 events:        249  (86.5%)
+
+But when --buildid-all is used, it eats most of the MMAP2 events.
+
+  $ perf record --buildid-mmap -o- true | perf inject -b --buildid-all | \
+  > perf report --stat -i- | grep MMAP2
+           MMAP2 events:          1  ( 2.5%)
+
+With this patch, it shows the original number now.
+
+  $ perf record --buildid-mmap -o- true | perf inject -b --buildid-all | \
+  > perf report --stat -i- | grep MMAP2
+           MMAP2 events:        249  (86.5%)
+
+Cc: stable@vger.kernel.org
+Fixes: f7fc0d1c915a ("perf inject: Do not inject BUILD_ID record if MMAP2 has it")
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- arch/powerpc/sysdev/tsi108_pci.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/builtin-inject.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff -- a/arch/powerpc/sysdev/tsi108_pci.c b/arch/powerpc/sysdev/tsi108_pci.c
---- a/arch/powerpc/sysdev/tsi108_pci.c
-+++ b/arch/powerpc/sysdev/tsi108_pci.c
-@@ -217,9 +217,9 @@ int __init tsi108_setup_pci(struct devic
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index f8182417b734..10bb1d494258 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -538,6 +538,7 @@ static int perf_event__repipe_buildid_mmap2(struct perf_tool *tool,
+ 			dso->hit = 1;
+ 		}
+ 		dso__put(dso);
++		perf_event__repipe(tool, event, sample, machine);
+ 		return 0;
+ 	}
  
- 	(hose)->ops = &tsi108_direct_pci_ops;
- 
--	printk(KERN_INFO "Found tsi108 PCI host bridge at 0x%08x. "
-+	printk(KERN_INFO "Found tsi108 PCI host bridge at 0x%pa. "
- 	       "Firmware bus number: %d->%d\n",
--	       rsrc.start, hose->first_busno, hose->last_busno);
-+	       &rsrc.start, hose->first_busno, hose->last_busno);
- 
- 	/* Interpret the "ranges" property */
- 	/* This also maps the I/O region and sets isa_io/mem_base */
+-- 
+2.39.2.637.g21b0678d19-goog
+
