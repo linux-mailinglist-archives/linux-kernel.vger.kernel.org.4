@@ -2,193 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2579F6A03C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00AD6A03D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbjBWI1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S233616AbjBWIcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbjBWI1O (ORCPT
+        with ESMTP id S233363AbjBWIcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:27:14 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1024AFD5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:27:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=s7Umo5/tacE0xYWC3Rv6yWoUU2xxnOUXYCVq32Pif04=; b=EgMy4QzTdc+NZYum0G/uwlFKkj
-        HBG0uWQ/egY14XYoF5sFOolnzDbPDbVwwOOUIUSkZOLeuM6vUTIYXT7T47oO91x2tvn6ibH5u1om4
-        8UYLJHRQld9f0DeCI5muuvt8lPF4ElgkCF1mV52l1Bf5tH/D2iD869b62+DPJvFvxppXlU/LFZ/Ju
-        PqlDWBOqr2z1pRzYgJQPrYw0DKoxaLLU1J/S5lkIQGj/BaPv6vYDE64aMon7v+ohXRgiQeEfbxT5k
-        E4tazvLIirGtpK3pUqQFDqFmpXRN1zD3mrXA0b2Xtyg/P6XsCXWB5s/VCLRkAzdIb24rmouxZD7gD
-        bV1+vj0Q==;
-Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pV6wW-00ECNm-Rf; Thu, 23 Feb 2023 08:27:09 +0000
-Message-ID: <bee3389fbdfbfacaa219e0c3987b9e1f24ca47c2.camel@infradead.org>
-Subject: Re: [PATCH 3/6] x86/smpboot: Remove initial_stack on 64-bit
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Cc:     Usama Arif <usama.arif@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Date:   Thu, 23 Feb 2023 08:27:07 +0000
-In-Reply-To: <d372b6d6021f101fe809f397bdba0455c7b037cc.camel@infradead.org>
-References: <20230222221301.245890-1-brgerst@gmail.com>
-         <20230222221301.245890-4-brgerst@gmail.com>
-         <d372b6d6021f101fe809f397bdba0455c7b037cc.camel@infradead.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-SjZD0OcetVdQLQnyrnv2"
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 23 Feb 2023 03:32:11 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0604D621;
+        Thu, 23 Feb 2023 00:32:08 -0800 (PST)
+Date:   Thu, 23 Feb 2023 08:32:05 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677141126;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XsWzHTULbdcIhpxvYZtfDkmwAxxceRWqYM8+zpCe3qg=;
+        b=pkJEGb0B3vljXtCyjamiPz8hSXPzKAJ7dVFaHDJ1d6jurvZvheRsVyV1Owg6wY5xVDliQ0
+        NeHZ1JdvVZTv5r2pasGaVPqF1DH4vWbztZ1rvgjA37/3uzbyuwvea7y+Y0MNBvUVKkjOMc
+        QAJa8+MrzLc1H0GE7r5gAxzrzkBVLO2sotArJj5L/XZUnCBXpBjIxMLzMA6hQ3s4vQ2xUe
+        0a4grMDoBRJHiZ0b64FedB9crArB79BWYnCbzQ2se+yAbXbuuC9kke2BrJ8Z8QNt8tLiHX
+        Vwv9aWmbFnfO8HGU319SwlYLuK7bs+aqEO1lQKzVRUvXVMMpE3FbLNKMOGRpFw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677141126;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XsWzHTULbdcIhpxvYZtfDkmwAxxceRWqYM8+zpCe3qg=;
+        b=kmFbZeWhvpjcg4bcXmMM0jX5CW3F8JT9O6jx3Gx59ANOds7WAvlgogN/yk/ACRIrVsF6Yu
+        WGvpjxK5+Nx2i3Cg==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/core] objtool: Fix ORC 'signal' propagation
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <97eef9db60cd86d376a9a40d49d77bb67a8f6526.1676579666.git.jpoimboe@kernel.org>
+References: <97eef9db60cd86d376a9a40d49d77bb67a8f6526.1676579666.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Message-ID: <167714112587.5837.1928053268533397694.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the objtool/core branch of tip:
 
---=-SjZD0OcetVdQLQnyrnv2
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Commit-ID:     00c8f01c4e84637c3db76f368b8687cb61f4dd9d
+Gitweb:        https://git.kernel.org/tip/00c8f01c4e84637c3db76f368b8687cb61f4dd9d
+Author:        Josh Poimboeuf <jpoimboe@kernel.org>
+AuthorDate:    Thu, 16 Feb 2023 12:34:41 -08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Thu, 23 Feb 2023 09:21:50 +01:00
 
-On Thu, 2023-02-23 at 08:05 +0000, David Woodhouse wrote:
->=20
->=20
-> Aren't all CPUs taking this .Linit_cpu0_data path for non-parallel
-> startup, not just cpu0? I think you want something more like
->=20
-> .Linit_cpuN_data:
-> 	orl	$0x0fffffff, %edx
-> 	leaq	__per_cpu_offset(%rip), %rbx
-> 	movq	(%rbx,%rdx,8), %rdx
-> 	jmp	.Lsetup_cpu
-> =C2=A0
+objtool: Fix ORC 'signal' propagation
 
-Er, nope. Forget that. More coffee...
+There have been some recently reported ORC unwinder warnings like:
 
---=-SjZD0OcetVdQLQnyrnv2
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+  WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
+  WARNING: stack going in the wrong direction? at __sys_setsockopt+0x2c6/0x5b0 net/socket.c:2271
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjIzMDgyNzA3WjAvBgkqhkiG9w0BCQQxIgQgwwChgtms
-M/OZy1q0VJC8P41ijtEf+VTZ9jRLqD/0WUYwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBkwst0yxOiWfJ1oQVRiDQU9fIU8dKEhc1K
-Am2c3B7OH4SrHDBWHf+4tWY7NygA2y4ILgTGFgj16A3nFO7Td5eEk7Ms8mdu6W+Q2h2dUInw+8GF
-2RKDf3ibztH8nWWRJIZe+rEAGNO/Mqr8H5wqHRBpZvYEGeNqSYgMRityqnpIojEEIOVElFNo6JrX
-WNKmjPfB/tvwoqIzXSyYNdJ4/HQ+tCz8ahTQe0fEfeeHVYAMLyNl6QpwenwgEE9DqUAI4yg1ZWBF
-idNQWFaDyJ2kOKMq26tpUlsWpXdtFl9a0HL9xFDl5zLNbsVE1v1OwFe8in09vo2lG9XWDc+LAOfj
-bAOO+CnBn4GiqUmbb6F0DnzofJYEtMFAWRuimmr/zpwwD7utY2ju1LAU2WoNtry06oQmmKi66Ju1
-WCMW1g9iNPHDjUfGbIj6Oo2ioHJnfopxmvG0zfMm6bv1U47BHWdUN1vEm5aWiJBidrVfMzMXV2CG
-qmEWE/ihtrRw2m2qIyYIb1NhYQ2ZkK6pJSKzovz1nixIOkPv8kqTp4ov160RSvkCbqGV0W3NoTU2
-PSwdYT9aHEVZRd5fjA9LXWz4L0KHw8Nu8E/RHEK/E5zds6vEYGH9UCayh5ET+7r0OysoWWgoLXmS
-rIjUQZfAnGO8vJ5/g1BFZGOKWGRmEYSKPRkZhYVMmgAAAAAAAA==
+And a KASAN warning:
 
+  BUG: KASAN: stack-out-of-bounds in unwind_next_frame (arch/x86/include/asm/ptrace.h:136 arch/x86/kernel/unwind_orc.c:455)
 
---=-SjZD0OcetVdQLQnyrnv2--
+It turns out the 'signal' bit isn't getting propagated from the unwind
+hints to the ORC entries, making the unwinder confused at times.
+
+Fixes: ffb1b4a41016 ("x86/unwind/orc: Add 'signal' field to ORC metadata")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/97eef9db60cd86d376a9a40d49d77bb67a8f6526.1676579666.git.jpoimboe@kernel.org
+---
+ tools/objtool/check.c               | 1 +
+ tools/objtool/include/objtool/cfi.h | 1 +
+ tools/objtool/orc_gen.c             | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index b0b467d..5822de3 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2330,6 +2330,7 @@ static int read_unwind_hints(struct objtool_file *file)
+ 
+ 		cfi.cfa.offset = bswap_if_needed(file->elf, hint->sp_offset);
+ 		cfi.type = hint->type;
++		cfi.signal = hint->signal;
+ 		cfi.end = hint->end;
+ 
+ 		insn->cfi = cfi_hash_find_or_add(&cfi);
+diff --git a/tools/objtool/include/objtool/cfi.h b/tools/objtool/include/objtool/cfi.h
+index f11d1ac..b1258e7 100644
+--- a/tools/objtool/include/objtool/cfi.h
++++ b/tools/objtool/include/objtool/cfi.h
+@@ -34,6 +34,7 @@ struct cfi_state {
+ 	unsigned char type;
+ 	bool bp_scratch;
+ 	bool drap;
++	bool signal;
+ 	bool end;
+ };
+ 
+diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
+index 1f22b7e..57a4527 100644
+--- a/tools/objtool/orc_gen.c
++++ b/tools/objtool/orc_gen.c
+@@ -27,6 +27,7 @@ static int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
+ 	}
+ 
+ 	orc->end = cfi->end;
++	orc->signal = cfi->signal;
+ 
+ 	if (cfi->cfa.base == CFI_UNDEFINED) {
+ 		orc->sp_reg = ORC_REG_UNDEFINED;
