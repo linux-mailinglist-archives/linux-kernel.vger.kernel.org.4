@@ -2,466 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A146A02C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D2F6A02C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbjBWGWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 01:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S233193AbjBWG13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 01:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjBWGWi (ORCPT
+        with ESMTP id S232238AbjBWG11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 01:22:38 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C717137716;
-        Wed, 22 Feb 2023 22:22:36 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id 19FA9209A988; Wed, 22 Feb 2023 22:22:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19FA9209A988
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1677133356;
-        bh=DzFT8z1+2TBhE/a2zJv86DJc3r0SSMFjrSA+AYUOKOg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fwB0J9GB3y6+DLA8oYruaS6tzK1zxcNIsCGTOCwXSd0fXM8vlHj6GW8bZ/+ZJh1Cj
-         Xd6xZB3LmkmaxRG7K8uDjzKCiNHJCNJURejTt6jV6Vgvk3rSOW8MeuMfSOwj7D/oeB
-         OZjoRBpEGAZpUaMdkZHU9FA1YlnXjUJlBUQh11J4=
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH] hv/hv_kvp_daemon: Add support for keyfile config based  connection profile in NM
-Date:   Wed, 22 Feb 2023 22:22:14 -0800
-Message-Id: <1677133334-6958-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 01:27:27 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4BD4A1D7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677133646; x=1708669646;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=OB3ukNz+caK23LfP8HXerSdz6y1odBhTNlgh8/gFcMY=;
+  b=LgG2bqkDOAqlbt+RqFDjp9Af33BvVZk1RXgd1yK8NYVsOZTeKfgaHDdX
+   +bOVO+uHEs1krLeL3a9DslNChLMTWjAlb2zsw8SKXiV6bpzsGOw62vIl7
+   ioQnVmyrLsq27LXpfXP/7PA5z36yK/nPzplKx8aoO/oWuyneRjl/ujyYC
+   1/08BOAevlerzpdZCYvpOKIKP6vjSKGh4tnJEt/H99odJcxwTyDm/VZ0i
+   NiUjvqm3S35lA/Rkn7j7NkbIjjQFqgzxVaPiex2tJ+YhrIuz7jDiUNvFD
+   gjtm9isuW/Xhoe0qkM7L0AKxOg4leU9aLkLw4FGWWgp7bcObz/I5TIthl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="331799308"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="331799308"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 22:27:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="736222907"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="736222907"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Feb 2023 22:27:25 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 22 Feb 2023 22:27:25 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 22 Feb 2023 22:27:25 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 22 Feb 2023 22:27:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hHMxewYfxVsdBvebpQ8lFPSqdOv2tYqyZ5yDY15UG1Lo4DX8WGQ1lH566vXuUvmib5YscUP9/OIAnffzfVvFs1hQyFUHRP+1VS0OVFTiUyLyIoHdgImgUxErUJadQGuT3oX4wIGCSjJF3U8q9MRDR5+JsxQP0zSUqURp5JsGSrVN0effTg/yNq3NgdZq299jaUiZb4B1mULEBqN/l6HxvcioZzDDATnjXqIFCQKB8QKLYsUvt+y/OmY/gFiAtZVzPRCBiQdry04CfLD7qnHZQsmI4RNPwNH9cRrdGB5sNqmvfGBZn91f10g9dVcXaamSUyzpr9L9oOd2cDhxnaN9DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OB3ukNz+caK23LfP8HXerSdz6y1odBhTNlgh8/gFcMY=;
+ b=lrvgiDWc1olwPLnmqO2c78dg0B7pAhIrFgQn2IN1fPvV9UsnjMrSw6Zpx9OP7ud8Au2ZSDWjgzA7Er7xJO0K+4ztlLmqdifex+9si4VQsZa1P/N0LfESKCbD36LSpndqXXJcM38Uc+MQsd4Lv2T+pEn9lU6ZfBoFxc1fGU1Rud74t2DQ454s0JMnLdGUoTwhAQSU2jzWq4vGOWCIHRbGsHcTtt9DChf8VTt/Q40uzD9OMhACKdvNe8yzHr+f5/4R1Op/i3k0WCff5NHNvqvI6SPAAMVTrdN3LQyt1Fl/YfimS5XYfxbYu9F0emzrpi/F16Sd65xR04j1O1QWS8/p5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM4PR11MB6019.namprd11.prod.outlook.com (2603:10b6:8:60::5) by
+ CH3PR11MB7764.namprd11.prod.outlook.com (2603:10b6:610:145::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Thu, 23 Feb
+ 2023 06:27:12 +0000
+Received: from DM4PR11MB6019.namprd11.prod.outlook.com
+ ([fe80::6723:483:53a2:5569]) by DM4PR11MB6019.namprd11.prod.outlook.com
+ ([fe80::6723:483:53a2:5569%6]) with mapi id 15.20.6134.019; Thu, 23 Feb 2023
+ 06:27:11 +0000
+From:   "Hogander, Jouni" <jouni.hogander@intel.com>
+To:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>
+CC:     "Souza, Jose" <jose.souza@intel.com>,
+        "Santa Cruz, Diego" <Diego.SantaCruz@spinetix.com>,
+        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Kahola, Mika" <mika.kahola@intel.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "De Marchi, Lucas" <lucas.demarchi@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 2/2] Apply quirk to disable PSR 2 on Tongfang
+ PHxTxX1 and PHxTQx1
+Thread-Topic: [Intel-gfx] [PATCH 2/2] Apply quirk to disable PSR 2 on Tongfang
+ PHxTxX1 and PHxTQx1
+Thread-Index: AQHZRsiHNO78TpLnaUWNbEYaLGMxFK7bZqoAgACrfAA=
+Date:   Thu, 23 Feb 2023 06:27:11 +0000
+Message-ID: <d254b88a99e0a979efb07d9298afdeb7016f0e0f.camel@intel.com>
+References: <20230222141755.1060162-1-wse@tuxedocomputers.com>
+         <20230222141755.1060162-3-wse@tuxedocomputers.com>
+         <Y/Z3ZJjYQIKb2LQ0@intel.com>
+In-Reply-To: <Y/Z3ZJjYQIKb2LQ0@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR11MB6019:EE_|CH3PR11MB7764:EE_
+x-ms-office365-filtering-correlation-id: db52d1d3-2f53-4141-2584-08db1566ff54
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q1u2n2H61gFFXZJSOmNhnDHRput4nBNGbsW9GzXEoGdbX09DcArrrbl8R8r8+enthPmtloCWCaoHp64tl5ddNHzM7/Ov4fISnFB5oj3iwAjj4vW+MOdBI9E6hsZyP+u1x9FPWx64PAuc22ZjtFSx4WqRiLXc8dFUkA1Y2Xks8W2+sZ1833L4CdVmxyVjG0LsrNVFhNRNh6BAX+P2w+pjJDAI0mPBfsYgYv8TEYiGYNr98YQ0IWofzZkDQtY3Lx7Fw8ygbcDatZrMTgvV4RQqC8lgomnYt4tQoW6pV5m/NY7l2fDhZ15SmMZKnklKSMyf9E6xaxATVmlDSItrFlvXTar5Cj11J/kPGyaa/b/7B73uw+HGmwiqRWI8hJhH/T1b5TECBfUAeXQ8/vyjW1kOoqyFURTg2B4UgZVPO83bucsbhIqd6RjHOt1rSpZvH2Sff7W9dWiRH1Pkb1UzhUaCwsFL92oI3REODZIrkuuUQey7oUpjGlb5d1dl9xiOumJbeqEUCFrg+6QLDgRq66+0J/yz+ZwlDK0WKX0v0TVebOVTWmETYALc0hHlTFPHxNDNFwcFF4dpVYquPoK2C+8t3fRJvyXo1wP0GpWNSbi32PxLbFqGd4AquLHB07u9+iaImMi+MTpoTF1UwAmQR2zoIQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6019.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(6029001)(346002)(366004)(376002)(396003)(39860400002)(136003)(451199018)(38100700002)(8676002)(66946007)(64756008)(66446008)(66556008)(66476007)(76116006)(91956017)(36756003)(122000001)(83380400001)(2616005)(186003)(6512007)(6506007)(26005)(86362001)(110136005)(82960400001)(316002)(478600001)(6486002)(4326008)(966005)(54906003)(71200400001)(38070700005)(5660300002)(2906002)(8936002)(7416002)(41300700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WjZOUDVnTEN0S1RsQXpwM0FYczhFVmY4YU1ZaGlNZkc5Z0tTWDVDTlpsQWcx?=
+ =?utf-8?B?YUxMS3poVGNGR05wMndFR1R4d1o5KzBoYXhhT0YvYUg4Q2Vqdm4zRFBPd1Y0?=
+ =?utf-8?B?TEs3YndDUVhhSUlnUllkTjRPS1pEN0luLzFHTWluREdSV1k1UnhYNjVhSjRE?=
+ =?utf-8?B?ODdINW9lWGd4aFU0eGJWTFkzcDlUUWFVdUc1RU9YK3poakVBMDZBWDVHYW9y?=
+ =?utf-8?B?M0J5RkJlQWl0U1JuWVpPNjVMc09pb1NwVVJtU2ZydVpxM01FcnAyK1laNFdj?=
+ =?utf-8?B?S1ZZNE9uWTJSU1M1aWZCdlZiZktBcmxHbDZUV2xKVFRQaENRbDlvbTNOcW1M?=
+ =?utf-8?B?SytkRFVCSzhQMkQ2S1VUd1RrYTgvTjh5U1BZU3lRcGJZZzF1MERDdlF1bXNK?=
+ =?utf-8?B?RWk5aUZkMkpBWHFsWDl3dmhsaEtLbjBJQ05HQTEwSW1Gd2RnYjczVWQ2QXpr?=
+ =?utf-8?B?QUtadThEcG9DV3Y5bU04dmZYZmoxL2VOMExqWm1IYkd2dUYxcG9mdFFKZDA1?=
+ =?utf-8?B?eVZFeEt2Z2diS3BHQXFyU0E2bDdsM2l0YU9XZ2JySnp1SnYyWXR5MmUzTTBF?=
+ =?utf-8?B?N2ZnOUozaThQYmFZK1FwNTM1T1BtcFgvRDRYZ01qVWovMG1nSnlyRTcrQXE2?=
+ =?utf-8?B?MFlPRW8reDQzUnJ3eEFrM1lFZSswZHdIR2FQYTF3Z0JzUUpyaGRpUWN3N1lH?=
+ =?utf-8?B?U0plODg3eXluY043bXpJM0tMdGpFbUM5dmcvZ3lwWk9VQTNKUEZGSzdZemFp?=
+ =?utf-8?B?ampKTWJRZmorZSt3R1czVVlxQ3hJYUM0Vjcva3NYYmNVZWRtaXdyQTVjR2g4?=
+ =?utf-8?B?S0lqdGYxaEVlTFZHRkZZRlQ1eUcvOWtDcllNY1RrMG1GSzRIbkV5dDAreGRa?=
+ =?utf-8?B?L0ZCdzFKWlhYaE0rRVBPNnlnb3lWNFNkMWxFeVVkanBId2tiOVRNUTUzbjVw?=
+ =?utf-8?B?VVMrbkpUUHBnVWNHM05XTDJMNys2SEQxMHRNSkNIbjJaQ2crN2JuS2gvdGla?=
+ =?utf-8?B?TWVLSTFJMTcreE9WUDhQNnlsaFo1UWZJNS9sVkp5T0xYeTdHMlZLWkZWdVNa?=
+ =?utf-8?B?R2dKNDFOZ2xkdjE5RXJFN0t1NDF5eUliVjNuTDNyRTA0aDBoN0NVM3hsZHpZ?=
+ =?utf-8?B?KzZHL3RNbXpXYnhoOVdGaitrVWlCTk54Z29TbCt5OXVOVERTK0h0clJ1RGZj?=
+ =?utf-8?B?UW16RUVBeGpQYlZUL0h0eVdBc1B2SldDdUp0WGIxam55TkNOSC9nNjdpR1BL?=
+ =?utf-8?B?c2lOdHdQWjZCYllTdEY5OFRCZjduV21YUjdxZjhIREpxeDQ2TEVUQ0dPUy9w?=
+ =?utf-8?B?Y1ZRenViY2xVOERmWDNrQjBuU1cvVmMxS0Y2SjRqVE1pcFQrWm41cW5vQUlt?=
+ =?utf-8?B?Tnk5UmZYUzV2eGMwNkhSV01COHk2T1p0VmovM3QyRlBJUktRdGtEdm9wWEJo?=
+ =?utf-8?B?Q25vVXY0REk2bGVoUE1vNXpseU1pYnkvY2M4a2ljY0s4NGlkR200Q1U4bG5B?=
+ =?utf-8?B?bHFQKzRFRnFBclRmdjluVmdyK01ZTEpUM0laUmo2cXNpRUMxdDNyRkpsNTdG?=
+ =?utf-8?B?dFd2R2ZDanVFdURVa05TVnJseXFxVENWMll2Yis4TEVldzRyZk81TkR6dWNt?=
+ =?utf-8?B?Wmd1MWhtTEExQVdjb1ZLaWxwWGZ6aXdSZHplNmpmVUlLRjlrZ3lsY2xvVHQy?=
+ =?utf-8?B?T09POTFvOWRER3dEdlNwZWxUVERhSU9YcHZMbG9hOXJ5K016VUNiMHlQa0ti?=
+ =?utf-8?B?Z0xGMWZSb0ZGSG5pTFZWTWNHTXB3ZXhpNy9qZVV4MXdwbE9jcWtWdmRwNm9P?=
+ =?utf-8?B?VFhWQk9lempjcldTR1lrKytzZTFUelFOcGhmQWxwdzNrWk00L1F4eVJDYXZy?=
+ =?utf-8?B?MHVsME03RXd0eXFHa1J0bDRWNVczUnQwZjFUeEF0K1c0K0k4MEh0Z2VuOVZW?=
+ =?utf-8?B?WE5hWnc2cTFvNnpoU2swZ1M0QXBMd1NSUWZEUFprQnR0VWFLZTNoVW16SFlU?=
+ =?utf-8?B?TkFnbHRoUEFUai9kRHdxRUxHU09kK0RIVHB5eG5xaFdWbnRiV1k0ZHh3NU1Q?=
+ =?utf-8?B?Y2xVTjNxRDNablZQdlhJZ0tzalZmQWVOa1hYS1owUVZmVC9ldUJET2FwYlR5?=
+ =?utf-8?B?TmhzMkZSK3VlemUyaVlXekhzSzRkOHdqQXBaTk10ZVhYdW9uZU1nR0pXaG5u?=
+ =?utf-8?B?QVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4482072CBEAA814C9DD8589358117839@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6019.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db52d1d3-2f53-4141-2584-08db1566ff54
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 06:27:11.7296
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BVdEy0uOEg54Jrxh6nfzlcxzIFrJ/Uh9md3PdwxPhkcS66fyMdfsmP9CUtBWv5A3vVa/C3+71PlNImto+sf77XGGOCFs3AUj5znoz5ys1gw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7764
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As communicated in BZ <2122115>, ifcfg config file support in
-NetworkManger is deprecated. This patch provides support for the
-new keyfile config format for connection profiles in NetworkManager.
-The patch modifies the hv_kvp_daemon code to generate the new network
-configuration in keyfile format(.ini-style format) instead of ifcfg
-format.
-This configuration is stored in a temp file which is further translated
-using the hv_set_ifconfig.sh script. This script is implemented by
-individual distros based on the network management commands supported.
-For example, RHEL's implementation could be found here:
-https://gitlab.com/redhat/centos-stream/src/hyperv-daemons/-/blob/c9s/hv_set_ifconfig.sh
-Debian's implementation could be found here:
-https://github.com/endlessm/linux/blob/master/debian/cloud-tools/hv_set_ifconfig
-
-The next part of this support is to inform the Distro vendors to
-modify these implementations to consume the new configuration format.
-
-Tested-on: Rhel9, Rhel 8.6 (Hyper-V, Azure)
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
----
- tools/hv/hv_kvp_daemon.c    | 252 ++++++++++++++++--------------------
- tools/hv/hv_set_ifconfig.sh |  42 +++---
- 2 files changed, 136 insertions(+), 158 deletions(-)
-
-diff --git a/tools/hv/hv_kvp_daemon.c b/tools/hv/hv_kvp_daemon.c
-index 27f5e7dfc2f7..7f68f9f69fda 100644
---- a/tools/hv/hv_kvp_daemon.c
-+++ b/tools/hv/hv_kvp_daemon.c
-@@ -1004,46 +1004,6 @@ static int kvp_mac_to_ip(struct hv_kvp_ipaddr_value *kvp_ip_val)
- 	return error;
- }
- 
--static int expand_ipv6(char *addr, int type)
--{
--	int ret;
--	struct in6_addr v6_addr;
--
--	ret = inet_pton(AF_INET6, addr, &v6_addr);
--
--	if (ret != 1) {
--		if (type == NETMASK)
--			return 1;
--		return 0;
--	}
--
--	sprintf(addr, "%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:"
--		"%02x%02x:%02x%02x:%02x%02x",
--		(int)v6_addr.s6_addr[0], (int)v6_addr.s6_addr[1],
--		(int)v6_addr.s6_addr[2], (int)v6_addr.s6_addr[3],
--		(int)v6_addr.s6_addr[4], (int)v6_addr.s6_addr[5],
--		(int)v6_addr.s6_addr[6], (int)v6_addr.s6_addr[7],
--		(int)v6_addr.s6_addr[8], (int)v6_addr.s6_addr[9],
--		(int)v6_addr.s6_addr[10], (int)v6_addr.s6_addr[11],
--		(int)v6_addr.s6_addr[12], (int)v6_addr.s6_addr[13],
--		(int)v6_addr.s6_addr[14], (int)v6_addr.s6_addr[15]);
--
--	return 1;
--
--}
--
--static int is_ipv4(char *addr)
--{
--	int ret;
--	struct in_addr ipv4_addr;
--
--	ret = inet_pton(AF_INET, addr, &ipv4_addr);
--
--	if (ret == 1)
--		return 1;
--	return 0;
--}
--
- static int parse_ip_val_buffer(char *in_buf, int *offset,
- 				char *out_buf, int out_len)
- {
-@@ -1092,80 +1052,80 @@ static int kvp_write_file(FILE *f, char *s1, char *s2, char *s3)
- 	return 0;
- }
- 
--
--static int process_ip_string(FILE *f, char *ip_string, int type)
-+static int kvp_subnet_to_plen(char *subnet_addr_str)
- {
--	int error = 0;
--	char addr[INET6_ADDRSTRLEN];
--	int i = 0;
--	int j = 0;
--	char str[256];
--	char sub_str[13];
--	int offset = 0;
-+	int plen = 0;
-+	struct in_addr subnet_addr4;
-+	struct in6_addr subnet_addr6;
- 
--	memset(addr, 0, sizeof(addr));
-+	/*
-+	 * Convert subnet address to binary representation
-+	 */
-+	if (inet_pton(AF_INET, subnet_addr_str, &subnet_addr4) == 1) {
- 
--	while (parse_ip_val_buffer(ip_string, &offset, addr,
--					(MAX_IP_ADDR_SIZE * 2))) {
-+		uint32_t subnet_mask = ntohl(subnet_addr4.s_addr);
- 
--		sub_str[0] = 0;
--		if (is_ipv4(addr)) {
--			switch (type) {
--			case IPADDR:
--				snprintf(str, sizeof(str), "%s", "IPADDR");
--				break;
--			case NETMASK:
--				snprintf(str, sizeof(str), "%s", "NETMASK");
--				break;
--			case GATEWAY:
--				snprintf(str, sizeof(str), "%s", "GATEWAY");
--				break;
--			case DNS:
--				snprintf(str, sizeof(str), "%s", "DNS");
--				break;
--			}
-+		while (subnet_mask & 0x80000000) {
- 
--			if (type == DNS) {
--				snprintf(sub_str, sizeof(sub_str), "%d", ++i);
--			} else if (type == GATEWAY && i == 0) {
--				++i;
--			} else {
--				snprintf(sub_str, sizeof(sub_str), "%d", i++);
--			}
-+			plen++;
-+			subnet_mask <<= 1;
-+		}
-+	} else if (inet_pton(AF_INET6, subnet_addr_str, &subnet_addr6) == 1) {
- 
-+		const uint8_t *subnet_mask = subnet_addr6.s6_addr;
-+		int i = 0;
- 
--		} else if (expand_ipv6(addr, type)) {
--			switch (type) {
--			case IPADDR:
--				snprintf(str, sizeof(str), "%s", "IPV6ADDR");
--				break;
--			case NETMASK:
--				snprintf(str, sizeof(str), "%s", "IPV6NETMASK");
--				break;
--			case GATEWAY:
--				snprintf(str, sizeof(str), "%s",
--					"IPV6_DEFAULTGW");
--				break;
--			case DNS:
--				snprintf(str, sizeof(str), "%s",  "DNS");
--				break;
--			}
-+		while (i < 16 && subnet_mask[i] == 0xff) {
- 
--			if (type == DNS) {
--				snprintf(sub_str, sizeof(sub_str), "%d", ++i);
--			} else if (j == 0) {
--				++j;
--			} else {
--				snprintf(sub_str, sizeof(sub_str), "_%d", j++);
-+			plen += 8;
-+			i++;
-+		}
-+		if (i < 16) {
-+
-+			uint8_t mask_byte = subnet_mask[i];
-+
-+			while (mask_byte & 0x80) {
-+
-+				plen++;
-+				mask_byte <<= 1;
- 			}
--		} else {
--			return  HV_INVALIDARG;
- 		}
-+	} else {
-+		return -1;
-+	}
- 
--		error = kvp_write_file(f, str, sub_str, addr);
--		if (error)
-+	return plen;
-+}
-+
-+static int process_ip_string(FILE *f, char *ip_string, char *subnet)
-+{
-+	int error = 0;
-+	char addr[INET6_ADDRSTRLEN];
-+	char subnet_addr[INET6_ADDRSTRLEN];
-+	int i = 0;
-+	int ip_offset = 0, subnet_offset = 0;
-+	int plen;
-+
-+	memset(addr, 0, sizeof(addr));
-+	memset(subnet_addr, 0, sizeof(subnet_addr));
-+
-+	while (parse_ip_val_buffer(ip_string, &ip_offset, addr,
-+					(MAX_IP_ADDR_SIZE * 2)) &&
-+					parse_ip_val_buffer(subnet,
-+					&subnet_offset, subnet_addr,
-+					(MAX_IP_ADDR_SIZE * 2))) {
-+
-+		plen = kvp_subnet_to_plen((char *)subnet_addr);
-+		if (plen < 0)
-+			return plen;
-+
-+		error = fprintf(f, "address%d=%s/%d\n", ++i, (char *)addr,
-+							plen);
-+		if (error < 0)
- 			return error;
-+
- 		memset(addr, 0, sizeof(addr));
-+		memset(subnet_addr, 0, sizeof(subnet_addr));
- 	}
- 
- 	return 0;
-@@ -1199,26 +1159,29 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
- 	 *
- 	 * Here is the format of the ip configuration file:
- 	 *
--	 * HWADDR=macaddr
--	 * DEVICE=interface name
--	 * BOOTPROTO=<protocol> (where <protocol> is "dhcp" if DHCP is configured
--	 *                       or "none" if no boot-time protocol should be used)
-+	 * [ethernet]
-+	 * mac-address=macaddr
-+	 * [connection]
-+	 * interface-name=interface name
-+	 *
-+	 * [ipv4]
-+	 * method=<protocol> (where <protocol> is "auto" if DHCP is configured
-+	 *                       or "manual" if no boot-time protocol should be used)
- 	 *
--	 * IPADDR0=ipaddr1
--	 * IPADDR1=ipaddr2
--	 * IPADDRx=ipaddry (where y = x + 1)
-+	 * address1=ipaddr1/plen
-+	 * address2=ipaddr2/plen
- 	 *
--	 * NETMASK0=netmask1
--	 * NETMASKx=netmasky (where y = x + 1)
-+	 * gateway=gateway1;gateway2
- 	 *
--	 * GATEWAY=ipaddr1
--	 * GATEWAYx=ipaddry (where y = x + 1)
-+	 * dns=dns1;dns2
- 	 *
--	 * DNSx=ipaddrx (where first DNS address is tagged as DNS1 etc)
-+	 * [ipv6]
-+	 * address1=ipaddr1/plen
-+	 * address2=ipaddr2/plen
- 	 *
--	 * IPV6 addresses will be tagged as IPV6ADDR, IPV6 gateway will be
--	 * tagged as IPV6_DEFAULTGW and IPV6 NETMASK will be tagged as
--	 * IPV6NETMASK.
-+	 * gateway=gateway1;gateway2
-+	 *
-+	 * dns=dns1;dns2
- 	 *
- 	 * The host can specify multiple ipv4 and ipv6 addresses to be
- 	 * configured for the interface. Furthermore, the configuration
-@@ -1248,12 +1211,20 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
- 		goto setval_error;
- 	}
- 
--	error = kvp_write_file(file, "HWADDR", "", mac_addr);
--	free(mac_addr);
-+	error = fprintf(file, "\n[connection]\n");
-+	if (error < 0)
-+		goto setval_error;
-+
-+	error = kvp_write_file(file, "interface-name", "", if_name);
- 	if (error)
- 		goto setval_error;
- 
--	error = kvp_write_file(file, "DEVICE", "", if_name);
-+	error = fprintf(file, "\n[ethernet]\n");
-+	if (error < 0)
-+		goto setval_error;
-+
-+	error = kvp_write_file(file, "mac-address", "", mac_addr);
-+	free(mac_addr);
- 	if (error)
- 		goto setval_error;
- 
-@@ -1263,36 +1234,43 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
- 	 * proceed to parse and pass the IPv6 information to the
- 	 * disto-specific script hv_set_ifconfig.
- 	 */
--	if (new_val->dhcp_enabled) {
--		error = kvp_write_file(file, "BOOTPROTO", "", "dhcp");
--		if (error)
--			goto setval_error;
-+	if (new_val->addr_family == ADDR_FAMILY_IPV6) {
- 
-+		error = fprintf(file, "\n[ipv6]\n");
-+		if (error < 0)
-+			goto setval_error;
- 	} else {
--		error = kvp_write_file(file, "BOOTPROTO", "", "none");
--		if (error)
-+
-+		error = fprintf(file, "\n[ipv4]\n");
-+		if (error < 0)
- 			goto setval_error;
-+
-+		if (new_val->dhcp_enabled) {
-+			error = kvp_write_file(file, "method", "", "auto");
-+			if (error < 0)
-+				goto setval_error;
-+		} else {
-+			error = kvp_write_file(file, "method", "", "manual");
-+			if (error < 0)
-+				goto setval_error;
-+		}
- 	}
- 
- 	/*
- 	 * Write the configuration for ipaddress, netmask, gateway and
--	 * name servers.
-+	 * name services
- 	 */
--
--	error = process_ip_string(file, (char *)new_val->ip_addr, IPADDR);
--	if (error)
-+	error = process_ip_string(file, (char *)new_val->ip_addr,
-+					(char *)new_val->sub_net);
-+	if (error < 0)
- 		goto setval_error;
- 
--	error = process_ip_string(file, (char *)new_val->sub_net, NETMASK);
--	if (error)
-+	error = fprintf(file, "gateway=%s\n", (char *)new_val->gate_way);
-+	if (error < 0)
- 		goto setval_error;
- 
--	error = process_ip_string(file, (char *)new_val->gate_way, GATEWAY);
--	if (error)
--		goto setval_error;
--
--	error = process_ip_string(file, (char *)new_val->dns_addr, DNS);
--	if (error)
-+	error = fprintf(file, "dns=%s\n", (char *)new_val->dns_addr);
-+	if (error < 0)
- 		goto setval_error;
- 
- 	fclose(file);
-diff --git a/tools/hv/hv_set_ifconfig.sh b/tools/hv/hv_set_ifconfig.sh
-index d10fe35b7f25..22238767ef7e 100755
---- a/tools/hv/hv_set_ifconfig.sh
-+++ b/tools/hv/hv_set_ifconfig.sh
-@@ -20,26 +20,29 @@
- #
- # Here is the format of the ip configuration file:
- #
--# HWADDR=macaddr
--# DEVICE=interface name
--# BOOTPROTO=<protocol> (where <protocol> is "dhcp" if DHCP is configured
--#                       or "none" if no boot-time protocol should be used)
-+# [ethernet]
-+# mac-address=macaddr
-+# [connection]
-+# interface-name=interface name
- #
--# IPADDR0=ipaddr1
--# IPADDR1=ipaddr2
--# IPADDRx=ipaddry (where y = x + 1)
-+# [ipv4]
-+# method=<protocol> (where <protocol> is "auto" if DHCP is configured
-+#                       or "manual" if no boot-time protocol should be used)
- #
--# NETMASK0=netmask1
--# NETMASKx=netmasky (where y = x + 1)
-+# address1=ipaddr1/plen
-+# address=ipaddr2/plen
- #
--# GATEWAY=ipaddr1
--# GATEWAYx=ipaddry (where y = x + 1)
-+# gateway=gateway1;gateway2
- #
--# DNSx=ipaddrx (where first DNS address is tagged as DNS1 etc)
-+# dns=dns1;
- #
--# IPV6 addresses will be tagged as IPV6ADDR, IPV6 gateway will be
--# tagged as IPV6_DEFAULTGW and IPV6 NETMASK will be tagged as
--# IPV6NETMASK.
-+# [ipv6]
-+# address1=ipaddr1/plen
-+# address2=ipaddr1/plen
-+#
-+# gateway=gateway1;gateway2
-+#
-+# dns=dns1;dns2
- #
- # The host can specify multiple ipv4 and ipv6 addresses to be
- # configured for the interface. Furthermore, the configuration
-@@ -50,13 +53,10 @@
- 
- 
- 
--echo "IPV6INIT=yes" >> $1
--echo "NM_CONTROLLED=no" >> $1
--echo "PEERDNS=yes" >> $1
--echo "ONBOOT=yes" >> $1
--
-+sed '/\[connection]\/a autoconnect=true' $1
- 
--cp $1 /etc/sysconfig/network-scripts/
-+chmod 600 $1
-+cp $1 /etc/NetworkManager/system-connections/
- 
- 
- interface=$(echo $1 | awk -F - '{ print $2 }')
--- 
-2.37.2
-
+T24gV2VkLCAyMDIzLTAyLTIyIGF0IDE1OjEzIC0wNTAwLCBSb2RyaWdvIFZpdmkgd3JvdGU6DQo+
+IE9uIFdlZCwgRmViIDIyLCAyMDIzIGF0IDAzOjE3OjU1UE0gKzAxMDAsIFdlcm5lciBTZW1iYWNo
+IHdyb3RlOg0KPiA+IE9uIHRoZXNlIEJhcmVib25lcyBQU1IgMiBpcyByZWNvZ25pemVkIGFzIHN1
+cHBvcnRlZCBidXQgaXMgdmVyeQ0KPiA+IGJ1Z2d5Og0KPiA+IC0gVXBwZXIgdGhpcmQgb2Ygc2Ny
+ZWVuIGRvZXMgc29tZXRpbWVzIG5vdCB1cGRhdGVkLCByZXN1bHRpbmcgaW4NCj4gPiBkaXNhcHBl
+YXJpbmcgY3Vyc29ycyBvciBnaG9zdHMgb2YgYWxyZWFkeSBjbG9zZWQgV2luZG93cyBzYXlpbmcN
+Cj4gPiBiZWhpbmQuDQo+ID4gLSBBcHByb3hpbWF0ZWx5IDQwIHB4IGZyb20gdGhlIGJvdHRvbSBl
+ZGdlIGEgMyBwaXhlbCB3aWRlIHN0cmlwIG9mDQo+ID4gcmFuZG9tbHkNCj4gPiBjb2xvcmVkIHBp
+eGVscyBpcyBmbGlja2VyaW5nLg0KPiA+IA0KPiA+IFBTUiAxIGlzIHdvcmtpbmcgZmluZSBob3dl
+dmVyLg0KPiANCj4gSSB3b25kZXIgaWYgdGhpcyBpcyByZWFsbHkgYWJvdXQgdGhlIHBhbmVsJ3Mg
+UFNSMiBvciBhYm91dCB0aGUNCj4gdXNlcnNwYWNlDQo+IHRoZXJlIG5vdCBtYXJraW5nIHRoZSBk
+aXJ0eWZiPyBJIGtub3cgSSBrbm93Li4uIGl0IGlzIG5vdCB1c2Vyc3BhY2UNCj4gZmF1bHQuLi4N
+Cj4gDQo+IEJ1dCBJIHdvbmRlciBpZiB0aGUgY2FzZSB5b3UgZ290IGhlcmUgaGlnaGxpZ2h0cyB0
+aGUgZmFjdCB0aGF0IHdlDQo+IGhhdmUNCj4gYSBzdWJzdGFudGlhbCBidWcgaW4gdGhlIGk5MTUg
+aXRzZWxmIGluIHJlZ2FyZHMgdG8gUFNSMiBBUEkuDQo+IA0KPiBKb3NlLCBKb3VuaSwgaWRlYXMg
+b24gaG93IHRvIGNoZWNrIHdoYXQgY291bGQgYmUgaGFwcGVuaW5nIGhlcmU/DQoNClRoZXJlIGlz
+IGFscmVhZHkgZml4IGZvciB0aGlzIChUaGFua3MgdG8gV2VybmVyIFNlbWJhY2ggZm9yIHRlc3Rp
+bmcgdGhlDQpwYXRjaCk6DQoNCmh0dHBzOi8vcGF0Y2h3b3JrLmZyZWVkZXNrdG9wLm9yZy9zZXJp
+ZXMvMTE0MjE3Lw0KDQo+IA0KPiBvaCwgYnR3LCBXZXJuZXIsIGRvIHdlIGhhdmUgYW7CoCBvcGVu
+IGdpbGFiIGlzc3VlIGZvciB0aGlzPw0KDQpodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcv
+ZHJtL2ludGVsLy0vaXNzdWVzLzczNDcNCg0KPiANCj4gVGhhbmtzLA0KPiBSb2RyaWdvLg0KPiAN
+Cj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBXZXJuZXIgU2VtYmFjaCA8d3NlQHR1eGVkb2NvbXB1
+dGVycy5jb20+DQo+ID4gQ2M6IDxzdGFibGVAdmdlci5rZXJuZWwub3JnPg0KPiA+IC0tLQ0KPiA+
+IMKgZHJpdmVycy9ncHUvZHJtL2k5MTUvZGlzcGxheS9pbnRlbF9xdWlya3MuYyB8IDggKysrKysr
+KysNCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKykNCj4gPiANCj4gPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2k5MTUvZGlzcGxheS9pbnRlbF9xdWlya3MuYw0KPiA+
+IGIvZHJpdmVycy9ncHUvZHJtL2k5MTUvZGlzcGxheS9pbnRlbF9xdWlya3MuYw0KPiA+IGluZGV4
+IGNlNmQwZmU2NDQ4ZjUuLmVlYjMyZDMxODlmNWMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9n
+cHUvZHJtL2k5MTUvZGlzcGxheS9pbnRlbF9xdWlya3MuYw0KPiA+ICsrKyBiL2RyaXZlcnMvZ3B1
+L2RybS9pOTE1L2Rpc3BsYXkvaW50ZWxfcXVpcmtzLmMNCj4gPiBAQCAtNjUsNiArNjUsMTAgQEAg
+c3RhdGljIHZvaWQNCj4gPiBxdWlya19ub19wcHNfYmFja2xpZ2h0X3Bvd2VyX2hvb2soc3RydWN0
+IGRybV9pOTE1X3ByaXZhdGUgKmk5MTUpDQo+ID4gwqDCoMKgwqDCoMKgwqDCoGRybV9pbmZvKCZp
+OTE1LT5kcm0sICJBcHBseWluZyBubyBwcHMgYmFja2xpZ2h0IHBvd2VyDQo+ID4gcXVpcmtcbiIp
+Ow0KPiA+IMKgfQ0KPiA+IMKgDQo+ID4gKy8qDQo+ID4gKyAqIFRvbmdmYW5nIFBIeFR4WDEgYW5k
+IFBIeFRReDEgZGV2aWNlcyBoYXZlIHN1cHBvcnQgZm9yIFBTUiAyIGJ1dA0KPiA+IGl0IGlzIGJy
+b2tlbg0KPiA+ICsgKiBvbiBMaW51eC4gUFNSIDEgaG93ZXZlciB3b3JrcyBqdXN0IGZpbmUuDQo+
+ID4gKyAqLw0KPiA+IMKgc3RhdGljIHZvaWQgcXVpcmtfbm9fcHNyMihzdHJ1Y3QgZHJtX2k5MTVf
+cHJpdmF0ZSAqaTkxNSkNCj4gPiDCoHsNCj4gPiDCoMKgwqDCoMKgwqDCoMKgaW50ZWxfc2V0X3F1
+aXJrKGk5MTUsIFFVSVJLX05PX1BTUjIpOw0KPiA+IEBAIC0yMDUsNiArMjA5LDEwIEBAIHN0YXRp
+YyBzdHJ1Y3QgaW50ZWxfcXVpcmsgaW50ZWxfcXVpcmtzW10gPSB7DQo+ID4gwqDCoMKgwqDCoMKg
+wqDCoC8qIEVDUyBMaXZhIFEyICovDQo+ID4gwqDCoMKgwqDCoMKgwqDCoHsgMHgzMTg1LCAweDEw
+MTksIDB4YTk0ZCwgcXVpcmtfaW5jcmVhc2VfZGRpX2Rpc2FibGVkX3RpbWUNCj4gPiB9LA0KPiA+
+IMKgwqDCoMKgwqDCoMKgwqB7IDB4MzE4NCwgMHgxMDE5LCAweGE5NGQsIHF1aXJrX2luY3JlYXNl
+X2RkaV9kaXNhYmxlZF90aW1lDQo+ID4gfSwNCj4gPiArDQo+ID4gK8KgwqDCoMKgwqDCoMKgLyog
+VG9uZ2ZhbmcgUEh4VHhYMSBhbmQgUEh4VFF4MS9UVVhFRE8gSW5maW5pdHlCb29rIDE0IEdlbjYN
+Cj4gPiAqLw0KPiA+ICvCoMKgwqDCoMKgwqDCoHsgMHg5YTQ5LCAweDFkMDUsIDB4MTEwNSwgcXVp
+cmtfbm9fcHNyMiB9LA0KPiA+ICvCoMKgwqDCoMKgwqDCoHsgMHg5YTQ5LCAweDFkMDUsIDB4MTE0
+YywgcXVpcmtfbm9fcHNyMiB9LA0KPiA+IMKgfTsNCj4gPiDCoA0KPiA+IMKgdm9pZCBpbnRlbF9p
+bml0X3F1aXJrcyhzdHJ1Y3QgZHJtX2k5MTVfcHJpdmF0ZSAqaTkxNSkNCj4gPiAtLSANCj4gPiAy
+LjM0LjENCj4gPiANCg0K
