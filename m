@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8716A04B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67C36A04BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbjBWJYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S233933AbjBWJZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbjBWJYn (ORCPT
+        with ESMTP id S233533AbjBWJZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:24:43 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2459A4DBC8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:24:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMnfV625vz4x5c;
-        Thu, 23 Feb 2023 20:24:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1677144274;
-        bh=hFqhrt7u1WjD0sRxb0fgkvK3+Rpur1bct1FveQKjbjs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=RtK2SFUch390YqXaK8RsAUngH74SLzJwAiXdlkX/eacGVfL9iaHhRMv0lAl4FEjNh
-         LfksbWPPg5AMgAM3zgVVyU0j1ptpMoGBmUP1stTMbAynR6z3Y3r2BqStqR/+IN971L
-         0O6arDFU5/UwRr5phmdEMjwZI5Psb5TGEac1tJpHm2IYDhcyeiucrpLWQt8oEb1v7y
-         DAM/APeV+PKNdGk7O2rCueI0A6JOpapKtEAh5CQBfhXuQWu+GEFO8bc0Rn59EzMXMI
-         W5SiF/zovskSMf0BPOf9Ce/40FBaJQHVZLSH3t8ojHh+6t9y5at7nACRT+cksChBAJ
-         pjYoAqfVO61NQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Cc:     paulmck@kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
- wmb to  lwsync
-In-Reply-To: <Y/bvClrV60CXK79G@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
- <20230222174719.GA1400185@paulmck-ThinkPad-P17-Gen-1>
- <87fsaxavk2.fsf@mpe.ellerman.id.au>
- <Y/bvClrV60CXK79G@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-Date:   Thu, 23 Feb 2023 20:24:34 +1100
-Message-ID: <871qmgbup9.fsf@mpe.ellerman.id.au>
+        Thu, 23 Feb 2023 04:25:47 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4018C4BE8E;
+        Thu, 23 Feb 2023 01:25:46 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PMnZD0h0mzKmNc;
+        Thu, 23 Feb 2023 17:20:52 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Thu, 23 Feb
+ 2023 17:25:13 +0800
+Subject: Re: [PATCH] net: tls: fix possible info leak in
+ tls_set_device_offload()
+To:     Hangyu Hua <hbh25y@gmail.com>, <borisp@nvidia.com>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230223090508.443157-1-hbh25y@gmail.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <60e2ed41-1c88-3780-e4c4-550cef8f7c91@huawei.com>
+Date:   Thu, 23 Feb 2023 17:25:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230223090508.443157-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
->  
->> You are correct, the patch is wrong because it fails to account for IO
->> accesses.
->
-> Okay, I looked at the PowerPC ISA and found:
-> "The memory barrier provides an ordering function for the storage accesses
-> caused by Load, Store,and dcbz instructions that are executed by the processor
-> executing the sync instruction and for which the specified storage location
-> is in storage that is Memory Coherence Required and is neither Write Through
-> Required nor Caching Inhibited.
+On 2023/2/23 17:05, Hangyu Hua wrote:
+> After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
+> tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL if it fails
+> before kmalloc cctx->iv. This may cause info leak when we call
+> do_tls_getsockopt_conf().
 
-Yep, that's the key sentence there. If you look at the definition for
-"sync" it has not exceptions for different storage types.
+Should we use kfree_sensitive() here if info leaking is what we want to
+avoid?
 
-I agree it's not very clear unless you're looking closely.
-
-> Thanks for your time, Michael. Sorry for the noise.
->> 
->> Kautuk, I'm not sure what motivated you to look at these barriers, was
->> it just the documentation you linked to?
-
-> I read the basic documentation. Now that I have access to the PowerISA
-> document I guess I'll go through it more thoroughly.
-
-The ISA is available publicly. There's links to most versions here:
-
-https://wiki.raptorcs.com/wiki/Power_ISA
-
-cheers
+> 
+> Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  net/tls/tls_device.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+> index 6c593788dc25..a63f6f727f58 100644
+> --- a/net/tls/tls_device.c
+> +++ b/net/tls/tls_device.c
+> @@ -1241,8 +1241,10 @@ int tls_set_device_offload(struct sock *sk, struct tls_context *ctx)
+>  	kfree(start_marker_record);
+>  free_rec_seq:
+>  	kfree(ctx->tx.rec_seq);
+> +	ctx->tx.rec_seq = NULL;
+>  free_iv:
+>  	kfree(ctx->tx.iv);
+> +	ctx->tx.iv = NULL;
+>  release_netdev:
+>  	dev_put(netdev);
+>  	return rc;
+> 
