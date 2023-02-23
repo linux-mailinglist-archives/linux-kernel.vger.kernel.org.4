@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5156A1064
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711FB6A1067
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbjBWTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S232745AbjBWTOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjBWTNN (ORCPT
+        with ESMTP id S232389AbjBWTNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:13:13 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E385C15F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:27 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id i11so5397837wrp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:27 -0800 (PST)
+        Thu, 23 Feb 2023 14:13:17 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769945D44D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:28 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h14so2893343wru.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ydn+N8Ta2/l5mmEEZ9zQwSQU4fOYRVeCJFh5IKZvP2o=;
-        b=XMP+3c7uJ0e3rUuqE3xP3n2bcdkHaye4xq0doQzwnAtiZpHBt0EhXEMjBGyfdkJC8L
-         XdmwsDBHG5CJlyC7g/3t/QfN3zXpeVAwxeCVNr5p+a6HiWka/VvuOsIibLUKaMN3eYz7
-         A+Z5tUhdCDd9x2Tetmn6oO8DU3AUjzxV5kNC4yA1qaEmjknk3zJoKfv6pCtCJ6dG25Y1
-         LzKe2S/ieY3a+EZQCkkI2msPad7Kphbtlfo/Aum/h/WBHYqyeLQR4CUZRxjypWZcVWwl
-         fCaY119EFubhBbWFfX3bJEW3UWJotvmlglZvJHStOoUXGebQaJZWF7P0X7ZOnIZvFLJT
-         0DMw==
+        bh=Ef9SnPny8CPfpZmm6N0jiCHwpvy9x8nd/PRiLPI7xag=;
+        b=XrQnR2cfEdgLwqJ0o6NE4oQo94jXmalIs45LryMzC+zupXpNrQFyQaJDH9RhoY4NO/
+         X/U5UAZk9WIGO8WHqPCfOQy+GntieRIMVjX2CQO+K+o5U5aUtGC7UKKBzKuMbm21D8lp
+         u0cZi//QcFT5PIFqhoirDUIPE4UgvBV1nDVlTma2g2xOeU/86sFo7mb1nakDRvdHP19X
+         b6Hy4TfrowFaRJqrFtRTUHv3cCDJZXsk3yJr4KG4iRmgLGfdgrVmlvq6hEmItm3DhhlW
+         um39DZUjO4+pDqLuLxhSJqXCoyrzn21aC2w8ZXkjEK+FWBK2QkpLgcwgQVEbVKEkuKEt
+         bN/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ydn+N8Ta2/l5mmEEZ9zQwSQU4fOYRVeCJFh5IKZvP2o=;
-        b=H4xGtR9n6ZGLfc9yktblREtZk58dFm2KOGDSgqwIxG/KfJtfjMhAgf2Vo0E4ovkgJi
-         dJw/dCBaIIl6RsfkIATdV8diIXYX8H5QTdUxikJ8q9kteUYZLEsBygf6XhycrDu9usmY
-         cSK4j5bl1i8YMnLkZWsfPgGC/hMLgKf+nJ839/GdYo4rabDgFxHIbSPU4mYI/3VxAWmp
-         GJkjg5+QXKV0s6x4INeYZfy62peCMckGhN9e1L9jKRDpavGllWzT/eWibO4WHoFaB0Yq
-         E4vh6NHUF6s7MZvKaUao9voXLoB2CO9Cw/wNq9bf+iaocslJsyPcxaN9LrECzCwL2NBN
-         SdcQ==
-X-Gm-Message-State: AO0yUKXdA5ARot62v9msh6M7181Nukpvw75jy4zatYEpJ79O7MjvP4nh
-        la4TL57QRpk1bToZHghSC85fzw==
-X-Google-Smtp-Source: AK7set+RzpW2Z067J+esL8OAcAyTvdMn1W6zmBe1bpVMCdOkL8SWAErbcP2lhujxblJRKjS5mOkVBQ==
-X-Received: by 2002:a05:6000:1007:b0:2c3:da8a:192 with SMTP id a7-20020a056000100700b002c3da8a0192mr10542698wrx.15.1677179512258;
-        Thu, 23 Feb 2023 11:11:52 -0800 (PST)
+        bh=Ef9SnPny8CPfpZmm6N0jiCHwpvy9x8nd/PRiLPI7xag=;
+        b=yBCh51JoQwQyFOv7v8GFtrc4DQpZByIkRm5wGU84nRHGx757LXBzFsNBeo0vkIISxP
+         7djnurvwM1+00WUkyTl03QV1LFZ6RY3kZQwu88Fdnx/cLGwxXcSdJugmSeSIYVNKOpAU
+         LRCSq2UkYwasiymw8/1nyTsbTkNO2pxvHffNZwI78zK4avdf+WGTmnjgR2TMA5Q5oX/6
+         I4fQK/PMEgskbvBQjnIxiJx7EaEm8s/NDfG1v1n+BTA7NtcjhW9R1DruGOuh48m7IEwp
+         YCrXHmjeYy3q8lzc2iOjJPWJknVsgFypYGN555vG2YUQ2EjtyRcP67Je7XWGLlbdPNok
+         ANPw==
+X-Gm-Message-State: AO0yUKVDZm2q7MHeh4KkY+MjHh3yDGlbCyD1fH7lWOUQBy2LoXBwBZhf
+        jXBQRw7aXEW5OIIh4lR5dELZ+A==
+X-Google-Smtp-Source: AK7set98tD0e8cEXZx0hdoDPqzv1pTcwpHGVhaE8HSWqaC4eiTYx1JWNklrl/RcXYo0eJXOCliLKFg==
+X-Received: by 2002:a5d:410b:0:b0:2c5:58f5:3c40 with SMTP id l11-20020a5d410b000000b002c558f53c40mr9571433wrp.47.1677179513058;
+        Thu, 23 Feb 2023 11:11:53 -0800 (PST)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:5ee0:5af0:64bd:6198])
-        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b002c561805a4csm12957286wrt.45.2023.02.23.11.11.51
+        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b002c561805a4csm12957286wrt.45.2023.02.23.11.11.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 11:11:51 -0800 (PST)
+        Thu, 23 Feb 2023 11:11:52 -0800 (PST)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
         brgerst@gmail.com
@@ -64,9 +64,9 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         simon.evans@bytedance.com, liangma@liangbit.com,
         David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v11 10/12] x86/smpboot: Remove early_gdt_descr on 64-bit
-Date:   Thu, 23 Feb 2023 19:11:38 +0000
-Message-Id: <20230223191140.4155012-11-usama.arif@bytedance.com>
+Subject: [PATCH v11 11/12] x86/smpboot: Remove initial_gs
+Date:   Thu, 23 Feb 2023 19:11:39 +0000
+Message-Id: <20230223191140.4155012-12-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230223191140.4155012-1-usama.arif@bytedance.com>
 References: <20230223191140.4155012-1-usama.arif@bytedance.com>
@@ -84,7 +84,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Brian Gerst <brgerst@gmail.com>
 
-Build the GDT descriptor on the stack instead.
+Use the percpu offset directly to set GSBASE.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
@@ -92,74 +92,109 @@ Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Tested-by: Usama Arif <usama.arif@bytedance.com>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- arch/x86/kernel/acpi/sleep.c |  2 --
- arch/x86/kernel/head_64.S    | 19 +++++++------------
- 2 files changed, 7 insertions(+), 14 deletions(-)
+ arch/x86/include/asm/realmode.h |  1 -
+ arch/x86/kernel/acpi/sleep.c    |  1 -
+ arch/x86/kernel/head_64.S       | 34 ++++++++++-----------------------
+ 3 files changed, 10 insertions(+), 26 deletions(-)
 
+diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
+index f0357cfe2fb0..87e5482acd0d 100644
+--- a/arch/x86/include/asm/realmode.h
++++ b/arch/x86/include/asm/realmode.h
+@@ -60,7 +60,6 @@ extern struct real_mode_header *real_mode_header;
+ extern unsigned char real_mode_blob_end[];
+ 
+ extern unsigned long initial_code;
+-extern unsigned long initial_gs;
+ extern unsigned long initial_stack;
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ extern unsigned long initial_vc_handler;
 diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-index 008fda8b1982..6538ddb55f28 100644
+index 6538ddb55f28..214dd4a79860 100644
 --- a/arch/x86/kernel/acpi/sleep.c
 +++ b/arch/x86/kernel/acpi/sleep.c
-@@ -114,8 +114,6 @@ int x86_acpi_suspend_lowlevel(void)
+@@ -114,7 +114,6 @@ int x86_acpi_suspend_lowlevel(void)
  #else /* CONFIG_64BIT */
  #ifdef CONFIG_SMP
  	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
--	early_gdt_descr.address =
--			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
- 	initial_gs = per_cpu_offset(smp_processor_id());
+-	initial_gs = per_cpu_offset(smp_processor_id());
  	/* Force the startup into boot mode */
  	saved_smpboot_ctrl = xchg(&smpboot_control, 0);
+ #endif
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index f7905ba4b992..0dd57d573a0e 100644
+index 0dd57d573a0e..9ed87ba0609f 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -245,7 +245,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+@@ -67,18 +67,10 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 
+ 	leaq	_text(%rip), %rdi
+ 
+-	/*
+-	 * initial_gs points to initial fixed_percpu_data struct with storage for
+-	 * the stack protector canary. Global pointer fixups are needed at this
+-	 * stage, so apply them as is done in fixup_pointer(), and initialize %gs
+-	 * such that the canary can be accessed at %gs:40 for subsequent C calls.
+-	 */
++	/* Setup GSBASE to allow stack canary access for C code */
+ 	movl	$MSR_GS_BASE, %ecx
+-	movq	initial_gs(%rip), %rax
+-	movq	$_text, %rdx
+-	subq	%rdx, %rax
+-	addq	%rdi, %rax
+-	movq	%rax, %rdx
++	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
++	movl	%edx, %eax
+ 	shrq	$32,  %rdx
+ 	wrmsr
+ 
+@@ -243,10 +235,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	ANNOTATE_NOENDBR // above
+ 
  #ifdef CONFIG_SMP
- 	/*
- 	 * Is this the boot CPU coming up? If so everything is available
--	 * in initial_gs and early_gdt_descr.
-+	 * in initial_gs.
- 	 */
+-	/*
+-	 * Is this the boot CPU coming up? If so everything is available
+-	 * in initial_gs.
+-	 */
++	/* Is this the boot CPU coming up? */
  	movl	smpboot_control(%rip), %edx
  	testl	$STARTUP_SECONDARY, %edx
-@@ -313,11 +313,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	/* Save it for GS BASE setup */
- 	movq	%rbx, initial_gs(%rip)
+ 	jz	.Linit_cpu0_data
+@@ -308,12 +297,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
  
--	/* Calculate the GDT address */
--	movq	$gdt_page, %rcx
--	addq	%rbx, %rcx
--	movq	%rcx, early_gdt_descr_base(%rip)
+ .Linit_cpu_data:
+ 	/* Get the per cpu offset for the given CPU# which is in ECX */
+-	leaq	__per_cpu_offset(%rip), %rbx
+-	movq	(%rbx,%rcx,8), %rbx
+-	/* Save it for GS BASE setup */
+-	movq	%rbx, initial_gs(%rip)
 -
- 	movq	%rbx, %rdx
+-	movq	%rbx, %rdx
++	movq	__per_cpu_offset(,%rcx,8), %rdx
  #else
  	xorl	%edx, %edx
-@@ -339,7 +334,12 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	 * addresses where we're currently running on. We have to do that here
- 	 * because in 32bit we couldn't load a 64bit linear address.
+ #endif /* CONFIG_SMP */
+@@ -363,8 +347,11 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * the per cpu areas are set up.
  	 */
--	lgdt	early_gdt_descr(%rip)
-+	subq	$16, %rsp
-+	movw	$(GDT_SIZE-1), (%rsp)
-+	leaq	gdt_page(%rdx), %rax
-+	movq	%rax, 2(%rsp)
-+	lgdt	(%rsp)
-+	addq	$16, %rsp
+ 	movl	$MSR_GS_BASE,%ecx
+-	movl	initial_gs(%rip),%eax
+-	movl	initial_gs+4(%rip),%edx
++#ifndef CONFIG_SMP
++	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
++#endif
++	movl	%edx, %eax
++	shrq	$32, %rdx
+ 	wrmsr
  
- 	/* set up data segments */
- 	xorl %eax,%eax
-@@ -754,11 +754,6 @@ SYM_DATA_END(level1_fixmap_pgt)
- 
- 	.data
- 	.align 16
--
--SYM_DATA(early_gdt_descr,		.word GDT_ENTRIES*8-1)
--SYM_DATA_LOCAL(early_gdt_descr_base,	.quad INIT_PER_CPU_VAR(gdt_page))
--
--	.align 16
- SYM_DATA(smpboot_control,		.long 0)
- 
- 	.align 16
+ 	/* Drop the realmode protection. For the boot CPU the pointer is NULL! */
+@@ -514,7 +501,6 @@ SYM_CODE_END(vc_boot_ghcb)
+ 	__REFDATA
+ 	.balign	8
+ SYM_DATA(initial_code,	.quad x86_64_start_kernel)
+-SYM_DATA(initial_gs,	.quad INIT_PER_CPU_VAR(fixed_percpu_data))
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
+ #endif
 -- 
 2.25.1
 
