@@ -2,233 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81076A02B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF5F6A02BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbjBWGSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 01:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S233183AbjBWGUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 01:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233133AbjBWGSK (ORCPT
+        with ESMTP id S230356AbjBWGUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 01:18:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1774E1024E;
-        Wed, 22 Feb 2023 22:18:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5D62B8191D;
-        Thu, 23 Feb 2023 06:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994D4C433EF;
-        Thu, 23 Feb 2023 06:18:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677133085;
-        bh=3NvIbz4dAOjcx+FQS/w/2TUmps7YZWRiNJaIltf+Vfk=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=RAXasNZoiJwiCBfBzXlnI/4HcA53uVtwYTvAklFL04ZwChA674cn861ckh8YJcYBM
-         66RZGxNTSSybSX0Gb1MVAW3Cxqzy2cqXijJrZ8RjAIDTO8c+AzSa29Q6QNurHWT17Z
-         LSYN6IwGZW1YRcsBMdGkGw3QctPETRzHMvE3JuYzzcvVHbmWaLhpspziS4wKw6u3fF
-         IJ5Z5CeLssf/F0f2d3jsVJQBqLgyXURqWG45lup5fvz3JJwYtUTfTCy0eH97C0t8Oe
-         bSLJROexpjPcqdppD62WOm/gSPWpBFru2BGC6nYkKX0Ntqrh37LgFudvPxYFxLmL2q
-         omI/As/PAJPBQ==
-Date:   Thu, 23 Feb 2023 06:18:01 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-CC:     Stephen Boyd <sboyd@kernel.org>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        Thu, 23 Feb 2023 01:20:23 -0500
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2096.outbound.protection.outlook.com [40.107.135.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF9033477;
+        Wed, 22 Feb 2023 22:20:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fvA1SLEbQyBB8YIANCTGSiDTZdQbLTzp19FpCt9U+2q0wzYI6DplCo9UetzAY+VAHuoj2sxOxLRd3Xk3woFb1Slme2PqPq2v1SDy+8knFgMPnAUVBNYEEH6rM0IaWBQbZ1fHBgmnmUDWr6fqEx1JFNpSvucnSvp775Rohxq3nMN95C28Vy9Eqr4LPngnNZ4YztFa9t4lf0UxZOkTv1/+wN6q6ysAEcNthBHeKrDMOHDe5MZPWKKkjSiyXe0kINsoPmQU94HOkcxNMo/G8M5xJKgmVNq+XEIsVKlNZM0v9Udr/tyiZj/s8YkfuL7/SswtJRqfNzcoxCJZjE/RaQhSwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9ibcR8CalYh8WulXfojVh4ts8dDA4m0Y6MI6cGGROoU=;
+ b=BvWImoOc4B2STRqqs3KEW88BY5YMs0L8fhI/BzttOkSL6VaLQvbN/G2pCFugbAL72VBqXhPmJcxC8sZOWWU01Qf1tovQxvMgOYkMUCvMD4pGEiKPapxc/IM0xEGbG+77/yg7igOvJTTiy4ngpwgjWkoygL8lRo9ZdTyGvRaOAkIl7e2O88/+uIOX70yXS+T/dAECzBXX6A++6hbI27SfPWtRDbhr838lWfK5zP4C2BjLe1UZktly6EUu9txhZaLGnhG9pCt2lRCTMEJbFodfkXSmqgsnwDfY18x/w3XmsY2erz0f3r9pcc+uMkI2Zco1cgJrp/c60UPA4k3cVbvWHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rohmsemiconductor.onmicrosoft.com;
+ s=selector2-rohmsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9ibcR8CalYh8WulXfojVh4ts8dDA4m0Y6MI6cGGROoU=;
+ b=JfCD9RsFyMJbXkJiTwKaR425wiA+VOET9mqKRBF2MXk9amD0Ts5ENt/Qf1UDM15wiheNdW+xx8gp/fCLTsvwHejPbGR40SlAqCT+QIog6ufXKQqdnAT5HQDilFC28nLaoSYLgE2nUwcoasK35+XZUIvjx/d6jSwA0pJJuwWXsJU=
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
+ by BEZP281MB3032.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:24::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
+ 2023 06:20:17 +0000
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::f504:16e7:71d4:2fd8]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::f504:16e7:71d4:2fd8%6]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
+ 06:20:17 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_07/11=5D_dt-bindings=3A_clock=3A_Add_S?= =?US-ASCII?Q?tarFive_JH7110_system_clock_and_reset_generator?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <63d0e2a9-84b9-6637-6bbf-dedb2527eaa5@starfivetech.com>
-References: <20221220005054.34518-1-hal.feng@starfivetech.com> <20221220005054.34518-8-hal.feng@starfivetech.com> <Y6JB37Pd5TZoGMy4@spud> <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com> <Y6tSWB2+98a8k9Qw@spud> <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com> <Y+5z8skN2DuvxDEL@spud> <72953dc9371b87da8d03c63633d7d9dd.sboyd@kernel.org> <Y/VWNPfApsfm3/UD@spud> <c0472d7f-56fe-3e91-e0a0-49ee51700b5d@starfivetech.com> <Y/ZCRv3jHwFxN1Fo@spud> <63d0e2a9-84b9-6637-6bbf-dedb2527eaa5@starfivetech.com>
-Message-ID: <74F2E9C9-A606-4BCE-BB00-780619F851AE@kernel.org>
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/6] dt-bindings: iio: light: Support ROHM BU27034
+Thread-Topic: [RFC PATCH 1/6] dt-bindings: iio: light: Support ROHM BU27034
+Thread-Index: AQHZRtjt+FHEeq9ZRkmPMGATWZG5bK7bUXWAgAC+owA=
+Date:   Thu, 23 Feb 2023 06:20:16 +0000
+Message-ID: <101db5e2-e878-b751-9679-6ea45eb24c26@fi.rohmeurope.com>
+References: <cover.1677080089.git.mazziesaccount@gmail.com>
+ <af211ec180d91a13862630e635019ebe03d4be31.1677080089.git.mazziesaccount@gmail.com>
+ <e6b2a6f4-d710-7f74-e85d-1cd3f5b96460@linaro.org>
+In-Reply-To: <e6b2a6f4-d710-7f74-e85d-1cd3f5b96460@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BEZP281MB2454:EE_|BEZP281MB3032:EE_
+x-ms-office365-filtering-correlation-id: 5c2528bd-4ff9-4531-a539-08db15660819
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: O/igxVHrnt/WZ4pYbdWfqd2asunyXYWKxIHO8898UOqCInwscQy08d2UN4K7SAp+WTNRdxqcPZaDGgtD8B1VLI6ynvyzkpj2uorvHer6O76/ZQGos2RMy3pA/wRPfbtqX9OIWSIKvSmyQc2iPXOpjxwdzpA/7arzX+MXhO++VrB6XqJyHNqXEuIOVKuY2UeguIODztJv2vwJmGzouvml2s4NwfrOaXY/IqvCeOE10G7+EVkeEBBoPV5qbVB8jJhJLYSAxlWjGZvuEwrx6/gxflR6kfXo7FPqCuD0AGmok3AaRoq9L9pcLhTE4ignHOJSDy5bzC5oo8WNR9MPHep5HyEWk/4vnSxhbI5MOkPK6kxrL7Yox9fSNuUrFTvPi44vKyUDJCfOdzbBxbp+wMlcOkOrwRiYhi+DJtN/4RCLK2w602eSMkQF9jgyOng01zh+w+x3Zp0rqWwnWtw/MHEi3ZOyPjD7zMV0YBAhwHWln+60JnEZxFapXx6Y8oYVnz65P0en4Bo7H7zozKTXNeZE/NvbmOJEbb9xey7J0Rj0Da+MjsjyXXzjpql/kqTu9A8HhOUBrOPQ9JWU/jaOUl4iykYthz4ZhBxwryn5CDuxvwTutiL3xlHoBoGKKPmTs16lHnfX6dsFo6wqegk3l3kEpa2r5DNc+P/uHT2sX69pT834g82vacpYixJWKZLuTY1/LNDi9Khcf5XgxDtmHP6FZ5waSJXSngWM0RZcLrZD7ssBQooAVJNGxQQX3WTVFPaQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(451199018)(64756008)(66446008)(66476007)(66946007)(76116006)(91956017)(66556008)(83380400001)(54906003)(110136005)(316002)(8676002)(8936002)(5660300002)(4326008)(41300700001)(6506007)(6512007)(2616005)(53546011)(186003)(478600001)(966005)(6486002)(71200400001)(38070700005)(31696002)(86362001)(2906002)(7416002)(122000001)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cWZJOHNHMkJnbVB0N0VGeFRuMy85SG1sTUVjaW0rSktpdGxCV2I1anZaRW9E?=
+ =?utf-8?B?bGtLL3g5cDAxWDh2WmpuaHdiNVBINFpON1NpSUs4WHkzNVplREFTOURTNkoz?=
+ =?utf-8?B?dmJPak5BUU8zdHJiTzl0WVUzemdnLzNuTmZpUDJqb0hPZEQ1bHZlQllmTFVp?=
+ =?utf-8?B?WGNjM1BQRFRNTVJYdDRaQ3diTHU3czE5OW1veFNlc1o2ci9mN3BKWExHUVhw?=
+ =?utf-8?B?eDVqSzcvU3E4V2htOWV5bmdQV1liandScDQxRm55SGpmZndJd24wWGNHRk42?=
+ =?utf-8?B?ODBRM0JMS3FjZGRQSURlVVIzeUk1QU9pZllrVVdESjJzeFFmOXBpYi9WZDFj?=
+ =?utf-8?B?Z3J3VjBPRTZ1VEVOdG14dm5HWVRhbjZ3UUYyeHRLREhvdGxFc2hXb0k3bEdN?=
+ =?utf-8?B?WXA4V0FVcUdqZDZiQ1lRMkZQa2NmRmhDNEpBSGtSNWdMS2lLaUo0dmcrZEFU?=
+ =?utf-8?B?eGoxSmhiN3FaQUI4V1h2c3g1eWVzTDFoWjNXMFd4RG96a2xZSytMc1ZGV2dR?=
+ =?utf-8?B?eVBrSld4WkdSbHFOMGl5czNjcm5EL2xmZHNUR1F0U3VnUHdycjdmZVNYY0dM?=
+ =?utf-8?B?dGg4cW8xWHN6ZXV4a0tXNS9NQm43ZCtSOG80cldTTm45elVpNDhMaUJHSDRI?=
+ =?utf-8?B?K3VWajVhTTNyYzBTS3ZiTXRHNU81c3I0WkpmbjhpR3NyQ0owVlVhelFJOGpv?=
+ =?utf-8?B?UWxYOUlkdXNXbmJpTWlUaGRuTVJHMHB6MDZYVHpsQXdaV3BjZCtlRW1xV3Fs?=
+ =?utf-8?B?UHo4MjJDWDJzV2NZQmtnZTE5T01xeDFTYWlJRDg4KzhxNEhoRkRqa1hzdTY3?=
+ =?utf-8?B?dTBQSXBBSHoxQVVVSW1PSzFiVnNvbEhUV1BKbDVlYUFFWU5SaFVPc1lQMjZF?=
+ =?utf-8?B?VVlLL0oyQk56d3lNRzNka0xZN08zR253OUVLTkZFZW1XWUJlMUFGOUgvYVdl?=
+ =?utf-8?B?TUV4ZzBhWERnZW51Y0xybm9ONzY5anh0Z2o2dGo3Mk5EWnQxTkJUTDRMdTBV?=
+ =?utf-8?B?VXppSCt4SmsxWVByMXNhc3UrR3AvOUtINCsrbGxuVXptK3EwaTFVVnJHcW04?=
+ =?utf-8?B?cDUyS2RKVnZQMVQxNTAvOEhzN0FGMVlHRDJQUFp2ME9Ld1pPWEJWUDkrQVU5?=
+ =?utf-8?B?OFhXTEMrZHFFMlFkZW94Sm5iTE9UcEV3U3lRNEpDMWFrZFFtekJpekM3YkRO?=
+ =?utf-8?B?OHAwV1FvVUNzQ3lyMElLd2IvKzJaNUZtbjVvNUhTS2RwdjlwUW9kR1loSnY3?=
+ =?utf-8?B?ZjlRaEhsZTlRUEt6dVpnZ0paVnVnOENzQ1VKWEN6RkRMSUNVbVNaQXVyUDlK?=
+ =?utf-8?B?TjZGemlqdjl4NkVwNGFISTZidXlTSXJ5cGgydVpORkVNWU8rQVBaZ2ErcXVG?=
+ =?utf-8?B?SmR6cnd5dEFyQWlqbmlzckNwTzhTdXI1QmRaOU0yVXUyQVdZOG8zd3prUUYw?=
+ =?utf-8?B?ajIxY2FSd2xVK3krMlVSNXNFU1hLL3IrNjZDcW9tMHVpL3NDYmJLS2pTd3NI?=
+ =?utf-8?B?QmtiOWVaZnJ5b1YyT0NXUEVFZWFhWXI2L3NBTkdKUjJTSG96UVg2T2c5TWRr?=
+ =?utf-8?B?UEJKaGNrRnh1R2ZwUEFaSStRSEZuMTNqcit2SHBYYkRSUXhDRW9Uamw5TmxK?=
+ =?utf-8?B?Ty90RGdhM2ZqTGY0R1NpWXZVMUJCRjNJbHN4OWluWEE3bTJPNVFUVVJYVVJu?=
+ =?utf-8?B?TGlOby9wVWQ3NDlDSkJTR1lYZFVnQnJhOEVaTWl3WVE0TDNXM1lGc3hHUHRo?=
+ =?utf-8?B?OTZhYm1BSXBQa25IM01UZDBYOExyY0RUbFd2dkQ1aXEzUzZZc3VENFhMSUI1?=
+ =?utf-8?B?c1V0ZEtSUHpqRnNqYUZMY0M3Wms2L1NONFpSSVJzVkQ2bldERk1RdWtGWWxS?=
+ =?utf-8?B?enN1blhjQW1EQlc4NDRyaUp4OWlNRXEvNkthL1dTTElOTTB2UUtYR210S0tG?=
+ =?utf-8?B?REhBNlpaR0hoOWNGMHZodWhCb0lZbVJId3FWVjFMWnpPb2ZpSWJLU1NlT2xq?=
+ =?utf-8?B?bGpFMFVaR1dtVCttYjRVMWppTmNZSWc1V1pMMVdlcytCNVd6RTl4R0FCeVB0?=
+ =?utf-8?B?Y2tWbk91V09MUURsVDFicWJEVXlMOERHcXpxa25ROXc2SFN0VmJOaGk5WHdK?=
+ =?utf-8?B?TUVQREovK0JqSHowNlZOZ1NpaXJ3d2RZRHFGUVIwWTBkK1FuMHNiQ0ZmbHh4?=
+ =?utf-8?Q?tdIZCL+ZOMbD7fbX5xXrpX8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E591B3FACC118B45BBF9E5E7B2327B21@DEUP281.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c2528bd-4ff9-4531-a539-08db15660819
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 06:20:16.9491
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: s8Atz29C60p43tC9rF8MGoioVLbGslE8eheO8wQmWl6tjbSlle6dlWnU1ITXShfepFuj+O3QlnA3qPllPnSZPKeJ5F1uVfYEdJ0lZHFITUYcJ6DV5hyUsIF87if6ZquS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB3032
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23 February 2023 03:03:04 GMT, Hal Feng <hal=2Efeng@starfivetech=2Ecom>=
- wrote:
->On Wed, 22 Feb 2023 16:26:46 +0000, Conor Dooley wrote:
->> On Wed, Feb 22, 2023 at 09:27:37PM +0800, Hal Feng wrote:
->>> On Tue, 21 Feb 2023 23:39:32 +0000, Conor Dooley wrote:
->>> > On Tue, Feb 21, 2023 at 02:17:17PM -0800, Stephen Boyd wrote:
->>> >> Quoting Conor Dooley (2023-02-16 10:20:34)
->>> >> > On Thu, Feb 16, 2023 at 10:42:20PM +0800, Hal Feng wrote:
->>> >> > > On Tue, 27 Dec 2022 20:15:20 +0000, Conor Dooley wrote:
->>> >> > > > On Mon, Dec 26, 2022 at 12:26:32AM +0800, Hal Feng wrote:
->>> >> > > Please see the picture of these external clocks in clock tree=
-=2E
->>> >> > >=20
->>> >> > > # mount -t debugfs none /mnt
->>> >> > > # cat /mnt/clk/clk_summary
->>> >> > >                                  enable  prepare  protect      =
-                          duty  hardware
->>> >> > >    clock                          count    count    count      =
-  rate   accuracy phase  cycle    enable
->>> >> > > ---------------------------------------------------------------=
-----------------------------------------
->>> >> > >  *mclk_ext*                             0        0        0    =
-12288000          0     0  50000         Y
->>> >> > >  *tdm_ext*                              0        0        0    =
-49152000          0     0  50000         Y
->>> >> > >  *i2srx_lrck_ext*                       0        0        0    =
-  192000          0     0  50000         Y
->>> >> > >  *i2srx_bclk_ext*                       0        0        0    =
-12288000          0     0  50000         Y
->>> >> > >  *i2stx_lrck_ext*                       0        0        0    =
-  192000          0     0  50000         Y
->>> >> > >  *i2stx_bclk_ext*                       0        0        0    =
-12288000          0     0  50000         Y
->>> >> > >  *gmac1_rgmii_rxin*                     0        0        0   1=
-25000000          0     0  50000         Y
->>> >> > >     gmac1_rx                          0        0        0   125=
-000000          0     0  50000         Y
->>> >> > >        gmac1_rx_inv                   0        0        0   125=
-000000          0   180  50000         Y
->>> >> > >  *gmac1_rmii_refin*                     0        0        0    =
-50000000          0     0  50000         Y
->>> >> > >     gmac1_rmii_rtx                    0        0        0    50=
-000000          0     0  50000         Y
->>> >> > >        gmac1_tx                       0        0        0    50=
-000000          0     0  50000         N
->>> >> > >           gmac1_tx_inv                0        0        0    50=
-000000          0   180  50000         Y
->>> >> > >  *osc*                                  4        4        0    =
-24000000          0     0  50000         Y
->>> >> > >     apb_func                          0        0        0    24=
-000000          0     0  50000         Y
->>> >> > >  =2E=2E=2E
->>> >> > >=20
->>> >> > > The clock "gmac1_rgmii_rxin" and the clock "gmac1_rmii_refin" a=
-re
->>> >> > > actually used as the parent of other clocks=2E
->>> >> >=20
->>> >> > > The "dummy" clocks
->>> >> > > you said are all internal clocks=2E
->>> >> >=20
->>> >> > No, what I meant by "dummy" clocks is that if you make clocks "re=
-quired"
->>> >> > in the binding that are not needed by the hardware for operation =
-a
->>> >> > customer of yours might have to add "dummy" clocks to their devic=
-etree
->>> >> > to pass dtbs_check=2E
->>> >>=20
->>> >> They can set the phandle specifier to '<0>' to fill in the required
->>> >> property when there isn't anything there=2E If this is inside an So=
-C, it
->>> >> is always connected because silicon can't change after it is made
->>> >> (unless this is an FPGA)=2E Therefore, any and all input clocks sho=
-uld be
->>> >> listed as required=2E
->>> >=20
->>> >> If the clk controller has inputs that are
->>> >> pads/balls/pins on the SoC then they can be optional if a valid des=
-ign
->>> >> can leave those pins not connected=2E
->>> >=20
->>> > From the discussion on the dts patches, where the clocks have been p=
-ut
->>> > (intentionally) into board=2Edts, I've been under the impression tha=
-t we
->>> > are in this situation=2E
->>>=20
->>> For the system (sys) clock controller, we are in this situation=2E
->>> For the always-on (aon) clock controller, we are not, because some inp=
-ut
->>> clocks are inside the SoC=2E
->>>=20
->>> > Up to Hal to tell us if the hardware is capable of having those inpu=
-ts
->>> > left unfilled!
->>>=20
->>> The situation is different for v1=2E2A and v1=2E3B boards=2E
->>>=20
->>> For the v1=2E2A board,
->>> gmac1 only requires "gmac1_rmii_refin", which support 100MHz
->>> gmac0 only requires "gmac0_rgmii_rxin", which support 1000MHz
->>>=20
->>> For the v1=2E3B board,
->>> gmac1 only requires "gmac1_rgmii_rxin", which support 1000MHz
->>> gmac0 only requires "gmac0_rgmii_rxin", which support 1000MHz
->>>=20
->>> So we should set the "required" property depending on different
->>> boards=2E
->>=20
->> These were Krzk's suggestions:
->> oneOf:
->>  - clock-names:
->>      minItems: 3
->>      items:
->>        - a
->>        - b
->>        - c
->>        - d
->>  - clock-names:
->>      items:
->>        - a
->>        - b
->>        - d
->>=20
->> or maybe:
->>  - clock-names:
->>      minItems: 3
->>      items:
->>        - a
->>        - b
->>        - enum: [c, d]
->>        - d
->>=20
->> Might be making a mess here, but I think that becomes:
->>   clock-names:
->>     oneOf:
->>       - items:
->>           - const: osc
->>           - enum:
->>               - gmac1_rmii_refin
->>               - gmac1_rgmii_rxin
->>           - const: i2stx_bclk_ext
->>           - const: i2stx_lrck_ext
->>           - const: i2srx_bclk_ext
->>           - const: i2srx_lrck_ext
->>           - const: tdm_ext
->>           - const: mclk_ext
->>=20
->>       - items:
->>           - const: osc
->>           - const: gmac1_rmii_refin
->>           - const: gmac1_rgmii_rxin
->>           - const: i2stx_bclk_ext
->>           - const: i2stx_lrck_ext
->>           - const: i2srx_bclk_ext
->>           - const: i2srx_lrck_ext
->>           - const: tdm_ext
->>           - const: mclk_ext
->
->Will modify it and improve the description of clock items for
->pointing out which clock is required on different boards=2E
-
-I don't think you need to mention the boards in it=2E
-
->Thank you all for your helpful suggestions=2E
->
->Best regards,
->Hal
+SGkgZGVlIEhvIEtyenlzenRvZiwNCg0KVGhhbmtzIGZvciB0aGUgcmV2aWV3ISBJdCdzIG5pY2Ug
+eW91IGhhZCB0aGUgdGltZSB0byB0YWtlIGEgbG9vayBvbiBSRkMgOikNCg0KT24gMi8yMi8yMyAy
+MDo1NywgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMjIvMDIvMjAyMyAxNzoxNCwg
+TWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPj4gUk9ITSBCVTI3MDM0IGlzIGFuIGFtYmllbnQgbGln
+aHQgc2Vzbm9yIHdpdGggMyBjaGFubmVscyBhbmQgMyBwaG90byBkaW9kZXMNCj4+IGNhcGFibGUg
+b2YgZGV0ZWN0aW5nIGEgdmVyeSB3aWRlIHJhbmdlIG9mIGlsbHVtaW5hbmNlLiBUeXBpY2FsIGFw
+cGxpY2F0aW9uDQo+PiBpcyBhZGp1c3RpbmcgTENEIGFuZCBiYWNrbGlnaHQgcG93ZXIgb2YgVFZz
+IGFuZCBtb2JpbGUgcGhvbmVzLg0KPj4NCj4+IEFkZCBpbml0aWFsIGR0LWJpbmRpbmdzLg0KPiAN
+Cj4gRHJpdmVyIGNhbiBiZSAiaW5pdGlhbCIsIGJ1dCBiaW5kaW5ncyBiZXR0ZXIgdG8gYmUgY2xv
+c2VyIHRvIGNvbXBsZXRlLA0KPiBldmVuIGlmIG5vdCB1c2VkIGJ5IHRoZSBkcml2ZXIgY3VycmVu
+dGx5Lg0KDQpPdXQgb2YgdGhlIGN1cmlvc2l0eSAtIHdoeSBpcyB0aGF0PyAoUGxlYXNlLCBkb24n
+dCB0YWtlIG1lIHdyb25nLCBJIGFtIA0Kbm90IHRyeWluZyB0byBhcmd1ZSBhZ2FpbnN0IHRoaXMg
+LSBqdXN0IGxlYXJuIHRoZSByZWFzb24gYmVoaW5kKS4gSSANCmNhbid0IGltbWVkaWF0ZWx5IHNl
+ZSB0aGUgaGFybSBjYXVzZWQgYnkgYWRkaW5nIG5ldyBwcm9wZXJ0aWVzIGxhdGVyIA0Kd2hlbiB3
+ZSBsZWFybiBtb3JlIG9mIGhhcmR3YXJlLiAoYW5kIG5vLCBJIGRvbid0IGV4cGVjdCB0aGlzIHNp
+bXBsZSBJQyANCnRvIGdhaW4gYXQgbGVhc3QgbWFueSBwcm9wZXJ0aWVzKS4NCg0KPj4gU2lnbmVk
+LW9mZi1ieTogTWF0dGkgVmFpdHRpbmVuIDxtYXp6aWVzYWNjb3VudEBnbWFpbC5jb20+DQo+PiAt
+LS0NCj4+ICAgLi4uL2JpbmRpbmdzL2lpby9saWdodC9yb2htLWJ1MjcwMzQueWFtbCAgICAgIHwg
+NDYgKysrKysrKysrKysrKysrKysrKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNDYgaW5zZXJ0aW9u
+cygrKQ0KPj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL2lpby9saWdodC9yb2htLWJ1MjcwMzQueWFtbA0KPj4NCj4+IGRpZmYgLS1naXQgYS9E
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaWlvL2xpZ2h0L3JvaG0tYnUyNzAzNC55
+YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2lpby9saWdodC9yb2htLWJ1
+MjcwMzQueWFtbA0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IGluZGV4IDAwMDAwMDAwMDAw
+MC4uYTNhNjQyYzI1OWU4DQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9Eb2N1bWVudGF0aW9u
+L2RldmljZXRyZWUvYmluZGluZ3MvaWlvL2xpZ2h0L3JvaG0tYnUyNzAzNC55YW1sDQo+IA0KPiAN
+Cj4gQ29tbWEgYXMgYSBzZXBhcmF0b3IsIHNvOg0KPiByb2htLGJ1MjcwMzQueWFtbA0KDQpPaCwg
+eWVzLiBTbyBpdCBzZWVtcy4NCg0KU3RyYW5nZSwgSSBjb3VsZCBoYXZlIHN3b3JuIEkgdXNlZCBo
+eXBoZW4gaW4gYmluZGluZyBmaWxlIG5hbWVzIA0KcHJldmlvdXNseSBhbHRob3VnaCB0aGUgY29t
+bWEgaGFzIGJlZW4gdXNlZCBpbiB0aGUgY29tcGF0aWJsZS4gSSBoYWQgdG8gDQpnbyBiYWNrIGlu
+IHRpbWUgKGxvcmUsa2VybmVsLm9yZykgdG8gY2hlY2sgbXkgZWFybGllciBzdWJtaXNzaW9ucy4g
+V2VsbCwgDQpteSBtaW5kIHNlZW1zIHRvIGJlIHBsYXlpbmcgdHJpY2tzIG9uIG1lIEBfQC4gSSds
+bCBmaXggdGhpcyBiZWZvcmUgDQpzZW5kaW5nIG91dCBub24gUkZDIHNlcmllcyA6KQ0KDQpHb29k
+IGNhdGNoIChhcyBhbHdheXMpISBUaGFua3MhDQoNCj4+IEBAIC0wLDAgKzEsNDYgQEANCj4+ICsj
+IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBCU0QtMi1DbGF1c2UpDQo+PiAr
+JVlBTUwgMS4yDQo+PiArLS0tDQo+PiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1h
+cy9paW8vbGlnaHQvcm9obS1idTI3MDM0LnlhbWwjDQo+IA0KPiBXaXRoIGZpbGVuYW1lIGFuZCAk
+aWQgZml4Og0KPiANCj4gUmV2aWV3ZWQtYnk6IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRv
+Zi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4gDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlz
+enRvZg0KPiANCg0KLS0gDQpNYXR0aSBWYWl0dGluZW4NCkxpbnV4IGtlcm5lbCBkZXZlbG9wZXIg
+YXQgUk9ITSBTZW1pY29uZHVjdG9ycw0KT3VsdSBGaW5sYW5kDQoNCn5+IFdoZW4gdGhpbmdzIGdv
+IHV0dGVybHkgd3JvbmcgdmltIHVzZXJzIGNhbiBhbHdheXMgdHlwZSA6aGVscCEgfn4NCg0K
