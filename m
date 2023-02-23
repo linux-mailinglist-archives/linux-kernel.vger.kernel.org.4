@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22546A07BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB95D6A07C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbjBWLx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 06:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S233086AbjBWLyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 06:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjBWLxY (ORCPT
+        with ESMTP id S233766AbjBWLx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 06:53:24 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962032449E;
-        Thu, 23 Feb 2023 03:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677153202; x=1708689202;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=9UQVMZWr2tJmrTeaqBt8QBAvocH3yVm9kr/ecibUREE=;
-  b=l8FPqp7WMYZWbhXdCKmHcwX2JazhHbfJly4xqwXuUtkcy/6SJLNQ+lbe
-   BmCWKm30pdsEmmJ0xgNd2IjGae76pOZdnKmazIoavbgAfNerG1JXgut8O
-   DYDKB3NygRRmsAxUJUrXJEpTA2yqXwolnsFrQd9YXKyxks2YrmSnzCWnE
-   NSZH3PkD4aWxFwVtOjNWmnViUTiNbDgLWDg/Hk2N9JYmXSEsSQlWC3ZFy
-   0KxToN/nIYk3NHUP+StT72kod431nwaa8J15eQe5kau6w2/t1HwGRabBa
-   8QlqQSac44y2SJE7Xi04w3Kpe1qIaZKEa+4NV8Xl2vthhH9vZ1Ed2Wgvj
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="321339616"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="321339616"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 03:53:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="815303383"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="815303383"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2023 03:53:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pVA9z-00AvWb-2W;
-        Thu, 23 Feb 2023 13:53:15 +0200
-Date:   Thu, 23 Feb 2023 13:53:15 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Thu, 23 Feb 2023 06:53:57 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D9626CE5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:53:55 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-538116920c3so68412997b3.15
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:53:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BkDvAde+xEB9EcrHYCd3LbwuRS92d6Mc0FVT1jwspM8=;
+        b=Z35YhhszAtXdYFobCxj/aziJglcANrpaMxpi1CDSCv7IjJzEM4Wivn62WJCVNrek6a
+         Cz/mx3z5CtSkgVeo/xIa9uUe/H+99BPkqJ+RWF3jYjBNpH1V5JNyz/LM31i2g0fk7WPg
+         ZjvcxcZeq7yLFyujSzRgDsUT3VlSGZxyUkoUqnAh2WTphfS6RTH6H7BIugKieGImed/3
+         ekdN/k2zNv63KV+tgoixuVm5IvCm8KdWWXwSjPwT4aUF79po3DZMeUPyLWpHSe5G8FmH
+         G/zBy19rAzyFCRWXX0qncBegn+2vOUFPsEDTR1QZ7UHaeK8FHQElOFW4JL5CfiABkmUP
+         JnPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BkDvAde+xEB9EcrHYCd3LbwuRS92d6Mc0FVT1jwspM8=;
+        b=vvYZTujA+CNpcFDVZ3K2B5CI1KvxOr38kCz5UC9mkteUi6ziR+MLxKY321A/DWfAtH
+         BCiQL79BbxH9RrmXm7r/PcNIw/1s8P5f+LOy6eqrjblJOeNLzXF/pa4wG9+aaf2fTqz5
+         hQFDXdNW2CYjLZSY8GsxEEMH5lNk3vqyjwKHyzqVYfYZoQxWXjxhDdaTIJ1p6PvZ4ZQD
+         uWdbeFzCjaQnt6vBDE2rGSZyzwkMo4CVujvkz9WFujT8hajFhoIgWs8+QFQQSlGmYHmB
+         TWkSuTQjbKD1DWDw/nuNgm/RyBNIe3HuxePhGevtM1/Ol20P7pnMiOXyJyEHSXSLNz5H
+         2QiA==
+X-Gm-Message-State: AO0yUKUId8s8e4phtPYSAxORYaZl6lH4e665Z8p2nVCnXcDl7jlGrkpw
+        rzx4au7pD8464N4DQTU6hlsd8CQpWHHALlAid6MDGrsZgUn2ir7An6b0PHYCuw6kjWQEUWnXXQ7
+        CrkAF63i6TTJh/2Z6ZDYMJCkZo+z/cIdgnO2U1/ZUENVTZPtnUtxHwQYm7rhHAFBpvBcoZcceQ5
+        M=
+X-Google-Smtp-Source: AK7set/0oI6mOIAcKW1VboXRgJ4t1fzTNFzHLjDgu+zbEp/gMciwOtoFgR7uBdNNvXWUCinDZ2m222zM71NuvQ==
+X-Received: from lux.lon.corp.google.com ([2a00:79e0:d:209:cf33:dc28:3e98:f5e9])
+ (user=maennich job=sendgmr) by 2002:a25:9109:0:b0:87e:a15b:4e55 with SMTP id
+ v9-20020a259109000000b0087ea15b4e55mr6271ybl.21.1677153234779; Thu, 23 Feb
+ 2023 03:53:54 -0800 (PST)
+Date:   Thu, 23 Feb 2023 11:53:47 +0000
+In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
+Message-Id: <20230223115351.1241401-1-maennich@google.com>
+Mime-Version: 1.0
+References: <20220201205624.652313-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Subject: [PATCH v5.15 v2 0/4] Allow CONFIG_DEBUG_INFO_DWARF5=y + CONFIG_DEBUG_INFO_BTF=y
+From:   Matthias Maennich <maennich@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, maennich@google.com,
+        stable@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Message-ID: <Y/dTqynpTWn86wUy@smile.fi.intel.com>
-References: <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
- <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com>
- <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
- <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
- <Y/ZoyaV10TCWhloT@smile.fi.intel.com>
- <CAMuHMdXbYapqG1eirbRoxS9akue+URKOV338efMp1c0CbwUEKg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdXbYapqG1eirbRoxS9akue+URKOV338efMp1c0CbwUEKg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:55:15AM +0100, Geert Uytterhoeven wrote:
-> On Wed, Feb 22, 2023 at 8:21 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, Feb 22, 2023 at 07:46:25PM +0100, Krzysztof Kozlowski wrote:
+Hi!
 
-...
+Can we please pick up the essential parts of this series for 5.15? I am
+particularly interested in the last patch to enable BTF + DWARF5, but
+the cleanup patches before are a very reasonable choice for stable@ as
+well as they simplify the pahole version calculation and allow future
+BTF/pahole related patches to apply cleanly as well.
 
-> > I.o.w. the part after comma in the compatible strings of the I²C devices must
-> > be unique globally to make that enumeration disambiguous.
-> 
-> Which is not unique to this driver?
-> I bet you can find other compatible values that become non-unique
-> after stripping the manufacturer.
+Cheers,
+Matthias
 
-Yes, exactly my point.
-So this all schema is error prone. Hence I would not rely on it at all.
+Cc: <stable@vger.kernel.org> # v5.15+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Matthias Maennich <maennich@google.com>
 
+Nathan Chancellor (4):
+  kbuild: Add CONFIG_PAHOLE_VERSION
+  scripts/pahole-flags.sh: Use pahole-version.sh
+  lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+  lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+
+ MAINTAINERS               |  1 +
+ init/Kconfig              |  4 ++++
+ lib/Kconfig.debug         |  4 ++--
+ scripts/pahole-flags.sh   |  2 +-
+ scripts/pahole-version.sh | 13 +++++++++++++
+ 5 files changed, 21 insertions(+), 3 deletions(-)
+ create mode 100755 scripts/pahole-version.sh
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2.637.g21b0678d19-goog
 
