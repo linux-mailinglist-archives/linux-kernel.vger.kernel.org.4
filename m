@@ -2,133 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BA36A0943
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F646A0944
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbjBWNBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S234151AbjBWNCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbjBWNBu (ORCPT
+        with ESMTP id S234085AbjBWNCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:01:50 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329AD51F8D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:01:48 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so4479807wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xYKvz6v9Qm8RLR69Xi3HrSQtP4/hBiOz+pHwtiihWek=;
-        b=fdaxwdnhQRFFJCHjvavAmCGo9MnR53LbDA48v59Lcuvcj1KHNtYWQDHDSI5ngl5D7a
-         bFx1WzhqFFPjiKX1k7m9BUMFc9xlchygSpNu2Sa09GpKJ4bNRlXpBii0066PGIybYxxX
-         TA0f2qI9yGZrVEE7E+QJG0qFZZsVunbz5TS8NNsnHSRo8G0+T06fiUxkuN36gUk2mg+e
-         naIpIll0oThras1TXYi0lPX6Hme/sZZ/Rqz5WpK9sMh1JCn9gc6iIoO6JNtElMdH0LXn
-         RwbRcA2n4Hd0OYEGt6y9+7g6bUx3k4v2Ezh2Sn5AkLB+oUhafK4EUJMRJuEVDmDxE8MN
-         FK9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYKvz6v9Qm8RLR69Xi3HrSQtP4/hBiOz+pHwtiihWek=;
-        b=GM04abHcylMbimEi82mPMocQPnHZaEG+IFxr77DxT/H4iDffUQbr/Rqm3ekINpiSp+
-         xaK/MkwSV0fQ6qVv69ZjrKL5Yxn/mYAqKQu3nl1PWObF8jouYMJEIskBUjjErMu3pfv2
-         TXWCIcJ9icAVSYgXn46FzV/i0OcGtTrVwJ0CBFfqICWYGoNGmew9R7+PVvL1Poo6/8eK
-         F+lBZ+VW6Q0JQtXu4PYvP9X0YiMd4YeulGMEfK+B5FVH0Vf1APMyAH2oUPeRVzckSmmo
-         UQbZg41OUUagLloL9GTMq89iqR4oACsVvebwFiUy7RP4DLCLmb5Y/3nO35Zc2BWxQARP
-         LK1g==
-X-Gm-Message-State: AO0yUKWGHVoXNxtvdsFREy+dxNoJ6wUO09Dj32qSpt+6zHPpOBeACjMk
-        WgJXzHbi/nXqM+Iz6gLbOWv9vg==
-X-Google-Smtp-Source: AK7set9V9rB0bZriA9L42bB5ZP5rCGPgvKUs1rwY98EgeGW7v5LfM3FhfNh0iPZLf49lH88jj5D5rA==
-X-Received: by 2002:a05:600c:2cd8:b0:3ea:d610:f062 with SMTP id l24-20020a05600c2cd800b003ead610f062mr226629wmc.30.1677157306679;
-        Thu, 23 Feb 2023 05:01:46 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m22-20020a7bce16000000b003e209b45f6bsm9372002wmc.29.2023.02.23.05.01.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 05:01:46 -0800 (PST)
-Message-ID: <449cdcb1-c2f9-7800-9451-cb2dc289b108@linaro.org>
-Date:   Thu, 23 Feb 2023 13:01:45 +0000
+        Thu, 23 Feb 2023 08:02:06 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE8F51FBC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:02:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iTxPRbBYLeov8/5I76KRAXwCRmegYoWRkoKL8ZUNLs4=; b=KuMaiffMZvd/PjXonoAkFRlbbg
+        4PMxJQSO5Q+p/z71seO0BR2ntn9Go+kwEqMyI0mU0ytoD6vkZtQtdR7jCRhMl7nzt/Arhz+xysGYO
+        gtuL+whupxGujb/+/Y1jiPmBatcgVdCEEqV706aChMLSYfyQ0ymI/vfNrQBfEHI0W/QRLhI8ezd4y
+        Gx2jS/Ua/LbCr96cOMJqegjgo28EPRZXwM6GuKAG/IQhAf8xFC+CwjziVI9gKvvBvc1F0Y/1sEci6
+        Ae+q2gg14xAwyuO2s+BnHKvbEYnad0+Phqarcsgmw0+twX/ALpHUrsvqjY22AnbdujZzzxSAsdxny
+        Uk3hVx3w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVBEV-00ENb0-D3; Thu, 23 Feb 2023 13:02:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4104A300446;
+        Thu, 23 Feb 2023 14:01:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A7E0E2C86C32C; Thu, 23 Feb 2023 14:01:58 +0100 (CET)
+Date:   Thu, 23 Feb 2023 14:01:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        stern@rowland.harvard.edu
+Subject: Re: [PATCH 1/2] lockdep: lock_set_lock_cmp_fn()
+Message-ID: <Y/djxk1q5EiYHFfF@hirez.programming.kicks-ass.net>
+References: <20230218032117.2372071-1-kent.overstreet@linux.dev>
+ <20230218032117.2372071-2-kent.overstreet@linux.dev>
+ <Y/ONLYqVrWPFyboF@hirez.programming.kicks-ass.net>
+ <Y/QHn+PecW2n2K5O@moria.home.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v5 01/10] interconnect: qcom: rpm: make QoS INVALID
- default, separate out driver data
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Jun Nie <jun.nie@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org>
- <20230217-topic-icc-fixes-v5-v5-1-c9a550f9fdb9@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230217-topic-icc-fixes-v5-v5-1-c9a550f9fdb9@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/QHn+PecW2n2K5O@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 10:46, Konrad Dybcio wrote:
-
-I find this commit log difficult to understand.
-
-Could you reduce it down ?
-
-> Currently, NOC_QOS_MODE_FIXED is defined as 0x0, which makes it the
-> "default" option (as that's what uninitialized members of partially
-> initialized structs are set to), which should really have been
-> NOC_QOS_MODE_INVALID, and that's what people (wrongly) assumed was
-> the case when .qos.qos_mode was not defined and what really makes
-> the most sense..
-
-"Currently NOC_QOS_MODE_FIXED is defined as 0x0 which makes it the 
-default option. The default option however should be NOC_QOS_MODE_INVALID"
-
-> That resulted in {port 0, prio 0, areq_prio 0, urg_fwd = false, rpm-voted}
-> QoS being always voted for, because the code flow assumed "hey, it's fixed
-> QoS, so let's just roll with whatever parameters are set" [again, set by
-> partial struct initialization, as these fields were left unfilled by the
-> developers]. That is of course incorrect, and on many of these platforms
-> port 0 is MAS_APPS_PROC, which 9/10 times is supposed to be handled by
-> the ap_owned path, not to mention the rest of the parameters may differ.
-> Arguably, the APPS node is the most important one, next to EBI0..
-
-This paragraph in particular is difficult to decipher, at least for me 
-with my native Dublinese
-
-
-> The modes are defined as preprocessor constants. They are not used
-> anywhere outside the driver or sent to any remote processor outside
-> qcom_icc_set_noc_qos(), which is easily worked around.
-> Separate the type specified in driver data from the value sent to msmbus.
-> Make the former an enum for better mainainability.
+On Mon, Feb 20, 2023 at 06:51:59PM -0500, Kent Overstreet wrote:
+> On Mon, Feb 20, 2023 at 04:09:33PM +0100, Peter Zijlstra wrote:
+> > which is much simpler to work with. Can we improve on this? Give the
+> > cmp_fn an additinoal optional argument of a string pointer or so to fill
+> > out with actual details to be printed?
 > 
-> This is an implicit fix for every SMD RPM ICC driver that didn't
-> explicitly specify NOC_QOS_MODE_INVALID on non-AP_owned nodes that
-> don't have QoS settings.
+> Here you go, example bcache output:
+> 
+> Patch is not as pretty as I'd like because not every path that prints a
+> lock has held_lock available - but the ones we care about in this
+> scenario do.
 
-It would be nice to reduce the commit log down to say three paragraphs 
-of no more than three sentences each.
+Right, unavoidable that.
 
----
-bod
+> ============================================
+> WARNING: possible recursive locking detected
+> 6.2.0-rc8-00003-g7d81e591ca6a-dirty #15 Not tainted
+> --------------------------------------------
+> kworker/14:3/938 is trying to acquire lock:
+> ffff8880143218c8 (&b->lock l=0 0:2803368){++++}-{3:3}, at: bch_btree_node_get.part.0+0x81/0x2b0
+> 
+> but task is already holding lock:
+> ffff8880143de8c8 (&b->lock l=1 1048575:9223372036854775807){++++}-{3:3}, at: __bch_btree_map_nodes+0xea/0x1e0
+> and the lock comparison function returns 1:
+> 
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+> 
+>        CPU0
+>        ----
+>   lock(&b->lock l=1 1048575:9223372036854775807);
+>   lock(&b->lock l=0 0:2803368);
+> 
+>  *** DEADLOCK ***
+> 
+>  May be due to missing lock nesting notation
+> 
+> 3 locks held by kworker/14:3/938:
+>  #0: ffff888005ea9d38 ((wq_completion)bcache){+.+.}-{0:0}, at: process_one_work+0x1ec/0x530
+>  #1: ffff8880098c3e70 ((work_completion)(&cl->work)#3){+.+.}-{0:0}, at: process_one_work+0x1ec/0x530
+>  #2: ffff8880143de8c8 (&b->lock l=1 1048575:9223372036854775807){++++}-{3:3}, at: __bch_btree_map_nodes+0xea/0x1e0
+
+Much better indeed. Thanks!
+
+> -- >8 --
+> Subject: [PATCH] lockdep: lock_set_print_fn()
+> 
+> This implements a new interface to lockedp, lock_set_print_fn(), for
+> printing additional information about a lock.
+> 
+> This is intended to be useful with the previous lock_set_cmp_fn(); when
+> defininig an ordering for locks of a given type, we'll want to print out
+> information about that lock that's relevant for the ordering we defined.
+> 
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> ---
+>  include/linux/lockdep.h       |  3 ++
+>  include/linux/lockdep_types.h |  2 +
+>  kernel/locking/lockdep.c      | 81 ++++++++++++++++++++++-------------
+>  3 files changed, 57 insertions(+), 29 deletions(-)
+> 
+> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> index 98e0338a74..66d8a5a24e 100644
+> --- a/include/linux/lockdep.h
+> +++ b/include/linux/lockdep.h
+> @@ -664,10 +664,13 @@ lockdep_rcu_suspicious(const char *file, const int line, const char *s)
+>  
+>  #ifdef CONFIG_PROVE_LOCKING
+>  void lockdep_set_lock_cmp_fn(struct lockdep_map *lock, lock_cmp_fn fn);
+> +void lockdep_set_lock_print_fn(struct lockdep_map *lock, lock_print_fn fn);
+
+I would suggest the same as last time; integrate this in the class
+setting zoo of functions. If you insiste, please keep it one function
+and force print_fn when cmp_fn. We don't want people to skimp out on
+this.
+
+Other than that, I don't think this can fully replace subclasses, since
+subclasses would allow lock hierarchies with other classes inter-twined,
+while this really relies on pure class nesting.
+
+That is:
+
+	A/0
+	B
+	A/1
+
+is a valid subclass nesting set, but you can't achieve the same with
+this.
+
+That said; it does seem like a very useful additional annotation for the
+more complex nesting sets.
+
+Thanks!
