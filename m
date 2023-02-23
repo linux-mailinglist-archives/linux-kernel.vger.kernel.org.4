@@ -2,127 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E7F6A0E09
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1C66A0E11
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 17:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbjBWQ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 11:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S234403AbjBWQbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 11:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234612AbjBWQ2x (ORCPT
+        with ESMTP id S234404AbjBWQbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 11:28:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFD71732;
-        Thu, 23 Feb 2023 08:28:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9C3661752;
-        Thu, 23 Feb 2023 16:28:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD26C433EF;
-        Thu, 23 Feb 2023 16:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677169710;
-        bh=QNtwL+3aQI5NX8KHQuxRVNJuJdxCfz9xgbVF4PuC1B4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ecOScmMnD4FY54PQcTo/sUh3wM/bq5x1gw2ldgd1gw3GsMiqGMHcx0hQYQ6U4hBej
-         JmDyZ/Tx/1Qq6N0Hg17t9W2gweAb3BddapdcI/ALIUxvRBHfrvLcAJBSsOWAbu0fnC
-         W14+vs8BlJ71JMPpCahFLIAWbKCnPLUmMkEAtp5w6825yBsUda4LMq9B4bG9xNMfcw
-         CVVgYVBhmI4PeoxciEBACllNI08VRVitgE7xwwY2RSeLpNshH0H6Q/1qGVi8gTEhuA
-         qunB88ExeofQLMfkFWy/9ZOpGNkuYSTulZCZOf2e0uu2yRzsX+EEqYlLb/zFlYUlnW
-         2q/C8GezC7vtw==
-Date:   Thu, 23 Feb 2023 09:28:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-Message-ID: <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
-References: <20230127221418.2522612-1-arnd@kernel.org>
+        Thu, 23 Feb 2023 11:31:33 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B79755063;
+        Thu, 23 Feb 2023 08:31:32 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id o12so44631819edb.9;
+        Thu, 23 Feb 2023 08:31:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZJiynkHcOYvpWdeg6eMjPakqPz+s/GM+Q1PI5yS7B8c=;
+        b=BdsblZ9BX7Y/pc8NE++33YGUAoPexThAHO4nLvYIf+QRGEztKDMqtKlTBVlBWnnnZB
+         MY/t5+lORQUJIwnifqLRMKy2kJFgD85blubqnnEIIhrg3u+bNzQNvOvLDLyZGupBrjWs
+         o3AwKGNYmsLnprzqSVuGMsXhuuvkhNWE6nfCZqa79dTnv2ArMozm8eZ/ipZJ6Djg5lZ7
+         uH4154PlZaY4MskKHO4DdDALP2QXFiFcGTiRoqb3nwKk0UoVOXIryozQJro9k/hduTVv
+         0TDEbu6ok21NtJYqqS7LnbCnpMCrTRarmWLtGizxclCfO60h2FeSCkBqVCInQNwJP+nJ
+         oITw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZJiynkHcOYvpWdeg6eMjPakqPz+s/GM+Q1PI5yS7B8c=;
+        b=BMHzG1qTmcIWcZiMJUBNnmgtHm/DQ0TV2WvZzQnuDrTyTBNFHPzFWQP29s+t9tAsU0
+         PiKjohKVFAp12fhH5X4CCDM8zLefWJCTNMhrGWBnJ8x07qatWkJDvjvrj5QFaD/CMhSp
+         v+xbI6iOZa56oZErFB6LR0CJnNkjnIa/BfKE/fbKo2ZAr4zKDonKnP7sih0GZQmHt1Qt
+         Lf5tfLVMVCvzLj7lU4R/qK43mPjd2qslN85R3MUbmrUO3zKNvBHG1ekIGl+oK49Y0snM
+         Bxa5OxSBAnShp170eV83sQDCyHELy57HPPFULBHA5FWtYB55P7wv4PL41KwlaPqwZgMS
+         b6Jw==
+X-Gm-Message-State: AO0yUKW0+z3n2MNlOdW+SUZVQAXOS6zAN62fBa7gDq66tMH04492O2Eq
+        d31nWtPy8QT7cD4ttztq/admdYYJq9SiN5lzOXo=
+X-Google-Smtp-Source: AK7set9s1bUxaieJq5s1ZS+BG4ANOJQRUOUFQ9UbUfvNSbAfBygtZo/7vkmzGsioUpxTZdnozd9bVIK8y96BIvfyVz0=
+X-Received: by 2002:a17:906:2495:b0:8b1:78b8:4207 with SMTP id
+ e21-20020a170906249500b008b178b84207mr10774401ejb.3.1677169890461; Thu, 23
+ Feb 2023 08:31:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127221418.2522612-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221151846.2218217-1-tero.kristo@linux.intel.com>
+In-Reply-To: <20230221151846.2218217-1-tero.kristo@linux.intel.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 23 Feb 2023 08:31:19 -0800
+Message-ID: <CAADnVQKmAEd3GTLC1GeP2hFtQUuaYZAkbV3Sk5-75x2jmmybLA@mail.gmail.com>
+Subject: Re: [RESEND PATCH] bpf: Add support for absolute value BPF timers
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thierry, Daniel, and David,
+On Tue, Feb 21, 2023 at 7:21 AM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+>
+> Add a new flag BPF_F_TIMER_ABS that can be passed to bpf_timer_start()
+> to start an absolute value timer instead of the default relative value.
+> This makes the timer expire at an exact point in time, instead of a time
+> with latencies and jitter induced by both the BPF and timer subsystems.
+> This is useful e.g. in certain time sensitive profiling cases, where we
+> need a timer to expire at an exact point in time.
 
-On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The error handling for platform_get_irq() failing no longer
-> works after a recent change, clang now points this out with
-> a warning:
-> 
-> drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
->         if (syncpt_irq < 0)
->             ^~~~~~~~~~
-> 
-> Fix this by removing the variable and checking the correct
-> error status.
-> 
-> Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+"certain time sensitive profiling cases" is too vague.
+
+Please precisely describe the use case.
+
+> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
 > ---
->  drivers/gpu/host1x/dev.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-> index 4872d183d860..aae2efeef503 100644
-> --- a/drivers/gpu/host1x/dev.c
-> +++ b/drivers/gpu/host1x/dev.c
-> @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
->  static int host1x_probe(struct platform_device *pdev)
+>  include/uapi/linux/bpf.h | 15 +++++++++++++++
+>  kernel/bpf/helpers.c     | 11 +++++++++--
+>  2 files changed, 24 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..7f5b71847984 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -4951,6 +4951,12 @@ union bpf_attr {
+>   *             different maps if key/value layout matches across maps.
+>   *             Every bpf_timer_set_callback() can have different callback_fn.
+>   *
+> + *             *flags* can be one of:
+> + *
+> + *             **BPF_F_TIMER_ABS**
+> + *                     Start the timer in absolute expire value instead of the
+> + *                     default relative one.
+> + *
+>   *     Return
+>   *             0 on success.
+>   *             **-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier
+> @@ -7050,4 +7056,13 @@ struct bpf_core_relo {
+>         enum bpf_core_relo_kind kind;
+>  };
+>
+> +/*
+> + * Flags to control bpf_timer_start() behaviour.
+> + *     - BPF_F_TIMER_ABS: Timeout passed is absolute time, by default it is
+> + *       relative to current time.
+> + */
+> +enum {
+> +       BPF_F_TIMER_ABS = (1ULL << 0),
+> +};
+> +
+>  #endif /* _UAPI__LINUX_BPF_H__ */
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index af30c6cbd65d..924849d89828 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1253,10 +1253,11 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
 >  {
->  	struct host1x *host;
-> -	int syncpt_irq;
->  	int err;
->  
->  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-> @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
->  	}
->  
->  	host->syncpt_irq = platform_get_irq(pdev, 0);
-> -	if (syncpt_irq < 0)
-> -		return syncpt_irq;
-> +	if (host->syncpt_irq < 0)
-> +		return host->syncpt_irq;
->  
->  	mutex_init(&host->devices_lock);
->  	INIT_LIST_HEAD(&host->devices);
-> -- 
-> 2.39.0
-> 
+>         struct bpf_hrtimer *t;
+>         int ret = 0;
+> +       enum hrtimer_mode mode;
+>
+>         if (in_nmi())
+>                 return -EOPNOTSUPP;
+> -       if (flags)
+> +       if (flags > BPF_F_TIMER_ABS)
+>                 return -EINVAL;
+>         __bpf_spin_lock_irqsave(&timer->lock);
+>         t = timer->timer;
+> @@ -1264,7 +1265,13 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+>                 ret = -EINVAL;
+>                 goto out;
+>         }
+> -       hrtimer_start(&t->timer, ns_to_ktime(nsecs), HRTIMER_MODE_REL_SOFT);
+> +
+> +       if (flags & BPF_F_TIMER_ABS)
+> +               mode = HRTIMER_MODE_ABS_SOFT;
+> +       else
+> +               mode = HRTIMER_MODE_REL_SOFT;
+> +
+> +       hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
 
-Apologies if this has been reported already or has a solution in
-progress but mainline is now broken because this change got separated
-from the change it is fixing:
-
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
-https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
-
-I see this change sitting in the drm-tegra tree [1], which is getting
-merged into -next, so it is fixed there, which is why we did not notice
-any issues until the drm-next tree was merged into mainline. Can this be
-fast tracked to Linus to unbreak clang builds with -Werror?
-
-[1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
-
-Cheers,
-Nathan
+The patch looks fine, but please add a selftest for new functionality
+in the 2nd patch and resend them together.
