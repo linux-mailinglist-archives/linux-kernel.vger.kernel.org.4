@@ -2,55 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8DB6A0034
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A02A6A003A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbjBWAxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S230048AbjBWAzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjBWAxl (ORCPT
+        with ESMTP id S232484AbjBWAzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:53:41 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DDB1C7C1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/VWMyfgJQqN+LT+oGtb6fBZ/QWKOOt48ECAn8krTz9w=; b=Rps9j5Y6XUVqHSB4VV2euMpcDb
-        /YBvZMPV2A76Pv5PGCHIKLSP23TbsHymBzuJJ0LG76L67zRW5f26ACnHDZIC0O90XE0LUrkqaS4qT
-        oxsFZP0eq9fo1BqNQEsA2VaRkRfUXqlIOeemmt/mmFR1Waj/FHedXJvDtA7zmZBxZ/wWf7hDnH5wl
-        YjNFSXftDGLgJYmEEYWLtuFDIrdLdgP4GAkGq6UYYc/hXqNL1Z9S2jxQiT9KPZ6fbLy2NnHBO0LBf
-        VKBkhmJvD5JEKIjAjRYtjB7Z7StpqpWv+Dwh/ELUvvEQqfcz3V+XtT6b6ml4qGJA+lElR1SOLhQdv
-        ef2PKDnA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUzrK-00Ea9B-ON; Thu, 23 Feb 2023 00:53:18 +0000
-Date:   Wed, 22 Feb 2023 16:53:18 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, hughd@google.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        p.raghav@samsung.com, dave@stgolabs.net, a.manzanares@samsung.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 2/2] shmem: add support to ignore swap
-Message-ID: <Y/a4/ktpxw/z7/PO@bombadil.infradead.org>
-References: <20230207025259.2522793-1-mcgrof@kernel.org>
- <20230207025259.2522793-3-mcgrof@kernel.org>
- <Y+HNL9RoP48tquGd@casper.infradead.org>
- <Y+PHPfiVS6EiTVl1@bombadil.infradead.org>
- <Y+PfqulG2wt0Y+Vr@casper.infradead.org>
- <CAJD7tkZnaphPCrOTMjb0uM7HHqwJESaauNZ6Q58+QP1290Zd4A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkZnaphPCrOTMjb0uM7HHqwJESaauNZ6Q58+QP1290Zd4A@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Wed, 22 Feb 2023 19:55:20 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC3537717
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:55:18 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c6ce8d74so92610357b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3azLqXR2vSKV5L2PaJh+3T6s1vBztgHEFOD2woEyPYw=;
+        b=ll/kgw4EhN1QBjkzhFZB0Ail1ORJy+AyUBj3Zon2zA6YZR6bvv6MRVw4xL88tq8Az8
+         UNfJYuIlxPRqkMZxma4EfhQVLDz+WB3n7N3GgnS6/N71B9VGL9L1wJxicWIzPEsnhNbY
+         jwqQtYqGUwQCJ7O/Ie7nc1bEP4GmGEJpB8DCFusadZrYSFRLnQZARIT1I0plRhGyCTgj
+         klqga5wY1X/qhy0ohB1y16mctfilFHsYR3l8CX6UQd0Ok2HUyZRCt5JjEmEyFz3N4ySp
+         AUxoMU/xS8Z5QEE7WS4WTYYb6USgkUVSpxiH8hOE9if2xvRinxF+p0VrjEGBhDPd5C7e
+         03hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3azLqXR2vSKV5L2PaJh+3T6s1vBztgHEFOD2woEyPYw=;
+        b=iDNbsnQlmEUnn6LDWwS5ziI9BjoN9XQMZSMLT0GLdaOnnvyncC8ohmIMxCCL/1aNhx
+         JkbUyI7gHQAV6S7Rq368YBtPz1gE4JCBxBGiucBy0ZR3bu0hrVlMOsnStt1U0opz5/+q
+         iKaVN4r4e9CZzwJL1jOaYCkYgSMDX8rPY2vEgcSKp1XCdg8qjdOSn7Lo5IP9WBxnfcwz
+         RfE5gSzerpky299f6DZnCqVk30xQ5nxijBGhY9ihS46xm3bXExDXtjuNxVb3Bn96KQem
+         mlG6VBxnRz8Il7HDDEdGT6ylA+TzSJ6K5H8/2bcBWrXWg98/ZwuU3I7mFrIaXpy5cTS1
+         sbZQ==
+X-Gm-Message-State: AO0yUKUNgnN2+h5NZo04hUcSizaFHfQGWODV4din/wpLTgkmdiK5m2n/
+        bXhQX4CUi7wLiovdNFoFYuSyxFG5s1ktC8Qc8Q==
+X-Google-Smtp-Source: AK7set/bRW8kyMySNfR/6zy0z0kR68DNc8Wiwl2R9ueq8c35MSB8zjbIqdtnOK6awXZtxDJCM5SBJnFOM9ODRuSA8Q==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:1028:b0:a27:3ecd:6 with SMTP
+ id x8-20020a056902102800b00a273ecd0006mr761629ybt.1.1677113717462; Wed, 22
+ Feb 2023 16:55:17 -0800 (PST)
+Date:   Thu, 23 Feb 2023 00:55:16 +0000
+In-Reply-To: <20230216100150.yv2ehwrdcfzbdhcq@box.shutemov.name> (kirill@shutemov.name)
+Mime-Version: 1.0
+Message-ID: <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [RFC PATCH 1/2] mm: restrictedmem: Allow userspace to specify
+ mount_path for memfd_restricted
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org,
+        chao.p.peng@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
+        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
+        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
+        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
+        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
+        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
+        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
+        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
+        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
+        yu.c.zhang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,66 +84,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 12:33:37PM -0800, Yosry Ahmed wrote:
-> On Wed, Feb 8, 2023 at 9:45 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Wed, Feb 08, 2023 at 08:01:01AM -0800, Luis Chamberlain wrote:
-> > > On Tue, Feb 07, 2023 at 04:01:51AM +0000, Matthew Wilcox wrote:
-> > > > On Mon, Feb 06, 2023 at 06:52:59PM -0800, Luis Chamberlain wrote:
-> > > > > @@ -1334,11 +1336,15 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
-> > > > >   struct shmem_inode_info *info;
-> > > > >   struct address_space *mapping = folio->mapping;
-> > > > >   struct inode *inode = mapping->host;
-> > > > > + struct shmem_sb_info *sbinfo = SHMEM_SB(inode->i_sb);
-> > > > >   swp_entry_t swap;
-> > > > >   pgoff_t index;
-> > > > >
-> > > > >   BUG_ON(!folio_test_locked(folio));
-> > > > >
-> > > > > + if (wbc->for_reclaim && unlikely(sbinfo->noswap))
-> > > > > +         return AOP_WRITEPAGE_ACTIVATE;
-> > > >
-> > > > Not sure this is the best way to handle this.  We'll still incur the
-> > > > oevrhead of tracking shmem pages on the LRU, only to fail to write them
-> > > > out when the VM thinks we should get rid of them.  We'd be better off
-> > > > not putting them on the LRU in the first place.
-> > >
-> > > Ah, makes sense, so in effect then if we do that then on reclaim
-> > > we should be able to even WARN_ON(sbinfo->noswap) assuming we did
-> > > everthing right.
-> > >
-> > > Hrm, we have invalidate_mapping_pages(mapping, 0, -1) but that seems a bit
-> > > too late how about d_mark_dontcache() on shmem_get_inode() instead?
-> >
-> > I was thinking that the two calls to folio_add_lru() in mm/shmem.c
-> > should be conditional on sbinfo->noswap.
-> >
-> 
-> Wouldn't this cause the folio to not show up in any lru lists, even
-> the unevictable one, which may be a strange discrepancy?
-> 
-> Perhaps we can do something like shmem_lock(), which calls
-> mapping_set_unevictable(), which will make folio_evictable() return
-> true and the LRUs code will take care of the rest?
 
-If shmem_lock() should take care of that is that because writepages()
-should not happen or because we have that info->flags & VM_LOCKED stop
-gap on writepages()? If the earlier then shouldn't we WARN_ON_ONCE()
-if writepages() is called on info->flags & VM_LOCKED?
+"Kirill A. Shutemov" <kirill@shutemov.name> writes:
 
-While I see the value in mapping_set_unevictable() I am not sure I see
-the point in using shmem_lock(). I don't see why we should constrain
-noswap tmpfs option to RLIMIT_MEMLOCK
+> On Thu, Feb 16, 2023 at 12:41:16AM +0000, Ackerley Tng wrote:
+>> By default, the backing shmem file for a restrictedmem fd is created
+>> on shmem's kernel space mount.
 
-Please correct me if I'm wrong but the limit seem to be designed for
-files / IPC / unprivileged perf limits. On the contrary, we'd bump the
-count for each new inode. Using shmem_lock() would  also complicate the
-inode allocation on shmem as we'd have to unwind on failure from the
-user_shm_lock(). It would also beg the question of when to capture a
-ucount for an inode, should we just share one for the superblock at
-shmem_fill_super() or do we really need to capture it at every single
-inode creation? In theory we could end up with different limits.    
+>> With this patch, an optional tmpfs mount can be specified, which will
+>> be used as the mountpoint for backing the shmem file associated with a
+>> restrictedmem fd.
 
-So why not just use mapping_set_unevictable() alone for this use case?
+>> This change is modeled after how sys_open() can create an unnamed
+>> temporary file in a given directory with O_TMPFILE.
 
-  Luis
+>> This will help restrictedmem fds inherit the properties of the
+>> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+>> binding hints, etc.
+
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> ---
+>>   include/linux/syscalls.h           |  2 +-
+>>   include/uapi/linux/restrictedmem.h |  8 ++++
+>>   mm/restrictedmem.c                 | 63 +++++++++++++++++++++++++++---
+>>   3 files changed, 66 insertions(+), 7 deletions(-)
+>>   create mode 100644 include/uapi/linux/restrictedmem.h
+
+>> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+>> index f9e9e0c820c5..4b8efe9a8680 100644
+>> --- a/include/linux/syscalls.h
+>> +++ b/include/linux/syscalls.h
+>> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int  
+>> flags);
+>>   asmlinkage long sys_set_mempolicy_home_node(unsigned long start,  
+>> unsigned long len,
+>>   					    unsigned long home_node,
+>>   					    unsigned long flags);
+>> -asmlinkage long sys_memfd_restricted(unsigned int flags);
+>> +asmlinkage long sys_memfd_restricted(unsigned int flags, const char  
+>> __user *mount_path);
+
+>>   /*
+>>    * Architecture-specific system calls
+
+> I'm not sure what the right practice now: do we provide string that
+> contains mount path or fd that represents the filesystem (returned from
+> fsmount(2) or open_tree(2)).
+
+> fd seems more flexible: it allows to specify unbind mounts.
+
+I tried out the suggestion of passing fds to memfd_restricted() instead
+of strings.
+
+One benefit I see of using fds is interface uniformity: it feels more
+aligned with other syscalls like fsopen(), fsconfig(), and fsmount() in
+terms of using and passing around fds.
+
+Other than being able to use a mount without a path attached to the
+mount, are there any other benefits of using fds over using the path string?
+
+Should I post the patches that allows specifying a mount using fds?
+Should I post them as a separate RFC, or as a new revision to this RFC?
