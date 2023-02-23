@@ -2,188 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E6A6A0FF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78236A0FC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjBWS5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        id S229632AbjBWSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBWS5t (ORCPT
+        with ESMTP id S229482AbjBWSwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:57:49 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684718153
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:57:47 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NHsedG023980;
-        Thu, 23 Feb 2023 18:57:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=pgHJVP5VYAB4nsdnPBhd1aExXHIe+MpwPHey0VXdhgM=;
- b=VDW8qB50NrHE1RSeniGpzk+a/1od6Nqu7eA63AL2Msf2RFhNU2V1nKmRSIWGFiTVP9uu
- kXFoLWjZtb0CB6VT/lTDpJcq81hu4OAUIgEDGTvyAQ9BiIcVNRBecBzj1YotDBPDhtLh
- cD2HSgCxRLz+HQyYyjV1Etp8sbVXxOe7kZ099aHW1iVuNJV/RfnYnBI7WRAyB6IL7SKX
- v3fGYoXBwNaIGOrPoZaz1pDkEvrAQTjgpuQ+fKHEwTkBbDGzOa7mDGEmk73kPYyn9wu5
- BL2KALkIYXGl861rVvP2IZScOppfUbzF1mED1AZNPflANt+DJ9b/cP7TT7l6hofUKyzh HQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nxcy61hes-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 18:57:36 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31NIoKNh010903;
-        Thu, 23 Feb 2023 18:57:35 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nxcy61hdp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 18:57:35 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31N866Sx031457;
-        Thu, 23 Feb 2023 18:57:32 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6db40-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 18:57:32 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31NIvUFB45613400
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Feb 2023 18:57:30 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4395020043;
-        Thu, 23 Feb 2023 18:57:30 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AEE2720040;
-        Thu, 23 Feb 2023 18:57:27 +0000 (GMT)
-Received: from li-c1fdab4c-355a-11b2-a85c-ef242fe9efb4.ibm.com.com (unknown [9.43.26.209])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Feb 2023 18:57:27 +0000 (GMT)
-From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, bsegall@google.com, tglx@linutronix.de,
-        srikar@linux.vnet.ibm.com, arjan@linux.intel.com,
-        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org,
-        sshegde@linux.vnet.ibm.com
-Subject: [PATCH V3] Interleave cfs bandwidth timers for improved single thread performance at low utilization
-Date:   Fri, 24 Feb 2023 00:21:53 +0530
-Message-Id: <20230223185153.1499710-1-sshegde@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LxoVlSwyMARh1WDY1MXcCaV2kYP4TLJG
-X-Proofpoint-ORIG-GUID: jcF7URTAT3B57kuBAp90vfLqD51pdX6z
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 23 Feb 2023 13:52:42 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9848890
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 10:52:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677178361; x=1708714361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T5c5dYd/7o6Mp7o1b1NX72cb1jT5ZAgXikuuyX1CoQk=;
+  b=APcbSEzQTcov0Jkj2E3xZdS54oNSKfYOlQUsfidTc47OtQC7GNu1om/s
+   Et7lrVryzHvwxBwdNTNZS3wEopIo3BCXLmSGtJMLuvq9okvhrXYkj9Hnf
+   kUOT6rRu9j0FfrcZdR/b+d9g5zF+3Bk4cEaJN8/hTCPVk5WeOVxizgx2y
+   wsut3pk0MXIbwbMfPd/nMtgcNqQ5LWcjN3WWUO9wBom+NbR4dNm9UneVk
+   3/CmcJnlHyrb1KgBff4BoGDW4DGOBjwtyRm3NAnNZV0hFxhaKShypu2sr
+   HpNc6LlUICCPE6/RfxSEMJHvNydx668XV2WawH+uqda8WBkn5yI15jQ29
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="312930513"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="312930513"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 10:52:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="665896092"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="665896092"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 23 Feb 2023 10:52:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pVGhp-00B7dk-0N;
+        Thu, 23 Feb 2023 20:52:37 +0200
+Date:   Thu, 23 Feb 2023 20:52:36 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] regmap-irq: Place kernel doc of struct
+ regmap_irq_chip in order
+Message-ID: <Y/e19Oqf1XwDo/aw@smile.fi.intel.com>
+References: <20230220153334.87049-1-andriy.shevchenko@linux.intel.com>
+ <Y/ZGMDI9wcOwMUWI@fedora>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-23_11,2023-02-23_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302230153
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/ZGMDI9wcOwMUWI@fedora>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPU cfs bandwidth controller uses hrtimer. Currently there is no initial
-value set. Hence all period timers would align at expiry.
-This happens when there are multiple CPU cgroup's.
+On Wed, Feb 22, 2023 at 11:43:28AM -0500, William Breathitt Gray wrote:
+> On Mon, Feb 20, 2023 at 05:33:34PM +0200, Andy Shevchenko wrote:
+> > It seems that a couple of members got lost theirorder, put them back.
+> 
+> Looks like a typographical error here: "theirorder".
 
-There is a performance gain that can be achieved here if the timers are
-interleaved when the utilization of each CPU cgroup is low and total
-utilization of all the CPU cgroup's is less than 50%. If the timers are
-interleaved, then the unthrottled cgroup can run freely without many
-context switches and can also benefit from SMT Folding. This effect will
-be further amplified in SPLPAR environment.
+Ah, thanks!
 
-This commit adds a random offset after initializing each hrtimer. This
-would result in interleaving the timers at expiry, which helps in achieving
-the said performance gain.
+...
 
-This was tested on powerpc platform with 8 core SMT=8. Socket power was
-measured when the workload. Benchmarked the stress-ng with power
-information. Throughput oriented benchmarks show significant gain up to
-25% while power consumption increases up to 15%.
+> >  	unsigned int use_ack:1;
+> >  	unsigned int ack_invert:1;
+> >  	unsigned int clear_ack:1;
+> > +	unsigned int status_invert:1;
+> >  	unsigned int wake_invert:1;
+> > -	unsigned int runtime_pm:1;
+> >  	unsigned int type_in_mask:1;
+> >  	unsigned int clear_on_unmask:1;
+> > +	unsigned int runtime_pm:1;
+> >  	unsigned int not_fixed_stride:1;
+> > -	unsigned int status_invert:1;
+> 
+> These don't look alphabetical, so what is the order for these?
 
-Workload: stress-ng --cpu=32 --cpu-ops=50000.
-1CG - 1 cgroup is running.
-2CG - 2 cgroups are running together.
-Time taken to complete stress-ng in seconds and power is in watts.
-each cgroup is throttled at 25% with 100ms as the period value.
-           6.2-rc6                     |   with patch
-8 core   1CG    power   2CG     power  |  1CG    power  2 CG    power
-        27.5    80.6    40      90     |  27.3    82    32.3    104
-        27.5    81      40.2    91     |  27.5    81    38.7     96
-        27.7    80      40.1    89     |  27.6    80    29.7    106
-        27.7    80.1    40.3    94     |  27.6    80    31.5    105
+Nope, the order is to follow:
+a) kernel doc
+b) semantics of each of the groups
 
-Latency might be affected by this change. That could happen if the CPU was
-in a deep idle state which is possible if we interleave the timers. Used
-schbench for measuring the latency. Each cgroup is throttled at 25% with
-period value is set to 100ms. Numbers are when both the cgroups are
-running simultaneously. Latency values don't degrade much. Some
-improvement is seen in tail latencies.
+Do you think the order can be improved? Can you point out how?
 
-		6.2-rc6        with patch
-Groups: 16
-50.0th:          39.5            42.5
-75.0th:         924.0           922.0
-90.0th:         972.0           968.0
-95.0th:        1005.5           994.0
-99.0th:        4166.0          2287.0
-99.5th:        7314.0          7448.0
-99.9th:       15024.0         13600.0
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Groups: 32
-50.0th:         819.0           463.0
-75.0th:        1596.0           918.0
-90.0th:        5992.0          1281.5
-95.0th:       13184.0          2765.0
-99.0th:       21792.0         14240.0
-99.5th:       25696.0         18920.0
-99.9th:       33280.0         35776.0
-
-Groups: 64
-50.0th:        4806.0          3440.0
-75.0th:       31136.0         33664.0
-90.0th:       54144.0         58752.0
-95.0th:       66176.0         67200.0
-99.0th:       84736.0         91520.0
-99.5th:       97408.0        114048.0
-99.9th:      136448.0        140032.0
-
-Signed-off-by: Shrikanth Hegde<sshegde@linux.vnet.ibm.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-
-Initial RFC PATCH, discussions and details on the problem:
-Link1: https://lore.kernel.org/lkml/5ae3cb09-8c9a-11e8-75a7-cc774d9bc283@linux.vnet.ibm.com/
-Link2: https://lore.kernel.org/lkml/9c57c92c-3e0c-b8c5-4be9-8f4df344a347@linux.vnet.ibm.com/
-
----
- kernel/sched/fair.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ff4dbbae3b10..2a4a0969e04f 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5923,6 +5923,10 @@ void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
- 	INIT_LIST_HEAD(&cfs_b->throttled_cfs_rq);
- 	hrtimer_init(&cfs_b->period_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
- 	cfs_b->period_timer.function = sched_cfs_period_timer;
-+
-+	/* Add a random offset so that timers interleave */
-+	hrtimer_set_expires(&cfs_b->period_timer,
-+			    get_random_u32_below(cfs_b->period));
- 	hrtimer_init(&cfs_b->slack_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	cfs_b->slack_timer.function = sched_cfs_slack_timer;
- 	cfs_b->slack_started = false;
---
-2.31.1
 
