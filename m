@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A21E6A05DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2362F6A05E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbjBWKTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
+        id S234019AbjBWKTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbjBWKTT (ORCPT
+        with ESMTP id S234287AbjBWKTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:19:19 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F253D928;
-        Thu, 23 Feb 2023 02:19:18 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id w42so10208601qtc.2;
-        Thu, 23 Feb 2023 02:19:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hiSyPZd76dU3y97iocP4+7J5nmKEdq6xDxkhc6e2U4Y=;
-        b=u8gh4vv4cQRT8kDj07i4Z0lgvsGsFjbAhUWJU0dUaGRG7FafUkfqr4CUaEsRwnqNVB
-         eVtKU7mlJi/xgWX8/oV5/loPmhr0eJqmJZb6yXDwe5qVcJFi77Ih68hbADbOc0gvOkM/
-         4aAUMYw3Nnjs4Rt+5+8TYCUzQVhvNfa44uQ6b/ahcfKdjZTVPrmoowvNoHDF10e/RSM9
-         2vOCn10XIdXVCDq6U9igkXKCLfhuqKAXl79i0I4fukhWCbkSxT2nqAm4cU7UXgMhFhyO
-         u5rThj8CaVu3uEl1n+kI822Id/1WeAoF3J+szSa02FPhsdrg9AJT4+yGdThSlUejCwO7
-         dVvg==
-X-Gm-Message-State: AO0yUKXuCCV/xRbUIOPz3zP/zwjiFoCXegMx9GUBpfT55r61C4chk/dv
-        zNGs+ebtv4Z1Rxk0OWGKFc0UMAWLapIU1LqD
-X-Google-Smtp-Source: AK7set9BvN12U2VTr2A/DbFOyw8HOlA5kjuiB3JeItJS0423kx0DOtMCBUzi5XLzL97F31WJvFW1HQ==
-X-Received: by 2002:a05:622a:10:b0:3b8:4325:7610 with SMTP id x16-20020a05622a001000b003b843257610mr20623938qtw.67.1677147557715;
-        Thu, 23 Feb 2023 02:19:17 -0800 (PST)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id a8-20020ac81088000000b003bd1a464346sm2931127qtj.9.2023.02.23.02.19.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 02:19:16 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-536cd8f6034so145891047b3.10;
-        Thu, 23 Feb 2023 02:19:16 -0800 (PST)
-X-Received: by 2002:a81:ae0c:0:b0:52e:cacb:d7c4 with SMTP id
- m12-20020a81ae0c000000b0052ecacbd7c4mr1883570ywh.5.1677147556298; Thu, 23 Feb
- 2023 02:19:16 -0800 (PST)
+        Thu, 23 Feb 2023 05:19:48 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D14498AB;
+        Thu, 23 Feb 2023 02:19:47 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N5rI3b006103;
+        Thu, 23 Feb 2023 10:19:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pfyZZO6xMEuJP6vhvmuwjFzktu+Iqk/2I7+Jba2oc0Q=;
+ b=PD9VRS2bhbQhURCoEYg6FUd7hWiK+nlu+o/5QzxXFcLw5KVOCLWCaZDXWT/0HloGyXEq
+ QElhiZqJXA5fHGpQpE8iC5IyGCkjMxl+GQGU54dQhzS/mTEJlqU9K+KdzbhGbr6KSwxK
+ 1ycSoPYTeOn1AGfGTo2EEMHDVxumBRtUo48/iLdYqifD5y39lG0+uQSK9GchQA43obe9
+ ytteGyQRasIekblHJR9z802pptTe6c55wpylNFru44K7fI1kz18jcNgTH6/O8/1Opc3E
+ ddQ9Ls0itgl/KQVSNNI7ILI0gPM2gnh4QOzRfWRrCV/gxcXuHsI9wrnGdA/TqJUAqzo9 /Q== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwybwgykd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:19:39 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NAJcgk019330
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 10:19:38 GMT
+Received: from [10.216.58.21] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 02:19:34 -0800
+Message-ID: <ef82f126-af16-8eba-4da9-eb08106a03db@quicinc.com>
+Date:   Thu, 23 Feb 2023 15:49:30 +0530
 MIME-Version: 1.0
-References: <20230222200838.8149-1-casey@schaufler-ca.com> <20230222200838.8149-7-casey@schaufler-ca.com>
-In-Reply-To: <20230222200838.8149-7-casey@schaufler-ca.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Feb 2023 11:19:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWGVmdTD5vZW1ObsCsXSxDnYp6WvFtfpKQKPCdHfu7Zvw@mail.gmail.com>
-Message-ID: <CAMuHMdWGVmdTD5vZW1ObsCsXSxDnYp6WvFtfpKQKPCdHfu7Zvw@mail.gmail.com>
-Subject: Re: [PATCH v6 06/11] LSM: wireup Linux Security Module syscalls
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     paul@paul-moore.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND v8 4/5] clk: qcom: lpassaudiocc-sc7280: Merge AHB clocks
+ into lpass_aon
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <broonie@kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
+        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
+        <quic_visr@quicinc.com>, <robh+dt@kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+References: <20230215151330.539885-1-quic_mohs@quicinc.com>
+ <20230215151330.539885-5-quic_mohs@quicinc.com>
+ <CAE-0n53mDzqua47jEqrJwQBhcQcyBjJAtNvH2J-tCPhkvV9JtA@mail.gmail.com>
+From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+In-Reply-To: <CAE-0n53mDzqua47jEqrJwQBhcQcyBjJAtNvH2J-tCPhkvV9JtA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mggz6HI0JFJFTJw8yYfdZ-xCUKslvekK
+X-Proofpoint-ORIG-GUID: mggz6HI0JFJFTJw8yYfdZ-xCUKslvekK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_06,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=987 malwarescore=0 impostorscore=0
+ bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302230088
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
 
-On Wed, Feb 22, 2023 at 9:18 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> Wireup lsm_get_self_attr, lsm_set_self_attr and lsm_module_list
-> system calls.
->
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+On 2/16/2023 11:01 AM, Stephen Boyd wrote:
+> Quoting Mohammad Rafi Shaik (2023-02-15 07:13:29)
+>> @@ -828,8 +830,9 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
+>>          if (of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode")) {
+>>                  lpass_audio_cc_sc7280_regmap_config.name = "cc";
+>>                  desc = &lpass_cc_sc7280_desc;
+>> -               ret = qcom_cc_probe(pdev, desc);
+>> -               goto exit;
+>> +               ret = qcom_cc_probe_by_index(pdev, 1, desc);
+> Where is the patch to the binding yaml file?
+Thanks for comment.
 
-Thanks for your patch!
+The dtbinding  yaml file for this is already present in existing yaml.
 
->  arch/m68k/kernel/syscalls/syscall.tbl               |  3 +++
+Below is the snippet for the same:
 
-Please collect tags given, and add them when reposting.
-I'm providing my
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
-for the third time.
+compatible = "qcom,sc7280-lpassaoncc";
+reg = <0x3380000 0x30000>;
 
-Gr{oetje,eeting}s,
+Actually what ever the  CC register region <required range is  0x3389000 
+0x24> which we are accessing is already present in the above reg map 
+range of dtsi, so we have not updated the 
+/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml file.
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
