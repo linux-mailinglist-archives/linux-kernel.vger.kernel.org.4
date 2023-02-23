@@ -2,219 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827AD6A0EAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DFB6A0EB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjBWR2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S229914AbjBWR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjBWR2K (ORCPT
+        with ESMTP id S229919AbjBWR2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:28:10 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD7D18B2F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:28:08 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id f31so16664552vsv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=31utYDCC/yFLRWwC2RwKHXn6KsflDX7hvn7iHrUw04E=;
-        b=Sdd7hPKBaEt1PTDPKGEhKh0cFLRe2Yx/VuUuv6kAhuhnM7to0TDCYi0R2J/otk8Pqf
-         WFH1iwbnoqpP/v6V7RkdAn0TCtMw+bMz5fesA/ftTwiR+QHmhj3jPqvv34rbMtH5k4mx
-         LVXXTy4uUcoL8wRogYukxUCPXiCr52gBF9hpwOqQXVG//efJB+iA/i1h5bRi46cz85UA
-         QDpWpWIYko0qEJvG3g8TiGlELNr7ETuVi9loLgEJ1ij4s7YECfz3SGeC0/wkvXK7pfdA
-         6sIAcR+uGf57sDBqQ/Wl/1ZePGl/tOoVcoXWej/gPVtiCBhyJJkY59Si4B+jFdVsUklV
-         jhtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=31utYDCC/yFLRWwC2RwKHXn6KsflDX7hvn7iHrUw04E=;
-        b=yxPMICijvccKTDrxg58KUoFzlfT0JSiFp5uDWrjOvF99Jw8dR1gRYnNjIWMOugYf/T
-         5P0vZWz5tSqnIE9XW+8CNkorgOJbXkTDJ5ny9rj54okZwybWNtxX62omXjVX6J51LuuB
-         Npf9lp7Gt+e6AP0ozYw9hqrOSwPwDqFTZYNLBnGVdp6gzJW3odlXme620l7k72+I6OHF
-         B9BgRTTpEojRg4Ndsoh0xSID4wmarb+Eug9LXuX1A5+nPNotQyFTfidpF1X7Wp+NmBDU
-         67/Q+IuTmapICJKVQ85BnHxZ7zYBWmOLtDMm1T3R5xMTA7fd+ZaEIZB76NaR2+8a9wmB
-         b5EA==
-X-Gm-Message-State: AO0yUKUh2p8dG2lIhM+CC+iE34qsKW7gwoIrTGfgVNwBuADSPnD+PhdS
-        wjucV4Tpb2sCmWKrJJsVjm+xGErcGYKqopRW2s8jxhg6eqcVMbGn
-X-Google-Smtp-Source: AK7set9ipf4JKgksfIPCGz7YusAkR8fyQ5wmRY52KwjPqGlUX+CfhrQnWSITtgynuYdihY0faOT9Lz6HbOuMIKjb8/I=
-X-Received: by 2002:ab0:38d3:0:b0:67a:2833:5ceb with SMTP id
- l19-20020ab038d3000000b0067a28335cebmr3475904uaw.0.1677173287566; Thu, 23 Feb
- 2023 09:28:07 -0800 (PST)
+        Thu, 23 Feb 2023 12:28:20 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8822D52DF8;
+        Thu, 23 Feb 2023 09:28:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IBauQl56IGvTonZ250MW77qyln6ZcOk7ghIh3MxgfZJrRDRdAVRx+Qt8SUSTP+oF6lKpFs/MZz4LTM3Zi/j2qDPU0uTkHBDflUXhfmKcBqTpO2mfJu50JmjwOiBvoCTnBiXs1ZDLAazJ7iVlj1ujl53qarxCy1IheqRlJu3XTR+RDARfgfSpAbjbfQrTBO315omzgQcaD9S/7/GysRhjRZjcVWzCHUZCyX8r3Qx68wMcB+ggXWpRCnGWQW18el87IbVZ/i/NtqU1ALL/pXzmBbLpcwBMgOd9qrZNza76JthWYOnzJUgSgWIAMAe5fLjNjAdxkV0fj7gyo3nHSfyuhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EKAwc/LgahAvTgYhXdUvHgORsVMsXkpCftdguy998aI=;
+ b=E1povPAPd0ZXkXskz4rLiGjXE5l7gKeN0Acew/4HCMeTaSfRYouANrKM4/dBN0DcrH2Dzyv3eubyaz9b7xAVyDiH9th/vxRt61AXaUcH5XmjuxrO4Atk8LGVYUjaheoZfT+8gu40XxkXP0xdIYKy2wZq5t1QMT1Xbg2ZLTYImhU1Br5nZ6frUTViznnArm5q99yatoqszebHnb0FfMp+304kQDwmFgyE+a3qQ466hTCiamsqRGwYfTXl/9KryZW+nYrtYpgxsd3BN+pnMWkhZjpoiw1eH8ihydfhmWACDQI8+aClzNO4TRzU0I54Cg+e6YLuI6vQ6UN4PmXRDjLQCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EKAwc/LgahAvTgYhXdUvHgORsVMsXkpCftdguy998aI=;
+ b=ppKcvQhMyE+wTM8JZCjY9g/3iU21+KFmkyth0kNxOctyRwQoqg6epC3+FYpbG9cRH0MHYlesqB6oyMyvzyu45FQ3bZkjSgbMJaVYthTId+Xolp7s1ff3UJtpWvrQGHrgfa9CcoeBpOrwVADqxD8m1KWXecaum4T8b/UsFwmIMgEcfAHRyhIBzw9bDw+qg97CCjDYolBcm3Jzxtz8Jc20aG3DONNR65ZvAR5+D4BAfwXGfLHbumXRght1LTX/IvurZhdEB0/92kUTUC+n+LgZ34kmpEZuRxWyYigTrTw/2675DKm7uHvmFrUKC62aAl/1SENLCNhMxtEYA8WLQue5uQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW3PR12MB4409.namprd12.prod.outlook.com (2603:10b6:303:2d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
+ 2023 17:28:13 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
+ 17:28:13 +0000
+Date:   Thu, 23 Feb 2023 13:28:12 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Alistair Popple <apopple@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Message-ID: <Y/eiLBo88pgr2IUm@nvidia.com>
+References: <Y/UEkNn0O65Pfi4e@nvidia.com>
+ <Y/UIURDjR9pv+gzx@slm.duckdns.org>
+ <Y/Ua6VcNe/DFh7X4@nvidia.com>
+ <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
+ <Y/UiQmuVwh2eqrfA@nvidia.com>
+ <87o7pmnd0p.fsf@nvidia.com>
+ <Y/YRJNwwvqp7nKKt@nvidia.com>
+ <87k009nvnr.fsf@nvidia.com>
+ <Y/bHNO7A8T3QQ5T+@nvidia.com>
+ <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABdmKX18MY19bnsxN5W38Z9zmoaZx+S4+zzN_5XCYDBruwPrLg@mail.gmail.com>
+X-ClientProxiedBy: BL1PR13CA0309.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::14) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-3-yuzhao@google.com>
- <Y++q/lglE6FJBdjt@google.com> <CAOUHufaK-BHdajDZJKjn_LU-gMkUTKa_9foMB8g-u9DyrVhPwg@mail.gmail.com>
- <Y/ed0XYAPx+7pukA@google.com>
-In-Reply-To: <Y/ed0XYAPx+7pukA@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 23 Feb 2023 10:27:31 -0700
-Message-ID: <CAOUHufYw9Mc-w1E-Jkqnt869bVJ0AxOB5_grSEMcdMdDODDdCw@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 2/5] kvm/x86: add kvm_arch_test_clear_young()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4409:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ff558a8-cc31-47f8-136a-08db15c3572c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Az0dYJVPJq3Jtm+F2AnXoLkDSqmICQTeuY0+dOawKPMTcj8SO1MSHkLHOqb9LTyFSD40/DIGa5gQDBVlLxyL8uJpxG8BpJ2L4Of3Q9Frwnv2scYaX9sFLAj+4Wn85QIEg3G5vJOCKxbucGvuLaFXz+aQJaXaZ9vGCy3vW4G1cJab9SBD6k2JNHjGqk8v2ExijFAw9RK4mtcHhk/E4+0MKEAv3tQjlJ0rc5NdZTXTQrutnQ9m2hllyZamYGBJvlQpd5u7SRZBYkqeoun9neYuQolzF6fmu9g0xw/2V+SuDxtPT9UVq0zY8eADh38IDlVnn78PL9Q46CTV7aSVex3bw/35Nf62iPPbXz8QJkZkFUGSqy1qGUEOQTfLMz1RnbJOsbPLyvqnCoRhANt4riqCF+FGKc0UWpp3iLvo0zsKaBwDGA3Ypls5vEx64JTF48/58slvNoyJ3rEcZxfl15MbKtT8qLnCyhThwSy9BTLQvwm9vzHKHWhh1AJUGPjeRTY85Ndp+3PNHaXe90zMGq9Bqf4mZ6Inw1M36tJLplugerpnegLUAA9P9ZdKzPbnu5/calVTfjQPQapIYLM1aFGtzdI9NNrxvBcr+j5G6wo87ELAz8J78zubwR4Gb17hB8wd1f3jW4DzCSCPGzjMBO0nDw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(366004)(39860400002)(346002)(451199018)(26005)(6512007)(316002)(186003)(41300700001)(8936002)(7416002)(2616005)(5660300002)(6486002)(66946007)(478600001)(66476007)(6506007)(54906003)(4326008)(66556008)(8676002)(6916009)(86362001)(38100700002)(36756003)(83380400001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XX7XTAnRB8btRUXa8swq4gC22zXcvVkutgnxLp6sAClIHAIwp9cTXwLEsVOX?=
+ =?us-ascii?Q?LlfccTGSs8aa+nBVGZpO30TjUL9j7XYCaIMkviuxfalCN/sq6/yuK5WpMTVx?=
+ =?us-ascii?Q?GcHRk13PTUKorlUKpM9ixdwc0eCD/cUqQagY3gaN0RIT2KcMJGByfDIvF4op?=
+ =?us-ascii?Q?9vPO643VX0yYidfcJkeJVQoOmHqWFqB5lvRJrazTyodGWJwAaaerhxtuhFwc?=
+ =?us-ascii?Q?DF0bR3I7w7UyxdwSFLVmj5DIzFNwfzP7fpKelh/w4Yt5Nh/1xqhe9UNjD/uH?=
+ =?us-ascii?Q?IE0Gm3V5+KCRyg6M4McWcn8rc2ASg6vXFVhKWyk1vok6F915tkolw/R1H+Vq?=
+ =?us-ascii?Q?BCi63Yh1yV9U0lvTvld2rENimQFI4AJmyulGPsFjVnjwaX4CuIBSKh4Z4VGC?=
+ =?us-ascii?Q?GANkjkd0xJ3AR1m8zQMiJr72eGPQU2ln7pmMXzWkKCVkGXVcq30hX72p46OA?=
+ =?us-ascii?Q?WS9y9ubnwajGZJ9OpSiuuta1t/wFX6311OgSthyTFweVxoiXbDhPxDpMgFBC?=
+ =?us-ascii?Q?edVuGCqBnFBuNJML3OcuM+Vlq6AvxRsi+1+qnoSsqDbxBQR1qAoh/F8Tgf0Z?=
+ =?us-ascii?Q?ZIqtRh9fFD3ATVSja1rXUGhVn58kXLV22c7LMoSjAj8OLTk3oM0An8bKvW3F?=
+ =?us-ascii?Q?ZXcHsymO/1coYpAjE7QxpZiJ1QvUfk5BiENKAFhJItaC8m3wNfBOT2YU+leU?=
+ =?us-ascii?Q?//lgj96F5StGngkPeDdGC8Pi74Z+975EM5wrWzbKUyY+Q8F7aLVBdhTB0yiU?=
+ =?us-ascii?Q?xFiEtA5UOIv5JgDsiMNJb24hrKX2vDaJeXoLYJxYeUQtsu99AN/PFyFOUbCw?=
+ =?us-ascii?Q?+5RuLCLkT6lWrlBcX3My9PC0bax5kKgIGV7PtAWK6LmWHoMWTrvT/BGUScW6?=
+ =?us-ascii?Q?Vd0zMUPSBQfnOb8ZeNOMnUnsz+I/m2cLbog3hevud+oe5UqIWgL4L8OgvCBd?=
+ =?us-ascii?Q?YpdyuUjZxhhyeA2MmLmWN6l0XoQR3HrLcVN6CBTbhFhadYUwH2rjGfFk/eJj?=
+ =?us-ascii?Q?PWfh7udg7NDBt7pqbrJJs9ydzSHiqNTJOWuaHE1ttZBKcD0/G788oTV4FIBT?=
+ =?us-ascii?Q?OaC+EHZ+4stNymqsSleyirvaOLoukqWNWBuamc0GLIlatjLVHbGuzstCZnjN?=
+ =?us-ascii?Q?lBOAqbTsHaP9awYXbF6ruKQUmJLus7YHskXCywAJdVyUJcqAnLi3Kc5VTBB1?=
+ =?us-ascii?Q?IHHr31g4538aLdf+nL0VbQ5DQN/XwZ1XNRRm5HOYRB95xxhjcwCXZOZWtNYd?=
+ =?us-ascii?Q?DTepplqFRrGqp74rbIoqgIw0vafdJK8eLxofEldxlZU32JAsF5XEV02EvkAQ?=
+ =?us-ascii?Q?L6QVt3ykPQfBwItS2rhcX3E9932I3JwAE86vgHpvsfY+mg8UjzLLM9SHOhqs?=
+ =?us-ascii?Q?BGn3fsmRSHEhJk9+1jxH8l9bJmY7gIZjBuZ66uiSlXQPTYSGvKkAQyv+5bm3?=
+ =?us-ascii?Q?nBxHIK/2wOA3dcYd15bg8l4Bl0aJWSXp1UA1RDvA5aM3n+cVh1uK9V4MMAWr?=
+ =?us-ascii?Q?tpyMNZOEvU8dvimd+s3lxoLKpLfmV/agVGNkp+xBjYMtHezNQmb+EUAHQmQo?=
+ =?us-ascii?Q?BfSprdcqER27eG+nW3Vvgy025Vmyk/cYJsy4wZJj?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ff558a8-cc31-47f8-136a-08db15c3572c
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 17:28:13.0400
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z/jsrIhFTKkzsK+Gihfjn8UpfxRDCvhmJHQxppw8HV7yXHmIk6t50KTCS6r0GQxM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4409
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:09=E2=80=AFAM Sean Christopherson <seanjc@google=
-.com> wrote:
->
-> On Wed, Feb 22, 2023, Yu Zhao wrote:
-> > On Fri, Feb 17, 2023 at 9:27 AM Sean Christopherson <seanjc@google.com>=
- wrote:
-> > >
-> > > On Thu, Feb 16, 2023, Yu Zhao wrote:
-> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm=
-/kvm_host.h
-> > > > index 6aaae18f1854..d2995c9e8f07 100644
-> > > > --- a/arch/x86/include/asm/kvm_host.h
-> > > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > > @@ -1367,6 +1367,12 @@ struct kvm_arch {
-> > > >        *      the MMU lock in read mode + the tdp_mmu_pages_lock or
-> > > >        *      the MMU lock in write mode
-> > > >        *
-> > > > +      * kvm_arch_test_clear_young() is a special case. It relies o=
-n two
-> > >
-> > > No, it's not.  The TDP MMU already employs on RCU and CMPXCHG.
+On Thu, Feb 23, 2023 at 09:18:23AM -0800, T.J. Mercier wrote:
+
+> > Solving that problem means figuring out when every cgroup stops using
+> > the memory - pinning or not. That seems to be very costly.
 > >
-> > It is -- you read it out of context :)
+> This is the current behavior of accounting for memfds, and I suspect
+> any kind of shared memory.
+> 
+> If cgroup A creates a memfd, maps and faults in pages, shares the
+> memfd with cgroup B and then A unmaps and closes the memfd, then
+> cgroup A is still charged for the pages it faulted in.
+
+As we discussed, as long as the memory is swappable then eventually
+memory pressure on cgroup A will evict the memfd pages and then cgroup
+B will swap it in and be charged for it.
+ 
+> FWIW this is also the behavior I was trying to use to attribute
+> dma-buffers to their original allocators. Whoever touches it first
+> gets charged as long as the memory is alive somewhere.
 >
-> Ah, the special case is that it's fully lockless.  That's still not all t=
-hat
-> special, e.g. see kvm_tdp_mmu_walk_lockless_{begin,end}().
->
-> >          * For reads, this list is protected by:
-> >          *      the MMU lock in read mode + RCU or
-> >          *      the MMU lock in write mode
-> >          *
-> >          * For writes, this list is protected by:
-> >          *      the MMU lock in read mode + the tdp_mmu_pages_lock or
-> >          *      the MMU lock in write mode
-> >          *
-> >          * kvm_arch_test_clear_young() is a special case.
-> >          ...
-> >
-> >         struct list_head tdp_mmu_roots;
-> >
-> > > Just drop the
-> > > entire comment.
-> >
-> > Let me move it into kvm_arch_test_clear_young().
->
-> No, I do not want kvm_arch_test_clear_young(), or any other one-off funct=
-ion, to
-> be "special".  I love the idea of a lockless walk, but I want it to be a =
-formal,
-> documented way to walk TDP MMU roots.  I.e. add macro to go with for_each=
-_tdp_mmu_root()
-> and the yield-safe variants.
+> Can't we do the same thing for pins?
 
-I see what you mean now. will do.
+If pins are tracked independently from memcg then definately not,
+a process in cgroup A should never be able to make a charge on cgroup
+B as a matter of security.
 
-> /* blah blah blah */
-> #define for_each_tdp_mmu_root_lockless(_kvm, _root, _as_id)             \
->         list_for_each_entry_rcu(_root, &kvm->arch.tdp_mmu_roots, link)  \
->                 if (refcount_read(&root->tdp_mmu_root_count) &&         \
->                     kvm_mmu_page_as_id(_root) !=3D _as_id) {             =
- \
->                 } else
->
-> > Also I want to be clear:
-> > 1. We can't just focus on here and now; we need to consider the distant=
- future.
->
-> I 100% agree, but those words need to be backed up by actions.  This seri=
-es is
-> littered with code that is not maintainable long term, e.g. open coding s=
-tuff
-> that belongs in helpers and/or for which KVM already provides helpers, co=
-py-pasting
-> __kvm_handle_hva_range() instead of extending it to have a lockless optio=
-n, poking
-> directly into KVM from mm/ code, etc.
->
-> I apologize for being so blunt.  My intent isn't to be rude/snarky, it's =
-to set
-> very clear expectations for getting any of these changes merges.
+If pins are part of the memcg then we can't always turn the pin
+request in to a NOP - the current cgroup always has to be charged for
+the memory. Otherwise what is the point from a security perspective?
 
-No worries at all. I appreciate you directly telling me how you prefer
-it to be done, and that makes the job easier for both of us. Please do
-bear with me though, because I'm very unfamiliar with the KVM side of
-expectations.
-
-> I asbolutely do
-> want to land improvments to KVM's test+clear young flows, but it needs to=
- be done
-> in a way that is maintainable and doesn't saddle KVM with more tech debt.
-
-Agreed.
-
-> > 2. From my POV, "see the comments on ..." is like the index of a book.
->
-> And my _very_ strong preference is to provide the "index" via code, not c=
-omments.
-
-Will do.
-
-> > > Clearing a single bit doesn't need a CMPXCHG.  Please weigh in on a r=
-elevant series
-> > > that is modifying the aging flows[*], I want to have exactly one help=
-er for aging
-> > > TDP MMU SPTEs.
-> > >
-> > > [*] https://lore.kernel.org/all/20230211014626.3659152-5-vipinsh@goog=
-le.com
-> >
-> > I'll take a look at that series. clear_bit() probably won't cause any
-> > practical damage but is technically wrong because, for example, it can
-> > end up clearing the A-bit in a non-leaf PMD. (cmpxchg will just fail
-> > in this case, obviously.)
->
-> Eh, not really.  By that argument, clearing an A-bit in a huge PTE is als=
-o technically
-> wrong because the target gfn may or may not have been accessed.
-
-Sorry, I don't understand. You mean clear_bit() on a huge PTE is
-technically wrong? Yes, that's what I mean. (cmpxchg() on a huge PTE
-is not.)
-
-> The only way for
-> KVM to clear a A-bit in a non-leaf entry is if the entry _was_ a huge PTE=
-, but was
-> replaced between the "is leaf" and the clear_bit().
-
-I think there is a misunderstanding here. Let me be more specific:
-1. Clearing the A-bit in a non-leaf entry is technically wrong because
-that's not our intention.
-2. When we try to clear_bit() on a leaf PMD, it can at the same time
-become a non-leaf PMD, which causes 1) above, and therefore is
-technically wrong.
-3. I don't think 2) could do any real harm, so no practically no problem.
-4. cmpxchg() can avoid 2).
-
-Does this make sense?
-
-Thanks.
+Jason
