@@ -2,547 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A326A0AB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8DE6A0A80
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbjBWNfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S234150AbjBWN2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbjBWNfJ (ORCPT
+        with ESMTP id S233819AbjBWN2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:35:09 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEB0497FB;
-        Thu, 23 Feb 2023 05:35:05 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id oe18-20020a17090b395200b00236a0d55d3aso12666964pjb.3;
-        Thu, 23 Feb 2023 05:35:05 -0800 (PST)
+        Thu, 23 Feb 2023 08:28:16 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AD5E8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:27:48 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so3945884pjn.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f3ATVOfxCZA2ZkKdKSzd8AQB6yxO93GcARBKQZVggQA=;
-        b=QdrgXbL1UTP9Gd7GXkTcXLPqYdp8s27T0EUDoLTDaUbnFFbJS+XxVXskYrF0bljG+Q
-         bj2lEH6N1QC9HDNIoFnhqDKbjClOXGnEBjgZfs06TYm3c4u6FuZFj36JmLFLNrsBrPQ+
-         Nn7OLtRD+LMsPl6QAGSGHB7OU+pMV+JMcoGZY5ZwgzbHxew0xeA2qfZE+9LLWzjDYNob
-         7lq0wU0XnWhFF8BAh46jjK1PuJf6bTIDNhqC3z438iCHaf66FcRa4y54pOe7oZmEpOwC
-         adFYBK3aknTvDGSxHuQW/7pVBejcIoaPH0OIr9kYnq2wOpAG20jS9U/8+KWcDrqqkWsk
-         +9ug==
+        d=bytedance.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xKt/Y0kjQNgEHLipUbHvod+aBByip3yQ9MFfOj73mgE=;
+        b=P7fGGsVEAC3ZebyiPjMzdiT3yTCzR3Fi9fGD/9Bn+s2brlkIP28OYPap4CoW4SiG3w
+         5Wduw41KyHmC4qTGLXbOwsjrxQf5qKYMy5OGYWDLSgJtA/QBlxYLsZop+HTMJDscg0DT
+         k3QQtMcau/h6i9hq/euXzA77CiC/V+5dZCLpOdeUxwQJUXJ0p2Z7gYa8pEJdAYwo3wrH
+         Nis8ERyLxc4lbcQ+SM3fWkIrh7bbcZB9h6TB9KNtRZWn0UEWBip00hf/wLbr6zaPBKuU
+         xYFhD11kK2y5cCX60Fk/m4Ldngt3geboUAJbexwKzK0qE+li2tOFVUwAKq0Cvh8rZl9K
+         5trA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f3ATVOfxCZA2ZkKdKSzd8AQB6yxO93GcARBKQZVggQA=;
-        b=mm7tpm2k9TGiemt4zcW2S9+fRIznZYA5g1CaEGUgIxr56wG9itd1XoocAKXVeje5xp
-         vJsFZQRlzNRQWoANLQScVDVmgQVVzdh91naY0dA3uKjddLrLHXLi+XQEmwqvjFSK+txv
-         KfHt54w7ELMN3fxhbwKG3PtBTk3ggno5BJv5V5QvUvqUKwrVvEdOqqV5oxt76/uorAkU
-         qrG0iE+h+Ly83X62f6RHK1xWcY537ZOorhakuT3qzKhx8QAEJO0zJWLvMisXNwQ2USLT
-         FLkWi3yGhOLP3yv7NOUptR6hQcQTJ98M57j5Q6ZGclCg8a7xQ9VQVnCPjuVy5lS+1GGG
-         rxkw==
-X-Gm-Message-State: AO0yUKUrLxUOjMxhfrNwSdSn90cBEj8GCpcM/KBIX0eMn7xWqLJhgODr
-        XIubNl/jTt1hG1G7MDkaxqwvsr+aNrW56w==
-X-Google-Smtp-Source: AK7set8E1aYl6549lZKqTYnOUlU9MFkiNr106y0uI/UZSfPfiK9FJjQPBguRrhk8X0hfTp47tbPwUA==
-X-Received: by 2002:a17:902:f546:b0:19a:8304:21eb with SMTP id h6-20020a170902f54600b0019a830421ebmr11036797plf.6.1677159304962;
-        Thu, 23 Feb 2023 05:35:04 -0800 (PST)
-Received: from localhost.localdomain (M014008005000.v4.enabler.ne.jp. [14.8.5.0])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709028c8d00b0019a96a6543esm6030254plo.184.2023.02.23.05.35.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xKt/Y0kjQNgEHLipUbHvod+aBByip3yQ9MFfOj73mgE=;
+        b=0i6ce2eRMqgFbhmp9grRJQBzGGS1ckTGsrydfN5wQTGHc2JhB22lT9ziIypaNr85xt
+         rpthr0u5h6els1qJiuGSDTDU8rRJkX/sSOvTkW//hVZh+hlaeyRNl0Fb9mm8kmNcS6wy
+         pYOvZE+1EfmfCySHcir5hNMr5gj4BROJXnw5jlFtJXJlRSr7pSWwWZEZBz8cGTwI2iXs
+         6VpR/RLMqOZUABQWN+UCou62M1B0ZhoqDe8zFqHA7gIoot7g+mH6MGYp296y+q6ireo5
+         KoMQEPi1nmgPtbDQTdhu5+vRItNxWqCC0nlIpnxuVApLUOcguKhiFiQ38o1Z0v7Sfo3z
+         jhVQ==
+X-Gm-Message-State: AO0yUKUVujDmviGXIDYsQrClFO0rZi9lMHKfJerc3/5PqJukIclgFhTc
+        6fS+11jVckSxYU4GYr1GtQFHxg==
+X-Google-Smtp-Source: AK7set9fjaTSlrmXKSGRRi61q4mnYpEdbhvptik0LEwjeTKLOn09qa6AUl20AQw8w96vHGPsU79Ufg==
+X-Received: by 2002:a05:6a20:6918:b0:cb:7cc4:3ddb with SMTP id q24-20020a056a20691800b000cb7cc43ddbmr11214087pzj.3.1677158867921;
+        Thu, 23 Feb 2023 05:27:47 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id g18-20020aa78752000000b005a9bf65b591sm3848591pfo.135.2023.02.23.05.27.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 05:35:04 -0800 (PST)
-From:   INAGAKI Hiroshi <musashino.open@gmail.com>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     INAGAKI Hiroshi <musashino.open@gmail.com>, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: [PATCH 2/2] ARM: dts: mvebu: add device tree for IIJ SA-W2 appliance
-Date:   Thu, 23 Feb 2023 22:25:02 +0900
-Message-Id: <20230223132502.2045-2-musashino.open@gmail.com>
-X-Mailer: git-send-email 2.39.1.windows.1
-In-Reply-To: <20230223132502.2045-1-musashino.open@gmail.com>
-References: <20230223132502.2045-1-musashino.open@gmail.com>
+        Thu, 23 Feb 2023 05:27:47 -0800 (PST)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org, tkhai@ya.ru, hannes@cmpxchg.org,
+        shakeelb@google.com, mhocko@kernel.org, roman.gushchin@linux.dev,
+        muchun.song@linux.dev, david@redhat.com, shy828301@gmail.com
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH v2 0/7] make slab shrink lockless
+Date:   Thu, 23 Feb 2023 21:27:18 +0800
+Message-Id: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree for Internet Initiative Japan Inc. (IIJ) SA-W2 appliance.
+Hi all,
 
-Specification:
+This patch series aims to make slab shrink lockless.
 
-- SoC         : Marvell Armada 380 88F6810
-- RAM         : DDR3 256 MiB
-- Flash       : SPI-NOR 32 MiB
-- WLAN        : 2x Mini PCI-E slots
-  - 2.4 GHz   : Atheros AR9287
-  - 5 GHz     : Qualcomm Atheros QCA9880
-- Ethernet    : 5x 10/100/1000 Mbps
-  - Switch    : Marvell 88E6172
-- LEDs        : 12x
-- Buttons     : 1x
-- Serial      : "CONSOLE" port (RJ-45, RS-232C level)
-  - port      : ttyS0
-  - settings  : 115200 8n1
-  - assignment: 1:NC , 2:NC , 3:TXD, 4:GND,
-                5:GND, 6:RXD, 7:NC , 8:NC
-- USB         : 2x USB 2.0 Type-A
-  - Hub       : SMCC USB2514B
-- Power       : DC Input or PoE Input
-  - DC        : 12 VDC, 3 A
-  - PoE       : 802.3f
-    - module  : Silvertel Ag9712-2BR
-- Bootloader  : PMON2000 based
-- Stock OS    : NetBSD based
+1. Background
+=============
 
-Image header for stock bootloader:
+On our servers, we often find the following system cpu hotspots:
 
-0x00 - 0x07: Identifier      , ascii, "SEIL2015"
-0x08 - 0x57: Copyright       , ascii
-0x58 - 0x5b: Checksum (CRC32), hex
-0x5c - 0x5f: Version Format  , hex  , 0x00000001
-0x60 - 0x63: Major Version   , hex
-0x64 - 0x67: Minor Version   , hex
-0x68 - 0x87: Release Version , ascii
-0x88 - 0x8b: Xor Key?        , hex  , 0x00000000 (if not encoded)
-0x8c - 0x8f: Data Length     , hex
+  44.16%  [kernel]  [k] down_read_trylock
+  14.12%  [kernel]  [k] up_read
+  13.43%  [kernel]  [k] shrink_slab
+   5.25%  [kernel]  [k] count_shadow_nodes
+   3.42%  [kernel]  [k] idr_find
 
-  example:
+Then we used bpftrace to capture its calltrace as follows:
 
-  Identifier     : "SEIL2015"
-  Copyright      : "ARM OpenWrt Linux-5.15.94"
-  Checksum       : 0xd575759f (calculated from kernel data)
-  Version Format : 0x00000001
-  Major Version  : 0x00000009
-  Minor Version  : 0x00000063
-  Release Version: "r22151-318ed84c8d"
-  Xor Key?       : 0x00000000
-  Data Length    : 0x35312d33 (length of kernel data)
+@[
+    down_read_trylock+5
+    shrink_slab+292
+    shrink_node+640
+    do_try_to_free_pages+211
+    try_to_free_mem_cgroup_pages+266
+    try_charge_memcg+386
+    charge_memcg+51
+    __mem_cgroup_charge+44
+    __handle_mm_fault+1416
+    handle_mm_fault+260
+    do_user_addr_fault+459
+    exc_page_fault+104
+    asm_exc_page_fault+38
+    clear_user_rep_good+18
+    read_zero+100
+    vfs_read+176
+    ksys_read+93
+    do_syscall_64+62
+    entry_SYSCALL_64_after_hwframe+114
+]: 1868979
 
-Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
----
- arch/arm/boot/dts/Makefile                 |   1 +
- arch/arm/boot/dts/armada-380-iij-sa-w2.dts | 391 +++++++++++++++++++++
- 2 files changed, 392 insertions(+)
- create mode 100644 arch/arm/boot/dts/armada-380-iij-sa-w2.dts
+It is easy to see that this is caused by the frequent failure to obtain the
+read lock of shrinker_rwsem when reclaiming slab memory.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index efe4152e5846..19119a3f4f1e 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1523,6 +1523,7 @@ dtb-$(CONFIG_MACH_ARMADA_370) += \
- dtb-$(CONFIG_MACH_ARMADA_375) += \
- 	armada-375-db.dtb
- dtb-$(CONFIG_MACH_ARMADA_38X) += \
-+	armada-380-iij-sa-w2.dtb \
- 	armada-381-netgear-gs110emx.dtb \
- 	armada-382-rd-ac3x-48g4x2xl.dtb \
- 	armada-385-atl-x530.dtb\
-diff --git a/arch/arm/boot/dts/armada-380-iij-sa-w2.dts b/arch/arm/boot/dts/armada-380-iij-sa-w2.dts
-new file mode 100644
-index 000000000000..beeecbb0f5f8
---- /dev/null
-+++ b/arch/arm/boot/dts/armada-380-iij-sa-w2.dts
-@@ -0,0 +1,391 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Device Tree file for Internet Initiative Japan Inc. SA-W2 Appliance
-+ *
-+ * Copyright (c) 2023, INAGAKI Hiroshi <musashino.open@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include "armada-380.dtsi"
-+
-+/ {
-+	model = "IIJ SA-W2";
-+	compatible = "iij,sa-w2", "marvell,armada380";
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x00000000 0x10000000>; /* 256MB */
-+	};
-+
-+	soc {
-+		ranges = <MBUS_ID(0xf0, 0x01) 0 0xd0000000 0x100000
-+			  MBUS_ID(0x01, 0x1d) 0 0xfff00000 0x100000
-+			  MBUS_ID(0x09, 0x19) 0 0xf1100000 0x10000
-+			  MBUS_ID(0x09, 0x15) 0 0xf1110000 0x10000
-+			  MBUS_ID(0x0c, 0x04) 0 0xf1200000 0x100000>;
-+
-+		pcie {
-+			status = "okay";
-+
-+			pcie@1,0 {
-+				status = "okay";
-+
-+				/* Atheros AR9287 */
-+				wifi@0,0 {
-+					compatible = "pci168c,002e";
-+					reg = <0000 0 0 0 0>;
-+				};
-+			};
-+
-+			pcie@3,0 {
-+				status = "okay";
-+
-+				/* Qualcomm Atheros QCA9880 */
-+				wifi@0,0 {
-+					compatible = "qcom,ath10k";
-+					reg = <0000 0 0 0 0>;
-+				};
-+			};
-+		};
-+	};
-+
-+	keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pmx_keys_pins>;
-+
-+		button-init {
-+			label = "init";
-+			linux,code = <KEY_RESTART>;
-+			gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pmx_leds_pins>;
-+
-+		led-0 {
-+			gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_WLAN;
-+			function-enumerator = <1>;
-+		};
-+
-+		led-1 {
-+			gpios = <&gpio0 20 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_RED>;
-+			function = LED_FUNCTION_WLAN;
-+			function-enumerator = <1>;
-+		};
-+
-+		led-2 {
-+			gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_STATUS;
-+		};
-+
-+		led-3 {
-+			gpios = <&gpio1 2 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_RED>;
-+			function = LED_FUNCTION_STATUS;
-+		};
-+
-+		led-4 {
-+			label = "green:mobile";
-+			gpios = <&gpio1 3 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_GREEN>;
-+		};
-+
-+		led-5 {
-+			label = "red:mobile";
-+			gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_RED>;
-+		};
-+
-+		led-6 {
-+			gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_WLAN;
-+			function-enumerator = <0>;
-+		};
-+
-+		led-7 {
-+			gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_RED>;
-+			function = LED_FUNCTION_WLAN;
-+			function-enumerator = <0>;
-+		};
-+
-+		led-8 {
-+			gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_POWER;
-+		};
-+
-+		led-9 {
-+			gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_RED>;
-+			function = LED_FUNCTION_POWER;
-+		};
-+
-+		led-10 {
-+			gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_USB;
-+			function-enumerator = <1>;
-+			linux,default-trigger = "usbport";
-+			trigger-sources = <&hub_port2>;
-+		};
-+
-+		led-11 {
-+			gpios = <&gpio1 23 GPIO_ACTIVE_LOW>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_USB;
-+			function-enumerator = <0>;
-+			linux,default-trigger = "usbport";
-+			trigger-sources = <&hub_port1>;
-+		};
-+	};
-+
-+	regulator-vbus-usb0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vbus-usb0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio1 20 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-always-on;
-+	};
-+
-+	regulator-vbus-usb1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vbus-usb1";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio1 21 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-always-on;
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pins>;
-+	status = "okay";
-+};
-+
-+&pinctrl {
-+	pmx_usb_pins: usb-pins {
-+		marvell,pins = "mpp2",		 /* smsc usb2514b reset */
-+			       "mpp48", "mpp49", /* port over current */
-+			       "mpp52", "mpp53"; /* port vbus */
-+		marvell,function = "gpio";
-+	};
-+
-+	pmx_keys_pins: keys-pins {
-+		marvell,pins = "mpp18";
-+		marvell,function = "gpio";
-+	};
-+
-+	pmx_leds_pins: leds-pins {
-+		marvell,pins = "mpp19", "mpp20", "mpp33", "mpp34", "mpp35",
-+			       "mpp36", "mpp44", "mpp45", "mpp46", "mpp47",
-+			       "mpp54", "mpp55";
-+		marvell,function = "gpio";
-+	};
-+};
-+
-+&gpio0 {
-+	usb-hub-reset {
-+		gpio-hog;
-+		gpios = <2 GPIO_ACTIVE_HIGH>;
-+		output-high;
-+	};
-+};
-+
-+&usb0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pmx_usb_pins>;
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* SMSC USB2514B */
-+	hub@1 {
-+		compatible = "usb424,2514";
-+		reg = <1>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		hub_port1: port@1 {
-+			reg = <1>;
-+			#trigger-source-cells = <0>;
-+		};
-+
-+		hub_port2: port@2 {
-+			reg = <2>;
-+			#trigger-source-cells = <0>;
-+		};
-+	};
-+};
-+
-+&bm {
-+	status = "okay";
-+};
-+
-+&bm_bppi {
-+	status = "okay";
-+};
-+
-+&eth1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ge1_rgmii_pins>;
-+	status = "okay";
-+
-+	phy-connection-type = "rgmii";
-+	buffer-manager = <&bm>;
-+	bm,pool-long = <2>;
-+	bm,pool-short = <3>;
-+
-+	nvmem-cells = <&macaddr_bdinfo_6>;
-+	nvmem-cell-names = "mac-address";
-+	mac-address-increment = <1>;
-+
-+	fixed-link {
-+		speed = <1000>;
-+		full-duplex;
-+	};
-+};
-+
-+&mdio {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mdio_pins>;
-+	status = "okay";
-+
-+	/* Marvell 88E6172 */
-+	switch@0 {
-+		compatible = "marvell,mv88e6085";
-+		reg = <0x0>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				label = "ge1_0";
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				label = "ge1_1";
-+			};
-+
-+			port@2 {
-+				reg = <2>;
-+				label = "ge1_2";
-+			};
-+
-+			port@3 {
-+				reg = <3>;
-+				label = "ge1_3";
-+			};
-+
-+			port@4 {
-+				reg = <4>;
-+				label = "ge0";
-+				nvmem-cells = <&macaddr_bdinfo_6>;
-+				nvmem-cell-names = "mac-address";
-+			};
-+
-+			/*
-+			 * eth0 is connected to port5 for WAN connection
-+			 * on port4 ("GE0")
-+			 */
-+
-+			port@6 {
-+				reg = <6>;
-+				label = "cpu";
-+				ethernet = <&eth1>;
-+				phy-connection-type = "rgmii-id";
-+
-+				fixed-link {
-+					speed = <1000>;
-+					full-duplex;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&rtc {
-+	status = "disabled";
-+};
-+
-+&spi1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi1_pins>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <40000000>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				reg = <0x0 0x100000>;
-+				label = "bootloader";
-+				read-only;
-+			};
-+
-+			partition@100000 {
-+				reg = <0x100000 0x10000>;
-+				label = "bootloader-env";
-+				read-only;
-+			};
-+
-+			partition@110000 {
-+				compatible = "nvmem-cells";
-+				reg = <0x110000 0xf0000>;
-+				label = "board-info";
-+				read-only;
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				macaddr_bdinfo_6: macaddr@6 {
-+					reg = <0x6 0x6>;
-+				};
-+			};
-+
-+			partition@200000 {
-+				reg = <0x200000 0xf00000>;
-+				label = "firmware";
-+			};
-+
-+			partition@1100000 {
-+				reg = <0x1100000 0xf00000>;
-+				label = "rescue";
-+				read-only;
-+			};
-+		};
-+	};
-+};
+Currently, the shrinker_rwsem is a global lock. And the following cases may
+cause the above system cpu hotspots:
+
+a. the write lock of shrinker_rwsem was held for too long. For example, there
+   are many memcgs in the system, which causes some paths to hold locks and
+   traverse it for too long. (e.g. expand_shrinker_info())
+b. the read lock of shrinker_rwsem was held for too long, and a writer came at
+   this time. Then this writer will be forced to wait and block all subsequent
+   readers.
+   For example:
+   - be scheduled when the read lock of shrinker_rwsem is held in
+     do_shrink_slab()
+   - some shrinker are blocked for too long. Like the case mentioned in the
+     patchset[1].
+
+[1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
+
+And all the down_read_trylock() hotspots caused by the above cases can be
+solved by replacing the shrinker_rwsem trylocks with SRCU.
+
+2. Survey
+=========
+
+Before doing the code implementation, I found that there were many similar
+submissions in the community:
+
+a. Davidlohr Bueso submitted a patch in 2015.
+   Subject: [PATCH -next v2] mm: srcu-ify shrinkers
+   Link: https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
+   Result: It was finally merged into the linux-next branch, but failed on arm
+           allnoconfig (without CONFIG_SRCU)
+
+b. Tetsuo Handa submitted a patchset in 2017.
+   Subject: [PATCH 1/2] mm,vmscan: Kill global shrinker lock.
+   Link: https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
+   Result: Finally chose to use the current simple way (break when
+           rwsem_is_contended()). And Christoph Hellwig suggested to using SRCU,
+           but SRCU was not unconditionally enabled at the time.
+
+c. Kirill Tkhai submitted a patchset in 2018.
+   Subject: [PATCH RFC 00/10] Introduce lockless shrink_slab()
+   Link: https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
+   Result: At that time, SRCU was not unconditionally enabled, and there were
+           some objections to enabling SRCU. Later, because Kirill's focus was
+           moved to other things, this patchset was not continued to be updated.
+
+d. Sultan Alsawaf submitted a patch in 2021.
+   Subject: [PATCH] mm: vmscan: Replace shrinker_rwsem trylocks with SRCU protection
+   Link: https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
+   Result: Rejected because SRCU was not unconditionally enabled.
+
+We can find that almost all these historical commits were abandoned because SRCU
+was not unconditionally enabled. But now SRCU has been unconditionally enable
+by Paul E. McKenney in 2023 [2], so it's time to replace shrinker_rwsem trylocks
+with SRCU.
+
+[2] https://lore.kernel.org/lkml/20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1/
+
+3. Reproduction and testing
+===========================
+
+We can reproduce the down_read_trylock() hotspot through the following script:
+
+```
+#!/bin/bash
+DIR="/root/shrinker/memcg/mnt"
+
+do_create()
+{
+        mkdir /sys/fs/cgroup/memory/test
+        echo 200M > /sys/fs/cgroup/memory/test/memory.limit_in_bytes
+        for i in `seq 0 $1`;
+        do
+                mkdir /sys/fs/cgroup/memory/test/$i;
+                echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+                mkdir -p $DIR/$i;
+        done
+}
+
+do_mount()
+{
+        for i in `seq $1 $2`;
+        do
+                mount -t tmpfs $i $DIR/$i;
+        done
+}
+
+do_touch()
+{
+        for i in `seq $1 $2`;
+        do
+                echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+                dd if=/dev/zero of=$DIR/$i/file$i bs=1M count=1 &
+        done
+}
+
+do_create 2000
+do_mount 0 2000
+do_touch 0 1000
+```
+
+Save the above script and execute it, we can get the following perf hotspots:
+
+  46.60%  [kernel]  [k] down_read_trylock
+  18.70%  [kernel]  [k] up_read
+  15.44%  [kernel]  [k] shrink_slab
+   4.37%  [kernel]  [k] _find_next_bit
+   2.75%  [kernel]  [k] xa_load
+   2.07%  [kernel]  [k] idr_find
+   1.73%  [kernel]  [k] do_shrink_slab
+   1.42%  [kernel]  [k] shrink_lruvec
+   0.74%  [kernel]  [k] shrink_node
+   0.60%  [kernel]  [k] list_lru_count_one
+
+After applying this patchset, the hotspot becomes as follows:
+
+  19.53%  [kernel]  [k] _find_next_bit
+  14.63%  [kernel]  [k] do_shrink_slab
+  14.58%  [kernel]  [k] shrink_slab
+  11.83%  [kernel]  [k] shrink_lruvec
+   9.33%  [kernel]  [k] __blk_flush_plug
+   6.67%  [kernel]  [k] mem_cgroup_iter
+   3.73%  [kernel]  [k] list_lru_count_one
+   2.43%  [kernel]  [k] shrink_node
+   1.96%  [kernel]  [k] super_cache_count
+   1.78%  [kernel]  [k] __rcu_read_unlock
+   1.38%  [kernel]  [k] __srcu_read_lock
+   1.30%  [kernel]  [k] xas_descend
+
+We can see that the slab reclaim is no longer blocked by shinker_rwsem trylock,
+which realizes the lockless slab reclaim.
+
+This series is based on next-20230217.
+
+Comments and suggestions are welcome.
+
+Thanks,
+Qi.
+
+Changelog in v1 -> v2:
+ - add a map_nr_max field to shrinker_info (suggested by Kirill)
+ - use shrinker_mutex in reparent_shrinker_deferred() (pointed by Kirill)
+
+Qi Zheng (7):
+  mm: vmscan: add a map_nr_max field to shrinker_info
+  mm: vmscan: make global slab shrink lockless
+  mm: vmscan: make memcg slab shrink lockless
+  mm: shrinkers: make count and scan in shrinker debugfs lockless
+  mm: vmscan: hold write lock to reparent shrinker nr_deferred
+  mm: vmscan: remove shrinker_rwsem from synchronize_shrinkers()
+  mm: shrinkers: convert shrinker_rwsem to mutex
+
+ drivers/md/dm-cache-metadata.c |   2 +-
+ drivers/md/dm-thin-metadata.c  |   2 +-
+ fs/super.c                     |   2 +-
+ include/linux/memcontrol.h     |   1 +
+ mm/shrinker_debug.c            |  38 ++++-----
+ mm/vmscan.c                    | 142 +++++++++++++++++----------------
+ 6 files changed, 92 insertions(+), 95 deletions(-)
+
 -- 
-2.25.1
+2.20.1
 
