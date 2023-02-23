@@ -2,247 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D356A1224
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E8D6A1228
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjBWVhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S229613AbjBWVhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBWVhQ (ORCPT
+        with ESMTP id S229608AbjBWVhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:37:16 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26005BB84
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:37:13 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so691210pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:37:13 -0800 (PST)
+        Thu, 23 Feb 2023 16:37:53 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EBD46B7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:37:51 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id f13so46873428edz.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:37:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z7+aUg9HXQ/A/eUt8v18nKugzdSz6vl7sg4McbH6tWQ=;
-        b=c0u0fvJZo7cq6NMR9jPgTY+MYZwgs+0jV6PRHowGAKrgQuoUhvj3TL13DAL7cHpEIg
-         4fYxMXbiP4VqePjSGrYZ+GgoINswsELo4klKlaOH4DjNL3MId9Z0yRYhzhfiPzf14+Js
-         l5sOFeOLeZTeRxCU5FJ7yUA5tg8DlZpNSY3LQYP/lIR8O/awnhgVGJ4sEswcpLfqh6ux
-         GeK5MXrLx3lqT4df5CdiOamajjJAW0KBcA5PN6wJTJ6HgbUrsXmFllSjzjM7WvPpOqsO
-         TE70o8gCt2etNpQiPKSBG2B/atIKnm7rJoR0iG6sIKDmvr+I3CnqWdiZmk1xPB6cJt5x
-         hIvQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VAVWbTZhOahgbeoCVeCI3EwYDSoKydef03wO7/5d2JU=;
+        b=EqmoPqeQbjoafMObEf2fTe/r9LkSJInAKED/5JXgQjuokPaocNnxoYXIZxa7+0u47G
+         Iq8CMCkdmxpQmovC/3sbC8DBEkIaUWeV3emMIwGiCvdSW0vvXje7Y3y5mm7ukDXLAyFU
+         AFnhyHNojJDRIrxezCs45dDWnqoYhhXvMGcPI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7+aUg9HXQ/A/eUt8v18nKugzdSz6vl7sg4McbH6tWQ=;
-        b=WPHZ8CEBRWcigAy1vALbJzZ0igqxwlrhFwd5LQdPVHkEUNKMLkhfKMvUt02szp3sd+
-         09XIxl86U2HCiyEzVYP0jaK8OEuE4WCoLmVQpX5frt8+UMdqPLQRbtqF7UHoAyxhJtvj
-         FaTY04FlLhYL/SLXyO+TEaVaOWMpkRO89RmTvn2kQ3gnBx5N3UYbThcICJDohbe1qVbU
-         K2sDEVDfUUUIh7IbAMzdzxGxpfrzEfPDaTl+Nqa6Np80TfDwtTFq3HReFa3nHkvq8VnA
-         tP2gb+zH4IP+h8H+RFyBIj7/FJhTjG8SLzuhJuTNxjxrrKJ9vdZAuFfklMDL2Kg9uTRB
-         EbGA==
-X-Gm-Message-State: AO0yUKVrmJ6h8Aw86iZpEhaqSLamx5Nk2ko1EqNnFvs84T3QFFtnJxCz
-        F3zyN4fCQRYc8HRiCb7Mpese5A==
-X-Google-Smtp-Source: AK7set+WA4y6isMIp2ZzVMyILhKLJ1WQxXMtedotrSE0LCPg6li/VQItDsL6LiRCl1UMeJqGyYTlRQ==
-X-Received: by 2002:a05:6a20:6918:b0:c7:164c:edf7 with SMTP id q24-20020a056a20691800b000c7164cedf7mr12929189pzj.36.1677188233241;
-        Thu, 23 Feb 2023 13:37:13 -0800 (PST)
-Received: from [10.211.55.3] (c-73-221-130-71.hsd1.wa.comcast.net. [73.221.130.71])
-        by smtp.gmail.com with ESMTPSA id s23-20020a62e717000000b005a9cb8edee3sm3881780pfh.85.2023.02.23.13.36.59
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VAVWbTZhOahgbeoCVeCI3EwYDSoKydef03wO7/5d2JU=;
+        b=gGHtxnv4aJWv4W/BK8lhSYRKcsltQrRGne8Gl5gKlcaDfyGG5QpVsaxHduVpF44ieJ
+         F6LgauLSz8cmBjMSID8kDM7b81ZN1+fP2qFklSGiwMAYcR4ceC48XBYQcYr4GpAYM1fM
+         jqz+XRw6zelLHGuDXoeko8pV2ka6LFmE50rjVnx35KBhrloTO60A5LOyEepck3yZPS9+
+         ZA+S5Jp3kXHQQGuOZgKBxBctIu9JCPuRH7JGxPmrNpuwt7Kvfc4mZorQIog80AAFXBVx
+         /trL1QN49T1x2TwFwT5ooTWcHAhaMRnY8tOlG2S9KXKRuJ+C30peqGf0uxa2Kzqet1jL
+         rFEA==
+X-Gm-Message-State: AO0yUKULMCZYs7JYGWPlvO5j16fhyWmP850mP57cLQ+Cfk1RVtHNw/rx
+        bsJc27boqLn6G353h37sdRJmQE4mjdsjE5yMkZs=
+X-Google-Smtp-Source: AK7set9luMvIytyNpZcN7LE4kfyMfPrS7PfCvpBCrOj9kPPvNomDi6CpSZYanMm2wvuvt1qSeXsefQ==
+X-Received: by 2002:a05:6402:14d1:b0:4af:6227:3866 with SMTP id f17-20020a05640214d100b004af62273866mr6869178edx.19.1677188269677;
+        Thu, 23 Feb 2023 13:37:49 -0800 (PST)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id g10-20020a50d5ca000000b004a21263bbaasm4596639edj.49.2023.02.23.13.37.48
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 13:37:01 -0800 (PST)
-Message-ID: <556ab51e-ddf8-b56b-1743-36f3b6d623d1@linaro.org>
-Date:   Thu, 23 Feb 2023 15:36:58 -0600
+        Thu, 23 Feb 2023 13:37:49 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id f13so46873183edz.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:37:48 -0800 (PST)
+X-Received: by 2002:a17:906:b55:b0:8f1:4cc5:f14c with SMTP id
+ v21-20020a1709060b5500b008f14cc5f14cmr933485ejg.0.1677188268445; Thu, 23 Feb
+ 2023 13:37:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 09/26] gunyah: rsc_mgr: Add VM lifecycle RPC
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212343.3311875-1-quic_eberman@quicinc.com>
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <20230214212343.3311875-1-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230221233808.1565509-1-kuba@kernel.org> <CAHk-=wjTMgB0=PQt8synf1MRTfetVXAWWLOibnMKvv1ETn_1uw@mail.gmail.com>
+ <87pma02odj.fsf@kernel.org>
+In-Reply-To: <87pma02odj.fsf@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Feb 2023 13:37:31 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgOmTXMxm=ouCEKu0Agd5q-u3mrQ8=ne8412ciG2b-eJA@mail.gmail.com>
+Message-ID: <CAHk-=wgOmTXMxm=ouCEKu0Agd5q-u3mrQ8=ne8412ciG2b-eJA@mail.gmail.com>
+Subject: Re: [PULL] Networking for v6.3
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pabeni@redhat.com, bpf@vger.kernel.org, ast@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 3:23 PM, Elliot Berman wrote:
-> 
-> Add Gunyah Resource Manager RPC to launch an unauthenticated VM.
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   drivers/virt/gunyah/Makefile      |   2 +-
->   drivers/virt/gunyah/rsc_mgr.h     |  45 ++++++
->   drivers/virt/gunyah/rsc_mgr_rpc.c | 226 ++++++++++++++++++++++++++++++
->   include/linux/gunyah_rsc_mgr.h    |  73 ++++++++++
->   4 files changed, 345 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/virt/gunyah/rsc_mgr_rpc.c
-> 
-> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-> index cc864ff5abbb..de29769f2f3f 100644
-> --- a/drivers/virt/gunyah/Makefile
-> +++ b/drivers/virt/gunyah/Makefile
-> @@ -2,5 +2,5 @@
->   
->   obj-$(CONFIG_GUNYAH) += gunyah.o
->   
-> -gunyah_rsc_mgr-y += rsc_mgr.o
-> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
->   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
-> diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
-> index d4e799a7526f..7406237bc66d 100644
-> --- a/drivers/virt/gunyah/rsc_mgr.h
-> +++ b/drivers/virt/gunyah/rsc_mgr.h
-> @@ -74,4 +74,49 @@ struct gh_rm;
->   int gh_rm_call(struct gh_rm *rsc_mgr, u32 message_id, void *req_buff, size_t req_buff_size,
->   		void **resp_buf, size_t *resp_buff_size);
->   
-> +/* Message IDs: VM Management */
-> +#define GH_RM_RPC_VM_ALLOC_VMID			0x56000001
-> +#define GH_RM_RPC_VM_DEALLOC_VMID		0x56000002
-> +#define GH_RM_RPC_VM_START			0x56000004
-> +#define GH_RM_RPC_VM_STOP			0x56000005
-> +#define GH_RM_RPC_VM_RESET			0x56000006
-> +#define GH_RM_RPC_VM_CONFIG_IMAGE		0x56000009
-> +#define GH_RM_RPC_VM_INIT			0x5600000B
-> +#define GH_RM_RPC_VM_GET_HYP_RESOURCES		0x56000020
-> +#define GH_RM_RPC_VM_GET_VMID			0x56000024
-> +
-> +struct gh_rm_vm_common_vmid_req {
-> +	__le16 vmid;
-> +	__le16 reserved0;
-> +} __packed;
-> +
-> +/* Call: VM_ALLOC */
-> +struct gh_rm_vm_alloc_vmid_resp {
-> +	__le16 vmid;
-> +	__le16 reserved0;
-> +} __packed;
-> +
-> +/* Call: VM_STOP */
-> +struct gh_rm_vm_stop_req {
-> +	__le16 vmid;
-> +#define GH_RM_VM_STOP_FLAG_FORCE_STOP	BIT(0)
-> +	u8 flags;
-> +	u8 reserved;
-> +#define GH_RM_VM_STOP_REASON_FORCE_STOP		3
+On Thu, Feb 23, 2023 at 11:06 AM Kalle Valo <kvalo@kernel.org> wrote:
+>
+> So that we can file a bug report about use of Wireless Extensions, what
+> process is ThreadPoolForeg?
 
-I suggested this before and you honored it.  Now I'll suggest
-it again, and ask you to do it throughout the driver.
+It is, as you already seem to have googled, just a sub-thread of google-chrome.
 
-Please separate the definitions of constant values that
-certain fields can take on from the structure definition.
-I think doing it the way you have here makes it harder to
-understand the structure definition.
+> The warning was applied over a month ago, I'm surprised nobody
+> else has reported anything.
 
-You could define an anonymous enumerated type to hold
-the values meant to be held by each field.
+Honestly, I'm not sure how many people actually _run_ a real desktop
+on linux-next. Getting merged into mainline really ends up resulting
+in a lot more testing (outside of the test robots that don't tend to
+really run desktop loads).
 
-> +	__le32 stop_reason;
-> +} __packed;
-> +
-> +/* Call: VM_CONFIG_IMAGE */
-> +struct gh_rm_vm_config_image_req {
-> +	__le16 vmid;
-> +	__le16 auth_mech;
-> +	__le32 mem_handle;
-> +	__le64 image_offset;
-> +	__le64 image_size;
-> +	__le64 dtb_offset;
-> +	__le64 dtb_size;
-> +} __packed;
-> +
-> +/* Call: GET_HYP_RESOURCES */
-> +
->   #endif
-> diff --git a/drivers/virt/gunyah/rsc_mgr_rpc.c b/drivers/virt/gunyah/rsc_mgr_rpc.c
-> new file mode 100644
-> index 000000000000..4515cdd80106
-> --- /dev/null
-> +++ b/drivers/virt/gunyah/rsc_mgr_rpc.c
-> @@ -0,0 +1,226 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/gunyah_rsc_mgr.h>
-> +
-> +#include "rsc_mgr.h"
-> +
-> +/*
-> + * Several RM calls take only a VMID as a parameter and give only standard
-> + * response back. Deduplicate boilerplate code by using this common call.
-> + */
-> +static int gh_rm_common_vmid_call(struct gh_rm *rm, u32 message_id, u16 vmid)
-> +{
-> +	struct gh_rm_vm_common_vmid_req req_payload = {
-> +		.vmid = cpu_to_le16(vmid),
-> +	};
-> +	size_t resp_size;
-> +	void *resp;
-> +
-> +	return gh_rm_call(rm, message_id, &req_payload, sizeof(req_payload), &resp, &resp_size);
-> +}
-> +
-> +/**
-> + * gh_rm_alloc_vmid() - Allocate a new VM in Gunyah. Returns the VM identifier.
-> + * @rm: Handle to a Gunyah resource manager
-> + * @vmid: Use GH_VMID_INVAL or 0 to dynamically allocate a VM. A reserved VMID can
-> + *        be supplied to request allocation of a platform-defined VM.
+I see it on my desktop too, but I actually noticed it on my laptop
+first, because it - once again - has started falling off the wireless
+network regularly and I was looking if there were any messages about
+it.
 
-Honestly, I'd rather just see 0 (and *not* GH_VMID_INVAL) be the
-special value to mean "dynamically allocate the VMID."  It seems
-0 is a reserved VMID anyway, and GH_VMID_INVAL might as well be
-treated here as an invalid parameter.
+(That ath driver really is flaky, and I've never figured out what the
+trigger is, it just sometimes goes dead and you have to disable and
+re-enable wireless. But that's not a new problem, it's just a "that's
+why I noticed")
 
-Is there any definitition of which VMIDs are reserved?  Like,
-anything under 1024?
-
-That's it on this patch for now.
-
-					-Alex
-
-> + *
-> + * Returns - the allocated VMID or negative value on error
-> + */
-> +int gh_rm_alloc_vmid(struct gh_rm *rm, u16 vmid)
-> +{
-> +	struct gh_rm_vm_common_vmid_req req_payload = { 0 };
-> +	struct gh_rm_vm_alloc_vmid_resp *resp_payload;
-> +	size_t resp_size;
-> +	void *resp;
-> +	int ret;
-
-. . .
-
+                 Linus
