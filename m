@@ -2,294 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542AF6A118C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803CF6A1196
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjBWU7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 15:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S229545AbjBWVDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBWU7s (ORCPT
+        with ESMTP id S229454AbjBWVDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 15:59:48 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CBB5C15C;
-        Thu, 23 Feb 2023 12:59:46 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id bi17so14112481oib.3;
-        Thu, 23 Feb 2023 12:59:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Osx0ixVmVSP+aXEP28qlQVylRkJ040ddv5NltnrKe3o=;
-        b=EVx5RvngRD2W6T1SggAGYLrDi9ZMatODN3ARiAqiLth4GCIRubrg8exqKZWZ6kSQen
-         sQSYJQlGsv2GfIBi7oj+pdQ/5uX5NEFKUMQJdILj657G0HTagy+3DsBNZTZrD8CH7R4J
-         sjZ+otvp4XM5AyKl4oh8q63zyQ6enEHqfKqswjqeGzSAO6Wa1JoOjdOpqh/K3fRibS/J
-         YEY1JaEovVUnfsihbjIdpsXBrgcnuynjAiL/rBz/yjAKehz0JoL63NHboBF0QhotKJxC
-         vahi/6HLXOoL5tiiO4+rk59RWKtT7IMOMLNRPZFIN3dJb6juHc6kJxu66PcvStAlNdh6
-         MXJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Osx0ixVmVSP+aXEP28qlQVylRkJ040ddv5NltnrKe3o=;
-        b=v1ezEH0ahkSGjpPFJ35RlhSNZw3DjOlUIyPTOWcWEluLl4nB98QiLJeL0pDyD/UQ0S
-         ef6Ssgc1u4eWUGQMyHhC3uKkqBKqr+XZ06iu1129/x3GAm3jYC9O8z6GtD5ik5n82qbZ
-         Ap5s4S6S6vVeTbW3kmwq15M2xUZ0MEMdODt0vc5332TjIcsyAJfFDCn0+JLg/YtG79uZ
-         ocfzl2qZpZ44wSL9HWwp7ZQcs0CpWKm1I8etNEM+FCKuHmOEFOC9JZU/LoNg2cerltPa
-         85jxoE7pEw/hK3WBMRgdkBMvMrZ2feRO6hdPS5Tr/LaMwnYIE1LfAJnLAGg/nvNLDoFk
-         5/Sw==
-X-Gm-Message-State: AO0yUKWrvy86U4Q8ps1Hboq2Cwh8xOtmD+icsNKiMTxFL9t/aULzeFdr
-        ZdOvGGqZNbSUZAXhNBqshq01HDzn13k=
-X-Google-Smtp-Source: AK7set/XYKik2KGEkmcJt1YBiLl/7lkSjFmlME/eKt7SLMjAtvvlUVVkJ9QRzAycFxpyas0MeiJTAA==
-X-Received: by 2002:aca:2809:0:b0:37f:9d35:779 with SMTP id 9-20020aca2809000000b0037f9d350779mr6332787oix.16.1677185985846;
-        Thu, 23 Feb 2023 12:59:45 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:2586:7432:d181:902b? ([2600:1700:2442:6db0:2586:7432:d181:902b])
-        by smtp.gmail.com with ESMTPSA id bd23-20020a056808221700b0037d93a7e8f6sm5284817oib.54.2023.02.23.12.59.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 12:59:45 -0800 (PST)
-Message-ID: <c7c3ce77-fefa-f771-390f-fa8891ee0271@gmail.com>
-Date:   Thu, 23 Feb 2023 14:59:44 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] of: create of_root if no dtb provided
+        Thu, 23 Feb 2023 16:03:17 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBCE2BF21;
+        Thu, 23 Feb 2023 13:03:15 -0800 (PST)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NK21lt012283;
+        Thu, 23 Feb 2023 21:02:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=JFmyS15ZCMhP13z00uLgB3p7YqHPQOopf6esSDTrCZ4=;
+ b=Or30OEAQNDf5iIID5gHVQBbVLJxFEQ5mQ0cULt9b1gFQA+I0ou8ZksDyjvNsUeIGvnut
+ /SveIWk6hqz0KH175fD9o26k8PP7xi+t90czUmGi5K4HXpB+uUzXRyJMlYr1DhX0szaz
+ AXRIrqvrzCyegfZyjJdzUfkwOslbjJp+VR6CsuWMjrqCFEJU958zfvZspDKa/IaRCys/
+ 4zKpLAYIk9DyATKB3zM1+85HzQ9TN5+CyJ5nF6qT1KpPWriEzs3uJEaugf887oopcMXd
+ 8Dasa79uQ52qXD2YcwIYrV2BuuzSZgWjjsmGsRH1rCN+c94plzeKY77MzVw+zRZIXDR2 Mg== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3nxbx22y2n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 21:02:49 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 3C15D800359;
+        Thu, 23 Feb 2023 21:02:48 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 23 Feb 2023 09:02:42 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
+ via Frontend Transport; Thu, 23 Feb 2023 09:02:42 -1200
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 23 Feb 2023 09:02:37 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YYnay4j/4PsKyreVwR/4jeHQAiUanP76P3bdZcT/YloeQCJ4kGKdVZotkv0tK3wchv6/E1MTdj1XJ9YeL19je83lMD5cfoTCr27C+H4xy9+QkEpRKw7Y5mWY8HNEjCNid8T1a7jcGpuZib6SLoocJAz/qZkNMO/5WebUkC4NjrGYKyHFNSFd8r+rv05iZFF9DLokdwpUiVDsTpt7x/sEhrEBJmAKQdR/Nlw8N3UJ+4tnMZvmB4YxIQMcfAP3zOOFvz+0ckBLb0kyzzM4wmAxIYBs6G9BHYUa0Ha1vjdPPNJWRpnBnv91ubufcHQwyC2JVprUdVKoDpIlltv2I6mX0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JFmyS15ZCMhP13z00uLgB3p7YqHPQOopf6esSDTrCZ4=;
+ b=WbfWUhmAjfXIJrxhzFOISMxV9aTR171RmTFA6J0lwdMy/RnvDQuXmLcg84wQd5YvrT1vuMEZzjzSOOwSRR/T/Ij7V5l5NSYSyEwXXSUURPz4j9kAKNcDYTJXrPolCJQ407olGWqxVZdpZyPRJQ1P8EL88l1ddr5iJUBGq3fYkmzMzn7i12PdzNhpkOMXwPAjKLd/nY9x+qPVOMlZS3d/Dt+8Yz1Dti0kUZLoRMIePsNZ5TIdD3+7dSAAoFt97M846i02EtFkFQD8X84K7i2IAbO/+Nef+cU4u1wqDuEuAUuxxEllvdB0Bt1UPcs17ucAENKTRVTZSIeB+xnQ+SObKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ PH7PR84MB1485.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:150::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.19; Thu, 23 Feb
+ 2023 21:02:36 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::ee74:bb9a:75ba:71d3]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::ee74:bb9a:75ba:71d3%8]) with mapi id 15.20.6111.021; Thu, 23 Feb 2023
+ 21:02:36 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "wsa@kernel.org" <wsa@kernel.org>
+Subject: Re: [PATCH v5 3/5] ARM: dts: hpe: Add I2C Topology
+Thread-Topic: [PATCH v5 3/5] ARM: dts: hpe: Add I2C Topology
+Thread-Index: AQHZQuhJXgK/7/i9r0iiM2KjL1y9xq7UfJ+AgAgtSYA=
+Date:   Thu, 23 Feb 2023 21:02:36 +0000
+Message-ID: <66D4DB5E-46AA-4280-A073-E22262F7FD58@hpe.com>
+References: <20230217155054.99757-1-nick.hawkins@hpe.com>
+ <20230217155054.99757-4-nick.hawkins@hpe.com>
+ <dc708865-6005-760f-cbb0-cb2d1d989b9d@linaro.org>
+In-Reply-To: <dc708865-6005-760f-cbb0-cb2d1d989b9d@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230222221051.809091-1-frowand.list@gmail.com>
- <20230222221051.809091-2-frowand.list@gmail.com>
- <20230223123415.6dade5ec@fixe.home>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20230223123415.6dade5ec@fixe.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.70.23021201
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|PH7PR84MB1485:EE_
+x-ms-office365-filtering-correlation-id: 634c8bed-17b8-4c16-0e7f-08db15e14a76
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x+qsMLJtdhEVO8ziv/IGMj/XsxOg9ClhGaW4BVhw69SCdxVx7b0J+TMQHqn0kL/lIuCSQfANDJV+MtLODYJ9FNNejNg2qYRM/DOSQZIqqbdRQN3efPcND0Zb7AIPQ0ReSFje1hXBZv5NfR6d1UWiSshdLj5ov74L4rr6v/QtWdvmVi/NPQ6KXrJDKAaN1kbmUBOoU86D2ICZX46jnSB+43Ta6fvJQMWNOYtx4pOxj1Nl6ELZKjk7YctW+tm+jGM1tAyNyRx1zhb2QMwQFB0ot03aeH9XJ9vPelMCgkm419U24ae80dALs1T1KSHVLqRPsnsplbFG8pMr/BAelJisFUplqcTYMnWYX6uxZIy8F+Hgk7FM9RtyPLztnpyhllxaBAX5S69eSXtglfipcD4Ji0lvHHDwKJo/veK2k4CUceWzdwiexea0G8mihJcxy1tDeNB7kVS+PNipMWqHm+uNajUOXojGZRbHLBwoGNWOQnfsIBJy+/aIuSKFHcrKRekSFb7vv0PInugIDZJ1x8bE1bwh36nHocxnxb/0Bf2fzvPsdKM+38suQ3x4t2QMNF6o9dZ0GHXCWIdX74sg6tHC2+oPNyFLbR0RcrzVDipCB2J7iZEiOcjBWCc1AGJMn8nDwelqPzt4moHr683m8EbrP85Ao6lJLfzwJFywrbFZdUaaQhGpHtQauAGm+KHlq/uFje94TuBOkBBYGU8Z0z7OToMqbOjxZADcKcUHj7ULc2uQn4/WiLE+/XjDEf/38IhD
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(346002)(39860400002)(396003)(136003)(451199018)(921005)(64756008)(66556008)(76116006)(6506007)(41300700001)(66446008)(316002)(2616005)(5660300002)(91956017)(66946007)(83380400001)(8936002)(8676002)(6512007)(71200400001)(478600001)(66476007)(6486002)(110136005)(186003)(33656002)(36756003)(2906002)(86362001)(4744005)(38100700002)(82960400001)(122000001)(38070700005)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UW1NUjFsTVFDY3dtVUZBeFpNdUd0SWdLZGp0cHVCTExVa1IzSWp0QjVXREU3?=
+ =?utf-8?B?eGdXakhxemt0em9idWtMQVUrbzJnM1dpNno1RHdmellTL3BJaTdOQVFyOUpU?=
+ =?utf-8?B?KzB1dFFpNXozZEN1eEVkVWNqdTMvVmViR2tLMlVtU2MrK3VJRXNwbE1hMlhZ?=
+ =?utf-8?B?clNiVkZVbC9YWEV2dzZqTUdncGozQ3ZDY1YzUVZTbXVLRTBHNXdKbjFGcDl2?=
+ =?utf-8?B?NGZXKzV5Y1VkSWF4bUlQdVplcFp4eUFrVEdiaVUremN0SXZFbDVqbFZPWERy?=
+ =?utf-8?B?bDVLUFl4Nnp3WXBsTjdIU2FXNG9Xd1BCaEFkYWZGZW9wTlVuR3VIenhLTEov?=
+ =?utf-8?B?bStOT3NmTmhscGl4cUl2ZnNvYTN0Q1ZhZ2M5Q0tLclZIdUk1bTNyU1gzUWl0?=
+ =?utf-8?B?cEJnZGpvbk1TcnQ1TVpLTXVKOUpFY0F1Y3BrK0FJRVgwMlFjdFJCamgvT3cy?=
+ =?utf-8?B?amV1ZTdneVFzbVpJemJtcDY2QUc5bDhsK1JZdnBlaFd0VDlJOG9zNWtXUFRi?=
+ =?utf-8?B?WUp6T3J5cEczM2pQdkhmaGFGL2dPV0pEVHozSVJPaEVaY1NyRlRaZGNMd1E4?=
+ =?utf-8?B?U2poZ0NpckE5OFlGa1RhbWNBWWRFWDJPdFVjT1lHOFdBL2ZJaTNXL3BtYmYv?=
+ =?utf-8?B?R214TVNTSnV2Y3NVUGtNcjN6R2tvSXJ5MTlqK0Qvem1WZDlsWEFCQmdLZjdB?=
+ =?utf-8?B?RFBBVklpd1dtTGN2OGtpVzBaaE5sZm83anVqTTcyNUR1ZWJGNUFtY2lEVjJW?=
+ =?utf-8?B?WTlDYVZqcFhZWGo0VzRTSndxWWxyRURLZ081NHNOZmE5QjBwMmtrN25VUUVr?=
+ =?utf-8?B?K1hPOW5VbVgvR3hPYWtBSklTRmY0K0Z0SithWm0vbnREZHc4NXg0OVZiajdY?=
+ =?utf-8?B?eHZzWmNtOGQ3MW04T05JelBmTXU3OS9ZNVFrLzVLQTFxM3B0WGJUTzFmVlhR?=
+ =?utf-8?B?eWVPeEFSUE1NZkNnbXYyMjhiUEpSR29xZEVsT0lod3U0MkV1dVl0anBPckZq?=
+ =?utf-8?B?dmVPMnZNamNNQno3WmJQQkhVdjd0Z3lSWkg1YXd3VlF3RHJsWUpJeG1adkJ4?=
+ =?utf-8?B?djE2SG9uT3A2WmlpSjMvUHYxRkg0WXR5RlFETm1FWjkyd3NBeld2RHlKRkc3?=
+ =?utf-8?B?UmRJT1MzN3EybHhXYjRLelRjQ0pSNEhEckliRzJkU2hoUlZzWEFHS2kvRlpr?=
+ =?utf-8?B?blQ1cEg1QmkwQnRyY0cyNHh5c3A2OWxiS0RQWktBMlo2ZXJrQjZTM0M3emp5?=
+ =?utf-8?B?RkNNOVZCWlJyTW12THJkUE52OTJrcXhHb0Y1SVRiVVBDOXYxWDI3RzdOTlRq?=
+ =?utf-8?B?dzNRMTQvMTVwQXNPcWowemY3c0dHQXhseHBjM2NHL2VsNmF1Y2lLOUtKeUNP?=
+ =?utf-8?B?V2FKNmN1K3I4YnlkRlNTa01idnJNR3lwU1FOMXRsS3FlZFRjcUFROGl3cXg4?=
+ =?utf-8?B?dzV0RUQxR2NBZEJDeXFBdmp0TlladFpSbTVlaUF6c092RGlMdE9xQWdKWnJR?=
+ =?utf-8?B?TDZNQnR5RlVOQkM2RVNwLzhyVUI4bVBMUFJnbENkS2ZnMWZlY1VIL09sdUlw?=
+ =?utf-8?B?bGJBTW1NUzJYanlCRWd5R1dyZ25JU1ZFd2dTT1p4a3lXT2h5b2N4bDZlNVFi?=
+ =?utf-8?B?dnMxb3pFcUtVQm9zbkNXZE5QL1FCY3FoVllra3dRQzlza2R1NDBtYW15czdr?=
+ =?utf-8?B?QzZvWXo5ejJjODNGSTZ3dFhheXB0cFJXK280YU5MRnk4c0g0RW5UWE1qcGFX?=
+ =?utf-8?B?ZjJObjFMK1ZnZ05PZW9rN2xOOU82SHNHMTY0c0VpbDNyYnA4OC9DdHllU2k5?=
+ =?utf-8?B?b1loSVd1SGtsS3dzMWJKSW9xNXNaa1lOMitzMjdUVGs1ekRxckhFVlUrU3Bq?=
+ =?utf-8?B?QXorbnBKVU9pcFgrSXRqK0JqSjBtMUpGWkFlQzByWmVNc1RUTnFua0lmNm9s?=
+ =?utf-8?B?cjdqRjhMZnJ0Nll2SFNObHZhNjlDYytCMXNPMFc5eXBMYjZVMjFHM2xJbGVY?=
+ =?utf-8?B?RFJ2aUtIay9GRFI1SkdzV1BtREZGT1ExWEp0V1hKZWl1dHR2cmtUZmVUSExE?=
+ =?utf-8?B?V1FUdFJDMTRCRTZNSTFlZ1E5eEoxTHR2NkJBZzdDekJZdVppa3ZTbmxVYnJ2?=
+ =?utf-8?B?YzQyZ0lXR3FzUTUxbXBUcnRzTnZLNnN0QmoyZnp1bnVBN1NRbXB2Uk5BdHlm?=
+ =?utf-8?B?aVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D804814EA1034F4A94FE3EF727BF470E@NAMPRD84.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 634c8bed-17b8-4c16-0e7f-08db15e14a76
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 21:02:36.3651
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rwj9++cUBIstByssUmOIWECy3XhNx07V1DFsCA9oowm30AfmDgsjcRKRxirIbTs3sK4TUgMeMMKQvDcmvJzYKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB1485
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: lt85hbax721n-nwg6qZjkhQdG15OxyQC
+X-Proofpoint-ORIG-GUID: lt85hbax721n-nwg6qZjkhQdG15OxyQC
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_13,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ spamscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=527
+ lowpriorityscore=0 clxscore=1011 phishscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230173
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 05:34, Clément Léger wrote:
-> Le Wed, 22 Feb 2023 16:10:50 -0600,
-> Frank Rowand <frowand.list@gmail.com> a écrit :
-> 
->> When enabling CONFIG_OF on a platform where of_root is not populated by
->> firmware, we end up without a root node. In order to apply overlays and
->> create subnodes of the root node, we need one. Create this root node
->> by unflattening an empty builtin dtb.
->>
->> If firmware provides a flattened device tree (FDT) then the FDT is
->> unflattened via setup_arch().  Otherwise, setup_of() which is called
->> immediately after setup_arch(), and will create the default root node
->> if it does not exist.
->>
->> Signed-off-by: Frank Rowand <frowand.list@gmail.com>
->> ---
->>
->> There are checkpatch warnings.  I have reviewed them and feel
->> they can be ignored.
->>
->> Changes since version 1:
->>   - refresh for 6.2-rc1
->>   - update Signed-off-by
->>   - fix typo in of_fdt.h: s/of_setup/setup_of
->>   - unflatten_device_tree(): validate size in header field dtb_empty_root
->>     that will be used to copy dtb_empty_root
->>   - add Kconfig option to manually select CONFIG_OF_EARLY_FLATTREE
->>
->>  drivers/of/Kconfig        |  7 ++++++-
->>  drivers/of/Makefile       |  2 +-
->>  drivers/of/empty_root.dts |  6 ++++++
->>  drivers/of/fdt.c          | 27 ++++++++++++++++++++++++++-
->>  include/linux/of_fdt.h    |  2 ++
->>  init/main.c               |  2 ++
->>  6 files changed, 43 insertions(+), 3 deletions(-)
->>  create mode 100644 drivers/of/empty_root.dts
->>
->> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
->> index 80b5fd44ab1c..591cfe386727 100644
->> --- a/drivers/of/Kconfig
->> +++ b/drivers/of/Kconfig
->> @@ -42,9 +42,14 @@ config OF_FLATTREE
->>  	select CRC32
->>  
->>  config OF_EARLY_FLATTREE
->> -	bool
->> +	bool "Functions for accessing Flat Devicetree (FDT) early in boot"
->>  	select DMA_DECLARE_COHERENT if HAS_DMA
->>  	select OF_FLATTREE
->> +	help
->> +	  Normally selected by platforms that process an FDT that has been
->> +	  passed to the kernel by the bootloader.  If the bootloader does not
->> +	  pass an FDT to the kernel and you need an empty devicetree that
->> +	  contains only a root node to exist, then say Y here.
->>  
->>  config OF_PROMTREE
->>  	bool
->> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->> index e0360a44306e..cbae92c5ed02 100644
->> --- a/drivers/of/Makefile
->> +++ b/drivers/of/Makefile
->> @@ -2,7 +2,7 @@
->>  obj-y = base.o device.o platform.o property.o
->>  obj-$(CONFIG_OF_KOBJ) += kobj.o
->>  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
->> -obj-$(CONFIG_OF_FLATTREE) += fdt.o
->> +obj-$(CONFIG_OF_FLATTREE) += fdt.o empty_root.dtb.o
->>  obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
->>  obj-$(CONFIG_OF_PROMTREE) += pdt.o
->>  obj-$(CONFIG_OF_ADDRESS)  += address.o
->> diff --git a/drivers/of/empty_root.dts b/drivers/of/empty_root.dts
->> new file mode 100644
->> index 000000000000..cf9e97a60f48
->> --- /dev/null
->> +++ b/drivers/of/empty_root.dts
->> @@ -0,0 +1,6 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/dts-v1/;
->> +
->> +/ {
->> +
->> +};
->> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
->> index b2272bccf85c..0d2f6d016b7e 100644
->> --- a/drivers/of/fdt.c
->> +++ b/drivers/of/fdt.c
->> @@ -33,6 +33,13 @@
->>  
->>  #include "of_private.h"
->>  
->> +/*
->> + * __dtb_empty_root_begin[] and __dtb_empty_root_end[] magically created by
->> + * cmd_dt_S_dtb in scripts/Makefile.lib
->> + */
->> +extern void *__dtb_empty_root_begin;
->> +extern void *__dtb_empty_root_end;
->> +
->>  /*
->>   * of_fdt_limit_memory - limit the number of regions in the /memory node
->>   * @limit: maximum entries
->> @@ -1326,8 +1333,19 @@ bool __init early_init_dt_scan(void *params)
->>   */
->>  void __init unflatten_device_tree(void)
->>  {
->> -	__unflatten_device_tree(initial_boot_params, NULL, &of_root,
->> +	if (!initial_boot_params) {
->> +		initial_boot_params = (void *) __dtb_empty_root_begin;
-> 
-> The crash I encountered was actually not due to memblock alloc but to
-> this usage/declaration of the embedded dtb pointers which is wrong.
-> 
-> Either declare it as:
-> 
->  extern char __dtb_empty_root_begin[];
->  extern char __dtb_empty_root_end[];
-
-Thanks for catching this, and the fix.
-
-I will change to uint8_t instead of char, consistent with the use
-in drivers/of/unittest.c
-
--Frank
-
-> 
-> and keep the existing usage in this function or keep the existing
-> declaration but modify this function to use &__dtb_empty_root_begin
-> 
-> With this modification, I finally have an empty device-tree present on
-> my system:
-> 
-> $ dtc -I fs -O dts  /sys/firmware/devicetree/
-> /dts-v1/;
-> 
-> / {
-> };
-> 
-> Thanks,
-> 
-> Clément
-> 
->> +		/* fdt_totalsize() will be used for copy size */
->> +		if (fdt_totalsize(initial_boot_params) >
->> +		    __dtb_empty_root_end - __dtb_empty_root_begin) {
->> +			pr_err("invalid size in dtb_empty_root\n");
->> +			return;
->> +		}
->> +		unflatten_and_copy_device_tree();
->> +	} else {
->> +		__unflatten_device_tree(initial_boot_params, NULL, &of_root,
->>  				early_init_dt_alloc_memory_arch, false);
->> +	}
->>  
->>  	/* Get pointer to "/chosen" and "/aliases" nodes for use everywhere */
->>  	of_alias_scan(early_init_dt_alloc_memory_arch);
->> @@ -1367,6 +1385,13 @@ void __init unflatten_and_copy_device_tree(void)
->>  	unflatten_device_tree();
->>  }
->>  
->> +void __init setup_of(void)
->> +{
->> +	/* if architecture did not unflatten devicetree, do it now */
->> +	if (!of_root)
->> +		unflatten_device_tree();
->> +}
->> +
->>  #ifdef CONFIG_SYSFS
->>  static ssize_t of_fdt_raw_read(struct file *filp, struct kobject *kobj,
->>  			       struct bin_attribute *bin_attr,
->> diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
->> index d69ad5bb1eb1..f0dc46d576da 100644
->> --- a/include/linux/of_fdt.h
->> +++ b/include/linux/of_fdt.h
->> @@ -81,6 +81,7 @@ extern const void *of_flat_dt_match_machine(const void *default_match,
->>  /* Other Prototypes */
->>  extern void unflatten_device_tree(void);
->>  extern void unflatten_and_copy_device_tree(void);
->> +extern void setup_of(void);
->>  extern void early_init_devtree(void *);
->>  extern void early_get_first_memblock_info(void *, phys_addr_t *);
->>  #else /* CONFIG_OF_EARLY_FLATTREE */
->> @@ -91,6 +92,7 @@ static inline void early_init_fdt_reserve_self(void) {}
->>  static inline const char *of_flat_dt_get_machine_name(void) { return NULL; }
->>  static inline void unflatten_device_tree(void) {}
->>  static inline void unflatten_and_copy_device_tree(void) {}
->> +static inline void setup_of(void) {}
->>  #endif /* CONFIG_OF_EARLY_FLATTREE */
->>  
->>  #endif /* __ASSEMBLY__ */
->> diff --git a/init/main.c b/init/main.c
->> index e1c3911d7c70..31e0931b5134 100644
->> --- a/init/main.c
->> +++ b/init/main.c
->> @@ -101,6 +101,7 @@
->>  #include <linux/init_syscalls.h>
->>  #include <linux/stackdepot.h>
->>  #include <linux/randomize_kstack.h>
->> +#include <linux/of_fdt.h>
->>  #include <net/net_namespace.h>
->>  
->>  #include <asm/io.h>
->> @@ -961,6 +962,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
->>  	pr_notice("%s", linux_banner);
->>  	early_security_init();
->>  	setup_arch(&command_line);
->> +	setup_of();
->>  	setup_boot_config();
->>  	setup_command_line(command_line);
->>  	setup_nr_cpu_ids();
-> 
-> 
-> 
-
+PiBjbG9jay1mcmVxdWVuY3kgaXMgYSBwcm9wZXJ0eSBvZiB0aGUgYm9hcmQuIElmIGl0IGlzIGZp
+eGVkIGluIHRoZSBTb0MsDQo+IHRoZW4gbWFrZSBpdCBmaXhlZCBpbiB0aGUgZHJpdmVyIGFuZCB0
+aGVyZSBpcyBubyBwb2ludCBmb3IgdGhpcyBwcm9wZXJ0eQ0KPiBpbiBEVC4NCg0KR3JlZXRpbmdz
+IEtyenlzenRvZiwNCg0KSXQgY2FuIGJlIG90aGVyIHZhbHVlcyBob3dldmVyIGlmIHRoaXMgcHJv
+cGVydHkgaXMgbWlzc2luZyB0aGUgY29kZSB3aWxsDQpkZWZhdWx0IHRvIHRoaXMgdmFsdWUuDQoN
+Ckkgd2lsbCByZW1vdmUgaXQuDQoNClRoYW5rcywNCg0KLU5pY2sgSGF3a2lucw0KDQoNCg==
