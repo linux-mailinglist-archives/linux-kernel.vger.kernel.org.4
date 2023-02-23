@@ -2,77 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D599C6A0154
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 03:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875A96A0155
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 03:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbjBWC4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 21:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S233749AbjBWC7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 21:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbjBWC4p (ORCPT
+        with ESMTP id S233082AbjBWC7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 21:56:45 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7B9B3B226
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:56:42 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 31N2ua3a008556;
-        Thu, 23 Feb 2023 03:56:36 +0100
-Date:   Thu, 23 Feb 2023 03:56:36 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Vincent Dagonneau <v@vda.io>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] tools/nolibc: Adding stdint.h, more integer types
- and tests
-Message-ID: <Y/bV5D8gmG0B7DpN@1wt.eu>
-References: <20230223010025.11092-1-v@vda.io>
- <b9df4ad5-0a4a-4061-a645-bda9fc42a874@t-8ch.de>
+        Wed, 22 Feb 2023 21:59:32 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB5843470;
+        Wed, 22 Feb 2023 18:59:31 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id t22so10229371oiw.12;
+        Wed, 22 Feb 2023 18:59:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4bDaQlm4IekB9ci5Y7wuWrWJVAV12yieyIsNsT+hgOM=;
+        b=YGPJA+i7UZLAPFXwYzlNCPMqISThunBnbc5pTH7YX1EDEmfx/4Y1SoNXZ3LxKf+Zqp
+         uLUywXXUMojb6MaaRk1ZQfYa1pys+gtDmzOg8Zxz6dGRZ8BalIDPJEKcZQRCMYn2ULDO
+         OGCM6WnMg3Oc5nHzuiiVjIqyCazTcJgMz+2nptTn9RSgGYNaJkePYFAmF+FsAQje8vTC
+         xK+1SS4mxHnilTLH1Sv78hzC/8HbXsAd+H3TvtB0i6yF8n/fnWdBSbybIpUqmHNVvDTf
+         DIG5H4YBp4ZDLZCgjZhQVqf7ySSJPGfjx7j9/OCqYYo9dvRueMeA9JrIOW6webJFS41C
+         MXKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4bDaQlm4IekB9ci5Y7wuWrWJVAV12yieyIsNsT+hgOM=;
+        b=yNL3HOsKsycyEfuo4LTaq4u2OMDGgFV1TjDygriCABKcohuQ6ceIj4234xl9qrOZc9
+         FMi018EgoQz7Kpana1MLAF0Rlg/SEEPe8zGTscl1FVQTC7c8ffcXxJa60oZgKMrJ1g6X
+         RRaPJQ4VjE43YzozVlQX3P/dnJc/NnvOZ8566ldsOoNGa/ZshhPxmaM/2EGEltu+qH4h
+         OxbXohpitzppl52zhMH4dxcU+gJz4DZ+ZwdkKel17zKM1kA3JlPKPJqQmMZ5TRS+/mkg
+         XXx7OP+hM1j9ZrR97J5JbVYd8TMDuzsdfGI/Wh2AIj4t/yz7uGudVL9SVt3jwf4nS57H
+         +Arw==
+X-Gm-Message-State: AO0yUKXlFAiT13InhJNVnaf9c8o4xQYi1ujknTrQniFgaAqdrzN5JUkm
+        EXB4vqP3ShQLsHuGn+O5nhy8KZmGL2k=
+X-Google-Smtp-Source: AK7set86T9sQySQYGe/f9RSGkaegNimz6qVa/PdrC/55qa3kx3bg2Yl+X0leE+6JadfF8HY9wn9jMQ==
+X-Received: by 2002:a05:6808:3a8:b0:378:920b:73f6 with SMTP id n8-20020a05680803a800b00378920b73f6mr1847221oie.46.1677121169983;
+        Wed, 22 Feb 2023 18:59:29 -0800 (PST)
+Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id b2-20020aca2202000000b003646062e83bsm2149403oic.29.2023.02.22.18.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 18:59:29 -0800 (PST)
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
+Subject: [PATCH] scripts: read cfgs from Makefile for rust-analyzer
+Date:   Wed, 22 Feb 2023 23:59:24 -0300
+Message-Id: <20230223025924.526200-1-yakoyoku@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b9df4ad5-0a4a-4061-a645-bda9fc42a874@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 01:53:06AM +0000, Thomas Weiﬂschuh wrote:
-> On Wed, Feb 22, 2023 at 08:00:21PM -0500, Vincent Dagonneau wrote:
-> > Hi,
-> > 
-> > This is version 6 of the patch to add stdint.h to nolibc. Previous
-> > versions of this patch are available here:
-> > 
-> > * v5: https://lore.kernel.org/all/20230220202010.37475-1-v@vda.io/
-> > * v4: https://lore.kernel.org/all/20230209024044.13127-1-v@vda.io/
-> > * v3: https://lore.kernel.org/all/20230206013248.471664-1-v@vda.io/
-> > * v2: https://lore.kernel.org/all/20230202201101.43160-1-v@vda.io/
-> > * v1: https://lore.kernel.org/all/20230202160236.25342-1-v@vda.io/
-> > 
-> > This version integrates the feedback from Thomas, removing the limits
-> > for ssize_t (not required by the standard) as well as multiple cosmetic
-> >   issues.
-> 
-> Thanks, for the whole series:
-> 
-> Reviewed-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+Both `core` and `alloc` had their `cfgs` missing in `rust-project.json`,
+to remedy this `generate_rust_analyzer.py` scans the Makefile from
+inside the `rust` directory for them to be added to a dictionary that
+each key corresponds to a crate and each value, to an array of `cfgs`.
 
-Thanks to you both! I'll take care of all this this week-end.
+Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+---
+ scripts/generate_rust_analyzer.py | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-> Note:
-> 
-> When sending new revisions it makes sense to add reviewers and
-> commenters of the previous versions on Cc.
-> 
-> It makes it easier for them and gives you a faster review or
-> Reviewed-by.
+diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
+index ecc7ea9a4dcf..8bfadd688ebc 100755
+--- a/scripts/generate_rust_analyzer.py
++++ b/scripts/generate_rust_analyzer.py
+@@ -9,6 +9,24 @@ import logging
+ import pathlib
+ import sys
+ 
++def makefile_crate_cfgs(makefile):
++    # Get configurations from a Makefile.
++    cfgs = {}
++    with open(makefile) as fd:
++        for line in fd:
++            if line.endswith("-cfgs = \\\n"):
++                crate = line.replace("-cfgs = \\\n", "")
++                cfg = []
++                for l in map(lambda l: l.strip(), fd):
++                    if not l:
++                        cfgs[crate] = cfg
++                        break
++                    l = l.replace("--cfg ", "")
++                    l = l.replace(" \\", "")
++                    cfg.append(l)
++
++    return cfgs
++
+ def generate_crates(srctree, objtree, sysroot_src):
+     # Generate the configuration list.
+     cfg = []
+@@ -24,6 +42,8 @@ def generate_crates(srctree, objtree, sysroot_src):
+     crates = []
+     crates_indexes = {}
+ 
++    makefile_cfgs = makefile_crate_cfgs(srctree / "rust" / "Makefile")
++
+     def append_crate(display_name, root_module, deps, cfg=[], is_workspace_member=True, is_proc_macro=False):
+         crates_indexes[display_name] = len(crates)
+         crates.append({
+@@ -44,6 +64,7 @@ def generate_crates(srctree, objtree, sysroot_src):
+         "core",
+         sysroot_src / "core" / "src" / "lib.rs",
+         [],
++        cfg=makefile_cfgs.get("core", []),
+         is_workspace_member=False,
+     )
+ 
+@@ -57,6 +78,7 @@ def generate_crates(srctree, objtree, sysroot_src):
+         "alloc",
+         srctree / "rust" / "alloc" / "lib.rs",
+         ["core", "compiler_builtins"],
++        cfg=makefile_cfgs.get("alloc", []),
+     )
+ 
+     append_crate(
+-- 
+2.39.2
 
-Agreed. Overall I find that for his first patchset Vincent has
-done a great job ;-)
-
-Cheers,
-Willy
