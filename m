@@ -2,85 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1601E6A0377
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 687006A037A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbjBWICI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S229646AbjBWIC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjBWICG (ORCPT
+        with ESMTP id S233312AbjBWICq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:02:06 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9202E2333D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:02:05 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17211366c6aso13843943fac.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:02:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WZS1hl/5J1jNV9j/uRISv6dQ60VUvSIvv3V4inD1bw8=;
-        b=jCdt1gXAdX+p7Hcn+pfhVChOOyFV/sli82vW97pNnEoqw/YqYgciN6zeaPgAIvKJBb
-         1jY4PzSotkPnv8Qk3f2C2IL9zQr8kwZVnV9e09Cd9nzIUvEHiOPK46pADYPCfpnbikas
-         ZV/h+7pnV20oGNhDG8M6aAxt8To0UrTKhsVVgdhaFUi+6Tsy/K2O5PQCvTvec1B/dUj+
-         05I8OrduwF7CoKWPixflx0fD4ZB96O4AC3RRxdV54gCalFU40EgPXwgyMz1p+bo4t6G+
-         IOwFckNThkiEDBR2Uur+SReWmA9hBwdlK5AKS/o99PsZq4JIq+NEA7Q21/QhVyAENowe
-         Rnqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WZS1hl/5J1jNV9j/uRISv6dQ60VUvSIvv3V4inD1bw8=;
-        b=AbERfuLz+zNQ/BAj939jARCW4usXauJmJ75Vm3mPpHYXK3En1kf3xYoLINW3KQEu0D
-         NHxeA6OGkn1jIQewE5EROmTkb0Kpqb6ox51ctTGgwNvatbrKCmez6FB/lPXXzpEI6S16
-         QYzYrkxpRA7aqiwwHJ7/qAftC4bgIjs/0h9J1D9D9dM4sQCKPdspz9erXVUMLmpnm296
-         kjOWFlygZ8KPGLav8DlCvJHipXo8AeZNlqKMptitchz2tjjy7xAIiVR3xqi8u/Y5i4fr
-         Jw5gm0Rc9gJCJ9m/lQRMYLSrQOR+6m5Kz/6yIp98hDky80/PHGEv0e09aOTcQFl9mQQM
-         yOYw==
-X-Gm-Message-State: AO0yUKVnu++yb154d5ycHeC//zXxrTNH0x7eagIffl3CZgd1nVHAc1KT
-        2G9RYVeLuepEka3GgwXP4gbetEoIq/lpWti4Hy4=
-X-Google-Smtp-Source: AK7set/iLyvEt72McVFDDTxRPxbmsj8qBN09ec2hc74/ndxKg/LQpq8NfyeZ0XcoggOa9FNRjr5X2tAuJKTV4MwEm94=
-X-Received: by 2002:a05:6870:3448:b0:172:2b2c:e6a2 with SMTP id
- i8-20020a056870344800b001722b2ce6a2mr972748oah.31.1677139324872; Thu, 23 Feb
- 2023 00:02:04 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6358:2c41:b0:ed:3ecd:ba7c with HTTP; Thu, 23 Feb 2023
- 00:02:04 -0800 (PST)
-From:   Frank Hughes <ccmk137@gmail.com>
-Date:   Thu, 23 Feb 2023 09:02:04 +0100
-Message-ID: <CANqQpXXapohKaiFp3NWN9gM8YrTZ-SMDGT_p5eEQc=GRQGEBEw@mail.gmail.com>
-Subject: =?UTF-8?B?2YrZiNmFINis2YrYr9iM?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 03:02:46 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0194D60B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:02:32 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 400415C00AE;
+        Thu, 23 Feb 2023 03:02:29 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 23 Feb 2023 03:02:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677139349; x=1677225749; bh=Ns6fBcefCS
+        Z3zA9z91vMNr9dPlillPJFIb1WJ0gDUyE=; b=DZ6L2apMSULrhf333hmaIHBh+6
+        6bMFLpOkrWbtJn53kuYB22GJCp96NlbHOwbtW3T+2ByJexSehK/SHuGpQGwbfsdQ
+        8c8bxsVLQWa50W4yHVdFCo3xXCuEqUWSc8Nk3bN7B50nWVmw9QhIeT2DmA/lejpB
+        6itBQ2EXL9Samgj8QmMo74I5n2tJM0hQXte3JbyKau5xzeuFj4B666xmEcMpOf0d
+        NjFLuI5FmULG8E3W/iR+445jcxRIR3jLgDh4nFl1U1EbcpTKZRmRt+0PtYrjB0IH
+        3a30DPwvJH+TIoOR1oxoPOchB3kByO59iUeYWLD25ZvNwzL6uaCN08t/2AEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677139349; x=1677225749; bh=Ns6fBcefCSZ3zA9z91vMNr9dPlil
+        lPJFIb1WJ0gDUyE=; b=iQCgn8ptvVOkSbVg0uzSxybA1Fut8KG/5VSshQqcTj9I
+        1ZmPaBFeHNo5KiI0yiom/U+z3gjGeg0n8UKxR/J66xcZvzp4mO8IAb1O2HMwJ+3Q
+        uWp/Hh1PbPmuhHunk9ELTO0+Lc3wx5+pV8+68r4q9/B5M67QRqZsKNR1rzM+jBIj
+        2JPKo4keb5T0UjKvrhicHzbJlsA+jo2PSHMH45ySpNjCRw5UnzVeXqKYht+m4yc6
+        pwGxmvlOhfnkeBFuMTWyq280+e/Pr/EDjCr9KRgp/30mswr3lDEvX8WCHbxpjCDw
+        M0dIIi17AM2WZqqp6WGMMFB8yqM+eOoLrl/QR+6ulw==
+X-ME-Sender: <xms:lB33Y_Atj9ufiSafQ3QV-huzvs-FroK1aYU2z0cNfT7ordcRaCl2mw>
+    <xme:lB33Y1hLcuAhTeTD9MKuuJ1Le5RPm4JEsgr8GB6mSa-l3wWxxQ3ja9fmvb67s90vk
+    7EGGA_HqFwPWAvRWWQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudektddguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:lB33Y6l82_wzZDX5LAeo7bdUWgGRIvrQ9m49CVYoBeP2ffXhLgqgGg>
+    <xmx:lB33YxxWI5qe76L9nftN5PZ2tWo3xGHeTuPrQ_hHlQwpRImCk4nv3w>
+    <xmx:lB33Y0SWfEYBJoO1BvxmQrL-bbke9-zkXNRP4RbzMAqQB-bQ9hlGwQ>
+    <xmx:lR33Y6d3vIQ8Am_prpdLphLlyk4Uk7EddkVFsAD6VmgMcDjbdGNZZA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C3DDAB60086; Thu, 23 Feb 2023 03:02:28 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <c06f37e0-e12f-4dcf-8e79-bb73957dbd34@app.fastmail.com>
+In-Reply-To: <20230222092302.6348-2-jirislaby@kernel.org>
+References: <20230222092302.6348-1-jirislaby@kernel.org>
+ <20230222092302.6348-2-jirislaby@kernel.org>
+Date:   Thu, 23 Feb 2023 09:02:31 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jiri Slaby" <jirislaby@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, "Hyunwoo Kim" <imv4bel@gmail.com>,
+        "Harald Welte" <laforge@gnumonks.org>,
+        "Lubomir Rintel" <lkundrak@v3.sk>
+Subject: Re: [PATCH v2 2/2] char: pcmcia: remove all the drivers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2YrZiNmFINis2YrYr9iMDQoNCtij2YbYpyDZgdix2KfZhtmDINmH2YrZiNiyLiDZgtin2KbYryDY
-s9in2KjZgiDYrtmE2KfZhCDYp9mE2KjYudir2Kkg2KfZhNi52LPZg9ix2YrYqSDYp9mE2KPZhdix
-2YrZg9mK2Kkg2YHZig0K2KfZhNi52LHYp9mCLiDYp9mE2KLZhiDZiNmC2K8g2KPZg9mF2YTYqiDY
-p9mE2YjZhNin2YrYp9iqINin2YTZhdiq2K3Yr9ipINmF2YfZhdiq2YfYpyDZgdmKDQrYp9mE2LnY
-sdin2YIg2Iwg2KPZhtinINin2YTYotmGINmB2Yog2LPZiNix2YrYpyDZhNmF2LLZitivINmF2YYg
-2KfZhNmF2YfYp9mFINmE2YPZhtmG2Yog2LPYo9mB2LnZhA0K2LPZitiq2YUg2KrYudmK2YrZhtmH
-INmC2LHZitio2YvYpyDZgdmKINmF2LHZg9iyINin2YTYp9iz2KrYudiv2KfYryDYp9mE2YXYtNiq
-2LHZgyDZhdiq2LnYr9ivINin2YTYrNmG2LPZitin2KogKEpNUkMpINiMDQoNCtiu2YTYp9mEINmF
-2YfZhdiq2Yog2YHZiiDYp9mE2LnYsdin2YIg2Iwg2KrZhdmD2YbYqiDZhdmGINiq2K3ZgtmK2YIg
-2YXYrNmF2YjYuQ0KMjUuMDAwLjAwMC4wMCDZhdmE2YrZiNmGINiv2YjZhNin2LEuINmH2LDZhyDY
-p9mE2KPZhdmI2KfZhCDYo9iq2Kog2YXZhiDYtdmB2YLYqSDZhtmB2Lcg2Iwg2KPZhtinDQrYtNiu
-2LUg2YrYsdiq2K/ZiiDYstmK2Kcg2LnYs9mD2LHZitinINmI2LnZhNmKINij2YYg2KPZgtiv2YUg
-2LTYrti12Kcg2YXYpyDYudmE2Ykg2KPZhtmHINij2KzZhtio2YoNCti02LHZitmDLiDYo9mG2Kcg
-2KPZhdix2YrZg9mKINmI2LbYp9io2Lcg2YXYrtin2KjYsdin2KouINmE2K/ZiiAxMDDZqg0K2YjY
-s9mK2YTYqSDYo9i12YTZitipINmE2LTYrdmGINin2YTYo9mF2YjYp9mEINi52YYg2LfYsdmK2YIg
-2KfZhNi02K3ZhiDYp9mE2K/YqNmE2YjZhdin2LPZig0K2LTYsdmD2KkuINij2YbYpyDZgdmC2Lcg
-2KjYrdin2KzYqSDYpdmE2Ykg2YXZiNin2YHZgtiq2YMg2YjZg9mEINi02YrYoSDYrNin2YfYsi4N
-Cg==
+On Wed, Feb 22, 2023, at 10:23, Jiri Slaby (SUSE) wrote:
+> These char PCMCIA drivers are buggy[1] and receive only minimal care. It
+> was concluded[2], that we should try to remove most pcmcia drivers
+> completely. Let's start with these char broken one.
+>
+> Note that I also removed a UAPI header: include/uapi/linux/cm4000_cs.h.
+> I found only coccinelle tests mentioning some ioctl constants from that
+> file. But they are not actually used. Anyway, should someone complain,
+> we may reintroduce the header (or its parts).
+>
+> [1] 
+> https://lore.kernel.org/all/f41c2765-80e0-48bc-b1e4-8cfd3230fd4a@www.fastmail.com/
+> [2] 
+> https://lore.kernel.org/all/c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com/
+>
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> Cc: "Hyunwoo Kim" <imv4bel@gmail.com>
+> Cc: Harald Welte <laforge@gnumonks.org>
+> Cc: Lubomir Rintel <lkundrak@v3.sk>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Thanks for cleaning this up!
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
