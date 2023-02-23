@@ -2,137 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206816A02DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD0A6A02E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 07:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbjBWGjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 01:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S233409AbjBWGoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 01:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbjBWGjk (ORCPT
+        with ESMTP id S232056AbjBWGoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 01:39:40 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB38A70
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:39:39 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so2182328wmb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5qJ08paylLYIpqZj393DmlSgJI28b+LXoVSY+XPXR6Y=;
-        b=aNaEmU0DREawGVFKaoJfBwUg8Cffu4p849yPLvioJyUCaf/whgBgTx3l5yN8bXrpwi
-         HFIkM8WCQfOyulxB9851almxVn6JB6DSgq15oSXj6R6NxmrOdS1sFI65tnzIs1VjSVmY
-         r7FIoplPw8BIiD6WRZHGeMqYmypUeODn4bZEj8RmTUVVoTXQ3l+qm+uKTZ2wK7FydrQc
-         dSRSEPcwE/8m+ACaDTUNe87nlZgJON7DBnDvnRMCnQ8hijxqPEJgz5PoYFHCkCeySo7S
-         FKjoydiF4SUE8PGwEuhQAqVjhsFA39NEsjv2vp5T++gSKz7xOhQBQOhsRCnTWVDuSQ/d
-         914Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5qJ08paylLYIpqZj393DmlSgJI28b+LXoVSY+XPXR6Y=;
-        b=gMk439lU2AcLoFcKUacYJw/HnyXJ6xtWNY4mJVixEZwwjtXCV/diTVqz7H0YUmGwvc
-         xgzw1MjrrXa8yySQGy9bAeNP5uK+RM0zWHxAJAci97dp9Akx0UigrFCz1nA9E2dAqPsP
-         gcilWcr7kfxcowKtr8hxUauqE/iOANx14mrF4bHxqlImsYz/AJ3a+xl88Po/XcBBcuWT
-         IxW1BbbHjOcrNENjZX2ZWSmmjOnJYGglfQ9vLPuRA7vhCzH5NQgizDs0Nq4/7tuzLAgK
-         RACWnqTGJi639LvUAjbwdf0Qr8S2nZLLoBRynUQFp9oh+PffrSTnfPfeubE9HPMIb511
-         9PHw==
-X-Gm-Message-State: AO0yUKUTRzb6Aj46DJEzEAQSt6YZWK49G/DPryqNm6NiL8Qg7iLFgc3W
-        OAyW/OEd2wTqDjT+F7vhXJKK3Q==
-X-Google-Smtp-Source: AK7set+OyPmjzGSDtb2O9PRYc5Lj9qVUcLm41Pwwe3M9MYNOoFahuQG4yXNkLZOpG67Uz2iNkaFmKQ==
-X-Received: by 2002:a05:600c:13c3:b0:3e0:39:ec9d with SMTP id e3-20020a05600c13c300b003e00039ec9dmr8906162wmg.23.1677134378051;
-        Wed, 22 Feb 2023 22:39:38 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id n30-20020a05600c3b9e00b003e206cc7237sm11428892wms.24.2023.02.22.22.39.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 22:39:37 -0800 (PST)
-Date:   Thu, 23 Feb 2023 07:39:36 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 1/4] RISC-V: Change suspend_save_csrs and
- suspend_restore_csrs to public function
-Message-ID: <20230223063936.6tsqh57lom3tvjxo@orel>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-2-jeeheng.sia@starfivetech.com>
+        Thu, 23 Feb 2023 01:44:18 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BE31E1D2;
+        Wed, 22 Feb 2023 22:44:17 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D582266021EE;
+        Thu, 23 Feb 2023 06:44:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677134655;
+        bh=TJTFlKvzTABfSMhGqoOjprz5SYUhd5UMNxSYYXk92Xw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ZUU1DpGfC5Ss8taQDliaXh3EPYqmEhmfFkaFezALdrEGQ8WpqsP0aQ+YT3mNV7D0P
+         nBLYEmkWJRHjU/uAX+XITYlA2/cASn5B1+QPG/VWnUI+3cRPMn8c2uu5+n6V7tEM6j
+         CYojyLC9cpF8p/sVh/DfSdkfHP9V2GjVQwFlKkDdRV32XOEYak0IeNBYZzJi2asOxX
+         IsgRdbnklR6DKs52OXpPVTfi21RGyP3TH+Wk+R2whXnwIcs4OHYEDCkVBWTnD/+xS4
+         mNfmeut+xNjWy/1x8nrPd0mtxLbUP7VCWPuCU2ynBDBqqS51Duz+YnL4xxioPBjRN/
+         I3JjCWTPvLceQ==
+Message-ID: <473b32fd-24f9-88fd-602f-3ba11d725472@collabora.com>
+Date:   Thu, 23 Feb 2023 11:44:04 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221023523.1498500-2-jeeheng.sia@starfivetech.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+ <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
+ <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
+ <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com>
+ <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
+ <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com>
+ <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:35:20AM +0800, Sia Jee Heng wrote:
-> Currently suspend_save_csrs() and suspend_restore_csrs() functions are
-> statically defined in the suspend.c. Change the function's attribute
-> to public so that the functions can be used by hibernation as well.
+On 2/22/23 4:48 PM, Michał Mirosław wrote:
+> On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> On 2/22/23 3:44 PM, Michał Mirosław wrote:
+>>> On Wed, 22 Feb 2023 at 11:11, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>> On 2/21/23 5:42 PM, Michał Mirosław wrote:
+>>>>> On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
+>>>>> <usama.anjum@collabora.com> wrote:
+>>>>>>
+>>>>>> Hi Michał,
+>>>>>>
+>>>>>> Thank you so much for comment!
+>>>>>>
+>>>>>> On 2/17/23 8:18 PM, Michał Mirosław wrote:
+>>>>> [...]
+>>>>>>> For the page-selection mechanism, currently required_mask and
+>>>>>>> excluded_mask have conflicting
+>>>>>> They are opposite of each other:
+>>>>>> All the set bits in required_mask must be set for the page to be selected.
+>>>>>> All the set bits in excluded_mask must _not_ be set for the page to be
+>>>>>> selected.
+>>>>>>
+>>>>>>> responsibilities. I suggest to rework that to:
+>>>>>>> 1. negated_flags: page flags which are to be negated before applying
+>>>>>>> the page selection using following masks;
+>>>>>> Sorry I'm unable to understand the negation (which is XOR?). Lets look at
+>>>>>> the truth table:
+>>>>>> Page Flag       negated_flags
+>>>>>> 0               0                       0
+>>>>>> 0               1                       1
+>>>>>> 1               0                       1
+>>>>>> 1               1                       0
+>>>>>>
+>>>>>> If a page flag is 0 and negated_flag is 1, the result would be 1 which has
+>>>>>> changed the page flag. It isn't making sense to me. Why the page flag bit
+>>>>>> is being fliped?
+>>>>>>
+>>>>>> When Anrdei had proposed these masks, they seemed like a fancy way of
+>>>>>> filtering inside kernel and it was straight forward to understand. These
+>>>>>> masks would help his use cases for CRIU. So I'd included it. Please can you
+>>>>>> elaborate what is the purpose of negation?
+>>>>>
+>>>>> The XOR is a way to invert the tested value of a flag (from positive
+>>>>> to negative and the other way) without having the API with invalid
+>>>>> values (with required_flags and excluded_flags you need to define a
+>>>>> rule about what happens if a flag is present in both of the masks -
+>>>>> either prioritise one mask over the other or reject the call).
+>>>> At minimum, one mask (required, any or excluded) must be specified. For a
+>>>> page to get selected, the page flags must fulfill the criterion of all the
+>>>> specified masks.
+>>>
+>>> [Please see the comment below.]
+>>>
+>>> [...]
+>>>> Lets translate words into table:
+>>> [Yes, those tables captured the intent correctly.]
+>>>
+>>>>> BTW, I think I assumed that both conditions (all flags in
+>>>>> required_flags and at least one in anyof_flags is present) need to be
+>>>>> true for the page to be selected - is this your intention?
+>>>> All the masks are optional. If all or any of the 3 masks are specified, the
+>>>> page flags must pass these masks to get selected.
+>>>
+>>> This explanation contradicts in part the introductory paragraph, but
+>>> this version seems more useful as you can pass all masks zero to have
+>>> all pages selected.
+>> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
+>> rephrase. All or at least any 1 of the 3 masks (required, any, exclude)
+>> must be specified. The return_mask must always be specified. Error is
+>> returned if all 3 masks (required, anyof, exclude) are zero or return_mask
+>> is zero.
 > 
-> Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/include/asm/suspend.h | 3 +++
->  arch/riscv/kernel/suspend.c      | 4 ++--
->  2 files changed, 5 insertions(+), 2 deletions(-)
+> Why do you need those restrictions? I'd guess it is valid to request a
+> list of all pages with zero return_mask - this will return a compact
+> list of used ranges of the virtual address space.
+At the time, we are supporting 4 flags (PAGE_IS_WRITTEN, PAGE_IS_FILE,
+PAGE_IS_PRESENT and PAGE_IS_SWAPPED). The idea is that user mention his
+flags of interest in the return_mask. If he wants only 1 flag, he'll
+specify it. Definitely if user wants only 1 flag, initially it doesn't make
+any sense to mention in the return mask. But we want uniformity. If user
+want, 2 or more flags in returned, return_mask becomes compulsory. So to
+keep things simple and generic for any number of flags of interest
+returned, the return_mask must be specified even if the flag of interest is
+only 1.
+
 > 
-> diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-> index 8be391c2aecb..75419c5ca272 100644
-> --- a/arch/riscv/include/asm/suspend.h
-> +++ b/arch/riscv/include/asm/suspend.h
-> @@ -33,4 +33,7 @@ int cpu_suspend(unsigned long arg,
->  /* Low-level CPU resume entry function */
->  int __cpu_resume_enter(unsigned long hartid, unsigned long context);
->  
-> +/* Used to save and restore the csr */
+>>>> After taking a while to understand this and compare with already present
+>>>> flag system, `negated flags` is comparatively difficult to understand while
+>>>> already present flags seem easier.
+>>>
+>>> Maybe replacing negated_flags in the API with matched_values =
+>>> ~negated_flags would make this better?
+>>>
+>>> We compare having to understand XOR vs having to understand ordering
+>>> of required_flags and excluded_flags.
+>> There is no ordering in current masks scheme. No mask is preferable. For a
+>> page to get selected, all the definitions of the masks must be fulfilled.
+>> You have come up with good example that what if required_mask =
+>> exclude_mask. In this case, no page will fulfill the criterion and hence no
+>> page would be selected. It is user's fault that he isn't understanding the
+>> definitions of these masks correctly.
+>>
+>> Now thinking about it, I can add a error check which would return error if
+>> a bit in required and excluded masks matches. Would you like it? Lets put
+>> this check in place.
+>> (Previously I'd left it for user's wisdom not to do this. If he'll specify
+>> same masks in them, he'll get no addresses out of the syscall.)
+> 
+> This error case is (one of) the problems I propose avoiding. You also
+> need much more text to describe the requred/excluded flags
+> interactions and edge cases than saying that a flag must have a value
+> equal to corresponding bit in ~negated_flags to be matched by
+> requried/anyof masks.
+I've found excluded_mask very intuitive as compared to negated_mask which
+is so difficult to understand that I don't know how to use it correctly.
+Lets take an example, I want pages which are PAGE_IS_WRITTEN and are not
+PAGE_IS_FILE. In addition, the pages must be PAGE_IS_PRESENT or
+PAGE_IS_SWAPPED. This can be specified as:
 
-s/the csr/CSRs/
+required_mask = PAGE_IS_WRITTEN
+excluded_mask = PAGE_IS_FILE
+anyof_mask = PAGE_IS_PRESETNT | PAGE_IS_SWAP
 
-> +void suspend_save_csrs(struct suspend_context *context);
-> +void suspend_restore_csrs(struct suspend_context *context);
->  #endif
-> diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
-> index 9ba24fb8cc93..3c89b8ec69c4 100644
-> --- a/arch/riscv/kernel/suspend.c
-> +++ b/arch/riscv/kernel/suspend.c
-> @@ -8,7 +8,7 @@
->  #include <asm/csr.h>
->  #include <asm/suspend.h>
->  
-> -static void suspend_save_csrs(struct suspend_context *context)
-> +void suspend_save_csrs(struct suspend_context *context)
->  {
->  	context->scratch = csr_read(CSR_SCRATCH);
->  	context->tvec = csr_read(CSR_TVEC);
-> @@ -29,7 +29,7 @@ static void suspend_save_csrs(struct suspend_context *context)
->  #endif
->  }
->  
-> -static void suspend_restore_csrs(struct suspend_context *context)
-> +void suspend_restore_csrs(struct suspend_context *context)
->  {
->  	csr_write(CSR_SCRATCH, context->scratch);
->  	csr_write(CSR_TVEC, context->tvec);
-> -- 
-> 2.34.1
->
+(a) assume page_flags = 0b1111
+skip page as 0b1111 & 0b0010 = true
 
-Otherwise,
+(b) assume page_flags = 0b1001
+select page as 0b1001 & 0b0010 = false
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+It seemed intuitive. Right? How would you achieve same thing with negated_mask?
 
-Thanks,
-drew
+required_mask = PAGE_IS_WRITTEN
+negated_mask = PAGE_IS_FILE
+anyof_mask = PAGE_IS_PRESETNT | PAGE_IS_SWAP
+
+(1) assume page_flags = 0b1111
+tested_flags = 0b1111 ^ 0b0010 = 0b1101
+
+(2) assume page_flags = 0b1001
+tested_flags = 0b1001 ^ 0b0010 = 0b1011
+
+In (1), we wanted to skip pages which have PAGE_IS_FILE set. But
+negated_mask has just masked it and page is still getting tested if it
+should be selected and it would get selected. It is wrong.
+
+In (2), the PAGE_IS_FILE bit of page_flags was 0 and got updated to 1 or
+PAGE_IS_FILE in tested_flags.
+
+> 
+>>> IOW my proposal is to replace branches in the masks interpretation (if
+>>> in one set then matches but if in another set then doesn't; if flags
+>>> match ... ) with plain calculation (flag is matching when equals
+>>> ~negated_flags; if flags match the masks ...).
+> 
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
