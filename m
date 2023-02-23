@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD286A0BD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FB96A0BD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbjBWOYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S234617AbjBWOY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233421AbjBWOYT (ORCPT
+        with ESMTP id S234771AbjBWOYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:24:19 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDFA46B0;
-        Thu, 23 Feb 2023 06:24:18 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NE5sKV030311;
-        Thu, 23 Feb 2023 14:24:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QhBLqNAAAUfBo8zrGeabF9XkrAAVmtIUEckwOA5id0g=;
- b=BrRVoYPFolQtM2DClHYfvsFgzwqMMWpMPJ5Qmah3Cy1zwHb3w4PMfzJ2yEfAnEqLFG9t
- c9H/Eu3P2qFk465v/MNYsCTvrdQycm6YkKw1q4hZphAFThbeyr9w41HPRBFSgtaNy+2h
- z1wx5Q2QijJw47C7kUle8N69RJFqUYh8YPinq5yJx3YxUJP+yOC2CztQ7+5e0d0upcgI
- XVDbY0zUmNHl+nriVsPW+UcawTqflKghqdxe/MMU9W3xivhVYtuMsM1Fo/0/GhKsUY0+
- 3+WGtx7aN0tfkKJwdoEMOGJhbJtO9X0631z3ahzMlp+PJf8VnClfogoF3aqjwLs3xXj/ bQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nx7k9m3u2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 14:24:04 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31NDqbAV025703;
-        Thu, 23 Feb 2023 14:24:03 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nx7k9m3su-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 14:24:03 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31N7VYn8007325;
-        Thu, 23 Feb 2023 14:24:01 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ntpa6eryb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 14:24:01 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31NENx6K29294872
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Feb 2023 14:23:59 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B08120040;
-        Thu, 23 Feb 2023 14:23:59 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4665C20043;
-        Thu, 23 Feb 2023 14:23:56 +0000 (GMT)
-Received: from [9.43.40.228] (unknown [9.43.40.228])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Feb 2023 14:23:56 +0000 (GMT)
-Message-ID: <086e2f43-00d2-0738-7d1b-697971161a32@linux.ibm.com>
-Date:   Thu, 23 Feb 2023 19:53:55 +0530
+        Thu, 23 Feb 2023 09:24:50 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3256E51F87
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:24:47 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id a65so1130600qkg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:24:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lS02SECNsTsSICkh2N4Q1yNXKnOepHfYrYQXorOwyTc=;
+        b=l47r7gKZWo17ELTFBKSDnl4UL1aPpwX48egkQ5iv9fd7gU1+KYTV/qLbq1HpRXJ1LA
+         4+24lFDlBwsHuQHEJQ/xOHjyvmGnq1K48HmsnGkwGReXKXQfDc8HuaDRMin/xz49Oz74
+         UrfdYbXpRunGetKy8QcBgmNfoiSXSi4+iPIHFosVLliohTHZLaooZw8yRpKOCI6n1sNS
+         al0D4N2shcbn7qJYckk5TV3EvNBXl1HquFcXUC8Yf5TpLPipk5xXF3gUo9xlSOwpy1tb
+         6EbyW+3+LhJRobC9aKhf6/QSOF3X2oxX2SkEv051yZJsKuxSiZOtbIpbrrsKjYDJ4Crl
+         vxfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lS02SECNsTsSICkh2N4Q1yNXKnOepHfYrYQXorOwyTc=;
+        b=O7N3gdJjVkMGcxgNOihLPpD5Lmv7oaEjJqTA1qdLzDUW8FatPY1UaJc8Ox1H+fes47
+         mx4fo5YCpkPydJlyG1/ITALubsLa4VGu/MYtaHFMQZ3Omipr/lkvyL33RG7Mf0+w4VBY
+         cfVs3xvqBRS0xIYJNhhlQe6TukEouM1drayb5Xi3h6U5Sv5p02vCkIqQK3DScksJMC/i
+         knQp8mzq2hSQTb8Y/oLcmUJ0bO6XBehUWsXc98kZv2sY+IGkkZ19f58HR8ZaWatO3RKK
+         ClUVPZurKsrYpVtxJnrLOwvidCCR8KfvgGWp84rkCfLI9/kF1KQoNlJ9WMlZJL5fnUNQ
+         33Xw==
+X-Gm-Message-State: AO0yUKXKGDzglx+1GnVp9woftEdOM9djimbsCkxxQ+SslNbhm9x15JSw
+        nTxS3Y2rEA//9thQu/JZsk8B1BU3g2qoqtgwXA==
+X-Google-Smtp-Source: AK7set9UOZ6B88hyD9biWoBHnQUGbtIgWqp/hXoIK+QG4jRV5lY7E9wDL+//EyYIwze+YUcOcARfoovIpNGHsLsq7IM=
+X-Received: by 2002:a05:620a:831a:b0:742:3e52:f855 with SMTP id
+ pa26-20020a05620a831a00b007423e52f855mr873076qkn.2.1677162286321; Thu, 23 Feb
+ 2023 06:24:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 1/2] perf tools: Sync perf_event_attr::config3 addition
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
+References: <20230222221301.245890-1-brgerst@gmail.com> <5bc62f30a439345eaf58231bafe621b28c62d85e.camel@infradead.org>
+In-Reply-To: <5bc62f30a439345eaf58231bafe621b28c62d85e.camel@infradead.org>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Thu, 23 Feb 2023 09:24:33 -0500
+Message-ID: <CAMzpN2j7-GV4ONG7P-R6fZ3P+ZYu9CRzZYFbO+OswX+XZwV4nA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] x86-64: Remove global variables from boot
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Usama Arif <usama.arif@bytedance.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Leo Yan <leo.yan@linaro.org>, James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20220914-arm-perf-tool-spe1-2-v2-v5-0-2cf5210b2f77@kernel.org>
- <20220914-arm-perf-tool-spe1-2-v2-v5-1-2cf5210b2f77@kernel.org>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <20220914-arm-perf-tool-spe1-2-v2-v5-1-2cf5210b2f77@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zXUEIAOrF-d-snL_s7cQUj80Mp3Yi4qM
-X-Proofpoint-GUID: 139F4cq_Vr95yZpB0Yc4aDxtUfxlG5-O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-23_08,2023-02-23_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302230115
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 23, 2023 at 8:44 AM David Woodhouse <dwmw2@infradead.org> wrote:
+>
+> On Wed, 2023-02-22 at 17:12 -0500, Brian Gerst wrote:
+> > This is on top of the parallel boot v10 series.
+> >
+> > Remove the global variables initial_gs, initial_stack, and
+> > early_gdt_descr from the 64-bit boot code.  The stack, GDT, and GSBASE
+> > can be determined from the CPU number.
+> >
+> > Brian Gerst (6):
+> >   x86/smpboot: Use CPU number instead of APIC ID for single CPU startup
+> >   x86/smpboot: Use current_task to get idle thread
+>
+>
+> I think those first two should be folded into the 'x86/smpboot: Support
+> parallel startup of secondary CPUs' patch rather than follow-on
+> patches?
 
+Yes, that makes sense.
 
-On 2/18/23 04:02, Rob Herring wrote:
-> Arm SPEv1.2 adds another 64-bits of event filtering control. As the
-> existing perf_event_attr::configN fields are all used up for SPE PMU, an
-> additional field is needed. Add a new 'config3' field.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> This matches commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
-> for the kernel queued in linux-next.
-> ---
->  tools/include/uapi/linux/perf_event.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-> index ea6defacc1a7..a38814ce9485 100644
-> --- a/tools/include/uapi/linux/perf_event.h
-> +++ b/tools/include/uapi/linux/perf_event.h
-> @@ -365,6 +365,7 @@ enum perf_event_read_format {
->  #define PERF_ATTR_SIZE_VER5	112	/* add: aux_watermark */
->  #define PERF_ATTR_SIZE_VER6	120	/* add: aux_sample_size */
->  #define PERF_ATTR_SIZE_VER7	128	/* add: sig_data */
-> +#define PERF_ATTR_SIZE_VER8	136	/* add: config3 */
->  
->  /*
->   * Hardware event_id to monitor via a performance monitoring event:
-> @@ -506,6 +507,8 @@ struct perf_event_attr {
->  	 * truncated accordingly on 32 bit architectures.
->  	 */
->  	__u64	sig_data;
-> +
-> +	__u64	config3; /* extension of config2 */
+> >   x86/smpboot: Remove initial_stack on 64-bit
+> >   x86/smpbppt: Remove early_gdt_descr on 64-bit
+> >   x86/smpboot: Remove initial_gs
+> >   x86/smpboot: Simplify boot CPU setup
+>
+> Those four probably make sense to come separately. For each of them,
+>
+> Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+>
+> I've pulled in the v10 series from Usama, squashed the first two as I
+> suggested, added the last four on top to do some testing:
+> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-rc8-part1
 
-Patch looks fine to me.
+Looks good.  I noticed a typo in the commit log of the last patch
+(dynammically -> dynamically).  Can you fix that or should I resend?
 
-Reviewed-by: Kajol Jain <kjain@linux.ibm.com>
+Thanks
 
-Thanks,
-Kajol Jain
->  };
->  
->  /*
-> 
+--
+Brian Gerst
