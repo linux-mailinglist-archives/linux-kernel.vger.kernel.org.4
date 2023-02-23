@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E5C6A08AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 712206A08A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbjBWMfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 07:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S233982AbjBWMe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 07:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbjBWMes (ORCPT
+        with ESMTP id S233824AbjBWMeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:34:48 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB217532B2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:34:47 -0800 (PST)
+        Thu, 23 Feb 2023 07:34:46 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D551F53291
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=Yu4KpcpLybjLjkU3gNwo4HWX9o49wsMDX9ywKwgjG5w=; b=oEmKyGJAp3cZqg6dOxsAhotOOm
-        V/RmkQGNhhpdFNV30VD5UkNxtCeFjGdGqC5wwbUw7WA2HPa+y8u2h64SooSNAn7xSjGkDnaHvM2CP
-        abhJV5F33gmn0YSaE+JkK1xYIG40nuLQXXUX+LjG5aiMvcLI5Cbbq0mRS3yZbPCZfRS3PZX27f2VW
-        A5ItRTO9mHUgrvi1cyMuAwftC0KCyXCfYRKbEzg39w1SvAzGaRkvmymfTO+di2+OQRk22kaM2txSv
-        QdvyWcY9il9aaSodAEIhAotg51acDtP0il9EnDPPoXvSKPmLekTmAuR+0VNtpVwXeEXNWN+gvB+BE
-        //e2JLnQ==;
+        bh=TEsGyLB0CNcBpX90uP9C3/IuHqwgLDCS4pkbIzi7bTs=; b=W+Yg1h01pDhHfxnGAyRcsmwgae
+        TUshyVt3m63K6ldCz0ndwzLsb7y7tLV14Pywr392gBpULlSTcJVFhW540Y3SiHgeMmp1msaNSxNxL
+        23lUZfij3DeAxFGUX7WK0ceMqp5pkC+1ohtQE5GcrPATG1ZXU0a1We/Lmy/EhrRElzcnzM3jBMRCw
+        UWWAB3pHtfdbwzU2ZRpWM+a50z2mkn48eAsvf3NXy7awZLRfV5NVj+tTBpTokPy5VHbm7uwNESw3u
+        MV6tqDmGvzvM3onImHKxLJYIlk8ISJqq9No4CkqP3hHxlpLYImk+3NH+4GGL47TviJPiPV2avyFid
+        h/0oSBmQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pVAo1-00CuVB-1h;
-        Thu, 23 Feb 2023 12:34:40 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVAo1-00EMIv-2D; Thu, 23 Feb 2023 12:34:37 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E057A300C50;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DE32130082F;
         Thu, 23 Feb 2023 13:34:35 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id C4C442C86FE07; Thu, 23 Feb 2023 13:34:35 +0100 (CET)
-Message-ID: <20230223123319.608133045@infradead.org>
+        id C88112C86FE08; Thu, 23 Feb 2023 13:34:35 +0100 (CET)
+Message-ID: <20230223123319.667433408@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 23 Feb 2023 13:26:47 +0100
+Date:   Thu, 23 Feb 2023 13:26:48 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     longman@redhat.com, mingo@redhat.com, will@kernel.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         boqun.feng@gmail.com
-Subject: [PATCH 5/6] locking/rwsem: Unify wait loop
+Subject: [PATCH 6/6] locking/rwsem: Use the force
 References: <20230223122642.491637862@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,171 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the reader and writer wait loops are identical, share the
-code.
+Now that the writer adjustment is done from the wakeup side and
+HANDOFF guarantees spinning/stealing is disabled, use the combined
+guarantee it ignore spurious READER_BIAS and directly claim the lock.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/locking/rwsem.c |  117 +++++++++++++++++++------------------------------
- 1 file changed, 47 insertions(+), 70 deletions(-)
+ kernel/locking/lock_events_list.h |    1 +
+ kernel/locking/rwsem.c            |   21 +++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
+--- a/kernel/locking/lock_events_list.h
++++ b/kernel/locking/lock_events_list.h
+@@ -67,3 +67,4 @@ LOCK_EVENT(rwsem_rlock_handoff)	/* # of
+ LOCK_EVENT(rwsem_wlock)		/* # of write locks acquired		*/
+ LOCK_EVENT(rwsem_wlock_fail)	/* # of failed write lock acquisitions	*/
+ LOCK_EVENT(rwsem_wlock_handoff)	/* # of write lock handoffs		*/
++LOCK_EVENT(rwsem_wlock_ehandoff) /* # of write lock early handoffs	*/
 --- a/kernel/locking/rwsem.c
 +++ b/kernel/locking/rwsem.c
-@@ -650,13 +650,11 @@ static void rwsem_mark_wake(struct rw_se
-  * optionally wake up waiters before it returns.
-  */
- static inline void
--rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter,
--		      struct wake_q_head *wake_q)
-+rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter)
- 		      __releases(&sem->wait_lock)
- {
- 	bool first = rwsem_first_waiter(sem) == waiter;
--
--	wake_q_init(wake_q);
-+	DEFINE_WAKE_Q(wake_q);
+@@ -433,6 +433,26 @@ static void rwsem_writer_wake(struct rw_
+ 	lockdep_assert_held(&sem->wait_lock);
  
- 	/*
- 	 * If the wait_list isn't empty and the waiter to be deleted is
-@@ -664,10 +662,10 @@ rwsem_del_wake_waiter(struct rw_semaphor
- 	 * be eligible to acquire or spin on the lock.
- 	 */
- 	if (rwsem_del_waiter(sem, waiter) && first)
--		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, wake_q);
-+		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
- 	raw_spin_unlock_irq(&sem->wait_lock);
--	if (!wake_q_empty(wake_q))
--		wake_up_q(wake_q);
-+	if (!wake_q_empty(&wake_q))
-+		wake_up_q(&wake_q);
- }
- 
- /*
-@@ -993,6 +991,46 @@ static inline void rwsem_cond_wake_waite
- 	rwsem_mark_wake(sem, wake_type, wake_q);
- }
- 
-+#define waiter_type(_waiter, _r, _w)	\
-+	((_waiter)->type == RWSEM_WAITING_FOR_READ ? (_r) : (_w))
+ 	count = atomic_long_read(&sem->count);
 +
-+static __always_inline struct rw_semaphore *
-+rwsem_waiter_wait(struct rw_semaphore *sem, struct rwsem_waiter *waiter, int state)
-+{
-+	trace_contention_begin(sem, waiter_type(waiter, LCB_F_READ, LCB_F_WRITE));
++	/*
++	 * Since rwsem_mark_wake() is only called (with WAKE_ANY) when
++	 * the lock is unlocked, and the HANDOFF bit guarantees that
++	 * all spinning / stealing is disabled, it is posssible to
++	 * unconditionally claim the lock -- any READER_BIAS will be
++	 * temporary.
++	 */
++	if (count & RWSEM_FLAG_HANDOFF) {
++		unsigned long adjustment = RWSEM_WRITER_LOCKED - RWSEM_FLAG_HANDOFF;
 +
-+	/* wait to be given the lock */
-+	for (;;) {
-+		set_current_state(state);
-+		if (!smp_load_acquire(&waiter->task)) {
-+			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
-+			break;
-+		}
-+		if (signal_pending_state(state, current)) {
-+			raw_spin_lock_irq(&sem->wait_lock);
-+			if (waiter->task)
-+				goto out_nolock;
-+			raw_spin_unlock_irq(&sem->wait_lock);
-+			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
-+			break;
-+		}
-+		schedule_preempt_disabled();
-+		lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
++		if (list_is_singular(&sem->wait_list))
++			adjustment -= RWSEM_FLAG_WAITERS;
++
++		atomic_long_set(&sem->owner, (long)waiter->task);
++		atomic_long_add(adjustment, &sem->count);
++		lockevent_inc(rwsem_wlock_ehandoff);
++		goto success;
 +	}
 +
-+	__set_current_state(TASK_RUNNING);
-+	lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
-+	trace_contention_end(sem, 0);
-+	return sem;
-+
-+out_nolock:
-+	rwsem_del_wake_waiter(sem, waiter);
-+	__set_current_state(TASK_RUNNING);
-+	lockevent_inc(waiter_type(waiter, rwsem_rlock_fail, rwsem_wlock_fail));
-+	trace_contention_end(sem, -EINTR);
-+	return ERR_PTR(-EINTR);
-+}
-+
- /*
-  * Wait for the read lock to be granted
-  */
-@@ -1071,38 +1109,7 @@ rwsem_down_read_slowpath(struct rw_semap
- 	if (!wake_q_empty(&wake_q))
- 		wake_up_q(&wake_q);
+ 	do {
+ 		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
  
--	trace_contention_begin(sem, LCB_F_READ);
--
--	/* wait to be given the lock */
--	for (;;) {
--		set_current_state(state);
--		if (!smp_load_acquire(&waiter.task)) {
--			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
--			break;
--		}
--		if (signal_pending_state(state, current)) {
--			raw_spin_lock_irq(&sem->wait_lock);
--			if (waiter.task)
--				goto out_nolock;
--			raw_spin_unlock_irq(&sem->wait_lock);
--			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
--			break;
--		}
--		schedule_preempt_disabled();
--		lockevent_inc(rwsem_sleep_reader);
--	}
--
--	__set_current_state(TASK_RUNNING);
--	lockevent_inc(rwsem_rlock);
--	trace_contention_end(sem, 0);
--	return sem;
--
--out_nolock:
--	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
--	__set_current_state(TASK_RUNNING);
--	lockevent_inc(rwsem_rlock_fail);
--	trace_contention_end(sem, -EINTR);
--	return ERR_PTR(-EINTR);
-+	return rwsem_waiter_wait(sem, &waiter, state);
- }
- 
- /*
-@@ -1150,37 +1157,7 @@ rwsem_down_write_slowpath(struct rw_sema
+@@ -479,6 +499,7 @@ static void rwsem_writer_wake(struct rw_
+ 		return;
  	}
- 	raw_spin_unlock_irq(&sem->wait_lock);
  
--	/* wait until we successfully acquire the lock */
--	trace_contention_begin(sem, LCB_F_WRITE);
--
--	for (;;) {
--		set_current_state(state);
--		if (!smp_load_acquire(&waiter.task)) {
--			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
--			break;
--		}
--		if (signal_pending_state(state, current)) {
--			raw_spin_lock_irq(&sem->wait_lock);
--			if (waiter.task)
--				goto out_nolock;
--			raw_spin_unlock_irq(&sem->wait_lock);
--			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
--			break;
--		}
--		schedule_preempt_disabled();
--		lockevent_inc(rwsem_sleep_writer);
--	}
--	__set_current_state(TASK_RUNNING);
--	lockevent_inc(rwsem_wlock);
--	trace_contention_end(sem, 0);
--	return sem;
--
--out_nolock:
--	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
--	__set_current_state(TASK_RUNNING);
--	lockevent_inc(rwsem_wlock_fail);
--	trace_contention_end(sem, -EINTR);
--	return ERR_PTR(-EINTR);
-+	return rwsem_waiter_wait(sem, &waiter, state);
- }
- 
- /*
++success:
+ 	/*
+ 	 * Have rwsem_writer_wake() fully imply rwsem_del_waiter() on
+ 	 * success.
 
 
