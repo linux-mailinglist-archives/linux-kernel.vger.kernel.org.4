@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB226A0194
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295B36A0196
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbjBWDnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:43:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S232906AbjBWDnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbjBWDnL (ORCPT
+        with ESMTP id S233173AbjBWDnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:43:11 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D1D23D99;
-        Wed, 22 Feb 2023 19:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=R7WTQfbxyA/nZ6u/jgi+dMUNGV/ZDn1IV7U0hvkO7zE=; b=X83936MZHL0YWURGBhRB/h+Gu2
-        W8/Q8oBTa90i/nwEymp9dQrInHR6M+I8wMM8uPeEQ8C/8S062A8psUpwzcCDzw+f2tspUfo23bCvR
-        0gofqM3rlNkYeCqGFblotnnWAVEnL9kkF5DRZ+5lvxELjGJfT+2Xta8FFmnRjYriapgJAJ0Flsr1k
-        jNu+0j0jPeoUpZc9/NwEpWkhyNLCK0pPSBKfzcmmw+uKEMlFyRtmydk0DVepdTmXacfbNZXwLlXZs
-        cM++gD/euvNDrJ0wQQsmRCUzKnCN7m2xlM7phfrNmTHHP0Bk/LFxSTIwf955xOevyF5PLyD2+phAP
-        1z1knf1Q==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pV2Vi-00EtNl-33; Thu, 23 Feb 2023 03:43:10 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-ia64@vger.kernel.org
-Subject: [PATCH] ia64: salinfo: placate defined-but-not-used warning
-Date:   Wed, 22 Feb 2023 19:43:09 -0800
-Message-Id: <20230223034309.13375-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 22 Feb 2023 22:43:43 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015982194F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:43:30 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id ko13so11967433plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:43:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EmZbWBcg/AW2Tz+32ksLqYO/e6dt8EO4hZXdp/nul3s=;
+        b=jgmENm0qng91d/uZPHQSAWkoiVVxT4onyeHR5L5btjZajYusPq4nUw5afIJxAtioSW
+         scnBMZU4SusEUc/10D4ADcSUzhExYbRW0FDBS+ZSQdsOjhNIzZIH6Gh54XACwmm/FuvQ
+         Ds2udvU7ZUiKYeLH2IRyJpQYiosSYh30jezjIZ8ipOPb1XHpfjNwvLOuMqkQPF3HoGeN
+         GOdbKCuAKw2blvJ3Pae92bvI/mkAabOd6Jji/0AN69Xlh2pxnsEHgzI7vb1kiHQyRLKK
+         hwXFYBVsDd8ieMUUhHNPOfilqJEmd/zUIGzheKj8Hta9neoVwocb/mdaCyH+l/c73IIu
+         slUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EmZbWBcg/AW2Tz+32ksLqYO/e6dt8EO4hZXdp/nul3s=;
+        b=3fZkR7K99jmZ5uqxNwu78hd6RoN2vId46XbtFw3rCRyj8AiOXAAYRFdbXCoMU+SurS
+         OE2n39K5vsUSRv7J5JpBAd+03/TwZQmCGWDwwYMZXhbl58fK301qB9iV5MVrEO/fTjjm
+         GFLom9DUq6IcGOf40HII/bRja23E1+ux046SnIb6ndbZSJzRhdOuZPqdgTf0Kk12l66V
+         WocJTIj7VjT+hd2wblWpGvCdONwiNmlKP4G+z77hBVHOR0fGA+Q/K3Zyu+RR16qF6LX+
+         nrPkqDf4CQc9X9r1xX2ddtuj+K+E0mduS1awXrpkuMGznsMpuqMBQKyiNgPRpltoncYW
+         WFxg==
+X-Gm-Message-State: AO0yUKVyjJHCe9jM1cu7YP5syLRE8xYkgy76dFghLQ+b5CJYJ6OSFz2i
+        MCLtR7iRHt0btYu3u5cWD4cbYT1eg626L5hG
+X-Google-Smtp-Source: AK7set+q4wdLmbrdYnGFANCbxREwGbuNbB5X3p6jbUJKYBm9j0HofsQcDFA0tDaKWvi/Ov5hXJcytw==
+X-Received: by 2002:a05:6a20:5484:b0:bc:b3fa:ee70 with SMTP id i4-20020a056a20548400b000bcb3faee70mr13545163pzk.0.1677123809888;
+        Wed, 22 Feb 2023 19:43:29 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id jc4-20020a17090325c400b001991e59fde6sm12491403plb.216.2023.02.22.19.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 19:43:29 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     code@siddh.me, willy@infradead.org,
+        Zhong Jinghua <zhongjinghua@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhongjinghua@huawei.com, yi.zhang@huawei.com, yukuai3@huawei.com,
+        houtao1@huawei.com
+In-Reply-To: <20230221095027.3656193-1-zhongjinghua@huaweicloud.com>
+References: <20230221095027.3656193-1-zhongjinghua@huaweicloud.com>
+Subject: Re: [PATCH-next v4] loop: loop_set_status_from_info() check before
+ assignment
+Message-Id: <167712380884.13855.10551951254719805732.b4-ty@kernel.dk>
+Date:   Wed, 22 Feb 2023 20:43:28 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-ada30
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_PROC_FS is not set, proc_salinfo_show() is not used.
-Mark the function as __maybe_unused to quieten the warning message.
 
-../arch/ia64/kernel/salinfo.c:584:12: warning: 'proc_salinfo_show' defined but not used [-Wunused-function]
-  584 | static int proc_salinfo_show(struct seq_file *m, void *v)
-      |            ^~~~~~~~~~~~~~~~~
+On Tue, 21 Feb 2023 17:50:27 +0800, Zhong Jinghua wrote:
+> In loop_set_status_from_info(), lo->lo_offset and lo->lo_sizelimit should
+> be checked before reassignment, because if an overflow error occurs, the
+> original correct value will be changed to the wrong value, and it will not
+> be changed back.
+> 
+> More, the original patch did not solve the problem, the value was set and
+> ioctl returned an error, but the subsequent io used the value in the loop
+> driver, which still caused an alarm:
+> 
+> [...]
 
-Fixes: 3f3942aca6da ("proc: introduce proc_create_single{,_data}")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: linux-ia64@vger.kernel.org
----
-The entire salinfo.c file looks like it should be conditional on
-CONFIG_PROC_FS, but I'm just addressing warnings/errors here.
+Applied, thanks!
 
- arch/ia64/kernel/salinfo.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1/1] loop: loop_set_status_from_info() check before assignment
+      commit: 9f6ad5d533d1c71e51bdd06a5712c4fbc8768dfa
 
-diff -- a/arch/ia64/kernel/salinfo.c b/arch/ia64/kernel/salinfo.c
---- a/arch/ia64/kernel/salinfo.c
-+++ b/arch/ia64/kernel/salinfo.c
-@@ -581,7 +581,7 @@ static int salinfo_cpu_pre_down(unsigned
-  * 'data' contains an integer that corresponds to the feature we're
-  * testing
-  */
--static int proc_salinfo_show(struct seq_file *m, void *v)
-+static int __maybe_unused proc_salinfo_show(struct seq_file *m, void *v)
- {
- 	unsigned long data = (unsigned long)v;
- 	seq_puts(m, (sal_platform_features & data) ? "1\n" : "0\n");
+Best regards,
+-- 
+Jens Axboe
+
+
+
