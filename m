@@ -2,91 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29046A0644
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390DF6A064D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbjBWKaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S233773AbjBWKcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbjBWK3y (ORCPT
+        with ESMTP id S233728AbjBWKcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:29:54 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090D62ED52;
-        Thu, 23 Feb 2023 02:29:52 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 39457123A;
-        Thu, 23 Feb 2023 11:29:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1677148189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ce0djBkbgIfPJp0Z94KT92OljnaqxS9qhflvWJOeC8w=;
-        b=CzegLmDGtXalVclPYQ2HDEDV4zmlUkIQ3F8o4lnGd0VtN5m+/l02eyMW+FUw+ukA9zTw3d
-        0E5Uctt1F8mZSMrnrklOgRPqzKDjLXeF+eHVqMQC4ZpqrEzbfFv/f+tcNOQJY0pnil3AD+
-        P8LXDnqgHYprGa+KZbEVwcccZ6o9yyiubWVAF6QI0AEYqCQFFMjvJg8gv2t69DVwYFFbbS
-        Q9XQhwUXseZqtpiwZmTIhXgblcfBZ2xGP6CxvpXw0MaEBVZ+4G74xzSbWcP6uEUe7q4s6R
-        VvQNPxLjGLXgV8K0jU0tK+oNwMfwFuMsEa/m8nChwBbcKRUoDqHhgIGH2MVuPA==
-MIME-Version: 1.0
-Date:   Thu, 23 Feb 2023 11:29:49 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kumaravel.thiagarajan@microchip.com, UNGLinuxDriver@microchip.com,
-        arnd@arndb.de, derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
-        gregkh@linuxfoundation.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 char-misc-next 2/5] misc: microchip: pci1xxxx: load
- gpio driver for the gpio controller auxiliary device enumerated by the
- auxiliary bus driver.
-In-Reply-To: <CACRpkda5NjddOUdqjg4b9YmJizd7Q0576S-nj4M=aw3xPF2Ywg@mail.gmail.com>
-References: <20220824200047.150308-3-kumaravel.thiagarajan@microchip.com>
- <20230217103116.2126311-1-michael@walle.cc>
- <CACRpkda5NjddOUdqjg4b9YmJizd7Q0576S-nj4M=aw3xPF2Ywg@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <cbd3adea51843a4528506ded927f1023@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 05:32:09 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553BA2CFEA;
+        Thu, 23 Feb 2023 02:32:08 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 309CC320091A;
+        Thu, 23 Feb 2023 05:32:07 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 23 Feb 2023 05:32:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677148326; x=
+        1677234726; bh=fc6qcoPy6n7YikuoryogjuIfcTxPHRlRaGS0scjDKWc=; b=J
+        BYJ0M43GhECBwOqalrZnwTDLimk3b5QRFq8imVP6LpkqwN8p0WK7T3GL/GFPf8Po
+        j3ukVk6cV8BzzjwmeRlMmKGQEGNzSZ1O+KxVScWfq+JqpqXVBZTFB5DPSQ5TtZrO
+        7iMCZ6qAKd8qqEcJ1VcMRzTqCrgJFqQRwFP7RcDKBFgMq8sTeVfiWnL1pokHFhE3
+        zX8d8vWMkeOoNOQr12nLh3xjEiY+HhC9sVVoQHQFumgbZORU9/etqwNBCDXTONwd
+        eUkaJONBOXwkQtSBkakqQU2vSCwfssZ4UtZMacllPBYWxzsZUv4j/iV9YToqcAPq
+        z8S+WY08tSNSa4I4Q1MDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677148326; x=
+        1677234726; bh=fc6qcoPy6n7YikuoryogjuIfcTxPHRlRaGS0scjDKWc=; b=n
+        k5Yf6muj/fSpns25I0A9XuM1Xj8rENVZGu/ujbjJPTXMSpe1zPCkm/pmRdVQ1K3T
+        UD+cs3f8DWRm02K8IUJdIxXncakskm+4ltBAgEAVSyHKndkQybgk71ZxFKmnFKB0
+        deifqzKj7EbyNEwir+vsx7qndZaf/ZAiI0RvZwv1IExQvVsR9wuuxkivhZFC402R
+        wSq4xAtyvK21i0hUQQ5hNuSAZ58fjEi5qIWEIVBGzltv19YXf99XJ8ung5Ml0sjg
+        s+E/mXchymMlWYRDWgqDrXgddsizkwq89V8P7ytZAULW32jnegQof+ButKDdYeRZ
+        1rRUtBeviLQsFzrtQ0m+A==
+X-ME-Sender: <xms:pkD3YxXqElu85bywT2wMPkTuCHtFE9GOT7eZijsfBcbuIklO7Wy-mg>
+    <xme:pkD3Yxmlrg6A1gF24O6ZbyzkPKuEsZJEK21H9on5xpmgQPluIp-c0Qg6TTjMLNpKB
+    LRQrh5YNmRJ8PCI5lI>
+X-ME-Received: <xmr:pkD3Y9YZHQHP3gK6OZ5ZFRorDQgEF2dVePLnHaOJGN84QUAmEmmfYvWTjEKpRfon8pUJ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekuddgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:pkD3Y0WwxUj4P88dPhx5khsK2sT9atie-6Sc2lPhnnp_XooL65pZdw>
+    <xmx:pkD3Y7nPaSo-xRi_k-EaJrsxkLZxLS4N68mkovRQ5DLhOsQXtqKTGg>
+    <xmx:pkD3YxdEII287xNhn5yEmb4-Hu8tiYxjYoX8DrCNBBMwjCjLKZ3dWg>
+    <xmx:pkD3Y5WnXzn9o5oM8ryb90cQ5AjPVqGflRPoLRa8DGwoGPlDJM8ZnQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Feb 2023 05:32:05 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
+Date:   Thu, 23 Feb 2023 10:31:54 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <70C80F6D-A727-48FD-A767-A2CA54AA7C1E@flygoat.com>
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
+ <20230222161222.11879-3-jiaxun.yang@flygoat.com>
+ <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
+To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-02-23 11:23, schrieb Linus Walleij:
-> On Fri, Feb 17, 2023 at 11:31 AM Michael Walle <michael@walle.cc> 
-> wrote:
->> [+ GPIO maintainers]
->> 
->> > PIO function's auxiliary bus driver enumerates separate child devices for
->> > GPIO controller and OTP/EEPROM interface. This gpio driver implemented
->> > based on the gpio framework is loaded for the gpio auxiliary device.
->> >
->> > Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
->> > ---
->> >  MAINTAINERS                                   |   1 +
->> >  drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
->> >  .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 163 ++++++++++++++++++
->> 
->> Why doesn't this file live in the GPIO subsystem? Seems like this 
->> haven't
->> got a proper review from the GPIO people (probably due to the "misc:"
->> subject). Maybe even GPIO_REGMAP could be used.
-> 
-> I agree, plese resend this patch with the linux-gpio mailing list and 
-> the GPIO
-> maintainers on CC.
 
-This is already in drivers/misc. There should be a follow up patch.
 
--michael
+> 2023=E5=B9=B42=E6=9C=8823=E6=97=A5 10:22=EF=BC=8CJohan Almbladh =
+<johan.almbladh@anyfinetworks.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Wed, Feb 22, 2023 at 5:12 PM Jiaxun Yang <jiaxun.yang@flygoat.com> =
+wrote:
+>>=20
+>> For R4000 erratas around multiplication and division instructions,
+>> as our use of those instructions are always followed by mflo/mfhi
+>> instructions, the only issue we need care is
+>>=20
+>> "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0" Errata 28:
+>> "A double-word or a variable shift may give an incorrect result if
+>> executed while an integer multiplication is in progress."
+>>=20
+>> We just emit a mfhi $0 to ensure the operation is completed after
+>> every multiplication instruction accorading to workaround suggestion
+>> in the document.
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>> arch/mips/Kconfig              | 4 +---
+>> arch/mips/net/bpf_jit_comp32.c | 4 ++++
+>> arch/mips/net/bpf_jit_comp64.c | 3 +++
+>> 3 files changed, 8 insertions(+), 3 deletions(-)
+>>=20
+>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> index df0910e3895c..5ea07c833c5b 100644
+>> --- a/arch/mips/Kconfig
+>> +++ b/arch/mips/Kconfig
+>> @@ -63,9 +63,7 @@ config MIPS
+>>        select HAVE_DEBUG_STACKOVERFLOW
+>>        select HAVE_DMA_CONTIGUOUS
+>>        select HAVE_DYNAMIC_FTRACE
+>> -       select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+>> -                               !CPU_R4000_WORKAROUNDS && \
+>> -                               !CPU_R4400_WORKAROUNDS
+>=20
+> Is the R4400 errata also covered by this workaround?
+
+Yes, R4400 errata is basically a reduced version of R4000 one.
+They managed to fix some parts of the issue but not all.
+
+>=20
+>> +       select HAVE_EBPF_JIT if !CPU_MICROMIPS
+>>        select HAVE_EXIT_THREAD
+>>        select HAVE_FAST_GUP
+>>        select HAVE_FTRACE_MCOUNT_RECORD
+>> diff --git a/arch/mips/net/bpf_jit_comp32.c =
+b/arch/mips/net/bpf_jit_comp32.c
+>> index ace5db3fbd17..fee334544d2f 100644
+>> --- a/arch/mips/net/bpf_jit_comp32.c
+>> +++ b/arch/mips/net/bpf_jit_comp32.c
+>> @@ -446,6 +446,9 @@ static void emit_mul_i64(struct jit_context *ctx, =
+const u8 dst[], s32 imm)
+>>                } else {
+>>                        emit(ctx, multu, hi(dst), src);
+>>                        emit(ctx, mflo, hi(dst));
+>> +                       /* Ensure multiplication is completed */
+>> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
+>> +                               emit(ctx, mfhi, MIPS_R_ZERO);
+>>                }
+>>=20
+>>                /* hi(dst) =3D hi(dst) - lo(dst) */
+>> @@ -504,6 +507,7 @@ static void emit_mul_r64(struct jit_context *ctx,
+>>        } else {
+>>                emit(ctx, multu, lo(dst), lo(src));
+>>                emit(ctx, mflo, lo(dst));
+>> +               /* No need for workaround because we have this mfhi =
+*/
+>>                emit(ctx, mfhi, tmp);
+>>        }
+>=20
+> R4000 is a 64-bit CPU, so the 32-bit JIT implementation will not be
+> used. =46rom the Makefile:
+>=20
+> ifeq ($(CONFIG_32BIT),y)
+>        obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp32.o
+> else
+>        obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp64.o
+> endif
+
+It=E2=80=99s common practice to run 32-bit kernel on R4000 based systems =
+to save some memory :-)
+
+Thanks.
+- Jiaxun
+
+>=20
+>>=20
+>> diff --git a/arch/mips/net/bpf_jit_comp64.c =
+b/arch/mips/net/bpf_jit_comp64.c
+>> index 0e7c1bdcf914..5f5a93f997bc 100644
+>> --- a/arch/mips/net/bpf_jit_comp64.c
+>> +++ b/arch/mips/net/bpf_jit_comp64.c
+>> @@ -228,6 +228,9 @@ static void emit_alu_r64(struct jit_context *ctx, =
+u8 dst, u8 src, u8 op)
+>>                } else {
+>>                        emit(ctx, dmultu, dst, src);
+>>                        emit(ctx, mflo, dst);
+>> +                       /* Ensure multiplication is completed */
+>> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
+>> +                               emit(ctx, mfhi, MIPS_R_ZERO);
+>>                }
+>>                break;
+>>        /* dst =3D dst / src */
+>> --
+>> 2.37.1 (Apple Git-137.1)
+
+
