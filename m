@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB52F6A054D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EBA6A0547
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjBWJxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S233734AbjBWJwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234160AbjBWJxI (ORCPT
+        with ESMTP id S233493AbjBWJwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:53:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFFE53EC7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:52:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677145938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hiWA9MAreXUI6IRZzfTpL89haVwrA8zEt2E8eApKBoQ=;
-        b=JIXS6NMIJ/oFowtH5inLVyK+qc3eEwA3UIaP2T08d+Hfwd3uTqD/QyGpsa3B7mThNJWZ4T
-        qWrWh9Y2cYcAiWFINBT9rJ6y5Nxm8f1Yw9mSLscaTn6EAoaTe3AkPSv7iBfHdts3oBPhvh
-        Urx+s+2HmtiI7F1zNnw/BZAu0rBrNM8=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-3-7NyFuWVLPimh3zkG2W9Kag-1; Thu, 23 Feb 2023 04:52:17 -0500
-X-MC-Unique: 7NyFuWVLPimh3zkG2W9Kag-1
-Received: by mail-qt1-f199.google.com with SMTP id c13-20020ac84e0d000000b003b9bd2a2284so4924143qtw.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:52:17 -0800 (PST)
+        Thu, 23 Feb 2023 04:52:34 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485B9515E9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:52:29 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536c02c9dfbso166749147b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WyLlud2sMTYzZimgt3LXDWS5h05sJ2yVKAsksslDR6M=;
+        b=ZLQtg4FtpfbiG3pBPGZhMDpS7wCOS2l/Vb/EzOb30N3BpV6OVBj7JZJcCdktYZtAS2
+         RGW0dtqmnR+dfXUGssVahvHzdlIIb3Wr6NT5kUUJrlu7BrbwGV02bV3l6E5fzO6bDj70
+         SvP2iiqLVg6LEFnvB4bPhSTHAD+gDohAdIL888wz1YBebd/zeDePN5CA8aEU002zeqpO
+         ZcehMW3NdG05r1TlY879Hxp5xNtowiQ88BYx74B5pMhCj0t8remt3/dVwp6+clGooA2h
+         jjbouEQg1rLtL49fdfDKchmHDrOXR/tW5qzs7HMR9ZX/tYH9q7MbxhVJDA529CYGk8kN
+         AOdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677145936;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hiWA9MAreXUI6IRZzfTpL89haVwrA8zEt2E8eApKBoQ=;
-        b=8FigFlnS0JAnFRE3g+vh8bVyH+icPUNKlQUAUqgxj4yeR8pIdQQDtfneJoiKt0i8B4
-         IomO0AjDnuOsLUY6jBFzLmjMgxoAU2VgFTLRoKMkkTfw9ZrFChVLOgkgHTvUrE/7nvg7
-         3a6yEmVkWAvs8+NCFNcRPOfl8crmA6fRbot0QXIO9+yw89NHvr6X4VXJ4N+jFlJf0df8
-         dRmIHeBC+gg1Eg0ZTAVrf3vlcy5pQz5ecZxnZGf6YA6wEgo/3bjETGsOn1+L/7h3mKkL
-         hGqO/sdLsjeVlP54wpiU3fqU35gLjOhRasMlsdcDGYL5WNR7WJOp/p7iRbm1yi5OGEXA
-         C+Vw==
-X-Gm-Message-State: AO0yUKV4Jd7V+TICkj+rEAJKXVxc7zfiBnVscyfzya5zmiywsrE5j2xt
-        0RoVdbWPRxxykdsnCaqcmKCMEB/JLJswQDB0kQwjb28bHXl6KDs0OGpmYNfVOPlbs+BkMj8kZ1A
-        kOn5zwc27BPXo5Id7xJ6L6321
-X-Received: by 2002:a05:622a:118f:b0:39c:da22:47b8 with SMTP id m15-20020a05622a118f00b0039cda2247b8mr24571219qtk.1.1677145936724;
-        Thu, 23 Feb 2023 01:52:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set+8cQmNNnQVUSxvHo9JVgmb+kjKrxF67imPwpha8hzRWci5qd3zoqSBgG5eIJ9xBrhDRma/NQ==
-X-Received: by 2002:a05:622a:118f:b0:39c:da22:47b8 with SMTP id m15-20020a05622a118f00b0039cda2247b8mr24571198qtk.1.1677145936408;
-        Thu, 23 Feb 2023 01:52:16 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id a14-20020a05622a064e00b003b9b41a32b7sm3834484qtb.81.2023.02.23.01.52.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 01:52:16 -0800 (PST)
-Message-ID: <8e05cf636937ad59e32b4ae7f1e7e8732c694421.camel@redhat.com>
-Subject: Re: [net PATCH] octeontx2-af: Unlock contexts in the queue context
- cache in case of fault detection
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Sai Krishna <saikrishnag@marvell.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
-        sumang@marvell.com
-Date:   Thu, 23 Feb 2023 10:52:12 +0100
-In-Reply-To: <20230222065921.1852686-1-saikrishnag@marvell.com>
-References: <20230222065921.1852686-1-saikrishnag@marvell.com>
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WyLlud2sMTYzZimgt3LXDWS5h05sJ2yVKAsksslDR6M=;
+        b=acIxqROVvWIljvda/WohSyRBb/W8T+zI6BNgIGFCOeRT8Pv0DX+mUUTFHxGmzZwd9K
+         R8s3oJxlgz7XNRCrkqac/b/WuzvecPa5JvT0RvViTW/56K+lVSxf6qbXHxsPk8pnN/e0
+         335b3ICpzw8RshPv+yaJvo551tINoYsGacJ4yD8V73EatGXyuknInY+hc0A8QQehgIdT
+         RqThhw1qJNWpUntXiW9XObVe250gBqQHMvtcEO/R1AkBbejivpUscQKKr1QOhJqV7vNy
+         reHaV5pWc1TKUKNkWiEOV5zeNuo6a7TO04kc97zD8nte066kLQUKoMs+3xGtOnJRkY92
+         VzEw==
+X-Gm-Message-State: AO0yUKVNJUxSpSzNkvvv59uiWxMEQKlzo8feR9jS+tA2yt7TiStgYAX7
+        wNBOfXO/E48wv7VhDvw6TMwsPREnGYtAq41qJUrEYDigasV6yT2IbgE=
+X-Google-Smtp-Source: AK7set/KtoAzQrIYU+2Mgk/pLUdmIb9s9QFOvjUwjQxM7F7nAZs/oSVNu3EBJvX3mgr7i2poBtd8kJyvbE4QOnKDsUs=
+X-Received: by 2002:a25:918c:0:b0:8da:d0ab:258a with SMTP id
+ w12-20020a25918c000000b008dad0ab258amr1705814ybl.5.1677145948475; Thu, 23 Feb
+ 2023 01:52:28 -0800 (PST)
+MIME-Version: 1.0
+References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au> <20230224231430.2948-1-kunyu@nfschina.com>
+ <Y/cy5wUtk10OahpO@gondor.apana.org.au>
+In-Reply-To: <Y/cy5wUtk10OahpO@gondor.apana.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 23 Feb 2023 10:52:17 +0100
+Message-ID: <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
+Subject: Re: [PATCH] stm32: stm32-hash: Add kmalloc_array allocation check
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Lionel Debieve <lionel.debieve@foss.st.com>
+Cc:     Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-22 at 12:29 +0530, Sai Krishna wrote:
-> From: Suman Ghosh <sumang@marvell.com>
->=20
-> NDC caches contexts of frequently used queue's (Rx and Tx queues)
-> contexts. Due to a HW errata when NDC detects fault/poision while
-> accessing contexts it could go into an illegal state where a cache
-> line could get locked forever. To makesure all cache lines in NDC
-> are available for optimum performance upon fault/lockerror/posion
-> errors scan through all cache lines in NDC and clear the lock bit.
->=20
-> Fixes: 4a3581cd5995 ("octeontx2-af: NPA AQ instruction enqueue support")
-> Signed-off-by: Suman Ghosh <sumang@marvell.com>
-> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+On Thu, Feb 23, 2023 at 10:33 AM Herbert Xu <herbert@gondor.apana.org.au> w=
+rote:
+> On Sat, Feb 25, 2023 at 07:14:29AM +0800, Li kunyu wrote:
+> >
+> > hello senior:
+> >   'rctx->hw_context' is a member of the rctx pointer array object and w=
+ill pass 'memcpy(out, rctx, sizeof(*rctx)) at the end of the function;  ', =
+copied to the out pointer memory, it cannot be released, I think this patch=
+ does an allocation check on the 'rctx->hw_context' pointer should help a b=
+it.
+>
+> Ugh that's completely broken.  You can't export pointers.
+>
+> I guess this driver needs to be disabled.
 
-After the net-next merge, this does not apply cleanly to net anymore.
+Added Lionel to the To: line so he can look at this, I guess we should
+also add an entry to MAINTAINERS so that the reports come to the right
+address.
 
-Please rebase and re-post, thanks!
+Can we fix the actual problem? It seems to have been there since the
+initial submission in 2017.
 
-Paolo
+I guess the right fix is to export the *actual* hardware state into "out"
+and read it back from there instead of copying out the rctx struct.
+Also .statesize needs to be fixed to correspond to that.
+I can just use a roof:ed constant size for this.
 
+If Lionel does not have time to look at it I can try to come up with a
+quick fix.
+
+Yours,
+Linus Walleij
