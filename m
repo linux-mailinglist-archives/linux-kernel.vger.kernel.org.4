@@ -2,152 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D926A01A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260706A01AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 05:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjBWD71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S232995AbjBWEBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 23:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjBWD70 (ORCPT
+        with ESMTP id S232802AbjBWEBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:59:26 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8913D25293
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:59:24 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id x14so13010433vso.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:59:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677124763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H32nxJKYLFgX94VN5oR58FHUZwCnE+gpSinuTrZzCc0=;
-        b=V4Q5l6WLAj/WwxnVZRzvheA/iOME8vS7OMCgLQWsVt/tZ1p+FehahQQjYkfBEwnn5l
-         TKqvMJ4ouOnvNtwLpkdvRKTTNQhJdK8GWjwAgSM5gu2EhnU0opER4l31mwe55domXE0w
-         Hh/RGdOf2a1K2z7Re8lyE0yCVzCTzILxkZUcQXewKdfJ3nDh+Cx8jTMdJZGQX0pZkZUY
-         4CAifutvKd9vpOwllaoBeMHWTAZ8SHL+wtWN3Q2twnpq3HAsmolU0vVpaO0k7gzLbvmc
-         s3sDmxNfwKOsOYTnd2jaudx9jqxs70BYLlpqGNm2hwnZxrqrv9nxqoKIAVBvW5yE8AKf
-         bHlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677124763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H32nxJKYLFgX94VN5oR58FHUZwCnE+gpSinuTrZzCc0=;
-        b=E1cvTjY30e3S4sxbmZZ0JCM42HkbIWQg9QEh6qGL/brc4byDFlWT0eRU96iQ4y9aqc
-         I2oT0GxqosEcIncjCQNlFBZS1fGjtrBPVG84pKB5zXEwcWUvQ+SmUCRY50afRBZbXZ+z
-         4BAiJvnMSE4fDrKC4TWp8N6Bt858eJytsU5dZx7LgwdtUDPjcuTbbUdeEnF+B5zh01iy
-         nhLSHuElIReR8LiT6VioM8gI0MU/ALBZ9+5l4bMm98EgpBCzGpIUaLGlXL4mi5dNDVkE
-         +7KJ7IAXbIOzoakmTfu+O+sAvZn3h+fP+J1dulZBVVi4OJa4jBuvB6PsZ/GLEhKVa+Ny
-         W+jA==
-X-Gm-Message-State: AO0yUKU4+KUG+udQs8siAxwMKCg2+bEao+O5SDp5Zs1vpeFTK5DrnDy5
-        IVdnicRknDzh+Yp1e04QxUsqJL28Lx7cUAou7sn2FzszkTgoP1UB
-X-Google-Smtp-Source: AK7set8d4Kt8nwIvSPEaytrIpcGaTkhsSfI3kbZZEBvM/1NXFxRlVl/iWmVtGErpsTF5b/RMhuHUh6LwD5LpoKFSFjM=
-X-Received: by 2002:a1f:aa41:0:b0:412:948:73ff with SMTP id
- t62-20020a1faa41000000b00412094873ffmr143108vke.13.1677124763494; Wed, 22 Feb
- 2023 19:59:23 -0800 (PST)
+        Wed, 22 Feb 2023 23:01:08 -0500
+Received: from out28-77.mail.aliyun.com (out28-77.mail.aliyun.com [115.124.28.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4D541085;
+        Wed, 22 Feb 2023 20:01:04 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08458463|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00787236-0.000697895-0.99143;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.RUUPChN_1677124861;
+Received: from 192.168.220.144(mailfrom:michael@allwinnertech.com fp:SMTPD_---.RUUPChN_1677124861)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Feb 2023 12:01:02 +0800
+Message-ID: <03a65972-f4ba-9d52-ed5c-ef5374927e53@allwinnertech.com>
+Date:   Thu, 23 Feb 2023 12:01:01 +0800
 MIME-Version: 1.0
-References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-4-yuzhao@google.com>
- <CAOUHufYSx-edDVCZSauOzwOJG6Av0++0TFT4ko8qWq7vLi_mjw@mail.gmail.com> <86lekwy8d7.wl-maz@kernel.org>
-In-Reply-To: <86lekwy8d7.wl-maz@kernel.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 22 Feb 2023 20:58:47 -0700
-Message-ID: <CAOUHufbbs2gG+DPvSOw_N_Kx7FWdZvpdJUvLzko-BDQ8vfd6Xg@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 3/5] kvm/arm64: add kvm_arch_test_clear_young()
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-mm@google.com, Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mice
+Content-Language: en-US
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230222013944.31095-1-michael@allwinnertech.com>
+ <0b6f1b7b-9275-6947-b1b9-73d60ce095ab@gmail.com>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <0b6f1b7b-9275-6947-b1b9-73d60ce095ab@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 2:00=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Fri, 17 Feb 2023 04:21:28 +0000,
-> Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > On Thu, Feb 16, 2023 at 9:12 PM Yu Zhao <yuzhao@google.com> wrote:
-> > >
-> > > This patch adds kvm_arch_test_clear_young() for the vast majority of
-> > > VMs that are not pKVM and run on hardware that sets the accessed bit
-> > > in KVM page tables.
->
-> I'm really interested in how you can back this statement. 90% of the
-> HW I have access to is not FEAT_HWAFDB capable, either because it
-> predates the feature or because the feature is too buggy to be useful.
+Dear Sergei:
 
-This is my expericen too -- most devices are pre v8.2.
+On 2/22/2023 4:59 PM, Sergei Shtylyov wrote:
+> Hello!
+> 
+> On 2/22/23 4:39 AM, Michael Wu wrote:
+> 
+>> This patch fixes a problem that USB mouse can't wake up the device that
+>> enters standby.
+>>
+>> At present, the kernel only checks whether certain USB manufacturers
+>> support wake-up, which will easily cause inconvenience to the
+>> development work of other manufacturers and add unnecessary work to the
+>> maintenance of kernel.
+>>
+>> The USB protocol supports judging whether a usb supports the wake-up
+>> function, so it should be more reasonable to add a wake-up source by
+>> directly checking the settings from the USB protocol.
+>>
+>> There was a similar issue on the keyboard before, which was fixed by
+>> this patch (3d61510f4eca), but now the problem happened on the mouse.
+>> This patch uses a similar idea to fix this problem.
+>>
+>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+>> ---
+>>   drivers/hid/usbhid/hid-core.c | 8 ++++++++
+>>   drivers/hid/usbhid/usbmouse.c | 1 +
+>>   2 files changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+>> index be4c731aaa65..d3a6755cca09 100644
+>> --- a/drivers/hid/usbhid/hid-core.c
+>> +++ b/drivers/hid/usbhid/hid-core.c
+>> @@ -1189,6 +1189,14 @@ static int usbhid_start(struct hid_device *hid)
+>>   		device_set_wakeup_enable(&dev->dev, 1);
+>>   	}
+>>   
+>> +	/**
+> 
 
-> Do you have numbers?
+>     The kernel-doc comments should not be used here in the function body.
 
-Let's do a quick market survey by segment. The following only applies
-to ARM CPUs:
+We will remove the NOTE comments.
 
-1. Phones: none of the major Android phone vendors sell phones running
-VMs; no other major Linux phone vendors.
-2. Laptops: only a very limited number of Chromebooks run VMs, namely
-ACRVM. No other major Linux laptop vendors.
-3. Desktops: no major Linux desktop vendors.
-4. Embedded/IoT/Router: no major Linux vendors run VMs (Android Auto
-can be a VM guest on QNX host).
-5. Cloud: this is where the vast majority VMs come from. Among the
-vendors available to the general public, Ampere is the biggest player.
-Here [1] is a list of its customers. The A-bit works well even on its
-EVT products (Neoverse cores).
+> 
+>> +	 * NOTE: enable remote wakeup by default for all mouse devices
+>> +	 * supporting the boot protocol.
+>> +	 */
+>> +	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
+>> +	    interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE)
+>> +		device_set_wakeup_enable(&dev->dev, 1);
+>> +
+>>   	mutex_unlock(&usbhid->mutex);
+>>   	return 0;
+>>   
+> [...]
+> 
+> MBR, Sergey
 
-[1] https://en.wikipedia.org/wiki/Ampere_Computing
-
-> > > It relies on two techniques, RCU and cmpxchg, to safely test and clea=
-r
-> > > the accessed bit without taking the MMU lock. The former protects KVM
-> > > page tables from being freed while the latter clears the accessed bit
-> > > atomically against both the hardware and other software page table
-> > > walkers.
-> > >
-> > > Signed-off-by: Yu Zhao <yuzhao@google.com>
-> > > ---
-> > >  arch/arm64/include/asm/kvm_host.h       |  7 +++
-> > >  arch/arm64/include/asm/kvm_pgtable.h    |  8 +++
-> > >  arch/arm64/include/asm/stage2_pgtable.h | 43 ++++++++++++++
-> > >  arch/arm64/kvm/arm.c                    |  1 +
-> > >  arch/arm64/kvm/hyp/pgtable.c            | 51 ++--------------
-> > >  arch/arm64/kvm/mmu.c                    | 77 +++++++++++++++++++++++=
-+-
-> > >  6 files changed, 141 insertions(+), 46 deletions(-)
-> >
-> > Adding Marc and Will.
-> >
-> > Can you please add other interested parties that I've missed?
->
-> The MAINTAINERS file has it all:
->
-> KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)
-> M:      Marc Zyngier <maz@kernel.org>
-> M:      Oliver Upton <oliver.upton@linux.dev>
-> R:      James Morse <james.morse@arm.com>
-> R:      Suzuki K Poulose <suzuki.poulose@arm.com>
-> R:      Zenghui Yu <yuzenghui@huawei.com>
-> L:      kvmarm@lists.linux.dev
->
-> May I suggest that you repost your patch and Cc the interested
-> parties yourself? I guess most folks will want to see this in context,
-> and not as a random, isolated change with no rationale.
-
-This clarified it. Thanks. (I was hesitant to spam people with the
-entire series containing changes to other architectures.)
+-- 
+Regards,
+Michael Wu
