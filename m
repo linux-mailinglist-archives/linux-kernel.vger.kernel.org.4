@@ -2,131 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF386A129C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621106A129E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 23:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjBWWK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 17:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        id S229812AbjBWWKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 17:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBWWK0 (ORCPT
+        with ESMTP id S229811AbjBWWKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 17:10:26 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822E196A1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 14:10:25 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id 202-20020a6218d3000000b005a89856900eso1434745pfy.14
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 14:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yypR5SWr5fAuROcOSsEI5X6eT6hSchBRQPrL8thWA1U=;
-        b=Jwv6kgov7x4dkPOvT37pVWQMD8Sxulc331jV+U+RIv1e1GNNNH3O2x/Z2djCWe0h7A
-         Vu2hLZhFLTSCCY7aLleOLB7viUmS+j1BnXMWTUgMoKo3Hc71KYI4ULXXgTG8yPmpVNLL
-         +6DO7D628eoUBDXU9Yus+s7IgPoJjWTxUXAIFbDU+7Tj64sGbYuOWSe1d5Xz+Yn9r65X
-         nWN65qOi3vwmEmFmwmWGAdDdUvSAn200wpPrRJhtXfNIn/XujWRvK8y/21gWqdsf1zWk
-         G+kuE/NWbz29bKhFsL0N2NoAtAsxmpDb0Z5E9MDs0LnP60S/oYkNCO+by4+ftUNWmYME
-         yAdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yypR5SWr5fAuROcOSsEI5X6eT6hSchBRQPrL8thWA1U=;
-        b=fmumZPZXL0Qt8wuHbY7SAHlPfTTG7t6/tUB2zb1z+IhOU36aLWwjV12TE7PH0xmj8W
-         VZv4AJsjqN9rXra/YgLSbWUTvrzlxKnJnZ2FUdwacxPi3OiMY0UsppESE4qfNz2yjyaO
-         7HORKqw/J06ZkW0ZCsvOSE9dWd04fqpZr9BeFL3VLKxYZxST4l6vxFzkDZ9Uhv/hxXEi
-         6XOrI7pXwKZa6Ln+Yw6dpdH7/mdHLsyI/o1YVNC0dWGTP3Tx1c5YJfnzQRo0zw1SEvTh
-         JNh/+Fwbw3k9UW/Sywk7OcUsVy+ZVtbUpSEdpRzDQE37/1rk4Xv6YgaL3EpNSkst76TW
-         ltFw==
-X-Gm-Message-State: AO0yUKUB0bIGLuHTCUnF1m8mhS8ViGb7G761J5a2hrRkOevaD8jGEMU3
-        9oy67l+QeOHsoVq0yr14l3KWbJLNxyk=
-X-Google-Smtp-Source: AK7set/mTkvRAH6S3QvmwPwwMO1+qJXpKcN7A7wBH4UY6Rz/dgjxv7hA4d9WaGpDXpcjxAn6zfGPBHiU4R4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:284b:b0:233:d613:a9ae with SMTP id
- p11-20020a17090a284b00b00233d613a9aemr868033pjf.3.1677190224408; Thu, 23 Feb
- 2023 14:10:24 -0800 (PST)
-Date:   Thu, 23 Feb 2023 14:10:22 -0800
-In-Reply-To: <092591cbcc40fbbcc42abd3f603b6d782f411770.camel@redhat.com>
-Mime-Version: 1.0
-References: <15291c3f-d55c-a206-9261-253a1a33dce1@redhat.com>
- <YzRycXDnWgMDgbD7@google.com> <ad97d0671774a873175c71c6435763a33569f669.camel@redhat.com>
- <YzSKhUEg3L1eMKOR@google.com> <08dab49f-9ca4-4978-4482-1815cf168e74@redhat.com>
- <b8fa9561295bb6af2b7fcaa8125c6a3b89b305c7.camel@redhat.com>
- <06d04f32-8403-4d7f-76a1-11a7fac3078e@redhat.com> <Y/aWx4EiDzKW6RHe@google.com>
- <05144c6d-922c-e70d-e625-c60952b60f3c@redhat.com> <092591cbcc40fbbcc42abd3f603b6d782f411770.camel@redhat.com>
-Message-ID: <Y/fkTs5ajFy0hP1U@google.com>
-Subject: Re: [PATCH] KVM: x86: disable on 32-bit unless CONFIG_BROKEN
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        "Daniel P. Berrange" <berrange@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 17:10:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6241058B7F;
+        Thu, 23 Feb 2023 14:10:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41F07617AE;
+        Thu, 23 Feb 2023 22:10:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B30C433AC;
+        Thu, 23 Feb 2023 22:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677190234;
+        bh=suHqtof+rHlv8+ShZXwEQBAa8pFrP6gpYT9ct9HWSTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JihsHmWiSifwyM8VJeXvqJYDmz0PXRFXiAAubL8cRklseU6XtE2vYVy1O8zV0qbFl
+         OxWm75mdk68iknnDyvyjnKGz2lyzQi2Zk3VhZjH4HVBSdvvVxJjfgzvLbrGtS9p0KF
+         v0H7b4MJ27VPbbEOfIsAZpaDyhDd2AHacPYyEjT18UCQdVrlpBxWQzhblr3UwK1b1b
+         mBaFBpmZsM6DAPOWeZgJ9Y8Dkh+5gM0HeTxlYWU7rA5/xCf/Lr7Ih/LlLNwWsL6tp7
+         AkcL4BRVKXSGK0E94m6KrXqt0HW80kUPKzkP0P3/CSo6iM5Q3tZx+axmCbXrL1fmw+
+         IhJaSK6x+AVJA==
+Date:   Thu, 23 Feb 2023 22:10:28 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 00/12] 6.2.1-rc2 review
+Message-ID: <Y/fkVLC7ogVuqFnh@spud>
+References: <20230223141539.893173089@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LaE6nG/shH9+RaLw"
+Content-Disposition: inline
+In-Reply-To: <20230223141539.893173089@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023, Maxim Levitsky wrote:
-> On Thu, 2023-02-23 at 08:01 +0100, Thomas Huth wrote:
-> > On 22/02/2023 23.27, Sean Christopherson wrote:
-> > > On Fri, Feb 17, 2023, Thomas Huth wrote:
-> > > > On 29/09/2022 15.52, Maxim Levitsky wrote:
-> > > > > On Thu, 2022-09-29 at 15:26 +0200, Paolo Bonzini wrote:
-> > > > > > On 9/28/22 19:55, Sean Christopherson wrote:
-> > > > > > > > As far as my opinion goes I do volunteer to test this code more often,
-> > > > > > > > and I do not want to see the 32 bit KVM support be removed*yet*.
-> > > > > > > 
-> > > > > > > Yeah, I 100% agree that it shouldn't be removed until we have equivalent test
-> > > > > > > coverage.  But I do think it should an "off-by-default" sort of thing.  Maybe
-> > > > > > > BROKEN is the wrong dependency though?  E.g. would EXPERT be a better option?
-> > > > > > 
-> > > > > > Yeah, maybe EXPERT is better but I'm not sure of the equivalent test
-> > > > > > coverage.  32-bit VMX/SVM kvm-unit-tests are surely a good idea, but
-> > > > > > what's wrong with booting an older guest?
-> > > > > >  From my point of view, using the same kernel source for host and the guest
-> > > > > is easier because you know that both kernels behave the same.
-> > > > > 
-> > > > > About EXPERT, IMHO these days most distros already dropped 32 bit suport thus anyway
-> > > > > one needs to compile a recent 32 bit kernel manually - thus IMHO whoever
-> > > > > these days compiles a 32 bit kernel, knows what they are doing.
-> > > > > 
-> > > > > I personally would wait few more releases when there is a pressing reason to remove
-> > > > > this support.
-> > > > 
-> > > > FWIW, from the QEMU perspective, it would be very helpful to remove 32-bit
-> > > > KVM support from the kernel. The QEMU project currently struggles badly with
-> > > > keeping everything tested in the CI in a reasonable amount of time. The
-> > > > 32-bit KVM kernel support is the only reason to keep the qemu-system-i386
-> > > > binary around - everything else can be covered with the qemu-system-x86_64
-> > > > binary that is a superset of the -i386 variant (except for the KVM part as
-> > > > far as I know).
-> > > > Sure, we could also drop qemu-system-i386 from the CI without dropping the
-> > > > 32-bit KVM code in the kernel, but I guess things will rather bitrot there
-> > > > even faster in that case, so I'd appreciate if the kernel could drop the
-> > > > 32-bit in the near future, too.
-> > > 
-> > > Ya, I would happily drop support for 32-bit kernels today, the only sticking point
-> > > is the lack of 32-bit shadow paging test coverage, which unfortunately is a rather
-> > > large point.  :-(
-> > 
-> >  From your point of view, would it be OK if QEMU dropped qemu-system-i386? 
-> > I.e. would it be fine to use older versions of QEMU only for that test 
-> > coverage (or do you even use a different userspace for testing that)?
 
-For me personally, I have no objection to dropping qemu-system-i386 support in
-future QEMU releases.  I update my 32-bit images very, very infrequently, so I
-probably wouldn't even notice for like 5 years :-)
+--LaE6nG/shH9+RaLw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> From my point of view qemu-system-x86_64 does run 32 bit guests just fine.
+On Thu, Feb 23, 2023 at 03:16:08PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.1 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
+>=20
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.1-r=
+c2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
+ linux-6.2.y
+> and the diffstat can be found below.
 
-Right, but unless I seriously misunderstand what qemu-system-x86_64 ecompasses,
-it can't be used to run guests of 32-bit _hosts_, which is what we need to test
-shadowing of 32-bit NPT.
+-rc2 looks grand on our RISC-V stuff..
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+
+--LaE6nG/shH9+RaLw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/fkVAAKCRB4tDGHoIJi
+0qVSAP9ieM3QvKIuUM7d07imkGubmJQMeDrtz9zffcu+3FKaxwD9FmKfjoyAHzed
+lMs9wUi2hL2fNgwx7KA2/iXEEH2Y9wo=
+=Geu+
+-----END PGP SIGNATURE-----
+
+--LaE6nG/shH9+RaLw--
