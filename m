@@ -2,261 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133C46A088E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E576A0894
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbjBWMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 07:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S233811AbjBWM0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 07:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBWMZD (ORCPT
+        with ESMTP id S229448AbjBWM0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:25:03 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2052.outbound.protection.outlook.com [40.92.99.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FBE37B6E;
-        Thu, 23 Feb 2023 04:25:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=grKIV9gVhCSwEpEM/oQvRR+XLwm1o6m0qqkx0i5+XQOjrxuP5WB7jHJbsUPN11RDidDeXOG3/arvZcDFKaDI6VUojl5pt+meEFJukSJxfGx3nNAqThWsVqpNSuuzJNX3GonFYl6tn47IgLsyrUofmW2GlgMrJfn0h2Y+ZNFp4qKsb5fSC/33i8zPcAKC+capQ6mdALgI+cDCmj3ZbUNCLq0xujEH1/kjGcbq+1R8nAH+sxzUfbUluQlKutBWmAJJB0MiLPLKI3KidUM423DNNwVqcEecYFW0mAsmKBM6M37F2ssdI8JBL6I+nc34tZn73HgLRgPI3tGeWjGAGGZLQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cxvwrQxmyTTm/NPD+PkL89Ju/tnQBQTyPtHYHape3Xg=;
- b=a0WULxhRUsS+Ls7RWUtpW63KsyPqX86v/fbqDpdEq5VndIVjxqbAnTsakT5RNmaSQE+AtRIAwqhRzvS5jLtYGIrIyL/j28TJpEZNIZB/XAqOKiqGvpLobpK0OTJd+QO23Lvvv9onE+GtiE6Ny+OSDRp1aUwlerPm8Pj2d3w88HWDBAyq0uqzRTqvhvdwZX14rs1WrucxF76aPhJI+zssffi8pjhmTwKFXXSIo7z1dOKaWtuCtII6DjDYZ/C82pKEFlry5vCjx9alB6oDKf4OgM3HZfxK2XGnByoVxAZ0yDIlyA0mxAh1SjuVqGdtqN3bCyiRyzSlobe3aWvEhyq3mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cxvwrQxmyTTm/NPD+PkL89Ju/tnQBQTyPtHYHape3Xg=;
- b=YC17fzq2VYViQVgDM2F7crPFxm4eDrNg3KzFnCZCHSnhMGVVC/wChtkoaH3fLoMKmC1Ljdan7zcYnjtM1BEUnox5b57QTYqrPSqDAmrWvTQAxgLNc4n2fI1bNsGik+aCTrFFl3x9UTAxaAU2Je1lr6+MWiRCN3Z71a0dmafARtzt81eNJ5cW1Z1LqDDiFS8gAMzuFWDeu/Ot8NRUHNKaj9vCYy56Gzs/GlfC+h405STC17QBSF565ZIkdvzFFFb+/akd06nvlFeAoai0Z3GkuZ7tZB75yMRA2q1pRmQnbknhWWnDAeKlvqtn12b4n9bC82VykOwrVS37ZFfJ0CNhjA==
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
- by TYCP286MB3487.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:3a3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
- 2023 12:24:58 +0000
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068%3]) with mapi id 15.20.6111.018; Thu, 23 Feb 2023
- 12:24:58 +0000
-Message-ID: <OS3P286MB22957CD400DAAAB7786FEF96F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Date:   Thu, 23 Feb 2023 20:24:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next v2 1/1] net: openvswitch: Use on stack
- sw_flow_key in ovs_packet_cmd_execute
-To:     netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-References: <OS3P286MB229572718C0B4E7229710062F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   Eddy Tao <taoyuan_eddy@hotmail.com>
-In-Reply-To: <OS3P286MB229572718C0B4E7229710062F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [c09wdAO3XQCA+k1VluYtMlRGO7q9uLF6]
-X-ClientProxiedBy: TYCP286CA0150.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31b::17) To OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:604:19b::11)
-X-Microsoft-Original-Message-ID: <f1c1a4aa-3deb-0686-8b8f-6b48c2c94a6a@hotmail.com>
+        Thu, 23 Feb 2023 07:26:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2194C6FE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:25:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677155135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vlhfn8tA0IPcHcqagD5wqt5nb53wGseGUDE2K0I/G38=;
+        b=PY8XLGoeE7IvxUT7njHAJLpnBAiIsnziHijwW9WWVOLi8prRnibTv2qyYu3/yRhMUmhlQz
+        3Ed1qaDy9fDqHHxzeYbVFI+oq65TYsWE8K5w0R4OAe56RxuDfRoGDFBPMiezN0G+m0b32y
+        Zabi5fzJAH2zD6H5AB3ktOZ41s329As=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-321--TC6XFcAOXyM3q3KGLBCGA-1; Thu, 23 Feb 2023 07:25:34 -0500
+X-MC-Unique: -TC6XFcAOXyM3q3KGLBCGA-1
+Received: by mail-io1-f70.google.com with SMTP id z5-20020a6b5c05000000b007447572f3f8so6056451ioh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:25:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vlhfn8tA0IPcHcqagD5wqt5nb53wGseGUDE2K0I/G38=;
+        b=gtZZPRZr0RGQcwP8nYT42xRaPWtP/v9S7l2OiffOPcf50AI0ppyaQuY3MsAPir890k
+         aeNtObAKXV8hzZp07bk8wWl9xwXlRW6ALKcjFmQdTLzsoRfuoAreJ2OEkCtMoT+M6bXV
+         drNIEyVp1+AVE5zIDGpAe4XPXZShBxnLE1BE2YJ2NnrGKNbqvhMaa+RuVdG3e1MgkaH8
+         cICBGaq/8wlY1g/tZ6YxK6AW+SGfcKOimk+IL5x8HyjeJazjaf6G+S4Zw7q454Unyx5W
+         EFKQi/PkGBnFepgXV1cpwPiy1holuqrLmM8C/YmtKnsmNiHDxERaOzV0A6QAfCU7ydy6
+         +XxQ==
+X-Gm-Message-State: AO0yUKUrk0ekfTWI9CDDZQPHXMC+cZo7K/U1Yf7LLgc74OSDiqJnpIfS
+        ufzTn56r0zK+Fa0CtWnvjda/AmAq5INVrGo4Kt9SuXKJzl5htUBr4fgeZPkfkRcHIs+D3ZcgNOx
+        iNJ8OjelZ1dp+Llv9tJNEk77x
+X-Received: by 2002:a92:ca0e:0:b0:316:e3a0:723f with SMTP id j14-20020a92ca0e000000b00316e3a0723fmr7133177ils.17.1677155133374;
+        Thu, 23 Feb 2023 04:25:33 -0800 (PST)
+X-Google-Smtp-Source: AK7set9J9K5vAM+Z307Jj89Gj1T2DAVET7LqPbgfFcmJRdfj00zhduzFv3Ng2Go6ZPSOmGI1agMwYQ==
+X-Received: by 2002:a92:ca0e:0:b0:316:e3a0:723f with SMTP id j14-20020a92ca0e000000b00316e3a0723fmr7133160ils.17.1677155133128;
+        Thu, 23 Feb 2023 04:25:33 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id b16-20020a029a10000000b003c2bb1bd5a4sm1228446jal.34.2023.02.23.04.25.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 04:25:32 -0800 (PST)
+Date:   Thu, 23 Feb 2023 07:25:30 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] firmware: qcom_scm: Refactor code to support
+ multiple download mode
+Message-ID: <Y/dbOtOHHAihhw87@x1>
+References: <1676990381-18184-1-git-send-email-quic_mojha@quicinc.com>
+ <1676990381-18184-4-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS3P286MB2295:EE_|TYCP286MB3487:EE_
-X-MS-Office365-Filtering-Correlation-Id: d9f7f0ac-3e7b-416b-b08f-08db1598fa7d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6AM/CSFR+w44zaow50hBWtlRp/lmNcsr9tOVST52i+GieJm+U85H37sBzReYX0brhDSRc5yk+HKS61c2jCnlKp+do7QBvjZkrzBhf83naz9STDRSlrbvjw29hs3d0d4pxyojXcWpjPTtyGla6sAyvIj9FTS0hA87W4sNtIYD3dkMKNfZbPiSNhOKekGKisiUfQLB9LvFY97Ue6O3wa9HARccGL2a3EBlIqLP2pnG/Ig3HuZwGxdlBA9cHQRcNv8fDAvj5ePQl1/j2siK+RmGNOVFtO92yjucDpiCpUmK8DALSRLAjsOIY8RNkXEbZ8o4SmIT44x2I6FMdTwwFyYrRia+zirohUI5IJNg7bDDEFCvxAIETydkOiFPv0OKu7vpfE9bpwiRV+S+j/HudY7FDWEvXHX6eqwKmFHGhbK8HsW6HXJbzAUTr5DHlqi8Q+hND+5sumYJhvHRDzj5NNOQ0H9nHxcLa9sBJABpgPUADjdFKbARcb0QHnNpCZEn5lwAwWBWNJ0oNcvROnrfPBviNfDjGrSJsXhanIqCrW5DFlvZ4dZtRWpjbJbW1kyhLIzxXhmCvqzuOVZA6F6kuZ/vD5i1GKrpS8wN6J6/B9lIv8kQUEo3ph30sPWkgZ5wjx4tDWFffmBhek8U87ma/LHUdA==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0dPMnFlVkxuekphcnNrUlFRZiswajdCZU9tVTFXWk5TY2ZORkdGMXZVeVNo?=
- =?utf-8?B?U01oRVg2a3NyMUo4aEV2SHNhbXNHSzJlWERPdjliUjZhWHVQd25Kd2dPUGNK?=
- =?utf-8?B?NlV0SHNrbDNwU1Nmd1A2c0VqUll5aDRTbTQvZllZNVNFb2lSSi8vQmFUeUZP?=
- =?utf-8?B?eDI0cHZKUkpRdStHMmQ2a1JBZ21hL2Z3M0ZkN2dDT2wycDRQWjVSMmRtNXRO?=
- =?utf-8?B?SmQwMGVYb3N1Z1RnVUk1ZXcyYzNLdU0xZGM2Z1NtLzR3UzQ3WE5oWkZmL2tz?=
- =?utf-8?B?bTJESzQvdDdjTStoWnJQMkt5TTltVFJOdHVIZGd3U1plOHhDVElTNTc1Qzh6?=
- =?utf-8?B?bGtPQlNLci93VDdKSWJtQ0ZVUmU5MEo4bjVnVFVoSlpzbVNkK3hoQk9lMG1k?=
- =?utf-8?B?MXpTZERzZFpkVExDdEN1cEI4Y1hUUWUvY0ZEa1NQNGVPcFEwSlhwazZPeEtE?=
- =?utf-8?B?VnBlaldSNGFkZ1FuWHZYdmRySHplcHpJcUZIZnZVRXRqVVgzZVh3dVN5blhi?=
- =?utf-8?B?enhGQ090czZSNnZ1a1FtRW43ZmErMkwveXprOU0rYUh1aGsrMnR1K1Bha1VG?=
- =?utf-8?B?aGphUjVWR0RXeHptWVZDdFJxc1FnREhPQnFVU3dCblo2RmluczFsU0xCMEYx?=
- =?utf-8?B?eUxzTldzeURkcGR1dHFHUmVGM2ZpSXdJVlg0Wk9LSjk2SzhGdHh3WHUzVmVO?=
- =?utf-8?B?M2ZBekdESUxMRjRwVFdRdkdDNXpxOWRCQWxiKzdGQ1JBazh0OGd4cUs5QVQw?=
- =?utf-8?B?enFJd2p4bTJ0REZnYjFacVhqT2ZRa2pTYTFDVEJOYXBRbThDN0NCNlFOSVdV?=
- =?utf-8?B?STBoOW8rZERyRHBHaTZUUTBzVkFiOTJScDJ0K0JnOVVVbGt2c1dhNjVPTm0y?=
- =?utf-8?B?WDRwNzdpR0pkUlppZ2Q2VzB4UU0xMU96Mmt6UFl4OTgwUUVDYldpTkFiTHc5?=
- =?utf-8?B?clAzVDNkdzdNUWZUQlg3dHRJcXhOSkp0R0ZvR3RZVDFwbWlDWTAwbEUyVjE2?=
- =?utf-8?B?bkExQ2hSTXR3MVlvRjVsNUUvZFFsNm5DQjhMd2wyVmUyT2l5RG4yVEJYZm9O?=
- =?utf-8?B?ZFBpYzd5b21HL3VIU0pXeUJPWkgzSnZmT2tPZnJaQnJzcys1RTNSZ2p5SHd1?=
- =?utf-8?B?cXlTNVFpZ0FycWg0L2h2ckkzSXdNeC9UZHFkdjhLV2JCU3RKRldSTmZCdmhO?=
- =?utf-8?B?YzVjNkVmWTQ5dlZ2TWltYmFnNVFjMjA1NmdlM1IyNnluU0FPVCs2Q2FUZ2dG?=
- =?utf-8?B?K0FxTEh2OHoxbmVuMk9pUWdsUDVFYytKZi8xOU9XWVBqdkhlMnE4ZHY4ZjQy?=
- =?utf-8?B?cmc4ZDZxckRzeS9RS3VWUVZHNnJRckRsNS9CWGxRNmJ4dlNTWFNzVGI2aFlo?=
- =?utf-8?B?T2ErWlhqNmV2SDhEYjVXbXhkb3RiMXg0TUE3cXBoRmZtVWxyZzNBQjVqM2Js?=
- =?utf-8?B?Si8xTnVQa2krakpxK0t4SDFhbkxKY1BudjhIL2FJb0k2UlFpZEdkdXhlNDNL?=
- =?utf-8?B?d21NWHhJbk9USGo2TW4vaU5OTHJvUGdJelBab2V1bGUxbEZKS2EybEpHWWE1?=
- =?utf-8?B?cGVmT0k3T2pyVEt2L2x0NW55VzBZcTEyQk1GZXZXamZXWWNReGpYa3RlYkdH?=
- =?utf-8?B?T0xtRVV1L1Z0SEsyUm5VbmFROGVySVhiMjJZYlJ5NS9Ra0xzTVp3eDJNc1NO?=
- =?utf-8?B?Tlh6OW9kWlZCS2ZndVo1S0szVkRPTmY3WEJsZG9wTDc5MHJDbnJYT2N3PT0=?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9f7f0ac-3e7b-416b-b08f-08db1598fa7d
-X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 12:24:58.6685
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB3487
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1676990381-18184-4-git-send-email-quic_mojha@quicinc.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, there is a typo in the mail, i will resend shortly, please ignore 
-it for now
-
-On 2023/2/23 20:21, Eddy Tao wrote:
-> Use on stack sw_flow_key in ovs_packet_cmd_execute
->
-> Reason: As key function in slow-path, ovs_packet_cmd_execute and
->          ovs_flow_cmd_new allocate transient memory for sw_flow
->          and frees it at the end of function.
->          The procedure is not efficient in 2 aspects
->          1. actuall sw_flow_key is what the function need
->          2. free/alloc involves kmem_cache operations
->          when system under frequent slow path operation
->
->          Existing code in ovs_flow_cmd_new/set/get use stack
->          to store sw_flow_mask and sw_flow_key deliberately
->
-> Performance benefit:
->          ovs_packet_cmd_execute efficiency improved
->          Avoid 2 calls to kmem_cache alloc
->          Avoid memzero of 200 bytes
->          6% less instructions
->
-> Testing topology
->              +-----+
->        nic1--|     |--nic1
->        nic2--|     |--nic2
-> VM1(16cpus) | ovs |   VM2(16 cpus)
->        nic3--|4cpus|--nic3
->        nic4--|     |--nic4
->              +-----+
->     2 threads on each vnic with affinity set on client side
->
-> netperf -H $peer -p $((port+$i)) -t UDP_RR  -l 60 -- -R 1 -r 8K,8K
-> netperf -H $peer -p $((port+$i)) -t TCP_RR  -l 60 -- -R 1 -r 120,240
-> netperf -H $peer -p $((port+$i)) -t TCP_CRR -l 60 -- -R 1 -r 120,240
->
-> Before the fix
->        Mode Iterations   Variance    Average
->      UDP_RR         10      %1.31      46724
->      TCP_RR         10      %6.26      77188
->     TCP_CRR         10      %0.10      20505
-> UDP_STREAM         10      %4.55      19907
-> TCP_STREAM         10      %9.93      28942
->
-> After the fix
->        Mode Iterations   Variance    Average
->      UDP_RR         10      %1.51      49097
->      TCP_RR         10      %5.58      78540
->     TCP_CRR         10      %0.14      20542
-> UDP_STREAM         10     %11.17      22532
-> TCP_STREAM         10     %11.14      28579
->
-> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+On Tue, Feb 21, 2023 at 08:09:40PM +0530, Mukesh Ojha wrote:
+> Currently on Qualcomm SoC, download_mode is enabled if
+> CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT is selected. Refactor
+> the code such that it supports multiple download modes and
+> drop the config.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > ---
->   V1 -> V2: Further reduce memory usage by using sw_flow_key instead
->             of sw_flow, revise description of change and provide data
->
->   net/openvswitch/datapath.c | 30 +++++++++++-------------------
->   1 file changed, 11 insertions(+), 19 deletions(-)
->
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index fcee6012293b..ae3146d51079 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -596,8 +596,7 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
->   	struct nlattr **a = info->attrs;
->   	struct sw_flow_actions *acts;
->   	struct sk_buff *packet;
-> -	struct sw_flow *flow;
-> -	struct sw_flow_actions *sf_acts;
-> +	struct sw_flow_key key;
->   	struct datapath *dp;
->   	struct vport *input_vport;
->   	u16 mru = 0;
-> @@ -636,24 +635,20 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
->   	}
->   
->   	/* Build an sw_flow for sending this packet. */
-> -	flow = ovs_flow_alloc();
-> -	err = PTR_ERR(flow);
-> -	if (IS_ERR(flow))
-> -		goto err_kfree_skb;
-> +	memset(&key, 0, sizeof(key));
->   
->   	err = ovs_flow_key_extract_userspace(net, a[OVS_PACKET_ATTR_KEY],
-> -					     packet, &flow->key, log);
-> +					     packet, &key, log);
->   	if (err)
-> -		goto err_flow_free;
-> +		goto err_kfree_skb;
->   
->   	err = ovs_nla_copy_actions(net, a[OVS_PACKET_ATTR_ACTIONS],
-> -				   &flow->key, &acts, log);
-> +				   &key, &acts, log);
->   	if (err)
-> -		goto err_flow_free;
-> +		goto err_kfree_skb;
->   
-> -	rcu_assign_pointer(flow->sf_acts, acts);
-> -	packet->priority = flow->key.phy.priority;
-> -	packet->mark = flow->key.phy.skb_mark;
-> +	packet->priority = key.phy.priority;
-> +	packet->mark = key.phy.skb_mark;
->   
->   	rcu_read_lock();
->   	dp = get_dp_rcu(net, ovs_header->dp_ifindex);
-> @@ -661,7 +656,7 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
->   	if (!dp)
->   		goto err_unlock;
->   
-> -	input_vport = ovs_vport_rcu(dp, flow->key.phy.in_port);
-> +	input_vport = ovs_vport_rcu(dp, key.phy.in_port);
->   	if (!input_vport)
->   		input_vport = ovs_vport_rcu(dp, OVSP_LOCAL);
->   
-> @@ -670,20 +665,17 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
->   
->   	packet->dev = input_vport->dev;
->   	OVS_CB(packet)->input_vport = input_vport;
-> -	sf_acts = rcu_dereference(flow->sf_acts);
->   
->   	local_bh_disable();
-> -	err = ovs_execute_actions(dp, packet, sf_acts, &flow->key);
-> +	err = ovs_execute_actions(dp, packet, acts, &key);
->   	local_bh_enable();
->   	rcu_read_unlock();
->   
-> -	ovs_flow_free(flow, false);
-> +	ovs_nla_free_flow_actions(acts);
->   	return err;
->   
->   err_unlock:
->   	rcu_read_unlock();
-> -err_flow_free:
-> -	ovs_flow_free(flow, false);
->   err_kfree_skb:
->   	kfree_skb(packet);
->   err:
+>  drivers/firmware/Kconfig    | 11 -----------
+>  drivers/firmware/qcom_scm.c | 45 +++++++++++++++++++++++++++++++++++++++------
+>  include/linux/qcom_scm.h    |  4 ++++
+>  3 files changed, 43 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index b59e304..ff7e9f3 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -215,17 +215,6 @@ config MTK_ADSP_IPC
+>  config QCOM_SCM
+>  	tristate
+>  
+> -config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
+> -	bool "Qualcomm download mode enabled by default"
+> -	depends on QCOM_SCM
+> -	help
+> -	  A device with "download mode" enabled will upon an unexpected
+> -	  warm-restart enter a special debug mode that allows the user to
+> -	  "download" memory content over USB for offline postmortem analysis.
+> -	  The feature can be enabled/disabled on the kernel command line.
+> -
+> -	  Say Y here to enable "download mode" by default.
+> -
+>  config SYSFB
+>  	bool
+>  	select BOOT_VESA_SUPPORT
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index c376ba8..4975d3c 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -20,8 +20,43 @@
+>  
+>  #include "qcom_scm.h"
+>  
+> -static bool download_mode = IS_ENABLED(CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT);
+> -module_param(download_mode, bool, 0);
+> +static unsigned int download_mode;
+> +static struct qcom_scm *__scm;
+
+Add newline. Also, moving __scm wasn't called out in the commit
+description.
+
+> +static void qcom_scm_set_download_mode(bool enable);
+> +static int set_dload_mode(const char *val, const struct kernel_param *kp)
+
+Can set_dload_mode() be placed after qcom_scm_set_download_mode() so
+that you don't need to declare it before hand.
+
+> +{
+> +	int ret;
+> +	int old_mode = download_mode;
+> +
+> +	ret = param_set_int(val, kp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (download_mode) {
+> +	case QCOM_DOWNLOAD_FULLDUMP:
+> +		if (__scm)
+> +			qcom_scm_set_download_mode(true);
+> +		break;
+> +	case QCOM_DOWNLOAD_NODUMP:
+> +		if (__scm)
+> +			qcom_scm_set_download_mode(false);
+> +		break;
+> +	default:
+> +		pr_err("unknown download mode\n");
+> +		download_mode = old_mode;
+> +		return -EINVAL;
+
+param_set_int() has been called already and has the invalid value. I
+think the param_set_int() should be called after the download mode has
+been set successfully.
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct kernel_param_ops dload_mode_param_ops = {
+> +	.set = set_dload_mode,
+> +	.get = param_get_hexint,
+> +};
+> +module_param_cb(download_mode, &dload_mode_param_ops, &download_mode, 0644);
+> +MODULE_PARM_DESC(download_mode,
+> +		 "Download mode: 0x0=no dump mode (default), 0x10=full dump mode");
+>  
+>  #define SCM_HAS_CORE_CLK	BIT(0)
+>  #define SCM_HAS_IFACE_CLK	BIT(1)
+> @@ -70,8 +105,6 @@ static const char * const qcom_scm_convention_names[] = {
+>  	[SMC_CONVENTION_LEGACY] = "smc legacy",
+>  };
+>  
+> -static struct qcom_scm *__scm;
+> -
+>  static int qcom_scm_clk_enable(void)
+>  {
+>  	int ret;
+> @@ -435,8 +468,8 @@ static void qcom_scm_set_download_mode(bool enable)
+>  		}
+>  
+>  		ret = qcom_scm_io_writel(__scm->dload_mode_addr, enable ?
+> -				dload_addr_val | QCOM_SCM_BOOT_SET_DLOAD_MODE :
+> -				dload_addr_val & ~(QCOM_SCM_BOOT_SET_DLOAD_MODE));
+> +				((dload_addr_val & ~QCOM_DOWNLOAD_MODE_MASK) | download_mode) :
+> +				dload_addr_val & ~QCOM_DOWNLOAD_MODE_MASK);
+
+These two lines were introduced in an earlier patch in this series. Why
+not just introduce the QCOM_DOWNLOAD_MODE_MASK there?
+
+Brian
+
