@@ -2,429 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182A06A122A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716D76A122E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjBWVjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S229759AbjBWVjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBWVjL (ORCPT
+        with ESMTP id S229525AbjBWVjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:39:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551331A64F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:38:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677188293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kqgwoPDu0udxKVhnk8uvaBcBVYX5nSRw5GTuP6V+NFk=;
-        b=c+paS85sSYVjYqtgcAPzMxCd47iGgVx9c7syP1KYYCyLpF1L3aFxYktw6mdA/S2eq/zI1L
-        augM1Z4o/xCtamhCSa983vddC8IihMNBUuNBie8DeZwibGBTGFwvJu/a22soIslGbS7ok2
-        I9D8Pbl62ulf5ie0yX+lkpZP8CHCDbI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-KNlCcAX6OmW5SR41J5EMkQ-1; Thu, 23 Feb 2023 16:38:09 -0500
-X-MC-Unique: KNlCcAX6OmW5SR41J5EMkQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FD6729ABA1C;
-        Thu, 23 Feb 2023 21:38:09 +0000 (UTC)
-Received: from [10.22.16.134] (unknown [10.22.16.134])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 294C0C15BA0;
-        Thu, 23 Feb 2023 21:38:09 +0000 (UTC)
-Message-ID: <bf2948c4-dd6a-1cf6-16b5-39e5e17ef72a@redhat.com>
-Date:   Thu, 23 Feb 2023 16:38:08 -0500
+        Thu, 23 Feb 2023 16:39:41 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CE55C152;
+        Thu, 23 Feb 2023 13:39:34 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1720887dfcdso17236686fac.6;
+        Thu, 23 Feb 2023 13:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oiqYmKCBb6pTn9/ZoddN5NSvx6CSd4fhJNmnMHgMU9s=;
+        b=SDLNeS2gXdtg2gCn+3+QIpnO8NNDqnczHqToUUg7R81LvyrE0d/3mx3w29Sjd6gk65
+         +opeyqm+JqCOp3cRw0fjzyuSqf7BD41B6rhVsF/1LhNxKEGg8R7yA8nfMAckSGWLZNNY
+         FKVDVXcdU4/cp9hzPHRxYdnwwiR/AhkdTK7hji1FVfdIUh/RummZVmpiz4c0c7arGvOF
+         JMTz++TQyKmhJQPPt81bOSG15/pX7bPbrxQyy013pY/D85cHR073R5NKofIEYScFNT9H
+         Zbs/DMnYl693qcts3kBZbEZGUA84ykI3l7YbYVmu7HCZLMz7I6nFyoYGcnWJb0W/Q+5+
+         ZaGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oiqYmKCBb6pTn9/ZoddN5NSvx6CSd4fhJNmnMHgMU9s=;
+        b=lUFDSy5MMFENdLnSBsHoBouY1sfKIaXl6d8p+KMUreqYczxZwnMUpuKXoP2lDzh/x6
+         JLYHZzkcNq8yYCRM5iVOSuiPXJSX7d2uw/Lg3gF4hB0b8bX5CwTLcue7wOxWFAlCPmpO
+         tcbO/BKpumhc20Zolt2WFISGDuqimv5CjgbuJP6l+RWUuBSUru8MAKgk7kiXb3Ajhzn/
+         /iGSDUe1wCM5s65litwSTPwAJviw03ru9l0DEZhoC++mgsIDwsts1+Q48AKJSCUmRBGx
+         23aEAeP3/K56A87yi48EdHc14hE1EGmNbeLR5eYqMWUjHWW28m8+kliBmviYapg2bJa5
+         sieQ==
+X-Gm-Message-State: AO0yUKUKwXktfGgLLC0vFrNdHbbHEX0kaVm1sfLo3x2bilnsLuvYt7dr
+        4uejtAnxSn4L1Rxaj9pgqMsiUNqmKgg=
+X-Google-Smtp-Source: AK7set/A9A8K0Z+F/p9HhVeO46Gn31qPy7xM5/xVhS2qGOoJOSbAhmB1axNe+gYNOFcCv5+c8wR71Q==
+X-Received: by 2002:a05:6870:438e:b0:172:473c:5a1b with SMTP id r14-20020a056870438e00b00172473c5a1bmr4710501oah.15.1677188373479;
+        Thu, 23 Feb 2023 13:39:33 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:2586:7432:d181:902b? ([2600:1700:2442:6db0:2586:7432:d181:902b])
+        by smtp.gmail.com with ESMTPSA id o2-20020a4a84c2000000b0051d13098c54sm2612189oog.19.2023.02.23.13.39.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 13:39:32 -0800 (PST)
+Message-ID: <12492b9f-1961-7d75-3197-41b4bce90b63@gmail.com>
+Date:   Thu, 23 Feb 2023 15:39:31 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 0/2] of: populate of_root_node if not set (alternate)
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com
-References: <20230223122642.491637862@infradead.org>
- <20230223123319.487908155@infradead.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230223123319.487908155@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230223213418.891942-1-frowand.list@gmail.com>
+In-Reply-To: <20230223213418.891942-1-frowand.list@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 07:26, Peter Zijlstra wrote:
-> Currently readers and writers have distinctly different wait/wake
-> methods. For readers the ->count adjustment happens on the wakeup
-> side, while for writers the ->count adjustment happens on the wait
-> side.
->
-> This asymmetry is unfortunate since the wake side has an additional
-> guarantee -- specifically, the wake side has observed the unlocked
-> state, and thus it can know that speculative READER_BIAS perbutations
-> on ->count are just that, they will be undone.
->
-> Additionally, unifying the wait/wake methods allows sharing code.
->
-> As such, do a straight-forward transform of the writer wakeup into the
-> wake side.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->   kernel/locking/rwsem.c |  253 ++++++++++++++++++++++---------------------------
->   1 file changed, 115 insertions(+), 138 deletions(-)
->
-> --- a/kernel/locking/rwsem.c
-> +++ b/kernel/locking/rwsem.c
-> @@ -107,7 +107,7 @@
->    *
->    * There are three places where the lock handoff bit may be set or cleared.
->    * 1) rwsem_mark_wake() for readers		-- set, clear
-> - * 2) rwsem_try_write_lock() for writers	-- set, clear
-> + * 2) rwsem_writer_wake() for writers	-- set, clear
->    * 3) rwsem_del_waiter()			-- clear
->    *
->    * For all the above cases, wait_lock will be held. A writer must also
-> @@ -377,7 +377,7 @@ rwsem_add_waiter(struct rw_semaphore *se
->   /*
->    * Remove a waiter from the wait_list and clear flags.
->    *
-> - * Both rwsem_mark_wake() and rwsem_try_write_lock() contain a full 'copy' of
-> + * Both rwsem_mark_wake() and rwsem_writer_wake() contain a full 'copy' of
->    * this function. Modify with care.
->    *
->    * Return: true if wait_list isn't empty and false otherwise
-> @@ -394,6 +394,100 @@ rwsem_del_waiter(struct rw_semaphore *se
->   	return false;
->   }
->   
-> +static inline void
-> +rwsem_waiter_wake(struct rwsem_waiter *waiter, struct wake_q_head *wake_q)
-> +{
-> +	struct task_struct *tsk;
-> +
-> +	tsk = waiter->task;
-> +	get_task_struct(tsk);
-> +
-> +	/*
-> +	 * Ensure calling get_task_struct() before setting the reader
-> +	 * waiter to nil such that rwsem_down_read_slowpath() cannot
-> +	 * race with do_exit() by always holding a reference count
-> +	 * to the task to wakeup.
-> +	 */
-> +	smp_store_release(&waiter->task, NULL);
-> +	/*
-> +	 * Ensure issuing the wakeup (either by us or someone else)
-> +	 * after setting the reader waiter to nil.
-> +	 */
-> +	wake_q_add_safe(wake_q, tsk);
-> +}
-> +
-> +/*
-> + * This function must be called with the sem->wait_lock held to prevent
-> + * race conditions between checking the rwsem wait list and setting the
-> + * sem->count accordingly.
-> + *
-> + * Implies rwsem_del_waiter() on success.
-> + */
-> +static void rwsem_writer_wake(struct rw_semaphore *sem,
-> +			      struct rwsem_waiter *waiter,
-> +			      struct wake_q_head *wake_q)
-> +{
-> +	struct rwsem_waiter *first = rwsem_first_waiter(sem);
-> +	long count, new;
-> +
-> +	lockdep_assert_held(&sem->wait_lock);
-> +
-> +	count = atomic_long_read(&sem->count);
-> +	do {
-> +		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
-> +
-> +		if (has_handoff) {
-> +			/*
-> +			 * Honor handoff bit and yield only when the first
-> +			 * waiter is the one that set it. Otherwisee, we
-> +			 * still try to acquire the rwsem.
-> +			 */
-> +			if (first->handoff_set && (waiter != first))
-> +				return;
-> +		}
-This "if" statement if for a non-first waiter that somehow got woken up 
-to have a chance to steal the lock. Now the handoff is done in the wake 
-side for the first waiter, this "if" statement is not applicable and can 
-be removed.
-> +
-> +		new = count;
-> +
-> +		if (count & RWSEM_LOCK_MASK) {
-> +			/*
-> +			 * A waiter (first or not) can set the handoff bit
-> +			 * if it is an RT task or wait in the wait queue
-> +			 * for too long.
-> +			 */
-> +			if (has_handoff || (!rt_task(waiter->task) &&
-> +					    !time_after(jiffies, waiter->timeout)))
-> +				return;
-> +
-> +			new |= RWSEM_FLAG_HANDOFF;
-> +		} else {
-> +			new |= RWSEM_WRITER_LOCKED;
-> +			new &= ~RWSEM_FLAG_HANDOFF;
-> +
-> +			if (list_is_singular(&sem->wait_list))
-> +				new &= ~RWSEM_FLAG_WAITERS;
-> +		}
-> +	} while (!atomic_long_try_cmpxchg_acquire(&sem->count, &count, new));
-> +
-> +	/*
-> +	 * We have either acquired the lock with handoff bit cleared or set
-> +	 * the handoff bit. Only the first waiter can have its handoff_set
-> +	 * set here to enable optimistic spinning in slowpath loop.
-> +	 */
-> +	if (new & RWSEM_FLAG_HANDOFF) {
-> +		first->handoff_set = true;
-> +		lockevent_inc(rwsem_wlock_handoff);
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Have rwsem_writer_wake() fully imply rwsem_del_waiter() on
-> +	 * success.
-> +	 */
-> +	list_del(&waiter->list);
-> +	rwsem_set_owner(sem);
-> +	rwsem_waiter_wake(waiter, wake_q);
-> +}
-> +
->   /*
->    * handle the lock release when processes blocked on it that can now run
->    * - if we come here from up_xxxx(), then the RWSEM_FLAG_WAITERS bit must
-> @@ -424,23 +518,12 @@ static void rwsem_mark_wake(struct rw_se
->   	 */
->   	waiter = rwsem_first_waiter(sem);
->   
-> -	if (waiter->type != RWSEM_WAITING_FOR_WRITE)
-> -		goto wake_readers;
-> -
-> -	if (wake_type == RWSEM_WAKE_ANY) {
-> -		/*
-> -		 * Mark writer at the front of the queue for wakeup.
-> -		 * Until the task is actually later awoken later by
-> -		 * the caller, other writers are able to steal it.
-> -		 * Readers, on the other hand, will block as they
-> -		 * will notice the queued writer.
-> -		 */
-> -		wake_q_add(wake_q, waiter->task);
-> -		lockevent_inc(rwsem_wake_writer);
-> +	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
-> +		if (wake_type == RWSEM_WAKE_ANY)
-> +			rwsem_writer_wake(sem, waiter, wake_q);
-> +		return;
->   	}
-> -	return;
->   
-> -wake_readers:
->   	/*
->   	 * No reader wakeup if there are too many of them already.
->   	 */
-> @@ -547,25 +630,8 @@ static void rwsem_mark_wake(struct rw_se
->   		atomic_long_add(adjustment, &sem->count);
->   
->   	/* 2nd pass */
-> -	list_for_each_entry_safe(waiter, tmp, &wlist, list) {
-> -		struct task_struct *tsk;
-> -
-> -		tsk = waiter->task;
-> -		get_task_struct(tsk);
-> -
-> -		/*
-> -		 * Ensure calling get_task_struct() before setting the reader
-> -		 * waiter to nil such that rwsem_down_read_slowpath() cannot
-> -		 * race with do_exit() by always holding a reference count
-> -		 * to the task to wakeup.
-> -		 */
-> -		smp_store_release(&waiter->task, NULL);
-> -		/*
-> -		 * Ensure issuing the wakeup (either by us or someone else)
-> -		 * after setting the reader waiter to nil.
-> -		 */
-> -		wake_q_add_safe(wake_q, tsk);
-> -	}
-> +	list_for_each_entry_safe(waiter, tmp, &wlist, list)
-> +		rwsem_waiter_wake(waiter, wake_q);
->   }
->   
->   /*
-> @@ -596,77 +662,6 @@ rwsem_del_wake_waiter(struct rw_semaphor
->   }
->   
->   /*
-> - * This function must be called with the sem->wait_lock held to prevent
-> - * race conditions between checking the rwsem wait list and setting the
-> - * sem->count accordingly.
-> - *
-> - * Implies rwsem_del_waiter() on success.
-> - */
-> -static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
-> -					struct rwsem_waiter *waiter)
-> -{
-> -	struct rwsem_waiter *first = rwsem_first_waiter(sem);
-> -	long count, new;
-> -
-> -	lockdep_assert_held(&sem->wait_lock);
-> -
-> -	count = atomic_long_read(&sem->count);
-> -	do {
-> -		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
-> -
-> -		if (has_handoff) {
-> -			/*
-> -			 * Honor handoff bit and yield only when the first
-> -			 * waiter is the one that set it. Otherwisee, we
-> -			 * still try to acquire the rwsem.
-> -			 */
-> -			if (first->handoff_set && (waiter != first))
-> -				return false;
-> -		}
-> -
-> -		new = count;
-> -
-> -		if (count & RWSEM_LOCK_MASK) {
-> -			/*
-> -			 * A waiter (first or not) can set the handoff bit
-> -			 * if it is an RT task or wait in the wait queue
-> -			 * for too long.
-> -			 */
-> -			if (has_handoff || (!rt_task(waiter->task) &&
-> -					    !time_after(jiffies, waiter->timeout)))
-> -				return false;
-> -
-> -			new |= RWSEM_FLAG_HANDOFF;
-> -		} else {
-> -			new |= RWSEM_WRITER_LOCKED;
-> -			new &= ~RWSEM_FLAG_HANDOFF;
-> -
-> -			if (list_is_singular(&sem->wait_list))
-> -				new &= ~RWSEM_FLAG_WAITERS;
-> -		}
-> -	} while (!atomic_long_try_cmpxchg_acquire(&sem->count, &count, new));
-> -
-> -	/*
-> -	 * We have either acquired the lock with handoff bit cleared or set
-> -	 * the handoff bit. Only the first waiter can have its handoff_set
-> -	 * set here to enable optimistic spinning in slowpath loop.
-> -	 */
-> -	if (new & RWSEM_FLAG_HANDOFF) {
-> -		first->handoff_set = true;
-> -		lockevent_inc(rwsem_wlock_handoff);
-> -		return false;
-> -	}
-> -
-> -	/*
-> -	 * Have rwsem_try_write_lock() fully imply rwsem_del_waiter() on
-> -	 * success.
-> -	 */
-> -	list_del(&waiter->list);
-> -	rwsem_set_owner(sem);
-> -	return true;
-> -}
-> -
-> -/*
->    * The rwsem_spin_on_owner() function returns the following 4 values
->    * depending on the lock owner state.
->    *   OWNER_NULL  : owner is currently NULL
-> @@ -1072,7 +1067,7 @@ rwsem_down_read_slowpath(struct rw_semap
->   	for (;;) {
->   		set_current_state(state);
->   		if (!smp_load_acquire(&waiter.task)) {
-> -			/* Matches rwsem_mark_wake()'s smp_store_release(). */
-> +			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
->   			break;
->   		}
->   		if (signal_pending_state(state, current)) {
-> @@ -1143,54 +1138,36 @@ rwsem_down_write_slowpath(struct rw_sema
->   	} else {
->   		atomic_long_or(RWSEM_FLAG_WAITERS, &sem->count);
->   	}
-> +	raw_spin_unlock_irq(&sem->wait_lock);
->   
->   	/* wait until we successfully acquire the lock */
-> -	set_current_state(state);
->   	trace_contention_begin(sem, LCB_F_WRITE);
->   
->   	for (;;) {
-> -		if (rwsem_try_write_lock(sem, &waiter)) {
-> -			/* rwsem_try_write_lock() implies ACQUIRE on success */
-> +		set_current_state(state);
-> +		if (!smp_load_acquire(&waiter.task)) {
-> +			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
->   			break;
->   		}
-> -
-> -		raw_spin_unlock_irq(&sem->wait_lock);
-> -
-> -		if (signal_pending_state(state, current))
-> -			goto out_nolock;
-> -
-> -		/*
-> -		 * After setting the handoff bit and failing to acquire
-> -		 * the lock, attempt to spin on owner to accelerate lock
-> -		 * transfer. If the previous owner is a on-cpu writer and it
-> -		 * has just released the lock, OWNER_NULL will be returned.
-> -		 * In this case, we attempt to acquire the lock again
-> -		 * without sleeping.
-> -		 */
-> -		if (waiter.handoff_set) {
-> -			enum owner_state owner_state;
-> -
-> -			owner_state = rwsem_spin_on_owner(sem);
-> -			if (owner_state == OWNER_NULL)
-> -				goto trylock_again;
-> +		if (signal_pending_state(state, current)) {
-> +			raw_spin_lock_irq(&sem->wait_lock);
-> +			if (waiter.task)
-> +				goto out_nolock;
-> +			raw_spin_unlock_irq(&sem->wait_lock);
-> +			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
-> +			break;
->   		}
-> -
->   		schedule_preempt_disabled();
->   		lockevent_inc(rwsem_sleep_writer);
-> -		set_current_state(state);
-> -trylock_again:
-> -		raw_spin_lock_irq(&sem->wait_lock);
->   	}
->   	__set_current_state(TASK_RUNNING);
-> -	raw_spin_unlock_irq(&sem->wait_lock);
->   	lockevent_inc(rwsem_wlock);
->   	trace_contention_end(sem, 0);
->   	return sem;
->   
->   out_nolock:
-> -	__set_current_state(TASK_RUNNING);
-> -	raw_spin_lock_irq(&sem->wait_lock);
->   	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
-> +	__set_current_state(TASK_RUNNING);
->   	lockevent_inc(rwsem_wlock_fail);
->   	trace_contention_end(sem, -EINTR);
->   	return ERR_PTR(-EINTR);
+Hi Clément,
 
-I believe it is better to change state inside the wait_lock critical 
-section to provide a release barrier for free.
+Can you please test this version of the patch series?
 
-Cheers,
-Longman
+Thanks!
+
+-Frank
+
+On 2/23/23 15:34, Frank Rowand wrote:
+> This series is a different implementation to achieve the goals of
+> https://lore.kernel.org/r/20220623105044.152832-1-clement.leger@bootlin.com
+> 
+> In order to apply overlays or create new nodes under the root node, the
+> kernel expects of_root to be set. On some system where a device-tree was
+> not provided by firmware (x86 for instance) if CONFIG_OF is enabled,
+> then we will end up with a null of_root. This series adds support to
+> create this root node using a builtin dtb and removes the manual
+> creation of the root node done in unittests.c.
+> 
+> Changes since version 2: (patch 1/2)
+>   - change of __dtb_empty_root_* from "void *" to "uint8_t []"
+> 
+> Changes since version 1: (patch 1/2)
+>   - refresh for 6.2-rc1
+>   - update Signed-off-by
+>   - fix typo in of_fdt.h: s/of_setup/setup_of
+>   - unflatten_device_tree(): validate size in header field dtb_empty_root
+>     that will be used to copy dtb_empty_root
+>   - add Kconfig option to manually select CONFIG_OF_EARLY_FLATTREE
+> 
+> Changes since version 1: (patch 2/2)
+>   - refresh for 6.2-rc1
+>   - update Signed-off-by
+>   - fix formatting error (leading space) in patch comment
+> 
+> Frank Rowand (2):
+>   of: create of_root if no dtb provided
+>   of: unittest: treat missing of_root as error instead of fixing up
+> 
+>  drivers/of/Kconfig        |  7 ++++++-
+>  drivers/of/Makefile       |  2 +-
+>  drivers/of/empty_root.dts |  6 ++++++
+>  drivers/of/fdt.c          | 27 ++++++++++++++++++++++++++-
+>  drivers/of/unittest.c     | 16 ++++++----------
+>  include/linux/of_fdt.h    |  2 ++
+>  init/main.c               |  2 ++
+>  7 files changed, 49 insertions(+), 13 deletions(-)
+>  create mode 100644 drivers/of/empty_root.dts
+> 
 
