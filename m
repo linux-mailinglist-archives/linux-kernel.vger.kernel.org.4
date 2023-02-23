@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A5F6A0EA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BE26A0EBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjBWRXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S229938AbjBWRaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjBWRXW (ORCPT
+        with ESMTP id S229536AbjBWRaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:23:22 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B9B1D924;
-        Thu, 23 Feb 2023 09:23:20 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id q11so14153312plx.5;
-        Thu, 23 Feb 2023 09:23:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4X9XPUluho+I4U2YTl0MMSfrwa5zdjEgqCMtE8mvXv0=;
-        b=gh+VZGdKAHENF5w1fy6caNEhvYRPbgD+mn/rC0Kyl8Regya2mBoyKQoD4ZQoPQK06Z
-         jCtwhGwbsRibxW9U2oIbd5nnuY1oN76EnBddzfQLvP1vcZfXcwaEzKJoeF61+6rUTPz0
-         k9CMne/R1oS4lkKKKJ9ZjYE/2IEPf0PydUhXU0hUWa5pnuo9obox8Ba1vsckhxqu8J44
-         2T0q13SG3oegxDDZfn+feYdLaTPx4fXZYb9TC3RaaCR1SMqwzdq8flGQHQsCSLHVwTHx
-         EPjUShnrWecq/MJcrqAY14q6xY3PIp/GjGjyM/yMZQiZxeMwoKEAiymQcB7pzNoCt2UM
-         Urlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4X9XPUluho+I4U2YTl0MMSfrwa5zdjEgqCMtE8mvXv0=;
-        b=Lz010fSArpZywP9HPBw6cDXNu6dsAa056laiDlGkD7ej052ss9ma812AN0tz1FJpn/
-         5Fag6sqKVBFEXJ6cPVUbb0X41vZLbltAL+d4mJlMSj4Kc49tOhsJJ33DBVw2kaFri+49
-         VY7wh4r6GMKCqCQZeLH1b8CympDcycURMUjFMB0FvrD7wiKhhJ2hTiD9nCaAqhZ9AH7j
-         rlt7GPVqSUps3QD+Nu+Eq/o+X7ChhlNHMY1ntQQ6CT1DZ27qsOJH6iQ9c4UiwOei33Gx
-         VMftoRc0S1VeuLkySgxKw5bkz4atU4YnSijC5UHBf2zyN/pMzpWwv6SjduY0YJ+quKTo
-         CzAw==
-X-Gm-Message-State: AO0yUKVnoxtixKQYE3vwdSnM5ZoTmk4pua6igNDfVB4a3H99LGvlftDz
-        8aJfCFmkzgqlZDnb/OmUFKw=
-X-Google-Smtp-Source: AK7set/K4BBwjvU55dIu+6lZsRHoNjZpmTcK22Pfl06vnIwEZdIRSLiFDIZGZcdH13Kd98nUMMz50g==
-X-Received: by 2002:a17:902:e1cc:b0:19c:9420:6236 with SMTP id t12-20020a170902e1cc00b0019c94206236mr7798946pla.22.1677172999883;
-        Thu, 23 Feb 2023 09:23:19 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x20-20020a170902ea9400b0019cbabf127dsm1941061plb.182.2023.02.23.09.23.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 09:23:19 -0800 (PST)
-Message-ID: <6c19502d-4303-fb8f-f2b7-9061a04b9a15@gmail.com>
-Date:   Thu, 23 Feb 2023 09:23:17 -0800
+        Thu, 23 Feb 2023 12:30:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4D4570A3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:30:02 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DE6F65D9BF;
+        Thu, 23 Feb 2023 17:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677173400;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GfD7bVI37Hoten2JJxqaA5DYKUJRjUgORtyVUH4ACFU=;
+        b=MpwUzLjQnKBehag874uU2dxJQZU3M1AtVM0EGiXceD+WpkQfCzXPvbppMLlEFth+Mh0Sp6
+        T2hDOF9Ndkt3RzaoxW0UW+/4YPlf59SBkSDhX4onjeF+Fqwq995tMd+yGVon/pi9V7lOxu
+        erkb4J1WqxZSV0EW+WFn9VUfH7mzhZ8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677173400;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GfD7bVI37Hoten2JJxqaA5DYKUJRjUgORtyVUH4ACFU=;
+        b=+/ToPFoO4p+tOcuI7IwO8Yxghyeo7tXa6VgiZVxISpZPCFPMbaDPY2+Y226QsXIvsaCB+k
+        tRKbsqvTPvsopBCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9801D139B5;
+        Thu, 23 Feb 2023 17:30:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nkPgI5ii92NsBgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 23 Feb 2023 17:30:00 +0000
+Date:   Thu, 23 Feb 2023 18:24:03 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        David Sterba <dsterba@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH 1/2] tty: ipwireless: move Kconfig entry to tty
+Message-ID: <20230223172403.GW10580@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20230222085013.32331-1-jirislaby@kernel.org>
+ <86e99adb-eccd-4c78-8128-b3690aa559c9@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.4 00/19] 5.4.233-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230223141539.591151658@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230223141539.591151658@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86e99adb-eccd-4c78-8128-b3690aa559c9@app.fastmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 06:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.233 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Feb 23, 2023 at 09:20:53AM +0100, Arnd Bergmann wrote:
+> On Wed, Feb 22, 2023, at 09:50, Jiri Slaby (SUSE) wrote:
+> > The ipwireless' Kconfig entry is currently sitting in char/pcmcia. But
+> > the driver is in tty/. So move the entry to tty/ too.
+> >
+> > First, it makes sense to have the entry along the driver. Second, whole
+> > char/pcmcia is about to pass away.
+> >
+> > Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> > Cc: Jiri Kosina <jikos@kernel.org>
+> > Cc: David Sterba <dsterba@suse.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
+> This is clearly correct
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.233-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 > 
-> thanks,
+> In Dominik's list from
+> https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
 > 
-> greg k-h
+> he had listed this driver as 'some activity in 2021', but all I can
+> find are treewide cleanups (mostly from you) after some work by David
+> in 2008 and Dominik's own PCMCIA rework in 2010. My guess is that
+> most likely this driver can be removed entirely, but you and David
+> are the ones who know if there are still users.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+The driver works and did not need any development, so the treewide or
+minor bugfixes are understandable. I had some discussions with a user in
+2011 regarding card detection but otherwise nothing. I can't tell how
+many users are there, there are some IPWireless cards in second hand
+market and cards for pcmcia can be bought in local shops.
+I'd vote for keeping the driver as long as the pcmcia subsystem exists
+(option a).
