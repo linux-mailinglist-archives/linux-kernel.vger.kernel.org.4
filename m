@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833576A0F46
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A49F6A0F42
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 19:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjBWSMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 13:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S230172AbjBWSME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 13:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjBWSMG (ORCPT
+        with ESMTP id S229928AbjBWSMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 13:12:06 -0500
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CC822A24;
-        Thu, 23 Feb 2023 10:12:05 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id x10so44542378edd.13;
-        Thu, 23 Feb 2023 10:12:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rEaarM4/v7i0Lz3hIFlrkMuKcSO1J4oYqrHpx/IZ4/Q=;
-        b=zYr/etDOmn4y9bRvzJaOj2VY7/S3RtK0w4EIZX4QBXDLivotKS7fmJc9mrumaWOArZ
-         LpP7bgmzrt4KOaYyzecLr8Sxhw40M1pmVM93CCOrEpyr52PLofSteesSlE8nYjd4DbLy
-         oJLdfCY0GEEYiyCFOzfOu2zscRZkCJcZ/ZWuZwUBsgVOlrsMof1GYld1a8DNmml0nLwp
-         7Xx2e3NVqwjmWWMCV3hGcdTyKIxFdT4h2b+v5jzqDjb2jqXfO0LNUgPTpMOQJCI1hmLm
-         OjC9kphoNoVNxxeJ9oaUdJ/LeqydiWNVYNx6XAv0rswSbcpjqsx0WivSL38kxazmXnPP
-         sB5w==
-X-Gm-Message-State: AO0yUKUT5CCMBfTC94xTtU5IMC/Wa/EJKQ7NJ4gATCRwLWtqpDjXZyMt
-        EJhu9PqDqQvtBJ7cnI0cBtiNdTqeDrOHRqVHGuCSGpynQLo=
-X-Google-Smtp-Source: AK7set+bwHnQcCisA+iUZl7QFkGD3nyxV+T3/46gXI0+hISWrIpYlVWBV6JDac7BpdVg0qbq1B5yIFZFnGzzoNW3seE=
-X-Received: by 2002:a50:9f6a:0:b0:4ae:e548:1c6 with SMTP id
- b97-20020a509f6a000000b004aee54801c6mr6007111edf.6.1677175923968; Thu, 23 Feb
- 2023 10:12:03 -0800 (PST)
+        Thu, 23 Feb 2023 13:12:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9894518A8B;
+        Thu, 23 Feb 2023 10:12:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2320DB81AB8;
+        Thu, 23 Feb 2023 18:12:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E14C433EF;
+        Thu, 23 Feb 2023 18:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677175919;
+        bh=0Seu0U8ciCMS/h7f2Zc8dBNZJz8tn/Y414DP+2xQaoc=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=IBn/3dElpRkiX1n0r/Pd7dft86+/JvagJ46du20D+Tjz6voTbwYjmgm0yzFjWYVtf
+         rAT4RrPpjPti7+qHRqZamriW8Pov/VQmtanTI2FghAPO2Vt+JvAjMQblH1/dm+0PdN
+         6BuCyjpxLn5F+GncrY3NKJAR9dEEJDZkAHmpVmFMo6OUTzp4SEVasttZVQwE4sGiCc
+         I6eMM4mQcO7dnRxax1paC8kTIhm4gCNY6mzAF44UgPYsh1Fva9PPXy9rOKXye9USES
+         YEXbV5ex9q/AwgzGycxHvEpHAxk/sME0RHvqxuiUWIyCY7YVmLVGBjRYuRendeVRwP
+         QZoAd9yR5UkKQ==
+Date:   Thu, 23 Feb 2023 19:11:56 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PULL REQUEST] i2c-for-6.3-rc1
+Message-ID: <Y/esbFf25ss0N+Z5@sai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+References: <Y/esAfKcQpM77Gql@sai>
 MIME-Version: 1.0
-References: <20230223044550.339811-1-luoxueqin@kylinos.cn>
-In-Reply-To: <20230223044550.339811-1-luoxueqin@kylinos.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Feb 2023 19:11:52 +0100
-Message-ID: <CAJZ5v0jyz_dpKW1GhWN=yYpR9-7WG33GbZ65aoGv+B+R9vEpEw@mail.gmail.com>
-Subject: Re: [PATCH -next] PM: tools: add "CPU killed" timeline on arm64 platform
-To:     Xueqin Luo <luoxueqin@kylinos.cn>, todd.e.brandt@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+bWfF7cXenbtC5Hw"
+Content-Disposition: inline
+In-Reply-To: <Y/esAfKcQpM77Gql@sai>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 5:46 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
->
-> On the arm64 platform, the core log of cpu offline is as follows:
 
-Please spell CPU in capitals.
+--+bWfF7cXenbtC5Hw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> [  100.431501] CPU1: shutdown
-> [  100.454820] psci: CPU1 killed (polled 20 ms)
-> [  100.459266] CPU2: shutdown
-> [  100.482575] psci: CPU2 killed (polled 20 ms)
-> [  100.486057] CPU3: shutdown
-> [  100.513974] psci: CPU3 killed (polled 28 ms)
-> [  100.518068] CPU4: shutdown
-> [  100.541481] psci: CPU4 killed (polled 24 ms)
->
-> 'smpboot: CPU (?P<cpu>[0-9]*) is now offline' cannot be applied
-> to the arm64 platform, which caused the loss of the suspend
-> machine stage in S3.
 
-I'm not exactly sure what you mean by "loss of the suspend machine stage in S3".
+> I2C for 6.3:
+>=20
+> * new drivers for HPE GXP and Loongson 2K/LS7A
+> * bigger refactorings for i801 and xiic
+> * gpio driver gained ACPI and SDA-write only support
+> * the core converted some OF helpers to fwnode helpers
+> * usual bunch of driver updates
 
->  Here I added core code to fix this issue.
->
-> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
-> ---
->  tools/power/pm-graph/sleepgraph.py | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
-> index 82c09cd25cc2..d816970b0a3d 100755
-> --- a/tools/power/pm-graph/sleepgraph.py
-> +++ b/tools/power/pm-graph/sleepgraph.py
-> @@ -4132,9 +4132,12 @@ def parseKernelLog(data):
->                         elif(re.match('Enabling non-boot CPUs .*', msg)):
->                                 # start of first cpu resume
->                                 cpu_start = ktime
-> -                       elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)):
-> +                       elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)) \
-> +                               or re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)):
->                                 # end of a cpu suspend, start of the next
->                                 m = re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)
-> +                               if(not m):
-> +                                       m = re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)
->                                 cpu = 'CPU'+m.group('cpu')
->                                 if(cpu not in actions):
->                                         actions[cpu] = []
-> --
+Forgot to mention: linux-next reported two merge conflicts in the
+MAINTAINERS file, but they should be trivial to resolve.
 
-The changes look reasonable to me, though.
+Thanks, Wolfram
 
-Todd, any comments?
+
+--+bWfF7cXenbtC5Hw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP3rGwACgkQFA3kzBSg
+KbbY9w/+ML/VhoHotebhSQ1f68MTZYft8WxiZwncNxG4UwYfLLGdUFMSr2iUVjY0
++BWKIPn5x8BoW/v0aEUVIILYqBs5GCXg/V9T2sy3IyipAyTH9fTAfdIFdKUGs8RT
+e4ZGlyY5lMDx4JRgiqheDvSWEbIM775NzJp0HKYO+Qqqfb/4KAOutSoABaLIFkaH
+WWKx5XjTf3N2xwUBWv28PDZoAwxdkBTZSXc49y2JAti4E1iY55rQjAJhtVma9Tgr
+hJIu06oMSPIB9WgxFPdwMojwJBTFh5Wwt6HD5dHaQtSPuiDgGkCxarPLfKzl7yQI
+j86jJFoqaWbZ00HmKv6881yqfSsAfbfdovAQkbkcL+ZWZaNUu7l4xhObLX5jpK+f
+5B8ttXnn4mAvmjQwSS2SFMs2NMwrnRkg51BtTG0YwDNDtaqvtEhfiIhaejRMwCXh
+nxRURIGsz5IZYZLkHsI3Yek0uEVUiRcmYgSJNHh+MJyytYdInuFAzT30SD79j9vN
+4LyfVvTV30oud2PM6w4sYyVE5xC2bo9mRNibHGNbYcgeYEkcY8HnxXnCZje/yoIl
+QprVr0GTMKiJpb0JJEz0P1qi8v8SmRdKh+ZEultBv+9i7RttEM+etQeuLpx2HsjR
+VuNRxs6A+/8tL1gfCNDR09Hd49k84qsFvg45jxROiArc6X5BFZY=
+=oMJt
+-----END PGP SIGNATURE-----
+
+--+bWfF7cXenbtC5Hw--
