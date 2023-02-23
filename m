@@ -2,135 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8076A0068
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8BC6A0069
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjBWBEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S233030AbjBWBFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbjBWBEU (ORCPT
+        with ESMTP id S230478AbjBWBFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:04:20 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9332CC46
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:03:57 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id l1so729529pjt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:03:57 -0800 (PST)
+        Wed, 22 Feb 2023 20:05:13 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D26DB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:05:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id h16so37802571edz.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:05:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WeVf+lvGNeVYubOJ3KmhlwMD0qDbcIcPAA2fSn/VLqI=;
-        b=eUM2OCcj2hc2PrhAjQULqh1Ap6c6rwgKSXbSnPKR3n7tl9VN6COEM/V7oa6XtHgc1o
-         8DouMvF8dGS+e5bk9wKEM24Rvk5WogEf9k+aIzh52nH7XmqZVOHxCUkjICO0qMR1aiqq
-         gm+t9gGJBUgTjaCAGYSZk1TFzoPhhTNuIO2SgjD75/lyc0QSdTZL0r6/6vmWi4EQeXGk
-         zbEdur62BFlMDqX9n5dSHCmpWd3rkWvwwlqPAqeA+6RGWHYsD5lhFLnvgBWjVFdr9lXu
-         IT7v6+pbqT4CXHTmaFIEIpYFWy+GCUVd5iS5UjkKtAEBhG9aZI4Z10Iq5cqF+4ezx51z
-         y1Hw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SHogG2LDNYMpKAnj+yA1kU5df/jIvMfB3AX9e8CKk5Q=;
+        b=eMEr2KTiTgK78tcAXjNLifRF6IhRudaha/mQV40/EZp98wWqB3C4XPGo8J46TDVQuK
+         9Myt9kMvWCrEOe/SaNvOPIMclmFuS8vgmWgA3EZN0lRW3NmVeZNtfvxE+6NNyAltGVH/
+         YB1MxF7KzN2WhPp3SZazN8uDBfpRznfZN5azAZl8E0fgnhETkEf4FUuAYJG2PAv3mdOs
+         hzBuFXnu7ItacKES8EPoRUmLOwNlaSpVy456ogAk+b3AvJs50CaoJHkq+qNUj/jAN7jE
+         nz/ejjux5nP3MClh8TxQkpm3o2EHZgigNxCMOh+n0EV8+CdMxCSQVXStaua0ZgUJCiBt
+         Br5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WeVf+lvGNeVYubOJ3KmhlwMD0qDbcIcPAA2fSn/VLqI=;
-        b=auNjOwvtSiQlxRFkjusAfB6ajt63EWn6SlygZFmdwn7LkXlTIl6XIWGHtii8n3ATvu
-         0eYCrckEQt1JmYC/7/d2McR8Ow5lEq+QzI7WH5dMquObyjyd2DAA5FiGJBb8kACvbAzN
-         eRUAgRn8dnnmEVPwN2F90fCEk2v5FSwu4zdlWsMISmNB44m9GHzuKmY3sSOB56hUV1DG
-         U1FeVEIcKiBCaztMYutMDWiGcMAPTuTkV6CA4Bk/HRdz9d6G91bpddxNfYL+IGCARlgf
-         M5qgec/4iZLsernBT6JjGz3NAy+JSxYOK0ARkuBz2fePLJh96Mf8qT47LfeVAugU1HpY
-         t0Gg==
-X-Gm-Message-State: AO0yUKX4x8Tu+2aj9Ng6Mx9d8k8GYN9ZvBUChrkwTjExqE2lJO56E29X
-        I+OCbeqa8+Jvl4528XA71d3KVNscRlA=
-X-Google-Smtp-Source: AK7set8TXzXaC2/fn0bf1HEdmolAPvXAKURAvIMr8ybRUcpKdxXj2NVbwHr01MjBJ8TL++W/fB2HVA==
-X-Received: by 2002:a05:6a21:329e:b0:c2:b249:fe9a with SMTP id yt30-20020a056a21329e00b000c2b249fe9amr12729950pzb.18.1677114236845;
-        Wed, 22 Feb 2023 17:03:56 -0800 (PST)
-Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
-        by smtp.gmail.com with ESMTPSA id n15-20020aa7904f000000b005a8da960fa8sm5648149pfo.144.2023.02.22.17.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 17:03:55 -0800 (PST)
-Date:   Thu, 23 Feb 2023 01:03:49 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vernon Yang <vernon2gm@gmail.com>
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: fix help comment of SLUB_DEBUG[_ON]
-Message-ID: <Y/a7db7v9zJJnX30@localhost>
-References: <20230222232058.66971-1-vernon2gm@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SHogG2LDNYMpKAnj+yA1kU5df/jIvMfB3AX9e8CKk5Q=;
+        b=KYk9jMri2S3BJvHzx+WK/g5i7j+ABG3Tctw9JY610f1vb7w2y2pCHk/RMVJGY797jJ
+         sGrCATrCqI94ymyTKA+LW3sYRRBIbTKwElernRXO1CXwRYCKZ0rrVMYMHfLmZBOFBgAQ
+         VZtFv2CDSO5qlG1fFFekOR39w66m+FWVbbYlqDrRz+vcYhUXz0pLQ+LwePWFr76t6DoT
+         QoUGX4wmzwIJCOnPBCQ3AJJ9shUkRfs5ZEQnwpt/npWcaEPUl/eJ38UCrmN6tpRGmFjk
+         e6HuXqJUHbG9uOKX/Zqa84+OkPNyT5DXcZizPItL717uuCWcDuB+uDZ4EVTio4yBMDLl
+         OEJg==
+X-Gm-Message-State: AO0yUKWAfwWlNIQDsdVqVko2dlUMxZh/61ESK9fwIDDeXc/Yg4fUgRZR
+        +g3VJRNCGfXJW3+0iqPYwBII2GU+HDcr/RvreLWqEQ==
+X-Google-Smtp-Source: AK7set8Tlpt0l9zSd2Ls40nRHuuybUPIQY9OPfJ8q+1se4mX40SUAsOH3ldxioQc54rTxF2xHul/dQj3q3UO1rqhHfo=
+X-Received: by 2002:a17:907:7b8a:b0:8af:2ad8:3453 with SMTP id
+ ne10-20020a1709077b8a00b008af2ad83453mr10329720ejc.6.1677114310566; Wed, 22
+ Feb 2023 17:05:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230222232058.66971-1-vernon2gm@gmail.com>
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <20230207025259.2522793-1-mcgrof@kernel.org> <20230207025259.2522793-3-mcgrof@kernel.org>
+ <Y+HNL9RoP48tquGd@casper.infradead.org> <Y+PHPfiVS6EiTVl1@bombadil.infradead.org>
+ <Y+PfqulG2wt0Y+Vr@casper.infradead.org> <CAJD7tkZnaphPCrOTMjb0uM7HHqwJESaauNZ6Q58+QP1290Zd4A@mail.gmail.com>
+ <Y/a4/ktpxw/z7/PO@bombadil.infradead.org>
+In-Reply-To: <Y/a4/ktpxw/z7/PO@bombadil.infradead.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 22 Feb 2023 17:04:32 -0800
+Message-ID: <CAJD7tkYHHSaiZwU9Evu-4r5=4FjrmFc-=xMst63io-4AM9N6XA@mail.gmail.com>
+Subject: Re: [RFC 2/2] shmem: add support to ignore swap
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Matthew Wilcox <willy@infradead.org>, hughd@google.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        p.raghav@samsung.com, dave@stgolabs.net, a.manzanares@samsung.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 07:20:58AM +0800, Vernon Yang wrote:
-> Since commit 081248de0a02 ("kset: move /sys/slab to /sys/kernel/slab"),
-> the SYSFS path of slab was modified, so fix up the help comment of
-> SLUB_DEBUG to use the correct one.
-> 
-> And now the "slub_debug" parameter on boot that is support for more
-> fine grained debug control, so fix up help comment of SLUB_DEBUG_ON
-> for "no support" to "support".
-> 
-> Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-> ---
->  mm/Kconfig.debug | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
-> index fca699ad1fb0..732043bf56c6 100644
-> --- a/mm/Kconfig.debug
-> +++ b/mm/Kconfig.debug
-> @@ -61,8 +61,8 @@ config SLUB_DEBUG
->  	help
->  	  SLUB has extensive debug support features. Disabling these can
->  	  result in significant savings in code size. This also disables
-> -	  SLUB sysfs support. /sys/slab will not exist and there will be
-> -	  no support for cache validation etc.
-> +	  SLUB sysfs support. /sys/kernel/slab will not exist and there
-> +	  will be no support for cache validation etc.
+On Wed, Feb 22, 2023 at 4:53 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, Feb 08, 2023 at 12:33:37PM -0800, Yosry Ahmed wrote:
+> > On Wed, Feb 8, 2023 at 9:45 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Wed, Feb 08, 2023 at 08:01:01AM -0800, Luis Chamberlain wrote:
+> > > > On Tue, Feb 07, 2023 at 04:01:51AM +0000, Matthew Wilcox wrote:
+> > > > > On Mon, Feb 06, 2023 at 06:52:59PM -0800, Luis Chamberlain wrote:
+> > > > > > @@ -1334,11 +1336,15 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
+> > > > > >   struct shmem_inode_info *info;
+> > > > > >   struct address_space *mapping = folio->mapping;
+> > > > > >   struct inode *inode = mapping->host;
+> > > > > > + struct shmem_sb_info *sbinfo = SHMEM_SB(inode->i_sb);
+> > > > > >   swp_entry_t swap;
+> > > > > >   pgoff_t index;
+> > > > > >
+> > > > > >   BUG_ON(!folio_test_locked(folio));
+> > > > > >
+> > > > > > + if (wbc->for_reclaim && unlikely(sbinfo->noswap))
+> > > > > > +         return AOP_WRITEPAGE_ACTIVATE;
+> > > > >
+> > > > > Not sure this is the best way to handle this.  We'll still incur the
+> > > > > oevrhead of tracking shmem pages on the LRU, only to fail to write them
+> > > > > out when the VM thinks we should get rid of them.  We'd be better off
+> > > > > not putting them on the LRU in the first place.
+> > > >
+> > > > Ah, makes sense, so in effect then if we do that then on reclaim
+> > > > we should be able to even WARN_ON(sbinfo->noswap) assuming we did
+> > > > everthing right.
+> > > >
+> > > > Hrm, we have invalidate_mapping_pages(mapping, 0, -1) but that seems a bit
+> > > > too late how about d_mark_dontcache() on shmem_get_inode() instead?
+> > >
+> > > I was thinking that the two calls to folio_add_lru() in mm/shmem.c
+> > > should be conditional on sbinfo->noswap.
+> > >
+> >
+> > Wouldn't this cause the folio to not show up in any lru lists, even
+> > the unevictable one, which may be a strange discrepancy?
+> >
+> > Perhaps we can do something like shmem_lock(), which calls
+> > mapping_set_unevictable(), which will make folio_evictable() return
+> > true and the LRUs code will take care of the rest?
+>
+> If shmem_lock() should take care of that is that because writepages()
+> should not happen or because we have that info->flags & VM_LOCKED stop
+> gap on writepages()? If the earlier then shouldn't we WARN_ON_ONCE()
+> if writepages() is called on info->flags & VM_LOCKED?
+>
+> While I see the value in mapping_set_unevictable() I am not sure I see
+> the point in using shmem_lock(). I don't see why we should constrain
+> noswap tmpfs option to RLIMIT_MEMLOCK
+>
+> Please correct me if I'm wrong but the limit seem to be designed for
+> files / IPC / unprivileged perf limits. On the contrary, we'd bump the
+> count for each new inode. Using shmem_lock() would  also complicate the
+> inode allocation on shmem as we'd have to unwind on failure from the
+> user_shm_lock(). It would also beg the question of when to capture a
+> ucount for an inode, should we just share one for the superblock at
+> shmem_fill_super() or do we really need to capture it at every single
+> inode creation? In theory we could end up with different limits.
+>
+> So why not just use mapping_set_unevictable() alone for this use case?
 
-After commit ab4d5ed5eeda ("slub: Enable sysfs support for !CONFIG_SLUB_DEBUG"),
-"Disabling SLUB_DEBUG also disables SLUB sysfs support" is not true anymore.
+Sorry if I wasn't clear, I did NOT mean that we should use
+shmem_lock(), I meant that we do something similar to what
+shmem_lock() does and use mapping_set_unevictable() or similar.
 
->  config SLUB_DEBUG_ON
->  	bool "SLUB debugging on by default"
-> @@ -73,10 +73,10 @@ config SLUB_DEBUG_ON
->  	  Boot with debugging on by default. SLUB boots by default with
->  	  the runtime debug capabilities switched off. Enabling this is
->  	  equivalent to specifying the "slub_debug" parameter on boot.
-> -	  There is no support for more fine grained debug control like
-> -	  possible with slub_debug=xxx. SLUB debugging may be switched
-> -	  off in a kernel built with CONFIG_SLUB_DEBUG_ON by specifying
-> -	  "slub_debug=-".
-> +	  There is support for more fine grained debug control like
-> +	  possible with slub_debug=xxx, details in Documentation/mm/slub.rst.
-> +	  SLUB debugging may be switched off in a kernel built with
-> +	  CONFIG_SLUB_DEBUG_ON by specifying "slub_debug=-".
+I think we just need to make sure that if we use
+mapping_set_unevictable() does not imply that shmem_lock() was used
+(i.e no code assumes that if the shmem mapping is unevictable then
+shmem_lock() was used).
 
-I think this is a misunderstanding. SLUB_DEBUG_ON is equivalent to
-passing boot parameter slub_debug=FUPZ, and what the help text says is that
+Anyway, I am not very knowledgeable here so take anything I say with a
+grain of salt.
+Thanks.
 
-"You can enable slub debugging by default using this config option but
- there is no support for fine-grained control like what slub_debug
- boot parameter provides."
-
- IOW SLUB_DEBUG_ON cannot be used to have same effect as passing
- something like slub_debug=F.
-
->  
->  config PAGE_OWNER
->  	bool "Track page owner"
-> -- 
-> 2.34.1
-> 
-> 
+>
+>   Luis
