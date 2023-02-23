@@ -2,164 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0E76A0089
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825C16A008B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 02:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbjBWBVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 20:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S233151AbjBWBXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 20:23:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjBWBVc (ORCPT
+        with ESMTP id S233098AbjBWBXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 20:21:32 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FC719698
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:21:29 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id lm13-20020a170903298d00b0019a8c8a13dfso4749371plb.16
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:21:29 -0800 (PST)
+        Wed, 22 Feb 2023 20:23:01 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D565220057;
+        Wed, 22 Feb 2023 17:22:57 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id e5so12115836plg.8;
+        Wed, 22 Feb 2023 17:22:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Utax3e55p3N2FiK+44m4EPF0IspqZNOsObveiGZKnps=;
-        b=qEb0sRMMQP+D3NIM0EavDhPqQ4MvMH/BkwStlAQZrjsNxsvp5AK1UfYEygcyPWPwJL
-         aw+JkiEqI0Wk8zGQmrouiI1z4upjRMubH9ZbMcD4DfUtX9Kh6wziQif1uoq55HTC3OnT
-         FkqnuFlPOv90b4F9aF2KaT24ghCOlh+8WCOGn6hLcFk+lS1tpcpAs56CWVfDHEhq5Ah+
-         M5mzL9C5YTPTLkTiGKHI6Qe115kFoyX58YgaW0qYBkv6o9AziLvKdimHbPOGepgb44h4
-         mzvdFkwJ0UuukAL7MBFDuYqBQ7qmF7FQJtSZrsAyl+BiB9B4nmX4rvZmwl8TcRhOvWlG
-         zxDw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W8JlHnEeXi6Ume/0LdrQ/Wv4xR86SmiNzZL4WaoGYxI=;
+        b=jBFbnzW7xxeQ02Nn1kicQZiPHvOTRESreCrOnCUHxOap4EINoKmuv2fpdpUpZJkvMZ
+         I18kqjayiDk2HybGVTLc89pQv5IAbL/Jj7ZTwCSOKFa3zolNkeWLV6NaqsDsH6FsTrEr
+         uwSz/f64lMtjpjKIvK85XyFd+XSLI21mwFZd/bkDMqs+ZZpn0OGPaK8/O6H+my0RGouc
+         F4PqwPgghTEBAG9VWjCWqLKv6rc9t56HzzjecLF2OS3wgSgetSwEBAmIZrN2mY5f6pvt
+         YUw4v/hQA24d2GwnTtAvh/X/IRgb8aoOYPmKne5Ij0TMi4Ysi7FAa8vWI+8MS4owiQnH
+         BNFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Utax3e55p3N2FiK+44m4EPF0IspqZNOsObveiGZKnps=;
-        b=R0N+ie42wvvpLpNR3GeHcVoZRsspKrRva4OlzNMVn4fPD6UI8VrxrZHOlMnHA/OwXO
-         KvhtQjeWxFxtCtVnI6Giv0GP6O9AFhqp4yWZEU5jCDbRv218XIbqPh8WD7Ssk8hC3H1u
-         RrpE3Hzt4YVzOXVjn7CmXhe+SbGKi4dWGPThtslL0z/DXzyIE3IrNWiLRsOYAulKjysc
-         h6Sf/vDWoOlD/zARrJlFlxcs1mTbdjVoK/MmPqnb9qkjqmjiDY5JI1aSIu6duI6QzBQ9
-         0Wb4UrDy3O7PIopYGXTA9Ojma/+Z20WWjf7NNL7HCDNOoKDppz9BVDf6c+vTfhbRqstM
-         nMXw==
-X-Gm-Message-State: AO0yUKVdnlb+8geqElpwT8iSLCn4udUjnPFuCEgtQ6J7RZlYrYKXYDTg
-        skvaZFIj2br1t3XnlqDwer+0GlDGlK4=
-X-Google-Smtp-Source: AK7set8uqJFTeifQRndK5OY7LsjNYEZihFhZGcRxMmqtrSL2SRl7UXNO3Bil4Wyqwogd1sRe6etbqkK7/G4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:66c6:0:b0:4fc:1da2:5f95 with SMTP id
- c6-20020a6566c6000000b004fc1da25f95mr1307512pgw.7.1677115288904; Wed, 22 Feb
- 2023 17:21:28 -0800 (PST)
-Date:   Wed, 22 Feb 2023 17:21:27 -0800
-In-Reply-To: <Y/ammgkyo3QVon+A@zn.tnic>
-Mime-Version: 1.0
-References: <Y+bXjxUtSf71E5SS@google.com> <Y+4wiyepKU8IEr48@zn.tnic>
- <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+5immKTXCsjSysx@zn.tnic> <BYAPR21MB16880EC9C85EC9343F9AF178D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y++VSZNAX9Cstbqo@zn.tnic> <Y/aTmL5Y8DtOJu9w@google.com> <Y/aYQlQzRSEH5II/@zn.tnic>
- <Y/adN3GQJTdDPmS8@google.com> <Y/ammgkyo3QVon+A@zn.tnic>
-Message-ID: <Y/a/lzOwqMjOUaYZ@google.com>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W8JlHnEeXi6Ume/0LdrQ/Wv4xR86SmiNzZL4WaoGYxI=;
+        b=1vRihr3rUKVp27WtegchYmuEoMUZ6Y6LjlVAeg8d3CRfkps55E952BVdGcas5lhEAZ
+         zlIqiRHvtVyRodWyg8TZKvhpH+KwgZaO+NFwJHWXDg5k1D7jaNBvTqK3txhQ9DaA4EKj
+         Ps3OlwirSBI6ElnKe+W06548oLOwQYDDc3KZ65fDmiIOqQ+ZPk6eccHqP9eNz0/2oiWX
+         u1Z+QFI2NL6c6BCU8qbeP+LkROd2Z7wVSAFUc/SpTmwl8nvHunHtN4ixABxYioFqVjqN
+         H40vX66RLfHNuBdiumg44p0MFE92HCwiK03tBSrji48/eLcFA/pPhdNqpgdSzXxJBNNU
+         uH5A==
+X-Gm-Message-State: AO0yUKUGuA0XJRnQdHEgNRxDj1BtIJavEyQ+qH8lRGPpk+x6UbpJzE5B
+        lbobbnYt+EVnqkRcza5BDrc=
+X-Google-Smtp-Source: AK7set8in1ZoSyRyaJNEnYf4iObtvL5YKbdNJ1Kol3k6xu9FgnbnNUwO+2zBhHO1PZl1PLKvXuxtkg==
+X-Received: by 2002:a17:902:ea07:b0:19a:9580:74c with SMTP id s7-20020a170902ea0700b0019a9580074cmr10568768plg.7.1677115376917;
+        Wed, 22 Feb 2023 17:22:56 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:1bf3])
+        by smtp.gmail.com with ESMTPSA id y1-20020a1709027c8100b0019cbb055a95sm277694pll.94.2023.02.22.17.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 17:22:55 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 22 Feb 2023 15:22:53 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Dave Marchevsky <davemarchevsky@meta.com>,
+        David Vernet <void@manifault.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_cgroup_from_id() kfunc
+Message-ID: <Y/a/7ftfWVYpDTO0@slm.duckdns.org>
+References: <Y/VA+jP0mB5cMZEz@slm.duckdns.org>
+ <CAADnVQL0Zf3Dq=6wCMmj+R9bz1B1J4b=mUkvkObKfPQprUjyag@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQL0Zf3Dq=6wCMmj+R9bz1B1J4b=mUkvkObKfPQprUjyag@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023, Borislav Petkov wrote:
-> On Wed, Feb 22, 2023 at 02:54:47PM -0800, Sean Christopherson wrote:
-> > Why?  I genuinely don't understand the motivation for bundling all of this stuff
-> > under a single "feature".
+On Wed, Feb 22, 2023 at 01:20:19PM -0800, Alexei Starovoitov wrote:
+> On Tue, Feb 21, 2023 at 2:09 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > cgroup ID is an userspace-visible 64bit value uniquely identifying a given
+> > cgroup. As the IDs are used widely, it's useful to be able to look up the
+> > matching cgroups. Add bpf_cgroup_from_id().
+> >
+> > Signed-off-by: Tejun Heo <tj@kernel.org>
+> > ---
+> >  Documentation/bpf/kfuncs.rst                  | 10 +++--
+> >  kernel/bpf/helpers.c                          | 18 ++++++++
+> >  .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
+> >  .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
+> >  .../selftests/bpf/progs/cgrp_kfunc_success.c  | 42 +++++++++++++++++++
+> >  5 files changed, 69 insertions(+), 3 deletions(-)
 > 
-> It is called "sanity".
-> 
-> See here:
-> 
-> https://lore.kernel.org/r/Y%2B5immKTXCsjSysx@zn.tnic
-> 
-> We support SEV, SEV-ES, SEV-SNP, TDX, HyperV... guests and whatever's
-> coming down the pipe. And all that goes into arch/x86/ kernel proper
-> code.
-> 
-> The CC_ATTR stuff is clean-ish in the sense that we have separation by
-> confidential computing platform - AMD's and Intel's. Hyper-V comes along
-> and wants to define a different subset of that. And that's only the
-> SEV-SNP side - there's a TDX patchset too.
-> 
-> And then some other hypervisor will come along and say, but but, I wanna
-> have X and Y and a pink pony too.
-> 
-> Oh, and there's this other fun with MTRRs where each HV decides to do
-> whatever it wants.
+> Looks great, but could you please split it into two patches:
+> One for helpers.c and kfuncs.rst and another for selftests
+> with [PATCH bpf-next] selftests/bpf: subject ?
+> Doesn't matter much in this case, but it might ease backporting
+> and easier to track patches grouped by subj.
 
-The MTRR mess isn't unique to coco guests, e.g. KVM explicitly "supports" VMMs
-hiding MTTRs from the guest by defaulting to WB if MTTRs aren't exposed to the
-guest.  Why on earth Hyper-V suddenly needs to enlighten the guest is beyond me,
-but whatever the reason, it's not unique to coco VMs.
+Will do.
 
-> So, we have a zoo brewing on the horizon already!
-> 
-> If there's no clean definition of what each guest is and requires and
-> that stuff isn't documented properly and if depending on which "feature"
-> I need to check, I need to call a different function or query
-> a different variable, then it won't go anywhere as far as guest support
-> goes.
-> 
-> The cc_platform_has() thing gives us a relatively clean way to abstract
-> all those differences away and keep the code sane-ish.
+Thanks.
 
-For features that are inherent to the platform, I agree, or at least I don't hate
-the interface.  But defining a platform to have specific devices runs counter to
-pretty much the entire x86 ecosystem.  At some point, there _will_ be more devices
-in private memory than just IO-APIC and TPM, and conversely there will be "platforms"
-that support a trusted TPM but not a trusted IO-APIC, and probably even vice versa.
-
-All I'm advocating is that for determining whether or not a device should be mapped
-private vs. shared, provide an API so that the hypervisor-specific enlightened code
-can manage that insanity without polluting common code.  If we are ever fortunate
-enough to have common enumeration, e.g. through ACPI or something, the enlightened
-code can simply reroute to the common code.  This is a well established pattern for
-many paravirt features, I don't see why it wouldn't work here.
+-- 
+tejun
