@@ -2,314 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCD46A10E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4B86A10E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBWTzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S229647AbjBWT5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjBWTzC (ORCPT
+        with ESMTP id S229611AbjBWT5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:55:02 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE75567B6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:54:59 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id s22so15074569lfi.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:54:59 -0800 (PST)
+        Thu, 23 Feb 2023 14:57:09 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C174459434
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:57:08 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so512689pjh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:57:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a4U4rQDieB3+PErrPuOZzC4ruO9cgcOiB3ZnT+4FxE0=;
-        b=AV95KhLqE7FX5lzrt0W0+iSRH0OO5I9K0le17AnRiCJ98H+OOWPgosNoWPOKhtHhoJ
-         nHpfQjWteyUk1uUMNc/hjeszD9BIJvPYLlRAVAgg4qbagNi5vdQeAVNinbqTouOCwXh3
-         ssfhw+24ocFOPzcyalwsLjB46AF2PqDfZ7rek=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YSzUOJfdtN9HqYc/iUHo6JBED4EqtZPD2VYPVWa2ehk=;
+        b=CqObwow7N9ynxd+bV1Rl60ADS9LJwNa+GAXvOy3aLHz8vN/Hn53Bk9Y+FIrZWunnX4
+         gUmzPG1mo011y0mLLOqQFB0MRKxk3wsadmy3Y84WunvMV2QVgviVUml6OZlTjCXnpIuk
+         AD3OYzXepLMhH/lxtqkQyqzcoA6y8I4Ahf54nx9OSl7vaBmrv372UeVDR883nuMDbRHx
+         3On44dy6n3wV5sje1m1Z0PSvS9x6r4tQHB+bnICcbrdoXAKTA9tiJ5RD45xR9yrDT/uV
+         2/eBv85oREvpJDOSLpq7/wu37KaBbk+GwSRGj9Z6FJsSt57ymj1OvJRsoO5I/jVk0rsi
+         qXgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a4U4rQDieB3+PErrPuOZzC4ruO9cgcOiB3ZnT+4FxE0=;
-        b=K6xoGPT4cA/vF+WYDjDYJ03yQyahMatjM2SYoF8POCvxygVa3Jhl8iesPvaiioZf+5
-         7J4s0Pbl56LQQNYaOaQZqIecDCz39gNG8ol+ncRoBB3GSAUErwS9Z/u/7xI470va0wPS
-         rd7iX++D6aQxoZEzgW8EaWU+v2GvI6sGFV45tdBPQIe1ZV4R7U0pKLTsPNqxLHjmUUzs
-         H00iHV5XolYWuhPe0mw4/OriGTMY64oYMTNpujpV7HhRo1M/aMwlA36noMnzB2AtSLVQ
-         17mAJ9/g8lsY4YW9+2TzMHYqvfKzno95zmNSBy5BCjEymPz994FuM/j1tTtoi8p8iQvC
-         6u1A==
-X-Gm-Message-State: AO0yUKXrJL8nbif+MHP7wHXe424OUQMdgvW26nFz7oKmTrjfoBjQ4sp7
-        SLtB5UC4kqBNsxGNHe0caXky0+V2OzdcAjdF1EPgYA==
-X-Google-Smtp-Source: AK7set9z8xowq/12NOQvH+NweN+PtWimjbUsfRrP+1654wMDDFK/wRabOmRamd9s6IcF05fzmWMWsLEOtRhgOp7ir8E=
-X-Received: by 2002:a05:6512:208:b0:4d5:ca32:9bdf with SMTP id
- a8-20020a056512020800b004d5ca329bdfmr4174276lfo.11.1677182097479; Thu, 23 Feb
- 2023 11:54:57 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YSzUOJfdtN9HqYc/iUHo6JBED4EqtZPD2VYPVWa2ehk=;
+        b=aiHIE3XLExJOx3ZvfZf7dhEfNKlP5ps4JDS+hXeICcWTm57/yVan94Iov2jcsh68nr
+         KiRKWMC8idURoMzDuBA4OFOEIRuVDUuOxk6AWECj8FjJUiV8xAJTHMdHgcTuYLYNjrrB
+         4ncFn7bWFdh6FGiOYIIdjYKbWCYOQpTlK5egunBY8i+A8VLJoqPUca4OPDVR71sPCngS
+         xBJUv6nYcsp9mDJcOVNfp8dN1hncTROsbmKzHRucM0ZdtxxhN5a/mURhQTF7RGu1gcw1
+         bVlhAvlK5W/tYkNMvx0UCqyz9AGXOw3cAAPpJQWRjFQTzWYzATdPdYVrjRtBmdjszqyt
+         OlmA==
+X-Gm-Message-State: AO0yUKWSRI5agMVbDvh37nInQ7MWlbS6lsnzJ1Ox1KR9WC16aHoG2O/j
+        FiNnSqh2q2auRykNzIg5/doiDA==
+X-Google-Smtp-Source: AK7set9d41ckYjUJSo//hzWtdXQZ7k7/qNPHIfBDpE4KC2bPtdUuTjzf3Jz4Tid9YndBYm+VHLXKvg==
+X-Received: by 2002:a17:90a:f0cd:b0:237:40a5:77cb with SMTP id fa13-20020a17090af0cd00b0023740a577cbmr5897552pjb.1.1677182228038;
+        Thu, 23 Feb 2023 11:57:08 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e4-20020a17090a6f8400b00232cf6186fdsm86404pjk.30.2023.02.23.11.57.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 11:57:07 -0800 (PST)
+Message-ID: <a25bcbff-b759-7814-1454-9edfe1df7314@kernel.dk>
+Date:   Thu, 23 Feb 2023 12:57:05 -0700
 MIME-Version: 1.0
-References: <20230213015506.778246-1-joel@joelfernandes.org>
- <Y/JS5SYKPeeDQErL@rowland.harvard.edu> <CAEXW_YQrFSiDEM9cuhkTT2_1+CZoGbg7vC9oL-D-Wd5OQ2mm2w@mail.gmail.com>
- <CAEXW_YR6eKDCv+E8Xv2aX=Eo=H0667cqrXkMqKhc_QMZ4Vf59A@mail.gmail.com>
- <Y/PgxRorDQZ7wPKU@rowland.harvard.edu> <20230222195051.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y/bRFNrzjIRjFgxz@rowland.harvard.edu>
-In-Reply-To: <Y/bRFNrzjIRjFgxz@rowland.harvard.edu>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 23 Feb 2023 14:54:45 -0500
-Message-ID: <CAEXW_YT=bvet=tEXQ=VL-SB1p8XuhKrivRrMatgtJGsZo5VgQQ@mail.gmail.com>
-Subject: Re: [PATCH] tools/memory-model: Add documentation about SRCU
- read-side critical sections
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
+ k[v]free_rcu_mightsleep()
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <84fd00b0-aa87-e4b7-e0a4-d57b720216c0@kernel.dk>
+ <20230223183124.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <ae3a6434-1b3a-b848-c8f9-bf6b3d0521e6@kernel.dk>
+ <20230223194708.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230223194708.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 9:36 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> Expand the discussion of SRCU and its read-side critical sections in
-> the Linux Kernel Memory Model documentation file explanation.txt.  The
-> new material discusses recent changes to the memory model made in
-> commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
-> semantics").
->
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-> Cc: Luc Maranget <luc.maranget@inria.fr>
-> Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will.deacon@arm.com>
-> Cc: Jonas Oberhauser <jonas.oberhauser@huawei.com>
->
-> ---
->
-> Joel, please feel free to add your Co-developed-by and Signed-off-by
-> tags to this patch.
+On 2/23/23 12:47?PM, Paul E. McKenney wrote:
+>>> Hey, the combined one/two-argument form seemed like a good idea at
+>>> the time!  ;-)
+>>
+>> Hah, not sure what you were smoking back then!
+> 
+> If I remember, would you like me to send you some?  ;-)
 
-Thanks!
+Definitely, might improve my reviews :-)
 
-Co-developed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+-- 
+Jens Axboe
 
-
- - Joel
-
-
->
->  tools/memory-model/Documentation/explanation.txt |  178 +++++++++++++++++++++--
->  1 file changed, 167 insertions(+), 11 deletions(-)
->
-> Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
-> @@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory C
->    20. THE HAPPENS-BEFORE RELATION: hb
->    21. THE PROPAGATES-BEFORE RELATION: pb
->    22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, and rb
-> -  23. LOCKING
-> -  24. PLAIN ACCESSES AND DATA RACES
-> -  25. ODDS AND ENDS
-> +  23. SRCU READ-SIDE CRITICAL SECTIONS
-> +  24. LOCKING
-> +  25. PLAIN ACCESSES AND DATA RACES
-> +  26. ODDS AND ENDS
->
->
->
-> @@ -1848,14 +1849,169 @@ section in P0 both starts before P1's gr
->  before it does, and the critical section in P2 both starts after P1's
->  grace period does and ends after it does.
->
-> -Addendum: The LKMM now supports SRCU (Sleepable Read-Copy-Update) in
-> -addition to normal RCU.  The ideas involved are much the same as
-> -above, with new relations srcu-gp and srcu-rscsi added to represent
-> -SRCU grace periods and read-side critical sections.  There is a
-> -restriction on the srcu-gp and srcu-rscsi links that can appear in an
-> -rcu-order sequence (the srcu-rscsi links must be paired with srcu-gp
-> -links having the same SRCU domain with proper nesting); the details
-> -are relatively unimportant.
-> +The LKMM supports SRCU (Sleepable Read-Copy-Update) in addition to
-> +normal RCU.  The ideas involved are much the same as above, with new
-> +relations srcu-gp and srcu-rscsi added to represent SRCU grace periods
-> +and read-side critical sections.  However, there are some important
-> +differences between RCU read-side critical sections and their SRCU
-> +counterparts, as described in the next section.
-> +
-> +
-> +SRCU READ-SIDE CRITICAL SECTIONS
-> +--------------------------------
-> +
-> +The LKMM models uses the srcu-rscsi relation to model SRCU read-side
-> +critical sections.  They are different from RCU read-side critical
-> +sections in the following respects:
-> +
-> +1.     Unlike the analogous RCU primitives, synchronize_srcu(),
-> +       srcu_read_lock(), and srcu_read_unlock() take a pointer to a
-> +       struct srcu_struct as an argument.  This structure is called
-> +       an SRCU domain, and calls linked by srcu-rscsi must have the
-> +       same domain.  Read-side critical sections and grace periods
-> +       associated with different domains are independent of one
-> +       another; the SRCU version of the RCU Guarantee applies only
-> +       to pairs of critical sections and grace periods having the
-> +       same domain.
-> +
-> +2.     srcu_read_lock() returns a value, called the index, which must
-> +       be passed to the matching srcu_read_unlock() call.  Unlike
-> +       rcu_read_lock() and rcu_read_unlock(), an srcu_read_lock()
-> +       call does not always have to match the next unpaired
-> +       srcu_read_unlock().  In fact, it is possible for two SRCU
-> +       read-side critical sections to overlap partially, as in the
-> +       following example (where s is an srcu_struct and idx1 and idx2
-> +       are integer variables):
-> +
-> +               idx1 = srcu_read_lock(&s);      // Start of first RSCS
-> +               idx2 = srcu_read_lock(&s);      // Start of second RSCS
-> +               srcu_read_unlock(&s, idx1);     // End of first RSCS
-> +               srcu_read_unlock(&s, idx2);     // End of second RSCS
-> +
-> +       The matching is determined entirely by the domain pointer and
-> +       index value.  By contrast, if the calls had been
-> +       rcu_read_lock() and rcu_read_unlock() then they would have
-> +       created two nested (fully overlapping) read-side critical
-> +       sections: an inner one and an outer one.
-> +
-> +3.     The srcu_down_read() and srcu_up_read() primitives work
-> +       exactly like srcu_read_lock() and srcu_read_unlock(), except
-> +       that matching calls don't have to execute on the same CPU.
-> +       (The names are meant to be suggestive of operations on
-> +       semaphores.)  Since the matching is determined by the domain
-> +       pointer and index value, these primitives make it possible for
-> +       an SRCU read-side critical section to start on one CPU and end
-> +       on another, so to speak.
-> +
-> +In order to account for these properties of SRCU, the LKMM models
-> +srcu_read_lock() as a special type of load event (which is
-> +appropriate, since it takes a memory location as argument and returns
-> +a value, just as a load does) and srcu_read_unlock() as a special type
-> +of store event (again appropriate, since it takes as arguments a
-> +memory location and a value).  These loads and stores are annotated as
-> +belonging to the "srcu-lock" and "srcu-unlock" event classes
-> +respectively.
-> +
-> +This approach allows the LKMM to tell whether two events are
-> +associated with the same SRCU domain, simply by checking whether they
-> +access the same memory location (i.e., they are linked by the loc
-> +relation).  It also gives a way to tell which unlock matches a
-> +particular lock, by checking for the presence of a data dependency
-> +from the load (srcu-lock) to the store (srcu-unlock).  For example,
-> +given the situation outlined earlier (with statement labels added):
-> +
-> +       A: idx1 = srcu_read_lock(&s);
-> +       B: idx2 = srcu_read_lock(&s);
-> +       C: srcu_read_unlock(&s, idx1);
-> +       D: srcu_read_unlock(&s, idx2);
-> +
-> +the LKMM will treat A and B as loads from s yielding values saved in
-> +idx1 and idx2 respectively.  Similarly, it will treat C and D as
-> +though they stored the values from idx1 and idx2 in s.  The end result
-> +is much as if we had written:
-> +
-> +       A: idx1 = READ_ONCE(s);
-> +       B: idx2 = READ_ONCE(s);
-> +       C: WRITE_ONCE(s, idx1);
-> +       D: WRITE_ONCE(s, idx2);
-> +
-> +except for the presence of the special srcu-lock and srcu-unlock
-> +annotations.  You can see at once that we have A ->data C and
-> +B ->data D.  These dependencies tell the LKMM that C is the
-> +srcu-unlock event matching srcu-lock event A, and D is the
-> +srcu-unlock event matching srcu-lock event B.
-> +
-> +This approach is admittedly a hack, and it has the potential to lead
-> +to problems.  For example, in:
-> +
-> +       idx1 = srcu_read_lock(&s);
-> +       srcu_read_unlock(&s, idx1);
-> +       idx2 = srcu_read_lock(&s);
-> +       srcu_read_unlock(&s, idx2);
-> +
-> +the LKMM will believe that idx2 must have the same value as idx1,
-> +since it reads from the immediately preceding store of idx1 in s.
-> +Fortunately this won't matter, assuming that litmus tests never do
-> +anything with SRCU index values other than pass them to
-> +srcu_read_unlock() or srcu_up_read() calls.
-> +
-> +However, sometimes it is necessary to store an index value in a
-> +shared variable temporarily.  In fact, this is the only way for
-> +srcu_down_read() to pass the index it gets to an srcu_up_read() call
-> +on a different CPU.  In more detail, we might have soething like:
-> +
-> +       struct srcu_struct s;
-> +       int x;
-> +
-> +       P0()
-> +       {
-> +               int r0;
-> +
-> +               A: r0 = srcu_down_read(&s);
-> +               B: WRITE_ONCE(x, r0);
-> +       }
-> +
-> +       P1()
-> +       {
-> +               int r1;
-> +
-> +               C: r1 = READ_ONCE(x);
-> +               D: srcu_up_read(&s, r1);
-> +       }
-> +
-> +Assuming that P1 executes after P0 and does read the index value
-> +stored in x, we can write this (using brackets to represent event
-> +annotations) as:
-> +
-> +       A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
-> +
-> +The LKMM defines a carry-srcu-data relation to express this pattern;
-> +it permits an arbitrarily long sequence of
-> +
-> +       data ; rf
-> +
-> +pairs (that is, a data link followed by an rf link) to occur between
-> +an srcu-lock event and the final data dependency leading to the
-> +matching srcu-unlock event.  carry-srcu-data is complicated by the
-> +need to ensure that none of the intermediate store events in this
-> +sequence are instances of srcu-unlock.  This is necessary because in a
-> +pattern like the one above:
-> +
-> +       A: idx1 = srcu_read_lock(&s);
-> +       B: srcu_read_unlock(&s, idx1);
-> +       C: idx2 = srcu_read_lock(&s);
-> +       D: srcu_read_unlock(&s, idx2);
-> +
-> +the LKMM treats B as a store to the variable s and C as a load from
-> +that variable, creating an undesirable rf link from B to C:
-> +
-> +       A ->data B ->rf C ->data D.
-> +
-> +This would cause carry-srcu-data to mistakenly extend a data
-> +dependency from A to D, giving the impression that D was the
-> +srcu-unlock event matching A's srcu-lock.  To avoid such problems,
-> +carry-srcu-data does not accept sequences in which the ends of any of
-> +the intermediate ->data links (B above) is an srcu-unlock event.
->
->
->  LOCKING
