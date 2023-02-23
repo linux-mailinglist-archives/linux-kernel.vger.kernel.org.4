@@ -2,156 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F646A0944
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581F36A0948
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbjBWNCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S233362AbjBWNDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbjBWNCG (ORCPT
+        with ESMTP id S233937AbjBWNC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:02:06 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE8F51FBC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:02:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iTxPRbBYLeov8/5I76KRAXwCRmegYoWRkoKL8ZUNLs4=; b=KuMaiffMZvd/PjXonoAkFRlbbg
-        4PMxJQSO5Q+p/z71seO0BR2ntn9Go+kwEqMyI0mU0ytoD6vkZtQtdR7jCRhMl7nzt/Arhz+xysGYO
-        gtuL+whupxGujb/+/Y1jiPmBatcgVdCEEqV706aChMLSYfyQ0ymI/vfNrQBfEHI0W/QRLhI8ezd4y
-        Gx2jS/Ua/LbCr96cOMJqegjgo28EPRZXwM6GuKAG/IQhAf8xFC+CwjziVI9gKvvBvc1F0Y/1sEci6
-        Ae+q2gg14xAwyuO2s+BnHKvbEYnad0+Phqarcsgmw0+twX/ALpHUrsvqjY22AnbdujZzzxSAsdxny
-        Uk3hVx3w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVBEV-00ENb0-D3; Thu, 23 Feb 2023 13:02:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4104A300446;
-        Thu, 23 Feb 2023 14:01:58 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A7E0E2C86C32C; Thu, 23 Feb 2023 14:01:58 +0100 (CET)
-Date:   Thu, 23 Feb 2023 14:01:58 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        stern@rowland.harvard.edu
-Subject: Re: [PATCH 1/2] lockdep: lock_set_lock_cmp_fn()
-Message-ID: <Y/djxk1q5EiYHFfF@hirez.programming.kicks-ass.net>
-References: <20230218032117.2372071-1-kent.overstreet@linux.dev>
- <20230218032117.2372071-2-kent.overstreet@linux.dev>
- <Y/ONLYqVrWPFyboF@hirez.programming.kicks-ass.net>
- <Y/QHn+PecW2n2K5O@moria.home.lan>
+        Thu, 23 Feb 2023 08:02:58 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7EB196AB
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:02:57 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p18-20020a05600c359200b003dc57ea0dfeso10352829wmq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a12AtM4kB0fb0LIep6/H6rCKcXD5v7yagMHvTBNIp4I=;
+        b=tRgyJxREQeMXPea7+vx3UPjFq4TkFelKzdqwI1cVZTlOeC8AT79fcVRewh154+KVtt
+         E8gwkM+jx2H/sAebVbRwpC0Z6BGMdtmJwhnCF7OGkI1/DVZfhOXsPdY+WNtSpsWcrcza
+         OJYpvm+CTxW9r5BxoUp3oq9n1mrY+99c6TRkm3NM5qAP78IEAnaN0Nu2bExMHcJ9F33H
+         Fbbivvy04kS2JRefHtFpQlY2gMz+X2qG6wWv6Z0fcGC9Is6lcY+3Mh9PctcnmisQEDzr
+         H9F5x2Sl9alPT6cWFyJO/Tu8OVMxzf/MrZ7lqJ1D9eq5yqNtukc+O+TDfqrUG5q9Ep6Z
+         SXkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a12AtM4kB0fb0LIep6/H6rCKcXD5v7yagMHvTBNIp4I=;
+        b=PBxc1oEuSWuQB2May4iuqRHXO2x4xr8Zsa38Li00XUj7iYm6EllmsRpcrrH47+iVkp
+         TxbhxO+eh6Bp6px+EQPPcBaVZ/Oz+XP5EzxomJnXQezbufm213WEKL7jRBzvTRpIioAn
+         zU3Ev/1WrHPulcYhQL6Oi+t+GA+bb89qLIJj3Pa+NtXDT5CB9cK4qODX+9xG+apf77mw
+         nVMx29pVVuATZsUjp9Z72NmWFEzwNRHox7iDFFuw8l2vYE746vrejd+ED9nFmxgaeP01
+         rtnAno+7IMcGD/l1UcByUl6bssVbR33m43yxV4KGRLOee1ljUVBN4e+6bUhgUTEeYCMZ
+         atFQ==
+X-Gm-Message-State: AO0yUKWtwYY1O57gI90HyRDr2rYdj1ImvbehoIMSrctgLG6C/L53cSPN
+        W1/u68zXI9m3exCAtLPWnHTd0g==
+X-Google-Smtp-Source: AK7set/0u/f08lXDj6areZhyG0tl0Hcl/XgHidaibgl3WMxirXbbJf1yGhx03ozCxKT3l0WAGDbyKA==
+X-Received: by 2002:a05:600c:a28f:b0:3ea:bc08:8f1f with SMTP id hu15-20020a05600ca28f00b003eabc088f1fmr670739wmb.20.1677157375764;
+        Thu, 23 Feb 2023 05:02:55 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id c23-20020a05600c149700b003e2066a6339sm8924833wmh.5.2023.02.23.05.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 05:02:55 -0800 (PST)
+Message-ID: <a662b604-0bef-6ee4-43d5-0480171539c3@linaro.org>
+Date:   Thu, 23 Feb 2023 13:02:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/QHn+PecW2n2K5O@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v6 2/5] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        stephan@gerhold.net, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+References: <20230222120411.55197-1-bryan.odonoghue@linaro.org>
+ <20230222120411.55197-3-bryan.odonoghue@linaro.org>
+ <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
+ <f852bf35-6f29-a91a-00ab-9f7b2d709328@linaro.org>
+ <78f9f327-283d-c7f9-b54b-a54efd1d264b@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <78f9f327-283d-c7f9-b54b-a54efd1d264b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 06:51:59PM -0500, Kent Overstreet wrote:
-> On Mon, Feb 20, 2023 at 04:09:33PM +0100, Peter Zijlstra wrote:
-> > which is much simpler to work with. Can we improve on this? Give the
-> > cmp_fn an additinoal optional argument of a string pointer or so to fill
-> > out with actual details to be printed?
+On 23/02/2023 12:53, Konrad Dybcio wrote:
 > 
-> Here you go, example bcache output:
 > 
-> Patch is not as pretty as I'd like because not every path that prints a
-> lock has held_lock available - but the ones we care about in this
-> scenario do.
+> On 23.02.2023 13:51, Bryan O'Donoghue wrote:
+>> On 22/02/2023 17:08, Konrad Dybcio wrote:
+>>>> +            interrupt-names = "wdog", "fatal", "ready",
+>>>> +                      "handover", "stop-ack";
+>>> This should be a vertical list
+>>>
+>>>> +
+>>>> +            clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+>>>> +                 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
+>>>> +                 <&gcc GCC_BOOT_ROM_AHB_CLK>,
+>>>> +                 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>>>> +            clock-names = "iface", "bus", "mem", "xo";
+>>> This could also be one
+>>>
+>>
+>> Sorry what are you asking for here Konrad
+>>
+>> clock-names = "iface",
+>>                "bus",
+>>
+>> if so, why ?
+> Yep!
+> 
+> It's just easier to read.. you don't have to count the
+> nth entry in a single line. Maybe this specific example
+> is still easy for the human brain to quickly cross-reference,
+> longer lists or lists with longer entries than 3 or so are
+> confusing..
+> 
+> Konrad
 
-Right, unavoidable that.
+I'm not necessarily opposed to that, I just don't see much precedent for it.
 
-> ============================================
-> WARNING: possible recursive locking detected
-> 6.2.0-rc8-00003-g7d81e591ca6a-dirty #15 Not tainted
-> --------------------------------------------
-> kworker/14:3/938 is trying to acquire lock:
-> ffff8880143218c8 (&b->lock l=0 0:2803368){++++}-{3:3}, at: bch_btree_node_get.part.0+0x81/0x2b0
-> 
-> but task is already holding lock:
-> ffff8880143de8c8 (&b->lock l=1 1048575:9223372036854775807){++++}-{3:3}, at: __bch_btree_map_nodes+0xea/0x1e0
-> and the lock comparison function returns 1:
-> 
-> other info that might help us debug this:
->  Possible unsafe locking scenario:
-> 
->        CPU0
->        ----
->   lock(&b->lock l=1 1048575:9223372036854775807);
->   lock(&b->lock l=0 0:2803368);
-> 
->  *** DEADLOCK ***
-> 
->  May be due to missing lock nesting notation
-> 
-> 3 locks held by kworker/14:3/938:
->  #0: ffff888005ea9d38 ((wq_completion)bcache){+.+.}-{0:0}, at: process_one_work+0x1ec/0x530
->  #1: ffff8880098c3e70 ((work_completion)(&cl->work)#3){+.+.}-{0:0}, at: process_one_work+0x1ec/0x530
->  #2: ffff8880143de8c8 (&b->lock l=1 1048575:9223372036854775807){++++}-{3:3}, at: __bch_btree_map_nodes+0xea/0x1e0
+But... fine.
 
-Much better indeed. Thanks!
-
-> -- >8 --
-> Subject: [PATCH] lockdep: lock_set_print_fn()
-> 
-> This implements a new interface to lockedp, lock_set_print_fn(), for
-> printing additional information about a lock.
-> 
-> This is intended to be useful with the previous lock_set_cmp_fn(); when
-> defininig an ordering for locks of a given type, we'll want to print out
-> information about that lock that's relevant for the ordering we defined.
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> ---
->  include/linux/lockdep.h       |  3 ++
->  include/linux/lockdep_types.h |  2 +
->  kernel/locking/lockdep.c      | 81 ++++++++++++++++++++++-------------
->  3 files changed, 57 insertions(+), 29 deletions(-)
-> 
-> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-> index 98e0338a74..66d8a5a24e 100644
-> --- a/include/linux/lockdep.h
-> +++ b/include/linux/lockdep.h
-> @@ -664,10 +664,13 @@ lockdep_rcu_suspicious(const char *file, const int line, const char *s)
->  
->  #ifdef CONFIG_PROVE_LOCKING
->  void lockdep_set_lock_cmp_fn(struct lockdep_map *lock, lock_cmp_fn fn);
-> +void lockdep_set_lock_print_fn(struct lockdep_map *lock, lock_print_fn fn);
-
-I would suggest the same as last time; integrate this in the class
-setting zoo of functions. If you insiste, please keep it one function
-and force print_fn when cmp_fn. We don't want people to skimp out on
-this.
-
-Other than that, I don't think this can fully replace subclasses, since
-subclasses would allow lock hierarchies with other classes inter-twined,
-while this really relies on pure class nesting.
-
-That is:
-
-	A/0
-	B
-	A/1
-
-is a valid subclass nesting set, but you can't achieve the same with
-this.
-
-That said; it does seem like a very useful additional annotation for the
-more complex nesting sets.
-
-Thanks!
+---
+bod
