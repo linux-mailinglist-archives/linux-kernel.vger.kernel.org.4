@@ -2,116 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1168A6A0164
+	by mail.lfdr.de (Postfix) with ESMTP id E8F256A0167
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233848AbjBWDFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S233970AbjBWDHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbjBWDFb (ORCPT
+        with ESMTP id S233933AbjBWDHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:05:31 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B621248E01
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:05:15 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id ky4so12450915plb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:05:15 -0800 (PST)
+        Wed, 22 Feb 2023 22:07:33 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36415474F6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:07:05 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id e21so10381226oie.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:07:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zvL3mMUiF6TzdAKKcnyDSGCQ6fTbHMRv58umlvVWhug=;
-        b=To5SpBeXwNb1lYh6OtMcdA7YXbEuqfheT/FB+PL18Ki7W7SwW3kIj63xK421vOkft8
-         /Pk58+kjibDmqthKvSgleL1UrM3fGkIT+Ishh6Lj7spySCW5r10AOqyEFNCPUqfajtN/
-         z+lLB16S5+B2UtABxWkJ1FFeWDsRq0a98+46w=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IsFwDXDFyAwgQgN7Ezx7sftsdxjHjlTMYKQ/wYMhb78=;
+        b=LYqxKMnouYu+dT0bW6p/08eh4jCaQkaoyhaFcxvkvtnTfzDxG1y2Z/9DRZX6i1GC7V
+         Cdo8AIq4N2MlbgqaTZ4cJj5JOtTyQ1fWn863StHyjchSiOPUFn/yONZHO8XPaatHM9sA
+         o7W0TFCDXXNN5gZ1QTuUh2Q+zuVH23qrK1ouMPYfCml5Y5DrhDrkr9nW+OBw71GHcsQu
+         OeEQmv1rKLoiknsFdQzFgJ59UZeqM8+7BfTfe1o8dYJl3mS0BZKD1+0K3weTVJ5YK0wF
+         X+E2lG5qS9EG8l09dAxn6SJd6b/piYWzZpBIPQ/Np0VY/oSY2Rin6QVLURQeSPAVKlmP
+         Pz7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zvL3mMUiF6TzdAKKcnyDSGCQ6fTbHMRv58umlvVWhug=;
-        b=HTPdOvUGisF+NKnVrMv57s8X5ViIevfjuME0u0YSgK2nIs89OHb0eDyQdfek73y6dY
-         eXlPagG6LgGXji84K6uj1QJdYK8J6/2wma/B6C6SzxbPm9YpsaeX4X6hxbRiauR48im9
-         XmZ1ngR5ipyiEkW8ZSgld0RHrJKOkotIcN8HtkBd/2+PkP8AB8ieWxpeWlsfSQuAFmJC
-         M60lZKqvaQHRc6kGbR/agCJqxkOH5mlqTC8kS8Wkc4GhXzHkuD8Z73BC81qysVJrM4Sg
-         Ri6fkNk305PmWPOSGzUhamSENrRjk+x+QjVPDJALvUB08Y5qrYhJSUptLIdC3FNydXr0
-         lXrQ==
-X-Gm-Message-State: AO0yUKWJKL5fYLXfb2eYggMpat5pEhlp09ufPsKBMtY6rQkDVvuZZT5Q
-        y8JxsYBzOIyKS0rD58BJOtCVWQ==
-X-Google-Smtp-Source: AK7set9GwcRpldktMmwsyDxV1U87D3miMVOwqhHkQYQzpgN7J9gWBZIAlMDN1gc6G/18tFmaOpi/mw==
-X-Received: by 2002:a17:90b:4a4d:b0:233:9fff:888e with SMTP id lb13-20020a17090b4a4d00b002339fff888emr11273419pjb.39.1677121514958;
-        Wed, 22 Feb 2023 19:05:14 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:6de2:9e85:b508:57b8])
-        by smtp.gmail.com with ESMTPSA id jl21-20020a170903135500b0019926c77577sm608520plb.90.2023.02.22.19.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 19:05:14 -0800 (PST)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yosry Ahmed <yosryahmed@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv2 6/6] zram: show zsmalloc objs_moved stat in mm_stat
-Date:   Thu, 23 Feb 2023 12:04:51 +0900
-Message-Id: <20230223030451.543162-7-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-In-Reply-To: <20230223030451.543162-1-senozhatsky@chromium.org>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IsFwDXDFyAwgQgN7Ezx7sftsdxjHjlTMYKQ/wYMhb78=;
+        b=ISUZBqJswHB3ACZ6VDXQtqiFoEpqJpbfJUFqAVoAgYWEl3lMici7hh1WenR61mmy70
+         eR8NmWQYMg1PwnRF4wy2GOvGk9CeI2W0/nxCtMYyiPZRnSawSfVt/QAuUJfLRHJDWk/R
+         ZoatnXfgfVfHoHuGnXLaAKVy5CPGrjByMA2LcADlVoqNdI6j47AH+otglBmrxBikhxjI
+         YaKtaNBWm3y2/5ELmBGx54+/qo2XcdKnaryzfO05V1rd8992Mkw7fyufs7u0dRSZor3w
+         dmbv3TYi86vdADCIWdOSDThzLZOQaP0zJ4iUR/xu8Ovq28foC0Bp3fifgekqkBuzJ7sd
+         ekOQ==
+X-Gm-Message-State: AO0yUKVMkp1E3vaeUCahnj6RjJcYdtlST3ncbxGax9YSbJT+nCFab1Mu
+        Bc/9zZUy+TsdNBvs7k+u8HBaZmy0bV4zUsvAKO8eBQ==
+X-Google-Smtp-Source: AK7set/bRL8ou0SIq3OLr/c87FxzRtrMmLfqzNaV86gtbWiVwJCusOZBWjZSfPj1zOwVal0nGhV9hZTSLlo+b09gssU=
+X-Received: by 2002:a05:6808:20a5:b0:37f:9ac7:826e with SMTP id
+ s37-20020a05680820a500b0037f9ac7826emr1361934oiw.62.1677121622447; Wed, 22
+ Feb 2023 19:07:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230208234313.23863-1-semen.protsenko@linaro.org>
+ <20230208234313.23863-7-semen.protsenko@linaro.org> <CGME20230219173642eucas1p1ddff7399223df763ff9fb48c4f7fc5f9@eucas1p1.samsung.com>
+ <CAPLW+4=cOV8J+Ho1t8Tkg8X_3m4npyy3FUC2zcQAYywE12uEkw@mail.gmail.com> <ea0055c7-34d4-3da0-0d3a-52020a783922@samsung.com>
+In-Reply-To: <ea0055c7-34d4-3da0-0d3a-52020a783922@samsung.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Wed, 22 Feb 2023 21:07:06 -0600
+Message-ID: <CAPLW+4=pFb2HZ8bhAs9hfm_trXUUQCiS7zf8G+VBA-i0qpLJJQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] clk: samsung: exynos5433: Extract PM support to
+ common ARM64 layer
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend zram mm_show with new objs_moved zs_pool_stats.
+On Tue, 21 Feb 2023 at 01:22, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> On 19.02.2023 18:36, Sam Protsenko wrote:
+> > On Wed, 8 Feb 2023 at 17:43, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+> >> Exynos5433 clock driver implements PM support internally, which might be
+> >> also useful for other Exynos clock drivers. Extract all PM related code
+> >> from clk-exynos5433 to common ARM64 functions.
+> >>
+> >> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> >> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> >> ---
+> >> Changes in v2:
+> >>    - Rebased on top of latest soc/for-next tree
+> >>    - Included linux/slab.h for kfree (found by kernel test robot)
+> >>
+> >>   drivers/clk/samsung/clk-exynos-arm64.c | 171 ++++++++++++++++++++++++-
+> >>   drivers/clk/samsung/clk-exynos-arm64.h |   3 +
+> >>   drivers/clk/samsung/clk-exynos5433.c   | 157 +----------------------
+> >>   3 files changed, 175 insertions(+), 156 deletions(-)
+> >>
+> >> diff --git a/drivers/clk/samsung/clk-exynos-arm64.c b/drivers/clk/samsung/clk-exynos-arm64.c
+> >> index 2aa3f0a5644e..7ad7fd353dda 100644
+> >> --- a/drivers/clk/samsung/clk-exynos-arm64.c
+> >> +++ b/drivers/clk/samsung/clk-exynos-arm64.c
+> >> @@ -10,6 +10,9 @@
+> >>    */
+> > Hi Marek,
+> >
+> > It just occurred to me that as I'm pulling your code from
+> > clk-exynos5433.c here, I should've probably added you to this file's
+> > author list in the header comment. Does that sound right to you? If
+> > so, I can re-send v3 with fixes.
+>
+> Fine for me.
+>
+> > Also, could you please review this series, if possible? I'm working
+> > right now on PM_DOMAINS support for Exynos850, so along with this
+> > series that would bring the initial PM support for ARM64 Exynos chips.
+>
+> Well, feel free to add:
+>
+> Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>
+> to v3 (the whole patchset).
+>
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- Documentation/admin-guide/blockdev/zram.rst | 1 +
- drivers/block/zram/zram_drv.c               | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Thanks, Marek!
 
-diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-index e4551579cb12..699cdbf27e37 100644
---- a/Documentation/admin-guide/blockdev/zram.rst
-+++ b/Documentation/admin-guide/blockdev/zram.rst
-@@ -267,6 +267,7 @@ line of text and contains the following stats separated by whitespace:
-  pages_compacted  the number of pages freed during compaction
-  huge_pages	  the number of incompressible pages
-  huge_pages_since the number of incompressible pages since zram set up
-+ objs_moved       The number of objects moved during pool compaction
-  ================ =============================================================
- 
- File /sys/block/zram<id>/bd_stat
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index aa490da3cef2..3194e9254c6f 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1221,7 +1221,7 @@ static ssize_t mm_stat_show(struct device *dev,
- 	max_used = atomic_long_read(&zram->stats.max_used_pages);
- 
- 	ret = scnprintf(buf, PAGE_SIZE,
--			"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
-+			"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu %8llu\n",
- 			orig_size << PAGE_SHIFT,
- 			(u64)atomic64_read(&zram->stats.compr_data_size),
- 			mem_used << PAGE_SHIFT,
-@@ -1230,7 +1230,8 @@ static ssize_t mm_stat_show(struct device *dev,
- 			(u64)atomic64_read(&zram->stats.same_pages),
- 			atomic_long_read(&pool_stats.pages_compacted),
- 			(u64)atomic64_read(&zram->stats.huge_pages),
--			(u64)atomic64_read(&zram->stats.huge_pages_since));
-+			(u64)atomic64_read(&zram->stats.huge_pages_since),
-+			(u64)atomic64_read(&pool_stats.objs_moved));
- 	up_read(&zram->init_lock);
- 
- 	return ret;
--- 
-2.39.2.637.g21b0678d19-goog
+> The only remark I have is not strictly related to this patchset, but the
+> code that is already in drivers/clk/samsung/clk-exynos-arm64.c. Playing
+> with GATE_ENABLE_HWACG/GATE_MANUAL is not strictly specific to all
+> Exynos ARM64 SoCs. GATE_OFF_START/GATE_OFF_END and the enable register
+> bits are something specific to recent Exynos SoCs (like 7885/850/auto9)
+> and don't fit well into the generic arm64 clk PM code, but I don't have
+> a good idea how to move it to the respective clk drivers and keep it simple.
+>
 
+Yeah, maybe having some sort of HW variants would be a better choice.
+That can be implemented later. I suggest we wait a bit first (after
+applying this series) and see if there going be any new users for that
+PM code. Once we gather more knowledge about current platforms (or
+no), the desired design decisions should become more obvious.
+
+>
+> Best regards
+> --
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+>
