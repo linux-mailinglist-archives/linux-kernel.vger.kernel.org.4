@@ -2,198 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3249C6A0E72
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DD06A0E7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjBWRNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S229629AbjBWROZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjBWRNc (ORCPT
+        with ESMTP id S229642AbjBWROW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:13:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8EC3D925;
-        Thu, 23 Feb 2023 09:13:27 -0800 (PST)
+        Thu, 23 Feb 2023 12:14:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A243D925;
+        Thu, 23 Feb 2023 09:14:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA0DB81A06;
-        Thu, 23 Feb 2023 17:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CD0C433D2;
-        Thu, 23 Feb 2023 17:13:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C26FB81A88;
+        Thu, 23 Feb 2023 17:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4429C433EF;
+        Thu, 23 Feb 2023 17:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172405;
-        bh=GKDMeLBGH+pATpMgOWTJhcMWeeCf4ZIAnDuYRYViDpI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=sS/hCxSTeo3O2rvfioNr4r0DKMTK1+Dxh9pkdzWP/eeKf5magLkP6dtsLVV3TIZJp
-         rnV99aBX14j2oFDt4MuNn4b3Bzv6J82SjBNeoSg2kAGbrlXgUd4hLNmtIYaoDvc7rV
-         KjhQiIEnQrdwblVYZ1uuhQLJ8Py2sMsu6vF4DaqlNW6oLSnLnRz8+djvi8rhtVO6ra
-         NQtUaWlxV3pz7c4w8hJHbDuJCrJAHsQfCNH5yYJQ6D6qCiEaozs6X0lTLIpuA23fTg
-         ujwejH+I9vwgB1JPIqpVZKQ3MTY6tis2ckmPvngkWT6LQ9G1nvmlii54LSTnU/Ltxp
-         SuXDpS6E6A1Yw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B82935C0DBB; Thu, 23 Feb 2023 09:13:24 -0800 (PST)
-Date:   Thu, 23 Feb 2023 09:13:24 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, frederic@kernel.org,
-        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in
- call_rcu_tasks_generic()
-Message-ID: <20230223171324.GB2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y/eP4h/chB8J0rAj@google.com>
- <258C736B-5957-4874-9CD8-BBC1E321A092@joelfernandes.org>
+        s=k20201202; t=1677172453;
+        bh=tMD0j0e568N2lfxiR0Fj9qTsU20UwP3oQEtQV2YKoYc=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=mC3yLHQT82ZBLG61PVB34U13cA2dF5VCIuw9KaZktUx/MBzYTXJXleTR1YX23XJf+
+         YGH1UaPj26K58cSNd5ThyoTrGnLNeq6oPWEaQO/j01IFNgm4IwwTX3up8lAAWptVER
+         xg4V0jo8/NUXsiwGmuFe8GFtRSRUG0lJc+ArQ70T6AtYtVhJoRSDpdTMkahVP4oIFm
+         MoLFgrbJyOLqwLgIe0D0inmO+2L0Lypb2JhgNN0zrb6Q6Esk7FV2X/iGlVqxAAWghs
+         pQ6gNcKNNS0e4Tuz0oVybiXF7kDiwKOth4YE2uSvMihqZW3IJXvMdoLDUFDUwz2dtH
+         FqUNAlwOTmSfw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id A7B82C61DA4;
+        Thu, 23 Feb 2023 17:14:13 +0000 (UTC)
+From:   Rob Bradford via B4 Relay 
+        <devnull+rbradford.rivosinc.com@kernel.org>
+Date:   Thu, 23 Feb 2023 17:13:57 +0000
+Subject: [PATCH] virtio-net: Fix probe of virtio-net on kvmtool
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <258C736B-5957-4874-9CD8-BBC1E321A092@joelfernandes.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230223-virtio-net-kvmtool-v1-1-fc23d29b9d7a@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIANSe92MC/22OwQrCMBBEf6Xs2YV0Q6n4K+IhqVu7qIlsQiiU/
+ rur4M3LwGN4w2xQWIULnLoNlJsUycmgP3QwLSHdGOVqDOTIOyKPTbRKxsQV7+1Zc37gcZz9OPR
+ DZCIwMYbCGDWkafmp6AgtZ1n/DHycl7KV3yPny76/AQAyPqCYAAAA
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Bradford <rbradford@rivosinc.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677172452; l=1694;
+ i=rbradford@rivosinc.com; s=20230223; h=from:subject:message-id;
+ bh=z4BoSYh1zWAdqXeZO03vzqGwuNOqVDWaqEjXIgKixEQ=;
+ b=sG/nKDOFR38MMLity9ZDXFHvYN9SbTx8eCMH1h1jh/fv3AC+ZcaV5qNk+SkzIcizdScKvRc4B
+ RhVLyHozFqaD3+B2TZTIjArEVoS4xdsMmCsqDmkkHd/1yM2EsnO0tNV
+X-Developer-Key: i=rbradford@rivosinc.com; a=ed25519;
+ pk=LZhCh/kJ+nOqxgEGWkLfx2jKUM5LlyU0Jlip8qsjuA8=
+X-Endpoint-Received: by B4 Relay for rbradford@rivosinc.com/20230223 with auth_id=34
+X-Original-From: Rob Bradford <rbradford@rivosinc.com>
+Reply-To: <rbradford@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 11:57:54AM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Feb 23, 2023, at 11:10 AM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> > 
-> > ﻿On Thu, Feb 23, 2023 at 08:43:05AM +0000, Zhang, Qiang1 wrote:
-> >>> From: Zqiang <qiang1.zhang@intel.com>
-> >>> Sent: Thursday, February 23, 2023 2:30 PM
-> >>> To: paulmck@kernel.org; frederic@kernel.org; quic_neeraju@quicinc.com;
-> >>> joel@joelfernandes.org
-> >>> Cc: rcu@vger.kernel.org; linux-kernel@vger.kernel.org
-> >>> Subject: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in
-> >>> call_rcu_tasks_generic()
-> >>> 
-> >>> According to commit '3063b33a347c ("Avoid raw-spinlocked wakeups from
-> >>> call_rcu_tasks_generic()")', the grace-period kthread is delayed to wakeup
-> >>> using irq_work_queue() is because if the caller of
-> >>> call_rcu_tasks_generic() holds a raw spinlock, when the kernel is built with
-> >>> CONFIG_PROVE_RAW_LOCK_NESTING=y, due to a spinlock will be hold in
-> >>> wake_up(), so the lockdep splats will happen. but now using
-> >>> rcuwait_wake_up() to wakeup grace-period kthread instead of wake_up(), in
-> >>> rcuwait_wake_up() no spinlock will be acquired, so this commit remove using
-> >>> 
-> >>> There are still spinlock-acquisition and spinlock-release invocations within the call path from rcuwait_wake_up().
-> >>> 
-> >>> rcuwait_wake_up() -> wake_up_process() -> try_to_wake_up(), then:
-> >>> 
-> >>>   raw_spin_lock_irqsave()
-> >>>   ...
-> >>>   raw_spin_unlock_irqrestore
-> >> 
-> >> Yes, but this is raw_spinlock acquisition and release(note: spinlock will convert to
-> >> sleepable lock in Preempt-RT kernel, but raw spinlock is not change).
-> >> 
-> >> acquire raw_spinlock -> acquire spinlock  will trigger lockdep warning.
-> > 
-> > Is this really safe in the long run though? I seem to remember there are
-> > weird locking dependencies if RCU is used from within the scheduler [1].
-> > 
-> > I prefer to keep it as irq_work_queue() unless you are seeing some benefit.
-> > Generally, there has to be a 'win' or other justification for adding more
-> > risk.
-> 
-> On second thought, you are deleting a decent number of lines.
-> 
-> What do others think?
-> 
-> I will take a closer look later, I am interested in researching the new lock dependency this adds.
+From: Rob Bradford <rbradford@rivosinc.com>
 
-One place to start is rcu_read_unlock_trace_special(), keeping firmly
-in mind that rcu_read_unlock_trace() is intended to be invoked from a
-great many places.
+kvmtool does not support the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature
+but does advertise the VIRTIO_NET_F_GUEST_TSO{4,6} features. Check that
+the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature is present before setting
+the NETIF_F_GRO_HW feature bit as otherwise an attempt will be made to
+program the virtio-net device using the ctrl queue which will fail.
 
-							Thanx, Paul
+This resolves the following error when running on kvmtool:
 
->  - Joel
-> 
-> > 
-> > thanks,
-> > 
-> > - Joel
-> > [1] http://www.joelfernandes.org/rcu/scheduler/locking/2019/09/02/rcu-schedlocks.html
-> > 
-> >>> irq_work_queue(), invoke rcuwait_wake_up() directly in
-> >>> call_rcu_tasks_generic().
-> >>> 
-> >>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >>> ---
-> >>> kernel/rcu/tasks.h | 16 +---------------
-> >>> 1 file changed, 1 insertion(+), 15 deletions(-)
-> >>> 
-> >>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h index
-> >>> baf7ec178155..757b8c6da1ad 100644
-> >>> --- a/kernel/rcu/tasks.h
-> >>> +++ b/kernel/rcu/tasks.h
-> >>> @@ -39,7 +39,6 @@ struct rcu_tasks_percpu {
-> >>>    unsigned long rtp_jiffies;
-> >>>    unsigned long rtp_n_lock_retries;
-> >>>    struct work_struct rtp_work;
-> >>> -    struct irq_work rtp_irq_work;
-> >>>    struct rcu_head barrier_q_head;
-> >>>    struct list_head rtp_blkd_tasks;
-> >>>    int cpu;
-> >>> @@ -112,12 +111,9 @@ struct rcu_tasks {
-> >>>    char *kname;
-> >>> };
-> >>> 
-> >>> -static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp);
-> >>> -
-> >>> #define DEFINE_RCU_TASKS(rt_name, gp, call, n)
-> >>>            \
-> >>> static DEFINE_PER_CPU(struct rcu_tasks_percpu, rt_name ## __percpu) = {
-> >>>            \
-> >>>    .lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name ##
-> >>> __percpu.cbs_pcpu_lock),        \
-> >>> -    .rtp_irq_work = IRQ_WORK_INIT_HARD(call_rcu_tasks_iw_wakeup),
-> >>>            \
-> >>> };
-> >>>        \
-> >>> static struct rcu_tasks rt_name =
-> >>>        \
-> >>> {
-> >>>        \
-> >>> @@ -273,16 +269,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
-> >>>    pr_info("%s: Setting shift to %d and lim to %d.\n", __func__,
-> >>> data_race(rtp->percpu_enqueue_shift), data_race(rtp-
-> >>>> percpu_enqueue_lim));
-> >>> }
-> >>> 
-> >>> -// IRQ-work handler that does deferred wakeup for call_rcu_tasks_generic().
-> >>> -static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp) -{
-> >>> -    struct rcu_tasks *rtp;
-> >>> -    struct rcu_tasks_percpu *rtpcp = container_of(iwp, struct
-> >>> rcu_tasks_percpu, rtp_irq_work);
-> >>> -
-> >>> -    rtp = rtpcp->rtpp;
-> >>> -    rcuwait_wake_up(&rtp->cbs_wait);
-> >>> -}
-> >>> -
-> >>> // Enqueue a callback for the specified flavor of Tasks RCU.
-> >>> static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
-> >>>                   struct rcu_tasks *rtp)
-> >>> @@ -334,7 +320,7 @@ static void call_rcu_tasks_generic(struct rcu_head
-> >>> *rhp, rcu_callback_t func,
-> >>>    rcu_read_unlock();
-> >>>    /* We can't create the thread unless interrupts are enabled. */
-> >>>    if (needwake && READ_ONCE(rtp->kthread_ptr))
-> >>> -        irq_work_queue(&rtpcp->rtp_irq_work);
-> >>> +        rcuwait_wake_up(&rtp->cbs_wait);
-> >>> }
-> >>> 
-> >>> // RCU callback function for rcu_barrier_tasks_generic().
-> >>> --
-> >>> 2.25.1
-> >> 
+[    1.865992] net eth0: Fail to set guest offload.
+[    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wanted 0x0000000000134829, left 0x0080000000134829
+
+Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+---
+ drivers/net/virtio_net.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 61e33e4dd0cd..59951e51fe76 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3781,9 +3781,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
+ 		dev->features |= NETIF_F_RXCSUM;
+ 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+-	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
+-		dev->features |= NETIF_F_GRO_HW;
+-	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
++	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6) &&
++	    virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+ 		dev->hw_features |= NETIF_F_GRO_HW;
+ 
+ 	dev->vlan_features = dev->features;
+
+---
+base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
+change-id: 20230223-virtio-net-kvmtool-87f37515be22
+
+Best regards,
+-- 
+Rob Bradford <rbradford@rivosinc.com>
+
