@@ -2,142 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E416D6A0B90
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C228E6A0C6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbjBWOKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S234612AbjBWPCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233429AbjBWOKL (ORCPT
+        with ESMTP id S229502AbjBWPCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:10:11 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2027.outbound.protection.outlook.com [40.92.98.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B4D4FCAB;
-        Thu, 23 Feb 2023 06:10:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eTXpzI/knA05PVNVW9Fb2RNk1g+e4IUUn9EIeSvovzbLI5g5rKZmLcuEjpZjDV2T3grUv5YzIxzybaML8DVPFmQ2i1guDxpHQ3UGe9J8C1vyRgNRzIJ4pG5hdRiPOvun/KxifU5WvnRoqB8mywwi+unwMaO0ULfrq0HeialYyjYv+9h1G2kYgg1xZ8CzcB13fWDE1tvOaNMLwR4PqVS8S7HYH2GoKr54nFELUQrkp7daaeS9RDVN34IQNoGjuj3mbjx22Xq+juHOQ3LlbDaitFQWcJAW7MGMjsHvY2sU4zsX/yMlPzBljbFBB5Yjm1APGe8EwgLXC/1moXHX9oFVmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZuXYWTxmjIoTnXPh3IlSiTjIlMd/7PS/o7AytNFzF98=;
- b=kWKq299HlzsqeVOi7KAyDfVK8WvSCBGrwlSu9SlgGBWZeRy2mj4q/dpOu4/PpI/Bw9Gre8zYERTE/EHGTFS3n40M0LyNFXZlKMB2KMhlaX/gSCNm9uf1RbtIls0xlmBIoIiQIucugAWi7kdxD42OuBW5ARhM/+/P/+hYfcV0aCWtZeruzvXKrKY9uoIFEUWtGdzEaVhHDQv9m0hQysQbZ5U9KIhBar7f5cTueamb3KKcbkEL7OQZvHH6wmkzSjLMkEuZGayZ/LC8aD5o/cLNhtwUAl10KducvBbw2y23KqkgOPR496+ZfqDqU1E2Sbe1wXO1iIVCo2CXpihwrVmdzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZuXYWTxmjIoTnXPh3IlSiTjIlMd/7PS/o7AytNFzF98=;
- b=mBxaDgE72OFqAckDQnZOaRXQ6aJPD+uu9t1zERNPe6hL+gq1+yl42sJT4QJUc4EJhjtnr+WKOp9DAJOZvhtXQpw2WAuuiES6Dv3YoZWRJGY8pfoASEpQ5mUHUMlHMsdmccaRhIof5GzUbzyTiWYqSfQZxiFX9WJO00piE01Yjvyv76oo+e6stU0eye1++04LJqu2F7pv6e53o060PgXpIqTJen7widbATjFoBAkgEQWMd6uD1K0bYM3aH3V3/kxzs6b0Vy61swnQLLXcwzFn9zYehYPFWl6cRVwV4GYCX0eKv0g1qIHIxyy/5UZgJh5CcXQvH8+qzpM/GrSJQFATyQ==
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
- by TYWP286MB3560.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:390::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
- 2023 14:10:06 +0000
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068%3]) with mapi id 15.20.6111.018; Thu, 23 Feb 2023
- 14:10:06 +0000
-From:   =?gb2312?B?1LUgzNU=?= <taoyuan_eddy@hotmail.com>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "dev@openvswitch.org" <dev@openvswitch.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 1/1] net: openvswitch: Use on stack
- sw_flow_key in ovs_packet_cmd_execute
-Thread-Topic: [PATCH net-next v2 1/1] net: openvswitch: Use on stack
- sw_flow_key in ovs_packet_cmd_execute
-Thread-Index: AQHZR4FotInn34zS50WzoBK8YtCA8a7cdKMAgAAEvoCAABhgBA==
-Date:   Thu, 23 Feb 2023 14:10:05 +0000
-Message-ID: <OS3P286MB22955BF6A1B4B782C3E12A61F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-References: <OS3P286MB229572718C0B4E7229710062F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-         <OS3P286MB22957CD400DAAAB7786FEF96F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
- <633f202d784a8c67fb846336941ef3e22877d1c7.camel@redhat.com>
-In-Reply-To: <633f202d784a8c67fb846336941ef3e22877d1c7.camel@redhat.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [udW8z+fGTttnp4JjzCAFv6ih6mWNqeJ5]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS3P286MB2295:EE_|TYWP286MB3560:EE_
-x-ms-office365-filtering-correlation-id: 85b4767c-3810-4c82-754d-08db15a7aa12
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AK5JHDivNNMrQpvOYhv9UPuMzEq17mhcrsl4Q1zkHHF1vFe47DvppWw/+9V2QSWMHWFHPN5xHG9m4Ve7LqnjVg42DNp7NOMkeId7JaVbsJofFyb+9dXFR3QGwE/V2sSYqxVExzVk5nVuzCaGjInDoB4aDq3CV2PiUPMWjDBCoCtEABme4Td/Jsfgb6zBM0bkW4P1SOM9CanoX/8Lkzu4CCefddc7Vm/t//8KGFtqTUgoCwY04gEpPMizIedLrB5Et2SQ8DBcAW1tnSfEe1xn+AezzogZw5Bfj/Xs/3l7enOxw1SoH3mX1+HNiG+6YQjvhQi8vy9dpJ+Y337WRYIzieWHFl8AQejlqJiLUaWSu5dGfy5awFAFOgbFjqsiq2YvttAk4/G8R9Zi0aty1GEWIxh6A7oszMn0sgElT9tMa1stXeB6ff4ehfkUqhkyPymMkKDOdKE+hKi7lJJE4XJuoL6CYOeidCQ2bFyieWo7SnScD6Aqc06nXyMHTwS/+OwUnhOV6cJtJBq06Z/NjXAfkqy3ns50f+/5rtbRvMjqtDDNphso1j+UnruFVC6SeoKdTZNFmeZeY77jptKEsneKwHgb1PegepyA1Ydof71KrcFgD03Ap3MjTqo1HE4XVTTS2jGjlXYxJU1BMfdM4iUROA==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?cFlrUzRHeGpxV09LOXkzcnNCblVQVTNNWnN1T2dVRjZJVU42Yjdld3FXeXVk?=
- =?gb2312?B?a2s2VHl1Sis0Rm1FNDNPaS9GNSsvaWlSTnlnYzBXNkd4UnF1KzZjeURwVWNC?=
- =?gb2312?B?TDZhRTE0bGwzOVozc1JVS1dLYmEveTV5bWhacFV2TVk1ZU1mWWx2R0tNNDJw?=
- =?gb2312?B?TnVJQWVDSXAvTE5qcmIzZEVWN3kzay8zZlFXS1ljMVlJa3p1dTZ5ZmRHdHgv?=
- =?gb2312?B?aUxLaGdBSVFZK1hsdlQzSjI5eWl6eGF1Q1duL1plaVZxUE53Uy8vUEhCYk1j?=
- =?gb2312?B?UDJwL2UvL1NrSHNVSC82N1J0aGNscnI2TjNEbExUZGozSEdiaksyUzhhVEFF?=
- =?gb2312?B?NE5PdXh3TVVlT21hSFlZQXJSWEJXM0R3K1NmRXdmWXJVTXFLdHZnU0R4QlQz?=
- =?gb2312?B?a2ExL2s2cENTRFFEM0Y1NHhaMmZPK0w3eXpKbytTQVBKRGxHb29rNjVzeTZJ?=
- =?gb2312?B?NWkva09kbHRuTjk5SEZNdVBDWWx3ODVVUzl0Q0daUEcvOG54elRVejA4SE9n?=
- =?gb2312?B?aUlmaEN6cHRNZDJ0ODJxM2NOdzc4WnlXbzRUOE1SYm1VMkdjV0ZvUTA5ek5G?=
- =?gb2312?B?cmxLVWloOU5NVWcvZ00zbUR3aEVrRk5GZ0E4TXlnbURLS1AxMnl1ZS8yUW5t?=
- =?gb2312?B?SExESVFBYWZlZk9IbW9jWGZDb3QvOW04R0FlLzVRRWF5WGhjRzd1MUx2TlpG?=
- =?gb2312?B?aDR1K0wvVDFkZjVKcEhCSjFXVFRRNmpiREVROUdJQkcxa1k2T1hsN1hWYWtN?=
- =?gb2312?B?djA4V0ZyS0pGL2ZWSzM5Z3V0Q0Z3bnBnYkZMTXZWOFk2WVJLVDNGTEpsWXM0?=
- =?gb2312?B?N3hqdk5ra2R4dHhqSmVaOC8yaTdJQldzNnByRnB6T1hWaDNXUmZmbjlyV3o3?=
- =?gb2312?B?V2FLdzVDU2gvOHNkQXpRcEUwUWl0TVIyS21EWHliQlhqaGNYRThWYnVteUhx?=
- =?gb2312?B?UkMwK1dQeGp4MEZQeEZCZGd2ZU42N282L1ZINVcrRlhEL2NDNkJHVXdSUHJs?=
- =?gb2312?B?NEJGWE5GdmQySkdSVVI2cm1COURBOWk3cS9jQWR1Z0R3MXMvbG9VcEY4a1Vj?=
- =?gb2312?B?dUh0L202THo4WEo5elNXbVIyQmhMa0JReVRqb0IzVnF1RHNJU3hNcTdoazVj?=
- =?gb2312?B?dGcyR2I3TVZSazRmQVBJN1RwQkxpNjRTeXB3WE5Bb2h2NVpuVlZKZFcrbjNo?=
- =?gb2312?B?Vk5RNE5mV3R6Uy83MTgvN2E5UVVsSG5TY1g3QWhvaFNSM3pJL1NHL1VRclJJ?=
- =?gb2312?B?UThzdUhUNnVHVE1wamIwUG5WLzZBNnZqZGkwb1gvS3dzQU9wTUxCUS9YK0Fr?=
- =?gb2312?B?Q2lzVzk4ZUlEUmQ5NTViQ2FLaTNrdXdGTWN4VkRpblFNNUN4cUtXOXErSk9C?=
- =?gb2312?B?bm1ENkYrZHZKdjBLMHVDWUo2S0tpQTBSaTh3QVhpRlJuNXJHY2xKVzJlVlc3?=
- =?gb2312?B?b2FkK2gwbHMvaFY1bVV4RmVMdlVrRllxalk4cmtVYmpwZk0vdGhSTW1BcEt2?=
- =?gb2312?B?Zno2SXdNY3FETUp0aHVtVVRJT1NlL1NsTnA0eG1XZGtBWWhIeFFTbkFuRndK?=
- =?gb2312?B?RTBOQkFMS3MzU1BxbjJTbCszTGRSL296RGdIZWhxNFRKMnh6VHVPSW5UaytF?=
- =?gb2312?B?bWlXTnBmMm9ndkprY0laa0xhb01aU3ZzNnJveGxpNTh1RlNvRWJjdkpxVFR6?=
- =?gb2312?B?VmZiU2JWMzVFblFuYVdjSzZaVDJuekVpaFdtdC95L0VvTXFWa3B1YlV3PT0=?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 23 Feb 2023 10:02:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE2823337
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677164518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k9OY3DOmsttxoPAiFSmCq7gtwaYekEfHfeSsFmsCyrY=;
+        b=U6oBH2MCfa2qc79Go3DZdTiTIn+6dmc4yxkMWXGncOn0s/9AENXB3ogRm+6R6arYRPu+RQ
+        bjdRNLZN2PWQJhClfX93M435JBnXrczJJQ3HrXyXhYgZAl14Zt+M8CDGZqT5ugc9h2UtNj
+        MHCbSSPqFUqxCx7OkpXEaebEv0FRfWI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-651-FlMdbvWrOWqrJPzJOb9GTA-1; Thu, 23 Feb 2023 10:01:46 -0500
+X-MC-Unique: FlMdbvWrOWqrJPzJOb9GTA-1
+Received: by mail-ed1-f71.google.com with SMTP id b1-20020aa7dc01000000b004ad062fee5eso15085982edu.17
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:01:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k9OY3DOmsttxoPAiFSmCq7gtwaYekEfHfeSsFmsCyrY=;
+        b=w8JcoLZmQKDtglp97Yjp88N9xHe5T+V+DT/ym22RZBKvz9COjaFay7UIEHdwdf+cU1
+         VM96jOGy8uSUcxCSCbAOi2xjaNpU2MVpIRduZoy1ARgltTxZ3kIkVx2CIXY514PB2hNV
+         jez1uwb8y1t3jA2+7RZGggZeToiR+e+//qt+Sn76RG8W05WdZHhw16ljLil2dkxrKtU0
+         1GyuCnMhGTzCYhva49PljZMbNHKVnxvK+Hai3Sm82nVwYkAbRJMtElNCGBUIOw/7IhCr
+         DWv21tqAEX/vrvncXWtH32CgMhfC2keKxDP+TWmnxbAaxG2Ejq7fyB6Hxy4inExdUUUz
+         Eupg==
+X-Gm-Message-State: AO0yUKUriOx+9HQdNqs5dVL+qbx80iXbq9zOuaI+dMBFHvT2Ktw5L4TN
+        3wb9am8XHEu3OI3v36aMromat+uxC0mFQaUjnnH4hqBVHlBQkzAUhNpGJDKSP6J2x9vgb+5PUB8
+        OWPyEEMtwceXacKBAiprWCLXk
+X-Received: by 2002:a17:907:3e22:b0:8e3:8543:8e71 with SMTP id hp34-20020a1709073e2200b008e385438e71mr11141659ejc.40.1677164503830;
+        Thu, 23 Feb 2023 07:01:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set9x3TEkF4rjKsOMblKg8nB91RIygBy/qyspdCpvJfYp5Ifo24giDUJ/K+JxqZGl9KaboO5b6g==
+X-Received: by 2002:a17:907:3e22:b0:8e3:8543:8e71 with SMTP id hp34-20020a1709073e2200b008e385438e71mr11141608ejc.40.1677164503488;
+        Thu, 23 Feb 2023 07:01:43 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170906260700b008b8ae79a72bsm7650214ejc.135.2023.02.23.07.01.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 07:01:42 -0800 (PST)
+Message-ID: <734e3c77-a536-95ca-bcae-1e1e86940a48@redhat.com>
+Date:   Thu, 23 Feb 2023 15:12:32 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85b4767c-3810-4c82-754d-08db15a7aa12
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 14:10:05.9959
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB3560
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 05/16] drm: manager to keep track of GPUs VA
+ mappings
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+        jason@jlekstrand.net, linux-doc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Dave Airlie <airlied@redhat.com>
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-6-dakr@redhat.com>
+ <70ba382f-1559-289a-4922-ca9c371aaf59@amd.com>
+ <cc8eeaf4-31e7-98e4-a712-012fc604e985@redhat.com>
+ <29ea3705-5634-c204-c1da-d356b6dfbafc@amd.com>
+ <83755119-083d-7d66-fca0-ca306c841d9c@redhat.com>
+ <7780a9b9-d6bd-6f3f-9c31-aafacb09db1f@amd.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <7780a9b9-d6bd-6f3f-9c31-aafacb09db1f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-U3VyZSwgd2lsbCByZWRvIHRoZSBwb3N0IHdoZW4gd2luZG93IG9wZW4KSGF2ZSBhIGdyZWF0IGRh
-eQplZGR5CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCkZyb206IFBh
-b2xvIEFiZW5pIDxwYWJlbmlAcmVkaGF0LmNvbT4KU2VudDogVGh1cnNkYXksIEZlYnJ1YXJ5IDIz
-LCAyMDIzIDEyOjQxClRvOiBFZGR5IFRhbzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZwpDYzogUHJh
-dmluIEIgU2hlbGFyOyBEYXZpZCBTLiBNaWxsZXI7IEVyaWMgRHVtYXpldDsgSmFrdWIgS2ljaW5z
-a2k7IGRldkBvcGVudnN3aXRjaC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcKU3Vi
-amVjdDogUmU6IFtQQVRDSCBuZXQtbmV4dCB2MiAxLzFdIG5ldDogb3BlbnZzd2l0Y2g6IFVzZSBv
-biBzdGFjayBzd19mbG93X2tleSBpbiBvdnNfcGFja2V0X2NtZF9leGVjdXRlCgpPbiBUaHUsIDIw
-MjMtMDItMjMgYXQgMjA6MjQgKzA4MDAsIEVkZHkgVGFvIHdyb3RlOgo+IFNvcnJ5LCB0aGVyZSBp
-cyBhIHR5cG8gaW4gdGhlIG1haWwsIGkgd2lsbCByZXNlbmQgc2hvcnRseSwKCnBsZWFzZSwgZG9u
-J3QgZG8gdGhhdC4KCiMgRm9ybSBsZXR0ZXIgLSBuZXQtbmV4dCBpcyBjbG9zZWQKClRoZSBtZXJn
-ZSB3aW5kb3cgZm9yIHY2LjMgaGFzIGJlZ3VuIGFuZCB0aGVyZWZvcmUgbmV0LW5leHQgaXMgY2xv
-c2VkCmZvciBuZXcgZHJpdmVycywgZmVhdHVyZXMsIGNvZGUgcmVmYWN0b3JpbmcgYW5kIG9wdGlt
-aXphdGlvbnMuCldlIGFyZSBjdXJyZW50bHkgYWNjZXB0aW5nIGJ1ZyBmaXhlcyBvbmx5LgoKUGxl
-YXNlIHJlcG9zdCB3aGVuIG5ldC1uZXh0IHJlb3BlbnMgYWZ0ZXIgTWFyIDZ0aC4KClJGQyBwYXRj
-aGVzIHNlbnQgZm9yIHJldmlldyBvbmx5IGFyZSBvYnZpb3VzbHkgd2VsY29tZSBhdCBhbnkgdGlt
-ZS4KCg==
+On 2/23/23 08:06, Christian König wrote:
+> Am 22.02.23 um 17:40 schrieb Danilo Krummrich:
+>> On 2/22/23 16:14, Christian König wrote:
+>>> Am 22.02.23 um 16:07 schrieb Danilo Krummrich:
+>>>> On 2/22/23 11:25, Christian König wrote:
+>>>>> Am 17.02.23 um 14:44 schrieb Danilo Krummrich:
+>>>>
+>>>> <snip>
+>>>>
+>>>>>> +/**
+>>>>>> + * DOC: Overview
+>>>>>> + *
+>>>>>> + * The DRM GPU VA Manager, represented by struct 
+>>>>>> drm_gpuva_manager keeps track
+>>>>>> + * of a GPU's virtual address (VA) space and manages the 
+>>>>>> corresponding virtual
+>>>>>> + * mappings represented by &drm_gpuva objects. It also keeps 
+>>>>>> track of the
+>>>>>> + * mapping's backing &drm_gem_object buffers.
+>>>>>> + *
+>>>>>> + * &drm_gem_object buffers maintain a list (and a corresponding 
+>>>>>> list lock) of
+>>>>>> + * &drm_gpuva objects representing all existent GPU VA mappings 
+>>>>>> using this
+>>>>>> + * &drm_gem_object as backing buffer.
+>>>>>> + *
+>>>>>> + * If the &DRM_GPUVA_MANAGER_REGIONS feature is enabled, a GPU VA 
+>>>>>> mapping can
+>>>>>> + * only be created within a previously allocated 
+>>>>>> &drm_gpuva_region, which
+>>>>>> + * represents a reserved portion of the GPU VA space. GPU VA 
+>>>>>> mappings are not
+>>>>>> + * allowed to span over a &drm_gpuva_region's boundary.
+>>>>>> + *
+>>>>>> + * GPU VA regions can also be flagged as sparse, which allows 
+>>>>>> drivers to create
+>>>>>> + * sparse mappings for a whole GPU VA region in order to support 
+>>>>>> Vulkan
+>>>>>> + * 'Sparse Resources'.
+>>>>>
+>>>>> Well since we have now found that there is absolutely no technical 
+>>>>> reason for having those regions could we please drop them?
+>>>>
+>>>> I disagree this was the outcome of our previous discussion.
+>>>>
+>>>> In nouveau I still need them to track the separate sparse page 
+>>>> tables and, as you confirmed previously, Nvidia cards are not the 
+>>>> only cards supporting this feature.
+>>>>
+>>>> The second reason is that with regions we can avoid merging between 
+>>>> buffers, which saves some effort. However, I agree that this 
+>>>> argument by itself probably doesn't hold too much, since you've 
+>>>> pointed out in a previous mail that:
+>>>>
+>>>> <cite>
+>>>> 1) If we merge and decide to only do that inside certain boundaries 
+>>>> then those boundaries needs to be provided and checked against. This 
+>>>> burns quite some CPU cycles
+>>>>
+>>>> 2) If we just merge what we can we might have extra page table 
+>>>> updates which cost time and could result in undesired side effects.
+>>>>
+>>>> 3) If we don't merge at all we have additional housekeeping for the 
+>>>> mappings and maybe hw restrictions.
+>>>> </cite>
+>>>>
+>>>> However, if a driver uses regions to track its separate sparse page 
+>>>> tables anyway it gets 1) for free, which is a nice synergy.
+>>>>
+>>>> I totally agree that regions aren't for everyone though. Hence, I 
+>>>> made them an optional feature and by default regions are disabled. 
+>>>> In order to use them drm_gpuva_manager_init() must be called with 
+>>>> the DRM_GPUVA_MANAGER_REGIONS feature flag.
+>>>>
+>>>> I really would not want to open code regions or have two GPUVA 
+>>>> manager instances in nouveau to track sparse page tables. That would 
+>>>> be really messy, hence I hope we can agree on this to be an optional 
+>>>> feature.
+>>>
+>>> I absolutely don't think that this is a good idea then. This separate 
+>>> handling of sparse page tables is completely Nouveau specific.
+>>
+>> Actually, I rely on what you said in a previous mail when I say it's, 
+>> potentially, not specific to nouveau.
+>>
+>> <cite>
+>> This sounds similar to what AMD hw used to have up until gfx8 (I 
+>> think), basically sparse resources where defined through a separate 
+>> mechanism to the address resolution of the page tables. I won't rule 
+>> out that other hardware has similar approaches.
+>> </cite>
+> 
+> Ok, sounds like I didn't made my point here clear: AMD does have that 
+> same mechanism for older hw you try to implement here for Nouveau, but 
+> we have *abandoned* it because it is to much trouble and especially 
+> overhead to support! In other words we have said "Ok we would need two 
+> separate components to cleanly handle that, one for newer hw and one for 
+> older hw.".
+
+My point was more about the potential existence of other hardware having 
+similar concepts.
+
+I, personally, can't judge whether actually making use of having 
+separate sparse page tables (or similar concepts) makes sense for other 
+drivers or not. I think it depends on how the hardware works, which 
+limitations it has in handling page tables, etc.
+
+I definitely recognize your experience and that for AMD you decided its 
+not worth using a similar mechanism. I would definitely be interested in 
+the details. Do you mind sharing them?
+
+However, I think we need to differentiate between whether for AMD 
+hardware you just found an approach that worked out better for your 
+specific hardware or whether something is fundamentally broken with 
+separate sparse page tables (or similar concepts) in general.
+
+Do you think there is something fundamentally broken with such an 
+approach? And if so, why?
+
+> 
+> What you now try to do is to write one component which works for both. 
+> We have already exercised this idea and came to the conclusion that it's 
+> not a good path to go down. So you're basically just repeating our mistake.
+> 
+> I mean if it's just for Nouveau then I would say feel free to do 
+> whatever you want, but since this component is supposed to be used by 
+> more drivers then I strongly think we need to tackle this from a 
+> different side.
+> 
+>>> Even when it's optional feature mixing this into the common handling 
+>>> is exactly what I pointed out as not properly separating between 
+>>> hardware specific and hardware agnostic functionality.
+>>
+>> Optionally having regions is *not* a hardware specific concept, 
+>> drivers might use it for a hardware specific purpose though. Which 
+>> potentially is is the case for almost every DRM helper.
+>>
+>> Drivers can use regions only for the sake of not merging between 
+>> buffer boundaries as well. Some drivers might prefer this over "never 
+>> merge" or "always merge", depending on the cost of re-organizing page 
+>> tables for unnecessary splits/merges, without having the need of 
+>> tracking separate sparse page tables.
+>>
+>> Its just that I think *if* a driver needs to track separate sparse 
+>> page tables anyways its a nice synergy since then there is no extra 
+>> cost for getting this optimization.
+> 
+> Well exactly that's the point: I really don't believe that this comes 
+> without extra costs.
+
+If you already have to store some information for purpose A and an 
+optional purpose B requires the exact same information you would get B 
+for free.
+
+Which other costs would you see here?
+
+> 
+> What we could maybe do is to have an two separate functions, one for 
+> updating the data structures and one for merging. When you now call the 
+> merging function with a limit you don't get mappings merged over that 
+> limit and if you don't call the merging function at all you don't get 
+> merges.
+
+Having a separate merging function would work. However, I am against an 
+interface that takes limit parameters. Having such an interface signals 
+general compliance with tracking regions to drivers, but without the 
+offer to do this job in a generic way.
+
+This sounds like a bad compromise to me. I think we should either accept 
+that some drivers might have a purpose of tracking regions and hence 
+*optionally* support them or have clear evidence that tracking regions 
+never ever make sense at all regardless of how a specific hardware 
+handles it's page tables.
+
+Allowing drivers to set the merge strategy, however, is a good idea. I 
+could also just add corresponding feature flags to let the driver pick.
+
+> 
+> But we should have definitely not have the tracking of the ranges inside 
+> the common component. This is something separated.
+> 
+>>> This is exactly the problem we ran into with TTM as well and I've 
+>>> spend a massive amount of time to clean that up again. >
+>>
+>> Admittedly, I don't know what problems you are referring to. However, 
+>> I don't see which kind of trouble it could cause by allowing drivers 
+>> to track regions optionally.
+> 
+> Take a look at my 2020 presentation about TTM on FOSDEM.
+> 
+> Regards,
+> Christian.
+> 
+>>
+>>> Regards,
+>>> Christian.
+>>>
+>>>>
+>>>>>
+>>>>> I don't really see a need for them any more.
+>>>>>
+>>>>> Regards,
+>>>>> Christian.
+>>>>>
+>>>>
+>>>
+>>
+> 
+
