@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6EF6A11DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F3F6A11E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjBWVWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S229702AbjBWVYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBWVWQ (ORCPT
+        with ESMTP id S229555AbjBWVYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:22:16 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DA038658
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:22:13 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17227cba608so14548519fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:22:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MR/wZWU2MfoFRQ1v+7cKSnHFZsY23JIISa7d2BB/xDw=;
-        b=gnlm6qqm+pKeTnQUt25QkCdqaKjsMqxEzdxBT2onwFCGeeoU/RX6AiJvOKSNz2vu8t
-         WWhTLNa71MwiwFbPcOsojyIOB93o/chFjDCOZ5emsnliYFtutOOIByme3ZvwTfS7pNi7
-         1QzSQu7H5DuoLcGgRc3x35WvnGW6ZXRYykvXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MR/wZWU2MfoFRQ1v+7cKSnHFZsY23JIISa7d2BB/xDw=;
-        b=kfWnlO97B3Nq+j+tZtgUyUCmyxruMybJvUe/30tBM1USQFgAp2s3iZ71s1TiSn17JB
-         hNK0HRIyIgfmVSg4ke9ghAA/yUKWCsGvKW86AF9eb1Nz17HnUm4HLODnuuywHwZclgUJ
-         6YarHE9sA7UHKhN2ZuTZCIGfoogpvwZsFcHLC1N5EU61iPF7ZVzrH97sUP9VsxvviBCP
-         owGfaoi3Q6egVTt9km32WCC/2ys2x62ZAH7W8hZ0U9q4Jv8MlRSNzxx455+SoLmrVS2s
-         vzXyrLX17xwL2hpEKJsBZlqXWA1UTj3UsxPXSFwNdHKIkUd4QaJcE+JZ/1ykFE5iDrkk
-         2eHA==
-X-Gm-Message-State: AO0yUKVX3eoOToLNcydismVxpYyUfCrcWouTysst+Xw8e0/1rhv705uk
-        KeTl6gUrydOqsJeaJ2AhUaEgCw==
-X-Google-Smtp-Source: AK7set/sNTT/yVsjpy2r6Q45tjgpi4iYIES3szcYTXf/crw9zO/9Jy3SH3xCxYjDgrQkEB4gcdy05Q==
-X-Received: by 2002:a05:6870:b529:b0:172:1f39:2b9b with SMTP id v41-20020a056870b52900b001721f392b9bmr7747035oap.44.1677187333019;
-        Thu, 23 Feb 2023 13:22:13 -0800 (PST)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id dy26-20020a056870c79a00b001723d62f997sm2386066oab.32.2023.02.23.13.22.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 13:22:12 -0800 (PST)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Thu, 23 Feb 2023 15:22:10 -0600
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/47] 6.1.14-rc2 review
-Message-ID: <Y/fZAqSWZOpL5xPZ@fedora64.linuxtx.org>
-References: <20230223141545.280864003@linuxfoundation.org>
+        Thu, 23 Feb 2023 16:24:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B0830E4;
+        Thu, 23 Feb 2023 13:24:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69879B81B2D;
+        Thu, 23 Feb 2023 21:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8D6C433D2;
+        Thu, 23 Feb 2023 21:23:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677187440;
+        bh=yRw1icoUbrG/fdcDSvr0XqBLTk5tcnOlHanN9Sc3uvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cx6tcCD2umxhYo0UY7sEDkRIGN15O6NdoK6VDMlI5aWApKyFk/BSQGT0tehVf8O1x
+         co3/ScbVx8fr3WY2yi0tUhd5GkFkkoHxXpoUzWg6D3LxqgjA5T+/qBt3sXt6WTszd+
+         SGeoY7WdDp2AWPAFE8xK2HXnyd+fmNebXlkq+JzI=
+Date:   Thu, 23 Feb 2023 22:23:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
+Message-ID: <Y/fZbQEEPBNZQ2w7@kroah.com>
+References: <20230223141542.672463796@linuxfoundation.org>
+ <adc1b0b7-f837-fbb4-332b-4ce18fc55709@roeck-us.net>
+ <Y/eVSi4ZTcOmPBTv@kroah.com>
+ <cfd03ee0-b47a-644d-4364-79601025f35f@roeck-us.net>
+ <CAHk-=whCG1zudvDsqdFo89pHARvDv4=r6vaZ8GWc_Q9amxBM6Q@mail.gmail.com>
+ <Y/fC3d3RqoeawG0Y@dev-arch.thelio-3990X>
+ <CAHk-=whkNnShBugM01Kzcypkp+f-uHeBWuAgtUiMpiSZuW+QDQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223141545.280864003@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=whkNnShBugM01Kzcypkp+f-uHeBWuAgtUiMpiSZuW+QDQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:16:15PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.14 release.
-> There are 47 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Feb 23, 2023 at 01:18:31PM -0800, Linus Torvalds wrote:
+> On Thu, Feb 23, 2023 at 11:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > I can send a patch unless you want to take those changes directly, you
+> > have half a commit message there already I think :)
 > 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
+> Not being one of those old fogeys myself, I don't feel hugely motivated to care.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.14-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> In fact, I think GNU patch implemented the git patch format extensions
+> more than a decade ago, so we might even simply decide that it's past
+> time to even worry about this at all.
 > 
-> thanks,
+> In fact, with all the base infrastructure supporting git patches, I'm
+> not quite sure just _how_ quilt is able to apply patches without
+> dealing with mode bits.
 > 
-> greg k-h
+> Does quilt parse the patches and actively remove those lines before
+> applying them? Or does quilt have some actual built-in patch
+> application code that doesn't depend on GNU patch?
+> 
+> (Side note: GNU patch may support git patches, but I don't think GNU
+> diffutils will generate them, so I guess not all base infrastructure
+> supports that fancy new "mode" line)
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Quilt should be depending on patch here, I think it's something in my
+set of "turn this series of patches into a mbox, split the mbox up into
+patches" sequence that is causing the problem.  I'll look into it in the
+morning, but for now, I'm blaming my horrid scripts, not git or quilt
+just yet...
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+thanks,
+
+greg k-h
