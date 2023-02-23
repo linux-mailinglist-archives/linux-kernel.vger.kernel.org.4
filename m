@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBC36A1115
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E7B6A1117
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 21:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjBWUPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 15:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        id S229627AbjBWUQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 15:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBWUPB (ORCPT
+        with ESMTP id S229436AbjBWUQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 15:15:01 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A244DE25;
-        Thu, 23 Feb 2023 12:14:59 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id h16so46798776edz.10;
-        Thu, 23 Feb 2023 12:14:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677183298;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kAb0qzqWSP/U+Kj5L5nLqdqYurAmo6JZhKfQvH683Pk=;
-        b=BaLgVKhuX1clAmVVahaKedAK7xDb7n37VgbEl5j85och7Y9+re7M8ZB/GCXlN0iW4P
-         RpY+bsTzN0egXJpJpNN6fArx526j4YSZMdYk9+RQAwoSaK8RddM/LoJ7NJ4WNge1jI4W
-         293i+uUBsLoU17XWO6XQoOMRekI+h/hSXlrVMYaHq9e9lyshfu5uXQ+L7ErgJk07+5VO
-         wf5Y+moJHpgaDl2hpoPsc/ktmPyHoaI1J4Y6eO9UQJ0D8/75X+SR2Hgj3Kz+Q7PDGUwJ
-         wEKJF4emYuhPovJsIuKN13NKtTWZayn5CQ7InFhtxFJueiuJvH7c89YgRPQnJjKVVYvb
-         GSwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677183298;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kAb0qzqWSP/U+Kj5L5nLqdqYurAmo6JZhKfQvH683Pk=;
-        b=vHiNqAvc/PccALmoQ0EPjlIY/OOZ0T01LA7r3KzASoyJEByGIW/NZH+tGAtqUSElAJ
-         oLoYWD3vgMROaHvbYPmHWE8FlDLzWEkJdE8YcNPPgGKqLFccypZuJS1EfamoahoR7AFb
-         V0HRvl49KfDJo1oqZOBrrDvotbcZxP7OyL0TdlJeUkX+WFJjkKKWjzYY/h0Z6XoCH5AD
-         lCumtMaP8W6dYssV33AtZNI6jPeIt/7W/oR8vuT2NzxECTUMhOETYgwLinwIOWiTYKC/
-         L7R+HPg7+WyqrOTXovSMZ17OCejv66ti4tSgFp4FyogNaxlyGBKVfEa4WiBKq04XY7jL
-         qPyg==
-X-Gm-Message-State: AO0yUKX6gTOje0S46Up/4t35JVEHzME9YEEBEzM1O9oh7+lbpnmwz7Rh
-        A17AcOpU+FIoKXEXv1AjA7liXXlvyaA0VM71
-X-Google-Smtp-Source: AK7set+fyV8NY7swJO99sprnqCQsbhtz4OVtCCE4+qb/xglPT66O02/tvTfiEpZ9YzNZX/uhSq5ksQ==
-X-Received: by 2002:a05:6402:34d5:b0:4ac:8e63:300a with SMTP id w21-20020a05640234d500b004ac8e63300amr12695555edc.3.1677183298324;
-        Thu, 23 Feb 2023 12:14:58 -0800 (PST)
-Received: from [192.168.88.131] ([37.252.81.68])
-        by smtp.gmail.com with ESMTPSA id s21-20020a50d495000000b004aee548b3e2sm5338830edi.69.2023.02.23.12.14.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 12:14:58 -0800 (PST)
-Message-ID: <1db3bfe5-0982-b445-9c94-784478279028@gmail.com>
-Date:   Thu, 23 Feb 2023 23:14:56 +0300
+        Thu, 23 Feb 2023 15:16:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0CE301A6;
+        Thu, 23 Feb 2023 12:16:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D75E46178A;
+        Thu, 23 Feb 2023 20:16:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04B2C433D2;
+        Thu, 23 Feb 2023 20:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677183367;
+        bh=VKgrxDWTun0mawFhuVSbHo2yhrnEv4U6behYpbjsLYU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fK6W76VXpltD0be6KDImQ4h91t+qiIKMVm34rFH/SRjn8apAV3hBiWb9pFPbnScdp
+         srV4UyvnT1DTFsZtj5HsjnY53u48Bzp3IbxSRJ8KVjrCe+g/8GEWNHHZWejRCZeGOb
+         5ePS2YCbMwHEYepdAVPkJhmY6rDqZHAVkLzxoP1L12sCs6jpuNHo3AaRx8BZgN0sti
+         ZG7Tss3kAcGYTeL9EM9fGF6hf8xzgK9KhcdHZ3k+7dzn//1Az5A/48+ltVOZchDJsS
+         91Juaer0dTUfDMbaCaHRIqyDDvxXsPmDy9FSLy0rGV4H59lLuZKr/PlkjF15CeMoBO
+         vgIhebUDyj8jQ==
+Date:   Thu, 23 Feb 2023 13:16:04 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>, kernel-dev@igalia.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH] kbuild: modinst: Enable multithread xz compression
+Message-ID: <Y/fJhOME2OAPWILK@dev-arch.thelio-3990X>
+References: <20230223001607.95523-1-andrealmeid@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] Fix snprintf format warnings during 'alsa' kselftest
- compilation
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-References: <20230223143214.16564-1-ivan.orlov0322@gmail.com>
- <Y/eAyrYs+wEu180d@sirena.org.uk>
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, shuah@kernel.org,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-In-Reply-To: <Y/eAyrYs+wEu180d@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230223001607.95523-1-andrealmeid@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.02.2023 18:05, Mark Brown wrote:
-
-> What warnings are you seeing in what configuration (arch, toolchain, any
-> custom options...)?  I'm not seeing anything when I test.  Are these
-> perhaps architecture dependent warnings?
+On Wed, Feb 22, 2023 at 09:16:07PM -0300, André Almeida wrote:
+> As it's done for zstd compression, enable multithread compression for
+> xz to speed up module installation.
 > 
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+> Signed-off-by: André Almeida <andrealmeid@igalia.com>
 
-Thank you for the review! I will follow the common subject lines style 
-in the future.
+This seems reasonable to me.
 
-I compiled the test via gcc 11.3.0 without any custom options, the arch 
-is x86_64. There were five warnings during the test compilation, and all 
-of them were caused by incorrect format in 'snprintf' function calls. As 
-I know, using incorrect format in 'snprintf' creates an undefined 
-behavior. Maybe there is a point to fix it?
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+If for some reason Masahiro does not want to take this, you could set
+XZ_OPT=-T0 in your build environment, which should accomplish the same
+thing.
+
+> ---
+> 
+> On my setup xz is a bottleneck during module installation. Here are the
+> numbers to install it in a local directory, before and after this patch:
+> 
+> $ time make INSTALL_MOD_PATH=/home/tonyk/codes/.kernel_deploy/ modules_install -j16
+> Executed in  100.08 secs
+> 
+> $ time make INSTALL_MOD_PATH=/home/tonyk/codes/.kernel_deploy/ modules_install -j16
+> Executed in   28.60 secs
+> ---
+>  scripts/Makefile.modinst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+> index 4815a8e32227..28dcc523d2ee 100644
+> --- a/scripts/Makefile.modinst
+> +++ b/scripts/Makefile.modinst
+> @@ -99,7 +99,7 @@ endif
+>  quiet_cmd_gzip = GZIP    $@
+>        cmd_gzip = $(KGZIP) -n -f $<
+>  quiet_cmd_xz = XZ      $@
+> -      cmd_xz = $(XZ) --lzma2=dict=2MiB -f $<
+> +      cmd_xz = $(XZ) --lzma2=dict=2MiB -f -T0 $<
+>  quiet_cmd_zstd = ZSTD    $@
+>        cmd_zstd = $(ZSTD) -T0 --rm -f -q $<
+>  
+> -- 
+> 2.39.2
+> 
