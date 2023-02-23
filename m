@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCFF6A0163
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1168A6A0164
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjBWDFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S233848AbjBWDFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbjBWDFS (ORCPT
+        with ESMTP id S233917AbjBWDFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:05:18 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00B34740C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:05:12 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id i10so2359460plr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:05:12 -0800 (PST)
+        Wed, 22 Feb 2023 22:05:31 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B621248E01
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:05:15 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id ky4so12450915plb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:05:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BpGG/okMdj5ni9xegYLzCx8QuNxJjUnFEqNX1SXn5aY=;
-        b=eXWiDf6CYI70E3qaKKdmQKpYXcXl5mJcHwRXnE9PqLSpLMIBznVHG6rsd6Yik0X/kL
-         7XBQaZKnWMaK+ZCn7rGTemi+XWQrhgo9ktJrz62HQnL1ZI8wqWskCMnCOUoRKkFs/oq2
-         x5q7YV9lJ90uWhY6HMhvkqjtbT42l++wXe/Sg=
+        bh=zvL3mMUiF6TzdAKKcnyDSGCQ6fTbHMRv58umlvVWhug=;
+        b=To5SpBeXwNb1lYh6OtMcdA7YXbEuqfheT/FB+PL18Ki7W7SwW3kIj63xK421vOkft8
+         /Pk58+kjibDmqthKvSgleL1UrM3fGkIT+Ishh6Lj7spySCW5r10AOqyEFNCPUqfajtN/
+         z+lLB16S5+B2UtABxWkJ1FFeWDsRq0a98+46w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BpGG/okMdj5ni9xegYLzCx8QuNxJjUnFEqNX1SXn5aY=;
-        b=K31aiZZT3KDW4nh5Yb11W7XXuBgF+3+vkIbnAz9Dx4Fxb45JIrMPSV/4C03YMaKGJj
-         czrS/mEmu4ZAHuulthxubrCSB3Esnv18VYybS4DFPGETw9mAH2wyQiYvglGN1Xhowm3t
-         Zm6cOpay9J1N0uWzjCSANdZCvFQwu3CpejLaUJ+uYxrwQjbh5bwKgYeRSKLLiRIXBeD2
-         1YJijpnD2UJZJ7SkIm44yQ8g0sZ916+5nqfMLTSqODBL75vrd/SeweFPrBPDSrGpcrAt
-         fy44QvE5NO/yQf6OZt+fwpvdA6UolxGU21f/e7TkJ8zi896HuooS6iwYLK+b8jwZ27jL
-         ktbw==
-X-Gm-Message-State: AO0yUKWrTDw1LVGi0XyO4woD59knjuxIBCvvmiHPr3mpLph7MEHk2l2v
-        uTi3awTVq7qnk8NQ2S6S9VkNLGiwBdsnFQ7M
-X-Google-Smtp-Source: AK7set+4oxGj/Ama0iVUAf/6wEdS2tLFbPW6Kq4JQCSnEY0zMYJIdlBBjbRva1S9Em30N43trG4ihA==
-X-Received: by 2002:a17:902:e5c9:b0:19c:355c:6eb5 with SMTP id u9-20020a170902e5c900b0019c355c6eb5mr14014208plf.30.1677121512118;
-        Wed, 22 Feb 2023 19:05:12 -0800 (PST)
+        bh=zvL3mMUiF6TzdAKKcnyDSGCQ6fTbHMRv58umlvVWhug=;
+        b=HTPdOvUGisF+NKnVrMv57s8X5ViIevfjuME0u0YSgK2nIs89OHb0eDyQdfek73y6dY
+         eXlPagG6LgGXji84K6uj1QJdYK8J6/2wma/B6C6SzxbPm9YpsaeX4X6hxbRiauR48im9
+         XmZ1ngR5ipyiEkW8ZSgld0RHrJKOkotIcN8HtkBd/2+PkP8AB8ieWxpeWlsfSQuAFmJC
+         M60lZKqvaQHRc6kGbR/agCJqxkOH5mlqTC8kS8Wkc4GhXzHkuD8Z73BC81qysVJrM4Sg
+         Ri6fkNk305PmWPOSGzUhamSENrRjk+x+QjVPDJALvUB08Y5qrYhJSUptLIdC3FNydXr0
+         lXrQ==
+X-Gm-Message-State: AO0yUKWJKL5fYLXfb2eYggMpat5pEhlp09ufPsKBMtY6rQkDVvuZZT5Q
+        y8JxsYBzOIyKS0rD58BJOtCVWQ==
+X-Google-Smtp-Source: AK7set9GwcRpldktMmwsyDxV1U87D3miMVOwqhHkQYQzpgN7J9gWBZIAlMDN1gc6G/18tFmaOpi/mw==
+X-Received: by 2002:a17:90b:4a4d:b0:233:9fff:888e with SMTP id lb13-20020a17090b4a4d00b002339fff888emr11273419pjb.39.1677121514958;
+        Wed, 22 Feb 2023 19:05:14 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:6de2:9e85:b508:57b8])
-        by smtp.gmail.com with ESMTPSA id jl21-20020a170903135500b0019926c77577sm608520plb.90.2023.02.22.19.05.10
+        by smtp.gmail.com with ESMTPSA id jl21-20020a170903135500b0019926c77577sm608520plb.90.2023.02.22.19.05.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 19:05:11 -0800 (PST)
+        Wed, 22 Feb 2023 19:05:14 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Minchan Kim <minchan@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yosry Ahmed <yosryahmed@google.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv2 5/6] zsmalloc: extend compaction statistics
-Date:   Thu, 23 Feb 2023 12:04:50 +0900
-Message-Id: <20230223030451.543162-6-senozhatsky@chromium.org>
+Subject: [PATCHv2 6/6] zram: show zsmalloc objs_moved stat in mm_stat
+Date:   Thu, 23 Feb 2023 12:04:51 +0900
+Message-Id: <20230223030451.543162-7-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
 In-Reply-To: <20230223030451.543162-1-senozhatsky@chromium.org>
 References: <20230223030451.543162-1-senozhatsky@chromium.org>
@@ -69,41 +69,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend zsmalloc zs_pool_stats with a new member that
-holds the number of objects pool compaction moved
-between pool pages.
+Extend zram mm_show with new objs_moved zs_pool_stats.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- include/linux/zsmalloc.h | 2 ++
- mm/zsmalloc.c            | 1 +
- 2 files changed, 3 insertions(+)
+ Documentation/admin-guide/blockdev/zram.rst | 1 +
+ drivers/block/zram/zram_drv.c               | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/zsmalloc.h b/include/linux/zsmalloc.h
-index a48cd0ffe57d..8b3fa5b4a68c 100644
---- a/include/linux/zsmalloc.h
-+++ b/include/linux/zsmalloc.h
-@@ -36,6 +36,8 @@ enum zs_mapmode {
- struct zs_pool_stats {
- 	/* How many pages were migrated (freed) */
- 	atomic_long_t pages_compacted;
-+	/* How many objects were migrated during compaction */
-+	atomic_long_t objs_moved;
- };
+diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+index e4551579cb12..699cdbf27e37 100644
+--- a/Documentation/admin-guide/blockdev/zram.rst
++++ b/Documentation/admin-guide/blockdev/zram.rst
+@@ -267,6 +267,7 @@ line of text and contains the following stats separated by whitespace:
+  pages_compacted  the number of pages freed during compaction
+  huge_pages	  the number of incompressible pages
+  huge_pages_since the number of incompressible pages since zram set up
++ objs_moved       The number of objects moved during pool compaction
+  ================ =============================================================
  
- struct zs_pool;
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index eacf9e32da5c..f7e69df48fb0 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1815,6 +1815,7 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
- 		obj_idx++;
- 		record_obj(handle, free_obj);
- 		obj_free(class->size, used_obj, NULL);
-+		atomic_long_inc(&pool->stats.objs_moved);
- 	}
+ File /sys/block/zram<id>/bd_stat
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index aa490da3cef2..3194e9254c6f 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1221,7 +1221,7 @@ static ssize_t mm_stat_show(struct device *dev,
+ 	max_used = atomic_long_read(&zram->stats.max_used_pages);
  
- 	/* Remember last position in this iteration */
+ 	ret = scnprintf(buf, PAGE_SIZE,
+-			"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
++			"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu %8llu\n",
+ 			orig_size << PAGE_SHIFT,
+ 			(u64)atomic64_read(&zram->stats.compr_data_size),
+ 			mem_used << PAGE_SHIFT,
+@@ -1230,7 +1230,8 @@ static ssize_t mm_stat_show(struct device *dev,
+ 			(u64)atomic64_read(&zram->stats.same_pages),
+ 			atomic_long_read(&pool_stats.pages_compacted),
+ 			(u64)atomic64_read(&zram->stats.huge_pages),
+-			(u64)atomic64_read(&zram->stats.huge_pages_since));
++			(u64)atomic64_read(&zram->stats.huge_pages_since),
++			(u64)atomic64_read(&pool_stats.objs_moved));
+ 	up_read(&zram->init_lock);
+ 
+ 	return ret;
 -- 
 2.39.2.637.g21b0678d19-goog
 
