@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D2E6A0340
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4EC6A0341
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjBWHSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
+        id S233468AbjBWHSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 02:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbjBWHSh (ORCPT
+        with ESMTP id S233276AbjBWHSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:18:37 -0500
+        Thu, 23 Feb 2023 02:18:43 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FE828209
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:18:32 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536bf649e70so109451257b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:18:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1851E2E0CA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:18:42 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536c8bcae3bso102993977b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 23:18:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iXAeDlZXVCzOH1LqKDfRFH+Nnlw0nQyHAuUwu11nvRY=;
-        b=gme+dLCjCjeQrS7dw8VS93maFpyrhu5Zmp25GduivSACrzqAvIAAq6r72zo6X3cbTH
-         1SpV6w4bVEz+pKjwSz/1FHSFMvQUU/q8XDkvCk8R1r3iyMzs3FvmyA2pQtamrBcOi3HW
-         UDx2iYfwq6sImcWTSGhYkFdceh1kVm2MuxgnEx9dbNmSP7+yeWuj3HbiL94DxnX5IleC
-         6LgsVa6GxavccDMnVFb4WCs/hTml6Z1PeFyqNH3/C366KTqF3/+op7S+7AUyyB9nrmJU
-         U6ZVH9dl05NJ5HhMBvEV7pwphPtakpca6vS8aF1iFlgwMZ5JSigJqSg0LO49MZ44DVhb
-         Tt+g==
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AEITOwn2BL7QlWmho9xFVXjSJaA3cXxb4gMVl1pbdN8=;
+        b=ro2mkONciMYnRbe1HJWJGrp2vpzeGVrJPHTH0cuW97WIMIz6XoZWxyV/QwwFsnFrqU
+         fO7gQem9BPzLBPMidesutaLNNrtgq2DYomHheyO3EvUSnHApt91FTIn91sl4xmtF5m3q
+         2rQ6yYiGdkCwYNAE+NreDYCriRmN6pbdBTKAh8FW5eIu8qHZFX8sa8O4MkQcaHtucBYm
+         rqQLL6wcJi+XbHOIzYUAGvJdUQ00WfqKutCtVMqBl7hTq0w1cnvtcx3jgadykLWsOhdL
+         yOfcSlhKgtZgZzay4RUuIpP85dFV08UlOcwTEAO+kCoaLswIGsEVOXbwZoijmz7JnsHD
+         naKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iXAeDlZXVCzOH1LqKDfRFH+Nnlw0nQyHAuUwu11nvRY=;
-        b=QD66xaCqIGTWH2kV1uNzWEDu8JkWSXreOt8fmnpnCGdT9mrITtfK8+jvV6x+8IBWdT
-         sUKAdGPs8YWX13D2X7KvgywDodahI9iI/sdUKMLoQdWWACxSgEY/eicOEWmi/q1KzKRW
-         TgW763LiqkLgva9DsruV9LVHbeX/CrjID1Gx9zMPOZxOuwO7F/L1XT5CHy6/F//2TJPQ
-         q9P1gRofA3WPWxXZ23VVXea9thGDIX0gCGBQqXvDfWjx/LmtCejJLu6tnVSWXxtbD197
-         grR4nzObPa7751d8XmkDsfinDRz9FP+ktEoY4qfMsWnb+XLr8OwO2PDM8QFeXGdb+s2B
-         0M9g==
-X-Gm-Message-State: AO0yUKUM/dVyuo+KuJ3zJahADFh3/hzNg1WtdlBMOOhxFatHJD807WgN
-        hucLpQ0ektuf/hIuzJITsjgJS/1x8fDp
-X-Google-Smtp-Source: AK7set/Wkw8fj89oBF//D3/fhbjw6lAN4fu5/NHTRzd5x1LMXBtFZ22kkHGRjzYle+Rqh3E7YUEzYF4jcKj0
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEITOwn2BL7QlWmho9xFVXjSJaA3cXxb4gMVl1pbdN8=;
+        b=RYT3eEvD1Bcx/FZ5n+MH2yUIfmOKpruCUBXBpLrVVj7G509dt+XsL4kkRBHNqufVRW
+         q1O3Kl6wiKGU3WvyEnrIUKDDBeJvIcfSLVfEZOhPjHwyS3tT9Z4ZEPJB4wyDWSXpruIA
+         k2f1mxs0TArIuiEkIdEeV5rGQA343Jmz5VjJYe47BuU+OJ9zpc2igq80tN9c14Swwdcw
+         qfk/teozKH5oZkiU6ooB7OkHiL5NQOcCfmttekZVGPHd0QP9tHZdRk6KumIvLkDXMtvl
+         79edf7g6OOc9Oz2oAokSaRk/41vA4pw+3tZmE3c6iajVlY3cQVpDsXnwN3ye8ygXl0RW
+         2D+w==
+X-Gm-Message-State: AO0yUKWOccPapnfRdrsF+zbJeOXqprm18SQsM97SbtqqDm6wGOGxbOJG
+        S2B1EcJcLvE4up3uijG0RjO30C+cY9tM
+X-Google-Smtp-Source: AK7set/OomecmZJRH6xelWBVPgDS7F59Tq1kX/SgFdZSmjh0NKYpROZdEyPKhLJ6m3ydc7C7HA3tDUJHDEEF
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9002:67cd:9e6b:7083])
- (user=irogers job=sendgmr) by 2002:a81:4320:0:b0:52e:c77d:3739 with SMTP id
- q32-20020a814320000000b0052ec77d3739mr1651534ywa.9.1677136711579; Wed, 22 Feb
- 2023 23:18:31 -0800 (PST)
-Date:   Wed, 22 Feb 2023 23:18:17 -0800
-Message-Id: <20230223071818.329671-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:6902:1028:b0:a27:3ecd:6 with SMTP id
+ x8-20020a056902102800b00a273ecd0006mr1126444ybt.1.1677136721353; Wed, 22 Feb
+ 2023 23:18:41 -0800 (PST)
+Date:   Wed, 22 Feb 2023 23:18:18 -0800
+In-Reply-To: <20230223071818.329671-1-irogers@google.com>
+Message-Id: <20230223071818.329671-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230223071818.329671-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v1 1/2] perf tests stat+csv_output: Switch CSV separator to @
+Subject: [PATCH v1 2/2] perf test: Avoid counting commas in json linter
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,124 +80,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Commas may appear in events like:
 cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-which causes the commachecker to see more fields than expected. Use @
-as the CSV separator to avoid this.
+which causes the count of commas to see more items than
+expected. Switch to counting the entries in the dictionary, which is 1
+more than the number of commas.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/shell/stat+csv_output.sh | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+ .../tests/shell/lib/perf_json_output_lint.py  | 29 +++++++++----------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests/shell/stat+csv_output.sh
-index b7f050aa6210..324fc9e6edd7 100755
---- a/tools/perf/tests/shell/stat+csv_output.sh
-+++ b/tools/perf/tests/shell/stat+csv_output.sh
-@@ -7,6 +7,7 @@
- set -e
+diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+index d90f8d102eb9..97598d14e532 100644
+--- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
++++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+@@ -40,19 +40,6 @@ def is_counter_value(num):
+   return isfloat(num) or num == '<not counted>' or num == '<not supported>'
  
- skip_test=0
-+csv_sep=@
+ def check_json_output(expected_items):
+-  if expected_items != -1:
+-    for line in Lines:
+-      if 'failed' not in line:
+-        count = 0
+-        count = line.count(',')
+-        if count != expected_items and count >= 1 and count <= 3 and 'metric-value' in line:
+-          # Events that generate >1 metric may have isolated metric
+-          # values and possibly other prefixes like interval, core and
+-          # aggregate-number.
+-          continue
+-        if count != expected_items:
+-          raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
+-                             f' in \'{line}\'')
+   checks = {
+       'aggregate-number': lambda x: isfloat(x),
+       'core': lambda x: True,
+@@ -73,6 +60,16 @@ def check_json_output(expected_items):
+   }
+   input = '[\n' + ','.join(Lines) + '\n]'
+   for item in json.loads(input):
++    if expected_items != -1:
++      count = len(item)
++      if count != expected_items and count >= 1 and count <= 4 and 'metric-value' in item:
++        # Events that generate >1 metric may have isolated metric
++        # values and possibly other prefixes like interval, core and
++        # aggregate-number.
++        pass
++      elif count != expected_items:
++        raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
++                           f' in \'{item}\'')
+     for key, value in item.items():
+       if key not in checks:
+         raise RuntimeError(f'Unexpected key: key={key} value={value}')
+@@ -82,11 +79,11 @@ def check_json_output(expected_items):
  
- function commachecker()
- {
-@@ -34,7 +35,7 @@ function commachecker()
- 		[ "$x" = "Failed" ] && continue
- 
- 		# Count the number of commas
--		x=$(echo $line | tr -d -c ',')
-+		x=$(echo $line | tr -d -c $csv_sep)
- 		cnt="${#x}"
- 		# echo $line $cnt
- 		[[ ! "$cnt" =~ $exp ]] && {
-@@ -54,7 +55,7 @@ function ParanoidAndNotRoot()
- check_no_args()
- {
- 	echo -n "Checking CSV output: no args "
--	perf stat -x, true 2>&1 | commachecker --no-args
-+	perf stat -x$csv_sep true 2>&1 | commachecker --no-args
- 	echo "[Success]"
- }
- 
-@@ -66,7 +67,7 @@ check_system_wide()
- 		echo "[Skip] paranoid and not root"
- 		return
- 	fi
--	perf stat -x, -a true 2>&1 | commachecker --system-wide
-+	perf stat -x$csv_sep -a true 2>&1 | commachecker --system-wide
- 	echo "[Success]"
- }
- 
-@@ -79,14 +80,14 @@ check_system_wide_no_aggr()
- 		return
- 	fi
- 	echo -n "Checking CSV output: system wide no aggregation "
--	perf stat -x, -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
-+	perf stat -x$csv_sep -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
- 	echo "[Success]"
- }
- 
- check_interval()
- {
- 	echo -n "Checking CSV output: interval "
--	perf stat -x, -I 1000 true 2>&1 | commachecker --interval
-+	perf stat -x$csv_sep -I 1000 true 2>&1 | commachecker --interval
- 	echo "[Success]"
- }
- 
-@@ -94,7 +95,7 @@ check_interval()
- check_event()
- {
- 	echo -n "Checking CSV output: event "
--	perf stat -x, -e cpu-clock true 2>&1 | commachecker --event
-+	perf stat -x$csv_sep -e cpu-clock true 2>&1 | commachecker --event
- 	echo "[Success]"
- }
- 
-@@ -106,7 +107,7 @@ check_per_core()
- 		echo "[Skip] paranoid and not root"
- 		return
- 	fi
--	perf stat -x, --per-core -a true 2>&1 | commachecker --per-core
-+	perf stat -x$csv_sep --per-core -a true 2>&1 | commachecker --per-core
- 	echo "[Success]"
- }
- 
-@@ -118,7 +119,7 @@ check_per_thread()
- 		echo "[Skip] paranoid and not root"
- 		return
- 	fi
--	perf stat -x, --per-thread -a true 2>&1 | commachecker --per-thread
-+	perf stat -x$csv_sep --per-thread -a true 2>&1 | commachecker --per-thread
- 	echo "[Success]"
- }
- 
-@@ -130,7 +131,7 @@ check_per_die()
- 		echo "[Skip] paranoid and not root"
- 		return
- 	fi
--	perf stat -x, --per-die -a true 2>&1 | commachecker --per-die
-+	perf stat -x$csv_sep --per-die -a true 2>&1 | commachecker --per-die
- 	echo "[Success]"
- }
- 
-@@ -142,7 +143,7 @@ check_per_node()
- 		echo "[Skip] paranoid and not root"
- 		return
- 	fi
--	perf stat -x, --per-node -a true 2>&1 | commachecker --per-node
-+	perf stat -x$csv_sep --per-node -a true 2>&1 | commachecker --per-node
- 	echo "[Success]"
- }
- 
-@@ -154,7 +155,7 @@ check_per_socket()
- 		echo "[Skip] paranoid and not root"
- 		return
- 	fi
--	perf stat -x, --per-socket -a true 2>&1 | commachecker --per-socket
-+	perf stat -x$csv_sep --per-socket -a true 2>&1 | commachecker --per-socket
- 	echo "[Success]"
- }
- 
+ try:
+   if args.no_args or args.system_wide or args.event:
+-    expected_items = 6
+-  elif args.interval or args.per_thread or args.system_wide_no_aggr:
+     expected_items = 7
+-  elif args.per_core or args.per_socket or args.per_node or args.per_die:
++  elif args.interval or args.per_thread or args.system_wide_no_aggr:
+     expected_items = 8
++  elif args.per_core or args.per_socket or args.per_node or args.per_die:
++    expected_items = 9
+   else:
+     # If no option is specified, don't check the number of items.
+     expected_items = -1
 -- 
 2.39.2.637.g21b0678d19-goog
 
