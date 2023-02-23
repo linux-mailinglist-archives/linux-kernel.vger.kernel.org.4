@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315B46A0D5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF576A0D5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbjBWPyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
+        id S234733AbjBWP4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBWPyU (ORCPT
+        with ESMTP id S229509AbjBWP4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:54:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231D1521E1;
-        Thu, 23 Feb 2023 07:54:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3F5EB81A2C;
-        Thu, 23 Feb 2023 15:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C060C433D2;
-        Thu, 23 Feb 2023 15:54:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677167655;
-        bh=0igkCLN8UIKJ+cS/Hik80+ovdbMq4awNwBfAghEIzLI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JTvI/mjqp8sxYZzFfOT/Nc5dCpnMV236H2yjhmUpss6FTlodJnd85LQ78JK3v0pJE
-         NHMCynh6Oop8yVtNRjkPeR0KAiqZn5+gkCv/g8kn4iQKJhfJVt/69IFep9Ol1ZkYYQ
-         pUZYriqjosqxuDAKvcWGBU5TcUvkTRPKyKkZpeCF189h2aQs4PLBctNhsggp3yr2uJ
-         ayarw6aUDIX2CucLCi7t5NCulWn47tIsd2yzU+GaHeAPoKQcy87fIYAZMShRXdf+03
-         J0z+VuL0ojAVlgEBhZILHE1xxY93JrvBsBbws+jCmS46mx/RdbmYy11PLfYX8dv3Sn
-         msG1ZX3LyIksA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1EF7C5C0DBB; Thu, 23 Feb 2023 07:54:15 -0800 (PST)
-Date:   Thu, 23 Feb 2023 07:54:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        pablo@netfilter.org
-Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
- k[v]free_rcu_mightsleep()
-Message-ID: <20230223155415.GA2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230201150815.409582-1-urezki@gmail.com>
- <Y/df4xtTQ14w/2m4@lothringen>
- <IA1PR11MB6171CE257AC58265B8B7CC9889AB9@IA1PR11MB6171.namprd11.prod.outlook.com>
+        Thu, 23 Feb 2023 10:56:23 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0D456795
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:56:22 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id ck15so45034832edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S9MksQe2BAdK07YeQzg1YaUSY9SPjEfox3Q0Fk5Pvig=;
+        b=UNy54ENZ5YaJ640QDfUC0Y2TGuVWRdfwf8gTHRnsWKa3j4GW74I6DrGJmhDe81spyw
+         DRkIGsTPNzlC3KtKw2RqCtTphDmp0dS61/RcrY9YyCRW02beCeXQs8FhoEEep2i/Rb0S
+         YPtHsEDTveQVnJQdOxQvbYje8YpoTu61rFol8jczeENhWovxNuiAx4xqrG6gmHIhLbxz
+         7t8TNdEZU8xfvNvKOEoDFRwVHCzZd/yOsGJmX8oWFt0k6kQ2XJMwvUjBwIoUiLvqCia8
+         CwTdLJ6z42Fupzrffsf568CNX9dw+wYDOAaNmW6PpgmbigOQrH4yNL2uIDDlCH1pJnmu
+         VobA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S9MksQe2BAdK07YeQzg1YaUSY9SPjEfox3Q0Fk5Pvig=;
+        b=NKqWpU93UUdvRMWHeOLgKV17zxjHjR4gzVdU4bRYd05PNniuvkKiCJGqgY0HCsva8p
+         PylWQMr8BxTj8Ta3YygnloFjUiIjRRimQdIwv4kexAh6Ei/h2iLGGOUmFqMt0RUdflzC
+         H+pLWeb1+KVT/jqPKoxxcgAeqAxZVBRV0y3YVNjIMzwkPEi2Ww6PBEGzKPsOBRZ4gdpW
+         YeKd8USTMJJfU4O9aGktzDfNSI+MQERj2tJPIgJormrQ84vT6vXhG016yjWAPOxtUvsa
+         o5lddOjtQv6VljZg0k31+x3TSipl9jL+pf/NdcZ9KqkvRGGElbleeriecncwfWyF68rp
+         Gcag==
+X-Gm-Message-State: AO0yUKXsEW5Hjd0fEkwVJC8WMqYD/4LTr7tj9nDNUzfwm7qund91uaGE
+        JrAoYcV+cnLfKNw9imBQkEyVkno77p/bIzbi
+X-Google-Smtp-Source: AK7set+A4SdT4h0K2X6Z+k0pdQEnMjswA7kn3apuBvEbNI+fDaMOmYhARfdEssZmoVhshaRzLOjsQQ==
+X-Received: by 2002:a17:906:58c6:b0:8ea:825:a5db with SMTP id e6-20020a17090658c600b008ea0825a5dbmr6993494ejs.76.1677167781178;
+        Thu, 23 Feb 2023 07:56:21 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id og5-20020a1709071dc500b008b1816dcf04sm8717024ejc.136.2023.02.23.07.56.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 07:56:20 -0800 (PST)
+Message-ID: <bbec5e72-ccd8-c24c-0f62-bcd18981f39e@linaro.org>
+Date:   Thu, 23 Feb 2023 16:56:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <IA1PR11MB6171CE257AC58265B8B7CC9889AB9@IA1PR11MB6171.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] dt-bindings: vendor-prefixes: add Internet Initiative
+ Japan Inc.
+Content-Language: en-US
+To:     INAGAKI Hiroshi <musashino.open@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230223132502.2045-1-musashino.open@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230223132502.2045-1-musashino.open@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,79 +76,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 02:29:42PM +0000, Zhuo, Qiuxu wrote:
-> > From: Frederic Weisbecker <frederic@kernel.org>
-> > Sent: Thursday, February 23, 2023 8:45 PM
-> > To: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > Cc: LKML <linux-kernel@vger.kernel.org>; RCU <rcu@vger.kernel.org>; Paul
-> > E . McKenney <paulmck@kernel.org>; Oleksiy Avramchenko
-> > <oleksiy.avramchenko@sony.com>; Jens Axboe <axboe@kernel.dk>; Philipp
-> > Reisner <philipp.reisner@linbit.com>; Bryan Tan <bryantan@vmware.com>;
-> > Steven Rostedt <rostedt@goodmis.org>; Eric Dumazet
-> > <edumazet@google.com>; Bob Pearson <rpearsonhpe@gmail.com>; Ariel
-> > Levkovich <lariel@nvidia.com>; Theodore Ts'o <tytso@mit.edu>; Julian
-> > Anastasov <ja@ssi.bg>
-> > Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
-> > k[v]free_rcu_mightsleep()
-> > 
-> > On Wed, Feb 01, 2023 at 04:08:06PM +0100, Uladzislau Rezki (Sony) wrote:
-> > > This small series is based on Paul's "dev" branch. Head is
-> > > 6002817348a1c610dc1b1c01ff81654cdec12be4
-> > > it renames a single argument of k[v]free_rcu() to its new
-> > k[v]free_rcu_mightsleep() name.
-> > >
-> > > 1.
-> > > The problem is that, recently we have run into a precedent when a user
-> > > intended to give a second argument to kfree_rcu() API but forgot to do
-> > > it in a code so a call became as a single argument of kfree_rcu() API.
-> > >
-> > > 2.
-> > > Such mistyping can lead to hidden bags where sleeping is forbidden.
-> > >
-> > > 3.
-> > > _mightsleep() prefix gives much more information for which contexts it
-> > > can be used for.
-> > >
-> > > Uladzislau Rezki (Sony) (13):
-> > >   rcu/kvfree: Add kvfree_rcu_mightsleep() and kfree_rcu_mightsleep()
-> > >   drbd: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-> > >   misc: vmw_vmci: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-> > >   tracing: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-> > >   lib/test_vmalloc.c: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-> > >   net/sysctl: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-> > >   RDMA/rxe: Rename kfree_rcu() to kfree_rcu_mightsleep()
-> > >   net/mlx5: Rename kfree_rcu() to kfree_rcu_mightsleep()
-> > >   ext4/super: Rename kfree_rcu() to kfree_rcu_mightsleep()
-> > >   ipvs: Rename kfree_rcu() to kfree_rcu_mightsleep()
-> > >   rcuscale: Rename kfree_rcu() to kfree_rcu_mightsleep()
-> > >   doc: Update whatisRCU.rst
-> > >   rcu/kvfree: Eliminate k[v]free_rcu() single argument macro
-> > 
-> > Hi,
-> > 
-> > Not sure if you guys noticed but on latest rcu/dev:
-> > 
-> > net/netfilter/ipvs/ip_vs_est.c: In function ‘ip_vs_stop_estimator’:
-> > net/netfilter/ipvs/ip_vs_est.c:552:15: error: macro "kfree_rcu" requires 2
-> > arguments, but only 1 given
-> >    kfree_rcu(td);
-> >                ^
-> > net/netfilter/ipvs/ip_vs_est.c:552:3: error: ‘kfree_rcu’ undeclared (first use in
-> > this function); did you mean ‘kfree_skb’?
-> >    kfree_rcu(td);
-> >    ^~~~~~~~~
-> >    kfree_skb
-> > net/netfilter/ipvs/ip_vs_est.c:552:3: note: each undeclared identifier is
-> > reported only once for each function it appears in
+On 23/02/2023 14:25, INAGAKI Hiroshi wrote:
+> Internet Initiative Japan Inc. (IIJ) is a developer of network equipment
+> and a provider of network-related services.
+> https://www.iij.ad.jp/en/
 > 
-> Hi Frederic Weisbecker,
+> Add a vendor prefix for it.
 > 
-> I encountered the same build error as yours. 
-> Per the discussion link below, the fix for this build error by Uladzislau Rezki will be picked up by some other maintainer's branch?
-> @Paul E . McKenney, please correct me if my understanding is wrong. 😊
-> 
->     https://lore.kernel.org/rcu/Y9qc+lgR1CgdszKs@salvia/
+> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Pablo and Julian, how are things coming with that patch?
 
-							Thanx, Paul
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
