@@ -2,96 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E276A054B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB52F6A054D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbjBWJww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        id S233624AbjBWJxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbjBWJwt (ORCPT
+        with ESMTP id S234160AbjBWJxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:52:49 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B584ECEC;
-        Thu, 23 Feb 2023 01:52:47 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31N9qcBl077086;
-        Thu, 23 Feb 2023 03:52:38 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1677145958;
-        bh=kN2RfnUUgzUkwI/ceg/z1+1sFH16ZWxamJeuThGZBG4=;
-        h=From:To:CC:Subject:Date;
-        b=RsGg7G6EjFczahcvt4jv5U3I45u+EasuFuc3C8GNmf0XlwfQXpPkZvmOykWP3BusP
-         Ox14gX4nz5GHeXl+dSwaKFEFawgxKfG4Hi2sEYYkHhDdom2uoGwOAjRdmiK7m9z8RT
-         POB/p5cE4ItiZMZjb5E7j1N2dNy5VFExulWLCYlU=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31N9qcaJ007277
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Feb 2023 03:52:38 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
- Feb 2023 03:52:37 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 23 Feb 2023 03:52:37 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31N9qarm120592;
-        Thu, 23 Feb 2023 03:52:37 -0600
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, Dhruva Gole <d-gole@ti.com>,
-        Pratyush Yadav <ptyadav@amazon.de>,
-        <linux-spi@vger.kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        <linux-kernel@vger.kernel.org>,
-        David Binderman <dcb314@hotmail.com>, <stable@vger.kernel.org>
-Subject: [PATCH] spi: spi-sn-f-ospi: fix duplicate flag while assigning to mode_bits
-Date:   Thu, 23 Feb 2023 15:22:02 +0530
-Message-ID: <20230223095202.924626-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 23 Feb 2023 04:53:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFFE53EC7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:52:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677145938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hiWA9MAreXUI6IRZzfTpL89haVwrA8zEt2E8eApKBoQ=;
+        b=JIXS6NMIJ/oFowtH5inLVyK+qc3eEwA3UIaP2T08d+Hfwd3uTqD/QyGpsa3B7mThNJWZ4T
+        qWrWh9Y2cYcAiWFINBT9rJ6y5Nxm8f1Yw9mSLscaTn6EAoaTe3AkPSv7iBfHdts3oBPhvh
+        Urx+s+2HmtiI7F1zNnw/BZAu0rBrNM8=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-3-7NyFuWVLPimh3zkG2W9Kag-1; Thu, 23 Feb 2023 04:52:17 -0500
+X-MC-Unique: 7NyFuWVLPimh3zkG2W9Kag-1
+Received: by mail-qt1-f199.google.com with SMTP id c13-20020ac84e0d000000b003b9bd2a2284so4924143qtw.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:52:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677145936;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hiWA9MAreXUI6IRZzfTpL89haVwrA8zEt2E8eApKBoQ=;
+        b=8FigFlnS0JAnFRE3g+vh8bVyH+icPUNKlQUAUqgxj4yeR8pIdQQDtfneJoiKt0i8B4
+         IomO0AjDnuOsLUY6jBFzLmjMgxoAU2VgFTLRoKMkkTfw9ZrFChVLOgkgHTvUrE/7nvg7
+         3a6yEmVkWAvs8+NCFNcRPOfl8crmA6fRbot0QXIO9+yw89NHvr6X4VXJ4N+jFlJf0df8
+         dRmIHeBC+gg1Eg0ZTAVrf3vlcy5pQz5ecZxnZGf6YA6wEgo/3bjETGsOn1+L/7h3mKkL
+         hGqO/sdLsjeVlP54wpiU3fqU35gLjOhRasMlsdcDGYL5WNR7WJOp/p7iRbm1yi5OGEXA
+         C+Vw==
+X-Gm-Message-State: AO0yUKV4Jd7V+TICkj+rEAJKXVxc7zfiBnVscyfzya5zmiywsrE5j2xt
+        0RoVdbWPRxxykdsnCaqcmKCMEB/JLJswQDB0kQwjb28bHXl6KDs0OGpmYNfVOPlbs+BkMj8kZ1A
+        kOn5zwc27BPXo5Id7xJ6L6321
+X-Received: by 2002:a05:622a:118f:b0:39c:da22:47b8 with SMTP id m15-20020a05622a118f00b0039cda2247b8mr24571219qtk.1.1677145936724;
+        Thu, 23 Feb 2023 01:52:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set+8cQmNNnQVUSxvHo9JVgmb+kjKrxF67imPwpha8hzRWci5qd3zoqSBgG5eIJ9xBrhDRma/NQ==
+X-Received: by 2002:a05:622a:118f:b0:39c:da22:47b8 with SMTP id m15-20020a05622a118f00b0039cda2247b8mr24571198qtk.1.1677145936408;
+        Thu, 23 Feb 2023 01:52:16 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id a14-20020a05622a064e00b003b9b41a32b7sm3834484qtb.81.2023.02.23.01.52.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 01:52:16 -0800 (PST)
+Message-ID: <8e05cf636937ad59e32b4ae7f1e7e8732c694421.camel@redhat.com>
+Subject: Re: [net PATCH] octeontx2-af: Unlock contexts in the queue context
+ cache in case of fault detection
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Sai Krishna <saikrishnag@marvell.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
+        sumang@marvell.com
+Date:   Thu, 23 Feb 2023 10:52:12 +0100
+In-Reply-To: <20230222065921.1852686-1-saikrishnag@marvell.com>
+References: <20230222065921.1852686-1-saikrishnag@marvell.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the SPI_TX_OCTAL flag that appeared two time with SPI_RX_OCTAL
-in the chain of '|' operators while assigning to mode_bits
+On Wed, 2023-02-22 at 12:29 +0530, Sai Krishna wrote:
+> From: Suman Ghosh <sumang@marvell.com>
+>=20
+> NDC caches contexts of frequently used queue's (Rx and Tx queues)
+> contexts. Due to a HW errata when NDC detects fault/poision while
+> accessing contexts it could go into an illegal state where a cache
+> line could get locked forever. To makesure all cache lines in NDC
+> are available for optimum performance upon fault/lockerror/posion
+> errors scan through all cache lines in NDC and clear the lock bit.
+>=20
+> Fixes: 4a3581cd5995 ("octeontx2-af: NPA AQ instruction enqueue support")
+> Signed-off-by: Suman Ghosh <sumang@marvell.com>
+> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
 
-Fixes: 1b74dd64c861 ("spi: Add Socionext F_OSPI SPI flash controller driver")
+After the net-next merge, this does not apply cleanly to net anymore.
 
-Reported-by: David Binderman <dcb314@hotmail.com>
-Link: https://lore.kernel.org/all/DB6P189MB0568F3BE9384315F5C8C1A3E9CA49@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM/
+Please rebase and re-post, thanks!
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
- drivers/spi/spi-sn-f-ospi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
-index 348c6e1edd38..333b22dfd8db 100644
---- a/drivers/spi/spi-sn-f-ospi.c
-+++ b/drivers/spi/spi-sn-f-ospi.c
-@@ -611,7 +611,7 @@ static int f_ospi_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	ctlr->mode_bits = SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL
--		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL
-+		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL
- 		| SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;
- 	ctlr->mem_ops = &f_ospi_mem_ops;
- 	ctlr->bus_num = -1;
--- 
-2.25.1
+Paolo
 
