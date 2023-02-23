@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F4E6A104A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444466A104E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbjBWTLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S231508AbjBWTMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjBWTLT (ORCPT
+        with ESMTP id S229801AbjBWTMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:11:19 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F31436FC1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:10:58 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id bw19so926096wrb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:10:58 -0800 (PST)
+        Thu, 23 Feb 2023 14:12:30 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C0338029
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:02 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id h14so2892919wru.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:12:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lrHADWHoMY9y8ELVmvMbzTureJuyfP6JlwHmhpl9ZDg=;
-        b=Qyw1CqW71eyXYbSz0GTnhvWK1TYOrEuH868f5034qbj8ll371dbPYSqy5emdEUDKGB
-         42bYlsrkmT1rK0Z/31TH70o0tisVmmC4i6Chi5MZJLpbzi3QxfPaSDgh8n+ZuvR/ifPI
-         d655ZEinrxDVcIJyowzv4a7GQndq1CoIVqg1iKbq7qkFM9Sl7W2zednQlkJ8z25swJqB
-         ANtbIND9z53bgeEp0PMHu58W7WDiGjA02kYKiM8K4u0tyCEq+tJ7k97+Ayatc6Jjww5n
-         7bkXG/2cvljjOEubkyxfPTmqpUlfuzxhI5IqRje3UzJ1iMVKAfz/9AavplCgCxdq1x8R
-         esQw==
+        d=bytedance.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XOS0veLLHWbwjK4eBBnp5I1m+3QaoysNm8QvFRgjkAM=;
+        b=NoWOE1juav4B2EzO3sYoVjYk0WKOVpH+oBqfJvi8ziGJ5mMnDNe/17x0Nm8VQqmURH
+         jY8DM7OfXqdvo5ko0NXGNMAlL5gcbkXkBJMqg8CCEhEKhV+mo7JGd5Eb2STH9IxN4NQ9
+         Pj37RCtxE8VmbCkvm+ZXgra2t3hGXDanm1NNyyJo+1lOxO0RH89t5omOv3wUVU2rjXKX
+         j/DjsDZcG+nlc2VAh72E4AKUTGT+o83suYwYv/0uOVFtpomc1sc4RlNxNBSZZCsUlQ9q
+         6pdpGFhIkU3joQO/TUf35xtYje4X3s+Ld6DQfDWvGet+hI8aAcYpXOaKjPpcqUlbDxPF
+         2viQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lrHADWHoMY9y8ELVmvMbzTureJuyfP6JlwHmhpl9ZDg=;
-        b=VlcUGhPx7opaNj+VMeThFbquxs2D/91LQm4EjO+1KpYmA12HqZI7O86M09eJTfryNs
-         UUxd967g+wBmp2RKZWAsUTOvsMslHUSP4Hu/h8ZXxe8GpgkFDRcj6zMJyUQdK9Koeo1z
-         buMhayv8D1AI0Is3Bs8/04E3hVt7XuUn2+/FYZ+Da1z9scvILdI7y/Gu+8mnABC38jC1
-         /mEvSvFgDymwk6C6IDAOcg+Na6f1AptaiAgwfREmZbVWI+WgHGtVx3977fIDY9MToqKG
-         j8sgPqpRZSvSJY+SoT2Z0Bl1R/UCI/FGPVJOMsbb4m+bly4ZBEfZajw0CiQ6QbzGWA2w
-         iKTg==
-X-Gm-Message-State: AO0yUKWreZCpoYhmXmmK7+qXHJmp70DKAkVhzYtK3SSYw7zS/8KoaWR9
-        i/PnU+yA+Dy5pGLgmlNzcTvvTQ==
-X-Google-Smtp-Source: AK7set907oOLmf5B2utz5wIhikq7alUFQyP2J1ImCu7ZiubjkvQNk70Sm9GawcW4HF6tZz+tgwZGKQ==
-X-Received: by 2002:adf:cd0c:0:b0:2c7:454:cee8 with SMTP id w12-20020adfcd0c000000b002c70454cee8mr9504064wrm.1.1677179457122;
-        Thu, 23 Feb 2023 11:10:57 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:a6f0:4ee9:c103:44cb])
-        by smtp.gmail.com with ESMTPSA id k2-20020adff282000000b002c6e8cb612fsm9844481wro.92.2023.02.23.11.10.55
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XOS0veLLHWbwjK4eBBnp5I1m+3QaoysNm8QvFRgjkAM=;
+        b=0mxa5npxSReOW2KpY31pFTWQK96cw9VOSpOauiaoBqMekprYvU6dIL1q4F2ymjqRf1
+         b9fiGpAFTJ0ASpAgXRY4hg0/vPfb2/X9mSZq5N/cRHaniSE5Kea6QE9E3r6VaDtfxpcm
+         9lZE0Tso4pV6WK6CdKPv/JJxZy4s8mIB5Yryt/B3CyjiDOKadfmcX9E66GOEi84xVka2
+         hNsXpMsm5pEXi0XL9txDwJUmXtrhanpCbjA9H70o1NWC+Ho/1A9gtdds71dJyU2tKT4V
+         nlhrZYFPguT7nbFWd/Oi0xwNx6CxKWJ8BMh8cthgYmaQIzSipjl3Y3u+suHUiniCAz1s
+         YTsQ==
+X-Gm-Message-State: AO0yUKWR6kr9KfA2+LK/DDK5Ll3VMeJHnSKckWJ3B9RbDuTlnYrchYHl
+        vpVsSTgFPupXQfBYKKZlbky8Vw==
+X-Google-Smtp-Source: AK7set8v9uJ+aFQdjGSLkOj7taqgBaP0/g1nSEOHlxeNkTiapiOF09lwMSzf83LJfhH/le9sXkYJUQ==
+X-Received: by 2002:a5d:6290:0:b0:2c7:1a86:aecd with SMTP id k16-20020a5d6290000000b002c71a86aecdmr532807wru.2.1677179503081;
+        Thu, 23 Feb 2023 11:11:43 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:5ee0:5af0:64bd:6198])
+        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b002c561805a4csm12957286wrt.45.2023.02.23.11.11.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 11:10:56 -0800 (PST)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
-Cc:     tj@kernel.org, qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v11 8/8] sched/fair: Add latency list
-Date:   Thu, 23 Feb 2023 20:10:41 +0100
-Message-Id: <20230223191041.577305-9-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230223191041.577305-1-vincent.guittot@linaro.org>
-References: <20230223191041.577305-1-vincent.guittot@linaro.org>
+        Thu, 23 Feb 2023 11:11:42 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v11 00/12] Parallel CPU bringup for x86_64
+Date:   Thu, 23 Feb 2023 19:11:28 +0000
+Message-Id: <20230223191140.4155012-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,243 +77,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a rb tree for latency sensitive entities so we can schedule the most
-sensitive one first even when it failed to preempt current at wakeup or
-when it got quickly preempted by another entity of higher priority.
+This version includes the work done by Brian Gerst
+(https://lore.kernel.org/all/20230222221301.245890-1-brgerst@gmail.com/)
+to remove the global variables initial_gs, initial_stack, and
+early_gdt_descr from the 64-bit boot code.
 
-In order to keep fairness, the latency is used once at wakeup to get a
-minimum slice and not during the following scheduling slice to prevent
-long running entity to got more running time than allocated to his nice
-priority.
+The first 2 patches have been squashed with patch 6, while the last 4 patches
+for removing the global variables and simplifying boot setup are added on top
+of the series.
+Thanks,
+Usama
 
-The rb tree enables to cover the last corner case where latency
-sensitive entity can't got schedule quickly after the wakeup.
+Changes across versions:
+v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+    in preparation for more parallelisation.
+v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+    avoid scribbling on initial_gs in common_cpu_up(), and to allow all
+    24 bits of the physical X2APIC ID to be used. That patch still needs
+    a Signed-off-by from its original author, who once claimed not to
+    remember writing it at all. But now we've fixed it, hopefully he'll
+    admit it now :)
+v5: rebase to v6.1 and remeasure performance, disable parallel bringup
+    for AMD CPUs.
+v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
+    reused timer calibration for secondary CPUs.
+v7: [David Woodhouse] iterate over all possible CPUs to find any existing
+    cluster mask in alloc_clustermask. (patch 1/9)
+    Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
+    0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+    Included sanity checks for APIC id from 0x0B. (patch 6/9)
+    Removed patch for reusing timer calibration for secondary CPUs.
+    commit message and code improvements.
+v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
+    early_gdt_descr.
+    Drop trampoline lock and bail if APIC ID not found in find_cpunr.
+    Code comments improved and debug prints added.
+v9: Drop patch to avoid repeated saves of MTRR at boot time.
+    rebased and retested at v6.2-rc8.
+    added kernel doc for no_parallel_bringup and made do_parallel_bringup
+    __ro_after_init.
+v10: Fixed suspend/resume not working with parallel smpboot.
+     rebased and retested to 6.2.
+     fixed checkpatch errors.
+v11: Added patches from Brian Gerst to remove the global variables initial_gs,
+     initial_stack, and early_gdt_descr from the 64-bit boot code
+     (https://lore.kernel.org/all/20230222221301.245890-1-brgerst@gmail.com/).
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
----
- include/linux/sched.h |   1 +
- kernel/sched/core.c   |   1 +
- kernel/sched/fair.c   | 108 ++++++++++++++++++++++++++++++++++++++++--
- kernel/sched/sched.h  |   1 +
- 4 files changed, 108 insertions(+), 3 deletions(-)
+Brian Gerst (4):
+  x86/smpboot: Remove initial_stack on 64-bit
+  x86/smpboot: Remove early_gdt_descr on 64-bit
+  x86/smpboot: Remove initial_gs
+  x86/smpboot: Simplify boot CPU setup
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 38decae3e156..41bb92be5ecc 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -548,6 +548,7 @@ struct sched_entity {
- 	/* For load-balancing: */
- 	struct load_weight		load;
- 	struct rb_node			run_node;
-+	struct rb_node			latency_node;
- 	struct list_head		group_node;
- 	unsigned int			on_rq;
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 093cc1af73dc..752fd364216c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4434,6 +4434,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	p->se.nr_migrations		= 0;
- 	p->se.vruntime			= 0;
- 	INIT_LIST_HEAD(&p->se.group_node);
-+	RB_CLEAR_NODE(&p->se.latency_node);
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 	p->se.cfs_rq			= NULL;
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 125a6ff53378..9fb0461197bd 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -680,7 +680,85 @@ struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
- 
- 	return __node_2_se(last);
- }
-+#endif
- 
-+/**************************************************************
-+ * Scheduling class tree data structure manipulation methods:
-+ * for latency
-+ */
-+
-+static inline bool latency_before(struct sched_entity *a,
-+				struct sched_entity *b)
-+{
-+	return (s64)(a->vruntime + a->latency_offset - b->vruntime - b->latency_offset) < 0;
-+}
-+
-+#define __latency_node_2_se(node) \
-+	rb_entry((node), struct sched_entity, latency_node)
-+
-+static inline bool __latency_less(struct rb_node *a, const struct rb_node *b)
-+{
-+	return latency_before(__latency_node_2_se(a), __latency_node_2_se(b));
-+}
-+
-+/*
-+ * Enqueue an entity into the latency rb-tree:
-+ */
-+static void __enqueue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-+{
-+
-+	/* Only latency sensitive entity can be added to the list */
-+	if (se->latency_offset >= 0)
-+		return;
-+
-+	if (!RB_EMPTY_NODE(&se->latency_node))
-+		return;
-+
-+	/*
-+	 * The entity is always added the latency list at wakeup.
-+	 * Then, a not waking up entity that is put back in the list after an
-+	 * execution time less than sysctl_sched_min_granularity, means that
-+	 * the entity has been preempted by a higher sched class or an entity
-+	 * with higher latency constraint. In thi case, the entity is also put
-+	 * back in the latency list so it gets a chance to run 1st during the
-+	 * next slice.
-+	 */
-+	if (!(flags & ENQUEUE_WAKEUP)) {
-+		u64 delta_exec = se->sum_exec_runtime - se->prev_sum_exec_runtime;
-+
-+		if (delta_exec >= sysctl_sched_min_granularity)
-+			return;
-+	}
-+
-+	rb_add_cached(&se->latency_node, &cfs_rq->latency_timeline, __latency_less);
-+}
-+
-+/*
-+ * Dequeue an entity from the latency rb-tree and return true if it was really
-+ * part of the rb-tree:
-+ */
-+static bool __dequeue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se)
-+{
-+	if (!RB_EMPTY_NODE(&se->latency_node)) {
-+		rb_erase_cached(&se->latency_node, &cfs_rq->latency_timeline);
-+		RB_CLEAR_NODE(&se->latency_node);
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static struct sched_entity *__pick_first_latency(struct cfs_rq *cfs_rq)
-+{
-+	struct rb_node *left = rb_first_cached(&cfs_rq->latency_timeline);
-+
-+	if (!left)
-+		return NULL;
-+
-+	return __latency_node_2_se(left);
-+}
-+
-+#ifdef CONFIG_SCHED_DEBUG
- /**************************************************************
-  * Scheduling class statistics methods:
-  */
-@@ -4758,8 +4836,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 	check_schedstat_required();
- 	update_stats_enqueue_fair(cfs_rq, se, flags);
- 	check_spread(cfs_rq, se);
--	if (!curr)
-+	if (!curr) {
- 		__enqueue_entity(cfs_rq, se);
-+		__enqueue_latency(cfs_rq, se, flags);
-+	}
- 	se->on_rq = 1;
- 
- 	if (cfs_rq->nr_running == 1) {
-@@ -4845,8 +4925,10 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 
- 	clear_buddies(cfs_rq, se);
- 
--	if (se != cfs_rq->curr)
-+	if (se != cfs_rq->curr) {
- 		__dequeue_entity(cfs_rq, se);
-+		__dequeue_latency(cfs_rq, se);
-+	}
- 	se->on_rq = 0;
- 	account_entity_dequeue(cfs_rq, se);
- 
-@@ -4941,6 +5023,7 @@ set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
- 		 */
- 		update_stats_wait_end_fair(cfs_rq, se);
- 		__dequeue_entity(cfs_rq, se);
-+		__dequeue_latency(cfs_rq, se);
- 		update_load_avg(cfs_rq, se, UPDATE_TG);
- 	}
- 
-@@ -4979,7 +5062,7 @@ static struct sched_entity *
- pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
- {
- 	struct sched_entity *left = __pick_first_entity(cfs_rq);
--	struct sched_entity *se;
-+	struct sched_entity *latency, *se;
- 
- 	/*
- 	 * If curr is set we have to see if its left of the leftmost entity
-@@ -5021,6 +5104,12 @@ pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
- 		se = cfs_rq->last;
- 	}
- 
-+	/* Check for latency sensitive entity waiting for running */
-+	latency = __pick_first_latency(cfs_rq);
-+	if (latency && (latency != se) &&
-+	    wakeup_preempt_entity(latency, se) < 1)
-+		se = latency;
-+
- 	return se;
- }
- 
-@@ -5044,6 +5133,7 @@ static void put_prev_entity(struct cfs_rq *cfs_rq, struct sched_entity *prev)
- 		update_stats_wait_start_fair(cfs_rq, prev);
- 		/* Put 'current' back into the tree. */
- 		__enqueue_entity(cfs_rq, prev);
-+		__enqueue_latency(cfs_rq, prev, 0);
- 		/* in !on_rq case, update occurred at dequeue */
- 		update_load_avg(cfs_rq, prev, 0);
- 	}
-@@ -12222,6 +12312,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
- void init_cfs_rq(struct cfs_rq *cfs_rq)
- {
- 	cfs_rq->tasks_timeline = RB_ROOT_CACHED;
-+	cfs_rq->latency_timeline = RB_ROOT_CACHED;
- 	u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
- #ifdef CONFIG_SMP
- 	raw_spin_lock_init(&cfs_rq->removed.lock);
-@@ -12529,8 +12620,19 @@ int sched_group_set_latency(struct task_group *tg, int prio)
- 
- 	for_each_possible_cpu(i) {
- 		struct sched_entity *se = tg->se[i];
-+		struct rq *rq = cpu_rq(i);
-+		struct rq_flags rf;
-+		bool queued;
-+
-+		rq_lock_irqsave(rq, &rf);
- 
-+		queued = __dequeue_latency(se->cfs_rq, se);
- 		WRITE_ONCE(se->latency_offset, latency_offset);
-+		if (queued)
-+			__enqueue_latency(se->cfs_rq, se, ENQUEUE_WAKEUP);
-+
-+
-+		rq_unlock_irqrestore(rq, &rf);
- 	}
- 
- 	mutex_unlock(&shares_mutex);
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 9a2e71231083..21dd309e98a9 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -570,6 +570,7 @@ struct cfs_rq {
- #endif
- 
- 	struct rb_root_cached	tasks_timeline;
-+	struct rb_root_cached	latency_timeline;
- 
- 	/*
- 	 * 'curr' points to currently running entity on this cfs_rq.
+David Woodhouse (8):
+  x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
+  cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+  cpu/hotplug: Add dynamic parallel bringup states before
+    CPUHP_BRINGUP_CPU
+  x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+  x86/smpboot: Split up native_cpu_up into separate phases and document
+    them
+  x86/smpboot: Support parallel startup of secondary CPUs
+  x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+  x86/smpboot: Serialize topology updates for secondary bringup
+
+ .../admin-guide/kernel-parameters.txt         |   3 +
+ arch/x86/include/asm/processor.h              |   6 +-
+ arch/x86/include/asm/realmode.h               |   4 +-
+ arch/x86/include/asm/smp.h                    |  13 +-
+ arch/x86/include/asm/topology.h               |   2 -
+ arch/x86/kernel/acpi/sleep.c                  |  12 +-
+ arch/x86/kernel/apic/apic.c                   |   2 +-
+ arch/x86/kernel/apic/x2apic_cluster.c         | 126 ++++---
+ arch/x86/kernel/asm-offsets.c                 |   1 +
+ arch/x86/kernel/cpu/common.c                  |   6 +-
+ arch/x86/kernel/head_64.S                     | 125 +++++--
+ arch/x86/kernel/smpboot.c                     | 350 +++++++++++++-----
+ arch/x86/realmode/init.c                      |   3 +
+ arch/x86/realmode/rm/trampoline_64.S          |  14 +
+ arch/x86/xen/smp_pv.c                         |   4 +-
+ arch/x86/xen/xen-head.S                       |   2 +-
+ include/linux/cpuhotplug.h                    |   2 +
+ include/linux/smpboot.h                       |   7 +
+ kernel/cpu.c                                  |  31 +-
+ kernel/smpboot.h                              |   2 -
+ 20 files changed, 525 insertions(+), 190 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 
