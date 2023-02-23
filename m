@@ -2,276 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D4A6A0EF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265F66A0EF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 18:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjBWR6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 12:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
+        id S230342AbjBWR7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 12:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBWR6M (ORCPT
+        with ESMTP id S229477AbjBWR7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 12:58:12 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D8E2E812
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:58:10 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id e9so11607230ljn.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:58:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mKgYnuqaN8yxJGre/0H4fb1zCcGeD2CAEWiF9ho0Iss=;
-        b=Y4awIPmzfSQYWU9vvX39ElXpDttocv0/K6p/oMCpKkygiBhBe971EzSk386imkT181
-         WNeMQCbtyxKqSbauXYN/WXzIgYe56FXYE7RxBiczvvkYVHxxvxnM5B0bypIHRGV4CEdi
-         5Ts4paXPDGVDk3GOLNFp2vXq0R4wkPkv8bFZvLJwdSbeIgj6cLrz0IN8wSBOJUMUXh4Y
-         /IK1uv6YQqBT+MDUp8GghCgCZfekwN36ljcsBYBXv1NLIbXJuJrwdBXYudlK8uDDC1qk
-         1+l6sRMhla7PunhfMo2+TX6oL/h38pI9Y9DckNg1IfCafHF5RCvqauhT/s0JjTBwG3Pv
-         CMkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mKgYnuqaN8yxJGre/0H4fb1zCcGeD2CAEWiF9ho0Iss=;
-        b=KI3DX/XRzPlKTtvgev1G7iXiRPOtlgN9ut7IfAlo39zbftZEN+UbB5hY1y/hKNJYZB
-         P9NDFHdzkT6KijmaonwjND1HVXLdqXlWZyqd2IsbiTmnOffsA8+MZm5x1LuaO9DpEaSk
-         M2B1oZZ9VDINHBLZEsTZD3HslRGLhIX0becxmtKwhTElfIevpwnizCJIiS465q8HuUhU
-         84pfrijseIizNuzrpcpG7X3uBE0wxpZSHvK1cy/eligqyxIrs20ILZt2GL7RU//HPM8W
-         N9wMNfufWLFXGxbtgRwtCOK2FNX/e0Zt3VbmiuMLmXEJZ8osSPyi6ybzyTCQ6lLEqAcz
-         mqrw==
-X-Gm-Message-State: AO0yUKVdyy1E7ASdnar10vt67K1EYBiOLJQgZsgnoh92WUKSLi+bKyLJ
-        xlZ/uPzS6i1KES/ytqwVVmPNOW6r+UHGGJwFfcc=
-X-Google-Smtp-Source: AK7set8pJITniJkSjNtADh2QhZg0G/Ae5yny6uyB3wYbn0U+NqIP2TQu+iCsl//BBZuTx0lrr0ioLpG0J5r0E8/sSCo=
-X-Received: by 2002:a05:651c:b9b:b0:295:945d:b382 with SMTP id
- bg27-20020a05651c0b9b00b00295945db382mr2448387ljb.4.1677175088015; Thu, 23
- Feb 2023 09:58:08 -0800 (PST)
+        Thu, 23 Feb 2023 12:59:23 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D3E36FC1;
+        Thu, 23 Feb 2023 09:59:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677175162; x=1708711162;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=g4+ynOkSEK3P6nC1cIBaJt3jXwbd+LdI1vrUVa6yvN8=;
+  b=ZBCYLciAc/Vjzwd487cyuESd0nZrhbISV467cJQNuE4KmATJ2Ess41A2
+   hwDcQJi1wUNkhBoStfJXLd6LNyfrDrlh1+9yk7xZP243+e72dDYxQL4/5
+   UXKsXnh8vzpRdlDozFQg3sQMCCpt/42Cd1vANlFrXnWtw1EiIKz8JetaG
+   VMeSI7jyWGPe2ZJOTTWkZW0tTAzmy1TSNqHyuBI12lS7WXYdf88lXR/px
+   A7WmX5ocRQdre7tW3NcNd0Kx+GhijL1pa2LBilWy/ROYP/uSmJGdaaKUF
+   qrgqzcFQjSrMXYJW/ohVNmHcAuafePEKR9C4FevO1AiYsJ/69V/zFvEdG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331957196"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="331957196"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 09:59:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918101496"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="918101496"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 09:59:20 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 09:59:20 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 09:59:20 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 23 Feb 2023 09:59:20 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 23 Feb 2023 09:59:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lgqPrmLwgSTmQvUeiAnmkES+0aAiX7DmCzb6hJ1yz66hfDl+3778XUQIHFab/6fElgpqmkfArgJ2vCE+toBooSeZYnEG4KDGfWKmZo4xAcZNXnWrtOM1k5tuyAeJP2jMyIV/M6GsMpXIJrOexKFVxAkxmQck7U91M9uTgGGMX9A3z4sfxtXd0+82eVLq/fdHjnZgnHU+RUunpHI2jzHF5iWBAODDQ/3Z8lZrQay6PzyUqi5AjxSztE+ALFdXG6DiEpf0Dqki0AraWw37Dl0dQWlLsF+x+40mAVze3C2h1KVwO5qDTFtHzaB8DQBxoukba9F+/L71XsnVkAhToSucqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g4+ynOkSEK3P6nC1cIBaJt3jXwbd+LdI1vrUVa6yvN8=;
+ b=Ao2q4nDeeuFQ8ALWh81qKYlnuUvtX459Qoe3Yvi7+09WVMNG4WYz1Izm+BAfI4k1gbCpTqxVL9fn8itqnqdXYbBI04TFCcaa4DoL0MJj5Abexsucx4e2Gw76XRk+8QoMTZ7QO8O6IFUSmHDIXqTYpJKBBLi9lgx0q1Q8lH3CFQrD6bJ2P4LgKe083ckdBD4T6C78oFrwFuNeI55Yq1aRB0FTLkNpVkkv6nsRsDFYSq2Uqb7gy+Y7iHZq2606Q/lMI1h7VhogUxezOYY2wf9PnB7CJKD1UPUwiWc3ZWRv2HRmQZ/qbvLDJrEdM26KCyml4vON/byJT/R7U7899D22Tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by IA1PR11MB6322.namprd11.prod.outlook.com (2603:10b6:208:38a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Thu, 23 Feb
+ 2023 17:59:17 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
+ 17:59:17 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "hca@linux.ibm.com" <hca@linux.ibm.com>
+CC:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v6 12/41] s390/mm: Introduce pmd_mkwrite_kernel()
+Thread-Topic: [PATCH v6 12/41] s390/mm: Introduce pmd_mkwrite_kernel()
+Thread-Index: AQHZQ9490xkYOGVnNUGxP685zSCNI67cePaAgABgYoA=
+Date:   Thu, 23 Feb 2023 17:59:16 +0000
+Message-ID: <9125cb75914eba24d730e617b9b8a8869f772a33.camel@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+         <20230218211433.26859-13-rick.p.edgecombe@intel.com>
+         <Y/dYmcHQXP63ONeL@osiris>
+In-Reply-To: <Y/dYmcHQXP63ONeL@osiris>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|IA1PR11MB6322:EE_
+x-ms-office365-filtering-correlation-id: 9dc30949-7a19-4341-e9f8-08db15c7addf
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /hHaA50AsvcPbU/u3jflGvzeoWlL71hX5acZy2eHxz4wnNxBLVtDwNuZqclAAz3rS5Tp2GkMb/wjiYOw3hDiwkjhDlRd6s5mvJNj4ynsiasRRyIT9ld7jHkHDdUGGUJAn9MYVQmvaebLSBsNbL0zXwHiPTqvIqN5vK3synp68H9AlTwYaiyDALxCkfkloz/TBghTB7c+SRhPFlF9IodQ99XmRfac2TjWhXw62+7k3kbC/2ukJ8hFeVHGqzcl0uwrlxQ5xtk8VsIoO5UB4QSt1ubv/kWZ3rUzZ7rtq9OkLp3b3Kq5wGIEvKS9GWf9tKxb9XloJ1ikeeCVsirRQU8nXa7dMgu1GOEaEYeSP6VJB5z115ETDiblgxvuySMlduMox1h+LFyI/VkOjl6H8O/QJy8ZxWEHFT+sks+EPJcUj0bC79kSniGti7Z5h3fZhWVTsO+wJhvF59yczqbTYfb3qTCAP6CnvSj5mzNFvi2W+lFktY3Wi762OcMYKLetXFDOHO37HasQbnsISlbWN7d4WJeQcAzVyJhHHDmPL9Xu8vEPj6mxLVLwHnI8VpZXa/lz4detGZOE6PgVlKhkNRFz8vLRr5bChcfSZPqDIzyBOy783PHmxjZQL79VyxG+iICBY5ev2zl/jfG6RJjmBHO5t96F9Q/rRnTVs5jRDBuO6Vgx8qijM7xai5a6IZ7xL+laB4FYYjpYNosFMoJIMPozXkYMqGyUMPLz+gQV1rs9hE4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(136003)(396003)(376002)(366004)(451199018)(558084003)(36756003)(54906003)(478600001)(8936002)(64756008)(5660300002)(6486002)(7416002)(91956017)(316002)(7406005)(66446008)(66476007)(2906002)(66556008)(76116006)(66946007)(41300700001)(4326008)(71200400001)(38100700002)(122000001)(6916009)(82960400001)(8676002)(38070700005)(2616005)(86362001)(6512007)(186003)(6506007)(26005)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q21BbzZyazZaR3B2d3NTZFBXZFgwb3dDTFNYUG4rUHQxYW9UbDJCU0tCRXla?=
+ =?utf-8?B?b2VrMFBoNVlVczAzUTNROENqN0ZUbUdZMTRWRXBKS28vVDJFUU9CQXhOclJJ?=
+ =?utf-8?B?OW5WcjdsK0J0bTRjSGJHR3lJRHB4N1pJZndDOUlmVGN2NE9EbEhvckd2VHlK?=
+ =?utf-8?B?VE9xWVFTcE16YklLS05aNjFpTVh5QUpyWlNNWGJMYlBGUTdpZzdIME5obFVw?=
+ =?utf-8?B?ZS9oQWNNbGw5d1RMU3hCc1BmUTI5ankrMEJXc2V2RjR6NFozNnFGbnRaY0FU?=
+ =?utf-8?B?ek9RN2s0Mnk0VUlmUEpnd0VMbVVkS3NzVDErQUJ5OFI3ZUxnMjhOcjhnNTVk?=
+ =?utf-8?B?SXJ5QXV2UTQzS05oRVhxWSs4SnFaVGxHNDBJOHRKdGxsNHVJQjI2L29CZkZY?=
+ =?utf-8?B?Sjc1NWlTVDQ0N29IU0V5d2VYZVdVaXlhaGtEMEo2UVpXY2FuMFFGTTFQaUEx?=
+ =?utf-8?B?RnNEMmlpRVNPdUpZU0liYXpxVmNlUGhTYS9NN0RTSUp5V0J4bm1UeENmK0JC?=
+ =?utf-8?B?SHpsM1M1UUEyMHdZNWJTa0FiVzJYRzRhTzgvV3BDalJQM2NKTzYvblRKVnpP?=
+ =?utf-8?B?d1k5enJOcUx2UzBJU3N1RDJ0alJvQnhyckFYekcvOWxya0N5bmNBYWtHSG02?=
+ =?utf-8?B?eHBkR3hkS3RvR0YxS1YwcytIU3pqWlpLbDVmRGRycTBaNG5Kc2s4aGFYbnNR?=
+ =?utf-8?B?dFhyNExLNC80cFNiNkdlQnlMcVBTSmRlNnN4U0Jkb2FPNmFyVGdRR1l5TzY1?=
+ =?utf-8?B?THYyaitqYWFCRmUvWi9VOWIvT0RxcVJhdmhWcUhXQ2sxRVE3RnJ5RzFjdk9q?=
+ =?utf-8?B?L0gyZmhJd01BdWtCUDRyRzJoMXZmUGNaVll1VXd4SUdmMnNlL0xPVGRYM3dr?=
+ =?utf-8?B?T1VOZEZvNEJhVitqRFB2cnR0bUV4bUJMK1RsSm85OFJmbHN2YU1KTjFEWjdq?=
+ =?utf-8?B?V1hnQzJ6NExDSmhPS1pKSlBLVHlQNWMwMkwxdHE4bmc0eVBqSG9ybTRNZENS?=
+ =?utf-8?B?cjJDRzZqa0E5d0k2bkhQajdhQUszbTEzVTlQMkxRMm5EY3Nnc003RU85TVkx?=
+ =?utf-8?B?bzE3V2VEQVNySnZiTE9sNnRGVWFJODZLaHIzSXRTWjEwUThXU2lOT1U4L3dT?=
+ =?utf-8?B?ZjkvWG0vNUhUR2RVYTQweS9vZmI3ZlBJcEhjK2hQL0dYRHVwclY1UVY0elR5?=
+ =?utf-8?B?cU5PSHBxV0xwb2xWNEttSE8wU1JJYncwNDVvTnpMODUrblV6Q21TNHplV1hB?=
+ =?utf-8?B?TXhxY2JDVDIyMkRxMVpDaUhyM1A1VTFmVmdVNXladUF5MWNveUx5MEJlUFds?=
+ =?utf-8?B?T1JVdnNKcjVyeWZyWmlGbHZIOWhLTHB3WFRDSHJzV3EvRUF4cUNzQTIxd0Ey?=
+ =?utf-8?B?dFdMbWZFTUtXVVhOOStaY3hUVkJ4aDdFNVdGVEIwWDJiUklndU5Mck50YlJG?=
+ =?utf-8?B?YVgyVVNwVDhSQml0VXJRK2VyeGxlRTR3MFRmYmdkNlFuMjNIMW1wMURwV1Jr?=
+ =?utf-8?B?T1RMdWN5cEVXNXJaWkZXUUJKcW95SWJCcXJ3aHNmK0ZJcitZM2VCTlg4RzRu?=
+ =?utf-8?B?Yk54QzB2Yk45bm0zM1l2cDBHc0RTa2NRcGUrWE5ielAzSkRyc2JPb3l3TjlO?=
+ =?utf-8?B?K0g5bnJEdG85TDdkRmxFM1pwbUZyYXFVU3hCUjFBVjhPalBNQVVYRlJ6cXJ5?=
+ =?utf-8?B?RkkwU0pMcjcyamhBZE1pVE5zczZMQnN1OW5hdzlJR0YzMitDSVI4YXBFbzVT?=
+ =?utf-8?B?dXMwTW5VY0lhWGJ4ZFVKbnRXT2JNN2k0S0FWWk1ybVovcnM3a0Y1RSt3eFNo?=
+ =?utf-8?B?RFhxM2lZa3c1UUtTckRWbGd2QnRpRnJuTUp1ZDgxN0NFS3AxaXh2aXV6bGRQ?=
+ =?utf-8?B?ZXp6Tm9yREw5NkdqblAwTGtNNXRuSDc5SVVYUGFiNGZnNlNwczJTb0dEa1Fq?=
+ =?utf-8?B?WUZjRGp2TGpoQk1SQ2JDV3dXZVVubk95aU9iS1FxN2Z5OGl6bmg5SnMvUHpZ?=
+ =?utf-8?B?ZEJYR3JaRVlnZXBRc2oxU2hiRFJVZ3NsR3dIZzVvYTlFUURIVjlaRWhFbVAx?=
+ =?utf-8?B?SWp2L29qTWtlZmhtT1dKRVcyb1JmSmU1RDFuTExrdVFnNzVsRFAxUHh5UjVi?=
+ =?utf-8?B?WFR4d2pwbVRCT1gzMTUycDVJUUFFbjg3WG44dUgwNDRjUytuL2QzcTFDb1VL?=
+ =?utf-8?Q?bWaxgVokjN8v8tnbOa+ul2g=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D935DD0E46569449B3792C8EF67DED88@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221111075902.798571-1-guoren@kernel.org> <CA+V-a8tbFhefuYF0UrGNrKZn6CpHEUhOvsf4GNmdLza0gWvf=w@mail.gmail.com>
-In-Reply-To: <CA+V-a8tbFhefuYF0UrGNrKZn6CpHEUhOvsf4GNmdLza0gWvf=w@mail.gmail.com>
-From:   Zong Li <zongbox@gmail.com>
-Date:   Fri, 24 Feb 2023 01:57:55 +0800
-Message-ID: <CA+ZOyah9dBzzkHyy6wxk+hok3K1YrR9h+VdA3aTW5+m9ne04SQ@mail.gmail.com>
-Subject: Re: [PATCH V3] riscv: asid: Fixup stale TLB entry cause application crash
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     guoren@kernel.org, anup@brainfault.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, conor.dooley@microchip.com, heiko@sntech.de,
-        philipp.tomsich@vrull.eu, alex@ghiti.fr, hch@lst.de,
-        ajones@ventanamicro.com, gary@garyguo.net, jszhang@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Zong Li <zong.li@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9dc30949-7a19-4341-e9f8-08db15c7addf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 17:59:16.2240
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Lu/vg35S3pYfyNlcP5tmgzLeIPYBPiSKoc7qvDGsVSTButPCs6mVpGcwxn9Zac6im/CX3FQDpV/86I+Y67OGe2q5TJm7j0xwIjnu2RGRH7o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6322
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lad, Prabhakar <prabhakar.csengg@gmail.com> =E6=96=BC 2022=E5=B9=B412=E6=9C=
-=8823=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:54=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> Hi Guo,
->
-> Thank you for the patch.
->
-> On Fri, Nov 11, 2022 at 8:00 AM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > After use_asid_allocator is enabled, the userspace application will
-> > crash by stale TLB entries. Because only using cpumask_clear_cpu withou=
-t
-> > local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
-> > Then set_mm_asid would cause the user space application to get a stale
-> > value by stale TLB entry, but set_mm_noasid is okay.
-> >
-> > Here is the symptom of the bug:
-> > unhandled signal 11 code 0x1 (coredump)
-> >    0x0000003fd6d22524 <+4>:     auipc   s0,0x70
-> >    0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
-> > =3D> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
-> > (gdb) i r s0
-> > s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
-> > (gdb) x /2x 0x3fd6d92490
-> > 0x3fd6d92490:   0xd80ac8a8      0x0000003f
-> > The core dump file shows that register s0 is wrong, but the value in
-> > memory is correct. Because 'ld s0, -148(s0)' used a stale mapping entry
-> > in TLB and got a wrong result from an incorrect physical address.
-> >
-> > When the task ran on CPU0, which loaded/speculative-loaded the value of
-> > address(0x3fd6d92490), then the first version of the mapping entry was
-> > PTWed into CPU0's TLB.
-> > When the task switched from CPU0 to CPU1 (No local_tlb_flush_all here b=
-y
-> > asid), it happened to write a value on the address (0x3fd6d92490). It
-> > caused do_page_fault -> wp_page_copy -> ptep_clear_flush ->
-> > ptep_get_and_clear & flush_tlb_page.
-> > The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need TLB
-> > flush, but CPU0 had cleared the CPU0's mm_cpumask in the previous
-> > switch_mm. So we only flushed the CPU1 TLB and set the second version
-> > mapping of the PTE. When the task switched from CPU1 to CPU0 again, CPU=
-0
-> > still used a stale TLB mapping entry which contained a wrong target
-> > physical address. It raised a bug when the task happened to read that
-> > value.
-> >
-> >    CPU0                               CPU1
-> >    - switch 'task' in
-> >    - read addr (Fill stale mapping
-> >      entry into TLB)
-> >    - switch 'task' out (no tlb_flush)
-> >                                       - switch 'task' in (no tlb_flush)
-> >                                       - write addr cause pagefault
-> >                                         do_page_fault() (change to
-> >                                         new addr mapping)
-> >                                           wp_page_copy()
-> >                                             ptep_clear_flush()
-> >                                               ptep_get_and_clear()
-> >                                               & flush_tlb_page()
-> >                                         write new value into addr
-> >                                       - switch 'task' out (no tlb_flush=
-)
-> >    - switch 'task' in (no tlb_flush)
-> >    - read addr again (Use stale
-> >      mapping entry in TLB)
-> >      get wrong value from old phyical
-> >      addr, BUG!
-> >
-> > The solution is to keep all CPUs' footmarks of cpumask(mm) in switch_mm=
-,
-> > which could guarantee to invalidate all stale TLB entries during TLB
-> > flush.
-> >
-> > Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Anup Patel <apatel@ventanamicro.com>
-> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> > ---
-> > Changes in v3:
-> >  - Move set/clear cpumask(mm) into set_mm (Make code more pretty
-> >    with Andrew's advice)
-> >  - Optimize comment description
-> >
-> > Changes in v2:
-> >  - Fixup nommu compile problem (Thx Conor, Also Reported-by: kernel
-> >    test robot <lkp@intel.com>)
-> >  - Keep cpumask_clear_cpu for noasid
-> > ---
-> >  arch/riscv/mm/context.c | 30 ++++++++++++++++++++----------
-> >  1 file changed, 20 insertions(+), 10 deletions(-)
-> >
-> As reported on the patch [0] I was seeing consistent failures on the
-> RZ/Five SoC while running bonnie++ utility. After applying this patch
-> on top of Palmer's for-next branch (eb67d239f3aa) I am no longer
-> seeing this issue.
->
-> Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> [0] https://patchwork.kernel.org/project/linux-riscv/patch/20220829205219=
-.283543-1-geomatsi@gmail.com/
->
-
-Hi all,
-I got the same situation (i.e. unhandle signal 11) on our internal
-multi-core system, I tried the patch[0] & [1], but it still doesn't
-work, I guess there are still some potential problems. After applying
-this patch, the situation disappeared, I took some time to look at
-other arches' implementations, such as arc, they don't clear the
-mm_cpumask due to the similar issue. I can't say which approach might
-be better, but I'd like to point out that this patch works to me.
-Thanks.
-
-Tested-by: Zong Li <zong.li@sifive.com>
-
-[0] https://lore.kernel.org/linux-riscv/20220829205219.283543-1-geomatsi@gm=
-ail.com/
-[1] https://lore.kernel.org/linux-riscv/20230129211818.686557-1-geomatsi@gm=
-ail.com/
-
-> Cheers,
-> Prabhakar
->
-> > diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-> > index 7acbfbd14557..0f784e3d307b 100644
-> > --- a/arch/riscv/mm/context.c
-> > +++ b/arch/riscv/mm/context.c
-> > @@ -205,12 +205,24 @@ static void set_mm_noasid(struct mm_struct *mm)
-> >         local_flush_tlb_all();
-> >  }
-> >
-> > -static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-> > +static inline void set_mm(struct mm_struct *prev,
-> > +                         struct mm_struct *next, unsigned int cpu)
-> >  {
-> > -       if (static_branch_unlikely(&use_asid_allocator))
-> > -               set_mm_asid(mm, cpu);
-> > -       else
-> > -               set_mm_noasid(mm);
-> > +       /*
-> > +        * The mm_cpumask indicates which harts' TLBs contain the virtu=
-al
-> > +        * address mapping of the mm. Compared to noasid, using asid
-> > +        * can't guarantee that stale TLB entries are invalidated becau=
-se
-> > +        * the asid mechanism wouldn't flush TLB for every switch_mm fo=
-r
-> > +        * performance. So when using asid, keep all CPUs footmarks in
-> > +        * cpumask() until mm reset.
-> > +        */
-> > +       cpumask_set_cpu(cpu, mm_cpumask(next));
-> > +       if (static_branch_unlikely(&use_asid_allocator)) {
-> > +               set_mm_asid(next, cpu);
-> > +       } else {
-> > +               cpumask_clear_cpu(cpu, mm_cpumask(prev));
-> > +               set_mm_noasid(next);
-> > +       }
-> >  }
-> >
-> >  static int __init asids_init(void)
-> > @@ -264,7 +276,8 @@ static int __init asids_init(void)
-> >  }
-> >  early_initcall(asids_init);
-> >  #else
-> > -static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-> > +static inline void set_mm(struct mm_struct *prev,
-> > +                         struct mm_struct *next, unsigned int cpu)
-> >  {
-> >         /* Nothing to do here when there is no MMU */
-> >  }
-> > @@ -317,10 +330,7 @@ void switch_mm(struct mm_struct *prev, struct mm_s=
-truct *next,
-> >          */
-> >         cpu =3D smp_processor_id();
-> >
-> > -       cpumask_clear_cpu(cpu, mm_cpumask(prev));
-> > -       cpumask_set_cpu(cpu, mm_cpumask(next));
-> > -
-> > -       set_mm(next, cpu);
-> > +       set_mm(prev, next, cpu);
-> >
-> >         flush_icache_deferred(next, cpu);
-> >  }
-> > --
-> > 2.36.1
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+T24gVGh1LCAyMDIzLTAyLTIzIGF0IDEzOjE0ICswMTAwLCBIZWlrbyBDYXJzdGVucyB3cm90ZToN
+Cj4gQWNrZWQtYnk6IEhlaWtvIENhcnN0ZW5zIDxoY2FAbGludXguaWJtLmNvbT4NCg0KVGhhbmtz
+IQ0K
