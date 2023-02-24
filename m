@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854036A1C73
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D41C6A1C74
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjBXMwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S230084AbjBXMxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjBXMwd (ORCPT
+        with ESMTP id S229611AbjBXMxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:52:33 -0500
+        Fri, 24 Feb 2023 07:53:02 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C5B686A2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:52:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78979682A6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:52:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40F67B81B2C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:52:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB4DC433D2;
-        Fri, 24 Feb 2023 12:52:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C60D4B81C82
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18870C433D2;
+        Fri, 24 Feb 2023 12:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677243130;
-        bh=8LlodR7ZO/ZzUF7krerukAVV/jEo1WyhWBygJgVh7es=;
+        s=korg; t=1677243164;
+        bh=IRe9VZwWRT1unnObymkFN3cf9tsygsxlnEnJqEj+Vpc=;
         h=Date:From:To:Cc:Subject:From;
-        b=pXme//nzvDNYQS/0ORjlCMBonJny9a8WirEWTqgT8ll62l37COD6n2C6063wPoMI9
-         MHo3x8ZWb2CvVcUN24r6abQx2kMyyMfxh74E/Enazz+p0Tm8FFDYCd2PVkn2t/FNaz
-         BY7wCzOgXEU+K6Rjl4hmDs6Tsn6iiXY01+5tXPVc=
-Date:   Fri, 24 Feb 2023 13:52:07 +0100
+        b=X0jFztMvxWnDR2/CaZcBV2r1USj09HqxGHyUEmpL5Xzo7hVYaQi7mQWWK9Sk7p2ZN
+         hmf1uESS9Zcs89DS3/vdhjd5IqdTAj48CA2PmbbW3egXVk1rj/GbTLzX35z5fk2m3T
+         SxRN9j+5z+x0ksAsN2GMiZcIyoHC+jRqQ4HUtuo8=
+Date:   Fri, 24 Feb 2023 13:52:42 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
-Subject: [GIT PULL] Driver core updates for 6.3-rc1
-Message-ID: <Y/iy9+Kn0SgzngDC@kroah.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Char/Misc driver updates for 6.3-rc1
+Message-ID: <Y/izGr/4KrHkbHx+@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
@@ -51,46 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
+The following changes since commit 4ec5183ec48656cec489c49f989c508b68b518e3:
 
-  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
+  Linux 6.2-rc7 (2023-02-05 13:13:28 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.3-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.3-rc1
 
-for you to fetch changes up to 88cd618dcc7b63baa1478730b02eaba3e3148467:
+for you to fetch changes up to 6ec363fc6142226b9ab5a6528f65333d729d2b6b:
 
-  debugfs: drop inline constant formatting for ERR_PTR(-ERROR) (2023-02-20 14:14:56 +0100)
+  scripts/tags.sh: fix incompatibility with PCRE2 (2023-02-16 13:52:29 +0100)
 
 ----------------------------------------------------------------
-Driver core changes for 6.3-rc1
+Char/Misc and other driver subsystem changes for 6.3-rc1
 
-Here is the large set of driver core changes for 6.3-rc1.
+Here is the large set of driver changes for char/misc drivers and other
+smaller driver subsystems that flow through this git tree.
 
-There's a lot of changes this development cycle, most of the work falls
-into two different categories:
-  - fw_devlink fixes and updates.  This has gone through numerous review
-    cycles and lots of review and testing by lots of different devices.
-    Hopefully all should be good now, and Saravana will be keeping a
-    watch for any potential regression on odd embedded systems.
-  - driver core changes to work to make struct bus_type able to be moved
-    into read-only memory (i.e. const)  The recent work with Rust has
-    pointed out a number of areas in the driver core where we are
-    passing around and working with structures that really do not have
-    to be dynamic at all, and they should be able to be read-only making
-    things safer overall.  This is the contuation of that work (started
-    last release with kobject changes) in moving struct bus_type to be
-    constant.  We didn't quite make it for this release, but the
-    remaining patches will be finished up for the release after this
-    one, but the groundwork has been laid for this effort.
-
-Other than that we have in here:
-  - debugfs memory leak fixes in some subsystems
-  - error path cleanups and fixes for some never-able-to-be-hit
-    codepaths.
-  - cacheinfo rework and fixes
-  - Other tiny fixes, full details are in the shortlog
+Included in here are:
+  - New IIO drivers and features and improvments in that subsystem
+  - New hwtracing drivers and additions to that subsystem
+  - lots of interconnect changes and new drivers as that subsystem seems
+    under very active development recently.  This required also merging
+    in the icc subsystem changes through this tree.
+  - FPGA driver updates
+  - counter subsystem and driver updates
+  - MHI driver updates
+  - nvmem driver updates
+  - documentation updates
+  - Other smaller driver updates and fixes, full details in the shortlog
 
 All of these have been in linux-next for a while with no reported
 problems.
@@ -98,364 +86,803 @@ problems.
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Andy Shevchenko (6):
-      media: ipu3-cio2: Don't dereference fwnode handle
-      media: ipu3-cio2: Convert to use software_node_register_node_group()
-      software node: Switch property entry test to a new API
-      software node: Remove unused APIs
-      device property: Make fwnode_graph_for_each_endpoint() consistent
-      container_of: Update header inclusions
+Abel Vesa (2):
+      dt-bindings: interconnect: Add Qualcomm SM8550
+      interconnect: qcom: Add SM8550 interconnect provider driver
 
-Bagas Sanjaya (1):
-      debugfs: drop inline constant formatting for ERR_PTR(-ERROR)
+Alexander Sverdlin (2):
+      dt-bindings: iio: adc: ep93xx: Add cirrus,ep9301-adc description
+      iio: adc: ep93xx: Add OF support
+
+Alexander Usyskin (2):
+      mei: bus-fixup:upon error print return values of send and receive
+      mei: bus: disallow driver match while dismantling device
+
+Alexander Vorwerk (1):
+      drivers: iio: cdc: Drop redundant if check
+
+Alper Nebi Yasak (1):
+      firmware: coreboot: framebuffer: Ignore reserved pixel color bits
+
+Andy Shevchenko (24):
+      iio: light: tsl2563: Use i2c_smbus_write_word_data() in tsl2563_configure()
+      iio: light: tsl2563: Configure INT in one place
+      iio: light: tsl2563: Make use of the macros from bits.h
+      iio: light: tsl2563: Drop unused defintion(s)
+      iio: light: tsl2563: Simplify with dev_err_probe
+      iio: light: tsl2563: Drop legacy platform data code
+      iio: light: tsl2563: Utilise temporary variable for struct device
+      iio: light: tsl2563: Use dev_get_drvdata() directly in PM callbacks
+      iio: light: tsl2563: sort header inclusion alphabetically
+      iio: light: tsl2563: Keep Makefile sorted by module name
+      iio: adc: ti-adc128s052: Switch to use spi_get_device_match_data()
+      iio: adc: ti-adc128s052: Drop anti-pattern of ACPI_PTR() use
+      iio: adc: ti-adc128s052: Sort headers
+      iio: adc: max11410: Use asm intead of asm-generic
+      iio: chemical: scd30_core: use sysfs_emit() to instead of scnprintf()
+      iio: chemical: scd30_core: Switch to use dev_err_probe()
+      eeprom: at25: Convert to use fwnode_device_is_compatible()
+      mei: pxp: Use correct macros to initialize uuid_le
+      misc/mei/hdcp: Use correct macros to initialize uuid_le
+      iio: adc: xilinx-ams: Convert to use fwnode_device_is_compatible()
+      iio: core: Replace iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
+      iio: core: Sort headers
+      uuid: Decouple guid_t and uuid_le types and respective macros
+      mei: Move uuid_le_cmp() to its only user
+
+Angelo Dureghello (1):
+      iio: dac: add support for max5522
+
+AngeloGioacchino Del Regno (1):
+      dt-bindings: nvmem: Fix qcom,qfprom compatibles enum ordering
+
+Anup Sharma (1):
+      iio: adc: ad7291: Fix indentation error by adding extra spaces
+
+Appana Durga Kedareswara rao (4):
+      dt-bindings: misc: tmr-manager: Add device-tree binding for TMR Manager
+      drivers: misc: Add Support for TMR Manager
+      dt-bindings: misc: tmr-inject: Add device-tree binding for TMR Inject
+      drivers: misc: Add Support for TMR Inject IP
+
+Arnd Bergmann (2):
+      Coresight: tpda/tpdm: remove incorrect __exit annotation
+      nvmem: stm32: fix OPTEE dependency
+
+Bagas Sanjaya (2):
+      Documentation: coresight: Extend title heading syntax in TPDM and TPDA documentation
+      Documentation: coresight: tpdm: Add dummy comment after sysfs list
+
+Bartosz Golaszewski (2):
+      dt-bindings: interconnect: qcom: document the interconnects for sa8775p
+      dt-bindings: interconnect: qcom,sa8775p-rpmh: fix a typo
+
+Bo Liu (2):
+      virtio_console: Use strscpy() to instead of strncpy()
+      misc: isl29003: Use sysfs_emit() to instead of sprintf()
+
+Bryan O'Donoghue (1):
+      dt-bindings: interconnect: Exclude all non msm8939 from snoc-mm
+
+Carl Vanderlip (1):
+      bus: mhi: Update Makefile to used Kconfig flags
+
+Carlos Llamas (1):
+      scripts/tags.sh: fix incompatibility with PCRE2
+
+Chen Zhongjin (1):
+      firmware: dmi-sysfs: Fix null-ptr-deref in dmi_sysfs_register_handle
 
 Christophe JAILLET (1):
-      test_firmware: Use kstrtobool() instead of strtobool()
+      misc: fastrpc: Fix an error handling path in fastrpc_rpmsg_probe()
 
-Gavin Shan (1):
-      drivers/base/memory: Fix comments for phys_index_show()
+Colin Ian King (4):
+      iio: imu: kmx61: Fix spelling mistake "Errow" -> "Error"
+      accessibility: speakup: Fix spelling mistake "thw" -> "the"
+      firmware: dmi-sysfs: make pr_info messages rate limited
+      iio: adc: imx93: Fix spelling mistake "geting" -> "getting"
 
-Greg Kroah-Hartman (66):
-      driver core: make bus_get_device_klist() static
-      driver core: remove subsys_find_device_by_id()
-      driver core: make subsys_dev_iter_init() static
-      driver core: make subsys_dev_iter_next() static
-      driver core: make subsys_dev_iter_exit() static
-      driver core: move struct subsys_dev_iter to a local file
-      driver core: change to_subsys_private() to use container_of_const()
-      driver core: bus.h: document bus notifiers better
-      driver core: bus: move bus notifier logic into bus.c
-      Merge tag 'archtopo-cacheinfo-updates-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into driver-core-next
-      Merge 6.2-rc5 into driver-core-next
-      of: device: make of_device_uevent_modalias() take a const device *
-      i3c: move dev_to_i3cdev() to use container_of_const()
-      platform/surface: aggregator: move to_ssam_device() to use container_of_const()
-      firewire: move fw_device() and fw_unit() to use container_of_const()
-      driver core: make struct device_type.uevent() take a const *
-      driver core: make struct device_type.devnode() take a const *
-      driver core: device_get_devnode() should take a const *
-      vio: move to_vio_dev() to use container_of_const()
-      platform/x86: wmi: move dev_to_wblock() and dev_to_wdev to use container_of_const()
-      drivers: hv: move device_to_hv_device to use container_of_const()
-      virtio: move dev_to_virtio() to use container_of_const()
-      drm/mipi-dsi: move to_mipi_dsi_device() to use container_of_const()
-      mcb: move to_mcb_device() to use container_of_const()
-      xen/xenbus: move to_xenbus_device() to use container_of_const()
-      driver core: make struct bus_type.uevent() take a const *
-      kobject: kset_uevent_ops: make uevent() callback take a const *
-      driver core: soc: remove layering violation for the soc_bus
-      maple: remove unneeded maple_bus_uevent() callback.
-      driver core: platform: removed unneeded variable from __platform_driver_probe()
-      driver core: platform: simplify __platform_driver_probe()
-      driver core: bus: move lock_class_key into dynamic structure
-      drivers: base: component: fix memory leak with using debugfs_lookup()
-      drivers: base: dd: fix memory leak with using debugfs_lookup()
-      kernel/time/test_udelay.c: fix memory leak with using debugfs_lookup()
-      kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
-      kernel/fail_function: fix memory leak with using debugfs_lookup()
-      driver core: add local subsys_get and subsys_put functions
-      driver core: bus: implement bus_get/put() without the private pointer
-      driver core: bus: constantify the bus_find_* functions
-      driver core: bus: convert bus_create/remove_file to be constant
-      driver core: bus: sysfs function cleanups
-      driver core: bus: bus_add/probe/remove_device() cleanups
-      driver core: bus: bus_register/unregister() cleanups
-      driver core: bus: subsys_interface_register/unregister() cleanups
-      driver core: bus: bus_get_kset() cleanup
-      driver core: bus: bus_register/unregister_notifier() cleanups
-      driver core: bus: bus_add/remove_driver() cleanups
-      driver core: bus: bus iterator cleanups
-      driver core: bus: clean up bus_sort_breadthfirst()
-      driver core: move driver_find() to bus.c
-      driver core: bus: clean up driver_find()
-      driver core: create bus_is_registered()
-      driver core: remove private pointer from struct bus_type
-      driver core: bus: constify bus_register/unregister_notifier()
-      driver core: bus: constify bus_get_kset()
-      driver core: bus: constify some internal functions
-      driver core: bus: constify bus_unregister()
-      driver core: bus: add bus_get_dev_root() function
-      driver core: bus: update my copyright notice
-      driver core: cpu: don't hand-override the uevent bus_type callback.
-      Revert "devtmpfs: remove return value of devtmpfs_delete_node()"
-      Revert "devtmpfs: add debug info to handle()"
-      Revert "driver core: add error handling for devtmpfs_create_node()"
-      driver core: class: move EXPORT_SYMBOL_GPL() lines to the correct place
-      dma-mapping: no need to pass a bus_type into get_arch_dma_ops()
+Dan Carpenter (1):
+      bus: mhi: ep: Fix off by one in mhi_ep_process_cmd_ring()
 
-Hanjun Guo (1):
-      driver core: location: Free struct acpi_pld_info *pld before return false
+Dmitry Baryshkov (9):
+      interconnect: qcom: sdx55: drop IP0 remnants
+      interconnect: qcom: sc7180: drop IP0 remnants
+      interconnect: move ignore_list out of of_count_icc_providers()
+      interconnect: qcom: sm8150: Drop IP0 interconnects
+      interconnect: qcom: sm8250: Drop IP0 interconnects
+      interconnect: qcom: sc8180x: Drop IP0 interconnects
+      interconnect: qcom: sc8280xp: Drop IP0 interconnects
+      dt-bindings: interconnect: qcom: Remove ipa-virt compatibles
+      dt-bindings: interconnect: qcom: drop IPA_CORE related defines
 
-Javier Martinez Canillas (1):
-      driver core: Make driver_deferred_probe_timeout a static variable
+Douglas Anderson (1):
+      firmware: coreboot: Remove GOOGLE_COREBOOT_TABLE_ACPI/OF Kconfig entries
 
-Longlong Xia (4):
-      devtmpfs: convert to pr_fmt
-      driver core: add error handling for devtmpfs_create_node()
-      devtmpfs: add debug info to handle()
-      devtmpfs: remove return value of devtmpfs_delete_node()
+Duoming Zhou (1):
+      Revert "char: pcmcia: cm4000_cs: Replace mdelay with usleep_range in set_protocol"
 
-Luis Chamberlain (1):
-      docs: embargoed-hardware-issues: add embargoed HW contact for Samsung
+Fabio Estevam (3):
+      dt-bindings: iio: dac: ad5686: Add an entry for AD5337
+      iio: dac: ad5686: Add support for AD5337
+      dt-bindings: iio: adc: max1238: Fix a typo in the description
 
-Pierre Gondois (9):
-      cacheinfo: Use RISC-V's init_cache_level() as generic OF implementation
-      cacheinfo: Return error code in init_of_cache_level()
-      cacheinfo: Check 'cache-unified' property to count cache leaves
-      ACPI: PPTT: Remove acpi_find_cache_levels()
-      ACPI: PPTT: Update acpi_find_last_cache_level() to acpi_get_cache_info()
-      arch_topology: Build cacheinfo from primary CPU
-      cacheinfo: Initialize variables in fetch_cache_info()
-      cacheinfo: Make default acpi_get_cache_info() return an error
-      cacheinfo: Remove unused check in init_cache_level()
+Ferry Toth (1):
+      iio: light: tsl2563: Do not hardcode interrupt trigger type
 
-Qi Zheng (2):
-      debugfs: update comment of debugfs_rename()
-      OPP: fix error checking in opp_migrate_dentry()
+George Kennedy (1):
+      VMCI: check context->notify_page after call to get_user_pages_fast() to avoid GPF
 
-Rafael J. Wysocki (1):
-      driver core: class: Clear private pointer on registration failures
+Georgi Djakov (6):
+      Merge branch 'icc-sm8550-immutable' into icc-next
+      Merge branch 'icc-qdu1000' into icc-next
+      Merge branch 'icc-ip0-migration' into icc-next
+      Merge branch 'icc-sdm670' into icc-next
+      Merge branch 'icc-sa8775p' into icc-next
+      Merge branch 'icc-dt' into icc-next
 
-Randy Dunlap (2):
-      test_firmware: use kernel-doc struct notation
-      i3c: fix device.h kernel-doc warnings
+Gerald Loacker (3):
+      iio: add struct declaration for iio types
+      dt-bindings: iio: magnetometer: add ti tmag5273 documentation file
+      iio: magnetometer: add ti tmag5273 driver
 
-Saravana Kannan (12):
-      driver core: fw_devlink: Don't purge child fwnode's consumer links
-      driver core: fw_devlink: Improve check for fwnode with no device/driver
-      soc: renesas: Move away from using OF_POPULATED for fw_devlink
-      gpiolib: Clear the gpio_device's fwnode initialized flag before adding
-      driver core: fw_devlink: Add DL_FLAG_CYCLE support to device links
-      driver core: fw_devlink: Allow marking a fwnode link as being part of a cycle
-      driver core: fw_devlink: Consolidate device link flag computation
-      driver core: fw_devlink: Make cycle detection more robust
-      of: property: Simplify of_link_to_phandle()
-      irqchip/irq-imx-gpcv2: Mark fwnode device as not initialized
-      firmware: arm_scmi: Set fwnode for the scmi_device
-      mtd: mtdpart: Don't create platform device that'll never probe
+Greg Kroah-Hartman (9):
+      Merge 6.2-rc5 into char-misc-next
+      Merge tag 'fpga-for-v6.3-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga into char-misc-next
+      Merge tag 'counter-updates-for-6.3a' of git://git.kernel.org/pub/scm/linux/kernel/git/wbg/counter into char-misc-next
+      Merge tag 'coresight-next-v6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux into char-misc-next
+      Merge tag 'mhi-for-v6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi into char-misc-next
+      Merge tag 'iio-for-6.3a' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-next
+      Merge 6.2-rc7 into char-misc-next
+      Merge tag 'icc-6.3-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc into char-misc-next
+      misc: vmw_balloon: fix memory leak with using debugfs_lookup()
 
-Soha Jin (1):
-      platform: remove useless if-branch in __platform_get_irq_byname()
+Haibo Chen (2):
+      iio: adc: add imx93 adc support
+      dt-bindings: iio: adc: Add NXP IMX93 ADC
 
-Stephen Rothwell (1):
-      driver core: fixup for "driver core: make struct bus_type.uevent() take a const *"
+Harshit Mogalapalli (2):
+      iio: accel: mma9551_core: Prevent uninitialized variable in mma9551_read_status_word()
+      iio: accel: mma9551_core: Prevent uninitialized variable in mma9551_read_config_word()
 
-Thomas Weißschuh (5):
-      kernels/ksysfs.c: export kernel address bits
-      const_structs.checkpatch.pl: add kobj_type
-      kobject: make dynamic_kobj_ktype and kset_ktype const
-      driver core: make kobj_type structures constant
-      samples/kobject: make kobj_type structure constant
+Hugo Villeneuve (2):
+      iio: adc: ti-ads7924: add Texas Instruments ADS7924 driver
+      dt-bindings: iio: adc: add Texas Instruments ADS7924
 
-Umang Jain (1):
-      platform: Document platform_add_devices() return value
+Ian Abbott (1):
+      comedi: check data length for INSN_CONFIG_GET_PWM_OUTPUT
 
-Uwe Kleine-König (3):
-      platform: Provide a remove callback that returns no value
-      staging: greybus: codecs: Drop empty platform remove function
-      serial: arc_uart: Drop empty platform remove function
+Ilpo Järvinen (10):
+      mfd: intel-m10-bmc: Add missing includes to header
+      mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+      mfd: intel-m10-bmc: Rename the local variables
+      mfd: intel-m10-bmc: Split into core and spi specific parts
+      mfd: intel-m10-bmc: Support multiple CSR register layouts
+      fpga: intel-m10-bmc: Rework flash read/write
+      mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
+      fpga: m10bmc-sec: Create helpers for rsu status/progress checks
+      fpga: m10bmc-sec: Make rsu status type specific
+      mfd: intel-m10-bmc: Add PMCI driver
 
-Wang Hai (1):
-      kobject: Fix slab-out-of-bounds in fill_kobj_path()
+Ivan Bornyakov (3):
+      fpga: microchip-spi: move SPI I/O buffers out of stack
+      fpga: microchip-spi: rewrite status polling in a time measurable way
+      fpga: microchip-spi: separate data frame write routine
 
-Yang Yingliang (3):
-      driver core: fix potential null-ptr-deref in device_add()
-      drivers: base: transport_class: fix possible memory leak
-      drivers: base: transport_class: fix resource leak when transport_add_device() fails
+James Clark (2):
+      coresight: cti: Prevent negative values of enable count
+      coresight: cti: Remove atomic type from enable_req_count
 
-Yong-Xuan Wang (1):
-      cacheinfo: Fix shared_cpu_map to handle shared caches at different levels
+Jiazi.Li (1):
+      binder: remove unneeded size check code
 
-Zhen Lei (1):
-      kernfs: remove an unused if statement in kernfs_path_from_node_locked()
+Johan Hovold (1):
+      nvmem: qcom-spmi-sdam: register at device init time
 
-Zhengchao Shao (1):
-      driver core: fix resource leak in device_add()
+Jonathan Cameron (5):
+      iio: accel: bma400: Use devm_regulator_bulk_get_enable()
+      iio: pressure: ms5611: Use devm_regulator_get_enable()
+      iio: pressure: ms5611: Switch to fully devm_ managed registration.
+      iio: adc: ep93xx: Enable wider build testing with COMPILE_TEST
+      dt-bindings: iio: dac: Maxim max5522 DAC
 
- .../ABI/testing/sysfs-kernel-address_bits          |  10 +
- .../process/embargoed-hardware-issues.rst          |   1 +
- arch/alpha/include/asm/dma-mapping.h               |   2 +-
- arch/arm64/kernel/cacheinfo.c                      |  14 +-
- arch/ia64/include/asm/dma-mapping.h                |   2 +-
- arch/mips/include/asm/dma-mapping.h                |   2 +-
- arch/mips/sgi-ip22/ip22-gio.c                      |   4 +-
- arch/parisc/include/asm/dma-mapping.h              |   2 +-
- arch/parisc/kernel/drivers.c                       |   4 +-
- arch/powerpc/include/asm/ps3.h                     |   2 +-
- arch/powerpc/include/asm/vio.h                     |   5 +-
- arch/powerpc/platforms/ps3/system-bus.c            |   2 +-
- arch/powerpc/platforms/pseries/ibmebus.c           |   7 +-
- arch/powerpc/platforms/pseries/vio.c               |   4 +-
- arch/riscv/kernel/cacheinfo.c                      |  42 --
- arch/sparc/include/asm/dma-mapping.h               |   2 +-
- arch/sparc/include/asm/vio.h                       |   5 +-
- arch/sparc/kernel/vio.c                            |   2 +-
- arch/x86/include/asm/dma-mapping.h                 |   2 +-
- block/genhd.c                                      |   2 +-
- block/partitions/core.c                            |   4 +-
- drivers/acpi/bus.c                                 |   2 +-
- drivers/acpi/device_sysfs.c                        |   8 +-
- drivers/acpi/internal.h                            |   2 +-
- drivers/acpi/pptt.c                                |  93 ++--
- drivers/amba/bus.c                                 |   4 +-
- drivers/base/arch_topology.c                       |  12 +-
- drivers/base/auxiliary.c                           |   2 +-
- drivers/base/base.h                                |  21 +-
- drivers/base/bus.c                                 | 575 ++++++++++++++-------
- drivers/base/cacheinfo.c                           | 161 +++++-
- drivers/base/class.c                               |  34 +-
- drivers/base/component.c                           |   2 +-
- drivers/base/core.c                                | 489 ++++++++++++------
- drivers/base/cpu.c                                 |  40 +-
- drivers/base/dd.c                                  |  36 +-
- drivers/base/devtmpfs.c                            |  16 +-
- drivers/base/driver.c                              |  29 +-
- drivers/base/memory.c                              |   9 +-
- drivers/base/physical_location.c                   |   5 +-
- drivers/base/platform.c                            |  48 +-
- drivers/base/soc.c                                 |   4 +-
- drivers/base/swnode.c                              |  63 +--
- drivers/base/test/property-entry-test.c            |  30 +-
- drivers/base/transport_class.c                     |  17 +-
- drivers/bcma/main.c                                |   6 +-
- drivers/bus/fsl-mc/fsl-mc-bus.c                    |   4 +-
- drivers/bus/mhi/ep/main.c                          |   4 +-
- drivers/bus/mhi/host/init.c                        |   4 +-
- drivers/bus/mips_cdmm.c                            |   4 +-
- drivers/bus/sunxi-rsb.c                            |   7 +-
- drivers/cxl/core/memdev.c                          |   4 +-
- drivers/cxl/core/port.c                            |   8 +-
- drivers/cxl/cxl.h                                  |   4 +-
- drivers/cxl/cxlmem.h                               |   2 +-
- drivers/dax/bus.c                                  |   2 +-
- drivers/eisa/eisa-bus.c                            |   4 +-
- drivers/firewire/core-device.c                     |   8 +-
- drivers/firmware/arm_ffa/bus.c                     |   4 +-
- drivers/firmware/arm_scmi/bus.c                    |   3 +-
- drivers/fpga/dfl.c                                 |   4 +-
- drivers/fsi/fsi-core.c                             |   6 +-
- drivers/gpio/gpiolib.c                             |   7 +
- drivers/gpu/drm/display/drm_dp_aux_bus.c           |   7 +-
- drivers/gpu/drm/drm_mipi_dsi.c                     |   4 +-
- drivers/gpu/host1x/bus.c                           |   2 +-
- drivers/greybus/core.c                             |  14 +-
- drivers/hid/hid-core.c                             |   4 +-
- drivers/hid/intel-ish-hid/ishtp/bus.c              |   2 +-
- drivers/hsi/hsi_core.c                             |   2 +-
- drivers/hv/vmbus_drv.c                             |   4 +-
- drivers/hwtracing/intel_th/core.c                  |   6 +-
- drivers/hwtracing/intel_th/intel_th.h              |   4 +-
- drivers/i2c/i2c-core-base.c                        |   4 +-
- drivers/i3c/device.c                               |  14 +-
- drivers/i3c/master.c                               |   4 +-
- drivers/input/input.c                              |  16 +-
- drivers/input/serio/serio.c                        |   4 +-
- drivers/ipack/ipack.c                              |   4 +-
- drivers/irqchip/irq-imx-gpcv2.c                    |   1 +
- drivers/macintosh/macio_asic.c                     |   7 +-
- drivers/mcb/mcb-core.c                             |   4 +-
- drivers/media/pci/intel/ipu3/cio2-bridge.c         |  27 +-
- drivers/media/pci/intel/ipu3/cio2-bridge.h         |   5 +-
- drivers/media/rc/rc-main.c                         |   2 +-
- drivers/memstick/core/memstick.c                   |   6 +-
- drivers/misc/mei/bus.c                             |   4 +-
- drivers/misc/tifm_core.c                           |   4 +-
- drivers/mmc/core/bus.c                             |   4 +-
- drivers/mmc/core/sdio_bus.c                        |   4 +-
- drivers/mtd/mtdpart.c                              |  10 +
- drivers/net/phy/mdio_bus.c                         |   2 +-
- drivers/net/xen-netback/xenbus.c                   |   2 +-
- drivers/nvdimm/bus.c                               |   4 +-
- drivers/nvdimm/dax_devs.c                          |   2 +-
- drivers/nvdimm/dimm_devs.c                         |   2 +-
- drivers/nvdimm/nd-core.h                           |  10 +-
- drivers/nvdimm/nd.h                                |   4 +-
- drivers/nvdimm/region_devs.c                       |   4 +-
- drivers/of/device.c                                |   4 +-
- drivers/of/property.c                              |  84 +--
- drivers/opp/debugfs.c                              |   2 +-
- drivers/pci/pci-driver.c                           |   4 +-
- drivers/pcmcia/ds.c                                |   4 +-
- drivers/platform/surface/aggregator/bus.c          |   4 +-
- drivers/platform/x86/wmi.c                         |  15 +-
- drivers/rapidio/rio-driver.c                       |   4 +-
- drivers/rpmsg/rpmsg_core.c                         |   4 +-
- drivers/s390/cio/css.c                             |   4 +-
- drivers/s390/cio/device.c                          |   8 +-
- drivers/s390/cio/scm.c                             |   2 +-
- drivers/s390/crypto/ap_bus.c                       |   4 +-
- drivers/scsi/scsi_sysfs.c                          |   4 +-
- drivers/sh/maple/maple.c                           |   7 -
- drivers/slimbus/core.c                             |   4 +-
- drivers/soc/imx/gpcv2.c                            |   2 +-
- drivers/soc/qcom/apr.c                             |   4 +-
- drivers/soc/renesas/rcar-sysc.c                    |   2 +-
- drivers/soundwire/bus_type.c                       |   4 +-
- drivers/spi/spi.c                                  |   2 +-
- drivers/spmi/spmi.c                                |   2 +-
- drivers/ssb/main.c                                 |   4 +-
- drivers/staging/greybus/audio_codec.c              |   6 -
- drivers/staging/greybus/gbphy.c                    |  14 +-
- drivers/tee/tee_core.c                             |   2 +-
- drivers/thunderbolt/switch.c                       |   4 +-
- drivers/thunderbolt/tb.h                           |   2 +-
- drivers/thunderbolt/xdomain.c                      |   6 +-
- drivers/tty/serdev/core.c                          |   2 +-
- drivers/tty/serial/arc_uart.c                      |   7 -
- drivers/usb/common/ulpi.c                          |   4 +-
- drivers/usb/core/driver.c                          |   6 +-
- drivers/usb/core/message.c                         |   8 +-
- drivers/usb/core/usb.c                             |   8 +-
- drivers/usb/phy/phy.c                              |   6 +-
- drivers/usb/roles/class.c                          |   3 +-
- drivers/usb/typec/bus.c                            |   4 +-
- drivers/usb/typec/class.c                          |   2 +-
- drivers/virtio/virtio.c                            |   4 +-
- drivers/w1/w1.c                                    |  10 +-
- drivers/xen/pvcalls-back.c                         |   2 +-
- drivers/xen/xenbus/xenbus_probe_backend.c          |   8 +-
- drivers/xen/xenbus/xenbus_probe_frontend.c         |   4 +-
- drivers/zorro/zorro-driver.c                       |   4 +-
- fs/debugfs/inode.c                                 |   4 +-
- fs/dlm/lockspace.c                                 |   4 +-
- fs/gfs2/sys.c                                      |   6 +-
- fs/kernfs/dir.c                                    |   3 -
- include/asm-generic/dma-mapping.h                  |   2 +-
- include/drm/drm_mipi_dsi.h                         |   5 +-
- include/linux/acpi.h                               |   4 +-
- include/linux/cacheinfo.h                          |  13 +-
- include/linux/container_of.h                       |   2 +-
- include/linux/device.h                             |   7 +-
- include/linux/device/bus.h                         |  97 ++--
- include/linux/device/driver.h                      |   1 -
- include/linux/dma-map-ops.h                        |   2 +-
- include/linux/firewire.h                           |  15 +-
- include/linux/fwnode.h                             |  12 +-
- include/linux/hyperv.h                             |   5 +-
- include/linux/i3c/device.h                         |  22 +-
- include/linux/kobject.h                            |   2 +-
- include/linux/mcb.h                                |   5 +-
- include/linux/of_device.h                          |   4 +-
- include/linux/platform_device.h                    |  11 +
- include/linux/property.h                           |   9 +-
- include/linux/soundwire/sdw_type.h                 |   2 +-
- include/linux/spi/spi.h                            |   2 +-
- include/linux/ssb/ssb.h                            |   2 +-
- include/linux/surface_aggregator/device.h          |   5 +-
- include/linux/transport_class.h                    |   8 +-
- include/linux/virtio.h                             |   5 +-
- include/sound/hdaudio.h                            |   2 +-
- include/xen/xenbus.h                               |   7 +-
- kernel/fail_function.c                             |   5 +-
- kernel/ksysfs.c                                    |   9 +
- kernel/power/energy_model.c                        |   5 +-
- kernel/time/test_udelay.c                          |   2 +-
- lib/kobject.c                                      |  16 +-
- lib/test_firmware.c                                |   5 +-
- samples/kobject/kset-example.c                     |   2 +-
- scripts/const_structs.checkpatch                   |   1 +
- sound/aoa/soundbus/core.c                          |   6 +-
- sound/hda/hda_bus_type.c                           |   2 +-
- sound/hda/hdac_device.c                            |   2 +-
- 185 files changed, 1535 insertions(+), 1192 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-address_bits
+Jonathan Neuschäfer (1):
+      drivers: misc: ti-st: Fix a typo ("unknow")
+
+Junhao He (1):
+      coresight: etm4x: Fix accesses to TRCSEQRSTEVR and TRCSEQSTR
+
+Kai Ye (3):
+      uacce: supports device isolation feature
+      Documentation: add the device isolation feature sysfs nodes for uacce
+      crypto: hisilicon/qm - define the device isolation strategy
+
+Konrad Dybcio (3):
+      dt-bindings: interconnect: OSM L3: Add SM6350 OSM L3 compatible
+      dt-bindings: nvmem: Add compatible for SM8150
+      dt-bindings: nvmem: Add compatible for SM8250
+
+Krzysztof Kozlowski (10):
+      dt-bindings: iio: adc: maxim,max1363: fix interface typo
+      dt-bindings: interconnect: split SC7280 to own schema
+      dt-bindings: interconnect: split SC8280XP to own schema
+      dt-bindings: interconnect: split SM8450 to own schema
+      dt-bindings: iio: drop unneeded quotes
+      dt-bindings: iio: minor whitespace cleanups
+      dt-bindings: iio: correct node names in examples
+      dt-bindings: iio: use lowercase hex in examples
+      dt-bindings: iio: cleanup examples - indentation
+      dt-bindings: interconnect: samsung,exynos-bus: allow opp-table
+
+Leonard Göhrs (2):
+      dt-bindings: iio: adc: add TI LMP92064 controller
+      iio: adc: add ADC driver for the TI LMP92064 controller
+
+Li Li (1):
+      binder: return pending info for frozen async txns
+
+Li kunyu (1):
+      sgi-gru: grukservices: remove unnecessary (void*) conversions
+
+Liu Ying (1):
+      drivers: bus: simple-pm-bus: Use clocks
+
+Luca Weiss (1):
+      iio: adc: qcom-spmi-adc5: define ADC5_BAT_ID_100K_PU channel
+
+Lukas Bulwahn (1):
+      counter: fix dependency references for config MICROCHIP_TCB_CAPTURE
+
+Maciej W. Rozycki (7):
+      parport_pc: Remove stale `parport_pc_ecp_read_block_pio' reference
+      parport_pc: Let chipset drivers mask unsupported modes
+      parport_pc: Let chipset drivers mask ECR bits on writes
+      parport_pc: Add a mode mask field for PCI devices
+      parport_pc: Add an ECR mask field for PCI devices
+      parport_pc: Set up mode and ECR masks for Oxford Semiconductor devices
+      parport_pc: Limit the number of PCI BAR pairs to 2
+
+Manivannan Sadhasivam (7):
+      bus: mhi: ep: Power up/down MHI stack during MHI RESET
+      bus: mhi: ep: Check if the channel is supported by the controller
+      bus: mhi: ep: Only send -ENOTCONN status if client driver is available
+      bus: mhi: ep: Fix the debug message for MHI_PKT_TYPE_RESET_CHAN_CMD cmd
+      bus: mhi: ep: Move chan->lock to the start of processing queued ch ring
+      bus: mhi: ep: Save channel state locally during suspend and resume
+      bus: mhi: ep: Change state_lock to mutex
+
+Mao Jinlong (9):
+      coresight: cti: Add PM runtime call in enable_store
+      coresight: core: Use IDR for non-cpu bound sources' paths.
+      Coresight: Add coresight TPDM source driver
+      dt-bindings: arm: Add CoreSight TPDM hardware
+      coresight-tpdm: Add DSB dataset support
+      coresight-tpdm: Add integration test support
+      Coresight: Add TPDA link driver
+      dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+      Documentation: trace: Add documentation for TPDM and TPDA
+
+Marco Pagani (1):
+      fpga: bridge: return errors in the show() method of the "state" attribute
+
+Marijn Suijten (2):
+      iio: adc: qcom-spmi-adc5: Suppress probe-deferral error message
+      dt-bindings: nvmem: Add compatible for MSM8976
+
+Melody Olvera (2):
+      dt-bindings: interconnect: Add QDU1000/QRU1000 devices
+      interconnect: qcom: Add QDU1000/QRU1000 interconnect driver
+
+Miaoqian Lin (1):
+      misc: enclosure: Fix doc for enclosure_find()
+
+Michael Walle (9):
+      net: add helper eth_addr_add()
+      of: base: add of_parse_phandle_with_optional_args()
+      of: property: make #.*-cells optional for simple props
+      of: property: add #nvmem-cell-cells property
+      nvmem: core: add an index parameter to the cell
+      nvmem: core: move struct nvmem_cell_info to nvmem-provider.h
+      nvmem: core: drop the removal of the cells in nvmem_add_cells()
+      nvmem: core: add nvmem_add_one_cell()
+      nvmem: core: use nvmem_add_one_cell() in nvmem_add_cells_from_of()
+
+Mike Leach (11):
+      coresight: trace-id: Add API to dynamically assign Trace ID values
+      coresight: Remove obsolete Trace ID unniqueness checks
+      coresight: perf: traceid: Add perf ID allocation and notifiers
+      coresight: stm: Update STM driver to use Trace ID API
+      coresight: etm4x: Update ETM4 driver to use Trace ID API
+      coresight: etm3x: Update ETM3 driver to use Trace ID API
+      coresight: etmX.X: stm: Remove trace_id() callback
+      coresight: trace id: Remove legacy get trace ID function.
+      kernel: events: Export perf_report_aux_output_id()
+      coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID
+      coresight: trace-id: Add debug & test macros to Trace ID allocation
+
+Mårten Lindahl (3):
+      iio: light: vcnl4000: Prepare for more generic setup
+      iio: light: vcnl4000: Make irq handling more generic
+      iio: light: vcnl4000: Add interrupt support for vcnl4040
+
+Neil Armstrong (1):
+      dt-bindings: interconnect: qcom-bwmon: document SM8550 compatibles
+
+Olivier Moysan (1):
+      iio: adc: stm32-dfsdm: add id registers support
+
+Patrick Delaunay (2):
+      nvmem: stm32: add OP-TEE support for STM32MP13x
+      nvmem: stm32: detect bsec pta presence for STM32MP15x
+
+Paulo Miguel Almeida (1):
+      scripts/tags.sh: choose which directories to exclude from being indexed
+
+Peter Robinson (4):
+      counter: Sort the Kconfig entries alphabetically
+      counter: intel-qep: Depend on X86
+      counter: ftm-quaddec: Depend on the Layerscape SoC
+      counter: microchip-tcp-capture: Add appropriate arch deps for TCP driver
+
+Philippe De Muyter (2):
+      iio: imu: st_lsm6dsx: fix naming of 'struct iio_info' in st_lsm6dsx_shub.c.
+      iio: imu: st_lsm6dsx: add 'mount_matrix' sysfs entry to gyro channel.
+
+Qi Liu (2):
+      drivers/coresight: Add UltraSoc System Memory Buffer driver
+      Documentation: Add document for UltraSoc SMB driver
+
+Randy Dunlap (8):
+      android: fix W=1 kernel-doc warnings
+      most: fix kernel-doc warnings
+      most: tell what the MOST acronym means
+      pcmcia: synclink_cs: remove kernel-doc notation
+      misc: genwqe: move intervening macros away from kernel-doc
+      comedi: use menuconfig for main Comedi menu
+      fpga: dfl: kernel-doc corrections
+      nvmem: rave-sp-eeprm: fix kernel-doc bad line warning
+
+Rayyan Ansari (1):
+      dt-bindings: iio/adc: qcom,spmi-iadc: document PM8226 compatible
+
+Richard Acayan (3):
+      dt-bindings: interconnect: add sdm670 interconnects
+      interconnect: qcom: add sdm670 interconnects
+      dt-bindings: nvmem: qfprom: add sdm670 compatible
+
+Rob Herring (1):
+      dt-bindings: iio/proximity: semtech,sx9360: Fix 'semtech,resolution' type
+
+Robert Marko (1):
+      dt-bindings: nvmem: qfprom: add IPQ8074 compatible
+
+Russell King (Oracle) (1):
+      nvmem: core: remove spurious white space
+
+Samuel Holland (2):
+      dt-bindings: iio: adc: ti,adc081c: Document the binding
+      nvmem: sunxi_sid: Drop the workaround on A64
+
+Shazad Hussain (1):
+      interconnect: qcom: add a driver for sa8775p
+
+Slark Xiao (1):
+      bus: mhi: host: Update mhi driver description
+
+Stephan Gerhold (3):
+      dt-bindings: iio: st-sensors: Add LSM303C accelerometer+magnetometer
+      iio: accel: st_accel: Add LSM303C
+      iio: magnetometer: st_magn: Add LSM303C
+
+Suzuki K Poulose (2):
+      coresight: Fix uninitialised variable use in coresight_disable
+      coresight: perf: Output trace id only once
+
+Tom Rix (1):
+      iio: imu: fix spdx format
+
+Uwe Kleine-König (1):
+      iio: light: max44009: Convert to i2c's .probe_new()
+
+Vitaly Lubart (1):
+      mei: lower the log level for non-fatal failed messages
+
+XU pengfei (1):
+      ipack: ipoctal: remove unnecessary (void*) conversions
+
+Xiongfeng Wang (1):
+      applicom: Fix PCI device refcount leak in applicom_init()
+
+Xu Yilun (2):
+      fpga: dfl: more kernel-doc corrections
+      Merge tag 'ib-mfd-fpga-hwmon-v6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd into for-fpga-v6.3-rc1
+
+Yabin Cui (1):
+      coresight: tmc: Don't enable TMC when it's not ready.
+
+Yang Yingliang (4):
+      coresight: ultrasoc-smb: fix return value check in smb_init_data_buffer()
+      firmware: stratix10-svc: add missing gen_pool_destroy() in stratix10_svc_drv_probe()
+      firmware: stratix10-svc: fix error handle while alloc/add device failed
+      coresight: tpda: fix return value check in tpda_probe()
+
+Yicong Yang (2):
+      hwtracing: hisi_ptt: Only add the supported devices to the filters list
+      MAINTAINERS: Update the entries for HiSilicon PTT device driver
+
+Yuan Can (1):
+      eeprom: idt_89hpesx: Fix error handling in idt_init()
+
+Yulong Zhang (1):
+      tools/iio/iio_utils:fix memory leak
+
+ye xingchen (2):
+      iio: adc: at91-sama5d2_adc: use sysfs_emit() to instead of scnprintf()
+      iio: common: scmi_iio: use sysfs_emit() to instead of scnprintf()
+
+ .../ABI/testing/sysfs-bus-coresight-devices-etm3x  |    2 +-
+ .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |   13 +
+ .../testing/sysfs-bus-coresight-devices-ultra_smb  |   31 +
+ .../ABI/testing/sysfs-driver-intel-m10-bmc         |    8 +-
+ Documentation/ABI/testing/sysfs-driver-uacce       |   18 +
+ .../ABI/testing/sysfs-driver-xilinx-tmr-manager    |   16 +
+ .../bindings/arm/qcom,coresight-tpda.yaml          |  129 +
+ .../bindings/arm/qcom,coresight-tpdm.yaml          |   93 +
+ .../bindings/iio/accel/adi,adis16201.yaml          |    2 +-
+ .../bindings/iio/accel/adi,adis16240.yaml          |    2 +-
+ .../devicetree/bindings/iio/accel/adi,adxl313.yaml |    2 +-
+ .../devicetree/bindings/iio/accel/adi,adxl345.yaml |    4 +-
+ .../devicetree/bindings/iio/accel/adi,adxl355.yaml |   52 +-
+ .../devicetree/bindings/iio/accel/adi,adxl372.yaml |   48 +-
+ .../bindings/iio/accel/bosch,bma220.yaml           |    2 +-
+ .../bindings/iio/accel/kionix,kxcjk1013.yaml       |    2 +-
+ .../bindings/iio/accel/memsensing,msa311.yaml      |    5 +-
+ .../bindings/iio/accel/nxp,fxls8962af.yaml         |    4 +-
+ .../devicetree/bindings/iio/adc/adi,ad7091r5.yaml  |    8 +-
+ .../devicetree/bindings/iio/adc/adi,ad7124.yaml    |    2 +-
+ .../devicetree/bindings/iio/adc/adi,ad7192.yaml    |   42 +-
+ .../devicetree/bindings/iio/adc/adi,ad7292.yaml    |    2 +-
+ .../devicetree/bindings/iio/adc/adi,ad7606.yaml    |   40 +-
+ .../devicetree/bindings/iio/adc/adi,ad7780.yaml    |    2 +-
+ .../devicetree/bindings/iio/adc/adi,ad799x.yaml    |   18 +-
+ .../devicetree/bindings/iio/adc/adi,ad9467.yaml    |    8 +-
+ .../devicetree/bindings/iio/adc/adi,axi-adc.yaml   |   10 +-
+ .../bindings/iio/adc/atmel,sama5d2-adc.yaml        |    2 +-
+ .../devicetree/bindings/iio/adc/avia-hx711.yaml    |    4 +-
+ .../bindings/iio/adc/cirrus,ep9301-adc.yaml        |   47 +
+ .../devicetree/bindings/iio/adc/ingenic,adc.yaml   |   18 +-
+ .../devicetree/bindings/iio/adc/maxim,max1027.yaml |    4 +-
+ .../devicetree/bindings/iio/adc/maxim,max1238.yaml |    2 +-
+ .../devicetree/bindings/iio/adc/maxim,max1241.yaml |    4 +-
+ .../devicetree/bindings/iio/adc/maxim,max1363.yaml |    2 +-
+ .../bindings/iio/adc/microchip,mcp3911.yaml        |    4 +-
+ .../devicetree/bindings/iio/adc/nxp,imx93-adc.yaml |   81 +
+ .../bindings/iio/adc/qcom,pm8018-adc.yaml          |    2 +-
+ .../bindings/iio/adc/qcom,spmi-iadc.yaml           |    3 +-
+ .../bindings/iio/adc/qcom,spmi-rradc.yaml          |   16 +-
+ .../bindings/iio/adc/renesas,rzg2l-adc.yaml        |    2 +-
+ .../bindings/iio/adc/samsung,exynos-adc.yaml       |    6 +-
+ .../devicetree/bindings/iio/adc/st,stm32-adc.yaml  |    8 +-
+ .../devicetree/bindings/iio/adc/st,stmpe-adc.yaml  |    8 +-
+ .../devicetree/bindings/iio/adc/ti,adc081c.yaml    |   55 +
+ .../devicetree/bindings/iio/adc/ti,ads1015.yaml    |    8 +-
+ .../devicetree/bindings/iio/adc/ti,ads131e08.yaml  |    2 +-
+ .../devicetree/bindings/iio/adc/ti,ads7924.yaml    |  110 +
+ .../devicetree/bindings/iio/adc/ti,lmp92064.yaml   |   70 +
+ .../devicetree/bindings/iio/adc/ti,tsc2046.yaml    |   34 +-
+ .../devicetree/bindings/iio/dac/adi,ad3552r.yaml   |   40 +-
+ .../devicetree/bindings/iio/dac/adi,ad5380.yaml    |    1 +
+ .../devicetree/bindings/iio/dac/adi,ad5686.yaml    |    1 +
+ .../devicetree/bindings/iio/dac/adi,ad5766.yaml    |   22 +-
+ .../devicetree/bindings/iio/dac/adi,ad5770r.yaml   |   88 +-
+ .../devicetree/bindings/iio/dac/adi,ltc2688.yaml   |   52 +-
+ .../devicetree/bindings/iio/dac/lltc,ltc1660.yaml  |    4 +-
+ .../devicetree/bindings/iio/dac/lltc,ltc2632.yaml  |   20 +-
+ .../devicetree/bindings/iio/dac/maxim,max5522.yaml |   49 +
+ .../devicetree/bindings/iio/dac/st,stm32-dac.yaml  |    4 +-
+ .../devicetree/bindings/iio/dac/ti,dac5571.yaml    |    2 +-
+ .../devicetree/bindings/iio/frequency/adf4371.yaml |   12 +-
+ .../bindings/iio/gyroscope/adi,adxrs290.yaml       |   14 +-
+ .../bindings/iio/gyroscope/nxp,fxas21002c.yaml     |   30 +-
+ .../devicetree/bindings/iio/health/ti,afe4403.yaml |    2 +-
+ .../devicetree/bindings/iio/health/ti,afe4404.yaml |    2 +-
+ .../devicetree/bindings/iio/humidity/dht11.yaml    |    2 +-
+ .../bindings/iio/humidity/ti,hdc2010.yaml          |   16 +-
+ .../devicetree/bindings/iio/imu/adi,adis16460.yaml |    2 +-
+ .../devicetree/bindings/iio/imu/adi,adis16475.yaml |   24 +-
+ .../devicetree/bindings/iio/imu/bosch,bmi160.yaml  |   32 +-
+ .../bindings/iio/imu/invensense,icm42600.yaml      |   34 +-
+ .../devicetree/bindings/iio/imu/nxp,fxos8700.yaml  |   26 +-
+ .../devicetree/bindings/iio/imu/st,lsm6dsx.yaml    |    2 +-
+ .../bindings/iio/magnetometer/ti,tmag5273.yaml     |   75 +
+ .../bindings/iio/magnetometer/yamaha,yas530.yaml   |   18 +-
+ .../bindings/iio/potentiometer/adi,ad5272.yaml     |    2 +-
+ .../bindings/iio/pressure/asc,dlhl60d.yaml         |    2 +-
+ .../devicetree/bindings/iio/pressure/bmp085.yaml   |   24 +-
+ .../bindings/iio/proximity/ams,as3935.yaml         |    2 +-
+ .../proximity/google,cros-ec-mkbp-proximity.yaml   |    1 -
+ .../bindings/iio/proximity/semtech,sx9360.yaml     |    2 +-
+ .../devicetree/bindings/iio/st,st-sensors.yaml     |    2 +
+ .../bindings/iio/temperature/adi,ltc2983.yaml      |  137 +-
+ .../bindings/iio/temperature/maxim,max31865.yaml   |   12 +-
+ .../bindings/iio/temperature/ti,tmp117.yaml        |    6 +-
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |    2 +
+ .../bindings/interconnect/qcom,osm-l3.yaml         |    1 +
+ .../bindings/interconnect/qcom,qdu1000-rpmh.yaml   |   70 +
+ .../devicetree/bindings/interconnect/qcom,rpm.yaml |   73 +-
+ .../bindings/interconnect/qcom,rpmh.yaml           |   46 +-
+ .../bindings/interconnect/qcom,sa8775p-rpmh.yaml   |   50 +
+ .../bindings/interconnect/qcom,sc7280-rpmh.yaml    |   71 +
+ .../bindings/interconnect/qcom,sc8280xp-rpmh.yaml  |   49 +
+ .../bindings/interconnect/qcom,sm8450-rpmh.yaml    |  124 +
+ .../bindings/interconnect/qcom,sm8550-rpmh.yaml    |  139 ++
+ .../bindings/interconnect/samsung,exynos-bus.yaml  |   27 +
+ .../devicetree/bindings/misc/xlnx,tmr-inject.yaml  |   47 +
+ .../devicetree/bindings/misc/xlnx,tmr-manager.yaml |   47 +
+ .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    7 +-
+ Documentation/kbuild/kbuild.rst                    |    7 +
+ Documentation/trace/coresight/coresight-tpda.rst   |   52 +
+ Documentation/trace/coresight/coresight-tpdm.rst   |   45 +
+ Documentation/trace/coresight/ultrasoc-smb.rst     |   83 +
+ MAINTAINERS                                        |   50 +-
+ drivers/accessibility/speakup/main.c               |    2 +-
+ drivers/android/binder.c                           |   65 +-
+ drivers/android/binder_internal.h                  |    3 +-
+ drivers/android/binderfs.c                         |    4 +-
+ drivers/bus/mhi/Makefile                           |    4 +-
+ drivers/bus/mhi/ep/main.c                          |   85 +-
+ drivers/bus/mhi/ep/sm.c                            |   42 +-
+ drivers/bus/mhi/host/init.c                        |    2 +-
+ drivers/bus/simple-pm-bus.c                        |   46 +
+ drivers/char/applicom.c                            |    5 +-
+ drivers/char/pcmcia/cm4000_cs.c                    |    6 +-
+ drivers/char/pcmcia/synclink_cs.c                  |   22 +-
+ drivers/char/virtio_console.c                      |    5 +-
+ drivers/comedi/Kconfig                             |    2 +-
+ drivers/comedi/comedi_fops.c                       |    1 +
+ drivers/counter/Kconfig                            |   91 +-
+ drivers/crypto/hisilicon/qm.c                      |  169 +-
+ drivers/firmware/dmi-sysfs.c                       |   14 +-
+ drivers/firmware/google/Kconfig                    |    8 -
+ drivers/firmware/google/framebuffer-coreboot.c     |    4 +-
+ drivers/firmware/stratix10-svc.c                   |   25 +-
+ drivers/fpga/Kconfig                               |    2 +-
+ drivers/fpga/dfl-afu-region.c                      |    1 +
+ drivers/fpga/dfl-afu.h                             |    2 +-
+ drivers/fpga/dfl-fme-perf.c                        |    2 +-
+ drivers/fpga/dfl-fme-pr.c                          |    4 +-
+ drivers/fpga/dfl-fme-pr.h                          |    2 +-
+ drivers/fpga/dfl.c                                 |    5 +-
+ drivers/fpga/dfl.h                                 |    1 +
+ drivers/fpga/fpga-bridge.c                         |   11 +-
+ drivers/fpga/intel-m10-bmc-sec-update.c            |  364 +--
+ drivers/fpga/microchip-spi.c                       |  145 +-
+ drivers/hwmon/Kconfig                              |    2 +-
+ drivers/hwtracing/coresight/Kconfig                |   35 +
+ drivers/hwtracing/coresight/Makefile               |    5 +-
+ drivers/hwtracing/coresight/coresight-core.c       |   87 +-
+ drivers/hwtracing/coresight/coresight-cti-core.c   |   23 +-
+ drivers/hwtracing/coresight/coresight-cti-sysfs.c  |   15 +-
+ drivers/hwtracing/coresight/coresight-cti.h        |    2 +-
+ drivers/hwtracing/coresight/coresight-etm-perf.c   |   31 +
+ drivers/hwtracing/coresight/coresight-etm-perf.h   |    2 +
+ drivers/hwtracing/coresight/coresight-etm.h        |    3 +-
+ drivers/hwtracing/coresight/coresight-etm3x-core.c |   93 +-
+ .../hwtracing/coresight/coresight-etm3x-sysfs.c    |   27 +-
+ drivers/hwtracing/coresight/coresight-etm4x-core.c |   91 +-
+ .../hwtracing/coresight/coresight-etm4x-sysfs.c    |   27 +-
+ drivers/hwtracing/coresight/coresight-etm4x.h      |    3 +
+ drivers/hwtracing/coresight/coresight-stm.c        |   49 +-
+ drivers/hwtracing/coresight/coresight-tmc-core.c   |    4 +-
+ drivers/hwtracing/coresight/coresight-tmc-etf.c    |   45 +-
+ drivers/hwtracing/coresight/coresight-tmc-etr.c    |   19 +-
+ drivers/hwtracing/coresight/coresight-tmc.h        |    2 +-
+ drivers/hwtracing/coresight/coresight-tpda.c       |  211 ++
+ drivers/hwtracing/coresight/coresight-tpda.h       |   35 +
+ drivers/hwtracing/coresight/coresight-tpdm.c       |  259 ++
+ drivers/hwtracing/coresight/coresight-tpdm.h       |   62 +
+ drivers/hwtracing/coresight/coresight-trace-id.c   |  297 +++
+ drivers/hwtracing/coresight/coresight-trace-id.h   |  156 ++
+ drivers/hwtracing/coresight/ultrasoc-smb.c         |  648 +++++
+ drivers/hwtracing/coresight/ultrasoc-smb.h         |  125 +
+ drivers/hwtracing/ptt/hisi_ptt.c                   |   10 +
+ drivers/iio/accel/Kconfig                          |    2 +-
+ drivers/iio/accel/bma400.h                         |    4 -
+ drivers/iio/accel/bma400_core.c                    |   29 +-
+ drivers/iio/accel/mma9551_core.c                   |   10 +-
+ drivers/iio/accel/st_accel.h                       |    1 +
+ drivers/iio/accel/st_accel_core.c                  |    1 +
+ drivers/iio/accel/st_accel_i2c.c                   |    5 +
+ drivers/iio/accel/st_accel_spi.c                   |    5 +
+ drivers/iio/adc/Kconfig                            |   34 +-
+ drivers/iio/adc/Makefile                           |    3 +
+ drivers/iio/adc/ad7291.c                           |    2 +-
+ drivers/iio/adc/at91-sama5d2_adc.c                 |    4 +-
+ drivers/iio/adc/ep93xx_adc.c                       |    8 +
+ drivers/iio/adc/imx93_adc.c                        |  484 ++++
+ drivers/iio/adc/max11410.c                         |    3 +-
+ drivers/iio/adc/qcom-spmi-adc5.c                   |    8 +-
+ drivers/iio/adc/stm32-dfsdm-core.c                 |   99 +-
+ drivers/iio/adc/stm32-dfsdm.h                      |   60 +-
+ drivers/iio/adc/ti-adc128s052.c                    |   54 +-
+ drivers/iio/adc/ti-ads7924.c                       |  474 ++++
+ drivers/iio/adc/ti-lmp92064.c                      |  332 +++
+ drivers/iio/adc/xilinx-ams.c                       |    9 +-
+ drivers/iio/cdc/ad7746.c                           |    3 +-
+ drivers/iio/chemical/scd30_core.c                  |   46 +-
+ drivers/iio/common/scmi_sensors/scmi_iio.c         |    4 +-
+ drivers/iio/dac/Kconfig                            |   21 +-
+ drivers/iio/dac/Makefile                           |    1 +
+ drivers/iio/dac/ad5686.c                           |    7 +
+ drivers/iio/dac/ad5686.h                           |    1 +
+ drivers/iio/dac/ad5696-i2c.c                       |    2 +
+ drivers/iio/dac/max5522.c                          |  207 ++
+ drivers/iio/imu/bno055/bno055_ser_trace.c          |    2 +-
+ drivers/iio/imu/kmx61.c                            |    2 +-
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h            |    5 +-
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_shub.c       |   12 +-
+ drivers/iio/industrialio-core.c                    |   64 +-
+ drivers/iio/light/Makefile                         |    2 +-
+ drivers/iio/light/max44009.c                       |    5 +-
+ drivers/iio/light/tsl2563.c                        |  189 +-
+ drivers/iio/light/vcnl4000.c                       |  449 ++--
+ drivers/iio/magnetometer/Kconfig                   |   14 +-
+ drivers/iio/magnetometer/Makefile                  |    2 +
+ drivers/iio/magnetometer/st_magn.h                 |    1 +
+ drivers/iio/magnetometer/st_magn_core.c            |    1 +
+ drivers/iio/magnetometer/st_magn_i2c.c             |    5 +
+ drivers/iio/magnetometer/st_magn_spi.c             |    5 +
+ drivers/iio/magnetometer/tmag5273.c                |  743 ++++++
+ drivers/iio/pressure/ms5611.h                      |    4 -
+ drivers/iio/pressure/ms5611_core.c                 |   49 +-
+ drivers/iio/pressure/ms5611_i2c.c                  |    6 -
+ drivers/iio/pressure/ms5611_spi.c                  |    6 -
+ drivers/interconnect/core.c                        |   14 +-
+ drivers/interconnect/qcom/Kconfig                  |   36 +
+ drivers/interconnect/qcom/Makefile                 |    8 +
+ drivers/interconnect/qcom/qdu1000.c                | 1067 ++++++++
+ drivers/interconnect/qcom/qdu1000.h                |   95 +
+ drivers/interconnect/qcom/sa8775p.c                | 2541 ++++++++++++++++++++
+ drivers/interconnect/qcom/sc7180.h                 |    4 +-
+ drivers/interconnect/qcom/sc8180x.c                |   38 -
+ drivers/interconnect/qcom/sc8180x.h                |    4 +-
+ drivers/interconnect/qcom/sc8280xp.c               |   25 -
+ drivers/interconnect/qcom/sc8280xp.h               |    4 +-
+ drivers/interconnect/qcom/sdm670.c                 |  440 ++++
+ drivers/interconnect/qcom/sdm670.h                 |  128 +
+ drivers/interconnect/qcom/sdx55.h                  |    4 +-
+ drivers/interconnect/qcom/sm8150.c                 |   21 -
+ drivers/interconnect/qcom/sm8150.h                 |    4 +-
+ drivers/interconnect/qcom/sm8250.c                 |   21 -
+ drivers/interconnect/qcom/sm8250.h                 |    4 +-
+ drivers/interconnect/qcom/sm8550.c                 | 2318 ++++++++++++++++++
+ drivers/interconnect/qcom/sm8550.h                 |  178 ++
+ drivers/ipack/devices/ipoctal.c                    |    2 +-
+ drivers/mfd/Kconfig                                |   32 +-
+ drivers/mfd/Makefile                               |    5 +-
+ drivers/mfd/intel-m10-bmc-core.c                   |  122 +
+ drivers/mfd/intel-m10-bmc-pmci.c                   |  219 ++
+ drivers/mfd/intel-m10-bmc-spi.c                    |  168 ++
+ drivers/mfd/intel-m10-bmc.c                        |  238 --
+ drivers/misc/Kconfig                               |   20 +
+ drivers/misc/Makefile                              |    2 +
+ drivers/misc/eeprom/at25.c                         |    8 +-
+ drivers/misc/eeprom/idt_89hpesx.c                  |   10 +-
+ drivers/misc/enclosure.c                           |    2 +-
+ drivers/misc/fastrpc.c                             |   13 +-
+ drivers/misc/genwqe/card_utils.c                   |    6 +-
+ drivers/misc/isl29003.c                            |   10 +-
+ drivers/misc/mei/bus-fixup.c                       |   26 +-
+ drivers/misc/mei/bus.c                             |    3 +-
+ drivers/misc/mei/hdcp/mei_hdcp.c                   |    4 +-
+ drivers/misc/mei/mei_dev.h                         |    5 +
+ drivers/misc/mei/pxp/mei_pxp.c                     |    4 +-
+ drivers/misc/sgi-gru/grukservices.c                |    8 +-
+ drivers/misc/ti-st/st_core.c                       |    2 +-
+ drivers/misc/uacce/uacce.c                         |   50 +
+ drivers/misc/vmw_balloon.c                         |    2 +-
+ drivers/misc/vmw_vmci/vmci_host.c                  |    2 +
+ drivers/misc/xilinx_tmr_inject.c                   |  171 ++
+ drivers/misc/xilinx_tmr_manager.c                  |  220 ++
+ drivers/most/Kconfig                               |    2 +-
+ drivers/most/most_cdev.c                           |    5 +-
+ drivers/most/most_snd.c                            |   10 +-
+ drivers/most/most_usb.c                            |    6 +-
+ drivers/nvmem/Kconfig                              |   10 +
+ drivers/nvmem/Makefile                             |    1 +
+ drivers/nvmem/core.c                               |  145 +-
+ drivers/nvmem/imx-ocotp.c                          |    4 +-
+ drivers/nvmem/qcom-spmi-sdam.c                     |   13 +-
+ drivers/nvmem/rave-sp-eeprom.c                     |    2 +-
+ drivers/nvmem/stm32-bsec-optee-ta.c                |  298 +++
+ drivers/nvmem/stm32-bsec-optee-ta.h                |   80 +
+ drivers/nvmem/stm32-romem.c                        |   84 +-
+ drivers/nvmem/sunxi_sid.c                          |    8 +-
+ drivers/of/property.c                              |    6 +-
+ drivers/parport/parport_pc.c                       |  125 +-
+ .../dt-bindings/interconnect/qcom,qdu1000-rpmh.h   |   98 +
+ .../dt-bindings/interconnect/qcom,sa8775p-rpmh.h   |  231 ++
+ include/dt-bindings/interconnect/qcom,sc7180.h     |    3 -
+ include/dt-bindings/interconnect/qcom,sc8180x.h    |    3 -
+ include/dt-bindings/interconnect/qcom,sc8280xp.h   |    4 +-
+ .../dt-bindings/interconnect/qcom,sdm670-rpmh.h    |  136 ++
+ include/dt-bindings/interconnect/qcom,sdx55.h      |    2 -
+ include/dt-bindings/interconnect/qcom,sm8150.h     |    3 -
+ include/dt-bindings/interconnect/qcom,sm8250.h     |    3 -
+ .../dt-bindings/interconnect/qcom,sm8550-rpmh.h    |  189 ++
+ include/linux/coresight-pmu.h                      |   34 +-
+ include/linux/coresight.h                          |    4 +-
+ include/linux/etherdevice.h                        |   14 +
+ include/linux/hisi_acc_qm.h                        |   15 +
+ include/linux/iio/iio.h                            |    5 +
+ include/linux/mfd/intel-m10-bmc.h                  |  154 +-
+ include/linux/mhi_ep.h                             |    4 +-
+ include/linux/nvmem-consumer.h                     |   10 +-
+ include/linux/nvmem-provider.h                     |   31 +-
+ include/linux/of.h                                 |   25 +
+ include/linux/parport_pc.h                         |    3 +
+ include/linux/platform_data/tsl2563.h              |    9 -
+ include/linux/uacce.h                              |   12 +
+ include/linux/uuid.h                               |   19 +-
+ include/uapi/linux/android/binder.h                |    7 +-
+ include/uapi/linux/uuid.h                          |   12 +-
+ kernel/events/core.c                               |    1 +
+ scripts/tags.sh                                    |    9 +-
+ tools/iio/iio_utils.c                              |   23 +-
+ 309 files changed, 17596 insertions(+), 2386 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-xilinx-tmr-manager
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/nxp,imx93-adc.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,adc081c.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/dac/maxim,max5522.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc8280xp-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
+ create mode 100644 Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml
+ create mode 100644 Documentation/trace/coresight/coresight-tpda.rst
+ create mode 100644 Documentation/trace/coresight/coresight-tpdm.rst
+ create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+ create mode 100644 drivers/iio/adc/imx93_adc.c
+ create mode 100644 drivers/iio/adc/ti-ads7924.c
+ create mode 100644 drivers/iio/adc/ti-lmp92064.c
+ create mode 100644 drivers/iio/dac/max5522.c
+ create mode 100644 drivers/iio/magnetometer/tmag5273.c
+ create mode 100644 drivers/interconnect/qcom/qdu1000.c
+ create mode 100644 drivers/interconnect/qcom/qdu1000.h
+ create mode 100644 drivers/interconnect/qcom/sa8775p.c
+ create mode 100644 drivers/interconnect/qcom/sdm670.c
+ create mode 100644 drivers/interconnect/qcom/sdm670.h
+ create mode 100644 drivers/interconnect/qcom/sm8550.c
+ create mode 100644 drivers/interconnect/qcom/sm8550.h
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
+ delete mode 100644 drivers/mfd/intel-m10-bmc.c
+ create mode 100644 drivers/misc/xilinx_tmr_inject.c
+ create mode 100644 drivers/misc/xilinx_tmr_manager.c
+ create mode 100644 drivers/nvmem/stm32-bsec-optee-ta.c
+ create mode 100644 drivers/nvmem/stm32-bsec-optee-ta.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,qdu1000-rpmh.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sa8775p-rpmh.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sdm670-rpmh.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
+ delete mode 100644 include/linux/platform_data/tsl2563.h
