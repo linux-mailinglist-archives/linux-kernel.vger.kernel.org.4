@@ -2,248 +2,751 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE866A1791
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081D16A1771
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBXHzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S229525AbjBXHmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjBXHzD (ORCPT
+        with ESMTP id S229500AbjBXHmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:55:03 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510F54FAA2;
-        Thu, 23 Feb 2023 23:54:55 -0800 (PST)
-X-UUID: 63d09752b41611ed945fc101203acc17-20230224
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=QvC9vkCAz7ts9+TSwK8ZJ8GegyXfNCAsMqmAecfSWIA=;
-        b=Vx8ZXQleXLR2jooYNFJCiFjORU4tuZwcQkImsr0xMf3sAQ2YLF8a55bYZB+fnAer/qHUtsLZsZMeBOkciU7wNQvp3pbo0vW4onxDHSiXKPgmSW0noeDEEYIAA5sCbGTzMvORJ/WS/LhF0ZXuzng8A90/wHtC2RTzuxNH036XyHo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:2eb4a615-c752-4a3c-b667-f13b098d6adc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:25b5999,CLOUDID:77ed9526-564d-42d9-9875-7c868ee415ec,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: 63d09752b41611ed945fc101203acc17-20230224
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <yanchao.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1631992789; Fri, 24 Feb 2023 15:39:37 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 24 Feb 2023 15:39:36 +0800
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 24 Feb 2023 15:39:36 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IUvjbyK53iv+ST4rhSjrqKKaastUWbOk3WM24rf7LnhlWUt34Sf7woRrCeD2bBstCLHEjPiI5dHhbB3HjCRhYnqmzfmrquDxgxTpPH+gA9/Z/RvnTwxXML/KMmfyZ7doSnPmAK7GJSh4vho0t8ZjGs1wQlXqdYsqHrlC3L0BKDHEIi7Yu8jjecd1te8dEP2ozBkd2vxVB7zxj6NBpy3MaSfsOIjQM5ij2tb+ZwJTVFppSEiOeQl4eF0iI0vD31/CjYPmO1pMfL3ie/k0uDRDkB/gw1u1vMvRDGuNtlUE140roXnJZ8tbznJUnFKA6/PbeAOiTzp6J08iXKHCzBvwGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QvC9vkCAz7ts9+TSwK8ZJ8GegyXfNCAsMqmAecfSWIA=;
- b=Ih0I8wxGQ5TEQn1RBnrZ5/FE3PKkNIMeolPLYXEUI6yM3/OvsIu5y9GMhXkQOsk3L/snAPMmIbXNUGxtb4C2eWBFcafLqtiaUmlygoOWGBfk0TxaMCyWNUIUsDdTgOWOFStlklh7FyYbru5vx1OvuL9+EtG8BqFOIXtx8f3yOE43lq2s8y4WAxLyHOJ+nDX5CBrTU1aep5mc3pk3bHlwc1ikTXySZHdbNrJkg2kfMhya0lcCSupz/GfSSXmHoALlLNLMMxUQ/utdp6cGtHeUIHQElnn0ipltb3fmDx36SsRkMIlCTOtA0n02CSdtgs0teKOqNLhcFI6ioocxVl5afA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QvC9vkCAz7ts9+TSwK8ZJ8GegyXfNCAsMqmAecfSWIA=;
- b=FUtVcJhXwgCNrn5GSOoc1R/nX9thL3f2L1kZxGlAvcd8925FA8NcLxPRn3i/yPLpsoBvxc0kuIeoemiP0PXh6AN9Sns/gXCJmOy8MBAB+84qugeSaEp5QCW1iNmphFLbnxdq+xOduheI2E5z1bCncI7Kvlg++e1do84TqPRuExs=
-Received: from TYZPR03MB6161.apcprd03.prod.outlook.com (2603:1096:400:12c::13)
- by SI2PR03MB5449.apcprd03.prod.outlook.com (2603:1096:4:103::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.20; Fri, 24 Feb
- 2023 07:39:34 +0000
-Received: from TYZPR03MB6161.apcprd03.prod.outlook.com
- ([fe80::7b38:f629:1b13:6dc7]) by TYZPR03MB6161.apcprd03.prod.outlook.com
- ([fe80::7b38:f629:1b13:6dc7%8]) with mapi id 15.20.6134.023; Fri, 24 Feb 2023
- 07:39:34 +0000
-From:   =?utf-8?B?WWFuY2hhbyBZYW5nICjmnajlvabotoUp?= 
-        <Yanchao.Yang@mediatek.com>
-To:     "kuba@kernel.org" <kuba@kernel.org>
-CC:     =?utf-8?B?Q2hyaXMgRmVuZyAo5Yav5L+d5p6XKQ==?= 
-        <Chris.Feng@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?TWluZ2xpYW5nIFh1ICjlvpDmmI7kuq4p?= 
-        <mingliang.xu@mediatek.com>,
-        =?utf-8?B?TWluIERvbmcgKOiRo+aVjyk=?= <min.dong@mediatek.com>,
-        "linuxwwan@intel.com" <linuxwwan@intel.com>,
-        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
-        =?utf-8?B?TGlhbmcgTHUgKOWQleS6rik=?= <liang.lu@mediatek.com>,
-        =?utf-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
-        <haijun.liu@mediatek.com>,
-        =?utf-8?B?SGFvemhlIENoYW5nICjluLjmtanlk7Ip?= 
-        <Haozhe.Chang@mediatek.com>,
-        =?utf-8?B?SHVhIFlhbmcgKOadqOWNjik=?= <Hua.Yang@mediatek.com>,
-        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
-        =?utf-8?B?WGlheXUgWmhhbmcgKOW8oOWkj+Wuhyk=?= 
-        <Xiayu.Zhang@mediatek.com>,
-        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        =?utf-8?B?VGluZyBXYW5nICjnjovmjLop?= <ting.wang@mediatek.com>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        =?utf-8?B?QWlkZW4gV2FuZyAo546L5ZKP6bqSKQ==?= 
-        <Aiden.Wang@mediatek.com>,
-        =?utf-8?B?RmVsaXggQ2hlbiAo6ZmI6Z2eKQ==?= <Felix.Chen@mediatek.com>,
-        =?utf-8?B?TGFtYmVydCBXYW5nICjnjovkvJ8p?= 
-        <Lambert.Wang@mediatek.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        =?utf-8?B?TWluZ2NodWFuZyBRaWFvICjkuZTmmI7pl68p?= 
-        <Mingchuang.Qiao@mediatek.com>,
-        =?utf-8?B?R3VvaGFvIFpoYW5nICjlvKDlm73osaop?= 
-        <Guohao.Zhang@mediatek.com>
-Subject: Re: [PATCH net-next v3 01/10] net: wwan: tmi: Add PCIe core
-Thread-Topic: [PATCH net-next v3 01/10] net: wwan: tmi: Add PCIe core
-Thread-Index: AQHZPfRhXG0uLuMh9ki8uUJNPx0e967PblKAgAIgUwCADDu2AA==
-Date:   Fri, 24 Feb 2023 07:39:33 +0000
-Message-ID: <d6f13d66a5ab0224f2ae424a0645d4cf29c2752b.camel@mediatek.com>
-References: <20230211083732.193650-1-yanchao.yang@mediatek.com>
-         <20230211083732.193650-2-yanchao.yang@mediatek.com>
-         <20230214202229.50d07b89@kernel.org>
-         <2e518c17bf54298a2108de75fcd35aaf2b3397d3.camel@mediatek.com>
-In-Reply-To: <2e518c17bf54298a2108de75fcd35aaf2b3397d3.camel@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR03MB6161:EE_|SI2PR03MB5449:EE_
-x-ms-office365-filtering-correlation-id: 0a1f8490-e981-4fe8-898a-08db163a45ca
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cQlIqqrlsmx+Se4QP9eMG386plB8mjAnEL9c6lKr2cSEBpo2SMeaGcbBxJIpbYo5pu6XaCW5YWEP72KXbpejis6QBKzCF/cp8AVfLlgvm3NNGS+lmXv+0HzbrDepIKegw/i7rsPmv7B44xLZQOWBFj5IQk0ZPZSadfdHRKxAqYWKO6lmXU1Vrj0yI+wg4fo620xM2B8xKFUAlxZ/TDQcDSIihH2X8h4szfduEGid4DMjUDemhRAq0yXFrjxhhWZFlrYggV2LNtWPSag4XDRjGcWEYs4wb/8U9CUlZRsTinHR8P6U5WAJvMtO71ddjA4Ua4hTiLgTFvFjZ+V91ChllUQhrelYkvPIppnXcMoGfVywTrap+RcXx48KMtr3E5Igmz8ZmS/f13Af7/ee0+FBWA9wV9/m6bmwblhxdG9kAufqk7FdmlzK1r3JjPEe5cee6TXY3y27/cHlLCgjS6Ns/1rYcI3aqEM2yGGBuMeB0Nr4U+BdEsreybLvShUzEHd4VHaIJUjRDE1J7Rhu1nw/DObzpXxZ3hEEpP55OlGtawwn4KN0vIBMzOnp2zuGmSDjIsxAPdDCYTLkj9Y3ZmC1s2PhvbhLenQd6tR0Kv3v964iCObkzNpnP2LXdWovvBwJek+tG032kuArnTb+yF1a3lXgpYERdGkvJ1dhMB3MeZOyVVNom/LUdC7Q5y1iNc3cLzCbJtJJGd9VLXZmUWNSaqzymBvYjW6Sqo1FPHQP7yE/jVQUNQYmgRV29cnHjN+t
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6161.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(451199018)(54906003)(316002)(2906002)(8936002)(2616005)(7416002)(38070700005)(186003)(122000001)(38100700002)(6512007)(71200400001)(6506007)(85182001)(26005)(6486002)(478600001)(83380400001)(86362001)(107886003)(36756003)(66946007)(64756008)(41300700001)(66476007)(66556008)(76116006)(66446008)(4326008)(5660300002)(91956017)(8676002)(6916009)(99106002)(473944003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WVJTZC9aT2g1RklJaU1rZFZNU29IcVpPSldMOWJ0OVRKdzBXSm5SeVpFZTRB?=
- =?utf-8?B?T2wwMmNzSHkzb1pwRTg0cHRLODErWmlpOTFQSHlJTzQzVHAxTW9nSngwaEVC?=
- =?utf-8?B?eDBtVFk1ZENMN0ZsWERveFh4VzQzeW11dWtBRFltWkVCbkM3RzVuZmQyWWYx?=
- =?utf-8?B?OURueEQyNVRseDF2ZldqVXJDVFR0c0lrUU1XZjR4RjRuZS9HaEIwYVkxZUJy?=
- =?utf-8?B?MHRKQW1zY2VDNlBxbWN1dTk2dGNQMUdsY0pNd1FwdHd2Si9zSUQvR256TUlQ?=
- =?utf-8?B?bTQyeGpuc0k5MVhoVEM5cmtzZXFCN3R4SVpoVlgrdEY2T1ZhQXBuL2I0NDhp?=
- =?utf-8?B?WE40TDFhempoSWo4MkJDdkhQUmhVK01RS1M5K2dpS2J1UkhTYTVON3ZhV0Zh?=
- =?utf-8?B?eVF0S05jdDNTeVlZZmJRbThXamhWSlArSUxvdEttZkhoNnlTLzJPNGUzR1Yr?=
- =?utf-8?B?cC82RjlFQjdaNDgzc2poazBxa2ZOU1FnM1pVbGdDNGI1NjN3WnBjWnJOMURj?=
- =?utf-8?B?RVNHNTJCY01BdTVNVlViRjQvLzFxUUVETzl6SEZjbmFpYzk2SUl3ekxBb1ZI?=
- =?utf-8?B?aHBZK2xuUEkxenFlaEpTSDJNTW0zV05vdmg0dTVBa1QvYS8vNm1xMWNVMXIr?=
- =?utf-8?B?aXExdFFYNGhlcFRjOTFadU85NC9taHF4OEhhMlVHdFF6dWNaSmFSb3RqbFRh?=
- =?utf-8?B?K0tHK2hLMmlkK0ZPdVJFbGIzQTlkSlBQbUVtQTI5MHZXREVnbm5Pbm5uUE1t?=
- =?utf-8?B?ZHRCZWFzZnE4UVpqUkFrWGcxdjR3VXB3dVJmN09qOGdBUytETFN3RkFGdExV?=
- =?utf-8?B?UFh3UmJaNlM2R1NRb2hCQ3p5dXdlNFpDQkdXVjRmc0hwNEhJbDlwYmJzK1Av?=
- =?utf-8?B?Z1FyYUhWVDhhTDBHSTFCQ0lSKzUxanBQWXEySlJXNVRrK1FHU3lPMWxoSkYv?=
- =?utf-8?B?blRYN0ZNeVlEcGlVaEtOQzl4QzZJTlVMcm13aG8yL2graVNYOHAxamppM2Vu?=
- =?utf-8?B?Umsvd1ovSkFLRm1wTWpraUJBaWlINlo1OE15cG1lbDF6Vld4RWY3UmxtZ1Vn?=
- =?utf-8?B?ZTJSMW1WUXFrcDI3Zjd2bWMyWGpSR2Z6R1UxQnNMazhyNzYvQ2JjZGFaVTky?=
- =?utf-8?B?Slc0Sk84NCtXR2JTQW11YjBMbjhPR3BuTTlURVAyYnVUdFNTR3UxdWdnU1Jl?=
- =?utf-8?B?YWMyLzRmblNSVUF1UEFKeGN3cVN2Z3RCOXBSVkVFb2JTci85bmYvbE5xYXpG?=
- =?utf-8?B?SkVVMDNFN3Q3Q3p3bUkvNzdKaXBTajBHbWZVYmREbWxNUzdQRHRNcE5zUm45?=
- =?utf-8?B?OWxCR3lDS3IvYVJBdkEvUVZITk1CN01MQlE1OXBOWlZValdiZTQ2b1hZdE5Y?=
- =?utf-8?B?RThSbFhWbm9kdmVrT3pZcWlDcWQyODcxQXpHd09RU3JwTXFoL1ltL2hNd0VK?=
- =?utf-8?B?UldaQUdJWGF5SmVDN0ZDcWpYYTNYTUZPdEhybCtIYWt0RHNCeEZpdkVOMFg2?=
- =?utf-8?B?Mms5ckFoakZyV0VpRVcyNXNQWEo5T2J1a25yOHYxc3d0VTc4dHV3NURMZUxS?=
- =?utf-8?B?c0l5Sng1UXZNTzQ5RURFUy9xaWtKT2RNRzMwR0RlNk1zaUpEaXRuR2lCaGR6?=
- =?utf-8?B?SVN4RGExcG1YYzM1cmNWU1hURTkzUzZzc3FSVHN6SHJpMG5MSFEyQUthKzBE?=
- =?utf-8?B?bFBHb2dYZmNTd0d0OXhNUGFoaGV6U2MvZStDT2xDTGZZWEhYNnl1eE1CZHBx?=
- =?utf-8?B?aDl6alp6TjN5aFZnMnpLYW5GelQ2bjloNWxkd2RzYllCdVR2MVVzZXY1d1RF?=
- =?utf-8?B?M2sybkdrY2w4QTVRa1F1bDRPNW83eVhQSGQ4WU5ROUEzbFVVZ245VWxhZzNv?=
- =?utf-8?B?VExLdDNJRzZ0VTVrcXVwMXIyT1JwRUpoMDBQb1NoSGdpUk43UVJ2WEtCYUJS?=
- =?utf-8?B?RllnTU5GVDMrVW44ZmJ4QWpjQmxlbHRqOTNPMHM3UUw1bVFHRVN1b25nMjhm?=
- =?utf-8?B?Y1NvWXFYdFl3T2NicUpHLzRCMnJHSUIzVG5kbExZOTkwTTkzZlVOeGk5RDk2?=
- =?utf-8?B?YVNZbVpuTVRRSkhZNXRBVVhTVzVPaS9ZcG9ZUTBzSXY4Z0xqSnd5alFHMi9k?=
- =?utf-8?B?b29WQ1dWVm1ZWDFkWXpjNkJkc2w3eEduTlR0a2kzd0xzWnV3Qk12TE5VV0Z0?=
- =?utf-8?B?eWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BAA4F721FDDFE149AFC5943149FADB2F@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 24 Feb 2023 02:42:53 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A91E30CF;
+        Thu, 23 Feb 2023 23:42:45 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7033724E278;
+        Fri, 24 Feb 2023 15:42:33 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 15:42:33 +0800
+Received: from [192.168.125.128] (113.72.147.165) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 15:42:32 +0800
+Message-ID: <8ba002ea-299c-2eaf-b1a7-d7d38a540152@starfivetech.com>
+Date:   Fri, 24 Feb 2023 15:42:51 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6161.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a1f8490-e981-4fe8-898a-08db163a45ca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 07:39:33.7247
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9usGiu+GD30XnE5MA/SRZfdft9stLQFUgIEKBYMSCOoTMA96bswN+McUm8mJGX+P2nMbSgc7NcTmNSJN5OuHPZPknqTSRSlF2JOBGfmgRWQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5449
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>
+References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
+ <20230220081926.267695-3-xingyu.wu@starfivetech.com>
+ <20230223182341.GA200380@roeck-us.net>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <20230223182341.GA200380@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.165]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmFrdWIsDQpPbiBUaHUsIDIwMjMtMDItMTYgYXQgMjA6NTAgKzA4MDAsIFlhbmNoYW8gWWFu
-ZyB3cm90ZToNCj4gPiANCj4gSGkgSmFrdWIsDQo+IA0KPiBPbiBUdWUsIDIwMjMtMDItMTQgYXQg
-MjA6MjIgLTA4MDAsIEpha3ViIEtpY2luc2tpIHdyb3RlOg0KPiA+IE9uIFNhdCwgMTEgRmViIDIw
-MjMgMTY6Mzc6MjMgKzA4MDAgWWFuY2hhbyBZYW5nIHdyb3RlOg0KPiA+ID4gK2NjZmxhZ3MteSAr
-PSAtSSQoc3JjdHJlZSkvJChzcmMpLw0KPiA+ID4gK2NjZmxhZ3MteSArPSAtSSQoc3JjdHJlZSkv
-JChzcmMpL3BjaWUvDQo+ID4gDQo+ID4gRG8geW91IHJlYWxseSBuZWVkIHRoZXNlIGZsYWdzPw0K
-PiANCj4gV2Ugd2lsbCBjaGVjayBhbmQgdXBkYXRlIGlmIGl0J3MgcmVhbGx5IHJlZHVuZGFudCBz
-b29uLg0KVXBkYXRlIHRlc3QgcmVzdWx0Lg0KQm90aCBmbGFncyBhcmUgZGVsZXRlZCwgdGhlbiBy
-dW4gdGhlIG1ha2UgY29tbWFuZCB3aXRoIA0KImJ1aWxkIGluIiBhbmQgImJ1aWxkIG1vZHVsZSIg
-b24gYSBzZXBhcmF0ZSBrZXJuZWwgdHJlZS4gQm90aCBzdWZmZXINCnRoZSBzYW1lIGJ1aWxkIGVy
-cm9yLg0K4oCcZHJpdmVycy9uZXQvd2FuL21lZGlhdGVrL3BjaWUvbXRrX3BjaS5jOjE2OjEwOiBm
-YXRhbCBlcnJvcjogbXRrX2ZzbS5oOg0KTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQ0KICNpbmNs
-dWRlICJtdGtfZnNtLmgiIg0KVGhlIHJlYXNvbiBpcyB0aGF0IGFsbCBmaWxlcyBhcmUgbm90IHBs
-YWNlZCBpbiB0aGUgc2FtZSBmb2xkZXIuIFRoZQ0KZHJpdmVyIG5hbWVkIFRNSSBuZWVkcyBhIGNo
-aWxkIGZvbGRlciwgdGhlbiBuZWVkcyB0aGVzZSBmbGFncy4NCg0KQW55IGlkZWFzIG9yIGNvbW1l
-bnRzIGZvciB0aGlzPyBQbGVhc2UgaGVscCBzaGFyZSBpdCBhdCB5b3VyDQpjb252ZW5pZW5jZS4N
-Cg0KPiA+ID4gK3sNCj4gPiA+ICsJc3RydWN0IHBjaV9kZXYgKnBkZXYgPSB0b19wY2lfZGV2KG1k
-ZXYtPmRldik7DQo+ID4gPiArCWludCBpcnFfY250Ow0KPiA+ID4gKw0KPiA+ID4gKwlpcnFfY250
-ID0gcGNpX2FsbG9jX2lycV92ZWN0b3JzKHBkZXYsIE1US19JUlFfQ05UX01JTiwNCj4gPiA+IG1h
-eF9pcnFfY250LCBpcnFfdHlwZSk7DQo+ID4gPiArCW1kZXYtPm1zaV9udmVjcyA9IGlycV9jbnQ7
-DQo+ID4gPiArDQo+ID4gPiArCWlmIChpcnFfY250IDwgTVRLX0lSUV9DTlRfTUlOKSB7DQo+ID4g
-PiArCQlkZXZfZXJyKG1kZXYtPmRldiwNCj4gPiA+ICsJCQkiVW5hYmxlIHRvIGFsbG9jIHBjaSBp
-cnEgdmVjdG9ycy4gcmV0PSVkDQo+ID4gPiBtYXhpcnFjbnQ9JWQgaXJxdHlwZT0weCV4XG4iLA0K
-PiA+ID4gKwkJCWlycV9jbnQsIG1heF9pcnFfY250LCBpcnFfdHlwZSk7DQo+ID4gPiArCQlyZXR1
-cm4gLUVGQVVMVDsNCj4gPiA+ICsJfQ0KPiA+ID4gKw0KPiA+ID4gKwlyZXR1cm4gbXRrX3BjaV9y
-ZXF1ZXN0X2lycV9tc2l4KG1kZXYsIGlycV9jbnQpOw0KPiA+ID4gK30NCj4gPiA+ICsNCj4gPiA+
-ICtzdGF0aWMgdm9pZCBtdGtfcGNpX2ZyZWVfaXJxKHN0cnVjdCBtdGtfbWRfZGV2ICptZGV2KQ0K
-PiA+ID4gK3sNCj4gPiA+ICsJc3RydWN0IHBjaV9kZXYgKnBkZXYgPSB0b19wY2lfZGV2KG1kZXYt
-PmRldik7DQo+ID4gPiArCXN0cnVjdCBtdGtfcGNpX3ByaXYgKnByaXYgPSBtZGV2LT5od19wcml2
-Ow0KPiA+ID4gKwlpbnQgaTsNCj4gPiA+ICsNCj4gPiA+ICsJZm9yIChpID0gMDsgaSA8IHByaXYt
-PmlycV9jbnQ7IGkrKykNCj4gPiA+ICsJCXBjaV9mcmVlX2lycShwZGV2LCBpLCAmcHJpdi0+aXJx
-X2Rlc2NbaV0pOw0KPiA+ID4gKw0KPiA+ID4gKwlwY2lfZnJlZV9pcnFfdmVjdG9ycyhwZGV2KTsN
-Cj4gPiA+ICt9DQo+ID4gPiArDQo+ID4gPiArc3RhdGljIHZvaWQgbXRrX3BjaV9zYXZlX3N0YXRl
-KHN0cnVjdCBtdGtfbWRfZGV2ICptZGV2KQ0KPiA+ID4gK3sNCj4gPiA+ICsJc3RydWN0IHBjaV9k
-ZXYgKnBkZXYgPSB0b19wY2lfZGV2KG1kZXYtPmRldik7DQo+ID4gPiArCXN0cnVjdCBtdGtfcGNp
-X3ByaXYgKnByaXYgPSBtZGV2LT5od19wcml2Ow0KPiA+ID4gKwlpbnQgbHRyLCBsMXNzOw0KPiA+
-ID4gKw0KPiA+ID4gKwlwY2lfc2F2ZV9zdGF0ZShwZGV2KTsNCj4gPiA+ICsJLyogc2F2ZSBsdHIg
-Ki8NCj4gPiA+ICsJbHRyID0gcGNpX2ZpbmRfZXh0X2NhcGFiaWxpdHkocGRldiwgUENJX0VYVF9D
-QVBfSURfTFRSKTsNCj4gPiA+ICsJaWYgKGx0cikgew0KPiA+ID4gKwkJcGNpX3JlYWRfY29uZmln
-X3dvcmQocGRldiwgbHRyICsgUENJX0xUUl9NQVhfU05PT1BfTEFULA0KPiA+ID4gKwkJCQkgICAg
-ICZwcml2LT5sdHJfbWF4X3Nub29wX2xhdCk7DQo+ID4gPiArCQlwY2lfcmVhZF9jb25maWdfd29y
-ZChwZGV2LCBsdHIgKw0KPiA+ID4gUENJX0xUUl9NQVhfTk9TTk9PUF9MQVQsDQo+ID4gPiArCQkJ
-CSAgICAgJnByaXYtPmx0cl9tYXhfbm9zbm9vcF9sYXQpOw0KPiA+ID4gKwl9DQo+ID4gPiArCS8q
-IHNhdmUgbDFzcyAqLw0KPiA+ID4gKwlsMXNzID0gcGNpX2ZpbmRfZXh0X2NhcGFiaWxpdHkocGRl
-diwgUENJX0VYVF9DQVBfSURfTDFTUyk7DQo+ID4gPiArCWlmIChsMXNzKSB7DQo+ID4gPiArCQlw
-Y2lfcmVhZF9jb25maWdfZHdvcmQocGRldiwgbDFzcyArIFBDSV9MMVNTX0NUTDEsDQo+ID4gPiAm
-cHJpdi0+bDFzc19jdGwxKTsNCj4gPiA+ICsJCXBjaV9yZWFkX2NvbmZpZ19kd29yZChwZGV2LCBs
-MXNzICsgUENJX0wxU1NfQ1RMMiwNCj4gPiA+ICZwcml2LT5sMXNzX2N0bDIpOw0KPiA+ID4gKwl9
-DQo+ID4gPiArfQ0KPiA+ID4gKwlkZXZfaW5mbyhtZGV2LT5kZXYsICJQcm9iZSBkb25lIGh3X3Zl
-cj0weCV4XG4iLCBtZGV2LT5od192ZXIpOw0KPiA+ID4gKwlyZXR1cm4gMDsNCj4gPiA+ICsNCj4g
-PiA+ICtlcnJfc2F2ZV9zdGF0ZToNCj4gPiANCj4gPiBMYWJlbHMgc2hvdWxkIGJlIG5hbWVkIGFm
-dGVyIGFjdGlvbiB0aGV5IHBlcmZvcm0sIG5vdCB3aGVyZSB0aGV5DQo+ID4ganVtcA0KPiA+IGZy
-b20uIFBsZWFzZSBmaXggdGhpcyBldmVyeXdoZXJlLg0KPiANCj4gV2UgY2FuIGZvdW5kIHNpbWls
-YXIgc2FtcGxlcyBpbiBrZXJuZWwgY29kZXMsIG5hbWluZyB0aGUgbGFiZWwgcGVyDQo+IHdoZXJl
-IGp1bXAgZnJvbeKApg0KPiBleC4gcGNpLXN5c2ZzLmMNCj4gc2hhbGwgd2UgYXBwbHkgdGhpcyBy
-dWxlIHRvIG91ciBkcml2ZXI/DQo+IEkNCj4gdCdzIG1hbmRhdG9yeSBvciBuaWNlIHRvIGhhdmUu
-DQoNCkFueSBpZGVhcyBvciBjb21tZW50cyBmb3IgdGhpcz8gUGxlYXNlIGhlbHAgc2hhcmUgaXQg
-YXQgeW91cg0KY29udmVuaWVuY2UuDQoNCk1hbnkgdGhhbmtzLg0KeWFuY2hhby55YW5nDQo=
+On 2023/2/24 2:23, Guenter Roeck wrote:
+> On Mon, Feb 20, 2023 at 04:19:26PM +0800, Xingyu Wu wrote:
+>> Add watchdog driver for the StarFive JH7110 SoC.
+>> 
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
+>>  MAINTAINERS                     |   7 +
+>>  drivers/watchdog/Kconfig        |   9 +
+>>  drivers/watchdog/Makefile       |   2 +
+>>  drivers/watchdog/starfive-wdt.c | 651 ++++++++++++++++++++++++++++++++
+>>  4 files changed, 669 insertions(+)
+>>  create mode 100644 drivers/watchdog/starfive-wdt.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 135d93368d36..6cbcf08fa76a 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19933,6 +19933,13 @@ F:	Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+>>  F:	drivers/reset/reset-starfive-jh7100.c
+>>  F:	include/dt-bindings/reset/starfive-jh7100.h
+>>  
+>> +STARFIVE JH7110 WATCHDOG DRIVER
+>> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
+>> +M:	Samin Guo <samin.guo@starfivetech.com>
+>> +S:	Supported
+>> +F:	Documentation/devicetree/bindings/watchdog/starfive*
+>> +F:	drivers/watchdog/starfive-wdt.c
+>> +
+>>  STATIC BRANCH/CALL
+>>  M:	Peter Zijlstra <peterz@infradead.org>
+>>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index 0bc40b763b06..4608eb5c9501 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -2089,6 +2089,15 @@ config UML_WATCHDOG
+>>  	tristate "UML watchdog"
+>>  	depends on UML || COMPILE_TEST
+>>  
+>> +config STARFIVE_WATCHDOG
+>> +	tristate "StarFive Watchdog support"
+>> +	depends on RISCV
+>> +	select WATCHDOG_CORE
+>> +	default SOC_STARFIVE
+>> +	help
+>> +	  Say Y here to support the watchdog of StarFive JH7110 SoC.
+>> +	  This driver can also be built as a module if choose M.
+>> +
+>>  #
+>>  # ISA-based Watchdog Cards
+>>  #
+>> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+>> index 9cbf6580f16c..4c0bd377e92a 100644
+>> --- a/drivers/watchdog/Makefile
+>> +++ b/drivers/watchdog/Makefile
+>> @@ -211,6 +211,8 @@ obj-$(CONFIG_WATCHDOG_SUN4V)		+= sun4v_wdt.o
+>>  # Xen
+>>  obj-$(CONFIG_XEN_WDT) += xen_wdt.o
+>>  
+>> +obj-$(CONFIG_STARFIVE_WATCHDOG) += starfive-wdt.o
+>> +
+>>  # Architecture Independent
+>>  obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
+>>  obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
+>> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+>> new file mode 100644
+>> index 000000000000..dfbb80406076
+>> --- /dev/null
+>> +++ b/drivers/watchdog/starfive-wdt.c
+>> @@ -0,0 +1,651 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Starfive Watchdog driver
+>> + *
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + */
+>> +
+>> +#include <linux/clk.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/reset.h>
+>> +#include <linux/watchdog.h>
+>> +
+>> +/* JH7110 WatchDog register define */
+>> +#define STARFIVE_WDT_JH7110_LOAD	0x000	/* RW: Watchdog load register */
+>> +#define STARFIVE_WDT_JH7110_VALUE	0x004	/* RO: The current value for the watchdog counter */
+>> +#define STARFIVE_WDT_JH7110_CONTROL	0x008	/*
+>> +						 * RW:
+>> +						 * [0]: reset enable;
+>> +						 * [1]: int enable/wdt enable/reload counter;
+>> +						 * [31:2]: reserve.
+> 
+> reserved
+
+Will fix.
+
+> 
+>> +						 */
+>> +#define STARFIVE_WDT_JH7110_INTCLR	0x00c	/* WO: clear intterupt && reload the counter */
+>> +#define STARFIVE_WDT_JH7110_RIS		0x010	/* RO: Raw interrupt status from the counter */
+>> +#define STARFIVE_WDT_JH7110_IMS		0x014	/* RO: Enabled interrupt status from the counter */
+>> +#define STARFIVE_WDT_JH7110_LOCK	0xc00	/*
+>> +						 * RO: Enable write access to all other registers
+>> +						 * by writing 0x1ACCE551.
+>> +						 */
+> 
+> "RO" contradicts itself against the rest of the comment. The register is
+> written to, so it can't bew RO.
+
+Change to 'RW'.
+
+> 
+>> +
+>> +/* WDOGCONTROL */
+>> +#define STARFIVE_WDT_ENABLE			0x1
+>> +#define STARFIVE_WDT_JH7110_EN_SHIFT		0
+>> +#define STARFIVE_WDT_RESET_EN			0x1
+>> +#define STARFIVE_WDT_JH7110_RESEN_SHIFT		1
+>> +
+>> +/* WDOGLOCK */
+>> +#define STARFIVE_WDT_LOCKED			BIT(0)
+>> +#define STARFIVE_WDT_JH7110_UNLOCK_KEY		0x1acce551
+>> +
+>> +/* WDOGINTCLR */
+>> +#define STARFIVE_WDT_INTCLR			0x1
+>> +
+>> +#define STARFIVE_WDT_MAXCNT			0xffffffff
+>> +#define STARFIVE_WDT_DEFAULT_TIME		(15)
+>> +#define STARFIVE_WDT_DELAY_US			0
+>> +#define STARFIVE_WDT_TIMEOUT_US			10000
+>> +
+>> +/* module parameter */
+>> +#define STARFIVE_WDT_EARLY_ENA			0
+>> +
+>> +static bool nowayout = WATCHDOG_NOWAYOUT;
+>> +static int heartbeat;
+>> +static int early_enable = STARFIVE_WDT_EARLY_ENA;
+>> +
+>> +module_param(heartbeat, int, 0);
+>> +module_param(early_enable, int, 0);
+>> +module_param(nowayout, bool, 0);
+>> +
+>> +MODULE_PARM_DESC(heartbeat, "Watchdog heartbeat in seconds. (default="
+>> +		 __MODULE_STRING(STARFIVE_WDT_DEFAULT_TIME) ")");
+>> +MODULE_PARM_DESC(early_enable,
+>> +		 "Watchdog is started at boot time if set to 1, default="
+>> +		 __MODULE_STRING(STARFIVE_WDT_EARLY_ENA));
+>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>> +
+>> +struct starfive_wdt_variant {
+>> +	u32 control;
+>> +	u32 load;
+>> +	u32 enable;
+>> +	u32 value;
+>> +	u32 int_clr;
+>> +	u32 unlock;
+>> +	u32 unlock_key;
+>> +	u32 irq_is_raise;
+>> +	u8 enrst_shift;
+>> +	u8 en_shift;
+>> +};
+>> +
+>> +struct starfive_wdt {
+>> +	unsigned long freq;
+>> +	struct device *dev;
+>> +	struct watchdog_device wdt_device;
+>> +	struct clk *core_clk;
+>> +	struct clk *apb_clk;
+>> +	struct reset_control *rsts;
+>> +	const struct starfive_wdt_variant *drv_data;
+>> +	u32 count;	/*count of timeout*/
+>> +	u32 reload;	/*restore the count*/
+>> +	void __iomem *base;
+>> +	spinlock_t lock;	/* spinlock for register handling */
+>> +};
+>> +
+>> +/* Register bias in JH7110 */
+>> +static const struct starfive_wdt_variant drv_data_jh7110 = {
+>> +	.control = STARFIVE_WDT_JH7110_CONTROL,
+>> +	.load = STARFIVE_WDT_JH7110_LOAD,
+>> +	.enable = STARFIVE_WDT_JH7110_CONTROL,
+>> +	.value = STARFIVE_WDT_JH7110_VALUE,
+>> +	.int_clr = STARFIVE_WDT_JH7110_INTCLR,
+>> +	.unlock = STARFIVE_WDT_JH7110_LOCK,
+>> +	.unlock_key = STARFIVE_WDT_JH7110_UNLOCK_KEY,
+>> +	.irq_is_raise = STARFIVE_WDT_JH7110_IMS,
+>> +	.enrst_shift = STARFIVE_WDT_JH7110_RESEN_SHIFT,
+>> +	.en_shift = STARFIVE_WDT_JH7110_EN_SHIFT,
+>> +};
+>> +
+>> +static const struct of_device_id starfive_wdt_match[] = {
+>> +	{ .compatible = "starfive,jh7110-wdt", .data = &drv_data_jh7110 },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, starfive_wdt_match);
+>> +
+>> +static const struct platform_device_id starfive_wdt_ids[] = {
+>> +	{
+>> +		.name = "starfive-jh7110-wdt",
+>> +		.driver_data = (unsigned long)&drv_data_jh7110,
+>> +	},
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(platform, starfive_wdt_ids);
+>> +
+>> +static int starfive_wdt_get_clock_rate(struct starfive_wdt *wdt)
+>> +{
+>> +	wdt->freq = clk_get_rate(wdt->core_clk);
+>> +	/* The clock rate should not be 0.*/
+> 
+> This is obvious and not worth a comment.
+
+Will drop.
+
+> 
+>> +	if (wdt->freq)
+>> +		return 0;
+>> +
+>> +	dev_err(wdt->dev, "get clock rate failed.\n");
+>> +	return -ENOENT;
+> 
+> Error handling should come first
+> 
+> 	if (!wdt->freq) {
+> 		dev_err(wdt->dev, "get clock rate failed.\n");
+> 		return -EINVAL;
+> 	}
+> 	return 0;
+> 
+> This is not "No such file or directory" (yes, I see that other drivers
+> do that, but that doesn't make it better). Use -EINVAL instead.
+
+Will fix.
+
+> 
+>> +}
+>> +
+>> +static int starfive_wdt_get_clock(struct starfive_wdt *wdt)
+>> +{
+>> +	wdt->apb_clk = devm_clk_get(wdt->dev, "apb");
+>> +	if (IS_ERR(wdt->apb_clk)) {
+>> +		dev_err(wdt->dev, "failed to get apb clock.\n");
+>> +		return PTR_ERR(wdt->apb_clk);
+>> +	}
+>> +
+>> +	wdt->core_clk = devm_clk_get(wdt->dev, "core");
+>> +	if (IS_ERR(wdt->core_clk)) {
+>> +		dev_err(wdt->dev, "failed to get core clock.\n");
+>> +		return PTR_ERR(wdt->core_clk);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int starfive_wdt_reset_init(struct starfive_wdt *wdt)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	wdt->rsts = devm_reset_control_array_get_exclusive(wdt->dev);
+>> +	if (IS_ERR(wdt->rsts)) {
+>> +		dev_err(wdt->dev, "failed to get rsts error.\n");
+> 
+> I don't think this message is understandable. "failed to get reset
+> control", maybe. Also, the call may return -EPROBE_DEFER,
+> which should not generate an error message. Either drop the message
+> or use dev_err_probe().
+
+Thanks you for reminding me. I will drop this.
+So is the devm_clk_get() and also drop the error message?
+
+> 
+>> +		ret = PTR_ERR(wdt->rsts);
+>> +	} else {
+>> +		ret = reset_control_deassert(wdt->rsts);
+>> +		if (ret)
+>> +			dev_err(wdt->dev, "failed to deassert rsts.\n");
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static u32 starfive_wdt_ticks_to_sec(struct starfive_wdt *wdt, u32 ticks)
+>> +{
+>> +	return DIV_ROUND_CLOSEST(ticks, wdt->freq);
+>> +}
+>> +
+>> +/*
+>> + * Write unlock-key to unlock. Write other value to lock. When lock bit is 1,
+>> + * external accesses to other watchdog registers are ignored.
+>> + */
+>> +static bool starfive_wdt_is_locked(struct starfive_wdt *wdt)
+>> +{
+>> +	u32 val;
+>> +
+>> +	val = readl(wdt->base + wdt->drv_data->unlock);
+>> +	return !!(val & STARFIVE_WDT_LOCKED);
+>> +}
+>> +
+>> +static void starfive_wdt_unlock(struct starfive_wdt *wdt)
+>> +{
+>> +	if (starfive_wdt_is_locked(wdt))
+>> +		writel(wdt->drv_data->unlock_key,
+>> +		       wdt->base + wdt->drv_data->unlock);
+>> +}
+>> +
+>> +static void starfive_wdt_lock(struct starfive_wdt *wdt)
+>> +{
+>> +	if (!starfive_wdt_is_locked(wdt))
+>> +		writel(~wdt->drv_data->unlock_key,
+>> +		       wdt->base + wdt->drv_data->unlock);
+>> +}
+>> +
+>> +/* enable watchdog interrupt to reset/reboot */
+>> +static void starfive_wdt_enable_reset(struct starfive_wdt *wdt)
+>> +{
+>> +	u32 val;
+>> +
+>> +	val = readl(wdt->base + wdt->drv_data->control);
+>> +	val |= STARFIVE_WDT_RESET_EN << wdt->drv_data->enrst_shift;
+>> +	writel(val, wdt->base + wdt->drv_data->control);
+>> +}
+>> +
+>> +/* disable watchdog interrupt to reset/reboot */
+>> +static void starfive_wdt_disable_reset(struct starfive_wdt *wdt)
+>> +{
+>> +	u32 val;
+>> +
+>> +	val = readl(wdt->base + wdt->drv_data->control);
+>> +	val &= ~(STARFIVE_WDT_RESET_EN << wdt->drv_data->enrst_shift);
+>> +	writel(val, wdt->base + wdt->drv_data->control);
+>> +}
+>> +
+>> +/* interrupt status whether has been raised from the counter */
+>> +static bool starfive_wdt_raise_irq_status(struct starfive_wdt *wdt)
+>> +{
+>> +	return !!readl(wdt->base + wdt->drv_data->irq_is_raise);
+>> +}
+>> +
+>> +/* clear interrupt signal before initialization or reload */
+>> +static void starfive_wdt_int_clr(struct starfive_wdt *wdt)
+>> +{
+>> +	writel(STARFIVE_WDT_INTCLR, wdt->base + wdt->drv_data->int_clr);
+>> +}
+>> +
+>> +static inline void starfive_wdt_set_count(struct starfive_wdt *wdt, u32 val)
+>> +{
+>> +	writel(val, wdt->base + wdt->drv_data->load);
+>> +}
+>> +
+>> +static inline u32 starfive_wdt_get_count(struct starfive_wdt *wdt)
+>> +{
+>> +	return readl(wdt->base + wdt->drv_data->value);
+>> +}
+>> +
+>> +/* enable watchdog */
+>> +static inline void starfive_wdt_enable(struct starfive_wdt *wdt)
+>> +{
+>> +	u32 val;
+>> +
+>> +	val = readl(wdt->base + wdt->drv_data->enable);
+>> +	val |= STARFIVE_WDT_ENABLE << wdt->drv_data->en_shift;
+>> +	writel(val, wdt->base + wdt->drv_data->enable);
+>> +}
+>> +
+>> +/* disable watchdog */
+>> +static inline void starfive_wdt_disable(struct starfive_wdt *wdt)
+>> +{
+>> +	u32 val;
+>> +
+>> +	val = readl(wdt->base + wdt->drv_data->enable);
+>> +	val &= ~(STARFIVE_WDT_ENABLE << wdt->drv_data->en_shift);
+>> +	writel(val, wdt->base + wdt->drv_data->enable);
+>> +}
+>> +
+>> +static inline void starfive_wdt_set_reload_count(struct starfive_wdt *wdt, u32 count)
+>> +{
+>> +	starfive_wdt_set_count(wdt, count);
+>> +	/* need enable controller to reload counter */
+>> +	starfive_wdt_enable(wdt);
+>> +}
+>> +
+>> +static unsigned int starfive_wdt_max_timeout(struct starfive_wdt *wdt)
+>> +{
+>> +	return DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, (wdt->freq / 2)) - 1;
+>> +}
+>> +
+>> +static unsigned int starfive_wdt_get_timeleft(struct watchdog_device *wdd)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +	u32 count;
+>> +
+>> +	starfive_wdt_unlock(wdt);
+>> +	/*
+>> +	 * Because set half count value,
+>> +	 * timeleft value should add the count value before first timeout.
+>> +	 */
+>> +	count = starfive_wdt_get_count(wdt);
+>> +	if (!starfive_wdt_raise_irq_status(wdt))
+>> +		count += wdt->count;
+>> +
+>> +	starfive_wdt_lock(wdt);
+>> +
+>> +	return starfive_wdt_ticks_to_sec(wdt, count);
+>> +}
+>> +
+>> +static int starfive_wdt_keepalive(struct watchdog_device *wdd)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	spin_lock(&wdt->lock);
+>> +
+>> +	starfive_wdt_unlock(wdt);
+>> +	starfive_wdt_int_clr(wdt);
+>> +	starfive_wdt_set_reload_count(wdt, wdt->count);
+>> +	starfive_wdt_lock(wdt);
+>> +
+>> +	spin_unlock(&wdt->lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int starfive_wdt_stop(struct watchdog_device *wdd)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	spin_lock(&wdt->lock);
+>> +
+>> +	starfive_wdt_unlock(wdt);
+>> +	starfive_wdt_disable_reset(wdt);
+> 
+> Is that necessary ? The watchdog is going to be stopped, after all.
+
+It doesn't seem necessary. Drop this. And drop this entire function
+because no one use it. 
+
+> 
+>> +	starfive_wdt_int_clr(wdt);
+>> +	starfive_wdt_disable(wdt);
+>> +	starfive_wdt_lock(wdt);
+>> +
+>> +	spin_unlock(&wdt->lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int starfive_wdt_pm_stop(struct watchdog_device *wdd)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	starfive_wdt_stop(wdd);
+>> +	pm_runtime_put_sync(wdt->dev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int starfive_wdt_start(struct watchdog_device *wdd)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	spin_lock(&wdt->lock);
+>> +	starfive_wdt_unlock(wdt);
+>> +	/* disable watchdog, to be safe */
+>> +	starfive_wdt_disable(wdt);
+>> +
+>> +	starfive_wdt_enable_reset(wdt);
+>> +	starfive_wdt_int_clr(wdt);
+>> +	starfive_wdt_set_count(wdt, wdt->count);
+>> +	starfive_wdt_enable(wdt);
+>> +
+>> +	starfive_wdt_lock(wdt);
+>> +	spin_unlock(&wdt->lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int starfive_wdt_pm_start(struct watchdog_device *wdd)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	pm_runtime_get_sync(wdt->dev);
+>> +
+>> +	return starfive_wdt_start(wdd);
+>> +}
+>> +
+>> +static int starfive_wdt_set_timeout(struct watchdog_device *wdd,
+>> +				    unsigned int timeout)
+>> +{
+>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
+>> +	unsigned long freq = wdt->freq;
+>> +
+>> +	spin_lock(&wdt->lock);
+>> +
+>> +	/*
+>> +	 * This watchdog takes twice timeouts to reset.
+>> +	 * In order to reduce time to reset, should set half count value.
+>> +	 */
+>> +	wdt->count = timeout * freq / 2;
+>> +	wdd->timeout = timeout;
+>> +
+>> +	starfive_wdt_unlock(wdt);
+>> +	starfive_wdt_disable(wdt);
+>> +	starfive_wdt_set_reload_count(wdt, wdt->count);
+>> +	starfive_wdt_enable(wdt);
+>> +	starfive_wdt_lock(wdt);
+>> +
+>> +	spin_unlock(&wdt->lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +#define OPTIONS (WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE)
+>> +
+>> +static const struct watchdog_info starfive_wdt_ident = {
+>> +	.options = OPTIONS,
+>> +	.identity = "StarFive Watchdog",
+>> +};
+>> +
+>> +static const struct watchdog_ops starfive_wdt_ops = {
+>> +	.owner = THIS_MODULE,
+>> +	.start = starfive_wdt_pm_start,
+>> +	.stop = starfive_wdt_pm_stop,
+>> +	.ping = starfive_wdt_keepalive,
+>> +	.set_timeout = starfive_wdt_set_timeout,
+>> +	.get_timeleft = starfive_wdt_get_timeleft,
+>> +};
+>> +
+>> +static const struct watchdog_device starfive_wdd = {
+>> +	.info = &starfive_wdt_ident,
+>> +	.ops = &starfive_wdt_ops,
+>> +	.timeout = STARFIVE_WDT_DEFAULT_TIME,
+>> +};
+>> +
+>> +static inline const struct starfive_wdt_variant *
+>> +starfive_wdt_get_drv_data(struct platform_device *pdev)
+>> +{
+>> +	const struct starfive_wdt_variant *variant;
+>> +
+>> +	variant = of_device_get_match_data(&pdev->dev);
+>> +	if (!variant) {
+>> +		/* Device matched by platform_device_id */
+>> +		variant = (struct starfive_wdt_variant *)
+>> +			   platform_get_device_id(pdev)->driver_data;
+>> +	}
+>> +
+>> +	return variant;
+>> +}
+>> +
+>> +static int starfive_wdt_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct starfive_wdt *wdt;
+>> +	int ret;
+>> +
+>> +	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>> +	if (!wdt)
+>> +		return -ENOMEM;
+>> +
+>> +	wdt->dev = dev;
+>> +	spin_lock_init(&wdt->lock);
+>> +	wdt->wdt_device = starfive_wdd;
+>> +
+>> +	wdt->drv_data = starfive_wdt_get_drv_data(pdev);
+>> +
+>> +	/* get the memory region for the watchdog timer */
+>> +	wdt->base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(wdt->base)) {
+>> +		ret = PTR_ERR(wdt->base);
+>> +		return ret;
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, wdt);
+>> +	pm_runtime_enable(wdt->dev);
+>> +
+>> +	ret = starfive_wdt_get_clock(wdt);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (pm_runtime_enabled(wdt->dev)) {
+>> +		ret = pm_runtime_get_sync(wdt->dev);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +	} else {
+>> +		/* runtime PM is disabled but clocks need to be enabled */
+>> +		ret = clk_prepare_enable(wdt->apb_clk);
+>> +		if (ret) {
+>> +			dev_err(wdt->dev, "failed to enable apb_clk.\n");
+>> +			return ret;
+>> +		}
+>> +		ret = clk_prepare_enable(wdt->core_clk);
+>> +		if (ret) {
+>> +			dev_err(wdt->dev, "failed to enable core_clk.\n");
+>> +			goto err_apb_clk_disable;
+>> +		}
+>> +	}
+>> +
+>> +	ret = starfive_wdt_get_clock_rate(wdt);
+>> +	if (ret)
+>> +		goto err_clk_disable;
+>> +
+>> +	ret = starfive_wdt_reset_init(wdt);
+>> +	if (ret)
+>> +		goto err_clk_disable;
+>> +
+>> +	wdt->wdt_device.min_timeout = 1;
+>> +	wdt->wdt_device.max_timeout = starfive_wdt_max_timeout(wdt);
+> 
+> 	wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
+> 
+> should be set here. Otherwise the warning below would always be seen
+> if the module parameter is not set.
+> 
+>> +
+>> +	watchdog_set_drvdata(&wdt->wdt_device, wdt);
+>> +
+>> +	/*
+>> +	 * see if we can actually set the requested heartbeat,
+>> +	 * and if not, try the default value.
+>> +	 */
+>> +	watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev);
+>> +	if (wdt->wdt_device.timeout == 0 ||
+> 
+> If wdt->wdt_device.timeout is pre-initialized, it will never be 0 here.
+> 
+>> +	    wdt->wdt_device.timeout > wdt->wdt_device.max_timeout) {
+> 
+> That won't happen because watchdog_init_timeout() validates it and does
+> not update the value if it is out of range.
+> 
+>> +		dev_warn(dev, "heartbeat value out of range, default %d used\n",
+>> +			 STARFIVE_WDT_DEFAULT_TIME);
+>> +		wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
+> 
+> And this is then unnecessary. wdt->wdt_device.timeout will always be
+> valid if it was pre-initialized.
+
+It is changed to be this at beginning of the driver:
+
+static int heartbeat = STARFIVE_WDT_DEFAULT_TIME;
+
+and it is changed to be this here:
+
+ret = watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev);
+if (ret)
+	return ret;
+
+Would that be better?
+
+> 
+>> +	}
+>> +	starfive_wdt_set_timeout(&wdt->wdt_device, wdt->wdt_device.timeout);
+>> +
+>> +	watchdog_set_nowayout(&wdt->wdt_device, nowayout);
+>> +	watchdog_stop_on_reboot(&wdt->wdt_device);
+>> +	watchdog_stop_on_unregister(&wdt->wdt_device);
+>> +
+>> +	wdt->wdt_device.parent = dev;
+>> +
+>> +	ret = watchdog_register_device(&wdt->wdt_device);
+>> +	if (ret)
+>> +		goto err_clk_disable;
+>> +
+>> +	if (early_enable) {
+>> +		starfive_wdt_start(&wdt->wdt_device);
+>> +		set_bit(WDOG_HW_RUNNING, &wdt->wdt_device.status);
+> 
+> Is it correct to call pm_runtime_put_sync() below if the watchdog
+> is running ? Doesn't that stop the clock ?
+
+Add a check of 'early_enable' to pm_runtime_put_sync() or
+move it after starfive_wdt_stop() immediately.
+
+> 
+>> +	} else {
+>> +		starfive_wdt_stop(&wdt->wdt_device);
+>> +	}
+> 
+> Wrong order. This has to be done _before_ the watchdog device is registered
+> to make sure that the watchdog core knows about WDOG_HW_RUNNING.
+
+So move this before watchdog_register_device().
+
+Best regards,
+Xingyu Wu
