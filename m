@@ -2,95 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAD66A1E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB246A1EA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjBXPel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S230048AbjBXPfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBXPej (ORCPT
+        with ESMTP id S229561AbjBXPfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:34:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E07519BD;
-        Fri, 24 Feb 2023 07:34:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3629B81BA6;
-        Fri, 24 Feb 2023 15:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA4AC433D2;
-        Fri, 24 Feb 2023 15:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677252875;
-        bh=yqgynGCXjfHPElbDGyjxGTtMq2BNVsC10RR73bI0d14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EQCCIOMP44xsBGBDCLyxlirfFI/BaNyP4f1UVzZrOaxYFhun01K2AGzChwCDfNowB
-         L3YsmZTRa560/PRBoxWv69q9Cm3mgHU2wmsv/S8AroDbb/W6Pm36jyCL+8C1OSEPUW
-         pM8tbmkKmda9zWQwdovIUbhsy186VyN3YaRVjo0k=
-Date:   Fri, 24 Feb 2023 16:34:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH 5/5] rust: device: Add a stub abstraction for devices
-Message-ID: <Y/jZCCl4jbKoOiPX@kroah.com>
-References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
- <20230224-rust-iopt-rtkit-v1-5-49ced3391295@asahilina.net>
- <Y/idMBIOfFZxXnVM@kroah.com>
- <26fc1456-0244-a379-0af4-e6adc819545c@asahilina.net>
+        Fri, 24 Feb 2023 10:35:21 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9F0421A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:35:19 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id eg37so52430152edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:35:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VzbLUEUjtY0tsDWNS62Tcb+S81iHP1D44kGH0OHXbkA=;
+        b=UUW2cNQxQ9wiI1y1uEIiov8/aAn6pQQMVXzfBkhJVbnD02igAWyzWePL5TL0KIpFXc
+         f06QP9Z9KFOrAD5Ctv6w7WEt4EpGTRp7azcZPWKRgRcy7Rq6bww9dx6TUNU5NGO2rgjk
+         yo4aNdOesMKZr3LRk9rjWzwFngPGaCK+rpUGcmZndXmJb/SCuTPWMP987JyoGPrq687s
+         ZVdvsxSaXkI4Dq/rU97CmzGR6MHk9vwsst50gUNty8yu/Rf8o86l8jy2Z4iYWyKTLm2+
+         qmsbKn9RXvDBmUJKNNwq8NfnVSmnAykvHSw/wUNDR0l1tseozRwukyc+jIcN3OqCKJFh
+         W4xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VzbLUEUjtY0tsDWNS62Tcb+S81iHP1D44kGH0OHXbkA=;
+        b=y1DtFZFZlwUnz+H9DSHtexTm+EQQkDY56Ybds/c7xNFbnkczAT0zskN5/KYxJCn+gG
+         asdcE9Sg61akjmFwoF50NBgwkhFNGTQGdbc3EHUZ6IqgeJ7Z94RhlWaP6nrs+YnoV/vL
+         L1F9Lk50sxHb8NG7pnQcU4YCopThHwwz+zWnmIeHV/vRdSiR7ZySJ6eCuPZXbV/UcqJn
+         o6ywb6Q4iF45xp4RYlRwZskNv1yLt8r1DL06+/bJaQzTO0CjBwHodYQPm7VD2imbsl24
+         oadk4jxDh5fege1848L5TXHKG0TkCLX5Md8DDrCDzsPOnSLOKNDKuxMDVmLPUi1i0cEu
+         I6Qg==
+X-Gm-Message-State: AO0yUKWLjPMrC4e/4vhLCY10WxRXcEci7Y3ouYmmA2WUY36GfCoNgXCS
+        Le+AZ7SEW/USUs1GPxiIAYs=
+X-Google-Smtp-Source: AK7set9QwwaNgb3OunBObQ+DvB0YGMDXoLNPjUGf1qbnK8dvMDVSCNC8+t8Bu3sMBeMmTuUP+/sN9w==
+X-Received: by 2002:a17:907:1612:b0:8e4:86ed:7203 with SMTP id hb18-20020a170907161200b008e486ed7203mr144549ejc.11.1677252918233;
+        Fri, 24 Feb 2023 07:35:18 -0800 (PST)
+Received: from EPUAKYIW03DD.. ([91.123.150.38])
+        by smtp.gmail.com with ESMTPSA id kg19-20020a17090776f300b008be0b7242d5sm8441360ejc.90.2023.02.24.07.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 07:35:17 -0800 (PST)
+From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Subject: [PATCH] drm/virtio: Pass correct device to dma_sync_sgtable_for_device()
+Date:   Fri, 24 Feb 2023 17:34:50 +0200
+Message-Id: <20230224153450.526222-1-olekstysh@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26fc1456-0244-a379-0af4-e6adc819545c@asahilina.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 12:10:47AM +0900, Asahi Lina wrote:
-> >> +impl Device {
-> >> +    /// Creates a new device instance.
-> >> +    ///
-> >> +    /// # Safety
-> >> +    ///
-> >> +    /// Callers must ensure that `ptr` is valid, non-null, and has a non-zero reference count.
-> >> +    pub unsafe fn new(ptr: *mut bindings::device) -> Self {
-> >> +        // SAFETY: By the safety requirements, ptr is valid and its refcounted will be incremented.
-> >> +        unsafe { bindings::get_device(ptr) };
-> > 
-> > You don't check the return value of get_device()?  What if it failed
-> > (hint, it can)?
-> 
-> Really? I looked at the implementation and I don't see how it can fail,
-> as long as the argument is non-NULL and valid... (which is a
-> precondition of this unsafe function). Did I miss something?
+From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-This function has changed a bit over time, but yes, it could fail if
-someone else just dropped the last reference right before you tried to
-grab a new one (look at the implementation of kobject_get()).
+The "vdev->dev.parent" should be used instead of "vdev->dev" as a device
+for which to perform the DMA operation in both
+virtio_gpu_cmd_transfer_to_host_2d(3d).
 
-Yes, if you "know" you have a non-zero reference count first, it should
-never fail, but how do you know this?  We have the ability to check the
-return value of the function, shouldn't that happen?
+Because the virtio-gpu device "vdev->dev" doesn't really have DMA OPS
+assigned to it, but parent (virtio-pci or virtio-mmio) device
+"vdev->dev.parent" has. The more, the sgtable in question the code is
+trying to sync here was mapped for the parent device (by using its DMA OPS)
+previously at:
+virtio_gpu_object_shmem_init()->drm_gem_shmem_get_pages_sgt()->
+dma_map_sgtable(), so should be synced here for the same parent device.
 
-thanks,
+Fixes: b5c9ed70d1a9 ("drm/virtio: Improve DMA API usage for shmem BOs")
+Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+---
+This patch fixes the following issue when running on top of Xen with 
+CONFIG_XEN_VIRTIO=y (patch was only tested in Xen environment (ARM64 guest)
+w/ and w/o using Xen grants for virtio):
 
-greg k-h
+[    0.830235] [drm] pci: virtio-gpu-pci detected at 0000:00:03.0
+[    0.832078] [drm] features: +virgl +edid -resource_blob -host_visible
+[    0.832084] [drm] features: -context_init
+[    0.837320] [drm] number of scanouts: 1
+[    0.837460] [drm] number of cap sets: 2
+[    0.904372] [drm] cap set 0: id 1, max-version 1, max-size 308
+[    0.905399] [drm] cap set 1: id 2, max-version 2, max-size 696
+[    0.907202] [drm] Initialized virtio_gpu 0.1.0 0 for 0000:00:03.0 on minor 0
+[    0.927241] virtio-pci 0000:00:03.0: [drm] drm_plane_enable_fb_damage_clips() not called
+[    0.927279] Unable to handle kernel paging request at virtual address ffffffffc0053000
+[    0.927284] Mem abort info:
+[    0.927286]   ESR = 0x0000000096000144
+[    0.927289]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.927293]   SET = 0, FnV = 0
+[    0.927295]   EA = 0, S1PTW = 0
+[    0.927298]   FSC = 0x04: level 0 translation fault
+[    0.927301] Data abort info:
+[    0.927303]   ISV = 0, ISS = 0x00000144
+[    0.927305]   CM = 1, WnR = 1
+[    0.927308] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000004127f000
+[    0.927312] [ffffffffc0053000] pgd=0000000000000000, p4d=0000000000000000
+[    0.927323] Internal error: Oops: 0000000096000144 [#1] PREEMPT SMP
+[    0.927329] Modules linked in:
+[    0.927336] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.2.0-rc4-yocto-standard #1
+[    0.927343] Hardware name: XENVM-4.18 (DT)
+[    0.927346] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.927352] pc : dcache_clean_poc+0x20/0x38
+[    0.927370] lr : arch_sync_dma_for_device+0x24/0x30
+[    0.927379] sp : ffff80000972b3e0
+[    0.927381] x29: ffff80000972b3e0 x28: ffff000001aa8a00 x27: 0000000000000000
+[    0.927389] x26: 0000000000000000 x25: ffff000002815010 x24: 0000000000000000
+[    0.927396] x23: ffff8000090f9078 x22: 0000000000000001 x21: 0000000000000002
+[    0.927403] x20: ffff000002b6b580 x19: 8000000000053000 x18: ffffffffffffffff
+[    0.927410] x17: 0000000000000000 x16: 0000000000000000 x15: ffff80000963b94e
+[    0.927416] x14: 0000000000000001 x13: ffff80000963b93b x12: 64615f616d645f67
+[    0.927423] x11: ffff800009513110 x10: 000000000000000a x9 : ffff80000972b360
+[    0.927430] x8 : ffff8000095130c8 x7 : ffff80000972b150 x6 : 000000000000000c
+[    0.927436] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 000000000000003f
+[    0.927443] x2 : 0000000000000040 x1 : ffffffffc0067000 x0 : ffffffffc0053000
+[    0.927450] Call trace:
+[    0.927452]  dcache_clean_poc+0x20/0x38
+[    0.927459]  dma_direct_sync_sg_for_device+0x124/0x130
+[    0.927466]  dma_sync_sg_for_device+0x64/0xd0
+[    0.927475]  virtio_gpu_cmd_transfer_to_host_2d+0x10c/0x110
+[    0.927483]  virtio_gpu_primary_plane_update+0x340/0x3d0
+[    0.927490]  drm_atomic_helper_commit_planes+0xe8/0x20c
+[    0.927497]  drm_atomic_helper_commit_tail+0x54/0xa0
+[    0.927503]  commit_tail+0x160/0x190
+[    0.927507]  drm_atomic_helper_commit+0x16c/0x180
+[    0.927513]  drm_atomic_commit+0xa8/0xe0
+[    0.927521]  drm_client_modeset_commit_atomic+0x200/0x260
+[    0.927529]  drm_client_modeset_commit_locked+0x5c/0x1a0
+[    0.927536]  drm_client_modeset_commit+0x30/0x60
+[    0.927540]  drm_fb_helper_set_par+0xc8/0x120
+[    0.927548]  fbcon_init+0x3b8/0x510
+[    0.927557]  visual_init+0xb4/0x104
+[    0.927565]  do_bind_con_driver.isra.0+0x1c4/0x394
+[    0.927572]  do_take_over_console+0x144/0x1fc
+[    0.927577]  do_fbcon_takeover+0x6c/0xe4
+[    0.927583]  fbcon_fb_registered+0x1e4/0x1f0
+[    0.927588]  register_framebuffer+0x214/0x310
+[    0.927592]  __drm_fb_helper_initial_config_and_unlock+0x33c/0x540
+[    0.927599]  drm_fb_helper_initial_config+0x4c/0x60
+[    0.927604]  drm_fbdev_client_hotplug+0xc4/0x150
+[    0.927609]  drm_fbdev_generic_setup+0x90/0x154
+[    0.927614]  virtio_gpu_probe+0xc8/0x16c
+[    0.927621]  virtio_dev_probe+0x19c/0x240
+[    0.927629]  really_probe+0xbc/0x2dc
+[    0.927637]  __driver_probe_device+0x78/0xe0
+[    0.927641]  driver_probe_device+0xd8/0x160
+[    0.927645]  __driver_attach+0x94/0x19c
+[    0.927649]  bus_for_each_dev+0x70/0xd0
+[    0.927656]  driver_attach+0x24/0x30
+[    0.927660]  bus_add_driver+0x154/0x20c
+[    0.927664]  driver_register+0x78/0x130
+[    0.927670]  register_virtio_driver+0x24/0x3c
+[    0.927675]  virtio_gpu_driver_init+0x18/0x24
+[    0.927684]  do_one_initcall+0x50/0x1d0
+[    0.927691]  kernel_init_freeable+0x210/0x27c
+[    0.927699]  kernel_init+0x24/0x12c
+[    0.927707]  ret_from_fork+0x10/0x20
+[    0.927716] Code: d2800082 9ac32042 d1000443 8a230000 (d50b7a20)
+[    0.927721] ---[ end trace 0000000000000000 ]---
+[    0.927728] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[    0.927732] SMP: stopping secondary CPUs
+[    0.927791] Kernel Offset: disabled
+[    0.927794] CPU features: 0x80000,41058100,0000421b
+[    0.927799] Memory Limit: none
+[    1.015063] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+---
+---
+ drivers/gpu/drm/virtio/virtgpu_vq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
+index a04a9b20896d..1778a2081fd6 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_vq.c
++++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
+@@ -604,7 +604,7 @@ void virtio_gpu_cmd_transfer_to_host_2d(struct virtio_gpu_device *vgdev,
+ 	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+ 
+ 	if (virtio_gpu_is_shmem(bo) && use_dma_api)
+-		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
++		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
+ 					    bo->base.sgt, DMA_TO_DEVICE);
+ 
+ 	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
+@@ -1026,7 +1026,7 @@ void virtio_gpu_cmd_transfer_to_host_3d(struct virtio_gpu_device *vgdev,
+ 	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+ 
+ 	if (virtio_gpu_is_shmem(bo) && use_dma_api)
+-		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
++		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
+ 					    bo->base.sgt, DMA_TO_DEVICE);
+ 
+ 	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
+-- 
+2.34.1
+
