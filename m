@@ -2,82 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D6E6A253D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45EF6A253F
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBXX4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 18:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
+        id S229644AbjBXX4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 18:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBXX4K (ORCPT
+        with ESMTP id S229625AbjBXX4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 18:56:10 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CC355047
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:56:09 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id cb13so446478pfb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:56:09 -0800 (PST)
+        Fri, 24 Feb 2023 18:56:41 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E784988A;
+        Fri, 24 Feb 2023 15:56:33 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id h19so1221629qtk.7;
+        Fri, 24 Feb 2023 15:56:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=roI2102NVn8tZj8AT0mqQAS15kZ5FO9em57hIeDNwj0=;
-        b=QB5cj7QKPC4eETDdYpgWnv3fyPKxoD9KZMEpY6QM0fHRGhMhDE4uxjfcIAoTovvyd6
-         h+ff9uW223/aV2TtJYDG4H6O5DdJAERUpY6e/VUR8g2Xbvv7rG6lSk2Zft5rgHL4mPqi
-         nnEugeB85k/jI5MnwhOTyqWPfmvxztT6Aj8C4yKN8OcWw4L+GP1tAnKhiSLAKgq49Co4
-         GljDwHscPWZ7fNKEpdlUBZ4r2+JKDNTJ4H/B3enW9G2Cw5JmeLX1Ftn3pzzBDR1u9A3t
-         Ihqm3IYqgD5EuUqKgbBYpq6HyScjibA9/wo5+/onFYXHUBFrrgKD/WYgI0F2XJrs76+B
-         wnMg==
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mg1OhrK00U2abybneZCMDTPfqJM1ATwamgUcjQxT/Ug=;
+        b=GiygabvyzRuFJ8dv+ivRo4TEC+5qtINQFNuDy7WUVNf6VjdtII4weY5pTfheItp32m
+         FAF3kfBxoxVYBIaBU6+ddc0CvpZ6btskJh4DWm7CVnTqHeihGRS8oky97Cy9rpXd6Yiu
+         U0JTpYp60G3Y9W0SruQ+Qk4CMAyqTctP2xfpnmc3jwGzQ7UCuhmL3CbqmbyVIt87U8PX
+         jMy1BcHhv7l59Rb9OYtwpR5LwXlGnyC3CN0WS7NgRAzxXKVnwvethiLcXe6IkXWCdcBI
+         /A1FhsY3XtEiLJ8LizRwRENmtU/Tk6bwlmsmQm0HJdXeUVXMRTBPhVxXpgqp8lqf0Hky
+         1BSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=roI2102NVn8tZj8AT0mqQAS15kZ5FO9em57hIeDNwj0=;
-        b=5KGKocQY1y4pWOw0p4V6mOA0EYBHnz74fJK1pTWifw0GYAc1Z/PC67ltyVL5H8YjuI
-         qx7rKUIE2NeIWdJAbyO+dn5sj4mfEHj0AM+LKFFherfgrarGkQfTbpRxIHZ0/ALdW07z
-         CmhDu4aiMjazStzjtTZpvE83Oy+Ug/KC18JnFNlHPFWd9CG76YLCwhffehMf5WPz+fiv
-         C8dllJh0EObFvLYbNXlqiBrL8XKg8OMlaPJxbYBD4z4FnwynvJ2xpHHO0icIv99c7Qm7
-         SHgr6uymlb4Wg9MKgdK2VZtoO2D7eFnqQ9vKrTqIYesae0UrErd+KlsrKZpl7TYt7SI7
-         2Xbg==
-X-Gm-Message-State: AO0yUKXOBQqUSfk8w0nbF3ia8r7T5h/nim4JzfY+yTNEDSiIDf9+ZPfu
-        DjlwGib4tBLEZiOi/2rMjV0Ndw==
-X-Google-Smtp-Source: AK7set91H8uZuErh0/LuDjee/awTv2DYiHBWv4zGyaBtHG2f3acLLiXNiqNVrCCS2NWZB/r598n+iw==
-X-Received: by 2002:aa7:9ed2:0:b0:5e3:2f9b:b5e8 with SMTP id r18-20020aa79ed2000000b005e32f9bb5e8mr3480281pfq.4.1677282968888;
-        Fri, 24 Feb 2023 15:56:08 -0800 (PST)
-Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
-        by smtp.gmail.com with ESMTPSA id s25-20020a63af59000000b004f1cb6ffe81sm45530pgo.64.2023.02.24.15.56.08
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mg1OhrK00U2abybneZCMDTPfqJM1ATwamgUcjQxT/Ug=;
+        b=iM1vsFZ17cIPt0QeyPAb4oNG/KfsyYdlZGvDxtSuWMU3IY6UnKLrIOrUk4HOFtpMRE
+         In7MFlZq6tSt0Vmn8ssIlyEqEkgJ3+qKY8iY5AqpgerFhP9qSliPZkvsy+8tOgZcJC/Y
+         Wce0Zk49w/P1VuznV1HyZrEIoOWrpDS6y6BhC2+mHUyYNQ1er9IaSOfE5UwBxXF0n4Ga
+         bhYzPPw+HQNW5i5lTnSSmNlaoaTYMZcnBVum/EIVBlcWjatCzGlyzN7ZmaGoVBVMubdC
+         avqRBk2aQ1WNubJV7t+zJhKTc6LrBDM2c1XwHH/9wS2RYgwQbE5WyCn87LOIURQOMQdl
+         DC7w==
+X-Gm-Message-State: AO0yUKUsk5ZRk0fdbqLGaFP4E8BtikGJHxNjoxdkK9vGY6xTzyJggQWQ
+        rHeAoV6yEgd+Drgg3PMGBhHOtmkG7Wc=
+X-Google-Smtp-Source: AK7set+CUGse5PQzutt0zUhWY1SRG6tx0fw2YPSB3juRWoaHUjROLJOFGsQFJr0Vbn70qpGsYVHarA==
+X-Received: by 2002:a05:622a:c6:b0:3bf:c665:657 with SMTP id p6-20020a05622a00c600b003bfc6650657mr281115qtw.8.1677282993098;
+        Fri, 24 Feb 2023 15:56:33 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id t30-20020a05620a005e00b00742709bc5edsm291976qkt.5.2023.02.24.15.56.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 15:56:08 -0800 (PST)
-Date:   Fri, 24 Feb 2023 23:56:04 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Chao Gao <chao.gao@intel.com>
-Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
- init_fpstate if fpstate contains the component
-Message-ID: <Y/lOlBWTNgROPl0P@google.com>
-References: <20230221163655.920289-1-mizhang@google.com>
- <20230221163655.920289-2-mizhang@google.com>
- <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
- <87ilfum6xh.ffs@tglx>
- <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
- <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+        Fri, 24 Feb 2023 15:56:32 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0933727C0054;
+        Fri, 24 Feb 2023 18:56:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 24 Feb 2023 18:56:32 -0500
+X-ME-Sender: <xms:r075YyXhOKyjdjgVphWHVyKy6cjIrDB_C2iDKSi51bLdZIQxqQLW2A>
+    <xme:r075Y-k2kVqw78n09CMOwAgyd_XbiSjRPOr-VyoaxqoHFU_9M_wxk3LUgxg14yDIZ
+    6hG758rm4MZhBvW2g>
+X-ME-Received: <xmr:r075Y2YPVqsn_xIskHNtbTlLy6bxgqWg1HPpEtVDjE45e7pPW1VC_0Nuv7U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:r075Y5WeZTC3YruI4k9p0OVOq-louwPCjoZKGlOXhpqw-N2pMMTckw>
+    <xmx:r075Y8knXovlpj2zQVtOQDHUDN-qqwuCjHu4ga50I7RvMxKL282wGw>
+    <xmx:r075Y-ciCGuJDpogbTh2hnCx3Bn5iTHz-WCKdWNt4MHk0BKL9ggGEQ>
+    <xmx:r075Y1c-shbs9FZq5sSEnT3_PgEBnnigeaSdiVOBRe-oMdLlsNwFuw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Feb 2023 18:56:30 -0500 (EST)
+Date:   Fri, 24 Feb 2023 15:56:05 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH 5/5] rust: error: Add from_kernel_result!() macro
+Message-ID: <Y/lOlcSpc+d9ytq/@boqun-archlinux>
+References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
+ <20230224-rust-error-v1-5-f8f9a9a87303@asahilina.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <20230224-rust-error-v1-5-f8f9a9a87303@asahilina.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,206 +105,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023, Chang S. Bae wrote:
-> On 2/22/2023 10:40 AM, Mingwei Zhang wrote:
-> > > > We have this [1]:
-> > > > 
-> > > >        if (fpu_state_size_dynamic())
-> > > >                mask &= (header.xfeatures | xinit->header.xcomp_bv);
-> > > > 
-> > > > If header.xfeatures[18] = 0 then mask[18] = 0 because
-> > > > xinit->header.xcomp_bv[18] = 0. Then, it won't hit that code. So, I'm
-> > > > confused about the problem that you described here.
-> > > 
-> > > Read the suggested changelog I wrote in my reply to Mingwei.
-> > > 
-> > > TLDR:
-> > > 
-> > >          xsave.header.xfeatures[18] = 1
-> > >          xinit.header.xfeatures[18] = 0
-> > >      ->  mask[18] = 1
-> > >      ->  __raw_xsave_addr(xsave, 18)     <- Success
-> > >      ->  __raw_xsave_addr(xinit, 18)     <- WARN
+On Fri, Feb 24, 2023 at 05:50:23PM +0900, Asahi Lina wrote:
+> From: Wedson Almeida Filho <wedsonaf@gmail.com>
 > 
-> Oh, sigh.. This should be caught last time.
+> Add a helper macro to easily return C result codes from a Rust function
+> that calls functions which return a Result<T>.
 > 
-> Hmm, then since we store init state for legacy ones [1], unless it is too
-> aggressive, perhaps the loop can be simplified like this:
+> Lina: Imported from rust-for-linux/rust, originally developed by Wedson
+> as part of file_operations.rs. Added the allow() flags since there is no
+> user in the kernel crate yet and fixed a typo in a comment.
 > 
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index 714166cc25f2..2dac6f5f3ade 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -1118,21 +1118,13 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
-> struct fpstate *fpstate,
->         zerofrom = offsetof(struct xregs_state, extended_state_area);
+> Co-developed-by: Fox Chen <foxhlchen@gmail.com>
+> Signed-off-by: Fox Chen <foxhlchen@gmail.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
+>  rust/kernel/error.rs | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 52 insertions(+)
 > 
->         /*
-> -        * The ptrace buffer is in non-compacted XSAVE format.  In
-> -        * non-compacted format disabled features still occupy state space,
-> -        * but there is no state to copy from in the compacted
-> -        * init_fpstate. The gap tracking will zero these states.
-> +        * Indicate which states to copy from fpstate. When not present in
-> +        * fpstate, those extended states are either initialized or
-> +        * disabled. They are also known to have an all zeros init state.
-> +        * Thus, remove them from 'mask' to zero those features in the user
-> +        * buffer instead of retrieving them from init_fpstate.
->          */
-> -       mask = fpstate->user_xfeatures;
-
-Do we need to change this line and the comments? I don't see any of
-these was relevant to this issue. The original code semantic is to
-traverse all user_xfeatures, if it is available in fpstate, copy it from
-there; otherwise, copy it from init_fpstate. We do not assume the
-component in init_fpstate (but not in fpstate) are all zeros, do we? If
-it is safe to assume that, then it might be ok. But at least in this
-patch, I want to keep the original semantics as is without the
-assumption.
-> -
-> -       /*
-> -        * Dynamic features are not present in init_fpstate. When they are
-> -        * in an all zeros init state, remove those from 'mask' to zero
-> -        * those features in the user buffer instead of retrieving them
-> -        * from init_fpstate.
-> -        */
-> -       if (fpu_state_size_dynamic())
-> -               mask &= (header.xfeatures | xinit->header.xcomp_bv);
-> +       mask = header.xfeatures;
-
-Same here. Let's not adding this optimization in this patch.
-
->
->         for_each_extended_xfeature(i, mask) {
->                 /*
-> @@ -1151,9 +1143,8 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
-> struct fpstate *fpstate,
->                         pkru.pkru = pkru_val;
->                         membuf_write(&to, &pkru, sizeof(pkru));
->                 } else {
-> -                       copy_feature(header.xfeatures & BIT_ULL(i), &to,
-> +                       membuf_write(&to,
->                                      __raw_xsave_addr(xsave, i),
-> -                                    __raw_xsave_addr(xinit, i),
->                                      xstate_sizes[i]);
->                 }
->                 /*
-> 
-> > Chang: to reproduce this issue, you can simply run the amx_test in the
-> > kvm selftest directory.
-> 
-> Yeah, I was able to reproduce it with this ptrace test:
-> 
-> diff --git a/tools/testing/selftests/x86/amx.c
-> b/tools/testing/selftests/x86/amx.c
-> index 625e42901237..ae02bc81846d 100644
-> --- a/tools/testing/selftests/x86/amx.c
-> +++ b/tools/testing/selftests/x86/amx.c
-> @@ -14,8 +14,10 @@
->  #include <sys/auxv.h>
->  #include <sys/mman.h>
->  #include <sys/shm.h>
-> +#include <sys/ptrace.h>
->  #include <sys/syscall.h>
->  #include <sys/wait.h>
-> +#include <sys/uio.h>
-> 
->  #include "../kselftest.h" /* For __cpuid_count() */
-> 
-> @@ -826,6 +828,76 @@ static void test_context_switch(void)
->         free(finfo);
+> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+> index cf3d089477d2..8a9222595cd1 100644
+> --- a/rust/kernel/error.rs
+> +++ b/rust/kernel/error.rs
+> @@ -226,3 +226,55 @@ pub(crate) fn from_kernel_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
+>      }
+>      Ok(ptr)
 >  }
-> 
-> +/* Ptrace test */
 > +
-> +static bool inject_tiledata(pid_t target)
+> +// TODO: Remove `dead_code` marker once an in-kernel client is available.
+> +#[allow(dead_code)]
+> +pub(crate) fn from_kernel_result_helper<T>(r: Result<T>) -> T
+> +where
+> +    T: From<i16>,
 > +{
-> +       struct xsave_buffer *xbuf;
-> +       struct iovec iov;
-> +
-> +       xbuf = alloc_xbuf();
-> +       if (!xbuf)
-> +               fatal_error("unable to allocate XSAVE buffer");
-> +
-> +       load_rand_tiledata(xbuf);
-> +
-> +       memcpy(&stashed_xsave->bytes[xtiledata.xbuf_offset],
-> +              &xbuf->bytes[xtiledata.xbuf_offset],
-> +              xtiledata.size);
-> +
-> +       iov.iov_base = xbuf;
-> +       iov.iov_len = xbuf_size;
-> +
-> +       if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-> +               fatal_error("PTRACE_SETREGSET");
-> +
-> +       if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-> +               err(1, "PTRACE_GETREGSET");
-> +
-> +       if (!memcmp(&stashed_xsave->bytes[xtiledata.xbuf_offset],
-> +                   &xbuf->bytes[xtiledata.xbuf_offset],
-> +                   xtiledata.size))
-> +               return true;
-> +       else
-> +               return false;
+> +    match r {
+> +        Ok(v) => v,
+> +        // NO-OVERFLOW: negative `errno`s are no smaller than `-bindings::MAX_ERRNO`,
+> +        // `-bindings::MAX_ERRNO` fits in an `i16` as per invariant above,
+> +        // therefore a negative `errno` always fits in an `i16` and will not overflow.
+> +        Err(e) => T::from(e.to_kernel_errno() as i16),
+> +    }
 > +}
 > +
-> +static void test_ptrace(void)
-> +{
-> +       pid_t child;
-> +       int status;
-> +
-> +       child = fork();
-> +       if (child < 0) {
-> +               err(1, "fork");
-> +       } else if (!child) {
-> +               if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-> +                       err(1, "PTRACE_TRACEME");
-> +
-> +               /* Use the state to expand the kernel buffer */
-> +               load_rand_tiledata(stashed_xsave);
-> +
-> +               raise(SIGTRAP);
-> +               _exit(0);
-> +       }
-> +
-> +       do {
-> +               wait(&status);
-> +       } while (WSTOPSIG(status) != SIGTRAP);
-> +
-> +       printf("\tInject tile data via ptrace()\n");
-> +
-> +       if (inject_tiledata(child))
-> +               printf("[OK]\tTile data was written on ptracee.\n");
-> +       else
-> +               printf("[FAIL]\tTile data was not written on ptracee.\n");
-> +
-> +       ptrace(PTRACE_DETACH, child, NULL, NULL);
-> +       wait(&status);
-> +       if (!WIFEXITED(status) || WEXITSTATUS(status))
-> +               err(1, "ptrace test");
+> +/// Transforms a [`crate::error::Result<T>`] to a kernel C integer result.
+> +///
+> +/// This is useful when calling Rust functions that return [`crate::error::Result<T>`]
+> +/// from inside `extern "C"` functions that need to return an integer
+> +/// error result.
+> +///
+> +/// `T` should be convertible from an `i16` via `From<i16>`.
+> +///
+> +/// # Examples
+> +///
+> +/// ```ignore
+> +/// # use kernel::from_kernel_result;
+> +/// # use kernel::bindings;
+> +/// unsafe extern "C" fn probe_callback(
+> +///     pdev: *mut bindings::platform_device,
+> +/// ) -> core::ffi::c_int {
+> +///     from_kernel_result! {
+> +///         let ptr = devm_alloc(pdev)?;
+> +///         bindings::platform_set_drvdata(pdev, ptr);
+> +///         Ok(0)
+> +///     }
+> +/// }
+> +/// ```
+> +// TODO: Remove `unused_macros` marker once an in-kernel client is available.
+> +#[allow(unused_macros)]
+> +macro_rules! from_kernel_result {
+
+This actually doesn't need to be a macro, right? The following function
+version:
+
+	pub fn from_kernel_result<T, F>(f: F) -> T
+	where
+	    T: From<i16>,
+	    F: FnOnce() -> Result<T>;
+
+is not bad, the above case then can be written as:
+
+	unsafe extern "C" fn probe_callback(
+	    pdev: *mut bindings::platform_device,
+	) -> core::ffi::c_int {
+	    from_kernel_result(|| {
+		let ptr = devm_alloc(pdev)?;
+		bindings::platform_set_drvdata(pdev, ptr);
+		Ok(0)
+	    })
+	}
+
+less magical, but the control flow is more clear.
+
+Thoughts?
+
+Regards,
+Boqun
+
+> +    ($($tt:tt)*) => {{
+> +        $crate::error::from_kernel_result_helper((|| {
+> +            $($tt)*
+> +        })())
+> +    }};
 > +}
 > +
->  int main(void)
->  {
->         /* Check hardware availability at first */
-> @@ -846,6 +918,8 @@ int main(void)
->         ctxtswtest_config.num_threads = 5;
->         test_context_switch();
+> +// TODO: Remove `unused_imports` marker once an in-kernel client is available.
+> +#[allow(unused_imports)]
+> +pub(crate) use from_kernel_result;
 > 
-> +       test_ptrace();
-> +
->         clearhandler(SIGILL);
->         free_stashed_xsave();
+> -- 
+> 2.35.1
 > 
-> Thanks,
-> Chang
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
-> 
-
-Nice one. Yeah both ptrace and KVM are calling this function so the above
-code would also be enough to trigger the bug.
-
-
-Thanks.
--Mingwei
