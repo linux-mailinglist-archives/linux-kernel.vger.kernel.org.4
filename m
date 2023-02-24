@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB5E6A1D6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10C36A1D7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjBXOak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S229910AbjBXOcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBXOai (ORCPT
+        with ESMTP id S229879AbjBXOcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:30:38 -0500
-Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABB864E25
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:30:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1677249033;
-        bh=W3vbmfyZv8kgZWgDHqtjr/Qbr0uqZvAd9EBnAPC1r48=;
-        h=From:To:Cc:Subject:Date;
-        b=VyfK0ekRXk+ILxGydbna7SOM3fd2mBN46hf3hS2CyWjvWYLcF9odQpQEZJN2Z+5QE
-         43b7gJepztgIgiIKvGMuvq+4aoEyIlfSyFsGOLwutjQqm7mKFE/PLBPMUD81qNr6Ya
-         ShCaoANuklR7UhyBFBnRVsfr3PmcL4U5KxVw3pZc=
-Received: from rtoax.. ([111.199.188.149])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 79FB9AF5; Fri, 24 Feb 2023 22:30:31 +0800
-X-QQ-mid: xmsmtpt1677249031thxy3muds
-Message-ID: <tencent_A95EA946D511450DBE8486B2122FA1549609@qq.com>
-X-QQ-XMAILINFO: MTmSu602bpi0NiHlqYwpI9anlZQTJxBil0Q4jE3kJ8tMeztO7+KOEy3BPVCAER
-         j80IWathpRfQP5+IF3vQPVR3jVnfw7T6OJD7uyXdnBkfwtmChgKSQz/Xv/wW0umFlWAQKZ2EFM0i
-         w+K+7J0NxNxIjrqzkXXqdaJrF51BMmVFqoUgdAOKQHzNM7GLNem3EzECXZ7p8+TkBuFtzlC81vQx
-         7sQsXhdfsc5ltniJzEOT4nTabNBW1e1p6MLp+ydM3+oxPXewQqzbe/VUr9pRlXSHBK3TjyFQzFNY
-         0mMrxnlvN6cPJsZXeB0VYVSQcvZlS99rgx8EYtj0vOWdK6+bkzE5d+q3JWId+GlyegqxnrThpB40
-         RAOD36XH/X350+IaigUhA6c2qO650pCtlrEFqQZ0Zac1wlykqlGMC8wyY+3y8G+tjZwpav7y0iWU
-         Q08hUByLoHB4K3rLVTRaaqqqI6ojIK8gbihZOZx5+IKp2O3Sr1ujoDAzxSaOZBYZ7s8oXV6zALXB
-         0kiJrYFDcMZYfWZYj6QeFR5x26m7/6q0dcdEf8aUNIDUeGwKYIXWzpQ+2oNydYF/IRIKRSYgMuLH
-         8eqqnuIdqAOZhDVGD/IUCv3hMAhD5zCz752XLLFaXLkX3vQVuQV7OEo/GvXviEomiqbznfhFeG0Y
-         6uD2I0yDzNVFUrmzZJLSNJvV6pW31KrA3O5z4DJcGfvAXcv/huwqDx0nZzvKshaMaoO7LKfn78nA
-         r4xKB7pfxj1iHaugCt6UQns4eytCgFM9+9ruVb8RXQpWtpUhlXpTIwBiYZXnnVFFxQjzUywV9MMG
-         1tYQ6bB0ARhNbUyGMtS0WrZv2RBF9Fgr36BTd6XTpx5hhLMMbIW91dF90TpCZ2FUO2I3SBRLc326
-         9ug5Qk8a4v7SzPPKUBMGsyY7qZxGqY44fnmPzQ4LbQaItPmRy0rflMEc7fa08gQF1QnklMLcLhLX
-         6PRj8QR8jVuoQ/EM5CKhVdGqpJ/nCT
-From:   Rong Tao <rtoax@foxmail.com>
-To:     mst@redhat.com
-Cc:     Rong Tao <rongtao@cestc.cn>, Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
-        NET DRIVERS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tools/virtio: virtio_test -h,--help should return directly
-Date:   Fri, 24 Feb 2023 22:30:30 +0800
-X-OQ-MSGID: <20230224143030.549967-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 24 Feb 2023 09:32:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE97B64E2E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677249082;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SOsL6NM2MJym+f7C6hxVzCVTtD6Lm6OnQWKMhqCZjP8=;
+        b=ccpDWd7yzc9GIVUCggQrv/9t1lL/B2EmolBYSyptm3l5vSMYU+nX4DQuu4+G6/SrsBpv37
+        5hA59d9SmVA/xRgjvLgIt0jb/p/eea+xR5be5LtXvDYcVXq1RcqsJGOWvl6PxLNs7HK29H
+        wOPZ9tpMWNpsp6oh33OBDlQ/d1+Izco=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-LZUo_cplOIC5eZZlXA46IQ-1; Fri, 24 Feb 2023 09:31:19 -0500
+X-MC-Unique: LZUo_cplOIC5eZZlXA46IQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00110887400;
+        Fri, 24 Feb 2023 14:31:18 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 44AA6440D8;
+        Fri, 24 Feb 2023 14:31:16 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+In-Reply-To: <2134430.1677240738@warthog.procyon.org.uk>
+References: <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steve French <stfrench@microsoft.com>
+Cc:     dhowells@redhat.com, Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] cifs: Fix cifs_writepages_region()
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2213351.1677249027.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+From:   David Howells <dhowells@redhat.com>
+Date:   Fri, 24 Feb 2023 14:31:15 +0000
+Message-ID: <2213409.1677249075@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Here's the simplest fix for cifs_writepages_region() that gets it to work.
 
-When we get help information, we should return directly, and we should not
-execute test cases. At the same time, the code indentation issue was fixed
-and virtio-trace/trace-agent was added to .gitignore.
+Fix the cifs_writepages_region() to just skip over members of the batch th=
+at
+have been cleaned up rather than retrying them.  I'm not entirely sure why=
+ it
+fixes it, though.  It's also not the most efficient as, in the common case=
+,
+this is going to happen a lot because cifs_extend_writeback() is going to
+clean up the contiguous pages in the batch - and then this skip will occur=
+ for
+those.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
+Fix: 3822a7c40997 ("Merge tag 'mm-stable-2023-02-20-13-37' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/akpm/mm")
+Signed-off-by: David Howells <dhowells@redhat.com>
 ---
- tools/virtio/.gitignore    | 1 +
- tools/virtio/virtio_test.c | 6 +++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 5365a3299088..ebfcaae8c437 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -2893,8 +2893,9 @@ static int cifs_writepages_region(struct address_spa=
+ce *mapping,
+ =
 
-diff --git a/tools/virtio/.gitignore b/tools/virtio/.gitignore
-index 075588c4da08..9934d48d9a55 100644
---- a/tools/virtio/.gitignore
-+++ b/tools/virtio/.gitignore
-@@ -2,3 +2,4 @@
- *.d
- virtio_test
- vringh_test
-+virtio-trace/trace-agent
-diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-index 120062f94590..6370cdada396 100644
---- a/tools/virtio/virtio_test.c
-+++ b/tools/virtio/virtio_test.c
-@@ -134,7 +134,7 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
- 	dev->buf_size = 1024;
- 	dev->buf = malloc(dev->buf_size);
- 	assert(dev->buf);
--        dev->control = open("/dev/vhost-test", O_RDWR);
-+	dev->control = open("/dev/vhost-test", O_RDWR);
- 	assert(dev->control >= 0);
- 	r = ioctl(dev->control, VHOST_SET_OWNER, NULL);
- 	assert(r >= 0);
-@@ -142,7 +142,7 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
- 			  sizeof dev->mem->regions[0]);
- 	assert(dev->mem);
- 	memset(dev->mem, 0, offsetof(struct vhost_memory, regions) +
--                          sizeof dev->mem->regions[0]);
-+			sizeof dev->mem->regions[0]);
- 	dev->mem->nregions = 1;
- 	dev->mem->regions[0].guest_phys_addr = (long)dev->buf;
- 	dev->mem->regions[0].userspace_addr = (long)dev->buf;
-@@ -361,7 +361,7 @@ int main(int argc, char **argv)
- 			break;
- 		case 'h':
- 			help();
--			goto done;
-+			exit(0);
- 		case 'i':
- 			features &= ~(1ULL << VIRTIO_RING_F_INDIRECT_DESC);
- 			break;
--- 
-2.39.2
+ 			if (folio_mapping(folio) !=3D mapping ||
+ 			    !folio_test_dirty(folio)) {
++				start +=3D folio_size(folio);
+ 				folio_unlock(folio);
+-				goto skip_write;
++				continue;
+ 			}
+ =
+
+ 			if (folio_test_writeback(folio) ||
 
