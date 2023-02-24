@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BC76A14D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332A06A14D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjBXCP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S229740AbjBXCRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBXCP4 (ORCPT
+        with ESMTP id S229446AbjBXCRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:15:56 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD2455E865
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:15:54 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8Cxf9vZHfhj4WwEAA--.3175S3;
-        Fri, 24 Feb 2023 10:15:53 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axvr7WHfhjfCY6AA--.45207S3;
-        Fri, 24 Feb 2023 10:15:52 +0800 (CST)
-Message-ID: <d0640075-289a-e5ac-132a-c4fb8e151ad2@loongson.cn>
-Date:   Fri, 24 Feb 2023 10:15:50 +0800
+        Thu, 23 Feb 2023 21:17:18 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EF55E874
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:17:17 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id e9so10216838plh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:17:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwQM5jDCnisoGK+9lg+DN9mXAFVodSsNBaIsTAFZ/HA=;
+        b=U+6xJp4C4jhOSJawd+VDYS75rVNz161MGfLLnJrgNjnKmt8cBQdIR26gxPBeNPJ6qP
+         m9AHc5m4KsZqNcMuZHDfheCR9byDTZvYiRj2fid6Io03+1lVcPVJfAT5x23GwMKbFBY5
+         pCm+SzTK21aJFfV9MmyCrEU1cauAGOffKM7iN1UW08fUNsf/JRrDNHyedKZpq5scl9lS
+         D61eeBFRipb4kA4c1lYrvE0M+dpq5mCIQQd2pndWwvF+bco0GDqcaPj8wic2IYeRlCgT
+         Rp113bTu8exyqlSchWz4PZ17yx5XbqKGSJeg3WxjPNTq+TMbhfBFR8HpWsOcFO5fYC0K
+         XKvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XwQM5jDCnisoGK+9lg+DN9mXAFVodSsNBaIsTAFZ/HA=;
+        b=zu8Zy9vmHav68700MHRNIEWnM+Q5k8gSKmcYgcpZuX4QfaDCEvkU1qnCTdYryZSSRY
+         wdPXBKsRNi+NGU3uRMIGA1jXGhQpgCIv92ywave7zyKEJgfgT6A5WxsmabrEG0Pfb12J
+         DycHPQs0+eNtT69/ztz625uYda2uEo8P+UmhFpOeYxmvjXHEJqG7WJUdsyRgMNSpdA/C
+         Titjhups9mQ8U0/WNxrESrxKz2RJLpkBc3mZSqmPJtI4dW8uTJAVHkpujG9rAraGP6/V
+         ROr5mWUnBtPoyru7ajXKDhOy1N7KbHJfw/Dl6S0ghuZIzFpLXh9wl0086rI9Owh+Z+u6
+         fzjg==
+X-Gm-Message-State: AO0yUKXQ2d7SMLpKYosg/j50p7Q/MrxVlBPyYhxOS6zhOQB0T7MhugCl
+        5v1s0CdroXQloF1Z24CPRbhVXQ==
+X-Google-Smtp-Source: AK7set/CzIDjqcs+ex1tt/uuL6og7+c8sKGOmyeRSPakEVadCRP1/lhjq2n1ROS6VFu3TO3FZkeR9g==
+X-Received: by 2002:a17:903:5c4:b0:19a:b9a8:3fbe with SMTP id kf4-20020a17090305c400b0019ab9a83fbemr10522949plb.48.1677205036904;
+        Thu, 23 Feb 2023 18:17:16 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id k17-20020a170902761100b0019a8468cbedsm4440202pll.226.2023.02.23.18.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 18:17:16 -0800 (PST)
+Date:   Fri, 24 Feb 2023 07:47:13 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jun Nie <jun.nie@linaro.org>
+Cc:     cw00.choi@samsung.com, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
+Message-ID: <20230224021713.stpcykx2tjkjwyti@vireshk-i7>
+References: <cover.1677063656.git.viresh.kumar@linaro.org>
+ <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4] drm: add kms driver for loongson display controller
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        suijingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Li Yi <liyi@loongson.cn>
-References: <20230220165130.6297-1-15330273260@189.cn>
- <ce854840-17d3-9ba1-5cf9-79a5fd2888c6@suse.de>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <ce854840-17d3-9ba1-5cf9-79a5fd2888c6@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axvr7WHfhjfCY6AA--.45207S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Gr48Xr1rtw4kXw1DAw47Jwb_yoWkuFb_uw
-        4DGrs3Zw1jyFs7trWktr45ZryDGrZYqrykAF42vFZIqFnrJF98Arn5JF97Za43u3ySy39x
-        Krn8JFn7ua1q9jkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        n7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23-02-23, 17:56, Jun Nie wrote:
+> It looks promising. The function get_target_freq_with_cpufreq() can be wrapped
+> to act as set_required_opps() callback.
 
-On 2023/2/23 22:07, Thomas Zimmermann wrote:
->
-> It's the same story all over: you rather want to remove all these 
-> lookup helpers and do a single test before you create the modesetting 
-> pipeline:
->
->  if (chip == LS7A2000 && index == 0)
->     lscd_create_output_ls7a2000_0();
->  else if (chip == LS7A2000 && index == 1)
->     lscd_create_output_ls7a2000_1();
->  else if (chip == LS7A1000 && index == 0)
->     lscd_create_output_ls7a1000_0();
->  else if (chip == LS7A1000 && index == 1)
->     lscd_create_output_ls7a1000_1();
->  else if (...)
->     ...
->
-> There you create the data structures for each pair of chip and index. 
-> If you have functions that can be used by multiple pairs, sharing 
-> those is fine. You might end up with duplicated code, but the overall 
-> design is sound.
->
-> Your current design will become unmaintainable pretty soon. We already 
-> have several of such drivers.
+> But my case is a bit complicated. CPU opp depends on both genpd opp and
+> devfreq opp.
 
+I was wondering if we will have such a case soon enough or not :)
+ 
+> So the genpd_virt_devs array need
+> to be modified or add another array for devfreq case. While genpd_virt_devs is
+> bounded with genpd directly and coupled with "power-domains" list in
+> device tree.
+> Current required-opp nodes are designed to be aligned with the list. I
+> am considering
+> what's the best way for back compatibility.
 
-Yes, your are right.
+Please look at the top commit here:
 
-I'm fear of the duplicated code in the past.
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/propagate
 
-I did not put my attention to the maintainable of the software.
+Will this be enough for your use case ? I will post everything again once we are
+settled on a solution.
 
-a quick skim through radeon, I find that there also seems have 
-"duplicated" code, this is  a design.
-
-I didn't get it before, now I get it.
-
+-- 
+viresh
