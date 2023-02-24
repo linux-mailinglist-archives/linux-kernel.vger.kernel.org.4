@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5146A19A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59AF6A19A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBXKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
+        id S230002AbjBXKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjBXKJ4 (ORCPT
+        with ESMTP id S229967AbjBXKKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:09:56 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CDE658EB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:08:40 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id f13so16664417vsg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:08:40 -0800 (PST)
+        Fri, 24 Feb 2023 05:10:18 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10E16886
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:09:05 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id x14so20747580vso.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:09:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=erxkKaNmgReQjjCE5Nun08H4QtCCa/ZqQiqJBxoU1Ok=;
-        b=X8+SA9pfi1u8C/Wv6YyefYb/yeJjqHbKIaAaHzXq4HKxYUUHaNYaVsO9Vq3GWF2tMG
-         30+rCnyWewJtcmlDac+TEe742tubnvXwDpwXdgRGEgAw10FYMe6HKyIg+TGOK7rLHBJf
-         6x0CvO35P9Ej3Q+x2erGFEjEPgDOiIYwiFkdg=
+        bh=K/7IE3JWHJRTNTnzdoavFidJ6LPEaM9q4fZmYFGLA1Q=;
+        b=DuSvUG9OycXrW6z26E5ntJAC8P8Z21ffrQQ0zKldE29yAbLukcTLMCOsd6/Y26MnPR
+         3GYz1sfaAjSIQLylvfFxGJHQNWEV4LgX5DU6LGkI+rtH3I3Z8d6jtb/ap6AWzM4viiWv
+         8WEUFbO14adJhjvJF/ctsGWNloY4St5A5SwoU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=erxkKaNmgReQjjCE5Nun08H4QtCCa/ZqQiqJBxoU1Ok=;
-        b=BJ/VU4x5NzdH6RTzyo4aK50GOAhcp+dBt8Ei2mf9MGpGbCJpNb7Tw74Vg1WuOgYMmV
-         a8H+TOsKSXrXfuGW/lYjz26lNgUZk20KTfoKgEP9kE8W74kLVrgn3lL0OGs9qrkdMpDI
-         h7VXAmy4u6bt4vWFUcxCxtAOdYjCSuCnwtSaItqjbz0FJdBTNzm9y88mjmGPpjKT7n+j
-         /SOey4jVNXmRId5Bn9k9ypm272OUWxcAooptKLGjYWH8KE7BRJ8DlMRqlIJTFT/lNFuW
-         lsGOat17zerpki5sQMey3VP9blp0XPBM7/IhNGtVSr0dDm732Y47LyVavKICRQ3pGg6c
-         N4jw==
-X-Gm-Message-State: AO0yUKWdpiWh7EC15VP0KJ4WERc0/vL0ks3WfqzA2UhtJj6A6K9HmCse
-        TldBA43AfGzFKdL8+FfVFSbl12G64sKeze2pmm5e4A==
-X-Google-Smtp-Source: AK7set/1xvdm5pq0EgFdZuGlRUZGFwjjdxewTbrvfcb4P2N6x5bfqAjJm08NFJELbq4Kj0E1OC3BOpwdByH/f1V0aw4=
-X-Received: by 2002:a1f:4343:0:b0:400:ea69:7082 with SMTP id
- q64-20020a1f4343000000b00400ea697082mr2084061vka.0.1677233319375; Fri, 24 Feb
- 2023 02:08:39 -0800 (PST)
+        bh=K/7IE3JWHJRTNTnzdoavFidJ6LPEaM9q4fZmYFGLA1Q=;
+        b=ZuEoWAymIPS660f8FchqVeozcociKYmIQ+sV+w9rxXU5ehimxo21YTy01tQLigIqNp
+         cjYtcUhNQBuXgVbZiKVJI1jxbgF17Wzwd7IRxwdJfxdr2Nl+eRYP3o2mep0dKpP7in8N
+         8BDGCWRGevwU8GwPM3QA4a8EdXkfy7iQZ0KRv3NCshLeqqUBNuBsorUK8nJAphm8o4M8
+         ZYPSVt41qj3Or30tYTmAdjiwvRi53BdRDQrXStfiUNlQ5pT9p5DLUO6tuHSN1smKB3Om
+         MGAubtyetXSmsyCWl41C6lUyVCnEx/WvaExCaVc0HZSTdl57hKXn7Jc6KpziIXW/AS/F
+         jNNQ==
+X-Gm-Message-State: AO0yUKXTRuuG72aOfCsXzQgo1bklFBBcWBrlLnaDMCTBQJpT0jgxpzam
+        Hb2JcB4ElfFIqEZm1uv2ZgiXR8s4AkiOhEvedcA1Uw==
+X-Google-Smtp-Source: AK7set/RvpYiZdz2LIP4LHIvV09xgbjakyZphGlBWRIs/ctqNr1a9OJ7MquZUocfHsTdE0KvpE3jj3Ssiny0LCbsUw4=
+X-Received: by 2002:a67:ec11:0:b0:411:c62b:6bf0 with SMTP id
+ d17-20020a67ec11000000b00411c62b6bf0mr2076104vso.3.1677233343067; Fri, 24 Feb
+ 2023 02:09:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230223133440.80941-1-angelogioacchino.delregno@collabora.com> <20230223133440.80941-4-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230223133440.80941-4-angelogioacchino.delregno@collabora.com>
+References: <20230223133440.80941-1-angelogioacchino.delregno@collabora.com> <20230223133440.80941-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230223133440.80941-3-angelogioacchino.delregno@collabora.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 24 Feb 2023 18:08:28 +0800
-Message-ID: <CAGXv+5Gk-G=TTSu8E7v8EHMfrp4j0mwFR32hi3_urPJ3sDxpDg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] dt-bindings: gpu: mali-bifrost: Allow up to 5
- power domains for MT8192
+Date:   Fri, 24 Feb 2023 18:08:52 +0800
+Message-ID: <CAGXv+5FK8BjSgwS5276FJj4zG_3STMbQwQWdyn3LjOvQ=108RQ@mail.gmail.com>
+Subject: Re: [PATCH v3 02/11] dt-bindings: gpu: mali-bifrost: Split out
+ MediaTek power-domains variation
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
@@ -74,11 +74,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Thu, Feb 23, 2023 at 9:34 PM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> MediaTek MT8192 (and similar) needs five power domains for the
-> Mali GPU and no sram-supply: change the binding to allow so.
+> In preparation for adding new bindings for new MediaTek SoCs, split out
+> the power-domain-names and power-domainsvariation from the `else` in
+> the current mediatek,mt8183-mali conditional.
 >
-> Fixes: 5d82e74a97c2 ("dt-bindings: Add compatible for Mali Valhall (JM)")
+> The sram-supply part is left in place to be disallowed for anything
+> that is not compatible with "mediatek,mt8183-mali" as this regulator
+> is MediaTek-specific and it is, and will ever be, used only for this
+> specific string due to the addition of the mediatek-regulator-coupler
+> driver.
+>
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
