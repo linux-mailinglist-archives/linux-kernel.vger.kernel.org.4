@@ -2,107 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D6E6A22AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B2C6A22B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjBXUAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:00:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
+        id S229827AbjBXUBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBXUAa (ORCPT
+        with ESMTP id S229770AbjBXUBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:00:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF453757D;
-        Fri, 24 Feb 2023 11:59:57 -0800 (PST)
-Date:   Fri, 24 Feb 2023 19:59:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677268795;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+QDv5nRWs6ZjIbRaVD5ljmBiyofZxQMMwPgAc7wVGTs=;
-        b=g9kMLqjmHdcTN3c6Gza+NM8qDC7FaVtkkijjP35RnHBMOLRYguqGhzlNk40FyoZ1i4Rr9E
-        rML7zG9RldqURWNqWkaK+nhTfE2n5XeZeXQzei5IVrrk42tf9meJYtNSu/nGjW0z7rQLHI
-        djjgoLMO674OXKqeJJr9CAJtBSGep/82MWl+jODzP5PzDFeU3nPNhYXVnJdcE8LVLdd5Vr
-        hAQ2ML0QW/APSnT4cJBIM/FdvKfvqTVzK0sgJpDcSKAIY6MD4sc2e1vt8E8xnZ8INLbuEf
-        BS6h67gq6GOhRh+gHtHMrCD6iktJQ9EmtkRgWGpihPcMv3RVDGmjjUPsx2PuPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677268795;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+QDv5nRWs6ZjIbRaVD5ljmBiyofZxQMMwPgAc7wVGTs=;
-        b=fDxbicN7KytEspVSAAHtjG8ejcQHRjKWm4agj+Y7I68Smu9XADePez/PoYvX222eijC0LB
-        ioorswgWhp4eh/BA==
-From:   "tip-bot2 for Johan Hovold" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] genirq/msi: Drop dead domain name assignment
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20230224130509.27814-1-johan+linaro@kernel.org>
-References: <20230224130509.27814-1-johan+linaro@kernel.org>
+        Fri, 24 Feb 2023 15:01:10 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316D41F4AF
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:01:01 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id eg37so1614279edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:01:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CycpbGYPVV7t0eKpbJzs8In3XpyKLfsIf6xBO+wlbU0=;
+        b=Wa4InpbaYI/Bgwr0JgNYDgEz2pEKz09JbCGGPcgDYXzpyBOGYuQn1jTnf+awYVY5TG
+         gLywfm0HGhJKHLdeJ3zH0UpPwFVP5ktSE8crVmyIP4jjR+qM9Jcb7GYS8UNVaOy8QiDJ
+         1JiA2yPy0NMZBsUoU6blsiasOsEWPmL6hnlHo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CycpbGYPVV7t0eKpbJzs8In3XpyKLfsIf6xBO+wlbU0=;
+        b=AXs9IwI0ZTk8+WxJjFW9oaZo3FMK6/EqkCIArorBl78fnJMuPTXO1rrabPCnphyklf
+         qNQufTjGD1En9B2KEQ9FBCpYstDl6sRC0xGCuMdCp5OvT6moPYzHu+1BnZqlZz/xCnzf
+         j05rAVrkB1PZu2Ifgor89Y+cPpXs1MgNoxd45kVaN82j8w5ExbfNlxWkFixvbxwZhhCJ
+         ezodV5QAX4D7H3/k7QFo1nuq8fICbAcJoQHtUIOq2UDKeWX3zd8IpeSMNSRZShw0Vl4y
+         wtkOPdwATIRAAc/K/r+13AsPnjGEtePxeAsLDK3BDjgibF/8SwDWo59B6MXMszSCExgA
+         71nw==
+X-Gm-Message-State: AO0yUKURl/E1TxqiqpbgmUoUM3iuvZnU0q6qw4zJJp89JAnoCwVCAjkQ
+        rwCmkSAteHNw771sNPXbIybmkDopx1OAJA+gF4AD7w==
+X-Google-Smtp-Source: AK7set+RJtOIK305HdC7rrioohW7JaLVXz0Rig8sfmXFCSXl6lFsgeF6freIcVkho9hSVwVcGqgNvw==
+X-Received: by 2002:a17:906:74d5:b0:8b3:b74:aeb5 with SMTP id z21-20020a17090674d500b008b30b74aeb5mr26418164ejl.30.1677268859409;
+        Fri, 24 Feb 2023 12:00:59 -0800 (PST)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id gv49-20020a1709072bf100b008e3e2b6a9adsm4193623ejc.94.2023.02.24.12.00.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 12:00:58 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id ee7so1830471edb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:00:58 -0800 (PST)
+X-Received: by 2002:a50:aa9e:0:b0:4ac:b616:4ba9 with SMTP id
+ q30-20020a50aa9e000000b004acb6164ba9mr8016701edc.5.1677268858123; Fri, 24 Feb
+ 2023 12:00:58 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <167726879502.5837.7389254031515212648.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wiZ9vaM23eW2k4R-ovtcWLyL8PWvnCG=RyeY4XXgZ6BCg@mail.gmail.com>
+ <20230224113247.07a660eb44198499314a9e96@linux-foundation.org>
+In-Reply-To: <20230224113247.07a660eb44198499314a9e96@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Feb 2023 12:00:40 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj-+PTUfu9NsdDt3p7tLXbUH-KJPBz+r4wHX075fydEOQ@mail.gmail.com>
+Message-ID: <CAHk-=wj-+PTUfu9NsdDt3p7tLXbUH-KJPBz+r4wHX075fydEOQ@mail.gmail.com>
+Subject: Re: diffutils file mode (was Re: [PATCH 5.15 00/37] 5.15.96-rc2 review)
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Eggert <eggert@cs.ucla.edu>,
+        Jim Meyering <meyering@fb.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        stable <stable@vger.kernel.org>, patches@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
+On Fri, Feb 24, 2023 at 11:32 AM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> Can we use git instead of diff?  I tried once, but it didn't work -
+> perhaps because it didn't like doing stuff outside a git repo.
 
-Commit-ID:     ea9a78c3a7a44e36fa690e1cc90dc2a758c8eb9a
-Gitweb:        https://git.kernel.org/tip/ea9a78c3a7a44e36fa690e1cc90dc2a758c8eb9a
-Author:        Johan Hovold <johan+linaro@kernel.org>
-AuthorDate:    Fri, 24 Feb 2023 14:05:09 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 24 Feb 2023 20:54:58 +01:00
+Just using "git diff" does work *but* I would strongly suggest using
+"--no-index" as in
 
-genirq/msi: Drop dead domain name assignment
+    git diff --no-index -- path1 path2
 
-Since commit d59f6617eef0 ("genirq: Allow fwnode to carry name
-information only") an IRQ domain is always given a name during
-allocation (e.g. used for the debugfs entry).
+because without the "--no-index" you will find that "git diff" will
+use heuristics to decide what it is you want to do.
 
-Drop the unused fallback name assignment when creating MSI domains.
+So if you do just
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230224130509.27814-1-johan+linaro@kernel.org
+    git diff path1 path2
 
----
- kernel/irq/msi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+and both of those paths are *inside* a git directory, then git thinks
+that "oh, you want to see the diff of those two paths against the
+current git index", and does something *very* different from showing
+the diff between those two paths.
 
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 13d9649..efd21b7 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -830,11 +830,8 @@ static struct irq_domain *__msi_create_irq_domain(struct fwnode_handle *fwnode,
- 	domain = irq_domain_create_hierarchy(parent, flags | IRQ_DOMAIN_FLAG_MSI, 0,
- 					     fwnode, &msi_domain_ops, info);
- 
--	if (domain) {
--		if (!domain->name && info->chip)
--			domain->name = info->chip->name;
-+	if (domain)
- 		irq_domain_update_bus_token(domain, info->bus_token);
--	}
- 
- 	return domain;
- }
+And I suspect that is the exact reason you *thought* it didn't work,
+but now that you tried it in a new test-directory, it did work for
+you.
+
+With the "--no-index", the ambiguity of "do you want a diff against
+git state, or the files against each other" goes away
+
+Just to give another example of this:
+
+ (a) when I'm in my kernel tree, I can do
+
+      $ git diff .config /etc/kernel-config
+
+and it will show me the diff between the two files, because while my
+".config" file is inside the repository, "/etc/kernel-config" is
+clearly not, so I get that "diff between two files" behavior.
+
+ (b) but then if I do a conceptually similar
+
+    $ git diff .config arch/x86/configs/x86_64_defconfig
+
+then git will see that both paths *are* inside the repository, and
+think I'm doing a diff vs the git index state, and since I have no
+changes wrt any checked in state in any paths that match, it will show
+no diff at all.
+
+So if I actually want to see the file diff between those two paths, I have to do
+
+    $ git diff --no-index .config arch/x86/configs/x86_64_defconfig
+
+to clarify what it is that I want.
+
+Also note that "git diff" is *not* a replacement for the 'diff' binary
+from diffutils in general.
+
+Doing a 'git diff' will *only* generate the extended git unified
+diffs. There's no support for any other diff format, and while there
+is overlap in the command line switches, there's a lot of differences
+too.
+
+So "git diff" is very much a "you can use it as a replacement for
+plain 'diff', but only in very specific circumstances" thing.
+
+                 Linus
