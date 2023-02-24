@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408B86A1B5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9750E6A1B5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjBXLWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S229940AbjBXLXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjBXLWd (ORCPT
+        with ESMTP id S229622AbjBXLXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:22:33 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989B563DE2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:22:31 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bt28so6893807wrb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tGfBN8IEC+qlIc6jdLkyzSmAC7UCyGCFtdcOqQyVOrQ=;
-        b=Hkh/qnF6A9pPW2TadDONBTbQf9DzjMsN316XQA6esIb9TPIqC9nm3BqU9oJ08sXWtj
-         Hw2HM6U1e5fyJzzy8Dmi2SGPi9LWQLKMlxzEAJD6H2FpWt1mpaRx6k/c75jSz6FGJI6P
-         f4FF/0wb3O9ZfflVgcVHxTzknLCypYHQvJPcCQhCSIDXEZmihdML/k296mawpjmngs5e
-         4ILFQcUzGbHCTPTcgAph5q93prYpb5ltsx15nxBDHRR7cqNMnGiMwEJUV3EExnZ4lLya
-         vBSmi28unYosHNjlxXq3lCdFfND61ZLWgKNPQ9d7OQA88IDw7TQmXbW0+Jcqe0P9VQl8
-         pRmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGfBN8IEC+qlIc6jdLkyzSmAC7UCyGCFtdcOqQyVOrQ=;
-        b=2R8XdF7DKBRoDjwDqA0mul7b6yoJnKpdiBVNBbQGmrNpDh8NBw4ap/AJX5Hd6dZnCl
-         XfAUL+xxfOzSkhtEhsGYFSci3SlwQ6w4YZD7LrkWtLX1zcdwOt8xXL2oN64KbvvPUFte
-         O14tL5rrErGlhlaPdG+w0MmDOi5e5fbDsuM3pn1/5tc5/e68XPZafqOlQx+oCYkxQHFa
-         1JVQ0pvO18QSRgQHD7XBz56cBMZkmwKWN2F3NorVtD/OLaQ8yDXYLOxDmWzTq870lbuE
-         8NthWiM6NAjbaeDtIn+2Cr9CF6oM004dWwgrsVSROYn3E4fk35zo7E9yWIZP72bJOT32
-         zi4w==
-X-Gm-Message-State: AO0yUKW0pg93I04I7RbNl3j50iPHrpeA8+Ni4uL51Xyf+jiCEnv2gDWa
-        YOqDB86licZCMgxYcU0KB3dG8Q==
-X-Google-Smtp-Source: AK7set+ci4988jeWDzm40Oj0p0cIoUr1kM+gaFBJ0XOXlbOKhkAP28EYzk+rLB39CGk9Yl/o0t/hiA==
-X-Received: by 2002:a5d:5651:0:b0:2c3:f78f:518f with SMTP id j17-20020a5d5651000000b002c3f78f518fmr13108445wrw.39.1677237750097;
-        Fri, 24 Feb 2023 03:22:30 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z14-20020a05600c220e00b003e11f280b8bsm2427156wml.44.2023.02.24.03.22.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 03:22:29 -0800 (PST)
-Message-ID: <86ececf1-72f3-41b8-ae48-092d169b690a@linaro.org>
-Date:   Fri, 24 Feb 2023 12:22:28 +0100
+        Fri, 24 Feb 2023 06:23:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A147013517;
+        Fri, 24 Feb 2023 03:23:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A1366173C;
+        Fri, 24 Feb 2023 11:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245A5C433EF;
+        Fri, 24 Feb 2023 11:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677237829;
+        bh=YWMHxEgZ8at03Pj0xQ2ZWGalNQEx8KUOPYy67J9pBPI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ox8QGMv0NVgAoeYGSa3oQgURAah4bZhQ4qINGDI1RheK2DEwgvgS3fNlwf6B1lc8J
+         pfMb+Gj3ivdnBwGYYV7lNSyVnkzbecN7p5auB+UYkSjQbs+fPZV4Dz0xyfEJsOCJi5
+         /l3BtIDSC+4OnGzwRPZyACE33rMWrork8bMnLV+M=
+Date:   Fri, 24 Feb 2023 12:23:47 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH 2/5] rust: device: Add a minimal RawDevice trait
+Message-ID: <Y/ieQ0UX/niAG1Hg@kroah.com>
+References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
+ <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] dt-bindings: fpga: xilinx-pr-decoupler: convert
- bindings to json-schema
-Content-Language: en-US
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230224111825.161593-1-nava.kishore.manne@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230224111825.161593-1-nava.kishore.manne@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,22 +63,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 12:18, Nava kishore Manne wrote:
-> Convert xilinx-pr-decoupler bindings to DT schema format using json-schema
+On Fri, Feb 24, 2023 at 07:53:14PM +0900, Asahi Lina wrote:
+> From: Wedson Almeida Filho <wedsonaf@gmail.com>
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> Add a RawDevice trait which can be implemented by any type representing
+> a device class (such as a PlatformDevice). This is the minimum amount of
+> Device support code required to unblock abstractions that need to take
+> device pointers.
+> 
+> Lina: Rewrote commit message, and dropped everything except RawDevice.
+> 
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
 > ---
-> Changes for v3:
->               - Removed 'bridge-enable' property and addressed some minor
->                 comments as suggested by Krzysztof.
+>  rust/bindings/bindings_helper.h |  1 +
+>  rust/kernel/device.rs           | 23 +++++++++++++++++++++++
+>  rust/kernel/lib.rs              |  1 +
+>  3 files changed, 25 insertions(+)
 > 
-> Changes for v2:
->               - Updated the description and addressed some minor comments
->                 as suggested by Krzysztof.
-> 
+> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+> index 75d85bd6c592..3632a39a28a6 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -6,6 +6,7 @@
+>   * Sorted alphabetically.
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/slab.h>
+>  #include <linux/refcount.h>
+>  
+> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+> new file mode 100644
+> index 000000000000..9be021e393ca
+> --- /dev/null
+> +++ b/rust/kernel/device.rs
+> @@ -0,0 +1,23 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Generic devices that are part of the kernel's driver model.
+> +//!
+> +//! C header: [`include/linux/device.h`](../../../../include/linux/device.h)
+> +
+> +use crate::bindings;
+> +
+> +/// A raw device.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementers must ensure that the `*mut device` returned by [`RawDevice::raw_device`] is
+> +/// related to `self`, that is, actions on it will affect `self`. For example, if one calls
+> +/// `get_device`, then the refcount on the device represented by `self` will be incremented.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+What is a "implementer" here?  Rust code?  C code?  Who is calling
+get_device() here, rust code or the driver code or something else?  How
+are you matching up the reference logic of this structure with the fact
+that the driver core actually owns the reference, not any rust code?
 
-Best regards,
-Krzysztof
 
+> +///
+> +/// Additionally, implementers must ensure that the device is never renamed. Commit a5462516aa99
+> +/// ("driver-core: document restrictions on device_rename()") has details on why `device_rename`
+> +/// should not be used.
+
+As much as I would have liked that, that commit was from 2010 and
+device_rename() is still being used by some pretty large subsystems
+(networking and IB) and I don't see that going away any year soon.
+
+So yes, your device will be renamed, so don't mess with the device name
+like I mentioned in review of path 5/5 in this series.
+
+> +pub unsafe trait RawDevice {
+> +    /// Returns the raw `struct device` related to `self`.
+> +    fn raw_device(&self) -> *mut bindings::device;
+
+Again, what prevents this device from going away?  I don't see a call to
+get_device() here :(
+
+And again, why are bindings needed for a "raw" struct device at all?
+Shouldn't the bus-specific wrappings work better?
+
+thanks,
+
+greg k-h
