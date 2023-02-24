@@ -2,133 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400EE6A1695
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 07:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A466A16AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 07:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBXGZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 01:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S229487AbjBXGld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 01:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBXGZp (ORCPT
+        with ESMTP id S229446AbjBXGlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 01:25:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0F94DBC3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 22:25:44 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31O6NuqR005767;
-        Fri, 24 Feb 2023 06:25:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=dUsi2PYpNXkeWSuAKCGpm+wwkFewMWEzA3bwsg8WyoQ=;
- b=bCeREzb6RL1xW5a5MVWiTsYB3VCbOnEzwxbNTCI+TEDsS6CzSEeZMeU21Jf+HymS12hK
- JcalKz/B97snRKnI7ic2yKKrve8Wg6TGBQTBGyP32rGN1R8tttzMYXFh2++nE6dySLCB
- W+AlXpdvBGlnj21tV664gkmZm4FZ4n69MsBPGYM5fjSy0nntZVEzhUbGrodHy8WEHlp5
- sWcyZ3yegiAW3xNGbP+UalEjXUkHo0T0zzcd/yHk678HON5aTJvt/acvwg9H+b/h1Mv0
- ZigeuwtbU8Dj+cOopsPhmHLKzy7DABdDET1tKAiOthFtLFngiowKk1U4L1YpJEubNnf6 rg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nxqxe80yk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 06:25:32 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31O6O52l006633;
-        Fri, 24 Feb 2023 06:25:31 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nxqxe80y6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 06:25:31 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31O5rUZt014115;
-        Fri, 24 Feb 2023 06:25:30 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ntpa7j842-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 06:25:30 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31O6PTFq10682990
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Feb 2023 06:25:29 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E96985805D;
-        Fri, 24 Feb 2023 06:25:28 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1611E58043;
-        Fri, 24 Feb 2023 06:25:25 +0000 (GMT)
-Received: from [9.43.73.248] (unknown [9.43.73.248])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Feb 2023 06:25:24 +0000 (GMT)
-Message-ID: <df3c173b-977c-0d45-bfb0-5ffc02f5dac4@linux.vnet.ibm.com>
-Date:   Fri, 24 Feb 2023 11:55:23 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V3] sched/fair: Interleave cfs bandwidth timers for
- improved single thread performance at low utilization
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, tglx@linutronix.de,
-        srikar@linux.vnet.ibm.com, arjan@linux.intel.com,
-        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org
-References: <20230224014922.2883-1-hdanton@sina.com>
-From:   shrikanth hegde <sshegde@linux.vnet.ibm.com>
-In-Reply-To: <20230224014922.2883-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: W3lslY_AIlvhsH5MFPgQvzGxMsTbQ4JC
-X-Proofpoint-ORIG-GUID: sWQm24i2YWTg-P1-Z3jcsnHVY-S8nijS
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 24 Feb 2023 01:41:31 -0500
+X-Greylist: delayed 917 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Feb 2023 22:41:29 PST
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E90C136C3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 22:41:28 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=9433889ceb=ms@dev.tdt.de>)
+        id 1pVRWl-000LrJ-9l; Fri, 24 Feb 2023 07:25:55 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ms@dev.tdt.de>)
+        id 1pVRWj-0006HF-OZ; Fri, 24 Feb 2023 07:25:53 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 46E1524004B;
+        Fri, 24 Feb 2023 07:25:53 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 93EFC240040;
+        Fri, 24 Feb 2023 07:25:52 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id 0E02420430;
+        Fri, 24 Feb 2023 07:25:52 +0100 (CET)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_02,2023-02-23_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 malwarescore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302240049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 24 Feb 2023 07:25:51 +0100
+From:   Martin Schiller <ms@dev.tdt.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     tharvey@gateworks.com, andrew@lunn.ch, davem@davemloft.net,
+        f.fainelli@gmail.com, hauke@hauke-m.de, hkallweit1@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, martin.blumenstingl@googlemail.com,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
+ delay configuration
+Organization: TDT AG
+In-Reply-To: <20230222160425.4040683-1-michael@walle.cc>
+References: <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
+ <20230222160425.4040683-1-michael@walle.cc>
+Message-ID: <8aa26f417c99761cdf1b6b7082fdec14@dev.tdt.de>
+X-Sender: ms@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate: clean
+X-purgate-type: clean
+X-purgate-ID: 151534::1677219954-177FA8D8-604DDCC6/0/0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/24/23 7:19 AM, Hillf Danton wrote:
-> On Fri, 24 Feb 2023 00:29:18 +0530 Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
->> @@ -5923,6 +5923,10 @@ void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
->>  	INIT_LIST_HEAD(&cfs_b->throttled_cfs_rq);
->>  	hrtimer_init(&cfs_b->period_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
->>  	cfs_b->period_timer.function = sched_cfs_period_timer;
->> +
->> +	/* Add a random offset so that timers interleave */
->> +	hrtimer_set_expires(&cfs_b->period_timer,
->> +			    get_random_u32_below(cfs_b->period));
->>  	hrtimer_init(&cfs_b->slack_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->>  	cfs_b->slack_timer.function = sched_cfs_slack_timer;
->>  	cfs_b->slack_started = false;
->> --
->> 2.31.1
+On 2023-02-22 17:04, Michael Walle wrote:
+> Hi Tim, Hi Martin,
 > 
-> Could you specify what sense this makes, given hrtimer_forward_now() in
-> start_cfs_bandwidth() and sched_cfs_period_timer(), which makes the
-> timer expire after now? Why does the randomness at init time play a role
-> at start time and run time?
+>> I've got some boards with the GPY111 phy on them and I'm finding that
+>> modifying XWAY_MDIO_MIICTRL to change the skew has no effect unless I
+>> do a soft reset (BCMR_RESET) first. I don't see anything in the
+>> datasheet which specifies this to be the case so I'm interested it
+>> what you have found. Are you sure adjusting the skews like this
+>> without a soft (or hard pin based) reset actually works?
+> 
+> I do have the same PHY and I'm puzzled with the delay settings. Do
+> you have an EEPROM attached to the PHY? According to my datasheet,
+> that seems to make a difference. Apparently, only if there is an
+> EEPROM, you can change the value (the value is then also written to
+> the EEPROM according the datasheet).
+> If you don't have one, the values will get overwritten by the
+> external strappings on a soft reset. Therefore, it seems they cannot
+> be set. (FWIW there is also a sticky bit, but that doesn't seem to
+> help in this case).
+> 
+> -michael
 
-Currently, Initial value is not set for period_timer. Expiry is calculated as 
-expiry = $INITIAL_EXPIRYVALUE + $N * $PERIOD
+Yes, you are right. The datasheet says: "In no-EEPROM mode, writing to
+this register has no impact on operation of the device".
 
-Hence, when there are two or more CPU cgroup's using bandwidth controller, 
-two period_timers would align at expiry. 
+But changing this settings without an EEPROM indeed has an impact.
 
-Adding a random offset play a role only at the start time, and no impact on the 
-run time. By adding offset, the different period_timer interleave, and we would get
-the benefit of SMT folding, less context switch's and less hypervisor preemptions.
+We don't use an EEPROM and without tuning this values some boards are
+unable to communicate on the ethernet port(s).
 
-More details are in RFC PATCH:
-https://lore.kernel.org/lkml/9c57c92c-3e0c-b8c5-4be9-8f4df344a347@linux.vnet.ibm.com/
+I varied these values during operation in the uboot and was able to test
+the limits very nicely.
+
+I wouldn't have introduced this feature if it hasn't got any impact.
+
+Regards,
+Martin
