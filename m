@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F446A2344
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C4B6A234B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjBXUtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S229776AbjBXUwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBXUtP (ORCPT
+        with ESMTP id S229720AbjBXUwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:49:15 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60985168BD;
-        Fri, 24 Feb 2023 12:49:14 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id ay37so132829qkb.1;
-        Fri, 24 Feb 2023 12:49:14 -0800 (PST)
+        Fri, 24 Feb 2023 15:52:06 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08918628C1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:52:04 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id oe18-20020a17090b395200b00236a0d55d3aso502021pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=sladewatkins.net; s=googled;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kvN0hLuCEsR9Vd2UCL7IKP8VbOyMpbeDrq81GUHoJwA=;
-        b=GqfB/gdry0rQFbWqA4I7frasJkabRvYO51A7qKOKC8hNrXPS6ocH5LW2aAHrSfAiLk
-         Zmlw3I5xkA8lrfLiclkrS8OuLZyn+e9rxwvbaECQtA8QprIa/YJ6SWo9+ovfwNrSAYJ7
-         wgiomVnsB3cS2Ox/1idwQTVLb9jBfaaC+UavUE0tSM+f5PUit3GzS4l7RgzyI0uYi5B1
-         1RobFo2Cm1skShJxBsbbVBG2RjIPLL7sOswtJLFnkINh34MOCD8QxFbn0Tg5NE2TOmYz
-         pzaQRcWb8JNvEu3TTEgsN67qvc4XdgRpTbF1tLrdT5BTdvqsWk2y+kdkPtihzZgggLt4
-         TH+A==
+        bh=55mt+kuo5dWkNyekw++UMrCQ9c2eDryyoLQGraQZpU8=;
+        b=PQ3//o9BqF/cCeFQ3Q1Xv/rY74hCW/eRKF38tLjFgGOCR99BqrWq0Z1TmDTmssrMtw
+         KRsVOpJ9a+/eAyMeQAoEOu751ZJEZA0gMoES3cjoTU7FtwEeDlLdH5ex99hv3OBGxZM/
+         Ww+f/8B/pGoMda4TM+YyDvLNPyGEe1cY8hiLLpcvyFB30w3Oa4txe99onuCvANlX9zkp
+         GhdR7L1rwM6PQ59DvdRHq3URtyV2+A+jf30pFRrpM98vbViML4r7tz54JNrViqzhQV6l
+         o2wvooKm2S3ozFKY2MzzjS7CVFlm1ZKR7jXKqPop9Cx1PRni7UE3dnNcqGsmchSjvdOm
+         acJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kvN0hLuCEsR9Vd2UCL7IKP8VbOyMpbeDrq81GUHoJwA=;
-        b=Nvu0jNXGY2wn/EsbdkEPgIytmvS5Rl2lBdl5PCDF/eNOUrBRRDd1zhAW6iTvzh/1b5
-         QDBHXwk1S/WAmjQwt59/xU5Zbm9YnzFrgqCAuRgcjcGEUEyFrI6Jnt04lTxrfKVOTYpz
-         XCCW41C9o7+h9A0vBp+8qFL9h+33/UNa0gzKn5Zcbq0ETKV6qf9AVolACxWCw2rT+5q/
-         gimo4/dbbTlYs1OLuP1IEotQ26IjB7Cu2QZvYkLZHfK6YvQu/jhKBRp/jwtvHQHsVtrL
-         G5hLpofDViMAIsgPZ6N4YIDYLja6SQH9Mm1nXNe+EOohdet2NumlQZNDxuZ0U2lpU4QC
-         K+TA==
-X-Gm-Message-State: AO0yUKXzM2Vw0K12LbMe44cjZiaCU2SuB8bKya+WuZ6rxQraoesxj8ZD
-        JO47bgI5LqvnVlmIWNZLDVa9cf/VBCQA67Thcj0=
-X-Google-Smtp-Source: AK7set+EeVvLHVy65mCkYp8oeMahekDSmvMS7T9rS7mRcJjSFOJ4zCxukkHG2BOF15E88wWliM70YXZoykBz+QU4ySs=
-X-Received: by 2002:a05:620a:13cd:b0:742:7e5a:4cee with SMTP id
- g13-20020a05620a13cd00b007427e5a4ceemr510882qkl.10.1677271753490; Fri, 24 Feb
- 2023 12:49:13 -0800 (PST)
+        bh=55mt+kuo5dWkNyekw++UMrCQ9c2eDryyoLQGraQZpU8=;
+        b=L31kw2LEnJODUC/0lqGnGrZ7H9KgLzHFUfouX9gKcrHQIy0WSvsIBOzxDEBtvSDtCG
+         EoCtljmEHBDClEv0GCz+wEOU1hGx3ixFwfR7pZr2h6MUrJo9s7fqbxiObmwwxpkJklgI
+         kIVzgWCPu/c3kT2uVA4nH+l4xmBj3124pmtjmgqE76Lvf+eoj7fTrLQZ5hkgsdTSkvLv
+         xJs31AGc5w9yrvyfDIOEp1hlyuHMW0neRQ48r3A9QfmHm8CGcn4N7jRfCr8gVioc0YKb
+         ucpzEHN0cW8H+AOeNAWL0DPgYpinKQOgPiSJR3dcFnF7JueIIT+I4F+9e0XmlXxcYBbc
+         SCeQ==
+X-Gm-Message-State: AO0yUKWTTQZbvs0AKWzm2XKTA1TanMhanusSzLNEf4kamfTV2Eug7tAx
+        3ancKmLsH9IaMBC5JirhUxq6zB1/g2vp+U80jsNchw==
+X-Google-Smtp-Source: AK7set9jwyl5cVUNpA1/XKIW8Cs28uP4ayT0pKHGrhJEcpKF3dfiREuG6JLl2PYLQ5lISV33j6Q9QZmQVEAdjse1W7k=
+X-Received: by 2002:a17:902:b410:b0:19c:b7da:d41f with SMTP id
+ x16-20020a170902b41000b0019cb7dad41fmr2274382plr.11.1677271923389; Fri, 24
+ Feb 2023 12:52:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230224192021.22591-1-asmaa@nvidia.com>
-In-Reply-To: <20230224192021.22591-1-asmaa@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 24 Feb 2023 22:48:37 +0200
-Message-ID: <CAHp75Vdz=P=HrjyhT=dQFJt0LmqzBG2Cmw=sCBmU-RCwkQ3uUw@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: mmio: handle "ngpios" properly in bgpio_init()
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <CAHk-=wiZ9vaM23eW2k4R-ovtcWLyL8PWvnCG=RyeY4XXgZ6BCg@mail.gmail.com>
+ <03dac14b-ed62-3e2b-878f-b145383ea9f8@cs.ucla.edu>
+In-Reply-To: <03dac14b-ed62-3e2b-878f-b145383ea9f8@cs.ucla.edu>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Fri, 24 Feb 2023 15:51:51 -0500
+Message-ID: <CA+pv=HPfatoLpQj77HWkzsg+tHK6AVRoR7h-eSY4=EyAFuocrA@mail.gmail.com>
+Subject: Re: diffutils file mode (was Re: [PATCH 5.15 00/37] 5.15.96-rc2 review)
+To:     Paul Eggert <eggert@cs.ucla.edu>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        stable <stable@vger.kernel.org>, patches@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>, rwarsow@gmx.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jim Meyering <meyering@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,44 +79,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 9:20 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
+On Fri, Feb 24, 2023 at 3:20 PM Paul Eggert <eggert@cs.ucla.edu> wrote:
 >
-> bgpio_init() uses "sz" argument to populate ngpio, which is not
-> accurate. Instead, read the "ngpios" property from the DT and if it
-> doesn't exist, use the "sz" argument. With this change, drivers no
-> longer need to overwrite the ngpio variable after calling bgpio_init.
+> On 2023-02-24 11:16, Linus Torvalds wrote:
+> >   GNU diffutils have never actually grown the
+> > ability to generate those extensions
+>
+> Thanks for pointing this out. I added this to our list of things to do,
+> by installing the attached patch to the GNU diffutils TODO file. If this
+> patch's wording isn't right, please let me know, as I haven't read this
+> whole email thread, just the three emails sent directly to me.
 
-...
+For what it's worth, this looks good to me.
 
-> +       ret = device_property_present(dev, "ngpios");
-> +       if (!ret)
-
-ret is not of the correct type for this call.
-
-Why not simply
-
-    if (!device_property_present(dev, "ngpios"))
-
-> +               gc->ngpio = gc->bgpio_bits;
-
-...
-
-The problem with this change is that you need to provide bgpio_bits.
-
-So, if there is a property when bgpio_bits will be updated?
-
-That's said what you need is something like this:
-1) split "ngpios" handling code (lines ~718-744 in gpiolib.c)  into a
-helper function that is available inside drivers/gpio;
-2) use it in bgpio_init() by overriding bgpio_bits.
-
-ret = new_helper();
-if (ret)
-    gc->bgpio_bits = sz * 8;
-else
-    ... = gc->ngpio;
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thank you,
+-- Slade
