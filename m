@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2E26A20EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891A76A20FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjBXR4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S229758AbjBXR6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjBXR4L (ORCPT
+        with ESMTP id S229750AbjBXR6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:56:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37466ADFF;
-        Fri, 24 Feb 2023 09:56:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3E82B81C9C;
-        Fri, 24 Feb 2023 17:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D536C433EF;
-        Fri, 24 Feb 2023 17:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677261368;
-        bh=fuldWUUBCCEEzxhrkX1CaEUawk3xj50XRZkkElRSkRE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E35m6+htE4e7PfwS+0PZMeTNATf3SegeLzonaktUBkX6sHWR8g95eBcWACwgGtFLn
-         1mSZNP15mTD6E6QmJsO35jPbO2QRlv7GR4kmi7rU6wCYtNNscnb8eFUPt3n2JhSSJ0
-         a3zoxcuX8BSfA3IbZyGQHSeffbwy+vr/wOKvv+30nfR12HKupk8pvQfYSNh3i43Usd
-         i67oBHij1cCzdkcyhsPBDQUsOVL4nXiDzP2Yy2xo0zlttQafzY9l5QnLPTRW9Mnz5D
-         Ar2N0WZZnFb1mRDspQv+3tsqnvi/W3tmorszIvW4i65AxsmT040jd8I/1devnaDb1m
-         i/icyeiXlG/tg==
-Date:   Fri, 24 Feb 2023 17:56:03 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [PATCH] spi: tegra210-quad: Fix iterator outside loop
-Message-ID: <Y/j6MxmOkZj/TKej@sirena.org.uk>
-References: <20230224163513.27290-1-kyarlagadda@nvidia.com>
- <Y/jqCRAenwbqc1Uu@sirena.org.uk>
- <DM4PR12MB5769BDB91342A9768207BD84C3A89@DM4PR12MB5769.namprd12.prod.outlook.com>
+        Fri, 24 Feb 2023 12:58:48 -0500
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983BA1ACE9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:58:47 -0800 (PST)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 135638026315
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:58:47 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 811761004A82D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:58:46 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id VcLGpLDBBTQEGVcLGpgTFq; Fri, 24 Feb 2023 17:58:46 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=N7Tsq0xB c=1 sm=1 tr=0 ts=63f8fad6
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=m04uMKEZRckA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=CRYauL5RPLKlrnpcW9EA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EiIfSzxXVHqdjvFUk/Wg0lxljVw44vWTztlkHg8UXXo=; b=mWa7a8DhYw4kIRxFC87HAquQoQ
+        RoKyFJU8UJVjHH7oqo/FbfMnxaMTJK0g0rnrpMa3GUp6upg6DF68oHRBDOIppcJwycy/O0Yx0IB+R
+        mBvTqv+QVDvIai2hnpqfpVgSWZgfeRveKS49hBhTyMLDzV7Ly5ubCOzJZbbvaY9TyD1v+aXkWSVIf
+        X7OfWGQc8ciLoair3TxRLBbKWwJwwupK+EXFhZSNg04o2wOld95dnjonV2OjfsiRGZswsO5ZkNlFs
+        A3w09s821/GiMRdu9ZA4ODtElYkP+5/CKvp9py6zETvxq7PUZXAjf9vvQUvnSa9SWWIbQp1E9iirJ
+        u/Ac/QDA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58264 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pVcLE-001PRV-FW;
+        Fri, 24 Feb 2023 10:58:44 -0700
+Subject: Re: [PATCH 6.1 00/47] 6.1.14-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230223141545.280864003@linuxfoundation.org>
+In-Reply-To: <20230223141545.280864003@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <71d05655-864f-84f1-18e5-053309a0cbd9@w6rz.net>
+Date:   Fri, 24 Feb 2023 09:58:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1Y5caIOx58tpWex7"
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB5769BDB91342A9768207BD84C3A89@DM4PR12MB5769.namprd12.prod.outlook.com>
-X-Cookie: The early worm gets the bird.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pVcLE-001PRV-FW
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:58264
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/23/23 6:16 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.14 release.
+> There are 47 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.14-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---1Y5caIOx58tpWex7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-On Fri, Feb 24, 2023 at 04:50:00PM +0000, Krishna Yarlagadda wrote:
+Tested-by: Ron Economos <re@w6rz.net>
 
-> > >  		msg->actual_length += xfer->len;
-> > > +		if (!xfer->cs_change && transfer_phase == DATA_TRANSFER)
-> > {
-> > > +			tegra_qspi_transfer_end(spi);
-> > > +			spi_transfer_delay_exec(xfer);
-> > > +		}
-> > >  		transfer_phase++;
-> > >  	}
-> > > -	if (!xfer->cs_change) {
-> > > -		tegra_qspi_transfer_end(spi);
-> > > -		spi_transfer_delay_exec(xfer);
-> > > -	}
-
-> > This looks like it'll do the wrong thing and do a change on every
-> > transfer if cs_change isn't set?
-
-> This condition is hit only in data phase which is end of message.
-
-Shouldn't this just be moved into the DATA_TRANSFER case statement?
-
---1Y5caIOx58tpWex7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP4+jIACgkQJNaLcl1U
-h9CuNAf/RnnVBXixt5TqUSG5Q9M0PuUVwE2dM/ySiYNHqJNe/wvfnMzahIoev4cd
-5nSTnwqNPI4oLsPsYNsWUa306BdMmOKKK0nPibXbzIuCX2xEjY69OBqEQqg0A990
-5CQpLlOLbEOy7+Ecnv8jmNuydgPu3F8Wxwzjw9ceD+P1viyE4514AuCL/9Oet02w
-zuE3IDrSOSdjmakcsj5vUVktj3GFQXOgNBP/ex0aFZgJJq3IjtI5e8yINHiJZx52
-DClt6OMO0zh/Gbob/aYGrp7+8df2CkAO4c85I8CAXwO3vsGfLv0qedlRGB9sd/BL
-uhKhhhaB+MF56Tsf9WnDURGmxskHkg==
-=amcU
------END PGP SIGNATURE-----
-
---1Y5caIOx58tpWex7--
