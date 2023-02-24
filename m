@@ -2,143 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97256A1432
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 01:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5C36A1439
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 01:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjBXAOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 19:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S229678AbjBXAPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 19:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBXAOD (ORCPT
+        with ESMTP id S229598AbjBXAPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 19:14:03 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF5132E4B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:14:02 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id o12so7384552oik.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:14:02 -0800 (PST)
+        Thu, 23 Feb 2023 19:15:15 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E58446153
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:15:13 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so1060299pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:15:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TdidChoinEBLrLlt/CurGVixllEMtFuJAvHMgu/NZfo=;
-        b=rJDsx+/KQ+i03a6ImfABsae+QTdtjd98soThsy2LfP6SUmtri7cI2gi1zIZhLyyaFp
-         m56LuccBFx6Cq5iNXT5DNWK9GA+9k3P9LmrhKZ6Er/ezbCpEID7KfXDp4FWtDFHsSXc2
-         RzBrV2O4ELyNK2d4RIrQWKjwDFwtK6XgPYmkxdX9JBCGw0dzxMe5crX7lLq0O/zL8YoI
-         04RgXLtgpDvE0LgSRsciv9uO9i3r2kqBoXDRMZjdDFG2XoD2xuOs1PafBMO458WxN35Y
-         wyBZ6kTQb1eAejmJVZB7CWidP1uOswaZRaskncBHH5BJqV3AFCDXaHOnRme+5wU6TzMF
-         TisQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gnsL+pGfqbSaj40dlXSygHui8rkzCXGh8NQYT1OtVjc=;
+        b=MEMyJaQw67L5JtHF1XZ61OYT6n+VfEM4YMA80P0tKRQfHyK6eOM2UnebOQdeamv+xT
+         yz2NB/ixM+eJktRajoBHzOa6L7dT2+CXtbR/pOqZGAHeq9z5a9z03YJ341hIx6xxxeoL
+         h+IutQs/R34YpzIUCI2D62wQKZ8qveteFtJOf6WvLi4PawfWnxcu/s6MoTWhsJ6bIVkm
+         JWB0JPg9ASJdw1+MZYPjQC5D3pD5S12YsD7Dk5SRBebuwl/9Wk1g90CacKGm/yWcAqQJ
+         p+28peXucCwPRkbo6f4iUAB4JqxQqU4Q+iKlqjmi0Qg+j0xJNiPRzKPqGYm+Rfx4E0g5
+         huKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TdidChoinEBLrLlt/CurGVixllEMtFuJAvHMgu/NZfo=;
-        b=TL40UPS+irKvbB9dzcfyUNX/vIUyMQGiWqRuTCJ08ie7iJZE9nprW3qkvLxs/hQo+K
-         CM1RpUC4+odulz1widByjqg/wunuTu3QpVNgNx79SNcP1AhAQxYvNtGOB18/9o/kt31l
-         wBJBoX0d1TP3X/99Y7IklJ1KYlOda61MJLrEWp2+J6775IQ4tJ25QDfrHsrqJIbHuoIK
-         kJAHyPkujHMDBImZinXxgApfUmbHAXFGAAb4TXrxOaI8LsUPefdJ7qKNcXe9x6NL2M90
-         h5dg18RdGGxgG++7FqBsVSLsubRh3YyPcgyLtFSIs/zy/xtL1MTBOnB9eE4hPveCLVlc
-         UgDQ==
-X-Gm-Message-State: AO0yUKXo7GztJsQuzBQLJke1x6K2UTAaxwyaT9CR4Wpg/D/0ASFnkKKD
-        UvmLCjwoPOpJuCgo2nUaBsP3RJ+LBoURljCmPrfyLsg7IfviMUA1
-X-Google-Smtp-Source: AK7set+Pu785rN2AMAsPyHuytxZFqVMOw3qN483f3LOeHCqNR/vsjJGPUIVlB9AeSPnsU8LhcUihzBkG+wVVr1U+WBI=
-X-Received: by 2002:a05:6808:8e3:b0:37f:9a01:f661 with SMTP id
- d3-20020a05680808e300b0037f9a01f661mr525076oic.9.1677197641278; Thu, 23 Feb
- 2023 16:14:01 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gnsL+pGfqbSaj40dlXSygHui8rkzCXGh8NQYT1OtVjc=;
+        b=EVPH+fQF2e1Z9Bc5HE2olEROF2HBoOgkNnfKAzAvAHL8rgIxfUeh9JBxLRT2rnRAL3
+         VRrzyhibwOZVOOTYuVg3Oxv7aaOzD4PJqepZmc/VtY0rIyBNNMsIPjossn6qhaWAOw0Z
+         S4kj4i9mbvCfbh7tc8+vF78DpOhHB11qRpFhBt5Lenv06G6iI6gA6hYQjykgfpgL4aoC
+         MUuyKR5AwegZiMf5/yeqvhSClNNf6a/lm15ffjBp9fUe78OjzRCm+2NN35Z0V8PGg/cJ
+         aOwINu605SDV+lgJDNcWaKtB9GUytRmBdg2P5lREWhp6980b4lS40X/n9Z/tAI5bNjlq
+         QR9A==
+X-Gm-Message-State: AO0yUKXVQ69yuj0eou+i/T9lv04qZc37b6/EW9Ma1IFnp/+ggnHhgHBd
+        JiGp5OXrAyWfRsBaenTQ68nSpw==
+X-Google-Smtp-Source: AK7set+H1Oed36cehxC8KiJPC3s0ckOpweO6g64c5qWByIUOeqKQ8bas15lSHf/5Y113qatq+WyDfg==
+X-Received: by 2002:a05:6a20:7d99:b0:cc:4db1:12fc with SMTP id v25-20020a056a207d9900b000cc4db112fcmr2303043pzj.46.1677197712594;
+        Thu, 23 Feb 2023 16:15:12 -0800 (PST)
+Received: from [10.211.55.3] (c-73-221-130-71.hsd1.wa.comcast.net. [73.221.130.71])
+        by smtp.gmail.com with ESMTPSA id q18-20020a62e112000000b005a7ae8b3a09sm3528645pfh.32.2023.02.23.16.15.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 16:15:12 -0800 (PST)
+Message-ID: <d4cdae93-a003-d07f-3074-3542a231747b@linaro.org>
+Date:   Thu, 23 Feb 2023 18:15:10 -0600
 MIME-Version: 1.0
-References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
- <Y/ewpGQkpWvOf7qh@gmail.com> <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
- <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com>
-In-Reply-To: <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com>
-From:   Sandeep Dhavale <dhavale@google.com>
-Date:   Thu, 23 Feb 2023 16:13:50 -0800
-Message-ID: <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
-Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an option
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-erofs@lists.ozlabs.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Huckleberry <nhuck@google.com>,
-        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 06/26] virt: gunyah: msgq: Add hypercalls to send and
+ receive messages
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212303.3307536-1-quic_eberman@quicinc.com>
+From:   Alex Elder <alex.elder@linaro.org>
+In-Reply-To: <20230214212303.3307536-1-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 11:08 AM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
->
->
->
-> On 2023/2/24 02:52, Gao Xiang wrote:
-> > Hi Eric,
-> >
-> > On 2023/2/24 02:29, Eric Biggers wrote:
-> >> Hi,
-> >>
-> >> On Wed, Feb 08, 2023 at 05:33:22PM +0800, Gao Xiang wrote:
-> >>> From: Sandeep Dhavale <dhavale@google.com>
-> >>>
-> >>> Using per-cpu thread pool we can reduce the scheduling latency compared
-> >>> to workqueue implementation. With this patch scheduling latency and
-> >>> variation is reduced as per-cpu threads are high priority kthread_workers.
-> >>>
-> >>> The results were evaluated on arm64 Android devices running 5.10 kernel.
-> >>
-> >> I see that this patch was upstreamed.  Meanwhile, commit c25da5b7baf1d
-> >> ("dm verity: stop using WQ_UNBOUND for verify_wq") was also upstreamed.
-> >>
-> >> Why is this more complex solution better than simply removing WQ_UNBOUND?
-> >
-> > I do think it's a specific issue on specific arm64 hardwares (assuming
-> > qualcomm, I don't know) since WQ_UNBOUND decompression once worked well
-> > on the hardwares I once used (I meant Hisilicon, and most x86_64 CPUs,
-> > I tested at that time) compared with per-cpu workqueue.
-> >
-> > Also RT threads are also matchable with softirq approach.  In addition,
-> > many configurations work without dm-verity.
->
-> Also for dm-verity use cases, EROFS will reuse the dm-verity context
-> directly rather than kick off a new context.  Yet I'm not sure there
-> are still users using EROFS without dm-verity as I said above.
->
-> Anyway, the original scheduling issue sounds strange for me (with my
-> own landing experiences) in the beginning, and I have no way to
-> confirm the cases.  Just hopefully it could be resolved from the
-> developer inputs and finally benefit to end users.
->
-> I've already did my own stress test with this new configuration as
-> well without explicit regression.
->
-Hi Eric,
-From the dm-verity patch description of removing WQ_UNBOUND it seems
-Nathan saw the EROFS wait time was reduced by 51% whereas high pri per-cpu
-threads showed me sched latency reduced on avg by ~80%.
+On 2/14/23 3:23 PM, Elliot Berman wrote:
+> Add hypercalls to send and receive messages on a Gunyah message queue.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   arch/arm64/gunyah/gunyah_hypercall.c | 32 ++++++++++++++++++++++++++++
+>   include/linux/gunyah.h               |  7 ++++++
+>   2 files changed, 39 insertions(+)
+> 
+> diff --git a/arch/arm64/gunyah/gunyah_hypercall.c b/arch/arm64/gunyah/gunyah_hypercall.c
+> index f30d06ee80cf..2ca9ab098ff6 100644
+> --- a/arch/arm64/gunyah/gunyah_hypercall.c
+> +++ b/arch/arm64/gunyah/gunyah_hypercall.c
+> @@ -38,6 +38,8 @@ EXPORT_SYMBOL_GPL(arch_is_gunyah_guest);
+>   						   fn)
+>   
+>   #define GH_HYPERCALL_HYP_IDENTIFY		GH_HYPERCALL(0x8000)
+> +#define GH_HYPERCALL_MSGQ_SEND			GH_HYPERCALL(0x801B)
+> +#define GH_HYPERCALL_MSGQ_RECV			GH_HYPERCALL(0x801C)
+>   
+>   /**
+>    * gh_hypercall_hyp_identify() - Returns build information and feature flags
+> @@ -57,5 +59,35 @@ void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identi
+>   }
+>   EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
+>   
+> +enum gh_error gh_hypercall_msgq_send(u64 capid, size_t size, uintptr_t buff, int tx_flags,
+> +					bool *ready)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_hvc(GH_HYPERCALL_MSGQ_SEND, capid, size, buff, tx_flags, 0, &res);
+> +
+> +	if (res.a0 == GH_ERROR_OK)
+> +		*ready = res.a1;
+> +
+> +	return res.a0;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_hypercall_msgq_send);
+> +
+> +enum gh_error gh_hypercall_msgq_recv(u64 capid, uintptr_t buff, size_t size, size_t *recv_size,
+> +					bool *ready)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_hvc(GH_HYPERCALL_MSGQ_RECV, capid, buff, size, 0, &res);
+> +
+> +	if (res.a0 == GH_ERROR_OK) {
+> +		*recv_size = res.a1;
 
-So from the description at least it does not look like both patches have
-equal benefits. I can't argue about the size and complexity of removing
-WQ_UNBOUND if it gives the same benefits, that would have been great.
+Is there any chance the 64-bit size is incompatible
+with size_t?  (Too big?)
 
-I will do the app launch tests again to compare these and share.
+> +		*ready = res.a2;
 
-Thanks,
-Sandeep.
+		*ready = !!res.a2;
 
+> +	}
+> +
+> +	return res.a0;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_hypercall_msgq_recv);
+> +
+>   MODULE_LICENSE("GPL");
+>   MODULE_DESCRIPTION("Gunyah Hypervisor Hypercalls");
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+> index 3fef2854c5e1..cb6df4eec5c2 100644
+> --- a/include/linux/gunyah.h
+> +++ b/include/linux/gunyah.h
+> @@ -112,4 +112,11 @@ struct gh_hypercall_hyp_identify_resp {
+>   
+>   void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity);
+>   
+> +#define GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH		BIT(0)
+> +
+> +enum gh_error gh_hypercall_msgq_send(u64 capid, size_t size, uintptr_t buff, int tx_flags,
+> +					bool *ready);
 
-> >
-> > I don't have more time to dig into it for now but it's important to
-> > resolve this problem on some arm64 hardwares first.  Also it's an
-> > optional stuff, if the root cause of workqueue issue can be resolved,
-> > we could consider drop it then.
-> >
-> > Thsnka,
-> > Gao Xiang
-> >
-> >>
-> >> - Eric
+Why uintptr_t?  Why not just pass a host pointer (void *)
+and do whatever conversion is necessary inside the function?
+
+					-Alex
+
+> +enum gh_error gh_hypercall_msgq_recv(u64 capid, uintptr_t buff, size_t size, size_t *recv_size,
+> +					bool *ready);
+> +
+>   #endif
+
