@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93A16A18E4
+	by mail.lfdr.de (Postfix) with ESMTP id F3F0C6A18E5
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjBXJf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S229819AbjBXJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjBXJfT (ORCPT
+        with ESMTP id S229816AbjBXJfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Feb 2023 04:35:19 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5315F5EECC
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE06565CF2
         for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:35:07 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so1654873wmb.5
+Received: by mail-wm1-x32a.google.com with SMTP id az36so1396481wmb.1
         for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m64jqOrcIRXu/umTrAuoSeK+k4rXGOgELajP5IUVuyY=;
-        b=pYehFX1bNNfwjhqedPBDus23aDHSLj1CXv7Icw4jLz2wc0T84AoEZo3r/sIRSZVce3
-         FtOSNxYg74KuifAm9s89teyegf76CDzqV8TC2BvujoX5fUKQ0AtQDlIATj5KR4yrZAsG
-         SjQeie1J0O3NNLbXgn1+6uVPT9AT0BQ3yAzGUvnYzFf+JLq9+522QPd1MnaBJlEDUobi
-         Hh0YeEEuLGgu2UK33METSkIWcX5w+WBbiYdG3afy50VMjNvvLxdL5X3OIT/lhvUH6x43
-         xTPaoZjEox86Bn8gMBaHvOZB70Wa8ymL5X1n0YbgUmzYkD1be2ra+f9bKBHkRhyYbHWa
-         Cm3w==
+        bh=jFfq5teius6pAK1nmf1oSiYVaS3V8Wiqx9qF8KZNMCQ=;
+        b=UPtzcx8EFj1zlSxQ6lMU0mkanMgYYtKeaO2lWxoPNm90eUsDg5dZ1+YuhJFLZ9eA1C
+         GwVX/XBU0wi8bbZqS4brymorHHXxUfabheM649o6i0SQ/aVibdS9bgWV9lK6GXWoyCxV
+         DDBMfSwJFsDs+VxTsL6tGbeInl0ZqUq5wfYvFDMQ9DRbPWoCbA/6Cvincqhb8n8A/JMv
+         yF2u9O9DHpm/uv9CcBKmrH4ca42lGrIqrseUJRNneFVCwHJafcuPzxjA18lvOlidR6dV
+         8ry4CjCYix+BYGvJUnF6KeUvdaZAfzJwDqJXYi1r+dRV7oZAoBl3+BLYwTygm+t5PEOr
+         SgfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m64jqOrcIRXu/umTrAuoSeK+k4rXGOgELajP5IUVuyY=;
-        b=D1B4fs8JM1ZgvFIYmbcQvxEPX2pIXTLj2XH30Zbxqs53YxPdmZ4H1wYSBtDtYGSCBK
-         QPY9oENBph3VdT1QOtcewbvNxT50s2NhdCJ/doe92RkE0+An3xUnavZU+FwppeDi3XIR
-         fj5v6mrg7VECGzNF+YVHsxcoJQCl+SvpgbhHp6TA3Zrsze0oA0Z4qnu4HPTKH9m23ha6
-         PGMFoqsqXvV1o3g6GV8R+Hs1dbHO193i4pFRst58sgFPv8+ZnmmnCRS/EelKRFfcKEZ3
-         CgHk3e1SVuUQuwVO0Lchrg/bQ26b3098IChV+f2K8nLRkzF5FyG2A3/JjFLrNwtFWYAV
-         pN7g==
-X-Gm-Message-State: AO0yUKUmPhtpWrQC3EZiOa+EVMZWSPs3e+jscOQAGtP/z7J9qGjhy6mb
-        S5LegiTyqLPwGnp1OkSudJqTFA==
-X-Google-Smtp-Source: AK7set+9lbgSbCjBufvOTfscvUZb2Bqe9iNdcu/ZokGyUiwY6OheF9JCHJ38NsYTCgtZrTxIgWmkmw==
-X-Received: by 2002:a05:600c:1d09:b0:3ea:f882:bb40 with SMTP id l9-20020a05600c1d0900b003eaf882bb40mr1902858wms.17.1677231305771;
-        Fri, 24 Feb 2023 01:35:05 -0800 (PST)
+        bh=jFfq5teius6pAK1nmf1oSiYVaS3V8Wiqx9qF8KZNMCQ=;
+        b=HqAXP07bCE0W6t8HOHH6n9Xq0Y3aj3Td6ofdZ1H+iXrxemNRnYBqx25oMs2OiyvdzX
+         /Zt/6b99i08nUTrfhF0Ouq/90B7+3pY5Zmk2i1g5KBRI6rwFxucMN6gemzhujKkF6/2a
+         xVYtBWmCBzkMItx+8/BEv1JiCuV8u9r3/M+A/4TNtQHYCoxdmz5DWNqoKPNDBYX7GPu7
+         3272jp8QH8aZkHFAn3UmIA4HiGBCsxe3xI/5qQKxHpdDtLqBAsZqlvMZvdxAPKJVkRWr
+         I06hPSVvDoOXtHeZfEKYQMKEzSlJI9znOwr4TEotsljU00RUh3jFvX3F8zlAQFH2uxxY
+         XIWA==
+X-Gm-Message-State: AO0yUKVfD7Kvh8MU0vi71wWi8Rn/w73a4LRjB2w2nIyEuPv4jWHcZC3X
+        KdLhT+0TNHZWj0qoFhLVio2lQA==
+X-Google-Smtp-Source: AK7set8uakOUbvmySBPvXTJA5HuapKBeA4BG/N82btii8y/1ofW049QHU4eTRDVwR0fxueKtyIIuAw==
+X-Received: by 2002:a05:600c:1da2:b0:3ea:ed4d:38fc with SMTP id p34-20020a05600c1da200b003eaed4d38fcmr2179606wms.31.1677231307168;
+        Fri, 24 Feb 2023 01:35:07 -0800 (PST)
 Received: from vingu-book.. ([2a01:e0a:f:6020:a6f0:4ee9:c103:44cb])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05600c34d200b003e6dcd562a6sm2239179wmq.28.2023.02.24.01.35.04
+        by smtp.gmail.com with ESMTPSA id d18-20020a05600c34d200b003e6dcd562a6sm2239179wmq.28.2023.02.24.01.35.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 01:35:05 -0800 (PST)
+        Fri, 24 Feb 2023 01:35:06 -0800 (PST)
 From:   Vincent Guittot <vincent.guittot@linaro.org>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -64,9 +64,9 @@ Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
         kprateek.nayak@amd.com, yu.c.chen@intel.com,
         youssefesmat@chromium.org, joel@joelfernandes.org,
         Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v12 6/8] sched/fair: Add sched group latency support
-Date:   Fri, 24 Feb 2023 10:34:52 +0100
-Message-Id: <20230224093454.956298-7-vincent.guittot@linaro.org>
+Subject: [PATCH v12 7/8] sched/core: Support latency priority with sched core
+Date:   Fri, 24 Feb 2023 10:34:53 +0100
+Message-Id: <20230224093454.956298-8-vincent.guittot@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230224093454.956298-1-vincent.guittot@linaro.org>
 References: <20230224093454.956298-1-vincent.guittot@linaro.org>
@@ -74,186 +74,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Task can set its latency priority with sched_setattr(), which is then used
-to set the latency offset of its sched_enity, but sched group entities
-still have the default latency offset value.
-
-Add a latency.nice field in cpu cgroup controller to set the latency
-priority of the group similarly to sched_setattr(). The latency priority
-is then used to set the offset of the sched_entities of the group.
+Take into account wakeup_latency_gran() when ordering the cfs threads.
 
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst | 10 ++++++++
- kernel/sched/core.c                     | 30 +++++++++++++++++++++++
- kernel/sched/fair.c                     | 32 +++++++++++++++++++++++++
- kernel/sched/sched.h                    |  4 ++++
- 4 files changed, 76 insertions(+)
+ kernel/sched/fair.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 1b3ed1c3b3f1..c08424593e4a 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1121,6 +1121,16 @@ All time durations are in microseconds.
-         values similar to the sched_setattr(2). This maximum utilization
-         value is used to clamp the task specific maximum utilization clamp.
- 
-+  cpu.latency.nice
-+	A read-write single value file which exists on non-root
-+	cgroups.  The default is "0".
-+
-+	The nice value is in the range [-20, 19].
-+
-+	This interface file allows reading and setting latency using the
-+	same values used by sched_setattr(2). The latency_nice of a group is
-+	used to limit the impact of the latency_nice of a task outside the
-+	group.
- 
- 
- Memory
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d5b7e237d79b..093cc1af73dc 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11059,6 +11059,25 @@ static int cpu_idle_write_s64(struct cgroup_subsys_state *css,
- {
- 	return sched_group_set_idle(css_tg(css), idle);
- }
-+
-+static s64 cpu_latency_nice_read_s64(struct cgroup_subsys_state *css,
-+				    struct cftype *cft)
-+{
-+	return LATENCY_TO_NICE(css_tg(css)->latency_prio);
-+}
-+
-+static int cpu_latency_nice_write_s64(struct cgroup_subsys_state *css,
-+				     struct cftype *cft, s64 nice)
-+{
-+	int prio;
-+
-+	if (nice < MIN_LATENCY_NICE || nice > MAX_LATENCY_NICE)
-+		return -ERANGE;
-+
-+	prio = NICE_TO_LATENCY(nice);
-+
-+	return sched_group_set_latency(css_tg(css), prio);
-+}
- #endif
- 
- static struct cftype cpu_legacy_files[] = {
-@@ -11073,6 +11092,11 @@ static struct cftype cpu_legacy_files[] = {
- 		.read_s64 = cpu_idle_read_s64,
- 		.write_s64 = cpu_idle_write_s64,
- 	},
-+	{
-+		.name = "latency.nice",
-+		.read_s64 = cpu_latency_nice_read_s64,
-+		.write_s64 = cpu_latency_nice_write_s64,
-+	},
- #endif
- #ifdef CONFIG_CFS_BANDWIDTH
- 	{
-@@ -11290,6 +11314,12 @@ static struct cftype cpu_files[] = {
- 		.read_s64 = cpu_idle_read_s64,
- 		.write_s64 = cpu_idle_write_s64,
- 	},
-+	{
-+		.name = "latency.nice",
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+		.read_s64 = cpu_latency_nice_read_s64,
-+		.write_s64 = cpu_latency_nice_write_s64,
-+	},
- #endif
- #ifdef CONFIG_CFS_BANDWIDTH
- 	{
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 414b6243208b..dc7570f43ebe 100644
+index dc7570f43ebe..125a6ff53378 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -12274,6 +12274,7 @@ int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
- 		goto err;
+@@ -11949,6 +11949,9 @@ bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
+ 	delta = (s64)(sea->vruntime - seb->vruntime) +
+ 		(s64)(cfs_rqb->min_vruntime_fi - cfs_rqa->min_vruntime_fi);
  
- 	tg->shares = NICE_0_LOAD;
-+	tg->latency_prio = DEFAULT_LATENCY_PRIO;
- 
- 	init_cfs_bandwidth(tg_cfs_bandwidth(tg));
- 
-@@ -12372,6 +12373,9 @@ void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
- 	}
- 
- 	se->my_q = cfs_rq;
++	/* Take into account latency offset */
++	delta -= wakeup_latency_gran(sea, seb);
 +
-+	se->latency_offset = calc_latency_offset(tg->latency_prio);
-+
- 	/* guarantee group entities always have weight */
- 	update_load_set(&se->load, NICE_0_LOAD);
- 	se->parent = parent;
-@@ -12502,6 +12506,34 @@ int sched_group_set_idle(struct task_group *tg, long idle)
- 	return 0;
+ 	return delta > 0;
  }
- 
-+int sched_group_set_latency(struct task_group *tg, int prio)
-+{
-+	long latency_offset;
-+	int i;
-+
-+	if (tg == &root_task_group)
-+		return -EINVAL;
-+
-+	mutex_lock(&shares_mutex);
-+
-+	if (tg->latency_prio == prio) {
-+		mutex_unlock(&shares_mutex);
-+		return 0;
-+	}
-+
-+	tg->latency_prio = prio;
-+	latency_offset = calc_latency_offset(prio);
-+
-+	for_each_possible_cpu(i) {
-+		struct sched_entity *se = tg->se[i];
-+
-+		WRITE_ONCE(se->latency_offset, latency_offset);
-+	}
-+
-+	mutex_unlock(&shares_mutex);
-+	return 0;
-+}
-+
- #else /* CONFIG_FAIR_GROUP_SCHED */
- 
- void free_fair_sched_group(struct task_group *tg) { }
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 3f42f86105d4..9a2e71231083 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -378,6 +378,8 @@ struct task_group {
- 
- 	/* A positive value indicates that this is a SCHED_IDLE group. */
- 	int			idle;
-+	/* latency priority of the group. */
-+	int			latency_prio;
- 
- #ifdef	CONFIG_SMP
- 	/*
-@@ -488,6 +490,8 @@ extern int sched_group_set_shares(struct task_group *tg, unsigned long shares);
- 
- extern int sched_group_set_idle(struct task_group *tg, long idle);
- 
-+extern int sched_group_set_latency(struct task_group *tg, int prio);
-+
- #ifdef CONFIG_SMP
- extern void set_task_rq_fair(struct sched_entity *se,
- 			     struct cfs_rq *prev, struct cfs_rq *next);
+ #else
 -- 
 2.34.1
 
