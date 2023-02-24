@@ -2,108 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB976A1A9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA206A1AA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjBXKwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S230039AbjBXKwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjBXKvk (ORCPT
+        with ESMTP id S229975AbjBXKwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:51:40 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C8354A08
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:51:37 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id ck15so54462223edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:51:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GWipjI5mniJwj+Zo4zdUNY2FbRwRYxCeXGMJn2ipLck=;
-        b=k4ggbccT39ghWzkqPfOuKg+e5dqk6S0iiRLcagST86D6Ehg1wAdUjlc/SuqwBa+dqn
-         WimQ6P/WlBwKVMP1IzwfxpBF2Byg8Kznh26l1swwOO+1MzON8n1q9kgeq5M2AdPpUmw+
-         6TGc8nOWg7YV/QaZaFD4MnHz4XGuv8ZQdRs8yThtQjEfhpX5B1dzvcQnpxonc//7bYdo
-         V6SpfXw/Tx1JOMCs5UiifAVL9IKb+h6Myskgw3STaA1e7tAnNY46NFFAzN4x21NMn2sq
-         KksIaXPBjWNZxi12LdvNW3SyHsr8OJMiOvpT9Sm1hYDjG/O9CMXTHjVEHiMkdpjhV4vL
-         OwDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWipjI5mniJwj+Zo4zdUNY2FbRwRYxCeXGMJn2ipLck=;
-        b=UUJ6ynQW5e/O0YiaWzjz9K9sRBPt0cNuApe2yF35mKKeuGndLMVz1A5OHgiZ7M7E3f
-         QyltfrIyfxVQ5QzyVekybTBpD8RyofBhFlo97yIlnjtMl5W5PjLku9MIOzBXZICqDsyY
-         Wy7V53NxprxY8Y0y46v/vBlSY+hi/627E80ZEuuNEPYknJI9tx/SM/D/oBYp9bY0RDVC
-         5rrBaL0hvO/tZemT2as2x9NSwod+1GiOHNBOBkYF3ZVBM4Hmv20fGnHdP0x8nkHpWYDz
-         Ecp9b3n5ijqowzcKFTW9o/dJGfWge5dU7f3JW8rHKNtBFaigDauL4zAFpMdc3MdjyF68
-         Mxmg==
-X-Gm-Message-State: AO0yUKX4PVNHhaAWsqw/FD/s3vVwU3lMHoGZYRqyRVAVmwz+1rUqLFjv
-        K2tCbLCdON1rmV2KKxbEWp0n9g==
-X-Google-Smtp-Source: AK7set/8r3ELb6NzgTDjS/JxvwXd778mA4ZaHD648XBFslKOZSwwXSIMZSZD4DlfMpG9Ny3kLVZl7g==
-X-Received: by 2002:a05:6402:1356:b0:4ac:746e:2edf with SMTP id y22-20020a056402135600b004ac746e2edfmr15950821edw.9.1677235896393;
-        Fri, 24 Feb 2023 02:51:36 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g26-20020a170906199a00b008c9b44b7851sm7197176ejd.182.2023.02.24.02.51.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 02:51:35 -0800 (PST)
-Message-ID: <36188e04-332f-e944-9c58-f6f2b74987da@linaro.org>
-Date:   Fri, 24 Feb 2023 11:51:34 +0100
+        Fri, 24 Feb 2023 05:52:05 -0500
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01AB56509;
+        Fri, 24 Feb 2023 02:52:02 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id D083E1B1926A;
+        Fri, 24 Feb 2023 12:51:59 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1677235920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hMX/SvCM5FiDgQ+z11AKxpaUrqr8yS8lrIi2hk5bw1M=;
+        b=P6KQx+QhL9/YOi02zs4UH2p77smt4DhMwgwl5Qd7EfS9eOxBQwCpHfvPaqujVQtJtSgNaR
+        RSqSn1hSpGnRybSvDJ2CR1no2/odeBWiJEbXAyVJNUuee0EEl7/gUR/M6kwji6F8iRCq+w
+        661I8Hcxj/5GESzS+VWjXeYRbmw+Oqfj3fmt4fZGbYwgqkzGwdy3uerMpIBvI6/n7btl4J
+        /FfYArC2WBN8NHvjoI8O9nwC5j4JgDvNbuMXduAgpwEDHi5V0/GrEQgcvk2ZwL2hrtjSN3
+        dkeAkpXu0YtLr2Aib8oA8BPwLZMHgSbKk9cTkeTbi0OxjGBrlkAcC+sOuwmX3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1677235920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hMX/SvCM5FiDgQ+z11AKxpaUrqr8yS8lrIi2hk5bw1M=;
+        b=PBIvVx/9vUF8QPBmlH/Qcd+Za/ku6MMP41XWpF/vsbbWlNRD5twblSCfJPhSXKJzf9CLtD
+        cNLIsmI321TCFiTz0FK7+sIFsIcuFjcLVUtHeCFsAfHtas1m2Ny71Hpyueif/jupyQ35xL
+        MZm1nSrsyEY1MkRNDj3MSWAWSNFNzu87WHmmdzXjyGG+qUSscuh7HKsXk4y0GevAzWWlVZ
+        SyJzyhcVANYyWLoN9Zp9r2PPb+ql7zmgFmh2HNeCoXKo1gTL6vfLqQVqMeKcCeX8Osxuyt
+        XOja97jGGda03Z78DdDJo6ITe6se4UnnydsRWTr3dNBjSQ1+fhwOugS7keo1Sg==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1677235920; a=rsa-sha256;
+        cv=none;
+        b=VuR0sDSN+Di59qrMbxZ9Z40kLyqrUg1JJuqP0CWiiFKCV/ZGHe6zt7AmTkTV5xMWVnTWoi
+        H90TYSm01ScWmiz1ax3W5mcsKJTGx7pQ3wtFsFNyB5mvzNtrXD1SBEc7Iz1MzUlXsPZ2PR
+        JFWIAa9sfxi47JmDT39Gh72BivC2VVdeuUHJMMpB8a4osaTl5S1KN/zRls4xclPXwHF3Jq
+        gbRgKIyR7M8fSxh4B4EAS9gkLw926BPe1IHG3xoOY0KA8qr/gfJqQOGtDh/cLDb7KhREAu
+        g+2x1cvbN2mq24u5AD0mmzHERQ1NSeu0SYOUJJ9FzNutsB0E2/QPHGjbUKKMjw==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 687B0634C91;
+        Fri, 24 Feb 2023 12:51:38 +0200 (EET)
+Date:   Fri, 24 Feb 2023 12:51:38 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Shravan.Chippa@microchip.com
+Cc:     Conor.Dooley@microchip.com, paul.j.murphy@intel.com,
+        daniele.alessandrelli@intel.com, mchehab@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        jacopo.mondi@ideasonboard.com, Prakash.Battu@microchip.com
+Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth mode
+Message-ID: <Y/iWulpOQl3gG3QI@valkosipuli.retiisi.eu>
+References: <20230208050915.1958183-1-shravan.chippa@microchip.com>
+ <20230208050915.1958183-4-shravan.chippa@microchip.com>
+ <Y/Xc9RCmO8P8eKtL@valkosipuli.retiisi.eu>
+ <Y/XnWOomz2N9fCvc@wendy>
+ <Y/XoXZJUKKGzGVVL@valkosipuli.retiisi.eu>
+ <Y/XpClyi9KMtLKcF@valkosipuli.retiisi.eu>
+ <PH0PR11MB5611D8EE3F896FC0BE9A842E81AA9@PH0PR11MB5611.namprd11.prod.outlook.com>
+ <Y/X9YiLJxDfLPNUX@valkosipuli.retiisi.eu>
+ <PH0PR11MB5611BB17A5DFAB0645D8DEB781A89@PH0PR11MB5611.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: dma: snps,dw-axi-dmac: Add reset
- items
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230221140424.719-1-walker.chen@starfivetech.com>
- <20230221140424.719-2-walker.chen@starfivetech.com>
- <1467f7c5-07eb-97db-c6f2-573a4208cc28@linaro.org>
- <d0984638-3f7f-7e4e-fe3e-5e1f88375dca@starfivetech.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d0984638-3f7f-7e4e-fe3e-5e1f88375dca@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5611BB17A5DFAB0645D8DEB781A89@PH0PR11MB5611.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 11:14, Walker Chen wrote:
->>>    resets:
->>> -    maxItems: 1
->>> +    maxItems: 2
->>
->> This breaks ABI and all other users. Test your changes before sending.
+Hi Shravan,
+
+On Fri, Feb 24, 2023 at 10:02:51AM +0000, Shravan.Chippa@microchip.com wrote:
+> Hi Sakari,
 > 
-> I think 'minItems' should be added here. So like this:
-> resets:
->   minItems: 1
->   maxItems: 2
+> > -----Original Message-----
+> > From: Sakari Ailus <sakari.ailus@iki.fi>
+> > Sent: 22 February 2023 05:03 PM
+> > To: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>
+> > Cc: Conor Dooley - M52691 <Conor.Dooley@microchip.com>;
+> > paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
+> > mchehab@kernel.org; robh+dt@kernel.org;
+> > krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
+> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
+> > linux-imx@nxp.com; linux-media@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; jacopo.mondi@ideasonboard.com; Battu
+> > Prakash Reddy - I30399 <Prakash.Battu@microchip.com>
+> > Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth
+> > mode
+> > 
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
+> > content is safe
+> > 
+> > On Wed, Feb 22, 2023 at 10:20:56AM +0000, Shravan.Chippa@microchip.com
+> > wrote:
+> > > Hi Sakari,
+> > >
+> > > > -----Original Message-----
+> > > > From: Sakari Ailus <sakari.ailus@iki.fi>
+> > > > Sent: 22 February 2023 03:36 PM
+> > > > To: Conor Dooley - M52691 <Conor.Dooley@microchip.com>
+> > > > Cc: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>;
+> > > > paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
+> > > > mchehab@kernel.org; robh+dt@kernel.org;
+> > > > krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
+> > > > s.hauer@pengutronix.de; kernel@pengutronix.de;
+> > festevam@gmail.com;
+> > > > linux-imx@nxp.com; linux-media@vger.kernel.org; linux-
+> > > > kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> > > > kernel@lists.infradead.org; Jacopo Mondi
+> > > > <jacopo.mondi@ideasonboard.com>; Battu Prakash Reddy - I30399
+> > > > <Prakash.Battu@microchip.com>
+> > > > Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower
+> > > > bandwidth mode
+> > > >
+> > > > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > > > know the content is safe
+> > > >
+> > > > On Wed, Feb 22, 2023 at 12:03:10PM +0200, Sakari Ailus wrote:
+> > > > > On Wed, Feb 22, 2023 at 09:58:48AM +0000, Conor Dooley wrote:
+> > > > > > On Wed, Feb 22, 2023 at 11:14:29AM +0200, Sakari Ailus wrote:
+> > > > > > > On Wed, Feb 08, 2023 at 10:39:13AM +0530, shravan kumar wrote:
+> > > > > > > > From: Shravan Chippa <shravan.chippa@microchip.com>
+> > > > > >
+> > > > > > > > @@ -666,11 +885,26 @@ static int imx334_init_pad_cfg(struct
+> > > > v4l2_subdev *sd,
+> > > > > > > >         struct v4l2_subdev_format fmt = { 0 };
+> > > > > > > >
+> > > > > > > >         fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY :
+> > > > V4L2_SUBDEV_FORMAT_ACTIVE;
+> > > > > > > > -       imx334_fill_pad_format(imx334, &supported_mode, &fmt);
+> > > > > > > > +       imx334_fill_pad_format(imx334, &supported_modes[0],
+> > > > > > > > + &fmt);
+> > > > > > >
+> > > > > > > Now that there are multiple modes supported, this would appear
+> > > > > > > to get the width, height as well as the other fields (apart
+> > > > > > > from mbus
+> > > > > > > code) from the first mode.
+> > > > > >
+> > > > > > Is this statement supposed to be a request to change something,
+> > > > > > or just a throwaway comment? It's a little hard for me to
+> > > > > > understand your intention here, sorry.
+> > > > >
+> > > > > Just pointing to what looks like a bug.
+> > > >
+> > > > Ah, my bad. Please ignore the comment.
+> > > >
+> > > > This is indeed about init_cfg(), not s_fmt().
+> > > >
+> > >
+> > > I will try to fix init_cfg()
+> > 
+> > There's no problem with it. Please ignore my original comment on this.
 > 
-> Other platform/users will not be affected by this.
+> Just checking, Do I need to do any modifications or the current code is fine?
 
-Which will allow two resets on all platforms. Is this correct for these
-platforms? Do they have two resets?
+The init_cfg() implementation is, but please see my other e-mail.
 
+-- 
+Regards,
 
-Best regards,
-Krzysztof
-
+Sakari Ailus
