@@ -2,415 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB726A1BA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCC96A1BAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjBXLzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        id S229725AbjBXL6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBXLzu (ORCPT
+        with ESMTP id S229516AbjBXL6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:55:50 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96598410A3;
-        Fri, 24 Feb 2023 03:55:48 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id z42so6187543ljq.13;
-        Fri, 24 Feb 2023 03:55:48 -0800 (PST)
+        Fri, 24 Feb 2023 06:58:08 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06879126DA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:58:07 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ee7so38739850edb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:58:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SM2jD2WGkkdjc+YfrvfeooKgMPREveodz0PCNlMVFUU=;
-        b=oYtJEH81IIRS5o0x+xLdmMNllSAuwKBCUooS8AOaxRt/BE2cRWtGVWH+Bvz/Sp9Tkv
-         r5BQzvKNC+0V5/PWEzDgoV1DnyLuGa7xy3g76rs+pkCS/Udh21KWrBYoUMSWUJohp2Wm
-         ST9xgqK1Wbop0OnRewSDsJjHAB21U+24MnCBkEoTdnK9UgmN5GKr/nktQDZdIlpt68Er
-         vi+srj5T3SfN3DkzjbTiuuKTf2C1X6vO2zE0ab5Qupw1aIfOOTbOUoJaOJ7o7e2rRcIJ
-         2grOIfhbo9PlYhGn3XLA91cNnkMhyIZDQf26A6U7LyWyMqIx9KtRacvhxatGUck2N0to
-         SCdA==
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5SvRaaL3nXP8o8+09y7RyP7z+BdqnGVyC31UuwZSLB4=;
+        b=fmJhu3nyDVSeySUZ2PbUE6zcmHHHERzxg5VF/SyR0hw0WaKRbkGBJMxsTX3TIzGvFx
+         8E1gpn0X8An6VHls1t0+VAmdS5fOnzCA6rzOFlreAIdrcVOAlaRGwT2rDHCetSIzyuTw
+         zsdcfZ0n81+UD0fT1NyG11sL/s9ePd/4bps1c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SM2jD2WGkkdjc+YfrvfeooKgMPREveodz0PCNlMVFUU=;
-        b=1cPGO8yyyh67iJ8A7Q98Mp/t9HMDPPwEjGo3NadyERfYUDk94dTwoeuyxiPq9LRc1d
-         Hu+WbuRTeDQQ7eMpgKcHjIohF8Te9v8eBmmSjC3apfNRY4wnmASegOeXoSYevOXiuaxb
-         JZWlzHZW+0BtTB/NRBhBmfn4nNbmjOVj2vqew8C2urptuNRjByMUCEzkhb/TRZsey754
-         MJuGmsLNP78qRRyBB2Pg7turJhCwTjleY8ZdaGXHogCR7HHORwq/czJnR0TIKRfR4a1H
-         SQgB/fV9TlFBu5HHZiesH1Uv3DDvhdGnTyzquuPUVKiY+BfCYOYETyMUE/9czZ3phOd9
-         B2Gg==
-X-Gm-Message-State: AO0yUKXINFmAPhKr7tzG8tD39h/OUNO/hLwhtGm6hJOZEe40GRtfeIks
-        nWzkSufZMtZ6KoxpA6cQkU0=
-X-Google-Smtp-Source: AK7set/WeGrqGcctJ0TVe1kLF8QFmtLiUiu8GO3U35HUeDbvsI/VmUrvYYPSOTjYEDAl0Scs+kKEyw==
-X-Received: by 2002:a2e:a9a2:0:b0:293:47c6:e876 with SMTP id x34-20020a2ea9a2000000b0029347c6e876mr8132243ljq.2.1677239746722;
-        Fri, 24 Feb 2023 03:55:46 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id s2-20020a19ad42000000b004cc7026d95asm1665253lfd.259.2023.02.24.03.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 03:55:46 -0800 (PST)
-Date:   Fri, 24 Feb 2023 13:55:44 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v8 35/56] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_UPDATE
- command
-Message-ID: <20230224135544.000075fb@gmail.com>
-In-Reply-To: <20230220183847.59159-36-michael.roth@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
-        <20230220183847.59159-36-michael.roth@amd.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5SvRaaL3nXP8o8+09y7RyP7z+BdqnGVyC31UuwZSLB4=;
+        b=0XRB5HZYy8a654mhlj4y3LN32oTCKZLy8u580lNRZ2qLkMjKnFRKB9S2ZN+nNo8Eik
+         ay/cl8uHJXef6KF7UTswQm8D0qggt/aJcgM/8FOVlSDuXfBkAqFNKCfJ0iFE2TUgBN27
+         QgRC/w3Bs92JqyFAvArn7vc8zV7I5GnwotHe8E1yW0jgv3p9AwhUegO0IxlpmJEhHyrw
+         kisdfBOfD7GDouQhYP6Gd9vm/OuyOw7YxxeF9Ltm0TqAzFJyVHAzV/7waoREOKfDox1S
+         /lqbrZSKsp3jprLO0FsGEby8tcr9Okw/IeBPnMyGApGj7Ei8TBD5PEq8PdsdpgU6wjC4
+         2QfA==
+X-Gm-Message-State: AO0yUKUjJD+bKZrJxXX/mTqcK463AoUDaUl58jsRjNUG6bdEOTGUtgbX
+        E1z7/lkOSN0tQKxQKaWlvE5z/WFoyeTw9JpovsRNSsEv15Iy1I6m
+X-Google-Smtp-Source: AK7set8dnBD+BRz/xrB9Os42h39GikwelmvocDp3Ir4AWUcCa7WQh0IB4rJ0xXvMqGaoFr/w+fVrMvaLHseaCuiFaVc=
+X-Received: by 2002:a17:906:a96:b0:8b2:d30:e72b with SMTP id
+ y22-20020a1709060a9600b008b20d30e72bmr11114020ejf.12.1677239885446; Fri, 24
+ Feb 2023 03:58:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20230211064527.3481754-1-jstultz@google.com> <20230211064527.3481754-2-jstultz@google.com>
+ <CAOf5uwnW1u=nfFnj3C8kCVmhgwRaVh6sHZR1RGnXdbrCNpkGVg@mail.gmail.com>
+ <87o7porea9.ffs@tglx> <CAOf5uwmhtQ8GXhMiE-Y3-wgL5=xfjOv0Tpq1vqPB8p=LyZHBmw@mail.gmail.com>
+ <CAOf5uwmpayJwpAFzUS6qsCgdpyek1f-2t2t9YNr76vnRjSC8=w@mail.gmail.com>
+ <87a618qlcp.ffs@tglx> <CAOf5uw=a2RYYFj+4_WOX+KaF_FCXSsUgfM+T2m2XjVuqKMdooA@mail.gmail.com>
+ <87sff0ox1a.ffs@tglx> <CAOf5uwmZWZij1tKUFUWKSKqyph4OYe6C3HdA8TQtrB7ztOdC-A@mail.gmail.com>
+ <874jrfq3jw.ffs@tglx> <CAOf5uw=+yZiTXGyjDgiw_w9yZZ5Pz3JQpykdCyFfbpNBTz+rXA@mail.gmail.com>
+ <CAOf5uwmqLkFDAjQdSJF8zXHjoz1P-2-Fp1L6orRHsAa6x89EHA@mail.gmail.com> <CAOf5uwnmy=dOBhLS-AsGZ5MLcPkBDa-c63eV425sAEbms-R4Kg@mail.gmail.com>
+In-Reply-To: <CAOf5uwnmy=dOBhLS-AsGZ5MLcPkBDa-c63eV425sAEbms-R4Kg@mail.gmail.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Fri, 24 Feb 2023 12:57:54 +0100
+Message-ID: <CAOf5uwnbBv-dN6cHm2t9R0ovqhAZRPV52tsR747wZnKcoeHr3Q@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/2] time: alarmtimer: Use TASK_FREEZABLE to cleanup
+ freezer handling
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>, kernel-team@android.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 12:38:26 -0600
-Michael Roth <michael.roth@amd.com> wrote:
+Hi
 
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> The KVM_SEV_SNP_LAUNCH_UPDATE command can be used to insert data into the
-> guest's memory. The data is encrypted with the cryptographic context
-> created with the KVM_SEV_SNP_LAUNCH_START.
-> 
-> In addition to the inserting data, it can insert a two special pages
-> into the guests memory: the secrets page and the CPUID page.
-> 
-> While terminating the guest, reclaim the guest pages added in the RMP
-> table. If the reclaim fails, then the page is no longer safe to be
-> released back to the system and leak them.
-> 
-> For more information see the SEV-SNP specification.
-> 
-> Co-developed-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> ---
->  .../virt/kvm/x86/amd-memory-encryption.rst    |  29 +++
->  arch/x86/kvm/svm/sev.c                        | 190 ++++++++++++++++++
->  include/uapi/linux/kvm.h                      |  19 ++
->  3 files changed, 238 insertions(+)
-> 
-> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> index 58971fc02a15..c94be8e6d657 100644
-> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> @@ -485,6 +485,35 @@ Returns: 0 on success, -negative on error
->  
->  See the SEV-SNP specification for further detail on the launch input.
->  
-> +20. KVM_SNP_LAUNCH_UPDATE
-> +-------------------------
-> +
-> +The KVM_SNP_LAUNCH_UPDATE is used for encrypting a memory region. It also
-> +calculates a measurement of the memory contents. The measurement is a signature
-> +of the memory contents that can be sent to the guest owner as an attestation
-> +that the memory was encrypted correctly by the firmware.
-> +
-> +Parameters (in): struct  kvm_snp_launch_update
-> +
-> +Returns: 0 on success, -negative on error
-> +
-> +::
-> +
-> +        struct kvm_sev_snp_launch_update {
-> +                __u64 start_gfn;        /* Guest page number to start from. */
-> +                __u64 uaddr;            /* userspace address need to be encrypted */
-> +                __u32 len;              /* length of memory region */
-> +                __u8 imi_page;          /* 1 if memory is part of the IMI */
-> +                __u8 page_type;         /* page type */
-> +                __u8 vmpl3_perms;       /* VMPL3 permission mask */
-> +                __u8 vmpl2_perms;       /* VMPL2 permission mask */
-> +                __u8 vmpl1_perms;       /* VMPL1 permission mask */
-> +        };
-> +
-> +See the SEV-SNP spec for further details on how to build the VMPL permission
-> +mask and page type.
-> +
-> +
->  References
->  ==========
->  
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 097bb2138360..03dd227f6090 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -234,6 +234,37 @@ static void sev_decommission(unsigned int handle)
->  	sev_guest_decommission(&decommission, NULL);
->  }
->  
-> +static int snp_page_reclaim(u64 pfn)
-> +{
-> +	struct sev_data_snp_page_reclaim data = {0};
-> +	int err, rc;
-> +
-> +	data.paddr = __sme_set(pfn << PAGE_SHIFT);
-> +	rc = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
-> +	if (rc) {
-> +		/*
-> +		 * If the reclaim failed, then page is no longer safe
-> +		 * to use.
-> +		 */
-> +		snp_mark_pages_offline(pfn,
-> +				       page_level_size(PG_LEVEL_4K) >> PAGE_SHIFT);
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +static int host_rmp_make_shared(u64 pfn, enum pg_level level, bool leak)
-> +{
-> +	int rc;
-> +
-> +	rc = rmp_make_shared(pfn, level);
-> +	if (rc && leak)
-> +		snp_mark_pages_offline(pfn,
-> +				       page_level_size(level) >> PAGE_SHIFT);
-> +
-> +	return rc;
-> +}
-> +
+Drop my last email. I have made a wrong assumption, below the fix I have done
 
-PATCH 24 has similar functions. It would be better to expose them.
+On Fri, Feb 24, 2023 at 11:32 AM Michael Nazzareno Trimarchi
+<michael@amarulasolutions.com> wrote:
+>
+> Hi
+>
+> On Fri, Feb 24, 2023 at 11:02 AM Michael Nazzareno Trimarchi
+> <michael@amarulasolutions.com> wrote:
+> >
+> > Hi Thomas
+> >
+> > On Tue, Feb 21, 2023 at 8:10 AM Michael Nazzareno Trimarchi
+> > <michael@amarulasolutions.com> wrote:
+> > >
+> > > Hi
+> > >
+> > > On Tue, Feb 21, 2023 at 1:12 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > >
+> > > > Michael!
+> > > >
+> > > > On Mon, Feb 20 2023 at 22:32, Michael Nazzareno Trimarchi wrote:
+> > > > > On Mon, Feb 20, 2023 at 10:18 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > > >>   * alarmtimer_fired - Handles alarm hrtimer being fired.
+> > > > >> @@ -194,6 +196,8 @@ static enum hrtimer_restart alarmtimer_f
+> > > > >>         int ret = HRTIMER_NORESTART;
+> > > > >>         int restart = ALARMTIMER_NORESTART;
+> > > > >>
+> > > > >> +       atomic_inc(&alarmtimer_wakeup);
+> > > > >> +
+> >
+> I have something like this
+>
+[snip]
 
->  static void sev_unbind_asid(struct kvm *kvm, unsigned int handle)
->  {
->  	struct sev_data_deactivate deactivate;
-> @@ -2093,6 +2124,162 @@ static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  	return rc;
->  }
->  
-> +static int snp_launch_update_gfn_handler(struct kvm *kvm,
-> +					 struct kvm_gfn_range *range,
-> +					 void *opaque)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct kvm_memory_slot *memslot = range->slot;
-> +	struct sev_data_snp_launch_update data = {0};
-> +	struct kvm_sev_snp_launch_update params;
-> +	struct kvm_sev_cmd *argp = opaque;
-> +	int *error = &argp->error;
-> +	int i, n = 0, ret = 0;
-> +	unsigned long npages;
-> +	kvm_pfn_t *pfns;
-> +	gfn_t gfn;
-> +
-> +	if (!kvm_slot_can_be_private(memslot)) {
-> +		pr_err("SEV-SNP requires restricted memory.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params))) {
-> +		pr_err("Failed to copy user parameters for SEV-SNP launch.\n");
-> +		return -EFAULT;
-> +	}
-> +
-> +	data.gctx_paddr = __psp_pa(sev->snp_context);
-> +
-> +	npages = range->end - range->start;
-> +	pfns = kvmalloc_array(npages, sizeof(*pfns), GFP_KERNEL_ACCOUNT);
-> +	if (!pfns)
-> +		return -ENOMEM;
-> +
-> +	pr_debug("%s: GFN range 0x%llx-0x%llx, type %d\n", __func__,
-> +		 range->start, range->end, params.page_type);
-> +
-> +	for (gfn = range->start, i = 0; gfn < range->end; gfn++, i++) {
-> +		int order, level;
-> +		void *kvaddr;
-> +
-> +		ret = kvm_restrictedmem_get_pfn(memslot, gfn, &pfns[i], &order);
-> +		if (ret)
-> +			goto e_release;
-> +
-> +		n++;
-> +		ret = snp_lookup_rmpentry((u64)pfns[i], &level);
-> +		if (ret) {
-> +			pr_err("Failed to ensure GFN 0x%llx is in initial shared state, ret: %d\n",
-> +			       gfn, ret);
-> +			return -EFAULT;
-> +		}
-> +
-> +		kvaddr = pfn_to_kaddr(pfns[i]);
-> +		if (!virt_addr_valid(kvaddr)) {
-> +			pr_err("Invalid HVA 0x%llx for GFN 0x%llx\n", (uint64_t)kvaddr, gfn);
-> +			ret = -EINVAL;
-> +			goto e_release;
-> +		}
-> +
-> +		ret = kvm_read_guest_page(kvm, gfn, kvaddr, 0, PAGE_SIZE);
-> +		if (ret) {
-> +			pr_err("Guest read failed, ret: 0x%x\n", ret);
-> +			goto e_release;
-> +		}
-> +
-> +		ret = rmp_make_private(pfns[i], gfn << PAGE_SHIFT, PG_LEVEL_4K,
-> +				       sev_get_asid(kvm), true);
-> +		if (ret) {
-> +			ret = -EFAULT;
-> +			goto e_release;
-> +		}
-> +
-> +		data.address = __sme_set(pfns[i] << PAGE_SHIFT);
-> +		data.page_size = X86_TO_RMP_PG_LEVEL(PG_LEVEL_4K);
-> +		data.page_type = params.page_type;
-> +		data.vmpl3_perms = params.vmpl3_perms;
-> +		data.vmpl2_perms = params.vmpl2_perms;
-> +		data.vmpl1_perms = params.vmpl1_perms;
-> +		ret = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_UPDATE,
-> +				      &data, error);
-> +		if (ret) {
-> +			pr_err("SEV-SNP launch update failed, ret: 0x%x, fw_error: 0x%x\n",
-> +			       ret, *error);
-> +			snp_page_reclaim(pfns[i]);
-> +
-> +			/*
-> +			 * When invalid CPUID function entries are detected, the firmware
-> +			 * corrects these entries for debugging purpose and leaves the
-> +			 * page unencrypted so it can be provided users for debugging
-> +			 * and error-reporting.
-> +			 *
-> +			 * Copy the corrected CPUID page back to shared memory so
-> +			 * userpsace can retrieve this information.
-> +			 */
-> +			if (params.page_type == SNP_PAGE_TYPE_CPUID &&
-> +			    *error == SEV_RET_INVALID_PARAM) {
-> +				int ret;
-> +
-> +				host_rmp_make_shared(pfns[i], PG_LEVEL_4K, true);
-> +
-> +				ret = kvm_write_guest_page(kvm, gfn, kvaddr, 0, PAGE_SIZE);
-> +				if (ret)
-> +					pr_err("Failed to write CPUID page back to userspace, ret: 0x%x\n",
-> +					       ret);
-> +			}
-> +
-> +
-> +			goto e_release;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Memory attribute updates via KVM_SET_MEMORY_ATTRIBUTES are serialized
-> +	 * via kvm->slots_lock, so use the same protocol for updating them here.
-> +	 */
-> +	mutex_lock(&kvm->slots_lock);
-> +	kvm_vm_set_region_attr(kvm, range->start, range->end, KVM_MEMORY_ATTRIBUTE_PRIVATE);
-> +	mutex_unlock(&kvm->slots_lock);
-> +
-> +e_release:
-> +	/* Content of memory is updated, mark pages dirty */
-> +	for (i = 0; i < n; i++) {
-> +		set_page_dirty(pfn_to_page(pfns[i]));
-> +		mark_page_accessed(pfn_to_page(pfns[i]));
-> +
-> +		/*
-> +		 * If its an error, then update RMP entry to change page ownership
-> +		 * to the hypervisor.
-> +		 */
-> +		if (ret)
-> +			host_rmp_make_shared(pfns[i], PG_LEVEL_4K, true);
-> +
-> +		put_page(pfn_to_page(pfns[i]));
-> +	}
-> +
-> +	kvfree(pfns);
-> +	return ret;
-> +}
-> +
-> +static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct kvm_sev_snp_launch_update params;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (!sev->snp_context)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	return kvm_vm_do_hva_range_op(kvm, params.uaddr, params.uaddr + params.len,
-> +				      snp_launch_update_gfn_handler, argp);
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_sev_cmd sev_cmd;
-> @@ -2186,6 +2373,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  	case KVM_SEV_SNP_LAUNCH_START:
->  		r = snp_launch_start(kvm, &sev_cmd);
->  		break;
-> +	case KVM_SEV_SNP_LAUNCH_UPDATE:
-> +		r = snp_launch_update(kvm, &sev_cmd);
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		goto out;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index cf19799ca5ce..4098bba17aa4 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1920,6 +1920,7 @@ enum sev_cmd_id {
->  	/* SNP specific commands */
->  	KVM_SEV_SNP_INIT,
->  	KVM_SEV_SNP_LAUNCH_START,
-> +	KVM_SEV_SNP_LAUNCH_UPDATE,
->  
->  	KVM_SEV_NR_MAX,
->  };
-> @@ -2036,6 +2037,24 @@ struct kvm_sev_snp_launch_start {
->  	__u8 pad[6];
->  };
->  
-> +#define KVM_SEV_SNP_PAGE_TYPE_NORMAL		0x1
-> +#define KVM_SEV_SNP_PAGE_TYPE_VMSA		0x2
-> +#define KVM_SEV_SNP_PAGE_TYPE_ZERO		0x3
-> +#define KVM_SEV_SNP_PAGE_TYPE_UNMEASURED	0x4
-> +#define KVM_SEV_SNP_PAGE_TYPE_SECRETS		0x5
-> +#define KVM_SEV_SNP_PAGE_TYPE_CPUID		0x6
-> +
-> +struct kvm_sev_snp_launch_update {
-> +	__u64 start_gfn;
-> +	__u64 uaddr;
-> +	__u32 len;
-> +	__u8 imi_page;
-> +	__u8 page_type;
-> +	__u8 vmpl3_perms;
-> +	__u8 vmpl2_perms;
-> +	__u8 vmpl1_perms;
-> +};
-> +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
+Fixed now and tested on my side as below
 
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index b68cb7f02a6b..1f2678fe6939 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -26,6 +26,7 @@
+ #include <linux/freezer.h>
+ #include <linux/compat.h>
+ #include <linux/module.h>
++#include <linux/suspend.h>
+ #include <linux/time_namespace.h>
+
+ #include "posix-timers.h"
+@@ -171,11 +172,11 @@ static void alarmtimer_dequeue(struct alarm_base
+*base, struct alarm *alarm)
+ {
+     if (!(alarm->state & ALARMTIMER_STATE_ENQUEUED))
+         return;
+
+     timerqueue_del(&base->timerqueue, &alarm->node);
+     alarm->state &= ~ALARMTIMER_STATE_ENQUEUED;
+ }
+
++static atomic_t alarmtimer_wakeup;
+
+ /**
+  * alarmtimer_fired - Handles alarm hrtimer being fired.
+@@ -194,6 +195,8 @@ static enum hrtimer_restart
+alarmtimer_fired(struct hrtimer *timer)
+     int ret = HRTIMER_NORESTART;
+     int restart = ALARMTIMER_NORESTART;
+
++    atomic_inc(&alarmtimer_wakeup);
++
+     spin_lock_irqsave(&base->lock, flags);
+     alarmtimer_dequeue(base, alarm);
+     spin_unlock_irqrestore(&base->lock, flags);
+@@ -244,6 +247,16 @@ static int alarmtimer_suspend(struct device *dev)
+     if (!rtc)
+         return 0;
+
++    /*
++     * Handle wakeups which happened between the start of suspend and
++     * now as those wakeups might have tried to wake up a frozen task
++     * which means they are not longer in the alarm timer list.
++     */
++    if (atomic_read(&alarmtimer_wakeup)) {
++        pm_wakeup_event(dev, 0);
++        return -EBUSY;
++    }
++
+     /* Find the soonest timer to expire*/
+     for (i = 0; i < ALARM_NUMTYPE; i++) {
+         struct alarm_base *base = &alarm_bases[i];
+@@ -296,6 +309,33 @@ static int alarmtimer_resume(struct device *dev)
+     return 0;
+ }
+
++static int alarmtimer_pm_notifier_fn(struct notifier_block *bl,
+unsigned long state,
++                                    void *unused)
++{
++    switch (state) {
++    case PM_SUSPEND_PREPARE:
++    case PM_POST_SUSPEND:
++    case PM_HIBERNATION_PREPARE:
++    case PM_POST_HIBERNATION:
++        atomic_set(&alarmtimer_wakeup, 0);
++        break;
++    }
++    return NOTIFY_DONE;
++}
++
++static struct notifier_block alarmtimer_pm_notifier = {
++       .notifier_call = alarmtimer_pm_notifier_fn,
++};
++
++static inline int alarmtimer_register_pm_notifier(void)
++{
++       return register_pm_notifier(&alarmtimer_pm_notifier);
++}
++
++static inline void alarmtimer_unregister_pm_notifier(void)
++{
++       unregister_pm_notifier(&alarmtimer_pm_notifier);
++}
+ #else
+ static int alarmtimer_suspend(struct device *dev)
+ {
+@@ -306,6 +346,15 @@ static int alarmtimer_resume(struct device *dev)
+ {
+     return 0;
+ }
++
++static inline int alarmtimer_register_pm_notifier(void)
++{
++       return 0;
++}
++
++static inline void alarmtimer_unregister_pm_notifier(void)
++{
++}
+ #endif
+
+ static void
+@@ -904,11 +953,18 @@ static int __init alarmtimer_init(void)
+     if (error)
+         return error;
+
+-    error = platform_driver_register(&alarmtimer_driver);
++    error = alarmtimer_register_pm_notifier();
+     if (error)
+         goto out_if;
+
++    error = platform_driver_register(&alarmtimer_driver);
++    if (error)
++        goto out_pm;
++
+     return 0;
++
++out_pm:
++    alarmtimer_unregister_pm_notifier();
+ out_if:
+     alarmtimer_rtc_interface_remove();
+     return error;
