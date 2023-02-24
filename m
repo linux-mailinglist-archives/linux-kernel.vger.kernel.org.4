@@ -2,210 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8526A22F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4386A2301
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjBXUDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S229648AbjBXUFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjBXUDC (ORCPT
+        with ESMTP id S229488AbjBXUFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:03:02 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0616F03A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:02:30 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pVeGi-0001Dl-MA; Fri, 24 Feb 2023 21:02:12 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pVeGd-0007PE-Tp; Fri, 24 Feb 2023 21:02:07 +0100
-Date:   Fri, 24 Feb 2023 21:02:07 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        kernel@pengutronix.de, intel-wired-lan@lists.osuosl.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
- genphy_c45_write_eee_adv()
-Message-ID: <20230224200207.GA8437@pengutronix.de>
-References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
- <20230211074113.2782508-7-o.rempel@pengutronix.de>
- <20230224035553.GA1089605@roeck-us.net>
- <20230224041604.GA1353778@roeck-us.net>
- <20230224045340.GN19238@pengutronix.de>
- <363517fc-d16e-5bcd-763d-fc0e32c2301a@roeck-us.net>
- <20230224165213.GO19238@pengutronix.de>
- <20230224174132.GA1224969@roeck-us.net>
- <20230224183646.GA26307@pengutronix.de>
- <b0af4518-3c07-726e-79a0-19c53f799204@roeck-us.net>
+        Fri, 24 Feb 2023 15:05:12 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E285CB76A;
+        Fri, 24 Feb 2023 12:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677269072; x=1708805072;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yK0OLOKHTBjVer7SFMeFOCUouvvyebPi2V/Mk1R/2rk=;
+  b=f3Nn2m+zWtGyVfYECGOi9Z7KSIrFxFPY5HkB7H/299clAaWvjwu839dN
+   uS+m3bRYX8utWtQgMlq27zZ7c+gKdNrkR5B4E8SBgggfEfs4XoYlDiGQd
+   YGdm3uEKXKUMUazkKwW5kECSC0hYlq9LZcJDRW5rgUux8ccxCLZj0PD+J
+   IzXLHfANkL2f9m3A3NJGBH0iSHu7pIVL6FSjQBd6KDq+qtkricJQWWTJR
+   Nxn0Vv3eiCAG9ZWa/5rjOu6/JtarQCP58z+vySvslEawtYe/EdofyEdlk
+   JOOm3VyGE8n4SwRXuwZrcbp9DwOUdgAvKDbeY/hC0MEDXW/FCY4nHm21o
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="321771024"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="321771024"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 12:03:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="741764528"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="741764528"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Feb 2023 12:03:07 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pVeHa-0002hb-0z;
+        Fri, 24 Feb 2023 20:03:06 +0000
+Date:   Sat, 25 Feb 2023 04:02:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andreas Hindborg <nmi@metaspace.dk>, linux-block@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Andreas Hindborg <nmi@metaspace.dk>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block: ublk: enable zoned storage support
+Message-ID: <202302250349.1eKfsTvO-lkp@intel.com>
+References: <20230224125950.214779-1-nmi@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b0af4518-3c07-726e-79a0-19c53f799204@roeck-us.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230224125950.214779-1-nmi@metaspace.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 11:17:24AM -0800, Guenter Roeck wrote:
-> On 2/24/23 10:36, Oleksij Rempel wrote:
-> > On Fri, Feb 24, 2023 at 09:41:32AM -0800, Guenter Roeck wrote:
-> > > On Fri, Feb 24, 2023 at 05:52:13PM +0100, Oleksij Rempel wrote:
-> > > > On Fri, Feb 24, 2023 at 08:00:57AM -0800, Guenter Roeck wrote:
-> > > > > On 2/23/23 20:53, Oleksij Rempel wrote:
-> > > > > > Hallo Guenter,
-> > > > > > 
-> > > > > > On Thu, Feb 23, 2023 at 08:16:04PM -0800, Guenter Roeck wrote:
-> > > > > > > On Thu, Feb 23, 2023 at 07:55:55PM -0800, Guenter Roeck wrote:
-> > > > > > > > On Sat, Feb 11, 2023 at 08:41:10AM +0100, Oleksij Rempel wrote:
-> > > > > > > > > Migrate from genphy_config_eee_advert() to genphy_c45_write_eee_adv().
-> > > > > > > > > 
-> > > > > > > > > It should work as before except write operation to the EEE adv registers
-> > > > > > > > > will be done only if some EEE abilities was detected.
-> > > > > > > > > 
-> > > > > > > > > If some driver will have a regression, related driver should provide own
-> > > > > > > > > .get_features callback. See micrel.c:ksz9477_get_features() as example.
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > > > > > > > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> > > > > > > > 
-> > > > > > > > This patch causes network interface failures with all my xtensa qemu
-> > > > > > > > emulations. Reverting it fixes the problem. Bisect log is attached
-> > > > > > > > for reference.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Also affected are arm:cubieboard emulations, with same symptom.
-> > > > > > > arm:bletchley-bmc emulations crash. In both cases, reverting this patch
-> > > > > > > fixes the problem.
-> > > > > > 
-> > > > > > Please test this fixes:
-> > > > > > https://lore.kernel.org/all/167715661799.11159.2057121677394149658.git-patchwork-notify@kernel.org/
-> > > > > > 
-> > > > > 
-> > > > > Applied and tested
-> > > > > 
-> > > > > 77c39beb5efa (HEAD -> master) net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
-> > > > > 068a35a8d62c net: phy: do not force EEE support
-> > > > > 66d358a5fac6 net: phy: c45: add genphy_c45_an_config_eee_aneg() function
-> > > > > ecea1bf8b04c net: phy: c45: use "supported_eee" instead of supported for access validation
-> > > > > 
-> > > > > on top of
-> > > > > 
-> > > > > d2980d8d8265 (upstream/master, origin/master, origin/HEAD, local/master) Merge tag 'mm-nonmm-stable-2023-02-20-15-29' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > > > > 
-> > > > > No change for xtensa and arm:cubieboard; network interfaces still fail.
-> > > > 
-> > > > Huh, interesting.
-> > > > 
-> > > > can you please send me the kernel logs.
-> > > > 
-> > > There is nothing useful there, or at least I don't see anything useful.
-> > > The Ethernet interfaces (sun4i-emac for cubieboard and ethoc for xtensa)
-> > > just don't come up.
-> > > 
-> > > Sample logs:
-> > > 
-> > > cubieboard:
-> > > 
-> > > https://kerneltests.org/builders/qemu-arm-v7-master/builds/531/steps/qemubuildcommand/logs/stdio
-> > > 
-> > > xtensa:
-> > > 
-> > > https://kerneltests.org/builders/qemu-xtensa-master/builds/2177/steps/qemubuildcommand/logs/stdio
-> > > 
-> > > and, for completeness, bletchley-bmc:
-> > > 
-> > > https://kerneltests.org/builders/qemu-arm-aspeed-master/builds/531/steps/qemubuildcommand/logs/stdio
-> > > 
-> > > Those logs are without the above set of patches, but I don't see a
-> > > difference with the patches applied for cubieboard and xtensa. I
-> > > started a complete test run (for all emulations) with the patches
-> > > applied; that should take about an hour to complete.
-> > > I could also add some debug logging, but you'd have to give me
-> > > some hints about what to add and where.
-> > 
-> > OK, interesting. These are emulated PHYs. QEMU seems to return 0 or
-> > 0xFFFF on unsupported registers. May be I'm wrong.
-> > All EEE read/write accesses depend on initial capability read
-> > genphy_c45_read_eee_cap1()
-> > 
-> > Can you please add this trace:
-> > 
-> > diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-> > index f595acd0a895..67dac9f0e71d 100644
-> > --- a/drivers/net/phy/phy-c45.c
-> > +++ b/drivers/net/phy/phy-c45.c
-> > @@ -799,6 +799,7 @@ static int genphy_c45_read_eee_cap1(struct phy_device *phydev)
-> >           * (Register 3.20)
-> >           */
-> >          val = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
-> > +       printk("MDIO_PCS_EEE_ABLE = 0x%04x", val);
-> >          if (val < 0)
-> >                  return val;
-> > 
-> 
-> For cubieboard:
-> 
-> MDIO_PCS_EEE_ABLE = 0x0000
-> 
-> qemu reports attempts to access unsupported registers.
-> 
-> I had a look at the Allwinner mdio driver. There is no indication suggesting
-> what the real hardware would return when trying to access unsupported registers,
-> and the Ethernet controller datasheet is not public.
+Hi Andreas,
 
-These are PHY accesses over MDIO bus. Ethernet controller should not
-care about content of this operations. But on qemu side, it is implemented as
-part of Ethernet controller emulation...
+Thank you for the patch! Yet something to improve:
 
-Since MDIO_PCS_EEE_ABLE == 0x0000, phydev->supported_eee should prevent
-other EEE related operations. But may be actual phy_read_mmd() went
-wrong. It is a combination of simple phy_read/write to different
-registers.
+[auto build test ERROR on v6.2]
+[cannot apply to axboe-block/for-next linus/master next-20230224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> For xtensa:
-> 
-> MDIO_PCS_EEE_ABLE = 0x0014
-> 
-> I didn't try to find out what that means.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Hindborg/block-ublk-enable-zoned-storage-support/20230224-210205
+patch link:    https://lore.kernel.org/r/20230224125950.214779-1-nmi%40metaspace.dk
+patch subject: [PATCH] block: ublk: enable zoned storage support
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230225/202302250349.1eKfsTvO-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6d088fc1b115a63e8888b12fa47aabd45be97460
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andreas-Hindborg/block-ublk-enable-zoned-storage-support/20230224-210205
+        git checkout 6d088fc1b115a63e8888b12fa47aabd45be97460
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-These will be interpreted as the PHY supports 1000KX and 1000T EEE modes.
-Starting from this point all EEE read write operations will be allowed.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302250349.1eKfsTvO-lkp@intel.com/
 
-> qemu did not report attempts to access unsupported registers.
+All errors (new ones prefixed by >>):
 
-Hm. What is the best way to proceed? Remove genphy_c45_read_eee_abilities()
-out of genphy_read_abilities() and let add it to PHYs known to support
-it? Or go deeper and fix QEMU if needed?
+   arch/mips/kernel/head.o: in function `kernel_entry':
+   (.ref.text+0xac): relocation truncated to fit: R_MIPS_26 against `start_kernel'
+   init/main.o: in function `set_reset_devices':
+   main.c:(.init.text+0x20): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x30): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `debug_kernel':
+   main.c:(.init.text+0xa4): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0xb4): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `quiet_kernel':
+   main.c:(.init.text+0x128): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x138): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `warn_bootconfig':
+   main.c:(.init.text+0x1ac): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x1bc): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `init_setup':
+   main.c:(.init.text+0x234): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x254): additional relocation overflows omitted from the output
+   mips-linux-ld: drivers/block/ublk_drv.o: in function `ublk_dev_param_basic_apply':
+>> ublk_drv.c:(.text.ublk_dev_param_basic_apply+0x2d8): undefined reference to `__udivdi3'
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
