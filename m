@@ -2,89 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE9C6A1C58
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103CB6A1C5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjBXMlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S230050AbjBXMnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjBXMlu (ORCPT
+        with ESMTP id S229601AbjBXMni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:41:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A968284;
-        Fri, 24 Feb 2023 04:41:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE511618D6;
-        Fri, 24 Feb 2023 12:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB560C4339B;
-        Fri, 24 Feb 2023 12:41:45 +0000 (UTC)
-Message-ID: <ed37c8c7-92a8-73fe-1451-08695cd4db9f@xs4all.nl>
-Date:   Fri, 24 Feb 2023 13:41:44 +0100
+        Fri, 24 Feb 2023 07:43:38 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5D518158;
+        Fri, 24 Feb 2023 04:43:36 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id cy6so48829538edb.5;
+        Fri, 24 Feb 2023 04:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UePzHufhOw2aAtD6ipXcXM5r15ZRa509qtLQfzxCNL0=;
+        b=SVop/IJtSIfVHFvQzKR2ZuvITHjZW7KC2Yq6z69oPYxvyno4y1js3twma1FkqjP+Lu
+         AfgyWJyZWUy8+U+B83BemQq1sa4LNhfQIWe+8vdC6f2g1Kj/APhmZYM6r9l6+jFUvjI4
+         at+SQjD6iWObRBhJ+Uvb8JKvxfT1flO2DaIkJ/FZYsCAiUPlc+M42sU+HfflReu7be6/
+         W9nE0TbtpKMuSOxUTzJuLHAUde5g8hKU7RSHWtobdnH+fvj/nlJ/AjzerW3oUl/ew4Z+
+         muo6YXwVVfNRxFy3+n0O54PWAnco/Xs+XnUBJxozudbSwM5pX0ssHdMDBS+fv8NcRFR4
+         XTvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UePzHufhOw2aAtD6ipXcXM5r15ZRa509qtLQfzxCNL0=;
+        b=MbSk84Glu0rKMHyGifkT7bnsFnl/9pKz651i1cJKhDSWusWw/+Q75p6LNzSyywa7K7
+         vMd85iR5qJ6m5GBliHTa++K84U/4lXWxPAHH3v/R9enn9CkZoloYownd1NhvlJRHH+Z3
+         B5ZEXDGfnhEATFm+DoODx5L4v3p7smCaAWyMzOhdE0q+RjKKTY5MqJXlmDbYq0y1yHdJ
+         Rrk95l7MXe3oY+WU5/2VWz9eYO6Y8jWV7ffkP5rnYca2bSGOSj7HaVbD0SiGrf2wTI2L
+         yxsq9SMrb3BQTHHEMPdKG4Vn8rM1jgTrp4zLMsWpDoFg4VnQ75T7c09yiEvlpumRMxpa
+         LuAg==
+X-Gm-Message-State: AO0yUKUqOVNlZuPC0udLScFHQ0dIBEjdmECz/RZvVpVGttdJvMUkmItC
+        rj/JU7AX9zpB/LuDdO8Vq0BaUG7L9kTxw7mq6QT339wg2Nqqfg7SG6g=
+X-Google-Smtp-Source: AK7set9SlEUHGCv9tnfYwDDIOmZdJnA32FkeWE/CLGkDZfbQhRz8AmOY6bThTYtr9NQleNBJHnxKEO2k8gdjQQUvxbI=
+X-Received: by 2002:a17:906:48c9:b0:878:4a24:1a5c with SMTP id
+ d9-20020a17090648c900b008784a241a5cmr11063255ejt.6.1677242614533; Fri, 24 Feb
+ 2023 04:43:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6/9] media: i2c: ov2685: convert to i2c's .probe_new()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     kernel@pengutronix.de, Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-References: <20230224120600.1681685-1-u.kleine-koenig@pengutronix.de>
- <20230224120600.1681685-7-u.kleine-koenig@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230224120600.1681685-7-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224092044.3332374-1-void0red@gmail.com> <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
+In-Reply-To: <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
+From:   Kang Chen <void0red@gmail.com>
+Date:   Fri, 24 Feb 2023 20:43:22 +0800
+Message-ID: <CANE+tVq0fwuuyMmrs4yyC21s_P8w0+WUS9zYZDxwda=++YpwqA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: add return value check of kzalloc in mv_udc_probe
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 13:05, Uwe Kleine-König wrote:
-> The probe function doesn't make use of the i2c_device_id * parameter so
-> it can be trivially converted.
-> 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Hi, Dongliang,
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+I totally agree with you. I checked the other drivers using
+status_req->req.buf structure, they free the memory when
+the driver removed. But in this driver, I can't find such code. So,
+as you said, it needs a devm_kazlloc instead of a kzalloc to manage
+the memory and avoid a memory leak.
 
-> Link: https://lore.kernel.org/lkml/20221121102838.16448-1-u.kleine-koenig@pengutronix.de
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/media/i2c/ov2685.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-> index a3b524f15d89..1c80b121e7d6 100644
-> --- a/drivers/media/i2c/ov2685.c
-> +++ b/drivers/media/i2c/ov2685.c
-> @@ -707,8 +707,7 @@ static int ov2685_configure_regulators(struct ov2685 *ov2685)
->  				       ov2685->supplies);
->  }
->  
-> -static int ov2685_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static int ov2685_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct ov2685 *ov2685;
-> @@ -830,7 +829,7 @@ static struct i2c_driver ov2685_i2c_driver = {
->  		.pm = &ov2685_pm_ops,
->  		.of_match_table = of_match_ptr(ov2685_of_match),
->  	},
-> -	.probe		= &ov2685_probe,
-> +	.probe_new	= &ov2685_probe,
->  	.remove		= &ov2685_remove,
->  };
->  
+Thanks for your correction. I will post a new patch later.
 
+Dongliang Mu <mudongliangabcd@gmail.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=8824=
+=E6=97=A5=E5=91=A8=E4=BA=94 19:06=E5=86=99=E9=81=93=EF=BC=9A
+
+>
+> On Fri, Feb 24, 2023 at 5:28 PM void0red <void0red@gmail.com> wrote:
+> >
+> > From: Kang Chen <void0red@gmail.com>
+> >
+> > Even an 8-byte kzalloc will fail when we don't have enough memory,
+> > so we need a nullptr check and do the cleanup when it fails.
+> >
+> > Reported-by: eriri <1527030098@qq.com>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217081
+> >
+> > Signed-off-by: Kang Chen <void0red@gmail.com>
+> > ---
+> >  drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/=
+udc/mv_udc_core.c
+> > index b397f3a84..6dd6d52de 100644
+> > --- a/drivers/usb/gadget/udc/mv_udc_core.c
+> > +++ b/drivers/usb/gadget/udc/mv_udc_core.c
+> > @@ -2230,6 +2230,10 @@ static int mv_udc_probe(struct platform_device *=
+pdev)
+> >
+> >         /* allocate a small amount of memory to get valid address */
+> >         udc->status_req->req.buf =3D kzalloc(8, GFP_KERNEL);
+>
+> Hi Kang and gregkh,
+>
+> I think there is a memory leak in this kzalloc. It seems there is no
+> deallocation for this allocated object.
+>
+> As the surrounding allocation statements suggest,
+> we should turn kzalloc to devm_kzalloc.
+>
+> > +       if (!udc->status_req->req.buf) {
+> > +               retval =3D -ENOMEM;
+> > +               goto err_destroy_dma;
+> > +       }
+> >         udc->status_req->req.dma =3D DMA_ADDR_INVALID;
+> >
+> >         udc->resume_state =3D USB_STATE_NOTATTACHED;
+> > --
+> > 2.34.1
+> >
