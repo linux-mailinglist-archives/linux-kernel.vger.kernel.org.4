@@ -2,78 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EAB6A1906
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986A46A190B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjBXJs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S229601AbjBXJum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXJsV (ORCPT
+        with ESMTP id S229460AbjBXJuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:48:21 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3C22A147
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:48:20 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id x14so20653927vso.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:48:20 -0800 (PST)
+        Fri, 24 Feb 2023 04:50:40 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD86863DCC;
+        Fri, 24 Feb 2023 01:50:38 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id c1so16379488plg.4;
+        Fri, 24 Feb 2023 01:50:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hy9qFm6Se/EXdsfdDRuKKStMA9t1Y7+V3hdvzyTdE1k=;
-        b=DXKueC8GpWCpoaUHhYn/VQVDrlcC5bBvGx9yUjyrIaUxjgH/nZgFkXAlDhhIM4Rk1K
-         fevzB1ccqZoM/IEbncOZ8uRBzbikbbjGgp4UmpOZmrPCgcJLJ2UXc5ibkBAy4ieK7itq
-         7R5kC5Dod5amnYLIoK+eRQgN2GAqgId8oG5es=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVCCdXBa6nz88M87KyoQqKDz5FQKWkEXCvBtVbehT4E=;
+        b=cjEL4yZ7en6kaastuCZfsMHDzYmv/Vd2SJJtJwOadFmDpRbtvMYKVqu6jrOHMl3iKR
+         NQybfLjw1kRjVerGVTjHXSCJ+mlMYGOer574w02tCSee3YyvRiVxIjx/UQ8TiJ9V4Fk5
+         TgeWA8jIGq5io6C9TZvb55cY4FN8RdQZD7YNj5dZGhq9S+KGYpWvcj8X5/XWHyLqLZUQ
+         fTbi/1SXF7cjcT6JweDyF0Jjdf3r/+sEXzgp+Xo2Jhf2SBxuAnsRhZ7JEgLKBVGrIGDo
+         NpRyS+3FBzh01i5aAon5IhM77QCUCKmyyV38DUj8DoBwffBdOCzcVYdUikzzIDjeJiv3
+         oosA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hy9qFm6Se/EXdsfdDRuKKStMA9t1Y7+V3hdvzyTdE1k=;
-        b=0PzaT66yB4xoUfnKEox3c4SCcqrg8YlOgr0SN1Ghbs3DqFI7XvseScn25E4/3RFPYk
-         PbX4q16Qsnq/UwBF8GuTI3/QpPcBlNJUgbneKaXO0ZiYA00ZCQJLUGV+mKQK+k+0aQzj
-         MgD1708cXhEUG5dwZ/pGBz9H4+QCPZw8HpGppQhnFZKu6nr30bintNHGFYE1PgR+hzZi
-         tktqUE6ixectvwPHms52TikW1syuJtl/Tx4cTPuZ9tPKt+w2PQn1uZu8OCGGAFO6Q8Zn
-         klO8fpqpqc21ZgE3u6I2gz7wsUpTvJeR4KO2SLOpiA7Aq6arWGL3HPYgxY9IV9U2NmJf
-         Xy2A==
-X-Gm-Message-State: AO0yUKUoGCX8OT0xBuNz4Q2PppFbISCDmMw8HR6vEfr1rqs7shdzraqa
-        qh1zNhgsTPVtP6FlS5m2zsQR+cVe4L8z0OXItz/KiwiVL8ZZNQ==
-X-Google-Smtp-Source: AK7set//leuBbGapBBCZqdtVWTRR+//pDwfT2YEJmSKyJPphUPRuePVjrJm1c2+unUfCTnRY/OH4DOBdzIniPgi5pX8=
-X-Received: by 2002:a67:ec11:0:b0:411:c62b:6bf0 with SMTP id
- d17-20020a67ec11000000b00411c62b6bf0mr2046072vso.3.1677232099910; Fri, 24 Feb
- 2023 01:48:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NVCCdXBa6nz88M87KyoQqKDz5FQKWkEXCvBtVbehT4E=;
+        b=edBrLSTnzMo2l1QwjeYHpMTF4qBjeV5pm/yyINQlPiVOVRVFCL9lh1L//Z1xMgiecq
+         Q5774UM8KxtSi+Tkr15+Jt1IQUlqzjCP6V6MTYnAu1NtDZP59JPDMHnIuNJCkWWWiL8w
+         QhWGho7+m/K1JNuZZB3IqR/w3a3Tsd6pi76y1PxyMwRDSTEUu1SIQmu5h/a7KCQzS/BG
+         SyZqEJeCMMPu+RbpNJ8Z9Zrd9eBKoHkyKHk1YVkhFQMa9Xdpp2OKTOPiggK5rH3mBQeI
+         VKyt2GSgEQJ9bXrLYvHUtNopcZQEuljGXqlu2bLnrUjsSOOn0cZv/aiMrKlwnGiPNzDM
+         jO5g==
+X-Gm-Message-State: AO0yUKWX1+3wwcPp1hAf/FCGcbCRqCnOee8crnvIw7X4FHkJcsoOVQbv
+        SCK+69QgAXXnBULhDuC9qi8=
+X-Google-Smtp-Source: AK7set/rtHLudRm85CWQuBieXpRW8tFRNkR2cAEct9hcL+0lMVkTZgqzZ4hSwV0FiYCejSf9wSz3Sw==
+X-Received: by 2002:a17:90b:1b50:b0:234:1676:84f2 with SMTP id nv16-20020a17090b1b5000b00234167684f2mr17823007pjb.11.1677232238175;
+        Fri, 24 Feb 2023 01:50:38 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-4.three.co.id. [180.214.233.4])
+        by smtp.gmail.com with ESMTPSA id a15-20020a17090a70cf00b00233df90227fsm1134486pjm.18.2023.02.24.01.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 01:50:37 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9098D106350; Fri, 24 Feb 2023 16:50:34 +0700 (WIB)
+Date:   Fri, 24 Feb 2023 16:50:34 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
+Message-ID: <Y/iIat7/gqFdI2xy@debian.me>
+References: <20230223141542.672463796@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com> <20230223134345.82625-2-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230223134345.82625-2-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 24 Feb 2023 17:48:08 +0800
-Message-ID: <CAGXv+5G8dkV-Po+960QeqMVUj6Sp7a08LYLitorWOWN=MhNKhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/16] arm64: dts: mediatek: mt8183-kukui: Couple VGPU
- and VSRAM_GPU regulators
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mGA0/6pHTKADJV3O"
+Content-Disposition: inline
+In-Reply-To: <20230223141542.672463796@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 9:43 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Add coupling for these regulators, as they have a strict voltage output
-> relation to satisfy in order to ensure GPU stable operation.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+--mGA0/6pHTKADJV3O
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 23, 2023 at 03:16:22PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.96 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+
+As others has pointed out, I have to apply scripts/pahole-version.sh file m=
+ode
+fix myself. Regardless, successfully cross-compiled for arm64
+(bcm2711_defconfig, GCC 10.2.0) and powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--mGA0/6pHTKADJV3O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/iIYgAKCRD2uYlJVVFO
+o4VMAQCgBe37PX/IS4NUBzfnKEDLL1b6iL9oOJzFRRzx+refkwEAs+g1MXQtIg97
+Rgq1eNefOupru+O909loeM9xQH9erwo=
+=VHKN
+-----END PGP SIGNATURE-----
+
+--mGA0/6pHTKADJV3O--
