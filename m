@@ -2,180 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098696A2278
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F2D6A2282
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjBXTpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
+        id S229550AbjBXTs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBXTpH (ORCPT
+        with ESMTP id S229482AbjBXTst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:45:07 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09F4206A5;
-        Fri, 24 Feb 2023 11:45:05 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1720600a5f0so661189fac.11;
-        Fri, 24 Feb 2023 11:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQCZaZas4mqF/1u+TgDl0aSZ4MQFsAGNxdsc85EAVk0=;
-        b=Rpzv5VL/XkyIgQFdemPBbfvDO/1gMNZ3HMQhxgQxNdmMNmPzkxut553WsamW5XvYWC
-         vi14lPcVIOjBkmzEKY6PXYrIfJvow0a78dDPP7IXdnVwVjL4PtvbDqzgvZcabMM+PN9r
-         7dJBqtmRMQwkw+jtZSpUAfCXIhOGyz5QE9m9KWHYhrAg88AIunMXHAC6gqkvC9Pg54h+
-         kba1adcNaoKK96dOuNaisIRegNgARYxIoqGQDLnQq/2gBQiH8QSU97iv0Ik1eFn5+2D9
-         IoxqsWZqOJ/r7rpOQ5RIs9EIWK2Q6EjYPw/4ZzwqOfyx3m3sYt5hgtdWn3PFawNF5DSA
-         pEBw==
+        Fri, 24 Feb 2023 14:48:49 -0500
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E2E6C1A2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:48:42 -0800 (PST)
+Received: by mail-il1-f205.google.com with SMTP id 2-20020a056e020ca200b003033a763270so331559ilg.19
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:48:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PQCZaZas4mqF/1u+TgDl0aSZ4MQFsAGNxdsc85EAVk0=;
-        b=1RFNkm8AmS4uJzIpjSdNSbp5wCnke32dLaA+4i1JmcO4rCfCd3fO8ix6sAM1Pc7Hn3
-         mKDcDVWrx1oG+7K26+Nzf61wsvdt82MXU/Yt8aE4vLRH7ep8sm4oiQ+XmDdJwTDjv/1O
-         V2BzK298m/sjWfEznfqJZUzvKUFDOwq6drbbUxdGqPR0Ko8Kk6y5DO4c9Ho5+Jm+CSm3
-         6/YtS0JZxz+97wKAQ9K6dkHg8aC0QW6HNBsQeukFHwHpUl5WCWiU0ZexL8rIPFSvrtyn
-         HORBNmWYknehgKhsuUEcakdyaJOBPNQPOL9LN9/1tMaBvnjBoGj4wxP3TGJzPsCmNUlj
-         jApg==
-X-Gm-Message-State: AO0yUKVDoaR95EQd3ygLx7TaiPS3zda4wHsb4HRa7mzi+hBnHyvIa/42
-        1U6VT6pq71oeVB5raYKENBdNRHIPlPQcXFLtgr8=
-X-Google-Smtp-Source: AK7set9q2ohE3ZIifWyCC+1q/2RI02UqDt8ADEh7SuBnNmXb/XptMvL0iwy9VsudXAL/RM3Gb8wn2wLxeAKMIu6DPvA=
-X-Received: by 2002:a05:6870:5b0a:b0:172:6f4:dcdf with SMTP id
- ds10-20020a0568705b0a00b0017206f4dcdfmr1447187oab.3.1677267905254; Fri, 24
- Feb 2023 11:45:05 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tj+YS6uDs/mw0VPIHBjLq++zoYCo86wH+DUsbWOpxBc=;
+        b=dPl69OHE3a0SbBN0jpBKPHBrqB/BshNNCkUClLU1A+ZX2xS39nBq8mVJxeLACQN4cp
+         yQxg3DIiYn04KpCs0TL4khGy/1mdNxtL+q12VjOJ8HqMY4LIOeFMItEIcUo1M4FETmLv
+         msefw8qCMf6isf03+LeAV/hG4shpJIKxQbl3xs2G8suBK+9Wl3SY8u7b1sEydZ+CUogR
+         nNaklGHsYb03LfhhDWJT3ZDpN6WIyuclsXT8et7PftTCHbtZ0fmW9UT2FFCaGz9LvLwI
+         suKwzcohOlO9qoKauXSWqKb/tQIQYHX1Bx0l+ZcniAmygQz7N6AEmvvvF57gKeSMj+43
+         y0Mg==
+X-Gm-Message-State: AO0yUKVzYdcvVVWweTvvf4yg7GWvkCDFrdnp0GlA/NpXzMYdiytBbqWG
+        eGfP9X+ZpvF4DzDrjtpeanG6QB8KDAgquliu+oOHx456POOb
+X-Google-Smtp-Source: AK7set/lpdFhGHQw+cB9TUuzNn6N5waM1hr7VkUEtxTEE0QTJPim2M8myplppztA1iU387qG7HTmvXxzDqkXjrCs8qG48TKcd7Xc
 MIME-Version: 1.0
-References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-7-robdclark@gmail.com>
- <20230220105345.70e46fa5@eldfell> <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
- <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com> <CAF6AEGuMn3FywPkEtfJ7oZ16A0Bk2aiaRvj4si4od1d3wzXkPw@mail.gmail.com>
- <20230222114900.1b6baf95@eldfell> <CAF6AEGs1_75gg+LCBj6=PH8Jn60PXiE+Kx_2636nP-+pajN8Hg@mail.gmail.com>
- <20230223113814.3010cedc@eldfell> <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
- <20230224112630.313d7b76@eldfell> <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
- <20230224122403.6a088da1@eldfell>
-In-Reply-To: <20230224122403.6a088da1@eldfell>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 24 Feb 2023 11:44:53 -0800
-Message-ID: <CAF6AEGsu666v9iOy2H20-JNkzi4Av0+OtrLBo_3CjRGByUPD0A@mail.gmail.com>
-Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+X-Received: by 2002:a02:a1c7:0:b0:3e5:a7d9:27db with SMTP id
+ o7-20020a02a1c7000000b003e5a7d927dbmr3101248jah.6.1677268122191; Fri, 24 Feb
+ 2023 11:48:42 -0800 (PST)
+Date:   Fri, 24 Feb 2023 11:48:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009dcd7705f5776af6@google.com>
+Subject: [syzbot] [ext4?] UBSAN: shift-out-of-bounds in ext2_fill_super
+From:   syzbot <syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 2:24 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
->
-> On Fri, 24 Feb 2023 09:41:46 +0000
-> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
->
-> > On 24/02/2023 09:26, Pekka Paalanen wrote:
-> > > On Thu, 23 Feb 2023 10:51:48 -0800
-> > > Rob Clark <robdclark@gmail.com> wrote:
-> > >
-> > >> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > >>>
-> > >>> On Wed, 22 Feb 2023 07:37:26 -0800
-> > >>> Rob Clark <robdclark@gmail.com> wrote:
-> > >>>
-> > >>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > >
-> > > ...
-> > >
-> > >>>>> On another matter, if the application uses SET_DEADLINE with one
-> > >>>>> timestamp, and the compositor uses SET_DEADLINE on the same thing with
-> > >>>>> another timestamp, what should happen?
-> > >>>>
-> > >>>> The expectation is that many deadline hints can be set on a fence.
-> > >>>> The fence signaller should track the soonest deadline.
-> > >>>
-> > >>> You need to document that as UAPI, since it is observable to userspace.
-> > >>> It would be bad if drivers or subsystems would differ in behaviour.
-> > >>>
-> > >>
-> > >> It is in the end a hint.  It is about giving the driver more
-> > >> information so that it can make better choices.  But the driver is
-> > >> even free to ignore it.  So maybe "expectation" is too strong of a
-> > >> word.  Rather, any other behavior doesn't really make sense.  But it
-> > >> could end up being dictated by how the hw and/or fw works.
-> > >
-> > > It will stop being a hint once it has been implemented and used in the
-> > > wild long enough. The kernel userspace regression rules make sure of
-> > > that.
-> >
-> > Yeah, tricky and maybe a gray area in this case. I think we eluded
-> > elsewhere in the thread that renaming the thing might be an option.
-> >
-> > So maybe instead of deadline, which is a very strong word, use something
-> > along the lines of "present time hint", or "signalled time hint"? Maybe
-> > reads clumsy. Just throwing some ideas for a start.
->
-> You can try, but I fear that if it ever changes behaviour and
-> someone notices that, it's labelled as a kernel regression. I don't
-> think documentation has ever been the authoritative definition of UABI
-> in Linux, it just guides drivers and userspace towards a common
-> understanding and common usage patterns.
->
-> So even if the UABI contract is not documented (ugh), you need to be
-> prepared to set the UABI contract through kernel implementation.
->
-> If you do not document the UABI contract, then different drivers are
-> likely to implement it differently, leading to differing behaviour.
-> Also userspace will invent wild ways to abuse the UABI if there is no
-> documentation guiding it on proper use. If userspace or end users
-> observe different behaviour, that's bad even if it's not a regression.
->
-> I don't like the situation either, but it is what it is. UABI stability
-> trumps everything regardless of whether it was documented or not.
->
-> I bet userspace is going to use this as a "make it faster, make it
-> hotter" button. I would not be surprised if someone wrote a LD_PRELOAD
-> library that stamps any and all fences with an expired deadline to
-> just squeeze out a little more through some weird side-effect.
+Hello,
 
-Userspace already has various (driver specific) debugfs/sysfs that it
-can use if it wants to make it hotter and drain batteries faster, so
-I'm not seeing a strong need to cater to the "turn it up to eleven"
-crowd here.  And really your point feels like a good reason to _not_
-document this as anything more than a hint.
+syzbot found the following issue on:
 
-Back in the real world, mobile games are already well aware of the fps
-vs battery-life (and therefore gameplay) tradeoff.  But what is
-missing is a way to inform the kernel of userspace's intentions, so
-that gpu dvfs can make intelligent decisions.  This series is meant to
-bridge that gap.
+HEAD commit:    a9b06ec42c0f Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1646c5e8c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ad40c5d31656db1
+dashboard link: https://syzkaller.appspot.com/bug?extid=4fec412f59eba8c01b77
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172f9f58c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13607dcf480000
 
-BR,
--R
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3fd9d14dbef6/disk-a9b06ec4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d4fd6fe60f78/vmlinux-a9b06ec4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/908925a4e5fc/Image-a9b06ec4.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/322d1cd45d78/mount_1.gz
 
-> Well, that's hopefully overboard in scaring, but in the end, I would
-> like to see UABI documented so I can have a feeling of what it is for
-> and how it was intended to be used. That's all.
->
->
-> Thanks,
-> pq
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 512
+================================================================================
+UBSAN: shift-out-of-bounds in fs/ext2/super.c:948:25
+shift exponent 32 is too large for 32-bit type 'int'
+CPU: 1 PID: 5922 Comm: syz-executor396 Not tainted 6.2.0-syzkaller-18295-ga9b06ec42c0f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Call trace:
+ dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:321
+ ext2_fill_super+0x2074/0x23fc fs/ext2/super.c:948
+ mount_bdev+0x26c/0x368 fs/super.c:1359
+ ext2_mount+0x44/0x58 fs/ext2/super.c:1484
+ legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
+ vfs_get_tree+0x90/0x274 fs/super.c:1489
+ do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
+ path_mount+0x590/0xe58 fs/namespace.c:3475
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount fs/namespace.c:3674 [inline]
+ __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+================================================================================
+EXT2-fs (loop0): error: fragsize 4096 != blocksize 1024(not supported yet)
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
