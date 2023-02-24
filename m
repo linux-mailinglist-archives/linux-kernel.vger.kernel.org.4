@@ -2,61 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CAD6A1627
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 001916A1649
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjBXFOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 00:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S229661AbjBXFdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 00:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXFOC (ORCPT
+        with ESMTP id S229436AbjBXFdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 00:14:02 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F4D26CC3;
-        Thu, 23 Feb 2023 21:14:00 -0800 (PST)
+        Fri, 24 Feb 2023 00:33:37 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942EA158AD;
+        Thu, 23 Feb 2023 21:33:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677215641; x=1708751641;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rafueas/Vcfut9/LWCGFPB0Qut6KMM0NFlHvmexhzNQ=;
-  b=gbh9Wc5dy0Mp4SSdEsScFUmYasx6r98aesk+Rj7Kxqwv7ESVivJWNwQn
-   9BLFpndI1i8EA++sWUjh1whkFbaG1v+SVPXhCn/up1yjs/dde6HOkIwSz
-   CJM/C6A8uJhffUHfB+oo2Sgdq9m3cNBHLY+ge3w8W4+rvEQ8t6HwGcyXv
-   TB8yjf0tF6rtnRsCUzyyU1X8cPJ8YjxNcX/zm6eROsgyQoGEB/2w0c13h
-   3SGt07k2SWrVO67KwUwxJlmYYcTkOr305sJ095lNNSxJV1l/POCSInHXU
-   qfythkNNv+eldXDKKatvfQaNi67YHcGLgyUL0LvjfxeTFyAOVy0FGL2st
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334819208"
+  t=1677216815; x=1708752815;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=NDCcYiBLbGtC8hu62rw3TxdXypRKMLlxXXhz2JeUn4Q=;
+  b=PsUn17dOIonQUIwg8/oGDGX0y4vESjfnYNr6+1V77zXd6pj1YyVaUUKC
+   3KwXxCo9EPvzXMvByfH4SeS0YQt0Ab3iwd/JTfaF9FQoUfrNG5JEvPnSh
+   Hd+vJfMWY9urOM0pftAQS9jcTbFq6J6QU1UohkkBqDhF0Erak7BbCJ88H
+   uQgUhNz4PDK5Hg0sdioUZ0FiToYsbG3Mq9XTQzahk8CLkY9KScm+uG6yY
+   8hDIJlEp0bcW2uTrgLapc6eRAH+bkBwn1Kq6ETgVGRLmdV+KA/jzhT1fY
+   L45BOUZk4tWWIr2KGIpMoOYBP1TElGsBgOC9Dhe3qXQWmwmGr0JifGSfW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="360905896"
 X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="334819208"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 21:13:53 -0800
+   d="scan'208";a="360905896"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 21:33:34 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918304007"
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736686015"
 X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="918304007"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 21:13:49 -0800
-Date:   Fri, 24 Feb 2023 13:02:49 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        trix@redhat.com, ronak.jain@xilinx.com, gregkh@linuxfoundation.org,
-        tanmay.shah@xilinx.com, mathieu.poirier@linaro.org,
-        ben.levinsky@amd.com, rajan.vaja@xilinx.com,
-        harsha.harsha@xilinx.com, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] fpga: zynqmp-fpga: Adds status interface
-Message-ID: <Y/hE+dqK0OzuExJ0@yilunxu-OptiPlex-7050>
-References: <20230217115036.2617396-1-nava.kishore.manne@amd.com>
- <20230217115036.2617396-3-nava.kishore.manne@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+   d="scan'208";a="736686015"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2023 21:33:34 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 21:33:34 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 21:33:33 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 23 Feb 2023 21:33:33 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 23 Feb 2023 21:33:33 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ku/WO3YR6IVgiRKcUAhImq9oA67BxB1ENUqVcARG25VoWbL8Os2RZY5lUTzOaHxIfgDJPcTqduxTUJjjxCQUHKB9k/O3hoTXIkmUsd/ASClaNXHBYeISdZ/MAS5BYiFm/ntyPeLFkK4CO4D8fgTiMVuEke4oT1Rdp9DDEYesA3pVUR97vLwxtCkcej11eUy6TzdGaD0ERUFaoXjz/oHLL6tMgddqdFBQDvZ3+vlsab1lYoYTqFNtXHbvi3QafLPnPG8wjKl3OsAQYUtYYaOJ5G7cTLt+p7ScKrMxa/DAWkY8sX9DeN+zCElNyPk3CeK1DCtMhZpwPEjvJH0UfwI2Dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sM9m8puFL/g9xSoLacwGTPP1EJHSv+XGkoI5gj5QMOc=;
+ b=dM0xO4xyrv04tDE/uHKnAbq7OHDNuPwJ8eGm+No/+y1x+9RnzwMwXlDKgJ7jjlvKfpxQODwQYHIqkQ3QuKhmciXH8djACIMfq2L9SLQNEXzY74UjkrHQpB1cqRXbkLOQs8/MUPvO6+7+gh0TGg6gI2gZR/6Ve9h1bXO76eaI126mX3CmwoCHI3WsoepPj+i9JNZA7JpiwN4svh59BSAz5fAgNByoiA6eyV77wv7zxIsKD/jajk0KBUuQz2Dg3gppA1v8GBd8vwYnjsT1A/x9CBdvRIbNMZOTRWWSqZHgfxNCJu36awSJ+bSNmSZFPgQnDUv3kd86X5BzxBY/vRhcfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ IA1PR11MB7199.namprd11.prod.outlook.com (2603:10b6:208:418::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Fri, 24 Feb
+ 2023 05:33:30 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::82d2:d341:4138:17ef]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::82d2:d341:4138:17ef%8]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
+ 05:33:30 +0000
+Date:   Fri, 24 Feb 2023 13:09:47 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     <kvm@vger.kernel.org>, <intel-gfx@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "Ben Gardon" <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Subject: Re: [PATCH 03/27] drm/i915/gvt: Incorporate KVM memslot info into
+ check for 2MiB GTT entry
+Message-ID: <Y/hGmyneWgDlmFwE@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <Y7SaklDQD0EoIs8l@google.com>
+ <Y7Y+759IN2DH5h3h@yzhao56-desk.sh.intel.com>
+ <Y7cLkLUMCy+XLRwm@google.com>
+ <Y7e3fT8/V2NoXAUP@yzhao56-desk.sh.intel.com>
+ <Y7ioYegkgKIH8uJL@google.com>
+ <Y7vlOCKkJ+QyO3EM@yzhao56-desk.sh.intel.com>
+ <Y773+EB35bAchVTC@google.com>
+ <Y8ix4lqk8QYH4g3h@zhen-hp.sh.intel.com>
+ <Y8jUom2voLubfqxE@yzhao56-desk.sh.intel.com>
+ <Y/fPePRoP6sOiD14@google.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230217115036.2617396-3-nava.kishore.manne@amd.com>
+In-Reply-To: <Y/fPePRoP6sOiD14@google.com>
+X-ClientProxiedBy: SG2PR03CA0119.apcprd03.prod.outlook.com
+ (2603:1096:4:91::23) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|IA1PR11MB7199:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6852af93-fc94-460b-40ba-08db1628a992
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9J/xDGDB3mGTpkwo2Pc1aoqOAgOe42v48AYCcoeKJ7BUiM3yzGmgwDBVVQfojCQh32g4erNukRFYip/KtiUPM55BdKOOSikgD0EDbJ4hNngcE54I/FbnH1iKB1v8Ib2cMe13D2gE/VG8WI0ZkIFoXPA86yavO23ttOj45YN+lGeZo/0SlabFEKeQKFjCrLXFSF2+/2Ut8mfAcbWdF+2uBqBlfQuHvMfjdwzltgH4HZFnhedKrG98G+st6dkUkNi0r4nNDeABwX2nY/hKnQ2/FBpGldvd2O51mfy7MvuOFpCmmnwCKSr7+0Po3eiEVyfRpv6MuU7HLgwgxR2BrVqQLEiJ6dwMPPevKptsjZGpPB+FDxJ88rTSFE8gB4ZQGIiI2/is3l31pEHbbsf8Kg84QKi0xIw7DtC7HRrpOdAgynb+2tbH2/yFES+L4DzrQnThazbfAMtq8P1tRX+2101FN4HQpcGSurqR1HCF/P5PFVAny5O5SH0XjwsD9gmLsyQiRc3PKQFLb79H9l2At6Thz9y+v5SkL0S6JhwFUj5au+/6NSnsh7AcmITueo5QR5qxBfq0/Ai1whmJ7D6TSWU461wyBs2dPU12FGziLkZcWsHioyLHl1XqCEFNyvk7FTyYHMhlAZmEBmZENc1FGlOThg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199018)(2906002)(3450700001)(5660300002)(478600001)(83380400001)(186003)(54906003)(6506007)(86362001)(316002)(26005)(82960400001)(38100700002)(4326008)(66476007)(66556008)(8676002)(66946007)(6916009)(8936002)(41300700001)(6666004)(6512007)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1G37fWGbsk6tQWAO+IptazIrbQ+f8wy/zzNNyUnym2kBhV1/O2CK1Q0O89g5?=
+ =?us-ascii?Q?3fQbPZtr16CbsK7rpIpWm43vVEwvl+zqildZ0hIWQSVj/S4FqiXcifRoY1/l?=
+ =?us-ascii?Q?N0TYNC9sb9jeQRNom7r9liTDWX+bK5nZfLaxh+hHwJw5OtxfcBPiWJmK+wpH?=
+ =?us-ascii?Q?FTFlXFOuTqNZHrhjpaBIOSpEadG+s+VO83goOg7Ox21uO0wA6cyWXA2YVgNG?=
+ =?us-ascii?Q?fkda+fJN1OAmlw6BWSv8AmSGEHOnfXPGxvymGJEyMx0pxdq7EVKnDrtwzz45?=
+ =?us-ascii?Q?VmjBSwymBTi9hOqNhZ9/2cgwaSmZw7+aray25V6q92AnvsQNUox9+uNkkNV3?=
+ =?us-ascii?Q?ilKnEzA1UbJVLpzKnqhN9aHXIxhOrh7ggXRK1IO2r04hXlSjHEZR/twkvTUv?=
+ =?us-ascii?Q?xskKLwxREhNPbk6C00md/HkSpeCGYuXnVfzJtItoeW6nBNejJDJYM9TbnF46?=
+ =?us-ascii?Q?wYA7zRuG+u7u+sCLZKNFvMHF4EJBy6H5in4IYuDBcV4oKqFFuALa89wknmch?=
+ =?us-ascii?Q?Dmrt/kXk3YBghIRpLEOTXkH0S+AzesITwmzt8ap2RAvpkffCaLLf5iswuJJV?=
+ =?us-ascii?Q?8O2b6f1/JdjqLAZ6ZnZomPhy7A1+HQgl0WjwUAheZdCW/xaFGF3i5uFJKaH8?=
+ =?us-ascii?Q?yBLMgK7smrLL4bQI/AX1PWYPw83Y/Xzlw3DoaPf3EPP09J8liTyWA89luvvz?=
+ =?us-ascii?Q?0jm+FZc5en7tRz1v6nf8fm08qxLXWw2vT47FImeApXOA/1ome5vqHWbf522W?=
+ =?us-ascii?Q?u8BRrSrbLbkUrlYYYbnNFXt7fLG+/woaLv57Q6pneHwklsAWosVhbrBtVOd2?=
+ =?us-ascii?Q?5/QxlSzPwFw+4/M0GT5QmqnZUnpjLWm7J2x7mTY2WFaorH/Tr9kwMHO0YUND?=
+ =?us-ascii?Q?aSS7rhpWit/v0ngIEqdVAJmzJTObop9pbgoTYf/NL49dLkB3O4UcjYd9hnIG?=
+ =?us-ascii?Q?ESPIp9KHqFMzKzmHhYfFhxHfEaHGY5hd1lbCy5o0o6ojXLyYMxTmxCNzVghj?=
+ =?us-ascii?Q?DCWjrhioTBUXMbOrrgfNDIAm5PxYSwrMQat04vD/P13QTzR8rRPCEs29vzkf?=
+ =?us-ascii?Q?ge9BGrGQIJdWSoROcLLywPCphMvuks2xcnobWMZjLoqsjFN6U7y3l2VUStB+?=
+ =?us-ascii?Q?owgLsB8M3qMs3oHhGaDkpmhcAXr+rWQ9C0ZYVIEfx6nheIjrQ8muKvHTbS72?=
+ =?us-ascii?Q?0hhZ1EvdKnMEvLpuyfMIvmp3izF5+rW9aOAEIhBYi0MhI3XmBRzYREFO6207?=
+ =?us-ascii?Q?P7AuFK3iiGjMePBU7M8ol4nM1BYQ6yKhH7Poob6EjMJF4Jgz1PuRX9vLDJ/r?=
+ =?us-ascii?Q?tcITN5O/OCxADkmKNmDOD9i0c3djU5lEnZPH6ounOD1PlKiV7TWOmVN8ihU6?=
+ =?us-ascii?Q?37Fia3hPJthAYKCjWoreJGecRFqysgBzzhZ5nCOE/rJp666mhlW9kkT2q5WH?=
+ =?us-ascii?Q?OOa7rXTzUBLSLwKy1pqe/6HCU+MOjxRh7DLk6rb/U0loiD/xUmPe6Yea/fPO?=
+ =?us-ascii?Q?F1nGL4unIE92/cu1bcXaj0HIFQ515Uf8ykOeH16D1nvI8OfHbfyeuqKtKMiS?=
+ =?us-ascii?Q?XAofRYUjWTNA6dboQ0vrNNdrwIsi8V3Hi+ze9vJr7x6iNV5F/LxGFZTnwbzx?=
+ =?us-ascii?Q?kA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6852af93-fc94-460b-40ba-08db1628a992
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 05:33:30.3757
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KdXibiQYOZzAQ7s1RvqyGFiTA5GWCmekAnER1/e4qQ/AhmFsXu/2UoS40Nahyr9Z500/mo279jokcNWEo+RDYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7199
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -67,189 +166,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-17 at 17:20:36 +0530, Nava kishore Manne wrote:
-> Adds status interface for zynqmp-fpga, It's a read only interface
+On Thu, Feb 23, 2023 at 12:41:28PM -0800, Sean Christopherson wrote:
+> Apologies for the super slow reply, I put this series on the backburner while I
+> caught up on other stuff and completely missed your questions.
+>
+Never mind :)
 
-s/,/.
-
-> which allows the user to get the Programmable Logic(PL) configuration
-> status.
+> On Thu, Jan 19, 2023, Yan Zhao wrote:
+> > On Thu, Jan 19, 2023 at 10:58:42AM +0800, Zhenyu Wang wrote:
+> > > Current KVMGT usage is mostly in controlled mode, either user is own host admin,
+> > > or host admin would pre-configure specific limited number of VMs for KVMGT use.
+> > > I think printk on error should be fine, we don't need rate limit, and adding
+> > > extra trace monitor for admin might not be necessary. So I'm towards to keep to
+> > > use current error message.
+> > > 
+> > 
+> > Thanks, Sean and Zhenyu.
+> > So, could I just post the final fix as below?
 > 
-> Usage:
-> To read the Programmable Logic(PL) configuration status
-> 	cat /sys/bus/platform/drivers/zynqmp_fpga_manager/
-> firmware:zynqmp-firmware:pcap/status
-
-Don't wrap here.
-
+> No objection here.
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
-> hanges for v2:
->               - Updated status messages handling logic as suggested by Xu Yilun.
+> > And, Sean, would you like to include it in this series or should I send it out
+> > first?
 > 
-> Changes for v3:
->               - Updated status interface handling logic (Restrict the status
->                 interface to the device-specific instead of handled by the core)
->                 as suggested by Xu Yilun.
+> I'd like to include it in this series as it's necessary (for some definitions of
+> necessary) to clean up KVM's APIs, and the main benefactor is KVM, i.e. getting
+> the patch merged sooner than later doesn't really benefit KVMGT itself.
 > 
-> Changes for v4:
->               - Limit the error strings to one word for each as suggested by
->                 Xu Yilun
-> 
-> Changes for v5:
->               - Added new sysfs-driver-zynqmp-fpga file.
-> 
-> Changes for v6:
->               - Updated the sysfs interface to cat /sys/bus/platform/drivers/...
-> 		as suggested by Xu Yilun.
->               - Exported raw hex value instead of multiple error strings
->                 as suggested by Greg.
-> 
->  .../ABI/testing/sysfs-driver-zynqmp-fpga      | 72 +++++++++++++++++++
->  drivers/fpga/zynqmp-fpga.c                    | 23 ++++++
->  2 files changed, 95 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
-> new file mode 100644
-> index 000000000000..af5d42916dd1
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
-> @@ -0,0 +1,72 @@
-> +What:		/sys/bus/platform/drivers/zynqmp_fpga_manager/firmware:zynqmp-firmware:pcap/status
-> +Date:		Jan 2023
-> +KernelVersion:	6.2
+> Thanks much!
 
-Please update the version & Data, I expect this could be merged in next
-cycle, so 6.4
+Then please include it and I can help to test once you sending out next
+version.
 
-> +Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
-> +Description:	(RO) Read fpga status.
-> +		Read returns a hexadecimal value that tells the current status
-> +                of the FPGA device. Each bit position in the status value is
-> +                described Below(see ug570 chapter 9).
-
-Please provide the URL for ug570, the commit message in Patch #0 that
-contains the info will not appear in mainline.
-
-> +
-> +		======================  ==============================================
-> +		BIT(0)			0: No CRC error
-> +					1: CRC error
-> +
-> +		BIT(1)			0: Decryptor security not set
-> +					1: Decryptor security set
-> +
-> +		BIT(2)			0: MMCMs/PLLs are not locked
-> +					1: MMCMs/PLLs are locked
-> +
-> +		BIT(3)			0: DCI not matched
-> +					1: DCI matched
-> +
-> +		BIT(4)			0: Start-up sequence has not finished
-> +					1: Start-up sequence has finished
-> +
-> +		BIT(5)			0: All I/Os are placed in High-Z state
-> +					1: All I/Os behave as configured
-> +
-> +		BIT(6)			0: Flip-flops and block RAM are write disabled
-> +					1: Flip-flops and block RAM are write enabled
-> +
-> +		BIT(7)			0: GHIGH_B_STATUS asserted
-> +					1: GHIGH_B_STATUS deasserted
-> +
-> +		BIT(8) to BIT(10)	Status of the mode pins
-> +
-> +		BIT(11)			0: Initialization has not finished
-> +					1: Initialization finished
-> +
-> +		BIT(12)			Value on INIT_B_PIN pin
-> +
-> +		BIT(13)			0: Signal not released
-> +					1: Signal released
-> +
-> +		BIT(14)			Value on DONE_PIN pin.
-> +
-> +		BIT(15)			0: No IDCODE_ERROR
-> +					1: IDCODE_ERROR
-> +
-> +		BIT(16)			0: No SECURITY_ERROR
-> +					1: SECURITY_ERROR
-> +
-> +		BIT(17)			System Monitor over-temperature if set
-> +
-> +		BIT(18) to BIT(20)	Start-up state machine (0 to 7)
-> +					Phase 0 = 000
-> +					Phase 1 = 001
-> +					Phase 2 = 011
-> +					Phase 3 = 010
-> +					Phase 4 = 110
-> +					Phase 5 = 111
-> +					Phase 6 = 101
-> +					Phase 7 = 100
-> +
-> +		BIT(25) to BIT(26)	Indicates the detected bus width
-> +					00 = x1
-> +					01 = x8
-> +					10 = x16
-> +					11 = x32
-> +		======================  ==============================================
-> +
-> +		The other bits are reserved.
-> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-> index c60f20949c47..0c58ca27319f 100644
-> --- a/drivers/fpga/zynqmp-fpga.c
-> +++ b/drivers/fpga/zynqmp-fpga.c
-> @@ -77,6 +77,28 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
->  	return FPGA_MGR_STATE_UNKNOWN;
->  }
->  
-> +static ssize_t status_show(struct device *dev,
-> +			   struct device_attribute *attr, char *buf)
-> +{
-> +	u32 status;
-> +	int ret;
-> +
-> +	ret = zynqmp_pm_fpga_get_config_status(&status);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sprintf(buf, "0x%x\n", status);
-
-sysfs_emit?
-
-> +}
-> +
-
-No blank line please.
-
-> +static DEVICE_ATTR_RO(status);
-> +
-> +static struct attribute *zynqmp_fpga_attrs[] = {
-> +	&dev_attr_status.attr,
-> +	NULL,
-> +};
-> +
-
-Same.
-
-Thanks,
-Yilun
-
-> +ATTRIBUTE_GROUPS(zynqmp_fpga);
-> +
->  static const struct fpga_manager_ops zynqmp_fpga_ops = {
->  	.state = zynqmp_fpga_ops_state,
->  	.write_init = zynqmp_fpga_ops_write_init,
-> @@ -113,6 +135,7 @@ static struct platform_driver zynqmp_fpga_driver = {
->  	.driver = {
->  		.name = "zynqmp_fpga_manager",
->  		.of_match_table = of_match_ptr(zynqmp_fpga_of_match),
-> +		.dev_groups = zynqmp_fpga_groups,
->  	},
->  };
->  
-> -- 
-> 2.25.1
-> 
+Thanks
+Yan
