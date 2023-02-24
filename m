@@ -2,222 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C876A1E62
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDAB6A1DF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjBXPT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S229777AbjBXPDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjBXPTY (ORCPT
+        with ESMTP id S229553AbjBXPDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:19:24 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259836A9E1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:19:11 -0800 (PST)
+        Fri, 24 Feb 2023 10:03:45 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2125.outbound.protection.outlook.com [40.107.114.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8872DE6A;
+        Fri, 24 Feb 2023 07:03:41 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lImvHofE3c5BWMyw1vnKYS1kghM3GnDDBO/6yvt9ZzvyEyr3nUD7iXep1wyza6OB97ixt31Kd/Jjo25Uwflc8ITV/weCwwBKst1XV4Y3lmiiZpeOUKJdUohj5am7SMz7DwtqMRci2ybJdNjyeHBYXPJPDOBSosrZKXVnvZWAPTBzAL7vfUHEZeKaQ/L6DmQygf5ri1GwtyZfFbvv7tHgwULgdeeiagIHgKgrSiGY8v3CafT8oJ31GQ65GIC45gImyl+lBtkGejrDf3QsrpgpqjAP8I6622PFClPVIZDmh9eS8f3VuwGcFKX2zIpki1Mdp+ISjoirdgIcbq93kjAwVA==
+ b=FLsQu7m2J+sYEmjxTd8Bml8RT6sL7PK/s3kO6kRHHpsQqK+DL8ujXo0Wv/idA/aRr20CALy/MeUl/wcv1oE6nkXRpKBK/7Au5OBUxmM5TWUloE4ZtaCGs6mXXWOoArYgOCXIY5a7DfNjL9WUuRjr7sInt+5kkzQl2KG1jgnusc+diPSnnm4xrv3Jr1CgFsSZvBUigeAFXiQtW+fi4IpkJy47mRlRr5Mq+DqG+0U4H8BErwFHb13pxMEr97EsKnkV2arAsnTyazw4hoM96pnfgee671le1LkSuE24ltQbMeC+hXjoZrIdemMH1zs0j2jTCyjMLvz1gxtUD10Mbfob3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wsjqPSfnm3Ygi4Io01Tn1OMFABOCofeh5v8NtS11/2E=;
- b=VCtAIxNdya0AiMhozyGYPRdPL1OtsGyicOfwPUEkQqasvbs4AFAwvoGAiXtEwX+JJ+1kxEUnK7XTWOGo+ROVI9lGNfSaaN3tNVKQawbmqpVVW2nzP2AdZf1szT9h92AmbhybL6RgTAwxhhn24cwS1F4fPSDFTAgHG07d4vxRE+3ZsQ5zCJugbJUcxNvcDPSPdsLhXbAjUEXhpnxnUv4g3uSWQYga9QiKDxVmJ69ed3dhx/EoQIZjrmASE4ixozOU19+iZkCPHKyfdU79pLOU5pkMZnZFyLR7IsZyh9x86CMIc2ra/5LyPiRFTHXKRAJGeH17XmbAhlpaMUvlhMvUIQ==
+ bh=ZnmBf11w1JXqpxVINrbMp/bbB6IGCULvmOS8aMZv/y0=;
+ b=PY88OgLSZMj16jtTrn3HiId5bXvKEYVnvGqDTGuH1QuuCEYt1L8Jzu5erWgsW6O30xRVO9RRhlnSts0y4HVQPxXO6Msz3rKn6EowcCgo+fgP41oyy78/KDAl6bBCJgt6XikNC0gECJGRzTaABUI9Z5FKWC7uPjSbyWjnAdE2RTXs0v6g+QP1RE8IaE8yhYtc6Ow7/UahEA571x6bDn/0wmpR+qcLeeh9Bn9T2EzbqXJgplqhbhMtJd6/tJuobC33O/K71i2P3pLar55RZWidc7+xgkWO0epB5K6LZdkT8Ojrnq/+FtMOU+IqM3f+U0G21wm9rKbmvzbBvHSST1uDsQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
+ header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wsjqPSfnm3Ygi4Io01Tn1OMFABOCofeh5v8NtS11/2E=;
- b=oQ/0YCsJx18U6FHhuqF1+00z84f580UHIAXAiEAt3c93FTlI4XlEZmoY20UdKeH9u4WSTz8sLhVbELWZUrofSfR2fGRdaxelnaSUlyRQkckk9iBWwbhPVZzOc6UvYzDWz3UyBfsZihctFgV9+sieJBOZLnfKCIi77Rx2XR3k87o=
-Received: from PH0PR12MB5434.namprd12.prod.outlook.com (2603:10b6:510:d5::8)
- by IA1PR12MB8190.namprd12.prod.outlook.com (2603:10b6:208:3f2::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Fri, 24 Feb
- 2023 15:19:08 +0000
-Received: from PH0PR12MB5434.namprd12.prod.outlook.com
- ([fe80::d292:d108:c1b0:41ea]) by PH0PR12MB5434.namprd12.prod.outlook.com
- ([fe80::d292:d108:c1b0:41ea%9]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
- 15:19:07 +0000
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN2PR12MB4127.namprd12.prod.outlook.com (2603:10b6:208:1d1::24) with
+ bh=ZnmBf11w1JXqpxVINrbMp/bbB6IGCULvmOS8aMZv/y0=;
+ b=jWJa5vzLYIwb9IZmKiimN1BLmx6NsV9uWg54c8/2vQbyr/CSftJOIBkLXxToUK8njXUDRX2UYbZGu7eiaGSn4vzMP4TavHA5T/zqacPhRA4Lho34FiPsVbZWv9HDNseUd7NhCwULlNlXSz1z81WSsFFfRD4VNcO+XTYulB+3Cp8=
+Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com (2603:1096:604:197::13)
+ by TYCPR01MB9433.jpnprd01.prod.outlook.com (2603:1096:400:199::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
- 2023 07:12:28 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
- 07:12:28 +0000
-Message-ID: <57e38bdd-8369-adb7-f095-26652d4ad8d5@amd.com>
-Date:   Fri, 24 Feb 2023 08:12:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Keyword Review - Re: amdgpu didn't start with pci=nocrs parameter,
- get error "Fatal error during GPU init"
+ 2023 15:03:37 +0000
+Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com
+ ([fe80::e332:554a:7:7135]) by OS3PR01MB8460.jpnprd01.prod.outlook.com
+ ([fe80::e332:554a:7:7135%3]) with mapi id 15.20.6134.023; Fri, 24 Feb 2023
+ 15:03:35 +0000
+From:   DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+To:     Nick Alcock <nick.alcock@oracle.com>, Lee Jones <lee@kernel.org>
+CC:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Support Opensource <support.opensource@diasemi.com>
+Subject: RE: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
+Thread-Topic: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
+Thread-Index: AQHZRreG6t0UP/1OKUiYOQvTbD/Rt67bi/BwgAEBwwCAAF3Zu4ABSKtw
+Date:   Fri, 24 Feb 2023 15:03:35 +0000
+Message-ID: <OS3PR01MB8460AA34CBDD0C2BBE6F2399C2A89@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com>
+        <20230222121453.91915-19-nick.alcock@oracle.com>
+        <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+        <Y/duxo1aKFibuZtF@google.com> <87ttzcmbgu.fsf@esperi.org.uk>
+In-Reply-To: <87ttzcmbgu.fsf@esperi.org.uk>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-References: <CABXGCsMbqw2qzWSCDfp3cNrYVJ1oxLv8Aixfm_Dt91x1cvFX4w@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CABXGCsMbqw2qzWSCDfp3cNrYVJ1oxLv8Aixfm_Dt91x1cvFX4w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0138.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::7) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dm.renesas.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS3PR01MB8460:EE_|TYCPR01MB9433:EE_
+x-ms-office365-filtering-correlation-id: 6e9aae38-cb94-4f58-7e54-08db16784db7
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +txS+gTu2CA4d+tCDMD12NQ7Eic/rn/x4/GT+zEuK8v+aCZI8Oeb7l4XAUXLJUffiR+v0KoCoXejrN5zuQEVtXqJmpIoqwMvj/JrtwPZowjndYbfbOaKdMoxViKV06GSda+TTnchm62pODOTwJ6PKZblMVFI1s4WqwaWT2BAolfYUxjRdD3EJ5OfWy1I0RmJcIARo/aHE+Jrb1PTSmLCgYXL+bohd1XT6Z7rdjddm5HfHoJnC4z8lJr7h9lnThoNBsR6uiCnv1o+gQXU4EysbNh+3zRgWKYjKgvNBKlOMyI8+iGBuqUucSNDVY42v2hX5fZ0g46zYbL4LrwYRdDunk1y1PiFGJOVpngZM3rsJpOP/4rM2v9h6wZZ+E7rULlEbx9Lne6FBR+CHRhb9PAW8gcaexTqKUhQd3TnQnPySnFDiy/d1WozpT0EMT7sziPK5YiZR+SuAjtr+7OanHYpgJ9ZMmUBMCbPlaqyTTaJVe+F1hc06sdz1d7eRJUwTI5fV1oN6djq2NHFgcXd575mkllnAM94ZIMZjIsFI4FnYVKSsxLfrHIez1QMIyCVAXdDzi0CpXr+JnIaW9CAAS2/+84Q5l+ve1Sm3/JVVba85wsj+OYutX4yNfRiur03Q0gNyqHIo6HFb6P7Ywf0LA3WphjhLUz2zZHonCgL/ABtB4r0eJRn+0NfGdYCs2aR8RZW
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8460.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(39860400002)(346002)(396003)(376002)(451199018)(5660300002)(52536014)(4744005)(8936002)(54906003)(110136005)(966005)(7696005)(71200400001)(41300700001)(478600001)(66946007)(66556008)(66446008)(66476007)(316002)(8676002)(64756008)(76116006)(55016003)(4326008)(33656002)(86362001)(122000001)(38100700002)(2906002)(38070700005)(186003)(26005)(9686003)(53546011)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1tRP10NgKzOZgS/6TjCCrqmxlKfqf8u6Pr9NNU5fgtm/p49KeJLKI6tW+n9q?=
+ =?us-ascii?Q?1rLn1xzxEo3uS/UYzgOgA3ZafaVDNIcoT5PwUWV99shoAszxdmwG4H846cu0?=
+ =?us-ascii?Q?/9sBTGGHrrPzsloGlyLLqhJfIeRcVrtRubzSqwhUPr4FLfcmgtQ4B8zEjxYu?=
+ =?us-ascii?Q?bsoyrEvXlO8BRFyTr/Fjz9kVCZclQR19PzZCr3VEcw0OaYn2Vj4raWRItbv0?=
+ =?us-ascii?Q?zupvSr1ZgVatKEcaf2jwKoRnAgakXmr1j9/+jUrBJb719J3z5rgNqIpju8VP?=
+ =?us-ascii?Q?r5GclQ9v3lFbVi6qf2v/6TcxUY16HRujSddlOhF3rFNkFSopGAOo0nMyIhs3?=
+ =?us-ascii?Q?ffQP0P5NmawQmLStH16ctD3Cf3jG3BaVqXYEIK4JM7FUQw7XjGCyRNw+6zGq?=
+ =?us-ascii?Q?YFi0/pKsIKgF4o9tR7Ap8abbORdeTOPtNdwih3ldY4uhIVJjRkegbLkwaGbj?=
+ =?us-ascii?Q?Zsg5uDvuZ9EctKLHnn5EdcU4Fn4mpMm4m9+KpW+A+O+eU6kWtf3COcGKYGcM?=
+ =?us-ascii?Q?2BqoKmd0BzQ0mNN8iPNZW9XWuBDb5ioTnR2ZXBHJGuZrD+XHa7pTC9rXXzbX?=
+ =?us-ascii?Q?4mJHbTh2zsQu/9xAKtwojgK1apo1E1Xt7lKc8TNgA4XaqrVk1IxmF9pXGfyM?=
+ =?us-ascii?Q?afnQNSgU/ra6x3a+k/xCXsaQsdJUpjfJcvj3S+QffC20g+BbpPhXNtx8auOd?=
+ =?us-ascii?Q?78G2d/pJv1vxJ1K/yqQL7Jaoez2te2A89CfQVRHrVFXnwvPgk4D57T7TcVzd?=
+ =?us-ascii?Q?HyNvAdkO/H7ThrCTcIjjNwjqSLfe2qWZ8gH55BDIoIMvgd4ywOb+IHDfmb16?=
+ =?us-ascii?Q?TeLYe7pxCBTDivjD6AC+pEke2o44rkRJ8CKiazuFEpTSZxg50lne0E39Hmav?=
+ =?us-ascii?Q?Rd1XKmHMlwvGFcUjNer9VMW/FdYEXdevL7MgaMCuuDgOM0NcWIgaEevWO4q7?=
+ =?us-ascii?Q?6jUFgCu3MVmPZiMruqqltJpU8D8wtSY4FbUT7oElwuw8OwUocm6uzLIFvB73?=
+ =?us-ascii?Q?hldmhsHxGHurPqlwFYwhXS/c43u1ks1JKYv7mTgTjtwDIR+tbiVXLiKv54ec?=
+ =?us-ascii?Q?YmqSrWxrP+Vap5lozTvOtKQeTJJAJFDO4zifbOOok9Uk4wSA3djXN+fai+HW?=
+ =?us-ascii?Q?GRws+Wf8DYz31uhdF/2Xop1cwxrwX92JMDA4nsIt8Ax9FtuYancZK+h4ao1j?=
+ =?us-ascii?Q?pBfsHHwXhHoWPxfwTkjsxjGTR1Qdu0NLJhCZO3yCaO9zECuyaIWR9zJQzgDz?=
+ =?us-ascii?Q?Ty1j6sOC/MivnkayJ9IhUOgLVUMMB5RiOvmxwBxFXDsYFgOqUp42xV7U8suY?=
+ =?us-ascii?Q?6RKndJePp/5zlJtWuUlWHKqWBK/CAivzwoD4IhOT6TNMz9o++J25kObEb+wH?=
+ =?us-ascii?Q?ngkWGHyj39//Km6ZKWKMWrBFmBtwRJFl50e2D2K9Bl+FNppdMUbCeC1LJdVJ?=
+ =?us-ascii?Q?y3eya+Gzw8Xbbjydre3hCQHsmvCbaGbtdTia7z81mUWo9MLTBszJ3eeYlNvj?=
+ =?us-ascii?Q?OZbxmjWUsLMQKeD3Rqye5p+VftWdlBBL0s0vkwd5IaQnmSqi+9a/Hkm327rd?=
+ =?us-ascii?Q?q7Eg35lV+B89s0fyVhMFxE90veuSbGXo+zEn/rEFjGS5xsKwiCwe/5dhnMrb?=
+ =?us-ascii?Q?eA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MN2PR12MB4127:EE_|IA1PR12MB8190:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97a91925-96f9-4ea4-8cec-08db16367c40
-X-Moderation-Data: 2/24/2023 3:19:06 PM
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v8382IwWZc95aD1RLQiwrDRfWIVY5nI12Bg1L8N2q7uJ1wiB+pbBL0rZTuI/VQGHtVe57xWRMGTOQP4ucDWUlBNwN1Aq8McI0/xDAwF3teG9Z6umcnRJ0g0T8tnaO2qFsN6tG29qqZI5xWCVkOOZ2mV6navzKseXHnk5jW6KwRoJm4FZ5kYephqSzHWr5IaVy0hxxTFiOftGzX+F9Vp9Q4C9OcjMaCX/zZ9RA6cehMiXAisFuOXxuSgfklbyS+JXEBQlUPcsxYzZZYECriHSTwk6QrrVt1BF9dW8iZg/YVWlsGWdSkPtEj7QSr8lAO27cHPUqWfk3St9ML0qGuazD6jCqY5ZTB6kj1kNJ9fsx0G9meFEFsCC3wt+UhiUhp/YRDGtKUMBCIrzj2EwWUeGYOlyCKhlLb5IWreDU5hEExmx6kopKlMs0A0f2JyUgzXSWlCeKxRJkQ967nm80h6c9LNHQGjlskmgm5z8ValBlBI8ljqOaFpB0V0DePXNAGG9gJ/sSqTRGpjtj22rBYTj0EEX7y4Q+ZhUQQv1EkR4rrmrR/G/N54N5o5RSE2+/ZXCNga2r+sP1ItgZev5cs4m50Q9SwYv3m7AMkhILK8tFiNvp+I9alvVjDWdjdtq5CeIgyqeDRqNM5hcHwkxQLq6mqhb5NkATGAh0v+oSYfnxZwfVeJ6Oi3/dpmnv7JlmEFYo8R5CGkkv8a6XWbWOs309BEDlrSN8U1LnjsfpO0uUxA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(396003)(346002)(39860400002)(136003)(451199018)(478600001)(5660300002)(2906002)(2616005)(38100700002)(6636002)(83380400001)(110136005)(6486002)(316002)(36756003)(186003)(6506007)(6512007)(6666004)(8936002)(41300700001)(31696002)(8676002)(86362001)(66476007)(66556008)(66946007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S081U3Vxak53M0l0bHhKN253VVlrYUIwVkNpOTJQSzNTLzF5NFM1czZCVUpK?=
- =?utf-8?B?UDhVK1hzdkxWazlqRERvUTd2OTZ1OTZPZEJWYW1tT3pBbXFwQnRHcE9kY2xX?=
- =?utf-8?B?TVJ0T0o3Q2xENnQvajV1Z0QySzhPSGlFK0ZsZENhMU11bERFZ21wRmNFTlQ4?=
- =?utf-8?B?Qnp6WFcxNDJTRnM4aXNJTGVwdVNOSEdqNmxIMWNTVStCWnJXY1ZkYUN1SFZS?=
- =?utf-8?B?dXQyQnljbmxzZDBvMzlQTzFuamJlSHd0Y21GQUJNSWJIRHZYV0xZMFIxZzFM?=
- =?utf-8?B?SXpoNnRDR0pJVzlrQ0kxbWU2TXpjL01JeHB6d3c4UlBIY3EyU1V0ZWJMRktK?=
- =?utf-8?B?RGN6dHJpd0VqTzBGMDVvOFRyZUxmZ1o2RVVIN0IwVmJPODEwOFBkZ0p4QWF3?=
- =?utf-8?B?ZEdaYnJEbWUveENuSW1wZUM2amhYdmg5NjA3dWJTQUY4bnBHVFVFNTVNVmpE?=
- =?utf-8?B?QjdqYXB0bUFjUkRIcXBPam83MUxROE5GYVpmVC9ZZ3d1dVh4NjFDZXV0T1Fx?=
- =?utf-8?B?NER6T0FjTHpCdmRIWXk4WDVrTGVZblBYSUo4MllCaDNJNXRqWlZ1Vklyd24r?=
- =?utf-8?B?QTVlVXRmTW1EQ2VBWm9CbGZCYVlJRWYwNFpUZGROTWlnT2gxK0JCcU5hNEts?=
- =?utf-8?B?d0JUbXo2WjdYWlJjeFFQS2JaZ25ZOVU1UUFtbWdXa2I1REdzSllSdDlnUWRQ?=
- =?utf-8?B?ZzAxNTh5anZkYmkzdm5MVUFKQWFaOGtCU3JUaGZzWXgyTnlpcm8vMmpSNUFB?=
- =?utf-8?B?cTcxMWViUlRscGorY0J5TUZGK25iMFVXTzR5M0lZZ3ZZM3JJdlc1SnJRTzk3?=
- =?utf-8?B?My8wNXVINkU5K3FBbXNMaUhDdmdYOFNHc1VIQ2VOcVVnVTdUNGdqampEL09J?=
- =?utf-8?B?YVhUV0dEVXoyeEgvSDc1NWthdkZ4Qi9CbUc3ejUrc0o1Uk43ckx1TUhlWW5v?=
- =?utf-8?B?VzluVmZKaE5ZTHk5OXBBRDhKRDBQVUcrb21VM0V5QStjWGJqZFR6VWZ5NkFP?=
- =?utf-8?B?S0VVbDJha2pJK254RTR5cUNPOVA0UEE2cEhqNVRXVzByM2xJd2NDQW1oT1B0?=
- =?utf-8?B?czRTMnhXN3FWZW5YZjRKek50enIrMUxndkNTNnB1TXBaZVlYblJuMTB6Wm5q?=
- =?utf-8?B?RDlwak1IKzNJV0dwMy8zWEtDeVN5ZllJMHBwZDljVjdwMCsxY291UFZuVEEw?=
- =?utf-8?B?VENRbW9CTW9BckpiU3ArUlFlS2IzUHB0TWQ2Q0ExN29sZC96VERwNC9maWx5?=
- =?utf-8?B?Yy9uVmdQQjVwOHc2TjI5eVFkbGJGWXczclVETUFtVWZENkI0RUc2WkZRd3Nk?=
- =?utf-8?B?TG9QMFlWa1ZJSHphVlRVVkNzeitqbXZpNFhTL1ZnM0prY001SVdTM2hDVk93?=
- =?utf-8?B?cWx1TUcwZlpWWHhFbUdFa1ZVc21JMmRBVVpGSG5VMksxQTk2Y0h2aFBKUGVy?=
- =?utf-8?B?dlVKWHFKMG05QUtWcHpyZjdrK3lxSVYxQlpKVFF0aXRsNmpVSCtXMThaVjZw?=
- =?utf-8?B?Q3JRL1VkZXZnbW91a3k0WTFCVjg4L01KZ3dZR0JCdnR4WVJNQ1J0bXhDc1lh?=
- =?utf-8?B?cWhndEJ2M2RFRWdkWTBaN2V5MVQzSWxpMUZKRlp3R2REcDkwZElEOXl6aEF2?=
- =?utf-8?B?dFAydXFEa2xVcnoveFhCTHI2ZEtCc0pDMnZsblV2aWNReDFlUkd0OUhkNSs0?=
- =?utf-8?B?UWhZVjBrSWljVThPYWgvNHJlVHN5bVdLcHZ1eEdUK0VWeXM2ZmlQb2xWd2lN?=
- =?utf-8?B?RFZBYXlYMXpiLzEvRkQ3VzBIOE9SS3RYV3pXYzIvZEFjSllXMFF2bjJoMkZz?=
- =?utf-8?B?dlI0Uzh1ZjhwOGM3Y0s5cG5KbDNHM0JiYXU0T25iaFdBZXpQTUFhZ0tndEEv?=
- =?utf-8?B?WGRETEdjWU9SajhoWk1uNHNMWit4aS9zMmFzQnZmZUIzYjhKbFRzQ1hLdE1V?=
- =?utf-8?B?enpCbUdpQXIxYlZZZGgzSDRhSkZ2MmFLQmxJeWg4MUVHd3ZiVldoU25sbTk3?=
- =?utf-8?B?WmNLZTVrYTRvWnBuOVhXQytBaW5nam96dzZmcnNZTVI3V1krT3QxSVhHVkNH?=
- =?utf-8?B?ZDFCOTVzSDFrQmtMdWlSQ0tUbm1PNjRlSGlPRS9NZmNDQ1JMYlI4VFpSZUpM?=
- =?utf-8?B?QUZ0dm1aaUdSQkJXU3NrTmdsb3VNR09uQy91YzN3U2NVTE1PamxJNjBNU0M5?=
- =?utf-8?B?ZFkzM0hCM1NJWWROSjM1MDkwUTJYcld5K1dFYThST2h2YVA0YVlXUkFPNXZS?=
- =?utf-8?B?VVFGOFNoL2NjRWV2RzRzNGE4ZTZTOUtUNC8xSG9ZblBZNWw5RE43bzltdmNP?=
- =?utf-8?B?RHgxaVFwNkpUUnFGSTlxRXliMUNsRHRLc0U0Q01UTFkvaUR2b3VveEd3NEhn?=
- =?utf-8?Q?DB2o8w3a0dTZvtwXT+2clRGvQDu90WPa2RCskwzLqtQsQ?=
-X-MS-Exchange-AntiSpam-MessageData-1: kKeTFWWn1FRYt1VjJztwB1xahn/kgUUXh8JVaEU5462aTq9T8zFFlK+F
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97a91925-96f9-4ea4-8cec-08db16367c40
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-OriginatorOrg: dm.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: spN+QuPmfvOx1JPKpEoFHuHgXLEphW5qK8vBfZUw19dY7N3SJvbcm1Pgs1UXfJSec8jSuMgcQmvY7JMESTw5VXL922N/JQztC6zfEvi+lJZDnNpUWpynjwyQFuXniTTwdR/7ldry69p3OaLT4FkZ/IrID2P/5/K3PRVY7YqnwuiDaYKBBrOTsj9fNKTLbTYEmzTvcGqWuamWeJ7Jtm4vfQCUOA6nNdM292RuStB0Pbw=
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 15:19:07.4098
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8460.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e9aae38-cb94-4f58-7e54-08db16784db7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 15:03:35.8346
  (UTC)
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8190
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FIcUyh95TQbmreGRjL9OtvK5+jhlRXhtguMnKCHA+cB2eYU0j3b0hhXgA1zDLPo6nCSSchJenhBc1hDndUyFUEh8WqSXJWOfvodHDtM/HSE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB9433
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mikhail,
+On 23/02/2023 19:25, Nick Alcock wrote:
 
-this is pretty clearly a problem with the system and/or it's BIOS and 
-not the GPU hw or the driver.
+>> Makes sense - but if you need to do a V2, would you mind removing the er=
+roneous claim on DA9055 at the same time?
 
-The option pci=nocrs makes the kernel ignore additional resource windows 
-the BIOS reports through ACPI. This then most likely leads to problems 
-with amdgpu because it can't bring up its PCIe resources any more.
+>I don't know what this means. There are two references to DA9055 in this p=
+atch, both in context (not in modified lines), one in drivers/mfd/da9055-co=
+re.c, the other in rivers/mfd/da9055-i2c.c. To me these both seem likely to=
+ be DA9055-related. Are you saying that one of them isn't?
 
-The output of "sudo lspci -vvvv -s $BUSID_OF_AMDGPU" might help 
-understand the problem, but I strongly suggest to try a BIOS update first.
-
-Regards,
-Christian.
-
-Am 24.02.23 um 00:40 schrieb Mikhail Gavrilov:
-> Hi,
-> I have a laptop ASUS ROG Strix G15 Advantage Edition G513QY-HQ007. But
-> it is impossible to use without AC power because the system losts nvme
-> when I disconnect the power adapter.
->
-> Messages from kernel log when it happens:
-> nvme nvme0: controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
-> nvme nvme0: Does your device have a faulty power saving mode enabled?
-> nvme nvme0: Try "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off"
-> and report a bug
->
-> I tried to use recommended parameters
-> (nvme_core.default_ps_max_latency_us=0 and pcie_aspm=off) to resolve
-> this issue, but without successed.
->
-> In the linux-nvme mail list the last advice was to try the "pci=nocrs"
-> parameter.
->
-> But with this parameter the amdgpu driver refuses to work and makes
-> the system unbootable. I can solve the problem with the booting system
-> by blacklisting the driver but it is not a good solution, because I
-> don't wanna lose the GPU.
->
-> Why amdgpu not work with "pci=nocrs" ?
-> And is it possible to solve this incompatibility?
-> It is very important because when I boot the system without amdgpu
-> driver with "pci=nocrs" nvme is not losts when I disconnect the power
-> adapter. So "pci=nocrs" really helps.
->
-> Below that I see in kernel log when adds "pci=nocrs" parameter:
->
-> amdgpu 0000:03:00.0: amdgpu: Fetched VBIOS from ATRM
-> amdgpu: ATOM BIOS: SWBRT77321.001
-> [drm] VCN(0) decode is enabled in VM mode
-> [drm] VCN(0) encode is enabled in VM mode
-> [drm] JPEG decode is enabled in VM mode
-> Console: switching to colour dummy device 80x25
-> amdgpu 0000:03:00.0: amdgpu: Trusted Memory Zone (TMZ) feature
-> disabled as experimental (default)
-> [drm] GPU posting now...
-> [drm] vm size is 262144 GB, 4 levels, block size is 9-bit, fragment
-> size is 9-bit
-> amdgpu 0000:03:00.0: amdgpu: VRAM: 12272M 0x0000008000000000 -
-> 0x00000082FEFFFFFF (12272M used)
-> amdgpu 0000:03:00.0: amdgpu: GART: 512M 0x0000000000000000 - 0x000000001FFFFFFF
-> amdgpu 0000:03:00.0: amdgpu: AGP: 267894784M 0x0000008400000000 -
-> 0x0000FFFFFFFFFFFF
-> [drm] Detected VRAM RAM=12272M, BAR=16384M
-> [drm] RAM width 192bits GDDR6
-> [drm] amdgpu: 12272M of VRAM memory ready
-> [drm] amdgpu: 31774M of GTT memory ready.
-> amdgpu 0000:03:00.0: amdgpu: (-14) failed to allocate kernel bo
-> [drm] Debug VRAM access will use slowpath MM access
-> amdgpu 0000:03:00.0: amdgpu: Failed to DMA MAP the dummy page
-> [drm:amdgpu_device_init [amdgpu]] *ERROR* sw_init of IP block
-> <gmc_v10_0> failed -12
-> amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_init failed
-> amdgpu 0000:03:00.0: amdgpu: Fatal error during GPU init
-> amdgpu 0000:03:00.0: amdgpu: amdgpu: finishing device.
->
-> Of course a full system log is also attached.
->
+The comment was followed by this link - https://elixir.bootlin.com/linux/la=
+test/source/drivers/mfd/Kconfig#L36
+This files talks about the driver being a module, but, as you correctly poi=
+nt out, it is not.
+And never has been.
+So it is worth removing.
 
