@@ -2,161 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C826A1EC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094B86A1EC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjBXPmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S230137AbjBXPm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBXPmq (ORCPT
+        with ESMTP id S229644AbjBXPmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Feb 2023 10:42:46 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE6A6ADE4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:42:45 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id nf5so13775879qvb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tliLWqZo1ClCFllMBGoxhRkpYCPqcv1PK4tnZkLlMM0=;
-        b=O2Uu3GbTz3FO7MHs1vCp97YWPwcz36gukuqk3vw3IuhBTAYf4vkn+mVDvu2zjRsCpm
-         bEoOBul9nkV1MK3PRvbtKQhUZFkGJGeKTmixHzuujh2E5YmRo50KQgkpu9tqME5e11Q3
-         Otk0IDQTM1xiknWW9sh+uqbDyqDBCa+0ZNqI5ZfY8NH+OF/+aU+qCuxVcrU/zUYCxxK1
-         J/sNmbw1aZLj9DC347LlgUdyHatgBvMCRYPFCh8WpXgzZgZP6+kNeorMSpYBCNZeKDM5
-         fvWEMSTpF22coIW9nCKJ6q9+x67rzknOj1Yb2+CV/flLhXeimewH+oDtb7tyogc9X491
-         awXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tliLWqZo1ClCFllMBGoxhRkpYCPqcv1PK4tnZkLlMM0=;
-        b=2lW7l3ziExeyrM7gAwjtuShGLzJykzpkGJRavtlPn7Y5m7N97bfPzqTd6vdNIVTofC
-         7YaWAuH3NEON1tVaJlpSMTtH1SmBqQQ91MfFVN3Ck5Cer3ehBkcNsL6v2Yqzh+R3rKnx
-         G5CeB9O0V2igvemrZPpt7B8/CvJdh9h5qEpB3aJ9GYSeztlTRnCzidsEi+Sfa2oE/cZV
-         rwE4J1d5K2KkUSqbeFbNSkr6gDLh/oSMO8f+DwKTKvIKFRSED4B+jxvVjFmbPhrX0vld
-         AfXzxSRPOLx5IXuQMfMAoyibZrU802tXcVP0fJEjKCMCzVlAYIaM+l8ntqfYeEcGb0J8
-         akhQ==
-X-Gm-Message-State: AO0yUKUY+DbAvTvAF+/pf8zi7Jg4/xUmNSLtwoKsX06Hoaqvja4bYfcj
-        qpf9VouACLRKTGnTihx9xO89L/e4cQ==
-X-Google-Smtp-Source: AK7set+H1d3jhAvT2EV/UtMS707IDVtG/4668+VsZMFIcDqSgJ1UMKaLb3d8tQFdweCWvbvV07FkSA==
-X-Received: by 2002:a05:6214:e44:b0:56f:c948:411b with SMTP id o4-20020a0562140e4400b0056fc948411bmr26341454qvc.29.1677253364009;
-        Fri, 24 Feb 2023 07:42:44 -0800 (PST)
-Received: from citadel.. (075-129-116-198.res.spectrum.com. [75.129.116.198])
-        by smtp.gmail.com with ESMTPSA id e26-20020a05620a015a00b0073b399700adsm1276131qkn.3.2023.02.24.07.42.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51223658EB;
         Fri, 24 Feb 2023 07:42:43 -0800 (PST)
-From:   Brian Gerst <brgerst@gmail.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v2 4/5] x86/smpboot: Simplify boot CPU setup
-Date:   Fri, 24 Feb 2023 10:42:34 -0500
-Message-Id: <20230224154235.277350-5-brgerst@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230224154235.277350-1-brgerst@gmail.com>
-References: <20230224154235.277350-1-brgerst@gmail.com>
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C97BF3FB17;
+        Fri, 24 Feb 2023 15:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1677253361;
+        bh=rOI1KqpyrEccV+F71Te1pl2hQSvFhl4XVciYRUj961g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ya0N54PoupnZUSmattKujLxGbaACXfgOTqDzylYmSWBm3am0tdIU9aaRfx0bnzEbz
+         BBRdXxORBkNFzWzQhA7pWGWFj2ZNTi+ZB1JERUQzIUiBRt0L5oN/720Mw2Wm0HgkIp
+         A2BDmxSTqmhem74xKdhH6AHRrwVQYhezvK10+6+tw4MLwazF97LLQN778YZZ/fbRCM
+         uypycDvJY+FJIDp1D079+Zd3BXnVkyaUvY/XSGr73Yp5DbLLoh5Vi40WufqxLVuM8K
+         rhJA5CoB1I4MITCyKRqv4AhfNSCNaVOYpzNBrK13/Gkd/6QJv7c7pcmopASA/UO2x0
+         HRDZmsG51aYBw==
+Message-ID: <b1453175-3cd6-bdd1-5e71-9c0f341bf3e9@asahilina.net>
+Date:   Sat, 25 Feb 2023 00:42:34 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/5] rust: device: Add a minimal RawDevice trait
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
+ <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
+ <Y/ieQ0UX/niAG1Hg@kroah.com>
+ <ef3a3638-6381-87ab-d674-644306b6b6ce@asahilina.net>
+ <Y/jFeZzZVCpBGvGv@kroah.com>
+ <0e3c15bd-a1d6-a363-d7b6-087b6e4cddac@asahilina.net>
+ <Y/jWtVr7JK/YKcsE@kroah.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <Y/jWtVr7JK/YKcsE@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the per-cpu GSBASE, stack, and GDT descriptor can be derived
-dynamically by CPU number, the boot CPU can use a fixed CPU number and
-take the same path as secondary CPUs.
+On 25/02/2023 00.24, Greg Kroah-Hartman wrote:
+>> What do you recommend for things that want to print device-associated
+>> messages, if not holding a reference to the device?
+> 
+> If you aren't holding a reference to the device, that means you aren't
+> associated to it at all, so you better not be printing out anything
+> related to any device as that pointer could be invalid at any point in
+> time.
 
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
-Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Tested-by: Usama Arif <usama.arif@bytedance.com>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- arch/x86/kernel/head_64.S | 24 +++++++-----------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
+The RTKit code talks to the firmware coprocessor that is part of the
+device, so it definitely is associated to it... among other things it
+prints out firmware logs from the device and crash logs, manages memory
+buffers (which have default implementations but can be overridden by the
+user driver), and more. It's essentially library code shared by all
+device drivers that interact with devices with these coprocessors.
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 9ed87ba0609f..8bd29ab523dd 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -235,11 +235,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR // above
- 
- #ifdef CONFIG_SMP
--	/* Is this the boot CPU coming up? */
--	movl	smpboot_control(%rip), %edx
--	testl	$STARTUP_SECONDARY, %edx
--	jz	.Linit_cpu0_data
--
- 	/*
- 	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
- 	 * used to look up the CPU number.  For booting a single CPU, the
-@@ -250,13 +245,13 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
- 	 * Bit 0-24	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
--	testl	$STARTUP_APICID_CPUID_0B, %edx
-+	movl	smpboot_control(%rip), %ecx
-+	testl	$STARTUP_APICID_CPUID_0B, %ecx
- 	jnz	.Luse_cpuid_0b
--	testl	$STARTUP_APICID_CPUID_01, %edx
-+	testl	$STARTUP_APICID_CPUID_01, %ecx
- 	jnz	.Luse_cpuid_01
--	andl	$0x0FFFFFFF, %edx
--	movl	%edx, %ecx
--	jmp	.Linit_cpu_data
-+	andl	$0x0FFFFFFF, %ecx
-+	jmp	.Lsetup_cpu
- 
- .Luse_cpuid_01:
- 	mov	$0x01, %eax
-@@ -277,7 +272,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 
- .Lfind_cpunr:
- 	cmpl	(%rbx,%rcx,4), %edx
--	jz	.Linit_cpu_data
-+	jz	.Lsetup_cpu
- 	inc	%ecx
- 	cmpl	nr_cpu_ids(%rip), %ecx
- 	jb	.Lfind_cpunr
-@@ -291,18 +286,13 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	hlt
- 	jmp	1b
- 
--.Linit_cpu0_data:
--	movq	__per_cpu_offset(%rip), %rdx
--	jmp	.Lsetup_cpu
--
--.Linit_cpu_data:
-+.Lsetup_cpu:
- 	/* Get the per cpu offset for the given CPU# which is in ECX */
- 	movq	__per_cpu_offset(,%rcx,8), %rdx
- #else
- 	xorl	%edx, %edx
- #endif /* CONFIG_SMP */
- 
--.Lsetup_cpu:
- 	/*
- 	 * Setup a boot time stack - Any secondary CPU will have lost its stack
- 	 * by now because the cr3-switch above unmaps the real-mode stack
--- 
-2.39.2
+>> Or did I
+>> misunderstand what you meant? Just pr_foo() isn't great because we have
+>> a lot of instances of rtkit and then you wouldn't know which device the
+>> messages are about...
+> 
+> Then the rtkit code needs to be changed to properly grab the reference
+> and actually use it for something other than just a log message.  If it
+> only wants it for a log message, then let's just drop it and have the
+> rtkit code go quiet, as when kernel code is working properly, it should
+> be quiet.  If something goes wrong, the code that called into rtkit can
+> print out a message based on the error return values.
 
+Keep in mind rtkit does things like print out crash logs, and you
+wouldn't want the caller to be responsible for that (and we definitely
+want those in dmesg since these coprocessors are non-recoverable, it's
+almost as bad as a kernel panic: you will have to reboot to be able to
+use the machine properly again). I find those crash logs very useful to
+figure out what went wrong with the GPU (especially if combined with a
+memory dump which we don't expose to regular users right now, but which
+I have ideas for... but even without that, just assert messages from the
+coprocessor or fault instruction pointers that I can correlate with the
+firmware are very useful on their own).
+
+Right now rtkit also prints out syslogs from the coprocessors. That's
+noisy for some but I think very useful, since we're dealing with reverse
+engineered drivers. We'll probably want to silence those for some noisy
+coprocessors at some point, but I don't think we want to do that until
+things are all upstream, stable, and with a larger user base... until
+then I think we'd much rather be spammy and have a better chance of
+debugging rare issues, which often happen with these coprocessors
+running big firmware blobs... there are a lot of subtleties in getting
+the interfaces right, never mind cache coherence issues!
+
+> I have no idea what "rtkit" is, if it's an interface to hardware, why
+> doesn't it have its own struct device that it creates and manages and
+> uses instead?  In my quick glance, that feels like the real solution
+> here instead of just "I hope this pointer is going to be valid" like it
+> lives with today.  Odds are you can't remove a rtkit device at runtime,
+> so no one has noticed this yet...
+
+Well, they're all embedded into the SoC, yes.
+
+RTKit is Apple's firmware RTOS, and also the name for the
+semi-standardized mailbox/shared-memory interface shared by different
+firmwares using it. The Linux code to drive it doesn't create its own
+"struct device" because the rtkit code is just library code that is
+extended by the downstream drivers (like mine). How each driver
+interacts with rtkit varies widely... NVMe almost doesn't at all other
+than for power management, there is actually a downstream "rtkit-helper"
+driver that is a proper standalone device wrapper for one case (MTP)
+where it really doesn't need to interact at all... in my case with the
+GPU, almost everything is shared memory and doorbells over the mailbox.
+Other drivers like DCP actually send pointers over multiple mailbox
+endpoints, or do most of their data exchange directly over messages like
+that (SMC).
+
+So in a way, if we consider it driver library code, it's not
+unreasonable for RTKit to require that the device you pass it outlives
+it. Certainly, if the device is getting unbound from your driver, you'd
+need to tear down RTKit as part of that in any reasonable situation.
+
+>> I know it's hard to review without examples, but I also can't just post
+>> the driver and everything else as one series now, there's still a lot to
+>> be improved and fixed and I'm working with the Rust folks on figuring
+>> out a roadmap for that... and waiting until "everything" is ready and
+>> perfect would mean we don't get anything done in the meantime and fall
+>> into a pit of endless rebasing and coordinating downstream trees, which
+>> also isn't good...
+> 
+> Yeah, it's a chicken and egg issue right now, no worries, I understand.
+> This is going to take some cycles to get right.
+> 
+
+Thank you ^^
+
+~~ Lina
