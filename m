@@ -2,250 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF806A21B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE626A21B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBXSqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S229753AbjBXSqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBXSqK (ORCPT
+        with ESMTP id S229460AbjBXSqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:46:10 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2101.outbound.protection.outlook.com [40.107.223.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E453168293;
-        Fri, 24 Feb 2023 10:46:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tk/vnDzEY0uWhix+zmMbwNV+6Mqt+LXi/2Oen1hQ7RHBA7SrYucKDbgro16rrHfnR7+FigllStlc8Kj8QoKgMLZlL/2tkwgkqgRXaa13v4GXmVHvhvGodMI9gV5I6eg+p72JBKFHgVUMcnTQdxUyeAEu73g+dH8PCY68b4zq/pdw6+Tjf4LQS05BvbULr4zXS+WkpWGUiRX5Z5t9DAxp305G36/i/ALMSpKP5Ptrm2KfPye2QZB/j59dd2U1fjqONk7SzzeuN8GGYjdB+/fWOZIG31EzYI6Gwt5fPxoKL35+Cb2fIvyADfh0rFfo9vByMYT0voBgClhsw05R8Ke/yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LOl/3RaS+C5nmDsYjy9Drzj2DpJNuEQFkHzZjBGqX7A=;
- b=fgzo+7G8jC9/HEHTNskUjwxeatWSqFy3t2cpcxTQsLklddAJqcmta+ZDQ3m7rEvDzIlwhESmkxcsybgBpbnihU3U8CUIYTAt7v0u/2/1a4D8xmUPWJTN7gy5xCIUHtjxm8yRXAYznyCGnN9ml8pZLJ3R4RZzErTSz4SCh2ZrrEJkj5xf0URE/V+MzC/yuMNvkCu2N6VpY7mflvCc3/2xlcCAB4nbg3jlUsM88c+0Lpz1bbLk8FN/ghmM29FTX9jCFQOBrR/dTs8FrRAWZisVikHIwuc6rBuM9z+1wGUOOcZIkKNSNUojL60T9SJwii/CgGMCoKihjK+8kFuwT7gMjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LOl/3RaS+C5nmDsYjy9Drzj2DpJNuEQFkHzZjBGqX7A=;
- b=BqzlDasdOUsmOtIgxb/8GeNjKfLgJjhS9Mo6vRcJriCROLpg0LpJCp3QUN3aArAmVYQx1iOOPk39iF5BU3bpdau2RPr/FPziQ+2rq64qWE00AN7NaMS75Q0g+HeUHzcJZBfC4oWMjDAAtgYd4HUIzMwiVkvzEHdljHpTZK3vxk8=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by DM4PR21MB3056.namprd21.prod.outlook.com (2603:10b6:8:5c::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.7; Fri, 24 Feb 2023 18:46:06 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a%5]) with mapi id 15.20.6156.005; Fri, 24 Feb 2023
- 18:46:06 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Usama Arif <usama.arif@bytedance.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "brgerst@gmail.com" <brgerst@gmail.com>
-CC:     "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "arjan@linux.intel.com" <arjan@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
-        "liangma@liangbit.com" <liangma@liangbit.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: RE: [PATCH v11 07/12] x86/smpboot: Send INIT/SIPI/SIPI to secondary
- CPUs in parallel
-Thread-Topic: [PATCH v11 07/12] x86/smpboot: Send INIT/SIPI/SIPI to secondary
- CPUs in parallel
-Thread-Index: AQHZR7r/6OCj/agkrUuXPSCA1yHYm67eaxzA
-Date:   Fri, 24 Feb 2023 18:46:06 +0000
-Message-ID: <BYAPR21MB16881C7140FEA56F5CE66851D7A89@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230223191140.4155012-1-usama.arif@bytedance.com>
- <20230223191140.4155012-8-usama.arif@bytedance.com>
-In-Reply-To: <20230223191140.4155012-8-usama.arif@bytedance.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=a8888a72-de74-4680-aa91-7e17469f06f4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-24T18:24:52Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DM4PR21MB3056:EE_
-x-ms-office365-filtering-correlation-id: be0a3635-2b4f-451d-7470-08db1697631c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IvXYxL8u1HIFlO3mhOTOzpqPzr+sqQ83wqiqR8ttVbeZ+mpR8fDov7LNenqycmF/7iH4BCNd/aDQGQSZE2MkntY9914Mz4YwqQjtpUNds+vykwWmOk6u/3pTsvbnW7H9HMYh/meC+bJDN6q5ei3K8iOZ2H2OmJ75Lft9Dal26vpSR7TEDJB7VUiULOKLhPDmZr3FZklXHyJnSRnYK5KmiVMb39fd07rZN9XRobfcEwcBB8rueFvr+IIK42G46j8xSm9tx3j0cm5OBGxtwzgw42RUXhyhZsC71YMu/LxOCz8MS5NhJ6OoK4NwDiv8dRtoIkilzkOoVkaT7sODE5goi828jSq6l7C4b8tJUWvh4SKLFb9a0ihKpCPegzGuBnYyjUy4F0xp6oIK1/yJ9goKhc0f3xRpwa2XBQMrxpfwEUrzOpuyTqz+qrptWmLtOL7dGUaHCiaT/Y3s97Qqlc4PFEaMf4W2moTmr63n3Xq1CoSZahfTUjAaQAY9vdsITBvVwBdKXOJAOLPvroljdWAZFluegDjvVQCDCYIKmrqwEZYdIdtxknaCHvV3yNH+C5+sV4Ju474SWqFJg+1EUEuAPtUi6R/uO4odnn3f7v8lW0HesZ3aNfuS6e0X6Puu6GN63CaN5P4NqVKx83LOpJEQ9BbmX1/iaOfIiQk1xH6OlKzUvxZL4o0XdAf0TDXCVl7JL9Fxd57+GtAR7GFc6f4pC91yUCT7Q9kOV69lxI9Jf4vTUcsEM2jwd5Qf56/dF6W0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(376002)(366004)(39860400002)(136003)(451199018)(2906002)(41300700001)(8990500004)(52536014)(8936002)(54906003)(316002)(110136005)(4326008)(8676002)(7416002)(7696005)(5660300002)(10290500003)(71200400001)(478600001)(6506007)(9686003)(26005)(186003)(76116006)(64756008)(66556008)(66446008)(66946007)(66476007)(122000001)(86362001)(55016003)(82950400001)(82960400001)(38070700005)(83380400001)(33656002)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZXgzbTFIT2Rab1I1UkhtejlmYU9zQ2JsRlVTMExjSjlqQ3JVS0s5Yzd5WlNx?=
- =?utf-8?B?MHJOc2hoYURRaGpFOXFkSG1pVjlYR3ovMnZvamNVNUxyZzZFbW5nR25jY2xv?=
- =?utf-8?B?clZtc2M3M3NzMUVSMitRTElKdmxSTGJPckNjcEdURzRmNkNOaXpiOUIxaVBM?=
- =?utf-8?B?Mmg3NzRibzBZRkhDclRSRy8wZ21Td2c0UGxieEVzT2JGdk5IOEgwY1RSd2dr?=
- =?utf-8?B?bTBGUzJBQ0dlQXBBZDFENUNZUllsQ2JQdUJzdWo2MmxWSlZYSFJKVS9EWDRY?=
- =?utf-8?B?QmEydGZHUzdFMjgzRFJVTm51RXdnSW9oemkrMmdJWjlHZ1NBWmtOd2l2RSth?=
- =?utf-8?B?NGlGdkFOSDR1VDhzWWFnTDdHZzdvUFMwZ1pDKzNBK01NL2E4VFRnUkUvd0dF?=
- =?utf-8?B?N3JGd21LS1JtanAyREowclpSWU1QKzRrZEY2Q3FieHhYdklCZ3RvUDVzeXg5?=
- =?utf-8?B?RSt1bm5vMXRGeld4bFQxSlo4b1EyL1ZNb1BxN1ZNK1ZucGJOSDFYM3kwM0o5?=
- =?utf-8?B?SXF1VURXVkZiM2JxekhKUUg4UnlOT0gwdW1PdVVXU1RNQ3EyTElEbFdFS1ZY?=
- =?utf-8?B?d1hyVUZBR0I0b3B3c3d3bGRzSjRGZVRSUElUVmtrSVlheTc5bWtBY0VTN2ZC?=
- =?utf-8?B?SDduYTRYZTEvN2VLN2YvemVHOHBjd3NUTllRUmNDVzZxcGJTRU41eTVVR3hU?=
- =?utf-8?B?OGFiaVcwUnpZNEF4aUk4OTJHdVh4SXM3WUxiRG5VUFpTcjV0dFhSS2tiT3Ra?=
- =?utf-8?B?ZDIxV21EZDhaeVRIZ09ONnNNSGdIbXNVbzltbWZuY0J1V2pkWUwrajg4YVla?=
- =?utf-8?B?TE9xNzlhRStrYlpwblc5UlZzbHlOdEZXVm9adXRKRUtzM1Z0bGJGSSt0bmNr?=
- =?utf-8?B?SXJkVzhRaFRlSmhHZGdxOU5pL3A2T1FwU1Znd1JrUVVkRk9sUDlGb2tVTDM3?=
- =?utf-8?B?UHFmWDJHMzBQenY0UzBLSENZbjltMHlvRXQ2U2tkTERITEFKZVhCZzBGN0FS?=
- =?utf-8?B?VmZFd2RGalVHTWpCV3kvbWFpOGgrNGpRL0h1S0VQekhjUGVkcDBSNjE2Ui80?=
- =?utf-8?B?WmdhSG5PRXAxRlhyVW5vZEI4K0xQNXBXRFpHRnp2WGNPTEhtcGltaFJwV2xm?=
- =?utf-8?B?QjI2MzRZcG5yYmJ2L0ExNHc0Wm9qMUViaWEzQ20vZStyOEQ0azRuYVhjL2x4?=
- =?utf-8?B?VXlVeGVpR0l4NytFUzJGb2ZCMVo3R1R2VWY3WkNLQ1VBQ1YxV3l4QUdBYUpq?=
- =?utf-8?B?UEM1YnY3cllDcmJmOEdlMmEzVk45RnFuVUt2VzJuNFFXWVVxS3lDa0hDYzI5?=
- =?utf-8?B?a2JyemlOVENzblpOQUpKb2ZyMklyRDFNVTgrUVFBbmVBUElScmJwbG5NUkR1?=
- =?utf-8?B?QndZOEs0UzlNcXRaSFVjMTI4R2hYR0twQlVkbmliNzBTUW9GZUtNZ0pxZVRF?=
- =?utf-8?B?dWdBbHFoeFZHRE1KL3M3RUVrbnErNXdHVEF5dVA4eG5LV0tQdkdOWEJiT0h1?=
- =?utf-8?B?TlRFdyt2Q0N4ektzS2UxNW5Ga2prdHNXU21tSTM0azZUSjJlUGNRRFRBdmxN?=
- =?utf-8?B?MFBvbjRPL1dlTC9xR25rZ2ExRDZTOXAwaXdQM3VnZ29KZURqcTQvbFhnNE9w?=
- =?utf-8?B?YUhYb2VJVFRsdllWcy81YkYwVVlFTElsZDlNZXkwTE1XZjA0N2xYMkZ6ZUMz?=
- =?utf-8?B?OVdEVFpjbDJ6c2tYTWJIVTgyd1JNdlpjR2ZVL0t2WlEzaDBzWnFWZzlUWDhx?=
- =?utf-8?B?N2NCdWRqUGxjM1BUOTlEY2lYZ0RiQ2E5NmFqWlNkN3JCS0VuSTlpOUY0b3VG?=
- =?utf-8?B?ZFJ4T1c2R3doTElGZ1ZVbkx1ZkhxTXdNb1IrOTRpak1zdDhqa3g3bUJQSDVC?=
- =?utf-8?B?eUNtS2RQREMxUVk1dnVDdHBuZ09TdTc2QmZ3QTJnYXh1SDN0d09ObkZRU0Jp?=
- =?utf-8?B?NXd0YzB6dVZtZFlQMW5rWFVoemdoRXBjU1NjRTk4dkJBdXUwaVZoWUxkYURL?=
- =?utf-8?B?OUMvZUo3S1R1NzdJWDl6cmpoZVhNbnlST1BBbGNMM1ZIemN2TTRqTWpTckpq?=
- =?utf-8?B?b2lZWGlpNkd5d3BRNm41SXdjM1J2YzZRWHJCRi9OYTNLVFk5OUhzQ2xTZklC?=
- =?utf-8?B?cGo0WlhlRWFlRU93ZjBrdEFKdGEvcGYrckRNUG54QmRKaERIVVhqVkRXNWVw?=
- =?utf-8?B?c2c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 24 Feb 2023 13:46:53 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6CE6C8C4;
+        Fri, 24 Feb 2023 10:46:52 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id h14so400233plf.10;
+        Fri, 24 Feb 2023 10:46:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=to5vJVxEp0UU32rm0NGYCVyewKbZkeSc8N7b2X1iLhs=;
+        b=nfYgA9jRzJx/597NvPlFV9Pog9qINZw558UyOkf4awrgHVJl/Ggavt0HjvMRQGjAbj
+         zkNYDoff/FGVR7gyw2rwbBIMw6O5hMaS/7X9AC47yEerv9RfgWuHeCXFX3W595R6V+dB
+         i8tkOPah2yDQnu4Xxioz9NqAkE/MjInES6Mq9sdGdfK5MK/pnHxvzNV5i1DoEf2Pkdri
+         IuVL4wATAKMF6ZnGzQVdD4PkJol+Gno4O4plWRE54KcbBzwZjDEHksGkuz6iAZY9Ipqk
+         iDl+SpVX7Zo2693368Z+m9Qrdyxf7aBt6/k0FuBPPNlTEgKL7PqUwCkBs4uaylwxuNH3
+         fvgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=to5vJVxEp0UU32rm0NGYCVyewKbZkeSc8N7b2X1iLhs=;
+        b=BgAlwzf0znJigOyUIY4SJ5gbVNTr2awF+oDo4ZVcelh/iIhYuHKsFBHQROco0NEwjZ
+         DxpInzR71AmDzG2iWgrtO9aS/0LfpS6W+LEk+0xpQKVNdTSpkdCYWxkhbKD2f8WHlXid
+         CCdv5Lbi/BfXcAg2wb657eMFzDJufdJVfjwDaqf8JcOFHAaPhOEU2BRlVLBpZywG8O6w
+         TZFe2ITjOY47EXuuTA69q73UVtPraulElMa8yhn/94a1EESrTvMffJcjVwgt7GuBpjqk
+         68OmN8Klo6LjIn9sJEk41icn73wDZEf4COax2c/RwMikA5pDO4ohx0Z9Z9NgQxotViB2
+         c4EA==
+X-Gm-Message-State: AO0yUKXlC4Y250jQw/BPUYJ/YFIrt815Ajmn46hL4tJHpnXdwSFvqlpW
+        HgKcmZUDfta8D+smvll5ojS7kBvZ+Mhr2NlgjrI=
+X-Google-Smtp-Source: AK7set9iHR8Vdy2GATvmM/SKxy2TO8YELkPlohM9CVMoNTmh121KKUWOGl/AjQPID8gP029RMY99o9gCLY6sGw4tXPU=
+X-Received: by 2002:a17:90a:db86:b0:234:13f7:b6b0 with SMTP id
+ h6-20020a17090adb8600b0023413f7b6b0mr2096550pjv.6.1677264411323; Fri, 24 Feb
+ 2023 10:46:51 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be0a3635-2b4f-451d-7470-08db1697631c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 18:46:06.1426
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SnDXEajRdB7tvzYOeipIK4kbasmoqfbrbsu0yI2FOdhyQMnYSFCg+UFVzcSmofGw8rstRaiinPGsF0fPMHLWc7dpUIeApJNu+NcQqhh1ZGw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3056
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
+ <CAHCN7xKbL+g5ZaPe3a50fUEe4AU3a6asCqWFSE8d7DCzWZO=qg@mail.gmail.com>
+ <Y/d3m78NgmuuXOH8@pendragon.ideasonboard.com> <CAHCN7xLXz4iSKcTQgyW=E0c4eLZSAYAiuoTKpQBWz8GsfZ2GCA@mail.gmail.com>
+ <12dfd1f511d83bb1a3d9924cb0d09dbba626a699.camel@ndufresne.ca>
+In-Reply-To: <12dfd1f511d83bb1a3d9924cb0d09dbba626a699.camel@ndufresne.ca>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 24 Feb 2023 12:46:39 -0600
+Message-ID: <CAHCN7xJZjhvjejuMhtewVMvFVijzi8VdyFiGKCvpx3C0MGLjqA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] media: rkisp1: Add support for i.MX8MP
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogVXNhbWEgQXJpZiA8dXNhbWEuYXJpZkBieXRlZGFuY2UuY29tPiBTZW50OiBUaHVyc2Rh
-eSwgRmVicnVhcnkgMjMsIDIwMjMgMTE6MTIgQU0NCj4gDQo+IEZyb206IERhdmlkIFdvb2Rob3Vz
-ZSA8ZHdtd0BhbWF6b24uY28udWs+DQo+IA0KPiBXaGVuIHRoZSBBUHMgY2FuIGZpbmQgdGhlaXIg
-b3duIEFQSUMgSUQgd2l0aG91dCBhc3Npc3RhbmNlLCBwZXJmb3JtIHRoZQ0KPiBBUCBicmluZ3Vw
-IGluIHBhcmFsbGVsLg0KPiANCj4gUmVnaXN0ZXIgYSBDUFVIUF9CUF9QQVJBTExFTF9EWU4gc3Rh
-Z2UgIng4Ni9jcHU6a2ljayIgd2hpY2gganVzdCBjYWxscw0KPiBkb19ib290X2NwdSgpIHRvIGRl
-bGl2ZXIgSU5JVC9TSVBJL1NJUEkgdG8gZWFjaCBBUCBpbiB0dXJuIGJlZm9yZSB0aGUNCj4gbm9y
-bWFsIG5hdGl2ZV9jcHVfdXAoKSBkb2VzIHRoZSByZXN0IG9mIHRoZSBoYW5kLWhvbGRpbmcuDQo+
-IA0KPiBUaGUgQVBzIHdpbGwgdGhlbiB0YWtlIHR1cm5zIHRocm91Z2ggdGhlIHJlYWwgbW9kZSBj
-b2RlICh3aGljaCBoYXMgaXRzDQo+IG93biBiaXRsb2NrIGZvciBleGNsdXNpb24pIHVudGlsIHRo
-ZXkgbWFrZSBpdCB0byB0aGVpciBvd24gc3RhY2ssIHRoZW4NCj4gcHJvY2VlZCB0aHJvdWdoIHRo
-ZSBmaXJzdCBmZXcgbGluZXMgb2Ygc3RhcnRfc2Vjb25kYXJ5KCkgYW5kIGV4ZWN1dGUNCj4gdGhl
-c2UgcGFydHMgaW4gcGFyYWxsZWw6DQo+IA0KPiAgc3RhcnRfc2Vjb25kYXJ5KCkNCj4gICAgIC0+
-IGNyNF9pbml0KCkNCj4gICAgIC0+IChzb21lIDMyLWJpdCBvbmx5IHN0dWZmIHNvIG5vdCBpbiB0
-aGUgcGFyYWxsZWwgY2FzZXMpDQo+ICAgICAtPiBjcHVfaW5pdF9zZWNvbmRhcnkoKQ0KPiAgICAg
-ICAgLT4gY3B1X2luaXRfZXhjZXB0aW9uX2hhbmRsaW5nKCkNCj4gICAgICAgIC0+IGNwdV9pbml0
-KCkNCj4gICAgICAgICAgIC0+IHdhaXRfZm9yX21hc3Rlcl9jcHUoKQ0KPiANCj4gQXQgdGhpcyBw
-b2ludCB0aGV5IHdhaXQgZm9yIHRoZSBCU1AgdG8gc2V0IHRoZWlyIGJpdCBpbiBjcHVfY2FsbG91
-dF9tYXNrDQo+IChmcm9tIGRvX3dhaXRfY3B1X2luaXRpYWxpemVkKCkpLCBhbmQgcmVsZWFzZSB0
-aGVtIHRvIGNvbnRpbnVlIHRocm91Z2gNCj4gdGhlIHJlc3Qgb2YgY3B1X2luaXQoKSBhbmQgYmV5
-b25kLg0KPiANCj4gVGhpcyByZWR1Y2VzIHRoZSB0aW1lIHRha2VuIGZvciBicmluZ3VwIG9uIG15
-IDI4LXRocmVhZCBIYXN3ZWxsIHN5c3RlbQ0KPiBmcm9tIGFib3V0IDEyMG1zIHRvIDgwbXMuIE9u
-IGEgc29ja2V0IDk2LXRocmVhZCBTa3lsYWtlIGl0IHRha2VzIHRoZQ0KPiBicmluZ3VwIHRpbWUg
-ZnJvbSA1MDBtcyB0byAxMDBtcy4NCg0KSSBidWlsdCBhbmQgdGVzdGVkIHRoaXMgc2VyaWVzIGlu
-IGEgSHlwZXItViBWTSB3aXRoIDY0IHZDUFVzIHJ1bm5pbmcNCm9uIGFuIEFNRCBFUFlDICJNaWxh
-biIgcHJvY2Vzc29yLiAgIFRoZSBWTSBoYXMgYW4geGFwaWMsIG5vdCBhbiB4MmFwaWMuDQoNClRo
-ZSBwYXRjaCBzZXQgd29ya3MgY29ycmVjdGx5LCB3aXRoIGFuZCB3aXRob3V0IHRoZSBub19wYXJh
-bGxlbF9icmluZ3VwDQprZXJuZWwgYm9vdCBvcHRpb24uICBJbiBhIHJ1bm5pbmcgTGludXggaW5z
-dGFuY2UsIEkgd2FzIGxvb2tpbmcgZm9yIGEgd2F5IHRvDQpjb25maXJtIHdoZXRoZXIgaXQgdXNl
-ZCBwYXJhbGxlbCBicmluZ3VwLiAgSSBjb3VsZCBvbmx5IGZpbmQgY2hlY2tpbmcgZm9yIHRoZQ0K
-Ing4Ni9jcHU6a2ljayIgc3RhdGUgaW4gL3N5cy9kZXZpY2VzL3N5c3RlbS9jcHUvaG90cGx1Zy9z
-dGF0ZXMuICBBbHdheXMNCm91dHB1dHRpbmcgYSBib290IG1lc3NhZ2UgdG8gaW5kaWNhdGUgdGhl
-IGFwcHJvYWNoIG1pZ2h0IGJlIGhlbHBmdWwuDQoNCkludGVyZXN0aW5nbHksIEkgZm91bmQgbm8g
-cmVkdWN0aW9uIGluIGVsYXBzZWQgdGltZSB0byBicmluZyB1cCB0aGUgNjQgdkNQVXMuDQpEZXBl
-bmRpbmcgb24gZXhhY3RseSB3aGVyZSB5b3UgbWVhc3VyZSwgaXQgaXMgODAgdG8gOTAgbWlsbGlz
-ZWNvbmRzDQpiZWZvcmUgYXBwbHlpbmcgdGhlIHBhdGNoIHNldCwgYW5kIGFmdGVyIGFwcGx5aW5n
-IHRoZSBwYXRjaCBzZXQgKHdpdGggb3INCndpdGhvdXQgbm9fcGFyYWxsZWxfYnJpbmd1cCkuICBF
-dmlkZW50bHksIFZNcyBhbHJlYWR5IGF2b2lkIGEgZ29vZA0KcGFydCBvZiB0aGUgb3ZlcmhlYWQg
-aW4gdGhlIGV4aXN0aW5nIHNlcmlhbGl6ZWQgYXBwcm9hY2guDQoNClsgICAgMS41MDM2OTldIHNt
-cDogQnJpbmdpbmcgdXAgc2Vjb25kYXJ5IENQVXMgLi4uDQpbICAgIDEuNTA3MzM5XSB4ODY6IEJv
-b3RpbmcgU01QIGNvbmZpZ3VyYXRpb246DQpbICAgIDEuNTExMTkyXSAuLi4uIG5vZGUgICMwLCBD
-UFVzOiAgICAgICAgIzEgICMyICAjMyAgIzQgICM1ICAjNiAgIzcgICM4ICAjOSAjMTAgIzExDQoj
-MTIgIzEzICMxNCAjMTUgIzE2ICMxNyAjMTggIzE5ICMyMCAjMjEgIzIyICMyMyAjMjQgIzI1ICMy
-NiAjMjcgIzI4ICMyOQ0KIzMwICMzMSAjMzIgIzMzICMzNCAjMzUgIzM2ICMzNyAjMzggIzM5ICM0
-MCAjNDEgIzQyICM0MyAjNDQgIzQ1ICM0NiAjNDcNCiM0OCAjNDkgIzUwICM1MSAjNTIgIzUzICM1
-NCAjNTUgIzU2ICM1NyAjNTggIzU5ICM2MCAjNjEgIzYyICM2Mw0KWyAgICAxLjU4ODAzOV0gc21w
-OiBCcm91Z2h0IHVwIDEgbm9kZSwgNjQgQ1BVcw0KWyAgICAxLjU5NTUxM10gc21wYm9vdDogTWF4
-IGxvZ2ljYWwgcGFja2FnZXM6IDENClsgICAgMS41OTkxODZdIHNtcGJvb3Q6IFRvdGFsIG9mIDY0
-IHByb2Nlc3NvcnMgYWN0aXZhdGVkICgyNTU1MjQuMjIgQm9nb01JUFMpDQoNClRoZSAieDg2L2Nw
-dTpraWNrIiBzdGF0ZSB3YXMgcHJlc2VudCBmb3IgdGhlIHBhcmFsbGVsIGJyaW5ndXAgY2FzZSwg
-c28NCnByZXN1bWFibHkgdGhlIHBhcmFsbGVsIGJlaGF2aW9yICpkaWQqIGhhcHBlbiwgdW5sZXNz
-IHRoZXJlIGlzIGxhdGVyDQpiYWlsb3V0IHBhdGggdGhhdCBJIG1pc3NlZC4gIEJ1dCB0aGVyZSB3
-ZXJlbid0IGFueSBib290IG1lc3NhZ2VzDQppbmRpY2F0aW5nIHN1Y2guDQoNCk1pY2hhZWwNCg0K
-Rm9yIHRoZSBzZXJpZXMsIG9uIEh5cGVyLVYgZ3Vlc3RzOg0KVGVzdGVkLWJ5OiBNaWNoYWVsIEtl
-bGxleSA8bWlrZWxsZXlAbWljcm9zb2Z0LmNvbT4NCg0KPiANCj4gVGhlcmUgaXMgbW9yZSBzcGVl
-ZHVwIHRvIGJlIGhhZCBieSBkb2luZyB0aGUgcmVtYWluaW5nIHBhcnRzIGluIHBhcmFsbGVsDQo+
-IHRvbyDigJQgZXNwZWNpYWxseSBub3RpZnlfY3B1X3N0YXJ0aW5nKCkgaW4gd2hpY2ggdGhlIEFQ
-IHRha2VzIGl0c2VsZg0KPiB0aHJvdWdoIGFsbCB0aGUgc3RhZ2VzIGZyb20gQ1BVSFBfQlJJTkdV
-UF9DUFUgdG8gQ1BVSFBfT05MSU5FLiBCdXQgdGhvc2UNCj4gcmVxdWlyZSBjYXJlZnVsIGF1ZGl0
-aW5nIHRvIGVuc3VyZSB0aGV5IGFyZSByZWVudHJhbnQsIGJlZm9yZSB3ZSBjYW4gZ28NCj4gdGhh
-dCBmYXIuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBXb29kaG91c2UgPGR3bXdAYW1hem9u
-LmNvLnVrPg0KPiBTaWduZWQtb2ZmLWJ5OiBVc2FtYSBBcmlmIDx1c2FtYS5hcmlmQGJ5dGVkYW5j
-ZS5jb20+DQo+IFRlc3RlZC1ieTogUGF1bCBFLiBNY0tlbm5leSA8cGF1bG1ja0BrZXJuZWwub3Jn
-Pg0KPiBUZXN0ZWQtYnk6IEtpbSBQaGlsbGlwcyA8a2ltLnBoaWxsaXBzQGFtZC5jb20+DQo+IFRl
-c3RlZC1ieTogT2xla3NhbmRyIE5hdGFsZW5rbyA8b2xla3NhbmRyQG5hdGFsZW5rby5uYW1lPg0K
-PiAtLS0NCj4gIGFyY2gveDg2L2tlcm5lbC9zbXBib290LmMgfCAyMSArKysrKysrKysrKysrKysr
-KystLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygt
-KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9zbXBib290LmMgYi9hcmNoL3g4
-Ni9rZXJuZWwvc21wYm9vdC5jDQo+IGluZGV4IDc0Yzc2Yzc4ZjdkMi4uODVjZTZhODk3OGZmIDEw
-MDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvc21wYm9vdC5jDQo+ICsrKyBiL2FyY2gveDg2
-L2tlcm5lbC9zbXBib290LmMNCj4gQEAgLTU3LDYgKzU3LDcgQEANCj4gICNpbmNsdWRlIDxsaW51
-eC9wZ3RhYmxlLmg+DQo+ICAjaW5jbHVkZSA8bGludXgvb3ZlcmZsb3cuaD4NCj4gICNpbmNsdWRl
-IDxsaW51eC9zdGFja3Byb3RlY3Rvci5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L3NtcGJvb3QuaD4N
-Cj4gDQo+ICAjaW5jbHVkZSA8YXNtL2FjcGkuaD4NCj4gICNpbmNsdWRlIDxhc20vY2FjaGVpbmZv
-Lmg+DQo+IEBAIC0xMzI1LDkgKzEzMjYsMTIgQEAgaW50IG5hdGl2ZV9jcHVfdXAodW5zaWduZWQg
-aW50IGNwdSwgc3RydWN0IHRhc2tfc3RydWN0DQo+ICp0aWRsZSkNCj4gIHsNCj4gIAlpbnQgcmV0
-Ow0KPiANCj4gLQlyZXQgPSBkb19jcHVfdXAoY3B1LCB0aWRsZSk7DQo+IC0JaWYgKHJldCkNCj4g
-LQkJcmV0dXJuIHJldDsNCj4gKwkvKiBJZiBwYXJhbGxlbCBBUCBicmluZ3VwIGlzbid0IGVuYWJs
-ZWQsIHBlcmZvcm0gdGhlIGZpcnN0IHN0ZXBzIG5vdy4gKi8NCj4gKwlpZiAoIWRvX3BhcmFsbGVs
-X2JyaW5ndXApIHsNCj4gKwkJcmV0ID0gZG9fY3B1X3VwKGNwdSwgdGlkbGUpOw0KPiArCQlpZiAo
-cmV0KQ0KPiArCQkJcmV0dXJuIHJldDsNCj4gKwl9DQo+IA0KPiAgCXJldCA9IGRvX3dhaXRfY3B1
-X2luaXRpYWxpemVkKGNwdSk7DQo+ICAJaWYgKHJldCkNCj4gQEAgLTEzNDksNiArMTM1MywxMiBA
-QCBpbnQgbmF0aXZlX2NwdV91cCh1bnNpZ25lZCBpbnQgY3B1LCBzdHJ1Y3QgdGFza19zdHJ1Y3QN
-Cj4gKnRpZGxlKQ0KPiAgCXJldHVybiByZXQ7DQo+ICB9DQo+IA0KPiArLyogQnJpbmd1cCBzdGVw
-IG9uZTogU2VuZCBJTklUL1NJUEkgdG8gdGhlIHRhcmdldCBBUCAqLw0KPiArc3RhdGljIGludCBu
-YXRpdmVfY3B1X2tpY2sodW5zaWduZWQgaW50IGNwdSkNCj4gK3sNCj4gKwlyZXR1cm4gZG9fY3B1
-X3VwKGNwdSwgaWRsZV90aHJlYWRfZ2V0KGNwdSkpOw0KPiArfQ0KPiArDQo+ICAvKioNCj4gICAq
-IGFyY2hfZGlzYWJsZV9zbXBfc3VwcG9ydCgpIC0gZGlzYWJsZXMgU01QIHN1cHBvcnQgZm9yIHg4
-NiBhdCBydW50aW1lDQo+ICAgKi8NCj4gQEAgLTE1NjYsNiArMTU3NiwxMSBAQCB2b2lkIF9faW5p
-dCBuYXRpdmVfc21wX3ByZXBhcmVfY3B1cyh1bnNpZ25lZCBpbnQNCj4gbWF4X2NwdXMpDQo+ICAJ
-CXNtcGJvb3RfY29udHJvbCA9IFNUQVJUVVBfU0VDT05EQVJZIHwNCj4gU1RBUlRVUF9BUElDSURf
-Q1BVSURfMDE7DQo+ICAJfQ0KPiANCj4gKwlpZiAoZG9fcGFyYWxsZWxfYnJpbmd1cCkgew0KPiAr
-CQljcHVocF9zZXR1cF9zdGF0ZV9ub2NhbGxzKENQVUhQX0JQX1BBUkFMTEVMX0RZTiwNCj4gIng4
-Ni9jcHU6a2ljayIsDQo+ICsJCQkJCSAgbmF0aXZlX2NwdV9raWNrLCBOVUxMKTsNCj4gKwl9DQo+
-ICsNCj4gIAlzbnBfc2V0X3dha2V1cF9zZWNvbmRhcnlfY3B1KCk7DQo+ICB9DQo+IA0KPiAtLQ0K
-PiAyLjI1LjENCg0K
+On Fri, Feb 24, 2023 at 12:24 PM Nicolas Dufresne <nicolas@ndufresne.ca> wr=
+ote:
+>
+> Hi Adam,
+>
+> Le jeudi 23 f=C3=A9vrier 2023 =C3=A0 10:10 -0600, Adam Ford a =C3=A9crit =
+:
+> > On Thu, Feb 23, 2023 at 8:26 AM Laurent Pinchart
+> > <laurent.pinchart@ideasonboard.com> wrote:
+> > >
+> > > Hi Adam,
+> > >
+> > > On Wed, Feb 22, 2023 at 05:39:30PM -0600, Adam Ford wrote:
+> > > > On Fri, Nov 18, 2022 at 3:44 AM Paul Elder wrote:
+> > > > >
+> > > > > This series depends on v3 of "dt-bindings: media: Add macros for =
+video
+> > > > > interface bus types" [1].
+> > > > >
+> > > > > This series extends the rkisp1 driver to support the ISP found in=
+ the
+> > > > > NXP i.MX8MP SoC.
+> > > > >
+> > > > > The ISP IP cores in the Rockchip RK3399 (known as the "Rockchip I=
+SP1")
+> > > > > and in the NXP i.MX8MP have the same origin, and have slightly di=
+verged
+> > > > > over time as they are now independently developed (afaik) by Rock=
+chip
+> > > > > and VeriSilicon. The latter is marketed under the name "ISP8000Na=
+no",
+> > > > > and is close enough to the RK3399 ISP that it can easily be suppo=
+rted by
+> > > > > the same driver.
+> > > > >
+> > > > > The last two patches add support for UYVY output format, which ca=
+n be
+> > > > > implemented on the ISP version in the i.MX8MP but not in the one =
+in the
+> > > > > RK3399.
+> > > > >
+> > > > > This version of the series specifically has been tested on a Poly=
+hex
+> > > > > Debix model A with an imx219 (Raspberry Pi cam v2).
+> > > > >
+> > > > > [1] https://lore.kernel.org/linux-media/20220615221410.27459-2-la=
+urent.pinchart@ideasonboard.com/
+> > > > >
+> > > > > Laurent Pinchart (3):
+> > > > >   dt-bindings: media: rkisp1: Add i.MX8MP ISP example
+> > > > >   media: rkisp1: Add and use rkisp1_has_feature() macro
+> > > > >   media: rkisp1: Configure gasket on i.MX8MP
+> > > > >
+> > > > > Paul Elder (11):
+> > > > >   dt-bindings: media: rkisp1: Add i.MX8MP ISP to compatible
+> > > > >   media: rkisp1: Add match data for i.MX8MP ISP
+> > > > >   media: rkisp1: Add and set registers for crop for i.MX8MP
+> > > > >   media: rkisp1: Add and set registers for output size config on =
+i.MX8MP
+> > > > >   media: rkisp1: Add i.MX8MP-specific registers for MI and resize=
+r
+> > > > >   media: rkisp1: Shift DMA buffer addresses on i.MX8MP
+> > > > >   media: rkisp1: Add register definitions for the test pattern ge=
+nerator
+> > > > >   media: rkisp1: Fix RSZ_CTRL bits for i.MX8MP
+> > > > >   media: rkisp1: Support devices without self path
+> > > > >   media: rkisp1: Add YC swap capability
+> > > > >   media: rkisp1: Add UYVY as an output format
+> > > >
+> > > > Paul / Laurent,
+> > > >
+> > > > I noticed an unexpected behaviour on the imx8mp.
+> > > >
+> > > > If I setup my pipeline for 640x480, it works just fine using an imx=
+219
+> > > > camera configured for SRGGB10_1X10.
+> > > >
+> > > > However, when I try to configure the pipeline to use the same camer=
+a
+> > > > at 1920x1080 (no resizing), the ISP source keeps defaulting to 640x=
+480
+> > > >
+> > > > Media device information
+> > > > ------------------------
+> > > > driver          rkisp1
+> > > > model           rkisp1
+> > > > serial
+> > > > bus info        platform:rkisp1
+> > > > hw revision     0xe
+> > > > driver version  6.2.0
+> > > >
+> > > > Device topology
+> > > > - entity 1: rkisp1_isp (4 pads, 4 links)
+> > > >             type V4L2 subdev subtype Unknown flags 0
+> > > >             device node name /dev/v4l-subdev0
+> > > > pad0: Sink [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw xf=
+er:none ycbcr:601 quantization:full-range crop.bounds:(0,0)/1920x1080 crop:=
+(0,0)/640x480]
+> > >
+> > > You're cropping the image to 640x480 here. You need to set the crop
+> > > rectangle to 1920x1080.
+> > >
+> > > As Jacopo mentioned, I wouldn't recommend exercising the ISP directly=
+.
+> > > Not only do you need to setup the pipeline, but you would also need t=
+o
+> > > implement all the imaging algorithms in userspace. libcamera will do =
+all
+> > > this for you.
+> >
+> > I'll give that a try.  My current employer has a v4l2src requirement,
+> > but I can likely make an argument to switch to libcamera.  I didn't
+> > catch the cropping part. Thanks for that.
+>
+> I'd hope you can transparently replace v4l2src with libcamerasrc, the plu=
+gins
+> currently lives inside the libcamera project. If not, I'd really like to =
+know
+> why. We can work together on adding missing controls (this is something I=
+'m
+> starting on soon).
+
+I plan to give it a try.  From what I've read it appears to be the
+right thing to do.  I just need to carve out some time to get it
+installed.  I mostly wanted to check out a camera adapter board my
+company made, test some updates I pushed for the imx219 on a second
+platform, and get more familiar with the ISP on the 8MP.
+
+I'll open a separate thread if I have questions on the cameralib.
+Thanks for all the feedback.  I look forward to seeing this driver
+merged.
+
+adam
+>
+> regards,
+> Nicolas
+>
+> >
+> > adam
+> > >
+> > > > <- "csis-32e40000.csi":1 [ENABLED]
+> > > > pad1: Sink [fmt:unknown/0x0 field:none]
+> > > > <- "rkisp1_params":0 [ENABLED,IMMUTABLE]
+> > > > pad2: Source [fmt:YUYV8_2X8/640x480 field:none colorspace:raw xfer:=
+none ycbcr:601 quantization:lim-range crop.bounds:(0,0)/640x480 crop:(0,0)/=
+640x480]
+> > > > -> "rkisp1_resizer_mainpath":0 [ENABLED]
+> > > > pad3: Source [fmt:unknown/0x0 field:none]
+> > > > -> "rkisp1_stats":0 [ENABLED,IMMUTABLE]
+> > > >
+> > > > - entity 6: rkisp1_resizer_mainpath (2 pads, 2 links)
+> > > >             type V4L2 subdev subtype Unknown flags 0
+> > > >             device node name /dev/v4l-subdev1
+> > > > pad0: Sink [fmt:YUYV8_2X8/1920x1080 field:none colorspace:srgb xfer=
+:srgb ycbcr:601 quantization:lim-range crop.bounds:(0,0)/1920x1080 crop:(0,=
+0)/640x480]
+> > > > <- "rkisp1_isp":2 [ENABLED]
+> > > > pad1: Source [fmt:YUYV8_2X8/1920x1080 field:none colorspace:srgb xf=
+er:srgb ycbcr:601 quantization:lim-range]
+> > > > -> "rkisp1_mainpath":0 [ENABLED,IMMUTABLE]
+> > > >
+> > > > - entity 9: rkisp1_mainpath (1 pad, 1 link)
+> > > >             type Node subtype V4L flags 0
+> > > >             device node name /dev/video0
+> > > > pad0: Sink
+> > > > <- "rkisp1_resizer_mainpath":1 [ENABLED,IMMUTABLE]
+> > > >
+> > > > - entity 13: rkisp1_stats (1 pad, 1 link)
+> > > >              type Node subtype V4L flags 0
+> > > >              device node name /dev/video1
+> > > > pad0: Sink
+> > > > <- "rkisp1_isp":3 [ENABLED,IMMUTABLE]
+> > > >
+> > > > - entity 17: rkisp1_params (1 pad, 1 link)
+> > > >              type Node subtype V4L flags 0
+> > > >              device node name /dev/video2
+> > > > pad0: Source
+> > > > -> "rkisp1_isp":1 [ENABLED,IMMUTABLE]
+> > > >
+> > > > - entity 29: csis-32e40000.csi (2 pads, 2 links)
+> > > >              type V4L2 subdev subtype Unknown flags 0
+> > > >              device node name /dev/v4l-subdev2
+> > > > pad0: Sink [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb x=
+fer:srgb ycbcr:601 quantization:full-range]
+> > > > <- "imx219 1-0010":0 [ENABLED]
+> > > > pad1: Source [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb=
+ xfer:srgb ycbcr:601 quantization:full-range]
+> > > > -> "rkisp1_isp":0 [ENABLED]
+> > > >
+> > > > - entity 34: imx219 1-0010 (1 pad, 1 link)
+> > > >              type V4L2 subdev subtype Sensor flags 0
+> > > >              device node name /dev/v4l-subdev3
+> > > > pad0: Source [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb=
+ xfer:srgb ycbcr:601 quantization:full-range crop.bounds:(8,8)/3280x2464 cr=
+op:(688,700)/1920x1080]
+> > > > -> "csis-32e40000.csi":0 [ENABLED]
+> > > >
+> > > > It's at this point that everything except the ISP source is 1920x10=
+80.
+> > > >
+> > > > When I try to set the ISP sink to 1080, it ends up being 640x480 an=
+d
+> > > > the resizer sink is also changed to 640x480
+> > > >
+> > > > root@beacon-imx8mp-kit:~# media-ctl -v -V "'rkisp1_isp':2
+> > > > [fmt:YUYV8_2X8/1920x1080 field:none]"
+> > > > Opening media device /dev/media0
+> > > > Enumerating entities
+> > > > looking up device: 81:3
+> > > > looking up device: 81:4
+> > > > looking up device: 81:0
+> > > > looking up device: 81:1
+> > > > looking up device: 81:2
+> > > > looking up device: 81:5
+> > > > looking up device: 81:6
+> > > > Found 7 entities
+> > > > Enumerating pads and links
+> > > > Setting up format YUYV8_2X8 1920x1080 on pad rkisp1_isp/2
+> > > > Format set: YUYV8_2X8 640x480
+> > > > Setting up format YUYV8_2X8 640x480 on pad rkisp1_resizer_mainpath/=
+0
+> > > > Format set: YUYV8_2X8 640x480
+> > > >
+> > > >
+> > > > It's my understanding that the ISP should be able to handle 1920x10=
+80,
+> > > > and the resizer sink should match the ISP source.
+> > > >
+> > > > With the pipeline improperly setup, the capture fails.
+> > > >
+> > > > >  .../bindings/media/rockchip-isp1.yaml         |  79 ++++++++++-
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-capture.c | 102 +++++++++++-=
+--
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-common.h  |  32 +++++
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-debug.c   |  14 +-
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-dev.c     |  67 +++++++--
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-isp.c     | 128 ++++++++++++=
++++++-
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-regs.h    |  90 ++++++++++++
+> > > > >  .../platform/rockchip/rkisp1/rkisp1-resizer.c |  35 ++++-
+> > > > >  include/uapi/linux/rkisp1-config.h            |   2 +
+> > > > >  9 files changed, 509 insertions(+), 40 deletions(-)
+> > >
+> > > --
+> > > Regards,
+> > >
+> > > Laurent Pinchart
+>
