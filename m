@@ -2,107 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30276A1602
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9899E6A1529
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjBXEqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 23:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S229882AbjBXDDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBXEqW (ORCPT
+        with ESMTP id S229877AbjBXDDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 23:46:22 -0500
-X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Feb 2023 20:46:18 PST
-Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ee9:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25E351F87
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 20:46:18 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by mailout2.hostsharing.net (Postfix) with ESMTPS id 2C44310189CFC;
-        Fri, 24 Feb 2023 05:40:34 +0100 (CET)
-Received: from localhost (unknown [89.246.108.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 23 Feb 2023 22:03:39 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756E2BDF5;
+        Thu, 23 Feb 2023 19:03:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id EA28561CE0A1;
-        Fri, 24 Feb 2023 05:40:33 +0100 (CET)
-X-Mailbox-Line: From 13e4bdf7677924c689a70d0b7ad970a3255a8d41 Mon Sep 17 00:00:00 2001
-Message-Id: <13e4bdf7677924c689a70d0b7ad970a3255a8d41.1677213245.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Fri, 24 Feb 2022 05:40:33 +0100
-Subject: [PATCH for-6.4] printk: Unregister boot consoles on register of 1st
- real console
-To:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        by sin.source.kernel.org (Postfix) with ESMTPS id D1F5BCE21A0;
+        Fri, 24 Feb 2023 03:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AC2C433EF;
+        Fri, 24 Feb 2023 03:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677207803;
+        bh=NDoK5e2kczfPG8bCKCQ1NNk7OjKyuYuk9kgZog2uktw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y7Kjwp1p/NywpI9es3Lt5W+4s060SqivXzaUJEIT0quhCbnVn3EAKoTYRdmlcKWVD
+         Xc3LFCAZqzQxdImbrMZOuNZSI8V78xgCdz53e7WIYboq6zQBGmF40NNSQxribMvG+p
+         pjkk67JmodqA+4iPgf5qfq75PUH7spBYIjWJBx9ssyAl4slsh3VaVwHx/b+Mc3U/0H
+         yK+XMt1QNLpRfyZO20evudXU8/c+vcSpkUupXKHkZntjB78Zlc8YAfTn5oneyfj00J
+         NKZP3dROkKTowMVwKZeE9/OkYbaW4fBiZ3mM0iL8aRKHE35MT+oGPWrCdA7Il3W5Nz
+         m86o5fnQ7Qjdg==
+Date:   Thu, 23 Feb 2023 19:03:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>
+Subject: Re: [PATCH net] net: sunhme: Fix region request
+Message-ID: <20230223190321.402822a7@kernel.org>
+In-Reply-To: <20230222204242.2658247-1-seanga2@gmail.com>
+References: <20230222204242.2658247-1-seanga2@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code comment preceding register_console() claims that:
+On Wed, 22 Feb 2023 15:42:41 -0500 Sean Anderson wrote:
+> devm_request_region is for I/O regions. Use devm_request_mem_region
+> instead.  This fixes the driver failing to probe since 99df45c9e0a4
+> ("sunhme: fix an IS_ERR() vs NULL check in probe"), which checked the
+> result.
+> 
+> Fixes: 914d9b2711dd ("sunhme: switch to devres")
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
 
-   "There are two types of consoles - bootconsoles (early_printk) and
-    "real" consoles (everything which is not a bootconsole) which are
-    handled differently. [...]
-    As soon as a "real" console is registered, all bootconsoles
-    will be unregistered automatically."
-
-But that's not what the code does:  The code unregisters bootconsoles
-only when the *preferred* console registers, i.e. the last one on the
-command line.  If that console's driver never registers (e.g. because
-it is disabled in the kernel config), bootconsoles stay around
-indefinitely.  Should the command line contain both a bootconsole as
-well as a real console on the same serial port, all messages are logged
-twice once the real console registers.
-
-Moreover, the log buffer is replayed once the real console registers
-even though the messages were already emitted by the bootconsole.
-
-Amend the code to be congruent with the above-quoted code comment and
-thereby avoid these issues.
-
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
----
- kernel/printk/printk.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index fd0c9f913940..f89e865c6b23 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -3423,10 +3423,8 @@ void register_console(struct console *newcon)
- 	 * the real console are the same physical device, it's annoying to
- 	 * see the beginning boot messages twice
- 	 */
--	if (bootcon_registered &&
--	    ((newcon->flags & (CON_CONSDEV | CON_BOOT)) == CON_CONSDEV)) {
-+	if (bootcon_registered && !(newcon->flags & CON_BOOT))
- 		newcon->flags &= ~CON_PRINTBUFFER;
--	}
- 
- 	newcon->dropped = 0;
- 	console_init_seq(newcon, bootcon_registered);
-@@ -3465,8 +3463,7 @@ void register_console(struct console *newcon)
- 	 * went to the bootconsole (that they do not see on the real console)
- 	 */
- 	con_printk(KERN_INFO, newcon, "enabled\n");
--	if (bootcon_registered &&
--	    ((newcon->flags & (CON_CONSDEV | CON_BOOT)) == CON_CONSDEV) &&
-+	if (bootcon_registered && !(newcon->flags & CON_BOOT) &&
- 	    !keep_bootcon) {
- 		struct hlist_node *tmp;
- 
--- 
-2.39.1
-
+Applied, thanks!
