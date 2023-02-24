@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517856A157F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B546A1580
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjBXDkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S229592AbjBXDku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBXDkm (ORCPT
+        with ESMTP id S229537AbjBXDko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:40:42 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8891589A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:40 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id fa3-20020a17090af0c300b002377eefb6acso739143pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:40 -0800 (PST)
+        Thu, 23 Feb 2023 22:40:44 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF5E515C6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:42 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id q15-20020a63d60f000000b00502e1c551aaso3383508pgg.21
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=X4tBb8bFIpeX5wNEM8VVQkPrbGhips7ogPU5rW+jMmE=;
-        b=MRTJ0iVZokAOELH2wGD4Oi7UywejhX/CilHcDTB/6HYDiXo3dIQUxbnDNUdL4G7IIp
-         jG/052PI7+n5eKGoe3+BHuLhUtLwSjFMgn2W6xTimnEovL6iS4rwzfO6navKK+MkTWyW
-         9e/KcHzyNuKhtKbxmGNcKFXj6vi0wD1eePpHG23i7UzWZu18G0kFVRniq+HxwRbNeako
-         DPZ6GIgcW1IEWU87D6acm6OI8vMtH8ypeDrbVr0QEGYN1rq991YwLfvAQpjvO1sHOBob
-         xKf6rH+GLgcqTple26jLbnRFZJ/vZI4JWNvV66nXb7ODN9l0F0ivDOMdxuqmb7zDvypE
-         GKHQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tz/fgJduKsVCOU3o92NlRuL4rbz7T6tbZlMwZgCQlZA=;
+        b=YQm24ux8aqXaHfxAZO+kBkwkXuWzed/yCs1ecIlfFHNmN3YbzYPnUy5Y5cN62A/miI
+         FlUaJloJJDV1jAS8Cw5njmoI2Paddj+qFcvV1ZXi7/g6OiJMgt0dLGxBdegHQ3TDEKYN
+         ivEFmmT5Aple1wz6w/mui8hHnWiDWBtap4WWfKOlEoSrz1TYn3tu8jKkLZj0wBZ3T56O
+         +t+yQJiE+/mUexfNoupTGkpVp+sWLum8gFa/cwCTmW1Tn3SfHoCC7nr2HbJZyjEMM0MD
+         aQOT7R7q/IrvAYkWh/2d2jT9TsPLTiItjoPlGuR4G96g3YUqyYSoE8Po4CWJz10DI40W
+         L6Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X4tBb8bFIpeX5wNEM8VVQkPrbGhips7ogPU5rW+jMmE=;
-        b=FyvZ8wTKUWnvtGboeNIVkZci/H+XDbRHtrAEs6YSPLcqpZPjkAmzzHbjWpg+c1WDWv
-         8ki6LZZA2LTSztNuhA+RzwDLY1XMPVG5Ku7santQGDBO5XNJvWCiUwr+jO2rhhAJwXDP
-         SX7pDPkh+q7pC6HOidGmn/n3+Njb/j7OEABdCpSlKlwCbt7mq9xpzD91ndKDf42OReTj
-         R1rLuybpdDq3vgXQU0MLEizvcqZQDljJuFmuoJVTH598sWq6SMjATmH/sEQTh6433UuQ
-         MCZj+RMTHxRJhBVE8dXtOV2o99cclJHFAsbLUcEIxYomiWulqaqLRF0Zfxn3JFioPIp9
-         lELA==
-X-Gm-Message-State: AO0yUKWfhtaA4IwFdjofUXzVF5/YOKAwgSL3qvlwcoerX4Av3ZH/4WE5
-        hnPFss2xJJQ1BTOXJDw1igmKEWrKogA=
-X-Google-Smtp-Source: AK7set9XAI/mo39xNg6NePeiOfMl922pN62XpgME1pxNmgVyCAkxmREMhiC4U1b5Zed1XteERjxQnzW4SDw=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tz/fgJduKsVCOU3o92NlRuL4rbz7T6tbZlMwZgCQlZA=;
+        b=tTB0bGnuRRSPVnKr2AAHFpYBhB/7xGs30Trqsjvfk+IYNPXlcgP8tX/CbVcBiECYZ4
+         v/H5cCJ1Y4b9I+3QZijU7JF1j0wWVQCg0e/FwHLSHR02oH9l+pQSlQsM8J7hzb1kRwyp
+         0uwNTeR1MX7YKE3gfiYqwAW8SVPfbAY1fu0i229nfUbdC7EiFaH2Lp04do0AJ5weo1ea
+         LmvtrBOKxVQ0uoOTHKs0R6VKAB50jT+cGJ8w9eVO7kRlkf+ugUZQ5ki5ExHFA+3hUr8F
+         tbrMfQDsUAWo4g5keRGGc8LdLDCy0aK6lEEhmrfnca84L2Ix+4M18Tu34rkBq+/M76gQ
+         wl/w==
+X-Gm-Message-State: AO0yUKUtwJm/r0eNz8mwDzUb/pEq8BY2lGpvRZMsVyGX/KapcPHAdkll
+        GnZH7HlCvRZRR7HxsiOh12AUCFSYyEk=
+X-Google-Smtp-Source: AK7set8Y74VoWYiHplekedhR9miefSOxqdya1d+JkmMLyRnHZ+UkVnfNrNE/F4+Hlf+xCYbNh9yLqGcN9Bo=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a17:902:f811:b0:19a:f153:b73e with SMTP id
- ix17-20020a170902f81100b0019af153b73emr2433664plb.4.1677210039493; Thu, 23
- Feb 2023 19:40:39 -0800 (PST)
-Date:   Fri, 24 Feb 2023 03:40:15 +0000
+ (user=edliaw job=sendgmr) by 2002:a62:ce0c:0:b0:5aa:72b4:2fe1 with SMTP id
+ y12-20020a62ce0c000000b005aa72b42fe1mr2592075pfg.1.1677210041847; Thu, 23 Feb
+ 2023 19:40:41 -0800 (PST)
+Date:   Fri, 24 Feb 2023 03:40:16 +0000
+In-Reply-To: <20230224034020.2080637-1-edliaw@google.com>
 Mime-Version: 1.0
+References: <20230224034020.2080637-1-edliaw@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230224034020.2080637-1-edliaw@google.com>
-Subject: [PATCH 4.14 v3 0/4] BPF fixes for CVE-2021-3444 and CVE-2021-3600
+Message-ID: <20230224034020.2080637-2-edliaw@google.com>
+Subject: [PATCH 4.14 v3 1/4] bpf: Do not use ax register in interpreter on div/mod
 From:   Edward Liaw <edliaw@google.com>
 To:     stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>
 Cc:     bpf@vger.kernel.org, kernel-team@android.com,
         Edward Liaw <edliaw@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,46 +73,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thadeu Lima de Souza Cascardo originally sent this patch but it failed to
-merge because of a compilation error:
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-https://lore.kernel.org/bpf/20210830183211.339054-1-cascardo@canonical.com/T/
+Commit c348d806ed1d3075af52345344243824d72c4945 upstream.
 
-v3:
-Added upstream commit hash from 4.19.y and added detail to changelog.
+Partially undo old commit 144cd91c4c2b ("bpf: move tmp variable into ax
+register in interpreter"). The reason we need this here is because ax
+register will be used for holding temporary state for div/mod instruction
+which otherwise interpreter would corrupt. This will cause a small +8 byte
+stack increase for interpreter, but with the gain that we can use it from
+verifier rewrites as scratch register.
 
-v2:
-Removed redefinition of tmp to fix compilation with CONFIG_BPF_JIT_ALWAYS_ON
-enabled.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+[cascardo: This partial revert is needed in order to support using AX for
+the following two commits, as there is no JMP32 on 4.19.y]
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+[edliaw: Removed redeclaration of tmp introduced by patch differences
+between 4.14 and 4.19]
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ kernel/bpf/core.c | 31 ++++++++++++++-----------------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
 
--Edward
- 
-==
-
-The upstream changes necessary to fix these CVEs rely on the presence of JMP32,
-which is not a small backport and brings its own potential set of necessary
-follow-ups.
-
-Daniel Borkmann, John Fastabend and Alexei Starovoitov came up with a fix
-involving the use of the AX register.
-
-This has been tested against the test_verifier in 4.14.y tree and some tests
-specific to the two referred CVEs. The test_bpf module was also tested.
-
-Daniel Borkmann (4):
-  bpf: Do not use ax register in interpreter on div/mod
-  bpf: fix subprog verifier bypass by div/mod by 0 exception
-  bpf: Fix 32 bit src register truncation on div/mod
-  bpf: Fix truncation handling for mod32 dst reg wrt zero
-
- include/linux/filter.h | 24 ++++++++++++++++++++++++
- kernel/bpf/core.c      | 39 ++++++++++++++-------------------------
- kernel/bpf/verifier.c  | 39 +++++++++++++++++++++++++++++++--------
- net/core/filter.c      |  9 ++++++++-
- 4 files changed, 77 insertions(+), 34 deletions(-)
-
-
-base-commit: a8ad60f2af5884921167e8cede5784c7849884b2
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 5d649983de07..4ddb846693bb 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -663,9 +663,6 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
+ 	 * below.
+ 	 *
+ 	 * Constant blinding is only used by JITs, not in the interpreter.
+-	 * The interpreter uses AX in some occasions as a local temporary
+-	 * register e.g. in DIV or MOD instructions.
+-	 *
+ 	 * In restricted circumstances, the verifier can also use the AX
+ 	 * register for rewrites as long as they do not interfere with
+ 	 * the above cases!
+@@ -1060,22 +1057,22 @@ static unsigned int ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn,
+ 	ALU64_MOD_X:
+ 		if (unlikely(SRC == 0))
+ 			return 0;
+-		div64_u64_rem(DST, SRC, &AX);
+-		DST = AX;
++		div64_u64_rem(DST, SRC, &tmp);
++		DST = tmp;
+ 		CONT;
+ 	ALU_MOD_X:
+ 		if (unlikely((u32)SRC == 0))
+ 			return 0;
+-		AX = (u32) DST;
+-		DST = do_div(AX, (u32) SRC);
++		tmp = (u32) DST;
++		DST = do_div(tmp, (u32) SRC);
+ 		CONT;
+ 	ALU64_MOD_K:
+-		div64_u64_rem(DST, IMM, &AX);
+-		DST = AX;
++		div64_u64_rem(DST, IMM, &tmp);
++		DST = tmp;
+ 		CONT;
+ 	ALU_MOD_K:
+-		AX = (u32) DST;
+-		DST = do_div(AX, (u32) IMM);
++		tmp = (u32) DST;
++		DST = do_div(tmp, (u32) IMM);
+ 		CONT;
+ 	ALU64_DIV_X:
+ 		if (unlikely(SRC == 0))
+@@ -1085,17 +1082,17 @@ static unsigned int ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn,
+ 	ALU_DIV_X:
+ 		if (unlikely((u32)SRC == 0))
+ 			return 0;
+-		AX = (u32) DST;
+-		do_div(AX, (u32) SRC);
+-		DST = (u32) AX;
++		tmp = (u32) DST;
++		do_div(tmp, (u32) SRC);
++		DST = (u32) tmp;
+ 		CONT;
+ 	ALU64_DIV_K:
+ 		DST = div64_u64(DST, IMM);
+ 		CONT;
+ 	ALU_DIV_K:
+-		AX = (u32) DST;
+-		do_div(AX, (u32) IMM);
+-		DST = (u32) AX;
++		tmp = (u32) DST;
++		do_div(tmp, (u32) IMM);
++		DST = (u32) tmp;
+ 		CONT;
+ 	ALU_END_TO_BE:
+ 		switch (IMM) {
 -- 
 2.39.2.637.g21b0678d19-goog
 
