@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4666A1844
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5466A1845
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjBXIu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S229931AbjBXIvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjBXIut (ORCPT
+        with ESMTP id S229550AbjBXIu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:50:49 -0500
+        Fri, 24 Feb 2023 03:50:58 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5877165CDC;
-        Fri, 24 Feb 2023 00:50:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F8B63570;
+        Fri, 24 Feb 2023 00:50:49 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 615E73FA55;
-        Fri, 24 Feb 2023 08:50:41 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id F31923FB17;
+        Fri, 24 Feb 2023 08:50:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677228644;
-        bh=kJHc+snPjIgQ0x5b0wG6oWK+hDCWiSQ0+kJLlveg4g4=;
+        s=default; t=1677228648;
+        bh=wVJAQXcyraQ0BfnXVpkBZ9YtELT3PqirBDuZ+Zuy55o=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=eADOkSXnOnrG+bRm9Lumm0rkE0iFgIIYcbPQEVc6tAjTSY7inqONtJOJBFpISJfvU
-         514K3eerbniJ1CtxpN7Hkb3h0e8Z5BF/DqUq4gzG3bNkfzPCDqO6Jr0Q/LPt7watiM
-         rvdT+A+mCY9kkpLVHYnRBlhTNl/SYg2jzo8cKL615LzPHdQiWhRFF8k6BWbDsvkmV1
-         +u221r3xiv/Vk2G4Zoxi5COvkD69p8nXqnTGtREa+qDl0gPCQ+Zhh/OWTPS0AH9Yk1
-         cr0/3fZWwsTsBbxPpwnJAaEbCzbai54MGUNTedh4M6NfIfmbL2/Fp7ZDI9yjSKcyHW
-         t+Q1Yii2HzaTw==
+        b=HxJYgu4n3tTBc25V8jiw1H0eIyUfSgpNQlKnyQGzcg0Wsm7bkxPAQIH0x+mvUT5a5
+         fBFICspOG2q43aR9I8XFkfvffo7dsmJMRJLD0lidZnkyBJJpW9JgKwSQpXomMNwnF5
+         Nm06Mt0ky44TS5Bs3S3T2OtrQ13Hgy2XfzmH3MIdnPm9u/PCi7Gwew9jekhxtF1AOD
+         b6M1kbyyDQlGYPvJhWeeSr+kZjjGowz947r1RYPWSPZOSwdq+22wjiiU50mQvv2CZc
+         by4gxtsNM/h5T63aKMrBA+k1rCjOJRBmnNH7Z8eTQxyjBdNbsKLcZ8Y4AcUPRhSfeC
+         gXv/6BmmmmAug==
 From:   Asahi Lina <lina@asahilina.net>
-Date:   Fri, 24 Feb 2023 17:50:21 +0900
-Subject: [PATCH 3/5] rust: error: Add to_result() helper
+Date:   Fri, 24 Feb 2023 17:50:22 +0900
+Subject: [PATCH 4/5] rust: error: Add a helper to convert a C ERR_PTR to a
+ `Result`
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-error-v1-3-f8f9a9a87303@asahilina.net>
+Message-Id: <20230224-rust-error-v1-4-f8f9a9a87303@asahilina.net>
 References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
 In-Reply-To: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
 To:     Miguel Ojeda <ojeda@kernel.org>,
@@ -51,11 +52,11 @@ Cc:     Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
         Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677228630; l=1204;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677228630; l=4205;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=NH9SKYYkrqlm+FkWH/ZnDX0pl4F1HcPQKt111GaT3sI=;
- b=KCT/Vytm/SqVGGDB3HJRNnWM8vV7m/eg//dyk/XUccOo+pJEshAuoTMhBGxReTX91zNPMWhlm
- Lcfou1e9YyICK6k6MRMrXWr6EYJv1btKFyGKZxWjqu1Xom8w/AQwjpF
+ bh=BznKYHV/l7mf3LcMbv3Ntc8N6CmBcSea0BDBchPZBuw=;
+ b=qzb7B+mHGS+D6NarBS16ESgo6Zx+rEfmqOWkoKfUXQdB365dlGdx3Dd1Vz2YrosL9xrTUz3Kz
+ EWUbzM45L/3AvmIG0XUcRjR3mXU/P2tCad+LNAHbgxIR6LKGgxnjVD1
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,38 +68,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wedson Almeida Filho <wedsonaf@gmail.com>
+From: Sven Van Asbroeck <thesven73@gmail.com>
 
-Add a to_result() helper to convert kernel C return values to a Rust
-Result, mapping >=0 values to Ok(()) and negative values to Err(...),
-with Error::from_kernel_errno() ensuring that the errno is within range.
+Some kernel C API functions return a pointer which embeds an optional
+`errno`. Callers are supposed to check the returned pointer with
+`IS_ERR()` and if this returns `true`, retrieve the `errno` using
+`PTR_ERR()`.
 
-Lina: Imported from rust-for-linux/rust, originally developed by Wedson
-as part of the AMBA device driver support.
+Create a Rust helper function to implement the Rust equivalent:
+transform a `*mut T` to `Result<*mut T>`.
 
-Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+Lina: Imported from rust-for-linux/linux, with subsequent refactoring
+and contributions squashed in and attributed below. Replaced usage of
+from_kernel_errno_unchecked() with an open-coded constructor, since this
+is the only user anyway.
+
+Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Co-developed-by: Fox Chen <foxhlchen@gmail.com>
+Signed-off-by: Fox Chen <foxhlchen@gmail.com>
+Co-developed-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
- rust/kernel/error.rs | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ rust/helpers.c       | 12 ++++++++++++
+ rust/kernel/error.rs | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 61 insertions(+)
 
+diff --git a/rust/helpers.c b/rust/helpers.c
+index 89f4cd1e0df3..04b9be46e887 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -53,6 +53,18 @@ __force void *rust_helper_ERR_PTR(long err)
+ }
+ EXPORT_SYMBOL_GPL(rust_helper_ERR_PTR);
+ 
++bool rust_helper_IS_ERR(__force const void *ptr)
++{
++	return IS_ERR(ptr);
++}
++EXPORT_SYMBOL_GPL(rust_helper_IS_ERR);
++
++long rust_helper_PTR_ERR(__force const void *ptr)
++{
++	return PTR_ERR(ptr);
++}
++EXPORT_SYMBOL_GPL(rust_helper_PTR_ERR);
++
+ /*
+  * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+  * as the Rust `usize` type, so we can use it in contexts where Rust
 diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-index 3b439fdb405c..1e8371f28746 100644
+index 1e8371f28746..cf3d089477d2 100644
 --- a/rust/kernel/error.rs
 +++ b/rust/kernel/error.rs
-@@ -167,3 +167,13 @@ impl From<core::convert::Infallible> for Error {
- /// it should still be modeled as returning a `Result` rather than
- /// just an [`Error`].
- pub type Result<T = ()> = core::result::Result<T, Error>;
+@@ -177,3 +177,52 @@ pub fn to_result(err: core::ffi::c_int) -> Result {
+         Ok(())
+     }
+ }
 +
-+/// Converts an integer as returned by a C kernel function to an error if it's negative, and
-+/// `Ok(())` otherwise.
-+pub fn to_result(err: core::ffi::c_int) -> Result {
-+    if err < 0 {
-+        Err(Error::from_kernel_errno(err))
-+    } else {
-+        Ok(())
++/// Transform a kernel "error pointer" to a normal pointer.
++///
++/// Some kernel C API functions return an "error pointer" which optionally
++/// embeds an `errno`. Callers are supposed to check the returned pointer
++/// for errors. This function performs the check and converts the "error pointer"
++/// to a normal pointer in an idiomatic fashion.
++///
++/// # Examples
++///
++/// ```ignore
++/// # use kernel::from_kernel_err_ptr;
++/// # use kernel::bindings;
++/// fn devm_platform_ioremap_resource(
++///     pdev: &mut PlatformDevice,
++///     index: u32,
++/// ) -> Result<*mut core::ffi::c_void> {
++///     // SAFETY: FFI call.
++///     unsafe {
++///         from_kernel_err_ptr(bindings::devm_platform_ioremap_resource(
++///             pdev.to_ptr(),
++///             index,
++///         ))
++///     }
++/// }
++/// ```
++// TODO: Remove `dead_code` marker once an in-kernel client is available.
++#[allow(dead_code)]
++pub(crate) fn from_kernel_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
++    // CAST: Casting a pointer to `*const core::ffi::c_void` is always valid.
++    let const_ptr: *const core::ffi::c_void = ptr.cast();
++    // SAFETY: The FFI function does not deref the pointer.
++    if unsafe { bindings::IS_ERR(const_ptr) } {
++        // SAFETY: The FFI function does not deref the pointer.
++        let err = unsafe { bindings::PTR_ERR(const_ptr) };
++        // CAST: If `IS_ERR()` returns `true`,
++        // then `PTR_ERR()` is guaranteed to return a
++        // negative value greater-or-equal to `-bindings::MAX_ERRNO`,
++        // which always fits in an `i16`, as per the invariant above.
++        // And an `i16` always fits in an `i32`. So casting `err` to
++        // an `i32` can never overflow, and is always valid.
++        //
++        // SAFETY: `IS_ERR()` ensures `err` is a
++        // negative value greater-or-equal to `-bindings::MAX_ERRNO`.
++        #[cfg_attr(CONFIG_ARM, allow(clippy::unnecessary_cast))]
++        return Err(Error(err as i32));
 +    }
++    Ok(ptr)
 +}
 
 -- 
