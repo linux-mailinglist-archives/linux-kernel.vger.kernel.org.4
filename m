@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF61E6A232C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9186A231F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjBXUiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S229700AbjBXUWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBXUiT (ORCPT
+        with ESMTP id S229510AbjBXUWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:38:19 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Feb 2023 12:38:18 PST
-Received: from zimbra.cs.ucla.edu (zimbra.cs.ucla.edu [131.179.128.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396531689B;
-        Fri, 24 Feb 2023 12:38:18 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.cs.ucla.edu (Postfix) with ESMTP id B49C816007D;
-        Fri, 24 Feb 2023 12:20:25 -0800 (PST)
-Received: from zimbra.cs.ucla.edu ([127.0.0.1])
-        by localhost (zimbra.cs.ucla.edu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id QG1sxi3-GO96; Fri, 24 Feb 2023 12:20:24 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.cs.ucla.edu (Postfix) with ESMTP id 8D919160081;
-        Fri, 24 Feb 2023 12:20:24 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.9.2 zimbra.cs.ucla.edu 8D919160081
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cs.ucla.edu;
-        s=78364E5A-2AF3-11ED-87FA-8298ECA2D365; t=1677270024;
-        bh=+I+riTDtbBzhWt5sJpH7wqPIRmijrbIey5uSacAFgT4=;
-        h=Content-Type:Message-ID:Date:MIME-Version:To:From:Subject;
-        b=deVCVUcrJbVSwJywGU2CXVd+lLOnnOZ1iT3/KNpmyTSqk723C0jpVDzzkTh2be5M3
-         xzU+bd71itubXnQ0wq5BmRyKEtQn82P8HEx+/MtNf1Ko+/NzLX5zvjsJXptH6P3oR8
-         BWb8vbDe6QFlt1PnBvJpzNtTS08Z0L2ryeH1nk6c=
-X-Virus-Scanned: amavisd-new at zimbra.cs.ucla.edu
-Received: from zimbra.cs.ucla.edu ([127.0.0.1])
-        by localhost (zimbra.cs.ucla.edu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id bhkfZAvkwQkB; Fri, 24 Feb 2023 12:20:24 -0800 (PST)
-Received: from [192.168.1.9] (cpe-172-91-119-151.socal.res.rr.com [172.91.119.151])
-        by zimbra.cs.ucla.edu (Postfix) with ESMTPSA id 1DA4016007D;
-        Fri, 24 Feb 2023 12:20:24 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------LZMUtxjI2VCeALvdg7n3PklB"
-Message-ID: <03dac14b-ed62-3e2b-878f-b145383ea9f8@cs.ucla.edu>
-Date:   Fri, 24 Feb 2023 12:20:23 -0800
+        Fri, 24 Feb 2023 15:22:46 -0500
+X-Greylist: delayed 119192 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Feb 2023 12:22:45 PST
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746EF1B2FF
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:22:45 -0800 (PST)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-373-sywlCAklM7KmAoGsxNHjmQ-1; Fri, 24 Feb 2023 15:22:26 -0500
+X-MC-Unique: sywlCAklM7KmAoGsxNHjmQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1275885621;
+        Fri, 24 Feb 2023 20:22:23 +0000 (UTC)
+Received: from hog (unknown [10.39.192.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3199C404BEC0;
+        Fri, 24 Feb 2023 20:22:21 +0000 (UTC)
+Date:   Fri, 24 Feb 2023 21:22:20 +0100
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Hangyu Hua <hbh25y@gmail.com>, borisp@nvidia.com,
+        john.fastabend@gmail.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, ilyal@mellanox.com, aviadye@mellanox.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: tls: fix possible info leak in
+ tls_set_device_offload()
+Message-ID: <Y/kcfM5jWrQhdYFR@hog>
+References: <20230224102839.26538-1-hbh25y@gmail.com>
+ <20230224105729.5f420511@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        stable <stable@vger.kernel.org>, patches@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jim Meyering <meyering@fb.com>
-References: <CAHk-=wiZ9vaM23eW2k4R-ovtcWLyL8PWvnCG=RyeY4XXgZ6BCg@mail.gmail.com>
-From:   Paul Eggert <eggert@cs.ucla.edu>
-Organization: UCLA Computer Science Department
-Subject: Re: diffutils file mode (was Re: [PATCH 5.15 00/37] 5.15.96-rc2
- review)
-In-Reply-To: <CAHk-=wiZ9vaM23eW2k4R-ovtcWLyL8PWvnCG=RyeY4XXgZ6BCg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230224105729.5f420511@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------LZMUtxjI2VCeALvdg7n3PklB
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+2023-02-24, 10:57:29 -0800, Jakub Kicinski wrote:
+> On Fri, 24 Feb 2023 18:28:39 +0800 Hangyu Hua wrote:
+> > After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
+> > tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL if it fails
+> > before kmalloc cctx->iv. It is better to Set them to NULL to avoid any
+> > potential info leak.
+> 
+> Please show clear chain of events which can lead to a use-after-free 
+> or info leak. And if you can't please don't send the patch.
 
-On 2023-02-24 11:16, Linus Torvalds wrote:
->   GNU diffutils have never actually grown the
-> ability to generate those extensions
+Sorry, I thought in this morning's discussion Hangyu had agreed to
+remove all mentions of possible info leak while sending v2, since we
+agreed [1] that this patch didn't fix any issue, just that it looked
+more consistent, as tls_set_sw_offload NULLs iv and rec_seq on
+failure. We can also drop the patch completely. Anyway since net-next
+is closed, I should have told Hangyu to wait for 2 weeks.
 
-Thanks for pointing this out. I added this to our list of things to do, 
-by installing the attached patch to the GNU diffutils TODO file. If this 
-patch's wording isn't right, please let me know, as I haven't read this 
-whole email thread, just the three emails sent directly to me.
---------------LZMUtxjI2VCeALvdg7n3PklB
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-maint-add-diff-git-TODO.patch"
-Content-Disposition: attachment; filename="0001-maint-add-diff-git-TODO.patch"
-Content-Transfer-Encoding: base64
+[1] https://lore.kernel.org/all/310391ea-7c71-395e-5dcb-b0a983e6fc93@gmail.com/
 
-RnJvbSAzZmE3MjE4NTY3YmRjZjk1OGYxMzQyYzEzYzg0OGM5ZTJmMmQzOGM1IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBQYXVsIEVnZ2VydCA8ZWdnZXJ0QGNzLnVjbGEuZWR1
-PgpEYXRlOiBGcmksIDI0IEZlYiAyMDIzIDEyOjEzOjEyIC0wODAwClN1YmplY3Q6IFtQQVRD
-SF0gbWFpbnQ6IGFkZCAnZGlmZiAtLWdpdCcgVE9ETwoKKiBUT0RPOiBTdWdnZXN0IGJldHRl
-ciBjb21wYXRpYmlsaXR5IHdpdGggJ2dpdCBkaWZmIC1wJy4KRnJvbSBhIHN1Z2dlc3Rpb24g
-YnkgTGludXMgVG9ydmFsZHMKPGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDIzLzIvMjQvNzk3
-Pi4KLS0tCiBUT0RPIHwgNiArKysrKysKIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMo
-KykKCmRpZmYgLS1naXQgYS9UT0RPIGIvVE9ETwppbmRleCA1MTMyZGU4Li4yNWZjMjJiIDEw
-MDY0NAotLS0gYS9UT0RPCisrKyBiL1RPRE8KQEAgLTEsMyArMSw5IEBACitBZGQgLS1naXQg
-b3B0aW9uIHRvIGdlbmVyYXRlIG91dHB1dCBjb21wYXRpYmxlIHdpdGggJ2dpdCBkaWZmIC1w
-Jy4KK1RoaXMgd291bGQgYmVoYXZlIGxpa2UgJ2RpZmYgLXAnLCBleGNlcHQgdGhhdCBpdCB3
-b3VsZCBhbHNvIGdlbmVyYXRlCit0aGUgZXh0ZW5kZWQgaGVhZGVycyAnb2xkIG1vZGUnLCAn
-bmV3IG1vZGUnLCAnZGVsZXRlZCBmaWxlIG1vZGUnLCBhbmQKKyduZXcgZmlsZSBtb2RlJywg
-YW5kIGl0IHdvdWxkIHF1b3RlIGZpbGUgbmFtZXMgd2l0aCB1bnVzdWFsIGNoYXJhY3RlcnMu
-CitHTlUgcGF0Y2ggYWxyZWFkeSBwYXJzZXMgdGhpcyBmb3JtYXQuCisKIEFkZCAtLWluY2x1
-ZGUgb3B0aW9uIChvcHBvc2l0ZSBvZiAtLWV4Y2x1ZGUpLgogCiBMb29rIGludG8gc2RpZmYg
-aW1wcm92ZW1lbnQgaGVyZToKLS0gCjIuMzcuMgoK
+-- 
+Sabrina
 
---------------LZMUtxjI2VCeALvdg7n3PklB--
