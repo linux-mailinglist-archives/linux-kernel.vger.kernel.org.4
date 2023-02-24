@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF5D6A14E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13616A14EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjBXCZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S229761AbjBXC3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjBXCZp (ORCPT
+        with ESMTP id S229545AbjBXC3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:25:45 -0500
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFED5E875;
-        Thu, 23 Feb 2023 18:25:41 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VcMIeW7_1677205538;
-Received: from 30.221.148.141(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VcMIeW7_1677205538)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Feb 2023 10:25:39 +0800
-Message-ID: <084ea730-a3a1-4dff-ecb5-d45a0af82e97@linux.alibaba.com>
-Date:   Fri, 24 Feb 2023 10:25:38 +0800
+        Thu, 23 Feb 2023 21:29:36 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBF7166EB
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:29:35 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id bn17so1117050pgb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:29:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1677205775;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qwNRQLXpbgmeG6gtF2j1SgKQd0doLDGHOq+m83fVYFo=;
+        b=4VgjbzA2C3vtUbGMG5qR7ba41D4wCV73ruwDF5j9H42bRQw4eV4VdYUzXHztt92S5y
+         FW8bmKeiORmBLPtYj4caJEUfMC6FGaVq1B1p0Khs10ylnMGc6vabtIFuMmAiKY9qEsvL
+         Rm4SZPdjiwCeJFvSYz9JBMUlnM3RkGsN3ldROy7kvDUn2PA2nynaluQpFflxZI51qMgt
+         5TK+7tHVWkK73wtsAKHRwR8tEXJoJmXWAsPfWHxO40fF+7a2ciCQz2cR/Vl6ObKqUeHc
+         oDObRkvjXVyEisr2khwFArIA7rXavJ3rUJxwmScNBdQbTRX8BXqYqN7P4QnycszUKqHB
+         fzgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677205775;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qwNRQLXpbgmeG6gtF2j1SgKQd0doLDGHOq+m83fVYFo=;
+        b=X9fjVd9it6v65t0ICD8S3vnwDdKn6gzeJOwwLpIZ5uBfo8/eGV0DUmuLiIVEY+eQ1O
+         +x87jo2FHb3pupc7Iei5yGV2r2FcJXijdmmjr+/oTOB5rEcRxJfOi/JN4G2yd8NXmSka
+         JgFnugJu/MGozJtYrcjnaq/kwxtWaPJBKaPCq8SmutuuOiY3Sxr735yKKicDEKt7BThD
+         bH3RkxFsEjqaV/wopR0fvwjcXbzATTLzTnXsCwJQyadfGIFdMLde26YRWEGxV/ZVeWbq
+         7mlwNX9eYJRjqGzzDmLaGEcyrnKjw5Nzx1eOvqosnSDQ4rqHxFxk8QYALRF7B9Y6s2WQ
+         pbkg==
+X-Gm-Message-State: AO0yUKVTyUR+S1yqFLiPhz87BDiTfQseAZhnEMej04y7EosJ4pjteAA0
+        IjYJeaAHnAimOA0SJltvCibpGA==
+X-Google-Smtp-Source: AK7set+QdDAF7stRlVv2RoN/k2otnHIZBQzsA3ZSmsY+uCQ/hYRC2E1HIUBLD830x5UOEsIlWR6zpA==
+X-Received: by 2002:a62:e713:0:b0:5a9:cebd:7b79 with SMTP id s19-20020a62e713000000b005a9cebd7b79mr14338696pfh.0.1677205774289;
+        Thu, 23 Feb 2023 18:29:34 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c6-20020a62e806000000b00593e4e6516csm6185695pfi.124.2023.02.23.18.29.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 18:29:33 -0800 (PST)
+Message-ID: <6188031e-8af2-5f67-fe79-79bfb7ad4344@kernel.dk>
+Date:   Thu, 23 Feb 2023 19:29:32 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
 Subject: Re: [PATCH tools/io_uring] tools/io_uring: correctly set "ret" for
  sq_poll case
 Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
 Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
         asml.silence@gmail.com
 References: <20230221073736.628851-1-ZiyangZhang@linux.alibaba.com>
  <55a01e39-c28c-dde0-172c-feee378c2f74@kernel.dk>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <55a01e39-c28c-dde0-172c-feee378c2f74@kernel.dk>
+ <084ea730-a3a1-4dff-ecb5-d45a0af82e97@linux.alibaba.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <084ea730-a3a1-4dff-ecb5-d45a0af82e97@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/23 11:46, Jens Axboe wrote:
-> On 2/21/23 12:37?AM, Ziyang Zhang wrote:
->> For sq_poll case, "ret" is not initialized or cleared/set. In this way,
->> output of this test program is incorrect and we can not even stop this
->> program by pressing CTRL-C.
+On 2/23/23 7:25 PM, Ziyang Zhang wrote:
+> On 2023/2/23 11:46, Jens Axboe wrote:
+>> On 2/21/23 12:37?AM, Ziyang Zhang wrote:
+>>> For sq_poll case, "ret" is not initialized or cleared/set. In this way,
+>>> output of this test program is incorrect and we can not even stop this
+>>> program by pressing CTRL-C.
+>>>
+>>> Reset "ret" to zero in each submission/completion round, and assign
+>>> "ret" to "this_reap".
 >>
->> Reset "ret" to zero in each submission/completion round, and assign
->> "ret" to "this_reap".
+>> Can you check if this issue also exists in the fio copy of this, which
+>> is t/io_uring.c in:
+>>
+>> git://git.kernel.dk/fio
+>>
+>> The copy in the kernel is pretty outdated at this point, and should
+>> probably get removed. But if the bug is in the above main version, then
+>> we should fix it there and then ponder if we want to remove the one in
+>> the kernel or just get it updated to match the upstream version.
+>>
 > 
-> Can you check if this issue also exists in the fio copy of this, which
-> is t/io_uring.c in:
+> Hi Jens,
 > 
-> git://git.kernel.dk/fio
-> 
-> The copy in the kernel is pretty outdated at this point, and should
-> probably get removed. But if the bug is in the above main version, then
-> we should fix it there and then ponder if we want to remove the one in
-> the kernel or just get it updated to match the upstream version.
-> 
+> I have checked t/io_uring.c and the code is correct with sq_poll.
 
-Hi Jens,
+OK good, I'll attempt a sync with the kernel copy...
 
-I have checked t/io_uring.c and the code is correct with sq_poll.
+-- 
+Jens Axboe
 
-Regards,
-Zhang
+
