@@ -2,104 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FB16A164B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35AB6A1650
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBXFed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 00:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S229672AbjBXFhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 00:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBXFeb (ORCPT
+        with ESMTP id S229436AbjBXFhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 00:34:31 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203F3166D9;
-        Thu, 23 Feb 2023 21:34:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PNJVX1Vkxz4x1N;
-        Fri, 24 Feb 2023 16:34:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677216868;
-        bh=6A7twci1N4LarMfKhdKYaWjpyVlHaS+Pf63aEFyRu0c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q6bjbrK1zku1eAlWyWqsSS1KWz+z/hCmQSimDhn7gzqK0JG6FgK6dV2cHAeMwxFM9
-         sGSKadWlAABmrrQHAPsZLVyipKwuaemCRTc4AVx4AISJqQWHze65jDTCmFrXhTcQqQ
-         maFE5KevOTpBarR+TlYmGIs/iSyuip9i9BG2pEjmct8h0fkN4P1tc6IOhMYxUOBz01
-         PA8OvJcPoQI90hQCF5rBpJQ9jDv0US7L5eewha3gCl3FjaF7QQmHLE4d00jrV7ZboP
-         pQgDBJ22so1Fhrzx/535CbHdZqvt2D3c2536bJHFTaOaQQ6O1KEQ7fUPbmya90+ajM
-         Rq79DcxAD3wGg==
-Date:   Fri, 24 Feb 2023 16:34:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Donglin Peng <dolinux.peng@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the ftrace tree
-Message-ID: <20230224163426.7e4d956b@canb.auug.org.au>
+        Fri, 24 Feb 2023 00:37:39 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA8418166;
+        Thu, 23 Feb 2023 21:37:38 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id il18-20020a17090b165200b0023127b2d602so1588233pjb.2;
+        Thu, 23 Feb 2023 21:37:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v3CviGV7t33SNeYpDjbt8w9RDuPB9SsJDazDQkC60W8=;
+        b=jffT47FeYhMfzu7dDp16u/Vry66wSVVTsGmjCNxa4dgsIGUjAp3pk34DBqRUDvIzEa
+         k1dAcoNlTbLKlMAvLTGbP7n4ZIbDzaZofFutiFWxz0EJtawVbWqmYmHDo7O9vq9qUKRl
+         0pBR1eqJxMQ2BD/99aS7ACXOs5RkDZodBEDlWgkVktbWZbQG6yFr7UwB+WzmBEEaCLMv
+         EryezaMrPOBCD5+CE7b7R1XhGnwjHX4TE6az00MyfSTlYtqEMbcLkpo41KHEEiYDWZL8
+         BmUYGARVFIqAme2YSJebip4pUb3qa7J3jCtSkE5omTsq97mCnS2mKhk6yvAm094ZdWaU
+         CkmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v3CviGV7t33SNeYpDjbt8w9RDuPB9SsJDazDQkC60W8=;
+        b=b7AtENyjvfQmkEFiXZyjTKxv0u7uNdhco6CTTqmK85Q5sFwIGJJ8Y9963sjL93c4aV
+         AQ9cpRPZFJm+9Qzz9HwDqohSaitWAK0nNgMJJxZKVQjDYqVxgJcHnAq0Pe8jwlfkMe5e
+         f2HWgtHq+WCkxqO3jd/EhYvf3SrNK/YtkHNrZwPebKxumK+0Ett35miwvYtadw3/FZpu
+         E25AwxICCY/dqS/8+04L0uCvRbOw33ys4vGPRErBkGJ52oEX/ydTIXW6m2gpCswlbu5A
+         /gjTOmspgy7aco6J7Hh5AKOBislpvEOet3QGv5EeYi2HX8FO20wYhflzwvDSALDKkN48
+         wpcg==
+X-Gm-Message-State: AO0yUKUBbdG5uCRPyn4hS8rYNa0jUHloJcNWVzM8KP87pAA38VL12x/g
+        ZC52yu0k9lSQzzodEFzDx9JnQZX9oLChHbw36dk=
+X-Google-Smtp-Source: AK7set/uq7hBk7H8CoI6VdRiUPsZCA05AQSUugYgQalOd+kV8eA9+S0ODLtc+3HpUtupDQsksTYBnKW6DcicBe5u0QY=
+X-Received: by 2002:a17:903:428a:b0:19a:ac0b:9d93 with SMTP id
+ ju10-20020a170903428a00b0019aac0b9d93mr2616680plb.0.1677217057684; Thu, 23
+ Feb 2023 21:37:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WmOnlEwEiVnO8d7QI=6q3U8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230218075956.1563118-1-zyytlz.wz@163.com> <Y/U+w7aMc+BttZwl@google.com>
+ <CAJedcCzmnZCR=XF+zKHiJ+8PNK88sXFDm5n=RnwcTnJfO0ihOw@mail.gmail.com> <Y/aHHSkUOsOsU+Kq@google.com>
+In-Reply-To: <Y/aHHSkUOsOsU+Kq@google.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Fri, 24 Feb 2023 13:37:26 +0800
+Message-ID: <CAJedcCykky7E_uyeU=Pj1HR0rcpUTF1tKJ-2UmmM33bweDg=yw@mail.gmail.com>
+Subject: Re: [PATCH] mwifiex: Fix use-after-free bug due to race condition
+ between main thread thread and timer thread
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, ganapathi017@gmail.com,
+        alex000young@gmail.com, amitkarwar@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WmOnlEwEiVnO8d7QI=6q3U8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Brain,
 
-Hi all,
+Thanks for your detailed review. Sorry we missed something. As you say, We =
+are
+lacking some consideration, the pointed race path could not happen. But aft=
+er
+diving deep into the code, we found another path.
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+Here is the possible path. In summary, if the execution of CPU1 is
+stuck by fw_done,
+the cpu0 will continue executing and free the adapter gets into
+error-path. The cpu1
+did not notice that and UAF happened.
 
-  2740abcc36cb ("Allow forcing unconditional bootconfig processing")
-  d3a1913404bf ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_=
-EMBED")
-  9739868a6e5b ("bootconfig: Increase max nodes of bootconfig from 1024 to =
-8192 for DCC support")
-  9f58b99c9c40 ("tracing/probe: add a char type to show the character value=
- of traced arguments")
+If there is something else we didn't know, please feel free to let us know.
 
-These are commits
+        CPU0                                                        CPU1
+mwifiex_sdio_probe
+mwifiex_add_card
+mwifiex_init_hw_fw
+request_firmware_nowait
+  mwifiex_fw_dpc
+    _mwifiex_fw_dpc
+      mwifiex_init_fw
+        mwifiex_main_process
+          mwifiex_exec_next_cmd
+            mwifiex_dnld_cmd_to_fw
+              mod_timer(&adapter->cmd_timer,..)
+                                                        mwifiex_cmd_timeout=
+_func
 
-  b743852ccc1d ("Allow forcing unconditional bootconfig processing")
-  6ded8a28ed80 ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_=
-EMBED")
-  6c40624930c5 ("bootconfig: Increase max nodes of bootconfig from 1024 to =
-8192 for DCC support")
-  8478cca1e3ab ("tracing/probe: add a char type to show the character value=
- of traced arguments")
+if_ops.card_reset(adapter)
 
-in Linus' tree.
+mwifiex_sdio_card_reset
+                                                            [*] stuck
+in mwifiex_shutdown_sw
+              return 0 in mwifiex_dnld_cmd_to_fw
+                return 0 in mwifiex_exec_next_cmd
+                  return 0 in  mwifiex_main_process
+                    return -EINPROGRESS in mwifiex_init_fw
+                      get into error path, mwifiex_free_adapter
+                        // free adapter
+                        complete_all(fw_done);
+                                                              [*]Go on
+                                                              Use
+adapter->fw_done
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/WmOnlEwEiVnO8d7QI=6q3U8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Best regards,
+Zheng
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP4TGIACgkQAVBC80lX
-0Gz7BAf9FQ2pqTGHXxrcyr89r6TOLGTVWqh7F44aa3B5IrXR7ZGxdp94uV3xDiFi
-IxpegDozpZ0bUR43NVKjEGD36zcbPYZOAnTlGO18atFBTb9pGjc6ZGSX3gqlWCJH
-tLFhGa2XKWNVwAYIQa2D9OiPBicy3jLltxWM6K4X81xFWREd9mMgDWPf8aBcQ2D/
-H486M4Qf+O4M2l43hrtfvyVNbvq9q1GQs27yqkkjjcN4GTa7bJCA+WQQ9QQbNjzK
-PEFtAWIW/jz/LtzeW2+lT7a/TxexOqh2jpfxBQXEThosfDRABGhmYI9vxK6TaLK0
-NZYFFOATPVy8aS+v3hEKNfV119+18g==
-=2jcZ
------END PGP SIGNATURE-----
-
---Sig_/WmOnlEwEiVnO8d7QI=6q3U8--
+Brian Norris <briannorris@chromium.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=8823=
+=E6=97=A5=E5=91=A8=E5=9B=9B 05:20=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, Feb 22, 2023 at 12:17:21PM +0800, Zheng Hacker wrote:
+> > Could you please provide some advice about the fix?
+>
+> This entire driver's locking patterns (or lack
+> thereof) need rewritten. This driver was probably written by someone
+> that doesn't really understand concurrent programming. It really only
+> works because the bulk of normal operation is sequentialized into the
+> main loop (mwifiex_main_process()). Any time you get outside that,
+> you're likely to find bugs.
+>
+> But now that I've looked a little further, I'm not confident you pointed
+> out a real bug. How does mwifiex_sdio_card_reset_work() get past
+> mwifiex_shutdown_sw() -> wait_for_completion(adapter->fw_done) ? That
+> should ensure that _mwifiex_fw_dpc() is finished, and so we can't hit
+> the race you point out.
+>
+> Note to self: ignore most "static analysis" reports of race conditions,
+> unless they have thorough analysis or a runtime reproduction.
+>
+> Brian
