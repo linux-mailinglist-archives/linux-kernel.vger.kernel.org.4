@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E916A2111
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5EA6A2117
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjBXSCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S229576AbjBXSDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBXSCc (ORCPT
+        with ESMTP id S229460AbjBXSDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:02:32 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66295206BE
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:02:30 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y2so12999752pjg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:02:30 -0800 (PST)
+        Fri, 24 Feb 2023 13:03:30 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18991BADA;
+        Fri, 24 Feb 2023 10:03:21 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id bh1so274439plb.11;
+        Fri, 24 Feb 2023 10:03:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dIetUbx7EIF3EVZI4uWomKEyBANtRstOQ9q276wzqdo=;
-        b=MH6aam4wwxxCOP8F74s6Ll3IKPas17IyPHqfjrU5DRqREcp574aRJL7kZZuGLwFtVM
-         5qjwEkw++dNg3OMCh2Mtk6meGfZ10SKB8U9bSt0sReAXqCuRh6EfFKMsMx+c1OC4Pgon
-         wyvgbEPrwlEVV0Ru6arZDsOe/vb+k7/8o0RqOFWHBPQbxxeg9MRI6yg0BjX8HvWZ4JI6
-         Vk8Tlb6Dr9bOk3jtTS3WAGohoRkn3p82EsApeWBwGCjmaO4fkDPz8AbSPi9uGOJTPktK
-         Njh3v40YmDl2P0NXJLECxSCJKbMnE20Pcn+zoMIpaP3w9hWNsgQacWC49zFUwiIuY6Gn
-         +Mdg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wvHk11qF0f603OOJoMN+JIoAZ/PNo0RzhOMf6kxGrNM=;
+        b=oziF9nHK8NdokR6g36ypTOBz+wYE7vFr6JVV3oRd8QfFOKiKK5K94qXdKKc//7fJ9O
+         zV4uWilqOMcCvN0JDVXNxRhFOTI4i68Q/QhdwkPVHfU1yVUsKv8laiJ+GCWzmbJxyFcQ
+         RmF7TzMSl2+aychpbtNypydPNhBBc33uhQqpN+OtSTXWIgO4rwCiecbXiJg+hroj4Vyb
+         20pL570/rYzgPlmqYVDH82Nm1VfltHDbDKdBXJQcHwUSknjZMFDJBpdUTTJqbcj0bwM+
+         +mK36AgpeZL4zL8WK3kGd+GUSSV3OxCbblzLmgD9/cY/RhTcvj+q9EZU2YBoQ6pjBL1W
+         8NXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dIetUbx7EIF3EVZI4uWomKEyBANtRstOQ9q276wzqdo=;
-        b=s0YpC5G5OsaqaeAI0plWCeIHB0RjLt7puN0di1WW80by8ifoaoEvZGtPthott8e7Qr
-         ByGUANdqQEHHNQ71zKZ5j/wyJEOs+xUkA0VKzxR9MpQY+uV8L03MD6/PuDmIvMf7qPMf
-         0pMeoy6WGNPQIIUWSW/knien5DWwjg7Wr/LZH2DvgQZR1MeNb0kVS9jvxPgGac8vxwtg
-         lwOTClrHW8iV5+0OStMGfOpqsYt9EWrEj3CUwO5FJ3xRgZDxpFbF6l+s2Hx5g1Rhpz81
-         SlLhHtPRFODO+OI60a4JDi4GbG0JLnUAQKXk4nE6h4WxAcX3ZIPVPqJG8JCcXz1El1mu
-         kktQ==
-X-Gm-Message-State: AO0yUKXf4M0bkqqy98QVDdDuiyH7ijzDb4CTJjOh3thnmxyEe9GU1m5J
-        sphALosMV3Ev0nSZbTOYvOY=
-X-Google-Smtp-Source: AK7set9P5Feo6a4/0yoFYK8d+lC8D6mrYWoq7w/KhB+AYtuzYRizJ3vRuhh03PSshTB20wmkY0jxxA==
-X-Received: by 2002:a17:902:ba83:b0:19c:be07:4af2 with SMTP id k3-20020a170902ba8300b0019cbe074af2mr4714336pls.45.1677261749322;
-        Fri, 24 Feb 2023 10:02:29 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902704500b00198ff118fd3sm1108105plt.101.2023.02.24.10.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 10:02:28 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Chia-I Wu <olvaffe@gmail.com>, Ryan Neph <ryanneph@chromium.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/virtio: Add option to disable KMS support
-Date:   Fri, 24 Feb 2023 10:02:24 -0800
-Message-Id: <20230224180225.2477641-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wvHk11qF0f603OOJoMN+JIoAZ/PNo0RzhOMf6kxGrNM=;
+        b=5bm9WFGYbUvg6yj6MylelZHhf5Hrll+MYMUG5qSzzsRnnQ75G6Lptw9JeFFwh25Tsz
+         5NOSuCcoMDwp1/ls9eJEcW+VurHgMDQTDbHSA8ZcUwF1vX02+GesJ8g0kpi72T9VjsjR
+         cpRSJslXVuyq8pmImxcP4lDkv6s2Cp0NS5R9HdJBJpKbz+JUyR+N8p5LlhH1jij9GFik
+         IW/1z3pTCYv81T5/OYr2YANYQ6FQVlzTARKUL+P6mWHK2kzzyFmSkXc0MLA2NnNDSX+k
+         4k8AyIjhr8yG16s9K8jbulxDsdIS6+5aIa/tkuwRDDIzcQd3/+kS8m7A0YuVJeGtcyr/
+         +uvw==
+X-Gm-Message-State: AO0yUKXQ7QghbogxtPnYGlOFoGh0kO0yZVKCWmPxRxWHUOcuVDJJam/Y
+        11cDn9FTA4o4z6vcJs7vt+A=
+X-Google-Smtp-Source: AK7set/3ugPTZmEm5s6yq1bmhLEbjqx8wxrI12IRqOft8T2nJAwB3c44xV0sHkdk4bhcsiqm+FpIAA==
+X-Received: by 2002:a17:903:284:b0:19a:9797:1631 with SMTP id j4-20020a170903028400b0019a97971631mr16431427plr.3.1677261801308;
+        Fri, 24 Feb 2023 10:03:21 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id p1-20020a170902bd0100b00198b01b412csm9804499pls.303.2023.02.24.10.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 10:03:20 -0800 (PST)
+Message-ID: <db158193-15f9-a2ae-7fda-8c04dfc979a7@gmail.com>
+Date:   Fri, 24 Feb 2023 10:03:18 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC Vb] bgmac: fix *initial* chip reset to support BCM5358
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230224134851.18028-1-zajec5@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230224134851.18028-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,143 +80,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 2/24/23 05:48, Rafał Miłecki wrote:
+> While bringing hardware up we should perform a full reset including the
+> switch bit (BGMAC_BCMA_IOCTL_SW_RESET aka SICF_SWRST). It's what
+> specification says and what reference driver does.
+> 
+> This seems to be critical for the BCM5358. Without this hardware doesn't
+> get initialized properly and doesn't seem to transmit or receive any
+> packets.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> RFC: This is alternative solutionto the
+> [PATCH RFC] bgmac: fix *initial* chip reset to support BCM5358
+> https://lore.kernel.org/lkml/20230207225327.27534-1-zajec5@gmail.com/T/
+> 
+> Any comments on the prefered solution? Parameter vs. flag?
 
-Add a build option to disable modesetting support.  This is useful in
-cases where the guest only needs to use the GPU in a headless mode, or
-(such as in the CrOS usage) window surfaces are proxied to a host
-compositor.
-
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/virtio/Kconfig       | 11 +++++++++++
- drivers/gpu/drm/virtio/Makefile      |  5 ++++-
- drivers/gpu/drm/virtio/virtgpu_drv.c |  6 +++++-
- drivers/gpu/drm/virtio/virtgpu_drv.h | 10 ++++++++++
- drivers/gpu/drm/virtio/virtgpu_kms.c |  6 ++++++
- 5 files changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/virtio/Kconfig b/drivers/gpu/drm/virtio/Kconfig
-index 51ec7c3240c9..ea06ff2aa4b4 100644
---- a/drivers/gpu/drm/virtio/Kconfig
-+++ b/drivers/gpu/drm/virtio/Kconfig
-@@ -11,3 +11,14 @@ config DRM_VIRTIO_GPU
- 	   QEMU based VMMs (like KVM or Xen).
- 
- 	   If unsure say M.
-+
-+config DRM_VIRTIO_GPU_KMS
-+	bool "Virtio GPU driver modesetting support"
-+	depends on DRM_VIRTIO_GPU
-+	default y
-+	help
-+	   Enable modesetting support for virtio GPU driver.  This can be
-+	   disabled in cases where only "headless" usage of the GPU is
-+	   required.
-+
-+	   If unsure, say Y.
-diff --git a/drivers/gpu/drm/virtio/Makefile b/drivers/gpu/drm/virtio/Makefile
-index b99fa4a73b68..24c7ebe87032 100644
---- a/drivers/gpu/drm/virtio/Makefile
-+++ b/drivers/gpu/drm/virtio/Makefile
-@@ -4,8 +4,11 @@
- # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
- 
- virtio-gpu-y := virtgpu_drv.o virtgpu_kms.o virtgpu_gem.o virtgpu_vram.o \
--	virtgpu_display.o virtgpu_vq.o \
-+	virtgpu_vq.o \
- 	virtgpu_fence.o virtgpu_object.o virtgpu_debugfs.o virtgpu_plane.o \
- 	virtgpu_ioctl.o virtgpu_prime.o virtgpu_trace_points.o
- 
-+virtio-gpu-$(CONFIG_DRM_VIRTIO_GPU_KMS) += \
-+	virtgpu_display.o
-+
- obj-$(CONFIG_DRM_VIRTIO_GPU) += virtio-gpu.o
-diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
-index ae97b98750b6..9cb7d6dd3da6 100644
---- a/drivers/gpu/drm/virtio/virtgpu_drv.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
-@@ -172,7 +172,11 @@ MODULE_AUTHOR("Alon Levy");
- DEFINE_DRM_GEM_FOPS(virtio_gpu_driver_fops);
- 
- static const struct drm_driver driver = {
--	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC,
-+	.driver_features =
-+#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
-+			DRIVER_MODESET | DRIVER_ATOMIC |
-+#endif
-+			DRIVER_GEM | DRIVER_RENDER,
- 	.open = virtio_gpu_driver_open,
- 	.postclose = virtio_gpu_driver_postclose,
- 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
-index af6ffb696086..ffe8faf67247 100644
---- a/drivers/gpu/drm/virtio/virtgpu_drv.h
-+++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
-@@ -426,8 +426,18 @@ virtio_gpu_cmd_set_scanout_blob(struct virtio_gpu_device *vgdev,
- 				uint32_t x, uint32_t y);
- 
- /* virtgpu_display.c */
-+#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
- int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev);
- void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev);
-+#else
-+static inline int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
-+{
-+	return 0;
-+}
-+static inline void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev)
-+{
-+}
-+#endif
- 
- /* virtgpu_plane.c */
- uint32_t virtio_gpu_translate_format(uint32_t drm_fourcc);
-diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
-index 27b7f14dae89..293e6f0bf133 100644
---- a/drivers/gpu/drm/virtio/virtgpu_kms.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
-@@ -161,9 +161,11 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_VIRGL))
- 		vgdev->has_virgl_3d = true;
- #endif
-+#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
- 	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
- 		vgdev->has_edid = true;
- 	}
-+#endif
- 	if (virtio_has_feature(vgdev->vdev, VIRTIO_RING_F_INDIRECT_DESC)) {
- 		vgdev->has_indirect = true;
- 	}
-@@ -218,6 +220,7 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 		goto err_vbufs;
- 	}
- 
-+#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
- 	/* get display info */
- 	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
- 			num_scanouts, &num_scanouts);
-@@ -229,6 +232,7 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 		goto err_scanouts;
- 	}
- 	DRM_INFO("number of scanouts: %d\n", num_scanouts);
-+#endif
- 
- 	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
- 			num_capsets, &num_capsets);
-@@ -246,10 +250,12 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 		virtio_gpu_get_capsets(vgdev, num_capsets);
- 	if (vgdev->has_edid)
- 		virtio_gpu_cmd_get_edids(vgdev);
-+#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
- 	virtio_gpu_cmd_get_display_info(vgdev);
- 	virtio_gpu_notify(vgdev);
- 	wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
- 			   5 * HZ);
-+#endif
- 	return 0;
- 
- err_scanouts:
+Seems to me that the flags have been used to express 
+features/quirks/capabilities as much as what you are trying to do here, 
+flag would be my preference. LGTM otherwise.
 -- 
-2.39.1
+Florian
 
