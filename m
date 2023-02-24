@@ -2,315 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871DB6A208D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF1B6A208F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjBXRjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S229481AbjBXRk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBXRjv (ORCPT
+        with ESMTP id S229448AbjBXRkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:39:51 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252DD69AEB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:39:49 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id x14so405550vso.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DdWHSOmYYOCQYfqMBfKIAUiuglDSU9RZ6zPwv3mrqc=;
-        b=Bv9KmUj4zAo7qpGqUTRlYxKWyXHSeWI4OmO/fKFGDFOhVixN3T3NF6lUNLmPO0FB+0
-         qHcfNJUUnXp8WcwlrZMzU4aN2H9q3pLbRq/40fW+6QueKuTLTbj2SQJD8XhCelF3b2px
-         Ka312bOyvQ7BLn0OKgJt/wPLJLQr34olnBUXPG8E1jypWAmckmF0ZjobqWcCiV+ijaaQ
-         rWdA/zYJ3FSq1Mtp1pI2e/LGs/PiP5saQWrQmz5IEqxLU8o/EW7U+N7fjs9X0FeClSq9
-         N56g3C+VaIxRFWDIC3bkcRmha3yD7HQrvXEyZDCmrquvP3GyHiGmnTOG85MOJC+TGyz+
-         AuCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6DdWHSOmYYOCQYfqMBfKIAUiuglDSU9RZ6zPwv3mrqc=;
-        b=zhkqdgRVn/w4hq3GWLwQP1+hhDU0GFUwIfqk+Xse5KJZGpppGeX9/CYQg3ysHx5rTd
-         ZK5mZ6JAs7Z3Jri2I/WYcollOQBQKHDdk2nF44M6L+347rxmVCnP6DsPPlR5rwZFXozW
-         RaiMVjsVUXPGsf4Ob5+5nTzRBOTu+U6ufJYFt8g5e2FZyn+tWZI1dM3WFeys3vv2pHcD
-         mNSAndGZMMvf1necCmfpGP8tdO5ETLLjQOzmkc3CJNoBZN7FWuJbpxDxAUiQkidnw2qT
-         PMidtMr/Bzxe3gJ/T1PfK5bNu4bZ+QEXSYWdWnqN0z8BZDaoLd7WTM/B4fCzzb81AI04
-         ipfw==
-X-Gm-Message-State: AO0yUKVkibC266FDL4Bpnhw72njMaOSjDSRhrfAxXB2I0SLc6xVtdDGp
-        0Wyl7M0PrWkwHgaNWXz+ouD9dv7qwkossVwpy8Qg+w==
-X-Google-Smtp-Source: AK7set8Ez6tAnhLpKJqCuX0swOAkF2AM6EIVjyQFN8bUxHfUwqydYX4+dgySrbuEybGI2ANYD+262Abc3a5MnOlkwy0=
-X-Received: by 2002:a1f:5fc1:0:b0:412:611a:dce5 with SMTP id
- t184-20020a1f5fc1000000b00412611adce5mr2945608vkb.0.1677260388122; Fri, 24
- Feb 2023 09:39:48 -0800 (PST)
+        Fri, 24 Feb 2023 12:40:25 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10hn2244.outbound.protection.outlook.com [52.100.157.244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B784269AEB;
+        Fri, 24 Feb 2023 09:40:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VfImz7ntGsE5nrgVpoTEYrWIkGGH5Mu2AMRlX0L8w3K8hFbl2pzWyJlU6DVjkJEXTjtWoPPQmui+aKWkrsL0whriZeBw8LO8KlJygcsnvVEPsGScmkuSbo4tXz8bIIZq2NjwNnJdDJIkRYXknDnmqBshMoBSQgdSIo3Phn+RImc3ErSkXNW9Al7VsXNAzuSEcaNBF7yJqCI/1EgVTlnUInI+r/WiN5sWb+3A08QYXufPtN2kr6Hq0NjJ0ZsFWksLpKPq5XOBhMr+NmT4ZVv2OgjJvFgdNX6JM36UPdz/C67Wscgno19uq0nKqrPN08SxIPn1KOT6BJyQrPi6eB0diw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4PMq/i/FulQVIpfMseiPXE5FktUUFiMwo7vKnVb/0ao=;
+ b=Fiu29smrDWmot9A1q97npccUiOeF7pQV6HK5qHY/Wl4uzUdmto/S7kD9fOi+QqlFuNxE21yrcFKF1qEoo1rNFwmqTpG+PhOVBU+s9AgfBaCgLVzPcAZ+jek0re55mGU3jdcYIFBIDol8dRDJAvbhcqhaV/RS1PHZOZ8NJZFIRT8XokL+PyxtMgo+RFTddBovWqif9Pmf/GTOP5ljh/2yDbMwghZ3HsWBaIOsIDK+DowisoOtYjFIdXiqM3m0kAwm8dH/hmjbpd9HvZQ/p0UHuLkvM3VqoclFKmjmBWMzTgqrU1Uo8iegIoThe6MYqTj1zlXbTEldNIR+bgh2biNIAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=temperror action=none header.from=nvidia.com; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4PMq/i/FulQVIpfMseiPXE5FktUUFiMwo7vKnVb/0ao=;
+ b=F4XoxM2YZnzv1aMJ2qVoqiGepz7a7MD1o05GxUr8zMHQrjqmNXy/TSzmnuH9OTWaR3XDQg+Dv0c1rJzaF8W4kHb3f7NwbNSlrp2BE3PHJCybllZADrkrYuElQrsn9LL/RtvBcYb3XeX1IaJ+0Jo4nk47dfUZa4E4pN8I/Dotr3N5UHotpxPoE1Bol7TcPUqIbB7OElQWdSjiadwM2pDZuCcy0ZDD9Xdyrt/MWl/An3dUf8eIV2srlPhAu7b/fAK1OUtTZAbG/aesm9Vd0IpmJbP4sXkd87ecy/PtouVxid76LVgI4GmQN+r3owmhJJLIK9qoYUwMzzdh8n3UUSy/3Q==
+Received: from DM6PR02CA0044.namprd02.prod.outlook.com (2603:10b6:5:177::21)
+ by DS0PR12MB7511.namprd12.prod.outlook.com (2603:10b6:8:139::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
+ 2023 17:40:22 +0000
+Received: from DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:177:cafe::7) by DM6PR02CA0044.outlook.office365.com
+ (2603:10b6:5:177::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24 via Frontend
+ Transport; Fri, 24 Feb 2023 17:40:22 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=nvidia.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of nvidia.com: DNS Timeout)
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT076.mail.protection.outlook.com (10.13.173.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.24 via Frontend Transport; Fri, 24 Feb 2023 17:40:21 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 24 Feb
+ 2023 09:40:10 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 24 Feb
+ 2023 09:40:10 -0800
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Fri, 24 Feb
+ 2023 09:40:09 -0800
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: [PATCH v1] gpio: mmio: handle "ngpios" properly in bgpio_init
+Date:   Fri, 24 Feb 2023 12:40:07 -0500
+Message-ID: <20230224174007.13009-1-asmaa@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-References: <20230218002819.1486479-1-jthoughton@google.com> <20230218002819.1486479-23-jthoughton@google.com>
-In-Reply-To: <20230218002819.1486479-23-jthoughton@google.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Fri, 24 Feb 2023 09:39:12 -0800
-Message-ID: <CADrL8HUu6Qncz8GkPCbeR1YbFhQwCpXm9xkB7GoigNE3HOQY7w@mail.gmail.com>
-Subject: Re: [PATCH v2 22/46] hugetlb: add HGM support to copy_hugetlb_page_range
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT076:EE_|DS0PR12MB7511:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54ec89a9-682b-4688-fd53-08db168e3444
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BSb/K5QOvuvbuAZgjg2roUfMpQIFyU0s+Thgl3l1zFcaLU7QdNu5B9AgnrdXRa30NeXBUmZ5VuQQyKviJaERdA2do1cdZaCi23IkiBKH7oZOltcBBPuOEiRLTuscNs43U0YiKsc/r4ULhg3ljuRwxIO4w2cK+Mv7QjbuKLWZYIwo4sEHyNjUV49ydPtgjRG0LS/nerXvOlan4UWI4sKBhhGmthDgvOhyQd3msRCC19qfCKTSA2YJHGv2Dc5Pzwf+RZIZa0aKCSwyCE5d3C9+NuGj6VoPdEMnGlRQoDh/uKv3R+fxd7Snz01kFazk/SQnT+x2fKko/eJ7tZvJGgEig5gkNZ526LAi40zlY3JAWARiHgMQ9tu1bb7bE24DrgRe97pzS69Vl5BtL7pbiGD+Qpnjaok33y1muDdVNyxVNsvHeclihmtgcfxvty8cbEJP0EiGz4/82yJd8agv/QT2nWI4v4nng/MTKGnAGqMsJNOXZ/gcBbWHCW2uGioRixo9IjzQShHnM0pYHZRXjHI3XTPikWhUWmQ+z+FLi+vizcvHvRVT38CMtZud9x7+EzNY7vffF2XqS1btdbKTjvPHbs+phFipJVBWvW1EbUtcYo99XJU4HsJVqSwIKLRVtbRLw8lD9cTttBk6FPYrdTNHq4k63gd2t/TL3ofb142TgTJhAG+BuNmp2DZ8XyKJ66LwS4nyFDGIBsUtReR14LGyUobAgyHfoGoagxWI2C5flJcRVGhA/9D2V6B+aRvif7mGfCPiW13bODrm/IzLNssbMiL/OVEDn4xOdmE02vGRQf4=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(136003)(5400799012)(451199018)(40470700004)(46966006)(36840700001)(36860700001)(2906002)(82310400005)(7636003)(82740400003)(86362001)(336012)(478600001)(7696005)(186003)(47076005)(426003)(2616005)(26005)(40480700001)(36756003)(356005)(83380400001)(110136005)(63370400001)(63350400001)(40460700003)(70206006)(4326008)(41300700001)(107886003)(70586007)(316002)(8936002)(1076003)(8676002)(5660300002)(34020700004)(2101003)(12100799015);DIR:OUT;SFP:1501;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 17:40:21.9598
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54ec89a9-682b-4688-fd53-08db168e3444
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7511
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 4:29 PM James Houghton <jthoughton@google.com> wrote:
->
-> This allows fork() to work with high-granularity mappings. The page
-> table structure is copied such that partially mapped regions will remain
-> partially mapped in the same way for the new process.
->
-> A page's reference count is incremented for *each* portion of it that
-> is mapped in the page table. For example, if you have a PMD-mapped 1G
-> page, the reference count will be incremented by 512.
->
-> mapcount is handled similar to THPs: if you're completely mapping a
-> hugepage, then the compound_mapcount is incremented. If you're mapping a
-> part of it, the subpages that are getting mapped will have their
-> mapcounts incremented.
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
->
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 1a1a71868dfd..2fe1eb6897d4 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -162,6 +162,8 @@ void hugepage_put_subpool(struct hugepage_subpool *spool);
->
->  void hugetlb_remove_rmap(struct page *subpage, unsigned long shift,
->                          struct hstate *h, struct vm_area_struct *vma);
-> +void hugetlb_add_file_rmap(struct page *subpage, unsigned long shift,
-> +                          struct hstate *h, struct vm_area_struct *vma);
->
->  void hugetlb_dup_vma_private(struct vm_area_struct *vma);
->  void clear_vma_resv_huge_pages(struct vm_area_struct *vma);
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 693332b7e186..210c6f2b16a5 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -141,6 +141,37 @@ void hugetlb_remove_rmap(struct page *subpage, unsigned long shift,
->                         page_remove_rmap(subpage, vma, false);
->         }
->  }
-> +/*
-> + * hugetlb_add_file_rmap() - increment the mapcounts for file-backed hugetlb
-> + * pages appropriately.
-> + *
-> + * For pages that are being mapped with their hstate-level PTE (e.g., a 1G page
-> + * being mapped with a 1G PUD), then we increment the compound_mapcount for the
-> + * head page.
-> + *
-> + * For pages that are being mapped with high-granularity, we increment the
-> + * mapcounts for the individual subpages that are getting mapped.
-> + */
-> +void hugetlb_add_file_rmap(struct page *subpage, unsigned long shift,
-> +                          struct hstate *h, struct vm_area_struct *vma)
-> +{
-> +       struct page *hpage = compound_head(subpage);
-> +
-> +       if (shift == huge_page_shift(h)) {
-> +               VM_BUG_ON_PAGE(subpage != hpage, subpage);
-> +               page_add_file_rmap(hpage, vma, true);
-> +       } else {
-> +               unsigned long nr_subpages = 1UL << (shift - PAGE_SHIFT);
-> +               struct page *final_page = &subpage[nr_subpages];
-> +
-> +               VM_BUG_ON_PAGE(HPageVmemmapOptimized(hpage), hpage);
-> +               /*
-> +                * Increment the mapcount on each page that is getting mapped.
-> +                */
-> +               for (; subpage < final_page; ++subpage)
-> +                       page_add_file_rmap(subpage, vma, false);
-> +       }
-> +}
->
->  static inline bool subpool_is_free(struct hugepage_subpool *spool)
->  {
-> @@ -5210,7 +5241,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                             struct vm_area_struct *src_vma)
->  {
->         pte_t *src_pte, *dst_pte, entry;
-> -       struct page *ptepage;
-> +       struct hugetlb_pte src_hpte, dst_hpte;
-> +       struct page *ptepage, *hpage;
->         unsigned long addr;
->         bool cow = is_cow_mapping(src_vma->vm_flags);
->         struct hstate *h = hstate_vma(src_vma);
-> @@ -5238,18 +5270,24 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->         }
->
->         last_addr_mask = hugetlb_mask_last_page(h);
-> -       for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
-> +       addr = src_vma->vm_start;
-> +       while (addr < src_vma->vm_end) {
->                 spinlock_t *src_ptl, *dst_ptl;
-> -               src_pte = hugetlb_walk(src_vma, addr, sz);
-> -               if (!src_pte) {
-> -                       addr |= last_addr_mask;
-> +               unsigned long hpte_sz;
-> +
-> +               if (hugetlb_full_walk(&src_hpte, src_vma, addr)) {
-> +                       addr = (addr | last_addr_mask) + sz;
->                         continue;
->                 }
-> -               dst_pte = huge_pte_alloc(dst, dst_vma, addr, sz);
-> -               if (!dst_pte) {
-> -                       ret = -ENOMEM;
-> +               ret = hugetlb_full_walk_alloc(&dst_hpte, dst_vma, addr,
-> +                               hugetlb_pte_size(&src_hpte));
-> +               if (ret)
->                         break;
-> -               }
-> +
-> +               src_pte = src_hpte.ptep;
-> +               dst_pte = dst_hpte.ptep;
-> +
-> +               hpte_sz = hugetlb_pte_size(&src_hpte);
->
->                 /*
->                  * If the pagetables are shared don't copy or take references.
-> @@ -5259,13 +5297,14 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                  * another vma. So page_count of ptep page is checked instead
->                  * to reliably determine whether pte is shared.
->                  */
-> -               if (page_count(virt_to_page(dst_pte)) > 1) {
-> -                       addr |= last_addr_mask;
-> +               if (hugetlb_pte_size(&dst_hpte) == sz &&
-> +                   page_count(virt_to_page(dst_pte)) > 1) {
-> +                       addr = (addr | last_addr_mask) + sz;
->                         continue;
->                 }
->
-> -               dst_ptl = huge_pte_lock(h, dst, dst_pte);
-> -               src_ptl = huge_pte_lockptr(huge_page_shift(h), src, src_pte);
-> +               dst_ptl = hugetlb_pte_lock(&dst_hpte);
-> +               src_ptl = hugetlb_pte_lockptr(&src_hpte);
->                 spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
->                 entry = huge_ptep_get(src_pte);
->  again:
-> @@ -5309,10 +5348,15 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                          */
->                         if (userfaultfd_wp(dst_vma))
->                                 set_huge_pte_at(dst, addr, dst_pte, entry);
-> +               } else if (!hugetlb_pte_present_leaf(&src_hpte, entry)) {
-> +                       /* Retry the walk. */
-> +                       spin_unlock(src_ptl);
-> +                       spin_unlock(dst_ptl);
-> +                       continue;
->                 } else {
-> -                       entry = huge_ptep_get(src_pte);
->                         ptepage = pte_page(entry);
-> -                       get_page(ptepage);
-> +                       hpage = compound_head(ptepage);
-> +                       get_page(hpage);
->
->                         /*
->                          * Failing to duplicate the anon rmap is a rare case
-> @@ -5324,13 +5368,34 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                          * need to be without the pgtable locks since we could
->                          * sleep during the process.
->                          */
-> -                       if (!PageAnon(ptepage)) {
-> -                               page_add_file_rmap(ptepage, src_vma, true);
-> -                       } else if (page_try_dup_anon_rmap(ptepage, true,
-> +                       if (!PageAnon(hpage)) {
-> +                               hugetlb_add_file_rmap(ptepage,
-> +                                               src_hpte.shift, h, src_vma);
-> +                       }
-> +                       /*
-> +                        * It is currently impossible to get anonymous HugeTLB
-> +                        * high-granularity mappings, so we use 'hpage' here.
-> +                        *
-> +                        * This will need to be changed when HGM support for
-> +                        * anon mappings is added.
-> +                        */
-> +                       else if (page_try_dup_anon_rmap(hpage, true,
->                                                           src_vma)) {
->                                 pte_t src_pte_old = entry;
->                                 struct folio *new_folio;
->
-> +                               /*
-> +                                * If we are mapped at high granularity, we
-> +                                * may end up allocating lots and lots of
-> +                                * hugepages when we only need one. Bail out
-> +                                * now.
-> +                                */
-> +                               if (hugetlb_pte_size(&src_hpte) != sz) {
-> +                                       put_page(hpage);
-> +                                       ret = -EINVAL;
-> +                                       break;
-> +                               }
-> +
+bgpio_init uses "sz" argument to populate ngpio, which is not accurate.
+Instead, read the "ngpios" property from the DT and if it
+doesn't exist, use the "sz" argument. With this change, drivers no
+longer need to overwrite the ngpio variable after calling bgpio_init.
 
-Although this block never executes, it should come after the following
-spin_unlocks().
+Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+---
+ drivers/gpio/gpio-mmio.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
->                                 spin_unlock(src_ptl);
->                                 spin_unlock(dst_ptl);
->                                 /* Do not use reserve as it's private owned */
-> @@ -5342,7 +5407,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                                 }
->                                 copy_user_huge_page(&new_folio->page, ptepage, addr, dst_vma,
->                                                     npages);
-> -                               put_page(ptepage);
-> +                               put_page(hpage);
->
->                                 /* Install the new hugetlb folio if src pte stable */
->                                 dst_ptl = huge_pte_lock(h, dst, dst_pte);
-> @@ -5360,6 +5425,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                                 hugetlb_install_folio(dst_vma, dst_pte, addr, new_folio);
->                                 spin_unlock(src_ptl);
->                                 spin_unlock(dst_ptl);
-> +                               addr += hugetlb_pte_size(&src_hpte);
->                                 continue;
->                         }
->
-> @@ -5376,10 +5442,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                         }
->
->                         set_huge_pte_at(dst, addr, dst_pte, entry);
-> -                       hugetlb_count_add(npages, dst);
-> +                       hugetlb_count_add(
-> +                                       hugetlb_pte_size(&dst_hpte) / PAGE_SIZE,
-> +                                       dst);
->                 }
->                 spin_unlock(src_ptl);
->                 spin_unlock(dst_ptl);
-> +               addr += hugetlb_pte_size(&src_hpte);
->         }
->
->         if (cow) {
-> --
-> 2.39.2.637.g21b0678d19-goog
->
+diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
+index d9dff3dc92ae..f317a371c529 100644
+--- a/drivers/gpio/gpio-mmio.c
++++ b/drivers/gpio/gpio-mmio.c
+@@ -601,6 +601,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
+ 	       void __iomem *clr, void __iomem *dirout, void __iomem *dirin,
+ 	       unsigned long flags)
+ {
++	u32 ngpios = 0;
+ 	int ret;
+ 
+ 	if (!is_power_of_2(sz))
+@@ -614,10 +615,15 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
+ 	gc->parent = dev;
+ 	gc->label = dev_name(dev);
+ 	gc->base = -1;
+-	gc->ngpio = gc->bgpio_bits;
+ 	gc->request = bgpio_request;
+ 	gc->be_bits = !!(flags & BGPIOF_BIG_ENDIAN);
+ 
++	ret = device_property_read_u32(dev, "ngpios", &ngpios);
++	if (!ret)
++		gc->ngpio = ngpios;
++	else
++		gc->ngpio = gc->bgpio_bits;
++
+ 	ret = bgpio_setup_io(gc, dat, set, clr, flags);
+ 	if (ret)
+ 		return ret;
+-- 
+2.30.1
+
