@@ -2,154 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35A26A1A7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D442E6A1A82
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjBXKnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S229790AbjBXKnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjBXKmn (ORCPT
+        with ESMTP id S229931AbjBXKnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:42:43 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCEF5FD5;
-        Fri, 24 Feb 2023 02:41:15 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OARbEx001357;
-        Fri, 24 Feb 2023 10:40:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8cWmvPwNwNmGYejx+XOmF4t+iGtdVe0NNZaVfqLw+CM=;
- b=m44a5+AZmREmQBqj3NVlwF80MBGPyQT8oPnPwWDDfrfrgm5Uh0s6qA/GHWsNBwnntku5
- Sg0Kn/EUOUZiPLzK12O89fVL6jdw9xcoEvk/CHVl3BzMwjpWA5cIsqWpOZmmDYDQ7l2q
- DEQpADRPrR2IEDaKQeERSZFnjPQqDMPe+HOUkMa0VWUnQwtOWq/u28qIULA3PafN15S1
- jz95ugB2Y06cOAQzyA4+Gal2Qe/5Q7rGdtHJySyawrd2FQWwFMkcNN0ndK5A4RQOIqAN
- jfmq7U4WpDCwULAjQ7QedgxcyWmah5wShuUF84ohWWRCo2hXbuZWL2ynTRccS5Vk3Tbn rg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxugh80tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 10:40:51 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OAeoqY024499
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 10:40:50 GMT
-Received: from [10.216.22.47] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
- 2023 02:40:45 -0800
-Message-ID: <47542dbb-8cf3-6eae-a38e-910d38bd960b@quicinc.com>
-Date:   Fri, 24 Feb 2023 16:10:42 +0530
+        Fri, 24 Feb 2023 05:43:02 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3CC2A157;
+        Fri, 24 Feb 2023 02:41:49 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id f41so17324270lfv.13;
+        Fri, 24 Feb 2023 02:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KQw4NVJFAFLSgoZBVcMoqNPGG17Af/T/X5oeh8AkTQ0=;
+        b=X6ENhphd+wZzM9gl/6cTr4GEyl2heOOInN5Fw8QqrKfFopQxA1Co3/9VBOkoLZxDae
+         wF9xsUbGUUooSGnij5fjxbPzUQijeguce7/nZEtms7anoVi5sp9xrVGP8VlZFdlAAvFA
+         X2oairdrWVv7VH9zCuMIl2HIDnx8yuL1iWuxTpPwouhvBksLlIOed6d8YyUId4B/Rdlm
+         TxbNV84zz5JERAzq0my7e4ohF5R4SJcH/5WuKKWqtj8Vveu0ApoypTshHn6KdziEIw9P
+         ulNXUR8/5tlO5uyIttIwgTjQDkeAkXgzcsou5RAnONbUcm7HLrwCHYmWKalTzF1zVLQg
+         u8Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KQw4NVJFAFLSgoZBVcMoqNPGG17Af/T/X5oeh8AkTQ0=;
+        b=ikWAkeXEpz0aPqkchHlFp54R2p6O5vLutZK1CkqWkshaau/ZNwmozSQ69BC1EbXCGF
+         fh1jlQA89yHybxxTzzqdfZaJKW4BB5JptUWdy6bdzEZ4YGjz4DL3xKnf2NumyvQlPIe7
+         5psVdB2keQcqeCmldIVYrbo1+8TwWMJGWKyYUrsJkag2C4ajwSbZ51ag986UC/Nq/wZI
+         YL2CVGzk7jlSxTrqa0HdKSgNeTEkkm0HPsej/6KZRD8f6H913qtGAS5w+Nb2yugd/X3a
+         RAU1w9WmGsFMvdLvI91XUwWErw4PHaKl5FjM+QHracoguvEaoIJD+CK/iySDlMOWOBt0
+         4quQ==
+X-Gm-Message-State: AO0yUKUYgE+TaPLLTr7mqBnMXBoPAWbZB+RmFcnrNq/3tzz66aJlx/lW
+        htuHgRhWsZzn5W0PEs9aLbw=
+X-Google-Smtp-Source: AK7set+X31MsOvhb4Gd5lEMAbTEf9y8axw33yhjVzJNDqQ7imwI3ateGBXGiuAInpl1tQ2MkOTogjQ==
+X-Received: by 2002:ac2:4479:0:b0:4db:4fa6:7c0c with SMTP id y25-20020ac24479000000b004db4fa67c0cmr4864298lfl.60.1677235307868;
+        Fri, 24 Feb 2023 02:41:47 -0800 (PST)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id m15-20020a19520f000000b004cb2995de37sm1628025lfb.265.2023.02.24.02.41.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 02:41:47 -0800 (PST)
+Message-ID: <02f948ee-34ee-c15e-09e4-d0d8c5161c9b@gmail.com>
+Date:   Fri, 24 Feb 2023 12:41:46 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 0/6] Add basic Minidump kernel driver support
-Content-Language: en-US
-To:     Brian Masney <bmasney@redhat.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <keescook@chromium.org>,
-        <tony.luck@intel.com>, <gpiccoli@igalia.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
- <Y/deHzijzvuvCJ2M@x1>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <Y/deHzijzvuvCJ2M@x1>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Language: en-US, en-GB
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1677080089.git.mazziesaccount@gmail.com>
+ <63a2dbedf54e2e00e3b63dd16aae190ff6596355.1677080089.git.mazziesaccount@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
+In-Reply-To: <63a2dbedf54e2e00e3b63dd16aae190ff6596355.1677080089.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T7W3uxWLeUgO6aChRz5rQfM-dvuvUMbl
-X-Proofpoint-ORIG-GUID: T7W3uxWLeUgO6aChRz5rQfM-dvuvUMbl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_06,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 adultscore=0 malwarescore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302240087
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Brian for your interest in this series.
+On 2/22/23 18:15, Matti Vaittinen wrote:
 
-On 2/23/2023 6:07 PM, Brian Masney wrote:
-> On Tue, Feb 21, 2023 at 04:55:07PM +0530, Mukesh Ojha wrote:
->> Minidump is a best effort mechanism to collect useful and predefined data
->> for first level of debugging on end user devices running on Qualcomm SoCs.
->> It is built on the premise that System on Chip (SoC) or subsystem part of
->> SoC crashes, due to a range of hardware and software bugs. Hence, the
->> ability to collect accurate data is only a best-effort. The data collected
->> could be invalid or corrupted, data collection itself could fail, and so on.
->>
->> Qualcomm devices in engineering mode provides a mechanism for generating
->> full system ramdumps for post mortem debugging. But in some cases it's
->> however not feasible to capture the entire content of RAM. The minidump
->> mechanism provides the means for selecting which snippets should be
->> included in the ramdump.
->>
->> The core of minidump feature is part of Qualcomm's boot firmware code.
->> It initializes shared memory (SMEM), which is a part of DDR and
->> allocates a small section of SMEM to minidump table i.e also called
->> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
->> their own table of segments to be included in the minidump and all get
->> their reference from G-ToC. Each segment/region has some details like
->> name, physical address and it's size etc. and it could be anywhere
->> scattered in the DDR.
->>
->> Existing upstream Qualcomm remoteproc driver[1] already supports minidump
->> feature for remoteproc instances like ADSP, MODEM, ... where predefined
->> selective segments of subsystem region can be dumped as part of
->> coredump collection which generates smaller size artifacts compared to
->> complete coredump of subsystem on crash.
->>
->> [1]
->> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/remoteproc/qcom_common.c#n142
->>
->> In addition to managing and querying the APSS minidump description,
->> the Linux driver maintains a ELF header in a segment. This segment
->> gets updated with section/program header whenever a new entry gets
->> registered.
->
-> I'd like to test this series plus your series that sets the multiple
-> download modes.
+//snip
 
-Sure, you are welcome, but for that you need a device running with 
-Qualcomm SoC and if it has a upstream support.
+> 	- Driver starts the measurement on the background when it is
+> 	  probed. This improves the respnse time to read-requests
+> 	  compared to starting the read only when data is requested.
+> 	  When the most accurate 400 mS measurement time is used, data reads
+> 	  would last quite long if measurement was started only on
+> 	  demand. This, however, is not appealing for users who would
+> 	  prefere power saving over measurement response time.
 
-Also, testing of this patch needs some minimal out of tree patches and
-i can help you with that.
+//snip
 
-> Can you include documentation about how to actually use
-> this new feature?
+> +static bool bu27034_has_valid_sample(struct bu27034_data *data)
+> +{
+> +	int ret, val;
+> +
+> +	ret = regmap_read(data->regmap, BU27034_REG_MODE_CONTROL4, &val);
+> +	if (ret)
+> +		dev_err(data->dev, "Read failed %d\n", ret);
+> +
+> +	return (val & BU27034_MASK_VALID);
+> +}
+> +
+> +static void bu27034_invalidate_read_data(struct bu27034_data *data)
+> +{
+> +	bu27034_has_valid_sample(data);
+> +}
+> +
+> +static int _bu27034_get_result(struct bu27034_data *data, u16 *res, bool lock)
+> +{
+> +	int ret = 0;
+> +
+> +retry:
+> +	if (lock)
+> +		mutex_lock(&data->mutex);
+> +	/* Get new value from sensor if data is ready - or use cached value */
+> +	if (bu27034_has_valid_sample(data)) {
+> +		ret = regmap_bulk_read(data->regmap, BU27034_REG_DATA0_LO,
+> +				       &data->raw[0], sizeof(data->raw));
+> +		if (ret)
+> +			goto unlock_out;
+> +
+> +		data->cached = true;
+> +		bu27034_invalidate_read_data(data);
+> +	} else if (unlikely(!data->cached)) {
+> +		/* No new data in sensor and no value cached. Wait and retry */
+> +		if (lock)
+> +			mutex_unlock(&data->mutex);
+> +		msleep(25);
+> +
+> +		goto retry;
+> +	}
+> +	res[0] = le16_to_cpu(data->raw[0]);
+> +	res[1] = le16_to_cpu(data->raw[1]);
+> +	res[2] = le16_to_cpu(data->raw[2]);
+> +
+> +unlock_out:
+> +	if (lock)
+> +		mutex_unlock(&data->mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static int bu27034_get_result_unlocked(struct bu27034_data *data, u16 *res)
+> +{
+> +	return _bu27034_get_result(data, res, false);
+> +}
+> +
+> +static int bu27034_get_result(struct bu27034_data *data, u16 *res)
+> +{
+> +	return _bu27034_get_result(data, res, true);
+> +}
 
-Will surely do, Since this is still RFC, and i am doubtful on the path 
-of it in documentation directory.
+//snip
 
-  Also the information that you provided above is really
-> useful. I think that should also go in the documentation file as well.
-> 
-> I already have a reliable way to make a board go BOOM and go into
-> ramdump mode.
+> +	case IIO_CHAN_INFO_RAW:
+> +	{
+> +		u16 res[3];
+> +
+> +		if (chan->type != IIO_INTENSITY)
+> +			return -EINVAL;
+> +
+> +		if (chan->channel < BU27034_CHAN_DATA0 ||
+> +		    chan->channel > BU27034_CHAN_DATA2)
+> +			return -EINVAL;
+> +		/*
+> +		 * Reading one channel at a time is inefficient.
+> +		 *
+> +		 * Hence we run the measurement on the background and always
+> +		 * read all the channels. There are following caveats:
+> +		 * 1) The VALID bit handling is racy. Valid bit clearing is not
+> +		 * tied to reading the data in the hardware. We clear the
+> +		 * valid-bit manually _after_ we have read the data - but this
+> +		 * means there is a small time-window where new result may
+> +		 * arrive between read and clear. This means we can miss a
+> +		 * sample. For normal use this should not be fatal because
+> +		 * usually the light is changing slowly. There might be
+> +		 * use-cases for measuring more rapidly changing light but this
+> +		 * driver is unsuitable for those cases anyways. (Smallest
+> +		 * measurement time we support is 55 mS.)
+> +		 * 2) Data readings more frequent than the meas_time will return
+> +		 * the same cached values. This should not be a problem for the
+> +		 * very same reason 1) is not a problem.
+> +		 */
+> +		ret = bu27034_get_result(data, &res[0]);
+> +		if (ret)
+> +			return ret;
+> +
+> +		*val = res[chan->channel - BU27034_CHAN_DATA0];
+> +
+> +		return IIO_VAL_INT;
+> +	}
 
-That's very nice to hear; but again if you can specify your target 
-specification.
+//snip
 
--Mukesh
-> 
-> Brian
-> 
+> +static int bu27034_chip_init(struct bu27034_data *data)
+> +{
+
+//snip
+
+> +
+> +	/*
+> +	 * Consider disabling the measurement (and powering off the sensor) for
+> +	 * runtime pm
+> +	 */
+> +	ret = bu27034_meas_en(data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return devm_add_action_or_reset(data->dev, bu27034_meas_stop, data);
+> +}
+
+Well, this "works on my machine" - but I am slightly unhappy with this. 
+I have a feeling I am effectively making a poor, reduced version of data 
+buffering here. I am starting to think that I should
+
+a) Not start measurement at chip init. (saves power)
+b) Start measurement at raw-read and just block for damn long for each 
+raw-read. Yep, it probably means that users who want to raw-read all 
+channels will be blocking 4 * measurement time when they are reading all 
+channels one after another. Yes, this is in worst case 4 * 400 mS. 
+Horrible. But see (c) below.
+c) Implement triggered_buffer mode. Here my lack of IIO-experience shows 
+up again. I have no idea if there is - or what is - the "de facto" way 
+for implementing this when our device has no IRQ? I could cook-up some 
+'tiny bit shorter than the measurement time' period timer which would 
+kick the driver to poll the VALID-bit - or, because we need anyways to 
+poll the valid bit from process context - just a kthread which polls the 
+VALID-bit. Naturally the thread/timer should be only activated when the 
+trigger is enabled.
+
+Actually, my question (with this driver, the big question in the RFC is 
+the gain-time-scale helper) seems to be - should I implement 
+triggered_buffer and do we have some generic IIO trigger (timer or 
+thread or whatever) the driver could use or should each driver (which 
+needs this) implement own one?
+
+
+Thanks for the patience :)
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
