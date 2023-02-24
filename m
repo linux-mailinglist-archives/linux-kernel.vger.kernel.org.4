@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5EA6A2117
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60366A211A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBXSDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S229485AbjBXSEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBXSDa (ORCPT
+        with ESMTP id S229515AbjBXSEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:03:30 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18991BADA;
-        Fri, 24 Feb 2023 10:03:21 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id bh1so274439plb.11;
-        Fri, 24 Feb 2023 10:03:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wvHk11qF0f603OOJoMN+JIoAZ/PNo0RzhOMf6kxGrNM=;
-        b=oziF9nHK8NdokR6g36ypTOBz+wYE7vFr6JVV3oRd8QfFOKiKK5K94qXdKKc//7fJ9O
-         zV4uWilqOMcCvN0JDVXNxRhFOTI4i68Q/QhdwkPVHfU1yVUsKv8laiJ+GCWzmbJxyFcQ
-         RmF7TzMSl2+aychpbtNypydPNhBBc33uhQqpN+OtSTXWIgO4rwCiecbXiJg+hroj4Vyb
-         20pL570/rYzgPlmqYVDH82Nm1VfltHDbDKdBXJQcHwUSknjZMFDJBpdUTTJqbcj0bwM+
-         +mK36AgpeZL4zL8WK3kGd+GUSSV3OxCbblzLmgD9/cY/RhTcvj+q9EZU2YBoQ6pjBL1W
-         8NXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wvHk11qF0f603OOJoMN+JIoAZ/PNo0RzhOMf6kxGrNM=;
-        b=5bm9WFGYbUvg6yj6MylelZHhf5Hrll+MYMUG5qSzzsRnnQ75G6Lptw9JeFFwh25Tsz
-         5NOSuCcoMDwp1/ls9eJEcW+VurHgMDQTDbHSA8ZcUwF1vX02+GesJ8g0kpi72T9VjsjR
-         cpRSJslXVuyq8pmImxcP4lDkv6s2Cp0NS5R9HdJBJpKbz+JUyR+N8p5LlhH1jij9GFik
-         IW/1z3pTCYv81T5/OYr2YANYQ6FQVlzTARKUL+P6mWHK2kzzyFmSkXc0MLA2NnNDSX+k
-         4k8AyIjhr8yG16s9K8jbulxDsdIS6+5aIa/tkuwRDDIzcQd3/+kS8m7A0YuVJeGtcyr/
-         +uvw==
-X-Gm-Message-State: AO0yUKXQ7QghbogxtPnYGlOFoGh0kO0yZVKCWmPxRxWHUOcuVDJJam/Y
-        11cDn9FTA4o4z6vcJs7vt+A=
-X-Google-Smtp-Source: AK7set/3ugPTZmEm5s6yq1bmhLEbjqx8wxrI12IRqOft8T2nJAwB3c44xV0sHkdk4bhcsiqm+FpIAA==
-X-Received: by 2002:a17:903:284:b0:19a:9797:1631 with SMTP id j4-20020a170903028400b0019a97971631mr16431427plr.3.1677261801308;
-        Fri, 24 Feb 2023 10:03:21 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id p1-20020a170902bd0100b00198b01b412csm9804499pls.303.2023.02.24.10.03.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 10:03:20 -0800 (PST)
-Message-ID: <db158193-15f9-a2ae-7fda-8c04dfc979a7@gmail.com>
-Date:   Fri, 24 Feb 2023 10:03:18 -0800
+        Fri, 24 Feb 2023 13:04:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51E21B56F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:03:54 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pVcQ6-0003ST-SQ; Fri, 24 Feb 2023 19:03:46 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pVcQ3-007Elu-Ru; Fri, 24 Feb 2023 19:03:45 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pVcQ4-006IuD-BE; Fri, 24 Feb 2023 19:03:44 +0100
+Date:   Fri, 24 Feb 2023 19:03:46 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/9] i2c: Switch .probe() to not take an id parameter
+Message-ID: <20230224180346.dbbjcetbjrmjt4fs@pengutronix.de>
+References: <20230224120600.1681685-1-u.kleine-koenig@pengutronix.de>
+ <20230224120600.1681685-8-u.kleine-koenig@pengutronix.de>
+ <20230224170218.22c0af0c@booty>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC Vb] bgmac: fix *initial* chip reset to support BCM5358
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230224134851.18028-1-zajec5@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230224134851.18028-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zzuurrxhunk2mhmd"
+Content-Disposition: inline
+In-Reply-To: <20230224170218.22c0af0c@booty>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/23 05:48, Rafał Miłecki wrote:
-> While bringing hardware up we should perform a full reset including the
-> switch bit (BGMAC_BCMA_IOCTL_SW_RESET aka SICF_SWRST). It's what
-> specification says and what reference driver does.
-> 
-> This seems to be critical for the BCM5358. Without this hardware doesn't
-> get initialized properly and doesn't seem to transmit or receive any
-> packets.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> RFC: This is alternative solutionto the
-> [PATCH RFC] bgmac: fix *initial* chip reset to support BCM5358
-> https://lore.kernel.org/lkml/20230207225327.27534-1-zajec5@gmail.com/T/
-> 
-> Any comments on the prefered solution? Parameter vs. flag?
 
-Seems to me that the flags have been used to express 
-features/quirks/capabilities as much as what you are trying to do here, 
-flag would be my preference. LGTM otherwise.
--- 
-Florian
+--zzuurrxhunk2mhmd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello Luca,
+
+On Fri, Feb 24, 2023 at 05:02:18PM +0100, Luca Ceresoli wrote:
+> On Fri, 24 Feb 2023 13:05:58 +0100
+> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
+> > [...]
+> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> > index d84e0e99f084..c3e022d53182 100644
+> > --- a/include/linux/i2c.h
+> > +++ b/include/linux/i2c.h
+> > @@ -272,14 +272,18 @@ enum i2c_driver_flags {
+> >  struct i2c_driver {
+> >  	unsigned int class;
+> > =20
+> > +	union {
+> >  	/* Standard driver model interfaces */
+> > -	int (*probe)(struct i2c_client *client, const struct i2c_device_id *i=
+d);
+> > +		int (*probe)(struct i2c_client *client);
+> > +		/*
+> > +		 * Legacy callback that was part of a conversion of .probe().
+> > +		 * Today it has the same semantic as .probe(). Don't use for new
+> > +		 * code.
+> > +		 */
+> > +		int (*probe_new)(struct i2c_client *client);
+> > +	};
+> >  	void (*remove)(struct i2c_client *client);
+> > =20
+> > -	/* New driver model interface to aid the seamless removal of the
+> > -	 * current probe()'s, more commonly unused than used second parameter.
+> > -	 */
+> > -	int (*probe_new)(struct i2c_client *client);
+>=20
+> The kerneldoc for this struct should also be updated:
+>=20
+> - * @probe: Callback for device binding - soon to be deprecated
+> - * @probe_new: New callback for device binding
+> + * @probe: Callback for device binding=20
+> + * @probe_new: Transitional callback for device binding - do not use
+
+Indeed. I will send an updated patch series near the end of the merge
+window, with your suggested change squashed in.
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zzuurrxhunk2mhmd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmP4+/8ACgkQwfwUeK3K
+7AnW2ggAgs0kOrMaBR1hMEZNM7UPtqYjl18LYmtcokGpOrUdWybqFwBzETr7a079
+xo76DXvsL3E3z6YjbaUwqCZ11SUWqUI6NMMIQSR71CLDF3Uts9rHhGxrGQ4u3wwV
+/hZi3Oib9vQ0GkaLHgV5LX0cEWV+UhZDDPamKS4WQfNA1QCcqKk7+Dk+DMVOyGwj
+2zbB7cOnKBNZ24Z/KUSldcOIUqce3xchOP0DqW7C9LeBTNWjgtW2hEnTMU2eMPj+
+q3Xm75q+czQd/5MNuLmP/VRP0RKy5rLrEg/xb8GqKE2T71hEidaS+EuK0KCsIa+4
+ACRaYxTlEd3Ofcc4UdwuhP0FTtIzAQ==
+=plub
+-----END PGP SIGNATURE-----
+
+--zzuurrxhunk2mhmd--
