@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445B66A20AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74B26A20E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjBXRqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S229512AbjBXRvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBXRqy (ORCPT
+        with ESMTP id S229470AbjBXRvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:46:54 -0500
-Received: from libero.it (smtp-34-i2.italiaonline.it [213.209.12.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5646C1B3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:46:51 -0800 (PST)
-Received: from [192.168.1.176] ([87.6.129.129])
-        by smtp-34.iol.local with ESMTPA
-        id Vc9ipVlFgVfPJVc9ipbuLa; Fri, 24 Feb 2023 18:46:50 +0100
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inwind.it; s=s2014;
-        t=1677260810; bh=Ejabf+Fi8cuY7wUHUo2cWIYILAeQJIhe3muthr7cnVs=;
-        h=From;
-        b=R9j93aI7sqb8fmEVZxbpmSlzN6AiJCMwQcy7b/ssoED5sO7MLMfUn6hYkDwCdLUpE
-         TJh1bTQbI6WL93b9cpOx9ZCiuPvKShAbwH4V7BCvEkZSPxBRliuG5FxjIWOKgm6S/Y
-         t47hWJsomF5hyRBIu+RQ4/s6ln1Fy3NJ++NKx4lFoYUR12rf/E/7ocnmTqQk4Fvdo5
-         0XhlRPC7eMCZNVcjx/LVhb1BmiuLzhE/5zyLSQ/51V6KrOEcCDvjqfgdpMsgaBgsOd
-         zdy285Do/pPZU7U0M9LuS7m8y6Ya3RyP4flRmUYoMiDumnmjfrjceg/AuT2c4+GJdh
-         eY2VP195gAMmg==
-X-CNFS-Analysis: v=2.4 cv=EKfAkXVC c=1 sm=1 tr=0 ts=63f8f80a cx=a_exe
- a=ZxqhrVAgG8YdQk3VCnDUFw==:117 a=ZxqhrVAgG8YdQk3VCnDUFw==:17
- a=IkcTkHD0fZMA:10 a=VwQbUJbxAAAA:8 a=pcNOOGWl7m_sQj1MCncA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22
-Message-ID: <87f7b3f4-8586-4c10-d4f4-643ff5f0cf62@inwind.it>
-Date:   Fri, 24 Feb 2023 18:46:51 +0100
+        Fri, 24 Feb 2023 12:51:09 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4C1FE6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:51:08 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id x34so13813807pjj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sladewatkins.net; s=googled;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=G41QfMy0gPOdytQyepHXV2zo+vejMnYEhBKv7ZyIXik=;
+        b=OW++KfGrEpGn8vfPq5A8i5xDwR1wegEp10vqA2beJ0n38XGSdpdZcqGu0X2rVQAwwY
+         3IKYYXXZLOQEm5t0q4hhnw6F0ultTbpUgxpQ9l5HJ3ZgyM3aDsLjs7/Sxg7Ptq8iND3u
+         +gQ3aaJc0gYc/o8GIj3EwijUYwxHy51GyJi64mBMnB+Uc2X/2wOxhuRtzoer6ApXVymW
+         ql0VLO7ksuxxCQKCkdRpoark2JDbFogCsTNYlgubSlNcKK+6u5JMbIA99Ydtx9VfMCWZ
+         POD1mEQC3mqCLnlsyYjTvidu1kw6jYWPKoPSyxOkwiYdQcj1GXNSfcBMPQWMvj9KlpaA
+         Z2kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G41QfMy0gPOdytQyepHXV2zo+vejMnYEhBKv7ZyIXik=;
+        b=UWjG2aU0jaFoiwVV9X+aVwuJM7/xckyXtY+PEiLHQTqTYjpJN72y0tcJ8i3Bq41JsD
+         gzpQf1Ou3IyKUCwU84GC7rWCbKCMD2jAMzK/kYy0vhXrak08QL0WABaGSQ9iVKbZue8F
+         Hf6Qm/lJSzE2ZL4sxbjPYqMPihmkee5NC53PiHWLK7C1Hy/kBgJzjNbfxKR7gRjowjQS
+         zFCWiYmpQN6IsPagFUjrxrn8spf/S2Wv5emYHg7VmcQSC+bqW97cpYhUK8Zf37n61adb
+         u+Uhz+lRfJmXEqYa8y+u7YtqBfbkFGkwvn4sz9HaGXtuLcODQ2hkT7zRyqvF6gDiC75x
+         GF0g==
+X-Gm-Message-State: AO0yUKV3Hh22qwKA1a2DjT1xbck7j4iTVsEEOOS2K4K5wqqeouR9eolz
+        1n1alPVe7d2Pfx4oKcSRZDnySmADFh2angqz8l633w==
+X-Google-Smtp-Source: AK7set8nd4ezLLCXVyqp2V+Mk/zCMObyIQmnH2HaXse63lHEHcKMPICs7gsTVmOJQoO1EkC22Z46WSTvGy/21ivZfVk=
+X-Received: by 2002:a17:90b:3e8b:b0:237:ae7c:1595 with SMTP id
+ rj11-20020a17090b3e8b00b00237ae7c1595mr270796pjb.2.1677261067487; Fri, 24 Feb
+ 2023 09:51:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Valerio Vanni <valerio.vanni@inwind.it>
-Subject: Kernel panic - not syncing: Attempted to kill init!
- exitcode=0x00007f00
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Antivirus: AVG (VPS 230224-4, 24/2/2023), Outbound message
-X-Antivirus-Status: Clean
-X-CMAE-Envelope: MS4xfK6oPIsHVx/hNNAui8o++f3i7OTQjIlEsIZeiBM3AaRJGIYzrg1VZiuBVYo47CGcmYf2UHVX8xGUQrS8qInYq8YVgJpgthbCHkhCVyAIFkRRZ7j10o8a
- hVW728UbTGpREsv7OZcQJqzmDJ7B+8SgXZUVC2dqC6DewvuwVDZ5ODmAe64yYBkaKTlyuTRPHmcULomQJ+yUIiBrEXEfQkiXCYA=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230223130423.369876969@linuxfoundation.org>
+In-Reply-To: <20230223130423.369876969@linuxfoundation.org>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Fri, 24 Feb 2023 12:50:55 -0500
+Message-ID: <CA+pv=HPhxmBG37wsjeem80bAK9W9wATO4DbXx09JHHLYHSVnwA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 0/7] 4.14.307-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,11 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=217083
+On Thu, Feb 23, 2023 at 8:04 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.307 release.
+> There are 7 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000.
+> Anything received after that time might be too late.
 
-I got this error after upgrading a Debian machine (x86-64) from Stretch 
-to Buster. Upgrade is successful, but the next boot it crashes.
+4.14.307-rc1 compiled and booted on my x86_64 test system. No errors
+or regressions.
 
-The machine is an Asus B360M-A with an Intel i7-8700 CPU and 16GB DDR4.
-My kernel is 4.20.17 (from kernel.org, not a distribution kernel), but I 
-tried with 4.19.273 and 5.10.169 with the same .config.
+Tested-by: Slade Watkins <srw@sladewatkins.net>
+
+Thanks,
+-- Slade
