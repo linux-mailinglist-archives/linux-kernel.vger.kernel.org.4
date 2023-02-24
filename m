@@ -2,146 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7F86A22A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7D56A2297
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBXT6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S229705AbjBXT6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjBXT6m (ORCPT
+        with ESMTP id S229720AbjBXT6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:58:42 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6962D231CC;
-        Fri, 24 Feb 2023 11:58:21 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OI9JNY010165;
-        Fri, 24 Feb 2023 19:57:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=2KeglNGIGTjZRWimPDaOKRsBt+lnwUieaIjlGkQbDEM=;
- b=RpNaI/Y1nYfjLN8TRjethsyGt9gGoMdllJpVCokcq0AaafYosEuJQvXZu3Tc2/oP0I24
- sRd5CiDDT/rtCFZM+2scXbQl+vQPIqzWenSPsnqYo8sL4gVZVzDvyjlo5Xq6PMqMP7il
- 1qyBZUpismUbw+ACFgH3JKd38WsACWkEH662u6lpTq94eKM1UfNXHAPD8RzHHQbW32C9
- DMd+0XQoIThuBt0cRkLdmR7n90nwNZPjjLjZ30EQ4rfD1YlX6ewHFND4HwFK2Kj+PQmP
- oqqfx28KRh4ECgpHV7B6TiFCkRrUYCxPszqtYinpokI1y9fDdD4RI0KQGeiOnP+Egw2N pw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwybwnrn4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 19:57:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OJvnAr023543
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 19:57:49 GMT
-Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 24 Feb 2023 11:57:48 -0800
-From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        "Elliot Berman" <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Siddharth Gupta <sidgup@codeaurora.org>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: [PATCH v4 2/2] remoteproc: qcom: Add full coredump fallback mechanism
-Date:   Fri, 24 Feb 2023 11:57:31 -0800
-Message-ID: <20230224195731.324-3-quic_gokukris@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230224195731.324-1-quic_gokukris@quicinc.com>
-References: <20230224195731.324-1-quic_gokukris@quicinc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T2g4fZZ1O8NP_BAvboV88nSDrTf7vvPG
-X-Proofpoint-ORIG-GUID: T2g4fZZ1O8NP_BAvboV88nSDrTf7vvPG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_14,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=976 malwarescore=0 impostorscore=0
- bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302240158
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 14:58:02 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDF5DCC4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:58:01 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536cad819c7so5878857b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677268680;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=p3M/U/RdbIKj9BRgWDZd3ub2xYwsuU8WGv3/rWkYSus=;
+        b=eV22FgQY4o1TSX4cv+YeD6o76tNMkWk142BEeFVgpk4xF9u+7stqQA3Sl9FCfsQKee
+         PwcyeHd4nbwK8yt2juTWJPeXWO1UQM5vrI85Ze8J/m11gIiGW1q4f0O+CYBbyMJm/kRV
+         eyfo6/nu6IBGt9n2SQdIhuZik4w++NofHsebKLN/5MtNpusK2O77g82R1uvfnVcs6rTO
+         X3vuq9gdXxOIynyuVLrFALUvBW7PjyG2rbQiyxAEjH2CNSd+Tbj5gok30D6J3SJOWjdT
+         MKtbGoK/M7hkxlwO6SqpSsmgcR1aPwvMak0Oc1mXK5qyQLTj5nm7MXZD7FuJuPjwogwb
+         /GXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677268680;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p3M/U/RdbIKj9BRgWDZd3ub2xYwsuU8WGv3/rWkYSus=;
+        b=171UvGwjkWPCt2RlUw9p5PhWYtJJob/gF3JW6tFXQIWR0EL254rQLV29x6KetjY43d
+         8l3uz4sSh1J3u6LmcngfipulXNsyNAicrLXGJWuEpoZKpCeAdZEWwtFXFa/GrBbWJWm2
+         tW1Rg5GHATh5EOwCamOmMq5mVPY71gzsh0gQMl5eb2nb+Zg1poxIGN5BcrIRZMQV+EWj
+         sXPhtzx4jkCM32AO6OLAYtZAsHg/PIUBncQ/Y5cxXBg7dZmuIzAYWeto/kPnyoBQWcEw
+         uFUMRnojMFX7YHQwIvIPqDyMujGM3mCKSNwmN0qhSsO9vx9x1L1j8DV/z73zPFFVNlAe
+         2CtA==
+X-Gm-Message-State: AO0yUKVZTyi4OrAHcdR2SZziAsD7dKJMIoApFoYZXTGnA5l244R5+JlA
+        kxh2mn8YUfN5ZqfCJ3/ikU1FvSaDWcI=
+X-Google-Smtp-Source: AK7set8wMrOqDfT7CZP+3w1w3JB04DQEg+TLIn3ovFUbTFv2EDk6St0AtACcJNEYP2Xs81UYpoyOMbQ6C/Q=
+X-Received: from sdalvi-android.chi.corp.google.com ([2620:15c:2:a:1808:5921:faf8:7a68])
+ (user=sdalvi job=sendgmr) by 2002:a05:6902:1003:b0:9f5:af6b:6f69 with SMTP id
+ w3-20020a056902100300b009f5af6b6f69mr699242ybt.5.1677268680297; Fri, 24 Feb
+ 2023 11:58:00 -0800 (PST)
+Date:   Fri, 24 Feb 2023 13:57:45 -0600
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230224195749.818282-1-sdalvi@google.com>
+Subject: [PATCH v1 0/2] Skip waiting for link up during probe
+From:   Sajid Dalvi <sdalvi@google.com>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Sajid Dalvi <sdalvi@google.com>, kernel-team@android.com,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Gupta <sidgup@codeaurora.org>
+When the Root Complex is probed, the default behavior is to spin in a loop
+waiting for the link to come up. In some systems the link is not brought up
+during probe, but later in the context of an end-point turning on. This
+patch adds a device tree property to the Synopsis designware root
+controller to skip this loop.
 
-If a remoteproc's firmware does not support minidump but the driver
-adds an ID, the minidump driver does not collect any coredumps when
-the remoteproc crashes. This hinders the purpose of coredump
-collection. This change adds a fallback mechanism in the event of a
-crash.
+Sajid Dalvi (2):
+  dt-bindings: PCI: dwc: Add snps,skip-wait-link-up
+  PCI: dwc: Skip waiting for link up on probe
 
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
-Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
----
- drivers/remoteproc/qcom_common.c   | 13 +++++++++++--
- drivers/remoteproc/qcom_q6v5_pas.c |  1 +
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml | 8 ++++++++
+ drivers/pci/controller/dwc/pcie-designware-host.c       | 5 +++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-index 7da3259be14a..280a5a821dca 100644
---- a/drivers/remoteproc/qcom_common.c
-+++ b/drivers/remoteproc/qcom_common.c
-@@ -173,12 +173,21 @@ void qcom_minidump(struct rproc *rproc, unsigned int minidump_id,
- 	 */
- 	if (subsystem->regions_baseptr == 0 ||
- 	    le32_to_cpu(subsystem->status) != 1 ||
--	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED ||
--	    le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
-+	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED) {
-+		return rproc_coredump(rproc);
-+	}
-+
-+	if (le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
- 		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
- 		return;
- 	}
- 
-+	/**
-+	 * Clear out the dump segments populated by parse_fw before
-+	 * re-populating them with minidump segments.
-+	 */
-+	rproc_coredump_cleanup(rproc);
-+
- 	ret = qcom_add_minidump_segments(rproc, subsystem, rproc_dumpfn_t);
- 	if (ret) {
- 		dev_err(&rproc->dev, "Failed with error: %d while adding minidump entries\n", ret);
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 27d3a6f8c92f..d065f99b4c32 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -442,6 +442,7 @@ static const struct rproc_ops adsp_minidump_ops = {
- 	.start = adsp_start,
- 	.stop = adsp_stop,
- 	.da_to_va = adsp_da_to_va,
-+	.parse_fw = qcom_register_dump_segments,
- 	.load = adsp_load,
- 	.panic = adsp_panic,
- 	.coredump = adsp_minidump,
 -- 
-2.39.2
+2.39.2.637.g21b0678d19-goog
 
