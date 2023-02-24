@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EFA6A170D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1C56A170E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBXH0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S229706AbjBXH0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjBXHZ7 (ORCPT
+        with ESMTP id S229609AbjBXH0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:25:59 -0500
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD7F5EEDF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:25:53 -0800 (PST)
-Received: by mail-io1-f78.google.com with SMTP id z5-20020a6b5c05000000b007447572f3f8so7692914ioh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:25:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=13ZPUloYEvdQxbJ02OlHlYBlVfQKqarZGRElgDtSV3Y=;
-        b=wUFlDp2vJBM4mRt2DcrCjCo75Luj5hSoRwArUmqvlgi2G2XbRdIUiN2tIMJzuZ+YrL
-         s4ErM9x5vc+pTVnzKE0O+ifA2Tr60V0kzaiIpkqRJ9OgWzU0CuvTP04F6zI1u2sE50J7
-         iAZbdd+Ygc+0LlOYqZ9vi0fz1hTwtGr25hy8TVrgYzVxCtdT3Bsyk0kALZwFyzrrx2NQ
-         ZUzV1xVmhm4CuDi1kyT2wZta65LTnd4MJk7dHhybuBpBqsE9OFc8PL2889uEGaJQvQeo
-         dlnkAf+U+O38AHtS9psqBh6NIZTh2xk9TDMa9zFjUE/9pekVhtTw9DjbQtocOpXBbdbo
-         2TEQ==
-X-Gm-Message-State: AO0yUKVxGpH/Mu8ty4QxUb1pL8zkjNYfOjuL5LSPAmoGEN084anuj3Td
-        AsQaOCvZfpJz3gjo0H6coZttkKU4+DmZEcwVDKxlFEjmmiyf
-X-Google-Smtp-Source: AK7set8/wVhN5vLN9i64rHqdzUpgXR69U//u9Dn+IB7mW0AtYBWP5xJVUQxWzojyDiTeuYvk/L8Ru7tnNUEKidgdanwu2OLNfa4D
+        Fri, 24 Feb 2023 02:26:32 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722391EBDF;
+        Thu, 23 Feb 2023 23:26:31 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C94FE4248B;
+        Fri, 24 Feb 2023 07:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1677223589;
+        bh=nKGhps5DD27EJVZDy1ee9VeyZsp+Mb8LJV4KHerqhaA=;
+        h=From:Subject:Date:To:Cc;
+        b=zexXCZty7onfsKHpn30fdyS96xk4THjzQTKr2yMbkM3zdVyNT+OA+28iGZxOuXjTx
+         nArZgrIBmwygvgzL28XQLDWkm2G5/QhIuU21ROMLCQOtzeUtRuiAiHTmdZ7lIFqYIw
+         7VheS/1xAPZ4H8nFXDPS4FWlazjdlSNp53uF8s4JSns+c+7KVr5m5NhqxLyl8VWRNL
+         rKcBCq2S+5PapCd8ktIXzn3vemb3Uih8oCBeI/ms00XL6SmFiry3i/WMtR6fsKTPdh
+         fbtOs6YM8w3+sAfhUD6q3e8MoqPMEyAN9jel8CeCqmfBd/8Uehgh+2z3Ycql/tLPLt
+         ztIQDkKrtAgig==
+From:   Asahi Lina <lina@asahilina.net>
+Subject: [PATCH 0/3] rust: Miscellaneous macro improvements
+Date:   Fri, 24 Feb 2023 16:25:54 +0900
+Message-Id: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4819:b0:3e9:4d91:5c9c with SMTP id
- cp25-20020a056638481900b003e94d915c9cmr671886jab.1.1677223553024; Thu, 23 Feb
- 2023 23:25:53 -0800 (PST)
-Date:   Thu, 23 Feb 2023 23:25:53 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000016493d05f56d0aae@google.com>
-Subject: [syzbot] [block?] WARNING in blkdev_put (2)
-From:   syzbot <syzbot+2bcc0d79e548c4f62a59@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIJm+GMC/x2NQQ6DMAwEv4J8rtWQoLbqV6oenGDAhwZkl6oS4
+ u8kHGd3R7uBsQobPJsNlH9iMucC7aWBNFEeGaUvDN754LzvUFf74oeSzoa3EPo4PO6OuIViRDL
+ GqJTTVJ1xWa/nvOa1X5QH+Z9vr/e+HwCnv259AAAA
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>,
+        Finn Behrens <me@kloenk.dev>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677223586; l=1588;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=nKGhps5DD27EJVZDy1ee9VeyZsp+Mb8LJV4KHerqhaA=;
+ b=VdMC491l3CXJjysB+gN/JRXZFdOkZ4zQ6Pu9earrHBjrMRmDFmisUcEWdeXDPkPlavbDFC/SK
+ UfGto5/oEoUANXtk8nLj3pp1JouQCTSXJHJny8JsYj1HO85DU1d3E73
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi everyone!
 
-syzbot found the following issue on:
+This short series is part of the set of dependencies for the drm/asahi
+Apple M1/M2 GPU driver.
 
-HEAD commit:    d2af0fa4bfa4 Add linux-next specific files for 20230220
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=170d2ef0c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=594e1a56901fd35d
-dashboard link: https://syzkaller.appspot.com/bug?extid=2bcc0d79e548c4f62a59
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1227e837480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122d8ca0c80000
+The first two patches make concat_idents!(bindings::foo, bar) work.
+I use this later in the DRM abstractions to construct DRM IOCTL command
+names [1], which avoids having to import all of bindings::*.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/83b78c113e8e/disk-d2af0fa4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d59f9b2c9091/vmlinux-d2af0fa4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2726c16c1d3b/bzImage-d2af0fa4.xz
+The third patch allows specifying multiple module aliases. Since modules
+can have multiple aliases, the macro naturally needs to be able to take
+an array instead of a single alias. I don't use this in the current
+iteration of the driver, since I introduced proper support for automatic
+modpost alias generation for Rust modules, but it can be useful both to
+remove that support as a blocking factor (we can specify aliases manually
+as a fallback), and for modules which need extra aliases not covered by
+device ID tables.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2bcc0d79e548c4f62a59@syzkaller.appspotmail.com
+[1] https://github.com/AsahiLinux/linux/blob/gpu/rebase-20230224/rust/kernel/drm/ioctl.rs#L101
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5080 at block/bdev.c:845 blkdev_put+0x6ca/0x770 block/bdev.c:845
-Modules linked in:
-CPU: 1 PID: 5080 Comm: syz-executor158 Not tainted 6.2.0-rc8-next-20230220-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-RIP: 0010:blkdev_put+0x6ca/0x770 block/bdev.c:845
-Code: 48 8b 3c 24 e8 b7 7c da fd e9 99 fa ff ff e8 8d 7c da fd e9 cf fb ff ff 4c 89 ff e8 80 7c da fd e9 80 fd ff ff e8 e6 ea 88 fd <0f> 0b e9 ef fc ff ff e8 8a 7c da fd e9 f3 fa ff ff 48 8b 3c 24 e8
-RSP: 0018:ffffc90003cefc88 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888144c49600 RCX: 0000000000000000
-RDX: ffff88807c2f8000 RSI: ffffffff83fbb8da RDI: 0000000000000005
-RBP: ffff888146bc0000 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000000 R12: 00000000484e009f
-R13: ffff888144c49628 R14: ffff888146bc0460 R15: ffff888144c49ab8
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb645428948 CR3: 000000000c571000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- blkdev_close+0x68/0x80 block/fops.c:507
- __fput+0x27c/0xa90 fs/file_table.c:321
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xb42/0x2b60 kernel/exit.c:869
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
- __do_sys_exit_group kernel/exit.c:1030 [inline]
- __se_sys_exit_group kernel/exit.c:1028 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1028
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb6453e4639
-Code: Unable to access opcode bytes at 0x7fb6453e460f.
-RSP: 002b:00007ffcfacb3ec8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007fb645458270 RCX: 00007fb6453e4639
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb645458270
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-
-
+Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Asahi Lina (3):
+      rust: macros: Make expect_punct() return the Punct directly
+      rust: macros: concat_idents: Allow :: paths in the first argument
+      rust: macros: Allow specifying multiple module aliases
+ rust/macros/concat_idents.rs | 24 +++++++++++++++++++++---
+ rust/macros/helpers.rs       | 14 +++++++++++---
+ rust/macros/module.rs        | 34 +++++++++++++++++++++++++++-------
+ 3 files changed, 59 insertions(+), 13 deletions(-)
+---
+base-commit: 83f978b63fa7ad474ca22d7e2772c5988101c9bd
+change-id: 20230224-rust-macros-633dbf870ae1
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thank you,
+~~ Lina
+
