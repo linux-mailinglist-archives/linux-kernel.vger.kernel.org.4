@@ -2,127 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44F76A1617
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CAD6A1627
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjBXFAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 00:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S229653AbjBXFOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 00:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBXFAk (ORCPT
+        with ESMTP id S229470AbjBXFOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 00:00:40 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810C019F3C;
-        Thu, 23 Feb 2023 21:00:39 -0800 (PST)
+        Fri, 24 Feb 2023 00:14:02 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F4D26CC3;
+        Thu, 23 Feb 2023 21:14:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677214839; x=1708750839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tZQIvNF2fQT5ZTTmF4013c95rvzv4D1YYc0RCv0VrnQ=;
-  b=B2KrAyOjPPn1/CV8cITS3US006iM4JFw2c6QYI99JWYj2bcR7pbgrvJY
-   cjbb1F4b+M5HEgGE56kR7+3D6MMiBvh+RVChN0SHEZZymDOw71v0QrX1Q
-   CBumWGMeuucDT9F8zO4HtQtHx4dd0QdsZuYDU8FBiObPPShNxyATv/Ta5
-   HGlnCEEAPxD2pJu1dGiHPteP8WsTo6KqPlbg9GxQfYj8ddSW2A9OSZZol
-   uasvzEJpuqmLwpWG+qulqRNVWfBs2x7iSpb90eF/+T1rRqgedmVYDVP8I
-   ge+UAn1XykjhEiupD9/elP/rPZSKpCQtPFnTsTS4YW3dyhy8aMnfVg3gL
+  t=1677215641; x=1708751641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rafueas/Vcfut9/LWCGFPB0Qut6KMM0NFlHvmexhzNQ=;
+  b=gbh9Wc5dy0Mp4SSdEsScFUmYasx6r98aesk+Rj7Kxqwv7ESVivJWNwQn
+   9BLFpndI1i8EA++sWUjh1whkFbaG1v+SVPXhCn/up1yjs/dde6HOkIwSz
+   CJM/C6A8uJhffUHfB+oo2Sgdq9m3cNBHLY+ge3w8W4+rvEQ8t6HwGcyXv
+   TB8yjf0tF6rtnRsCUzyyU1X8cPJ8YjxNcX/zm6eROsgyQoGEB/2w0c13h
+   3SGt07k2SWrVO67KwUwxJlmYYcTkOr305sJ095lNNSxJV1l/POCSInHXU
+   qfythkNNv+eldXDKKatvfQaNi67YHcGLgyUL0LvjfxeTFyAOVy0FGL2st
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="317156415"
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334819208"
 X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="317156415"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 21:00:39 -0800
+   d="scan'208";a="334819208"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 21:13:53 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="782206623"
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918304007"
 X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="782206623"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2023 21:00:37 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVQCC-000290-36;
-        Fri, 24 Feb 2023 05:00:36 +0000
-Date:   Fri, 24 Feb 2023 13:00:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c:38:32:
- warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned
- int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int,
- void *)') converts to incompatible f...
-Message-ID: <202302241258.Q3rgDf4M-lkp@intel.com>
+   d="scan'208";a="918304007"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 21:13:49 -0800
+Date:   Fri, 24 Feb 2023 13:02:49 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
+        trix@redhat.com, ronak.jain@xilinx.com, gregkh@linuxfoundation.org,
+        tanmay.shah@xilinx.com, mathieu.poirier@linaro.org,
+        ben.levinsky@amd.com, rajan.vaja@xilinx.com,
+        harsha.harsha@xilinx.com, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] fpga: zynqmp-fpga: Adds status interface
+Message-ID: <Y/hE+dqK0OzuExJ0@yilunxu-OptiPlex-7050>
+References: <20230217115036.2617396-1-nava.kishore.manne@amd.com>
+ <20230217115036.2617396-3-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230217115036.2617396-3-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On 2023-02-17 at 17:20:36 +0530, Nava kishore Manne wrote:
+> Adds status interface for zynqmp-fpga, It's a read only interface
 
-FYI, the error/warning still remains.
+s/,/.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d2980d8d826554fa6981d621e569a453787472f8
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   11 months ago
-config: hexagon-randconfig-r041-20230224 (https://download.01.org/0day-ci/archive/20230224/202302241258.Q3rgDf4M-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/vcodec/
+> which allows the user to get the Programmable Logic(PL) configuration
+> status.
+> 
+> Usage:
+> To read the Programmable Logic(PL) configuration status
+> 	cat /sys/bus/platform/drivers/zynqmp_fpga_manager/
+> firmware:zynqmp-firmware:pcap/status
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302241258.Q3rgDf4M-lkp@intel.com/
+Don't wrap here.
 
-All warnings (new ones prefixed by >>):
+> 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> hanges for v2:
+>               - Updated status messages handling logic as suggested by Xu Yilun.
+> 
+> Changes for v3:
+>               - Updated status interface handling logic (Restrict the status
+>                 interface to the device-specific instead of handled by the core)
+>                 as suggested by Xu Yilun.
+> 
+> Changes for v4:
+>               - Limit the error strings to one word for each as suggested by
+>                 Xu Yilun
+> 
+> Changes for v5:
+>               - Added new sysfs-driver-zynqmp-fpga file.
+> 
+> Changes for v6:
+>               - Updated the sysfs interface to cat /sys/bus/platform/drivers/...
+> 		as suggested by Xu Yilun.
+>               - Exported raw hex value instead of multiple error strings
+>                 as suggested by Greg.
+> 
+>  .../ABI/testing/sysfs-driver-zynqmp-fpga      | 72 +++++++++++++++++++
+>  drivers/fpga/zynqmp-fpga.c                    | 23 ++++++
+>  2 files changed, 95 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> new file mode 100644
+> index 000000000000..af5d42916dd1
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> @@ -0,0 +1,72 @@
+> +What:		/sys/bus/platform/drivers/zynqmp_fpga_manager/firmware:zynqmp-firmware:pcap/status
+> +Date:		Jan 2023
+> +KernelVersion:	6.2
 
->> drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c:38:32: warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
-           ipi_handler_t handler_const = (ipi_handler_t)handler;
-                                         ^~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Please update the version & Data, I expect this could be merged in next
+cycle, so 6.4
 
+> +Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
+> +Description:	(RO) Read fpga status.
+> +		Read returns a hexadecimal value that tells the current status
+> +                of the FPGA device. Each bit position in the status value is
+> +                described Below(see ug570 chapter 9).
 
-vim +38 drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
+Please provide the URL for ug570, the commit message in Patch #0 that
+contains the info will not appear in mainline.
 
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  27  
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  28  static int mtk_vcodec_vpu_set_ipi_register(struct mtk_vcodec_fw *fw, int id,
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  29  					   mtk_vcodec_ipi_handler handler,
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  30  					   const char *name, void *priv)
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  31  {
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  32  	/*
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  33  	 * The handler we receive takes a void * as its first argument. We
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  34  	 * cannot change this because it needs to be passed down to the rproc
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  35  	 * subsystem when SCP is used. VPU takes a const argument, which is
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  36  	 * more constrained, so the conversion below is safe.
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  37  	 */
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13 @38  	ipi_handler_t handler_const = (ipi_handler_t)handler;
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  39  
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  40  	return vpu_ipi_register(fw->pdev, id, handler_const, name, priv);
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  41  }
-46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  42  
+> +
+> +		======================  ==============================================
+> +		BIT(0)			0: No CRC error
+> +					1: CRC error
+> +
+> +		BIT(1)			0: Decryptor security not set
+> +					1: Decryptor security set
+> +
+> +		BIT(2)			0: MMCMs/PLLs are not locked
+> +					1: MMCMs/PLLs are locked
+> +
+> +		BIT(3)			0: DCI not matched
+> +					1: DCI matched
+> +
+> +		BIT(4)			0: Start-up sequence has not finished
+> +					1: Start-up sequence has finished
+> +
+> +		BIT(5)			0: All I/Os are placed in High-Z state
+> +					1: All I/Os behave as configured
+> +
+> +		BIT(6)			0: Flip-flops and block RAM are write disabled
+> +					1: Flip-flops and block RAM are write enabled
+> +
+> +		BIT(7)			0: GHIGH_B_STATUS asserted
+> +					1: GHIGH_B_STATUS deasserted
+> +
+> +		BIT(8) to BIT(10)	Status of the mode pins
+> +
+> +		BIT(11)			0: Initialization has not finished
+> +					1: Initialization finished
+> +
+> +		BIT(12)			Value on INIT_B_PIN pin
+> +
+> +		BIT(13)			0: Signal not released
+> +					1: Signal released
+> +
+> +		BIT(14)			Value on DONE_PIN pin.
+> +
+> +		BIT(15)			0: No IDCODE_ERROR
+> +					1: IDCODE_ERROR
+> +
+> +		BIT(16)			0: No SECURITY_ERROR
+> +					1: SECURITY_ERROR
+> +
+> +		BIT(17)			System Monitor over-temperature if set
+> +
+> +		BIT(18) to BIT(20)	Start-up state machine (0 to 7)
+> +					Phase 0 = 000
+> +					Phase 1 = 001
+> +					Phase 2 = 011
+> +					Phase 3 = 010
+> +					Phase 4 = 110
+> +					Phase 5 = 111
+> +					Phase 6 = 101
+> +					Phase 7 = 100
+> +
+> +		BIT(25) to BIT(26)	Indicates the detected bus width
+> +					00 = x1
+> +					01 = x8
+> +					10 = x16
+> +					11 = x32
+> +		======================  ==============================================
+> +
+> +		The other bits are reserved.
+> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+> index c60f20949c47..0c58ca27319f 100644
+> --- a/drivers/fpga/zynqmp-fpga.c
+> +++ b/drivers/fpga/zynqmp-fpga.c
+> @@ -77,6 +77,28 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
+>  	return FPGA_MGR_STATE_UNKNOWN;
+>  }
+>  
+> +static ssize_t status_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	u32 status;
+> +	int ret;
+> +
+> +	ret = zynqmp_pm_fpga_get_config_status(&status);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return sprintf(buf, "0x%x\n", status);
 
-:::::: The code at line 38 was first introduced by commit
-:::::: 46233e91fa24a91bffca0680b1c55282ba601918 media: mtk-vcodec: move firmware implementations into their own files
+sysfs_emit?
 
-:::::: TO: Alexandre Courbot <acourbot@chromium.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> +}
+> +
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+No blank line please.
+
+> +static DEVICE_ATTR_RO(status);
+> +
+> +static struct attribute *zynqmp_fpga_attrs[] = {
+> +	&dev_attr_status.attr,
+> +	NULL,
+> +};
+> +
+
+Same.
+
+Thanks,
+Yilun
+
+> +ATTRIBUTE_GROUPS(zynqmp_fpga);
+> +
+>  static const struct fpga_manager_ops zynqmp_fpga_ops = {
+>  	.state = zynqmp_fpga_ops_state,
+>  	.write_init = zynqmp_fpga_ops_write_init,
+> @@ -113,6 +135,7 @@ static struct platform_driver zynqmp_fpga_driver = {
+>  	.driver = {
+>  		.name = "zynqmp_fpga_manager",
+>  		.of_match_table = of_match_ptr(zynqmp_fpga_of_match),
+> +		.dev_groups = zynqmp_fpga_groups,
+>  	},
+>  };
+>  
+> -- 
+> 2.25.1
+> 
