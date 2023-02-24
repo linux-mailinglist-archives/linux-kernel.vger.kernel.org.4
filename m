@@ -2,213 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CC56A226F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC3D6A2275
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjBXTlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S229639AbjBXTm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjBXTlP (ORCPT
+        with ESMTP id S229568AbjBXTm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:41:15 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08C86EB12;
-        Fri, 24 Feb 2023 11:41:13 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31O8hKYg018518;
-        Fri, 24 Feb 2023 19:41:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=piuuc2wyWBVCiJ95WfQWMKtEKTQoo3gZy+3qcnD1EOU=;
- b=j4uLb1b/Ox9CVHduWFk3GhSW9P9WaOsAPQnZ9wkkoAi9h2YdGmNSLEd+j/Tz+MFXK5nA
- lBADEDZu2zffWInrykx2zxpuIZ0rCWSgE81qIrBLW2v6L03oi+MH5uOcrgKdSUgZFrOk
- HU293AMDtiCpHc0ct5vK6eiq6l/CLgnG4DIu40fBO8NqjSNvlyK25v0rSaLTFUjXaxQ9
- oW99UtzVFzjaax+SAqLxQybNReEbBxyTaxCtNpM9HcUjPXYQoFyBUiNGa5WN2hJtxElF
- +y1td/4wZm5sJQkvrRl9XZDH+swFcifYwnubfxNILoGXiaddD+UIt4oHdOfIuilFwE1s 5w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxsy7sv99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 19:41:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OJf3LG026677
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 19:41:03 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 24 Feb 2023 11:41:02 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH 2/2] drm/msm/dsi: use new dpu_dsc_populate_dsc_config()
-Date:   Fri, 24 Feb 2023 11:40:47 -0800
-Message-ID: <1677267647-28672-3-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
+        Fri, 24 Feb 2023 14:42:26 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46FC6F022
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:42:00 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id q23so178563pgt.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ijgekmVB2QKb1HH14nlyibdFD+y7KoE1WivpnqCwi0o=;
+        b=8W3znN4bYEVoTCQAc/uMRjujf4tKqTj3EiBKNI+wfWaRm5qjLPlR0oMqeMdxW6vJZ8
+         YPM2RYXqduJdfmV7SdABPZI34jixxdMHFaqyVMNSEUkI0/vrgtZdPKEfG82rna1g/yXI
+         /tuAKri4OjZbgUNMadfZBFB8MF1SZIJkhXXa4KaReZ+4KHcSHotIgTj4zor+TmQttfCE
+         PTbi+mTrVJ2b7pSXNeFQ8AugjzDv5N4KzlC+COpe4qpZp4WtLsxLS/LlyqlZNREVuAzM
+         2UdkYAmvNFlC6eu0Z5kyIVrP7meUvQGCNJabd3Ruu78/h3EoDTiL5KFd81W3ChA0Cv0M
+         BFOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ijgekmVB2QKb1HH14nlyibdFD+y7KoE1WivpnqCwi0o=;
+        b=LMHRmKo4sPYk7uNlxbrbBmxsKCKxT/5AouPCF6+P1ElCjIwbWzmdccgPr04L88bLUK
+         H8/4SCqEQdL2PHPS5V/pxCHJgkZIDyysNx4k5beWzJOcdJML7nFFPBEuU/SsaTPsP5Qk
+         Ffjdph8f1UvevOaOmQLRjhVnjjiSB8h4rMNcWQVz5iIXjgjqhQEUyrZvDEbxzqWtVjqR
+         +MDLKfp4Blp2piLBfhqS8pszZUFJuC/3H+REi6zrngdp1xf5Z7+gMLxQyrFIQ2zzR/jC
+         LqwLuly21qKGTPMov2GVL7Kzu2mM3KHPKClv6fY4qF60moi5Whh46MRud8xCuDCYK2jj
+         dclg==
+X-Gm-Message-State: AO0yUKVXTcBskfLjKxw68XKuvJRsAhynKPFcv4Hu4Dv2PCBMgnlVNzSx
+        FPcIu/ZKoca4049ouNFdPXCJog==
+X-Google-Smtp-Source: AK7set9SRI3aeT+VUPA2REv2kUyLXrOxdOlZ0hD6wdvvODIaDy0UKOPSOUXEdhe1KeSRw51fnxcjmw==
+X-Received: by 2002:aa7:9841:0:b0:5e2:3086:f977 with SMTP id n1-20020aa79841000000b005e23086f977mr3868360pfq.2.1677267720030;
+        Fri, 24 Feb 2023 11:42:00 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k10-20020aa7820a000000b005d791692727sm5044111pfi.191.2023.02.24.11.41.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 11:41:59 -0800 (PST)
+Message-ID: <6673f9e6-fa00-b929-02c1-5e0f293dfa0a@kernel.dk>
+Date:   Fri, 24 Feb 2023 12:41:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -CeI4-AXY3I53xWRkXWvhhuSztR7-WAH
-X-Proofpoint-ORIG-GUID: -CeI4-AXY3I53xWRkXWvhhuSztR7-WAH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_14,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302240155
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3 1/2] io_uring: Move from hlist to io_wq_work_node
+Content-Language: en-US
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Breno Leitao <leitao@debian.org>, asml.silence@gmail.com,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gustavold@meta.com, leit@meta.com, kasan-dev@googlegroups.com
+References: <20230223164353.2839177-1-leitao@debian.org>
+ <20230223164353.2839177-2-leitao@debian.org> <87wn48ryri.fsf@suse.de>
+ <8404f520-2ef7-b556-08f6-5829a2225647@kernel.dk> <87mt52syls.fsf@suse.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <87mt52syls.fsf@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-use new introduced dpu_dsc_populate_dsc_config() to calculate
-and populate drm_dsc_info instead of hard code value.
+On 2/24/23 11:32?AM, Gabriel Krisman Bertazi wrote:
+> Jens Axboe <axboe@kernel.dk> writes:
+> 
+>> On 2/23/23 12:02?PM, Gabriel Krisman Bertazi wrote:
+>>> Breno Leitao <leitao@debian.org> writes:
+>>>
+>>>> Having cache entries linked using the hlist format brings no benefit, and
+>>>> also requires an unnecessary extra pointer address per cache entry.
+>>>>
+>>>> Use the internal io_wq_work_node single-linked list for the internal
+>>>> alloc caches (async_msghdr and async_poll)
+>>>>
+>>>> This is required to be able to use KASAN on cache entries, since we do
+>>>> not need to touch unused (and poisoned) cache entries when adding more
+>>>> entries to the list.
+>>>>
+>>>
+>>> Looking at this patch, I wonder if it could go in the opposite direction
+>>> instead, and drop io_wq_work_node entirely in favor of list_head. :)
+>>>
+>>> Do we gain anything other than avoiding the backpointer with a custom
+>>> linked implementation, instead of using the interface available in
+>>> list.h, that developers know how to use and has other features like
+>>> poisoning and extra debug checks?
+>>
+>> list_head is twice as big, that's the main motivation. This impacts
+>> memory usage (obviously), but also caches when adding/removing
+>> entries.
+> 
+> Right. But this is true all around the kernel.  Many (Most?)  places
+> that use list_head don't even need to touch list_head->prev.  And
+> list_head is usually embedded in larger structures where the cost of
+> the extra pointer is insignificant.  I suspect the memory
+> footprint shouldn't really be the problem.
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dsi/dsi_host.c | 78 ++++++--------------------------------
- 1 file changed, 12 insertions(+), 66 deletions(-)
+I may be in the minority here in caring deeply about even little details
+in terms of memory foot print and how many cachelines we touch... Eg if
+we can embed 8 bytes rather than 16, then why not? Particularly for
+cases where we may have a lot of these structures.
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 31ad193..5f3f84f 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights reserved
-  */
- 
- #include <linux/clk.h>
-@@ -21,7 +22,6 @@
- 
- #include <video/mipi_display.h>
- 
--#include <drm/display/drm_dsc_helper.h>
- #include <drm/drm_of.h>
- 
- #include "dsi.h"
-@@ -31,6 +31,7 @@
- #include "msm_kms.h"
- #include "msm_gem.h"
- #include "phy/dsi_phy.h"
-+#include "dpu_dsc_helper.h"
- 
- #define DSI_RESET_TOGGLE_DELAY_MS 20
- 
-@@ -1819,29 +1820,8 @@ static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
- 	return -EINVAL;
- }
- 
--static u32 dsi_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
--	0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54, 0x62,
--	0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
--};
--
--/* only 8bpc, 8bpp added */
--static char min_qp[DSC_NUM_BUF_RANGES] = {
--	0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13
--};
--
--static char max_qp[DSC_NUM_BUF_RANGES] = {
--	4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 15
--};
--
--static char bpg_offset[DSC_NUM_BUF_RANGES] = {
--	2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
--};
--
- static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc_config *dsc)
- {
--	int i;
--	u16 bpp = dsc->bits_per_pixel >> 4;
--
- 	if (dsc->bits_per_pixel & 0xf) {
- 		DRM_DEV_ERROR(&msm_host->pdev->dev, "DSI does not support fractional bits_per_pixel\n");
- 		return -EINVAL;
-@@ -1852,50 +1832,16 @@ static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc
- 		return -EOPNOTSUPP;
- 	}
- 
--	dsc->rc_model_size = 8192;
--	dsc->first_line_bpg_offset = 12;
--	dsc->rc_edge_factor = 6;
--	dsc->rc_tgt_offset_high = 3;
--	dsc->rc_tgt_offset_low = 3;
--	dsc->simple_422 = 0;
--	dsc->convert_rgb = 1;
--	dsc->vbr_enable = 0;
--
--	/* handle only bpp = bpc = 8 */
--	for (i = 0; i < DSC_NUM_BUF_RANGES - 1 ; i++)
--		dsc->rc_buf_thresh[i] = dsi_dsc_rc_buf_thresh[i];
--
--	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
--		dsc->rc_range_params[i].range_min_qp = min_qp[i];
--		dsc->rc_range_params[i].range_max_qp = max_qp[i];
--		/*
--		 * Range BPG Offset contains two's-complement signed values that fill
--		 * 8 bits, yet the registers and DCS PPS field are only 6 bits wide.
--		 */
--		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i] & DSC_RANGE_BPG_OFFSET_MASK;
--	}
--
--	dsc->initial_offset = 6144;		/* Not bpp 12 */
--	if (bpp != 8)
--		dsc->initial_offset = 2048;	/* bpp = 12 */
--
--	if (dsc->bits_per_component <= 10)
--		dsc->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
--	else
--		dsc->mux_word_size = DSC_MUX_WORD_SIZE_12_BPC;
--
--	dsc->initial_xmit_delay = 512;
--	dsc->initial_scale_value = 32;
--	dsc->first_line_bpg_offset = 12;
--	dsc->line_buf_depth = dsc->bits_per_component + 1;
--
--	/* bpc 8 */
--	dsc->flatness_min_qp = 3;
--	dsc->flatness_max_qp = 12;
--	dsc->rc_quant_incr_limit0 = 11;
--	dsc->rc_quant_incr_limit1 = 11;
--
--	return drm_dsc_compute_rc_parameters(dsc);
-+	/*
-+	 * NOTE:
-+	 * dsc->dsc_version_major, dsc->dsc_version_minor
-+	 * dsc->bits_per_pixel,
-+	 * dsc->bits_per_component,
-+	 * dsc->native_422, dsc->native_420
-+	 *
-+	 * above parameters must be populated
-+	 */
-+	return dpu_dsc_populate_dsc_config(dsc, 0);
- }
- 
- static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
+But it's of course always a tradeoff.
+
+> This specific patch is extending io_wq_work_node to io_cache_entry,
+> where the increased size will not matter.  In fact, for the cached
+> structures, the cache layout and memory footprint don't even seem to
+> change, as io_cache_entry is already in a union larger than itself, that
+> is not crossing cachelines, (io_async_msghdr, async_poll).
+
+True, for the caching case, the member size doesn't matter. At least
+immediately. Sometimes things are shuffled around and optimized further,
+and then you may need to find 8 bytes to avoid bloating the struct.
+
+> The other structures currently embedding struct io_work_node are
+> io_kiocb (216 bytes long, per request) and io_ring_ctx (1472 bytes long,
+> per ring). so it is not like we are saving a lot of memory with a single
+> linked list. A more compact cache line still makes sense, though, but I
+> think the only case (if any) where there might be any gain is io_kiocb?
+
+Yeah, the ring is already pretty big. It is still handled in cachelines
+for the bits that matter, so nice to keep them as small for the
+sections. Maybe bumping it will waste an extra cacheline. Or, more
+commonly, later additions now end up bumping into the next cacheline
+rather than still fitting.
+
+> I don't severely oppose this patch, of course. But I think it'd be worth
+> killing io_uring/slist.h entirely in the future instead of adding more
+> users.  I intend to give that approach a try, if there's a way to keep
+> the size of io_kiocb.
+
+At least it's consistent within io_uring, which also means something.
+I'd be fine with taking a look at such a patch, but let's please keep it
+outside the scope of this change.
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Jens Axboe
 
