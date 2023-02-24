@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAB16A2215
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B366D6A2221
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjBXTHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S229981AbjBXTIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjBXTHF (ORCPT
+        with ESMTP id S229462AbjBXTIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:07:05 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BF32E0E2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:07:04 -0800 (PST)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A2E326602FCE;
-        Fri, 24 Feb 2023 19:07:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677265622;
-        bh=CCW4naAHvfl4tjBL1Fqp4N6OXlt0PApFtXxoADlWb68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZnwcqKqjUfDZPu0RLuyMr6gR4w84I1K+tAaBLoztEfEqXZq0Z0vfwgpYy/xmYPUOp
-         K5GPK9VN2ekdlb1iof/C3NeauEhO9uzh60IWL/k0rxvBJIBFFnZ/h8z7XomRVjWfdG
-         ue1167sxgj6A+Xv6TaZtt3WXQTbPOp9OJOFtvFI7bVEi8GsfemGBzlx3G2bfoQYNbz
-         SKH8oEl3/aUqbFfWFNj0OCREI3MmDWkO/7AO7LIdg5gM5jpTwqIrd/FgxgxbeW59Fz
-         wGAt6i/WIhdHYDXeiVL0dGXLhhcP1RZ/oiIbskcSWTKrTND+dkaEUs5DTLZ4+YBcHf
-         Ia1TkwtumA6Ow==
-Date:   Fri, 24 Feb 2023 14:06:57 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] ASoC: mt8192: Remove spammy log messages
-Message-ID: <20230224190657.edrvkg22gz5gff4g@notapiano>
-References: <20230223-asoc-mt8192-quick-fixes-v1-0-9a85f90368e1@kernel.org>
- <20230223-asoc-mt8192-quick-fixes-v1-1-9a85f90368e1@kernel.org>
+        Fri, 24 Feb 2023 14:08:19 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F6118AAD
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:08:18 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id nv15so128339qvb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:08:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
+        b=lq6iyj0EKEfQqTglbgRZALTdd2iolrg+mZLgfyfnuVsB4IgmyuDLcMN6i6GuVZ9LOj
+         gUjXjWwISfO71A6rCgQ8gCvy5Z+2N9vcBspoVTHaicXj43zSHl/8fGnJ+/bZYMFhOfKl
+         czA/TkxP9IOjyfxU/duJ/1Ec05mPty6AAlFP55nKjbRVeb+WQIh08yHMBJYr3xf/afdL
+         16JaC4xyGt0ZTv0vRp9o4EcElhP5Jct64R9371YE5Uk3d19FNoiZTS/gV/6dcj+CYWyl
+         Kj+KZLLNoOv6Aw00qLzDtH8I7M7VrFDHjnZkTX0W2daqxnsYb+V66y4T8nXrX50j3xfn
+         HHFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
+        b=SjWpj0E///huA7NdE8xF9lsuy/AqiNZYI5xM7SEoLrV7UcwBgLQHuyVspOyn7ewPek
+         MnS0Mx45G9jwu9/l7pxT2DVujZ+o/h7ceM/LSfv0re0kVLZH3FL40Zn0kUdiDWFHO10j
+         50eCXi5ZAMqxfw7qIvFuHvfxg73ONOELKk7hHIAZhNdWRyXNkg7u90MPtsuE+PUsscRb
+         uN1tT5hB05I1YkRjmdjANGqeXWIBT3Z+YskHCX0W/hRhQ5fPxRmnG8Djbu+Y0Krb/tYs
+         vk2gPRP+C6T9DA6EIokkk16jIm2FNaCpuOu4omb74btNqnqj84elIc4Ys19HfvSZaDsP
+         shjQ==
+X-Gm-Message-State: AO0yUKX2lHS8uUsmAsZeY9x+/FmjnfSydkUQ4fl1k5VjLTzR/QOtttTL
+        T2UA/UcNKS1b8WbzDX/9b3D22fbpGn4Qi1fqR/w=
+X-Google-Smtp-Source: AK7set9UUnEX07CRkjzbPdK8zWln6h7gK+1gPjZxG4CHzOgXcW6u7Xvj+O82/dbLV0kBvhlXrrOcIPNS6Lhqikgr8Oc=
+X-Received: by 2002:ad4:5502:0:b0:56b:ee5a:89f0 with SMTP id
+ pz2-20020ad45502000000b0056bee5a89f0mr2838750qvb.7.1677265695154; Fri, 24 Feb
+ 2023 11:08:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230223-asoc-mt8192-quick-fixes-v1-1-9a85f90368e1@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ad4:438b:0:b0:572:2b9b:a3d4 with HTTP; Fri, 24 Feb 2023
+ 11:08:14 -0800 (PST)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <mrsmalingwansuzara00@gmail.com>
+Date:   Fri, 24 Feb 2023 20:08:14 +0100
+Message-ID: <CAGYVCFB5eLGTy8qSgtabJwm5wuQEYtRHCgQPchyroqv23_UNgw@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrsmalingwansuzara00[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [avamedicinemed3[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsmalingwansuzara00[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 02:03:55PM +0000, Mark Brown wrote:
-> There are a lot of info level log messages in the mt8192 ADDA driver which
-> are trivially triggerable from userspace, many in normal operation. Remove
-> these to avoid spamming the console.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-
-Probably the spammiest messages are 
-
-[   33.881459] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mt8192_afe_runtime_resume()
-[   33.889320] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mt8192_afe_enable_clock()
-[   34.029456] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mt8192_afe_runtime_suspend()
-[   34.041718] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mt8192_afe_disable_clock()
-
-from mt8192-afe-pcm.c, so I think it would make sense to get rid of those in
-this commit as well.
-
-Way less spammy, but there are also
-
-[  176.209790] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mtk_dai_tdm_hw_params(), id 43, rate 48000, channels 2, format 6, mclk_rate 24576000, bck_rate 3072000
-[  176.224149] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mtk_dai_tdm_hw_params(), out_channels_per_sdata = 2
-[  180.272153] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mtk_tdm_en_event(), name TDM_EN, event 0x8
-[  180.281462] mt8192-audio 11210000.syscon:mt8192-afe-pcm: mtk_tdm_bck_en_event(), name TDM_BCK, event 0x8, dai_id 43
-
-from mt8192-dai-tdm.c.
-
-Anyway, if you prefer to keep only changes in the ADDA driver for this commit
-that's fine too, and I can send another patch removing these other ones later.
-
-Either way,
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
+-- 
+Hello Dear
+My name is Dr Ava Smith,a medical doctor from United States.
+I have Dual citizenship which is English and French.
+I will share pictures and more details about me as soon as i get
+a response from you
+Thanks
+Ava
