@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E5A6A1D2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5346A1D36
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjBXOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S229778AbjBXOHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBXOBW (ORCPT
+        with ESMTP id S229458AbjBXOHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:01:22 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F7963A03;
-        Fri, 24 Feb 2023 06:01:21 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id n27-20020a4ad63b000000b005252709efdbso539250oon.4;
-        Fri, 24 Feb 2023 06:01:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cD2V3GFxUMbiUHqwfuQz30DRd9uey95Pb5f4mqZNz5Q=;
-        b=nSQHhui9wzPmOzXMr5aqMMdc/emCD2VEKeowVCo0NrHkcplyLtFZoJHoJSFkK4z40b
-         1Y5bsQqiIwdR5gofZEF35EK9avASKH36E5ex9cJE5wk26qczgQcR+g0acFXnTiiKDgxR
-         PvZla0biMrFKQWZUiXoGS6VgkiqBzncTWilDH6zjbE0U2SVw1hG4kbL7ENtszZEjBb05
-         qptC3JWIkQCUlwk/JXL6N42MpRNrK4D9ejBf0Lzca0apISJPaVzxW40XxUIt1LW/qq0f
-         4QDj1rzPaIjMHxDN33OwyQKN9iTS0IxjFl1iPOh6pz4OLI/4YSXCYDPmBLAYfvu1N4S0
-         XtLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cD2V3GFxUMbiUHqwfuQz30DRd9uey95Pb5f4mqZNz5Q=;
-        b=LCdynrcJKOI/qgwW3xIIVbinJgVRSNcF4a6tj9X0ZpQqzYPblaxl9nyTG25KlpEhX7
-         z2s+dEJclcrZPa+9AXBAXeR8CIzRDRT6twQ4pVwgzUBZiW43zvltKtxZ1W00rDkA46z3
-         pZVClP5gVVPGWFeqxa3dPhXv3pkzDlXWRh6ZH6XpCzTPwevuAgF9SsxPGo8gr87/NBYT
-         ZywL8bt4gj9r3f0Uk9EBSBgvqQlW8mNkWjCM7Fj/ZL7MDWi/o+IWBmhAFoGOGUpe3JjG
-         hTzfpxXlN++qRiY1MA/fO5fSJS4cOPRN3E0FrBSqVtajRU6KvKcA8mUbKu4K6MCa0+Rh
-         4/ZQ==
-X-Gm-Message-State: AO0yUKV2/pvL0tyZBOAAbNPoVb0wqLHiDY20CvgVdZb+G4FCNIiS3U3k
-        0zNKC64YFs4+KTk0Pt3NfPs=
-X-Google-Smtp-Source: AK7set98zYboFrn/b4D2MBfz+3WRgRRGr0dXxRlba6lrQpOjcTAlP8smsxqbzioF9NIua3JNmHd9sg==
-X-Received: by 2002:a05:6820:61f:b0:51f:e2ab:5535 with SMTP id e31-20020a056820061f00b0051fe2ab5535mr8142396oow.0.1677247280363;
-        Fri, 24 Feb 2023 06:01:20 -0800 (PST)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id v14-20020a9d604e000000b0068bbf5f2e49sm4505958otj.37.2023.02.24.06.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 06:01:19 -0800 (PST)
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To:     lina@asahilina.net
-Cc:     alex.gaynor@gmail.com, asahi@lists.linux.dev,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
-Subject: Re: [PATCH] rust: Enable the new_uninit feature for kernel and driver crates
-Date:   Fri, 24 Feb 2023 11:01:13 -0300
-Message-Id: <20230224140113.745953-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net>
-References: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net>
+        Fri, 24 Feb 2023 09:07:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAB269ADA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:07:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A7ED5CE238A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A58EC433EF;
+        Fri, 24 Feb 2023 14:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677247654;
+        bh=6WgQseSSE1/0RjYTZmTF8phVwKCFajro+gk7cetd7fg=;
+        h=From:Subject:Date:To:Cc:From;
+        b=e3icBfRRHSaWBxoU7LXlhkkJ0dYzqRGcFoeLU+fspHDzlaA9zBC8GeNEr0XoWqRYb
+         XrWCoGjjVBIjqcs7d4Fn0XnOqYQPZ66sLSLH85VvoqWnwlZbCSUYTqBzMqkbk9Gol+
+         qJyNPR1dH8GkTHU/eTurusY2fu4NeKRdFDjG5Ci98wc7ru8+xQso8CEw4jFzJd9hlb
+         aZABOvgqo7J2hWYjnyLse4bS0PkJM5HA1SkEOKbThYc9T6S5x7xLhJ60RS0EJu/apn
+         lhCFM1kQJZGHnb3Qjo7eTeasTkDA7K/1drnv3JHFpNrmyqdmpU7BU6FNYQU88xQxys
+         CN+qvpn2mCfkw==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/4] ASoC: mt8192: Fixes from initial glance at kselftest
+ run
+Date:   Fri, 24 Feb 2023 14:03:54 +0000
+Message-Id: <20230223-asoc-mt8192-quick-fixes-v1-0-9a85f90368e1@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMrD+GMC/x2L0QrCMAwAf2Xk2UCbwqz+iviQdZkLsm42U4Sxf
+ 7fz8Y67DUyKisG12aDIR03nXMGfGkgj54eg9pWBHAVHFJBtTjit0V8IX29NTxz0K4ZxCOLYxzN
+ RC/Xu2AS7wjmNx79Oy2GXIv+8qtt9338NhGfcfwAAAA==
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
+        <nfraprado@collabora.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=949; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=6WgQseSSE1/0RjYTZmTF8phVwKCFajro+gk7cetd7fg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj+MSgptemsOYFwoH0fc5cIPy9dkZo6raLVN9t/bwB
+ +1VF2laJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/jEoAAKCRAk1otyXVSH0F4CB/
+ wO8wM26BECdCimtw2TUtGGjddmXPhsckwQto7lBLJnqtFnOxrYE4eHSGXjRkRyvFN1BjKnEObQY6Cb
+ ZrzIw5s7kYMxAd0ik6y/+TOM5X+a2h7PJvwkfFlQEnTNUXz06e+Wr7+2th0RPw28ovpvrv9suUyjMf
+ PrlaTSKbcvL/ThYL94y2bKP8bqL9segFhHf8NwSpneSBlVAsg3lHNb2tUKoVxZP4OeTMNSgMTlyYxd
+ GfYjWV1qZgwIKdzteb1WDVZQn20VkgeGqSy4G+XqdAsor1IPfo26xdcE0snqTs7tID86Yvi9yBN9ss
+ MfryzIZcD7L/hWfFve8dZ9/dvrj84m
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 05:09:47PM +0900, Asahi Lina wrote:=0D
-> The unstable new_uninit feature enables various library APIs to create=0D
-> uninitialized containers, such as `Box::assume_init()`. This is=0D
-> necessary to build abstractions that directly initialize memory at the=0D
-> target location, instead of doing copies through the stack.=0D
-> =0D
-> Will be used by the DRM scheduler abstraction in the kernel crate, and=0D
-> by field-wise initialization (e.g. using `place!()` or a future=0D
-> replacement macro which may itself live in `kernel`) in driver crates.=0D
-=0D
-Very useful to me as some constructors in the USB bindings that I'm=0D
-writting might make use of unitialized memory.=0D
-=0D
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>=0D
+This is a collection of fixes I came up after glancing through an
+initial test run with the Spherion Chromebook on KernelCI.  There are
+more issues flagged, this is just what I fixed thus far - the volume
+controls on the MT6359 have issues for example, and a lot of controls
+aren't marked as Switches like they should be.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (4):
+      ASoC: mt8192: Remove spammy log messages
+      ASoC: mt8192: Fix event generation for controls
+      ASoC: mt8192: Report an error if when an invalid sidetone gain is written
+      ASoC: mt8192: Fix range for sidetone positive gain
+
+ sound/soc/mediatek/mt8192/mt8192-dai-adda.c | 58 ++++++++++-------------------
+ 1 file changed, 19 insertions(+), 39 deletions(-)
+---
+base-commit: b361d5d2464a88184f6e17a6462719ba79180b1a
+change-id: 20230223-asoc-mt8192-quick-fixes-8f3e0a187226
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
