@@ -2,158 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791276A16F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2FF6A175C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjBXHOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S229757AbjBXHdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBXHN6 (ORCPT
+        with ESMTP id S230119AbjBXHdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:13:58 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52353166D1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:13:57 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id eg37so47396390edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wsjqPSfnm3Ygi4Io01Tn1OMFABOCofeh5v8NtS11/2E=;
-        b=MS6F7AAs7jHnE7fpitncvB/tOyt/BH+4OtiAQ++pmhoXc2Nrd8nWNcTi7MnStOK66S
-         WFLwNPExELXJzfDlVroEcr7AC38mvcygnpohlB1vvoVnYFT1cnPePrurC9kmQvZ6jRbE
-         f+WUHihlJCB8j0BMVSFrotHfvFg8wDU/vkosbsDczhGBHywYoie4AvwvNdf+imyjHkZ0
-         F+s3LkYobHyl/PMjIa7aveSXSItDHgza2C+CGJ0iBNwd5082/Yjq+Xnjqv3247//PeJb
-         Wk9oL+1ioxEVSAF22/WF/Ln1Em1cQfCik/7T8ismTBmGWtaA2N+CTj22bhbt0YZe9+no
-         h2BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsjqPSfnm3Ygi4Io01Tn1OMFABOCofeh5v8NtS11/2E=;
-        b=71cKbpXreaas09yGAmS/pDa0yGQeDCvjum4s6PEIastD2r2fuFC6smCUN1n9DVNUzx
-         tbCUEajQClINQxu1mnyVIpRhSCzq7K1iox1XEaizM5L/7dFnmOz+be7QOXK1ooyJ8rKH
-         kGn9BkBm03XRquM7RUBGnCo+qLnQT9nJz8Emv5s108B74hNIeJAWAMsFoJL26NlqwJnX
-         VB3qdclWXiQ04iWdIGsnMI1Eh8BIzUD+g+5j/mvEg8TDrMuDrA+1FQW6sT7cwri0Cdv6
-         Z+DVGDIx6MvH/VLVMymvXLQ5OeK4W+4L7KMIthHxN93VgYsqeQA0JPAkic6PnWZZa0s+
-         8/oA==
-X-Gm-Message-State: AO0yUKUr+twuiWIOAuewgpudTG0SNT1sNhdnOCCMPLaydNKx8un+ze+6
-        RIK0mKpWNptLpCTp82TyYgw=
-X-Google-Smtp-Source: AK7set9KADS+TjTlENdlakaJIRZvUPjmQJ37PpokD1mzD+mepSGXCw+VINEwWPzHUm07ZarqHDYmbA==
-X-Received: by 2002:a17:907:961c:b0:8f1:dfa5:8117 with SMTP id gb28-20020a170907961c00b008f1dfa58117mr4046581ejc.51.1677222835683;
-        Thu, 23 Feb 2023 23:13:55 -0800 (PST)
-Received: from ?IPV6:2a02:908:1256:79a0:35e:38c6:dafc:5dd2? ([2a02:908:1256:79a0:35e:38c6:dafc:5dd2])
-        by smtp.gmail.com with ESMTPSA id dv4-20020a170906b80400b008b904cb2bcdsm8504505ejb.11.2023.02.23.23.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 23:13:54 -0800 (PST)
-Message-ID: <a99e6def-68be-3f2b-4e01-ac26cdb80f49@gmail.com>
-Date:   Fri, 24 Feb 2023 08:13:52 +0100
+        Fri, 24 Feb 2023 02:33:40 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6146174;
+        Thu, 23 Feb 2023 23:33:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677223994; x=1708759994;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zwryG0AGbtAQ6n2azIrnoaRDyFC29oFDBNeBPcHwTlg=;
+  b=A9Xd7ybVEDcTMhO5oeOBOfF9iAHgx6s7pihraO0V3w9TXJq4v0N878Zx
+   54SMCLSZVD5TjUU3p9MajGoWWJ2uSKLCA77Zm9+/DvV45fWwqMSu/uF1s
+   iCMO/pioOTgres8HGiBCwFbnz/OoCdmoR8JQR7Je14VHUqF69WlrOjcv+
+   uw/jNLjr5j0FOO+v8mbX5Zr4Zw9mwDm0q/ZhFfs18iviIGpY+W4PzC/RT
+   q+WM+NT+xr4CT8LTXEFXsUBmIQzKTFUGiqZlbTSEV7Kpxvd1ArgJCaK9f
+   LfwNO4geN3h1iOZ61fTh1p/wzGp8ZqZDq5cXFt5K31aJ42Ra4h6612Q9o
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="419650667"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="419650667"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 23:31:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918331423"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="918331423"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 23:31:48 -0800
+Date:   Fri, 24 Feb 2023 15:20:48 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/4] fpga: add fake FPGA region
+Message-ID: <Y/hlUOy26HBfdJFR@yilunxu-OptiPlex-7050>
+References: <20230203170653.414990-1-marpagan@redhat.com>
+ <20230203170653.414990-3-marpagan@redhat.com>
+ <Y/Ckw+F/sb2er2oK@yilunxu-OptiPlex-7050>
+ <3f17060a-69ce-fb39-61ab-a892b9a1e8c6@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: amdgpu didn't start with pci=nocrs parameter, get error "Fatal
- error during GPU init"
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-References: <CABXGCsMbqw2qzWSCDfp3cNrYVJ1oxLv8Aixfm_Dt91x1cvFX4w@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <CABXGCsMbqw2qzWSCDfp3cNrYVJ1oxLv8Aixfm_Dt91x1cvFX4w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f17060a-69ce-fb39-61ab-a892b9a1e8c6@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mikhail,
+On 2023-02-21 at 15:53:20 +0100, Marco Pagani wrote:
+> 
+> 
+> On 2023-02-18 11:13, Xu Yilun wrote:
+> > On 2023-02-03 at 18:06:51 +0100, Marco Pagani wrote:
+> >> Add fake FPGA region platform driver with support functions. This
+> >> module is part of the KUnit test suite for the FPGA subsystem.
+> >>
+> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> >> ---
+> >>  drivers/fpga/tests/fake-fpga-region.c | 186 ++++++++++++++++++++++++++
+> >>  drivers/fpga/tests/fake-fpga-region.h |  37 +++++
+> >>  2 files changed, 223 insertions(+)
+> >>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+> >>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
+> >>
+> >> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
+> >> new file mode 100644
+> >> index 000000000000..095397e41837
+> >> --- /dev/null
+> >> +++ b/drivers/fpga/tests/fake-fpga-region.c
+> >> @@ -0,0 +1,186 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * Driver for fake FPGA region
+> >> + *
+> >> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
+> >> + *
+> >> + * Author: Marco Pagani <marpagan@redhat.com>
+> >> + */
+> >> +
+> >> +#include <linux/device.h>
+> >> +#include <linux/platform_device.h>
+> >> +#include <linux/fpga/fpga-mgr.h>
+> >> +#include <linux/fpga/fpga-region.h>
+> >> +#include <linux/fpga/fpga-bridge.h>
+> >> +#include <kunit/test.h>
+> >> +
+> >> +#include "fake-fpga-region.h"
+> >> +
+> >> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
+> >> +
+> >> +struct fake_region_priv {
+> >> +	int id;
+> >> +	struct kunit *test;
+> >> +};
+> >> +
+> >> +struct fake_region_data {
+> >> +	struct fpga_manager *mgr;
+> >> +	struct kunit *test;
+> >> +};
+> >> +
+> >> +/**
+> >> + * fake_fpga_region_register - register a fake FPGA region
+> >> + * @region_ctx: fake FPGA region context data structure.
+> >> + * @test: KUnit test context object.
+> >> + *
+> >> + * Return: 0 if registration succeeded, an error code otherwise.
+> >> + */
+> >> +int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
+> >> +			      struct fpga_manager *mgr, struct kunit *test)
+> >> +{
+> >> +	struct fake_region_data pdata;
+> >> +	struct fake_region_priv *priv;
+> >> +	int ret;
+> >> +
+> >> +	pdata.mgr = mgr;
+> >> +	pdata.test = test;
+> >> +
+> >> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
+> >> +						 PLATFORM_DEVID_AUTO);
+> >> +	if (IS_ERR(region_ctx->pdev)) {
+> >> +		pr_err("Fake FPGA region device allocation failed\n");
+> >> +		return -ENOMEM;
+> >> +	}
+> >> +
+> >> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
+> >> +
+> >> +	ret = platform_device_add(region_ctx->pdev);
+> >> +	if (ret) {
+> >> +		pr_err("Fake FPGA region device add failed\n");
+> >> +		platform_device_put(region_ctx->pdev);
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
+> >> +
+> >> +	if (test) {
+> >> +		priv = region_ctx->region->priv;
+> >> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
+> >> +	}
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
+> >> +
+> >> +/**
+> >> + * fake_fpga_region_unregister - unregister a fake FPGA region
+> >> + * @region_ctx: fake FPGA region context data structure.
+> >> + */
+> >> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
+> >> +{
+> >> +	struct fake_region_priv *priv;
+> >> +	struct kunit *test;
+> >> +	int id;
+> >> +
+> >> +	priv = region_ctx->region->priv;
+> >> +	test = priv->test;
+> >> +	id = priv->id;
+> >> +
+> >> +	if (region_ctx->pdev) {
+> >> +		platform_device_unregister(region_ctx->pdev);
+> >> +		if (test)
+> >> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
+> >> +	}
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
+> >> +
+> >> +/**
+> >> + * fake_fpga_region_add_bridge - add a bridge to a fake FPGA region
+> >> + * @region_ctx: fake FPGA region context data structure.
+> >> + * @bridge: FPGA bridge.
+> >> + *
+> >> + * Return: 0 if registration succeeded, an error code otherwise.
+> >> + */
+> >> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+> >> +				struct fpga_bridge *bridge)
+> >> +{
+> >> +	struct fake_region_priv *priv;
+> >> +	int ret;
+> >> +
+> >> +	priv = region_ctx->region->priv;
+> >> +
+> >> +	ret = fpga_bridge_get_to_list(bridge->dev.parent, NULL,
+> >> +				      &region_ctx->region->bridge_list);
+> >> +
+> >> +	if (priv->test && !ret)
+> >> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
+> >> +			   priv->id);
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
+> >> +
+> >> +static int fake_fpga_region_probe(struct platform_device *pdev)
+> >> +{
+> >> +	struct device *dev;
+> >> +	struct fpga_region *region;
+> >> +	struct fpga_manager *mgr;
+> >> +	struct fake_region_data *pdata;
+> >> +	struct fake_region_priv *priv;
+> >> +	static int id_count;
+> >> +
+> >> +	dev = &pdev->dev;
+> >> +	pdata = dev_get_platdata(dev);
+> >> +
+> >> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> >> +	if (!priv)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
+> >> +	if (IS_ERR(mgr))
+> >> +		return PTR_ERR(mgr);
+> >> +
+> >> +	/*
+> >> +	 * No get_bridges() method since the bridges list is
+> >> +	 * pre-built using fake_fpga_region_add_bridge()
+> >> +	 */
+> > 
+> > This is not the common use for drivers to associate the region & bridge,
+> > Better to realize the get_bridges() method.
+> 
+> Initially, I was using a get_bridges() method to create the list of bridges
+> before each reconfiguration. However, this required having a "duplicated"
+> list of bridges in the context of the fake region low-level driver.
+> 
+> Since I couldn't find a reason to keep a duplicate list of bridges in the
+> fake region driver, I decided then to change the approach and build the
+> list of bridges at device instantiation time.
+> 
+> In my understanding, the approach of creating the list of bridges just
+> before reconfiguration with a get_bridges() method works best for the
+> OF case, where the topology is already encoded in the DT. I feel using
+> this approach on platforms without OF support would increase complexity
+> and create unnecessary duplication.
 
-this is pretty clearly a problem with the system and/or it's BIOS and 
-not the GPU hw or the driver.
+I'm not fully get your point. My understanding is we don't have to
+always grab the bridge driver module if we don't reprogram. In many
+cases, we just work with the existing bitstream before Linux is started.
+So generally I prefer not to have an example that gets all bridges at
+initialization unless there is a real need.
 
-The option pci=nocrs makes the kernel ignore additional resource windows 
-the BIOS reports through ACPI. This then most likely leads to problems 
-with amdgpu because it can't bring up its PCIe resources any more.
-
-The output of "sudo lspci -vvvv -s $BUSID_OF_AMDGPU" might help 
-understand the problem, but I strongly suggest to try a BIOS update first.
-
-Regards,
-Christian.
-
-Am 24.02.23 um 00:40 schrieb Mikhail Gavrilov:
-> Hi,
-> I have a laptop ASUS ROG Strix G15 Advantage Edition G513QY-HQ007. But
-> it is impossible to use without AC power because the system losts nvme
-> when I disconnect the power adapter.
->
-> Messages from kernel log when it happens:
-> nvme nvme0: controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
-> nvme nvme0: Does your device have a faulty power saving mode enabled?
-> nvme nvme0: Try "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off"
-> and report a bug
->
-> I tried to use recommended parameters
-> (nvme_core.default_ps_max_latency_us=0 and pcie_aspm=off) to resolve
-> this issue, but without successed.
->
-> In the linux-nvme mail list the last advice was to try the "pci=nocrs"
-> parameter.
->
-> But with this parameter the amdgpu driver refuses to work and makes
-> the system unbootable. I can solve the problem with the booting system
-> by blacklisting the driver but it is not a good solution, because I
-> don't wanna lose the GPU.
->
-> Why amdgpu not work with "pci=nocrs" ?
-> And is it possible to solve this incompatibility?
-> It is very important because when I boot the system without amdgpu
-> driver with "pci=nocrs" nvme is not losts when I disconnect the power
-> adapter. So "pci=nocrs" really helps.
->
-> Below that I see in kernel log when adds "pci=nocrs" parameter:
->
-> amdgpu 0000:03:00.0: amdgpu: Fetched VBIOS from ATRM
-> amdgpu: ATOM BIOS: SWBRT77321.001
-> [drm] VCN(0) decode is enabled in VM mode
-> [drm] VCN(0) encode is enabled in VM mode
-> [drm] JPEG decode is enabled in VM mode
-> Console: switching to colour dummy device 80x25
-> amdgpu 0000:03:00.0: amdgpu: Trusted Memory Zone (TMZ) feature
-> disabled as experimental (default)
-> [drm] GPU posting now...
-> [drm] vm size is 262144 GB, 4 levels, block size is 9-bit, fragment
-> size is 9-bit
-> amdgpu 0000:03:00.0: amdgpu: VRAM: 12272M 0x0000008000000000 -
-> 0x00000082FEFFFFFF (12272M used)
-> amdgpu 0000:03:00.0: amdgpu: GART: 512M 0x0000000000000000 - 0x000000001FFFFFFF
-> amdgpu 0000:03:00.0: amdgpu: AGP: 267894784M 0x0000008400000000 -
-> 0x0000FFFFFFFFFFFF
-> [drm] Detected VRAM RAM=12272M, BAR=16384M
-> [drm] RAM width 192bits GDDR6
-> [drm] amdgpu: 12272M of VRAM memory ready
-> [drm] amdgpu: 31774M of GTT memory ready.
-> amdgpu 0000:03:00.0: amdgpu: (-14) failed to allocate kernel bo
-> [drm] Debug VRAM access will use slowpath MM access
-> amdgpu 0000:03:00.0: amdgpu: Failed to DMA MAP the dummy page
-> [drm:amdgpu_device_init [amdgpu]] *ERROR* sw_init of IP block
-> <gmc_v10_0> failed -12
-> amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_init failed
-> amdgpu 0000:03:00.0: amdgpu: Fatal error during GPU init
-> amdgpu 0000:03:00.0: amdgpu: amdgpu: finishing device.
->
-> Of course a full system log is also attached.
->
-
+Thanks,
+Yilun
