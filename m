@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC50C6A2340
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F446A2344
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjBXUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S229720AbjBXUtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjBXUqG (ORCPT
+        with ESMTP id S229505AbjBXUtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:46:06 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EC567994;
-        Fri, 24 Feb 2023 12:46:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CXWCcTWtQAtpZMwkWvr7mMFe5zhDDr+sLVb4ims5Yh0=; b=CylG0YEwbg2HdKH7WRiHhc2PBo
-        nUcBZWh4rU5DPQ9TwdH1oAb9/Ki20Z6DOb6Ha5jHTHCvDkMlTfpaTXMwpuw0Bvgs2fdtbMG/HxmHT
-        vIBBsmb3nuBB7M2BfMJXYIsxJprhU5uFI5uvnTCU2Oz1HT0JWktUV45xoGl5q88xfFYtAXrigMAhQ
-        yOJfDntwgXWN5/ONFP/Y6G71jxIrYJLc7viTo8ZZZ2RfK7t2YEA1QoZR293oxziJBqPqymqZMJS+D
-        0JsJPpN/gaMvOUAuWMzrGJBRDnQ8QT9WUERS6zRYpMLPdq7RDiwCW2wfjnjDcVjp08CukIx0wG+6+
-        qXj78o9w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVewi-00FYW5-RI; Fri, 24 Feb 2023 20:45:36 +0000
-Date:   Fri, 24 Feb 2023 20:45:36 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
-Message-ID: <Y/kh8P4oSjunIU7T@casper.infradead.org>
-References: <Y/jhwuTCaOgOTLp2@casper.infradead.org>
- <2134430.1677240738@warthog.procyon.org.uk>
- <2009825.1677229488@warthog.procyon.org.uk>
- <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
- <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
- <2213409.1677249075@warthog.procyon.org.uk>
- <2385089.1677258941@warthog.procyon.org.uk>
- <Y/kFnhUM5hjWM2Ae@casper.infradead.org>
- <2390711.1677269637@warthog.procyon.org.uk>
- <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
+        Fri, 24 Feb 2023 15:49:15 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60985168BD;
+        Fri, 24 Feb 2023 12:49:14 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id ay37so132829qkb.1;
+        Fri, 24 Feb 2023 12:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kvN0hLuCEsR9Vd2UCL7IKP8VbOyMpbeDrq81GUHoJwA=;
+        b=GqfB/gdry0rQFbWqA4I7frasJkabRvYO51A7qKOKC8hNrXPS6ocH5LW2aAHrSfAiLk
+         Zmlw3I5xkA8lrfLiclkrS8OuLZyn+e9rxwvbaECQtA8QprIa/YJ6SWo9+ovfwNrSAYJ7
+         wgiomVnsB3cS2Ox/1idwQTVLb9jBfaaC+UavUE0tSM+f5PUit3GzS4l7RgzyI0uYi5B1
+         1RobFo2Cm1skShJxBsbbVBG2RjIPLL7sOswtJLFnkINh34MOCD8QxFbn0Tg5NE2TOmYz
+         pzaQRcWb8JNvEu3TTEgsN67qvc4XdgRpTbF1tLrdT5BTdvqsWk2y+kdkPtihzZgggLt4
+         TH+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kvN0hLuCEsR9Vd2UCL7IKP8VbOyMpbeDrq81GUHoJwA=;
+        b=Nvu0jNXGY2wn/EsbdkEPgIytmvS5Rl2lBdl5PCDF/eNOUrBRRDd1zhAW6iTvzh/1b5
+         QDBHXwk1S/WAmjQwt59/xU5Zbm9YnzFrgqCAuRgcjcGEUEyFrI6Jnt04lTxrfKVOTYpz
+         XCCW41C9o7+h9A0vBp+8qFL9h+33/UNa0gzKn5Zcbq0ETKV6qf9AVolACxWCw2rT+5q/
+         gimo4/dbbTlYs1OLuP1IEotQ26IjB7Cu2QZvYkLZHfK6YvQu/jhKBRp/jwtvHQHsVtrL
+         G5hLpofDViMAIsgPZ6N4YIDYLja6SQH9Mm1nXNe+EOohdet2NumlQZNDxuZ0U2lpU4QC
+         K+TA==
+X-Gm-Message-State: AO0yUKXzM2Vw0K12LbMe44cjZiaCU2SuB8bKya+WuZ6rxQraoesxj8ZD
+        JO47bgI5LqvnVlmIWNZLDVa9cf/VBCQA67Thcj0=
+X-Google-Smtp-Source: AK7set+EeVvLHVy65mCkYp8oeMahekDSmvMS7T9rS7mRcJjSFOJ4zCxukkHG2BOF15E88wWliM70YXZoykBz+QU4ySs=
+X-Received: by 2002:a05:620a:13cd:b0:742:7e5a:4cee with SMTP id
+ g13-20020a05620a13cd00b007427e5a4ceemr510882qkl.10.1677271753490; Fri, 24 Feb
+ 2023 12:49:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224192021.22591-1-asmaa@nvidia.com>
+In-Reply-To: <20230224192021.22591-1-asmaa@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 24 Feb 2023 22:48:37 +0200
+Message-ID: <CAHp75Vdz=P=HrjyhT=dQFJt0LmqzBG2Cmw=sCBmU-RCwkQ3uUw@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: mmio: handle "ngpios" properly in bgpio_init()
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 12:16:49PM -0800, Linus Torvalds wrote:
-> On Fri, Feb 24, 2023 at 12:14 PM David Howells <dhowells@redhat.com> wrote:
-> >
-> > Then why do we have to wait for PG_writeback to complete?
-> 
-> At least for PG_writeback, it's about "the _previous_ dirty write is
-> still under way, but - since PG_dirty is set again - the page has been
-> dirtied since".
-> 
-> So we have to start _another_ writeback, because while the current
-> writeback *might* have written the updated data, that is not at all
-> certain or clear.
+On Fri, Feb 24, 2023 at 9:20 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
+>
+> bgpio_init() uses "sz" argument to populate ngpio, which is not
+> accurate. Instead, read the "ngpios" property from the DT and if it
+> doesn't exist, use the "sz" argument. With this change, drivers no
+> longer need to overwrite the ngpio variable after calling bgpio_init.
 
-also, we only have a writeback bit, not a writeback count.  And when
-the current writeback completes, it'll clear that bit.  We're also
-being kind to our backing store and not writing to the same block twice
-at the same time.
+...
 
-> I'm not sure what the fscache rules are.
+> +       ret = device_property_present(dev, "ngpios");
+> +       if (!ret)
 
-My understanding is that the fscache bit is set under several
-circumstances, but if the folio is dirty _and_ the fscache bit
-is set, it means the folio is currently being written to the cache
-device.  I don't see a conflict there; we can write to the backing
-store and the cache device at the same time.
+ret is not of the correct type for this call.
+
+Why not simply
+
+    if (!device_property_present(dev, "ngpios"))
+
+> +               gc->ngpio = gc->bgpio_bits;
+
+...
+
+The problem with this change is that you need to provide bgpio_bits.
+
+So, if there is a property when bgpio_bits will be updated?
+
+That's said what you need is something like this:
+1) split "ngpios" handling code (lines ~718-744 in gpiolib.c)  into a
+helper function that is available inside drivers/gpio;
+2) use it in bgpio_init() by overriding bgpio_bits.
+
+ret = new_helper();
+if (ret)
+    gc->bgpio_bits = sz * 8;
+else
+    ... = gc->ngpio;
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
