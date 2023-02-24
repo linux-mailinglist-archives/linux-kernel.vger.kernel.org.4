@@ -2,179 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1104D6A1576
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517856A157F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjBXDjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S229525AbjBXDkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBXDjQ (ORCPT
+        with ESMTP id S229484AbjBXDkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:39:16 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7221589A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:39:14 -0800 (PST)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 496BC3F4B7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677209953;
-        bh=LvpymLUbODHZ4Mo00qWLmVpjnxYdZJ0xxMFsKmLrd74=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=skfPlk9hGD9JACenRp6ojAbGRcl3CrzNjXydiIWpmAMkPcopObstHRuQdgDneaudw
-         TSEptR8ZVSUufRWYX1u3kkRZ/QOLodHhXwbHKm8b74ER7E6+xACGa0BSEvFXsmRiqC
-         Xn6X2l+HLeppRub8nfdbttgVfvQriUg80cgkqxYCPc61NjnutkfTvZmcqK1tyfaUrY
-         DPJYzO23FybcDF57Jt65ui/R4kDSONDfzXXHX+GRFIVQQb8vlOv9rMeChLvVKvoXC8
-         lVuVHMz6Cd7KmnlMI6mEpXmbHrTn0c41xiiLFXAVPmqTV+3q0y9dF94YRtlLGMZkgH
-         +j1/uybKZNW4Q==
-Received: by mail-pf1-f197.google.com with SMTP id w3-20020aa78583000000b005d244af158eso4272956pfn.23
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:39:13 -0800 (PST)
+        Thu, 23 Feb 2023 22:40:42 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8891589A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:40 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id fa3-20020a17090af0c300b002377eefb6acso739143pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=X4tBb8bFIpeX5wNEM8VVQkPrbGhips7ogPU5rW+jMmE=;
+        b=MRTJ0iVZokAOELH2wGD4Oi7UywejhX/CilHcDTB/6HYDiXo3dIQUxbnDNUdL4G7IIp
+         jG/052PI7+n5eKGoe3+BHuLhUtLwSjFMgn2W6xTimnEovL6iS4rwzfO6navKK+MkTWyW
+         9e/KcHzyNuKhtKbxmGNcKFXj6vi0wD1eePpHG23i7UzWZu18G0kFVRniq+HxwRbNeako
+         DPZ6GIgcW1IEWU87D6acm6OI8vMtH8ypeDrbVr0QEGYN1rq991YwLfvAQpjvO1sHOBob
+         xKf6rH+GLgcqTple26jLbnRFZJ/vZI4JWNvV66nXb7ODN9l0F0ivDOMdxuqmb7zDvypE
+         GKHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LvpymLUbODHZ4Mo00qWLmVpjnxYdZJ0xxMFsKmLrd74=;
-        b=fWuHSzvXBVhodH1EgDZiwZPHKiGhe9nl12oRjzMwBzQ8xb4hPPGwC6NQyOPJsB/RGg
-         MPfTOvfknaqN13GO4OJtWNOLeppU3iz4rJnf2iOIVMnqVFMSJ8X5SKFPSqGHeKd+3pic
-         ykveaZCncSAijqwr6aG+E6xKmiQ2onQ1k0ahanLOVx4qpo08DjroKxqhUZOa/8SUN6ku
-         We6ER0y/CYLMQO/vgZCOn115n4dCjDOQHK0dX+l2Ewdz24cwA378SbP8P/ofQwIb0qpi
-         3BR3S4L7uXoFQynJSFMmxXm7CO0MYpq3nTNaAdLuFgCTt9nqSmi7yj4TMlKE3WI/CSfh
-         uxYw==
-X-Gm-Message-State: AO0yUKV1mmeo9t5TgW296yFVvESuBUDKtyMqRR96ylc2+roK+6jixFG7
-        z2uIE6DVBKr9I9VtRuzZcfAsqqiEACZHt9l47UB9D20KB1i+6aSi7xCqcj9kTcJcWoB3F0+6K0q
-        RjuoevnTo56Civn1GM8anPSd+4HKH+B9ENs5Hi3yHESpdHI2bUOVHHQZoNw==
-X-Received: by 2002:a17:902:c3cd:b0:19c:a3be:a4f3 with SMTP id j13-20020a170902c3cd00b0019ca3bea4f3mr1811090plj.4.1677209951572;
-        Thu, 23 Feb 2023 19:39:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set9zi8Z6ymjynDbJ1bv4R019r6ipAEWDuZlP1cNc9u9M+NCmiZ7E0/bSyF0hgJAcuEy3QZN2T2SFFoSYNKs66fY=
-X-Received: by 2002:a17:902:c3cd:b0:19c:a3be:a4f3 with SMTP id
- j13-20020a170902c3cd00b0019ca3bea4f3mr1811084plj.4.1677209951159; Thu, 23 Feb
- 2023 19:39:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20230221023849.1906728-1-kai.heng.feng@canonical.com>
- <20230221023849.1906728-7-kai.heng.feng@canonical.com> <b2bae4bb-0dbe-be80-3849-f46395c05cd2@gmail.com>
- <CAAd53p79Of-ZPBFGtBZCSnST+oTT5AwGkRo_Z57Gm9XDOBmi_A@mail.gmail.com>
-In-Reply-To: <CAAd53p79Of-ZPBFGtBZCSnST+oTT5AwGkRo_Z57Gm9XDOBmi_A@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 24 Feb 2023 11:38:59 +0800
-Message-ID: <CAAd53p5NdHgC8syFqKUZkfZ4-Z7VcYANbLDPCZ4DexacR+nZEA@mail.gmail.com>
-Subject: Re: [PATCH v8 RESEND 6/6] r8169: Disable ASPM while doing NAPI poll
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     nic_swsd@realtek.com, bhelgaas@google.com, koba.ko@canonical.com,
-        acelan.kao@canonical.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
-        rafael.j.wysocki@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X4tBb8bFIpeX5wNEM8VVQkPrbGhips7ogPU5rW+jMmE=;
+        b=FyvZ8wTKUWnvtGboeNIVkZci/H+XDbRHtrAEs6YSPLcqpZPjkAmzzHbjWpg+c1WDWv
+         8ki6LZZA2LTSztNuhA+RzwDLY1XMPVG5Ku7santQGDBO5XNJvWCiUwr+jO2rhhAJwXDP
+         SX7pDPkh+q7pC6HOidGmn/n3+Njb/j7OEABdCpSlKlwCbt7mq9xpzD91ndKDf42OReTj
+         R1rLuybpdDq3vgXQU0MLEizvcqZQDljJuFmuoJVTH598sWq6SMjATmH/sEQTh6433UuQ
+         MCZj+RMTHxRJhBVE8dXtOV2o99cclJHFAsbLUcEIxYomiWulqaqLRF0Zfxn3JFioPIp9
+         lELA==
+X-Gm-Message-State: AO0yUKWfhtaA4IwFdjofUXzVF5/YOKAwgSL3qvlwcoerX4Av3ZH/4WE5
+        hnPFss2xJJQ1BTOXJDw1igmKEWrKogA=
+X-Google-Smtp-Source: AK7set9XAI/mo39xNg6NePeiOfMl922pN62XpgME1pxNmgVyCAkxmREMhiC4U1b5Zed1XteERjxQnzW4SDw=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:f811:b0:19a:f153:b73e with SMTP id
+ ix17-20020a170902f81100b0019af153b73emr2433664plb.4.1677210039493; Thu, 23
+ Feb 2023 19:40:39 -0800 (PST)
+Date:   Fri, 24 Feb 2023 03:40:15 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230224034020.2080637-1-edliaw@google.com>
+Subject: [PATCH 4.14 v3 0/4] BPF fixes for CVE-2021-3444 and CVE-2021-3600
+From:   Edward Liaw <edliaw@google.com>
+To:     stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     bpf@vger.kernel.org, kernel-team@android.com,
+        Edward Liaw <edliaw@google.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 9:03 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> On Tue, Feb 21, 2023 at 7:09 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> >
-> > On 21.02.2023 03:38, Kai-Heng Feng wrote:
-> > > NAPI poll of Realtek NICs don't seem to perform well ASPM is enabled.
-> > > The vendor driver uses a mechanism called "dynamic ASPM" to toggle ASPM
-> > > based on the packet number in given time period.
-> > >
-> > > Instead of implementing "dynamic ASPM", use a more straightforward way
-> > > by disabling ASPM during NAPI poll, as a similar approach was
-> > > implemented to solve slow performance on Realtek wireless NIC, see
-> > > commit 24f5e38a13b5 ("rtw88: Disable PCIe ASPM while doing NAPI poll on
-> > > 8821CE").
-> > >
-> > > Since NAPI poll should be handled as fast as possible, also remove the
-> > > delay in rtl_hw_aspm_clkreq_enable() which was added by commit
-> > > 94235460f9ea ("r8169: Align ASPM/CLKREQ setting function with vendor
-> > > driver").
-> > >
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > ---
-> > > v8:
-> > >  - New patch.
-> > >
-> > >  drivers/net/ethernet/realtek/r8169_main.c | 14 ++++++++++++--
-> > >  1 file changed, 12 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-> > > index 897f90b48bba6..4d4a802346ae3 100644
-> > > --- a/drivers/net/ethernet/realtek/r8169_main.c
-> > > +++ b/drivers/net/ethernet/realtek/r8169_main.c
-> > > @@ -2711,8 +2711,6 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
-> > >               RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
-> > >               RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
-> > >       }
-> > > -
-> > > -     udelay(10);
-> > >  }
-> > >
-> > >  static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
-> > > @@ -4577,6 +4575,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
-> > >       struct net_device *dev = tp->dev;
-> > >       int work_done;
-> > >
-> > > +     if (tp->aspm_manageable) {
-> > > +             rtl_unlock_config_regs(tp);
-> >
-> > NAPI poll runs in softirq context (except for threaded NAPI).
-> > Therefore you should use a spinlock instead of a mutex.
->
-> You are right. Will change it in next revision.
->
-> >
-> > > +             rtl_hw_aspm_clkreq_enable(tp, false);
-> > > +             rtl_lock_config_regs(tp);
-> > > +     }
-> > > +
-> > >       rtl_tx(dev, tp, budget);
-> > >
-> > >       work_done = rtl_rx(dev, tp, budget);
-> > > @@ -4584,6 +4588,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
-> > >       if (work_done < budget && napi_complete_done(napi, work_done))
-> > >               rtl_irq_enable(tp);
-> > >
-> > > +     if (tp->aspm_manageable) {
-> > > +             rtl_unlock_config_regs(tp);
-> > > +             rtl_hw_aspm_clkreq_enable(tp, true);
-> > > +             rtl_lock_config_regs(tp);
-> >
-> > Why not moving lock/unlock into rtl_hw_aspm_clkreq_enable()?
->
-> Because where it gets called at other places don't need the lock.
-> But yes this will make it easier to read, will do in next revision.
+Thadeu Lima de Souza Cascardo originally sent this patch but it failed to
+merge because of a compilation error:
 
-We can't do that because it creates deadlock:
-rtl_hw_start()
-  rtl_unlock_config_regs()
-  rtl_hw_start_8168()
-  rtl_hw_config()
-    rtl_hw_start_8168h_1()
-      rtl_hw_aspm_clkreq_enable()
+https://lore.kernel.org/bpf/20210830183211.339054-1-cascardo@canonical.com/T/
 
-Kai-Heng
+v3:
+Added upstream commit hash from 4.19.y and added detail to changelog.
 
->
-> Kai-Heng
->
-> >
-> > > +     }
-> > > +
-> > >       return work_done;
-> > >  }
-> > >
-> >
+v2:
+Removed redefinition of tmp to fix compilation with CONFIG_BPF_JIT_ALWAYS_ON
+enabled.
+
+-Edward
+ 
+==
+
+The upstream changes necessary to fix these CVEs rely on the presence of JMP32,
+which is not a small backport and brings its own potential set of necessary
+follow-ups.
+
+Daniel Borkmann, John Fastabend and Alexei Starovoitov came up with a fix
+involving the use of the AX register.
+
+This has been tested against the test_verifier in 4.14.y tree and some tests
+specific to the two referred CVEs. The test_bpf module was also tested.
+
+Daniel Borkmann (4):
+  bpf: Do not use ax register in interpreter on div/mod
+  bpf: fix subprog verifier bypass by div/mod by 0 exception
+  bpf: Fix 32 bit src register truncation on div/mod
+  bpf: Fix truncation handling for mod32 dst reg wrt zero
+
+ include/linux/filter.h | 24 ++++++++++++++++++++++++
+ kernel/bpf/core.c      | 39 ++++++++++++++-------------------------
+ kernel/bpf/verifier.c  | 39 +++++++++++++++++++++++++++++++--------
+ net/core/filter.c      |  9 ++++++++-
+ 4 files changed, 77 insertions(+), 34 deletions(-)
+
+
+base-commit: a8ad60f2af5884921167e8cede5784c7849884b2
+-- 
+2.39.2.637.g21b0678d19-goog
+
