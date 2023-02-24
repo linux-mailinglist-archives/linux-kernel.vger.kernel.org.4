@@ -2,133 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415596A2308
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3EA6A2310
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjBXUHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S229446AbjBXUN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjBXUH1 (ORCPT
+        with ESMTP id S229523AbjBXUN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:07:27 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0897411E93
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677269235; x=1708805235;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=a6+nfG7a4Kkpk7FP1rUfILI2yvSsEp9IQE/r4kYcYcM=;
-  b=SMffRVOZuYnsXNj+jfJv5r/IPIMiIqI+JtuZSpHRopX3XycZ8VPsI4YP
-   Nq1WNS438HHtC9hZ4ye4CQ0OFNtiVaxyJ8qflR8gW68Orljmo4LfNMQOI
-   HQliVijMTTVbIs5LqhrH7E+WcScugtzdC7QC1pRzqHIqh2DgF91UDAKm3
-   2WLPxM32833IkaPlnEvO7X6FYuX6SgiDKQC+tDQalv3gGGqUsddcMuQPg
-   smkPV/LBxPBhtWvS+FTdbSviSN3kp0UfbZM4vGEX/m0cCdwSdzTroG2QG
-   gIfv7sIfoEjEFJfG0H25xnOZ5BvU61BS9/BKMh/yxpSEPTUmMhnjAWAb1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="317328939"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="317328939"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 12:07:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="705397917"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="705397917"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2023 12:07:10 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A08B4147; Fri, 24 Feb 2023 22:07:51 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] devres: Pass unique name of the resource to devm_add_action()
-Date:   Fri, 24 Feb 2023 22:07:45 +0200
-Message-Id: <20230224200745.17324-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 24 Feb 2023 15:13:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DA4231C5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:12:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677269556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=83oMZbrY2l0l38w3Usm1ZV2q90zXmL7guIkz2T8m0zw=;
+        b=T8LVixnskwjcjHZJEsFQ/fZAgy/7Q6SaG6YxE8Y0Y7PEObcfsIJ514kzDwVH3zyr/Y1CDS
+        qP+VcSjRlOAGA9VsmGPtRg10W2fx1fqq0KMkbyzd9NVQpDHyhl1Q/UrkDCW0f7piqGIUsm
+        uPi/JFEQ2Trcvn760Aabq2HmzZYD+Ek=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-441-sQ_wUmtmO-6HxeTruDcs-w-1; Fri, 24 Feb 2023 15:12:34 -0500
+X-MC-Unique: sQ_wUmtmO-6HxeTruDcs-w-1
+Received: by mail-il1-f197.google.com with SMTP id y2-20020a929502000000b0031707c6b348so407059ilh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:12:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=83oMZbrY2l0l38w3Usm1ZV2q90zXmL7guIkz2T8m0zw=;
+        b=HQX0kebtD6BjyTo8wXCb3muENVxdFYUQwi6h5lr+orbQJeJETwczg3IIEBUe+cCnmn
+         H+cusdK5mdGyC4rgPxZbHvVsn8bJStidGUT5QP49dhx2HHbIWoqIQDDuT1Uh7KVfv5k5
+         82oJ3gjTEBh1iKW9pcXvQcZurzhaAdzwXRfN0U9nWQdrmg8Etd7Q9yviF56T2SMdjK2T
+         z5FnHfOk49smmK/rZy1UayFqeK0vfLAWlygkLbSGBrQ9ETjrYemwiJbR/0hblVKifDAF
+         KP2/xapFVfa7TFceVekm8rwXm23rPdm587WGOVTfBQZXYkzE/4yPXXnRfZlhyL9B/meL
+         ysaQ==
+X-Gm-Message-State: AO0yUKU1dDlL0jUu7AZvWMjw59sT/PsNUMuGypQTR4CNKSJow1RDqdXI
+        1bfwG+VTqZUPNnpz21Q1xrwG+WY5iu9egVLoFfe+mh2Sbv1YxjgwCgM6iXGZAqBzIUvyB1VWiDW
+        46JJDq9bWlFEUqE6i/Az1LAKl
+X-Received: by 2002:a92:5204:0:b0:30f:3d9e:f80 with SMTP id g4-20020a925204000000b0030f3d9e0f80mr11472959ilb.25.1677269554225;
+        Fri, 24 Feb 2023 12:12:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set9818HJBR7WmIOjbZm7g6cqVX0YlvWFT46jfznNZQkV/T94BVzZ9MQQVQMs2QRkFcpiAlRRxg==
+X-Received: by 2002:a92:5204:0:b0:30f:3d9e:f80 with SMTP id g4-20020a925204000000b0030f3d9e0f80mr11472946ilb.25.1677269553943;
+        Fri, 24 Feb 2023 12:12:33 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id q28-20020a02cf1c000000b003c4f35c21absm4771590jar.137.2023.02.24.12.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 12:12:33 -0800 (PST)
+Date:   Fri, 24 Feb 2023 13:12:32 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: [GIT PULL] VFIO updates for v6.3-rc1
+Message-ID: <20230224131232.113c5eef.alex.williamson@redhat.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pass the unique name of the resource to devm_add_action(),
-so it will be easier to debug managed resources.
+Hi Linus,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/base/devres.c  | 11 ++++++-----
- include/linux/device.h |  5 ++++-
- 2 files changed, 10 insertions(+), 6 deletions(-)
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-index c0e100074aa3..5c998cfac335 100644
---- a/drivers/base/devres.c
-+++ b/drivers/base/devres.c
-@@ -722,20 +722,21 @@ static void devm_action_release(struct device *dev, void *res)
- }
- 
- /**
-- * devm_add_action() - add a custom action to list of managed resources
-+ * __devm_add_action() - add a custom action to list of managed resources
-  * @dev: Device that owns the action
-  * @action: Function that should be called
-  * @data: Pointer to data passed to @action implementation
-+ * @name: Name of the resource (for debugging purposes)
-  *
-  * This adds a custom action to the list of managed resources so that
-  * it gets executed as part of standard resource unwinding.
-  */
--int devm_add_action(struct device *dev, void (*action)(void *), void *data)
-+int __devm_add_action(struct device *dev, void (*action)(void *), void *data, const char *name)
- {
- 	struct action_devres *devres;
- 
--	devres = devres_alloc(devm_action_release,
--			      sizeof(struct action_devres), GFP_KERNEL);
-+	devres = __devres_alloc_node(devm_action_release, sizeof(struct action_devres),
-+				     GFP_KERNEL, NUMA_NO_NODE, name);
- 	if (!devres)
- 		return -ENOMEM;
- 
-@@ -745,7 +746,7 @@ int devm_add_action(struct device *dev, void (*action)(void *), void *data)
- 	devres_add(dev, devres);
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(devm_add_action);
-+EXPORT_SYMBOL_GPL(__devm_add_action);
- 
- /**
-  * devm_remove_action() - removes previously added custom action
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 1508e637bb26..5b9f3cb22f78 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -243,10 +243,13 @@ void __iomem *devm_of_iomap(struct device *dev,
- 			    resource_size_t *size);
- 
- /* allows to add/remove a custom action to devres stack */
--int devm_add_action(struct device *dev, void (*action)(void *), void *data);
- void devm_remove_action(struct device *dev, void (*action)(void *), void *data);
- void devm_release_action(struct device *dev, void (*action)(void *), void *data);
- 
-+int __devm_add_action(struct device *dev, void (*action)(void *), void *data, const char *name);
-+#define devm_add_action(release, action, data) \
-+	__devm_add_action(release, action, data, #action)
-+
- static inline int devm_add_action_or_reset(struct device *dev,
- 					   void (*action)(void *), void *data)
- {
--- 
-2.39.1
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
+
+are available in the Git repository at:
+
+  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.3-rc1
+
+for you to fetch changes up to d649c34cb916b015fdcb487e51409fcc5caeca8d:
+
+  vfio: Fix NULL pointer dereference caused by uninitialized group->iommufd (2023-02-22 10:56:37 -0700)
+
+----------------------------------------------------------------
+VFIO updates for v6.3-rc1
+
+ - Remove redundant resource check in vfio-platform. (Angus Chen)
+
+ - Use GFP_KERNEL_ACCOUNT for persistent userspace allocations, allowing
+   removal of arbitrary kernel limits in favor of cgroup control.
+   (Yishai Hadas)
+
+ - mdev tidy-ups, including removing the module-only build restriction
+   for sample drivers, Kconfig changes to select mdev support,
+   documentation movement to keep sample driver usage instructions with
+   sample drivers rather than with API docs, remove references to
+   out-of-tree drivers in docs. (Christoph Hellwig)
+
+ - Fix collateral breakages from mdev Kconfig changes. (Arnd Bergmann)
+
+ - Make mlx5 migration support match device support, improve source
+   and target flows to improve pre-copy support and reduce downtime.
+   (Yishai Hadas)
+
+ - Convert additional mdev sysfs case to use sysfs_emit(). (Bo Liu)
+
+ - Resolve copy-paste error in mdev mbochs sample driver Kconfig.
+   (Ye Xingchen)
+
+ - Avoid propagating missing reset error in vfio-platform if reset
+   requirement is relaxed by module option. (Tomasz Duszynski)
+
+ - Range size fixes in mlx5 variant driver for missed last byte and
+   stricter range calculation. (Yishai Hadas)
+
+ - Fixes to suspended vaddr support and locked_vm accounting, excluding
+   mdev configurations from the former due to potential to indefinitely
+   block kernel threads, fix underflow and restore locked_vm on new mm.
+   (Steve Sistare)
+
+ - Update outdated vfio documentation due to new IOMMUFD interfaces in
+   recent kernels. (Yi Liu)
+
+ - Resolve deadlock between group_lock and kvm_lock, finally.
+   (Matthew Rosato)
+
+ - Fix NULL pointer in group initialization error path with IOMMUFD.
+   (Yan Zhao)
+
+----------------------------------------------------------------
+Angus Chen (1):
+      vfio: platform: No need to check res again
+
+Arnd Bergmann (1):
+      vfio-mdev: add back CONFIG_VFIO dependency
+
+Bo Liu (1):
+      vfio/mdev: Use sysfs_emit() to instead of sprintf()
+
+Christoph Hellwig (4):
+      vfio-mdev: allow building the samples into the kernel
+      vfio-mdev: turn VFIO_MDEV into a selectable symbol
+      vfio-mdev: move the mtty usage documentation
+      vfio-mdev: remove an non-existing driver from vfio-mediated-device
+
+Cornelia Huck (1):
+      MAINTAINERS: step down as vfio reviewer
+
+Jason Gunthorpe (1):
+      vfio: Use GFP_KERNEL_ACCOUNT for userspace persistent allocations
+
+Matthew Rosato (2):
+      vfio: fix deadlock between group lock and kvm lock
+      vfio: no need to pass kvm pointer during device open
+
+Shay Drory (1):
+      vfio/mlx5: Check whether VF is migratable
+
+Steve Sistare (7):
+      vfio/type1: exclude mdevs from VFIO_UPDATE_VADDR
+      vfio/type1: prevent underflow of locked_vm via exec()
+      vfio/type1: track locked_vm per dma
+      vfio/type1: restore locked_vm
+      vfio/type1: revert "block on invalid vaddr"
+      vfio/type1: revert "implement notify callback"
+      vfio: revert "iommu driver notify callback"
+
+Tomasz Duszynski (1):
+      vfio: platform: ignore missing reset if disabled at module init
+
+Yan Zhao (1):
+      vfio: Fix NULL pointer dereference caused by uninitialized group->iommufd
+
+Yi Liu (2):
+      vfio: Update the kdoc for vfio_device_ops
+      docs: vfio: Update vfio.rst per latest interfaces
+
+Yishai Hadas (8):
+      vfio/mlx5: Fix UBSAN note
+      vfio/mlx5: Allow loading of larger images than 512 MB
+      vfio/hisi: Use GFP_KERNEL_ACCOUNT for userspace persistent allocations
+      vfio/fsl-mc: Use GFP_KERNEL_ACCOUNT for userspace persistent allocations
+      vfio/platform: Use GFP_KERNEL_ACCOUNT for userspace persistent allocations
+      vfio/mlx5: Improve the source side flow upon pre_copy
+      vfio/mlx5: Improve the target side flow to reduce downtime
+      vfio/mlx5: Fix range size calculation upon tracker creation
+
+ye xingchen (1):
+      samples: fix the prompt about SAMPLE_VFIO_MDEV_MBOCHS
+
+ Documentation/driver-api/vfio-mediated-device.rst | 108 +--------
+ Documentation/driver-api/vfio.rst                 |  82 +++++--
+ Documentation/s390/vfio-ap.rst                    |   1 -
+ MAINTAINERS                                       |   1 -
+ arch/s390/Kconfig                                 |   8 +-
+ arch/s390/configs/debug_defconfig                 |   1 -
+ arch/s390/configs/defconfig                       |   1 -
+ drivers/gpu/drm/i915/Kconfig                      |   3 +-
+ drivers/vfio/container.c                          |   7 +-
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c                 |   2 +-
+ drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c            |   4 +-
+ drivers/vfio/group.c                              |  46 +++-
+ drivers/vfio/mdev/Kconfig                         |   8 +-
+ drivers/vfio/mdev/mdev_sysfs.c                    |   2 +-
+ drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |   4 +-
+ drivers/vfio/pci/mlx5/cmd.c                       |  79 +++++--
+ drivers/vfio/pci/mlx5/cmd.h                       |  28 ++-
+ drivers/vfio/pci/mlx5/main.c                      | 261 ++++++++++++++++++----
+ drivers/vfio/pci/vfio_pci_config.c                |   6 +-
+ drivers/vfio/pci/vfio_pci_core.c                  |   7 +-
+ drivers/vfio/pci/vfio_pci_igd.c                   |   2 +-
+ drivers/vfio/pci/vfio_pci_intrs.c                 |  10 +-
+ drivers/vfio/pci/vfio_pci_rdwr.c                  |   2 +-
+ drivers/vfio/platform/vfio_platform_common.c      |  12 +-
+ drivers/vfio/platform/vfio_platform_irq.c         |   8 +-
+ drivers/vfio/vfio.h                               |  25 ++-
+ drivers/vfio/vfio_iommu_type1.c                   | 248 +++++++++-----------
+ drivers/vfio/vfio_main.c                          |  70 +++++-
+ drivers/vfio/virqfd.c                             |   2 +-
+ include/linux/vfio.h                              |   6 +-
+ include/uapi/linux/vfio.h                         |  15 +-
+ samples/Kconfig                                   |  19 +-
+ samples/vfio-mdev/README.rst                      | 100 +++++++++
+ 33 files changed, 756 insertions(+), 422 deletions(-)
+ create mode 100644 samples/vfio-mdev/README.rst
 
