@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FFF6A2065
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D196A2069
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjBXRS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S229763AbjBXRU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjBXRSv (ORCPT
+        with ESMTP id S229610AbjBXRUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:18:51 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C28168BC;
-        Fri, 24 Feb 2023 09:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/rWlsTTsqwQRBH1/dsrlrPiKOJY/AEr+/TWJdGdG9rM=; b=WV54+Xhc8CTfs8oWGtxYegWSsl
-        sWZ04PYxAWNBY6BnzM+EIYh3/2nvfW4iYqfXiZG3wuS+UhMRxpqvw0ahZdKtXR/Wkyq+7ZcdjgMY4
-        6lKdJSyy3aRy3LFyILuCWoFnLjKJudUE7kg4m2s/fojGyLMppBK8+mR+KF9b9RP7d2yLUJdJZ4Clu
-        QkwUZKpFLgw7KEWRe+VL9BMAcgKgA6ACljFH4Y4bD5f9bOhg0xI0nkqWr39ZcOSb7hszFGstCkhv1
-        Fq0OwTlVg5c+E0ARozgQLN5HL2YhwJAlsbq484gTv9oEOcA+xDWXrNXaCSR8QRV2RhVHLMcYJprPQ
-        LAhvWNQA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVbiR-003HyC-Ph; Fri, 24 Feb 2023 17:18:39 +0000
-Date:   Fri, 24 Feb 2023 09:18:39 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH 21/27] kbuild, dma-mapping: benchmark: remove
- MODULE_LICENSE in non-modules
-Message-ID: <Y/jxb+2bZcQ2PuK5@bombadil.infradead.org>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-22-nick.alcock@oracle.com>
- <20230222144856.GA14220@lst.de>
- <Y/acoc6MDKNnrG+g@bombadil.infradead.org>
- <878rgopfdl.fsf@esperi.org.uk>
- <Y/fR0KnxKP2rF3Da@bombadil.infradead.org>
- <87pm9zm9gf.fsf@esperi.org.uk>
+        Fri, 24 Feb 2023 12:20:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFA01589B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:19:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677259176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f2WOQUqLPxDcFQ7Nje15yiuLa01CXfpErjUcBxi/r80=;
+        b=AIlcp31y0GteEwcxJdjqnYdu/cVeFUQd8MGZ3XqivK5aAsLE/2nZc5puyjjeU/jeqweJpj
+        n3IWkg/IxvPiOmF9mRccdvQTmV88HmoW3ZJljp1zwCROM8UCdGCl9Q5HvSH1vRcBoiHV6s
+        VaVe7Db3+KGM+V4Ig25dDIKM19mzZio=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-NifuMESHMPOwiyBH2L3mAQ-1; Fri, 24 Feb 2023 12:19:31 -0500
+X-MC-Unique: NifuMESHMPOwiyBH2L3mAQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C0DD3804531;
+        Fri, 24 Feb 2023 17:19:30 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6C722026D4B;
+        Fri, 24 Feb 2023 17:19:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=whFKL4VuFBWvenG8fAgfvbf36PDgouUSx47rZDWr9BkJw@mail.gmail.com>
+References: <CAHk-=whFKL4VuFBWvenG8fAgfvbf36PDgouUSx47rZDWr9BkJw@mail.gmail.com> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org> <2134430.1677240738@warthog.procyon.org.uk> <2213409.1677249075@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Steve French <stfrench@microsoft.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pm9zm9gf.fsf@esperi.org.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2385283.1677259167.1@warthog.procyon.org.uk>
+Date:   Fri, 24 Feb 2023 17:19:27 +0000
+Message-ID: <2385284.1677259167@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 02:20:16PM +0000, Nick Alcock wrote:
-> The only problem that I can see with that is that this stops us using
-> MODULE_LICENSE for modinfo construction,
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Yes, the requirement shifts to having us *write* the module license
-from the combination computation of files from SPDX, so although not
-present anymore what changes is a new target / goal in ordering which has
-us construct that define for the file.
+> Can you humor me, and try if just removing that skip count thing
+> instead? IOW, this attached patch?
 
-Easier said than done of course.
+That works too.
 
-  Luis
+> Because that whole "let's stop writing if we need to reschedule" sounds
+> truly odd (we have a cond_resched(), although it's per folio batch, not
+> per-folio), and the skip count logic doesn't make much sense to me either.
+
+The skip thing, in my code, is only used in WB_SYNC_NONE mode.  If we hit 5
+things in progress or rescheduling is required, we return to the caller on the
+basis that conflicting flushes appear to be happening in other threads.
+
+David
+
