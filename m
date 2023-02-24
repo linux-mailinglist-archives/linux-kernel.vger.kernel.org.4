@@ -2,128 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41E66A17C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051596A17CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjBXIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        id S229556AbjBXISN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjBXIQf (ORCPT
+        with ESMTP id S229485AbjBXISL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:16:35 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07FE4988A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:16:33 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id bn17so1459374pgb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:16:33 -0800 (PST)
+        Fri, 24 Feb 2023 03:18:11 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5F013529;
+        Fri, 24 Feb 2023 00:18:09 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id b5so2246541iow.0;
+        Fri, 24 Feb 2023 00:18:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677226593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dn8fVHgRka3CBf4dzz7H6jMzvwom75gm7qdg9exDmI8=;
-        b=D6OP0tN8sWZPahHKSNFOdt5zMUoSL24vbs19CEVifu6csXgKLCyaORPLR7nlYEscIW
-         CMLFLxVz6oDUmrfXo6FD3CmqiwWIT+LYxZ8VpVHYH9p+SvRHEbpKMk+un+xjeKWZsbT1
-         84lcvdG97Yx8HD26L8LXaUy7PDAixssklYvc57av36HofSVZlf1xvEJOAG36gDm37+vc
-         QmyGjX/VXXd+QC3/MKYXwyqPzyT9wkTqgWnYYWq76RTHzJffTO9e+sIRBFV9ivz+aNMo
-         g4zaMjaBz2MctSzJNPegGyCURJq2oCyD8Rb0c54cqmbOUE/gDq4iTes2X+NZSZZrRmyE
-         Tc/g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O0ngU5kfJKxMYZFBd+7WXjjgrm7mINfk+g1OE6PGkNw=;
+        b=juyQhWTkOySr/EdhXTXw0uQdF8kVaOzrtUeaH7yY7M6zf1AEu10smfDCdKgUDooeJA
+         drqAgRRPNKdFRJLBakxny9P/0HxNuy7DFGBdt8GBg6zdO5eADPmSjyPo2FWnGApn2Ewp
+         Hu7IcPlSSxcqeT6B/gfP7esDGhVgxRpnMDB3HDFHLFNlcc8q0FbDWBZrwdQHUoKjMc3/
+         zjgJbBgD/hZ8ussa5VvU+3asesbQR77NVJXnuMTx/55VnEBXTpJuJYtUP9FPY6mHbYX2
+         e9hu+Vn5H+6kHRG8X5FQ15PYpwn7Kqas6oBHRJRI+XnFgeX3mURWfmv9tE+Z1tm3jPSm
+         2tig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677226593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dn8fVHgRka3CBf4dzz7H6jMzvwom75gm7qdg9exDmI8=;
-        b=2wOk4KronCZE+gv02MkSiDd51RkKCPvlkncyfXwbP8iqaDWX8zkv0WwEFddFxwMuRX
-         a4v3lcNzRJ0DonY1oEGKVUnGDxCdOFzgXafPBbSjGCcjwTIUrG8q51El/0iqhhNHcgtc
-         Qd+cOJ2oR09HSJmoJX6P7ey+U4pgyJD8e60IV24lUny/zy6cF1eKL0WRc8toVP47QARK
-         GuJpAMyNENjb/CizrHkw8m8t9hfheXNsHXRc2/KZPHOHXlGF+lgDQ7jxroXo3MRVKwfA
-         30mK/JwOyB2JDMth3rJeY/rdUY9z7Bjm7umtdU30qqV1WBTwTDWjTs4B3KLVB+3u6lU2
-         esFg==
-X-Gm-Message-State: AO0yUKV/WbH00TDCvEk2pW1VRb+0SjNGSL+o41BY0XyMktuDUUt7Kpjq
-        vYdi7ys6HGjY+Dvjveex2lL16Q==
-X-Google-Smtp-Source: AK7set+bnaya8ymLWEYRvTWs9lZspJeRhG8CRI6ADbV1PFLfGuBYqop0ppIL4j8Q6sthEyfOWxAvzQ==
-X-Received: by 2002:a62:1ccb:0:b0:5a9:d5c7:199a with SMTP id c194-20020a621ccb000000b005a9d5c7199amr12889650pfc.8.1677226593285;
-        Fri, 24 Feb 2023 00:16:33 -0800 (PST)
-Received: from niej-dt-7B47 (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id x16-20020aa784d0000000b0058bc60dd98dsm6408427pfn.23.2023.02.24.00.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 00:16:32 -0800 (PST)
-Date:   Fri, 24 Feb 2023 16:17:03 +0800
-From:   Jun Nie <jun.nie@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     cw00.choi@samsung.com, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
-Message-ID: <Y/hyf+/EqEeTu436@niej-dt-7B47>
-References: <cover.1677063656.git.viresh.kumar@linaro.org>
- <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
- <20230224021713.stpcykx2tjkjwyti@vireshk-i7>
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O0ngU5kfJKxMYZFBd+7WXjjgrm7mINfk+g1OE6PGkNw=;
+        b=i/JMzO6TXIQF/3s2DcW3BlYfpU3+MLJqQruRMzL3eoTODUFzoKJeVtHX82TH4Q4D7t
+         DzbhaqRtaJLONIUyTiK00CuqoAqJ+j4FNYJCLWRvTva3hsgVEoBpRZP5dEC4oPHoOlhj
+         A4JX2vYMgvXz/UfpkPOfYDMTZNWGcNb8oP8Cc5xOmM/lUEY6/w/UW43kL4J2F0Mwb5FJ
+         s4HfjBHaNksaHORt7QT4gtAPfK4bSg5sGWNF5IU/E9iXeQV5EIrK8i+DOYvb/sfIV7VW
+         draDSHkAqCqDd8zpHHl4aXa132FxFFVZFfeAWpcxnoQQNkmmfyn/CFO27OySbQPDOFmq
+         STqA==
+X-Gm-Message-State: AO0yUKWC3cUA5+QcNFbIGqS0+59fZH2eUncpla87aJKk+JmwSWH4NN4T
+        2SrbY/7vq3BhfqNtQueokhisIbdSbuTYVAh2UnM=
+X-Google-Smtp-Source: AK7set8Jq6plJbbrBmatQWDPxsz0GV823XNOEt52m+0mf8yWNEVK00R+UGnjbQjEdlzrpO+Iau02uUa8QqrmmEH9I1Q=
+X-Received: by 2002:a05:6638:1342:b0:3c2:c1c9:8bca with SMTP id
+ u2-20020a056638134200b003c2c1c98bcamr6370686jad.2.1677226688551; Fri, 24 Feb
+ 2023 00:18:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224021713.stpcykx2tjkjwyti@vireshk-i7>
+References: <20230221201740.2236-1-gregory.price@memverge.com> <20230221201740.2236-3-gregory.price@memverge.com>
+In-Reply-To: <20230221201740.2236-3-gregory.price@memverge.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Fri, 24 Feb 2023 00:17:56 -0800
+Message-ID: <CANaxB-zTkCLbjBti8hrs9RVna21KzwC0GugyDu7=nTzGLLum2Q@mail.gmail.com>
+Subject: Re: [PATCH v11 2/2] ptrace,syscall_user_dispatch: checkpoint/restore
+ support for SUD
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        oleg@redhat.com, peterz@infradead.org, luto@kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 07:47:13AM +0530, Viresh Kumar wrote:
-> On 23-02-23, 17:56, Jun Nie wrote:
-> > It looks promising. The function get_target_freq_with_cpufreq() can be wrapped
-> > to act as set_required_opps() callback.
-> 
-> > But my case is a bit complicated. CPU opp depends on both genpd opp and
-> > devfreq opp.
-> 
-> I was wondering if we will have such a case soon enough or not :)
->  
-> > So the genpd_virt_devs array need
-> > to be modified or add another array for devfreq case. While genpd_virt_devs is
-> > bounded with genpd directly and coupled with "power-domains" list in
-> > device tree.
-> > Current required-opp nodes are designed to be aligned with the list. I
-> > am considering
-> > what's the best way for back compatibility.
-> 
-> Please look at the top commit here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/propagate
-> 
-> Will this be enough for your use case ? I will post everything again once we are
-> settled on a solution.
+On Tue, Feb 21, 2023 at 12:18 PM Gregory Price
+<gourry.memverge@gmail.com> wrote:
 
-For the opp lib, this is right direction. We still need to find a method to
-pass devfreq device node to opp lib, just genpd_virt_devs for power domain.
-But I am not clear below is the right way yet and this also involves wider
-changes. Or the opp's owner, devfreq device can be referred via opp lib?
-If so, we do not need to add devfreq-devs to cpu node at all.
+...
 
-		cpu1: cpu@101 {
-			compatible = "arm,cortex-a53";
-			device_type = "cpu";
-			power-domains = <&cpr>;
-			power-domain-names = "cpr";
-			devfreq-devs = <&cci>;
-			devfreq-names = "cci";
-			operating-points-v2 = <&cluster1_opp_table>;
-		};
+> diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
+> index 22396b234854..08e8b377557f 100644
+> --- a/kernel/entry/syscall_user_dispatch.c
+> +++ b/kernel/entry/syscall_user_dispatch.c
+> @@ -4,6 +4,7 @@
+>   */
+>  #include <linux/sched.h>
+>  #include <linux/prctl.h>
+> +#include <linux/ptrace.h>
+>  #include <linux/syscall_user_dispatch.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/signal.h>
+> @@ -113,3 +114,42 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
+>  {
+>         return task_set_syscall_user_dispatch(current, mode, offset, len, selector);
+>  }
+> +
+> +int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+> +                                    void __user *data)
+> +{
+> +       struct syscall_user_dispatch *sd = &task->syscall_dispatch;
+> +       struct ptrace_sud_config config;
 
-		opp-200000000 {
-			opp-hz = /bits/ 64 <200000000>;
-			required-opps = <&cpr_opp3>, <&cci_opp1>;
-		};
+WARNING: Missing a blank line after declarations
 
-> 
-> -- 
-> viresh
+You need to verify all patches with ./scripts/checkpatch.pl. Here are
+a few other warnings.
+
+> +       if (size != sizeof(struct ptrace_sud_config))
+> +               return -EINVAL;
+> +
+
+config has to be fully initialized otherwise it leaks data from a kernel stack.
+
+> +       if (test_task_syscall_work(task, SYSCALL_USER_DISPATCH))
+> +               config.mode = PR_SYS_DISPATCH_ON;
+> +       else
+> +               config.mode = PR_SYS_DISPATCH_OFF;
+> +
+> +       config.offset = sd->offset;
+> +       config.len = sd->len;
+> +       config.selector = (__u64)sd->selector;
+> +
+> +       if (copy_to_user(data, &config, sizeof(config))) {
+> +               return -EFAULT;
+> +       }
+> +       return 0;
+> +}
+> +
+> +int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+> +                                    void __user *data)
+> +{
+> +       int rc;
+> +       struct ptrace_sud_config cfg;
+> +       if (size != sizeof(struct ptrace_sud_config))
+> +               return -EINVAL;
+> +
+> +       if (copy_from_user(&cfg, data, sizeof(cfg))) {
+> +               return -EFAULT;
+> +       }
+> +       rc = task_set_syscall_user_dispatch(task, cfg.mode, cfg.offset,
+> +                                           cfg.len, (void __user*)cfg.selector);
+> +       return rc;
+> +}
+> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+> index 54482193e1ed..d99376532b56 100644
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/compat.h>
+>  #include <linux/sched/signal.h>
+>  #include <linux/minmax.h>
+> +#include <linux/syscall_user_dispatch.h>
+>
+>  #include <asm/syscall.h>       /* for syscall_get_* */
+>
+> @@ -1259,6 +1260,14 @@ int ptrace_request(struct task_struct *child, long request,
+>                 break;
+>  #endif
+>
+> +       case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
+> +               ret = syscall_user_dispatch_set_config(child, addr, datavp);
+> +               break;
+> +
+> +       case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
+> +               ret = syscall_user_dispatch_get_config(child, addr, datavp);
+> +               break;
+> +
+>         default:
+>                 break;
+>         }
+> diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
+> index 792318aaa30c..b7dde152e75a 100644
+> --- a/tools/testing/selftests/ptrace/.gitignore
+> +++ b/tools/testing/selftests/ptrace/.gitignore
+> @@ -1,4 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  get_syscall_info
+> +get_set_sud
+>  peeksiginfo
+>  vmaccess
+> diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
+> index 2f1f532c39db..33a36b73bcb9 100644
+> --- a/tools/testing/selftests/ptrace/Makefile
+> +++ b/tools/testing/selftests/ptrace/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  CFLAGS += -std=c99 -pthread -iquote../../../../include/uapi -Wall
+>
+> -TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess
+> +TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess get_set_sud
+>
+>  include ../lib.mk
+> diff --git a/tools/testing/selftests/ptrace/get_set_sud.c b/tools/testing/selftests/ptrace/get_set_sud.c
+
+I think the test has to be in a separate patch.
+
+> new file mode 100644
+> index 000000000000..c4e7b87cab03
+> --- /dev/null
+> +++ b/tools/testing/selftests/ptrace/get_set_sud.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +#include "../kselftest_harness.h"
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <errno.h>
+> +#include <sys/wait.h>
+> +#include <sys/syscall.h>
+> +#include <sys/prctl.h>
+> +
+> +#include "linux/ptrace.h"
+> +
+> +static int sys_ptrace(int request, pid_t pid, void *addr, void *data)
+> +{
+> +       return syscall(SYS_ptrace, request, pid, addr, data);
+> +}
+> +
+> +TEST(get_set_sud)
+> +{
+> +       struct ptrace_sud_config config;
+> +       pid_t child;
+> +       int ret = 0;
+> +       int status;
+> +
+> +       child = fork();
+> +       ASSERT_GE(child, 0);
+> +       if (child == 0) {
+> +               ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
+> +                       TH_LOG("PTRACE_TRACEME: %m");
+> +               }
+> +               kill(getpid(), SIGSTOP);
+> +               _exit(1);
+> +       }
+> +
+> +       waitpid(child, &status, 0);
+> +
+> +       memset(&config, 0xff, sizeof(config));
+> +       config.mode = PR_SYS_DISPATCH_ON;
+> +
+> +       ret = sys_ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG, child,
+> +                        (void*)sizeof(config), &config);
+> +       if (ret < 0) {
+> +               ASSERT_EQ(errno, EIO);
+
+When do we expect to get EIO here?
+
+> +               goto leave;
+> +       }
+> +
+> +       ASSERT_EQ(ret, 0);
+> +       ASSERT_EQ(config.mode, PR_SYS_DISPATCH_OFF);
+> +       ASSERT_EQ(config.selector, 0);
+> +       ASSERT_EQ(config.offset, 0);
+> +       ASSERT_EQ(config.len, 0);
+> +
+> +       config.mode = PR_SYS_DISPATCH_ON;
+> +       config.selector = 0;
+> +       config.offset = 0x400000;
+> +       config.len = 0x1000;
+> +
+> +       ret = sys_ptrace(PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG, child,
+> +                        (void*)sizeof(config), &config);
+> +
+> +       ASSERT_EQ(ret, 0);
+> +
+> +       memset(&config, 1, sizeof(config));
+> +       ret = sys_ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG, child,
+> +                        (void*)sizeof(config), &config);
+> +
+> +       ASSERT_EQ(ret, 0);
+> +       ASSERT_EQ(config.mode, PR_SYS_DISPATCH_ON);
+> +       ASSERT_EQ(config.selector, 0);
+> +       ASSERT_EQ(config.offset, 0x400000);
+> +       ASSERT_EQ(config.len, 0x1000);
+> +
+> +leave:
+> +       kill(child, SIGKILL);
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> --
+> 2.39.1
+>
