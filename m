@@ -2,106 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25E06A233F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC50C6A2340
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBXUpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S229872AbjBXUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 15:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjBXUpT (ORCPT
+        with ESMTP id S229613AbjBXUqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:45:19 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6422DC5;
-        Fri, 24 Feb 2023 12:45:18 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-53916ab0c6bso11904117b3.7;
-        Fri, 24 Feb 2023 12:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbwZ7KJxlkNyIKWiZuH4bGbwcOZpsexyARY/sQCYU7Q=;
-        b=EM6i17xmf4rHEkb6+ZAxBNfq12n66NGEbB3Bp0oCP6oXSZB+KWXgzh18MCjf8H0KqO
-         buVvmlAfgnzYq7uX31oLSJ0w+3QaSYZ7LsPdi7nTrssLwQ8+j5EA9bC/WqcCz4FI4Olh
-         Ox67BeF01mkW8yvtN9Z5/uQj2LxLLk1ByRbpIz5qHdqcRL+mirLXAELY4tz3FVU5pb2V
-         +HO0kiEcs7n7xPiJwz2paZls62gb7WzQw0CCvRIAyYBUeLZ9dEnA29Xa+DXYQBJmkBVG
-         TSgiVJ8a2gDNODRc+UclMPNqKnlCXFLZAW2SeqkdjdgQ+W8nSfg683q6VbHQfQ5WN/K9
-         sqQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gbwZ7KJxlkNyIKWiZuH4bGbwcOZpsexyARY/sQCYU7Q=;
-        b=myj0C+11H0A4zhe9HdVS23mmv99PZRqVgoYO4THmLXjPOWhcKrVVYNaCBYefo2uKW3
-         jctOPqBE3+bCo+isi7ZtRs7pL3qB+1a2a5VIRPelPH5S9rsRWOC6aVrnHn8VzcM6JQKg
-         +/g7tyP3QtidknZxt0oDtxjcq8y0uowRGiYKRrc9+gxPJ91Jw7qoMDDNRfQNF3IB/enA
-         E6xXENk1/a46yeP4EzAba73WYG4x8yF6w/mzulPV5vmv4Q/ZxGjzteZkb1twmzeXIBt4
-         BwbrJgMYgfqeN3e1lHrExTv9RIV+/AEPHosczx3vbyHQc9KG1q+zn1A+zR48NXKbXV8Y
-         ve5Q==
-X-Gm-Message-State: AO0yUKULKtjhMj2WiGxsf2kZui2nDkV1Cqn3EVW8h+7bjdayqtoAoBu4
-        /ZvQARfpdfJLYUev0HVw1eDTzkO6hhnAZDrZJgo=
-X-Google-Smtp-Source: AK7set84Zz1Zr7T7N8qHPRl6RNV3+nFpbLtN1bYDnhyNzpxCSNaUv0uEVh3ISprN44/2u3gUR//r6clsUubamtYQ/C4=
-X-Received: by 2002:a81:af1b:0:b0:533:8080:16ee with SMTP id
- n27-20020a81af1b000000b00533808016eemr5353877ywh.10.1677271517377; Fri, 24
- Feb 2023 12:45:17 -0800 (PST)
+        Fri, 24 Feb 2023 15:46:06 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EC567994;
+        Fri, 24 Feb 2023 12:46:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CXWCcTWtQAtpZMwkWvr7mMFe5zhDDr+sLVb4ims5Yh0=; b=CylG0YEwbg2HdKH7WRiHhc2PBo
+        nUcBZWh4rU5DPQ9TwdH1oAb9/Ki20Z6DOb6Ha5jHTHCvDkMlTfpaTXMwpuw0Bvgs2fdtbMG/HxmHT
+        vIBBsmb3nuBB7M2BfMJXYIsxJprhU5uFI5uvnTCU2Oz1HT0JWktUV45xoGl5q88xfFYtAXrigMAhQ
+        yOJfDntwgXWN5/ONFP/Y6G71jxIrYJLc7viTo8ZZZ2RfK7t2YEA1QoZR293oxziJBqPqymqZMJS+D
+        0JsJPpN/gaMvOUAuWMzrGJBRDnQ8QT9WUERS6zRYpMLPdq7RDiwCW2wfjnjDcVjp08CukIx0wG+6+
+        qXj78o9w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVewi-00FYW5-RI; Fri, 24 Feb 2023 20:45:36 +0000
+Date:   Fri, 24 Feb 2023 20:45:36 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
+Message-ID: <Y/kh8P4oSjunIU7T@casper.infradead.org>
+References: <Y/jhwuTCaOgOTLp2@casper.infradead.org>
+ <2134430.1677240738@warthog.procyon.org.uk>
+ <2009825.1677229488@warthog.procyon.org.uk>
+ <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
+ <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
+ <2213409.1677249075@warthog.procyon.org.uk>
+ <2385089.1677258941@warthog.procyon.org.uk>
+ <Y/kFnhUM5hjWM2Ae@casper.infradead.org>
+ <2390711.1677269637@warthog.procyon.org.uk>
+ <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230224135044.2882109-1-conor.dooley@microchip.com> <20230224135044.2882109-3-conor.dooley@microchip.com>
-In-Reply-To: <20230224135044.2882109-3-conor.dooley@microchip.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 24 Feb 2023 21:45:05 +0100
-Message-ID: <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
-Subject: Re: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with
- rust support
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 2:51 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->
-> The rust modules work on 64-bit RISC-V, with no twiddling required.
-> Select HAS_RUST and provide the required flags to kbuild so that the
+On Fri, Feb 24, 2023 at 12:16:49PM -0800, Linus Torvalds wrote:
+> On Fri, Feb 24, 2023 at 12:14 PM David Howells <dhowells@redhat.com> wrote:
+> >
+> > Then why do we have to wait for PG_writeback to complete?
+> 
+> At least for PG_writeback, it's about "the _previous_ dirty write is
+> still under way, but - since PG_dirty is set again - the page has been
+> dirtied since".
+> 
+> So we have to start _another_ writeback, because while the current
+> writeback *might* have written the updated data, that is not at all
+> certain or clear.
 
-HAS -> HAVE
+also, we only have a writeback bit, not a writeback count.  And when
+the current writeback completes, it'll clear that bit.  We're also
+being kind to our backing store and not writing to the same block twice
+at the same time.
 
-> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-> index 6982b63775da..197919158596 100644
-> --- a/Documentation/rust/arch-support.rst
-> +++ b/Documentation/rust/arch-support.rst
-> @@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
->  ============  ================  ==============================================
->  Architecture  Level of support  Constraints
->  ============  ================  ==============================================
-> +``riscv``     Maintained        ``rv64`` only.
-> +============  ================  ==============================================
->  ``x86``       Maintained        ``x86_64`` only.
+> I'm not sure what the fscache rules are.
 
-I think this separator between rows should not be here (it is not in
-`rust-for-linux/rust`). Please see
-https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#simple-tables.
-
-Cheers,
-Miguel
+My understanding is that the fscache bit is set under several
+circumstances, but if the folio is dirty _and_ the fscache bit
+is set, it means the folio is currently being written to the cache
+device.  I don't see a conflict there; we can write to the backing
+store and the cache device at the same time.
