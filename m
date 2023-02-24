@@ -2,179 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E6B6A14DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80996A14E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjBXCUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S229754AbjBXCZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBXCUs (ORCPT
+        with ESMTP id S229446AbjBXCZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:20:48 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95305E870;
-        Thu, 23 Feb 2023 18:20:46 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id s1so2799113vsk.5;
-        Thu, 23 Feb 2023 18:20:46 -0800 (PST)
+        Thu, 23 Feb 2023 21:25:17 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CD55E870
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:25:15 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id ne1so12784464qvb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:25:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f01DwiBCCoSA8b356xeySu4YsZ3rzS92CP2vOVZhAWg=;
-        b=ql4RUo5LeGLa0GhN/7edy7N8eSQlsbke1N6qiltaZfQBUJuX/AwYqZ/Vm5kTVz39Xi
-         ovseMGfGAqmFEuv1nHiRRbrhmddHrgZtohSszSQ+R8Z5KG/UR9Fjlqr9bDqiPB4V51Sq
-         XcaVkvqD6lv8VpLPsDCfqIkUq6ZmB80JlW4ADCWbvnUxADl/iVBuDDmb/3hO7sUbQMeW
-         z86bCviapNBo0b6mQpGtxmnJLqh0SbtiKuGganjZ5oW91qSLHPmweTnvFoitm7ucJqqF
-         Vzw7iNvEi+jeCTRrNH+9CSh62O+2m7oaxGJ8zXm/TzAc8SZqEWL7owEjqkPh70bx2cX7
-         9kVA==
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6PDBgr54Vfa3PfNd3VzchAN71msIlCdFUIX7w+B3VJc=;
+        b=V1QPpUJiO7RqrJbebYe1aBJX7toyPR/IzxvftZ7lJWdEpjUCmvFWCMNycL8q2G9Ilu
+         v+S0aMEBFYbMB2Sp/Ads5Vq86NxXbsZaxzhB0M8zjifbjYx+aXm2tFEJA0u0FSyhuYF5
+         dCcTuWsAoQJmVozUKRP0Hjj5cxsLVBFkKP0S4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f01DwiBCCoSA8b356xeySu4YsZ3rzS92CP2vOVZhAWg=;
-        b=zXMBgr5oRPyQ2XkZVxClhur2/bYeLQfyi3SEsEG+4HHt4m/Cgfq7G3o6bW8ASNeyrF
-         oCsbQZ0p6UxAv/LircXLByjLJ+KDnhwaY3QwTcyvN0iC+T3PiVTXJs+kadMpp1uWXiQH
-         fz964ml+xsqlw5nG2BQwFbOZw1LDWxc+dGmMerHfbKWp1Je+vmoFEq4DkP6ExlQIcM6C
-         Ly497YozpfWIKbGlBoRI6tgz1rReIKnm5Ucr8Z4Sa48nld3PRPZi+hskbnSSYYTWSfs5
-         1CxGnTS0+IRC0lm5EigVvum/eVCRGDcyTjVKMrQfZ8x9zBPF85h34Dj1Hw6Bf7B1sKwA
-         NHiQ==
-X-Gm-Message-State: AO0yUKVlWPh3+LjwD3WrQihzQOvFN/+f0odcgqQYy8db63oXXhbYbYul
-        ktSfScD2rseC/+AF6EcdQrI09QjOeYqOie9O2aw=
-X-Google-Smtp-Source: AK7set8GaFZs9grTBPV2TtGqHKOwcBoSfP0H2qOWvJ/sb72x2A3bDmtOsjArb1eEis7Bc9lNaMYPNjkC9qJrqfiPLyc=
-X-Received: by 2002:ab0:551a:0:b0:68e:2ed3:92eb with SMTP id
- t26-20020ab0551a000000b0068e2ed392ebmr3300972uaa.1.1677205245675; Thu, 23 Feb
- 2023 18:20:45 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6PDBgr54Vfa3PfNd3VzchAN71msIlCdFUIX7w+B3VJc=;
+        b=BHQVz3aa8Ilf4bwXzb7zUJnD4f/V/pgc/50RXAifaSDqeBBxWuyGIKl5g9VadPOMIZ
+         UQz7BDivobLkN57Hng45hm2SUt6Ivm4NECxdtuizcNdUhIqbq38FIQc3ep12jbsD0UQK
+         +hg5wjlCYrlPzf7HO7oOTjgXj6HTMzJdq/t5R3bOJk6Ibm3WMXdHoRd5m4hYo4TLV05o
+         q5TIg2701M1uInYxN739I1IByUo3Jpk00j+TAq5UY3Azj+N98kgged0+PORDedRcOCbl
+         xaRLtSHNNQfZSS/qsrP6jt/19jOi719gZdAS8AFRNevY2JXHcsMyfW23OWO3d3um9vDy
+         dmCQ==
+X-Gm-Message-State: AO0yUKWzjYn3oaGwjN+bo2QGPuD7Y4BGz9ZLtp/9LRkn62vR+RM5B3VG
+        Q0lFHSSb+o9mDR/MOe2pcjIKyQ==
+X-Google-Smtp-Source: AK7set9+9fNEM/gDyn3rd4nAf0oji67wNWdiWAZZTs8JnczTMZYqPnkX2+BXycd+N5APjM5OSByv6g==
+X-Received: by 2002:a05:6214:e8a:b0:56e:ff37:6b6e with SMTP id hf10-20020a0562140e8a00b0056eff376b6emr28650649qvb.10.1677205514622;
+        Thu, 23 Feb 2023 18:25:14 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id 9-20020a370409000000b00741a984943fsm6221829qke.40.2023.02.23.18.25.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 18:25:13 -0800 (PST)
+Date:   Fri, 24 Feb 2023 02:25:13 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in
+ call_rcu_tasks_generic()
+Message-ID: <Y/ggCdoMEhMO8vs+@google.com>
+References: <20230223063022.2592212-1-qiang1.zhang@intel.com>
+ <IA1PR11MB6171F5F6B525B6C599024C9D89AB9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <PH0PR11MB588084641FFB675A102BA503DAAB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <Y/eP4h/chB8J0rAj@google.com>
+ <PH0PR11MB58801B94B0374865394E9F8FDAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
-In-Reply-To: <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Thu, 23 Feb 2023 18:20:29 -0800
-Message-ID: <CANaxB-x2OrTPziL_hgwgQ1xe-ypVrvEJZK5i4ZvmUwsLqfTcvA@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB58801B94B0374865394E9F8FDAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 4:42=E2=80=AFAM Micha=C5=82 Miros=C5=82aw <emmir@go=
-ogle.com> wrote:
->
-> On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
+On Fri, Feb 24, 2023 at 12:36:05AM +0000, Zhang, Qiang1 wrote:
+> On Thu, Feb 23, 2023 at 08:43:05AM +0000, Zhang, Qiang1 wrote:
+> > > From: Zqiang <qiang1.zhang@intel.com>
+> > > Sent: Thursday, February 23, 2023 2:30 PM
+> > > To: paulmck@kernel.org; frederic@kernel.org; quic_neeraju@quicinc.com;
+> > > joel@joelfernandes.org
+> > > Cc: rcu@vger.kernel.org; linux-kernel@vger.kernel.org
+> > > Subject: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in
+> > > call_rcu_tasks_generic()
+> > > 
+> > > According to commit '3063b33a347c ("Avoid raw-spinlocked wakeups from
+> > > call_rcu_tasks_generic()")', the grace-period kthread is delayed to wakeup
+> > > using irq_work_queue() is because if the caller of
+> > > call_rcu_tasks_generic() holds a raw spinlock, when the kernel is built with
+> > > CONFIG_PROVE_RAW_LOCK_NESTING=y, due to a spinlock will be hold in
+> > > wake_up(), so the lockdep splats will happen. but now using
+> > > rcuwait_wake_up() to wakeup grace-period kthread instead of wake_up(), in
+> > > rcuwait_wake_up() no spinlock will be acquired, so this commit remove using
+> > >
+> > >There are still spinlock-acquisition and spinlock-release invocations within the call path from rcuwait_wake_up().
+> > >
+> > >rcuwait_wake_up() -> wake_up_process() -> try_to_wake_up(), then:
+> > >
+> > >    raw_spin_lock_irqsave()
+> > >    ...
+> > >    raw_spin_unlock_irqrestore
+> > 
+> > Yes, but this is raw_spinlock acquisition and release(note: spinlock will convert to
+> > sleepable lock in Preempt-RT kernel, but raw spinlock is not change).
+> > 
+> > acquire raw_spinlock -> acquire spinlock  will trigger lockdep warning.
 > >
-> > Hi Micha=C5=82,
+> >Is this really safe in the long run though? I seem to remember there are
+> >weird locking dependencies if RCU is used from within the scheduler [1].
 > >
-> > Thank you so much for comment!
+> 
+> 
+> I have  been running rcutorture with rcutorture.type = tasks-tracing,
+> so far no problems have been found.
+> 
+> 
+> >I prefer to keep it as irq_work_queue() unless you are seeing some benefit.
+> >Generally, there has to be a 'win' or other justification for adding more
+> >risk.
 > >
-> > On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> [...]
-> > > For the page-selection mechanism, currently required_mask and
-> > > excluded_mask have conflicting
-> > They are opposite of each other:
-> > All the set bits in required_mask must be set for the page to be select=
-ed.
-> > All the set bits in excluded_mask must _not_ be set for the page to be
-> > selected.
+> >thanks,
 > >
-> > > responsibilities. I suggest to rework that to:
-> > > 1. negated_flags: page flags which are to be negated before applying
-> > > the page selection using following masks;
-> > Sorry I'm unable to understand the negation (which is XOR?). Lets look =
-at
-> > the truth table:
-> > Page Flag       negated_flags
-> > 0               0                       0
-> > 0               1                       1
-> > 1               0                       1
-> > 1               1                       0
+> >- Joel
+> >[1] http://www.joelfernandes.org/rcu/scheduler/locking/2019/09/02/rcu-schedlocks.html
+> 
+> 
+> The problem in this link,  in an earlier RCU version, rcu_read_unlock_special()
+> Invoke wakeup and enter scheduler can lead to deadlock, but my modification is for
+> call_rcu_tasks_generic(), even if there is a lock dependency problem, we should pay
+> more attention to rcu_read_unlock_trace_special()
+
+Consider ABBA deadlocks as well, not just self-deadlocks (which IIRC is what
+the straight-RCU rcu_read_unlock() issues were about).
+
+What prevents the following scenario?
+
+In the scheduler you have code like this:
+                rq = task_rq_lock(p, &rf);
+                trace_sched_wait_task(p);
+
+Someone can hook up a BPF program to that tracepoint that then calls
+rcu_read_unlock_trace() -> rcu_read_unlock_trace_special(). All of
+this while holding the rq and pi scheduler locks.
+
+That's A (rq lock) -> B (rtpcp lock).
+
+In another path, your change adds the following dependency due to doing
+wakeup under the rtpcp lock.
+
+That's call_rcu_tasks_generic() -> B (rtpcp lock) -> A (rq lock).
+
+Maybe there is some other state that prevents this case, but it still makes
+me queasy specially since there is perhaps no benefit more than deleting a
+few lines of code.
+
+Either way, nice observation!
+
+Btw, the way irq_work works is quite interesting, so I guess what it does is
+it does a self-IPI and then runs the callback in hard IRQ context, without
+holding any locks. Another interesting fact is, there is also a "lazy"
+version of the IRQ work API (IRQ_WORK_INIT_LAZY) which seems currently to be
+used by printk. This executes the work from the scheduler tick instead of an
+IPI handler unless the tick is stopped.
+
+thanks,
+
+ - Joel
+
+
+> 
+> Thanks
+> Zqiang
+> 
 > >
-> > If a page flag is 0 and negated_flag is 1, the result would be 1 which =
-has
-> > changed the page flag. It isn't making sense to me. Why the page flag b=
-it
-> > is being fliped?
-> >
-> > When Anrdei had proposed these masks, they seemed like a fancy way of
-> > filtering inside kernel and it was straight forward to understand. Thes=
-e
-> > masks would help his use cases for CRIU. So I'd included it. Please can=
- you
-> > elaborate what is the purpose of negation?
->
-> The XOR is a way to invert the tested value of a flag (from positive
-> to negative and the other way) without having the API with invalid
-> values (with required_flags and excluded_flags you need to define a
-> rule about what happens if a flag is present in both of the masks -
-> either prioritise one mask over the other or reject the call).
-> (Note: the XOR is applied only to the value of the flags for the
-> purpose of testing page-selection criteria.)
-
-Micha=C5=82,
-
-Your API isn't much different from the current one, but it requires
-a bit more brain activity for understanding.
-
-The current set of masks can be easy translated to the new one:
-negated_flags =3D excluded_flags
-required_flags_new =3D excluded_flags | required_flags
-
-As for invalid values, I think it is an advantage of the current API.
-I mean we can easily detect invalid values and return EINVAL. With your
-API, such mistakes will be undetectable.
-
-As for priorities, I don't see this problem here If I don't miss something.
-
-We can rewrite the code this way:
-```
-if (required_mask && ((page_flags & required_mask) !=3D required_mask)
-  skip page;
-if (anyof_mask && !(page_flags & anyof_mask))
-  skip page;
-if (page_flags & excluded_mask)
-  skip page;
-```
-
-I think the result is always the same no matter in what order each
-mask is applied.
-
-Thanks,
-Andrei
+> > > irq_work_queue(), invoke rcuwait_wake_up() directly in
+> > > call_rcu_tasks_generic().
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > > ---
+> > >  kernel/rcu/tasks.h | 16 +---------------
+> > >  1 file changed, 1 insertion(+), 15 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h index
+> > > baf7ec178155..757b8c6da1ad 100644
+> > > --- a/kernel/rcu/tasks.h
+> > > +++ b/kernel/rcu/tasks.h
+> > > @@ -39,7 +39,6 @@ struct rcu_tasks_percpu {
+> > >  	unsigned long rtp_jiffies;
+> > >  	unsigned long rtp_n_lock_retries;
+> > >  	struct work_struct rtp_work;
+> > > -	struct irq_work rtp_irq_work;
+> > >  	struct rcu_head barrier_q_head;
+> > >  	struct list_head rtp_blkd_tasks;
+> > >  	int cpu;
+> > > @@ -112,12 +111,9 @@ struct rcu_tasks {
+> > >  	char *kname;
+> > >  };
+> > > 
+> > > -static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp);
+> > > -
+> > >  #define DEFINE_RCU_TASKS(rt_name, gp, call, n)
+> > > 			\
+> > >  static DEFINE_PER_CPU(struct rcu_tasks_percpu, rt_name ## __percpu) = {
+> > > 			\
+> > >  	.lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name ##
+> > > __percpu.cbs_pcpu_lock),		\
+> > > -	.rtp_irq_work = IRQ_WORK_INIT_HARD(call_rcu_tasks_iw_wakeup),
+> > > 			\
+> > >  };
+> > > 		\
+> > >  static struct rcu_tasks rt_name =
+> > > 		\
+> > >  {
+> > > 		\
+> > > @@ -273,16 +269,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+> > >  	pr_info("%s: Setting shift to %d and lim to %d.\n", __func__,
+> > > data_race(rtp->percpu_enqueue_shift), data_race(rtp-
+> > > >percpu_enqueue_lim));
+> > >  }
+> > > 
+> > > -// IRQ-work handler that does deferred wakeup for call_rcu_tasks_generic().
+> > > -static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp) -{
+> > > -	struct rcu_tasks *rtp;
+> > > -	struct rcu_tasks_percpu *rtpcp = container_of(iwp, struct
+> > > rcu_tasks_percpu, rtp_irq_work);
+> > > -
+> > > -	rtp = rtpcp->rtpp;
+> > > -	rcuwait_wake_up(&rtp->cbs_wait);
+> > > -}
+> > > -
+> > >  // Enqueue a callback for the specified flavor of Tasks RCU.
+> > >  static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+> > >  				   struct rcu_tasks *rtp)
+> > > @@ -334,7 +320,7 @@ static void call_rcu_tasks_generic(struct rcu_head
+> > > *rhp, rcu_callback_t func,
+> > >  	rcu_read_unlock();
+> > >  	/* We can't create the thread unless interrupts are enabled. */
+> > >  	if (needwake && READ_ONCE(rtp->kthread_ptr))
+> > > -		irq_work_queue(&rtpcp->rtp_irq_work);
+> > > +		rcuwait_wake_up(&rtp->cbs_wait);
+> > >  }
+> > > 
+> > >  // RCU callback function for rcu_barrier_tasks_generic().
+> > > --
+> > > 2.25.1
+> > 
