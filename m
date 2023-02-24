@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030D56A1797
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53DB6A179C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjBXH5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S229607AbjBXIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBXH5l (ORCPT
+        with ESMTP id S229458AbjBXIAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:57:41 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BA214EB9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:57:35 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-eVmjo_9qMACmN271Yc8nEQ-1; Fri, 24 Feb 2023 02:57:33 -0500
-X-MC-Unique: eVmjo_9qMACmN271Yc8nEQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 24 Feb 2023 03:00:07 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024AC22797;
+        Fri, 24 Feb 2023 00:00:03 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84CB11C05AF9;
-        Fri, 24 Feb 2023 07:57:32 +0000 (UTC)
-Received: from hog (unknown [10.39.192.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 37E5F140EBF4;
-        Fri, 24 Feb 2023 07:57:31 +0000 (UTC)
-Date:   Fri, 24 Feb 2023 08:57:30 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: tls: fix possible info leak in
- tls_set_device_offload()
-Message-ID: <Y/ht6gQL+u6fj3dG@hog>
-References: <20230223090508.443157-1-hbh25y@gmail.com>
- <Y/dK6OoNpYswIqrD@hog>
- <310391ea-7c71-395e-5dcb-b0a983e6fc93@gmail.com>
- <04c4d6ee-f893-5248-26cf-2c6d1c9b3aa5@gmail.com>
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id AC7E9424B9;
+        Fri, 24 Feb 2023 07:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1677225602;
+        bh=0OwJlzst8QnGBgBcQk6fTLszxJcN7zyR3Uch+1IED3Y=;
+        h=From:Subject:Date:To:Cc;
+        b=azST5eqx5b7QMLR8ATMAy34kmbqzXch0+Izv5mG1EgncDMCGkErboRH25vcweteIG
+         AZJyBCb7qlgUZDiUZ7BlogzLevTk8RqaXRUt56Ix2atp22x7bQOGHA8zl/PErmMbz1
+         lGFmV8w/D5ii9hcnVm5fnUIGL+lCUUK6lIQaPMQLavp5H+VT3JAr0jSr59w3I4B16V
+         hHOhPuVS4P4vy6AjigLEEiiuAwK4qsr64pLR/xR8ANts0/2MCtr+7KknxNbEHJeHD+
+         KUdzagkuyPXsB53DMxFni6bnubHrBETiUHASNBKkQwkKFiZ9w4EOndrUAGreQoOEgF
+         PmxWnEe7YK1VA==
+From:   Asahi Lina <lina@asahilina.net>
+Subject: [PATCH 0/2] rust: sync: Arc: Any downcasting and assume_init()
+Date:   Fri, 24 Feb 2023 16:59:32 +0900
+Message-Id: <20230224-rust-arc-v1-0-568eea613a41@asahilina.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <04c4d6ee-f893-5248-26cf-2c6d1c9b3aa5@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGVu+GMC/x2NMQ6DQAwEv4Jcx4IYRMFXIgrfYcDNgeyAIiH+n
+ jvK2Z3VXuBiKg5DdYHJqa5byvB+VRBXTougTpmBGmobog7t8C+yRQzcRupl6qRnyHpgFwzGKa5
+ lsOxH/bglL/1uMuvvufqM9/0H5guVzXoAAAA=
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677225599; l=718;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=0OwJlzst8QnGBgBcQk6fTLszxJcN7zyR3Uch+1IED3Y=;
+ b=MsH7fCaHou7xPAAUUnI0ciXy7xK6obm6TD3QPM7GG2vtUQLay6AChAR9KGhsHWG9rlpAgb/C3
+ 8nkD+GkApjUAVK46Lr2bMjadiDcAr0BbXD7zGYEgc9FzOi7nINvuGkg
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-02-24, 11:33:29 +0800, Hangyu Hua wrote:
-> On 24/2/2023 11:07, Hangyu Hua wrote:
-> > On 23/2/2023 19:15, Sabrina Dubroca wrote:
-> > > 2023-02-23, 17:05:08 +0800, Hangyu Hua wrote:
-> > > > After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
-> > > > tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL
-> > > > if it fails
-> > > > before kmalloc cctx->iv. This may cause info leak when we call
-> > > > do_tls_getsockopt_conf().
-> > > 
-> > > Is there really an issue here?
-> > > 
-> > > If both tls_set_device_offload and tls_set_sw_offload fail,
-> > > do_tls_setsockopt_conf will clear crypto_{send,recv} from the context.
-> > > Then the TLS_CRYPTO_INFO_READY in do_tls_getsockopt_conf will fail, so
-> > > we won't try to access iv or rec_seq.
-> > > 
-> > 
-> > My bad. I forget memzero_explicit. Then this is harmless. But I still
-> > think it is better to set them to NULL like tls_set_sw_offload's error
-> > path because we don't know there are another way to do this(I will
-> > change the commit log). What do you think?
+Hi everyone,
 
-Yes, I guess for consistency between functions it would be ok.
+This short series is part of the set of dependencies for the drm/asahi
+Apple M1/M2 GPU driver.
 
-> Like a rare case, there is a race condition between
-> do_tls_getsockopt_conf and do_tls_setsockopt_conf while the previous
-> condition is met. TLS_CRYPTO_INFO_READY(crypto_info) is not
-> protected by lock_sock in do_tls_getsockopt_conf. It's just too
-> difficult to satisfy both conditions at the same time.
+The two patches simply add two missing features to the kernel Arc
+implementation which are present in the Rust std version: `Any`
+downcasting and `assume_init()`.
 
-Ugh, thanks for noticing this. We should move the lock_sock in
-getsockopt before TLS_CRYPTO_INFO_READY. Do you want to write that
-patch?
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+Asahi Lina (2):
+      rust: sync: arc: implement Arc<dyn Any + Send + Sync>::downcast()
+      rust: sync: arc: Add UniqueArc<MaybeUninit<T>::assume_init()
+ rust/kernel/sync/arc.rs | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+---
+base-commit: 83f978b63fa7ad474ca22d7e2772c5988101c9bd
+change-id: 20230224-rust-arc-ba3c26ed4e6a
 
-Thanks.
-
--- 
-Sabrina
+Thank you,
+~~ Lina
 
