@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BF86A1AAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D156A1AAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjBXKyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:54:22 -0500
+        id S230077AbjBXKyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:54:49 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjBXKyK (ORCPT
+        with ESMTP id S230247AbjBXKyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:54:10 -0500
+        Fri, 24 Feb 2023 05:54:21 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0449B60D5E;
-        Fri, 24 Feb 2023 02:53:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8418164E16;
+        Fri, 24 Feb 2023 02:54:02 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 6C3BA424B9;
-        Fri, 24 Feb 2023 10:53:50 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id E917342627;
+        Fri, 24 Feb 2023 10:53:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677236035;
-        bh=NrVqIiH3X9XgjWiOPXyb08yMiHXA6hAq3CWoGWegOsU=;
+        s=default; t=1677236040;
+        bh=s8yg5Qe3Cf1DPHC1UIkVpTHEHGDsFbQ4/QodiHzArtM=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=z4ncFNu82ujl536rci+ZwNDWUFh+JpOeYiio+n69Y/NI3cGdn8gq9c4GuZ7EP8q1I
-         fCBLp8gKeCGt/Ct4n1TYKG3e6vlFlVOg1uDBXKV0GdEkW66azHhCxeYqsK8Y6+bCdl
-         DhxNz2rI1SMRMUju5sZ3mDOr/I7w8HeEDd5O74wraZZjc901j++oKL0iZdGG2QFo66
-         Bx2ZTiqEOE8oJaPUC6z6ESMDqG5EoE4OyLG6lxdjJFjaJPg8xfpreQq95VSjWD1usy
-         LaIasHjZ9vUE1y6eX5ptPIozRvnzOZTCdY1AOXbAc8yLCLBYKbFXScR0wDMhp2wUpR
-         Yq+vIzcKu/9SQ==
+        b=A6Ru0K8ekFVsvGDAELnpxa6tTrj8c587gyepAco4OyLOpVCnGZFAAC8pzTvEnr8BK
+         ERgbLZBGIJZOiyYEOPzwWb7HiM6Gnb+/buqxYEmBZCTjAyUKHAL3jljF9FMyC1EvdD
+         Q795JgevAi5UnOrlku3tg1TYdXWnX6kb5468++fDi4o0VbLkfBEN4nPCX34XnnvcO9
+         QX7UOjo47PKDFa4+uFUN4bf4lwt7021J0XN8PI57gXxiUDMt2LhCypHcqSw9oUHMwK
+         ZwIz4ZOANwzmOk3L6j4WCbNzqVfi1XeGxtWC2lLies3au6RfD7cxjEXS9kW/WMZbel
+         Qz4VyAEbABKEw==
 From:   Asahi Lina <lina@asahilina.net>
-Date:   Fri, 24 Feb 2023 19:53:15 +0900
-Subject: [PATCH 3/5] rust: io_pgtable: Add io_pgtable abstraction
+Date:   Fri, 24 Feb 2023 19:53:16 +0900
+Subject: [PATCH 4/5] rust: soc: apple: rtkit: Add Apple RTKit abstraction
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-iopt-rtkit-v1-3-49ced3391295@asahilina.net>
+Message-Id: <20230224-rust-iopt-rtkit-v1-4-49ced3391295@asahilina.net>
 References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
 In-Reply-To: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
 To:     Miguel Ojeda <ojeda@kernel.org>,
@@ -58,11 +58,11 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
         Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677236013; l=13923;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677236013; l=11585;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=NrVqIiH3X9XgjWiOPXyb08yMiHXA6hAq3CWoGWegOsU=;
- b=P9OJjQ7AsUwVWHlKKVuH9K+Qw3x4Twvm2E2HX6B8xsfUWQmjTKpiewnwJRmHi+HwymNy1/Yy2
- tw0/4bjOLl6BFLJbQJeWSGJXE4wU2Dxn/nVewsuULTqRppTxiCZDFF7
+ bh=s8yg5Qe3Cf1DPHC1UIkVpTHEHGDsFbQ4/QodiHzArtM=;
+ b=czVp61paD5NoMTz4vwcTr9lDdsqWjE73xnF7YjvYkIghtw6eScQB6OZFQccW+TpLk15O7XiLU
+ mYioNvRS1+RBDOqpGHh4UMxmwD3NLQvmeW/kCm575MbOzlXnNhTeCpU
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,413 +74,343 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The io_pgtable subsystem implements page table management for various
-IOMMU page table formats. This abstraction allows Rust drivers for
-devices with an embedded MMU to use this shared code directly.
+RTKit is Apple's proprietary real-time operating system framework, used
+across many subdevices on Apple Silicon platforms including NVMe, system
+management, GPU, etc. Add Rust abstractions for this subsystem, so that
+it can be used by upcoming Rust drivers.
 
-Gather structures are not implemented yet, since we don't have a
-consumer for that functionality. That can be added and refactored when
-someone needs it.
+This API is safe under the expectation that all RTKit coprocessors
+either have no unfiltered access to system memory (SMC), are behind a
+DART IOMMU (DCP, etc.), or require other unsafe operations to be granted
+access to arbitrary system memory (GFX, where the coprocessor page
+tables need to be mutated in bootloader-allocated memory blocks in order
+to map additional memory, which is a requirement to get it to do
+anything interesting beyond basic startup.)
 
-It's worth noting that although this abstraction is nominally used to
-manage page tables and mapping physical memory addresses, the
-abstraction API itself is not unsafe. This is because, by itself, it can
-only be used to manage page tables in isolation, which have no effect on
-the system. In Rust, we typically use `unsafe` to mark operations that
-actually introduce the safety requirements (that is, where the
-responsibilities are created). Here, that would be actually installing
-the page table root pointer into a device register (the downstream iomem
-abstractions are unsafe for this reason, because devices can do DMA).
+Note: Although ARM64 support is not yet merged, this can be built on amd64
+with CONFIG_COMPILE_TEST=y.
 
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
  rust/bindings/bindings_helper.h |   1 +
- rust/kernel/io_pgtable.rs       | 351 ++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |   2 +
- 3 files changed, 354 insertions(+)
+ rust/kernel/lib.rs              |   1 +
+ rust/kernel/soc/apple/mod.rs    |   6 +
+ rust/kernel/soc/apple/rtkit.rs  | 259 ++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/soc/mod.rs          |   5 +
+ 5 files changed, 272 insertions(+)
 
 diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 3632a39a28a6..88c65431d3ad 100644
+index 88c65431d3ad..c920d6242e3a 100644
 --- a/rust/bindings/bindings_helper.h
 +++ b/rust/bindings/bindings_helper.h
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/device.h>
-+#include <linux/io-pgtable.h>
+@@ -10,6 +10,7 @@
+ #include <linux/io-pgtable.h>
  #include <linux/slab.h>
  #include <linux/refcount.h>
++#include <linux/soc/apple/rtkit.h>
  
-diff --git a/rust/kernel/io_pgtable.rs b/rust/kernel/io_pgtable.rs
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 9944086d7e09..78108cbbf814 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -35,6 +35,7 @@ pub mod error;
+ pub mod io_pgtable;
+ pub mod prelude;
+ pub mod print;
++pub mod soc;
+ mod static_assert;
+ #[doc(hidden)]
+ pub mod std_vendor;
+diff --git a/rust/kernel/soc/apple/mod.rs b/rust/kernel/soc/apple/mod.rs
 new file mode 100644
-index 000000000000..19029b1fdfd8
+index 000000000000..dd69db63677d
 --- /dev/null
-+++ b/rust/kernel/io_pgtable.rs
-@@ -0,0 +1,351 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/rust/kernel/soc/apple/mod.rs
+@@ -0,0 +1,6 @@
++// SPDX-License-Identifier: GPL-2.0-only OR MIT
 +
-+//! IOMMU page table management
++//! Apple SoC drivers
++
++#[cfg(CONFIG_APPLE_RTKIT = "y")]
++pub mod rtkit;
+diff --git a/rust/kernel/soc/apple/rtkit.rs b/rust/kernel/soc/apple/rtkit.rs
+new file mode 100644
+index 000000000000..595b9b3dda96
+--- /dev/null
++++ b/rust/kernel/soc/apple/rtkit.rs
+@@ -0,0 +1,259 @@
++// SPDX-License-Identifier: GPL-2.0-only OR MIT
++
++//! Support for Apple RTKit coprocessors.
 +//!
-+//! C header: [`include/io-pgtable.h`](../../../../include/io-pgtable.h)
++//! C header: [`include/linux/soc/apple/rtkit.h`](../../../../include/linux/gpio/driver.h)
 +
 +use crate::{
 +    bindings, device,
-+    error::{code::*, to_result, Result},
++    error::{code::*, from_kernel_err_ptr, from_kernel_result, to_result, Result},
++    str::CStr,
 +    types::{ForeignOwnable, ScopeGuard},
 +};
 +
++use alloc::boxed::Box;
 +use core::marker::PhantomData;
-+use core::mem;
-+use core::num::NonZeroU64;
++use core::ptr;
++use macros::vtable;
 +
-+/// Protection flags used with IOMMU mappings.
-+pub mod prot {
-+    /// Read access.
-+    pub const READ: u32 = bindings::IOMMU_READ;
-+    /// Write access.
-+    pub const WRITE: u32 = bindings::IOMMU_WRITE;
-+    /// Request cache coherency.
-+    pub const CACHE: u32 = bindings::IOMMU_CACHE;
-+    /// Request no-execute permission.
-+    pub const NOEXEC: u32 = bindings::IOMMU_NOEXEC;
-+    /// MMIO peripheral mapping.
-+    pub const MMIO: u32 = bindings::IOMMU_MMIO;
-+    /// Privileged mapping.
-+    pub const PRIV: u32 = bindings::IOMMU_PRIV;
-+}
-+
-+/// Represents a requested io_pgtable configuration.
-+pub struct Config {
-+    /// Quirk bitmask (type-specific).
-+    pub quirks: usize,
-+    /// Valid page sizes, as a bitmask of powers of two.
-+    pub pgsize_bitmap: usize,
-+    /// Input address space size in bits.
-+    pub ias: usize,
-+    /// Output address space size in bits.
-+    pub oas: usize,
-+    /// IOMMU uses coherent accesses for page table walks.
-+    pub coherent_walk: bool,
-+}
-+
-+/// IOMMU callbacks for TLB and page table management.
++/// Trait to represent allocatable buffers for the RTKit core.
 +///
-+/// Users must implement this trait to perform the TLB flush actions for this IOMMU, if
-+/// required.
-+pub trait FlushOps {
-+    /// User-specified type owned by the IOPagetable that will be passed to TLB operations.
++/// Users must implement this trait for their own representation of those allocations.
++pub trait Buffer {
++    /// Returns the IOVA (virtual address) of the buffer from RTKit's point of view, or an error if
++    /// unavailable.
++    fn iova(&self) -> Result<usize>;
++
++    /// Returns a mutable byte slice of the buffer contents, or an
++    /// error if unavailable.
++    fn buf(&mut self) -> Result<&mut [u8]>;
++}
++
++/// Callback operations for an RTKit client.
++#[vtable]
++pub trait Operations {
++    /// Arbitrary user context type.
 +    type Data: ForeignOwnable + Send + Sync;
 +
-+    /// Synchronously invalidate the entire TLB context.
-+    fn tlb_flush_all(data: <Self::Data as ForeignOwnable>::Borrowed<'_>);
++    /// Type representing an allocated buffer for RTKit.
++    type Buffer: Buffer;
 +
-+    /// Synchronously invalidate all intermediate TLB state (sometimes referred to as the "walk
-+    /// cache") for a virtual address range.
-+    fn tlb_flush_walk(
-+        data: <Self::Data as ForeignOwnable>::Borrowed<'_>,
-+        iova: usize,
-+        size: usize,
-+        granule: usize,
-+    );
++    /// Called when RTKit crashes.
++    fn crashed(_data: <Self::Data as ForeignOwnable>::Borrowed<'_>) {}
 +
-+    /// Optional callback to queue up leaf TLB invalidation for a single page.
++    /// Called when a message was received on a non-system endpoint. Called in non-IRQ context.
++    fn recv_message(
++        _data: <Self::Data as ForeignOwnable>::Borrowed<'_>,
++        _endpoint: u8,
++        _message: u64,
++    ) {
++    }
++
++    /// Called in IRQ context when a message was received on a non-system endpoint.
 +    ///
-+    /// IOMMUs that cannot batch TLB invalidation operations efficiently will typically issue
-+    /// them here, but others may decide to update the iommu_iotlb_gather structure and defer
-+    /// the invalidation until iommu_iotlb_sync() instead.
-+    ///
-+    /// TODO: Implement the gather argument for batching.
-+    fn tlb_add_page(
-+        data: <Self::Data as ForeignOwnable>::Borrowed<'_>,
-+        iova: usize,
-+        granule: usize,
-+    );
++    /// Must return `true` if the message is handled, or `false` to process it in
++    /// the handling thread.
++    fn recv_message_early(
++        _data: <Self::Data as ForeignOwnable>::Borrowed<'_>,
++        _endpoint: u8,
++        _message: u64,
++    ) -> bool {
++        false
++    }
++
++    /// Allocate a buffer for use by RTKit.
++    fn shmem_alloc(
++        _data: <Self::Data as ForeignOwnable>::Borrowed<'_>,
++        _size: usize,
++    ) -> Result<Self::Buffer> {
++        Err(EINVAL)
++    }
++
++    /// Map an existing buffer used by RTKit at a device-specified virtual address.
++    fn shmem_map(
++        _data: <Self::Data as ForeignOwnable>::Borrowed<'_>,
++        _iova: usize,
++        _size: usize,
++    ) -> Result<Self::Buffer> {
++        Err(EINVAL)
++    }
 +}
 +
-+/// Inner page table info shared across all table types.
++/// Represents `struct apple_rtkit *`.
++///
 +/// # Invariants
 +///
-+///   - [`self.ops`] is valid and non-null.
-+///   - [`self.cfg`] is valid and non-null.
-+#[doc(hidden)]
-+pub struct IoPageTableInner {
-+    ops: *mut bindings::io_pgtable_ops,
-+    cfg: bindings::io_pgtable_cfg,
++/// The rtk pointer is valid.
++/// The data pointer is a valid pointer from T::Data::into_foreign().
++pub struct RtKit<T: Operations> {
++    rtk: *mut bindings::apple_rtkit,
 +    data: *mut core::ffi::c_void,
++    _p: PhantomData<T>,
 +}
 +
-+/// Helper trait to get the config type for a single page table type from the union.
-+pub trait GetConfig {
-+    /// Returns the specific output configuration for this page table type.
-+    fn cfg(iopt: &impl IoPageTable) -> &Self
-+    where
-+        Self: Sized;
++unsafe extern "C" fn crashed_callback<T: Operations>(cookie: *mut core::ffi::c_void) {
++    // SAFETY: cookie is always a PointerWrapper of the right type, passed in new().
++    T::crashed(unsafe { T::Data::borrow(cookie) });
 +}
 +
-+/// A generic IOMMU page table
-+pub trait IoPageTable: crate::private::Sealed {
-+    #[doc(hidden)]
-+    const FLUSH_OPS: bindings::iommu_flush_ops;
++unsafe extern "C" fn recv_message_callback<T: Operations>(
++    cookie: *mut core::ffi::c_void,
++    endpoint: u8,
++    message: u64,
++) {
++    // SAFETY: cookie is always a PointerWrapper of the right type, passed in new().
++    T::recv_message(unsafe { T::Data::borrow(cookie) }, endpoint, message);
++}
 +
-+    #[doc(hidden)]
-+    fn new_fmt<T: FlushOps>(
++unsafe extern "C" fn recv_message_early_callback<T: Operations>(
++    cookie: *mut core::ffi::c_void,
++    endpoint: u8,
++    message: u64,
++) -> bool {
++    // SAFETY: cookie is always a PointerWrapper of the right type, passed in new().
++    T::recv_message_early(unsafe { T::Data::borrow(cookie) }, endpoint, message)
++}
++
++unsafe extern "C" fn shmem_setup_callback<T: Operations>(
++    cookie: *mut core::ffi::c_void,
++    bfr: *mut bindings::apple_rtkit_shmem,
++) -> core::ffi::c_int {
++    // SAFETY: `bfr` is a valid buffer.
++    let bfr_mut = unsafe { &mut *bfr };
++
++    let buf = if bfr_mut.iova != 0 {
++        bfr_mut.is_mapped = true;
++        T::shmem_map(
++            // SAFETY: `cookie` came from a previous call to `into_foreign`.
++            unsafe { T::Data::borrow(cookie) },
++            bfr_mut.iova as usize,
++            bfr_mut.size,
++        )
++    } else {
++        bfr_mut.is_mapped = false;
++        // SAFETY: `cookie` came from a previous call to `into_foreign`.
++        T::shmem_alloc(unsafe { T::Data::borrow(cookie) }, bfr_mut.size)
++    };
++
++    from_kernel_result! {
++        let mut buf = buf?;
++        let iova = buf.iova()?;
++        let slice = buf.buf()?;
++
++        if slice.len() < bfr_mut.size {
++            return Err(ENOMEM);
++        }
++
++        bfr_mut.iova = iova as u64;
++        bfr_mut.buffer = slice.as_mut_ptr() as *mut _;
++
++        // Now box the returned buffer type and stash it in the private pointer of the
++        // `apple_rtkit_shmem` struct for safekeeping.
++        bfr_mut.private = Box::into_raw(Box::try_new(buf)?) as *mut _;
++        Ok(0)
++    }
++}
++
++unsafe extern "C" fn shmem_destroy_callback<T: Operations>(
++    _cookie: *mut core::ffi::c_void,
++    bfr: *mut bindings::apple_rtkit_shmem,
++) {
++    // SAFETY: `bfr` is a valid buffer.
++    let bfr_mut = unsafe { &mut *bfr };
++    if !bfr_mut.private.is_null() {
++        // SAFETY: Per shmem_setup_callback, this has to be a pointer to a Buffer if it is set.
++        unsafe {
++            core::mem::drop(Box::from_raw(bfr_mut.private as *mut T::Buffer));
++        }
++        bfr_mut.private = core::ptr::null_mut();
++    }
++}
++
++impl<T: Operations> RtKit<T> {
++    const VTABLE: bindings::apple_rtkit_ops = bindings::apple_rtkit_ops {
++        crashed: Some(crashed_callback::<T>),
++        recv_message: Some(recv_message_callback::<T>),
++        recv_message_early: Some(recv_message_early_callback::<T>),
++        shmem_setup: if T::HAS_SHMEM_ALLOC || T::HAS_SHMEM_MAP {
++            Some(shmem_setup_callback::<T>)
++        } else {
++            None
++        },
++        shmem_destroy: if T::HAS_SHMEM_ALLOC || T::HAS_SHMEM_MAP {
++            Some(shmem_destroy_callback::<T>)
++        } else {
++            None
++        },
++    };
++
++    /// Creates a new RTKit client for a given device and optional mailbox name or index.
++    pub fn new(
 +        dev: &dyn device::RawDevice,
-+        format: u32,
-+        config: Config,
++        mbox_name: Option<&'static CStr>,
++        mbox_idx: usize,
 +        data: T::Data,
-+    ) -> Result<IoPageTableInner> {
++    ) -> Result<Self> {
 +        let ptr = data.into_foreign() as *mut _;
 +        let guard = ScopeGuard::new(|| {
 +            // SAFETY: `ptr` came from a previous call to `into_foreign`.
 +            unsafe { T::Data::from_foreign(ptr) };
 +        });
-+
-+        let mut raw_cfg = bindings::io_pgtable_cfg {
-+            quirks: config.quirks.try_into()?,
-+            pgsize_bitmap: config.pgsize_bitmap.try_into()?,
-+            ias: config.ias.try_into()?,
-+            oas: config.oas.try_into()?,
-+            coherent_walk: config.coherent_walk,
-+            tlb: &Self::FLUSH_OPS,
-+            iommu_dev: dev.raw_device(),
-+            // SAFETY: This is an output field which is fine to zero-init.
-+            __bindgen_anon_1: unsafe { mem::zeroed() },
-+        };
-+
-+        // SAFETY: FFI call, all input pointers are valid.
-+        let ops = unsafe {
-+            bindings::alloc_io_pgtable_ops(format as bindings::io_pgtable_fmt, &mut raw_cfg, ptr)
-+        };
-+
-+        if ops.is_null() {
-+            return Err(EINVAL);
-+        }
++        // SAFETY: This just calls the C init function.
++        let rtk = unsafe {
++            from_kernel_err_ptr(bindings::apple_rtkit_init(
++                dev.raw_device(),
++                ptr,
++                match mbox_name {
++                    Some(s) => s.as_char_ptr(),
++                    None => ptr::null(),
++                },
++                mbox_idx.try_into()?,
++                &Self::VTABLE,
++            ))
++        }?;
 +
 +        guard.dismiss();
-+        Ok(IoPageTableInner {
-+            ops,
-+            cfg: raw_cfg,
++        // INVARIANT: `rtk` and `data` are valid here.
++        Ok(Self {
++            rtk,
 +            data: ptr,
++            _p: PhantomData,
 +        })
 +    }
 +
-+    /// Map a range of pages.
-+    fn map_pages(
-+        &mut self,
-+        iova: usize,
-+        paddr: usize,
-+        pgsize: usize,
-+        pgcount: usize,
-+        prot: u32,
-+    ) -> Result<usize> {
-+        let mut mapped: usize = 0;
++    /// Boots (wakes up) the RTKit coprocessor.
++    pub fn boot(&mut self) -> Result {
++        // SAFETY: `rtk` is valid per the type invariant.
++        to_result(unsafe { bindings::apple_rtkit_boot(self.rtk) })
++    }
 +
-+        // SAFETY: FFI call, ops is valid per the type invariant.
++    /// Starts a non-system endpoint.
++    pub fn start_endpoint(&mut self, endpoint: u8) -> Result {
++        // SAFETY: `rtk` is valid per the type invariant.
++        to_result(unsafe { bindings::apple_rtkit_start_ep(self.rtk, endpoint) })
++    }
++
++    /// Sends a message to a given endpoint.
++    pub fn send_message(&mut self, endpoint: u8, message: u64) -> Result {
++        // SAFETY: `rtk` is valid per the type invariant.
 +        to_result(unsafe {
-+            (*self.inner().ops).map_pages.unwrap()(
-+                self.inner().ops,
-+                iova as u64,
-+                paddr as u64,
-+                pgsize,
-+                pgcount,
-+                prot as i32,
-+                bindings::GFP_KERNEL,
-+                &mut mapped,
-+            )
-+        })?;
-+
-+        Ok(mapped)
-+    }
-+
-+    /// Unmap a range of pages.
-+    fn unmap_pages(
-+        &mut self,
-+        iova: usize,
-+        pgsize: usize,
-+        pgcount: usize,
-+        // TODO: gather: *mut iommu_iotlb_gather,
-+    ) -> usize {
-+        // SAFETY: FFI call, ops is valid per the type invariant.
-+        unsafe {
-+            (*self.inner().ops).unmap_pages.unwrap()(
-+                self.inner().ops,
-+                iova as u64,
-+                pgsize,
-+                pgcount,
-+                core::ptr::null_mut(),
-+            )
-+        }
-+    }
-+
-+    /// Translate an IOVA to the corresponding physical address, if mapped.
-+    fn iova_to_phys(&self, iova: usize) -> Option<NonZeroU64> {
-+        // SAFETY: FFI call, ops is valid per the type invariant.
-+        NonZeroU64::new(unsafe {
-+            (*self.inner().ops).iova_to_phys.unwrap()(self.inner().ops, iova as u64)
++            bindings::apple_rtkit_send_message(self.rtk, endpoint, message, ptr::null_mut(), false)
 +        })
 +    }
++}
 +
-+    #[doc(hidden)]
-+    fn inner(&self) -> &IoPageTableInner;
++// SAFETY: `RtKit` operations require a mutable reference.
++unsafe impl<T: Operations> Sync for RtKit<T> {}
++unsafe impl<T: Operations> Send for RtKit<T> {}
 +
-+    #[doc(hidden)]
-+    fn raw_cfg(&self) -> &bindings::io_pgtable_cfg {
-+        &self.inner().cfg
++impl<T: Operations> Drop for RtKit<T> {
++    fn drop(&mut self) {
++        // SAFETY: The pointer is valid by the type invariant.
++        unsafe { bindings::apple_rtkit_free(self.rtk) };
++
++        // Free context data.
++        //
++        // SAFETY: This matches the call to `into_foreign` from `new` in the success case.
++        unsafe { T::Data::from_foreign(self.data) };
 +    }
 +}
+diff --git a/rust/kernel/soc/mod.rs b/rust/kernel/soc/mod.rs
+new file mode 100644
+index 000000000000..e3024042e74f
+--- /dev/null
++++ b/rust/kernel/soc/mod.rs
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+// SAFETY: All abstraction operations either require mutable references or are thread-safe,
-+// and io_pgtable_ops objects can be passed between threads without issue.
-+unsafe impl Send for IoPageTableInner {}
-+unsafe impl Sync for IoPageTableInner {}
++//! SoC drivers
 +
-+unsafe extern "C" fn tlb_flush_all_callback<T: FlushOps>(cookie: *mut core::ffi::c_void) {
-+    // SAFETY: The cookie is always a ForeignOwnable of the right type, per new_fmt().
-+    T::tlb_flush_all(unsafe { T::Data::borrow(cookie) });
-+}
-+
-+unsafe extern "C" fn tlb_flush_walk_callback<T: FlushOps>(
-+    iova: core::ffi::c_ulong,
-+    size: usize,
-+    granule: usize,
-+    cookie: *mut core::ffi::c_void,
-+) {
-+    // SAFETY: The cookie is always a ForeignOwnable of the right type, per new_fmt().
-+    T::tlb_flush_walk(
-+        unsafe { T::Data::borrow(cookie) },
-+        iova as usize,
-+        size,
-+        granule,
-+    );
-+}
-+
-+unsafe extern "C" fn tlb_add_page_callback<T: FlushOps>(
-+    _gather: *mut bindings::iommu_iotlb_gather,
-+    iova: core::ffi::c_ulong,
-+    granule: usize,
-+    cookie: *mut core::ffi::c_void,
-+) {
-+    // SAFETY: The cookie is always a ForeignOwnable of the right type, per new_fmt().
-+    T::tlb_add_page(unsafe { T::Data::borrow(cookie) }, iova as usize, granule);
-+}
-+
-+macro_rules! iopt_cfg {
-+    ($name:ident, $field:ident, $type:ident) => {
-+        /// An IOMMU page table configuration for a specific kind of pagetable.
-+        pub type $name = bindings::$type;
-+
-+        impl GetConfig for $name {
-+            fn cfg(iopt: &impl IoPageTable) -> &$name {
-+                // SAFETY: The type system ensures we are accessing the right union field.
-+                unsafe { &iopt.raw_cfg().__bindgen_anon_1.$field }
-+            }
-+        }
-+    };
-+}
-+
-+impl GetConfig for () {
-+    fn cfg(_iopt: &impl IoPageTable) -> &() {
-+        &()
-+    }
-+}
-+
-+macro_rules! iopt_type {
-+    ($type:ident, $cfg:ty, $fmt:ident) => {
-+        /// Represents an IOPagetable of this type.
-+        pub struct $type<T: FlushOps>(IoPageTableInner, PhantomData<T>);
-+
-+        impl<T: FlushOps> $type<T> {
-+            /// Creates a new IOPagetable implementation of this type.
-+            pub fn new(dev: &dyn device::RawDevice, config: Config, data: T::Data) -> Result<Self> {
-+                Ok(Self(
-+                    <Self as IoPageTable>::new_fmt::<T>(dev, bindings::$fmt, config, data)?,
-+                    PhantomData,
-+                ))
-+            }
-+
-+            /// Get the configuration for this IOPagetable.
-+            pub fn cfg(&self) -> &$cfg {
-+                <$cfg as GetConfig>::cfg(self)
-+            }
-+        }
-+
-+        impl<T: FlushOps> crate::private::Sealed for $type<T> {}
-+
-+        impl<T: FlushOps> IoPageTable for $type<T> {
-+            const FLUSH_OPS: bindings::iommu_flush_ops = bindings::iommu_flush_ops {
-+                tlb_flush_all: Some(tlb_flush_all_callback::<T>),
-+                tlb_flush_walk: Some(tlb_flush_walk_callback::<T>),
-+                tlb_add_page: Some(tlb_add_page_callback::<T>),
-+            };
-+
-+            fn inner(&self) -> &IoPageTableInner {
-+                &self.0
-+            }
-+        }
-+
-+        impl<T: FlushOps> Drop for $type<T> {
-+            fn drop(&mut self) {
-+                // SAFETY: The pointer is valid by the type invariant.
-+                unsafe { bindings::free_io_pgtable_ops(self.0.ops) };
-+
-+                // Free context data.
-+                //
-+                // SAFETY: This matches the call to `into_foreign` from `new_fmt`.
-+                unsafe { T::Data::from_foreign(self.0.data) };
-+            }
-+        }
-+    };
-+}
-+
-+// Ew, bindgen unions really are quite messy...
-+iopt_cfg!(
-+    ARMLPAES1Cfg,
-+    arm_lpae_s1_cfg,
-+    io_pgtable_cfg__bindgen_ty_1__bindgen_ty_1
-+);
-+iopt_cfg!(
-+    ARMLPAES2Cfg,
-+    arm_lpae_s2_cfg,
-+    io_pgtable_cfg__bindgen_ty_1__bindgen_ty_2
-+);
-+iopt_cfg!(
-+    ARMv7SCfg,
-+    arm_v7s_cfg,
-+    io_pgtable_cfg__bindgen_ty_1__bindgen_ty_3
-+);
-+iopt_cfg!(
-+    ARMMaliLPAECfg,
-+    arm_mali_lpae_cfg,
-+    io_pgtable_cfg__bindgen_ty_1__bindgen_ty_4
-+);
-+iopt_cfg!(
-+    AppleDARTCfg,
-+    apple_dart_cfg,
-+    io_pgtable_cfg__bindgen_ty_1__bindgen_ty_5
-+);
-+
-+iopt_type!(ARM32LPAES1, ARMLPAES1Cfg, io_pgtable_fmt_ARM_32_LPAE_S1);
-+iopt_type!(ARM32LPAES2, ARMLPAES2Cfg, io_pgtable_fmt_ARM_32_LPAE_S2);
-+iopt_type!(ARM64LPAES1, ARMLPAES1Cfg, io_pgtable_fmt_ARM_64_LPAE_S1);
-+iopt_type!(ARM64LPAES2, ARMLPAES2Cfg, io_pgtable_fmt_ARM_64_LPAE_S2);
-+iopt_type!(ARMv7S, ARMv7SCfg, io_pgtable_fmt_ARM_V7S);
-+iopt_type!(ARMMaliLPAE, ARMMaliLPAECfg, io_pgtable_fmt_ARM_MALI_LPAE);
-+iopt_type!(AMDIOMMUV1, (), io_pgtable_fmt_AMD_IOMMU_V1);
-+iopt_type!(AppleDART, AppleDARTCfg, io_pgtable_fmt_APPLE_DART);
-+iopt_type!(AppleDART2, AppleDARTCfg, io_pgtable_fmt_APPLE_DART2);
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index de44092718f8..9944086d7e09 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -31,6 +31,8 @@ mod allocator;
- mod build_assert;
- pub mod device;
- pub mod error;
-+#[cfg(CONFIG_IOMMU_IO_PGTABLE)]
-+pub mod io_pgtable;
- pub mod prelude;
- pub mod print;
- mod static_assert;
++pub mod apple;
 
 -- 
 2.35.1
