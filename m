@@ -2,110 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F0D6A1C7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3314A6A1C7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjBXMyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S230116AbjBXMyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjBXMyg (ORCPT
+        with ESMTP id S230106AbjBXMyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:54:36 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C291259E4F
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:54:34 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bt28so7150597wrb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sKJQDv4Kif6EGyfqOTg66AyQtr3vwAgyU41TdnYU1ok=;
-        b=n5Dy01q6kUixJ9kKRCOGyblC2Dy5qoduTfh5ms/rHvPjmTstlc+RWyu71B8e3+Kotg
-         QmDj8qStmtWPrIydTH0Q69pcr7WxYIcDBFZJsIxPzf68qfurepjaOLAOGNu5J+BA7Gpx
-         T1KEq1qxa/+NE85nrB151iM3kKRiU/TSTWsBg28N1J0Rl5gaLGqFe4Sa9tmrdk3ceq4q
-         jqkx2KfdEyAWleRWkIC3OGm7i4JNcueEmHJ22uhX9+5YbT804eI+mw03dTuRJNTvYl5r
-         LZrmao6nugHccwZT0ODuT+3A+1EPR4XRcENjPyC8rZCiMgJ6c14h8+ceCGiazj4j6vn+
-         eRHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKJQDv4Kif6EGyfqOTg66AyQtr3vwAgyU41TdnYU1ok=;
-        b=7lZ6hVy3332YeJk6ZHQ5w7cT0oeoqrL5STt/OjpdjBezDckHQ2hu29aWwXDfNet3Uz
-         sc5lpKhLG6yEYpfMSzO7OmVeaYUUjXnCb3P/6cenaJAU1OXIwIDHtATAysPJx8vZEpc4
-         JADgMHN0WACcwac9/5fO9/P+thFAQ3cdz575nDSj4y/1bN1ErAZNmliiTzLuZ587xnNU
-         NrHHhnLkOBDiReYlYfuMuBqk1tIvZAWikXNW5fAIgCmv1qKEU9LNaILcpw/nojtSq66g
-         B3sR3QENiWo7kCdF8YyRzTdpNE1YWmQR9USKibsNJSiPIE2TZOpDU2grBSx/Mhmm6YUp
-         kshQ==
-X-Gm-Message-State: AO0yUKVt/7D55+xQrBt9O/+8W/y2ZBlTvF0mWaGrlqNlyxxobvlOrUqN
-        JPy+V+hSOp/lv+VNiZgf2awjxg==
-X-Google-Smtp-Source: AK7set9YMD34P8T/oGssJCIPFl6P4x2re05kDEPyfm4ulVZnvWLTPtalofrM1ozZ42Xn60QYUEdqhQ==
-X-Received: by 2002:adf:f802:0:b0:2c5:4c7d:53ab with SMTP id s2-20020adff802000000b002c54c7d53abmr11060307wrp.20.1677243273310;
-        Fri, 24 Feb 2023 04:54:33 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d10-20020adfe84a000000b002c71d206329sm1714946wrn.55.2023.02.24.04.54.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 04:54:32 -0800 (PST)
-Message-ID: <3bfa1895-a282-14c2-9710-7e887a5d52ee@linaro.org>
-Date:   Fri, 24 Feb 2023 13:54:31 +0100
+        Fri, 24 Feb 2023 07:54:39 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8535C175
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677243278; x=1708779278;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OfcCtz3rWxfP3amwIcGuVYvyjcWidfx9qLgTpByTuQ8=;
+  b=ekZQL36wwd2pW8LiIeT7AM5MpJ3upNsYuV7VI8QMSrejVZjvlXYjMkis
+   kXGsEDme/dWJzcT+oPiQ3UcldxUzn2VvNtixdvqzrDGuWuHQzT34Gd9na
+   8I0j1YUHAyjkxGvfsxtCa7iVyfd3MNZFYHO9XMpVeMzXZol0ZFptXG14d
+   59PfB0+W1Fp7I17GbyiP3FHvdELzm+eJB+JYarh7jFeBPahARsfmiwqZz
+   MegD6vJ6gQZopVAsJ1vupu9p99xc8Lf+KiG3AQKEGWXDQMBHJjjboCFke
+   Q8CzjdKRz4pRCXrbWThTN1etV8eZmp7kirMHm90pP08ShAeQSU7dpGA9v
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="395978778"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="395978778"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 04:54:37 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="761773297"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="761773297"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 04:54:35 -0800
+Message-ID: <53119509-3365-f648-8c9b-335fe99eb0af@linux.intel.com>
+Date:   Fri, 24 Feb 2023 13:54:33 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3 01/15] dt-bindings: display/msm: gpu: Document GMU
- wrapper-equipped A6xx
+Subject: Re: [PATCH] firmware_loader: Add debug message with checksum for FW
+ file
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Russ Weight <russell.h.weight@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20230224201918.411492-1-amadeuszx.slawinski@linux.intel.com>
+ <Y/ixsjgkh8M10yKX@kroah.com>
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>
-References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org>
- <20230223-topic-gmuwrapper-v3-1-5be55a336819@linaro.org>
- <c3376575-c24f-18a3-1d8b-c3d67f072287@linaro.org>
- <a28c4e67-78b4-21b5-7094-9953316576b2@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a28c4e67-78b4-21b5-7094-9953316576b2@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <Y/ixsjgkh8M10yKX@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 12:51, Konrad Dybcio wrote:
->>> +    else:
->>> +      if:
->>> +        properties:
->>> +          compatible:
->>> +            contains:
->>> +              pattern: '^qcom,adreno-6[0-9][0-9]\.[0-9]$'
->>> +
->>> +      then: # Starting with A6xx, the clocks are usually defined in the GMU node
+On 2/24/2023 1:46 PM, Greg Kroah-Hartman wrote:
+> On Fri, Feb 24, 2023 at 09:19:18PM +0100, Amadeusz Sławiński wrote:
+>> Enable dynamic-debug logging of firmware filenames and SHA256 checksums
+>> to clearly identify the firmware files that are loaded by the system.
 >>
->> The comment is not accurate anymore.
-> I'll argue the semantics, they are still "usually" defined
-> in the GMU node..
+>> Example output:
+>> [   34.944619] firmware_class:_request_firmware: i915 0000:00:02.0: Loaded FW: i915/kbl_dmc_ver1_04.bin, sha256: 2cde41c3e5ad181423bcc3e98ff9c49f743c88f18646af4d0b3c3a9664b831a1
+>> [   48.155884] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/cnl/dsp_basefw.bin, sha256: 43f6ac1b066e9bd0423d914960fbbdccb391af27d2b1da1085eee3ea8df0f357
+>> [   49.579540] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/rt274-tplg.bin, sha256: 4b3580da96dc3d2c443ba20c6728d8b665fceb3ed57223c3a57582bbad8e2413
+>> [   49.798196] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/hda-8086280c-tplg.bin, sha256: 5653172579b2be1b51fd69f5cf46e2bac8d63f2a1327924311c13b2f1fe6e601
+>> [   49.859627] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/dmic-tplg.bin, sha256: 00fb7fbdb74683333400d7e46925dae60db448b88638efcca0b30215db9df63f
+>>
+>> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+>> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+>> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+>> ---
+>>   drivers/base/firmware_loader/main.c | 45 ++++++++++++++++++++++++++++-
+>>   1 file changed, 44 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+>> index 017c4cdb219e..a6e1fb10763d 100644
+>> --- a/drivers/base/firmware_loader/main.c
+>> +++ b/drivers/base/firmware_loader/main.c
+>> @@ -791,6 +791,47 @@ static void fw_abort_batch_reqs(struct firmware *fw)
+>>   	mutex_unlock(&fw_lock);
+>>   }
+>>   
+>> +#if defined(DEBUG) || defined(CONFIG_DYNAMIC_DEBUG)
+>> +#include <crypto/hash.h>
+>> +#include <crypto/sha2.h>
+>> +#define SHA256_STRING_SIZE (SHA256_DIGEST_SIZE * 2)
+>> +static void fw_log_firmware_info(const struct firmware *fw, const char *name, struct device *device)
+>> +{
+>> +	char outbuf[SHA256_STRING_SIZE + 1];
+>> +	u8 sha256buf[SHA256_DIGEST_SIZE];
+> 
+> Nit, these are big, are you _SURE_ you can put them on the stack ok?
+> Why not dynamically allocate them?
+> 
 
-Ah, usually. It's fine then.
+Well, those arrays are not that big? First one is 65 bytes and other one 
+32. Although now that I looked again at the header, there is 
+SHA256_BLOCK_SIZE define for string size, so I will change 
+SHA256_STRING_SIZE to that instead.
 
-Best regards,
-Krzysztof
+>> +	struct shash_desc *shash;
+>> +	struct crypto_shash *alg;
+>> +
+>> +	alg = crypto_alloc_shash("sha256", 0, 0);
+> 
+> Do we need to select this in the .config as well?
+> 
+
+Most likely.
+
+>> +	if (!alg)
+>> +		return;
+>> +
+>> +	shash = kmalloc(sizeof(*shash) + crypto_shash_descsize(alg), GFP_KERNEL);
+> 
+> kmalloc_array()?
+> 
+
+Yes.
+
+>> +	if (!shash)
+>> +		goto out_alg;
+>> +
+>> +	shash->tfm = alg;
+>> +
+>> +	if (crypto_shash_digest(shash, fw->data, fw->size, sha256buf) < 0)
+>> +		goto out_shash;
+>> +
+>> +	for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
+>> +		sprintf(&outbuf[i * 2], "%02x", sha256buf[i]);
+>> +	outbuf[SHA256_STRING_SIZE] = 0;
+>> +	dev_dbg(device, "Loaded FW: %s, sha256: %s\n", name, outbuf);
+>> +
+>> +out_shash:
+>> +	kfree(shash);
+>> +out_alg:
+>> +	crypto_free_shash(alg);
+> 
+> Otherwise, just tiny comments, overall this looks nice, thanks for doing
+> this.
+> 
+> greg k-h
 
