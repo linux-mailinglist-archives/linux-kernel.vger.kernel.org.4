@@ -2,240 +2,421 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D355C6A2381
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BE66A2389
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjBXVJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S229579AbjBXVNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjBXVJm (ORCPT
+        with ESMTP id S229977AbjBXVNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:09:42 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0511BC6;
-        Fri, 24 Feb 2023 13:09:40 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OKY53F022876;
-        Fri, 24 Feb 2023 21:09:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/IoXJe8XyjYluWekzt7MCy9knazuwG+FxGkiZk/M+ls=;
- b=WB9irxc8V1ekAEbv3v+OFeektmoNz02UWWXza1PakwlkV3EQofBOj0rRwx3zxtkANcmb
- +vG8W2AsHGznrZeaBP6rND+rBoQ+k29l8aPpnh7WfJtQA8/GpAT30xHDc/khp1aKaxhc
- 0HlSudJM0AJ70piPyvKOAJjzvGPoqMHyKLCh9hmurH3CYGdXMVmNUlHOtzBPqPId032n
- uADu0JuLEINShzdMExUNyoQGvmnrKerMZlpbmEE8w/usny0oZzeLCfr+HfdUsOwCS6Oa
- xkIBjaGBLbRcXB6gLU+91rsIy4ztmch2GUWW0yJGWRDNTGXyZRtl+ta/4VojVVz4LIXE 1w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxuu11myc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 21:09:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OL9NxK008523
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 21:09:23 GMT
-Received: from [10.110.89.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
- 2023 13:09:22 -0800
-Message-ID: <21623a6d-7f83-5d2c-068c-f600a1834ac9@quicinc.com>
-Date:   Fri, 24 Feb 2023 13:09:21 -0800
+        Fri, 24 Feb 2023 16:13:37 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EAC211C6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:13:35 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id r27so780788lfe.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:13:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jPPypH0+zMRs74IFMU8nhBKKQ29L3l1KuYY4woKJqkQ=;
+        b=VLrdSjqP7eilPsWDa1pvazsL7eKvC4qe0P3m6FcOMcqYh8hQ1NMRhjEhZDCORSwA51
+         xE96NhgfSOh4Q3x9j5AlkZVSlENi4mhZV5ZUzebRGew8Y/Yt+hbjYKV6jZYMERtc6OTm
+         v7jHUEcmDsJSU32r9/dBFlPUCVP5nK8VI0sGNhC6LvnlKmxNIG6VfBSK/hWKtzoHwYgy
+         sS3DE/2Uk9AhcVYdv/1uj1ndVOmjN0hJQNcCKzGauNAPVMDT7EqQEKTi74bc1R9Rgky+
+         9wD7EXeFid1CDxoZw4Iy74A4Jyrx4G/TqEvcOx7rjc4rKTOeyQe0jXB38qkRlr187G75
+         gm1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jPPypH0+zMRs74IFMU8nhBKKQ29L3l1KuYY4woKJqkQ=;
+        b=OHvLUJ7lD1S7aQdvhnb4SQmcNQPrpyfTrudV2oH+xtTdkDED3D8KsKgMf0Ncmzero7
+         F0k8+5cP1zeU9vVQkY7Bnt+pKwKi65tI4YJAols1vQceDvW0uyuIuxnZhNXT+VG3KIPT
+         EjGBcSBGkRIaorGvNYY6lCQGaadDloWqBmIZ//NUuOnVV+v8DKkH9BKS5K6vbGoqnk9f
+         F93IEdoZH1oyPrvkYVKjcEApj58S0940E5n0/wx5CgoFlioB63TmWc4HcidbE37VOdwM
+         HmsRhqaum/SM1fqyz6pnCrantGlkcmH/bGYXgeqJZD6I2CK5RwTIUk8/vOBqZLC6Touh
+         /NfA==
+X-Gm-Message-State: AO0yUKW0WmBqnizknavNxcpGQqDinjXgfAlw1sKKLJ71r7ayC0dwRxQP
+        qWJ30L4W9gyuDMEHLzP+W7E+XQ==
+X-Google-Smtp-Source: AK7set8MTxcQUbguFEo8WkqK9t0k7IjsT/xe62fovfbjcUJHYxNTS16/0n3P/JAvbI1PZgxWDMz13A==
+X-Received: by 2002:a05:6512:244:b0:4db:d6a:dea9 with SMTP id b4-20020a056512024400b004db0d6adea9mr6630317lfo.68.1677273213254;
+        Fri, 24 Feb 2023 13:13:33 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id u8-20020ac251c8000000b004cc9042c9cfsm1545785lfm.158.2023.02.24.13.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 13:13:32 -0800 (PST)
+Message-ID: <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
+Date:   Fri, 24 Feb 2023 23:13:32 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH 2/2] drm/msm/dsi: use new
- dpu_dsc_populate_dsc_config()
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-3-git-send-email-quic_khsieh@quicinc.com>
- <525078f5-44be-9a75-a737-ddcc6e097700@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <525078f5-44be-9a75-a737-ddcc6e097700@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0lxBen9CYwzmuB3XWXpBbC68Eug5A8wO
-X-Proofpoint-ORIG-GUID: 0lxBen9CYwzmuB3XWXpBbC68Eug5A8wO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_15,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302240169
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/24/2023 1:04 PM, Dmitry Baryshkov wrote:
-> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->> use new introduced dpu_dsc_populate_dsc_config() to calculate
->> and populate drm_dsc_info instead of hard code value.
+On 24/02/2023 21:40, Kuogee Hsieh wrote:
+> Add DSC helper functions based on DSC configuration profiles to produce
+> DSC related runtime parameters through both table look up and runtime
+> calculation to support DSC on DPU.
 > 
-> DPU is an optional component, so DSI driver should not depend on the DPU 
-> driver.
+> There are 6 different DSC configuration profiles are supported currently.
+> DSC configuration profiles are differiented by 5 keys, DSC version (V1.1),
+> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
+> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
 > 
+> Only DSC version V1.1 added and V1.2 will be added later.
 
-Today, the implicit dependency is already there. Without the DPU DSC 
-blocks, the DSI cannot operate in compressed mode.
+These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
+Also please check that they can be used for i915 or for amdgpu (ideally 
+for both of them).
 
-But, from a SW standpoint I agree we can separate this.
+I didn't check the tables against the standard (or against the current 
+source code), will do that later.
 
-We can move this one level up to the disp/ or msm/ folder
-
-What do you think about that?
-
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 78 
->> ++++++--------------------------------
->>   1 file changed, 12 insertions(+), 66 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index 31ad193..5f3f84f 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -1,6 +1,7 @@
->>   // SPDX-License-Identifier: GPL-2.0-only
->>   /*
->>    * Copyright (c) 2015, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights 
->> reserved
->>    */
->>   #include <linux/clk.h>
->> @@ -21,7 +22,6 @@
->>   #include <video/mipi_display.h>
->> -#include <drm/display/drm_dsc_helper.h>
->>   #include <drm/drm_of.h>
->>   #include "dsi.h"
->> @@ -31,6 +31,7 @@
->>   #include "msm_kms.h"
->>   #include "msm_gem.h"
->>   #include "phy/dsi_phy.h"
->> +#include "dpu_dsc_helper.h"
->>   #define DSI_RESET_TOGGLE_DELAY_MS 20
->> @@ -1819,29 +1820,8 @@ static int dsi_host_parse_lane_data(struct 
->> msm_dsi_host *msm_host,
->>       return -EINVAL;
->>   }
->> -static u32 dsi_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
->> -    0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54, 0x62,
->> -    0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
->> -};
->> -
->> -/* only 8bpc, 8bpp added */
->> -static char min_qp[DSC_NUM_BUF_RANGES] = {
->> -    0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13
->> -};
->> -
->> -static char max_qp[DSC_NUM_BUF_RANGES] = {
->> -    4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 15
->> -};
->> -
->> -static char bpg_offset[DSC_NUM_BUF_RANGES] = {
->> -    2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
->> -};
->> -
->>   static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, 
->> struct drm_dsc_config *dsc)
->>   {
->> -    int i;
->> -    u16 bpp = dsc->bits_per_pixel >> 4;
->> -
->>       if (dsc->bits_per_pixel & 0xf) {
->>           DRM_DEV_ERROR(&msm_host->pdev->dev, "DSI does not support 
->> fractional bits_per_pixel\n");
->>           return -EINVAL;
->> @@ -1852,50 +1832,16 @@ static int dsi_populate_dsc_params(struct 
->> msm_dsi_host *msm_host, struct drm_dsc
->>           return -EOPNOTSUPP;
->>       }
->> -    dsc->rc_model_size = 8192;
->> -    dsc->first_line_bpg_offset = 12;
->> -    dsc->rc_edge_factor = 6;
->> -    dsc->rc_tgt_offset_high = 3;
->> -    dsc->rc_tgt_offset_low = 3;
->> -    dsc->simple_422 = 0;
->> -    dsc->convert_rgb = 1;
->> -    dsc->vbr_enable = 0;
->> -
->> -    /* handle only bpp = bpc = 8 */
->> -    for (i = 0; i < DSC_NUM_BUF_RANGES - 1 ; i++)
->> -        dsc->rc_buf_thresh[i] = dsi_dsc_rc_buf_thresh[i];
->> -
->> -    for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
->> -        dsc->rc_range_params[i].range_min_qp = min_qp[i];
->> -        dsc->rc_range_params[i].range_max_qp = max_qp[i];
->> -        /*
->> -         * Range BPG Offset contains two's-complement signed values 
->> that fill
->> -         * 8 bits, yet the registers and DCS PPS field are only 6 
->> bits wide.
->> -         */
->> -        dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i] & 
->> DSC_RANGE_BPG_OFFSET_MASK;
->> -    }
->> -
->> -    dsc->initial_offset = 6144;        /* Not bpp 12 */
->> -    if (bpp != 8)
->> -        dsc->initial_offset = 2048;    /* bpp = 12 */
->> -
->> -    if (dsc->bits_per_component <= 10)
->> -        dsc->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
->> -    else
->> -        dsc->mux_word_size = DSC_MUX_WORD_SIZE_12_BPC;
->> -
->> -    dsc->initial_xmit_delay = 512;
->> -    dsc->initial_scale_value = 32;
->> -    dsc->first_line_bpg_offset = 12;
->> -    dsc->line_buf_depth = dsc->bits_per_component + 1;
->> -
->> -    /* bpc 8 */
->> -    dsc->flatness_min_qp = 3;
->> -    dsc->flatness_max_qp = 12;
->> -    dsc->rc_quant_incr_limit0 = 11;
->> -    dsc->rc_quant_incr_limit1 = 11;
->> -
->> -    return drm_dsc_compute_rc_parameters(dsc);
->> +    /*
->> +     * NOTE:
->> +     * dsc->dsc_version_major, dsc->dsc_version_minor
->> +     * dsc->bits_per_pixel,
->> +     * dsc->bits_per_component,
->> +     * dsc->native_422, dsc->native_420
->> +     *
->> +     * above parameters must be populated
 > 
-> Comments
-> In Yoda style
-> written should be not.
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/Makefile                   |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c | 209 +++++++++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h |  34 ++++
+>   3 files changed, 244 insertions(+)
+>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
 > 
->> +     */
->> +    return dpu_dsc_populate_dsc_config(dsc, 0);
->>   }
->>   static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
-> 
+> diff --git a/drivers/gpu/drm/msm/Makefile b/drivers/gpu/drm/msm/Makefile
+> index 7274c412..28cf52b 100644
+> --- a/drivers/gpu/drm/msm/Makefile
+> +++ b/drivers/gpu/drm/msm/Makefile
+> @@ -65,6 +65,7 @@ msm-$(CONFIG_DRM_MSM_DPU) += \
+>   	disp/dpu1/dpu_hw_catalog.o \
+>   	disp/dpu1/dpu_hw_ctl.o \
+>   	disp/dpu1/dpu_hw_dsc.o \
+> +	disp/dpu1/dpu_dsc_helper.o \
+>   	disp/dpu1/dpu_hw_interrupts.o \
+>   	disp/dpu1/dpu_hw_intf.o \
+>   	disp/dpu1/dpu_hw_lm.o \
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+> new file mode 100644
+> index 00000000..88207e9
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+> @@ -0,0 +1,209 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights reserved
+> + */
+> +
+> +#include <drm/display/drm_dsc_helper.h>
+> +#include "msm_drv.h"
+> +#include "dpu_kms.h"
+> +#include "dpu_hw_dsc.h"
+> +#include "dpu_dsc_helper.h"
+> +
+> +
+
+Extra empty line
+
+> +#define DPU_DSC_PPS_SIZE       128
+> +
+> +enum dpu_dsc_ratio_type {
+> +	DSC_V11_8BPC_8BPP,
+> +	DSC_V11_10BPC_8BPP,
+> +	DSC_V11_10BPC_10BPP,
+> +	DSC_V11_SCR1_8BPC_8BPP,
+> +	DSC_V11_SCR1_10BPC_8BPP,
+> +	DSC_V11_SCR1_10BPC_10BPP,
+> +	DSC_RATIO_TYPE_MAX
+> +};
+> +
+> +
+> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
+> +		0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
+> +		0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
+
+Weird indentation
+
+> +};
+> +
+> +/*
+> + * Rate control - Min QP values for each ratio type in dpu_dsc_ratio_type
+> + */
+> +static char dpu_dsc_rc_range_min_qp[DSC_RATIO_TYPE_MAX][DSC_NUM_BUF_RANGES] = {
+> +	/* DSC v1.1 */
+> +	{0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13},
+> +	{0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 17},
+> +	{0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
+> +	/* DSC v1.1 SCR and DSC v1.2 RGB 444 */
+
+What is SCR? Is there any reason to use older min/max Qp params instead 
+of always using the ones from the VESA-DSC-1.1 standard?
+
+> +	{0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 9, 12},
+> +	{0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 13, 16},
+> +	{0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
+> +};
+> +
+> +/*
+> + * Rate control - Max QP values for each ratio type in dpu_dsc_ratio_type
+> + */
+> +static char dpu_dsc_rc_range_max_qp[DSC_RATIO_TYPE_MAX][DSC_NUM_BUF_RANGES] = {
+> +	/* DSC v1.1 */
+> +	{4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 15},
+> +	{4, 8, 9, 10, 11, 11, 11, 12, 13, 14, 15, 16, 17, 17, 19},
+> +	{7, 8, 9, 10, 11, 11, 11, 12, 13, 13, 14, 14, 15, 15, 16},
+> +	/* DSC v1.1 SCR and DSC v1.2 RGB 444 */
+> +	{4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13},
+> +	{8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17},
+> +	{7, 8, 9, 10, 11, 11, 11, 12, 13, 13, 14, 14, 15, 15, 16},
+> +};
+> +
+> +/*
+> + * Rate control - bpg offset values for each ratio type in dpu_dsc_ratio_type
+> + */
+> +static char dpu_dsc_rc_range_bpg[DSC_RATIO_TYPE_MAX][DSC_NUM_BUF_RANGES] = {
+> +	/* DSC v1.1 */
+> +	{2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12},
+> +	{2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12},
+> +	{2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12},
+> +	/* DSC v1.1 SCR and DSC V1.2 RGB 444 */
+> +	{2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12},
+> +	{2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12},
+> +	{2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12},
+> +};
+> +
+> +static struct dpu_dsc_rc_init_params_lut {
+> +	u32 rc_quant_incr_limit0;
+> +	u32 rc_quant_incr_limit1;
+> +	u32 initial_fullness_offset;
+> +	u32 initial_xmit_delay;
+> +	u32 second_line_bpg_offset;
+> +	u32 second_line_offset_adj;
+> +	u32 flatness_min_qp;
+> +	u32 flatness_max_qp;
+> +}  dpu_dsc_rc_init_param_lut[] = {
+> +	/* DSC v1.1 */
+> +	{11, 11, 6144, 512, 0, 0, 3, 12}, /* DSC_V11_8BPC_8BPP */
+> +	{15, 15, 6144, 512, 0, 0, 7, 16}, /* DSC_V11_10BPC_8BPP */
+> +	{15, 15, 5632, 410, 0, 0, 7, 16}, /* DSC_V11_10BPC_10BPP */
+> +	/* DSC v1.1 SCR and DSC v1.2 RGB 444 */
+> +	{11, 11, 6144, 512, 0, 0, 3, 12}, /* DSC_V12_444_8BPC_8BPP or DSC_V11_SCR1_8BPC_8BPP */
+> +	{15, 15, 6144, 512, 0, 0, 7, 16}, /* DSC_V12_444_10BPC_8BPP or DSC_V11_SCR1_10BPC_8BPP */
+> +	{15, 15, 5632, 410, 0, 0, 7, 16}, /* DSC_V12_444_10BPC_10BPP or DSC_V11_SCR1_10BPC_10BPP */
+> +};
+> +
+> +/**
+> + * Maps to lookup the dpu_dsc_ratio_type index used in rate control tables
+> + */
+> +static struct dpu_dsc_table_index_lut {
+> +	u32 fmt;
+> +	u32 scr_ver;
+> +	u32 minor_ver;
+> +	u32 bpc;
+> +	u32 bpp;
+> +	u32 type;
+> +} dpu_dsc_index_map[] = {
+> +	/* DSC 1.1 formats - scr version is considered */
+> +	{DPU_DSC_CHROMA_444, 0, 1, 8, 8, DSC_V11_8BPC_8BPP},
+> +	{DPU_DSC_CHROMA_444, 0, 1, 10, 8, DSC_V11_10BPC_8BPP},
+> +	{DPU_DSC_CHROMA_444, 0, 1, 10, 10, DSC_V11_10BPC_10BPP},
+> +	{DPU_DSC_CHROMA_444, 1, 1, 8, 8, DSC_V11_SCR1_8BPC_8BPP},
+> +	{DPU_DSC_CHROMA_444, 1, 1, 10, 8, DSC_V11_SCR1_10BPC_8BPP},
+> +	{DPU_DSC_CHROMA_444, 1, 1, 10, 10, DSC_V11_SCR1_10BPC_10BPP},
+> +};
+> +
+> +static int _get_rc_table_index(struct drm_dsc_config *dsc, int scr_ver)
+> +{
+> +	u32 bpp, bpc, i, fmt = DPU_DSC_CHROMA_444;
+> +
+> +	if (dsc->dsc_version_major != 0x1) {
+> +		DPU_ERROR("unsupported major version %d\n",
+> +				dsc->dsc_version_major);
+> +		return -EINVAL;
+> +	}
+> +
+> +	bpc = dsc->bits_per_component;
+> +	bpp = DSC_BPP(*dsc);
+
+Just inline the macro.
+
+> +
+> +	if (dsc->native_422)
+> +		fmt = DPU_DSC_CHROMA_422;
+> +	else if (dsc->native_420)
+> +		fmt = DPU_DSC_CHROMA_420;
+> +
+> +
+> +	for (i = 0; i < ARRAY_SIZE(dpu_dsc_index_map); i++) {
+> +		if (dsc->dsc_version_minor == dpu_dsc_index_map[i].minor_ver &&
+> +				fmt ==  dpu_dsc_index_map[i].fmt &&
+> +				bpc == dpu_dsc_index_map[i].bpc &&
+> +				bpp == dpu_dsc_index_map[i].bpp &&
+> +				(dsc->dsc_version_minor != 0x1 ||
+> +					scr_ver == dpu_dsc_index_map[i].scr_ver))
+> +			return dpu_dsc_index_map[i].type;
+> +	}
+> +
+> +	DPU_ERROR("unsupported DSC v%d.%dr%d, bpc:%d, bpp:%d, fmt:0x%x\n",
+> +			dsc->dsc_version_major, dsc->dsc_version_minor,
+> +			scr_ver, bpc, bpp, fmt);
+> +	return -EINVAL;
+> +}
+> +
+> +int dpu_dsc_populate_dsc_config(struct drm_dsc_config *dsc, int scr_ver)
+> +{
+> +	int bpp, bpc;
+> +	struct dpu_dsc_rc_init_params_lut *rc_param_lut;
+> +	int i, ratio_idx;
+> +
+> +	dsc->rc_model_size = 8192;
+> +
+> +	if ((dsc->dsc_version_major == 0x1) &&
+> +			(dsc->dsc_version_minor == 0x1)) {
+
+indent to the opening bracket please, so that '(dsc' on both lines start 
+on the same position.
+
+> +		if (scr_ver == 0x1)
+> +			dsc->first_line_bpg_offset = 15;
+> +		else
+> +			dsc->first_line_bpg_offset = 12;
+> +	}
+> +
+> +	dsc->rc_edge_factor = 6;
+> +	dsc->rc_tgt_offset_high = 3;
+> +	dsc->rc_tgt_offset_low = 3;
+> +	dsc->simple_422 = 0;
+> +	dsc->convert_rgb = !(dsc->native_422 | dsc->native_420);
+> +	dsc->vbr_enable = 0;
+> +
+> +	bpp = DSC_BPP(*dsc);
+
+inline the macro.
+
+> +	bpc = dsc->bits_per_component;
+> +
+> +	ratio_idx = _get_rc_table_index(dsc, scr_ver);
+> +	if ((ratio_idx < 0) || (ratio_idx >= DSC_RATIO_TYPE_MAX))
+> +		return -EINVAL;
+> +
+> +
+> +	for (i = 0; i < DSC_NUM_BUF_RANGES - 1; i++)
+> +		dsc->rc_buf_thresh[i] = dpu_dsc_rc_buf_thresh[i];
+
+Can we use memcpy?
+
+> +
+> +	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+> +		dsc->rc_range_params[i].range_min_qp =
+> +			dpu_dsc_rc_range_min_qp[ratio_idx][i];
+> +		dsc->rc_range_params[i].range_max_qp =
+> +			dpu_dsc_rc_range_max_qp[ratio_idx][i];
+> +		dsc->rc_range_params[i].range_bpg_offset =
+> +			dpu_dsc_rc_range_bpg[ratio_idx][i];
+> +	}
+> +
+> +	rc_param_lut = &dpu_dsc_rc_init_param_lut[ratio_idx];
+> +	dsc->rc_quant_incr_limit0 = rc_param_lut->rc_quant_incr_limit0;
+> +	dsc->rc_quant_incr_limit1 = rc_param_lut->rc_quant_incr_limit1;
+> +	dsc->initial_offset = rc_param_lut->initial_fullness_offset;
+> +	dsc->initial_xmit_delay = rc_param_lut->initial_xmit_delay;
+> +	dsc->second_line_bpg_offset = rc_param_lut->second_line_bpg_offset;
+> +	dsc->second_line_offset_adj = rc_param_lut->second_line_offset_adj;
+> +	dsc->flatness_min_qp = rc_param_lut->flatness_min_qp;
+> +	dsc->flatness_max_qp = rc_param_lut->flatness_max_qp;
+> +
+> +
+> +	dsc->line_buf_depth = bpc + 1;
+> +	dsc->mux_word_size = bpc > 10 ? DSC_MUX_WORD_SIZE_12_BPC : DSC_MUX_WORD_SIZE_8_10_BPC;
+> +
+> +	dsc->initial_scale_value = 8 * dsc->rc_model_size /
+> +			(dsc->rc_model_size - dsc->initial_offset);
+> +
+> +        return drm_dsc_compute_rc_parameters(dsc);
+
+Indentation is wrong
+
+> +}
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
+> new file mode 100644
+> index 00000000..4a23e02
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights reserved
+> + */
+> +
+> +#ifndef __DPU_DSC_HELPER_H__
+> +#define __DPU_DSC_HELPER_H__
+> +
+> +#include "msm_drv.h"
+> +
+> +#define DSC_1_1_PPS_PARAMETER_SET_ELEMENTS   88
+
+What is this? Does it need to be global?
+
+> +
+> +/**
+> + * Bits/pixel target >> 4  (removing the fractional bits)
+> + * returns the integer bpp value from the drm_dsc_config struct
+> + */
+> +#define DSC_BPP(config) ((config).bits_per_pixel >> 4)
+> +
+> +enum dpu_dsc_chroma {
+> +	DPU_DSC_CHROMA_444,
+> +	DPU_DSC_CHROMA_422,
+> +	DPU_DSC_CHROMA_420,
+> +};
+
+I think this enum is also not used outside of your helpers.
+
+> +
+> +int dpu_dsc_populate_dsc_config(struct drm_dsc_config *dsc, int scr_ver);
+> +
+> +bool dpu_dsc_ich_reset_override_needed(bool pu_en, struct drm_dsc_config *dsc);
+
+Unused
+
+> +
+> +int dpu_dsc_initial_line_calc( u32 num_active_ss_per_enc,
+> +				struct drm_dsc_config *dsc,
+> +				int enc_ip_width, int dsc_cmn_mode);
+
+Unused
+
+> +
+> +#endif /* __DPU_DSC_HELPER_H__ */
+> +
+
+-- 
+With best wishes
+Dmitry
+
