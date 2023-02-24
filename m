@@ -2,78 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD136A192F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166396A1933
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjBXJy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S229795AbjBXJz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjBXJyn (ORCPT
+        with ESMTP id S229639AbjBXJz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:54:43 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C488C48E33
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:54:31 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id f13so16599953vsg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:54:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pd8U/PCi0p6o8UgaJg/HLKkspvkAHB5A6pexOvPjfR4=;
-        b=KVBqsIOUbphURupL/Z7Haw0sLK34ZhqLI14Zv6P1iiGy1OGYTBYzEb0wc5M6tuiyFI
-         ujCiYCDkCg3cptrEb1R18nTEuWYEsAR8Ijp9n/zIWKWnbg0ARFOu7TL791vlu/BgFYz2
-         Hg6dVzhahUTBzfexhFW6sCDEYFMrlUcEt/Shg=
+        Fri, 24 Feb 2023 04:55:26 -0500
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3792FCC3;
+        Fri, 24 Feb 2023 01:55:24 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id h14so4639367wru.4;
+        Fri, 24 Feb 2023 01:55:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pd8U/PCi0p6o8UgaJg/HLKkspvkAHB5A6pexOvPjfR4=;
-        b=aopmG6sCtNka7xaEcSUGd1l5DhegwRCNnC+rcSSAcHbokKaGWI69F1W/lybpYPyxQt
-         Pm5KbdLHcRDm5K/Z96ONbGyVy1hQYcJBjRz6U6joyk74dHNoQQLl9wmS1e5UcjzXZ1Pg
-         9tNuX7viwVU1uNodgpVwbKd15TKtjxCVgUExVCc3sPoFKOCB/in4h+DPZlGPg/kqnqyu
-         OoyqPFpowAWrC5v3AMMgZFSgyOMdPJJDfHA62fJSRIeNd64fVsQDjx5q/A7X5JW580RH
-         OIT6HXoOqUq+FRh8TAAkaIoxCm9P1fEeXDVrNC7ILw4vSqITH+xOkjzJCKEZwPJUv7DY
-         ingA==
-X-Gm-Message-State: AO0yUKXf9OBgdqC6TsoE4MKN4aJJ6hxiyDLaO1eMP4m5qBuzkNFuLdYE
-        xvBLBWgrN+s2F+HCqVSz9QePthS6BrWCitVraztNpg==
-X-Google-Smtp-Source: AK7set/5nxZl0eckNXI6Q503VgTEGQfN71DtPSOnMcy7mMkQne8mOsAfpJuhK2AcNqxwdbl36ZLhTsBZt57SOZ7m6V8=
-X-Received: by 2002:a05:6102:3a61:b0:412:2ed6:d79b with SMTP id
- bf1-20020a0561023a6100b004122ed6d79bmr2017113vsb.3.1677232470933; Fri, 24 Feb
- 2023 01:54:30 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5hKOP+zOtwvtwGqPgrZA/GUj5RgMDSUC85g3TVd1JRk=;
+        b=q7gBLyjT05lmDfqKGCGDsXl1X+d/Jgbq4PE/lZDDI+sRlwqoDb8LEPtZBnVIzMXJxs
+         1A5JBxNjfcISYTSX0QaUf6qWqXtFter8Zo7UygmCEKYmDThWPRN4rv6yqaMq+YD0aUD6
+         0UW8XN1IR8J38sMQL5i7dYzkXwyKk+kbdBYYOTYvCRiJPFrFQaj5/WvNktsGTj+URP+V
+         QNA835coK0kSuv7XLSAJAje98LSv1R4o+pmJFb2ZGsZ8hOdMJ+9DLF2ySbemxhAf1/o1
+         Gt5zVlUC+sgey3VEibvs6EJbZnEe9tbTAaxgYKrljXmxnOykVlI/ot106a4IyjWrmKBd
+         H7UA==
+X-Gm-Message-State: AO0yUKU1rXAW7slnwYSsHqocmYsS+01luIO7BUekMkk4u/Yq9aql3Ivc
+        VSp0NZHqsnpn5DSS3lHHTg4=
+X-Google-Smtp-Source: AK7set+e91vux3xxQR5qvOrgh0yokPiZgUQyPmdVxgud4LEV9Q76tpnJP6QeS8K/jsATllGhi+GWJg==
+X-Received: by 2002:adf:fe87:0:b0:2c5:54a7:363e with SMTP id l7-20020adffe87000000b002c554a7363emr14515575wrr.3.1677232522615;
+        Fri, 24 Feb 2023 01:55:22 -0800 (PST)
+Received: from gmail.com (fwdproxy-cln-022.fbsv.net. [2a03:2880:31ff:16::face:b00c])
+        by smtp.gmail.com with ESMTPSA id j8-20020a5d6048000000b002c553e061fdsm15114349wrt.112.2023.02.24.01.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 01:55:22 -0800 (PST)
+Date:   Fri, 24 Feb 2023 01:55:20 -0800
+From:   Breno Leitao <leitao@debian.org>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gustavold@meta.com, leit@meta.com,
+        kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 1/2] io_uring: Move from hlist to io_wq_work_node
+Message-ID: <Y/iJiCW+HmWZofgs@gmail.com>
+References: <20230223164353.2839177-1-leitao@debian.org>
+ <20230223164353.2839177-2-leitao@debian.org>
+ <87wn48ryri.fsf@suse.de>
 MIME-Version: 1.0
-References: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com> <20230223134345.82625-7-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230223134345.82625-7-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 24 Feb 2023 17:54:19 +0800
-Message-ID: <CAGXv+5HgfRbuyJM9Xk31TC8bgSGTCoeV-N+4wSVXmqskGHD_Ew@mail.gmail.com>
-Subject: Re: [PATCH v2 06/16] arm64: dts: mediatek: mt8183: Use
- mediatek,mt8183b-mali as GPU compatible
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wn48ryri.fsf@suse.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 9:44 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Use the new GPU related compatible to finally enable GPU DVFS on
-> the MT8183 SoC.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hello Krisman, thanks for the review
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+On Thu, Feb 23, 2023 at 04:02:25PM -0300, Gabriel Krisman Bertazi wrote:
+> Breno Leitao <leitao@debian.org> writes:
+
+> >  static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *cache)
+> >  {
+> > -	if (!hlist_empty(&cache->list)) {
+> > -		struct hlist_node *node = cache->list.first;
+> > +	if (cache->list.next) {
+> > +		struct io_cache_entry *entry;
+> >  
+> > -		hlist_del(node);
+> > -		return container_of(node, struct io_cache_entry, node);
+> > +		entry = container_of(cache->list.next, struct io_cache_entry, node);
+> > +		cache->list.next = cache->list.next->next;
+> > +		return entry;
+> >  	}
+> 
+> From a quick look, I think you could use wq_stack_extract() here
+
+True, we can use wq_stack_extract() in this patch, but, we would need to
+revert to back to this code in the next patch. Remember that
+wq_stack_extract() touches the stack->next->next, which will be
+poisoned, causing a KASAN warning.
+
+Here is relevant part of the code:
+
+	struct io_wq_work_node *wq_stack_extract(struct io_wq_work_node *stack)
+	{
+		struct io_wq_work_node *node = stack->next;
+		stack->next = node->next;
