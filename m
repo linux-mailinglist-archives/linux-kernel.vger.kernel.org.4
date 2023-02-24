@@ -2,523 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AC86A1DC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8AD6A1DBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjBXOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S230089AbjBXOsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjBXOtE (ORCPT
+        with ESMTP id S229497AbjBXOsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:49:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A376C1116E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677250090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r3Iwur3DaO9qOJlnUw5ODrEZJsIUBj4dSLzn2wwaUV8=;
-        b=Goa8GoS/MnDuGTedcWnHgthKccmV1UZH+DqHBbd3B08c4A5cXfTi4lip8+Vqqcg79e3DR0
-        Kp07sC/8TbPuuPtxHTWe9pHJu+ssfLBfhtvAc+JseXR7TwD9h2dB0b30l7ru6qJ8kjsf+G
-        kQx9E2kiW3g90mel9qe3b9V9OJdtOdc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-346-p9_Us-HwPMethNlGGb1Kzg-1; Fri, 24 Feb 2023 09:48:07 -0500
-X-MC-Unique: p9_Us-HwPMethNlGGb1Kzg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7677A3C0E213;
-        Fri, 24 Feb 2023 14:48:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DF552166B29;
-        Fri, 24 Feb 2023 14:48:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2134430.1677240738@warthog.procyon.org.uk>
-References: <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <stfrench@microsoft.com>
-Cc:     dhowells@redhat.com, Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH] cifs, afs: Revert changes to {cifs,afs}_writepages_region()
+        Fri, 24 Feb 2023 09:48:41 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C71383E4;
+        Fri, 24 Feb 2023 06:48:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1677250104; i=linosanfilippo@gmx.de;
+        bh=YelkDbTnQ/zyAAob9B2ze+jP4qbVvwZlTqkb84H8HuI=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=KRQ/DeTP18QEo4PNE+InOcqyXXPn0YoaYcpwi12fTyUqnzcJxwl/bey54c2au0TrD
+         14DkehD48trktrnwTAKQeb771rT2T0xI9Pzdtg6Hh2annlZmbp1qN1Gjtnj6P9+nKL
+         fh2cb0ZbBIUQnYwuoUPs739AXtekTwD2OnsolowcPtRVvUsryv2NYQiC7xP8JGsubL
+         taGXQTmAR1e5rR4dvIrJdstrDLHxhN51WJfK2edih5cT82+kZLTBSztRspMQQjQ36W
+         1Y7cupycJUAHyEdq8ugp7I+YfergbMcKX19QLQvYofv/GecBEA7bCmWgkbdMUaBVXM
+         Q1x5QFzpZrMOA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.2.37] ([84.162.10.217]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMobO-1pEzvQ0Wuq-00IpgN; Fri, 24
+ Feb 2023 15:48:24 +0100
+Subject: Re: [PATCH v11 00/14] TPM IRQ fixes
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <4c094418-7725-b815-f1f9-8b12f1ac4d72@gmx.de>
+Date:   Fri, 24 Feb 2023 15:48:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2214156.1677250083.1@warthog.procyon.org.uk>
+In-Reply-To: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 24 Feb 2023 14:48:03 +0000
-Message-ID: <2214157.1677250083@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:E/eoRPjDHLXwal2VRTn9BCbGZq6XwRxeMh4B7CeCfWpwVvm17go
+ QXnRA57+vKPXWpVVwJMRDEh3GBSK+D4j56XYA+tR0rCKZDDnUz4wK7W859L0mbnF66QU0R+
+ L78W2gIUcl9wMkx/01VsBAQD2iw7V/4872hYheXPoKV849JFqts9xrVR/8kiaGrHy9fPJPa
+ FoyZ8FWq42QB6MntsRp8g==
+UI-OutboundReport: notjunk:1;M01:P0:d6qHNZNlTRw=;DAJCia3xrEr0b7Mx3Z3z10KbfNp
+ t8MbwQ7yVXho/DXZvPWd3PIhKqrc9Lwu0mNCQOwU4gZ61yWzw9aEa5j4GeODoo7CSMRL8IhuO
+ bsNuLcuYduT7H1ex7P/+OtWiFBifZSbgM8muoNNxVa1z9eHpKmNzfX5QN5YkJvKvRyXKxaiMJ
+ 11jAprCy/aglhYiRhGf7ChqcGiG+K3AuzMnYfYsImfCJLHtELHHTyo09vrFZpfNQBMLT26G0C
+ xN7rrujvtGvKuMztzWdPUrCRNpWreRgSYbsADtMQoYQ3lXVRh/LRDxTadXp9ReY6aQwaD1YRP
+ GnWW/dKv2VveP9IxcqARp0orusD99r/gWXMhuwOHwbJJf0Nh42UhOsYCQlQVTYEt39HRYKfqg
+ 15IBhpuP59IqZMU/It5XRDrnTCBGd42s8tlgmms6QDFoIyyO02ITk3yB9tORLHfH17sP4d/Z9
+ NlSLTpKSdfv24kvO+GuHnRbpSIHkECIiVIif9+WPwBNY6dQj+Mitx6hvpej2fuddaLz0WRh5q
+ Zs/iFnynapTbW/oDkhdRGzBzZxF9ATAKJ7KYnaz41YZOxEyBxBnM+s63G60waU+BIeqAXJJK9
+ 21Yr7wKEQAscAVM3xU924JiEhCJ7Cwgw5k16COYHERHjaSDzJeYXtw/R1OuxkpsHftdy6KMB6
+ pPzNPUHFmc/6aXX/NAfmE7GpK0c+hjSBxuSBZJ4cqYiGxggtqv4lb8VS6lWPI47+8cBHkrJVD
+ VWlGfUg5w7iS17E54+bObMn6GCL3oAHuct3iC35Eju58yWSqK1l3YI/lDwgxfZ7XpHzOaTUZD
+ h3jJSNoE6BUB9uJPZFzWJm8XXxlLdWrMhO0t2U7Kpr31iz/lIKyY3uZpRMtCq7AuUtnwJ3I4K
+ Bk0s7swt8lbkkSwFCrk2xbe1FbYk2Tdk2ScTBYx8o2fDcP2sWcXkP3Zw/5JvKRN8CS7ouqhw9
+ Y5ACjw==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's a more complex patch that reverts Vishal's patch to afs and your
-changes to cifs back to the point where find_get_pages_range_tag() was
-being used to get a single folio and then replace that with a function,
-filemap_get_folio_tag() that just gets a single folio.  An alternative way
-of doing this would be to make filemap_get_folios_tag() take a limit count=
-.
-
-This is likely to be more efficient for the common case as
-*_extend_writeback() will deal with pages that are contiguous to the
-starting page before we get on to continuing to process the batch.
-
-For filemap_get_folios_tag() to be of use, the batch has to be passed down=
-,
-and if it contains scattered, non-contiguous pages, these are likely to en=
+On 24.11.22 at 14:55, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>
+> This series enables IRQ support for the TPM TIS core. For this reason a
+> number of bugfixes around the interrupt handling are required (patches 1=
+ to
+> 5).
+>
+> Patch 6 takes into account that according to the TPM Interface
+> Specification stsValid and commandRead interrupts might not be supported
+> by the hardware. For this reason the supported interrupts are first quer=
+ied
+> and stored. Then wait_for_tpm_stat() is adjusted to not wait for status
+> changes that are not reported by interrupts.
+>
+> Patch 7 moves the interrupt flag checks into an own function as suggeste=
 d
-up being pinned by the batch for significant periods of time whilst I/O is
-undertaken on earlier pages.
-    =
+> by Jarkko.
+>
+> Patch 8 Removes the possibility that tpm_tis_data->locality can be chang=
+ed
+> at driver runtime so this variable can be read without the need to prote=
+ct
+> it against concurrent modification.
+>
+> Patch 9 addresses the issue with concurrent locality handling:
+> Since the interrupt handler writes the interrupt status registers it nee=
+ds
+> to hold the locality. However it runs concurrently to the thread which
+> triggered the interrupt (e.g. by reading or writing data to the TPM). So
+> it must take care when claiming and releasing the locality itself,
+> because it may race with the concurrent running thread which also claims
+> and releases the locality.
+> To avoid that both interrupt and concurrent running thread interfere wit=
+h
+> each other a locality counter is used which guarantees that at any time
+> the locality is held as long as it is required by one of both execution
+> paths.
+>
+> Patch 10 implements the request of a threaded interrupt handler. This is
+> needed since SPI uses a mutex for data transmission and since we access =
+the
+> interrupt status register via SPI in the irq handler we need a sleepable
+> context.
+>
+> Patch 11 makes sure that writes to the interrupt register are effective =
+if
+> done in the interrupt handler.
+>
+> Patch 12 makes sure that writes to the interrupt and INTERRUPT_VECTOR
+> and INTERRUPT_ENABLE registers are effective by holding the locality.
+>
+> Patch 13 makes sure that the TPM is properly initialized after power cyc=
+le
+> before the irq test is done.
+>
+> Patch 14 enables the test for interrupts by setting the required flag
+> before the test is executed.
+>
+> Changes in v11:
+> - adjust patches 4,5 and 14 slightly to void the consecutive removal and
+>   re-addition of the "ret" variable in tpm_tis_gen_interrupt()
+>
+> Changes in v10:
+> - fix typo in subject line as pointed out by Jason Andryuk
+> - improve patch "tpm, tpm_tis: Claim locality before writing interrupt
+>   registers" by extending the scope with held locality". For this reason
+>   the "Reviewed-by" tag by Jarko and the "Tested-by" tag by Michael have
+>   been removed.
+> - add fix to avoid TPM_RC_INITIALIZE after power cycle when testing irqs
+>   (PATCH 13)
+> - add fix to restore the old interrupt vector at error (PATCH 4)
+>
+>
+> Changes in v9:
+> - add a fix for an issue when interrupts are reenabled on resume (PATCH =
+11)
+> - improve the commit message for patch 8 as requested by Jarkko
+> - improved functions naming
+> - changed patch 12 (tpm, tpm_tis: Enable interrupt test) to not delete t=
+he
+>   TPM_CHIP_FLAG_IRQ flag any more when tpm2_get_tpm_pt() fails. Due to t=
+his
+>   change the 'Tested-by' tag from Michael and the 'Reviewed-by:' tag fro=
+m
+>   Jarko has been removed
+>
+> Changes in v8:
+> - tpm_tis_data->locality is not changed at runtime any more so that it c=
+an
+> be read without any protection against concurrent modification.
+> - add missing brackets as pointed out by Jason Andryuk
+>
+> Changes in v7:
+> - moved interrupt flag checks into an own function as suggested by Jarkk=
+o
+> - added "Tested-by" tags for Tests from Michael Niew=C3=B6hner
+> - fixed one comment
+>
+> Changes in v6:
+> - set TPM_TIS_IRQ_TESTED in flag member of the tpm_tis_data struct inste=
+ad
+> in an own bitfield
+> - improve commit messages
+> - use int_mask instead of irqs_in_use as variable name
+> - use sts_mask instead of active_irqs as variable name
+> - squash patch 5 and 6
+> - prefix functions with tpm_tis_
+> - remove "fixes" tag
+>
+> Changes in v5:
+> - improve commit message of patch 1 as requested by Jarko
+> - drop patch that makes locality handling simpler by only claiming it at
+>   driver startup and releasing it at driver shutdown (requested by Jarko=
+)
+> - drop patch that moves the interrupt test from tpm_tis_send()
+>   to tmp_tis_probe_irq_single() as requested by Jarko
+> - add patch to make locality handling threadsafe so that it can also be
+>   done by the irq handler
+> - separate logical changes into own patches
+> - always request threaded interrupt handler
+>
+> Changes in v4:
+> - only request threaded irq in case of SPI as requested by Jarko.
+> - reimplement patch 2 to limit locality handling changes to the TIS core=
+.
+> - separate fixes from cleanups as requested by Jarko.
+> - rephrase commit messages
+>
+> Changes in v3:
+> - fixed compiler error reported by kernel test robot
+> - rephrased commit message as suggested by Jarko Sakkinen
+> - added Reviewed-by tag
+>
+> Changes in v2:
+> - rebase against 5.12
+> - free irq on error path
+>
+>
+> Lino Sanfilippo (14):
+>   tpm, tpm_tis: Avoid cache incoherency in test for interrupts
+>   tpm, tpm_tis: Claim locality before writing TPM_INT_ENABLE register
+>   tpm, tpm_tis: Disable interrupts if tpm_tis_probe_irq() failed
+>   tpm, tpm_tis: Do not skip reset of original interrupt vector
+>   tpm, tpm_tis: Claim locality before writing interrupt registers
+>   tpm, tpm_tis: Only handle supported interrupts
+>   tpm, tpm_tis: Move interrupt mask checks into own function
+>   tpm, tpm_tis: do not check for the active locality in interrupt
+>     handler
+>   tpm, tpm: Implement usage counter for locality
+>   tpm, tpm_tis: Request threaded interrupt handler
+>   tpm, tpm_tis: Claim locality in interrupt handler
+>   tpm, tpm_tis: Claim locality when interrupts are reenabled on resume
+>   tpm, tpm_tis: startup chip before testing for interrupts
+>   tpm, tpm_tis: Enable interrupt test
+>
+>  drivers/char/tpm/tpm-chip.c     |  38 ++--
+>  drivers/char/tpm/tpm.h          |   1 +
+>  drivers/char/tpm/tpm_tis.c      |   2 +-
+>  drivers/char/tpm/tpm_tis_core.c | 299 ++++++++++++++++++++------------
+>  drivers/char/tpm/tpm_tis_core.h |   5 +-
+>  5 files changed, 214 insertions(+), 131 deletions(-)
+>
 
-Fix: 3822a7c40997 ("Merge tag 'mm-stable-2023-02-20-13-37' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/akpm/mm")
-Fix: acc8d8588cb7 ("afs: convert afs_writepages_region() to use filemap_ge=
-t_folios_tag()")
-Signed-off-by: David Howells <dhowells@redhat.com>
----
- fs/afs/write.c          |  116 +++++++++++++++++++++++-------------------=
-------
- fs/cifs/file.c          |  114 ++++++++++++++++++++----------------------=
------
- include/linux/pagemap.h |    2 =
+Hi Jarkko,
 
- mm/filemap.c            |   58 ++++++++++++++++++++++++
- 4 files changed, 165 insertions(+), 125 deletions(-)
+its been a while now since the review of this series has been completed. W=
+ill it be merged in the
+near future? Or is there anything left to do (from my side)?
 
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 571f3b9a417e..b04a95262c4f 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -704,87 +704,83 @@ static int afs_writepages_region(struct address_spac=
-e *mapping,
- 				 bool max_one_loop)
- {
- 	struct folio *folio;
--	struct folio_batch fbatch;
- 	ssize_t ret;
--	unsigned int i;
- 	int n, skips =3D 0;
- =
-
- 	_enter("%llx,%llx,", start, end);
--	folio_batch_init(&fbatch);
- =
-
- 	do {
- 		pgoff_t index =3D start / PAGE_SIZE;
- =
-
--		n =3D filemap_get_folios_tag(mapping, &index, end / PAGE_SIZE,
--					PAGECACHE_TAG_DIRTY, &fbatch);
--
--		if (!n)
-+		folio =3D filemap_get_folio_tag(mapping, &index, end / PAGE_SIZE,
-+					      PAGECACHE_TAG_DIRTY);
-+		if (!folio)
- 			break;
--		for (i =3D 0; i < n; i++) {
--			folio =3D fbatch.folios[i];
--			start =3D folio_pos(folio); /* May regress with THPs */
- =
-
--			_debug("wback %lx", folio_index(folio));
-+		start =3D folio_pos(folio); /* May regress with THPs */
- =
-
--			/* At this point we hold neither the i_pages lock nor the
--			 * page lock: the page may be truncated or invalidated
--			 * (changing page->mapping to NULL), or even swizzled
--			 * back from swapper_space to tmpfs file mapping
--			 */
--			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
--				ret =3D folio_lock_killable(folio);
--				if (ret < 0) {
--					folio_batch_release(&fbatch);
--					return ret;
--				}
--			} else {
--				if (!folio_trylock(folio))
--					continue;
--			}
-+		_debug("wback %lx", folio_index(folio));
- =
-
--			if (folio->mapping !=3D mapping ||
--			    !folio_test_dirty(folio)) {
--				start +=3D folio_size(folio);
--				folio_unlock(folio);
--				continue;
-+		/* At this point we hold neither the i_pages lock nor the
-+		 * page lock: the page may be truncated or invalidated
-+		 * (changing page->mapping to NULL), or even swizzled
-+		 * back from swapper_space to tmpfs file mapping
-+		 */
-+		if (wbc->sync_mode !=3D WB_SYNC_NONE) {
-+			ret =3D folio_lock_killable(folio);
-+			if (ret < 0) {
-+				folio_put(folio);
-+				return ret;
-+			}
-+		} else {
-+			if (!folio_trylock(folio)) {
-+				folio_put(folio);
-+				return 0;
- 			}
-+		}
- =
-
--			if (folio_test_writeback(folio) ||
--			    folio_test_fscache(folio)) {
--				folio_unlock(folio);
--				if (wbc->sync_mode !=3D WB_SYNC_NONE) {
--					folio_wait_writeback(folio);
-+		if (folio_mapping(folio) !=3D mapping ||
-+		    !folio_test_dirty(folio)) {
-+			start +=3D folio_size(folio);
-+			folio_unlock(folio);
-+			folio_put(folio);
-+			continue;
-+		}
-+
-+		if (folio_test_writeback(folio) ||
-+		    folio_test_fscache(folio)) {
-+			folio_unlock(folio);
-+			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
-+				folio_wait_writeback(folio);
- #ifdef CONFIG_AFS_FSCACHE
--					folio_wait_fscache(folio);
-+				folio_wait_fscache(folio);
- #endif
--				} else {
--					start +=3D folio_size(folio);
--				}
--				if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
--					if (skips >=3D 5 || need_resched()) {
--						*_next =3D start;
--						_leave(" =3D 0 [%llx]", *_next);
--						return 0;
--					}
--					skips++;
--				}
--				continue;
-+			} else {
-+				start +=3D folio_size(folio);
- 			}
--
--			if (!folio_clear_dirty_for_io(folio))
--				BUG();
--			ret =3D afs_write_back_from_locked_folio(mapping, wbc,
--					folio, start, end);
--			if (ret < 0) {
--				_leave(" =3D %zd", ret);
--				folio_batch_release(&fbatch);
--				return ret;
-+			folio_put(folio);
-+			if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
-+				if (skips >=3D 5 || need_resched())
-+					break;
-+				skips++;
- 			}
-+			continue;
-+		}
- =
-
--			start +=3D ret;
-+		if (!folio_clear_dirty_for_io(folio))
-+			BUG();
-+		ret =3D afs_write_back_from_locked_folio(mapping, wbc, folio, start, en=
-d);
-+		folio_put(folio);
-+		if (ret < 0) {
-+			_leave(" =3D %zd", ret);
-+			return ret;
- 		}
- =
-
--		folio_batch_release(&fbatch);
-+		start +=3D ret;
-+
-+		if (max_one_loop)
-+			break;
-+
- 		cond_resched();
- 	} while (wbc->nr_to_write > 0);
- =
-
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 5365a3299088..121254086e30 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -2857,92 +2857,76 @@ static int cifs_writepages_region(struct address_s=
-pace *mapping,
- 				  struct writeback_control *wbc,
- 				  loff_t start, loff_t end, loff_t *_next)
- {
--	struct folio_batch fbatch;
-+	struct folio *folio;
-+	ssize_t ret;
- 	int skips =3D 0;
- =
-
--	folio_batch_init(&fbatch);
- 	do {
--		int nr;
- 		pgoff_t index =3D start / PAGE_SIZE;
- =
-
--		nr =3D filemap_get_folios_tag(mapping, &index, end / PAGE_SIZE,
--					    PAGECACHE_TAG_DIRTY, &fbatch);
--		if (!nr)
-+		folio =3D filemap_get_folio_tag(mapping, &index, end / PAGE_SIZE,
-+					      PAGECACHE_TAG_DIRTY);
-+		if (!folio)
- 			break;
- =
-
--		for (int i =3D 0; i < nr; i++) {
--			ssize_t ret;
--			struct folio *folio =3D fbatch.folios[i];
--
--redo_folio:
--			start =3D folio_pos(folio); /* May regress with THPs */
-+		start =3D folio_pos(folio); /* May regress with THPs */
- =
-
--			/* At this point we hold neither the i_pages lock nor the
--			 * page lock: the page may be truncated or invalidated
--			 * (changing page->mapping to NULL), or even swizzled
--			 * back from swapper_space to tmpfs file mapping
--			 */
--			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
--				ret =3D folio_lock_killable(folio);
--				if (ret < 0)
--					goto write_error;
--			} else {
--				if (!folio_trylock(folio))
--					goto skip_write;
-+		/* At this point we hold neither the i_pages lock nor the
-+		 * page lock: the page may be truncated or invalidated
-+		 * (changing page->mapping to NULL), or even swizzled
-+		 * back from swapper_space to tmpfs file mapping
-+		 */
-+		if (wbc->sync_mode !=3D WB_SYNC_NONE) {
-+			ret =3D folio_lock_killable(folio);
-+			if (ret < 0) {
-+				folio_put(folio);
-+				return ret;
- 			}
--
--			if (folio_mapping(folio) !=3D mapping ||
--			    !folio_test_dirty(folio)) {
--				folio_unlock(folio);
--				goto skip_write;
-+		} else {
-+			if (!folio_trylock(folio)) {
-+				folio_put(folio);
-+				return 0;
- 			}
-+		}
- =
-
--			if (folio_test_writeback(folio) ||
--			    folio_test_fscache(folio)) {
--				folio_unlock(folio);
--				if (wbc->sync_mode =3D=3D WB_SYNC_NONE)
--					goto skip_write;
-+		if (folio_mapping(folio) !=3D mapping ||
-+		    !folio_test_dirty(folio)) {
-+			start +=3D folio_size(folio);
-+			folio_unlock(folio);
-+			folio_put(folio);
-+			continue;
-+		}
- =
-
-+		if (folio_test_writeback(folio) ||
-+		    folio_test_fscache(folio)) {
-+			folio_unlock(folio);
-+			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
- 				folio_wait_writeback(folio);
- #ifdef CONFIG_CIFS_FSCACHE
- 				folio_wait_fscache(folio);
- #endif
--				goto redo_folio;
-+			} else {
-+				start +=3D folio_size(folio);
- 			}
--
--			if (!folio_clear_dirty_for_io(folio))
--				/* We hold the page lock - it should've been dirty. */
--				WARN_ON(1);
--
--			ret =3D cifs_write_back_from_locked_folio(mapping, wbc, folio, start, =
-end);
--			if (ret < 0)
--				goto write_error;
--
--			start +=3D ret;
--			continue;
--
--write_error:
--			folio_batch_release(&fbatch);
--			*_next =3D start;
--			return ret;
--
--skip_write:
--			/*
--			 * Too many skipped writes, or need to reschedule?
--			 * Treat it as a write error without an error code.
--			 */
--			if (skips >=3D 5 || need_resched()) {
--				ret =3D 0;
--				goto write_error;
-+			folio_put(folio);
-+			if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
-+				if (skips >=3D 5 || need_resched())
-+					break;
-+				skips++;
- 			}
--
--			/* Otherwise, just skip that folio and go on to the next */
--			skips++;
--			start +=3D folio_size(folio);
- 			continue;
- 		}
- =
-
--		folio_batch_release(&fbatch);		=
-
-+		if (!folio_clear_dirty_for_io(folio))
-+			/* We hold the page lock - it should've been dirty. */
-+			WARN_ON(1);
-+
-+		ret =3D cifs_write_back_from_locked_folio(mapping, wbc, folio, start, e=
-nd);
-+		folio_put(folio);
-+		if (ret < 0)
-+			return ret;
-+
-+		start +=3D ret;
- 		cond_resched();
- 	} while (wbc->nr_to_write > 0);
- =
-
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 0acb8e1fb7af..577535633006 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -741,6 +741,8 @@ unsigned filemap_get_folios_contig(struct address_spac=
-e *mapping,
- 		pgoff_t *start, pgoff_t end, struct folio_batch *fbatch);
- unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *s=
-tart,
- 		pgoff_t end, xa_mark_t tag, struct folio_batch *fbatch);
-+struct folio *filemap_get_folio_tag(struct address_space *mapping, pgoff_=
-t *start,
-+				    pgoff_t end, xa_mark_t tag);
- =
-
- struct page *grab_cache_page_write_begin(struct address_space *mapping,
- 			pgoff_t index);
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 2723104cc06a..1b1e9c661018 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2339,6 +2339,64 @@ unsigned filemap_get_folios_tag(struct address_spac=
-e *mapping, pgoff_t *start,
- }
- EXPORT_SYMBOL(filemap_get_folios_tag);
- =
-
-+/**
-+ * filemap_get_folio_tag - Get the first folio matching @tag
-+ * @mapping:    The address_space to search
-+ * @start:      The starting page index
-+ * @end:        The final page index (inclusive)
-+ * @tag:        The tag index
-+ *
-+ * Search for and return the first folios in the mapping starting at inde=
-x
-+ * @start and up to index @end (inclusive).  The folio is returned with a=
-n
-+ * elevated reference count.
-+ *
-+ * If a folio is returned, it may start before @start; if it does, it wil=
-l
-+ * contain @start.  The folio may also extend beyond @end; if it does, it=
- will
-+ * contain @end.  If folios are added to or removed from the page cache w=
-hile
-+ * this is running, they may or may not be found by this call.
-+ *
-+ * Return: The folio that was found or NULL.  @start is also updated to i=
-ndex
-+ * the next folio for the traversal or will be left pointing after @end.
-+ */
-+struct folio *filemap_get_folio_tag(struct address_space *mapping, pgoff_=
-t *start,
-+				    pgoff_t end, xa_mark_t tag)
-+{
-+	XA_STATE(xas, &mapping->i_pages, *start);
-+	struct folio *folio;
-+
-+	rcu_read_lock();
-+	while ((folio =3D find_get_entry(&xas, end, tag)) !=3D NULL) {
-+		/*
-+		 * Shadow entries should never be tagged, but this iteration
-+		 * is lockless so there is a window for page reclaim to evict
-+		 * a page we saw tagged. Skip over it.
-+		 */
-+		if (xa_is_value(folio))
-+			continue;
-+
-+		if (folio_test_hugetlb(folio))
-+			*start =3D folio->index + 1;
-+		else
-+			*start =3D folio_next_index(folio);
-+		goto out;
-+	}
-+
-+	/*
-+	 * We come here when there is no page beyond @end. We take care to not
-+	 * overflow the index @start as it confuses some of the callers. This
-+	 * breaks the iteration when there is a page at index -1 but that is
-+	 * already broke anyway.
-+	 */
-+	if (end =3D=3D (pgoff_t)-1)
-+		*start =3D (pgoff_t)-1;
-+	else
-+		*start =3D end + 1;
-+out:
-+	rcu_read_unlock();
-+	return folio;
-+}
-+EXPORT_SYMBOL(filemap_get_folio_tag);
-+
- /*
-  * CD/DVDs are error prone. When a medium error occurs, the driver may fa=
-il
-  * a _large_ part of the i/o request. Imagine the worst scenario:
+Regards,
+Lino
 
