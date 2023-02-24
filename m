@@ -2,266 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FD76A170B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EFA6A170D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjBXHZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S229695AbjBXH0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBXHZl (ORCPT
+        with ESMTP id S229671AbjBXHZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:25:41 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE3E1EBDF;
-        Thu, 23 Feb 2023 23:25:39 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PNLvr5jszznWTZ;
-        Fri, 24 Feb 2023 15:23:04 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 24 Feb
- 2023 15:25:34 +0800
-Date:   Fri, 24 Feb 2023 15:25:01 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Changbin Du <changbin.du@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hui Wang <hw.huiwang@huawei.com>
-Subject: Re: [PATCH] perf: fix counting when initial delay configured
-Message-ID: <20230224072501.r6khif73pg27xe5l@M910t>
-References: <20230223075800.1795777-1-changbin.du@huawei.com>
- <Y/dt6QpsCj5AAUE/@kernel.org>
- <CAM9d7cgwP1ra44oJeWO3y+XviXJyZmR4wrgdizK1UhYEw9w6jg@mail.gmail.com>
+        Fri, 24 Feb 2023 02:25:59 -0500
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD7F5EEDF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:25:53 -0800 (PST)
+Received: by mail-io1-f78.google.com with SMTP id z5-20020a6b5c05000000b007447572f3f8so7692914ioh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:25:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=13ZPUloYEvdQxbJ02OlHlYBlVfQKqarZGRElgDtSV3Y=;
+        b=wUFlDp2vJBM4mRt2DcrCjCo75Luj5hSoRwArUmqvlgi2G2XbRdIUiN2tIMJzuZ+YrL
+         s4ErM9x5vc+pTVnzKE0O+ifA2Tr60V0kzaiIpkqRJ9OgWzU0CuvTP04F6zI1u2sE50J7
+         iAZbdd+Ygc+0LlOYqZ9vi0fz1hTwtGr25hy8TVrgYzVxCtdT3Bsyk0kALZwFyzrrx2NQ
+         ZUzV1xVmhm4CuDi1kyT2wZta65LTnd4MJk7dHhybuBpBqsE9OFc8PL2889uEGaJQvQeo
+         dlnkAf+U+O38AHtS9psqBh6NIZTh2xk9TDMa9zFjUE/9pekVhtTw9DjbQtocOpXBbdbo
+         2TEQ==
+X-Gm-Message-State: AO0yUKVxGpH/Mu8ty4QxUb1pL8zkjNYfOjuL5LSPAmoGEN084anuj3Td
+        AsQaOCvZfpJz3gjo0H6coZttkKU4+DmZEcwVDKxlFEjmmiyf
+X-Google-Smtp-Source: AK7set8/wVhN5vLN9i64rHqdzUpgXR69U//u9Dn+IB7mW0AtYBWP5xJVUQxWzojyDiTeuYvk/L8Ru7tnNUEKidgdanwu2OLNfa4D
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cgwP1ra44oJeWO3y+XviXJyZmR4wrgdizK1UhYEw9w6jg@mail.gmail.com>
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4819:b0:3e9:4d91:5c9c with SMTP id
+ cp25-20020a056638481900b003e94d915c9cmr671886jab.1.1677223553024; Thu, 23 Feb
+ 2023 23:25:53 -0800 (PST)
+Date:   Thu, 23 Feb 2023 23:25:53 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000016493d05f56d0aae@google.com>
+Subject: [syzbot] [block?] WARNING in blkdev_put (2)
+From:   syzbot <syzbot+2bcc0d79e548c4f62a59@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 02:48:26PM -0800, Namhyung Kim wrote:
-> Hello,
-> 
-> On Thu, Feb 23, 2023 at 5:45 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Thu, Feb 23, 2023 at 03:58:00PM +0800, Changbin Du escreveu:
-> > > When creating counters with initial delay configured, the enable_on_exec
-> > > field is not set. So we need to enable the counters later. The problem
-> > > is, when a workload is specified the target__none() is still true. So
-> > > we also need to check stat_config.initial_delay.
-> > >
-> > > Before this fix the event is not counted:
-> > > $ ./perf stat -e instructions -D 100 sleep 2
-> > > Events disabled
-> > > Events enabled
-> > >
-> > >  Performance counter stats for 'sleep 2':
-> > >
-> > >      <not counted>      instructions
-> > >
-> > >        1.901661124 seconds time elapsed
-> > >
-> > >        0.001602000 seconds user
-> > >        0.000000000 seconds sys
-> > >
-> > > After fix it works:
-> > > $ ./perf stat -e instructions -D 100 sleep 2
-> > > Events disabled
-> > > Events enabled
-> > >
-> > >  Performance counter stats for 'sleep 2':
-> > >
-> > >            404,214      instructions
-> > >
-> > >        1.901743475 seconds time elapsed
-> > >
-> > >        0.001617000 seconds user
-> > >        0.000000000 seconds sys
-> > >
-> > > Fixes: c587e77e100f ("perf stat: Do not delay the workload with --delay")
-> >
-> > Yeap, even the comment states that we need to enable when initial_delay
-> > is set :-)
-> 
-> Right, but the logic that checks the initial_delay is placed
-> out of the function.  Just checking the initial_delay value
-> can be confusing as it can have a negative value.
-> 
-> Maybe we can add an argument (bool force?) to the
-> enable_counters() function.
->
-Yes, it could be done.
+Hello,
 
-Maybe we can fold the 'initial_delay' into 'struct target', and provide
-consistent behaviour for all subcommands. Here I add a
-target__enable_counter_on_exec() to determine whether enable_on_exec should
-set for all counters.
+syzbot found the following issue on:
 
-$ git diff -U1
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index c71d85577de6..e807be2214c7 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -541,8 +541,3 @@ static int enable_counters(void)
+HEAD commit:    d2af0fa4bfa4 Add linux-next specific files for 20230220
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=170d2ef0c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=594e1a56901fd35d
+dashboard link: https://syzkaller.appspot.com/bug?extid=2bcc0d79e548c4f62a59
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1227e837480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122d8ca0c80000
 
--       /*
--        * We need to enable counters only if:
--        * - we don't have tracee (attaching to task or cpu)
--        * - we have initial delay configured
--        */
--       if (!target__none(&target) || stat_config.initial_delay) {
-+       if (!target__enable_counter_on_exec(&target)) {
-                if (!all_counters_use_bpf)
-@@ -916,3 +911,3 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/83b78c113e8e/disk-d2af0fa4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d59f9b2c9091/vmlinux-d2af0fa4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2726c16c1d3b/bzImage-d2af0fa4.xz
 
--       if (stat_config.initial_delay) {
-+       if (target.initial_delay) {
-                pr_info(EVLIST_DISABLED_MSG);
-@@ -928,4 +923,4 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2bcc0d79e548c4f62a59@syzkaller.appspotmail.com
 
--       if (stat_config.initial_delay > 0) {
--               usleep(stat_config.initial_delay * USEC_PER_MSEC);
-+       if (target.initial_delay > 0) {
-+               usleep(target.initial_delay * USEC_PER_MSEC);
-                err = enable_counters();
-@@ -1250,3 +1245,3 @@ static struct option stat_options[] = {
-                     "aggregate counts per numa node", AGGR_NODE),
--       OPT_INTEGER('D', "delay", &stat_config.initial_delay,
-+       OPT_INTEGER('D', "delay", &target.initial_delay,
-                    "ms to wait before starting measurement after program start (-1: start with events disabled)"),
-diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-index 534d36d26fc3..40984d124db1 100644
---- a/tools/perf/util/stat.c
-+++ b/tools/perf/util/stat.c
-@@ -848,3 +848,3 @@ int create_perf_stat_counter(struct evsel *evsel,
-                 */
--               if (target__none(target) && !config->initial_delay)
-+               if (target__enable_counter_on_exec(target))
-                        attr->enable_on_exec = 1;
-diff --git a/tools/perf/util/target.h b/tools/perf/util/target.h
-index daec6cba500d..a6721b644bfb 100644
---- a/tools/perf/util/target.h
-+++ b/tools/perf/util/target.h
-@@ -20,2 +20,3 @@ struct target {
-        bool         hybrid;
-+       int          initial_delay;
-        const char   *attr_map;
-@@ -74,2 +75,7 @@ static inline bool target__none(struct target *target)
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5080 at block/bdev.c:845 blkdev_put+0x6ca/0x770 block/bdev.c:845
+Modules linked in:
+CPU: 1 PID: 5080 Comm: syz-executor158 Not tainted 6.2.0-rc8-next-20230220-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:blkdev_put+0x6ca/0x770 block/bdev.c:845
+Code: 48 8b 3c 24 e8 b7 7c da fd e9 99 fa ff ff e8 8d 7c da fd e9 cf fb ff ff 4c 89 ff e8 80 7c da fd e9 80 fd ff ff e8 e6 ea 88 fd <0f> 0b e9 ef fc ff ff e8 8a 7c da fd e9 f3 fa ff ff 48 8b 3c 24 e8
+RSP: 0018:ffffc90003cefc88 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888144c49600 RCX: 0000000000000000
+RDX: ffff88807c2f8000 RSI: ffffffff83fbb8da RDI: 0000000000000005
+RBP: ffff888146bc0000 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000ffffffff R11: 0000000000000000 R12: 00000000484e009f
+R13: ffff888144c49628 R14: ffff888146bc0460 R15: ffff888144c49ab8
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb645428948 CR3: 000000000c571000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ blkdev_close+0x68/0x80 block/fops.c:507
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb42/0x2b60 kernel/exit.c:869
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb6453e4639
+Code: Unable to access opcode bytes at 0x7fb6453e460f.
+RSP: 002b:00007ffcfacb3ec8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fb645458270 RCX: 00007fb6453e4639
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb645458270
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
 
-+static inline bool target__enable_counter_on_exec(struct target *target)
-+{
-+       return target__none(target) && !target->initial_delay;
-+}
-+
 
-> Thanks,
-> Namhyung
-> 
-> 
-> >
-> > I added the additional test output below.
-> >
-> > Namhyung, can you please ack it?
-> >
-> > - Arnaldo
-> >
-> > Committer testing:
-> >
-> > Before:
-> >
-> > Lets use stress-ng so that we have lots of samples using a CPU stressor
-> > and also intermingle the workload output with the messages about when
-> > the events get enabled (i.e. later on in the workload):
-> >
-> >   $ perf stat -e instructions -D 100 stress-ng -c 32 -t 1
-> >   Events disabled
-> >   stress-ng: info:  [38361] setting to a 1 second run per stressor
-> >   stress-ng: info:  [38361] dispatching hogs: 32 cpu
-> >   Events enabled
-> >   stress-ng: info:  [38361] successful run completed in 1.01s
-> >
-> >    Performance counter stats for 'stress-ng -c 32 -t 1':
-> >
-> >        <not counted>      instructions:u
-> >
-> >          0.916479141 seconds time elapsed
-> >
-> >         30.868003000 seconds user
-> >          0.049851000 seconds sys
-> >
-> >
-> >   Some events weren't counted. Try disabling the NMI watchdog:
-> >         echo 0 > /proc/sys/kernel/nmi_watchdog
-> >         perf stat ...
-> >         echo 1 > /proc/sys/kernel/nmi_watchdog
-> >   $
-> >
-> > After the fix:
-> >
-> >   $ perf stat -e instructions -D 100 stress-ng -c 32 -t 1
-> >   Events disabled
-> >   stress-ng: info:  [40429] setting to a 1 second run per stressor
-> >   stress-ng: info:  [40429] dispatching hogs: 32 cpu
-> >   Events enabled
-> >   stress-ng: info:  [40429] successful run completed in 1.01s
-> >
-> >    Performance counter stats for 'stress-ng -c 32 -t 1':
-> >
-> >         154117865145      instructions:u
-> >
-> >          0.920827644 seconds time elapsed
-> >
-> >         30.864753000 seconds user
-> >          0.073862000 seconds sys
-> >
-> >
-> >   $
-> >
-> > > Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> > > ---
-> > >  tools/perf/builtin-stat.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> > > index 9f3e4b257516..c71d85577de6 100644
-> > > --- a/tools/perf/builtin-stat.c
-> > > +++ b/tools/perf/builtin-stat.c
-> > > @@ -544,7 +544,7 @@ static int enable_counters(void)
-> > >        * - we don't have tracee (attaching to task or cpu)
-> > >        * - we have initial delay configured
-> > >        */
-> > > -     if (!target__none(&target)) {
-> > > +     if (!target__none(&target) || stat_config.initial_delay) {
-> > >               if (!all_counters_use_bpf)
-> > >                       evlist__enable(evsel_list);
-> > >       }
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > --
-> >
-> > - Arnaldo
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-Cheers,
-Changbin Du
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
