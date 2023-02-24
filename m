@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142276A23B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756576A23B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjBXVYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S230184AbjBXVYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjBXVYf (ORCPT
+        with ESMTP id S230159AbjBXVYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:24:35 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966584608A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:24:25 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ec43so2491835edb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:24:25 -0800 (PST)
+        Fri, 24 Feb 2023 16:24:34 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9846F03A;
+        Fri, 24 Feb 2023 13:24:20 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id b6so958123qtb.1;
+        Fri, 24 Feb 2023 13:24:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7FL2J01+S1brZJhkSmrAVHSbND/ljBuG/iYSX39T/M=;
-        b=FqYqL229nQFsdT8zagqSYUMC8fLl9jL1yBbVwID9qj6Af/qat8UsxUyPUbVHQpJ7+T
-         SJ+IpE7G2Dxp0LqEdrRQIHMRFrAGpcpX6LdLMzlANx2xVHKvm/d88opMaHNpgQBBTE9D
-         EsQYuqWJVIcKvbzccwf/F+ujbtwgB68lPVm1M=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N2dyy0LSAUfyLYU6Trou16AO3o2R0x1ufXT5iLsOFwg=;
+        b=eyoF0HD1VYVahpnM9pAU2BW5h+4Gx6x2QQtE2148eAsl29d7UUBYPHCJk0EO7enAMZ
+         KJuxMZVe5flhlruOgu0chB+ZOXGlEoc7S4LblvJB3jaWYrbB9pqh4CGnG/nQcljCXzYi
+         lpnC2QSFY5/0rCph5bGtZjOcK04gqAM1P4mz47VXmmN63ZTxGEkqezx1hokEUyBav4Ma
+         B2THvT9xZqQjMEg9FXM25JQJvNQv6d/pS/xlascjH6nb03/+r6tplTs1kAQXxhsRXdGn
+         YVj9U6Cykf0s5Nm8VBKSqQxj2eyxdt7Cd9GWY68LhhXUcY6aWCaWpe9EfGf6NweG5Uw+
+         H02A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z7FL2J01+S1brZJhkSmrAVHSbND/ljBuG/iYSX39T/M=;
-        b=vtVw47DGe73Wii/8HUkqeA8Bxw6asWWXKicL+1rTANmALLMqtp9zzHzRO+r8m7A4DG
-         qqYbpzHPJEmkLXeWWLyDy7bvfAMyahfQV9wTM7PMxNHw+bxvdmA1+9V1FeT2i3592UJ4
-         DE69OplYFLAZXm7dDfp//c/fks7pylbOHTNllZpfotUeM24fO6sso72s+PkRdgNMwYGd
-         ZOL5q69ouu8bM+JAYNOXW+4urUMCmDof9DqKqG/AB+jAQIP0MUSS8Km2FSfqglC1waDM
-         7xFfG9x2WpJ9AkqsUppWJMTUhiaIC1N91sjucPVKke015kWlHqrlUwXr1Jc5LZqg7A//
-         pqXw==
-X-Gm-Message-State: AO0yUKUParPp4JjSg8DQulFqnyc/DZYaZjEBKNo3f3zg4AvEwybF5/0w
-        c4sB54nD2kl+QQgcQDmQut7aejxzwH47b3BosYBLAw==
-X-Google-Smtp-Source: AK7set+37mUo6NoDRZdv8Axb+grytAisuh1jjDBtTFrqIv726j7YXf0uIKl1HrpVoUyFWoXq/um+WA==
-X-Received: by 2002:a17:906:4fd2:b0:8d9:c3d:91d8 with SMTP id i18-20020a1709064fd200b008d90c3d91d8mr25211844ejw.31.1677273863842;
-        Fri, 24 Feb 2023 13:24:23 -0800 (PST)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id o5-20020a17090611c500b008b907006d5dsm8437eja.173.2023.02.24.13.24.22
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2dyy0LSAUfyLYU6Trou16AO3o2R0x1ufXT5iLsOFwg=;
+        b=vLP4MR1WzJjV787jAgUBWDFTGnPAA0pH7I2TtasaTqejMfV2buqNiwFjKqWFbAij0n
+         Tjoc8pJcQLAm/X3WHyeJMNGWkhaPz91RifR8x8WpeF3WmFKd55+OlbAMlWtv47iXb38F
+         KT0iJmOtswmd5J9Fg5KQiV4NeKgHIqRtgo7qQXjYDWD1XRgdcsNsj4HzJt1h6DJ6t/uG
+         NxH/SheihinbnbM0yTj3UFynWZ9q9kTRZEpkpdGp6rDf02eZA/TuK6CYc2CaSp8+dfOK
+         dDQApHJlFSP+Yb9aV/YMFmBGNrg0hnk047S4oD1k2tR/kj3vMa00pcNmsY+nQVoe/kFu
+         178w==
+X-Gm-Message-State: AO0yUKUfsiGqEy7tvycewBNkxaDDgmr2iaASovLy+30hC4mVPChKG4Lz
+        xjKF7id4J+Dz3hwzVv7BeJg2YwhWr3M=
+X-Google-Smtp-Source: AK7set+6OXUrjU5+b60mgTFkGtN9bqKFEZih0QShslf/6D/kqmlmscK12buYE27E/85cEiyRFVWS+A==
+X-Received: by 2002:ac8:5a42:0:b0:3bf:ba6e:ac83 with SMTP id o2-20020ac85a42000000b003bfba6eac83mr6531669qta.61.1677273859378;
+        Fri, 24 Feb 2023 13:24:19 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d21-20020a376815000000b0073b4a55a2d1sm11327qkc.124.2023.02.24.13.24.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 13:24:23 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id o15so58288edr.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:24:22 -0800 (PST)
-X-Received: by 2002:a17:906:b55:b0:8f1:4cc5:f14c with SMTP id
- v21-20020a1709060b5500b008f14cc5f14cmr2756517ejg.0.1677273862668; Fri, 24 Feb
- 2023 13:24:22 -0800 (PST)
+        Fri, 24 Feb 2023 13:24:18 -0800 (PST)
+Message-ID: <50db8a7d-0db1-54de-b3ab-838d88da40f5@gmail.com>
+Date:   Fri, 24 Feb 2023 13:24:16 -0800
 MIME-Version: 1.0
-References: <Y/iywbFbiUAA6ZD3@kroah.com>
-In-Reply-To: <Y/iywbFbiUAA6ZD3@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 Feb 2023 13:24:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
-Message-ID: <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
-Subject: Re: [GIT PULL] TTY/Serial driver updates for 6.3-rc1
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_power=3a_reset=3a_brcm-kona-reset=3a_Us?=
+ =?UTF-8?B?ZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, sre@kernel.org
+Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202302151452046003226@zte.com.cn>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <202302151452046003226@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,27 +77,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 4:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
->   - more 8250 device support added
+On 2/14/23 22:52, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+> 
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Bah. I didn't notice this while merging, so it's in my tree now, but
-that SERIAL_8250_PCI1XXXX shouldn't default to on.
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-The Kconfig file has
-
-    config SERIAL_8250_PCI1XXXX
-        tristate "Microchip 8250 based serial port"
-        depends on SERIAL_8250 && PCI
-        select SERIAL_8250_PCILIB
-        default SERIAL_8250
-        ...
-
-and I don't think that "default" line should exist. It's not like this
-is some super-common board that everybody should enable.
-
-When I notice things in time, I tend to just fix this up in the merge
-itself, but this time I had already done a couple of other of your
-pulls before I noticed this thing.
-
-            Linus
