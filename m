@@ -2,219 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675C36A17DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC4C6A17E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBXIX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S229724AbjBXIYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjBXIXz (ORCPT
+        with ESMTP id S229619AbjBXIX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:23:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E246D1516C;
-        Fri, 24 Feb 2023 00:23:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 24 Feb 2023 03:23:58 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CCE15C91;
+        Fri, 24 Feb 2023 00:23:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B50EB81B41;
-        Fri, 24 Feb 2023 08:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBF7C433EF;
-        Fri, 24 Feb 2023 08:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677227030;
-        bh=egpj4R6Nk7pdXQzDojnEiQJzr0p1Wl3gveqprerB2C4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J3KCgR4XlKEqGoeRXnUX0YHSXn+wA6L1gxqk3IaPoH6Yb8Fh5tYZvMwQmFWbPV5gH
-         AurR25V+xbgCocaBRWXUB5R6xn9oTNZbvDnS5ofctBaFFqBDZfl588ukBixn1M27Hq
-         6lI71jYSr+YYANAcwWn0AeuhlpZ3Kaq+3b9PKJPP3bhWa4ohfPnd4uqNeZDoo4sEeG
-         ptuRLIkaMVx05+tPtIydPlcBh54QfceDaUUBhVyA2RO+J9EZ0fLlpvm6rkd/WDt5YV
-         ELNUMvsJxFfze8w6E2kEtocCfbCc932+hiVs/F08p9BCD5b55RD7HP6VWKf+v4tjEV
-         8z0pCG+XMtzFw==
-Date:   Fri, 24 Feb 2023 13:53:32 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, mani@kernel.org, p.zabel@pengutronix.de,
-        svarbanov@mm-sol.com, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
-        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com
-Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
- compatible
-Message-ID: <20230224082332.GA5443@thinkpad>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
- <20230214164135.17039-2-quic_devipriy@quicinc.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7861F37778;
+        Fri, 24 Feb 2023 08:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1677227035; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AL9X1+yNh4TnR5INv6zRDMmmyJRq44OTuNAoJX2NvEw=;
+        b=mr3Ky5jeFRjUgdY6dWt7rZesi83ypE+9L4yARacUWa/Kcq+CP9K7kdFUzIlaB3BC5pl3eX
+        r/zrBqwCYEAHmsSa3pPf6706wmMpxxT6ptA0LDGOzH6P0TWwiZO34r/4Ia3wb8ngm5oQSw
+        E/Ep32+6vsnuzjqeRYsGj2oEwkR8dsM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 595B013A3A;
+        Fri, 24 Feb 2023 08:23:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iLnaEht0+GNYFwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 24 Feb 2023 08:23:55 +0000
+Date:   Fri, 24 Feb 2023 09:23:54 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Matthew Chae <Matthew.Chae@axis.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel <kernel@axis.com>,
+        Christopher Wong <Christopher.Wong@axis.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/memcontrol: add memory.peak in cgroup root
+Message-ID: <Y/h0GlmeSQ735DxK@dhcp22.suse.cz>
+References: <AM5PR0202MB25167BFBBE892630A2EE3B7DE1AB9@AM5PR0202MB2516.eurprd02.prod.outlook.com>
+ <Y/eizTVo8LM70flh@P9FQF9L96D.corp.robot.car>
+ <AM5PR0202MB2516BD45CFBC033F9EA3B0A4E1AB9@AM5PR0202MB2516.eurprd02.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230214164135.17039-2-quic_devipriy@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <AM5PR0202MB2516BD45CFBC033F9EA3B0A4E1AB9@AM5PR0202MB2516.eurprd02.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
-> Document the compatible for IPQ9574
+On Thu 23-02-23 19:00:57, Matthew Chae wrote:
+> Hi Roman,
 > 
+> I'd like to get the peak memory usage recorded overall time, rather than at a certain time.
 
-You didn't mention about the "msi-parent" property that is being added
-by this patch.
+Sampling /proc/vmstat should have a minimal overhead and you will get
+not only a single value but also a break down to broad cathegory users
+(LRU, slab, page tables etc.). Unfortunatelly this doesn't cover all the
+users (e.g. direct users of the page allocator are not accounted to any
+specific counter) but it should give you a reasonable idea how is memory
+utilized. Specific metrics really depend on what you are interested in.
 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
->  .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
->  1 file changed, 70 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> index 872817d6d2bd..dabdf2684e2d 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> @@ -26,6 +26,7 @@ properties:
->            - qcom,pcie-ipq8064-v2
->            - qcom,pcie-ipq8074
->            - qcom,pcie-ipq8074-gen3
-> +          - qcom,pcie-ipq9574
->            - qcom,pcie-msm8996
->            - qcom,pcie-qcs404
->            - qcom,pcie-sa8540p
-> @@ -44,11 +45,11 @@ properties:
->  
->    reg:
->      minItems: 4
-> -    maxItems: 5
-> +    maxItems: 6
->  
->    reg-names:
->      minItems: 4
-> -    maxItems: 5
-> +    maxItems: 6
->  
->    interrupts:
->      minItems: 1
-> @@ -105,6 +106,8 @@ properties:
->      items:
->        - const: pciephy
->  
-> +  msi-parent: true
-> +
->    power-domains:
->      maxItems: 1
->  
-> @@ -173,6 +176,27 @@ allOf:
->              - const: parf # Qualcomm specific registers
->              - const: config # PCIe configuration space
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pcie-ipq9574
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 5
-> +          maxItems: 6
-> +        reg-names:
-> +          minItems: 5
-> +          items:
-> +            - const: dbi # DesignWare PCIe registers
-> +            - const: elbi # External local bus interface registers
-> +            - const: atu # ATU address space
-> +            - const: parf # Qualcomm specific registers
-> +            - const: config # PCIe configuration space
-> +            - const: aggr_noc #PCIe aggr_noc
+Another approach that might give you a different angle to the memory
+consumption is to watch PSI metrics. This will not tell you the peak
+memory usage but it will give you an useful cost model for the memory
+usage. Being low on free memory itself is not a bad thing, i.e. you are
+paying for the amount of memory so it would be rather sub-optimal to not
+use it whole, right? If the memory can be reclaimed easily (e.g. by
+reclaiming idle caches) then the overhead of a high memory utilization
+should be reasonably low so the overal price of the reclaim is worth it.
+On the other hand an over utilized system with a working set size larger
+than the available memory would spend a lot of time reclaiming so the
+performance would drop down.
 
-Why do you need this region unlike other SoCs? Is the driver making use of it?
-
-Thanks,
-Mani
-
-> +
->    - if:
->        properties:
->          compatible:
-> @@ -365,6 +389,39 @@ allOf:
->              - const: ahb # AHB Reset
->              - const: axi_m_sticky # AXI Master Sticky reset
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pcie-ipq9574
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 6
-> +          maxItems: 6
-> +        clock-names:
-> +          items:
-> +            - const: ahb  # AHB clock
-> +            - const: aux  # Auxiliary clock
-> +            - const: axi_m # AXI Master clock
-> +            - const: axi_s # AXI Slave clock
-> +            - const: axi_bridge # AXI bridge clock
-> +            - const: rchng
-> +        resets:
-> +          minItems: 8
-> +          maxItems: 8
-> +        reset-names:
-> +          items:
-> +            - const: pipe # PIPE reset
-> +            - const: sticky # Core Sticky reset
-> +            - const: axi_s_sticky # AXI Slave Sticky reset
-> +            - const: axi_s # AXI Slave reset
-> +            - const: axi_m_sticky # AXI Master Sticky reset
-> +            - const: axi_m # AXI Master reset
-> +            - const: aux # AUX Reset
-> +            - const: ahb # AHB Reset
-> +
->    - if:
->        properties:
->          compatible:
-> @@ -681,6 +738,16 @@ allOf:
->          - interconnects
->          - interconnect-names
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pcie-ipq9574
-> +    then:
-> +      required:
-> +        - msi-parent
-> +
->    - if:
->        not:
->          properties:
-> @@ -693,6 +760,7 @@ allOf:
->                  - qcom,pcie-ipq8064v2
->                  - qcom,pcie-ipq8074
->                  - qcom,pcie-ipq8074-gen3
-> +                - qcom,pcie-ipq9574
->                  - qcom,pcie-qcs404
->      then:
->        required:
-> -- 
-> 2.17.1
-> 
-
+All that being said the primary question is what is your usecase.
 -- 
-மணிவண்ணன் சதாசிவம்
+Michal Hocko
+SUSE Labs
