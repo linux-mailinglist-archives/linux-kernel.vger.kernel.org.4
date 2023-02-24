@@ -2,114 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115D66A2350
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 21:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954CD6A2354
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjBXU7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 15:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S229776AbjBXVAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBXU7N (ORCPT
+        with ESMTP id S229460AbjBXVAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:59:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B8625E3D
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:58:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677272306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IRX7slzsj7oP9EoAKocW7fCHED6Bws5rQl0DCvHnUe0=;
-        b=Y+Gz3jQHpUPqe9sC1rQtGj2XUO31mP0L0PNwLc322zJzkG4U6jy6yObfY38dOwX0XGtg1p
-        3d3yF2kcDDY0RV1FaOWJMV/aQmAkC2K569epcAPbuaraG/bkBv8oCYrjF5Z41TcbgEE8kh
-        wUGVy0tnHP/TP5QBuHtf/rJXwPnFVxE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-DJUjrUgEMh-kLslfuqIpSg-1; Fri, 24 Feb 2023 15:58:21 -0500
-X-MC-Unique: DJUjrUgEMh-kLslfuqIpSg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 24 Feb 2023 16:00:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BC227D5F;
+        Fri, 24 Feb 2023 13:00:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E6D2811E9C;
-        Fri, 24 Feb 2023 20:58:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6618CC15BA0;
-        Fri, 24 Feb 2023 20:58:19 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
-References: <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com> <Y/jhwuTCaOgOTLp2@casper.infradead.org> <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org> <2213409.1677249075@warthog.procyon.org.uk> <2385089.1677258941@warthog.procyon.org.uk> <Y/kFnhUM5hjWM2Ae@casper.infradead.org> <2390711.1677269637@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        Steve French <stfrench@microsoft.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A09B36198A;
+        Fri, 24 Feb 2023 21:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5688BC433D2;
+        Fri, 24 Feb 2023 21:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677272445;
+        bh=2hjpyvDNC/wSGd+1eQn8U57a8M+iEjURLEBCMQC9WCo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rLJpIT7pDDaWlDn2FWpGiTm0l0Hf9NkJskpSVsWOVJierGI3/z/FGex58pkoLVVCv
+         crERApewISnJR5PC5YcqPC49xNp2xSRvbVuTmo2pe6kGWjWNlgJeYsRTiJAGLL7tvm
+         SZUU4dWGVeNXXodlhfHzBVSNW+4yEdR7ZHGvek4wEemqOYTLuREcikoaV0yrmBP9Bx
+         LVEJlNGEUae0AvH8zjtmcy6fu7DtpBV4/DsMo3G6f9mRPxpUCC352meb0i4uAOQjbh
+         qOIfH+BK6ruwCTCaylDCiwKm16UxCsYebsidWL00xsFT0hdoo4DgSDqKBtEJaTRXns
+         TJMxhiffUXCVA==
+Date:   Fri, 24 Feb 2023 21:00:38 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+Message-ID: <Y/kldmYcl7+2FBRB@spud>
+References: <20230224133609.2877396-1-conor.dooley@microchip.com>
+ <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2392015.1677272298.1@warthog.procyon.org.uk>
-Date:   Fri, 24 Feb 2023 20:58:18 +0000
-Message-ID: <2392016.1677272298@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EzgSW8I33ytRe36y"
+Content-Disposition: inline
+In-Reply-To: <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> > Then why do we have to wait for PG_writeback to complete?
-> 
-> At least for PG_writeback, it's about "the _previous_ dirty write is
-> still under way, but - since PG_dirty is set again - the page has been
-> dirtied since".
-> 
-> So we have to start _another_ writeback, because while the current
-> writeback *might* have written the updated data, that is not at all
-> certain or clear.
+--EzgSW8I33ytRe36y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As I understand it, it's also about serialising writes from the same page to
-the same backing store.  We don't want them to end up out-of-order.  I'm not
-sure what guarantees, for instance, the block layer gives if two I/O requests
-go to the same place.
+On Fri, Feb 24, 2023 at 09:42:08PM +0100, Miguel Ojeda wrote:
+> Hi Conor,
+>=20
+> On Fri, Feb 24, 2023 at 2:37 PM Conor Dooley <conor.dooley@microchip.com>=
+ wrote:
+> >
+> > This is a somewhat blind (and maybe foolish) attempt at enabling Rust
+> > for RISC-V. I've tested this on Icicle, and the modules seem to work.
+> > I'd like to play around with Rust on RISC-V, but I'm not interested in
+> > using downstream kernels, so figured I should try and see what's
+> > missing...
+> > I've tagged this as RFC in case I've missed some "WAaaaa you can't do
+> > this" somewhere :)
+>=20
+> Thanks for sending this and taking the lead on RISC-V
 
-> I'm not sure what the fscache rules are.
+Meh, far from it. I'm just trying to get the ball rolling if it really
+is as trivial as this seems.
 
-I'm now using PG_fscache in exactly the same way: the previous write to the
-cache is still under way.  I don't want to start another DIO write to the
-cache for the same pages.
+> I appreciate
+> you put me as the author, but in this case, it was actually Gary that
+> started the RISC-V port [1], and then I sent three PRs on top later
+> on.
 
-Hence the waits/checks on PG_fscache I've added anywhere we need to wait/check
-on PG_writeback.
+The stuff that I have lifted here all had you as the sole author in the
+"rust" branch downstream, which is why I gave you authorship. Namely:
+afba78eacb9b ("rust: generate target specification files on the fly")
+732b3c386328 ("rust: target: remove `cpu`")
 
+I don't see anything from [1] in these commits, so I don't think that I
+made a mistake here.
 
-As I mentioned I'm looking at the possibility of making PG_dirty and
-PG_writeback cover *both* cases and recording the difference elsewhere -
-thereby returning PG_private_2 to the VM folks who'd like their bit back.
+> When submitting something on behalf of somebody else, I suggest being
+> very careful and ideally contacting the authors beforehand. In
+> particular, if there has been any modification (including to the
+> commit message), then a note should be added explaining so.
 
-This means, for instance, when we read from the server and find we need to
-write it to the cache, we set a note in the aforementioned elsewhere, mark the
-page dirty and leave it to writepages() to effect the write to the cache.
+It's RFC for a reason, I've had a poor track record with off-list emails
+to people that do not know me so would rather do it this way :)
+Probably should have noted that I wrote the ~placeholder commit messages
+though, apologies. I'll sort that out for a potential v1.
 
-It could get tricky because we have two different places to write to, with
-very different characteristics (e.g. ~6000km away server vs local SSD) with
-their own queueing, scheduling, bandwidth, etc. - and the local disk might
-have to share with the system.
+> Therefore, please double-check everybody that contributed to the lines
+> you are sending (e.g. via `git-blame`) and add them as
 
-David
+That's what I did! Unless I missed something that was non-obvious, the
+only name on the commits I lifted was you. Is there somewhere else I
+should have looked for that information?
 
+> `Co-developed-by`. Also, please add a note of what you changed/wrote
+> e.g. square brackets, and `Link` tags to the original PRs/discussions.
+
+If this goes to v1, I will note that I wrote the commit messages.
+
+Apologies,
+Conor.
+
+--EzgSW8I33ytRe36y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/kldgAKCRB4tDGHoIJi
+0kRlAQCUtbv6hyB+QaKgek4dllhjR2OYkuSr5B2c1hLoO5iADAEAs0GElI0VA2QL
+tfv3Ync/lLJwVaPRbeh6/nBJInV17wU=
+=lKKs
+-----END PGP SIGNATURE-----
+
+--EzgSW8I33ytRe36y--
