@@ -2,163 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF2D6A1573
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1104D6A1576
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjBXDiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
+        id S229506AbjBXDjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBXDiN (ORCPT
+        with ESMTP id S229488AbjBXDjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:38:13 -0500
-Received: from CO1PR02CU002-vft-obe.outbound.protection.outlook.com (mail-westus2azon11010005.outbound.protection.outlook.com [52.101.46.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509A413DC9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:38:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R3MkTZvJ/X09v1BBxi0Ue+EuKVZMyy/SKuk3WxHHin/faNA1n0C5KFahtOki6N5DK/iUuQS8JDdUg4H4mn4Zr/dDsXcsYiwOcN5Y0+qjGC3zGGWGeW05++un2IqFSJfjFFLdReWJIdg8zQ/ew1/GkCrKuC5NRcRQwjMtWohmEEJuwDzA1TrPWgEBKFAuO+KRTzlwoGiWt152pYBnPin7NT9oTzcNjw0AYqMARE09UQU1XBmjS74N84JRztI/6YoD8o+21YxVp3tF8LHzzP096k0vZV5oPIgXxwMveEkV9uIvw7ttaiBRZ6TH7O3OmQUv3rBtuSulzLU+Y0Sss5gKlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GLOaZicxtkxKkBYLUyijVgPCiC/dx0j/+i64ocnGf9g=;
- b=O765vDmbRTDNnPrHpbQQjgv3de69Kpwq5cp3MGgjC3meGdwCJiTnFdTuiFU6ZH7rnqQ0SXXKpTqkU071zz+6k10864ETL7TdKNVAJejET5ig8jLr56ug4oVId3s8Jqboz34oTUg/N6Hrf6C8acpOa/xn3CYKuOcxk6Wm6xlxp5WluiTUYa5c0HAEw+nuPNfZ69VdF8sShOImYMtf2hdhG35++oRlQSHFWb6BP0Wky+5drVIJHyrZYGZEh4mi0lE5L3oKxAjwHsC6pVVEvOT+xH5+4Psn4bMzYrmBsZ0185Y3d8WSZoxUKeTMX2aGaHFPfgSBTefcpHCbugiC/xWPFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GLOaZicxtkxKkBYLUyijVgPCiC/dx0j/+i64ocnGf9g=;
- b=dvw889gOdb5zclEdWyHThfjZAZO/QO9kQJW1/5DqbZpt9UAR69Xrn0tCr/Cpf5xSuTlAML+hN08a7Hf/xJDoT/RAAuGhdOTVlqcOBRKA/j2W1hSR3TO5MTU5K/w894W2aKIyshj7QPNvPXjp7DpP752BiK2eGUlfNe7EyJtaukQ=
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- (2603:10b6:610:155::10) by BN7PR05MB4577.namprd05.prod.outlook.com
- (2603:10b6:406:f8::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Fri, 24 Feb
- 2023 03:38:04 +0000
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::ad2d:cb08:253b:26e7]) by CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::ad2d:cb08:253b:26e7%8]) with mapi id 15.20.6134.024; Fri, 24 Feb 2023
- 03:38:03 +0000
-From:   Zack Rusin <zackr@vmware.com>
-To:     "tangmeng@uniontech.com" <tangmeng@uniontech.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
-Thread-Topic: [PATCH v2] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
-Thread-Index: AQHZR1Unjoj41030h0yn+mDWgyFFg67cfB+AgADptICAAAdYAIAABJoAgAACWwA=
-Date:   Fri, 24 Feb 2023 03:38:03 +0000
-Message-ID: <7c0691dd62f58cffb42fbfb32eedc742038a2de0.camel@vmware.com>
-References: <20230223070405.20228-1-tangmeng@uniontech.com>
-         <c5ba07a5ad3c6b101126a97eb094c51013ee83c0.camel@vmware.com>
-         <113C6E516C95FA38+f2633fe9-fb5a-616e-0e35-7559750544c9@uniontech.com>
-         <2bc1750b4c3ebebf84c106b903178e5236dc396e.camel@vmware.com>
-         <D9D1D797C8BE2644+74545cb0-21ea-1b04-bee1-1ed1bbe3efff@uniontech.com>
-In-Reply-To: <D9D1D797C8BE2644+74545cb0-21ea-1b04-bee1-1ed1bbe3efff@uniontech.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.3-1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|BN7PR05MB4577:EE_
-x-ms-office365-filtering-correlation-id: 7f7f2321-f849-4130-abba-08db161888f3
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R8Dig+8Its00Fb6ToKLL/7FFe1eG2t5WWfeDi1QRh+JO3pKQjo0ZivJi+AH2XxdUJyOUhbjxlgXZouGzpuCgcEnPZxnssYGSJcLhMkw1c1mRSahkPazZcNIqrfU8f6gndUVfPnO9V+K7Cez4b/ed45EX96BHBMD7rIgmLRLxVtE39O6PK0h2WuDco+4RZR2Vbk2iZlgFAK8FwfomOHs0CrwvE30iF0h1wKLzJjJQbd30XlJXAerWljpGmdkRdqUdtIhZ8e8lOSltbSW/Y2oSxgH0DwxwT9536usiOJiJIIAm3MJCkkJID9oLJ0INEpTn5dlKewBJfM0GZuN61zovU3tZxX9PgBQTsER/nQr03Yjd+Fp/z/U0EJ5kEXuX0DpxS+y/dkiSCcrO6jQeGCcAcXLenSzcXjrOi1cnOd3qKJvW9sESS8zldZfuUqVKbOeuq16Bu7xZnYRjb6LnEFvbfL3qnVSpEjO7SycLxsm9pXp01kT3CpiSwBioBwQ0/x19CkmWpb9ivCHmlZPp4OkgrL8dTBcotL/j11+EfZfXkZi9JP4A47zieeaFvQYogwB051FEimT0NAOeknqaq976Gu2xHdHCMKcrCyD2TgsbioJ1We1TXKzfTK4a0AgMcwIV2Ni2H9+eWATDrCSxMWovdRjmRKzY0eQh5Qba7YV/6Ut0fI7QIeAvaH76fBi1m17HcpCjAEWjYrvgK7m6petmhpCcXIqEo6USpiNyNVIiJ3w0br3lVA8S8dB+1coj082/
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199018)(36756003)(83380400001)(6506007)(186003)(26005)(6512007)(71200400001)(53546011)(6486002)(478600001)(66476007)(91956017)(2616005)(66556008)(76116006)(64756008)(66946007)(86362001)(66446008)(8676002)(2906002)(41300700001)(8936002)(5660300002)(122000001)(110136005)(316002)(38070700005)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cVBzc09hRTRFMGo3QjlIVWZOK1VVc1lkZk12eXRhYk9JcS9Zb1gxTEc2MURs?=
- =?utf-8?B?SzVzMzczc1VwU2pyd3MvNmo5Nk1pUUhnRTZLMmI5eVJxTnFyRjd6Y3ZobnVw?=
- =?utf-8?B?K01QTmxkY0pOdVF0SUhDVmJhcHo1THFUL2xyM3RuTkp4alREcjgxRWViS2pV?=
- =?utf-8?B?cXJOdjZpbXRvRDdUVWlJTjFhOElWNHpYQUQ3am85ckZ6UE5iUmhnSzA1d3NV?=
- =?utf-8?B?aDRzc0Izckpra1Vvc2tzb3pYMFNqTVJxS2srWmJSb2JqNi9NZ3Z3WGdPS1Zo?=
- =?utf-8?B?ZFBOaEdwenU4cDh2WURlaXV2eE5aSlFMUGxza2xTZFdNZzJKVGhnWmZmenVn?=
- =?utf-8?B?REF4cHFDS0JVTHVuZUk3Q2xrbTVrd2lUcGs4WGJsQWpMZmF0SnpURnhZV250?=
- =?utf-8?B?TVNCQWo1WTAyZ3E1ZUJiaVVySEI3MjRwY0R6ZEVBT0s0R3Juc2VqOHVNME5Q?=
- =?utf-8?B?SHlBbnJmS2paa1NrQ0wvRGtIOXVHVWNHeFRDYkh2TlJVa0VZZ2puOEQ2dzEx?=
- =?utf-8?B?bDI2NkNRTU40VGQ0UTVOZUUxbGdxSXYwZlZuYU96RGhIYjFnRmxZakZsQ2pS?=
- =?utf-8?B?dW4xWTFiekpkaWVqRHpUSmhiZTNPekc0OHRhZGk4QlI2Mys3N1dQeUhGOTFF?=
- =?utf-8?B?cFB0cGkvb2xYV2R4UWJKQ0FCa2hsR0kvZEpJWmF5RE4rdlFVYlpLRlZXSVA3?=
- =?utf-8?B?QjVhQnlMd3cyb2ZDTTNzZWpFMXhQQi9EblAzQ1FPZXpmQWJtZlBva1VTeW9V?=
- =?utf-8?B?WndCMmJQRXIxRHQ2Q3VmYVFhMU13eDVTYnJVbEx4TWoySVFJV05NbkpybHRy?=
- =?utf-8?B?dGp6VVN4bmIycnMvcS9UVjFFcmVBRXdvRFFyeVFMNVVVSUIxdWxKbE5tbFdz?=
- =?utf-8?B?OVBqcUh4WHdaRnZJOGxFNW1PSXFlRitKZ3NtZVAxdHRHdWtaMlRUdFd3c1hx?=
- =?utf-8?B?WVQrRzFZUHcwWmFCeEdiUlRTUWlkQ2dHUkhVRWlmaGY5SXFjZmYybE12QWl2?=
- =?utf-8?B?NXJodTRqQytwcU9VOXJVbFdLRTNaMGZuNVRXMXBqSi9zRkV4dXZFczkxV29u?=
- =?utf-8?B?UDlwdnRISHgwU09WUUlxZkVXWkhiTjM3WUFiTkVDTEp3dHd3ZmswR25Pd09Y?=
- =?utf-8?B?cEdvb3BuZHU1enhHZVFTdXBKSFhQdStQRWxqL1dXaGYwZ0l5Q3czeEtxYWJN?=
- =?utf-8?B?Q2RyNnFFMUlneVlMNWYvTjgwaC83Qlkxb2NYV3dCencvSlZUcVhMQ3QwZkgx?=
- =?utf-8?B?QTkwUDQzNEZ0VmRvaXpzdGg2eWFVZGkyUFBiVHZMYlY0WHJFU25Rc0UwMFRJ?=
- =?utf-8?B?ME9lazBpYTlXdzZCUWVUeHNwT0FPSFhNamZEWlBzUmNaeGVMaFhhbWpZRklX?=
- =?utf-8?B?bmF2ak03eHpsSkU5WW5vZDh6YTJOVThrVlcvL3NNMGVBOHdObWxUSXR3aDV5?=
- =?utf-8?B?cXB2c1hRWm83N0xRMG14MHFCdFhmb1dmbWtvM3o2a2FmcEVuUkZUclZMU0JW?=
- =?utf-8?B?T0Q4QWc0MXZIR1B6QUl6UHYzSGVCVjRxVzA2M1hxaGVTZGJrRUFpR3VURS9K?=
- =?utf-8?B?aXhDc3FvQktsMDZzNVllQmYwNVBvQlRKNUNPb3FDYmhiSWlmc20vMUNqVlU0?=
- =?utf-8?B?dkNSVSttVWloWXh3NWh2R09Ya00yeEM4bnZrc3NHVEtyQWNPNGNpWWFTZEZq?=
- =?utf-8?B?UTJnMk1rNWw3c1U2ZmxKbWExTXM2NDZOUzJPM2hPNlhxcHhOeGE3UkhBMnYz?=
- =?utf-8?B?Q25RMGdmSnFOKzczbzhybDdQZ1J5UEpvUWQ4a1o1V2xSaEdBbEltQ2ViMVo1?=
- =?utf-8?B?Z0xBRTdzc2c4RmNLT3h4TzdWYk9qbE1XUlF0TmVUaWtSSDhabDJNNDU1czBv?=
- =?utf-8?B?d3FkcXdMK29LZ0dmUEpFenpCbDRuWkNuM0p1Q3lFdDZJS0gwaERQSFVmbjVj?=
- =?utf-8?B?M1NXRFNLRHdYMVdDMEowMDgzajQ4T05HRGxrdDg1KzRGeHF2S1p4YUZsR3Rp?=
- =?utf-8?B?UnFyYkMrRkl4NERnNG9RYnJwOFZwelloQm5MVlUyK0E5MW9BZ2FSZVFRM2Nh?=
- =?utf-8?B?TTlDMkNsR3NQZ09xVjVpSWN1dHlpT2g3RVNYRU5jdFl0bzVUT3dJK09aNVhq?=
- =?utf-8?Q?BQpnlD7NS3OOdcQkO6Al/xDhp?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EDA40C893A412041AAEF7C5CBE352023@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 23 Feb 2023 22:39:16 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7221589A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:39:14 -0800 (PST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 496BC3F4B7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:39:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677209953;
+        bh=LvpymLUbODHZ4Mo00qWLmVpjnxYdZJ0xxMFsKmLrd74=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=skfPlk9hGD9JACenRp6ojAbGRcl3CrzNjXydiIWpmAMkPcopObstHRuQdgDneaudw
+         TSEptR8ZVSUufRWYX1u3kkRZ/QOLodHhXwbHKm8b74ER7E6+xACGa0BSEvFXsmRiqC
+         Xn6X2l+HLeppRub8nfdbttgVfvQriUg80cgkqxYCPc61NjnutkfTvZmcqK1tyfaUrY
+         DPJYzO23FybcDF57Jt65ui/R4kDSONDfzXXHX+GRFIVQQb8vlOv9rMeChLvVKvoXC8
+         lVuVHMz6Cd7KmnlMI6mEpXmbHrTn0c41xiiLFXAVPmqTV+3q0y9dF94YRtlLGMZkgH
+         +j1/uybKZNW4Q==
+Received: by mail-pf1-f197.google.com with SMTP id w3-20020aa78583000000b005d244af158eso4272956pfn.23
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:39:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LvpymLUbODHZ4Mo00qWLmVpjnxYdZJ0xxMFsKmLrd74=;
+        b=fWuHSzvXBVhodH1EgDZiwZPHKiGhe9nl12oRjzMwBzQ8xb4hPPGwC6NQyOPJsB/RGg
+         MPfTOvfknaqN13GO4OJtWNOLeppU3iz4rJnf2iOIVMnqVFMSJ8X5SKFPSqGHeKd+3pic
+         ykveaZCncSAijqwr6aG+E6xKmiQ2onQ1k0ahanLOVx4qpo08DjroKxqhUZOa/8SUN6ku
+         We6ER0y/CYLMQO/vgZCOn115n4dCjDOQHK0dX+l2Ewdz24cwA378SbP8P/ofQwIb0qpi
+         3BR3S4L7uXoFQynJSFMmxXm7CO0MYpq3nTNaAdLuFgCTt9nqSmi7yj4TMlKE3WI/CSfh
+         uxYw==
+X-Gm-Message-State: AO0yUKV1mmeo9t5TgW296yFVvESuBUDKtyMqRR96ylc2+roK+6jixFG7
+        z2uIE6DVBKr9I9VtRuzZcfAsqqiEACZHt9l47UB9D20KB1i+6aSi7xCqcj9kTcJcWoB3F0+6K0q
+        RjuoevnTo56Civn1GM8anPSd+4HKH+B9ENs5Hi3yHESpdHI2bUOVHHQZoNw==
+X-Received: by 2002:a17:902:c3cd:b0:19c:a3be:a4f3 with SMTP id j13-20020a170902c3cd00b0019ca3bea4f3mr1811090plj.4.1677209951572;
+        Thu, 23 Feb 2023 19:39:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set9zi8Z6ymjynDbJ1bv4R019r6ipAEWDuZlP1cNc9u9M+NCmiZ7E0/bSyF0hgJAcuEy3QZN2T2SFFoSYNKs66fY=
+X-Received: by 2002:a17:902:c3cd:b0:19c:a3be:a4f3 with SMTP id
+ j13-20020a170902c3cd00b0019ca3bea4f3mr1811084plj.4.1677209951159; Thu, 23 Feb
+ 2023 19:39:11 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f7f2321-f849-4130-abba-08db161888f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 03:38:03.5128
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uAyb8Fp1/Hrck8O3TVvQ66ZG8eGaFDNoFVOWsjskLykPcnfDk6piwdLEliC57erS60gGHIxfwdbAMlKPHa/lcQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR05MB4577
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230221023849.1906728-1-kai.heng.feng@canonical.com>
+ <20230221023849.1906728-7-kai.heng.feng@canonical.com> <b2bae4bb-0dbe-be80-3849-f46395c05cd2@gmail.com>
+ <CAAd53p79Of-ZPBFGtBZCSnST+oTT5AwGkRo_Z57Gm9XDOBmi_A@mail.gmail.com>
+In-Reply-To: <CAAd53p79Of-ZPBFGtBZCSnST+oTT5AwGkRo_Z57Gm9XDOBmi_A@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 24 Feb 2023 11:38:59 +0800
+Message-ID: <CAAd53p5NdHgC8syFqKUZkfZ4-Z7VcYANbLDPCZ4DexacR+nZEA@mail.gmail.com>
+Subject: Re: [PATCH v8 RESEND 6/6] r8169: Disable ASPM while doing NAPI poll
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     nic_swsd@realtek.com, bhelgaas@google.com, koba.ko@canonical.com,
+        acelan.kao@canonical.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
+        rafael.j.wysocki@intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTAyLTI0IGF0IDExOjI5ICswODAwLCBNZW5nIFRhbmcgd3JvdGU6DQo+IA0K
-PiANCj4gT24gMjAyMy8yLzI0IDExOjEzLCBaYWNrIFJ1c2luIHdyb3RlOg0KPiA+IA0KPiA+IFRo
-YXQncyBjb3JyZWN0LiBUaGF0J3MgdGhlIHdheSB0aGlzIHdvcmtzLiBUaGUgaW9jdGwgaXMgYWxs
-b2NhdGluZyBhIGJ1ZmZlciwNCj4gPiB0aGVyZSdzDQo+ID4gbm8gaW5maW5pdGUgc3BhY2UgZm9y
-IGJ1ZmZlcnMgb24gYSBzeXN0ZW0gYW5kLCBnaXZlbiB0aGF0IHlvdXIgYXBwIGp1c3QNCj4gPiBh
-bGxvY2F0ZXMNCj4gPiBhbmQgbmV2ZXIgZnJlZXMgYnVmZmVycywgYXQgc29tZSBwb2ludCB0aGUg
-c3BhY2Ugd2lsbCBydW4gb3V0IGFuZCB0aGUgaW9jdGwgd2lsbA0KPiA+IHJldHVybiBhIGZhaWx1
-cmUuDQo+ID4gDQo+IERvIHlvdSBtZWFuIHRoYXQgdXNlcnMgd2l0aG91dCBjZXJ0YWluIHByaXZp
-bGVnZXMgY2FuIGFjY2VzcyBhbGxvY2F0ZSBhIA0KPiBidWZmZXIgYmVjYXVzZSBpdCBpcyBkZXNp
-Z25lZCBsaWtlIHRoaXM/IHNvIHdlIGRvbid0IG5lZWQgdG8gYmxvY2sgDQo+IHVzZXJzwqB3aXRo
-b3V0wqBjZXJ0YWluwqBwcml2aWxlZ2VzwqB0b8KgVk1XX0FMTE9DX0RNQUJVRsKgc3VjY2Vzcz8N
-Cg0KVGhhdCdzIGNvcnJlY3QuIElmIG9ubHkgdGhlIGRybSBtYXN0ZXIgb3IgYWRtaW5zIGNvdWxk
-IHVzZSByZW5kZXJpbmcgbm9uZSBvZiB0aGUNCnJlZ3VsYXIgYWNjZWxlcmF0ZWQgKGUuZy4gT3Bl
-bkdMKSBhcHBzIHdvdWxkIHdvcmsuDQoNCj4gPiBBcyB0byB0aGUgc3RhY2sgdHJhY2UsIEknbSBu
-b3Qgc3VyZSB3aGF0IGtlcm5lbCB5b3Ugd2VyZSB0ZXN0aW5nIGl0IG9uIHNvIEkNCj4gPiBkb24n
-dA0KPiA+IGhhdmUgYWNjZXNzIHRvIHRoZSBmdWxsIGxvZyBidXQgSSBjYW4ndCByZXByb2R1Y2Ug
-aXQgYW5kIHRoZXJlIHdhcyBhIGNoYW5nZQ0KPiA+IGZpeGluZw0KPiA+IGV4YWN0bHkgdGhpcyAo
-aS5lLiBidWZmZXIgZmFpbGVkIGFsbG9jYXRpb24gYnV0IHdlIHdlcmUgc3RpbGwgYWNjZXNzaW5n
-IGl0KSB0aGF0DQo+ID4gd2FzDQo+ID4gZml4ZWQgaW4gaW4gNi4yIGluIGNvbW1pdCAxYTY4OTc5
-MjFmNTIgKCJkcm0vdm13Z2Z4OiBTdG9wIGFjY2Vzc2luZyBidWZmZXINCj4gPiBvYmplY3RzDQo+
-ID4gd2hpY2ggZmFpbGVkIGluaXQiKSB0aGUgY2hhbmdlIHdhcyBiYWNrcG9ydGVkIGFzIHdlbGws
-IHNvIHlvdSBzaG91bGQgYmUgYWJsZSB0bw0KPiA+IHZlcmlmeSBvbiBhbnkga2VybmVsIHdpdGgg
-aXQuDQo+ID4gDQo+ID4geg0KPiA+IA0KPiBUaGFuayB5b3UsIHRoZSBrZXJuZWwgdmVyc2lvbiBv
-ZiBteSBlbnZpcm9ubWVudCBpcyBsb3dlciB0aGFuIDYuMiwgSSANCj4gd2lsbCB2ZXJpZnkgb24g
-bXkga2VybmVsIHdpdGggY29tbWl0IDFhNjg5NzkyMWY1MiAoImRybS92bXdnZng6IFN0b3AgDQo+
-IGFjY2Vzc2luZyBidWZmZXIgb2JqZWN0cyB3aGljaCBmYWlsZWQgaW5pdCIpLg0KDQpHcmVhdC4g
-TGV0IG1lIGtub3cgaWYgeW91IGhhdmUgYW55IHByb2JsZW1zIHdpdGggaXQuDQoNCnoNCg==
+On Wed, Feb 22, 2023 at 9:03 PM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> On Tue, Feb 21, 2023 at 7:09 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> >
+> > On 21.02.2023 03:38, Kai-Heng Feng wrote:
+> > > NAPI poll of Realtek NICs don't seem to perform well ASPM is enabled.
+> > > The vendor driver uses a mechanism called "dynamic ASPM" to toggle ASPM
+> > > based on the packet number in given time period.
+> > >
+> > > Instead of implementing "dynamic ASPM", use a more straightforward way
+> > > by disabling ASPM during NAPI poll, as a similar approach was
+> > > implemented to solve slow performance on Realtek wireless NIC, see
+> > > commit 24f5e38a13b5 ("rtw88: Disable PCIe ASPM while doing NAPI poll on
+> > > 8821CE").
+> > >
+> > > Since NAPI poll should be handled as fast as possible, also remove the
+> > > delay in rtl_hw_aspm_clkreq_enable() which was added by commit
+> > > 94235460f9ea ("r8169: Align ASPM/CLKREQ setting function with vendor
+> > > driver").
+> > >
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > ---
+> > > v8:
+> > >  - New patch.
+> > >
+> > >  drivers/net/ethernet/realtek/r8169_main.c | 14 ++++++++++++--
+> > >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+> > > index 897f90b48bba6..4d4a802346ae3 100644
+> > > --- a/drivers/net/ethernet/realtek/r8169_main.c
+> > > +++ b/drivers/net/ethernet/realtek/r8169_main.c
+> > > @@ -2711,8 +2711,6 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
+> > >               RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
+> > >               RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
+> > >       }
+> > > -
+> > > -     udelay(10);
+> > >  }
+> > >
+> > >  static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
+> > > @@ -4577,6 +4575,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
+> > >       struct net_device *dev = tp->dev;
+> > >       int work_done;
+> > >
+> > > +     if (tp->aspm_manageable) {
+> > > +             rtl_unlock_config_regs(tp);
+> >
+> > NAPI poll runs in softirq context (except for threaded NAPI).
+> > Therefore you should use a spinlock instead of a mutex.
+>
+> You are right. Will change it in next revision.
+>
+> >
+> > > +             rtl_hw_aspm_clkreq_enable(tp, false);
+> > > +             rtl_lock_config_regs(tp);
+> > > +     }
+> > > +
+> > >       rtl_tx(dev, tp, budget);
+> > >
+> > >       work_done = rtl_rx(dev, tp, budget);
+> > > @@ -4584,6 +4588,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
+> > >       if (work_done < budget && napi_complete_done(napi, work_done))
+> > >               rtl_irq_enable(tp);
+> > >
+> > > +     if (tp->aspm_manageable) {
+> > > +             rtl_unlock_config_regs(tp);
+> > > +             rtl_hw_aspm_clkreq_enable(tp, true);
+> > > +             rtl_lock_config_regs(tp);
+> >
+> > Why not moving lock/unlock into rtl_hw_aspm_clkreq_enable()?
+>
+> Because where it gets called at other places don't need the lock.
+> But yes this will make it easier to read, will do in next revision.
+
+We can't do that because it creates deadlock:
+rtl_hw_start()
+  rtl_unlock_config_regs()
+  rtl_hw_start_8168()
+  rtl_hw_config()
+    rtl_hw_start_8168h_1()
+      rtl_hw_aspm_clkreq_enable()
+
+Kai-Heng
+
+>
+> Kai-Heng
+>
+> >
+> > > +     }
+> > > +
+> > >       return work_done;
+> > >  }
+> > >
+> >
