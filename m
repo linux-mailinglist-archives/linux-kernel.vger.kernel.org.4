@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9E56A1597
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE5E6A159B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjBXDnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S229628AbjBXDo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBXDnb (ORCPT
+        with ESMTP id S229638AbjBXDo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:43:31 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293229757;
-        Thu, 23 Feb 2023 19:42:53 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso1489395pjb.2;
-        Thu, 23 Feb 2023 19:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3KYhp7BVqrVyOrznEFnFb4ZtNJLmanhkAsoLMLCOK+Y=;
-        b=LPgJHuS2FiIrAtIYRxjA3746GLb7RxOpWi0NeNzKvSc4+BMO0RDlTqhT7JYLSsdiET
-         1M3I1Hx1TiJ5Z1LbLl2JGlILhZnhMJ9RtPQLP22K1pCn+Ez+JKVVOH8qr/+0PfcvzUO/
-         wkf3acD71POeh4SIT3rcTtSvt95pqRw5740wA65tJKx5fcFjtii3NkdqApoyDU6clLSK
-         RctLCp0ROyxqhAAqjcOFIJTLe9wZXYo69Z9V3g07boIb++mbZkmoE6I5ADaMJFaU8xaO
-         S5cqXO773bfepkOJ8pzrckkOYDWLAmbvdKSrWoo1Ze8yMbO0tY5soIdSGnxzGXyoSd1x
-         kOOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3KYhp7BVqrVyOrznEFnFb4ZtNJLmanhkAsoLMLCOK+Y=;
-        b=t6/tJmVcFcOgRWgYt/DekBcdO9YtkyJnCXClZ9F7OYgJo8QFxRo+pc47O1yoCWFLFe
-         TIJTRmGq3heY7hhyHi3ys6nmOlUaqb6bW+uDJFRHQCay4cHVnSLXyOiQcfQgEoynFmHs
-         rybNhw3eFzNWQrqBosO/y3uTgQ30dp9uyad7yf9239m8PghDas03dGBz4/0jyDBuLyvN
-         rF8Sye3iytkOPG6P6SFF6wlc9+mcoDSO3M7ufUXskSZDkU40UCQMKOXjVPl4a85pIZVX
-         YOHxM4ofcowDRvo9eR+WEYsMHS1vvx4kgkiuCgUfH4G0LdU1q67iDMxxNn3mL6A7OsJu
-         g+oQ==
-X-Gm-Message-State: AO0yUKXP7h2f4pShxG2F6Fz2SjuLaM6GC8uv5ub2LYi4ol+htA38kr24
-        2vVgrp1hC13+NIDeRkHxR68=
-X-Google-Smtp-Source: AK7set99C8IMLIReuTwpFk7MxtnjBQoYQrGFX5q06LsSMcZL/ZLPFgDBCra0D9aUERuIU+Bc6UnWXQ==
-X-Received: by 2002:a17:90b:4c87:b0:234:b35b:f8e7 with SMTP id my7-20020a17090b4c8700b00234b35bf8e7mr14449372pjb.7.1677210171873;
-        Thu, 23 Feb 2023 19:42:51 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-89.three.co.id. [180.214.232.89])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a0f8300b002340f58e19bsm424520pjz.45.2023.02.23.19.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 19:42:51 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5800A106506; Fri, 24 Feb 2023 10:42:48 +0700 (WIB)
-Date:   Fri, 24 Feb 2023 10:42:48 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 00/12] 6.2.1-rc2 review
-Message-ID: <Y/gyOLu5VtE4MbTO@debian.me>
-References: <20230223141539.893173089@linuxfoundation.org>
+        Thu, 23 Feb 2023 22:44:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD16CDC0;
+        Thu, 23 Feb 2023 19:44:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 538FD617AA;
+        Fri, 24 Feb 2023 03:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E30C433EF;
+        Fri, 24 Feb 2023 03:44:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677210242;
+        bh=RwjySR8hWiLpxUC0dXi0nzoxYZdFGRL2DklpueF5MkU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XJPbS1UbyjIiMYfcmex9BIoKABEj3kN1KuaUZ+IvDh89zdkURSzEyIBeswY5eP+8A
+         UJOavKCO4FBaAQAPmJrDObNsAjN1U2l8foWAGxdEToy4CrvylLIruyjB/IdsLtx6sr
+         3wQ+oogSYYJHgPQYe1GN3JzKpkiUKbUtu6gOYxPKDu9BPqn2gP+Nc/anNmV9ynkrqw
+         i6ScmFDZvSa0pyYTTxR9DEMjYphSu0iHa60/M7c4nPG4Hgglit1+u0PooNACanAFsr
+         8bpIPiKVZA44qq5M9Qc1uAlSEU976FiHj/vkZ+dIE+9tfOlGA7MK8+I3cEQuMWwNls
+         HrZ8rV9sEtKmA==
+Date:   Thu, 23 Feb 2023 21:44:28 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] usb: host: oxu210hp-hcd: Replace fake flex-array with
+ flexible-array member
+Message-ID: <Y/gynI9Wv8RZTD8M@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230223141539.893173089@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:16:08PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.1 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+Zero-length arrays as fake flexible arrays are deprecated and we are
+moving towards adopting C99 flexible-array members instead.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+Transform zero-length array into flexible-array member in struct
+ehci_regs.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Address the following warnings found with GCC-13 and
+-fstrict-flex-arrays=3 enabled:
+drivers/usb/host/oxu210hp-hcd.c:3983:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3986:38: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3971:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3978:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3523:30: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:2774:39: warning: array subscript port is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3569:35: warning: array subscript <unknown> is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:3888:36: warning: array subscript port is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+drivers/usb/host/oxu210hp-hcd.c:2911:45: warning: array subscript i is outside array bounds of ‘u32[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
 
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
+
+Link: https://github.com/KSPP/linux/issues/21
+Link: https://github.com/KSPP/linux/issues/259
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/host/oxu210hp-hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index 3a441310c713..f998d3f1a78a 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -169,7 +169,7 @@ struct ehci_regs {
+ #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+ 
+ 	/* PORTSC: offset 0x44 */
+-	u32		port_status[0];	/* up to N_PORTS */
++	u32		port_status[];	/* up to N_PORTS */
+ /* 31:23 reserved */
+ #define PORT_WKOC_E	(1<<22)		/* wake on overcurrent (enable) */
+ #define PORT_WKDISC_E	(1<<21)		/* wake on disconnect (enable) */
 -- 
-An old man doll... just what I always wanted! - Clara
+2.34.1
+
