@@ -2,169 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F376A1CB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483066A1CBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjBXNIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S229925AbjBXNIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjBXNIH (ORCPT
+        with ESMTP id S229741AbjBXNIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:08:07 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99B7113C5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:08:05 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id n2so14555372lfb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:08:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677244084;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EPreAIsPBs0vo9Qsm+CM5kGjxjzbL2RRreZgJMx8oPk=;
-        b=cJdEzQNdVzHBlQVlfDkZ4stM6P+/jhwF5aDU9BVUr5epgTQZrsOmTCdIcFh3ew1/Ui
-         eFeGRMjuHUErKRT6h/3VN26wS6UoJ8FdId4RY+dEFNfkPr7VH8G1auSMMLNsT6NCR27W
-         m6xWUU3u9lkIHwT9BKScyBCbFXBPGWwJHF5wPEvPdgnqPeMIsA970HoTRrTKt64t9JLP
-         vQfrmFfo1UBtYE6oExAtVX12C3I0K4Ks0dnnEaCMMuUadrDXZ/xf2NyqK5vIrGafb673
-         vOprKJVEGlz6nrcYNLMFj4pMufGbn7EuakGc/6LWEaL3Rfa/gA/bzpttKMp0XbTZqFHJ
-         82bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677244084;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EPreAIsPBs0vo9Qsm+CM5kGjxjzbL2RRreZgJMx8oPk=;
-        b=6aHbXd4yGAhSxuLrWYQHgsVXAp38q8qK+4TFfOaFCdfBYmxqNFhZ1ZC0/a8IcZg+zW
-         SzE7SaT/FJgbd1tny+9+96w5WnCSmty7Q4PlFPmRZaFTf+b/cjGVZeV611DJX8laYmdA
-         YJ/w69hgPBYcOf3eBOcmAku9xMhp3SOEa79sPgH00QC5AA7x+j1nR0i9hbT67VrYdnEi
-         +JMyFATwqKz9EkPgyv6R9wOsyIOWbhTNNAVbo76h3Qe3R787My37vB/FJO/D0kf4bTmS
-         h9k7CtCfXBtysmNGlpxg3fphJeMwvYDl0vbCiD2ssQitjQgnB/btoMN2+25GKkLmMPbr
-         x68Q==
-X-Gm-Message-State: AO0yUKV7IZcjFX2vwM+1kZoTsMajCGqYoIJxrbtTc4AEtKOXcNoLA/ur
-        2a+Z4KkyYP2xn9QaVxINMg14Og==
-X-Google-Smtp-Source: AK7set8+cjo3A4v4txcKI1tpKNOIYdz++lPbFizEkFnGvQRsMB9gq98YcsVIBQ02klbWKAU+VDL43w==
-X-Received: by 2002:ac2:48b7:0:b0:4db:3a6f:df17 with SMTP id u23-20020ac248b7000000b004db3a6fdf17mr5132455lfg.51.1677244083883;
-        Fri, 24 Feb 2023 05:08:03 -0800 (PST)
-Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id i19-20020a056512007300b004dd7fefd2c8sm524046lfo.242.2023.02.24.05.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 05:08:03 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Iskren Chernev <me@iskren.info>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: qcom: sc8280xp: Use correct CPU compatibles
-Date:   Fri, 24 Feb 2023 14:07:58 +0100
-Message-Id: <20230224130759.45579-2-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230224130759.45579-1-konrad.dybcio@linaro.org>
-References: <20230224130759.45579-1-konrad.dybcio@linaro.org>
+        Fri, 24 Feb 2023 08:08:36 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3037D13506;
+        Fri, 24 Feb 2023 05:08:32 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1FBF16602FB6;
+        Fri, 24 Feb 2023 13:08:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677244110;
+        bh=xo1yhPMyDaRz4SOUHsbsxgo14//hh0ZQOfocbNC6veY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HG7SbVCmRnaklGIxLLZ099L6hajqr5lOYvMIJevUkx5q9DdLxc1+srkL5FwkIkOc9
+         gIh6txekjwYdcHBCd8PlmthiS0jFcHJjOxEWPUSQQuB5fC4x8UScMzRMNH8yyEcPxN
+         TSq8kMBt7bc84NaGim7cVvVsZ1U0MEAxTQBOVUMTAJ06ByhGPObyz120YrlGpjtMl9
+         1q00viChtTV3R82CqSrwejD18qI/QDH0/dcXGJgWYPOg8mfVzBX1Zm4j9lhgpxEurg
+         2dulDaLggfhytozyqrxYUEVB8o4GSf+qRGNSIKWK1s9MXXMXIOrwkK4B4//s4KufTM
+         2uUVpfXa7lmxg==
+Message-ID: <61ebdd1a-2737-0516-08fd-3b9aa0ddd4fe@collabora.com>
+Date:   Fri, 24 Feb 2023 14:08:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 08/11] drm/panfrost: Add the MT8192 GPU ID
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Steven Price <steven.price@arm.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230223133440.80941-1-angelogioacchino.delregno@collabora.com>
+ <20230223133440.80941-9-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5Hzin_5aTqMRRztWbDR64z6_oFOx2hUVnpJBvk9xDzrfw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5Hzin_5aTqMRRztWbDR64z6_oFOx2hUVnpJBvk9xDzrfw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cores 0-3 are CA78C r0p0, cores 4-7 are CX1C r0p0. Use the correct
-compatibles instead of the placeholder qcom,kryo.
+Il 24/02/23 11:06, Chen-Yu Tsai ha scritto:
+> On Thu, Feb 23, 2023 at 9:35 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> From: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+>>
+>> MediaTek MT8192 has a Mali-G57 with a special GPU ID. Add its GPU ID,
+>> but treat it as otherwise identical to a standard Mali-G57.
+>>
+>> We do _not_ fix up the GPU ID here -- userspace needs to be aware of the
+>> special GPU ID, in case we find functional differences between
+>> MediaTek's implementation and the standard Mali-G57 down the line.
+>>
+>> Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Reviewed-by: Steven Price <steven.price@arm.com>
+> 
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> As previously mentioned, MT8195 Mali G57 has minor revision number 1.
+> Do we need to handle that?
+> 
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Maybe something went wrong while sending the reply to the same question on v2?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 0d02599d8867..9c186ba55cdc 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -43,7 +43,7 @@ cpus {
- 
- 		CPU0: cpu@0 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a78c";
- 			reg = <0x0 0x0>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <602>;
-@@ -67,7 +67,7 @@ L3_0: l3-cache {
- 
- 		CPU1: cpu@100 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a78c";
- 			reg = <0x0 0x100>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <602>;
-@@ -87,7 +87,7 @@ L2_100: l2-cache {
- 
- 		CPU2: cpu@200 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a78c";
- 			reg = <0x0 0x200>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <602>;
-@@ -107,7 +107,7 @@ L2_200: l2-cache {
- 
- 		CPU3: cpu@300 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a78c";
- 			reg = <0x0 0x300>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <602>;
-@@ -127,7 +127,7 @@ L2_300: l2-cache {
- 
- 		CPU4: cpu@400 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-x1c";
- 			reg = <0x0 0x400>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
-@@ -147,7 +147,7 @@ L2_400: l2-cache {
- 
- 		CPU5: cpu@500 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-x1c";
- 			reg = <0x0 0x500>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
-@@ -167,7 +167,7 @@ L2_500: l2-cache {
- 
- 		CPU6: cpu@600 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-x1c";
- 			reg = <0x0 0x600>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
-@@ -187,7 +187,7 @@ L2_600: l2-cache {
- 
- 		CPU7: cpu@700 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-x1c";
- 			reg = <0x0 0x700>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
--- 
-2.39.2
+Anyway, from what I can see on my MT8195 machine, it works fine without adding
+any particular handling...
+
+Alyssa, Steven,
+are you aware of anything that we should consider?
+
+Regards,
+Angelo
+
+>> ---
+>>   drivers/gpu/drm/panfrost/panfrost_gpu.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/panfrost/panfrost_gpu.c b/drivers/gpu/drm/panfrost/panfrost_gpu.c
+>> index 6452e4e900dd..d28b99732dde 100644
+>> --- a/drivers/gpu/drm/panfrost/panfrost_gpu.c
+>> +++ b/drivers/gpu/drm/panfrost/panfrost_gpu.c
+>> @@ -204,6 +204,14 @@ static const struct panfrost_model gpu_models[] = {
+>>
+>>          GPU_MODEL(g57, 0x9001,
+>>                  GPU_REV(g57, 0, 0)),
+>> +
+>> +       /* MediaTek MT8192 has a Mali-G57 with a different GPU ID from the
+>> +        * standard. Arm's driver does not appear to handle this model.
+>> +        * ChromeOS has a hack downstream for it. Treat it as equivalent to
+>> +        * standard Mali-G57 for now.
+>> +        */
+>> +       GPU_MODEL(g57, 0x9003,
+>> +               GPU_REV(g57, 0, 0)),
+>>   };
+>>
+>>   static void panfrost_gpu_init_features(struct panfrost_device *pfdev)
+>> --
+>> 2.39.2
+>>
+
 
