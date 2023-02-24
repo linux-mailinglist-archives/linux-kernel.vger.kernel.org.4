@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8472B6A1C72
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 854036A1C73
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjBXMvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S230079AbjBXMwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjBXMvm (ORCPT
+        with ESMTP id S230061AbjBXMwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:51:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA7561EFA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:51:38 -0800 (PST)
+        Fri, 24 Feb 2023 07:52:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C5B686A2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:52:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B819FB81C77
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:51:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12269C433D2;
-        Fri, 24 Feb 2023 12:51:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40F67B81B2C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB4DC433D2;
+        Fri, 24 Feb 2023 12:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677243095;
-        bh=geMwP7vVPIhTQ6PXvzLZ1QqUcOjZ0zK/vbJrIu2UaQg=;
+        s=korg; t=1677243130;
+        bh=8LlodR7ZO/ZzUF7krerukAVV/jEo1WyhWBygJgVh7es=;
         h=Date:From:To:Cc:Subject:From;
-        b=e6xPKn5cMSMoDfMcXFudfa1oPXF+SGrvoL9qL+YbjZayrY7RBC0XDYUjhdvDAk2+V
-         Y2O6B0KbihPXworRlcRoebSHRekrVtNeiMT8pQjbCoPeBJlv9VCB4nWT954I9CADHe
-         EywqC+vLTqJWyd3c88mZSgOuZ4OVwIU86J44M6yY=
-Date:   Fri, 24 Feb 2023 13:51:32 +0100
+        b=pXme//nzvDNYQS/0ORjlCMBonJny9a8WirEWTqgT8ll62l37COD6n2C6063wPoMI9
+         MHo3x8ZWb2CvVcUN24r6abQx2kMyyMfxh74E/Enazz+p0Tm8FFDYCd2PVkn2t/FNaz
+         BY7wCzOgXEU+K6Rjl4hmDs6Tsn6iiXY01+5tXPVc=
+Date:   Fri, 24 Feb 2023 13:52:07 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [GIT PULL] Staging driver updates for 6.3-rc1
-Message-ID: <Y/iy1MgXVLkmtOQP@kroah.com>
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
+Subject: [GIT PULL] Driver core updates for 6.3-rc1
+Message-ID: <Y/iy9+Kn0SgzngDC@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,365 +57,405 @@ The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-6.3-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.3-rc1
 
-for you to fetch changes up to b5929325f06300d28696b9a030539a4009154788:
+for you to fetch changes up to 88cd618dcc7b63baa1478730b02eaba3e3148467:
 
-  staging: r8188eu: Revert "staging: r8188eu: simplify rtw_get_ff_hwaddr" (2023-02-16 13:55:03 +0100)
+  debugfs: drop inline constant formatting for ERR_PTR(-ERROR) (2023-02-20 14:14:56 +0100)
 
 ----------------------------------------------------------------
-Staging driver update for 6.3-rc1
+Driver core changes for 6.3-rc1
 
-Here is the "boring" staging driver update for 6.3-rc1.
+Here is the large set of driver core changes for 6.3-rc1.
 
-Nothing major in here at all, it's just lots of tiny code cleanups to
-bring some of the staging drivers more in line with the real portion of
-the kernel (apis and coding style.)  Overall we remove more lines of
-code than we add, always a nice result.
+There's a lot of changes this development cycle, most of the work falls
+into two different categories:
+  - fw_devlink fixes and updates.  This has gone through numerous review
+    cycles and lots of review and testing by lots of different devices.
+    Hopefully all should be good now, and Saravana will be keeping a
+    watch for any potential regression on odd embedded systems.
+  - driver core changes to work to make struct bus_type able to be moved
+    into read-only memory (i.e. const)  The recent work with Rust has
+    pointed out a number of areas in the driver core where we are
+    passing around and working with structures that really do not have
+    to be dynamic at all, and they should be able to be read-only making
+    things safer overall.  This is the contuation of that work (started
+    last release with kobject changes) in moving struct bus_type to be
+    constant.  We didn't quite make it for this release, but the
+    remaining patches will be finished up for the release after this
+    one, but the groundwork has been laid for this effort.
 
-The big work was done by Martin Kaiser and Philipp Hortmann, both
-tackling some of the older wifi drivers, removing unused code and
-structures and a file in one case.
-
-Full details of the changes are in the shortlog.
+Other than that we have in here:
+  - debugfs memory leak fixes in some subsystems
+  - error path cleanups and fixes for some never-able-to-be-hit
+    codepaths.
+  - cacheinfo rework and fixes
+  - Other tiny fixes, full details are in the shortlog
 
 All of these have been in linux-next for a while with no reported
-issues.
+problems.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Abhirup Deb (1):
-      staging: vme_user: Replace the "<<" with BIT macro
+Andy Shevchenko (6):
+      media: ipu3-cio2: Don't dereference fwnode handle
+      media: ipu3-cio2: Convert to use software_node_register_node_group()
+      software node: Switch property entry test to a new API
+      software node: Remove unused APIs
+      device property: Make fwnode_graph_for_each_endpoint() consistent
+      container_of: Update header inclusions
 
-Anup Sharma (2):
-      Staging: rtl8192u: ieee80211: Fix indentation errors by removing extra spaces
-      staging: rtl8723bs: hal: Fix codespell-reported spelling mistakes
+Bagas Sanjaya (1):
+      debugfs: drop inline constant formatting for ERR_PTR(-ERROR)
 
-Brent Pappas (1):
-      staging: greybus: gpio: Replace macro irq_data_to_gpio_chip with function
+Christophe JAILLET (1):
+      test_firmware: Use kstrtobool() instead of strtobool()
 
-Deepak R Varma (2):
-      staging: greybus: Replace zero-length array by DECLARE_FLEX_ARRAY() helper
-      staging: wlan-ng: Remove unused code
+Gavin Shan (1):
+      drivers/base/memory: Fix comments for phys_index_show()
 
-Denis Arefev (1):
-      staging: rts5208: Added value check
+Greg Kroah-Hartman (66):
+      driver core: make bus_get_device_klist() static
+      driver core: remove subsys_find_device_by_id()
+      driver core: make subsys_dev_iter_init() static
+      driver core: make subsys_dev_iter_next() static
+      driver core: make subsys_dev_iter_exit() static
+      driver core: move struct subsys_dev_iter to a local file
+      driver core: change to_subsys_private() to use container_of_const()
+      driver core: bus.h: document bus notifiers better
+      driver core: bus: move bus notifier logic into bus.c
+      Merge tag 'archtopo-cacheinfo-updates-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into driver-core-next
+      Merge 6.2-rc5 into driver-core-next
+      of: device: make of_device_uevent_modalias() take a const device *
+      i3c: move dev_to_i3cdev() to use container_of_const()
+      platform/surface: aggregator: move to_ssam_device() to use container_of_const()
+      firewire: move fw_device() and fw_unit() to use container_of_const()
+      driver core: make struct device_type.uevent() take a const *
+      driver core: make struct device_type.devnode() take a const *
+      driver core: device_get_devnode() should take a const *
+      vio: move to_vio_dev() to use container_of_const()
+      platform/x86: wmi: move dev_to_wblock() and dev_to_wdev to use container_of_const()
+      drivers: hv: move device_to_hv_device to use container_of_const()
+      virtio: move dev_to_virtio() to use container_of_const()
+      drm/mipi-dsi: move to_mipi_dsi_device() to use container_of_const()
+      mcb: move to_mcb_device() to use container_of_const()
+      xen/xenbus: move to_xenbus_device() to use container_of_const()
+      driver core: make struct bus_type.uevent() take a const *
+      kobject: kset_uevent_ops: make uevent() callback take a const *
+      driver core: soc: remove layering violation for the soc_bus
+      maple: remove unneeded maple_bus_uevent() callback.
+      driver core: platform: removed unneeded variable from __platform_driver_probe()
+      driver core: platform: simplify __platform_driver_probe()
+      driver core: bus: move lock_class_key into dynamic structure
+      drivers: base: component: fix memory leak with using debugfs_lookup()
+      drivers: base: dd: fix memory leak with using debugfs_lookup()
+      kernel/time/test_udelay.c: fix memory leak with using debugfs_lookup()
+      kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
+      kernel/fail_function: fix memory leak with using debugfs_lookup()
+      driver core: add local subsys_get and subsys_put functions
+      driver core: bus: implement bus_get/put() without the private pointer
+      driver core: bus: constantify the bus_find_* functions
+      driver core: bus: convert bus_create/remove_file to be constant
+      driver core: bus: sysfs function cleanups
+      driver core: bus: bus_add/probe/remove_device() cleanups
+      driver core: bus: bus_register/unregister() cleanups
+      driver core: bus: subsys_interface_register/unregister() cleanups
+      driver core: bus: bus_get_kset() cleanup
+      driver core: bus: bus_register/unregister_notifier() cleanups
+      driver core: bus: bus_add/remove_driver() cleanups
+      driver core: bus: bus iterator cleanups
+      driver core: bus: clean up bus_sort_breadthfirst()
+      driver core: move driver_find() to bus.c
+      driver core: bus: clean up driver_find()
+      driver core: create bus_is_registered()
+      driver core: remove private pointer from struct bus_type
+      driver core: bus: constify bus_register/unregister_notifier()
+      driver core: bus: constify bus_get_kset()
+      driver core: bus: constify some internal functions
+      driver core: bus: constify bus_unregister()
+      driver core: bus: add bus_get_dev_root() function
+      driver core: bus: update my copyright notice
+      driver core: cpu: don't hand-override the uevent bus_type callback.
+      Revert "devtmpfs: remove return value of devtmpfs_delete_node()"
+      Revert "devtmpfs: add debug info to handle()"
+      Revert "driver core: add error handling for devtmpfs_create_node()"
+      driver core: class: move EXPORT_SYMBOL_GPL() lines to the correct place
+      dma-mapping: no need to pass a bus_type into get_arch_dma_ops()
 
-Greg Kroah-Hartman (2):
-      Merge 6.2-rc5 into staging-next
-      staging: pi433: fix memory leak with using debugfs_lookup()
+Hanjun Guo (1):
+      driver core: location: Free struct acpi_pld_info *pld before return false
 
-Guru Mehar Rachaputi (1):
-      staging: pi433: Added information about bit_rate configuration
+Javier Martinez Canillas (1):
+      driver core: Make driver_deferred_probe_timeout a static variable
 
-Jongwoo Han (1):
-      staging: vc04_services: mmal-vchiq: fix typo in comment
+Longlong Xia (4):
+      devtmpfs: convert to pr_fmt
+      driver core: add error handling for devtmpfs_create_node()
+      devtmpfs: add debug info to handle()
+      devtmpfs: remove return value of devtmpfs_delete_node()
 
-Kang Minchul (1):
-      staging: r8188eu: Prefer kcalloc over kzalloc
+Luis Chamberlain (1):
+      docs: embargoed-hardware-issues: add embargoed HW contact for Samsung
 
-Larry Finger (1):
-      staging: r8188eu: Fix some endian problems
+Pierre Gondois (9):
+      cacheinfo: Use RISC-V's init_cache_level() as generic OF implementation
+      cacheinfo: Return error code in init_of_cache_level()
+      cacheinfo: Check 'cache-unified' property to count cache leaves
+      ACPI: PPTT: Remove acpi_find_cache_levels()
+      ACPI: PPTT: Update acpi_find_last_cache_level() to acpi_get_cache_info()
+      arch_topology: Build cacheinfo from primary CPU
+      cacheinfo: Initialize variables in fetch_cache_info()
+      cacheinfo: Make default acpi_get_cache_info() return an error
+      cacheinfo: Remove unused check in init_cache_level()
 
-Martin Kaiser (113):
-      staging: r8188eu: merge on_action_public_vendor into its caller
-      staging: r8188eu: merge on_action_public_default into its only caller
-      staging: r8188eu: remove intermediate pframe pointer
-      staging: r8188eu: remove intermediate token variable
-      staging: r8188eu: make xmitframe_swencrypt a void function
-      staging: r8188eu: remove some unused CAM defines
-      staging: r8188eu: cmd_seq is write-only
-      staging: r8188eu: return immediately if we're not meant to encrypt
-      staging: r8188eu: remove unused parameter
-      staging: r8188eu: simplify rtl8188eu_xmit_tasklet
-      staging: r8188eu: remove rtl8188eu_init_xmit_priv
-      staging: r8188eu: remove duplicate psta check
-      staging: r8188eu: simplify frame type check
-      staging: r8188eu: simplify rtw_make_wlanhdr's error handling
-      staging: r8188eu: clean up qos_option setting
-      staging: r8188eu: remove unused bpending array
-      staging: r8188eu: remove unused dma_transfer_addr
-      staging: r8188eu: bm_pending is not used
-      staging: r8188eu: terminate_xmitthread_sema is not used
-      staging: r8188eu: tx_retevt semaphore is not used
-      staging: r8188eu: remove unnecessary rtw_free_xmitframe call
-      staging: r8188eu: phwxmit parameter is unused
-      staging: r8188eu: rtw_init_hwxmits is not needed
-      staging: r8188eu: beq_cnt is write-only
-      staging: r8188eu: bkq_cnt is write-only
-      staging: r8188eu: viq_cnt is write-only
-      staging: r8188eu: voq_cnt is write-only
-      staging: r8188eu: replace switch with if
-      staging: r8188eu: dir_dev is unused
-      staging: r8188eu: remove unused hal_xmit_handler define
-      staging: r8188eu: txirp_cnt is write-only
-      staging: r8188eu: remove unused QSLT defines
-      staging: r8188eu: xmit_priv's vcs_type is not used
-      staging: r8188eu: xmit_priv's vcs is not used
-      staging: r8188eu: xmit_priv's vcs_setting is not used
-      staging: r8188eu: refactor status handling in usb_write_port_complete
-      staging: r8188eu: reformat usb_write_port_complete
-      staging: r8188eu: remove unused function parameter
-      staging: r8188eu: always process urb status
-      staging: r8188eu: remove NULL check for usb_kill_urb
-      staging: r8188eu: remove struct io_priv
-      staging: r8188eu: remove io function prototypes
-      staging: r8188eu: remove ioreq function prototypes
-      staging: r8188eu: remove async read function prototypes
-      staging: r8188eu: remove async write function prototypes
-      staging: r8188eu: remove struct io_queue
-      staging: r8188eu: remove attrib function prototypes
-      staging: r8188eu: remove rtw_write_scsi function prototype
-      staging: r8188eu: remove dev_power_down function prototype
-      staging: r8188eu: remove struct reg_protocol_rd
-      staging: r8188eu: remove struct reg_protocol_wt
-      staging: r8188eu: remove interface handler prototypes
-      staging: r8188eu: remove readmem and writemem prototypes
-      staging: r8188eu: remove IO defines
-      staging: r8188eu: remove struct io_req
-      staging: r8188eu: remove usb buffer macros
-      staging: r8188eu: pass struct adapter to usb_read
-      staging: r8188eu: we use a constant number of hw_xmit entries
-      staging: r8188eu: pass struct adapter to usb_write
-      staging: r8188eu: remove struct intf_hdl
-      staging: r8188eu: remove struct intf_priv
-      staging: r8188eu: simplify the sta loop in rtw_dequeue_xframe
-      staging: r8188eu: simplify the code to initialise inx
-      staging: r8188eu: remove an obsolete comment
-      staging: r8188eu: remove unused function parameter
-      staging: r8188eu: remove dead assignment
-      staging: r8188eu: use list_empty
-      staging: r8188eu: simplify dequeue_one_xmitframe
-      staging: r8188eu: remove redundant parameter
-      staging: r8188eu: make rtw_chk_hi_queue_cmd a void function
-      staging: r8188eu: decrement qcnt in rtw_dequeue_xframe
-      staging: r8188eu: simplify dequeue_one_xmitframe
-      staging: r8188eu: use list_head for xmitframe list
-      staging: r8188eu: merge dequeue_one_xmitframe into its caller
-      staging: r8188eu: use lists for hwxmits
-      staging: r8188eu: fix rtw_xmitframe_enqueue error handling
-      staging: r8188eu: remove rtw_xmitframe_enqueue
-      staging: r8188eu: struct agg_pkt_info is unused
-      staging: r8188eu: apsd_setting is unused
-      staging: r8188eu: merge rtw_free_hwxmits into its only caller
-      staging: r8188eu: usb_read_port_complete needs no regs parameter
-      staging: r8188eu: remove defines that strip regs parameter
-      staging: r8188eu: remove unused defines
-      staging: r8188eu: remove usb_ops_linux.h
-      staging: r8188eu: rtw_free_xmitframe_queue needs no spinlock
-      staging: r8188eu: change function param from __queue to list_head
-      staging: r8188eu: change another function param from __queue to list_head
-      staging: r8188eu: make sta_pending a list_head
-      staging: r8188eu: use kernel helper to iterate over a list
-      staging: r8188eu: legacy_dz is initialised but never used
-      staging: r8188eu: apsd is initialised but never used
-      staging: r8188eu: option in struct sta_xmit_priv is not used
-      staging: r8188eu: replace switch-case with if
-      staging: r8188eu: clean up NULL check for rcu pointer
-      staging: r8188eu: pass a struct recv_buf to rtw_read_port
-      staging: r8188eu: use standard error codes in rtw_read_port
-      staging: r8188eu: use standard error codes in rtl8188eu_inirp_init
-      staging: r8188eu: remove intf_start pointer
-      staging: r8188eu: handle rtl8188eu_inirp_init errors
-      staging: r8188eu: remove intf_stop pointer
-      staging: r8188eu: make ips_enter static
-      staging: r8188eu: make ips_leave static
-      staging: r8188eu: remove change_rfpwrstate
-      staging: r8188eu: merge do_queue_select into its only caller
-      staging: r8188eu: simplify rtw_alloc_xmitframe
-      staging: r8188eu: remove unused frametag defines
-      staging: r8188eu: xmit_buf's ff_hwaddr is not used
-      staging: r8188eu: simplify xmit_buf flags
-      staging: r8188eu: simplify rtw_get_ff_hwaddr
-      staging: r8188eu: bagg_pkt parameter is not used
-      staging: r8188eu: merge _rtw_enqueue_cmd into its caller
-      staging: r8188eu: replace hand coded loop with list_for_each_entry
-      staging: r8188eu: Revert "staging: r8188eu: simplify rtw_get_ff_hwaddr"
+Qi Zheng (2):
+      debugfs: update comment of debugfs_rename()
+      OPP: fix error checking in opp_migrate_dentry()
 
-Matt Jan (3):
-      staging: vme_user: add the spaces around the "*"
-      staging: vme_user: remove unnecessary spaces
-      staging: vme_user: replace 'unsigned' with 'unsigned int'
+Rafael J. Wysocki (1):
+      driver core: class: Clear private pointer on registration failures
 
-Michael Straube (7):
-      staging: r8188eu: convert rtw_writeN() to common error logic
-      staging: r8188eu: convert PHY_MACConfig8188E() to common error logic
-      staging: r8188eu: convert phy_RF6052_Config_ParaFile() to common error logic
-      staging: r8188eu: convert phy_BB8188E_Config_ParaFile() to common error logic
-      staging: r8188eu: convert PHY_BBConfig8188E() to common error logic
-      staging: r8188eu: correct error logic of rtl8188eu_init_recv_priv()
-      staging: r8188eu: correct error logic of _rtw_init_recv_priv()
+Randy Dunlap (2):
+      test_firmware: use kernel-doc struct notation
+      i3c: fix device.h kernel-doc warnings
 
-Parthiban Veerasooran (1):
-      most: add maintainer entry
+Saravana Kannan (12):
+      driver core: fw_devlink: Don't purge child fwnode's consumer links
+      driver core: fw_devlink: Improve check for fwnode with no device/driver
+      soc: renesas: Move away from using OF_POPULATED for fw_devlink
+      gpiolib: Clear the gpio_device's fwnode initialized flag before adding
+      driver core: fw_devlink: Add DL_FLAG_CYCLE support to device links
+      driver core: fw_devlink: Allow marking a fwnode link as being part of a cycle
+      driver core: fw_devlink: Consolidate device link flag computation
+      driver core: fw_devlink: Make cycle detection more robust
+      of: property: Simplify of_link_to_phandle()
+      irqchip/irq-imx-gpcv2: Mark fwnode device as not initialized
+      firmware: arm_scmi: Set fwnode for the scmi_device
+      mtd: mtdpart: Don't create platform device that'll never probe
 
-Phil Elwell (1):
-      staging: vchiq_core: Add comments to remote event parts
+Soha Jin (1):
+      platform: remove useless if-branch in __platform_get_irq_byname()
 
-Philipp Hortmann (66):
-      staging: rtl8192e: Rename ChannelPlan, eeprom_ChannelPlan and CckPwEnl
-      staging: rtl8192e: Rename TSSI_13dBm, Pwr_Track and NumTotalRFPath
-      staging: rtl8192e: Rename CCKPresentAtt...
-      staging: rtl8192e: Rename TxPowerLevelCCK...
-      staging: rtl8192e: Rename TxPowerLevelOFDM24G...
-      staging: rtl8192e: Rename MCSTxPowerL.., LegacyHTTxPowe.. and AntennaTx..
-      staging: rtl8192e: Rename SetRFPowerSta.., RfReg0Value and bTXPowerDa..
-      staging: rtl8192e: Rename bDynamicTxHig.., bDynamicTxL.. and bLastDTPF..
-      staging: rtl8192e: Rename bLastDTPFlag_Low, OFDM_index and CCK_index
-      staging: rtl8192e: Rename Record_CCK_2.., Record_CCK_4.. and DefaultIn..
-      staging: rtl8192e: Rename rateCountDi.., ContinueDif.. and TxCounter
-      staging: rtl8192e: Rename bResetInPro.., framesyncMo.. and nCur40MhzPri..
-      staging: rtl8192e: Rename SetBWModeIn.., SwChnlInPro.. and ThermalMet..
-      staging: rtl8192e: Rename CrystalCap, EEPROMLegacyHTT.. and EEPROMCrys..
-      staging: rtl8192e: Rename EEPROMTherma.., EEPROMAntPw.. and EEPROMTxPow..
-      staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF.. and SilentReset..
-      staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF.. and SilentReset..
-      staging: rtl8192e: Rename LongRetryL.., ShortRetryL.. and ReceiveConfig
-      staging: rtl8192e: Rename LastRxDescTSF, LoopbackMode and pFirmware
-      staging: rtl8192e: Rename PHYRegDef, CurrentChannelBW and CustomerID
-      staging: rtl8192e: Remove unused variable SifsTime
-      staging: rtl8192e: Remove unused variable framesyncC34
-      staging: rtl8192e: Remove unused variable PwrDomainProtect
-      staging: rtl8192e: Remove unused variable H2CTxCmdSeq
-      staging: rtl8192e: Remove unused variable RF_C_TxPwDiff
-      staging: rtl8192e: Remove unused variable DM_Type
-      staging: rtl8192e: Combine three loops to one to init tx_pwr_level_...
-      staging: rtl8192e: Init tx_pwr_level_cck_a and friends directly
-      staging: rtl8192e: Remove zeroed arrays tx_pwr_level_cck_a and friends
-      staging: rtl8192e: Remove ant_pwr_diff which is always zero
-      staging: rtl8192e: Remove u4RegValue which is always zero
-      staging: rtl8192e: Remove repeated set to zero of powerlevel and friend
-      staging: rtl8192e: Remove unused variable bfirst_init
-      staging: rtl8192e: Rename eeprom_CustomerID, SwChnlStage and SwChnlStep
-      staging: rtl8192e: Rename btxpower_trackin.., Slide_Beaco.. and Slide_B..
-      staging: rtl8192e: Remove unused variables rxrdu and rxok
-      staging: rtl8192e: Remove unused variables rxdatacrcerr and rxmgmtcrcerr
-      staging: rtl8192e: Remove unused variables rxcrcerrmin and friends
-      staging: rtl8192e: Remove unused variables numpacket.. and received_pre..
-      staging: rtl8192e: Remove unused variables numqry_..
-      staging: rtl8192e: Remove unused variables num_proc.., recei.. and rxov..
-      staging: rtl8192e: Remove unused variables rxint, ints and shints
-      staging: rtl8192e: Remove unused variables txov.., txbeokint and txbkokint
-      staging: rtl8192e: Remove unused variables txviok.., txvook.. and txbea..
-      staging: rtl8192e: Remove unused variables txbeac.., txman.. and txcmdp..
-      staging: rtl8192e: Remove unused variables txbytes.., txbyt.. and signa..
-      staging: rtl8192e: Rename TxBBGainTab.., CCKTxBBGainTab.. and RT_CID_81..
-      staging: rtl8192e: Rename sCrcLng
-      staging: rtl8192e: Remove unused variable rxSNRdB
-      staging: rtl8192e: Remove unused constants from enum rt_customer_id
-      staging: rtl8192e: Rename BaseBand_Config_PHY_REG and BaseBand_Config_AGC_TAB
-      staging: rtl8192e: Remove unused constants at beginning of r8192E_hw.h
-      staging: rtl8192e: Remove unused constants in _RTL8192Pci_HW
-      staging: rtl8192e: Remove used constants MSR_LINK_SH.. and MSR_LINK_N..
-      staging: rtl8192e: Rename _RTL8192Pci_HW, MXDMA2_NoLimit and TPPoll
-      staging: rtl8192e: Rename TPPoll_CQ, AcmHwCtrl and AcmHw_BeqEn
-      staging: rtl8192e: Rename AcmHw_ViqEn, AcmHw_VoqEn and ANAPAR_FOR_8192PciE
-      staging: rtl8192e: Remove blank lines in r8192E_hw.h, rtl_core.h and ..
-      staging: rtl8192e: Rename MacBlkCtrl and remove double definition
-      staging: rtl8192e: Rename OFDM_Table.., CCK_Table_.. and RxPathSelecti..
-      staging: rtl8192e: Rename RxPathSelectio.., RateAdaptive.. and RateAdap..
-      staging: rtl8192e: Rename RateAdaptiveTH.., VeryLowRSSI and WAIotTHVal
-      staging: rtl8192e: Rename Enable, cck_Rx_path and SS_TH_low
-      staging: rtl8192e: Rename diff_TH and disabledRF
-      staging: rtl8192e: Rename DM_RxPathSelTable
-      staging: rtl8192e: Use BIT() instead of << for bit field MSR_LINK_MASK
+Stephen Rothwell (1):
+      driver core: fixup for "driver core: make struct bus_type.uevent() take a const *"
 
-Stefan Wahren (1):
-      staging: vchiq_arm: Improve error log for vchiq_platform_init
+Thomas Weißschuh (5):
+      kernels/ksysfs.c: export kernel address bits
+      const_structs.checkpatch.pl: add kobj_type
+      kobject: make dynamic_kobj_ktype and kset_ktype const
+      driver core: make kobj_type structures constant
+      samples/kobject: make kobj_type structure constant
 
-Umang Jain (12):
-      staging: vc04_services: Replace vchiq_status return type to int
-      staging: vc04_services: Drop VCHIQ_SUCCESS usage
-      staging: vc04_services: Drop VCHIQ_ERROR usage
-      staging: vc04_services: Drop VCHIQ_RETRY usage
-      staging: vc04_services: vchiq_arm: Drop VCHIQ_RETRY usage on disconnect
-      staging: vc04_services: Drop enum vchiq_status remnants
-      staging: vc04_services: vchiq: Drop custom return values from TODO
-      staging: vc04_services: Drop __VCCOREVER__ remnants
-      staging: vc04_services: bcm2835-audio: Drop include Makefile directive
-      staging: vc04_services: bcm2835-camera: Drop include Makefile directive
-      staging: vc04_services: vchiq-mmal: Drop include Makefile directive
-      staging: vc04_services: interface: Drop include Makefile directive
+Umang Jain (1):
+      platform: Document platform_add_devices() return value
 
-Xu Panda (2):
-      staging: ks7010: use strscpy() to instead of strncpy()
-      staging: r8188eu: use strscpy() to instead of strncpy()
+Uwe Kleine-König (3):
+      platform: Provide a remove callback that returns no value
+      staging: greybus: codecs: Drop empty platform remove function
+      serial: arc_uart: Drop empty platform remove function
 
-Yuan Can (1):
-      staging: emxx_udc: Add checks for dma_alloc_coherent()
+Wang Hai (1):
+      kobject: Fix slab-out-of-bounds in fill_kobj_path()
 
- MAINTAINERS                                        |  10 +
- drivers/staging/emxx_udc/emxx_udc.c                |   7 +-
- drivers/staging/greybus/gpio.c                     |   6 +-
- drivers/staging/greybus/usb.c                      |   2 +-
- drivers/staging/ks7010/ks_wlan_net.c               |   3 +-
- drivers/staging/pi433/TODO                         |   3 +
- drivers/staging/pi433/pi433_if.c                   |  11 +-
- drivers/staging/r8188eu/core/rtw_cmd.c             |  67 +--
- drivers/staging/r8188eu/core/rtw_fw.c              |  10 +-
- drivers/staging/r8188eu/core/rtw_mlme.c            |   5 -
- drivers/staging/r8188eu/core/rtw_mlme_ext.c        |  31 +-
- drivers/staging/r8188eu/core/rtw_pwrctrl.c         |  23 +-
- drivers/staging/r8188eu/core/rtw_recv.c            |  30 +-
- drivers/staging/r8188eu/core/rtw_sta_mgt.c         |  26 +-
- drivers/staging/r8188eu/core/rtw_xmit.c            | 478 +++++++--------------
- drivers/staging/r8188eu/hal/rtl8188e_cmd.c         |   4 +-
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c      |  35 +-
- drivers/staging/r8188eu/hal/rtl8188e_rf6052.c      |   7 +-
- drivers/staging/r8188eu/hal/rtl8188eu_xmit.c       |  42 +-
- drivers/staging/r8188eu/hal/usb_halinit.c          |  31 +-
- drivers/staging/r8188eu/hal/usb_ops_linux.c        |  80 ++--
- drivers/staging/r8188eu/include/drv_types.h        |   4 -
- drivers/staging/r8188eu/include/hal_intf.h         |   2 +-
- drivers/staging/r8188eu/include/osdep_intf.h       |  32 --
- drivers/staging/r8188eu/include/rtl8188e_cmd.h     |   2 +-
- drivers/staging/r8188eu/include/rtl8188e_spec.h    |  21 -
- drivers/staging/r8188eu/include/rtl8188e_xmit.h    |  16 +-
- drivers/staging/r8188eu/include/rtw_cmd.h          |   3 +-
- drivers/staging/r8188eu/include/rtw_io.h           | 257 +----------
- drivers/staging/r8188eu/include/rtw_pwrctrl.h      |   3 -
- drivers/staging/r8188eu/include/rtw_xmit.h         |  57 +--
- drivers/staging/r8188eu/include/usb_ops.h          |   2 -
- drivers/staging/r8188eu/include/usb_ops_linux.h    |  29 --
- drivers/staging/r8188eu/os_dep/ioctl_linux.c       |   6 +-
- drivers/staging/r8188eu/os_dep/os_intfs.c          |  17 +-
- drivers/staging/r8188eu/os_dep/usb_intf.c          |  33 +-
- drivers/staging/r8188eu/os_dep/usb_ops_linux.c     | 106 +----
- drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c |  22 +-
- drivers/staging/rtl8192e/rtl8192e/r8192E_cmdpkt.c  |   2 +-
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c     | 355 ++++++---------
- .../staging/rtl8192e/rtl8192e/r8192E_firmware.c    |   4 +-
- drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h      | 219 +---------
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c     | 374 ++++++++--------
- drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h  |   2 -
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c       |  86 +---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h       | 208 +++------
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c         | 342 ++++++++-------
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.h         |  45 +-
- drivers/staging/rtl8192e/rtl8192e/rtl_pm.c         |   2 +-
- drivers/staging/rtl8192u/ieee80211/ieee80211.h     |   2 +-
- drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c  |  14 +-
- drivers/staging/rts5208/ms.c                       |   2 +
- drivers/staging/vc04_services/Makefile             |   2 -
- .../staging/vc04_services/bcm2835-audio/Makefile   |   2 -
- .../vc04_services/bcm2835-audio/bcm2835-vchiq.c    |  12 +-
- .../staging/vc04_services/bcm2835-audio/bcm2835.h  |   3 +-
- .../staging/vc04_services/bcm2835-camera/Makefile  |   5 -
- .../vc04_services/bcm2835-camera/bcm2835-camera.c  |  10 +-
- .../vc04_services/bcm2835-camera/controls.c        |   6 +-
- .../include/linux/raspberrypi/vchiq.h              |  63 ++-
- drivers/staging/vc04_services/interface/TODO       |   5 -
- .../vc04_services/interface/vchiq_arm/vchiq_arm.c  | 136 +++---
- .../vc04_services/interface/vchiq_arm/vchiq_arm.h  |   8 +-
- .../vc04_services/interface/vchiq_arm/vchiq_core.c | 226 +++++-----
- .../vc04_services/interface/vchiq_arm/vchiq_core.h |  38 +-
- .../vc04_services/interface/vchiq_arm/vchiq_dev.c  |  36 +-
- .../interface/vchiq_arm/vchiq_ioctl.h              |  11 +-
- drivers/staging/vc04_services/vchiq-mmal/Makefile  |   5 -
- .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c  |  15 +-
- drivers/staging/vme_user/vme.h                     |  26 +-
- drivers/staging/vme_user/vme_bridge.h              |  36 +-
- drivers/staging/wlan-ng/hfa384x.h                  | 171 --------
- 72 files changed, 1330 insertions(+), 2666 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/include/usb_ops_linux.h
+Yang Yingliang (3):
+      driver core: fix potential null-ptr-deref in device_add()
+      drivers: base: transport_class: fix possible memory leak
+      drivers: base: transport_class: fix resource leak when transport_add_device() fails
+
+Yong-Xuan Wang (1):
+      cacheinfo: Fix shared_cpu_map to handle shared caches at different levels
+
+Zhen Lei (1):
+      kernfs: remove an unused if statement in kernfs_path_from_node_locked()
+
+Zhengchao Shao (1):
+      driver core: fix resource leak in device_add()
+
+ .../ABI/testing/sysfs-kernel-address_bits          |  10 +
+ .../process/embargoed-hardware-issues.rst          |   1 +
+ arch/alpha/include/asm/dma-mapping.h               |   2 +-
+ arch/arm64/kernel/cacheinfo.c                      |  14 +-
+ arch/ia64/include/asm/dma-mapping.h                |   2 +-
+ arch/mips/include/asm/dma-mapping.h                |   2 +-
+ arch/mips/sgi-ip22/ip22-gio.c                      |   4 +-
+ arch/parisc/include/asm/dma-mapping.h              |   2 +-
+ arch/parisc/kernel/drivers.c                       |   4 +-
+ arch/powerpc/include/asm/ps3.h                     |   2 +-
+ arch/powerpc/include/asm/vio.h                     |   5 +-
+ arch/powerpc/platforms/ps3/system-bus.c            |   2 +-
+ arch/powerpc/platforms/pseries/ibmebus.c           |   7 +-
+ arch/powerpc/platforms/pseries/vio.c               |   4 +-
+ arch/riscv/kernel/cacheinfo.c                      |  42 --
+ arch/sparc/include/asm/dma-mapping.h               |   2 +-
+ arch/sparc/include/asm/vio.h                       |   5 +-
+ arch/sparc/kernel/vio.c                            |   2 +-
+ arch/x86/include/asm/dma-mapping.h                 |   2 +-
+ block/genhd.c                                      |   2 +-
+ block/partitions/core.c                            |   4 +-
+ drivers/acpi/bus.c                                 |   2 +-
+ drivers/acpi/device_sysfs.c                        |   8 +-
+ drivers/acpi/internal.h                            |   2 +-
+ drivers/acpi/pptt.c                                |  93 ++--
+ drivers/amba/bus.c                                 |   4 +-
+ drivers/base/arch_topology.c                       |  12 +-
+ drivers/base/auxiliary.c                           |   2 +-
+ drivers/base/base.h                                |  21 +-
+ drivers/base/bus.c                                 | 575 ++++++++++++++-------
+ drivers/base/cacheinfo.c                           | 161 +++++-
+ drivers/base/class.c                               |  34 +-
+ drivers/base/component.c                           |   2 +-
+ drivers/base/core.c                                | 489 ++++++++++++------
+ drivers/base/cpu.c                                 |  40 +-
+ drivers/base/dd.c                                  |  36 +-
+ drivers/base/devtmpfs.c                            |  16 +-
+ drivers/base/driver.c                              |  29 +-
+ drivers/base/memory.c                              |   9 +-
+ drivers/base/physical_location.c                   |   5 +-
+ drivers/base/platform.c                            |  48 +-
+ drivers/base/soc.c                                 |   4 +-
+ drivers/base/swnode.c                              |  63 +--
+ drivers/base/test/property-entry-test.c            |  30 +-
+ drivers/base/transport_class.c                     |  17 +-
+ drivers/bcma/main.c                                |   6 +-
+ drivers/bus/fsl-mc/fsl-mc-bus.c                    |   4 +-
+ drivers/bus/mhi/ep/main.c                          |   4 +-
+ drivers/bus/mhi/host/init.c                        |   4 +-
+ drivers/bus/mips_cdmm.c                            |   4 +-
+ drivers/bus/sunxi-rsb.c                            |   7 +-
+ drivers/cxl/core/memdev.c                          |   4 +-
+ drivers/cxl/core/port.c                            |   8 +-
+ drivers/cxl/cxl.h                                  |   4 +-
+ drivers/cxl/cxlmem.h                               |   2 +-
+ drivers/dax/bus.c                                  |   2 +-
+ drivers/eisa/eisa-bus.c                            |   4 +-
+ drivers/firewire/core-device.c                     |   8 +-
+ drivers/firmware/arm_ffa/bus.c                     |   4 +-
+ drivers/firmware/arm_scmi/bus.c                    |   3 +-
+ drivers/fpga/dfl.c                                 |   4 +-
+ drivers/fsi/fsi-core.c                             |   6 +-
+ drivers/gpio/gpiolib.c                             |   7 +
+ drivers/gpu/drm/display/drm_dp_aux_bus.c           |   7 +-
+ drivers/gpu/drm/drm_mipi_dsi.c                     |   4 +-
+ drivers/gpu/host1x/bus.c                           |   2 +-
+ drivers/greybus/core.c                             |  14 +-
+ drivers/hid/hid-core.c                             |   4 +-
+ drivers/hid/intel-ish-hid/ishtp/bus.c              |   2 +-
+ drivers/hsi/hsi_core.c                             |   2 +-
+ drivers/hv/vmbus_drv.c                             |   4 +-
+ drivers/hwtracing/intel_th/core.c                  |   6 +-
+ drivers/hwtracing/intel_th/intel_th.h              |   4 +-
+ drivers/i2c/i2c-core-base.c                        |   4 +-
+ drivers/i3c/device.c                               |  14 +-
+ drivers/i3c/master.c                               |   4 +-
+ drivers/input/input.c                              |  16 +-
+ drivers/input/serio/serio.c                        |   4 +-
+ drivers/ipack/ipack.c                              |   4 +-
+ drivers/irqchip/irq-imx-gpcv2.c                    |   1 +
+ drivers/macintosh/macio_asic.c                     |   7 +-
+ drivers/mcb/mcb-core.c                             |   4 +-
+ drivers/media/pci/intel/ipu3/cio2-bridge.c         |  27 +-
+ drivers/media/pci/intel/ipu3/cio2-bridge.h         |   5 +-
+ drivers/media/rc/rc-main.c                         |   2 +-
+ drivers/memstick/core/memstick.c                   |   6 +-
+ drivers/misc/mei/bus.c                             |   4 +-
+ drivers/misc/tifm_core.c                           |   4 +-
+ drivers/mmc/core/bus.c                             |   4 +-
+ drivers/mmc/core/sdio_bus.c                        |   4 +-
+ drivers/mtd/mtdpart.c                              |  10 +
+ drivers/net/phy/mdio_bus.c                         |   2 +-
+ drivers/net/xen-netback/xenbus.c                   |   2 +-
+ drivers/nvdimm/bus.c                               |   4 +-
+ drivers/nvdimm/dax_devs.c                          |   2 +-
+ drivers/nvdimm/dimm_devs.c                         |   2 +-
+ drivers/nvdimm/nd-core.h                           |  10 +-
+ drivers/nvdimm/nd.h                                |   4 +-
+ drivers/nvdimm/region_devs.c                       |   4 +-
+ drivers/of/device.c                                |   4 +-
+ drivers/of/property.c                              |  84 +--
+ drivers/opp/debugfs.c                              |   2 +-
+ drivers/pci/pci-driver.c                           |   4 +-
+ drivers/pcmcia/ds.c                                |   4 +-
+ drivers/platform/surface/aggregator/bus.c          |   4 +-
+ drivers/platform/x86/wmi.c                         |  15 +-
+ drivers/rapidio/rio-driver.c                       |   4 +-
+ drivers/rpmsg/rpmsg_core.c                         |   4 +-
+ drivers/s390/cio/css.c                             |   4 +-
+ drivers/s390/cio/device.c                          |   8 +-
+ drivers/s390/cio/scm.c                             |   2 +-
+ drivers/s390/crypto/ap_bus.c                       |   4 +-
+ drivers/scsi/scsi_sysfs.c                          |   4 +-
+ drivers/sh/maple/maple.c                           |   7 -
+ drivers/slimbus/core.c                             |   4 +-
+ drivers/soc/imx/gpcv2.c                            |   2 +-
+ drivers/soc/qcom/apr.c                             |   4 +-
+ drivers/soc/renesas/rcar-sysc.c                    |   2 +-
+ drivers/soundwire/bus_type.c                       |   4 +-
+ drivers/spi/spi.c                                  |   2 +-
+ drivers/spmi/spmi.c                                |   2 +-
+ drivers/ssb/main.c                                 |   4 +-
+ drivers/staging/greybus/audio_codec.c              |   6 -
+ drivers/staging/greybus/gbphy.c                    |  14 +-
+ drivers/tee/tee_core.c                             |   2 +-
+ drivers/thunderbolt/switch.c                       |   4 +-
+ drivers/thunderbolt/tb.h                           |   2 +-
+ drivers/thunderbolt/xdomain.c                      |   6 +-
+ drivers/tty/serdev/core.c                          |   2 +-
+ drivers/tty/serial/arc_uart.c                      |   7 -
+ drivers/usb/common/ulpi.c                          |   4 +-
+ drivers/usb/core/driver.c                          |   6 +-
+ drivers/usb/core/message.c                         |   8 +-
+ drivers/usb/core/usb.c                             |   8 +-
+ drivers/usb/phy/phy.c                              |   6 +-
+ drivers/usb/roles/class.c                          |   3 +-
+ drivers/usb/typec/bus.c                            |   4 +-
+ drivers/usb/typec/class.c                          |   2 +-
+ drivers/virtio/virtio.c                            |   4 +-
+ drivers/w1/w1.c                                    |  10 +-
+ drivers/xen/pvcalls-back.c                         |   2 +-
+ drivers/xen/xenbus/xenbus_probe_backend.c          |   8 +-
+ drivers/xen/xenbus/xenbus_probe_frontend.c         |   4 +-
+ drivers/zorro/zorro-driver.c                       |   4 +-
+ fs/debugfs/inode.c                                 |   4 +-
+ fs/dlm/lockspace.c                                 |   4 +-
+ fs/gfs2/sys.c                                      |   6 +-
+ fs/kernfs/dir.c                                    |   3 -
+ include/asm-generic/dma-mapping.h                  |   2 +-
+ include/drm/drm_mipi_dsi.h                         |   5 +-
+ include/linux/acpi.h                               |   4 +-
+ include/linux/cacheinfo.h                          |  13 +-
+ include/linux/container_of.h                       |   2 +-
+ include/linux/device.h                             |   7 +-
+ include/linux/device/bus.h                         |  97 ++--
+ include/linux/device/driver.h                      |   1 -
+ include/linux/dma-map-ops.h                        |   2 +-
+ include/linux/firewire.h                           |  15 +-
+ include/linux/fwnode.h                             |  12 +-
+ include/linux/hyperv.h                             |   5 +-
+ include/linux/i3c/device.h                         |  22 +-
+ include/linux/kobject.h                            |   2 +-
+ include/linux/mcb.h                                |   5 +-
+ include/linux/of_device.h                          |   4 +-
+ include/linux/platform_device.h                    |  11 +
+ include/linux/property.h                           |   9 +-
+ include/linux/soundwire/sdw_type.h                 |   2 +-
+ include/linux/spi/spi.h                            |   2 +-
+ include/linux/ssb/ssb.h                            |   2 +-
+ include/linux/surface_aggregator/device.h          |   5 +-
+ include/linux/transport_class.h                    |   8 +-
+ include/linux/virtio.h                             |   5 +-
+ include/sound/hdaudio.h                            |   2 +-
+ include/xen/xenbus.h                               |   7 +-
+ kernel/fail_function.c                             |   5 +-
+ kernel/ksysfs.c                                    |   9 +
+ kernel/power/energy_model.c                        |   5 +-
+ kernel/time/test_udelay.c                          |   2 +-
+ lib/kobject.c                                      |  16 +-
+ lib/test_firmware.c                                |   5 +-
+ samples/kobject/kset-example.c                     |   2 +-
+ scripts/const_structs.checkpatch                   |   1 +
+ sound/aoa/soundbus/core.c                          |   6 +-
+ sound/hda/hda_bus_type.c                           |   2 +-
+ sound/hda/hdac_device.c                            |   2 +-
+ 185 files changed, 1535 insertions(+), 1192 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-address_bits
