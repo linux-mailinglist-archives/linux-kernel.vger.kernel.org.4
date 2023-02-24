@@ -2,124 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37AC6A235B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCC86A235E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBXVDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S229642AbjBXVEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBXVD3 (ORCPT
+        with ESMTP id S229479AbjBXVEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:03:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007392699;
-        Fri, 24 Feb 2023 13:03:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94633B81D1B;
-        Fri, 24 Feb 2023 21:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FD6C433EF;
-        Fri, 24 Feb 2023 21:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677272595;
-        bh=GOPRgmEm/tLlo164VtO08+QtLf9+r2oLkH7o65afRmY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qt82xGw08+pWQPYenM8GbR0Qn4nQY7XCUDyzCsd556SIZ/mqaZKCxmuMq43nL5sM2
-         YfIhiPwNX+MqauE34NbgOcdxgCE1VDhPmNmRe7Gw5I5NMbJcUjPVWG0rjzsUpEbFZu
-         5wQVKGJY41UTW8GI/u19czDbFT9Hzx9F21e7LadYjUkzgvDjG/o4GMtd1JkoDsPlXE
-         /TNvh8GXartMwOlt9911MkoCWLO1VmPnIe2TazBqh5zPwerPtSXHPlUO9vGvxTYkFw
-         FSCDzkXMYBQXStWUeFQO6sufgUyGj5wxPA+E/iOmye4S57Zdix2f0paxXAu4DwWiaU
-         aTuqaHZpN9kaQ==
-Date:   Fri, 24 Feb 2023 21:03:09 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with
- rust support
-Message-ID: <Y/kmDcMBcZ2PzcKR@spud>
-References: <20230224135044.2882109-1-conor.dooley@microchip.com>
- <20230224135044.2882109-3-conor.dooley@microchip.com>
- <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
+        Fri, 24 Feb 2023 16:04:40 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E445E859
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:04:38 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id i9so786709lfc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lszs4gFEp6xlpuCdIMDcvdyOaBDChuIXNZLbY3PSN+w=;
+        b=FFoAnd2wFYH55quPctWfE3WOhdtqx4qGcOH/8R1h9cZgLIO1SjNy1jyuHGfYQlqXwg
+         tN4gn4i3zpVfs5LYJOycZm2yEvpjjO1n/ZGofv8WSYllHopEX3oG1l7fs47maVqGiXjJ
+         RoJHLAqO1GPVMKKcqWJE8HGWFB6BFRAt9Q9JNF/DN9aJjU1LxEacVtlp4b4+f8rL6/oT
+         Dte+b48yE5mIl6Xe1KDgQ+VJz/UTJMlspMK7kuJmQMDF2SCVrhixJfHJXKjYsunFXkWI
+         bZzAjlCc4OC+Ra+0Had2ryAVanchi16nbp+qmCZqkTqzM+WDHuKniQ4Ocef9jXZbjwrX
+         6k+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lszs4gFEp6xlpuCdIMDcvdyOaBDChuIXNZLbY3PSN+w=;
+        b=ReBj4hk6jzz4I1OExdWTBdxbP5OLGdp4sAvpX88abytJtimRdPCt33NTARV9Qc6rRS
+         yT2kwGzgqpd0IDQtOByNqdGSD7VgLEck1TFvU3E47PmCEi8qk+eM4HEMDgRjvOeEJwTB
+         Adgmcg60++umfVPkaAji9XFHJTjzldD/vu0zPRnS2uRr4KClCDxwsJTQ633l2cJRuRCy
+         ydbKxgyPoFiYYdM5gdDDdT3S7iuRt0WBZtLCt8RSD/0PefGw5dLSUJzOFphncLlLiBYo
+         2XgIqh3NYw4a+WXRiwnL9YYkYLoJDXP5AJ+nDJPY0VECaSzfe1WhKLKuuq2e6MavFYQL
+         ZIiA==
+X-Gm-Message-State: AO0yUKX7oyjkQ+QtDu8zHnau52blMYejXeo5ANrQGEF6BH+trC3jomRI
+        BTS1h0WwVw1kI3cjz08z93b82w==
+X-Google-Smtp-Source: AK7set+jot1Xx+HYRKIm/IB6J0LNgiDMMuzLqDQidL6EC2s5j4GX6oiobb4KkHt+I3bq5PgbJzZ8eg==
+X-Received: by 2002:a05:6512:147:b0:4db:513b:6ef4 with SMTP id m7-20020a056512014700b004db513b6ef4mr5691421lfo.11.1677272676735;
+        Fri, 24 Feb 2023 13:04:36 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id j7-20020ac253a7000000b004d86808fd33sm746lfh.15.2023.02.24.13.04.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 13:04:36 -0800 (PST)
+Message-ID: <525078f5-44be-9a75-a737-ddcc6e097700@linaro.org>
+Date:   Fri, 24 Feb 2023 23:04:35 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WdAygoFJPXezUehP"
-Content-Disposition: inline
-In-Reply-To: <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC PATCH 2/2] drm/msm/dsi: use new
+ dpu_dsc_populate_dsc_config()
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
+ <1677267647-28672-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1677267647-28672-3-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 24/02/2023 21:40, Kuogee Hsieh wrote:
+> use new introduced dpu_dsc_populate_dsc_config() to calculate
+> and populate drm_dsc_info instead of hard code value.
 
---WdAygoFJPXezUehP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+DPU is an optional component, so DSI driver should not depend on the DPU 
+driver.
 
-On Fri, Feb 24, 2023 at 09:45:05PM +0100, Miguel Ojeda wrote:
-> On Fri, Feb 24, 2023 at 2:51 PM Conor Dooley <conor.dooley@microchip.com>=
- wrote:
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 78 ++++++--------------------------------
+>   1 file changed, 12 insertions(+), 66 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 31ad193..5f3f84f 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /*
+>    * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights reserved
+>    */
+>   
+>   #include <linux/clk.h>
+> @@ -21,7 +22,6 @@
+>   
+>   #include <video/mipi_display.h>
+>   
+> -#include <drm/display/drm_dsc_helper.h>
+>   #include <drm/drm_of.h>
+>   
+>   #include "dsi.h"
+> @@ -31,6 +31,7 @@
+>   #include "msm_kms.h"
+>   #include "msm_gem.h"
+>   #include "phy/dsi_phy.h"
+> +#include "dpu_dsc_helper.h"
+>   
+>   #define DSI_RESET_TOGGLE_DELAY_MS 20
+>   
+> @@ -1819,29 +1820,8 @@ static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
+>   	return -EINVAL;
+>   }
+>   
+> -static u32 dsi_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
+> -	0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54, 0x62,
+> -	0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
+> -};
+> -
+> -/* only 8bpc, 8bpp added */
+> -static char min_qp[DSC_NUM_BUF_RANGES] = {
+> -	0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13
+> -};
+> -
+> -static char max_qp[DSC_NUM_BUF_RANGES] = {
+> -	4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 15
+> -};
+> -
+> -static char bpg_offset[DSC_NUM_BUF_RANGES] = {
+> -	2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
+> -};
+> -
+>   static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc_config *dsc)
+>   {
+> -	int i;
+> -	u16 bpp = dsc->bits_per_pixel >> 4;
+> -
+>   	if (dsc->bits_per_pixel & 0xf) {
+>   		DRM_DEV_ERROR(&msm_host->pdev->dev, "DSI does not support fractional bits_per_pixel\n");
+>   		return -EINVAL;
+> @@ -1852,50 +1832,16 @@ static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc
+>   		return -EOPNOTSUPP;
+>   	}
+>   
+> -	dsc->rc_model_size = 8192;
+> -	dsc->first_line_bpg_offset = 12;
+> -	dsc->rc_edge_factor = 6;
+> -	dsc->rc_tgt_offset_high = 3;
+> -	dsc->rc_tgt_offset_low = 3;
+> -	dsc->simple_422 = 0;
+> -	dsc->convert_rgb = 1;
+> -	dsc->vbr_enable = 0;
+> -
+> -	/* handle only bpp = bpc = 8 */
+> -	for (i = 0; i < DSC_NUM_BUF_RANGES - 1 ; i++)
+> -		dsc->rc_buf_thresh[i] = dsi_dsc_rc_buf_thresh[i];
+> -
+> -	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+> -		dsc->rc_range_params[i].range_min_qp = min_qp[i];
+> -		dsc->rc_range_params[i].range_max_qp = max_qp[i];
+> -		/*
+> -		 * Range BPG Offset contains two's-complement signed values that fill
+> -		 * 8 bits, yet the registers and DCS PPS field are only 6 bits wide.
+> -		 */
+> -		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i] & DSC_RANGE_BPG_OFFSET_MASK;
+> -	}
+> -
+> -	dsc->initial_offset = 6144;		/* Not bpp 12 */
+> -	if (bpp != 8)
+> -		dsc->initial_offset = 2048;	/* bpp = 12 */
+> -
+> -	if (dsc->bits_per_component <= 10)
+> -		dsc->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
+> -	else
+> -		dsc->mux_word_size = DSC_MUX_WORD_SIZE_12_BPC;
+> -
+> -	dsc->initial_xmit_delay = 512;
+> -	dsc->initial_scale_value = 32;
+> -	dsc->first_line_bpg_offset = 12;
+> -	dsc->line_buf_depth = dsc->bits_per_component + 1;
+> -
+> -	/* bpc 8 */
+> -	dsc->flatness_min_qp = 3;
+> -	dsc->flatness_max_qp = 12;
+> -	dsc->rc_quant_incr_limit0 = 11;
+> -	dsc->rc_quant_incr_limit1 = 11;
+> -
+> -	return drm_dsc_compute_rc_parameters(dsc);
+> +	/*
+> +	 * NOTE:
+> +	 * dsc->dsc_version_major, dsc->dsc_version_minor
+> +	 * dsc->bits_per_pixel,
+> +	 * dsc->bits_per_component,
+> +	 * dsc->native_422, dsc->native_420
+> +	 *
+> +	 * above parameters must be populated
 
-> > diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/a=
-rch-support.rst
-> > index 6982b63775da..197919158596 100644
-> > --- a/Documentation/rust/arch-support.rst
-> > +++ b/Documentation/rust/arch-support.rst
-> > @@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAIN=
-ERS`` file.
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> >  Architecture  Level of support  Constraints
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> > +``riscv``     Maintained        ``rv64`` only.
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> >  ``x86``       Maintained        ``x86_64`` only.
->=20
-> I think this separator between rows should not be here (it is not in
-> `rust-for-linux/rust`). Please see
-> https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#simple=
--tables.
+Comments
+In Yoda style
+written should be not.
 
-That's what the "let the automation tell me if I messed up rst" approach
-gets you ;)
+> +	 */
+> +	return dpu_dsc_populate_dsc_config(dsc, 0);
+>   }
+>   
+>   static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
 
+-- 
+With best wishes
+Dmitry
 
---WdAygoFJPXezUehP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/kmDQAKCRB4tDGHoIJi
-0nPaAP4scKJyUoodTh1VeLDzWnq6wVMqx2ag5tPkur6OL8OPSwD+J4ShZHdTHo7f
-F5jmK7nrKyOomF7iNe21+bCUkCg/qAs=
-=fdgN
------END PGP SIGNATURE-----
-
---WdAygoFJPXezUehP--
