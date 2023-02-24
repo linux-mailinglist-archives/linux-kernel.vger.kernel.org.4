@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD586A1EC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C826A1EC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjBXPmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S230008AbjBXPmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBXPmq (ORCPT
+        with ESMTP id S229615AbjBXPmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Feb 2023 10:42:46 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CDE6A9CD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:42:43 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id cf14so4657299qtb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:42:43 -0800 (PST)
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE6A6ADE4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:42:45 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id nf5so13775879qvb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:42:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kkpL2g7L2sQ+6ZxUM2vC2iNXW2IcArehGjgvwIpbvEw=;
-        b=Xhb7nQliM0PER/Dw9ahi/hPKBHv/E6io/C+U0Omq1Ib5xL2ZrelvvLuQB7ZktxhFPc
-         r9CsY9S01DXv+SmTttclUjHJuOc2bVKe6wSdIIkoNLEhFk3mpSrhGOWo0lmck88atSVM
-         OCcMGV9DV7og10HrnvCQqia3ybm6vi4zVjea0QMBjTH0/caexqkXwVyXm2llf2mfXiGR
-         7XgMtLIydlaLS5Ir8fmEbdx4VMumQK9v7+vyCAo+4iJUgcFWkB0j30FcVW7W5bAUSvKv
-         etwkIM+1qmZt5cMzQYG2M5nQmaqxSlaPcPWTpi/Wq8KoVXwvQ9pXg/sAvdGPgWBe1SFW
-         H2nw==
+        bh=tliLWqZo1ClCFllMBGoxhRkpYCPqcv1PK4tnZkLlMM0=;
+        b=O2Uu3GbTz3FO7MHs1vCp97YWPwcz36gukuqk3vw3IuhBTAYf4vkn+mVDvu2zjRsCpm
+         bEoOBul9nkV1MK3PRvbtKQhUZFkGJGeKTmixHzuujh2E5YmRo50KQgkpu9tqME5e11Q3
+         Otk0IDQTM1xiknWW9sh+uqbDyqDBCa+0ZNqI5ZfY8NH+OF/+aU+qCuxVcrU/zUYCxxK1
+         J/sNmbw1aZLj9DC347LlgUdyHatgBvMCRYPFCh8WpXgzZgZP6+kNeorMSpYBCNZeKDM5
+         fvWEMSTpF22coIW9nCKJ6q9+x67rzknOj1Yb2+CV/flLhXeimewH+oDtb7tyogc9X491
+         awXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kkpL2g7L2sQ+6ZxUM2vC2iNXW2IcArehGjgvwIpbvEw=;
-        b=X0d+5wkNAJoDOoOmQ+P5gNdidhL4pcBXMac/lqS2duUmfGThQW0TWMt5/oRIr6YhN6
-         Nnun6IKA4RSiKA7gtXMrbekHi/Ofo6vLdV95xnX52PKsnMafhk85U1F38I3M4i+nRCpg
-         idU+AMawKM8uv2iPizwlyeJGoMJaeKTPS3ggwxPpPP30Wjv+nAEJu7ywGfdw/1NYqIrs
-         gNs/zo+9DbNAb2FLXp87Yu/8G6AgrtiEH+ZcNC2IwkLoUL5JXHR/lOpVJK8zXFyGc1G4
-         PDgExi2k/Neq0l4Ww07/vSIVpc3YV9ght6ZNeSD9KhJsCqkj9D7cSQalZdQUatisbS+w
-         +J/A==
-X-Gm-Message-State: AO0yUKXDu6UD7rq4oBxYyFQa2hB+L6sL4P9+6Rj13OH68q9ga3emR/Q0
-        Z714z486te/u2GfSDI0Rp4DLzd94sA==
-X-Google-Smtp-Source: AK7set+cmIv0LaIQRYRGTGGFQorfxHDYOT5+6QbE/5lz3if5/FqHTkBT5gAoKJNdKwZDPkUCImvw0Q==
-X-Received: by 2002:ac8:598c:0:b0:3bd:efa:baf with SMTP id e12-20020ac8598c000000b003bd0efa0bafmr30729870qte.19.1677253362756;
-        Fri, 24 Feb 2023 07:42:42 -0800 (PST)
+        bh=tliLWqZo1ClCFllMBGoxhRkpYCPqcv1PK4tnZkLlMM0=;
+        b=2lW7l3ziExeyrM7gAwjtuShGLzJykzpkGJRavtlPn7Y5m7N97bfPzqTd6vdNIVTofC
+         7YaWAuH3NEON1tVaJlpSMTtH1SmBqQQ91MfFVN3Ck5Cer3ehBkcNsL6v2Yqzh+R3rKnx
+         G5CeB9O0V2igvemrZPpt7B8/CvJdh9h5qEpB3aJ9GYSeztlTRnCzidsEi+Sfa2oE/cZV
+         rwE4J1d5K2KkUSqbeFbNSkr6gDLh/oSMO8f+DwKTKvIKFRSED4B+jxvVjFmbPhrX0vld
+         AfXzxSRPOLx5IXuQMfMAoyibZrU802tXcVP0fJEjKCMCzVlAYIaM+l8ntqfYeEcGb0J8
+         akhQ==
+X-Gm-Message-State: AO0yUKUY+DbAvTvAF+/pf8zi7Jg4/xUmNSLtwoKsX06Hoaqvja4bYfcj
+        qpf9VouACLRKTGnTihx9xO89L/e4cQ==
+X-Google-Smtp-Source: AK7set+H1d3jhAvT2EV/UtMS707IDVtG/4668+VsZMFIcDqSgJ1UMKaLb3d8tQFdweCWvbvV07FkSA==
+X-Received: by 2002:a05:6214:e44:b0:56f:c948:411b with SMTP id o4-20020a0562140e4400b0056fc948411bmr26341454qvc.29.1677253364009;
+        Fri, 24 Feb 2023 07:42:44 -0800 (PST)
 Received: from citadel.. (075-129-116-198.res.spectrum.com. [75.129.116.198])
-        by smtp.gmail.com with ESMTPSA id e26-20020a05620a015a00b0073b399700adsm1276131qkn.3.2023.02.24.07.42.41
+        by smtp.gmail.com with ESMTPSA id e26-20020a05620a015a00b0073b399700adsm1276131qkn.3.2023.02.24.07.42.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 07:42:42 -0800 (PST)
+        Fri, 24 Feb 2023 07:42:43 -0800 (PST)
 From:   Brian Gerst <brgerst@gmail.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     David Woodhouse <dwmw2@infradead.org>,
@@ -62,9 +62,9 @@ Cc:     David Woodhouse <dwmw2@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Brian Gerst <brgerst@gmail.com>,
         David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v2 3/5] x86/smpboot: Remove initial_gs
-Date:   Fri, 24 Feb 2023 10:42:33 -0500
-Message-Id: <20230224154235.277350-4-brgerst@gmail.com>
+Subject: [PATCH v2 4/5] x86/smpboot: Simplify boot CPU setup
+Date:   Fri, 24 Feb 2023 10:42:34 -0500
+Message-Id: <20230224154235.277350-5-brgerst@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230224154235.277350-1-brgerst@gmail.com>
 References: <20230224154235.277350-1-brgerst@gmail.com>
@@ -80,7 +80,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the percpu offset directly to set GSBASE.
+Now that the per-cpu GSBASE, stack, and GDT descriptor can be derived
+dynamically by CPU number, the boot CPU can use a fixed CPU number and
+take the same path as secondary CPUs.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
@@ -88,109 +90,73 @@ Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Tested-by: Usama Arif <usama.arif@bytedance.com>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- arch/x86/include/asm/realmode.h |  1 -
- arch/x86/kernel/acpi/sleep.c    |  1 -
- arch/x86/kernel/head_64.S       | 34 ++++++++++-----------------------
- 3 files changed, 10 insertions(+), 26 deletions(-)
+ arch/x86/kernel/head_64.S | 24 +++++++-----------------
+ 1 file changed, 7 insertions(+), 17 deletions(-)
 
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index f0357cfe2fb0..87e5482acd0d 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -60,7 +60,6 @@ extern struct real_mode_header *real_mode_header;
- extern unsigned char real_mode_blob_end[];
- 
- extern unsigned long initial_code;
--extern unsigned long initial_gs;
- extern unsigned long initial_stack;
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern unsigned long initial_vc_handler;
-diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-index 6538ddb55f28..214dd4a79860 100644
---- a/arch/x86/kernel/acpi/sleep.c
-+++ b/arch/x86/kernel/acpi/sleep.c
-@@ -114,7 +114,6 @@ int x86_acpi_suspend_lowlevel(void)
- #else /* CONFIG_64BIT */
- #ifdef CONFIG_SMP
- 	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
--	initial_gs = per_cpu_offset(smp_processor_id());
- 	/* Force the startup into boot mode */
- 	saved_smpboot_ctrl = xchg(&smpboot_control, 0);
- #endif
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 0dd57d573a0e..9ed87ba0609f 100644
+index 9ed87ba0609f..8bd29ab523dd 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -67,18 +67,10 @@ SYM_CODE_START_NOALIGN(startup_64)
- 
- 	leaq	_text(%rip), %rdi
- 
--	/*
--	 * initial_gs points to initial fixed_percpu_data struct with storage for
--	 * the stack protector canary. Global pointer fixups are needed at this
--	 * stage, so apply them as is done in fixup_pointer(), and initialize %gs
--	 * such that the canary can be accessed at %gs:40 for subsequent C calls.
--	 */
-+	/* Setup GSBASE to allow stack canary access for C code */
- 	movl	$MSR_GS_BASE, %ecx
--	movq	initial_gs(%rip), %rax
--	movq	$_text, %rdx
--	subq	%rdx, %rax
--	addq	%rdi, %rax
--	movq	%rax, %rdx
-+	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
-+	movl	%edx, %eax
- 	shrq	$32,  %rdx
- 	wrmsr
- 
-@@ -243,10 +235,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+@@ -235,11 +235,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
  	ANNOTATE_NOENDBR // above
  
  #ifdef CONFIG_SMP
--	/*
--	 * Is this the boot CPU coming up? If so everything is available
--	 * in initial_gs.
--	 */
-+	/* Is this the boot CPU coming up? */
- 	movl	smpboot_control(%rip), %edx
- 	testl	$STARTUP_SECONDARY, %edx
- 	jz	.Linit_cpu0_data
-@@ -308,12 +297,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 
- .Linit_cpu_data:
- 	/* Get the per cpu offset for the given CPU# which is in ECX */
--	leaq	__per_cpu_offset(%rip), %rbx
--	movq	(%rbx,%rcx,8), %rbx
--	/* Save it for GS BASE setup */
--	movq	%rbx, initial_gs(%rip)
+-	/* Is this the boot CPU coming up? */
+-	movl	smpboot_control(%rip), %edx
+-	testl	$STARTUP_SECONDARY, %edx
+-	jz	.Linit_cpu0_data
 -
--	movq	%rbx, %rdx
-+	movq	__per_cpu_offset(,%rcx,8), %rdx
+ 	/*
+ 	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
+ 	 * used to look up the CPU number.  For booting a single CPU, the
+@@ -250,13 +245,13 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
+ 	 * Bit 0-24	CPU# if STARTUP_APICID_CPUID_xx flags are not set
+ 	 */
+-	testl	$STARTUP_APICID_CPUID_0B, %edx
++	movl	smpboot_control(%rip), %ecx
++	testl	$STARTUP_APICID_CPUID_0B, %ecx
+ 	jnz	.Luse_cpuid_0b
+-	testl	$STARTUP_APICID_CPUID_01, %edx
++	testl	$STARTUP_APICID_CPUID_01, %ecx
+ 	jnz	.Luse_cpuid_01
+-	andl	$0x0FFFFFFF, %edx
+-	movl	%edx, %ecx
+-	jmp	.Linit_cpu_data
++	andl	$0x0FFFFFFF, %ecx
++	jmp	.Lsetup_cpu
+ 
+ .Luse_cpuid_01:
+ 	mov	$0x01, %eax
+@@ -277,7 +272,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 
+ .Lfind_cpunr:
+ 	cmpl	(%rbx,%rcx,4), %edx
+-	jz	.Linit_cpu_data
++	jz	.Lsetup_cpu
+ 	inc	%ecx
+ 	cmpl	nr_cpu_ids(%rip), %ecx
+ 	jb	.Lfind_cpunr
+@@ -291,18 +286,13 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	hlt
+ 	jmp	1b
+ 
+-.Linit_cpu0_data:
+-	movq	__per_cpu_offset(%rip), %rdx
+-	jmp	.Lsetup_cpu
+-
+-.Linit_cpu_data:
++.Lsetup_cpu:
+ 	/* Get the per cpu offset for the given CPU# which is in ECX */
+ 	movq	__per_cpu_offset(,%rcx,8), %rdx
  #else
  	xorl	%edx, %edx
  #endif /* CONFIG_SMP */
-@@ -363,8 +347,11 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	 * the per cpu areas are set up.
- 	 */
- 	movl	$MSR_GS_BASE,%ecx
--	movl	initial_gs(%rip),%eax
--	movl	initial_gs+4(%rip),%edx
-+#ifndef CONFIG_SMP
-+	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
-+#endif
-+	movl	%edx, %eax
-+	shrq	$32, %rdx
- 	wrmsr
  
- 	/* Drop the realmode protection. For the boot CPU the pointer is NULL! */
-@@ -514,7 +501,6 @@ SYM_CODE_END(vc_boot_ghcb)
- 	__REFDATA
- 	.balign	8
- SYM_DATA(initial_code,	.quad x86_64_start_kernel)
--SYM_DATA(initial_gs,	.quad INIT_PER_CPU_VAR(fixed_percpu_data))
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
- #endif
+-.Lsetup_cpu:
+ 	/*
+ 	 * Setup a boot time stack - Any secondary CPU will have lost its stack
+ 	 * by now because the cr3-switch above unmaps the real-mode stack
 -- 
 2.39.2
 
