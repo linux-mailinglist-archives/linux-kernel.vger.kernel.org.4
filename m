@@ -2,122 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACF96A2242
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE1B6A2247
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjBXTTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S229486AbjBXTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBXTTJ (ORCPT
+        with ESMTP id S229779AbjBXTTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:19:09 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F1C1FF3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:19:08 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id d7so999061vsj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:19:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=uci-edu.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=beKhMtsCTaM5oM3Mze5dnKYHOlzx1cDOTU11CiVmTd8=;
-        b=H3SEpbzsD7PRyycSfaIJTHQITmlJgkO7Io7xHoUfh6iiCZVz9xOrTv1LV5ScXsGbej
-         M3JGKkz9ieE3+sdM+rX5Y49Yz5gd+cYX/v0ssXiXxWX4jF+LyGDKdjYOZyoHyZ7M6Hj8
-         Fjanq3xvT7H3csTgbOkTU6NCKQRA91J8J+5gTpS/aCv/4DTD22moW91JBqYzHOOB2pzm
-         Ebke5bzH9WteMh+0aqP+q3oNr61B5MppI/LEvWcOeI2AvTZuq9P5IQTQW0boFKrEbLB7
-         7GVXbJurw3Hpq1Pu0Rii7SqEW3ZxpAErRkHGUYlomFpzjepes0z6uzV2TVE5ux+ASXT0
-         roaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=beKhMtsCTaM5oM3Mze5dnKYHOlzx1cDOTU11CiVmTd8=;
-        b=S5o9UYa389cVM0mC8unOgvEwxxSTY2pz8vTntTB1o0OfTfuPeCCj8biAytlsfVvx3R
-         pjuuooirqBy+5FeIcbAF3RFWxrBY0ydXLQ9ZltfdwGRiWuuR/W7YwtF++Orzrvlf16Np
-         OrnMkJZm3TkVezXuDDRUseslQYuH+Jw9v2gDOKc+7mM6CNbUTLt8yDeRi/ywQbX/4kKg
-         2slD3ZE6Y+41Ev4riKBvHlsQOWj5YaWablJPeoLZTHVW8j2zTLS6PAdedQL0NtawcVhr
-         Y88Lx4gO5W9xc3Yr3R4frkIgerJSMWOC8hSlpcAJQXbzp2ptDY0KBizLTjt38NDJHGG/
-         BRAQ==
-X-Gm-Message-State: AO0yUKWwaQoL9KRSXJfhK0bsiqwupcvAKjZ+FhusbYzgnsaWU/SfJPMJ
-        j/ya4HWCeDVx6wy9Epk08gSoVsAYVOnRmaQyp5V24g==
-X-Google-Smtp-Source: AK7set8lCRfbdrWNN0pLqcJuTWrdGmQzu4KmlBszfB3kfSMl8UPsYGuSJPDt8W5Ix1Vhgy16L8mKJ8WCEEKd5v8PayQ=
-X-Received: by 2002:a67:db0a:0:b0:414:2344:c353 with SMTP id
- z10-20020a67db0a000000b004142344c353mr3075359vsj.5.1677266347284; Fri, 24 Feb
- 2023 11:19:07 -0800 (PST)
+        Fri, 24 Feb 2023 14:19:16 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947F07292;
+        Fri, 24 Feb 2023 11:19:14 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OCG7Nc012848;
+        Fri, 24 Feb 2023 19:19:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=IGd2NCh6HKgvvTS62VAjy8ePxKCYXoUvB7NuZI5A0GE=;
+ b=ATvOfxjDxHD98IPqKtat4E3PzMdKZgapQVcX+z82M5j2rDz1X8uqeEgh09Wa9ATXk0A8
+ QY8Cz0BtVH4gvzoZ85Ai0BxHPmrRQthxeHslneEWjJG0dBA+sqIMSpLGtd5uI5MigglM
+ CImrwK6FYcogoUUR29a06SPZFSw64t4/hpY8RP+I/8di00Kz/2OXqPII7FpXNhkD4kAc
+ 23JsGlXg+KjgpG4mdi6UXo5soo2KyX9MN/6/7K9uzpTyOZ2bkf5ELK5LrLcVuWIqV0hN
+ 8ifF2gOOOlQBuyta3LYVP+PJbEn7+u34gWSMXZXAA6O00yzN1hpMQSn+W3sFRLMA7x5d RQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxw3d99un-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Feb 2023 19:19:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OJJ0C0013201
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Feb 2023 19:19:00 GMT
+Received: from [10.110.60.51] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
+ 2023 11:18:59 -0800
+Message-ID: <51ad9ff8-dbfa-7476-b208-f47e8d54fc20@quicinc.com>
+Date:   Fri, 24 Feb 2023 11:18:51 -0800
 MIME-Version: 1.0
-References: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
- <87a614h62a.fsf@cloudflare.com> <CABcoxUYiRUBkhzsbvsux8=zjgs7KKWYUobjoKrM+JYpeyfNw8g@mail.gmail.com>
-In-Reply-To: <CABcoxUYiRUBkhzsbvsux8=zjgs7KKWYUobjoKrM+JYpeyfNw8g@mail.gmail.com>
-From:   Hsin-Wei Hung <hsinweih@uci.edu>
-Date:   Fri, 24 Feb 2023 13:18:31 -0600
-Message-ID: <CABcoxUY=k8_aM0YE3_e_FaMTLiBmo-Yc4UMyBVuRNggj4ivA-Q@mail.gmail.com>
-Subject: Re: A potential deadlock in sockhash map
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 0/2] add V1.1 dsc_helper fucntion
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1677265287-7765-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Language: en-US
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <1677265287-7765-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: w2BbetFI0CNeq-dLZXoGAtiz-rCjfXKI
+X-Proofpoint-ORIG-GUID: w2BbetFI0CNeq-dLZXoGAtiz-rCjfXKI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-24_14,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 mlxlogscore=886 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302240153
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Please ignore this series
 
-Just a quick update. I can still trigger the lockdep warning on bpf
-tree (5b7c4cabbb65).
+I am going to re post it as RFC.
 
-Thanks,
-Hsin-Wei
 
-On Fri, Feb 24, 2023 at 9:58 AM Hsin-Wei Hung <hsinweih@uci.edu> wrote:
+kuogee
+
+On 2/24/2023 11:01 AM, Kuogee Hsieh wrote:
+> Add V1.1 dsc function and have dsi use it instead of hardcode value
 >
-> Hi Jakub,
+> Kuogee Hsieh (2):
+>    drm/msm/dpu: add dsc helper functions
+>    drm/msm/dsi: use new dpu_dsc_populate_dsc_config()
 >
-> Thanks for following up. Sorry that I did not receive the previous reply.
+>   drivers/gpu/drm/msm/Makefile                   |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c | 209 +++++++++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h |  28 ++++
+>   drivers/gpu/drm/msm/dsi/dsi_host.c             |  78 ++-------
+>   drivers/gpu/drm/msm/msm_drv.h                  |   7 +
+>   5 files changed, 257 insertions(+), 66 deletions(-)
+>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
 >
-> The latest version I tested is 5.19 (3d7cb6b04c3f) and we can reproduce the
-> issue with the BPF PoC included. Since we modified Syzkaller, we do not
-> have a Syzkaller reproducer.
->
-> I will follow John's suggestion to test the latest kernel and bpf
-> tree. I will follow
-> up if the issue still reproduces.
->
-> Thanks,
-> Hsin-Wei
->
->
->
->
-> On Fri, Feb 24, 2023 at 8:51 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Feb 20, 2023 at 07:39 AM -06, Hsin-Wei Hung wrote:
-> > > I think my previous report got blocked since it contained HTML
-> > > subparts so I am sending it again. Our bpf runtime fuzzer (a
-> > > customized syzkaller) triggered a lockdep warning in the bpf subsystem
-> > > indicating a potential deadlock. We are able to trigger this bug on
-> > > v5.15.25 and v5.19. The following code is a BPF PoC, and the lockdep
-> > > warning is attached at the end.
-> >
-> > Not sure if you've seen John's reply to the previous report:
-> >
-> > https://urldefense.com/v3/__https://lore.kernel.org/all/63dddcc92fc31_6bb15208e9@john.notmuch/__;!!CzAuKJ42GuquVTTmVmPViYEvSg!PU-LFxMnx4b-GmTXGI0hYjBiq8vkwrFrlf_b0N5uzy8do5kPFiNcuZJbby-19TtOH2rJoY9UwOvzFArd$
-> >
-> > Are you also fuzzing any newer kernel versions? Or was v5.19 the latest?
-> >
-> > Did syzkaller find a reproducer?
-> >
-> > Thanks,
-> > Jakub
