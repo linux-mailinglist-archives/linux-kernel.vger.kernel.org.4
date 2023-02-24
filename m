@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2516A142D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 01:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97256A1432
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 01:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjBXALb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 19:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S229549AbjBXAOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 19:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjBXALQ (ORCPT
+        with ESMTP id S229510AbjBXAOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 19:11:16 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B56B5EEDD;
-        Thu, 23 Feb 2023 16:10:39 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 130so4143453pgg.3;
-        Thu, 23 Feb 2023 16:10:39 -0800 (PST)
+        Thu, 23 Feb 2023 19:14:03 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF5132E4B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:14:02 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id o12so7384552oik.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:14:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677197436;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MoT6gaRYPtnh8k1ngr4M8vOub0Wg4UYVI0g6XpMS9dA=;
-        b=WYapsYYcy8reSKaTmTX7Sf2qze8b1lJ6e5lrN93dRyoFA73MiDv8fYlmKuYx48RZDR
-         ms+lX1GivT57dw17JHGeEXRMpw1y+nhAs1JuWnqxKnPLj0bWtZ7HdzNiXPLMAvm0Y0q/
-         ZJdlhfqZmnhLa7uOJ6QfQYGYA0Hryajqh9hrOklpWOdiGjehMyvtcJbMiVP7R21gAJdm
-         gmgBJyftQ0H10qBSL7Ggy1AtD0zNQ6ugYAqvSxrJ0B4Zb4rqO+SGsHxTPzGadMmMpbsO
-         yjeODjrqmnz0nxcmOVKEWg47CWDKcqsGJssWFuH16LIAgADXU215JR5ohQL4cUiR/p/b
-         +9/A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TdidChoinEBLrLlt/CurGVixllEMtFuJAvHMgu/NZfo=;
+        b=rJDsx+/KQ+i03a6ImfABsae+QTdtjd98soThsy2LfP6SUmtri7cI2gi1zIZhLyyaFp
+         m56LuccBFx6Cq5iNXT5DNWK9GA+9k3P9LmrhKZ6Er/ezbCpEID7KfXDp4FWtDFHsSXc2
+         RzBrV2O4ELyNK2d4RIrQWKjwDFwtK6XgPYmkxdX9JBCGw0dzxMe5crX7lLq0O/zL8YoI
+         04RgXLtgpDvE0LgSRsciv9uO9i3r2kqBoXDRMZjdDFG2XoD2xuOs1PafBMO458WxN35Y
+         wyBZ6kTQb1eAejmJVZB7CWidP1uOswaZRaskncBHH5BJqV3AFCDXaHOnRme+5wU6TzMF
+         TisQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677197436;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MoT6gaRYPtnh8k1ngr4M8vOub0Wg4UYVI0g6XpMS9dA=;
-        b=l4JDFmrLp6Hhlq+QMtNYbW71qVD1TOMcWtwpKBRCTmHBGF8lUC35b1VUPksAcu09aT
-         W9JRfYf0zlDz8cjDOQ60ejh/yfvsppkQ61sHwaqd1+7HfMgGhg5NBhkM4o+Zj6PP5wSE
-         +GwQez2oi+u4zixa28Jzy/cEWbSo8dOnyfWL+NF9AfH2JdzpCDLDAjmKGobaC3agTexa
-         28HdGRyWhwY49/g0SQsO1fu/hsLWQ3Zg4BQPNm3OVeyAJ7FN2FyN7hlY6PS6qXeTy8yS
-         Pro8HlEZsRnKuUBtE7h7/QHZgNwPJdfEXxo7Q0xtPUIxNCDeyJsZ1bA9xjiCsg7GjyGS
-         Nw9Q==
-X-Gm-Message-State: AO0yUKW1Nm/h1q+bFPMZ5onS8p6PmLPMx7msTXMPLj/ZFKlgcYet2clb
-        rK5erPbZjLC1Pw5vujWB1LSrLLnQIur8xk2hL7GkKNBysPc=
-X-Google-Smtp-Source: AK7set+H1KfqQ0rDAp24SajDp5b3exSzqpNDhSxbT82t3yc1G36eDZ2qfdY/DQOlb2xwvhIBNK8tcVuzp9GJ6wgKVyQ=
-X-Received: by 2002:a63:715e:0:b0:4fc:27c2:840d with SMTP id
- b30-20020a63715e000000b004fc27c2840dmr2296661pgn.12.1677197436490; Thu, 23
- Feb 2023 16:10:36 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TdidChoinEBLrLlt/CurGVixllEMtFuJAvHMgu/NZfo=;
+        b=TL40UPS+irKvbB9dzcfyUNX/vIUyMQGiWqRuTCJ08ie7iJZE9nprW3qkvLxs/hQo+K
+         CM1RpUC4+odulz1widByjqg/wunuTu3QpVNgNx79SNcP1AhAQxYvNtGOB18/9o/kt31l
+         wBJBoX0d1TP3X/99Y7IklJ1KYlOda61MJLrEWp2+J6775IQ4tJ25QDfrHsrqJIbHuoIK
+         kJAHyPkujHMDBImZinXxgApfUmbHAXFGAAb4TXrxOaI8LsUPefdJ7qKNcXe9x6NL2M90
+         h5dg18RdGGxgG++7FqBsVSLsubRh3YyPcgyLtFSIs/zy/xtL1MTBOnB9eE4hPveCLVlc
+         UgDQ==
+X-Gm-Message-State: AO0yUKXo7GztJsQuzBQLJke1x6K2UTAaxwyaT9CR4Wpg/D/0ASFnkKKD
+        UvmLCjwoPOpJuCgo2nUaBsP3RJ+LBoURljCmPrfyLsg7IfviMUA1
+X-Google-Smtp-Source: AK7set+Pu785rN2AMAsPyHuytxZFqVMOw3qN483f3LOeHCqNR/vsjJGPUIVlB9AeSPnsU8LhcUihzBkG+wVVr1U+WBI=
+X-Received: by 2002:a05:6808:8e3:b0:37f:9a01:f661 with SMTP id
+ d3-20020a05680808e300b0037f9a01f661mr525076oic.9.1677197641278; Thu, 23 Feb
+ 2023 16:14:01 -0800 (PST)
 MIME-Version: 1.0
-References: <CAMr-kF1LxzoOShd7nkE1Pc0ZZgTusB42rDep5ROPirLK9xK55g@mail.gmail.com>
- <1c1c0a3b-10d0-ef9c-e96c-a415bbe0bf33@infradead.org> <CAMr-kF0rCQZ6OQkb5g5pAzWddFKDv4CGYLFzDQs=hYLjJMsuQw@mail.gmail.com>
- <6dc4d3ce-005c-13be-971b-1c026e3272c1@infradead.org>
-In-Reply-To: <6dc4d3ce-005c-13be-971b-1c026e3272c1@infradead.org>
-From:   Hanasaki Jiji <hanasaki@gmail.com>
-Date:   Thu, 23 Feb 2023 19:09:59 -0500
-Message-ID: <CAMr-kF29=r_W3VD7vx4SdDW7CXs9XD0KipRyThOzqfAUPzEtVg@mail.gmail.com>
-Subject: Re: .config and "make" / turning off all debug
-To:     LIST - Linux Kernel <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
+ <Y/ewpGQkpWvOf7qh@gmail.com> <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
+ <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com>
+In-Reply-To: <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com>
+From:   Sandeep Dhavale <dhavale@google.com>
+Date:   Thu, 23 Feb 2023 16:13:50 -0800
+Message-ID: <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
+Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an option
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-erofs@lists.ozlabs.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,53 +72,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_DEBUG_FS appears to be a relevant to kernel development.  So,
-turning that off should be fine for me.
-
-The below are from grep SELECT.  Looking each up, none seem to enable
-DEBUG/TRACE elsewhere. However I am still somewhat a newbie.
-CONFIG_PROCESSOR_SELECT=
-CONFIG_B44_PCI_AUTOSELECT=
-CONFIG_B44_PCICORE_AUTOSELECT=
-CONFIG_B43_PCI_AUTOSELECT=
-CONFIG_B43_PCICORE_AUTOSELECT=
-CONFIG_B43LEGACY_PCI_AUTOSELECT=
-CONFIG_B43LEGACY_PCICORE_AUTOSELECT=
-CONFIG_MEDIA_SUBDRV_AUTOSELECT=
-CONFIG_INTEL_SPEED_SELECT_INTERFACE=
-
-If interest are the keys for grep LEGACY or _LEGACY
-which, semantically, I would hope to be able to turnoff/disable on
-hardware more current than perhaps 3-5 years ago or a KVM or
-VirtualBox VM.  Your thoughts and input are appreciated.
-
-Thank you,
-
-On Wed, Feb 22, 2023 at 7:29 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Thu, Feb 23, 2023 at 11:08 AM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 >
-> Hi,
 >
-> On 2/22/23 16:21, Hanasaki Jiji wrote:
-> > Hello,
+>
+> On 2023/2/24 02:52, Gao Xiang wrote:
+> > Hi Eric,
 > >
-> > Thank you so much for helping out.
+> > On 2023/2/24 02:29, Eric Biggers wrote:
+> >> Hi,
+> >>
+> >> On Wed, Feb 08, 2023 at 05:33:22PM +0800, Gao Xiang wrote:
+> >>> From: Sandeep Dhavale <dhavale@google.com>
+> >>>
+> >>> Using per-cpu thread pool we can reduce the scheduling latency compared
+> >>> to workqueue implementation. With this patch scheduling latency and
+> >>> variation is reduced as per-cpu threads are high priority kthread_workers.
+> >>>
+> >>> The results were evaluated on arm64 Android devices running 5.10 kernel.
+> >>
+> >> I see that this patch was upstreamed.  Meanwhile, commit c25da5b7baf1d
+> >> ("dm verity: stop using WQ_UNBOUND for verify_wq") was also upstreamed.
+> >>
+> >> Why is this more complex solution better than simply removing WQ_UNBOUND?
 > >
-> > Might the below accomplish the task?
+> > I do think it's a specific issue on specific arm64 hardwares (assuming
+> > qualcomm, I don't know) since WQ_UNBOUND decompression once worked well
+> > on the hardwares I once used (I meant Hisilicon, and most x86_64 CPUs,
+> > I tested at that time) compared with per-cpu workqueue.
 > >
-> > cat f | grep -v DEBUG| grep -v TRACE | grep -v TRACING > newConfigFileWithout
+> > Also RT threads are also matchable with softirq approach.  In addition,
+> > many configurations work without dm-verity.
 >
-> It will disable CONFIG_DEBUG_FS.  That's OK if that's what you want to do.
+> Also for dm-verity use cases, EROFS will reuse the dm-verity context
+> directly rather than kick off a new context.  Yet I'm not sure there
+> are still users using EROFS without dm-verity as I said above.
 >
-> But this will just give you something to begin with. It will need more work.
-> There are lots of config options that use "select" to force another config
-> option to be set/enabled. Even if you disable an option and you have one of
-> these other options set/enabled, they will just enable the DEBUG/TRACE options
-> again for you.
+> Anyway, the original scheduling issue sounds strange for me (with my
+> own landing experiences) in the beginning, and I have no way to
+> confirm the cases.  Just hopefully it could be resolved from the
+> developer inputs and finally benefit to end users.
 >
-> When you find one of these, they pretty much have to be checked and tuned
-> one-by-one. It can take a lot of time to do that.
+> I've already did my own stress test with this new configuration as
+> well without explicit regression.
 >
->
-> --
-> ~Randy
-> https://people.kernel.org/tglx/notes-about-netiquette
+Hi Eric,
+From the dm-verity patch description of removing WQ_UNBOUND it seems
+Nathan saw the EROFS wait time was reduced by 51% whereas high pri per-cpu
+threads showed me sched latency reduced on avg by ~80%.
+
+So from the description at least it does not look like both patches have
+equal benefits. I can't argue about the size and complexity of removing
+WQ_UNBOUND if it gives the same benefits, that would have been great.
+
+I will do the app launch tests again to compare these and share.
+
+Thanks,
+Sandeep.
+
+
+> >
+> > I don't have more time to dig into it for now but it's important to
+> > resolve this problem on some arm64 hardwares first.  Also it's an
+> > optional stuff, if the root cause of workqueue issue can be resolved,
+> > we could consider drop it then.
+> >
+> > Thsnka,
+> > Gao Xiang
+> >
+> >>
+> >> - Eric
