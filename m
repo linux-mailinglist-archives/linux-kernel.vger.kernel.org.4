@@ -2,88 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350F76A18AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F246A18AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBXJYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S229721AbjBXJZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBXJYl (ORCPT
+        with ESMTP id S229660AbjBXJZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:24:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E160132;
-        Fri, 24 Feb 2023 01:24:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24C07B81BE0;
-        Fri, 24 Feb 2023 09:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87F6C433D2;
-        Fri, 24 Feb 2023 09:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677230677;
-        bh=JTlnceaMAn4H4iP52lMgGtEKORtQS2pIE1OgoKHtH70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f0SnnPEB9P7u/XrrEaaj4ngWoTVK+LbZYKwmiKVwik0UlY/j92e47u15eUBezSasE
-         JRpEU6EDLZwrTLMsjLjbgbmwf6F2ZM0G39mIcpMdJwAQP0u9l8LglNnspzlAV6X4+9
-         cnbw8yQx/Rrn7ULq2BIbkcP7cFq/CMZUheKMCm9YbPnmR6si3ynw3VraRHB91RX7RM
-         Whr2X58fVheKV91vkWk79IrtFX9MFnalwzArxR5Fz3QHUjdkNXgLJr86fS6SSVMehy
-         fshjbZohaOuONv7iiluA9ksW1jd8bbPfvBLsLZVFH3ghSH2w0aHU7QAYGSReHyRBnc
-         OXtwkvTuB1H/g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pVUJs-0003wL-JT; Fri, 24 Feb 2023 10:24:48 +0100
-Date:   Fri, 24 Feb 2023 10:24:48 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 16/22] dt-bindings: rtc: qcom-pm8xxx: add nvmem-cell
- offset
-Message-ID: <Y/iCYA3xQEE4w2Th@hovoldconsulting.com>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-17-johan+linaro@kernel.org>
- <Y+bJqIpgZ0fbzL2b@mail.local>
- <Y+dQXlABqc/uzIXc@hovoldconsulting.com>
- <Y+fF94EOkUuMq9Fc@mail.local>
- <Y+0NiJsp4JjeyrqH@hovoldconsulting.com>
- <Y/hzcxrS3D0O3s9U@hovoldconsulting.com>
- <Y/iA/sQh/p9980qQ@mail.local>
+        Fri, 24 Feb 2023 04:25:46 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D465E84A;
+        Fri, 24 Feb 2023 01:25:41 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VcNs8t3_1677230738;
+Received: from 30.221.129.145(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VcNs8t3_1677230738)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Feb 2023 17:25:38 +0800
+Message-ID: <375d169e-5612-f75e-f219-ec981108dcbe@linux.alibaba.com>
+Date:   Fri, 24 Feb 2023 17:25:37 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/iA/sQh/p9980qQ@mail.local>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH net-next v3 0/9] net/smc: Introduce SMC-D-based OS
+ internal communication acceleration
+To:     Wenjia Zhang <wenjia@linux.ibm.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexandra Winter <WINTERA@de.ibm.com>
+References: <1676477905-88043-1-git-send-email-guwen@linux.alibaba.com>
+ <06f1d098-724c-80ba-7efc-b9569593f1e6@linux.alibaba.com>
+ <fbfdc4d0-7b66-efcb-b84d-d675fb484527@linux.ibm.com>
+From:   Wen Gu <guwen@linux.alibaba.com>
+In-Reply-To: <fbfdc4d0-7b66-efcb-b84d-d675fb484527@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:18:54AM +0100, Alexandre Belloni wrote:
-> On 24/02/2023 09:21:07+0100, Johan Hovold wrote:
 
-> > Looks like these last two patches adding support for the nvmem offset
-> > has not been applied yet. Still hoping you can get them merged for 6.3
-> > even if this one does not apply cleanly unless you first merge your
-> > rtc-fixes branch.
+
+On 2023/2/22 21:08, Wenjia Zhang wrote:
 > 
-> This is still my plan, I'm travelling right now but they will be sent for
-> 6.3
+> 
+> On 22.02.23 13:00, Wen Gu wrote:
+>>
+>>
+>> On 2023/2/16 00:18, Wen Gu wrote:
+>>
+>>> Hi, all
+>>>
+>>> # Background
+>>>
+>>> The background and previous discussion can be referred from [1].
+>>>
+>>> We found SMC-D can be used to accelerate OS internal communication, such as
+>>> loopback or between two containers within the same OS instance. So this patch
+>>> set provides a kind of SMC-D dummy device (we call it the SMC-D loopback device)
+>>> to emulate an ISM device, so that SMC-D can also be used on architectures
+>>> other than s390. The SMC-D loopback device are designed as a system global
+>>> device, visible to all containers.
+>>>
+>>> This version is implemented based on the generalized interface provided by [2].
+>>> And there is an open issue of this version, which will be mentioned later.
+>>>
+>>> # Design
+>>>
+>>> This patch set basically follows the design of the previous version.
+>>>
+>>> Patch #1/9 ~ #3/9 attempt to decouple ISM-related structures from the SMC-D
+>>> generalized code and extract some helpers to make SMC-D protocol compatible
+>>> with devices other than s390 ISM device.
+>>>
+>>> Patch #4/9 introduces a kind of loopback device, which is defined as SMC-D v2
+>>> device and designed to provide communication between SMC sockets in the same OS
+>>> instance.
+>>>
+>>>   +-------------------------------------------+
+>>>   |  +--------------+       +--------------+  |
+>>>   |  | SMC socket A |       | SMC socket B |  |
+>>>   |  +--------------+       +--------------+  |
+>>>   |       ^                         ^         |
+>>>   |       |    +----------------+   |         |
+>>>   |       |    |   SMC stack    |   |         |
+>>>   |       +--->| +------------+ |<--|         |
+>>>   |            | |   dummy    | |             |
+>>>   |            | |   device   | |             |
+>>>   |            +-+------------+-+             |
+>>>   |                   OS                      |
+>>>   +-------------------------------------------+
+>>>
+>>> Patch #5/9 ~ #8/9 expand SMC-D protocol interface (smcd_ops) for scenarios where
+>>> SMC-D is used to communicate within VM (loopback here) or between VMs on the same
+>>> host (based on virtio-ism device, see [3]). What these scenarios have in common
+>>> is that the local sndbuf and peer RMB can be mapped to same physical memory region,
+>>> so the data copy between the local sndbuf and peer RMB can be omitted. Performance
+>>> improvement brought by this extension can be found in # Benchmark Test.
+>>>
+>>>   +----------+                     +----------+
+>>>   | socket A |                     | socket B |
+>>>   +----------+                     +----------+
+>>>         |                               ^
+>>>         |         +---------+           |
+>>>    regard as      |         | ----------|
+>>>    local sndbuf   |  B's    |     regard as
+>>>         |         |  RMB    |     local RMB
+>>>         |-------> |         |
+>>>                   +---------+
+>>>
+>>> Patch #9/9 realizes the support of loopback device for the above-mentioned expanded
+>>> SMC-D protocol interface.
+>>>
+>>> # Benchmark Test
+>>>
+>>>   * Test environments:
+>>>        - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
+>>>        - SMC sndbuf/RMB size 1MB.
+>>>
+>>>   * Test object:
+>>>        - TCP lo: run on TCP loopback.
+>>>        - domain: run on UNIX domain.
+>>>        - SMC lo: run on SMC loopback device with patch #1/9 ~ #4/9.
+>>>        - SMC lo-nocpy: run on SMC loopback device with patch #1/9 ~ #9/9.
+>>>
+>>> 1. ipc-benchmark (see [4])
+>>>
+>>>   - ./<foo> -c 1000000 -s 100
+>>>
+>>>                      TCP-lo              domain SMC-lo          SMC-lo-nocpy
+>>> Message
+>>> rate (msg/s)         79025      115736(+46.45%) 146760(+85.71%)       149800(+89.56%)
+>>>
+>>> 2. sockperf
+>>>
+>>>   - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
+>>>   - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 
+>>> -t 30
+>>>
+>>>                      TCP-lo                  SMC-lo SMC-lo-nocpy
+>>> Bandwidth(MBps)   4822.388        4940.918(+2.56%) 8086.67(+67.69%)
+>>> Latency(us)          6.298          3.352(-46.78%) 3.35(-46.81%)
+>>>
+>>> 3. iperf3
+>>>
+>>>   - serv: <smc_run> taskset -c <cpu> iperf3 -s
+>>>   - clnt: <smc_run> taskset -c <cpu> iperf3 -c 127.0.0.1 -t 15
+>>>
+>>>                      TCP-lo                  SMC-lo SMC-lo-nocpy
+>>> Bitrate(Gb/s)         40.7            40.5(-0.49%) 72.4(+77.89%)
+>>>
+>>> 4. nginx/wrk
+>>>
+>>>   - serv: <smc_run> nginx
+>>>   - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
+>>>
+>>>                      TCP-lo                  SMC-lo SMC-lo-nocpy
+>>> Requests/s       155994.57      214544.79(+37.53%) 215538.55(+38.17%)
+>>>
+>>>
+>>> # Open issue
+>>>
+>>> The open issue has not been resolved now is about how to detect that the source
+>>> and target of CLC proposal are within the same OS instance and can communicate
+>>> through the SMC-D loopback device. Similar issue also exists when using virtio-ism
+>>> devices (the background and details of virtio-ism device can be referred from [3]).
+>>> In previous discussions, multiple options were proposed (see [5]). Thanks again for
+>>> the help of the community. cc Alexandra Winter :)
+>>>
+>>> But as we discussed, these solutions have some imperfection. So this version of RFC
+>>> continues to use previous workaround, that is, a 64-bit random GID is generated for
+>>> SMC-D loopback device. If the GIDs of the devices found by two peers are the same,
+>>> then they are considered to be in the same OS instance and can communicate with each
+>>> other by the loopback device.
+>>>
+>>> This approach has very small risk. Assume the following situations:
+>>>
+>>> (1) Assume that the SMC-D loopback devices of the two OS instances happen to
+>>>      generate the same 64-bit GID.
+>>>
+>>>      For the convenience of description, we refer to the sockets on these two
+>>>      different OS instance as server A and client B.
+>>>
+>>>      A will misjudge that the two are on the same OS instance because the same GID
+>>>      in CLC proposal message. Then A creates its RMB and sends 64-bit token-A to B
+>>>      in CLC accept message.
+>>>
+>>>      B receives the CLC accept message. And according to patch #7/9, B tries to
+>>>      attach its sndbuf to A's RMB by token-A.
+>>>
+>>> (2) Assume that the OS instance where B is located happens to have an unattached
+>>>      RMB whose 64-bit token is same as token-A.
+>>>
+>>>      Then B successfully attaches its sndbuf to the wrong RMB, and creates its RMB,
+>>>      sends token-B to A in CLC confirm message.
+>>>
+>>>      Similarly, A receives the message and tries to attach its sndbuf to B's RMB by
+>>>      token-B.
+>>>
+>>> (3) Similar to (2), assume that the OS instance where A is located happens to have
+>>>      an unattached RMB whose 64-bit token is same as token-B.
+>>>
+>>>      Then A successfully attach its sndbuf to the wrong RMB. Both sides mistakenly
+>>>      believe that an SMC-D connection based on the loopback device is established
+>>>      between them.
+>>>
+>>> If the above 3 coincidences all happen, that is, 64-bit random number conflicts occur
+>>> 3 times, then an unreachable SMC-D connection will be established, which is nasty.
+>>> If one of above is not satisfied, it will safely fallback to TCP.
+>>>
+>>> Since the chances of these happening are very small, I wonder if this risk of 1/2^(64*3)
+>>> probability can be tolerated ?
+>>
+>> Hi,
+>>
+>> Any comments about this open issue or other parts of this RFC patch set? :)
+>>
+>> Thanks,
+>> Wen Gu
+>>
+> Hi Wen,
+> 
+> I don't forget it ;) I'm trying to run it by myself. Please give us more time for the trying and review.
+> 
+> Thanks
+> Wenjia
+> 
 
-Perfect, thanks!
+Sure, Wenjia. Thank you!
 
-Johan
+Please feel free to add comments. I will wait for you to complete the review before
+deciding what to do next.
+
+Regards,
+Wen Gu
+
+>>> Another way to solve this open issue is using a 128-bit UUID to identify SMC-D loopback
+>>> device or virtio-ism device, because the probability of a 128-bit UUID collision is
+>>> considered negligible. But it may need to extend the CLC message to carry a longer GID,
+>>> which is the last option.
+>>>
+>>> v3->v2
+>>>   1. Adapt new generalized interface provided by [2];
+>>>   2. Select loopback device through SMC-D v2 protocol;
+>>>   3. Split the loopback-related implementation and generic implementation into different
+>>>      patches more reasonably.
+>>>
+>>> v1->v2
+>>>   1. Fix some build WARNINGs complained by kernel test rebot
+>>>      Reported-by: kernel test robot <lkp@intel.com>
+>>>   2. Add iperf3 test data.
+>>>
+>>> [1] https://lore.kernel.org/netdev/1671506505-104676-1-git-send-email-guwen@linux.alibaba.com/
+>>> [2] https://lore.kernel.org/netdev/20230123181752.1068-1-jaka@linux.ibm.com/
+>>> [3] https://lists.oasis-open.org/archives/virtio-comment/202302/msg00148.html
+>>> [4] https://github.com/goldsborough/ipc-bench
+>>> [5] https://lore.kernel.org/netdev/b9867c7d-bb2b-16fc-feda-b79579aa833d@linux.ibm.com/
+>>>
+>>> Wen Gu (9):
+>>>    net/smc: Decouple ism_dev from SMC-D device dump
+>>>    net/smc: Decouple ism_dev from SMC-D DMB registration
+>>>    net/smc: Extract v2 check helper from SMC-D device registration
+>>>    net/smc: Introduce SMC-D loopback device
+>>>    net/smc: Introduce an interface for getting DMB attribute
+>>>    net/smc: Introudce interfaces for DMB attach and detach
+>>>    net/smc: Avoid data copy from sndbuf to peer RMB in SMC-D
+>>>    net/smc: Modify cursor update logic when using mappable DMB
+>>>    net/smc: Add interface implementation of loopback device
+>>>
+>>>   drivers/s390/net/ism_drv.c |   5 +-
+>>>   include/net/smc.h          |  18 +-
+>>>   net/smc/Makefile           |   2 +-
+>>>   net/smc/af_smc.c           |  26 ++-
+>>>   net/smc/smc_cdc.c          |  59 ++++--
+>>>   net/smc/smc_cdc.h          |   1 +
+>>>   net/smc/smc_core.c         |  70 ++++++-
+>>>   net/smc/smc_core.h         |   1 +
+>>>   net/smc/smc_ism.c          |  79 ++++++--
+>>>   net/smc/smc_ism.h          |   4 +
+>>>   net/smc/smc_loopback.c     | 442 +++++++++++++++++++++++++++++++++++++++++++++
+>>>   net/smc/smc_loopback.h     |  55 ++++++
+>>>   12 files changed, 725 insertions(+), 37 deletions(-)
+>>>   create mode 100644 net/smc/smc_loopback.c
+>>>   create mode 100644 net/smc/smc_loopback.h
+>>>
