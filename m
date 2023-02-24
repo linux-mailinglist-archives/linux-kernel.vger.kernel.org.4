@@ -2,353 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67426A16A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 07:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638C56A16AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 07:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBXGhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 01:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
+        id S229745AbjBXGjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 01:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBXGhh (ORCPT
+        with ESMTP id S229462AbjBXGjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 01:37:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511E7580F2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 22:37:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 24 Feb 2023 01:39:07 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C50A60D78;
+        Thu, 23 Feb 2023 22:39:05 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E1D9F3482B;
-        Fri, 24 Feb 2023 06:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677220653; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DbPyqq5eVD3uXwE7N0Em9Sy5J2byjVce6MnkwDL8TUA=;
-        b=Bh4NPmDsc8TCrf1uMdzEQaQSJk4nqGafx7CDzs6uwpaG/b3tREHJkIDxomydCa4hsiQAnL
-        AQQe7WBMA8k06ulIgW3OOF5BEqzxdzL0HiQOvhayNe6z6lgfYoSmplzS6/gSXA8IVJFc1y
-        3FK8Mifc9XjhXc8AFJcpDip/CMbNwQ0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EAC313A3A;
-        Fri, 24 Feb 2023 06:37:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iq45JS1b+GPVYgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 24 Feb 2023 06:37:33 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v3.1 10/12] x86/mtrr: use new cache_map in mtrr_type_lookup()
-Date:   Fri, 24 Feb 2023 07:37:18 +0100
-Message-Id: <20230224063718.27666-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230223093243.1180-11-jgross@suse.com>
-References: <20230223093243.1180-11-jgross@suse.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PNKx26CWfz501RX;
+        Fri, 24 Feb 2023 14:39:02 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 31O6cpsx044681;
+        Fri, 24 Feb 2023 14:38:51 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Fri, 24 Feb 2023 14:38:53 +0800 (CST)
+Date:   Fri, 24 Feb 2023 14:38:53 +0800 (CST)
+X-Zmail-TransId: 2b0363f85b7d4e2e0d35
+X-Mailer: Zmail v1.0
+Message-ID: <202302241438536013777@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <davem@davemloft.net>
+Cc:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhang.yunkai@zte.com.cn>, <xu.xin16@zte.com.cn>,
+        <jiang.xuexin@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfdHg6IEFkZCB0ZXN0IGZvciBJUCBmcmFnbWVudGF0aW9uIG9mIFVEUCBwYWNrZXRz?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 31O6cpsx044681
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63F85B86.002/4PNKx26CWfz501RX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of crawling through the MTRR register state, use the new
-cache_map for looking up the cache type(s) of a memory region.
+From: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
 
-This allows now to set the uniform parameter according to the
-uniformity of the cache mode of the region, instead of setting it
-only if the complete region is mapped by a single MTRR. This now
-includes even the region covered by the fixed MTRR registers.
+The UDP GSO bench only tests the performance of userspace payload splitting
+and UDP GSO. But we are also concerned about the performance comparing
+with IP fragmentation and UDP GSO. In other words comparing IP fragmentation 
+and segmentation.
 
-Make sure uniform is always set.
+So we add testcase of IP fragmentation of UDP packets, then user would easy
+to get to know the performance promotion of UDP GSO compared with IP 
+fragmentation. We add a new option "-f", which is to send big data using 
+IP fragmentation instead of using UDP GSO or userspace payload splitting.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
+In the QEMU environment we could see obvious promotion of UDP GSO.
+The first test is to get the performance of userspace payload splitting.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST"
+udp tx:     10 MB/s     7812 calls/s    186 msg/s
+udp tx:     10 MB/s     7392 calls/s    176 msg/s
+udp tx:     11 MB/s     7938 calls/s    189 msg/s
+udp tx:     11 MB/s     7854 calls/s    187 msg/s
+
+The second test is to get the performance of IP fragmentation.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST" -f
+udp tx:     33 MB/s      572 calls/s    572 msg/s
+udp tx:     33 MB/s      563 calls/s    563 msg/s
+udp tx:     31 MB/s      540 calls/s    540 msg/s
+udp tx:     33 MB/s      571 calls/s    571 msg/s
+
+The third test is to get the performance of UDP GSO.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
+udp tx:     46 MB/s      795 calls/s    795 msg/s
+udp tx:     49 MB/s      845 calls/s    845 msg/s
+udp tx:     49 MB/s      847 calls/s    847 msg/s
+udp tx:     45 MB/s      774 calls/s    774 msg/s
+
+Signed-off-by: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
+Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
+Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
 ---
-V3:
-- new patch
-V3.1:
-- fix type_merge() (Michael Kelley)
----
- arch/x86/kernel/cpu/mtrr/generic.c | 227 ++++-------------------------
- 1 file changed, 32 insertions(+), 195 deletions(-)
+ tools/testing/selftests/net/udpgso_bench_tx.c | 33 ++++++++++++++++++++++-----
+ 1 file changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index ca9b8cec81a0..1926a9e64769 100644
---- a/arch/x86/kernel/cpu/mtrr/generic.c
-+++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -138,154 +138,6 @@ static u8 get_effective_type(u8 type1, u8 type2)
- 	return type1;
+diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+index 477392715a9a..025e706b594b 100644
+--- a/tools/testing/selftests/net/udpgso_bench_tx.c
++++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+@@ -64,6 +64,7 @@ static int	cfg_runtime_ms	= -1;
+ static bool	cfg_poll;
+ static int	cfg_poll_loop_timeout_ms = 2000;
+ static bool	cfg_segment;
++static bool	cfg_fragment;
+ static bool	cfg_sendmmsg;
+ static bool	cfg_tcp;
+ static uint32_t	cfg_tx_ts = SOF_TIMESTAMPING_TX_SOFTWARE;
+@@ -375,6 +376,21 @@ static int send_udp_sendmmsg(int fd, char *data)
+ 	return ret;
  }
- 
--/*
-- * Check and return the effective type for MTRR-MTRR type overlap.
-- * Returns true if the effective type is UNCACHEABLE, else returns false
-- */
--static bool check_type_overlap(u8 *prev, u8 *curr)
--{
--	*prev = *curr = get_effective_type(*curr, *prev);
--
--	return *prev == MTRR_TYPE_UNCACHABLE;
--}
--
--/**
-- * mtrr_type_lookup_fixed - look up memory type in MTRR fixed entries
-- *
-- * Return the MTRR fixed memory type of 'start'.
-- *
-- * MTRR fixed entries are divided into the following ways:
-- *  0x00000 - 0x7FFFF : This range is divided into eight 64KB sub-ranges
-- *  0x80000 - 0xBFFFF : This range is divided into sixteen 16KB sub-ranges
-- *  0xC0000 - 0xFFFFF : This range is divided into sixty-four 4KB sub-ranges
-- *
-- * Return Values:
-- * MTRR_TYPE_(type)  - Matched memory type
-- * MTRR_TYPE_INVALID - Unmatched
-- */
--static u8 mtrr_type_lookup_fixed(u64 start, u64 end)
--{
--	int idx;
--
--	if (start >= 0x100000)
--		return MTRR_TYPE_INVALID;
--
--	/* 0x0 - 0x7FFFF */
--	if (start < 0x80000) {
--		idx = 0;
--		idx += (start >> 16);
--		return mtrr_state.fixed_ranges[idx];
--	/* 0x80000 - 0xBFFFF */
--	} else if (start < 0xC0000) {
--		idx = 1 * 8;
--		idx += ((start - 0x80000) >> 14);
--		return mtrr_state.fixed_ranges[idx];
--	}
--
--	/* 0xC0000 - 0xFFFFF */
--	idx = 3 * 8;
--	idx += ((start - 0xC0000) >> 12);
--	return mtrr_state.fixed_ranges[idx];
--}
--
--/**
-- * mtrr_type_lookup_variable - look up memory type in MTRR variable entries
-- *
-- * Return Value:
-- * MTRR_TYPE_(type) - Matched memory type or default memory type (unmatched)
-- *
-- * Output Arguments:
-- * repeat - Set to 1 when [start:end] spanned across MTRR range and type
-- *	    returned corresponds only to [start:*partial_end].  Caller has
-- *	    to lookup again for [*partial_end:end].
-- *
-- * uniform - Set to 1 when an MTRR covers the region uniformly, i.e. the
-- *	     region is fully covered by a single MTRR entry or the default
-- *	     type.
-- */
--static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
--				    int *repeat, u8 *uniform)
--{
--	int i;
--	u64 base, mask;
--	u8 prev_match, curr_match;
--
--	*repeat = 0;
--	*uniform = 1;
--
--	prev_match = MTRR_TYPE_INVALID;
--	for (i = 0; i < num_var_ranges; ++i) {
--		unsigned short start_state, end_state, inclusive;
--
--		if (!(mtrr_state.var_ranges[i].mask_lo & (1 << 11)))
--			continue;
--
--		base = (((u64)mtrr_state.var_ranges[i].base_hi) << 32) +
--		       (mtrr_state.var_ranges[i].base_lo & PAGE_MASK);
--		mask = (((u64)mtrr_state.var_ranges[i].mask_hi) << 32) +
--		       (mtrr_state.var_ranges[i].mask_lo & PAGE_MASK);
--
--		start_state = ((start & mask) == (base & mask));
--		end_state = ((end & mask) == (base & mask));
--		inclusive = ((start < base) && (end > base));
--
--		if ((start_state != end_state) || inclusive) {
--			/*
--			 * We have start:end spanning across an MTRR.
--			 * We split the region into either
--			 *
--			 * - start_state:1
--			 * (start:mtrr_end)(mtrr_end:end)
--			 * - end_state:1
--			 * (start:mtrr_start)(mtrr_start:end)
--			 * - inclusive:1
--			 * (start:mtrr_start)(mtrr_start:mtrr_end)(mtrr_end:end)
--			 *
--			 * depending on kind of overlap.
--			 *
--			 * Return the type of the first region and a pointer
--			 * to the start of next region so that caller will be
--			 * advised to lookup again after having adjusted start
--			 * and end.
--			 *
--			 * Note: This way we handle overlaps with multiple
--			 * entries and the default type properly.
--			 */
--			if (start_state)
--				*partial_end = base + get_mtrr_size(mask);
--			else
--				*partial_end = base;
--
--			if (unlikely(*partial_end <= start)) {
--				WARN_ON(1);
--				*partial_end = start + PAGE_SIZE;
--			}
--
--			end = *partial_end - 1; /* end is inclusive */
--			*repeat = 1;
--			*uniform = 0;
--		}
--
--		if ((start & mask) != (base & mask))
--			continue;
--
--		curr_match = mtrr_state.var_ranges[i].base_lo & 0xff;
--		if (prev_match == MTRR_TYPE_INVALID) {
--			prev_match = curr_match;
--			continue;
--		}
--
--		*uniform = 0;
--		if (check_type_overlap(&prev_match, &curr_match))
--			return curr_match;
--	}
--
--	if (prev_match != MTRR_TYPE_INVALID)
--		return prev_match;
--
--	return mtrr_state.def_type;
--}
--
- static void rm_map_entry_at(int idx)
- {
- 	int i;
-@@ -532,6 +384,20 @@ void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
- 	mtrr_state_set = 1;
- }
- 
-+static u8 type_merge(u8 type, u8 new_type, u8 *uniform)
+
++static int send_udp_fragment(int fd, char *data)
 +{
-+	u8 effective_type;
++	int ret;
 +
-+	if (type == MTRR_TYPE_INVALID)
-+		return new_type;
++	ret = sendto(fd, data, cfg_payload_len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
++			cfg_connected ? NULL : (void *)&cfg_dst_addr,
++			cfg_connected ? 0 : cfg_alen);
++	if (ret == -1)
++		error(1, errno, "write");
++	if (ret != cfg_payload_len)
++		error(1, errno, "write: %uB != %uB\n", ret, cfg_payload_len);
 +
-+	effective_type = get_effective_type(type, new_type);
-+	if (type != effective_type)
-+		*uniform = 0;
-+
-+	return effective_type;
++	return 1;
 +}
 +
- /**
-  * mtrr_type_lookup - look up memory type in MTRR
-  *
-@@ -540,66 +406,37 @@ void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
-  * MTRR_TYPE_INVALID - MTRR is disabled
-  *
-  * Output Argument:
-- * uniform - Set to 1 when an MTRR covers the region uniformly, i.e. the
-- *	     region is fully covered by a single MTRR entry or the default
-- *	     type.
-+ * uniform - Set to 1 when the returned MTRR type is valid for the whole
-+ *	     region, set to 0 else.
-  */
- u8 mtrr_type_lookup(u64 start, u64 end, u8 *uniform)
+ static void send_udp_segment_cmsg(struct cmsghdr *cm)
  {
--	u8 type, prev_type, is_uniform = 1, dummy;
--	int repeat;
--	u64 partial_end;
--
--	/* Make end inclusive instead of exclusive */
--	end--;
-+	u8 type = MTRR_TYPE_INVALID;
-+	unsigned int i;
- 
--	if (!mtrr_state_set)
-+	if (!mtrr_state_set || !cache_map) {
-+		*uniform = 0;	/* Uniformity is unknown. */
- 		return MTRR_TYPE_INVALID;
-+	}
-+
-+	*uniform = 1;
- 
- 	if (!(mtrr_state.enabled & MTRR_STATE_MTRR_ENABLED))
- 		return MTRR_TYPE_INVALID;
- 
--	/*
--	 * Look up the fixed ranges first, which take priority over
--	 * the variable ranges.
--	 */
--	if ((start < 0x100000) &&
--	    (mtrr_state.have_fixed) &&
--	    (mtrr_state.enabled & MTRR_STATE_MTRR_FIXED_ENABLED)) {
--		is_uniform = 0;
--		type = mtrr_type_lookup_fixed(start, end);
--		goto out;
--	}
--
--	/*
--	 * Look up the variable ranges.  Look of multiple ranges matching
--	 * this address and pick type as per MTRR precedence.
--	 */
--	type = mtrr_type_lookup_variable(start, end, &partial_end,
--					 &repeat, &is_uniform);
-+	for (i = 0; i < cache_map_n && start < end; i++) {
-+		if (start >= cache_map[i].end)
-+			continue;
-+		if (start < cache_map[i].start)
-+			type = type_merge(type, mtrr_state.def_type, uniform);
-+		type = type_merge(type, cache_map[i].type, uniform);
- 
--	/*
--	 * Common path is with repeat = 0.
--	 * However, we can have cases where [start:end] spans across some
--	 * MTRR ranges and/or the default type.  Do repeated lookups for
--	 * that case here.
--	 */
--	while (repeat) {
--		prev_type = type;
--		start = partial_end;
--		is_uniform = 0;
--		type = mtrr_type_lookup_variable(start, end, &partial_end,
--						 &repeat, &dummy);
--
--		if (check_type_overlap(&prev_type, &type))
--			goto out;
-+		start = cache_map[i].end;
- 	}
- 
--	if (mtrr_tom2 && (start >= (1ULL<<32)) && (end < mtrr_tom2))
--		type = MTRR_TYPE_WRBACK;
-+	if (start < end)
-+		type = type_merge(type, mtrr_state.def_type, uniform);
- 
--out:
--	*uniform = is_uniform;
- 	return type;
- }
- 
--- 
-2.35.3
+ 	uint16_t *valp;
+@@ -429,7 +445,7 @@ static int send_udp_segment(int fd, char *data)
 
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
++	error(1, 0, "Usage: %s [-46acfmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
+ 		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+ 		    filepath);
+ }
+@@ -440,7 +456,7 @@ static void parse_opts(int argc, char **argv)
+ 	int max_len, hdrlen;
+ 	int c;
+
+-	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
++	while ((c = getopt(argc, argv, "46acC:D:fHl:L:mM:p:s:PS:tTuvz")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -469,6 +485,9 @@ static void parse_opts(int argc, char **argv)
+ 		case 'l':
+ 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
++		case 'f':
++			cfg_fragment = true;
++			break;
+ 		case 'L':
+ 			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
+@@ -527,10 +546,10 @@ static void parse_opts(int argc, char **argv)
+ 		error(1, 0, "must pass one of -4 or -6");
+ 	if (cfg_tcp && !cfg_connected)
+ 		error(1, 0, "connectionless tcp makes no sense");
+-	if (cfg_segment && cfg_sendmmsg)
+-		error(1, 0, "cannot combine segment offload and sendmmsg");
+-	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg))
+-		error(1, 0, "Options -T and -H require either -S or -m option");
++	if ((cfg_segment + cfg_sendmmsg + cfg_fragment) > 1)
++		error(1, 0, "cannot combine segment offload , fragment and sendmmsg");
++	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg || cfg_fragment))
++		error(1, 0, "Options -T and -H require either -S or -m or -f option");
+
+ 	if (cfg_family == PF_INET)
+ 		hdrlen = sizeof(struct iphdr) + sizeof(struct udphdr);
+@@ -695,6 +714,8 @@ int main(int argc, char **argv)
+ 			num_sends += send_udp_segment(fd, buf[i]);
+ 		else if (cfg_sendmmsg)
+ 			num_sends += send_udp_sendmmsg(fd, buf[i]);
++		else if (cfg_fragment)
++			num_sends += send_udp_fragment(fd, buf[i]);
+ 		else
+ 			num_sends += send_udp(fd, buf[i]);
+ 		num_msgs++;
+-- 
+2.15.2
