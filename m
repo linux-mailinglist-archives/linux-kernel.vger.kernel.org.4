@@ -2,246 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF02F6A2189
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAD76A218C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjBXScW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S229876AbjBXSc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjBXScU (ORCPT
+        with ESMTP id S229872AbjBXSc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:32:20 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155566C538
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:32:16 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id m10so726653vso.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v+g2qCpnal7loN6QCFrurLS2PALIQt/+PVVdydvd50I=;
-        b=C6XuAp+mutkN4ED6cCj/Y/Z2ckdxV5pptJyCdVMe3vcnHpkGXR3RLnjxWtvNSzN6gU
-         337mHRxCrIYqmjIBoVTpduC1HBj3mlESbOVh0BS+E/ir8Ka+UO/L1L9puWAnTjhIVOiY
-         m0Ru28BIua7Gsr4w9mlxkYNh2L3tV0RphHdetyQCXvQtDuN6lBPCj+qZNzo/P5FDet2H
-         V02LzLORf96Hn9komQWrSpF3Zj4b2K1GJ+u7Tv5AOEMy5wHX7Ey6u2f3bCXcXKYc06r8
-         ozehFqWMmK8FbQb1wPP1xhnf7ulGeVrhM+01g/gObbLo6PnEfEVjN+kbcnT9Nd6arb1b
-         Bo7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v+g2qCpnal7loN6QCFrurLS2PALIQt/+PVVdydvd50I=;
-        b=6Z/egQfh0EGj023xBptvbViR3qFYvEFjoR+WctblPbVTN6mdsBG6cUEn3LRKCmgVgQ
-         lHCCYUQB+9yz2C6Z+FxyM3mURtVOBUivIMybHf+uNPS7zBSsBofKiMvIO7dv2rV2li+R
-         FyQYrdMox/1701RJ7ifH2UkqTwXwMIFuFrW6QhtF3qbUcVZru5hWJ7OJMYt0ARqZHTfX
-         e51qF4wgTijXsrAJiKLk2RckEayk60GKoj3yqYKGRHnzPiMRIrhz+wjyCRFq556TWEdh
-         QXyCxDUSzu7BrfVN3Jhz9fwzopwmQ1/BBnzOhkLzhVnTfAD8q3oT/l+AHS8T33jbHZ2E
-         Amdg==
-X-Gm-Message-State: AO0yUKVModbynzk0iaH3UZ847KT2vuK5+lFBSEhXSvhZgp42gyN/jlyY
-        31dM0qmo9SqAUMi59K6x177IzbYDD9T/xTCyeoJMeQ==
-X-Google-Smtp-Source: AK7set/eiDLngCWPSVzTAUOLr4JOvlVHo0dwgYUeIgCLVB30yu4hbYdFnvB39u6miGDQ4JfLl+7cAjg+0xcAz6WgUNM=
-X-Received: by 2002:a05:6102:3a61:b0:412:2ed6:d79b with SMTP id
- bf1-20020a0561023a6100b004122ed6d79bmr2945441vsb.3.1677263534940; Fri, 24 Feb
- 2023 10:32:14 -0800 (PST)
+        Fri, 24 Feb 2023 13:32:56 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9762D7E;
+        Fri, 24 Feb 2023 10:32:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 375DC38947;
+        Fri, 24 Feb 2023 18:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1677263570; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IwljiIh1fS+2NOwzceHLVqy8Ve5Q5t96iwJ4JuzYLq0=;
+        b=RwI0RqcNlUU0utIdjpsaTVCw+iniqt0jauvlB7csQiGHZibjHcYsgDlO9DgUOkS+irS/fd
+        W1H3e+qve5djSRAnDYFdlUYBx3USSXHrJCj0w1mB4JZBbJOFRNFF2EwLG6ATk30qC9p4F3
+        mF67v1sPeZDapmaKWqADNrpYlk2p2us=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1677263570;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IwljiIh1fS+2NOwzceHLVqy8Ve5Q5t96iwJ4JuzYLq0=;
+        b=4CqLLgv8o49Zz8tQN1NCxV7j5ZXyYT4fOH6aEQcT0stUQ7fRDz9YcN+4cioS+xbYQOy+yh
+        6PaKtGYaklgm7CDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BBA0413246;
+        Fri, 24 Feb 2023 18:32:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p64CIdEC+WNvbAAAMHmgww
+        (envelope-from <krisman@suse.de>); Fri, 24 Feb 2023 18:32:49 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Breno Leitao <leitao@debian.org>, asml.silence@gmail.com,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gustavold@meta.com, leit@meta.com, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 1/2] io_uring: Move from hlist to io_wq_work_node
+References: <20230223164353.2839177-1-leitao@debian.org>
+        <20230223164353.2839177-2-leitao@debian.org> <87wn48ryri.fsf@suse.de>
+        <8404f520-2ef7-b556-08f6-5829a2225647@kernel.dk>
+Date:   Fri, 24 Feb 2023 15:32:47 -0300
+In-Reply-To: <8404f520-2ef7-b556-08f6-5829a2225647@kernel.dk> (Jens Axboe's
+        message of "Thu, 23 Feb 2023 12:39:25 -0700")
+Message-ID: <87mt52syls.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20230224102235.663354088@linuxfoundation.org>
-In-Reply-To: <20230224102235.663354088@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 25 Feb 2023 00:02:03 +0530
-Message-ID: <CA+G9fYsvvAD6XRrCbesFowzDd+uZhtenszgOdNTNHm_UP21ddQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 at 15:54, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Jens Axboe <axboe@kernel.dk> writes:
+
+> On 2/23/23 12:02?PM, Gabriel Krisman Bertazi wrote:
+>> Breno Leitao <leitao@debian.org> writes:
+>> 
+>>> Having cache entries linked using the hlist format brings no benefit, and
+>>> also requires an unnecessary extra pointer address per cache entry.
+>>>
+>>> Use the internal io_wq_work_node single-linked list for the internal
+>>> alloc caches (async_msghdr and async_poll)
+>>>
+>>> This is required to be able to use KASAN on cache entries, since we do
+>>> not need to touch unused (and poisoned) cache entries when adding more
+>>> entries to the list.
+>>>
+>> 
+>> Looking at this patch, I wonder if it could go in the opposite direction
+>> instead, and drop io_wq_work_node entirely in favor of list_head. :)
+>> 
+>> Do we gain anything other than avoiding the backpointer with a custom
+>> linked implementation, instead of using the interface available in
+>> list.h, that developers know how to use and has other features like
+>> poisoning and extra debug checks?
 >
-> This is the start of the stable review cycle for the 5.15.96 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 26 Feb 2023 10:22:23 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.96-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> list_head is twice as big, that's the main motivation. This impacts
+> memory usage (obviously), but also caches when adding/removing
+> entries.
 
+Right. But this is true all around the kernel.  Many (Most?)  places
+that use list_head don't even need to touch list_head->prev.  And
+list_head is usually embedded in larger structures where the cost of
+the extra pointer is insignificant.  I suspect the memory
+footprint shouldn't really be the problem.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This specific patch is extending io_wq_work_node to io_cache_entry,
+where the increased size will not matter.  In fact, for the cached
+structures, the cache layout and memory footprint don't even seem to
+change, as io_cache_entry is already in a union larger than itself, that
+is not crossing cachelines, (io_async_msghdr, async_poll).
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The other structures currently embedding struct io_work_node are
+io_kiocb (216 bytes long, per request) and io_ring_ctx (1472 bytes long,
+per ring). so it is not like we are saving a lot of memory with a single
+linked list. A more compact cache line still makes sense, though, but I
+think the only case (if any) where there might be any gain is io_kiocb?
 
-## Build
-* kernel: 5.15.96-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 75c1b03758ed17a09cf86c10bd6e17448a978d21
-* git describe: v5.15.95-38-g75c1b03758ed
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.95-38-g75c1b03758ed
+I don't severely oppose this patch, of course. But I think it'd be worth
+killing io_uring/slist.h entirely in the future instead of adding more
+users.  I intend to give that approach a try, if there's a way to keep
+the size of io_kiocb.
 
-## Test Regressions (compared to v5.15.95)
-
-## Metric Regressions (compared to v5.15.95)
-
-## Test Fixes (compared to v5.15.95)
-
-## Metric Fixes (compared to v5.15.95)
-
-## Test result summary
-total: 161577, pass: 132929, fail: 4487, skip: 23824, xfail: 337
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 49 total, 47 passed, 2 failed
-* i386: 39 total, 35 passed, 4 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 14 total, 14 passed, 0 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-c
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Gabriel Krisman Bertazi
