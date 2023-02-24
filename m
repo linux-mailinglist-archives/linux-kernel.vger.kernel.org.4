@@ -2,138 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CB96A1DC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2867D6A1DD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjBXOtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        id S230079AbjBXOwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjBXOtQ (ORCPT
+        with ESMTP id S229543AbjBXOwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:49:16 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B832453EE2;
-        Fri, 24 Feb 2023 06:49:05 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 24 Feb 2023 09:52:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EE653293
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:52:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B2A9C3FA55;
-        Fri, 24 Feb 2023 14:48:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677250144;
-        bh=9ldx9Szz+whOvxXhwLV1gjd7enNHNzspB3ZXUahx/bs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=y8hUWhe5Psa20R0C8vtHmx7YDAFLkA9Sqy/C9NZq7AhcKhFlqXR63+xEKbxPc8Axs
-         umqkzWiNNK+LyhUfkEEP8lafaFrsaFbq/xecCk0g2Smyfpsjp9qxBGCNGkQTSE9fP2
-         QPJ2K9EUPEqQ5562021rDvKP7NREziYJz1zuejrxHqkTu3zMf0NTdlpvaOPpH7mKW0
-         sckO8cecEVnQrRkR9yam4t2xi0rJBGNatooQ2i1Wi5y79ilcaORSiUtsHd4LUaU9TM
-         2tK4k95/4qvOGpoGzvQXRWxEAST4MI13YkkCgOq0A3EkwKiMIHvQLEQ5H4RAcCu8Qd
-         sPjvP7kQ+0JAA==
-Message-ID: <87de1cd0-a57a-3391-a4b8-599ee0307491@asahilina.net>
-Date:   Fri, 24 Feb 2023 23:48:56 +0900
+        by ams.source.kernel.org (Postfix) with ESMTPS id 369B0B81C98
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEF9C433D2;
+        Fri, 24 Feb 2023 14:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677250356;
+        bh=88jg955Xlrfjz0cdpx93zZt+1vg7t0UtMpUiq72/y20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WuayLX8T11FBApVctgpEi4iszLEZbC2I6zuVpzQ1lROGYa395L2A7EvStSF7LQxP9
+         OYIliXyzfsSQuqYGcqzcGHiIjeruOZ56spgNEjHEI7tlVoxujKYnbnEEdtFR7w8Gpj
+         NNGzX/a4Wi+ZhoPO6sB6i077FQM/EClwXuZAZuPahGvPAKxYFfo9xeyuYVPlUxundc
+         bl97rVN929h+OFrKUJRa2dGILgG4rkYo4Dv8WEGujH6Tg2FvE40K+Bys9zwAex5K0M
+         Lf4XEmemjnIfJhhnzQ3jwx8WPgkGcke0hxn6LRoPAxmlyMQ2fzXx9k2JsIWaHHw6o4
+         bOb/7wNaxaLcw==
+Date:   Fri, 24 Feb 2023 16:52:26 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
+Cc:     remckee0@gmail.com, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Add tests for memblock_alloc_node()
+Message-ID: <Y/jPKvcIpqi1zVgC@kernel.org>
+References: <59d4745b-7b2-bf6-7b8-f6571d78d336@mail.polimi.it>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 2/5] rust: device: Add a minimal RawDevice trait
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
- <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
- <Y/ieQ0UX/niAG1Hg@kroah.com>
- <ef3a3638-6381-87ab-d674-644306b6b6ce@asahilina.net>
- <Y/jFeZzZVCpBGvGv@kroah.com> <e6d6d928-4514-55b9-346d-2e5e82220729@arm.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <e6d6d928-4514-55b9-346d-2e5e82220729@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59d4745b-7b2-bf6-7b8-f6571d78d336@mail.polimi.it>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Claudio,
 
-
-On 2023/02/24 23:32, Robin Murphy wrote:
-> On 2023-02-24 14:11, Greg Kroah-Hartman wrote:
->> Thanks for the detailed rust explainations, I'd like to just highlight
->> one thing:
->>
->> On Fri, Feb 24, 2023 at 10:15:12PM +0900, Asahi Lina wrote:
->>> On 24/02/2023 20.23, Greg Kroah-Hartman wrote:
->>>> And again, why are bindings needed for a "raw" struct device at all?
->>>> Shouldn't the bus-specific wrappings work better?
->>>
->>> Because lots of kernel subsystems need to be able to accept "any" device
->>> and don't care about the bus! That's what this is for.
->>
->> That's great, but:
->>
->>> All the bus
->>> wrappers would implement this so they can be used as an argument for all
->>> those subsystems (plus a generic one when you just need to pass around
->>> an actual owned generic reference and no longer need bus-specific
->>> operations - you can materialize that out of a RawDevice impl, which is
->>> when get_device() would be called). That's why I'm introducing this now,
->>> because both io_pgtable and rtkit need to take `struct device` pointers
->>> on the C side so we need some "generic struct device" view on the
->>> Rust side.
->>
->> In looking at both ftkit and io_pgtable, those seem to be good examples
->> of how "not to use a struct device", so trying to make safe bindings
->> from Rust to these frameworks is very ironic :)
->>
->> rtkit takes a struct device pointer and then never increments it,
->> despite saving it off, which is unsafe.  It then only uses it to print
->> out messages if things go wrong (or right in some cases), which is odd.
->> So it can get away from using a device pointer entirely, except for the
->> devm_apple_rtkit_init() call, which I doubt you want to call from rust
->> code, right?
->>
->> for io_pgtable, that's a bit messier, you want to pass in a device that
->> io_pgtable treats as a "device" but again, it is NEVER properly
->> reference counted, AND, it is only needed to try to figure out the bus
->> operations that dma memory should be allocated from for this device.  So
->> what would be better to save off there would be a pointer to the bus,
->> which is constant and soon will be read-only so there are no lifetime
->> rules needed at all (see the major struct bus_type changes going into
->> 6.3-rc1 that will enable that to happen).
+On Sun, Feb 19, 2023 at 05:28:46PM +0100, Claudio Migliorelli wrote:
+> This test is aimed at verifying the memblock_alloc_node() to work as
+> expected, so setting the correct NUMA node for the new allocated
+> region. The memblock_alloc_node() is called directly without using any
+> stub. The core check is between the requested NUMA node and the `nid`
+> field inside the memblock_region structure. These two are supposed to
+> be equal for the test to succeed.
 > 
-> FWIW the DMA API *has* to know which specific device it's operating
-> with, since the relevant properties can and do vary even between
-> different devices within a single bus_type (e.g. DMA masks).
+> Signed-off-by: Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
+> ---
+> Changelog:
+> ----------
+> v2:
+> 	- Use the memblock_alloc_node() directly without mimicking it
 > 
-> In the case of io-pgtable at least, there's no explicit refcounting
-> since the struct device must be the one representing the physical
-> platform/PCI/etc. device consuming the pagetable, so if that were to
-> disappear from underneath its driver while the pagetable is still in
-> use, things would already have gone very very wrong indeed :)
+>  tools/testing/memblock/tests/alloc_nid_api.c | 40 ++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
 
-There's no terribly good way to encode this relationship in safe Rust as
-far as I know. So although it might be "obvious" (and I think my driver
-can never violate it as it is currently designed), this means the Rust
-abstraction will have to take the device reference if the C side does
-not, because safe rust abstractions have to actually make these bugs
-impossible and nothing stops a Rust driver from, say, stashing an
-io_pgtable reference into a global and letting the device go away.
+When I tried to apply your patch I've got these errors:
 
-~~ Lina
+<stdin>:188: trailing whitespace.
+ 
+error: patch failed: tools/testing/memblock/tests/alloc_nid_api.c:2494
+error: tools/testing/memblock/tests/alloc_nid_api.c: patch does not apply
+
+> diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
+> index 49ef68cccd6f..975a5317abf3 100644
+> --- a/tools/testing/memblock/tests/alloc_nid_api.c
+> +++ b/tools/testing/memblock/tests/alloc_nid_api.c
+> @@ -2494,6 +2494,35 @@ static int alloc_nid_numa_split_all_reserved_generic_check(void)
+>  	return 0;
+>  }
+> 
+> +/*
+> + * A simple test that tries to allocate a memory region through the
+> + * memblock_alloc_node() on a NUMA node with id `nid`. Expected to have the
+> + * correct NUMA node set for the new region.
+> + */
+> +static int alloc_node_on_correct_nid(void)
+> +{
+> +	int nid_req = 2;
+> +	void *allocated_ptr = NULL;
+> +#ifdef CONFIG_NUMA
+> +	struct memblock_region *req_node = &memblock.memory.regions[nid_req];
+> +#endif
+> +	phys_addr_t size = SZ_512;
+> +
+> +	PREFIX_PUSH();
+> +	setup_numa_memblock(node_fractions);
+> + +	allocated_ptr = memblock_alloc_node(size, SMP_CACHE_BYTES, nid_req);
+> +
+> +	ASSERT_NE(allocated_ptr, NULL);
+> +#ifdef CONFIG_NUMA
+> +	ASSERT_EQ(nid_req, req_node->nid);
+> +#endif
+> +
+> +	test_pass_pop();
+> +
+> +	return 0;
+> +}
+> +
+>  /* Test case wrappers for NUMA tests */
+>  static int alloc_nid_numa_simple_check(void)
+>  {
+> @@ -2632,6 +2661,15 @@ static int alloc_nid_numa_split_all_reserved_check(void)
+>  	return 0;
+>  }
+> 
+> +static int alloc_node_numa_on_correct_nid(void)
+> +{
+> +	test_print("\tRunning %s...\n", __func__);
+> +	run_top_down(alloc_node_on_correct_nid);
+> +	run_bottom_up(alloc_node_on_correct_nid);
+> +
+> +	return 0;
+> +}
+> +
+>  int __memblock_alloc_nid_numa_checks(void)
+>  {
+>  	test_print("Running %s NUMA tests...\n",
+> @@ -2652,6 +2690,8 @@ int __memblock_alloc_nid_numa_checks(void)
+>  	alloc_nid_numa_reserved_full_merge_check();
+>  	alloc_nid_numa_split_all_reserved_check();
+> 
+> +	alloc_node_numa_on_correct_nid();
+> +
+>  	return 0;
+>  }
+> 
+> -- 
+> 2.38.3
+
+-- 
+Sincerely yours,
+Mike.
