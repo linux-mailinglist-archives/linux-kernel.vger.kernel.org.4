@@ -2,240 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5466A1F82
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FE06A1F80
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjBXQVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 11:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S229759AbjBXQVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 11:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXQV0 (ORCPT
+        with ESMTP id S229470AbjBXQVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 11:21:26 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561F64D74
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:21:24 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id b6so8789709qtb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z8xMPNDDIosDsi8KC1Q003Om5yV2TkivxkxGJvH89O8=;
-        b=cFoZWgSFrc5TYV8fCUe/7DVjBIuaOzYVrZkgP33WaeHGCCkOcz9BqlmkcR23+mtZWI
-         W/lDOvKM+D3FpUgEdMSLcSx6hXbN4mja3Nnsm8LTy5KXjsOHmtWkLY1t5Ka8Rj2OOvTN
-         uilB4Ns0wotmzQvJZde4zs0yTLmKmsl1NqCy5vH4+sTKg84KoQdA+DSEYwLc98zkSHYq
-         2ryzY5zY5dWvPyypOTn5qV5BYOdPO1KGYOjGOJPnkOlrX5fgSR66WXVhvglD+13bdz0o
-         Gx9leQAqbBnIy9hHFqDIkkob9MGbni6l82/OoxW0bH37wTTsYEmo9yAV3o/Np7rPZiHL
-         9p0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z8xMPNDDIosDsi8KC1Q003Om5yV2TkivxkxGJvH89O8=;
-        b=oi0hutavhQG8ioOi/x8B4OqfVPoh8udWuxJzI/scQzwU/x0FuGT5uRN1re//HDg0pH
-         PrRKcal2bL9CTy9++30QODuZrbBrqsRTQ+9hRIXKRqgAeJSJ5xMQ3kdEbKptmrckllxw
-         xiz5WYWcm+Yfw5QSlyq4MRvxYe1jAFP1ch22ML1skdYogX2dTE+nMGmlijXpHBHTyxrh
-         coRPeL+8oHcnFKTXMpBrBqRLZkkVILFGcvqmNNeo2ujf45TGj1asummwWRmggchKz0ay
-         /TlnpQE7KFiMkVnOzMXenAYvJSul1m7uSeDSR1ApzVJ567kuIw6vFmvdg6xLkIobM+ac
-         JkDg==
-X-Gm-Message-State: AO0yUKVv42DRwY2VqsTjJr+CRhp0tbfY4CNHco66SYqk6PdTNOSig7hU
-        sTLesElFKU5jpNTl0c/Qsvzi57dIQEjzrRRDoR8=
-X-Google-Smtp-Source: AK7set9btTXqPlLhfhnk3vhBV+cPe7bG6ZKSR1BHo/RIubfV1O6KV7gi6P2U/lO0KUtDbBpf6vbbIiAWxEwqGSGvEy8=
-X-Received: by 2002:a05:622a:4105:b0:3b7:fda4:b504 with SMTP id
- cc5-20020a05622a410500b003b7fda4b504mr3149109qtb.13.1677255683073; Fri, 24
- Feb 2023 08:21:23 -0800 (PST)
-MIME-Version: 1.0
-References: <CABXGCsMbqw2qzWSCDfp3cNrYVJ1oxLv8Aixfm_Dt91x1cvFX4w@mail.gmail.com>
- <a99e6def-68be-3f2b-4e01-ac26cdb80f49@gmail.com> <CABXGCsM7JPxtQm6B7vk+ZcXfphgQm=ArJZKiDUdbk9hujyRtmg@mail.gmail.com>
- <43016018-4d0a-94dc-ce93-b4bff2dce71c@gmail.com> <90b1c9f8-1674-e9ec-e6d8-2fa1967439b3@gmail.com>
-In-Reply-To: <90b1c9f8-1674-e9ec-e6d8-2fa1967439b3@gmail.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Fri, 24 Feb 2023 21:21:12 +0500
-Message-ID: <CABXGCsN2NutEmi==JBDD5G2Bj=DJ6vm87_Cbubycz-WowUOh5w@mail.gmail.com>
-Subject: Re: amdgpu didn't start with pci=nocrs parameter, get error "Fatal
- error during GPU init"
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 24 Feb 2023 11:21:22 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2049.outbound.protection.outlook.com [40.107.95.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A47C5E846;
+        Fri, 24 Feb 2023 08:21:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DBd93voUUiMLqaY6K+iMCWuD0EYxw+0T9EXxAj7Y+BGSv0SNmbmTpip7Pj62U5rJ34Zatu6U/DqAtWXCBP/YMJozAXTmTxYd773fFxvD8rFGNwTD0F324NDsrPgCwK5KqUbpL8mDMPS6aBzB1xTdFxbTHhPyGk2rdas8HuxvjC8UV5SCHwGiwOEcLpyvy+tv+ch4nD5Pki6pArPF+p8sxCLHOcahSMelyLgH8zf+lhka1YZMrAxD0kA2fLrL3/fqwk4tg3fUeRWUZpHzFRKDcTtu28L7k6jFAMra0rSkFQYcKfiPZtB+pyoWIb4DL34ebVYfZxIQar/wo3sumkvKjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vWi8GiG0bd5qtZFt9APCldCO+ZFwSNZQZu3tbeXrzs0=;
+ b=N21nWb6n1P5cGg9xoY2B3Qgusm8itTVn0H3YXNi184Bzb/vDRE2//+z84hOhC1MuRz97OUGVVy+U7kpdPZdK/eTrwAMujnPJsfZwVaQz0OGZDI8uHACIItpi7yx+ktUKfQgo+mj9hAho/yhtCqAeBrl+mk1HJPqD/7BRIZtOceQ+u3lHwTLQb8Z5mOT2Bj+avzgxOQbbndeKTihtPAfV4FNp84cpBsoCBb9/Z7rXi3U+TEWRLFxDk5NOdNAMLFwS+FfE1R8KuboNU5tpurYcs7aFXghnSz7TWJ0WcslTF+FbBn5HWj70DJFqpzkotEvxsYQ/mOWBcs7VSyCiif0STA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vWi8GiG0bd5qtZFt9APCldCO+ZFwSNZQZu3tbeXrzs0=;
+ b=HQSPE72CHfshZLIORk0xtHZM6siAe+a3iXwEuKUSbi7hBfze4Y86JZguabPL+QcHxz3wwOqQpiWO9caGS/onWNd4tHgG7DE0RQKWdVtxQzKVEd3kKwnGyoWop9KpfEEOnTFcXjG36l7E8hUgOi8sKSusnaYYfPBANFtMnerxM3Gw6cdzn8dHFXI4DXcSdDqUJ8kwoYsGEpP6MpwQTIVYxY+ZE7Bk8knZvJAUfYtdYimc6Ti13Tyx6eycBdPkk1zxb+5bYSvoHZ3ephwaetfiL8NWZM2+KWMOEO2XjXN3BMThrzA0Nm30/LSfJipRlu4C/3ovyUY4OIQBUMQ4qIfGnQ==
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
+ SJ0PR12MB7065.namprd12.prod.outlook.com (2603:10b6:a03:4ae::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
+ 2023 16:21:17 +0000
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6134.019; Fri, 24 Feb 2023
+ 16:21:17 +0000
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: RE: [Patch V3 1/3] tpm_tis-spi: Support hardware wait polling
+Thread-Topic: [Patch V3 1/3] tpm_tis-spi: Support hardware wait polling
+Thread-Index: AQHZR6OqOBQhj0zBTUWL/FYm6RTrP67cxooAgAAUpuCAAALmgIABQ3fwgAAe8YCAAAa28A==
+Date:   Fri, 24 Feb 2023 16:21:17 +0000
+Message-ID: <DM4PR12MB5769153B42FA57FD98491F6CC3A89@DM4PR12MB5769.namprd12.prod.outlook.com>
+References: <20230223162635.19747-1-kyarlagadda@nvidia.com>
+ <20230223162635.19747-2-kyarlagadda@nvidia.com>
+ <Y/egACRAp6nKZWdN@sirena.org.uk>
+ <DM4PR12MB57695DE127286D1DA436E804C3AB9@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <Y/ezwaFCn5h86u6X@sirena.org.uk>
+ <DM4PR12MB5769C60EFD807376CE09DC3FC3A89@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <Y/jdDeBPM//W5WG8@sirena.org.uk>
+In-Reply-To: <Y/jdDeBPM//W5WG8@sirena.org.uk>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|SJ0PR12MB7065:EE_
+x-ms-office365-filtering-correlation-id: 5b90a38d-fe62-424e-c05c-08db1683280e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FDKnNDQV1K/sj2xV/gpm20/WRW0/Syceghru/ibJBQ0BGqFG+61yjkRpV7/xmK0DDOyy1mVTN6DmZt/8UL0MsALBf7QyRQRfbUUKWTcpUyuhae88RJdhUZwWNip61Firr7J9SsmzGAdxqwqKhKrDWidaiCRrYaWaPcruvFHSOT1iOEItE22DiyzSTYu7sjRNrFhoEbOuOJIxV+ZDBUvNF2eOCaRCchjXtiay3mVEg9XAYmZqaxF86PRdC0KEMGtz7pzNfs/owXqoF4wJ4qil/d9v6yNmcbhqcSP0VMmSclHj7faGnhPatzxQ2uUs39dBOcHXdkIL7ZqWWLfUrUVcK86x0Zu0vxTEoKciRpDHGvYquIOAnO8HIvppJS4q6q3ba8MEUy9zd6Bad4tldwr7UmImI86hvCbWYyZkX54VrJGvB4DGKIDfH5ijpU82ro5kMGCvo4bheOxSwCSp0IaLeQd4LysiyQK0JoQhGvrWQ1zWpBhkJfHv0hgfMBAkyvGBe9gq0No2R0t3MjpHFDL9UC7KEkGWx+pjqs+Ol1XnketwY7dE/zvKN5UZffvO0pnuYgsCPQytlg05tNKOH5TzrkGvkMOrhg+iWWeQYfjzfwB7t4tTa+m25TzIx+H7NmyKAn5U6M6+GdVHUldLjdLKgQCRcLJ5V4+f4rGxbVN0nkkpDDTMmBY2idqToen3cHVLC4P1ZDNt7fEcZJ05mZgNYQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(346002)(376002)(39860400002)(396003)(451199018)(122000001)(66899018)(6916009)(66476007)(66946007)(76116006)(66446008)(53546011)(66556008)(8676002)(64756008)(4326008)(55016003)(52536014)(107886003)(41300700001)(38100700002)(9686003)(26005)(7416002)(5660300002)(38070700005)(186003)(71200400001)(7696005)(478600001)(54906003)(6506007)(33656002)(86362001)(2906002)(8936002)(316002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QD2eKem/PavnBGlrYnQIBZHgC2nqc2EXspOvKI+t7X5a0wLYSjOLTLq2EhkV?=
+ =?us-ascii?Q?V7vHM+d0/7pHidAcQXpqbkvUbV3dZi7o7SEdMHP1LfY9yONdS9MLMRBqCAo9?=
+ =?us-ascii?Q?fTT4B+JK1bI49bF69Bz7kzd/7JS9aXFrHecpUENr26dqwzgGS1kSRjucPsPJ?=
+ =?us-ascii?Q?s4XvvGO2lvWHUAmzNlujZA3iOfdR6lERbfckmWQN5cnUh74J4WpXm8LPxM9w?=
+ =?us-ascii?Q?nz3GgA60f+xdHsNWVlivc8xfihr7OIMzV5/LLJUuRWkQN/p3gUxSzX05sRe7?=
+ =?us-ascii?Q?JJiOUbMeJFYnHD28LmedRmn6xDBUl0wDg3ntklljesIMokaFuU0nlmNSigxf?=
+ =?us-ascii?Q?+7S97nSwQdbp6ByxHGi1KGdo0t9TB4xBDLKfqK4MR7C4UshrV3I43YnzRSeI?=
+ =?us-ascii?Q?Vg3FPC3zfrzfv5l65nqP8XKkpw1P9ngexXH5LdwupJDGQt5cclgJpUK6AMIE?=
+ =?us-ascii?Q?aFrVCdj1XEEmZ1JRRBUx/NNbc/0wIjzOMDdIu8dgW8G3MXfsE4q7CePLWasy?=
+ =?us-ascii?Q?RnLJfxac7WPI1BEQ9WgknTONXXi5eUiwdCRzqsfGz1OSJVYSyuZRFWqdbw3i?=
+ =?us-ascii?Q?IRauNRRslS/bjN/sMC63TPxJJMafj+RpwPXjlVAycOOpn8wUh2aBcD+WnGZW?=
+ =?us-ascii?Q?mK/U9Kftise8KIQuTikw43Djd8WALx/WV6xp0lAy8ZplTjTFKgVGBaw11EsL?=
+ =?us-ascii?Q?xgROM1LvvCKEyd2I6XvpDr4WMNPMtWbQy2CMF2nsacABDf3DeWi2N7d0SF6c?=
+ =?us-ascii?Q?4RXYVoOxakcblkqiqN8WaXvNFDLvoTSJTLVNRiM9OSzSUF3wdUNp0OGI7I6Z?=
+ =?us-ascii?Q?2LflKZaiC2qhLiKAYrFJyIyFB9rC4zeaNH62dl93sBEUM8XkSZlyMoxN5nwy?=
+ =?us-ascii?Q?Vi//1YEAeMs/hkJ2kxpQyg1M4bXn4zyEZZRZ31Qzfzsd4DUe2ON05mAVh4Cy?=
+ =?us-ascii?Q?yxL1YUENJEGIZ5RV5HM4MAXGlkYFf7W6rErGlINN6Et0k9J/1wWdwLnMQNEC?=
+ =?us-ascii?Q?2hvBZLfbYT9+9dwpoKf15GFXE8ec0nq2TPN8Me7xjh1cZj8vuNRLP8X/1rmI?=
+ =?us-ascii?Q?zEPP0XisUGASsNXgEAMXAHVjYolgAK5SmdVTMeBxakSlEp2s7otgodGT/70V?=
+ =?us-ascii?Q?kDQvtYIiEJZkZDUfyOUK+Hk7mLAAYe8cgNbbioOp9EeD/royK7hTeYehWsow?=
+ =?us-ascii?Q?Abv/RhK+qDRj56fI6YmdLnKiGg6QBeAbeA33NXJG27zz3uQcP+EhuTX1F96E?=
+ =?us-ascii?Q?f8wFyc3LjAjB7oh0qs5VUIAsc1PTCiyw8noIg5cX+/9E7hDPhIeyJ36nT1Jg?=
+ =?us-ascii?Q?NXw7qOGhSMb8ANecSw3rfOxa6a9SJYzEhZZvsRJFR3euST3dZ5NBuKlrGyB6?=
+ =?us-ascii?Q?W/C+7+d5EnGB6loDEqxI+NRqlrGmqzGfct+qhUN6RoTw17qMl7IscKzOwFkG?=
+ =?us-ascii?Q?AvxaKR1H6Nw/7xQxK+bn+ieDbraQomDN38BUFCYPMgd9noRq5PV+zgWv8A7B?=
+ =?us-ascii?Q?MsgpYb1/Wz7q/vS/GvylO4eJz6cmLpWr1QAQENclW50Gvh1W/qoG3x2nwZu8?=
+ =?us-ascii?Q?h0S6+UpJcR9bi6UTou9PAea1Si0GbqcR6Q04mJv8?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b90a38d-fe62-424e-c05c-08db1683280e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 16:21:17.1014
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: V7HpcKTZLi4AZO8A8a8RBvw3SxKcc3asprNm2Yz7UKGAiKSUJ1zHiK9WhhKs+aGLPABVyN3NQXt6PtrBBKwK6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7065
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 8:31 PM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Sorry I totally missed that you attached the full dmesg to your original
-> mail.
->
-> Yeah, the driver did fail gracefully. But then X doesn't come up and
-> then gdm just dies.
-
-Are you sure that these messages should be present when the driver
-fails gracefully?
-
-turning off the locking correctness validator.
-CPU: 14 PID: 470 Comm: (udev-worker) Tainted: G             L
--------  ---  6.3.0-0.rc0.20230222git5b7c4cabbb65.3.fc39.x86_64+debug
-#1
-Hardware name: ASUSTeK COMPUTER INC. ROG Strix G513QY_G513QY/G513QY,
-BIOS G513QY.320 09/07/2022
-Call Trace:
- <TASK>
- dump_stack_lvl+0x57/0x90
- register_lock_class+0x47d/0x490
- __lock_acquire+0x74/0x21f0
- ? lock_release+0x155/0x450
- lock_acquire+0xd2/0x320
- ? amdgpu_irq_disable_all+0x37/0xf0 [amdgpu]
- ? lock_is_held_type+0xce/0x120
- _raw_spin_lock_irqsave+0x4d/0xa0
- ? amdgpu_irq_disable_all+0x37/0xf0 [amdgpu]
- amdgpu_irq_disable_all+0x37/0xf0 [amdgpu]
- amdgpu_device_fini_hw+0x43/0x2c0 [amdgpu]
- amdgpu_driver_load_kms+0xe8/0x190 [amdgpu]
- amdgpu_pci_probe+0x140/0x420 [amdgpu]
- local_pci_probe+0x41/0x90
- pci_device_probe+0xc3/0x230
- really_probe+0x1b6/0x410
- __driver_probe_device+0x78/0x170
- driver_probe_device+0x1f/0x90
- __driver_attach+0xd2/0x1c0
- ? __pfx___driver_attach+0x10/0x10
- bus_for_each_dev+0x8a/0xd0
- bus_add_driver+0x141/0x230
- driver_register+0x77/0x120
- ? __pfx_init_module+0x10/0x10 [amdgpu]
- do_one_initcall+0x6e/0x350
- do_init_module+0x4a/0x220
- __do_sys_init_module+0x192/0x1c0
- do_syscall_64+0x5b/0x80
- ? asm_exc_page_fault+0x22/0x30
- ? lockdep_hardirqs_on+0x7d/0x100
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-RIP: 0033:0x7fd58cfcb1be
-Code: 48 8b 0d 4d 0c 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
-84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 af 00 00 00 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 8b 0d 1a 0c 0c 00 f7 d8 64 89 01
-RSP: 002b:00007ffd1d1065d8 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
-RAX: ffffffffffffffda RBX: 000055b0b5aa6d70 RCX: 00007fd58cfcb1be
-RDX: 000055b0b5a96670 RSI: 00000000016b6156 RDI: 00007fd589392010
-RBP: 00007ffd1d106690 R08: 000055b0b5a93bd0 R09: 00000000016b6ff0
-R10: 000055b5eea2c333 R11: 0000000000000246 R12: 000055b0b5a96670
-R13: 0000000000020000 R14: 000055b0b5a9c170 R15: 000055b0b5aa58a0
- </TASK>
-amdgpu: probe of 0000:03:00.0 failed with error -12
-amdgpu 0000:08:00.0: enabling device (0006 -> 0007)
-[drm] initializing kernel modesetting (RENOIR 0x1002:0x1638 0x1043:0x16C2 0=
-xC4).
-
-
-list_add corruption. prev->next should be next (ffffffffc0940328), but
-was 0000000000000000. (prev=3Dffff8c9b734062b0).
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:30!
-invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-CPU: 14 PID: 470 Comm: (udev-worker) Tainted: G             L
--------  ---  6.3.0-0.rc0.20230222git5b7c4cabbb65.3.fc39.x86_64+debug
-#1
-Hardware name: ASUSTeK COMPUTER INC. ROG Strix G513QY_G513QY/G513QY,
-BIOS G513QY.320 09/07/2022
-RIP: 0010:__list_add_valid+0x74/0x90
-Code: 8d ff 0f 0b 48 89 c1 48 c7 c7 a0 3d b3 99 e8 a3 ed 8d ff 0f 0b
-48 89 d1 48 89 c6 4c 89 c2 48 c7 c7 f8 3d b3 99 e8 8c ed 8d ff <0f> 0b
-48 89 f2 48 89 c1 48 89 fe 48 c7 c7 50 3e b3 99 e8 75 ed 8d
-RSP: 0018:ffffa50f81aafa00 EFLAGS: 00010246
-RAX: 0000000000000075 RBX: ffff8c9b734062b0 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000027 RDI: 00000000ffffffff
-RBP: ffff8c9b734062b0 R08: 0000000000000000 R09: ffffa50f81aaf8a0
-R10: 0000000000000003 R11: ffff8caa1d2fffe8 R12: ffff8c9b7c0a5e48
-R13: 0000000000000000 R14: ffffffffc13a6d20 R15: 0000000000000000
-FS:  00007fd58c6a5940(0000) GS:ffff8ca9d9a00000(0000) knlGS:000000000000000=
-0
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055b0b5a955e0 CR3: 000000017e860000 CR4: 0000000000750ee0
-PKRU: 55555554
-Call Trace:
- <TASK>
- ttm_device_init+0x184/0x1c0 [ttm]
- amdgpu_ttm_init+0xb8/0x610 [amdgpu]
- ? _printk+0x60/0x80
- gmc_v9_0_sw_init+0x4a3/0x7c0 [amdgpu]
- amdgpu_device_init+0x14e5/0x2520 [amdgpu]
- amdgpu_driver_load_kms+0x15/0x190 [amdgpu]
- amdgpu_pci_probe+0x140/0x420 [amdgpu]
- local_pci_probe+0x41/0x90
- pci_device_probe+0xc3/0x230
- really_probe+0x1b6/0x410
- __driver_probe_device+0x78/0x170
- driver_probe_device+0x1f/0x90
- __driver_attach+0xd2/0x1c0
- ? __pfx___driver_attach+0x10/0x10
- bus_for_each_dev+0x8a/0xd0
- bus_add_driver+0x141/0x230
- driver_register+0x77/0x120
- ? __pfx_init_module+0x10/0x10 [amdgpu]
- do_one_initcall+0x6e/0x350
- do_init_module+0x4a/0x220
- __do_sys_init_module+0x192/0x1c0
- do_syscall_64+0x5b/0x80
- ? asm_exc_page_fault+0x22/0x30
- ? lockdep_hardirqs_on+0x7d/0x100
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-RIP: 0033:0x7fd58cfcb1be
-Code: 48 8b 0d 4d 0c 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
-84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 af 00 00 00 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 8b 0d 1a 0c 0c 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffd1d1065d8 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
-RAX: ffffffffffffffda RBX: 000055b0b5aa6d70 RCX: 00007fd58cfcb1be
-RDX: 000055b0b5a96670 RSI: 00000000016b6156 RDI: 00007fd589392010
-RBP: 00007ffd1d106690 R08: 000055b0b5a93bd0 R09: 00000000016b6ff0
-R10: 000055b5eea2c333 R11: 0000000000000246 R12: 000055b0b5a96670
-R13: 0000000000020000 R14: 000055b0b5a9c170 R15: 000055b0b5aa58a0
- </TASK>
-Modules linked in: amdgpu(+) drm_ttm_helper hid_asus ttm asus_wmi
-iommu_v2 crct10dif_pclmul ledtrig_audio drm_buddy crc32_pclmul
-sparse_keymap gpu_sched crc32c_intel polyval_clmulni platform_profile
-hid_multitouch polyval_generic drm_display_helper nvme rfkill
-ucsi_acpi ghash_clmulni_intel nvme_core typec_ucsi serio_raw
-sp5100_tco ccp sha512_ssse3 r8169 cec typec nvme_common i2c_hid_acpi
-video i2c_hid wmi ip6_tables ip_tables fuse
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_add_valid+0x74/0x90
-Code: 8d ff 0f 0b 48 89 c1 48 c7 c7 a0 3d b3 99 e8 a3 ed 8d ff 0f 0b
-48 89 d1 48 89 c6 4c 89 c2 48 c7 c7 f8 3d b3 99 e8 8c ed 8d ff <0f> 0b
-48 89 f2 48 89 c1 48 89 fe 48 c7 c7 50 3e b3 99 e8 75 ed 8d
-RSP: 0018:ffffa50f81aafa00 EFLAGS: 00010246
-RAX: 0000000000000075 RBX: ffff8c9b734062b0 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000027 RDI: 00000000ffffffff
-RBP: ffff8c9b734062b0 R08: 0000000000000000 R09: ffffa50f81aaf8a0
-R10: 0000000000000003 R11: ffff8caa1d2fffe8 R12: ffff8c9b7c0a5e48
-R13: 0000000000000000 R14: ffffffffc13a6d20 R15: 0000000000000000
-FS:  00007fd58c6a5940(0000) GS:ffff8ca9d9a00000(0000) knlGS:000000000000000=
-0
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055b0b5a955e0 CR3: 000000017e860000 CR4: 0000000000750ee0
-PKRU: 55555554
-(udev-worker) (470) used greatest stack depth: 12416 bytes left
-
-I thought that gracefully means switching to svga mode and showing the
-desktop with software rendering (exactly as it happens when I
-blacklist amdgpu driver). Currently the boot process stucking and the
-local console is unavailable.
-
-
---=20
-Best Regards,
-Mike Gavrilov.
+> -----Original Message-----
+> From: Mark Brown <broonie@kernel.org>
+> Sent: 24 February 2023 21:22
+> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> Cc: robh+dt@kernel.org; peterhuewe@gmx.de; jgg@ziepe.ca;
+> jarkko@kernel.org; krzysztof.kozlowski+dt@linaro.org; linux-
+> spi@vger.kernel.org; linux-tegra@vger.kernel.org; linux-
+> integrity@vger.kernel.org; linux-kernel@vger.kernel.org;
+> thierry.reding@gmail.com; Jonathan Hunter <jonathanh@nvidia.com>;
+> Sowjanya Komatineni <skomatineni@nvidia.com>; Laxman Dewangan
+> <ldewangan@nvidia.com>
+> Subject: Re: [Patch V3 1/3] tpm_tis-spi: Support hardware wait polling
+>=20
+> On Fri, Feb 24, 2023 at 02:16:27PM +0000, Krishna Yarlagadda wrote:
+>=20
+> > > > > > +       spi_bus_lock(phy->spi_device->master);
+> > > > > > +
+> > > > > > +       while (len) {
+>=20
+> > > > > Why?
+>=20
+> > > > TPM supports max 64B in single transaction. Loop to send rest of it=
+.
+>=20
+> > > No, why is there a bus lock?
+>=20
+> > Bus lock to avoid other clients to be accessed between TPM transfers.
+>=20
+> That's what a bus lock does but what would be the problem if something
+> else sent a message between messages?  Note that a message will always
+> be sent atomically.
+QSPI has multi-chip-select support. Idea was to prevent transfers from both
+devices at the same time. But it should be fine if it is single message.
+I will verify with bus lock removed.
