@@ -2,139 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379FB6A1CDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604996A1CD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjBXNRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S230221AbjBXNP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBXNRW (ORCPT
+        with ESMTP id S229446AbjBXNPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:17:22 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E805EEFA;
-        Fri, 24 Feb 2023 05:17:18 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id fd25so7076420pfb.1;
-        Fri, 24 Feb 2023 05:17:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qYxoWPSADwk2ctvIlv0tQaBOl/ue0eeRxizjAWjDaII=;
-        b=as25OEHfghOe0GQ4ZQp14Unllm7YNJtGgiueV9sjuMtmtDOPJtCSvPfS4kgPtSPhZw
-         M58fGnKbreJfBhmKDA1wZxodjgYtkryPA+HxmuWZPv3Iz3UfllHqDdLWbK7aZYY+PsDv
-         iAkS1gKBwi9zN7cnYbwJ+Gw0n9RDyHv9JKPu5+XGRzvplfxFCoUUyhk8i5xc1NPqRhHq
-         xStiCB8k0htHlHiMijbPOGnzEa+jiRNPD8Jqoj94WYhJTsKmTwOkm14sikdnHPDSK/0F
-         NS4kFYft3sXTT/IT6+NDmu/YRyoOqd9S2nSPtUewyXNwCbLxls/ydr9/bbNL9Bxjajvg
-         00NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qYxoWPSADwk2ctvIlv0tQaBOl/ue0eeRxizjAWjDaII=;
-        b=XUkNgroOQf0U6HaIowXVQvBiR0BgL2k3fLcy8bTJHJQgZp65Mub3CeYa74/5BrvOJh
-         6EMfk6S6Z1/0GbBu7ekC3OubMa4ru5LvrHBkFtUrdQHt3s8dZy6/LhX0buXRscqYwJsf
-         ybt9Go30f/UTepk2sr6oP73umsLVP/GmqxVZy0TBM9bJgZrD6wFG4Pk/ltx7pM3KBmiM
-         A2oQNJaXvk0F+ywBNkdCTf0iWCddQ9QY7wSG72NGi1B8C2Arg+O+R5LX80niM/raXz4F
-         dQ4efxxtv5MGArdaq683NygIoGRlmMCO2fR1N9E8+6e7IETnyuPIx+9aJ+CdrXNr8wlt
-         yypA==
-X-Gm-Message-State: AO0yUKVLWUjZQh423pRXFzgKSv22qg7SWnR7fAni6BTmfMB6GfRb5/tr
-        5YRfhQwyEausvDIf5pqz+OnPdirmEKBG3hJSRDXzNDBDigntpfTn
-X-Google-Smtp-Source: AK7set/zyX3pyRijOb6XfW7vKqQFHHcKpADURXXdbQxxacT8uz5rH1REmL+utcRTAi2ODG6MspHyz3HG280gGeNBm3A=
-X-Received: by 2002:a63:3e41:0:b0:4df:6f34:48f8 with SMTP id
- l62-20020a633e41000000b004df6f3448f8mr3027644pga.8.1677244637812; Fri, 24 Feb
- 2023 05:17:17 -0800 (PST)
+        Fri, 24 Feb 2023 08:15:22 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9750156533;
+        Fri, 24 Feb 2023 05:15:20 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id ECC973FA55;
+        Fri, 24 Feb 2023 13:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1677244519;
+        bh=JO7LZ+UZTbX7aFX3msEPPny1eqLFld3+UeOQ0vjC2Vs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=BtDVDBuvwtoz5SQkWrfz9yQbpj9enVmh2+4C/WkmnHhBHWIq8N/3nHVCYBWLWCSPD
+         K5kQucd+G5/rGqWQNOQSWWxyQ+S3EYSrp0hiOrsCH8pRLHOn5tVDbr+NtPaqQY0kMz
+         oj9qAEnw1WOd9sbQbFqe8WIctPAcY1/eMab/vhGIVz8JS99KVXuNbj1X2FR6y0ghx/
+         PUB5m1bYjjZxGNz6qc2dM4vO7kjahci9PmQ4t3W3gBIoRqQiCcRX9YGt10cTiHVONS
+         AhMJMTEoMJXnYWRBYBz0hgtKZu/tyYSF+j0crSxBs3m0AmieVSbytfvXVFUW9rIDj7
+         6VcsRGaLxC3fA==
+Message-ID: <ef3a3638-6381-87ab-d674-644306b6b6ce@asahilina.net>
+Date:   Fri, 24 Feb 2023 22:15:12 +0900
 MIME-Version: 1.0
-References: <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
- <20230224130235.4028566-1-void0red@gmail.com> <Y/i33HL2e9UwUpd8@kroah.com>
-In-Reply-To: <Y/i33HL2e9UwUpd8@kroah.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Fri, 24 Feb 2023 21:14:30 +0800
-Message-ID: <CAD-N9QVTxUSiCnprnXw=i4NVWbKFg2dZrkB0rqV2E4jzPeXAeA@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: replace kzalloc with devm_kzalloc in
- mv_udc_probe and add a check for this allocation.
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     void0red <void0red@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, eriri <1527030098@qq.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/5] rust: device: Add a minimal RawDevice trait
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
+ <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
+ <Y/ieQ0UX/niAG1Hg@kroah.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <Y/ieQ0UX/niAG1Hg@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 9:13 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Feb 24, 2023 at 09:02:35PM +0800, void0red wrote:
-> > From: Kang Chen <void0red@gmail.com>
-> >
-> > This driver uses the unified memory management api, so replace
-> > kzalloc with devm_kzalloc to avoid a memory leak and add a check
-> > for this allocation.
-> >
-> > Reported-by: eriri <1527030098@qq.com>
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217081
-> >
-> > Signed-off-by: Kang Chen <void0red@gmail.com>
+On 24/02/2023 20.23, Greg Kroah-Hartman wrote:
+> On Fri, Feb 24, 2023 at 07:53:14PM +0900, Asahi Lina wrote:
+>> From: Wedson Almeida Filho <wedsonaf@gmail.com>
+>>
+>> Add a RawDevice trait which can be implemented by any type representing
+>> a device class (such as a PlatformDevice). This is the minimum amount of
+>> Device support code required to unblock abstractions that need to take
+>> device pointers.
+>>
+>> Lina: Rewrote commit message, and dropped everything except RawDevice.
+>>
+>> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+>> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+>> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+>> Signed-off-by: Asahi Lina <lina@asahilina.net>
+>> ---
+>>  rust/bindings/bindings_helper.h |  1 +
+>>  rust/kernel/device.rs           | 23 +++++++++++++++++++++++
+>>  rust/kernel/lib.rs              |  1 +
+>>  3 files changed, 25 insertions(+)
+>>
+>> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+>> new file mode 100644
+>> index 000000000000..9be021e393ca
+>> --- /dev/null
+>> +++ b/rust/kernel/device.rs
+>> @@ -0,0 +1,23 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +//! Generic devices that are part of the kernel's driver model.
+>> +//!
+>> +//! C header: [`include/linux/device.h`](../../../../include/linux/device.h)
+>> +
+>> +use crate::bindings;
+>> +
+>> +/// A raw device.
+>> +///
+>> +/// # Safety
+>> +///
+>> +/// Implementers must ensure that the `*mut device` returned by [`RawDevice::raw_device`] is
+>> +/// related to `self`, that is, actions on it will affect `self`. For example, if one calls
+>> +/// `get_device`, then the refcount on the device represented by `self` will be incremented.
+> 
+> What is a "implementer" here?  Rust code?  C code?  Who is calling
+> get_device() here, rust code or the driver code or something else?  How
+> are you matching up the reference logic of this structure with the fact
+> that the driver core actually owns the reference, not any rust code?
 
-Please remember to send a v2 patch. Otherwise, gregkh's bot will
-notify you that this is an already-sent patch.
+This is a Rust trait, so that would be Rust code. In practice that means
+other abstractions for different device buses, and the generic one which
+I sent as patch 5. It's not a structure, so it doesn't have any
+reference logic itself. That would go into the implementing struct (like
+`Device`). What the comment is saying is that other parts of the Rust
+kernel crate may make assumptions about the relationship between the
+lifetime of the struct implementing RawDevice and the lifetime of the
+underlying `struct device`. So for example, it's not legal to return a
+borrowed reference to a `struct device` that might go away before `self`
+does.
 
-> > ---
-> >  drivers/usb/gadget/udc/mv_udc_core.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-> > index b397f3a84..08474c08d 100644
-> > --- a/drivers/usb/gadget/udc/mv_udc_core.c
-> > +++ b/drivers/usb/gadget/udc/mv_udc_core.c
-> > @@ -2229,7 +2229,11 @@ static int mv_udc_probe(struct platform_device *pdev)
-> >       INIT_LIST_HEAD(&udc->status_req->queue);
-> >
-> >       /* allocate a small amount of memory to get valid address */
-> > -     udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
-> > +     udc->status_req->req.buf = devm_kzalloc(&pdev->dev, 8, GFP_KERNEL);
-> > +     if (!udc->status_req->req.buf) {
-> > +             retval = -ENOMEM;
-> > +             goto err_destroy_dma;
-> > +     }
-> >       udc->status_req->req.dma = DMA_ADDR_INVALID;
-> >
-> >       udc->resume_state = USB_STATE_NOTATTACHED;
-> > --
-> > 2.34.1
-> >
->
-> Hi,
->
-> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-> a patch that has triggered this response.  He used to manually respond
-> to these common problems, but in order to save his sanity (he kept
-> writing the same thing over and over, yet to different people), I was
-> created.  Hopefully you will not take offence and will fix the problem
-> in your patch and resubmit it so that it can be accepted into the Linux
-> kernel tree.
->
-> You are receiving this message because of the following common error(s)
-> as indicated below:
->
-> - This looks like a new version of a previously submitted patch, but you
->   did not list below the --- line any changes from the previous version.
->   Please read the section entitled "The canonical patch format" in the
->   kernel file, Documentation/process/submitting-patches.rst for what
->   needs to be done here to properly describe this.
->
-> If you wish to discuss this problem further, or you have questions about
-> how to resolve this issue, please feel free to respond to this email and
-> Greg will reply once he has dug out from the pending patches received
-> from other developers.
->
-> thanks,
->
-> greg k-h's patch email bot
+We should probably make this `Sealed` too, to make sure no driver can
+even try to implement it (which probably wouldn't make sense)... this
+should only ever be implemented by stuff in the kernel crate.
+
+The reference is owned by whoever owns the reference, no? If you call
+get_device(), you own a new reference to the device (which means you can
+keep the pointer around until you call put_device()). Normally in Rust
+you would have logic where whatever Rust structure that owns a reference
+(which in practice is most things that implement RawDevice) would also
+have a `Clone` trait impl that calls `get_device()` and duplicates
+itself, and a `Drop` trait impl that calls `put_device()`. In Rust
+terms, the Rust structure "owns" the device reference, and whatever code
+creates that structure needs to either be allowed to steal the reference
+from its caller or explicitly call `get_device()`.
+
+You can also elide that in some cases though, like when you're just
+passing a device reference down from a callback into Rust code. Then the
+caller guarantees it has a device reference, which will outlive the
+execution of the callback. So the wrapper that calls user Rust code can
+materialize a RawDevice implementation without calling `get_device()`,
+and then pass a Rust reference to it (which means the downstream code
+can't steal it), and then make sure it gets destroyed without a
+`put_device()` before the callback returns. In Rust terms, that's a code
+path that passes a borrowed reference to the device down into user code.
+
+This kind of ties back to why Rust rather than C... C does not encode
+concepts like "borrowing a reference" or "taking over a reference" in
+the type system, so it's really easy to mess up the refcounting and end
+up with dangling references or leaks. Rust does, so once you wrap a C
+API with the matching Rust semantics, there's no way to mess up and have
+those issues any more.
+
+> 
+>> +///
+>> +/// Additionally, implementers must ensure that the device is never renamed. Commit a5462516aa99
+>> +/// ("driver-core: document restrictions on device_rename()") has details on why `device_rename`
+>> +/// should not be used.
+> 
+> As much as I would have liked that, that commit was from 2010 and
+> device_rename() is still being used by some pretty large subsystems
+> (networking and IB) and I don't see that going away any year soon.
+> 
+> So yes, your device will be renamed, so don't mess with the device name
+> like I mentioned in review of path 5/5 in this series.
+
+I think we can just drop that part (and the name stuff) then. Wedson, is
+that okay?
+
+> 
+>> +pub unsafe trait RawDevice {
+>> +    /// Returns the raw `struct device` related to `self`.
+>> +    fn raw_device(&self) -> *mut bindings::device;
+> 
+> Again, what prevents this device from going away?  I don't see a call to
+> get_device() here :(
+
+That would be up to the caller, if it needs to keep the pointer around.
+Think of `raw_device()` as just "please return the `struct device *`
+pointer for yourself, thanks". If you need to store that pointer for
+later, you need to call `get_device()`. But most of the time it will be
+used transiently, and then you don't need to take any references since
+the safety requirement above guarantees that `self` owns a reference.
+The caller then just needs to make sure not to throw away `self` before
+it finishes using the returned pointer.
+
+Keep in mind that this is an internal abstraction, it's there to be
+implemented and used by the kernel crate itself. User code can't
+actually do anything with the returned pointer without using `unsafe`
+(so it's safe to expose this) and can't implement the trait without
+`unsafe` either. But it can take dynamic trait arguments of type
+RawDevice and pass them along, which is perfectly fine. Rust guarantees
+that the right `get_device()` and `put_device()` are called when
+references get cloned or dropped, for owned objects, and for borrowed
+references there is no need to touch the refcount.
+
+> And again, why are bindings needed for a "raw" struct device at all?
+> Shouldn't the bus-specific wrappings work better?
+
+Because lots of kernel subsystems need to be able to accept "any" device
+and don't care about the bus! That's what this is for. All the bus
+wrappers would implement this so they can be used as an argument for all
+those subsystems (plus a generic one when you just need to pass around
+an actual owned generic reference and no longer need bus-specific
+operations - you can materialize that out of a RawDevice impl, which is
+when get_device() would be called). That's why I'm introducing this now,
+because both io_pgtable and rtkit need to take `struct device` pointers
+on the C side so we need some "generic struct device" view on the Rust side.
+
+~~ Lina
