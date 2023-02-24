@@ -2,140 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F096A1F37
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FADA6A1F3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBXQBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 11:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S229485AbjBXQBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 11:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBXQBY (ORCPT
+        with ESMTP id S229961AbjBXQBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 11:01:24 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0368D305;
-        Fri, 24 Feb 2023 08:01:01 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id d73so6778487iof.4;
-        Fri, 24 Feb 2023 08:01:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=24SeSYQMuEBW/rMjuq7m2xf9oOdtGU4bOMH/EOR5RMM=;
-        b=DSZTB2NU8s3meyG/2StSkJrrUI30HnUJcgtbd+4Vn8rYkDPNSaMZhX5fQwoGe3N7Bh
-         wPXhWTdWD51fheCMWkUp4vIWVqL8DZliEo2LTuVFin8hKczdNwXJlaFJBj7WSJgUr0Ot
-         TcZ1shCiBZ8Sw4vvVHH69ylthf+OozpZ2kVXcw8e9e3o91lWOmkiNvaDkIze33hVzYFE
-         I19+sKwEbK/kAOVmYkp6gfXEahKPa4XTjB2HBVmGZDyMIZNcL2ElkP9MApTlOflTWA8+
-         1MRiSXCICRKO2q7wd/93uKPQ7A2CF50yIMf8XK6hBQQr7xFv41DNq5OUsDPNkwl02/ku
-         +ehw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=24SeSYQMuEBW/rMjuq7m2xf9oOdtGU4bOMH/EOR5RMM=;
-        b=VGXVkaHhnEGTVCgpxZbYGFj5aR9Okvgh9GwXM/0t4EboJt+BPvliPCKFqtK9962H2T
-         WJOsgPzfotgXeiN4B4+raIZOpaMZi9d4WizZQxyEz5kHvTVHFBEEWnKFTTyOkm2N/76q
-         EoM8XS5VPtmppwKFdj+IKHemi+0vFhR6eGp4XjtWaYElcV3JyK77swKCmUU/SreVoLID
-         otO736PESi/ITSIWSqD+ENu2fzZR+VtcjVwuSY/Obn0ZUu6m8U4v38S2v0Z9SSnCFrHx
-         doboatmuYYRIP5gznDiTFwxaUBEYpQr+SC/VblgSQ8Ioqk1KtQ21jyCR3rFYs+sM6HZn
-         tALQ==
-X-Gm-Message-State: AO0yUKXgVVe5y48m4PhlZdxW7smfVaJpTV2Nqh3fLaYN5zWA9GAZ0KHT
-        qZqfW1ZSTfEgUg9yW28iGeo=
-X-Google-Smtp-Source: AK7set+mfd10UDgs4fKqzp8/U0ux4eBGCSMZN60VS9/2fLwNL1WYyotYyAoQrFqyf547U9bH7+wZWg==
-X-Received: by 2002:a6b:fe10:0:b0:74c:a38e:b210 with SMTP id x16-20020a6bfe10000000b0074ca38eb210mr4359938ioh.2.1677254461044;
-        Fri, 24 Feb 2023 08:01:01 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5e8c09000000b00740710c0a65sm3503872ioj.47.2023.02.24.08.00.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 08:01:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <363517fc-d16e-5bcd-763d-fc0e32c2301a@roeck-us.net>
-Date:   Fri, 24 Feb 2023 08:00:57 -0800
+        Fri, 24 Feb 2023 11:01:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEBB6EB19;
+        Fri, 24 Feb 2023 08:01:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E01066092D;
+        Fri, 24 Feb 2023 16:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1677254491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tgTWfleAXKax/MjMcdtBmTWoYmYuDGvm13wqKadZJr8=;
+        b=LxN5XqnVxI+Dj/TLfvKp8yMkcD5vQ48Il5MAWg9BmS37oQ4A0C5G586Rn1C5fYCcqAlty0
+        1VwEG1v1XMrxewSeHv6sbHtw3S4FDHFSCiEuw+xMKFiu3Lsbk6/pPRpI+Sr9N4B00WIosR
+        PvpRZtdEIRHsBR4ZellOPbm78xA0buA=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9193D2C141;
+        Fri, 24 Feb 2023 16:01:28 +0000 (UTC)
+Date:   Fri, 24 Feb 2023 17:01:22 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v2 2/3] livepatch,sched: Add livepatch task switching to
+ cond_resched()
+Message-ID: <Y/jfUlPm7uCWvHPl@alley>
+References: <cover.1676672328.git.jpoimboe@kernel.org>
+ <9f09bff809fc026618108e8bbaac67ef2f8e6d3d.1676672328.git.jpoimboe@kernel.org>
+ <Y/YgARbqsyvzebAl@alley>
+ <20230224013402.hpq5ka4exetrdh4t@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        kernel@pengutronix.de, intel-wired-lan@lists.osuosl.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
- <20230211074113.2782508-7-o.rempel@pengutronix.de>
- <20230224035553.GA1089605@roeck-us.net>
- <20230224041604.GA1353778@roeck-us.net>
- <20230224045340.GN19238@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
- genphy_c45_write_eee_adv()
-In-Reply-To: <20230224045340.GN19238@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224013402.hpq5ka4exetrdh4t@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 20:53, Oleksij Rempel wrote:
-> Hallo Guenter,
+On Thu 2023-02-23 17:34:02, Josh Poimboeuf wrote:
+> On Wed, Feb 22, 2023 at 03:00:33PM +0100, Petr Mladek wrote:
+> > > +	/* All patching has stopped, now start the reverse transition. */
+> > > +	klp_transition_patch->enabled = !klp_transition_patch->enabled;
+> > > +	klp_target_state = !klp_target_state;
+> > 
+> > I have double checked the synchronization and we need here:
+> > 
+> > 	/*
+> > 	 * Make sure klp_update_patch_state() and __klp_sched_try_switch()
+> > 	 * see the updated klp_target_state before TIF_PATCH_PENDING
+> > 	 * is set again in klp_start_transition().
+> > 	 */
+> > 	smp_wmb();
+> > 
+> > The same is achieved by smp_wmb() in klp_init_transition().
+> > 
+> > Note that the extra barrier was missing here because klp_target_state
+> > was set before klp_synchronize_transition(). It was fine because
+> > klp_update_patch_state() was called on locations where a transition
+> > in any direction was always safe.
+> > 
+> > Just for record. We need to modify @klp_target_state after
+> > klp_synchronize_transition() now. The value is used by
+> > __klp_sched_try_switch() to decide when the transition
+> > is safe. It defines what functions must not be on the stack.
 > 
-> On Thu, Feb 23, 2023 at 08:16:04PM -0800, Guenter Roeck wrote:
->> On Thu, Feb 23, 2023 at 07:55:55PM -0800, Guenter Roeck wrote:
->>> On Sat, Feb 11, 2023 at 08:41:10AM +0100, Oleksij Rempel wrote:
->>>> Migrate from genphy_config_eee_advert() to genphy_c45_write_eee_adv().
->>>>
->>>> It should work as before except write operation to the EEE adv registers
->>>> will be done only if some EEE abilities was detected.
->>>>
->>>> If some driver will have a regression, related driver should provide own
->>>> .get_features callback. See micrel.c:ksz9477_get_features() as example.
->>>>
->>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->>>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
->>>
->>> This patch causes network interface failures with all my xtensa qemu
->>> emulations. Reverting it fixes the problem. Bisect log is attached
->>> for reference.
->>>
->>
->> Also affected are arm:cubieboard emulations, with same symptom.
->> arm:bletchley-bmc emulations crash. In both cases, reverting this patch
->> fixes the problem.
-> 
-> Please test this fixes:
-> https://lore.kernel.org/all/167715661799.11159.2057121677394149658.git-patchwork-notify@kernel.org/
-> 
+> Yes, makes sense.  And we need a corresponding smp_rmb() in
+> __klp_sched_try_switch() before the call to klp_try_switch_task(),
+> right?
 
-Applied and tested
+Yes. Great catch!
 
-77c39beb5efa (HEAD -> master) net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
-068a35a8d62c net: phy: do not force EEE support
-66d358a5fac6 net: phy: c45: add genphy_c45_an_config_eee_aneg() function
-ecea1bf8b04c net: phy: c45: use "supported_eee" instead of supported for access validation
+I feel shame that I missed this counter piece when I realized that
+the write barrier was missing.
 
-on top of
+> Something like this on top?  Also updated a few more comments.
+>
+> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> index b9e006632124..218ef4a5d575 100644
+> --- a/kernel/livepatch/transition.c
+> +++ b/kernel/livepatch/transition.c
+> @@ -192,8 +192,8 @@ void klp_update_patch_state(struct task_struct *task)
+>  	 * barrier (smp_rmb) for two cases:
+>  	 *
+>  	 * 1) Enforce the order of the TIF_PATCH_PENDING read and the
+> -	 *    klp_target_state read.  The corresponding write barrier is in
+> -	 *    klp_init_transition().
+> +	 *    klp_target_state read.  The corresponding write barriers are in
+> +	 *    klp_init_transition() and klp_reverse_transition().
+>  	 *
+>  	 * 2) Enforce the order of the TIF_PATCH_PENDING read and a future read
+>  	 *    of func->transition, if klp_ftrace_handler() is called later on
+> @@ -381,6 +381,14 @@ void __klp_sched_try_switch(void)
+>  	if (unlikely(!klp_patch_pending(current)))
+>  		goto out;
+>  
+> +	/*
+> +	 * Enforce the order of the TIF_PATCH_PENDING read above and the
+> +	 * klp_target_state read in klp_try_switch_task().  The corresponding
+> +	 * write barriers are in klp_init_transition() and
+> +	 * klp_reverse_transition().
+> +	 */
+> +	smp_rmb();
 
-d2980d8d8265 (upstream/master, origin/master, origin/HEAD, local/master) Merge tag 'mm-nonmm-stable-2023-02-20-15-29' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+This barrier has basically the same purpose as the implicit read
+barrier in klp_update_patch_state().
 
-No change for xtensa and arm:cubieboard; network interfaces still fail.
-On the plus side, the failures with arm:bletchley-bmc (warnings, crash)
-are longer seen.
+The comment in klp_update_patch_state() says that the read barrier
+actually has two purposes. The 1st one is easy. It is the one
+described above.
 
-Guenter
+It took me quite some time to understand the 2nd purpose again.
+The original comment was:
 
+	 * 2) Enforce the order of the TIF_PATCH_PENDING read and a future read
+	 *    of func->transition, if klp_ftrace_handler() is called later on
+	 *    the same CPU.  See __klp_disable_patch().
+
+I think that a better description would be:
+
+	 * 2) Make sure that this CPU sees func->transition enabled when
+	 *    it sees the TIF_PATCH_PENDING enabled. This is important when
+	 *    the current task is transitioning itself and then calls
+	 *    klp_ftrace_handler() later. It ensures that the ftrace handler
+	 *    would check the state change that we did here.
+	 *    The corresponding write barrier is in __klp_enable_patch()
+	 *    and __klp_disable_patch().
+
+Note that the previous comment wasn't correct. IMHO, the related write
+barrier is needed in both __klp_enable_patch() and __klp_disable_patch().
+
+> +
+>  	klp_try_switch_task(current);
+>  
+>  out:
+> @@ -604,8 +612,9 @@ void klp_init_transition(struct klp_patch *patch, int state)
+>  	 * see a func in transition with a task->patch_state of KLP_UNDEFINED.
+>  	 *
+>  	 * Also enforce the order of the klp_target_state write and future
+> -	 * TIF_PATCH_PENDING writes to ensure klp_update_patch_state() doesn't
+> -	 * set a task->patch_state to KLP_UNDEFINED.
+> +	 * TIF_PATCH_PENDING writes to ensure klp_update_patch_state() and
+> +	 * __klp_sched_try_switch() don't set a task->patch_state to
+> +	 * KLP_UNDEFINED.
+>  	 */
+>  	smp_wmb();
+>  
+> @@ -661,9 +670,19 @@ void klp_reverse_transition(void)
+>  	 */
+>  	klp_synchronize_transition();
+>  
+> -	/* All patching has stopped, now start the reverse transition. */
+> +	/* All patching has stopped, now start the reverse transition: */
+> +
+
+Is the extra empty line intended?
+
+>  	klp_transition_patch->enabled = !klp_transition_patch->enabled;
+>  	klp_target_state = !klp_target_state;
+> +
+> +	/*
+> +	 * Enforce the order of the klp_target_state write and the
+> +	 * TIF_PATCH_PENDING writes in klp_start_transition() to ensure
+> +	 * klp_update_patch_state() and __klp_sched_try_switch() don't set
+> +	 * task->patch_state to the wrong value.
+> +	 */
+> +	smp_wmb();
+> +
+>  	klp_start_transition();
+>  }
+
+This made me to revisit all the barriers in the livepatch code.
+The good thing is that it seems that all the barriers are correct,
+including the new ones proposed in this patchset.
+
+But some comments are a bit misleading. I would like to update
+them a bit. I have started working on it but it goes slowly.
+I often get lost...
+
+I am not sure about the ordering. I do not want to block this patchset
+by the clean up of the comments. The currently proposed ones are
+good enough. Feel free to send v3.
+
+Or would you prefer to wait for my clean up of the comments?
+
+Best Regards,
+Petr
