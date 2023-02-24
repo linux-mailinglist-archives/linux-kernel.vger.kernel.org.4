@@ -2,123 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D262B6A18E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8896A18EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjBXJfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
+        id S229624AbjBXJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjBXJfU (ORCPT
+        with ESMTP id S229532AbjBXJhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:35:20 -0500
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E03265CD6;
-        Fri, 24 Feb 2023 01:35:09 -0800 (PST)
-Received: by mail-qt1-x843.google.com with SMTP id c18so358246qte.5;
-        Fri, 24 Feb 2023 01:35:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8s6o4CkNEdFG6GmMR0ELLlfRZdxakWUBLhovBwvl3eY=;
-        b=LUVLB0d+18NvWtkYDtpkdc6YZWqSjg+9mGVsbd57ILSRQ/tGIzOR8YaC7gZqbbU6Gz
-         O+P68Sl1ccTMLo9jh/fKEDEdFiQ6CLbpOrWRGkTEo5gwJbhEulfYILn/UGy0YFYxCeMq
-         Mq029BpRyIlVhGufGwXtKT96IHg7VcMgT12bxftUV2VY19JfnuomrzKCQQgBCwDeMGK0
-         PyzGNSaIEW3/p/bhAYcA43BUDd++XZ37WPDa4S32ala4lTuvZ+hrLcepxWQauZ5t/5Sc
-         y2hzKrASCKsN+HhuWArbgac/EZdr9UBPlX2uAXnLLH6RqigZ9Q/7DeknkNRSvek7UlHj
-         f6dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8s6o4CkNEdFG6GmMR0ELLlfRZdxakWUBLhovBwvl3eY=;
-        b=ZVAp/PTYKg9j24IKY+IU7R+ZcDCqjCwZQxYX8oGcApIm+rXkOAB4IOK0YrmB0/rd3v
-         CCqHu396GqOmBs1cyBb8jko3FWnJv7ON5tKsNb/shx9LFrHqG0pPn03XS0UR7bQ2bL+Y
-         fBFHx5uezMkSVH6LDpaNxipjMdzwP7kifLnlcX9dDz2Wbp1SrzamX0csN/wSv2/MZFzR
-         EOvqqZiFwmDj4VhXr/UtV8/T1Ck6XaeVq+mR6GuxkUj9nEmnfYGO5eavbOeeFjZmxDYo
-         FkQuMl2lMkPh9ckB2osCjKAOzTGIWLsu6jzwsCCtc3hBjfXPKzRn0lC/UG/LMnEshS+V
-         eD6A==
-X-Gm-Message-State: AO0yUKXd3g4ok8gpp382E0s4AsObRnKdAm+YZMefgyF8nYsPxduJAM5d
-        44FtWLxszD0jm2tL4YTU0fA=
-X-Google-Smtp-Source: AK7set9zwJ3jd7pkf4NjfrtUgcWrmJbWmuQrD6SmZV2krTqnjJ2WbrvwojVMNguHhoWdya2ov5xm2w==
-X-Received: by 2002:ac8:7e94:0:b0:3b9:fc92:a6 with SMTP id w20-20020ac87e94000000b003b9fc9200a6mr32012483qtj.6.1677231308597;
-        Fri, 24 Feb 2023 01:35:08 -0800 (PST)
-Received: from [127.0.0.1] ([103.152.220.17])
-        by smtp.gmail.com with ESMTPSA id t18-20020a37aa12000000b006bb82221013sm5719992qke.0.2023.02.24.01.35.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 01:35:07 -0800 (PST)
-Message-ID: <22948c58-d9df-1326-a849-4278d14f76b5@gmail.com>
-Date:   Fri, 24 Feb 2023 17:35:01 +0800
+        Fri, 24 Feb 2023 04:37:36 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDE64D70;
+        Fri, 24 Feb 2023 01:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677231422; x=1708767422;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qh5dHIF3Zy/2vFiSSHWmzyQvmvJlUbTRwfF+WltTESk=;
+  b=WDRmYASbnHMX3Ojs54SxtR4XRQJcnzIlqgO0LVMrqnnPuoTJUGcsDl+p
+   q7lTPDO1RvYqMufhR4Swyq+ciCjFN5UzzFbTRdCIH31tMDTToidONCaWO
+   wwVgFq3VlbhT2hZsgq6GRfavpzfa4627vKCHOGo6QjKSlXHo1GviywI04
+   Jb9qM+kFi5zX1vpLGvmsqz9i7yiHw8qHcjyh8LDYOHTZlmViKL6GS+xfP
+   lh2NK0dHo/LYlKDOQrSstBW12KHy/00lN/ngwTbVod68HxdA0UGoZc79o
+   DbNRlqAFoks4I6NKWKYWyptQ8/jcGFitNemb/4umoWmXqr2tOM3Kgqt9/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331171606"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="331171606"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="741608912"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="741608912"
+Received: from rkris18-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.56.190])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:03 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id C84DF10A581; Fri, 24 Feb 2023 12:36:00 +0300 (+03)
+Date:   Fri, 24 Feb 2023 12:36:00 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, kvm@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org, chao.p.peng@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
+        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
+        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, linmiaohe@huawei.com, luto@kernel.org,
+        mail@maciej.szmigiero.name, mhocko@suse.com, michael.roth@amd.com,
+        mingo@redhat.com, naoya.horiguchi@nec.com, pbonzini@redhat.com,
+        qperret@google.com, rppt@kernel.org, seanjc@google.com,
+        shuah@kernel.org, steven.price@arm.com, tabba@google.com,
+        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
+        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
+        x86@kernel.org, yu.c.zhang@linux.intel.com
+Subject: Re: [RFC PATCH 1/2] mm: restrictedmem: Allow userspace to specify
+ mount_path for memfd_restricted
+Message-ID: <20230224093600.osmbpilmsi64wlwb@box.shutemov.name>
+References: <20230216100150.yv2ehwrdcfzbdhcq@box.shutemov.name>
+ <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] net: tls: fix possible info leak in
- tls_set_device_offload()
-To:     Sabrina Dubroca <sd@queasysnail.net>
-Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230223090508.443157-1-hbh25y@gmail.com> <Y/dK6OoNpYswIqrD@hog>
- <310391ea-7c71-395e-5dcb-b0a983e6fc93@gmail.com>
- <04c4d6ee-f893-5248-26cf-2c6d1c9b3aa5@gmail.com> <Y/ht6gQL+u6fj3dG@hog>
-Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <Y/ht6gQL+u6fj3dG@hog>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/2/2023 15:57, Sabrina Dubroca wrote:
-> 2023-02-24, 11:33:29 +0800, Hangyu Hua wrote:
->> On 24/2/2023 11:07, Hangyu Hua wrote:
->>> On 23/2/2023 19:15, Sabrina Dubroca wrote:
->>>> 2023-02-23, 17:05:08 +0800, Hangyu Hua wrote:
->>>>> After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
->>>>> tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL
->>>>> if it fails
->>>>> before kmalloc cctx->iv. This may cause info leak when we call
->>>>> do_tls_getsockopt_conf().
->>>>
->>>> Is there really an issue here?
->>>>
->>>> If both tls_set_device_offload and tls_set_sw_offload fail,
->>>> do_tls_setsockopt_conf will clear crypto_{send,recv} from the context.
->>>> Then the TLS_CRYPTO_INFO_READY in do_tls_getsockopt_conf will fail, so
->>>> we won't try to access iv or rec_seq.
->>>>
->>>
->>> My bad. I forget memzero_explicit. Then this is harmless. But I still
->>> think it is better to set them to NULL like tls_set_sw_offload's error
->>> path because we don't know there are another way to do this(I will
->>> change the commit log). What do you think?
+On Thu, Feb 23, 2023 at 12:55:16AM +0000, Ackerley Tng wrote:
 > 
-> Yes, I guess for consistency between functions it would be ok.
+> "Kirill A. Shutemov" <kirill@shutemov.name> writes:
 > 
->> Like a rare case, there is a race condition between
->> do_tls_getsockopt_conf and do_tls_setsockopt_conf while the previous
->> condition is met. TLS_CRYPTO_INFO_READY(crypto_info) is not
->> protected by lock_sock in do_tls_getsockopt_conf. It's just too
->> difficult to satisfy both conditions at the same time.
+> > On Thu, Feb 16, 2023 at 12:41:16AM +0000, Ackerley Tng wrote:
+> > > By default, the backing shmem file for a restrictedmem fd is created
+> > > on shmem's kernel space mount.
 > 
-> Ugh, thanks for noticing this. We should move the lock_sock in
-> getsockopt before TLS_CRYPTO_INFO_READY. Do you want to write that
-> patch?
+> > > With this patch, an optional tmpfs mount can be specified, which will
+> > > be used as the mountpoint for backing the shmem file associated with a
+> > > restrictedmem fd.
 > 
-> Thanks.
+> > > This change is modeled after how sys_open() can create an unnamed
+> > > temporary file in a given directory with O_TMPFILE.
 > 
+> > > This will help restrictedmem fds inherit the properties of the
+> > > provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+> > > binding hints, etc.
+> 
+> > > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > > ---
+> > >   include/linux/syscalls.h           |  2 +-
+> > >   include/uapi/linux/restrictedmem.h |  8 ++++
+> > >   mm/restrictedmem.c                 | 63 +++++++++++++++++++++++++++---
+> > >   3 files changed, 66 insertions(+), 7 deletions(-)
+> > >   create mode 100644 include/uapi/linux/restrictedmem.h
+> 
+> > > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> > > index f9e9e0c820c5..4b8efe9a8680 100644
+> > > --- a/include/linux/syscalls.h
+> > > +++ b/include/linux/syscalls.h
+> > > @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int
+> > > flags);
+> > >   asmlinkage long sys_set_mempolicy_home_node(unsigned long start,
+> > > unsigned long len,
+> > >   					    unsigned long home_node,
+> > >   					    unsigned long flags);
+> > > -asmlinkage long sys_memfd_restricted(unsigned int flags);
+> > > +asmlinkage long sys_memfd_restricted(unsigned int flags, const char
+> > > __user *mount_path);
+> 
+> > >   /*
+> > >    * Architecture-specific system calls
+> 
+> > I'm not sure what the right practice now: do we provide string that
+> > contains mount path or fd that represents the filesystem (returned from
+> > fsmount(2) or open_tree(2)).
+> 
+> > fd seems more flexible: it allows to specify unbind mounts.
+> 
+> I tried out the suggestion of passing fds to memfd_restricted() instead
+> of strings.
+> 
+> One benefit I see of using fds is interface uniformity: it feels more
+> aligned with other syscalls like fsopen(), fsconfig(), and fsmount() in
+> terms of using and passing around fds.
+> 
+> Other than being able to use a mount without a path attached to the
+> mount, are there any other benefits of using fds over using the path string?
 
-I see. I will make a new patch to fix the race and send v2 of this.
+It would be nice if anyone from fs folks comment on this.
 
-Thanks,
-Hangyu
+> Should I post the patches that allows specifying a mount using fds?
+> Should I post them as a separate RFC, or as a new revision to this RFC?
+
+Let's first decide what the right direction is.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
