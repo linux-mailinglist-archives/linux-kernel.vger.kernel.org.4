@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CCF6A1DA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A8B6A1DB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjBXOpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S230064AbjBXOpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjBXOox (ORCPT
+        with ESMTP id S230056AbjBXOpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:44:53 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FD028216
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:44:51 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id f16so14348903ljq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:44:51 -0800 (PST)
+        Fri, 24 Feb 2023 09:45:06 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166113BD9C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:45:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso3059434pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+i3g6u0rlqo0uOWY4ZzAscD0foBD0Ue4NJ+Kep1BHaA=;
-        b=MHZixJAy4T8/xACVwYG6GipRpVWAyr0lBjFK6Vbgcwa31ncnxWNPWAJNZDDyo6xwXZ
-         9rMdq0ZA6RA69oeljRYAmNZC46+fqrTwvc6klacJpczUqyIoPkqKxnTIcy1QtmHYPY1n
-         l1txh1Z5h41/9878v4AKRIzfcwx46ZF6qHWLt27lczkPv/tvBxoBJefRtYJYhDSDbWJ4
-         ZMjEkPHdoTStnUpAm/3K7YRdxxpDuSmx6PArNw0J0donopcIVpn9eW0ZubsYzho+W1Nf
-         FNZwTHDYfvAOGcQj2g6yRHmQfsVp5lE3Kbmq9BTjWQCZp3M6eDQP/OqCDjTlpbrVTUdB
-         84eA==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=coTtLh17Jcp/i0fKluv9ugDwM4AesfTvM9iAIYJCq2A=;
+        b=f3JP3IfXZFoWmGVI+4aC5ZR6KytWd3/IEHl8NQy66xo+fh0HIm6MxedamJlxa8lmAl
+         fPZCJigIQoFapyXsf34PLbN35QvacCathImrfrvcSwCQu3H/mXdgGvsKKvIDS7GxJcSI
+         K4hISq8h9SDFlloVloSQcmKNkcY3+ahaPqbJwxZNGSgsfIqmdjIGe9ovGg8Py222kmjl
+         zyvSr5nhPsrS30yHyQgAGQ2XxxjJy8kB1k2F4U86BXsVCd3c4kUCL0G4lrFkSklq3c25
+         OyvtfK3ObB4PhLcCUuu+YrSO5foxebwWaxQ3UrcvkXuH8tl7RDskoyYWD/uNdmXFNdWG
+         fp4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+i3g6u0rlqo0uOWY4ZzAscD0foBD0Ue4NJ+Kep1BHaA=;
-        b=aZkpJSZDNMrDauYxIwETTOgf9x8jbe7Q60Ge+C+ixbpB2L/qnIfMhVQudmAS7Gqw+L
-         u4AqFz08YolR+ECRnWt3GNLxi0Jf+fsHOIpXFQJncLEUQ5jBb3H7dRMAB6sdsvsV0/tZ
-         Mx1N0RK1OJ+9lNvhW23aB0XjNzzDFx2TL7iloGMtedpAn7R7cevQQ59drfJKe6PAhHtq
-         RM4XTgyQyv1uXxYfqbZh1WcygLZ0F1MnJtql9Td06zvNYBgiM1uVifTi2hFYe19GhnYY
-         Zuu5xrxOEXuuNT1P3bk2g7VMli7jZec5o/tJqeXekymR2xn/OvZgoHHobX5m962/SdCt
-         qJ7Q==
-X-Gm-Message-State: AO0yUKVckwF94UC52GQasSMbu1VYvb+Nz5yZMBGBHU2k9k+7Wn1Oso/f
-        35z1vt5Igzk/F6MFqnwhwJo=
-X-Google-Smtp-Source: AK7set+1gVifLSj869ewiGuO0idCmkLh1gMdBDGD/nNgHxD48/d3X4yKnATQq7cR4HQXwo8FshjYFw==
-X-Received: by 2002:a2e:3a12:0:b0:295:9021:450a with SMTP id h18-20020a2e3a12000000b002959021450amr4201173lja.49.1677249889586;
-        Fri, 24 Feb 2023 06:44:49 -0800 (PST)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id bg27-20020a05651c0b9b00b002959b1162f0sm784267ljb.96.2023.02.24.06.44.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 06:44:49 -0800 (PST)
-Message-ID: <d6a6097b-cc48-4213-a5bf-7b154870ce0b@gmail.com>
-Date:   Fri, 24 Feb 2023 16:44:48 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=coTtLh17Jcp/i0fKluv9ugDwM4AesfTvM9iAIYJCq2A=;
+        b=pVZobXBT2wf8p7HOEFHELAzINdo8qfMdOi9ddd/qrhuDzZ9CQsXy+NopuBuD+FaxnH
+         ij796ttuZwf6EgUC9nl9c9edZTUgC5UznaNOUCpDljrYQnir+wwbKv1GelORomlR/Hkz
+         D9y4fXwOooRE+7Kds78lOTVIjHTCzMp+ocC5v2mtqcVxLd5nJ87d1XGLPoe9tE3HGKvD
+         XsKWtvHWO03QXYwROfEUFKFd50fP35g4xIvNBvYyc7e27sNIkcDRhRQXDvnaBcTD+Gbb
+         MR/iry5rj3rYcC9N+dLyNT2CNN5xx/9oxKCHcfBoBfDgEtT4SJnCH9MbzhzGxJ0SkIdO
+         hucw==
+X-Gm-Message-State: AO0yUKVhClXS2NhuzP3mP0fqpn/mYNkjeltE+D+1EwuPruQE4chri3hB
+        cgTL4bNBbjea9XTpksTJQJoWYw==
+X-Google-Smtp-Source: AK7set/Iyjj7TrMe766Iwdl0u/OZcVJHX4ug1aHv9t/gLxoHo1hy6D3fQY4QTXwCFZqVNjl7iJMV7g==
+X-Received: by 2002:a17:90b:38c7:b0:234:a88e:d67e with SMTP id nn7-20020a17090b38c700b00234a88ed67emr17691751pjb.34.1677249904318;
+        Fri, 24 Feb 2023 06:45:04 -0800 (PST)
+Received: from sunil-laptop ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170902b60c00b0019472226769sm9103967pls.251.2023.02.24.06.44.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 06:45:04 -0800 (PST)
+Date:   Fri, 24 Feb 2023 20:14:54 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V2 18/21] RISC-V: Add ACPI initialization in setup_arch()
+Message-ID: <Y/jNZg5k1UZ26i1X@sunil-laptop>
+References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
+ <20230216182043.1946553-19-sunilvl@ventanamicro.com>
+ <20230220200743.rev3djzbaa2jcmg6@orel>
+ <Y/ivRjQbIna7M4R2@sunil-laptop>
+ <20230224130712.c42ob66ux5xhffbm@orel>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] iio: Add some kerneldoc for channel types
-Content-Language: en-US, en-GB
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrea Merello <andrea.merello@iit.it>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <10a855f9adc1d710150b7f647500c3c6a769f9ca.1677243698.git.mazziesaccount@gmail.com>
- <CAHp75VdAmUhhP0NF19wOFGGc-v0SWSecywdd5=cBhzbCsSn3BA@mail.gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <CAHp75VdAmUhhP0NF19wOFGGc-v0SWSecywdd5=cBhzbCsSn3BA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224130712.c42ob66ux5xhffbm@orel>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/23 16:20, Andy Shevchenko wrote:
-> On Fri, Feb 24, 2023 at 3:02 PM Matti Vaittinen
-> <mazziesaccount@gmail.com> wrote:
->>
->> For occasional contributor like me navigating the IIO channel types and
->> modifiers may be a daunting task. One may have hard time finding out
->> what type of channel should be used for device data and what units the
->> data should be converted.
->>
->> There is a great documentation for the sysfs interfaces though. What is
->> missing is mapping of the channel types and modifiers to the sysfs
->> documentation (and entries in documentation).
->>
->> Give a hand to a driver writer by providing some documentation and by
->> pointing to the sysfs document from the kerneldocs of respective enums.
-> 
-> kernel doc
-> 
-> Documentation is always welcome!
-> 
+On Fri, Feb 24, 2023 at 02:07:12PM +0100, Andrew Jones wrote:
+> On Fri, Feb 24, 2023 at 06:06:22PM +0530, Sunil V L wrote:
+> > On Mon, Feb 20, 2023 at 09:07:43PM +0100, Andrew Jones wrote:
+> > > On Thu, Feb 16, 2023 at 11:50:40PM +0530, Sunil V L wrote:
 > ...
+> > > > +	fadt = (struct acpi_table_fadt *)table;
+> > > > +
+> > > > +	if (!(fadt->flags & ACPI_FADT_HW_REDUCED)) {
+> > > 
+> > > Do we also need to check for ACPI version 5.0+ when checking for HW
+> > > reduced?
+> > > 
+> > We need to add version check of FADT once spec is released. Will
+> > update it at that time.
+> > 
 > 
-Thanks for the review Andy. All comments valid and to the point - I'll 
-fix these issues before respinning!
+> I was thinking we need the version check already just for the flag.
+> The spec has a footnote that says
+> 
+> "The description of HW_REDUCED_ACPI provided here applies to ACPI
+>  specifications 5.0 and later"
+> 
+> It doesn't really matter in practice since no RISC-V machines can
+> boot with ACPI less than a version that support the new RISC-V
+> tables... But I'd rather we either document that fact, or just do
+> the check.
+> 
+Okay Let me add the current FADT version of 6.5 which for sure
+supports HW_REDUCED flag. When the spec gets released, we can update with
+actual revision we need for RISC-V.
 
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Thanks,
+Sunil
