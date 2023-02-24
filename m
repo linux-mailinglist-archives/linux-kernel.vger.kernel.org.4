@@ -2,149 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BE76A1C33
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7756A1C38
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjBXMdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S229560AbjBXMed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBXMdb (ORCPT
+        with ESMTP id S229609AbjBXMeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:33:31 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E72611145
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:33:30 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id u10so16322415pjc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:33:30 -0800 (PST)
+        Fri, 24 Feb 2023 07:34:31 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55410A96
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:34:30 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id y19so7515871pgk.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=33SPJrepXDYssJSSelUFbYD0nTs1piiuF+fmKofYKbQ=;
-        b=HZjYKspC5Lg+X2Vc9+J+jE4cCFYNqipGB40OShgGw1NkXykEcvmXTg3EkUMMJ0Krvq
-         GirqMJEO2TtJ9E3eYI8I6jWMOAqAeSJuiQT4psC4ab29hORjztAwkbW3JR8govjoCuZX
-         kq+dIR0feWtHrGqS5CIxTm+uAdbbY94+z1t/F7ehxZ4bSnq9O6hyqHht8cm/ZSXec9w/
-         hN7Hxvf33LQJF9T6ZiavpINS3coNhyiK68zbYhbTpEeJAesWNHBSTRkFkCcqq3JuQaHX
-         9SnFSd188NFbKPg0sqNBf11jT074nHgWyuurp4rkBXTfn84I6WJI9Ymsbiwl9RinrKej
-         ZQ0A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEGhtws+wiErVlZ42D9/AJOQAx1qZAqoPjXvwOSW4/Y=;
+        b=Luaf/TY2AqGgB0hkPGQ+LksJldhRPkMqBb4ra3M5uPh482D5dCWjp2wvQj+3mmf8t/
+         X2WA9NiEHb2iqZwdly4569+fDq7Hi0rkAbZVvlVwgZMqRInv6IVPZH4caEEHFdTE7ikU
+         uhlFGI5xi6P4yFE2rQ40ONh+kB6ndNlGtPcAPkh6nOKoK90KKMc+ZxYZneW2qZVqlcWd
+         7n4JUMOsVevmFGWjsVrWTBI7xLY3JeObOD6vhJVoyNYoPdKWIVYq6tXxebmUxTWWIuQ2
+         b7CS39BWFDzjcF1f7/u8phe/mFv/91h8oIoyGNwS5sifVSNtcBhXli3suvE5ydiEBd9k
+         yUAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=33SPJrepXDYssJSSelUFbYD0nTs1piiuF+fmKofYKbQ=;
-        b=dQJk9fpYqTKtuVGyFakcj7JfpY1wFh0syctafqJxdh1iT94EQzfMv9OoUv8RvqtTi/
-         lCN4yt5uCS3CxeSNpJu43ICrtqRyx/8bmE+YQo0wmnxElIAecg1ogJInqUFLwKnGso4v
-         5FPh3CButFixmJsUscWCeV5xfRVXyDo+QNIek1nYC20/rCJTd7iVv5CvMUh4pGHWcikp
-         QVvcv+LmOP74oBsAAxO4ENasVV4RvMuyXfeWC9CNOvB+3hNbxoDpIWVn6+7BSqX42h5V
-         OBn5Gw1NVl0SvD8+yLJlbQLjc43dZj1PDcfXditWFDa6OvL9kSW6cu5xb+cZTZT3K0xe
-         dJ0Q==
-X-Gm-Message-State: AO0yUKUmMxfEbfe5Q0B3HiGrD2A7BkhAZxSx6OHPjXrpVQyDwXb1C/Om
-        uCPcNwwBJjwImAEpmgz0NyQjlQ==
-X-Google-Smtp-Source: AK7set8lh4oq9Ny2jUvEaopudjtRsPWRkWSe2qv0BwYCD1GzQdlvIN5SMUosnRA8cejuyeAa/JHwWg==
-X-Received: by 2002:a05:6a20:a020:b0:cb:db9d:f78d with SMTP id p32-20020a056a20a02000b000cbdb9df78dmr9506579pzj.47.1677242009581;
-        Fri, 24 Feb 2023 04:33:29 -0800 (PST)
-Received: from sunil-laptop ([49.206.14.226])
-        by smtp.gmail.com with ESMTPSA id u2-20020a62ed02000000b005e0699464e3sm1835833pfh.206.2023.02.24.04.33.23
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zEGhtws+wiErVlZ42D9/AJOQAx1qZAqoPjXvwOSW4/Y=;
+        b=Oc58zq81FJvT0cM5zWiMZ/5ietdaqv3iqNvmXN2MeHYxpUtZTMalTUtgSQZWcgCA69
+         MCVwCXuz9yO2f7FEDUoioHXayCIToX5vmdtDiYWJXU7SQoWutdEHpUABVliH1b0xfWir
+         TcJsqMVKx35zk+309CA/fEulbvay2ow3rYtahAcNNfKnlP5h/e55QzC0pXaUhh2Z2gip
+         oIukzCcrPcjcJbc5y1tBMCx2z1yjWRJROFp8iy2Fy/n/qEWPjJb5p77F0sdcgfgv/LBr
+         EPv6aL4W2BODHeAic9SBFWa2Av3IR6m3YZhHjNPj/w9bVhAfbjE33bgwBUsjKOFh/7vb
+         Vvpw==
+X-Gm-Message-State: AO0yUKWzQe2g0Kq8rvQa8qaMDnHtdS13XVjH8Tych+4uAYpXuKoFO5E2
+        SudJZD6IeQMORKXmkVe3UAk=
+X-Google-Smtp-Source: AK7set+gXnlTz88F5C7LHfoQ4IzUJlqJp62R4Zz5yYBd6fcXYpcsOMNQ0lXzhyMpmivpyYCZ3CxCDQ==
+X-Received: by 2002:a62:601:0:b0:5a8:c2bb:f0c4 with SMTP id 1-20020a620601000000b005a8c2bbf0c4mr11619701pfg.13.1677242069584;
+        Fri, 24 Feb 2023 04:34:29 -0800 (PST)
+Received: from XHD-CHAVAN-L1.amd.com ([103.115.201.82])
+        by smtp.gmail.com with ESMTPSA id e24-20020a62aa18000000b005d61829db4fsm4866032pff.168.2023.02.24.04.34.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 04:33:29 -0800 (PST)
-Date:   Fri, 24 Feb 2023 18:03:20 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V2 17/21] RISC-V: time.c: Add ACPI support for time_init()
-Message-ID: <Y/iukIjBKO0wRm/X@sunil-laptop>
-References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
- <20230216182043.1946553-18-sunilvl@ventanamicro.com>
- <20230220195808.reyuclvefujucpsq@orel>
+        Fri, 24 Feb 2023 04:34:28 -0800 (PST)
+From:   Rohit Chavan <roheetchavan@gmail.com>
+To:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     Rohit Chavan <roheetchavan@gmail.com>
+Subject: [PATCH] staging: vme: remove blank line after return statement
+Date:   Fri, 24 Feb 2023 18:04:01 +0530
+Message-Id: <20230224123401.1365-1-roheetchavan@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220195808.reyuclvefujucpsq@orel>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 08:58:08PM +0100, Andrew Jones wrote:
-> On Thu, Feb 16, 2023 at 11:50:39PM +0530, Sunil V L wrote:
-> > On ACPI based platforms, timer related information is
-> > available in RHCT. Add ACPI based probe support to the
-> > timer initialization.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  arch/riscv/kernel/time.c | 25 +++++++++++++++++++------
-> >  1 file changed, 19 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
-> > index 1cf21db4fcc7..e49b897fc657 100644
-> > --- a/arch/riscv/kernel/time.c
-> > +++ b/arch/riscv/kernel/time.c
-> > @@ -4,6 +4,7 @@
-> >   * Copyright (C) 2017 SiFive
-> >   */
-> >  
-> > +#include <linux/acpi.h>
-> >  #include <linux/of_clk.h>
-> >  #include <linux/clockchips.h>
-> >  #include <linux/clocksource.h>
-> > @@ -18,17 +19,29 @@ EXPORT_SYMBOL_GPL(riscv_timebase);
-> >  void __init time_init(void)
-> >  {
-> >  	struct device_node *cpu;
-> > +	struct acpi_table_rhct *rhct;
-> > +	acpi_status status;
-> >  	u32 prop;
-> >  
-> > -	cpu = of_find_node_by_path("/cpus");
-> > -	if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
-> > -		panic(KERN_WARNING "RISC-V system with no 'timebase-frequency' in DTS\n");
-> > -	of_node_put(cpu);
-> > -	riscv_timebase = prop;
-> > +	if (acpi_disabled) {
-> > +		cpu = of_find_node_by_path("/cpus");
-> > +		if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
-> > +			panic("RISC-V system with no 'timebase-frequency' in DTS\n");
-> > +		of_node_put(cpu);
-> > +		riscv_timebase = prop;
-> > +	} else {
-> > +		status = acpi_get_table(ACPI_SIG_RHCT, 0, (struct acpi_table_header **)&rhct);
-> > +		if (ACPI_FAILURE(status))
-> > +			panic("RISC-V ACPI system with no RHCT table\n");
-> > +		riscv_timebase = rhct->time_base_freq;
-> > +		acpi_put_table((struct acpi_table_header *)rhct);
-> > +	}
-> >  
-> >  	lpj_fine = riscv_timebase / HZ;
-> >  
-> > -	of_clk_init(NULL);
-> > +	if (acpi_disabled)
-> > +		of_clk_init(NULL);
-> 
-> I think we should be able to move of_clk_init() up into the acpi_disabled
-> arm rather than add another if here.
+This patch resolves a checkpatch issue by removing blank line,
+after return statement at end of the function.
 
-Yes, will update.
+Signed-off-by: Rohit Chavan <roheetchavan@gmail.com>
+---
+ drivers/staging/vme_user/vme_fake.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Thanks,
-Sunil
+diff --git a/drivers/staging/vme_user/vme_fake.c b/drivers/staging/vme_user/vme_fake.c
+index f5d2c345978a..7c53a8a7b79b 100644
+--- a/drivers/staging/vme_user/vme_fake.c
++++ b/drivers/staging/vme_user/vme_fake.c
+@@ -329,7 +329,6 @@ static int fake_master_set(struct vme_master_resource *image, int enabled,
+ err_dwidth:
+ err_window:
+ 	return retval;
+-
+ }
+
+ /*
+@@ -638,7 +637,6 @@ static noinline_for_stack void fake_vmewrite8(struct fake_driver *bridge,
+ 	}
+
+ 	fake_lm_check(bridge, addr, aspace, cycle);
+-
+ }
+
+ static noinline_for_stack void fake_vmewrite16(struct fake_driver *bridge,
+@@ -669,7 +667,6 @@ static noinline_for_stack void fake_vmewrite16(struct fake_driver *bridge,
+ 	}
+
+ 	fake_lm_check(bridge, addr, aspace, cycle);
+-
+ }
+
+ static noinline_for_stack void fake_vmewrite32(struct fake_driver *bridge,
+@@ -700,7 +697,6 @@ static noinline_for_stack void fake_vmewrite32(struct fake_driver *bridge,
+ 	}
+
+ 	fake_lm_check(bridge, addr, aspace, cycle);
+-
+ }
+
+ static ssize_t fake_master_write(struct vme_master_resource *image, void *buf,
+@@ -1234,7 +1230,6 @@ static int __init fake_init(void)
+ 	kfree(fake_bridge);
+ err_struct:
+ 	return retval;
+-
+ }
+
+ static void __exit fake_exit(void)
+--
+2.30.2
+
