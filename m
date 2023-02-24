@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425476A1D8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401D96A1D8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjBXOhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S229936AbjBXOiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjBXOhN (ORCPT
+        with ESMTP id S229634AbjBXOiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:37:13 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18F7679B4;
-        Fri, 24 Feb 2023 06:37:11 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id gi3-20020a17090b110300b0023762f642dcso2895997pjb.4;
-        Fri, 24 Feb 2023 06:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GtHGA3HFyOs3Fz5IJ5DexsxarDl9tkHRWlmic7uJ/C4=;
-        b=Dx2Grd9BGKbRDkGFAUPYQ8vTzH8QWnDRsrCraVsYxfUEWdevRLBi1R7C5EZoW7zxZ+
-         pLz5iJ+OsoHHhgDycBidBpMHnZMuQ8p67MXtb5rU859qW8JxsTxD83dfz2l2zp1PfH7D
-         3IpSsiccmyOeXVqk5vpQAbjayRtfEjZ0EtE4NMKFqERzsKFNfDaKZ3V0sS8jVgAMJqXl
-         Iqt6vwYqQCLDLJ+/5+bB5BRj73Mi2AjmkamOWkf3SswgDF+YjKKnemJbrIVpmwv8HR+q
-         jNdjAHK4HrQm720hJSG9zDcdielgSq66xcEZpQmUoOIX3NNzITIsdDyEDBef5BH5A2Fj
-         IYwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GtHGA3HFyOs3Fz5IJ5DexsxarDl9tkHRWlmic7uJ/C4=;
-        b=XxzcU/EgMS0GdEy/7uUl5IvaRySUDltAdbwyP4jKvCp6mpfz/tAdGaTuFRizRMS3qU
-         oMD3jallG8okoAAXfbLf27Hcu4tIY07EkjpNMWXxozIimdoiCGrseQaGgx1wW7Nhq3Tl
-         yTo1s0Cz64Nk2ZYUMLB+3m4hykc4aTUHSlQbSTuJq/8pF9gpywEsrf8uXoCR+auxD+XZ
-         4BokvKO4JX1s0Zw/YS6nW43YcV3uuZ2/HDCdrJL8cNscMXawQmExrzKB85dysppm9Mgn
-         WtfLftek0IWRNtBk0+Klj+cvA+yCTbrJTMgOxtXqyiKoCpZ/PPodsN9WT9OAzVh14C2y
-         VhpA==
-X-Gm-Message-State: AO0yUKV0M/scMrblbWG5a8+4GkFqKELzKMD0yFeR3tI8LYCvPYTzdjwu
-        J9+am4Y0ps0+2a74lWV3cEg=
-X-Google-Smtp-Source: AK7set/ujXfZPMz7EOm7ZILbEIxe4nKgXMWAwvoatB7ZrSFIzQwgPsGrmI4DoRt0El6v7VLELq5Q8w==
-X-Received: by 2002:a17:902:f605:b0:19c:dd2e:d4f5 with SMTP id n5-20020a170902f60500b0019cdd2ed4f5mr991892plg.36.1677249431225;
-        Fri, 24 Feb 2023 06:37:11 -0800 (PST)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id k4-20020a170902694400b001963a178dfcsm4047493plt.244.2023.02.24.06.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 06:37:10 -0800 (PST)
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To:     lina@asahilina.net
-Cc:     alex.gaynor@gmail.com, asahi@lists.linux.dev,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
-Subject: Re: [PATCH 2/2] rust: sync: arc: Add UniqueArc<MaybeUninit<T>::assume_init()
-Date:   Fri, 24 Feb 2023 11:37:01 -0300
-Message-Id: <20230224143701.755103-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
-References: <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
+        Fri, 24 Feb 2023 09:38:16 -0500
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61A9671C5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:38:13 -0800 (PST)
+Received: from newone.lan (unknown [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 53FD4161ED2;
+        Fri, 24 Feb 2023 15:38:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1677249491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9fwVD4ucwH2c8weBti7L3KPNpxO0LVGqX+ym0nzws2k=;
+        b=oraeAmBGBywq8pjgh103DdoByF2y1jGZZ0q5+lzAfmMUA2PdlAEr8XutxxAPAc9SF5Iz5K
+        ZHfUv7cfu87cSYYVSQcBqSI3LyB9r9dZBXBsgucjHwYx1k1NMKE82eUiMKHx3TS8U4u3Mm
+        fwCHZW0NdNT38rdXJilrk8/jsWm22Bo=
+From:   David Heidelberg <david@ixit.cz>
+Cc:     dri-devel@lists.freedesktop.org, helen.koike@collabora.com,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa+renesas@sang-engineering.com, akpm@linux-foundation.org,
+        David Heidelberg <david@ixit.cz>
+Subject: [RESEND v2 PATCH] init/do_mounts.c: add virtiofs root fs support
+Date:   Fri, 24 Feb 2023 15:37:51 +0100
+Message-Id: <20230224143751.36863-1-david@ixit.cz>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 04:59:34PM +0900, Asahi Lina wrote:=0D
-> We can already create `UniqueArc<MaybeUninit<T>>` instances with=0D
-> `UniqueArc::try_new_uninit()` and write to them with `write()`. Add=0D
-> the missing unsafe `assume_init()` function to promote it to=0D
-> `UniqueArc<T>`, so users can do piece-wise initialization of the=0D
-> contents instead of doing it all at once as long as they keep the=0D
-> invariants (the same requirements as `MaybeUninit::assume_init()`).=0D
-> =0D
-> This mirrors the std `Arc::assume_init()` function. In the kernel,=0D
-> since we have `UniqueArc`, arguably this only belongs there since most=0D
-> use cases will initialize it immediately after creating it, before=0D
-> demoting it to `Arc` to share it.=0D
-=0D
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>=0D
+From: Stefan Hajnoczi <stefanha@redhat.com>
+
+Make it possible to boot directly from a virtiofs file system with tag
+'myfs' using the following kernel parameters:
+
+  rootfstype=virtiofs root=myfs rw
+
+Booting directly from virtiofs makes it possible to use a directory on
+the host as the root file system.  This is convenient for testing and
+situations where manipulating disk image files is cumbersome.
+
+Reviewed-by: Helen Koike <helen.koike@collabora.com>
+Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+v2: added Reviewed-by and CCed everyone interested.
+
+We have used this option in Mesa3D CI for testing crosvm for
+more than one years and it's proven to work reliably.
+
+We are working on effort to removing custom patches to be able to do 
+automated apply and test of patches from any tree.                              
+
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/.gitlab-ci/crosvm-runner.sh#L85
+ init/do_mounts.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index 811e94daf0a8..11c11abe23d7 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -578,6 +578,16 @@ void __init mount_root(void)
+ 			printk(KERN_ERR "VFS: Unable to mount root fs via SMB.\n");
+ 		return;
+ 	}
++#endif
++#ifdef CONFIG_VIRTIO_FS
++	if (root_fs_names && !strcmp(root_fs_names, "virtiofs")) {
++		if (!do_mount_root(root_device_name, "virtiofs",
++				   root_mountflags, root_mount_data))
++			return;
++
++		panic("VFS: Unable to mount root fs \"%s\" from virtiofs",
++		      root_device_name);
++	}
+ #endif
+ 	if (ROOT_DEV == 0 && root_device_name && root_fs_names) {
+ 		if (mount_nodev_root() == 0)
+-- 
+2.39.1
+
