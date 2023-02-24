@@ -2,138 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CC46A1774
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4346A1781
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjBXHpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S229471AbjBXHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBXHpD (ORCPT
+        with ESMTP id S229460AbjBXHtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:45:03 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AB517CC0;
-        Thu, 23 Feb 2023 23:45:01 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 467D724E154;
-        Fri, 24 Feb 2023 15:44:48 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 15:44:48 +0800
-Received: from [192.168.125.128] (113.72.147.165) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 15:44:46 +0800
-Message-ID: <3d9679f8-45c6-3f27-b671-a0828a1a4ad3@starfivetech.com>
-Date:   Fri, 24 Feb 2023 15:45:06 +0800
+        Fri, 24 Feb 2023 02:49:36 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E724DE3E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:49:34 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id q16so2629804wrw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QbxEvBcANfCyv04vVI+P20GroH/CL1OZ8pzexawzCPA=;
+        b=tnQWyJSxP15q1apDQgYJZl7TiYEzVSdSDue1GfVVOaD0fB7R0X/Bpt/P+s54EvMarj
+         Y1GC+LfEvoa4d+LHbYhq1lLahNstbjvLM3CPlLNdcTMWd+6fEpU5pCFUdd1VfeuNgKwk
+         ibvjVqYpxqAiwq34+4XApexuqjYGbp4gt7qZw1iuaxGK1TvncfYmapRjGkD85NIMMmmP
+         NbuQi4uWSQWuuy9ihIFez+nKuGnq8M3VjfTqgeRzTTrLM/7QimIK9UBuRM43t1GjyADK
+         yey+QqJZp4HrIHUMyIt6xRNdgPgUO0A11h1Oks2iBavOIBt53d+FQQPLO4ynnVsaUe+U
+         aQBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbxEvBcANfCyv04vVI+P20GroH/CL1OZ8pzexawzCPA=;
+        b=i4en5iOh3hRuzROKn6Z224oIicoyKV6AgCtEXcJNjrlNJIVak9OwiNQjY8VcdRjEjA
+         7eeV3an9ttuRANq2I7HGFGxe0+0FBV2YcMal+VhCJSYMrz0uwRlIUVnw1uDo+iztDY8K
+         MW524i+PjnC4wrfIEKWfdMnr02zSvsgKPQZrdhhWu89Aiu8+A0qaNlaFN42LDRAZiQK7
+         5pA0fBGR0c0wbsDy9mia4FiJ1KlKOvaZUZ+5VjqfLE0gd7xF0YO7AgWwUkDmAnny0GO+
+         /H39gK9P+1n0jo1+s2EuFFO9FOgRaN0/YDUZnywAeiLKzVEGDpiFoJvijNGSdgI6eHsP
+         0z6Q==
+X-Gm-Message-State: AO0yUKW6LR4UR6RPO54GFxTB/ufgUOx3ai5+iLOCdQxOnWuGfpgy4sU8
+        BTBNehuM7Oq2BFk3IdBMcyaZFQ==
+X-Google-Smtp-Source: AK7set/nHyhaRUq0Yd+9Qdd+3r2tbNOhcXsgs9HAHAccmP/VT5YKMYKugqE9ITyi4t9jCFYpx+UWhg==
+X-Received: by 2002:a05:6000:98c:b0:2c5:5ee9:6b27 with SMTP id by12-20020a056000098c00b002c55ee96b27mr11889818wrb.13.1677224973014;
+        Thu, 23 Feb 2023 23:49:33 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id j21-20020a5d6e55000000b002c3f81c51b6sm13600444wrz.90.2023.02.23.23.49.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 23:49:32 -0800 (PST)
+Message-ID: <78fc83d7-a31b-c6bd-4e08-f0696e0a275b@linaro.org>
+Date:   Fri, 24 Feb 2023 07:49:31 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/3] clk: starfive: Add StarFive JH7110 PLL clock
- driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 07/26] mailbox: Add Gunyah message queue mailbox
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
- <20230221141147.303642-3-xingyu.wu@starfivetech.com>
- <3f50066b-f967-b9fa-1e0d-5337ec1ed194@linaro.org>
- <5e4007b7-6522-4c81-ca15-15a98c586aad@starfivetech.com>
- <50b6fb73-afb2-051b-7969-d7fbbe1e6175@linaro.org>
- <f23b3755-e2dd-f858-02ad-3f1b58934bc6@starfivetech.com>
- <d76f25ff-3c60-4e9b-87d7-8c4043b2e47f@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <d76f25ff-3c60-4e9b-87d7-8c4043b2e47f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.165]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212316.3309053-1-quic_eberman@quicinc.com>
+ <c8161a4c-fa45-cb9e-7211-5486ece1fc2d@linaro.org>
+ <576aed85-a566-3645-559e-06b2135cf57f@quicinc.com>
+ <7e3170e4-c530-0b5b-903f-e5ea6d8268dc@linaro.org>
+ <d42cba3e-db22-5241-0ae2-ccec3b811a5a@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <d42cba3e-db22-5241-0ae2-ccec3b811a5a@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/23 18:10, Krzysztof Kozlowski wrote:
-> On 23/02/2023 11:03, Xingyu Wu wrote:
->> On 2023/2/23 17:35, Krzysztof Kozlowski wrote:
->>> On 23/02/2023 10:32, Xingyu Wu wrote:
->>>> On 2023/2/23 16:56, Krzysztof Kozlowski wrote:
->>>>> On 21/02/2023 15:11, Xingyu Wu wrote:
->>>>>> Add driver for the StarFive JH7110 PLL clock controller and
->>>>>> modify the JH7110 system clock driver to rely on this PLL clocks.
->>>>>>
->>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>>> ---
->>>>>
->>>>>
->>>>>> +
->>>>>> +static int jh7110_pll_clk_probe(struct platform_device *pdev)
->>>>>> +{
->>>>>> +	int ret;
->>>>>> +	struct of_phandle_args args;
->>>>>> +	struct regmap *pll_syscon_regmap;
->>>>>> +	unsigned int idx;
->>>>>> +	struct jh7110_clk_pll_priv *priv;
->>>>>> +	struct jh7110_clk_pll_data *data;
->>>>>> +	char *pll_name[JH7110_PLLCLK_END] = {
->>>>>> +		"pll0_out",
->>>>>> +		"pll1_out",
->>>>>> +		"pll2_out"
->>>>>> +	};
->>>>>> +
->>>>>> +	priv = devm_kzalloc(&pdev->dev,
->>>>>> +			    struct_size(priv, data, JH7110_PLLCLK_END),
->>>>>> +			    GFP_KERNEL);
->>>>>> +	if (!priv)
->>>>>> +		return -ENOMEM;
->>>>>> +
->>>>>> +	priv->dev = &pdev->dev;
->>>>>> +	ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node, "starfive,sysreg", 0, 0, &args);
->>>>>
->>>>> 1. Wrong wrapping. Wrap code at 80 as coding style asks.
->>>>>
->>>>> 2. Why you are using syscon for normal, device MMIO operation? Your DTS
->>>>> also points that this is incorrect, hacky representation of hardware.
->>>>> Don't add devices to DT to fake places and then overuse syscon to fix
->>>>> that fake placement. The clock is in system registers, thus it must be
->>>>> there.
->>>>>
->>>>> 3. Even if this stays, why so complicated code instead of
->>>>> syscon_regmap_lookup_by_phandle()?
->>>>>
->>>>
->>>> Thanks for your advice. Will use syscon_regmap_lookup_by_phandle instead it
->>>> and remove useless part.
->>>
->>> So you ignored entirely part 2? This was the main comment... I am going
->>> to keep NAK-ing it then.
->> 
->> What I understand to mean is that I cannot use a fake node to operate syscon
->> registers. So I should move the PLL node under syscon node directly. Is it ok?
+
+
+On 23/02/2023 23:15, Elliot Berman wrote:
 > 
-> Yes, because it looks like entire PLL clock control is from the syscon
-> node, thus the clocks are there.
+> 
+> On 2/23/2023 2:25 AM, Srinivas Kandagatla wrote:
+>>
+>>
+>> On 23/02/2023 00:15, Elliot Berman wrote:
+>>>
+>>>
+>>> On 2/20/2023 5:59 AM, Srinivas Kandagatla wrote:
+>>>>
+>>>>
+>>>> On 14/02/2023 21:23, Elliot Berman wrote:
+>>>>> Gunyah message queues are a unidirectional inter-VM pipe for 
+>>>>> messages up
+>>>>> to 1024 bytes. This driver supports pairing a receiver message 
+>>>>> queue and
+>>>>> a transmitter message queue to expose a single mailbox channel.
+>>>>>
+>>>>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>>>>> ---
+>>>>>   Documentation/virt/gunyah/message-queue.rst |   8 +
+>>>>>   drivers/mailbox/Makefile                   |   2 +
+>>>>>   drivers/mailbox/gunyah-msgq.c               | 214 
+>>>>> ++++++++++++++++++++
+>>>>>   include/linux/gunyah.h                      |  56 +++++
+>>>>>   4 files changed, 280 insertions(+)
+>>>>>   create mode 100644 drivers/mailbox/gunyah-msgq.c
+>>>>>
+>>>>> diff --git a/Documentation/virt/gunyah/message-queue.rst 
+>>>>> b/Documentation/virt/gunyah/message-queue.rst
+>>>>> index 0667b3eb1ff9..082085e981e0 100644
+>>>>> --- a/Documentation/virt/gunyah/message-queue.rst
+>>>>> +++ b/Documentation/virt/gunyah/message-queue.rst
+>>>>> @@ -59,3 +59,11 @@ vIRQ: two TX message queues will have two vIRQs 
+>>>>> (and two capability IDs).
+>>>>>         |               |         |                 | 
+>>>>> |               |
+>>>>>         |               |         |                 | 
+>>>>> |               |
+>>>>>         +---------------+         +-----------------+ 
+>>>>> +---------------+
+>>>>> +
+>>>>> +Gunyah message queues are exposed as mailboxes. To create the 
+>>>>> mailbox, create
+>>>>> +a mbox_client and call `gh_msgq_init`. On receipt of the RX_READY 
+>>>>> interrupt,
+>>>>> +all messages in the RX message queue are read and pushed via the 
+>>>>> `rx_callback`
+>>>>> +of the registered mbox_client.
+>>>>> +
+>>>>> +.. kernel-doc:: drivers/mailbox/gunyah-msgq.c
+>>>>> +   :identifiers: gh_msgq_init
+>>>>> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+>>>>> index fc9376117111..5f929bb55e9a 100644
+>>>>> --- a/drivers/mailbox/Makefile
+>>>>> +++ b/drivers/mailbox/Makefile
+>>>>> @@ -55,6 +55,8 @@ obj-$(CONFIG_MTK_CMDQ_MBOX)    += mtk-cmdq-mailbox.o
+>>>>>   obj-$(CONFIG_ZYNQMP_IPI_MBOX)    += zynqmp-ipi-mailbox.o
+>>>>> +obj-$(CONFIG_GUNYAH)        += gunyah-msgq.o
+>>>>
+>>>> Why are we reusing CONFIG_GUNYAH Kconfig symbol for mailbox, why not 
+>>>> CONFIG_GUNYAH_MBOX?
+>>>>
+>>>
+>>> There was some previous discussion about this:
+>>>
+>>> https://lore.kernel.org/all/2a7bb5f2-1286-b661-659a-a5037150eae8@quicinc.com/
+>>>
+>>>>> +
+>>>>>   obj-$(CONFIG_SUN6I_MSGBOX)    += sun6i-msgbox.o
+>>>>>   obj-$(CONFIG_SPRD_MBOX)       += sprd-mailbox.o
+>>>>> diff --git a/drivers/mailbox/gunyah-msgq.c 
+>>>>> b/drivers/mailbox/gunyah-msgq.c
+>>>>> new file mode 100644
+>>>>> index 000000000000..03ffaa30ce9b
+>>>>> --- /dev/null
+>>>>> +++ b/drivers/mailbox/gunyah-msgq.c
+>>>>> @@ -0,0 +1,214 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>>> +/*
+>>>>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>>>>> rights reserved.
+>>>>> + */
+>>>>> +
+>>>>> +#include <linux/mailbox_controller.h>
+>>>>> +#include <linux/module.h>
+>>>>> +#include <linux/interrupt.h>
+>>>>> +#include <linux/gunyah.h>
+>>>>> +#include <linux/printk.h>
+>>>>> +#include <linux/init.h>
+>>>>> +#include <linux/slab.h>
+>>>>> +#include <linux/wait.h>
+>>>>
+>>>> ...
+>>>>
+>>>>> +/* Fired when message queue transitions from "full" to "space 
+>>>>> available" to send messages */
+>>>>> +static irqreturn_t gh_msgq_tx_irq_handler(int irq, void *data)
+>>>>> +{
+>>>>> +    struct gh_msgq *msgq = data;
+>>>>> +
+>>>>> +    mbox_chan_txdone(gh_msgq_chan(msgq), 0);
+>>>>> +
+>>>>> +    return IRQ_HANDLED;
+>>>>> +}
+>>>>> +
+>>>>> +/* Fired after sending message and hypercall told us there was 
+>>>>> more space available. */
+>>>>> +static void gh_msgq_txdone_tasklet(struct tasklet_struct *tasklet)
+>>>>
+>>>> Tasklets have been long deprecated, consider using workqueues in 
+>>>> this particular case.
+>>>>
+>>>
+>>> Workqueues have higher latency and tasklets came as recommendation 
+>>> from Jassi. drivers/mailbox/imx-mailbox.c uses tasklets in the same way.
+>>>
+>>> I did some quick unscientific measurements of ~1000x samples. The 
+>>> median latency for resource manager went from 25.5 us (tasklet) to 26 
+>>> us (workqueue) (2% slower). The mean went from 28.7 us to 32.5 us 
+>>> (13% slower). Obviously, the outliers for workqueues were much more 
+>>> extreme.
+>>
+>> TBH, this is expected because we are only testing resource manager, 
+>> Note   the advantage that you will see shifting from tasket to 
+>> workqueues is on overall system latencies and some drivers performance 
+>> that need to react to events.
+>>
+>> please take some time to read this nice article about this 
+>> https://lwn.net/Articles/830964/
+>>
+> 
+> Hmm, this article is from 2020 and there was another effort in 2007. 
+> Neither seems to have succeeded. I'd like to stick to same mechanisms as 
+> other mailbox controllers.
 
-Thanks for the guidance, I will modify it in the next patch.
+I don't want to block this series because of this. We will have more 
+opportunity to improve this once some system wide profiling is done.
 
-Best regards,
-Xingyu Wu
+AFAIU, In this system we will have atleast 2 tasklets between VM and RM 
+and 2 per inter-vm, so if the number of tasklets increase in the system 
+will be potentially spending more time in soft irq handling it.
+
+At somepoint in time its good to get some profiling done using 
+bcc/softirqs to see how much time is spent on softirqs.
+
+
+--srini
+
+> 
+> Jassi, do you have any preferences?
+> 
+> Thanks,
+> Elliot
+> 
+> 
