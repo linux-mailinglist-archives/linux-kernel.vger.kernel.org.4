@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AB96A228C
+	by mail.lfdr.de (Postfix) with ESMTP id 901936A228D
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBXTxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S229698AbjBXTxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBXTxR (ORCPT
+        with ESMTP id S229659AbjBXTxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:53:17 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E929530B36
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:53:16 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id p14-20020a170902e74e00b0019ad833d8a4so213393plf.15
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:53:16 -0800 (PST)
+        Fri, 24 Feb 2023 14:53:18 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE84B31E02
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:53:17 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id 202-20020a6218d3000000b005a89856900eso59186pfy.14
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:53:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8YOzDd/6L/vKBnSebEe4nvaSdZD321OF0FG44WHcog8=;
-        b=WT4/T85dVBxjE51E8WWLMhAavndjTBa0+BF4I0xQ0fDPyRnA/YzJQWGmLvkElaKV9m
-         rQ0inlp89lgMu9ePvEB6QEv7X2KTJ4G8sjeEZyJtEvwcKX5TE2HXHesglNzDcXaYi7W6
-         KJiY2HD9eKG8xBQ/wjBjvncL+2JIJ5wyLsVqIl7a5AWftGl/olQXcrPI0/CAI0FfZPvL
-         yy4T+xereVFACpDEWXIH/gu2WuCAARPJIL072MgQnFEkwtkEtA+Sbcp0OxISt6vcu1S8
-         VX05yw1pxu40eyDduVaiI3qwuWmbrkRH8Qny8CKmbLo74Rd5g88xKeAzMpOsPK7iROj6
-         zFgA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkRn+6AoxobFYVvnDPTVGQq+gGNHibmmav9mWkGQcVk=;
+        b=ILZLCrgZS1VLizZWWAK+C1MzdNr6RID8mWa3hzE+XcEW2p6iM/BvO/yRxHWiOSEEgy
+         gYSwauIfvjWlABo2DKzMfpSLuGdnPjEuKIUgTlKzhKRh+odB1SLOlZV+yDufYDWEhxUy
+         WsDH90DLicnkiGnUWJwiT9OWnpMSKDl7RfsPud9BUtPeR+Ks+VTMRRYFBdUOI8SB5jhY
+         NBaABFh0QiuVy14AjA9bAdJQRChJ7oHSMOTA4UYQCdBLtb4FybP1jZsLwElPtf9IXhLF
+         w3I2g4LJ5yfkWDEc5tNZPkNydfd6+LFhQ/rnKnA/m9qv5RR6lMdOwz5AZm9QDj0iv95E
+         BdGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8YOzDd/6L/vKBnSebEe4nvaSdZD321OF0FG44WHcog8=;
-        b=JT7RkpjkGWAq/rDcTbH7dzdKfI0aGsLZDtJih2G1I77Cu1NSAoR1sCT1CCgkJviIni
-         MUGl0w4XJng9OQINy5kDoK/qOcy8NGEe3YpeFaHkaXS05gqmppAnKPTXzOiOF0RC7EIC
-         a0uwpcX1e/f4lIikcs7dWy0eoXhvqc3WwxiA2YYzVWH/5wvm9zrLE0CKBdN0BZV7VOZD
-         RVwoUfy2rxstRcDh5wvtU1xmk6BQZuBp6jx0o4hpEELvEYqiCIh3gorTTnwXcQQrvPFn
-         sIhV6Z9Y2oNgHprhGIO3YRfEml1rA9/EatjmpnsGjWr8dIzLBFJPjk0H9isUy3zK3aYQ
-         PW4Q==
-X-Gm-Message-State: AO0yUKXFuVTPFCPctF7Z/MWh3QD/uslo+T1CLkfwSOkI7olaAyb3m+1t
-        qrSrvdYDSoawNYPe95tzP9P3b3WYM8/X
-X-Google-Smtp-Source: AK7set+ODXNARgX9D6pi5xqfai89uMIZfQY62hBezj+LIOPmnNEWOBHm2uXgyNid4m3LOd11OtLnPqn+jS1c
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkRn+6AoxobFYVvnDPTVGQq+gGNHibmmav9mWkGQcVk=;
+        b=VolZcSHY2OWK+5BoTWX1wmkNMed0u3jP65Q+b/0Hri/0lbqGJdAYTHgK3YJd1/SsBZ
+         IHJQPIBXA0bcXg4M6KiXp7iTWXeZooAU4nOVlczW2k8ll0gEq4QVmlFG0tKhhMy5lFp3
+         BI4mT3hNvPuMkAzyzC2SU9/rdCMknzWRCCfdLLtE5bf+3+/rEJfaogcNRZEysJAEJ9Xl
+         8QeDRaBZA06aSAQL9xPAmJilMN9qHqGMnuylsu032GnlWqGGsGKDnGxfxyvv+SaGN445
+         mLx3hCaPP8axsRFXRCLJd5YzUKMzLoTZNgsDROYRk+aNYcl5A6Mr80fiipXvIsp8ZAgw
+         kWeg==
+X-Gm-Message-State: AO0yUKVm9wSgMOLCK4v3PANzJo95NJwaTj+p/B6n89YOQRWHCYIjdwPs
+        wOwmFp0vd7IBtJ1yL8Ts14htWhgMgpkA
+X-Google-Smtp-Source: AK7set8uBBgqkM+ht7YzOeEtgi5m6MwPtlIpSVoxsGaDBblHFL+pwGXlPcFSCwhTOk7CHYOuazpqRQNCrhox
 X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a62:82ce:0:b0:5af:db19:b1c with SMTP id
- w197-20020a6282ce000000b005afdb190b1cmr3505514pfd.2.1677268395963; Fri, 24
- Feb 2023 11:53:15 -0800 (PST)
-Date:   Fri, 24 Feb 2023 11:53:12 -0800
+ (user=jiangzp job=sendgmr) by 2002:a17:903:2348:b0:199:6e3:187a with SMTP id
+ c8-20020a170903234800b0019906e3187amr443395plh.6.1677268397322; Fri, 24 Feb
+ 2023 11:53:17 -0800 (PST)
+Date:   Fri, 24 Feb 2023 11:53:13 -0800
+In-Reply-To: <20230224195313.1877313-1-jiangzp@google.com>
 Mime-Version: 1.0
+References: <20230224195313.1877313-1-jiangzp@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230224195313.1877313-1-jiangzp@google.com>
-Subject: [kernel PATCH v2 0/1] Clear workqueue to avoid use-after-free
+Message-ID: <20230224115310.kernel.v2.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
+Subject: [kernel PATCH v2 1/1] Bluetooth: hci_sync: clear workqueue before
+ clear mgmt cmd
 From:   Zhengping Jiang <jiangzp@google.com>
 To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
         luiz.dentz@gmail.com
@@ -73,11 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Clear cmd_sync_work queue before clearing the mgmt cmd list to avoid
+racing conditions which cause use-after-free.
 
-After the hci_sync rework, cmd_sync_work was cleared when calling
-hci_unregister_dev, but not when powering off the adapter.
-Use-after-free errors happen when a work is still scheduled
-when cmd is freed by __mgmt_power_off.
+When powering off the adapter, the mgmt cmd list will be cleared. If a
+work is queued in the cmd_sync_work queue at the same time, it will
+cause the risk of use-after-free, as the cmd pointer is not checked
+before use.
+
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+---
 
 Changes in v2:
 - Add function to clear the queue without stop the timer
@@ -85,12 +93,49 @@ Changes in v2:
 Changes in v1:
 - Clear cmd_sync_work queue before clearing the mgmt cmd list
 
-Zhengping Jiang (1):
-  Bluetooth: hci_sync: clear workqueue before clear mgmt cmd
-
  net/bluetooth/hci_sync.c | 21 ++++++++++++++++++++-
  1 file changed, 20 insertions(+), 1 deletion(-)
 
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 117eedb6f709..b70365dfff0c 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -636,6 +636,23 @@ void hci_cmd_sync_init(struct hci_dev *hdev)
+ 	INIT_DELAYED_WORK(&hdev->adv_instance_expire, adv_timeout_expire);
+ }
+ 
++static void hci_pend_cmd_sync_clear(struct hci_dev *hdev)
++{
++	struct hci_cmd_sync_work_entry *entry, *tmp;
++
++	mutex_lock(&hdev->cmd_sync_work_lock);
++	list_for_each_entry_safe(entry, tmp, &hdev->cmd_sync_work_list, list) {
++		if (entry->destroy) {
++			hci_req_sync_lock(hdev);
++			entry->destroy(hdev, entry->data, -ECANCELED);
++			hci_req_sync_unlock(hdev);
++		}
++		list_del(&entry->list);
++		kfree(entry);
++	}
++	mutex_unlock(&hdev->cmd_sync_work_lock);
++}
++
+ void hci_cmd_sync_clear(struct hci_dev *hdev)
+ {
+ 	struct hci_cmd_sync_work_entry *entry, *tmp;
+@@ -4842,8 +4859,10 @@ int hci_dev_close_sync(struct hci_dev *hdev)
+ 
+ 	if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
+ 	    !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
+-	    hci_dev_test_flag(hdev, HCI_MGMT))
++	    hci_dev_test_flag(hdev, HCI_MGMT)) {
++		hci_pend_cmd_sync_clear(hdev);
+ 		__mgmt_power_off(hdev);
++	}
+ 
+ 	hci_inquiry_cache_flush(hdev);
+ 	hci_pend_le_actions_clear(hdev);
 -- 
 2.39.2.722.g9855ee24e9-goog
 
