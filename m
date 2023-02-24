@@ -2,158 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6EF6A1500
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852BF6A1505
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBXCii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        id S229799AbjBXCm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXCih (ORCPT
+        with ESMTP id S229470AbjBXCm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:38:37 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2631E2E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:38:33 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id d7so7165524pfu.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:38:33 -0800 (PST)
+        Thu, 23 Feb 2023 21:42:57 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02C7166F4;
+        Thu, 23 Feb 2023 18:42:56 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so1271894pja.5;
+        Thu, 23 Feb 2023 18:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JRecAKZcY6IbQwyurCrABIbVaiA2PzBDQV3Z+P3MRuI=;
-        b=CNs/JVqajIYC7MgPC9Va/OivfBI1AxWe1NN6i0WgWVrP3aM2ojjh1GNTlvPQaE4sUC
-         rbFzdkj1hFdKLdtFkngfOFnh22XWCC6dPlb3l7/bVYcnWsoPsAYHR367jep2wHUi5Q0m
-         FXzYJTsE1HdASYCoYJEr398Ubr9lnkPyAEpjs=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jxyI/41shoUmIXWxgHt7K1UbQjmbWtbd/7LeDQ6aEsI=;
+        b=BeqgUEixZhO78peOPQhqW4yF6VYzakK/ASWVPZzMENNXg5scdTsLjKaGfYXB+aPwuv
+         Tf5XOaWq5JDkLVf8gkcWdlBpK032Xz7cD1sIxxSqs4/hdZHr0eqC7rSlEczpdVNtMyqg
+         8IJLGL/MR5v1QScxe4knXaTkvE7BExi4+oeZC+jnWUdOjxxxTFlGe5dQ1tClAyQQ2nXu
+         z4wzWZwcY9yFagJ/FVJWS0N6GrW5nTA5JbBCp3n5JvGocC/SyBEOcyd6NHZzl0t7W8Vx
+         WMgWmDIWcw+FzhPaN9KSKCK+Ak0q0o+y3D1QWSw3XYad0tIEStKTu4bUzUjj4BtNADne
+         /whw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JRecAKZcY6IbQwyurCrABIbVaiA2PzBDQV3Z+P3MRuI=;
-        b=GSHf+5scCLfcKaWmnL+rVvfHl9YzKOtjF7A35CSP6jwXK3J0sp+5anyDDG003DYTK2
-         NVKyGJiKfyY3TxHsTD8ojlCE9ioAVpG058cCoGKXQXlr8+SMrgkcVdWcgldGSC2g+Li+
-         PFuAWVtmVRSulnacxSHAe4oJK/bFSLm0VL36VaOSr0q3SAEna0+Kl0qUvfQGyVD/HY3i
-         IT6fbCWpnxAh/aFUrGn8dwwA6Z1xvwZIX7qlAPBqB/PaULsMTW0mlaWL99szY1fHLtE+
-         TbiEmSQywpQzBzCbd+jU/LIYp/oOAEqio64qwDxK0DNFs2YUUqKQTR84JUYUrV33NOJT
-         QLdg==
-X-Gm-Message-State: AO0yUKVA27On7J/TOOQ2tZ5nm9fa+Llf6I8l/cBgHyzeNJzSpBcwZmmr
-        hnYapWVYjGQlaimQAAEhPzGjRg7NcOYuOBHGU4iZ
-X-Google-Smtp-Source: AK7set/Pl4bgDi8YBHtTidAXSP+H3vDftz5DSWh0Vofi7bk5M4UMW7IhUght0gW5AAjqkid9OtVoW7Q3yNNWVKSGijI=
-X-Received: by 2002:a62:8704:0:b0:5a8:9872:2b9b with SMTP id
- i4-20020a628704000000b005a898722b9bmr2481602pfe.1.1677206312565; Thu, 23 Feb
- 2023 18:38:32 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jxyI/41shoUmIXWxgHt7K1UbQjmbWtbd/7LeDQ6aEsI=;
+        b=VktbvdN2C79X/tkLxpAk/ZrNwUUGdAiZPdoK+QwrlfyLAknt5GU6CmDjlSx8K7Xhf3
+         V+QwAQYBzNAfLbmQ2XDtrtQl5hSnQOEXsJJRXO7Kitq2hwb1N+RtwtIiP+gdtMmA8HOY
+         MUwSp8U5QzyNSNogWEWXmLVp8kjxFnCqigp4hWkWHVsjkCcPIzUP2FQKEYW3A18U1H60
+         12hPFukwWmWabiIsVznvH3JubkEIHWxPCSQA7Xu4OnEI96JHSCSFtzl5/gH095+YmJyB
+         cevSHKt11F8aeCOYIDFnLMdIK/m0fNZQr9OPH7IdYx4zhmjmf9KL7QAtJDa80kgloT7U
+         oYsQ==
+X-Gm-Message-State: AO0yUKVSPXUCdlKtjUsJLJnzfnSdTvqL6qQcTtjmcVLaYlWHve2WN5Vi
+        qe1vGNuSIc1ys14pzyu7tOE=
+X-Google-Smtp-Source: AK7set8gNKsLF0UkjCWtfWD+CvvdSOV2HDE6PocCDLWIplYCdaISotZ0mg/TLYWF8LBighLrl7nfEA==
+X-Received: by 2002:a05:6a20:c89b:b0:cc:3bf0:ed91 with SMTP id hb27-20020a056a20c89b00b000cc3bf0ed91mr2584909pzb.51.1677206576145;
+        Thu, 23 Feb 2023 18:42:56 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-89.three.co.id. [180.214.232.89])
+        by smtp.gmail.com with ESMTPSA id s23-20020aa78d57000000b005ad9e050512sm2082620pfe.121.2023.02.23.18.42.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 18:42:55 -0800 (PST)
+Message-ID: <5f228150-0e29-6d58-3dcf-776bc2a630b7@gmail.com>
+Date:   Fri, 24 Feb 2023 09:42:49 +0700
 MIME-Version: 1.0
-References: <CAOnJCUKHq_8msJtU-H1JvWJ8nY94J0tcarQMBsPNpBZO8sP6HQ@mail.gmail.com>
- <CAK9=C2Uy_0B6D2TGq35sfrGkp9s1Td=cEsidzDPTDhG7Nq5EWw@mail.gmail.com>
-In-Reply-To: <CAK9=C2Uy_0B6D2TGq35sfrGkp9s1Td=cEsidzDPTDhG7Nq5EWw@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 23 Feb 2023 18:38:21 -0800
-Message-ID: <CAOnJCU+EdF3sCpcNoOiPOCNwwX7bguJghqZccY=cUmku+Ak0=A@mail.gmail.com>
-Subject: Re: Perf event to counter mapping question
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Beeman Strong <beeman@rivosinc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-next: manual merge of the mm-stable tree with the ext4 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20230220152938.45f62d5a@canb.auug.org.au>
+ <Y/ODNJ3MfoD6dUru@casper.infradead.org>
+ <20230221175436.599166f9@canb.auug.org.au>
+ <20230223144722.635ab483@canb.auug.org.au>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230223144722.635ab483@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 6:55 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> On Thu, Feb 23, 2023 at 5:58 AM Atish Patra <atishp@atishpatra.org> wrote:
-> >
-> > Hi All,
-> > We are trying to figure out what is the best approach to define the
-> > perf event to programmable counter mappings in RISC-V.
-> > Until recently, all the programmable counter/event selector registers
-> > were writable in M-mode (highest privilege mode) only. The firmware
-> > residing in M-mode
-> > would discover the mapping from device tree[1] and the perf driver
-> > relies on SBI PMU[2] interface to discover the mapping between event &
-> > counters.
-> >
-> > There are new ISA extensions being proposed to make counters /event
-> > selector register in supervisor mode as well. Thus, a pmu driver
-> > can directly program the event selectors without relying on firmware.
-> > However, the kernel needs to be aware of counter mapping to do that.
-> >
-> > AFAIK, ARM64 allows all-to-all mapping in pmuv3[1]. That makes life
-> > much easier. It just needs to pick the next available counter.
-> > On the other hand, x86 allows selective counter mapping which is
-> > discovered from the json file and maintained in per event
-> > constraints[4].
-> > There may be some legacy reasons why it was done in x86 this way[5].
-> > Please correct me if I am wrong in my understanding/assumption.
-> >
-> > Here are a few approaches that can be used to solve it in RISC-V.
-> >
-> > 1. Continue to use device tree bindings
-> > Cons: We have to define similar entries for ACPI. It makes
-> > virtualization difficult as the VMM has to discover and update the
-> > device tree/ACPI as well.
-> >
-> > 2. Mandate all-to-all mapping similar to ARM64.
-> > Note: This is only for programmable counters. If the platform supports
-> > any fixed counters (i.e. can monitor
-> > only a specific event), that needs to be provisioned via some other
-> > method. IIRC the fixed counters(apart from cycle) in ARM64 are part of
-> > AMU not PMU.
-> >
-> > 3. All platforms need to define which subset of events can be
-> > monitored using a subset of counters. The platform specific perf json
-> > file can specify that.
-> > This approach provides more flexibility but makes the code path a bit
-> > more complex as the counter mask constraint needs to be maintained per
-> > event basis.
-> >
-> > 4. Any other approach ?
->
-> I suggest a 4th approach where by default the kernel assumes all-to-all
-> mappings and optionally perf json file can be used to override mappings
-> for certain counters. This approach is more like a hybrid approach between
+On 2/23/23 10:47, Stephen Rothwell wrote:
+> I still have not been able to figure out a merge resolution for this,
+> so the ext4 tree still has had no testing in linux-next and the merge
+> window is progressing.  Does anyone want to help with this?
+> 
 
-Do you mean override counter mapping for certain events ? I don't
-think we should split counter space as platforms may want
-to choose random encounters between hpmcounter3-hpmcounte31.
+I think at worst, Linus will have to resolve this mess himself when PR
+for ext4 is submitted and merged in this merge window.
 
-We can always do this. If the counter mask is not set in the event
-attributes, assume that the event
-can be monitored by all the counters. x86 does something similar as well.
-
-> approach #2 and #3. It work fine with KVM RISC-V as well because Guest/VM
-> will assume all-to-all mapping for logical HW counters whereas Host can have
-> specific counter mappings.
->
-> >
-> > Any thoughts on what would be the best approach for RISC-V. It would
-> > be great to repeat any past mistakes in RISC-V by learning from
-> > experience from the community.
-> >
-> > [1] https://lore.kernel.org/lkml/Y6tS959TaY2EBAdn@spud/T/
-> > [2] https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc#function-find-and-configure-a-matching-counter-fid-2
-> > [3] https://elixir.bootlin.com/linux/v6.2/source/arch/arm64/kernel/perf_event.c#L899
-> > [4] https://elixir.bootlin.com/linux/latest/source/arch/x86/events/core.c#L876
-> > [5] https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1978937.html
-> > --
-> > Regards,
-> > Atish
->
-> Regards,
-> Anup
-
-
+Thanks.
 
 -- 
-Regards,
-Atish
+An old man doll... just what I always wanted! - Clara
+
