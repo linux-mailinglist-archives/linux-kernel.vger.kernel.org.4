@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E866A1564
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A112D6A156A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjBXDal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S229765AbjBXDdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjBXDaj (ORCPT
+        with ESMTP id S229468AbjBXDdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:30:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E05B521F9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:30:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1881B81BC5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAE2C433A7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677209434;
-        bh=wFxdbsXrX6akSSocnLKePaTbVUvseZwZz7Gr0BvZckA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b6JP5cSY5FoIiYOADl8b0MFxblseDSTjsKqjQXzLGTLKDMu+WXQjk0SFZ8ugFvoQl
-         hlQFc4PGa1boiDnVRWGt1tjMrLIZTz3LHiQZjX28nChEvrgthOe8B3R670B9HnvLo+
-         gFpGpDtzFNJQ6BUjod2zbKdmjC94NnD9XuXOSIiX/ioxRxEEUZqipEG6axSHq2GuVW
-         AEcq0moaiUmB5qelYNzKxNP83OxUYRmPIvcTHbJtVHXTg4aRqBRToxPhJ7pxngmjb6
-         9jUQrEjj2uZndeJOSUPvMpVJhZe+u6lyw/udW1wxpXHzgj44tz6Qw8lavc3wbQBMeC
-         owe7W2Ewbo23A==
-Received: by mail-ed1-f41.google.com with SMTP id f13so49316181edz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:30:34 -0800 (PST)
-X-Gm-Message-State: AO0yUKUCZcW1jWF+ogCv3FvZCodbk4ykDnzKuTnFy6uJgB/1B7NBODBU
-        Bwf5xlv3E6aEoaQsKGJn5OJqmYRJKqt6gay7y7Z4KQ==
-X-Google-Smtp-Source: AK7set/a2U2gqUx+w1odhF8Rc1nRegOiLI7wK3uvBBO7G/XCc4EG6We936z5VG9KmLDbi2iRREdBJv59Lk639jtdc/Y=
-X-Received: by 2002:a17:907:1dda:b0:8b0:fbd5:2145 with SMTP id
- og26-20020a1709071dda00b008b0fbd52145mr10095945ejc.15.1677209432608; Thu, 23
- Feb 2023 19:30:32 -0800 (PST)
+        Thu, 23 Feb 2023 22:33:41 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061A4ECC5;
+        Thu, 23 Feb 2023 19:33:36 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id s12so13471338qtq.11;
+        Thu, 23 Feb 2023 19:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KnIcmPbufx/Eg74VQm53iu46gZIk4wBPQ48Df3prIiQ=;
+        b=XfPRZw/xRxmDednv0MA0reuILbvR+ViF+tIuBGScZJ7QTOM84/LR3+RgP406eDF0K3
+         b5d55viBPSS1rlFQ1Rze3FTr2kgI+r3pVhASgXyz9IqB2fNsdLpNaXqAi+s4xAcS4yta
+         mztzx978gFUV9v85SdcwRw2eQH6ryXIBOTGoGZ9SV+kVXyguJkPihhcF5fxfX3TyX3KN
+         FEKNLBoXwNRK5HrUv/eJvhcV7MZ4E/1NpNL9dbH69AT75mEU6F8NfYtYfZr4wzW03NDb
+         SdrJJuloOb9ki+LNN0BR4pzAhqcNyLfu7yZ0o4Svi8CWjx6ams4kNiXU8k27Z+CnlWbR
+         A54A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KnIcmPbufx/Eg74VQm53iu46gZIk4wBPQ48Df3prIiQ=;
+        b=BHtz6cuEC5gXs39bLgG+vxu/uVVsHlekLmmocHq96pWHvNyvosbymOMYuiskcNA2op
+         ZgklZgh+ixxt8yU55/Y7Gb48i0sJrtpPCJSkjLGQulLdg1t0QefW+zHZyGP85/Z8Vrkq
+         Zzqo3rY/0FPkgqjMLOetqX5lSxeRE9eSFf4/AjRPwTUAPI2tTo1ZxecgNB8OZHcTOnCT
+         GNtPgCiRIyvOFOOLS7IDWfcpNLYvpr1t8toCnITXHRZCPJti2YEAZy8KXKOHxLhtUnKM
+         ruhXzB8g70zNeGOC6tZY3omtAKMU2RvOveHA6uKFR4rzq+5lZvRiHib+iQCtYgewT0uU
+         EJkQ==
+X-Gm-Message-State: AO0yUKWDkVMTzsFkuG17qBMUCRmg1xdZqs41K0qXU8opKqPHhUbA7+QJ
+        M154NGfQUGabtXp3XBoIb6M=
+X-Google-Smtp-Source: AK7set/EB9C5pGBeupjSFP9ZWKtq1uIwkPYAd9pJtk5Y30J7QIaE8ts30bnSENwZr8AMV3AZ/pU44g==
+X-Received: by 2002:a05:622a:48a:b0:3bf:b510:878d with SMTP id p10-20020a05622a048a00b003bfb510878dmr6870757qtx.4.1677209615896;
+        Thu, 23 Feb 2023 19:33:35 -0800 (PST)
+Received: from [127.0.0.1] ([103.152.220.17])
+        by smtp.gmail.com with ESMTPSA id n129-20020a37bd87000000b0073b81e888bfsm5788107qkf.56.2023.02.23.19.33.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 19:33:35 -0800 (PST)
+Message-ID: <04c4d6ee-f893-5248-26cf-2c6d1c9b3aa5@gmail.com>
+Date:   Fri, 24 Feb 2023 11:33:29 +0800
 MIME-Version: 1.0
-References: <20230221184908.2349578-1-kpsingh@kernel.org> <20230221184908.2349578-2-kpsingh@kernel.org>
- <Y/d9qajJnR/ZcHvB@zn.tnic>
-In-Reply-To: <Y/d9qajJnR/ZcHvB@zn.tnic>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 23 Feb 2023 22:30:21 -0500
-X-Gmail-Original-Message-ID: <CACYkzJ4W5eoWiF5=QyuiPMd7J--+xUE3QN2b+CWhfcJszm1UFg@mail.gmail.com>
-Message-ID: <CACYkzJ4W5eoWiF5=QyuiPMd7J--+xUE3QN2b+CWhfcJszm1UFg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Documentation/hw-vuln: Document the interaction
- between IBRS and STIBP
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
-        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
-        jmattson@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] net: tls: fix possible info leak in
+ tls_set_device_offload()
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230223090508.443157-1-hbh25y@gmail.com> <Y/dK6OoNpYswIqrD@hog>
+ <310391ea-7c71-395e-5dcb-b0a983e6fc93@gmail.com>
+Content-Language: en-US
+In-Reply-To: <310391ea-7c71-395e-5dcb-b0a983e6fc93@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 9:52 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Feb 21, 2023 at 07:49:08PM +0100, KP Singh wrote:
-> > ... Consequently, STIBP needs to be explicitly
-> > +   enabled to guard against cross-thread attacks in userspace.
->
-> needs?
->
-> That sounds like something the user needs to do. But we do it by
-> default. Let's rephrase:
->
-> "Systems which support enhanced IBRS (eIBRS) enable IBRS protections once at
-> boot and they're automatically protected against Spectre v2 variant
-> attacks, including cross-thread branch target injections on SMT systems
-> (STIBP). IOW, eIBRS enables STIBP too.
->
-> Legacy IBRS systems clear the IBRS bit on exit to userspace and
-> therefore explicitly enable STIBP for that."
+On 24/2/2023 11:07, Hangyu Hua wrote:
+> On 23/2/2023 19:15, Sabrina Dubroca wrote:
+>> 2023-02-23, 17:05:08 +0800, Hangyu Hua wrote:
+>>> After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
+>>> tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL if it 
+>>> fails
+>>> before kmalloc cctx->iv. This may cause info leak when we call
+>>> do_tls_getsockopt_conf().
+>>
+>> Is there really an issue here?
+>>
+>> If both tls_set_device_offload and tls_set_sw_offload fail,
+>> do_tls_setsockopt_conf will clear crypto_{send,recv} from the context.
+>> Then the TLS_CRYPTO_INFO_READY in do_tls_getsockopt_conf will fail, so
+>> we won't try to access iv or rec_seq.
+>>
+> 
+> My bad. I forget memzero_explicit. Then this is harmless. But I still 
+> think it is better to set them to NULL like tls_set_sw_offload's error 
+> path because we don't know there are another way to do this(I will 
+> change the commit log). What do you think?
 
-ack, I will respin both patches with your suggestions.
-
-- KP
-
->
-> Simple.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Like a rare case, there is a race condition between
+do_tls_getsockopt_conf and do_tls_setsockopt_conf while the previous
+condition is met. TLS_CRYPTO_INFO_READY(crypto_info) is not
+protected by lock_sock in do_tls_getsockopt_conf. It's just too
+difficult to satisfy both conditions at the same time.
