@@ -2,186 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708386A153D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598FF6A153F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjBXDNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S229930AbjBXDQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:16:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBXDNS (ORCPT
+        with ESMTP id S229445AbjBXDQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:13:18 -0500
-Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11012005.outbound.protection.outlook.com [52.101.63.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D130BB86
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:13:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AeeF3hgeUerpMWN4f1FfUqGQcGFzeVCIQQIrUUYzWOjXW+aSy1Y3DUObeLbr0GXaQGDDLEYMO9KzIdbdaJHgaLZvnI9X/Wf37W7YcHVXksBc3bG+jcvOFu0CirlJucxfcAXs5Vxy9M99u6Fin3Cpgp7mXdMGD2ZoWwYLxiY928OWj0aVJQpv3QwXHgqXREgfRuq44iUDbEwCzhz0apLSZeUw5af9JgJVWqEXM3kb3UWcdZeTsWL48Aql3+kWpDFV8pwsPpRMMGYmK3DDPVoVyv6yrQOE/Z6WqIHBCTDS8gj4DvOsszAWrQ6tgSecTnwILYNVbcIiS5lc/KJAeFKm2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tz+jlTZYhJ8p4ZIC9Z1PYKo36wrq2vXLSLZLsRn9v4o=;
- b=n3HMxGn6D0/oMqjIyBQ8EK6N+E5xISeYR0z9iT/CKodKLb0LnLag1L6HmymyJcdqrORqxDC0KKiftZf+GFgGJPq52tp5sKBFR5v78RBXZdqkc3IkqX5A/3qGSVUEYK4lS17YU7x/EQbVp7aSbCyOVXZCQ5Q5gAl2MNQOth31OaUp9Cb4DZ7ID4Ge3hQKhPdLfwGXtUQ9DPyi68OWEr6YnmDGIzEfdUoWTy75NFrZ9VeSgtMcakrg3aDFGwVMXA2AdC6+WD3uqNQnLKArTsvwJtpddxJ+C2yH2uEF4XyK9FuJIkn/CZXLodgEhKiZ23me6PQWZJLLmYsVk8d8O+8pbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tz+jlTZYhJ8p4ZIC9Z1PYKo36wrq2vXLSLZLsRn9v4o=;
- b=FW4q3PgZZ63TBhR77LSrHdbkyd/7Kr1xFPjIBhjbQ59HBnmzluYQ5YrGhmpqeD3g1eop7hhMY1fkseYdjsYa/kFlUcKgsKeZgNpWoK3WZQjx5DXZOrs/UKjFrOSeK5DBU1srgPCrnYgnnBkhlYs6kBxqah5qBjWCN25YilFEdM8=
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- (2603:10b6:610:155::10) by DM6PR05MB6074.namprd05.prod.outlook.com
- (2603:10b6:5:11c::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Fri, 24 Feb
- 2023 03:13:09 +0000
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::ad2d:cb08:253b:26e7]) by CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::ad2d:cb08:253b:26e7%8]) with mapi id 15.20.6134.024; Fri, 24 Feb 2023
- 03:13:09 +0000
-From:   Zack Rusin <zackr@vmware.com>
-To:     "tangmeng@uniontech.com" <tangmeng@uniontech.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
-Thread-Topic: [PATCH v2] drm/vmwgfx: Work around VMW_ALLOC_DMABUF
-Thread-Index: AQHZR1Unjoj41030h0yn+mDWgyFFg67cfB+AgADptICAAAdYAA==
-Date:   Fri, 24 Feb 2023 03:13:09 +0000
-Message-ID: <2bc1750b4c3ebebf84c106b903178e5236dc396e.camel@vmware.com>
-References: <20230223070405.20228-1-tangmeng@uniontech.com>
-         <c5ba07a5ad3c6b101126a97eb094c51013ee83c0.camel@vmware.com>
-         <113C6E516C95FA38+f2633fe9-fb5a-616e-0e35-7559750544c9@uniontech.com>
-In-Reply-To: <113C6E516C95FA38+f2633fe9-fb5a-616e-0e35-7559750544c9@uniontech.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.3-1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|DM6PR05MB6074:EE_
-x-ms-office365-filtering-correlation-id: 693430b5-836d-43b6-f868-08db16150e4b
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iRyfAKfJFUYdirEHIBkxKWBn/lwuS2zhY2nYKWKqxi/WIjJO0I893b+877xDYMY5YuKPbnx7YRWCUPLwsxDc48tEwcrZ8ixwBiFZlDu0/m68FQEsEwCFeJ0pBNaNiegCSe5KZA7M8fo9mAy5cUMbemMBEcGwEd6sv8wh9FP7JtyjvlBY91SoSihilTB0StsxIo2tYNDGzLmImvwtLZWcJrSR7naQMA3RsM7yPg7tXjwhAYtuMILedwxL5VvqkgNIitx8oVE7pR2eXFDFNse7/ae4u6LRP4v7XG/5lxqOhKrQRgiYEafmrizlKcarTbPRwjtSmmgcd5uM88VJdJdEpRfgv1xcypnMrj4rw6Yopp4Bu1g+49XGInTO4/C4GFMLKy5NZdivLOhvsuSMjSMKH1QyIGoHQAznYJKXR/RaBAggH+66zLzmSyZ0XlSIx171BDAOlxi7pyFc5SIkHXXs3KC1TrTdGl9zB5Ohi52diua9KT6MOXp6hIaWKiafd4NE3SvtIt0xAACf6xvHxWjoOYJyGeeT/RznQt+Phsm8lhqqOhiAe9i3QKd1xtsziXYgzdU6EcuthgI5Bc9Ps7BYrymoLk0yKMWzdbHBZE7Ys6I8ImwE0ge47ub3+NQ9jvRbwDkFs386gLpzGjQLvdWkw2ZeggLigFxi87/o/xsRJBqQqHvlk9pcsjViqT2pk2BtOv9qWvWX4rgvYISArSkjsORkP8t0qkh5cPFLRkGlNDp2UnO+tIM5hAOFGtvjKJ/H
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(39860400002)(396003)(346002)(136003)(451199018)(83380400001)(26005)(110136005)(36756003)(316002)(6486002)(6512007)(53546011)(6506007)(71200400001)(478600001)(2616005)(186003)(8936002)(38100700002)(86362001)(38070700005)(5660300002)(2906002)(91956017)(66556008)(41300700001)(122000001)(76116006)(66946007)(8676002)(64756008)(66446008)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TURxc3E5ZjBKaEJmWjdUY0tVLzJLQ3lpa3N5N2RwNFJkbEQ3bHpyb2J2MjZC?=
- =?utf-8?B?THhUbFU3UWZQSGFHSHBMcmRma1UzQVNIUFNac0VtWlV4OFNVT2N2MFNNRnY1?=
- =?utf-8?B?Zk5Eb3Y4Yy9SMGpSR2ttVVVrZTZFQ01mUlo5OWJXZ0lBMkc1eW9mZXN5Tld6?=
- =?utf-8?B?aFd5bjRiZlowN3JsQ29HV1F2M2JxSHBmc0FoTTdmSTFNMEJNR0tja0luYmM2?=
- =?utf-8?B?cWMxZlFZakF0Z3M5NnpOOFRxVlhWbUtXVUNDeEVsTzBnZnk2ZG5tdnJ3Mmla?=
- =?utf-8?B?NXRxMlQ1QXo5WXhyZmgvQ0FTL2VLOWNubE1FaGlKVDBCb3NBNERYZit3aVN3?=
- =?utf-8?B?TjBEdS9hSzdBS1JoVzYzSGt3d0pBZ1hrb3d3SE15KzBuU2RPbk1ueE54Nm9U?=
- =?utf-8?B?RXhxak1PN3JZZ1pMMTliMVV2T2J2Uy9WSjdOUWpEVmRrdU9UQlNqT2txRVEv?=
- =?utf-8?B?bUk1aUZFa2xnN2pLTDZOK0lvQStvVnFFbTEzY1JrWHdHRkJUcWlBYUMycHJu?=
- =?utf-8?B?VldvandKeE0rb0tsM3I5VXc3ZDdvdE9hYkVRS2FIemR6eHExV2FzTUdHV1Rt?=
- =?utf-8?B?aTR3MllEUlRTYXZ0VDNZK05HNkxsemNxdUhhbHh2Ung2QWswRGRCT1FNaGo0?=
- =?utf-8?B?Tyt0ZEwyc1NsL3hnVDB2Z29JZlZiV2xMcCtHVkVVUVFIY1l1TS9tSzVXNDJY?=
- =?utf-8?B?RWM5R3dnMkNEcUMzSG1lb3dsa3dUaWRMUjNxbWZkTVJrM2xhTTluMHdUY01E?=
- =?utf-8?B?S2lXTUNwM0RqQkhuTzNUUWI4cXNIUHM4MXY1Y0dITEw1MHpJSHBpVEFsellO?=
- =?utf-8?B?cUlaRFNmajh5azVwWkdyWkJCUE1tWDBJM1FhZWErRnJvc002RHRRR1Y1VTgx?=
- =?utf-8?B?bktKRWNmdXFZOE91TUZrYkhleTVZWXF2OTFYRGpFOE5pNFJ0YmZnK0E0OWUx?=
- =?utf-8?B?NE5pSjM3c2MxanppNDBlOE93M3NvNXUzWGtLcGhjRllEUm4zMFRZVUFoWnRl?=
- =?utf-8?B?ZFdhbjllTXJVYjFUazZKVk9xTUxacEdNaFNpNHc0WVBQbVFFS25RbVpkZ1NR?=
- =?utf-8?B?bXR0NlR6NFZLKzVBZEdTZWZJQWxRN2djVnN1Vnl4dVlCQy9hUlU5akk0Zitu?=
- =?utf-8?B?bVkwK1hidmtsZlFFZ3hkcTNYcHZmWE9OMGpLMWx1VUFTSCt2VmJHc1FDaUk5?=
- =?utf-8?B?OU1KRW1RV3hTdVRzV2YyVWtwSDczeTdLVlFWbmpPU1g5b09ZSGZ2SE90QVEr?=
- =?utf-8?B?N05DK0xsM2haaDJGa0x0WkZIalVqeFdnZDk1U1FIbkE2V2wrMFNQU0tWakNm?=
- =?utf-8?B?WDFPaHJ6YVdqSVdpMGN4V3FwVGR0b05mK29uemxVcXpoWXdZZy9EQ3JpMmR6?=
- =?utf-8?B?UGpJTG9MY0hiWGZYaHhiWVhnaXY0emlNeHdkWDdVZitRNjQxdHVZK2ZNRURW?=
- =?utf-8?B?bTdRaWNnempUVjZRZFJSMnB3ZW9BanpJcTZtcDh2elg2b3VuQ2VJbWdIVjJP?=
- =?utf-8?B?UndjbzdjcFBacFppSTdCNmsvTmlTdTIzak1XRmt2MjNWRnBRbm9yT3J4SWhT?=
- =?utf-8?B?eFdPOEIzMlNJa3pOMEdkRjE1Smd2b3dHQmNhbWI3ZHZaQWxYT21ZM3JjQ0RC?=
- =?utf-8?B?bUxqUGpWaktpcmR3MzNUcG05OVdmN1JYTlBRVkJ2NVR2S20zRGRQRTZwKzRW?=
- =?utf-8?B?SWIyK3JRSDRkQzhsTUxaZU9ScGtsemM1ck9RbXBnM3hIM0krNHh4djVxd0RO?=
- =?utf-8?B?WUJPbEptMVkydklValA0dTdFSGRBbEE2bG9LNDN5UTdWV0N5ZGM3RkZPUWVj?=
- =?utf-8?B?eFJzVUZKKzRuRlA2NXV3V0ZoVTJxRGJQUldodzlndGI4Qy9aODdzUUo4L3RE?=
- =?utf-8?B?a1QrNjZNd1IxQ0lhRTcxcDBONVlFWmlyczNYN1FlK3lXcldGTUlFamtYVGRN?=
- =?utf-8?B?QXE0ZG5kYzIxMzk1Z0pDNVVBcTg1Wm5LTlNGdGFiNGx5dkt4OUgzUkF6ZUtJ?=
- =?utf-8?B?Y3JtVkYvdlB0MUdtcVNkalNqdVd2cHh0aGt5Zmd1TFh2VExEemxURkhPVlc3?=
- =?utf-8?B?MDhWLzdldER2N0p3bXpGNUpyWFZ0elRiaUY4L2gwUzBrL1A4NFJScTdvTUFx?=
- =?utf-8?Q?aoDs0zxbh3j9v3zsONAQ+SIam?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <62719AA5207C2D4C87A6D740079D2DF9@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 23 Feb 2023 22:16:39 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ADF311EB
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677208598; x=1708744598;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kviqoXrzMaBFxzY/PLk4rLq7RoEXLaN/OBT9RBs+qDk=;
+  b=GmbfGySxTQYwtzf2lacd4YrqF+MZYQ34eMtQySDTBro55Qyq8EAKdZeU
+   n52xhE3Aevfjj1v0iV9mebGfT/zmX3S/yiPkH7TToPfoDXS49GbJ+npj+
+   qBsQXhPTybn3gu+AtgMMXe9TnXGGsY9L4Jpyd9TcA8SpFxDC0C2QeYyW+
+   t4uLf6duzApktziyoB1+vZXCHKCzN9GK3hXse6i4GycuaWNiMDQSjrm2f
+   S0ByUlZdHGRGsLo2NgZFaInCR3Q7+ScsIJXZzMzjj25TX6G3yJ6DRKV2A
+   eRLGLpRD/VLRomjjeAGyLgHG01OYIVof0vE5hK25zdU1e7iaA6mGYkL6N
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334805231"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="334805231"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 19:16:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="1001674782"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="1001674782"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2023 19:16:35 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pVOZW-00025J-1w;
+        Fri, 24 Feb 2023 03:16:34 +0000
+Date:   Fri, 24 Feb 2023 11:16:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     M Chetan Kumar <m.chetan.kumar@linux.intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: drivers/net/wwan/iosm/iosm_ipc_mux.h:369:17: warning: field
+ adb_finish_timer within 'struct iosm_mux' is less aligned than 'struct
+ hrtimer' and is usually due to 'struct iosm_mux' being packed, which can
+ lead to unaligned accesses
+Message-ID: <202302241140.XzIRs2Td-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 693430b5-836d-43b6-f868-08db16150e4b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 03:13:09.2416
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4G4o6nSEbIaPiB5MFWr9vyuh3Bi7E/bNjCR3q5ZzRRuuVGPWX52ltT0FWYW1TxPCwW+OCRBdJ7ivyDHjxgHrHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB6074
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTAyLTI0IGF0IDEwOjQ2ICswODAwLCBNZW5nIFRhbmcgd3JvdGU6DQo+IE9u
-IDIwMjMvMi8yMyAyMDo1MCwgWmFjayBSdXNpbiB3cm90ZToNCj4gPiBPbiBUaHUsIDIwMjMtMDIt
-MjMgYXQgMTU6MDQgKzA4MDAsIE1lbmcgVGFuZyB3cm90ZToNCj4gPiA+IEEgcHJpdmlsZWdlIGVz
-Y2FsYXRpb24gdnVsbmVyYWJpbGl0eSB3YXMgZm91bmQgaW4gdm13Z2Z4IGRyaXZlcg0KPiA+ID4g
-aW4gZHJpdmVycy9ncHUvZHJtL3Ztd2dmeC92bXdnZnhfZHJ2LmMgaW4gR1BVIGNvbXBvbmVudCBv
-ZiBMaW51eA0KPiA+ID4ga2VybmVsIHdpdGggZGV2aWNlIGZpbGUgJy9kZXYvZHJpL3JlbmRlckQx
-MjggKG9yIER4eHgpJy4gVGhpcyBmbGF3DQo+ID4gPiBhbGxvd3MgYSBsb2NhbCBhdHRhY2tlciB3
-aXRoIGEgdXNlciBhY2NvdW50IG9uIHRoZSBzeXN0ZW0gdG8gZ2Fpbg0KPiA+ID4gcHJpdmlsZWdl
-LCBjYXVzaW5nIGEgZGVuaWFsIG9mIHNlcnZpY2UoRG9TKS4NCj4gPiA+IA0KPiA+ID4gVGhpcyB2
-dWxuZXJhYmlsaXR5IGNhbiBiZSBxdWlja2x5IHZlcmlmaWVkIGJ5IHRoZSBmb2xsb3dpbmcgY29k
-ZQ0KPiA+ID4gbG9naWM6DQo+ID4gPiAuLi4NCj4gPiA+IGRyaV9mZCA9IG9wZW4oIi9kZXYvZHJp
-L3JlbmRlckQxMjgiLCBPX1JEV1IpOw0KPiA+ID4gcmV0ID0gaW9jdGwoZHJpX2ZkLCAweEMwMTg2
-NDQxLCAmYXJnKTsNCj4gPiA+IGlmIChyZXQgPT0gMCkgew0KPiA+ID4gwqDCoMKgwqDCoMKgwqDC
-oMKgcHJpbnRmKCJbKl0gVk1XX0FMTE9DX0RNQUJVRiBTdWNjZXNzIVxuIik7DQo+ID4gPiB9DQo+
-ID4gPiAuLi4NCj4gPiANCj4gPiBUaGlzIGlzIGp1c3QgcmVndWxhciB1c2FnZSBvZiB0aGF0IGlv
-Y3RsLiBXaGF0J3MgdGhlIHZ1bG5lcmFiaWxpdHk/DQo+ID4gDQo+IFllcywgdGhpcyBpcyBhIHZl
-cnkgY29tbW9uIHJlZ3VsYXIgdXNhZ2Ugb2YgdGhhdCBpb2N0bC4NCj4gQnV0IGlmIGFueSB1c2Vy
-IGNhbiBvcGVyYXRlIC9kZXYvZHJpL3JlbmRlckQxMjggdGhyb3VnaCBpb2N0bCwgaXQgd2lsbCAN
-Cj4gbGVhZCB0byBhIHZ1bG5lcmFiaWxpdHkuDQo+ID4gPiBTdWJtaXQgdGhpcyBjb21taXQgdG8g
-Zml4IGl0Lg0KPiA+IA0KPiA+IE5vLCB0aGlzIGlzIGluY29ycmVjdC4gWW91J3JlIGVmZmVjdGl2
-ZWx5IGp1c3QgZGlzYWJsaW5nIHRoZSBkcml2ZXIgZm9yIG5vcm1hbA0KPiA+IGFwcHMvdXNlcnMg
-dXNpbmcgT3BlbkdMIG9yIGFueSBhY2NlbGVyYXRlZCBjb250ZXh0cywgd2hpY2ggaXMgZ29pbmcg
-dG8NCj4gPiBjb21wbGV0ZWx5DQo+ID4gYnJlYWssIHdlbGwsIGVzc2VudGlhbGx5IGV2ZXJ5dGhp
-bmcgdGhpcyBkcml2ZXIgaXMgZm9yLiBCZWluZyBhYmxlIHRvIHVzZQ0KPiA+IGlvY3RsJ3MNCj4g
-PiB0aGF0IHdlcmUgbWVhbnQgdG8gYmUgdXNlZCBpcyBub3QgYSBidWcuDQo+ID4gDQo+ID4gSWYg
-eW91IGhhdmUgYSBwcm9vZiBvZiBjb25jZXB0IG9yIGF0IGxlYXN0IGEgZGVzY3JpcHRpb24gb2Yg
-dGhlIHZ1bG5lcmFiaWxpdHkNCj4gPiB0aGF0DQo+ID4geW91J3ZlIGZvdW5kIEknZCBiZSBoYXBw
-eSB0byB0YWtlIGEgbG9vayBhdCBpdC4NCj4gPiANCj4gPiB6DQo+IA0KPiANCj4gJCBscyAvZGV2
-L2RyaS9yZW5kZXJEMTI4IC1sYQ0KPiBjcnctcnctLS0tKyAxIHJvb3QgcmVuZGVyIDIyNiwgMTI4
-IDI/wqAgMTUgMTE6NDUgL2Rldi9kcmkvcmVuZGVyRDEyOA0KPiANCj4gVGhlIHBlcm1pc3Npb24g
-b2YgdGhlIGZpbGUgaXMg4oCdY3J3LXJ3LS0tLSvigJ0uDQo+IEkgdGhpbmsgb25seSB0aGUgcm9v
-dCB1c2VyIG9yIHVzZXJzIHdpdGggY2VydGFpbiBwcml2aWxlZ2VzIGNhbiBhY2Nlc3MgDQo+IHRo
-ZSAvZGV2L2RyaS9yZW5kZXJEMTI4IGRldmljZSBmaWxlIGF0IHRoaXMgdGltZS4NCj4gDQo+IEJ1
-dCBpbiBmYWN0LCB1c2VycyBjYW4gYWNjZXNzIC9kZXYvZHJpL3JlbmRlckQxMjggdGhyb3VnaCBp
-b2N0bCB3aXRob3V0IA0KPiBwZXJtaXNzaW9uLg0KPiANCj4gQXR0YWNobWVudCBwb2MuYyBpcyBh
-IHRlc3QgY2FzZSwgYW55IHVzZXIgY2FuIGV4ZWN1dGUgdGhlIA0KPiBjYXNlKFZNV19BTExPQ19E
-TUFCVUYpIHN1Y2Nlc3NmdWxseSwgYW5kIGV2ZW50dWFsbHkgbGVhZCB0byBhIGNhbGwgDQo+IHRy
-YWNlKGxvZyBzZWUgYXR0YWNobWVudCBkbWVzZy50eHQpLg0KPiANCj4gVGhpcyB3aWxsIGNhdXNl
-IHRoZSB1c2VyIHdpdGggcGVybWlzc2lvbiBWTVdfQUxMT0NfRE1BQlVGIGZhaWxlZC4NCg0KVGhh
-dCdzIGNvcnJlY3QuIFRoYXQncyB0aGUgd2F5IHRoaXMgd29ya3MuIFRoZSBpb2N0bCBpcyBhbGxv
-Y2F0aW5nIGEgYnVmZmVyLCB0aGVyZSdzDQpubyBpbmZpbml0ZSBzcGFjZSBmb3IgYnVmZmVycyBv
-biBhIHN5c3RlbSBhbmQsIGdpdmVuIHRoYXQgeW91ciBhcHAganVzdCBhbGxvY2F0ZXMNCmFuZCBu
-ZXZlciBmcmVlcyBidWZmZXJzLCBhdCBzb21lIHBvaW50IHRoZSBzcGFjZSB3aWxsIHJ1biBvdXQg
-YW5kIHRoZSBpb2N0bCB3aWxsDQpyZXR1cm4gYSBmYWlsdXJlLsKgDQoNCkFzIHRvIHRoZSBzdGFj
-ayB0cmFjZSwgSSdtIG5vdCBzdXJlIHdoYXQga2VybmVsIHlvdSB3ZXJlIHRlc3RpbmcgaXQgb24g
-c28gSSBkb24ndA0KaGF2ZSBhY2Nlc3MgdG8gdGhlIGZ1bGwgbG9nIGJ1dCBJIGNhbid0IHJlcHJv
-ZHVjZSBpdCBhbmQgdGhlcmUgd2FzIGEgY2hhbmdlIGZpeGluZw0KZXhhY3RseSB0aGlzIChpLmUu
-IGJ1ZmZlciBmYWlsZWQgYWxsb2NhdGlvbiBidXQgd2Ugd2VyZSBzdGlsbCBhY2Nlc3NpbmcgaXQp
-IHRoYXQgd2FzDQpmaXhlZCBpbiBpbiA2LjIgaW4gY29tbWl0IDFhNjg5NzkyMWY1MiAoImRybS92
-bXdnZng6IFN0b3AgYWNjZXNzaW5nIGJ1ZmZlciBvYmplY3RzDQp3aGljaCBmYWlsZWQgaW5pdCIp
-IHRoZSBjaGFuZ2Ugd2FzIGJhY2twb3J0ZWQgYXMgd2VsbCwgc28geW91IHNob3VsZCBiZSBhYmxl
-IHRvDQp2ZXJpZnkgb24gYW55IGtlcm5lbCB3aXRoIGl0Lg0KDQp6DQoNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d2980d8d826554fa6981d621e569a453787472f8
+commit: 035e3befc191347331dd2530c3686e05a8acfbb2 net: wwan: iosm: fix driver not working with INTEL_IOMMU disabled
+date:   4 months ago
+config: arm-randconfig-r004-20230224 (https://download.01.org/0day-ci/archive/20230224/202302241140.XzIRs2Td-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=035e3befc191347331dd2530c3686e05a8acfbb2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 035e3befc191347331dd2530c3686e05a8acfbb2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302241140.XzIRs2Td-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/wwan/iosm/iosm_ipc_debugfs.c:10:
+   In file included from drivers/net/wwan/iosm/iosm_ipc_trace.h:12:
+   In file included from drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h:9:
+>> drivers/net/wwan/iosm/iosm_ipc_mux.h:369:17: warning: field adb_finish_timer within 'struct iosm_mux' is less aligned than 'struct hrtimer' and is usually due to 'struct iosm_mux' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct hrtimer adb_finish_timer;
+                          ^
+   1 warning generated.
+
+
+vim +369 drivers/net/wwan/iosm/iosm_ipc_mux.h
+
+51c45fa95435c5 M Chetan Kumar 2021-06-13  309  
+51c45fa95435c5 M Chetan Kumar 2021-06-13  310  /**
+51c45fa95435c5 M Chetan Kumar 2021-06-13  311   * struct iosm_mux - Structure of the data multiplexing over an IP channel.
+51c45fa95435c5 M Chetan Kumar 2021-06-13  312   * @dev:		Pointer to device structure
+51c45fa95435c5 M Chetan Kumar 2021-06-13  313   * @session:		Array of the MUX sessions.
+51c45fa95435c5 M Chetan Kumar 2021-06-13  314   * @channel:		Reference to the IP MUX channel
+51c45fa95435c5 M Chetan Kumar 2021-06-13  315   * @pcie:		Pointer to iosm_pcie struct
+51c45fa95435c5 M Chetan Kumar 2021-06-13  316   * @imem:		Pointer to iosm_imem
+51c45fa95435c5 M Chetan Kumar 2021-06-13  317   * @wwan:		Poinetr to iosm_wwan
+51c45fa95435c5 M Chetan Kumar 2021-06-13  318   * @ipc_protocol:	Pointer to iosm_protocol
+51c45fa95435c5 M Chetan Kumar 2021-06-13  319   * @channel_id:		Channel ID for MUX
+51c45fa95435c5 M Chetan Kumar 2021-06-13  320   * @protocol:		Type of the MUX protocol
+51c45fa95435c5 M Chetan Kumar 2021-06-13  321   * @ul_flow:		UL Flow type
+51c45fa95435c5 M Chetan Kumar 2021-06-13  322   * @nr_sessions:	Number of sessions
+51c45fa95435c5 M Chetan Kumar 2021-06-13  323   * @instance_id:	Instance ID
+51c45fa95435c5 M Chetan Kumar 2021-06-13  324   * @state:		States of the MUX object
+51c45fa95435c5 M Chetan Kumar 2021-06-13  325   * @event:		Initiated actions to change the state of the MUX object
+51c45fa95435c5 M Chetan Kumar 2021-06-13  326   * @tx_transaction_id:	Transaction id for the ACB command.
+51c45fa95435c5 M Chetan Kumar 2021-06-13  327   * @rr_next_session:	Next session number for round robin.
+51c45fa95435c5 M Chetan Kumar 2021-06-13  328   * @ul_adb:		State of the UL ADB/ADGH.
+51c45fa95435c5 M Chetan Kumar 2021-06-13  329   * @size_needed:	Variable to store the size needed during ADB preparation
+51c45fa95435c5 M Chetan Kumar 2021-06-13  330   * @ul_data_pend_bytes:	Pending UL data to be processed in bytes
+51c45fa95435c5 M Chetan Kumar 2021-06-13  331   * @acb:		Temporary ACB state
+51c45fa95435c5 M Chetan Kumar 2021-06-13  332   * @wwan_q_offset:	This will hold the offset of the given instance
+51c45fa95435c5 M Chetan Kumar 2021-06-13  333   *			Useful while passing or receiving packets from
+51c45fa95435c5 M Chetan Kumar 2021-06-13  334   *			wwan/imem layer.
+1f52d7b622854b M Chetan Kumar 2022-02-10  335   * @adb_finish_timer:	Timer for forcefully finishing the ADB
+1f52d7b622854b M Chetan Kumar 2022-02-10  336   * @acb_tx_sequence_nr: Sequence number for the ACB header.
+1f52d7b622854b M Chetan Kumar 2022-02-10  337   * @params:		user configurable parameters
+1f52d7b622854b M Chetan Kumar 2022-02-10  338   * @adb_tx_sequence_nr: Sequence number for ADB header
+1f52d7b622854b M Chetan Kumar 2022-02-10  339   * @acc_adb_size:       Statistic data for logging
+1f52d7b622854b M Chetan Kumar 2022-02-10  340   * @acc_payload_size:   Statistic data for logging
+51c45fa95435c5 M Chetan Kumar 2021-06-13  341   * @initialized:	MUX object is initialized
+51c45fa95435c5 M Chetan Kumar 2021-06-13  342   * @ev_mux_net_transmit_pending:
+51c45fa95435c5 M Chetan Kumar 2021-06-13  343   *			0 means inform the IPC tasklet to pass the
+51c45fa95435c5 M Chetan Kumar 2021-06-13  344   *			accumulated uplink ADB to CP.
+51c45fa95435c5 M Chetan Kumar 2021-06-13  345   * @adb_prep_ongoing:	Flag for ADB preparation status
+51c45fa95435c5 M Chetan Kumar 2021-06-13  346   */
+51c45fa95435c5 M Chetan Kumar 2021-06-13  347  struct iosm_mux {
+51c45fa95435c5 M Chetan Kumar 2021-06-13  348  	struct device *dev;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  349  	struct mux_session session[IPC_MEM_MUX_IP_SESSION_ENTRIES];
+51c45fa95435c5 M Chetan Kumar 2021-06-13  350  	struct ipc_mem_channel *channel;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  351  	struct iosm_pcie *pcie;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  352  	struct iosm_imem *imem;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  353  	struct iosm_wwan *wwan;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  354  	struct iosm_protocol *ipc_protocol;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  355  	int channel_id;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  356  	enum ipc_mux_protocol protocol;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  357  	enum ipc_mux_ul_flow ul_flow;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  358  	int nr_sessions;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  359  	int instance_id;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  360  	enum mux_state state;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  361  	enum mux_event event;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  362  	u32 tx_transaction_id;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  363  	int rr_next_session;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  364  	struct mux_adb ul_adb;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  365  	int size_needed;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  366  	long long ul_data_pend_bytes;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  367  	struct mux_acb acb;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  368  	int wwan_q_offset;
+1f52d7b622854b M Chetan Kumar 2022-02-10 @369  	struct hrtimer adb_finish_timer;
+1f52d7b622854b M Chetan Kumar 2022-02-10  370  	u16 acb_tx_sequence_nr;
+1f52d7b622854b M Chetan Kumar 2022-02-10  371  	struct ipc_params *params;
+1f52d7b622854b M Chetan Kumar 2022-02-10  372  	u16 adb_tx_sequence_nr;
+1f52d7b622854b M Chetan Kumar 2022-02-10  373  	unsigned long long acc_adb_size;
+1f52d7b622854b M Chetan Kumar 2022-02-10  374  	unsigned long long acc_payload_size;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  375  	u8 initialized:1,
+51c45fa95435c5 M Chetan Kumar 2021-06-13  376  	   ev_mux_net_transmit_pending:1,
+1f52d7b622854b M Chetan Kumar 2022-02-10  377  	   adb_prep_ongoing;
+1f52d7b622854b M Chetan Kumar 2022-02-10  378  } __packed;
+51c45fa95435c5 M Chetan Kumar 2021-06-13  379  
+
+:::::: The code at line 369 was first introduced by commit
+:::::: 1f52d7b622854b8bd7a1be3de095ca2e1f77098e net: wwan: iosm: Enable M.2 7360 WWAN card support
+
+:::::: TO: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
