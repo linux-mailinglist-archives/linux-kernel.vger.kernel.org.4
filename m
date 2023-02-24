@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A7D6A2209
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552E86A2211
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjBXTGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S230001AbjBXTHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjBXTGD (ORCPT
+        with ESMTP id S229982AbjBXTHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:06:03 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BCB2310E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:06:02 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cq23so1313022edb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:06:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gOnW98lyJGpYbD3eJjqqzz7gc3Ub1QIGFkaXHUv4Ygw=;
-        b=QgJzE1UXmKimaRQyvLPX5eOzT51cg/7f32m8GMjg3xQqoxdyxololhdOn94vv4mfJZ
-         mNXn+/IMq2NgXpZq0dV9JUbm82Tv+OpUNyfJDu6dpCaBqQQlbZTu21GCYsC9+zVH0n42
-         DBThtYurcSf7Bo98gVQ42RJLZrWoPKpK6t+u4=
+        Fri, 24 Feb 2023 14:07:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7743771B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:06:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677265573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TO32MmHRC5X6hVdeytKpEjQuFgiB4c62vSXkbsV3be0=;
+        b=JplskUSuU/ceWMzpto0lgV23LuWdzQG7l41s2lWizg6hr3mZQJgmBbZD1uNJzrxVRYRb2y
+        h6wrwoCnxmt3P21SuYX/Cm01bAeKGAd+hYF7jW60Jp0qkkSgXxzBoVLERhz62KTqF8O7FZ
+        nuBi6A47ScqJ3CbpP7miiiQ+EKsfS+Q=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-357-U7kBTsPGOQmlX6i9cjlAeA-1; Fri, 24 Feb 2023 14:06:11 -0500
+X-MC-Unique: U7kBTsPGOQmlX6i9cjlAeA-1
+Received: by mail-io1-f71.google.com with SMTP id i3-20020a0566022c8300b0073a6a9f8f45so8973346iow.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:06:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gOnW98lyJGpYbD3eJjqqzz7gc3Ub1QIGFkaXHUv4Ygw=;
-        b=I19DQkMGUyUImBCLr1LoLVxZB4n4dkjV2I6uwmP7hIAQsnlncgAjp1bQ6PjXr9zhWI
-         32DNffuxeEu3dHiNTWgzaIuEvX+X2nRnydH96T2PMTg6R5u7oLphkslcAxM6sbsxpDcP
-         ASuNXHtNN9D5LIuSIlx/5jOQk/2vqA5Fy1faZO85B1roLL3dBTj2Zgx9JB6SanJchTtk
-         MoU8Lc7Faqb1LRyu89EkhBWtcdaYd+/bRUl6vdhHzV55nI2CYikyw4LYs0k4TEX0tbEZ
-         QPR2NYR4pAa8QC4k46PI7DmlKCCKVyr6625CuD7X8KCctNk9l9C9YT1KPMAxdCv3opYf
-         wKvA==
-X-Gm-Message-State: AO0yUKVYG6wPAa/ieZ3t+JJHBT4svI8mr/WMTe0J1cXCEJRqSEthdG46
-        F8KM+a0CcGYbQ+d/2aMOYGPRm+JzLklMgySH6/1I4A==
-X-Google-Smtp-Source: AK7set9YgPlzKbK+A6YgryTBT+wpExy5W9+LOwALbxc5QoPtYbFQ4gZoWAh3lhbssCnVSpQAYHdd7A==
-X-Received: by 2002:a17:906:7e06:b0:7c4:fa17:7203 with SMTP id e6-20020a1709067e0600b007c4fa177203mr25490830ejr.63.1677265560775;
-        Fri, 24 Feb 2023 11:06:00 -0800 (PST)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id w25-20020a50d799000000b004aef4f32edesm23021edi.88.2023.02.24.11.05.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 11:05:59 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id da10so1268324edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:05:59 -0800 (PST)
-X-Received: by 2002:a50:baa7:0:b0:4ae:e5f1:7c50 with SMTP id
- x36-20020a50baa7000000b004aee5f17c50mr7747187ede.5.1677265559017; Fri, 24 Feb
- 2023 11:05:59 -0800 (PST)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TO32MmHRC5X6hVdeytKpEjQuFgiB4c62vSXkbsV3be0=;
+        b=4EaFFaFVLa8eQaUPMT/VpKIenz3zFR7ilnX6FjX8JdDobCnOBgK14A2yBTOZvRHjym
+         +6P1W3b33FKeM5T4Ofxrm7G24olgiYdiqyXwGzZ/e0SHtuboCnqlc4cKHA0yl8LsG5vz
+         PXrF7NpC4oaw4Xkyx6tMcAyPPg9WukO0raqia8IQkEEX82d84r2LonNUjUoMinF2jWXm
+         2rWn9+VxLmyBcvD0vaPLQ5um4dYMM9y06d/6VLqXBFGMBZ6GRruqQOHN2/L6vyI0tgDs
+         vZjmzQAhaCbJIHdITgTGOsTFQCS3jj7S2HlDJ5ooAseFf4AlMIoLd8f75mnyA3BNgmLm
+         nVIA==
+X-Gm-Message-State: AO0yUKWJOOSsx/tA2HcWFljbtPrIwnX/7ILc/BdnNt0Jb66shoxBJjc3
+        mOCC6eT92wAPD4fBqgksnsKEtV5gk95N2AcOKmV0IiYwoVAi/UjKRz4b3SGQWnV2lLv8pOUoUhR
+        cyKKrWaoaJW+9LC5qzC53QRpj
+X-Received: by 2002:a05:6602:200f:b0:74c:bc54:def6 with SMTP id y15-20020a056602200f00b0074cbc54def6mr790438iod.16.1677265571053;
+        Fri, 24 Feb 2023 11:06:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set9/Pv5CyL/4mD4A9Y4Q/LVOJsbK7o9jmpBuvUza9YaJUBhEetobrRKdqPedvvHaEaB9J1UmPg==
+X-Received: by 2002:a05:6602:200f:b0:74c:bc54:def6 with SMTP id y15-20020a056602200f00b0074cbc54def6mr790426iod.16.1677265570885;
+        Fri, 24 Feb 2023 11:06:10 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id l5-20020a6b7b05000000b0073f8a470bacsm24221iop.16.2023.02.24.11.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 11:06:09 -0800 (PST)
+Date:   Fri, 24 Feb 2023 14:06:07 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH 0/6] Add basic Minidump kernel driver support
+Message-ID: <Y/kKn9tnvSQ2Pacn@x1>
+References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
+ <Y/deHzijzvuvCJ2M@x1>
+ <47542dbb-8cf3-6eae-a38e-910d38bd960b@quicinc.com>
 MIME-Version: 1.0
-References: <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
- <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
- <2134430.1677240738@warthog.procyon.org.uk> <2213409.1677249075@warthog.procyon.org.uk>
- <CAHk-=whFKL4VuFBWvenG8fAgfvbf36PDgouUSx47rZDWr9BkJw@mail.gmail.com>
- <2385284.1677259167@warthog.procyon.org.uk> <CAHk-=wiAQZUZCEH1OxFb3Oa_mqz69tagdXHnKuYd_rwRHba5Cw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiAQZUZCEH1OxFb3Oa_mqz69tagdXHnKuYd_rwRHba5Cw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 Feb 2023 11:05:42 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wizKeB-EAsFgvUUfL2OaO3+W2OHr2L8Y4cGBBheYeJdtw@mail.gmail.com>
-Message-ID: <CAHk-=wizKeB-EAsFgvUUfL2OaO3+W2OHr2L8Y4cGBBheYeJdtw@mail.gmail.com>
-Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <stfrench@microsoft.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47542dbb-8cf3-6eae-a38e-910d38bd960b@quicinc.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,17 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:58 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I'll apply that minimal fix for now - I think the right thing to do is
-> your bigger patch, but that needs more thinking (or at least splitting
-> up).
+Hi Mukesh,
 
-Minimal fix applied - that way I can drop this for now, and we can
-discuss the whole "maybe we can just use write_cache_pages()" instead.
+On Fri, Feb 24, 2023 at 04:10:42PM +0530, Mukesh Ojha wrote:
+> On 2/23/2023 6:07 PM, Brian Masney wrote:
+> > I'd like to test this series plus your series that sets the multiple
+> > download modes.
+> 
+> Sure, you are welcome, but for that you need a device running with Qualcomm
+> SoC and if it has a upstream support.
 
-Because that _would_ be lovely, even if it's possible that the generic
-helper might need some extra love to work better for cifs/afs.
+I will be testing this series on a sa8540p (QDrive3 Automotive
+Development Board), which has the sc8280xp SoC with good upstream
+support. This is also the same board that I have a reliable way to
+make the board crash due to a known firmware bug.
 
-             Linus
+> Also, testing of this patch needs some minimal out of tree patches and
+> i can help you with that.
+
+Yup, that's fine. Hopefully we can also work to get those dependencies
+merged upstream as well.
+
+Brian
+
