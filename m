@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1136A1FEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDEB6A1FF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjBXQpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 11:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S230006AbjBXQqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 11:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjBXQpH (ORCPT
+        with ESMTP id S229728AbjBXQqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 11:45:07 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A475F1A66B;
-        Fri, 24 Feb 2023 08:45:05 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id da10so58354266edb.3;
-        Fri, 24 Feb 2023 08:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qhsCvsTQigHaRbJBtRfG3MI7vuMgumhn+WwEAc/wh38=;
-        b=KfxTUqrPaM/JFBgLjle39E08GF3YQnUun22/P74B0AWc1lMfJglKCVpq+igWeLLccw
-         eVt3KKQE9brNzCZWJLP1A2xZOjTt7q16eJxe4p99vHxmvLgkECg51StdGqXKolE4YOyn
-         g5oK4hYxY/OjU6GfJNekO54scJiE88CX84XBb9KiI4992tnCT/gLQ8Lr4Myo6f8d8zfV
-         1nIwREah3PkGpMwp16uyj8EpXEaJYby9vU00NLG/1ig0+fUtah223DuH/f1vcIdMM/E4
-         Bz4VSxfy6remH3BjpBhfH09td1V3mIA5/mAaoi31WF0HpWX2HSANAaeVPNAvoEPaXwF5
-         BGPw==
+        Fri, 24 Feb 2023 11:46:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893476A7B0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:45:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677257125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=13svcAbhKsbNR6lcnWL8PecfM86J5HXpB/wTf6k/HJg=;
+        b=f+DR6jFhaf67jhNig1RYv+Bq/sbFKD/Chy8vdUgbfD0y3DB+uoKs5KlqbFpwp6gjsc/g2T
+        Jqe6mW6IOtzyj69UGag6+RJvEFNGMMhqgaIVbFw8qrOBDN8Qd4sA/l0ckwL4HG83DuxTG3
+        JaObMBOrDiPeg7xGpXnAXRo3j5DrBms=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-637-Yl1xVWA3PcikbfSEqSGoiA-1; Fri, 24 Feb 2023 11:45:24 -0500
+X-MC-Unique: Yl1xVWA3PcikbfSEqSGoiA-1
+Received: by mail-qt1-f200.google.com with SMTP id cr14-20020a05622a428e00b003b82d873b38so7185017qtb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:45:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qhsCvsTQigHaRbJBtRfG3MI7vuMgumhn+WwEAc/wh38=;
-        b=L72f5VYbID+RofKuINqkAvpAZ2LmgW+yNIKbTzXpGUx44tB4buI6O+yqKnOCfhta84
-         X6BDT4aShHZ5sUQhvcmA6SOzdWB9GkX9+P356zl2NvIEH3J11Ebk67TJgrNzM/1qaczX
-         Oj9JH4Lm2NL9Svsnu8dcgEDVzyoyCVTWh6EH74QHCwdtbVxg0jkC2TO7GpRx3zXlbyua
-         R8b3LtxHHX5JBIcVP24nLtFTSFPgTZVkfU9RKTrzWmPPsQhq5WSNoAWNKyx92+ynlYCq
-         OxmmBMJgtpM2uyE5fIKKIZslWd3wQniwZU9gOk5CsCIkxHeVexnOZDQ3Id5SC73Wnbpb
-         AfHg==
-X-Gm-Message-State: AO0yUKURCR+FCi2smqEStDqE8mxtZRqvSYbtLeGqEhWt7jUivdRbhxk7
-        8TzQuNhxJSvuTIFYSVvg25Y=
-X-Google-Smtp-Source: AK7set/4ePRxdLx3BL4tvb//3n2ehhz8lNKdTJxXQszTAbDdd+iv6YtOmXPPufJI0gn1001tbhEj2Q==
-X-Received: by 2002:a17:907:d403:b0:8ae:fa9f:d58e with SMTP id vi3-20020a170907d40300b008aefa9fd58emr30424961ejc.53.1677257104079;
-        Fri, 24 Feb 2023 08:45:04 -0800 (PST)
-Received: from [192.168.1.50] ([79.119.240.25])
-        by smtp.gmail.com with ESMTPSA id kq9-20020a170906abc900b008d9c518a318sm5844996ejb.142.2023.02.24.08.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 08:45:03 -0800 (PST)
-Message-ID: <5c024519-3c5c-dd83-6b71-14b2747084fd@gmail.com>
-Date:   Fri, 24 Feb 2023 18:44:19 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=13svcAbhKsbNR6lcnWL8PecfM86J5HXpB/wTf6k/HJg=;
+        b=5wKaE77JXb50qbxJodFmZVHsG+U38CZ0zyaX2qZ2+uYpT2lXZUDYlec3vCvQpmeAbA
+         xJ0MIX5ySl8k+d5M80FZ+bLpqxer9WRyhNX6FZqnv4+Djs7P61FbGIqCkZGwT70lJpuZ
+         oOqsg2VBw+BXGDD8H08O8bf91SQ0flJj7EorV0h1MqF5cq7GtGLD6chkZ12rVPWkUFqV
+         w/4GCtT9pSLoVSbgvIkMGyWGixHlUF3YWbirJB+TPQB/EXBxrNjyQyMVjrgwbI0flcf3
+         E69Mfc/mytXaLlFj6ghSozg5dX3544G9gR5ORE9+ekoDthCAIiRVlQ9EiSedt/r2+3mm
+         6GCQ==
+X-Gm-Message-State: AO0yUKWiT8JeGVU877xkQKgj+fIgIcO2Q3VFcyNPaCCB3jstzi0QW3on
+        8plTsO1YNJySyv1FWzZ7TNE3UaY43FIeVsux66TfDGz3mmlpHO7Ane+uHzwfWxNeLKvf3WE4uKn
+        WE/Ghton8WGzDGGnDwyRW5B+J
+X-Received: by 2002:ac8:5744:0:b0:3bd:dfe:9c1d with SMTP id 4-20020ac85744000000b003bd0dfe9c1dmr24611378qtx.59.1677257123552;
+        Fri, 24 Feb 2023 08:45:23 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ab3tb8sJ9dHB9BnRpA5KhvlL1jf3eeYsfFKZ/ZRG9txC27LuVJrseS7PPvfb60RIOXh+Tbw==
+X-Received: by 2002:ac8:5744:0:b0:3bd:dfe:9c1d with SMTP id 4-20020ac85744000000b003bd0dfe9c1dmr24611334qtx.59.1677257123231;
+        Fri, 24 Feb 2023 08:45:23 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id oq21-20020a05620a611500b0074235fc7a69sm5506113qkn.68.2023.02.24.08.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 08:45:22 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        ruijing.dong@amd.com, Jane.Jian@amd.com, James.Zhu@amd.com,
+        tao.zhou1@amd.com, sonny.jiang@amd.com, leo.liu@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdgpu: remove unused variable ring
+Date:   Fri, 24 Feb 2023 11:45:19 -0500
+Message-Id: <20230224164519.2757173-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
-From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
-To:     Jun ASAKA <JunASAKA@zzy040330.moe>, Jes.Sorensen@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
- <18907e6b-93b4-d850-8a17-95ad43501136@gmail.com>
- <56a335f1-3558-e496-4b0b-b024a935f881@zzy040330.moe>
- <4ce57d51-0b53-6258-d003-ebb4a2eb4b82@gmail.com>
-Content-Language: en-US
-In-Reply-To: <4ce57d51-0b53-6258-d003-ebb4a2eb4b82@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/01/2023 14:49, Bitterblue Smith wrote:
-> On 08/01/2023 11:29, Jun ASAKA wrote:
->> On 07/01/2023 22:17, Bitterblue Smith wrote:
->>
->>> On 17/12/2022 05:06, Jun ASAKA wrote:
->>>> Fixing transmission failure which results in
->>>> "authentication with ... timed out". This can be
->>>> fixed by disable the REG_TXPAUSE.
->>>>
->>>> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
->>>> ---
->>>>   drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c | 5 +++++
->>>>   1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
->>>> index a7d76693c02d..9d0ed6760cb6 100644
->>>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
->>>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
->>>> @@ -1744,6 +1744,11 @@ static void rtl8192e_enable_rf(struct rtl8xxxu_priv *priv)
->>>>       val8 = rtl8xxxu_read8(priv, REG_PAD_CTRL1);
->>>>       val8 &= ~BIT(0);
->>>>       rtl8xxxu_write8(priv, REG_PAD_CTRL1, val8);
->>>> +
->>>> +    /*
->>>> +     * Fix transmission failure of rtl8192e.
->>>> +     */
->>>> +    rtl8xxxu_write8(priv, REG_TXPAUSE, 0x00);
->>>>   }
->>>>     static s8 rtl8192e_cck_rssi(struct rtl8xxxu_priv *priv, u8 cck_agc_rpt)
->>> By the way, you should get this into the stable kernels too:
->>> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->>
->> I see.
->>
->> But since this patch has not been merged into Linus' tree yet, so should I wait until this patch is merged or I should issue a v2 patch here and Cc it to "table@vger.kernel.org"?
->>
->>
->> Jun ASAKA.
->>
-> Ah, yeah. Wait then.
+building with gcc and W=1 reports
+drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c:81:29: error: variable
+  ‘ring’ set but not used [-Werror=unused-but-set-variable]
+   81 |         struct amdgpu_ring *ring;
+      |                             ^~~~
 
-It should be fine to send it now.
+ring is not used so remove it.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c b/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+index 213b43670f23..023a1fffa6a9 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+@@ -78,12 +78,10 @@ static void vcn_v4_0_set_ras_funcs(struct amdgpu_device *adev);
+ static int vcn_v4_0_early_init(void *handle)
+ {
+ 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
+-	struct amdgpu_ring *ring;
+ 
+ 	if (amdgpu_sriov_vf(adev)) {
+ 		adev->vcn.harvest_config = VCN_HARVEST_MMSCH;
+ 		for (int i = 0; i < adev->vcn.num_vcn_inst; ++i) {
+-			ring = &adev->vcn.inst[i].ring_enc[0];
+ 			if (amdgpu_vcn_is_disabled_vcn(adev, VCN_ENCODE_RING, i)) {
+ 				adev->vcn.harvest_config |= 1 << i;
+ 				dev_info(adev->dev, "VCN%d is disabled by hypervisor\n", i);
+-- 
+2.27.0
+
