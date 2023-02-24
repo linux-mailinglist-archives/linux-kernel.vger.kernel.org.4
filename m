@@ -2,103 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5446A2512
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BB66A2514
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjBXXaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 18:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S229539AbjBXXbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 18:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBXXaU (ORCPT
+        with ESMTP id S229446AbjBXXbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 18:30:20 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE446BF5A;
-        Fri, 24 Feb 2023 15:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677281419; x=1708817419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iYG64KQ8eDbP4/BqEcmXVFBG++OPO7afYUzLr08b6cg=;
-  b=mXoBqhTzG9XLc1n8QlcxO7aYqA3aaKqzmCdsWbf/ERZTXQoWxJ5LpxVr
-   8Ba3PUw/mwef02Rwkwos19fzkMRqHv1F7SosXnDs3ENZRyW/sHAs13vuH
-   mokb9Vguozks2zznJ5tZxIXrGOdV22FYP46BeW9/i5LBliVgLsXmHqa39
-   GOTACWm/r1ocBK2gZbDZxRD1AJqneaMMhviHnxkyuoGptXwWfmg3q7OLP
-   RbfxStoyufA+r5muS/z8jhJ6IgZR22VsI2iqo3huY7YCcBqsFIQXIs4Y7
-   zObEyOm+5ufr5YoBLd8tfQ9xX2wLTv2fnxyWWVXO1KFF/yLd9c0UQ4Fv6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="398334904"
-X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
-   d="scan'208";a="398334904"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 15:30:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="847106500"
-X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
-   d="scan'208";a="847106500"
-Received: from ydu6-mobl1.gar.corp.intel.com (HELO desk) ([10.209.68.79])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 15:30:18 -0800
-Date:   Fri, 24 Feb 2023 15:30:04 -0800
-From:   "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Wilk, Konrad" <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 7/8] x86/cpu: Support AMD Automatic IBRS
-Message-ID: <20230224233004.rf2nzgqvz5c2b73u@desk>
-References: <20230124163319.2277355-1-kim.phillips@amd.com>
- <20230124163319.2277355-8-kim.phillips@amd.com>
- <20230224185257.o3mcmloei5zqu7wa@treble>
- <Y/knUC0s+rg6ef2r@zn.tnic>
- <20230224213522.nofavod2jzhn22wp@treble>
- <Y/kzGEqafzQkbU4T@zn.tnic>
- <SJ1PR11MB60834960ECAC976C1D328A86FCA89@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y/k2TWHpq1M8QiSa@zn.tnic>
+        Fri, 24 Feb 2023 18:31:41 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4784C6DD93;
+        Fri, 24 Feb 2023 15:31:39 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id h14so1071667plf.10;
+        Fri, 24 Feb 2023 15:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iLqpTAJ2zI/UpBIrfmjrHQ5czCGNvbt8KQT4ojOnXBw=;
+        b=oMYJOYyd4hp3MTtQmnuUggOtO92lYNfXm1Fd+hJkfgQug+r1/I9QY3MXPeZzIn/E8V
+         ghLOMkxT1S2yFSZzC98Z4KVUMKzjeLc2Tg1ZExLlsqLFXOdL+iTHjoQH7KDXi1K5L64b
+         f9NUNCsMhPtXPsk6z5m9ftaOX8DmSoAieDmfj5Re+7JQVYtff53mVhWKuZZkgibS1lTt
+         Ye7opJXaEDdZSxd05NFylVwsJw1sov2HdTfLlQl4fljy09GZDvwvqOEgo3M9sbu65o4g
+         CB3ThMKbCDu56fTdO+mtBwR12lzQtKkR/Djt/Zfw+m1corStVGQN/MRSazTkIIAe6RTc
+         fJrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iLqpTAJ2zI/UpBIrfmjrHQ5czCGNvbt8KQT4ojOnXBw=;
+        b=u4NL2+JObeSat/FUVxY4dl0pslR0DHM2aPxzSUklOOIVHOpklP4MpHIuha2icLzszX
+         ymSIjNaucfh3mYFhy98xlRb8K6PM4UOqsc5eXJzoF9ypMBU/STJyBiq8fkVT2EMwlxVC
+         rJUb6DUkYx33659+azIUhsWzMuKdIf6MERrRlRFCMOFNfJhUaydZzXRa7FwRr/tpZqWy
+         ViGpVlLw9geMX8Vj/xzAHPveoG3TzD8W776JgeHv3KtjzGcAa32fdJ+VBzhDjTS8cag+
+         yVC/cgPdJRKioVxwvM7pUtpDSZmDJr+5ZQ5oGMl5aup3sDNTVD9r5Q8sDM8M8NgaYlca
+         jwMQ==
+X-Gm-Message-State: AO0yUKVfY2Irp/2+y3eUWsgoTULvPyI7M4/f3IljD1ngikmz5eDJnTi7
+        5drjqOq6m48Gvy80Bd5Xd/leZlEGZJc7
+X-Google-Smtp-Source: AK7set8jtgQGXwnbqt1UD/28ukFJjCzXH2LOfEgXleC84u6NCyNigWRoM8EvwBotz9tezA/y3fvnCA==
+X-Received: by 2002:a17:902:6bc4:b0:19c:bd2c:b33b with SMTP id m4-20020a1709026bc400b0019cbd2cb33bmr5628851plt.11.1677281498514;
+        Fri, 24 Feb 2023 15:31:38 -0800 (PST)
+Received: from fedora.mshome.net ([104.184.156.161])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902868200b0019a5aa7eab0sm59680plo.54.2023.02.24.15.31.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 15:31:38 -0800 (PST)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
+        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v12 0/3] Checkpoint Support for Syscall User Dispatch
+Date:   Fri, 24 Feb 2023 18:31:23 -0500
+Message-Id: <20230224233126.1936-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/k2TWHpq1M8QiSa@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 11:12:29PM +0100, Borislav Petkov wrote:
-> On Fri, Feb 24, 2023 at 10:03:16PM +0000, Luck, Tony wrote:
-> > Should also include Pawan as another unfortunate soul sucked
-> > into keeping that file up to date with the latest wreckage. If not
-> > as "M", at least as "R":
-> > 
-> > R: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> 
-> We probably should hear from him before you offer his soul into the
-> purgatory of hardware speculation.
+v12: split test into its own patch
+     change from padding a u8 to using a u64
+     casting issues
+     checkpatch.pl
 
-I will be happy to review what I can.
+v11: backout complex compat code, change struct to more generic typing
+     (padding to ensure struct size is the same in 32 compat)
+     update selftest
+     tested selftest on 64 machine and in 32-bit compat mode
 
-Soulfully yours,
-Pawan
+v10: move refactor code into patch ahead of change
+     add compat support
+     documentation change
+
+v9: tglx feedback
+    whitespace
+    documentation of ptrace struct
+    shorten struct name
+    helper function for set_syscall_user_dispatch
+    use task variant of set/clear_syscall_work
+    use task variant of test_syscall_work in getter
+    selftest
+
+[truncated version history]
+
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
+
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+Patch summary:
+- Refactor configuration setting interface to operate on a task
+  rather than current, so the set and error paths can be consolidated
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+- Selftest for the new feature
+
+Gregory Price (3):
+  syscall_user_dispatch: helper function to operate on given task
+  ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
+  selftest,ptrace: Add selftest for syscall user dispatch config api
+
+ .../admin-guide/syscall-user-dispatch.rst     |  4 ++
+ include/linux/syscall_user_dispatch.h         | 18 +++++
+ include/uapi/linux/ptrace.h                   | 29 ++++++++
+ kernel/entry/syscall_user_dispatch.c          | 65 ++++++++++++++---
+ kernel/ptrace.c                               |  9 +++
+ tools/testing/selftests/ptrace/.gitignore     |  1 +
+ tools/testing/selftests/ptrace/Makefile       |  2 +-
+ tools/testing/selftests/ptrace/get_set_sud.c  | 72 +++++++++++++++++++
+ 8 files changed, 191 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
+
+-- 
+2.39.1
+
