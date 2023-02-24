@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C766A1DD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A276A1DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjBXOzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S230113AbjBXO5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjBXOzM (ORCPT
+        with ESMTP id S229379AbjBXO5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:55:12 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F9446096
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:55:10 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id m14-20020a7bce0e000000b003e00c739ce4so1885372wmc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aMQW/ellgn1pXltseM1o0F3wQ2R9xKG925J3WLYtIok=;
-        b=da+dhW3QJGErTX3NvZ44iKfDDxZfxs7rL/V3IoMNmgzNYJwx1qOUL6cUAwuIgk5h++
-         Zlm+8xoPSooEP9p/PH2bGZC4t8msBI59TyTkvw+FMvwfJAAOlTx41H3JCAK9/VEa0fyR
-         MNGf7H7EVCQJcbGdck0Oab8BEStnje4WV42ExHLsQNJioAcsY2dX5oYYsiLCmbWHfZNj
-         rOLv9VFyHtIJEoHh2PT8QlzSbGtFz8otcXVj3bXcrX/zG2Us0Mua57SYyn5OQmUZpLN9
-         Mx9oYaa8at9pNGp7P7WxD5/ebwN9o3l0G6N6qa6A3Ef/UQBtUbUMdbMr81bzFzgTNMSB
-         aQZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aMQW/ellgn1pXltseM1o0F3wQ2R9xKG925J3WLYtIok=;
-        b=rA5gpohWA3TJI6674F7gERC5Ag607KGmKO5vovH6U3Inz7eCaa6pHFjbZNR81yTCFe
-         TQbBppv2IL2Y0jGigPGKPHiUkq0O3UMTBaSpSbju7TePtc662dx6gt43GR39dfJlrylg
-         qWBvONrFNBkPnYAl9rge33ROTozkizo8okyr2FE3KxjE92DtmShMzcaJ8IIyiOv396qE
-         /GVo90j8Bci1mzozK/WV2yemzMT4YQaML4a0fquWeYb9rag6aQJk8E35dAG2mlem1DBg
-         6xtZ0oSSixtcQgF2CMH+tjX7pygPC0Clb4LGWv/Y5GqmyLqaN6pcsTYzHJ2/BuDzjpI1
-         k5MA==
-X-Gm-Message-State: AO0yUKWa/UaanSr59SoOFwL0ZsPLUfF5dHO8JiOp4vtI2IheVbIAEncw
-        b0Oryb6MB8RPmH5cxRGwIzklLg==
-X-Google-Smtp-Source: AK7set9n3yDeszAz6rxtpcHWPJpCYXtZPQyoC7QSt/RBAGQZWNXLHu3H4DAGoH3J6E1tycXa0VMDTQ==
-X-Received: by 2002:a05:600c:4d18:b0:3ea:e554:7808 with SMTP id u24-20020a05600c4d1800b003eae5547808mr3256028wmp.19.1677250509708;
-        Fri, 24 Feb 2023 06:55:09 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dff870ce0esm3104352wmc.2.2023.02.24.06.55.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 06:55:09 -0800 (PST)
-Message-ID: <2df19bef-5565-6961-3235-bf1ea21eabfe@linaro.org>
-Date:   Fri, 24 Feb 2023 15:55:07 +0100
+        Fri, 24 Feb 2023 09:57:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8725A64E2A;
+        Fri, 24 Feb 2023 06:57:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1058F618E6;
+        Fri, 24 Feb 2023 14:57:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D587C433EF;
+        Fri, 24 Feb 2023 14:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677250636;
+        bh=BX7ubvR3+x0sfXaoE8k2EQZkDXcr72I1hlLKxFfUneM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LeQAyzUcx24i3ueMY7iYVCIa0WNjPNOdR2O9fKOX1Zw2ZioO/R0gDk8e4oc8g1Cvj
+         FxSMJc0ZD84wdrZMaGSJHxOEhX2i0A3F1/CzWSIf0EpCEP7LoqN2Bq2I2hLN9xyH4Z
+         S0rbr3SZAFB8DuO+TiQON/aD0nYjHLe6jn2JQZaEvlcf3XLSipn96yH68a+vD3ViXb
+         QXOSRBREy4zXA1dbb+bpYd4pXYyDOmGJ+E0il+5z6x3VKBm0E0rsWkX8ivUqz9lJRR
+         HFf0ngDbQYWzhbSk6ovc9LY+bnVvtNoRsPmb1TVo2pCiTab1TKvAejr4+H/pD7zJEn
+         QkfMmKNjAIHhA==
+Date:   Fri, 24 Feb 2023 07:57:13 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with
+ rust support
+Message-ID: <Y/jQSUpXH5XwQTqg@dev-arch.thelio-3990X>
+References: <20230224135044.2882109-1-conor.dooley@microchip.com>
+ <20230224135044.2882109-3-conor.dooley@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dt-bindings: fpga: xilinx-spi: convert bindings to
- json-schema
-Content-Language: en-US
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230224113711.193903-1-nava.kishore.manne@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230224113711.193903-1-nava.kishore.manne@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224135044.2882109-3-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,131 +66,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 12:37, Nava kishore Manne wrote:
-> Convert xilinx-spi bindings to DT schema format using json-schema
+Hi Conor,
 
-Missing full stop.
-
+On Fri, Feb 24, 2023 at 01:50:44PM +0000, Conor Dooley wrote:
+> From: Miguel Ojeda <ojeda@kernel.org>
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> The rust modules work on 64-bit RISC-V, with no twiddling required.
+> Select HAS_RUST and provide the required flags to kbuild so that the
+> modules can be used.
+> 32-bit is broken in core rust code, so support is limited to 64-bit
+> only: ld.lld: error: undefined symbol: __udivdi3
+> 
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../bindings/fpga/xilinx-slave-serial.txt     | 51 ------------
->  .../bindings/fpga/xlnx,fpga-slave-serial.yaml | 77 +++++++++++++++++++
->  2 files changed, 77 insertions(+), 51 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+>  Documentation/rust/arch-support.rst | 2 ++
+>  arch/riscv/Kconfig                  | 1 +
+>  arch/riscv/Makefile                 | 3 ++-
+>  3 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+> index 6982b63775da..197919158596 100644
+> --- a/Documentation/rust/arch-support.rst
+> +++ b/Documentation/rust/arch-support.rst
+> @@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
+>  ============  ================  ==============================================
+>  Architecture  Level of support  Constraints
+>  ============  ================  ==============================================
+> +``riscv``     Maintained        ``rv64`` only.
+> +============  ================  ==============================================
+>  ``x86``       Maintained        ``x86_64`` only.
+>  ============  ================  ==============================================
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 81eb031887d2..73174157212d 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -115,6 +115,7 @@ config RISCV
+>  	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
+>  	select HAVE_REGS_AND_STACK_ACCESS_API
+>  	select HAVE_RSEQ
+> +	select HAVE_RUST if 64BIT
 
+Just a small drive by comment, you have 'if 64BIT' here...
 
-Thank you for your patch. There is something to discuss/improve.
+>  	select HAVE_STACKPROTECTOR
+>  	select HAVE_SYSCALL_TRACEPOINTS
+>  	select IRQ_DOMAIN
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 76989561566b..0d6fc4e25221 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -29,8 +29,8 @@ ifeq ($(CONFIG_ARCH_RV64I),y)
+>  
+>  	KBUILD_CFLAGS += -mabi=lp64
+>  	KBUILD_AFLAGS += -mabi=lp64
+> -
+>  	KBUILD_LDFLAGS += -melf64lriscv
+> +	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv64
+>  else
+>  	BITS := 32
+>  	UTS_MACHINE := riscv32
+> @@ -38,6 +38,7 @@ else
+>  	KBUILD_CFLAGS += -mabi=ilp32
+>  	KBUILD_AFLAGS += -mabi=ilp32
+>  	KBUILD_LDFLAGS += -melf32lriscv
+> +	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv32
 
+but also add KBUILD_RUSTFLAGS for the !64BIT case. Seems like one of
+those can be removed.
 
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
-> @@ -0,0 +1,77 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/xlnx,fpga-slave-serial.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Slave Serial SPI FPGA driver.
+>  endif
+>  
+>  ifeq ($(CONFIG_LD_IS_LLD),y)
+> -- 
+> 2.39.2
+> 
 
-Drop driver and full stop.
-
-> +
-> +maintainers:
-> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
-> +
-> +description: |
-> +  Xilinx Spartan-6 and 7 Series FPGAs support a method of loading the bitstream
-> +  over what is referred to as slave serial interface.The slave serial link is
-> +  not technically SPI, and might require extra circuits in order to play nicely
-> +  with other SPI slaves on the same bus.
-> +  Please refer to fpga-region.txt in this directory for  common binding part
-> +  and usage.
-
-Just one space, not two. But what exactly from fpga-region comes here?
-If it is used, you need to mention it otherwise it's not allowed to be
-used...
-
-
-> +
-> +  Datasheets:
-> +    https://www.xilinx.com/support/documentation/user_guides/ug380.pdf
-> +    https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
-> +    https://www.xilinx.com/support/documentation/application_notes/xapp583-fpga-configuration.pdf
-> +
-
-Missing allOf to spi-peripheral-props.
-
-> +properties:
-> +  compatible:
-> +    items:
-
-No need for items, drop it.
-
-> +      - enum:
-> +          - xlnx,fpga-slave-serial
-> +
-> +  spi-cpha: true
-> +
-> +  spi-max-frequency:
-> +    maximum: 60000000
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  prog_b-gpios:
-> +    description:
-> +      config pin (referred to as PROGRAM_B in the manual)
-
-maxItems
-
-> +
-> +  done-gpios:
-> +    description:
-> +      config status pin (referred to as DONE in the manual)
-
-maxItems
-
-> +
-> +  init-b-gpios:
-> +    description:
-> +      initialization status and configuration error pin
-> +      (referred to as INIT_B in the manual)
-
-maxItems
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - prog_b-gpios
-> +  - done-gpios
-> +  - init-b-gpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    spi0 {
-
-spi
-
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      fpga_mgr_spi: fpga-mgr@0 {
-> +        compatible = "xlnx,fpga-slave-serial";
-> +        spi-max-frequency = <60000000>;
-> +        spi-cpha;
-> +        reg = <0>;
-> +        prog_b-gpios = <&gpio0 29 GPIO_ACTIVE_LOW>;
-> +        init-b-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
-> +        done-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
-> +      };
-> +    };
-> +...
-
-Best regards,
-Krzysztof
-
+Cheers,
+Nathan
