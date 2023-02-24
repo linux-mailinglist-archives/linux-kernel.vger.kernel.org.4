@@ -2,180 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBEA6A1DA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CCF6A1DA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjBXOoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S230011AbjBXOpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjBXOoG (ORCPT
+        with ESMTP id S230085AbjBXOox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:44:06 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7151689D;
-        Fri, 24 Feb 2023 06:44:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2AB393FA55;
-        Fri, 24 Feb 2023 14:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677249842;
-        bh=D5wNXpCLthvKzU0v4nv/lr+ty+Pv+guL5ET4c/EH8nE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Irlcd4vdNdqExEiwyDlVv808VxXgX9m/G5YGPBtDAzaBbtvHVqk+M6pp6lLJRb/Vl
-         6PrAkVvLBUdlAoLtVdfffN7wpTeIp9MFE/g0j0JNbXJ+l6auXoQVRW5MpDE1y2N5mh
-         nPJqUnPdkN8C7BIV5xy8t8S2oK9uEfw0IEBybH4Nqp+XtB/abdrfPIS5jMAOH3drxP
-         DcMRWEwlj3kRo+dDtOQ2XYy/fpEYNkcZcCGzvD3ZTYRlhGSqRoMtRKpCIVHDFV/3xJ
-         3pdo74roDva34gPGO/b/MIfnHB1QxdQJKmEclCybOaUuS9owqxmRxG1HfeiMgx1XuK
-         7jU8V9xYpKXIw==
-Message-ID: <0e3c15bd-a1d6-a363-d7b6-087b6e4cddac@asahilina.net>
-Date:   Fri, 24 Feb 2023 23:43:54 +0900
+        Fri, 24 Feb 2023 09:44:53 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FD028216
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:44:51 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id f16so14348903ljq.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+i3g6u0rlqo0uOWY4ZzAscD0foBD0Ue4NJ+Kep1BHaA=;
+        b=MHZixJAy4T8/xACVwYG6GipRpVWAyr0lBjFK6Vbgcwa31ncnxWNPWAJNZDDyo6xwXZ
+         9rMdq0ZA6RA69oeljRYAmNZC46+fqrTwvc6klacJpczUqyIoPkqKxnTIcy1QtmHYPY1n
+         l1txh1Z5h41/9878v4AKRIzfcwx46ZF6qHWLt27lczkPv/tvBxoBJefRtYJYhDSDbWJ4
+         ZMjEkPHdoTStnUpAm/3K7YRdxxpDuSmx6PArNw0J0donopcIVpn9eW0ZubsYzho+W1Nf
+         FNZwTHDYfvAOGcQj2g6yRHmQfsVp5lE3Kbmq9BTjWQCZp3M6eDQP/OqCDjTlpbrVTUdB
+         84eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+i3g6u0rlqo0uOWY4ZzAscD0foBD0Ue4NJ+Kep1BHaA=;
+        b=aZkpJSZDNMrDauYxIwETTOgf9x8jbe7Q60Ge+C+ixbpB2L/qnIfMhVQudmAS7Gqw+L
+         u4AqFz08YolR+ECRnWt3GNLxi0Jf+fsHOIpXFQJncLEUQ5jBb3H7dRMAB6sdsvsV0/tZ
+         Mx1N0RK1OJ+9lNvhW23aB0XjNzzDFx2TL7iloGMtedpAn7R7cevQQ59drfJKe6PAhHtq
+         RM4XTgyQyv1uXxYfqbZh1WcygLZ0F1MnJtql9Td06zvNYBgiM1uVifTi2hFYe19GhnYY
+         Zuu5xrxOEXuuNT1P3bk2g7VMli7jZec5o/tJqeXekymR2xn/OvZgoHHobX5m962/SdCt
+         qJ7Q==
+X-Gm-Message-State: AO0yUKVckwF94UC52GQasSMbu1VYvb+Nz5yZMBGBHU2k9k+7Wn1Oso/f
+        35z1vt5Igzk/F6MFqnwhwJo=
+X-Google-Smtp-Source: AK7set+1gVifLSj869ewiGuO0idCmkLh1gMdBDGD/nNgHxD48/d3X4yKnATQq7cR4HQXwo8FshjYFw==
+X-Received: by 2002:a2e:3a12:0:b0:295:9021:450a with SMTP id h18-20020a2e3a12000000b002959021450amr4201173lja.49.1677249889586;
+        Fri, 24 Feb 2023 06:44:49 -0800 (PST)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id bg27-20020a05651c0b9b00b002959b1162f0sm784267ljb.96.2023.02.24.06.44.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 06:44:49 -0800 (PST)
+Message-ID: <d6a6097b-cc48-4213-a5bf-7b154870ce0b@gmail.com>
+Date:   Fri, 24 Feb 2023 16:44:48 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 2/5] rust: device: Add a minimal RawDevice trait
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
- <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
- <Y/ieQ0UX/niAG1Hg@kroah.com>
- <ef3a3638-6381-87ab-d674-644306b6b6ce@asahilina.net>
- <Y/jFeZzZVCpBGvGv@kroah.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <Y/jFeZzZVCpBGvGv@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] iio: Add some kerneldoc for channel types
+Content-Language: en-US, en-GB
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andrea Merello <andrea.merello@iit.it>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <10a855f9adc1d710150b7f647500c3c6a769f9ca.1677243698.git.mazziesaccount@gmail.com>
+ <CAHp75VdAmUhhP0NF19wOFGGc-v0SWSecywdd5=cBhzbCsSn3BA@mail.gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <CAHp75VdAmUhhP0NF19wOFGGc-v0SWSecywdd5=cBhzbCsSn3BA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/02/24 23:11, Greg Kroah-Hartman wrote:
-> Thanks for the detailed rust explainations, I'd like to just highlight
-> one thing:
-> 
-> On Fri, Feb 24, 2023 at 10:15:12PM +0900, Asahi Lina wrote:
->> On 24/02/2023 20.23, Greg Kroah-Hartman wrote:
->>> And again, why are bindings needed for a "raw" struct device at all?
->>> Shouldn't the bus-specific wrappings work better?
+On 2/24/23 16:20, Andy Shevchenko wrote:
+> On Fri, Feb 24, 2023 at 3:02 PM Matti Vaittinen
+> <mazziesaccount@gmail.com> wrote:
 >>
->> Because lots of kernel subsystems need to be able to accept "any" device
->> and don't care about the bus! That's what this is for.
+>> For occasional contributor like me navigating the IIO channel types and
+>> modifiers may be a daunting task. One may have hard time finding out
+>> what type of channel should be used for device data and what units the
+>> data should be converted.
+>>
+>> There is a great documentation for the sysfs interfaces though. What is
+>> missing is mapping of the channel types and modifiers to the sysfs
+>> documentation (and entries in documentation).
+>>
+>> Give a hand to a driver writer by providing some documentation and by
+>> pointing to the sysfs document from the kerneldocs of respective enums.
 > 
-> That's great, but:
+> kernel doc
 > 
->> All the bus
->> wrappers would implement this so they can be used as an argument for all
->> those subsystems (plus a generic one when you just need to pass around
->> an actual owned generic reference and no longer need bus-specific
->> operations - you can materialize that out of a RawDevice impl, which is
->> when get_device() would be called). That's why I'm introducing this now,
->> because both io_pgtable and rtkit need to take `struct device` pointers
->> on the C side so we need some "generic struct device" view on the Rust side.
+> Documentation is always welcome!
 > 
-> In looking at both ftkit and io_pgtable, those seem to be good examples
-> of how "not to use a struct device", so trying to make safe bindings
-> from Rust to these frameworks is very ironic :)
-
-And this is why I want to use Rust, and why writing the abstractions for
-C code is so difficult... Rust encodes all these rules in the type
-system, but C doesn't, and so many kernel APIs don't document any of
-this or what the requirements are...
-
-> rtkit takes a struct device pointer and then never increments it,
-> despite saving it off, which is unsafe.  It then only uses it to print
-> out messages if things go wrong (or right in some cases), which is odd.
-> So it can get away from using a device pointer entirely, except for the
-> devm_apple_rtkit_init() call, which I doubt you want to call from rust
-> code, right?
-
-That sounds like we need to fix the C side to grab a reference ^^
-
-We do need to pass the device to the init function though
-(apple_rtkit_init(), this is in the SoC tree which I mentioned as a
-prequisite and already on the way to 6.3-rc1), since at the very least
-it has to pick up the mailbox and all that to initialize.
-
-Alternatively we could say that the C API contract is that the user of
-rtkit has to own a reference, and then the Rust abstraction would have
-to take that reference to make a safe abstraction, but that doesn't
-sound like the better option.
-
-What do you recommend for things that want to print device-associated
-messages, if not holding a reference to the device? Or did I
-misunderstand what you meant? Just pr_foo() isn't great because we have
-a lot of instances of rtkit and then you wouldn't know which device the
-messages are about...
-
-> for io_pgtable, that's a bit messier, you want to pass in a device that
-> io_pgtable treats as a "device" but again, it is NEVER properly
-> reference counted, AND, it is only needed to try to figure out the bus
-> operations that dma memory should be allocated from for this device.  So
-> what would be better to save off there would be a pointer to the bus,
-> which is constant and soon will be read-only so there are no lifetime
-> rules needed at all (see the major struct bus_type changes going into
-> 6.3-rc1 that will enable that to happen).
+> ...
 > 
-> So the two subsystems you want to call from rust code don't properly
-> handle the reference count of the object you are going to pass into it,
-> and only need it for debugging and iommu stuff, which is really only the
-> bus that the device is on, not good examples to start out with :)
+Thanks for the review Andy. All comments valid and to the point - I'll 
+fix these issues before respinning!
 
-Well, they're two examples that are dependencies for the driver I wrote,
-and I don't think you want me picking easy examples with zero known
-upcoming users... ^^;;
+Yours,
+	-- Matti
 
-> Yeah, this is yack-shaving, sorry, but it's how we clean up core
-> subsystems for apis and implementations that are not really correct and
-> were not noticed at the time.
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-I'm fine with helping fix all this, and I don't expect all the
-underlying C code to be perfect already either! I already fixed one
-locking bug in DRM and spent a lot of time trying to figure out lifetime
-rules there, but I didn't dig into rtkit/io_pgtable and didn't realize
-they don't take references properly...
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-> Can we see some users of this code posted so I can see how struct device
-> is going to work in a rust driver?  That's the thing I worry most about
-> the rust/C interaction here as we have two different ways of thinking
-> about reference counts from the two worlds and putting them together is
-> going to be "interesting", as can be seen here already.
-
-I linked a tree with everything in the cover letter ([4]), look in
-drivers/gpu/drm/asahi for the actual driver. But there are a lot of
-other dependencies that have to go in before that will compile
-(everything else in that branch...)
-
-I know it's hard to review without examples, but I also can't just post
-the driver and everything else as one series now, there's still a lot to
-be improved and fixed and I'm working with the Rust folks on figuring
-out a roadmap for that... and waiting until "everything" is ready and
-perfect would mean we don't get anything done in the meantime and fall
-into a pit of endless rebasing and coordinating downstream trees, which
-also isn't good...
-
-~~ Lina
