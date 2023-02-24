@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7D56A2297
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663406A229A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjBXT6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S229532AbjBXT6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjBXT6C (ORCPT
+        with ESMTP id S229718AbjBXT6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:58:02 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDF5DCC4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:58:01 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536cad819c7so5878857b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:58:01 -0800 (PST)
+        Fri, 24 Feb 2023 14:58:16 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207E0682B1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:58:09 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c8bcae3bso6252877b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677268680;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=p3M/U/RdbIKj9BRgWDZd3ub2xYwsuU8WGv3/rWkYSus=;
-        b=eV22FgQY4o1TSX4cv+YeD6o76tNMkWk142BEeFVgpk4xF9u+7stqQA3Sl9FCfsQKee
-         PwcyeHd4nbwK8yt2juTWJPeXWO1UQM5vrI85Ze8J/m11gIiGW1q4f0O+CYBbyMJm/kRV
-         eyfo6/nu6IBGt9n2SQdIhuZik4w++NofHsebKLN/5MtNpusK2O77g82R1uvfnVcs6rTO
-         X3vuq9gdXxOIynyuVLrFALUvBW7PjyG2rbQiyxAEjH2CNSd+Tbj5gok30D6J3SJOWjdT
-         MKtbGoK/M7hkxlwO6SqpSsmgcR1aPwvMak0Oc1mXK5qyQLTj5nm7MXZD7FuJuPjwogwb
-         /GXw==
+        d=google.com; s=20210112; t=1677268688;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5ozTt3+xQs6+7ogbKaGsgcnydK5zFBxlpY+OKLh75k=;
+        b=YcHnei0sgU7WOBbwBcC7bYeBQfgTTWPvFHN1cEwg309Bo29+1Jx1Q0KA0jAAG9dXfC
+         BW/r+PmCY9a1ZuL6cO8dLH8xvNEqVek3VWt/wDEh39fqa4+sEFP66cyAwTSwl4SpiIx0
+         QinhZSelVJ60nB+HoFFY66n5Km/2O15ZLohjdU31tx7+FPEJRd2bgYwoXd4SmHapSCHA
+         APm579m23p3/j/nSqcOqjB/z5LbkfPkxCzAEJYTFsvHrOgrBbuPKrB/EbR0zdWqxSD7u
+         eKEldJWXt+tWjZuGz9MQzY/kMURuHmutEmkQRt1mNB2l8Y41YUP5yKz3OGTm2ehIrcq0
+         QTtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677268680;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p3M/U/RdbIKj9BRgWDZd3ub2xYwsuU8WGv3/rWkYSus=;
-        b=171UvGwjkWPCt2RlUw9p5PhWYtJJob/gF3JW6tFXQIWR0EL254rQLV29x6KetjY43d
-         8l3uz4sSh1J3u6LmcngfipulXNsyNAicrLXGJWuEpoZKpCeAdZEWwtFXFa/GrBbWJWm2
-         tW1Rg5GHATh5EOwCamOmMq5mVPY71gzsh0gQMl5eb2nb+Zg1poxIGN5BcrIRZMQV+EWj
-         sXPhtzx4jkCM32AO6OLAYtZAsHg/PIUBncQ/Y5cxXBg7dZmuIzAYWeto/kPnyoBQWcEw
-         uFUMRnojMFX7YHQwIvIPqDyMujGM3mCKSNwmN0qhSsO9vx9x1L1j8DV/z73zPFFVNlAe
-         2CtA==
-X-Gm-Message-State: AO0yUKVZTyi4OrAHcdR2SZziAsD7dKJMIoApFoYZXTGnA5l244R5+JlA
-        kxh2mn8YUfN5ZqfCJ3/ikU1FvSaDWcI=
-X-Google-Smtp-Source: AK7set8wMrOqDfT7CZP+3w1w3JB04DQEg+TLIn3ovFUbTFv2EDk6St0AtACcJNEYP2Xs81UYpoyOMbQ6C/Q=
+        d=1e100.net; s=20210112; t=1677268688;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5ozTt3+xQs6+7ogbKaGsgcnydK5zFBxlpY+OKLh75k=;
+        b=IhY2744nweXGvzMt1v8wlYwrhbsA4XsXQ+W7DpAxkKSNoFC3Z1+N8w3oWqjjTSOi6n
+         urKaImClJnFglSyZ9tjWjkXPoFqEKauWy8AUcXYovkikL9o72zwe6EyUqqsi2gIgolZ+
+         81p2yrKV2Mz0TqB0iq2EvVUn48aau+VrXGDIJaiSE2Mumf0hjPn1hE1TsGr3+g1sx7Ib
+         i5IBtv7n0qoX9/1cuixBI2GVdTYnddPRHiyAgL9mSZCMFtYPQBFfHrBoOMCJF4sy+IeZ
+         jQdRVZYlnD4rXGD4KmmfyTVMyScm/FH4HrAsKUnv0K9JADRcYlioDqpfk9b0ZxTRI7VM
+         g3Sg==
+X-Gm-Message-State: AO0yUKW6PRJ18SfAJVDTjUjqYC7Iy1B2FbO1yKWVef+JSbt0hYCndUqb
+        zEL9dsWDA4q7e2mw5WuM1qMn8ggsdWk=
+X-Google-Smtp-Source: AK7set+btwFgubuHZ/Rb4MNnccdpV/hP9fK6leiIOl8RXG+/oNxNWwAZcOBowLTFIYv5GMhm2C+RP7jXmRM=
 X-Received: from sdalvi-android.chi.corp.google.com ([2620:15c:2:a:1808:5921:faf8:7a68])
- (user=sdalvi job=sendgmr) by 2002:a05:6902:1003:b0:9f5:af6b:6f69 with SMTP id
- w3-20020a056902100300b009f5af6b6f69mr699242ybt.5.1677268680297; Fri, 24 Feb
- 2023 11:58:00 -0800 (PST)
-Date:   Fri, 24 Feb 2023 13:57:45 -0600
+ (user=sdalvi job=sendgmr) by 2002:a05:690c:583:b0:538:49a4:b1e0 with SMTP id
+ bo3-20020a05690c058300b0053849a4b1e0mr720665ywb.2.1677268687916; Fri, 24 Feb
+ 2023 11:58:07 -0800 (PST)
+Date:   Fri, 24 Feb 2023 13:57:46 -0600
+In-Reply-To: <20230224195749.818282-1-sdalvi@google.com>
 Mime-Version: 1.0
+References: <20230224195749.818282-1-sdalvi@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230224195749.818282-1-sdalvi@google.com>
-Subject: [PATCH v1 0/2] Skip waiting for link up during probe
+Message-ID: <20230224195749.818282-2-sdalvi@google.com>
+Subject: [PATCH v1 1/2] dt-bindings: PCI: dwc: Add snps,skip-wait-link-up
 From:   Sajid Dalvi <sdalvi@google.com>
 To:     Jingoo Han <jingoohan1@gmail.com>,
         Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
@@ -75,18 +77,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 When the Root Complex is probed, the default behavior is to spin in a loop
 waiting for the link to come up. In some systems the link is not brought up
-during probe, but later in the context of an end-point turning on. This
-patch adds a device tree property to the Synopsis designware root
-controller to skip this loop.
+during probe, but later in the context of an end-point turning on.
+This property will allow the loop to be skipped.
 
-Sajid Dalvi (2):
-  dt-bindings: PCI: dwc: Add snps,skip-wait-link-up
-  PCI: dwc: Skip waiting for link up on probe
-
+Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+---
  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml | 8 ++++++++
- drivers/pci/controller/dwc/pcie-designware-host.c       | 5 +++--
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ 1 file changed, 8 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+index 1a83f0f65f19..0b8950a73b7e 100644
+--- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+@@ -197,6 +197,14 @@ properties:
+       - contains:
+           const: msi
+ 
++  snps,skip-wait-link-up:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      When the Root Complex is probed, the default behavior is to spin in a
++      loop waiting for the link to come up. In some systems the link is not
++      brought up during probe, but later in the context of an end-point turning
++      on. This property will allow the loop to be skipped.
++
+ additionalProperties: true
+ 
+ required:
 -- 
 2.39.2.637.g21b0678d19-goog
 
