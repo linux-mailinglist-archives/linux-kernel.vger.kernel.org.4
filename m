@@ -2,192 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373186A1534
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635F36A153B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjBXDKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S229921AbjBXDMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBXDKO (ORCPT
+        with ESMTP id S229445AbjBXDMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:10:14 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD2F5EEFE;
-        Thu, 23 Feb 2023 19:10:11 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PNFHz0FcBz4f3vfW;
-        Fri, 24 Feb 2023 11:10:07 +0800 (CST)
-Received: from [10.174.176.34] (unknown [10.174.176.34])
-        by APP4 (Coremail) with SMTP id gCh0CgBn0LOLKvhjD7fTEA--.35663S3;
-        Fri, 24 Feb 2023 11:10:04 +0800 (CST)
-Subject: Re: [LSF/MM/BPF TOPIC] Image-based read-only filesystem: further use
- cases & directions
-To:     xiang@kernel.org
-References: <Y7vTpeNRaw3Nlm9B@debian>
-Cc:     lsf-pc@lists.linuxfoundation.org, linux-fsdevel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        guohanjun@huawei.com
-From:   Zhang Yi <yi.zhang@huaweicloud.com>
-Message-ID: <249fd0e8-3024-219a-30fa-7298bf2370fb@huaweicloud.com>
-Date:   Fri, 24 Feb 2023 11:10:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Thu, 23 Feb 2023 22:12:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D02C5EEFE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677208311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ce5tfl2n/EssbKt11AP0PiIJ95ywSk+f7JnIMaHI1Wk=;
+        b=Bq2S3V4dzEu83xOgYWzZr+zlld+eFtAlNrMtccxw4QQSt9bTCR9/UYBTrJtlo6Ovau8sr2
+        unWoMfbOYlDDU7vdejsOV5NCWe0akXUgtiaZMyNdjC1rAvqi8Y+NzNSGfMAq2bjGgv6SBe
+        Sm3ArBiFSk5xiRE3i5PXBGjzPJD610Q=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-241-PQbmh6iENUeWyxnTogFI5g-1; Thu, 23 Feb 2023 22:11:50 -0500
+X-MC-Unique: PQbmh6iENUeWyxnTogFI5g-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1728e0187d7so1175644fac.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:11:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ce5tfl2n/EssbKt11AP0PiIJ95ywSk+f7JnIMaHI1Wk=;
+        b=bVFjNb8Oa0Yai/cPImFt1rULoMVXO/qI5wwxIliq5MK0VPW59OlcwbEUr5EPNA4N/4
+         ZnKpsF5FXevzqOUtEiDuUfooDjMiqz1aGYrOWoBfas6eGULdCvfGxe8BbAjk9z5CQ0/A
+         asl8sVIGYdOpvQ2DTIlzd4YItCaZcdvKCT3lzRGzd+DjdTBI+gKTVcA8crImCuFgVv5m
+         mNAzqhJKye8kUIvNMogWt95cK1fv/ERFj4n76j7C5x9joFe3jArj+negP7r2UJA4Ov+0
+         u0AqG7E0TbTDjp0RCuJTWteO/+GiC2WnBpWkS1mUq2Taiu9vgXedbYvfiNDHNg40qp7P
+         09gQ==
+X-Gm-Message-State: AO0yUKX8VYpjAKAuuN8CuEsEQC9jDhPh+0mnIjhDUn8WQ04hW6X5bpfj
+        S80NrlKvPWbWSWg5xfO9BGBML+jxneSvOBaxrk7+TgCAz/hCBlnZh/amMbjPlv4s8gLrcdY8Ppj
+        JnibH/QQCZC8hmQOG6rl+1vdxD+I9pbjPZ7y68s7vA4VNzrN+
+X-Received: by 2002:a05:6808:6c9:b0:383:c688:a8e0 with SMTP id m9-20020a05680806c900b00383c688a8e0mr725788oih.9.1677208309041;
+        Thu, 23 Feb 2023 19:11:49 -0800 (PST)
+X-Google-Smtp-Source: AK7set+gu9v2kcBbZccH/ZaJz3PndJ8R+g8ZrRudTxgfmD3x81zCiyAktZ0EKcq2Yuereo2Z41aHL/7pYEkRPXgsh0s=
+X-Received: by 2002:a05:6808:6c9:b0:383:c688:a8e0 with SMTP id
+ m9-20020a05680806c900b00383c688a8e0mr725779oih.9.1677208308153; Thu, 23 Feb
+ 2023 19:11:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y7vTpeNRaw3Nlm9B@debian>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBn0LOLKvhjD7fTEA--.35663S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4kZF4rAF1rKFyrWw13twb_yoWrtw4rpF
-        Z5KrWUKr4ruFn7CrWkXr429F4rGws5tay5Jw15KayfZF15KF9F9rZ29r48uFW7XrW8J3Wj
-        vwsIvFyFvrWqyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: d1lo6xhdqjqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com>
+In-Reply-To: <20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 24 Feb 2023 11:11:37 +0800
+Message-ID: <CACGkMEu8JtT9_0YcbmfWCGxbrB1GHnesnspFYgaeVrb2x3o3oQ@mail.gmail.com>
+Subject: Re: [PATCH v2] virtio-net: Fix probe of virtio-net on kvmtool
+To:     rbradford@rivosinc.com
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/9 16:43, Gao Xiang wrote:
-> Hi folks,
-> 
-> * Background *
-> 
-> We've been continuously working on forming a useful read-only
-> (immutable) image solution since the end of 2017 (as a part of our
-> work) until now as everyone may know:  EROFS.
-> 
-> Currently it has already successfully landed to (about) billions of
-> Android-related devices, other types of embedded devices and containers
-> with many vendors involved, and we've always been seeking more use
-> cases such as incremental immutable rootfs, app sandboxes or packages
-> (Android apk? with many duplicated libraries), dataset packages, etc.
-> 
-> The reasons why we always do believe immutable images can benefit
-> various use cases are:
-> 
->  - much easier for all vendors to ship/distribute/keep original signing
->    (golden) images to each instance;
-> 
->  - (combined with the writable layer such as overlayfs) easy to roll
->    back to the original shipped state or do incremental updates;
-> 
->  - easy to check data corruption or do data recovery (no matter
->    whether physical device or network errors);
-> 
->  - easy for real storage devices to do hardware write-protection for
->    immutable images;
-> 
->  - can do various offline algorithms (such as reduced metadata,
->    content-defined rolling hash deduplication, compression) to minimize
->    image sizes;
-> 
->  - initrd with FSDAX to avoid double caching with advantages above;
-> 
->  - and more.
-> 
-> In 2019, a LSF/MM/BPF topic was put forward to show EROFS initial use
-> cases [1] as the read-only Android rootfs of a single instance on
-> resource-limited devices so that effective compression became quite
-> important at that time.
-> 
-> 
-> * Problem *
-> 
-> In addition to enhance data compression for single-instance deployment,
-> as a self-contained approach (so that all use cases can share the only
-> _one_ signed image), we've also focusing on multiple instances (such as
-> containers or apps, each image represents a complete filesystem tree)
-> all together on one device with similar data recently years so that
-> effective data deduplication, on-demand lazy pulling, page cache
-> sharing among such different golden images became vital as well.
-> 
-> 
-> * Current progresses *
-> 
-> In order to resolve the challenges above, we've worked out:
-> 
->  - (v5.15) chunk-based inodes (to form inode extents) to do data
->    deduplication among a single image;
-> 
->  - (v5.16) multiple shared blobs (to keep content-defined data) in
->    addition to the primary blob (to keep filesystem metadata) for wider
->    deduplication across different images:
-> 
->  - (v5.19) file-based distribution by introducing in-kernel local
->    caching fscache and on-demand lazy pulling feature [2];
-> 
->  - (v6.1) shared domain to share such multiple shared blobs in
->    fscache mode [3];
-> 
->  - [RFC] preliminary page cache sharing between diffenent images [4].
-> 
-> 
-> * Potential topics to discuss *
-> 
->  - data verification of different images with thousands (or more)
->    shared blobs [5];
-> 
->  - encryption with per-extent keys for confidential containers [5][6];
-> 
->  - current page cache sharing limitation due to mm reserve mapping and
->    finer (folio or page-based) page cache sharing among images/blobs
->    [4][7];
-> 
->  - more effective in-kernel local caching features for fscache such as
->    failover and daemonless;
-> 
->  - (wild preliminary ideas, maybe) overlayfs partial copy-up with
->    fscache as the upper layer in order to form a unique caching
->    subsystem for better space saving?
-> 
+On Fri, Feb 24, 2023 at 3:38 AM Rob Bradford via B4 Relay
+<devnull+rbradford.rivosinc.com@kernel.org> wrote:
+>
+> From: Rob Bradford <rbradford@rivosinc.com>
+>
+> kvmtool does not support the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature
+> but does advertise the VIRTIO_NET_F_GUEST_TSO{4,6} features. Check that
+> the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature is present before setting
+> the NETIF_F_GRO_HW feature bit as otherwise an attempt will be made to
+> program the virtio-net device using the ctrl queue which will fail.
+>
+> This resolves the following error when running on kvmtool:
+>
+> [    1.865992] net eth0: Fail to set guest offload.
+> [    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wanted 0x0000000000134829, left 0x0080000000134829
+>
+> Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+> ---
+> Changes in v2:
+> - Use parentheses to group logical OR of features
+> - Link to v1:
+>   https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d7a@rivosinc.com
+> ---
+>  drivers/net/virtio_net.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 61e33e4dd0cd..f8341d1a4ccd 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3780,10 +3780,9 @@ static int virtnet_probe(struct virtio_device *vdev)
+>         }
+>         if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
+>                 dev->features |= NETIF_F_RXCSUM;
+> -       if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> -           virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
+> -               dev->features |= NETIF_F_GRO_HW;
+> -       if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+> +       if ((virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> +           virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6)) &&
+> +           virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+>                 dev->hw_features |= NETIF_F_GRO_HW;
 
-Hello Xiang and all,
+Does this mean we won't have NETIF_F_GRO_HW when only TSO4/TSO6 are
+supported but not GUEST_OFFLOADS?
 
-We interested in these topic too. Our cloud products will also want to use
-erofs + overlayfs as container's base image and want to do more researchs on
-deduplication, page cache sharing and disk space saving, and I also have some
-study on overlayfs partial copy-up feature. I hope we could have further
-discussion on this topic in person.
+Is this intended?
 
-Thanks,
-Yi.
+Thanks
 
-
->  - FSDAX enhancements for initial ramdisk or other use cases;
-> 
->  - other issues when landing.
-> 
-> 
-> Finally, if our efforts (or plans) also make sense to you, we do hope
-> more people could join us, Thanks!
-> 
-> [1] https://lore.kernel.org/r/f44b1696-2f73-3637-9964-d73e3d5832b7@huawei.com
-> [2] https://lore.kernel.org/r/Yoj1AcHoBPqir++H@debian
-> [3] https://lore.kernel.org/r/20220918043456.147-1-zhujia.zj@bytedance.com
-> [4] https://lore.kernel.org/r/20230106125330.55529-1-jefflexu@linux.alibaba.com
-> [5] https://lore.kernel.org/r/Y6KqpGscDV6u5AfQ@B-P7TQMD6M-0146.local
-> [6] https://lwn.net/SubscriberLink/918893/4d389217f9b8d679
-> [7] https://lwn.net/Articles/895907
-> 
-> Thanks,
-> Gao Xiang
-> .
+>
+>         dev->vlan_features = dev->features;
+>
+> ---
+> base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
+> change-id: 20230223-virtio-net-kvmtool-87f37515be22
+>
+> Best regards,
+> --
+> Rob Bradford <rbradford@rivosinc.com>
+>
 
