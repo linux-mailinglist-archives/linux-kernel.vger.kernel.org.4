@@ -2,329 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3306A19B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27BF6A19B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjBXKL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S229577AbjBXKNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBXKLb (ORCPT
+        with ESMTP id S229543AbjBXKNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:11:31 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AB1316897
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:10:57 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8AxYeUwjfhjuaQEAA--.3679S3;
-        Fri, 24 Feb 2023 18:10:56 +0800 (CST)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+QjjfhjNH86AA--.6368S8;
-        Fri, 24 Feb 2023 18:10:55 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Xi Ruoyao <xry111@xry111.site>,
-        Youling Tang <tangyouling@loongson.cn>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] LoongArch: Clean up la_abs macro
-Date:   Fri, 24 Feb 2023 18:10:13 +0800
-Message-Id: <20230224101013.26971-7-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230224101013.26971-1-hejinyang@loongson.cn>
-References: <20230224101013.26971-1-hejinyang@loongson.cn>
+        Fri, 24 Feb 2023 05:13:36 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125144FA91
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:12:42 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id bh1so16194578plb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:12:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/IvV+bH+C+VeI7S9uQHFqjbaSa0dBmu9Y/yAg4Kj/4o=;
+        b=aFguvAoAID1KylifBI4GB0jBM3I9fZNzm//O0CXEbV/B+MUGhsczQECOWoFsBAIhpG
+         akkTXYiqVOSrBXAeNN4/BmxrqB9nwO4WzdDS/yatJAfOrxPSXDHyjCpUT8toKPMqe9bh
+         cD7MlMS3BBV3ki01OZDCI3AdV1XELZNnL+6lg3nMwF5UX5CIuoq1tkhj79aPSD+4u/Qf
+         v6We3wWkmICmXC5qlDT7/fVakyZ3yGI+7oRarpXK3AQBm39Wfr/1WXnEDnFJpPD1vlDo
+         WFgGLyfWzW0Gx+UX8BsXRSyfOSxYZGU4PJvmw7hIcYt9edn7GQEG9qI62RrdhCjSqOa7
+         73KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/IvV+bH+C+VeI7S9uQHFqjbaSa0dBmu9Y/yAg4Kj/4o=;
+        b=33bZlyrh5+wIAsbxxefopxEi/rzw4ruNt6lJnsQXAPFdzYda0fqSk7z41NTbsmkDNL
+         cH35g+MB/Zfncu3pgRFrqX08kn8Jilkuqe8jfjTYzGaW5N4RBcgBWbIE6U/17Qil/KFF
+         3kmrbO3w87JNEsABxOFpwxnosCPAZZLvr3ixeq5WEJdVONBkbN2eE7eIDQ16QFNB5+ux
+         EvWYy3aoaF+Tqbzo3Q/LIomqKNy5v4obJvvdAyTAUmEPnjCDQA8c92WLxRRTr4liNx/d
+         OHciQ6QouXAEG4NrmIFcPt3fC2BTHgljENubgobvcKEZbQSueUCdChJSvC3UsvKXsXOG
+         I72Q==
+X-Gm-Message-State: AO0yUKVYNmD7IFIeyjqk15lNS2dd3GAxz8vKFeS0bm8z50U8SIW9nj5y
+        5zWvX15X4Csp+ENquDJf3/mvyQ==
+X-Google-Smtp-Source: AK7set88TinS01xc14vhp6vQ4QdTEryb0sekST3hLdYHjRa2gtieICleQ2cjpnWJD7UK3K9ys1sshg==
+X-Received: by 2002:a17:90a:29a3:b0:233:dd4d:6b1a with SMTP id h32-20020a17090a29a300b00233dd4d6b1amr13548742pjd.3.1677233561078;
+        Fri, 24 Feb 2023 02:12:41 -0800 (PST)
+Received: from [10.70.252.135] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id gd5-20020a17090b0fc500b00233cde36909sm1179920pjb.21.2023.02.24.02.12.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 02:12:40 -0800 (PST)
+Message-ID: <c293ff0c-9635-649d-984d-e382ef519759@bytedance.com>
+Date:   Fri, 24 Feb 2023 18:12:31 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxX+QjjfhjNH86AA--.6368S8
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxKryDGFWUXr1xtw13tF4rGrg_yoW3JrWDpF
-        nxZrn7JayrWrn3Za4Dta4DurZ8JwsFg342ganIkFy8u3W7ZF18ZrykA3s7ZFykKay8Xw4I
-        gFyrJws2qF4UJwUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
+Content-Language: en-US
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     akpm@linux-foundation.org, tkhai@ya.ru, hannes@cmpxchg.org,
+        shakeelb@google.com, mhocko@kernel.org, roman.gushchin@linux.dev,
+        muchun.song@linux.dev, david@redhat.com, shy828301@gmail.com,
+        dave@stgolabs.net, penguin-kernel@i-love.sakura.ne.jp,
+        paulmck@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+ <20230223132725.11685-3-zhengqi.arch@bytedance.com>
+ <Y/evb+PBeaahx9Os@sultan-box.localdomain>
+ <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
+ <Y/hzPP0G5AFhOmsY@sultan-box.localdomain>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Y/hzPP0G5AFhOmsY@sultan-box.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we can replace la_abs with la.pcrel. Clean up the la_abs macro.
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/loongarch/include/asm/asmmacro.h   | 17 ---------------
- arch/loongarch/include/asm/setup.h      |  7 -------
- arch/loongarch/include/asm/stackframe.h |  2 +-
- arch/loongarch/kernel/entry.S           |  4 ++--
- arch/loongarch/kernel/genex.S           |  6 +++---
- arch/loongarch/kernel/relocate.c        | 28 -------------------------
- arch/loongarch/kernel/vmlinux.lds.S     |  9 --------
- arch/loongarch/mm/tlbex.S               | 14 ++++++-------
- 8 files changed, 13 insertions(+), 74 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
-index 79e1d53fea89..328bb956f241 100644
---- a/arch/loongarch/include/asm/asmmacro.h
-+++ b/arch/loongarch/include/asm/asmmacro.h
-@@ -667,21 +667,4 @@
- 	nor	\dst, \src, zero
- .endm
- 
--.macro la_abs reg, sym
--#ifndef CONFIG_RELOCATABLE
--	la.abs	\reg, \sym
--#else
--	766:
--	lu12i.w	\reg, 0
--	ori	\reg, \reg, 0
--	lu32i.d	\reg, 0
--	lu52i.d	\reg, \reg, 0
--	.pushsection ".la_abs", "aw", %progbits
--	768:
--	.dword	768b-766b
--	.dword	\sym
--	.popsection
--#endif
--.endm
--
- #endif /* _ASM_ASMMACRO_H */
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-index 4074225339ec..84d131f29e0c 100644
---- a/arch/loongarch/include/asm/setup.h
-+++ b/arch/loongarch/include/asm/setup.h
-@@ -16,13 +16,6 @@ extern void per_cpu_trap_init(int cpu);
- 
- #ifdef CONFIG_RELOCATABLE
- 
--struct rela_la_abs {
--	long offset;
--	long symvalue;
--};
--
--extern long __la_abs_begin;
--extern long __la_abs_end;
- extern long __rela_dyn_begin;
- extern long __rela_dyn_end;
- 
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-index bb5e0e2bd3a9..fff4a0ce7750 100644
---- a/arch/loongarch/include/asm/stackframe.h
-+++ b/arch/loongarch/include/asm/stackframe.h
-@@ -86,7 +86,7 @@
-  * new value in sp.
-  */
- 	.macro	get_saved_sp docfi=0
--	la_abs	  t1, kernelsp
-+	la.pcrel  t1, kernelsp
- #ifdef CONFIG_SMP
- 	csrrd	  t0, PERCPU_BASE_KS
- 	LONG_ADD  t1, t1, t0
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index ca4651f91e73..4de6b31dc3bf 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -22,7 +22,7 @@
- 	.align	5
- SYM_FUNC_START(handle_sys)
- 	csrrd		t0, PERCPU_BASE_KS
--	la_abs		t1, kernelsp
-+	la.pcrel	t1, kernelsp
- 	add.d		t1, t1, t0
- 	move		t2, sp
- 	ld.d		sp, t1, 0
-@@ -65,7 +65,7 @@ SYM_FUNC_START(handle_sys)
- 	and		tp, tp, sp
- 
- 	move	a0, sp
--	la_abs	ra, do_syscall
-+	la.pcrel	ra, do_syscall
- 	jirl	ra, ra, 0
- 
- 	RESTORE_ALL_AND_RET
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 8705a7661ce9..b6a74246d1c4 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -36,7 +36,7 @@ SYM_FUNC_END(__arch_cpu_idle)
- SYM_FUNC_START(handle_vint\idx)
- 	BACKUP_T0T1
- 	SAVE_ALL
--	la_abs	t1, __arch_cpu_idle
-+	la.pcrel	t1, __arch_cpu_idle
- 	LONG_L	t0, sp, PT_ERA
- 	/* 32 byte rollback region */
- 	ori	t0, t0, 0x1f
-@@ -45,7 +45,7 @@ SYM_FUNC_START(handle_vint\idx)
- 	LONG_S	t0, sp, PT_ERA
- 1:	move	a0, sp
- 	move	a1, sp
--	la_abs	t0, do_vint
-+	la.pcrel	t0, do_vint
- 	jirl	ra, t0, 0
- 	RESTORE_ALL_AND_RET
- SYM_FUNC_END(handle_vint\idx)
-@@ -76,7 +76,7 @@ SYM_FUNC_START(handle_\exception)
- 	SAVE_ALL
- 	build_prep_\prep
- 	move	a0, sp
--	la_abs	t0, do_\handler
-+	la.pcrel	t0, do_\handler
- 	jirl	ra, t0, 0
- 	UNW_NEED_RESET
- 	RESTORE_ALL_AND_RET
-diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-index 070b9fb87ebc..5ecfd7791268 100644
---- a/arch/loongarch/kernel/relocate.c
-+++ b/arch/loongarch/kernel/relocate.c
-@@ -12,7 +12,6 @@
- #include <linux/start_kernel.h>
- #include <asm/bootinfo.h>
- #include <asm/early_ioremap.h>
--#include <asm/inst.h>
- #include <asm/sections.h>
- #include <asm/setup.h>
- 
-@@ -41,31 +40,6 @@ static inline __init void relocate_relative(void)
- 	}
- }
- 
--static inline void __init relocate_la_abs(long random_offset)
--{
--	void *begin, *end;
--	struct rela_la_abs *p;
--
--	begin = RELOCATED_KASLR(&__la_abs_begin);
--	end   = RELOCATED_KASLR(&__la_abs_end);
--
--	for (p = begin; (void *)p < end; p++) {
--		long v = p->symvalue;
--		uint32_t lu12iw, ori, lu32id, lu52id;
--		union loongarch_instruction *insn = (void *)p - p->offset;
--
--		lu12iw = (v >> 12) & 0xfffff;
--		ori    = v & 0xfff;
--		lu32id = (v >> 32) & 0xfffff;
--		lu52id = v >> 52;
--
--		insn[0].reg1i20_format.immediate = lu12iw;
--		insn[1].reg2i12_format.immediate = ori;
--		insn[2].reg1i20_format.immediate = lu32id;
--		insn[3].reg2i12_format.immediate = lu52id;
--	}
--}
--
- #ifdef CONFIG_RANDOMIZE_BASE
- static inline __init unsigned long rotate_xor(unsigned long hash,
- 					      const void *area, size_t size)
-@@ -202,8 +176,6 @@ void * __init relocate_kernel(void)
- 	if (reloc_offset)
- 		relocate_relative();
- 
--	relocate_la_abs(random_offset);
--
- 	return kernel_entry;
- }
- 
-diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-index 00f1f9061961..8ae5f245eb2f 100644
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -91,15 +91,6 @@ SECTIONS
- 		__alt_instructions_end = .;
- 	}
- 
--#ifdef CONFIG_RELOCATABLE
--	. = ALIGN(8);
--	.la_abs : AT(ADDR(.la_abs) - LOAD_OFFSET) {
--		__la_abs_begin = .;
--		*(.la_abs)
--		__la_abs_end = .;
--	}
--#endif
--
- 	.got : ALIGN(16) { *(.got) }
- 	.plt : ALIGN(16) { *(.plt) }
- 	.got.plt : ALIGN(16) { *(.got.plt) }
-diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
-index 53321d3447a2..196d9bc870c5 100644
---- a/arch/loongarch/mm/tlbex.S
-+++ b/arch/loongarch/mm/tlbex.S
-@@ -41,7 +41,7 @@ SYM_FUNC_START(handle_tlb_protect\idx)
- 	move		a1, zero
- 	csrrd		a2, LOONGARCH_CSR_BADV
- 	REG_S		a2, sp, PT_BVADDR
--	la_abs		t0, do_page_fault
-+	la.pcrel	t0, do_page_fault
- 	jirl		ra, t0, 0
- 	RESTORE_ALL_AND_RET
- SYM_FUNC_END(handle_tlb_protect\idx)
-@@ -119,7 +119,7 @@ SYM_FUNC_START(handle_tlb_load\idx)
- 
- #ifdef CONFIG_64BIT
- 3: /* vmalloc_load: */
--	la_abs		t1, swapper_pg_dir
-+	la.pcrel	t1, swapper_pg_dir
- 	b		1b
- #endif
- 
-@@ -190,7 +190,7 @@ SYM_FUNC_START(handle_tlb_load\idx)
- 5: /* nopage_tlb_load: */
- 	dbar		0
- 	csrrd		ra, EXCEPTION_KS2
--	la_abs		t0, tlb_do_page_fault_0
-+	la.pcrel	t0, tlb_do_page_fault_0
- 	jr		t0
- SYM_FUNC_END(handle_tlb_load\idx)
- 	.endm
-@@ -268,7 +268,7 @@ smp_pgtable_change_store:
- 
- #ifdef CONFIG_64BIT
- vmalloc_store:
--	la_abs		t1, swapper_pg_dir
-+	la.pcrel	t1, swapper_pg_dir
- 	b		vmalloc_done_store
- #endif
- 
-@@ -341,7 +341,7 @@ tlb_huge_update_store:
- nopage_tlb_store:
- 	dbar		0
- 	csrrd		ra, EXCEPTION_KS2
--	la_abs		t0, tlb_do_page_fault_1
-+	la.pcrel	t0, tlb_do_page_fault_1
- 	jr		t0
- SYM_FUNC_END(handle_tlb_store)
- 	.endm
-@@ -418,7 +418,7 @@ smp_pgtable_change_modify:
- 
- #ifdef CONFIG_64BIT
- vmalloc_modify:
--	la_abs		t1, swapper_pg_dir
-+	la.pcrel	t1, swapper_pg_dir
- 	b		vmalloc_done_modify
- #endif
- 
-@@ -490,7 +490,7 @@ tlb_huge_update_modify:
- nopage_tlb_modify:
- 	dbar		0
- 	csrrd		ra, EXCEPTION_KS2
--	la_abs		t0, tlb_do_page_fault_1
-+	la.pcrel	t0, tlb_do_page_fault_1
- 	jr		t0
- SYM_FUNC_END(handle_tlb_modify)
- 	.endm
+On 2023/2/24 16:20, Sultan Alsawaf wrote:
+> On Fri, Feb 24, 2023 at 12:00:21PM +0800, Qi Zheng wrote:
+>>
+>>
+>> On 2023/2/24 02:24, Sultan Alsawaf wrote:
+>>> On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
+>>>> The shrinker_rwsem is a global lock in shrinkers subsystem,
+>>>> it is easy to cause blocking in the following cases:
+>>>>
+>>>> a. the write lock of shrinker_rwsem was held for too long.
+>>>>      For example, there are many memcgs in the system, which
+>>>>      causes some paths to hold locks and traverse it for too
+>>>>      long. (e.g. expand_shrinker_info())
+>>>> b. the read lock of shrinker_rwsem was held for too long,
+>>>>      and a writer came at this time. Then this writer will be
+>>>>      forced to wait and block all subsequent readers.
+>>>>      For example:
+>>>>      - be scheduled when the read lock of shrinker_rwsem is
+>>>>        held in do_shrink_slab()
+>>>>      - some shrinker are blocked for too long. Like the case
+>>>>        mentioned in the patchset[1].
+>>>>
+>>>> Therefore, many times in history ([2],[3],[4],[5]), some
+>>>> people wanted to replace shrinker_rwsem reader with SRCU,
+>>>> but they all gave up because SRCU was not unconditionally
+>>>> enabled.
+>>>>
+>>>> But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
+>>>> the SRCU is unconditionally enabled. So it's time to use
+>>>> SRCU to protect readers who previously held shrinker_rwsem.
+>>>>
+>>>> [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
+>>>> [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
+>>>> [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
+>>>> [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
+>>>> [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
+>>>>
+>>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>>>> ---
+>>>>    mm/vmscan.c | 27 +++++++++++----------------
+>>>>    1 file changed, 11 insertions(+), 16 deletions(-)
+>>>>
+>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>> index 9f895ca6216c..02987a6f95d1 100644
+>>>> --- a/mm/vmscan.c
+>>>> +++ b/mm/vmscan.c
+>>>> @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>    LIST_HEAD(shrinker_list);
+>>>>    DECLARE_RWSEM(shrinker_rwsem);
+>>>> +DEFINE_SRCU(shrinker_srcu);
+>>>>    #ifdef CONFIG_MEMCG
+>>>>    static int shrinker_nr_max;
+>>>> @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>>>>    void register_shrinker_prepared(struct shrinker *shrinker)
+>>>>    {
+>>>>    	down_write(&shrinker_rwsem);
+>>>> -	list_add_tail(&shrinker->list, &shrinker_list);
+>>>> +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
+>>>>    	shrinker->flags |= SHRINKER_REGISTERED;
+>>>>    	shrinker_debugfs_add(shrinker);
+>>>>    	up_write(&shrinker_rwsem);
+>>>> @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>    		return;
+>>>>    	down_write(&shrinker_rwsem);
+>>>> -	list_del(&shrinker->list);
+>>>> +	list_del_rcu(&shrinker->list);
+>>>>    	shrinker->flags &= ~SHRINKER_REGISTERED;
+>>>>    	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+>>>>    		unregister_memcg_shrinker(shrinker);
+>>>>    	debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>    	up_write(&shrinker_rwsem);
+>>>> +	synchronize_srcu(&shrinker_srcu);
+>>>> +
+>>>>    	debugfs_remove_recursive(debugfs_entry);
+>>>>    	kfree(shrinker->nr_deferred);
+>>>> @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
+>>>>    {
+>>>>    	down_write(&shrinker_rwsem);
+>>>>    	up_write(&shrinker_rwsem);
+>>>> +	synchronize_srcu(&shrinker_srcu);
+>>>>    }
+>>>>    EXPORT_SYMBOL(synchronize_shrinkers);
+>>>> @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>    {
+>>>>    	unsigned long ret, freed = 0;
+>>>>    	struct shrinker *shrinker;
+>>>> +	int srcu_idx;
+>>>>    	/*
+>>>>    	 * The root memcg might be allocated even though memcg is disabled
+>>>> @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>    	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>>>    		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>> -	if (!down_read_trylock(&shrinker_rwsem))
+>>>> -		goto out;
+>>>> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>> -	list_for_each_entry(shrinker, &shrinker_list, list) {
+>>>> +	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>> +				 srcu_read_lock_held(&shrinker_srcu)) {
+>>>>    		struct shrink_control sc = {
+>>>>    			.gfp_mask = gfp_mask,
+>>>>    			.nid = nid,
+>>>> @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>    		if (ret == SHRINK_EMPTY)
+>>>>    			ret = 0;
+>>>>    		freed += ret;
+>>>> -		/*
+>>>> -		 * Bail out if someone want to register a new shrinker to
+>>>> -		 * prevent the registration from being stalled for long periods
+>>>> -		 * by parallel ongoing shrinking.
+>>>> -		 */
+>>>> -		if (rwsem_is_contended(&shrinker_rwsem)) {
+>>>> -			freed = freed ? : 1;
+>>>> -			break;
+>>>> -		}
+>>>>    	}
+>>>> -	up_read(&shrinker_rwsem);
+>>>> -out:
+>>>> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>    	cond_resched();
+>>>>    	return freed;
+>>>>    }
+>>>> -- 
+>>>> 2.20.1
+>>>>
+>>>>
+>>>
+>>> Hi Qi,
+>>>
+>>> A different problem I realized after my old attempt to use SRCU was that the
+>>> unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
+>>> call. Both register_shrinker() *and* unregister_shrinker() are called frequently
+>>> these days, and SRCU is too unfair to the unregister path IMO.
+>>
+>> Hi Sultan,
+>>
+>> IIUC, for unregister_shrinker(), the wait time is hardly longer with
+>> SRCU than with shrinker_rwsem before.
+> 
+> The wait time can be quite different because with shrinker_rwsem, the
+> rwsem_is_contended() bailout would cause unregister_shrinker() to wait for only
+> one random shrinker to finish at worst rather than waiting for *all* shrinkers
+> to finish.
+
+Yes, to be exact, unregister_shrinker() needs to wait for all the
+shrinkers who entered grace period before it. But the benefit in
+exchange is that the slab shrink is completely lock-free, I think this 
+is more worthwhile than letting unregister_shrinker() wait a little
+longer.
+
+> 
+>> And I just did a simple test. After using the script in cover letter to
+>> increase the shrink_slab hotspot, I did umount 1k times at the same
+>> time, and then I used bpftrace to measure the time consumption of
+>> unregister_shrinker() as follows:
+>>
+>> bpftrace -e 'kprobe:unregister_shrinker { @start[tid] = nsecs; }
+>> kretprobe:unregister_shrinker /@start[tid]/ { @ns[comm] = hist(nsecs -
+>> @start[tid]); delete(@start[tid]); }'
+>>
+>> @ns[umount]:
+>> [16K, 32K)             3 |      |
+>> [32K, 64K)            66 |@@@@@@@@@@      |
+>> [64K, 128K)           32 |@@@@@      |
+>> [128K, 256K)          22 |@@@      |
+>> [256K, 512K)          48 |@@@@@@@      |
+>> [512K, 1M)            19 |@@@      |
+>> [1M, 2M)             131 |@@@@@@@@@@@@@@@@@@@@@      |
+>> [2M, 4M)             313
+>> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+>> [4M, 8M)             302 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+>> |
+>> [8M, 16M)             55 |@@@@@@@@@
+>>
+>> I see that the highest time-consuming of unregister_shrinker() is between
+>> 8ms and 16ms, which feels tolerable?
+> 
+> If you've got a fast x86 machine then I'd say that's a bit slow. :)
+
+Nope, I tested it on a qemu virtual machine.
+
+And I just tested it on a physical machine (Intel(R) Xeon(R) Platinum
+8260 CPU @ 2.40GHz) and the results are as follows:
+
+1) use synchronize_srcu():
+
+@ns[umount]:
+[8K, 16K)             83 |@@@@@@@ 
+      |
+[16K, 32K)           578 
+|@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[32K, 64K)            78 |@@@@@@@ 
+      |
+[64K, 128K)            6 | 
+      |
+[128K, 256K)           7 | 
+      |
+[256K, 512K)          29 |@@ 
+      |
+[512K, 1M)            51 |@@@@ 
+      |
+[1M, 2M)              90 |@@@@@@@@ 
+      |
+[2M, 4M)              70 |@@@@@@ 
+      |
+[4M, 8M)               8 | 
+      |
+
+2) use synchronize_srcu_expedited():
+
+@ns[umount]:
+[8K, 16K)             31 |@@ 
+      |
+[16K, 32K)           803 
+|@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[32K, 64K)           158 |@@@@@@@@@@ 
+      |
+[64K, 128K)            4 | 
+      |
+[128K, 256K)           2 | 
+      |
+[256K, 512K)           2 | 
+      |
+
+Thanks,
+Qi
+
+> 
+> This depends a lot on which shrinkers are active on your system and how much
+> work each one does upon running. If a driver's shrinker doesn't have much to do
+> because there's nothing it can shrink further, then it'll run fast. Conversely,
+> if a driver is stressed in a way that constantly creates a lot of potential work
+> for its shrinker, then the shrinker will run longer.
+> 
+> Since shrinkers are allowed to sleep, the delays can really add up when waiting
+> for all of them to finish running. In the past, I recall observing delays of
+> 100ms+ in unregister_shrinker() on slower arm64 hardware when I stress tested
+> the SRCU approach.
+> 
+> If your GPU driver has a shrinker (such as i915), I suggest testing again under
+> heavy GPU load. The GPU shrinkers can be pretty heavy IIRC.
+> 
+> Thanks,
+> Sultan
+> 
+>> Thanks,
+>> Qi
+>>
+>>>
+>>> Although I never got around to submitting it, I made a non-SRCU solution [1]
+>>> that uses fine-grained locking instead, which is fair to both the register path
+>>> and unregister path. (The patch I've linked is a version of this adapted to an
+>>> older 4.14 kernel FYI, but it can be reworked for the current kernel.)
+>>>
+>>> What do you think about the fine-grained locking approach?
+>>>
+>>> Thanks,
+>>> Sultan
+>>>
+>>> [1] https://github.com/kerneltoast/android_kernel_google_floral/commit/012378f3173a82d2333d3ae7326691544301e76a
+>>>
+>>
+>> -- 
+>> Thanks,
+>> Qi
+
 -- 
-2.34.3
-
+Thanks,
+Qi
