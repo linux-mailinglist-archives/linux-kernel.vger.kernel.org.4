@@ -2,137 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994966A1A84
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0876A1A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjBXKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S229868AbjBXKpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjBXKnM (ORCPT
+        with ESMTP id S229516AbjBXKo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:43:12 -0500
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB328A5C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:42:47 -0800 (PST)
-Received: by mail-il1-f206.google.com with SMTP id 2-20020a056e020ca200b003033a763270so7247599ilg.19
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:42:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wu/tOnCc7ZTPiYWfykiutPtgVaJumHoVSI6tLhsDKBM=;
-        b=LzbdgoQlY2jgN3f+eoOBkRsVoDKQveQCZnSowN/a26Y9gFcOklFk4eseajgYeBNDwK
-         hZXdFYyFidSByPkTTYZHhMsKmTES86u5gY/zVnyHgl5sNdSopY3A+GyWyiSi5fkMp+GG
-         psMiE2Bkt3kz+IC0xZtGBgnsTWYbj8XgJcsZt5/ca5MwXq2RN1AOKU7uWYtdqa5AHAlG
-         YMU4H93j/2mQpMz4iCLY8YbL0RRum08bJ8oaOAYmPJgRX85Dlo8A5/CUgGP4L8pq7Nnf
-         XyxpMxw4aOmyxVIQJDQ6aJhYpmu0CKOmhEww2QNdCfaR3Gm5RquMdDi78ziHW7e+yXS1
-         +uxw==
-X-Gm-Message-State: AO0yUKVFnI6Jx4c2btmca3S3TCKLddx7icU3859AO53yCOA3Aspwfnzs
-        NMHRTmMuKwjnt5ECe3XGclXsbIxq915mgI/5UAPLipVIXI9o
-X-Google-Smtp-Source: AK7set/PMjmBTNfCWO+rEXugqmZ9mpJ1oFG9AgOcYhTmpgZnU/gej4pJOb6rhWhFSb6mIRdhn40OIVMsWvZBJqNVLSXhGR1e9Vrk
-MIME-Version: 1.0
-X-Received: by 2002:a92:5408:0:b0:317:b01:229 with SMTP id i8-20020a925408000000b003170b010229mr596832ilb.2.1677235366868;
- Fri, 24 Feb 2023 02:42:46 -0800 (PST)
-Date:   Fri, 24 Feb 2023 02:42:46 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003f3d9a05f56fcac5@google.com>
-Subject: [syzbot] [kernfs?] WARNING: suspicious RCU usage in mas_start
-From:   syzbot <syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tj@kernel.org
+        Fri, 24 Feb 2023 05:44:28 -0500
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10DB5BBA8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:44:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1677235437;
+        bh=mOMOVF2iJgJR2obOieRkRdSF9pKgncWHGSHN+UgxW64=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=FsiEuNmKyogza/4nI1R66rJ75uhZZirj2+zK24xqUVLyyUWYAC8yxY7/Pu1kdqu4F
+         cqylnQ7R4Pldh5LQqqPB3H8sYiVFAyTTV37TuHNgRdh10qCUXs7zuJF32a7TeM2jwu
+         BV3DG42vKLqGwDpGROT4gUL3BhMTOl+m+6/+ExX4=
+Received: from [IPv6:2408:8471:1116:556a:af80:d15d:41f2:3e09] (unknown [IPv6:2408:8471:1116:556a:af80:d15d:41f2:3e09])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 6AA6765DC8;
+        Fri, 24 Feb 2023 05:43:49 -0500 (EST)
+Message-ID: <cc9fe98d7e157c3e4bdf82d92e9ea368b894ce00.camel@xry111.site>
+Subject: Re: [PATCH 6/6] LoongArch: Clean up la_abs macro
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Youling Tang <tangyouling@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 24 Feb 2023 18:43:33 +0800
+In-Reply-To: <20230224101013.26971-7-hejinyang@loongson.cn>
+References: <20230224101013.26971-1-hejinyang@loongson.cn>
+         <20230224101013.26971-7-hejinyang@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+T24gRnJpLCAyMDIzLTAyLTI0IGF0IDE4OjEwICswODAwLCBKaW55YW5nIEhlIHdyb3RlOgoKLyog
+c25pcCAqLwoKPiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2FyY2gva2VybmVsL2VudHJ5LlMKPiBi
+L2FyY2gvbG9vbmdhcmNoL2tlcm5lbC9lbnRyeS5TCj4gaW5kZXggY2E0NjUxZjkxZTczLi40ZGU2
+YjMxZGMzYmYgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9sb29uZ2FyY2gva2VybmVsL2VudHJ5LlMKPiAr
+KysgYi9hcmNoL2xvb25nYXJjaC9rZXJuZWwvZW50cnkuUwoKLyogc25pcCAqLwoKPiBAQCAtNjUs
+NyArNjUsNyBAQCBTWU1fRlVOQ19TVEFSVChoYW5kbGVfc3lzKQo+IMKgwqDCoMKgwqDCoMKgwqBh
+bmTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRwLCB0cCwgc3AKPiDCoAo+IMKgwqDCoMKgwqDC
+oMKgwqBtb3ZlwqDCoMKgwqBhMCwgc3AKPiAtwqDCoMKgwqDCoMKgwqBsYV9hYnPCoMKgcmEsIGRv
+X3N5c2NhbGwKPiArwqDCoMKgwqDCoMKgwqBsYS5wY3JlbMKgwqDCoMKgwqDCoMKgwqByYSwgZG9f
+c3lzY2FsbAo+IMKgwqDCoMKgwqDCoMKgwqBqaXJswqDCoMKgwqByYSwgcmEsIDAKCmJsCWRvX3N5
+c2NhbGwKCj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgUkVTVE9SRV9BTExfQU5EX1JFVAo+IGRpZmYg
+LS1naXQgYS9hcmNoL2xvb25nYXJjaC9rZXJuZWwvZ2VuZXguUwo+IGIvYXJjaC9sb29uZ2FyY2gv
+a2VybmVsL2dlbmV4LlMKPiBpbmRleCA4NzA1YTc2NjFjZTkuLmI2YTc0MjQ2ZDFjNCAxMDA2NDQK
+PiAtLS0gYS9hcmNoL2xvb25nYXJjaC9rZXJuZWwvZ2VuZXguUwo+ICsrKyBiL2FyY2gvbG9vbmdh
+cmNoL2tlcm5lbC9nZW5leC5TCgovKiBzbmlwICovCgo+IEBAIC00NSw3ICs0NSw3IEBAIFNZTV9G
+VU5DX1NUQVJUKGhhbmRsZV92aW50XGlkeCkKPiDCoMKgwqDCoMKgwqDCoMKgTE9OR19TwqDCoHQw
+LCBzcCwgUFRfRVJBCj4gwqAxOsKgwqDCoMKgwqBtb3ZlwqDCoMKgwqBhMCwgc3AKPiDCoMKgwqDC
+oMKgwqDCoMKgbW92ZcKgwqDCoMKgYTEsIHNwCj4gLcKgwqDCoMKgwqDCoMKgbGFfYWJzwqDCoHQw
+LCBkb192aW50Cj4gK8KgwqDCoMKgwqDCoMKgbGEucGNyZWzCoMKgwqDCoMKgwqDCoMKgdDAsIGRv
+X3ZpbnQKPiDCoMKgwqDCoMKgwqDCoMKgamlybMKgwqDCoMKgcmEsIHQwLCAwCgpibAlkb192aW50
+Cgo+IMKgwqDCoMKgwqDCoMKgwqBSRVNUT1JFX0FMTF9BTkRfUkVUCj4gwqBTWU1fRlVOQ19FTkQo
+aGFuZGxlX3ZpbnRcaWR4KQo+IEBAIC03Niw3ICs3Niw3IEBAIFNZTV9GVU5DX1NUQVJUKGhhbmRs
+ZV9cZXhjZXB0aW9uKQo+IMKgwqDCoMKgwqDCoMKgwqBTQVZFX0FMTAo+IMKgwqDCoMKgwqDCoMKg
+wqBidWlsZF9wcmVwX1xwcmVwCj4gwqDCoMKgwqDCoMKgwqDCoG1vdmXCoMKgwqDCoGEwLCBzcAo+
+IC3CoMKgwqDCoMKgwqDCoGxhX2Fic8KgwqB0MCwgZG9fXGhhbmRsZXIKPiArwqDCoMKgwqDCoMKg
+wqBsYS5wY3JlbMKgwqDCoMKgwqDCoMKgwqB0MCwgZG9fXGhhbmRsZXIKPiDCoMKgwqDCoMKgwqDC
+oMKgamlybMKgwqDCoMKgcmEsIHQwLCAwCgpibAlkb19caGFuZGxlcgoKLyogc25pcCAqLwoKPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2FyY2gvbW0vdGxiZXguUyBiL2FyY2gvbG9vbmdhcmNoL21t
+L3RsYmV4LlMKPiBpbmRleCA1MzMyMWQzNDQ3YTIuLjE5NmQ5YmM4NzBjNSAxMDA2NDQKPiAtLS0g
+YS9hcmNoL2xvb25nYXJjaC9tbS90bGJleC5TCj4gKysrIGIvYXJjaC9sb29uZ2FyY2gvbW0vdGxi
+ZXguUwo+IEBAIC00MSw3ICs0MSw3IEBAIFNZTV9GVU5DX1NUQVJUKGhhbmRsZV90bGJfcHJvdGVj
+dFxpZHgpCj4gwqDCoMKgwqDCoMKgwqDCoG1vdmXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhMSwg
+emVybwo+IMKgwqDCoMKgwqDCoMKgwqBjc3JyZMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhMiwgTE9P
+TkdBUkNIX0NTUl9CQURWCj4gwqDCoMKgwqDCoMKgwqDCoFJFR19TwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGEyLCBzcCwgUFRfQlZBRERSCj4gLcKgwqDCoMKgwqDCoMKgbGFfYWJzwqDCoMKgwqDCoMKg
+wqDCoMKgwqB0MCwgZG9fcGFnZV9mYXVsdAo+ICvCoMKgwqDCoMKgwqDCoGxhLnBjcmVswqDCoMKg
+wqDCoMKgwqDCoHQwLCBkb19wYWdlX2ZhdWx0Cj4gwqDCoMKgwqDCoMKgwqDCoGppcmzCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqByYSwgdDAsIDAKCmJsCWRvX3BhZ2VfZmF1bHQKCi8qIHNuaXAgKi8K
+Cj4gQEAgLTE5MCw3ICsxOTAsNyBAQCBTWU1fRlVOQ19TVEFSVChoYW5kbGVfdGxiX2xvYWRcaWR4
+KQo+IMKgNTogLyogbm9wYWdlX3RsYl9sb2FkOiAqLwo+IMKgwqDCoMKgwqDCoMKgwqBkYmFywqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgMAo+IMKgwqDCoMKgwqDCoMKgwqBjc3JyZMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqByYSwgRVhDRVBUSU9OX0tTMgo+IC3CoMKgwqDCoMKgwqDCoGxhX2Fic8KgwqDC
+oMKgwqDCoMKgwqDCoMKgdDAsIHRsYl9kb19wYWdlX2ZhdWx0XzAKPiArwqDCoMKgwqDCoMKgwqBs
+YS5wY3JlbMKgwqDCoMKgwqDCoMKgwqB0MCwgdGxiX2RvX3BhZ2VfZmF1bHRfMAo+IMKgwqDCoMKg
+wqDCoMKgwqBqcsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0MAoKYgl0bGJfZG9fcGFnZV9m
+YXVsdF8wCgovKiBzbmlwICovCgo+IEBAIC0zNDEsNyArMzQxLDcgQEAgdGxiX2h1Z2VfdXBkYXRl
+X3N0b3JlOgo+IMKgbm9wYWdlX3RsYl9zdG9yZToKPiDCoMKgwqDCoMKgwqDCoMKgZGJhcsKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoDAKPiDCoMKgwqDCoMKgwqDCoMKgY3NycmTCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcmEsIEVYQ0VQVElPTl9LUzIKPiAtwqDCoMKgwqDCoMKgwqBsYV9hYnPCoMKgwqDC
+oMKgwqDCoMKgwqDCoHQwLCB0bGJfZG9fcGFnZV9mYXVsdF8xCj4gK8KgwqDCoMKgwqDCoMKgbGEu
+cGNyZWzCoMKgwqDCoMKgwqDCoMKgdDAsIHRsYl9kb19wYWdlX2ZhdWx0XzEKPiDCoMKgwqDCoMKg
+wqDCoMKganLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdDAKCmIJdGxiX2RvX3BhZ2VfZmF1
+bHRfMQoKLyogc25pcCAqLwoKPiBAQCAtNDkwLDcgKzQ5MCw3IEBAIHRsYl9odWdlX3VwZGF0ZV9t
+b2RpZnk6Cj4gwqBub3BhZ2VfdGxiX21vZGlmeToKPiDCoMKgwqDCoMKgwqDCoMKgZGJhcsKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoDAKPiDCoMKgwqDCoMKgwqDCoMKgY3NycmTCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcmEsIEVYQ0VQVElPTl9LUzIKPiAtwqDCoMKgwqDCoMKgwqBsYV9hYnPCoMKgwqDC
+oMKgwqDCoMKgwqDCoHQwLCB0bGJfZG9fcGFnZV9mYXVsdF8xCj4gK8KgwqDCoMKgwqDCoMKgbGEu
+cGNyZWzCoMKgwqDCoMKgwqDCoMKgdDAsIHRsYl9kb19wYWdlX2ZhdWx0XzEKPiDCoMKgwqDCoMKg
+wqDCoMKganLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdDAKCmIJdGxiX2RvX3BhZ2VfZmF1
+bHRfMQoKPiDCoFNZTV9GVU5DX0VORChoYW5kbGVfdGxiX21vZGlmeSkKPiDCoMKgwqDCoMKgwqDC
+oMKgLmVuZG0KCi0tIApYaSBSdW95YW8gPHhyeTExMUB4cnkxMTEuc2l0ZT4KU2Nob29sIG9mIEFl
+cm9zcGFjZSBTY2llbmNlIGFuZCBUZWNobm9sb2d5LCBYaWRpYW4gVW5pdmVyc2l0eQo=
 
-syzbot found the following issue on:
-
-HEAD commit:    d2980d8d8265 Merge tag 'mm-nonmm-stable-2023-02-20-15-29' ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c7f944c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=471a946f0dd5764c
-dashboard link: https://syzkaller.appspot.com/bug?extid=d79e205d463e603f47ff
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/65a5040f9f8c/disk-d2980d8d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e7593e5fe23f/vmlinux-d2980d8d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9714acfee895/bzImage-d2980d8d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com
-
-=============================
-WARNING: suspicious RCU usage
-6.2.0-syzkaller-09238-gd2980d8d8265 #0 Not tainted
------------------------------
-lib/maple_tree.c:856 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-6 locks held by syz-executor.0/11715:
- #0: ffff888073bc0368 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x254/0x2f0 fs/file.c:1046
- #1: ffff888027ec2460 (sb_writers#8){.+.+}-{0:0}, at: vfs_write+0x26d/0xbb0 fs/read_write.c:580
- #2: ffff888073909888 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x1eb/0x4f0 fs/kernfs/file.c:325
- #3: ffff88801782d3a8 (kn->active#64){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x20f/0x4f0 fs/kernfs/file.c:326
- #4: ffffffff8d014968 (ksm_thread_mutex){+.+.}-{3:3}, at: run_store+0x122/0xb10 mm/ksm.c:2953
- #5: ffff88807b136d98 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
- #5: ffff88807b136d98 (&mm->mmap_lock){++++}-{3:3}, at: unmerge_and_remove_all_rmap_items mm/ksm.c:990 [inline]
- #5: ffff88807b136d98 (&mm->mmap_lock){++++}-{3:3}, at: run_store+0x2db/0xb10 mm/ksm.c:2959
-
-stack backtrace:
-CPU: 1 PID: 11715 Comm: syz-executor.0 Not tainted 6.2.0-syzkaller-09238-gd2980d8d8265 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- lockdep_rcu_suspicious+0x220/0x340 kernel/locking/lockdep.c:6599
- mas_root lib/maple_tree.c:856 [inline]
- mas_start+0x2c1/0x440 lib/maple_tree.c:1357
- mas_state_walk lib/maple_tree.c:3838 [inline]
- mas_walk+0x33/0x180 lib/maple_tree.c:5052
- mas_find+0x1e9/0x240 lib/maple_tree.c:6030
- vma_next include/linux/mm.h:745 [inline]
- unmerge_and_remove_all_rmap_items mm/ksm.c:991 [inline]
- run_store+0x2f9/0xb10 mm/ksm.c:2959
- kernfs_fop_write_iter+0x3a6/0x4f0 fs/kernfs/file.c:334
- call_write_iter include/linux/fs.h:1851 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7b2/0xbb0 fs/read_write.c:584
- ksys_write+0x1a0/0x2c0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f498d08c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f498dec9168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f498d1abf80 RCX: 00007f498d08c0f9
-RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 00007f498d0e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe961b822f R14: 00007f498dec9300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
