@@ -2,95 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0236A2482
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F6B6A2484
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBXWve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 17:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S229677AbjBXWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 17:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBXWvc (ORCPT
+        with ESMTP id S229584AbjBXWwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 17:51:32 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF206F83C;
-        Fri, 24 Feb 2023 14:51:22 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BEAB41EC0725;
-        Fri, 24 Feb 2023 23:51:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677279080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=I0/DAcvGh63kLuV/4PhWOz8jJFp5cUWvt4Uph5cz1cA=;
-        b=WZMZnuxoURigfhjSznJQgfAH0AwaypgAxZF/yQQ2Vsn00FwrdnMkNoXr6wzOyxzZFwEFfS
-        GL8kukbCbnZPku/47miBR5PK++t6XKmxV66obCQ9NWCPwltZqsvqCfcDwhTBVVzEJ15pVk
-        VhdsP0wdLUgLLgiVqAtsT5vG7e28sEA=
-Date:   Fri, 24 Feb 2023 23:51:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 7/8] x86/cpu: Support AMD Automatic IBRS
-Message-ID: <Y/k/ZXUXOFiBhOiI@zn.tnic>
-References: <20230124163319.2277355-1-kim.phillips@amd.com>
- <20230124163319.2277355-8-kim.phillips@amd.com>
- <20230224185257.o3mcmloei5zqu7wa@treble>
- <Y/knUC0s+rg6ef2r@zn.tnic>
+        Fri, 24 Feb 2023 17:52:12 -0500
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E85BB96;
+        Fri, 24 Feb 2023 14:52:11 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7D77B200361;
+        Fri, 24 Feb 2023 23:52:09 +0100 (CET)
+Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 42ED6200340;
+        Fri, 24 Feb 2023 23:52:09 +0100 (CET)
+Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.134])
+        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 14035402F1;
+        Fri, 24 Feb 2023 15:52:08 -0700 (MST)
+From:   Li Yang <leoyang.li@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Bauer <mail@david-bauer.net>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>
+Subject: [PATCH v2 2/2] net: phy: at803x: remove set/get wol callbacks for AR8032
+Date:   Fri, 24 Feb 2023 16:51:58 -0600
+Message-Id: <20230224225158.12229-1-leoyang.li@nxp.com>
+X-Mailer: git-send-email 2.25.1.377.g2d2118b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y/knUC0s+rg6ef2r@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:08:32PM +0100, Borislav Petkov wrote:
-> On Fri, Feb 24, 2023 at 10:52:57AM -0800, Josh Poimboeuf wrote:
-> > Doesn't this only enable it on the boot CPU?
-> 
-> Whoops, you might be right.
+Since the AR8032 part does not support wol, remove related callbacks
+from it.
 
-Actually, we stick that MSR - EFER - into the trampoline header and then
-each AP gets it written to in arch/x86/realmode/rm/trampoline_64.S
+Fixes: 5800091a2061 ("net: phy: at803x: add support for AR8032 PHY")
+Signed-off-by: Li Yang <leoyang.li@nxp.com>
+---
+ drivers/net/phy/at803x.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-But this is only from code staring - I'll confirm this tomorrow.
-
-And if so, we should at least put comments in that trampoline code so
-that people do not remove the MSR writes.
-
-Or, actually, we should simply write it again because it is the init
-path and not really a hot path but it should damn well make sure that
-that bit gets set.
-
-Thx.
-
+diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+index 2102279b3964..ac47a1d681b2 100644
+--- a/drivers/net/phy/at803x.c
++++ b/drivers/net/phy/at803x.c
+@@ -2079,8 +2079,6 @@ static struct phy_driver at803x_driver[] = {
+ 	.flags			= PHY_POLL_CABLE_TEST,
+ 	.config_init		= at803x_config_init,
+ 	.link_change_notify	= at803x_link_change_notify,
+-	.set_wol		= at803x_set_wol,
+-	.get_wol		= at803x_get_wol,
+ 	.suspend		= at803x_suspend,
+ 	.resume			= at803x_resume,
+ 	/* PHY_BASIC_FEATURES */
 -- 
-Regards/Gruss,
-    Boris.
+2.38.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
