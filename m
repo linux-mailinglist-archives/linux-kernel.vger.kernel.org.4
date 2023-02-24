@@ -2,195 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D1C6A251E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99B26A2520
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjBXXcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 18:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S229503AbjBXXhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 18:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBXXcU (ORCPT
+        with ESMTP id S229445AbjBXXhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 18:32:20 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDB76F010;
-        Fri, 24 Feb 2023 15:32:02 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id bh1so1068054plb.11;
-        Fri, 24 Feb 2023 15:32:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ogl86awpdsmdZqeffQnskO7M/1aafsTEVLhtpf3qa4Y=;
-        b=o1JFEmoEEsE819cu2a+6E17o8mG1i8Hu1t+bGf8JtGPbKJpOluiPKHiTPbBl9/D6ZE
-         ng0lGy4q+bnKaOB5WCoe7lqfpa05+o57KfZkskTYZ7IhEe8PtWrOcV6niRUELjhyeIQV
-         T8VowftRoJaR6ESg7n10bnw03d3uVMmuPQGG4sdeaKmEVTztOhw0ESohOrj9utGbnK7d
-         0D7RSu6WRCRAPVAoxMXGL7Co7ZjDZv3NNBdK7Ffr40FzlY9R41byJO6bUh8/fReyOVKU
-         FjI6fzCL6VidT74KI90k9v87+TUttnBH2U9ly4cnTTBQhPG/Nzc1HyFSApWD+S1oq42s
-         rrwQ==
+        Fri, 24 Feb 2023 18:37:00 -0500
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F339D6F022;
+        Fri, 24 Feb 2023 15:36:54 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id p8so816244wrt.12;
+        Fri, 24 Feb 2023 15:36:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ogl86awpdsmdZqeffQnskO7M/1aafsTEVLhtpf3qa4Y=;
-        b=WVtqxwxg5CH2aKB2dycLeLysqWcajiOmvzdtPz9VQQGxcETVxj5BlfdLDEY7Uzh0GW
-         RKehAuqXBcBielxcDZ101SarfO9FwkbJP9qk+p7/Ug+mtI88Rbm4GhlVp7Z19YgvFKB9
-         XkWsL+14e985V2KKGm3fpWSGPhf7NyT67z7f4N4HkacE5TExMop4OVonKx2SyEGkU+V9
-         R9NRP15FxRWlV4cKXT1oIFcXtrLwdPPoFeVc5MB2s20FwJ+saLR0yXxf96vu3w+jL+F7
-         OdKcAOeVv85zw7eLD1uZif2xYxif+uqfHCqpiraEnK6rAB0Cowb3PmuQojiCUmhAejg2
-         nQwA==
-X-Gm-Message-State: AO0yUKU9Ls9SV3BXOPAoEH+e4271beO++f6QR5id7l13TeRnL5KxqrtQ
-        +bgkWZl7qRGbgdCtQIp4/kN/s54pwxGV
-X-Google-Smtp-Source: AK7set8I6VGYRH8kCoKGDb7Ha8xxPGIp4IR31x6yP24z2bLjEddpmPa6d6Ngb9E6JjJCHBmXICQAYw==
-X-Received: by 2002:a17:902:c406:b0:19a:8fb9:5af1 with SMTP id k6-20020a170902c40600b0019a8fb95af1mr22520532plk.36.1677281522244;
-        Fri, 24 Feb 2023 15:32:02 -0800 (PST)
-Received: from fedora.mshome.net ([104.184.156.161])
-        by smtp.gmail.com with ESMTPSA id g2-20020a170902868200b0019a5aa7eab0sm59680plo.54.2023.02.24.15.31.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 15:32:02 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
-        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH v12 3/3] selftest,ptrace: Add selftest for syscall user dispatch config api
-Date:   Fri, 24 Feb 2023 18:31:26 -0500
-Message-Id: <20230224233126.1936-4-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230224233126.1936-1-gregory.price@memverge.com>
-References: <20230224233126.1936-1-gregory.price@memverge.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EIuvSI8dsaE1KoLsQ+0gaEIsCp7DxSM01nfe38oAIrA=;
+        b=GEOnJ1itjoogkiw/FtOoLuQAFTrn+x4dr5W+JCtA3OonbML6mINZs81me6UcLbn3BK
+         ucdF7aJNVlYvFr+IGItho4d0W+QwMQ5iI77gKE78mX4CSizO5t8bCxSE+5DapzalWRIu
+         tXGbRjF46/U3miBulmbxOvEjih9VPPD+c43ysOGUNTn1k4ODcbpI+zoJgl0pmh72kxgP
+         prwleiWwQBvjZqHh7VDIjBVFkCgXArKiM9xCdA1Zbc9PI55Btovu0NiFMX2+OWgE0oPB
+         1G6xWpUjHmiqrWHT6VdeAqGSCSKRB/Ka7G4mHUFSxumakI/6dFJPJyyYtiGBY4C7wGoH
+         VH4g==
+X-Gm-Message-State: AO0yUKXlU4nAxTwurs8rQtOeQ7HRfg9GXXCKQOcghbXbsqWWXPLSB7kH
+        7HmPEwTk0PprS364XGV7iZdXqKfp7HkHIlFf8YU=
+X-Google-Smtp-Source: AK7set+w+JQOtXNbJeAxrX4lIdcMUwseYMMDw45KL1lX1fkc6LEsjdfcJ5uQSZIVIySZtjLppZZhks04ZvsOd4NyCIo=
+X-Received: by 2002:a05:6000:10c1:b0:2c5:4780:d614 with SMTP id
+ b1-20020a05600010c100b002c54780d614mr1570619wrx.4.1677281813131; Fri, 24 Feb
+ 2023 15:36:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230223075800.1795777-1-changbin.du@huawei.com>
+ <Y/dt6QpsCj5AAUE/@kernel.org> <CAM9d7cgwP1ra44oJeWO3y+XviXJyZmR4wrgdizK1UhYEw9w6jg@mail.gmail.com>
+ <20230224072501.r6khif73pg27xe5l@M910t>
+In-Reply-To: <20230224072501.r6khif73pg27xe5l@M910t>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 24 Feb 2023 15:36:41 -0800
+Message-ID: <CAM9d7cjmyNsn=OQr2UtH96AbcSAc-X4crr7RcR3NxY3aMM_Wow@mail.gmail.com>
+Subject: Re: [PATCH] perf: fix counting when initial delay configured
+To:     Changbin Du <changbin.du@huawei.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hui Wang <hw.huiwang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Validate that the following new ptrace requests work as expected
+On Thu, Feb 23, 2023 at 11:25 PM Changbin Du <changbin.du@huawei.com> wrote:
+>
+> On Thu, Feb 23, 2023 at 02:48:26PM -0800, Namhyung Kim wrote:
+> > Hello,
+> >
+> > On Thu, Feb 23, 2023 at 5:45 AM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Thu, Feb 23, 2023 at 03:58:00PM +0800, Changbin Du escreveu:
+> > > > When creating counters with initial delay configured, the enable_on_exec
+> > > > field is not set. So we need to enable the counters later. The problem
+> > > > is, when a workload is specified the target__none() is still true. So
+> > > > we also need to check stat_config.initial_delay.
+> > > >
+> > > > Before this fix the event is not counted:
+> > > > $ ./perf stat -e instructions -D 100 sleep 2
+> > > > Events disabled
+> > > > Events enabled
+> > > >
+> > > >  Performance counter stats for 'sleep 2':
+> > > >
+> > > >      <not counted>      instructions
+> > > >
+> > > >        1.901661124 seconds time elapsed
+> > > >
+> > > >        0.001602000 seconds user
+> > > >        0.000000000 seconds sys
+> > > >
+> > > > After fix it works:
+> > > > $ ./perf stat -e instructions -D 100 sleep 2
+> > > > Events disabled
+> > > > Events enabled
+> > > >
+> > > >  Performance counter stats for 'sleep 2':
+> > > >
+> > > >            404,214      instructions
+> > > >
+> > > >        1.901743475 seconds time elapsed
+> > > >
+> > > >        0.001617000 seconds user
+> > > >        0.000000000 seconds sys
+> > > >
+> > > > Fixes: c587e77e100f ("perf stat: Do not delay the workload with --delay")
+> > >
+> > > Yeap, even the comment states that we need to enable when initial_delay
+> > > is set :-)
+> >
+> > Right, but the logic that checks the initial_delay is placed
+> > out of the function.  Just checking the initial_delay value
+> > can be confusing as it can have a negative value.
+> >
+> > Maybe we can add an argument (bool force?) to the
+> > enable_counters() function.
+> >
+> Yes, it could be done.
+>
+> Maybe we can fold the 'initial_delay' into 'struct target', and provide
+> consistent behaviour for all subcommands. Here I add a
+> target__enable_counter_on_exec() to determine whether enable_on_exec should
+> set for all counters.
 
-* PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG
-  - returns the contents of task->syscall_dispatch if enabled
+Maybe just target__enable_on_exec() ?  Note that we have
+similar logic in the perf record.  Otherwise looks good.
 
-* PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG
-  - sets the contents of task->syscall_dispatch
+Thanks,
+Namhyung
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
----
- tools/testing/selftests/ptrace/.gitignore    |  1 +
- tools/testing/selftests/ptrace/Makefile      |  2 +-
- tools/testing/selftests/ptrace/get_set_sud.c | 72 ++++++++++++++++++++
- 3 files changed, 74 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
-
-diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
-index 792318aaa30c..b7dde152e75a 100644
---- a/tools/testing/selftests/ptrace/.gitignore
-+++ b/tools/testing/selftests/ptrace/.gitignore
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- get_syscall_info
-+get_set_sud
- peeksiginfo
- vmaccess
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 96ffa94afb91..1c631740a730 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS += -std=c99 -pthread -Wall $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess
-+TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess get_set_sud
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/get_set_sud.c b/tools/testing/selftests/ptrace/get_set_sud.c
-new file mode 100644
-index 000000000000..5297b10d25c3
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/get_set_sud.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include "../kselftest_harness.h"
-+#include <stdio.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <sys/wait.h>
-+#include <sys/syscall.h>
-+#include <sys/prctl.h>
-+
-+#include "linux/ptrace.h"
-+
-+static int sys_ptrace(int request, pid_t pid, void *addr, void *data)
-+{
-+	return syscall(SYS_ptrace, request, pid, addr, data);
-+}
-+
-+TEST(get_set_sud)
-+{
-+	struct ptrace_sud_config config;
-+	pid_t child;
-+	int ret = 0;
-+	int status;
-+
-+	child = fork();
-+	ASSERT_GE(child, 0);
-+	if (child == 0) {
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		kill(getpid(), SIGSTOP);
-+		_exit(1);
-+	}
-+
-+	waitpid(child, &status, 0);
-+
-+	memset(&config, 0xff, sizeof(config));
-+	config.mode = PR_SYS_DISPATCH_ON;
-+
-+	ret = sys_ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG, child,
-+			 (void *)sizeof(config), &config);
-+
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(config.mode, PR_SYS_DISPATCH_OFF);
-+	ASSERT_EQ(config.selector, 0);
-+	ASSERT_EQ(config.offset, 0);
-+	ASSERT_EQ(config.len, 0);
-+
-+	config.mode = PR_SYS_DISPATCH_ON;
-+	config.selector = 0;
-+	config.offset = 0x400000;
-+	config.len = 0x1000;
-+
-+	ret = sys_ptrace(PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG, child,
-+			 (void *)sizeof(config), &config);
-+
-+	ASSERT_EQ(ret, 0);
-+
-+	memset(&config, 1, sizeof(config));
-+	ret = sys_ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG, child,
-+			 (void *)sizeof(config), &config);
-+
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(config.mode, PR_SYS_DISPATCH_ON);
-+	ASSERT_EQ(config.selector, 0);
-+	ASSERT_EQ(config.offset, 0x400000);
-+	ASSERT_EQ(config.len, 0x1000);
-+
-+	kill(child, SIGKILL);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.39.1
-
+>
+> $ git diff -U1
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index c71d85577de6..e807be2214c7 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -541,8 +541,3 @@ static int enable_counters(void)
+>
+> -       /*
+> -        * We need to enable counters only if:
+> -        * - we don't have tracee (attaching to task or cpu)
+> -        * - we have initial delay configured
+> -        */
+> -       if (!target__none(&target) || stat_config.initial_delay) {
+> +       if (!target__enable_counter_on_exec(&target)) {
+>                 if (!all_counters_use_bpf)
+> @@ -916,3 +911,3 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>
+> -       if (stat_config.initial_delay) {
+> +       if (target.initial_delay) {
+>                 pr_info(EVLIST_DISABLED_MSG);
+> @@ -928,4 +923,4 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>
+> -       if (stat_config.initial_delay > 0) {
+> -               usleep(stat_config.initial_delay * USEC_PER_MSEC);
+> +       if (target.initial_delay > 0) {
+> +               usleep(target.initial_delay * USEC_PER_MSEC);
+>                 err = enable_counters();
+> @@ -1250,3 +1245,3 @@ static struct option stat_options[] = {
+>                      "aggregate counts per numa node", AGGR_NODE),
+> -       OPT_INTEGER('D', "delay", &stat_config.initial_delay,
+> +       OPT_INTEGER('D', "delay", &target.initial_delay,
+>                     "ms to wait before starting measurement after program start (-1: start with events disabled)"),
+> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> index 534d36d26fc3..40984d124db1 100644
+> --- a/tools/perf/util/stat.c
+> +++ b/tools/perf/util/stat.c
+> @@ -848,3 +848,3 @@ int create_perf_stat_counter(struct evsel *evsel,
+>                  */
+> -               if (target__none(target) && !config->initial_delay)
+> +               if (target__enable_counter_on_exec(target))
+>                         attr->enable_on_exec = 1;
+> diff --git a/tools/perf/util/target.h b/tools/perf/util/target.h
+> index daec6cba500d..a6721b644bfb 100644
+> --- a/tools/perf/util/target.h
+> +++ b/tools/perf/util/target.h
+> @@ -20,2 +20,3 @@ struct target {
+>         bool         hybrid;
+> +       int          initial_delay;
+>         const char   *attr_map;
+> @@ -74,2 +75,7 @@ static inline bool target__none(struct target *target)
+>
+> +static inline bool target__enable_counter_on_exec(struct target *target)
+> +{
+> +       return target__none(target) && !target->initial_delay;
+> +}
+> +
+>
+> > Thanks,
+> > Namhyung
+> >
+> >
+> > >
+> > > I added the additional test output below.
+> > >
+> > > Namhyung, can you please ack it?
+> > >
+> > > - Arnaldo
+> > >
+> > > Committer testing:
+> > >
+> > > Before:
+> > >
+> > > Lets use stress-ng so that we have lots of samples using a CPU stressor
+> > > and also intermingle the workload output with the messages about when
+> > > the events get enabled (i.e. later on in the workload):
+> > >
+> > >   $ perf stat -e instructions -D 100 stress-ng -c 32 -t 1
+> > >   Events disabled
+> > >   stress-ng: info:  [38361] setting to a 1 second run per stressor
+> > >   stress-ng: info:  [38361] dispatching hogs: 32 cpu
+> > >   Events enabled
+> > >   stress-ng: info:  [38361] successful run completed in 1.01s
+> > >
+> > >    Performance counter stats for 'stress-ng -c 32 -t 1':
+> > >
+> > >        <not counted>      instructions:u
+> > >
+> > >          0.916479141 seconds time elapsed
+> > >
+> > >         30.868003000 seconds user
+> > >          0.049851000 seconds sys
+> > >
+> > >
+> > >   Some events weren't counted. Try disabling the NMI watchdog:
+> > >         echo 0 > /proc/sys/kernel/nmi_watchdog
+> > >         perf stat ...
+> > >         echo 1 > /proc/sys/kernel/nmi_watchdog
+> > >   $
+> > >
+> > > After the fix:
+> > >
+> > >   $ perf stat -e instructions -D 100 stress-ng -c 32 -t 1
+> > >   Events disabled
+> > >   stress-ng: info:  [40429] setting to a 1 second run per stressor
+> > >   stress-ng: info:  [40429] dispatching hogs: 32 cpu
+> > >   Events enabled
+> > >   stress-ng: info:  [40429] successful run completed in 1.01s
+> > >
+> > >    Performance counter stats for 'stress-ng -c 32 -t 1':
+> > >
+> > >         154117865145      instructions:u
+> > >
+> > >          0.920827644 seconds time elapsed
+> > >
+> > >         30.864753000 seconds user
+> > >          0.073862000 seconds sys
+> > >
+> > >
+> > >   $
+> > >
+> > > > Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> > > > ---
+> > > >  tools/perf/builtin-stat.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> > > > index 9f3e4b257516..c71d85577de6 100644
+> > > > --- a/tools/perf/builtin-stat.c
+> > > > +++ b/tools/perf/builtin-stat.c
+> > > > @@ -544,7 +544,7 @@ static int enable_counters(void)
+> > > >        * - we don't have tracee (attaching to task or cpu)
+> > > >        * - we have initial delay configured
+> > > >        */
+> > > > -     if (!target__none(&target)) {
+> > > > +     if (!target__none(&target) || stat_config.initial_delay) {
+> > > >               if (!all_counters_use_bpf)
+> > > >                       evlist__enable(evsel_list);
+> > > >       }
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> > > --
+> > >
+> > > - Arnaldo
+> >
+>
+> --
+> Cheers,
+> Changbin Du
