@@ -2,211 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982A46A2474
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125C66A246F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjBXWsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 17:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S229592AbjBXWq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 17:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBXWsR (ORCPT
+        with ESMTP id S229379AbjBXWq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 17:48:17 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CDE4E5FB;
-        Fri, 24 Feb 2023 14:48:08 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.255]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M5wY1-1pPL6y32D5-007WKq; Fri, 24 Feb 2023 23:42:31 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 826D33C1C6; Fri, 24 Feb 2023 23:42:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1677278550; bh=3Q1ZIqpG+fkEm+5lSz4xt93M7STQCsuQ3AehnRYSWT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YhfSEuA8di20WiQrOaQGJk1Y/jEXcRu6v3W7dGlig6IfiNt4BzsTN//iXlE8Qsc3R
-         GOTcNuJ5GYERmCcuR2X+MkJ5xPrkIeu9LoeQSF4M88hFgZAadZ+VyuLv6z64usy2rr
-         J7YgfJB98ghY5fBM9MUYcELXI2IOEx50O5G8NhBY=
-Date:   Fri, 24 Feb 2023 23:42:30 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v6 07/12] kbuild: deb-pkg: switch over to source format
- 3.0 (quilt)
-Message-ID: <Y/k9VkL+Amj8JaSe@fjasle.eu>
-References: <20230215012034.403356-1-masahiroy@kernel.org>
- <20230215012034.403356-7-masahiroy@kernel.org>
+        Fri, 24 Feb 2023 17:46:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000256F838;
+        Fri, 24 Feb 2023 14:46:22 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OELEDI014331;
+        Fri, 24 Feb 2023 22:45:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Tp3wP6028yx/5Hb9vbmKHmruAPTEZ6VePo+dfzf25Yk=;
+ b=FBF6NrKDil13Kce50gNsVr77uNiBwYlGZNggGRLICMTIaHF/ITRE2GA4PL/mUdUsfDzX
+ 6YLp+5FUm8/hFJvFrREtORFN1qOjnMqr28wTxu+Od1skWxB+P7GQonoGB2CI/19xAKbx
+ KsJoyKfvCjJt1OhiT8aoH3R9yOtOtT2SujMuNuCrqZt9CraKWWDDPNdMvoUSudrFRYbg
+ fd5I+BFrI3W7766Ou3Y3DY1BZzGfu32Ad67Jii9B9/Qt1Ul5qnvQvJIXt1BwykNrSj+L
+ zZj8RpdMlC5Ces/x9wiQUqQuqKYdGfq9aljrpaD3QOl3gN1U3DJ4v5YgGK/Wrm17sQNW Dg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxsxr27ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Feb 2023 22:45:15 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OMj6wS015669
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Feb 2023 22:45:06 GMT
+Received: from [10.110.32.28] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
+ 2023 14:45:05 -0800
+Message-ID: <c22a7d59-e14c-a039-3488-fea2686a88b3@quicinc.com>
+Date:   Fri, 24 Feb 2023 14:45:05 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Ug59cDCp0STC2gvi"
-Content-Disposition: inline
-In-Reply-To: <20230215012034.403356-7-masahiroy@kernel.org>
-X-Provags-ID: V03:K1:hT/um+7HUktSResSMTXZ6GSgJX158k27KJSYkZBzl6VDYxtvBJ4
- YPvuZePuwsXEP/WSG2AxTzB4P8pyzhLLSQ4ePlTOWCvdaAeDhINbPssn/1NXqZ6iFgnLWXn
- EBGKHAzMPEDHz1i+SqjYm1IZVzpsTdtggvW7LQJtRjfBZUG/ghLGgXW9DZxsvFujUtTqX/U
- B2HiOzBRsMEfZDFh+N27g==
-UI-OutboundReport: notjunk:1;M01:P0:Hk+YLX1btlY=;F4sCEcowpy/1XxLS3yAV+grjT9j
- t1zxlEbt1P5e6mIDrBW2ZZi3Mck8Kw4Ll7Ay8yTXyB9UvRri8VhzhiW1U7vsfSWT8yo+eA65f
- 2SZ7TtUqC/0PlN71FiYloZT5cVos164B3nVvjFDCHh7/Tm+DsMka2iV+gqVaZBR0reUM00gyq
- 0Fw3R2jEeJnEVtuGJcmofKDFxqUYqyIJOR4KfASkay/zTt6YjTAME55ZYdS2ID4+ZcVxxp4Og
- gJ0U/SfQuUB8WTAAwl1CVdvhlCCcXN/vl7QGHCLYI/yPWa5yilWsVyuPekPeAWNaw9/hNgZcp
- S8+IBSaBM8/SInP4/U7+Rqg1DCMigU8XmuHalG/jCjd60KkYIS3KDkCzu0ipYWLJ4Bvie5HlD
- +fYjEsskyyI1c4FMruw2ErtpauISjvPy2CtdkbXZz+MrdsNqbQhqisOiyu5PSBluW1JBptlJR
- yEPMdAHHImjQ8k2E9w0XsDQHa8MRxMyg0Yl0cKhG2Ata0C79RPIu2oBjuI/HHkQXG8ciL0CUb
- SZwP779f4f8h6U5WakGuIJXMEULcplqA1bXZXy74erzNoziPo0gvQZi88S0orAwWn706+ZiKu
- Wm6ge4Ktsa57PlcecnFxFMxsqPU8CNCLPKsn5uk78QEnK1nM1hdQg4h02R3wKNQp4vrsaDY2l
- Au9Bs4/By+fb0yCwdIPSsdn18H1mMkDFL8cQRtEQyQ==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 1/2] remoteproc: core: Export the rproc coredump APIs
+Content-Language: en-US
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Siddharth Gupta <sidgup@codeaurora.org>
+References: <20230224211707.30916-1-quic_gokukris@quicinc.com>
+ <20230224211707.30916-2-quic_gokukris@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <20230224211707.30916-2-quic_gokukris@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wmKaKgunR9KvKjIpBV24lJAivQbV__Jo
+X-Proofpoint-ORIG-GUID: wmKaKgunR9KvKjIpBV24lJAivQbV__Jo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-24_16,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ impostorscore=0 mlxlogscore=610 suspectscore=0 adultscore=0 clxscore=1015
+ spamscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302240183
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/24/2023 1:17 PM, Gokul krishna Krishnakumar wrote:
+> From: Siddharth Gupta <sidgup@codeaurora.org>
 
---Ug59cDCp0STC2gvi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is it possible to change the From to your email ID, since we know that 
+sidgup@codeaurora.org no longer works including there is no longer 
+sidgup in Qualcomm. You don't have to CC sidgup@codeaurora.org since it 
+will only bounce.
 
-On Wed, Feb 15, 2023 at 10:20:29AM +0900 Masahiro Yamada wrote:
-> Change the source format from "1.0" to "3.0 (quilt)" because it works
-> more cleanly.
->=20
-> All files except .config and debian/ go into the orig tarball.
-> Add a single patch, debian/patches/config, and delete the ugly
-> extend-diff-ignore patterns.
->=20
-> The debian tarball will be compressed into *.debian.tar.xz by default.
-> If you like to use a different compression mode, you can pass the
-> command line option, DPKG_FLAGS=3D-Zgzip, for example.
->=20
-> The orig tarball only supports gzip for now. The combination of
-> gzip and xz is somewhat clumsy, but it is not a practical problem.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+> 
+> The remoteproc coredump APIs are currently only part of the internal
+> remoteproc header. This prevents the remoteproc platform drivers from
+> using these APIs when needed. This change moves the rproc_coredump()
+> and rproc_coredump_cleanup() APIs to the linux header and marks them
+> as exported symbols.
+> 
+> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
 
-Thanks, that switch to 3.0/quilt sounds really good to me.
+We can keep it here, if others are fine.
 
->=20
-> Changes in v6:
->   - Fix error when KCONFIG_CONFIG is set
->=20
-> Changes in v4:
->   - New patch
->=20
->  scripts/Makefile.package |  2 +-
->  scripts/package/mkdebian | 41 ++++++++++++++++++----------------------
->  2 files changed, 19 insertions(+), 24 deletions(-)
->=20
-> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> index 80a96eb61426..5538deacb136 100644
-> --- a/scripts/Makefile.package
-> +++ b/scripts/Makefile.package
-> @@ -105,7 +105,7 @@ debian-orig: linux.tar.gz debian
->  PHONY +=3D deb-pkg
->  deb-pkg: debian-orig
->  	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG=
-_FLAGS) \
-> -		--build=3Dsource,binary --source-option=3D-sP -nc -us -uc
-> +		--build=3Dsource,binary -nc -us -uc
-> =20
->  PHONY +=3D bindeb-pkg
->  bindeb-pkg: debian
-> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> index 534e9713761a..22fc73a5e4f2 100755
-> --- a/scripts/package/mkdebian
-> +++ b/scripts/package/mkdebian
-> @@ -135,29 +135,24 @@ else
->  fi
-> =20
->  mkdir -p debian/source/
-> -echo "1.0" > debian/source/format
-> -
-> -# Ugly: ignore anything except .config or debian/
-> -cat<<'EOF' > debian/source/local-options
-> -diff-ignore
-> -
-> -extend-diff-ignore =3D ^[^.d]
-> -
-> -extend-diff-ignore =3D ^\.[^c]
-> -extend-diff-ignore =3D ^\.c($|[^o])
-> -extend-diff-ignore =3D ^\.co($|[^n])
-> -extend-diff-ignore =3D ^\.con($|[^f])
-> -extend-diff-ignore =3D ^\.conf($|[^i])
-> -extend-diff-ignore =3D ^\.confi($|[^g])
-> -extend-diff-ignore =3D ^\.config.
-> -
-> -extend-diff-ignore =3D ^d($|[^e])
-> -extend-diff-ignore =3D ^de($|[^b])
-> -extend-diff-ignore =3D ^deb($|[^i])
-> -extend-diff-ignore =3D ^debi($|[^a])
-> -extend-diff-ignore =3D ^debia($|[^n])
-> -extend-diff-ignore =3D ^debian[^/]
-> -EOF
-> +echo "3.0 (quilt)" > debian/source/format
-> +
-> +{
-> +	echo "diff-ignore"
-> +	echo "extend-diff-ignore =3D .*"
-> +} > debian/source/local-options
-> +
-> +# Add .config as a patch
-> +mkdir -p debian/patches
-> +{
-> +	echo "Subject: Add .config"
-> +	echo "Author: ${maintainer}"
-> +	echo
-> +	echo "--- /dev/null"
-> +	echo "+++ linux/.config"
+> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 
-bike-shedding:
-
-	cat <<-eof
-	Subject: Add .config
-	Author: ${maintainer}
-
-	--- /dev/null
-	+++ linux/.config
-	eof
-
-
-> +	diff -u /dev/null "${KCONFIG_CONFIG}" | tail -n +3
-> +} > debian/patches/config
-> +echo config > debian/patches/series
-> =20
->  echo $debarch > debian/arch
->  extra_build_depends=3D", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-de=
-v:native)"
-> --=20
-> 2.34.1
-
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
---Ug59cDCp0STC2gvi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmP5PVUACgkQB1IKcBYm
-Emk+uhAA2TE8BdL0TPrv42P4qNx16ODICbnWZnOyC7kDk9rqd0mYR0mMa/w/i7BV
-q+QlnwyfB/U1QGzO3ygtvicFvExPAuNeH4Cc/vSpp+aMmLWEYIPdMU+WEvjqzkiz
-8ockigUferhu2+3+fViCIejRhN6hrGsSLmxcx8mrOEtF95qjDekHRQMsfDl82QQS
-25F5Y7JZDxydUAJoExIBE3e7VhAfEDpuuxRADeiJsW+b75a6M0ikvPenEoPK2Pko
-bY63NCHNC7us5Rz1mgbtn1IVAIbYp/9r1bQsS4IbNc2XXhNfoc560KSInehhcorb
-IIG/zQ1eModa0Q4CsgjbzO5bD6BQhZtHmK0x8Qe0AQOEqVpgSvBMDY78zS1/5FbI
-Gft6Fq0VDOv/ZJBHdduUXiaX/Tefi/DxAvx35+/ed/fkehtmiskgbb4RkjpkodYx
-V8SDFRg/RxSx15dmMBq+LjZFIZnnvPCUCIVTaWtV70Pdt+nBQqEDUopzQXpDMJY8
-2C6Xr1U6ODrcHn0ql9tR1XtgEqEsfZnEVwcf7RxAkzskfh6D30Uc5/SYTbKzBcSZ
-FMax+hH7CIOMe5TsO4m/D8JyUc/GU7pi6oiOMwZ0FZ2sRlVyFAjiTzskl9AjYFtq
-I0Mr0zu2pHil6Cfs/3hV38dRTWN50vgb4tql62L/vYkIvG4tPlw=
-=48FK
------END PGP SIGNATURE-----
-
---Ug59cDCp0STC2gvi--
+---Trilok Soni
