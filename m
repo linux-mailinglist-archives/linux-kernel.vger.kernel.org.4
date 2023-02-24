@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F2D6A2282
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9826A2284
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBXTs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S229633AbjBXTu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBXTst (ORCPT
+        with ESMTP id S229464AbjBXTu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:48:49 -0500
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E2E6C1A2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:48:42 -0800 (PST)
-Received: by mail-il1-f205.google.com with SMTP id 2-20020a056e020ca200b003033a763270so331559ilg.19
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:48:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tj+YS6uDs/mw0VPIHBjLq++zoYCo86wH+DUsbWOpxBc=;
-        b=dPl69OHE3a0SbBN0jpBKPHBrqB/BshNNCkUClLU1A+ZX2xS39nBq8mVJxeLACQN4cp
-         yQxg3DIiYn04KpCs0TL4khGy/1mdNxtL+q12VjOJ8HqMY4LIOeFMItEIcUo1M4FETmLv
-         msefw8qCMf6isf03+LeAV/hG4shpJIKxQbl3xs2G8suBK+9Wl3SY8u7b1sEydZ+CUogR
-         nNaklGHsYb03LfhhDWJT3ZDpN6WIyuclsXT8et7PftTCHbtZ0fmW9UT2FFCaGz9LvLwI
-         suKwzcohOlO9qoKauXSWqKb/tQIQYHX1Bx0l+ZcniAmygQz7N6AEmvvvF57gKeSMj+43
-         y0Mg==
-X-Gm-Message-State: AO0yUKVzYdcvVVWweTvvf4yg7GWvkCDFrdnp0GlA/NpXzMYdiytBbqWG
-        eGfP9X+ZpvF4DzDrjtpeanG6QB8KDAgquliu+oOHx456POOb
-X-Google-Smtp-Source: AK7set/lpdFhGHQw+cB9TUuzNn6N5waM1hr7VkUEtxTEE0QTJPim2M8myplppztA1iU387qG7HTmvXxzDqkXjrCs8qG48TKcd7Xc
+        Fri, 24 Feb 2023 14:50:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F343A4DE13;
+        Fri, 24 Feb 2023 11:50:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2034B81D0C;
+        Fri, 24 Feb 2023 19:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C358C433D2;
+        Fri, 24 Feb 2023 19:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677268254;
+        bh=DxSc5qyoJ3WetPubE5FBomItk0PCI3+VL+zlQed0ojE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tSH3us1vBbUCfEsZ6FMHC5txQio/GgPk3pwL4mgWsm2eWbEdeEVZuqyzPHEJf1Lv/
+         41K7CyS5MK3Cquy3xwxCb73DyOY1UOnUh1OmK/TIPpTjgF9RlDgn7g22IWuhPcP7xl
+         b8zSoq79YNCAG7T6jskr4k+7aqV1FWwCZgTehv/mAlnjw/6HGGqQ17gCcr56KkrONT
+         3dQtOThgDyh8BmGRN64ucXCQZij41ySd9x0PyLyI/HGQhsZKMkdsTYRNOgA7yXd98e
+         LSUGk8w2LmrLzZ8t8nUSGgNYtt+nkTPoCTrwKoJjOc5c3q4X/8djvfySzBldSZNJiw
+         m89YMERgCba7w==
+Date:   Fri, 24 Feb 2023 11:50:52 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Yanchao Yang (=?UTF-8?B?5p2o5b2m6LaF?=)" <Yanchao.Yang@mediatek.com>
+Cc:     "Chris Feng (=?UTF-8?B?5Yav5L+d5p6X?=)" <Chris.Feng@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "Mingliang Xu (=?UTF-8?B?5b6Q5piO5Lqu?=)" <mingliang.xu@mediatek.com>,
+        "Min Dong (=?UTF-8?B?6JGj5pWP?=)" <min.dong@mediatek.com>,
+        "linuxwwan@intel.com" <linuxwwan@intel.com>,
+        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
+        "Liang Lu (=?UTF-8?B?5ZCV5Lqu?=)" <liang.lu@mediatek.com>,
+        "Haijun Liu (=?UTF-8?B?5YiY5rW35Yab?=)" <haijun.liu@mediatek.com>,
+        "Haozhe Chang (=?UTF-8?B?5bi45rWp5ZOy?=)" <Haozhe.Chang@mediatek.com>,
+        "Hua Yang (=?UTF-8?B?5p2o5Y2O?=)" <Hua.Yang@mediatek.com>,
+        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
+        "Xiayu Zhang (=?UTF-8?B?5byg5aSP5a6H?=)" <Xiayu.Zhang@mediatek.com>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Ting Wang (=?UTF-8?B?546L5oy6?=)" <ting.wang@mediatek.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "Aiden Wang ( =?UTF-8?B?546L5ZKP6bqS?=)" <Aiden.Wang@mediatek.com>,
+        "Felix Chen ( =?UTF-8?B?6ZmI6Z2e?=)" <Felix.Chen@mediatek.com>,
+        "Lambert Wang ( =?UTF-8?B?546L5Lyf?=)" <Lambert.Wang@mediatek.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "Mingchuang Qiao (=?UTF-8?B?5LmU5piO6Zev?=)" 
+        <Mingchuang.Qiao@mediatek.com>,
+        "Guohao Zhang (=?UTF-8?B?5byg5Zu96LGq?=)" <Guohao.Zhang@mediatek.com>
+Subject: Re: [PATCH net-next v3 01/10] net: wwan: tmi: Add PCIe core
+Message-ID: <20230224115052.5bdcc54d@kernel.org>
+In-Reply-To: <d6f13d66a5ab0224f2ae424a0645d4cf29c2752b.camel@mediatek.com>
+References: <20230211083732.193650-1-yanchao.yang@mediatek.com>
+        <20230211083732.193650-2-yanchao.yang@mediatek.com>
+        <20230214202229.50d07b89@kernel.org>
+        <2e518c17bf54298a2108de75fcd35aaf2b3397d3.camel@mediatek.com>
+        <d6f13d66a5ab0224f2ae424a0645d4cf29c2752b.camel@mediatek.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a1c7:0:b0:3e5:a7d9:27db with SMTP id
- o7-20020a02a1c7000000b003e5a7d927dbmr3101248jah.6.1677268122191; Fri, 24 Feb
- 2023 11:48:42 -0800 (PST)
-Date:   Fri, 24 Feb 2023 11:48:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009dcd7705f5776af6@google.com>
-Subject: [syzbot] [ext4?] UBSAN: shift-out-of-bounds in ext2_fill_super
-From:   syzbot <syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 24 Feb 2023 07:39:33 +0000 Yanchao Yang (=E6=9D=A8=E5=BD=A6=E8=B6=
+=85) wrote:
+> > > Do you really need these flags? =20
+> >=20
+> > We will check and update if it's really redundant soon. =20
+> Update test result.
+> Both flags are deleted, then run the make command with=20
+> "build in" and "build module" on a separate kernel tree. Both suffer
+> the same build error.
+> =E2=80=9Cdrivers/net/wan/mediatek/pcie/mtk_pci.c:16:10: fatal error: mtk_=
+fsm.h:
+> No such file or directory
+>  #include "mtk_fsm.h""
+> The reason is that all files are not placed in the same folder. The
+> driver named TMI needs a child folder, then needs these flags.
+>=20
+> Any ideas or comments for this? Please help share it at your
+> convenience.
 
-syzbot found the following issue on:
+Relative paths work, right?
 
-HEAD commit:    a9b06ec42c0f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1646c5e8c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8ad40c5d31656db1
-dashboard link: https://syzkaller.appspot.com/bug?extid=4fec412f59eba8c01b77
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172f9f58c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13607dcf480000
+> > > Labels should be named after action they perform, not where they
+> > > jump
+> > > from. Please fix this everywhere. =20
+> >=20
+> > We can found similar samples in kernel codes, naming the label per
+> > where jump from=E2=80=A6
+> > ex. pci-sysfs.c
+> > shall we apply this rule to our driver?
+> > I
+> > t's mandatory or nice to have. =20
+>=20
+> Any ideas or comments for this? Please help share it at your
+> convenience.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3fd9d14dbef6/disk-a9b06ec4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d4fd6fe60f78/vmlinux-a9b06ec4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/908925a4e5fc/Image-a9b06ec4.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/322d1cd45d78/mount_1.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 512
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ext2/super.c:948:25
-shift exponent 32 is too large for 32-bit type 'int'
-CPU: 1 PID: 5922 Comm: syz-executor396 Not tainted 6.2.0-syzkaller-18295-ga9b06ec42c0f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call trace:
- dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:321
- ext2_fill_super+0x2074/0x23fc fs/ext2/super.c:948
- mount_bdev+0x26c/0x368 fs/super.c:1359
- ext2_mount+0x44/0x58 fs/ext2/super.c:1484
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1489
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
- path_mount+0x590/0xe58 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount fs/namespace.c:3674 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
-EXT2-fs (loop0): error: fragsize 4096 != blocksize 1024(not supported yet)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+It's mandatory for new code.
