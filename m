@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32546A1DF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BA36A1DFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjBXPFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
+        id S229888AbjBXPGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXPFS (ORCPT
+        with ESMTP id S229470AbjBXPGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:05:18 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829092CFDC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:05:17 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id ev13so13875594qvb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:05:17 -0800 (PST)
+        Fri, 24 Feb 2023 10:06:37 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CACC679B6;
+        Fri, 24 Feb 2023 07:06:36 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id e9so14426517ljn.9;
+        Fri, 24 Feb 2023 07:06:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O5BpD6FTwoSIc56RP/MeWNUaxFFqGMGY83NroahzU7g=;
-        b=OvJ/9+t5tSih6Cs7/VwVRxdFSmLE3uHmMP2iPMou9Ph4IF275aGHwW0lsDMq34XP7J
-         KtnmR1Kyz9nwbAfPeB24EE6enAvh7TfdZ+LSdCXmejScc26YtKCkcAQ1c9p3rylCaevD
-         bujgKUL0r4fwcaZZHa7LJHd+QTLXr0V0d0H/k6PEFE7bHEZIuzn75UNaXDWjfWE7ghmL
-         qbF7hAEUqyjiIUgBbCc762iOqinFYjyMRYZhvWbSWbaEalQzp2d3mR9f6b0kIvHGLpvW
-         knmQixfvy0915fxY6j1UAH4N39fDRRUzNMpV287lkrqkWaLqSzVDPkT8EbxPjJSHllhq
-         cEFw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r3QZB4TfMdCwmEYdbGrhQi/oX08bvtvcvl8M28Xvs1g=;
+        b=C1Gl8NWEYK3WMxfju4xsAu9HaKmq8aXEd7DJYgqK6k94bdTiWaCBwCm3WADAIPy67s
+         Ea/TP3czgCcAgvWk0Xe7Dp56xBZ45Hj8tFRnF2T0kKu5JyA7D0D/UvkLbSnVm/M1keE0
+         Gi3Q2sOiSLEgV8XZRXZ1eB9d3jdOeRxW2k2K3UY9O/oBGLew0FEorv9babK8B+4Iq+G7
+         OYtt0Cgumic0hQ0Vt7eoTbWh0+raaiee8xAs7yVZczQJH1shkFo+++BqzLjbnqFAf/Um
+         Z99cG9NIXVRMEWoqsQuOmRLugAuZS9r5ShZZ1xMnlr1l41BYy9qp5G8dLK2u3D0ePDcz
+         emrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O5BpD6FTwoSIc56RP/MeWNUaxFFqGMGY83NroahzU7g=;
-        b=4UJLQoqbz/av7KB54suZQ/BwTVkxuDjWZIl9HSCKu2l69r6ZN1wtu4LjheLnMvolEY
-         5czXxfuilEX1MovxDfSoZrWsYlxFRSY/Yff7kk9kxq80LCj07TR+RfnafUa5xMQorWZB
-         ku6S+nVfj3JtiBD72JMoQkGntkODy0ISrkOM6ybKQ7Y7YB1cCnkCcMmY/HkZYAvG6yvp
-         3R6L7VViscMaUn9zwpLj4Xl6ts9Vh4mz+c0A+81Vywpt0xEPyoaMUFC2WKDrDOCctRud
-         CHK8WRlq1KGH0Y60nCAlF6tW44IFkMlJNt4muDQ0xjvJJnzmORfGsTldN6c61Gbx7IIe
-         nZ3A==
-X-Gm-Message-State: AO0yUKWPOVDcJP63pN19x0z2vTKIKg/0mM4+WpevylKvJKAzA9gQSQBR
-        5hP1DFfPocokH7HgolPthsag3BCyMln7QV9EVmw=
-X-Google-Smtp-Source: AK7set82DcP5O0Ce0JRP76yvFk01KL2wCZ2N+/Abd+TwAMwdOsaWfxITECxz9SxWHBh1nhmPmixVNg==
-X-Received: by 2002:a05:6214:e8a:b0:56e:ff37:6b6e with SMTP id hf10-20020a0562140e8a00b0056eff376b6emr31812080qvb.10.1677251116493;
-        Fri, 24 Feb 2023 07:05:16 -0800 (PST)
-Received: from [192.168.0.189] (modemcable125.110-19-135.mc.videotron.ca. [135.19.110.125])
-        by smtp.gmail.com with ESMTPSA id a186-20020a3798c3000000b0073b878e3f30sm6538530qke.59.2023.02.24.07.05.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 07:05:16 -0800 (PST)
-Subject: Re: [Freedreno] [PATCH v3 4/7] drm/msm/a2xx: Implement .gpu_busy
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230223-topic-opp-v3-0-5f22163cd1df@linaro.org>
- <20230223-topic-opp-v3-4-5f22163cd1df@linaro.org>
-From:   Jonathan Marek <jonathan@marek.ca>
-Message-ID: <2f2467d1-f5f3-86dd-edba-fc26e60d142f@marek.ca>
-Date:   Fri, 24 Feb 2023 10:04:19 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r3QZB4TfMdCwmEYdbGrhQi/oX08bvtvcvl8M28Xvs1g=;
+        b=HP6ChdQ0oqK1pgfj8FpK6j4lCVXTf0GaltjodHtYtaP0pnL8i+5KavTZS+4dwnL60m
+         NCqZQVmgFoXXGLCEniwJgfa6lu9igTVsKEqMMbLGIyl4l7oFJ1wbENGrCsbpLcXIOJGQ
+         sMdMnv6064+sw5I/rh6TMH0OlqGq8IuMcmGl51OwzFtv7O9RBwg0j3S5uHR9R4sSzTPQ
+         bIQ084qDdimk8Jb90Utjs6OTqhPKGFq8hyEp+T+/zFU/xp4dC6eW4MovWaP9GuELDW4f
+         gnDjJDYrP/qA9Heu3hcH7zP3Ufj0heOHZy7ksGGgF0NLl8Ov7KX89ZJLhoCi8B8VN/f6
+         RREw==
+X-Gm-Message-State: AO0yUKV7fZ/gTcpgiJydbMOYzfW+iEZMa8ZTwxQWp4ndfU0P400hbH0Z
+        awJ+9Bf9gXIli+7O/CRbsX0=
+X-Google-Smtp-Source: AK7set+vcOPNv5TrtvcImV1tnxleSzTn9w+ohnJhraUXj9D7VsufdJnfvxHEIBXmp//BnkJdKCHRqA==
+X-Received: by 2002:a05:651c:554:b0:293:2c7e:bf53 with SMTP id q20-20020a05651c055400b002932c7ebf53mr8216266ljp.0.1677251193686;
+        Fri, 24 Feb 2023 07:06:33 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id p25-20020a2ea4d9000000b00295a32db4e1sm346142ljm.91.2023.02.24.07.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 07:06:33 -0800 (PST)
+Date:   Fri, 24 Feb 2023 17:06:31 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
+        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
+        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v8 41/56] KVM: SVM: Add support to handle MSR based
+ Page State Change VMGEXIT
+Message-ID: <20230224170631.000016f1@gmail.com>
+In-Reply-To: <20230220183847.59159-42-michael.roth@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+        <20230220183847.59159-42-michael.roth@amd.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <20230223-topic-opp-v3-4-5f22163cd1df@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,67 +90,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This won't work because a2xx freedreno userspace expects to own all the 
-perfcounters.
+On Mon, 20 Feb 2023 12:38:32 -0600
+Michael Roth <michael.roth@amd.com> wrote:
 
-This will break perfcounters for userspace, and when userspace isn't 
-using perfcounters, this won't count correctly because userspace writes 
-0 to CP_PERFMON_CNTL at the start of every submit.
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> SEV-SNP VMs can ask the hypervisor to change the page state in the RMP
+> table to be private or shared using the Page State Change MSR protocol
+> as defined in the GHCB specification.
+> 
+> Forward these requests to userspace via KVM_EXIT_VMGEXIT so the VMM can
+> issue the KVM ioctls to update the page state accordingly.
+> 
 
-On 2/23/23 5:52 AM, Konrad Dybcio wrote:
-> Implement gpu_busy based on the downstream msm-3.4 code [1]. This
-> allows us to use devfreq on this old old old hardware!
-> 
-> [1] https://github.com/LineageOS/android_kernel_sony_apq8064/blob/lineage-16.0/drivers/gpu/msm/adreno_a2xx.c#L1975
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+It would be better to describe the design purpose. Like, why should the
+page state change VMGEIXT be forwarded to the userspace instead of being
+handled in the kernel.
+
+> Co-developed-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
 > ---
->   drivers/gpu/drm/msm/adreno/a2xx_gpu.c | 26 ++++++++++++++++++++++++++
->   1 file changed, 26 insertions(+)
+>  arch/x86/include/asm/sev-common.h |  9 ++++++++
+>  arch/x86/kvm/svm/sev.c            | 25 +++++++++++++++++++++++
+>  arch/x86/kvm/trace.h              | 34 +++++++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.c                |  1 +
+>  4 files changed, 69 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/msm/adreno/a2xx_gpu.c b/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
-> index c67089a7ebc1..104bdf28cdaf 100644
-> --- a/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
-> @@ -481,6 +481,31 @@ a2xx_create_address_space(struct msm_gpu *gpu, struct platform_device *pdev)
->   	return aspace;
->   }
->   
-> +/* While the precise size of this field is unknown, it holds at least these three values.. */
-> +static u64 a2xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+> diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
+> index 0a9055cdfae2..ee38f7408470 100644
+> --- a/arch/x86/include/asm/sev-common.h
+> +++ b/arch/x86/include/asm/sev-common.h
+> @@ -93,6 +93,10 @@ enum psc_op {
+>  };
+>  
+>  #define GHCB_MSR_PSC_REQ		0x014
+> +#define GHCB_MSR_PSC_GFN_POS		12
+> +#define GHCB_MSR_PSC_GFN_MASK		GENMASK_ULL(39, 0)
+> +#define GHCB_MSR_PSC_OP_POS		52
+> +#define GHCB_MSR_PSC_OP_MASK		0xf
+>  #define GHCB_MSR_PSC_REQ_GFN(gfn, op)			\
+>  	/* GHCBData[55:52] */				\
+>  	(((u64)((op) & 0xf) << 52) |			\
+> @@ -102,6 +106,11 @@ enum psc_op {
+>  	GHCB_MSR_PSC_REQ)
+>  
+>  #define GHCB_MSR_PSC_RESP		0x015
+> +#define GHCB_MSR_PSC_ERROR_POS		32
+> +#define GHCB_MSR_PSC_ERROR_MASK		GENMASK_ULL(31, 0)
+> +#define GHCB_MSR_PSC_ERROR		GENMASK_ULL(31, 0)
+> +#define GHCB_MSR_PSC_RSVD_POS		12
+> +#define GHCB_MSR_PSC_RSVD_MASK		GENMASK_ULL(19, 0)
+>  #define GHCB_MSR_PSC_RESP_VAL(val)			\
+>  	/* GHCBData[63:32] */				\
+>  	(((u64)(val) & GENMASK_ULL(63, 32)) >> 32)
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 2613311f4fcc..a1a2686dde7b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -30,6 +30,7 @@
+>  #include "svm_ops.h"
+>  #include "cpuid.h"
+>  #include "trace.h"
+> +#include "mmu.h"
+>  
+>  #ifndef CONFIG_KVM_AMD_SEV
+>  /*
+> @@ -3345,6 +3346,23 @@ static void set_ghcb_msr(struct vcpu_svm *svm, u64 value)
+>  	svm->vmcb->control.ghcb_gpa = value;
+>  }
+>  
+> +/*
+> + * TODO: need to get the value set by userspace in vcpu->run->vmgexit.ghcb_msr
+> + * and process that here accordingly.
+> + */
+> +static int snp_complete_psc_msr_protocol(struct kvm_vcpu *vcpu)
 > +{
-> +	u64 busy_cycles;
+> +	struct vcpu_svm *svm = to_svm(vcpu);
 > +
-> +	/* Freeze the counter */
-> +	gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_FREEZE);
+> +	set_ghcb_msr_bits(svm, 0,
+> +			  GHCB_MSR_PSC_ERROR_MASK, GHCB_MSR_PSC_ERROR_POS);
 > +
-> +	busy_cycles = gpu_read64(gpu, REG_A2XX_RBBM_PERFCOUNTER1_LO);
+> +	set_ghcb_msr_bits(svm, 0, GHCB_MSR_PSC_RSVD_MASK, GHCB_MSR_PSC_RSVD_POS);
+> +	set_ghcb_msr_bits(svm, GHCB_MSR_PSC_RESP, GHCB_MSR_INFO_MASK, GHCB_MSR_INFO_POS);
 > +
-> +	/* Reset the counter */
-> +	gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_RESET);
-> +
-> +	/* Re-enable the performance monitors */
-> +	gpu_rmw(gpu, REG_A2XX_RBBM_PM_OVERRIDE2,
-> +		A2XX_RBBM_PM_OVERRIDE2_DEBUG_PERF_SCLK_PM_OVERRIDE,
-> +		A2XX_RBBM_PM_OVERRIDE2_DEBUG_PERF_SCLK_PM_OVERRIDE);
-> +	gpu_write(gpu, REG_A2XX_RBBM_PERFCOUNTER1_SELECT, 1);
-> +	gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_ENABLE);
-> +
-> +	*out_sample_rate = clk_get_rate(gpu->core_clk);
-> +
-> +	return busy_cycles;
+> +	return 1; /* resume */
 > +}
 > +
->   static u32 a2xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
->   {
->   	ring->memptrs->rptr = gpu_read(gpu, REG_AXXX_CP_RB_RPTR);
-> @@ -502,6 +527,7 @@ static const struct adreno_gpu_funcs funcs = {
->   #if defined(CONFIG_DEBUG_FS) || defined(CONFIG_DEV_COREDUMP)
->   		.show = adreno_show,
->   #endif
-> +		.gpu_busy = a2xx_gpu_busy,
->   		.gpu_state_get = a2xx_gpu_state_get,
->   		.gpu_state_put = adreno_gpu_state_put,
->   		.create_address_space = a2xx_create_address_space,
-> 
+>  static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+>  {
+>  	struct vmcb_control_area *control = &svm->vmcb->control;
+> @@ -3445,6 +3463,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+>  				  GHCB_MSR_INFO_POS);
+>  		break;
+>  	}
+> +	case GHCB_MSR_PSC_REQ:
+> +		vcpu->run->exit_reason = KVM_EXIT_VMGEXIT;
+> +		vcpu->run->vmgexit.ghcb_msr = control->ghcb_gpa;
+> +		vcpu->arch.complete_userspace_io = snp_complete_psc_msr_protocol;
+> +
+> +		ret = -1;
+> +		break;
+>  	case GHCB_MSR_TERM_REQ: {
+>  		u64 reason_set, reason_code;
+>  
+> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+> index 83843379813e..65861d2d086c 100644
+> --- a/arch/x86/kvm/trace.h
+> +++ b/arch/x86/kvm/trace.h
+> @@ -7,6 +7,7 @@
+>  #include <asm/svm.h>
+>  #include <asm/clocksource.h>
+>  #include <asm/pvclock-abi.h>
+> +#include <asm/sev-common.h>
+>  
+>  #undef TRACE_SYSTEM
+>  #define TRACE_SYSTEM kvm
+> @@ -1831,6 +1832,39 @@ TRACE_EVENT(kvm_vmgexit_msr_protocol_exit,
+>  		  __entry->vcpu_id, __entry->ghcb_gpa, __entry->result)
+>  );
+>  
+> +/*
+> + * Tracepoint for the SEV-SNP page state change processing
+> + */
+> +#define psc_operation					\
+> +	{SNP_PAGE_STATE_PRIVATE, "private"},		\
+> +	{SNP_PAGE_STATE_SHARED,  "shared"}		\
+> +
+> +TRACE_EVENT(kvm_snp_psc,
+> +	TP_PROTO(unsigned int vcpu_id, u64 pfn, u64 gpa, u8 op, int level),
+> +	TP_ARGS(vcpu_id, pfn, gpa, op, level),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(int, vcpu_id)
+> +		__field(u64, pfn)
+> +		__field(u64, gpa)
+> +		__field(u8, op)
+> +		__field(int, level)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->vcpu_id = vcpu_id;
+> +		__entry->pfn = pfn;
+> +		__entry->gpa = gpa;
+> +		__entry->op = op;
+> +		__entry->level = level;
+> +	),
+> +
+> +	TP_printk("vcpu %u, pfn %llx, gpa %llx, op %s, level %d",
+> +		  __entry->vcpu_id, __entry->pfn, __entry->gpa,
+> +		  __print_symbolic(__entry->op, psc_operation),
+> +		  __entry->level)
+> +);
+> +
+>  #endif /* _TRACE_KVM_H */
+>  
+>  #undef TRACE_INCLUDE_PATH
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 268c3d16894d..0154fc7a28c1 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13515,6 +13515,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_enter);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_exit);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_msr_protocol_enter);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_msr_protocol_exit);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_snp_psc);
+>  
+>  static int __init kvm_x86_init(void)
+>  {
+
