@@ -2,136 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F516A2181
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C436A2185
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjBXSaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S229533AbjBXSae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBXSaP (ORCPT
+        with ESMTP id S229454AbjBXSad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:30:15 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8004BEB7;
-        Fri, 24 Feb 2023 10:30:14 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OFkQvN024245;
-        Fri, 24 Feb 2023 18:30:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=dgvQa8CmPE5BVE0cHwpo1N2gjIqFpZorHLJU3v0F05g=;
- b=SaxLtKrfPD9yKZiJ9nbhKOgDVPC9Lk163eOYUc6oNPwaMJxd5J3oLlcqiYoR6Epac/qL
- RzuXzKbHB9OlzZJthzaZxvsZDL/vu5KgqLs5hFqV1pcbDWlqaHKaY5uqSekOAUVwXTDq
- aU0Kpom8LSQNbY/gxGV+ClxLC9+y+J0n1YJqXz52QHFdJyZYJsgANm+dF8WR4uubv05m
- d1N7VD0AM983PCksqTu1BUSdhg3hG4Qgn5FCbQbBC5/QT6SvFod/wrtH5Fay1IFO+9q8
- rm322c16YWO8r1K3qE/DtBL/HX53EMCgBEAelEP5mS6juxbY3FuRYY+fFR6KVDoXvXZ6 hg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny05mre8v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 18:30:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OIU611020461
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 18:30:06 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 24 Feb 2023 10:30:06 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm/dp: check core_initialized flag at both host_init() and host_deinit()
-Date:   Fri, 24 Feb 2023 10:29:58 -0800
-Message-ID: <1677263398-13801-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 24 Feb 2023 13:30:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DC96BF5C;
+        Fri, 24 Feb 2023 10:30:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 685A0B81CAB;
+        Fri, 24 Feb 2023 18:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30EFC433EF;
+        Fri, 24 Feb 2023 18:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677263426;
+        bh=O4Mwg3w0JpRgJui6yoNsXmx/h3NhYcrFggVezAyqKTc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Dd3v1cAycWoH9PcbX9WncZTrSPPZCUF6mqNHAigNs55MehLmbwMTFjiM8qxaX0liF
+         SnwY5yPxSq2k9p7R0m/lH5lZa46NWGtacvEY89mmAPBRyTxTrz6+hhCNR+3ZiRIDhK
+         VFMAKxR1rYqw7e4lrSbV9eQ4FjPWUAteYPYGhB0rVeciEY2AHjewYPr4irhvcNCQDQ
+         g6r1j+Y+b8A65iWc1OH+/WhEBXPg/ah0am1fJafoi07ZNsxT2E9ZtKFo0ang3701BR
+         vISUSpjyw0dlUbIGa72R6NRmGwkSedxM7k50dTNLBUBDOmCMEXn2pTaDUUQcy+vdcR
+         SxIsQwb2fNoPA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, ldewangan@nvidia.com
+In-Reply-To: <20230224164034.56933-1-kyarlagadda@nvidia.com>
+References: <20230224164034.56933-1-kyarlagadda@nvidia.com>
+Subject: Re: [PATCH] spi: tegra210-quad: Fix validate combined sequence
+Message-Id: <167726342439.539434.8001216354479584360.b4-ty@kernel.org>
+Date:   Fri, 24 Feb 2023 18:30:24 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Un4DeNeBPrw8ZWiQG_muEsoh48V6PoZv
-X-Proofpoint-ORIG-GUID: Un4DeNeBPrw8ZWiQG_muEsoh48V6PoZv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_14,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 malwarescore=0 clxscore=1011 phishscore=0 mlxscore=0
- spamscore=0 impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302240146
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a reboot/suspend test case where system suspend is forced during
-system booting up. Since host_init() of external DP is executed at hpd
-thread context, this test case may created a scenario that host_deinit()
-from pm_suspend() run before host_init() if hpd thread has no chance to
-run during booting up while suspend request command was issued.
-At this scenario system will crash at aux register access at host_deinit()
-since aux clock had not yet been enabled by host_init().  Therefore we
-have to ensure aux clock enabled by checking core_initialized flag before
-access aux registers at pm_suspend.
+On Fri, 24 Feb 2023 22:10:34 +0530, Krishna Yarlagadda wrote:
+> Check for non dma transfers that do not fit in FIFO has issue and skips
+> combined sequence for Tegra234 & Tegra241 which does not have GPCDMA.
+> 
+> Fixes: 1b8342cc4a38 ("spi: tegra210-quad: combined sequence mode")
+> 
+> 
 
-Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+Applied to
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bde1a7c..1850738 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -460,10 +460,12 @@ static void dp_display_host_init(struct dp_display_private *dp)
- 		dp->dp_display.connector_type, dp->core_initialized,
- 		dp->phy_initialized);
- 
--	dp_power_init(dp->power, false);
--	dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
--	dp_aux_init(dp->aux);
--	dp->core_initialized = true;
-+	if (!dp->core_initialized) {
-+		dp_power_init(dp->power, false);
-+		dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
-+		dp_aux_init(dp->aux);
-+		dp->core_initialized = true;
-+	}
- }
- 
- static void dp_display_host_deinit(struct dp_display_private *dp)
-@@ -472,10 +474,12 @@ static void dp_display_host_deinit(struct dp_display_private *dp)
- 		dp->dp_display.connector_type, dp->core_initialized,
- 		dp->phy_initialized);
- 
--	dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
--	dp_aux_deinit(dp->aux);
--	dp_power_deinit(dp->power);
--	dp->core_initialized = false;
-+	if (dp->core_initialized) {
-+		dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
-+		dp_aux_deinit(dp->aux);
-+		dp_power_deinit(dp->power);
-+		dp->core_initialized = false;
-+	}
- }
- 
- static int dp_display_usbpd_configure_cb(struct device *dev)
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: tegra210-quad: Fix validate combined sequence
+      commit: 047ee71ae4f412d8819e39e4b08c588fa299cfc2
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
