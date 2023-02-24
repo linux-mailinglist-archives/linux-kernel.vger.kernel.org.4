@@ -2,642 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F83C6A1D04
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE476A1D05
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjBXNbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S230190AbjBXNbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjBXNbh (ORCPT
+        with ESMTP id S229978AbjBXNbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:31:37 -0500
+        Fri, 24 Feb 2023 08:31:38 -0500
 Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DB74A1D9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:31:33 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id az36so1827584wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:31:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A0C4BE90
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:31:34 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id p26so11395712wmc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1677245492;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1677245493;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yoniXrMAMCP1ygXvpYDpat9bf0ssCt2SLlyt+NFABPo=;
-        b=N2LRUjZLdttLYVWwSQ+Qb+uQjRaJVVOuaSb+azySZDFZGlWMoqKxP3cvUIQPgCiycJ
-         LcQihuiuIQCoJKT+YpEVQ9Clu+mAmQlBUsueXVDz+/KDUSopoW0Gn582H49I0ckj93fk
-         AjwVx4lFVBFCHK4Mufce6jHIfoTjs1uPO6ewzyBFplaUICMb0Dd29hySPEkYpTgo5jeT
-         0mplG4gxz1ZUea6VGbINjdeF22NxAxqx/JKiFzUer3peJyTNOBiuqXGNy/KP+8IgxCw9
-         rECdYtZRxk1nqkSjlyqUbLJwh3MOiSJVHm0S/sUVCdWAGA2rUIchQpnXybVjO1wGdbpW
-         MUqg==
+        bh=7AJpG3b+5nh0JP3Y3B72T/w7YEmWL2KoaIhrl1LS2N4=;
+        b=4SQlr4yFY8ZKc9cIxtafVYxVATgwia3+3+8WaJdaxY6LpWQFil1vDvWBk/RQkguyiF
+         bGIfV6tXuO7fFXIMsMfX2RC3cSiQAULuVR+s0nKeiyM30shyI40qE6DrbC5iqCKoKsln
+         fG9VgZNhwexQlAkMb8KjR2AgsizOr8rNuH2U+1tXuotq/duRfgy8YuCz9bfkcp/gnsiG
+         V5WWZQnki7KSw6TkGmN3YRTdJqnT1CZWuHZSihy02+aPqYDrkvDcHH8YnYbXohu3ZuOX
+         LjHX8V71G/6NWT1LYC0KIAG+BTAnV0DYvtCYciHvP2K4NLziUSgIDFofHjgyh4UuebUr
+         i7fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677245492;
+        d=1e100.net; s=20210112; t=1677245493;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yoniXrMAMCP1ygXvpYDpat9bf0ssCt2SLlyt+NFABPo=;
-        b=Si8RJd8YZAFaURKNaHbAoKrXH8MH7AXh+vcfK7JMPDnnqVepOJMt1RveRAgeVPOIWG
-         zymDRki6rsYH8kkZSTMg+9a88c0u3zlhH5P0seqPk+kvt1pptEkmBddmT1hqNFyPaT2W
-         tRN49yLv3js9M98cGMoklPAyzThiGc7q2VKIlaQdq6k7Yseo2X3dv3M9dpazdba0Mxgh
-         NRnbK3SauxGnn8YEENBMffPddwMsNYssl5y50ydDRlhAw/uu8SWasB9k0wppDIeAHTq1
-         jv+dh1zEY3Ibf200HgxXW9RIrks/sgzeQTFV7FDhrhsMBhuXzaA4AYk75kF3auiCaqWZ
-         NnPw==
-X-Gm-Message-State: AO0yUKVI3aztOc04vZx7tFbW6NovseDrlO14dMtsmQJOisfgDCJRAKIC
-        uYEFWy3N+hipaOt7TQTCVO7rvw==
-X-Google-Smtp-Source: AK7set8KhmdSLDLrap5U721LvZMJFmsNPMFod4er9hFMe0xX2IiOZU+nnSlAJjMKwe1pC00LGGghgQ==
-X-Received: by 2002:a05:600c:198e:b0:3df:9858:c037 with SMTP id t14-20020a05600c198e00b003df9858c037mr13460121wmq.12.1677245491846;
-        Fri, 24 Feb 2023 05:31:31 -0800 (PST)
+        bh=7AJpG3b+5nh0JP3Y3B72T/w7YEmWL2KoaIhrl1LS2N4=;
+        b=pMYdoaPwRkHhcA5XF7iKceJXkc3hPzGVMCV1mls2IdqpxXp4xdCdYoIcNmAgj1YjUX
+         XKumvGhlLi8+9UosU1wn1BYbMrv8ZXg1QE5OxJj2JnSnb4ByvAUKa7W0lGDrzvTeR0TW
+         SZR8Y5BL9aVYrHPbAEzECtnWeBAJDRZ8nRF6zExgMZ0QzgYz4GM47CioRmAxnHQPRUi2
+         Qt0MakVBxnPfuZQ1uhxJowXVTJ8XCq/xB2n9nJdprHgO9s4kHsUexfmLVoDpXL9trnb6
+         OElJi2yznWgtOJcuIPv4nhtTtL5/1iBqdJWXSrhT4daKavG9jUcv3qrh4JrixtnlJtpc
+         H/yQ==
+X-Gm-Message-State: AO0yUKX5I5dbBFxgtHOEOsArwYaBUthawdfKcSpnwTY9Qf5ZlubLgD/N
+        n0grPpxRwck74GopgATaU/amTg==
+X-Google-Smtp-Source: AK7set9GgTxT9QPDajl0We3MlLaa8VCoWm+j0LyDjDTQM3BSMQLy1LdTioqEPGuvU8DUucyMDPD6vg==
+X-Received: by 2002:a05:600c:a295:b0:3eb:29fe:70ec with SMTP id hu21-20020a05600ca29500b003eb29fe70ecmr813792wmb.27.1677245492688;
+        Fri, 24 Feb 2023 05:31:32 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e0a:28d:66d0:5e4:476:5145:2ad1])
         by smtp.gmail.com with ESMTPSA id o25-20020a05600c511900b003dfe549da4fsm3308735wms.18.2023.02.24.05.31.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 05:31:31 -0800 (PST)
+        Fri, 24 Feb 2023 05:31:32 -0800 (PST)
 From:   Esteban Blanc <eblanc@baylibre.com>
 To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com
 Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-rtc@vger.kernel.org, jpanis@baylibre.com,
         jneanne@baylibre.com
-Subject: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594 PMIC RTC
-Date:   Fri, 24 Feb 2023 14:31:27 +0100
-Message-Id: <20230224133129.887203-2-eblanc@baylibre.com>
+Subject: [PATCH INTERNAL v1 2/3] pinctrl: tps6594: add for TPS6594 PMIC
+Date:   Fri, 24 Feb 2023 14:31:28 +0100
+Message-Id: <20230224133129.887203-3-eblanc@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230224133129.887203-1-eblanc@baylibre.com>
 References: <20230224133129.887203-1-eblanc@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TPS6594 PMIC is a MFD driver. This add support for the RTC found inside
-TPS6594 family of PMIC.
+TI TPS6594 PMIC has 11 GPIOs which can be used for different
+functions
 
-Alarm is also supported.
+This add a pinctrl and pinmux drivers in order to use those functions
 
 Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
 ---
- drivers/rtc/Kconfig       |   8 +
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-tps6594.c | 516 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 525 insertions(+)
- create mode 100644 drivers/rtc/rtc-tps6594.c
+ drivers/pinctrl/Kconfig           |   9 +
+ drivers/pinctrl/Makefile          |   1 +
+ drivers/pinctrl/pinctrl-tps6594.c | 367 ++++++++++++++++++++++++++++++
+ 3 files changed, 377 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 677d2601d305..34c63555669d 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -578,6 +578,14 @@ config RTC_DRV_TPS6586X
- 	  along with alarm. This driver supports the RTC driver for
- 	  the TPS6586X RTC module.
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 7d5f5458c72e..323c5b0d63bd 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -499,6 +499,15 @@ config PINCTRL_THUNDERBAY
+ 	  rate control and direction control. This module will be
+ 	  called as pinctrl-thunderbay.
  
-+config RTC_DRV_TPS6594
-+	tristate "TI TPS6594 RTC driver"
++config PINCTRL_TPS6594
++	tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
 +	depends on MFD_TPS6594
++	select PINMUX
++	select GPIOLIB
 +	help
-+	  TI Power Management IC TPS6594 supports RTC functionality
-+	  along with alarm. This driver supports the RTC driver for
-+	  the TPS6594 RTC module.
++	  This driver supports the GPIO for the TPS6594 PMICs.
++	  chip family.
 +
- config RTC_DRV_TPS65910
- 	tristate "TI TPS65910 RTC driver"
- 	depends on MFD_TPS65910
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index d3c042dcbc73..7dbeec711ad5 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -174,6 +174,7 @@ obj-$(CONFIG_RTC_DRV_TEGRA)	+= rtc-tegra.o
- obj-$(CONFIG_RTC_DRV_TEST)	+= rtc-test.o
- obj-$(CONFIG_RTC_DRV_TI_K3)	+= rtc-ti-k3.o
- obj-$(CONFIG_RTC_DRV_TPS6586X)	+= rtc-tps6586x.o
-+obj-$(CONFIG_RTC_DRV_TPS6594)	+= rtc-tps6594.o
- obj-$(CONFIG_RTC_DRV_TPS65910)	+= rtc-tps65910.o
- obj-$(CONFIG_RTC_DRV_TWL4030)	+= rtc-twl.o
- obj-$(CONFIG_RTC_DRV_V3020)	+= rtc-v3020.o
-diff --git a/drivers/rtc/rtc-tps6594.c b/drivers/rtc/rtc-tps6594.c
+ config PINCTRL_ZYNQ
+ 	bool "Pinctrl driver for Xilinx Zynq"
+ 	depends on ARCH_ZYNQ
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index d5939840bb2a..ba7149883a06 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -49,6 +49,7 @@ obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
+ obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
+ obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
+ obj-$(CONFIG_PINCTRL_THUNDERBAY) += pinctrl-thunderbay.o
++obj-$(CONFIG_PINCTRL_TPS6594) += pinctrl-tps6594.o
+ obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
+ obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
+ 
+diff --git a/drivers/pinctrl/pinctrl-tps6594.c b/drivers/pinctrl/pinctrl-tps6594.c
 new file mode 100644
-index 000000000000..f150ef33f65f
+index 000000000000..8decf758ff54
 --- /dev/null
-+++ b/drivers/rtc/rtc-tps6594.c
-@@ -0,0 +1,516 @@
++++ b/drivers/pinctrl/pinctrl-tps6594.c
+@@ -0,0 +1,367 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * RTC driver for tps6594 PMIC
++ * Pinmux and GPIO driver for tps6594 PMIC
 + *
 + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
 + */
 +
-+#include <linux/bcd.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/math64.h>
++#define DEBUG
++
++#include <linux/gpio/driver.h>
 +#include <linux/module.h>
-+#include <linux/rtc.h>
-+#include <linux/types.h>
 +#include <linux/platform_device.h>
-+#include <linux/property.h>
++#include <linux/pinctrl/pinmux.h>
 +
 +#include <linux/mfd/tps6594.h>
 +
-+struct tps6594_rtc {
-+	struct rtc_device *rtc;
++#define TPS6594_GPIO_DIR_IN 0
++#define TPS6594_GPIO_DIR_OUT TPS6594_BIT_GPIO_DIR
++#define TPS6594_PINCTRL_PINS_NB 11
++
++#define TPS6594_PINCTRL_GPIO_FUNCTION 0
++#define TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION 1
++#define TPS6594_PINCTRL_TRIG_WDOG_FUNCTION 1
++#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION 1
++#define TPS6594_PINCTRL_SCLK_SPMI_FUNCTION 1
++#define TPS6594_PINCTRL_SDATA_SPMI_FUNCTION 1
++#define TPS6594_PINCTRL_NERR_MCU_FUNCTION 1
++#define TPS6594_PINCTRL_PDOG_FUNCTION 1
++#define TPS6594_PINCTRL_SYNCCLKIN_FUNCTION 1
++#define TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION 2
++#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION 2
++#define TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION 2
++#define TPS6594_PINCTRL_NERR_SOC_FUNCTION 2
++#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION 3
++#define TPS6594_PINCTRL_NSLEEP1_FUNCTION 4
++#define TPS6594_PINCTRL_NSLEEP2_FUNCTION 5
++#define TPS6594_PINCTRL_WKUP1_FUNCTION 6
++#define TPS6594_PINCTRL_WKUP2_FUNCTION 7
++
++/* Special muxval for recalcitrant pins */
++#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8 2
++#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8 3
++#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9 3
++
++#define TPS6594_OFFSET_GPIO_SEL 5
++
++static const struct pinctrl_pin_desc tps6594_pins[TPS6594_PINCTRL_PINS_NB] = {
++	PINCTRL_PIN(0, "GPIO0"),   PINCTRL_PIN(1, "GPIO1"),
++	PINCTRL_PIN(2, "GPIO2"),   PINCTRL_PIN(3, "GPIO3"),
++	PINCTRL_PIN(4, "GPIO4"),   PINCTRL_PIN(5, "GPIO5"),
++	PINCTRL_PIN(6, "GPIO6"),   PINCTRL_PIN(7, "GPIO7"),
++	PINCTRL_PIN(8, "GPIO8"),   PINCTRL_PIN(9, "GPIO9"),
++	PINCTRL_PIN(10, "GPIO10"),
 +};
 +
-+#define TPS6594_GET_TIME_ON TPS6594_BIT_GET_TIME
-+#define TPS6594_GET_TIME_OFF 0
-+#define TPS6594_IT_ALARM_ON TPS6594_BIT_IT_ALARM
-+#define TPS6594_IT_ALARM_OFF 0
-+#define TPS6594_AUTO_COMP_ON TPS6594_BIT_IT_ALARM
++static const char *groups_name[TPS6594_PINCTRL_PINS_NB] = {
++	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
++	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10"
++};
 +
-+/* Total number of RTC registers needed to set time*/
-+#define NUM_TIME_REGS (TPS6594_REG_RTC_WEEKS - TPS6594_REG_RTC_SECONDS + 1)
++struct tps6594_pinctrl_function {
++	const char *name;
++	u8 muxval;
++	const char **groups;
++	unsigned long ngroups;
++};
 +
-+/* Total number of RTC alarm register */
-+#define NUM_TIME_ALARM_REGS (NUM_TIME_REGS - 1)
++static const struct tps6594_pinctrl_function pinctrl_functions[] = {
++	{ "gpio", TPS6594_PINCTRL_GPIO_FUNCTION, groups_name,
++	  TPS6594_PINCTRL_PINS_NB },
++	{ "nsleep1", TPS6594_PINCTRL_NSLEEP1_FUNCTION, groups_name,
++	  TPS6594_PINCTRL_PINS_NB },
++	{ "nsleep2", TPS6594_PINCTRL_NSLEEP2_FUNCTION, groups_name,
++	  TPS6594_PINCTRL_PINS_NB },
++	{ "wkup1", TPS6594_PINCTRL_WKUP1_FUNCTION, groups_name,
++	  TPS6594_PINCTRL_PINS_NB },
++	{ "wkup2", TPS6594_PINCTRL_WKUP2_FUNCTION, groups_name,
++	  TPS6594_PINCTRL_PINS_NB },
++	{ "scl_i2c2-cs_spi", TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION,
++	  (const char *[]){ "GPIO0", "GPIO1" }, 2 },
++	{ "nrstout_soc", TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION,
++	  (const char *[]){ "GPIO0", "GPIO10" }, 2 },
++	{ "trig_wdog", TPS6594_PINCTRL_TRIG_WDOG_FUNCTION,
++	  (const char *[]){ "GPIO1", "GPIO10" }, 2 },
++	{ "sda_i2c2-sdo_spi", TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION,
++	  (const char *[]){ "GPIO1" }, 1 },
++	{ "clk32kout", TPS6594_PINCTRL_CLK32KOUT_FUNCTION,
++	  (const char *[]){ "GPIO2", "GPIO3", "GPIO7" }, 3 },
++	{ "nerr_soc", TPS6594_PINCTRL_NERR_SOC_FUNCTION,
++	  (const char *[]){ "GPIO2" }, 1 },
++	{ "sclk_spmi", TPS6594_PINCTRL_SCLK_SPMI_FUNCTION,
++	  (const char *[]){ "GPIO4" }, 1 },
++	{ "sdata_spmi", TPS6594_PINCTRL_SDATA_SPMI_FUNCTION,
++	  (const char *[]){ "GPIO5" }, 1 },
++	{ "nerr_mcu", TPS6594_PINCTRL_NERR_MCU_FUNCTION,
++	  (const char *[]){ "GPIO6" }, 1 },
++	{ "syncclkout", TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION,
++	  (const char *[]){ "GPIO7", "GPIO9" }, 2 },
++	{ "disable_wdog", TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION,
++	  (const char *[]){ "GPIO7", "GPIO8" }, 2 },
++	{ "pdog", TPS6594_PINCTRL_PDOG_FUNCTION, (const char *[]){ "GPIO8" },
++	  1 },
++	{ "syncclkin", TPS6594_PINCTRL_SYNCCLKIN_FUNCTION,
++	  (const char *[]){ "GPIO9" }, 1 },
++};
 +
-+/* Total number of RTC registers needed to set compensation registers */
-+#define NUM_COMP_REGS (TPS6594_REG_RTC_COMP_MSB - TPS6594_REG_RTC_COMP_LSB + 1)
++struct tps6594_pinctrl {
++	struct tps6594 *tps;
++	struct gpio_chip gpio_chip;
++	struct pinctrl_dev *pctl_dev;
++	const struct tps6594_pinctrl_function *funcs;
++	const struct pinctrl_pin_desc *pins;
++};
 +
-+/* Min and max values supported with 'offset' interface (swapped sign)
-+ * After conversion, the values does not exceed the range [-32767, 33767] which COMP_REG must
-+ * conform to
-+ */
-+#define MIN_OFFSET (-277774)
-+#define MAX_OFFSET (277774)
-+
-+/* Number of ticks per hour */
-+#define TICKS_PER_HOUR (32768 * 3600)
-+
-+/* Multiplier for ppb conversions */
-+#define PPB_MULT (1000000000LL)
-+
-+static int tps6594_rtc_alarm_irq_enable(struct device *dev,
-+					unsigned int enabled)
++static int tps6594_gpio_get(struct gpio_chip *gc, unsigned int offset)
 +{
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	u8 val = 0;
-+	int ret;
++	struct tps6594_pinctrl *pinctrl = gpiochip_get_data(gc);
++	int ret, val;
 +
-+	val = enabled ? TPS6594_IT_ALARM_ON : TPS6594_IT_ALARM_OFF;
-+
-+	ret = regmap_update_bits(tps->regmap, TPS6594_REG_RTC_INTERRUPTS,
-+				 TPS6594_BIT_IT_ALARM, val);
-+
-+	return ret;
-+}
-+
-+/* Pulse GET_TIME field of RTC_CTRL_1 to store a timestamp in shadow registers */
-+static int tps6594_rtc_shadow_timestamp(struct device *dev, struct tps6594 *tps)
-+{
-+	int ret;
-+
-+	/* Set GET_TIME to 0. This way, next time we set GET_TIME to 1 we are sure to store an
-+	 * up-to-date timestamp
-+	 */
-+	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-+				TPS6594_BIT_GET_TIME);
-+	if (ret < 0) {
-+		dev_err(dev, "RTC CTRL1 reg update failed with err:%d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Copy content of RTC registers to shadow registers or latches to read a coherent
-+	 *  timestamp
-+	 */
-+	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-+			      TPS6594_BIT_GET_TIME);
-+	if (ret < 0) {
-+		dev_err(dev, "RTC CTRL1 reg update failed with err:%d\n", ret);
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * Gets current tps6594 RTC time and date parameters.
-+ *
-+ * The RTC's time/alarm representation is not what gmtime(3) requires
-+ * Linux to use:
-+ *
-+ *  - Months are 1..12 vs Linux 0-11
-+ *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-+ */
-+static int tps6594_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	unsigned char rtc_data[NUM_TIME_REGS];
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	int ret;
-+
-+	ret = tps6594_rtc_shadow_timestamp(dev, tps);
-+	if (ret < 0) {
-+		dev_err(dev,
-+			"failed to store a timestamp in shadow registers:%d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	/* Read shadowed RTC registers */
-+	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-+			       NUM_TIME_REGS);
-+	if (ret < 0) {
-+		dev_err(dev, "rtc_read_time failed with error :%d\n", ret);
-+		return ret;
-+	}
-+
-+	tm->tm_sec = bcd2bin(rtc_data[0]);
-+	tm->tm_min = bcd2bin(rtc_data[1]);
-+	tm->tm_hour = bcd2bin(rtc_data[2]);
-+	tm->tm_mday = bcd2bin(rtc_data[3]);
-+	tm->tm_mon = bcd2bin(rtc_data[4]) - 1;
-+	tm->tm_year = bcd2bin(rtc_data[5]) + 100;
-+	tm->tm_wday = bcd2bin(rtc_data[6]);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Sets current tps6594 RTC time and date parameters.
-+ *
-+ * The RTC's time/alarm representation is not what gmtime(3) requires
-+ * Linux to use:
-+ *
-+ *  - Months are 1..12 vs Linux 0-11
-+ *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-+ */
-+static int tps6594_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	unsigned char rtc_data[NUM_TIME_REGS];
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	int ret;
-+
-+	rtc_data[0] = bin2bcd(tm->tm_sec);
-+	rtc_data[1] = bin2bcd(tm->tm_min);
-+	rtc_data[2] = bin2bcd(tm->tm_hour);
-+	rtc_data[3] = bin2bcd(tm->tm_mday);
-+	rtc_data[4] = bin2bcd(tm->tm_mon + 1);
-+	rtc_data[5] = bin2bcd(tm->tm_year - 100);
-+	rtc_data[6] = bin2bcd(tm->tm_wday);
-+
-+	/* Stop RTC while updating the RTC time registers */
-+	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-+				TPS6594_BIT_STOP_RTC);
-+	if (ret < 0) {
-+		dev_err(dev, "RTC stop failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Update all the time registers in one shot */
-+	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-+				NUM_TIME_REGS);
-+	if (ret < 0) {
-+		dev_err(dev, "rtc_set_time failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Start back RTC */
-+	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-+			      TPS6594_BIT_STOP_RTC);
++	ret = regmap_read(pinctrl->tps->regmap, TPS6594_REG_GPIOX_IN(offset),
++			  &val);
 +	if (ret < 0)
-+		dev_err(dev, "RTC start failed: %d\n", ret);
++		return ret;
 +
-+	return ret;
++	val = (val & TPS6594_BIT_GPIOX_IN(offset)) > 0;
++
++	return val;
 +}
 +
-+/*
-+ * Gets current tps6594 RTC alarm time.
-+ */
-+static int tps6594_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
++static void tps6594_gpio_set(struct gpio_chip *gc, unsigned int offset,
++			     int value)
 +{
-+	unsigned char alarm_data[NUM_TIME_ALARM_REGS];
-+	u32 int_val;
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
++	struct tps6594_pinctrl *pinctrl = gpiochip_get_data(gc);
++	unsigned int set_register = TPS6594_REG_GPIOX_OUT(offset);
 +	int ret;
 +
-+	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_ALARM_SECONDS,
-+			       alarm_data, NUM_TIME_ALARM_REGS);
++	ret = regmap_update_bits(pinctrl->tps->regmap, set_register,
++				 TPS6594_BIT_GPIOX_OUT(offset),
++				 value ? TPS6594_BIT_GPIOX_OUT(offset) : 0);
++	if (ret < 0)
++		dev_err(pinctrl->tps->dev,
++			"gpio_set failed to set GPIO%d to %d: %d\n", offset,
++			value, ret);
++}
++
++static int tps6594_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
++{
++	struct tps6594_pinctrl *pinctrl = gpiochip_get_data(gc);
++	int ret;
++
++	ret = regmap_test_bits(pinctrl->tps->regmap,
++			       TPS6594_REG_GPIOX_CONF(offset),
++			       TPS6594_BIT_GPIO_DIR);
 +	if (ret < 0) {
-+		dev_err(dev, "rtc_read_alarm failed read alarm registers: %d\n",
++		dev_err(pinctrl->tps->dev,
++			"gpio_get_direction for GPIO%d failed: %d\n", offset,
 +			ret);
 +		return ret;
 +	}
-+
-+	alm->time.tm_sec = bcd2bin(alarm_data[0]);
-+	alm->time.tm_min = bcd2bin(alarm_data[1]);
-+	alm->time.tm_hour = bcd2bin(alarm_data[2]);
-+	alm->time.tm_mday = bcd2bin(alarm_data[3]);
-+	alm->time.tm_mon = bcd2bin(alarm_data[4]) - 1;
-+	alm->time.tm_year = bcd2bin(alarm_data[5]) + 100;
-+
-+	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_INTERRUPTS, &int_val);
-+	if (ret < 0) {
-+		dev_err(dev, "rtc_read_alarm failed to read alarm status: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	alm->enabled = int_val & TPS6594_BIT_IT_ALARM ? 1 : 0;
-+
-+	return ret;
-+}
-+
-+static int tps6594_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
-+{
-+	unsigned char alarm_data[NUM_TIME_ALARM_REGS];
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	int ret;
-+
-+	/* Disable alarm irq before changing the alarm timestamp */
-+	ret = tps6594_rtc_alarm_irq_enable(dev, 0);
-+	if (ret) {
-+		dev_err(dev, "rtc_set_alarm failed to disable alarm: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	alarm_data[0] = bin2bcd(alm->time.tm_sec);
-+	alarm_data[1] = bin2bcd(alm->time.tm_min);
-+	alarm_data[2] = bin2bcd(alm->time.tm_hour);
-+	alarm_data[3] = bin2bcd(alm->time.tm_mday);
-+	alarm_data[4] = bin2bcd(alm->time.tm_mon + 1);
-+	alarm_data[5] = bin2bcd(alm->time.tm_year - 100);
-+
-+	/* Update all the alarm registers in one shot */
-+	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_ALARM_SECONDS,
-+				alarm_data, NUM_TIME_ALARM_REGS);
-+	if (ret) {
-+		dev_err(dev,
-+			"rtc_set_alarm failed to write alarm registers: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	if (alm->enabled) {
-+		ret = tps6594_rtc_alarm_irq_enable(dev, 1);
-+		if (ret < 0) {
-+			dev_err(dev,
-+				"rtc_set_alarm failed to re-enable the alarm: %d\n",
-+				ret);
-+			return ret;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int tps6594_rtc_set_calibration(struct device *dev, int calibration)
-+{
-+	unsigned char comp_data[NUM_COMP_REGS];
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	s16 value;
-+	int ret;
 +
 +	/*
-+	 * TPS6594 uses two's complement 16 bit value for compensation for RTC
-+	 * crystal inaccuracies. One time every hour when seconds counter
-+	 * increments from 0 to 1 compensation value will be added to internal
-+	 * RTC counter value.
-+	 *
-+	 *
-+	 * Valid range for compensation value: [-32767 .. 32767]
++	 * TPS6594 direction is 0 = input and 1 = output but Linux direction is 0 = output and
++	 * 1 = input
++	 * Let's invert our value
 +	 */
-+	if (calibration < -32767 || calibration > 32767) {
-+		dev_err(dev, "RTC calibration value out of range: %d\n",
-+			calibration);
-+		return -EINVAL;
-+	}
++	return !ret;
++}
 +
-+	value = (s16)calibration;
++static int tps6594_gpio_change_direction(struct gpio_chip *gc,
++					 unsigned int offset,
++					 unsigned int direction)
++{
++	struct tps6594_pinctrl *pinctrl = gpiochip_get_data(gc);
++	int ret;
 +
-+	comp_data[0] = (u16)value & 0xFF;
-+	comp_data[1] = ((u16)value >> 8) & 0xFF;
-+
-+	/* Update all the compensation registers in one shot */
-+	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_RTC_COMP_LSB,
-+				comp_data, NUM_COMP_REGS);
-+	if (ret < 0) {
-+		dev_err(dev,
-+			"rtc_set_calibration failed to write compensation value: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	/* Enable automatic compensation */
-+	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-+			      TPS6594_BIT_AUTO_COMP);
++	ret = regmap_update_bits(pinctrl->tps->regmap,
++				 TPS6594_REG_GPIOX_CONF(offset),
++				 TPS6594_BIT_GPIO_DIR, direction);
 +	if (ret < 0)
-+		dev_err(dev,
-+			"rtc_set_calibration failed to enable auto_comp: %d\n",
-+			ret);
++		dev_err(pinctrl->tps->dev,
++			"gpio_change_direction for GPIO%d to %u direction failed: %d\n",
++			offset, direction, ret);
 +
 +	return ret;
 +}
 +
-+static int tps6594_rtc_get_calibration(struct device *dev, int *calibration)
++static int tps6594_gpio_direction_input(struct gpio_chip *gc,
++					unsigned int offset)
 +{
-+	unsigned char comp_data[NUM_COMP_REGS];
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	unsigned int ctrl;
-+	u16 value;
-+	int ret;
-+
-+	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_CTRL_1, &ctrl);
-+	if (ret < 0) {
-+		dev_err(dev,
-+			"rtc_get_calibration failed to read control register 1: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	/* If automatic compensation is not enabled report back zero */
-+	if (!(ctrl & TPS6594_BIT_AUTO_COMP)) {
-+		*calibration = 0;
-+		return 0;
-+	}
-+
-+	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_COMP_LSB, comp_data,
-+			       NUM_COMP_REGS);
-+	if (ret < 0) {
-+		dev_err(dev,
-+			"rtc_get_calibration failed to read compensation registers: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	value = (u16)comp_data[0] | ((u16)comp_data[1] << 8);
-+
-+	*calibration = (s16)value;
-+
-+	return 0;
++	return tps6594_gpio_change_direction(gc, offset, TPS6594_GPIO_DIR_IN);
 +}
 +
-+static int tps6594_rtc_read_offset(struct device *dev, long *offset)
++static int tps6594_gpio_direction_output(struct gpio_chip *gc,
++					 unsigned int offset, int value)
 +{
-+	int calibration;
-+	s64 tmp;
-+	int ret;
++	tps6594_gpio_set(gc, offset, value);
 +
-+	ret = tps6594_rtc_get_calibration(dev, &calibration);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Convert from RTC calibration register format to ppb format */
-+	tmp = calibration * (s64)PPB_MULT;
-+	if (tmp < 0)
-+		tmp -= TICKS_PER_HOUR / 2LL;
-+	else
-+		tmp += TICKS_PER_HOUR / 2LL;
-+	tmp = div_s64(tmp, TICKS_PER_HOUR);
-+
-+	/* Offset value operates in negative way, so swap sign.
-+	 * See 8.3.10.5, (32768 - COMP_REG)
-+	 */
-+	*offset = (long)-tmp;
-+
-+	return 0;
++	return tps6594_gpio_change_direction(gc, offset, TPS6594_GPIO_DIR_OUT);
 +}
 +
-+static int tps6594_rtc_set_offset(struct device *dev, long offset)
-+{
-+	int calibration;
-+	s64 tmp;
-+	int ret;
-+
-+	/* Make sure offset value is within supported range */
-+	if (offset < MIN_OFFSET || offset > MAX_OFFSET)
-+		return -ERANGE;
-+
-+	/* Convert from ppb format to RTC calibration register format */
-+	tmp = offset * (s64)TICKS_PER_HOUR;
-+	if (tmp < 0)
-+		tmp -= PPB_MULT / 2LL;
-+	else
-+		tmp += PPB_MULT / 2LL;
-+	tmp = div_s64(tmp, PPB_MULT);
-+
-+	/* Offset value operates in negative way, so swap sign */
-+	calibration = (int)-tmp;
-+
-+	ret = tps6594_rtc_set_calibration(dev, calibration);
-+
-+	return ret;
-+}
-+
-+static irqreturn_t tps6594_rtc_interrupt(int irq, void *rtc)
-+{
-+	struct device *dev = rtc;
-+	unsigned long events = 0;
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	struct tps6594_rtc *tps_rtc = dev_get_drvdata(dev);
-+	int ret;
-+	u32 rtc_reg;
-+
-+	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_STATUS, &rtc_reg);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	if (rtc_reg & TPS6594_BIT_ALARM)
-+		events = RTC_IRQF | RTC_AF;
-+
-+	/* Notify RTC core on event */
-+	rtc_update_irq(tps_rtc->rtc, 1, events);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct rtc_class_ops tps6594_rtc_ops = {
-+	.read_time = tps6594_rtc_read_time,
-+	.set_time = tps6594_rtc_set_time,
-+	.read_alarm = tps6594_rtc_read_alarm,
-+	.set_alarm = tps6594_rtc_set_alarm,
-+	.alarm_irq_enable = tps6594_rtc_alarm_irq_enable,
-+	.read_offset = tps6594_rtc_read_offset,
-+	.set_offset = tps6594_rtc_set_offset,
++static const struct gpio_chip template_gpio_chip = {
++	.label = "tps6594-gpio",
++	.owner = THIS_MODULE,
++	.get_direction = tps6594_gpio_get_direction,
++	.direction_input = tps6594_gpio_direction_input,
++	.direction_output = tps6594_gpio_direction_output,
++	.get = tps6594_gpio_get,
++	.set = tps6594_gpio_set,
++	.base = -1,
++	.ngpio = TPS6594_PINCTRL_PINS_NB,
++	.can_sleep = true,
 +};
 +
-+static int tps6594_rtc_probe(struct platform_device *pdev)
++static int tps6594_pmx_func_cnt(struct pinctrl_dev *pctldev)
 +{
-+	struct tps6594 *tps6594;
-+	struct tps6594_rtc *tps_rtc;
-+	int irq;
-+	int ret;
++	return ARRAY_SIZE(pinctrl_functions);
++}
 +
-+	tps6594 = dev_get_drvdata(pdev->dev.parent);
++static const char *tps6594_pmx_func_name(struct pinctrl_dev *pctldev,
++					 unsigned int selector)
++{
++	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
 +
-+	tps_rtc = devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
-+			       GFP_KERNEL);
-+	if (!tps_rtc)
++	return pinctrl->funcs[selector].name;
++}
++
++static int tps6594_pmx_func_groups(struct pinctrl_dev *pctldev,
++				   unsigned int selector,
++				   const char *const **groups,
++				   unsigned int *num_groups)
++{
++	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
++
++	*groups = pinctrl->funcs[selector].groups;
++	*num_groups = pinctrl->funcs[selector].ngroups;
++
++	return 0;
++}
++
++static int tps6594_pmx_set(struct tps6594_pinctrl *pinctrl, unsigned int pin,
++			   u8 muxval)
++{
++	u8 mux_sel_val = muxval << TPS6594_OFFSET_GPIO_SEL;
++
++	return regmap_update_bits(pinctrl->tps->regmap,
++				  TPS6594_REG_GPIOX_CONF(pin),
++				  TPS6594_MASK_GPIO_SEL, mux_sel_val);
++}
++
++static int tps6594_pmx_set_mux(struct pinctrl_dev *pctldev,
++			       unsigned int function, unsigned int group)
++{
++	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
++	u8 muxval = pinctrl->funcs[function].muxval;
++
++	/* Some pins don't have the same muxval for the same function... */
++	if (group == 8) {
++		if (muxval == TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION)
++			muxval = TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8;
++		else if (muxval == TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION)
++			muxval = TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8;
++	} else if (group == 9) {
++		if (muxval == TPS6594_PINCTRL_CLK32KOUT_FUNCTION)
++			muxval = TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9;
++	}
++
++	return tps6594_pmx_set(pinctrl, group, muxval);
++}
++
++static int tps6594_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
++					  struct pinctrl_gpio_range *range,
++					  unsigned int offset, bool input)
++{
++	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
++	u8 muxval = pinctrl->funcs[TPS6594_PINCTRL_GPIO_FUNCTION].muxval;
++
++	return tps6594_pmx_set(pinctrl, offset, muxval);
++}
++
++static const struct pinmux_ops tps6594_pmx_ops = {
++	.get_functions_count = tps6594_pmx_func_cnt,
++	.get_function_name = tps6594_pmx_func_name,
++	.get_function_groups = tps6594_pmx_func_groups,
++	.set_mux = tps6594_pmx_set_mux,
++	.gpio_set_direction = tps6594_pmx_gpio_set_direction,
++	.strict = true,
++};
++
++static int tps6594_groups_cnt(struct pinctrl_dev *pctldev)
++{
++	return ARRAY_SIZE(tps6594_pins);
++}
++
++static int tps6594_group_pins(struct pinctrl_dev *pctldev,
++			      unsigned int selector, const unsigned int **pins,
++			      unsigned int *num_pins)
++{
++	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
++
++	*pins = (unsigned int *)&pinctrl->pins[selector];
++	*num_pins = 1;
++
++	return 0;
++}
++
++static const char *tps6594_group_name(struct pinctrl_dev *pctldev,
++				      unsigned int selector)
++{
++	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
++
++	return pinctrl->pins[selector].name;
++}
++
++static const struct pinctrl_ops tps6594_pctrl_ops = {
++	.dt_node_to_map = pinconf_generic_dt_node_to_map_group,
++	.dt_free_map = pinconf_generic_dt_free_map,
++	.get_groups_count = tps6594_groups_cnt,
++	.get_group_name = tps6594_group_name,
++	.get_group_pins = tps6594_group_pins,
++};
++
++static int tps6594_pinctrl_probe(struct platform_device *pdev)
++{
++	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
++	struct tps6594_pinctrl *pinctrl;
++	struct pinctrl_desc *pctrl_desc;
++
++	pinctrl = devm_kzalloc(&pdev->dev, sizeof(*pinctrl), GFP_KERNEL);
++	if (!pinctrl)
 +		return -ENOMEM;
 +
-+	tps_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(tps_rtc->rtc))
-+		return PTR_ERR(tps_rtc->rtc);
++	pinctrl->tps = dev_get_drvdata(pdev->dev.parent);
++	pinctrl->gpio_chip = template_gpio_chip;
++	pinctrl->gpio_chip.parent = tps->dev;
 +
-+	/* Enable crystal oscillator */
-+	ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
-+			      TPS6594_BIT_XTAL_EN);
-+	if (ret < 0)
-+		return ret;
++	pctrl_desc = devm_kzalloc(&pdev->dev, sizeof(*pctrl_desc), GFP_KERNEL);
++	if (!pctrl_desc)
++		return -ENOMEM;
 +
-+	/* Start rtc */
-+	ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
-+			      TPS6594_BIT_STOP_RTC);
-+	if (ret < 0)
-+		return ret;
-+
-+	mdelay(100);
-+
-+	/*
-+	 * RTC should be running now. Check if this is the case.
-+	 * If not it might be a missing oscillator.
-+	 */
-+	ret = regmap_test_bits(tps6594->regmap, TPS6594_REG_RTC_STATUS,
-+			       TPS6594_BIT_RUN);
-+	if (ret < 0)
-+		return ret;
-+	if (ret == 0)
-+		return -ENODEV;
-+
-+	platform_set_drvdata(pdev, tps_rtc);
-+
-+	irq = platform_get_irq_byname(pdev, TPS6594_IRQ_NAME_ALARM);
-+	if (irq < 0) {
-+		dev_err(&pdev->dev, "Failed to get irq\n");
-+		return irq;
++	pctrl_desc->name = dev_name(&pdev->dev);
++	pctrl_desc->owner = THIS_MODULE;
++	pctrl_desc->pins = tps6594_pins;
++	pctrl_desc->npins = ARRAY_SIZE(tps6594_pins);
++	pctrl_desc->pctlops = &tps6594_pctrl_ops;
++	pctrl_desc->pmxops = &tps6594_pmx_ops;
++	pinctrl->funcs = pinctrl_functions;
++	pinctrl->pins = tps6594_pins;
++	pinctrl->pctl_dev =
++		devm_pinctrl_register(&pdev->dev, pctrl_desc, pinctrl);
++	if (IS_ERR(pinctrl->pctl_dev)) {
++		dev_err(&pdev->dev, "Couldn't register pinctrl driver\n");
++		return PTR_ERR(pinctrl->pctl_dev);
 +	}
 +
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+					tps6594_rtc_interrupt, IRQF_ONESHOT,
-+					TPS6594_IRQ_NAME_ALARM, &pdev->dev);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Failed to request_threaded_irq\n");
-+		return ret;
-+	}
-+
-+	tps_rtc->rtc->ops = &tps6594_rtc_ops;
-+	tps_rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	tps_rtc->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	return devm_rtc_register_device(tps_rtc->rtc);
++	return devm_gpiochip_add_data(&pdev->dev, &pinctrl->gpio_chip, pinctrl);
 +}
 +
-+static struct platform_driver tps6594_rtc_driver = {
-+	.probe		= tps6594_rtc_probe,
-+	.driver		= {
-+		.name	= "tps6594-rtc",
-+	},
++static struct platform_driver tps6594_pinctrl_driver = {
++	.driver = { .name = "tps6594-pinctrl" },
++	.probe = tps6594_pinctrl_probe,
 +};
++module_platform_driver(tps6594_pinctrl_driver);
 +
-+module_platform_driver(tps6594_rtc_driver);
-+
-+MODULE_ALIAS("platform:tps6594-rtc");
++MODULE_ALIAS("platform:tps6594-pinctrl");
 +MODULE_AUTHOR("Esteban Blanc <eblanc@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 RTC driver");
++MODULE_DESCRIPTION("TPS6594 pinctrl and GPIO driver");
 +MODULE_LICENSE("GPL");
 -- 
 2.38.1
