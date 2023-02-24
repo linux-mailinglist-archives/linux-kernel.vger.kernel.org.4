@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E676A1553
+	by mail.lfdr.de (Postfix) with ESMTP id F24986A1555
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjBXD1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S229836AbjBXD1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBXD07 (ORCPT
+        with ESMTP id S229445AbjBXD1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:26:59 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AE94ECF7;
-        Thu, 23 Feb 2023 19:26:58 -0800 (PST)
+        Thu, 23 Feb 2023 22:27:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B9515C6;
+        Thu, 23 Feb 2023 19:27:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=PyOIrIQ40A989oDPmdzXDCc7yzBUmFmPHD6fjPINY60=; b=mlpgbniti13aApcxkm+llzBkW5
-        NuTs4hjCeTIDB4oiIzguaz6NqplNjCVvxjVddf9Zbsx4vb2gt745lMqBr6rirKqMmQAyTEcR+EwZn
-        OQWymosDnTRzzdUkmw3rkmSYiEVzTCLlhhVCLD3Zph5ry8fzvgjYEE2REv7XSeOP/upgZZxWVcK9r
-        ZybXokMn1pYHh2CyA3tY/cqDHP0tEGhqYJWLr92/lnwstkUqkq+wmQnYAZDN3YajvsSgtz0MizuBy
-        DzLBoEe5L0g1P2XK+7K5RpWjaPuBQqCBI/6w/ztPkQ0s0iNhGTJkm84XJ5tio/BO6Pr530YpfolXn
-        21nfkfHA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pVOjZ-00Bs5N-0M;
-        Fri, 24 Feb 2023 03:26:57 +0000
-Date:   Fri, 24 Feb 2023 03:26:57 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [git pull] vfs.git sysv pile
-Message-ID: <Y/gugbqq858QXJBY@ZenIV>
+        bh=3IhXFWZbsoRSpNhQKpLcLNnprR4jfrb5zB61a/c73DM=; b=TvJszvU6fu+GFni5Ufd2ji7V0n
+        rI22ILCnkzDwWKe8PUnCgs2zeK0O6Rm6HChCToBO1HqhRUB+0s6jeckV3UPZuO0IGg650u6uaV8cb
+        KWg48RrES0dfHlpkP2SBcJiSZ54+8ILjllVMDgDnS8Xr9Fc53sqMk3rqB28D4BSC6ET9QfLN9LLd2
+        eLHricqsAOb1z+YBHw+7izQvqnqYdH6LP6HC5kWay5yH+tfSkMKG8Xa4+f6rk044cBgu/obZaLOrc
+        jkskMiyRi5nbTWhnQ0Moj7BdQeRIHykwrfayh6v023BI5QrHOKPzjBYcmMQHClPl/NMJz2paQ9Ak7
+        EDfWtiBw==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVOji-0014K7-Fa; Fri, 24 Feb 2023 03:27:06 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Rajiv Andrade <srajiv@linux.vnet.ibm.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Subject: [PATCH] IMA: allow/fix UML builds
+Date:   Thu, 23 Feb 2023 19:27:03 -0800
+Message-Id: <20230224032703.7789-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Fabio's "switch to kmap_local_page()" patchset (originally after the
-ext2 counterpart, with a lot of cleaning up done to it; as the matter of
-fact, ext2 side is in need of similar cleanups - calling conventions there
-are bloody awful).  Plus the equivalents of minix stuff...
+UML supports HAS_IOMEM since 0bbadafdc49d (um: allow disabling
+NO_IOMEM).
 
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
+Current IMA build on UML fails on allmodconfig (with TCG_TPM=m):
 
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+ld: security/integrity/ima/ima_queue.o: in function `ima_add_template_entry':
+ima_queue.c:(.text+0x2d9): undefined reference to `tpm_pcr_extend'
+ld: security/integrity/ima/ima_init.o: in function `ima_init':
+ima_init.c:(.init.text+0x43f): undefined reference to `tpm_default_chip'
+ld: security/integrity/ima/ima_crypto.o: in function `ima_calc_boot_aggregate_tfm':
+ima_crypto.c:(.text+0x1044): undefined reference to `tpm_pcr_read'
+ld: ima_crypto.c:(.text+0x10d8): undefined reference to `tpm_pcr_read'
 
-are available in the Git repository at:
+Modify the IMA Kconfig entry so that it selects TCG_TPM if HAS_IOMEM
+is set, regardless of the UML Kconfig setting.
+This updates TCG_TPM from =m to =y and fixes the linker errors.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.sysv
+Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Rajiv Andrade <srajiv@linux.vnet.ibm.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: linux-um@lists.infradead.org
+---
+ security/integrity/ima/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-for you to fetch changes up to abb7c742397324f8676c5b622effdce911cd52e3:
-
-  sysv: fix handling of delete_entry and set_link failures (2023-01-19 23:24:42 -0500)
-
-----------------------------------------------------------------
-Al Viro (1):
-      sysv: fix handling of delete_entry and set_link failures
-
-Christoph Hellwig (1):
-      sysv: don't flush page immediately for DIRSYNC directories
-
-Fabio M. De Francesco (4):
-      fs/sysv: Use the offset_in_page() helper
-      fs/sysv: Change the signature of dir_get_page()
-      fs/sysv: Use dir_put_page() in sysv_rename()
-      fs/sysv: Replace kmap() with kmap_local_page()
-
- fs/sysv/dir.c   | 154 ++++++++++++++++++++++++++++++++------------------------
- fs/sysv/namei.c |  42 ++++++++--------
- fs/sysv/sysv.h  |   3 +-
- 3 files changed, 111 insertions(+), 88 deletions(-)
+diff -- a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -8,7 +8,7 @@ config IMA
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA1
+ 	select CRYPTO_HASH_INFO
+-	select TCG_TPM if HAS_IOMEM && !UML
++	select TCG_TPM if HAS_IOMEM
+ 	select TCG_TIS if TCG_TPM && X86
+ 	select TCG_CRB if TCG_TPM && ACPI
+ 	select TCG_IBMVTPM if TCG_TPM && PPC_PSERIES
