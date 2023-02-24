@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DE96A148C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 02:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51E96A1498
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 02:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjBXBPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 20:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S229577AbjBXB1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 20:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBXBPq (ORCPT
+        with ESMTP id S229448AbjBXB1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 20:15:46 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28F6B77B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 17:15:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677201346; x=1708737346;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QsfdgQZvsGRE9SouMzIYaJNkdCg1AcGM3tcRVJFSpJY=;
-  b=YCGSkWI9oNmMpR4bdjpPCmwg02eGpm0euVTEQDcZsvttEyLsYZJjs+7U
-   OqAROhgDX45f+KaQ5DkDVx8LnjBpkVqIFeu2q1EG2YAMvy8T33oJqFn0P
-   jZdwsRZBj4fKqgIStLLntPTaR/IbywE3Vvkak7psySCqhA3AZPVPow8j7
-   w8JFSbw53Vmu0mrgaRYVYTXLNH92W89ku4P+nTcqPQ+LomVlm8uM5E3wk
-   98B1sZ+Z08ZrWw5Afn7xj5GATBPIdBaNL3mOLRbPOwZnYx+AkVhZyv/7k
-   Ak0921b9e6enZvfstFlgsNajNUEPa97sQr2KpTEKlSi56vALoz0l28y0h
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334789427"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="334789427"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 17:15:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="665998365"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="665998365"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 17:15:43 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     dave@stgolabs.net, paulmck@kernel.org, josh@joshtriplett.org
-Cc:     linux-kernel@vger.kernel.org, qiang1.zhang@intel.com
-Subject: [PATCH v2] locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
-Date:   Fri, 24 Feb 2023 09:20:35 +0800
-Message-Id: <20230224012035.2693610-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 23 Feb 2023 20:27:37 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2355B3756A;
+        Thu, 23 Feb 2023 17:27:33 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8BxIk6EEvhjT2kEAA--.3172S3;
+        Fri, 24 Feb 2023 09:27:32 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK76DEvhjKh46AA--.40084S3;
+        Fri, 24 Feb 2023 09:27:32 +0800 (CST)
+Subject: Re: [PATCH v2 01/29] LoongArch: KVM: Add kvm related header files
+To:     Xi Ruoyao <xry111@xry111.site>, Paolo Bonzini <pbonzini@redhat.com>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-2-zhaotianrui@loongson.cn>
+ <ef024d7e4e0207e76c165c1818d1bb21f07235ab.camel@xry111.site>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <004179bf-2d9c-f534-f40a-646bafc1e2bf@loongson.cn>
+Date:   Fri, 24 Feb 2023 09:27:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <ef024d7e4e0207e76c165c1818d1bb21f07235ab.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxK76DEvhjKh46AA--.40084S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Xr18GFyrZFy7tF4Dtw4xWFg_yoWfuFX_Zw
+        4xAw4kGa1rtrnFqrn2gFn0gF1vga1kt3Wvvw1YvF95Zwn3Xay8Ar4kC34kAasrJ34rtF17
+        ur4kta4fWrZ7XjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        17kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In PREEMPT_RT kernels, both spin_lock() and spin_lock_irq() are converted
-to sleepable rt_spin_lock().  This means that the interrupt related suffix
-for spin_lock/unlock(_irq, irqsave/irqrestore) do not affect the CPU's
-interrupt state. This commit therefore adds raw spin-lock torture tests.
-This in turn permits pure spin locks to be tested in PREEMPT_RT kernels.
 
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/locking/locktorture.c | 56 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index 9425aff08936..153ddc4c47ef 100644
---- a/kernel/locking/locktorture.c
-+++ b/kernel/locking/locktorture.c
-@@ -55,7 +55,7 @@ torture_param(int, nested_locks, 0, "Number of nested locks (max = 8)");
- /* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
- #define MAX_NESTED_LOCKS 8
- 
--static char *torture_type = "spin_lock";
-+static char *torture_type = IS_ENABLED(CONFIG_PREEMPT_RT) ? "raw_spin_lock" : "spin_lock";
- module_param(torture_type, charp, 0444);
- MODULE_PARM_DESC(torture_type,
- 		 "Type of lock to torture (spin_lock, spin_lock_irq, mutex_lock, ...)");
-@@ -257,6 +257,59 @@ static struct lock_torture_ops spin_lock_irq_ops = {
- 	.name		= "spin_lock_irq"
- };
- 
-+static DEFINE_RAW_SPINLOCK(torture_raw_spinlock);
-+
-+static int torture_raw_spin_lock_write_lock(int tid __maybe_unused)
-+__acquires(torture_raw_spinlock)
-+{
-+	raw_spin_lock(&torture_raw_spinlock);
-+	return 0;
-+}
-+
-+static void torture_raw_spin_lock_write_unlock(int tid __maybe_unused)
-+__releases(torture_raw_spinlock)
-+{
-+	raw_spin_unlock(&torture_raw_spinlock);
-+}
-+
-+static struct lock_torture_ops raw_spin_lock_ops = {
-+	.writelock	= torture_raw_spin_lock_write_lock,
-+	.write_delay	= torture_spin_lock_write_delay,
-+	.task_boost	= torture_rt_boost,
-+	.writeunlock	= torture_raw_spin_lock_write_unlock,
-+	.readlock	= NULL,
-+	.read_delay	= NULL,
-+	.readunlock	= NULL,
-+	.name		= "raw_spin_lock"
-+};
-+
-+static int torture_raw_spin_lock_write_lock_irq(int tid __maybe_unused)
-+__acquires(torture_raw_spinlock)
-+{
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&torture_raw_spinlock, flags);
-+	cxt.cur_ops->flags = flags;
-+	return 0;
-+}
-+
-+static void torture_raw_spin_lock_write_unlock_irq(int tid __maybe_unused)
-+__releases(torture_raw_spinlock)
-+{
-+	raw_spin_unlock_irqrestore(&torture_raw_spinlock, cxt.cur_ops->flags);
-+}
-+
-+static struct lock_torture_ops raw_spin_lock_irq_ops = {
-+	.writelock	= torture_raw_spin_lock_write_lock_irq,
-+	.write_delay	= torture_spin_lock_write_delay,
-+	.task_boost	= torture_rt_boost,
-+	.writeunlock	= torture_raw_spin_lock_write_unlock_irq,
-+	.readlock	= NULL,
-+	.read_delay	= NULL,
-+	.readunlock	= NULL,
-+	.name		= "raw_spin_lock_irq"
-+};
-+
- static DEFINE_RWLOCK(torture_rwlock);
- 
- static int torture_rwlock_write_lock(int tid __maybe_unused)
-@@ -1017,6 +1070,7 @@ static int __init lock_torture_init(void)
- 	static struct lock_torture_ops *torture_ops[] = {
- 		&lock_busted_ops,
- 		&spin_lock_ops, &spin_lock_irq_ops,
-+		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
- 		&rw_lock_ops, &rw_lock_irq_ops,
- 		&mutex_lock_ops,
- 		&ww_mutex_lock_ops,
--- 
-2.25.1
+在 2023年02月21日 12:36, Xi Ruoyao 写道:
+> On Mon, 2023-02-20 at 14:57 +0800, Tianrui Zhao wrote:
+>
+> /* snip */
+>
+>> +/*
+>> + * for KVM_GET_FPU and KVM_SET_FPU
+>> + */
+>> +struct kvm_fpu {
+>> +	__u32 fcsr;
+>> +	__u32 none;
+>> +	__u64 fcc;    /* 8x8 */
+>> +	struct kvm_fpureg {
+>> +		__u64 val64[4];	//support max 256 bits
+>> +	} fpr[32];
+> Do we need __attribute__((__aligned__(16))) for fpureg (like
+> sc_extcontext in struct sigcontext)?
+
+Thanks,  the loongarch_fpu variable is already has FPU_ALIGN feature in 
+the kvm_vcpu_arch structure, so it need not to use __aligned__(16).
+
+Thanks
+Tianrui Zhao
+
+>
+>> +};
+>> +
+>> +/*
+>> + * For LOONGARCH, we use KVM_SET_ONE_REG and KVM_GET_ONE_REG to
+>            ^^^^^^^^^
+>            LoongArch
+
+Thanks, I will fix it
+
+Thanks
+Tianrui Zhao
+
+>
+>> access various
+>> + * registers.  The id field is broken down as follows:
+>> + *
+>> + *  bits[63..52] - As per linux/kvm.h
+>> + *  bits[51..32] - Must be zero.
+>> + *  bits[31..16] - Register set.
 
