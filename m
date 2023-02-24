@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760456A1F85
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745326A1F86
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBXQWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 11:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S229754AbjBXQW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 11:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjBXQWG (ORCPT
+        with ESMTP id S229588AbjBXQWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 11:22:06 -0500
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276AF64D74
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:22:04 -0800 (PST)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1677255722; bh=5doeosS9EHjVo4INuIYpNqv+kkFiPbeHbMYZHjoGVWM=;
-        h=From:To:Cc:Subject:Date;
-        b=G8ZShmzQ+zrOvl6A66hdsEM7QQBjCPXjk1zWtDJaDT8gF3BVhGVnR6C3HfcxhjbeJ
-         AWCsjd7GvztCq8pMIfE5F5nN/EgBJgRDJfSBHW+ySkqU09iBnihIg6FlbjgFHmwtRN
-         aHG1X9lB98Yeds3fsNOurHa40DgtwZ5ptNq7OKfA=
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [PATCH] soc: apple: rtkit: Crop syslog messages
-Date:   Fri, 24 Feb 2023 17:21:59 +0100
-Message-Id: <20230224162159.46348-1-povik+lin@cutebit.org>
+        Fri, 24 Feb 2023 11:22:25 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A96267996
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:22:23 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x10so56035158edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:22:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1ddkJIM272NGkB+LdN/hOmq0DPwywAhS02NibdV81Y=;
+        b=bstXxSL+BDGWYBS5i0BfvHRTN5xNltCllunCBSGHMIovfA2Zl4RfJXVwEWe8wBnMcA
+         j/8MypiD9cD6M+qyHUfL5CDqO9YEdIBWUdDzQBViMk5d2c96bWbBg7i6UXH/WXncbAj6
+         aRxK/kG0bgqQB9xcxRQZsAkPeR0Ta+jmZuR/E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s1ddkJIM272NGkB+LdN/hOmq0DPwywAhS02NibdV81Y=;
+        b=VGqGS+jw+aAhqCEzTcABosMCB6Am3Q5sCHnwgQ7mNlbd/jSRolXJ3beEUHiGO7rd1d
+         gPKXXh03VcV0oUvhTe79EPLoBEN+XfMOdKVcX+z1e4ATG0dGdYyf+fwxYbU9WEpU6q1i
+         TGbe7Ok3MkB7YnEGATUI1idS4OxBXTJxxsna5bq/j9wiNEuEs1glRHA8C2cDKplMlMm6
+         Q9F78Pf2Fbk2VyYGTc8jyDSiDe/Es61r38KjGY77Rm84GLzbQsL+nsEHn1fbI4gr1eAd
+         fRafs1NVM9ui3hWZdBQVug2int5cL9AsDyYDsVpufdhJ1nhtV9LMUFdzcs44O/4mxP4Q
+         of1w==
+X-Gm-Message-State: AO0yUKU/1352v32CTkE/RI7xeb4TeKTi7bcIXscseMdJ+VBFc92tXjRy
+        I/3tpdFmoYqfiuyaYoPMnpWo1TojMUPvgOf3zE888Q==
+X-Google-Smtp-Source: AK7set+QM9spzx5nXgu783Ibw8Lc9Ig+CZqpceTmxSP51aaY81ab3Z48eHYY6cZ6d3s5yEzc7FewFA==
+X-Received: by 2002:aa7:c317:0:b0:4ac:b6b2:1233 with SMTP id l23-20020aa7c317000000b004acb6b21233mr15404880edq.30.1677255741509;
+        Fri, 24 Feb 2023 08:22:21 -0800 (PST)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id fe15-20020a1709072a4f00b008d8f1b238fdsm5945346ejc.149.2023.02.24.08.22.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 08:22:20 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id o12so57267391edb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:22:20 -0800 (PST)
+X-Received: by 2002:a50:d619:0:b0:4ab:3a49:68b9 with SMTP id
+ x25-20020a50d619000000b004ab3a4968b9mr7634213edi.5.1677255740399; Fri, 24 Feb
+ 2023 08:22:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk>
+ <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
+ <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
+ <2213409.1677249075@warthog.procyon.org.uk> <2244151.1677251586@warthog.procyon.org.uk>
+In-Reply-To: <2244151.1677251586@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Feb 2023 08:22:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgPPFN0MvHYwtaPAtQkDFHwZrDXxZ+bOWk-qSyGMiLV6g@mail.gmail.com>
+Message-ID: <CAHk-=wgPPFN0MvHYwtaPAtQkDFHwZrDXxZ+bOWk-qSyGMiLV6g@mail.gmail.com>
+Subject: Re: [RFC][PATCH] cifs: Improve use of filemap_get_folios_tag()
+To:     David Howells <dhowells@redhat.com>
+Cc:     Steve French <stfrench@microsoft.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Crop trailing whitespace, null, and newline characters in syslog
-messages received from coprocessors. Notably DCP sends its messages
-including a trailing newline, so prior to this change we would end up
-cluttering the kernel log by repeated newlines at the end of messages.
+On Fri, Feb 24, 2023 at 7:13 AM David Howells <dhowells@redhat.com> wrote:
+>
+> The inefficiency derived from filemap_get_folios_tag() get a batch of
+> contiguous folios in Vishal's change to afs that got copied into cifs can
+> be reduced by skipping over those folios that have been passed by the start
+> position rather than going through the process of locking, checking and
+> trying to write them.
 
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
- drivers/soc/apple/rtkit.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+This patch just makes me go "Ugh".
 
-diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
-index 35ec35aa500d..639f5134d159 100644
---- a/drivers/soc/apple/rtkit.c
-+++ b/drivers/soc/apple/rtkit.c
-@@ -409,11 +409,17 @@ static void apple_rtkit_syslog_rx_init(struct apple_rtkit *rtk, u64 msg)
- 		rtk->syslog_n_entries, rtk->syslog_msg_size);
- }
- 
-+static bool should_crop_syslog_char(char c)
-+{
-+	return c == '\n' || c == '\r' || c == ' ' || c == '\0';
-+}
-+
- static void apple_rtkit_syslog_rx_log(struct apple_rtkit *rtk, u64 msg)
- {
- 	u8 idx = msg & 0xff;
- 	char log_context[24];
- 	size_t entry_size = 0x20 + rtk->syslog_msg_size;
-+	int msglen;
- 
- 	if (!rtk->syslog_msg_buffer) {
- 		dev_warn(
-@@ -446,7 +452,13 @@ static void apple_rtkit_syslog_rx_log(struct apple_rtkit *rtk, u64 msg)
- 			   rtk->syslog_msg_size);
- 
- 	log_context[sizeof(log_context) - 1] = 0;
--	rtk->syslog_msg_buffer[rtk->syslog_msg_size - 1] = 0;
-+
-+	msglen = rtk->syslog_msg_size - 1;
-+	while (msglen > 0 &&
-+		   should_crop_syslog_char(rtk->syslog_msg_buffer[msglen - 1]))
-+		msglen--;
-+
-+	rtk->syslog_msg_buffer[msglen] = 0;
- 	dev_info(rtk->dev, "RTKit: syslog message: %s: %s\n", log_context,
- 		 rtk->syslog_msg_buffer);
- 
--- 
-2.33.0
+There's something wrong with this code for it to need these games.
 
+That  just makes me convinced that your other patch that just gets rid
+of the batching entirely is the right one.
+
+Of course, I'd be even happier if Willy is right and the code could
+use the generic write_cache_pages() and avoid all of these things
+entirely. I'm not clear on why cifs and afs are being so different in
+the first place, and some of the differences are just odd (like that
+skip count).
+
+               Linus
