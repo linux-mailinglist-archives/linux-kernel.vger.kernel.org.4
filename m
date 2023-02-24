@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2A36A245E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2BE6A2462
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjBXWiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 17:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S229603AbjBXWir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 17:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBXWh6 (ORCPT
+        with ESMTP id S229523AbjBXWio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 17:37:58 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9371B2EC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:37:33 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-17235c8dab9so1185532fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:37:33 -0800 (PST)
+        Fri, 24 Feb 2023 17:38:44 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB0213D63;
+        Fri, 24 Feb 2023 14:38:40 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-53852143afcso19670467b3.3;
+        Fri, 24 Feb 2023 14:38:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPIaWXPFHo0fd67ol/Y3q7iwZBF+ha9D9KhIm0046cs=;
-        b=aH6oRAehs/bQJ6pfKcAcemuaekXsVwUnREED4H9pfNRq3UNgFIlhUlELHi5WmN5dbu
-         c9y0mNPdhBCUeYmsDEEl/bcYWZJCgeDXGP/A7yqAXZ87O4KnCQMPPd9jmZU8GE5f44fx
-         UaZ86ICYsNlATe+XNPSGXkPpodmcSCf/3xPoSNoiNlXQ5xXWbSCVNWuNBb+YS7B075Ln
-         rVJAp3Ytv7HNJrFtGI6PlFefRg4ghIs5BMP84nzguD93iVTb1uQnWYUu6rQ8+3bPVWRW
-         xVGdDZ/UAYwCnHQjdBx8A0wjQ46L12jJK51y0zM+8NznpgSVXzG7zEinmFqW7/DktR+M
-         zGMg==
+        bh=IiZXfgYrspTV0X/zg/5bl8O+J9jjbguyQkrt9WII1A0=;
+        b=bzK+Jq7kLQRRdxUfI3rrYPnfSI3JnEffWb9iDWXTH0zft44uEZTbkiVOJXDQdTrACx
+         59XzqxmqHVQCjrcalYuHfMAMDZKQoxSe2WvnX0XCrmjwY/IdV9J+qg1BogLexreysUe/
+         SokQYPWnZtnNi5IN3KBC6XGp6n88V1leOyFWNsyofCONgxYyK8yVnls6D6c15HzNTcPP
+         jzTeweizmYsODUhNV63ps10xzbOpXTwQQGV+HGZen1SeStHtArDAsMd+sxc68prDIqlS
+         bUM99cfGDG0fEihCtelGXCu922xUv5H42Pa6/jdLojJVOXzmFnr8QNaJ+entRlwl65be
+         kCsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CPIaWXPFHo0fd67ol/Y3q7iwZBF+ha9D9KhIm0046cs=;
-        b=CCdrpcQd09FOpmait83HE57CUDNEkQEelPheuNwh2Q05sb6r7Cu0Yv1oWG22XhY5/V
-         lz+CwllIgPJCj9DhO3vzMr7OwNTc98kJtrlWGKwMvKKrekxH3MrFwSEifznfstpBfoTQ
-         nQD3tN1MZKOHCafoRcNqVACy7I48PtrxXbY3k0mEzOTNNXdib5qkLtVUr0yOCz7mXkxQ
-         gV3sZaS+Z8YIY4zcfXEAEzmJovdB3mN1/stSmehaGoc3TojlifVvs5tNP3B0nF5drnr6
-         GTijSlHRwtt5JTyUDYmkayNEv0+yjimokFSF2qmWZsfdxhvmnQ5AMywIGz5hi4QC9vMW
-         P5+g==
-X-Gm-Message-State: AO0yUKUAIHy2cbQwjWu7pu16hfEalpS56ieG6rXh3shYq/MtRmyTiOqY
-        TLsVK9KwxyG/1Io30S+iSRa05qQzKZNZAe3mgtYEWQ==
-X-Google-Smtp-Source: AK7set/BdUClvmyebte8R/H/NeiEx9CQ6WND0VkVnkP+D0I65/lrj6l+4kZ5jy4ogNFoM1rzOtG6Yo19gkDklYbUDfI=
-X-Received: by 2002:a05:6870:5a8a:b0:16e:4db:be3f with SMTP id
- dt10-20020a0568705a8a00b0016e04dbbe3fmr1461921oab.0.1677278252069; Fri, 24
- Feb 2023 14:37:32 -0800 (PST)
+        bh=IiZXfgYrspTV0X/zg/5bl8O+J9jjbguyQkrt9WII1A0=;
+        b=hvSF0GlAKCUJ0nAwn/k/kx4WG9izUXGsHrd5XMJ3XHpEFngWU3lTQt2NkJWPvavURA
+         Xtc2S4ofhJIufa+3lA2BfrvBaGvRHlQqBrAF5xwXeoowJUa/PECd7dLLju/qTjPn/jha
+         zTu2qBmhs1tLET8v2aDcbbg/BRsXMNK0J40CMvODkZOEsXfgaa0M2I7oJGPYOi2mIaxA
+         y7cOGbt5viY+81cnrnq7oolxz1GCHWoHczERkkWz+YhpqMparBXWMX2WTW2I5cdIx3ys
+         Q/f6hGrhj61ghwr/HxYjfwb5xqHHzEfFIi5PXA9aksQ6fY0eRDcTn56UVVNcpAqDUeXo
+         6JQg==
+X-Gm-Message-State: AO0yUKUA8wHa7cWS32Onz0OoAipR/BPkxuzckhXOFCW9r3V8/Ziiau5j
+        R68rbuUWurTuz1SZaNy6/mrV/9V9a8W37IFFLHE=
+X-Google-Smtp-Source: AK7set+BcHZfCoW3YN7rlFFqlBxmBE2vpUFQA6KfIVb53xV/67tx3iho0pA7G0cJLfST92ibrVpx3iDHTpAZS3zFhwo=
+X-Received: by 2002:a81:ac5c:0:b0:533:9b80:a30e with SMTP id
+ z28-20020a81ac5c000000b005339b80a30emr5513757ywj.10.1677278319933; Fri, 24
+ Feb 2023 14:38:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230224195313.1877313-1-jiangzp@google.com> <20230224115310.kernel.v2.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
- <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com>
-In-Reply-To: <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com>
-From:   Zhengping Jiang <jiangzp@google.com>
-Date:   Fri, 24 Feb 2023 14:37:19 -0800
-Message-ID: <CAB4PzUrO32Z1AF-3UJviYqTr3YvachGgJ7NiqkNW46ioWigtfw@mail.gmail.com>
-Subject: Re: [kernel PATCH v2 1/1] Bluetooth: hci_sync: clear workqueue before
- clear mgmt cmd
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        mmandlik@google.com, chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20230224133609.2877396-1-conor.dooley@microchip.com> <mhng-f429a40f-1869-4c5b-ab4f-e7eec94489e8@palmer-ri-x1c9a>
+In-Reply-To: <mhng-f429a40f-1869-4c5b-ab4f-e7eec94489e8@palmer-ri-x1c9a>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 24 Feb 2023 23:38:28 +0100
+Message-ID: <CANiq72nfGfqnk4QyKsf3kmjgBVPG3WFLQqd7_+jLcYh9jG+fQw@mail.gmail.com>
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>,
+        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,110 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
-
-> Any particular reason why you are not using hci_cmd_sync_clear
-> instead?
-
-That is a good question and we used hci_cmd_sync_clear in the first
-version, but it will clear the queue and also close the timer. As a
-result, when the adapter is turned on again, the timer will not
-schedule any new jobs. So the option is to use hci_cmd_sync_clear and
-re-initiate the queue or to write a new function which only clears the
-queue.
-
-> We also may want to move the clearing logic to
-> hci_dev_close_sync since it should be equivalent to
-> hci_request_cancel_all.
-
-I actually have a question here. I saw
-"drain_workqueue(hdev->workqueue)" in hci_dev_close_sync and thought
-it should force clearing the cmd_sync queue. But it seems cannot
-prevent the use-after-free situation.
-
-Any suggestions to improve the solution?
-
-Thanks,
-Zhengping
-
-
-On Fri, Feb 24, 2023 at 1:02 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
+On Fri, Feb 24, 2023 at 10:32 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
 >
-> Hi Zhengping,
+> I'm fine with it, but IIRC the Rust support for most targets was pulled
+> out as they weren't deemed ready to go yet.  If the Rust folks are OK
+
+So we trimmed the original series from v8 to v9 as much as possible in
+order to upstream things piece by piece, get maintainers involved, and
+so on; i.e. they were not trimmed because they were not ready.
+
+Having said that, for the architectures support in particular, what we
+had is indeed a prototype: each architecture we added was able to
+compile, boot into QEMU, load the sample Rust modules, pass a few
+tests, and so on in our CI, using a couple kernel configs. But that is
+just the basic support, and it does not mean it works for other kernel
+configs, all hardware, all security features, and so on.
+
+So it depends on how you want to approach it, whether you are
+interested in the basic support or not, etc. In any case, I would
+recommend having an expert on the architecture take a look to
+double-check things look sane, run some tests on real hardware, etc.
+
+> turning on RISC-V support then it's fine with me, but I think it's
+> really more up to them at this point.
 >
-> On Fri, Feb 24, 2023 at 11:53 AM Zhengping Jiang <jiangzp@google.com> wrote:
-> >
-> > Clear cmd_sync_work queue before clearing the mgmt cmd list to avoid
-> > racing conditions which cause use-after-free.
-> >
-> > When powering off the adapter, the mgmt cmd list will be cleared. If a
-> > work is queued in the cmd_sync_work queue at the same time, it will
-> > cause the risk of use-after-free, as the cmd pointer is not checked
-> > before use.
-> >
-> > Signed-off-by: Zhengping Jiang <jiangzp@google.com>
-> > ---
-> >
-> > Changes in v2:
-> > - Add function to clear the queue without stop the timer
-> >
-> > Changes in v1:
-> > - Clear cmd_sync_work queue before clearing the mgmt cmd list
-> >
-> >  net/bluetooth/hci_sync.c | 21 ++++++++++++++++++++-
-> >  1 file changed, 20 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> > index 117eedb6f709..b70365dfff0c 100644
-> > --- a/net/bluetooth/hci_sync.c
-> > +++ b/net/bluetooth/hci_sync.c
-> > @@ -636,6 +636,23 @@ void hci_cmd_sync_init(struct hci_dev *hdev)
-> >         INIT_DELAYED_WORK(&hdev->adv_instance_expire, adv_timeout_expire);
-> >  }
-> >
-> > +static void hci_pend_cmd_sync_clear(struct hci_dev *hdev)
-> > +{
-> > +       struct hci_cmd_sync_work_entry *entry, *tmp;
-> > +
-> > +       mutex_lock(&hdev->cmd_sync_work_lock);
-> > +       list_for_each_entry_safe(entry, tmp, &hdev->cmd_sync_work_list, list) {
-> > +               if (entry->destroy) {
-> > +                       hci_req_sync_lock(hdev);
-> > +                       entry->destroy(hdev, entry->data, -ECANCELED);
-> > +                       hci_req_sync_unlock(hdev);
-> > +               }
-> > +               list_del(&entry->list);
-> > +               kfree(entry);
-> > +       }
-> > +       mutex_unlock(&hdev->cmd_sync_work_lock);
-> > +}
-> > +
-> >  void hci_cmd_sync_clear(struct hci_dev *hdev)
-> >  {
-> >         struct hci_cmd_sync_work_entry *entry, *tmp;
-> > @@ -4842,8 +4859,10 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >
-> >         if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
-> >             !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> > -           hci_dev_test_flag(hdev, HCI_MGMT))
-> > +           hci_dev_test_flag(hdev, HCI_MGMT)) {
-> > +               hci_pend_cmd_sync_clear(hdev);
+> So
 >
-> Any particular reason why you are not using hci_cmd_sync_clear
-> instead? We also may want to move the clearing logic to
-> hci_dev_close_sync since it should be equivalent to
-> hci_request_cancel_all.
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 >
-> >                 __mgmt_power_off(hdev);
-> > +       }
-> >
-> >         hci_inquiry_cache_flush(hdev);
-> >         hci_pend_le_actions_clear(hdev);
-> > --
-> > 2.39.2.722.g9855ee24e9-goog
-> >
->
->
-> --
-> Luiz Augusto von Dentz
+> in case folks want to take it via some Rust-related tree, but I'm also
+> fine taking it via the RISC-V tree if that's easier.
+
+Thanks Palmer! We are trying to get maintainers of the different
+subsystems/archs/... involved so that they maintain the different Rust
+bits we are upstreaming, so ideally it would go through the RISC-V
+tree.
+
+Cheers,
+Miguel
