@@ -2,127 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589916A0318
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 08:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA016A0258
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjBWHCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 02:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S233252AbjBWFT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 00:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbjBWHC2 (ORCPT
+        with ESMTP id S233234AbjBWFTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:02:28 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397244AFE2;
-        Wed, 22 Feb 2023 23:02:02 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id e9so6677917plh.2;
-        Wed, 22 Feb 2023 23:02:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdqKjDpknoldjbXgVeqUHUTykf5w/8lk9H2d441sxtg=;
-        b=FJ/Zl852LRpZfzweW3XjqZItvLfXb8d10BfQXkfC2dq/ORvjq0DRh2POWz/HnulYAQ
-         4s1nItn+GP1RK5xIn6OcxS4NyMvRYRUjEtDNnG8+a9du+Cyn5edhETRqk6OB+CHljcTt
-         hcwkzFIqZxJvusfp6Fm1QCXB8SYNY4PaFl3vYzapey6bNc0mnE+WedBtkBQiX3EwXLCZ
-         uKGY7+RpaIRB8n3J6XOFVkcBhu1YQnZID2osD6tTQX02JqCSxv912Bjnj7tMrIdxeQV1
-         q1DK/B2dPv6TAIKF1zhNDvELiyLz1uvW3X7KwDcnuf1pvlHKtsYejVasiHjmqvRXZ+u8
-         YJFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mdqKjDpknoldjbXgVeqUHUTykf5w/8lk9H2d441sxtg=;
-        b=VkoHq/C/7ISfvqTBNNrh7upVm7ed5/xuz8QlWk33HYKeeAPTxoFyosNLU5+8/i+St2
-         8LcP+H06bxdL00Bip2HA4D9Inr2hZPF0OZgVg0xTxpfRSqaUBU55VdKUhQRrELhrxLk/
-         TolJssWcq7aMnkAyG30g7v8sxAsiYh+cBP2+PD1Q80z1vlpqzPa0GW+lHhnnEBdhg5eU
-         Fx+JC48AVa0cY7kZmTCrV8KWDS6I5L7TehrxxsuGdYWDj8+rihUWrAAGz0XrHztxFzTS
-         JyRYmohDQ22Biw5eFRxH6OiCLX67kpPWAV+Vy2CENZTFK0q3kUkOs/HAskD5E73/dmH9
-         aeoA==
-X-Gm-Message-State: AO0yUKU3+tdqb1aLtn2pL3ssG4UOSr0uwofjHGPIiqC5KW9SKMGsi/nY
-        faBxhFJbpkrPmeLo+vCXPRQ=
-X-Google-Smtp-Source: AK7set82OYyCXPIb5mj39rMPSTyj4k8FAK3ZXtDeewEo0KuLS+Wd5dbFCKODHxACj0b43P/ArJPTlw==
-X-Received: by 2002:a17:903:41cd:b0:19a:a6cd:35a8 with SMTP id u13-20020a17090341cd00b0019aa6cd35a8mr12692150ple.25.1677135718170;
-        Wed, 22 Feb 2023 23:01:58 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:44b0:ad80:6c0b:4a23:5c4f])
-        by smtp.gmail.com with ESMTPSA id gj5-20020a17090b108500b00231227781d5sm4570725pjb.2.2023.02.22.23.01.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 23:01:57 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] perf inject: Fix --buildid-all not to eat up MMAP2
-Date:   Wed, 22 Feb 2023 23:01:55 -0800
-Message-Id: <20230223070155.54251-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 00:19:18 -0500
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBDA47432;
+        Wed, 22 Feb 2023 21:19:05 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 5896C1A00A14;
+        Thu, 23 Feb 2023 13:19:44 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yXrtiH0GntNQ; Thu, 23 Feb 2023 13:19:40 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 10B9E1A0092F;
+        Thu, 23 Feb 2023 13:19:40 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        mcoquelin.stm32@gmail.com
+Cc:     linux-crypto@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] stm32: stm32-hash: Add kmalloc_array allocation check
+Date:   Sat, 25 Feb 2023 05:50:19 +0800
+Message-Id: <20230224215019.3687-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When MMAP2 has PERF_RECORD_MISC_MMAP_BUILD_ID flag, it means the record
-already has the build-id info.  So it marks the DSO as hit, to skip if
-the same DSO is not processed if it happens to miss the build-id later.
+If rctx->hw_context allocation of the context pointer failed. Returning
+-ENOMEM and assigning NULL to the out pointer should improve the
+robustness of the function.
 
-But it missed to copy the MMAP2 record itself so it'd fail to symbolize
-samples for those regions.
-
-For example, the following generates 249 MMAP2 events.
-
-  $ perf record --buildid-mmap -o- true | perf report --stat -i- | grep MMAP2
-           MMAP2 events:        249  (86.8%)
-
-Adding perf inject should not change the number of events like this
-
-  $ perf record --buildid-mmap -o- true | perf inject -b | \
-  > perf report --stat -i- | grep MMAP2
-           MMAP2 events:        249  (86.5%)
-
-But when --buildid-all is used, it eats most of the MMAP2 events.
-
-  $ perf record --buildid-mmap -o- true | perf inject -b --buildid-all | \
-  > perf report --stat -i- | grep MMAP2
-           MMAP2 events:          1  ( 2.5%)
-
-With this patch, it shows the original number now.
-
-  $ perf record --buildid-mmap -o- true | perf inject -b --buildid-all | \
-  > perf report --stat -i- | grep MMAP2
-           MMAP2 events:        249  (86.5%)
-
-Cc: stable@vger.kernel.org
-Fixes: f7fc0d1c915a ("perf inject: Do not inject BUILD_ID record if MMAP2 has it")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
 ---
- tools/perf/builtin-inject.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/stm32/stm32-hash.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index f8182417b734..10bb1d494258 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -538,6 +538,7 @@ static int perf_event__repipe_buildid_mmap2(struct perf_tool *tool,
- 			dso->hit = 1;
- 		}
- 		dso__put(dso);
-+		perf_event__repipe(tool, event, sample, machine);
- 		return 0;
- 	}
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index d33006d43f76..18e79f62be96 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -970,6 +970,10 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
+ 	rctx->hw_context = kmalloc_array(3 + HASH_CSR_REGISTER_NUMBER,
+ 					 sizeof(u32),
+ 					 GFP_KERNEL);
++	if (rctx->hw_context == NULL) {
++		out = NULL;
++		return -ENOMEM;
++	}
+ 
+ 	preg = rctx->hw_context;
  
 -- 
-2.39.2.637.g21b0678d19-goog
+2.18.2
 
