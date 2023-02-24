@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FC16A17B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030D56A1797
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBXII0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S229600AbjBXH5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBXIIY (ORCPT
+        with ESMTP id S229458AbjBXH5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:08:24 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707A425E09;
-        Fri, 24 Feb 2023 00:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677226103; x=1708762103;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tK3PjEZic4TnRDEQrMnzOsYQnpHOQ7k2HFJWHp2ltd0=;
-  b=LoqUQLTt/nN7gQE02bP0bsyRjO5jiomkf+/5oCmaTdrdcPaQoBeE78kv
-   vh8tZCsViquh9qKpwl3+NF2Awuberg5Fzt2eHIcbOUGdePZBj61ZCMnJ5
-   VvP7DIktxxyPT7qF67X/Y7FBKOrYbOEw/yYHnt28fo9eMRLinpeKxAPtZ
-   3quASQt4wyt6gyGb+YXq7c/OMn9AsT6e2aF2HPa0unf14GPf+5g4J5HZv
-   pfZTa/7XNFhpK/17xgZuR2ZGvp+94xmG5sWIyjCydQXY5ao5JXmPHNxnu
-   L3vJZY9XOR+krM8i+MMNvKVeVvvZMGpw9zFZrf/yUeuDc/suoHmuyy5J5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="332108176"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="332108176"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 00:08:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736718256"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="736718256"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Feb 2023 00:08:08 -0800
-Date:   Fri, 24 Feb 2023 15:57:09 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] PolarFire SoC Auto Update Support
-Message-ID: <Y/ht1eHgtRrLxIhC@yilunxu-OptiPlex-7050>
-References: <20230217164023.14255-1-conor@kernel.org>
+        Fri, 24 Feb 2023 02:57:41 -0500
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BA214EB9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:57:35 -0800 (PST)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-604-eVmjo_9qMACmN271Yc8nEQ-1; Fri, 24 Feb 2023 02:57:33 -0500
+X-MC-Unique: eVmjo_9qMACmN271Yc8nEQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84CB11C05AF9;
+        Fri, 24 Feb 2023 07:57:32 +0000 (UTC)
+Received: from hog (unknown [10.39.192.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 37E5F140EBF4;
+        Fri, 24 Feb 2023 07:57:31 +0000 (UTC)
+Date:   Fri, 24 Feb 2023 08:57:30 +0100
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: tls: fix possible info leak in
+ tls_set_device_offload()
+Message-ID: <Y/ht6gQL+u6fj3dG@hog>
+References: <20230223090508.443157-1-hbh25y@gmail.com>
+ <Y/dK6OoNpYswIqrD@hog>
+ <310391ea-7c71-395e-5dcb-b0a983e6fc93@gmail.com>
+ <04c4d6ee-f893-5248-26cf-2c6d1c9b3aa5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230217164023.14255-1-conor@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <04c4d6ee-f893-5248-26cf-2c6d1c9b3aa5@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,89 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-17 at 16:40:17 +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Hey all,
-> 
-> This patchset adds support for the "Auto Update" feature on PolarFire
-> SoC that allows for writing an FPGA bistream to the SPI flash connected
-> to the system controller.
+2023-02-24, 11:33:29 +0800, Hangyu Hua wrote:
+> On 24/2/2023 11:07, Hangyu Hua wrote:
+> > On 23/2/2023 19:15, Sabrina Dubroca wrote:
+> > > 2023-02-23, 17:05:08 +0800, Hangyu Hua wrote:
+> > > > After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
+> > > > tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL
+> > > > if it fails
+> > > > before kmalloc cctx->iv. This may cause info leak when we call
+> > > > do_tls_getsockopt_conf().
+> > > 
+> > > Is there really an issue here?
+> > > 
+> > > If both tls_set_device_offload and tls_set_sw_offload fail,
+> > > do_tls_setsockopt_conf will clear crypto_{send,recv} from the context.
+> > > Then the TLS_CRYPTO_INFO_READY in do_tls_getsockopt_conf will fail, so
+> > > we won't try to access iv or rec_seq.
+> > > 
+> > 
+> > My bad. I forget memzero_explicit. Then this is harmless. But I still
+> > think it is better to set them to NULL like tls_set_sw_offload's error
+> > path because we don't know there are another way to do this(I will
+> > change the commit log). What do you think?
 
-I haven't fully checked the patches yet, just some quick comments:
+Yes, I guess for consistency between functions it would be ok.
 
-Since this feature is just to R/W the flash, and would not affect the
-runtime FPGA region, I don't think an FPGA manager is actually needed.
-Why not just use the MTD uAPI? There is a set of exsiting MTD uAPI &
-MTD tool if I remember correctly.
+> Like a rare case, there is a race condition between
+> do_tls_getsockopt_conf and do_tls_setsockopt_conf while the previous
+> condition is met. TLS_CRYPTO_INFO_READY(crypto_info) is not
+> protected by lock_sock in do_tls_getsockopt_conf. It's just too
+> difficult to satisfy both conditions at the same time.
 
-Thanks,
-Yilun
+Ugh, thanks for noticing this. We should move the lock_sock in
+getsockopt before TLS_CRYPTO_INFO_READY. Do you want to write that
+patch?
 
-> On powercycle (or reboot depending on how the firmware implements the
-> openSBI SRST extension) "Auto Update" will take place, and program the
-> FPGA with the contents of the SPI flash - provided that that image is
-> valid and an actual upgrade from that already programmed!
-> 
-> Unfortunately, this series is not really testable yet - the Engineering
-> Sample silicon on most dev boards has a bug in the QSPI controller
-> connected to the system controller's flash and cannot access it.
-> Pre-production and later silicon has this bug fixed.
-> 
-> I previously posted an RFC about my approach in this driver, since as a
-> flash-based FPGA we are somewhat different to the existing
-> self-reprogramming drivers here. That RFC is here:
-> https://lore.kernel.org/linux-fpga/20221121225748.124900-1-conor@kernel.org/
-> 
-> This series depends on the following fixes:
-> https://patchwork.kernel.org/project/linux-riscv/list/?series=714160
-> 
-> The patch adding the driver depends on the soc patches earlier in the
-> series, so taking both through the same tree makes sense. Depending on
-> sequencing with the dependencies, me taking it through the soc tree
-> (with Acks etc of course) may make the most sense.
-> 
-> The other caveat here I guess is that this uses debugfs to trigger the
-> write, as we do not yet have a userspace for this yet!
-> 
-> Cheers,
-> Conor.
-> 
-> CC: Conor Dooley <conor.dooley@microchip.com>
-> CC: Daire McNamara <daire.mcnamara@microchip.com>
-> CC: Rob Herring <robh+dt@kernel.org>
-> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> CC: Moritz Fischer <mdf@kernel.org>
-> CC: Wu Hao <hao.wu@intel.com>
-> CC: Xu Yilun <yilun.xu@intel.com>
-> CC: Tom Rix <trix@redhat.com>
-> CC: linux-riscv@lists.infradead.org
-> CC: devicetree@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-fpga@vger.kernel.org
-> 
-> Conor Dooley (6):
->   soc: microchip: mpfs: add a prefix to rx_callback()
->   dt-bindings: soc: microchip: add a property for system controller
->     flash
->   soc: microchip: mpfs: enable access to the system controller's flash
->   soc: microchip: mpfs: add auto-update subdev to system controller
->   fpga: add PolarFire SoC Auto Update support
->   riscv: dts: microchip: add the mpfs' system controller qspi &
->     associated flash
-> 
->  .../microchip,mpfs-sys-controller.yaml        |  10 +
->  .../boot/dts/microchip/mpfs-icicle-kit.dts    |  21 +
->  arch/riscv/boot/dts/microchip/mpfs.dtsi       |  24 +-
->  drivers/fpga/Kconfig                          |   9 +
->  drivers/fpga/Makefile                         |   1 +
->  drivers/fpga/microchip-auto-update.c          | 495 ++++++++++++++++++
->  drivers/soc/microchip/Kconfig                 |   1 +
->  drivers/soc/microchip/mpfs-sys-controller.c   |  33 +-
->  include/soc/microchip/mpfs.h                  |   2 +
->  9 files changed, 586 insertions(+), 10 deletions(-)
->  create mode 100644 drivers/fpga/microchip-auto-update.c
-> 
-> -- 
-> 2.39.1
-> 
+Thanks.
+
+-- 
+Sabrina
+
