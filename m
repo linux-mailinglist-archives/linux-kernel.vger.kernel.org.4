@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32046A1927
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD136A192F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjBXJyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S229871AbjBXJy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjBXJyP (ORCPT
+        with ESMTP id S229893AbjBXJyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:54:15 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD61205F;
-        Fri, 24 Feb 2023 01:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677232454; x=1708768454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o+MfsIEhIYQbpZ61l/Q4RJDgRlXpr7zn7qF/0hBGrtg=;
-  b=A4/XmcOZaAL37bG9v/p5cl/lMEzXWP46biOZqlmaLOiWoMY7XcAuI8rs
-   6db5OL/onfyhC9uOytV7ANfDItM+UzVBNV9vDdJ5x3wKnxFhiAAzkmQFR
-   qqlP6nYnB6XAgmXDnhGljUrM789C+DkPuM2yXNUY0kh5jRa/UssEkXiHO
-   SXX6VNeQCm79G6bREL6CYmnId6IgWmlw28XEfIk9h7aimMXvspV5ki2xn
-   ZUPbGPuKMgKsaMfzgoMY2HyiGgtZX3L+++Q805eQIaC6ZO5q2mJDvKNJM
-   1rypW3CGzicGWHOOf5qvmauy8SfVzIpi5CvbOz2GZIa+j+UGlP1MM+5EA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334860081"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="334860081"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:54:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736746256"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="736746256"
-Received: from moqiongz-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.215.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:54:12 -0800
-Date:   Fri, 24 Feb 2023 17:54:09 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/12] KVM: x86: Use KVM-governed feature framework to
- track "XSAVES enabled"
-Message-ID: <20230224095409.bo77lwb6wbsc53hx@linux.intel.com>
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-6-seanjc@google.com>
- <20230221145610.ytlj5nkqsscc2yxo@linux.intel.com>
- <Y/ZlRDuRivMDKGwo@google.com>
+        Fri, 24 Feb 2023 04:54:43 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C488C48E33
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:54:31 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id f13so16599953vsg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:54:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pd8U/PCi0p6o8UgaJg/HLKkspvkAHB5A6pexOvPjfR4=;
+        b=KVBqsIOUbphURupL/Z7Haw0sLK34ZhqLI14Zv6P1iiGy1OGYTBYzEb0wc5M6tuiyFI
+         ujCiYCDkCg3cptrEb1R18nTEuWYEsAR8Ijp9n/zIWKWnbg0ARFOu7TL791vlu/BgFYz2
+         Hg6dVzhahUTBzfexhFW6sCDEYFMrlUcEt/Shg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pd8U/PCi0p6o8UgaJg/HLKkspvkAHB5A6pexOvPjfR4=;
+        b=aopmG6sCtNka7xaEcSUGd1l5DhegwRCNnC+rcSSAcHbokKaGWI69F1W/lybpYPyxQt
+         Pm5KbdLHcRDm5K/Z96ONbGyVy1hQYcJBjRz6U6joyk74dHNoQQLl9wmS1e5UcjzXZ1Pg
+         9tNuX7viwVU1uNodgpVwbKd15TKtjxCVgUExVCc3sPoFKOCB/in4h+DPZlGPg/kqnqyu
+         OoyqPFpowAWrC5v3AMMgZFSgyOMdPJJDfHA62fJSRIeNd64fVsQDjx5q/A7X5JW580RH
+         OIT6HXoOqUq+FRh8TAAkaIoxCm9P1fEeXDVrNC7ILw4vSqITH+xOkjzJCKEZwPJUv7DY
+         ingA==
+X-Gm-Message-State: AO0yUKXf9OBgdqC6TsoE4MKN4aJJ6hxiyDLaO1eMP4m5qBuzkNFuLdYE
+        xvBLBWgrN+s2F+HCqVSz9QePthS6BrWCitVraztNpg==
+X-Google-Smtp-Source: AK7set/5nxZl0eckNXI6Q503VgTEGQfN71DtPSOnMcy7mMkQne8mOsAfpJuhK2AcNqxwdbl36ZLhTsBZt57SOZ7m6V8=
+X-Received: by 2002:a05:6102:3a61:b0:412:2ed6:d79b with SMTP id
+ bf1-20020a0561023a6100b004122ed6d79bmr2017113vsb.3.1677232470933; Fri, 24 Feb
+ 2023 01:54:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/ZlRDuRivMDKGwo@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com> <20230223134345.82625-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230223134345.82625-7-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 24 Feb 2023 17:54:19 +0800
+Message-ID: <CAGXv+5HgfRbuyJM9Xk31TC8bgSGTCoeV-N+4wSVXmqskGHD_Ew@mail.gmail.com>
+Subject: Re: [PATCH v2 06/16] arm64: dts: mediatek: mt8183: Use
+ mediatek,mt8183b-mali as GPU compatible
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 10:56:04AM -0800, Sean Christopherson wrote:
-> On Tue, Feb 21, 2023, Yu Zhang wrote:
-> > On Fri, Feb 17, 2023 at 03:10:15PM -0800, Sean Christopherson wrote:
-> > > Use the governed feature framework to track if XSAVES is "enabled", i.e.
-> > > if XSAVES can be used by the guest.  Add a comment in the SVM code to
-> > > explain the very unintuitive logic of deliberately NOT checking if XSAVES
-> > > is enumerated in the guest CPUID model.
-> > > 
-> > > No functional change intended.
-> > 
-> > xsaves_enabled in struct kvm_vcpu_arch is no longer used. But instead of
-> > just deleting it, maybe we could move 'bool load_eoi_exitmap_pending' to
-> > its place, so 7 bytes can be saved for each struct kvm_vcpu_arch:
-> 
-> I prefer leaving load_eoi_exitmap_pending where it is so that it's co-located with
-> ioapic_handled_vectors.  I agree wasting 7 bytes is unfortunate, but I don't want
-> to take an ad hoc approach to shrinking per-vCPU structs.  See the link below for
-> more discussion.
-> 
-> https://lore.kernel.org/all/20230213163351.30704-1-minipli@grsecurity.net
+On Thu, Feb 23, 2023 at 9:44 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Use the new GPU related compatible to finally enable GPU DVFS on
+> the MT8183 SoC.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Fair enough. :)
-
-Thanks
-Yu
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
