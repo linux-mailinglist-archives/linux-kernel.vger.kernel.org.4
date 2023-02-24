@@ -2,189 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA206A1AA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0BF6A1AA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjBXKwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S229820AbjBXKxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBXKwF (ORCPT
+        with ESMTP id S229709AbjBXKxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:52:05 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01AB56509;
-        Fri, 24 Feb 2023 02:52:02 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id D083E1B1926A;
-        Fri, 24 Feb 2023 12:51:59 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1677235920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hMX/SvCM5FiDgQ+z11AKxpaUrqr8yS8lrIi2hk5bw1M=;
-        b=P6KQx+QhL9/YOi02zs4UH2p77smt4DhMwgwl5Qd7EfS9eOxBQwCpHfvPaqujVQtJtSgNaR
-        RSqSn1hSpGnRybSvDJ2CR1no2/odeBWiJEbXAyVJNUuee0EEl7/gUR/M6kwji6F8iRCq+w
-        661I8Hcxj/5GESzS+VWjXeYRbmw+Oqfj3fmt4fZGbYwgqkzGwdy3uerMpIBvI6/n7btl4J
-        /FfYArC2WBN8NHvjoI8O9nwC5j4JgDvNbuMXduAgpwEDHi5V0/GrEQgcvk2ZwL2hrtjSN3
-        dkeAkpXu0YtLr2Aib8oA8BPwLZMHgSbKk9cTkeTbi0OxjGBrlkAcC+sOuwmX3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1677235920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hMX/SvCM5FiDgQ+z11AKxpaUrqr8yS8lrIi2hk5bw1M=;
-        b=PBIvVx/9vUF8QPBmlH/Qcd+Za/ku6MMP41XWpF/vsbbWlNRD5twblSCfJPhSXKJzf9CLtD
-        cNLIsmI321TCFiTz0FK7+sIFsIcuFjcLVUtHeCFsAfHtas1m2Ny71Hpyueif/jupyQ35xL
-        MZm1nSrsyEY1MkRNDj3MSWAWSNFNzu87WHmmdzXjyGG+qUSscuh7HKsXk4y0GevAzWWlVZ
-        SyJzyhcVANYyWLoN9Zp9r2PPb+ql7zmgFmh2HNeCoXKo1gTL6vfLqQVqMeKcCeX8Osxuyt
-        XOja97jGGda03Z78DdDJo6ITe6se4UnnydsRWTr3dNBjSQ1+fhwOugS7keo1Sg==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1677235920; a=rsa-sha256;
-        cv=none;
-        b=VuR0sDSN+Di59qrMbxZ9Z40kLyqrUg1JJuqP0CWiiFKCV/ZGHe6zt7AmTkTV5xMWVnTWoi
-        H90TYSm01ScWmiz1ax3W5mcsKJTGx7pQ3wtFsFNyB5mvzNtrXD1SBEc7Iz1MzUlXsPZ2PR
-        JFWIAa9sfxi47JmDT39Gh72BivC2VVdeuUHJMMpB8a4osaTl5S1KN/zRls4xclPXwHF3Jq
-        gbRgKIyR7M8fSxh4B4EAS9gkLw926BPe1IHG3xoOY0KA8qr/gfJqQOGtDh/cLDb7KhREAu
-        g+2x1cvbN2mq24u5AD0mmzHERQ1NSeu0SYOUJJ9FzNutsB0E2/QPHGjbUKKMjw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 687B0634C91;
-        Fri, 24 Feb 2023 12:51:38 +0200 (EET)
-Date:   Fri, 24 Feb 2023 12:51:38 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Shravan.Chippa@microchip.com
-Cc:     Conor.Dooley@microchip.com, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        jacopo.mondi@ideasonboard.com, Prakash.Battu@microchip.com
-Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth mode
-Message-ID: <Y/iWulpOQl3gG3QI@valkosipuli.retiisi.eu>
-References: <20230208050915.1958183-1-shravan.chippa@microchip.com>
- <20230208050915.1958183-4-shravan.chippa@microchip.com>
- <Y/Xc9RCmO8P8eKtL@valkosipuli.retiisi.eu>
- <Y/XnWOomz2N9fCvc@wendy>
- <Y/XoXZJUKKGzGVVL@valkosipuli.retiisi.eu>
- <Y/XpClyi9KMtLKcF@valkosipuli.retiisi.eu>
- <PH0PR11MB5611D8EE3F896FC0BE9A842E81AA9@PH0PR11MB5611.namprd11.prod.outlook.com>
- <Y/X9YiLJxDfLPNUX@valkosipuli.retiisi.eu>
- <PH0PR11MB5611BB17A5DFAB0645D8DEB781A89@PH0PR11MB5611.namprd11.prod.outlook.com>
+        Fri, 24 Feb 2023 05:53:25 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3C55678A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:53:21 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id t25-20020a1c7719000000b003eb052cc5ccso1401752wmi.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:53:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=znlB4r6XgBnVvoPNdtfBl1Kal49FRfFG/+7iFF5NYGM=;
+        b=CahmQVC0rEX2m1jIBvE6lKSxFcwQU1naGbPwl5uJTZm/xt3OVS5j+dFDUEAE5bI47D
+         y7OTTOaRAVxAKM9Xc3WS0vgDoD/4QOvQZbmgi1+3CSkfBn5PCTxvhYxZinzQjHjkcSwH
+         vrZzACVqhT1DZBwONy84w3W6wIMbfNenvSdCOUy80uEhX7AxuFey85ZNEqb217X16kgu
+         snf2uDewRFFP4pp8CMj7t3sQddZx7XlxFfryOIbFMRIZUIVXpnNXbLGcpd+nIEC94N1i
+         cMaSmABnB0x+SYcjEiGRpfSjdC4/r+dxeC67BrywGgLvNYKhPCAng9bk+onkcJguS/Zj
+         HEfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=znlB4r6XgBnVvoPNdtfBl1Kal49FRfFG/+7iFF5NYGM=;
+        b=FUdEhUwvDaXi1dwos69GSlF1COqnAMSn8iyX1W7p7fi537iz/Ks00yy7Udl8pLyyty
+         uPP4HaechOSVG/GGm5KPXwHFw7PJMCwhjdj8NLLiG9ZU8sA+4oOphbw7L1MzujLaRziP
+         heJBuSUTAlKh473c+/uzpnjuZ7gX3INLsRYn7DmOW02I51DSdzDAvIQbSPqi4uDh44lW
+         yyFJU4YzR8FNZiBD311l8djevulXSJIbao55qJh9H6IZF20fNY1CeLQTn42kIuC33eMn
+         BlN5fM45Fnf+ct/8fZWsPOgMRA369UG13E3IEY99RW9haoZd74KtLOET+dft+hG/OLpm
+         rsgQ==
+X-Gm-Message-State: AO0yUKXTvrHjY/6qfNyRuULYqH4rpSCCREePYBltZpKibU85SmpAO8Ue
+        gZsq0ehihIDJUUDzU+RJqfljTK0QtKYyFEySWTGjHg==
+X-Google-Smtp-Source: AK7set+zOA8EjyMhKkZVWtfwPH0x6BD+VAP4kHCLJYaqtwjn3LBX11LdH2RvdSQmmQorzU2SLOOhUBwb1opCmFKAC98=
+X-Received: by 2002:a05:600c:3ba7:b0:3e2:98f:1d76 with SMTP id
+ n39-20020a05600c3ba700b003e2098f1d76mr1152618wms.8.1677236000306; Fri, 24 Feb
+ 2023 02:53:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5611BB17A5DFAB0645D8DEB781A89@PH0PR11MB5611.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230219183059.1029525-1-xiang.ye@intel.com> <20230219183059.1029525-6-xiang.ye@intel.com>
+In-Reply-To: <20230219183059.1029525-6-xiang.ye@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 24 Feb 2023 11:53:08 +0100
+Message-ID: <CACRpkdbAve++nA0zwHvOm3fy0t9J9g0fR_FO71TTv=TwM6CJYA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] Documentation: Add ABI doc for attributes of LJCA device
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shravan,
+Hi Ye,
 
-On Fri, Feb 24, 2023 at 10:02:51AM +0000, Shravan.Chippa@microchip.com wrote:
-> Hi Sakari,
-> 
-> > -----Original Message-----
-> > From: Sakari Ailus <sakari.ailus@iki.fi>
-> > Sent: 22 February 2023 05:03 PM
-> > To: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>
-> > Cc: Conor Dooley - M52691 <Conor.Dooley@microchip.com>;
-> > paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
-> > mchehab@kernel.org; robh+dt@kernel.org;
-> > krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
-> > linux-imx@nxp.com; linux-media@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; jacopo.mondi@ideasonboard.com; Battu
-> > Prakash Reddy - I30399 <Prakash.Battu@microchip.com>
-> > Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth
-> > mode
-> > 
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> > content is safe
-> > 
-> > On Wed, Feb 22, 2023 at 10:20:56AM +0000, Shravan.Chippa@microchip.com
-> > wrote:
-> > > Hi Sakari,
-> > >
-> > > > -----Original Message-----
-> > > > From: Sakari Ailus <sakari.ailus@iki.fi>
-> > > > Sent: 22 February 2023 03:36 PM
-> > > > To: Conor Dooley - M52691 <Conor.Dooley@microchip.com>
-> > > > Cc: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>;
-> > > > paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
-> > > > mchehab@kernel.org; robh+dt@kernel.org;
-> > > > krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> > > > s.hauer@pengutronix.de; kernel@pengutronix.de;
-> > festevam@gmail.com;
-> > > > linux-imx@nxp.com; linux-media@vger.kernel.org; linux-
-> > > > kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> > > > kernel@lists.infradead.org; Jacopo Mondi
-> > > > <jacopo.mondi@ideasonboard.com>; Battu Prakash Reddy - I30399
-> > > > <Prakash.Battu@microchip.com>
-> > > > Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower
-> > > > bandwidth mode
-> > > >
-> > > > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > > > know the content is safe
-> > > >
-> > > > On Wed, Feb 22, 2023 at 12:03:10PM +0200, Sakari Ailus wrote:
-> > > > > On Wed, Feb 22, 2023 at 09:58:48AM +0000, Conor Dooley wrote:
-> > > > > > On Wed, Feb 22, 2023 at 11:14:29AM +0200, Sakari Ailus wrote:
-> > > > > > > On Wed, Feb 08, 2023 at 10:39:13AM +0530, shravan kumar wrote:
-> > > > > > > > From: Shravan Chippa <shravan.chippa@microchip.com>
-> > > > > >
-> > > > > > > > @@ -666,11 +885,26 @@ static int imx334_init_pad_cfg(struct
-> > > > v4l2_subdev *sd,
-> > > > > > > >         struct v4l2_subdev_format fmt = { 0 };
-> > > > > > > >
-> > > > > > > >         fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY :
-> > > > V4L2_SUBDEV_FORMAT_ACTIVE;
-> > > > > > > > -       imx334_fill_pad_format(imx334, &supported_mode, &fmt);
-> > > > > > > > +       imx334_fill_pad_format(imx334, &supported_modes[0],
-> > > > > > > > + &fmt);
-> > > > > > >
-> > > > > > > Now that there are multiple modes supported, this would appear
-> > > > > > > to get the width, height as well as the other fields (apart
-> > > > > > > from mbus
-> > > > > > > code) from the first mode.
-> > > > > >
-> > > > > > Is this statement supposed to be a request to change something,
-> > > > > > or just a throwaway comment? It's a little hard for me to
-> > > > > > understand your intention here, sorry.
-> > > > >
-> > > > > Just pointing to what looks like a bug.
-> > > >
-> > > > Ah, my bad. Please ignore the comment.
-> > > >
-> > > > This is indeed about init_cfg(), not s_fmt().
-> > > >
-> > >
-> > > I will try to fix init_cfg()
-> > 
-> > There's no problem with it. Please ignore my original comment on this.
-> 
-> Just checking, Do I need to do any modifications or the current code is fine?
+thanks for your patch!
 
-The init_cfg() implementation is, but please see my other e-mail.
+On Sun, Feb 19, 2023 at 7:31 PM Ye Xiang <xiang.ye@intel.com> wrote:
 
--- 
-Regards,
+> Add sysfs attributes Documentation entries for LJCA device
+>
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+(...)
+> +What:          /sys/bus/usb/.../cmd
+> +Date:          July 2023
+> +KernelVersion: 6.4
+> +Contact:       Ye Xiang <xiang.ye@intel.com>
+> +Description:
+> +               Commands supported by LJCA device.
+> +               When read, it will return valid commands.
+> +               When write with a command, it will execute the command.
+> +               Valid commands are [dfu, reset, debug]
+> +               dfu:    Force LJCA device to enter DFU mode.
+> +               reset:  Trigger soft reset for LJCA device.
+> +               debug:  Enable debug logging.
 
-Sakari Ailus
+Given that there are kernel drivers for this device, it looks pretty
+dangerous to make it possible for userspace to reset the device?
+
+But maybe it will re-enumerate when you do this so all drivers
+unload cleanly and then re-probe?
+
+I guess the DFU mode will use the USB standard class for updating
+the firmware?
+
+Perhaps a short blurb on the use case for each string could be
+helpful, like "echo dfu to this file so as to put the device into
+DFU mode so the firmware can be updated".
+
+Is the idea that e.g. fwupdmgr should provide a front-end for this?
+
+Yours,
+Linus Walleij
