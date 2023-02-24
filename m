@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1A96A1888
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C293D6A1889
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjBXJMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229681AbjBXJMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBXJME (ORCPT
+        with ESMTP id S229635AbjBXJMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:12:04 -0500
+        Fri, 24 Feb 2023 04:12:05 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDA85E860;
-        Fri, 24 Feb 2023 01:12:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAA05D460;
+        Fri, 24 Feb 2023 01:12:04 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A76F73FA55;
-        Fri, 24 Feb 2023 09:11:57 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C82703FB17;
+        Fri, 24 Feb 2023 09:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677229920;
-        bh=Kexcv5VSFsdhbWGeV5GdVt3exuFu1QaguzBZjGsJVc4=;
-        h=From:Subject:Date:To:Cc;
-        b=F4oms03Jp7CTRzOF3yqto6QFaEcvhk45z7gjOPE+9ydMdJzwydWFHiqqR8WVUSTbm
-         hAlJCWyuf99nsMUTEpSR5N25p20FBWG+NmqtHegZBJtBoIbQTBB36eOl/MCLm+p40Y
-         Zs2J6c79xrLyNBfntke48kRpTDRnEOidF+hcvU9CzxVdHCB+34iZcVHkzWoV2QTFTR
-         vP21OnLMQmmyFyzvb/YlROKY6NC7srAiS/ax2DVwaF1x0iHMbAHZvTwnpGcPzgGxjN
-         vb/dEkdzvvHjm8A5mni54oOXt1DalLrhPdm2d3hQRjCC31Zol8oru8Rkk2agPBPAJM
-         Wz6QLemKJqbkw==
+        s=default; t=1677229923;
+        bh=wkplfyZ81CMYGIVsW/sksaSI2sUSjgdmqyg/orT1EzU=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=sSC0VSiw/DFJcOw0MluWtnpjsgxnaq5CRtv7bT0CgvUiR3KLVKidiViSTDTIrv9Y4
+         A7SYMnJsBK19GyYUUOxTtR1+UEwroRWOqFfiWQ19NETTJEJSGos1xZwqygD7mF0j8C
+         jyLEuKh4WJMXMQh6IPFGkChcOoF+PTmb9cVE5vqvqj9rtaDLnPS3UbiHHntG0q9Vpr
+         oPJWSuhzluFMHv0Wz4+3R4lYTYv/dTifwgoxPPukgEYRwziQqn0aUgGO+KwGtUWFT1
+         up4AmdxFwYePNonwk1gUiSUGcjRfPrKH89FZermEbHlCFIcaJifuvnam0UQFY5jj9f
+         QivRoXWGRXZ3A==
 From:   Asahi Lina <lina@asahilina.net>
-Subject: [PATCH 0/4] rust: alloc: vec: Add some missing fallible try_*
- methods
-Date:   Fri, 24 Feb 2023 18:11:46 +0900
-Message-Id: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
+Date:   Fri, 24 Feb 2023 18:11:47 +0900
+Subject: [PATCH 1/4] rust: Import upstream `alloc::vec::set_len_on_drop`
+ module
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFJ/+GMC/x2NQQ6DMAwEv4J8rtXURS3iK6iHJDjgS4psQJUQf
- 2/CcXZntQcYq7BB3xygvIvJNxd43BqIs88To4yFgRw9HVGLutmKO0cc05uSb0PnXhGKHrwxBvU
- 5znUwLdv9cmte+0U5ye+6Gj7n+QchxcjpegAAAA==
+Message-Id: <20230224-rust-vec-v1-1-733b5b5a57c5@asahilina.net>
+References: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
+In-Reply-To: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -51,11 +50,11 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
         asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677229917; l=1547;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677229917; l=1615;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=Kexcv5VSFsdhbWGeV5GdVt3exuFu1QaguzBZjGsJVc4=;
- b=YQ2gdXmj9OUyOCsZnIMJb7O8keRcS8R6qfWgeG/YVrCqdM+f9OlY2HjMakkrhbPo6Mnu+F9AT
- 9id+5rR0/TSCVZS6Y1Y1ZOuXVItaX+8VyaGTT7Dm5P+PqIhhTL3HdB5
+ bh=wkplfyZ81CMYGIVsW/sksaSI2sUSjgdmqyg/orT1EzU=;
+ b=dpihB9SPTYWGtGlJDBu1TR+XXTZHd3dUY5XNgEcfL9XzxZo4G8htddwW/e3Rk+nV1QD7x8SyI
+ 47RrcxWK6GnBI/z/4z6xeqIM19pQDYRDiG1WxZRMFh7rPO8plJONNEB
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,41 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone!
+This is a subset of the Rust standard library `alloc` crate,
+version 1.66.0, licensed under "Apache-2.0 OR MIT", from:
 
-This short series is part of the set of dependencies for the drm/asahi
-Apple M1/M2 GPU driver.
+    https://github.com/rust-lang/rust/tree/1.66.0/library/alloc/src
 
-This series imports part of a commit from Miguel in
-rust-for-linux/linux, which adds missing fallible
-mutation/allocation methods to `Vec`. These are generally useful to make
-standard features available to the kernel environment, which does not
-have infallible allocation.
+The file is copied as-is, with no modifications whatsoever
+(not even adding the SPDX identifiers).
 
-The additions in turn depend on importing two submodules from the Rust
-stdlib, which I have attributed using the same commit message template
-used for the original import of this part of the codebase. These
-versions come from Rust 1.66, but also build on Rust 1.62 (the current
-version upstream). I added the SPDX identifiers in a separate commit to
-clearly separate the original code from subsequent changes.
+For copyright details, please see:
+
+    https://github.com/rust-lang/rust/blob/1.66.0/COPYRIGHT
 
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
-Asahi Lina (3):
-      rust: Import upstream `alloc::vec::set_len_on_drop` module
-      rust: Import upstream `alloc::vec::spec_extend` module
-      rust: Add SPDX headers to alloc::vec::{spec_extend, set_len_on_drop}
+ rust/alloc/vec/set_len_on_drop.rs | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-Miguel Ojeda (1):
-      rust: alloc: vec: Add some try_* methods we need
- rust/alloc/vec/mod.rs             | 137 +++++++++++++++++++++++++++++-
- rust/alloc/vec/set_len_on_drop.rs |  30 +++++++
- rust/alloc/vec/spec_extend.rs     | 172 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 336 insertions(+), 3 deletions(-)
----
-base-commit: 83f978b63fa7ad474ca22d7e2772c5988101c9bd
-change-id: 20230224-rust-vec-df72fa4b806c
+diff --git a/rust/alloc/vec/set_len_on_drop.rs b/rust/alloc/vec/set_len_on_drop.rs
+new file mode 100644
+index 000000000000..8b66bc812129
+--- /dev/null
++++ b/rust/alloc/vec/set_len_on_drop.rs
+@@ -0,0 +1,28 @@
++// Set the length of the vec when the `SetLenOnDrop` value goes out of scope.
++//
++// The idea is: The length field in SetLenOnDrop is a local variable
++// that the optimizer will see does not alias with any stores through the Vec's data
++// pointer. This is a workaround for alias analysis issue #32155
++pub(super) struct SetLenOnDrop<'a> {
++    len: &'a mut usize,
++    local_len: usize,
++}
++
++impl<'a> SetLenOnDrop<'a> {
++    #[inline]
++    pub(super) fn new(len: &'a mut usize) -> Self {
++        SetLenOnDrop { local_len: *len, len }
++    }
++
++    #[inline]
++    pub(super) fn increment_len(&mut self, increment: usize) {
++        self.local_len += increment;
++    }
++}
++
++impl Drop for SetLenOnDrop<'_> {
++    #[inline]
++    fn drop(&mut self) {
++        *self.len = self.local_len;
++    }
++}
 
-Thank you,
-~~ Lina
+-- 
+2.35.1
 
