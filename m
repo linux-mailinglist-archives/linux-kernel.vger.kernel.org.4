@@ -2,275 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21806A17CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DABD26A17D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjBXIUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S229679AbjBXIVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBXIUS (ORCPT
+        with ESMTP id S229472AbjBXIVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:20:18 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796C14E83
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:20:16 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso1982480pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:20:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iSPxndrx+ztdRUQfIIoj5xs34XMHs7tigbiGxN/UUsQ=;
-        b=Ol5kgUASl4bqMws73aRE+eRLQTBBpkgAObQQd1macc79QXlmj3syYzKceq4UiA8Vbm
-         L3sLsMiBkyPvc2EZ3XwGwylhCyTXojRO0oN783EXhI/1xznTNBI91SV7kNeL2t0Mmrxb
-         YO3bKFxlYLwMAd5NPqUTcBhH+JQ9OunOGdjWPg7huP/JDYc6RyH4I+MKz5ZfcqayFQuf
-         g2nKekFjVFoZA3gS+eeRbF4a3f3MJTtWpCij0yZ6t2v/0A5AEuGqfzikuhCVumR55F2d
-         +SxAN6jqwLiaHFOyVNbg9RP1MUqkdeWf9GNeLCpLNeMbL9RAWjKaGjvRrk8mEhxlkuNe
-         +fpw==
-X-Gm-Message-State: AO0yUKVC0M1QjCjf6pmg7zUlKRdTD9QjveXbIqDcRHSVW4wf5SKIPI7T
-        deJ8SdaGkrR0mQ/frXAJ85w=
-X-Google-Smtp-Source: AK7set8LCY6i9yowASOkkSDw1hKpSBcBDDhgMNWgaB9BdUQgt2Ur4tAlUfixKnWsMbYI/vbsR/de3Q==
-X-Received: by 2002:a05:6a20:244c:b0:cb:c276:589a with SMTP id t12-20020a056a20244c00b000cbc276589amr11020625pzc.0.1677226816198;
-        Fri, 24 Feb 2023 00:20:16 -0800 (PST)
-Received: from sultan-box.localdomain ([142.147.89.230])
-        by smtp.gmail.com with ESMTPSA id m9-20020aa78a09000000b005a8ba70315bsm7614312pfa.6.2023.02.24.00.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 00:20:15 -0800 (PST)
-Date:   Fri, 24 Feb 2023 00:20:12 -0800
-From:   Sultan Alsawaf <sultan@kerneltoast.com>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     akpm@linux-foundation.org, tkhai@ya.ru, hannes@cmpxchg.org,
-        shakeelb@google.com, mhocko@kernel.org, roman.gushchin@linux.dev,
-        muchun.song@linux.dev, david@redhat.com, shy828301@gmail.com,
-        dave@stgolabs.net, penguin-kernel@i-love.sakura.ne.jp,
-        paulmck@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
-Message-ID: <Y/hzPP0G5AFhOmsY@sultan-box.localdomain>
-References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
- <20230223132725.11685-3-zhengqi.arch@bytedance.com>
- <Y/evb+PBeaahx9Os@sultan-box.localdomain>
- <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
+        Fri, 24 Feb 2023 03:21:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2F914E83;
+        Fri, 24 Feb 2023 00:20:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C44BB81C0A;
+        Fri, 24 Feb 2023 08:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F45C433EF;
+        Fri, 24 Feb 2023 08:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677226856;
+        bh=7Sh3B4xeBlYFXHyzPGM9lxQr6XzXCWeJDIfTx2n5nkE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Iiykv2MpVSfgcv+XzdHGAJfpBHTMu901ZnaVaFS1SPQAO/yO8oKiO9Fve8JM7m0vH
+         k+iORbp7vNHR26s3d7f2aY9Wg1N+5CcoWUS3St0KfylKgVPRyzun6L0aDZZXUCl6jY
+         mwuwYcd5tDGPPbciR73qik6OdeqeFPKsF+unZ8i/JKMYzRSVizLwgQxtjp6sc1O1Ew
+         1oW9B3ApyZBqZiPivTbiUMwXKXvOCqk02Yxjdve8705qmVlChkLEVWgzH6mBD7TJ6M
+         X0QUWn8eeEFuRwuUiYQDF80x1Ce94YW3tpQXRk0ZpuWOLlveQ7lDqfno/DlL2l2HZU
+         MBwuDAbmNAcKA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pVTKF-0003Q8-2p; Fri, 24 Feb 2023 09:21:07 +0100
+Date:   Fri, 24 Feb 2023 09:21:07 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 16/22] dt-bindings: rtc: qcom-pm8xxx: add nvmem-cell
+ offset
+Message-ID: <Y/hzcxrS3D0O3s9U@hovoldconsulting.com>
+References: <20230202155448.6715-1-johan+linaro@kernel.org>
+ <20230202155448.6715-17-johan+linaro@kernel.org>
+ <Y+bJqIpgZ0fbzL2b@mail.local>
+ <Y+dQXlABqc/uzIXc@hovoldconsulting.com>
+ <Y+fF94EOkUuMq9Fc@mail.local>
+ <Y+0NiJsp4JjeyrqH@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y+0NiJsp4JjeyrqH@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 12:00:21PM +0800, Qi Zheng wrote:
+Hi Alexandre,
+
+On Wed, Feb 15, 2023 at 05:51:20PM +0100, Johan Hovold wrote:
+> On Sat, Feb 11, 2023 at 05:44:39PM +0100, Alexandre Belloni wrote:
+> > On 11/02/2023 09:22:54+0100, Johan Hovold wrote:
+> > > On Fri, Feb 10, 2023 at 11:48:08PM +0100, Alexandre Belloni wrote:
+> > > > On 02/02/2023 16:54:42+0100, Johan Hovold wrote:
+> > > > > On many Qualcomm platforms the PMIC RTC control and time registers are
+> > > > > read-only so that the RTC time can not be updated. Instead an offset
+> > > > > needs be stored in some machine-specific non-volatile memory, which a
+> > > > > driver can take into account.
+> > > > > 
+> > > > > Add an 'offset' nvmem cell which can be used to store a 32-bit offset
+> > > > > from the Unix epoch so that the RTC time can be updated on such
+> > > > > platforms.
+> > > > > 
+> > > > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > 
-> 
-> On 2023/2/24 02:24, Sultan Alsawaf wrote:
-> > On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
-> > > The shrinker_rwsem is a global lock in shrinkers subsystem,
-> > > it is easy to cause blocking in the following cases:
+> > > > The patch doesn't apply because this part of the context is not
+> > > > upstream. Can you rebase?
 > > > 
-> > > a. the write lock of shrinker_rwsem was held for too long.
-> > >     For example, there are many memcgs in the system, which
-> > >     causes some paths to hold locks and traverse it for too
-> > >     long. (e.g. expand_shrinker_info())
-> > > b. the read lock of shrinker_rwsem was held for too long,
-> > >     and a writer came at this time. Then this writer will be
-> > >     forced to wait and block all subsequent readers.
-> > >     For example:
-> > >     - be scheduled when the read lock of shrinker_rwsem is
-> > >       held in do_shrink_slab()
-> > >     - some shrinker are blocked for too long. Like the case
-> > >       mentioned in the patchset[1].
+> > > Ah, sorry about that. That's because of commit 51b3802e7960
+> > > ("dt-bindings: rtc: qcom-pm8xxx: allow 'wakeup-source' property") which
+> > > is now in Linus's tree (and your rtc-fixes branch).
 > > > 
-> > > Therefore, many times in history ([2],[3],[4],[5]), some
-> > > people wanted to replace shrinker_rwsem reader with SRCU,
-> > > but they all gave up because SRCU was not unconditionally
-> > > enabled.
-> > > 
-> > > But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
-> > > the SRCU is unconditionally enabled. So it's time to use
-> > > SRCU to protect readers who previously held shrinker_rwsem.
-> > > 
-> > > [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
-> > > [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
-> > > [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
-> > > [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
-> > > [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
-> > > 
-> > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> > > ---
-> > >   mm/vmscan.c | 27 +++++++++++----------------
-> > >   1 file changed, 11 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > > index 9f895ca6216c..02987a6f95d1 100644
-> > > --- a/mm/vmscan.c
-> > > +++ b/mm/vmscan.c
-> > > @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
-> > >   LIST_HEAD(shrinker_list);
-> > >   DECLARE_RWSEM(shrinker_rwsem);
-> > > +DEFINE_SRCU(shrinker_srcu);
-> > >   #ifdef CONFIG_MEMCG
-> > >   static int shrinker_nr_max;
-> > > @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
-> > >   void register_shrinker_prepared(struct shrinker *shrinker)
-> > >   {
-> > >   	down_write(&shrinker_rwsem);
-> > > -	list_add_tail(&shrinker->list, &shrinker_list);
-> > > +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
-> > >   	shrinker->flags |= SHRINKER_REGISTERED;
-> > >   	shrinker_debugfs_add(shrinker);
-> > >   	up_write(&shrinker_rwsem);
-> > > @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
-> > >   		return;
-> > >   	down_write(&shrinker_rwsem);
-> > > -	list_del(&shrinker->list);
-> > > +	list_del_rcu(&shrinker->list);
-> > >   	shrinker->flags &= ~SHRINKER_REGISTERED;
-> > >   	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
-> > >   		unregister_memcg_shrinker(shrinker);
-> > >   	debugfs_entry = shrinker_debugfs_remove(shrinker);
-> > >   	up_write(&shrinker_rwsem);
-> > > +	synchronize_srcu(&shrinker_srcu);
-> > > +
-> > >   	debugfs_remove_recursive(debugfs_entry);
-> > >   	kfree(shrinker->nr_deferred);
-> > > @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
-> > >   {
-> > >   	down_write(&shrinker_rwsem);
-> > >   	up_write(&shrinker_rwsem);
-> > > +	synchronize_srcu(&shrinker_srcu);
-> > >   }
-> > >   EXPORT_SYMBOL(synchronize_shrinkers);
-> > > @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
-> > >   {
-> > >   	unsigned long ret, freed = 0;
-> > >   	struct shrinker *shrinker;
-> > > +	int srcu_idx;
-> > >   	/*
-> > >   	 * The root memcg might be allocated even though memcg is disabled
-> > > @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
-> > >   	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
-> > >   		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
-> > > -	if (!down_read_trylock(&shrinker_rwsem))
-> > > -		goto out;
-> > > +	srcu_idx = srcu_read_lock(&shrinker_srcu);
-> > > -	list_for_each_entry(shrinker, &shrinker_list, list) {
-> > > +	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
-> > > +				 srcu_read_lock_held(&shrinker_srcu)) {
-> > >   		struct shrink_control sc = {
-> > >   			.gfp_mask = gfp_mask,
-> > >   			.nid = nid,
-> > > @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
-> > >   		if (ret == SHRINK_EMPTY)
-> > >   			ret = 0;
-> > >   		freed += ret;
-> > > -		/*
-> > > -		 * Bail out if someone want to register a new shrinker to
-> > > -		 * prevent the registration from being stalled for long periods
-> > > -		 * by parallel ongoing shrinking.
-> > > -		 */
-> > > -		if (rwsem_is_contended(&shrinker_rwsem)) {
-> > > -			freed = freed ? : 1;
-> > > -			break;
-> > > -		}
-> > >   	}
-> > > -	up_read(&shrinker_rwsem);
-> > > -out:
-> > > +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
-> > >   	cond_resched();
-> > >   	return freed;
-> > >   }
-> > > -- 
-> > > 2.20.1
-> > > 
-> > > 
+> > > Do you still want me to rebase or do you prefer to handle the conflict
+> > > some other way?
 > > 
-> > Hi Qi,
-> > 
-> > A different problem I realized after my old attempt to use SRCU was that the
-> > unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
-> > call. Both register_shrinker() *and* unregister_shrinker() are called frequently
-> > these days, and SRCU is too unfair to the unregister path IMO.
+> > Ah yes, my bad, I'll merge rtc-fixes in rtc-next before applying
 > 
-> Hi Sultan,
-> 
-> IIUC, for unregister_shrinker(), the wait time is hardly longer with
-> SRCU than with shrinker_rwsem before.
+> Sorry about reminding so soon, but with the merge window approaching
+> fast, will you be able to get this merged for 6.3?
 
-The wait time can be quite different because with shrinker_rwsem, the
-rwsem_is_contended() bailout would cause unregister_shrinker() to wait for only
-one random shrinker to finish at worst rather than waiting for *all* shrinkers
-to finish.
+Looks like these last two patches adding support for the nvmem offset
+has not been applied yet. Still hoping you can get them merged for 6.3
+even if this one does not apply cleanly unless you first merge your
+rtc-fixes branch.
 
-> And I just did a simple test. After using the script in cover letter to
-> increase the shrink_slab hotspot, I did umount 1k times at the same
-> time, and then I used bpftrace to measure the time consumption of
-> unregister_shrinker() as follows:
-> 
-> bpftrace -e 'kprobe:unregister_shrinker { @start[tid] = nsecs; }
-> kretprobe:unregister_shrinker /@start[tid]/ { @ns[comm] = hist(nsecs -
-> @start[tid]); delete(@start[tid]); }'
-> 
-> @ns[umount]:
-> [16K, 32K)             3 |      |
-> [32K, 64K)            66 |@@@@@@@@@@      |
-> [64K, 128K)           32 |@@@@@      |
-> [128K, 256K)          22 |@@@      |
-> [256K, 512K)          48 |@@@@@@@      |
-> [512K, 1M)            19 |@@@      |
-> [1M, 2M)             131 |@@@@@@@@@@@@@@@@@@@@@      |
-> [2M, 4M)             313
-> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [4M, 8M)             302 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-> |
-> [8M, 16M)             55 |@@@@@@@@@
-> 
-> I see that the highest time-consuming of unregister_shrinker() is between
-> 8ms and 16ms, which feels tolerable?
-
-If you've got a fast x86 machine then I'd say that's a bit slow. :)
-
-This depends a lot on which shrinkers are active on your system and how much
-work each one does upon running. If a driver's shrinker doesn't have much to do
-because there's nothing it can shrink further, then it'll run fast. Conversely,
-if a driver is stressed in a way that constantly creates a lot of potential work
-for its shrinker, then the shrinker will run longer.
-
-Since shrinkers are allowed to sleep, the delays can really add up when waiting
-for all of them to finish running. In the past, I recall observing delays of
-100ms+ in unregister_shrinker() on slower arm64 hardware when I stress tested
-the SRCU approach.
-
-If your GPU driver has a shrinker (such as i915), I suggest testing again under
-heavy GPU load. The GPU shrinkers can be pretty heavy IIRC.
-
-Thanks,
-Sultan
-
-> Thanks,
-> Qi
-> 
-> > 
-> > Although I never got around to submitting it, I made a non-SRCU solution [1]
-> > that uses fine-grained locking instead, which is fair to both the register path
-> > and unregister path. (The patch I've linked is a version of this adapted to an
-> > older 4.14 kernel FYI, but it can be reworked for the current kernel.)
-> > 
-> > What do you think about the fine-grained locking approach?
-> > 
-> > Thanks,
-> > Sultan
-> > 
-> > [1] https://github.com/kerneltoast/android_kernel_google_floral/commit/012378f3173a82d2333d3ae7326691544301e76a
-> > 
-> 
-> -- 
-> Thanks,
-> Qi
+Johan
