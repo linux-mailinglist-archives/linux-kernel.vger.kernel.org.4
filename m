@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16B76A246B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2A36A245E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjBXWnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 17:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S229588AbjBXWiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 17:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjBXWnA (ORCPT
+        with ESMTP id S229452AbjBXWh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 17:43:00 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F988696;
-        Fri, 24 Feb 2023 14:42:54 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.255]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M3lLh-1pVxw40mTz-000wTV; Fri, 24 Feb 2023 23:37:11 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id B245B3C1C6; Fri, 24 Feb 2023 23:37:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1677278227; bh=NVte4m3e/9C0o4T5mfInbxtnfjIrFf5rYpccNuHdXQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HYWWYz9/ejeGIpYRRJ56T7uLPlxwG5Qh5ZEaPg2XiJejNHki9W5EfJJGaEmHHZ7Vk
-         pvuFTtQBrcjYYBPRfxZr7xJWbZTG7gq9eu9JToJx1KRPkhMuaCx73Q+JOSaHyHSo0V
-         t3phKZopWFDeXmWAMlT9FRaedxl+PUYQL85b2jNU=
-Date:   Fri, 24 Feb 2023 23:37:07 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v6 06/12] kbuild: deb-pkg: make .orig tarball a hard link
- if possible
-Message-ID: <Y/k8E8N5W8L91EpB@fjasle.eu>
-References: <20230215012034.403356-1-masahiroy@kernel.org>
- <20230215012034.403356-6-masahiroy@kernel.org>
+        Fri, 24 Feb 2023 17:37:58 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9371B2EC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:37:33 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-17235c8dab9so1185532fac.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:37:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CPIaWXPFHo0fd67ol/Y3q7iwZBF+ha9D9KhIm0046cs=;
+        b=aH6oRAehs/bQJ6pfKcAcemuaekXsVwUnREED4H9pfNRq3UNgFIlhUlELHi5WmN5dbu
+         c9y0mNPdhBCUeYmsDEEl/bcYWZJCgeDXGP/A7yqAXZ87O4KnCQMPPd9jmZU8GE5f44fx
+         UaZ86ICYsNlATe+XNPSGXkPpodmcSCf/3xPoSNoiNlXQ5xXWbSCVNWuNBb+YS7B075Ln
+         rVJAp3Ytv7HNJrFtGI6PlFefRg4ghIs5BMP84nzguD93iVTb1uQnWYUu6rQ8+3bPVWRW
+         xVGdDZ/UAYwCnHQjdBx8A0wjQ46L12jJK51y0zM+8NznpgSVXzG7zEinmFqW7/DktR+M
+         zGMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CPIaWXPFHo0fd67ol/Y3q7iwZBF+ha9D9KhIm0046cs=;
+        b=CCdrpcQd09FOpmait83HE57CUDNEkQEelPheuNwh2Q05sb6r7Cu0Yv1oWG22XhY5/V
+         lz+CwllIgPJCj9DhO3vzMr7OwNTc98kJtrlWGKwMvKKrekxH3MrFwSEifznfstpBfoTQ
+         nQD3tN1MZKOHCafoRcNqVACy7I48PtrxXbY3k0mEzOTNNXdib5qkLtVUr0yOCz7mXkxQ
+         gV3sZaS+Z8YIY4zcfXEAEzmJovdB3mN1/stSmehaGoc3TojlifVvs5tNP3B0nF5drnr6
+         GTijSlHRwtt5JTyUDYmkayNEv0+yjimokFSF2qmWZsfdxhvmnQ5AMywIGz5hi4QC9vMW
+         P5+g==
+X-Gm-Message-State: AO0yUKUAIHy2cbQwjWu7pu16hfEalpS56ieG6rXh3shYq/MtRmyTiOqY
+        TLsVK9KwxyG/1Io30S+iSRa05qQzKZNZAe3mgtYEWQ==
+X-Google-Smtp-Source: AK7set/BdUClvmyebte8R/H/NeiEx9CQ6WND0VkVnkP+D0I65/lrj6l+4kZ5jy4ogNFoM1rzOtG6Yo19gkDklYbUDfI=
+X-Received: by 2002:a05:6870:5a8a:b0:16e:4db:be3f with SMTP id
+ dt10-20020a0568705a8a00b0016e04dbbe3fmr1461921oab.0.1677278252069; Fri, 24
+ Feb 2023 14:37:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qxYSgjOh4Jmozfz8"
-Content-Disposition: inline
-In-Reply-To: <20230215012034.403356-6-masahiroy@kernel.org>
-X-Provags-ID: V03:K1:8a0zJCfyzBwCzlfBiDCwhvMXDdDSPXNNzVawKks10QebQhaJqCq
- QC2vIVukdjRLoD+0BM25V0HArqrDd6PltvBTBj4YANn75vfkwl5lihtCyi1YmQpLrGOLw/m
- 5K85Pg11qPhudbapCfHeiLduufXKKbLvzWydcG7bAzC5MPCVRaklKqJHkToZYHOAnC4pyet
- zuZ1HkA5A+z0vdfgq+Svg==
-UI-OutboundReport: notjunk:1;M01:P0:ZIWKOIp/cPE=;6x1lYNRUJ1sJffHUDCFVK3f62oi
- /BtSsLmb7fL/YOrsca0KiR/jX303cgnHfWIQsyEKwtbFmr5jldAketftWvfcH8bOsWIDZJA7A
- LuFLRdaZKwJYzMAcEnZ7+6oVMnpffqt9mXYn+ybfrcaH6Rtd4fhD2CbDWR68+af17PARvhr9h
- dtTKc+zFQ1WNwsR1CyiJ5fdS4zJhYAO2xuNNVxpeIYi9l/HgkjI3z7PfhbnHfBlyTi47jCeai
- eNufxAE4V3J6+D3UVScCWtA2udPoWskn1VCdQ15sqIdYVYyM5e59rHSKRJQHWLfDOQrpTZz+Y
- Wz+GHGvQdTUjflh1xoj4ED6Qq3D8zbTt0VquGvmB4SVKMz/fh4X17D7jYWpdLDZTVN4bP0gxd
- OUfyAP1EMvCFjJMfIzX/lYc5sHjlLVY8eL8omwWcv9dUP5ueMuiyaINy8HmUkhQCY75NoKAgU
- u0YsXh7GAmYiHNEweppdCFOhmtfLnIUaBUhAgMCRQSyhaK/P+hQWw+MkbNBh8fYAIpBNrt0y5
- 4MGCMQy04XPTR+CE6yESljKv74Q43CrKJ0PPKpf3EW0LWL3OmcG0+bo7E/OSxRoiWXl9GQM2U
- rl54kjo2q3NlR+NsCvkK65PzsEfSKKwv0AoKGGDcB+/uGBE/KpbFpPuQMK5geUUfGIcMBtw5a
- umERpQgZ4rCXcmGgMJCbrNt22XSvCXi30uCtCyMwEA==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230224195313.1877313-1-jiangzp@google.com> <20230224115310.kernel.v2.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
+ <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com>
+In-Reply-To: <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com>
+From:   Zhengping Jiang <jiangzp@google.com>
+Date:   Fri, 24 Feb 2023 14:37:19 -0800
+Message-ID: <CAB4PzUrO32Z1AF-3UJviYqTr3YvachGgJ7NiqkNW46ioWigtfw@mail.gmail.com>
+Subject: Re: [kernel PATCH v2 1/1] Bluetooth: hci_sync: clear workqueue before
+ clear mgmt cmd
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        mmandlik@google.com, chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,71 +76,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Luiz,
 
---qxYSgjOh4Jmozfz8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Any particular reason why you are not using hci_cmd_sync_clear
+> instead?
 
-On Wed, Feb 15, 2023 at 10:20:28AM +0900 Masahiro Yamada wrote:
-> If '..' belongs to the same filesystem, create a hard link instead of
-> a copy. In most cases, you can save disk space.
->=20
-> I do not want to use 'mv' because keeping linux.tar.gz is useful to
-> avoid unneeded rebuilding of the tarball.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
-> Changes in v6:
->   - New patch
->=20
->  scripts/Makefile.package | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->=20
-> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> index c207f4ec47ac..80a96eb61426 100644
-> --- a/scripts/Makefile.package
-> +++ b/scripts/Makefile.package
-> @@ -96,7 +96,11 @@ debian-orig: private source =3D $(shell dpkg-parsechan=
-gelog -S Source)
->  debian-orig: private version =3D $(shell dpkg-parsechangelog -S Version =
-| sed 's/-[^-]*$$//')
->  debian-orig: private orig-name =3D $(source)_$(version).orig.tar.gz
->  debian-orig: linux.tar.gz debian
-> -	$(Q)cp $< ../$(orig-name)
-> +	$(Q)if [ "$(df  --output=3Dtarget .. 2>/dev/null)" =3D "$(df --output=
-=3Dtarget $< 2>/dev/null)" ]; then \
-> +		ln -f $< ../$(orig-name); \
-> +	else \
-> +		cp $< ../$(orig-name); \
-> +	fi
-> =20
->  PHONY +=3D deb-pkg
->  deb-pkg: debian-orig
-> --=20
-> 2.34.1
+That is a good question and we used hci_cmd_sync_clear in the first
+version, but it will clear the queue and also close the timer. As a
+result, when the adapter is turned on again, the timer will not
+schedule any new jobs. So the option is to use hci_cmd_sync_clear and
+re-initiate the queue or to write a new function which only clears the
+queue.
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> We also may want to move the clearing logic to
+> hci_dev_close_sync since it should be equivalent to
+> hci_request_cancel_all.
 
---qxYSgjOh4Jmozfz8
-Content-Type: application/pgp-signature; name="signature.asc"
+I actually have a question here. I saw
+"drain_workqueue(hdev->workqueue)" in hci_dev_close_sync and thought
+it should force clearing the cmd_sync queue. But it seems cannot
+prevent the use-after-free situation.
 
------BEGIN PGP SIGNATURE-----
+Any suggestions to improve the solution?
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmP5PBMACgkQB1IKcBYm
-EmmeQBAAv13H1JZw7oaHPtLFIWBB84ySrshJfkep+41mj8MCBxMNookp1I/hmUuD
-634ioubZhgXjp+xR7TKjj25rIivwHjwtDumMZ5ewvlV6ohSbO8MyRe8O0RKGjJVr
-gNPJncxz1bGhXDtcXNGvHsJ65mTJdl5l7KUbMSJCi4ggL4//+VFsfnv7Jxb+0RSZ
-gjKhTyHB4LWRYMxAc3moAMiggC9/67KUq2TH6OctuA+kz3tD/dS4yari7eRERq0q
-SdU/N6+h5U5rrY7qQk5iSMMGeNf+/gYkAPUt+v+Iu5fwVP6bXqe7ymq4QIvq7Cqf
-vjCulHXP0AlcYpb4m+oW2jl52M+BMzS4mXaszueabEZRLEIl2s9A98aYhg5seDg3
-DhZ0ScnkrwBbw9sbIUoTynhwX+Y9rJCvC3RylfzcSWanGrsSWPtspMiUV+y0+Emq
-iF6AdxQ6NnEoO9KZ2EuVnbyWAmLAusgiEN0Bt06WpFXbLNg4N0M9Ciz5ZNLEy3U1
-MNvtDYCDOmC8hL/Cus5GQDqDlZL7rV/UI1oT2rssEZIDbko5Ant/P0iyUmu6Lyuc
-XQYPHs2Pzh42QlMGGpqREujgyZFDiXLjShJO9dZZsgB2yTyY9kjbhnSFm/L6ySBH
-Qjzw5GxdPB8EAGPeU3NArgM+JJbgLMfk/mcqNz454hQIn/y9aDY=
-=S61U
------END PGP SIGNATURE-----
+Thanks,
+Zhengping
 
---qxYSgjOh4Jmozfz8--
+
+On Fri, Feb 24, 2023 at 1:02 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Zhengping,
+>
+> On Fri, Feb 24, 2023 at 11:53 AM Zhengping Jiang <jiangzp@google.com> wrote:
+> >
+> > Clear cmd_sync_work queue before clearing the mgmt cmd list to avoid
+> > racing conditions which cause use-after-free.
+> >
+> > When powering off the adapter, the mgmt cmd list will be cleared. If a
+> > work is queued in the cmd_sync_work queue at the same time, it will
+> > cause the risk of use-after-free, as the cmd pointer is not checked
+> > before use.
+> >
+> > Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+> > ---
+> >
+> > Changes in v2:
+> > - Add function to clear the queue without stop the timer
+> >
+> > Changes in v1:
+> > - Clear cmd_sync_work queue before clearing the mgmt cmd list
+> >
+> >  net/bluetooth/hci_sync.c | 21 ++++++++++++++++++++-
+> >  1 file changed, 20 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> > index 117eedb6f709..b70365dfff0c 100644
+> > --- a/net/bluetooth/hci_sync.c
+> > +++ b/net/bluetooth/hci_sync.c
+> > @@ -636,6 +636,23 @@ void hci_cmd_sync_init(struct hci_dev *hdev)
+> >         INIT_DELAYED_WORK(&hdev->adv_instance_expire, adv_timeout_expire);
+> >  }
+> >
+> > +static void hci_pend_cmd_sync_clear(struct hci_dev *hdev)
+> > +{
+> > +       struct hci_cmd_sync_work_entry *entry, *tmp;
+> > +
+> > +       mutex_lock(&hdev->cmd_sync_work_lock);
+> > +       list_for_each_entry_safe(entry, tmp, &hdev->cmd_sync_work_list, list) {
+> > +               if (entry->destroy) {
+> > +                       hci_req_sync_lock(hdev);
+> > +                       entry->destroy(hdev, entry->data, -ECANCELED);
+> > +                       hci_req_sync_unlock(hdev);
+> > +               }
+> > +               list_del(&entry->list);
+> > +               kfree(entry);
+> > +       }
+> > +       mutex_unlock(&hdev->cmd_sync_work_lock);
+> > +}
+> > +
+> >  void hci_cmd_sync_clear(struct hci_dev *hdev)
+> >  {
+> >         struct hci_cmd_sync_work_entry *entry, *tmp;
+> > @@ -4842,8 +4859,10 @@ int hci_dev_close_sync(struct hci_dev *hdev)
+> >
+> >         if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
+> >             !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
+> > -           hci_dev_test_flag(hdev, HCI_MGMT))
+> > +           hci_dev_test_flag(hdev, HCI_MGMT)) {
+> > +               hci_pend_cmd_sync_clear(hdev);
+>
+> Any particular reason why you are not using hci_cmd_sync_clear
+> instead? We also may want to move the clearing logic to
+> hci_dev_close_sync since it should be equivalent to
+> hci_request_cancel_all.
+>
+> >                 __mgmt_power_off(hdev);
+> > +       }
+> >
+> >         hci_inquiry_cache_flush(hdev);
+> >         hci_pend_le_actions_clear(hdev);
+> > --
+> > 2.39.2.722.g9855ee24e9-goog
+> >
+>
+>
+> --
+> Luiz Augusto von Dentz
