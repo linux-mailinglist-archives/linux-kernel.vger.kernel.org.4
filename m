@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AB26A1B05
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39BE6A1AD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjBXLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        id S230129AbjBXLAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjBXLAt (ORCPT
+        with ESMTP id S229810AbjBXK76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:00:49 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC2B6357A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:00:16 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id ko13so16991795plb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:00:16 -0800 (PST)
+        Fri, 24 Feb 2023 05:59:58 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D880025297
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:59:29 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id az36so1552867wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:59:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GDe2OfCLNRaJ6CRURKr3KlmzCsataxU7y19XTJRsk+A=;
-        b=fAJqvN5f5O1suKMbMKyZTKUOuQWDy9CpZJalOaBD5HtdbClkBc2Y3mQktVEXsKIkyM
-         jqwulwTPo0TCvEOim7vshccXaA0Rf0Y9DXxoEyVsK6j4qZBAOBZHZiAZh0/FPdl8b/6t
-         99/G0hP6iYZ4siN6USBnUOzHhXy1eq6v4rBhHz+L1jWHVYaknjNut3fHZGmnF4uuf8bR
-         wpflaqZ3v5/cyV78xkdj4tw+GViopd/zJBAxU8ZdPbKO62vSoEb1Mc10BxaZZnmVKbUe
-         7pNqc3ZJQdBJVjmXt29Ew9KoAUfYslHbLyuSOn82oi52m3xc0zy0oxh6RKvsx+uXM0Us
-         l8lg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gtukSA39Wi90XWdmVY6UvzBxv9KPhp2uRrC15iYduW8=;
+        b=uL3hKxHp/QXQ6xxqZpfnK+ZdbFhkCtPTiyzqk/+yYqbn+VoDSiH8G17tejFKbj0sQG
+         Sqxqsv9U29FgWliM0iUNMh8QMmfe7m9DuuPiMK+L6JA6+dosaBHnELPLJ2E4SDNYp5gZ
+         Xh7I/W1eiRMc05fMDssPr1aqjVcNe51ksM4D8K/aP0aCFZpLtR/DJsBTgf7AKmhSp1N7
+         RIqDEE3o7M9Bh0aAutn7Od3daPvzZws+YrkZbEnoHN1k8ZV+BoPZTiN6i9qvldYxjFYH
+         8NIg61DZWB4NzDiw720CKy3j2CypXHe7yEz/z9iJt5d8PppT+7utXZjQNKjdbIeTL2p9
+         FFzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GDe2OfCLNRaJ6CRURKr3KlmzCsataxU7y19XTJRsk+A=;
-        b=PLLaoWL+7FvzSoV1CnYJx+haolMGyyBQzjdIfwJz2+4mH0S9BLW6g9n26M/A6RtFzA
-         Fu48fcMti2w0etEOe+pB5RKth8I1oCxYxR9rhOkvfnwaZDe6+wxLD/1wG7BoV/qBmmEH
-         S15oLb6wVXHyMORI5xx0TWCkLUhEypByK9hG+hM+5fT1l4nEDQPIMNd0MgMt7K2j12cx
-         zSvHox8wvK8tFjrMDRivnfcUbMEZp/SzaH5OyAHm/DyjmprWLnIb5xNuIe2+P0eErnyx
-         HU0pmMz31L8y3uxOdcOQk5pO1HRjCCT6NrGYLRAqHDrR5hfLZDj4ShddKS4F1frUrhil
-         ZbaQ==
-X-Gm-Message-State: AO0yUKVbDq3+3iFrJEl7leSyN7wok9N09NPrXJlymssJLEJ61KL+Zn67
-        CRX5qE6VsHp9s0TrdffLtnVJ
-X-Google-Smtp-Source: AK7set96B4clo9yI/CAFFJdJQ32pbl2Rs/s9/H+2kiiR3ogiFM6+s9/K/NGi2RuWUQxR38KPnofOuA==
-X-Received: by 2002:a17:90b:4a4d:b0:231:284:ea4d with SMTP id lb13-20020a17090b4a4d00b002310284ea4dmr17736121pjb.22.1677236416420;
-        Fri, 24 Feb 2023 03:00:16 -0800 (PST)
-Received: from localhost.localdomain ([117.217.187.3])
-        by smtp.gmail.com with ESMTPSA id gd5-20020a17090b0fc500b00233cde36909sm1263853pjb.21.2023.02.24.03.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 03:00:16 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org
-Cc:     konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 13/13] PCI: qcom: Add support for SDX55 SoC
-Date:   Fri, 24 Feb 2023 16:29:06 +0530
-Message-Id: <20230224105906.16540-14-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230224105906.16540-1-manivannan.sadhasivam@linaro.org>
-References: <20230224105906.16540-1-manivannan.sadhasivam@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gtukSA39Wi90XWdmVY6UvzBxv9KPhp2uRrC15iYduW8=;
+        b=G89GzuggCg4kfQXz+FjZfw6hgqGnf78Migdx6DfTL8fKfbDm2a1BycBB7WKZuuwsZz
+         BCo9s5kSjFmU5HpuIaUheq1iTGyNTh8Nw47X7QikH+u8ppfOAiDz3efp6oTdCJuMAxhG
+         3A378gZMvMzQdmcxhnoDFNojwPeQzbVWaTbp/Q6zFC1efUrykNZwM35yPeB/ChsQ7xtG
+         XSug5wNDmHnkbqkk2R+5uB+hb7wTUtybnLDRr38Q9EOj+1e3OFqVKGyU00rlFYllYsMh
+         tInzj1N1fN6yTMuGimaPYNGMo/rWuqO5P9DbvAziSpB7irbJoW3hS9k/dJy/W+uRkIST
+         VmMQ==
+X-Gm-Message-State: AO0yUKWzKKCG61QgebZDPWyNYXNyhIRBEbfo7PBKblfJ2fRyoF2dVGBA
+        gHlwa1VNQb876hwoY+Ejns1zoA==
+X-Google-Smtp-Source: AK7set+6qCrCJhJWKul9+wwk0Sl1OQr5LMWEah+GmhryU62cpZOQqYSLbs7n6/2LMzNjVIRdKwXcvQ==
+X-Received: by 2002:a05:600c:600f:b0:3dc:4316:52be with SMTP id az15-20020a05600c600f00b003dc431652bemr13299778wmb.10.1677236368402;
+        Fri, 24 Feb 2023 02:59:28 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05600c1c8800b003dec22de1b1sm2601864wms.10.2023.02.24.02.59.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 02:59:28 -0800 (PST)
+Message-ID: <0827a05c-117d-3d4c-2e3a-f8d80e256ca0@linaro.org>
+Date:   Fri, 24 Feb 2023 11:59:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/4] ASoC: dt-bindings: wlf,wm8524: Add a property to
+ specify power up sequency time
+Content-Language: en-US
+To:     Chancel Liu <chancel.liu@nxp.com>, Mark Brown <broonie@kernel.org>
+Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "ckeepax@opensource.cirrus.com" <ckeepax@opensource.cirrus.com>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20230222113945.3390672-1-chancel.liu@nxp.com>
+ <20230222113945.3390672-2-chancel.liu@nxp.com>
+ <Y/YPkgOreByREmOz@sirena.org.uk>
+ <VI1PR04MB4222996DB8494FD14A1D5FCEE3A89@VI1PR04MB4222.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <VI1PR04MB4222996DB8494FD14A1D5FCEE3A89@VI1PR04MB4222.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,45 +87,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for SDX55 SoC reusing the 1.9.0 config. The PCIe controller is
-of version 1.10.0 but it is compatible with the 1.9.0 config. This SoC also
-requires "sleep" clock which is added as an optional clock in the driver,
-since it is not required on other SoCs.
+On 24/02/2023 11:56, Chancel Liu wrote:
+>> On Wed, Feb 22, 2023 at 07:39:43PM +0800, Chancel Liu wrote:
+>>> This property specifies power up to audio out time. It's necessary
+>>> beacause this device has to wait some time before ready to output
+>>> audio after MCLK, BCLK and MUTE=1 are enabled. For more details about
+>>> the timing constraints, please refer to WTN0302 on
+>>> https://www.cirrus.com/products/wm8524/
+>>
+>> According to that the delay is a property of MCLK and the sample rate rather
+>> than a per board constant, it shouldn't be in DT but rather the driver should
+>> figure out the required delay on each startup.
+> 
+> I can't agree with you more. From the power up to audio out timing table in
+> WTN0302, the delay depends on sample rate and MCLK. Driver should calculate it
+> rather than read it from DT. However as I mentioned in my last email, values in
+> the table seem not accurate for all systems. It's a kind of compromise to get
+> the value from DT. Do other codecs have a similar situation?
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+DT is for hardware properties, not for software compromises.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 77e5dc7b88ad..659df73114dd 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -182,7 +182,7 @@ struct qcom_pcie_resources_2_3_3 {
- 
- /* 6 clocks typically, 7 for sm8250 */
- struct qcom_pcie_resources_2_7_0 {
--	struct clk_bulk_data clks[12];
-+	struct clk_bulk_data clks[13];
- 	int num_clks;
- 	struct regulator_bulk_data supplies[2];
- 	struct reset_control *pci_reset;
-@@ -1208,6 +1208,7 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
- 	res->clks[idx++].id = "noc_aggr_4";
- 	res->clks[idx++].id = "noc_aggr_south_sf";
- 	res->clks[idx++].id = "cnoc_qx";
-+	res->clks[idx++].id = "sleep";
- 
- 	num_opt_clks = idx - num_clks;
- 	res->num_clks = idx;
-@@ -1824,6 +1825,7 @@ static const struct of_device_id qcom_pcie_match[] = {
- 	{ .compatible = "qcom,pcie-sc8180x", .data = &cfg_1_9_0 },
- 	{ .compatible = "qcom,pcie-sc8280xp", .data = &cfg_1_9_0 },
- 	{ .compatible = "qcom,pcie-sdm845", .data = &cfg_2_7_0 },
-+	{ .compatible = "qcom,pcie-sdx55", .data = &cfg_1_9_0 },
- 	{ .compatible = "qcom,pcie-sm8150", .data = &cfg_1_9_0 },
- 	{ .compatible = "qcom,pcie-sm8250", .data = &cfg_1_9_0 },
- 	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
--- 
-2.25.1
+
+Best regards,
+Krzysztof
 
