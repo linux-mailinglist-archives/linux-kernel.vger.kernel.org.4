@@ -2,144 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9526A1C09
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4926A1C28
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjBXMTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S229987AbjBXM3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjBXMTD (ORCPT
+        with ESMTP id S229909AbjBXM3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:19:03 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B2963A11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677241138; x=1708777138;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8d8p7PuMREJ+HiAtxqekG9lFLSEEVPGv9lxV26sp4wc=;
-  b=Fivt4T6dML+HYVV9f0YvKV3tVwU0ojadTT74YQ9VoFV+SRFolZ8PVWIp
-   O3fOM7tXYmgs/C9DpgGlzkz1Rwwmuih1YROAiGVfi/2dYojgJpHU7wMY4
-   Teyy08VA93Ji7Djgbjnra/7mqLIzfMIACSPu+dtTgiegrYjQENTEvlE1q
-   XG5joSf7eTGmV/cYWYIFhni8ZcRQEezzuWs+EHhxFoztQlMFwRKOqdAYi
-   DTF6Ku17il3J7aAkCf31nQvHhomOpvtXdpMRca15OkNqfPyN2e67JYYmv
-   E0o0iAA2HsdtDCQ6d0xzsd1MO3dXwK36sf1guVcpShUgb5xc0dzQEdSiZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="360966410"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="360966410"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 04:18:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736782075"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="736782075"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Feb 2023 04:18:58 -0800
-Date:   Fri, 24 Feb 2023 04:29:00 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
- current sched domain
-Message-ID: <20230224122900.GA12626@ranerica-svr.sc.intel.com>
-References: <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
- <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
- <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
- <Y+Z2b/OtZDk9cT53@hirez.programming.kicks-ass.net>
- <xhsmhk00pqwap.mognet@vschneid.remote.csb>
- <20230210183155.GA11997@ranerica-svr.sc.intel.com>
- <8300f288-7157-5e2d-3bb3-badcffd15d34@arm.com>
- <20230214064328.GA11859@ranerica-svr.sc.intel.com>
- <20230216052105.GA20785@ranerica-svr.sc.intel.com>
- <183aec1b-5626-e972-bbed-aca038280828@arm.com>
+        Fri, 24 Feb 2023 07:29:38 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D525652A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:29:31 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id h14so16716667plf.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I64OIj5JM5jVLmuB1aGRMosStTA9JU6adN4APAydm64=;
+        b=brp9cb638P51eq5ehuHgI2HFngdi1uyqvFfnsN0iNV6jajEV4Lbv4g4fsWhjOEE+j0
+         Ui3ro/7bG8IoQZMs/RVYwWzfr6jFfVRUXTFjxW4WnXECCU9VONc8cvKvKstMJDqrvgcG
+         FRcwRFD3shxmmND0s/fh5FpN+2n38gNFwX2kieY3QmNbi3OUH2u1tYKDZEXjW4/NcuBU
+         IlH7A/Gbmz1tHnK65v+Ad3D6rvzfZeJ/lpaYkdHXsbyOX34vl3PSxEbNpJjyG+TNW4VX
+         dYxdQd4byJG/hUZNn8AwtzhsgLAaB78s/8OQzAZP20Sw0C8/U31n2288sy2gG6pN5ib5
+         4CDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I64OIj5JM5jVLmuB1aGRMosStTA9JU6adN4APAydm64=;
+        b=cy++o2XN1Ld8NSbOn8GAuBdFz2ug4r15bnFoQAvO0YYf4Ycz9fLZ2YJpPOcfGXuf/P
+         4BP4CKm6zTL2RNwamtqh7lOJ4Ui3pOCRCUynh4TV/1NExcQEcVmGGpPya9nOCBuxPMtz
+         ZLRgL5C9ly8A8maXHo9DD0Sf2OQjJVLV+HAb75zd35SNyYiawbK6yP23xQ6ZdKgUrNUQ
+         gkc9TQ2l8hKe5ITUdn/p/NK7XB0LU7jK4CX4dtDzQ+w0RustRB48e+nfBmKcZiiQ2COU
+         KXSzCHkEhsueThy8NxzE9il1aXrbrWLH+wpF4InTp8/rK1jI4E+EmpT3Nno2CZxTjhBy
+         YY5w==
+X-Gm-Message-State: AO0yUKWMHK8SA8lJG8QyK8IJvg0uiySTzoUW6Ubr5QCaVSz+zPVhM6Qo
+        lKsiuYlywHLoVHCBR+sFGOozbA==
+X-Google-Smtp-Source: AK7set++3aPbfhVhU7RzG1W+bNoSLXJ5kLpnrFXm+bGTgYrXsXUtOzbg4lBwpNZZFrbYZW6O3YaNXQ==
+X-Received: by 2002:a17:90b:3a8f:b0:237:9cc7:28a4 with SMTP id om15-20020a17090b3a8f00b002379cc728a4mr1197994pjb.14.1677241770561;
+        Fri, 24 Feb 2023 04:29:30 -0800 (PST)
+Received: from sunil-laptop ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id g9-20020a17090a9b8900b0022bb3ee9b68sm1458634pjp.13.2023.02.24.04.29.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 04:29:30 -0800 (PST)
+Date:   Fri, 24 Feb 2023 17:59:21 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V2 14/21] irqchip/riscv-intc: Add ACPI support
+Message-ID: <Y/itoXOnbmmYAwoJ@sunil-laptop>
+References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
+ <20230216182043.1946553-15-sunilvl@ventanamicro.com>
+ <20230220193714.kuef6sfg7xmdyfty@orel>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <183aec1b-5626-e972-bbed-aca038280828@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230220193714.kuef6sfg7xmdyfty@orel>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 11:09:55AM +0100, Dietmar Eggemann wrote:
-> On 16/02/2023 06:21, Ricardo Neri wrote:
-> > On Mon, Feb 13, 2023 at 10:43:28PM -0800, Ricardo Neri wrote:
-> >> On Mon, Feb 13, 2023 at 01:17:09PM +0100, Dietmar Eggemann wrote:
-> >>> On 10/02/2023 19:31, Ricardo Neri wrote:
-> >>>> On Fri, Feb 10, 2023 at 05:12:30PM +0000, Valentin Schneider wrote:
-> >>>>> On 10/02/23 17:53, Peter Zijlstra wrote:
-> >>>>>> On Fri, Feb 10, 2023 at 02:54:56PM +0000, Valentin Schneider wrote:
-> 
-> [...]
-> 
-> >>> Can you not detect the E-core dst_cpu case on MC with:
-> >>>
-> >>> +       if (child)
-> >>> +               sds->prefer_sibling = child->flags & SD_PREFER_SIBLING;
-> >>> +       else if (sds->busiest)
-> >>> +               sds->prefer_sibling = sds->busiest->group_weight > 1;
-> >>
-> >> Whose child wants the prefer_sibling setting? In update_sd_lb_stats(), it
-> >> is set based on the flags of the destination CPU's sched domain. But when
-> >> used in find_busiest_group() tasks are spread from the busiest group's
-> >> child domain.
-> >>
-> >> Your proposed code, also needs a check for SD_PREFER_SIBLING, no?
+On Mon, Feb 20, 2023 at 08:37:14PM +0100, Andrew Jones wrote:
+> On Thu, Feb 16, 2023 at 11:50:36PM +0530, Sunil V L wrote:
+> > Add support for initializing the RISC-V INTC driver on ACPI
+> > platforms.
 > > 
-> > I tweaked the solution that Dietmar proposed:
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/irqchip/irq-riscv-intc.c | 78 +++++++++++++++++++++++++++-----
+> >  1 file changed, 66 insertions(+), 12 deletions(-)
 > > 
-> > -	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
-> > +	if (sds->busiest)
-> > +		sds->prefer_sibling = sds->busiest->flags & SD_PREFER_SIBLING;
+> > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> > index f229e3e66387..97a8db0fbc6c 100644
+> > --- a/drivers/irqchip/irq-riscv-intc.c
+> > +++ b/drivers/irqchip/irq-riscv-intc.c
+> > @@ -6,6 +6,7 @@
+> >   */
+> >  
+> >  #define pr_fmt(fmt) "riscv-intc: " fmt
+> > +#include <linux/acpi.h>
+> >  #include <linux/atomic.h>
+> >  #include <linux/bits.h>
+> >  #include <linux/cpu.h>
+> > @@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
+> >  	return intc_domain->fwnode;
+> >  }
+> >  
+> > +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
+> > +{
+> > +	int rc;
+> > +
+> > +	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
+> > +					       &riscv_intc_domain_ops, NULL);
+> > +	if (!intc_domain) {
+> > +		pr_err("unable to add IRQ domain\n");
+> > +		return -ENXIO;
+> > +	}
+> > +
+> > +	rc = set_handle_irq(&riscv_intc_irq);
+> > +	if (rc) {
+> > +		pr_err("failed to set irq handler\n");
+> > +		return rc;
+> > +	}
+> > +
+> > +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
+> > +
+> > +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int __init riscv_intc_init(struct device_node *node,
+> >  				  struct device_node *parent)
+> >  {
+> > @@ -133,24 +158,53 @@ static int __init riscv_intc_init(struct device_node *node,
+> >  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
+> >  		return 0;
+> >  
+> > -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
+> > -					    &riscv_intc_domain_ops, NULL);
+> > -	if (!intc_domain) {
+> > -		pr_err("unable to add IRQ domain\n");
+> > -		return -ENXIO;
+> > -	}
+> > -
+> > -	rc = set_handle_irq(&riscv_intc_irq);
+> > +	rc = riscv_intc_init_common(of_node_to_fwnode(node));
+> >  	if (rc) {
+> > -		pr_err("failed to set irq handler\n");
+> > +		pr_err("failed to initialize INTC\n");
+> >  		return rc;
+> >  	}
+> >  
+> > -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
+> > +	return 0;
+> > +}
+> >  
+> > -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
+> > +IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
+> > +
+> > +#ifdef CONFIG_ACPI
+> > +
+> > +static int __init
+> > +riscv_intc_acpi_init(union acpi_subtable_headers *header,
+> > +		     const unsigned long end)
 > 
-> Maybe:
+> Please keep the function and its return type on the same line. We can go
+> to 100 chars.
 > 
-> sds->prefer_sibling = !!(sds->busiest->flags & SD_PREFER_SIBLING);
-> 
-> 1 vs 2048 ?
+Yes, missed updating this instance. Thanks!
 
-Sure, I can do this.
-> 
-> > This comes from the observation that the prefer_sibling setting acts on
-> > busiest group. It then depends on whether the busiest group, not the local
-> > group, has child sched sched domains. Today it works because in most cases
-> > both the local and the busiest groups have child domains with the SD_
-> > PREFER_SIBLING flag.
-> > 
-> > This would also satisfy sched domains with the SD_ASYM_CPUCAPACITY flag as
-> > prefer_sibling would not be set in that case.
-> > 
-> > It would also conserve the current behavior at the NUMA level. We would
-> > not need to implement SD_SPREAD_TASKS.
-> > 
-> > This would both fix the SMT vs non-SMT bug and be less invasive.
-> 
-> Yeah, much better! I always forget that we have those flags on SGs now
-> as well. Luckily, we just need to check busiest sg to cover all cases.
-
-Right. I can add a comment to clarify from where the flags come.
-
+Thanks,
+Sunil
