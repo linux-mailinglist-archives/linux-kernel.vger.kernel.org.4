@@ -2,117 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584EE6A1B32
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A62E6A1B34
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjBXLOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S230062AbjBXLOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjBXLOE (ORCPT
+        with ESMTP id S229766AbjBXLOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:14:04 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E231353A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:14:02 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s26so53386000edw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:14:02 -0800 (PST)
+        Fri, 24 Feb 2023 06:14:12 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA971689C;
+        Fri, 24 Feb 2023 03:14:08 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id q16so3189256wrw.2;
+        Fri, 24 Feb 2023 03:14:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b4D6hX91fb92VP82KNoA4xeL0ZK1TUyb4FSrEk92iZw=;
-        b=zNcNrNzKfAKA5t/pAA7zijWFeVt36mJVhdHAeL4/YAlXPxdmWlKdR6R+xi+LrlWP33
-         z2Dt9BjXIn+4OqbmsvOUYbfiwdwSYia64/Lw2AxfOP49gPuxf+r7nWvl/96yHIQSaZ5D
-         +1bNEERoen9tf9vFvKxn6+SYz7+jID2wwp4PMWG2lkqm61CmdgDJoIJfDMs+sQ7HRiVx
-         uLFboR8A41OR6Mgl8CKjyZPx4ZDnUNuVa9z9bS4I+4wxDNf8EcoPR0YCcIfxtKYuS8tj
-         F6gSTyQBPPWtQ5Uit7thD9i9mwfZvqfj3mQaP5u369414I1D16RU1XlRwAshaGKww/QR
-         329g==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SKRDOn50Fe/CNyx3l2bs2XrZQpRO9QtNT/Gvh1YGQwE=;
+        b=k3GkFWnbyNWw4U+CrFtc++dPmQ0/dfG30pJknWe3NEE4NsY0e+d5rAJMi6Jt3Dmx5f
+         QS+7r3+uhgt+V3ddBmPHV0WK98xJFoLYi3T+MlgxdJPxLVMXNXW/PNkTvqlxHGQcnSpQ
+         73DTZEwxeadnCnQqBQ/AmSiCe0kc2t5rhGDt0i4ZsMLcdsDtR+ug0/qiQaxRXlrcJpQZ
+         6TtNa/640SchYLaUbJO4ZN1oc/eFd0EWkhcWTiCW54nABunnLM2uw6XHkwIYm/hbJS93
+         HBd4DSNSbWkiahC4IXFnA3AviZ4ZBF8mlDffRR83fARD9kE+UdS7c5HYf1SKug47CUfU
+         mkWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b4D6hX91fb92VP82KNoA4xeL0ZK1TUyb4FSrEk92iZw=;
-        b=JH7OgWtIFqewK5zc+L/4RrYOC09ecy48bUPi7DholmZEDUBQ3ii0QKdAnW4HbHd6jK
-         ZrmVfq/7691AYz3QHYV7zFEatL7HKx95bK6xsi07nn5BXmFw7nufzvPPji4VOFDpIozT
-         poOSHdiI+NKs59P0pP/x86gytLUmVg/a6BInGc5fXqhUiIHifUqrIOaF0c+ZfXvS2HCK
-         me/yy1QsOg3dvXyF8WyHgV36vRuz3czzQh/cpg8UH2vEnZL/d1qNtPKhfMtNpsLnpcOd
-         4NFTY6ate93AaTz353u/CbYcAnYRBGJP1mxJxIM9W20clv1q3hEh9hQL4CnVLvMoZ1EQ
-         JI0A==
-X-Gm-Message-State: AO0yUKVu110u2m4mNUw483+nj2DwADMPVrbztrtiySQ8PJvlvQUDX+jD
-        sZ3EAgfaZDcR1I5ZIvWLhui12Q==
-X-Google-Smtp-Source: AK7set+gc4yhE+A0IXsPpE9c67JqLb4w2Z5XdXbf0h0MLlfYinTEULSVEUAfshoVmYErhQRuFjwloQ==
-X-Received: by 2002:a05:6402:54c:b0:4ad:7224:ce94 with SMTP id i12-20020a056402054c00b004ad7224ce94mr15016385edx.15.1677237241273;
-        Fri, 24 Feb 2023 03:14:01 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w15-20020a50c44f000000b004af70c4b4a7sm1534058edf.97.2023.02.24.03.14.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 03:14:00 -0800 (PST)
-Message-ID: <d4d4c5e6-4700-2404-618a-5cb21946b555@linaro.org>
-Date:   Fri, 24 Feb 2023 12:13:59 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SKRDOn50Fe/CNyx3l2bs2XrZQpRO9QtNT/Gvh1YGQwE=;
+        b=vTLXsNgnmvXfmCJN3wQXB3Awyq8fXQ4u0XFuE5/7WtcAiSLQLks5i0+CPpxFRusn1q
+         F0QxIb92f47mxR8Yj63FyR42NEoCHk97C8IaI/8Ju2HzlVmddih9aBN9b40nZHBmUSWt
+         SDzVsHKR247Qyh6dHcDIPm/GoX2EXHEtCURE+SnRDBMgf6N9OmbYKhKpSZDYMAl0CFeV
+         hZ24Ev12MEonRHnWQbDyXd4qdvrnEgjkY4XOLbIjmYd0mgwJg7RXKSG7tuITp08tkgjc
+         n5jNHbFgypRffk67ptRh3SUxPq3RyROs7oq0EBd0COQEiKwrdDOJe2/whu4L4UgUpgRV
+         03EA==
+X-Gm-Message-State: AO0yUKU3B35XhfVJw16pG4IAudJ6dw6eV8+K1teS07TAz+AyLwbqO5/p
+        FU7oErKFUBWSFgjIC+BPCXo=
+X-Google-Smtp-Source: AK7set9InYlzh56OehyNP2cFmC8v4kKyYst9z0J09KA9LqrlET1h8ddkYSEy3lLM79IT/P5otdA0MQ==
+X-Received: by 2002:adf:f5d2:0:b0:2c7:bbe:456e with SMTP id k18-20020adff5d2000000b002c70bbe456emr6788251wrp.56.1677237246589;
+        Fri, 24 Feb 2023 03:14:06 -0800 (PST)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id c5-20020a5d4cc5000000b002c59f18674asm12287023wrt.22.2023.02.24.03.14.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 03:14:06 -0800 (PST)
+Date:   Fri, 24 Feb 2023 11:14:04 +0000
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 00/12] 4.19.274-rc2 review
+Message-ID: <Y/ib/IxdLtDCGZ7s@debian>
+References: <20230223141538.102388120@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/7] dt-bindings: gpio: rockchip,gpio-bank: add unique
- hardware GPIO ID
-Content-Language: en-US
-To:     Johan Jonker <jbx6244@gmail.com>, linus.walleij@linaro.org,
-        brgl@bgdev.pl
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <3eeaa940-9d40-5e33-bc36-c9b0449ded9f@gmail.com>
- <774d712d-bcdf-677a-2d9c-a49ed829e965@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <774d712d-bcdf-677a-2d9c-a49ed829e965@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223141538.102388120@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 20:46, Johan Jonker wrote:
-> Add a unique hardware GPIO ID to the Rockchip GPIO nodes with
-> the "rockchip,gpio-controller" property to be independent from aliases
-> and probe order. "gpio-ranges" can't be used for that, because there is
-> no semantic restrictions on how they are set up.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
-> 
-> See discussion:
-> https://lore.kernel.org/u-boot/CACRpkdZx8EaSFLeh4vruRsdC+Sx_ieBiKmuE7t37zhiYqtS3WQ@mail.gmail.com/
-> ---
->  .../devicetree/bindings/gpio/rockchip,gpio-bank.yaml        | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> index 2e9a5179c..39ac41e9d 100644
-> --- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> @@ -52,6 +52,12 @@ properties:
-> 
->    gpio-line-names: true
-> 
-> +  rockchip,gpio-controller:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maximum: 8
-> +    description:
-> +      Unique hardware GPIO ID.
+Hi Greg,
 
-Neither commit msg nor this description explain why do you need it.
-Also: what is a unique ID? why only 8 of them are allowed? Why assigning
-arbitrary numbers should be a property of DT (answer: it's not)?
+On Thu, Feb 23, 2023 at 03:15:58PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.274 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
 
-Best regards,
-Krzysztof
+Build test (gcc version 11.3.1 20230210):
+mips: 63 configs -> no  failure
+arm: 115 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2928
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
