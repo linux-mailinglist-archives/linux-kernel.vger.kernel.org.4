@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710BF6A23A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA9A6A23A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjBXVSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S229759AbjBXVSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjBXVSP (ORCPT
+        with ESMTP id S229864AbjBXVSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:18:15 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA22525E;
+        Fri, 24 Feb 2023 16:18:16 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FE24C3E;
         Fri, 24 Feb 2023 13:17:53 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OKp80j029561;
-        Fri, 24 Feb 2023 21:17:23 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OK5hs0030408;
+        Fri, 24 Feb 2023 21:17:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=CPewQcvdvM6tnCXkA/ryYOlaoSyypxN3yA10Btcyz3E=;
- b=k+Gj8IPUFgcBH5J1LlgnQ/1KIbeqwHdh6LjwnpYXitZ7FY/uucBYhJTp/IklW+N0SwGu
- ae7g9Y7U9Rh+yX4xP2khxktloAZb9eB8sHaWT+9EAoST7ocdYpsobb9waTky+l20Ru9d
- bSQuWWfc4aKoYNiOs4DNY3q+ezUmhw0d29S2TEK9Usvnn7cTKs819TeVePxhsI1mh0B2
- KgF57/TJVAAMR1tcS+6xgbtBHxnX/wqkMEuYDxOViaHco0CTAqnATzmSyoeDsSDXaUQ4
- d3euLNj2JU76/bRvlBXrbPVkJARiEDbQWycJ8zgdBk53ueUXMzDYQaeKZGTFqprtwlYI BQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxsy7t22n-1
+ bh=2KeglNGIGTjZRWimPDaOKRsBt+lnwUieaIjlGkQbDEM=;
+ b=fwdBbrlPqw3uesc+q/CiqsrKpTuPFaFFrP4MtLPPuSAZxr6qwvx4JD05L/mWJSb87ryH
+ JFmzqRrLuEExo0u4fe+Ih0pbXbLbU9X6HPr4eoru3PXGQBtVHM19d9ss/htbyqPKqANo
+ ziMxvgITSn+R+wRljsGc2zBbYjUe/8NwRiwBeCUTK4EHFKx+QBfSH2V1I4ncjr+k9AHs
+ BX7d7sn1k8u7Kf9xAanT/jkABTev9oLXVE5jpw0Aus6KwGPFZMDF85DXayxBThaFSaK1
+ mh9gnzCy7WuBn5xypf/73e88QPh6Dq3YxKKAVEL5P257FKzWDxxf1waoj9BUZQpG6wgn ng== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwybwnwch-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 21:17:23 +0000
+        Fri, 24 Feb 2023 21:17:25 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OLHMhK025479
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OLHOXF018415
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 21:17:22 GMT
+        Fri, 24 Feb 2023 21:17:24 GMT
 Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 24 Feb 2023 13:17:21 -0800
+ 15.2.986.41; Fri, 24 Feb 2023 13:17:23 -0800
 From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -54,9 +54,9 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>,
         Siddharth Gupta <sidgup@codeaurora.org>,
         Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: [PATCH v5 1/2] remoteproc: core: Export the rproc coredump APIs
-Date:   Fri, 24 Feb 2023 13:17:06 -0800
-Message-ID: <20230224211707.30916-2-quic_gokukris@quicinc.com>
+Subject: [PATCH v5 2/2] remoteproc: qcom: Add full coredump fallback mechanism
+Date:   Fri, 24 Feb 2023 13:17:07 -0800
+Message-ID: <20230224211707.30916-3-quic_gokukris@quicinc.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230224211707.30916-1-quic_gokukris@quicinc.com>
 References: <20230224211707.30916-1-quic_gokukris@quicinc.com>
@@ -68,19 +68,19 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: blBNM9NyXPCCoeOBTVj9JCNqBbbd9bVH
-X-Proofpoint-ORIG-GUID: blBNM9NyXPCCoeOBTVj9JCNqBbbd9bVH
+X-Proofpoint-GUID: rJjw62YLETut6RPGP3-Zs-qtUw_Rm3kD
+X-Proofpoint-ORIG-GUID: rJjw62YLETut6RPGP3-Zs-qtUw_Rm3kD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_14,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302240169
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2023-02-24_16,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=976 malwarescore=0 impostorscore=0
+ bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302240169
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,70 +89,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Siddharth Gupta <sidgup@codeaurora.org>
 
-The remoteproc coredump APIs are currently only part of the internal
-remoteproc header. This prevents the remoteproc platform drivers from
-using these APIs when needed. This change moves the rproc_coredump()
-and rproc_coredump_cleanup() APIs to the linux header and marks them
-as exported symbols.
+If a remoteproc's firmware does not support minidump but the driver
+adds an ID, the minidump driver does not collect any coredumps when
+the remoteproc crashes. This hinders the purpose of coredump
+collection. This change adds a fallback mechanism in the event of a
+crash.
 
 Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
 Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 ---
- drivers/remoteproc/remoteproc_coredump.c | 2 ++
- drivers/remoteproc/remoteproc_internal.h | 4 ----
- include/linux/remoteproc.h               | 4 ++++
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/remoteproc/qcom_common.c   | 13 +++++++++++--
+ drivers/remoteproc/qcom_q6v5_pas.c |  1 +
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_coredump.c b/drivers/remoteproc/remoteproc_coredump.c
-index 4b093420d98a..9c53c3df7fde 100644
---- a/drivers/remoteproc/remoteproc_coredump.c
-+++ b/drivers/remoteproc/remoteproc_coredump.c
-@@ -32,6 +32,7 @@ void rproc_coredump_cleanup(struct rproc *rproc)
- 		kfree(entry);
- 	}
- }
-+EXPORT_SYMBOL_GPL(rproc_coredump_cleanup);
- 
- /**
-  * rproc_coredump_add_segment() - add segment of device memory to coredump
-@@ -327,6 +328,7 @@ void rproc_coredump(struct rproc *rproc)
+diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+index 7da3259be14a..280a5a821dca 100644
+--- a/drivers/remoteproc/qcom_common.c
++++ b/drivers/remoteproc/qcom_common.c
+@@ -173,12 +173,21 @@ void qcom_minidump(struct rproc *rproc, unsigned int minidump_id,
  	 */
- 	wait_for_completion(&dump_state.dump_done);
- }
-+EXPORT_SYMBOL_GPL(rproc_coredump);
- 
- /**
-  * rproc_coredump_using_sections() - perform coredump using section headers
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index d4dbb8d1d80c..f62a82d71dfa 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -76,10 +76,6 @@ extern struct class rproc_class;
- int rproc_init_sysfs(void);
- void rproc_exit_sysfs(void);
- 
--/* from remoteproc_coredump.c */
--void rproc_coredump_cleanup(struct rproc *rproc);
--void rproc_coredump(struct rproc *rproc);
--
- #ifdef CONFIG_REMOTEPROC_CDEV
- void rproc_init_cdev(void);
- void rproc_exit_cdev(void);
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index fe8978eb69f1..b4795698d8c2 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -690,6 +690,10 @@ int rproc_detach(struct rproc *rproc);
- int rproc_set_firmware(struct rproc *rproc, const char *fw_name);
- void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
- void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iomem);
+ 	if (subsystem->regions_baseptr == 0 ||
+ 	    le32_to_cpu(subsystem->status) != 1 ||
+-	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED ||
+-	    le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
++	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED) {
++		return rproc_coredump(rproc);
++	}
 +
-+/* from remoteproc_coredump.c */
-+void rproc_coredump_cleanup(struct rproc *rproc);
-+void rproc_coredump(struct rproc *rproc);
- void rproc_coredump_using_sections(struct rproc *rproc);
- int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size);
- int rproc_coredump_add_custom_segment(struct rproc *rproc,
++	if (le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
+ 		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
+ 		return;
+ 	}
+ 
++	/**
++	 * Clear out the dump segments populated by parse_fw before
++	 * re-populating them with minidump segments.
++	 */
++	rproc_coredump_cleanup(rproc);
++
+ 	ret = qcom_add_minidump_segments(rproc, subsystem, rproc_dumpfn_t);
+ 	if (ret) {
+ 		dev_err(&rproc->dev, "Failed with error: %d while adding minidump entries\n", ret);
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 27d3a6f8c92f..d065f99b4c32 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -442,6 +442,7 @@ static const struct rproc_ops adsp_minidump_ops = {
+ 	.start = adsp_start,
+ 	.stop = adsp_stop,
+ 	.da_to_va = adsp_da_to_va,
++	.parse_fw = qcom_register_dump_segments,
+ 	.load = adsp_load,
+ 	.panic = adsp_panic,
+ 	.coredump = adsp_minidump,
 -- 
 2.39.2
 
