@@ -2,359 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2006A1661
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A3F6A1669
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 06:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjBXFtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 00:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S229674AbjBXFwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 00:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBXFs7 (ORCPT
+        with ESMTP id S229436AbjBXFwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 00:48:59 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8B035AF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 21:48:56 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B140C3859F;
-        Fri, 24 Feb 2023 05:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677217734; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uj/OBStsmUdP9ek+s7FMyPm2HoT1toFrymVzDDl57ec=;
-        b=pBmaH7uMCXJMSlyNCJwJJKNotfKp6Mn0SPyqcTmKCc33Zz8EQrwAkaC7JO8i1Yijv/moRK
-        CkqBuMehiCxXfEk3jm6YGApBlDiCWErtBYmA6+Hv1ax3YQDVK6ZSKdKzFqAxJWaDZrxSmM
-        Wlhtbiw88aXaAfB56Sy5FP2HHiphzoM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6822B1391B;
-        Fri, 24 Feb 2023 05:48:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /qfUF8ZP+GOTTgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 24 Feb 2023 05:48:54 +0000
-Message-ID: <ff1c662f-ec3d-409a-ecff-05ae94ba0558@suse.com>
-Date:   Fri, 24 Feb 2023 06:48:53 +0100
+        Fri, 24 Feb 2023 00:52:17 -0500
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E685E843;
+        Thu, 23 Feb 2023 21:52:14 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pVQzn-00F7yJ-3T; Fri, 24 Feb 2023 13:51:52 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 24 Feb 2023 13:51:51 +0800
+Date:   Fri, 24 Feb 2023 13:51:51 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
+        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
+Subject: [v2 PATCH] crypto: stm32 - Save and restore between each request
+Message-ID: <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
+References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au>
+ <20230224231430.2948-1-kunyu@nfschina.com>
+ <Y/cy5wUtk10OahpO@gondor.apana.org.au>
+ <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
+ <Y/c7iVW67Xhhdu8e@gondor.apana.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 10/12] x86/mtrr: use new cache_map in
- mtrr_type_lookup()
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230223093243.1180-1-jgross@suse.com>
- <20230223093243.1180-11-jgross@suse.com>
- <BYAPR21MB1688C09C285013BD11DC13FBD7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <BYAPR21MB1688C09C285013BD11DC13FBD7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0QVQPYHhjZlK0pCIM6ViPzKV"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/c7iVW67Xhhdu8e@gondor.apana.org.au>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0QVQPYHhjZlK0pCIM6ViPzKV
-Content-Type: multipart/mixed; boundary="------------Fh4QDdnw5ozCsplexJL0Z4kQ";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <ff1c662f-ec3d-409a-ecff-05ae94ba0558@suse.com>
-Subject: Re: [PATCH v3 10/12] x86/mtrr: use new cache_map in
- mtrr_type_lookup()
-References: <20230223093243.1180-1-jgross@suse.com>
- <20230223093243.1180-11-jgross@suse.com>
- <BYAPR21MB1688C09C285013BD11DC13FBD7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB1688C09C285013BD11DC13FBD7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
+v2 fixes potential state clobbering from the disconnect between
+hdev->flags and rctx->flags.
 
---------------Fh4QDdnw5ozCsplexJL0Z4kQ
-Content-Type: multipart/mixed; boundary="------------dkSEqcM0tVyownhSwl6Eza2r"
+---8<---
+The Crypto API hashing paradigm requires the hardware state to
+be exported between *each* request because multiple unrelated
+hashes may be processed concurrently.
 
---------------dkSEqcM0tVyownhSwl6Eza2r
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+The stm32 hardware is capable of producing the hardware hashing
+state but it was only doing it in the export function.  This is
+not only broken for export as you can't export a kernel pointer
+and reimport it, but it also means that concurrent hashing was
+fundamentally broken.
 
-T24gMjMuMDIuMjMgMjA6MjQsIE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgd3JvdGU6DQo+IEZy
-b206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4gU2VudDogVGh1cnNkYXksIEZl
-YnJ1YXJ5IDIzLCAyMDIzIDE6MzMgQU0NCj4+DQo+PiBJbnN0ZWFkIG9mIGNyYXdsaW5nIHRo
-cm91Z2ggdGhlIE1UUlIgcmVnaXN0ZXIgc3RhdGUsIHVzZSB0aGUgbmV3DQo+PiBjYWNoZV9t
-YXAgZm9yIGxvb2tpbmcgdXAgdGhlIGNhY2hlIHR5cGUocykgb2YgYSBtZW1vcnkgcmVnaW9u
-Lg0KPj4NCj4+IFRoaXMgYWxsb3dzIG5vdyB0byBzZXQgdGhlIHVuaWZvcm0gcGFyYW1ldGVy
-IGFjY29yZGluZyB0byB0aGUNCj4+IHVuaWZvcm1pdHkgb2YgdGhlIGNhY2hlIG1vZGUgb2Yg
-dGhlIHJlZ2lvbiwgaW5zdGVhZCBvZiBzZXR0aW5nIGl0DQo+PiBvbmx5IGlmIHRoZSBjb21w
-bGV0ZSByZWdpb24gaXMgbWFwcGVkIGJ5IGEgc2luZ2xlIE1UUlIuIFRoaXMgbm93DQo+PiBp
-bmNsdWRlcyBldmVuIHRoZSByZWdpb24gY292ZXJlZCBieSB0aGUgZml4ZWQgTVRSUiByZWdp
-c3RlcnMuDQo+Pg0KPj4gTWFrZSBzdXJlIHVuaWZvcm0gaXMgYWx3YXlzIHNldC4NCj4+DQo+
-PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+PiAt
-LS0NCj4+IFYzOg0KPj4gLSBuZXcgcGF0Y2gNCj4+IC0tLQ0KPj4gICBhcmNoL3g4Ni9rZXJu
-ZWwvY3B1L210cnIvZ2VuZXJpYy5jIHwgMjIzICsrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyOCBpbnNlcnRpb25zKCspLCAxOTUgZGVsZXRp
-b25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9n
-ZW5lcmljLmMgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvZ2VuZXJpYy5jDQo+PiBpbmRl
-eCBjYTliOGNlYzgxYTAuLjljOWNiZjZiNTZiYyAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2
-L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMNCj4+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9j
-cHUvbXRyci9nZW5lcmljLmMNCj4+IEBAIC0xMzgsMTU0ICsxMzgsNiBAQCBzdGF0aWMgdTgg
-Z2V0X2VmZmVjdGl2ZV90eXBlKHU4IHR5cGUxLCB1OCB0eXBlMikNCj4+ICAgCXJldHVybiB0
-eXBlMTsNCj4+ICAgfQ0KPj4NCj4+IC0vKg0KPj4gLSAqIENoZWNrIGFuZCByZXR1cm4gdGhl
-IGVmZmVjdGl2ZSB0eXBlIGZvciBNVFJSLU1UUlIgdHlwZSBvdmVybGFwLg0KPj4gLSAqIFJl
-dHVybnMgdHJ1ZSBpZiB0aGUgZWZmZWN0aXZlIHR5cGUgaXMgVU5DQUNIRUFCTEUsIGVsc2Ug
-cmV0dXJucyBmYWxzZQ0KPj4gLSAqLw0KPj4gLXN0YXRpYyBib29sIGNoZWNrX3R5cGVfb3Zl
-cmxhcCh1OCAqcHJldiwgdTggKmN1cnIpDQo+PiAtew0KPj4gLQkqcHJldiA9ICpjdXJyID0g
-Z2V0X2VmZmVjdGl2ZV90eXBlKCpjdXJyLCAqcHJldik7DQo+PiAtDQo+PiAtCXJldHVybiAq
-cHJldiA9PSBNVFJSX1RZUEVfVU5DQUNIQUJMRTsNCj4+IC19DQo+PiAtDQo+PiAtLyoqDQo+
-PiAtICogbXRycl90eXBlX2xvb2t1cF9maXhlZCAtIGxvb2sgdXAgbWVtb3J5IHR5cGUgaW4g
-TVRSUiBmaXhlZCBlbnRyaWVzDQo+PiAtICoNCj4+IC0gKiBSZXR1cm4gdGhlIE1UUlIgZml4
-ZWQgbWVtb3J5IHR5cGUgb2YgJ3N0YXJ0Jy4NCj4+IC0gKg0KPj4gLSAqIE1UUlIgZml4ZWQg
-ZW50cmllcyBhcmUgZGl2aWRlZCBpbnRvIHRoZSBmb2xsb3dpbmcgd2F5czoNCj4+IC0gKiAg
-MHgwMDAwMCAtIDB4N0ZGRkYgOiBUaGlzIHJhbmdlIGlzIGRpdmlkZWQgaW50byBlaWdodCA2
-NEtCIHN1Yi1yYW5nZXMNCj4+IC0gKiAgMHg4MDAwMCAtIDB4QkZGRkYgOiBUaGlzIHJhbmdl
-IGlzIGRpdmlkZWQgaW50byBzaXh0ZWVuIDE2S0Igc3ViLXJhbmdlcw0KPj4gLSAqICAweEMw
-MDAwIC0gMHhGRkZGRiA6IFRoaXMgcmFuZ2UgaXMgZGl2aWRlZCBpbnRvIHNpeHR5LWZvdXIg
-NEtCIHN1Yi1yYW5nZXMNCj4+IC0gKg0KPj4gLSAqIFJldHVybiBWYWx1ZXM6DQo+PiAtICog
-TVRSUl9UWVBFXyh0eXBlKSAgLSBNYXRjaGVkIG1lbW9yeSB0eXBlDQo+PiAtICogTVRSUl9U
-WVBFX0lOVkFMSUQgLSBVbm1hdGNoZWQNCj4+IC0gKi8NCj4+IC1zdGF0aWMgdTggbXRycl90
-eXBlX2xvb2t1cF9maXhlZCh1NjQgc3RhcnQsIHU2NCBlbmQpDQo+PiAtew0KPj4gLQlpbnQg
-aWR4Ow0KPj4gLQ0KPj4gLQlpZiAoc3RhcnQgPj0gMHgxMDAwMDApDQo+PiAtCQlyZXR1cm4g
-TVRSUl9UWVBFX0lOVkFMSUQ7DQo+PiAtDQo+PiAtCS8qIDB4MCAtIDB4N0ZGRkYgKi8NCj4+
-IC0JaWYgKHN0YXJ0IDwgMHg4MDAwMCkgew0KPj4gLQkJaWR4ID0gMDsNCj4+IC0JCWlkeCAr
-PSAoc3RhcnQgPj4gMTYpOw0KPj4gLQkJcmV0dXJuIG10cnJfc3RhdGUuZml4ZWRfcmFuZ2Vz
-W2lkeF07DQo+PiAtCS8qIDB4ODAwMDAgLSAweEJGRkZGICovDQo+PiAtCX0gZWxzZSBpZiAo
-c3RhcnQgPCAweEMwMDAwKSB7DQo+PiAtCQlpZHggPSAxICogODsNCj4+IC0JCWlkeCArPSAo
-KHN0YXJ0IC0gMHg4MDAwMCkgPj4gMTQpOw0KPj4gLQkJcmV0dXJuIG10cnJfc3RhdGUuZml4
-ZWRfcmFuZ2VzW2lkeF07DQo+PiAtCX0NCj4+IC0NCj4+IC0JLyogMHhDMDAwMCAtIDB4RkZG
-RkYgKi8NCj4+IC0JaWR4ID0gMyAqIDg7DQo+PiAtCWlkeCArPSAoKHN0YXJ0IC0gMHhDMDAw
-MCkgPj4gMTIpOw0KPj4gLQlyZXR1cm4gbXRycl9zdGF0ZS5maXhlZF9yYW5nZXNbaWR4XTsN
-Cj4+IC19DQo+PiAtDQo+PiAtLyoqDQo+PiAtICogbXRycl90eXBlX2xvb2t1cF92YXJpYWJs
-ZSAtIGxvb2sgdXAgbWVtb3J5IHR5cGUgaW4gTVRSUiB2YXJpYWJsZSBlbnRyaWVzDQo+PiAt
-ICoNCj4+IC0gKiBSZXR1cm4gVmFsdWU6DQo+PiAtICogTVRSUl9UWVBFXyh0eXBlKSAtIE1h
-dGNoZWQgbWVtb3J5IHR5cGUgb3IgZGVmYXVsdCBtZW1vcnkgdHlwZSAodW5tYXRjaGVkKQ0K
-Pj4gLSAqDQo+PiAtICogT3V0cHV0IEFyZ3VtZW50czoNCj4+IC0gKiByZXBlYXQgLSBTZXQg
-dG8gMSB3aGVuIFtzdGFydDplbmRdIHNwYW5uZWQgYWNyb3NzIE1UUlIgcmFuZ2UgYW5kIHR5
-cGUNCj4+IC0gKgkgICAgcmV0dXJuZWQgY29ycmVzcG9uZHMgb25seSB0byBbc3RhcnQ6KnBh
-cnRpYWxfZW5kXS4gIENhbGxlciBoYXMNCj4+IC0gKgkgICAgdG8gbG9va3VwIGFnYWluIGZv
-ciBbKnBhcnRpYWxfZW5kOmVuZF0uDQo+PiAtICoNCj4+IC0gKiB1bmlmb3JtIC0gU2V0IHRv
-IDEgd2hlbiBhbiBNVFJSIGNvdmVycyB0aGUgcmVnaW9uIHVuaWZvcm1seSwgaS5lLiB0aGUN
-Cj4+IC0gKgkgICAgIHJlZ2lvbiBpcyBmdWxseSBjb3ZlcmVkIGJ5IGEgc2luZ2xlIE1UUlIg
-ZW50cnkgb3IgdGhlIGRlZmF1bHQNCj4+IC0gKgkgICAgIHR5cGUuDQo+PiAtICovDQo+PiAt
-c3RhdGljIHU4IG10cnJfdHlwZV9sb29rdXBfdmFyaWFibGUodTY0IHN0YXJ0LCB1NjQgZW5k
-LCB1NjQgKnBhcnRpYWxfZW5kLA0KPj4gLQkJCQkgICAgaW50ICpyZXBlYXQsIHU4ICp1bmlm
-b3JtKQ0KPj4gLXsNCj4+IC0JaW50IGk7DQo+PiAtCXU2NCBiYXNlLCBtYXNrOw0KPj4gLQl1
-OCBwcmV2X21hdGNoLCBjdXJyX21hdGNoOw0KPj4gLQ0KPj4gLQkqcmVwZWF0ID0gMDsNCj4+
-IC0JKnVuaWZvcm0gPSAxOw0KPj4gLQ0KPj4gLQlwcmV2X21hdGNoID0gTVRSUl9UWVBFX0lO
-VkFMSUQ7DQo+PiAtCWZvciAoaSA9IDA7IGkgPCBudW1fdmFyX3JhbmdlczsgKytpKSB7DQo+
-PiAtCQl1bnNpZ25lZCBzaG9ydCBzdGFydF9zdGF0ZSwgZW5kX3N0YXRlLCBpbmNsdXNpdmU7
-DQo+PiAtDQo+PiAtCQlpZiAoIShtdHJyX3N0YXRlLnZhcl9yYW5nZXNbaV0ubWFza19sbyAm
-ICgxIDw8IDExKSkpDQo+PiAtCQkJY29udGludWU7DQo+PiAtDQo+PiAtCQliYXNlID0gKCgo
-dTY0KW10cnJfc3RhdGUudmFyX3Jhbmdlc1tpXS5iYXNlX2hpKSA8PCAzMikgKw0KPj4gLQkJ
-ICAgICAgIChtdHJyX3N0YXRlLnZhcl9yYW5nZXNbaV0uYmFzZV9sbyAmIFBBR0VfTUFTSyk7
-DQo+PiAtCQltYXNrID0gKCgodTY0KW10cnJfc3RhdGUudmFyX3Jhbmdlc1tpXS5tYXNrX2hp
-KSA8PCAzMikgKw0KPj4gLQkJICAgICAgIChtdHJyX3N0YXRlLnZhcl9yYW5nZXNbaV0ubWFz
-a19sbyAmIFBBR0VfTUFTSyk7DQo+PiAtDQo+PiAtCQlzdGFydF9zdGF0ZSA9ICgoc3RhcnQg
-JiBtYXNrKSA9PSAoYmFzZSAmIG1hc2spKTsNCj4+IC0JCWVuZF9zdGF0ZSA9ICgoZW5kICYg
-bWFzaykgPT0gKGJhc2UgJiBtYXNrKSk7DQo+PiAtCQlpbmNsdXNpdmUgPSAoKHN0YXJ0IDwg
-YmFzZSkgJiYgKGVuZCA+IGJhc2UpKTsNCj4+IC0NCj4+IC0JCWlmICgoc3RhcnRfc3RhdGUg
-IT0gZW5kX3N0YXRlKSB8fCBpbmNsdXNpdmUpIHsNCj4+IC0JCQkvKg0KPj4gLQkJCSAqIFdl
-IGhhdmUgc3RhcnQ6ZW5kIHNwYW5uaW5nIGFjcm9zcyBhbiBNVFJSLg0KPj4gLQkJCSAqIFdl
-IHNwbGl0IHRoZSByZWdpb24gaW50byBlaXRoZXINCj4+IC0JCQkgKg0KPj4gLQkJCSAqIC0g
-c3RhcnRfc3RhdGU6MQ0KPj4gLQkJCSAqIChzdGFydDptdHJyX2VuZCkobXRycl9lbmQ6ZW5k
-KQ0KPj4gLQkJCSAqIC0gZW5kX3N0YXRlOjENCj4+IC0JCQkgKiAoc3RhcnQ6bXRycl9zdGFy
-dCkobXRycl9zdGFydDplbmQpDQo+PiAtCQkJICogLSBpbmNsdXNpdmU6MQ0KPj4gLQkJCSAq
-IChzdGFydDptdHJyX3N0YXJ0KShtdHJyX3N0YXJ0Om10cnJfZW5kKShtdHJyX2VuZDplbmQp
-DQo+PiAtCQkJICoNCj4+IC0JCQkgKiBkZXBlbmRpbmcgb24ga2luZCBvZiBvdmVybGFwLg0K
-Pj4gLQkJCSAqDQo+PiAtCQkJICogUmV0dXJuIHRoZSB0eXBlIG9mIHRoZSBmaXJzdCByZWdp
-b24gYW5kIGEgcG9pbnRlcg0KPj4gLQkJCSAqIHRvIHRoZSBzdGFydCBvZiBuZXh0IHJlZ2lv
-biBzbyB0aGF0IGNhbGxlciB3aWxsIGJlDQo+PiAtCQkJICogYWR2aXNlZCB0byBsb29rdXAg
-YWdhaW4gYWZ0ZXIgaGF2aW5nIGFkanVzdGVkIHN0YXJ0DQo+PiAtCQkJICogYW5kIGVuZC4N
-Cj4+IC0JCQkgKg0KPj4gLQkJCSAqIE5vdGU6IFRoaXMgd2F5IHdlIGhhbmRsZSBvdmVybGFw
-cyB3aXRoIG11bHRpcGxlDQo+PiAtCQkJICogZW50cmllcyBhbmQgdGhlIGRlZmF1bHQgdHlw
-ZSBwcm9wZXJseS4NCj4+IC0JCQkgKi8NCj4+IC0JCQlpZiAoc3RhcnRfc3RhdGUpDQo+PiAt
-CQkJCSpwYXJ0aWFsX2VuZCA9IGJhc2UgKyBnZXRfbXRycl9zaXplKG1hc2spOw0KPj4gLQkJ
-CWVsc2UNCj4+IC0JCQkJKnBhcnRpYWxfZW5kID0gYmFzZTsNCj4+IC0NCj4+IC0JCQlpZiAo
-dW5saWtlbHkoKnBhcnRpYWxfZW5kIDw9IHN0YXJ0KSkgew0KPj4gLQkJCQlXQVJOX09OKDEp
-Ow0KPj4gLQkJCQkqcGFydGlhbF9lbmQgPSBzdGFydCArIFBBR0VfU0laRTsNCj4+IC0JCQl9
-DQo+PiAtDQo+PiAtCQkJZW5kID0gKnBhcnRpYWxfZW5kIC0gMTsgLyogZW5kIGlzIGluY2x1
-c2l2ZSAqLw0KPj4gLQkJCSpyZXBlYXQgPSAxOw0KPj4gLQkJCSp1bmlmb3JtID0gMDsNCj4+
-IC0JCX0NCj4+IC0NCj4+IC0JCWlmICgoc3RhcnQgJiBtYXNrKSAhPSAoYmFzZSAmIG1hc2sp
-KQ0KPj4gLQkJCWNvbnRpbnVlOw0KPj4gLQ0KPj4gLQkJY3Vycl9tYXRjaCA9IG10cnJfc3Rh
-dGUudmFyX3Jhbmdlc1tpXS5iYXNlX2xvICYgMHhmZjsNCj4+IC0JCWlmIChwcmV2X21hdGNo
-ID09IE1UUlJfVFlQRV9JTlZBTElEKSB7DQo+PiAtCQkJcHJldl9tYXRjaCA9IGN1cnJfbWF0
-Y2g7DQo+PiAtCQkJY29udGludWU7DQo+PiAtCQl9DQo+PiAtDQo+PiAtCQkqdW5pZm9ybSA9
-IDA7DQo+PiAtCQlpZiAoY2hlY2tfdHlwZV9vdmVybGFwKCZwcmV2X21hdGNoLCAmY3Vycl9t
-YXRjaCkpDQo+PiAtCQkJcmV0dXJuIGN1cnJfbWF0Y2g7DQo+PiAtCX0NCj4+IC0NCj4+IC0J
-aWYgKHByZXZfbWF0Y2ggIT0gTVRSUl9UWVBFX0lOVkFMSUQpDQo+PiAtCQlyZXR1cm4gcHJl
-dl9tYXRjaDsNCj4+IC0NCj4+IC0JcmV0dXJuIG10cnJfc3RhdGUuZGVmX3R5cGU7DQo+PiAt
-fQ0KPj4gLQ0KPj4gICBzdGF0aWMgdm9pZCBybV9tYXBfZW50cnlfYXQoaW50IGlkeCkNCj4+
-ICAgew0KPj4gICAJaW50IGk7DQo+PiBAQCAtNTMyLDYgKzM4NCwxNyBAQCB2b2lkIG10cnJf
-b3ZlcndyaXRlX3N0YXRlKHN0cnVjdCBtdHJyX3Zhcl9yYW5nZSAqdmFyLA0KPj4gdW5zaWdu
-ZWQgaW50IG51bV92YXIsDQo+PiAgIAltdHJyX3N0YXRlX3NldCA9IDE7DQo+PiAgIH0NCj4+
-DQo+PiArc3RhdGljIHU4IHR5cGVfbWVyZ2UodTggdHlwZSwgdTggbmV3X3R5cGUsIHU4ICp1
-bmlmb3JtKQ0KPj4gK3sNCj4+ICsJdTggZWZmZWN0aXZlX3R5cGU7DQo+PiArDQo+PiArCWVm
-ZmVjdGl2ZV90eXBlID0gZ2V0X2VmZmVjdGl2ZV90eXBlKHR5cGUsIG5ld190eXBlKTsNCj4+
-ICsJaWYgKHR5cGUgIT0gTVRSUl9UWVBFX0lOVkFMSUQgJiYgdHlwZSAhPSBlZmZlY3RpdmVf
-dHlwZSkNCj4+ICsJCSp1bmlmb3JtID0gMDsNCj4+ICsNCj4+ICsJcmV0dXJuIGVmZmVjdGl2
-ZV90eXBlOw0KPj4gK30NCj4+ICsNCj4+ICAgLyoqDQo+PiAgICAqIG10cnJfdHlwZV9sb29r
-dXAgLSBsb29rIHVwIG1lbW9yeSB0eXBlIGluIE1UUlINCj4+ICAgICoNCj4+IEBAIC01NDAs
-NjYgKzQwMywzNiBAQCB2b2lkIG10cnJfb3ZlcndyaXRlX3N0YXRlKHN0cnVjdCBtdHJyX3Zh
-cl9yYW5nZSAqdmFyLA0KPiANCj4gVGhpcyBsYXN0IGNodW5rIG9mIHRoaXMgcGF0Y2ggaXMg
-bm90IGFwcGx5aW5nIGNvcnJlY3RseSBmb3IgbWUuICAncGF0Y2gnIGNvbXBsYWlucw0KPiBh
-Ym91dCBhIG1hbGZvcm1lZCBwYXRjaC4gIEkgbWFudWFsbHkgZWRpdGVkIHRoZSBjaGFuZ2Vz
-IGluIHNvIEkgY291bGQgYnVpbGQgYW5kDQo+IHRlc3QsIGJ1dCBJJ20gdW5zdXJlIGlmIHNv
-bWV0aGluZyBtaWdodCBiZSBtaXNzaW5nLg0KDQpXZWlyZC4gSSBjaGFuZ2VkIGEgdHlwbyBp
-biB0aGUgcGF0Y2ggZmlsZSBpdHNlbGYsIG1heWJlIEkgZGlkIHNvbWUgb3RoZXINCm1vZGlm
-aWNhdGlvbiB3aXRob3V0IG5vdGljaW5nIGl0LiBXaWxsIHJlc2VuZC4NCg0KPiANCj4+IHVu
-c2lnbmVkIGludCBudW1fdmFyLA0KPj4gICAgKiBNVFJSX1RZUEVfSU5WQUxJRCAtIE1UUlIg
-aXMgZGlzYWJsZWQNCj4+ICAgICoNCj4+ICAgICogT3V0cHV0IEFyZ3VtZW50Og0KPj4gLSAq
-IHVuaWZvcm0gLSBTZXQgdG8gMSB3aGVuIGFuIE1UUlIgY292ZXJzIHRoZSByZWdpb24gdW5p
-Zm9ybWx5LCBpLmUuIHRoZQ0KPj4gLSAqCSAgICAgcmVnaW9uIGlzIGZ1bGx5IGNvdmVyZWQg
-YnkgYSBzaW5nbGUgTVRSUiBlbnRyeSBvciB0aGUgZGVmYXVsdA0KPj4gLSAqCSAgICAgdHlw
-ZS4NCj4+ICsgKiB1bmlmb3JtIC0gU2V0IHRvIDEgd2hlbiB0aGUgcmV0dXJuZWQgTVRSUiB0
-eXBlIGlzIHZhbGlkIGZvciB0aGUgd2hvbGUNCj4+ICsgKgkgICAgIHJlZ2lvbiwgc2V0IHRv
-IDAgZWxzZS4NCj4+ICAgICovDQo+PiAgIHU4IG10cnJfdHlwZV9sb29rdXAodTY0IHN0YXJ0
-LCB1NjQgZW5kLCB1OCAqdW5pZm9ybSkNCj4+ICAgew0KPj4gLQl1OCB0eXBlLCBwcmV2X3R5
-cGUsIGlzX3VuaWZvcm0gPSAxLCBkdW1teTsNCj4+IC0JaW50IHJlcGVhdDsNCj4+IC0JdTY0
-IHBhcnRpYWxfZW5kOw0KPj4gLQ0KPj4gLQkvKiBNYWtlIGVuZCBpbmNsdXNpdmUgaW5zdGVh
-ZCBvZiBleGNsdXNpdmUgKi8NCj4+IC0JZW5kLS07DQo+PiArCXU4IHR5cGUgPSBNVFJSX1RZ
-UEVfSU5WQUxJRDsNCj4+ICsJdW5zaWduZWQgaW50IGk7DQo+Pg0KPj4gLQlpZiAoIW10cnJf
-c3RhdGVfc2V0KQ0KPj4gKwlpZiAoIW10cnJfc3RhdGVfc2V0IHx8ICFjYWNoZV9tYXApIHsN
-Cj4+ICsJCSp1bmlmb3JtID0gMDsJLyogVW5pZm9ybWl0eSBpcyB1bmtub3duLiAqLw0KPj4g
-ICAJCXJldHVybiBNVFJSX1RZUEVfSU5WQUxJRDsNCj4+ICsJfQ0KPj4gKw0KPj4gKwkqdW5p
-Zm9ybSA9IDE7DQo+Pg0KPj4gICAJaWYgKCEobXRycl9zdGF0ZS5lbmFibGVkICYgTVRSUl9T
-VEFURV9NVFJSX0VOQUJMRUQpKQ0KPj4gICAJCXJldHVybiBNVFJSX1RZUEVfSU5WQUxJRDsN
-Cj4+DQo+PiAtCS8qDQo+PiAtCSAqIExvb2sgdXAgdGhlIGZpeGVkIHJhbmdlcyBmaXJzdCwg
-d2hpY2ggdGFrZSBwcmlvcml0eSBvdmVyDQo+PiAtCSAqIHRoZSB2YXJpYWJsZSByYW5nZXMu
-DQo+PiAtCSAqLw0KPj4gLQlpZiAoKHN0YXJ0IDwgMHgxMDAwMDApICYmDQo+PiAtCSAgICAo
-bXRycl9zdGF0ZS5oYXZlX2ZpeGVkKSAmJg0KPj4gLQkgICAgKG10cnJfc3RhdGUuZW5hYmxl
-ZCAmIE1UUlJfU1RBVEVfTVRSUl9GSVhFRF9FTkFCTEVEKSkgew0KPj4gLQkJaXNfdW5pZm9y
-bSA9IDA7DQo+PiAtCQl0eXBlID0gbXRycl90eXBlX2xvb2t1cF9maXhlZChzdGFydCwgZW5k
-KTsNCj4+IC0JCWdvdG8gb3V0Ow0KPj4gLQl9DQo+PiAtDQo+PiAtCS8qDQo+PiAtCSAqIExv
-b2sgdXAgdGhlIHZhcmlhYmxlIHJhbmdlcy4gIExvb2sgb2YgbXVsdGlwbGUgcmFuZ2VzIG1h
-dGNoaW5nDQo+PiAtCSAqIHRoaXMgYWRkcmVzcyBhbmQgcGljayB0eXBlIGFzIHBlciBNVFJS
-IHByZWNlZGVuY2UuDQo+PiAtCSAqLw0KPj4gLQl0eXBlID0gbXRycl90eXBlX2xvb2t1cF92
-YXJpYWJsZShzdGFydCwgZW5kLCAmcGFydGlhbF9lbmQsDQo+PiAtCQkJCQkgJnJlcGVhdCwg
-JmlzX3VuaWZvcm0pOw0KPj4gKwlmb3IgKGkgPSAwOyBpIDwgY2FjaGVfbWFwX24gJiYgc3Rh
-cnQgPCBlbmQ7IGkrKykgew0KPj4gKwkJaWYgKHN0YXJ0ID49IGNhY2hlX21hcFtpXS5lbmQp
-DQo+PiArCQkJY29udGludWU7DQo+PiArCQlpZiAoc3RhcnQgPCBjYWNoZV9tYXBbaV0uc3Rh
-cnQpDQo+PiArCQkJdHlwZSA9IHR5cGVfbWVyZ2UodHlwZSwgbXRycl9zdGF0ZS5kZWZfdHlw
-ZSwgdW5pZm9ybSk7DQo+PiArCQl0eXBlID0gdHlwZV9tZXJnZSh0eXBlLCBjYWNoZV9tYXBb
-aV0udHlwZSwgdW5pZm9ybSk7DQo+IA0KPiBUaGlzIGRldGVybWluYXRpb24gb2YgdGhlIHR5
-cGUgaXNuJ3Qgd29ya2luZyBmb3IgbWUgaW4gYSBub3JtYWwgVk0gKCpub3QqDQo+IFNFVi1T
-TlApIHRoYXQgaGFzIE1UUlJzIGFuZCBwcm9kdWNlcyBhIHJlYXNvbmFibGUgY2FjaGVfbWFw
-LiAgVGhlDQo+IGNhY2hlX21hcCBjb250ZW50cyBhcmUgdGhpczoNCj4gDQo+IFsgICAgMC4w
-MjcyMTRdIG10cnIgbWFwIDA6IHN0YXJ0IDAgZW5kIGEwMDAwIHR5cGUgNiBmaXhlZCAxDQo+
-IFsgICAgMC4wMzM3MTBdIG10cnIgbWFwIDE6IHN0YXJ0IGEwMDAwIGVuZCAxMDAwMDAgdHlw
-ZSAwIGZpeGVkIDENCj4gWyAgICAwLjA0MDk1OF0gbXRyciBtYXAgMjogc3RhcnQgMTAwMDAw
-IGVuZCAxMTAwMDAwMDAwIHR5cGUgNiBmaXhlZCAwDQo+IA0KPiBUaGUgbG9va3VwIGlzIGRv
-bmUgZm9yIHN0YXJ0ID0gZjdmZjgwMDAgYW5kIGVuZCA9IGY3ZmY5MDAwLiAgIGNhY2hlX21h
-cA0KPiBlbnRyaWVzIDAgYW5kIDEgdGFrZSB0aGUgImNvbnRpbnVlIiBwYXRoIGFzIGV4cGVj
-dGVkLiAgY2FjaGVfbWFwIGVudHJ5DQo+IDIgbWF0Y2hlcywgc28gdHlwZV9tZXJnZSBpcyBj
-YWxsZWQgd2l0aCB0eXBlID0gTVRSUl9UWVBFX0lOVkFMSUQgYW5kDQo+IGNhY2hlX21hcFtp
-XS50eXBlIGlzIDYgKE1UUlJfVFlQRV9XUklURUJBQ0spLiAgIEJ1dCB0eXBlX21lcmdlKCkN
-Cj4gcmV0dXJucyBNVFJSX1RZUEVfVU5DQUNIQUJMRSBiZWNhdXNlIGdldF9lZmZlY3RpdmVf
-dHlwZSgpIGZpbmRzDQo+IHR5cGUxICE9IHR5cGUyLg0KPiANCj4gSSBkb24ndCBmdWxseSBo
-YXZlIG15IGhlYWQgd3JhcHBlZCBhcm91bmQgeW91ciBuZXcgY29kZSwgc28gSSdtIGp1c3QN
-Cj4gcG9pbnRpbmcgb3V0IHRoZSBwcm9ibGVtLCBub3QgdGhlIHNvbHV0aW9uLiA6LSggICBP
-ciBtYXliZSB0aGlzIHByb2JsZW0NCj4gaXMgZHVlIHRvIHRoZSBwYXRjaCBpdHNlbGYgYmVp
-bmcgbWFsZm9ybWVkIGFzIG1lbnRpb25lZCBhYm92ZS4NCg0KT2gsIHdoYXQgYSBzaWxseSBi
-dWcuIFRoYW5rcyBmb3IgdGhlIGFuYWx5c2lzIQ0KDQoNCkp1ZXJnZW4NCg==
---------------dkSEqcM0tVyownhSwl6Eza2r
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Fix this by moving the saving and restoring of hardware hash
+state between each and every hashing request.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Fixes: 8a1012d3f2ab ("crypto: stm32 - Support for STM32 HASH module")
+Reported-by: Li kunyu <kunyu@nfschina.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------dkSEqcM0tVyownhSwl6Eza2r--
-
---------------Fh4QDdnw5ozCsplexJL0Z4kQ--
-
---------------0QVQPYHhjZlK0pCIM6ViPzKV
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmP4T8UFAwAAAAAACgkQsN6d1ii/Ey+C
-fwf9F3duTLfp8Om3vfZax0RsRJ50S/fJ4VDRYQo8Z3y1+PwY+PrhwLvZe9soR/7A70L0R54Jozdj
-um0uMvwB2dSVP/kUuSUXbkgcthInTC09BmDMkdTgIQndqKkX9K3LST6rTz332KcHzwXQ8LSKAVXO
-jtEQJ/EM0DywPzGq84hYXyJ0UlSvdIoHV48+vXoMcwX++EmOCzI9rnj7ElRHDJygDkjV54FeWQ/k
-UyhgizcqKtt9Eb5jYEkIlBN51tn5qbnbKeotZGGf6h0bY+OSwueBseX9703axN+DL0rkeMffn+KI
-ZVGFPDe+Kwg5Kzz0DMFVdUC0p3klTAXMsBpewkXcCg==
-=WdXN
------END PGP SIGNATURE-----
-
---------------0QVQPYHhjZlK0pCIM6ViPzKV--
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index acf8bfc8de4b..523312f47166 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -152,8 +152,8 @@ struct stm32_hash_request_ctx {
+ 
+ 	u8 buffer[HASH_BUFLEN] __aligned(sizeof(u32));
+ 
+-	/* Export Context */
+-	u32			*hw_context;
++	/* hash state */
++	u32			hw_context[3 + HASH_CSR_REGISTER_NUMBER];
+ };
+ 
+ struct stm32_hash_algs_info {
+@@ -184,7 +184,6 @@ struct stm32_hash_dev {
+ 	struct ahash_request	*req;
+ 	struct crypto_engine	*engine;
+ 
+-	int			err;
+ 	unsigned long		flags;
+ 
+ 	struct dma_chan		*dma_lch;
+@@ -442,6 +441,18 @@ static int stm32_hash_update_cpu(struct stm32_hash_dev *hdev)
+ 			hdev->flags |= HASH_FLAGS_OUTPUT_READY;
+ 			err = 0;
+ 		}
++	} else {
++		u32 *preg = rctx->hw_context;
++		int i;
++
++		if (!hdev->pdata->ux500)
++			*preg++ = stm32_hash_read(hdev, HASH_IMR);
++		*preg++ = stm32_hash_read(hdev, HASH_STR);
++		*preg++ = stm32_hash_read(hdev, HASH_CR);
++		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
++			*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
++
++		rctx->flags |= HASH_FLAGS_INIT;
+ 	}
+ 
+ 	return err;
+@@ -884,11 +895,6 @@ static void stm32_hash_finish_req(struct ahash_request *req, int err)
+ 	if (!err && (HASH_FLAGS_FINAL & hdev->flags)) {
+ 		stm32_hash_copy_hash(req);
+ 		err = stm32_hash_finish(req);
+-		hdev->flags &= ~(HASH_FLAGS_FINAL | HASH_FLAGS_CPU |
+-				 HASH_FLAGS_INIT | HASH_FLAGS_DMA_READY |
+-				 HASH_FLAGS_OUTPUT_READY | HASH_FLAGS_HMAC |
+-				 HASH_FLAGS_HMAC_INIT | HASH_FLAGS_HMAC_FINAL |
+-				 HASH_FLAGS_HMAC_KEY);
+ 	} else {
+ 		rctx->flags |= HASH_FLAGS_ERRORS;
+ 	}
+@@ -899,68 +905,58 @@ static void stm32_hash_finish_req(struct ahash_request *req, int err)
+ 	crypto_finalize_hash_request(hdev->engine, req, err);
+ }
+ 
+-static int stm32_hash_hw_init(struct stm32_hash_dev *hdev,
++static void stm32_hash_hw_init(struct stm32_hash_dev *hdev,
+ 			      struct stm32_hash_request_ctx *rctx)
+ {
+ 	pm_runtime_get_sync(hdev->dev);
+-
+-	if (!(HASH_FLAGS_INIT & hdev->flags)) {
+-		stm32_hash_write(hdev, HASH_CR, HASH_CR_INIT);
+-		stm32_hash_write(hdev, HASH_STR, 0);
+-		stm32_hash_write(hdev, HASH_DIN, 0);
+-		stm32_hash_write(hdev, HASH_IMR, 0);
+-		hdev->err = 0;
+-	}
+-
+-	return 0;
+ }
+ 
+-static int stm32_hash_one_request(struct crypto_engine *engine, void *areq);
+-static int stm32_hash_prepare_req(struct crypto_engine *engine, void *areq);
+-
+ static int stm32_hash_handle_queue(struct stm32_hash_dev *hdev,
+ 				   struct ahash_request *req)
+ {
+ 	return crypto_transfer_hash_request_to_engine(hdev->engine, req);
+ }
+ 
+-static int stm32_hash_prepare_req(struct crypto_engine *engine, void *areq)
++static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
+ {
+ 	struct ahash_request *req = container_of(areq, struct ahash_request,
+ 						 base);
+ 	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
+ 	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
+ 	struct stm32_hash_request_ctx *rctx;
++	int err = 0;
+ 
+ 	if (!hdev)
+ 		return -ENODEV;
+ 
+-	hdev->req = req;
+-
+-	rctx = ahash_request_ctx(req);
+-
+ 	dev_dbg(hdev->dev, "processing new req, op: %lu, nbytes %d\n",
+ 		rctx->op, req->nbytes);
+ 
+-	return stm32_hash_hw_init(hdev, rctx);
+-}
+-
+-static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
+-{
+-	struct ahash_request *req = container_of(areq, struct ahash_request,
+-						 base);
+-	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
+-	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
+-	struct stm32_hash_request_ctx *rctx;
+-	int err = 0;
+-
+-	if (!hdev)
+-		return -ENODEV;
++	stm32_hash_hw_init(hdev, rctx);
+ 
+ 	hdev->req = req;
++	hdev->flags = 0;
+ 
+ 	rctx = ahash_request_ctx(req);
+ 
++	if (rctx->flags & HASH_FLAGS_INIT) {
++		u32 *preg = rctx->hw_context;
++		u32 reg;
++		int i;
++
++		if (!hdev->pdata->ux500)
++			stm32_hash_write(hdev, HASH_IMR, *preg++);
++		stm32_hash_write(hdev, HASH_STR, *preg++);
++		stm32_hash_write(hdev, HASH_CR, *preg);
++		reg = *preg++ | HASH_CR_INIT;
++		stm32_hash_write(hdev, HASH_CR, reg);
++
++		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
++			stm32_hash_write(hdev, HASH_CSR(i), *preg++);
++
++		hdev->flags |= HASH_FLAGS_INIT;
++	}
++
+ 	if (rctx->op == HASH_OP_UPDATE)
+ 		err = stm32_hash_update_req(hdev);
+ 	else if (rctx->op == HASH_OP_FINAL)
+@@ -1048,33 +1044,6 @@ static int stm32_hash_digest(struct ahash_request *req)
+ static int stm32_hash_export(struct ahash_request *req, void *out)
+ {
+ 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
+-	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
+-	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
+-	u32 *preg;
+-	unsigned int i;
+-	int ret;
+-
+-	pm_runtime_get_sync(hdev->dev);
+-
+-	ret = stm32_hash_wait_busy(hdev);
+-	if (ret)
+-		return ret;
+-
+-	rctx->hw_context = kmalloc_array(3 + HASH_CSR_REGISTER_NUMBER,
+-					 sizeof(u32),
+-					 GFP_KERNEL);
+-
+-	preg = rctx->hw_context;
+-
+-	if (!hdev->pdata->ux500)
+-		*preg++ = stm32_hash_read(hdev, HASH_IMR);
+-	*preg++ = stm32_hash_read(hdev, HASH_STR);
+-	*preg++ = stm32_hash_read(hdev, HASH_CR);
+-	for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
+-		*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
+-
+-	pm_runtime_mark_last_busy(hdev->dev);
+-	pm_runtime_put_autosuspend(hdev->dev);
+ 
+ 	memcpy(out, rctx, sizeof(*rctx));
+ 
+@@ -1084,33 +1053,9 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
+ static int stm32_hash_import(struct ahash_request *req, const void *in)
+ {
+ 	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
+-	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
+-	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
+-	const u32 *preg = in;
+-	u32 reg;
+-	unsigned int i;
+ 
+ 	memcpy(rctx, in, sizeof(*rctx));
+ 
+-	preg = rctx->hw_context;
+-
+-	pm_runtime_get_sync(hdev->dev);
+-
+-	if (!hdev->pdata->ux500)
+-		stm32_hash_write(hdev, HASH_IMR, *preg++);
+-	stm32_hash_write(hdev, HASH_STR, *preg++);
+-	stm32_hash_write(hdev, HASH_CR, *preg);
+-	reg = *preg++ | HASH_CR_INIT;
+-	stm32_hash_write(hdev, HASH_CR, reg);
+-
+-	for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
+-		stm32_hash_write(hdev, HASH_CSR(i), *preg++);
+-
+-	pm_runtime_mark_last_busy(hdev->dev);
+-	pm_runtime_put_autosuspend(hdev->dev);
+-
+-	kfree(rctx->hw_context);
+-
+ 	return 0;
+ }
+ 
+@@ -1166,8 +1111,6 @@ static int stm32_hash_cra_init_algs(struct crypto_tfm *tfm,
+ 		ctx->flags |= HASH_FLAGS_HMAC;
+ 
+ 	ctx->enginectx.op.do_one_request = stm32_hash_one_request;
+-	ctx->enginectx.op.prepare_request = stm32_hash_prepare_req;
+-	ctx->enginectx.op.unprepare_request = NULL;
+ 
+ 	return stm32_hash_init_fallback(tfm);
+ }
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
