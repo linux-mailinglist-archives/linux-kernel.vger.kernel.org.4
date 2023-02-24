@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B80A6A1595
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C706A1591
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjBXDnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S229627AbjBXDmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjBXDnJ (ORCPT
+        with ESMTP id S229484AbjBXDmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:43:09 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABED95E875;
-        Thu, 23 Feb 2023 19:42:34 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so1540331pjh.0;
-        Thu, 23 Feb 2023 19:42:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Dm48pFZyVUakxJYWdujNt6jVqzb33IRoM5ttLAEElTc=;
-        b=NckyLiPi7//kP1eOXaMTWSJx6sObdjPdjQ5u87ghNeY1HoSDgB6HJCSb3b3DNmOzzb
-         S6adJSW7ggHTP78XJk20CzmhbUeO8fa7nVDiNBphzFhcMiGdF3dnJ8JJmVRSgtlm3XVT
-         IyWIBFMU99fyzWiONpRCKEBs1ZURWHjgO3krA6dwTz9jtPF5v/emVqHQ1fDiX7CX1/Dq
-         3Mo7YWEKfwFrR5aYBXnufS0BoXZSSKwLSlrkJ7kL0zm4D7DTz1xHk5qUfcT1n3YeB5HO
-         GI0TAGfRyD4ia0ElAxag/nQsV0z3/oDdCN1eMat5Q4oF9n7cd0LeuKJc+kTACtC7BUWU
-         f5uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dm48pFZyVUakxJYWdujNt6jVqzb33IRoM5ttLAEElTc=;
-        b=0SGb/gE8P95QyQSRrWg7INTJQVSwR4GWSWPE4A5D2Si1uR5utVUXa5+RXQOndTg09l
-         VnNyHtPPnbFrh/t30isiIGeJABYAB5sMlnL4sikT7XGe3GrCK1KsE+gLYvHR2p+uIAFz
-         LSeP3LUCMOKCbgL4eDpU+ZS/S4etQNT/5FNDzsmoCq5q4YLZ6MY1yEUt0f2n/mnkTwS7
-         iw75RxTTaqbEddpIErjHSJZuAwF2N4hqVw8CGPnOLo5ph0FPP4l6zIfGHD4NpnEmbOZb
-         slheUf+3ZI0relI8dKzX4dMDa7zty/rvBYmyAs/ADP84FTQAaSQElO0vJBQcGaGytmn+
-         9zkQ==
-X-Gm-Message-State: AO0yUKUSiGuh6f8SC3GK8gyEsu1Pr0karMtbYMiPJjF6DT5Cx0ZCu7n0
-        vyWzNEL/sh/Aunra7txHkQ4=
-X-Google-Smtp-Source: AK7set/EF7WV/kje5lDltcwnQzpGuNdswVxJYj8nhFHVGkSTqyQ4dhXgEe9H8jtZ2HyPzr3AXMBCvg==
-X-Received: by 2002:a17:90a:15:b0:237:161e:33bc with SMTP id 21-20020a17090a001500b00237161e33bcmr12796870pja.16.1677210144300;
-        Thu, 23 Feb 2023 19:42:24 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-89.three.co.id. [180.214.232.89])
-        by smtp.gmail.com with ESMTPSA id x18-20020a17090abc9200b00233aacab89esm429235pjr.48.2023.02.23.19.42.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 19:42:23 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 171FD105EA5; Fri, 24 Feb 2023 10:42:17 +0700 (WIB)
-Date:   Fri, 24 Feb 2023 10:42:17 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/47] 6.1.14-rc2 review
-Message-ID: <Y/gyGS08EIuFYxjH@debian.me>
-References: <20230223141545.280864003@linuxfoundation.org>
+        Thu, 23 Feb 2023 22:42:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF9D15151;
+        Thu, 23 Feb 2023 19:42:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1738DB81B2F;
+        Fri, 24 Feb 2023 03:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37274C433EF;
+        Fri, 24 Feb 2023 03:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677210121;
+        bh=1+iTjI8144LQifhA5jGdDFhZRv+AUNRCi/0OKx4iOfA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gVdn/Kr6HlfAF4N4sGLeETDSym4W2TYS6eQ9fS9Y2TWtyJgMvii4tT2z9zqsl9toP
+         AHoUlgZ3KsGIFLoAMkIfyHdv5cdtBK83uYoQFZA4GMZ/FfrIOCiuOxrxDega6mHW36
+         PFA36m0IlQUPmxeaxIUPcU/aIWKOCSdaZOSITiq7sWZ8fhc8FGp/ZB3gw5uTijKclA
+         gwVoB69VTh6wpIaF4l9wM6BzuRGF/Z0FMAfBN8TYRjdSUh/jWyeG1pnaOkphfq1Kr5
+         bnMf0FqURXn1SIsiQFUrJv0OTpbAWIuOhufuiMuu4DxEgGUPERQQbF4zAmSBfnbD8n
+         Ud86u32tRXzVw==
+Date:   Thu, 23 Feb 2023 21:42:26 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] ASoC: SOF: ipc4-topology: Replace fake flexible arrays
+ with flexible-array member
+Message-ID: <Y/gyIg1qZduhigPi@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230223141545.280864003@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:16:15PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.14 release.
-> There are 47 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Zero-length arrays as fake flexible arrays are deprecated and we are
+moving towards adopting C99 flexible-array members, instead.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+Use the DECLARE_FLEX_ARRAY() helper macro to transform zero-length
+arrays in unions with flexible-array members.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Address the following warnings found with GCC-13 and
+-fstrict-flex-arrays=3 enabled:
+sound/soc/sof/ipc4-control.c:176:77: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:78:29: warning: array subscript 0 is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:80:33: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:95:53: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:96:53: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:93:53: warning: array subscript 0 is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:140:58: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:141:29: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-control.c:142:29: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-topology.c:1475:36: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
+sound/soc/sof/ipc4-topology.c:1476:36: warning: array subscript i is outside array bounds of ‘struct sof_ipc4_ctrl_value_chan[0]’ [-Warray-bounds=]
 
---=20
-An old man doll... just what I always wanted! - Clara
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
+
+Link: https://github.com/KSPP/linux/issues/21
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://github.com/KSPP/linux/issues/258
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ sound/soc/sof/ipc4-topology.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/sof/ipc4-topology.h b/sound/soc/sof/ipc4-topology.h
+index 72529179ac22..8507171a6e4d 100644
+--- a/sound/soc/sof/ipc4-topology.h
++++ b/sound/soc/sof/ipc4-topology.h
+@@ -266,8 +266,8 @@ struct sof_ipc4_control_data {
+ 	int index;
+ 
+ 	union {
+-		struct sof_ipc4_ctrl_value_chan chanv[0];
+-		struct sof_abi_hdr data[0];
++		DECLARE_FLEX_ARRAY(struct sof_ipc4_ctrl_value_chan, chanv);
++		DECLARE_FLEX_ARRAY(struct sof_abi_hdr, data);
+ 	};
+ };
+ 
+-- 
+2.34.1
+
