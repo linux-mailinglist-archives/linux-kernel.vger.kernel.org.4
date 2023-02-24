@@ -2,91 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A806A6A2139
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE49A6A214A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjBXSLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S229789AbjBXSRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjBXSLk (ORCPT
+        with ESMTP id S229783AbjBXSRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:11:40 -0500
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1542566955
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:11:36 -0800 (PST)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 934181003FEAF
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 18:11:36 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id VcXgphW9PNX2aVcXgpQiyU; Fri, 24 Feb 2023 18:11:36 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=63f8fdd8
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=m04uMKEZRckA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EUGO2zo5A5LgyGuTJ4tMddLToPMG74kYrvdy7mNDB4I=; b=HaKWocC8o3X0JluyjpKSe2PGpj
-        vOhuoLu7tyPBWOwp3lqk1DovY8rXhUbwid6G4MPCAx/K/guvZl9zDu4KrOkV0+a/uD0Vy2iWWZri7
-        VR0BroxyudpKM2IHWgte3Xqn2vKa4VxqezC3xBmKVhGAX+wB9pIJvB8UQvOpNG1ch8XGyyfmeBH1w
-        VKVBe/cNtLe2BfTdgVtBqYKsnB8YsGsBa/Svw/NuazeT6qm3uupAuU2aaaaZPXA7vbFOd3UtDJENd
-        f4VAVRpoaDltw8ATl72E85ZHzrr39z3pQR4qubPr/xOHnz+kIYTyye7wp3BxnMH4wZ9yIM8sTP+B6
-        pzL5qNDw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58270 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pVcXf-001VAs-0U;
-        Fri, 24 Feb 2023 11:11:35 -0700
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230224102235.663354088@linuxfoundation.org>
-In-Reply-To: <20230224102235.663354088@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <a395cb5a-d54a-d52e-8a44-0287358ae002@w6rz.net>
-Date:   Fri, 24 Feb 2023 10:11:29 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 24 Feb 2023 13:17:01 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0010113DF9;
+        Fri, 24 Feb 2023 10:16:57 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id w42so342065qtc.2;
+        Fri, 24 Feb 2023 10:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dbrfWU2+v05vgW558zPyEG9XfLlb2Qbh/gfCUZwyWQI=;
+        b=XxVCTehJPVgGP8dSH5G4p1FqFXEfrPHgU2eYaRv+X11mO/DuNCGQckQRBF3/LrmSY2
+         D44KmJy+nLSBv0VNdeyWDfSr1OjSAQL0CGK9IRH4TJY2/nP7BB+ednlGpJZ+FrGS1jSj
+         HOa5cD9M+qUROep+ycPHiZIhAp6+uKwkYNccouNORcgIcUMDL2EKOE/9w4z+BygSjH2i
+         mYgcTHtSZnj9oxdi2o9wKDBf9OaqQtZA9XvPa/Clpy2HbI9KeQ4y7UafIKQPFOHmUgbO
+         xDNlWkJ+kQx3glj28N05xw7N5Wpj7Qo7jLTwcCiql6K8C3GS+Z3U+gWNnUDedahlHiph
+         7Ocw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dbrfWU2+v05vgW558zPyEG9XfLlb2Qbh/gfCUZwyWQI=;
+        b=D+K2lkZkMYMRHaZDDvGIVsS0TnmiwoaZnn6B8bos0jQ3Y2Q1W3qS88uRr2uEyH5/0U
+         DTQvSypsGnciu+Ssa0herONFPfUKXHbMkbgbPFfaXoea+e6bkjpmN+WD1+Tzt3my9c2F
+         oStbmaoH4a4PZDdpVWlsTd6FUepyZEYeJT5ySQy0KvoVeAMZApCIfG+V3FZtx7nHhrH5
+         eA0OK6pM38WxJNdHqr4zsJGxpgRNkDY/MUuBtIu0euAyhGb0Id8J4bup2tKBQI313asA
+         lRll5u+RF8hQ4zmkK5OxDNOj2SMSkDFvp+4ZDWmMJ1ESER5XVyg+la6NdFNpOI08lJuL
+         kKjQ==
+X-Gm-Message-State: AO0yUKW/uTm3gtNY8fD1z2l9yy1Z6zQ5lJvt/+TtfgRKfR+HZEMJdIUX
+        gRxU+rVL/fN8AnBoH4t5b5pVN5KNBw35BeU9be4=
+X-Google-Smtp-Source: AK7set8PMPukDTNXLaVQNOCTO1ktYqvA4vD54uZFEKxFwUo9Q0hg2ln9c8i57jCCtLgbdMyUGKFO6/Q/BBs1/KHAm1M=
+X-Received: by 2002:ac8:24f:0:b0:3bf:b93b:6af1 with SMTP id
+ o15-20020ac8024f000000b003bfb93b6af1mr848795qtg.1.1677262617128; Fri, 24 Feb
+ 2023 10:16:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pVcXf-001VAs-0U
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:58270
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20230224174007.13009-1-asmaa@nvidia.com>
+In-Reply-To: <20230224174007.13009-1-asmaa@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 24 Feb 2023 20:16:21 +0200
+Message-ID: <CAHp75Vf_yHVhZS4ghZK5aZ7sQjdZ_1_MT=Ke6vVfUBRpL70-Eg@mail.gmail.com>
+Subject: Re: [PATCH v1] gpio: mmio: handle "ngpios" properly in bgpio_init
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,26 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/23 2:23 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.96 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Feb 24, 2023 at 7:40 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
 >
-> Responses should be made by Sun, 26 Feb 2023 10:22:23 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.96-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> bgpio_init uses "sz" argument to populate ngpio, which is not accurate.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+bgpio_init() uses the
 
-Tested-by: Ron Economos <re@w6rz.net>
+(Note parentheses, same for other func() mentions)
 
+> Instead, read the "ngpios" property from the DT and if it
+> doesn't exist, use the "sz" argument. With this change, drivers no
+> longer need to overwrite the ngpio variable after calling bgpio_init.
+
+Thank you!
+
+...
+
+> +       ret = device_property_read_u32(dev, "ngpios", &ngpios);
+> +       if (!ret)
+> +               gc->ngpio = ngpios;
+> +       else
+> +               gc->ngpio = gc->bgpio_bits;
+
+This duplicates the GPIO library. What probably better to have is to
+just check the property existence
+
+device_property_present() and do accordingly.
+
+-- 
+With Best Regards,
+Andy Shevchenko
