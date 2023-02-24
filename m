@@ -2,94 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4346A1781
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982496A1788
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 08:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjBXHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 02:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S229539AbjBXHxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 02:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBXHtg (ORCPT
+        with ESMTP id S229518AbjBXHxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 02:49:36 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E724DE3E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:49:34 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id q16so2629804wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:49:34 -0800 (PST)
+        Fri, 24 Feb 2023 02:53:45 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E93136F6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:53:43 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id j14so20279099vse.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 23:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QbxEvBcANfCyv04vVI+P20GroH/CL1OZ8pzexawzCPA=;
-        b=tnQWyJSxP15q1apDQgYJZl7TiYEzVSdSDue1GfVVOaD0fB7R0X/Bpt/P+s54EvMarj
-         Y1GC+LfEvoa4d+LHbYhq1lLahNstbjvLM3CPlLNdcTMWd+6fEpU5pCFUdd1VfeuNgKwk
-         ibvjVqYpxqAiwq34+4XApexuqjYGbp4gt7qZw1iuaxGK1TvncfYmapRjGkD85NIMMmmP
-         NbuQi4uWSQWuuy9ihIFez+nKuGnq8M3VjfTqgeRzTTrLM/7QimIK9UBuRM43t1GjyADK
-         yey+QqJZp4HrIHUMyIt6xRNdgPgUO0A11h1Oks2iBavOIBt53d+FQQPLO4ynnVsaUe+U
-         aQBA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vdmyGXqsuWEA5J1LKHJz/9OjkInX21YMvFtAnrWDjfY=;
+        b=adA6qbq4MVAaO3KK3woJiwoMOuBmQNISBj+EVmRR/SNgcOzcS9d+nUzZPzfYwPYLmu
+         ZbqTf2Zsdn/vl/g48cSS+4twwPXAG8NkA1nSxH04kVTlIC4X3i+Tz1cMxwGW2aci91j7
+         pHI7rr/eT1IJedTRY6hTC+yNaAoPiwBhJHmTo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QbxEvBcANfCyv04vVI+P20GroH/CL1OZ8pzexawzCPA=;
-        b=i4en5iOh3hRuzROKn6Z224oIicoyKV6AgCtEXcJNjrlNJIVak9OwiNQjY8VcdRjEjA
-         7eeV3an9ttuRANq2I7HGFGxe0+0FBV2YcMal+VhCJSYMrz0uwRlIUVnw1uDo+iztDY8K
-         MW524i+PjnC4wrfIEKWfdMnr02zSvsgKPQZrdhhWu89Aiu8+A0qaNlaFN42LDRAZiQK7
-         5pA0fBGR0c0wbsDy9mia4FiJ1KlKOvaZUZ+5VjqfLE0gd7xF0YO7AgWwUkDmAnny0GO+
-         /H39gK9P+1n0jo1+s2EuFFO9FOgRaN0/YDUZnywAeiLKzVEGDpiFoJvijNGSdgI6eHsP
-         0z6Q==
-X-Gm-Message-State: AO0yUKW6LR4UR6RPO54GFxTB/ufgUOx3ai5+iLOCdQxOnWuGfpgy4sU8
-        BTBNehuM7Oq2BFk3IdBMcyaZFQ==
-X-Google-Smtp-Source: AK7set/nHyhaRUq0Yd+9Qdd+3r2tbNOhcXsgs9HAHAccmP/VT5YKMYKugqE9ITyi4t9jCFYpx+UWhg==
-X-Received: by 2002:a05:6000:98c:b0:2c5:5ee9:6b27 with SMTP id by12-20020a056000098c00b002c55ee96b27mr11889818wrb.13.1677224973014;
-        Thu, 23 Feb 2023 23:49:33 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id j21-20020a5d6e55000000b002c3f81c51b6sm13600444wrz.90.2023.02.23.23.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 23:49:32 -0800 (PST)
-Message-ID: <78fc83d7-a31b-c6bd-4e08-f0696e0a275b@linaro.org>
-Date:   Fri, 24 Feb 2023 07:49:31 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vdmyGXqsuWEA5J1LKHJz/9OjkInX21YMvFtAnrWDjfY=;
+        b=pa3evdHUu6ZZkLATV0uSbZ+EeHA2QIXAp/OwwLiq86dUUpztHgYdXK/iRpuF7ZHa1p
+         Lx1cadQBZAE2tJNdsaT97QRmLDgn28DbNQZs5HKt2aPdjxJmiXp297ppFrMyTMejDlzk
+         RKDfsfHeK7RoPf5/Of7M75N+JZhsh07UXcsLnG61as+keziCVi88rYkxI2IX5o/j/ivx
+         C51bOPgtwelwqMqsSiahWXIQc2ABrdvMTdA51FopONvJZVPQgnT22Sm3AUh/AQ2WBLdS
+         2hat1keuvToPjFwOPn22IjuW876KgWd8H1PVvy0oC6wBjix793HBXse1/kOovnF6Iwza
+         fZqA==
+X-Gm-Message-State: AO0yUKWEwGq0vTg8RMV03U30vi6q4XV9B9duvY/O1PIHAlL5PaIDwp/H
+        upKaGSYNq1bKLJQDtJBVXEd4Gas3fAyY7UiWIAirZw==
+X-Google-Smtp-Source: AK7set9ZAp9+Vs7DCN8gO7YWRVX7TWXuw4hHRRsssi+Iv2W0TTsgH88ywdYxCBLS54DFWC5u60r7qCR10D/MbBr9UZw=
+X-Received: by 2002:a1f:4343:0:b0:400:ea69:7082 with SMTP id
+ q64-20020a1f4343000000b00400ea697082mr1911875vka.0.1677225222656; Thu, 23 Feb
+ 2023 23:53:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 07/26] mailbox: Add Gunyah message queue mailbox
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212316.3309053-1-quic_eberman@quicinc.com>
- <c8161a4c-fa45-cb9e-7211-5486ece1fc2d@linaro.org>
- <576aed85-a566-3645-559e-06b2135cf57f@quicinc.com>
- <7e3170e4-c530-0b5b-903f-e5ea6d8268dc@linaro.org>
- <d42cba3e-db22-5241-0ae2-ccec3b811a5a@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <d42cba3e-db22-5241-0ae2-ccec3b811a5a@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com> <20230222092543.19187-54-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230222092543.19187-54-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 24 Feb 2023 15:53:31 +0800
+Message-ID: <CAGXv+5F6U9VZaRR3TW_rkDQrROVBGarqZJC6+ntR0d-TxJZ_Lw@mail.gmail.com>
+Subject: Re: [PATCH v5 53/54] clk: mediatek: mt8135: Join root_clk_alias and
+ top_divs arrays
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,162 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 22, 2023 at 5:27 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> In preparation for converting this driver to the common simple probe
+> mechanism, join the root_clk_alias and top_divs mtk_fixed_factor
+> arrays.
+>
+> This commit brings no functional change.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+>  drivers/clk/mediatek/clk-mt8135.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
+> index 1c76c0003f99..8785d58cb3a5 100644
+> --- a/drivers/clk/mediatek/clk-mt8135.c
+> +++ b/drivers/clk/mediatek/clk-mt8135.c
+> @@ -2,8 +2,6 @@
+>  /*
+>   * Copyright (c) 2014 MediaTek Inc.
+>   * Author: James Liao <jamesjj.liao@mediatek.com>
+> - * Copyright (c) 2023 Collabora, Ltd.
+> - *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
+Was this meant for some other patch?
 
-On 23/02/2023 23:15, Elliot Berman wrote:
-> 
-> 
-> On 2/23/2023 2:25 AM, Srinivas Kandagatla wrote:
->>
->>
->> On 23/02/2023 00:15, Elliot Berman wrote:
->>>
->>>
->>> On 2/20/2023 5:59 AM, Srinivas Kandagatla wrote:
->>>>
->>>>
->>>> On 14/02/2023 21:23, Elliot Berman wrote:
->>>>> Gunyah message queues are a unidirectional inter-VM pipe for 
->>>>> messages up
->>>>> to 1024 bytes. This driver supports pairing a receiver message 
->>>>> queue and
->>>>> a transmitter message queue to expose a single mailbox channel.
->>>>>
->>>>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->>>>> ---
->>>>>   Documentation/virt/gunyah/message-queue.rst |   8 +
->>>>>   drivers/mailbox/Makefile                   |   2 +
->>>>>   drivers/mailbox/gunyah-msgq.c               | 214 
->>>>> ++++++++++++++++++++
->>>>>   include/linux/gunyah.h                      |  56 +++++
->>>>>   4 files changed, 280 insertions(+)
->>>>>   create mode 100644 drivers/mailbox/gunyah-msgq.c
->>>>>
->>>>> diff --git a/Documentation/virt/gunyah/message-queue.rst 
->>>>> b/Documentation/virt/gunyah/message-queue.rst
->>>>> index 0667b3eb1ff9..082085e981e0 100644
->>>>> --- a/Documentation/virt/gunyah/message-queue.rst
->>>>> +++ b/Documentation/virt/gunyah/message-queue.rst
->>>>> @@ -59,3 +59,11 @@ vIRQ: two TX message queues will have two vIRQs 
->>>>> (and two capability IDs).
->>>>>         |               |         |                 | 
->>>>> |               |
->>>>>         |               |         |                 | 
->>>>> |               |
->>>>>         +---------------+         +-----------------+ 
->>>>> +---------------+
->>>>> +
->>>>> +Gunyah message queues are exposed as mailboxes. To create the 
->>>>> mailbox, create
->>>>> +a mbox_client and call `gh_msgq_init`. On receipt of the RX_READY 
->>>>> interrupt,
->>>>> +all messages in the RX message queue are read and pushed via the 
->>>>> `rx_callback`
->>>>> +of the registered mbox_client.
->>>>> +
->>>>> +.. kernel-doc:: drivers/mailbox/gunyah-msgq.c
->>>>> +   :identifiers: gh_msgq_init
->>>>> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
->>>>> index fc9376117111..5f929bb55e9a 100644
->>>>> --- a/drivers/mailbox/Makefile
->>>>> +++ b/drivers/mailbox/Makefile
->>>>> @@ -55,6 +55,8 @@ obj-$(CONFIG_MTK_CMDQ_MBOX)    += mtk-cmdq-mailbox.o
->>>>>   obj-$(CONFIG_ZYNQMP_IPI_MBOX)    += zynqmp-ipi-mailbox.o
->>>>> +obj-$(CONFIG_GUNYAH)        += gunyah-msgq.o
->>>>
->>>> Why are we reusing CONFIG_GUNYAH Kconfig symbol for mailbox, why not 
->>>> CONFIG_GUNYAH_MBOX?
->>>>
->>>
->>> There was some previous discussion about this:
->>>
->>> https://lore.kernel.org/all/2a7bb5f2-1286-b661-659a-a5037150eae8@quicinc.com/
->>>
->>>>> +
->>>>>   obj-$(CONFIG_SUN6I_MSGBOX)    += sun6i-msgbox.o
->>>>>   obj-$(CONFIG_SPRD_MBOX)       += sprd-mailbox.o
->>>>> diff --git a/drivers/mailbox/gunyah-msgq.c 
->>>>> b/drivers/mailbox/gunyah-msgq.c
->>>>> new file mode 100644
->>>>> index 000000000000..03ffaa30ce9b
->>>>> --- /dev/null
->>>>> +++ b/drivers/mailbox/gunyah-msgq.c
->>>>> @@ -0,0 +1,214 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>> +/*
->>>>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
->>>>> rights reserved.
->>>>> + */
->>>>> +
->>>>> +#include <linux/mailbox_controller.h>
->>>>> +#include <linux/module.h>
->>>>> +#include <linux/interrupt.h>
->>>>> +#include <linux/gunyah.h>
->>>>> +#include <linux/printk.h>
->>>>> +#include <linux/init.h>
->>>>> +#include <linux/slab.h>
->>>>> +#include <linux/wait.h>
->>>>
->>>> ...
->>>>
->>>>> +/* Fired when message queue transitions from "full" to "space 
->>>>> available" to send messages */
->>>>> +static irqreturn_t gh_msgq_tx_irq_handler(int irq, void *data)
->>>>> +{
->>>>> +    struct gh_msgq *msgq = data;
->>>>> +
->>>>> +    mbox_chan_txdone(gh_msgq_chan(msgq), 0);
->>>>> +
->>>>> +    return IRQ_HANDLED;
->>>>> +}
->>>>> +
->>>>> +/* Fired after sending message and hypercall told us there was 
->>>>> more space available. */
->>>>> +static void gh_msgq_txdone_tasklet(struct tasklet_struct *tasklet)
->>>>
->>>> Tasklets have been long deprecated, consider using workqueues in 
->>>> this particular case.
->>>>
->>>
->>> Workqueues have higher latency and tasklets came as recommendation 
->>> from Jassi. drivers/mailbox/imx-mailbox.c uses tasklets in the same way.
->>>
->>> I did some quick unscientific measurements of ~1000x samples. The 
->>> median latency for resource manager went from 25.5 us (tasklet) to 26 
->>> us (workqueue) (2% slower). The mean went from 28.7 us to 32.5 us 
->>> (13% slower). Obviously, the outliers for workqueues were much more 
->>> extreme.
->>
->> TBH, this is expected because we are only testing resource manager, 
->> Note   the advantage that you will see shifting from tasket to 
->> workqueues is on overall system latencies and some drivers performance 
->> that need to react to events.
->>
->> please take some time to read this nice article about this 
->> https://lwn.net/Articles/830964/
->>
-> 
-> Hmm, this article is from 2020 and there was another effort in 2007. 
-> Neither seems to have succeeded. I'd like to stick to same mechanisms as 
-> other mailbox controllers.
+Also this is the first patch where my MT8186 fails to boot, which makes
+absolutely no sense, since the MT8135 driver isn't even built.
 
-I don't want to block this series because of this. We will have more 
-opportunity to improve this once some system wide profiling is done.
+ChenYu
 
-AFAIU, In this system we will have atleast 2 tasklets between VM and RM 
-and 2 per inter-vm, so if the number of tasklets increase in the system 
-will be potentially spending more time in soft irq handling it.
-
-At somepoint in time its good to get some profiling done using 
-bcc/softirqs to see how much time is spent on softirqs.
-
-
---srini
-
-> 
-> Jassi, do you have any preferences?
-> 
-> Thanks,
-> Elliot
-> 
-> 
+>   */
+>
+>  #include <linux/clk.h>
+> @@ -19,14 +17,12 @@
+>
+>  static DEFINE_SPINLOCK(mt8135_clk_lock);
+>
+> -static const struct mtk_fixed_factor root_clk_alias[] __initconst = {
+> +static const struct mtk_fixed_factor top_divs[] __initconst = {
+>         FACTOR(CLK_TOP_DSI0_LNTC_DSICLK, "dsi0_lntc_dsiclk", "clk_null", 1, 1),
+>         FACTOR(CLK_TOP_HDMITX_CLKDIG_CTS, "hdmitx_clkdig_cts", "clk_null", 1, 1),
+>         FACTOR(CLK_TOP_CLKPH_MCK, "clkph_mck", "clk_null", 1, 1),
+>         FACTOR(CLK_TOP_CPUM_TCK_IN, "cpum_tck_in", "clk_null", 1, 1),
+> -};
+>
+> -static const struct mtk_fixed_factor top_divs[] __initconst = {
+>         FACTOR(CLK_TOP_MAINPLL_806M, "mainpll_806m", "mainpll", 1, 2),
+>         FACTOR(CLK_TOP_MAINPLL_537P3M, "mainpll_537p3m", "mainpll", 1, 3),
+>         FACTOR(CLK_TOP_MAINPLL_322P4M, "mainpll_322p4m", "mainpll", 1, 5),
+> @@ -534,7 +530,6 @@ static void __init mtk_topckgen_init(struct device_node *node)
+>
+>         clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+>
+> -       mtk_clk_register_factors(root_clk_alias, ARRAY_SIZE(root_clk_alias), clk_data);
+>         mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
+>         mtk_clk_register_composites(NULL, top_muxes,
+>                                     ARRAY_SIZE(top_muxes), base,
+> --
+> 2.39.2
+>
