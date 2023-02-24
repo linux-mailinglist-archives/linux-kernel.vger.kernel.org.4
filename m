@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160D46A211E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CE56A2122
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 19:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjBXSFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 13:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S229618AbjBXSGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 13:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBXSFt (ORCPT
+        with ESMTP id S229489AbjBXSGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 13:05:49 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00575D452
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:05:48 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id a3so695247vsi.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:05:48 -0800 (PST)
+        Fri, 24 Feb 2023 13:06:51 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973B663DD8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:06:50 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso3644505pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 10:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=sladewatkins.net; s=googled;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VyhopY4pefshENiUdAPb0DtVuLSFSl8zazR2QNJ67YA=;
-        b=m7oQ2Itj+NP4lfSKYKGIJzhhuBkFAkLe2Ip1el5PQYt17EL2tgA059/1/MORPpVBoa
-         AjF9CVwGZ5v5e3NO4+FeftcMQ5goSgVzJGRstdUfDvnsWexGhC+OuCygI1qL7fW7g54Q
-         KECpjBxs2ilz1hGlpbnsW6oOetU1PiHP3t3HOBMXOaipYSihJMzvRXCpdwy78tX0svfa
-         I6ir0ho/YBOqWcUFisC3kQKDtHk2vtz8LtEkxhybJJzxImfDa6UP0clgH9K8NNATLRu+
-         wYHidFaVtV6eU/OmxfLq4Frbld4m2sSqH2h6Hc14EiQtVjHrEEpFWvFKCU8rST4qyL7U
-         PUXw==
+        bh=kqymbtir1wxBswrnIYSIP9JVKM4bPs/fGcPWQikKC3w=;
+        b=a4WxdS3D15t+NFnKGYxP5Gu4m2cn0yrhKp4kzgSflEqrNn6ctHKMnPgz+Lm/a98B7S
+         FgytwKetxKkp4e1kcHyG8/P3bF02J3I4EP7/9wVP/ofDc4WfZicIAvXYKnWix4rt98m9
+         KC8jJRJGbxmWWSFptNJwdv0wsvk72rvIu82B9950lKDfwRnkWWHoVN5scksbEyc+1Pwv
+         mbxPhaSnZy1nIPpl7H+w3kIe5ivOj/EkcF4j3sB2/pwvB8PX3NCSRG+MYul6zPmPcLQB
+         8yDi1RZrAGTqIMCxALPJ9QhFfyJ0ghxrJEolf3UtKnQ1GZJo4uq6N3Rgec/I9gXXK4yH
+         S3pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VyhopY4pefshENiUdAPb0DtVuLSFSl8zazR2QNJ67YA=;
-        b=XPkfD3sKLqVBjcA0U8aoyYjAfReg8o4uHusyw7+LibzEwboXwyrxrH6sT6/9IQI43R
-         tzWcn3a41L5XRXIeOhGFG3482KDq1Ae4nhuAMMr6Kirfx3LHK2Z78T844WzuRSBIy+B/
-         B88N2aHYghn2JkP4QA3ZBvRz7WGasRtLE5gsAF3q2cIj11MJHcym8tty6rMpGyBlWhgc
-         5/wIDf/t/SgcJv7BOso7vJuBApY4YvZEud0k5lgR6j684vd4r6blkhZ+BUav9F8l3Jfh
-         zBX9CZBuUdOPNJ2rxYiF3Fp/bhMEbAvoeFriKZWcvskGlqCntdrg83JhVi/2+YtREcCX
-         vfLA==
-X-Gm-Message-State: AO0yUKUiIcG3s8/7BwRIIgnbmwy9W/xt0XGKJrzPCjmWZe4yeB77dgLu
-        +YGNLytQZ4QADMYq9qvY8pxOxInyKqfR1O5bj6th8w==
-X-Google-Smtp-Source: AK7set+ir8tH9lQ1a+ZRXdWK3+wx2JsLbDl8NNiXiG7xT/YirHvIn0MJwbvUNpPRewNl+24J4UCttpm0kujABuFmhOI=
-X-Received: by 2002:ab0:6ed3:0:b0:68b:716e:ed8a with SMTP id
- c19-20020ab06ed3000000b0068b716eed8amr533401uav.0.1677261947753; Fri, 24 Feb
- 2023 10:05:47 -0800 (PST)
+        bh=kqymbtir1wxBswrnIYSIP9JVKM4bPs/fGcPWQikKC3w=;
+        b=orLubCaozYm6IhUSeMAloVpf0Ws5fe6WVXD1nZesmbBXbNFIHHiDqv9/zv6xyVTp01
+         v7eCgPAQcvg0dUBnwgFFN3orfMpoY+/gl42P3qqNtwMP8p5tKYrE64ZYhg8GnJYy4uGl
+         XUPCvaJPTvsrOxgB9d1aNA0eO9E9EMjAhpfYM8WXXl6m7rh3e1HBTqhVx3Ixp+Y8Re9h
+         YKh7EpPRlBuVVxi1JGL6hjN2Tbck5taPJWVsN57ivH9Vx1x46XsTySIhJjaliqBv/MY2
+         lEVgQc5smpW9ULFKJgE1UrZLIaMP7KYShJCSoLR1r5ZCGOKfCTF8CVOoG6yOnpSLQiZl
+         Z9Jw==
+X-Gm-Message-State: AO0yUKU6XrT45cIylRDn8lZNzIfA7kJn14VCvkVRURODgrbH0zol4dl8
+        wBdC35zZJu3P5sVIohNfWFfOMQjYMc4HvQ28+4qpIYjQCpGZlIhrzLk=
+X-Google-Smtp-Source: AK7set/Ho5RE83SzbTV71i2R5H8sPpiG7uthy6qNCk6YeHb0ja4+QUHiYKO7MjC8a8NuLywGOIujfqSiFLeBqdfJUMU=
+X-Received: by 2002:a17:90a:df85:b0:237:29b0:fb95 with SMTP id
+ p5-20020a17090adf8500b0023729b0fb95mr2091228pjv.5.1677262010030; Fri, 24 Feb
+ 2023 10:06:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20230218002819.1486479-1-jthoughton@google.com>
- <20230218002819.1486479-36-jthoughton@google.com> <CADrL8HUNO83XtYKxnrm_iWXweP4Wthy2TiodBZ3Tp=FOVa=ZPA@mail.gmail.com>
-In-Reply-To: <CADrL8HUNO83XtYKxnrm_iWXweP4Wthy2TiodBZ3Tp=FOVa=ZPA@mail.gmail.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Fri, 24 Feb 2023 10:05:11 -0800
-Message-ID: <CADrL8HVGFT+pwg1YmJHsADXrUQzYhRiAhQRybTHqW2CjYH0XWA@mail.gmail.com>
-Subject: Re: [PATCH v2 35/46] hugetlb: add check to prevent refcount overflow
- via HGM
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <87f7b3f4-8586-4c10-d4f4-643ff5f0cf62@inwind.it>
+In-Reply-To: <87f7b3f4-8586-4c10-d4f4-643ff5f0cf62@inwind.it>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Fri, 24 Feb 2023 13:06:37 -0500
+Message-ID: <CA+pv=HOSysost0YYeq4pw9VKjhtQDH6MvERrYpWyisme19b7dA@mail.gmail.com>
+Subject: Re: Kernel panic - not syncing: Attempted to kill init! exitcode=0x00007f00
+To:     Valerio Vanni <valerio.vanni@inwind.it>
+Cc:     linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,25 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 9:42 AM James Houghton <jthoughton@google.com> wrote:
+On Fri, Feb 24, 2023 at 12:46 PM Valerio Vanni <valerio.vanni@inwind.it> wrote:
 >
-> > @@ -5397,7 +5397,10 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
-> >                 } else {
-> >                         ptepage = pte_page(entry);
-> >                         hpage = compound_head(ptepage);
-> > -                       get_page(hpage);
-> > +                       if (try_get_page(hpage)) {
-> > +                               ret = -EFAULT;
-> > +                               break;
+> https://bugzilla.kernel.org/show_bug.cgi?id=217083
 >
-> spin_unlock(src_ptl) and spin_unlock(dst_ptl) is required here.
->
-> I'll make sure there's a selftest that actually makes sure that
-> refcount overflowing is handled gracefully for v3.
+> I got this error after upgrading a Debian machine (x86-64) from Stretch
+> to Buster. Upgrade is successful, but the next boot it crashes.
 
-And this should be !try_get_page(). This hunk was a last-minute
-addition to this commit; apparently I hadn't retested fork() after I
-made this change. Sorry! The hugetlb-hgm selftest immediately catches
-this problem.
+Thanks for the details. What was the last known good kernel version
+that did not exhibit this issue on your system? Bisecting against that
+is your best bet to try and find where a change was introduced that
+might be causing this issue to occur.
 
-- James
+>
+> The machine is an Asus B360M-A with an Intel i7-8700 CPU and 16GB DDR4.
+> My kernel is 4.20.17 (from kernel.org, not a distribution kernel), but I
+> tried with 4.19.273 and 5.10.169 with the same .config.
+
+Also just a quick note, since I noticed you mention it here: 4.20.y is
+not supported (see kernel.org for a list of supported releases).
+4.19.y and 5.10.y, however, are.
+
+-- Slade
