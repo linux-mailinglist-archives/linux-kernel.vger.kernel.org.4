@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024FD6A247F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0236A2482
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjBXWvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 17:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S229657AbjBXWve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 17:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBXWvH (ORCPT
+        with ESMTP id S229615AbjBXWvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 17:51:07 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED6A1C595
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:51:05 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id d30so3299102eda.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:51:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XetVmJJp94Tm+T8Ok6omBAdD9XAfcZ6uupziRkiZMk4=;
-        b=O992ZC0d4Fin+fSMDEuc/r4oFcV7GuLj9xW5Jaak+IJxNIGgsgHvuvCcZiaX+GMlBS
-         N776OX1MKa2ocMIExB/CvqrGqgUncIQxhKN3EjfIdflSlixcjzb9Pf0PvLdScnculsFz
-         Jb+JalT+9UXEQKhI1dBBcBnwv7Q14O8TVsOwU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XetVmJJp94Tm+T8Ok6omBAdD9XAfcZ6uupziRkiZMk4=;
-        b=GPTa6P2nPPnSfKIFmpZOtP9hWDXAZKJnLBbOLkzPSUj1aksBJuSVemwXGNy9OLvEP8
-         N7njL7gmUQrHuJHpQOdBTF8+uISPpfwiPqnRrIs/LDFxb3de6f98Ndj/nIN3OKRkJKaP
-         Dhcu8elyFWk7D+hPW/SU2ejp7Pij1jwHfVtff1P6Vq+QOU+JRXb4EzmfvNTf5gAQF9j0
-         O3APKhUV+R5cAmQ1UiP12NlavVxhBxxtP85wcNi27qN77P2aqoJ3bZU659Jz0FFB353P
-         iwwfyPD/gnb6kaiTtSlIrre4P2u+h6S7PvxP+uLun2oYTSNrO1dIdaHrFVz43pITXaYM
-         OEBg==
-X-Gm-Message-State: AO0yUKVor/FSxy6M6/14I82TMD1PWKTASgXUVeArOSZJJXDRNgDtrY7p
-        NpWSl9WcfKv6HHBZpEukUBMW8CsFuHntf6ELEHIh5w==
-X-Google-Smtp-Source: AK7set9TqA1l6VzGsk9qpSXzMQ9jwafMr6ZRSj2xV2KQgaBD5LuS/B1jy2lYtskIHMZ8XCpNloLUYA==
-X-Received: by 2002:a17:906:6444:b0:8af:2af5:1191 with SMTP id l4-20020a170906644400b008af2af51191mr22964029ejn.18.1677279063842;
-        Fri, 24 Feb 2023 14:51:03 -0800 (PST)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id s24-20020a50ab18000000b004af6b93f00asm228375edc.23.2023.02.24.14.51.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 14:51:02 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id i34so3246861eda.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:51:02 -0800 (PST)
-X-Received: by 2002:a50:9fae:0:b0:4ab:4d34:9762 with SMTP id
- c43-20020a509fae000000b004ab4d349762mr8258013edf.5.1677279062350; Fri, 24 Feb
- 2023 14:51:02 -0800 (PST)
+        Fri, 24 Feb 2023 17:51:32 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF206F83C;
+        Fri, 24 Feb 2023 14:51:22 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BEAB41EC0725;
+        Fri, 24 Feb 2023 23:51:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677279080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=I0/DAcvGh63kLuV/4PhWOz8jJFp5cUWvt4Uph5cz1cA=;
+        b=WZMZnuxoURigfhjSznJQgfAH0AwaypgAxZF/yQQ2Vsn00FwrdnMkNoXr6wzOyxzZFwEFfS
+        GL8kukbCbnZPku/47miBR5PK++t6XKmxV66obCQ9NWCPwltZqsvqCfcDwhTBVVzEJ15pVk
+        VhdsP0wdLUgLLgiVqAtsT5vG7e28sEA=
+Date:   Fri, 24 Feb 2023 23:51:17 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 7/8] x86/cpu: Support AMD Automatic IBRS
+Message-ID: <Y/k/ZXUXOFiBhOiI@zn.tnic>
+References: <20230124163319.2277355-1-kim.phillips@amd.com>
+ <20230124163319.2277355-8-kim.phillips@amd.com>
+ <20230224185257.o3mcmloei5zqu7wa@treble>
+ <Y/knUC0s+rg6ef2r@zn.tnic>
 MIME-Version: 1.0
-References: <Y/Tlx8j3i17n5bzL@nvidia.com>
-In-Reply-To: <Y/Tlx8j3i17n5bzL@nvidia.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 Feb 2023 14:50:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiy2XRdvxchyuVYJJ618sAcGiPPam14z8yAW+kyCzgPmA@mail.gmail.com>
-Message-ID: <CAHk-=wiy2XRdvxchyuVYJJ618sAcGiPPam14z8yAW+kyCzgPmA@mail.gmail.com>
-Subject: Re: [GIT PULL] Please pull IOMMUFD subsystem changes
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     iommu@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/knUC0s+rg6ef2r@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 7:39 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> iommufd for 6.3
->
-> Some polishing and small fixes for iommufd:
+On Fri, Feb 24, 2023 at 10:08:32PM +0100, Borislav Petkov wrote:
+> On Fri, Feb 24, 2023 at 10:52:57AM -0800, Josh Poimboeuf wrote:
+> > Doesn't this only enable it on the boot CPU?
+> 
+> Whoops, you might be right.
 
-Hmm. About half the patches seem to not be about iommufd, but about
-'isolated_msi', which isn't even mentioned in the pull request at all
-(well, it's there in the shortlog, but not in the actual "this is what
-happened")
+Actually, we stick that MSR - EFER - into the trampoline header and then
+each AP gets it written to in arch/x86/realmode/rm/trampoline_64.S
 
-I already merged it, and am not sure what I would add to the commit
-message, but I really would have liked to see that mentioned,
-considering that it wasn't some small part of it all.
+But this is only from code staring - I'll confirm this tomorrow.
 
-              Linus
+And if so, we should at least put comments in that trampoline code so
+that people do not remove the MSR writes.
+
+Or, actually, we should simply write it again because it is the init
+path and not really a hot path but it should damn well make sure that
+that bit gets set.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
