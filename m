@@ -2,112 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7AB6A1B3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485986A1B43
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBXLRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        id S230032AbjBXLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjBXLRL (ORCPT
+        with ESMTP id S230000AbjBXLSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:17:11 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289615AB6C;
-        Fri, 24 Feb 2023 03:17:10 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id bt28so6879123wrb.8;
-        Fri, 24 Feb 2023 03:17:10 -0800 (PST)
+        Fri, 24 Feb 2023 06:18:02 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E517A9E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:17:59 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s26so53424536edw.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=npDbChGxVT4upG8iaPwlFeucpDW9PWHzn2e04HvErHg=;
-        b=SXYrhGcd4tqmWcOnaTmKqN+sRnT/WFxWYU4Azd9/iijyM0RUUC9M4K5jXT00g5aZ2v
-         OUKYkUwRUBZykOKKB4jAQW0UMlvo84Krd6+CUp5qCOqq43nfd28dXj5wHNKOx2rhVnMz
-         VjNN9puvOdzvmaZpbyPe7sJJZub+P9WtcWFmom3Ai9c/YOKsXrntLjfRT2rmRkJbikWj
-         SzKK5bqyp1+uzzAHl2Og/PMMrSudaKlKyfmT+XGm2/956Ubttmj5fOoOR0Mb9xdpRO4x
-         xk8nLOsB/rlW6yxwX8jWFhi4t1iYFCZpyqeLDCBCOw2qeMRJCosqfL2PpQO+oeEQvhAa
-         3NQg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Vl8zU8kbmD0NXYO3MpGhm7tTD1vhneNkAGrrsmIsSw=;
+        b=TZz/8/zzgzDt8+hZqJEeX7Y4spNoEB1x53DoiTOqrKyo+9YKWAjJPmHgR5FTbWNGpn
+         GYysbJTX/QKQJ0kGvGNRLHM7Xr0TkoOBmweGm6vATdTeEp4sDTdIFoIfHi4JCryDUP3M
+         cVQ1vtlMCj80ubXLb8QXhY5rp4U01Q1twHhn7qAMcUv6UxWpS7AcmsxuA6ZSKeNE0W/X
+         VmpQvTu632nhPgHDinmsXAJBHA3VfjZnYK+IyHxzcvjjVBImvp18+Hjnl5LvtPXDtJ84
+         2/+5v/fg59tVkZflqBzK1huB+xnWXfnGK9v0AqIwxJBC94IMofDvU0R0hQQ6VZlNam63
+         0RLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=npDbChGxVT4upG8iaPwlFeucpDW9PWHzn2e04HvErHg=;
-        b=2FVXP83azPe6vmz9VFJVu4o8+iWACuPW/IyW4SjEcDzIKO26C2aRkl9RK/XjfKXDcB
-         FRyYjl9eo3JndvxLH4BH1nn3/nB0FGxkJtQVtuDWt4mBupKjGJO6yxGQHQcmVHDvLMVv
-         ufvu/h9Qvqs4xEn9jsjrasWNFLtj6aAXXBcz/uFpQlST3CciMFd3e8SjIOoG8V366Q31
-         1d6+bP96RQL3MB5LSxkgU3ut5RmhhtPFXNkfdSRGkiF7Pms52VRUePorfyyr5n26C6Jb
-         nTuW7IztwE1HJN2O5VgpG0YbvrE6winTu3FCG0n+uTqfsnzq1sYbRSYbmmtT5TrVldCO
-         EaFg==
-X-Gm-Message-State: AO0yUKWXCcQ3mGrUoCtsB1T0UZMMwG3nF8ecdvjmjiFa1XQCcpZlZcTy
-        aybDdqO7crnXk+mOxt80UNA=
-X-Google-Smtp-Source: AK7set+UJzenSO3Gz/GaTaipnBhKn5GSfxZ5z86bym5kTMn8n+9cf8ur0PJk98JfC7yVX7pPnN9Ayg==
-X-Received: by 2002:adf:d0c8:0:b0:2c7:1b3d:1fb9 with SMTP id z8-20020adfd0c8000000b002c71b3d1fb9mr1944209wrh.50.1677237428674;
-        Fri, 24 Feb 2023 03:17:08 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id u13-20020a5d434d000000b002c55ec7f661sm11676426wrr.5.2023.02.24.03.17.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 03:17:08 -0800 (PST)
-Date:   Fri, 24 Feb 2023 11:17:06 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/26] 5.10.170-rc2 review
-Message-ID: <Y/icsrUPXoxqPCLj@debian>
-References: <20230223141540.701637224@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Vl8zU8kbmD0NXYO3MpGhm7tTD1vhneNkAGrrsmIsSw=;
+        b=5mAVEhSixVEgXDK0F0sHz9Ey6PPv5jjBOgBt+QYmJsVcCJvXxAhV1pUPzV1SBrD4FY
+         i0mUccLicER3YeHBu0Hy/tWUvZWq4yLLGn0ilcbWrxskYA1qbQS6VxJkxARsLi1QQ4jc
+         3yoVppB4nYZodR0rSLkS+Yj+qrL34+odLqkmy04fbYg8zikX9hN1awj6A2rx+Zr35Qx3
+         ND18xEKeHk7QGf3TW63IArCEhPSx2QkDSFd7JDp3Ia7M/Lg9dkRywtQYeH2bOJCBKwYh
+         2hySGSh+xVKv0m4w8R25gM9uldZD6s48/B6YRJvZnMElOzDWyKQEf6fBs8+zdIQXTJHo
+         UDsw==
+X-Gm-Message-State: AO0yUKVCP9vTI4LSm3mkRZMek0DXnoKrdC4tPaEBI3NmStsIbZyYyXeo
+        RqWqTeRzDTSd0aCrUiLDZoUtzA==
+X-Google-Smtp-Source: AK7set+4KfFMeGNAYlcsDg1coF14sbqhpIKYYoNl+eBr/MJ1HdQqsV0dLeXgac6Vspjm/49TkSXQJA==
+X-Received: by 2002:a17:906:518d:b0:8b1:78b6:bbd7 with SMTP id y13-20020a170906518d00b008b178b6bbd7mr29255076ejk.10.1677237477989;
+        Fri, 24 Feb 2023 03:17:57 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i10-20020a170906a28a00b008bda61ff999sm8119127ejz.130.2023.02.24.03.17.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 03:17:57 -0800 (PST)
+Message-ID: <c3376575-c24f-18a3-1d8b-c3d67f072287@linaro.org>
+Date:   Fri, 24 Feb 2023 12:17:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223141540.701637224@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 01/15] dt-bindings: display/msm: gpu: Document GMU
+ wrapper-equipped A6xx
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>
+References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org>
+ <20230223-topic-gmuwrapper-v3-1-5be55a336819@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230223-topic-gmuwrapper-v3-1-5be55a336819@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Thu, Feb 23, 2023 at 03:16:29PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.170 release.
-> There are 26 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 23/02/2023 13:06, Konrad Dybcio wrote:
+> GMU wrapper-equipped A6xx GPUs require clocks and clock-names to be
+> specified under the GPU node, just like their older cousins.
+> Account for that.
 > 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/display/msm/gpu.yaml       | 63 ++++++++++++++++++----
+>  1 file changed, 53 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/gpu.yaml b/Documentation/devicetree/bindings/display/msm/gpu.yaml
+> index d4191cca71fb..e6d3160601bc 100644
+> --- a/Documentation/devicetree/bindings/display/msm/gpu.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/gpu.yaml
+> @@ -36,10 +36,7 @@ properties:
+>  
+>    reg-names:
+>      minItems: 1
+> -    items:
+> -      - const: kgsl_3d0_reg_memory
+> -      - const: cx_mem
+> -      - const: cx_dbgc
+> +    maxItems: 3
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -147,26 +144,72 @@ allOf:
+>                  description: GPU Alternative Memory Interface clock
+>                - const: gfx3d
+>                  description: GPU 3D engine clock
+> +              - const: gmu
+> +                description: CX GMU clock
+>                - const: rbbmtimer
+>                  description: GPU RBBM Timer for Adreno 5xx series
+>                - const: rbcpr
+>                  description: GPU RB Core Power Reduction clock
+> +              - const: xo
+> +                description: GPUCC clocksource clock
+>            minItems: 2
+> -          maxItems: 7
+> +          maxItems: 9
 
-Build test (gcc version 11.3.1 20230210):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Your commit says A6xx but this is a3-5xx. I don't understand this change.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+>  
+>        required:
+>          - clocks
+>          - clock-names
+> +
+>    - if:
+>        properties:
+>          compatible:
+>            contains:
+> -            pattern: '^qcom,adreno-6[0-9][0-9]\.[0-9]$'
+> -
+> -    then: # Since Adreno 6xx series clocks should be defined in GMU
+> +            enum:
+> +              - qcom,adreno-610.0
+> +              - qcom,adreno-619.1
+> +    then:
+>        properties:
+> -        clocks: false
+> -        clock-names: false
+> +        clock-names:
+> +          items:
+> +            - const: core
+> +              description: GPU Core clock
+> +            - const: iface
+> +              description: GPU Interface clock
+> +            - const: mem_iface
+> +              description: GPU Memory Interface clock
+> +            - const: alt_mem_iface
+> +              description: GPU Alternative Memory Interface clock
+> +            - const: gmu
+> +              description: CX GMU clock
+> +            - const: xo
+> +              description: GPUCC clocksource clock
+> +
+> +        reg-names:
+> +          minItems: 1
+> +          items:
+> +            - const: kgsl_3d0_reg_memory
+> +            - const: cx_dbgc
+> +
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +    else:
+> +      if:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              pattern: '^qcom,adreno-6[0-9][0-9]\.[0-9]$'
+> +
+> +      then: # Starting with A6xx, the clocks are usually defined in the GMU node
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2930
-[2]. https://openqa.qa.codethink.co.uk/tests/2933
+The comment is not accurate anymore.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Best regards,
+Krzysztof
 
--- 
-Regards
-Sudip
