@@ -2,86 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490956A2067
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416116A206C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBXRUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
+        id S229724AbjBXRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjBXRUI (ORCPT
+        with ESMTP id S229454AbjBXRVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:20:08 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4FE43468;
-        Fri, 24 Feb 2023 09:20:07 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id g6so2364503iov.13;
-        Fri, 24 Feb 2023 09:20:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6nruIHAhdhx1kLlG3LLxcyHw+CS76kCYQby15s3Fp+Y=;
-        b=IpamoNkd4cXS1VDYI2n56rf2X4LcZBHRzlXw71mavaB4o/VFmHAPvqlcZBuuuyV2T1
-         05SYpOUK/2Krm7rHdTiL9hszzpkwhMaHwREFeoCxZDiu/7vSq9glnbo1J6CDZ2V75RXK
-         t1J43Ybp020bq2DdNo+xb3PUyGlYbzpQPXPBFIg41mclgJSXAz0F1EuKNkh8vMfaRFDc
-         nR4WtHnvEgd81QKrw8ZajY8oeBY4YtONuZz9GL767Kba+KyBik0g4KcrIAVC944Efz6s
-         EWhMHWpF1Er7YuhqmHlWCQbU/TiX+5DkGKVhvE8EaW8q7eu65HkAJ3/b7v3Bo/A/E8kV
-         dBhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6nruIHAhdhx1kLlG3LLxcyHw+CS76kCYQby15s3Fp+Y=;
-        b=pBgCsxhrqLPV6YlMRhSzpRD3jZkaSoz+MPCf2GF798YN06RnW9g8wHGd1knuWPRC5h
-         uQk4WG+16d1jwCpiyU9UuBMoB4e+OlT1IL9jRZ45Sgw6zGFHFzrjfFQkbZSlbtUZPmf0
-         UUmYPxfaMJPK7yPUz/ni3LrscnPuJFsIMe7cwNoodYHQOv2ZTYGpO3rImJX+t5pS/bxI
-         q6xvFNwLMtcDtYoAh2y81Gxv2756JTEj6sI5Z5QWldekAmrEKU2bUphrpkiEbpQskNjo
-         tJ9v2xAeX80YKXMMyM8wtLDQoPCFTxEa4XjCIXAyzANqxRcUWYj5s0KzgVmyYLcYDx8N
-         hk+Q==
-X-Gm-Message-State: AO0yUKW+R8qkzSDbYuDN9wc+RYRY9/AyQ6fBRfVjga8qXtOc+Cx+Qm+x
-        MFAoOyF82o/xF5Wimr+9P2Q=
-X-Google-Smtp-Source: AK7set8NgV86UQeUeidAd60E4SLLlduW3eN2qKkqFJEQ/Lse8jHWimLTTUAnNOU966VV+v7wxtMv2A==
-X-Received: by 2002:a5d:8e01:0:b0:74c:822c:a6ac with SMTP id e1-20020a5d8e01000000b0074c822ca6acmr9886755iod.15.1677259206469;
-        Fri, 24 Feb 2023 09:20:06 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5e8c09000000b00740710c0a65sm3552788ioj.47.2023.02.24.09.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 09:20:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 24 Feb 2023 09:20:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
- genphy_c45_write_eee_adv()
-Message-ID: <20230224172004.GA1224760@roeck-us.net>
-References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
- <20230211074113.2782508-7-o.rempel@pengutronix.de>
- <20230224035553.GA1089605@roeck-us.net>
- <20230224041604.GA1353778@roeck-us.net>
+        Fri, 24 Feb 2023 12:21:44 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792AF158BF;
+        Fri, 24 Feb 2023 09:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hVqtr9A69/Si/EFagr+5HgP7SHagZOhLbSWzYrGADwQ=; b=LItUNW0Trf6fcGd6hJBbRaRstL
+        stwDEmjolZnMfJzKOvSKW4DYjOQF4M9ihtyDTW+NSO9muiwINc+qKp872YxbNmSXZOtBbp1jPzWcB
+        0QKG0gY2bl8FGPKU3bXzncEox6oIacRQXz4OstV3ASwysT0lZYHGHauRQWVNETlwEvZKVwQEVJTrj
+        fzp41hf3DDTpzvH0y2TMv7beyY2/99ZbK9lvVM5jc5aOZXZRfXoBvL1fk1d/rqM0aIy8ZoRYIt01f
+        7vIP7ZAsmkxsZ1+eqBnNo2w98KzuUK/F5XODOSBdoC36nrd4g4F21l6kJsjuhg/aT6loCGblVeZE6
+        9WFxINYQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVblM-003IPG-2u; Fri, 24 Feb 2023 17:21:40 +0000
+Date:   Fri, 24 Feb 2023 09:21:40 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
+Message-ID: <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+ <20230224150811.80316-10-nick.alcock@oracle.com>
+ <86y1onw02k.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230224041604.GA1353778@roeck-us.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <86y1onw02k.wl-maz@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,33 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Copying regzbot.
-  
-#regzbot ^introduced 9b01c885be36
-#regzbot title Network interface initialization failures on xtensa, arm:cubieboard
-#regzbot ignore-activity
+On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
+> On Fri, 24 Feb 2023 15:07:53 +0000,
+> Nick Alcock <nick.alcock@oracle.com> wrote:
+> > 
+> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > are used to identify modules. As a consequence, uses of the macro
+> > in non-modules will cause modprobe to misidentify their containing
+> > object file as a module when it is not (false positives), and modprobe
+> > might succeed rather than failing with a suitable error message.
+> > 
+> > So remove it in the files in this commit, none of which can be built as
+> > modules.
+> > 
+> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: linux-modules@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > ---
+> >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> > index 25fd8ee66565..4bbfa2b0a4df 100644
+> > --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
+> >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+> >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
+> >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> > -MODULE_LICENSE("GPL");
+> 
+> I'm probably missing some context here, but I find it odd to drop
+> something that is a important piece of information because of what
+> looks like a tooling regression.
+> 
+> It also means that once a random driver gets enabled as a module, it
+> won't load because it is now missing a MODULE_LICENSE() annotation.
+> 
+> It feels like MODULE_LICENSE should instead degrade to an empty
+> statement when MODULE isn't defined. Why isn't this approach the
+> correct one?
+> 
+> I expect the cover letter would have some pretty good information on
+> this, but lore.kernel.org doesn't seem to have it at the time I write
+> this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
+> found").
 
-On Thu, Feb 23, 2023 at 08:16:06PM -0800, Guenter Roeck wrote:
-> On Thu, Feb 23, 2023 at 07:55:55PM -0800, Guenter Roeck wrote:
-> > On Sat, Feb 11, 2023 at 08:41:10AM +0100, Oleksij Rempel wrote:
-> > > Migrate from genphy_config_eee_advert() to genphy_c45_write_eee_adv().
-> > > 
-> > > It should work as before except write operation to the EEE adv registers
-> > > will be done only if some EEE abilities was detected.
-> > > 
-> > > If some driver will have a regression, related driver should provide own
-> > > .get_features callback. See micrel.c:ksz9477_get_features() as example.
-> > > 
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> > 
-> > This patch causes network interface failures with all my xtensa qemu
-> > emulations. Reverting it fixes the problem. Bisect log is attached
-> > for reference.
-> > 
-> 
-> Also affected are arm:cubieboard emulations, with same symptom.
-> arm:bletchley-bmc emulations crash. In both cases, reverting this patch
-> fixes the problem.
-> 
-> Guenter
+The right thing is to not even have this and have the module license
+inferred from the SPDX tag. But for now we want to remove the tag from
+things we know for sure are not modules.
+
+  Luis
