@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F026A184C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BFB6A1850
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjBXIxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S229649AbjBXIyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjBXIxE (ORCPT
+        with ESMTP id S229630AbjBXIyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:53:04 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016628A55
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:53:00 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-536cb25982eso239910577b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:53:00 -0800 (PST)
+        Fri, 24 Feb 2023 03:54:35 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF6D2D50
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:54:34 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id f31so20429137vsv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXBxCzUTwUkY9VpXwOuTsg9QsDGpyRlggQ0Ehs3LnAQ=;
-        b=kLCBct7OJ0ZWzc41yyFNoAbZU/0AeYHVz7PrnBKPVpdqsXs2IAdyj+vQZ4TlLmrVwI
-         weqFuX+933EX7S14S/LlRbwYOj0fFXjgMSzRLlN69zyC1b53+Gb1kHUBmbSLcPTaJfSL
-         mpJY1tS03b3k21dWA0+dIK2361RNm6DE73/5w=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sEfzPXb8YxsNwYdshNnWQ30snb3BfxoVn1m1qqjbb6M=;
+        b=tb/t4KsW8JqSHi611kiR10Ctc/9wpGoM+GHONN1kX5fUBmDUlV9y7ROjBL/9MU43LX
+         vBQCLgp5LA6d88JB2fcAAbdYhSJEPzr6ytpVfzagqGsDd6FbqK4ZM0j2O+aOHAgbBcpr
+         T4ji0bbXMv6OBUpk1Grfrr5HkPka1xUrOc3BdmOgh+v/1XHSz1SNdlMTfkabGV9dY9pS
+         a/zaBiAD6uhE7UVEAyebSpDHa1cNmb9RpSLO91RNsklqOZGVWMxHiSOQZJbT0Nyt29gG
+         VtDGZmjZ/Q+Z0Oh4YvSPpt+ZX54E4FjJXBQwXCLl9+H9PPNA9JkCqoTuWbbwTcrIFN/e
+         fP6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXBxCzUTwUkY9VpXwOuTsg9QsDGpyRlggQ0Ehs3LnAQ=;
-        b=iLMEdfOVng+FGxNo6yLI2rleFFif81qf/0ThJldskuehBv64GLYWvbwvGP+38gYQBq
-         FkKUGWH0ybpKUmW5e9FZFefuLg1xMUpmHoRgNH55+cO1e/fcUW6+G5ZEWhIkwNjQjrnV
-         Pt8IzDkUgjGD7TS68vgVyi5Bzv7W37E+DMgMdVxfLyPwmmwvqB1RDEWNRsjsYLbSCpM5
-         Q35RjL0+JKNZtH2PEFWwxAgyr9ViamM7+WIkUH04fpgPpKoFoj7GK2oAMIk3oq7kLIfu
-         q+QtmH+ywa6s5idZef3Ct+hjS0gUtd1B3rkJwoEOfQKnKBe+lOc0KosSjHxAkdyj552E
-         Vshw==
-X-Gm-Message-State: AO0yUKVwDfyoQk6wxTgujOC5QbDGdRXBkeeF4cbAgmWOL6R0H7k/zRcV
-        yQM6C9fHIo+BsD+J5xuQLhfTFMmJNKkK+iwWPnuH3lpBs/QNLfUO
-X-Google-Smtp-Source: AK7set+Ee//aV+bgfKyyjEpjRL0bSpqErjnIpTNSDdx4FSfXGZbHvCA4NH6lrLlFfb3LI0RYGdapOLHeJoNvs/rJzp0=
-X-Received: by 2002:ab0:5550:0:b0:688:c23f:c22f with SMTP id
- u16-20020ab05550000000b00688c23fc22fmr3805805uaa.1.1677228765555; Fri, 24 Feb
- 2023 00:52:45 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sEfzPXb8YxsNwYdshNnWQ30snb3BfxoVn1m1qqjbb6M=;
+        b=sEsBtpOpM7HTGXzIgYG1jeBy8JxhhJPBronuNxDnaODOX1nHasVoYrtGH1FSagMBIb
+         Us9zlZYczRAgdu3jdCdEhTm5gN+1AYFep96Dcc7niF4iE+O/Vxu05FEg1jx838c6++1Q
+         6YRKS8zcGQF+MoUXsKuGGLpdPxVYWQx8u+FV3R6KZoc/atHyjDMWUC7HM9LXHJnlvSYM
+         P7eodgZMdazo856sT+WuXjQgVoo3tHKNMEUCyUYVWf717PAeY6XdJRcZYPtGgcYkartB
+         68ztbWCPFIkI71P8BBp1Mk8NVbZbXrqkyBxtceUtAk8fgmZEgW78KpaPntQeJiznEDUo
+         FzyA==
+X-Gm-Message-State: AO0yUKU9lNAZuPHuicLibtlH5TRmvk9lmeekKeSqf6A+gjrZfoJB5L9T
+        ZF0siLJ8593rm/2DJWKb30z8WtOr+IySGfi4KUKlOg==
+X-Google-Smtp-Source: AK7set9fFkBXCIMkaZh4Vw/kF2quvU7mD09yH3AxWxZCFMIIqYj8WFL85LbA4gZaKyeAu+ilzpcIfNrZe5N2vfuAnr4=
+X-Received: by 2002:a67:fbd2:0:b0:411:fff6:3cc4 with SMTP id
+ o18-20020a67fbd2000000b00411fff63cc4mr1999815vsr.3.1677228872941; Fri, 24 Feb
+ 2023 00:54:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20230223145426.193590-1-angelogioacchino.delregno@collabora.com> <20230223145426.193590-5-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230223145426.193590-5-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 24 Feb 2023 16:52:34 +0800
-Message-ID: <CAGXv+5H7ADKUu1bsGrF5F-EgJBM6WW0N+AFw=m+hH_00QGHDew@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] arm64: dts: mediatek: cherry: Add configuration
- for display backlight
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+References: <20230223141545.280864003@linuxfoundation.org>
+In-Reply-To: <20230223141545.280864003@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 24 Feb 2023 14:24:21 +0530
+Message-ID: <CA+G9fYvCEzv=XF=SMoru58r2+1+8t+OSKf9Uwhrx2jD0gKk5ew@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/47] 6.1.14-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +72,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:56 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Thu, 23 Feb 2023 at 19:46, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Configure the hardware PWM for the integrated display's backlight:
-> all Cherry devices enable the backlight with GPIO82 and manage the
-> PWM via MediaTek disp-pwm on GPIO97.
+> This is the start of the stable review cycle for the 6.1.14 release.
+> There are 47 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.14-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-with some additional patches to enable the internal display.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.1.14-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 342b7f3b3ae56d997a28ceec3321ebca5b73c30b
+* git describe: v6.1.13-48-g342b7f3b3ae5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.1=
+3-48-g342b7f3b3ae5
+
+## Test Regressions (compared to v6.1.13)
+
+## Metric Regressions (compared to v6.1.13)
+
+## Test Fixes (compared to v6.1.13)
+
+## Metric Fixes (compared to v6.1.13)
+
+## Test result summary
+total: 163767, pass: 144832, fail: 4537, skip: 14355, xfail: 43
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 146 passed, 3 failed
+* arm64: 51 total, 48 passed, 3 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 13 passed, 3 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 42 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
