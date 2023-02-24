@@ -2,184 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B166A1E3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BC86A1E5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjBXPMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S229567AbjBXPS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjBXPMA (ORCPT
+        with ESMTP id S229736AbjBXPSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:12:00 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E066CF06;
-        Fri, 24 Feb 2023 07:11:30 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OEo1d5012033;
-        Fri, 24 Feb 2023 15:10:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=KRrwQzlt5aRkpr/mL7CMLdUB9E29iFH9PIP+6PHbgtI=;
- b=Vq37TjQGSX7zf1euOjf2sd5+DWrOWVcPj50sphlLz0oSXnkDL6yne28SRuM0I3/lXGxn
- H3do7u/k+r4JaPcbWc9yG3bg6C9piVHHZAswjCdZVX0wpCKUKMvB+jK5To/DBWLxF3jT
- RLe/pmc6sdMCZLveNPNlI0Eb5aY/oEHV8lSIrj3YQle44VSltKiusCnI4rTz/w6QwmE9
- xpiafbMYLIuqBqy90oYBelowAPn34HBc295jFusPRyQKAQwkziWmzzEyCRpt+bWZcXMx
- SXSGNGal8/ERCjUnGb2oIA9heviyy2obPuXvyy1r5WdB5l/BPrioLfD3MDEPIR73DDtN fQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntpjad82u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Feb 2023 15:10:31 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31ODVvm9030210;
-        Fri, 24 Feb 2023 15:10:30 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn49kyca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Feb 2023 15:10:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IbqIo5dx5bqQOxcHPVjHbL9bSjhOud2ACce8LKoG5NSLDHbeYGPVcipb31SKrCikest8OIxw/giU01hZt2Jdx75pZz92Km1g7gKJ5FRoL9Lo75HTvdcVvAJgAahMfEXmed8EDEDZpgN/CcukcPciRrZgWlPRCZ8zIWiwHj/2tXQKsiDRTL1q2JU6kMDouY9oYFIhV1bqIBCJaHnTc+KbTL/JR4mMO4nQzgxhFb1int7/wPRb74ctcr0yemxXUZ+AJZF//lFSi41ZGbNImYPtyvxIi+WT3d8jYjJ4I1v+IB8X34T1X0gz8pXyCIrXFgIcEVwfBQ11Psr2YCfxet/Fgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KRrwQzlt5aRkpr/mL7CMLdUB9E29iFH9PIP+6PHbgtI=;
- b=EJNmkNZdCQXV7RBdRp0kfnoinuFO5Q7PW/GLrKFi12nFOz9eOtqb/ouhCfvOoyOZxl68IqJEaeVhSDrGnoQcGQar8d01dvfN75p/13GisO+3EguXZ+UT5FrG2ykxVLiceCHJPyvuhdBVuCoLlcYsBNrsFyPRTiCOSqdyS8WxsedUvIcfry+JsOXWnC602NaMQw9zujqsZRH1VVf4ZqAL3PoR+lieuJX5mGKptzWE8RmCKUfewPpKECXYLWN69+78LcQ4MJiT9w1PBU5wN78n++D/E5Y/J4wrfX6tqAi3pQSA0HoMDSvO/jJZHLUbmtKXcH1ancL9XJzElSVppwIsTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KRrwQzlt5aRkpr/mL7CMLdUB9E29iFH9PIP+6PHbgtI=;
- b=v4tzOPcCMApWYn7UHJeZJL2qxihRSixR3koBTE4mdZ7/JwFMMHU6PdxbNd74frMPvRzzEUFG55c05toVcKJFjMZSoJ2LE20PvZQq63cmjxfEQIt5jS5UGFiggyx84joygqq0fKgbrv42gBW8ze5+edB7ZKuWJATnoJfa1EreCc4=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by SJ0PR10MB6424.namprd10.prod.outlook.com (2603:10b6:a03:44e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.7; Fri, 24 Feb
- 2023 15:10:28 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6134.019; Fri, 24 Feb 2023
- 15:10:28 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     mcgrof@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org
-Subject: [PATCH 27/27] lib: packing: remove MODULE_LICENSE in non-modules
-Date:   Fri, 24 Feb 2023 15:08:11 +0000
-Message-Id: <20230224150811.80316-28-nick.alcock@oracle.com>
-X-Mailer: git-send-email 2.39.1.268.g9de2f9a303
-In-Reply-To: <20230224150811.80316-1-nick.alcock@oracle.com>
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0396.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18f::23) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+        Fri, 24 Feb 2023 10:18:54 -0500
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61EA682BF;
+        Fri, 24 Feb 2023 07:18:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1677251925;
+        bh=2DxjrJyKKTqbJ2x4ZMA0QnmzjpPwL2ed1Fn0QoMGueQ=;
+        h=From:To:Cc:Subject:Date;
+        b=w23xj9HzMuNVIKIvBoWVHYhq2h2pvg+N7/TxZBN1lihdjFWLx/UPmj7KpuUizXLuM
+         ciUnxU3WgKrrcdkjE1EvlL+IVlSkzKe2QrYQsYEvbuPlL+2yzgI14mjU85NZWEYbyX
+         2vuS1lCBby/upGErpEnVNJ461Mr7hW9Nelzey9oY=
+Received: from rtoax.. ([111.199.188.149])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 28421E7C; Fri, 24 Feb 2023 23:10:04 +0800
+X-QQ-mid: xmsmtpt1677251404tc788u33m
+Message-ID: <tencent_CB281722B3C1BD504C16CDE586CACC2BE706@qq.com>
+X-QQ-XMAILINFO: MaJhvnnz6ISsTeBvp4SdkfRgmLru8HT4dYD59XQa9InsFMrFkQCik7T6o584SR
+         HrxnPWpBq7Q4iIIr6E+ZL3rBbfKFwE2UQu6L/bC+A1IQa4nFwqlwuHLS25Dto0/BycZ0upk449pR
+         j9GB8EbSD1y/+T1VQceIjHmoPYBQgg3xK96JnaGLHErglPV2/uSD5Mhw5VmUJQlHsp3pfl9NNQ6X
+         zAtzONR7dKRExHozzjUYfcAAOxetFZ0wxrAqzxVFmOZAxetpsNuPmQAv6N2R7zsHIOpz/BJo+heK
+         w2+xrA9088q9tg63I8eYAHObwonvgWNNax6RlWKjcDHsLXrjY03gY32y29+auQpP0YWhYR6JDZ0K
+         84rNRW/AhPleRO4uW/xrIdGOcHFpbZnd8BZmQEtkES/cjY24KhAwvS9T8zSxV2e6IhOkju4Mh8Ia
+         iNDyz2VlE37TOjD0VdbU9U52HJbxNux6oA4YHY8cxjfRTtJoH5r2msar7L+W4fAy0HHYwGT+b9fO
+         V8GKnjlhIxJmJwdE4nyQJRnVJGERijCSTedQWIX31EnCxG1VTBtoACMSjH5Xgzj5Ctt2zfpdqiTK
+         NpWbj7in1ChjsHKdwmB1L5kwKp9t0n+USxbRPN78rfLTqs8bqKN8qSgwYsSPHPHYCo7PXwB1nhs4
+         IP4hm04ujclsHRDTeVmVbj+CvLiOYtWJLVm7CtuHp8/tI0YX0AcM3RqkrjKeDbaZvDM/x6RnWxLK
+         T5Qz95OvNAr0Hsn4XL/gN1sLPJwkzZzKQ9NFcxa0lmmjBhypZN4/FOOwLE6kVfionaD899bMX4Cs
+         e7psJpvwIFVcFRLixdh5u/gmcw5Kb96+U7Gr0foDW/wC68X2DdMkKes616m5qAQzwmz6DwIwgdks
+         lhF8/LimktzrJbWUsMX3DxqaTfyGH71uhghgX+Ofl3eNMtpkuq/VkLpZByVyr1y2lYYNHhLEELDP
+         JSAZWWuEENoa9HTY175BDWnH9NHSueUvggdhVxjhWHdoppjAA3ZgC5tUlgnZkUjHOyPr3vG07BSn
+         UUXrTTIVMm1FS3Yf3w
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix compilation errors: assign a value to a constant
+Date:   Fri, 24 Feb 2023 23:10:02 +0800
+X-OQ-MSGID: <20230224151002.579037-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|SJ0PR10MB6424:EE_
-X-MS-Office365-Filtering-Correlation-Id: e56e921c-9632-431a-4357-08db16794384
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nG27zJ9SJwIJY3ZF5wkxF8JF/0sW5/HzPmvxCvE/AZIG/N47GeSKU+bjhDdhAiFFf+oySvJ0pGRAWjDC6jiynl8duXN/QRpaKXUVsgApmZZpXF+S1BGKmF1ZndDwzv6TUrDwP+qOfQug0Un7Unzm0VI3mLEoXZuKeNuhS94M7uQzZ8qEUobGSCdFI0/zFbwAKDL4EGGVG8DNyt1eDH20fcEAMA2BCHomT+WiunUpE2M4jvOBeAROzHG+B4zCQF9bS9HKrHlrXY4r9uvOWI4KNDjOQBEwgVX39/3CmwXZoOag3suI7S8ytm/SJIZKgaeVTUDtmsieUZlXYTClbGJMfl/NIitfzfeagpfAkaRSCcJklePZFdCIPHbwCBRNbp+pW3c6CNrMPy7t+K9SpTyl0QADvbJoxfJBo0xyDYd/8DiS8SIILHokLXJLLcAh1usrZ3UudW71hQVlLOOmJjV6rnGG7nAfgq0F2J4gJjK0+bGO8rZn1U+ssKYNaatU90T081/0xpb5eCQZoFVSj2kiEfaUKWrNxWtFiKEFELpDVa/VWUhHawpZ44ItTVz4lNdohcZcsa/WQyfBfkd2SOoMa1HXKV92kkecbMaPxUQZeMcQTtHDbn0poS3kdHXslWD3hxVX/+12hVAp7CIP34T6cQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(396003)(39860400002)(376002)(451199018)(83380400001)(36756003)(4326008)(66476007)(66556008)(66946007)(6916009)(8676002)(86362001)(2906002)(38100700002)(41300700001)(478600001)(186003)(2616005)(1076003)(54906003)(6666004)(6512007)(6506007)(316002)(8936002)(44832011)(5660300002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kd8fI2tPlncPTffDzFVHYcetr/wIBvc0h0uJ2lg3V8p5aep2DxU8N52Ou+3O?=
- =?us-ascii?Q?IkCNc3ipO0VTIzIMhKe9mQgKAKQsxJ32t1NhfxAzr/U0RJesuB7aLkitxbP4?=
- =?us-ascii?Q?pZ9NCb4O3EQ7R5ytKtXGzwvJdTKFT7Q0oAmb2mBRZXq5zsnKHslOyCnBU+lr?=
- =?us-ascii?Q?e9qw/9JeZoiMQnIYtlNe3lvpsFBmfaMXGhVGblLDyLmQvFoqmoy43v4YYKOk?=
- =?us-ascii?Q?ZyJe1NQ//3Rt7Wk44n4rIsFirTUkQLgtMWSqxXYbziKlh0o6h3n9I1KGfv/S?=
- =?us-ascii?Q?dKhw4NwcV0gZvvQlEbow2JUsh/+QwUXLf5hTNlqbeUbmtxbPlm9dhF1eVylN?=
- =?us-ascii?Q?Dr/z1oOHsEGIbg/eTvLm9wMwoU+9xpFbtAnyZC1xGwXHSqY//FFrBGcNF0k2?=
- =?us-ascii?Q?X8M5rGRF65AaPFnOQJlFWh/tbcJJyhbXSOBf85pdQLO/v7C8htbtTPjmJgk8?=
- =?us-ascii?Q?B0h+rLh+ZsrtQNaNHZWPZubFDhb9Zt9IXpJDDewmr4p7lDiZjAW90OJrfu1Q?=
- =?us-ascii?Q?faIvddQXm6eZq2KnFwuStxynlObo1wCkrisWzjFG1KS2pxwsCsE+BtVWxBKk?=
- =?us-ascii?Q?cNSQLDv/Buf3zZQL1mOdfD9Mwo455RxspmIELiDQ2lrqaNuvgWNNpcy/yoLn?=
- =?us-ascii?Q?gjhuuULNGEmE6z7OlEhTzssVc9gavbenCoebYJtw2RxhXBP8oAjDjn8wqv+u?=
- =?us-ascii?Q?dPyk8Mw+UxrIC7XiwF+ji+mPWFDi9jVnL9yVI1uWJpDqLlWc0jDEGYsS/Mjj?=
- =?us-ascii?Q?uskBi0I3Z7a6yM8se8K/sFeumkgKjjc9wbrfOvSKi0Ri0g6Zye3w+RbUqcD5?=
- =?us-ascii?Q?sRd4gWXjvrtjwy6OyFwRv33uInAF3v67xwlWsRbCc0MU03KRHSKl3ulTiBGe?=
- =?us-ascii?Q?60OJzI47XAQvCDax3AUOTz9P3zzI2qtxe/SRtYlirVqY2EFn6CKTxBU9TM6B?=
- =?us-ascii?Q?r47MbWmnAxjnsqVTCURE1tb8Q2Mmx4vQQaZT5yAyGPKRRh3ie+8t+deITYR0?=
- =?us-ascii?Q?3kysF8KUGmf+eBSQ+6pFF/fvpJCi8+EKPbQvVo8RmpqB7uKFU1+R3B1sYqB2?=
- =?us-ascii?Q?5hNvej2wAPbAxZSXMwwAhWOr/mo654mpri9VKojG+8Ed/UKwdK6v3O7Hzlym?=
- =?us-ascii?Q?AUyeEfd0HuVMaxpflzAaia3WcBGxZlockzwNFwg51qZdOt/Sd3wZkmdM2ZBd?=
- =?us-ascii?Q?gtpyvyWpNXsLfhCUykoxKlQJP4wm7eG1n3Gral3tGHFIAAuMV6jI4YTpU7Nr?=
- =?us-ascii?Q?XTKRmvD4HSmZh3TSkCpncqZWiFsBpuMW7UimSRmC+BLNRTyGFUdeM6n5dqmD?=
- =?us-ascii?Q?1wsvKWjzOOnowhpFIoZtRh0CKRceEw+/xxFPRnSfi6oiAlK1xqhgT+tSz/8y?=
- =?us-ascii?Q?4tkarhSwAlVeUkZpNY/t+tvVFXlLQSwTFc8QL+Z3Xt2f+rywJaae3NuVYbdQ?=
- =?us-ascii?Q?eBZELLvwccN7WLtzZP2kgOhsVMnIeTXISmb1r+5T4S8k6DvluUEkgiVohPq2?=
- =?us-ascii?Q?VdJm0E15LhJ1hNfKEYAXfhLzqWT4l4lbl7H8HDiwrCERQ9ny44W3Na3Yjka3?=
- =?us-ascii?Q?n3u+jqXOOKJBEzoBw+Pf61y1GIx36pO91yjfMncHaAZp588PAY2VYeHwtvTp?=
- =?us-ascii?Q?Wk3DHhiPTVDwqZP+uicB4Bk=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: hInkZf1bOLdvP61Q4/04r6rudOfGYF40lu5zSY/2mm08Sac9IwIo0QbRlkZxuXd9wcQSNigGA+I1/FhWlfB3+t0N0dVGfBc0v0h6P/1UpM+phfr2+OYi1Xzya3StjNgEWWlcjM73fwsHTLnFh468927to6arlalBrfXMGo1G1XMx9FSwG+7BwUJAqdzySKK4/lPegfXBqhELAHAKokOpjyyeH20pk0HUmbAFGliWsn9Q+wMHclYY1Sris4XlE+jUKX3Y69jCzKd2P7pIwlAO+PZKh/dc3QzJraK7za4X6w5w8c9KbPThFhLDT3IoLnlm6rdV+1+KGCI/mWK39kyx9jhQ9bDpD91lhYWg8nLITj6rNMrRRxleUjO5M8NTGkp3S5IVnV+D3zV16nwGjLgJxpcFufLaVPn3GTupGLv7/vDrQWDVVPmqQpDMlWgHnpH9FiwaRk1z2JzMqptIWuCpQ7hDXZc8x05Tji6NK7okdf5LtpOvLVTdncmrHAL9xizpotT3BOKc6u5IbriMJO6qEL4rGJIhsiKWIdscGQpwPmVfA6urQ6GBMzQPLsDM+exGpCJkEUkIAc8Eh8aPEHTKS4qC5yOeGNEkRonFNeURBhospYwCjzQPFkD1g6N/5dstd5TblkCanJ2MRFbMlRH26n1TESuiKkr9EHD8iDqHkg5Vbd8XVr1AVfrzkvnvA22EQlYSM7VJilSmvS1CDnLyizHB8Pc8R2m9a/q1LC5gFY8Nzmb6x8gdfYfPBjKdc+04tqvgUD0vklX1eik4cREIVkmsMdm0b9XftWUdWV9VFs9z+mC0t+wiC+dldSYfI1zaMbkTUty72uP3JWLgJz20Gnfw1BIPddZwJtjrL0cKAzc=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e56e921c-9632-431a-4357-08db16794384
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 15:10:28.3746
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KQSw+7XkiHIRIwWeSTR+gbGl6PxgKvEbypERT73FfCofvxBgjyFIwwpZpc8FsSv1VkEsFan/pDUZuAKJinjiKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB6424
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_10,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
- suspectscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302240118
-X-Proofpoint-ORIG-GUID: si0ElL4JkVQXWoSqFDc9rl_51ESnZ2xH
-X-Proofpoint-GUID: si0ElL4JkVQXWoSqFDc9rl_51ESnZ2xH
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-are used to identify modules. As a consequence, uses of the macro
-in non-modules will cause modprobe to misidentify their containing
-object file as a module when it is not (false positives), and modprobe
-might succeed rather than failing with a suitable error message.
+From: Rong Tao <rongtao@cestc.cn>
 
-So remove it in the files in this commit, none of which can be built as
-modules.
+commit bc292ab00f6c("mm: introduce vma->vm_flags wrapper functions")
+turns the vm_flags into a const variable.
 
-Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Cc: Vladimir Oltean <olteanv@gmail.com>
-Cc: netdev@vger.kernel.org
+Added bpf_find_vma test in commit f108662b27c9("selftests/bpf: Add tests
+for bpf_find_vma") to assign values to variables that declare const in
+find_vma_fail1.c programs, which is an error to the compiler and does not
+test BPF verifiers. It is better to replace 'const vm_flags_t vm_flags'
+with 'unsigned long vm_start' for testing.
+
+    $ make -C tools/testing/selftests/bpf/ -j8
+    ...
+    progs/find_vma_fail1.c:16:16: error: cannot assign to non-static data
+    member 'vm_flags' with const-qualified type 'const vm_flags_t' (aka
+    'const unsigned long')
+            vma->vm_flags |= 0x55;
+            ~~~~~~~~~~~~~ ^
+    ../tools/testing/selftests/bpf/tools/include/vmlinux.h:1898:20:
+    note: non-static data member 'vm_flags' declared const here
+                    const vm_flags_t vm_flags;
+                    ~~~~~~~~~~~`~~~~~~^~~~~~~~
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- lib/packing.c | 1 -
- 1 file changed, 1 deletion(-)
+v2: Add more useful commit information
+v1: https://lore.kernel.org/lkml/tencent_FC8827062142CF5936974B2A30AF6CA3C408@qq.com/
+---
+ tools/testing/selftests/bpf/progs/find_vma_fail1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/packing.c b/lib/packing.c
-index a96169237ae6..3f656167c17e 100644
---- a/lib/packing.c
-+++ b/lib/packing.c
-@@ -198,5 +198,4 @@ int packing(void *pbuf, u64 *uval, int startbit, int endbit, size_t pbuflen,
- }
- EXPORT_SYMBOL(packing);
+diff --git a/tools/testing/selftests/bpf/progs/find_vma_fail1.c b/tools/testing/selftests/bpf/progs/find_vma_fail1.c
+index b3b326b8e2d1..47d5dedff554 100644
+--- a/tools/testing/selftests/bpf/progs/find_vma_fail1.c
++++ b/tools/testing/selftests/bpf/progs/find_vma_fail1.c
+@@ -13,7 +13,7 @@ static long write_vma(struct task_struct *task, struct vm_area_struct *vma,
+ 		      struct callback_ctx *data)
+ {
+ 	/* writing to vma, which is illegal */
+-	vma->vm_flags |= 0x55;
++	vma->vm_start = 0xffffffffff600000;
  
--MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("Generic bitfield packing and unpacking");
+ 	return 0;
+ }
 -- 
-2.39.1.268.g9de2f9a303
+2.39.2
 
