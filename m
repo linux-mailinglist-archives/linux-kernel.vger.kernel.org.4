@@ -2,200 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B234F6A23B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142276A23B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjBXVYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S230251AbjBXVYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbjBXVYe (ORCPT
+        with ESMTP id S230208AbjBXVYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:24:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5CF39CF7;
-        Fri, 24 Feb 2023 13:24:21 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OCG7Nt012852;
-        Fri, 24 Feb 2023 21:24:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dqn3TSizO1k0WXRWN0nK+feytmKUay5FFzXt31bXIZk=;
- b=WPoC+b/cQ5HOwg375AGWx/+c3gnzUeF0v/2y3P4qXN0l2eIpgTme8BPvDTqspIa5pCEH
- EzBlekb5AZ4wmddiahDsg93jAjh/+pF4M9cEaKGI1ggDsT+f8cdNJ3G7QBFL9oCANsnL
- 5CDo0n1fODi5y81Bsmd0hP2O0/GNp4CiDBY5xKwih2i1yCEpwbC4hn3tGG242XghLUBh
- 4KamqAIz3E9TKGWzvB3X8LckhsVZ1lqfd7Q/9qZFJ+unVOktkf2fAH5WL/5lfmoJi9SF
- /Qq9lQW7PoS6dq6yshWfixucGEt+5vVg65Z3Tf7XionP9jhOwqlw8ru6VOadZWf6YXhV Ow== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxw3d9jn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 21:24:03 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31OLO2F3015714
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Feb 2023 21:24:02 GMT
-Received: from [10.110.9.108] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
- 2023 13:24:00 -0800
-Message-ID: <556dedfa-2c18-fca7-94d9-994d29b7bacc@quicinc.com>
-Date:   Fri, 24 Feb 2023 13:24:00 -0800
+        Fri, 24 Feb 2023 16:24:35 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966584608A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:24:25 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id ec43so2491835edb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:24:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7FL2J01+S1brZJhkSmrAVHSbND/ljBuG/iYSX39T/M=;
+        b=FqYqL229nQFsdT8zagqSYUMC8fLl9jL1yBbVwID9qj6Af/qat8UsxUyPUbVHQpJ7+T
+         SJ+IpE7G2Dxp0LqEdrRQIHMRFrAGpcpX6LdLMzlANx2xVHKvm/d88opMaHNpgQBBTE9D
+         EsQYuqWJVIcKvbzccwf/F+ujbtwgB68lPVm1M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z7FL2J01+S1brZJhkSmrAVHSbND/ljBuG/iYSX39T/M=;
+        b=vtVw47DGe73Wii/8HUkqeA8Bxw6asWWXKicL+1rTANmALLMqtp9zzHzRO+r8m7A4DG
+         qqYbpzHPJEmkLXeWWLyDy7bvfAMyahfQV9wTM7PMxNHw+bxvdmA1+9V1FeT2i3592UJ4
+         DE69OplYFLAZXm7dDfp//c/fks7pylbOHTNllZpfotUeM24fO6sso72s+PkRdgNMwYGd
+         ZOL5q69ouu8bM+JAYNOXW+4urUMCmDof9DqKqG/AB+jAQIP0MUSS8Km2FSfqglC1waDM
+         7xFfG9x2WpJ9AkqsUppWJMTUhiaIC1N91sjucPVKke015kWlHqrlUwXr1Jc5LZqg7A//
+         pqXw==
+X-Gm-Message-State: AO0yUKUParPp4JjSg8DQulFqnyc/DZYaZjEBKNo3f3zg4AvEwybF5/0w
+        c4sB54nD2kl+QQgcQDmQut7aejxzwH47b3BosYBLAw==
+X-Google-Smtp-Source: AK7set+37mUo6NoDRZdv8Axb+grytAisuh1jjDBtTFrqIv726j7YXf0uIKl1HrpVoUyFWoXq/um+WA==
+X-Received: by 2002:a17:906:4fd2:b0:8d9:c3d:91d8 with SMTP id i18-20020a1709064fd200b008d90c3d91d8mr25211844ejw.31.1677273863842;
+        Fri, 24 Feb 2023 13:24:23 -0800 (PST)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id o5-20020a17090611c500b008b907006d5dsm8437eja.173.2023.02.24.13.24.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 13:24:23 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id o15so58288edr.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:24:22 -0800 (PST)
+X-Received: by 2002:a17:906:b55:b0:8f1:4cc5:f14c with SMTP id
+ v21-20020a1709060b5500b008f14cc5f14cmr2756517ejg.0.1677273862668; Fri, 24 Feb
+ 2023 13:24:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 06/26] virt: gunyah: msgq: Add hypercalls to send and
- receive messages
-Content-Language: en-US
-To:     Alex Elder <alex.elder@linaro.org>, Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212303.3307536-1-quic_eberman@quicinc.com>
- <d4cdae93-a003-d07f-3074-3542a231747b@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <d4cdae93-a003-d07f-3074-3542a231747b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rL3Ze6N_w2egxgkQGAEE24YRFNj3xBCX
-X-Proofpoint-ORIG-GUID: rL3Ze6N_w2egxgkQGAEE24YRFNj3xBCX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_16,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302240169
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/iywbFbiUAA6ZD3@kroah.com>
+In-Reply-To: <Y/iywbFbiUAA6ZD3@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Feb 2023 13:24:05 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
+Message-ID: <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
+Subject: Re: [GIT PULL] TTY/Serial driver updates for 6.3-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 24, 2023 at 4:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+>   - more 8250 device support added
 
+Bah. I didn't notice this while merging, so it's in my tree now, but
+that SERIAL_8250_PCI1XXXX shouldn't default to on.
 
-On 2/23/2023 4:15 PM, Alex Elder wrote:
-> On 2/14/23 3:23 PM, Elliot Berman wrote:
->> Add hypercalls to send and receive messages on a Gunyah message queue.
->>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
->>   arch/arm64/gunyah/gunyah_hypercall.c | 32 ++++++++++++++++++++++++++++
->>   include/linux/gunyah.h               |  7 ++++++
->>   2 files changed, 39 insertions(+)
->>
->> diff --git a/arch/arm64/gunyah/gunyah_hypercall.c 
->> b/arch/arm64/gunyah/gunyah_hypercall.c
->> index f30d06ee80cf..2ca9ab098ff6 100644
->> --- a/arch/arm64/gunyah/gunyah_hypercall.c
->> +++ b/arch/arm64/gunyah/gunyah_hypercall.c
->> @@ -38,6 +38,8 @@ EXPORT_SYMBOL_GPL(arch_is_gunyah_guest);
->>                              fn)
->>   #define GH_HYPERCALL_HYP_IDENTIFY        GH_HYPERCALL(0x8000)
->> +#define GH_HYPERCALL_MSGQ_SEND            GH_HYPERCALL(0x801B)
->> +#define GH_HYPERCALL_MSGQ_RECV            GH_HYPERCALL(0x801C)
->>   /**
->>    * gh_hypercall_hyp_identify() - Returns build information and 
->> feature flags
->> @@ -57,5 +59,35 @@ void gh_hypercall_hyp_identify(struct 
->> gh_hypercall_hyp_identify_resp *hyp_identi
->>   }
->>   EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
->> +enum gh_error gh_hypercall_msgq_send(u64 capid, size_t size, 
->> uintptr_t buff, int tx_flags,
->> +                    bool *ready)
->> +{
->> +    struct arm_smccc_res res;
->> +
->> +    arm_smccc_1_1_hvc(GH_HYPERCALL_MSGQ_SEND, capid, size, buff, 
->> tx_flags, 0, &res);
->> +
->> +    if (res.a0 == GH_ERROR_OK)
->> +        *ready = res.a1;
->> +
->> +    return res.a0;
->> +}
->> +EXPORT_SYMBOL_GPL(gh_hypercall_msgq_send);
->> +
->> +enum gh_error gh_hypercall_msgq_recv(u64 capid, uintptr_t buff, 
->> size_t size, size_t *recv_size,
->> +                    bool *ready)
->> +{
->> +    struct arm_smccc_res res;
->> +
->> +    arm_smccc_1_1_hvc(GH_HYPERCALL_MSGQ_RECV, capid, buff, size, 0, 
->> &res);
->> +
->> +    if (res.a0 == GH_ERROR_OK) {
->> +        *recv_size = res.a1;
-> 
-> Is there any chance the 64-bit size is incompatible
-> with size_t?  (Too big?)
+The Kconfig file has
 
-This is safe because size of messages <= 240.
+    config SERIAL_8250_PCI1XXXX
+        tristate "Microchip 8250 based serial port"
+        depends on SERIAL_8250 && PCI
+        select SERIAL_8250_PCILIB
+        default SERIAL_8250
+        ...
 
-> 
->> +        *ready = res.a2;
-> 
->          *ready = !!res.a2;
-> 
->> +    }
->> +
->> +    return res.a0;
->> +}
->> +EXPORT_SYMBOL_GPL(gh_hypercall_msgq_recv);
->> +
->>   MODULE_LICENSE("GPL");
->>   MODULE_DESCRIPTION("Gunyah Hypervisor Hypercalls");
->> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
->> index 3fef2854c5e1..cb6df4eec5c2 100644
->> --- a/include/linux/gunyah.h
->> +++ b/include/linux/gunyah.h
->> @@ -112,4 +112,11 @@ struct gh_hypercall_hyp_identify_resp {
->>   void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp 
->> *hyp_identity);
->> +#define GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH        BIT(0)
->> +
->> +enum gh_error gh_hypercall_msgq_send(u64 capid, size_t size, 
->> uintptr_t buff, int tx_flags,
->> +                    bool *ready);
-> 
-> Why uintptr_t?  Why not just pass a host pointer (void *)
-> and do whatever conversion is necessary inside the function?
-> 
->                      -Alex
-> 
->> +enum gh_error gh_hypercall_msgq_recv(u64 capid, uintptr_t buff, 
->> size_t size, size_t *recv_size,
->> +                    bool *ready);
->> +
->>   #endif
-> 
+and I don't think that "default" line should exist. It's not like this
+is some super-common board that everybody should enable.
+
+When I notice things in time, I tend to just fix this up in the merge
+itself, but this time I had already done a couple of other of your
+pulls before I noticed this thing.
+
+            Linus
