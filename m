@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91AB6A1C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BBA6A1C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBXMrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S229809AbjBXMtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjBXMrj (ORCPT
+        with ESMTP id S229611AbjBXMtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:47:39 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAE063DC2;
-        Fri, 24 Feb 2023 04:47:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 24 Feb 2023 07:49:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E179552DD6;
+        Fri, 24 Feb 2023 04:49:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E51F38C9E;
-        Fri, 24 Feb 2023 12:47:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677242856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FRS6JIVxD98UMfKKQQi4U8ooVdVzZHO1t/2LZ6jiUFs=;
-        b=r3ur6fxcW92yEcWBOA6q76sBEhcOGqHa26Ze7DErSHeh+g0UKez4w4NTMAH1baJ9s0s49f
-        xTKXrXS5ST25dtnvUjd6jghioSjnLxf+zZMwu6tYOw+ri2WBg+7UF2viOdwlud9VBybt96
-        vFWJK8WI8B5vjik2Bzm3Fp1IyCm1aI4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8174D13A3A;
-        Fri, 24 Feb 2023 12:47:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id K39AHOix+GOELwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 24 Feb 2023 12:47:36 +0000
-Date:   Fri, 24 Feb 2023 13:47:35 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        mark.rutland@arm.com, will@kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Patrick Daly <quic_pdaly@quicinc.com>
-Subject: Re: [PATCH] psi: reduce min window size to 50ms
-Message-ID: <Y/ix53x8i/ViuBXf@dhcp22.suse.cz>
-References: <cover.1676067791.git.quic_sudaraja@quicinc.com>
- <CAJuCfpHWQ8NV=iR3BN+pt1c8FynCnRqyyriHb1gLxFgiNVrwjA@mail.gmail.com>
- <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com>
- <CAJuCfpGLkkS2yx0d9+2nYtEtxANSH5H3EgCmWZax4N-ieEBG7g@mail.gmail.com>
- <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
- <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
- <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com>
- <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A0556188D;
+        Fri, 24 Feb 2023 12:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6432AC4339B;
+        Fri, 24 Feb 2023 12:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677242958;
+        bh=tuYHQ+XarG1U3xH8LjrMRpaLxwbZFcHeJ3I/p1szLFM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bf4Iaj4iXDmYS0So4+Fal8DrBahuMVm6EKJXs2nvuZ4hMPWrFsb9G8tJf2JSDhezH
+         HFpMRsHoAuTKXu1KGmfVH1gDRZMgMkGqveXnfKdH0gkJLff9TBToX1+SI6ZimmVPEs
+         rzohnlKDKXbOOYavcCLY0apAoVSGHuK69DL53cqc=
+Date:   Fri, 24 Feb 2023 13:49:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Finn Behrens <me@kloenk.dev>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>
+Subject: Re: [PATCH 3/3] rust: macros: Allow specifying multiple module
+ aliases
+Message-ID: <Y/iyTA3Nl5yZ/eMA@kroah.com>
+References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
+ <20230224-rust-macros-v1-3-b39fae46e102@asahilina.net>
+ <Y/hpiWDLm0fB0Xp/@kroah.com>
+ <5220876d-f226-117a-d8ed-1d380cd3f14e@asahilina.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5220876d-f226-117a-d8ed-1d380cd3f14e@asahilina.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 14-02-23 11:34:30, Suren Baghdasaryan wrote:
-[...]
-> Your suggestion to have this limit configurable sounds like obvious
-> solution. I would like to get some opinions from other maintainers.
-> Johannes, WDYT? CC'ing Michal to chime in as well since this is mostly
-> related to memory stalls.
+On Fri, Feb 24, 2023 at 09:41:08PM +0900, Asahi Lina wrote:
+> On 24/02/2023 16.38, Greg KH wrote:
+> > On Fri, Feb 24, 2023 at 04:25:57PM +0900, Asahi Lina wrote:
+> >> Modules can (and usually do) have multiple alias tags, in order to
+> >> specify multiple possible device matches for autoloading. Allow this by
+> >> changing the alias ModuleInfo field to an Option<Vec<String>>.
+> > 
+> > Note, manually specifying the MODULE_ALIAS is only really ever done for
+> > platform drivers today (and I would argue we need to fix that up),
+> > otherwise the use of MODULE_DEVICE_TABLE() should really really be used
+> > instead of having to manually specify aliases.
+> 
+> That's the plan, I just added this before adding support for
+> MODULE_DEVICE_TABLE() when I first realized that it wasn't yet in there!
+> We were briefly hardcoding the bus aliases for downstream kernels
+> because the depmod stuff couldn't work with the way device ID tables
+> were done in Rust downstream at the time (and I only noticed the first
+> time I tried to build it as a module, since I always develop with
+> monolithic kernels). That's fixed now ^^
+> 
+> However, the issue is that right now the module macro already takes a
+> single optional alias, and that doesn't make sense as an API. We could
+> remove support for this entirely (if I get my Rust MODULE_DEVICE_TABLE()
+> implementation in, there will be zero users of the alias argument as far
+> as I know), or add support for multiple aliases. But I think just
+> leaving it as a single alias doesn't really make sense? It doesn't
+> represent the way module aliases work, which is 0..N.
+> 
+> I'm fine with removing it if people prefer that, I just thought that for
+> something as basic as module metadata we might as well do it properly
+> even if there are no users right now, since it's already half in there...
 
-I do not think that making this configurable helps much. Many users will
-be bound to distribution config and also it would be hard to experiment
-with a recompile cycle every time. This seems just too impractical.
+How about just removing it so that people don't think it is something
+that they really should be doing and adding real MODULE_DEVICE_TABLE()
+support instead?
 
-Is there any reason why we shouldn't allow any timeout? Shorter
-timeouts could be restricted to a priviledged context to avoid an easy
-way to swamp system by too frequent polling.
+Although the first filesystem that gets written will need the
+MODULE_ALIAS() logic added back, oh well.
 
-Btw. it seems that there is is only a limit on a single trigger per fd
-but no limits per user so it doesn't sound too hard to end up with too
-much polling even with a larger timeouts. To me it seems like we need to
-contain the polling thread to be bound by the cpu controller.
--- 
-Michal Hocko
-SUSE Labs
+Anyway, no objection for me for this for now, just trying to point out
+that drivers really should not be using MODULE_ALIAS() at all.
+
+thanks,
+
+greg k-h
