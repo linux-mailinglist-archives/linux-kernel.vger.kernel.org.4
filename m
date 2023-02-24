@@ -2,193 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9DD6A2535
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D6E6A253D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjBXXx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 18:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        id S229632AbjBXX4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 18:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjBXXxz (ORCPT
+        with ESMTP id S229560AbjBXX4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 18:53:55 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD5C1A48C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:53:53 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536cd8f6034so22240897b3.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:53:53 -0800 (PST)
+        Fri, 24 Feb 2023 18:56:10 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CC355047
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:56:09 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id cb13so446478pfb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=il0Lfk8v/wMXGKCUf0z3B1RYBxM/gWsQLCwY0xU7Rj4=;
-        b=vLb5huxOZdbt+fxkhIICNLk5fYM/NFYIxomJZCdtaMZmIcBJFiMx++9oxie6uM5dxn
-         VG7N5L0OEV1NCjd4xTuK/DTAuT5HKLQAWmFEFx4O/wSk6vmK04gnQqpFhXezVNl6ZFar
-         s0LMQQTA4Pm6MvSt5B/Wuq0ZylSGU4w4vRABbXjc42asMDKKutfcvN7Hy9NFtBr4ZCaM
-         LhgQIXZPmQtNCFXGg1jkX12YokGy/fKemQd4BjXlnLd7g4cK5A4+DROnu3+uQWwSil/7
-         WdqFPow1DhtJ8eF70fGHzGHQv1dYmrJsysifbv58ozuodpMjCfNZ401q7fqGVkmFPOZW
-         3FNg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=roI2102NVn8tZj8AT0mqQAS15kZ5FO9em57hIeDNwj0=;
+        b=QB5cj7QKPC4eETDdYpgWnv3fyPKxoD9KZMEpY6QM0fHRGhMhDE4uxjfcIAoTovvyd6
+         h+ff9uW223/aV2TtJYDG4H6O5DdJAERUpY6e/VUR8g2Xbvv7rG6lSk2Zft5rgHL4mPqi
+         nnEugeB85k/jI5MnwhOTyqWPfmvxztT6Aj8C4yKN8OcWw4L+GP1tAnKhiSLAKgq49Co4
+         GljDwHscPWZ7fNKEpdlUBZ4r2+JKDNTJ4H/B3enW9G2Cw5JmeLX1Ftn3pzzBDR1u9A3t
+         Ihqm3IYqgD5EuUqKgbBYpq6HyScjibA9/wo5+/onFYXHUBFrrgKD/WYgI0F2XJrs76+B
+         wnMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=il0Lfk8v/wMXGKCUf0z3B1RYBxM/gWsQLCwY0xU7Rj4=;
-        b=WQnd+nBA5KmKqe95vKrHazMl1oxA7Pveho92Lqa6peKQd2+M75na/JMyXwohjUXLtz
-         PSGVEE07DLi1C4O481y643PoHiBJMgXY3UHBCoVLkTlgyJp2TrGgN8XN/LShOsN4ch1F
-         iIKMlxcCZb7+PB95J9j4Ietymtm8dZoNHN1R3iblz2vkHz5F+Y+k0BS3i8lw4E8D5lOY
-         Dh8wQHQ1T7FijkFY9U0fxvDImqZ9IWXpta8ee69BNJdDt+PAgR+NV94lCz5V15a/qGhF
-         Tvo0GYJwvEqzI4X9gnm+VaMb55jyORAKdINYLQ8s19NOgQluDeL0WxmZkMLK0pgxh1Hw
-         i74Q==
-X-Gm-Message-State: AO0yUKX4CUWr/yxv4PAoP2wgkzJvFEEoIaJaWgw6gLUe+MXdib+N/jDA
-        fYDHabueDZuLK3Re5tPTDksY9Z8ui+RFVKxK8Ob61A==
-X-Google-Smtp-Source: AK7set+EYm4TvALJovISjq2Lgnd8DKcNgvkYPAlweBlG0TEQ64ieMnqAF9Zf4ZWxudAkuV/FHVn7XAIvyWRG7GnOEoI=
-X-Received: by 2002:a05:6902:1203:b0:a09:314f:9f09 with SMTP id
- s3-20020a056902120300b00a09314f9f09mr1172424ybu.6.1677282832795; Fri, 24 Feb
- 2023 15:53:52 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=roI2102NVn8tZj8AT0mqQAS15kZ5FO9em57hIeDNwj0=;
+        b=5KGKocQY1y4pWOw0p4V6mOA0EYBHnz74fJK1pTWifw0GYAc1Z/PC67ltyVL5H8YjuI
+         qx7rKUIE2NeIWdJAbyO+dn5sj4mfEHj0AM+LKFFherfgrarGkQfTbpRxIHZ0/ALdW07z
+         CmhDu4aiMjazStzjtTZpvE83Oy+Ug/KC18JnFNlHPFWd9CG76YLCwhffehMf5WPz+fiv
+         C8dllJh0EObFvLYbNXlqiBrL8XKg8OMlaPJxbYBD4z4FnwynvJ2xpHHO0icIv99c7Qm7
+         SHgr6uymlb4Wg9MKgdK2VZtoO2D7eFnqQ9vKrTqIYesae0UrErd+KlsrKZpl7TYt7SI7
+         2Xbg==
+X-Gm-Message-State: AO0yUKXOBQqUSfk8w0nbF3ia8r7T5h/nim4JzfY+yTNEDSiIDf9+ZPfu
+        DjlwGib4tBLEZiOi/2rMjV0Ndw==
+X-Google-Smtp-Source: AK7set91H8uZuErh0/LuDjee/awTv2DYiHBWv4zGyaBtHG2f3acLLiXNiqNVrCCS2NWZB/r598n+iw==
+X-Received: by 2002:aa7:9ed2:0:b0:5e3:2f9b:b5e8 with SMTP id r18-20020aa79ed2000000b005e32f9bb5e8mr3480281pfq.4.1677282968888;
+        Fri, 24 Feb 2023 15:56:08 -0800 (PST)
+Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id s25-20020a63af59000000b004f1cb6ffe81sm45530pgo.64.2023.02.24.15.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 15:56:08 -0800 (PST)
+Date:   Fri, 24 Feb 2023 23:56:04 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Chao Gao <chao.gao@intel.com>
+Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
+ init_fpstate if fpstate contains the component
+Message-ID: <Y/lOlBWTNgROPl0P@google.com>
+References: <20230221163655.920289-1-mizhang@google.com>
+ <20230221163655.920289-2-mizhang@google.com>
+ <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
+ <87ilfum6xh.ffs@tglx>
+ <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
+ <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
 MIME-Version: 1.0
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
- <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org> <741be2a3-0208-2f40-eedf-d439c4e6795b@quicinc.com>
- <F8A4FC18-C64E-4011-BC08-18EB3B95A357@linaro.org> <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
-In-Reply-To: <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 25 Feb 2023 01:53:41 +0200
-Message-ID: <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
-        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Feb 2023 at 00:26, Abhinav Kumar <quic_abhinavk@quicinc.com> wro=
-te:
-> On 2/24/2023 1:36 PM, Dmitry Baryshkov wrote:
-> > 24 =D1=84=D0=B5=D0=B2=D1=80=D0=B0=D0=BB=D1=8F 2023 =D0=B3. 23:23:03 GMT=
-+02:00, Abhinav Kumar <quic_abhinavk@quicinc.com> =D0=BF=D0=B8=D1=88=D0=B5=
-=D1=82:
-> >> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
-> >>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
-> >>>> Add DSC helper functions based on DSC configuration profiles to prod=
-uce
-> >>>> DSC related runtime parameters through both table look up and runtim=
-e
-> >>>> calculation to support DSC on DPU.
-> >>>>
-> >>>> There are 6 different DSC configuration profiles are supported curre=
-ntly.
-> >>>> DSC configuration profiles are differiented by 5 keys, DSC version (=
-V1.1),
-> >>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
-> >>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
-> >>>>
-> >>>> Only DSC version V1.1 added and V1.2 will be added later.
-> >>>
-> >>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
-> >>> Also please check that they can be used for i915 or for amdgpu (ideal=
-ly for both of them).
-> >>>
-> >>
-> >> No, it cannot. So each DSC encoder parameter is calculated based on th=
-e HW core which is being used.
-> >>
-> >> They all get packed to the same DSC structure which is the struct drm_=
-dsc_config but the way the parameters are computed is specific to the HW.
-> >>
-> >> This DPU file helper still uses the drm_dsc_helper's drm_dsc_compute_r=
-c_parameters() like all other vendors do but the parameters themselves are =
-very HW specific and belong to each vendor's dir.
-> >>
-> >> This is not unique to MSM.
-> >>
-> >> Lets take a few other examples:
-> >>
-> >> AMD: https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gp=
-u/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c#L165
-> >>
-> >> i915: https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/g=
-pu/drm/i915/display/intel_vdsc.c#L379
-> >
-> > I checked several values here. Intel driver defines more bpc/bpp combin=
-ations, but the ones which are defined in intel_vdsc and in this patch seem=
- to match. If there are major differences there, please point me to the exa=
-ct case.
-> >
-> > I remember that AMD driver might have different values.
-> >
->
-> Some values in the rc_params table do match. But the rc_buf_thresh[] does=
-nt.
+On Wed, Feb 22, 2023, Chang S. Bae wrote:
+> On 2/22/2023 10:40 AM, Mingwei Zhang wrote:
+> > > > We have this [1]:
+> > > > 
+> > > >        if (fpu_state_size_dynamic())
+> > > >                mask &= (header.xfeatures | xinit->header.xcomp_bv);
+> > > > 
+> > > > If header.xfeatures[18] = 0 then mask[18] = 0 because
+> > > > xinit->header.xcomp_bv[18] = 0. Then, it won't hit that code. So, I'm
+> > > > confused about the problem that you described here.
+> > > 
+> > > Read the suggested changelog I wrote in my reply to Mingwei.
+> > > 
+> > > TLDR:
+> > > 
+> > >          xsave.header.xfeatures[18] = 1
+> > >          xinit.header.xfeatures[18] = 0
+> > >      ->  mask[18] = 1
+> > >      ->  __raw_xsave_addr(xsave, 18)     <- Success
+> > >      ->  __raw_xsave_addr(xinit, 18)     <- WARN
+> 
+> Oh, sigh.. This should be caught last time.
+> 
+> Hmm, then since we store init state for legacy ones [1], unless it is too
+> aggressive, perhaps the loop can be simplified like this:
+> 
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index 714166cc25f2..2dac6f5f3ade 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1118,21 +1118,13 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
+> struct fpstate *fpstate,
+>         zerofrom = offsetof(struct xregs_state, extended_state_area);
+> 
+>         /*
+> -        * The ptrace buffer is in non-compacted XSAVE format.  In
+> -        * non-compacted format disabled features still occupy state space,
+> -        * but there is no state to copy from in the compacted
+> -        * init_fpstate. The gap tracking will zero these states.
+> +        * Indicate which states to copy from fpstate. When not present in
+> +        * fpstate, those extended states are either initialized or
+> +        * disabled. They are also known to have an all zeros init state.
+> +        * Thus, remove them from 'mask' to zero those features in the user
+> +        * buffer instead of retrieving them from init_fpstate.
+>          */
+> -       mask = fpstate->user_xfeatures;
 
-Because later they do:
+Do we need to change this line and the comments? I don't see any of
+these was relevant to this issue. The original code semantic is to
+traverse all user_xfeatures, if it is available in fpstate, copy it from
+there; otherwise, copy it from init_fpstate. We do not assume the
+component in init_fpstate (but not in fpstate) are all zeros, do we? If
+it is safe to assume that, then it might be ok. But at least in this
+patch, I want to keep the original semantics as is without the
+assumption.
+> -
+> -       /*
+> -        * Dynamic features are not present in init_fpstate. When they are
+> -        * in an all zeros init state, remove those from 'mask' to zero
+> -        * those features in the user buffer instead of retrieving them
+> -        * from init_fpstate.
+> -        */
+> -       if (fpu_state_size_dynamic())
+> -               mask &= (header.xfeatures | xinit->header.xcomp_bv);
+> +       mask = header.xfeatures;
 
-vdsc_cfg->rc_buf_thresh[i] =3D rc_buf_thresh[i] >> 6;
-
->
-> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i9=
-15/display/intel_vdsc.c#L40
->
-> Vs
->
-> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] =3D {
-> +               0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
-> +               0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
-> +};
-
-I'd prefer to have 896, 1792, etc. here, as those values come from the
-standard. As it's done in the Intel driver.
-
-> I dont know the AMD calculation very well to say that moving this to the
-> helper is going to help.
-
-Those calculations correspond (more or less) at the first glance to
-what intel does for their newer generations. I think that's not our
-problem for now.
+Same here. Let's not adding this optimization in this patch.
 
 >
-> Also, i think its too risky to change other drivers to use whatever math
-> we put in the drm_dsc_helper to compute thr RC params because their code
-> might be computing and using this tables differently.
->
-> Its too much ownership for MSM developers to move this to drm_dsc_helper
-> and own that as it might cause breakage of basic DSC even if some values
-> are repeated.
+>         for_each_extended_xfeature(i, mask) {
+>                 /*
+> @@ -1151,9 +1143,8 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
+> struct fpstate *fpstate,
+>                         pkru.pkru = pkru_val;
+>                         membuf_write(&to, &pkru, sizeof(pkru));
+>                 } else {
+> -                       copy_feature(header.xfeatures & BIT_ULL(i), &to,
+> +                       membuf_write(&to,
+>                                      __raw_xsave_addr(xsave, i),
+> -                                    __raw_xsave_addr(xinit, i),
+>                                      xstate_sizes[i]);
+>                 }
+>                 /*
+> 
+> > Chang: to reproduce this issue, you can simply run the amx_test in the
+> > kvm selftest directory.
+> 
+> Yeah, I was able to reproduce it with this ptrace test:
+> 
+> diff --git a/tools/testing/selftests/x86/amx.c
+> b/tools/testing/selftests/x86/amx.c
+> index 625e42901237..ae02bc81846d 100644
+> --- a/tools/testing/selftests/x86/amx.c
+> +++ b/tools/testing/selftests/x86/amx.c
+> @@ -14,8 +14,10 @@
+>  #include <sys/auxv.h>
+>  #include <sys/mman.h>
+>  #include <sys/shm.h>
+> +#include <sys/ptrace.h>
+>  #include <sys/syscall.h>
+>  #include <sys/wait.h>
+> +#include <sys/uio.h>
+> 
+>  #include "../kselftest.h" /* For __cpuid_count() */
+> 
+> @@ -826,6 +828,76 @@ static void test_context_switch(void)
+>         free(finfo);
+>  }
+> 
+> +/* Ptrace test */
+> +
+> +static bool inject_tiledata(pid_t target)
+> +{
+> +       struct xsave_buffer *xbuf;
+> +       struct iovec iov;
+> +
+> +       xbuf = alloc_xbuf();
+> +       if (!xbuf)
+> +               fatal_error("unable to allocate XSAVE buffer");
+> +
+> +       load_rand_tiledata(xbuf);
+> +
+> +       memcpy(&stashed_xsave->bytes[xtiledata.xbuf_offset],
+> +              &xbuf->bytes[xtiledata.xbuf_offset],
+> +              xtiledata.size);
+> +
+> +       iov.iov_base = xbuf;
+> +       iov.iov_len = xbuf_size;
+> +
+> +       if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
+> +               fatal_error("PTRACE_SETREGSET");
+> +
+> +       if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
+> +               err(1, "PTRACE_GETREGSET");
+> +
+> +       if (!memcmp(&stashed_xsave->bytes[xtiledata.xbuf_offset],
+> +                   &xbuf->bytes[xtiledata.xbuf_offset],
+> +                   xtiledata.size))
+> +               return true;
+> +       else
+> +               return false;
+> +}
+> +
+> +static void test_ptrace(void)
+> +{
+> +       pid_t child;
+> +       int status;
+> +
+> +       child = fork();
+> +       if (child < 0) {
+> +               err(1, "fork");
+> +       } else if (!child) {
+> +               if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
+> +                       err(1, "PTRACE_TRACEME");
+> +
+> +               /* Use the state to expand the kernel buffer */
+> +               load_rand_tiledata(stashed_xsave);
+> +
+> +               raise(SIGTRAP);
+> +               _exit(0);
+> +       }
+> +
+> +       do {
+> +               wait(&status);
+> +       } while (WSTOPSIG(status) != SIGTRAP);
+> +
+> +       printf("\tInject tile data via ptrace()\n");
+> +
+> +       if (inject_tiledata(child))
+> +               printf("[OK]\tTile data was written on ptracee.\n");
+> +       else
+> +               printf("[FAIL]\tTile data was not written on ptracee.\n");
+> +
+> +       ptrace(PTRACE_DETACH, child, NULL, NULL);
+> +       wait(&status);
+> +       if (!WIFEXITED(status) || WEXITSTATUS(status))
+> +               err(1, "ptrace test");
+> +}
+> +
+>  int main(void)
+>  {
+>         /* Check hardware availability at first */
+> @@ -846,6 +918,8 @@ int main(void)
+>         ctxtswtest_config.num_threads = 5;
+>         test_context_switch();
+> 
+> +       test_ptrace();
+> +
+>         clearhandler(SIGILL);
+>         free_stashed_xsave();
+> 
+> Thanks,
+> Chang
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
+> 
 
-It's time to stop thinking about ownership and start thinking about
-shared code. We already have two instances of DSC tables. I don't
-think having a third instance, which is a subset of an existing
-dataset, would be beneficial to anybody.
-AMD has complicated code which supports half-bit bpp and calculates
-some of the parameters. But sharing data with the i915 driver is
-straightforward.
+Nice one. Yeah both ptrace and KVM are calling this function so the above
+code would also be enough to trigger the bug.
 
-> I would prefer to keep it in the msm code but in a top level directory
-> so that we dont have to make DSI dependent on DPU.
 
-I haven't changed my opinion. Please move relevant i915's code to
-helpers, verify data against standards and reuse it.
-
-> >> All vendors compute the values differently and eventually call drm_dsc=
-_compute_rc_parameters()
-> >>
-> >>> I didn't check the tables against the standard (or against the curren=
-t source code), will do that later.
-
---=20
-With best wishes
-Dmitry
+Thanks.
+-Mingwei
