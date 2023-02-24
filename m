@@ -2,168 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8B26A15F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89E86A15F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjBXEhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 23:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S229808AbjBXEiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 23:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBXEhd (ORCPT
+        with ESMTP id S229545AbjBXEiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 23:37:33 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EDF5EEC1;
-        Thu, 23 Feb 2023 20:37:31 -0800 (PST)
+        Thu, 23 Feb 2023 23:38:22 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BA435BD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 20:38:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677213500; x=1708749500;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h85A9Ga5o+K/kV2eFPuFE4haLLuSdvaUkpdiK8x9fn4=;
+  b=hUCE+JnnyEtYxd58oSCwhZQFk00/MPLf/qgReiTjPUEv9QpuINCRnbLj
+   U6cdAjnvAzklKUdBuUB9/yNBi5vpjCgZWPwJ3QeADY9Uo1RIe6ykQ9DTw
+   99rrtz4Zc50bj95VZefL94Qorcxq+Vr4w4bKTI5lBTFRhL3DCKoulPrBJ
+   UYxi9FfVBv0TvzB2+GzRMjE81wnlyCOH8LU51f7+vV/4i1+KSmF5jbmn+
+   Yc+JTGkTeFOIY1SsuFWaS6BrbG6gSZvpdJBzjlxqPhy5IAolXRUCTUb5W
+   wWoWTPK2Pe3PQkV5Zjy9Zqm17fGtdxzyoyOum7AkjrMuiMrNshxmCtD+a
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="333401266"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="333401266"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 20:38:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918296217"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="918296217"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 20:38:20 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 20:38:19 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 23 Feb 2023 20:38:19 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 23 Feb 2023 20:38:19 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XIwqCtaXQc0ov/jjVUREKDChcqfiV5pUJLJT3BNreUtCK6urYpT/BjJP/n1o+vdjNUg+n+tLMU2J4ha9IvDf5l/y9NE7CUi9w4oXXT56ob3QGuJkkI4XTYT53kjuJlooYwjVDPDymXz0Fzkc3oKnkgOBFf7ECmlhzl4XhTubRzD4T3anVAgiLXa52SI3pG4MiMJDORcD4zGGHpCK9+7ohCZ3LuU3APatC+V3SQ6lyjy/Wlk0/4XGGJgUZuGzQ6cPKxtDHFG4jZYWS3nL7LYv0a9YDvyKyNuPjL7GK/vyMetkvmhSi0hW4rvPZie5DWs9Q/YcY7OoTkNJndSsMppDyw==
+ b=DdzVpyKHzP/OC7r1pLRu+0/9tTWbNQhT8r880yTL24Ie2p2hUKogAIR3ZRevA0hHJlTN+wh69R1+hJiWQ8mxQmZmEgw7JU8SAtwtOI9kbT4r7MIWAQrWNtuXj0151wROWu4YTBxAy0hPuNcWFu6d9Hkr93vLZ4M6PzXZAcwEm1GbDI9p4cYhgPUICmKKt/lnIIVR8lB5HnsuXPnH8n90F4mx9R6DdUhKRvgxtPS0H03sDKh7UAa1B0tQtMP+rbEtNzR81rbJm5ba85GLLZIhnDTuwAXsvy5x90DjKEfNw9omhMCvrZkKjGkDL+azm2vWRo7lqsxa+tnnI4LVwX7qCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=to4F1kMN8HlN6amhHnRFTUgsZ/2MDG3KMUG3nFKjVlg=;
- b=KrDG1qEFQiO3MqSn2IWKfzvYPaDAc/yP+i07tTldxFXh10T0g/ex+rBLc0pxxuPpIxoQelX/ho2USBp+VPW7nXjnq3w9sEXkuqNEEY2RGUSEigJUEF0MihRNhVIHvIL6F62CpV/yqUyhdnZytZNdh1sUkWzUgL+oP2gwIjZIfBQFo9Ov45hdt5R5gdJVY2jQF+sxHhbuNXzDPhpbTRiOaqWfkC0ZpmHempPpRirVdrNRLC1yZ78g9zMQXLbJzMU3YiCC0yJxFs1TM2dLL4MYbwh9bWW89U2gpqYflBNhuKbZVRSPX4UjC0kXhttrVOR58Dcjpa8G55HlCXroZtUvvg==
+ bh=5WpC3eCOEkDoJNxGzYzVK14as/J/gE7821yI4VRnSMs=;
+ b=lpBmOEDu9wcfRKhOPnrWfhgYwdaKl+2xCGd2mzLZWsBW2ZaoTTnHPixFe6FhuvN4Gv7mL1swkmFnvMBO/MheqXtVok7lbdHfgGh0lJRIklFG8wOArmCe/DES6/yvIG/iyz6qThT+L6q707iKL3bl/nPLxPI/QmXAf82VN7DUPPq1GGscUaZg3CMdUAQn+M69VjpZmOOiwV9IHIQemtfNWGbRmP//9O7MiuTq7XHvwH95rzsovQUO9uesZ/LQY4IHYopyBd9VgVFdyzOrTAFnJXX1DyP/BGJJt6QuGT72k0xs5QFifJp5aH/DeTBlldDJNpqr6uCJ6BJa507laInDUA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=to4F1kMN8HlN6amhHnRFTUgsZ/2MDG3KMUG3nFKjVlg=;
- b=dtH5BVPlhkWvbG+hgt8KTgNtiwYXdPq5WqmaV1MsHzMltDHl8arVDDs8lJtD0X11ZyBG1oAxZupXQZ+fh3sDm/DrGmqYPa6mCMXwMA93vNJAXpG+EvkUMhyVbI6SQSiGr/cghnQA3E6wXWjbC7p0pz7C2AifRDMiWWhniG9rMlw=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM9PR04MB8162.eurprd04.prod.outlook.com (2603:10a6:20b:3e3::20) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
+ by MN0PR11MB6229.namprd11.prod.outlook.com (2603:10b6:208:3c6::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
- 2023 04:37:28 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
- 04:37:28 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
-Thread-Topic: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
-Thread-Index: AQHZN3EBIMdG65+qaUS6uw5+ONteWa7dpF7g
-Date:   Fri, 24 Feb 2023 04:37:28 +0000
-Message-ID: <DU0PR04MB9417FCEB7D14C5914D80EBCE88A89@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM9PR04MB8162:EE_
-x-ms-office365-filtering-correlation-id: 0f085442-656c-4cb2-1681-08db1620d5e3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aOBL7ovTMEM6S7V8kPlyKid/0ul4nUPZKYPZ68qIQS59j4QqiQq180oyO4R2Ozc1OnSHLplgKhmuGubXUaNbXyBAoZgsF+XscuPFIpqyCy7NBQfU9ZMAfXlRCt7DM46yl7P0yix/ErhXfxGNEXzaf8fKctdtyYE9cSRVWIqpUaXPY0KvCG0AlpC6P9kDTjomyexkrRx1gBgNL1J1xSvfVnUe8hTBFHhs9bm+8glWCnO+9MQpB9EKxztfBEG0iCHa/jFE+H7phnpUBDA4YP6A73yji1MxF0ecI9fzE9K08o7pGmoNCs/NzSX4Pf3gTbW9/MzIK0Bp7XgPkR/8iQ/ajf8EJmBYabGsdf0md+YqdSZensDvGrGNQ8884NqmzYSM/+re9+NzVgoBDc7k+zZ5Jl+B4MeSHSZ8dOoHwngH6Wou2WGzL59hQkQKys0mPpnFsueJ0LTLDoruULouaBuruMgbl70LNy6Z7XmopH+vWPkiAEwaJGbKlaY6QzpEoZlyV1rUTSHtGPRpKIlp+WqvMzLvlCGW91rRpbW77wICXc76EWQSAU4xTH6sezgQ+ZiqI2W9El4tEhJCba6lxNqu9WNVizSnJFBGMZ4bZGAbghGZE737RQoCd6OgvmdGEgAFGdftCzTo/P43hlyjXxx5iABZuicuzvmGyrEgqH8VRfplpLXvcvKbPbCHPd3iUB5K2BRFnfo2eIeTixYyj70jq8wrcY11YVKZb+HXNZperH2qlTzts1aRSo4CC3Oagasm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(396003)(366004)(39860400002)(376002)(451199018)(122000001)(8936002)(52536014)(54906003)(316002)(38070700005)(26005)(9686003)(186003)(478600001)(6506007)(33656002)(7696005)(71200400001)(86362001)(2906002)(55016003)(44832011)(110136005)(5660300002)(38100700002)(64756008)(41300700001)(8676002)(83380400001)(4326008)(66946007)(66556008)(66446008)(76116006)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?G98rXYIyvTWGdY4LW38KzeB1kKW5Hqp7zOwagdbQ2WWZ6t/5kiUFOa4Z6R2g?=
- =?us-ascii?Q?1TVcO2OCwAjtOtIzn1d/Sq1b0VvnNk4FGW847Qa4zNvzh4BJw6QMLCWTbDXV?=
- =?us-ascii?Q?kcs+zQFY1KAZs3fxsvHEeVYdJDzAYUpBO/dZ4ry/CiGA197N6kVd+fVAZbId?=
- =?us-ascii?Q?ps4dwqJP2zrKcWpQ8i0pufLcmib7FVzm8Lou92wO3Bof2hbaHZWZK/0i0IGE?=
- =?us-ascii?Q?coyQovs4ELzK2EwCj554eI2SDwFZX4SQ/cFCOfdaII7/mU7PhEkTrvTY/03d?=
- =?us-ascii?Q?mCmpQ4JzySt1/rcjEl+Eoc5c+j0/yI0br+GEl9FruyeKAFdJH4PAjJkHej0p?=
- =?us-ascii?Q?WmwMdiuMpw/dFPqzw/BQEb025R6WVeLmRF+VhJdI62BTKc3y2Q62e6k7WH65?=
- =?us-ascii?Q?OZmbVKaQzIU/Er8ox2YMRRRZgm6ctQVs7WQovEhY7P6AotREZrphsusrYxMm?=
- =?us-ascii?Q?OwvkNC7/5kl+IkutkaCEDgZq7DjpuC75mS63WggTv50XCkCs6WtcR7oUQY7f?=
- =?us-ascii?Q?45e3LVIlzyQ8byHakKvvenMJ+5H58oz3lEDtma4D8MFSLu1MWrtvm8U7/Wmj?=
- =?us-ascii?Q?zipB4bi26iTf/tCP5w8JxqAq3wrG1oWBMm9tzEmCU/Q8ZoRDYywqp14nY7sN?=
- =?us-ascii?Q?A3dP/CQ0CumbANlon4fzNlw3xRgnRWHi31M5NUYZJ4Lc96nWVxlsvBQHK0Rm?=
- =?us-ascii?Q?Y0jtuCd5HXdU2H9KxKQ/ojZ9GCJslEPhz0vD62riIw569kqwPqMYBRdfvSlc?=
- =?us-ascii?Q?ES+B2XydvVj874vIIb7ViK6nvRKYBcyej8Q2b3mTzkhKhyGiDuXhETxzesMW?=
- =?us-ascii?Q?PVuXRnFKbKORYEC6OctrXQgisfIsDU/Q2w/KNzVU6cnWaFU8yGbIob3AyAOJ?=
- =?us-ascii?Q?wnumunY4Xmnx4zz5Hv3VXEPTP9WzK1952KewUagWDpYrPiXUoP4r82ETVD+D?=
- =?us-ascii?Q?zaRQvjIfQswVl3NMbPXm9Hg6PBgSPjfhm08bFFeirF1UKNrIOA8APRVh0lZO?=
- =?us-ascii?Q?yR1aIw9RtC6lqNH/Eh9tjgPoCGqNyWr+LpvGpq7xVHtpAyODbnfXXj0L1bfG?=
- =?us-ascii?Q?XyVyanLVibhdz3YXbAfKvB71HcrsZE5UuBa2xenOxBaFTIhBUY1YQKalMKsv?=
- =?us-ascii?Q?NDXe1uBhKP3rfrNDtSk7ZUgpIZsM48+n/n9OsPRCvo8DpnY9UdZFrGfGpp0d?=
- =?us-ascii?Q?qj8spTZVKFjg50lpig1+I+CsM+nF5JORtHUl7anhTUoFRMbhOXuSPrmx2N3u?=
- =?us-ascii?Q?Xk0pdhqCfo2Ogv62kR5smNRwoOjNcGJYDuK6NbEipjH9FMBPXaGLZQW/Y3K0?=
- =?us-ascii?Q?AsxzV2dngh9Elv4kcC5W4vvCSCdX5SWFAOflPTT8MKFXhG3Kxi4zvKChsOJV?=
- =?us-ascii?Q?YOmXce8h2AeqwEcsF3bE9wlzIZqS57nU9VloyOw6EyVvQXuQWi9rPt4/uzUg?=
- =?us-ascii?Q?4Sh9xkQUbp3YKbPXrxS/Xj3Nkgc4w01L5D61cojmabPsvNXR2WZI8YnipSg6?=
- =?us-ascii?Q?ibMpnH/x6oVI7ZivXlZUM+H2uvfmgTrwOjQey0WaRCevh92ulZASLxdf2Fm4?=
- =?us-ascii?Q?AUJllWWZcVbCc+tGl74=3D?=
+ 2023 04:38:17 +0000
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::e28f:b27b:4b9d:2154]) by PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::e28f:b27b:4b9d:2154%5]) with mapi id 15.20.6134.024; Fri, 24 Feb 2023
+ 04:38:17 +0000
+Date:   Fri, 24 Feb 2023 12:39:25 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     <deller@gmx.de>
+CC:     <asml.silence@gmail.com>, <geert@linux-m68k.org>,
+        <linux-kernel@vger.kernel.org>, <heng.su@intel.com>
+Subject: [Syzkaller & bisect] There is "xfs_dquot_alloc" related BUG in v6.2
+ in guest
+Message-ID: <Y/g/femUL7jZ9gF3@xpf.sh.intel.com>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+X-ClientProxiedBy: SG2PR02CA0011.apcprd02.prod.outlook.com
+ (2603:1096:3:17::23) To PH0PR11MB4839.namprd11.prod.outlook.com
+ (2603:10b6:510:42::18)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4839:EE_|MN0PR11MB6229:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd76d981-2899-4601-2004-08db1620f28b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SnaDFvaKoxJCVHuau62rjBTCmtYMC75UwxO8ZARM5iivUOPn7Wc6OBo+Jqh6FtCV6b5iOFY+tKn7FQ5thlBS3jCRbJQzCAESCFLA3uL71pW/wvDlU1SPxuaHnowK0dNzcM7VG9DxDzhkLt3ybR2ZreRdiUe4+9BxsD57ZZ+uMsXB0NK9mRP23CwRHGYYNsgCmz0ez2v2Ea0bq7pHIEba1gvBq6srkBO4LxYaqylTJQYlSGCTTvrXIuHT9pUmLpZy5J9dhIxorFtrJacy+PlExcAYyhbpHAKVLbNucSR1YmQgcdhhyZLRb1ap/TV/aNDqm7AxVsU8WXiN7Mg5lyrdo88yNb3YZqabQIdCvepo1DdQT/njkiIt3emPzsgWekDP9fQryPVdASLP7WJ4wsdz7tnvHiIETmsjX+DYkA2jEG6AXTtIPIugS7+0BOM8GlI9QcrNBNHYMYD5Yj3dEAVi2MIvSyS1B5UkopcbzfUkcOPlmNjtIcIQj5IjSZmPPa9bz8PMAe5Z/bQMiymiwAt9wpbniZJlY5XOpcrVfPzDmjx0D9Sk7+YXkvMCiszs4OQOQRpqpxiIyie3QmTRmCktx7Gp6AmxUUDuVk5BXVmZNZ81XPg7alo3IfYKUrVXm1RcH+EY4EXanidSZM2AkkQN+BiJIo2rxZmqzmXuxkeMuJxWKlSQErqGiVbrj7OwgpELuzc2JlKAMp/iD/HwkRX65JiciUur6E6g4Y2m7MQdV0y43IyoYBeaFb4XbDr6RSCI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4839.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(39860400002)(366004)(136003)(376002)(451199018)(45080400002)(6666004)(107886003)(66556008)(316002)(30864003)(38100700002)(478600001)(19627235002)(86362001)(2906002)(44832011)(5660300002)(66946007)(66476007)(8676002)(6916009)(4326008)(83380400001)(82960400001)(966005)(6486002)(8936002)(41300700001)(26005)(6512007)(186003)(6506007)(21314003)(505234007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oPF61tZdH7H6cEQDFWhNmWGxaXsQQA1mSomdhsgox0ir7o7eTv0za5hW5fYM?=
+ =?us-ascii?Q?Q94vCJcpRu6KXlqpnxx4VPxSIh9BFINgSkVeDxEbfmsCytnJd9C8K0NOlIo2?=
+ =?us-ascii?Q?9RUGfUq/5RAeUawAjgikRoyJZngcZnc/qa/NwtLjfkwtPRogpu7AF6pbrQ2h?=
+ =?us-ascii?Q?z11XvMUe4g6TDFF6wf+ucsyyPR01GwMRF1dl5AE9MpiZYj/u0G9PJFPDuTVn?=
+ =?us-ascii?Q?l6OK5SLcRcFKlMi7+RajL8YnYoZC53GNxyCaeAMn9tdx9Uv+SsBDL9F8m99v?=
+ =?us-ascii?Q?OGZzsByOVr408amdfEuzHehcep7Jn/3P7/hO+RT7P4uA13lDnNXxY+R+uqCt?=
+ =?us-ascii?Q?iDWk010xvyz9Mx/hYmaUwT4pCjI+k6+R34f91UreSTTCAwPqBW3GA4An8KgV?=
+ =?us-ascii?Q?M16kTh+qTTSX9ZTo9LH2YxuzG3z1dIC8t1KsyRtNXB8Cht1huAs6i72Wqhn/?=
+ =?us-ascii?Q?RQJlvEm3DRt1PaZgqP5Dr2qoZatvW2qC+qVl4RVeu8+y4cH5T/A9azoScNUK?=
+ =?us-ascii?Q?XYlV88lGvECC59GtthVtQIxkrL1pvszUwo77itziufDY6mBnoTJcnIKDBUo/?=
+ =?us-ascii?Q?lKn49ZYROnIUaPfH0f0f0mSX+jN6Vo2DTd+wj7KZ5neUEuU8IGB6Xp4OCqhB?=
+ =?us-ascii?Q?vD41nbih7H56m9cZQYynejHHVV73B/+vCgS3DrUua8JPHFD/S5TnuFuisCCU?=
+ =?us-ascii?Q?vQN6KYEh/hKqXnra1rAkKcZ4zI/Ak32r0+B2q1+WqFR0a90KJPFDAAxlakIZ?=
+ =?us-ascii?Q?NZd8Z8PT2NaRQJVKvvPqOvdr9YZWR99mcz7naFb5w83Ph84QOlOP/NZxiGOO?=
+ =?us-ascii?Q?6mI1DgDjwdokpdGTYEucPeHqS7hS0y9h24YeXPnlEHzPYEYqj3ECNVlLkJr8?=
+ =?us-ascii?Q?MhtTXT7oM1SLHubGflVjAnESjEnWZDQJ/VhPvpcIQOUc0ag5gaTI42Uncos7?=
+ =?us-ascii?Q?AkgxjelraekWGy2zhP66DvVmzu/R1DG3/N3I5UKOjzAuUkcAJ1+1+JnhVVJo?=
+ =?us-ascii?Q?S6hMD26uKx8i87NnetL6U53KJGjI1m5C5IsShRt48KePzYrx3EaHBS08FaJP?=
+ =?us-ascii?Q?PzJcayX+e6aUfUDwlCQ3raZfgY9AGbo6d0bMX+AITMdYwAHQBY92xMwNclsC?=
+ =?us-ascii?Q?pmM2hlwOZ1WZv7E0eY3WvKhw7emyC6GO9vhZFSOw7SGh19Xz8YZwBlSLBuVg?=
+ =?us-ascii?Q?XyOX1AQCeGroLFf0+FwgO+9Lg6mXvuHG2qML5iwA12pMH58zYuWZcYeQg6kn?=
+ =?us-ascii?Q?mzzhdTNtfZyyqXYq62AK3OF7NUkEkBogneIWQCRtpsBrYIUnFNJtWS8Y2ufS?=
+ =?us-ascii?Q?JDZNYbGazVBItx4KUzNEwjhLdvuI8eS/60Gcps+xQgT5lphqbhAP+mRA8Dir?=
+ =?us-ascii?Q?oEszXK09xnrF4dvSrvqrOmmuR27s2BW3rC+5afhXsRKDQB/tv3a8Y34gRV5F?=
+ =?us-ascii?Q?zoE7EjUlnP3j9lF8TDbEyzS7jAHiFYSX6LzF8If77unXm3Lp+SWKQOVJHN3w?=
+ =?us-ascii?Q?T8YhLIyrIFZuCMAaFQDFbyZvcK4qZ/GnPKs3JFu3CHF0gGqchDq3NydkQEMo?=
+ =?us-ascii?Q?90sjirfcOrbsHlkF0g1hqhllV7kG83sdHiJh5n30lzvdZDUfZSeJCwZaHsEC?=
+ =?us-ascii?Q?2Q=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd76d981-2899-4601-2004-08db1620f28b
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4839.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f085442-656c-4cb2-1681-08db1620d5e3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 04:37:28.5782
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 04:38:17.0161
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vNg1ZSC0ZZd/eYB3ji/4fSJIxy+zJmYkeAC44FOpYsZzzwXHhuKddrLpC5CC1LJLYy42MhEtguIJIokMiHgSdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8162
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1008QmbUrm56XLTQlkynFzzqE79yXx5jGtWlAw7vAreui/3LUOBb30cbrylC3Vr8vep56ZRdtPfY6ZSvn/i3yQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6229
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping..
+Hi Helge Deller,
 
-> Subject: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
->=20
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> i.MX8MQ use Synopsys DesignWare USB3 Controller IP, so add the
-> compatible.
->=20
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->=20
-> V2:
->  Rebased on linux-next, remove power-domains from v1
->=20
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index be36956af53b..fefd6610ab45 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -30,11 +30,13 @@ allOf:
->=20
->  properties:
->    compatible:
-> -    contains:
-> -      oneOf:
-> -        - const: snps,dwc3
-> -        - const: synopsys,dwc3
-> -          deprecated: true
-> +    oneOf:
-> +      - items:
-> +          - const: fsl,imx8mq-dwc3
-> +          - const: snps,dwc3
-> +      - const: snps,dwc3
-> +      - const: synopsys,dwc3
-> +        deprecated: true
->=20
->    reg:
->      maxItems: 1
-> --
-> 2.37.1
+Greeting!
 
+Reproduced code: https://github.com/xupengfe/syzkaller_logs/blob/main/230222_152458_xfs_dquot_alloc_bug/repro.c
+Kconfig: https://github.com/xupengfe/syzkaller_logs/blob/main/230222_152458_xfs_dquot_alloc_bug/kconfig_origin
+Issue dmesg: https://github.com/xupengfe/syzkaller_logs/blob/main/230222_152458_xfs_dquot_alloc_bug/v6.2_c9c3395d5e3dcc6daee66c6908354d47bf98cb0c_dmesg.log
+Bisect info(Might not be correct this time, but just gave some clues to the problem)
+https://github.com/xupengfe/syzkaller_logs/blob/main/230222_152458_xfs_dquot_alloc_bug/bisect_info.log
+
+All detailed info: https://github.com/xupengfe/syzkaller_logs/tree/main/230222_152458_xfs_dquot_alloc_bug
+
+Platform: ADL-S, and it could be reproduced on x86 platform in guest.
+There is "xfs_dquot_alloc" related BUG in v6.2:
+
+[   71.149963] xfs filesystem being mounted at /root/syzkaller.6TPmw0/0/file0 supports timestamps until 2038 (0x7fffffff)
+[   71.150653] 00000000: 58 41 47 49 00 00 00 01 00 00 00 00 00 00 80 00  XAGI............
+[   71.151006] 00000010: 00 00 00 40 00 00 00 06 00 00 00 01 00 00 00 37  ...@...........7
+[   71.151321] 00000020: 00 00 00 20 ff ff ff ff ff ff ff ff ff ff ff ff  ... ............
+[   71.151633] 00000030: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.151946] 00000040: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.152259] 00000050: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.152570] 00000060: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.152881] 00000070: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.153193] 00000080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.153607] 00000090: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.153921] 000000a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.154237] 000000b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.154549] 000000c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.154865] 000000d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.155180] 000000e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.155494] 000000f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.155807] 00000100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.156119] 00000110: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+[   71.156433] 00000120: ff ff ff ff ff ff ff ff 00 00 00 00 00 00 00 00  ................
+[   71.156747] 00000130: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   71.157059] 00000140: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   71.157382] 00000150: 00 00 00 00 00 00 00 00                          ........
+[   71.157671] XFS (loop3): Internal error xfs_iunlink_remove_inode at line 2013 of file fs/xfs/xfs_inode.c.  Caller xfs_ifree+0xed/0x9e0
+[   71.158154] CPU: 1 PID: 137 Comm: kworker/1:3 Not tainted 6.2.0-c9c3395d5e3d #1
+[   71.158447] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[   71.158890] Workqueue: xfs-inodegc/loop3 xfs_inodegc_worker
+[   71.159117] Call Trace:
+[   71.159220]  <TASK>
+[   71.159313]  dump_stack_lvl+0xa7/0xdb
+[   71.159478]  dump_stack+0x19/0x1f
+[   71.159621]  xfs_corruption_error+0xd7/0xe0
+[   71.159805]  ? xfs_ifree+0xed/0x9e0
+[   71.159957]  xfs_iunlink_remove+0x32e/0x590
+[   71.160136]  ? xfs_ifree+0xed/0x9e0
+[   71.160290]  xfs_ifree+0xed/0x9e0
+[   71.160432]  ? write_comp_data+0x2f/0x90
+[   71.160600]  ? xfs_trans_ijoin+0x47/0x70
+[   71.160768]  ? __sanitizer_cov_trace_pc+0x25/0x60
+[   71.160964]  ? xfs_trans_add_item+0x79/0x1c0
+[   71.161151]  xfs_inactive_ifree+0xf8/0x2a0
+[   71.161324]  xfs_inactive+0x226/0x340
+[   71.161482]  xfs_inodegc_worker+0xd3/0x430
+[   71.161657]  process_one_work+0x3b1/0x960
+[   71.161837]  worker_thread+0x52/0x660
+[   71.161999]  ? __pfx_worker_thread+0x10/0x10
+[   71.162184]  kthread+0x161/0x1a0
+[   71.162331]  ? __pfx_kthread+0x10/0x10
+[   71.162498]  ret_from_fork+0x29/0x50
+[   71.162670]  </TASK>
+[   71.162773] XFS (loop3): Corruption detected. Unmount and run xfs_repair
+[   71.163039] XFS (loop3): xfs_inactive_ifree: xfs_ifree returned error -117
+[   71.163869] repro: attempt to access beyond end of device
+[   71.163869] loop3: rw=432129, sector=65535, nr_sectors = 16 limit=65536
+[   71.164410] XFS (loop3): log I/O error -5
+[   71.166002] XFS (loop3): Metadata I/O Error (0x1) detected at xfs_inactive_ifree+0x232/0x2a0 (fs/xfs/xfs_inode.c:1612).  Shutting down filesystem.
+[   71.166541] XFS (loop3): Please unmount the filesystem and rectify the problem(s)
+[   71.167188] XFS (loop1): DAX unsupported by block device. Turning off DAX.
+[   71.167530] XFS (loop7): DAX unsupported by block device. Turning off DAX.
+[   71.167859] XFS (loop6): DAX unsupported by block device. Turning off DAX.
+[   71.168188] XFS (loop4): DAX unsupported by block device. Turning off DAX.
+[   71.168554] XFS (loop1): Mounting V4 Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.168995] XFS (loop7): Mounting V4 Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.169595] XFS (loop2): Unmounting Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.169614] XFS (loop6): Mounting V4 Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.170444] XFS (loop4): Mounting V4 Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.172161] XFS (loop3): Quotacheck: Unsuccessful (Error -5): Disabling quotas.
+[   71.172510] xfs filesystem being mounted at /root/syzkaller.mc3H24/0/file0 supports timestamps until 2038 (0x7fffffff)
+[   71.174633] XFS (loop3): Unmounting Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.175936] XFS (loop5): DAX unsupported by block device. Turning off DAX.
+[   71.176303] XFS (loop5): Mounting V4 Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.178679] XFS (loop4): totally zeroed log
+[   71.179069] XFS (loop4): Ending clean mount
+[   71.179442] XFS (loop4): Quotacheck needed: Please wait.
+[   71.183738] XFS (loop6): totally zeroed log
+[   71.184537] repro: attempt to access beyond end of device
+[   71.184537] loop4: rw=432129, sector=65535, nr_sectors = 16 limit=65536
+[   71.184637] XFS (loop6): Ending clean mount
+[   71.185052] XFS (loop4): log I/O error -5
+[   71.185339] XFS (loop6): Quotacheck needed: Please wait.
+[   71.185404] XFS (loop4): Filesystem has been shut down due to log error (0x2).
+[   71.185883] XFS (loop4): Please unmount the filesystem and rectify the problem(s).
+[   71.186372] XFS (loop4): Quotacheck: Unsuccessful (Error -5): Disabling quotas.
+[   71.186705] xfs filesystem being mounted at /root/syzkaller.uq7iOt/0/file0 supports timestamps until 2038 (0x7fffffff)
+[   71.187608] repro: attempt to access beyond end of device
+[   71.187608] loop6: rw=432129, sector=65535, nr_sectors = 16 limit=65536
+[   71.188127] XFS (loop6): log I/O error -5
+[   71.188317] XFS (loop6): Filesystem has been shut down due to log error (0x2).
+[   71.188599] XFS (loop6): Please unmount the filesystem and rectify the problem(s).
+[   71.188998] XFS (loop6): Quotacheck: Unsuccessful (Error -5): Disabling quotas.
+[   71.189324] xfs filesystem being mounted at /root/syzkaller.OjSrkA/0/file0 supports timestamps until 2038 (0x7fffffff)
+[   71.191782] XFS (loop4): Unmounting Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.193911] XFS (loop6): Unmounting Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.207573] XFS (loop1): totally zeroed log
+[   71.207813] XFS (loop7): totally zeroed log
+[   71.208396] XFS (loop7): Ending clean mount
+[   71.208664] XFS (loop1): Ending clean mount
+[   71.209093] XFS (loop1): Quotacheck needed: Please wait.
+[   71.210841] XFS (loop7): Quotacheck needed: Please wait.
+[   71.216659] repro: attempt to access beyond end of device
+[   71.216659] loop7: rw=432129, sector=65535, nr_sectors = 16 limit=65536
+[   71.217165] XFS (loop7): log I/O error -5
+[   71.217375] XFS (loop7): Filesystem has been shut down due to log error (0x2).
+[   71.217674] XFS (loop7): Please unmount the filesystem and rectify the problem(s).
+[   71.218071] XFS (loop7): Quotacheck: Unsuccessful (Error -5): Disabling quotas.
+[   71.218402] xfs filesystem being mounted at /root/syzkaller.Q5dMMG/0/file0 supports timestamps until 2038 (0x7fffffff)
+[   71.219906] XFS (loop7): Unmounting Filesystem 86ecfda0-089a-461f-b078-1b43afedebc1
+[   71.224443] repro: attempt to access beyond end of device
+[   71.224443] loop1: rw=432129, sector=65535, nr_sectors = 16 limit=65536
+[   71.224960] XFS (loop1): log I/O error -5
+[   71.225151] XFS (loop1): Filesystem has been shut down due to log error (0x2).
+[   71.225543] XFS (loop1): Please unmount the filesystem and rectify the problem(s).
+[   71.225966] XFS (loop1): Quotacheck: Unsuccessful (Error -5): Disabling quotas.
+[   71.226310] xfs filesystem being mounted at /root/syzkaller.qCVHXV/0/file0 supports timestamps until 2038 (0x7fffffff)
+[   71.227591] BUG: kernel NULL pointer dereference, address: 00000000000002a8
+[   71.227873] #PF: supervisor read access in kernel mode
+[   71.228077] #PF: error_code(0x0000) - not-present page
+[   71.228280] PGD c313067 P4D c313067 PUD c1fe067 PMD 0 
+[   71.228494] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   71.228673] CPU: 0 PID: 161 Comm: kworker/0:4 Not tainted 6.2.0-c9c3395d5e3d #1
+[   71.228961] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[   71.229400] Workqueue: xfs-inodegc/loop1 xfs_inodegc_worker
+[   71.229626] RIP: 0010:xfs_dquot_alloc+0x95/0x1e0
+[   71.229820] Code: 80 15 ad 85 48 c7 c6 7c 6b 92 83 e8 75 0f 6b ff 49 8b 8d 60 01 00 00 44 89 e0 31 d2 48 c7 c6 18 ae 8f 83 48 8d bb 18 02 00 00 <f7> b1 a8 02 2
+[   71.230528] RSP: 0018:ffffc90000babc20 EFLAGS: 00010246
+[   71.230737] RAX: 0000000000000009 RBX: ffff8880093c98c0 RCX: 0000000000000000
+[   71.231014] RDX: 0000000000000000 RSI: ffffffff838fae18 RDI: ffff8880093c9ad8
+[   71.231292] RBP: ffffc90000babc48 R08: 0000000000000002 R09: 0000000000000000
+[   71.231570] R10: ffffc90000baba80 R11: ffff88800af08d98 R12: 0000000000000009
+[   71.231850] R13: ffff88800c4bc000 R14: ffff88800c4bc000 R15: 0000000000000004
+[   71.232129] FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+[   71.232441] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   71.232668] CR2: 00000000000002a8 CR3: 000000000a1d2002 CR4: 0000000000770ef0
+[   71.232949] PKRU: 55555554
+[   71.233061] Call Trace:
+[   71.233162]  <TASK>
+[   71.233254]  xfs_qm_dqread+0x46/0x440
+[   71.233410]  ? xfs_qm_dqget_inode+0x13e/0x500
+[   71.233596]  xfs_qm_dqget_inode+0x154/0x500
+[   71.233774]  xfs_qm_dqattach_one+0x142/0x3c0
+[   71.233961]  xfs_qm_dqattach_locked+0x14a/0x170
+[   71.234149]  xfs_qm_dqattach+0x52/0x80
+[   71.234307]  xfs_inactive+0x186/0x340
+[   71.234461]  xfs_inodegc_worker+0xd3/0x430
+[   71.234630]  process_one_work+0x3b1/0x960
+[   71.234802]  worker_thread+0x52/0x660
+[   71.234957]  ? __pfx_worker_thread+0x10/0x10
+[   71.235136]  kthread+0x161/0x1a0
+[   71.235279]  ? __pfx_kthread+0x10/0x10
+[   71.235442]  ret_from_fork+0x29/0x50
+[   71.235602]  </TASK>
+[   71.235696] Modules linked in:
+[   71.235826] CR2: 00000000000002a8
+[   71.235964] ---[ end trace 0000000000000000 ]---
+
+Reporting the above issue and providing a reproduced way seems valuable.
+
+But not sure report to who in kernel community.
+So used RIP: "xfs_dquot_alloc" key word to bisect between v6.2 and v5.11.
+I know there is BUG also but with some other RIP info.
+
+Related commit:
+29837019d5ebb80a5f180af3107a0645c731a770
+Merge tag 'io_uring-5.19-2022-07-08' of git://git.kernel.dk/linux-block
+
+This might not be the right point of suspicion.
+Could you help to take a look or add the correct developer for this issue?
+Thanks a lot!
+
+---
+
+If you don't need an environment to reproduce the problem or if you already
+have one, please ignore the following information.
+
+How to reproduce:
+git clone https://gitlab.com/xupengfe/repro_vm_env.git
+cd repro_vm_env
+tar -xvf repro_vm_env.tar.gz
+cd repro_vm_env; ./start3.sh  // it needs qemu-system-x86_64 and I used v7.1.0
+   // start3.sh will load bzImage_2241ab53cbb5cdb08a6b2d4688feb13971058f65 v6.2-rc5 kernel
+   // You could change the bzImage_xxx as you want
+In vm and login with root,  there is no password for root.
+
+After login vm successfully, you could transfer reproduced binary to the VM by below way, and reproduce the problem:
+gcc -pthread -o repro repro.c
+scp -P 10023 repro root@localhost:/root/
+
+Get the bzImage for target kernel:
+Please use target kconfig and copy it to kernel_src/.config
+make olddefconfig
+make -jx bzImage           //x should equal or less than cpu num your pc has
+
+Fill the bzImage file into above start3.sh to load the target kernel vm.
+
+
+Tips:
+If you already have qemu-system-x86_64, please ignore below info.
+If you want to install qemu v7.1.0 version:
+git clone https://github.com/qemu/qemu.git
+cd qemu
+git checkout -f v7.1.0
+mkdir build
+cd build
+yum install -y ninja-build.x86_64
+../configure --target-list=x86_64-softmmu --enable-kvm --enable-vnc --enable-gtk --enable-sdl
+make
+make install
+
+Thanks!
+BR.
