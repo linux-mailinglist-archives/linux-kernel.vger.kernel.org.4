@@ -2,144 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF1B6A208F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BFF6A2091
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjBXRk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S229613AbjBXRkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBXRkZ (ORCPT
+        with ESMTP id S229492AbjBXRkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:40:25 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10hn2244.outbound.protection.outlook.com [52.100.157.244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B784269AEB;
-        Fri, 24 Feb 2023 09:40:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VfImz7ntGsE5nrgVpoTEYrWIkGGH5Mu2AMRlX0L8w3K8hFbl2pzWyJlU6DVjkJEXTjtWoPPQmui+aKWkrsL0whriZeBw8LO8KlJygcsnvVEPsGScmkuSbo4tXz8bIIZq2NjwNnJdDJIkRYXknDnmqBshMoBSQgdSIo3Phn+RImc3ErSkXNW9Al7VsXNAzuSEcaNBF7yJqCI/1EgVTlnUInI+r/WiN5sWb+3A08QYXufPtN2kr6Hq0NjJ0ZsFWksLpKPq5XOBhMr+NmT4ZVv2OgjJvFgdNX6JM36UPdz/C67Wscgno19uq0nKqrPN08SxIPn1KOT6BJyQrPi6eB0diw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4PMq/i/FulQVIpfMseiPXE5FktUUFiMwo7vKnVb/0ao=;
- b=Fiu29smrDWmot9A1q97npccUiOeF7pQV6HK5qHY/Wl4uzUdmto/S7kD9fOi+QqlFuNxE21yrcFKF1qEoo1rNFwmqTpG+PhOVBU+s9AgfBaCgLVzPcAZ+jek0re55mGU3jdcYIFBIDol8dRDJAvbhcqhaV/RS1PHZOZ8NJZFIRT8XokL+PyxtMgo+RFTddBovWqif9Pmf/GTOP5ljh/2yDbMwghZ3HsWBaIOsIDK+DowisoOtYjFIdXiqM3m0kAwm8dH/hmjbpd9HvZQ/p0UHuLkvM3VqoclFKmjmBWMzTgqrU1Uo8iegIoThe6MYqTj1zlXbTEldNIR+bgh2biNIAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=temperror action=none header.from=nvidia.com; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4PMq/i/FulQVIpfMseiPXE5FktUUFiMwo7vKnVb/0ao=;
- b=F4XoxM2YZnzv1aMJ2qVoqiGepz7a7MD1o05GxUr8zMHQrjqmNXy/TSzmnuH9OTWaR3XDQg+Dv0c1rJzaF8W4kHb3f7NwbNSlrp2BE3PHJCybllZADrkrYuElQrsn9LL/RtvBcYb3XeX1IaJ+0Jo4nk47dfUZa4E4pN8I/Dotr3N5UHotpxPoE1Bol7TcPUqIbB7OElQWdSjiadwM2pDZuCcy0ZDD9Xdyrt/MWl/An3dUf8eIV2srlPhAu7b/fAK1OUtTZAbG/aesm9Vd0IpmJbP4sXkd87ecy/PtouVxid76LVgI4GmQN+r3owmhJJLIK9qoYUwMzzdh8n3UUSy/3Q==
-Received: from DM6PR02CA0044.namprd02.prod.outlook.com (2603:10b6:5:177::21)
- by DS0PR12MB7511.namprd12.prod.outlook.com (2603:10b6:8:139::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
- 2023 17:40:22 +0000
-Received: from DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:177:cafe::7) by DM6PR02CA0044.outlook.office365.com
- (2603:10b6:5:177::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24 via Frontend
- Transport; Fri, 24 Feb 2023 17:40:22 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=temperror action=none header.from=nvidia.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of nvidia.com: DNS Timeout)
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT076.mail.protection.outlook.com (10.13.173.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.24 via Frontend Transport; Fri, 24 Feb 2023 17:40:21 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 24 Feb
- 2023 09:40:10 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 24 Feb
- 2023 09:40:10 -0800
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.10)
- with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Fri, 24 Feb
- 2023 09:40:09 -0800
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v1] gpio: mmio: handle "ngpios" properly in bgpio_init
-Date:   Fri, 24 Feb 2023 12:40:07 -0500
-Message-ID: <20230224174007.13009-1-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        Fri, 24 Feb 2023 12:40:32 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AAB6ADD0;
+        Fri, 24 Feb 2023 09:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677260430; x=1708796430;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v3EXCROmbAWje/m/hEXKjA+6CDwxFrm7Z1h1UtWhvxI=;
+  b=U7DrLR+4kyrzbJG1KDmtHXYUFGZqoMlZrsyQ7cJOesyDyfBx1lzwOo5e
+   u1VdSFqqm1GKDzmXhzGI0WBUAhKe/p82ext5WB1sopmCwWDbLt/Oa5HYv
+   /FgeyOx6fWCDGnLz64ytIg9onEX/yxldVU/kD2zgjn5QSvJ4yjOqv7UZB
+   M+bkLZecjmrCbqO2ZcadrffLUOHWvV44+fSa/oJaUQXb9/FoZLuyAb5+W
+   fhRNzs+K38f/AQ7ds9huR4lZIB5BAGXe0bb70E0iSgVLqWpntLOMwYXtz
+   LlWXd480nc6m8k0Qz0XXIWI1RYM7Z5FhiKLqM/4B+cxDfW990pHx+I19I
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="317293337"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="317293337"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 09:40:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="918500680"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="918500680"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Feb 2023 09:40:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pVc3W-00BZaL-1Y;
+        Fri, 24 Feb 2023 19:40:26 +0200
+Date:   Fri, 24 Feb 2023 19:40:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: INFO: REPRODUCED: memory leak in gpio device in 6.2-rc6
+Message-ID: <Y/j2ikfd/wvrDdws@smile.fi.intel.com>
+References: <Y+j1dbZ0A1mndwXp@smile.fi.intel.com>
+ <36d8e761-58e2-2515-fd1a-65a11731d1b1@alu.unizg.hr>
+ <Y+y5nZJwZ6ykf0Fz@smile.fi.intel.com>
+ <3d96e50b-ed17-9bf5-149b-8a50c7b4cca2@alu.unizg.hr>
+ <CAMRc=Mcx=Ko5H_c1YGzA5Jfu3KJqx1pfL3RZuMrV6oTObnUrhQ@mail.gmail.com>
+ <4b001ce6-b35d-3ad1-b757-f5f6baca7b51@alu.unizg.hr>
+ <Y/N5Dt6G397rkfBd@smile.fi.intel.com>
+ <d7762f6f-5b58-cf71-3400-557799de43c0@alu.unizg.hr>
+ <Y/Tlq9aY3btfoVUN@smile.fi.intel.com>
+ <7856e5a8-d84e-4f41-721b-80b6fc413919@alu.unizg.hr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT076:EE_|DS0PR12MB7511:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54ec89a9-682b-4688-fd53-08db168e3444
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BSb/K5QOvuvbuAZgjg2roUfMpQIFyU0s+Thgl3l1zFcaLU7QdNu5B9AgnrdXRa30NeXBUmZ5VuQQyKviJaERdA2do1cdZaCi23IkiBKH7oZOltcBBPuOEiRLTuscNs43U0YiKsc/r4ULhg3ljuRwxIO4w2cK+Mv7QjbuKLWZYIwo4sEHyNjUV49ydPtgjRG0LS/nerXvOlan4UWI4sKBhhGmthDgvOhyQd3msRCC19qfCKTSA2YJHGv2Dc5Pzwf+RZIZa0aKCSwyCE5d3C9+NuGj6VoPdEMnGlRQoDh/uKv3R+fxd7Snz01kFazk/SQnT+x2fKko/eJ7tZvJGgEig5gkNZ526LAi40zlY3JAWARiHgMQ9tu1bb7bE24DrgRe97pzS69Vl5BtL7pbiGD+Qpnjaok33y1muDdVNyxVNsvHeclihmtgcfxvty8cbEJP0EiGz4/82yJd8agv/QT2nWI4v4nng/MTKGnAGqMsJNOXZ/gcBbWHCW2uGioRixo9IjzQShHnM0pYHZRXjHI3XTPikWhUWmQ+z+FLi+vizcvHvRVT38CMtZud9x7+EzNY7vffF2XqS1btdbKTjvPHbs+phFipJVBWvW1EbUtcYo99XJU4HsJVqSwIKLRVtbRLw8lD9cTttBk6FPYrdTNHq4k63gd2t/TL3ofb142TgTJhAG+BuNmp2DZ8XyKJ66LwS4nyFDGIBsUtReR14LGyUobAgyHfoGoagxWI2C5flJcRVGhA/9D2V6B+aRvif7mGfCPiW13bODrm/IzLNssbMiL/OVEDn4xOdmE02vGRQf4=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(136003)(5400799012)(451199018)(40470700004)(46966006)(36840700001)(36860700001)(2906002)(82310400005)(7636003)(82740400003)(86362001)(336012)(478600001)(7696005)(186003)(47076005)(426003)(2616005)(26005)(40480700001)(36756003)(356005)(83380400001)(110136005)(63370400001)(63350400001)(40460700003)(70206006)(4326008)(41300700001)(107886003)(70586007)(316002)(8936002)(1076003)(8676002)(5660300002)(34020700004)(2101003)(12100799015);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 17:40:21.9598
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54ec89a9-682b-4688-fd53-08db168e3444
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7511
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7856e5a8-d84e-4f41-721b-80b6fc413919@alu.unizg.hr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bgpio_init uses "sz" argument to populate ngpio, which is not accurate.
-Instead, read the "ngpios" property from the DT and if it
-doesn't exist, use the "sz" argument. With this change, drivers no
-longer need to overwrite the ngpio variable after calling bgpio_init.
+On Fri, Feb 24, 2023 at 04:12:31PM +0100, Mirsad Todorovac wrote:
+> On 2/21/23 16:39, Andy Shevchenko wrote:
+> > On Tue, Feb 21, 2023 at 02:52:38PM +0100, Mirsad Goran Todorovac wrote:
+> > > On 20. 02. 2023. 14:43, Andy Shevchenko wrote:
+> > > > On Mon, Feb 20, 2023 at 02:10:00PM +0100, Mirsad Todorovac wrote:
+> > > > > On 2/16/23 15:16, Bartosz Golaszewski wrote:
 
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
----
- drivers/gpio/gpio-mmio.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+...
 
-diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
-index d9dff3dc92ae..f317a371c529 100644
---- a/drivers/gpio/gpio-mmio.c
-+++ b/drivers/gpio/gpio-mmio.c
-@@ -601,6 +601,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
- 	       void __iomem *clr, void __iomem *dirout, void __iomem *dirin,
- 	       unsigned long flags)
- {
-+	u32 ngpios = 0;
- 	int ret;
- 
- 	if (!is_power_of_2(sz))
-@@ -614,10 +615,15 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
- 	gc->parent = dev;
- 	gc->label = dev_name(dev);
- 	gc->base = -1;
--	gc->ngpio = gc->bgpio_bits;
- 	gc->request = bgpio_request;
- 	gc->be_bits = !!(flags & BGPIOF_BIG_ENDIAN);
- 
-+	ret = device_property_read_u32(dev, "ngpios", &ngpios);
-+	if (!ret)
-+		gc->ngpio = ngpios;
-+	else
-+		gc->ngpio = gc->bgpio_bits;
-+
- 	ret = bgpio_setup_io(gc, dat, set, clr, flags);
- 	if (ret)
- 		return ret;
+> > > > > As Mr. McKenney once said, a bunch of monkeys with keyboard could
+> > > > > have done it in a considerable number of trials and errors ;-)
+> > > > > 
+> > > > > But here I have something that could potentially leak as well. I could not devise a
+> > > > > reproducer due to the leak being lightly triggered only in extreme memory contention.
+> > > > > 
+> > > > > See it for yourself:
+> > > > > 
+> > > > > drivers/gpio/gpio-sim.c:
+> > > > >   301 static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
+> > > > >   302 {
+> > > > >   303         struct device_attribute *val_dev_attr, *pull_dev_attr;
+> > > > >   304         struct gpio_sim_attribute *val_attr, *pull_attr;
+> > > > >   305         unsigned int num_lines = chip->gc.ngpio;
+> > > > >   306         struct device *dev = chip->gc.parent;
+> > > > >   307         struct attribute_group *attr_group;
+> > > > >   308         struct attribute **attrs;
+> > > > >   309         int i, ret;
+> > > > >   310
+> > > > >   311         chip->attr_groups = devm_kcalloc(dev, sizeof(*chip->attr_groups),
+> > > > >   312                                          num_lines + 1, GFP_KERNEL);
+> > > > >   313         if (!chip->attr_groups)
+> > > > >   314                 return -ENOMEM;
+> > > > >   315
+> > > > >   316         for (i = 0; i < num_lines; i++) {
+> > > > >   317                 attr_group = devm_kzalloc(dev, sizeof(*attr_group), GFP_KERNEL);
+> > > > >   318                 attrs = devm_kcalloc(dev, GPIO_SIM_NUM_ATTRS, sizeof(*attrs),
+> > > > >   319                                      GFP_KERNEL);
+> > > > >   320                 val_attr = devm_kzalloc(dev, sizeof(*val_attr), GFP_KERNEL);
+> > > > >   321                 pull_attr = devm_kzalloc(dev, sizeof(*pull_attr), GFP_KERNEL);
+> > > > >   322                 if (!attr_group || !attrs || !val_attr || !pull_attr)
+> > > > >   323                         return -ENOMEM;
+> > > > >   324
+> > > > >   325                 attr_group->name = devm_kasprintf(dev, GFP_KERNEL,
+> > > > >   326                                                   "sim_gpio%u", i);
+> > > > >   327                 if (!attr_group->name)
+> > > > >   328                         return -ENOMEM;
+> > > > > 
+> > > > > Apparently, if the memory allocation only partially succeeds, in the theoretical case
+> > > > > that the system is close to its kernel memory exhaustion, `return -ENOMEM` would not
+> > > > > free the partially succeeded allocs, would it?
+> > > > > 
+> > > > > To explain it better, I tried a version that is not yet full doing "all or nothing"
+> > > > > memory allocation for the gpio-sim driver, because I am not that familiar with the
+> > > > > driver internals.
+> > > > 
+> > > > devm_*() mean that the resource allocation is made in a managed manner, so when
+> > > > it's done, it will be freed automatically.
+> > > 
+> > > Didn't see that one coming ... :-/ "buzzing though the bush ..."
+> > > 
+> > > > The question is: is the lifetime of the attr_groups should be lesser or the
+> > > > same as chip->gc.parent? Maybe it's incorrect to call devm_*() in the first place?
+> > > 
+> > > Bona fide said, I hope that automatic deallocation does things in the right order.
+> > > I've realised that devm_kzalloc() calls devm_kmalloc() that registers allocations on
+> > > a per driver list. But I am not sure how chip->gc was allocated?
+> > > 
+> > > Here is said it is allocated in drivers/gpio/gpio-sim.c:386 in gpio_sim_add_bank(),
+> > > as a part of
+> > > 
+> > > 	struct gpio_sim_chip *chip;
+> > > 	struct gpio_chip *gc;
+> > > 
+> > > 	gc = &chip->gc;
+> > > 
+> > > and gc->parent is set to
+> > > 
+> > > 	gc->parent = dev;
+> > > 
+> > > in line 420, which appears called before gpio_sim_setup_sysfs() and the lines above.
+> > > 
+> > > If I understood well, automatic deallocation on unloading the driver goes
+> > > in the reverse order, so lifetime of chip appears to be longer than attr_groups,
+> > > but I am really not that good at this ...
+> > 
+> > So, the device is instantiated by platform_device_register_full().
+> > 
+> > It should gone with the platform_device_unregister().
+> > 
+> > In case of CONFIG_DEBUG_KOBJECT_RELEASE=y the ->release() can be called
+> > asynchronously.
+> > 
+> > So, there are following questions:
+> > - is the put_device() is actually called?
+> > - is the above mentioned option is set to Y?
+> > - if it's in Y, does kmemleak take it into account?
+> > - if no, do you get anything new in `dmesg` when enable it?
+> 
+> Hi, Andy,
+> 
+> Having set CONFIG_DEBUG_KOBJECT=y.
+> CONFIG_DEBUG_KOBJECT_RELEASE=y and CONFIG_DEBUG_OBJECTS_TIMERS=y disappear after "make olddefconfig"
+> 
+> So, I cannot tell about whether release() was called asynchronously, all I get is (after driver unload):
+> 
+> [  810.989742] kobject: 'gpio-sim' (00000000251afa19): kobject_cleanup, parent 00000000447da7a7
+> [  810.990216] kobject: 'gpio-sim' (00000000251afa19): auto cleanup kobject_del
+> [  810.990674] kobject: 'gpio-sim' (00000000251afa19): auto cleanup 'remove' event
+> [  810.991175] kobject: 'gpio-sim' (00000000251afa19): kobject_uevent_env
+> [  810.991674] kobject: 'gpio-sim' (00000000251afa19): fill_kobj_path: path = '/bus/platform/drivers/gpio-sim'
+> [  810.992154] kobject: 'gpio-sim' (00000000251afa19): calling ktype release
+> [  810.992644] kobject: 'gpio-sim': free name
+> 
+> I am still trying to convince "make olddefconfig" to accept the above values he did not like :-/
+
+Btw, since devm_*() is in use, you may enable trace events (I have added them a
+few releases back) and see how objects allocated with devm are getting
+released.
+
+Before that there is a possibility to enable debug for devm.
+CONFIG_DEBUG_DEVRES for that (you may see how it's used in the
+drivers/base/devres.c).
+
+> > > > Or maybe the chip->gc.parent should be changed to something else (actual GPIO
+> > > > device, but then it's unclear how to provide the attributes in non-racy way
+> > > Really, dunno. I have to repeat that my learning curve cannot adapt so quickly.
+> > > 
+> > > I merely gave the report of KMEMLEAK, otherwise I am not a Linux kernel
+> > > device expert nor would be appropriate to try the craft not earned ;-)
+
 -- 
-2.30.1
+With Best Regards,
+Andy Shevchenko
+
 
