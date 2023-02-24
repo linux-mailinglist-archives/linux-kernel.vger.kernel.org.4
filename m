@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BA96A1CC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B37E6A1CC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBXNJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S230197AbjBXNJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjBXNJN (ORCPT
+        with ESMTP id S230132AbjBXNJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:09:13 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854F714987;
-        Fri, 24 Feb 2023 05:09:10 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7A15524E31E;
-        Fri, 24 Feb 2023 21:09:08 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 21:09:08 +0800
-Received: from [192.168.125.93] (113.72.147.165) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 21:09:07 +0800
-Message-ID: <bd4301c5-d79f-6ba5-a840-95b733d2d44e@starfivetech.com>
-Date:   Fri, 24 Feb 2023 21:09:07 +0800
+        Fri, 24 Feb 2023 08:09:46 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE15E13506;
+        Fri, 24 Feb 2023 05:09:45 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F3AFB6602FB6;
+        Fri, 24 Feb 2023 13:09:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677244184;
+        bh=eNRVBTrYla/JuAHqdu3DfZ00wg57f7iLgICRaNb9Zh0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QtxSPp6n7A2HoEqRKa/hKmrhjzgs7KgoDfuIwGGbuWri+axuqr+i1FYKXHNeBy2gl
+         FO9/Oeb7LOyBn2GQkGfbtutzbjbuMlW3FeZ0VqzjOtrPoX2LNuT8Zuc7HQYOZKzRFo
+         9rVeinBG3lZ7VLJGtFVBboXPSge2Gkr0n6l7ZeQ+rKlNDogi399JN34fAUlkM6zjNB
+         OumQLNy899WgRda8wehFeyZViqMNxLVtA/36YznDKneBjvxLF6TTWwmUmukNOIwrP/
+         zPbaMxHPgD76B3a7ancx1R9yhwnw72SENmz/53qEXjRcASRmozUfxW5sFleN4/B4mX
+         pREtAMGa8ia/A==
+Message-ID: <9e12c33a-998e-7042-27b7-320be99940ea@collabora.com>
+Date:   Fri, 24 Feb 2023 14:09:41 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 1/3] dt-bindings: dma: snps,dw-axi-dmac: Add reset
- items
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 02/11] dt-bindings: gpu: mali-bifrost: Split out
+ MediaTek power-domains variation
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>
-CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230221140424.719-1-walker.chen@starfivetech.com>
- <20230221140424.719-2-walker.chen@starfivetech.com>
- <1467f7c5-07eb-97db-c6f2-573a4208cc28@linaro.org>
- <d0984638-3f7f-7e4e-fe3e-5e1f88375dca@starfivetech.com>
- <36188e04-332f-e944-9c58-f6f2b74987da@linaro.org>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <36188e04-332f-e944-9c58-f6f2b74987da@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230223133440.80941-1-angelogioacchino.delregno@collabora.com>
+ <20230223133440.80941-3-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5FK8BjSgwS5276FJj4zG_3STMbQwQWdyn3LjOvQ=108RQ@mail.gmail.com>
+ <CAGXv+5Gv19nijoW5i8=Ouh4H24X3pknM3ZBSo9Tgv8XkLt+XbQ@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5Gv19nijoW5i8=Ouh4H24X3pknM3ZBSo9Tgv8XkLt+XbQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.165]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/2/24 18:51, Krzysztof Kozlowski wrote:
-> On 24/02/2023 11:14, Walker Chen wrote:
->>>>    resets:
->>>> -    maxItems: 1
->>>> +    maxItems: 2
+Il 24/02/23 11:09, Chen-Yu Tsai ha scritto:
+> On Fri, Feb 24, 2023 at 6:08 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>
+>> On Thu, Feb 23, 2023 at 9:34 PM AngeloGioacchino Del Regno
+>> <angelogioacchino.delregno@collabora.com> wrote:
 >>>
->>> This breaks ABI and all other users. Test your changes before sending.
->> 
->> I think 'minItems' should be added here. So like this:
->> resets:
->>   minItems: 1
->>   maxItems: 2
->> 
->> Other platform/users will not be affected by this.
+>>> In preparation for adding new bindings for new MediaTek SoCs, split out
+>>> the power-domain-names and power-domainsvariation from the `else` in
 > 
-> Which will allow two resets on all platforms. Is this correct for these
-> platforms? Do they have two resets?
+>                                              ^ missing space
 > 
-In kernel 6.2, only two platforms use this DMA controller (see 'arch/arc/boot/dts/hsdk.dts' and 'arch/riscv/boot/dts/canaan/k210.dtsi').
-There is one reset on k210, while there is no reset of DMA on hsdk at all.
-If here minItems with value 1 is added and the value of maxItems is changed to 2, after my testing,
-whether it is one reset or two resets, even no reset, there is no errors occur when doing dtbs_check,
-the DMA initialization shall not be affected either on their platforms.
+> Once fixed,
 
+I think you even mentioned that already, ugh. Will fix.
+
+> 
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+>>> the current mediatek,mt8183-mali conditional.
+>>>
+>>> The sram-supply part is left in place to be disallowed for anything
+>>> that is not compatible with "mediatek,mt8183-mali" as this regulator
+>>> is MediaTek-specific and it is, and will ever be, used only for this
+>>> specific string due to the addition of the mediatek-regulator-coupler
+>>> driver.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
