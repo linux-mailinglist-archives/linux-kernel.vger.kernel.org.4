@@ -2,117 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AC16A1D0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201EC6A1D14
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBXNh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        id S229609AbjBXNme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBXNh1 (ORCPT
+        with ESMTP id S229446AbjBXNmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:37:27 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB424BE90;
-        Fri, 24 Feb 2023 05:37:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677245843; x=1708781843;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aZzsSFvg1UfLqYXxjgJ2eB+4H3YgR+M3br8uQwZVD1w=;
-  b=QwWy4LSgPP8apy192AgnI4HWGoPp6kkVi/dJTy8dr7aBvBS27oIOccVP
-   H6WVpaitfUP5w2+W9ec5HB/CE1U3jVi4SmWdZaPmXFQTboHPJz9ODceio
-   y9Yb93YsiQ1sAJ615EoKA5+u3Dj6Ntd6oyuVVfFEzXpcEgMeM6nu4n2Jj
-   EkoYId4kEmr3upVO7zF8uYcSEa2xM7ZCBBnqB+rSi5/ffRinzcPdnAHlY
-   slkqlz9FKn1Auk7agsCW97kpOnQqG2aF3rTvhO3WxO87EAbxu5nrDrrK5
-   1Y6IZwIsrhBvV1wZou6g7iAMde8rPZAYTYXiNE8rTcgHN2q5QJdRdZE5z
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,324,1669100400"; 
-   d="scan'208";a="138922155"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2023 06:37:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 24 Feb 2023 06:37:20 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Fri, 24 Feb 2023 06:37:17 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <linux-riscv@lists.infradead.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>, <conor@kernel.org>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: [RFC 0/2] RISC-V: enable rust
-Date:   Fri, 24 Feb 2023 13:36:08 +0000
-Message-ID: <20230224133609.2877396-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 24 Feb 2023 08:42:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E8858B41;
+        Fri, 24 Feb 2023 05:42:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83C41614DD;
+        Fri, 24 Feb 2023 13:42:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC5AC433EF;
+        Fri, 24 Feb 2023 13:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677246150;
+        bh=TmwSxx0Eiv8zFOHYq4EbPQ1HL/+e5mY7ILp/zgMBsr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FqyeR66fBqYuXVHgdcMaAR0oAZ0Xg3sBBzBjFQLI7GUXhn64yL5Mj5Y4LdvivhEQI
+         C+kNBum+NYNGWcw9P51iY52g02rQNXHban7EDYxn3H0zKs2vXhnsV7UVB2Ur6yEDH4
+         B35y62GWe54Z841hNxyOFiRFe+I4zX4YiUVBwN7TSrx5DNG+n4qUjhmQClLGo1HS69
+         Uijcqbw8/vgoYMa5kbi0DExVEBx5pFdRiY0hpyFdj3DzWGwp7u0PBJzBbnECPFadam
+         A4wiUaLNVi50rk7VektAd36J4DiyoPMAT2yERJuy4ZOWl36/GlrgLuiICw0tze1jFJ
+         kRpwPYyIJh5ew==
+Date:   Fri, 24 Feb 2023 13:42:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
+Message-ID: <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-4-eblanc@baylibre.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1475; i=conor.dooley@microchip.com; h=from:subject; bh=aZzsSFvg1UfLqYXxjgJ2eB+4H3YgR+M3br8uQwZVD1w=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMk/9rocvX3IpcHZwESXJXif4QPzG+uS7Z+U/3R8YDjTJC6T zbipo5SFQYyDQVZMkSXxdl+L1Po/Ljuce97CzGFlAhnCwMUpABOxMWRk2LhgbcZ94f3W9/ddLXNZq7 b64bvUiUmuPRJzVryeG7I6K4aRYUr5E82VBzfNVau2eiiQ6377v52T4gt7P5kbB5xL+Wr42QA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oG82+iDbRwcxSL34"
+Content-Disposition: inline
+In-Reply-To: <20230224133129.887203-4-eblanc@baylibre.com>
+X-Cookie: The early worm gets the bird.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a somewhat blind (and maybe foolish) attempt at enabling Rust
-for RISC-V. I've tested this on Icicle, and the modules seem to work.
-I'd like to play around with Rust on RISC-V, but I'm not interested in
-using downstream kernels, so figured I should try and see what's
-missing...
-I've tagged this as RFC in case I've missed some "WAaaaa you can't do
-this" somewhere :)
 
-Thanks,
-Conor.
+--oG82+iDbRwcxSL34
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-CC: Miguel Ojeda <ojeda@kernel.org>
-CC: Alex Gaynor <alex.gaynor@gmail.com>
-CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Gary Guo <gary@garyguo.net>
-CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
-CC: Jonathan Corbet <corbet@lwn.net>
-CC: Paul Walmsley <paul.walmsley@sifive.com>
-CC: Palmer Dabbelt <palmer@dabbelt.com>
-CC: Nathan Chancellor <nathan@kernel.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Tom Rix <trix@redhat.com>
-CC: rust-for-linux@vger.kernel.org
-CC: linux-doc@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-riscv@lists.infradead.org
-CC: llvm@lists.linux.dev
+On Fri, Feb 24, 2023 at 02:31:29PM +0100, Esteban Blanc wrote:
+> From: Jerome Neanne <jneanne@baylibre.com>
+>=20
+> This patch adds support for TPS6594 regulators (bucks and LDOs).
+> The output voltages are configurable and are meant to supply power
+> to the main processor and other components.
+> Bucks can be used in single or multiphase mode, depending on PMIC
+> part number.
+>=20
+> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+> ---
 
-Miguel Ojeda (2):
-  scripts: generate_rust_target: enable building on RISC-V
-  RISC-V: enable building the 64-bit kernels with rust support
+You've not provided a Signed-off-by for this so I can't do anything with
+it, please see Documentation/process/submitting-patches.rst for details
+on what this is and why it's important.
 
- Documentation/rust/arch-support.rst |  2 ++
- arch/riscv/Kconfig                  |  1 +
- arch/riscv/Makefile                 |  3 ++-
- scripts/generate_rust_target.rs     | 19 +++++++++++++++++++
- 4 files changed, 24 insertions(+), 1 deletion(-)
+> @@ -0,0 +1,559 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Regulator driver for tps6594 PMIC
+> + *
+> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
 
--- 
-2.39.2
+Please make the entire comment block a C++ one so things look more
+intentional.
 
+> +static unsigned int tps6594_get_mode(struct regulator_dev *dev)
+> +{
+> +	return REGULATOR_MODE_NORMAL;
+> +}
+
+If configuring modes isn't supported just omit all mode operations.
+
+> +	}
+> +
+> +	regulator_notifier_call_chain(irq_data->rdev,
+> +				      irq_data->type->event, NULL);
+> +
+> +	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
+> +		irq_data->type->event_name, irq_data->type->regulator_name);
+
+I suspect it might avoid future confusion to log the error before
+notifying so that any consequences of the error more clearly happen in
+response to the error.
+
+> +static int tps6594_get_rdev_by_name(const char *regulator_name,
+> +				    struct regulator_dev *rdevbucktbl[BUCK_NB],
+> +				    struct regulator_dev *rdevldotbl[LDO_NB],
+> +				    struct regulator_dev *dev)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i <=3D BUCK_NB; i++) {
+> +		if (strcmp(regulator_name, buck_regs[i].name) =3D=3D 0) {
+> +			dev =3D rdevbucktbl[i];
+> +			return 0;
+> +		}
+> +	}
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(ldo_regs); i++) {
+> +		if (strcmp(regulator_name, ldo_regs[i].name) =3D=3D 0) {
+> +			dev =3D rdevldotbl[i];
+> +			return 0;
+> +		}
+> +	}
+> +	return -EINVAL;
+> +}
+
+> +	for (i =3D 0; i < ARRAY_SIZE(tps6594_regulator_irq_types); ++i) {
+> +		irq_type =3D &tps6594_regulator_irq_types[i];
+> +
+> +		irq =3D platform_get_irq_byname(pdev, irq_type->irq_name);
+> +		if (irq < 0)
+> +			return -EINVAL;
+> +
+> +		irq_data[i].dev =3D tps->dev;
+> +		irq_data[i].type =3D irq_type;
+> +
+> +		tps6594_get_rdev_by_name(irq_type->regulator_name, rdevbucktbl,
+> +					 rdevldotbl, rdev);
+
+This would be simpler and you wouldn't need this lookup function if the
+regulator descriptions included their IRQ names, then you could just
+request the interrupts while registering the regulators.
+
+> +		error =3D devm_request_threaded_irq(tps->dev, irq, NULL,
+> +						  tps6594_regulator_irq_handler,
+> +						  IRQF_ONESHOT,
+> +						  irq_type->irq_name,
+> +						  &irq_data[i]);
+> +		if (error) {
+> +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+> +				irq_type->irq_name, irq, error);
+> +			return error;
+> +		}
+
+This leaks all previously requested interrupts.
+
+--oG82+iDbRwcxSL34
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP4vsAACgkQJNaLcl1U
+h9DC8wf+PPxkC1ldYobmVUlV90lQ1DwHIqQ/OdyWLaHj0lQJblDPnU+B7egduikb
+4CpESpYXrb9gFWYDGGLtAo6U4ex08EszaLsoluVyoL8PPemLquZqxkLwNnJYkfPm
+j8eiGkYYUoMld3fRXH7NrENyxevXxl+g42kg4++cNb9mb8zT3rd0SDxcx2QCHu/7
+74xb8tOgE7bpejNz2kSGU2AbrZDOy63R7f1p1002CwI25EBZKW/B57xNzt+DbsKh
+QfIUsIWUygI9s5D0ytSWJlJ5nHQHfArNFqNe0TXkFjXnnQ6skdcRISX9M31eVRlF
+6rauEkzzv4L9gtya96ijS8aljYSnAQ==
+=mKZJ
+-----END PGP SIGNATURE-----
+
+--oG82+iDbRwcxSL34--
