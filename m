@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC856A1C68
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91AB6A1C6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBXMrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:47:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S229671AbjBXMrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBXMr2 (ORCPT
+        with ESMTP id S229743AbjBXMrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:47:28 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A18F42BED
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:47:27 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id CDC69240003;
-        Fri, 24 Feb 2023 12:47:20 +0000 (UTC)
-Message-ID: <8adb9dcb-621a-0392-9ccd-0117345636ec@ghiti.fr>
-Date:   Fri, 24 Feb 2023 13:47:20 +0100
+        Fri, 24 Feb 2023 07:47:39 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAE063DC2;
+        Fri, 24 Feb 2023 04:47:37 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E51F38C9E;
+        Fri, 24 Feb 2023 12:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1677242856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRS6JIVxD98UMfKKQQi4U8ooVdVzZHO1t/2LZ6jiUFs=;
+        b=r3ur6fxcW92yEcWBOA6q76sBEhcOGqHa26Ze7DErSHeh+g0UKez4w4NTMAH1baJ9s0s49f
+        xTKXrXS5ST25dtnvUjd6jghioSjnLxf+zZMwu6tYOw+ri2WBg+7UF2viOdwlud9VBybt96
+        vFWJK8WI8B5vjik2Bzm3Fp1IyCm1aI4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8174D13A3A;
+        Fri, 24 Feb 2023 12:47:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id K39AHOix+GOELwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 24 Feb 2023 12:47:36 +0000
+Date:   Fri, 24 Feb 2023 13:47:35 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        mark.rutland@arm.com, will@kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Patrick Daly <quic_pdaly@quicinc.com>
+Subject: Re: [PATCH] psi: reduce min window size to 50ms
+Message-ID: <Y/ix53x8i/ViuBXf@dhcp22.suse.cz>
+References: <cover.1676067791.git.quic_sudaraja@quicinc.com>
+ <CAJuCfpHWQ8NV=iR3BN+pt1c8FynCnRqyyriHb1gLxFgiNVrwjA@mail.gmail.com>
+ <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com>
+ <CAJuCfpGLkkS2yx0d9+2nYtEtxANSH5H3EgCmWZax4N-ieEBG7g@mail.gmail.com>
+ <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
+ <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
+ <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com>
+ <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] RISC-V: mm: Support huge page in vmalloc_fault()
-Content-Language: en-US
-To:     Dylan Jhong <dylan@andestech.com>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     liushixin2@huawei.com, x5710999x@gmail.com, bjorn@rivosinc.com,
-        abrestic@rivosinc.com, peterx@redhat.com, hanchuanhua@oppo.com,
-        apopple@nvidia.com, hca@linux.ibm.com, aou@eecs.berkeley.edu,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, tim609@andestech.com,
-        peterlin@andestech.com, ycliang@andestech.com
-References: <20230224104001.2743135-1-dylan@andestech.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230224104001.2743135-1-dylan@andestech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dylan,
+On Tue 14-02-23 11:34:30, Suren Baghdasaryan wrote:
+[...]
+> Your suggestion to have this limit configurable sounds like obvious
+> solution. I would like to get some opinions from other maintainers.
+> Johannes, WDYT? CC'ing Michal to chime in as well since this is mostly
+> related to memory stalls.
 
-On 2/24/23 11:40, Dylan Jhong wrote:
-> RISC-V supports ioremap() with huge page (pud/pmd) mapping, but
-> vmalloc_fault() assumes that the vmalloc range is limited to pte
-> mappings. Add huge page support to complete the vmalloc_fault()
-> function.
->
-> Fixes: 310f541a027b ("riscv: Enable HAVE_ARCH_HUGE_VMAP for 64BIT")
->
-> Signed-off-by: Dylan Jhong <dylan@andestech.com>
-> ---
->   arch/riscv/mm/fault.c | 5 +++++
->   1 file changed, 5 insertions(+)
->
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index eb0774d9c03b..4b9953b47d81 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -143,6 +143,8 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
->   		no_context(regs, addr);
->   		return;
->   	}
-> +	if (pud_leaf(*pud_k))
-> +		goto flush_tlb;
->   
->   	/*
->   	 * Since the vmalloc area is global, it is unnecessary
-> @@ -153,6 +155,8 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
->   		no_context(regs, addr);
->   		return;
->   	}
-> +	if (pmd_leaf(*pmd_k))
-> +		goto flush_tlb;
->   
->   	/*
->   	 * Make sure the actual PTE exists as well to
-> @@ -172,6 +176,7 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
->   	 * ordering constraint, not a cache flush; it is
->   	 * necessary even after writing invalid entries.
->   	 */
-> +flush_tlb:
->   	local_flush_tlb_page(addr);
->   }
->   
+I do not think that making this configurable helps much. Many users will
+be bound to distribution config and also it would be hard to experiment
+with a recompile cycle every time. This seems just too impractical.
 
+Is there any reason why we shouldn't allow any timeout? Shorter
+timeouts could be restricted to a priviledged context to avoid an easy
+way to swamp system by too frequent polling.
 
-This looks good to me, you can add:
-
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-One question: how did you encounter this bug?
-
-Thanks,
-
-Alex
-
+Btw. it seems that there is is only a limit on a single trigger per fd
+but no limits per user so it doesn't sound too hard to end up with too
+much polling even with a larger timeouts. To me it seems like we need to
+contain the polling thread to be bound by the cpu controller.
+-- 
+Michal Hocko
+SUSE Labs
