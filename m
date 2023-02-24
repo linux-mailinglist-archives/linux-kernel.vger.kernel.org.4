@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC136A1CCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D832F6A1CD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjBXNL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S230229AbjBXNNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjBXNLz (ORCPT
+        with ESMTP id S229446AbjBXNNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:11:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D199812BD0;
-        Fri, 24 Feb 2023 05:11:54 -0800 (PST)
+        Fri, 24 Feb 2023 08:13:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8F2199FA;
+        Fri, 24 Feb 2023 05:13:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C01F61889;
-        Fri, 24 Feb 2023 13:11:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240C9C433EF;
-        Fri, 24 Feb 2023 13:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677244313;
-        bh=Tmnx99J6rFLY7zffB2aNcRIyYYL1t2F2ABDf+c5GMVg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=H8k6CqZL6BaGKu4kt8cRObUOvEVkpJEKhdApYVg6IeYEXC2gtxLdBYW1ppWP8kKav
-         SoXp4+ZtT5XhaS/Fz0mPb7nJkfpiDebE5iiA0pFGO0rNtTb9yd1cfGASCCjVrrcG1L
-         UERQTMcRRhyfMBU8f8WBfzituuADOczb49H/UEqIN7fw6Jz+5uR95FnDPSiDURt02b
-         d5UhI1PC544wWJnGezsaDQwqmwKfNasdDgL51ItBY0YU4W/rpbaKddndvkppNA1ikU
-         Vpl2iEZly25qXuL/rZRcMayED99+CibHweAxKicaXdpee/b/oPHbzhSbI1Dc7+oEs2
-         VQJcUctif+4kw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "asahi\@lists.linux.dev" <asahi@lists.linux.dev>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl\@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list\@infineon.com" 
-        <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] Apple T2 platform support
-References: <20230214080034.3828-1-marcan@marcan.st>
-        <379F9C6D-F98D-4940-A336-F5356F9C1898@live.com>
-        <BM1PR01MB09315D50C9380E9CB6471E9EB8A89@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-Date:   Fri, 24 Feb 2023 15:11:46 +0200
-In-Reply-To: <BM1PR01MB09315D50C9380E9CB6471E9EB8A89@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-        (Aditya Garg's message of "Fri, 24 Feb 2023 13:05:55 +0000")
-Message-ID: <87leknrywd.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D993B81C6F;
+        Fri, 24 Feb 2023 13:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D922C433EF;
+        Fri, 24 Feb 2023 13:13:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677244383;
+        bh=mG36bU4HRnZNnnvahSyDHn/Pw5W7wth7kX6CTTdC3n0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mGTT4X3eHCFP3FmBsxX2wattDg/ddNy78hLdjB3Nkwwe5vlf0JhB7DH/mSVsKDeu9
+         IlpNkwfUhPmLKYAdS+eA4stp+CQRV9R7U1Q3L8sjHeTDS0Ktot8gG6x+yQK53D901c
+         bfHttiiVGDEE65+HPznWbB/kLIxP3SmdsXxFwhnA=
+Date:   Fri, 24 Feb 2023 14:13:00 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     void0red <void0red@gmail.com>
+Cc:     mudongliangabcd@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, eriri <1527030098@qq.com>
+Subject: Re: [PATCH] usb: gadget: udc: replace kzalloc with devm_kzalloc in
+ mv_udc_probe and add a check for this allocation.
+Message-ID: <Y/i33HL2e9UwUpd8@kroah.com>
+References: <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
+ <20230224130235.4028566-1-void0red@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224130235.4028566-1-void0red@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,73 +52,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aditya Garg <gargaditya08@live.com> writes:
+On Fri, Feb 24, 2023 at 09:02:35PM +0800, void0red wrote:
+> From: Kang Chen <void0red@gmail.com>
+> 
+> This driver uses the unified memory management api, so replace
+> kzalloc with devm_kzalloc to avoid a memory leak and add a check
+> for this allocation.
+> 
+> Reported-by: eriri <1527030098@qq.com>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217081
+> 
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/mv_udc_core.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+> index b397f3a84..08474c08d 100644
+> --- a/drivers/usb/gadget/udc/mv_udc_core.c
+> +++ b/drivers/usb/gadget/udc/mv_udc_core.c
+> @@ -2229,7 +2229,11 @@ static int mv_udc_probe(struct platform_device *pdev)
+>  	INIT_LIST_HEAD(&udc->status_req->queue);
+>  
+>  	/* allocate a small amount of memory to get valid address */
+> -	udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
+> +	udc->status_req->req.buf = devm_kzalloc(&pdev->dev, 8, GFP_KERNEL);
+> +	if (!udc->status_req->req.buf) {
+> +		retval = -ENOMEM;
+> +		goto err_destroy_dma;
+> +	}
+>  	udc->status_req->req.dma = DMA_ADDR_INVALID;
+>  
+>  	udc->resume_state = USB_STATE_NOTATTACHED;
+> -- 
+> 2.34.1
+> 
 
->  On 23-Feb-2023, at 8:31 PM, Aditya Garg <gargaditya08@live.com> wrote:
->
->  =EF=BB=BFHi Hector
->
->  I=E2=80=99ve applied the following patchset (arranged in chronological o=
-rder) to linux 6.2,
->  and wifi seems to have broken on MacBookPro16,1 (brcmfmac4364b3)
->
->  https://lore.kernel.org/asahi/20230212063813.27622-1-marcan@marcan.st/T/=
-#t
->  (BCM4355/4364/4377 support & identification fixes)
->
->  https://lore.kernel.org/asahi/20230214080034.3828-1-marcan@marcan.st/T/#=
-t (Apple T2
->  platform support)
->
->  https://lore.kernel.org/asahi/20230214091651.10178-1-marcan@marcan.st/T/=
-#t (BCM4387
->  / Apple M1 platform support)
->
->  https://lore.kernel.org/asahi/b4489e24-e226-4f99-1322-cab6c1269f09@broad=
-com.com/T/#t
->  (brcmfmac: cfg80211: Use WSEC to set SAE password)
->
->  The logs show:
->
->  Feb 23 20:08:57 MacBook kernel: usbcore: registered new interface driver=
- brcmfmac
->  Feb 23 20:08:57 MacBook kernel: brcmfmac 0000:05:00.0: enabling device (=
-0000 -> 0002)
->  Feb 23 20:08:57 MacBook kernel: brcmfmac: brcmf_fw_alloc_request: using
->  brcm/brcmfmac4364b3-pcie for chip BCM4364/4
->  Feb 23 20:08:57 MacBook kernel: brcmfmac 0000:05:00.0: Direct firmware l=
-oad for
->  brcm/brcmfmac4364b3-pcie.Apple Inc.-MacBookPro16,1.bin failed with error=
- -2
->  Feb 23 20:08:57 MacBook kernel: brcmfmac 0000:05:00.0: Direct firmware l=
-oad for
->  brcm/brcmfmac4364b3-pcie.bin failed with error -2
->  Feb 23 20:08:57 MacBook kernel: brcmfmac 0000:05:00.0: brcmf_pcie_setup:=
- Dongle setup
->  failed
->
->  I also tested the patchiest in the following link, and wifi mostly worke=
-d there (occasionally it
->  complained about some pic error, I=E2=80=99ll save the logs next time I =
-encounter that) :
->
->  https://github.com/t2linux/linux-t2-patches/blob/main/8001-asahilinux-wi=
-fi-patchset.patch
->
->  Thanks
->  Aditya
->
-> I just noticed that the patch to ACPI was missing. Adding that fixed the =
-issue.
->
-> https://github.com/t2linux/linux-t2-patches/blob/main/8005-ACPI-property-=
-Support-strings-in-Apple-_DSM-props.patch
+Hi,
 
-Please don't use HTML, our lists drop those. I'll reply in text/plain so
-that is info is archived.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
