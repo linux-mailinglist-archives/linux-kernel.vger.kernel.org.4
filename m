@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B786A1E96
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE3E6A1E98
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjBXPcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S230104AbjBXPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjBXPcp (ORCPT
+        with ESMTP id S229637AbjBXPc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:32:45 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8C48D6A9CD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:32:44 -0800 (PST)
-Received: (qmail 40461 invoked by uid 1000); 24 Feb 2023 10:32:43 -0500
-Date:   Fri, 24 Feb 2023 10:32:43 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
-References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 10:32:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F052D421A;
+        Fri, 24 Feb 2023 07:32:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BDE061910;
+        Fri, 24 Feb 2023 15:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DFBC433EF;
+        Fri, 24 Feb 2023 15:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677252774;
+        bh=M8s/+ue2tUYnD3EP7X5f/z9MZy+gJoke2cX2xDeSggY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M7/pTPZmz+YiZQxZL4Jy5FZg0LXU+pp0N/WR1wQRBHQKT31IOrViwMKCY9CVsR1JI
+         68VIT+sZNamK/7OF0/JiX9RfSrSBmVT09A1VZ3Z379TVokDmZZd4E7kE/2g4UBLHZc
+         rpdOB+leJs0ctADlZo8sedWDa8kRfDj0pbgmllVTucWNcoOISjcizfKv1EcjchhpOM
+         sOy3NoOf0kl/HIZEfEBhe+/Yg4fJajLlSLJF/AxgNCjU6p9LzPE0kIX8rd2Jq72HPV
+         nYQ0GxTb/jbqKqPtQI4xkZh1hYZmld+KRwyXHkv+V7LqpcDV5iE1lc+/xZvUqtmxHW
+         l/a8RSXEA6a4g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pVa43-00Cuwd-I2;
+        Fri, 24 Feb 2023 15:32:52 +0000
+Date:   Fri, 24 Feb 2023 15:32:51 +0000
+Message-ID: <86y1onw02k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
+In-Reply-To: <20230224150811.80316-10-nick.alcock@oracle.com>
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+        <20230224150811.80316-10-nick.alcock@oracle.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nick.alcock@oracle.com, mcgrof@kernel.org, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, hasegawa-hitomi@fujitsu.com, tglx@linutronix.de, p.zabel@pengutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
-> As stated in the documentation and implied by its name, the ppo
-> (preserved program order) relation is intended to link po-earlier
-> to po-later instructions under certain conditions.  However, a
-> corner case currently allows instructions to be linked by ppo that
-> are not executed by the same thread, i.e., instructions are being
-> linked that have no po relation.
+On Fri, 24 Feb 2023 15:07:53 +0000,
+Nick Alcock <nick.alcock@oracle.com> wrote:
 > 
-> This happens due to the mb/strong-fence/fence relations, which (as
-> one case) provide order when locks are passed between threads
-> followed by an smp_mb__after_unlock_lock() fence.  This is
-> illustrated in the following litmus test (as can be seen when using
-> herd7 with `doshow ppo`):
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
-> P0(int *x, int *y)
-> {
->     spin_lock(x);
->     spin_unlock(x);
-> }
+> So remove it in the files in this commit, none of which can be built as
+> modules.
 > 
-> P1(int *x, int *y)
-> {
->     spin_lock(x);
->     smp_mb__after_unlock_lock();
->     *y = 1;
-> }
-> 
-> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
-> P0 passes a lock to P1 which then uses this fence.
-> 
-> The patch makes ppo a subrelation of po by letting fence contribute
-> to ppo only in case the fence links events of the same thread.
-> 
-> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > ---
->  tools/memory-model/linux-kernel.cat | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> index cfc1b8fd46da..adf3c4f41229 100644
-> --- a/tools/memory-model/linux-kernel.cat
-> +++ b/tools/memory-model/linux-kernel.cat
-> @@ -82,7 +82,7 @@ let rwdep = (dep | ctrl) ; [W]
->  let overwrite = co | fr
->  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
->  let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
-> -let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
-> +let ppo = to-r | to-w | (fence & int) | (po-unlock-lock-po & int)
->  
->  (* Propagation: Ordering from release operations and strong fences. *)
->  let A-cumul(r) = (rfe ; [Marked])? ; r
+> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> index 25fd8ee66565..4bbfa2b0a4df 100644
+> --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
+>  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+>  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
+>  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> -MODULE_LICENSE("GPL");
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+I'm probably missing some context here, but I find it odd to drop
+something that is a important piece of information because of what
+looks like a tooling regression.
+
+It also means that once a random driver gets enabled as a module, it
+won't load because it is now missing a MODULE_LICENSE() annotation.
+
+It feels like MODULE_LICENSE should instead degrade to an empty
+statement when MODULE isn't defined. Why isn't this approach the
+correct one?
+
+I expect the cover letter would have some pretty good information on
+this, but lore.kernel.org doesn't seem to have it at the time I write
+this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
+found").
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
