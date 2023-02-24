@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96016A1495
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 02:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DE96A148C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 02:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBXBUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 20:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S229510AbjBXBPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 20:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjBXBUn (ORCPT
+        with ESMTP id S229436AbjBXBPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 20:20:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F0F14E9E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 17:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677201595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qjp481qPgrzUiPMjEjVJgds/tnUMHD8NHuhe/hy/1oQ=;
-        b=OQPmJbMG/mHZXLuBgGolrOOoALD7Dwo+BeHfr6glIzju33GK3i6Ci6jWNVbaqKpIwBrAok
-        ilu/UXm31VTkOVxx/YppBMAP+G+nMT3UqgBpHPbnHB418BGC4Su7tlXwdsjfNpfCsyjNrO
-        qL3UYXRkbZmCRVfOsIySHQe6hix7eGs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-Sswt8SwMNiiKYDXj8LU5iA-1; Thu, 23 Feb 2023 20:19:47 -0500
-X-MC-Unique: Sswt8SwMNiiKYDXj8LU5iA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 46953811E9C;
-        Fri, 24 Feb 2023 01:19:47 +0000 (UTC)
-Received: from [10.22.16.134] (unknown [10.22.16.134])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0BC8F492C3E;
-        Fri, 24 Feb 2023 01:19:47 +0000 (UTC)
-Message-ID: <55b63346-1445-30f6-3b8a-06068377bad6@redhat.com>
-Date:   Thu, 23 Feb 2023 20:19:46 -0500
+        Thu, 23 Feb 2023 20:15:46 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28F6B77B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 17:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677201346; x=1708737346;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QsfdgQZvsGRE9SouMzIYaJNkdCg1AcGM3tcRVJFSpJY=;
+  b=YCGSkWI9oNmMpR4bdjpPCmwg02eGpm0euVTEQDcZsvttEyLsYZJjs+7U
+   OqAROhgDX45f+KaQ5DkDVx8LnjBpkVqIFeu2q1EG2YAMvy8T33oJqFn0P
+   jZdwsRZBj4fKqgIStLLntPTaR/IbywE3Vvkak7psySCqhA3AZPVPow8j7
+   w8JFSbw53Vmu0mrgaRYVYTXLNH92W89ku4P+nTcqPQ+LomVlm8uM5E3wk
+   98B1sZ+Z08ZrWw5Afn7xj5GATBPIdBaNL3mOLRbPOwZnYx+AkVhZyv/7k
+   Ak0921b9e6enZvfstFlgsNajNUEPa97sQr2KpTEKlSi56vALoz0l28y0h
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334789427"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="334789427"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 17:15:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="665998365"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="665998365"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 17:15:43 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     dave@stgolabs.net, paulmck@kernel.org, josh@joshtriplett.org
+Cc:     linux-kernel@vger.kernel.org, qiang1.zhang@intel.com
+Subject: [PATCH v2] locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
+Date:   Fri, 24 Feb 2023 09:20:35 +0800
+Message-Id: <20230224012035.2693610-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/6] locking/rwsem: Rework writer wakeup and handoff
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com
-References: <20230223122642.491637862@infradead.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230223122642.491637862@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 07:26, Peter Zijlstra wrote:
-> Hi,
->
-> these here few patches boot but are otherwise very much untested. Please test.
+In PREEMPT_RT kernels, both spin_lock() and spin_lock_irq() are converted
+to sleepable rt_spin_lock().  This means that the interrupt related suffix
+for spin_lock/unlock(_irq, irqsave/irqrestore) do not affect the CPU's
+interrupt state. This commit therefore adds raw spin-lock torture tests.
+This in turn permits pure spin locks to be tested in PREEMPT_RT kernels.
 
-I like the unification that you have done with this series.
+Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/locking/locktorture.c | 56 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
 
-However, I got the following task hanging message when doing a kernel build:
-
-[ 2215.893058]  </TASK>
-[ 2215.895252] INFO: task pahole:65220 blocked for more than 123 seconds.
-[ 2215.901776]       Tainted: G S         OE      6.2.0-test+ #1
-[ 2215.907520] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[ 2215.915347] task:pahole          state:D stack:0     pid:65220 
-ppid:65065  flags:0x00000000
-[ 2215.923690] Call Trace:
-[ 2215.926146]  <TASK>
-[ 2215.928250]  __schedule+0x367/0x950
-[ 2215.931741]  schedule+0x50/0xc0
-[ 2215.934888]  schedule_preempt_disabled+0x11/0x20
-[ 2215.939507]  rwsem_down_read_slowpath+0x28c/0x520
-[ 2215.944215]  down_read+0x98/0xc0
-[ 2215.947446]  do_user_addr_fault+0x410/0x700
-[ 2215.951633]  exc_page_fault+0x64/0x140
-[ 2215.955385]  asm_exc_page_fault+0x22/0x30
-[ 2215.959394] RIP: 0033:0x7f37f8808dd2
-[ 2215.962974] RSP: 002b:00007ffe7bc89e80 EFLAGS: 00010246
-[ 2215.968199] RAX: 00007f377d7fb000 RBX: 00007f377dffb700 RCX: 
-00007f37f8439a1b
-[ 2215.975332] RDX: 0000000000000003 RSI: 0000000000800000 RDI: 
-00007f377d7fc000
-[ 2215.982465] RBP: 00007ffe7bc89f50 R08: 00000000ffffffff R09: 
-0000000000000000
-[ 2215.989594] R10: 0000000000000000 R11: 0000000000000206 R12: 
-0000000000001000
-[ 2215.996728] R13: 00007ffe7bc89ee0 R14: 0000000000000000 R15: 
-0000000000801000
-[ 2216.003862]  </TASK>
-
-I am a bit tired now. I will look at the series again tomorrow to see if 
-there is something missing.
-
-Cheers,
-Longman
+diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+index 9425aff08936..153ddc4c47ef 100644
+--- a/kernel/locking/locktorture.c
++++ b/kernel/locking/locktorture.c
+@@ -55,7 +55,7 @@ torture_param(int, nested_locks, 0, "Number of nested locks (max = 8)");
+ /* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
+ #define MAX_NESTED_LOCKS 8
+ 
+-static char *torture_type = "spin_lock";
++static char *torture_type = IS_ENABLED(CONFIG_PREEMPT_RT) ? "raw_spin_lock" : "spin_lock";
+ module_param(torture_type, charp, 0444);
+ MODULE_PARM_DESC(torture_type,
+ 		 "Type of lock to torture (spin_lock, spin_lock_irq, mutex_lock, ...)");
+@@ -257,6 +257,59 @@ static struct lock_torture_ops spin_lock_irq_ops = {
+ 	.name		= "spin_lock_irq"
+ };
+ 
++static DEFINE_RAW_SPINLOCK(torture_raw_spinlock);
++
++static int torture_raw_spin_lock_write_lock(int tid __maybe_unused)
++__acquires(torture_raw_spinlock)
++{
++	raw_spin_lock(&torture_raw_spinlock);
++	return 0;
++}
++
++static void torture_raw_spin_lock_write_unlock(int tid __maybe_unused)
++__releases(torture_raw_spinlock)
++{
++	raw_spin_unlock(&torture_raw_spinlock);
++}
++
++static struct lock_torture_ops raw_spin_lock_ops = {
++	.writelock	= torture_raw_spin_lock_write_lock,
++	.write_delay	= torture_spin_lock_write_delay,
++	.task_boost	= torture_rt_boost,
++	.writeunlock	= torture_raw_spin_lock_write_unlock,
++	.readlock	= NULL,
++	.read_delay	= NULL,
++	.readunlock	= NULL,
++	.name		= "raw_spin_lock"
++};
++
++static int torture_raw_spin_lock_write_lock_irq(int tid __maybe_unused)
++__acquires(torture_raw_spinlock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&torture_raw_spinlock, flags);
++	cxt.cur_ops->flags = flags;
++	return 0;
++}
++
++static void torture_raw_spin_lock_write_unlock_irq(int tid __maybe_unused)
++__releases(torture_raw_spinlock)
++{
++	raw_spin_unlock_irqrestore(&torture_raw_spinlock, cxt.cur_ops->flags);
++}
++
++static struct lock_torture_ops raw_spin_lock_irq_ops = {
++	.writelock	= torture_raw_spin_lock_write_lock_irq,
++	.write_delay	= torture_spin_lock_write_delay,
++	.task_boost	= torture_rt_boost,
++	.writeunlock	= torture_raw_spin_lock_write_unlock_irq,
++	.readlock	= NULL,
++	.read_delay	= NULL,
++	.readunlock	= NULL,
++	.name		= "raw_spin_lock_irq"
++};
++
+ static DEFINE_RWLOCK(torture_rwlock);
+ 
+ static int torture_rwlock_write_lock(int tid __maybe_unused)
+@@ -1017,6 +1070,7 @@ static int __init lock_torture_init(void)
+ 	static struct lock_torture_ops *torture_ops[] = {
+ 		&lock_busted_ops,
+ 		&spin_lock_ops, &spin_lock_irq_ops,
++		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
+ 		&rw_lock_ops, &rw_lock_irq_ops,
+ 		&mutex_lock_ops,
+ 		&ww_mutex_lock_ops,
+-- 
+2.25.1
 
