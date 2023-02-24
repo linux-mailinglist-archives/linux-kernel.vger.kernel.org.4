@@ -2,118 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621676A24F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784CC6A24F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 00:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjBXXXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 18:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S229743AbjBXXXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 18:23:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjBXXXT (ORCPT
+        with ESMTP id S229532AbjBXXXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 18:23:19 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA9A3E626
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:23:18 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id o12so3432617edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:23:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWAcuGbK5S98jhiEfAfFxluyUQmZTTL6shQBcv9fLug=;
-        b=eSX5EmziA/DY5rK3tRfiuIorvaZ6oZBxKbLwZa+EzjGi/fWSRJLsF5m4NcoF1QZPXY
-         LKtEgrGO8dSaGM6OX+0ChNI+5XIZkqmUXYv7j/15nechIkRWCMnCJvdWnFehFbtLx0AI
-         J4ysdYuHIeLti9eALlkmV+fnrr5aRBNIzLSI4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nWAcuGbK5S98jhiEfAfFxluyUQmZTTL6shQBcv9fLug=;
-        b=houQxewTkVj00dW/uhV14g4n1L+/CFIaF8D4d8PTlsk51K8QYfG7njMz90cm77uuse
-         WjNhaxiCRtLt+NF2KOkZp5Gre0ZhWhBEJ7O2IfXDDgRbolgZrWKh425UHbc38C1O/gJf
-         dn3cXkibDAvoKaIVmMw564Tt9+4KDnlOaGFBWsUP6Y63yY2IweGouvK5p+pcsymDUc1U
-         v94xWr7nyR42ooJlfRxNx6sDhGwJFCMRNalC+IVGQJt9nsxns/+MR0IbWDtkhM2dUTye
-         QErOcFUnXJ4obN6vPrka6kDwFB6Gz2lvjR7j6AQNs/4qtHdW8uEDICCZMeUZdUboBynC
-         5LWg==
-X-Gm-Message-State: AO0yUKXO83qQmiIKG2M13PUzUbm6pfzu+yKviPktwjPg3p1gdi2YiV0o
-        T6/eF8p09CFTzMumohPSZTWXFCZdSG02BNQ7kbseOw==
-X-Google-Smtp-Source: AK7set/i7aVf81JVv+BPjBC5fRPs6gZ/Dww9H5ttedP/eltXk8P1oZj6WGp1RFQd8BFhfI4YZQO50w==
-X-Received: by 2002:a17:907:97d5:b0:8eb:d3a5:b9f0 with SMTP id js21-20020a17090797d500b008ebd3a5b9f0mr11362293ejc.67.1677280996312;
-        Fri, 24 Feb 2023 15:23:16 -0800 (PST)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id x18-20020a170906149200b008e54ac90de1sm120085ejc.74.2023.02.24.15.23.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 15:23:15 -0800 (PST)
-Received: by mail-ed1-f42.google.com with SMTP id eg37so3357861edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 15:23:15 -0800 (PST)
-X-Received: by 2002:a17:906:9f25:b0:8f5:2e0e:6def with SMTP id
- fy37-20020a1709069f2500b008f52e0e6defmr989738ejc.0.1677280995333; Fri, 24 Feb
- 2023 15:23:15 -0800 (PST)
+        Fri, 24 Feb 2023 18:23:09 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE840231D4;
+        Fri, 24 Feb 2023 15:23:08 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3C4411EC0725;
+        Sat, 25 Feb 2023 00:23:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677280987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=j0zvR/GW8qESlMENYKavRs5BBeojGzLc+Igg/tiAP10=;
+        b=LYcoaFyr631Gy3vC9r2lkRIy/pHYb5Kb6lwDjloyRBA8QwwjuE990CgNkiI00nprv/0KY6
+        Ow1/wyGRtZpeSkENTyGShz1PCjHPGgaTgNLqDi831UepcbiOdqO9CYXIgJchcHY3q6BhKB
+        OqDjqbOoXrxYig5kP9pSfm8H+jGlEbM=
+Date:   Sat, 25 Feb 2023 00:23:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 7/8] x86/cpu: Support AMD Automatic IBRS
+Message-ID: <Y/lG1v28zQx976Pz@zn.tnic>
+References: <20230124163319.2277355-1-kim.phillips@amd.com>
+ <20230124163319.2277355-8-kim.phillips@amd.com>
+ <20230224185257.o3mcmloei5zqu7wa@treble>
+ <Y/knUC0s+rg6ef2r@zn.tnic>
+ <Y/k/ZXUXOFiBhOiI@zn.tnic>
 MIME-Version: 1.0
-References: <02cf36b9-6526-576b-1fd3-a59b67c8c123@linuxfoundation.org>
-In-Reply-To: <02cf36b9-6526-576b-1fd3-a59b67c8c123@linuxfoundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 Feb 2023 15:22:58 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
-Message-ID: <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
-Subject: Re: [GIT PULL] KUnit next update for Linux 6.3-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah <shuah@kernel.org>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/k/ZXUXOFiBhOiI@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 5:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> This KUnit update for Linux 6.3-rc1 consists of cleanups, new features,
-> and documentation updates:
+On Fri, Feb 24, 2023 at 11:51:17PM +0100, Borislav Petkov wrote:
+> Or, actually, we should simply write it again because it is the init
+> path and not really a hot path but it should damn well make sure that
+> that bit gets set.
 
-Hmm. I have not actually bisected this or tried to otherwise figure
-out exactly what is wrong, but the kunit code ends up being really
-annoying for my build testing.
+Yeah, we have this fancy msr_set_bit() interface which saves us the MSR
+write when not needed. And it also tells us that. :-)
 
-In particular, if I do
+So we can do:
 
-     make
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 380753b14cab..2aa089aa23db 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -996,6 +996,12 @@ static void init_amd(struct cpuinfo_x86 *c)
+ 		msr_set_bit(MSR_K7_HWCR, MSR_K7_HWCR_IRPERF_EN_BIT);
+ 
+ 	check_null_seg_clears_base(c);
++
++	if (cpu_has(c, X86_FEATURE_AUTOIBRS)) {
++		int ret = msr_set_bit(MSR_EFER, _EFER_AUTOIBRS);
++
++		pr_info("%s: CPU%d, ret: %d\n", __func__, smp_processor_id(), ret);
++	}
+ }
+ 
+ #ifdef CONFIG_X86_32
 
-repeatedly - ie with no other changes in between - the kunit code ends
-up re-building itself for no apparent reason.
+---
 
-Which then causes a re-link and makes it all really slow.
+and the output looks like this:
 
-Maybe I'm barking up the wrong tree, but just do
+[    3.046607] x86: Booting SMP configuration:
+[    3.046609] .... node  #0, CPUs:          #1
+[    2.874768] init_amd: CPU1, ret: 0
+[    3.046873]    #2
+[    2.874768] init_amd: CPU2, ret: 0
+[    3.049155]    #3
+[    2.874768] init_amd: CPU3, ret: 0
+[    3.050834]    #4
+[    2.874768] init_amd: CPU4, ret: 0
+...
 
-   make allmodconfig
+which says that the bit was already set - which confirms the
+trampoline setting thing.
 
-and then do two plain "make"s in succession (feel free to add "-jXYZ"
-to make it go much faster ;).
+And doing the write again serves as a guard when in the future we decide
+to not set EFER anymore - I doubt it - but we can't allow ourselves to
+not set the autoibrs bit so one more RDMSR on init doesn't matter.
 
-The second build - that shouldn't have to re-build anything - still does this:
+Proper patch tomorrow.
 
-  CALL    scripts/checksyscalls.sh
-  DESCEND objtool
-  CHK     kernel/kheaders_data.tar.xz
-  CC      lib/kunit/hooks.o
-  AR      lib/built-in.a
-  CC      lib/kunit/hooks.o
-  AR      lib/kunit/lib.a
-  AR      built-in.a
-  AR      vmlinux.a
-  LD      vmlinux.o
-  ...
+Thx.
 
-and it all takes much longer than an empty kernel build _should_ take.
+-- 
+Regards/Gruss,
+    Boris.
 
-               Linus
+https://people.kernel.org/tglx/notes-about-netiquette
