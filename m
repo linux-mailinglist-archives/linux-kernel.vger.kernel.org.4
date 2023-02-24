@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5766A1A73
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62326A1A76
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjBXKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S229736AbjBXKjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjBXKiC (ORCPT
+        with ESMTP id S229817AbjBXKiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:38:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A0DA2A157;
-        Fri, 24 Feb 2023 02:36:59 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8CxQMxKk_hjCKcEAA--.3585S3;
-        Fri, 24 Feb 2023 18:36:58 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxQuVHk_hjToM6AA--.5828S5;
-        Fri, 24 Feb 2023 18:36:58 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Use __NR_prlimit64 instead of __NR_getrlimit in user_ringbuf test
-Date:   Fri, 24 Feb 2023 18:36:55 +0800
-Message-Id: <1677235015-21717-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1677235015-21717-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1677235015-21717-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8CxQuVHk_hjToM6AA--.5828S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZF4DGry8Jw1kCF18tF1kZrb_yoW5JFWDpa
-        y8G343tF1SyF43Jw18CrWxZFyfJrsrZF4FkF4ktr95Zr1UXas7Xr1xKF4YgrnIgrZaqrsY
-        va4IgF9ruw48AwUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU84xRDUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 05:38:11 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B401A657
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:37:37 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id 22-20020a05660220d600b0074c8b57746cso6034869ioz.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:37:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1+xVltypcnxAkvWPCQxFM0n2XimN1lwperOL1Mtxsc=;
+        b=zDUBnAvxy/hbjFLz5SQVgsvpEEWzcC8Ijj8x9w0BJeNm/kPaIbfIH94EzYigf3pENn
+         1yvDqHbhvMsn3sSdyNif/LdvjplK8LDlvm81J0TIempq02Y27zgzawwbU0wiwxk3BGJC
+         ayRQHhVcFyPhIWvdRSNThaAQJa0hixrT1vM90Xyxg3Go2fDw/3aBOQGAzGVMM93JJaPT
+         D3OiodRKFZtPLjLGF27XaqIVkb6OIDo7PiWlnSvOGRO4+593asu9iGDPRRMOLVLLSL4E
+         upCq2cNV3eVjuIyv8fD5e2CRysC+vRIWGAkVRpfPq7Atte3qzrflBBGGShew4jScJbuc
+         F7nw==
+X-Gm-Message-State: AO0yUKVNoyKNTB4V7934VEXfh9UeX8XL61qcd+iJmFVcH5dgBTiN5ndD
+        n0PEKpYwa+S4lbTUkEWos8CjigukcxlSLomaMym8dbg7gFjY
+X-Google-Smtp-Source: AK7set9BQ2hLGkH4rh6LoB1pxceRVcoO+duNseH2oJ7Z8vnoT9cTfctrdK8+cxyn/3t4o+rlHABCUXESiz5flpE9j9PDcihi/jRF
+MIME-Version: 1.0
+X-Received: by 2002:a02:a15e:0:b0:3c5:19e6:b532 with SMTP id
+ m30-20020a02a15e000000b003c519e6b532mr5810674jah.6.1677235057020; Fri, 24 Feb
+ 2023 02:37:37 -0800 (PST)
+Date:   Fri, 24 Feb 2023 02:37:37 -0800
+In-Reply-To: <00000000000015ac7905e97ebaed@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c7553a05f56fb722@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
+From:   syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, dan.carpenter@oracle.com,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 80d7da1cac62 ("asm-generic: Drop getrlimit and setrlimit
-syscalls from default list"), new architectures won't need to include
-getrlimit and setrlimit, they are superseded with prlimit64.
+This bug is marked as fixed by commit:
+9p: client_create/destroy: only call trans_mod->close after create
 
-In order to maintain compatibility for the new architectures, such as
-LoongArch which does not define __NR_getrlimit, it is better to use
-__NR_prlimit64 instead of __NR_getrlimit in user_ringbuf test to fix
-the following build error:
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-    TEST-OBJ [test_progs] user_ringbuf.test.o
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c: In function 'kick_kernel_cb':
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: error: '__NR_getrlimit' undeclared (first use in this function)
-    593 |         syscall(__NR_getrlimit);
-        |                 ^~~~~~~~~~~~~~
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: note: each undeclared identifier is reported only once for each function it appears in
-  make: *** [Makefile:573: tools/testing/selftests/bpf/user_ringbuf.test.o] Error 1
-  make: Leaving directory 'tools/testing/selftests/bpf'
+#syz fix: exact-commit-title
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=67d13108d855f451cafc
+
 ---
- tools/testing/selftests/bpf/prog_tests/user_ringbuf.c    | 2 +-
- tools/testing/selftests/bpf/progs/user_ringbuf_success.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+[1] I expect the commit to be present in:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-index 3a13e10..e51721d 100644
---- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-@@ -590,7 +590,7 @@ static void *kick_kernel_cb(void *arg)
- 	/* Kick the kernel, causing it to drain the ring buffer and then wake
- 	 * up the test thread waiting on epoll.
- 	 */
--	syscall(__NR_getrlimit);
-+	syscall(__NR_prlimit64);
- 
- 	return NULL;
- }
-diff --git a/tools/testing/selftests/bpf/progs/user_ringbuf_success.c b/tools/testing/selftests/bpf/progs/user_ringbuf_success.c
-index b39093d..0ade111 100644
---- a/tools/testing/selftests/bpf/progs/user_ringbuf_success.c
-+++ b/tools/testing/selftests/bpf/progs/user_ringbuf_success.c
-@@ -202,7 +202,7 @@ do_nothing_cb(struct bpf_dynptr *dynptr, void *context)
- 	return 0;
- }
- 
--SEC("fentry/" SYS_PREFIX "sys_getrlimit")
-+SEC("fentry/" SYS_PREFIX "sys_prlimit64")
- int test_user_ringbuf_epoll(void *ctx)
- {
- 	long num_samples;
--- 
-2.1.0
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
 
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 10 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
