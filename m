@@ -2,110 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA5B6A1B1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C93A6A1B1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjBXLIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S230362AbjBXLH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjBXLHq (ORCPT
+        with ESMTP id S229964AbjBXLG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:07:46 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AA8448A;
-        Fri, 24 Feb 2023 03:06:15 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id bn17so1691808pgb.10;
-        Fri, 24 Feb 2023 03:06:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F5kh1fzvUgUk/w1qLsxSxKG9Kl1fSNnNnBOIZOF4L7I=;
-        b=WHBcrjNROiRHnYaDmxtq5sA1nFH8Bz5pluH7c+KV+iml30dLeMmLhRgwndHtgvhn4q
-         j/aLvAo0qGL6lkhr6FzY2SwLNtnIoPhe6gAN3Y1yzBmb4LWdyZV3zpARtgj7vs3kRBpQ
-         rRNFYQUaa2AiFqJzR2pFMAs1JHayazuJeops4W9XiMoEH8owevSoYVjQhYuRJF1xd9RR
-         jT7IcPUspt1BhOEvK77XMN4vyFT+FuuhGweOZIEiCKDJP4W+pfryBCWXAetj9ILnlZDk
-         56RpxxyjVdB8/OtTYLnx3aWE/+votCpEVvRK9vX/ZVmXa8u7ba8/wl87w3kvjUTs3E5F
-         qTmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F5kh1fzvUgUk/w1qLsxSxKG9Kl1fSNnNnBOIZOF4L7I=;
-        b=NYXaI4e1+bP2AYqivH4n7cG0agJNBYQxAxvq1Lf1Fc5FHR5appFJ2QgJxJ9qCjqHPu
-         tauJNtQqiqPCbDVTNVg/eSi8LrLAtshJmsxm92xgihfBHAcaObA8lLHyg5tFSiQng+/W
-         exuz5gs2VWwfv/vf3/kzaA97O+Yhgjxh1e7cF3D+ksnZd+ZN9VVh5GWi2UXVLrC+cTgc
-         ve54D24cfW8lBMCadSeYVbvhPM46PgyS9PG5rAuRF4h4Du6M9fXRTbcquRqCvjeie0gc
-         i/AibWAy7RtP6TokLx2Q9brI1dW2XYqgga/ko9iv8E4A9HBTNzrvCv6uEcSH7NcwYCKm
-         OAVg==
-X-Gm-Message-State: AO0yUKVOL5cHuDzzh0ccu2HGzCDGZVm+Yr1WL19cz7z7WUguqAnyxDBx
-        LBA+dopsmfnlQPxP0lqspgl+qaZoXPvZav3+qfnhXZzZ+pWadw2lsVk=
-X-Google-Smtp-Source: AK7set+e+TsRwRrzJh5Bc2e6/7zacw4W3BBD+1YIP0OY61aC9aEfrQT4F0JhVm0U1yHDLsuoReiVriaBzQ+ADmFReUY=
-X-Received: by 2002:a63:3687:0:b0:4fb:a28e:fa50 with SMTP id
- d129-20020a633687000000b004fba28efa50mr2743073pga.8.1677236775261; Fri, 24
- Feb 2023 03:06:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20230224092044.3332374-1-void0red@gmail.com>
-In-Reply-To: <20230224092044.3332374-1-void0red@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Fri, 24 Feb 2023 19:03:27 +0800
-Message-ID: <CAD-N9QX5i5toj8cs7DxBjYWtRGf3ZRnfTAf809sFW6iX0Ktfmw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: add return value check of kzalloc in mv_udc_probe
-To:     void0red <void0red@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 06:06:58 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F2948E35;
+        Fri, 24 Feb 2023 03:05:18 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id D035D3200934;
+        Fri, 24 Feb 2023 06:04:07 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute5.internal (MEProxy); Fri, 24 Feb 2023 06:04:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1677236647; x=1677323047; bh=IG
+        jti/89eaSBQeG7/CdUKqs9RGevFuI+4y4uzM+W77g=; b=YA+4c+VUpFw/eJ/p3d
+        +BYrAL9ijyiKTZVzmR/dW4O6/0M5HgRtTJk3KbRWPltEjx4VJSe11uLvMVdcxLGw
+        ZzmxqQV5y80Mf//+1Lh881tU6Ae8ixBLcfqzN3Zgk54T4rp6wgL4q0ZEgTp14CDW
+        /XS4v22TKokay8kQnrvYgrvOfV6j+3l16ZjWRnPZWJokwLXTQaGd9LYgnqPLoav7
+        9aBQWQR05Wq33+okmg06c/2BKFijN/BIZNOz0AY0i/6NJNWxg6ZAOS5p4Z1T0p5Z
+        6bFkoNfuHupLEDJv7TNETcMrHTvHU7h88vHOw6A8iyNLJwQZq7geEwGpmGWNustu
+        fBuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677236647; x=1677323047; bh=IGjti/89eaSBQeG7/CdUKqs9RGev
+        FuI+4y4uzM+W77g=; b=gQwuR6vByiIvt3FSH/MHek54M5V2v+ItpvV43/F/S8Pw
+        dZNWNEGYt3FxF8RImXuX0CmJynJ4o3UMMnQSSm3Tlu8ONEDx7D55/Bo3Gp3gls5d
+        8wv2aVI4hy2VvEXDB2002u3lY9bBcGUFAhP6snJx777cLfXi/1Auo51Zw3K7M4OQ
+        tfBkP5HKpbfeJ7GLVfk1tlWhAMPgrgdg+kedIxpKAfNZe4tt5PZudoFYUVv7Btza
+        jQTg6UnwzTCzH9ifZRyo1glBUWwss7a5LIClZNYsbSBiOBDQEv4m2r8fvt48q+Tp
+        nKpLJfEf3sqdwa2csmIRih1MM946n8HSAGgpx1P/dA==
+X-ME-Sender: <xms:ppn4Y7ghKHD68D9HYsdHq8TB9vyPNzAeYStolC_PZFOuFCMRzXiajg>
+    <xme:ppn4Y4DH97yJvFggoal3C88y_nm2Jz5z8pLgQCHgSP4u3gdhglwnKz3b1LG-M63xU
+    AfnCSYLEoMJGPaKlPk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekfedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepfeegudfghfejvdffgffgkeetuddtteeuheduiedtgfdufedvudeitddv
+    leeivdfgnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgv
+    thgvrhdruggvvh
+X-ME-Proxy: <xmx:ppn4Y7FJHfRgcX4UhAW5fRBb_6WI8pu4GlgIio60wDLydhhRBNb0xQ>
+    <xmx:ppn4Y4TSvPL3JwmnZWw5r6_pKAzq4PJML_sLNvBPX8Vxyc5OeJ-87w>
+    <xmx:ppn4Y4z-e8UWNF9A-ggLg-pAc1YZoMFI0chraCXGeLEUD1G0VlQqIg>
+    <xmx:p5n4Y0ecexx7F5f_gyjVLJUsZd5JDIn6oL5p2wym_49JegatXOhY9A>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 51FDDA60082; Fri, 24 Feb 2023 06:04:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <e26318db-77b1-4876-8a40-f707d11b5857@app.fastmail.com>
+In-Reply-To: <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
+References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
+ <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
+Date:   Fri, 24 Feb 2023 12:03:45 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Sasha Finkelstein" <fnkl.kernel@gmail.com>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        - <asahi@lists.linux.dev>, "Henrik Rydberg" <rydberg@bitmath.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2 controller
+ bindings.
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 5:28 PM void0red <void0red@gmail.com> wrote:
+
+
+On Fri, Feb 24, 2023, at 11:20, Sasha Finkelstein via B4 Relay wrote:
+> From: Sasha Finkelstein <fnkl.kernel@gmail.com>
 >
-> From: Kang Chen <void0red@gmail.com>
+> Add bindings for touchscreen controllers attached using the Z2 protocol.
+> Those are present in most Apple devices.
 >
-> Even an 8-byte kzalloc will fail when we don't have enough memory,
-> so we need a nullptr check and do the cleanup when it fails.
->
-> Reported-by: eriri <1527030098@qq.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217081
->
-> Signed-off-by: Kang Chen <void0red@gmail.com>
+> Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
 > ---
->  drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../input/touchscreen/apple,z2-touchscreen.yaml    | 81 ++++++++++++++++++++++
+>  1 file changed, 81 insertions(+)
 >
-> diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-> index b397f3a84..6dd6d52de 100644
-> --- a/drivers/usb/gadget/udc/mv_udc_core.c
-> +++ b/drivers/usb/gadget/udc/mv_udc_core.c
-> @@ -2230,6 +2230,10 @@ static int mv_udc_probe(struct platform_device *pdev)
->
->         /* allocate a small amount of memory to get valid address */
->         udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
+> diff --git 
+> a/Documentation/devicetree/bindings/input/touchscreen/apple,z2-touchscreen.yaml 
+> b/Documentation/devicetree/bindings/input/touchscreen/apple,z2-touchscreen.yaml
+> new file mode 100644
+> index 000000000000..695594494b1e
+> --- /dev/null
+> +++ 
+> b/Documentation/devicetree/bindings/input/touchscreen/apple,z2-touchscreen.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: 
+> http://devicetree.org/schemas/input/touchscreen/apple,z2-touchscreen.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple touchscreens attached using the Z2 protocol.
+> +
+> +maintainers:
+> +  - asahi@lists.linux.dev
+> +  - Sasha Finkelstein <fnkl.kernel@gmail.com>
+> +
+> +description: A series of touschscreen controllers used in Apple 
+> products.
+> +
+> +allOf:
+> +  - $ref: touchscreen.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: apple,z2-touchscreen
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts-extended:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  cs-gpios:
+> +    maxItems: 1
+> +
+> +  firmware-name:
+> +    maxItems: 1
+> +
+> +  apple,z2-device-name:
+> +    description: The name to be used for the input device
+> +    $ref: /schemas/types.yaml#/definitions/string
 
-Hi Kang and gregkh,
+Now that I thought about this again after the brief discussion we already had:
+Do we even need to specify the device name? Is there any reason we can't just
+always use something like "Apple Z2 TouchBar"?
 
-I think there is a memory leak in this kzalloc. It seems there is no
-deallocation for this allocated object.
 
-As the surrounding allocation statements suggest,
-we should turn kzalloc to devm_kzalloc.
 
-> +       if (!udc->status_req->req.buf) {
-> +               retval = -ENOMEM;
-> +               goto err_destroy_dma;
-> +       }
->         udc->status_req->req.dma = DMA_ADDR_INVALID;
->
->         udc->resume_state = USB_STATE_NOTATTACHED;
-> --
-> 2.34.1
->
+Best,
+
+
+Sven
