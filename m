@@ -2,452 +2,594 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1D96A18BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDAE6A18C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjBXJ2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
+        id S229532AbjBXJdn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Feb 2023 04:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBXJ23 (ORCPT
+        with ESMTP id S229464AbjBXJdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:28:29 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E23144B2;
-        Fri, 24 Feb 2023 01:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677230906; x=1708766906;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=dChvUAEFhZeBKU46EJmT+3TMhwyODzX9E0e0Zihg9fQ=;
-  b=hw2GB/29/HwSdgJmt8vA00pFIOJTXlKu+OZaRFfi/tMjXiiIbmk7Zb3f
-   Bgo3VAn30+1786mpePZnkTdATxzs8cxDMAeHq+vPg5wXpdQCSZeZafZU3
-   COUXZkNlAF/TWz7AwokvYNDZuFnbfGFptVu/64e5zcDESaDp4xZmB5Ga7
-   ahBjF7f0x4Dnh0mmp3qEcnfAH+FQ8mHxdXrqclWPpemrGW3CfySDi2qoa
-   pXe5F+6FoV69mwhEMDyheroc1jPg1hUVcrimf1dVtTAJXyhK8DAFJPUWe
-   EglMow3+hQoduNbS9hEmePFtsOuUgSEuytvnQloq5a0JWNJarIGoxNYn4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="313071081"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="313071081"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:28:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="846892582"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="846892582"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2023 01:28:26 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 24 Feb 2023 01:28:25 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 24 Feb 2023 01:28:25 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 24 Feb 2023 01:28:25 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 24 Feb 2023 01:28:25 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=COt+tgfxMkOMTa9uxxCHGsVSPxLxtL3SYg+SEy+C/tCIb0/m1jj/L9SSAaTxPEW41yaBkBpE0PM5b0wtFA84qIfqGttO3Gs5Zq8I+mQAdkoTZdSTGbKyVZ2cvSCGpfj1uEpNIs9mn6rJof2woP1WpD5kHQ8gZo62WT5dGJJv8uhjCJDLp1zkXM1alVMePeyGSKlmAwddrRTfRj5Ph7kzq9+6LHHMx73n0s0vfXKC5eU3smKkLGP++cb5nldYfsZnkbquVCW8OLe6LDb4MoS1/uX43mcbJIK927X0D6+VClPIdw3s4x3XVK9DqtTeIJvNoJpqsA+cLR2kqgL2Mcs2kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dChvUAEFhZeBKU46EJmT+3TMhwyODzX9E0e0Zihg9fQ=;
- b=GEZ5ATqy5otBHh6ex0AMOq220OJ2q+QBBzZiK2ozu2xpBZKCOUuucv0exPdI0Xh+aSuyteSJ62VPc8pkCBWTP9jqZc92wVZcTql27+VtHNLPTgCTMqWfK9ZwrKzdTjBjbVA/yFjQpjYDOXOoNb/yhoGXcgKT3XkDXExY2eO5WTH0N2OxHzm3tYqEvXF7C/+gnjKWyrTbhGwqy0uDZWs+jvw3jUAhkx6wblTD5b4m4uHcuChOMvZGvldUL9KeXPOKd2960n5lxbaTpUyM1IuV66il/BMPDaTCJWLiZl1iEi8omXKG/1UntFKxoq9uPYkKlk0Bg0MeIODNdEle/G0x4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB6963.namprd11.prod.outlook.com (2603:10b6:930:58::10)
- by MN0PR11MB6058.namprd11.prod.outlook.com (2603:10b6:208:376::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
- 2023 09:28:22 +0000
-Received: from CY8PR11MB6963.namprd11.prod.outlook.com
- ([fe80::a52:ac2:750:f341]) by CY8PR11MB6963.namprd11.prod.outlook.com
- ([fe80::a52:ac2:750:f341%6]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
- 09:28:22 +0000
-From:   "Kang, Shan" <shan.kang@intel.com>
-To:     "Li, Xin3" <xin3.li@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Fri, 24 Feb 2023 04:33:42 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FAC1515C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:33:38 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9A2D024E289;
+        Fri, 24 Feb 2023 17:33:31 +0800 (CST)
+Received: from EXMBX164.cuchost.com (172.16.7.74) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 17:33:31 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX164.cuchost.com
+ (172.16.7.74) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 17:33:31 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Fri, 24 Feb 2023 17:33:31 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "Christopherson,, Sean" <seanjc@google.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [RFC PATCH v3 00/32] x86: enable FRED for x86-64
-Thread-Topic: [RFC PATCH v3 00/32] x86: enable FRED for x86-64
-Thread-Index: AQHZSCGOmkSmnYDLPkm1OsxdIxeRIK7d1GIA
-Date:   Fri, 24 Feb 2023 09:28:22 +0000
-Message-ID: <a04f7222f48f86c0153a64fe6f3acf6c3197c86f.camel@intel.com>
-References: <20230224070145.3572-1-xin3.li@intel.com>
-In-Reply-To: <20230224070145.3572-1-xin3.li@intel.com>
-Accept-Language: en-US
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: RE: [PATCH v4 4/4] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Topic: [PATCH v4 4/4] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Index: AQHZRZ0zqkG7/pRhhEiAX6gFjug0Aa7cUgAAgAEC65D///aKAIAAiLXg
+Date:   Fri, 24 Feb 2023 09:33:31 +0000
+Message-ID: <9cfd485d1e0d46cdb1323bb6ea330f6e@EXMBX066.cuchost.com>
+References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
+ <20230221023523.1498500-5-jeeheng.sia@starfivetech.com>
+ <20230223180720.55fgbxzlx6xvzgms@orel>
+ <b26264a20b5f4bc5abfc6dd87aa4e38f@EXMBX066.cuchost.com>
+ <20230224090010.nmy6latszfkdqcft@orel>
+In-Reply-To: <20230224090010.nmy6latszfkdqcft@orel>
+Accept-Language: en-US, zh-CN
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB6963:EE_|MN0PR11MB6058:EE_
-x-ms-office365-filtering-correlation-id: eea650e1-eaf9-4d92-f9a9-08db16497912
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9xSefIwidMi39uEz6Qej8UUDpC5LSkWPsfl7To8IVm7nDXvNJ3JH8k/3qWy8mK3ORnb5t3iQCqFiSijRWIB5HVn/t9YaWKj21rZC+qqCwQjvzjkyI3RfMYty4fuy4NyZ/MhB9q1lN3tugSNpZ1ZGWDbu23vtTH2C9geVQjMcdW0/b+DghT9MGbkXnIlt0T7byax9VclEfHe6c92qrA/kPgyCikWi5MfiRMig5GOnfwQO2Ty6pUNlcD7q4Pfi2teEYPr5FQPOpEqCK8h9ZVtvIIgBxWtAED6+wR8m/d3h6l3qtS+7d4V37bD0ql4zM3976e22O3SAJYoMqM5VPmnr0/IqGEB3C2XAUaS0hDPGijkVFn5a2kAftoegoULSLa2bI79AjXVnV0S1KjPj3yBwjd70LY7xetQKPWj4V5SlzM1PzA3ga+I2sKUIu2HAf0vl48taVdd2ehR3xKlFpYW7SC0cF+EIX/g09qfCH6ofxTDOfco5kHqIwLNEuADYs0nYQ6odjS/fckoXLjWvuo72FxyVoS8SAZC0DlUrFN/xnWuOvqcLFr87zWDsONpCOvOdN26h3g8nYYiqUFh9p6kEKEfNt3JAp8f1g3Kj6SqAKae2wfS3Ix8dxoQy/ajIEc7OySAn/JC9zD2+fIv27G0/9BSwgFP8HIZLggUeAhXYntIu6V6vNxAMGKLIprNfNmWM
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB6963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(39860400002)(136003)(346002)(376002)(451199018)(83380400001)(91956017)(66556008)(66946007)(41300700001)(4326008)(64756008)(66476007)(66446008)(8676002)(316002)(38070700005)(36756003)(186003)(26005)(82960400001)(122000001)(8936002)(54906003)(110136005)(2616005)(76116006)(7416002)(5660300002)(38100700002)(6506007)(71200400001)(86362001)(478600001)(30864003)(6512007)(966005)(2906002)(6486002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z2x1Y2d6cDd5bitBV3RPUi90M2VDSEQvbVR4RzJKb25FalN6YkFhTVlrcXhi?=
- =?utf-8?B?Rjh4blBERmFIaGNRQmF5eVpvNEM3Y3RKekRua0lZc2VzaVRuNkJ5NEJXMHc2?=
- =?utf-8?B?MmlPbHFwMDBEZDJJRk5zSDRjMkhJdWhEZEYzYkhGZHhRQVhVUGp4eEVyNk91?=
- =?utf-8?B?MEQwcGViY2xFVEhFbVZyOXdIVEFEQ3ZXQVA0QmxveUp0VnM2SldxV01YODFW?=
- =?utf-8?B?RDVtYlRXODhSQS9QbFZ5YTh1YXNSRXlTVzJNSjJBMkhOcXVrdWVvN2hUVER5?=
- =?utf-8?B?bnZpU1hSWkhUM0ZhT29NcDNac2dWZ0dSZVNwU3NScnhaNXV5cS9XTVhCczZz?=
- =?utf-8?B?clhhbytlNGxzakYyODZLd3llcUN5U05IRDZtNlovaWVHT1VsYmdDUm1kVTU0?=
- =?utf-8?B?Vnhrcml5QnVYOWpCTWpYU05uVjRhV2Y5YnBuRTZ2YWxYazJOcy85NU9JYlI4?=
- =?utf-8?B?bncyMmxraFBiUjlGalZVMnoxNWtUQ2paTHZCYTZlQzhGanZnR1g2RmcyS1p5?=
- =?utf-8?B?bTNad1ROTEZLajdqY3dsUEJsK3Vtc0tiamdQa0hwN1phSWlHeHJ1QzdhT1pl?=
- =?utf-8?B?aHM0UUY0TTRPeEFZSTFBeVViRUFBb3J5L3NKOXAwaERHVkRjNlZZR0V3bm0r?=
- =?utf-8?B?TUc0ZFRGWFFpOXNEWXFIQUgxNC85S3EwNXlpQjVZR3htT2o5Qlg1MzVMemc4?=
- =?utf-8?B?c2FNZENVOUxsSEdSRDFEMnJKUHNJd3hUaUFnQ3RhN3JmcEhFbTdpTjJqSFd5?=
- =?utf-8?B?bWttendoZzFUK0pHUWk1NDU3NWhKY0lIazFZM2NKU1FMTnRSRDR4Q0lOUkJS?=
- =?utf-8?B?TDJhcEZxZk8yL1M4MlBKcEwxL1dKOGxlWW55bWdBY1ljZEdtWmF0MzcydmJ3?=
- =?utf-8?B?NlVvNVk4TjhHQkVFaHdCYkViRG8rVjlTY25hWlVvSjhPZ3pVZDdjem1VUG9N?=
- =?utf-8?B?NE1RaDdNTWh3eVVURWllV3lhZlVVMWNBNDNxcHo0TXB4ZmNZcGpLakg1c05Z?=
- =?utf-8?B?bWt3VU5kKzNzWVlkLzhXejV1RGlEdndDdm5zWEVSVlF4eXZXT0RsZEJBNEJ3?=
- =?utf-8?B?bmhLN0c4dWpWODdGVlhDb3U0TjFZQyt4Q0tkMUVCVmkxVVhzNWtDTHc3OFZG?=
- =?utf-8?B?T3VuTUtvSU9CNy8xK0g4dUNCQWZnUGxXM2k3VWhoK0dKL0ZzME9vRldlUG1j?=
- =?utf-8?B?alkxOFZBKzdhK1BNazdId2pCRW5lUHVlaG11Q2dPZkxTZkh1dzFoMTE1QktK?=
- =?utf-8?B?ZU1nb2NYbHVtUEhVaGNCVldmUjR3b0JzZGdhWUR0NGY2Um9nNVg0Qmd5QnhP?=
- =?utf-8?B?bDVweXZpN2lWNERybUpNYWsyTjFTTWFFR1pSTlpkZ09Ka1ZZL3hxa0FpMm9W?=
- =?utf-8?B?ZnYwRzlTK2FFbmhTNU5OOVFacE51UUZaZk9VRENlRUZGd1dTODJ5K0VEcmdG?=
- =?utf-8?B?M1BnaVJoS0xaWm9Kdk9SNzlIN0ZsU3Zyc3JNRXhEMzcyTkwrWXNjMW9jZDFJ?=
- =?utf-8?B?a1l6Nm4xMDRIdi9TbW9WRGU3bWlKY2pYMDNVNmt0UVoxMTN0bkdUY1N1SU5F?=
- =?utf-8?B?NG9VdGZNN1Vtd0V3K0VVTStnQnFnRVhPNXJjd2FaODc2K2ZOOEdxVmtKRjdM?=
- =?utf-8?B?VVA0TGRZRjRqSXBGRXBnL0hPMHcyQlZvQTh4WVEvYnVFelV0bU1SUHMzcU1j?=
- =?utf-8?B?L1ZVa0pOUE9MUnVkQjJyYzBrcnZJTEVGVXM2TWQ3ME1ZSWhWYWdnTGlsWVgx?=
- =?utf-8?B?Y3dWbWJkSFprTGs1b3oreDFmdDZvMzMvbVc2Z25LcHpSMEFOMVhWc1hvS1N4?=
- =?utf-8?B?MVR0dEgyMkNnamN5SzlWV21LOCt2VXhFVkl1NGZIeDBPSHNVY3hxdDcySGVH?=
- =?utf-8?B?TjN3dXVvVmtlSEQ0WkJjRTdIUFF0bFlIYU9FWlJwK3F1TE9LOWs1SUhETXl2?=
- =?utf-8?B?czk3YUxjakVnNnFtc1lrVDBwZmVRTW55ZkhHUVZnK1RBS2piT01aVi9YZ20r?=
- =?utf-8?B?U3FwaXd1c0lzMGxWWEY0TTFHcDRtRVBOS2RVdUlFanBBcXZsZDgyOUVONTFU?=
- =?utf-8?B?Ym9reVlOZnhnamFGOHJKT2tnN3RPTU5BNnB2V2NQWDdxS0ZXcnZoQ1o4dHNV?=
- =?utf-8?B?bWRNSzFXOGxhM3BKZWZYb1l5c3pRME5NRGh6OXpPN2RPbzJXVFN6VmhYOXNI?=
- =?utf-8?B?bUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <351E1CED2105C94980F67F755AFD6A05@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [60.50.196.81]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB6963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eea650e1-eaf9-4d92-f9a9-08db16497912
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 09:28:22.2611
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZESJhKDAIMaPRvAww3UOlVxqsEye6TYwXZZRNALlE9DxNq3awAD2bPVymu0RfCJClNKo2Bg+kDnSc/UOQT6LzQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6058
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V2UgdGVzdGVkIHRoZSB2MyBGUkVEIHBhdGNoIHNldCBvbiB0aGUgSW50ZWwgU2ltaWNzwq4gU2lt
-dWxhdG9yIGFuZCBhIG1hY2hpbmUNCndpdGggYSA3dGggSW50ZWwoUikgQ29yZShUTSkgQ1BVLg0K
-DQpGb2xsb3dpbmcgYXJlIHRoZSBMVFAgdmVyaW9uIDIwMjIwMTIxIHRlc3QgcmVzdWx0cyBvbiBY
-ODYtNjQuDQorLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0t
-LS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSsNCnwgICAgICAgICAgICAgICAgICAgQ29uZmln
-ICAgICAgICAgICAgICAgICAgIHwgIFBhc3MgfCAgRmFpbCB8ICBTa2lwIHwgIEhhbmcgfA0KKy0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0rLS0tLS0t
-LSstLS0tLS0tKy0tLS0tLS0rDQp8ICAgICAgIHRoZSA3dGggSW50ZWwoUikgQ29yZShUTSkgQ1BV
-ICAgICAgICB8ICAxNzg4IHwgIDEwOCAgfCAgNDUzICB8ICAgMCAgIHwNCnwgICAgICAgICAgICAg
-ICAgIDYuMi4wLXJjNysgICAgICAgICAgICAgICAgIHwgICAgICAgfCAgICAgICB8ICAgICAgIHwg
-ICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0t
-LS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rDQp8ICAgICAgIHRoZSA3dGggSW50ZWwoUikg
-Q29yZShUTSkgQ1BVICAgICAgICB8ICAxNzg4IHwgIDEwOCAgfCAgNDUzICB8ICAgMCAgIHwNCnwg
-ICAgICAgIDYuMi4wLXJjNysgdy8gRlJFRCBwYXRjaCBzZXQgICAgICAgIHwgICAgICAgfCAgICAg
-ICB8ICAgICAgIHwgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rDQp8ICAgSW50ZWwgU2lt
-aWNzwq4gU2ltdWxhdG9yIHcvbyBGUkVEIG1vZGVsICAgfCAgMTc5NyB8ICAxMTEgIHwgIDQ0MCAg
-fCAgIDEgICB8DQp8ICAgICAgICAgICAgICAgICA2LjIuMC1yYzcrICAgICAgICAgICAgICAgICB8
-ICAgICAgIHwgICAgICAgfCAgICAgICB8ICAgICAgIHwNCistLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKw0K
-fCAgIEludGVsIFNpbWljc8KuIFNpbXVsYXRvciB3L28gRlJFRCBtb2RlbCAgIHwgIDE3OTcgfCAg
-MTExICB8ICA0NDAgIHwgICAxICAgfA0KfCAgICAgICAgNi4yLjAtcmM3KyB3LyBGUkVEIHBhdGNo
-IHNldCAgICAgICAgfCAgICAgICB8ICAgICAgIHwgICAgICAgfCAgICAgICB8DQorLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0t
-LS0rLS0tLS0tLSsNCnwgICBJbnRlbCBTaW1pY3PCriBTaW11bGF0b3Igdy8gRlJFRCBtb2RlbCAg
-ICB8ICAxNzk3IHwgIDExMSAgfCAgNDQwICB8ICAgMSAgIHwNCnwgICAgICAgICAgICAgICAgIDYu
-Mi4wLXJjNysgICAgICAgICAgICAgICAgIHwgICAgICAgfCAgICAgICB8ICAgICAgIHwgICAgICAg
-fA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0r
-LS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rDQp8ICAgSW50ZWwgU2ltaWNzwq4gU2ltdWxhdG9yIHcv
-IEZSRUQgbW9kZWwgICAgfCAgMTc5NyB8ICAxMTEgIHwgIDQ0MCAgfCAgIDEgICB8DQp8IDYuMi4w
-LXJjNysgdy8gRlJFRCBwYXRjaCBzZXQgRlJFRCBkaXNhYmxlZCB8ICAgICAgIHwgICAgICAgfCAg
-ICAgICB8ICAgICAgIHwNCistLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKw0KfCAgIEludGVsIFNpbWljc8Ku
-IFNpbXVsYXRvciB3LyBGUkVEIG1vZGVsICAgIHwgIDE3OTcgfCAgMTExICB8ICA0NDAgIHwgICAx
-ICAgfA0KfCAgICAgICAgNi4yLjAtcmM3KyB3LyBGUkVEIHBhdGNoIHNldCAgICAgICAgfCAgICAg
-ICB8ICAgICAgIHwgICAgICAgfCAgICAgICB8DQorLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSsNCldlIHdl
-cmUgdW5hYmxlIHRvIGlkZW50aWZ5IGFueSByZWdyZXNzaW9uIHdpdGggdGhlIExUUCB0ZXN0cy4g
-DQoNCkZvbGxvd2luZyBhcmUgdGhlIEtzZWxmdGVzdCByZXN1bHRzIG9uIFg4Ni02NC4NCistLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0r
-LS0tLS0tLSstLS0tLS0tKw0KfCAgICAgICAgICAgICAgICAgIENvbmZpZyAgICAgICAgICAgICAg
-ICAgICAgfCAgUGFzcyB8ICBGYWlsIHwgIFNraXAgfCAgSGFuZyB8DQorLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rLS0t
-LS0tLSsNCnwgICAgICAgdGhlIDd0aCBJbnRlbChSKSBDb3JlKFRNKSBDUFUgICAgICAgIHwgIDMy
-MjQgfCAgNDU0ICB8ICA1OTEgIHwgICA1ICAgfA0KfCAgICAgICAgICAgICAgICAgNi4yLjAtcmM3
-KyAgICAgICAgICAgICAgICAgfCAgICAgICB8ICAgICAgIHwgICAgICAgfCAgICAgICB8DQorLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLSstLS0tLS0t
-Ky0tLS0tLS0rLS0tLS0tLSsNCnwgICAgICAgdGhlIDd0aCBJbnRlbChSKSBDb3JlKFRNKSBDUFUg
-ICAgICAgIHwgIDMyMjQgfCAgNDU0ICB8ICA1OTEgIHwgICA1ICAgfA0KfCAgICAgICAgNi4yLjAt
-cmM3KyB3LyBGUkVEIHBhdGNoIHNldCAgICAgICAgfCAgICAgICB8ICAgICAgIHwgICAgICAgfCAg
-ICAgICB8DQorLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0t
-LS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSsNCnwgICBJbnRlbCBTaW1pY3PCriBTaW11bGF0
-b3Igdy9vIEZSRUQgbW9kZWwgICB8ICAxODUzIHwgIDI2NyAgfCAgMjE0MyB8ICAgMTEgIHwNCnwg
-ICAgICAgICAgICAgICAgIDYuMi4wLXJjNysgICAgICAgICAgICAgICAgIHwgICAgICAgfCAgICAg
-ICB8ICAgICAgIHwgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rDQp8ICAgSW50ZWwgU2lt
-aWNzwq4gU2ltdWxhdG9yIHcvbyBGUkVEIG1vZGVsICAgfCAgMTg1MyB8ICAyNjcgIHwgIDIxNDMg
-fCAgIDExICB8DQp8ICAgICAgICA2LjIuMC1yYzcrIHcvIEZSRUQgcGF0Y2ggc2V0ICAgICAgICB8
-ICAgICAgIHwgICAgICAgfCAgICAgICB8ICAgICAgIHwNCistLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKw0K
-fCAgIEludGVsIFNpbWljc8KuIFNpbXVsYXRvciB3LyBGUkVEIG1vZGVsICAgIHwgIDE4NTMgfCAg
-MjY3ICB8ICAyMTQzIHwgICAxMSAgfA0KfCAgICAgICAgICAgICAgICAgNi4yLjAtcmM3KyAgICAg
-ICAgICAgICAgICAgfCAgICAgICB8ICAgICAgIHwgICAgICAgfCAgICAgICB8DQorLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKy0tLS0t
-LS0rLS0tLS0tLSsNCnwgICBJbnRlbCBTaW1pY3PCriBTaW11bGF0b3Igdy8gRlJFRCBtb2RlbCAg
-ICB8ICAxODUzIHwgIDI2NyAgfCAgMjE0MyB8ICAgMTEgIHwNCnwgNi4yLjAtcmM3KyB3LyBGUkVE
-IHBhdGNoIHNldCBGUkVEIGRpc2FibGVkIHwgICAgICAgfCAgICAgICB8ICAgICAgIHwgICAgICAg
-fA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0r
-LS0tLS0tLSstLS0tLS0tKy0tLS0tLS0rDQp8ICAgSW50ZWwgU2ltaWNzwq4gU2ltdWxhdG9yIHcv
-IEZSRUQgbW9kZWwgICAgfCAgMTg0NyB8ICAyNzIgIHwgIDIxNDMgfCAgIDEyICB8DQp8ICAgICAg
-ICA2LjIuMC1yYzcrIHcvIEZSRUQgcGF0Y2ggc2V0ICAgICAgICB8ICAgICAgIHwgICAgICAgfCAg
-ICAgICB8ICAgICAgIHwNCistLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLSstLS0tLS0tKy0tLS0tLS0rLS0tLS0tLSstLS0tLS0tKw0KTm8gcmVncmVzc2lvbiB3YXMg
-Zm91bmQgb24gdGhlIGJhcmUgbWV0YWwsIHdoaWxlIHRoZSBmb2xsb3dpbmcgYXJlIHRoZQ0KcmVn
-cmVzc2lvbnMgb24gdGhlIFNpbWljc8KuIFNpbXVsYXRvci4NCistLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsNCnwgICAg
-ICAgICAgICAgICAgICAgICAgfCAgICBJbnRlbCBTaW1pY3PCriAgICAgfCAgICBJbnRlbCBTaW1p
-Y3PCriAgICAgfA0KfCAgICAgICAgICAgICAgICAgICAgICB8ICBTaW11bGF0b3Igdy8gRlJFRCAg
-IHwgIFNpbXVsYXRvciB3LyBGUkVEICAgfA0KfCAgICAgIHRlc3QgbmFtZSAgICAgICB8ICAgICAg
-ICBtb2RlbCAgICAgICAgIHwgICAgICAgIG1vZGVsICAgICAgICAgfA0KfCAgICAgICAgICAgICAg
-ICAgICAgICB8ICA2LjIuMC1yYzcrIHcvIEZSRUQgIHwgIDYuMi4wLXJjNysgdy8gRlJFRCAgfA0K
-fCAgICAgICAgICAgICAgICAgICAgICB8ICAgIHBhdGNoIHNldCBGUkVEICAgIHwgICAgICBwYXRj
-aCBzZXQgICAgICAgfA0KfCAgICAgICAgICAgICAgICAgICAgICB8ICAgICAgIGRpc2FibGVkICAg
-ICAgIHwgICAgICAgICAgICAgICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KfCAgIGt2bTpoeXBl
-cnZfY2xvY2sgICB8ICAgICAgICAgUEFTUyAgICAgICAgIHwgICAgICAgICBGQUlMICAgICAgICAg
-fA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tKw0KfCBrdm06aHlwZXJ2X2ZlYXR1cmVzICB8ICAgICAgICAgUEFTUyAg
-ICAgICAgIHwgICAgICAgICBGQUlMICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0r
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KfCBrdm06eGVu
-X3ZtY2FsbF90ZXN0ICB8ICAgICAgICAgUEFTUyAgICAgICAgIHwgICAgICAgICBGQUlMICAgICAg
-ICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tKw0KfCAgICBrdm06aHlwZXJ2X2lwaSAgICB8ICAgICAgICAgUEFT
-UyAgICAgICAgIHwgICAgICAgICBGQUlMICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KfCBrdm06
-aHlwZXJ2X3RsYl9mbHVzaCB8ICAgICAgICAgUEFTUyAgICAgICAgIHwgICAgICAgICBGQUlMICAg
-ICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSst
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KfCAgICBicGY6dGVzdF9wcm9ncyAgICB8ICAgICAgICAg
-RkFJTCAgICAgICAgIHwgICAgICAgICBIQU5HICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KfCAg
-eDg2OnN5c3JldF9yaXBfNjQgICB8ICAgICAgICAgUEFTUyAgICAgICAgIHwgICAgICAgICBGQUlM
-ICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKw0KVGhlIHRlc3QgIng4NjpzeXNyZXRfcmlwXzY0IiBp
-cyBOT1QgYSB2YWxpZCB0ZXN0IG9uIEZSRUQsIGFuZCB0aGVyZSBpcyBhIGZpeA0KZnJvbSBBbW1h
-ciBGYWl6aSBhZnRlciB3ZSBkaXNjdXNzZWQgaXQgaW4gdGhlIExLTUwuIE90aGVyIHRlc3QgZmFp
-bHVyZXMgYXJlDQp1bmRlciBpbnZlc3RpZ2F0aW9uLg0KDQpGUkVEIGlzIGEgNjQtYml0IG9ubHkg
-ZmVhdHVyZSwgaG93ZXZlciB0aGUgMzFzdCBwYXRjaCAieDg2L2ZyZWQ6IGFsbG93IGR5bmFtaWMN
-CnN0YWNrIGZyYW1lIHNpemUiIGFwcGxpZXMgdG8gWDg2LTMyLCB0aHVzIHdlIHJhbiBLc2VsZnRl
-c3QgYW5kIExUUCBvbiBYODYtMzIgdG8NCnNlZSBpZiB0aGVyZSBpcyBhbnkgcmVncmVzc2lvbiwg
-YW5kIHdlIGRpbid0IGZpbmQgYW55Lg0KDQpGb2xsb3dpbmcgYXJlIHRoZSBLc2VsZnRlc3QgcmVz
-dWx0cyBvbiBYODYtMzIuDQorLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0t
-LS0rLS0tLS0tLS0tKy0tLS0tLS0tLSstLS0tLS0tLS0rDQp8ICAgICAgICAgICAgIENvbmZpZyAg
-ICAgICAgICAgIHwgICBQYXNzICB8ICAgRmFpbCAgfCAgIFNraXAgIHwgICBIYW5nICB8DQorLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0t
-LSstLS0tLS0tLS0rDQp8IHRoZSA1dGggSW50ZWwoUikgQ29yZShUTSkgQ1BVIHwgICAxMzYxICB8
-ICAgMjY3ICAgfCAgIDMwMSAgIHwgICAgMyAgICB8DQp8ICAgICAgICBGUkVEIDYuMi4wLXJjNysg
-ICAgICAgIHwgICAgICAgICB8ICAgICAgICAgfCAgICAgICAgIHwgICAgICAgICB8DQorLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0tLSst
-LS0tLS0tLS0rDQp8IHRoZSA1dGggSW50ZWwoUikgQ29yZShUTSkgQ1BVIHwgICAxMzYxICB8ICAg
-MjY3ICAgfCAgIDMwMSAgIHwgICAgMyAgICB8DQp8ICA2LjIuMC1yYzcrIHcvIEZSRUQgcGF0Y2gg
-c2V0IHwgICAgICAgICB8ICAgICAgICAgfCAgICAgICAgIHwgICAgICAgICB8DQorLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0tLSstLS0t
-LS0tLS0rDQoNCkZvbGxvd2luZyBhcmUgdGhlIExUUCB0ZXN0IHJlc3VsdHMgb24gWDg2LTMyLg0K
-Ky0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0tLSstLS0t
-LS0tLS0rLS0tLS0tLS0tKw0KfCAgICAgICAgICAgICBDb25maWcgICAgICAgICAgICB8ICAgUGFz
-cyAgfCAgIEZhaWwgIHwgICBTa2lwICB8ICAgSGFuZyAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0tLSstLS0tLS0tLS0rLS0tLS0tLS0tKw0KfCB0
-aGUgNXRoIEludGVsKFIpIENvcmUoVE0pIENQVSB8ICAgMTg0OSAgfCAgICA4MSAgIHwgICA0MTkg
-ICB8ICAgIDAgICAgfA0KfCAgNi4yLjAtcmM3KyB3LyBGUkVEIHBhdGNoIHNldCB8ICAgICAgICAg
-fCAgICAgICAgIHwgICAgICAgICB8ICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0tLSstLS0tLS0tLS0rLS0tLS0tLS0tKw0KfCB0aGUg
-NXRoIEludGVsKFIpIENvcmUoVE0pIENQVSB8ICAgMTg0OSAgfCAgICA4MSAgIHwgICA0MTkgICB8
-ICAgIDAgICAgfA0KfCAgICAgICAgRlJFRCA2LjIuMC1yYzcrICAgICAgICB8ICAgICAgICAgfCAg
-ICAgICAgIHwgICAgICAgICB8ICAgICAgICAgfA0KKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0rLS0tLS0tLS0tKy0tLS0tLS0tLSstLS0tLS0tLS0rLS0tLS0tLS0tKw0KDQpUaGFua3MN
-CiAgIC0tU2hhbg0KDQpPbiBUaHUsIDIwMjMtMDItMjMgYXQgMjM6MDEgLTA4MDAsIFhpbiBMaSB3
-cm90ZToNCj4gVGhpcyBwYXRjaCBzZXQgZW5hYmxlcyBGUkVEIGZvciB4ODYtNjQsIGFuZCBpdCdz
-IGJhc2VkIG9uIHRoZSBwcmV2aW91cyBMS0dTDQo+IHBhdGNoIHNldC4NCj4gDQo+IFRoZSBJbnRl
-bCBmbGV4aWJsZSByZXR1cm4gYW5kIGV2ZW50IGRlbGl2ZXJ5IChGUkVEKSBhcmNoaXRlY3R1cmUg
-ZGVmaW5lcw0KPiBzaW1wbGUNCj4gbmV3IHRyYW5zaXRpb25zIHRoYXQgY2hhbmdlIHByaXZpbGVn
-ZSBsZXZlbCAocmluZyB0cmFuc2l0aW9ucykuICBUaGUgRlJFRA0KPiBhcmNoaXRlY3R1cmUgd2Fz
-IGRlc2lnbmVkIHdpdGggdGhlIGZvbGxvd2luZyBnb2FsczoNCj4gMSkgSW1wcm92ZSBvdmVyYWxs
-IHBlcmZvcm1hbmNlIGFuZCByZXNwb25zZSB0aW1lIGJ5IHJlcGxhY2luZyBldmVudCBkZWxpdmVy
-eQ0KPiB0aHJvdWdoIHRoZSBpbnRlcnJ1cHQgZGVzY3JpcHRvciB0YWJsZSAoSURUIGV2ZW50IGRl
-bGl2ZXJ5KSBhbmQgZXZlbnQgcmV0dXJuDQo+IGJ5DQo+IHRoZSBJUkVUIGluc3RydWN0aW9uIHdp
-dGggbG93ZXIgbGF0ZW5jeSB0cmFuc2l0aW9ucy4NCj4gMikgSW1wcm92ZSBzb2Z0d2FyZSByb2J1
-c3RuZXNzIGJ5IGVuc3VyaW5nIHRoYXQgZXZlbnQgZGVsaXZlcnkgZXN0YWJsaXNoZXMgdGhlDQo+
-IGZ1bGwgc3VwZXJ2aXNvciBjb250ZXh0IGFuZCB0aGF0IGV2ZW50IHJldHVybiBlc3RhYmxpc2hl
-cyB0aGUgZnVsbCB1c2VyDQo+IGNvbnRleHQuDQo+IA0KPiBUaGUgbmV3IHRyYW5zaXRpb25zIGRl
-ZmluZWQgYnkgdGhlIEZSRUQgYXJjaGl0ZWN0dXJlIGFyZSBGUkVEIGV2ZW50IGRlbGl2ZXJ5DQo+
-IGFuZCwNCj4gZm9yIHJldHVybmluZyBmcm9tIGV2ZW50cywgdHdvIEZSRUQgcmV0dXJuIGluc3Ry
-dWN0aW9ucy4gRlJFRCBldmVudCBkZWxpdmVyeQ0KPiBjYW4NCj4gZWZmZWN0IGEgdHJhbnNpdGlv
-biBmcm9tIHJpbmcgMyB0byByaW5nIDAsIGJ1dCBpdCBpcyB1c2VkIGFsc28gdG8gZGVsaXZlcg0K
-PiBldmVudHMNCj4gaW5jaWRlbnQgdG8gcmluZyAwLiBPbmUgRlJFRCBpbnN0cnVjdGlvbiAoRVJF
-VFUpIGVmZmVjdHMgYSByZXR1cm4gZnJvbSByaW5nIDANCj4gdG8NCj4gcmluZyAzLCB3aGlsZSB0
-aGUgb3RoZXIgKEVSRVRTKSByZXR1cm5zIHdoaWxlIHJlbWFpbmluZyBpbiByaW5nIDAuDQo+IA0K
-PiBTZWFyY2ggZm9yIHRoZSBsYXRlc3QgRlJFRCBzcGVjIGluIG1vc3Qgc2VhcmNoIGVuZ2luZXMg
-d2l0aCB0aGlzIHNlYXJjaA0KPiBwYXR0ZXJuOg0KPiANCj4gICBzaXRlOmludGVsLmNvbSBGUkVE
-IChmbGV4aWJsZSByZXR1cm4gYW5kIGV2ZW50IGRlbGl2ZXJ5KSBzcGVjaWZpY2F0aW9uDQo+IA0K
-PiBBcyBvZiBub3cgdGhlcmUgaXMgbm8gcHVibGljbHkgYXZhaWFibGUgQ1BVIHN1cHBvcnRpbmcg
-RlJFRCwgdGh1cyB0aGUgSW50ZWwNCj4gU2ltaWNzwq4gU2ltdWxhdG9yIGlzIHVzZWQgYXMgc29m
-dHdhcmUgZGV2ZWxvcG1lbnQgYW5kIHRlc3RpbmcgdmVoaWNsZXMuIEFuZA0KPiBpdCBjYW4gYmUg
-ZG93bmxvYWRlZCBmcm9tOg0KPiAgIA0KPiBodHRwczovL3d3dy5pbnRlbC5jb20vY29udGVudC93
-d3cvdXMvZW4vZGV2ZWxvcGVyL2FydGljbGVzL3Rvb2wvc2ltaWNzLXNpbXVsYXRvci5odG1sDQo+
-IA0KPiBUbyBlbmFibGUgRlJFRCwgU2ltaWNzIHBhY2thZ2UgODExMiBRU1AtQ1BVIG5lZWRzIHRv
-IGJlIGluc3RhbGxlZCB3aXRoIENQVQ0KPiBtb2RlbCBjb25maWd1cmVkIGFzOg0KPiAJJGNwdV9j
-b21wX2NsYXNzID0gIng4Ni1leHBlcmltZW50YWwtZnJlZCINCj4gDQo+IExvbmdlciB0ZXJtLCB3
-ZSBzaG91bGQgcmVmYWN0b3IgY29tbW9uIGNvZGUgc2hhcmVkIGJ5IEZSRUQgYW5kIElEVCBpbnRv
-IGNvbW1vbg0KPiBzaGFyZWQgZmlsZXMsIGFuZCBjb250YWluIElEVCBjb2RlIHVzaW5nIGEgbmV3
-IGNvbmZpZyBDT05GSUdfWDg2X0lEVC4NCj4gDQo+IFRPRE86IGNhbGwgZXh0ZXJuYWxfaW50ZXJy
-dXB0KCkgdG8gcmVpbmplY3QgSVJRIGluIEtWTSBWTVguDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHYy
-Og0KPiAqIEltcHJvdmUgY29tbWVudHMgZm9yIGNoYW5nZXMgaW4gYXJjaC94ODYvaW5jbHVkZS9h
-c20vaWR0ZW50cnkuaC4NCj4gDQo+IENoYW5nZXMgc2luY2UgdjE6DQo+ICogY2FsbCBpcnFlbnRy
-eV9ubWlfe2VudGVyLGV4aXR9KCkgaW4gYm90aCBJRFQgYW5kIEZSRUQgZGVidWcgZmF1bHQga2Vy
-bmVsDQo+ICAgaGFuZGxlciAoUGV0ZXIgWmlqbHN0cmEpLg0KPiAqIEluaXRpYWxpemUgYSBGUkVE
-IGV4Y2VwdGlvbiBoYW5kbGVyIHRvIGZyZWRfYmFkX2V2ZW50KCkgaW5zdGVhZCBvZiBOVUxMDQo+
-ICAgaWYgbm8gRlJFRCBoYW5kbGVyIGRlZmluZWQgZm9yIGFuIGV4Y2VwdGlvbiB2ZWN0b3IgKFBl
-dGVyIFppamxzdHJhKS4NCj4gKiBQdXNoIGNhbGxpbmcgaXJxZW50cnlfe2VudGVyLGV4aXR9KCkg
-YW5kIGluc3RydW1lbnRhdGlvbl97YmVnaW4sZW5kfSgpDQo+ICAgZG93biBpbnRvIGluZGl2aWR1
-YWwgRlJFRCBleGNlcHRpb24gaGFuZGxlcnMsIGluc3RlYWQgb2YgaW4gdGhlIGRpc3BhdGNoDQo+
-ICAgZnJhbWV3b3JrIChQZXRlciBaaWpsc3RyYSkuDQo+IA0KPiBILiBQZXRlciBBbnZpbiAoSW50
-ZWwpICgyNCk6DQo+ICAgeDg2L3RyYXBzOiBsZXQgY29tbW9uX2ludGVycnVwdCgpIGhhbmRsZSBJ
-UlFfTU9WRV9DTEVBTlVQX1ZFQ1RPUg0KPiAgIHg4Ni90cmFwczogYWRkIGEgc3lzdGVtIGludGVy
-cnVwdCB0YWJsZSBmb3Igc3lzdGVtIGludGVycnVwdCBkaXNwYXRjaA0KPiAgIHg4Ni90cmFwczog
-YWRkIGV4dGVybmFsX2ludGVycnVwdCgpIHRvIGRpc3BhdGNoIGV4dGVybmFsIGludGVycnVwdHMN
-Cj4gICB4ODYvY3B1ZmVhdHVyZTogYWRkIHRoZSBjcHUgZmVhdHVyZSBiaXQgZm9yIEZSRUQNCj4g
-ICB4ODYvb3Bjb2RlOiBhZGQgRVJFVFUsIEVSRVRTIGluc3RydWN0aW9ucyB0byB4ODYtb3Bjb2Rl
-LW1hcA0KPiAgIHg4Ni9vYmp0b29sOiB0ZWFjaCBvYmp0b29sIGFib3V0IEVSRVRVIGFuZCBFUkVU
-Uw0KPiAgIHg4Ni9jcHU6IGFkZCBYODZfQ1I0X0ZSRUQgbWFjcm8NCj4gICB4ODYvZnJlZDogYWRk
-IEtjb25maWcgb3B0aW9uIGZvciBGUkVEIChDT05GSUdfWDg2X0ZSRUQpDQo+ICAgeDg2L2ZyZWQ6
-IGlmIENPTkZJR19YODZfRlJFRCBpcyBkaXNhYmxlZCwgZGlzYWJsZSBGUkVEIHN1cHBvcnQNCj4g
-ICB4ODYvY3B1OiBhZGQgTVNSIG51bWJlcnMgZm9yIEZSRUQgY29uZmlndXJhdGlvbg0KPiAgIHg4
-Ni9mcmVkOiBoZWFkZXIgZmlsZSB3aXRoIEZSRUQgZGVmaW5pdGlvbnMNCj4gICB4ODYvZnJlZDog
-bWFrZSB1bmlvbnMgZm9yIHRoZSBjcyBhbmQgc3MgZmllbGRzIGluIHN0cnVjdCBwdF9yZWdzDQo+
-ICAgeDg2L2ZyZWQ6IHJlc2VydmUgc3BhY2UgZm9yIHRoZSBGUkVEIHN0YWNrIGZyYW1lDQo+ICAg
-eDg2L2ZyZWQ6IGFkZCBhIHBhZ2UgZmF1bHQgZW50cnkgc3R1YiBmb3IgRlJFRA0KPiAgIHg4Ni9m
-cmVkOiBhZGQgYSBkZWJ1ZyBmYXVsdCBlbnRyeSBzdHViIGZvciBGUkVEDQo+ICAgeDg2L2ZyZWQ6
-IGFkZCBhIE5NSSBlbnRyeSBzdHViIGZvciBGUkVEDQo+ICAgeDg2L2ZyZWQ6IEZSRUQgZW50cnkv
-ZXhpdCBhbmQgZGlzcGF0Y2ggY29kZQ0KPiAgIHg4Ni9mcmVkOiBGUkVEIGluaXRpYWxpemF0aW9u
-IGNvZGUNCj4gICB4ODYvZnJlZDogdXBkYXRlIE1TUl9JQTMyX0ZSRURfUlNQMCBkdXJpbmcgdGFz
-ayBzd2l0Y2gNCj4gICB4ODYvZnJlZDogbGV0IHJldF9mcm9tX2ZvcmsoKSBqbXAgdG8gZnJlZF9l
-eGl0X3VzZXIgd2hlbiBGUkVEIGlzDQo+ICAgICBlbmFibGVkDQo+ICAgeDg2L2ZyZWQ6IGRpc2Fs
-bG93IHRoZSBzd2FwZ3MgaW5zdHJ1Y3Rpb24gd2hlbiBGUkVEIGlzIGVuYWJsZWQNCj4gICB4ODYv
-ZnJlZDogbm8gRVNQRklYIG5lZWRlZCB3aGVuIEZSRUQgaXMgZW5hYmxlZA0KPiAgIHg4Ni9mcmVk
-OiBhbGxvdyBzaW5nbGUtc3RlcCB0cmFwIGFuZCBOTUkgd2hlbiBzdGFydGluZyBhIG5ldyB0aHJl
-YWQNCj4gICB4ODYvZnJlZDogYWxsb3cgRlJFRCBzeXN0ZW1zIHRvIHVzZSBpbnRlcnJ1cHQgdmVj
-dG9ycyAweDEwLTB4MWYNCj4gDQo+IFhpbiBMaSAoOCk6DQo+ICAgeDg2L3RyYXBzOiBhZGQgaW5z
-dGFsbF9zeXN0ZW1faW50ZXJydXB0X2hhbmRsZXIoKQ0KPiAgIHg4Ni90cmFwczogZXhwb3J0IGV4
-dGVybmFsX2ludGVycnVwdCgpIGZvciBWTVggSVJRIHJlaW5qZWN0aW9uDQo+ICAgeDg2L2ZyZWQ6
-IGhlYWRlciBmaWxlIGZvciBldmVudCB0eXBlcw0KPiAgIHg4Ni9mcmVkOiBhZGQgYSBtYWNoaW5l
-IGNoZWNrIGVudHJ5IHN0dWIgZm9yIEZSRUQNCj4gICB4ODYvZnJlZDogZml4dXAgZmF1bHQgb24g
-RVJFVFUgYnkganVtcGluZyB0byBmcmVkX2VudHJ5cG9pbnRfdXNlcg0KPiAgIHg4Ni9pYTMyOiBk
-byBub3QgbW9kaWZ5IHRoZSBEUEwgYml0cyBmb3IgYSBudWxsIHNlbGVjdG9yDQo+ICAgeDg2L2Zy
-ZWQ6IGFsbG93IGR5bmFtaWMgc3RhY2sgZnJhbWUgc2l6ZQ0KPiAgIHg4Ni9mcmVkOiBkaXNhYmxl
-IEZSRUQgYnkgZGVmYXVsdCBpbiBpdHMgZWFybHkgc3RhZ2UNCj4gDQo+ICAuLi4vYWRtaW4tZ3Vp
-ZGUva2VybmVsLXBhcmFtZXRlcnMudHh0ICAgICAgICAgfCAgIDQgKw0KPiAgYXJjaC94ODYvS2Nv
-bmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA5ICsNCj4gIGFyY2gveDg2L2Vu
-dHJ5L01ha2VmaWxlICAgICAgICAgICAgICAgICAgICAgICB8ICAgNSArLQ0KPiAgYXJjaC94ODYv
-ZW50cnkvZW50cnlfMzIuUyAgICAgICAgICAgICAgICAgICAgIHwgICAyICstDQo+ICBhcmNoL3g4
-Ni9lbnRyeS9lbnRyeV82NC5TICAgICAgICAgICAgICAgICAgICAgfCAgIDUgKw0KPiAgYXJjaC94
-ODYvZW50cnkvZW50cnlfNjRfZnJlZC5TICAgICAgICAgICAgICAgIHwgIDU5ICsrKysrDQo+ICBh
-cmNoL3g4Ni9lbnRyeS9lbnRyeV9mcmVkLmMgICAgICAgICAgICAgICAgICAgfCAyMzQgKysrKysr
-KysrKysrKysrKysrDQo+ICBhcmNoL3g4Ni9lbnRyeS92c3lzY2FsbC92c3lzY2FsbF82NC5jICAg
-ICAgICAgfCAgIDIgKy0NCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL2NwdWZlYXR1cmVzLmggICAg
-ICAgICAgICB8ICAgMSArDQo+ICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9kaXNhYmxlZC1mZWF0dXJl
-cy5oICAgICAgfCAgIDggKy0NCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL2VudHJ5LWNvbW1vbi5o
-ICAgICAgICAgICB8ICAgMyArDQo+ICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9ldmVudC10eXBlLmgg
-ICAgICAgICAgICAgfCAgMTcgKysNCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL2V4dGFibGVfZml4
-dXBfdHlwZXMuaCAgICB8ICAgNCArLQ0KPiAgYXJjaC94ODYvaW5jbHVkZS9hc20vZnJlZC5oICAg
-ICAgICAgICAgICAgICAgIHwgMTMxICsrKysrKysrKysNCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNt
-L2lkdGVudHJ5LmggICAgICAgICAgICAgICB8ICA3NiArKysrKy0NCj4gIGFyY2gveDg2L2luY2x1
-ZGUvYXNtL2lycS5oICAgICAgICAgICAgICAgICAgICB8ICAgNSArDQo+ICBhcmNoL3g4Ni9pbmNs
-dWRlL2FzbS9pcnFfdmVjdG9ycy5oICAgICAgICAgICAgfCAgMTUgKy0NCj4gIGFyY2gveDg2L2lu
-Y2x1ZGUvYXNtL21zci1pbmRleC5oICAgICAgICAgICAgICB8ICAxMyArLQ0KPiAgYXJjaC94ODYv
-aW5jbHVkZS9hc20vcHJvY2Vzc29yLmggICAgICAgICAgICAgIHwgIDEyICstDQo+ICBhcmNoL3g4
-Ni9pbmNsdWRlL2FzbS9wdHJhY2UuaCAgICAgICAgICAgICAgICAgfCAgMzYgKystDQo+ICBhcmNo
-L3g4Ni9pbmNsdWRlL2FzbS9zd2l0Y2hfdG8uaCAgICAgICAgICAgICAgfCAgMTAgKy0NCj4gIGFy
-Y2gveDg2L2luY2x1ZGUvYXNtL3RocmVhZF9pbmZvLmggICAgICAgICAgICB8ICAzNSArLS0NCj4g
-IGFyY2gveDg2L2luY2x1ZGUvYXNtL3RyYXBzLmggICAgICAgICAgICAgICAgICB8ICAxMyArDQo+
-ICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS92bXguaCAgICAgICAgICAgICAgICAgICAgfCAgMTcgKy0N
-Cj4gIGFyY2gveDg2L2luY2x1ZGUvdWFwaS9hc20vcHJvY2Vzc29yLWZsYWdzLmggICB8ICAgMiAr
-DQo+ICBhcmNoL3g4Ni9rZXJuZWwvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgfCAgIDEg
-Kw0KPiAgYXJjaC94ODYva2VybmVsL2FwaWMvYXBpYy5jICAgICAgICAgICAgICAgICAgIHwgIDEx
-ICstDQo+ICBhcmNoL3g4Ni9rZXJuZWwvYXBpYy92ZWN0b3IuYyAgICAgICAgICAgICAgICAgfCAg
-IDggKy0NCj4gIGFyY2gveDg2L2tlcm5lbC9jcHUvYWNybi5jICAgICAgICAgICAgICAgICAgICB8
-ICAgNyArLQ0KPiAgYXJjaC94ODYva2VybmVsL2NwdS9jb21tb24uYyAgICAgICAgICAgICAgICAg
-IHwgIDg4ICsrKystLS0NCj4gIGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2NvcmUuYyAgICAgICAg
-ICAgICAgICB8ICAxMSArDQo+ICBhcmNoL3g4Ni9rZXJuZWwvY3B1L21zaHlwZXJ2LmMgICAgICAg
-ICAgICAgICAgfCAgMjIgKy0NCj4gIGFyY2gveDg2L2tlcm5lbC9lc3BmaXhfNjQuYyAgICAgICAg
-ICAgICAgICAgICB8ICAgOCArDQo+ICBhcmNoL3g4Ni9rZXJuZWwvZnJlZC5jICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgNzMgKysrKysrDQo+ICBhcmNoL3g4Ni9rZXJuZWwvaGVhZF8zMi5TICAg
-ICAgICAgICAgICAgICAgICAgfCAgIDMgKy0NCj4gIGFyY2gveDg2L2tlcm5lbC9pZHQuYyAgICAg
-ICAgICAgICAgICAgICAgICAgICB8ICAgNiArLQ0KPiAgYXJjaC94ODYva2VybmVsL2lycS5jICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgICA2ICstDQo+ICBhcmNoL3g4Ni9rZXJuZWwvaXJxaW5p
-dC5jICAgICAgICAgICAgICAgICAgICAgfCAgIDcgKy0NCj4gIGFyY2gveDg2L2tlcm5lbC9rdm0u
-YyAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNCArLQ0KPiAgYXJjaC94ODYva2VybmVsL25t
-aS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDI4ICsrKw0KPiAgYXJjaC94ODYva2VybmVs
-L3Byb2Nlc3MuYyAgICAgICAgICAgICAgICAgICAgIHwgICA1ICsNCj4gIGFyY2gveDg2L2tlcm5l
-bC9wcm9jZXNzXzY0LmMgICAgICAgICAgICAgICAgICB8ICAyMSArLQ0KPiAgYXJjaC94ODYva2Vy
-bmVsL3NpZ25hbF8zMi5jICAgICAgICAgICAgICAgICAgIHwgIDIxICstDQo+ICBhcmNoL3g4Ni9r
-ZXJuZWwvdHJhcHMuYyAgICAgICAgICAgICAgICAgICAgICAgfCAxNzUgKysrKysrKysrKystLQ0K
-PiAgYXJjaC94ODYvbGliL3g4Ni1vcGNvZGUtbWFwLnR4dCAgICAgICAgICAgICAgIHwgICAyICst
-DQo+ICBhcmNoL3g4Ni9tbS9leHRhYmxlLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjgg
-KysrDQo+ICBhcmNoL3g4Ni9tbS9mYXVsdC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAg
-MjAgKy0NCj4gIGRyaXZlcnMveGVuL2V2ZW50cy9ldmVudHNfYmFzZS5jICAgICAgICAgICAgICB8
-ICAgNSArLQ0KPiAga2VybmVsL2ZvcmsuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgICA2ICsNCj4gIHRvb2xzL2FyY2gveDg2L2luY2x1ZGUvYXNtL2NwdWZlYXR1cmVzLmggICAg
-ICB8ICAgMSArDQo+ICAuLi4vYXJjaC94ODYvaW5jbHVkZS9hc20vZGlzYWJsZWQtZmVhdHVyZXMu
-aCAgfCAgIDggKy0NCj4gIHRvb2xzL2FyY2gveDg2L2luY2x1ZGUvYXNtL21zci1pbmRleC5oICAg
-ICAgICB8ICAxMyArLQ0KPiAgdG9vbHMvYXJjaC94ODYvbGliL3g4Ni1vcGNvZGUtbWFwLnR4dCAg
-ICAgICAgIHwgICAyICstDQo+ICB0b29scy9vYmp0b29sL2FyY2gveDg2L2RlY29kZS5jICAgICAg
-ICAgICAgICAgfCAgMjIgKy0NCj4gIDU0IGZpbGVzIGNoYW5nZWQsIDExNTYgaW5zZXJ0aW9ucygr
-KSwgMTc0IGRlbGV0aW9ucygtKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gveDg2L2VudHJ5
-L2VudHJ5XzY0X2ZyZWQuUw0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gveDg2L2VudHJ5L2Vu
-dHJ5X2ZyZWQuYw0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gveDg2L2luY2x1ZGUvYXNtL2V2
-ZW50LXR5cGUuaA0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gveDg2L2luY2x1ZGUvYXNtL2Zy
-ZWQuaA0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gveDg2L2tlcm5lbC9mcmVkLmMNCj4gDQo=
+
+
+> -----Original Message-----
+> From: Andrew Jones <ajones@ventanamicro.com>
+> Sent: Friday, 24 February, 2023 5:00 PM
+> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+> 
+> On Fri, Feb 24, 2023 at 02:05:43AM +0000, JeeHeng Sia wrote:
+> >
+> >
+> > > -----Original Message-----
+> > > From: Andrew Jones <ajones@ventanamicro.com>
+> > > Sent: Friday, 24 February, 2023 2:07 AM
+> > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+> > >
+> > > On Tue, Feb 21, 2023 at 10:35:23AM +0800, Sia Jee Heng wrote:
+> > > > Low level Arch functions were created to support hibernation.
+> > > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
+> > > > cpu state onto the stack, then calling swsusp_save() to save the memory
+> > > > image.
+> > > >
+> > > > Arch specific hibernation header is implemented and is utilized by the
+> > > > arch_hibernation_header_restore() and arch_hibernation_header_save()
+> > > > functions. The arch specific hibernation header consists of satp, hartid,
+> > > > and the cpu_resume address. The kernel built version is also need to be
+> > > > saved into the hibernation image header to making sure only the same
+> > > > kernel is restore when resume.
+> > > >
+> > > > swsusp_arch_resume() creates a temporary page table that covering only
+> > > > the linear map. It copies the restore code to a 'safe' page, then start
+> > > > to restore the memory image. Once completed, it restores the original
+> > > > kernel's page table. It then calls into __hibernate_cpu_resume()
+> > > > to restore the CPU context. Finally, it follows the normal hibernation
+> > > > path back to the hibernation core.
+> > > >
+> > > > To enable hibernation/suspend to disk into RISCV, the below config
+> > > > need to be enabled:
+> > > > - CONFIG_ARCH_HIBERNATION_HEADER
+> > > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
+> > > >
+> > > > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+> > > > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> > > > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
+> > > > ---
+> > > >  arch/riscv/Kconfig                 |   7 +
+> > > >  arch/riscv/include/asm/assembler.h |  20 ++
+> > > >  arch/riscv/include/asm/suspend.h   |  19 ++
+> > > >  arch/riscv/kernel/Makefile         |   1 +
+> > > >  arch/riscv/kernel/asm-offsets.c    |   5 +
+> > > >  arch/riscv/kernel/hibernate-asm.S  |  77 +++++
+> > > >  arch/riscv/kernel/hibernate.c      | 447 +++++++++++++++++++++++++++++
+> > > >  7 files changed, 576 insertions(+)
+> > > >  create mode 100644 arch/riscv/kernel/hibernate-asm.S
+> > > >  create mode 100644 arch/riscv/kernel/hibernate.c
+> > > >
+> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > index e2b656043abf..4555848a817f 100644
+> > > > --- a/arch/riscv/Kconfig
+> > > > +++ b/arch/riscv/Kconfig
+> > > > @@ -690,6 +690,13 @@ menu "Power management options"
+> > > >
+> > > >  source "kernel/power/Kconfig"
+> > > >
+> > > > +config ARCH_HIBERNATION_POSSIBLE
+> > > > +	def_bool y
+> > > > +
+> > > > +config ARCH_HIBERNATION_HEADER
+> > > > +	def_bool y
+> > > > +	depends on HIBERNATION
+> > >
+> > > nit: I think this can be simplified as def_bool HIBERNATION
+> > good suggestion. will change it.
+> > >
+> > > > +
+> > > >  endmenu # "Power management options"
+> > > >
+> > > >  menu "CPU Power Management"
+> > > > diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
+> > > > index 727a97735493..68c46c0e0ea8 100644
+> > > > --- a/arch/riscv/include/asm/assembler.h
+> > > > +++ b/arch/riscv/include/asm/assembler.h
+> > > > @@ -59,4 +59,24 @@
+> > > >  		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
+> > > >  	.endm
+> > > >
+> > > > +/*
+> > > > + * copy_page - copy 1 page (4KB) of data from source to destination
+> > > > + * @a0 - destination
+> > > > + * @a1 - source
+> > > > + */
+> > > > +	.macro	copy_page a0, a1
+> > > > +		lui	a2, 0x1
+> > > > +		add	a2, a2, a0
+> > > > +1 :
+> > >     ^ please remove this space
+> > can't remove it otherwise checkpatch will throws ERROR: spaces required around that ':'
+> 
+> Oh, right, labels in macros have this requirement.
+> 
+> > >
+> > > > +		REG_L	t0, 0(a1)
+> > > > +		REG_L	t1, SZREG(a1)
+> > > > +
+> > > > +		REG_S	t0, 0(a0)
+> > > > +		REG_S	t1, SZREG(a0)
+> > > > +
+> > > > +		addi	a0, a0, 2 * SZREG
+> > > > +		addi	a1, a1, 2 * SZREG
+> > > > +		bne	a2, a0, 1b
+> > > > +	.endm
+> > > > +
+> > > >  #endif	/* __ASM_ASSEMBLER_H */
+> > > > diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
+> > > > index 75419c5ca272..3362da56a9d8 100644
+> > > > --- a/arch/riscv/include/asm/suspend.h
+> > > > +++ b/arch/riscv/include/asm/suspend.h
+> > > > @@ -21,6 +21,11 @@ struct suspend_context {
+> > > >  #endif
+> > > >  };
+> > > >
+> > > > +/*
+> > > > + * Used by hibernation core and cleared during resume sequence
+> > > > + */
+> > > > +extern int in_suspend;
+> > > > +
+> > > >  /* Low-level CPU suspend entry function */
+> > > >  int __cpu_suspend_enter(struct suspend_context *context);
+> > > >
+> > > > @@ -36,4 +41,18 @@ int __cpu_resume_enter(unsigned long hartid, unsigned long context);
+> > > >  /* Used to save and restore the csr */
+> > > >  void suspend_save_csrs(struct suspend_context *context);
+> > > >  void suspend_restore_csrs(struct suspend_context *context);
+> > > > +
+> > > > +/* Low-level API to support hibernation */
+> > > > +int swsusp_arch_suspend(void);
+> > > > +int swsusp_arch_resume(void);
+> > > > +int arch_hibernation_header_save(void *addr, unsigned int max_size);
+> > > > +int arch_hibernation_header_restore(void *addr);
+> > > > +int __hibernate_cpu_resume(void);
+> > > > +
+> > > > +/* Used to resume on the CPU we hibernated on */
+> > > > +int hibernate_resume_nonboot_cpu_disable(void);
+> > > > +
+> > > > +asmlinkage void hibernate_restore_image(unsigned long resume_satp, unsigned long satp_temp,
+> > > > +					unsigned long cpu_resume);
+> > > > +asmlinkage int hibernate_core_restore_code(void);
+> > > >  #endif
+> > > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> > > > index 4cf303a779ab..daab341d55e4 100644
+> > > > --- a/arch/riscv/kernel/Makefile
+> > > > +++ b/arch/riscv/kernel/Makefile
+> > > > @@ -64,6 +64,7 @@ obj-$(CONFIG_MODULES)		+= module.o
+> > > >  obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+> > > >
+> > > >  obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
+> > > > +obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate-asm.o
+> > > >
+> > > >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+> > > >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+> > > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> > > > index df9444397908..d6a75aac1d27 100644
+> > > > --- a/arch/riscv/kernel/asm-offsets.c
+> > > > +++ b/arch/riscv/kernel/asm-offsets.c
+> > > > @@ -9,6 +9,7 @@
+> > > >  #include <linux/kbuild.h>
+> > > >  #include <linux/mm.h>
+> > > >  #include <linux/sched.h>
+> > > > +#include <linux/suspend.h>
+> > > >  #include <asm/kvm_host.h>
+> > > >  #include <asm/thread_info.h>
+> > > >  #include <asm/ptrace.h>
+> > > > @@ -116,6 +117,10 @@ void asm_offsets(void)
+> > > >
+> > > >  	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
+> > > >
+> > > > +	OFFSET(HIBERN_PBE_ADDR, pbe, address);
+> > > > +	OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
+> > > > +	OFFSET(HIBERN_PBE_NEXT, pbe, next);
+> > > > +
+> > > >  	OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
+> > > >  	OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
+> > > >  	OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
+> > > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
+> > > > new file mode 100644
+> > > > index 000000000000..846affe4dced
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/kernel/hibernate-asm.S
+> > > > @@ -0,0 +1,77 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > > > +/*
+> > > > + * Hibernation low level support for RISCV.
+> > > > + *
+> > > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> > > > + *
+> > > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
+> > > > + */
+> > > > +
+> > > > +#include <asm/asm.h>
+> > > > +#include <asm/asm-offsets.h>
+> > > > +#include <asm/assembler.h>
+> > > > +#include <asm/csr.h>
+> > > > +
+> > > > +#include <linux/linkage.h>
+> > > > +
+> > > > +/*
+> > > > + * int __hibernate_cpu_resume(void)
+> > > > + * Switch back to the hibernated image's page table prior to restoring the CPU
+> > > > + * context.
+> > > > + *
+> > > > + * Always returns 0
+> > > > + */
+> > > > +ENTRY(__hibernate_cpu_resume)
+> > > > +	/* switch to hibernated image's page table. */
+> > > > +	csrw CSR_SATP, s0
+> > > > +	sfence.vma
+> > > > +
+> > > > +	REG_L	a0, hibernate_cpu_context
+> > > > +
+> > > > +	restore_csr
+> > > > +	restore_reg
+> > > > +
+> > > > +	/* Return zero value. */
+> > > > +	add	a0, zero, zero
+> > >
+> > > nit: mv a0, zero
+> > sure
+> > >
+> > > > +
+> > > > +	ret
+> > > > +END(__hibernate_cpu_resume)
+> > > > +
+> > > > +/*
+> > > > + * Prepare to restore the image.
+> > > > + * a0: satp of saved page tables.
+> > > > + * a1: satp of temporary page tables.
+> > > > + * a2: cpu_resume.
+> > > > + */
+> > > > +ENTRY(hibernate_restore_image)
+> > > > +	mv	s0, a0
+> > > > +	mv	s1, a1
+> > > > +	mv	s2, a2
+> > > > +	REG_L	s4, restore_pblist
+> > > > +	REG_L	a1, relocated_restore_code
+> > > > +
+> > > > +	jalr	a1
+> > > > +END(hibernate_restore_image)
+> > > > +
+> > > > +/*
+> > > > + * The below code will be executed from a 'safe' page.
+> > > > + * It first switches to the temporary page table, then starts to copy the pages
+> > > > + * back to the original memory location. Finally, it jumps to __hibernate_cpu_resume()
+> > > > + * to restore the CPU context.
+> > > > + */
+> > > > +ENTRY(hibernate_core_restore_code)
+> > > > +	/* switch to temp page table. */
+> > > > +	csrw satp, s1
+> > > > +	sfence.vma
+> > > > +.Lcopy:
+> > > > +	/* The below code will restore the hibernated image. */
+> > > > +	REG_L	a1, HIBERN_PBE_ADDR(s4)
+> > > > +	REG_L	a0, HIBERN_PBE_ORIG(s4)
+> > >
+> > > Are we sure restore_pblist will never be NULL?
+> > restore_pblist is a link-list, it will be null during initialization or during page clean up by hibernation core. During the initial resume
+> process, the hibernation core will check the header and load the pages. If everything works correctly, the page will be linked to the
+> restore_pblist and then invoke swsusp_arch_resume() else hibernation core will throws error and failed to resume from the
+> hibernated image.
+> 
+> I know restore_pblist is a linked-list and this doesn't answer the
+> question. The comment above restore_pblist says
+> 
+> /*
+>  * List of PBEs needed for restoring the pages that were allocated before
+>  * the suspend and included in the suspend image, but have also been
+>  * allocated by the "resume" kernel, so their contents cannot be written
+>  * directly to their "original" page frames.
+>  */
+> 
+> which implies the pages that end up on this list are "special". My
+> question is whether or not we're guaranteed to have at least one
+> of these special pages. If not, we shouldn't assume s4 is non-null.
+> If so, then a comment stating why that's guaranteed would be nice.
+The restore_pblist will not be null otherwise swsusp_arch_resume wouldn't get invoked. you can find how the link-list are link and how it checks against validity at https://elixir.bootlin.com/linux/v6.2-rc8/source/kernel/power/snapshot.c . " A comment stating why that's guaranteed would be nice" ? Hmm, perhaps this is out of my scope but I do believe in the page validity checking in the link I shared.
+> 
+> > >
+> > > > +
+> > > > +	copy_page a0, a1
+> > > > +
+> > > > +	REG_L	s4, HIBERN_PBE_NEXT(s4)
+> > > > +	bnez	s4, .Lcopy
+> > > > +
+> > > > +	jalr	s2
+> > > > +END(hibernate_core_restore_code)
+> > > > diff --git a/arch/riscv/kernel/hibernate.c b/arch/riscv/kernel/hibernate.c
+> > > > new file mode 100644
+> > > > index 000000000000..46a2f470db6e
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/kernel/hibernate.c
+> > > > @@ -0,0 +1,447 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > +/*
+> > > > + * Hibernation support for RISCV
+> > > > + *
+> > > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> > > > + *
+> > > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
+> > > > + */
+> > > > +
+> > > > +#include <asm/barrier.h>
+> > > > +#include <asm/cacheflush.h>
+> > > > +#include <asm/mmu_context.h>
+> > > > +#include <asm/page.h>
+> > > > +#include <asm/pgalloc.h>
+> > > > +#include <asm/pgtable.h>
+> > > > +#include <asm/sections.h>
+> > > > +#include <asm/set_memory.h>
+> > > > +#include <asm/smp.h>
+> > > > +#include <asm/suspend.h>
+> > > > +
+> > > > +#include <linux/cpu.h>
+> > > > +#include <linux/memblock.h>
+> > > > +#include <linux/pm.h>
+> > > > +#include <linux/sched.h>
+> > > > +#include <linux/suspend.h>
+> > > > +#include <linux/utsname.h>
+> > > > +
+> > > > +/* The logical cpu number we should resume on, initialised to a non-cpu number. */
+> > > > +static int sleep_cpu = -EINVAL;
+> > > > +
+> > > > +/* Pointer to the temporary resume page table. */
+> > > > +static pgd_t *resume_pg_dir;
+> > > > +
+> > > > +/* CPU context to be saved. */
+> > > > +struct suspend_context *hibernate_cpu_context;
+> > > > +EXPORT_SYMBOL_GPL(hibernate_cpu_context);
+> > > > +
+> > > > +unsigned long relocated_restore_code;
+> > > > +EXPORT_SYMBOL_GPL(relocated_restore_code);
+> > > > +
+> > > > +/**
+> > > > + * struct arch_hibernate_hdr_invariants - container to store kernel build version.
+> > > > + * @uts_version: to save the build number and date so that the we do not resume with
+> > > > + *		a different kernel.
+> > > > + */
+> > > > +struct arch_hibernate_hdr_invariants {
+> > > > +	char		uts_version[__NEW_UTS_LEN + 1];
+> > > > +};
+> > > > +
+> > > > +/**
+> > > > + * struct arch_hibernate_hdr - helper parameters that help us to restore the image.
+> > > > + * @invariants: container to store kernel build version.
+> > > > + * @hartid: to make sure same boot_cpu executes the hibernate/restore code.
+> > > > + * @saved_satp: original page table used by the hibernated image.
+> > > > + * @restore_cpu_addr: the kernel's image address to restore the CPU context.
+> > > > + */
+> > > > +static struct arch_hibernate_hdr {
+> > > > +	struct arch_hibernate_hdr_invariants invariants;
+> > > > +	unsigned long	hartid;
+> > > > +	unsigned long	saved_satp;
+> > > > +	unsigned long	restore_cpu_addr;
+> > > > +} resume_hdr;
+> > > > +
+> > > > +static inline void arch_hdr_invariants(struct arch_hibernate_hdr_invariants *i)
+> > > > +{
+> > > > +	memset(i, 0, sizeof(*i));
+> > > > +	memcpy(i->uts_version, init_utsname()->version, sizeof(i->uts_version));
+> > > > +}
+> > > > +
+> > > > +/*
+> > > > + * Check if the given pfn is in the 'nosave' section.
+> > > > + */
+> > > > +int pfn_is_nosave(unsigned long pfn)
+> > > > +{
+> > > > +	unsigned long nosave_begin_pfn = sym_to_pfn(&__nosave_begin);
+> > > > +	unsigned long nosave_end_pfn = sym_to_pfn(&__nosave_end - 1);
+> > > > +
+> > > > +	return ((pfn >= nosave_begin_pfn) && (pfn <= nosave_end_pfn));
+> > > > +}
+> > > > +
+> > > > +void notrace save_processor_state(void)
+> > > > +{
+> > > > +	WARN_ON(num_online_cpus() != 1);
+> > > > +}
+> > > > +
+> > > > +void notrace restore_processor_state(void)
+> > > > +{
+> > > > +}
+> > > > +
+> > > > +/*
+> > > > + * Helper parameters need to be saved to the hibernation image header.
+> > > > + */
+> > > > +int arch_hibernation_header_save(void *addr, unsigned int max_size)
+> > > > +{
+> > > > +	struct arch_hibernate_hdr *hdr = addr;
+> > > > +
+> > > > +	if (max_size < sizeof(*hdr))
+> > > > +		return -EOVERFLOW;
+> > > > +
+> > > > +	arch_hdr_invariants(&hdr->invariants);
+> > > > +
+> > > > +	hdr->hartid = cpuid_to_hartid_map(sleep_cpu);
+> > > > +	hdr->saved_satp = csr_read(CSR_SATP);
+> > > > +	hdr->restore_cpu_addr = (unsigned long)__hibernate_cpu_resume;
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(arch_hibernation_header_save);
+> > > > +
+> > > > +/*
+> > > > + * Retrieve the helper parameters from the hibernation image header.
+> > > > + */
+> > > > +int arch_hibernation_header_restore(void *addr)
+> > > > +{
+> > > > +	struct arch_hibernate_hdr_invariants invariants;
+> > > > +	struct arch_hibernate_hdr *hdr = addr;
+> > > > +	int ret = 0;
+> > > > +
+> > > > +	arch_hdr_invariants(&invariants);
+> > > > +
+> > > > +	if (memcmp(&hdr->invariants, &invariants, sizeof(invariants))) {
+> > > > +		pr_crit("Hibernate image not generated by this kernel!\n");
+> > > > +		return -EINVAL;
+> > > > +	}
+> > > > +
+> > > > +	sleep_cpu = riscv_hartid_to_cpuid(hdr->hartid);
+> > > > +	if (sleep_cpu < 0) {
+> > > > +		pr_crit("Hibernated on a CPU not known to this kernel!\n");
+> > > > +		sleep_cpu = -EINVAL;
+> > > > +		return -EINVAL;
+> > > > +	}
+> > > > +
+> > > > +#ifdef CONFIG_SMP
+> > > > +	ret = bringup_hibernate_cpu(sleep_cpu);
+> > > > +	if (ret) {
+> > > > +		sleep_cpu = -EINVAL;
+> > > > +		return ret;
+> > > > +	}
+> > > > +#endif
+> > > > +	resume_hdr = *hdr;
+> > > > +
+> > > > +	return ret;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(arch_hibernation_header_restore);
+> > > > +
+> > > > +int swsusp_arch_suspend(void)
+> > > > +{
+> > > > +	int ret = 0;
+> > > > +
+> > > > +	if (__cpu_suspend_enter(hibernate_cpu_context)) {
+> > > > +		sleep_cpu = smp_processor_id();
+> > > > +		suspend_save_csrs(hibernate_cpu_context);
+> > > > +		ret = swsusp_save();
+> > > > +	} else {
+> > > > +		suspend_restore_csrs(hibernate_cpu_context);
+> > > > +		flush_tlb_all();
+> > > > +		flush_icache_all();
+> > > > +
+> > > > +		/*
+> > > > +		 * Tell the hibernation core that we've just restored the memory.
+> > > > +		 */
+> > > > +		in_suspend = 0;
+> > > > +		sleep_cpu = -EINVAL;
+> > > > +	}
+> > > > +
+> > > > +	return ret;
+> > > > +}
+> > > > +
+> > > > +static unsigned long _temp_pgtable_map_pte(pte_t *dst_ptep, pte_t *src_ptep,
+> > > > +					   unsigned long addr, pgprot_t prot)
+> > > > +{
+> > > > +	pte_t pte = READ_ONCE(*src_ptep);
+> > > > +
+> > > > +	if (pte_present(pte))
+> > > > +		set_pte(dst_ptep, __pte(pte_val(pte) | pgprot_val(prot)));
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > > +static unsigned long temp_pgtable_map_pte(pmd_t *dst_pmdp, pmd_t *src_pmdp,
+> > > > +					  unsigned long start, unsigned long end,
+> > > > +					  pgprot_t prot)
+> > > > +{
+> > > > +	unsigned long addr = start;
+> > > > +	pte_t *src_ptep;
+> > > > +	pte_t *dst_ptep;
+> > > > +
+> > > > +	if (pmd_none(READ_ONCE(*dst_pmdp))) {
+> > > > +		dst_ptep = (pte_t *)get_safe_page(GFP_ATOMIC);
+> > > > +		if (!dst_ptep)
+> > > > +			return -ENOMEM;
+> > > > +
+> > > > +		pmd_populate_kernel(NULL, dst_pmdp, dst_ptep);
+> > > > +	}
+> > > > +
+> > > > +	dst_ptep = pte_offset_kernel(dst_pmdp, start);
+> > > > +	src_ptep = pte_offset_kernel(src_pmdp, start);
+> > > > +
+> > > > +	do {
+> > > > +		_temp_pgtable_map_pte(dst_ptep, src_ptep, addr, prot);
+> > >
+> > > I think I'd rather have the body of _temp_pgtable_map_pte() here and drop
+> > > the helper, because the helper does (pte_val(pte) | pgprot_val(prot))
+> > > which looks strange, until seeing here that 'pte' is only the address
+> > > bits, so OR'ing in new prot bits without clearing old prot bits makes
+> > > sense.
+> > we do not need to clear the old bits since we going to keep those bits but add new bits which are required for resume. Let's hold
+> your question here but I will would like to see how Alex view it.
+> 
+> I confused myself a bit in my first read, so some of what I said isn't
+> relevant, but I still wonder why we don't want to be more explicit about
+> what prot bits are present in the end, and I still wonder why we need such
+> a simple helper function which is used in exactly one place. Indeed, the
+> pattern of all the other pgtable functions below is to put the set_p*
+> calls directly in the loop.
+I am sorry if I confused you but what I meant is that I would like to consolidate all comments from other reviewers before provide the best solution. There is no doubt that your comment is valid.
+> 
+> Thanks,
+> drew
