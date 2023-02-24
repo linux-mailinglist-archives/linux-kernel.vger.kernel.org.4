@@ -2,168 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D882D6A18B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4236A18B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjBXJ0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S229634AbjBXJ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjBXJ0E (ORCPT
+        with ESMTP id S229543AbjBXJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:26:04 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655E365CF3;
-        Fri, 24 Feb 2023 01:25:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677230758; x=1708766758;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OyeVN/6+sk6VdrZcJyIYuAz0tXwdT2zcvqJwbZL9lL0=;
-  b=PHnZ7rkMBSQntiRDnjiwtPa56ZK6e3klgxT9OgzBzxraaaLLSAVaL3LA
-   6NqsN2VKvdTD76OxiFeYRql+a8jt1AoXau70+u5783hUUDBSwzByrd37p
-   gBSdsheYfaZI6Kj5J1rbbFn6GbA4vAe+pz2+MNavg2xRVXzC7tqkB280o
-   Ozzb/h6T9iLWfkUJi4RxwzD9CbWgn7B8S9mSDBAIeMheZG5gIfnJjyANc
-   fwUz63Rk0b4NHS6SnCaT63yxd5DsO0LRJmrNQGtYQJHlqCSrF6giM59eH
-   noW9tLUu5dwNZh3lUXF76Mo52UkVsvdbAJZMNGkd5f4ehy5SMqmv+doCY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331169926"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="331169926"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:25:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="741607042"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="741607042"
-Received: from moqiongz-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.215.23])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:25:55 -0800
-Date:   Fri, 24 Feb 2023 17:25:52 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 08/12] KVM: nSVM: Use KVM-governed feature framework to
- track "vVM{SAVE,LOAD} enabled"
-Message-ID: <20230224092552.6olrcx2ryo4sexxm@linux.intel.com>
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-9-seanjc@google.com>
- <20230221152349.ulcjtbnvziair7ff@linux.intel.com>
- <20230221153306.qubx7tfmasnvodeu@linux.intel.com>
- <Y/VYN3n/lHePiDxM@google.com>
- <20230222064931.ppz6berhfr4edewf@linux.intel.com>
- <Y/ZFJfspU6L2RmQS@google.com>
+        Fri, 24 Feb 2023 04:26:23 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAD765CF1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:26:16 -0800 (PST)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PNPXJ608WzKmLv;
+        Fri, 24 Feb 2023 17:21:20 +0800 (CST)
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 24 Feb
+ 2023 17:26:14 +0800
+Message-ID: <4c1084b6-2295-df22-9370-31e24d6df97e@huawei.com>
+Date:   Fri, 24 Feb 2023 17:26:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/ZFJfspU6L2RmQS@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] x86: profiling: Set prof_cpu_mask to NULL after free
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>
+References: <20230224084945.134038-1-chenzhongjin@huawei.com>
+Content-Language: en-US
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20230224084945.134038-1-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 08:39:01AM -0800, Sean Christopherson wrote:
-> +Maxim
-> 
-> On Wed, Feb 22, 2023, Yu Zhang wrote:
-> > On Tue, Feb 21, 2023 at 03:48:07PM -0800, Sean Christopherson wrote:
-> > > On Tue, Feb 21, 2023, Yu Zhang wrote:
-> > > > > Sorry, why guest_cpuid_is_intel(vcpu)? Is it becasue that a AMD host with virtual
-> > > > > VMSAVE/VMLOAD capability will always expose this feature for all AMD guests? 
-> > > > 
-> > > > Oh, sorry. I missed the guest_cpuid_has() in kvm_governed_feature_check_and_set().
-> > > > So please just ignore my 2nd question.
-> > > > 
-> > > > As to the check of guest_cpuid_is_intel(), is it necessary?
-> > > 
-> > > Yes?  The comment in init_vmcb_after_set_cpuid() says:
-> > > 
-> > > 		/*
-> > > 		 * We must intercept SYSENTER_EIP and SYSENTER_ESP
-> > > 		 * accesses because the processor only stores 32 bits.
-> > > 		 * For the same reason we cannot use virtual VMLOAD/VMSAVE.
-> > > 		 */
-> > > 
-> > > but I'm struggling to connect the dots to SYSENTER.  I suspect the comment is
-> > > misleading and has nothing to do 32-bit vs. 64-bit (or I'm reading it wrong) and
-> > > should be something like:
-> > > 
-> > > 	/*
-> > > 	 * Disable virtual VMLOAD/VMSAVE and intercept VMLOAD/VMSAVE if the
-> > > 	 * guest CPU is Intel in order to inject #UD.
-> > > 	 */
-> > > 
-> > > In other words, a non-SVM guest shouldn't be allowed to execute VMLOAD/VMSAVE.
-> > 
-> > Yes. Such interpretation makes sense. And vmload/vmsave shall be intercepted
-> > if guest CPU is Intel and #UD shall be injected. I guess this is done indirectly
-> > by judging the EFER_SVME not set in EFER in nested_svm_check_permissions()?
-> 
-> Nope, my interpretation is wrong.  vmload_vmsave_interception() clears the upper
-> bits of SYSENTER_{EIP,ESP}
-> 
-> 	if (vmload) {
-> 		svm_copy_vmloadsave_state(svm->vmcb, vmcb12);
-> 		svm->sysenter_eip_hi = 0;
-> 		svm->sysenter_esp_hi = 0;
-> 	} else {
-> 		svm_copy_vmloadsave_state(vmcb12, svm->vmcb);
-> 	}
-> 
-> From commit adc2a23734ac ("KVM: nSVM: improve SYSENTER emulation on AMD"):
->     
->     3. Disable vmload/vmsave virtualization if vendor=GenuineIntel.
->        (It is somewhat insane to set vendor=GenuineIntel and still enable
->        SVM for the guest but well whatever).
->        Then zero the high 32 bit parts when kvm intercepts and emulates vmload.
-> 
-> Presumably AMD hardware loads only the lower 32 bits, which would leave garbage
-> in the upper bits and even leak state from L1 to L2 (again ignoring the fact that
-> exposing SVM to an Intel vCPU is bonkers).
-Is it because L1 is a VM migrated from Intel platform to AMD's?
+get_maintainer.pl gets a wrong spelled mail address 
+'akpm@linux-foudation.org'.
 
-So w/o commit adc2a23734ac ("KVM: nSVM: improve SYSENTER emulation on AMD"):
-1> L1 could be a "GenuineIntel" with SVM capability (bizarre as it is), running
-in 64-bit mode.
-2> With no interception of MSR writes to the SYSENTER_EIP/ESP, L1 may set its
-SYSENTER_EIP/ESP to a 64-bit value successfully (though sysenter/sysexit may
-fail).
-3> L2 could be in 32-bit mode. And if virtual vmload/vmsave is enabled for L1,
-only lower 32 bits of those MSRs will be loaded, leaking the higher 32 bits.
+Seems it's because Andrew left a wrong Reviewed-by in the last commit.. 
+so -cc alone for Andrew.
 
-Is above scenario the reason of Maxim's fix?
-
-But why it is related to nested migration? 
+Sorry for bothering.
 
 
-> I'll opportunistically massage the comment to make it more explicit about why
-> VMLOAD needs to be intercepted.
->  
-> That said, clearing the bits for this seems wrong.  That would corrupt the MSRs
-> for 64-bit Intel guests.  The "target" of the fix was 32-bit L2s, i.e. I doubt
-> anything would notice.
-> 
->     This patch fixes nested migration of 32 bit nested guests, that was
->     broken because incorrect cached values of SYSENTER msrs were stored in
->     the migration stream if L1 changed these msrs with
->     vmload prior to L2 entry.
-
-> 
-> Maxim, would anything actually break if KVM let L1 load 64-bit values for the
-> SYSENTER MSRs?
-> 
-> > And as to X86_FEATURE_V_VMSAVE_VMLOAD, should the guest_cpuid_has() return true
-> > at all for a Intel guest?
-> 
-> Yes, because guest CPUID is userspace controlled.  Except for emulating architectural
-> side effects, e.g. size of XSAVE area, KVM doesn't sanitize guest CPUID.
-> 
-
-B.R.
-Yu
+On 2023/2/24 16:49, Chen Zhongjin wrote:
+> KASAN reported a UAF problem in profile_tick():
+>
+>    BUG: KASAN: use-after-free in profile_tick+0x5c/0x80
+>    Read of size 8 at addr ffff888100928aa0 by task bash/1108
+>
+>    CPU: 2 PID: 1108 Comm: bash Not tainted 5.10.0+ #72
+>    Call Trace:
+>     <IRQ>
+>     dump_stack+0x93/0xc5
+>     print_address_description.constprop.0+0x1c/0x3c0
+>     kasan_report.cold+0x37/0x74
+>     check_memory_region+0x161/0x1c0
+>     profile_tick+0x5c/0x80
+>     tick_sched_timer+0xcd/0x100
+>     __hrtimer_run_queues+0x23e/0x480
+>     hrtimer_interrupt+0x1c2/0x440
+>     asm_call_irq_on_stack+0xf/0x20
+>     </IRQ>
+>    ...
+>
+> It is beacause in profiling_store(), profile_init() is possible to fail
+> and free prof_cpu_mask. However prof_cpu_mask is not set to NULL and
+> cpumask_available(prof_cpu_mask) will return true in profile_tick().
+> Then cpumask_test_cpu() will dereference prof_cpu_mask and trigger the
+> KASAN warning.
+>
+> There is no interface to disable profile_tick() even though profile_init()
+> has been already failed. So just set prof_cpu_mask to NULL when free it.
+> Then accessing to prof_cpu_mask can be rejected by prof_buffer or
+> cpumask_available().
+>
+> Fixes: c309b917cab5 ("cpumask: convert kernel/profile.c")
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>   kernel/profile.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/profile.c b/kernel/profile.c
+> index 8a77769bc4b4..d60f9634fb2a 100644
+> --- a/kernel/profile.c
+> +++ b/kernel/profile.c
+> @@ -133,6 +133,7 @@ int __ref profile_init(void)
+>   		return 0;
+>   
+>   	free_cpumask_var(prof_cpu_mask);
+> +	prof_cpu_mask = NULL;
+>   	return -ENOMEM;
+>   }
+>   
+> @@ -334,7 +335,7 @@ void profile_tick(int type)
+>   {
+>   	struct pt_regs *regs = get_irq_regs();
+>   
+> -	if (!user_mode(regs) && cpumask_available(prof_cpu_mask) &&
+> +	if (!user_mode(regs) && prof_buffer && cpumask_available(prof_cpu_mask) &&
+>   	    cpumask_test_cpu(smp_processor_id(), prof_cpu_mask))
+>   		profile_hit(type, (void *)profile_pc(regs));
+>   }
