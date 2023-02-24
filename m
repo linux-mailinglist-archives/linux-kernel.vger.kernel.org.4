@@ -2,588 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD416A186B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08496A1870
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjBXJAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S229965AbjBXJCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjBXJAQ (ORCPT
+        with ESMTP id S229515AbjBXJBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:00:16 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D662163A3B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:00:12 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id j2so12970624wrh.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:00:12 -0800 (PST)
+        Fri, 24 Feb 2023 04:01:47 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C485662A2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:01:10 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so2124987pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:01:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JfbFvgMHMXh5R5bJNhmXm8/75pCWi7sHWu3XP2LXyVw=;
-        b=fZdycC8RuwUJG2eZPMQyHptdaGo4UgygIJG2mssmJHOAOHkwQeRLTgYKkGu4mW4lbL
-         LjF4+EFDAg/2//JHQBkHrmIH5SVsijtayKYjHSfcmrhCeI19rJacqd+Eje7IwqI6+vwg
-         nEOSVwejKqb+jB4gf/yTcVA0d7vo0aCBZ1rgsLwi3PEL7mIMpXLMc8ptxGFxmK622isL
-         h7aQ9jXW9Jkwh341F9Onx+m/uLzS08LNwKZ/zsKMXy6BCs9bQvASMaNvpnMfh+mw18O3
-         Am+N4s0dC/ArXzGZ+TzmyXiwAMWqbRgeLRY08oUh0giZFfmsis1GdD5S0aaHIJtKyrnm
-         52ow==
+        bh=7SciX5aVZChspF9M3W2UcrfB8lkq1WSnSwFmbufo/K4=;
+        b=ZI383dRDIbf8rnbyqXMKkKwicJwWHKyhiJTe3izBokdxTjMOJDe8gArmmeBig46IPg
+         3FLKFHmnqBnsE4jhea/WELLQQEgoa0qt/7VZ3z6cAR3523nb5Ufrp4GDBDc3sZIBq4OV
+         SJcq9Zzp/OHbKDSga7ZwuvO7o+nQpKRGs6sXSjJaSjNUzEK5C2WDSQBCsdyNHFGEPnZr
+         b/MCBliE6jjByZpUysVs9U2QiOjEPKl3A1bd0h77AinQ/trZwVfaR09VksCJuntZTJVv
+         3Dgi3R6jmo/qQolSZdCHvu+Jc3NeRof7W9q1v8wcm+nx+jnqHOVscx0H7JpE2LckPM4y
+         2Ghg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JfbFvgMHMXh5R5bJNhmXm8/75pCWi7sHWu3XP2LXyVw=;
-        b=jZevCsWHmwfIunqM1iDHidZh9r2Zr0OUlTraaLrkSSoh7DdGn02E43kFkrPtWe8Vk8
-         4DkIn9HeEOnRD6zp1Qw6dUQQlcR5CrF90rEJvskGBroKigz3WeenJbPwnHXsb9O4A9Fh
-         zzqOv/bmu+FBomoaS+ucIPQcXnTiiUIhbPVhS2cT8lCALJfDJoy3/5lvDwbptu7cGp/H
-         dXtkN1vf1SxUbjYgR5I751cVrpZ4O1fK868HvGSuiH+zcHKFVV+B/1nfa0fcMv2LZK4W
-         tOdknvqcRIk29gyNDj6dpyGU0WS4Cnln8tvsVxplNVKQgpgyfax6z3+w7xwe+8Qy1cX3
-         aAlQ==
-X-Gm-Message-State: AO0yUKVo+CsiNPGXD7nEd6WgONq3HMSo5dOYnhE+yMnUF6T2To2o98YY
-        wgDrSe2FiSUCNKf5770A9k+Ltw==
-X-Google-Smtp-Source: AK7set+YlCeacHd5gYPR7CAW3SDPPzTAnWzxEWJULhrSeM6GiUWyJM10Hae1yg87OR4DmzhEDDnGZw==
-X-Received: by 2002:a5d:5651:0:b0:2c3:f78f:518f with SMTP id j17-20020a5d5651000000b002c3f78f518fmr12820937wrw.39.1677229211354;
-        Fri, 24 Feb 2023 01:00:11 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id e17-20020a05600c219100b003e7f1086660sm2065227wme.15.2023.02.24.01.00.10
+        bh=7SciX5aVZChspF9M3W2UcrfB8lkq1WSnSwFmbufo/K4=;
+        b=50bu57QFEFhd+K0+azNIQA1kedIMjFRplSiiC2ZspLvulFTqGV8FPge5uimkeaD2nC
+         5FPzMrH3TiHUraB4GSrIBQhOPowiWo1IDMUcvXkgXXV1cR4h0QrnTC10Urpc7safcWmu
+         pwP/OBDXbdNeZG8biNfr6mTxteDVoKDUhhPwdXskGoCoV8iFw8EmHp5mkzvsyNU9Oixt
+         H78022aHkxb+ztGqXCMQFmCXfpPX+W5hA0QN9TZRUfy0nCJFKf0dWBXacRpy0VoPJIH9
+         mzO0TB+oSylk/4ZTDe+rWyJnu57OtI8MeKZ+nhqseaB20gWcWoy0behgRrseEO7lyExo
+         oxvw==
+X-Gm-Message-State: AO0yUKV1bqCVQkCILEigsJeQOw1GYzv/w0Pr3n1M9Vc1A1NZb4DMYs53
+        jIZsukNlxmc+p9EziSosDQVriA==
+X-Google-Smtp-Source: AK7set9TN0cuW8/3ER/OJmFGi76u0ihPyZMOpJVaB8g6dEcNmNinMZWMGq3IjbfFDv/DEQrUjT2bkQ==
+X-Received: by 2002:a17:90b:3912:b0:233:b73c:18c9 with SMTP id ob18-20020a17090b391200b00233b73c18c9mr18005220pjb.40.1677229268265;
+        Fri, 24 Feb 2023 01:01:08 -0800 (PST)
+Received: from sunil-laptop ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id mv11-20020a17090b198b00b002376d85844dsm1039904pjb.51.2023.02.24.01.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 01:00:11 -0800 (PST)
-Date:   Fri, 24 Feb 2023 10:00:10 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
-Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Message-ID: <20230224090010.nmy6latszfkdqcft@orel>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-5-jeeheng.sia@starfivetech.com>
- <20230223180720.55fgbxzlx6xvzgms@orel>
- <b26264a20b5f4bc5abfc6dd87aa4e38f@EXMBX066.cuchost.com>
+        Fri, 24 Feb 2023 01:01:07 -0800 (PST)
+Date:   Fri, 24 Feb 2023 14:30:58 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V2 04/21] RISC-V: Add support to build the ACPI core
+Message-ID: <Y/h8ygElKNMzPVoy@sunil-laptop>
+References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
+ <20230216182043.1946553-5-sunilvl@ventanamicro.com>
+ <20230220154415.u435t34q7btmwzwx@orel>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b26264a20b5f4bc5abfc6dd87aa4e38f@EXMBX066.cuchost.com>
+In-Reply-To: <20230220154415.u435t34q7btmwzwx@orel>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 02:05:43AM +0000, JeeHeng Sia wrote:
+On Mon, Feb 20, 2023 at 04:44:15PM +0100, Andrew Jones wrote:
+> On Thu, Feb 16, 2023 at 11:50:26PM +0530, Sunil V L wrote:
+> > Enable ACPI core for RISC-V after adding architecture-specific
+> > interfaces and header files required to build the ACPI core.
+> > 
+> > 1) Couple of header files are required unconditionally by the ACPI
+> > core. Add empty acenv.h and cpu.h header files.
+> > 
+> > 2) If CONFIG_PCI is enabled, a few PCI related interfaces need to
+> > be provided by the architecture. Define dummy interfaces for now
+> > so that build succeeds. Actual implementation will be added when
+> > PCI support is added for ACPI along with external interrupt
+> > controller support.
+> > 
+> > 3) A few globals and memory mapping related functions specific
+> > to the architecture need to be provided.
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  arch/riscv/Kconfig             |  5 +++
+> >  arch/riscv/include/asm/acenv.h | 11 +++++
+> >  arch/riscv/include/asm/acpi.h  | 60 +++++++++++++++++++++++++
+> >  arch/riscv/include/asm/cpu.h   |  8 ++++
+> >  arch/riscv/kernel/Makefile     |  2 +
+> >  arch/riscv/kernel/acpi.c       | 80 ++++++++++++++++++++++++++++++++++
+> >  6 files changed, 166 insertions(+)
+> >  create mode 100644 arch/riscv/include/asm/acenv.h
+> >  create mode 100644 arch/riscv/include/asm/acpi.h
+> >  create mode 100644 arch/riscv/include/asm/cpu.h
+> >  create mode 100644 arch/riscv/kernel/acpi.c
+> > 
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index d153e1cd890b..3ba701b26389 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -12,6 +12,8 @@ config 32BIT
+> >  
+> >  config RISCV
+> >  	def_bool y
+> > +	select ACPI_GENERIC_GSI if ACPI
 > 
+> Is it better for this to come after patch 14, "irqchip/riscv-intc:
+> Add ACPI support"?
 > 
-> > -----Original Message-----
-> > From: Andrew Jones <ajones@ventanamicro.com>
-> > Sent: Friday, 24 February, 2023 2:07 AM
-> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > 
-> > On Tue, Feb 21, 2023 at 10:35:23AM +0800, Sia Jee Heng wrote:
-> > > Low level Arch functions were created to support hibernation.
-> > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-> > > cpu state onto the stack, then calling swsusp_save() to save the memory
-> > > image.
-> > >
-> > > Arch specific hibernation header is implemented and is utilized by the
-> > > arch_hibernation_header_restore() and arch_hibernation_header_save()
-> > > functions. The arch specific hibernation header consists of satp, hartid,
-> > > and the cpu_resume address. The kernel built version is also need to be
-> > > saved into the hibernation image header to making sure only the same
-> > > kernel is restore when resume.
-> > >
-> > > swsusp_arch_resume() creates a temporary page table that covering only
-> > > the linear map. It copies the restore code to a 'safe' page, then start
-> > > to restore the memory image. Once completed, it restores the original
-> > > kernel's page table. It then calls into __hibernate_cpu_resume()
-> > > to restore the CPU context. Finally, it follows the normal hibernation
-> > > path back to the hibernation core.
-> > >
-> > > To enable hibernation/suspend to disk into RISCV, the below config
-> > > need to be enabled:
-> > > - CONFIG_ARCH_HIBERNATION_HEADER
-> > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> > >
-> > > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> > > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> > > ---
-> > >  arch/riscv/Kconfig                 |   7 +
-> > >  arch/riscv/include/asm/assembler.h |  20 ++
-> > >  arch/riscv/include/asm/suspend.h   |  19 ++
-> > >  arch/riscv/kernel/Makefile         |   1 +
-> > >  arch/riscv/kernel/asm-offsets.c    |   5 +
-> > >  arch/riscv/kernel/hibernate-asm.S  |  77 +++++
-> > >  arch/riscv/kernel/hibernate.c      | 447 +++++++++++++++++++++++++++++
-> > >  7 files changed, 576 insertions(+)
-> > >  create mode 100644 arch/riscv/kernel/hibernate-asm.S
-> > >  create mode 100644 arch/riscv/kernel/hibernate.c
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index e2b656043abf..4555848a817f 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -690,6 +690,13 @@ menu "Power management options"
-> > >
-> > >  source "kernel/power/Kconfig"
-> > >
-> > > +config ARCH_HIBERNATION_POSSIBLE
-> > > +	def_bool y
-> > > +
-> > > +config ARCH_HIBERNATION_HEADER
-> > > +	def_bool y
-> > > +	depends on HIBERNATION
-> > 
-> > nit: I think this can be simplified as def_bool HIBERNATION
-> good suggestion. will change it.
-> > 
-> > > +
-> > >  endmenu # "Power management options"
-> > >
-> > >  menu "CPU Power Management"
-> > > diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
-> > > index 727a97735493..68c46c0e0ea8 100644
-> > > --- a/arch/riscv/include/asm/assembler.h
-> > > +++ b/arch/riscv/include/asm/assembler.h
-> > > @@ -59,4 +59,24 @@
-> > >  		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
-> > >  	.endm
-> > >
-> > > +/*
-> > > + * copy_page - copy 1 page (4KB) of data from source to destination
-> > > + * @a0 - destination
-> > > + * @a1 - source
-> > > + */
-> > > +	.macro	copy_page a0, a1
-> > > +		lui	a2, 0x1
-> > > +		add	a2, a2, a0
-> > > +1 :
-> >     ^ please remove this space
-> can't remove it otherwise checkpatch will throws ERROR: spaces required around that ':'
+This is required to just to enable building the ACPI core for RISC-V.
 
-Oh, right, labels in macros have this requirement.
+> > +	select ACPI_REDUCED_HARDWARE_ONLY if ACPI
+> >  	select ARCH_CLOCKSOURCE_INIT
+> >  	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
+> >  	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
+> > @@ -598,6 +600,7 @@ config EFI_STUB
+> >  config EFI
+> >  	bool "UEFI runtime support"
+> >  	depends on OF && !XIP_KERNEL
+> > +	select ARCH_SUPPORTS_ACPI if 64BIT
+> >  	select LIBFDT
+> >  	select UCS2_STRING
+> >  	select EFI_PARAMS_FROM_FDT
+> > @@ -703,3 +706,5 @@ source "drivers/cpufreq/Kconfig"
+> >  endmenu # "CPU Power Management"
+> >  
+> >  source "arch/riscv/kvm/Kconfig"
+> > +
+> > +source "drivers/acpi/Kconfig"
+> > diff --git a/arch/riscv/include/asm/acenv.h b/arch/riscv/include/asm/acenv.h
+> > new file mode 100644
+> > index 000000000000..22123c5a4883
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/acenv.h
+> > @@ -0,0 +1,11 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * RISC-V specific ACPICA environments and implementation
+> > + */
+> > +
+> > +#ifndef _ASM_ACENV_H
+> > +#define _ASM_ACENV_H
+> > +
+> > +/* It is required unconditionally by ACPI core */
+> > +
+> > +#endif /* _ASM_ACENV_H */
+> > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+> > new file mode 100644
+> > index 000000000000..7f9dce3c39d0
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/acpi.h
+> > @@ -0,0 +1,60 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + *  Copyright (C) 2013-2014, Linaro Ltd.
+> > + *	Author: Al Stone <al.stone@linaro.org>
+> > + *	Author: Graeme Gregory <graeme.gregory@linaro.org>
+> > + *	Author: Hanjun Guo <hanjun.guo@linaro.org>
+> > + *
+> > + *  Copyright (C) 2021-2023, Ventana Micro Systems Inc.
+> > + *	Author: Sunil V L <sunilvl@ventanamicro.com>
+> > + */
+> > +
+> > +#ifndef _ASM_ACPI_H
+> > +#define _ASM_ACPI_H
+> > +
+> > +/* Basic configuration for ACPI */
+> > +#ifdef CONFIG_ACPI
+> > +
+> > +/* ACPI table mapping after acpi_permanent_mmap is set */
+> > +void *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+> > +#define acpi_os_ioremap acpi_os_ioremap
+> > +
+> > +#define acpi_strict 1   /* No out-of-spec workarounds on RISC-V */
+> > +extern int acpi_disabled;
+> > +extern int acpi_noirq;
+> > +extern int acpi_pci_disabled;
+> 
+> need blank line here
+> 
+Okay.
 
-> > 
-> > > +		REG_L	t0, 0(a1)
-> > > +		REG_L	t1, SZREG(a1)
-> > > +
-> > > +		REG_S	t0, 0(a0)
-> > > +		REG_S	t1, SZREG(a0)
-> > > +
-> > > +		addi	a0, a0, 2 * SZREG
-> > > +		addi	a1, a1, 2 * SZREG
-> > > +		bne	a2, a0, 1b
-> > > +	.endm
-> > > +
-> > >  #endif	/* __ASM_ASSEMBLER_H */
-> > > diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-> > > index 75419c5ca272..3362da56a9d8 100644
-> > > --- a/arch/riscv/include/asm/suspend.h
-> > > +++ b/arch/riscv/include/asm/suspend.h
-> > > @@ -21,6 +21,11 @@ struct suspend_context {
-> > >  #endif
-> > >  };
-> > >
-> > > +/*
-> > > + * Used by hibernation core and cleared during resume sequence
-> > > + */
-> > > +extern int in_suspend;
-> > > +
-> > >  /* Low-level CPU suspend entry function */
-> > >  int __cpu_suspend_enter(struct suspend_context *context);
-> > >
-> > > @@ -36,4 +41,18 @@ int __cpu_resume_enter(unsigned long hartid, unsigned long context);
-> > >  /* Used to save and restore the csr */
-> > >  void suspend_save_csrs(struct suspend_context *context);
-> > >  void suspend_restore_csrs(struct suspend_context *context);
-> > > +
-> > > +/* Low-level API to support hibernation */
-> > > +int swsusp_arch_suspend(void);
-> > > +int swsusp_arch_resume(void);
-> > > +int arch_hibernation_header_save(void *addr, unsigned int max_size);
-> > > +int arch_hibernation_header_restore(void *addr);
-> > > +int __hibernate_cpu_resume(void);
-> > > +
-> > > +/* Used to resume on the CPU we hibernated on */
-> > > +int hibernate_resume_nonboot_cpu_disable(void);
-> > > +
-> > > +asmlinkage void hibernate_restore_image(unsigned long resume_satp, unsigned long satp_temp,
-> > > +					unsigned long cpu_resume);
-> > > +asmlinkage int hibernate_core_restore_code(void);
-> > >  #endif
-> > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > > index 4cf303a779ab..daab341d55e4 100644
-> > > --- a/arch/riscv/kernel/Makefile
-> > > +++ b/arch/riscv/kernel/Makefile
-> > > @@ -64,6 +64,7 @@ obj-$(CONFIG_MODULES)		+= module.o
-> > >  obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
-> > >
-> > >  obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-> > > +obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate-asm.o
-> > >
-> > >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
-> > >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
-> > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > > index df9444397908..d6a75aac1d27 100644
-> > > --- a/arch/riscv/kernel/asm-offsets.c
-> > > +++ b/arch/riscv/kernel/asm-offsets.c
-> > > @@ -9,6 +9,7 @@
-> > >  #include <linux/kbuild.h>
-> > >  #include <linux/mm.h>
-> > >  #include <linux/sched.h>
-> > > +#include <linux/suspend.h>
-> > >  #include <asm/kvm_host.h>
-> > >  #include <asm/thread_info.h>
-> > >  #include <asm/ptrace.h>
-> > > @@ -116,6 +117,10 @@ void asm_offsets(void)
-> > >
-> > >  	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
-> > >
-> > > +	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-> > > +	OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
-> > > +	OFFSET(HIBERN_PBE_NEXT, pbe, next);
-> > > +
-> > >  	OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
-> > >  	OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
-> > >  	OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
-> > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
-> > > new file mode 100644
-> > > index 000000000000..846affe4dced
-> > > --- /dev/null
-> > > +++ b/arch/riscv/kernel/hibernate-asm.S
-> > > @@ -0,0 +1,77 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > +/*
-> > > + * Hibernation low level support for RISCV.
-> > > + *
-> > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> > > + *
-> > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-> > > + */
-> > > +
-> > > +#include <asm/asm.h>
-> > > +#include <asm/asm-offsets.h>
-> > > +#include <asm/assembler.h>
-> > > +#include <asm/csr.h>
-> > > +
-> > > +#include <linux/linkage.h>
-> > > +
-> > > +/*
-> > > + * int __hibernate_cpu_resume(void)
-> > > + * Switch back to the hibernated image's page table prior to restoring the CPU
-> > > + * context.
-> > > + *
-> > > + * Always returns 0
-> > > + */
-> > > +ENTRY(__hibernate_cpu_resume)
-> > > +	/* switch to hibernated image's page table. */
-> > > +	csrw CSR_SATP, s0
-> > > +	sfence.vma
-> > > +
-> > > +	REG_L	a0, hibernate_cpu_context
-> > > +
-> > > +	restore_csr
-> > > +	restore_reg
-> > > +
-> > > +	/* Return zero value. */
-> > > +	add	a0, zero, zero
-> > 
-> > nit: mv a0, zero
-> sure
-> > 
-> > > +
-> > > +	ret
-> > > +END(__hibernate_cpu_resume)
-> > > +
-> > > +/*
-> > > + * Prepare to restore the image.
-> > > + * a0: satp of saved page tables.
-> > > + * a1: satp of temporary page tables.
-> > > + * a2: cpu_resume.
-> > > + */
-> > > +ENTRY(hibernate_restore_image)
-> > > +	mv	s0, a0
-> > > +	mv	s1, a1
-> > > +	mv	s2, a2
-> > > +	REG_L	s4, restore_pblist
-> > > +	REG_L	a1, relocated_restore_code
-> > > +
-> > > +	jalr	a1
-> > > +END(hibernate_restore_image)
-> > > +
-> > > +/*
-> > > + * The below code will be executed from a 'safe' page.
-> > > + * It first switches to the temporary page table, then starts to copy the pages
-> > > + * back to the original memory location. Finally, it jumps to __hibernate_cpu_resume()
-> > > + * to restore the CPU context.
-> > > + */
-> > > +ENTRY(hibernate_core_restore_code)
-> > > +	/* switch to temp page table. */
-> > > +	csrw satp, s1
-> > > +	sfence.vma
-> > > +.Lcopy:
-> > > +	/* The below code will restore the hibernated image. */
-> > > +	REG_L	a1, HIBERN_PBE_ADDR(s4)
-> > > +	REG_L	a0, HIBERN_PBE_ORIG(s4)
-> > 
-> > Are we sure restore_pblist will never be NULL?
-> restore_pblist is a link-list, it will be null during initialization or during page clean up by hibernation core. During the initial resume process, the hibernation core will check the header and load the pages. If everything works correctly, the page will be linked to the restore_pblist and then invoke swsusp_arch_resume() else hibernation core will throws error and failed to resume from the hibernated image.
-
-I know restore_pblist is a linked-list and this doesn't answer the
-question. The comment above restore_pblist says
-
-/*
- * List of PBEs needed for restoring the pages that were allocated before
- * the suspend and included in the suspend image, but have also been
- * allocated by the "resume" kernel, so their contents cannot be written
- * directly to their "original" page frames.
- */
-
-which implies the pages that end up on this list are "special". My
-question is whether or not we're guaranteed to have at least one
-of these special pages. If not, we shouldn't assume s4 is non-null.
-If so, then a comment stating why that's guaranteed would be nice.
-
-> > 
-> > > +
-> > > +	copy_page a0, a1
-> > > +
-> > > +	REG_L	s4, HIBERN_PBE_NEXT(s4)
-> > > +	bnez	s4, .Lcopy
-> > > +
-> > > +	jalr	s2
-> > > +END(hibernate_core_restore_code)
-> > > diff --git a/arch/riscv/kernel/hibernate.c b/arch/riscv/kernel/hibernate.c
-> > > new file mode 100644
-> > > index 000000000000..46a2f470db6e
-> > > --- /dev/null
-> > > +++ b/arch/riscv/kernel/hibernate.c
-> > > @@ -0,0 +1,447 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Hibernation support for RISCV
-> > > + *
-> > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> > > + *
-> > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-> > > + */
-> > > +
-> > > +#include <asm/barrier.h>
-> > > +#include <asm/cacheflush.h>
-> > > +#include <asm/mmu_context.h>
-> > > +#include <asm/page.h>
-> > > +#include <asm/pgalloc.h>
-> > > +#include <asm/pgtable.h>
-> > > +#include <asm/sections.h>
-> > > +#include <asm/set_memory.h>
-> > > +#include <asm/smp.h>
-> > > +#include <asm/suspend.h>
-> > > +
-> > > +#include <linux/cpu.h>
-> > > +#include <linux/memblock.h>
-> > > +#include <linux/pm.h>
-> > > +#include <linux/sched.h>
-> > > +#include <linux/suspend.h>
-> > > +#include <linux/utsname.h>
-> > > +
-> > > +/* The logical cpu number we should resume on, initialised to a non-cpu number. */
-> > > +static int sleep_cpu = -EINVAL;
-> > > +
-> > > +/* Pointer to the temporary resume page table. */
-> > > +static pgd_t *resume_pg_dir;
-> > > +
-> > > +/* CPU context to be saved. */
-> > > +struct suspend_context *hibernate_cpu_context;
-> > > +EXPORT_SYMBOL_GPL(hibernate_cpu_context);
-> > > +
-> > > +unsigned long relocated_restore_code;
-> > > +EXPORT_SYMBOL_GPL(relocated_restore_code);
-> > > +
-> > > +/**
-> > > + * struct arch_hibernate_hdr_invariants - container to store kernel build version.
-> > > + * @uts_version: to save the build number and date so that the we do not resume with
-> > > + *		a different kernel.
-> > > + */
-> > > +struct arch_hibernate_hdr_invariants {
-> > > +	char		uts_version[__NEW_UTS_LEN + 1];
-> > > +};
-> > > +
-> > > +/**
-> > > + * struct arch_hibernate_hdr - helper parameters that help us to restore the image.
-> > > + * @invariants: container to store kernel build version.
-> > > + * @hartid: to make sure same boot_cpu executes the hibernate/restore code.
-> > > + * @saved_satp: original page table used by the hibernated image.
-> > > + * @restore_cpu_addr: the kernel's image address to restore the CPU context.
-> > > + */
-> > > +static struct arch_hibernate_hdr {
-> > > +	struct arch_hibernate_hdr_invariants invariants;
-> > > +	unsigned long	hartid;
-> > > +	unsigned long	saved_satp;
-> > > +	unsigned long	restore_cpu_addr;
-> > > +} resume_hdr;
-> > > +
-> > > +static inline void arch_hdr_invariants(struct arch_hibernate_hdr_invariants *i)
-> > > +{
-> > > +	memset(i, 0, sizeof(*i));
-> > > +	memcpy(i->uts_version, init_utsname()->version, sizeof(i->uts_version));
-> > > +}
-> > > +
-> > > +/*
-> > > + * Check if the given pfn is in the 'nosave' section.
-> > > + */
-> > > +int pfn_is_nosave(unsigned long pfn)
-> > > +{
-> > > +	unsigned long nosave_begin_pfn = sym_to_pfn(&__nosave_begin);
-> > > +	unsigned long nosave_end_pfn = sym_to_pfn(&__nosave_end - 1);
-> > > +
-> > > +	return ((pfn >= nosave_begin_pfn) && (pfn <= nosave_end_pfn));
-> > > +}
-> > > +
-> > > +void notrace save_processor_state(void)
-> > > +{
-> > > +	WARN_ON(num_online_cpus() != 1);
-> > > +}
-> > > +
-> > > +void notrace restore_processor_state(void)
-> > > +{
-> > > +}
-> > > +
-> > > +/*
-> > > + * Helper parameters need to be saved to the hibernation image header.
-> > > + */
-> > > +int arch_hibernation_header_save(void *addr, unsigned int max_size)
-> > > +{
-> > > +	struct arch_hibernate_hdr *hdr = addr;
-> > > +
-> > > +	if (max_size < sizeof(*hdr))
-> > > +		return -EOVERFLOW;
-> > > +
-> > > +	arch_hdr_invariants(&hdr->invariants);
-> > > +
-> > > +	hdr->hartid = cpuid_to_hartid_map(sleep_cpu);
-> > > +	hdr->saved_satp = csr_read(CSR_SATP);
-> > > +	hdr->restore_cpu_addr = (unsigned long)__hibernate_cpu_resume;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(arch_hibernation_header_save);
-> > > +
-> > > +/*
-> > > + * Retrieve the helper parameters from the hibernation image header.
-> > > + */
-> > > +int arch_hibernation_header_restore(void *addr)
-> > > +{
-> > > +	struct arch_hibernate_hdr_invariants invariants;
-> > > +	struct arch_hibernate_hdr *hdr = addr;
-> > > +	int ret = 0;
-> > > +
-> > > +	arch_hdr_invariants(&invariants);
-> > > +
-> > > +	if (memcmp(&hdr->invariants, &invariants, sizeof(invariants))) {
-> > > +		pr_crit("Hibernate image not generated by this kernel!\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	sleep_cpu = riscv_hartid_to_cpuid(hdr->hartid);
-> > > +	if (sleep_cpu < 0) {
-> > > +		pr_crit("Hibernated on a CPU not known to this kernel!\n");
-> > > +		sleep_cpu = -EINVAL;
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +#ifdef CONFIG_SMP
-> > > +	ret = bringup_hibernate_cpu(sleep_cpu);
-> > > +	if (ret) {
-> > > +		sleep_cpu = -EINVAL;
-> > > +		return ret;
-> > > +	}
-> > > +#endif
-> > > +	resume_hdr = *hdr;
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(arch_hibernation_header_restore);
-> > > +
-> > > +int swsusp_arch_suspend(void)
-> > > +{
-> > > +	int ret = 0;
-> > > +
-> > > +	if (__cpu_suspend_enter(hibernate_cpu_context)) {
-> > > +		sleep_cpu = smp_processor_id();
-> > > +		suspend_save_csrs(hibernate_cpu_context);
-> > > +		ret = swsusp_save();
-> > > +	} else {
-> > > +		suspend_restore_csrs(hibernate_cpu_context);
-> > > +		flush_tlb_all();
-> > > +		flush_icache_all();
-> > > +
-> > > +		/*
-> > > +		 * Tell the hibernation core that we've just restored the memory.
-> > > +		 */
-> > > +		in_suspend = 0;
-> > > +		sleep_cpu = -EINVAL;
-> > > +	}
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static unsigned long _temp_pgtable_map_pte(pte_t *dst_ptep, pte_t *src_ptep,
-> > > +					   unsigned long addr, pgprot_t prot)
-> > > +{
-> > > +	pte_t pte = READ_ONCE(*src_ptep);
-> > > +
-> > > +	if (pte_present(pte))
-> > > +		set_pte(dst_ptep, __pte(pte_val(pte) | pgprot_val(prot)));
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static unsigned long temp_pgtable_map_pte(pmd_t *dst_pmdp, pmd_t *src_pmdp,
-> > > +					  unsigned long start, unsigned long end,
-> > > +					  pgprot_t prot)
-> > > +{
-> > > +	unsigned long addr = start;
-> > > +	pte_t *src_ptep;
-> > > +	pte_t *dst_ptep;
-> > > +
-> > > +	if (pmd_none(READ_ONCE(*dst_pmdp))) {
-> > > +		dst_ptep = (pte_t *)get_safe_page(GFP_ATOMIC);
-> > > +		if (!dst_ptep)
-> > > +			return -ENOMEM;
-> > > +
-> > > +		pmd_populate_kernel(NULL, dst_pmdp, dst_ptep);
-> > > +	}
-> > > +
-> > > +	dst_ptep = pte_offset_kernel(dst_pmdp, start);
-> > > +	src_ptep = pte_offset_kernel(src_pmdp, start);
-> > > +
-> > > +	do {
-> > > +		_temp_pgtable_map_pte(dst_ptep, src_ptep, addr, prot);
-> > 
-> > I think I'd rather have the body of _temp_pgtable_map_pte() here and drop
-> > the helper, because the helper does (pte_val(pte) | pgprot_val(prot))
-> > which looks strange, until seeing here that 'pte' is only the address
-> > bits, so OR'ing in new prot bits without clearing old prot bits makes
-> > sense.
-> we do not need to clear the old bits since we going to keep those bits but add new bits which are required for resume. Let's hold your question here but I will would like to see how Alex view it.
-
-I confused myself a bit in my first read, so some of what I said isn't
-relevant, but I still wonder why we don't want to be more explicit about
-what prot bits are present in the end, and I still wonder why we need such
-a simple helper function which is used in exactly one place. Indeed, the
-pattern of all the other pgtable functions below is to put the set_p*
-calls directly in the loop.
-
-Thanks,
-drew
+> > +static inline void disable_acpi(void)
+> > +{
+> > +	acpi_disabled = 1;
+> > +	acpi_pci_disabled = 1;
+> > +	acpi_noirq = 1;
+> > +}
+> > +
+> > +static inline void enable_acpi(void)
+> > +{
+> > +	acpi_disabled = 0;
+> > +	acpi_pci_disabled = 0;
+> > +	acpi_noirq = 0;
+> > +}
+> > +
+> > +/*
+> > + * The ACPI processor driver for ACPI core code needs this macro
+> > + * to find out this cpu was already mapped (mapping from CPU hardware
+> > + * ID to CPU logical ID) or not.
+> > + */
+> > +#define cpu_physical_id(cpu) cpuid_to_hartid_map(cpu)
+> > +
+> > +/*
+> > + * Since MADT must provide at least one RINTC structure, the
+> > + * CPU will be always available in MADT on RISC-V.
+> > + */
+> > +static inline bool acpi_has_cpu_in_madt(void)
+> > +{
+> > +	return true;
+> > +}
+> > +
+> > +static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+> > +
+> > +#endif /* CONFIG_ACPI */
+> > +
+> > +#endif /*_ASM_ACPI_H*/
+> > diff --git a/arch/riscv/include/asm/cpu.h b/arch/riscv/include/asm/cpu.h
+> > new file mode 100644
+> > index 000000000000..ea1a88b3d5f2
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/cpu.h
+> > @@ -0,0 +1,8 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#ifndef _ASM_CPU_H
+> > +#define _ASM_CPU_H
+> > +
+> > +/* It is required unconditionally by ACPI core */
+> > +
+> > +#endif /* _ASM_CPU_H */
+> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> > index 67f542be1bea..f979dc8cf47d 100644
+> > --- a/arch/riscv/kernel/Makefile
+> > +++ b/arch/riscv/kernel/Makefile
+> > @@ -90,3 +90,5 @@ obj-$(CONFIG_EFI)		+= efi.o
+> >  obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
+> >  obj-$(CONFIG_COMPAT)		+= compat_signal.o
+> >  obj-$(CONFIG_COMPAT)		+= compat_vdso/
+> > +
+> > +obj-$(CONFIG_ACPI)              += acpi.o
+> > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+> > new file mode 100644
+> > index 000000000000..81d448c41714
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/acpi.c
+> > @@ -0,0 +1,80 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + *  RISC-V Specific Low-Level ACPI Boot Support
+> > + *
+> > + *  Copyright (C) 2013-2014, Linaro Ltd.
+> > + *	Author: Al Stone <al.stone@linaro.org>
+> > + *	Author: Graeme Gregory <graeme.gregory@linaro.org>
+> > + *	Author: Hanjun Guo <hanjun.guo@linaro.org>
+> > + *	Author: Tomasz Nowicki <tomasz.nowicki@linaro.org>
+> > + *	Author: Naresh Bhat <naresh.bhat@linaro.org>
+> > + *
+> > + *  Copyright (C) 2021-2023, Ventana Micro Systems Inc.
+> > + *	Author: Sunil V L <sunilvl@ventanamicro.com>
+> > + */
+> > +
+> > +#include <linux/acpi.h>
+> > +#include <linux/io.h>
+> > +#include <linux/pci.h>
+> > +
+> > +int acpi_noirq = 1;		/* skip ACPI IRQ initialization */
+> > +int acpi_disabled = 1;
+> > +EXPORT_SYMBOL(acpi_disabled);
+> > +
+> > +int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
+> > +EXPORT_SYMBOL(acpi_pci_disabled);
+> > +
+> > +/*
+> > + * __acpi_map_table() will be called before paging_init(), so early_ioremap()
+> > + * or early_memremap() should be called here to for ACPI table mapping.
+> > + */
+> > +void __init __iomem *__acpi_map_table(unsigned long phys, unsigned long size)
+> > +{
+> > +	if (!size)
+> > +		return NULL;
+> > +
+> > +	return early_memremap(phys, size);
+> > +}
+> > +
+> > +void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
+> > +{
+> > +	if (!map || !size)
+> > +		return;
+> > +
+> > +	early_memunmap(map, size);
+> > +}
+> > +
+> > +void *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+> > +{
+> > +	return memremap(phys, size, MEMREMAP_WB);
+> > +}
+> > +
+> > +#ifdef CONFIG_PCI
+> > +
+> > +/*
+> > + * These interfaces are defined just to enable building ACPI core.
+> > + * TODO: Update it with actual implementation when external interrupt
+> > + * controller support is added in RISC-V ACPI.
+> > + */
+> > +int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
+> > +		 int reg, int len, u32 *val)
+> > +{
+> > +	return PCIBIOS_DEVICE_NOT_FOUND;
+> > +}
+> > +
+> > +int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
+> > +		  int reg, int len, u32 val)
+> > +{
+> > +	return PCIBIOS_DEVICE_NOT_FOUND;
+> > +}
+> > +
+> > +int acpi_pci_bus_find_domain_nr(struct pci_bus *bus)
+> > +{
+> > +	return -1;
+> > +}
+> > +
+> > +struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
+> > +{
+> > +	return NULL;
+> > +}
+> > +#endif	/* CONFIG_PCI */
+> > -- 
+> > 2.34.1
+> >
+> 
+> Otherwise, afaict, this is pretty consistent with how arm64 started its
+> ACPI support.
+> 
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> 
+Thanks!
+Sunil
