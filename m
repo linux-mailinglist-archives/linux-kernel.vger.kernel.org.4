@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B366D6A2221
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEA96A2226
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjBXTIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S229729AbjBXTKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBXTIT (ORCPT
+        with ESMTP id S229462AbjBXTKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:08:19 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F6118AAD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:08:18 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id nv15so128339qvb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:08:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
-        b=lq6iyj0EKEfQqTglbgRZALTdd2iolrg+mZLgfyfnuVsB4IgmyuDLcMN6i6GuVZ9LOj
-         gUjXjWwISfO71A6rCgQ8gCvy5Z+2N9vcBspoVTHaicXj43zSHl/8fGnJ+/bZYMFhOfKl
-         czA/TkxP9IOjyfxU/duJ/1Ec05mPty6AAlFP55nKjbRVeb+WQIh08yHMBJYr3xf/afdL
-         16JaC4xyGt0ZTv0vRp9o4EcElhP5Jct64R9371YE5Uk3d19FNoiZTS/gV/6dcj+CYWyl
-         Kj+KZLLNoOv6Aw00qLzDtH8I7M7VrFDHjnZkTX0W2daqxnsYb+V66y4T8nXrX50j3xfn
-         HHFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
-        b=SjWpj0E///huA7NdE8xF9lsuy/AqiNZYI5xM7SEoLrV7UcwBgLQHuyVspOyn7ewPek
-         MnS0Mx45G9jwu9/l7pxT2DVujZ+o/h7ceM/LSfv0re0kVLZH3FL40Zn0kUdiDWFHO10j
-         50eCXi5ZAMqxfw7qIvFuHvfxg73ONOELKk7hHIAZhNdWRyXNkg7u90MPtsuE+PUsscRb
-         uN1tT5hB05I1YkRjmdjANGqeXWIBT3Z+YskHCX0W/hRhQ5fPxRmnG8Djbu+Y0Krb/tYs
-         vk2gPRP+C6T9DA6EIokkk16jIm2FNaCpuOu4omb74btNqnqj84elIc4Ys19HfvSZaDsP
-         shjQ==
-X-Gm-Message-State: AO0yUKX2lHS8uUsmAsZeY9x+/FmjnfSydkUQ4fl1k5VjLTzR/QOtttTL
-        T2UA/UcNKS1b8WbzDX/9b3D22fbpGn4Qi1fqR/w=
-X-Google-Smtp-Source: AK7set9UUnEX07CRkjzbPdK8zWln6h7gK+1gPjZxG4CHzOgXcW6u7Xvj+O82/dbLV0kBvhlXrrOcIPNS6Lhqikgr8Oc=
-X-Received: by 2002:ad4:5502:0:b0:56b:ee5a:89f0 with SMTP id
- pz2-20020ad45502000000b0056bee5a89f0mr2838750qvb.7.1677265695154; Fri, 24 Feb
- 2023 11:08:15 -0800 (PST)
+        Fri, 24 Feb 2023 14:10:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFB71ACD8;
+        Fri, 24 Feb 2023 11:10:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14C1C61977;
+        Fri, 24 Feb 2023 19:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695FDC433EF;
+        Fri, 24 Feb 2023 19:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677265816;
+        bh=Beeg3L8TB4WjiSw949cuBxSUM1UYxNMXNzKYVbF+ync=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=BdBdSOO4A2TbKmfFFY9zoVy1TylXrNLt2+twn4YM4PK1c+IdoifLC1L+pDS4hUUlS
+         Pd9HJylSUeuVKVVBihyraJtRI4pS2YmzEaMNzH2UukT2qpv4SXlj6GhlTFu05liCOI
+         y5lY2/IZhMpzAt9b0XLM/OH+eKc6GOlZ6uYqfaYaOmjvvKCXtkLOzLL7et6nOJoWpY
+         V/9TOOFaI89n/5Z4X7wjX9Tb5j31gSkqI5RAeK2XgEK3KtbxfNnZClc+zCls5kHT9T
+         6s8Y28cRO+edS+8fHOeVlCjo+DlIm9zFxx+41WOPsUgHZnNkAv/BSFTnhu2l/jXE7C
+         lnB5zrawdeYFQ==
+Message-ID: <19ce51bd94685e2bed6cbc20467e5705.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:ad4:438b:0:b0:572:2b9b:a3d4 with HTTP; Fri, 24 Feb 2023
- 11:08:14 -0800 (PST)
-Reply-To: avamedicinemed3@gmail.com
-From:   Dr Ava Smith <mrsmalingwansuzara00@gmail.com>
-Date:   Fri, 24 Feb 2023 20:08:14 +0100
-Message-ID: <CAGYVCFB5eLGTy8qSgtabJwm5wuQEYtRHCgQPchyroqv23_UNgw@mail.gmail.com>
-Subject: From Dr Ava Smith from United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f36 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsmalingwansuzara00[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [avamedicinemed3[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsmalingwansuzara00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <d2519ebc-8f71-1cf0-9ec8-a65a7f094853@loongson.cn>
+References: <20221129034157.15036-1-zhuyinbo@loongson.cn> <31c690a347f858a477bbba9c838984ed.sboyd@kernel.org> <4b5fd886-57ce-01ef-8224-432898b7fb1c@loongson.cn> <8332a1cf44b01f06bdd5db9dc5d7f387.sboyd@kernel.org> <01ee3dc6-a868-fd2b-93aa-11e6bdfcc9df@loongson.cn> <9e8952c9415973dc7276185e3cdf5ae7.sboyd@kernel.org> <d92223a0-6d4c-33ea-1473-3d40bdd0ad9e@loongson.cn> <834da7dc-bb5d-3427-43e5-938e40a2d180@loongson.cn> <6c497d2d70d215a86be178fc08546f4d.sboyd@kernel.org> <d2519ebc-8f71-1cf0-9ec8-a65a7f094853@loongson.cn>
+Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver support
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liupeibao@loongson.cn,
+        loongarch@lists.linux.dev, wanghongliang@loongson.cn,
+        zhuyinbo <zhuyinbo@loongson.cn>
+Date:   Fri, 24 Feb 2023 11:10:14 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear
-My name is Dr Ava Smith,a medical doctor from United States.
-I have Dual citizenship which is English and French.
-I will share pictures and more details about me as soon as i get
-a response from you
-Thanks
-Ava
+Quoting zhuyinbo (2023-02-22 18:16:49)
+>=20
+> =E5=9C=A8 2023/2/23 =E4=B8=8A=E5=8D=885:00, Stephen Boyd =E5=86=99=E9=81=
+=93:
+> > Quoting zhuyinbo (2023-02-21 21:10:14)
+> >>>>> yes, the use of dts doesn't require the use of CLK_OF_DECLARE and c=
+an
+> >>>>> use platform_driver_register
+> >>>>>
+> >>>>> but my drvier not use platform_driver_register to register clk and =
+use
+> >>>>> CLK_OF_DECLARE to match of_clk_init.
+> >>>> of_clk_init() is there to register clks that are needed for early in=
+it,
+> >>>> i.e. the clockevent/clocksource or the root interrupt controller
+> >>>> (irqchip). Otherwise, it isn't necessary to register clks via
+> >>>> of_clk_init().
+> >>> okay, I got it.
+> >> and,=C2=A0 the time driver=C2=A0 get clock by CCF that ask loongson2 c=
+lock driver
+> >> use CLK_OF_DECLARE
+> >>
+> >> to match of_clk_init.=C2=A0=C2=A0 because=C2=A0 the timer_probe=C2=A0 =
+is very early and the
+> >> timer driver was use TIMER_OF_DECLARE
+> >>
+> >> to match time_probe.
+> >>
+> > If you have a time driver that gets clks, register those early with
+> > CLK_OF_DECLARE_DRIVER() and then have a platform driver for the rest of
+> > the clk tree that registers clks later.
+>=20
+> okay, I got it.=C2=A0 and this series patch I will use platform driver.=20
+> later, if the loongson2 time driver use the
+>=20
+> CLK_OF_DECLARE style I will make a alone time clk driver for it that=20
+> use=C2=A0 CLK_OF_DECLARE_DRIVER()
+>=20
+
+It can be the same file if you want. But then it can't be a module. Up
+to you what you want to do there.
