@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB9E6A1CBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BA96A1CC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjBXNJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S229629AbjBXNJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjBXNJE (ORCPT
+        with ESMTP id S230191AbjBXNJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:09:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA9014225;
-        Fri, 24 Feb 2023 05:09:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE538617BD;
-        Fri, 24 Feb 2023 13:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 250C1C433EF;
-        Fri, 24 Feb 2023 13:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677244142;
-        bh=DfKPie46ReFTjEqKAjEGsOkois9sxNN565pWyn1gjA0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NdhT66enU/WN9qIxplXDOGrIkHaR1cQOlinSCM7P438D9UH1sULVuRNNrAiEUnmdw
-         TxOHXnW6shXJo1N/JVlanoHk9qRY/7ZYDfdVl70nXT2S5AmsIXAPP25R0/q/RTaQr5
-         LWHmUKJwT0pcBqwmstkQ5x/FaXQZLnGkuNUK+dOB2qNSWYHgBSLHWUmaBkbrRQ2A1R
-         iut7SaxW6bhp0epE5wLUgEXw6HUZZ5GeRIMVHw2IBzT6svmhgSBMmlOZZbkMFWhm+J
-         G4tfzzAUXzYwdMAtQoXEOgebjD0OtORud0HIoQTzLyO16zGbbE8IKmA0UfcQubyfUw
-         cJUFAcFSq1Ypg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pVXp3-0007Hb-Fm; Fri, 24 Feb 2023 14:09:13 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] pinctrl: at91-pio4: fix domain name assignment
-Date:   Fri, 24 Feb 2023 14:08:28 +0100
-Message-Id: <20230224130828.27985-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 24 Feb 2023 08:09:13 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854F714987;
+        Fri, 24 Feb 2023 05:09:10 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7A15524E31E;
+        Fri, 24 Feb 2023 21:09:08 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 21:09:08 +0800
+Received: from [192.168.125.93] (113.72.147.165) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 21:09:07 +0800
+Message-ID: <bd4301c5-d79f-6ba5-a840-95b733d2d44e@starfivetech.com>
+Date:   Fri, 24 Feb 2023 21:09:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 1/3] dt-bindings: dma: snps,dw-axi-dmac: Add reset
+ items
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230221140424.719-1-walker.chen@starfivetech.com>
+ <20230221140424.719-2-walker.chen@starfivetech.com>
+ <1467f7c5-07eb-97db-c6f2-573a4208cc28@linaro.org>
+ <d0984638-3f7f-7e4e-fe3e-5e1f88375dca@starfivetech.com>
+ <36188e04-332f-e944-9c58-f6f2b74987da@linaro.org>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <36188e04-332f-e944-9c58-f6f2b74987da@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.165]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,33 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit d59f6617eef0 ("genirq: Allow fwnode to carry name
-information only") an IRQ domain is always given a name during
-allocation (e.g. used for the debugfs entry).
 
-Drop the no longer valid name assignment, which would lead to an attempt
-to free a string constant when removing the domain on late probe
-failures (e.g. probe deferral).
 
-Fixes: d59f6617eef0 ("genirq: Allow fwnode to carry name information only")
-Cc: stable@vger.kernel.org	# 4.13
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/pinctrl/pinctrl-at91-pio4.c | 1 -
- 1 file changed, 1 deletion(-)
+On 2023/2/24 18:51, Krzysztof Kozlowski wrote:
+> On 24/02/2023 11:14, Walker Chen wrote:
+>>>>    resets:
+>>>> -    maxItems: 1
+>>>> +    maxItems: 2
+>>>
+>>> This breaks ABI and all other users. Test your changes before sending.
+>> 
+>> I think 'minItems' should be added here. So like this:
+>> resets:
+>>   minItems: 1
+>>   maxItems: 2
+>> 
+>> Other platform/users will not be affected by this.
+> 
+> Which will allow two resets on all platforms. Is this correct for these
+> platforms? Do they have two resets?
+> 
+In kernel 6.2, only two platforms use this DMA controller (see 'arch/arc/boot/dts/hsdk.dts' and 'arch/riscv/boot/dts/canaan/k210.dtsi').
+There is one reset on k210, while there is no reset of DMA on hsdk at all.
+If here minItems with value 1 is added and the value of maxItems is changed to 2, after my testing,
+whether it is one reset or two resets, even no reset, there is no errors occur when doing dtbs_check,
+the DMA initialization shall not be affected either on their platforms.
 
-diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
-index 39b233f73e13..d699588677a5 100644
---- a/drivers/pinctrl/pinctrl-at91-pio4.c
-+++ b/drivers/pinctrl/pinctrl-at91-pio4.c
-@@ -1206,7 +1206,6 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
- 		dev_err(dev, "can't add the irq domain\n");
- 		return -ENODEV;
- 	}
--	atmel_pioctrl->irq_domain->name = "atmel gpio";
- 
- 	for (i = 0; i < atmel_pioctrl->npins; i++) {
- 		int irq = irq_create_mapping(atmel_pioctrl->irq_domain, i);
--- 
-2.39.2
 
