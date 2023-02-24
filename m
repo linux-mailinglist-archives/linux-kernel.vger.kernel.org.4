@@ -2,97 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FA26A15E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AFE6A15E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjBXE3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 23:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S229802AbjBXEbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 23:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBXE3q (ORCPT
+        with ESMTP id S229553AbjBXEbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 23:29:46 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666CC25293;
-        Thu, 23 Feb 2023 20:29:45 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id h10so2441185ila.11;
-        Thu, 23 Feb 2023 20:29:45 -0800 (PST)
+        Thu, 23 Feb 2023 23:31:12 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B238B5B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 20:31:08 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id s22so16330930lfi.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 20:31:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bFcCAGcExvL1TUhy9/ONz2HJhq249qLecHd7Ujep69E=;
-        b=EPK9SKNxDXpAG4KK7C0t7TYCyuqrFSIdMsrEL6J/boNFOE1e0mzeKA2JZ7ghjdDf2H
-         ZrfHmp82vQ1f8ufVgQMotnh2cirtXi9o96qJ5SIQgceRU6jqeuWFlF4J4tcWTj0q2aWj
-         TrBwKn97VsU0i7qe4a9zfKN4jvGfGkD3N+i2qt/+BSR+19uZWD36HI82/6wcFaQcOSZf
-         qfjj/jUTId0oJYxl3QGoGYq84q2qS1n+plPz9rRc0jh2hRQJqr/RA1hT5Bi2yddb8G43
-         Bux7Aca0CrOaeR48sH7YO4BC4CyCW3C5UketUD7IOHt4kIv+nI4dlBGiEx9M9NqRPS4q
-         lDXw==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+TjRzJKx+5gPPVAVOvZp755ZRzKkCtMzeNpZRhOAXHs=;
+        b=IHBRDf7+4sWqaN2L9Vv1WWhK4dx+CgF0B+6x84eUc0BfbGWSrD4PeC3lBw8tFAHM+q
+         17oVXYFothVXQc/3TUpx+nx7mYMRxKcMCbZV5B7vvoew66CpT1JP/kfKmShWaPkpC8pS
+         CyJJdcC3dX4hTDltSofdhDM6dZfYii7iPr+Eo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bFcCAGcExvL1TUhy9/ONz2HJhq249qLecHd7Ujep69E=;
-        b=TkzcoirKIdKiGURtRDug1PObdcwyyFB4bsUbXEwxaI8LVkpA8CyrLIYOmcmNOmq595
-         Oj2j/8TLK0p4XL0FGZoIKemQgAhvqiDoQNDvqyq5SbJprkD84Ht7ci91vgbXRTDQqZ4h
-         p1+A0QxjUbZ2HKPaJsU0W4KIAQwOO30P2hj0CxvvCQ7m/pcdIAAUPbP6/7YIy0aOYGlU
-         jVISteZ8TSmFjhO4o7bC9AUxa/xpANj9x/P4Tktv5opzvZuGeviZYoqr3mLhs/w79fGi
-         AG60JmsSA27Dn/C8XZq0B1DbAaet+VWTXyKCGB4iQnPLJ0xKvtJC+EBVoZZ/xtmJhwfO
-         c8Fw==
-X-Gm-Message-State: AO0yUKXeMvYvg1NBpxML4fcWDdhuTKgrOwfui3G+QotKqyBuWajRUzoS
-        1RGR7+fTYtbFkxXcaSIp/JA=
-X-Google-Smtp-Source: AK7set80xtq++KVR8NwURwDqQiq7UYsT0qUlqRG4VROqQ1BSuWy/QeJAGfVR4Yro2p9h7zjMXHOa8Q==
-X-Received: by 2002:a05:6e02:1849:b0:316:dc3a:fe80 with SMTP id b9-20020a056e02184900b00316dc3afe80mr10828322ilv.0.1677212984802;
-        Thu, 23 Feb 2023 20:29:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s24-20020a02c518000000b003ad13752c9csm1999216jam.72.2023.02.23.20.29.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 20:29:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Feb 2023 20:29:43 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 00/12] 6.2.1-rc2 review
-Message-ID: <20230224042943.GE1354431@roeck-us.net>
-References: <20230223141539.893173089@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+TjRzJKx+5gPPVAVOvZp755ZRzKkCtMzeNpZRhOAXHs=;
+        b=uHnmto7AMGHv/i0La9iVYYgnJBGgB3+TxPYkCk/OrUxBd0tZSstOX5jw1IW0+o2oFK
+         jhl22N/ck3XiyvDz8QNNzrEuR9jdtsj18GTL/L+DlW0vMN3Ej6hJPFkYle8a5nvlvXai
+         HR1WbPcmDeFiRYOYKakc8oR3sc+VARr2SEpTkj2J0SpLkDQjUueMKCkzk4omJPwo8LKE
+         a0gk50ncxxsFKkwfKhGjnpZFUC4VWo270RckhwQAIitSnh1MkvSm03S5nx4dA+H2mFP1
+         OlxZq8I+RjAs3lhCS3n/agaRkNCmnVnL8XI1vyzqEuVbR8fX5/1QOV6Y5aq/6X9SbKAm
+         NyWQ==
+X-Gm-Message-State: AO0yUKWOT5YBN8S7vFlCHQGrVc8NB0vA/pf6qYrdM7p8AaqU881sWy5N
+        bJW63LsaLsn6ywqLa7qhmvxex2HvvA2pHfpkv+mtWw==
+X-Google-Smtp-Source: AK7set/muUdtLIc+8EFNdUDzC9QtVfwxV+1nsIhXr+5UG3IvB9BRJTXMy4NX88uhhuy9L3eYlLkQdf9ox+Bld2Fh3mU=
+X-Received: by 2002:ac2:485a:0:b0:4dc:4af9:8a7 with SMTP id
+ 26-20020ac2485a000000b004dc4af908a7mr4538260lfy.11.1677213066891; Thu, 23 Feb
+ 2023 20:31:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223141539.893173089@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230223063022.2592212-1-qiang1.zhang@intel.com>
+ <IA1PR11MB6171F5F6B525B6C599024C9D89AB9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <PH0PR11MB588084641FFB675A102BA503DAAB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <Y/eP4h/chB8J0rAj@google.com> <PH0PR11MB58801B94B0374865394E9F8FDAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <Y/ggCdoMEhMO8vs+@google.com> <CAEXW_YRTOYu5ZR6aX7AaTGyCQJwjB2aEmuPMYExYD4A2csRP1w@mail.gmail.com>
+ <CAEXW_YRH2amT0K3f9c4tEzXZ46GsKHwGkjaznPrH5EOL4ay+dg@mail.gmail.com>
+ <PH0PR11MB588021890119CA76AA5BB848DAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <CAEXW_YSbUzqBCQXHPF0zF67B8+mwTNojC38K6rx3=0+Jzurjzg@mail.gmail.com> <PH0PR11MB58805DC495967F99AC133440DAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB58805DC495967F99AC133440DAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 23 Feb 2023 23:30:55 -0500
+Message-ID: <CAEXW_YQd5hOiUPM0n7-ttXA=z7A0k8d5jeO=4vvrGZeGLHztHQ@mail.gmail.com>
+Subject: Re: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in call_rcu_tasks_generic()
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:16:08PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.1 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
-> 
+On Thu, Feb 23, 2023 at 10:22 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+>
+> On Thu, Feb 23, 2023 at 10:05 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+> >
+> > On Thu, Feb 23, 2023 at 9:35 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > > On Thu, Feb 23, 2023 at 9:25 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > >
+> > > > On Fri, Feb 24, 2023 at 12:36:05AM +0000, Zhang, Qiang1 wrote:
+> > > > > On Thu, Feb 23, 2023 at 08:43:05AM +0000, Zhang, Qiang1 wrote:
+> > > > > > > From: Zqiang <qiang1.zhang@intel.com>
+> > > > > > > Sent: Thursday, February 23, 2023 2:30 PM
+> > > > > > > To: paulmck@kernel.org; frederic@kernel.org; quic_neeraju@quicinc.com;
+> > > > > > > joel@joelfernandes.org
+> > > > > > > Cc: rcu@vger.kernel.org; linux-kernel@vger.kernel.org
+> > > > > > > Subject: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in
+> > > > > > > call_rcu_tasks_generic()
+> > > > > > >
+> > > > > > > According to commit '3063b33a347c ("Avoid raw-spinlocked wakeups from
+> > > > > > > call_rcu_tasks_generic()")', the grace-period kthread is delayed to wakeup
+> > > > > > > using irq_work_queue() is because if the caller of
+> > > > > > > call_rcu_tasks_generic() holds a raw spinlock, when the kernel is built with
+> > > > > > > CONFIG_PROVE_RAW_LOCK_NESTING=y, due to a spinlock will be hold in
+> > > > > > > wake_up(), so the lockdep splats will happen. but now using
+> > > > > > > rcuwait_wake_up() to wakeup grace-period kthread instead of wake_up(), in
+> > > > > > > rcuwait_wake_up() no spinlock will be acquired, so this commit remove using
+> > > > > > >
+> > > > > > >There are still spinlock-acquisition and spinlock-release invocations within the call path from rcuwait_wake_up().
+> > > > > > >
+> > > > > > >rcuwait_wake_up() -> wake_up_process() -> try_to_wake_up(), then:
+> > > > > > >
+> > > > > > >    raw_spin_lock_irqsave()
+> > > > > > >    ...
+> > > > > > >    raw_spin_unlock_irqrestore
+> > > > > >
+> > > > > > Yes, but this is raw_spinlock acquisition and release(note: spinlock will convert to
+> > > > > > sleepable lock in Preempt-RT kernel, but raw spinlock is not change).
+> > > > > >
+> > > > > > acquire raw_spinlock -> acquire spinlock  will trigger lockdep warning.
+> > > > > >
+> > > > > >Is this really safe in the long run though? I seem to remember there are
+> > > > > >weird locking dependencies if RCU is used from within the scheduler [1].
+> > > > > >
+> > > > >
+> > > > >
+> > > > > I have  been running rcutorture with rcutorture.type = tasks-tracing,
+> > > > > so far no problems have been found.
+> > > > >
+> > > > >
+> > > > > >I prefer to keep it as irq_work_queue() unless you are seeing some benefit.
+> > > > > >Generally, there has to be a 'win' or other justification for adding more
+> > > > > >risk.
+> > > > > >
+> > > > > >thanks,
+> > > > > >
+> > > > > >- Joel
+> > > > > >[1] http://www.joelfernandes.org/rcu/scheduler/locking/2019/09/02/rcu-schedlocks.html
+> > > > >
+> > > > >
+> > > > > The problem in this link,  in an earlier RCU version, rcu_read_unlock_special()
+> > > > > Invoke wakeup and enter scheduler can lead to deadlock, but my modification is for
+> > > > > call_rcu_tasks_generic(), even if there is a lock dependency problem, we should pay
+> > > > > more attention to rcu_read_unlock_trace_special()
+> > > >
+> > > > Consider ABBA deadlocks as well, not just self-deadlocks (which IIRC is what
+> > > > the straight-RCU rcu_read_unlock() issues were about).
+> > > >
+> > > > What prevents the following scenario?
+> > > >
+> > > > In the scheduler you have code like this:
+> > > >                 rq = task_rq_lock(p, &rf);
+> > > >                 trace_sched_wait_task(p);
+> > > >
+> > > > Someone can hook up a BPF program to that tracepoint that then calls
+> > > > rcu_read_unlock_trace() -> rcu_read_unlock_trace_special(). All of
+> > > > this while holding the rq and pi scheduler locks.
+> > > >
+> > > > That's A (rq lock) -> B (rtpcp lock).
+> >
+> > In rcu_read_unlock_trace_special(), the premise of acquiring the rtpcp lock is that
+> > before that, we have task switch in the rcu_read_lock_trace/unlock_trace critical section.
+> > but after we already hold the rq lock, no task switch is generated in the
+> > rcu_read_lock_trace/unlock_trace  critical section.
+> >
+> > Please correct me if my understanding is wrong.
+> >
+> >Yes, but in the next reply I corrected myself and I am still concerned
+> >about ABBA. There is obviously *some lock* that is held by the callers
+> >of call_rcu_tasks*(). So there is a dependency that gets created
+> >between _that_ lock and the rq lock, if you do a wakeup here.  And I
+> >am not sure whether that lock is also acquired when the BPF program
+> >runs. If it is, then the BPF programs may hang. It is probably worth
+> >checking with the BPF guys.
+> >
+> >More importantly, do you see a benefit with this change in terms of
+> >anything more than deleting a few lines of code? Paul typically favors
+> >robustness and guard rails (as do I), unless there is significant
+> >benefit in performance, power or both.
+>
+> because I found that the purpose of using irq_work_queue() early is to solve the problem of lockep splat,
+> my modified junior is also to avoid unnecessary IPI.
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 504 pass: 504 fail: 0
+irq_work_queue() which this code uses does a self-IPI, unlike
+irq_work_queue_on() which AFAIK is significantly cheaper on ARM64 than
+cross-CPU IPIs. Not sure about x86 though.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Another way to avoid IPI sometimes is making the IRQ work lazy.  It
+will then do self-IPI only if the tick is turned off. But I'm not sure
+if that is any better than leaving the code as-is.
 
-Guenter
+> but like you said, indeed we are not completely sure
+> whether there is a potential lock dependency problem, so I agree your opinion.
+
+Ok and thanks for digging into it. This was fun!
+
+ - Joel
+
+
+>
+> Thanks
+> Zqiang
+>
+> >
+> >Thanks,
+> >
+> > - Joel
