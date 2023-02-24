@@ -2,223 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929296A1B01
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08396A1B10
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 12:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjBXLBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 06:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S230370AbjBXLDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 06:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBXLAY (ORCPT
+        with ESMTP id S230003AbjBXLCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 06:00:24 -0500
-Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461B63576;
-        Fri, 24 Feb 2023 03:00:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1677236405;
-  h=message-id:date:from:subject:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=q4pRj+lApAO29UsmHk3xOQLyT7j5LdoqZnB+rheaQl0=;
-  b=J3rSZQEXOkfdQyAGiPCs+JtG6MyXccqynhV+1rxpo6Rko1FWoAZPzDNu
-   defXE6lhrm9YbhuYOlL+UxlBKaDkTQOFJeB5uB40nHzohOchVVFFUNQrP
-   hNaZOKCvT/iDkTDFRCLnO/iMGwP0KhtXjKsh8spFu3BOxjx+Ac2LkkRJK
-   0=;
-X-IronPort-RemoteIP: 104.47.59.172
-X-IronPort-MID: 100819730
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:T3ke469c+70+vO4LqpR7DrUD8n6TJUtcMsCJ2f8bNWPcYEJGY0x3m
- mAXWWHXb/6NNGXxKtkiO4+w9EICvJXXx4QwQAplqn08E34SpcT7XtnIdU2Y0wF+jCHgZBk+s
- 5hBMImowOQcFCK0SsKFa+C5xZVE/fjUAOG6UKicYXoZqTZMEE8JkQhkl/MynrlmiN24BxLlk
- d7pqojUNUTNNwRcawr40Ire7kIw1BjOkGlA5AdmP6oX5AW2e0Q9V/rzG4ngdxMUfaEMdgKKb
- 76r5K20+Grf4yAsBruN+losWhRXKlJ6FVHmZkt+A8BOsDAbzsAB+v9T2M4nQVVWk120c+VZk
- 72hg3ASpTABZcUgkMxFO/VR/roX0aduoNcrKlDn2SCfItGvn9IBDJyCAWlvVbD09NqbDklc1
- 8M4KyIXViupirO90puiGudvp8caeZyD0IM34hmMzBn/JNN/G9XvZvuP4tVVmjAtmspJAPDSI
- dIDbiZiZwjBZBsJPUoLDJU5n6GjgXyXnz9w8QrJ4/ZopTWCilUuitABM/KMEjCObexTklyVu
- STt+GPhDwtBHNee1SCE4jSngeqncSbTAdpKROTpqaUy6LGV7jZKWERRBV6Vmse4sG+8W/d2O
- kIP8RN7+MDe82TuFLERRSaQsH+C5VgYWvJRFfE37EeGza+8ywKYAHUUCz1MctorsOcoSjEwk
- FyEhdXkAXpoqrL9YWLNqJ+XoCm0NCxTKnUNDQcHUw4t/dbuuscwgwjJQ9IlF7S65vXpFjXg6
- zSLqjUinbIVjN5N26jT1VXGhT2rjoLEQg48+kPcWWfNxglhTIehZoGuuR7X4J5oII+HQx+Bt
- X4fls626OEIEIHLlSqRTeFLF7asj96FKDT0k09zGINn/DOok1a7cJxd+iNWJUFnKM8IdDblJ
- kjJtmt5/5JaOnmhRaBwZI21BoIhyq2IPczvUfbGb9xPSoJ8eA+O4GdlYkv493rkjklqj+ckO
- Z6dcs+2JXccFaljijGxQo8gPaQDwyk/wSbfQM79xhH+i76GPifKE/ECLUeEaf0/4OWcugLJ/
- t1DNsyMjRJCTOn5ZSqR+okWRbwXEUUG6VnNg5Q/Xoa+zsBOQgnN19e5LWsdRrFY
-IronPort-HdrOrdr: A9a23:hL2/8K3RVYR3i0ZvNu88nwqjBHYkLtp133Aq2lEZdPU0SKGlfq
- GV7ZEmPHrP4gr5N0tOpTntAse9qBDnhPxICOsqXYtKNTOO0AeVxelZhrcKqAeQeBEWmNQ96U
- 9hGZIOcuEZDzJB/LvHCN/TKadd/DGFmprY+ts31x1WPGVXgzkL1XYANu6ceHcGIzVuNN4CO7
- e3wNFInDakcWR/VLXBOpFUN9KzweEijfjdEGc7OyI=
-X-IronPort-AV: E=Sophos;i="5.97,324,1669093200"; 
-   d="scan'208";a="100819730"
-Received: from mail-dm6nam12lp2172.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.172])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Feb 2023 06:00:02 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HZSQCHr+hia5NGQkYsZZMoU5kHTFHlP+cG8OKe/xBNj4/aC+ZwSoRYLU6I0Ho1ZM2m44wiG+RHR+dNPLOlhleXhJofwgo5DFN4SDgiOwfb7Y9qzw56CJm6AzhaBY28qWXZ7WZO0z3Gl9fKzKqLMneqp2P7j9MKDVHnb0c1kvGS2Lr9KdOdI1cgfns51LXfYrVQFQGY19p6klg0rVGox1b7EH6ytM+/dH3LBprpAe2lG10wHG26h6402K7mpnnbnvJxWjCzV1e8HFOmZ3Bw7tVNOYZ8orV40+B1OPPFN5StWDFoHW4LpRAq5anoYsVqeL0WXaFYMKvvQeIx+EyIcBkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Frs6YygcITvsoWVq1GwH33Jml/Wk6QLtwz3eY3qlCIM=;
- b=aw5hUUa4I8hiakI0pO6LOhXM5/ESnK8CbYYiUNWQiNnXDeF4WLg5grba8aO1A1TkC+nvAMGjScuUPpq0cLUxta5lkf4skBk2ZZ7W/rwHNp7QeChjBPWiEWzeywi52qxiOpUuR9tp2d2NIHzZ/zdMCyW78QkfhP0aGvTYyc1ra0r+RGE5tMln1trrHkB9xI/GHPAyecG4fO85oPTsKlLEkoOHRGdkLl4XPyszXdVVIVcjHekEMl5g/1TMonoTp2JSec6iTpdeFQ9JMvLZKvI4yvQj7PeBmwYRFFVe89dHvwc4c7RCFjN5Q0kAbq3j61w5ihg65GddxJ3DEVUWUN92QQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+        Fri, 24 Feb 2023 06:02:53 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E701F6CF0F;
+        Fri, 24 Feb 2023 03:01:06 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id e24so7517831ljj.3;
+        Fri, 24 Feb 2023 03:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Frs6YygcITvsoWVq1GwH33Jml/Wk6QLtwz3eY3qlCIM=;
- b=mYzEUGMdpyIx4ybDDu1XyTyhPkyeahf8L+wdu/sgMRRUSbkB0tkWHYAq1DdiiWTQsTzjl83UiRlLQFTHoQGWMFjtMx9+/KfqKlIAQCU4FN21+b9QYlMtl0/5HkWzk/ZEGcvxM593fWS9fsHVaAvYvlwKhtxJNRHZGb4avqim7MI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by PH0PR03MB6637.namprd03.prod.outlook.com (2603:10b6:510:b1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Fri, 24 Feb
- 2023 11:00:01 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::8299:f95f:934b:29e8]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::8299:f95f:934b:29e8%7]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
- 11:00:01 +0000
-Message-ID: <bf1ad4c3-73eb-0f8f-e627-a7e0785fe903@citrix.com>
-Date:   Fri, 24 Feb 2023 10:59:54 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   andrew.cooper3@citrix.com
-Subject: Re: [RFC PATCH v3 15/32] x86/fred: make unions for the cs and ss
- fields in struct pt_regs
-Content-Language: en-GB
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com
-References: <20230224070145.3572-1-xin3.li@intel.com>
- <20230224070145.3572-16-xin3.li@intel.com>
-In-Reply-To: <20230224070145.3572-16-xin3.li@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LNXP265CA0058.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:5d::22) To BYAPR03MB3623.namprd03.prod.outlook.com
- (2603:10b6:a02:aa::12)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5AIXFULTyE2NYT6U8vMfNuliXg2sFhN0e4bazCu8yv8=;
+        b=m80A7SSUDmTjppc/QxY0xh4gKh5c9j2fqJJ5VGuCBVl+dPqSYp6+8qyYBzRLXTpGbJ
+         ZnXvWGDmeWssc3LH+rrERguT5Xy1TJRQHEiD6FWLTUnJ5swL9D9Ce8ChGJCptz7RFIXP
+         LAWe+b3npfc7VdM71mMHpS1xsVZZWrPhRWeT+QIuOqau06TR6lGY5aDAniz+MpOSTXjJ
+         vMhqW67aDcL51XU+wjOy8MMSvoItFbTjNKFnnG9QHF0LifjJnOvQbrJ6Zq/767LJIrp/
+         Bk5/3RWz/365M7nCzWJV2kNcu39L/esSs3sMEULFl6xTAmPAAB12xUMmiUeVkczispx9
+         qzVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5AIXFULTyE2NYT6U8vMfNuliXg2sFhN0e4bazCu8yv8=;
+        b=Ifq7sYpxeEWWntWClud84iuBUuj0Od9wExSYXrpFJ/7TAKymKJ9cN99qQS84JhOGis
+         562X5Ug3xvaZjv/Sgy9wnCU+0bhZc+ANlJmiNbA9x3EX6zE4MgsvtBz9RJPvOOPmdJAV
+         oTwgos+fYD6CGlmDK54bojVXNalN83c6/d0TtR9ADJ7w70KioGHJ/+1tDwc0A3T7Ig5Y
+         AF61jlnFahh8jbb81v03+903md71fCHRVlYfeT9XpjCigQ52N4v/xuzwRvLUtoW0WEUE
+         99vFvO6+hZN6jw9FXlzWq/RRP1gMpyNbdxH7UOPWnzPE/9vityqz+A2Ul/ePC3AOwh+6
+         ZBUQ==
+X-Gm-Message-State: AO0yUKUOcCzR+p9EmEFZ+kiyfZJO+BYzWnpkncGjdEJK0CTFKu2XHrq0
+        1DMC2cHKkRA3hBp1pbK1V78=
+X-Google-Smtp-Source: AK7set+u6j5mMjeRrDy3BHmdbX5p1kc2CcLp2kMTojx4ZvP7aK8yrHuABT4+lDMV12C7Cj+kbsY5YQ==
+X-Received: by 2002:a2e:be88:0:b0:293:4d02:98ed with SMTP id a8-20020a2ebe88000000b002934d0298edmr6858700ljr.27.1677236464508;
+        Fri, 24 Feb 2023 03:01:04 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id u2-20020a2e9f02000000b0029474e94ac6sm720991ljk.12.2023.02.24.03.01.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 03:01:04 -0800 (PST)
+Date:   Fri, 24 Feb 2023 13:00:53 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+Message-ID: <20230224130053.3f8939e2@eldfell>
+In-Reply-To: <582a9b92-d246-fce2-cf39-539d9a2db17f@linux.intel.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+        <20230218211608.1630586-7-robdclark@gmail.com>
+        <20230220105345.70e46fa5@eldfell>
+        <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
+        <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com>
+        <CAF6AEGuMn3FywPkEtfJ7oZ16A0Bk2aiaRvj4si4od1d3wzXkPw@mail.gmail.com>
+        <20230222114900.1b6baf95@eldfell>
+        <CAF6AEGs1_75gg+LCBj6=PH8Jn60PXiE+Kx_2636nP-+pajN8Hg@mail.gmail.com>
+        <20230223113814.3010cedc@eldfell>
+        <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
+        <20230224112630.313d7b76@eldfell>
+        <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
+        <20230224122403.6a088da1@eldfell>
+        <582a9b92-d246-fce2-cf39-539d9a2db17f@linux.intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|PH0PR03MB6637:EE_
-X-MS-Office365-Filtering-Correlation-Id: 925703cc-95f2-482f-f60d-08db165646ab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Kr8CDS7ir67KbxT3n39anAxDvPputJ2C6MZjvOizc0MF3AvSOj/mGCpa3hkbeama6vkBRiLz+kYwn5gK47hzrauCha14Vgu7ntmUtzeVJNhWPqcmSvappwATkzd8tZvtAaxFb0M0etPFxra9yAdmGPIirsN9mXdch2j+of/VqOb8H2CpSGz2P5GilFo4P/+pF3/C/srE2WzGSNaWqj4Fo3mQZFS0elPvlcDFVk+OFnfd+wP8S2S4yhasrcz81pnzS/XdAiSmwEJ3rlzzSjXjsygwmfjShY95PMrOU9yhpzo663SU4MOsUwhcZ8jK/1XQsjvukox9Q8Z6KuO5q9Iw9RUKeCxq/pyX5uE1Uz5GiLHTkwUnByn/WEnhwbk6Oz8cleXBXrSIvWfXZtqo+bB/jVXy8Fzuom3fyA4rSVKzHt8y1/OUtKH8plrDYKnCYMIteNUZafGmsBqROScpL9lXCHrx56NTjFxkgbKX0bkFY23Tonvg8hbP7+i5mN38WQU8sMaLkNt0GpzoEJ2hhG7LlWNkL+Us4BycA7AoLFN0hCB3wmxCE17z5Or1CKSaTKOhj2FmztstsizYd2Ua4D9ztNoMxLTshLfeRy3b0cSdjvifxJ9VVDjG6UJ9aaPE5d4bpodd9OtkOMGT1n0l0j79UoCsRgTGRACGxwwjcPw7L4Fdo6ImkSvFRDMK1KfBpU1WQiVcqwMZ441puCQVLnCu+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199018)(41300700001)(31686004)(2616005)(82960400001)(2906002)(6506007)(36756003)(66476007)(66556008)(478600001)(86362001)(38100700002)(316002)(4744005)(9686003)(6512007)(26005)(6666004)(8676002)(6486002)(4326008)(66946007)(53546011)(5660300002)(8936002)(7416002)(31696002)(186003)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YnBFTWhORGtEMjhDUm45RDFvUGxqK3ZXdy9GYy9hdG45NUhVNU1RZDZvQXhE?=
- =?utf-8?B?M0ZtMzFqbWdGdVNiYVg4NXpXV1N1SzVmY3ZKSmVITjg1TFplclVFbVJwZjd4?=
- =?utf-8?B?MUU1d1hqN2xESnJ5UzkxR0JBbWVuc1BUYi9BN0pjSHFIUmwzb044dnd5Mktm?=
- =?utf-8?B?QXI3ZXBnMkpxVHJPRlY0c3hKdStvNDZTcXlBcUdzVWxNZThHWmthSjdsL1Ex?=
- =?utf-8?B?bWZBL2JOQU5YekFhUzcwWWRtc0o1MUNJcXFWYmNxOGtLb05PMUpOVlNoMy9E?=
- =?utf-8?B?OGt0NmV3c055dEJ5My9CSXluWWYrRExZUTE3VnI2TVFLQ3g2SXNwNzkzVUxz?=
- =?utf-8?B?RU56TWJkaWFObmc1ZUNIT3FKMW8zSHhHYndQcGdJZDNFa01zd2dXd0dwTmUz?=
- =?utf-8?B?cXFsRUpmdlpnOERWYlI4cGJaZHJWTkpxTXd0dXR5ZVBiT2ZUZEtROU0rNW5T?=
- =?utf-8?B?bnNOa0hoSnZjY0VVb1MvYkJSbXBzcVJBc0RsL0ZBQ2Q2dXpENWNxUllPVVVL?=
- =?utf-8?B?MUd5MWs5S1FGSFBhckRIdUorNXV5NXhYRStIdzVUVytYZ1krQlRhNmxqUXpC?=
- =?utf-8?B?bklrLzR5dnNLYVd0bkZaMlJ0UjFUNDFyREpNZWpyTzhUaVArb1BVdVY1VVpD?=
- =?utf-8?B?dGJ1Y1NtUysrcEFmRmRKSjVCQ1RnUURmL0kvMEMyVGZ6a1cyNjFXbGMzUlQ1?=
- =?utf-8?B?VlhuVXQyaEgzL1p4MmlGMXZ3Q041UFZ0T1hjdEpSaG1jN1ppaVRoRDh6NUl0?=
- =?utf-8?B?aHFtbC9MT2tJSHJ6d1dsMVoxSW56Nm9tRTUwOGp0RndDeWlxaFJNM2N4Sy96?=
- =?utf-8?B?MjAxY0FxenhEYW5TNElyajZ4dU5qQ05GcjY5aC9PUUE1OTF0SElPQlRHakx2?=
- =?utf-8?B?NGdENi9iWW1hNldZNmRmaTV2bFJHU0cxeDYzZStVN01TVWcwWTcxbnlxekxC?=
- =?utf-8?B?dUgrTFNpY0p4b3grdW9xYTJjRE9NQTA5YmVseWYxL043ay85dnNuUm5WdUNI?=
- =?utf-8?B?MHFMVWZaTTNUY09VWmttU3pnQ05GSExoanUrZG9FZmFoeWtVNnBMS3lLYUtq?=
- =?utf-8?B?eHRKQ2VNZUJsdWhGbHZoNUkvaEw4Yk1ocnhIWHI4eEthZjMrekRDNG9rbFFq?=
- =?utf-8?B?alhBbkQwQ2wrMlgydTVyTm1sZnVRaDFXTGZlb1JtclJ3ZXJabGpySEwxTVY3?=
- =?utf-8?B?VXBXOFR2d2RCSEl1VFB5dDJETXBrSTZzWTVGOXhzRzFvdkxlc0gvQVJSVG8v?=
- =?utf-8?B?M3pmL09VdzlmVGpmT3VSKzhCMVdGS3kzb1IreU5VeHpFZFcxS012WDNZZHJu?=
- =?utf-8?B?bEJRRDZxQTRZMUwxOHNkRkY3QUlXOS9XTjBTYmdJNmIvdWxxVEZUd1hZS1ZY?=
- =?utf-8?B?azFlN3dRSmtQa3dVR3lDRW4rbndyb2hBVnlNL1pJaWswU1kxY21IaHdZdE5Y?=
- =?utf-8?B?SnQraUVUVXRmM1ZsNTcxb1V4Qzl1WDV0ek1zMkp1aXJ6U29tUjZpNzdONXpJ?=
- =?utf-8?B?TGhHT1dzZ0txN2NiVDRYWjlMN0R1ZHNWZGpGQzI4YkRraGlabXA2V24vTjJT?=
- =?utf-8?B?ZU5yeWVNOE9zd0dzbzc0V1NpdVBlRjZid0xodWw5SUM4Tk92SlNJeVcvVlVo?=
- =?utf-8?B?aHRkRXJlT1R1MHFydTJhVWxvbzVnRW85UkxNUmFQWXZmc2hkQUZPT2tkL3FE?=
- =?utf-8?B?MEJEQldzRWVkYW5EbmpFdFBkVDkranhIb3lYMFdlTXVHY083dGIvblFqTzdN?=
- =?utf-8?B?ZDNVNkNtdm9vWTNwUU5DMGZldTQyZmppZ2VqaElodVEzVUpveWpMQVRMYlVM?=
- =?utf-8?B?a28wTDRLNHo3RDRzQXNCblcwNlZRRVcydHduM1VuQTJRaUlkQ2xtMEJzZzM2?=
- =?utf-8?B?bWkwUWFGY2F0aUlIb3lieW03OWRJMHN1aTNQNmVCZ0hmY1lxeGtpb2k4SzNo?=
- =?utf-8?B?VjNzRlpzNngxN3EzMlZDUWg3MWNiMjdIeGQ2cHpBeUZHaDA0QzlrcU5kcGxi?=
- =?utf-8?B?Ym5aNWRTRE5yV1JzQTFjS0dBRDVrQmdpK2pMVVhMbUJqcDNBSTFTUGlwbnNF?=
- =?utf-8?B?MzZ0eGRRMFgyZDFYaFhpRmI2YXduTmFWZGJEMUl5M2hGL2JNbjBxV1ViSjlB?=
- =?utf-8?B?ZjM3dFY1UGp6eGtCTWNCMG0xQ2NCVjFVcEkxNTZoNklYcCtFNmlFWjdLczJK?=
- =?utf-8?B?c1E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RkVETi9KUGdFYy9ERVV3Qis2dVVZSjM0MVdyb2R6emJkKzdNcC9zUDhvcm4z?=
- =?utf-8?B?SlJzNStzZjZQWDJZQkRoNFhNMit6RFh6a1liQWdidTRHVFBaZTNNVHRsOVNs?=
- =?utf-8?B?T2xCNjZMRm9mQWE1S1MzeG9iV1VZSHF5NnQ1UGZtSTVQcUN4aGpXNS85dFl1?=
- =?utf-8?B?RlA0b0FqQm1LMmR1NXhNZE5rM0lwK2FjWDdKV0crOGdoQjVNZERSdVB2cnVO?=
- =?utf-8?B?cGN5Mkk4ZVpVMVM4dTJwQ05ZVGZvV1YwcGM3enBzM25IeUdDU0M5WmFIdmdr?=
- =?utf-8?B?TlpzS2haVGlmVFBKOTRXbS95VURKSndKaUJpbmRZK0RFUEt5TWlRektqZE4w?=
- =?utf-8?B?Y3pXOFZ4YnJQdUZsZXRQODR3UTQ3OU1CckdDY09CNC9uMXpmTjdTU2ZHK0NG?=
- =?utf-8?B?bTJ6dWtpOXFKZHVBZ29UM0F4dktwQ1E1ZmZQU0xZS0Nyb2lmNS9FU2sxcVlD?=
- =?utf-8?B?RC9lOWEydmhaaDZyUTlvNnU4aUJvMkIvMG1ua3ZNdXB1dDl1VzhFQTJYaHFL?=
- =?utf-8?B?SjRmSnFoOUFoc1R1SXpJZXVCOXZjMEFuZDltVEZtRndVTGhLOFo1N3pWWE9F?=
- =?utf-8?B?Q2cxM1Ztc2d0eUpuTEhIZXNMSVAxc1NuWm5rYkp4Yk5MSUFRTjhOUHlPY3g4?=
- =?utf-8?B?N1BWcjJVL21KRjRCdFVyR0ZwOFk5THpNVmFDckVZdXpzUzZ0ekF6Q2ZXR2VP?=
- =?utf-8?B?R2V0RGIraStmN3pJK0JxMWVZUjV0NmhkYlQyWnk2VUVtczNGWTdZdEpsVDZ1?=
- =?utf-8?B?VHVJc25PVkpJMHZqVG03QzVtdWl6Z2pGdGlWbzdDaEZEYjhlTXBveFhBMWZD?=
- =?utf-8?B?NTNEOHdMTzNLVWxodWpnSnp4aG1CNVdJQjZqQ0taRzdhblBMQk83cUFWbmEz?=
- =?utf-8?B?VkRQM1lHOVkwTmJmaERHMlhDWCtzdWQrVm1JT0F0U24rdXFmaTBmY3hZVVRI?=
- =?utf-8?B?L3gvcE5ZVTlHa1pvN1M4VHY1dTdMcVBlM3lhcTFrWDExa1VOb2picTNsWkxB?=
- =?utf-8?B?d1RMV2xYeUw4eXhYeDZCQ09lSjVNWURPYlVhblpPTUpzNUlsUjRKbmVNcnc4?=
- =?utf-8?B?aE0yZU04dS9ha1A5c1FLL21kS0RTNU0zNUZzZVNZTXlrMWgzNTV6U3lCcUk4?=
- =?utf-8?B?eVgzT3ZCSllLYkphL21vWXhaTFhxUkorZFR0ZXV5cUN0OFZOM0srR2piNlpv?=
- =?utf-8?B?NnZUbmNVMTJJL1lYME45TG1RTDB4cTF4WDdLc2NzS2wyMldrM3FnZTNuNEJh?=
- =?utf-8?B?TFpFSzVJcUtWZEV1eEJGQVNRcml5MXBIMlRwYnlHbTRlbnlNUGpCNjFBZVZ2?=
- =?utf-8?B?NGZKbER4NktXZG1ZMWRnUVgwVzZWeGRva0NFVlFzYU9ycW1xMmhJMTVDQkR6?=
- =?utf-8?Q?Cx3acowwKiEyZhnK857fpOUc+mbsvlPA=3D?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 925703cc-95f2-482f-f60d-08db165646ab
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 11:00:01.4386
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kqixzw7wa3aLCrMJO0Cb5HjKM3x76WkyEEZuuV+GjcnxmJ4FH/L5fCfxLop4J//yRhYCPK8EYlGTXcTrkOxSKwNE7H8nvPGdc9PG8+UA4Hw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB6637
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/I1D.bYM83gCFWxxa.Md9LXG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 7:01 am, Xin Li wrote:
-> diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
-> index f4db78b09c8f..341e44847cc1 100644
-> --- a/arch/x86/include/asm/ptrace.h
-> +++ b/arch/x86/include/asm/ptrace.h
-> @@ -82,13 +82,41 @@ struct pt_regs {
->   * On hw interrupt, it's IRQ number:
->   */
->  	unsigned long orig_ax;
-> -/* Return frame for iretq */
-> +
-> +	/* Return frame for iretq/eretu/erets */
->  	unsigned long ip;
-> -	unsigned long cs;
-> +	union {
-> +		unsigned long  csl; /* CS + any fields above it */
+--Sig_/I1D.bYM83gCFWxxa.Md9LXG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I guess that CSL here is supposed to mean cs long, but CSL (Current
-Stack Level) is a new term in the FRED spec which isn't this.
+On Fri, 24 Feb 2023 10:50:51 +0000
+Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
 
-This causes changes such as the final hunk in patch 27 to read
-incorrectly, despite being technically correct.
+> On 24/02/2023 10:24, Pekka Paalanen wrote:
+> > On Fri, 24 Feb 2023 09:41:46 +0000
+> > Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> >  =20
+> >> On 24/02/2023 09:26, Pekka Paalanen wrote: =20
+> >>> On Thu, 23 Feb 2023 10:51:48 -0800
+> >>> Rob Clark <robdclark@gmail.com> wrote:
+> >>>     =20
+> >>>> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaalanen@gmail.com>=
+ wrote: =20
+> >>>>>
+> >>>>> On Wed, 22 Feb 2023 07:37:26 -0800
+> >>>>> Rob Clark <robdclark@gmail.com> wrote:
+> >>>>>       =20
+> >>>>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.co=
+m> wrote: =20
+> >>>
+> >>> ...
+> >>>     =20
+> >>>>>>> On another matter, if the application uses SET_DEADLINE with one
+> >>>>>>> timestamp, and the compositor uses SET_DEADLINE on the same thing=
+ with
+> >>>>>>> another timestamp, what should happen? =20
+> >>>>>>
+> >>>>>> The expectation is that many deadline hints can be set on a fence.
+> >>>>>> The fence signaller should track the soonest deadline. =20
+> >>>>>
+> >>>>> You need to document that as UAPI, since it is observable to usersp=
+ace.
+> >>>>> It would be bad if drivers or subsystems would differ in behaviour.
+> >>>>>       =20
+> >>>>
+> >>>> It is in the end a hint.  It is about giving the driver more
+> >>>> information so that it can make better choices.  But the driver is
+> >>>> even free to ignore it.  So maybe "expectation" is too strong of a
+> >>>> word.  Rather, any other behavior doesn't really make sense.  But it
+> >>>> could end up being dictated by how the hw and/or fw works. =20
+> >>>
+> >>> It will stop being a hint once it has been implemented and used in the
+> >>> wild long enough. The kernel userspace regression rules make sure of
+> >>> that. =20
+> >>
+> >> Yeah, tricky and maybe a gray area in this case. I think we eluded
+> >> elsewhere in the thread that renaming the thing might be an option.
+> >>
+> >> So maybe instead of deadline, which is a very strong word, use somethi=
+ng
+> >> along the lines of "present time hint", or "signalled time hint"? Maybe
+> >> reads clumsy. Just throwing some ideas for a start. =20
+> >=20
+> > You can try, but I fear that if it ever changes behaviour and
+> > someone notices that, it's labelled as a kernel regression. I don't
+> > think documentation has ever been the authoritative definition of UABI
+> > in Linux, it just guides drivers and userspace towards a common
+> > understanding and common usage patterns.
+> >=20
+> > So even if the UABI contract is not documented (ugh), you need to be
+> > prepared to set the UABI contract through kernel implementation. =20
+>=20
+> To be the devil's advocate it probably wouldn't be an ABI regression but=
+=20
+> just an regression. Same way as what nice(2) priorities mean hasn't=20
+> always been the same over the years, I don't think there is a strict=20
+> contract.
+>=20
+> Having said that, it may be different with latency sensitive stuff such=20
+> as UIs though since it is very observable and can be very painful to user=
+s.
+>=20
+> > If you do not document the UABI contract, then different drivers are
+> > likely to implement it differently, leading to differing behaviour.
+> > Also userspace will invent wild ways to abuse the UABI if there is no
+> > documentation guiding it on proper use. If userspace or end users
+> > observe different behaviour, that's bad even if it's not a regression.
+> >=20
+> > I don't like the situation either, but it is what it is. UABI stability
+> > trumps everything regardless of whether it was documented or not.
+> >=20
+> > I bet userspace is going to use this as a "make it faster, make it
+> > hotter" button. I would not be surprised if someone wrote a LD_PRELOAD
+> > library that stamps any and all fences with an expired deadline to
+> > just squeeze out a little more through some weird side-effect.
+> >=20
+> > Well, that's hopefully overboard in scaring, but in the end, I would
+> > like to see UABI documented so I can have a feeling of what it is for
+> > and how it was intended to be used. That's all. =20
+>=20
+> We share the same concern. If you read elsewhere in these threads you=20
+> will notice I have been calling this an "arms race". If the ability to=20
+> make yourself go faster does not required additional privilege I also=20
+> worry everyone will do it at which point it becomes pointless. So yes, I=
+=20
+> do share this concern about exposing any of this as an unprivileged uapi.
+>=20
+> Is it possible to limit access to only compositors in some sane way?=20
+> Sounds tricky when dma-fence should be disconnected from DRM..
 
-cs_slot would be much clearer in code, but tbh, even cs_l would be
-better than the version without an underscore.
+Maybe it's not that bad in this particular case, because we are talking
+only about boosting GPU clocks which benefits everyone (except
+battery life) and it does not penalize other programs like e.g.
+job priorities do.
 
-And obviously, whatever is done here should be mirrored for ss.
+Drivers are not going to use the deadline for scheduling priorities,
+right? I don't recall seeing any mention of that.
 
-~Andrew
+...right?
+
+
+Thanks,
+pq
+
+--Sig_/I1D.bYM83gCFWxxa.Md9LXG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmP4mOUACgkQI1/ltBGq
+qqc1rQ/9EUIHxQur2LFhPc8dW9al2BKzk9iETv5iymwqPnsiPVwBensxVlYR6H5+
+hKLDJfOE4ka7Lh6t6oazo6vrt+vzRFQjPXdyteTpezf1fqruYrHLyuSU5hJ/TFj+
+WBBRCJhTJ6AfytE+kDgxJFveJgTB2wX0TcjrvY16B/qLeHojQs5ZxWhFaKOOgUGI
+oPFZZM4JGm+/UrNeGloSYL32gXzRv01DTinmoH9Pg6DXOrSQuXJ5MmX5GTjpe2hQ
++Kaqh6dkCCxHpIoj/A6mnsGVCP3Y/SB3VNE2iTYq2Fn7zssfFu1MbI6ib9rCKRMK
+tS2qQl8PMIUJYkSV+ke65DP0jgQhjPM6t+O6LYqYyx3Fm9/KkbaQExO743WZzhuo
+ZgiIbrfTGJ2NGSGH7hofqRdVTsPF6No905se5M8ohpSnzd675LRuzj3RnzzpvwJG
+2S/1CyBNsqD1dWDrph9S38YhFUGRvFgw0yqWUr1uqT9sT5JslsD6eFxuUtLfBn7N
+jnXqhGeg5gscKYND/uXPPC0IdBqG5kROTL2Md/ushUhVYu8TdW2eXlZE3MFltDg/
+xEz+yv0TQq3JwM9rEPtGMQOTfNQECUnrVMpDmv9iFo8KaSp379Yo9VTQNgP3Df3c
+bjl6l7PxtpsKqYb6aAnMpNiWj8/w+JXq9QEM5Hoa3lFdkYCQgZM=
+=1ihL
+-----END PGP SIGNATURE-----
+
+--Sig_/I1D.bYM83gCFWxxa.Md9LXG--
