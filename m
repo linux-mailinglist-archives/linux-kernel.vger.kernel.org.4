@@ -2,86 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D296A1CAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4906A1CAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjBXNG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S230145AbjBXNFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjBXNG0 (ORCPT
+        with ESMTP id S230172AbjBXNFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:06:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB576AB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:06:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 24 Feb 2023 08:05:30 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F78FF959;
+        Fri, 24 Feb 2023 05:05:29 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF45618D9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8011AC433EF;
-        Fri, 24 Feb 2023 13:06:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677243984;
-        bh=Gd+b31B6Tap7aA3jtuFUlatJg/pv2hwU9Z6ZAY7YshA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eudlguZ9ZKNCvlYoITFAFiXnh7t7I81egbws5/uWoZzRcj1gWRV2wWYR2BTshLaR1
-         zpZ2DmJFhl3APhXfEKJ1L2QE1UlZ/rrcY8xZ4oCJej6mnKOC/1FMlbjjCo9XGf8l9n
-         3kAeKalZIHeMuqpWRm5v2QrIxjkEoGfm47h5J7i+infY8EdiQLuQwUMDlyWAg8os07
-         QK3a/w8/8aLBsipani4FPggpGsmmpHaIdobicVUtScyOVUT975J42Bc7CpECeSaUmD
-         Gv5GPi4WJIMZL89Y+uIQRbPyyKWl08vMUlecDIfrukXV6IUKoXVCsequuMoQPmZ+rO
-         QB14OKnZUqp4w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pVXmW-0007Fb-95; Fri, 24 Feb 2023 14:06:36 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] genirq/msi: Drop dead domain name assignment
-Date:   Fri, 24 Feb 2023 14:05:09 +0100
-Message-Id: <20230224130509.27814-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8EE386602FB6;
+        Fri, 24 Feb 2023 13:05:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677243928;
+        bh=aVfAm+nqbHeECjn7WiittCHTPKqgPS/pUH3qciDBBc4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=c9nU2MjQbPZi2nc6yF9Aamrh8ompl8InKd/kvjIlJKM0IpQoh8tF1GSEr3IBRATpb
+         SasUgJJS4JsSuFGRl5Fx5jALhtvW5H5ODPQZydwYyU7MiwTtb0Qwnfwb1wYwsJP8WD
+         kHnR8EmFK1htn974GrQMziuFYrkMzrabEx4Nb4wvSqqz6BStoeoVDqEXF33GilUL/G
+         MUY7+08FDC1dbUQL7FL8eXAMPOSWbRW6u5k0wp2QLJ2DYV1eS+mHf8C+Bi8bN2CdAJ
+         E/up31yxCNi2dAZSEK73kS+xxicGSCoxlGWDHXcXq1SixncMx5sJU3B7rGJU0i1bO0
+         vLHpeXrwv/tdA==
+Message-ID: <7a4653f6-c074-1bd7-718a-7754f56c5105@collabora.com>
+Date:   Fri, 24 Feb 2023 14:05:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 11/16] arm64: dts: mediatek: mt8192-asurada: Couple
+ VGPU and VSRAM_OTHER regulators
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com>
+ <20230223134345.82625-12-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5ER-Z9WiRAKEbfKV3hzNQu0Xru-z5QUJA85wzrwzY7hcw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5ER-Z9WiRAKEbfKV3hzNQu0Xru-z5QUJA85wzrwzY7hcw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit d59f6617eef0 ("genirq: Allow fwnode to carry name
-information only") an IRQ domain is always given a name during
-allocation (e.g. used for the debugfs entry).
+Il 24/02/23 10:58, Chen-Yu Tsai ha scritto:
+> On Thu, Feb 23, 2023 at 9:44 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Add coupling for these regulators, as VSRAM_OTHER is used to power the
+>> GPU SRAM, and they have a strict voltage output relation to satisfy in
+>> order to ensure GPU stable operation.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>> index df477eb89f21..c8b6e1a9605b 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>> @@ -447,6 +447,13 @@ &mt6359_vrf12_ldo_reg {
+>>          regulator-always-on;
+>>   };
+>>
+>> +&mt6359_vsram_others_ldo_reg {
+>> +       regulator-min-microvolt = <750000>;
+>> +       regulator-max-microvolt = <850000>;
+>> +       regulator-coupled-with = <&mt6315_7_vbuck1>;
+>> +       regulator-coupled-max-spread = <10000>;
+>> +};
+>> +
+>>   &mt6359_vufs_ldo_reg {
+>>          regulator-always-on;
+>>   };
+>> @@ -1411,6 +1418,8 @@ mt6315_7_vbuck1: vbuck1 {
+>>                                  regulator-max-microvolt = <1193750>;
+>>                                  regulator-enable-ramp-delay = <256>;
+>>                                  regulator-allowed-modes = <0 1 2>;
+>> +                               regulator-coupled-with = <&mt6359_vsram_others_ldo_reg>;
+>> +                               regulator-coupled-max-spread = <10000>;
+> 
+> Also fix the constraints here? And overriding the constraints should be
+> mentioned in the commit log.
+> 
 
-Drop the unused fallback name assignment when creating MSI domains.
+There's no constraint to fix, though. The current ones are just fine.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- kernel/irq/msi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+I'll mention the constraints override for vsram_others in v3!
 
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 783a3e6a0b10..10d29bc87eb2 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -830,11 +830,8 @@ static struct irq_domain *__msi_create_irq_domain(struct fwnode_handle *fwnode,
- 	domain = irq_domain_create_hierarchy(parent, flags | IRQ_DOMAIN_FLAG_MSI, 0,
- 					     fwnode, &msi_domain_ops, info);
- 
--	if (domain) {
--		if (!domain->name && info->chip)
--			domain->name = info->chip->name;
-+	if (domain)
- 		irq_domain_update_bus_token(domain, info->bus_token);
--	}
- 
- 	return domain;
- }
--- 
-2.39.2
+Regards,
+Angelo
+
+>>                          };
+>>                  };
+>>          };
+>> --
+>> 2.39.2
+>>
+
 
