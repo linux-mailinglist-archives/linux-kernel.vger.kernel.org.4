@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2867D6A1DD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C766A1DD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjBXOwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S230104AbjBXOzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjBXOwk (ORCPT
+        with ESMTP id S229720AbjBXOzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:52:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EE653293
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:52:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 369B0B81C98
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 14:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEF9C433D2;
-        Fri, 24 Feb 2023 14:52:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677250356;
-        bh=88jg955Xlrfjz0cdpx93zZt+1vg7t0UtMpUiq72/y20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WuayLX8T11FBApVctgpEi4iszLEZbC2I6zuVpzQ1lROGYa395L2A7EvStSF7LQxP9
-         OYIliXyzfsSQuqYGcqzcGHiIjeruOZ56spgNEjHEI7tlVoxujKYnbnEEdtFR7w8Gpj
-         NNGzX/a4Wi+ZhoPO6sB6i077FQM/EClwXuZAZuPahGvPAKxYFfo9xeyuYVPlUxundc
-         bl97rVN929h+OFrKUJRa2dGILgG4rkYo4Dv8WEGujH6Tg2FvE40K+Bys9zwAex5K0M
-         Lf4XEmemjnIfJhhnzQ3jwx8WPgkGcke0hxn6LRoPAxmlyMQ2fzXx9k2JsIWaHHw6o4
-         bOb/7wNaxaLcw==
-Date:   Fri, 24 Feb 2023 16:52:26 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
-Cc:     remckee0@gmail.com, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Add tests for memblock_alloc_node()
-Message-ID: <Y/jPKvcIpqi1zVgC@kernel.org>
-References: <59d4745b-7b2-bf6-7b8-f6571d78d336@mail.polimi.it>
+        Fri, 24 Feb 2023 09:55:12 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F9446096
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:55:10 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m14-20020a7bce0e000000b003e00c739ce4so1885372wmc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aMQW/ellgn1pXltseM1o0F3wQ2R9xKG925J3WLYtIok=;
+        b=da+dhW3QJGErTX3NvZ44iKfDDxZfxs7rL/V3IoMNmgzNYJwx1qOUL6cUAwuIgk5h++
+         Zlm+8xoPSooEP9p/PH2bGZC4t8msBI59TyTkvw+FMvwfJAAOlTx41H3JCAK9/VEa0fyR
+         MNGf7H7EVCQJcbGdck0Oab8BEStnje4WV42ExHLsQNJioAcsY2dX5oYYsiLCmbWHfZNj
+         rOLv9VFyHtIJEoHh2PT8QlzSbGtFz8otcXVj3bXcrX/zG2Us0Mua57SYyn5OQmUZpLN9
+         Mx9oYaa8at9pNGp7P7WxD5/ebwN9o3l0G6N6qa6A3Ef/UQBtUbUMdbMr81bzFzgTNMSB
+         aQZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aMQW/ellgn1pXltseM1o0F3wQ2R9xKG925J3WLYtIok=;
+        b=rA5gpohWA3TJI6674F7gERC5Ag607KGmKO5vovH6U3Inz7eCaa6pHFjbZNR81yTCFe
+         TQbBppv2IL2Y0jGigPGKPHiUkq0O3UMTBaSpSbju7TePtc662dx6gt43GR39dfJlrylg
+         qWBvONrFNBkPnYAl9rge33ROTozkizo8okyr2FE3KxjE92DtmShMzcaJ8IIyiOv396qE
+         /GVo90j8Bci1mzozK/WV2yemzMT4YQaML4a0fquWeYb9rag6aQJk8E35dAG2mlem1DBg
+         6xtZ0oSSixtcQgF2CMH+tjX7pygPC0Clb4LGWv/Y5GqmyLqaN6pcsTYzHJ2/BuDzjpI1
+         k5MA==
+X-Gm-Message-State: AO0yUKWa/UaanSr59SoOFwL0ZsPLUfF5dHO8JiOp4vtI2IheVbIAEncw
+        b0Oryb6MB8RPmH5cxRGwIzklLg==
+X-Google-Smtp-Source: AK7set9n3yDeszAz6rxtpcHWPJpCYXtZPQyoC7QSt/RBAGQZWNXLHu3H4DAGoH3J6E1tycXa0VMDTQ==
+X-Received: by 2002:a05:600c:4d18:b0:3ea:e554:7808 with SMTP id u24-20020a05600c4d1800b003eae5547808mr3256028wmp.19.1677250509708;
+        Fri, 24 Feb 2023 06:55:09 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dff870ce0esm3104352wmc.2.2023.02.24.06.55.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 06:55:09 -0800 (PST)
+Message-ID: <2df19bef-5565-6961-3235-bf1ea21eabfe@linaro.org>
+Date:   Fri, 24 Feb 2023 15:55:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59d4745b-7b2-bf6-7b8-f6571d78d336@mail.polimi.it>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dt-bindings: fpga: xilinx-spi: convert bindings to
+ json-schema
+Content-Language: en-US
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230224113711.193903-1-nava.kishore.manne@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230224113711.193903-1-nava.kishore.manne@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,100 +78,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Claudio,
+On 24/02/2023 12:37, Nava kishore Manne wrote:
+> Convert xilinx-spi bindings to DT schema format using json-schema
 
-On Sun, Feb 19, 2023 at 05:28:46PM +0100, Claudio Migliorelli wrote:
-> This test is aimed at verifying the memblock_alloc_node() to work as
-> expected, so setting the correct NUMA node for the new allocated
-> region. The memblock_alloc_node() is called directly without using any
-> stub. The core check is between the requested NUMA node and the `nid`
-> field inside the memblock_region structure. These two are supposed to
-> be equal for the test to succeed.
+Missing full stop.
+
 > 
-> Signed-off-by: Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
 > ---
-> Changelog:
-> ----------
-> v2:
-> 	- Use the memblock_alloc_node() directly without mimicking it
-> 
->  tools/testing/memblock/tests/alloc_nid_api.c | 40 ++++++++++++++++++++
->  1 file changed, 40 insertions(+)
+>  .../bindings/fpga/xilinx-slave-serial.txt     | 51 ------------
+>  .../bindings/fpga/xlnx,fpga-slave-serial.yaml | 77 +++++++++++++++++++
+>  2 files changed, 77 insertions(+), 51 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-slave-serial.txt
+>  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
 
-When I tried to apply your patch I've got these errors:
 
-<stdin>:188: trailing whitespace.
- 
-error: patch failed: tools/testing/memblock/tests/alloc_nid_api.c:2494
-error: tools/testing/memblock/tests/alloc_nid_api.c: patch does not apply
+Thank you for your patch. There is something to discuss/improve.
 
-> diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
-> index 49ef68cccd6f..975a5317abf3 100644
-> --- a/tools/testing/memblock/tests/alloc_nid_api.c
-> +++ b/tools/testing/memblock/tests/alloc_nid_api.c
-> @@ -2494,6 +2494,35 @@ static int alloc_nid_numa_split_all_reserved_generic_check(void)
->  	return 0;
->  }
-> 
-> +/*
-> + * A simple test that tries to allocate a memory region through the
-> + * memblock_alloc_node() on a NUMA node with id `nid`. Expected to have the
-> + * correct NUMA node set for the new region.
-> + */
-> +static int alloc_node_on_correct_nid(void)
-> +{
-> +	int nid_req = 2;
-> +	void *allocated_ptr = NULL;
-> +#ifdef CONFIG_NUMA
-> +	struct memblock_region *req_node = &memblock.memory.regions[nid_req];
-> +#endif
-> +	phys_addr_t size = SZ_512;
-> +
-> +	PREFIX_PUSH();
-> +	setup_numa_memblock(node_fractions);
-> + +	allocated_ptr = memblock_alloc_node(size, SMP_CACHE_BYTES, nid_req);
-> +
-> +	ASSERT_NE(allocated_ptr, NULL);
-> +#ifdef CONFIG_NUMA
-> +	ASSERT_EQ(nid_req, req_node->nid);
-> +#endif
-> +
-> +	test_pass_pop();
-> +
-> +	return 0;
-> +}
-> +
->  /* Test case wrappers for NUMA tests */
->  static int alloc_nid_numa_simple_check(void)
->  {
-> @@ -2632,6 +2661,15 @@ static int alloc_nid_numa_split_all_reserved_check(void)
->  	return 0;
->  }
-> 
-> +static int alloc_node_numa_on_correct_nid(void)
-> +{
-> +	test_print("\tRunning %s...\n", __func__);
-> +	run_top_down(alloc_node_on_correct_nid);
-> +	run_bottom_up(alloc_node_on_correct_nid);
-> +
-> +	return 0;
-> +}
-> +
->  int __memblock_alloc_nid_numa_checks(void)
->  {
->  	test_print("Running %s NUMA tests...\n",
-> @@ -2652,6 +2690,8 @@ int __memblock_alloc_nid_numa_checks(void)
->  	alloc_nid_numa_reserved_full_merge_check();
->  	alloc_nid_numa_split_all_reserved_check();
-> 
-> +	alloc_node_numa_on_correct_nid();
-> +
->  	return 0;
->  }
-> 
-> -- 
-> 2.38.3
 
--- 
-Sincerely yours,
-Mike.
+> +++ b/Documentation/devicetree/bindings/fpga/xlnx,fpga-slave-serial.yaml
+> @@ -0,0 +1,77 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/xlnx,fpga-slave-serial.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Slave Serial SPI FPGA driver.
+
+Drop driver and full stop.
+
+> +
+> +maintainers:
+> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
+> +
+> +description: |
+> +  Xilinx Spartan-6 and 7 Series FPGAs support a method of loading the bitstream
+> +  over what is referred to as slave serial interface.The slave serial link is
+> +  not technically SPI, and might require extra circuits in order to play nicely
+> +  with other SPI slaves on the same bus.
+> +  Please refer to fpga-region.txt in this directory for  common binding part
+> +  and usage.
+
+Just one space, not two. But what exactly from fpga-region comes here?
+If it is used, you need to mention it otherwise it's not allowed to be
+used...
+
+
+> +
+> +  Datasheets:
+> +    https://www.xilinx.com/support/documentation/user_guides/ug380.pdf
+> +    https://www.xilinx.com/support/documentation/user_guides/ug470_7Series_Config.pdf
+> +    https://www.xilinx.com/support/documentation/application_notes/xapp583-fpga-configuration.pdf
+> +
+
+Missing allOf to spi-peripheral-props.
+
+> +properties:
+> +  compatible:
+> +    items:
+
+No need for items, drop it.
+
+> +      - enum:
+> +          - xlnx,fpga-slave-serial
+> +
+> +  spi-cpha: true
+> +
+> +  spi-max-frequency:
+> +    maximum: 60000000
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  prog_b-gpios:
+> +    description:
+> +      config pin (referred to as PROGRAM_B in the manual)
+
+maxItems
+
+> +
+> +  done-gpios:
+> +    description:
+> +      config status pin (referred to as DONE in the manual)
+
+maxItems
+
+> +
+> +  init-b-gpios:
+> +    description:
+> +      initialization status and configuration error pin
+> +      (referred to as INIT_B in the manual)
+
+maxItems
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - prog_b-gpios
+> +  - done-gpios
+> +  - init-b-gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    spi0 {
+
+spi
+
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      fpga_mgr_spi: fpga-mgr@0 {
+> +        compatible = "xlnx,fpga-slave-serial";
+> +        spi-max-frequency = <60000000>;
+> +        spi-cpha;
+> +        reg = <0>;
+> +        prog_b-gpios = <&gpio0 29 GPIO_ACTIVE_LOW>;
+> +        init-b-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
+> +        done-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
+> +      };
+> +    };
+> +...
+
+Best regards,
+Krzysztof
+
