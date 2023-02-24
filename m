@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD516A1C71
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8472B6A1C72
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjBXMvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S230082AbjBXMvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjBXMvf (ORCPT
+        with ESMTP id S230078AbjBXMvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:51:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE8067E33;
-        Fri, 24 Feb 2023 04:51:16 -0800 (PST)
+        Fri, 24 Feb 2023 07:51:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA7561EFA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:51:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42D13618CF;
-        Fri, 24 Feb 2023 12:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5373AC433EF;
-        Fri, 24 Feb 2023 12:51:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B819FB81C77
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 12:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12269C433D2;
+        Fri, 24 Feb 2023 12:51:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677243075;
-        bh=ocwngAEf5PTicddOIGKnJl7NnMzPbVEc+3C5ogPZkjI=;
+        s=korg; t=1677243095;
+        bh=geMwP7vVPIhTQ6PXvzLZ1QqUcOjZ0zK/vbJrIu2UaQg=;
         h=Date:From:To:Cc:Subject:From;
-        b=v1gHmnmR90srI51H0NkQHWdAg3yBIvO38HuHYD7kLD9DTNnyo26JwXJfGeDS+Li5H
-         dtmjtg33jWry+TJISDXa5I0KQ6iN622U42tNaRDvd7PtbHNs4m2EdxZtGLaZEQgGHe
-         2tBrHdyJP701DxGHDr/SWKZTv+4gXDMkcZpF21lw=
-Date:   Fri, 24 Feb 2023 13:51:13 +0100
+        b=e6xPKn5cMSMoDfMcXFudfa1oPXF+SGrvoL9qL+YbjZayrY7RBC0XDYUjhdvDAk2+V
+         Y2O6B0KbihPXworRlcRoebSHRekrVtNeiMT8pQjbCoPeBJlv9VCB4nWT954I9CADHe
+         EywqC+vLTqJWyd3c88mZSgOuZ4OVwIU86J44M6yY=
+Date:   Fri, 24 Feb 2023 13:51:32 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver updates for 6.3-rc1
-Message-ID: <Y/iywbFbiUAA6ZD3@kroah.com>
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [GIT PULL] Staging driver updates for 6.3-rc1
+Message-ID: <Y/iy1MgXVLkmtOQP@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,366 +49,371 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 4ec5183ec48656cec489c49f989c508b68b518e3:
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-  Linux 6.2-rc7 (2023-02-05 13:13:28 -0800)
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.3-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-6.3-rc1
 
-for you to fetch changes up to 72206cc730b5c9208e9a99ace1c619f542035312:
+for you to fetch changes up to b5929325f06300d28696b9a030539a4009154788:
 
-  tty: n_gsm: add keep alive support (2023-02-16 13:50:50 +0100)
+  staging: r8188eu: Revert "staging: r8188eu: simplify rtw_get_ff_hwaddr" (2023-02-16 13:55:03 +0100)
 
 ----------------------------------------------------------------
-TTY/Serial driver updates for 6.3-rc1
+Staging driver update for 6.3-rc1
 
-Here is the big set of serial and tty driver updates for 6.3-rc1.
+Here is the "boring" staging driver update for 6.3-rc1.
 
-Once again, Jiri and Ilpo have done a number of core vt and tty/serial
-layer cleanups that were much needed and appreciated.  Other than that,
-it's just a bunch of little tty/serial driver updates:
-  - qcom-geni-serial driver updates
-  - liteuart driver updates
-  - hvcs driver cleanups
-  - n_gsm updates and additions for new features
-  - more 8250 device support added
-  - fpga/dfl update and additions
-  - imx serial driver updates
-  - fsl_lpuart updates
-  - other tiny fixes and updates for serial drivers
+Nothing major in here at all, it's just lots of tiny code cleanups to
+bring some of the staging drivers more in line with the real portion of
+the kernel (apis and coding style.)  Overall we remove more lines of
+code than we add, always a nice result.
+
+The big work was done by Martin Kaiser and Philipp Hortmann, both
+tackling some of the older wifi drivers, removing unused code and
+structures and a file in one case.
+
+Full details of the changes are in the shortlog.
 
 All of these have been in linux-next for a while with no reported
-problems.
+issues.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Andy Shevchenko (2):
-      serial: liteuart: Don't mix devm_*() with non-devm_*() calls
-      serial: liteuart: Remove a copy of UART id in private structure
+Abhirup Deb (1):
+      staging: vme_user: Replace the "<<" with BIT macro
 
-Bartosz Golaszewski (14):
-      tty: serial: qcom-geni-serial: stop operations in progress at shutdown
-      tty: serial: qcom-geni-serial: drop unneeded forward definitions
-      tty: serial: qcom-geni-serial: remove unused symbols
-      tty: serial: qcom-geni-serial: align #define values
-      tty: serial: qcom-geni-serial: improve the to_dev_port() macro
-      tty: serial: qcom-geni-serial: remove stray newlines
-      tty: serial: qcom-geni-serial: refactor qcom_geni_serial_isr()
-      tty: serial: qcom-geni-serial: remove unneeded tabs
-      tty: serial: qcom-geni-serial: split out the FIFO tx code
-      tty: serial: qcom-geni-serial: refactor qcom_geni_serial_send_chunk_fifo()
-      tty: serial: qcom-geni-serial: drop the return value from handle_rx
-      tty: serial: qcom-geni-serial: use of_device_id data
-      soc: qcom-geni-se: add more symbol definitions
-      tty: serial: qcom-geni-serial: add support for serial engine DMA
+Anup Sharma (2):
+      Staging: rtl8192u: ieee80211: Fix indentation errors by removing extra spaces
+      staging: rtl8723bs: hal: Fix codespell-reported spelling mistakes
 
-Basheer Ahmed Muddebihal (1):
-      fpga: dfl: Add DFHv1 Register Definitions
+Brent Pappas (1):
+      staging: greybus: gpio: Replace macro irq_data_to_gpio_chip with function
 
-Bin Meng (3):
-      serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h
-      riscv: Implement semihost.h for earlycon semihost driver
-      serial: Rename earlycon semihost driver
+Deepak R Varma (2):
+      staging: greybus: Replace zero-length array by DECLARE_FLEX_ARRAY() helper
+      staging: wlan-ng: Remove unused code
 
-Brian King (6):
-      hvcs: Fix hvcs port reference counting
-      hvcs: Use dev_groups to manage hvcs device attributes
-      hvcs: Use driver groups to manage driver attributes
-      hvcs: Get reference to tty in remove
-      hvcs: Use vhangup in hotplug remove
-      hvcs: Synchronize hotplug remove with port free
+Denis Arefev (1):
+      staging: rts5208: Added value check
 
-Christoph Niedermaier (4):
-      dt-bindings: serial: rs485: Add GPIO controlling RX enable during TX
-      serial: core: Add option to output RS485 RX_DURING_TX state via GPIO
-      serial: imx: Add support for RS485 RX_DURING_TX output GPIO
-      serial: stm32: Add support for rs485 RX_DURING_TX output GPIO
+Greg Kroah-Hartman (2):
+      Merge 6.2-rc5 into staging-next
+      staging: pi433: fix memory leak with using debugfs_lookup()
 
-Christophe JAILLET (1):
-      serial: sccnxp: Use devm_clk_get_enabled() helper
+Guru Mehar Rachaputi (1):
+      staging: pi433: Added information about bit_rate configuration
 
-Conor Dooley (1):
-      dt-bindings: serial: snps-dw-apb-uart: add dma & dma-names properties
+Jongwoo Han (1):
+      staging: vc04_services: mmal-vchiq: fix typo in comment
 
-Daniel Starke (4):
-      tty: n_gsm: mark unusable ioctl structure fields accordingly
-      tty: n_gsm: add RING/CD control support
-      tty: n_gsm: add TIOCMIWAIT support
-      tty: n_gsm: add keep alive support
+Kang Minchul (1):
+      staging: r8188eu: Prefer kcalloc over kzalloc
 
-Elliot Berman (1):
-      soc: qcom: geni-se: Move qcom-geni-se.h to linux/soc/qcom/geni-se.h
+Larry Finger (1):
+      staging: r8188eu: Fix some endian problems
 
-Gabriel Somlo (14):
-      serial: liteuart: use KBUILD_MODNAME as driver name
-      serial: liteuart: use bit number macros
-      serial: liteuart: remove unused uart_ops stubs
-      serial: liteuart: don't set unused port fields
-      serial: liteuart: minor style fix in liteuart_init()
-      serial: liteuart: move tty_flip_buffer_push() out of rx loop
-      serial: liteuart: rx loop should only ack rx events
-      serial: liteuart: simplify passing of uart_insert_char() flag
-      serial: liteuart: clean up rx loop variables
-      serial: liteuart: separate rx loop from poll timer
-      serial: liteuart: move function definitions
-      serial: liteuart: add IRQ support for the RX path
-      serial: liteuart: add IRQ support for the TX path
-      serial: liteuart: move polling putchar() function
+Martin Kaiser (113):
+      staging: r8188eu: merge on_action_public_vendor into its caller
+      staging: r8188eu: merge on_action_public_default into its only caller
+      staging: r8188eu: remove intermediate pframe pointer
+      staging: r8188eu: remove intermediate token variable
+      staging: r8188eu: make xmitframe_swencrypt a void function
+      staging: r8188eu: remove some unused CAM defines
+      staging: r8188eu: cmd_seq is write-only
+      staging: r8188eu: return immediately if we're not meant to encrypt
+      staging: r8188eu: remove unused parameter
+      staging: r8188eu: simplify rtl8188eu_xmit_tasklet
+      staging: r8188eu: remove rtl8188eu_init_xmit_priv
+      staging: r8188eu: remove duplicate psta check
+      staging: r8188eu: simplify frame type check
+      staging: r8188eu: simplify rtw_make_wlanhdr's error handling
+      staging: r8188eu: clean up qos_option setting
+      staging: r8188eu: remove unused bpending array
+      staging: r8188eu: remove unused dma_transfer_addr
+      staging: r8188eu: bm_pending is not used
+      staging: r8188eu: terminate_xmitthread_sema is not used
+      staging: r8188eu: tx_retevt semaphore is not used
+      staging: r8188eu: remove unnecessary rtw_free_xmitframe call
+      staging: r8188eu: phwxmit parameter is unused
+      staging: r8188eu: rtw_init_hwxmits is not needed
+      staging: r8188eu: beq_cnt is write-only
+      staging: r8188eu: bkq_cnt is write-only
+      staging: r8188eu: viq_cnt is write-only
+      staging: r8188eu: voq_cnt is write-only
+      staging: r8188eu: replace switch with if
+      staging: r8188eu: dir_dev is unused
+      staging: r8188eu: remove unused hal_xmit_handler define
+      staging: r8188eu: txirp_cnt is write-only
+      staging: r8188eu: remove unused QSLT defines
+      staging: r8188eu: xmit_priv's vcs_type is not used
+      staging: r8188eu: xmit_priv's vcs is not used
+      staging: r8188eu: xmit_priv's vcs_setting is not used
+      staging: r8188eu: refactor status handling in usb_write_port_complete
+      staging: r8188eu: reformat usb_write_port_complete
+      staging: r8188eu: remove unused function parameter
+      staging: r8188eu: always process urb status
+      staging: r8188eu: remove NULL check for usb_kill_urb
+      staging: r8188eu: remove struct io_priv
+      staging: r8188eu: remove io function prototypes
+      staging: r8188eu: remove ioreq function prototypes
+      staging: r8188eu: remove async read function prototypes
+      staging: r8188eu: remove async write function prototypes
+      staging: r8188eu: remove struct io_queue
+      staging: r8188eu: remove attrib function prototypes
+      staging: r8188eu: remove rtw_write_scsi function prototype
+      staging: r8188eu: remove dev_power_down function prototype
+      staging: r8188eu: remove struct reg_protocol_rd
+      staging: r8188eu: remove struct reg_protocol_wt
+      staging: r8188eu: remove interface handler prototypes
+      staging: r8188eu: remove readmem and writemem prototypes
+      staging: r8188eu: remove IO defines
+      staging: r8188eu: remove struct io_req
+      staging: r8188eu: remove usb buffer macros
+      staging: r8188eu: pass struct adapter to usb_read
+      staging: r8188eu: we use a constant number of hw_xmit entries
+      staging: r8188eu: pass struct adapter to usb_write
+      staging: r8188eu: remove struct intf_hdl
+      staging: r8188eu: remove struct intf_priv
+      staging: r8188eu: simplify the sta loop in rtw_dequeue_xframe
+      staging: r8188eu: simplify the code to initialise inx
+      staging: r8188eu: remove an obsolete comment
+      staging: r8188eu: remove unused function parameter
+      staging: r8188eu: remove dead assignment
+      staging: r8188eu: use list_empty
+      staging: r8188eu: simplify dequeue_one_xmitframe
+      staging: r8188eu: remove redundant parameter
+      staging: r8188eu: make rtw_chk_hi_queue_cmd a void function
+      staging: r8188eu: decrement qcnt in rtw_dequeue_xframe
+      staging: r8188eu: simplify dequeue_one_xmitframe
+      staging: r8188eu: use list_head for xmitframe list
+      staging: r8188eu: merge dequeue_one_xmitframe into its caller
+      staging: r8188eu: use lists for hwxmits
+      staging: r8188eu: fix rtw_xmitframe_enqueue error handling
+      staging: r8188eu: remove rtw_xmitframe_enqueue
+      staging: r8188eu: struct agg_pkt_info is unused
+      staging: r8188eu: apsd_setting is unused
+      staging: r8188eu: merge rtw_free_hwxmits into its only caller
+      staging: r8188eu: usb_read_port_complete needs no regs parameter
+      staging: r8188eu: remove defines that strip regs parameter
+      staging: r8188eu: remove unused defines
+      staging: r8188eu: remove usb_ops_linux.h
+      staging: r8188eu: rtw_free_xmitframe_queue needs no spinlock
+      staging: r8188eu: change function param from __queue to list_head
+      staging: r8188eu: change another function param from __queue to list_head
+      staging: r8188eu: make sta_pending a list_head
+      staging: r8188eu: use kernel helper to iterate over a list
+      staging: r8188eu: legacy_dz is initialised but never used
+      staging: r8188eu: apsd is initialised but never used
+      staging: r8188eu: option in struct sta_xmit_priv is not used
+      staging: r8188eu: replace switch-case with if
+      staging: r8188eu: clean up NULL check for rcu pointer
+      staging: r8188eu: pass a struct recv_buf to rtw_read_port
+      staging: r8188eu: use standard error codes in rtw_read_port
+      staging: r8188eu: use standard error codes in rtl8188eu_inirp_init
+      staging: r8188eu: remove intf_start pointer
+      staging: r8188eu: handle rtl8188eu_inirp_init errors
+      staging: r8188eu: remove intf_stop pointer
+      staging: r8188eu: make ips_enter static
+      staging: r8188eu: make ips_leave static
+      staging: r8188eu: remove change_rfpwrstate
+      staging: r8188eu: merge do_queue_select into its only caller
+      staging: r8188eu: simplify rtw_alloc_xmitframe
+      staging: r8188eu: remove unused frametag defines
+      staging: r8188eu: xmit_buf's ff_hwaddr is not used
+      staging: r8188eu: simplify xmit_buf flags
+      staging: r8188eu: simplify rtw_get_ff_hwaddr
+      staging: r8188eu: bagg_pkt parameter is not used
+      staging: r8188eu: merge _rtw_enqueue_cmd into its caller
+      staging: r8188eu: replace hand coded loop with list_for_each_entry
+      staging: r8188eu: Revert "staging: r8188eu: simplify rtw_get_ff_hwaddr"
 
-Greg Kroah-Hartman (3):
-      Merge 6.2-rc5 into tty-next
-      Merge 6.2-rc7 into tty-next
-      tty: pcn_uart: fix memory leak with using debugfs_lookup()
+Matt Jan (3):
+      staging: vme_user: add the spaces around the "*"
+      staging: vme_user: remove unnecessary spaces
+      staging: vme_user: replace 'unsigned' with 'unsigned int'
 
-Ilpo Järvinen (20):
-      serial: 8250: Use defined IER bits
-      serial: 8250: Name MSR literals
-      serial: 8250: Cleanup MCR literals
-      serial: 8250: Add IIR FIFOs enabled field properly
-      serial: 8250: Define IIR 64 byte bit & cleanup related code
-      serial: 8250_early: Convert literals to use defines
-      tty: Cleanup tty_port_set_initialized() bool parameter
-      tty: Cleamup tty_port_set_suspended() bool parameter
-      tty: Cleanup tty_port_set_active() bool parameter
-      tty: moxa: Make local var storing tty_port_initialized() bool
-      serial: Convert uart_{,port_}startup() init_hw param to bool
-      tty: Convert ->carrier_raised() and callchains to bool
-      tty: Convert ->dtr_rts() to take bool argument
-      tty/serial: Make ->dcd_change()+uart_handle_dcd_change() status bool active
-      serial: Make uart_handle_cts_change() status param bool active
-      tty: Return bool from tty_termios_hw_change()
-      tty: Call ->dtr_rts() parameter active consistently
-      tty: moxa: Rename dtr/rts parameters/variables to active
-      serial: qcom_geni: Fix variable naming
-      serial: liteuart: Correct error rollback
+Michael Straube (7):
+      staging: r8188eu: convert rtw_writeN() to common error logic
+      staging: r8188eu: convert PHY_MACConfig8188E() to common error logic
+      staging: r8188eu: convert phy_RF6052_Config_ParaFile() to common error logic
+      staging: r8188eu: convert phy_BB8188E_Config_ParaFile() to common error logic
+      staging: r8188eu: convert PHY_BBConfig8188E() to common error logic
+      staging: r8188eu: correct error logic of rtl8188eu_init_recv_priv()
+      staging: r8188eu: correct error logic of _rtw_init_recv_priv()
 
-Isaac True (1):
-      serial: sc16is7xx: setup GPIO controller later in probe
+Parthiban Veerasooran (1):
+      most: add maintainer entry
 
-Jean Delvare (1):
-      serial: liteuart: drop obsolete dependency on COMPILE_TEST
+Phil Elwell (1):
+      staging: vchiq_core: Add comments to remote event parts
 
-Jiri Slaby (SUSE) (11):
-      tty: vt: remove vc_uniscr_debug_check()
-      tty: vt: drop get_vc_uniscr()
-      tty: vt: remove reference to undefined NO_VC_UNI_SCREEN
-      tty: vt: use sizeof(*variable) where possible
-      tty: vt: remove char32_t typedef
-      tty: vt: remove struct uni_screen
-      tty: vt: replace BUG_ON() by WARN_ON_ONCE()
-      tty: vt: simplify some unicode conditions
-      tty: vt: separate array juggling to juggle_array()
-      tty: vt: saner names for more scroll variables
-      tty: vt: cache row count in con_scroll()
+Philipp Hortmann (66):
+      staging: rtl8192e: Rename ChannelPlan, eeprom_ChannelPlan and CckPwEnl
+      staging: rtl8192e: Rename TSSI_13dBm, Pwr_Track and NumTotalRFPath
+      staging: rtl8192e: Rename CCKPresentAtt...
+      staging: rtl8192e: Rename TxPowerLevelCCK...
+      staging: rtl8192e: Rename TxPowerLevelOFDM24G...
+      staging: rtl8192e: Rename MCSTxPowerL.., LegacyHTTxPowe.. and AntennaTx..
+      staging: rtl8192e: Rename SetRFPowerSta.., RfReg0Value and bTXPowerDa..
+      staging: rtl8192e: Rename bDynamicTxHig.., bDynamicTxL.. and bLastDTPF..
+      staging: rtl8192e: Rename bLastDTPFlag_Low, OFDM_index and CCK_index
+      staging: rtl8192e: Rename Record_CCK_2.., Record_CCK_4.. and DefaultIn..
+      staging: rtl8192e: Rename rateCountDi.., ContinueDif.. and TxCounter
+      staging: rtl8192e: Rename bResetInPro.., framesyncMo.. and nCur40MhzPri..
+      staging: rtl8192e: Rename SetBWModeIn.., SwChnlInPro.. and ThermalMet..
+      staging: rtl8192e: Rename CrystalCap, EEPROMLegacyHTT.. and EEPROMCrys..
+      staging: rtl8192e: Rename EEPROMTherma.., EEPROMAntPw.. and EEPROMTxPow..
+      staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF.. and SilentReset..
+      staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF.. and SilentReset..
+      staging: rtl8192e: Rename LongRetryL.., ShortRetryL.. and ReceiveConfig
+      staging: rtl8192e: Rename LastRxDescTSF, LoopbackMode and pFirmware
+      staging: rtl8192e: Rename PHYRegDef, CurrentChannelBW and CustomerID
+      staging: rtl8192e: Remove unused variable SifsTime
+      staging: rtl8192e: Remove unused variable framesyncC34
+      staging: rtl8192e: Remove unused variable PwrDomainProtect
+      staging: rtl8192e: Remove unused variable H2CTxCmdSeq
+      staging: rtl8192e: Remove unused variable RF_C_TxPwDiff
+      staging: rtl8192e: Remove unused variable DM_Type
+      staging: rtl8192e: Combine three loops to one to init tx_pwr_level_...
+      staging: rtl8192e: Init tx_pwr_level_cck_a and friends directly
+      staging: rtl8192e: Remove zeroed arrays tx_pwr_level_cck_a and friends
+      staging: rtl8192e: Remove ant_pwr_diff which is always zero
+      staging: rtl8192e: Remove u4RegValue which is always zero
+      staging: rtl8192e: Remove repeated set to zero of powerlevel and friend
+      staging: rtl8192e: Remove unused variable bfirst_init
+      staging: rtl8192e: Rename eeprom_CustomerID, SwChnlStage and SwChnlStep
+      staging: rtl8192e: Rename btxpower_trackin.., Slide_Beaco.. and Slide_B..
+      staging: rtl8192e: Remove unused variables rxrdu and rxok
+      staging: rtl8192e: Remove unused variables rxdatacrcerr and rxmgmtcrcerr
+      staging: rtl8192e: Remove unused variables rxcrcerrmin and friends
+      staging: rtl8192e: Remove unused variables numpacket.. and received_pre..
+      staging: rtl8192e: Remove unused variables numqry_..
+      staging: rtl8192e: Remove unused variables num_proc.., recei.. and rxov..
+      staging: rtl8192e: Remove unused variables rxint, ints and shints
+      staging: rtl8192e: Remove unused variables txov.., txbeokint and txbkokint
+      staging: rtl8192e: Remove unused variables txviok.., txvook.. and txbea..
+      staging: rtl8192e: Remove unused variables txbeac.., txman.. and txcmdp..
+      staging: rtl8192e: Remove unused variables txbytes.., txbyt.. and signa..
+      staging: rtl8192e: Rename TxBBGainTab.., CCKTxBBGainTab.. and RT_CID_81..
+      staging: rtl8192e: Rename sCrcLng
+      staging: rtl8192e: Remove unused variable rxSNRdB
+      staging: rtl8192e: Remove unused constants from enum rt_customer_id
+      staging: rtl8192e: Rename BaseBand_Config_PHY_REG and BaseBand_Config_AGC_TAB
+      staging: rtl8192e: Remove unused constants at beginning of r8192E_hw.h
+      staging: rtl8192e: Remove unused constants in _RTL8192Pci_HW
+      staging: rtl8192e: Remove used constants MSR_LINK_SH.. and MSR_LINK_N..
+      staging: rtl8192e: Rename _RTL8192Pci_HW, MXDMA2_NoLimit and TPPoll
+      staging: rtl8192e: Rename TPPoll_CQ, AcmHwCtrl and AcmHw_BeqEn
+      staging: rtl8192e: Rename AcmHw_ViqEn, AcmHw_VoqEn and ANAPAR_FOR_8192PciE
+      staging: rtl8192e: Remove blank lines in r8192E_hw.h, rtl_core.h and ..
+      staging: rtl8192e: Rename MacBlkCtrl and remove double definition
+      staging: rtl8192e: Rename OFDM_Table.., CCK_Table_.. and RxPathSelecti..
+      staging: rtl8192e: Rename RxPathSelectio.., RateAdaptive.. and RateAdap..
+      staging: rtl8192e: Rename RateAdaptiveTH.., VeryLowRSSI and WAIotTHVal
+      staging: rtl8192e: Rename Enable, cck_Rx_path and SS_TH_low
+      staging: rtl8192e: Rename diff_TH and disabledRF
+      staging: rtl8192e: Rename DM_RxPathSelTable
+      staging: rtl8192e: Use BIT() instead of << for bit field MSR_LINK_MASK
 
-Krzysztof Kozlowski (14):
-      dt-bindings: serial: qcom,msm-uart: Convert to DT schema
-      serial: msm: add lock annotation to msm_set_baud_rate()
-      dt-bindings: serial: amlogic,meson-uart: allow other serial properties
-      dt-bindings: serial: 8250: correct Nuvoton NPCM850 compatible
-      dt-bindings: serial: pl011: allow ARM Primecell properties
-      dt-bindings: serial: correct ref to serial.yaml
-      dt-bindings: serial: cdsn,uart: add power-domains
-      dt-bindings: serial: 8250_omap: drop rs485 properties
-      dt-bindings: serial: fsl-imx-uart: drop common properties
-      dt-bindings: serial: fsl-lpuart: drop rs485 properties
-      dt-bindings: serial: fsl-lpuart: allow other serial properties
-      dt-bindings: serial: st,stm32-uart: drop common properties
-      dt-bindings: serial: drop unneeded quotes
-      dt-bindings: serial: example cleanup
+Stefan Wahren (1):
+      staging: vchiq_arm: Improve error log for vchiq_platform_init
 
-Kumaravel Thiagarajan (4):
-      serial: 8250_pci: Add serial8250_pci_setup_port definition in 8250_pcilib.c
-      serial: 8250_pci1xxxx: Add driver for quad-uart support
-      serial: 8250_pci1xxxx: Add RS485 support to quad-uart driver
-      serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
+Umang Jain (12):
+      staging: vc04_services: Replace vchiq_status return type to int
+      staging: vc04_services: Drop VCHIQ_SUCCESS usage
+      staging: vc04_services: Drop VCHIQ_ERROR usage
+      staging: vc04_services: Drop VCHIQ_RETRY usage
+      staging: vc04_services: vchiq_arm: Drop VCHIQ_RETRY usage on disconnect
+      staging: vc04_services: Drop enum vchiq_status remnants
+      staging: vc04_services: vchiq: Drop custom return values from TODO
+      staging: vc04_services: Drop __VCCOREVER__ remnants
+      staging: vc04_services: bcm2835-audio: Drop include Makefile directive
+      staging: vc04_services: bcm2835-camera: Drop include Makefile directive
+      staging: vc04_services: vchiq-mmal: Drop include Makefile directive
+      staging: vc04_services: interface: Drop include Makefile directive
 
-Liang He (1):
-      serial: ucc_uart: Add of_node_put() in ucc_uart_remove()
-
-Matthew Gerlach (3):
-      Documentation: fpga: dfl: Add documentation for DFHv1
-      fpga: dfl: add basic support for DFHv1
-      tty: serial: 8250: add DFL bus driver for Altera 16550.
-
-Nate Drude (1):
-      tty: serial: fsl_lpuart: increase maximum uart_nr to eight
-
-Peng Fan (1):
-      tty: serial: imx: disable Ageing Timer interrupt request irq
-
-Ricardo Ribalda (2):
-      earlycon: Let users set the clock frequency
-      earlycon: Increase options size
-
-Rob Herring (1):
-      dt-bindings: serial: 8250: Fix 'aspeed,lpc-io-reg' differing types
-
-Samuel Thibault (3):
-      VT: Add height parameter to con_font_get/set consw operations
-      VT: Add KD_FONT_OP_SET/GET_TALL operations
-      VT: Bump font size limitation to 64x128 pixels
-
-Sergey Organov (8):
-      serial: imx: factor-out common code to imx_uart_soft_reset()
-      serial: imx: work-around for hardware RX flood
-      serial: imx: do not sysrq broken chars
-      serial: imx: do not break from FIFO reading loop prematurely
-      serial: imx: remove redundant USR2 read from FIFO reading loop
-      serial: imx: stop using USR2 in FIFO reading loop
-      serial: imx: refine local variables in rxint()
-      serial: imx: get rid of registers shadowing
-
-Shenwei Wang (1):
-      serial: fsl_lpuart: fix RS485 RTS polariy inverse issue
-
-Sherry Sun (13):
-      tty: serial: fsl_lpuart: only enable Idle Line Interrupt for non-dma case
-      tty: serial: fsl_lpuart: disable Rx/Tx DMA in lpuart32_shutdown()
-      tty: serial: fsl_lpuart: clear LPUART Status Register in lpuart32_shutdown()
-      tty: serial: fsl_lpuart: disable the CTS when send break signal
-      tty: serial: fsl_lpuart: disable the break condition when shutdown the uart port
-      tty: serial: imx: disable the break condition when shutdown the uart port
-      tty: serial: fsl_lpuart: don't enable receiver/transmitter before rx/tx dma ready
-      tty: serial: fsl_lpuart: make rx_watermark configurable for different platforms
-      tty: serial: fsl_lpuart: set receive watermark for imx8qxp platform
-      tty: serial: fsl_lpuart: Fix the wrong RXWATER setting for rx dma case
-      tty: serial: fsl_lpuart: Enable Receiver Idle Empty function for LPUART
-      tty: serial: fsl_lpuart: set RTS watermark for lpuart
-      tty: serial: fsl_lpuart: add imx8ulp support
-
-Sven Schnelle (2):
-      tty: fix out-of-bounds access in tty_driver_lookup_tty()
-      tty/vt: prevent registration of console with invalid number
-
-Tom Rix (1):
-      serial: imx: remove a redundant check
-
-Uwe Kleine-König (1):
-      serial: 8250: Fix mismerge regarding serial_lsr_in()
-
-Yi Yang (1):
-      serial: tegra: Add missing clk_disable_unprepare() in tegra_uart_hw_init()
+Xu Panda (2):
+      staging: ks7010: use strscpy() to instead of strncpy()
+      staging: r8188eu: use strscpy() to instead of strncpy()
 
 Yuan Can (1):
-      serial: pic32: Add checks for devm_clk_get() in pic32_uart_probe()
+      staging: emxx_udc: Add checks for dma_alloc_coherent()
 
- Documentation/admin-guide/kernel-parameters.txt    |  12 +-
- Documentation/devicetree/bindings/serial/8250.yaml |  10 +-
- .../devicetree/bindings/serial/8250_omap.yaml      |  23 +-
- .../bindings/serial/amlogic,meson-uart.yaml        |  15 +-
- .../devicetree/bindings/serial/cdns,uart.yaml      |  27 +-
- .../bindings/serial/fsl,s32-linflexuart.yaml       |   2 +-
- .../devicetree/bindings/serial/fsl-imx-uart.yaml   |  11 +-
- .../devicetree/bindings/serial/fsl-lpuart.yaml     |   6 +-
- .../devicetree/bindings/serial/fsl-mxs-auart.yaml  |   2 +-
- .../devicetree/bindings/serial/pl011.yaml          |   1 +
- .../devicetree/bindings/serial/qcom,msm-uart.txt   |  25 -
- .../devicetree/bindings/serial/qcom,msm-uart.yaml  |  56 ++
- .../bindings/serial/renesas,em-uart.yaml           |  10 +-
- .../devicetree/bindings/serial/renesas,hscif.yaml  |  26 +-
- .../devicetree/bindings/serial/renesas,sci.yaml    |  24 +-
- .../devicetree/bindings/serial/renesas,scif.yaml   |  24 +-
- .../devicetree/bindings/serial/renesas,scifa.yaml  |  22 +-
- .../devicetree/bindings/serial/renesas,scifb.yaml  |  12 +-
- .../devicetree/bindings/serial/rs485.yaml          |   6 +
- .../devicetree/bindings/serial/serial.yaml         |  18 +-
- .../devicetree/bindings/serial/sifive-serial.yaml  |   6 +-
- .../bindings/serial/snps-dw-apb-uart.yaml          |   8 +
- .../devicetree/bindings/serial/st,stm32-uart.yaml  |   7 -
- .../bindings/serial/xlnx,opb-uartlite.yaml         |   6 +-
- Documentation/driver-api/tty/n_gsm.rst             |  19 +
- Documentation/fpga/dfl.rst                         | 119 ++++
- MAINTAINERS                                        |   7 +
- arch/arm/include/asm/semihost.h                    |  30 +
- arch/arm64/include/asm/semihost.h                  |  24 +
- arch/riscv/include/asm/semihost.h                  |  26 +
- drivers/char/pcmcia/synclink_cs.c                  |  18 +-
- drivers/fpga/dfl.c                                 | 245 ++++++--
- drivers/fpga/dfl.h                                 |  43 ++
- drivers/i2c/busses/i2c-qcom-geni.c                 |   2 +-
- drivers/ipack/devices/ipoctal.c                    |   4 +-
- drivers/mmc/core/sdio_uart.c                       |  13 +-
- drivers/pps/clients/pps-ldisc.c                    |   6 +-
- drivers/s390/char/con3215.c                        |   4 +-
- drivers/soc/qcom/qcom-geni-se.c                    |   2 +-
- drivers/spi/spi-geni-qcom.c                        |   2 +-
- drivers/staging/greybus/uart.c                     |   4 +-
- drivers/tty/amiserial.c                            |  12 +-
- drivers/tty/hvc/hvc_console.c                      |   4 +-
- drivers/tty/hvc/hvc_console.h                      |   2 +-
- drivers/tty/hvc/hvc_iucv.c                         |   6 +-
- drivers/tty/hvc/hvcs.c                             |  91 ++-
- drivers/tty/moxa.c                                 |  82 +--
- drivers/tty/mxser.c                                |  11 +-
- drivers/tty/n_gsm.c                                | 160 +++++-
- drivers/tty/serial/8250/8250_dfl.c                 | 167 ++++++
- drivers/tty/serial/8250/8250_early.c               |   4 +-
- drivers/tty/serial/8250/8250_pci.c                 |  25 +-
- drivers/tty/serial/8250/8250_pci1xxxx.c            | 494 ++++++++++++++++
- drivers/tty/serial/8250/8250_pcilib.c              |  40 ++
- drivers/tty/serial/8250/8250_pcilib.h              |  15 +
- drivers/tty/serial/8250/8250_port.c                |  57 +-
- drivers/tty/serial/8250/Kconfig                    |  27 +
- drivers/tty/serial/8250/Makefile                   |   3 +
- drivers/tty/serial/Kconfig                         |  16 +-
- drivers/tty/serial/Makefile                        |   2 +-
- ...earlycon-arm-semihost.c => earlycon-semihost.c} |  25 +-
- drivers/tty/serial/earlycon.c                      |   9 +-
- drivers/tty/serial/fsl_lpuart.c                    | 119 +++-
- drivers/tty/serial/imx.c                           | 308 +++++-----
- drivers/tty/serial/liteuart.c                      | 241 ++++----
- drivers/tty/serial/max3100.c                       |   2 +-
- drivers/tty/serial/max310x.c                       |   3 +-
- drivers/tty/serial/msm_serial.c                    |   1 +
- drivers/tty/serial/pch_uart.c                      |   2 +-
- drivers/tty/serial/pic32_uart.c                    |   2 +
- drivers/tty/serial/qcom_geni_serial.c              | 638 ++++++++++++++-------
- drivers/tty/serial/sc16is7xx.c                     |  51 +-
- drivers/tty/serial/sccnxp.c                        |  12 +-
- drivers/tty/serial/serial-tegra.c                  |   7 +-
- drivers/tty/serial/serial_core.c                   |  77 +--
- drivers/tty/serial/stm32-usart.c                   |   6 +-
- drivers/tty/serial/sunhv.c                         |   8 +-
- drivers/tty/serial/ucc_uart.c                      |   2 +
- drivers/tty/synclink_gt.c                          |  21 +-
- drivers/tty/tty_io.c                               |   8 +-
- drivers/tty/tty_ioctl.c                            |   8 +-
- drivers/tty/tty_port.c                             |  22 +-
- drivers/tty/vt/vt.c                                | 310 +++++-----
- drivers/usb/class/cdc-acm.c                        |   4 +-
- drivers/usb/serial/console.c                       |   2 +-
- drivers/usb/serial/usb-serial.c                    |   6 +-
- drivers/video/console/newport_con.c                |   9 +-
- drivers/video/console/sticon.c                     |   9 +-
- drivers/video/console/vgacon.c                     |   8 +-
- drivers/video/fbdev/core/fbcon.c                   |  35 +-
- include/linux/console.h                            |   5 +-
- include/linux/console_struct.h                     |   3 +-
- include/linux/dfl.h                                |   8 +
- include/linux/serial.h                             |  10 +
- include/linux/serial_core.h                        |   9 +-
- .../linux/{qcom-geni-se.h => soc/qcom/geni-se.h}   |   3 +
- include/linux/tty.h                                |   2 +-
- include/linux/tty_ldisc.h                          |   4 +-
- include/linux/tty_port.h                           |  10 +-
- include/uapi/linux/gsmmux.h                        |  17 +-
- include/uapi/linux/kd.h                            |  10 +-
- include/uapi/linux/serial_core.h                   |   3 +
- include/uapi/linux/serial_reg.h                    |   5 +
- net/bluetooth/rfcomm/tty.c                         |   2 +-
- 104 files changed, 2908 insertions(+), 1283 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uart.txt
- create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uart.yaml
- create mode 100644 arch/arm/include/asm/semihost.h
- create mode 100644 arch/arm64/include/asm/semihost.h
- create mode 100644 arch/riscv/include/asm/semihost.h
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
- create mode 100644 drivers/tty/serial/8250/8250_pci1xxxx.c
- create mode 100644 drivers/tty/serial/8250/8250_pcilib.c
- create mode 100644 drivers/tty/serial/8250/8250_pcilib.h
- rename drivers/tty/serial/{earlycon-arm-semihost.c => earlycon-semihost.c} (57%)
- rename include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} (99%)
+ MAINTAINERS                                        |  10 +
+ drivers/staging/emxx_udc/emxx_udc.c                |   7 +-
+ drivers/staging/greybus/gpio.c                     |   6 +-
+ drivers/staging/greybus/usb.c                      |   2 +-
+ drivers/staging/ks7010/ks_wlan_net.c               |   3 +-
+ drivers/staging/pi433/TODO                         |   3 +
+ drivers/staging/pi433/pi433_if.c                   |  11 +-
+ drivers/staging/r8188eu/core/rtw_cmd.c             |  67 +--
+ drivers/staging/r8188eu/core/rtw_fw.c              |  10 +-
+ drivers/staging/r8188eu/core/rtw_mlme.c            |   5 -
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c        |  31 +-
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c         |  23 +-
+ drivers/staging/r8188eu/core/rtw_recv.c            |  30 +-
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c         |  26 +-
+ drivers/staging/r8188eu/core/rtw_xmit.c            | 478 +++++++--------------
+ drivers/staging/r8188eu/hal/rtl8188e_cmd.c         |   4 +-
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c      |  35 +-
+ drivers/staging/r8188eu/hal/rtl8188e_rf6052.c      |   7 +-
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c       |  42 +-
+ drivers/staging/r8188eu/hal/usb_halinit.c          |  31 +-
+ drivers/staging/r8188eu/hal/usb_ops_linux.c        |  80 ++--
+ drivers/staging/r8188eu/include/drv_types.h        |   4 -
+ drivers/staging/r8188eu/include/hal_intf.h         |   2 +-
+ drivers/staging/r8188eu/include/osdep_intf.h       |  32 --
+ drivers/staging/r8188eu/include/rtl8188e_cmd.h     |   2 +-
+ drivers/staging/r8188eu/include/rtl8188e_spec.h    |  21 -
+ drivers/staging/r8188eu/include/rtl8188e_xmit.h    |  16 +-
+ drivers/staging/r8188eu/include/rtw_cmd.h          |   3 +-
+ drivers/staging/r8188eu/include/rtw_io.h           | 257 +----------
+ drivers/staging/r8188eu/include/rtw_pwrctrl.h      |   3 -
+ drivers/staging/r8188eu/include/rtw_xmit.h         |  57 +--
+ drivers/staging/r8188eu/include/usb_ops.h          |   2 -
+ drivers/staging/r8188eu/include/usb_ops_linux.h    |  29 --
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c       |   6 +-
+ drivers/staging/r8188eu/os_dep/os_intfs.c          |  17 +-
+ drivers/staging/r8188eu/os_dep/usb_intf.c          |  33 +-
+ drivers/staging/r8188eu/os_dep/usb_ops_linux.c     | 106 +----
+ drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c |  22 +-
+ drivers/staging/rtl8192e/rtl8192e/r8192E_cmdpkt.c  |   2 +-
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c     | 355 ++++++---------
+ .../staging/rtl8192e/rtl8192e/r8192E_firmware.c    |   4 +-
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h      | 219 +---------
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c     | 374 ++++++++--------
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h  |   2 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c       |  86 +---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h       | 208 +++------
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c         | 342 ++++++++-------
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.h         |  45 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_pm.c         |   2 +-
+ drivers/staging/rtl8192u/ieee80211/ieee80211.h     |   2 +-
+ drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c  |  14 +-
+ drivers/staging/rts5208/ms.c                       |   2 +
+ drivers/staging/vc04_services/Makefile             |   2 -
+ .../staging/vc04_services/bcm2835-audio/Makefile   |   2 -
+ .../vc04_services/bcm2835-audio/bcm2835-vchiq.c    |  12 +-
+ .../staging/vc04_services/bcm2835-audio/bcm2835.h  |   3 +-
+ .../staging/vc04_services/bcm2835-camera/Makefile  |   5 -
+ .../vc04_services/bcm2835-camera/bcm2835-camera.c  |  10 +-
+ .../vc04_services/bcm2835-camera/controls.c        |   6 +-
+ .../include/linux/raspberrypi/vchiq.h              |  63 ++-
+ drivers/staging/vc04_services/interface/TODO       |   5 -
+ .../vc04_services/interface/vchiq_arm/vchiq_arm.c  | 136 +++---
+ .../vc04_services/interface/vchiq_arm/vchiq_arm.h  |   8 +-
+ .../vc04_services/interface/vchiq_arm/vchiq_core.c | 226 +++++-----
+ .../vc04_services/interface/vchiq_arm/vchiq_core.h |  38 +-
+ .../vc04_services/interface/vchiq_arm/vchiq_dev.c  |  36 +-
+ .../interface/vchiq_arm/vchiq_ioctl.h              |  11 +-
+ drivers/staging/vc04_services/vchiq-mmal/Makefile  |   5 -
+ .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c  |  15 +-
+ drivers/staging/vme_user/vme.h                     |  26 +-
+ drivers/staging/vme_user/vme_bridge.h              |  36 +-
+ drivers/staging/wlan-ng/hfa384x.h                  | 171 --------
+ 72 files changed, 1330 insertions(+), 2666 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/include/usb_ops_linux.h
