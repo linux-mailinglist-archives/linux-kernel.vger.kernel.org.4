@@ -2,59 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A5E6A2081
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052246A2083
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBXRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S229720AbjBXRfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:35:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBXRbe (ORCPT
+        with ESMTP id S229448AbjBXRfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:31:34 -0500
-X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Feb 2023 09:31:30 PST
-Received: from libero.it (smtp-34-i2.italiaonline.it [213.209.12.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F904E5C3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:31:30 -0800 (PST)
-Received: from [192.168.1.176] ([87.6.129.129])
-        by smtp-34.iol.local with ESMTPA
-        id VbtrpVeG7VfPJVbtrpbpQn; Fri, 24 Feb 2023 18:30:27 +0100
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inwind.it; s=s2014;
-        t=1677259827; bh=sVgZMa7XGNbF8bO6/51EavTN1f497YDnLUjEWguDYS8=;
-        h=From;
-        b=ioNuZLZHY1QkUQr3qOpOGxpcOn9zkLnEN1zgxzobMUkP2LcwnI2oVl5imhJNKsUzO
-         SgnEnZvBuj/B7lWTr+AiZgGJe5x9kOu4wf6SpOdFN/6NddJRKJMJmy0/X6BCqOn9PJ
-         Y8Uor7HsD8XWyQK9Mx7MptbwShT4nMorf7u/WKylh3m8grdLnxwd+7iNywjpd3mwWS
-         C3h359eVK+41Lr5WT3zXXkxZWJ060f6mFIRonohNxfECb0L7a+IWXRXog1mqbaRbjJ
-         fE+nZ3VzJo2fZ2J1plYaC0f4Hi6Rbbptcz0XNdPdn2iObRZdGi2zcWYpZrhtkPZWdG
-         Qc2b9fyIBcFrQ==
-X-CNFS-Analysis: v=2.4 cv=EKfAkXVC c=1 sm=1 tr=0 ts=63f8f433 cx=a_exe
- a=ZxqhrVAgG8YdQk3VCnDUFw==:117 a=ZxqhrVAgG8YdQk3VCnDUFw==:17
- a=IkcTkHD0fZMA:10 a=VwQbUJbxAAAA:8 a=CpviIb0-6JBOsNwm3AgA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22
-Message-ID: <f4d6ddad-90c7-8a59-4f1f-334ae5e38463@inwind.it>
-Date:   Fri, 24 Feb 2023 18:30:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-To:     linux-kernel@vger.kernel.org
-From:   Valerio Vanni <valerio.vanni@inwind.it>
-Subject: Bugzilla 217083
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Antivirus: AVG (VPS 230224-4, 24/2/2023), Outbound message
-X-Antivirus-Status: Clean
-X-CMAE-Envelope: MS4xfDIsVw3BgJk7kYYpgOlpkKbCjfeV24J42pGXSO4jfX1gfskWg0T8FQIQBmz3oWXMgurOECXNKht7qArb0OAOTeeCfNBq2MhQljK78CgPT180ASAJRlAY
- ds31h9Ms9/5nQBlUvxGmqA5nRRT4AZPCyK6QdsHbRRXE4+5SMgUx2cuxJ9NXCBjP5RUwphw6mJYdg7fexGO9O+b6K3PKxJtGgZg=
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,TVD_SPACE_RATIO
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 12:35:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3308A6A78A;
+        Fri, 24 Feb 2023 09:35:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8181A61923;
+        Fri, 24 Feb 2023 17:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D04C4C433EF;
+        Fri, 24 Feb 2023 17:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677260137;
+        bh=tXN44/G0tGrQT+vcSuRwVPCBdAOKX4j6QHDhteSZeHo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kb9Ya395PCdFxoVXSSdZjUJyRo8DgvFD6HZlFtCIYzaiNv2VLF356uTusEl2pWAkL
+         u4We/6A7wW8kQLxLbDP/GAiJQJxRBF+jX0PCydfM4mDuMyTria8tMm5ubcOyl/SJnX
+         Rm/XV8YtATcmqjvOI+88sbBcLSNNjI+gHZGqISsK56S7b7zahXxMDJlBC3l7F/rkgP
+         GYZaSTKgUJD3xb9fjLXwSWAXtBE/MkGODwGh/I1H2yyDGIarRUY3/yegvwSwth1/IZ
+         FUBS7zbK2zXG9F2Kk3BGewzHf4LPHw1hb0+zclKC+t+MUu3P17ecMqD6zfL1nmg1Ox
+         Y1BO+QEtk3Msg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pVbyp-00CwWB-GV;
+        Fri, 24 Feb 2023 17:35:35 +0000
+Date:   Fri, 24 Feb 2023 17:35:34 +0000
+Message-ID: <86wn47vue1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
+In-Reply-To: <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+        <20230224150811.80316-10-nick.alcock@oracle.com>
+        <86y1onw02k.wl-maz@kernel.org>
+        <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mcgrof@kernel.org, nick.alcock@oracle.com, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, hasegawa-hitomi@fujitsu.com, tglx@linutronix.de, p.zabel@pengutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=217083
+On Fri, 24 Feb 2023 17:21:40 +0000,
+Luis Chamberlain <mcgrof@kernel.org> wrote:
+> 
+> On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
+> > On Fri, 24 Feb 2023 15:07:53 +0000,
+> > Nick Alcock <nick.alcock@oracle.com> wrote:
+> > > 
+> > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > > are used to identify modules. As a consequence, uses of the macro
+> > > in non-modules will cause modprobe to misidentify their containing
+> > > object file as a module when it is not (false positives), and modprobe
+> > > might succeed rather than failing with a suitable error message.
+> > > 
+> > > So remove it in the files in this commit, none of which can be built as
+> > > modules.
+> > > 
+> > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > Cc: linux-modules@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > > ---
+> > >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> > > index 25fd8ee66565..4bbfa2b0a4df 100644
+> > > --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> > > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
+> > >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+> > >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
+> > >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> > > -MODULE_LICENSE("GPL");
+> > 
+> > I'm probably missing some context here, but I find it odd to drop
+> > something that is a important piece of information because of what
+> > looks like a tooling regression.
+> > 
+> > It also means that once a random driver gets enabled as a module, it
+> > won't load because it is now missing a MODULE_LICENSE() annotation.
+> > 
+> > It feels like MODULE_LICENSE should instead degrade to an empty
+> > statement when MODULE isn't defined. Why isn't this approach the
+> > correct one?
+> > 
+> > I expect the cover letter would have some pretty good information on
+> > this, but lore.kernel.org doesn't seem to have it at the time I write
+> > this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
+> > found").
+> 
+> The right thing is to not even have this and have the module license
+> inferred from the SPDX tag. But for now we want to remove the tag from
+> things we know for sure are not modules.
+
+I understand that you want to remove it. I don't get why this is the
+right solution. Can you please assume that, in this particular
+instance, I am a complete idiot and spell it out for me?
+
+Why isn't that a problem for modules that are compiled-in?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
