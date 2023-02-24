@@ -2,143 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDD66A14A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 02:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F586A14A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 02:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjBXBeV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Feb 2023 20:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        id S229837AbjBXBe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 20:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjBXBeN (ORCPT
+        with ESMTP id S229848AbjBXBe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 20:34:13 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A83139CC7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 17:34:00 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 2849624E240;
-        Fri, 24 Feb 2023 09:33:59 +0800 (CST)
-Received: from EXMBX063.cuchost.com (172.16.7.63) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 09:33:59 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX063.cuchost.com
- (172.16.7.63) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 09:33:58 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Fri, 24 Feb 2023 09:33:58 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v4 3/4] RISC-V: mm: Enable huge page support to
- kernel_page_present() function
-Thread-Topic: [PATCH v4 3/4] RISC-V: mm: Enable huge page support to
- kernel_page_present() function
-Thread-Index: AQHZRZ0wRsS1rJlvBEisTE2RNJ10DK7blsuAgAG+CwA=
-Date:   Fri, 24 Feb 2023 01:33:58 +0000
-Message-ID: <4c2190ee0e1f4995b1c2cfa87f67661a@EXMBX066.cuchost.com>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-4-jeeheng.sia@starfivetech.com>
- <20230223065717.zmlf2gxmtsgqperw@orel>
-In-Reply-To: <20230223065717.zmlf2gxmtsgqperw@orel>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [60.50.196.81]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 23 Feb 2023 20:34:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E9546081;
+        Thu, 23 Feb 2023 17:34:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76579B81BE0;
+        Fri, 24 Feb 2023 01:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941C2C4339B;
+        Fri, 24 Feb 2023 01:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677202445;
+        bh=sfc8vPmzmDYQ6qFv+VN2JCiBx6bhKzkHEHef6QEkz64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EZU2b2pz9Oc0cigv6ehCuuC0JAKmID4XXo3ak/2BtGXozYfZqzIgHUmHTaCeP3C96
+         MfHRQPJ7LtLHmfdtA8RWqDKwCmlbqlPi/lo2NK6WyUEcdg3nUcoZeaqgF/8Wdo4Msu
+         cfVnTHY2sN3S9Yabk1chSUIyF50+EUw5dKuLLlDyWJ6acozg7rVvbnFNWj2TTfWkGY
+         DnDBPhadaR2L7zl5Znima9KFO9vtFDupPJWoCU8uVT8f0YXM2fLo6vj4ATSiSAU7AK
+         kHJPXzqaYUgzeAAhiQZQ0b/f+Fk57kMcs03OKiGPsXWPKq77sizsw2ANvMJhTLfItn
+         dPT0k4XCPMFSQ==
+Date:   Thu, 23 Feb 2023 17:34:02 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v2 2/3] livepatch,sched: Add livepatch task switching to
+ cond_resched()
+Message-ID: <20230224013402.hpq5ka4exetrdh4t@treble>
+References: <cover.1676672328.git.jpoimboe@kernel.org>
+ <9f09bff809fc026618108e8bbaac67ef2f8e6d3d.1676672328.git.jpoimboe@kernel.org>
+ <Y/YgARbqsyvzebAl@alley>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/YgARbqsyvzebAl@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 22, 2023 at 03:00:33PM +0100, Petr Mladek wrote:
+> > +	/* All patching has stopped, now start the reverse transition. */
+> > +	klp_transition_patch->enabled = !klp_transition_patch->enabled;
+> > +	klp_target_state = !klp_target_state;
+> 
+> I have double checked the synchronization and we need here:
+> 
+> 	/*
+> 	 * Make sure klp_update_patch_state() and __klp_sched_try_switch()
+> 	 * see the updated klp_target_state before TIF_PATCH_PENDING
+> 	 * is set again in klp_start_transition().
+> 	 */
+> 	smp_wmb();
+> 
+> The same is achieved by smp_wmb() in klp_init_transition().
+> 
+> Note that the extra barrier was missing here because klp_target_state
+> was set before klp_synchronize_transition(). It was fine because
+> klp_update_patch_state() was called on locations where a transition
+> in any direction was always safe.
+> 
+> Just for record. We need to modify @klp_target_state after
+> klp_synchronize_transition() now. The value is used by
+> __klp_sched_try_switch() to decide when the transition
+> is safe. It defines what functions must not be on the stack.
 
+Yes, makes sense.  And we need a corresponding smp_rmb() in
+__klp_sched_try_switch() before the call to klp_try_switch_task(),
+right?
 
-> -----Original Message-----
-> From: Andrew Jones <ajones@ventanamicro.com>
-> Sent: Thursday, 23 February, 2023 2:57 PM
-> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> Subject: Re: [PATCH v4 3/4] RISC-V: mm: Enable huge page support to kernel_page_present() function
-> 
-> On Tue, Feb 21, 2023 at 10:35:22AM +0800, Sia Jee Heng wrote:
-> > Currently kernel_page_present() function doesn't support huge page
-> > detection causes the function to mistakenly return false to the
-> > hibernation core.
-> >
-> > Add huge page detection to the function to solve the problem.
-> >
-> > Fixes tag: commit 9e953cda5cdf ("riscv:
-> > Introduce huge page support for 32/64bit kernel")
-> 
-> This should be formatted as below (no line wrap and no 'tag' in the tag)
-> 
-> Fixes: 9e953cda5cdf ("riscv: Introduce huge page support for 32/64bit kernel")
-> 
-> >
-> > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> > ---
-> >  arch/riscv/mm/pageattr.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-> > index 86c56616e5de..ea3d61de065b 100644
-> > --- a/arch/riscv/mm/pageattr.c
-> > +++ b/arch/riscv/mm/pageattr.c
-> > @@ -217,18 +217,26 @@ bool kernel_page_present(struct page *page)
-> >  	pgd = pgd_offset_k(addr);
-> >  	if (!pgd_present(*pgd))
-> >  		return false;
-> > +	if (pgd_leaf(*pgd))
-> > +		return true;
-> >
-> >  	p4d = p4d_offset(pgd, addr);
-> >  	if (!p4d_present(*p4d))
-> >  		return false;
-> > +	if (p4d_leaf(*p4d))
-> > +		return true;
-> >
-> >  	pud = pud_offset(p4d, addr);
-> >  	if (!pud_present(*pud))
-> >  		return false;
-> > +	if (pud_leaf(*pud))
-> > +		return true;
-> >
-> >  	pmd = pmd_offset(pud, addr);
-> >  	if (!pmd_present(*pmd))
-> >  		return false;
-> > +	if (pmd_leaf(*pmd))
-> > +		return true;
-> >
-> >  	pte = pte_offset_kernel(pmd, addr);
-> >  	return pte_present(*pte);
-> > --
-> > 2.34.1
-> >
-> >
-> 
-> Otherwise,
-> 
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-noted with thanks
-> 
-> Thanks,
-> drew
+Something like this on top?  Also updated a few more comments.
+
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 201f0c0482fb..3f79265dd6e5 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -33,6 +33,7 @@
+  *
+  * - klp_ftrace_handler()
+  * - klp_update_patch_state()
++ * - __klp_sched_try_switch()
+  */
+ DEFINE_MUTEX(klp_mutex);
+ 
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index b9e006632124..218ef4a5d575 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -192,8 +192,8 @@ void klp_update_patch_state(struct task_struct *task)
+ 	 * barrier (smp_rmb) for two cases:
+ 	 *
+ 	 * 1) Enforce the order of the TIF_PATCH_PENDING read and the
+-	 *    klp_target_state read.  The corresponding write barrier is in
+-	 *    klp_init_transition().
++	 *    klp_target_state read.  The corresponding write barriers are in
++	 *    klp_init_transition() and klp_reverse_transition().
+ 	 *
+ 	 * 2) Enforce the order of the TIF_PATCH_PENDING read and a future read
+ 	 *    of func->transition, if klp_ftrace_handler() is called later on
+@@ -381,6 +381,14 @@ void __klp_sched_try_switch(void)
+ 	if (unlikely(!klp_patch_pending(current)))
+ 		goto out;
+ 
++	/*
++	 * Enforce the order of the TIF_PATCH_PENDING read above and the
++	 * klp_target_state read in klp_try_switch_task().  The corresponding
++	 * write barriers are in klp_init_transition() and
++	 * klp_reverse_transition().
++	 */
++	smp_rmb();
++
+ 	klp_try_switch_task(current);
+ 
+ out:
+@@ -604,8 +612,9 @@ void klp_init_transition(struct klp_patch *patch, int state)
+ 	 * see a func in transition with a task->patch_state of KLP_UNDEFINED.
+ 	 *
+ 	 * Also enforce the order of the klp_target_state write and future
+-	 * TIF_PATCH_PENDING writes to ensure klp_update_patch_state() doesn't
+-	 * set a task->patch_state to KLP_UNDEFINED.
++	 * TIF_PATCH_PENDING writes to ensure klp_update_patch_state() and
++	 * __klp_sched_try_switch() don't set a task->patch_state to
++	 * KLP_UNDEFINED.
+ 	 */
+ 	smp_wmb();
+ 
+@@ -661,9 +670,19 @@ void klp_reverse_transition(void)
+ 	 */
+ 	klp_synchronize_transition();
+ 
+-	/* All patching has stopped, now start the reverse transition. */
++	/* All patching has stopped, now start the reverse transition: */
++
+ 	klp_transition_patch->enabled = !klp_transition_patch->enabled;
+ 	klp_target_state = !klp_target_state;
++
++	/*
++	 * Enforce the order of the klp_target_state write and the
++	 * TIF_PATCH_PENDING writes in klp_start_transition() to ensure
++	 * klp_update_patch_state() and __klp_sched_try_switch() don't set
++	 * task->patch_state to the wrong value.
++	 */
++	smp_wmb();
++
+ 	klp_start_transition();
+ }
+ 
