@@ -2,119 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9596A1905
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EAB6A1906
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjBXJsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S229693AbjBXJs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjBXJsV (ORCPT
+        with ESMTP id S229470AbjBXJsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Feb 2023 04:48:21 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A57829E34;
-        Fri, 24 Feb 2023 01:48:20 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id z6so2141750qtv.0;
-        Fri, 24 Feb 2023 01:48:20 -0800 (PST)
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3C22A147
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:48:20 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id x14so20653927vso.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:48:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JVXNCqpApA7ELtFM5W7tXqhzvT3RzGT0ucZSGwR72Fc=;
-        b=dnY0C/s1YZxv6ExAkfxySx7upc3ZK6WcAbur+sTRGiK7sg05e5eNCaezffrO1QBDgS
-         dIx+t4wtuI/ZdoxMkpMaAj3Rf0CNPlogjFI4ABmF2R6edDER3jzplFQbflqkCGKnwX6V
-         SUm0w0O7T/TZQ2qlVv2JFDRNC7kh+sy7bK2HxcPhlj37u+z82i6F2KWV2zOeKm6atQRD
-         /8CMxtBpU/GOHdtCRHmT3CYL2zbIh3pK6Ct//EReDOlU35qx/gB9nOlc0uubIWs4JF5w
-         mNHrkDaInCMKtfFP4HmDyfBekwuBCI2V2F+6FdaYx7oCVlSc0THhnSivN89c4M4GSiy/
-         kYQw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hy9qFm6Se/EXdsfdDRuKKStMA9t1Y7+V3hdvzyTdE1k=;
+        b=DXKueC8GpWCpoaUHhYn/VQVDrlcC5bBvGx9yUjyrIaUxjgH/nZgFkXAlDhhIM4Rk1K
+         fevzB1ccqZoM/IEbncOZ8uRBzbikbbjGgp4UmpOZmrPCgcJLJ2UXc5ibkBAy4ieK7itq
+         7R5kC5Dod5amnYLIoK+eRQgN2GAqgId8oG5es=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JVXNCqpApA7ELtFM5W7tXqhzvT3RzGT0ucZSGwR72Fc=;
-        b=5+SqAccAWHBEMXyVnX6GLwJYpcnwPy7KtXaX9fDw3Fgvm3O+tkfAToft/hPW0Vyat7
-         iuwmu8SGOlUUrfTbvziJeixy+ErgIKJXSmwffvM9P/bgIfwwAN8snniV3ZlKK0uT32pR
-         R68VF8/Oa45sEdLkV6lyGltvD++gKYNr515D3Jfl2dmkC2LtRaMTw9TSZB9N32sacZ8g
-         fDuXbPRfJPJAKtakwxPDWmhktKZt06WMN402QhbrSmUN05010bfRfFRXWvv4FbUfsqHs
-         ohgTxaz0AJ+2tMYA7TLS0u5haDxYPKf0Sd7+SfDs92PnRxyw9fIS7FpZhptyBTTGfnAx
-         Lf0A==
-X-Gm-Message-State: AO0yUKXRzdtE1pixGYZ0JPVzu0+1qjWuv+HhbCm4pPaca+BO4+vKsqJr
-        7/dJD26PECBAuFaOldr4rdafeKBggNNgL+EcADo97OOEqrjkKg==
-X-Google-Smtp-Source: AK7set8q1/ET9SaMohJ7q/8VDfxDX2T3g1CZP+PquoalRpsrVJj+NLUvNDoQfimqIv2A19WNteILS0DnkhT69hSTLQE=
-X-Received: by 2002:aed:2791:0:b0:3bd:1a0b:8ac4 with SMTP id
- a17-20020aed2791000000b003bd1a0b8ac4mr2683586qtd.1.1677232099416; Fri, 24 Feb
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hy9qFm6Se/EXdsfdDRuKKStMA9t1Y7+V3hdvzyTdE1k=;
+        b=0PzaT66yB4xoUfnKEox3c4SCcqrg8YlOgr0SN1Ghbs3DqFI7XvseScn25E4/3RFPYk
+         PbX4q16Qsnq/UwBF8GuTI3/QpPcBlNJUgbneKaXO0ZiYA00ZCQJLUGV+mKQK+k+0aQzj
+         MgD1708cXhEUG5dwZ/pGBz9H4+QCPZw8HpGppQhnFZKu6nr30bintNHGFYE1PgR+hzZi
+         tktqUE6ixectvwPHms52TikW1syuJtl/Tx4cTPuZ9tPKt+w2PQn1uZu8OCGGAFO6Q8Zn
+         klO8fpqpqc21ZgE3u6I2gz7wsUpTvJeR4KO2SLOpiA7Aq6arWGL3HPYgxY9IV9U2NmJf
+         Xy2A==
+X-Gm-Message-State: AO0yUKUoGCX8OT0xBuNz4Q2PppFbISCDmMw8HR6vEfr1rqs7shdzraqa
+        qh1zNhgsTPVtP6FlS5m2zsQR+cVe4L8z0OXItz/KiwiVL8ZZNQ==
+X-Google-Smtp-Source: AK7set//leuBbGapBBCZqdtVWTRR+//pDwfT2YEJmSKyJPphUPRuePVjrJm1c2+unUfCTnRY/OH4DOBdzIniPgi5pX8=
+X-Received: by 2002:a67:ec11:0:b0:411:c62b:6bf0 with SMTP id
+ d17-20020a67ec11000000b00411c62b6bf0mr2046072vso.3.1677232099910; Fri, 24 Feb
  2023 01:48:19 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1676042188.git.asmaa@nvidia.com> <cover.1676668853.git.asmaa@nvidia.com>
- <28f0d670407c127614b64d9c382b11c795f5077d.1676668853.git.asmaa@nvidia.com>
- <CAHp75VdeVpjzg5Y_4Y+Ke9=3wog28vUBN4Fd8zxfa8dWGrqUUA@mail.gmail.com>
- <CH2PR12MB3895520749883D912E5021F1D7AA9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <CAHp75Vc+iSt2XvpOYzwZnzX7Qg013e-E27CPjPaO-QmtferWVg@mail.gmail.com>
- <CH2PR12MB389509F68E6AFE776C5B0AC6D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <CAHp75VdoUDMvVk1uMQcAKQteL6gbYGpoKpFn96ysdS81LjPGCQ@mail.gmail.com> <CH2PR12MB389530C5929100CB54396CF5D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
-In-Reply-To: <CH2PR12MB389530C5929100CB54396CF5D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 24 Feb 2023 11:47:43 +0200
-Message-ID: <CAHp75VfZ1r_sNus_qMYumja3YrJawA6hRHUbi-uPFUprorQ_Kw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] gpio: gpio-mlxbf3: Add gpio driver support
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+References: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com> <20230223134345.82625-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230223134345.82625-2-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 24 Feb 2023 17:48:08 +0800
+Message-ID: <CAGXv+5G8dkV-Po+960QeqMVUj6Sp7a08LYLitorWOWN=MhNKhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/16] arm64: dts: mediatek: mt8183-kukui: Couple VGPU
+ and VSRAM_GPU regulators
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 12:51 AM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
+On Thu, Feb 23, 2023 at 9:43 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Add coupling for these regulators, as they have a strict voltage output
+> relation to satisfy in order to ensure GPU stable operation.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-...
-
-> > > > > Ah that=E2=80=99s my bad. The property should be called "ngpios" =
-like in
-> > > > > the DT
-> > > > documentation. Will fix.
-> > > >
-> > > > And why do you need it? What's a corner case that the GPIO library
-> > > > doesn't handle yet?
-> > >
-> > > We have 2 gpiochips, gpiochip 0 supports 32 gpio pins and gpiochip 1
-> > supports only 24 pins.
-> > > If I remove the logic from gpio-mlxbf3.c, the gpiolib.c logic will co=
-rrectly set
-> > the ngpios =3D 32 for gpiochip 0 but will wrongly set ngpios=3D32 for g=
-piogchip 1:
-> >
-> > So, either you need to have two entries in DT per chip or ngpios should=
- be 56.
-> >
-> I already have 2 entries in my ACPI table, in the first entry, ngpios =3D=
- 32 and in the second entry ngpios =3D 24.
-
-Can you show the DSDT excerpt of this device? (Also including the
-pieces for pin control)
-
-Is this a table of the device in the wild?
-
-> Gpiochip_add_data_with_keys only reads the ngpios property if (ngpios =3D=
-=3D 0) which is not the case when
-> bgpio_init is called. bgpio_init uses "sz" argument to populate the ngpio=
- in bgpio_init, which is not what we want.
-
-Maybe bgpio_init() is not a good API for your case?
-
---
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
