@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD02C6A1D4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D407A6A1D4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjBXONt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S229879AbjBXONg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjBXONr (ORCPT
+        with ESMTP id S229462AbjBXONf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:13:47 -0500
+        Fri, 24 Feb 2023 09:13:35 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0772C211F
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:13:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8165B1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:12:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677248015; x=1708784015;
+  t=1677247974; x=1708783974;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Fp4tA+iUltAlnGLma9o8GDd9EzYWAtujwIKXsR/KuG8=;
-  b=ixrm1LWuTlZumI35jVhNQwQ3d6V1ANbbhtiJ23RIty3qiww2uwlsFia4
-   Y5YR52aDmY7XurG/ZEQ6M36Aztvtzks+ZWVle3kCB2Z76JhBuGXCG3rvt
-   MpRyisdHGlxPEbDJIQ6QbqbvSLq99AJAgIf2wi0mrX5mu0xQSKuPi2d1S
-   iTaXE387kXKwvy7ku87hkOlx5c0AIh2DILAZutTaxR79Srzzux+g7VrMr
-   ePqYTOuPcS7mLtPjNx3pF1RKLXIV8m3I3P0ZgiwdZP3pztuZ5HVZD/6bO
-   Z0WM2MSwk022XDVDx43jIDc3rHd6GP+L98Fhtj/f1u6D/6zCt74nuGRmP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331218420"
+  bh=VRrdbg90JvMh/sWg4i4ypAsOM8fNcSKwYbYz8AMKag0=;
+  b=kknhS/WVU1RIN+N3A5qRYlxH2Vsz9KODt+PIPEDqAx01v2rFVWt84zkR
+   b4ue9jlS/z6aw7thm+Oeb6L+6SIDJy2RkjKGkJwM8jNGJ/oZG/EuXbPiz
+   gw+asKB13ZiQkKNPon+6y1tZp6Q4b/UA09Jy9u6DnZwM4xkAM9qt3H5EB
+   VdleWdOovWOEjmHafdj6s+MQOHkiCmIlVaqLe2qgHGgj6il4By+ttQjOj
+   FaRWWVKFJv/7qYCn1KHa6hn+ZK6bBqX4sxUEjXy/A4N5Sdcgf2a1aRkuo
+   tSKOYJ9zcWJZ+AcYNBs86pPou/+td2SkqZ8nBKzHGOV2enK/AdKYFmQN9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331218414"
 X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="331218420"
+   d="scan'208";a="331218414"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 06:12:55 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 06:12:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736810634"
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736810633"
 X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="736810634"
+   d="scan'208";a="736810633"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
   by fmsmga008.fm.intel.com with ESMTP; 24 Feb 2023 06:12:53 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pVYoe-0002Sf-1Q;
+        id 1pVYoe-0002Sh-1b;
         Fri, 24 Feb 2023 14:12:52 +0000
-Date:   Fri, 24 Feb 2023 22:12:42 +0800
+Date:   Fri, 24 Feb 2023 22:12:43 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Subject: drivers/nvme/host/core.c:3109:44: sparse: sparse: invalid
- assignment: &=
-Message-ID: <202302242222.PevBhzvC-lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: kernel/rcu/refscale.c:614:24: sparse: sparse: incompatible types in
+ comparison expression (different address spaces):
+Message-ID: <202302242216.C9zAq2tw-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,68 +63,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   d2980d8d826554fa6981d621e569a453787472f8
-commit: baff6491448b487e920faaa117e432989cbafa89 nvme: mask CSE effects for security receive
-date:   3 weeks ago
-config: m68k-randconfig-s051-20230222 (https://download.01.org/0day-ci/archive/20230224/202302242222.PevBhzvC-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
+commit: a6889becb05394255c80b62103677e3b095726a9 refscale: Add tests using SLAB_TYPESAFE_BY_RCU
+date:   7 weeks ago
+config: parisc-randconfig-s052-20230222 (https://download.01.org/0day-ci/archive/20230224/202302242216.C9zAq2tw-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
 reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # apt-get install sparse
         # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=baff6491448b487e920faaa117e432989cbafa89
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a6889becb05394255c80b62103677e3b095726a9
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout baff6491448b487e920faaa117e432989cbafa89
+        git checkout a6889becb05394255c80b62103677e3b095726a9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash drivers/nvme/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash kernel/rcu/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302242222.PevBhzvC-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302242216.C9zAq2tw-lkp@intel.com/
 
 sparse warnings: (new ones prefixed by >>)
->> drivers/nvme/host/core.c:3109:44: sparse: sparse: invalid assignment: &=
->> drivers/nvme/host/core.c:3109:44: sparse:    left side has type restricted __le32
->> drivers/nvme/host/core.c:3109:44: sparse:    right side has type int
+>> kernel/rcu/refscale.c:614:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>> kernel/rcu/refscale.c:614:24: sparse:    struct refscale_typesafe [noderef] __rcu *
+>> kernel/rcu/refscale.c:614:24: sparse:    struct refscale_typesafe *
+   kernel/rcu/refscale.c:569:13: sparse: sparse: context imbalance in 'typesafe_lock_acquire' - wrong count at exit
+   kernel/rcu/refscale.c:576:13: sparse: sparse: context imbalance in 'typesafe_lock_release' - unexpected unlock
 
-vim +3109 drivers/nvme/host/core.c
+vim +614 kernel/rcu/refscale.c
 
-  3083	
-  3084	static void nvme_init_known_nvm_effects(struct nvme_ctrl *ctrl)
-  3085	{
-  3086		struct nvme_effects_log	*log = ctrl->effects;
-  3087	
-  3088		log->acs[nvme_admin_format_nvm] |= cpu_to_le32(NVME_CMD_EFFECTS_LBCC |
-  3089							NVME_CMD_EFFECTS_NCC |
-  3090							NVME_CMD_EFFECTS_CSE_MASK);
-  3091		log->acs[nvme_admin_sanitize_nvm] |= cpu_to_le32(NVME_CMD_EFFECTS_LBCC |
-  3092							NVME_CMD_EFFECTS_CSE_MASK);
-  3093	
-  3094		/*
-  3095		 * The spec says the result of a security receive command depends on
-  3096		 * the previous security send command. As such, many vendors log this
-  3097		 * command as one to submitted only when no other commands to the same
-  3098		 * namespace are outstanding. The intention is to tell the host to
-  3099		 * prevent mixing security send and receive.
-  3100		 *
-  3101		 * This driver can only enforce such exclusive access against IO
-  3102		 * queues, though. We are not readily able to enforce such a rule for
-  3103		 * two commands to the admin queue, which is the only queue that
-  3104		 * matters for this command.
-  3105		 *
-  3106		 * Rather than blindly freezing the IO queues for this effect that
-  3107		 * doesn't even apply to IO, mask it off.
-  3108		 */
-> 3109		log->acs[nvme_admin_security_recv] &= ~NVME_CMD_EFFECTS_CSE_MASK;
-  3110	
-  3111		log->iocs[nvme_cmd_write] |= cpu_to_le32(NVME_CMD_EFFECTS_LBCC);
-  3112		log->iocs[nvme_cmd_write_zeroes] |= cpu_to_le32(NVME_CMD_EFFECTS_LBCC);
-  3113		log->iocs[nvme_cmd_write_uncor] |= cpu_to_le32(NVME_CMD_EFFECTS_LBCC);
-  3114	}
-  3115	
+   595	
+   596	// Do a read-side critical section with the specified delay in
+   597	// microseconds and nanoseconds inserted so as to increase probability
+   598	// of failure.
+   599	static void typesafe_delay_section(const int nloops, const int udl, const int ndl)
+   600	{
+   601		unsigned int a;
+   602		unsigned int b;
+   603		int i;
+   604		long idx;
+   605		struct refscale_typesafe *rtsp;
+   606		unsigned int start;
+   607	
+   608		for (i = nloops; i >= 0; i--) {
+   609			preempt_disable();
+   610			idx = torture_random(this_cpu_ptr(&refscale_rand)) % rtsarray_size;
+   611			preempt_enable();
+   612	retry:
+   613			rcu_read_lock();
+ > 614			rtsp = rcu_dereference(rtsarray[idx]);
+   615			a = READ_ONCE(rtsp->a);
+   616			if (!rts_acquire(rtsp, &start)) {
+   617				rcu_read_unlock();
+   618				goto retry;
+   619			}
+   620			if (a != READ_ONCE(rtsp->a)) {
+   621				(void)rts_release(rtsp, start);
+   622				rcu_read_unlock();
+   623				goto retry;
+   624			}
+   625			un_delay(udl, ndl);
+   626			// Remember, seqlock read-side release can fail.
+   627			if (!rts_release(rtsp, start)) {
+   628				rcu_read_unlock();
+   629				goto retry;
+   630			}
+   631			b = READ_ONCE(rtsp->a);
+   632			WARN_ONCE(a != b, "Re-read of ->a changed from %u to %u.\n", a, b);
+   633			b = rtsp->b;
+   634			rcu_read_unlock();
+   635			WARN_ON_ONCE(a * a != b);
+   636		}
+   637	}
+   638	
 
 -- 
 0-DAY CI Kernel Test Service
