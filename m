@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3776A1A89
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EBB6A1A90
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjBXKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        id S229682AbjBXKs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBXKrT (ORCPT
+        with ESMTP id S229622AbjBXKsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:47:19 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2C4244B4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:47:18 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pVVbf-0001Ao-FL; Fri, 24 Feb 2023 11:47:15 +0100
-Message-ID: <07e61f29-5a0e-be38-ad24-01aefdf970bd@leemhuis.info>
-Date:   Fri, 24 Feb 2023 11:47:14 +0100
+        Fri, 24 Feb 2023 05:48:23 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4576B13D49
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:48:22 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r7so13299037wrz.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:48:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HR0UWQKqPA3ewcsqzjhlOUtNlnfP6392kIgsSTEs7d8=;
+        b=mFDonIVCSZ0rdWjYufm4eMvD1LnS53ToUl9EKyG7g8JO+Rw3SGGn2yjcH2XfVaI4jd
+         XzYd933WnqWkKbOdDS9KEv4CdiagfLwwrTWFvUemRchLFrPChk2lmOAUY2VhL1HdsCrG
+         iyBVb2K6+rbHWzjs0OjUtW2I84AZoHuiLNFxCVtCTJT77XWJPqsuv1GQeZpyPpp6Iy15
+         l4MxJO+qfAmeD2MrXBiFD0dE0PejaR2H1f2M1GvTZ3+FqENUgZji00S4Se19dBrE4lYI
+         DTkPhWeqLQAaaHHt0l1em42bfTMhEHBDeoAFM6vzL2aupPc8clHQmmJjWYSJ9asXu3ZY
+         FMqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HR0UWQKqPA3ewcsqzjhlOUtNlnfP6392kIgsSTEs7d8=;
+        b=WHuvuLvDAScnsCO9JAshl+I1SrHc1I+bC+oBbp8OXxq/4P+fQVzSmQqX1L2mMnVvJT
+         IL2xGBuTYfRwxc+cEk+trlPXpu1N3JwQd/S05KqOVLK+XibozMrF9gtCVxsQScpkIwCR
+         JPlpTBUt1fN0DghkanX5/Gyr7y2/NUQCtIMdf1GmmgR7fIc4jT+BWRy/vbf5J1VZj4YT
+         d+WcaPv7+rDeituGVa0UjgLRWcOkY/iXnv7Ac1mW1ZHTJRo5QitpjR3eJ+C6/Bjb2VKP
+         fpwOo51VLEWNwI5iXvPg6HlbJVoW2Vul4KjtH4kJan6cBjBJjJqE8I5Hzsx2HTLOQqGc
+         s9Rw==
+X-Gm-Message-State: AO0yUKWlHPdN4/ax6BO44q8WFk4mZL8ArQGSyONdkPYS11W9iR999k+a
+        oSIPB5qm0c2MaePCW7Ai7uCNYy34/Vi8VmYIdajv/VOu5gwk2u2c
+X-Google-Smtp-Source: AK7set+t2ZMXxJdkymq/f433ab9d1M38NcOpbgsjxwuHP9yBszDXCzcxLzuD8X8eMuxSDUIbKIbUnFuGPUkJsIOSTvs=
+X-Received: by 2002:a5d:59a9:0:b0:2c7:e48:8ca4 with SMTP id
+ p9-20020a5d59a9000000b002c70e488ca4mr1099157wrr.2.1677235700730; Fri, 24 Feb
+ 2023 02:48:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFC] ipc/mqueue: introduce msg cache
-Content-Language: en-US, de-DE
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Waiman Long <longman@redhat.com>,
-        Sven Luther <Sven.Luther@windriver.com>
-References: <20221220184813.1908318-1-roman.gushchin@linux.dev>
- <7a3e0cb1-54f0-73b2-d9e5-db4d28836bfc@leemhuis.info>
- <Y+/GxJcNykVQxcG+@P9FQF9L96D.corp.robot.car>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <Y+/GxJcNykVQxcG+@P9FQF9L96D.corp.robot.car>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677235638;7323fbfc;
-X-HE-SMSGID: 1pVVbf-0001Ao-FL
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230219183059.1029525-1-xiang.ye@intel.com> <20230219183059.1029525-3-xiang.ye@intel.com>
+In-Reply-To: <20230219183059.1029525-3-xiang.ye@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 24 Feb 2023 11:48:08 +0100
+Message-ID: <CACRpkdYdDE+B=SF+kAuQBiwUi31y_xELLXuDK+9G+rqD9MQBGg@mail.gmail.com>
+Subject: Re: [PATCH 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+Hi Ye,
 
-On 17.02.23 19:26, Roman Gushchin wrote:
-> On Thu, Feb 16, 2023 at 01:29:59PM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
->>
->> On 20.12.22 19:48, Roman Gushchin wrote:
->>> Sven Luther reported a regression in the posix message queues
->>> performance caused by switching to the per-object tracking of
->>> slab objects introduced by patch series ending with the
->>> commit 10befea91b61 ("mm: memcg/slab: use a single set of kmem_caches for all
->>> allocations").
->>
->> Quick inquiry: what happened to below patch? It was supposed to fix a
->> performance regression reported here:
-> 
-> I wouldn't call it simple a regression,
+thanks for your patch!
 
-Well, performance regressions are regressions, too. That being said:
+I think your colleague Andy Shevchenko will provide the most detailed
+and deep feedback, but here are some things I spotted immediately:
 
-> things a bit more complicated:
-> it was a switch to a different approach with different trade-offs,
-> which IMO make more sense for the majority of real-world workloads.
-> In two words: individual kernel memory allocations became somewhat slower
-> (but still fast), but we've saved 40%+ of slab memory on typical systems
-> and reduced the memory fragmentation.
+On Sun, Feb 19, 2023 at 7:31 PM Ye Xiang <xiang.ye@intel.com> wrote:
+
+> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> GPIO module with specific protocol through interfaces exported by LJCA USB
+> driver.
 >
-> The regression reported by Sven and my "fix" are related to one very specific
-> case: posix message queues. To my knowledge they are not widely used for
-> anything that performance-sensitive, so it's quite a niche use case.
-> My "fix" was also hand-crafted for the benchmark provided by Sven, so it might
-> not work for a more generic case. And I don't think it can be easily generalized
-> without adding cpu or memory overhead.
-> 
-> On the other hand I'm working on improving the speed of kernel memory allocations
-> in general (I posted early versions some weeks ago). Hopefully it will mitigate
-> the problem for Sven as well, so we won't need these message queue-specific
-> hacks.
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+(...)
 
-Thx for the explanation. Sven didn't complain and it seems no one else
-run into this, so I think we can live with that state of affairs.
+> +config GPIO_LJCA
+> +       tristate "INTEL La Jolla Cove Adapter GPIO support"
+> +       depends on MFD_LJCA
 
-#regzbot inconclusive: not fixed, but cause by a trade-off and a likely
-corner-case anyway; more optimizations planned to improve things
-#regzbot ignore-activity
+I would add
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+   default MFD_LJCA
+
+so if you activate the MFD you get this subdriver by default
+as module or built-in depending on what the MFD is built
+as.
+
+(Same goes for the other subdrivers I guess)
+
+In addition you need:
+
+select GPIOLIB_IRQCHIP
+
+since you use this facility.
+
+> +static struct irq_chip ljca_gpio_irqchip = {
+
+static const ...
+
+> +       .name = "ljca-irq",
+> +       .irq_mask = ljca_irq_mask,
+> +       .irq_unmask = ljca_irq_unmask,
+> +       .irq_set_type = ljca_irq_set_type,
+> +       .irq_bus_lock = ljca_irq_bus_lock,
+> +       .irq_bus_sync_unlock = ljca_irq_bus_unlock,
+> +       .flags = IRQCHIP_IMMUTABLE,
+> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+
+Yours,
+Linus Walleij
