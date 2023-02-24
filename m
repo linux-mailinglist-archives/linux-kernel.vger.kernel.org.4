@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FA26A17AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8B46A17AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjBXIDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S229539AbjBXIE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBXIDM (ORCPT
+        with ESMTP id S229545AbjBXIEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:03:12 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA90279B8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:03:11 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id h14so4335916wru.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:03:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPluoQMOkdFe2Sa5U9SyXRVN40WIY8W5okzJaoRdoj4=;
-        b=dU3IpnmqlGqaHKN8F6/Ar/A3HuRIAZNuZ98SOlvtHzAk/fi8+5wd+7RUX2abJT8YAx
-         olWnIZ2fSrx95gfLwk7Z7w1TkNjJgSBqRn/gFxV9g4i8FGFNjx+6FTOxGNFCWQ9ONcR7
-         6LokqcrF+qb4NwV+NavKTlVYnglSfEXa/GIKRN+Ax9acsorBSF0/zeic0uTyH6/R+QLs
-         EM8mLiuNUkBKQUQnRQ0hxPoGhk5+ie0G9ezJmThg0PYQS18VLXSw9p2ntjqcHPUuFJG8
-         Gls9YK9he5+svTbMQTxb9CylqLQAAf9LisdxoWFT9eTogFO39gH9Y0ehGAIs2H5niurm
-         m+rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CPluoQMOkdFe2Sa5U9SyXRVN40WIY8W5okzJaoRdoj4=;
-        b=Kd2Bwc9szcvwddnZp0a6laCz0DKxJIDk5/3La5JEJPMHL1QogYNB+v2fEZ8aysdTl0
-         U4KqJV+1/4rAJuxQm+Bw5ottMnDIEMXoWX7+Hz+Pk9XKQ01FAeI6wuVB1u3llTDt2Ua/
-         OR9xk40pbxSv81+VKrhsYvcbrixzcUoXTbIpscW7yPsmWJbHOvVPrLxAcazQDW7FPwDK
-         XfwhAfEU1Tc4T9WGJ2kTYaKJZPWK9vm3x/VexHNlYU5NzGAnT/iP5DeCXjnWVudTrIfE
-         5NlAPdSW08Pd9UQokKbIofF4elkuGpbFFEDEx2+cDBVnKo8+UIFIeEwsKgpMbjdxqib0
-         ZWHw==
-X-Gm-Message-State: AO0yUKWTsLb3DZ5wtgrWc8Sg4uZeDNkVfToZCiIq6zvhOCjALJ7No8LI
-        q5TZUJgwkI4a3ICFMsRyYdEIhtudYTv62DPyP+EeDw==
-X-Google-Smtp-Source: AK7set/rBOumgljbhDtIArm700oTnvpDNRJ0E9MhtS9R1JCMjRfY7Jh/q6i90kPnlwa5aLYRzNCiDLSH+DAHJIYkPlM=
-X-Received: by 2002:adf:d4c6:0:b0:2c7:1a97:ef91 with SMTP id
- w6-20020adfd4c6000000b002c71a97ef91mr380000wrk.1.1677225789964; Fri, 24 Feb
- 2023 00:03:09 -0800 (PST)
+        Fri, 24 Feb 2023 03:04:53 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CCC28D2F;
+        Fri, 24 Feb 2023 00:04:51 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id EDC0F61;
+        Fri, 24 Feb 2023 09:04:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1677225890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8hYTIIbNhdLYsQYh/XYIycPjz/USIz6gl+igSUCQP2Y=;
+        b=BorI/xn6hRTyGYBqmeLOtYz69IP1ZRg2y01401Tyw4jzXtO+WCLUXnM5cHQoASvXPMbILC
+        5pDAlz9y0YXM+qKGjfOtDQLSTaxGhp1TBC0RjET8rJ0mf1WwtFKIYAge0fOq9bXj305o6N
+        h2JEZemB1FY0RHC/SX5GU0tp7nbnvdf4Ux4hr3p5KEn0zXemGSlQ8I6Up/4vD8FTCadkqh
+        L6wb3vr+2BGJxCMXmDiukVTuep7AmDgUgMT50OzoCjeyTxNAJZUdlABmTnmNtEXCMPlOSJ
+        dmoQ5d1daQwBBH2mqIfS06OZFsLW3YX8Y+LXZzkrLUuIIR/ix9ISD+dDL+laAw==
 MIME-Version: 1.0
-References: <20230224080045.6577-1-manivannan.sadhasivam@linaro.org>
-In-Reply-To: <20230224080045.6577-1-manivannan.sadhasivam@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Fri, 24 Feb 2023 13:32:45 +0530
-Message-ID: <CAH=2NtwdosY2FaWTcBvVs_-S6=ZC5uBh6S+jS7Ck7h9+MUJzKg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Fix the iommu mask used for
- PCIe controllers
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        srinivas.kandagatla@linaro.org, quic_vkamble@quicinc.com,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 24 Feb 2023 09:04:49 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Martin Schiller <ms@dev.tdt.de>
+Cc:     tharvey@gateworks.com, andrew@lunn.ch, davem@davemloft.net,
+        f.fainelli@gmail.com, hauke@hauke-m.de, hkallweit1@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, martin.blumenstingl@googlemail.com,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
+ delay configuration
+In-Reply-To: <8aa26f417c99761cdf1b6b7082fdec14@dev.tdt.de>
+References: <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
+ <20230222160425.4040683-1-michael@walle.cc>
+ <8aa26f417c99761cdf1b6b7082fdec14@dev.tdt.de>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <df9a0b6e59d27d5898a9021915ca333a@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 at 13:30, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> The iommu mask should be 0x3f as per Qualcomm internal documentation.
-> Without the correct mask, the PCIe transactions from the endpoint will
-> result in SMMU faults. Hence, fix it!
->
-> Cc: stable@vger.kernel.org # 5.19
-> Fixes: a1c86c680533 ("arm64: dts: qcom: sm8150: Add PCIe nodes")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index fd20096cfc6e..13e0ce828606 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -1826,7 +1826,7 @@ pcie0: pci@1c00000 {
->                                       "slave_q2a",
->                                       "tbu";
->
-> -                       iommus = <&apps_smmu 0x1d80 0x7f>;
-> +                       iommus = <&apps_smmu 0x1d80 0x3f>;
->                         iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
->                                     <0x100 &apps_smmu 0x1d81 0x1>;
->
-> @@ -1925,7 +1925,7 @@ pcie1: pci@1c08000 {
->                         assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
->                         assigned-clock-rates = <19200000>;
->
-> -                       iommus = <&apps_smmu 0x1e00 0x7f>;
-> +                       iommus = <&apps_smmu 0x1e00 0x3f>;
->                         iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
->                                     <0x100 &apps_smmu 0x1e01 0x1>;
->
+Hi Martin,
 
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Am 2023-02-24 07:25, schrieb Martin Schiller:
+> On 2023-02-22 17:04, Michael Walle wrote:
+>> Hi Tim, Hi Martin,
+>> 
+>>> I've got some boards with the GPY111 phy on them and I'm finding that
+>>> modifying XWAY_MDIO_MIICTRL to change the skew has no effect unless I
+>>> do a soft reset (BCMR_RESET) first. I don't see anything in the
+>>> datasheet which specifies this to be the case so I'm interested it
+>>> what you have found. Are you sure adjusting the skews like this
+>>> without a soft (or hard pin based) reset actually works?
+>> 
+>> I do have the same PHY and I'm puzzled with the delay settings. Do
+>> you have an EEPROM attached to the PHY? According to my datasheet,
+>> that seems to make a difference. Apparently, only if there is an
+>> EEPROM, you can change the value (the value is then also written to
+>> the EEPROM according the datasheet).
+>> If you don't have one, the values will get overwritten by the
+>> external strappings on a soft reset. Therefore, it seems they cannot
+>> be set. (FWIW there is also a sticky bit, but that doesn't seem to
+>> help in this case).
+>> 
+>> -michael
+> 
+> Yes, you are right. The datasheet says: "In no-EEPROM mode, writing to
+> this register has no impact on operation of the device".
+> 
+> But changing this settings without an EEPROM indeed has an impact.
+> 
+> We don't use an EEPROM and without tuning this values some boards are
+> unable to communicate on the ethernet port(s).
 
-Thanks.
+Thanks for confirming! Could you share your PHYID1/PHYID2 register and
+firmware version (FWV, 0x1E) contents?
+
+In our case, any changes in MIICTRL are lost after a soft reset.
+
+> I varied these values during operation in the uboot and was able to 
+> test
+> the limits very nicely.
+
+So I guess, the value you write into MIICTRL are retained on a soft 
+reset.
+I.e.
+
+mii write <phyad> 0x17 0xffff
+mii write <phyad> 0x00 0x8000
+mii read <phyad> 0x17
+
+will still return 0xffff?
+
+> 
+> I wouldn't have introduced this feature if it hasn't got any impact.
+
+Sure, I'm just trying to figure out the differences ;)
+
+Thanks,
+Michael
