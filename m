@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD086A1DBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AC86A1DC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjBXOrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S230113AbjBXOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjBXOru (ORCPT
+        with ESMTP id S230096AbjBXOtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:47:50 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A381D19BA;
-        Fri, 24 Feb 2023 06:47:48 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536bf92b55cso281764207b3.12;
-        Fri, 24 Feb 2023 06:47:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8uUY0givXBFT5S7l+w54j/YXmi9by/XbIMZYftrzf2Q=;
-        b=LLvWs8JX9DPLjP9GXeHGKYI6m3OLPWqDFxAE5Mr7DI3o9UqA5qKuhCWT6dCKs7RCBm
-         /3+i988r17RH4J3MsFUBR5E9bXe5norCSlCV540ExT8ajXbus6eXIseyswopyjBVAfM1
-         pvEznqqmPijzJbWqm+DlAQA7uW7Yss/j4wNcHyo3Oq7YebMUTSI+qLYg8TqK1K9+LOjL
-         VRhS4mjzYz8l6/Mcmqk7/XKHhidzty7L6aR3fNuhsrjdGNypedE5bO3kMUd8dUJLCzw9
-         zCQ1NeMO4Y5TKYNn/JjS+9xqWMWWqkLo2A5w/Aqr13ZWkNrF57QDU4n/1jux7P9YEalQ
-         yiQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8uUY0givXBFT5S7l+w54j/YXmi9by/XbIMZYftrzf2Q=;
-        b=K6jSW3DJ1IvND3tPS0YjAwNZY/ye8USZhG2x1mz2DOVF+f8MqqpzH3/x2eAfKAyvyX
-         JXr8N/yRq3FtCeHmP9SvY6M0xaFrhkDyf6/yA3a+YHSd8sHNKRGFVgSCyW4JviFAyjA3
-         p6GB6XDLUeg9xBAwOu9clCOB0sxtOxlnfFNiqSOExIMYxpcNFW1pipRFhkCiC6WII/75
-         mhFd2gDrumbehIodLBcUI2L1ijXwSxQaAeo6kwTAF8zdbuBUV2Q/MpkOwkwur00RjdDR
-         8EXUUWNTUTC1i0F3z578+AFvz4cwF2PJEGzEmlSGRV6mljYXBnbdbd9oS/AOeFF4QFy1
-         JLFg==
-X-Gm-Message-State: AO0yUKXyldYiMG6Rj4f2r2ovjes60x3Yy8hhUaaoy0PrlFYLvXIuwVoW
-        3vQaP1WqWNKvWozj4a+gVnYiEYjsQXM=
-X-Google-Smtp-Source: AK7set/G9lKoX3cNTU4MKH/VN/w5BVWKXkwG3pEbF8XrYg8cCVVWQO24zeRWIYJB3yVJi0n7MdR0Og==
-X-Received: by 2002:a25:e210:0:b0:a24:1001:1fb2 with SMTP id h16-20020a25e210000000b00a2410011fb2mr6144946ybe.30.1677250067848;
-        Fri, 24 Feb 2023 06:47:47 -0800 (PST)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id b201-20020ae9ebd2000000b007423843d879sm5160106qkg.93.2023.02.24.06.47.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 06:47:47 -0800 (PST)
-Date:   Fri, 24 Feb 2023 09:47:47 -0500
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     yang.yang29@zte.com.cn, davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhang.yunkai@zte.com.cn, xu.xin16@zte.com.cn,
-        jiang.xuexin@zte.com.cn
-Message-ID: <63f8ce1313457_78f63208c6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <202302241438536013777@zte.com.cn>
-References: <202302241438536013777@zte.com.cn>
-Subject: RE: [PATCH linux-next] selftests: net: udpgso_bench_tx: Add test for
- IP fragmentation of UDP packets
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 24 Feb 2023 09:49:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A376C1116E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677250090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r3Iwur3DaO9qOJlnUw5ODrEZJsIUBj4dSLzn2wwaUV8=;
+        b=Goa8GoS/MnDuGTedcWnHgthKccmV1UZH+DqHBbd3B08c4A5cXfTi4lip8+Vqqcg79e3DR0
+        Kp07sC/8TbPuuPtxHTWe9pHJu+ssfLBfhtvAc+JseXR7TwD9h2dB0b30l7ru6qJ8kjsf+G
+        kQx9E2kiW3g90mel9qe3b9V9OJdtOdc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-p9_Us-HwPMethNlGGb1Kzg-1; Fri, 24 Feb 2023 09:48:07 -0500
+X-MC-Unique: p9_Us-HwPMethNlGGb1Kzg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7677A3C0E213;
+        Fri, 24 Feb 2023 14:48:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DF552166B29;
+        Fri, 24 Feb 2023 14:48:04 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2134430.1677240738@warthog.procyon.org.uk>
+References: <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steve French <stfrench@microsoft.com>
+Cc:     dhowells@redhat.com, Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] cifs, afs: Revert changes to {cifs,afs}_writepages_region()
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2214156.1677250083.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 24 Feb 2023 14:48:03 +0000
+Message-ID: <2214157.1677250083@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,145 +73,452 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yang.yang29@ wrote:
-> From: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-> 
-> The UDP GSO bench only tests the performance of userspace payload splitting
-> and UDP GSO. But we are also concerned about the performance comparing
-> with IP fragmentation and UDP GSO. In other words comparing IP fragmentation 
-> and segmentation.
-> 
-> So we add testcase of IP fragmentation of UDP packets, then user would easy
-> to get to know the performance promotion of UDP GSO compared with IP 
-> fragmentation. We add a new option "-f", which is to send big data using 
-> IP fragmentation instead of using UDP GSO or userspace payload splitting.
-> 
-> In the QEMU environment we could see obvious promotion of UDP GSO.
-> The first test is to get the performance of userspace payload splitting.
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST"
-> udp tx:     10 MB/s     7812 calls/s    186 msg/s
-> udp tx:     10 MB/s     7392 calls/s    176 msg/s
-> udp tx:     11 MB/s     7938 calls/s    189 msg/s
-> udp tx:     11 MB/s     7854 calls/s    187 msg/s
-> 
-> The second test is to get the performance of IP fragmentation.
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST" -f
-> udp tx:     33 MB/s      572 calls/s    572 msg/s
-> udp tx:     33 MB/s      563 calls/s    563 msg/s
-> udp tx:     31 MB/s      540 calls/s    540 msg/s
-> udp tx:     33 MB/s      571 calls/s    571 msg/s
-> 
-> The third test is to get the performance of UDP GSO.
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-> udp tx:     46 MB/s      795 calls/s    795 msg/s
-> udp tx:     49 MB/s      845 calls/s    845 msg/s
-> udp tx:     49 MB/s      847 calls/s    847 msg/s
-> udp tx:     45 MB/s      774 calls/s    774 msg/s
-> 
-> Signed-off-by: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-> Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-> Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
-> Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
-> ---
->  tools/testing/selftests/net/udpgso_bench_tx.c | 33 ++++++++++++++++++++++-----
->  1 file changed, 27 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-> index 477392715a9a..025e706b594b 100644
-> --- a/tools/testing/selftests/net/udpgso_bench_tx.c
-> +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-> @@ -64,6 +64,7 @@ static int	cfg_runtime_ms	= -1;
->  static bool	cfg_poll;
->  static int	cfg_poll_loop_timeout_ms = 2000;
->  static bool	cfg_segment;
-> +static bool	cfg_fragment;
->  static bool	cfg_sendmmsg;
->  static bool	cfg_tcp;
->  static uint32_t	cfg_tx_ts = SOF_TIMESTAMPING_TX_SOFTWARE;
-> @@ -375,6 +376,21 @@ static int send_udp_sendmmsg(int fd, char *data)
->  	return ret;
->  }
-> 
-> +static int send_udp_fragment(int fd, char *data)
-> +{
-> +	int ret;
-> +
-> +	ret = sendto(fd, data, cfg_payload_len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
-> +			cfg_connected ? NULL : (void *)&cfg_dst_addr,
-> +			cfg_connected ? 0 : cfg_alen);
+Here's a more complex patch that reverts Vishal's patch to afs and your
+changes to cifs back to the point where find_get_pages_range_tag() was
+being used to get a single folio and then replace that with a function,
+filemap_get_folio_tag() that just gets a single folio.  An alternative way
+of doing this would be to make filemap_get_folios_tag() take a limit count=
+.
 
-This should probably disable PMTU discovery with IP_PMTUDISC_OMIT to
-allow transmission with fragmentation of a packet that exceeds MTU.
-And to avoid send returning with error after ICMP destination
-unreachable messages if MTU is exceeded in the path.
+This is likely to be more efficient for the common case as
+*_extend_writeback() will deal with pages that are contiguous to the
+starting page before we get on to continuing to process the batch.
 
-> +	if (ret == -1)
-> +		error(1, errno, "write");
-> +	if (ret != cfg_payload_len)
-> +		error(1, errno, "write: %uB != %uB\n", ret, cfg_payload_len);
-> +
-> +	return 1;
-> +}
-> +
->  static void send_udp_segment_cmsg(struct cmsghdr *cm)
->  {
->  	uint16_t *valp;
-> @@ -429,7 +445,7 @@ static int send_udp_segment(int fd, char *data)
-> 
->  static void usage(const char *filepath)
->  {
-> -	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
-> +	error(1, 0, "Usage: %s [-46acfmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
->  		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
->  		    filepath);
->  }
-> @@ -440,7 +456,7 @@ static void parse_opts(int argc, char **argv)
->  	int max_len, hdrlen;
->  	int c;
-> 
-> -	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
-> +	while ((c = getopt(argc, argv, "46acC:D:fHl:L:mM:p:s:PS:tTuvz")) != -1) {
->  		switch (c) {
->  		case '4':
->  			if (cfg_family != PF_UNSPEC)
-> @@ -469,6 +485,9 @@ static void parse_opts(int argc, char **argv)
->  		case 'l':
->  			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
->  			break;
-> +		case 'f':
-> +			cfg_fragment = true;
-> +			break;
->  		case 'L':
->  			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
->  			break;
-> @@ -527,10 +546,10 @@ static void parse_opts(int argc, char **argv)
->  		error(1, 0, "must pass one of -4 or -6");
->  	if (cfg_tcp && !cfg_connected)
->  		error(1, 0, "connectionless tcp makes no sense");
-> -	if (cfg_segment && cfg_sendmmsg)
-> -		error(1, 0, "cannot combine segment offload and sendmmsg");
-> -	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg))
-> -		error(1, 0, "Options -T and -H require either -S or -m option");
-> +	if ((cfg_segment + cfg_sendmmsg + cfg_fragment) > 1)
-> +		error(1, 0, "cannot combine segment offload , fragment and sendmmsg");
+For filemap_get_folios_tag() to be of use, the batch has to be passed down=
+,
+and if it contains scattered, non-contiguous pages, these are likely to en=
+d
+up being pinned by the batch for significant periods of time whilst I/O is
+undertaken on earlier pages.
+    =
 
-nit: extra whitespace before comma.
+Fix: 3822a7c40997 ("Merge tag 'mm-stable-2023-02-20-13-37' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/akpm/mm")
+Fix: acc8d8588cb7 ("afs: convert afs_writepages_region() to use filemap_ge=
+t_folios_tag()")
+Signed-off-by: David Howells <dhowells@redhat.com>
+---
+ fs/afs/write.c          |  116 +++++++++++++++++++++++-------------------=
+------
+ fs/cifs/file.c          |  114 ++++++++++++++++++++----------------------=
+-----
+ include/linux/pagemap.h |    2 =
 
-> +	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg || cfg_fragment))
-> +		error(1, 0, "Options -T and -H require either -S or -m or -f option");
-> 
->  	if (cfg_family == PF_INET)
->  		hdrlen = sizeof(struct iphdr) + sizeof(struct udphdr);
-> @@ -695,6 +714,8 @@ int main(int argc, char **argv)
->  			num_sends += send_udp_segment(fd, buf[i]);
->  		else if (cfg_sendmmsg)
->  			num_sends += send_udp_sendmmsg(fd, buf[i]);
-> +		else if (cfg_fragment)
-> +			num_sends += send_udp_fragment(fd, buf[i]);
->  		else
->  			num_sends += send_udp(fd, buf[i]);
->  		num_msgs++;
-> -- 
-> 2.15.2
+ mm/filemap.c            |   58 ++++++++++++++++++++++++
+ 4 files changed, 165 insertions(+), 125 deletions(-)
 
+diff --git a/fs/afs/write.c b/fs/afs/write.c
+index 571f3b9a417e..b04a95262c4f 100644
+--- a/fs/afs/write.c
++++ b/fs/afs/write.c
+@@ -704,87 +704,83 @@ static int afs_writepages_region(struct address_spac=
+e *mapping,
+ 				 bool max_one_loop)
+ {
+ 	struct folio *folio;
+-	struct folio_batch fbatch;
+ 	ssize_t ret;
+-	unsigned int i;
+ 	int n, skips =3D 0;
+ =
+
+ 	_enter("%llx,%llx,", start, end);
+-	folio_batch_init(&fbatch);
+ =
+
+ 	do {
+ 		pgoff_t index =3D start / PAGE_SIZE;
+ =
+
+-		n =3D filemap_get_folios_tag(mapping, &index, end / PAGE_SIZE,
+-					PAGECACHE_TAG_DIRTY, &fbatch);
+-
+-		if (!n)
++		folio =3D filemap_get_folio_tag(mapping, &index, end / PAGE_SIZE,
++					      PAGECACHE_TAG_DIRTY);
++		if (!folio)
+ 			break;
+-		for (i =3D 0; i < n; i++) {
+-			folio =3D fbatch.folios[i];
+-			start =3D folio_pos(folio); /* May regress with THPs */
+ =
+
+-			_debug("wback %lx", folio_index(folio));
++		start =3D folio_pos(folio); /* May regress with THPs */
+ =
+
+-			/* At this point we hold neither the i_pages lock nor the
+-			 * page lock: the page may be truncated or invalidated
+-			 * (changing page->mapping to NULL), or even swizzled
+-			 * back from swapper_space to tmpfs file mapping
+-			 */
+-			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
+-				ret =3D folio_lock_killable(folio);
+-				if (ret < 0) {
+-					folio_batch_release(&fbatch);
+-					return ret;
+-				}
+-			} else {
+-				if (!folio_trylock(folio))
+-					continue;
+-			}
++		_debug("wback %lx", folio_index(folio));
+ =
+
+-			if (folio->mapping !=3D mapping ||
+-			    !folio_test_dirty(folio)) {
+-				start +=3D folio_size(folio);
+-				folio_unlock(folio);
+-				continue;
++		/* At this point we hold neither the i_pages lock nor the
++		 * page lock: the page may be truncated or invalidated
++		 * (changing page->mapping to NULL), or even swizzled
++		 * back from swapper_space to tmpfs file mapping
++		 */
++		if (wbc->sync_mode !=3D WB_SYNC_NONE) {
++			ret =3D folio_lock_killable(folio);
++			if (ret < 0) {
++				folio_put(folio);
++				return ret;
++			}
++		} else {
++			if (!folio_trylock(folio)) {
++				folio_put(folio);
++				return 0;
+ 			}
++		}
+ =
+
+-			if (folio_test_writeback(folio) ||
+-			    folio_test_fscache(folio)) {
+-				folio_unlock(folio);
+-				if (wbc->sync_mode !=3D WB_SYNC_NONE) {
+-					folio_wait_writeback(folio);
++		if (folio_mapping(folio) !=3D mapping ||
++		    !folio_test_dirty(folio)) {
++			start +=3D folio_size(folio);
++			folio_unlock(folio);
++			folio_put(folio);
++			continue;
++		}
++
++		if (folio_test_writeback(folio) ||
++		    folio_test_fscache(folio)) {
++			folio_unlock(folio);
++			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
++				folio_wait_writeback(folio);
+ #ifdef CONFIG_AFS_FSCACHE
+-					folio_wait_fscache(folio);
++				folio_wait_fscache(folio);
+ #endif
+-				} else {
+-					start +=3D folio_size(folio);
+-				}
+-				if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
+-					if (skips >=3D 5 || need_resched()) {
+-						*_next =3D start;
+-						_leave(" =3D 0 [%llx]", *_next);
+-						return 0;
+-					}
+-					skips++;
+-				}
+-				continue;
++			} else {
++				start +=3D folio_size(folio);
+ 			}
+-
+-			if (!folio_clear_dirty_for_io(folio))
+-				BUG();
+-			ret =3D afs_write_back_from_locked_folio(mapping, wbc,
+-					folio, start, end);
+-			if (ret < 0) {
+-				_leave(" =3D %zd", ret);
+-				folio_batch_release(&fbatch);
+-				return ret;
++			folio_put(folio);
++			if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
++				if (skips >=3D 5 || need_resched())
++					break;
++				skips++;
+ 			}
++			continue;
++		}
+ =
+
+-			start +=3D ret;
++		if (!folio_clear_dirty_for_io(folio))
++			BUG();
++		ret =3D afs_write_back_from_locked_folio(mapping, wbc, folio, start, en=
+d);
++		folio_put(folio);
++		if (ret < 0) {
++			_leave(" =3D %zd", ret);
++			return ret;
+ 		}
+ =
+
+-		folio_batch_release(&fbatch);
++		start +=3D ret;
++
++		if (max_one_loop)
++			break;
++
+ 		cond_resched();
+ 	} while (wbc->nr_to_write > 0);
+ =
+
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 5365a3299088..121254086e30 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -2857,92 +2857,76 @@ static int cifs_writepages_region(struct address_s=
+pace *mapping,
+ 				  struct writeback_control *wbc,
+ 				  loff_t start, loff_t end, loff_t *_next)
+ {
+-	struct folio_batch fbatch;
++	struct folio *folio;
++	ssize_t ret;
+ 	int skips =3D 0;
+ =
+
+-	folio_batch_init(&fbatch);
+ 	do {
+-		int nr;
+ 		pgoff_t index =3D start / PAGE_SIZE;
+ =
+
+-		nr =3D filemap_get_folios_tag(mapping, &index, end / PAGE_SIZE,
+-					    PAGECACHE_TAG_DIRTY, &fbatch);
+-		if (!nr)
++		folio =3D filemap_get_folio_tag(mapping, &index, end / PAGE_SIZE,
++					      PAGECACHE_TAG_DIRTY);
++		if (!folio)
+ 			break;
+ =
+
+-		for (int i =3D 0; i < nr; i++) {
+-			ssize_t ret;
+-			struct folio *folio =3D fbatch.folios[i];
+-
+-redo_folio:
+-			start =3D folio_pos(folio); /* May regress with THPs */
++		start =3D folio_pos(folio); /* May regress with THPs */
+ =
+
+-			/* At this point we hold neither the i_pages lock nor the
+-			 * page lock: the page may be truncated or invalidated
+-			 * (changing page->mapping to NULL), or even swizzled
+-			 * back from swapper_space to tmpfs file mapping
+-			 */
+-			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
+-				ret =3D folio_lock_killable(folio);
+-				if (ret < 0)
+-					goto write_error;
+-			} else {
+-				if (!folio_trylock(folio))
+-					goto skip_write;
++		/* At this point we hold neither the i_pages lock nor the
++		 * page lock: the page may be truncated or invalidated
++		 * (changing page->mapping to NULL), or even swizzled
++		 * back from swapper_space to tmpfs file mapping
++		 */
++		if (wbc->sync_mode !=3D WB_SYNC_NONE) {
++			ret =3D folio_lock_killable(folio);
++			if (ret < 0) {
++				folio_put(folio);
++				return ret;
+ 			}
+-
+-			if (folio_mapping(folio) !=3D mapping ||
+-			    !folio_test_dirty(folio)) {
+-				folio_unlock(folio);
+-				goto skip_write;
++		} else {
++			if (!folio_trylock(folio)) {
++				folio_put(folio);
++				return 0;
+ 			}
++		}
+ =
+
+-			if (folio_test_writeback(folio) ||
+-			    folio_test_fscache(folio)) {
+-				folio_unlock(folio);
+-				if (wbc->sync_mode =3D=3D WB_SYNC_NONE)
+-					goto skip_write;
++		if (folio_mapping(folio) !=3D mapping ||
++		    !folio_test_dirty(folio)) {
++			start +=3D folio_size(folio);
++			folio_unlock(folio);
++			folio_put(folio);
++			continue;
++		}
+ =
+
++		if (folio_test_writeback(folio) ||
++		    folio_test_fscache(folio)) {
++			folio_unlock(folio);
++			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
+ 				folio_wait_writeback(folio);
+ #ifdef CONFIG_CIFS_FSCACHE
+ 				folio_wait_fscache(folio);
+ #endif
+-				goto redo_folio;
++			} else {
++				start +=3D folio_size(folio);
+ 			}
+-
+-			if (!folio_clear_dirty_for_io(folio))
+-				/* We hold the page lock - it should've been dirty. */
+-				WARN_ON(1);
+-
+-			ret =3D cifs_write_back_from_locked_folio(mapping, wbc, folio, start, =
+end);
+-			if (ret < 0)
+-				goto write_error;
+-
+-			start +=3D ret;
+-			continue;
+-
+-write_error:
+-			folio_batch_release(&fbatch);
+-			*_next =3D start;
+-			return ret;
+-
+-skip_write:
+-			/*
+-			 * Too many skipped writes, or need to reschedule?
+-			 * Treat it as a write error without an error code.
+-			 */
+-			if (skips >=3D 5 || need_resched()) {
+-				ret =3D 0;
+-				goto write_error;
++			folio_put(folio);
++			if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
++				if (skips >=3D 5 || need_resched())
++					break;
++				skips++;
+ 			}
+-
+-			/* Otherwise, just skip that folio and go on to the next */
+-			skips++;
+-			start +=3D folio_size(folio);
+ 			continue;
+ 		}
+ =
+
+-		folio_batch_release(&fbatch);		=
+
++		if (!folio_clear_dirty_for_io(folio))
++			/* We hold the page lock - it should've been dirty. */
++			WARN_ON(1);
++
++		ret =3D cifs_write_back_from_locked_folio(mapping, wbc, folio, start, e=
+nd);
++		folio_put(folio);
++		if (ret < 0)
++			return ret;
++
++		start +=3D ret;
+ 		cond_resched();
+ 	} while (wbc->nr_to_write > 0);
+ =
+
+diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+index 0acb8e1fb7af..577535633006 100644
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@ -741,6 +741,8 @@ unsigned filemap_get_folios_contig(struct address_spac=
+e *mapping,
+ 		pgoff_t *start, pgoff_t end, struct folio_batch *fbatch);
+ unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *s=
+tart,
+ 		pgoff_t end, xa_mark_t tag, struct folio_batch *fbatch);
++struct folio *filemap_get_folio_tag(struct address_space *mapping, pgoff_=
+t *start,
++				    pgoff_t end, xa_mark_t tag);
+ =
+
+ struct page *grab_cache_page_write_begin(struct address_space *mapping,
+ 			pgoff_t index);
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 2723104cc06a..1b1e9c661018 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2339,6 +2339,64 @@ unsigned filemap_get_folios_tag(struct address_spac=
+e *mapping, pgoff_t *start,
+ }
+ EXPORT_SYMBOL(filemap_get_folios_tag);
+ =
+
++/**
++ * filemap_get_folio_tag - Get the first folio matching @tag
++ * @mapping:    The address_space to search
++ * @start:      The starting page index
++ * @end:        The final page index (inclusive)
++ * @tag:        The tag index
++ *
++ * Search for and return the first folios in the mapping starting at inde=
+x
++ * @start and up to index @end (inclusive).  The folio is returned with a=
+n
++ * elevated reference count.
++ *
++ * If a folio is returned, it may start before @start; if it does, it wil=
+l
++ * contain @start.  The folio may also extend beyond @end; if it does, it=
+ will
++ * contain @end.  If folios are added to or removed from the page cache w=
+hile
++ * this is running, they may or may not be found by this call.
++ *
++ * Return: The folio that was found or NULL.  @start is also updated to i=
+ndex
++ * the next folio for the traversal or will be left pointing after @end.
++ */
++struct folio *filemap_get_folio_tag(struct address_space *mapping, pgoff_=
+t *start,
++				    pgoff_t end, xa_mark_t tag)
++{
++	XA_STATE(xas, &mapping->i_pages, *start);
++	struct folio *folio;
++
++	rcu_read_lock();
++	while ((folio =3D find_get_entry(&xas, end, tag)) !=3D NULL) {
++		/*
++		 * Shadow entries should never be tagged, but this iteration
++		 * is lockless so there is a window for page reclaim to evict
++		 * a page we saw tagged. Skip over it.
++		 */
++		if (xa_is_value(folio))
++			continue;
++
++		if (folio_test_hugetlb(folio))
++			*start =3D folio->index + 1;
++		else
++			*start =3D folio_next_index(folio);
++		goto out;
++	}
++
++	/*
++	 * We come here when there is no page beyond @end. We take care to not
++	 * overflow the index @start as it confuses some of the callers. This
++	 * breaks the iteration when there is a page at index -1 but that is
++	 * already broke anyway.
++	 */
++	if (end =3D=3D (pgoff_t)-1)
++		*start =3D (pgoff_t)-1;
++	else
++		*start =3D end + 1;
++out:
++	rcu_read_unlock();
++	return folio;
++}
++EXPORT_SYMBOL(filemap_get_folio_tag);
++
+ /*
+  * CD/DVDs are error prone. When a medium error occurs, the driver may fa=
+il
+  * a _large_ part of the i/o request. Imagine the worst scenario:
 
