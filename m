@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6881F6A184A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9E06A1841
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjBXIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S229823AbjBXIul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjBXIw3 (ORCPT
+        with ESMTP id S229497AbjBXIui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:52:29 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4013662A2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:52:00 -0800 (PST)
-Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PNNq472c7zRsSP;
-        Fri, 24 Feb 2023 16:49:04 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 24 Feb 2023 16:51:51 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <chenzhongjin@huawei.com>, <akpm@linux-foudation.org>,
-        <wuchi.zero@gmail.com>, <ben-linux@fluff.org>,
-        <rusty@rustcorp.com.au>
-Subject: [PATCH] x86: profiling: Set prof_cpu_mask to NULL after free
-Date:   Fri, 24 Feb 2023 16:49:45 +0800
-Message-ID: <20230224084945.134038-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 24 Feb 2023 03:50:38 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23F31206D;
+        Fri, 24 Feb 2023 00:50:35 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 9110B3FA55;
+        Fri, 24 Feb 2023 08:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1677228633;
+        bh=tQrGaAqMYCBhKSnr1KfIUiJLe3za3ls9Y5ZjKTRKLPw=;
+        h=From:Subject:Date:To:Cc;
+        b=UnzTzOwjsEg7GMA3hTnS3jxTaWR7RRJM2Qbhz5Yd/kbdKdH5tGs6auw27WcsUhWPm
+         5SKVedClPkSnzYs0KifMo9+LeWoIpdOmNu4R5Q99BM2apeeXGSrYxshOh113WcTIbU
+         FxtKfkIzfqZh4KGFcDsFIp1fDB8Ephy96kMmoo8W2wgEPnpkKsA2evNZX7ph2heHzJ
+         AMuRvS5cBtlQlQ8953QPlBqwTFNvL7QgCo/cJwI9VKyxRlQAqRswO47ersffubGibt
+         Zx/oQL7hKpmk1gVUpIcLPEIzyAA88JL/B2fWDuP38YIuE2d6qfPNLV+L2MN6wk9Sr+
+         TOik9QnB5jmFw==
+From:   Asahi Lina <lina@asahilina.net>
+Subject: [PATCH 0/5] rust: error: Add missing wrappers to convert to/from
+ kernel error codes
+Date:   Fri, 24 Feb 2023 17:50:18 +0900
+Message-Id: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEp6+GMC/x2NSw6DMAxEr4K8rtXgVuJzlaqLJHXAm4BsqCoh7
+ t6E5ZuZpznAWIUNxuYA5a+YLLlAe2sgzj5PjPIpDOTo4YieqLttyKqLYqK+a1OIg+sSFCF4Ywz
+ qc5yrMq37/VrXvParcpLfdfZ6n+cf4Gama3wAAAA=
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677228630; l=2180;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=tQrGaAqMYCBhKSnr1KfIUiJLe3za3ls9Y5ZjKTRKLPw=;
+ b=3kkWlTBkfsbE+GogOzkuW4+mkz3cQDoMrBDE+y9cx7KXvHr4jG+I4+ATuSs+6374g3Ubh0SQ6
+ l5k0Hli7jKsCeldS7hAxcjsI0BjX+MDCQunCDCnLwVq5bitF70CWnKd
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reported a UAF problem in profile_tick():
+Hi everyone!
 
-  BUG: KASAN: use-after-free in profile_tick+0x5c/0x80
-  Read of size 8 at addr ffff888100928aa0 by task bash/1108
+This series is part of the set of dependencies for the drm/asahi
+Apple M1/M2 GPU driver.
 
-  CPU: 2 PID: 1108 Comm: bash Not tainted 5.10.0+ #72
-  Call Trace:
-   <IRQ>
-   dump_stack+0x93/0xc5
-   print_address_description.constprop.0+0x1c/0x3c0
-   kasan_report.cold+0x37/0x74
-   check_memory_region+0x161/0x1c0
-   profile_tick+0x5c/0x80
-   tick_sched_timer+0xcd/0x100
-   __hrtimer_run_queues+0x23e/0x480
-   hrtimer_interrupt+0x1c2/0x440
-   asm_call_irq_on_stack+0xf/0x20
-   </IRQ>
-  ...
+It adds a bunch of missing wrappers in kernel::error, which are useful
+to convert to/from kernel error codes. Since these will be used by many
+abstractions coming up soon, I think it makes sense to merge them as
+soon as possible instead of bundling them with the first user. Hence,
+they have allow() tags to silence dead code warnings. These can be
+removed as soon as the first user is in the kernel crate.
 
-It is beacause in profiling_store(), profile_init() is possible to fail
-and free prof_cpu_mask. However prof_cpu_mask is not set to NULL and
-cpumask_available(prof_cpu_mask) will return true in profile_tick().
-Then cpumask_test_cpu() will dereference prof_cpu_mask and trigger the
-KASAN warning.
+Getting this in first allows the subsequent abstractions to be merged in
+any order, so we don't have to worry about piecewise rebasing and fixing
+conflicts in the Error wrappers. See [1] for a complete tree with the DRM
+abstractions and all other miscellaneous work-in-progress prerequisites
+rebased on top of mainline.
 
-There is no interface to disable profile_tick() even though profile_init()
-has been already failed. So just set prof_cpu_mask to NULL when free it.
-Then accessing to prof_cpu_mask can be rejected by prof_buffer or
-cpumask_available().
+Most of these have been extracted from the rust-for-linux/rust branch,
+with author attribution to the first/primary author and Co-developed-by:
+for everyone else who touched the code.
 
-Fixes: c309b917cab5 ("cpumask: convert kernel/profile.c")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Attribution changes:
+- One of the patches had Miguel's old email in the tags, updated that per
+  his request.
+- Wedson's email changed from @google.com to @gmail.com (I understand
+  this is the current one).
+
+Sven: There is one patch from you in this series, do you want to send it
+yourself directly? I understand Wedson and Miguel are okay with me
+sending stuff on their behalf.
+
+[1] https://github.com/Rust-for-Linux/linux/pull/969/commits
+
+Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
- kernel/profile.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Asahi Lina (1):
+      rust: error: Add Error::to_ptr()
 
-diff --git a/kernel/profile.c b/kernel/profile.c
-index 8a77769bc4b4..d60f9634fb2a 100644
---- a/kernel/profile.c
-+++ b/kernel/profile.c
-@@ -133,6 +133,7 @@ int __ref profile_init(void)
- 		return 0;
- 
- 	free_cpumask_var(prof_cpu_mask);
-+	prof_cpu_mask = NULL;
- 	return -ENOMEM;
- }
- 
-@@ -334,7 +335,7 @@ void profile_tick(int type)
- {
- 	struct pt_regs *regs = get_irq_regs();
- 
--	if (!user_mode(regs) && cpumask_available(prof_cpu_mask) &&
-+	if (!user_mode(regs) && prof_buffer && cpumask_available(prof_cpu_mask) &&
- 	    cpumask_test_cpu(smp_processor_id(), prof_cpu_mask))
- 		profile_hit(type, (void *)profile_pc(regs));
- }
--- 
-2.17.1
+Miguel Ojeda (1):
+      rust: error: Add Error::from_kernel_errno()
+
+Sven Van Asbroeck (1):
+      rust: error: Add a helper to convert a C ERR_PTR to a `Result`
+
+Wedson Almeida Filho (2):
+      rust: error: Add to_result() helper
+      rust: error: Add from_kernel_result!() macro
+ rust/helpers.c       |  19 +++++++
+ rust/kernel/error.rs | 137 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 156 insertions(+)
+---
+base-commit: 83f978b63fa7ad474ca22d7e2772c5988101c9bd
+change-id: 20230224-rust-error-f2871fbc907f
+
+Thank you,
+~~ Lina
 
