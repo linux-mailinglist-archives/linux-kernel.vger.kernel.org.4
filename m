@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25E66A1872
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ABA6A1876
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjBXJC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S229569AbjBXJEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjBXJBz (ORCPT
+        with ESMTP id S229534AbjBXJEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:01:55 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759FA65CFD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:01:24 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id j14so20528777vse.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:01:24 -0800 (PST)
+        Fri, 24 Feb 2023 04:04:45 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019C910F4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:04:44 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso2125226pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:04:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QBK+chRqzmbdbE5cm4Uz1XII0teWxpjTk64XAOcTlok=;
-        b=BPIgh+eQeTgXYE6e94AEFS6mL8ljjkbjKU7DImx1z2sMitZndpaAKGU6spAUTsDKkn
-         b3twj3SpsWdIZXLBbq2Qn2BhaLLFU/+wbOnpCaM6HGW6rXReQSLwkBpZPXq+YugTKTus
-         a5t/Hxc14nAs0cx9CkmaKlfE32+ao56WmtKvg=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sNH9BgItuJxPa+eQE400FTpJfbjpuq0SQX7Oz1zEQmQ=;
+        b=JGmDr8Aw8icVTyZLLXFiLcpuosCA6vb0fgEOTMZH1ZDfNETpXH/qb/2VLqnM8ZPBcI
+         kUAiFNFrTSv/3bI54f7cdTFAACDt7jIkSExuH3W/zKt3n+3nrvIai3cZjYX0/XQMrfzm
+         Ow8lxCAsXHbVLY+u1DzOVFMFlTV2wsNZT7vf4DCwuOQge0A3Hb4MWmvL/jSWHWLFk4TF
+         8xeoNKbifzzOWewdhstp3x7vtPld5i+R28i3RMNgN3SnuZxrcPo2y3kEJxxImrtiF/IC
+         iehGkHDYfldfJP6m0i/SfNe4oapLZkW0/VhUrOFMK4XICM2ydmJChs9AzwNDrgwq9jDv
+         epiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QBK+chRqzmbdbE5cm4Uz1XII0teWxpjTk64XAOcTlok=;
-        b=cSCo1TOlQDYU18RZdk7+mKOUPox9AAToPw4NPCQS/12vz25+TGs38qEjzZHYXZD9C3
-         Xg2qb/OJenkfArMJHCMhbzI0sguxU+zQcrVlYXAZ43LNU7mujWLzpmsWPbbATi+4V8LB
-         J+eQgoyclqI/iVfZOlx2oCnlQsK4SQfOqX/ci9XigKFy3F2voBpbpfzVccPSqijaixv/
-         r6b476+TyOOe/hcpdjeuqcrM0w+wHTCvba8+EwvTgagcgIsryiCsG16nLTFGHVyIFgzf
-         5cvFCy1oo1lJugr12LP5kOtQ7v5Vv1pKYh4bOlTSD03a/819PVAeTsxn4b9KVyXrxC5Y
-         k0Kg==
-X-Gm-Message-State: AO0yUKUBC4uetWy47nuvtXh3pGQBXeOYQ6+hbYoDV/u+BaNYOurYFq7J
-        MXgPiweWjxTYzxZbB8BIEp6fQy1qqbIbLz2xW/hanA==
-X-Google-Smtp-Source: AK7set9TC5yZJZTk7JGtwENz7sxNaZjRUPyW1G7+VmdQi5xpJ1lU/wiSfu/h18lBh/yMOuq4XEO+IihERlmymu0kUMQ=
-X-Received: by 2002:a67:fbd2:0:b0:411:fff6:3cc4 with SMTP id
- o18-20020a67fbd2000000b00411fff63cc4mr2007730vsr.3.1677229283567; Fri, 24 Feb
- 2023 01:01:23 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sNH9BgItuJxPa+eQE400FTpJfbjpuq0SQX7Oz1zEQmQ=;
+        b=OeYfFP2XIvKExYFzBT1dB58UjeUx5PHffHuWnr6RNhAQ7oWn15JmVMD7hPPy6AiSgH
+         VVAvVwVrfkYXTTKkgpSW/MXojmVUFTuzPGvffki/eGH1w1rW2T7RqSoOHQzDtttBBp+j
+         bfjv3UQS0FU+NJ4P9dHw2txJmBxkcMcOgOO3JzsjoTY6aLASuEJ2rSDum1ppdvXQ5oGS
+         5YH89tVsApDMI62wNAE/1ezkbHjWpHZj382tFfNu47tpwV3mn+xO5iACcv0liq1yWIS8
+         BEOK7UIQMNRTEXvFsldok7/wed58wDDfj9JmO2cUxE9mvXW1A8vJSb4ITGEN0gVCyhE3
+         6t4A==
+X-Gm-Message-State: AO0yUKXvDuiVq7rj5DrGFVie9g+6qGoAQjuMqQdoj/cYnR6/ZoCew2tR
+        tGj0jpgnKyyWvh7swnJbRlBjMjF4qbf0gdOaaiI=
+X-Google-Smtp-Source: AK7set/WHQxm63cNc7enn7Z9b+Nju1snHTscYc6ReT+6G8jFapodfkn6Jy9fgCz6K1/tKYcu1YQjShwDzauj5eLGgWg=
+X-Received: by 2002:a17:90a:154a:b0:237:4a5d:5a57 with SMTP id
+ y10-20020a17090a154a00b002374a5d5a57mr1413804pja.1.1677229484556; Fri, 24 Feb
+ 2023 01:04:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20230223145426.193590-1-angelogioacchino.delregno@collabora.com> <20230223145426.193590-4-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230223145426.193590-4-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 24 Feb 2023 17:01:12 +0800
-Message-ID: <CAGXv+5Ff13sH9JTcBBi5j2mUX3BKOvpM=MxV-Fwwu370FdYjyA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] arm64: dts: mediatek: mt8195: Add display pwm nodes
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+Received: by 2002:a17:522:2798:b0:4cd:649a:64b5 with HTTP; Fri, 24 Feb 2023
+ 01:04:44 -0800 (PST)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <angelaemmanuel672@gmail.com>
+Date:   Fri, 24 Feb 2023 01:04:44 -0800
+Message-ID: <CA+OK53kDEZFAHt2cnDf_xOSKutfTksSjbP6S8Bmnm=4hpwy5Tw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:56 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Add the two hardware PWMs for display backlighting but keep them
-> disabled by default, as usage is board-specific.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-
-and
-
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-
-for disp_pwm0
+-- 
+Hello,did you receive my message?
