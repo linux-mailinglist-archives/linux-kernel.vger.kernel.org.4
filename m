@@ -2,203 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86386A158C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA436A158E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjBXDlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S229657AbjBXDli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjBXDlF (ORCPT
+        with ESMTP id S229734AbjBXDl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:41:05 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA11B60D52
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:48 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id b18-20020a17090a489200b0023762d1ee58so655584pjh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:40:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3iBhiHTRJXOrBGrqzDxss6bg8LHug+SM3RBUwYxANE=;
-        b=J6+YN9IGP6MwLPZckWbo5E/Xk82MfTw13Lhg5Ll7egHVE9N1Gz17NrAEoEi5jefz8h
-         s5ZPFOX/8PJLvK8IZCoKa2hDIiAlP345R3P0/QmKYhzYHJiNlawUTL+V6gPo//gkOR/M
-         mOuBhSmC9tdwpYZQpoGvgsscg2IxTOllCkHlB3kujyatWQlAuhKf1miS4RZdd2850qO4
-         +qtC2AkdlCtVdHThYkZIvoiVdrWWzeUE+eYrgb8yTUigK6VC6a9NjY0qTRfItPHTBl0v
-         EtzRt4Z3mQqbuTjbxi5VNiZOEUoFEnKXp3uQgeDAlkBFgJmGLxIpVMkMBLKZI3M9gPxw
-         Ie5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3iBhiHTRJXOrBGrqzDxss6bg8LHug+SM3RBUwYxANE=;
-        b=cP8yTwXEZPz9cabsc69Ej8rVawjaepnPOMeFidQXL2lqx/1AS0CA6I3eZXb8c7wRt7
-         MYQOe/UqM+0juI0KNYLqJW212wPKYud71RBFvRt/zUKvvYGWerkGoIvvkWs4/DLUN/wI
-         CoaIqpuh5wMayS1cU3uJ/9eKvT+MDg9ZKKCduTPBws3PDEWAfw0HMyCJj7ernU3YNEyF
-         WGpx2g9OMt9XT/9kJh5qplcLmvjK6rkboHTKeh3ls8qTcn1ValYL3RK8UuHdQ39nqbX3
-         dejmpMnnsvIBqYlGpN3jyBWpoeb9bVHoh9qsm+a28xxEvWHviQ5mJ0qFpS+tX9K2aoDk
-         vKPw==
-X-Gm-Message-State: AO0yUKWRpBi9nXmJusjX40DdP2zy1TnAebdV+K8fjkssQQWCeizIDGHt
-        tN63l5cGigb3dcQfCAqvcsCvo9WX77E=
-X-Google-Smtp-Source: AK7set8E3MEPhXV1/45uWmz2lxMH5cm58fZ0faRvczxB9TFOAlLdrNUle4su/XjXkfOaSWJtLZDQpa/gB4k=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a17:90a:f82:b0:237:29b1:188f with SMTP id
- 2-20020a17090a0f8200b0023729b1188fmr1158374pjz.8.1677210048093; Thu, 23 Feb
- 2023 19:40:48 -0800 (PST)
-Date:   Fri, 24 Feb 2023 03:40:19 +0000
-In-Reply-To: <20230224034020.2080637-1-edliaw@google.com>
-Mime-Version: 1.0
-References: <20230224034020.2080637-1-edliaw@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230224034020.2080637-5-edliaw@google.com>
-Subject: [PATCH 4.14 v3 4/4] bpf: Fix truncation handling for mod32 dst reg
- wrt zero
-From:   Edward Liaw <edliaw@google.com>
-To:     stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     bpf@vger.kernel.org, kernel-team@android.com,
-        Edward Liaw <edliaw@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 22:41:29 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD8161F17;
+        Thu, 23 Feb 2023 19:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=zV2PTjvErRgwnmTzz6vFMxKw2+5Wo2Bf4GVoQwQhANk=; b=b01dJR510FkYZROTnTjwTZ9GKH
+        kPMUXKLi/Z8urjnJVTEsw1q90m0t4VP36LGUuv9yAC30Vtny3V6Q/WXshuiUFljKLa8ynIkqUzg9S
+        /aorZyvW6Uv8CNKe69VX7dSli9vZRKr2D5SfqgW/fDC01oZeMwbNY7b8BK89s7d8yjb6PqAKVXOKj
+        a0E7//CuZ6p+U96mKbvIhuGgxZLLe72cRsMVsBr01tzUcpBhvW/AkqsiNQUwx9Y54T+JeqibnZ/ZG
+        +CHg6P0GXaM9zSKgUvTrHKCoLTE7Zbdwju6jEOD60bQUGSxznvkQQKceE1J5s0sTqdNKyILlBYblP
+        48SIsJDQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pVOx7-00BsJM-0R;
+        Fri, 24 Feb 2023 03:40:57 +0000
+Date:   Fri, 24 Feb 2023 03:40:57 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [git pull] vfs.git misc bits
+Message-ID: <Y/gxyQA+yKJECwyp@ZenIV>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+	Assorted stuff that didn't fit anywhere else.
 
-Commit 9b00f1b78809309163dda2d044d9e94a3c0248a3 upstream.
+That should cover the rest of what I had in -next; I'd been sick for
+several weeks, so a lot of pending stuff I hoped to put into -next
+is going to miss this window ;-/
 
-Recently noticed that when mod32 with a known src reg of 0 is performed,
-then the dst register is 32-bit truncated in verifier:
+Al, off to deal with the remaining pile in the mailbox...
 
-  0: R1=ctx(id=0,off=0,imm=0) R10=fp0
-  0: (b7) r0 = 0
-  1: R0_w=inv0 R1=ctx(id=0,off=0,imm=0) R10=fp0
-  1: (b7) r1 = -1
-  2: R0_w=inv0 R1_w=inv-1 R10=fp0
-  2: (b4) w2 = -1
-  3: R0_w=inv0 R1_w=inv-1 R2_w=inv4294967295 R10=fp0
-  3: (9c) w1 %= w0
-  4: R0_w=inv0 R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff)) R2_w=inv4294967295 R10=fp0
-  4: (b7) r0 = 1
-  5: R0_w=inv1 R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff)) R2_w=inv4294967295 R10=fp0
-  5: (1d) if r1 == r2 goto pc+1
-   R0_w=inv1 R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff)) R2_w=inv4294967295 R10=fp0
-  6: R0_w=inv1 R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff)) R2_w=inv4294967295 R10=fp0
-  6: (b7) r0 = 2
-  7: R0_w=inv2 R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff)) R2_w=inv4294967295 R10=fp0
-  7: (95) exit
-  7: R0=inv1 R1=inv(id=0,umin_value=4294967295,umax_value=4294967295,var_off=(0x0; 0xffffffff)) R2=inv4294967295 R10=fp0
-  7: (95) exit
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
 
-However, as a runtime result, we get 2 instead of 1, meaning the dst
-register does not contain (u32)-1 in this case. The reason is fairly
-straight forward given the 0 test leaves the dst register as-is:
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
 
-  # ./bpftool p d x i 23
-   0: (b7) r0 = 0
-   1: (b7) r1 = -1
-   2: (b4) w2 = -1
-   3: (16) if w0 == 0x0 goto pc+1
-   4: (9c) w1 %= w0
-   5: (b7) r0 = 1
-   6: (1d) if r1 == r2 goto pc+1
-   7: (b7) r0 = 2
-   8: (95) exit
+are available in the Git repository at:
 
-This was originally not an issue given the dst register was marked as
-completely unknown (aka 64 bit unknown). However, after 468f6eafa6c4
-("bpf: fix 32-bit ALU op verification") the verifier casts the register
-output to 32 bit, and hence it becomes 32 bit unknown. Note that for
-the case where the src register is unknown, the dst register is marked
-64 bit unknown. After the fix, the register is truncated by the runtime
-and the test passes:
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.misc
 
-  # ./bpftool p d x i 23
-   0: (b7) r0 = 0
-   1: (b7) r1 = -1
-   2: (b4) w2 = -1
-   3: (16) if w0 == 0x0 goto pc+2
-   4: (9c) w1 %= w0
-   5: (05) goto pc+1
-   6: (bc) w1 = w1
-   7: (b7) r0 = 1
-   8: (1d) if r1 == r2 goto pc+1
-   9: (b7) r0 = 2
-  10: (95) exit
+for you to fetch changes up to 39ecb653f671bbccd4a3c40f7f803f2874252f81:
 
-Semantics also match with {R,W}x mod{64,32} 0 -> {R,W}x. Invalid div
-has always been {R,W}x div{64,32} 0 -> 0. Rewrites are as follows:
+  nsfs: repair kernel-doc for ns_match() (2023-01-11 15:47:40 -0500)
 
-  mod32:                            mod64:
+----------------------------------------------------------------
+Fabio M. De Francesco (1):
+      fs/cramfs: Convert kmap() to kmap_local_data()
 
-  (16) if w0 == 0x0 goto pc+2       (15) if r0 == 0x0 goto pc+1
-  (9c) w1 %= w0                     (9f) r1 %= r0
-  (05) goto pc+1
-  (bc) w1 = w1
+Lukas Bulwahn (1):
+      nsfs: repair kernel-doc for ns_match()
 
-[Salvatore Bonaccorso: This is an earlier version based on work by
-Daniel and John which does not rely on availability of the BPF_JMP32
-instruction class. This means it is not even strictly a backport of the
-upstream commit mentioned but based on Daniel's and John's work to
-address the issue and was finalized by Thadeu Lima de Souza Cascardo.]
+Thomas Weiﬂschuh (1):
+      nsfs: add compat ioctl handler
 
-Fixes: 468f6eafa6c4 ("bpf: fix 32-bit ALU op verification")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-Tested-by: Salvatore Bonaccorso <carnil@debian.org>
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
- kernel/bpf/verifier.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9f04d413df92..a55e264cdb54 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4846,7 +4846,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			bool is64 = BPF_CLASS(insn->code) == BPF_ALU64;
- 			struct bpf_insn mask_and_div[] = {
- 				BPF_MOV_REG(BPF_CLASS(insn->code), BPF_REG_AX, insn->src_reg),
--				/* Rx div 0 -> 0 */
-+				/* [R,W]x div 0 -> 0 */
- 				BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 2),
- 				BPF_RAW_REG(*insn, insn->dst_reg, BPF_REG_AX),
- 				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
-@@ -4854,9 +4854,10 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			};
- 			struct bpf_insn mask_and_mod[] = {
- 				BPF_MOV_REG(BPF_CLASS(insn->code), BPF_REG_AX, insn->src_reg),
--				/* Rx mod 0 -> Rx */
--				BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 1),
-+				BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 1 + (is64 ? 0 : 1)),
- 				BPF_RAW_REG(*insn, insn->dst_reg, BPF_REG_AX),
-+				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
-+				BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
- 			};
- 			struct bpf_insn *patchlet;
- 
-@@ -4866,7 +4867,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 				cnt = ARRAY_SIZE(mask_and_div);
- 			} else {
- 				patchlet = mask_and_mod;
--				cnt = ARRAY_SIZE(mask_and_mod);
-+				cnt = ARRAY_SIZE(mask_and_mod) - (is64 ? 2 : 0);
- 			}
- 
- 			new_prog = bpf_patch_insn_data(env, i + delta, patchlet, cnt);
--- 
-2.39.2.637.g21b0678d19-goog
-
+ fs/cramfs/inode.c | 9 ++++-----
+ fs/nsfs.c         | 3 ++-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
