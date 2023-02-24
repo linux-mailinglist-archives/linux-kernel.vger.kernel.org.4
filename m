@@ -2,101 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A200E6A1F60
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A079E6A1F64
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 17:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjBXQMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 11:12:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S229723AbjBXQNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 11:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjBXQMc (ORCPT
+        with ESMTP id S229589AbjBXQNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 11:12:32 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DFF6EB03
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 08:12:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677255146; x=1708791146;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zrIOX/eAJTtv52elNQI1lM9u3xMyOfuLqflASbexGuA=;
-  b=b+Mbjr9Fo5dKjkTuB4fa7W1CW0cRl1l7eR72zJ7+d/tonN5Ogb55m7ER
-   WTvIGXuJH+FXTcI+pKsrskwR8lq0HvO82R2u1XnnNCaM9STEG3kBKK2M0
-   A4jUap/yxuhyhlH3fXbM83nXOB0bMovaA4cVPURfQIi4HUgCrlfRcKqLq
-   8AvbNMC+Aj71mGUDh0VH95KNDxgWw9niXQmemfhVIvhG5HCN7CBBsqUY6
-   1ypucVr84TUAxRZDgqBjsateSoDViNxbakyM8TsqZnEWaZ+RkAQpNjIO+
-   QJ+sPriytkO3N+rz4l03qeWZoSTpWYmLQV7c9jJEyIiTZ5pHpOkXkv0pn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="332197940"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="332197940"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 08:12:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="703227125"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="703227125"
-Received: from rkris18-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.56.190])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 08:12:22 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id B706810A5FE; Fri, 24 Feb 2023 19:12:19 +0300 (+03)
-Date:   Fri, 24 Feb 2023 19:12:19 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Isaku Yamahata <isaku.yamahata@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org
-Subject: Re: [PATCH 0/2] Kexec enabling in TDX guest
-Message-ID: <20230224161219.txwidrzpfnkbn7oi@box.shutemov.name>
-References: <20230213234836.3683-1-kirill.shutemov@linux.intel.com>
- <6b09a3505bf3deaa11906a2ecb9d15c4ec427ea2.camel@infradead.org>
- <20230224143004.xqhpv6upn2fkqkjp@box.shutemov.name>
- <f32f1f77-c707-ae19-ae1a-dc0a37fa9806@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f32f1f77-c707-ae19-ae1a-dc0a37fa9806@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 11:13:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C6FED;
+        Fri, 24 Feb 2023 08:13:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C8F2B81CA4;
+        Fri, 24 Feb 2023 16:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4D1C433EF;
+        Fri, 24 Feb 2023 16:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677255191;
+        bh=CX7DTo+TTEsmnSfQAL6fYr2TZeiQ34sL6XZbkuYAgnM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KVwA4z7SDaJT7aawcz7U1U8s44GL3XnQalcq51XdHmsMeBxj4BcNwZGmF+ce9QOkk
+         mvRE1Gb+0jsSZNRh/WA/LTM86YXKeG4iolEHiNP2ljJ5AAqK10O9E/x1AZwBfxdidR
+         BWxLQm0fVhlnYEO4NI8QAX+PH1+jnPMYh02KPMaIotWbqMcdFxZboQ3JPrGcqQ3P8A
+         x9Ai4560Pt+LyozrCr79DgJICgCV0Av+P+c+6k/bvvhTKbytMznBw9uqQeUkn30OWO
+         enmRwVrITQBPJ2VojqCMFMAw5VcoLs5mnldX0U2scai0ANx7JURsxNHMrF3AAOogVC
+         tp1MW1kZ0o0IQ==
+Date:   Sat, 25 Feb 2023 01:13:06 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     paulmck@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-Id: <20230225011306.0dd47e760f502b6787096bf7@kernel.org>
+In-Reply-To: <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+        <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 07:22:18AM -0800, Dave Hansen wrote:
-> On 2/24/23 06:30, Kirill A. Shutemov wrote:
-> > Ideally, it has to be addressed on BIOS level: it has to provide a way to
-> > offline CPUs, putting it back to pre-wakeup state.
+Hi Geert,
+
+On Fri, 24 Feb 2023 09:31:50 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+
+> Hi Paul,
 > 
-> Is there anything stopping us from just parking the CPUs in a loop
-> looking at 'acpi_mp_wake_mailbox_paddr'?  Basically park them in a way
-> which is indistinguishable from what the BIOS did.
+> On Sat, Jan 7, 2023 at 5:33 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > (or at least recommend to enable this)
+> >
+> > Like this?
+> >
+> >                                                         Thanx, Paul
+> >
+> > ------------------------------------------------------------------------
+> >
+> > commit d09a1505c51a70da38b34ac38062977299aef742
+> > Author: Paul E. McKenney <paulmck@kernel.org>
+> > Date:   Sat Jan 7 08:09:22 2023 -0800
+> >
+> >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> >
+> >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> >     will normally be to unconditionally provide the specified kernel-boot
+> >     arguments to the kernel, as opposed to requiring a separately provided
+> >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> >
+> >     The old semantics may be obtained by manually overriding this default.
+> >
+> >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> >
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> >  config BOOT_CONFIG_FORCE
+> >         bool "Force unconditional bootconfig processing"
+> >         depends on BOOT_CONFIG
+> > +       default y if BOOT_CONFIG_EMBED
+> >         help
+> >           With this Kconfig option set, BOOT_CONFIG processing is carried
+> >           out even when the "bootconfig" kernel-boot parameter is omitted.
+> 
+> Thanks for your patch, which is now commit 6ded8a28ed80e4cc
+> ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED").
+> 
+> After this change, an all{mod,yes}config kernel has:
+> 
+>     CONFIG_BOOT_CONFIG_FORCE=y
+>     CONFIG_BOOT_CONFIG_EMBED=y
+>     CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> 
+> Will this actually work? I haven't tried booting such a kernel yet.
 
-+Rafael.
+Yeah, good question. It is same as when you boot the kernel with 'bootconfig'
+but do not add the bootconfig file to initrd. You may see below message
+on boot log, but kernel boots normally. :)
 
- - Forward compatibility can be an issue. Version 0 of mailbox supports
-   only single Wakeup command. Future specs may define a new command that
-   kernel implementation doesn't support.
+ 'bootconfig' found on command line, but no bootconfig found
 
- - BIOS owns the mailbox page and can re-use for something else after the
-   last CPU has woken up. (I know it is very theoretical, but still.)
+(Maybe it is better to fix the message, because if BOOT_CONFIG_FORCE=y, this
+will be shown without 'bootconfig' on command line.)
 
- - We can patch ACPI table to point to mailbox page in kernel allocated
-   memory, but it brings other problem. If the first kernel didn't wake up
-   all CPUs for some reason (CONFIG_SMP=n or nr_cpus= or something) the
-   second kernel would not be able to wake up them too since they looping
-   around the old address.
+Thank you!
 
-But ultimately, I think it is clearly missing BIOS functionality and has
-to be addressed there. Hacking around it in kernel will lead to more
-problems down the road.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
