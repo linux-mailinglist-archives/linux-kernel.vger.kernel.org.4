@@ -2,108 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101596A1C86
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9A16A1C89
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjBXM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
+        id S229832AbjBXM6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjBXM4p (ORCPT
+        with ESMTP id S229504AbjBXM6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:56:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A9361EFE
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:56:44 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pVXcn-0007AP-Vw; Fri, 24 Feb 2023 13:56:33 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pVXcm-0005Zq-2j; Fri, 24 Feb 2023 13:56:32 +0100
-Date:   Fri, 24 Feb 2023 13:56:32 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, Jacky Bai <ping.bai@nxp.com>
-Subject: Re: [PATCH] arm64: dts: imx8mp-msc-sm2s: Add sound card
-Message-ID: <20230224125632.eokbmb4wchxuny4s@pengutronix.de>
-References: <20230222182252.2ad6d82b@booty>
- <20230222172552.1545519-1-luca.ceresoli@bootlin.com>
- <20230222175941.7pdi7yg5am3ws4gp@pengutronix.de>
- <10394cf6-70f0-638a-15d3-5a14615dad44@denx.de>
- <20230222190246.ihknh2tgjb2w3qmf@pengutronix.de>
- <63cbfbaf-7405-eaec-9681-36fc3792e637@denx.de>
+        Fri, 24 Feb 2023 07:58:03 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6BE13526;
+        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so382235pjp.2;
+        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677243482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CXtEyT8xVIkUMApBSTQ3cYy66lfTrvRLYpoVJHa9vcs=;
+        b=fGNjMXdOa/2jFDtcv4zjh5C+rTTvUkujg/MH7jVU3TzF9pgNNfvHMmhe9KdoxBz/IP
+         nmztiOBlWTPhe8cRXO284AFl+WeBp8e9PutPukzpzZTijXvU5PcC9Nwy+uMv/Mg7/qtq
+         65O0QVE2iGRv7s6zI0/YqQm+oO4XGzzePhfEJTl4EHbLKkdZRyyrGgetPgQYcn5MyOt0
+         nWXkaJhYVsiaj+Q125hN1AqIJe9XEGJAPYQOZDSmCVkg9j/6QVnGvmRJ4xPlwhoxDCJb
+         vwEnSRVIkmlUamNSmoPcmYEFDgUuf7R29/rCGuSskTxzfp6gAWVsKMS24m6VaAWqb/kB
+         sQqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677243482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CXtEyT8xVIkUMApBSTQ3cYy66lfTrvRLYpoVJHa9vcs=;
+        b=wRa8CU3XBoRzVO3GyEhciGma5ZpkYZkZ4YAuwZV3GXpaCzgbxVN3uZK/HDIM1N7ojT
+         BQt/SJaxPH8pzGP7QwEQKz2+CQEj0ftGEwciH5m9mwnCuz3QA8KX2OSswrJla4rmX0G/
+         qk47OkQ/dAArL9g27xRv3UIt4BKEiU2NjWkV1Lb4Ilt1uBcpL9Eim5aOGtdEof8c0oaA
+         d8CqzL5ZixMS9m3W3rdHpiEAU+en1cCLo81aVYjihfjzbxErRCpgoGjsmiYe/ZtuoH57
+         9YwM17BhDPANOdGEJZfZxbYAUgzhu3hAaDuUA+I8kYCf6/vcll9BU47m8xMIOFiqviRf
+         FPgw==
+X-Gm-Message-State: AO0yUKVylRHhQ3CJzX6mThM8OyZXOVh626uMMLIX7KPGQXS4yILsdzJk
+        tpMEtER01okB7RSDpd/HUfk=
+X-Google-Smtp-Source: AK7set+YzXg/RfEEChGbQ+6UrrWMwrZYY/kX2hO/BsunvHndn5j3QyvNXnxK3qAajg7VWTkoh4nCsg==
+X-Received: by 2002:a17:902:d2cd:b0:19a:98fd:9c54 with SMTP id n13-20020a170902d2cd00b0019a98fd9c54mr19495973plc.35.1677243482019;
+        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
+Received: from [192.168.1.39] (M014008005000.v4.enabler.ne.jp. [14.8.5.0])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b0019a74841c9bsm6409474pln.192.2023.02.24.04.57.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 04:58:01 -0800 (PST)
+Message-ID: <7d4a218d-8b8a-5a1d-eff8-e154bfde69be@gmail.com>
+Date:   Fri, 24 Feb 2023 21:57:37 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63cbfbaf-7405-eaec-9681-36fc3792e637@denx.de>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] ARM: dts: mvebu: add device tree for IIJ SA-W2
+ appliance
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230223132502.2045-1-musashino.open@gmail.com>
+ <20230223132502.2045-2-musashino.open@gmail.com> <Y/d7gjqQCKKXMHqj@lunn.ch>
+From:   INAGAKI Hiroshi <musashino.open@gmail.com>
+In-Reply-To: <Y/d7gjqQCKKXMHqj@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-23, Marek Vasut wrote:
-> On 2/22/23 20:02, Marco Felsch wrote:
-> 
-> Hi,
-> 
-> [...]
-> 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> > index 8547391d9cbbf..3b38ec7bb47be 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> > @@ -47,7 +47,6 @@ reg_audio_pwr: regulator-audio-pwr {
-> >   		regulator-max-microvolt = <3300000>;
-> >   		gpio = <&gpio4 29 GPIO_ACTIVE_HIGH>;
-> >   		enable-active-high;
-> > -		regulator-always-on;
-> >   	};
-> >   	reg_can1_stby: regulator-can1-stby {
-> > @@ -94,21 +93,34 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
-> >   		enable-active-high;
-> >   	};
-> > -	sound-wm8960 {
-> > -		compatible = "fsl,imx-audio-wm8960";
-> > -		model = "wm8960-audio";
-> > -		audio-cpu = <&sai3>;
-> > -		audio-codec = <&codec>;
-> > -		audio-routing =
-> > +	sound-wm8524 {
-> 
-> Why WM8524 ? The MX8MP EVK I have here is populated with WM8960 chip and
-> with single headphone jack, are you sure the below is correct ?
+Hi Andrew,
 
-Argh.. the name was copied from 8MM evk dts but the below setup is
-working, at least the audio-outpath. Didn't tested the mic path.
+thank you for your reviews and detailed descriptions.
+
+On 2023/02/23 23:43, Andrew Lunn wrote:
+>> +		pcie {
+>> +			status = "okay";
+>> +
+>> +			pcie@1,0 {
+>> +				status = "okay";
+>> +
+>> +				/* Atheros AR9287 */
+>> +				wifi@0,0 {
+>> +					compatible = "pci168c,002e";
+>> +					reg = <0000 0 0 0 0>;
+>> +				};
+>> +			};
+>> +
+>> +			pcie@3,0 {
+>> +				status = "okay";
+>> +
+>> +				/* Qualcomm Atheros QCA9880 */
+>> +				wifi@0,0 {
+>> +					compatible = "qcom,ath10k";
+>> +					reg = <0000 0 0 0 0>;
+>> +				};
+>> +			};
+>> +		};
+>> +	};
+> These are not wrong, but they are also not needed. PCI devices should
+> be discovered by enumeration, and you don't have any additional
+> properties here, or phandles pointing to these nodes.
+>
+> I assume these are COTS wifi modules? By listing them here you are
+> restricting some flexibility. The OEM could for example swap the
+> modules around, and Linux would not care, but the DT would then be
+> wrong. Or you could have a device with a different module because it
+> is cheaper, and again, Linux would not care, but the DT would be
+> wrong.
+
+Got it. SA-W2 is not designed to allow users to swap cards under 
+normal use, but certainly things like you said can happen...
+I'll remove "wifi" nodes.
+
+ > I assume these are COTS wifi modules?
+
+Yes, those are the modules manufactured by Silex Technology, Inc. [1][2].
+
+[1]: https://www.silex.jp/products/wireless-module/sxpcegn.html
+[2]: https://www.silex.jp/products/wireless-module/sxpceac.html
+
+>
+>> +&usb0 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pmx_usb_pins>;
+>> +	status = "okay";
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +
+>> +	/* SMSC USB2514B */
+>> +	hub@1 {
+>> +		compatible = "usb424,2514";
+>> +		reg = <1>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +
+>> +		hub_port1: port@1 {
+>> +			reg = <1>;
+>> +			#trigger-source-cells = <0>;
+>> +		};
+>> +
+>> +		hub_port2: port@2 {
+>> +			reg = <2>;
+>> +			#trigger-source-cells = <0>;
+>> +		};
+>> +	};
+>> +};
+> Same comment as PCI. However, it is likely that the USB hub is
+> actually on the board, not a module, so it is a lot less likely to
+> change.
+
+Yes, that USB hub is on the PCB and wired to the SoC directly. But 
+I'll keep it in mind...
+
+>
+> As i said, they are not wrong, so you don't need to remove them.
+>
+> 	Andrew
+>
 
 Regards,
-  Marco
+Hiroshi
