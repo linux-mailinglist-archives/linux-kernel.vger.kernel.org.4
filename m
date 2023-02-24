@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233EF6A1ABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D4F6A1AC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjBXK6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S230023AbjBXK7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjBXK5u (ORCPT
+        with ESMTP id S229964AbjBXK6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:57:50 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948C5671F1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:57:44 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id az36so1549927wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 02:57:44 -0800 (PST)
+        Fri, 24 Feb 2023 05:58:31 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7352112;
+        Fri, 24 Feb 2023 02:58:29 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id c23so11196381pjo.4;
+        Fri, 24 Feb 2023 02:58:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wUzlOGkuT0rri1NZcy3oPLiyFwjaeCiqRMJCuHFb5ts=;
-        b=dLreh8Yxx9kckvOfZdklyGyT2utdxcqAYoLD3p9a4v83wuopSnCDDCTGaXv54KIEQg
-         HYn16dO3Oc5y2cTr2+l1u+X3s3DwdDED9B9auqLhQKERxmugO+WcUKG/x1Fc61aFEor7
-         8qYRGkXuBeElYZuzxQHLCLA9wwgSrU5BXVDyPA4bX4ouiLj0HL1nOHCXo5G79sT2CF9r
-         Ok5ISa0ZCDtHrCR1e4D2U12jI16IZrCqvn15mIxIMSBixhPWjr06VZenN7d8NEJ7pc3e
-         OYr4csPS6itxsoPWEepLxbHpDqCnQjhYziAm/UyoHuwfZxFGfRzRU/DfUIh+zaj03QiU
-         VarQ==
+        d=gmail.com; s=20210112; t=1677236309;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jk45hO2dJBO+eSPwpnI7b1q3xk4uLOBl8nIPeR2AALE=;
+        b=EbtLiTrZVXwyUhMqFPZW6GnvOXqwvqMj60fwvVKR3JRnlMN6MYs6r0wPhtUsfKb3mW
+         aFsyPU1h3BzzMehRfYea6BrZXZ+hcQQvwFFty4JRMAsof8n9q+Ijey8n7Dy+lKsVsbmj
+         rQZY/4rm1yqoEhoimQZoQV5/oXyuP/0THwsEzeqs1Hr2AUIHEOAgvoy5E7vD0EGJo3B0
+         cKgDrSyjuJ1iXXesRWoyVLiEbszymY1esoY8fv+XF7b7LgnhXy0YpXMqZnJBs8qiZyzx
+         4ltEJ3MErnS8PgsNZUbkMqBLRDBI6hzhH2wKYZaVU2rw4OmsweiOkQvU71A8dHJZVEXI
+         F0bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUzlOGkuT0rri1NZcy3oPLiyFwjaeCiqRMJCuHFb5ts=;
-        b=3xLQQEYbGTXyMRNoF7trbX45vzrhjk6AUhkQDyxMbfNv4FdDB2r0QAdn9hJQufneFA
-         ScFhpMD6HUNkuOVYgn1bShmho0MzXe+vcvVryaih6lvMwuEZ1mtQTiwvflIhsHbXIvsE
-         Mc8V7GKhOMhbUEGp6aDEEx64pVHrX0TBIGmr2lyapsGmHDgAIZsXwUY/tNDhAW3NDa0d
-         nwQ9o1doajR7DTKlNhTRPiKKEpvzRNd3f0jjptmuEEJJeLYLkzjhbWma/kHrTkYByvE2
-         VvNsLuZ8LmknlK0qcBmv1tR0f1fuNbdUlqGjL7wdxsJohE6HJZn88Rp3Q0Cj5HTaWnfk
-         5ysg==
-X-Gm-Message-State: AO0yUKWOq08wZGfKsFO3NEXlJmdTk8+s6uOm0CHSuBfrnBbLWOs9XmtX
-        ZmLMRXw1I/CWavkOMySBGryCjg==
-X-Google-Smtp-Source: AK7set8ofc+BvKAusfSUZGB0OaFA138AUMJg1kOmeEms6DUeu1XH/pOv+hyOfB0pioS72PKGct/gZA==
-X-Received: by 2002:a7b:c7d4:0:b0:3df:de28:f819 with SMTP id z20-20020a7bc7d4000000b003dfde28f819mr11541352wmk.15.1677236263072;
-        Fri, 24 Feb 2023 02:57:43 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c42c700b003db012d49b7sm8464475wme.2.2023.02.24.02.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 02:57:42 -0800 (PST)
-Message-ID: <f38158f6-5493-5b85-1353-9b75f66ad0d3@linaro.org>
-Date:   Fri, 24 Feb 2023 11:57:40 +0100
+        d=1e100.net; s=20210112; t=1677236309;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jk45hO2dJBO+eSPwpnI7b1q3xk4uLOBl8nIPeR2AALE=;
+        b=ZDY6SA50Pknt59NKHRSUthJlvUaHG1NjVwsU0mrYgu1PkGaR3ZZaH6vGb7PlBR0kwV
+         m6FOI+EQFGmU7zus6PHGUQhalzOyEy6GXewpOTF6d0L3CnN7d9/ful0hPH0c47nnNlmt
+         4zTof5Wa4u6lo414W1WK0Th3YDSwJo05ozplo05ZTqaSdndCDVqeT7eN5eN/HmDTdYEV
+         WT8uxziZykQe/McX25VBjVfbGM3D5RuotxATC8mIaOOHyP5YS5koBN8JuPheacsOip50
+         XhDR9mMIvZ7o3T4sF2GA2xLpI09nDiidhl61JpcUttoFcAok5G23bZK4UsKZ2aQNK9oY
+         P+Iw==
+X-Gm-Message-State: AO0yUKW6ozD0SlhCAkK/LS47GzjG9gpmlEsF1X7yfBevIstAh/KHAdUT
+        k/wxeWBfIS8utO46TCsB6ws=
+X-Google-Smtp-Source: AK7set/LJCulTVccNUMhf4Iemv6zz4cFMBcyG7/259+FoRSgrFMuYCx00YkNHyC1fo2H2OA4BV7LBg==
+X-Received: by 2002:a17:902:ab57:b0:19a:839d:b67a with SMTP id ij23-20020a170902ab5700b0019a839db67amr15847909plb.5.1677236308870;
+        Fri, 24 Feb 2023 02:58:28 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id g24-20020a170902fe1800b0019c2b1c4ad4sm10044933plj.6.2023.02.24.02.58.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 02:58:28 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        davejwatson@fb.com, aviadye@mellanox.com, ilyal@mellanox.com,
+        sd@queasysnail.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] net: tls: fix possible race condition between do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
+Date:   Fri, 24 Feb 2023 18:58:11 +0800
+Message-Id: <20230224105811.27467-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 02/11] dt-bindings: gpu: mali-bifrost: Split out
- MediaTek power-domains variation
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, airlied@gmail.com
-Cc:     daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
-        robh@kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org
-References: <20230223133440.80941-1-angelogioacchino.delregno@collabora.com>
- <20230223133440.80941-3-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230223133440.80941-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 14:34, AngeloGioacchino Del Regno wrote:
-> In preparation for adding new bindings for new MediaTek SoCs, split out
-> the power-domain-names and power-domainsvariation from the `else` in
-> the current mediatek,mt8183-mali conditional.
-> 
-> The sram-supply part is left in place to be disallowed for anything
-> that is not compatible with "mediatek,mt8183-mali" as this regulator
-> is MediaTek-specific and it is, and will ever be, used only for this
-> specific string due to the addition of the mediatek-regulator-coupler
-> driver.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> index 02699d389be1..ac174c17e25f 100644
-> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> @@ -145,6 +145,18 @@ allOf:
->          - power-domains
->          - resets
->          - reset-names
-> +  - if:
-> +      not:
+ctx->crypto_send.info is not protected by lock_sock in
+do_tls_getsockopt_conf(). A race condition between do_tls_getsockopt_conf()
+and do_tls_setsockopt_conf() can cause a NULL point dereference or
+use-after-free read when memcpy.
 
-I think this makes the binding difficult to maintain. You have:
-1. if - amlogic - then - some properties
-2. if - renesas - then - some properties
-3. if - not mediatek - then - something else
-4. if - mediatek - then - some properties
+Fixes: 3c4d7559159b ("tls: kernel TLS support")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ net/tls/tls_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Instead just disallow power domains in each of other variants.
-
-Best regards,
-Krzysztof
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index 3735cb00905d..4956f5149b8e 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -374,6 +374,7 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 	}
+ 
+ 	/* get user crypto info */
++	lock_sock(sk);
+ 	if (tx) {
+ 		crypto_info = &ctx->crypto_send.info;
+ 		cctx = &ctx->tx;
+@@ -381,6 +382,7 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 		crypto_info = &ctx->crypto_recv.info;
+ 		cctx = &ctx->rx;
+ 	}
++	release_sock(sk);
+ 
+ 	if (!TLS_CRYPTO_INFO_READY(crypto_info)) {
+ 		rc = -EBUSY;
+-- 
+2.34.1
 
