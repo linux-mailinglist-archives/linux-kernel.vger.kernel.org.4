@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3C96A23CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03666A23CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjBXV2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S229454AbjBXVbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBXV2C (ORCPT
+        with ESMTP id S229446AbjBXVbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:28:02 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239B1125A8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:28:01 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s26so2466803edw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:28:01 -0800 (PST)
+        Fri, 24 Feb 2023 16:31:21 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08979193FD
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:31:18 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id cq23so2722815edb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:31:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vRAThVXs60a4Q7LBwPuQkj+PUeZris9Nk8uDTLMgFV8=;
-        b=SYbhV4EHJoTxaBzuMvbR0qZyp9NgiQTj3Tm0XrrpGHg/hYXaC/yU6pUxcNpSVac+qN
-         GC/ndefXICYdYj0QbNnJilpQwEUBBpIfc+w2MhSPWUIeNu1zG3Jno4E9UYytrRO2u3B8
-         4MRP2SSIvTrxpE10pDOmFZccgHtf8zYgZgr3Mzdvr3xl1030cPasGM0gkkv4sa1TicGy
-         h3WZ4YYO+/B1fcOaTdEfLQc0TrQzEONFHOeF7i9K5RHE6UMEpz1UGiBlFq8AHPG7smpR
-         1xRAEjcbQGPILlJolzHDd259WmWnvQYMMtBYr7rkFBVQfOgHluFhM+jJHN/jk/8smfYB
-         iZ8g==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrE04gOVw81UKFZPld2Vl1EpoZ4FShZtZFABiCjDz1k=;
+        b=U7gWuY7WPaAKGddJZQsgblTmmGzM6IGrhyDKpf4MIoCPtxKblnkp7k+m745hxwm/ui
+         n52VtteVh03owR4gUOk5R8bZEWbffVclRpm8Y9uVx2kV5WrTXSUIuOGQh0Pt5tHKJcGx
+         SgIim4KSTaNjJUhJgo5a4ziG5tr0JjQiKfD1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vRAThVXs60a4Q7LBwPuQkj+PUeZris9Nk8uDTLMgFV8=;
-        b=x5QWDpLHE5kBo2Mmt+JcOqCscEs0hqGkUTBI+QMeA81rZDirQrwdJ4JDaUs+cx6/L6
-         ozJitKavPJpYfvxvmYfSSNf5K7Yp4KmJmxUDk3Hi7UXtoGF923/DIgJ3WAehGA/sX3VT
-         PN+OU4kb2yj2OwWpBM6UeA8BQlzoPICWMXkGO049ZYdjnruqw3NmlG5mHKMLfYSp26oE
-         lb0z9rkFuONyYupVmadt16U4Qq7E8qzE0Q6U8fgXHZPb+BR/ATW5hrEOFdsLSL0J71WK
-         IRdZERih47Pzs/MthB5u2Cw42sACp0yR41VCvhJS+hNj0aaKayN8RdwIY63C5lYqmkSm
-         J51g==
-X-Gm-Message-State: AO0yUKUkQo+JLSgsmczao847s3xqF+/fnvrX3CAQhthcoe5px9wTAFvO
-        5x1bPRL1ae0R4Gb+p3jQvjlvg5n+tWrwRcovnAc=
-X-Google-Smtp-Source: AK7set/MdAgCuWjuNZu26TkNYWSRBcPx/qXK5xgkmyV8GSwygOUUYxKOPqKKxQZwvTOgbLdgNVui5rqhnQBU/7cEjKg=
-X-Received: by 2002:a05:6402:4494:b0:4af:6e95:85e9 with SMTP id
- er20-20020a056402449400b004af6e9585e9mr858242edb.4.1677274079172; Fri, 24 Feb
- 2023 13:27:59 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JrE04gOVw81UKFZPld2Vl1EpoZ4FShZtZFABiCjDz1k=;
+        b=lSIDMyQ5mg7qNUErZcCcHxOJYxg4gaeX9BqkawhkfxzJSVNVKOEhM2aVai4L68FVC9
+         FIe97tI/mY6sZx39CEWgi9CxVnf8OJfpItI0YXiLSkxZLLM4iPSF6kAiOstW7hAWqGMt
+         /uGJ7d2VnlQRWjTx5AHGwXovhxOOXYn1mQ8tMKzo1nyVF97xLTUrjrellDfzc0c1YmKF
+         LXsiRNworXZMgv/n8/l7l9jddJCtA68dW8XIaqf9cdHhaBijv3jKHIFxWE/Kit0KXQXp
+         tivUQFlUmSAZgiSkrqRMutAvMDdKENW9xpYC7HYyvAlaQvZHhik6gQ2WO2cQxcQpT3b+
+         QONg==
+X-Gm-Message-State: AO0yUKVBCbKnCyt42NcYj4MwMkW87Ep8endZlVXSHtbw4WznA2U1q7wt
+        jBFlmzRjRFU5PU+eo92GzPaaEpREeUf+iBO1VO88Sg==
+X-Google-Smtp-Source: AK7set9lZ1KZKFwhmmpkAb61ocp34zd/5zh9PJgGTQoM6hpUz1AdmP5YNS2aTtGqeYHEtxzK/eTpHg==
+X-Received: by 2002:aa7:d048:0:b0:4ab:554:37ea with SMTP id n8-20020aa7d048000000b004ab055437eamr17062047edo.4.1677274276162;
+        Fri, 24 Feb 2023 13:31:16 -0800 (PST)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id d1-20020a50f681000000b004ad72045ed9sm167262edn.65.2023.02.24.13.31.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 13:31:15 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id d30so2650179eda.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:31:15 -0800 (PST)
+X-Received: by 2002:a17:907:73c6:b0:8f1:fd:50d0 with SMTP id
+ es6-20020a17090773c600b008f100fd50d0mr2763634ejc.0.1677274275171; Fri, 24 Feb
+ 2023 13:31:15 -0800 (PST)
 MIME-Version: 1.0
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Fri, 24 Feb 2023 15:27:48 -0600
-Message-ID: <CABb+yY3u9hBsHEeJXEYcdohhy-nQy8io1ZN1-MhFjvudUBPZ6w@mail.gmail.com>
-Subject: [GIT PULL] Mailbox changes for v6.3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <Y/iywbFbiUAA6ZD3@kroah.com> <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
+In-Reply-To: <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Feb 2023 13:30:58 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjyFhdR-M7H6JpH7zF0k_z5xj8+qERaHsh5+0c4uOmv+g@mail.gmail.com>
+Message-ID: <CAHk-=wjyFhdR-M7H6JpH7zF0k_z5xj8+qERaHsh5+0c4uOmv+g@mail.gmail.com>
+Subject: Re: [GIT PULL] TTY/Serial driver updates for 6.3-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,68 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Feb 24, 2023 at 1:24 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+>         default SERIAL_8250
 
-The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
+Hmm. Looking around, it seems to be a pattern. I'm not convinced any
+of them are really valid, except probably the ones that aren't about
+specific drivers, but about base support (like the "SERIAL_8250_DMA"
+one).
 
-  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
+I also do get the feeling that the base "SERIAL_8250" feature might be
+better off as a _selected_ option, rather than a "ask if you want it".
+I think we've ended up with that SERIAL_8250 being a base option
+mainly for historical reasons (ie it was part of the original PC/AT
+base specs, and then later it has become a "base driver for a lot of
+random cards".
 
-are available in the Git repository at:
+It's probably most legacy by now - it's a long time since I saw a
+serial port being used outside of management ports, and even those are
+often ethernet these days.
 
-  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
-tags/mailbox-v6.3
+Maybe nobody cares.
 
-for you to fetch changes up to 6ccbe33a39523f6d62b22c5ee99c6695993c935e:
-
-  dt-bindings: mailbox: qcom-ipcc: Add compatible for QDU1000/QRU1000
-(2023-02-23 14:47:13 -0600)
-
-----------------------------------------------------------------
-- qcom: misc changes to bindings for sa8775p, QDU1000/QRU1000,
-         IPQ5332, SDX55, msm8976, glink-rpm-edge
-- sti: convert to DT schema
-- zynq: switch to flexible array to simplify code
-
-----------------------------------------------------------------
-Alain Volmat (1):
-      dt-bindings: mailbox: sti-mailbox: convert to DT schema
-
-Bartosz Golaszewski (1):
-      dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
-
-Christophe JAILLET (1):
-      mailbox: zynq: Switch to flexible array to simplify code
-
-Dmitry Baryshkov (6):
-      dt-bindings: mailbox: qcom: add SDX55 compatible
-      dt-bindings: mailbox: qcom: enable syscon compatible for msm8976
-      dt-bindings: mailbox: qcom: correct the list of platforms using clocks
-      dt-bindings: mailbox: qcom: add missing platforms to conditional clauses
-      dt-bindings: mailbox: qcom: add #clock-cells to msm8996 example
-      mailbox: qcom-apcs-ipc: enable APCS clock device for MSM8996
-
-Kathiravan T (2):
-      dt-bindings: mailbox: qcom: add compatible for the IPQ5332 SoC
-      mailbox: qcom-apcs-ipc: add IPQ5332 APSS clock support
-
-Krzysztof Kozlowski (1):
-      dt-bindings: remoteproc: qcom,glink-rpm-edge: convert to DT schema
-
-Melody Olvera (1):
-      dt-bindings: mailbox: qcom-ipcc: Add compatible for QDU1000/QRU1000
-
- .../bindings/mailbox/qcom,apcs-kpss-global.yaml    | 53 +++++++++---
- .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |  2 +
- .../bindings/mailbox/st,sti-mailbox.yaml           | 53 ++++++++++++
- .../devicetree/bindings/mailbox/sti-mailbox.txt    | 51 -----------
- .../bindings/remoteproc/qcom,glink-rpm-edge.yaml   | 99 ++++++++++++++++++++++
- .../devicetree/bindings/soc/qcom/qcom,glink.txt    | 94 --------------------
- drivers/mailbox/qcom-apcs-ipc-mailbox.c            |  3 +-
- drivers/mailbox/zynqmp-ipi-mailbox.c               |  6 +-
- 8 files changed, 197 insertions(+), 164 deletions(-)
- create mode 100644
-Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
- delete mode 100644 Documentation/devicetree/bindings/mailbox/sti-mailbox.txt
- create mode 100644
-Documentation/devicetree/bindings/remoteproc/qcom,glink-rpm-edge.yaml
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
+             Linus
