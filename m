@@ -2,213 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4572B6A223C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130396A223F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjBXTRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S230023AbjBXTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjBXTRb (ORCPT
+        with ESMTP id S230022AbjBXTSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:17:31 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B596DD8C;
-        Fri, 24 Feb 2023 11:17:28 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id l2so328708ilg.7;
-        Fri, 24 Feb 2023 11:17:28 -0800 (PST)
+        Fri, 24 Feb 2023 14:18:00 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EE66A7A2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:17:31 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bw19so162659wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:17:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        d=bytedance.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1e26bbruHMjLgHC3kf6AF7TXnsQxoIObs73hciyTTjs=;
-        b=Y2prViu7RGnF9nNCSevqbgy0xFGBD2OU4Gl7n1Z282XKpZ6VpFsqIEOrJ1+50Qz/FZ
-         UA6DW8d+vL1Y2P7bDhHI2bQg11Nd+KjAEVsW5ykf629u1vTmhs9q3GMEmMSaN6y2CRA7
-         s5akANQWGQfP3Q+ZrTBEHAPcXnGfP89v79CnlLeTiKO3cKjWiA+jk2TEwtHI3mI34XqJ
-         SmXYTksuFRgBsHU7H//sIdBQTYfGwlmqateUDMFhR05Z4IyfSUZM0G52SAgsKgC1tZMA
-         yiOEQAcy9tPmXfPLclcknCU6yx/oUrtYnTpmbwHVbkvIk8uJPAQvaeR9hWDseztBO/Uz
-         Oo2w==
+        bh=nlPt4Q3q43f/kES2hajYBu0feYXRxIPRsViZnbHRgo8=;
+        b=ULOxdkQfJSc2wzWXnZzkcOyay31tWrkYETOwBzB86fVZxSrlFxO0D+wFcUzNSs6OEy
+         G/Wj5Om0d1dD3bur8hORomrHxlcp2EbExVSVCLMSKMGK2NC7h+NFjFMV7o67rbfpdPJe
+         IeIpNPsVMo+s+E7ly717Zk+OS1Cl+Gkl9QbLcj3fT3nhhNHD2KH0fO3KZ5srXAerW70V
+         tMXC90LPZ9cSFAyS4VDbe7A4PUZgMQ9Wp0rQS6agHwqpMfgMxvvB9otmc4DTHrlHl4/M
+         oNvhx15NDacei8jDIfP7/qN6BwU6owh6GMJBAE5cP+r6LbEuEks5hO4JemkXa5R1bXEO
+         QiwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1e26bbruHMjLgHC3kf6AF7TXnsQxoIObs73hciyTTjs=;
-        b=feceEy+zabpnOd4X4OcUoI+Bf1EmMM0PgZxngKJCg5dV0E2MQGWAmZc6nysFgZHBj5
-         5KhikOBN3wvu39VjYEOkKODUQOnO1PxxdDMUzgP2zGqO1xbfA2WC68t5+H4LZMecGZuF
-         pBsrG3V/pkc3fUGmwZrl0W0rubqlyV1gs5aazRGlzRJoyNjV5EYY1P+PWondHiPaP8xO
-         WIApZpJlUREgkWRmY12q4CV+3rR/0EO/d2YU/Mn7iA0P3AKkaDXV9bWp5l6BI04HnKeg
-         yhvWSO1UJq/J9uJ20WCdihx0IY13SdFuoGWOAF6W4Rc/pkRU7+5D67QQa3b5wPO942NV
-         gxCg==
-X-Gm-Message-State: AO0yUKU7wi3/SAgahvL2la2jN+VntzsWA4Yx6hIg95WHaFfXWtqF6ASZ
-        qQVzpQ+T17DPbFRAX+hGmKE=
-X-Google-Smtp-Source: AK7set9/+2jpC9sutbrQAAb4mHGfP63HMGv3VXKmzx9OQ5XerDMreNhTQtFdXdSwzaJRw3xZuOEDDA==
-X-Received: by 2002:a92:7510:0:b0:315:4793:f7b4 with SMTP id q16-20020a927510000000b003154793f7b4mr10006551ilc.31.1677266247325;
-        Fri, 24 Feb 2023 11:17:27 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a1-20020a92d341000000b0031535ce9cc8sm4239248ilh.83.2023.02.24.11.17.25
+        bh=nlPt4Q3q43f/kES2hajYBu0feYXRxIPRsViZnbHRgo8=;
+        b=LJVp5YJ5DOd2aFgrd9dCSipNeqi+eqiSerP0fCexxpPIOm9yZ35ILRYF/Kaj4U7mBI
+         JSb5LQpdYUEitzo7XKNg96fKlOCYreL7er0U1CTkKABLaweCZaQVIn4Lz8ASSR6WqY/O
+         ns099mEUzB8LRP7OWkx+m78myWJelIPqSnS/2QG6tcLcoQY6LB4eXKz1dnR0GRGxZRlS
+         V9LWd5GAxDLQKy0v5/0GTe/VEahOT2YgkkUyi4CQVz3thQQUjqXGN9N0UWr/BR0staTZ
+         fIcbE1k7tzQ1q39Q1gm2LixVXOc8YsNSEjBfrw4fu9mWrgO8aP61KnR4fi4OGAC+NJJD
+         3kyQ==
+X-Gm-Message-State: AO0yUKVRhpHYBYlc3zFd+INy/onkk7vfATnsmjPYfMt91OHCXIomu0fr
+        lKrk8kRndFjI9VqAkykJxE1l/Q==
+X-Google-Smtp-Source: AK7set8bcMpUzNCKsQ+jr5w1UWR23aN9ub4GLVSYhJodv/gdPO0QitNKBJ4ItzsHaFeUGdPOLJvusA==
+X-Received: by 2002:a5d:6f01:0:b0:2bf:d937:3589 with SMTP id ay1-20020a5d6f01000000b002bfd9373589mr594169wrb.14.1677266249149;
+        Fri, 24 Feb 2023 11:17:29 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:d12b:5d7b:42ef:d31a? ([2a02:6b6a:b566:0:d12b:5d7b:42ef:d31a])
+        by smtp.gmail.com with ESMTPSA id x8-20020adfdd88000000b002c58ca558b6sm13612940wrl.88.2023.02.24.11.17.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 11:17:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b0af4518-3c07-726e-79a0-19c53f799204@roeck-us.net>
-Date:   Fri, 24 Feb 2023 11:17:24 -0800
+        Fri, 24 Feb 2023 11:17:28 -0800 (PST)
+Message-ID: <8dcac250-474a-6102-1a60-b8ad84eb0a4b@bytedance.com>
+Date:   Fri, 24 Feb 2023 19:17:27 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v11 09/12] x86/smpboot: Remove
+ initial_stack on 64-bit
 Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        kernel@pengutronix.de, intel-wired-lan@lists.osuosl.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
- <20230211074113.2782508-7-o.rempel@pengutronix.de>
- <20230224035553.GA1089605@roeck-us.net>
- <20230224041604.GA1353778@roeck-us.net>
- <20230224045340.GN19238@pengutronix.de>
- <363517fc-d16e-5bcd-763d-fc0e32c2301a@roeck-us.net>
- <20230224165213.GO19238@pengutronix.de>
- <20230224174132.GA1224969@roeck-us.net>
- <20230224183646.GA26307@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
- genphy_c45_write_eee_adv()
-In-Reply-To: <20230224183646.GA26307@pengutronix.de>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kim.phillips@amd.com" <kim.phillips@amd.com>,
+        "brgerst@gmail.com" <brgerst@gmail.com>
+Cc:     "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "arjan@linux.intel.com" <arjan@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
+        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
+        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
+        "liangma@liangbit.com" <liangma@liangbit.com>
+References: <20230223191140.4155012-1-usama.arif@bytedance.com>
+ <20230223191140.4155012-10-usama.arif@bytedance.com>
+ <BYAPR21MB1688FEE6BA7464980CCF7A21D7A89@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <2c3abf634824f2b7207a3ac94985863472d67608.camel@infradead.org>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <2c3abf634824f2b7207a3ac94985863472d67608.camel@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/23 10:36, Oleksij Rempel wrote:
-> On Fri, Feb 24, 2023 at 09:41:32AM -0800, Guenter Roeck wrote:
->> On Fri, Feb 24, 2023 at 05:52:13PM +0100, Oleksij Rempel wrote:
->>> On Fri, Feb 24, 2023 at 08:00:57AM -0800, Guenter Roeck wrote:
->>>> On 2/23/23 20:53, Oleksij Rempel wrote:
->>>>> Hallo Guenter,
->>>>>
->>>>> On Thu, Feb 23, 2023 at 08:16:04PM -0800, Guenter Roeck wrote:
->>>>>> On Thu, Feb 23, 2023 at 07:55:55PM -0800, Guenter Roeck wrote:
->>>>>>> On Sat, Feb 11, 2023 at 08:41:10AM +0100, Oleksij Rempel wrote:
->>>>>>>> Migrate from genphy_config_eee_advert() to genphy_c45_write_eee_adv().
->>>>>>>>
->>>>>>>> It should work as before except write operation to the EEE adv registers
->>>>>>>> will be done only if some EEE abilities was detected.
->>>>>>>>
->>>>>>>> If some driver will have a regression, related driver should provide own
->>>>>>>> .get_features callback. See micrel.c:ksz9477_get_features() as example.
->>>>>>>>
->>>>>>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->>>>>>>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
->>>>>>>
->>>>>>> This patch causes network interface failures with all my xtensa qemu
->>>>>>> emulations. Reverting it fixes the problem. Bisect log is attached
->>>>>>> for reference.
->>>>>>>
->>>>>>
->>>>>> Also affected are arm:cubieboard emulations, with same symptom.
->>>>>> arm:bletchley-bmc emulations crash. In both cases, reverting this patch
->>>>>> fixes the problem.
->>>>>
->>>>> Please test this fixes:
->>>>> https://lore.kernel.org/all/167715661799.11159.2057121677394149658.git-patchwork-notify@kernel.org/
->>>>>
->>>>
->>>> Applied and tested
->>>>
->>>> 77c39beb5efa (HEAD -> master) net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
->>>> 068a35a8d62c net: phy: do not force EEE support
->>>> 66d358a5fac6 net: phy: c45: add genphy_c45_an_config_eee_aneg() function
->>>> ecea1bf8b04c net: phy: c45: use "supported_eee" instead of supported for access validation
->>>>
->>>> on top of
->>>>
->>>> d2980d8d8265 (upstream/master, origin/master, origin/HEAD, local/master) Merge tag 'mm-nonmm-stable-2023-02-20-15-29' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>>>
->>>> No change for xtensa and arm:cubieboard; network interfaces still fail.
->>>
->>> Huh, interesting.
->>>
->>> can you please send me the kernel logs.
->>>
->> There is nothing useful there, or at least I don't see anything useful.
->> The Ethernet interfaces (sun4i-emac for cubieboard and ethoc for xtensa)
->> just don't come up.
->>
->> Sample logs:
->>
->> cubieboard:
->>
->> https://kerneltests.org/builders/qemu-arm-v7-master/builds/531/steps/qemubuildcommand/logs/stdio
->>
->> xtensa:
->>
->> https://kerneltests.org/builders/qemu-xtensa-master/builds/2177/steps/qemubuildcommand/logs/stdio
->>
->> and, for completeness, bletchley-bmc:
->>
->> https://kerneltests.org/builders/qemu-arm-aspeed-master/builds/531/steps/qemubuildcommand/logs/stdio
->>
->> Those logs are without the above set of patches, but I don't see a
->> difference with the patches applied for cubieboard and xtensa. I
->> started a complete test run (for all emulations) with the patches
->> applied; that should take about an hour to complete.
->> I could also add some debug logging, but you'd have to give me
->> some hints about what to add and where.
+
+
+On 24/02/2023 18:28, David Woodhouse wrote:
+> On Fri, 2023-02-24 at 18:24 +0000, Michael Kelley (LINUX) wrote:
+>> I'm getting a compile error on the new reference to PTREGS_SIZE:
 > 
-> OK, interesting. These are emulated PHYs. QEMU seems to return 0 or
-> 0xFFFF on unsupported registers. May be I'm wrong.
-> All EEE read/write accesses depend on initial capability read
-> genphy_c45_read_eee_cap1()
-> 
-> Can you please add this trace:
-> 
-> diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-> index f595acd0a895..67dac9f0e71d 100644
-> --- a/drivers/net/phy/phy-c45.c
-> +++ b/drivers/net/phy/phy-c45.c
-> @@ -799,6 +799,7 @@ static int genphy_c45_read_eee_cap1(struct phy_device *phydev)
->           * (Register 3.20)
->           */
->          val = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
-> +       printk("MDIO_PCS_EEE_ABLE = 0x%04x", val);
->          if (val < 0)
->                  return val;
-> 
+> Is it just that <asm/asm-offsets.h> is included conditionally, and not
+> in your build? What if you include it directly from <asm/processor.h>
 
-For cubieboard:
+This is fixed in the v2 patch that Brian sent.
 
-MDIO_PCS_EEE_ABLE = 0x0000
+diff --git a/arch/x86/include/asm/processor.h 
+b/arch/x86/include/asm/processor.h
+index 9c4a5c4d46c1..bdde7316e75b 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -650,8 +650,8 @@ static inline void spin_lock_prefetch(const void *x)
+  #else
+  extern unsigned long __end_init_task[];
 
-qemu reports attempts to access unsupported registers.
+-#define INIT_THREAD {                                                  \
+-       .sp     = (unsigned long)&__end_init_task - PTREGS_SIZE,        \
++#define INIT_THREAD { 
+    \
++       .sp     = (unsigned long)&__end_init_task - sizeof(struct 
+pt_regs), \
+  }
 
-I had a look at the Allwinner mdio driver. There is no indication suggesting
-what the real hardware would return when trying to access unsupported registers,
-and the Ethernet controller datasheet is not public.
-
-For xtensa:
-
-MDIO_PCS_EEE_ABLE = 0x0014
-
-I didn't try to find out what that means.
-
-qemu did not report attempts to access unsupported registers.
-
-Guenter
-
+  extern unsigned long KSTK_ESP(struct task_struct *task);
