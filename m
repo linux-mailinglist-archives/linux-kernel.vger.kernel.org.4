@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6B46A2095
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6366A2097
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjBXRm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S229733AbjBXRoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBXRmz (ORCPT
+        with ESMTP id S229481AbjBXRof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:42:55 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420219036
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:42:53 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id a3so573772vsi.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:42:53 -0800 (PST)
+        Fri, 24 Feb 2023 12:44:35 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60D61351E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:44:33 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so2755277wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:44:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ImfHWq2alcMESc+jlZwm6NFsn5wdlz4TeCafnSlnQRY=;
-        b=a5/uEcnSHAw3vjGfVMDszS2akB2i9mpVfz/PyhLG3EbUelFnXQdjWguWYRK7rLj+Ba
-         T732vrPBnEMWStHMrOvCrZdmOxGOPoh+0PHTvGvb9TPJvBsWLLru/SgiMsNP67YVAmfY
-         VROMsr6Gstg0TU6qN9Dzrlb0bu3U0GongYwWh3m8hgnAE/ze4LzTb5084gxtNHpLPoCK
-         78DvVHHjTdMQinQxw5VU8SIZJ74hFa2IrpM5AtyLgv3z4QTUqKib7wbYVG6u35jifcSH
-         41CBzXc/o+C8zei2jOJBL72pBnC16bSeSW8MFGdm/o6kevvGm5a77MAxP/kZXRf8vy3h
-         omNA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ABAymivtzLVXmfabanq8IH08mxiGWPYpwC0ephBRLG0=;
+        b=gYU+7Unrce8q6rrCpIL/B0cnvipjfJwjoXnHA9enfaMCXALHoxu4g4kz0BM5G2JS7J
+         fLIUujLpCOSHfGfG1Bp+Izyc3f+noF01kkC5p0fn67OvuBkRCQTQFXqRb8/r0luGyMlD
+         Kc1hsFRIp31Ub0PKsVVt9JaCEg5zGMmNzOj6qxgQv6gsyL7jdfak5GS5g2fdXpZFAawC
+         POeLstnKr7hp3IT6ri1DJX5xz4c3sdRgm1MlzlW7Sz37lG88eE2Oz2ecqQi8YXJcTJae
+         rq6zDjiQM7h5jd9LlprSBTr834/ey4zelWSss+JKqM40BAXa5NugKuVbEHBpPIJ7DeJT
+         ZevQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ImfHWq2alcMESc+jlZwm6NFsn5wdlz4TeCafnSlnQRY=;
-        b=dPOe5jshTo7NmvcWbej7MCO6jj3Au/rD+mLjffASgfPPzI9PGEQbGYcosTqe6lR/Nd
-         /Ims33VvzSLVYGSDyYzgz51LrdwxaEZH6itzlz8CO0KQzrWZx24jc/irAOfPdcbmfy9e
-         yHVN3ZFWzPDgl6FD0udqRm8y/yecrQGv2JbjZDpRBrZmrJnQg3bYuScHsHQEdWBMn0OU
-         vi+1WC/Gf+53q6NRzEc1EzL3KnixOOnaIrSISUdazX88053qe932HSJTQGilYyv3T51A
-         CwVW3ayFNxcFAzjfvyx9NBCJZzMvULqNi5kAo4hvhV8+StmjdbYWUQS54P0H7z+VvGQf
-         owvg==
-X-Gm-Message-State: AO0yUKU9ZDM596KD5inprP2ZWurqj3pWtz8uBXrTcsScZkfFhFaMNBgn
-        NJjcIno+5A2+WvHpTvOMU7ZHofDMyi5t5f7rRdCsUg==
-X-Google-Smtp-Source: AK7set8XJ+X/I7BuVEK4uI2uLjeWUMpq+1S58VzfWVUN+y/M/G72dDeRJ2+H+BRiYY/inCy8ILlhax+H7H7dwCSZ/wk=
-X-Received: by 2002:a05:6102:1264:b0:412:d18:c718 with SMTP id
- q4-20020a056102126400b004120d18c718mr2889952vsg.3.1677260572300; Fri, 24 Feb
- 2023 09:42:52 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ABAymivtzLVXmfabanq8IH08mxiGWPYpwC0ephBRLG0=;
+        b=XSKMg1sP/GT8Mdb1hQFZi9KKZMNs5ISY4uMG3WUfhvemN31TgVzM2ozqW+EdbgLDfU
+         E/WMYYm1/X2XWML/FnIuP/z9Sq46lpS0pnpq8OfcCk+amcXmH+wov4qfMehCqwWN4xrQ
+         ME56jQIEW6w/Dm50DzioA0K40HNtiuV8qGf3GTuS1ZFRd7+sy3gy7yDGAHVEgJhPQVax
+         QXs4LKYNTtG1ySkN1AfI0oGOmBw5NQh33XxIM1kA8cy2fdAJkVaZzurLCjW8C6tk9GgL
+         4CtHUUl7MaMNhH7PRcknyHo1ERjbkTVXmuF/rhAChZV9wKlmg8lzZWpHD9RY0oAoGVNn
+         KzQQ==
+X-Gm-Message-State: AO0yUKURh7TiiIS/2Sy4f1xzWMW+BuaKbgSWwY2/a2nWNhAQwY5hSLUY
+        B5eNyDL7wepuwsd9x0xE52jRwQ==
+X-Google-Smtp-Source: AK7set+UVe9jwKR4MXwkj0n/p9aOAlU1m0yXD7Hn0JW6PRPP8wNnTUvpeXbNeJeOiHs/Emw541fz2g==
+X-Received: by 2002:a05:600c:3b1b:b0:3df:eda1:439c with SMTP id m27-20020a05600c3b1b00b003dfeda1439cmr401643wms.11.1677260672271;
+        Fri, 24 Feb 2023 09:44:32 -0800 (PST)
+Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
+        by smtp.gmail.com with ESMTPSA id x8-20020a1c7c08000000b003dc4baaedd3sm3267078wmc.37.2023.02.24.09.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 09:44:31 -0800 (PST)
+Date:   Fri, 24 Feb 2023 17:44:32 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 2/3] iommu/sva: Stop using ioasid_set for SVA
+Message-ID: <Y/j3gO1GsqS6svhO@myrica>
+References: <20230214064414.1038058-1-jacob.jun.pan@linux.intel.com>
+ <20230214064414.1038058-3-jacob.jun.pan@linux.intel.com>
+ <Y+tW3kxFeOMcELww@myrica>
+ <20230215133651.776a1553@jacob-builder>
 MIME-Version: 1.0
-References: <20230218002819.1486479-1-jthoughton@google.com> <20230218002819.1486479-36-jthoughton@google.com>
-In-Reply-To: <20230218002819.1486479-36-jthoughton@google.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Fri, 24 Feb 2023 09:42:16 -0800
-Message-ID: <CADrL8HUNO83XtYKxnrm_iWXweP4Wthy2TiodBZ3Tp=FOVa=ZPA@mail.gmail.com>
-Subject: Re: [PATCH v2 35/46] hugetlb: add check to prevent refcount overflow
- via HGM
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230215133651.776a1553@jacob-builder>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -5397,7 +5397,10 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                 } else {
->                         ptepage = pte_page(entry);
->                         hpage = compound_head(ptepage);
-> -                       get_page(hpage);
-> +                       if (try_get_page(hpage)) {
-> +                               ret = -EFAULT;
-> +                               break;
+On Wed, Feb 15, 2023 at 01:36:51PM -0800, Jacob Pan wrote:
+> > > -	pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
+> > > -	if (!pasid_valid(pasid))
+> > > -		ret = -ENOMEM;
+> > > -	else
+> > > -		mm_pasid_set(mm, pasid);
+> > > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> > > GFP_KERNEL);
+> > > +	if (ret < min)  
+> > 
+> > Just check ret < 0
+> yes, but i thought < min is safe too. 
 
-spin_unlock(src_ptl) and spin_unlock(dst_ptl) is required here.
+It is, but 'ret < 0' is the standard used everywhere else. So someone
+reading this code will stop and spend time trying to figure out why this
+isn't 'ret < 0', wonder what's special here, inspect the ida_alloc_range()
+doc, etc. No big deal, but I think it's unnecessary.
 
-I'll make sure there's a selftest that actually makes sure that
-refcount overflowing is handled gracefully for v3.
-
-> +                       }
->
->                         /*
->                          * Failing to duplicate the anon rmap is a rare case
-> @@ -6132,6 +6135,30 @@ static bool hugetlb_pte_stable(struct hstate *h, struct hugetlb_pte *hpte,
->         return same;
->  }
+Thanks,
+Jean
