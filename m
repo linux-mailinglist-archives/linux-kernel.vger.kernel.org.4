@@ -2,133 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603976A15D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F1B6A15D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 05:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBXE1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 23:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S229596AbjBXE1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 23:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjBXE12 (ORCPT
+        with ESMTP id S229441AbjBXE1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 23:27:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B78F2CFD2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 20:27:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A73E617AF
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:27:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD8BBC433D2;
-        Fri, 24 Feb 2023 04:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677212843;
-        bh=X/P6KRyU7oT0fpeqdRKwmkQX6R7d8WIchAugB9Cbtls=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tlNisvho+7Rw65blcQhOddtNIrpkAC+OHKxdehzJtzGyMGElgpN+yKddoylKYRSuj
-         +CcQQoGjKdhPZR9IIknN4p+KhJHamJnurCrZTTVoCxgNiRMsQN3lk4tw/bzeeGIqNm
-         f73ToMkVuO9rOqh4NCjy+A3hvtGEVepiupRe3RgP0aDlxaly8K0WnuZzXlgkMkt5S1
-         YzxOFmhrbxK3eClD4NlkVfDY6TbzRmydz8gs92Hz9qzhSq5EOByU08prCsPOSIU3gF
-         i+2K43X6VBYn1vZuKhE+Xuc08HvUEMoVV21J1Xd0EEAuldYFejXiH8f+l8WYzHV/xp
-         9vWQYn/bBDD/A==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Li Lingfeng <lilingfeng3@huawei.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, Tejun Heo <tj@kernel.org>
-Subject: [PATCH] lib: parser: update documentation for match_NUMBER functions
-Date:   Thu, 23 Feb 2023 20:26:18 -0800
-Message-Id: <20230224042618.9092-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 23 Feb 2023 23:27:14 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFBD2A6D9;
+        Thu, 23 Feb 2023 20:27:12 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id b12so4031221ils.8;
+        Thu, 23 Feb 2023 20:27:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=t+DpcZDS2FvDgnuMoKZFyv7FRUek1ue38SSe6bohPe0=;
+        b=RU4EE9eHQ2IgOSNy4B0fyMUnX+s3TpS9bbx7ql0OKkQouTzemsqLnUYKSTFPURkNtK
+         OEuC1hR+r5Qc4XD3VLkoQQtZp1LqQBPVgOAVzmhMiv2yRElrAFsq6Vz4NyTmFU6wzB/q
+         0ORLASft8jUYOrvDVECBvopyvM2/zPVyrlyvn+6A5GUSRlL8T7dqrADhxrfMzR/qHaV+
+         9EpmyJ8yXsWh7vw+bEmRZmwTFYx57a+WUQm4ZrSvNIjhe3yPs2XMAH5R3OxBTNzm/vBu
+         bI006IFzP4nUKg6nn9otByoURZhobbqVSTRhnNiSZH/GH6LXww99jgQ1A4XeOkbvlv7r
+         Rb+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t+DpcZDS2FvDgnuMoKZFyv7FRUek1ue38SSe6bohPe0=;
+        b=UA91Wl0OH5Yz7Kspl10gK74stcqNrQnqCL80cINWaAJw5f2qIXUNnXzYlIzvlbYse0
+         30Sbk2zDPN4cbinERbuJHtpE1L2yssW9sb+LVFwVLoUPbwboe1Maaf2WabKzi9GBEfm4
+         vRZyd+2HAYmrf8urvKYYjwyNpBS1/NN8ebgho5G0C4mHa2Bsc4zZ6sZ5GcGDkGJoPZbh
+         iqmMjMZDVFQOc4WB0El7I6GyP8BtVg1k4Z1gttX4aL4maIxQouDLvRo7xTh4dHepHz4Z
+         ibI/mN4tDH1VHqK+fEohMd7lrUNlhcXB2dtk09g3X+2MNgQotQQAx8doM8TMoJq+Yhl0
+         5SqQ==
+X-Gm-Message-State: AO0yUKUX/GXOHR7ZS80Pa9zcSqn8atJ6dHpgRiZthQgec6BvjLPYAjSn
+        C7+JNJ2827wOenQ/YLPyEO0vLbN17Xs=
+X-Google-Smtp-Source: AK7set+B1PgxUeVhk+CzJ4fyVf8B8ploSe4nm1k86TpZlF+Hcie3ifEl1mbTCuOVSXi/FEqcbcUmkA==
+X-Received: by 2002:a05:6e02:1988:b0:316:f93f:6baa with SMTP id g8-20020a056e02198800b00316f93f6baamr6387299ilf.31.1677212832290;
+        Thu, 23 Feb 2023 20:27:12 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a9-20020a056e0208a900b0031578323bc5sm3305138ilt.56.2023.02.23.20.27.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 20:27:11 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <805e4f64-84d4-37a8-2529-8ed65395ab56@roeck-us.net>
+Date:   Thu, 23 Feb 2023 20:27:09 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4.14 0/7] 4.14.307-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230223130423.369876969@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230223130423.369876969@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On 2/23/23 05:04, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.307 release. There are 7 patches in this series, all will be posted as a response to this one.  If anyone has any issues with these being applied, please let me know.
+> 
+> Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000. Anything received after that time might be too late.
+> 
 
-commit 67222c4ba8af ("lib: parser: optimize match_NUMBER apis to use
-local array") removed -ENOMEM as a possible return value, so update the
-comments accordingly.
+Build results:
+	total: 168 pass: 168 fail: 0
+Qemu test results:
+	total: 425 pass: 425 fail: 0
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- lib/parser.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/lib/parser.c b/lib/parser.c
-index 2b5e2b480253..f4eafb9d74e6 100644
---- a/lib/parser.c
-+++ b/lib/parser.c
-@@ -133,7 +133,7 @@ EXPORT_SYMBOL(match_token);
-  * as a number in that base.
-  *
-  * Return: On success, sets @result to the integer represented by the
-- * string and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * string and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- static int match_number(substring_t *s, int *result, int base)
- {
-@@ -165,7 +165,7 @@ static int match_number(substring_t *s, int *result, int base)
-  * as a number in that base.
-  *
-  * Return: On success, sets @result to the integer represented by the
-- * string and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * string and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- static int match_u64int(substring_t *s, u64 *result, int base)
- {
-@@ -189,7 +189,7 @@ static int match_u64int(substring_t *s, u64 *result, int base)
-  * Description: Attempts to parse the &substring_t @s as a decimal integer.
-  *
-  * Return: On success, sets @result to the integer represented by the string
-- * and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- int match_int(substring_t *s, int *result)
- {
-@@ -205,7 +205,7 @@ EXPORT_SYMBOL(match_int);
-  * Description: Attempts to parse the &substring_t @s as a decimal integer.
-  *
-  * Return: On success, sets @result to the integer represented by the string
-- * and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- int match_uint(substring_t *s, unsigned int *result)
- {
-@@ -228,7 +228,7 @@ EXPORT_SYMBOL(match_uint);
-  * integer.
-  *
-  * Return: On success, sets @result to the integer represented by the string
-- * and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- int match_u64(substring_t *s, u64 *result)
- {
-@@ -244,7 +244,7 @@ EXPORT_SYMBOL(match_u64);
-  * Description: Attempts to parse the &substring_t @s as an octal integer.
-  *
-  * Return: On success, sets @result to the integer represented by the string
-- * and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- int match_octal(substring_t *s, int *result)
- {
-@@ -260,7 +260,7 @@ EXPORT_SYMBOL(match_octal);
-  * Description: Attempts to parse the &substring_t @s as a hexadecimal integer.
-  *
-  * Return: On success, sets @result to the integer represented by the string
-- * and returns 0. Returns -ENOMEM, -EINVAL, or -ERANGE on failure.
-+ * and returns 0. Returns -EINVAL or -ERANGE on failure.
-  */
- int match_hex(substring_t *s, int *result)
- {
--- 
-2.39.2
-
+Guenter
