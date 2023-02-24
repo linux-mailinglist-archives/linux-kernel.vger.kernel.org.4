@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D196A2069
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 490956A2067
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 18:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjBXRU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 12:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S229712AbjBXRUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 12:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjBXRUY (ORCPT
+        with ESMTP id S229527AbjBXRUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:20:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFA01589B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 09:19:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677259176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f2WOQUqLPxDcFQ7Nje15yiuLa01CXfpErjUcBxi/r80=;
-        b=AIlcp31y0GteEwcxJdjqnYdu/cVeFUQd8MGZ3XqivK5aAsLE/2nZc5puyjjeU/jeqweJpj
-        n3IWkg/IxvPiOmF9mRccdvQTmV88HmoW3ZJljp1zwCROM8UCdGCl9Q5HvSH1vRcBoiHV6s
-        VaVe7Db3+KGM+V4Ig25dDIKM19mzZio=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-NifuMESHMPOwiyBH2L3mAQ-1; Fri, 24 Feb 2023 12:19:31 -0500
-X-MC-Unique: NifuMESHMPOwiyBH2L3mAQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C0DD3804531;
-        Fri, 24 Feb 2023 17:19:30 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C6C722026D4B;
-        Fri, 24 Feb 2023 17:19:28 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=whFKL4VuFBWvenG8fAgfvbf36PDgouUSx47rZDWr9BkJw@mail.gmail.com>
-References: <CAHk-=whFKL4VuFBWvenG8fAgfvbf36PDgouUSx47rZDWr9BkJw@mail.gmail.com> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org> <2134430.1677240738@warthog.procyon.org.uk> <2213409.1677249075@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Steve French <stfrench@microsoft.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
+        Fri, 24 Feb 2023 12:20:08 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4FE43468;
+        Fri, 24 Feb 2023 09:20:07 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id g6so2364503iov.13;
+        Fri, 24 Feb 2023 09:20:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6nruIHAhdhx1kLlG3LLxcyHw+CS76kCYQby15s3Fp+Y=;
+        b=IpamoNkd4cXS1VDYI2n56rf2X4LcZBHRzlXw71mavaB4o/VFmHAPvqlcZBuuuyV2T1
+         05SYpOUK/2Krm7rHdTiL9hszzpkwhMaHwREFeoCxZDiu/7vSq9glnbo1J6CDZ2V75RXK
+         t1J43Ybp020bq2DdNo+xb3PUyGlYbzpQPXPBFIg41mclgJSXAz0F1EuKNkh8vMfaRFDc
+         nR4WtHnvEgd81QKrw8ZajY8oeBY4YtONuZz9GL767Kba+KyBik0g4KcrIAVC944Efz6s
+         EWhMHWpF1Er7YuhqmHlWCQbU/TiX+5DkGKVhvE8EaW8q7eu65HkAJ3/b7v3Bo/A/E8kV
+         dBhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6nruIHAhdhx1kLlG3LLxcyHw+CS76kCYQby15s3Fp+Y=;
+        b=pBgCsxhrqLPV6YlMRhSzpRD3jZkaSoz+MPCf2GF798YN06RnW9g8wHGd1knuWPRC5h
+         uQk4WG+16d1jwCpiyU9UuBMoB4e+OlT1IL9jRZ45Sgw6zGFHFzrjfFQkbZSlbtUZPmf0
+         UUmYPxfaMJPK7yPUz/ni3LrscnPuJFsIMe7cwNoodYHQOv2ZTYGpO3rImJX+t5pS/bxI
+         q6xvFNwLMtcDtYoAh2y81Gxv2756JTEj6sI5Z5QWldekAmrEKU2bUphrpkiEbpQskNjo
+         tJ9v2xAeX80YKXMMyM8wtLDQoPCFTxEa4XjCIXAyzANqxRcUWYj5s0KzgVmyYLcYDx8N
+         hk+Q==
+X-Gm-Message-State: AO0yUKW+R8qkzSDbYuDN9wc+RYRY9/AyQ6fBRfVjga8qXtOc+Cx+Qm+x
+        MFAoOyF82o/xF5Wimr+9P2Q=
+X-Google-Smtp-Source: AK7set8NgV86UQeUeidAd60E4SLLlduW3eN2qKkqFJEQ/Lse8jHWimLTTUAnNOU966VV+v7wxtMv2A==
+X-Received: by 2002:a5d:8e01:0:b0:74c:822c:a6ac with SMTP id e1-20020a5d8e01000000b0074c822ca6acmr9886755iod.15.1677259206469;
+        Fri, 24 Feb 2023 09:20:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n9-20020a5e8c09000000b00740710c0a65sm3552788ioj.47.2023.02.24.09.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 09:20:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 24 Feb 2023 09:20:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
+ genphy_c45_write_eee_adv()
+Message-ID: <20230224172004.GA1224760@roeck-us.net>
+References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
+ <20230211074113.2782508-7-o.rempel@pengutronix.de>
+ <20230224035553.GA1089605@roeck-us.net>
+ <20230224041604.GA1353778@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2385283.1677259167.1@warthog.procyon.org.uk>
-Date:   Fri, 24 Feb 2023 17:19:27 +0000
-Message-ID: <2385284.1677259167@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224041604.GA1353778@roeck-us.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,20 +89,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Copying regzbot.
+  
+#regzbot ^introduced 9b01c885be36
+#regzbot title Network interface initialization failures on xtensa, arm:cubieboard
+#regzbot ignore-activity
 
-> Can you humor me, and try if just removing that skip count thing
-> instead? IOW, this attached patch?
-
-That works too.
-
-> Because that whole "let's stop writing if we need to reschedule" sounds
-> truly odd (we have a cond_resched(), although it's per folio batch, not
-> per-folio), and the skip count logic doesn't make much sense to me either.
-
-The skip thing, in my code, is only used in WB_SYNC_NONE mode.  If we hit 5
-things in progress or rescheduling is required, we return to the caller on the
-basis that conflicting flushes appear to be happening in other threads.
-
-David
-
+On Thu, Feb 23, 2023 at 08:16:06PM -0800, Guenter Roeck wrote:
+> On Thu, Feb 23, 2023 at 07:55:55PM -0800, Guenter Roeck wrote:
+> > On Sat, Feb 11, 2023 at 08:41:10AM +0100, Oleksij Rempel wrote:
+> > > Migrate from genphy_config_eee_advert() to genphy_c45_write_eee_adv().
+> > > 
+> > > It should work as before except write operation to the EEE adv registers
+> > > will be done only if some EEE abilities was detected.
+> > > 
+> > > If some driver will have a regression, related driver should provide own
+> > > .get_features callback. See micrel.c:ksz9477_get_features() as example.
+> > > 
+> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> > 
+> > This patch causes network interface failures with all my xtensa qemu
+> > emulations. Reverting it fixes the problem. Bisect log is attached
+> > for reference.
+> > 
+> 
+> Also affected are arm:cubieboard emulations, with same symptom.
+> arm:bletchley-bmc emulations crash. In both cases, reverting this patch
+> fixes the problem.
+> 
+> Guenter
