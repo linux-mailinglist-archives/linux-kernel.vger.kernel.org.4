@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52F16A1E64
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5593D6A1E46
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjBXPU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S230342AbjBXPPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjBXPUZ (ORCPT
+        with ESMTP id S230298AbjBXPPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:20:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BC855047
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:19:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677251958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GQh9PzREi1aKG+cvDq/BudsqXqu0IrqPEQVrEk5VEng=;
-        b=DMUYxNW2CKnZL6CtqvRXXT/I56on4JlzFtgCy8jSJy0C5PRceB9EP0uoZTN7oU2DXCJ+4Q
-        3TC5GpZqZmKSTGWKp0lyzLacCUUrnLaGI59G7kSv0SzDsFEygB60Q+ZlxX6Pk1Sl7pTQ5c
-        +QR0VI2VPnV7Um2E2ytqpI6/PplwWBU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-ZGuU11x2PtyBMDfxKc7VNQ-1; Fri, 24 Feb 2023 10:13:09 -0500
-X-MC-Unique: ZGuU11x2PtyBMDfxKc7VNQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C9F6800B23;
-        Fri, 24 Feb 2023 15:13:08 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CBAC7492B12;
-        Fri, 24 Feb 2023 15:13:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2213409.1677249075@warthog.procyon.org.uk>
-References: <2213409.1677249075@warthog.procyon.org.uk> <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <stfrench@microsoft.com>
-Cc:     dhowells@redhat.com, Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH] cifs: Improve use of filemap_get_folios_tag()
+        Fri, 24 Feb 2023 10:15:12 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450BC1026A;
+        Fri, 24 Feb 2023 07:14:30 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id v27so14282121vsa.7;
+        Fri, 24 Feb 2023 07:14:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rLFJlemgxUP4zmekRB5aWOhb6GtCq43P1e4KVbVEABM=;
+        b=PtuzvOm8AkxjcsL/YFTT9kogXXLdyIiVdJmOBdcOeONocpAIHeKODBomb/Y7d5wmEs
+         fJwir++HOqAZ/FgwAPVT/gXpO1MqrZbJfZQWL7LHupSYskx6p+X48eygUVdJCFJSbhQs
+         +lpYs+SW0hvwlDqLPfgQigx3TDguk5StAp2ZHh8VbcAJeYfJrwaf3EH74/1ln1kkPGNj
+         k70a/cnFjB7xgRYjXQl/DTqMj4QnQcUWXTw32MtsdT4MDjLoqy+d0KiA1w1Vgk0oirTw
+         qI+TVs7h5VQ+Iv+KQaLmUO7TvxEeNyeYr7lYKQ/fAtm+Z1u0Pd5WPLg8vRguD1Qsf/a2
+         RiHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rLFJlemgxUP4zmekRB5aWOhb6GtCq43P1e4KVbVEABM=;
+        b=5nBXeg3t6OWsVItwzXuaSSuMtrNijBqOjia54BE7WuNp9xeQyqcQFbDC3A8yzQ2S6s
+         YIddDtzxrlYo7MDAZ7kD58sAfnHSenzFAmTbEqo6E31Cw5Sa7OFOfdHh1JxQvRLAxh5g
+         lKcvAkHFmhsT42IxJM/JEtHq5vRxfPAaWT5WfU9+4gxAVk4VdZ9jx2oaM7FvB/nZPNy7
+         c2i1MgIELX7db7e4m4fc4v2MLppD+uMkbAzs7YplBeS+07Gr+5LQ1lxDHb0ifdzQuZ2z
+         8IoAgdS3fbRK7X/ekGpKUdVSEqJqVPymx0EoFFVh4AUVId691U/DwNXUpIwXzWIQ4sPq
+         tB1A==
+X-Gm-Message-State: AO0yUKXf2Bxdr6cLe1cLBEMB6fDZQ18ajTXo4e1pld8+uQ7gY/PHBNPE
+        Q3vPu3FFwAuAdEz0ffjK9FRWuCvstmxPEBU4VnE=
+X-Google-Smtp-Source: AK7set9LiZ49vpiIkbOHzXWEtVIW0PGqKOHz9mI8lvrbqokCFJ4vRaSdLiHwvYoaQ66Rte5CpIaJJ5gZ6XJ42U+Mb8g=
+X-Received: by 2002:a05:6102:3676:b0:402:99ce:1d9f with SMTP id
+ bg22-20020a056102367600b0040299ce1d9fmr2533581vsb.4.1677251667429; Fri, 24
+ Feb 2023 07:14:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2244150.1677251586.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 24 Feb 2023 15:13:06 +0000
-Message-ID: <2244151.1677251586@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <cover.1676042188.git.asmaa@nvidia.com> <cover.1676668853.git.asmaa@nvidia.com>
+ <28f0d670407c127614b64d9c382b11c795f5077d.1676668853.git.asmaa@nvidia.com>
+ <CAHp75VdeVpjzg5Y_4Y+Ke9=3wog28vUBN4Fd8zxfa8dWGrqUUA@mail.gmail.com>
+ <CH2PR12MB3895520749883D912E5021F1D7AA9@CH2PR12MB3895.namprd12.prod.outlook.com>
+ <CAHp75Vc+iSt2XvpOYzwZnzX7Qg013e-E27CPjPaO-QmtferWVg@mail.gmail.com>
+ <CH2PR12MB389509F68E6AFE776C5B0AC6D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
+ <CAHp75VdoUDMvVk1uMQcAKQteL6gbYGpoKpFn96ysdS81LjPGCQ@mail.gmail.com>
+ <CH2PR12MB389530C5929100CB54396CF5D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
+ <CAHp75VfZ1r_sNus_qMYumja3YrJawA6hRHUbi-uPFUprorQ_Kw@mail.gmail.com> <CH2PR12MB3895124032E3276B54570676D7A89@CH2PR12MB3895.namprd12.prod.outlook.com>
+In-Reply-To: <CH2PR12MB3895124032E3276B54570676D7A89@CH2PR12MB3895.namprd12.prod.outlook.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 24 Feb 2023 17:13:50 +0200
+Message-ID: <CAHp75VecFVO4jZa3T7P2N5u4fSb-ruFBv9juyCaHnj8HVTPvtg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] gpio: gpio-mlxbf3: Add gpio driver support
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,54 +78,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[This additional to the "cifs: Fix cifs_writepages_region()" patch that I
-posted]
+On Fri, Feb 24, 2023 at 4:42 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
 
-The inefficiency derived from filemap_get_folios_tag() get a batch of
-contiguous folios in Vishal's change to afs that got copied into cifs can
-be reduced by skipping over those folios that have been passed by the star=
-t
-position rather than going through the process of locking, checking and
-trying to write them.
+>            Package () { "gpio-reserved-ranges", Package () {5, 1, 7, 3, 11, 31}},
 
-A similar change would need to be made in afs, in addition to fixing the b=
-ugs
-there.
+Side note, doesn't it the same to
 
-There's also a fix in cifs_write_back_from_locked_folio() where it doesn't
-return the amount of data dispatched to the server as ->async_writev() jus=
-t
-returns 0 on success.
+           Package () { "gpio-reserved-ranges", Package () {5, 1, 7, 34}},
 
-Signed-off-by: David Howells <dhowells@redhat.com>
----
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index ebfcaae8c437..bae1a9709e32 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -2839,6 +2839,7 @@ static ssize_t cifs_write_back_from_locked_folio(str=
-uct address_space *mapping,
- 	free_xid(xid);
- 	if (rc =3D=3D 0) {
- 		wbc->nr_to_write =3D count;
-+		rc =3D len;
- 	} else if (is_retryable_error(rc)) {
- 		cifs_pages_write_redirty(inode, start, len);
- 	} else {
-@@ -2873,6 +2874,13 @@ static int cifs_writepages_region(struct address_sp=
-ace *mapping,
- 		for (int i =3D 0; i < nr; i++) {
- 			ssize_t ret;
- 			struct folio *folio =3D fbatch.folios[i];
-+			unsigned long long fstart;
-+
-+			fstart =3D folio_pos(folio); /* May go backwards with THPs */
-+			if (fstart < start &&
-+			    folio_size(folio) <=3D start - fstart)
-+				continue;
-+			start =3D fstart;
- =
+?
 
- redo_folio:
- 			start =3D folio_pos(folio); /* May regress with THPs */
-
+-- 
+With Best Regards,
+Andy Shevchenko
