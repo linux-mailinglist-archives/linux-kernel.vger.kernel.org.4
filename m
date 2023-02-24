@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3306A1D0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AC16A1D0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBXNen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S229580AbjBXNh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBXNel (ORCPT
+        with ESMTP id S229454AbjBXNh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:34:41 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BAB10439;
-        Fri, 24 Feb 2023 05:34:40 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id i34so29533439eda.7;
-        Fri, 24 Feb 2023 05:34:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kw5cJI1rHZIRKHFIWnHekwrBsn4zRcD69gaW1hs0C/U=;
-        b=n+51ixapN6Td6Ox2ZaphZfZswNZWcv8r7IjlzBxg+njtkIGWD22XaYh47X6eJ7Zt0x
-         9a9L7A+KqjlhbWJNpiMlv84lP1rG5+cgzWm8UXkQ6CoKtvYmb72RYFLCn9Q9qI+1aig0
-         9JobeAGumu/w9YvfOLDK2P8httH35IboGFZWJuPVeQhVXQH/puaB9CZCC0S3ORQF5mJH
-         ErolpBaeaLvO/GUm5cAarpvzWyoR/H4B88h4arceFwAv25JAJxVNgXAMWSu3EYbMpYfp
-         zbDSrfsjnjTM/78t0jkXzqOVh57OLz5VMWMkPvwdZrDgcsAuEdCyhiR6cZGJAf8J6083
-         zEjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kw5cJI1rHZIRKHFIWnHekwrBsn4zRcD69gaW1hs0C/U=;
-        b=VTHBK7dHBippYt1ThjnS+SPuT7Ur5FyWfQHQCvc5d1N0/8MJwAZM4mZtPrii7KOcgF
-         YyZLW+PqGKrRd7Pghkg9r+tBTxQ/Ev5JQGrIvyl4ujmn8x63WdwoBDIXI2tczRvze7sh
-         //4OA2sJHI8aWBZE5NuIiCWFZO1r/HNlRLJq/kJmxU9cEPrAw3i512Gc9BRflwdLTufH
-         jAzLTBZE0eo3jtSjpKH2cdIf87/rEUgdoHAe9ZEWJdeD/SP8iry+tJoTJHFoPy/2bqpl
-         JqizCO2+P4LJ8R1YWpeeoQ3ojZNzqRQW0Q5bHRgvAHcGssDbcMil3L9XEx0xGWtdBQPq
-         1oUA==
-X-Gm-Message-State: AO0yUKWQ55zjFArGMvO11/Gd1ule7mNIaCWJ85Hqjh8rpaJXsogFZVcs
-        jeGgUnTVKOTWdYZSc7pVv4Q=
-X-Google-Smtp-Source: AK7set9of3J1wJ2it/J7AXZmN2hY3XpHL2jexB0WeT4xbfAQaN5TEpvXvIXdR6Agc8bfL18mB0vQgA==
-X-Received: by 2002:a17:906:ad82:b0:8b1:7eb4:6bea with SMTP id la2-20020a170906ad8200b008b17eb46beamr25019154ejb.38.1677245679028;
-        Fri, 24 Feb 2023 05:34:39 -0800 (PST)
-Received: from [127.0.0.1] ([91.204.84.193])
-        by smtp.gmail.com with ESMTPSA id b24-20020a170906491800b008dd2db45c0bsm4924674ejq.105.2023.02.24.05.34.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 05:34:38 -0800 (PST)
-Date:   Fri, 24 Feb 2023 15:34:39 +0200
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-CC:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] ARM: tegra: Add labels to tegra30.dtsi
-User-Agent: K-9 Mail for Android
-In-Reply-To: <50e64bd0-00cc-fd2f-b45e-e7268cd371b8@kapsi.fi>
-References: <20230221175348.15681-1-clamor95@gmail.com> <20230221175348.15681-2-clamor95@gmail.com> <50e64bd0-00cc-fd2f-b45e-e7268cd371b8@kapsi.fi>
-Message-ID: <99DD9F81-682B-4EFF-B665-D6C2CDC5EC75@gmail.com>
+        Fri, 24 Feb 2023 08:37:27 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB424BE90;
+        Fri, 24 Feb 2023 05:37:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677245843; x=1708781843;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aZzsSFvg1UfLqYXxjgJ2eB+4H3YgR+M3br8uQwZVD1w=;
+  b=QwWy4LSgPP8apy192AgnI4HWGoPp6kkVi/dJTy8dr7aBvBS27oIOccVP
+   H6WVpaitfUP5w2+W9ec5HB/CE1U3jVi4SmWdZaPmXFQTboHPJz9ODceio
+   y9Yb93YsiQ1sAJ615EoKA5+u3Dj6Ntd6oyuVVfFEzXpcEgMeM6nu4n2Jj
+   EkoYId4kEmr3upVO7zF8uYcSEa2xM7ZCBBnqB+rSi5/ffRinzcPdnAHlY
+   slkqlz9FKn1Auk7agsCW97kpOnQqG2aF3rTvhO3WxO87EAbxu5nrDrrK5
+   1Y6IZwIsrhBvV1wZou6g7iAMde8rPZAYTYXiNE8rTcgHN2q5QJdRdZE5z
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,324,1669100400"; 
+   d="scan'208";a="138922155"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2023 06:37:22 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 24 Feb 2023 06:37:20 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Fri, 24 Feb 2023 06:37:17 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <linux-riscv@lists.infradead.org>
+CC:     Conor Dooley <conor.dooley@microchip.com>, <conor@kernel.org>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+Subject: [RFC 0/2] RISC-V: enable rust
+Date:   Fri, 24 Feb 2023 13:36:08 +0000
+Message-ID: <20230224133609.2877396-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1475; i=conor.dooley@microchip.com; h=from:subject; bh=aZzsSFvg1UfLqYXxjgJ2eB+4H3YgR+M3br8uQwZVD1w=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMk/9rocvX3IpcHZwESXJXif4QPzG+uS7Z+U/3R8YDjTJC6T zbipo5SFQYyDQVZMkSXxdl+L1Po/Ljuce97CzGFlAhnCwMUpABOxMWRk2LhgbcZ94f3W9/ddLXNZq7 b64bvUiUmuPRJzVryeG7I6K4aRYUr5E82VBzfNVau2eiiQ6377v52T4gt7P5kbB5xL+Wr42QA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,32 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-22 =D0=BB=D1=8E=D1=82=D0=BE=D0=B3=D0=BE 2023 =D1=80=2E 10:56:23 GMT+02:00, =
-Mikko Perttunen <cyndis@kapsi=2Efi> =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=
-=B2(-=D0=BB=D0=B0):
->On 2/21/23 19:53, Svyatoslav Ryhel wrote:
->> From: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere=2Eqmqm=2Epl>
->>=20
->> Add phandle names for memory/I2C/SPI/USB/SDMMC controller nodes to allo=
-w
->> for cleaner device descriptions=2E
->>=20
->> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere=2Eqmqm=2Epl>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail=2Ecom>
->> ---
->
->Hi!
->
->Patches 1 and 2 are missing your Signed-off-by=2E But also, I'd only add =
-labels as they are needed instead of adding them all in one go=2E
->
->Mikko
->
+This is a somewhat blind (and maybe foolish) attempt at enabling Rust
+for RISC-V. I've tested this on Icicle, and the modules seem to work.
+I'd like to play around with Rust on RISC-V, but I'm not interested in
+using downstream kernels, so figured I should try and see what's
+missing...
+I've tagged this as RFC in case I've missed some "WAaaaa you can't do
+this" somewhere :)
 
-Thanks for suggestions=2E I may agree about labels, but it eventually will=
- get to stage when all labels from patches will be added=2E So why not add =
-them in one commit instead of making a dozen more with adding one label a t=
-ime=2E
+Thanks,
+Conor.
 
-Best regards,
-Svyatoslav R=2E
+CC: Miguel Ojeda <ojeda@kernel.org>
+CC: Alex Gaynor <alex.gaynor@gmail.com>
+CC: Wedson Almeida Filho <wedsonaf@gmail.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Gary Guo <gary@garyguo.net>
+CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Nick Desaulniers <ndesaulniers@google.com>
+CC: Tom Rix <trix@redhat.com>
+CC: rust-for-linux@vger.kernel.org
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
+CC: llvm@lists.linux.dev
+
+Miguel Ojeda (2):
+  scripts: generate_rust_target: enable building on RISC-V
+  RISC-V: enable building the 64-bit kernels with rust support
+
+ Documentation/rust/arch-support.rst |  2 ++
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/Makefile                 |  3 ++-
+ scripts/generate_rust_target.rs     | 19 +++++++++++++++++++
+ 4 files changed, 24 insertions(+), 1 deletion(-)
+
+-- 
+2.39.2
+
