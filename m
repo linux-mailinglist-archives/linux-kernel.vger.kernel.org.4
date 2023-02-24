@@ -2,77 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482476A1522
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A306A1525
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjBXDBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S229867AbjBXDCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:02:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBXDB2 (ORCPT
+        with ESMTP id S229849AbjBXDCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:01:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125E55BB8D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 19:01:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE7D061808
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 03:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9DAC433EF;
-        Fri, 24 Feb 2023 03:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1677207687;
-        bh=kvfsn2+ZdZM0fqeRRqjBlVABargZmLOk6XdX/QcR5YA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ijfj1uun6qolEZ68l2ZinNG90dUZqt1z+Xq3U2nTZk3ltok4b+qwRnDUoMHuSqa5u
-         OtO5aG7ZcbzsE19oXzu9QFOLBUCWTrqGisO5O8NyL7raibILaIqASHY+4aBl4smtHh
-         ufl/9b/2v+sQvhKNTsI1VNSx6XsyFSY0idjoKm9I=
-Date:   Thu, 23 Feb 2023 19:01:25 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, joe@perches.com,
-        linux-kernel@vger.kernel.org, rdunlap@xenotime.net
-Subject: Re: [patch 1/1] submitting-patches.rst: suggest a Link: after
- Reported-by:
-Message-Id: <20230223190125.207776ed24553e7608b1a378@linux-foundation.org>
-In-Reply-To: <f41176a6-173b-7b20-c287-f49a503fb0f9@gmail.com>
-References: <20230224014731.ECB6DC433EF@smtp.kernel.org>
-        <f41176a6-173b-7b20-c287-f49a503fb0f9@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 22:02:53 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC844AC;
+        Thu, 23 Feb 2023 19:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677207772; x=1708743772;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=v+OHKdxrw/nM2qX9sYd6aRRdtAU9Je2UuBYcv5BP8wY=;
+  b=ORXA0fGA0ddSDJv3UVLZt/DPKqvSToIcFcAHp1ATnBLMicjl+5JJ/xmG
+   eIf6i/R5AMbNzz9P5/EihzxLf2uh3ArGJ39OD6atbBIlDKvQqdjE1iIDw
+   Vk1s4nP8ykfoMVMGNpoT0IL2swM9wIMZqemueL5LEKIjMKlnNKAeUNvFC
+   euBFwu+mZVjWm8HSvXOn6BA0aJrMmemqUEhRn+0mskmLTkrZLUHStD9B3
+   /Q3MHvZp1io2pUkgG5IrHiH+JGfOtpFFc/psgZ1woA5az3YXqZUXxPous
+   h6rd1geuIfqtUQYZqWzBDAxFZjkzSrinxKsThzkTCg9bRgdKmKKMXOZlp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331117111"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="331117111"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 19:02:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918274147"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="918274147"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 19:02:45 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] MM updates for 6.3-rc1
+References: <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
+        <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
+Date:   Fri, 24 Feb 2023 11:01:49 +0800
+In-Reply-To: <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
+        (Linus Torvalds's message of "Thu, 23 Feb 2023 17:33:37 -0800")
+Message-ID: <87cz5zdaw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 11:59:31 +0900 Akira Yokosawa <akiyks@gmail.com> wrote:
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-> Hi Andrew,
-> 
-> On Thu, 23 Feb 2023 17:47:31 -0800, Andrew Morton wrote:
-> > It seems to be the new way and I find it super useful.
-> > 
-> > Cc: Joe Perches <joe@perches.com>
-> > Cc: "Randy.Dunlap" <rdunlap@xenotime.net>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> 
-> JFYI, Jon has just applied a similar patch from Thorsten:
-> 
->     https://lore.kernel.org/lkml/87ttzc40y9.fsf@meer.lwn.net/T/#t
-> 
->     "Re: [PATCH v1] docs: recommend using Link: whenever using Reported-by:"
-> 
+>
+>  - gcc 12.2.1 quite reasonable complains about some of the new MM code:
+>
+>     mm/migrate.c: In function =E2=80=98__migrate_folio_extract=E2=80=99:
+>     mm/migrate.c:1050:20: note: randstruct: casting between randomized
+> structure pointer types (ssa): =E2=80=98struct anon_vma=E2=80=99 and =E2=
+=80=98struct
+> address_space=E2=80=99
+>
+>      1050 |         *anon_vmap =3D (void *)dst->mapping;
+>           |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+>
+>    and while this doesn't cause a build failure ("note" is different
+> from "warning"), I do think something needs to be done. Gcc is right.
+> This code seems to *work* simply because it's intentionally
+> mis-casting pointers,
 
-Oh, OK, I preferred my version ;)
+Yes.  The mis-casting is intentional.  I just need some place to hold
+the data temporarily (save in __migrate_folio_record() and clear in
+__migrate_folio_extract()).  And "dst" is newly allocated folio.
 
-Whatever, I'll drop this.
+> but I think it needs to be seriously looked at and something done to
+> make gcc happy (and a *LARGE* comment about it).
+
+Sure.  I will check whether there's some way to make gcc happy and add
+some comments about that.  There's some comments for
+__migrate_folio_extract(), but that's isn't enough apprently.)
+
+> That last note is not some merge result, it's purely about the new MM cod=
+e.
+>
+
+[snip]
+
+Best Regards,
+Huang, Ying
