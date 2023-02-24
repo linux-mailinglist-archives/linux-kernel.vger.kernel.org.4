@@ -2,195 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A006A1D99
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FEC6A1D9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjBXOnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S229965AbjBXOnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBXOnA (ORCPT
+        with ESMTP id S229684AbjBXOnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:43:00 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2077.outbound.protection.outlook.com [40.107.220.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C23AD0E;
-        Fri, 24 Feb 2023 06:42:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UsLH843prO2xYejehYMxF56yJqTJEKuzx+OHAdOfqbd3ibXQA2mL0853j448OVH4MO1sBmOVbirtI0BkPeqhwkNK3UhLXajyWplQvIYRVZVwaw6AIgwbCYMc8nUsiauVMK8ALhBkyG3rsWVGuVkdKB1WKV612jvq7uOQTglqli3qooipqZxETvudVdlM5R7xcvQZP+eRBmyh0muHnYuo1UOhtPw2NMIjxoLgm76839Ds05SEtMNWP5XaBgDSIMDvQPEIr/iIny9c/MWNSEy9G0UyZ0sy/DcL/uYKhsnpOpBjfR6i169vc85oyIQLRJL/4cjg9S9rHrklbhTlxY+4ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8TGQ1gNXJZHTcWAqkAfCakaXwrTyIX5rXwXUquMZ2iU=;
- b=TMh2s86kO1trk16E1UUk2VAvVuLaI4v5eoC6GPD3nKSnI/YYF02oqqHal5Ru6WFMqrVlGsCmYsnA4eCZ1V6Pk7TQq64zlAAjT13kctgeuqAikDWZiwNo7zkeSIgdTIMiH+1ySA4aXemXmnhjtPzYpVBDFdEPORN7/Kc71QjATQ9996EvDZELYOyDWzEXyssyaPT8lMyGyJvIIs9FOKqc3SNXQECTtgZCuZqyawbw0sg9elx4T2lLQ9W1RafzDH5bOSV2wotcvj34U/sIFjiswZImytraW8LFh44m9+ZCEVQeaij9CmreLvtlIhnVWVEw3C02e+WyPQeRo0ASXCDiBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8TGQ1gNXJZHTcWAqkAfCakaXwrTyIX5rXwXUquMZ2iU=;
- b=ucMmsEqknRyG4jfZ+YFEXweP3R9A2/cMpApNJPXYYoDUy1YibsdlqjH1aUkKPXMVmhrQb23CMyhr2+rHfHHVYNzB4uv9qWQfzKKl02D12m1/AUdC9Flz/e1zq6xcD5ioWyUlhVY/+PCiWzJNPY/kHjTaZsJqicIth2Kyu9ksVxUdg7WpfeFhSxyGJbMerUGbH8a7ZLafIOFCUkj8zB2CbinSvzkQOPRKH/FRFEk1F6XkxCncbnG2jlXNwqq4IZoYpglWN8MNuvH3x1mNM+YzHuO7AFYEMbaPKzj2DszMDyeXgXiXdEVEe0n6pR/L5syBcqd4kLjIm4ZftSXl7IiEdw==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by PH7PR12MB8053.namprd12.prod.outlook.com (2603:10b6:510:279::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
- 2023 14:42:56 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::5f35:2f2d:94a4:f7c3]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::5f35:2f2d:94a4:f7c3%4]) with mapi id 15.20.6134.019; Fri, 24 Feb 2023
- 14:42:56 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: RE: [PATCH v4 1/2] gpio: gpio-mlxbf3: Add gpio driver support
-Thread-Topic: [PATCH v4 1/2] gpio: gpio-mlxbf3: Add gpio driver support
-Thread-Index: AQHZQxaSlkLDlqQj4USzupFOvdT5/67TwvwAgAeH+DCAARyQgIAAhNPAgAAP7gCAAC3a0IAAuciAgABPpIA=
-Date:   Fri, 24 Feb 2023 14:42:56 +0000
-Message-ID: <CH2PR12MB3895124032E3276B54570676D7A89@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <cover.1676042188.git.asmaa@nvidia.com>
- <cover.1676668853.git.asmaa@nvidia.com>
- <28f0d670407c127614b64d9c382b11c795f5077d.1676668853.git.asmaa@nvidia.com>
- <CAHp75VdeVpjzg5Y_4Y+Ke9=3wog28vUBN4Fd8zxfa8dWGrqUUA@mail.gmail.com>
- <CH2PR12MB3895520749883D912E5021F1D7AA9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <CAHp75Vc+iSt2XvpOYzwZnzX7Qg013e-E27CPjPaO-QmtferWVg@mail.gmail.com>
- <CH2PR12MB389509F68E6AFE776C5B0AC6D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <CAHp75VdoUDMvVk1uMQcAKQteL6gbYGpoKpFn96ysdS81LjPGCQ@mail.gmail.com>
- <CH2PR12MB389530C5929100CB54396CF5D7AB9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <CAHp75VfZ1r_sNus_qMYumja3YrJawA6hRHUbi-uPFUprorQ_Kw@mail.gmail.com>
-In-Reply-To: <CAHp75VfZ1r_sNus_qMYumja3YrJawA6hRHUbi-uPFUprorQ_Kw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|PH7PR12MB8053:EE_
-x-ms-office365-filtering-correlation-id: 22ca9da6-8fb3-492c-7b56-08db16756ac1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jFdv1crX7y3y+jPakAOqIgbyXRinzziNYnk4aP8prDHEXg/DVxYq5Gku4Xk1ABD+vVD8UO82KOXGzW+q5fo84ztw422fH0gzYawVEE3j5mz/TfPNb+7JP7lW0KIrkgQgkz+DT+gtiEscJlUNDaHXDznNr91jD4vRHHa5fLkv0MPBX+olPEtZ3TKBtFVJhUhhkmWQCdxkb2ikmbReswi1r1J+aFf0+6dExIJrxI2WaPHSyPSCiRf3FY6ceCOCWjvNCHiN6QvvghEPjwRXxVkJ3GMSZTTvlNJFTVSm/6p51Esu3JkrjyJw3LkcB6VOLUUqzmbiO/AuP28I5NwM04lZ+ovETagGu3TENGKUJ4uv53XMLAqOipR3NUnZ/gStsf9fMWMy+fDbZM1J9QcwgiYr9T2RnpuBmYDYJ9EYsw8tklYPrpIZSnQO1ZtdFVlRHUtxU02G6Exvg4X8Y1lnZIf0JwDQhVl+rZi0WDrWrMcYuvAF5jUfdRZBZyFQCweHQzezCxUzPVAEtBYRGuv0A9nw5zxfXKBvGuvkkqQYwtjo0w4H1iey3f5As0+7rVgBYihsNavCH23+7toVL/9EdSASXStfFZ5IW3XE+CmR4Ku44renx9mvCkAQpVZoOEcHGV9pVZOhpJavpvqG+tjAluEGAgVqVAhYYZp0VmHr0rcfU+62LQ+5Tas30ckPObacawHHFyjbr9F62WgDChnKi5oQGQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(346002)(376002)(39860400002)(136003)(451199018)(2906002)(83380400001)(9686003)(38070700005)(26005)(186003)(122000001)(38100700002)(8676002)(76116006)(66946007)(64756008)(66476007)(66556008)(66446008)(6916009)(316002)(4326008)(52536014)(5660300002)(8936002)(41300700001)(33656002)(6506007)(55016003)(478600001)(86362001)(54906003)(7696005)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b01HZVlnYjJNYjFlendjUDBYdHJoNEtkVisxV3JtZFBQU1YwdWpLbElNaHZE?=
- =?utf-8?B?Z2p1Vy9GczdhNVh1MDRiNzFmZDJCNWhZT1g0dHhWbnRJZXUzTkxVbjJuK3Uy?=
- =?utf-8?B?L2FtdTlOWi9FTlNJWHU0Wi9jYnRTOEV1ajNsMnBZNnhzSjFKN1M0eGIxc3Iw?=
- =?utf-8?B?QkF6ZHRWVjFTWC9INmJlR00ydDlxeVBuUGdDc2hDaEtUNDYzZlc1RVVEMWdO?=
- =?utf-8?B?akVzTnRERVZ2RkpTZWs1L3dJWjV1ZUIwRVNSTWNRTnNhK0lQSko0VEFpZTRa?=
- =?utf-8?B?Rm1wK2Q2b2VYaGFGM3FEOE4zb1p6djVtZWcwUjFpZEFGQ0g0Z1N2TEM5dXpa?=
- =?utf-8?B?VmJQRU0xZHJzZ3NwWDhpYlY2MVY2SnFKdXZVZ2xEZW55Q1JiNndQTXZuYVFE?=
- =?utf-8?B?Q2MwLys5Z2k3MDM4WDJua0pDLzQ3NElaTFZKVFBJM2s4QkE1ck9yVmdjdGs4?=
- =?utf-8?B?RG0ydGoxVUIySWttWXVYVnN2ZDROemJ4amhROFdjb0pNSFZHWVlrUDVGbldi?=
- =?utf-8?B?dk1nL0l3YzdpNDB5aFdLWXp4bnlxcnBZQTNPSVRSOTlEYmREN1M2OFZlWnh0?=
- =?utf-8?B?emJaN2JVYnFWazJvZzRybXVjZ3RURDAxV21uWXFtcnJNVDVtKzdqeGRJWHVO?=
- =?utf-8?B?MVpBaStoRjBISHZ6WXJpTUFrWGlpdTNkRnNkSUVMZDFNK3QxZ05kajNMdXIv?=
- =?utf-8?B?U2VUM2krYmhWQ0N2VldWZWMvN29nbXUxTTN5a1l1dW9DL21hTUNpUGgzMUV1?=
- =?utf-8?B?QUdHY2dtaXhTWGFlYjkvKy9idDRoU0x4YnpPWlNRcGtwdytuL3hzUFIvUSsr?=
- =?utf-8?B?d1JjOEgyWEMxVlUrK3hvVGE3UWFDTk10ODN3WWxiemhTVFBscFBQN21RQTNX?=
- =?utf-8?B?eW5XOW9wWnlTaDBkWG1XSmJtVVVhbWczNlVpbm0yV3ltbmpYbjZXazJHT3J5?=
- =?utf-8?B?Q1VaQktWaEhZcXpYaWtESW5ocGVTVUI0azRyZ0E2ZEIreEZJampUMDJnYmJw?=
- =?utf-8?B?UE5jc1BuQ2llYXIyRFJaemJvVzBEZVJHbkxaNmJ1VVBVNTJteXl0V05YK2I5?=
- =?utf-8?B?b2tHZTM4dHRRSlNYdDhsSmRxR0wvajBzdzIxd1VnR1drM3J4SnFKaXUxMXhG?=
- =?utf-8?B?aEZBZnFVc1lLLzNiVnpTUjJqWW5PbGRrOEJTMXRWUHJaYkdFRmJGR1d0VDFD?=
- =?utf-8?B?RFFXd2d5WTZaL2hZcHlUNEJENnVxa3dueWtnVWdEQWZ3R0lOYU9PTjJoUm1F?=
- =?utf-8?B?OWcvZGgxRzIzRnBmODNSSkVZVFQ0Ump5L2ozeXJlaTVwbTNRNzZnTDN6NnZr?=
- =?utf-8?B?UWRuYU1RRXo1SCtOdG4yaWJWNFgwajRlQnNhWWhBcGliOU1MMXRxVDBOUG5v?=
- =?utf-8?B?WVVKQUZYbXQ2U0J4MndMVWdlNXFGTlFpNEpKYTlRTGJjTDQyYmtCVkFwRXVh?=
- =?utf-8?B?YXBEbUs1WFJmaFpSK3pTeUk0ZTRPaE9HZC9OUUdZMmRVbmp3eHhOTE9PcEtU?=
- =?utf-8?B?a0pYLytSSnJlOGJqSzBwWE5IQW1UZnI3Vkdsb3BndnRGQWZqSzd0T2hyckIw?=
- =?utf-8?B?eWE2T1FQWTlZN09ITFdYamJSYlBjOThMRzkyU0hEeUR2aktzOFRTekQ5Rk5m?=
- =?utf-8?B?dU1MSmMya1RzRlBhdXU3Y0kwYUd0b24wYzZCYjBRSWRheHFNUTZNam1wbUho?=
- =?utf-8?B?K3FoZG1zbnlYOUt2dWJ1dkFpamw2WjI5dVFJRW9RVS9zdGhBbndaYWdDbk9w?=
- =?utf-8?B?a3o3TU5VMmZXZDZYYjNPQ2FEV2FIbno1SkVRT3VHZnBrY2hjZW4yOEswallY?=
- =?utf-8?B?dk9pWEFMcTNlaGRYckpCZWs5R0srSE9GeVFRcXcxeEc5Q1ZPbitoUExaLzhC?=
- =?utf-8?B?UlBQdS9rOVpJakUwWDUrc1JaMFoybE5McFVyWk0zZVJOay8yb1F3cnhjMXZQ?=
- =?utf-8?B?YWQ2K3V4dyt4U3BxUWI3N3NUdzFIemJNWjRpbnEzKzBHVXBnRHdZWk1LeVc1?=
- =?utf-8?B?Q3JYRk8wcXpXN2l2SmVLZ0crSGY3cG1uQjRidTYxejRqMEZrTFpaMDBwU1VX?=
- =?utf-8?B?WDVPSUlnN3RuY3F4MTBudnVCOUlTTjUxYjIxODNtWndoNlRvVlRrSFQycHdi?=
- =?utf-8?Q?RCNQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 24 Feb 2023 09:43:42 -0500
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD7F10268
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:43:40 -0800 (PST)
+Received: by mail-io1-f79.google.com with SMTP id a21-20020a5d9595000000b0074c9dc19e16so3730954ioo.15
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:43:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1vhNhDtCJAHygFr5mhS/Wz48xvVC0K933eE1y561LX8=;
+        b=Rr8a85gaMwGxVe1vkcFIP+iu8YrgtF9iTWYtFTqXkUqfZoqn/c00Kka4G2OKNGdSZP
+         1RJ8liLPv9MUe/CBbROrlz1jYmYJV0Q/6X2EvB2GZ25gcXEZnt70rFimDMHsRM5Zup8R
+         GUck68FHg/3+74XbivuOwCU/ZC+qkydeu8cSGNxcT88uOdRFe8PsgKVbbhkg1wYvvx3e
+         guDW1TRx93VltpJmZDD43y0jixS1ChnJL4/C3yzJmFLkeMQT5IZ71pFmfyZHskfn3YHz
+         YMlZ60y/T34cbxLGVjdeP63bG5Nirw8YiKhSWT71vmg+KidsQul+cfNRHf1MjcHxXYiO
+         FGYQ==
+X-Gm-Message-State: AO0yUKWK5kHdoEFlFQUC4QvgM0F8JFsezP3BsrlQyA15CUcdFfkSHx8O
+        Bv7th1sRUZQJ3Q6UpSeliburKLBrZdCz5QbtQ7HOB/gFDlqJ
+X-Google-Smtp-Source: AK7set/hfTFqfGmln4NGCIwq8OaziDx+SmPi49INxJIjpCaRZalddl8K9A7Zc7kyaAVbwlAvG0BDWvnlnm/zIT6BzwEBPOGoyhwn
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22ca9da6-8fb3-492c-7b56-08db16756ac1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 14:42:56.0950
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FggUGL5413Hbn79aEYaB2up/1p+iwhNVmVSlW+d+8HMu4Yqeyn0VY4SNBNXWulnjMu8Y9iNV71Rzbls5NCbqQw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8053
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:b1c7:0:b0:3a7:e46f:ffc with SMTP id
+ u7-20020a02b1c7000000b003a7e46f0ffcmr5315145jah.0.1677249819765; Fri, 24 Feb
+ 2023 06:43:39 -0800 (PST)
+Date:   Fri, 24 Feb 2023 06:43:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b4f0d505f5732704@google.com>
+Subject: [syzbot] [kernel?] WARNING: locking bug in call_usermodehelper_exec_work
+From:   syzbot <syzbot+ed63f5009044b5dc16ba@syzkaller.appspotmail.com>
+To:     boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
+        longman@redhat.com, mingo@redhat.com, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ID4gPiA+ID4gQWggdGhhdOKAmXMgbXkgYmFkLiBUaGUgcHJvcGVydHkgc2hvdWxkIGJlIGNh
-bGxlZCAibmdwaW9zIiBsaWtlDQo+ID4gPiA+ID4gPiBpbiB0aGUgRFQNCj4gPiA+ID4gPiBkb2N1
-bWVudGF0aW9uLiBXaWxsIGZpeC4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IEFuZCB3aHkgZG8geW91
-IG5lZWQgaXQ/IFdoYXQncyBhIGNvcm5lciBjYXNlIHRoYXQgdGhlIEdQSU8NCj4gPiA+ID4gPiBs
-aWJyYXJ5IGRvZXNuJ3QgaGFuZGxlIHlldD8NCj4gPiA+ID4NCj4gPiA+ID4gV2UgaGF2ZSAyIGdw
-aW9jaGlwcywgZ3Bpb2NoaXAgMCBzdXBwb3J0cyAzMiBncGlvIHBpbnMgYW5kIGdwaW9jaGlwDQo+
-ID4gPiA+IDENCj4gPiA+IHN1cHBvcnRzIG9ubHkgMjQgcGlucy4NCj4gPiA+ID4gSWYgSSByZW1v
-dmUgdGhlIGxvZ2ljIGZyb20gZ3Bpby1tbHhiZjMuYywgdGhlIGdwaW9saWIuYyBsb2dpYyB3aWxs
-DQo+ID4gPiA+IGNvcnJlY3RseSBzZXQNCj4gPiA+IHRoZSBuZ3Bpb3MgPSAzMiBmb3IgZ3Bpb2No
-aXAgMCBidXQgd2lsbCB3cm9uZ2x5IHNldCBuZ3Bpb3M9MzIgZm9yIGdwaW9nY2hpcA0KPiAxOg0K
-PiA+ID4NCj4gPiA+IFNvLCBlaXRoZXIgeW91IG5lZWQgdG8gaGF2ZSB0d28gZW50cmllcyBpbiBE
-VCBwZXIgY2hpcCBvciBuZ3Bpb3Mgc2hvdWxkIGJlDQo+IDU2Lg0KPiA+ID4NCj4gPiBJIGFscmVh
-ZHkgaGF2ZSAyIGVudHJpZXMgaW4gbXkgQUNQSSB0YWJsZSwgaW4gdGhlIGZpcnN0IGVudHJ5LCBu
-Z3Bpb3MgPSAzMiBhbmQNCj4gaW4gdGhlIHNlY29uZCBlbnRyeSBuZ3Bpb3MgPSAyNC4NCj4gDQo+
-IENhbiB5b3Ugc2hvdyB0aGUgRFNEVCBleGNlcnB0IG9mIHRoaXMgZGV2aWNlPyAoQWxzbyBpbmNs
-dWRpbmcgdGhlIHBpZWNlcyBmb3INCj4gcGluIGNvbnRyb2wpDQoNCk91ciBBQ1BJIHRhYmxlcyBh
-cmUgaW50ZXJuYWw6DQoNCkRldmljZShHUEkwKSB7DQogICAgICAgIE5hbWUoX0hJRCwgIk1MTlhC
-RjMzIikNCiAgICAgICAgTmFtZShfVUlELCBaZXJvKQ0KICAgICAgICBOYW1lKF9DQ0EsIDEpDQog
-ICAgICAgIE5hbWUoX0NSUywgUmVzb3VyY2VUZW1wbGF0ZSgpIHsNCiAgICAgICAgICAvLyBmb3Ig
-ZndfZ3Bpb1swXSB5dSBibG9jaw0KICAgICAgICAgTWVtb3J5MzJGaXhlZChSZWFkV3JpdGUsIDB4
-MTM0MDExMDAsIDB4MDAwMDAwODApDQogICAgICAgICAvLyBmb3IgeXVfZ3Bpb19jYXVzZXJlZzAg
-YmxvY2sNCiAgICAgICAgIE1lbW9yeTMyRml4ZWQoUmVhZFdyaXRlLCAweDEzNDAxYzAwLCAweDAw
-MDAwMDIwKQ0KICAgICAgICAgSW50ZXJydXB0KFJlc291cmNlQ29uc3VtZXIsIEVkZ2UsIEFjdGl2
-ZUhpZ2gsIFNoYXJlZCkNCiAgICAgICAgICAgeyBCRl9SU0gwX1lVIH0NCiAgICAgICB9KQ0KICAg
-ICAgIE5hbWUoX0RTRCwgUGFja2FnZSgpIHsNCiAgICAgICAgIFRvVVVJRCgiZGFmZmQ4MTQtNmVi
-YS00ZDhjLThhOTEtYmM5YmJmNGFhMzAxIiksDQogICAgICAgICBQYWNrYWdlKCkgew0KICAgICAg
-ICAgICBQYWNrYWdlICgpIHsgIm5ncGlvcyIsIDMyIH0sIC8vIE51bWJlciBvZiBHUElPIHBpbnMg
-b24gZ3BpbyBibG9jayAwDQogICAgICAgICAgIFBhY2thZ2UgKCkgeyAiZ3Bpby1yZXNlcnZlZC1y
-YW5nZXMiLCBQYWNrYWdlICgpIHs1LCAxLCA3LCAzLCAxMSwgMzF9fSwNCiAgICAgICAgIH0NCiAg
-ICAgICB9KQ0KICAgICB9DQogRGV2aWNlKEdQSTEpIHsNCiAgICAgICBOYW1lKF9ISUQsICJNTE5Y
-QkYzMyIpDQogICAgICAgTmFtZShfVUlELCAxKQ0KICAgICAgIE5hbWUoX0NDQSwgMSkNCiAgICAg
-ICBOYW1lKF9DUlMsIFJlc291cmNlVGVtcGxhdGUoKSB7DQogICAgICAgICAvLyBmb3IgZndfZ3Bp
-b1sxXSB5dSBibG9jaw0KICAgICAgICAgTWVtb3J5MzJGaXhlZChSZWFkV3JpdGUsIDB4MTM0MDEx
-ODAsIDB4MDAwMDAwODApDQogICAgICAgICAvLyBmb3IgeXVfZ3Bpb19jYXVzZXJlZzEgYmxvY2sN
-CiAgICAgICAgIE1lbW9yeTMyRml4ZWQoUmVhZFdyaXRlLCAweDEzNDAxYzIwLCAweDAwMDAwMDIw
-KQ0KICAgICAgIH0pDQogICAgICAgTmFtZShfRFNELCBQYWNrYWdlKCkgew0KICAgICAgICAgVG9V
-VUlEKCJkYWZmZDgxNC02ZWJhLTRkOGMtOGE5MS1iYzliYmY0YWEzMDEiKSwNCiAgICAgICAgIFBh
-Y2thZ2UoKSB7DQogICAgICAgICAgIFBhY2thZ2UgKCkgeyAibmdwaW9zIiwgMjQgfSwgLy8gTnVt
-YmVyIG9mIEdQSU8gcGlucyBvbiBncGlvIGJsb2NrIDENCiAgICAgICAgICAgUGFja2FnZSAoKSB7
-ICJncGlvLXJlc2VydmVkLXJhbmdlcyIsIFBhY2thZ2UgKCkgezAsIDIxfX0sDQogICAgICAgICB9
-DQogICAgICAgfSkNCiAgfQ0KDQogICAgRGV2aWNlKFBJTjApIHsNCiAgICAgIE5hbWUoX0hJRCwg
-Ik1MTlhCRjM0IikNCiAgICAgIE5hbWUoX1VJRCwgWmVybykNCiAgICAgIE5hbWUoX0NDQSwgMSkN
-CiAgICAgIE5hbWUoX0NSUywgUmVzb3VyY2VUZW1wbGF0ZSgpIHsNCiAgICAgICAgLy8gZm9yIGZ3
-X2dwaW9bMF0gYW5kIGZ3X2dwaW9bMV0geXUgYmxvY2tzDQogICAgICAgIE1lbW9yeTMyRml4ZWQo
-UmVhZFdyaXRlLCAweDEzNDAxMTAwLCAweDAwMDAwMTAwKQ0KICAgICAgfSkNCiAgICAgfQ0KDQo+
-IA0KPiA+IEdwaW9jaGlwX2FkZF9kYXRhX3dpdGhfa2V5cyBvbmx5IHJlYWRzIHRoZSBuZ3Bpb3Mg
-cHJvcGVydHkgaWYgKG5ncGlvcw0KPiA+ID09IDApIHdoaWNoIGlzIG5vdCB0aGUgY2FzZSB3aGVu
-IGJncGlvX2luaXQgaXMgY2FsbGVkLiBiZ3Bpb19pbml0IHVzZXMgInN6Ig0KPiBhcmd1bWVudCB0
-byBwb3B1bGF0ZSB0aGUgbmdwaW8gaW4gYmdwaW9faW5pdCwgd2hpY2ggaXMgbm90IHdoYXQgd2Ug
-d2FudC4NCj4gDQo+IE1heWJlIGJncGlvX2luaXQoKSBpcyBub3QgYSBnb29kIEFQSSBmb3IgeW91
-ciBjYXNlPw0KDQoNCkF0IHRoZSBtb21lbnQsIGJncGlvX2luaXQgaGFuZGxlcyBhbGwgdGhlIGRp
-cmVjdGlvbiBpbi9vdXQgZ2V0L3NldCBncGlvIHZhbHVlIGZvciB1cy4NClNvIEkgY2FuIGVpdGhl
-ciByZW1vdmUgYmdwaW9faW5pdCBzbyB0aGF0IHdlIGdldCB0aGUgY29ycmVjdCBuZ3Bpb3MgcHJv
-cGVydHksIGJ1dCB3aWxsIGhhdmUgdG8gZGVmaW5lIGdldF9ncGlvLCBzZXRfZ3BpbywgZGlyIGlu
-IGFuZCBkaXIgb3V0Lg0KT3IgSSBjYW4ga2VlcCBiZ3Bpb19pbml0IGFuZCBkZXZpY2VfcHJvcGVy
-dHlfcmVhZF91MzIgaW4gdGhlIGdwaW8tbWx4YmYzLmMgZHJpdmVyLg0KUGxlYXNlIGxldCBtZSBr
-bm93IHdoaWNoIGFwcHJvYWNoIHlvdSBwcmVmZXIuDQo=
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    2d3827b3f393 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b1d290c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606ed7eeab569393
+dashboard link: https://syzkaller.appspot.com/bug?extid=ed63f5009044b5dc16ba
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fd94d68ff17d/disk-2d3827b3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f304fbef0773/vmlinux-2d3827b3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/74eb318f51b0/Image-2d3827b3.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ed63f5009044b5dc16ba@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 5159 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4729 [inline]
+WARNING: CPU: 0 PID: 5159 at kernel/locking/lockdep.c:231 __lock_acquire+0x2c0/0x2f48 kernel/locking/lockdep.c:5005
+Modules linked in:
+CPU: 0 PID: 5159 Comm: kworker/u4:11 Not tainted 6.2.0-rc7-syzkaller-17907-g2d3827b3f393 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Workqueue: events_unbound call_usermodehelper_exec_work
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+pc : __lock_acquire+0x2c0/0x2f48 kernel/locking/lockdep.c:5005
+lr : hlock_class kernel/locking/lockdep.c:231 [inline]
+lr : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+lr : __lock_acquire+0x2a8/0x2f48 kernel/locking/lockdep.c:5005
+sp : ffff80002054bb00
+x29: ffff80002054bbe0 x28: ffff0000e74b2440 x27: ffff80000d2c49a4
+x26: ffff0000e74b2420 x25: 0000000000000001 x24: 0000000000000000
+x23: 0000000000000001 x22: 0000000000000000 x21: ffff0000e74b23d0
+x20: 0000000000000002 x19: aaaaaaaaaaa31957 x18: 0000000000000000
+x17: 000000000000ba7e x16: 0000000000000001 x15: ffff80000dbd2118
+x14: ffff0000e74b1a00 x13: 0000000000000012 x12: ffff0000e74b1a00
+x11: ffff80000dd94158 x10: 0000000000000000 x9 : da680f1092402900
+x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000bf650d4
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
+Call trace:
+ check_wait_context kernel/locking/lockdep.c:4729 [inline]
+ __lock_acquire+0x2c0/0x2f48 kernel/locking/lockdep.c:5005
+ lock_acquire+0x164/0x334 kernel/locking/lockdep.c:5668
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x68/0x88 kernel/locking/spinlock.c:162
+ complete+0x24/0x90 kernel/sched/completion.c:32
+ call_usermodehelper_exec_work+0x128/0x17c
+ process_one_work+0x3ac/0x9d0 kernel/workqueue.c:2289
+ worker_thread+0x340/0x608 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+irq event stamp: 115998
+hardirqs last  enabled at (115997): [<ffff80000bf56d78>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:84 [inline]
+hardirqs last  enabled at (115997): [<ffff80000bf56d78>] exit_to_kernel_mode+0xe8/0x118 arch/arm64/kernel/entry-common.c:94
+hardirqs last disabled at (115998): [<ffff80000bf6a910>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
+hardirqs last disabled at (115998): [<ffff80000bf6a910>] _raw_spin_lock_irqsave+0x2c/0x88 kernel/locking/spinlock.c:162
+softirqs last  enabled at (115906): [<ffff80000bbed718>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
+softirqs last  enabled at (115906): [<ffff80000bbed718>] ieee80211_ibss_work+0x170/0x9d8 net/mac80211/ibss.c:1701
+softirqs last disabled at (115904): [<ffff80000bbed610>] spin_lock_bh include/linux/spinlock.h:355 [inline]
+softirqs last disabled at (115904): [<ffff80000bbed610>] ieee80211_ibss_work+0x68/0x9d8 net/mac80211/ibss.c:1690
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel NULL pointer dereference at virtual address 00000000000000b8
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=00000001274f6000
+[00000000000000b8] pgd=0800000127562003, p4d=0800000127562003, pud=0800000109882003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 5159 Comm: kworker/u4:11 Tainted: G        W          6.2.0-rc7-syzkaller-17907-g2d3827b3f393 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Workqueue: events_unbound call_usermodehelper_exec_work
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+pc : __lock_acquire+0x2e0/0x2f48 kernel/locking/lockdep.c:5005
+lr : hlock_class kernel/locking/lockdep.c:231 [inline]
+lr : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+lr : __lock_acquire+0x2a8/0x2f48 kernel/locking/lockdep.c:5005
+sp : ffff80002054bb00
+x29: ffff80002054bbe0 x28: ffff0000e74b2440 x27: ffff80000d2c49a4
+x26: ffff0000e74b2420 x25: 0000000000000001 x24: 0000000000000000
+x23: 0000000000000001 x22: 0000000000000000 x21: ffff0000e74b23d0
+x20: 0000000000000002 x19: aaaaaaaaaaa31957 x18: 0000000000000000
+x17: 000000000000ba7e x16: 0000000000000001 x15: ffff80000dbd2118
+x14: ffff0000e74b1a00 x13: 0000000000000012 x12: ffff0000e74b1a00
+x11: ffff80000dd94158 x10: 0000000000000000 x9 : 00000000000c1957
+x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000bf650d4
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
+Call trace:
+ hlock_class kernel/locking/lockdep.c:222 [inline]
+ check_wait_context kernel/locking/lockdep.c:4730 [inline]
+ __lock_acquire+0x2e0/0x2f48 kernel/locking/lockdep.c:5005
+ lock_acquire+0x164/0x334 kernel/locking/lockdep.c:5668
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x68/0x88 kernel/locking/spinlock.c:162
+ complete+0x24/0x90 kernel/sched/completion.c:32
+ call_usermodehelper_exec_work+0x128/0x17c
+ process_one_work+0x3ac/0x9d0 kernel/workqueue.c:2289
+ worker_thread+0x340/0x608 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+Code: 910461ef 9002dfeb 9105616b b9400389 (3942e118) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	910461ef 	add	x15, x15, #0x118
+   4:	9002dfeb 	adrp	x11, 0x5bfc000
+   8:	9105616b 	add	x11, x11, #0x158
+   c:	b9400389 	ldr	w9, [x28]
+* 10:	3942e118 	ldrb	w24, [x8, #184] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
