@@ -2,123 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630436A1513
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 487B66A151C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBXCuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S229836AbjBXCzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBXCuB (ORCPT
+        with ESMTP id S229470AbjBXCzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:50:01 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2114.outbound.protection.outlook.com [40.107.117.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9535839CC7;
-        Thu, 23 Feb 2023 18:49:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xk4PkDtl6w0D0kw45fFJigrjryhxiGSlIlCmOMqTuX4548S0ctLz6EtjvZ+TXCHB8bBIRlckRp0c/ijTqTSks2AamEzLre4VctP6G3B/0EPFAtO7bCkTMHRsm6EMF1BThLheZ90nbbPnWbA7lBl/VByR306SZTpwsTwabvrElT39W2FV7BB/WygbG5w6hUlE1ZUVibUUj5QkQ3HKGwGeuJseSqsb/fTpYiZN67PodaYzmJeUtkkYJTMBn/UT6oreDTMDMQ6RC4z2/xJsImVvZyEoR7TM33j6hCLKw3tBfyFyvFkSdsgph6SRAJG0ht3SoJGex48ZGJ2cW6DoUfD6HA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oCtGoQIfo10m6T50qM/hk3IgQOWrRcdBhUexp+R+X+Y=;
- b=NJVHDb45knuksmPhpdtEzNBikzdAdaPuMQmBXDgWedPXbenNEAiR/3LtCw7MYzz2iJ3R6/XcHqfXcP+8dUhEOmJRMSMXirEG/i+PD5o5gPSz52NP2XnErjdqvOFkilZUe7buEH7aghjlaCP8A47Ua3RdI7UhH66SMyreSqnq3gaG+ShlN+kygGHROgPg7fmZ9pi5DIoSljz1L8Y2q7DnQGBGWBywlJeFZbKg6mywucN64TvrhToc4ux7zZUBnlZdROrb+HZhLVNfZCP0Wygv71xqLnwbN55ObOsMgJ1Wsgc0tfQ/BdM+nZNfrW8f5/f0UBw0cna0bLvBWxW2vJpknw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from PSAPR03MB6329.apcprd03.prod.outlook.com (2603:1096:301:5a::9)
- by SI2PR03MB5241.apcprd03.prod.outlook.com (2603:1096:4:ed::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.21; Fri, 24 Feb 2023 02:49:14 +0000
-Received: from PSAPR03MB6329.apcprd03.prod.outlook.com
- ([fe80::f5b8:7820:4802:70fe]) by PSAPR03MB6329.apcprd03.prod.outlook.com
- ([fe80::f5b8:7820:4802:70fe%8]) with mapi id 15.20.6134.024; Fri, 24 Feb 2023
- 02:49:13 +0000
-Message-ID: <4deec176-135f-f49f-0b04-f5b45ec691cb@amlogic.com>
-Date:   Fri, 24 Feb 2023 10:49:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] clk: meson: vid-pll-div: added meson_vid_pll_div_ops
- support to enable vid_pll_div to meet clock setting requirements, especially
- for late chip
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
-References: <20230223062723.4770-1-yu.tu@amlogic.com>
- <1jv8jsoerm.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1jv8jsoerm.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SGXP274CA0019.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::31)
- To PSAPR03MB6329.apcprd03.prod.outlook.com (2603:1096:301:5a::9)
+        Thu, 23 Feb 2023 21:55:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096003BDB6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:55:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PNDyt50sHz4x5Q;
+        Fri, 24 Feb 2023 13:55:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677207320;
+        bh=/2xLNg0+9yoUgCwDEfgWLF/ybcil9mGDLaS3H3wjJ7Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=deBXuCj5IFdJjqt30dq8rmNNLGe50GjAcPToXFxIO08NEDPVgTb/vDZpT+wkXak0P
+         5SXWYcgmldCnkcDpjdLBHG6QptbQksMT/dz4bhQH/WpQKekdzYwkaFZsC3Oj/CsP+u
+         34cNNDWByJlGzc+fOUawkfjPZ2LncKyqY0j3twjNJhYkw4ZYQV9NtQzbdYH3pxRi3l
+         zrBHMZsiiY0yYTmX7eSCIcCiJu6P5sdGu9Jo6LFhRM+6OH9wCtF5Aj1Ke+00oFLpJC
+         Se5SwtqnA+0Nm2Jlkc2ZuAqEk6dwYQ+45YU5tBbIaatlPiqraqoaTEd+mU0F1nIYOL
+         LOqOp0xjyWskQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ajd@linux.ibm.com, anders.roxell@linaro.org, bgray@linux.ibm.com,
+        christophe.leroy@csgroup.eu, fbarrat@linux.ibm.com,
+        ganeshgr@linux.ibm.com, geoff@infradead.org,
+        gregkh@linuxfoundation.org, hbathini@linux.ibm.com,
+        jpoimboe@kernel.org, kjain@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mathieu.desnoyers@efficios.com, nathan@kernel.org,
+        nathanl@linux.ibm.com, nayna@linux.ibm.com, npiggin@gmail.com,
+        pali@kernel.org, rmclure@linux.ibm.com, ruscur@russell.cc,
+        skhan@linuxfoundation.org, song@kernel.org,
+        sourabhjain@linux.ibm.com, sv@linux.ibm.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.3-1 tag
+Date:   Fri, 24 Feb 2023 13:55:18 +1100
+Message-ID: <87v8jrai21.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PSAPR03MB6329:EE_|SI2PR03MB5241:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ebcf4fc-5c4e-4fdf-e40f-08db1611b5a2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ka0qC7skySaSxl93oQSmGyRmTZu6YZGHHr0LFQUTV8ASyaXKFSofAxebRoncn88kO6f8oHgvhagOeDMKokFpvc8Ku4nKb9KNHdgVGIY2T0mrTqQnAkBId3moM6VJESbvW6r8ULBasmdSG8qjQnrGqlnSwCVw5gNDUplheuGU1GVhpGyFcKEG6sV/xuI1QpiI/kYn8svax5vfWp/4AQyzRcDRPKSUKG8ehzAHoVAaj9+69jp58jnloY+UJTEQEEKPCY6oZt7rR4A+HygY4IlN3zhTpYcd6jyEb1mznkZ2ambf6alXzfbCqWOzO8aC/lM6QByu+v2n3NjVDg167JS4n+blVdRu3/Q5c0pD5vnQ+L6jUI8LeYGu5FSqVb65cKudxXBa0wsjjva+oIG7dStqrs5scewIFvKlpapEZ7eSgz1zNRrJdmRJjhV5DrUag9OZxKXIRkl/VKMYUg497F5edJfNOM9OfI722fyCtraRADH73E8UEGR5sPODjnK2Zj1xuGpRWrXxSEkkJSTJ4i2UFernkzwp94neE+Hx4OjVyB/PoKEyulqdetVEnM2f6Pa9Mqm6SO8I58mDS+OvmgmMiFaxl3ipQz4FDCFxce9Ls0OlNw31wPnHezfcQVWsSdrsIW4Ljn936wyMqX6koe8A7rCBzqhhqgAYTvpXoOeT+fNgCucLyYw+X9SdNCS0wgoTvrQKIL31dQBL6bYFqegfK+AE7dZsDCDqVKMgb9fKB+11nV5AchEl1ECXZZKCQqpg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR03MB6329.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(346002)(396003)(39850400004)(376002)(451199018)(6506007)(6512007)(53546011)(86362001)(316002)(44832011)(31696002)(5660300002)(66556008)(66946007)(66476007)(8936002)(7416002)(4326008)(8676002)(2906002)(6486002)(38100700002)(2616005)(478600001)(31686004)(6666004)(26005)(83380400001)(110136005)(107886003)(41300700001)(186003)(36756003)(921005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUxRZGk2UUF2U3RZc3BIbjE2OU4vci9yeXFEakdGZUY3YTZsbE8zcDlpWXhN?=
- =?utf-8?B?eEs1ZWZnQmU4SERHWFNCdElwV1NFTm8vN0tCYUNlTW1LTlZwdkxXWUtTdTZ1?=
- =?utf-8?B?cnR5b2xxRkFQek8yN016TG1Vdkt5a281Z28ycHpZQ3U4b3NzZmFSb0UvRmYz?=
- =?utf-8?B?NDI2ZGI4dFFHTWk4ZDdFT2lkNHppRlZKVFJ6R1hNbHUrSVdOZEQ0dFViSGRq?=
- =?utf-8?B?L2Q5djY4RFhoSURPQkUyU1FFZ2xQcHYyRXF1NnpJTm1jZWFZWmdCU3Znc3Qz?=
- =?utf-8?B?a2EvMlgySEFnQU8veHc1MmlUYmYvOVIxdmF4L2Z0ckZWQ3Jab3V1ODA3U1Ey?=
- =?utf-8?B?c1FDV0ZEWW5mTHNrTmowU05zb0RGaUs1dHdEWUM0YmVNVkpxcElSMjFzc0tG?=
- =?utf-8?B?ald5anlFbzRSQ3JveEpXL0FXUkhCMlRvWHFXWjA3SUQ2TWFKS21JUXppYWlN?=
- =?utf-8?B?bXM4N0JvdFVBZUozeEU3LzZBRnZEVWtLeXhsNXYrdGUxaW9hOUUvcU16MEZr?=
- =?utf-8?B?UUJkem1vZ2VDcktUMlBoMnlOb2I3bUxYekVEaXkvTDJDQWo2Tk5sK0U0Sm8y?=
- =?utf-8?B?Z3IzSSt1VVdGNTNRd2prODhFYmRwVUlCTm1NR1F5SHJIVDB4dU5VMWZCZXJL?=
- =?utf-8?B?R3M1d0FSYUl1R0phU1ExcHcyN0ZoanhRY05vSjhBYmhKb2x0V0JRb2hHM0xM?=
- =?utf-8?B?UGFlaDEzbGZhUUUwcjN3WVV4SWgxY0RhRFlQUS9TTys3TFJnS2hkNnB4ZFlx?=
- =?utf-8?B?WUtCR3pkdFJ1R2hnWkh6VVVVVUVoSUg5K0x5N0xYVTlxNzBIbmsrQjNwOGFn?=
- =?utf-8?B?T3ZNWURZd25mM0F1RkQ0K0xlcVRtZWhwV044MDFzYjN1d2Y4TzZvNFZLUEVw?=
- =?utf-8?B?dFUzdzJLZUFnTm5zMkhHOU10RUEzM2cyY0NNSERWY3p0ajRxNDhRcjYwMGha?=
- =?utf-8?B?VXBONFNkeXJvTmZBOENrekdwRVhOdmNCaWlsNDlvNDZqNnVHVlZENDdOVEox?=
- =?utf-8?B?eUtia2djcU1aaXZEcWwwcVVTM0RrVkJHRXByVVZ4NmFmK2xhZ0ROOG9lYXJD?=
- =?utf-8?B?ZUlKaGFaRytVNllYRjRhS3R2UUV4ZHFxdERWdjNLUXNVK010enFnalVhd3l6?=
- =?utf-8?B?eDVTcTdaU2Q0SkVVdWRENWlMM245SGJmMVFWNlFRU3pia202N1hKajlXclVi?=
- =?utf-8?B?UGkwV0VxUlhHaUJPbThiaFkzQllLaEIvU1Zzakx0SjlKMERvOGJCT2lodmd3?=
- =?utf-8?B?VXhaYWxva05sUEdoeGU5eHgrc3FBZDdyaWdFZlJadnIvZ2JzL01CbGZlYnJW?=
- =?utf-8?B?RzlLNS9jRGFqUFJRa3pmbVJ3UExhVFhYTklQelZKOXNUSzdTeVJuckh2SGdw?=
- =?utf-8?B?SkR5TE9qZTBmNkQ4cXNndHYveUVKdzA5MVF4UXFkcnFsSFpTczJoQzd5NGlJ?=
- =?utf-8?B?UjFDcFQ2UnVpdnkrYjhHc0xNMnpVb2JzN1MrNDRQZDdzSmZDdG80c3RGMVdE?=
- =?utf-8?B?Lzdkc1hUek9ZYkszQUJFRGpHRWFjcHAwYnRSUXpmS2l1YzgvMmJuVDBMMldl?=
- =?utf-8?B?VDFnclg0LzFUa0FYREtNazIyQllWWFMzYkJDbC9qa0lUY3JCM3ZqdGJKSHJW?=
- =?utf-8?B?Z3RwSXpwQmI2NkZRNzZWVEdnb1lVNXpjQlkrdldaaTJMN0w1YWpxelBlZ2JO?=
- =?utf-8?B?ZE1ZYmJpd3hnUnhDb2RBWFY3RUdQaTgzZGZ4SFoydE4zZEZOcEUrbzRHT0l6?=
- =?utf-8?B?RzVhTWQ3dUNteVhPV2EyTXU0b3N4UmtSL2lmK0VVL05jT2FLdHpCOTUzbzhh?=
- =?utf-8?B?VDVBUllHWFdFZGQxQXpodEpMS0R2Q0tsMG9TenlKRzZEdjhwVW95ZGZXRkE0?=
- =?utf-8?B?V2k1OUNtU3pLQTJ3Z0lxaDJsdi9ScFZ1dkk2N3lNMWgvSXROSXhGVHhMeFBM?=
- =?utf-8?B?NDA3Rkd4SGJiTzdETGNjNmx6Nm1pbTBzK21iZitYS2JlZnl5cGhQMUdSQTdt?=
- =?utf-8?B?Mi9aQ0szMUxjTHBzcnp0eGFlbmJXbGJyTGkwcTFhY3FKTHltWlNRQitWR3lI?=
- =?utf-8?B?MTN6ZzV0OHVYQnBSbGtiTDhWNFdUc2RGakxEYkJzNEx3c3QwUjZYYWo1Uk5y?=
- =?utf-8?Q?37xR473m3TlwSl7EbZ9pkBM/P?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ebcf4fc-5c4e-4fdf-e40f-08db1611b5a2
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR03MB6329.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 02:49:12.7693
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ATmiwDVAAJoFzSoIDb0WDBDknIlT+prp+dOOZPyFs6kb/iHC+yQ17IL0GimeOh82WvWbB9+KmAzC5/El6930ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5241
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,172 +59,359 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Hi Linus,
+
+Please pull powerpc updates for 6.3:
+
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
+werpc-6.3-1
+
+for you to fetch changes up to f82cdc37c4bd4ba905bf99ade9782a639b5c12e9:
+
+  powerpc/pseries: Avoid hcall in plpks_is_available() on non-pseries (2023=
+-02-22 17:01:46 +1100)
+
+- ------------------------------------------------------------------
+powerpc updates for 6.3
+
+ - Support for configuring secure boot with user-defined keys on PowerVM LP=
+ARs.
+
+ - Simplify the replay of soft-masked IRQs by making it non-recursive.
+
+ - Add support for KCSAN on 64-bit Book3S.
+
+ - Improvements to the API & code which interacts with RTAS (pseries firmwa=
+re).
+
+ - Change 32-bit powermac to assign PCI bus numbers per domain by default.
+
+ - Some improvements to the 32-bit BPF JIT.
+
+ - Various other small features and fixes.
+
+Thanks to: Anders Roxell, Andrew Donnellan, Andrew Jeffery, Benjamin Gray, =
+Christophe
+Leroy, Frederic Barrat, Ganesh Goudar, Geoff Levand, Greg Kroah-Hartman, Ja=
+n-Benedict
+Glaw, Josh Poimboeuf, Kajol Jain, Laurent Dufour, Mahesh Salgaonkar, Mathie=
+u Desnoyers,
+Mimi Zohar, Murphy Zhou, Nathan Chancellor, Nathan Lynch, Nayna Jain, Nicho=
+las Piggin,
+Pali Roh=C3=A1r, Petr Mladek, Rohan McLure, Russell Currey, Sachin Sant, Sa=
+thvika Vasireddy,
+Sourabh Jain, Stefan Berger, Stephen Rothwell, Sudhakar Kuppusamy.
+
+- ------------------------------------------------------------------
+Anders Roxell (1):
+      powerpc/mm: Rearrange if-else block to avoid clang warning
+
+Andrew Donnellan (10):
+      powerpc/pseries: Fix handling of PLPKS object flushing timeout
+      powerpc/pseries: Fix alignment of PLPKS structures and buffers
+      powerpc/secvar: Clean up init error messages
+      powerpc/secvar: Allow backend to populate static list of variable nam=
+es
+      powerpc/secvar: Warn when PAGE_SIZE is smaller than max object size
+      powerpc/secvar: Don't print error on ENOENT when reading variables
+      powerpc/pseries: Make caller pass buffer to plpks_read_var()
+      powerpc/pseries: Turn PSERIES_PLPKS into a hidden option
+      powerpc/pseries: Clarify warning when PLPKS password already set
+      powerpc/pseries: Fix endianness issue when parsing PLPKS secvar flags
+
+Benjamin Gray (5):
+      selftests/powerpc: Add generic read/write file util
+      selftests/powerpc: Add read/write debugfs file, int
+      selftests/powerpc: Parse long/unsigned long value safely
+      selftests/powerpc: Add {read,write}_{long,ulong}
+      selftests/powerpc: Add automatically allocating read_file
+
+Christophe Leroy (16):
+      powerpc/64: Set default CPU in Kconfig
+      powerpc: Check !irq instead of irq =3D=3D NO_IRQ and remove NO_IRQ
+      powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
+      powerpc: Remove __kernel_text_address() in show_instructions()
+      powerpc/bpf/32: No need to zeroise r4 when not doing tail call
+      powerpc/bpf/32: Only set a stack frame when necessary
+      powerpc/bpf/32: BPF prog is never called with more than one arg
+      powerpc/bpf: Perform complete extra passes to update addresses
+      powerpc/bpf: Only pad length-variable code at initial pass
+      powerpc/bpf/32: Optimise some particular const operations
+      powerpc/bpf/32: introduce a second source register for ALU operations
+      powerpc/bpf/32: perform three operands ALU operations
+      powerpc/64: Replace -mcpu=3De500mc64 by -mcpu=3De5500
+      powerpc: Pass correct CPU reference to assembler
+      powerpc/epapr: Don't use wrteei on non booke
+      powerpc/e500: Add missing prototype for 'relocate_init'
+
+Frederic Barrat (1):
+      powerpc/powernv/ioda: Skip unallocated resources when mapping to PE
+
+Ganesh Goudar (2):
+      powerpc/mce: log the error for all unrecoverable errors
+      powerpc/eeh: Set channel state after notifying the drivers
+
+Geoff Levand (2):
+      powerpc/ps3: Change updateboltedpp() panic to info
+      powerpc/ps3: Refresh ps3_defconfig
+
+Greg Kroah-Hartman (1):
+      powerpc/iommu: fix memory leak with using debugfs_lookup()
+
+Josh Poimboeuf (2):
+      powerpc/module_64: Improve restore_r2() return semantics
+      powerpc/module_64: Fix "expected nop" error on module re-patching
+
+Kajol Jain (1):
+      powerpc/hv-24x7: Fix pvr check when setting interface version
+
+Mathieu Desnoyers (1):
+      selftests/powerpc: Fix incorrect kernel headers search path
+
+Michael Ellerman (6):
+      Merge branch 'fixes' into next
+      powerpc/rtas: Drop unused export symbols
+      Merge branch 'fixes' into next
+      powerpc/secvar: Use u64 in secvar_operations
+      powerpc/nohash: Fix build error with binutils >=3D 2.38
+      powerpc/nohash: Fix build with llvm-as
+
+Nathan Chancellor (1):
+      macintosh: windfarm: Use unsigned type for 1-bit bitfields
+
+Nathan Lynch (25):
+      powerpc/rtas: unexport 'rtas' symbol
+      powerpc/rtas: make all exports GPL
+      powerpc/rtas: remove lock and args fields from global rtas struct
+      powerpc/rtas: upgrade internal arch spinlocks
+      powerpc/rtas: handle extended delays safely in early boot
+      powerpc/perf/hv-24x7: add missing RTAS retry status handling
+      powerpc/pseries/lpar: add missing RTAS retry status handling
+      powerpc/pseries/lparcfg: add missing RTAS retry status handling
+      powerpc/pseries/setup: add missing RTAS retry status handling
+      powerpc/rtas: ensure 4KB alignment for rtas_data_buf
+      powerpc/pseries: drop RTAS-based timebase synchronization
+      powerpc/rtas: improve function information lookups
+      powerpc/rtas: strengthen do_enter_rtas() type safety, drop inline
+      powerpc/tracing: tracepoints for RTAS entry and exit
+      powerpc/rtas: add tracepoints around RTAS entry
+      powerpc/pseries: add RTAS work area allocator
+      powerpc/pseries/dlpar: use RTAS work area API
+      powerpc/pseries: PAPR system parameter API
+      powerpc/pseries: convert CMO probe to papr_sysparm API
+      powerpc/pseries/lparcfg: convert to papr_sysparm API
+      powerpc/pseries/hv-24x7: convert to papr_sysparm API
+      powerpc/pseries/lpar: convert to papr_sysparm API
+      powerpc/rtas: introduce rtas_function_token() API
+      powerpc/rtas: arch-wide function token lookup conversions
+      powerpc/machdep: warn when machine_is() used too early
+
+Nayna Jain (2):
+      powerpc/pseries: Expose PLPKS config values, support additional fields
+      powerpc/pseries: Implement signed update for PLPKS objects
+
+Nicholas Piggin (14):
+      powerpc/64: Don't recurse irq replay
+      powerpc/64s/radix: Remove need_flush_all test from radix__tlb_flush
+      powerpc/64s/radix: mm->context.id should always be valid
+      powerpc/64s/radix: Remove TLB_FLUSH_ALL test from range flushes
+      powerpc: Consolidate 32-bit and 64-bit interrupt_enter_prepare
+      powerpc/32: implement HAVE_CONTEXT_TRACKING_USER support
+      powerpc/32: select HAVE_VIRT_CPU_ACCOUNTING_GEN
+      crypto: powerpc - Use address generation helper for asm
+      powerpc/64s: Refactor initialisation after prom
+      powerpc/64e: Simplify address calculation in secondary hold loop
+      powerpc/64s: Fix stress_hpt memblock alloc alignment
+      powerpc/64: Fix task_cpu in early boot when booting non-zero cpuid
+      powerpc/64: Move paca allocation to early_setup()
+      powerpc: Skip stack validation checking alternate stacks if they are =
+not allocated
+
+Pali Roh=C3=A1r (4):
+      powerpc/boot: Don't always pass -mcpu=3Dpowerpc when building 32-bit =
+uImage
+      powerpc/pci: Enable PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT by default
+      powerpc/pci: Add option for using pci_to_OF_bus_map
+      powerpc: dts: turris1x.dts: Set lower priority for CPLD syscon-reboot
+
+Rohan McLure (5):
+      powerpc/kcsan: Add exclusions from instrumentation
+      powerpc/kcsan: Exclude udelay to prevent recursive instrumentation
+      powerpc/kcsan: Memory barriers semantics
+      powerpc/kcsan: Prevent recursive instrumentation with IRQ save/restor=
+es
+      powerpc/kcsan: Add KCSAN Support
+
+Russell Currey (15):
+      powerpc/secvar: Fix incorrect return in secvar_sysfs_load()
+      powerpc/secvar: Warn and error if multiple secvar ops are set
+      powerpc/secvar: Use sysfs_emit() instead of sprintf()
+      powerpc/secvar: Handle format string in the consumer
+      powerpc/secvar: Handle max object size in the consumer
+      powerpc/secvar: Extend sysfs to include config vars
+      powerpc/pseries: Move plpks.h to include directory
+      powerpc/pseries: Move PLPKS constants to header file
+      powerpc/pseries: Log hcall return codes for PLPKS debug
+      powerpc/pseries: Add helper to get PLPKS password length
+      powerpc/pseries: Pass PLPKS password on kexec
+      powerpc/pseries: Implement secvars for dynamic secure boot
+      integrity/powerpc: Improve error handling & reporting when loading ce=
+rts
+      integrity/powerpc: Support loading keys from PLPKS
+      powerpc/pseries: Avoid hcall in plpks_is_available() on non-pseries
+
+Sathvika Vasireddy (1):
+      powerpc/64: Fix unannotated intra-function call warning
+
+Sourabh Jain (1):
+      powerpc/kexec_file: print error string on usable memory property upda=
+te failure
 
 
-On 2023/2/23 18:11, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
+ Documentation/ABI/testing/sysfs-secvar                   |   75 +-
+ arch/powerpc/Kconfig                                     |   19 +-
+ arch/powerpc/Makefile                                    |   26 +-
+ arch/powerpc/boot/Makefile                               |   14 +-
+ arch/powerpc/boot/dts/turris1x.dts                       |   23 +
+ arch/powerpc/configs/ps3_defconfig                       |   39 +-
+ arch/powerpc/crypto/crc32-vpmsum_core.S                  |   13 +-
+ arch/powerpc/include/asm/barrier.h                       |   12 +-
+ arch/powerpc/include/asm/hvcall.h                        |    1 +
+ arch/powerpc/include/asm/hw_irq.h                        |    6 +-
+ arch/powerpc/include/asm/interrupt.h                     |   35 +-
+ arch/powerpc/include/asm/irq.h                           |    3 -
+ arch/powerpc/include/asm/machdep.h                       |   16 +-
+ arch/powerpc/include/asm/paca.h                          |    1 -
+ arch/powerpc/include/asm/papr-sysparm.h                  |   38 +
+ arch/powerpc/include/asm/pci-bridge.h                    |    4 +-
+ arch/powerpc/include/asm/plpks.h                         |  195 ++++
+ arch/powerpc/include/asm/rtas-types.h                    |    2 -
+ arch/powerpc/include/asm/rtas-work-area.h                |   96 ++
+ arch/powerpc/include/asm/rtas.h                          |  184 ++++
+ arch/powerpc/include/asm/secvar.h                        |   21 +-
+ arch/powerpc/include/asm/smp.h                           |    1 +
+ arch/powerpc/include/asm/trace.h                         |  103 ++
+ arch/powerpc/kernel/Makefile                             |   10 +
+ arch/powerpc/kernel/eeh_driver.c                         |    4 +-
+ arch/powerpc/kernel/epapr_hcalls.S                       |    6 +
+ arch/powerpc/kernel/head_64.S                            |   51 +-
+ arch/powerpc/kernel/iommu.c                              |    4 +-
+ arch/powerpc/kernel/irq_64.c                             |  105 +-
+ arch/powerpc/kernel/mce.c                                |   10 +-
+ arch/powerpc/kernel/module_64.c                          |   29 +-
+ arch/powerpc/kernel/pci_32.c                             |   17 +-
+ arch/powerpc/kernel/process.c                            |   14 +-
+ arch/powerpc/kernel/prom.c                               |   16 +-
+ arch/powerpc/kernel/rtas-proc.c                          |   24 +-
+ arch/powerpc/kernel/rtas-rtc.c                           |    6 +-
+ arch/powerpc/kernel/rtas.c                               | 1056 ++++++++++=
++++++-----
+ arch/powerpc/kernel/rtas_flash.c                         |   21 +-
+ arch/powerpc/kernel/rtas_pci.c                           |    8 +-
+ arch/powerpc/kernel/rtasd.c                              |    2 +-
+ arch/powerpc/kernel/secvar-ops.c                         |   10 +-
+ arch/powerpc/kernel/secvar-sysfs.c                       |  178 ++--
+ arch/powerpc/kernel/setup-common.c                       |    4 +
+ arch/powerpc/kernel/setup_64.c                           |   16 +-
+ arch/powerpc/kernel/time.c                               |    4 +-
+ arch/powerpc/kernel/trace/Makefile                       |    1 +
+ arch/powerpc/kernel/vdso/Makefile                        |    1 +
+ arch/powerpc/kexec/file_load_64.c                        |   21 +-
+ arch/powerpc/lib/Makefile                                |    2 +
+ arch/powerpc/mm/book3s64/hash_utils.c                    |    3 +-
+ arch/powerpc/mm/book3s64/radix_tlb.c                     |   73 +-
+ arch/powerpc/mm/mmu_decl.h                               |    1 +
+ arch/powerpc/mm/nohash/e500_hugetlbpage.c                |    5 +-
+ arch/powerpc/mm/nohash/tlb_low_64e.S                     |    2 +-
+ arch/powerpc/net/bpf_jit.h                               |    2 +-
+ arch/powerpc/net/bpf_jit_comp.c                          |   91 +-
+ arch/powerpc/net/bpf_jit_comp32.c                        |  400 ++++----
+ arch/powerpc/net/bpf_jit_comp64.c                        |   16 +-
+ arch/powerpc/perf/hv-24x7.c                              |   44 +-
+ arch/powerpc/platforms/44x/fsp2.c                        |    2 +-
+ arch/powerpc/platforms/52xx/efika.c                      |    4 +-
+ arch/powerpc/platforms/Kconfig.cputype                   |   20 +-
+ arch/powerpc/platforms/cell/ras.c                        |    4 +-
+ arch/powerpc/platforms/cell/smp.c                        |    4 +-
+ arch/powerpc/platforms/chrp/nvram.c                      |    4 +-
+ arch/powerpc/platforms/chrp/pci.c                        |    4 +-
+ arch/powerpc/platforms/chrp/setup.c                      |    4 +-
+ arch/powerpc/platforms/maple/setup.c                     |    4 +-
+ arch/powerpc/platforms/powernv/opal-secvar.c             |   60 +-
+ arch/powerpc/platforms/powernv/pci-ioda.c                |    3 +-
+ arch/powerpc/platforms/ps3/htab.c                        |    2 +-
+ arch/powerpc/platforms/pseries/Kconfig                   |   20 +-
+ arch/powerpc/platforms/pseries/Makefile                  |    6 +-
+ arch/powerpc/platforms/pseries/dlpar.c                   |   29 +-
+ arch/powerpc/platforms/pseries/eeh_pseries.c             |   22 +-
+ arch/powerpc/platforms/pseries/hotplug-cpu.c             |    4 +-
+ arch/powerpc/platforms/pseries/io_event_irq.c            |    2 +-
+ arch/powerpc/platforms/pseries/lpar.c                    |   37 +-
+ arch/powerpc/platforms/pseries/lparcfg.c                 |  104 +-
+ arch/powerpc/platforms/pseries/mobility.c                |    4 +-
+ arch/powerpc/platforms/pseries/msi.c                     |    4 +-
+ arch/powerpc/platforms/pseries/nvram.c                   |    4 +-
+ arch/powerpc/platforms/pseries/papr-sysparm.c            |  151 +++
+ arch/powerpc/platforms/pseries/pci.c                     |    2 +-
+ arch/powerpc/platforms/pseries/plpks-secvar.c            |  217 ++++
+ arch/powerpc/platforms/pseries/plpks.c                   |  385 +++++--
+ arch/powerpc/platforms/pseries/plpks.h                   |   71 --
+ arch/powerpc/platforms/pseries/ras.c                     |    2 +-
+ arch/powerpc/platforms/pseries/rtas-work-area.c          |  209 ++++
+ arch/powerpc/platforms/pseries/setup.c                   |   29 +-
+ arch/powerpc/platforms/pseries/smp.c                     |   12 +-
+ arch/powerpc/purgatory/Makefile                          |    1 +
+ arch/powerpc/sysdev/xics/ics-rtas.c                      |    8 +-
+ arch/powerpc/xmon/Makefile                               |    1 +
+ arch/powerpc/xmon/xmon.c                                 |   16 +-
+ drivers/macintosh/windfarm_lm75_sensor.c                 |    4 +-
+ drivers/macintosh/windfarm_smu_sensors.c                 |    4 +-
+ security/integrity/platform_certs/load_powerpc.c         |   47 +-
+ tools/testing/selftests/powerpc/dscr/dscr.h              |   34 +-
+ tools/testing/selftests/powerpc/dscr/dscr_sysfs_test.c   |   25 +-
+ tools/testing/selftests/powerpc/include/utils.h          |   20 +-
+ tools/testing/selftests/powerpc/nx-gzip/gzfht_test.c     |   52 +-
+ tools/testing/selftests/powerpc/pmu/lib.c                |   34 +-
+ tools/testing/selftests/powerpc/ptrace/Makefile          |    2 +-
+ tools/testing/selftests/powerpc/ptrace/core-pkey.c       |   28 +-
+ tools/testing/selftests/powerpc/security/Makefile        |    2 +-
+ tools/testing/selftests/powerpc/security/entry_flush.c   |   12 +-
+ tools/testing/selftests/powerpc/security/rfi_flush.c     |   12 +-
+ tools/testing/selftests/powerpc/security/uaccess_flush.c |   18 +-
+ tools/testing/selftests/powerpc/syscalls/Makefile        |    4 +-
+ tools/testing/selftests/powerpc/syscalls/rtas_filter.c   |   81 +-
+ tools/testing/selftests/powerpc/tm/Makefile              |    2 +-
+ tools/testing/selftests/powerpc/utils.c                  |  412 ++++++--
+ 113 files changed, 3850 insertions(+), 1582 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/papr-sysparm.h
+ create mode 100644 arch/powerpc/include/asm/plpks.h
+ create mode 100644 arch/powerpc/include/asm/rtas-work-area.h
+ create mode 100644 arch/powerpc/platforms/pseries/papr-sysparm.c
+ create mode 100644 arch/powerpc/platforms/pseries/plpks-secvar.c
+ delete mode 100644 arch/powerpc/platforms/pseries/plpks.h
+ create mode 100644 arch/powerpc/platforms/pseries/rtas-work-area.c
+-----BEGIN PGP SIGNATURE-----
 
-Hi Jerome,
-
-> 
-> On Thu 23 Feb 2023 at 14:27, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
-> Title is way too long, 75 char max
-
-I will change to "clk: meson: vid-pll-div: added meson_vid_pll_div_ops 
-support". I wonder if you have a better suggestion, please let me know 
-if you have.
-
-> 
->> The previous chip only provides "ro_ops" for the vid_pll_div clock,
-> 
-> The driver does. Other chip could use RW ops I suppose.
-
-Your suppose is right.
-
-> 
->> which is not satisfied with the operation requirements of the later
->> chip for this clock, so the ops that can be set for the clock is added.
->>
-> 
-> What requirements ? What "late" chip ? all this is quite vague.
-
-I will change to "Since the previous code only provides "ro_ops" for the 
-vid_pll_div clock,In fact, the clock can be set. So add "ops" that can 
-set the clock, especially for later chips like S4 SOC and so on."
-
-Is that ok with you?
-
-> 
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->> ---
->>   drivers/clk/meson/vid-pll-div.c | 59 +++++++++++++++++++++++++++++++++
->>   drivers/clk/meson/vid-pll-div.h |  1 +
->>   2 files changed, 60 insertions(+)
->>
->> diff --git a/drivers/clk/meson/vid-pll-div.c b/drivers/clk/meson/vid-pll-div.c
->> index daff235bc763..e75fa6f75efe 100644
->> --- a/drivers/clk/meson/vid-pll-div.c
->> +++ b/drivers/clk/meson/vid-pll-div.c
->> @@ -89,6 +89,65 @@ static unsigned long meson_vid_pll_div_recalc_rate(struct clk_hw *hw,
->>   	return DIV_ROUND_UP_ULL(parent_rate * div->multiplier, div->divider);
->>   }
->>   
->> +static int meson_vid_pll_div_determine_rate(struct clk_hw *hw,
->> +					    struct clk_rate_request *req)
->> +{
->> +	unsigned long best = 0, now = 0;
->> +	unsigned int i, best_i = 0;
->> +
->> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
-> 
-> It would be nice to actually describe how this vid pll work so we can
-> stop using precompute "magic" values and actually use the IP to its full
-> capacity.
-
-Thank you for your advice. I'm going to define a macro to represent this 
-table size.
-
-> 
->> +		now = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
-> 
-> This effectively stops rate propagation. That's not how determine_rate()
-> call back should work. Have a look a clk-divider.c and how it calls
-> clk_hw_round_rate().
-> 
-
-I understand that this should be changed to
-" parent_rate = clk_hw_round_rate(req->best_parent_hw,
-				 DIV_ROUND_CLOSEST_ULL(rate * vid_pll_div_table[i].divider, 
-vid_pll_div_table[i].multiplier));
-
-now = DIV_ROUND_CLOSEST_ULL(parent_rate * 
-vid_pll_div_table[i].multiplier, vid_pll_div_table[i].divider);"
-
-I don't know if it is correct, please give me a comment.
-
->> +					    vid_pll_div_table[i].multiplier,
->> +					    vid_pll_div_table[i].divider);
->> +		if (req->rate == now) {
->> +			return 0;
->> +		} else if (abs(now - req->rate) < abs(best - req->rate)) {
->> +			best = now;
->> +			best_i = i;
->> +		}
->> +	}
->> +
->> +	if (best_i < ARRAY_SIZE(vid_pll_div_table))
->> +		req->rate = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
->> +						  vid_pll_div_table[best_i].multiplier,
->> +						  vid_pll_div_table[best_i].divider);
->> +	else
-> 
-> What is the point of this 'if' clause ?
-> It looks like the 'else' part is dead code.
-
-I'm going to delete these.
-
-> 
->> +		req->rate = meson_vid_pll_div_recalc_rate(hw, req->best_parent_rate);
->> +
->> +	return 0;
->> +}
->> +
->> +static int meson_vid_pll_div_set_rate(struct clk_hw *hw, unsigned long rate,
->> +				      unsigned long parent_rate)
->> +{
->> +	struct clk_regmap *clk = to_clk_regmap(hw);
->> +	struct meson_vid_pll_div_data *pll_div = meson_vid_pll_div_data(clk);
->> +	int i;
->> +
->> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
->> +		if (DIV_ROUND_CLOSEST_ULL(parent_rate * vid_pll_div_table[i].multiplier,
->> +					  vid_pll_div_table[i].divider) == rate) {
-> 
-> This assumes the set_rate() is going to have a perfect match and
-> otherwise fail. You should not assume that. Have a look at clk-divider.c
-> for examples.
-
-Thank you for your advice. I will do a bestdiv match like the 
-clk-divider.c file.
-
-> 
->> +			meson_parm_write(clk->map, &pll_div->val, vid_pll_div_table[i].shift_val);
->> +			meson_parm_write(clk->map, &pll_div->sel, vid_pll_div_table[i].shift_sel);
->> +			break;
->> +		}
->> +	}
->> +
->> +	if (i >= ARRAY_SIZE(vid_pll_div_table)) {
->> +		pr_debug("%s: Invalid rate value for vid_pll_div\n", __func__);
->> +		return -EINVAL;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +const struct clk_ops meson_vid_pll_div_ops = {
->> +	.recalc_rate	= meson_vid_pll_div_recalc_rate,
->> +	.determine_rate	= meson_vid_pll_div_determine_rate,
->> +	.set_rate	= meson_vid_pll_div_set_rate,
->> +};
->> +EXPORT_SYMBOL_GPL(meson_vid_pll_div_ops);
->> +
->>   const struct clk_ops meson_vid_pll_div_ro_ops = {
->>   	.recalc_rate	= meson_vid_pll_div_recalc_rate,
->>   };
->> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vid-pll-div.h
->> index c0128e33ccf9..3ab729b85fde 100644
->> --- a/drivers/clk/meson/vid-pll-div.h
->> +++ b/drivers/clk/meson/vid-pll-div.h
->> @@ -16,5 +16,6 @@ struct meson_vid_pll_div_data {
->>   };
->>   
->>   extern const struct clk_ops meson_vid_pll_div_ro_ops;
->> +extern const struct clk_ops meson_vid_pll_div_ops;
->>   
->>   #endif /* __MESON_VID_PLL_DIV_H */
->>
->> base-commit: 8a9fbf00acfeeeaac8efab8091bb464bd71b70ea
-> 
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmP4Js4ACgkQUevqPMjh
+pYD/8xAAqi1IkWjDafE8+/PKZhMEfWT5h0wg4fdNTDRVeKC92JNEtkmt1tAgz5WH
+h3oVnqPzr1B4n95rS6nIYab96IIaG0vEHdmSHsR49zwConVkcVjNN1GL0g1Sz78m
+L/jDAwDgF0oFT3IWxMzUe+/9FsY+FXOd0qbql2nzYxtmy+aERq7QBTEBMFkNUcjR
+BN05vKqYjBVGK7zdDS/XJU+sQJe7Qw+FqDzJHO4Yn8X0UanDvSRbk30zOpohh9Mh
+VMGwr31zzUTvTT5ZiBA1WHPYIjuComSSChICjlMfnyMYxaoFe5OYAOdkIpsgYHUV
+2/J1vTD3Z0iQhIPFlhFDbUCpVtjjyLSOmo7ufJeHX3xQI6iSM1ioQOVER9x+qmkw
+cyTEwzSIO0d5v2v3AxceIhWdkIIzCXvWfScRIKHf5VTa4w9VNb+kGhfGGXQdr+YS
+cyRagX43/IgodCYYSaEzHPNyEFYNgiJJDs76nZO5tVmE6uiL1trmHq+lXh2DQsvV
+a/FqOBUiljyxUcsTh9PchNRhZGt6QI98Eijq239aDO92RV5awejZtgwvliEwPfOY
+yOPsb52bwcIOfj0+Xo+gbKbR8+QgJ2WDuTd8Xq7tv7hNh8IO/wGIpv3S0xS09UP+
+xrQSLtY5NzagYAw8h4gsyZeEFmVTX4qIUgHyPezUGzlMgojdkY8=3D
+=3Dxuz9
+-----END PGP SIGNATURE-----
