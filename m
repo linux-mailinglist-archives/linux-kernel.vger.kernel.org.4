@@ -2,427 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293266A1BE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2DC6A1BEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjBXMIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S229838AbjBXMJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBXMId (ORCPT
+        with ESMTP id S229622AbjBXMJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:08:33 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971021BEC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:07:49 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id l25so13277789wrb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:07:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YxIAdYbXFosE9kis+Er3rqhUkF1bS9QS0XQfADraVoc=;
-        b=RNyoVmr/jLo79/O4RIIbiOa4hKXaU9WjvM2UK1OXDg6hVYYqQSVvH28ExKvqIrMqns
-         mXQkEuHBFiKsOLh4hdkLcVHQVW+2Nbl103EMYhZRqiM0x5SaKf4O7LwmO+b054YINbji
-         7BE6Q3hRv9vbc6FLHKVdufaxd0W6lvOg8Oqqps009Bm/7inSiWvgQsepkBwpesQOrzM2
-         z+AEyx50sVeFNSUPeSADaJP/7P8q5+BBeXULHdJF4ImMY6jhpOpPG2NevA6gJFZ//jJJ
-         if2pSdqpPX3DIj9b+lCTNpTpHDfukxXGIGNsfl6DEnhDW2/LpBYTLtqUZzisr4TYg6oM
-         yN+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YxIAdYbXFosE9kis+Er3rqhUkF1bS9QS0XQfADraVoc=;
-        b=K7bK/RRHAPTKBMPzWBS+9V2c4oehhf23spZF/7528VIAJAP9dpbyV35UHaeVHlhxyi
-         Kb9wJCL0T6WjGBeF8DWEFkvUlUMdVDsGoaFBN7wOEWTJoUq5era/kNto+k/vfsTaGRqY
-         0Yrwx53Y0xk/4ZrHjqmp4WdqXXpyKQMrArUGRauBIXvks6TWDWdDckLZOUQLy6roxc7r
-         Gzr+GDP9XEaX7BNEsDxHT/azfiqLRHNS+keVr7RbZmSn8f1xsOoqB5oHGP+yb6gsUuDH
-         T27n4Py0/RDGf4uvCUESa/mQ7zJa8etpQkE66Qg6XgA3+GKQH38oCCqN6E3iA1WJ3PNr
-         +38w==
-X-Gm-Message-State: AO0yUKUjQ+Y6GfdlnsnCfy9fOmvDoUY9Cz1lTp9AOux1PZ2CvjbwECMM
-        wBRPlIvFt4DUXxn6p8lhQnNR1l14IAVROnUi
-X-Google-Smtp-Source: AK7set+mcAc4LbCgFfcMfVkf3J/pZTyNHl89UO5LRPM4WL9B3PBWQwqAcO3eX8Rag1AL8GqigdjXQg==
-X-Received: by 2002:adf:ef06:0:b0:2c7:da1:4694 with SMTP id e6-20020adfef06000000b002c70da14694mr6350458wro.62.1677240436795;
-        Fri, 24 Feb 2023 04:07:16 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id t10-20020a05600c128a00b003dfee43863fsm2557924wmd.26.2023.02.24.04.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 04:07:16 -0800 (PST)
-Date:   Fri, 24 Feb 2023 13:07:15 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
-Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Message-ID: <20230224120715.wgqnqmkadsbqusus@orel>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-5-jeeheng.sia@starfivetech.com>
- <20230223180720.55fgbxzlx6xvzgms@orel>
- <b26264a20b5f4bc5abfc6dd87aa4e38f@EXMBX066.cuchost.com>
- <20230224090010.nmy6latszfkdqcft@orel>
- <9cfd485d1e0d46cdb1323bb6ea330f6e@EXMBX066.cuchost.com>
- <20230224095526.ctctpzw3p3csf6qj@orel>
- <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
+        Fri, 24 Feb 2023 07:09:25 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060.outbound.protection.outlook.com [40.107.93.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3D3CE27;
+        Fri, 24 Feb 2023 04:08:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bDKeZAhKKvDCvx7l1DxZ6Gf5ndWvVuhWSeXEfk1hmiQncBkCaPiO1RbbCQsUos6Y9NG2a6ms/Ghz2t3X3WwCfFCo3NYcP7iQkq6R1FAXl4cgUX5GREud57FIU8XV57xeUkanblnpUzeNYweL5wiyvkpel9PnqYZmmq40siQsR0ixcIuT4R19K/HM9Ub9yk3SAWbYIuSQY7+mWf9rnGewLivpIKDnLLM2RsEQ/pNC8DyT8q4C3GZSrS+Oa1okX5XY09zRGjfaPHJILasykDVqfNFKa4fkS7JHbYpEx/5YUG4+Mcx7fcjNqV7wELx+FMbuoTmrNfvolMbhmpeU4UGZlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AoizO9eci6dcpXEEUNLH8cgwfZfC3SKmptBLI1Zrz4w=;
+ b=J3z502IBoseQEqWtZFe8h28EsA2XVq72Y/Aqvy0BbiUWuRnOPb2Wnu+XKXbapQPmJ2JmftLxa3aaK+f7xiiVqN9iIEgeR/eK4z4R1aUuHLXK7k82ie7vxpx/LPvBPd+esagK9xecJxd16WJyTNonov2ISwMZ6DLgjDazCaMJVb+5s0LYw/+8m3winoj2lly1Jo/X8xiyqutInqUdsPxAw4hKl3sScasxzwmw9IyrUxHdCBJ43kjR9r+Ri/Zga4J05MI0bfztE79ghnaOj158zSu+iMAfKuXCQB6/P11E2sq+NwynNQc748L0/jlTsGteq77ZqP7huIuD+zi5fwbqTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=xilinx.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AoizO9eci6dcpXEEUNLH8cgwfZfC3SKmptBLI1Zrz4w=;
+ b=eoiltb5qLe6qPduJqZTO+SAfvtLzwoAL8Z4mFfYTZeVXn5GxW39KY3aIxiVE0+raeEu+Q82vYY6yxzXFTXNXAKE1JIcCZnDV56IdEHS+xdPArPBGPawtEEQhti84cXwCj/JjxS5E4QuXG9aAvfPS3hIQY5sIjMXfnDgK7XLnQfQ=
+Received: from BLAPR03CA0174.namprd03.prod.outlook.com (2603:10b6:208:32f::11)
+ by PH7PR12MB6788.namprd12.prod.outlook.com (2603:10b6:510:1ae::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Fri, 24 Feb
+ 2023 12:07:43 +0000
+Received: from BL02EPF000108E8.namprd05.prod.outlook.com
+ (2603:10b6:208:32f:cafe::d4) by BLAPR03CA0174.outlook.office365.com
+ (2603:10b6:208:32f::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24 via Frontend
+ Transport; Fri, 24 Feb 2023 12:07:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF000108E8.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.16 via Frontend Transport; Fri, 24 Feb 2023 12:07:42 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 24 Feb
+ 2023 06:07:41 -0600
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <michal.simek@xilinx.com>, <mdf@kernel.org>, <hao.wu@intel.com>,
+        <yilun.xu@intel.com>, <trix@redhat.com>,
+        <nava.kishore.manne@amd.com>, <ronak.jain@xilinx.com>,
+        <gregkh@linuxfoundation.org>, <tanmay.shah@xilinx.com>,
+        <mathieu.poirier@linaro.org>, <ben.levinsky@amd.com>,
+        <rajan.vaja@xilinx.com>, <harsha.harsha@xilinx.com>,
+        <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
+Subject: [PATCH v7 0/2]Adds status interface for zynqmp-fpga
+Date:   Fri, 24 Feb 2023 17:37:36 +0530
+Message-ID: <20230224120738.329416-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000108E8:EE_|PH7PR12MB6788:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d82f2db-8b8f-464e-c710-08db165fbba5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Fm4hcz4F0P/jE//eqVu1th1f+XUFndVBhCM7u08RithGkS2664Nhok9giyC2+XKDlvgjXUFlgBgPSQ5yA8ZAKzLY4gG4hpvBlnYdSDZOOFkWvm0FzNu/3NYgQCVvX6W5YqsCpd7r+TSpySpBANYEKG1qW4srfFh8CrdTkCAFPBCOQi0eyrvg0y7iGrfBQSxYKBYpcZ9Xdl3LDBESoP0xnZ/o80f3IdFhP41VJC2yDwJEp28RvP7pXbwQDD0i+FchKCpddq+AHzSg+xLKDfhFFUs1UB601shRjcWeX2uHriywKG+jrHaO5LsyPOzgnbfNFTHKTZ4OCfTIuKjpckd90ObuwQZZvr95mpX8aCqnDhx9aghSzP+JOJhAegQ9ZMPHfXLfjGyxqTcaqnEnk/IjiH0XP8CuX/OaU2jhxQZpKjSXOovQ3KnAbyvE3wrFFOlgFjKtXz+CtHBnuRkJ74QLo5rHSaO/nPy+oGOyZeA0HBxUDwQOrhf4QqBXhGV7/pgS8CKIXepWnZXM7jUYaeK2yzH70PIc6n8BmMDEnwPcLBtkc0bQI2Dgzi2PSBjoPQeEnOHIX9ud+z8fxjPUg0JNOqtlh+/3PAlKOV7XYYIaeEn9wLBwsIXRFvBcSXXfi3U0QpfVsGFcsBTiPPvxmlImeFjitInvx9lPeALFdrvug2OV1fmIGyOGHfwQLSidYHyjM5KKV7sV1iQVTzVZ1F9IlhHih60NdvSmhUGzwUeOMwu/mrw6hk2hDGpR/LLME8nDe8HAsEBGJjXI8MNOdwfqAktBRLCc4qOxVuia8pJaCu0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199018)(36840700001)(46966006)(40470700004)(82740400003)(81166007)(316002)(186003)(16526019)(41300700001)(336012)(26005)(40480700001)(36860700001)(4744005)(426003)(356005)(7416002)(8936002)(2616005)(103116003)(5660300002)(478600001)(8676002)(70586007)(1076003)(110136005)(47076005)(40460700003)(82310400005)(70206006)(36756003)(86362001)(966005)(6666004)(921005)(2906002)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 12:07:42.8496
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d82f2db-8b8f-464e-c710-08db165fbba5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6788
+X-Spam-Status: No, score=0.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:30:19AM +0000, JeeHeng Sia wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Andrew Jones <ajones@ventanamicro.com>
-> > Sent: Friday, 24 February, 2023 5:55 PM
-> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > 
-> > On Fri, Feb 24, 2023 at 09:33:31AM +0000, JeeHeng Sia wrote:
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > > Sent: Friday, 24 February, 2023 5:00 PM
-> > > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > > >
-> > > > On Fri, Feb 24, 2023 at 02:05:43AM +0000, JeeHeng Sia wrote:
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > > > > Sent: Friday, 24 February, 2023 2:07 AM
-> > > > > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > > > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > > > > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > > > > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > > > > >
-> > > > > > On Tue, Feb 21, 2023 at 10:35:23AM +0800, Sia Jee Heng wrote:
-> > > > > > > Low level Arch functions were created to support hibernation.
-> > > > > > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-> > > > > > > cpu state onto the stack, then calling swsusp_save() to save the memory
-> > > > > > > image.
-> > > > > > >
-> > > > > > > Arch specific hibernation header is implemented and is utilized by the
-> > > > > > > arch_hibernation_header_restore() and arch_hibernation_header_save()
-> > > > > > > functions. The arch specific hibernation header consists of satp, hartid,
-> > > > > > > and the cpu_resume address. The kernel built version is also need to be
-> > > > > > > saved into the hibernation image header to making sure only the same
-> > > > > > > kernel is restore when resume.
-> > > > > > >
-> > > > > > > swsusp_arch_resume() creates a temporary page table that covering only
-> > > > > > > the linear map. It copies the restore code to a 'safe' page, then start
-> > > > > > > to restore the memory image. Once completed, it restores the original
-> > > > > > > kernel's page table. It then calls into __hibernate_cpu_resume()
-> > > > > > > to restore the CPU context. Finally, it follows the normal hibernation
-> > > > > > > path back to the hibernation core.
-> > > > > > >
-> > > > > > > To enable hibernation/suspend to disk into RISCV, the below config
-> > > > > > > need to be enabled:
-> > > > > > > - CONFIG_ARCH_HIBERNATION_HEADER
-> > > > > > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> > > > > > >
-> > > > > > > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> > > > > > > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > > > > > > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> > > > > > > ---
-> > > > > > >  arch/riscv/Kconfig                 |   7 +
-> > > > > > >  arch/riscv/include/asm/assembler.h |  20 ++
-> > > > > > >  arch/riscv/include/asm/suspend.h   |  19 ++
-> > > > > > >  arch/riscv/kernel/Makefile         |   1 +
-> > > > > > >  arch/riscv/kernel/asm-offsets.c    |   5 +
-> > > > > > >  arch/riscv/kernel/hibernate-asm.S  |  77 +++++
-> > > > > > >  arch/riscv/kernel/hibernate.c      | 447 +++++++++++++++++++++++++++++
-> > > > > > >  7 files changed, 576 insertions(+)
-> > > > > > >  create mode 100644 arch/riscv/kernel/hibernate-asm.S
-> > > > > > >  create mode 100644 arch/riscv/kernel/hibernate.c
-> > > > > > >
-> > > > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > > > > index e2b656043abf..4555848a817f 100644
-> > > > > > > --- a/arch/riscv/Kconfig
-> > > > > > > +++ b/arch/riscv/Kconfig
-> > > > > > > @@ -690,6 +690,13 @@ menu "Power management options"
-> > > > > > >
-> > > > > > >  source "kernel/power/Kconfig"
-> > > > > > >
-> > > > > > > +config ARCH_HIBERNATION_POSSIBLE
-> > > > > > > +	def_bool y
-> > > > > > > +
-> > > > > > > +config ARCH_HIBERNATION_HEADER
-> > > > > > > +	def_bool y
-> > > > > > > +	depends on HIBERNATION
-> > > > > >
-> > > > > > nit: I think this can be simplified as def_bool HIBERNATION
-> > > > > good suggestion. will change it.
-> > > > > >
-> > > > > > > +
-> > > > > > >  endmenu # "Power management options"
-> > > > > > >
-> > > > > > >  menu "CPU Power Management"
-> > > > > > > diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
-> > > > > > > index 727a97735493..68c46c0e0ea8 100644
-> > > > > > > --- a/arch/riscv/include/asm/assembler.h
-> > > > > > > +++ b/arch/riscv/include/asm/assembler.h
-> > > > > > > @@ -59,4 +59,24 @@
-> > > > > > >  		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
-> > > > > > >  	.endm
-> > > > > > >
-> > > > > > > +/*
-> > > > > > > + * copy_page - copy 1 page (4KB) of data from source to destination
-> > > > > > > + * @a0 - destination
-> > > > > > > + * @a1 - source
-> > > > > > > + */
-> > > > > > > +	.macro	copy_page a0, a1
-> > > > > > > +		lui	a2, 0x1
-> > > > > > > +		add	a2, a2, a0
-> > > > > > > +1 :
-> > > > > >     ^ please remove this space
-> > > > > can't remove it otherwise checkpatch will throws ERROR: spaces required around that ':'
-> > > >
-> > > > Oh, right, labels in macros have this requirement.
-> > > >
-> > > > > >
-> > > > > > > +		REG_L	t0, 0(a1)
-> > > > > > > +		REG_L	t1, SZREG(a1)
-> > > > > > > +
-> > > > > > > +		REG_S	t0, 0(a0)
-> > > > > > > +		REG_S	t1, SZREG(a0)
-> > > > > > > +
-> > > > > > > +		addi	a0, a0, 2 * SZREG
-> > > > > > > +		addi	a1, a1, 2 * SZREG
-> > > > > > > +		bne	a2, a0, 1b
-> > > > > > > +	.endm
-> > > > > > > +
-> > > > > > >  #endif	/* __ASM_ASSEMBLER_H */
-> > > > > > > diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-> > > > > > > index 75419c5ca272..3362da56a9d8 100644
-> > > > > > > --- a/arch/riscv/include/asm/suspend.h
-> > > > > > > +++ b/arch/riscv/include/asm/suspend.h
-> > > > > > > @@ -21,6 +21,11 @@ struct suspend_context {
-> > > > > > >  #endif
-> > > > > > >  };
-> > > > > > >
-> > > > > > > +/*
-> > > > > > > + * Used by hibernation core and cleared during resume sequence
-> > > > > > > + */
-> > > > > > > +extern int in_suspend;
-> > > > > > > +
-> > > > > > >  /* Low-level CPU suspend entry function */
-> > > > > > >  int __cpu_suspend_enter(struct suspend_context *context);
-> > > > > > >
-> > > > > > > @@ -36,4 +41,18 @@ int __cpu_resume_enter(unsigned long hartid, unsigned long context);
-> > > > > > >  /* Used to save and restore the csr */
-> > > > > > >  void suspend_save_csrs(struct suspend_context *context);
-> > > > > > >  void suspend_restore_csrs(struct suspend_context *context);
-> > > > > > > +
-> > > > > > > +/* Low-level API to support hibernation */
-> > > > > > > +int swsusp_arch_suspend(void);
-> > > > > > > +int swsusp_arch_resume(void);
-> > > > > > > +int arch_hibernation_header_save(void *addr, unsigned int max_size);
-> > > > > > > +int arch_hibernation_header_restore(void *addr);
-> > > > > > > +int __hibernate_cpu_resume(void);
-> > > > > > > +
-> > > > > > > +/* Used to resume on the CPU we hibernated on */
-> > > > > > > +int hibernate_resume_nonboot_cpu_disable(void);
-> > > > > > > +
-> > > > > > > +asmlinkage void hibernate_restore_image(unsigned long resume_satp, unsigned long satp_temp,
-> > > > > > > +					unsigned long cpu_resume);
-> > > > > > > +asmlinkage int hibernate_core_restore_code(void);
-> > > > > > >  #endif
-> > > > > > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > > > > > > index 4cf303a779ab..daab341d55e4 100644
-> > > > > > > --- a/arch/riscv/kernel/Makefile
-> > > > > > > +++ b/arch/riscv/kernel/Makefile
-> > > > > > > @@ -64,6 +64,7 @@ obj-$(CONFIG_MODULES)		+= module.o
-> > > > > > >  obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
-> > > > > > >
-> > > > > > >  obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-> > > > > > > +obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate-asm.o
-> > > > > > >
-> > > > > > >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
-> > > > > > >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
-> > > > > > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > > > > > > index df9444397908..d6a75aac1d27 100644
-> > > > > > > --- a/arch/riscv/kernel/asm-offsets.c
-> > > > > > > +++ b/arch/riscv/kernel/asm-offsets.c
-> > > > > > > @@ -9,6 +9,7 @@
-> > > > > > >  #include <linux/kbuild.h>
-> > > > > > >  #include <linux/mm.h>
-> > > > > > >  #include <linux/sched.h>
-> > > > > > > +#include <linux/suspend.h>
-> > > > > > >  #include <asm/kvm_host.h>
-> > > > > > >  #include <asm/thread_info.h>
-> > > > > > >  #include <asm/ptrace.h>
-> > > > > > > @@ -116,6 +117,10 @@ void asm_offsets(void)
-> > > > > > >
-> > > > > > >  	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
-> > > > > > >
-> > > > > > > +	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-> > > > > > > +	OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
-> > > > > > > +	OFFSET(HIBERN_PBE_NEXT, pbe, next);
-> > > > > > > +
-> > > > > > >  	OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
-> > > > > > >  	OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
-> > > > > > >  	OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
-> > > > > > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..846affe4dced
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/arch/riscv/kernel/hibernate-asm.S
-> > > > > > > @@ -0,0 +1,77 @@
-> > > > > > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > > > > > +/*
-> > > > > > > + * Hibernation low level support for RISCV.
-> > > > > > > + *
-> > > > > > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> > > > > > > + *
-> > > > > > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-> > > > > > > + */
-> > > > > > > +
-> > > > > > > +#include <asm/asm.h>
-> > > > > > > +#include <asm/asm-offsets.h>
-> > > > > > > +#include <asm/assembler.h>
-> > > > > > > +#include <asm/csr.h>
-> > > > > > > +
-> > > > > > > +#include <linux/linkage.h>
-> > > > > > > +
-> > > > > > > +/*
-> > > > > > > + * int __hibernate_cpu_resume(void)
-> > > > > > > + * Switch back to the hibernated image's page table prior to restoring the CPU
-> > > > > > > + * context.
-> > > > > > > + *
-> > > > > > > + * Always returns 0
-> > > > > > > + */
-> > > > > > > +ENTRY(__hibernate_cpu_resume)
-> > > > > > > +	/* switch to hibernated image's page table. */
-> > > > > > > +	csrw CSR_SATP, s0
-> > > > > > > +	sfence.vma
-> > > > > > > +
-> > > > > > > +	REG_L	a0, hibernate_cpu_context
-> > > > > > > +
-> > > > > > > +	restore_csr
-> > > > > > > +	restore_reg
-> > > > > > > +
-> > > > > > > +	/* Return zero value. */
-> > > > > > > +	add	a0, zero, zero
-> > > > > >
-> > > > > > nit: mv a0, zero
-> > > > > sure
-> > > > > >
-> > > > > > > +
-> > > > > > > +	ret
-> > > > > > > +END(__hibernate_cpu_resume)
-> > > > > > > +
-> > > > > > > +/*
-> > > > > > > + * Prepare to restore the image.
-> > > > > > > + * a0: satp of saved page tables.
-> > > > > > > + * a1: satp of temporary page tables.
-> > > > > > > + * a2: cpu_resume.
-> > > > > > > + */
-> > > > > > > +ENTRY(hibernate_restore_image)
-> > > > > > > +	mv	s0, a0
-> > > > > > > +	mv	s1, a1
-> > > > > > > +	mv	s2, a2
-> > > > > > > +	REG_L	s4, restore_pblist
-> > > > > > > +	REG_L	a1, relocated_restore_code
-> > > > > > > +
-> > > > > > > +	jalr	a1
-> > > > > > > +END(hibernate_restore_image)
-> > > > > > > +
-> > > > > > > +/*
-> > > > > > > + * The below code will be executed from a 'safe' page.
-> > > > > > > + * It first switches to the temporary page table, then starts to copy the pages
-> > > > > > > + * back to the original memory location. Finally, it jumps to __hibernate_cpu_resume()
-> > > > > > > + * to restore the CPU context.
-> > > > > > > + */
-> > > > > > > +ENTRY(hibernate_core_restore_code)
-> > > > > > > +	/* switch to temp page table. */
-> > > > > > > +	csrw satp, s1
-> > > > > > > +	sfence.vma
-> > > > > > > +.Lcopy:
-> > > > > > > +	/* The below code will restore the hibernated image. */
-> > > > > > > +	REG_L	a1, HIBERN_PBE_ADDR(s4)
-> > > > > > > +	REG_L	a0, HIBERN_PBE_ORIG(s4)
-> > > > > >
-> > > > > > Are we sure restore_pblist will never be NULL?
-> > > > > restore_pblist is a link-list, it will be null during initialization or during page clean up by hibernation core. During the initial
-> > resume
-> > > > process, the hibernation core will check the header and load the pages. If everything works correctly, the page will be linked to the
-> > > > restore_pblist and then invoke swsusp_arch_resume() else hibernation core will throws error and failed to resume from the
-> > > > hibernated image.
-> > > >
-> > > > I know restore_pblist is a linked-list and this doesn't answer the
-> > > > question. The comment above restore_pblist says
-> > > >
-> > > > /*
-> > > >  * List of PBEs needed for restoring the pages that were allocated before
-> > > >  * the suspend and included in the suspend image, but have also been
-> > > >  * allocated by the "resume" kernel, so their contents cannot be written
-> > > >  * directly to their "original" page frames.
-> > > >  */
-> > > >
-> > > > which implies the pages that end up on this list are "special". My
-> > > > question is whether or not we're guaranteed to have at least one
-> > > > of these special pages. If not, we shouldn't assume s4 is non-null.
-> > > > If so, then a comment stating why that's guaranteed would be nice.
-> > > The restore_pblist will not be null otherwise swsusp_arch_resume wouldn't get invoked. you can find how the link-list are link and
-> > how it checks against validity at https://elixir.bootlin.com/linux/v6.2-rc8/source/kernel/power/snapshot.c . " A comment stating why
-> > that's guaranteed would be nice" ? Hmm, perhaps this is out of my scope but I do believe in the page validity checking in the link I
-> > shared.
-> > 
-> > Sorry, but pointing to an entire source file (one that I've obviously
-> > already looked at, since I quoted a comment from it...) is not helpful.
-> > I don't see where restore_pblist is being checked before
-> > swsusp_arch_resume() is issued (from its callsite in hibernate.c).
-> Sure, below shows the hibernation flow for your reference. The link-list creation and checking found at: https://elixir.bootlin.com/linux/v6.2/source/kernel/power/snapshot.c#L2576
-> software_resume()
-> 	load_image_and_restore()
-> 		swsusp_read()
-> 			load_image()
->  				snapshot_write_next()
-> 					get_buffer() <-- This is the function checks and links the pages to the restore_pblist
+Adds status interface for zynqmp-fpga, It's a read only interface
+which allows the user to get the Programmable Logic(PL) status.
+ -Device Initialization error.
+ -Device internal signal error.
+ -All I/Os are placed in High-Z state.
+ -Device start-up sequence error.
+ -Firmware error.
 
-Yup, I've read this path, including get_buffer(), where I saw that
-get_buffer() can return an address without allocating a PBE. Where is the
-check that restore_pblist isn't NULL, i.e. we see that at least one PBE
-has been allocated by get_buffer(), before we call swsusp_arch_resume()?
+For more details refer the ug570.
+https://docs.xilinx.com/v/u/en-US/ug570-ultrascale-configuration
 
-Or, is known that at least one or more pages match the criteria pointed
-out in the comment below (copied from get_buffer())?
+Nava kishore Manne (2):
+  firmware: xilinx: Add pm api function for PL config reg readback
+  fpga: zynqmp-fpga: Adds status interface
 
-        /*
-         * The "original" page frame has not been allocated and we have to
-         * use a "safe" page frame to store the loaded page.
-         */
+ .../ABI/testing/sysfs-driver-zynqmp-fpga      | 73 +++++++++++++++++++
+ drivers/firmware/xilinx/zynqmp.c              | 33 +++++++++
+ drivers/fpga/zynqmp-fpga.c                    | 21 ++++++
+ include/linux/firmware/xlnx-zynqmp.h          | 11 +++
+ 4 files changed, 138 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
 
-If so, then which ones? And where does it state that?
+-- 
+2.25.1
 
-Thanks,
-drew
-
-
-> 		hibernation_restore()
-> 			resume_target_kernel()
-> 				swsusp_arch_resume()
-> > 
-> > Thanks,
-> > drew
