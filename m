@@ -2,94 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5C36A1439
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 01:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4A36A144E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 01:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjBXAPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 19:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S229541AbjBXA1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 19:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBXAPP (ORCPT
+        with ESMTP id S229379AbjBXA1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 19:15:15 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E58446153
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:15:13 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so1060299pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 16:15:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gnsL+pGfqbSaj40dlXSygHui8rkzCXGh8NQYT1OtVjc=;
-        b=MEMyJaQw67L5JtHF1XZ61OYT6n+VfEM4YMA80P0tKRQfHyK6eOM2UnebOQdeamv+xT
-         yz2NB/ixM+eJktRajoBHzOa6L7dT2+CXtbR/pOqZGAHeq9z5a9z03YJ341hIx6xxxeoL
-         h+IutQs/R34YpzIUCI2D62wQKZ8qveteFtJOf6WvLi4PawfWnxcu/s6MoTWhsJ6bIVkm
-         JWB0JPg9ASJdw1+MZYPjQC5D3pD5S12YsD7Dk5SRBebuwl/9Wk1g90CacKGm/yWcAqQJ
-         p+28peXucCwPRkbo6f4iUAB4JqxQqU4Q+iKlqjmi0Qg+j0xJNiPRzKPqGYm+Rfx4E0g5
-         huKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gnsL+pGfqbSaj40dlXSygHui8rkzCXGh8NQYT1OtVjc=;
-        b=EVPH+fQF2e1Z9Bc5HE2olEROF2HBoOgkNnfKAzAvAHL8rgIxfUeh9JBxLRT2rnRAL3
-         VRrzyhibwOZVOOTYuVg3Oxv7aaOzD4PJqepZmc/VtY0rIyBNNMsIPjossn6qhaWAOw0Z
-         S4kj4i9mbvCfbh7tc8+vF78DpOhHB11qRpFhBt5Lenv06G6iI6gA6hYQjykgfpgL4aoC
-         MUuyKR5AwegZiMf5/yeqvhSClNNf6a/lm15ffjBp9fUe78OjzRCm+2NN35Z0V8PGg/cJ
-         aOwINu605SDV+lgJDNcWaKtB9GUytRmBdg2P5lREWhp6980b4lS40X/n9Z/tAI5bNjlq
-         QR9A==
-X-Gm-Message-State: AO0yUKXVQ69yuj0eou+i/T9lv04qZc37b6/EW9Ma1IFnp/+ggnHhgHBd
-        JiGp5OXrAyWfRsBaenTQ68nSpw==
-X-Google-Smtp-Source: AK7set+H1Oed36cehxC8KiJPC3s0ckOpweO6g64c5qWByIUOeqKQ8bas15lSHf/5Y113qatq+WyDfg==
-X-Received: by 2002:a05:6a20:7d99:b0:cc:4db1:12fc with SMTP id v25-20020a056a207d9900b000cc4db112fcmr2303043pzj.46.1677197712594;
-        Thu, 23 Feb 2023 16:15:12 -0800 (PST)
-Received: from [10.211.55.3] (c-73-221-130-71.hsd1.wa.comcast.net. [73.221.130.71])
-        by smtp.gmail.com with ESMTPSA id q18-20020a62e112000000b005a7ae8b3a09sm3528645pfh.32.2023.02.23.16.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 16:15:12 -0800 (PST)
-Message-ID: <d4cdae93-a003-d07f-3074-3542a231747b@linaro.org>
-Date:   Thu, 23 Feb 2023 18:15:10 -0600
+        Thu, 23 Feb 2023 19:27:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CE52705;
+        Thu, 23 Feb 2023 16:27:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABD5DB81B9E;
+        Fri, 24 Feb 2023 00:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551F2C433A0;
+        Fri, 24 Feb 2023 00:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677198468;
+        bh=04HzNiXeZWVQUk21JLryWqtmb0X9RFU/gPUr0yis9Gs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XbIPccfNIEdDHpKlCl5b4JTDQ5O4ni+Wyct/voolXYdrqAe9dZbMCjlmNVIh/Bfqf
+         L6YU7iUgZSqCr+Zy9wc8d2zGdjwshN26FYvCkDWQhYfATXmP+coQI+y/KLzVFQvpVY
+         tF31txnNjHnNPuaHx5xWYpnJMYAyVIqiIL41Npj7fZ/E/VWkNrB5pS3ZLdkIbAzbb6
+         8THdVszjk7ZputT6Yj0OYlTWjbRv+Sj7mfWbCy90aZqUuemaEZpS5HomZTtwAjgVYP
+         gLIriAC0uB7qQ6HsOLRwQiDlD/q4Dqt21tbj9E0Xn4pFkcNQMvkMPLUn031gQjGtII
+         QWg0ODZCFAUew==
+Received: by mail-oi1-f173.google.com with SMTP id q15so6464601oiw.11;
+        Thu, 23 Feb 2023 16:27:48 -0800 (PST)
+X-Gm-Message-State: AO0yUKX4rW8CZ6k/IhF1soXN5SYWfN+/hgMTKEMuFWTk1Gu2c8b+wL8A
+        u7eUe4lT0iZxDPLrGJLIQAPkxAARn9oVI0AKeGQ=
+X-Google-Smtp-Source: AK7set8U0qz7dTajr8wKMh2TbmDSLqhSeRhHSczTQAqxiE1PVudX5LoBI0kqCXZkQ1R+EqHAfrZnwvjxfDgH0iMiCcw=
+X-Received: by 2002:aca:1b04:0:b0:383:d3ae:2ef4 with SMTP id
+ b4-20020aca1b04000000b00383d3ae2ef4mr507233oib.8.1677198467541; Thu, 23 Feb
+ 2023 16:27:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 06/26] virt: gunyah: msgq: Add hypercalls to send and
- receive messages
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212303.3307536-1-quic_eberman@quicinc.com>
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <20230214212303.3307536-1-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
+ <63c2936e-6bc7-67e3-eaf3-0123333381f8@landley.net> <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
+ <380c88ef-eb19-e73e-0ec9-805b8b90e957@landley.net>
+In-Reply-To: <380c88ef-eb19-e73e-0ec9-805b8b90e957@landley.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 24 Feb 2023 09:27:11 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATzPWoPpKNuZ8LOUw4j=LVsHn2ji-++8i3Cn_4fJGoQSg@mail.gmail.com>
+Message-ID: <CAK7LNATzPWoPpKNuZ8LOUw4j=LVsHn2ji-++8i3Cn_4fJGoQSg@mail.gmail.com>
+Subject: Re: [PATCH 1/5] try generic compiler name "cc" before falling back to "gcc".
+To:     Rob Landley <rob@landley.net>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,91 +67,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 3:23 PM, Elliot Berman wrote:
-> Add hypercalls to send and receive messages on a Gunyah message queue.
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   arch/arm64/gunyah/gunyah_hypercall.c | 32 ++++++++++++++++++++++++++++
->   include/linux/gunyah.h               |  7 ++++++
->   2 files changed, 39 insertions(+)
-> 
-> diff --git a/arch/arm64/gunyah/gunyah_hypercall.c b/arch/arm64/gunyah/gunyah_hypercall.c
-> index f30d06ee80cf..2ca9ab098ff6 100644
-> --- a/arch/arm64/gunyah/gunyah_hypercall.c
-> +++ b/arch/arm64/gunyah/gunyah_hypercall.c
-> @@ -38,6 +38,8 @@ EXPORT_SYMBOL_GPL(arch_is_gunyah_guest);
->   						   fn)
->   
->   #define GH_HYPERCALL_HYP_IDENTIFY		GH_HYPERCALL(0x8000)
-> +#define GH_HYPERCALL_MSGQ_SEND			GH_HYPERCALL(0x801B)
-> +#define GH_HYPERCALL_MSGQ_RECV			GH_HYPERCALL(0x801C)
->   
->   /**
->    * gh_hypercall_hyp_identify() - Returns build information and feature flags
-> @@ -57,5 +59,35 @@ void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identi
->   }
->   EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
->   
-> +enum gh_error gh_hypercall_msgq_send(u64 capid, size_t size, uintptr_t buff, int tx_flags,
-> +					bool *ready)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_hvc(GH_HYPERCALL_MSGQ_SEND, capid, size, buff, tx_flags, 0, &res);
-> +
-> +	if (res.a0 == GH_ERROR_OK)
-> +		*ready = res.a1;
-> +
-> +	return res.a0;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_hypercall_msgq_send);
-> +
-> +enum gh_error gh_hypercall_msgq_recv(u64 capid, uintptr_t buff, size_t size, size_t *recv_size,
-> +					bool *ready)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_hvc(GH_HYPERCALL_MSGQ_RECV, capid, buff, size, 0, &res);
-> +
-> +	if (res.a0 == GH_ERROR_OK) {
-> +		*recv_size = res.a1;
+On Thu, Feb 23, 2023 at 10:36 PM Rob Landley <rob@landley.net> wrote:
+>
+> On 2/22/23 23:31, Masahiro Yamada wrote:
+> > On Wed, Feb 22, 2023 at 5:41 AM Rob Landley <rob@landley.net> wrote:
+> >>
+> >> Distros like debian install the generic "cc" name for both gcc and clang,
+> >> and the plumbing already does CC_VERSION_TEXT to include Makefile.clang.
+> >>
+> >> Previously: https://lkml.iu.edu/hypermail/linux/kernel/2202.0/01505.html
+> >> Signed-off-by: Rob Landley <rob@landley.net>
+> >> ---
+> >>  Makefile | 5 +++--
+> >>  1 file changed, 3 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Makefile b/Makefile
+> >> index 3f6628780eb2..0ac57ae3b45f 100644
+> >> --- a/Makefile
+> >> +++ b/Makefile
+> >> @@ -456,7 +456,7 @@ endif
+> >>  HOSTCC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+> >>  HOSTCXX        = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
+> >>  else
+> >> -HOSTCC = gcc
+> >> +HOSTCC := $(shell cc --version >/dev/null 2>&1 && echo cc || echo gcc)
+> >
+> > 'cc' only makes sense for the host compiler,
+>
+> It was the generic posix name for "C compiler" until posix decided to put an
+> expiration date in the command name, which seems as widely honored as the
+> tar->pax switch or the removal of cpio.
+>
+> The name "gcc" was like "gmake" and "gawk". (On macos homebrew there's "gsed".)
+>
+> > which is configured by 'update-alternative'.
+>
+> Hexagon only has llvm support, not gcc, so I had to add an llvm cross compiler
+> to my cross compiler set, prefixed hexagon-unknown-linux-musl-*, but the linux
+> kernel wants to call it as hexagon-unknown-linux-musl-gcc.
+>
+> The kernel builds find with a "gcc" symlink to clang, but there _is_ a generic
+> name, which is widely installed.
 
-Is there any chance the 64-bit size is incompatible
-with size_t?  (Too big?)
 
-> +		*ready = res.a2;
 
-		*ready = !!res.a2;
+In the discussion in the past [1], we decided to
+go with LLVM=1 switch rather than 'cc'.
+We do not need both.
 
-> +	}
-> +
-> +	return res.a0;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_hypercall_msgq_recv);
-> +
->   MODULE_LICENSE("GPL");
->   MODULE_DESCRIPTION("Gunyah Hypervisor Hypercalls");
-> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-> index 3fef2854c5e1..cb6df4eec5c2 100644
-> --- a/include/linux/gunyah.h
-> +++ b/include/linux/gunyah.h
-> @@ -112,4 +112,11 @@ struct gh_hypercall_hyp_identify_resp {
->   
->   void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity);
->   
-> +#define GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH		BIT(0)
-> +
-> +enum gh_error gh_hypercall_msgq_send(u64 capid, size_t size, uintptr_t buff, int tx_flags,
-> +					bool *ready);
+[1]: https://lkml.org/lkml/2020/3/28/494
 
-Why uintptr_t?  Why not just pass a host pointer (void *)
-and do whatever conversion is necessary inside the function?
 
-					-Alex
 
-> +enum gh_error gh_hypercall_msgq_recv(u64 capid, uintptr_t buff, size_t size, size_t *recv_size,
-> +					bool *ready);
-> +
->   #endif
 
+
+
+
+
+>
+> > I tried it before, but LLVM folks preferred
+> > using $(LLVM) to choose clang/gcc.
+>
+> So if we want generic behavior without having to specify, we should create a
+> "gcc" symlink to clang?
+
+
+If you mean "without LLVM=1 or HOSTCC=clang specified",
+I think the answer is yes.
+
+
+
+
+
+
+>
+> >>  HOSTCXX        = g++
+> >>  endif
+> >>  HOSTRUSTC = rustc
+> >> @@ -503,7 +503,8 @@ OBJDUMP             = $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+> >>  READELF                = $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+> >>  STRIP          = $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+> >>  else
+> >> -CC             = $(CROSS_COMPILE)gcc
+> >> +CC             := $(CROSS_COMPILE)$(shell $(CROSS_COMPILE)cc --version \
+> >> +                       >/dev/null 2>&1 && echo cc || echo gcc)
+> >
+> > This hunk sets up GCC/binutils.
+>
+> This is the codepath that's taken when you don't explicitly specify "LLVM=1".
+> The test there is falling back to (appropriately prefixed) gcc when it can't
+> find a working (appropriately prefixed) cc.
+
+
+Unless LLVM=1 is specified, the toolchain defaults to GCC/binutils,
+there is no need for such additional complexity.
+
+
+
+
+>
+> > So, cc does not make sense.  NACK.
+>
+> Do you explicitly specify the "gold" linker vs the previous gnu one vs
+> lld.llvm.org on the kernel build command line?
+
+
+gold is unsupported.
+See 75959d44f9dc8e44410667009724e4e238515502
+
+
+Yes, to override only LD, LD=ld.lld should be given in the command line.
+
+
+
+
+
+>
+> Rob
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
