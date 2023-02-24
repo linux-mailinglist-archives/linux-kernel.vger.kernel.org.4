@@ -2,108 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DF76A179E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B77346A17A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 09:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjBXIAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 03:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S229633AbjBXIBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 03:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjBXIAL (ORCPT
+        with ESMTP id S229626AbjBXIA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 03:00:11 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E993122DEF;
-        Fri, 24 Feb 2023 00:00:09 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id E970C42627;
-        Fri, 24 Feb 2023 08:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677225608;
-        bh=0Up47y7KEYhekwntYgr5syUpa6Dxb/pGbZHOT4tPwJM=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=tER4tx7J4m3yFPMir0rEV1nhCYmxofpML4pw1lwQYZhVt3OM2iNb41mFu4itCF3Q4
-         Vk+V16EjWGKqAGT1XCMFkiH1f4BwehRYbZWCZ7/E+dhMp4hDAxaBZ+xO80N7NSFeoO
-         1P59zVIfTE+Epbm2JUshFd51dHWmY2yBBz+uWOU9NAGCVFEWN7KWe73/lcClmsWnFs
-         wrEVjuinO7AJ+Hw2ompz99OxVd54JjTtD9FXuNUOYnuDXRLCF/XH1nErXRz3CsuJZ+
-         XyDsZjJrbLXKC814dS1xE5WE3jNkKEulgILcNARN6Ow7Nyjdc3TnkU7W2dr4FnN50K
-         sQDP3r5UapMaA==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Fri, 24 Feb 2023 16:59:34 +0900
-Subject: [PATCH 2/2] rust: sync: arc: Add
- UniqueArc<MaybeUninit<T>::assume_init()
+        Fri, 24 Feb 2023 03:00:59 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829B925BAA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:00:57 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id u10so15635927pjc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 00:00:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PcsnC67wn+CqlKF18BOklq3hhvo7C+mJm1DzOVZsLT8=;
+        b=cRnat+0Cs7+bku17Q0RWfYOyZoaY/AM3gR/A4qjMETzHJ8K/6cMg6sGIDgVGEUi2us
+         Siv6tVSk8OJ5+NMBcy4u69Wi+IRYTZb2yyEQ8cJnQqoajbwvM+r8ywhAxau9pRpMoh6z
+         OxNBb8aaTRh7b3QNsM/2CObzPZWXqGwDli3mx5Z+XP6TFOlawPctW5DeNRZSNWo3fZfw
+         /A0QLienw62/ybqG/1ipvDDFWQSzUISSJ47SFKk2HvEf//fPLO+YQKMZIg5CvhdKVQyw
+         GX5AhiDnxUK5seaggpfa44E6V7EvuGqu0myYlM0AI72dHew3HhKu5t27GC7z75uN4+TN
+         xRrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PcsnC67wn+CqlKF18BOklq3hhvo7C+mJm1DzOVZsLT8=;
+        b=lKfXh6LGAbz0aXA3dD8E0WolYLZQZE2gGNwnLGR/MgQKh0j4DLbrC7dzo7T4VgPKhU
+         Blky4QEW7iZA/UmAoJQ+cUAkd/CoGHbNq6VxMCK9oZefY1j0XYqlU/QWxqhsCbpSUyRq
+         /3SvGyma4FlaOIQhUm2j0050ULFLUunmmHo0A05om193qmzh3dlauihKN2GbjF5nWiOZ
+         gLUM5SOqEJNzXCR4Tucs/mjEfrUyoM5qaewxM41nMKXchLsM7k1nC/pLE5OgfbbjgANk
+         7PI8+Ec9dJdK/ZiObmktgqVL9SjWVygvqntJTFmQrZZIc5F4J4JsyjLU0v9JZ0xvLyZ/
+         HBxg==
+X-Gm-Message-State: AO0yUKWCPY0qGmWJH9Fbfd2syPyhSJVZwpgKEbz4XLz01olIXN6sDgZ4
+        wPtx4WL8LRXBsMHgey/7SUK3
+X-Google-Smtp-Source: AK7set/lzSiKZKtwDbb/ZwhiiXzU1IO4RluJP7aya+5eNvg/2KbycM28CZD5Iy/+ZPBhkHUjotDfcw==
+X-Received: by 2002:a17:90b:3144:b0:237:99b9:c415 with SMTP id ip4-20020a17090b314400b0023799b9c415mr725021pjb.38.1677225656986;
+        Fri, 24 Feb 2023 00:00:56 -0800 (PST)
+Received: from localhost.localdomain ([117.217.187.3])
+        by smtp.gmail.com with ESMTPSA id l3-20020a17090ac58300b002372106a5casm914211pjt.44.2023.02.24.00.00.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 00:00:56 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org
+Cc:     konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.sharma@linaro.org, srinivas.kandagatla@linaro.org,
+        quic_vkamble@quicinc.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm8150: Fix the iommu mask used for PCIe controllers
+Date:   Fri, 24 Feb 2023 13:30:45 +0530
+Message-Id: <20230224080045.6577-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
-References: <20230224-rust-arc-v1-0-568eea613a41@asahilina.net>
-In-Reply-To: <20230224-rust-arc-v1-0-568eea613a41@asahilina.net>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677225599; l=1757;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=0Up47y7KEYhekwntYgr5syUpa6Dxb/pGbZHOT4tPwJM=;
- b=uJ1yTsqKiJ60A7a9DGhqliBpLPZdFYZvgKBN4QFlYL8xz5Fq/DvvPu1HeHmu9Ru9FqBj2uX1Z
- Y9EbTDTSc0QC01RK+qseEH2NcYWjE1RCHtAH9DyQH9p4mLLqKfKcyLh
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can already create `UniqueArc<MaybeUninit<T>>` instances with
-`UniqueArc::try_new_uninit()` and write to them with `write()`. Add
-the missing unsafe `assume_init()` function to promote it to
-`UniqueArc<T>`, so users can do piece-wise initialization of the
-contents instead of doing it all at once as long as they keep the
-invariants (the same requirements as `MaybeUninit::assume_init()`).
+The iommu mask should be 0x3f as per Qualcomm internal documentation.
+Without the correct mask, the PCIe transactions from the endpoint will
+result in SMMU faults. Hence, fix it!
 
-This mirrors the std `Arc::assume_init()` function. In the kernel,
-since we have `UniqueArc`, arguably this only belongs there since most
-use cases will initialize it immediately after creating it, before
-demoting it to `Arc` to share it.
-
-Signed-off-by: Asahi Lina <lina@asahilina.net>
+Cc: stable@vger.kernel.org # 5.19
+Fixes: a1c86c680533 ("arm64: dts: qcom: sm8150: Add PCIe nodes")
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- rust/kernel/sync/arc.rs | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index 752bd7c4699e..b8e9477fe865 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -512,6 +512,15 @@ impl<T> UniqueArc<MaybeUninit<T>> {
-     /// Converts a `UniqueArc<MaybeUninit<T>>` into a `UniqueArc<T>` by writing a value into it.
-     pub fn write(mut self, value: T) -> UniqueArc<T> {
-         self.deref_mut().write(value);
-+        // SAFETY: We have just written the contents fully.
-+        unsafe { self.assume_init() }
-+    }
-+
-+    /// Returns a UniqueArc<T>, assuming the MaybeUninit<T> has already been initialized.
-+    ///
-+    /// # Safety
-+    /// The contents of the UniqueArc must have already been fully initialized.
-+    pub unsafe fn assume_init(self) -> UniqueArc<T> {
-         let inner = ManuallyDrop::new(self).inner.ptr;
-         UniqueArc {
-             // SAFETY: The new `Arc` is taking over `ptr` from `self.inner` (which won't be
-
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index fd20096cfc6e..13e0ce828606 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -1826,7 +1826,7 @@ pcie0: pci@1c00000 {
+ 				      "slave_q2a",
+ 				      "tbu";
+ 
+-			iommus = <&apps_smmu 0x1d80 0x7f>;
++			iommus = <&apps_smmu 0x1d80 0x3f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
+ 				    <0x100 &apps_smmu 0x1d81 0x1>;
+ 
+@@ -1925,7 +1925,7 @@ pcie1: pci@1c08000 {
+ 			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+ 			assigned-clock-rates = <19200000>;
+ 
+-			iommus = <&apps_smmu 0x1e00 0x7f>;
++			iommus = <&apps_smmu 0x1e00 0x3f>;
+ 			iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
+ 				    <0x100 &apps_smmu 0x1e01 0x1>;
+ 
 -- 
-2.35.1
+2.25.1
 
