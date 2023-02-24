@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB246A1EA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F6D6A1EA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 16:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjBXPfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 10:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S230253AbjBXPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 10:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBXPfV (ORCPT
+        with ESMTP id S230184AbjBXPfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:35:21 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9F0421A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:35:19 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id eg37so52430152edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:35:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VzbLUEUjtY0tsDWNS62Tcb+S81iHP1D44kGH0OHXbkA=;
-        b=UUW2cNQxQ9wiI1y1uEIiov8/aAn6pQQMVXzfBkhJVbnD02igAWyzWePL5TL0KIpFXc
-         f06QP9Z9KFOrAD5Ctv6w7WEt4EpGTRp7azcZPWKRgRcy7Rq6bww9dx6TUNU5NGO2rgjk
-         yo4aNdOesMKZr3LRk9rjWzwFngPGaCK+rpUGcmZndXmJb/SCuTPWMP987JyoGPrq687s
-         ZVdvsxSaXkI4Dq/rU97CmzGR6MHk9vwsst50gUNty8yu/Rf8o86l8jy2Z4iYWyKTLm2+
-         qmsbKn9RXvDBmUJKNNwq8NfnVSmnAykvHSw/wUNDR0l1tseozRwukyc+jIcN3OqCKJFh
-         W4xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VzbLUEUjtY0tsDWNS62Tcb+S81iHP1D44kGH0OHXbkA=;
-        b=y1DtFZFZlwUnz+H9DSHtexTm+EQQkDY56Ybds/c7xNFbnkczAT0zskN5/KYxJCn+gG
-         asdcE9Sg61akjmFwoF50NBgwkhFNGTQGdbc3EHUZ6IqgeJ7Z94RhlWaP6nrs+YnoV/vL
-         L1F9Lk50sxHb8NG7pnQcU4YCopThHwwz+zWnmIeHV/vRdSiR7ZySJ6eCuPZXbV/UcqJn
-         o6ywb6Q4iF45xp4RYlRwZskNv1yLt8r1DL06+/bJaQzTO0CjBwHodYQPm7VD2imbsl24
-         oadk4jxDh5fege1848L5TXHKG0TkCLX5Md8DDrCDzsPOnSLOKNDKuxMDVmLPUi1i0cEu
-         I6Qg==
-X-Gm-Message-State: AO0yUKWLjPMrC4e/4vhLCY10WxRXcEci7Y3ouYmmA2WUY36GfCoNgXCS
-        Le+AZ7SEW/USUs1GPxiIAYs=
-X-Google-Smtp-Source: AK7set9QwwaNgb3OunBObQ+DvB0YGMDXoLNPjUGf1qbnK8dvMDVSCNC8+t8Bu3sMBeMmTuUP+/sN9w==
-X-Received: by 2002:a17:907:1612:b0:8e4:86ed:7203 with SMTP id hb18-20020a170907161200b008e486ed7203mr144549ejc.11.1677252918233;
-        Fri, 24 Feb 2023 07:35:18 -0800 (PST)
-Received: from EPUAKYIW03DD.. ([91.123.150.38])
-        by smtp.gmail.com with ESMTPSA id kg19-20020a17090776f300b008be0b7242d5sm8441360ejc.90.2023.02.24.07.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 07:35:17 -0800 (PST)
-From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Subject: [PATCH] drm/virtio: Pass correct device to dma_sync_sgtable_for_device()
-Date:   Fri, 24 Feb 2023 17:34:50 +0200
-Message-Id: <20230224153450.526222-1-olekstysh@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 24 Feb 2023 10:35:33 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0631.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65986126D4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 07:35:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g7GWnqqOIQJ9i1+7lJgxYOZ4sErLQD58hER6YfS2zXIQcsOpu7Iug2gBwool1PLNqcWvLv658x5xNqOWikFRdNI7RO+Y6Jo6fB9wBDQskOFDKIpzOGm84pNBifzM+DFHo1k/JaLRTO5X4Qi4+cgruA9tqh0oI5d+pxZwmpwzQ9qo0pJUFqIiWmTlPnqP53UOXa0j4aBvCuQc+u7ns5LmfIyKVt2PCK+uAWZ39978GTabSdzCePezuDDtEjKm4D5XW39iKlKQchcWIujcfpfhU9JOPZHi2eeiMch+h7RxIP/26bIPm5kX19hdeHGc/HtO5eJVzGOsy3C3Hm/9TyFHRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cvnh2GVd8TsUUtNmxk55pbUgeUDB0AzqQOgwGsF/kiQ=;
+ b=Iodzt4Kw/1TaBzG+Uk+cZgVGr+FS6SB2ppLaganhwIEhElYXQV4gfEaR4O/pBjyRD9bKCGlNxN/rj6d7c0oy6Z8NI7a1YXLBUjnRU5x7WP3RBekNy6eh4k3v/0VBIfc4U5Yb6kSnciNi0C69sIAGkOWb8M2eu7d5MlYBonEJzxR55VN38+4HHgE14AEw8NIs6IofW+kw5rkL78U/kwRYZS9N+wYNVuVL26fmlgIqEy24oy0OzieXIzuG9dz+rmGaqaBmvTxgiIPDsaLAEFZn/Q8s1ScZy0vreTd6SyKrO2RsAD7nNa6gfR7a91wp7QxrP2Kq9CoovbDizE5CRA/+dw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mail.polimi.it; dmarc=pass action=none
+ header.from=mail.polimi.it; dkim=pass header.d=mail.polimi.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.polimi.it;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cvnh2GVd8TsUUtNmxk55pbUgeUDB0AzqQOgwGsF/kiQ=;
+ b=YTYm8/imRljxbpkQlYdkECBaGYEUVe94NJRYPcO8WnmxcZHI5QcKXtuHNs0YnCAl7qqvc13vsi3iOM9Rk+HpjAUIIQev4/HFbgiX95h7OVNnYY/+68m7KNW9/uHTlxCIB1UN453jxQ5Usbr/e3LnCGXu1HzMAApbFaT/iiSjHC/m7cR0u1hiqf5bruz8jITCkzFGyaNtSv1DLYSTsOvJEUET1ckS4LDTP+dHUJW6m85AmsimGBwVHIKpOvGMPCHQbCIkqTP/BStMa7g8OWZ/HbfnBRggkBov76vShuL9AM+Yqg/p0/hxxmriXhH56AOiyxZ8G4gwJBwn8JznLPg0ag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mail.polimi.it;
+Received: from GVXP251MB0767.EURP251.PROD.OUTLOOK.COM (2603:10a6:150:6e::22)
+ by AS1P251MB0407.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:4ab::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Fri, 24 Feb
+ 2023 15:35:25 +0000
+Received: from GVXP251MB0767.EURP251.PROD.OUTLOOK.COM
+ ([fe80::d332:f1b9:334f:eff]) by GVXP251MB0767.EURP251.PROD.OUTLOOK.COM
+ ([fe80::d332:f1b9:334f:eff%9]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
+ 15:35:25 +0000
+Date:   Fri, 24 Feb 2023 16:35:22 +0100 (CET)
+From:   Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
+To:     Mike Rapoport <rppt@kernel.org>
+cc:     remckee0@gmail.com, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Add tests for memblock_alloc_node()
+In-Reply-To: <Y/jPKvcIpqi1zVgC@kernel.org>
+Message-ID: <273bd6c2-ce77-3ce4-db7a-8d664adc8d24@mail.polimi.it>
+References: <59d4745b-7b2-bf6-7b8-f6571d78d336@mail.polimi.it> <Y/jPKvcIpqi1zVgC@kernel.org>
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-ClientProxiedBy: ZR0P278CA0182.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:44::15) To GVXP251MB0767.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:150:6e::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GVXP251MB0767:EE_|AS1P251MB0407:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92cdb420-a781-415f-68b9-08db167cbfaf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Li1IIBMCWRL09mUjZ79IcZ80duqUx6d5eXLrrBXkmZ8btDmCvfiISA8JrQ0FP8VNKzrr33SqI+VoFex5KLO0Tr42oumdbheTDK0G4LI5qRsfCg9qhQUgj5x5VqRV9px3xMNRZI0CD5a1xKUM4HmsESViIMRfD7SddxdczObO5alfD4OBPqNZrSNPFfg1br8DPK0jFezYc1K4d/TjkqphE2dh/MBxY3JIjyOyv2DrxJLHdkpeCJ/Q5o69z2Gg4IDYseK2O3fe35E/FUPLjVo6ymI4tTY+ypALkh8ygxdEcJlDuOstgpQX5dcADQhyg4bSrZSq5qls4DiJBQoZk8GvHqST6i1gmFAeadO1IfnjRN+dakJm2w4jQSRepXco3lA5Tq8LKGvz41Pm2mvewJHhR935xteiJ/7zjP6aAKyFopkZvRT1hma6u0UfjsU8s4kl+qTRZDWX9pVMacSGwfYXGqXxZTFolu/jH7lfDeLzLhlL8OpEAYtFcd7Oy+k4gsvAaF70041geXjcOuobJzCTuDygXnsCEz7sGcIMj6mgOkbGOPkMKlqpYtuRQO876phbk5vIwQudEHGZ69FeYrsGdyCahFjrc5aaSfNETAwB+3mlq4WBpG7z3RfIYeWxzz4kJ5AaYJYx8weMIvIt1tUb9f1JvOp58CjeN+69Ady1VYTsszBEVXK4es6zzhYl88tt7O6tSF2Xc/J9MLWMZEswoA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXP251MB0767.EURP251.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199018)(2616005)(66946007)(41300700001)(83380400001)(478600001)(44832011)(26005)(186003)(8936002)(86362001)(38100700002)(8676002)(6916009)(31696002)(4326008)(4744005)(5660300002)(6512007)(786003)(6506007)(316002)(41320700001)(66556008)(6486002)(66476007)(2906002)(31686004)(6666004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Nx+1ituNK+QVaYVAKMxsldGKGjFclvq8XrfH1NUDbatjg5dweMhlyMQXthvf?=
+ =?us-ascii?Q?uo9q0H6Af9y8ZFlrNiDBRNKtdXNPKWCmE52B4wAly70nurs4qfoh73bWtgyz?=
+ =?us-ascii?Q?nMZot4dcRmqxRAmMWc9R6i+3JWhi8dBEl09vFJ1jWqYbRGQvVEPKrWT0HR0h?=
+ =?us-ascii?Q?bVAmJkA5vMhNkZyWjBlQffkL5XH05w8L2iXWZox1AjaUpLEknHqfpyJCa605?=
+ =?us-ascii?Q?p1Qpp9ogZIUNoqVogAREs809frEys+wtcSXGW7wTU8ur6eRZGkxBfMWuLWLf?=
+ =?us-ascii?Q?C3qaJthFJtEMWgV1b46cGVWtSboZVQH914MdwZI0h0GpIWiO0e61/f3K+gdB?=
+ =?us-ascii?Q?bf/05Iyu8ODPnXrHFt0arX92GcUm/r6tVMb6z84sNHoFAZZ+YNaZVoJEhJlW?=
+ =?us-ascii?Q?Joxc8e2ayhk+Qzt2UFdhzZ7mBzadUpJ/p0k9AYAnK0u0b+GsE1sDCLhHjDvI?=
+ =?us-ascii?Q?sEdDVcNbtHhVBPjHnwsfu3oc31FciPIksA5LKbj09Vsw2kdRPgOGbyHXyrbO?=
+ =?us-ascii?Q?UZmEdmcGw1qv0LIU/4uwJ+XPxhTriNOVfZkVvNA2eecRF7NXaXZ21pSqqwi8?=
+ =?us-ascii?Q?/lAwyE4JZwzcK/vXR0nhzgVK/HwlNzW697F4E2GKtsBdSpxfMHpntnY+NStK?=
+ =?us-ascii?Q?nXYIhpe/GoHFj2ga7V/Sqy40jN6E7xnTzo+HosXc++ro9zFaf/vmjPK1L1jA?=
+ =?us-ascii?Q?CjfKYZNaVeT1964cQwtgiqZpF8oqjd7PQJG8GkEmV125QEV0O+mgR0ulaoBt?=
+ =?us-ascii?Q?KTCuIYl8vJ9ZzrOTCVgesgmKc+DDzMm+7/BXrhR5q8nYP5eOqibWBI62DPqg?=
+ =?us-ascii?Q?KTZw+EHQA9xiLX98TNppuopu7/PUZOHS/CJVgqxufrnh82dpV/dIgA2l8TbO?=
+ =?us-ascii?Q?uPDAG/4CXxwA/AN8dwNiZoqYeGwScqHnVDi/uJcVkA885XY9r7OZiENb0tyC?=
+ =?us-ascii?Q?VWlaLwi1rv2Nbne7zsDypl5gj0GGk8NwbkKoztFhh+zZrtY7h/F54dcWpNRe?=
+ =?us-ascii?Q?ltWaQns8taoHOrKcP5m3FEwb8kJ+gueFylRq1UD6FFfbK/eDe67rSrgkxvCV?=
+ =?us-ascii?Q?x/l1qsE5hhyA/KpAUO6fWVTt89Jk4rlBvUTpOAtjNLUxk2aM7ANdjPSnY+oW?=
+ =?us-ascii?Q?K79x/HMyOfmb+do1CCxcjm940pQ+nUkCa1Nj0PGt1s7uCv/PqhIl9ZXDHf8q?=
+ =?us-ascii?Q?ZCsX9Z2JNlZvE7iYlJPsBvF+khaeijHSN1Yo4hTwC7pT38PtU4m3h3jxoAWe?=
+ =?us-ascii?Q?xpKUx1FDXaMhjYSiWaRHbekdskiw2ZNn1GmtfP4IM5h0PUDmzFRMNIMwSKc/?=
+ =?us-ascii?Q?gThXDlohWWZZlm3XzmgAKStN1u8yUSM/XxmHqDAYZRvS4QzG9Q1d7CwtlGBm?=
+ =?us-ascii?Q?NV9EO00ZAqHKKpbf5MVI3hnizrz55YQxJzF39d+NKAiTcPQxR0qK9jULUBG7?=
+ =?us-ascii?Q?s9i9UQOrB9ZQiufVB9jaXdUcMTDVIIqQ4F3be7vN/TfXDoKaAy4Llae+xGxK?=
+ =?us-ascii?Q?xFaCFD+xXtF1Xh9eGVnJkl1VXKL976/NC+uqarvkyvVelAClpTqvur69yDLU?=
+ =?us-ascii?Q?3FCH/Li+fd5gF8SbDTJQUMPfIeVQw3eMmi5rx6Gg?=
+X-OriginatorOrg: mail.polimi.it
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92cdb420-a781-415f-68b9-08db167cbfaf
+X-MS-Exchange-CrossTenant-AuthSource: GVXP251MB0767.EURP251.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 15:35:25.1850
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0a17712b-6df3-425d-808e-309df28a5eeb
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tvRp1WM/jKOjHMjy+7+om02lguIoF9HU5rLDGcMF+3vk/HikcdkrlBExn91p18NnHngLsgdXFd1MCsChcKtENw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1P251MB0407
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,143 +111,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-The "vdev->dev.parent" should be used instead of "vdev->dev" as a device
-for which to perform the DMA operation in both
-virtio_gpu_cmd_transfer_to_host_2d(3d).
 
-Because the virtio-gpu device "vdev->dev" doesn't really have DMA OPS
-assigned to it, but parent (virtio-pci or virtio-mmio) device
-"vdev->dev.parent" has. The more, the sgtable in question the code is
-trying to sync here was mapped for the parent device (by using its DMA OPS)
-previously at:
-virtio_gpu_object_shmem_init()->drm_gem_shmem_get_pages_sgt()->
-dma_map_sgtable(), so should be synced here for the same parent device.
+On Fri, 24 Feb 2023, Mike Rapoport wrote:
 
-Fixes: b5c9ed70d1a9 ("drm/virtio: Improve DMA API usage for shmem BOs")
-Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
----
-This patch fixes the following issue when running on top of Xen with 
-CONFIG_XEN_VIRTIO=y (patch was only tested in Xen environment (ARM64 guest)
-w/ and w/o using Xen grants for virtio):
+> Hi Claudio,
+>
 
-[    0.830235] [drm] pci: virtio-gpu-pci detected at 0000:00:03.0
-[    0.832078] [drm] features: +virgl +edid -resource_blob -host_visible
-[    0.832084] [drm] features: -context_init
-[    0.837320] [drm] number of scanouts: 1
-[    0.837460] [drm] number of cap sets: 2
-[    0.904372] [drm] cap set 0: id 1, max-version 1, max-size 308
-[    0.905399] [drm] cap set 1: id 2, max-version 2, max-size 696
-[    0.907202] [drm] Initialized virtio_gpu 0.1.0 0 for 0000:00:03.0 on minor 0
-[    0.927241] virtio-pci 0000:00:03.0: [drm] drm_plane_enable_fb_damage_clips() not called
-[    0.927279] Unable to handle kernel paging request at virtual address ffffffffc0053000
-[    0.927284] Mem abort info:
-[    0.927286]   ESR = 0x0000000096000144
-[    0.927289]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    0.927293]   SET = 0, FnV = 0
-[    0.927295]   EA = 0, S1PTW = 0
-[    0.927298]   FSC = 0x04: level 0 translation fault
-[    0.927301] Data abort info:
-[    0.927303]   ISV = 0, ISS = 0x00000144
-[    0.927305]   CM = 1, WnR = 1
-[    0.927308] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000004127f000
-[    0.927312] [ffffffffc0053000] pgd=0000000000000000, p4d=0000000000000000
-[    0.927323] Internal error: Oops: 0000000096000144 [#1] PREEMPT SMP
-[    0.927329] Modules linked in:
-[    0.927336] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.2.0-rc4-yocto-standard #1
-[    0.927343] Hardware name: XENVM-4.18 (DT)
-[    0.927346] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.927352] pc : dcache_clean_poc+0x20/0x38
-[    0.927370] lr : arch_sync_dma_for_device+0x24/0x30
-[    0.927379] sp : ffff80000972b3e0
-[    0.927381] x29: ffff80000972b3e0 x28: ffff000001aa8a00 x27: 0000000000000000
-[    0.927389] x26: 0000000000000000 x25: ffff000002815010 x24: 0000000000000000
-[    0.927396] x23: ffff8000090f9078 x22: 0000000000000001 x21: 0000000000000002
-[    0.927403] x20: ffff000002b6b580 x19: 8000000000053000 x18: ffffffffffffffff
-[    0.927410] x17: 0000000000000000 x16: 0000000000000000 x15: ffff80000963b94e
-[    0.927416] x14: 0000000000000001 x13: ffff80000963b93b x12: 64615f616d645f67
-[    0.927423] x11: ffff800009513110 x10: 000000000000000a x9 : ffff80000972b360
-[    0.927430] x8 : ffff8000095130c8 x7 : ffff80000972b150 x6 : 000000000000000c
-[    0.927436] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 000000000000003f
-[    0.927443] x2 : 0000000000000040 x1 : ffffffffc0067000 x0 : ffffffffc0053000
-[    0.927450] Call trace:
-[    0.927452]  dcache_clean_poc+0x20/0x38
-[    0.927459]  dma_direct_sync_sg_for_device+0x124/0x130
-[    0.927466]  dma_sync_sg_for_device+0x64/0xd0
-[    0.927475]  virtio_gpu_cmd_transfer_to_host_2d+0x10c/0x110
-[    0.927483]  virtio_gpu_primary_plane_update+0x340/0x3d0
-[    0.927490]  drm_atomic_helper_commit_planes+0xe8/0x20c
-[    0.927497]  drm_atomic_helper_commit_tail+0x54/0xa0
-[    0.927503]  commit_tail+0x160/0x190
-[    0.927507]  drm_atomic_helper_commit+0x16c/0x180
-[    0.927513]  drm_atomic_commit+0xa8/0xe0
-[    0.927521]  drm_client_modeset_commit_atomic+0x200/0x260
-[    0.927529]  drm_client_modeset_commit_locked+0x5c/0x1a0
-[    0.927536]  drm_client_modeset_commit+0x30/0x60
-[    0.927540]  drm_fb_helper_set_par+0xc8/0x120
-[    0.927548]  fbcon_init+0x3b8/0x510
-[    0.927557]  visual_init+0xb4/0x104
-[    0.927565]  do_bind_con_driver.isra.0+0x1c4/0x394
-[    0.927572]  do_take_over_console+0x144/0x1fc
-[    0.927577]  do_fbcon_takeover+0x6c/0xe4
-[    0.927583]  fbcon_fb_registered+0x1e4/0x1f0
-[    0.927588]  register_framebuffer+0x214/0x310
-[    0.927592]  __drm_fb_helper_initial_config_and_unlock+0x33c/0x540
-[    0.927599]  drm_fb_helper_initial_config+0x4c/0x60
-[    0.927604]  drm_fbdev_client_hotplug+0xc4/0x150
-[    0.927609]  drm_fbdev_generic_setup+0x90/0x154
-[    0.927614]  virtio_gpu_probe+0xc8/0x16c
-[    0.927621]  virtio_dev_probe+0x19c/0x240
-[    0.927629]  really_probe+0xbc/0x2dc
-[    0.927637]  __driver_probe_device+0x78/0xe0
-[    0.927641]  driver_probe_device+0xd8/0x160
-[    0.927645]  __driver_attach+0x94/0x19c
-[    0.927649]  bus_for_each_dev+0x70/0xd0
-[    0.927656]  driver_attach+0x24/0x30
-[    0.927660]  bus_add_driver+0x154/0x20c
-[    0.927664]  driver_register+0x78/0x130
-[    0.927670]  register_virtio_driver+0x24/0x3c
-[    0.927675]  virtio_gpu_driver_init+0x18/0x24
-[    0.927684]  do_one_initcall+0x50/0x1d0
-[    0.927691]  kernel_init_freeable+0x210/0x27c
-[    0.927699]  kernel_init+0x24/0x12c
-[    0.927707]  ret_from_fork+0x10/0x20
-[    0.927716] Code: d2800082 9ac32042 d1000443 8a230000 (d50b7a20)
-[    0.927721] ---[ end trace 0000000000000000 ]---
-[    0.927728] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-[    0.927732] SMP: stopping secondary CPUs
-[    0.927791] Kernel Offset: disabled
-[    0.927794] CPU features: 0x80000,41058100,0000421b
-[    0.927799] Memory Limit: none
-[    1.015063] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
----
----
- drivers/gpu/drm/virtio/virtgpu_vq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Mike,
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
-index a04a9b20896d..1778a2081fd6 100644
---- a/drivers/gpu/drm/virtio/virtgpu_vq.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
-@@ -604,7 +604,7 @@ void virtio_gpu_cmd_transfer_to_host_2d(struct virtio_gpu_device *vgdev,
- 	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
- 
- 	if (virtio_gpu_is_shmem(bo) && use_dma_api)
--		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
-+		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
- 					    bo->base.sgt, DMA_TO_DEVICE);
- 
- 	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
-@@ -1026,7 +1026,7 @@ void virtio_gpu_cmd_transfer_to_host_3d(struct virtio_gpu_device *vgdev,
- 	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
- 
- 	if (virtio_gpu_is_shmem(bo) && use_dma_api)
--		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
-+		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
- 					    bo->base.sgt, DMA_TO_DEVICE);
- 
- 	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
--- 
-2.34.1
+>
+> When I tried to apply your patch I've got these errors:
+>
+> <stdin>:188: trailing whitespace.
+>
+> error: patch failed: tools/testing/memblock/tests/alloc_nid_api.c:2494
+> error: tools/testing/memblock/tests/alloc_nid_api.c: patch does not apply
+>
 
+I'm really sorry for this. I'll fix it and post it in version 3 of the patch.
+
+Thanks,
+
+ 	Claudio
