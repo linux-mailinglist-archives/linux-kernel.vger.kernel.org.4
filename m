@@ -2,188 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8D66A2404
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CBE6A2409
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 23:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjBXWD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 17:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S229678AbjBXWGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 17:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBXWDZ (ORCPT
+        with ESMTP id S229446AbjBXWGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 17:03:25 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A2818ABB;
-        Fri, 24 Feb 2023 14:03:24 -0800 (PST)
+        Fri, 24 Feb 2023 17:06:15 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63AC61ED6;
+        Fri, 24 Feb 2023 14:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677276204; x=1708812204;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=tHYnFrgaUpX5R1tfhbhsbkh0dVyzj/uP1sbPLioseLU=;
-  b=UAiS+CeHVSzuPMNysFSxJVcsLEiYPYb/Csvg1/YNwcSHUouI+QNk0VP5
-   ZQ1KG5+/OH5K9s+zcWZewfedBap3I5x8v/WiecPANNadrDVNt9TatMNrX
-   QTeZpHn8Y6JEsUmhqI0oOcVByljbJtXrEy6C12cs/ZlSjTAOtgdON1KIg
-   QlZNJcEbElVvlTHfnZh/2uIlegLJWyf7Zi0A6WAoGwA26Wao7h6Sz+1O+
-   YMlLN1ImbtLRmF07jboXsnp5OQazVy7S6DIDr9xxOSTkUr6aig6ODkKF5
-   wAt4vH6XW6eguwFMfiMHiunTIQ4Ikv1BwNk5temOWCYh4Ec/a+HTyP0JU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="317348066"
+  t=1677276373; x=1708812373;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rDITd1hAY7Tct9xmSw77zAJ3KaORKpMyyv5EjImDJMI=;
+  b=M+Bkz/JO5VRWcqL815vlzxH5qX2zIZFcCqR2TOA2PY8YBtLGat0OabWo
+   6WOA/nalPa8YgH9Sev8gnXImiF68Cv/omBtF2MI9r+uLaU9WzTEjeMJOb
+   fLJpkNyqYcRLLgkPO733Y4QOZxyqCOV4O1ZksK12OqIyCPbRDv3AapHTu
+   qbsJCAcE5TRPWD42pPXvmrOzY4sdz2NZcfiocxizCZKWnGX2p3kFk8j65
+   D0QyqkBjjY3gmNL7WWeM2XPLL++ctAD+Kpl3vcV/wDYkCR4PxysqtGSpA
+   napvMfNXOc26OdZVjDAN8EwlFGaDWENM5TOzNX8HPm/Z5Tvh0kdwP1ETG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335021085"
 X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
-   d="scan'208";a="317348066"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 14:03:23 -0800
+   d="scan'208";a="335021085"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 14:06:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="918559360"
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="847082338"
 X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
-   d="scan'208";a="918559360"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Feb 2023 14:03:22 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 24 Feb 2023 14:03:21 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 24 Feb 2023 14:03:21 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.42) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 24 Feb 2023 14:03:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T1yt+NhD+iLWxsH+eFMevMGpTNXMRcg968L0CAE+6XigTxc70zU+DcUl7c0Y0c7OX2sG5Wdzze2pC8V7IebsF+YAE8FBsrjHcYWF2QqfxmdnUQ7sPWd2G04D3G3xr/pCTxJAdfNvEkAgPd9F7xEtMmpAjl2OLthry6nzdF3aH4F4cMij15xMuc/9VjEc+yzFkC55gcvEaQok4MqrioZbcCLRqN3m24KYG24oWamciH3vZYNRTn89bkh+xgLzXc7LLeHEw0JLEm23O3W6k3pTOuaSysqnAs396IEhhOZaoTVjQOl8Z+Yi6HGhy8xobUgmlpS4aWsxCxSjUnlcdmJBRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tHYnFrgaUpX5R1tfhbhsbkh0dVyzj/uP1sbPLioseLU=;
- b=emsm87l4i6ZtA6ASLPitRm7LhPSnget5F8f/rblEesdbnI3sNnKiXHB4zYKkNJOa61/SqQwKW5Cb1Uqp0qeuOeSUCUnckDir+x1RF3iM9U52FIy3zfRPIabCdZnpMOLMuHoKmST+C/Muo9A7uQx+57fvXMj4qrX2n5bvZLdfGfS0mX3O2e5/o4fNC3PY6ccrO9cIjFXlE4PPnbwSMRa+xyYoCS1fx7qk9qvkZBqObCG8IbiMthXLjC4xDXN5NbFTefpfEaQ9Ny6AwgVaa4yGVQSmzkmjRTB1J1Qwr+cuXNwLC6cR1WOjKIYmcc799p5RXh8oKthStJZgAem4xkuBnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by MW3PR11MB4522.namprd11.prod.outlook.com (2603:10b6:303:2d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
- 2023 22:03:17 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::ee6a:b9b2:6f37:86a1]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::ee6a:b9b2:6f37:86a1%9]) with mapi id 15.20.6134.021; Fri, 24 Feb 2023
- 22:03:17 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>
-CC:     Kim Phillips <kim.phillips@amd.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Wilk, Konrad" <konrad.wilk@oracle.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v9 7/8] x86/cpu: Support AMD Automatic IBRS
-Thread-Topic: [PATCH v9 7/8] x86/cpu: Support AMD Automatic IBRS
-Thread-Index: AQHZMBHrCh+R2Wn7lEufQJMkJLt2Hq7eokeAgAAl4QCAAAeAAIAABqWAgAAALfA=
-Date:   Fri, 24 Feb 2023 22:03:16 +0000
-Message-ID: <SJ1PR11MB60834960ECAC976C1D328A86FCA89@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230124163319.2277355-1-kim.phillips@amd.com>
- <20230124163319.2277355-8-kim.phillips@amd.com>
- <20230224185257.o3mcmloei5zqu7wa@treble> <Y/knUC0s+rg6ef2r@zn.tnic>
- <20230224213522.nofavod2jzhn22wp@treble> <Y/kzGEqafzQkbU4T@zn.tnic>
-In-Reply-To: <Y/kzGEqafzQkbU4T@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|MW3PR11MB4522:EE_
-x-ms-office365-filtering-correlation-id: fc961033-1869-461b-dc5e-08db16b2eecf
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +Z9caEVLib8AMWoIP9+6mAc5RSG9ICdOC3H4LvEGj+3kV4+2rt78qF2+HOULUEznIsIZUGN+WG/WCc0XXCJmO0xbh2RpNtU9zo9fRR0Uu0qXm1lNrImzwAT4zZXV7RPaxCb6D2Eo6wa2ehaE/FYG0pe8TWUeWlh1nVQ7GBgx24EHOT0umWsIm8kZnOynMr9riSLIl0dsg/sAXA0EEEFtrx/L8PIEibVfmU6ZhNsw9TCSq8CLp4gCP7ShQ+jNa2GwKVA6eVLal6Qif8eAUNoqLZuTgkyGBgLOS1cGqTf5q4CzzPcJYngn+lsLZv3EYKN4x2itca2dRvd6WpCaRJcwbUVgZm+t+JjEEPMA1lWv2xuD4RXS18gFtX44pgT2YcqlFhQrpEYHnuLwCeTx8sJ54BPGYi6V861v9Q9f0raESZm6Yar3jwqw/tTs3FPYU+zv4FhvjYRJmk1BzmES23S6kQUU6rlg+BWM+sEXpDw00Kqqj9uxoEZ6LkExy6DO822yDVdf8VnUSO+fSlAXYQi9Iv9tzEAo6G3ojfCDzbW1oAix1P2sbzb9BregL0iub1GFnzHEdu44CXI9sfC5XLxFjCWwlmGYRWjaiwg+lQl8Rf9ul+XsQ3CQJREVj9YFJv2UMLNvMtqEygBkWnccWNHHmlRm9qJ1IX95H7ZWHRrS+TM64HAtE/GtpBel+d51eoa0wZ9cMsKk2LDc3AlYOQmUqQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(366004)(376002)(136003)(39860400002)(451199018)(316002)(33656002)(86362001)(110136005)(54906003)(66946007)(9686003)(186003)(66556008)(2906002)(4744005)(66476007)(66446008)(4326008)(7416002)(8676002)(41300700001)(6506007)(478600001)(26005)(71200400001)(7696005)(55016003)(76116006)(38100700002)(82960400001)(5660300002)(64756008)(52536014)(8936002)(122000001)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TjN3b3VkTGJzQWdSOGxJNlVkSjhZNkZNMUt5THhlalVxV2EyNW43MjVJbHFi?=
- =?utf-8?B?K0xINURmTDFuRkZoR2o3M2VzTm15MklxL0Yranp4YjVFYnk1bUVneGZST29X?=
- =?utf-8?B?NWo5NVBCQlNmODZWYnJFQWFDS2dQY1JROGs5NnhOc3BHOVN1WExRYzFwb2Mv?=
- =?utf-8?B?bDI2bG8rdWVreW9tbmR1WGxmZ0VjampmWGpqbkM5VUxTK1FQS28vc0FVN042?=
- =?utf-8?B?SlBJakRKSkJSUWNOU1FrOGVVTXV3aVMxQ0ZYSmk2NXZVY3JZQTNHNTEvaXdO?=
- =?utf-8?B?V3dxOUNBVzdGU3lkNGppazFHbWRLOHRKNEJXV3FuQmJzNU1wTzRiRnh5S1Y3?=
- =?utf-8?B?RTRuYTdUWlkrY2VWMUM3TlcwSGZveldIaW5aK1p1ZWEwcEljQVZCRGpONzlt?=
- =?utf-8?B?Q0wxNFRULzI4cW1rMDFBTGxlTmNrVS9mZ0E0SXhQbHprSExSbmNZSGx5a3or?=
- =?utf-8?B?aEZLVjZ1M3FhWUNQOXhMbUtwU2ZnbEh5TTl3M0RocHgxK3Zzc2NqQXY5cVNM?=
- =?utf-8?B?aktQQm5mWFB5cnV4b1U0ZkYxcU9MallwK1p5bVVjVjN4QlRJcGVHSnFKNDFw?=
- =?utf-8?B?Z2hxR1lYMTl5Mi9DaWgwSWxydDhLN3BNaFJzNmtoTWIyVGJ5SmVLOXVMbjF3?=
- =?utf-8?B?T1VUdW04YU1RaWIwU3lDa0lXRWR3N2RMNURJUWEzdE5rWXEzZkVWK21oMXFC?=
- =?utf-8?B?ZWNpdWtqL1RsM3JXaTVkNmVaVzhGZHE4emxlU2l4WEVoY0tuVHpOcmlyeWV1?=
- =?utf-8?B?K09ZNUxZQ3VxT2JDTVZsS2FwYWR5QmNIeU1SbU5aSEtmZmJvU2NWMDhjNGVi?=
- =?utf-8?B?T3dkb0U0eXFRQWdLRWRSWGxsS0YzMEtObUFXNllVdTg3Ni9ONGhZQVJxMUhY?=
- =?utf-8?B?R2pzeTk2RThqZzY3bUh3enI0akhoeHpNRDZJa1JyV1ZKRHBzK0tzeVc1R1RE?=
- =?utf-8?B?MmNWZS9PVVhpSktRMVBUUXRiUytKaDNzMzluN3E1M3lFcmRMK3N1aWlVbG5u?=
- =?utf-8?B?TFh3dlF5VC95MjUzeGN2V25CaUZ2bkZaVnlHMjNVVERHYlpnWXNmeE1iNjY2?=
- =?utf-8?B?cVc0Zkk5VnFjamF5S3dkQ3pWOGM3cWpIMEoyOGEyNU9zKzgvL1hkZkJLREp3?=
- =?utf-8?B?N1o4aHo4aW9mYWswQlAxWEcyNGxPYVVvQTBpZlc2ZXBzRmtQN2lGM1NYQndP?=
- =?utf-8?B?cEoycE5vSlg1TytkbU16Q2xpL1c4OEpiQ2VQNUw3MENKbk5jVStLUGJmUEJv?=
- =?utf-8?B?TmNudE5BM0gwU0t6dThWOVpXWXpuckdqVlBiZnRYSW44aVptWWJiMUhEMFRl?=
- =?utf-8?B?SjZ3ZzFJN3V3K2szNUtya3ZKbUJWblRNUDNCY0s2MUNQSU11STZQMTdscFFP?=
- =?utf-8?B?eDRZYjBFcTdOMVo0VHZ3SXNtTXZETFFDYWM5aGtDOTQxaFhUb00vS21BOFQx?=
- =?utf-8?B?ejR3OFVJR3k0aUJHTkRObldsRUxYWDFTM3lQMWVHMG5pQlRLK2RkRjFwbmdi?=
- =?utf-8?B?bGpkbEdLY1g5eENYeWh6MytkVWhudEJoZXdBOTdHRXNlTnRmUElNek9VVVNE?=
- =?utf-8?B?QklKK0dQdTkzaWxyY0l6QTIvRm8ySlN5N0dleXBFVFQ3MmpGTzFFZ1I0ZXRh?=
- =?utf-8?B?Ykl5NVhUdytweUlGQ2IvQk1LQkM3Q09idmtJcC9jMTI3VjNyb29uN2JDOHgz?=
- =?utf-8?B?M0grQVJSN1M2bEhhSlpFeEQyYTI5UEVSYS9ZTURaeldEbHNXNzFCQ1ZpNnR5?=
- =?utf-8?B?ZGNFNHQ1SnF0cVhqZm83NDgweGxmRmhuMUFsaVJVRkxQN3VzOGNYbzU0SmtM?=
- =?utf-8?B?SXk2bWU5cUR5ZGJTdm1kTW5NcUwwOHhjMEEyNkhwZnNEQ2QwZEdiaElka2V1?=
- =?utf-8?B?N3JhVUEyUTBVUHJ1bWVkdXowSzJpbGJDd2poUUI4ZW9FdGY1ZXM5ek1sSlI0?=
- =?utf-8?B?ZkZucUNmZ2p2bkpLY2hYRUFKK3lLSU83Vm94YjAyd091eDl6a3JmaE5tN0VU?=
- =?utf-8?B?WklXa3pXYUJsMUNicUtNNThqVk5kQk1mSU5GaVYxNDBxV3J4dkkyVG1MNlFI?=
- =?utf-8?B?RFNRdDFhWlhnU2Rlb2xKSkJjZzQyeFNBL1BLNFQ5dXBWemZtcnVTQlJZdy9E?=
- =?utf-8?Q?CstM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="847082338"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2023 14:06:09 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pVgCe-0002ky-2T;
+        Fri, 24 Feb 2023 22:06:08 +0000
+Date:   Sat, 25 Feb 2023 06:06:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        jpanis@baylibre.com, jneanne@baylibre.com
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
+Message-ID: <202302250541.p9Kg2Tc6-lkp@intel.com>
+References: <20230224133129.887203-4-eblanc@baylibre.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc961033-1869-461b-dc5e-08db16b2eecf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 22:03:16.9178
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GPg0/Mqv5JaDH9iClw9VFL46nJeI7TIUg20MkXg4R8sE32Owms1wMhj9I1+dzDOafo8bjnmGfWNM1RsXu/O4Nw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4522
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224133129.887203-4-eblanc@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pj4gQ2FuIHdlIGFkZCBidWdzLmMgYW5kIGZyaWVuZHMgdG8gTUFJTlRBSU5FUlM/DQo+DQo+IFN1
-cmUsIG1pZ2h0IGFzIHdlbGwuDQo+DQo+IEFja2VkLWJ5OiBCb3Jpc2xhdiBQZXRrb3YgKEFNRCkg
-PGJwQGFsaWVuOC5kZT4NCj4NCj4gSSdsbCBxdWV1ZSBpdCBhZnRlciB0aGUgTVcgaXMgb3Zlci4N
-Cg0KU2hvdWxkIGFsc28gaW5jbHVkZSBQYXdhbiBhcyBhbm90aGVyIHVuZm9ydHVuYXRlIHNvdWwg
-c3Vja2VkDQppbnRvIGtlZXBpbmcgdGhhdCBmaWxlIHVwIHRvIGRhdGUgd2l0aCB0aGUgbGF0ZXN0
-IHdyZWNrYWdlLiBJZiBub3QNCmFzICJNIiwgYXQgbGVhc3QgYXMgIlIiOg0KDQpSOiBQYXdhbiBH
-dXB0YSA8cGF3YW4ua3VtYXIuZ3VwdGFAbGludXguaW50ZWwuY29tPg0KDQotVG9ueQ0KDQoNCg==
+Hi Esteban,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next broonie-regulator/for-next abelloni/rtc-next linus/master v6.2 next-20230224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Esteban-Blanc/rtc-tps6594-add-driver-for-TPS6594-PMIC-RTC/20230224-213323
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20230224133129.887203-4-eblanc%40baylibre.com
+patch subject: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230225/202302250541.p9Kg2Tc6-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/740925ed262d27dda4f7b9af4c0173a845fa0578
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Esteban-Blanc/rtc-tps6594-add-driver-for-TPS6594-PMIC-RTC/20230224-213323
+        git checkout 740925ed262d27dda4f7b9af4c0173a845fa0578
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302250541.p9Kg2Tc6-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/regulator/tps6594-regulator.c: In function 'tps6594_get_rdev_by_name':
+>> drivers/regulator/tps6594-regulator.c:342:59: warning: parameter 'dev' set but not used [-Wunused-but-set-parameter]
+     342 |                                     struct regulator_dev *dev)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/regulator/tps6594-regulator.c: In function 'tps6594_regulator_probe':
+>> drivers/regulator/tps6594-regulator.c:493:26: warning: ordered comparison of pointer with integer zero [-Wextra]
+     493 |                 if (rdev < 0) {
+         |                          ^
+>> drivers/regulator/tps6594-regulator.c:381:13: warning: variable 'multi_phase_case' set but not used [-Wunused-but-set-variable]
+     381 |         int multi_phase_case = 0xFFFF;
+         |             ^~~~~~~~~~~~~~~~
+>> drivers/regulator/tps6594-regulator.c:377:31: warning: variable 'rdevmultitbl' set but not used [-Wunused-but-set-variable]
+     377 |         struct regulator_dev *rdevmultitbl[MULTI_PHASE_NB];
+         |                               ^~~~~~~~~~~~
+
+
+vim +/dev +342 drivers/regulator/tps6594-regulator.c
+
+   338	
+   339	static int tps6594_get_rdev_by_name(const char *regulator_name,
+   340					    struct regulator_dev *rdevbucktbl[BUCK_NB],
+   341					    struct regulator_dev *rdevldotbl[LDO_NB],
+ > 342					    struct regulator_dev *dev)
+   343	{
+   344		int i;
+   345	
+   346		for (i = 0; i <= BUCK_NB; i++) {
+   347			if (strcmp(regulator_name, buck_regs[i].name) == 0) {
+   348				dev = rdevbucktbl[i];
+   349				return 0;
+   350			}
+   351		}
+   352	
+   353		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
+   354			if (strcmp(regulator_name, ldo_regs[i].name) == 0) {
+   355				dev = rdevldotbl[i];
+   356				return 0;
+   357			}
+   358		}
+   359		return -EINVAL;
+   360	}
+   361	
+   362	static int tps6594_regulator_probe(struct platform_device *pdev)
+   363	{
+   364		struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
+   365		struct regulator_dev *rdev;
+   366		struct regulator_config config = {};
+   367		u8 buck_configured[BUCK_NB] = { 0 };
+   368		u8 buck_multi[MULTI_PHASE_NB] = { 0 };
+   369		int i;
+   370		int error;
+   371		int irq;
+   372		int ext_reg_irq_nb = 2;
+   373		struct tps6594_regulator_irq_data *irq_data;
+   374		struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
+   375		struct tps6594_regulator_irq_type *irq_type;
+   376		struct regulator_dev *rdevbucktbl[BUCK_NB];
+ > 377		struct regulator_dev *rdevmultitbl[MULTI_PHASE_NB];
+   378		struct regulator_dev *rdevldotbl[LDO_NB];
+   379	
+   380		int multi_phase_id;
+ > 381		int multi_phase_case = 0xFFFF;
+   382	
+   383		config.dev = tps->dev;
+   384		config.driver_data = tps;
+   385		config.regmap = tps->regmap;
+   386	
+   387		/*
+   388		 * Switch case defines different possible multi phase config
+   389		 * This is based on dts custom property: multi-phase-id
+   390		 * Using compatible or device rev is a too complex alternative
+   391		 * Default case is no Multiphase buck.
+   392		 * In case of Multiphase configuration, value should be defined for
+   393		 * buck_configured to avoid creating bucks for every buck in multiphase
+   394		 */
+   395	
+   396		if (device_property_present(tps->dev, "ti,multi-phase-id")) {
+   397			device_property_read_u32(tps->dev, "ti,multi-phase-id", &multi_phase_id);
+   398			switch (multi_phase_id) {
+   399			case 12:
+   400				buck_multi[0] = 1;
+   401				buck_configured[0] = 1;
+   402				buck_configured[1] = 1;
+   403				multi_phase_case = TPS6594_BUCK_12;
+   404				break;
+   405			case 34:
+   406				buck_multi[1] = 1;
+   407				buck_configured[2] = 1;
+   408				buck_configured[3] = 1;
+   409				multi_phase_case = TPS6594_BUCK_34;
+   410				break;
+   411			case 123:
+   412				buck_multi[2] = 1;
+   413				buck_configured[0] = 1;
+   414				buck_configured[1] = 1;
+   415				buck_configured[2] = 1;
+   416				multi_phase_case = TPS6594_BUCK_123;
+   417				break;
+   418			case 1234:
+   419				buck_multi[3] = 1;
+   420				buck_configured[0] = 1;
+   421				buck_configured[1] = 1;
+   422				buck_configured[2] = 1;
+   423				buck_configured[3] = 1;
+   424				multi_phase_case = TPS6594_BUCK_1234;
+   425				break;
+   426			}
+   427		}
+   428	
+   429		for (i = 0; i < MULTI_PHASE_NB; i++) {
+   430			if (buck_multi[i] == 0)
+   431				continue;
+   432	
+   433			rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
+   434			if (IS_ERR(rdev)) {
+   435				dev_err(tps->dev, "failed to register %s regulator\n",
+   436					pdev->name);
+   437				return PTR_ERR(rdev);
+   438			}
+   439			rdevmultitbl[i] = rdev;
+   440		}
+   441	
+   442		if (tps->chip_id == LP8764X)
+   443			/* There is only 4 buck on LP8764X */
+   444			buck_configured[4] = 1;
+   445	
+   446		for (i = 0; i < BUCK_NB; i++) {
+   447			if (buck_configured[i] == 1)
+   448				continue;
+   449	
+   450			rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
+   451			if (IS_ERR(rdev)) {
+   452				dev_err(tps->dev, "failed to register %s regulator\n",
+   453					pdev->name);
+   454				return PTR_ERR(rdev);
+   455			}
+   456			rdevbucktbl[i] = rdev;
+   457		}
+   458	
+   459		/* LP8764X dosen't have LDO */
+   460		if (tps->chip_id != LP8764X) {
+   461			for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
+   462				rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
+   463				if (IS_ERR(rdev)) {
+   464					dev_err(tps->dev,
+   465						"failed to register %s regulator\n",
+   466						pdev->name);
+   467					return PTR_ERR(rdev);
+   468				}
+   469				rdevldotbl[i] = rdev;
+   470			}
+   471		}
+   472	
+   473		irq_data = devm_kmalloc(tps->dev,
+   474					ARRAY_SIZE(tps6594_regulator_irq_types) *
+   475					sizeof(struct tps6594_regulator_irq_data),
+   476					GFP_KERNEL);
+   477		if (!irq_data)
+   478			return -ENOMEM;
+   479	
+   480		for (i = 0; i < ARRAY_SIZE(tps6594_regulator_irq_types); ++i) {
+   481			irq_type = &tps6594_regulator_irq_types[i];
+   482	
+   483			irq = platform_get_irq_byname(pdev, irq_type->irq_name);
+   484			if (irq < 0)
+   485				return -EINVAL;
+   486	
+   487			irq_data[i].dev = tps->dev;
+   488			irq_data[i].type = irq_type;
+   489	
+   490			tps6594_get_rdev_by_name(irq_type->regulator_name, rdevbucktbl,
+   491						 rdevldotbl, rdev);
+   492	
+ > 493			if (rdev < 0) {
+   494				dev_err(tps->dev, "Failed to get rdev for %s\n",
+   495					irq_type->regulator_name);
+   496				return -EINVAL;
+   497			}
+   498			irq_data[i].rdev = rdev;
+   499	
+   500			error = devm_request_threaded_irq(tps->dev, irq, NULL,
+   501							  tps6594_regulator_irq_handler,
+   502							  IRQF_ONESHOT,
+   503							  irq_type->irq_name,
+   504							  &irq_data[i]);
+   505			if (error) {
+   506				dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+   507					irq_type->irq_name, irq, error);
+   508				return error;
+   509			}
+   510		}
+   511	
+   512		if (tps->chip_id == LP8764X)
+   513			ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
+   514	
+   515		irq_ext_reg_data = devm_kmalloc(tps->dev,
+   516						ext_reg_irq_nb *
+   517						sizeof(struct tps6594_ext_regulator_irq_data),
+   518						GFP_KERNEL);
+   519		if (!irq_ext_reg_data)
+   520			return -ENOMEM;
+   521	
+   522		for (i = 0; i < ext_reg_irq_nb; ++i) {
+   523			irq_type = &tps6594_ext_regulator_irq_types[i];
+   524	
+   525			irq = platform_get_irq_byname(pdev, irq_type->irq_name);
+   526			if (irq < 0)
+   527				return -EINVAL;
+   528	
+   529			irq_ext_reg_data[i].dev = tps->dev;
+   530			irq_ext_reg_data[i].type = irq_type;
+   531	
+   532			error = devm_request_threaded_irq(tps->dev, irq, NULL,
+   533							  tps6594_regulator_irq_handler,
+   534							  IRQF_ONESHOT,
+   535							  irq_type->irq_name,
+   536							  &irq_ext_reg_data[i]);
+   537			if (error) {
+   538				dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+   539					irq_type->irq_name, irq, error);
+   540				return error;
+   541			}
+   542		}
+   543	
+   544		return 0;
+   545	}
+   546	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
