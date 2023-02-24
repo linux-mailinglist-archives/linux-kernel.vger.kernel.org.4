@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD426A1CF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825C56A1CF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBXNX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S229686AbjBXN1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjBXNXV (ORCPT
+        with ESMTP id S229527AbjBXN1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:23:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBB2729B;
-        Fri, 24 Feb 2023 05:23:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52AD5B81C5F;
-        Fri, 24 Feb 2023 13:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75834C433EF;
-        Fri, 24 Feb 2023 13:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677244984;
-        bh=cbR8uAH8FMCf7AI+eZE/BNI3CtpMujoaWI9PPpn9PXA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cScYkId7dJ+3ya2Zl/Gaa9iHYaD0HfCS4152cjCtZz4AunvAkcWpgxnPUr/xIhv9s
-         zL7OZsQ9E1+CTaOeJjbIbPRfzvquDCd3vPMcKYyZx2C7XrnhR0D/lRwYROqOfkg5KD
-         bo5v9NzatoJh08Sg76YZ424ZPTbT4OVXFV/ZyvTWr9Xs0VhM740PXr5cc/uPUlXUXm
-         qpG3Ju4zPeKzsnPWWm+DJBZKRs4kyBAiujmqCVsj/ec2YlVw8u5yk22txlaTevMMEl
-         o3OsDwbv63tqUcoxsZ7gQ9Qgjv0CNI406M8S+5p2MVk2o2cX/CYYvDEvM3d8zoxdwF
-         SDh+NoWzoz7xA==
-Date:   Fri, 24 Feb 2023 18:52:59 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dma <dmaengine@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: dmaengine updates for v6.3
-Message-ID: <Y/i6M7DxoQQwL5Et@matsya>
+        Fri, 24 Feb 2023 08:27:54 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F8E86A8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:27:52 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id d20so14120891vsf.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:27:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ht3Zl3ZeZf9aYs1rAv0eBFAKdSyPCi8FHnQJB2PH7a4=;
+        b=q42TEXf32WjxpQYaZ+P2B/m7xXg3PhNpsXDHqqRDBJVt4oLOScq4Mq0mWbSErQAvOY
+         ZN2eBQUbcKaIvX8p0Pcn63o/WTCMIFSCxfNigG+qtncT+KwLVEs6BpBdsFdFuphJB1Pf
+         92N9M67hUUXGLbEGW0tWoRLNJ+H/ZWI/CiONWjTVQEQl/0lNL8AcStZsx9AhAaQWVuOl
+         f7Pul1kjFp5lJ2Sy1YCNdy+BKmZQBx3GLgGGwBwVLVAcwiVmMSXl08xp+5vhbcXBy101
+         gjShESLdUz+z+gOlFkKCQIrJX85ZfTtU11E8NLOXP0KxqQV3QMgW4R3q6j/pK9MZBVDo
+         KhHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ht3Zl3ZeZf9aYs1rAv0eBFAKdSyPCi8FHnQJB2PH7a4=;
+        b=U3Om3vN0TiiVeV5l2g3y0kP7byhznW7zRczZhjVW9sus1TqM+ZrZ3mMxxDubRJzG0R
+         cArCviUJ0ZB0Gr5qgC86+0WYI1Q4MNOp/jzWkrdlzUamkMAaOGRXbm7qtMSc0pjAVG8F
+         3AdDTx7TwwRsa2gBPnkcNgclQ0mA6b4Tob/lMwM+AP5ByTXBcNih3m0opKiiWcH4b8mH
+         u79DF53p18FKtnmPxIVwzzmXD3Rg0fEhXtUUIft1AoSAkaAAIfaEXGonHDxK1b4BO+C0
+         qcWaSW+2CxZs1VSXxWiC6pebcahuXPvA+ZB7PXcC0Upe+511056ET3nSa30MhoSUMbZs
+         /ICw==
+X-Gm-Message-State: AO0yUKV5Zm29Mlsxp7wRqAflYSAZ1jyZeme2S3BG/UvjQ2W8Ar/kXTAA
+        qtFC3KMLKpNuApVvvxMjG+1rjdRj0pBNDjrpis6OXg==
+X-Google-Smtp-Source: AK7set+RvhMqiPUTtmN09JfHxAMoVYk1d0TWTJi3iZrKtWsN1At8RhCFG3vW/3R5ioz49sQafvf7WJy7UxAH0kpg7Sc=
+X-Received: by 2002:a05:6122:e17:b0:401:8898:ea44 with SMTP id
+ bk23-20020a0561220e1700b004018898ea44mr2344915vkb.3.1677245271310; Fri, 24
+ Feb 2023 05:27:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LJuaWkJpLxVxPSkZ"
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230223130423.369876969@linuxfoundation.org>
+In-Reply-To: <20230223130423.369876969@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 24 Feb 2023 18:57:40 +0530
+Message-ID: <CA+G9fYsOV3vqKEkVKy-2FCzhM4S1d1HMHByHO_1kTSgsopy=gA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 0/7] 4.14.307-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,249 +72,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 23 Feb 2023 at 18:34, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.307 release.
+> There are 7 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 25 Feb 2023 13:04:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.307-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---LJuaWkJpLxVxPSkZ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Hello Linus,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Please pull to receive dmaengine subsystem updates for v6.3. A new
-driver, couple of device support and binding conversion along with bunch
-of driver updates are features of this request. You have already
-received request from Bjorn on edma driver updates thru pci tree.
+## Build
+* kernel: 4.14.307-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 43b3a61e4368a7abc906689e505cbb1e198bd1cf
+* git describe: v4.14.306-8-g43b3a61e4368
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.306-8-g43b3a61e4368
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+## Test Regressions (compared to v4.14.306)
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+## Metric Regressions (compared to v4.14.306)
 
-are available in the Git repository at:
+## Test Fixes (compared to v4.14.306)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
-aengine-6.3-rc1
+## Metric Fixes (compared to v4.14.306)
 
-for you to fetch changes up to e922bbf37564a4c67efca9dd6133eaadbffb65f5:
+## Test result summary
+total: 92685, pass: 79026, fail: 3518, skip: 9809, xfail: 332
 
-  dmaengine: idma64: Update bytes_transferred field (2023-02-16 18:45:48 +0=
-530)
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 228 total, 225 passed, 3 failed
+* arm64: 42 total, 39 passed, 3 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 38 total, 37 passed, 1 failed
 
-----------------------------------------------------------------
-dmaengine updates for v6.3
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
 
- New support:
- - TI AM62Ax controller support
- - Xilinx xdma driver
- - Qualcomm SM6125, SM8550, QDU1000/QRU1000 GPI controller
-
- Updates:
- - Runtime pm support for at_xdmac driver
- - IMX sdma binding conversion to yaml and HDMI audio support
- - IMX mxs binding conversion to yaml
-
-----------------------------------------------------------------
-Aman Kumar (1):
-      dmaengine: idma64: Update bytes_transferred field
-
-Andy Shevchenko (4):
-      dmaengine: Make an order in struct dma_device definition
-      dmaengine: use sysfs_emit() to instead of scnprintf()
-      dmaengine: Simplify dmaenginem_async_device_register() function
-      dmaengine: dw: Move check for paused channel to dwc_get_residue()
-
-Claudiu Beznea (3):
-      dmaengine: at_xdmac: align properly function members
-      dmaengine: at_xdmac: add runtime pm support
-      dmaengine: at_xdmac: remove empty line
-
-Eric Pilmore (1):
-      dmaengine: ptdma: check for null desc before calling pt_cmd_callback
-
-Fenghua Yu (2):
-      dmaengine: idxd: Set traffic class values in GRPCFG on DSA 2.0
-      dmaengine: idxd: Fix default allowed read buffers value in group
-
-Geert Uytterhoeven (1):
-      dmaengine: HISI_DMA should depend on ARCH_HISI
-
-Jai Luthra (1):
-      dmaengine: ti: k3-psil-am62a: Add AM62Ax PSIL and PDMA data
-
-Jayesh Choudhary (1):
-      dmaengine: ti: k3-udma: remove non-fatal probe deferral log
-
-Jiapeng Chong (1):
-      dmaengine: idxd: Remove the unused function set_completion_address()
-
-Joy Zou (2):
-      dt-bindings: fsl-imx-sdma: Convert imx sdma to DT schema
-      dmaengine: imx-sdma: support hdmi in sdma
-
-Kai-Heng Feng (1):
-      dmaengine: imx-sdma: Set DMA channel to be private
-
-Kees Cook (1):
-      dmaengine: dw-axi-dmac: Do not dereference NULL structure
-
-Krzysztof Kozlowski (2):
-      dt-bindings: dma: drop unneeded quotes
-      dt-bindings: dma: cleanup examples - indentation, lowercase hex
-
-Lizhi Hou (2):
-      dmaengine: xilinx: xdma: Add xilinx xdma driver
-      dmaengine: xilinx: xdma: Add user logic interrupt support
-
-Marek Vasut (1):
-      dt-bindings: dma: fsl-mxs-dma: Convert MXS DMA to DT schema
-
-Martin Botka (1):
-      dt-bindings: dma: gpi: Document SM6125 compatible
-
-Melody Olvera (1):
-      dt-bindings: dmaengine: qcom: gpi: Add QDU1000/QRU1000 gpi device
-
-Neil Armstrong (1):
-      dt-bindings: dma: qcom: gpi: add compatible for sm8550
-
-Samuel Holland (1):
-      dmaengine: sun6i: Set the maximum segment size
-
-Shravan Chippa (1):
-      dmaengine: sf-pdma: pdma_desc memory leak fix
-
-Tudor Ambarus (1):
-      dmaengine: drivers: Use devm_platform_ioremap_resource()
-
-Vignesh Raghavendra (4):
-      dt-bindings: dma: ti: k3-bcdma: Add bindings for BCDMA CSI RX
-      dmaengine: ti: k3-udma: Fix BCDMA for case w/o BCHAN
-      dmaengine: ti: k3-udma: Add support for DMAs on AM62A SoC
-      dmaengine: ti: k3-udma: Add support for BCDMA CSI RX
-
-ye xingchen (1):
-      dmaengine: ppc4xx: Convert to use=A0sysfs_emit()/sysfs_emit_at() APIs
-
- .../bindings/dma/allwinner,sun4i-a10-dma.yaml      |   2 +-
- .../bindings/dma/allwinner,sun50i-a64-dma.yaml     |   2 +-
- .../bindings/dma/allwinner,sun6i-a31-dma.yaml      |   2 +-
- .../devicetree/bindings/dma/altr,msgdma.yaml       |   2 +-
- .../devicetree/bindings/dma/apple,admac.yaml       |   2 +-
- .../devicetree/bindings/dma/arm-pl08x.yaml         |   2 +-
- .../devicetree/bindings/dma/dma-controller.yaml    |   2 +-
- .../devicetree/bindings/dma/dma-router.yaml        |   2 +-
- .../devicetree/bindings/dma/fsl,edma.yaml          |   2 +-
- .../devicetree/bindings/dma/fsl,imx-sdma.yaml      | 149 ++++
- .../devicetree/bindings/dma/fsl,mxs-dma.yaml       |  80 ++
- .../devicetree/bindings/dma/fsl-imx-sdma.txt       | 118 ---
- .../devicetree/bindings/dma/fsl-mxs-dma.txt        |  60 --
- .../devicetree/bindings/dma/ingenic,dma.yaml       |   2 +-
- .../devicetree/bindings/dma/intel,ldma.yaml        |   2 +-
- .../devicetree/bindings/dma/mediatek,uart-dma.yaml |   2 +-
- .../bindings/dma/nvidia,tegra186-gpc-dma.yaml      |   2 +-
- .../bindings/dma/nvidia,tegra210-adma.yaml         |   2 +-
- Documentation/devicetree/bindings/dma/owl-dma.yaml |   2 +-
- .../devicetree/bindings/dma/qcom,bam-dma.yaml      |   2 +-
- .../devicetree/bindings/dma/qcom,gpi.yaml          |   5 +-
- .../devicetree/bindings/dma/renesas,rcar-dmac.yaml |   2 +-
- .../devicetree/bindings/dma/renesas,rz-dmac.yaml   |   2 +-
- .../bindings/dma/renesas,rzn1-dmamux.yaml          |   2 +-
- .../devicetree/bindings/dma/renesas,usb-dmac.yaml  |   2 +-
- .../bindings/dma/sifive,fu540-c000-pdma.yaml       |   2 +-
- .../bindings/dma/snps,dma-spear1340.yaml           |   2 +-
- .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml  |  38 +-
- .../bindings/dma/socionext,uniphier-mio-dmac.yaml  |   2 +-
- .../bindings/dma/socionext,uniphier-xdmac.yaml     |   2 +-
- .../devicetree/bindings/dma/st,stm32-dma.yaml      |   2 +-
- .../devicetree/bindings/dma/st,stm32-dmamux.yaml   |   2 +-
- .../devicetree/bindings/dma/st,stm32-mdma.yaml     |   2 +-
- .../devicetree/bindings/dma/stericsson,dma40.yaml  |  18 +-
- .../devicetree/bindings/dma/ti/k3-bcdma.yaml       |  77 +-
- MAINTAINERS                                        |  11 +
- drivers/dma/Kconfig                                |  16 +-
- drivers/dma/at_xdmac.c                             | 220 ++++-
- drivers/dma/bcm2835-dma.c                          |   4 +-
- drivers/dma/dma-axi-dmac.c                         |   4 +-
- drivers/dma/dmaengine.c                            |  26 +-
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |   6 +-
- drivers/dma/dw/core.c                              |  11 +-
- drivers/dma/fsl-edma.c                             |   8 +-
- drivers/dma/fsl-qdma.c                             |  10 +-
- drivers/dma/idma64.c                               |   8 +-
- drivers/dma/idxd/device.c                          |  14 +-
- drivers/dma/idxd/dma.c                             |   6 -
- drivers/dma/idxd/init.c                            |   7 +-
- drivers/dma/idxd/sysfs.c                           |   4 +-
- drivers/dma/img-mdc-dma.c                          |   4 +-
- drivers/dma/imx-dma.c                              |   4 +-
- drivers/dma/imx-sdma.c                             |  43 +-
- drivers/dma/mcf-edma.c                             |   5 +-
- drivers/dma/mediatek/mtk-hsdma.c                   |   4 +-
- drivers/dma/mmp_pdma.c                             |   4 +-
- drivers/dma/mmp_tdma.c                             |   4 +-
- drivers/dma/moxart-dma.c                           |   4 +-
- drivers/dma/mv_xor_v2.c                            |   7 +-
- drivers/dma/mxs-dma.c                              |   4 +-
- drivers/dma/nbpfaxi.c                              |   4 +-
- drivers/dma/ppc4xx/adma.c                          |  12 +-
- drivers/dma/ptdma/ptdma-dmaengine.c                |   2 +-
- drivers/dma/pxa_dma.c                              |   4 +-
- drivers/dma/qcom/bam_dma.c                         |   4 +-
- drivers/dma/sf-pdma/sf-pdma.c                      |   7 +-
- drivers/dma/sf-pdma/sf-pdma.h                      |   1 -
- drivers/dma/sh/usb-dmac.c                          |   4 +-
- drivers/dma/stm32-dmamux.c                         |   4 +-
- drivers/dma/stm32-mdma.c                           |   4 +-
- drivers/dma/sun4i-dma.c                            |   4 +-
- drivers/dma/sun6i-dma.c                            |   7 +-
- drivers/dma/tegra210-adma.c                        |   4 +-
- drivers/dma/ti/Makefile                            |   3 +-
- drivers/dma/ti/cppi41.c                            |  10 +-
- drivers/dma/ti/k3-psil-am62a.c                     | 196 +++++
- drivers/dma/ti/k3-psil-priv.h                      |   1 +
- drivers/dma/ti/k3-psil.c                           |   1 +
- drivers/dma/ti/k3-udma.c                           |  42 +-
- drivers/dma/ti/omap-dma.c                          |   4 +-
- drivers/dma/xilinx/Makefile                        |   1 +
- drivers/dma/xilinx/xdma-regs.h                     | 166 ++++
- drivers/dma/xilinx/xdma.c                          | 974 +++++++++++++++++=
-++++
- drivers/dma/xilinx/zynqmp_dma.c                    |   4 +-
- include/linux/dma/amd_xdma.h                       |  16 +
- include/linux/dma/imx-dma.h                        |   1 +
- include/linux/dmaengine.h                          |  13 +-
- include/linux/platform_data/amd_xdma.h             |  34 +
- 88 files changed, 2119 insertions(+), 445 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
- create mode 100644 Documentation/devicetree/bindings/dma/fsl,mxs-dma.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt
- delete mode 100644 Documentation/devicetree/bindings/dma/fsl-mxs-dma.txt
- create mode 100644 drivers/dma/ti/k3-psil-am62a.c
- create mode 100644 drivers/dma/xilinx/xdma-regs.h
- create mode 100644 drivers/dma/xilinx/xdma.c
- create mode 100644 include/linux/dma/amd_xdma.h
- create mode 100644 include/linux/platform_data/amd_xdma.h
-
---=20
-~Vinod
-
---LJuaWkJpLxVxPSkZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmP4ujMACgkQfBQHDyUj
-g0dBAg/9FfEfETxIWbeYHCW+aE5DfWOAD7D2WwpFPFTkM21rxE1anv1bnGqyrtwW
-1B9ZBiPGXZHzgJv8YdzgbSSaA3FNWAYpTwssCaBkOW/XcHzx+QvJJHEwf04a6FAp
-LcJ34JQmhLY4YCM+vl4asJsYm+rknF+dkCEx4yz0+8/czlUnVH8U8OaMIwg4Aare
-sdsbuv4jUxQWpRCm06eNZhP/2AXAr8J4HUpiYP9zaNFGAz0Blc1wVLCzrmMi8WKS
-qXFCCLLX7SsoqvpOdhbpUrOPEN01R0xWHZ6wNsRM6TyP13bgetOeeNWmFE47mstc
-ajnLszTUy7c03+x5JOHXrALYnSPG5L94vSQxDAvHmC3i0m6+++T2xjDrSO+6FdDC
-LRu+cAns0+WkwhEgapVXuFvyFjPxEk7zmd8SURWz9LdvTN3MrPETuUVqFEBtqXEO
-cZjJQIkCWBFeMTI40X4MbmJVgWtTifcLtoYCZfamEoMid/V06ECKyys8MmwI2y1i
-9FPOmzlsqs1e/kc4aP/sS8XsWpb6OaJDkey6u88UxdxqDrxgw3r31MgIaqwQcncP
-9vtZSKVpDjHMSk/oqLMevNA+9Kzs8sJPd6EKiaVS64GUZjavFaTGSM+rH8zcFr4a
-Wfv4Kmrnm4bh5/qbaF3vS8+zORAdpZ0ZuUz/GzduHea4kUt+FtY=
-=yUPm
------END PGP SIGNATURE-----
-
---LJuaWkJpLxVxPSkZ--
+--
+Linaro LKFT
+https://lkft.linaro.org
