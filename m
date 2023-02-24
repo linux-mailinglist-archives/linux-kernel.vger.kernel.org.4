@@ -2,594 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDAE6A18C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F476A18CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjBXJdn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Feb 2023 04:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
+        id S229611AbjBXJfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjBXJdm (ORCPT
+        with ESMTP id S229464AbjBXJfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:33:42 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FAC1515C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:33:38 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9A2D024E289;
-        Fri, 24 Feb 2023 17:33:31 +0800 (CST)
-Received: from EXMBX164.cuchost.com (172.16.7.74) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 17:33:31 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX164.cuchost.com
- (172.16.7.74) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
- 2023 17:33:31 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Fri, 24 Feb 2023 17:33:31 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZRZ0zqkG7/pRhhEiAX6gFjug0Aa7cUgAAgAEC65D///aKAIAAiLXg
-Date:   Fri, 24 Feb 2023 09:33:31 +0000
-Message-ID: <9cfd485d1e0d46cdb1323bb6ea330f6e@EXMBX066.cuchost.com>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-5-jeeheng.sia@starfivetech.com>
- <20230223180720.55fgbxzlx6xvzgms@orel>
- <b26264a20b5f4bc5abfc6dd87aa4e38f@EXMBX066.cuchost.com>
- <20230224090010.nmy6latszfkdqcft@orel>
-In-Reply-To: <20230224090010.nmy6latszfkdqcft@orel>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [60.50.196.81]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 24 Feb 2023 04:35:01 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DF3DBE6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:34:58 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id p16so8758512wmq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 01:34:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7MESVcb0g47iFx+NjjNUXz3tLNPtYavh4Fnoa4DatG4=;
+        b=MNI9dwgzbdM57MbIF248fH6T0SnxmGohL7exzi5QEWRMvYdycQQ9JFqZTW4PZgqCAO
+         eqhnxKuUta7hTQWhlqS+ufHDTdSyqDj0Kojx5p/pvcX/kp1GV4VNqJMpD6XZzll3C9jd
+         8rez0aFk84nBx35u5ksK4g/R0kwll9WCVvUKVPuPEAJdk4bDK00PIFxayPl2CH2WlBQ+
+         /PahV9wmJ4OPgEwVVFpCA2x9KoDwrqtfxknJTQIF+2U1s+2PR7R9XiA3yp3duabXawxv
+         UzcGLP/HUbcEabmTWsqnqwGlBeAYv4EoLaAngeUyoJmeG0NoXwZyQsAIYUlCZkUauV3L
+         D5JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7MESVcb0g47iFx+NjjNUXz3tLNPtYavh4Fnoa4DatG4=;
+        b=VoeBmMhUlNulDBNBN5wqYlpgRm4GvCu4kFhdcWP7KMh8zMmV3C3ASl7gMlv8wDtJRE
+         otfrWFW9hYfURD+C1nLTzAmK44aYzqOAJz0Xhb8Ho7KDwLywA871bboAQosSClPd9S3M
+         4P2q7wl66p0AX+mfG6drQpCNVEjWeiDTOJC09nzIBHKejwZvpXbma22i08op7XALKkC8
+         0uuFLfHPunEK3tf8eLmqRIP00MUV0DQ5KPxFduqtpoRRV9F4F7e0fvZHTnbYZ470zHla
+         LoJdAAzD138FBMNkoHx8+6EIfFTKB+JHwLDIh6/NLypipjIk8qk96fzoWUjoxPk2/rTr
+         Sfpw==
+X-Gm-Message-State: AO0yUKX1DWcNe3+48so/DqDYpFfx2cUZv7phWYi98z9oE9edeR0g5YG3
+        jHVPRgjptJn0oeAm0jUtCS82tQ==
+X-Google-Smtp-Source: AK7set865xxSsMkTO5iGWPi5y7vK4V6q7mqmItJ7yJ2m0Er5FDJyMZR7QaE/DVJ8wShKuDh37On7wA==
+X-Received: by 2002:a05:600c:2ed3:b0:3df:7948:886b with SMTP id q19-20020a05600c2ed300b003df7948886bmr6036362wmn.31.1677231297360;
+        Fri, 24 Feb 2023 01:34:57 -0800 (PST)
+Received: from vingu-book.. ([2a01:e0a:f:6020:a6f0:4ee9:c103:44cb])
+        by smtp.gmail.com with ESMTPSA id d18-20020a05600c34d200b003e6dcd562a6sm2239179wmq.28.2023.02.24.01.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 01:34:56 -0800 (PST)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v12 0/8] Add latency priority for CFS class
+Date:   Fri, 24 Feb 2023 10:34:46 +0100
+Message-Id: <20230224093454.956298-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset restarts the work about adding a latency priority to describe
+the latency tolerance of cfs tasks.
 
+Patch [1] is a new one that has been added with v6. It fixes an
+unfairness for low prio tasks because of wakeup_gran() being bigger
+than the maximum vruntime credit that a waking task can keep after
+sleeping.
 
-> -----Original Message-----
-> From: Andrew Jones <ajones@ventanamicro.com>
-> Sent: Friday, 24 February, 2023 5:00 PM
-> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> 
-> On Fri, Feb 24, 2023 at 02:05:43AM +0000, JeeHeng Sia wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > Sent: Friday, 24 February, 2023 2:07 AM
-> > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > >
-> > > On Tue, Feb 21, 2023 at 10:35:23AM +0800, Sia Jee Heng wrote:
-> > > > Low level Arch functions were created to support hibernation.
-> > > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-> > > > cpu state onto the stack, then calling swsusp_save() to save the memory
-> > > > image.
-> > > >
-> > > > Arch specific hibernation header is implemented and is utilized by the
-> > > > arch_hibernation_header_restore() and arch_hibernation_header_save()
-> > > > functions. The arch specific hibernation header consists of satp, hartid,
-> > > > and the cpu_resume address. The kernel built version is also need to be
-> > > > saved into the hibernation image header to making sure only the same
-> > > > kernel is restore when resume.
-> > > >
-> > > > swsusp_arch_resume() creates a temporary page table that covering only
-> > > > the linear map. It copies the restore code to a 'safe' page, then start
-> > > > to restore the memory image. Once completed, it restores the original
-> > > > kernel's page table. It then calls into __hibernate_cpu_resume()
-> > > > to restore the CPU context. Finally, it follows the normal hibernation
-> > > > path back to the hibernation core.
-> > > >
-> > > > To enable hibernation/suspend to disk into RISCV, the below config
-> > > > need to be enabled:
-> > > > - CONFIG_ARCH_HIBERNATION_HEADER
-> > > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> > > >
-> > > > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> > > > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > > > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> > > > ---
-> > > >  arch/riscv/Kconfig                 |   7 +
-> > > >  arch/riscv/include/asm/assembler.h |  20 ++
-> > > >  arch/riscv/include/asm/suspend.h   |  19 ++
-> > > >  arch/riscv/kernel/Makefile         |   1 +
-> > > >  arch/riscv/kernel/asm-offsets.c    |   5 +
-> > > >  arch/riscv/kernel/hibernate-asm.S  |  77 +++++
-> > > >  arch/riscv/kernel/hibernate.c      | 447 +++++++++++++++++++++++++++++
-> > > >  7 files changed, 576 insertions(+)
-> > > >  create mode 100644 arch/riscv/kernel/hibernate-asm.S
-> > > >  create mode 100644 arch/riscv/kernel/hibernate.c
-> > > >
-> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > index e2b656043abf..4555848a817f 100644
-> > > > --- a/arch/riscv/Kconfig
-> > > > +++ b/arch/riscv/Kconfig
-> > > > @@ -690,6 +690,13 @@ menu "Power management options"
-> > > >
-> > > >  source "kernel/power/Kconfig"
-> > > >
-> > > > +config ARCH_HIBERNATION_POSSIBLE
-> > > > +	def_bool y
-> > > > +
-> > > > +config ARCH_HIBERNATION_HEADER
-> > > > +	def_bool y
-> > > > +	depends on HIBERNATION
-> > >
-> > > nit: I think this can be simplified as def_bool HIBERNATION
-> > good suggestion. will change it.
-> > >
-> > > > +
-> > > >  endmenu # "Power management options"
-> > > >
-> > > >  menu "CPU Power Management"
-> > > > diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
-> > > > index 727a97735493..68c46c0e0ea8 100644
-> > > > --- a/arch/riscv/include/asm/assembler.h
-> > > > +++ b/arch/riscv/include/asm/assembler.h
-> > > > @@ -59,4 +59,24 @@
-> > > >  		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
-> > > >  	.endm
-> > > >
-> > > > +/*
-> > > > + * copy_page - copy 1 page (4KB) of data from source to destination
-> > > > + * @a0 - destination
-> > > > + * @a1 - source
-> > > > + */
-> > > > +	.macro	copy_page a0, a1
-> > > > +		lui	a2, 0x1
-> > > > +		add	a2, a2, a0
-> > > > +1 :
-> > >     ^ please remove this space
-> > can't remove it otherwise checkpatch will throws ERROR: spaces required around that ':'
-> 
-> Oh, right, labels in macros have this requirement.
-> 
-> > >
-> > > > +		REG_L	t0, 0(a1)
-> > > > +		REG_L	t1, SZREG(a1)
-> > > > +
-> > > > +		REG_S	t0, 0(a0)
-> > > > +		REG_S	t1, SZREG(a0)
-> > > > +
-> > > > +		addi	a0, a0, 2 * SZREG
-> > > > +		addi	a1, a1, 2 * SZREG
-> > > > +		bne	a2, a0, 1b
-> > > > +	.endm
-> > > > +
-> > > >  #endif	/* __ASM_ASSEMBLER_H */
-> > > > diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-> > > > index 75419c5ca272..3362da56a9d8 100644
-> > > > --- a/arch/riscv/include/asm/suspend.h
-> > > > +++ b/arch/riscv/include/asm/suspend.h
-> > > > @@ -21,6 +21,11 @@ struct suspend_context {
-> > > >  #endif
-> > > >  };
-> > > >
-> > > > +/*
-> > > > + * Used by hibernation core and cleared during resume sequence
-> > > > + */
-> > > > +extern int in_suspend;
-> > > > +
-> > > >  /* Low-level CPU suspend entry function */
-> > > >  int __cpu_suspend_enter(struct suspend_context *context);
-> > > >
-> > > > @@ -36,4 +41,18 @@ int __cpu_resume_enter(unsigned long hartid, unsigned long context);
-> > > >  /* Used to save and restore the csr */
-> > > >  void suspend_save_csrs(struct suspend_context *context);
-> > > >  void suspend_restore_csrs(struct suspend_context *context);
-> > > > +
-> > > > +/* Low-level API to support hibernation */
-> > > > +int swsusp_arch_suspend(void);
-> > > > +int swsusp_arch_resume(void);
-> > > > +int arch_hibernation_header_save(void *addr, unsigned int max_size);
-> > > > +int arch_hibernation_header_restore(void *addr);
-> > > > +int __hibernate_cpu_resume(void);
-> > > > +
-> > > > +/* Used to resume on the CPU we hibernated on */
-> > > > +int hibernate_resume_nonboot_cpu_disable(void);
-> > > > +
-> > > > +asmlinkage void hibernate_restore_image(unsigned long resume_satp, unsigned long satp_temp,
-> > > > +					unsigned long cpu_resume);
-> > > > +asmlinkage int hibernate_core_restore_code(void);
-> > > >  #endif
-> > > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > > > index 4cf303a779ab..daab341d55e4 100644
-> > > > --- a/arch/riscv/kernel/Makefile
-> > > > +++ b/arch/riscv/kernel/Makefile
-> > > > @@ -64,6 +64,7 @@ obj-$(CONFIG_MODULES)		+= module.o
-> > > >  obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
-> > > >
-> > > >  obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-> > > > +obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate-asm.o
-> > > >
-> > > >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
-> > > >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
-> > > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > > > index df9444397908..d6a75aac1d27 100644
-> > > > --- a/arch/riscv/kernel/asm-offsets.c
-> > > > +++ b/arch/riscv/kernel/asm-offsets.c
-> > > > @@ -9,6 +9,7 @@
-> > > >  #include <linux/kbuild.h>
-> > > >  #include <linux/mm.h>
-> > > >  #include <linux/sched.h>
-> > > > +#include <linux/suspend.h>
-> > > >  #include <asm/kvm_host.h>
-> > > >  #include <asm/thread_info.h>
-> > > >  #include <asm/ptrace.h>
-> > > > @@ -116,6 +117,10 @@ void asm_offsets(void)
-> > > >
-> > > >  	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
-> > > >
-> > > > +	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-> > > > +	OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
-> > > > +	OFFSET(HIBERN_PBE_NEXT, pbe, next);
-> > > > +
-> > > >  	OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
-> > > >  	OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
-> > > >  	OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
-> > > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
-> > > > new file mode 100644
-> > > > index 000000000000..846affe4dced
-> > > > --- /dev/null
-> > > > +++ b/arch/riscv/kernel/hibernate-asm.S
-> > > > @@ -0,0 +1,77 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > > +/*
-> > > > + * Hibernation low level support for RISCV.
-> > > > + *
-> > > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> > > > + *
-> > > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-> > > > + */
-> > > > +
-> > > > +#include <asm/asm.h>
-> > > > +#include <asm/asm-offsets.h>
-> > > > +#include <asm/assembler.h>
-> > > > +#include <asm/csr.h>
-> > > > +
-> > > > +#include <linux/linkage.h>
-> > > > +
-> > > > +/*
-> > > > + * int __hibernate_cpu_resume(void)
-> > > > + * Switch back to the hibernated image's page table prior to restoring the CPU
-> > > > + * context.
-> > > > + *
-> > > > + * Always returns 0
-> > > > + */
-> > > > +ENTRY(__hibernate_cpu_resume)
-> > > > +	/* switch to hibernated image's page table. */
-> > > > +	csrw CSR_SATP, s0
-> > > > +	sfence.vma
-> > > > +
-> > > > +	REG_L	a0, hibernate_cpu_context
-> > > > +
-> > > > +	restore_csr
-> > > > +	restore_reg
-> > > > +
-> > > > +	/* Return zero value. */
-> > > > +	add	a0, zero, zero
-> > >
-> > > nit: mv a0, zero
-> > sure
-> > >
-> > > > +
-> > > > +	ret
-> > > > +END(__hibernate_cpu_resume)
-> > > > +
-> > > > +/*
-> > > > + * Prepare to restore the image.
-> > > > + * a0: satp of saved page tables.
-> > > > + * a1: satp of temporary page tables.
-> > > > + * a2: cpu_resume.
-> > > > + */
-> > > > +ENTRY(hibernate_restore_image)
-> > > > +	mv	s0, a0
-> > > > +	mv	s1, a1
-> > > > +	mv	s2, a2
-> > > > +	REG_L	s4, restore_pblist
-> > > > +	REG_L	a1, relocated_restore_code
-> > > > +
-> > > > +	jalr	a1
-> > > > +END(hibernate_restore_image)
-> > > > +
-> > > > +/*
-> > > > + * The below code will be executed from a 'safe' page.
-> > > > + * It first switches to the temporary page table, then starts to copy the pages
-> > > > + * back to the original memory location. Finally, it jumps to __hibernate_cpu_resume()
-> > > > + * to restore the CPU context.
-> > > > + */
-> > > > +ENTRY(hibernate_core_restore_code)
-> > > > +	/* switch to temp page table. */
-> > > > +	csrw satp, s1
-> > > > +	sfence.vma
-> > > > +.Lcopy:
-> > > > +	/* The below code will restore the hibernated image. */
-> > > > +	REG_L	a1, HIBERN_PBE_ADDR(s4)
-> > > > +	REG_L	a0, HIBERN_PBE_ORIG(s4)
-> > >
-> > > Are we sure restore_pblist will never be NULL?
-> > restore_pblist is a link-list, it will be null during initialization or during page clean up by hibernation core. During the initial resume
-> process, the hibernation core will check the header and load the pages. If everything works correctly, the page will be linked to the
-> restore_pblist and then invoke swsusp_arch_resume() else hibernation core will throws error and failed to resume from the
-> hibernated image.
-> 
-> I know restore_pblist is a linked-list and this doesn't answer the
-> question. The comment above restore_pblist says
-> 
-> /*
->  * List of PBEs needed for restoring the pages that were allocated before
->  * the suspend and included in the suspend image, but have also been
->  * allocated by the "resume" kernel, so their contents cannot be written
->  * directly to their "original" page frames.
->  */
-> 
-> which implies the pages that end up on this list are "special". My
-> question is whether or not we're guaranteed to have at least one
-> of these special pages. If not, we shouldn't assume s4 is non-null.
-> If so, then a comment stating why that's guaranteed would be nice.
-The restore_pblist will not be null otherwise swsusp_arch_resume wouldn't get invoked. you can find how the link-list are link and how it checks against validity at https://elixir.bootlin.com/linux/v6.2-rc8/source/kernel/power/snapshot.c . " A comment stating why that's guaranteed would be nice" ? Hmm, perhaps this is out of my scope but I do believe in the page validity checking in the link I shared.
-> 
-> > >
-> > > > +
-> > > > +	copy_page a0, a1
-> > > > +
-> > > > +	REG_L	s4, HIBERN_PBE_NEXT(s4)
-> > > > +	bnez	s4, .Lcopy
-> > > > +
-> > > > +	jalr	s2
-> > > > +END(hibernate_core_restore_code)
-> > > > diff --git a/arch/riscv/kernel/hibernate.c b/arch/riscv/kernel/hibernate.c
-> > > > new file mode 100644
-> > > > index 000000000000..46a2f470db6e
-> > > > --- /dev/null
-> > > > +++ b/arch/riscv/kernel/hibernate.c
-> > > > @@ -0,0 +1,447 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +/*
-> > > > + * Hibernation support for RISCV
-> > > > + *
-> > > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> > > > + *
-> > > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-> > > > + */
-> > > > +
-> > > > +#include <asm/barrier.h>
-> > > > +#include <asm/cacheflush.h>
-> > > > +#include <asm/mmu_context.h>
-> > > > +#include <asm/page.h>
-> > > > +#include <asm/pgalloc.h>
-> > > > +#include <asm/pgtable.h>
-> > > > +#include <asm/sections.h>
-> > > > +#include <asm/set_memory.h>
-> > > > +#include <asm/smp.h>
-> > > > +#include <asm/suspend.h>
-> > > > +
-> > > > +#include <linux/cpu.h>
-> > > > +#include <linux/memblock.h>
-> > > > +#include <linux/pm.h>
-> > > > +#include <linux/sched.h>
-> > > > +#include <linux/suspend.h>
-> > > > +#include <linux/utsname.h>
-> > > > +
-> > > > +/* The logical cpu number we should resume on, initialised to a non-cpu number. */
-> > > > +static int sleep_cpu = -EINVAL;
-> > > > +
-> > > > +/* Pointer to the temporary resume page table. */
-> > > > +static pgd_t *resume_pg_dir;
-> > > > +
-> > > > +/* CPU context to be saved. */
-> > > > +struct suspend_context *hibernate_cpu_context;
-> > > > +EXPORT_SYMBOL_GPL(hibernate_cpu_context);
-> > > > +
-> > > > +unsigned long relocated_restore_code;
-> > > > +EXPORT_SYMBOL_GPL(relocated_restore_code);
-> > > > +
-> > > > +/**
-> > > > + * struct arch_hibernate_hdr_invariants - container to store kernel build version.
-> > > > + * @uts_version: to save the build number and date so that the we do not resume with
-> > > > + *		a different kernel.
-> > > > + */
-> > > > +struct arch_hibernate_hdr_invariants {
-> > > > +	char		uts_version[__NEW_UTS_LEN + 1];
-> > > > +};
-> > > > +
-> > > > +/**
-> > > > + * struct arch_hibernate_hdr - helper parameters that help us to restore the image.
-> > > > + * @invariants: container to store kernel build version.
-> > > > + * @hartid: to make sure same boot_cpu executes the hibernate/restore code.
-> > > > + * @saved_satp: original page table used by the hibernated image.
-> > > > + * @restore_cpu_addr: the kernel's image address to restore the CPU context.
-> > > > + */
-> > > > +static struct arch_hibernate_hdr {
-> > > > +	struct arch_hibernate_hdr_invariants invariants;
-> > > > +	unsigned long	hartid;
-> > > > +	unsigned long	saved_satp;
-> > > > +	unsigned long	restore_cpu_addr;
-> > > > +} resume_hdr;
-> > > > +
-> > > > +static inline void arch_hdr_invariants(struct arch_hibernate_hdr_invariants *i)
-> > > > +{
-> > > > +	memset(i, 0, sizeof(*i));
-> > > > +	memcpy(i->uts_version, init_utsname()->version, sizeof(i->uts_version));
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * Check if the given pfn is in the 'nosave' section.
-> > > > + */
-> > > > +int pfn_is_nosave(unsigned long pfn)
-> > > > +{
-> > > > +	unsigned long nosave_begin_pfn = sym_to_pfn(&__nosave_begin);
-> > > > +	unsigned long nosave_end_pfn = sym_to_pfn(&__nosave_end - 1);
-> > > > +
-> > > > +	return ((pfn >= nosave_begin_pfn) && (pfn <= nosave_end_pfn));
-> > > > +}
-> > > > +
-> > > > +void notrace save_processor_state(void)
-> > > > +{
-> > > > +	WARN_ON(num_online_cpus() != 1);
-> > > > +}
-> > > > +
-> > > > +void notrace restore_processor_state(void)
-> > > > +{
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * Helper parameters need to be saved to the hibernation image header.
-> > > > + */
-> > > > +int arch_hibernation_header_save(void *addr, unsigned int max_size)
-> > > > +{
-> > > > +	struct arch_hibernate_hdr *hdr = addr;
-> > > > +
-> > > > +	if (max_size < sizeof(*hdr))
-> > > > +		return -EOVERFLOW;
-> > > > +
-> > > > +	arch_hdr_invariants(&hdr->invariants);
-> > > > +
-> > > > +	hdr->hartid = cpuid_to_hartid_map(sleep_cpu);
-> > > > +	hdr->saved_satp = csr_read(CSR_SATP);
-> > > > +	hdr->restore_cpu_addr = (unsigned long)__hibernate_cpu_resume;
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(arch_hibernation_header_save);
-> > > > +
-> > > > +/*
-> > > > + * Retrieve the helper parameters from the hibernation image header.
-> > > > + */
-> > > > +int arch_hibernation_header_restore(void *addr)
-> > > > +{
-> > > > +	struct arch_hibernate_hdr_invariants invariants;
-> > > > +	struct arch_hibernate_hdr *hdr = addr;
-> > > > +	int ret = 0;
-> > > > +
-> > > > +	arch_hdr_invariants(&invariants);
-> > > > +
-> > > > +	if (memcmp(&hdr->invariants, &invariants, sizeof(invariants))) {
-> > > > +		pr_crit("Hibernate image not generated by this kernel!\n");
-> > > > +		return -EINVAL;
-> > > > +	}
-> > > > +
-> > > > +	sleep_cpu = riscv_hartid_to_cpuid(hdr->hartid);
-> > > > +	if (sleep_cpu < 0) {
-> > > > +		pr_crit("Hibernated on a CPU not known to this kernel!\n");
-> > > > +		sleep_cpu = -EINVAL;
-> > > > +		return -EINVAL;
-> > > > +	}
-> > > > +
-> > > > +#ifdef CONFIG_SMP
-> > > > +	ret = bringup_hibernate_cpu(sleep_cpu);
-> > > > +	if (ret) {
-> > > > +		sleep_cpu = -EINVAL;
-> > > > +		return ret;
-> > > > +	}
-> > > > +#endif
-> > > > +	resume_hdr = *hdr;
-> > > > +
-> > > > +	return ret;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(arch_hibernation_header_restore);
-> > > > +
-> > > > +int swsusp_arch_suspend(void)
-> > > > +{
-> > > > +	int ret = 0;
-> > > > +
-> > > > +	if (__cpu_suspend_enter(hibernate_cpu_context)) {
-> > > > +		sleep_cpu = smp_processor_id();
-> > > > +		suspend_save_csrs(hibernate_cpu_context);
-> > > > +		ret = swsusp_save();
-> > > > +	} else {
-> > > > +		suspend_restore_csrs(hibernate_cpu_context);
-> > > > +		flush_tlb_all();
-> > > > +		flush_icache_all();
-> > > > +
-> > > > +		/*
-> > > > +		 * Tell the hibernation core that we've just restored the memory.
-> > > > +		 */
-> > > > +		in_suspend = 0;
-> > > > +		sleep_cpu = -EINVAL;
-> > > > +	}
-> > > > +
-> > > > +	return ret;
-> > > > +}
-> > > > +
-> > > > +static unsigned long _temp_pgtable_map_pte(pte_t *dst_ptep, pte_t *src_ptep,
-> > > > +					   unsigned long addr, pgprot_t prot)
-> > > > +{
-> > > > +	pte_t pte = READ_ONCE(*src_ptep);
-> > > > +
-> > > > +	if (pte_present(pte))
-> > > > +		set_pte(dst_ptep, __pte(pte_val(pte) | pgprot_val(prot)));
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +
-> > > > +static unsigned long temp_pgtable_map_pte(pmd_t *dst_pmdp, pmd_t *src_pmdp,
-> > > > +					  unsigned long start, unsigned long end,
-> > > > +					  pgprot_t prot)
-> > > > +{
-> > > > +	unsigned long addr = start;
-> > > > +	pte_t *src_ptep;
-> > > > +	pte_t *dst_ptep;
-> > > > +
-> > > > +	if (pmd_none(READ_ONCE(*dst_pmdp))) {
-> > > > +		dst_ptep = (pte_t *)get_safe_page(GFP_ATOMIC);
-> > > > +		if (!dst_ptep)
-> > > > +			return -ENOMEM;
-> > > > +
-> > > > +		pmd_populate_kernel(NULL, dst_pmdp, dst_ptep);
-> > > > +	}
-> > > > +
-> > > > +	dst_ptep = pte_offset_kernel(dst_pmdp, start);
-> > > > +	src_ptep = pte_offset_kernel(src_pmdp, start);
-> > > > +
-> > > > +	do {
-> > > > +		_temp_pgtable_map_pte(dst_ptep, src_ptep, addr, prot);
-> > >
-> > > I think I'd rather have the body of _temp_pgtable_map_pte() here and drop
-> > > the helper, because the helper does (pte_val(pte) | pgprot_val(prot))
-> > > which looks strange, until seeing here that 'pte' is only the address
-> > > bits, so OR'ing in new prot bits without clearing old prot bits makes
-> > > sense.
-> > we do not need to clear the old bits since we going to keep those bits but add new bits which are required for resume. Let's hold
-> your question here but I will would like to see how Alex view it.
-> 
-> I confused myself a bit in my first read, so some of what I said isn't
-> relevant, but I still wonder why we don't want to be more explicit about
-> what prot bits are present in the end, and I still wonder why we need such
-> a simple helper function which is used in exactly one place. Indeed, the
-> pattern of all the other pgtable functions below is to put the set_p*
-> calls directly in the loop.
-I am sorry if I confused you but what I meant is that I would like to consolidate all comments from other reviewers before provide the best solution. There is no doubt that your comment is valid.
-> 
-> Thanks,
-> drew
+The patches [2-4] have been done by Parth:
+https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
+
+I have just rebased and moved the set of latency priority outside the
+priority update. I have removed the reviewed tag because the patches
+are 2 years old.
+
+This aims to be a generic interface and the following patches is one use
+of it to improve the scheduling latency of cfs tasks.
+
+Patch [5] uses latency nice priority to define a latency offset
+and then decide if a cfs task can or should preempt the current
+running task. The patch gives some tests results with cyclictests and
+hackbench to highlight the benefit of latency priority for short
+interactive task or long intensive tasks.
+
+Patch [6] adds the support of latency nice priority to task group by
+adding a cpu.latency.nice field. The range is [-20:19] as for setting task
+latency priority.
+
+Patch [7] makes sched_core taking into account the latency offset.
+
+Patch [8] adds a rb tree to cover some corner cases where the latency
+sensitive task (priority < 0) is preempted by high priority task (RT/DL)
+or fails to preempt them. This patch ensures that tasks will have at least
+a slice of sched_min_granularity in priority at wakeup.
+
+I have also backported the patchset on a dragonboard RB3 with an android
+mainline kernel based on v5.18 for a quick test. I have used the
+TouchLatency app which is part of AOSP and described to be a very good
+test to highlight jitter and jank frame sources of a system [1].
+In addition to the app, I have added some short running tasks waking-up
+regularly (to use the 8 cpus for 4 ms every 37777us) to stress the system
+without overloading it (and disabling EAS). The 1st results shows that the
+patchset helps to reduce the missed deadline frames from 5% to less than
+0.1% when the cpu.latency.nice of task group are set. I haven't rerun the
+test with latest version.
+
+I have also tested the patchset with the modified version of the alsa
+latency test that has been shared by Tim. The test quickly xruns with
+default latency nice priority 0 but is able to run without underuns with
+a latency -20 and hackbench running simultaneously.
+
+While preparing the version 8, I have evaluated the benefit of using an
+augmented rbtree instead of adding a rbtree for latency sensitive entities,
+which was a relevant suggestion done by PeterZ. Although the augmented
+rbtree enables to sort additional information in the tree with a limited
+overhead, it has more impact on legacy use cases (latency_nice >= 0)
+because the augmented callbacks are always called to maintain this
+additional information even when there is no sensitive tasks. In such
+cases, the dedicated rbtree remains empty and the overhead is reduced to
+loading a cached null node pointer. Nevertheless, we might want to
+reconsider the augmented rbtree once the use of negative latency_nice will
+be more widlely deployed. At now, the different tests that I have done,
+have not shown improvements with augmented rbtree.
+
+Below are some hackbench results (from v10):
+        2 rbtrees               augmented rbtree        augmented rbtree	
+                                sorted by vruntime      sorted by wakeup_vruntime
+sched	pipe	
+avg     26311,000               25976,667               25839,556
+stdev   0,15 %                  0,28 %                  0,24 %
+vs tip  0,50 %                  -0,78 %                 -1,31 %
+hackbench	1 group	
+avg     1,315                   1,344                   1,359
+stdev   0,88 %                  1,55 %                  1,82 %
+vs tip  -0,47 %                 -2,68 %                 -3,87 %
+hackbench	4 groups
+avg     1,339                   1,365                   1,367
+stdev   2,39 %                  2,26 %                  3,58 %
+vs tip  -0,08 %                 -2,01 %                 -2,22 %
+hackbench	8 groups
+avg     1,233                   1,286                   1,301
+stdev   0,74 %                  1,09 %                  1,52 %
+vs tip  0,29 %                  -4,05 %                 -5,27 %
+hackbench	16 groups	
+avg     1,268                   1,313                   1,319
+stdev   0,85 %                  1,60 %                  0,68 %
+vs tip  -0,02 %                 -3,56 %                 -4,01 %
+
+[1] https://source.android.com/docs/core/debug/eval_perf#touchlatency
+
+Change since v11:
+- init latency_node of task group entity
+
+Change since v10:
+- remove sched_latency_to_weight array and use a calc_latency_offset() instead
+- save latency_prio instead for task group instead of latency offset
+- enqueue back an entity when changing the latency nice prio fo a task group
+
+Change since v9:
+- Rebase
+- add tags
+
+Change since v8:
+- Rename get_sched_latency by get_sleep_latency
+- move latency nice defines in sched/prio.h and fix latency_prio init value
+- Fix typo and comments
+
+Change since v7:
+- Replaced se->on_latency by using RB_CLEAR_NODE() and RB_EMPTY_NODE()
+- Clarify the limit behavior fo the cgroup cpu.latenyc_nice
+
+Change since v6:
+- Fix compilation error for !CONFIG_SCHED_DEBUG
+
+Change since v5:
+- Add patch 1 to fix unfairness for low prio task. This has been
+  discovered while studying Youssef's tests results with latency nice
+  which were hitting the same problem.
+- Fixed latency_offset computation to take into account
+  GENTLE_FAIR_SLEEPERS. This has diseappeared with v2and has been raised
+  by Youssef's tests.
+- Reworked and optimized how latency_offset in used to check for
+  preempting current task at wakeup and tick. This cover more cases too.
+- Add patch 9 to remove check_preempt_from_others() which is not needed
+  anymore with the rb tree.
+
+Change since v4:
+- Removed permission checks to set latency priority. This enables user
+  without elevated privilege like audio application to set their latency
+  priority as requested by Tim.
+- Removed cpu.latency and replaced it by cpu.latency.nice so we keep a
+  generic interface not tied to latency_offset which can be used to
+  implement other latency features.
+- Added an entry in Documentation/admin-guide/cgroup-v2.rst to describe
+  cpu.latency.nice.
+- Fix some typos.
+
+Change since v3:
+- Fix 2 compilation warnings raised by kernel test robot <lkp@intel.com>
+
+Change since v2:
+- Set a latency_offset field instead of saving a weight and computing it
+  on the fly.
+- Make latency_offset available for task group: cpu.latency
+- Fix some corner cases to make latency sensitive tasks schedule first and
+  add a rb tree for latency sensitive task.
+
+Change since v1:
+- fix typo
+- move some codes in the right patch to make bisect happy
+- simplify and fixed how the weight is computed
+- added support of sched core patch 7
+
+Parth Shah (3):
+  sched: Introduce latency-nice as a per-task attribute
+  sched/core: Propagate parent task's latency requirements to the child
+    task
+  sched: Allow sched_{get,set}attr to change latency_nice of the task
+
+Vincent Guittot (5):
+  sched/fair: fix unfairness at wakeup
+  sched/fair: Take into account latency priority at wakeup
+  sched/fair: Add sched group latency support
+  sched/core: Support latency priority with sched core
+  sched/fair: Add latency list
+
+ Documentation/admin-guide/cgroup-v2.rst |  10 ++
+ include/linux/sched.h                   |   4 +
+ include/linux/sched/prio.h              |  27 +++
+ include/uapi/linux/sched.h              |   4 +-
+ include/uapi/linux/sched/types.h        |  19 ++
+ init/init_task.c                        |   1 +
+ kernel/sched/core.c                     |  65 +++++++
+ kernel/sched/debug.c                    |   1 +
+ kernel/sched/fair.c                     | 222 ++++++++++++++++++++----
+ kernel/sched/sched.h                    |  50 +++++-
+ tools/include/uapi/linux/sched.h        |   4 +-
+ 11 files changed, 371 insertions(+), 36 deletions(-)
+
+-- 
+2.34.1
+
