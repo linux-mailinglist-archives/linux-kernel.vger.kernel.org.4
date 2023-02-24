@@ -2,108 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A306A1525
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EDD6A1527
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 04:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjBXDCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 22:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S229873AbjBXDDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 22:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjBXDCx (ORCPT
+        with ESMTP id S229849AbjBXDDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 22:02:53 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC844AC;
-        Thu, 23 Feb 2023 19:02:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677207772; x=1708743772;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=v+OHKdxrw/nM2qX9sYd6aRRdtAU9Je2UuBYcv5BP8wY=;
-  b=ORXA0fGA0ddSDJv3UVLZt/DPKqvSToIcFcAHp1ATnBLMicjl+5JJ/xmG
-   eIf6i/R5AMbNzz9P5/EihzxLf2uh3ArGJ39OD6atbBIlDKvQqdjE1iIDw
-   Vk1s4nP8ykfoMVMGNpoT0IL2swM9wIMZqemueL5LEKIjMKlnNKAeUNvFC
-   euBFwu+mZVjWm8HSvXOn6BA0aJrMmemqUEhRn+0mskmLTkrZLUHStD9B3
-   /Q3MHvZp1io2pUkgG5IrHiH+JGfOtpFFc/psgZ1woA5az3YXqZUXxPous
-   h6rd1geuIfqtUQYZqWzBDAxFZjkzSrinxKsThzkTCg9bRgdKmKKMXOZlp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331117111"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="331117111"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 19:02:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918274147"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="918274147"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 19:02:45 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Paulo Alcantara <pc@cjr.nz>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] MM updates for 6.3-rc1
-References: <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
-        <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
-Date:   Fri, 24 Feb 2023 11:01:49 +0800
-In-Reply-To: <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com>
-        (Linus Torvalds's message of "Thu, 23 Feb 2023 17:33:37 -0800")
-Message-ID: <87cz5zdaw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 23 Feb 2023 22:03:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25988A4B;
+        Thu, 23 Feb 2023 19:03:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 662B3B81A53;
+        Fri, 24 Feb 2023 03:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBE0C433EF;
+        Fri, 24 Feb 2023 03:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677207784;
+        bh=nJk183oZJwTlZUGeg+/8SvbDtB87n3GYLJJ3zBy7xls=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cuEgDSyMiNIx/xrZ3BFOy+x81vTz0QorBIXyU9jfNFTOfjqs3QA90Fl86osvKieZg
+         NtAPQxCW+F8vj/U7dlWzTmBUmhot0Jhhzd6ClAfGYU/O7fjnE0oYlXB5pzzTXknoFd
+         UPLR8Soxu5lwUoFULvCYETHGwdn5WALPLU5vi+fb96o8RVJ/Fte0w4fkOS3a8m+rr4
+         fzdF64DkcY29UEcRdX/PR9pMTIgfzHaoU7727sMxb0ySp36z0T0Txjiyrt2FDj2CLM
+         tkSVEPkJ5DZQ8wg8LTjzZpAcjCBx4khXV/kafYo6cG9I7sgHVAfMLeK2ADsaXjWhJY
+         TL4oToMBsHG+A==
+Date:   Thu, 23 Feb 2023 19:03:02 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH v3] octeontx2-pf: Use correct struct reference in test
+ condition
+Message-ID: <20230223190302.2ec6fd5b@kernel.org>
+In-Reply-To: <Y/YYkKddeHOt80cO@ubun2204.myguest.virtualbox.org>
+References: <Y/YYkKddeHOt80cO@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
+On Wed, 22 Feb 2023 18:58:48 +0530 Deepak R Varma wrote:
+> Fix the typo/copy-paste error by replacing struct variable ah_esp_mask name
+> by ah_esp_hdr.
+> Issue identified using doublebitand.cocci Coccinelle semantic patch.
+> 
+> Fixes: b7cf966126eb ("octeontx2-pf: Add flow classification using IP next level protocol")
+> Link: https://lore.kernel.org/all/20210111112537.3277-1-naveenm@marvell.com/
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
 
->
->  - gcc 12.2.1 quite reasonable complains about some of the new MM code:
->
->     mm/migrate.c: In function =E2=80=98__migrate_folio_extract=E2=80=99:
->     mm/migrate.c:1050:20: note: randstruct: casting between randomized
-> structure pointer types (ssa): =E2=80=98struct anon_vma=E2=80=99 and =E2=
-=80=98struct
-> address_space=E2=80=99
->
->      1050 |         *anon_vmap =3D (void *)dst->mapping;
->           |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
->
->    and while this doesn't cause a build failure ("note" is different
-> from "warning"), I do think something needs to be done. Gcc is right.
-> This code seems to *work* simply because it's intentionally
-> mis-casting pointers,
-
-Yes.  The mis-casting is intentional.  I just need some place to hold
-the data temporarily (save in __migrate_folio_record() and clear in
-__migrate_folio_extract()).  And "dst" is newly allocated folio.
-
-> but I think it needs to be seriously looked at and something done to
-> make gcc happy (and a *LARGE* comment about it).
-
-Sure.  I will check whether there's some way to make gcc happy and add
-some comments about that.  There's some comments for
-__migrate_folio_extract(), but that's isn't enough apprently.)
-
-> That last note is not some merge result, it's purely about the new MM cod=
-e.
->
-
-[snip]
-
-Best Regards,
-Huang, Ying
+Applied, thanks!
