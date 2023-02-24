@@ -2,132 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130396A223F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACF96A2242
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 20:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjBXTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 14:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S229509AbjBXTTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 14:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjBXTSA (ORCPT
+        with ESMTP id S229481AbjBXTTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:18:00 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EE66A7A2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:17:31 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bw19so162659wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:17:30 -0800 (PST)
+        Fri, 24 Feb 2023 14:19:09 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F1C1FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:19:08 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id d7so999061vsj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 11:19:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nlPt4Q3q43f/kES2hajYBu0feYXRxIPRsViZnbHRgo8=;
-        b=ULOxdkQfJSc2wzWXnZzkcOyay31tWrkYETOwBzB86fVZxSrlFxO0D+wFcUzNSs6OEy
-         G/Wj5Om0d1dD3bur8hORomrHxlcp2EbExVSVCLMSKMGK2NC7h+NFjFMV7o67rbfpdPJe
-         IeIpNPsVMo+s+E7ly717Zk+OS1Cl+Gkl9QbLcj3fT3nhhNHD2KH0fO3KZ5srXAerW70V
-         tMXC90LPZ9cSFAyS4VDbe7A4PUZgMQ9Wp0rQS6agHwqpMfgMxvvB9otmc4DTHrlHl4/M
-         oNvhx15NDacei8jDIfP7/qN6BwU6owh6GMJBAE5cP+r6LbEuEks5hO4JemkXa5R1bXEO
-         QiwQ==
+        d=uci-edu.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=beKhMtsCTaM5oM3Mze5dnKYHOlzx1cDOTU11CiVmTd8=;
+        b=H3SEpbzsD7PRyycSfaIJTHQITmlJgkO7Io7xHoUfh6iiCZVz9xOrTv1LV5ScXsGbej
+         M3JGKkz9ieE3+sdM+rX5Y49Yz5gd+cYX/v0ssXiXxWX4jF+LyGDKdjYOZyoHyZ7M6Hj8
+         Fjanq3xvT7H3csTgbOkTU6NCKQRA91J8J+5gTpS/aCv/4DTD22moW91JBqYzHOOB2pzm
+         Ebke5bzH9WteMh+0aqP+q3oNr61B5MppI/LEvWcOeI2AvTZuq9P5IQTQW0boFKrEbLB7
+         7GVXbJurw3Hpq1Pu0Rii7SqEW3ZxpAErRkHGUYlomFpzjepes0z6uzV2TVE5ux+ASXT0
+         roaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nlPt4Q3q43f/kES2hajYBu0feYXRxIPRsViZnbHRgo8=;
-        b=LJVp5YJ5DOd2aFgrd9dCSipNeqi+eqiSerP0fCexxpPIOm9yZ35ILRYF/Kaj4U7mBI
-         JSb5LQpdYUEitzo7XKNg96fKlOCYreL7er0U1CTkKABLaweCZaQVIn4Lz8ASSR6WqY/O
-         ns099mEUzB8LRP7OWkx+m78myWJelIPqSnS/2QG6tcLcoQY6LB4eXKz1dnR0GRGxZRlS
-         V9LWd5GAxDLQKy0v5/0GTe/VEahOT2YgkkUyi4CQVz3thQQUjqXGN9N0UWr/BR0staTZ
-         fIcbE1k7tzQ1q39Q1gm2LixVXOc8YsNSEjBfrw4fu9mWrgO8aP61KnR4fi4OGAC+NJJD
-         3kyQ==
-X-Gm-Message-State: AO0yUKVRhpHYBYlc3zFd+INy/onkk7vfATnsmjPYfMt91OHCXIomu0fr
-        lKrk8kRndFjI9VqAkykJxE1l/Q==
-X-Google-Smtp-Source: AK7set8bcMpUzNCKsQ+jr5w1UWR23aN9ub4GLVSYhJodv/gdPO0QitNKBJ4ItzsHaFeUGdPOLJvusA==
-X-Received: by 2002:a5d:6f01:0:b0:2bf:d937:3589 with SMTP id ay1-20020a5d6f01000000b002bfd9373589mr594169wrb.14.1677266249149;
-        Fri, 24 Feb 2023 11:17:29 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:d12b:5d7b:42ef:d31a? ([2a02:6b6a:b566:0:d12b:5d7b:42ef:d31a])
-        by smtp.gmail.com with ESMTPSA id x8-20020adfdd88000000b002c58ca558b6sm13612940wrl.88.2023.02.24.11.17.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 11:17:28 -0800 (PST)
-Message-ID: <8dcac250-474a-6102-1a60-b8ad84eb0a4b@bytedance.com>
-Date:   Fri, 24 Feb 2023 19:17:27 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=beKhMtsCTaM5oM3Mze5dnKYHOlzx1cDOTU11CiVmTd8=;
+        b=S5o9UYa389cVM0mC8unOgvEwxxSTY2pz8vTntTB1o0OfTfuPeCCj8biAytlsfVvx3R
+         pjuuooirqBy+5FeIcbAF3RFWxrBY0ydXLQ9ZltfdwGRiWuuR/W7YwtF++Orzrvlf16Np
+         OrnMkJZm3TkVezXuDDRUseslQYuH+Jw9v2gDOKc+7mM6CNbUTLt8yDeRi/ywQbX/4kKg
+         2slD3ZE6Y+41Ev4riKBvHlsQOWj5YaWablJPeoLZTHVW8j2zTLS6PAdedQL0NtawcVhr
+         Y88Lx4gO5W9xc3Yr3R4frkIgerJSMWOC8hSlpcAJQXbzp2ptDY0KBizLTjt38NDJHGG/
+         BRAQ==
+X-Gm-Message-State: AO0yUKWwaQoL9KRSXJfhK0bsiqwupcvAKjZ+FhusbYzgnsaWU/SfJPMJ
+        j/ya4HWCeDVx6wy9Epk08gSoVsAYVOnRmaQyp5V24g==
+X-Google-Smtp-Source: AK7set8lCRfbdrWNN0pLqcJuTWrdGmQzu4KmlBszfB3kfSMl8UPsYGuSJPDt8W5Ix1Vhgy16L8mKJ8WCEEKd5v8PayQ=
+X-Received: by 2002:a67:db0a:0:b0:414:2344:c353 with SMTP id
+ z10-20020a67db0a000000b004142344c353mr3075359vsj.5.1677266347284; Fri, 24 Feb
+ 2023 11:19:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v11 09/12] x86/smpboot: Remove
- initial_stack on 64-bit
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "brgerst@gmail.com" <brgerst@gmail.com>
-Cc:     "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "arjan@linux.intel.com" <arjan@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
-        "liangma@liangbit.com" <liangma@liangbit.com>
-References: <20230223191140.4155012-1-usama.arif@bytedance.com>
- <20230223191140.4155012-10-usama.arif@bytedance.com>
- <BYAPR21MB1688FEE6BA7464980CCF7A21D7A89@BYAPR21MB1688.namprd21.prod.outlook.com>
- <2c3abf634824f2b7207a3ac94985863472d67608.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <2c3abf634824f2b7207a3ac94985863472d67608.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
+ <87a614h62a.fsf@cloudflare.com> <CABcoxUYiRUBkhzsbvsux8=zjgs7KKWYUobjoKrM+JYpeyfNw8g@mail.gmail.com>
+In-Reply-To: <CABcoxUYiRUBkhzsbvsux8=zjgs7KKWYUobjoKrM+JYpeyfNw8g@mail.gmail.com>
+From:   Hsin-Wei Hung <hsinweih@uci.edu>
+Date:   Fri, 24 Feb 2023 13:18:31 -0600
+Message-ID: <CABcoxUY=k8_aM0YE3_e_FaMTLiBmo-Yc4UMyBVuRNggj4ivA-Q@mail.gmail.com>
+Subject: Re: A potential deadlock in sockhash map
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Just a quick update. I can still trigger the lockdep warning on bpf
+tree (5b7c4cabbb65).
 
-On 24/02/2023 18:28, David Woodhouse wrote:
-> On Fri, 2023-02-24 at 18:24 +0000, Michael Kelley (LINUX) wrote:
->> I'm getting a compile error on the new reference to PTREGS_SIZE:
-> 
-> Is it just that <asm/asm-offsets.h> is included conditionally, and not
-> in your build? What if you include it directly from <asm/processor.h>
+Thanks,
+Hsin-Wei
 
-This is fixed in the v2 patch that Brian sent.
-
-diff --git a/arch/x86/include/asm/processor.h 
-b/arch/x86/include/asm/processor.h
-index 9c4a5c4d46c1..bdde7316e75b 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -650,8 +650,8 @@ static inline void spin_lock_prefetch(const void *x)
-  #else
-  extern unsigned long __end_init_task[];
-
--#define INIT_THREAD {                                                  \
--       .sp     = (unsigned long)&__end_init_task - PTREGS_SIZE,        \
-+#define INIT_THREAD { 
-    \
-+       .sp     = (unsigned long)&__end_init_task - sizeof(struct 
-pt_regs), \
-  }
-
-  extern unsigned long KSTK_ESP(struct task_struct *task);
+On Fri, Feb 24, 2023 at 9:58 AM Hsin-Wei Hung <hsinweih@uci.edu> wrote:
+>
+> Hi Jakub,
+>
+> Thanks for following up. Sorry that I did not receive the previous reply.
+>
+> The latest version I tested is 5.19 (3d7cb6b04c3f) and we can reproduce the
+> issue with the BPF PoC included. Since we modified Syzkaller, we do not
+> have a Syzkaller reproducer.
+>
+> I will follow John's suggestion to test the latest kernel and bpf
+> tree. I will follow
+> up if the issue still reproduces.
+>
+> Thanks,
+> Hsin-Wei
+>
+>
+>
+>
+> On Fri, Feb 24, 2023 at 8:51 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+> >
+> > Hi,
+> >
+> > On Mon, Feb 20, 2023 at 07:39 AM -06, Hsin-Wei Hung wrote:
+> > > I think my previous report got blocked since it contained HTML
+> > > subparts so I am sending it again. Our bpf runtime fuzzer (a
+> > > customized syzkaller) triggered a lockdep warning in the bpf subsystem
+> > > indicating a potential deadlock. We are able to trigger this bug on
+> > > v5.15.25 and v5.19. The following code is a BPF PoC, and the lockdep
+> > > warning is attached at the end.
+> >
+> > Not sure if you've seen John's reply to the previous report:
+> >
+> > https://urldefense.com/v3/__https://lore.kernel.org/all/63dddcc92fc31_6bb15208e9@john.notmuch/__;!!CzAuKJ42GuquVTTmVmPViYEvSg!PU-LFxMnx4b-GmTXGI0hYjBiq8vkwrFrlf_b0N5uzy8do5kPFiNcuZJbby-19TtOH2rJoY9UwOvzFArd$
+> >
+> > Are you also fuzzing any newer kernel versions? Or was v5.19 the latest?
+> >
+> > Did syzkaller find a reproducer?
+> >
+> > Thanks,
+> > Jakub
