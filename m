@@ -2,116 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C806A238D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 274B76A238E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjBXVPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S231224AbjBXVPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjBXVO7 (ORCPT
+        with ESMTP id S231184AbjBXVPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:14:59 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63DB6F416
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:14:55 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id bi9so842965lfb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:14:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a3tMET32MC/ilQvKVfykq58VVtfmdUTziBlgOazLd3M=;
-        b=U5eD5dgQMqr90/i1TZVqTWa3upSJ8famKFMQf6b9Y4qBH8DJcyBWCDB2wSBsxCCQmV
-         WZ+8aokL4OdbZAaMkkA3m8qy6FibDv5B7fgz1TTrT0aGeRrgnzz5GhFtpuDI2LAXzVpY
-         DtucP8KdYrdXIDcb25gdulIleYmRNT2tNiEGSn5/gRHJ0+UmPNDswbe8uz6mpLEYYBSv
-         OQgWVLtwRv7wwHFb1npF/UZFjkqNwbH1gZlmtMGoclhGA9W/4uZ+5+qs2dD5baNy7YBY
-         IQ9ZJdMJNw6jKamY4dAgdrItDX1BkWNO0DYQo+EkdY9p3tH6CFWPy92vySc2VVVINtLc
-         JMQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3tMET32MC/ilQvKVfykq58VVtfmdUTziBlgOazLd3M=;
-        b=KQ/IqlaSFbPadcd/HSIbb96nAd0Z7rY9B8eDTgMXPALITOWv/yeOS2nwWwgTBns2za
-         Wtn2W/sWoCI3UJIb2a0w/IZfF57wYzTrPfCJgiOnjqpWvQ8FkNgZZIS2tp/P40BaPaOo
-         REdwBCcOpgGTN8nY3jdvIRb02lcFmRhV3n/vGziZiAczrMFSVf2fkkl6HI7jStSpS/29
-         jrJLpKZS6ydBzxkNb0TzrHgUPG6BYcY8q+X0KoSFw9Bb1jVdQfyo66f2vdpQkQ4jar1M
-         uAzHjZvKoL9tBFfaJUnbq7ajhv0NEX4Wrps4auroxk/gVWqoNcJDRPCUlMK6mGIynjfN
-         rAug==
-X-Gm-Message-State: AO0yUKWJmCc9xyKfLlVgoc/Bl6qHghwP7J1ec4LlwxA65pdKR8doYgaj
-        HJVAVxQGvnxYtBC5x3/jhhLvDw==
-X-Google-Smtp-Source: AK7set+KuQfh3hQTyj9cvtkBXBPxyynq+nrRD1q1YjjoI1lEyvxDbAvco71W6uCiJgOUd/RvpsNOzg==
-X-Received: by 2002:ac2:4842:0:b0:4d5:a6ad:53e8 with SMTP id 2-20020ac24842000000b004d5a6ad53e8mr6464231lfy.27.1677273294064;
-        Fri, 24 Feb 2023 13:14:54 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id z7-20020ac25de7000000b004db44dfd888sm2750lfq.30.2023.02.24.13.14.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 13:14:53 -0800 (PST)
-Message-ID: <54004e9c-256c-15b2-9c55-8bd88ebb0c85@linaro.org>
-Date:   Fri, 24 Feb 2023 23:14:52 +0200
+        Fri, 24 Feb 2023 16:15:13 -0500
+Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5966F801
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 13:15:06 -0800 (PST)
+Received: from myt5-f3d0b203e46f.qloud-c.yandex.net (myt5-f3d0b203e46f.qloud-c.yandex.net [IPv6:2a02:6b8:c12:3b2d:0:640:f3d0:b203])
+        by forward500c.mail.yandex.net (Yandex) with ESMTP id 88C125EB74;
+        Sat, 25 Feb 2023 00:15:04 +0300 (MSK)
+Received: by myt5-f3d0b203e46f.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 0FYdsvHZ6W21-xDSwbxYK;
+        Sat, 25 Feb 2023 00:15:03 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1677273303;
+        bh=22Azepy2Dbys1MXTz7hzaBtdOBI1jBJ6KyrlvrLf+Lc=;
+        h=In-Reply-To:Cc:Date:References:To:From:Subject:Message-ID;
+        b=OlcbsBvo1YZ3M44OKHRxcgR/3j+lL1atrkjXRKyZ9/CaIETHhwjlPyqT6HRPLPjXL
+         oF9VLfQ+xL/maLAeA02K2b46ialGj2/hiILCNkumJtYtzVQBKCyAqbRmUjgaxv15+g
+         eetgBa/ClaA2bjCO01A7Ju6r8wcNlX2rSiu8VvAA=
+Authentication-Results: myt5-f3d0b203e46f.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <ed9c844b-c431-df69-21ff-1b6dc6557b20@ya.ru>
+Date:   Sat, 25 Feb 2023 00:14:58 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RFC PATCH 2/2] drm/msm/dsi: use new
- dpu_dsc_populate_dsc_config()
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-3-git-send-email-quic_khsieh@quicinc.com>
- <525078f5-44be-9a75-a737-ddcc6e097700@linaro.org>
- <21623a6d-7f83-5d2c-068c-f600a1834ac9@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <21623a6d-7f83-5d2c-068c-f600a1834ac9@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
+From:   Kirill Tkhai <tkhai@ya.ru>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, dave@stgolabs.net,
+        penguin-kernel@i-love.sakura.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+ <20230223132725.11685-3-zhengqi.arch@bytedance.com>
+ <Y/evb+PBeaahx9Os@sultan-box.localdomain>
+ <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
+ <b9593d94-057d-43d3-97e2-07cf83896041@ya.ru>
+Content-Language: en-US
+In-Reply-To: <b9593d94-057d-43d3-97e2-07cf83896041@ya.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2023 23:09, Abhinav Kumar wrote:
-> 
-> 
-> On 2/24/2023 1:04 PM, Dmitry Baryshkov wrote:
->> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->>> use new introduced dpu_dsc_populate_dsc_config() to calculate
->>> and populate drm_dsc_info instead of hard code value.
+On 25.02.2023 00:02, Kirill Tkhai wrote:
+> On 24.02.2023 07:00, Qi Zheng wrote:
 >>
->> DPU is an optional component, so DSI driver should not depend on the 
->> DPU driver.
 >>
+>> On 2023/2/24 02:24, Sultan Alsawaf wrote:
+>>> On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
+>>>> The shrinker_rwsem is a global lock in shrinkers subsystem,
+>>>> it is easy to cause blocking in the following cases:
+>>>>
+>>>> a. the write lock of shrinker_rwsem was held for too long.
+>>>>     For example, there are many memcgs in the system, which
+>>>>     causes some paths to hold locks and traverse it for too
+>>>>     long. (e.g. expand_shrinker_info())
+>>>> b. the read lock of shrinker_rwsem was held for too long,
+>>>>     and a writer came at this time. Then this writer will be
+>>>>     forced to wait and block all subsequent readers.
+>>>>     For example:
+>>>>     - be scheduled when the read lock of shrinker_rwsem is
+>>>>       held in do_shrink_slab()
+>>>>     - some shrinker are blocked for too long. Like the case
+>>>>       mentioned in the patchset[1].
+>>>>
+>>>> Therefore, many times in history ([2],[3],[4],[5]), some
+>>>> people wanted to replace shrinker_rwsem reader with SRCU,
+>>>> but they all gave up because SRCU was not unconditionally
+>>>> enabled.
+>>>>
+>>>> But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
+>>>> the SRCU is unconditionally enabled. So it's time to use
+>>>> SRCU to protect readers who previously held shrinker_rwsem.
+>>>>
+>>>> [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
+>>>> [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
+>>>> [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
+>>>> [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
+>>>> [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
+>>>>
+>>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>>>> ---
+>>>>   mm/vmscan.c | 27 +++++++++++----------------
+>>>>   1 file changed, 11 insertions(+), 16 deletions(-)
+>>>>
+>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>> index 9f895ca6216c..02987a6f95d1 100644
+>>>> --- a/mm/vmscan.c
+>>>> +++ b/mm/vmscan.c
+>>>> @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>     LIST_HEAD(shrinker_list);
+>>>>   DECLARE_RWSEM(shrinker_rwsem);
+>>>> +DEFINE_SRCU(shrinker_srcu);
+>>>>     #ifdef CONFIG_MEMCG
+>>>>   static int shrinker_nr_max;
+>>>> @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>>>>   void register_shrinker_prepared(struct shrinker *shrinker)
+>>>>   {
+>>>>       down_write(&shrinker_rwsem);
+>>>> -    list_add_tail(&shrinker->list, &shrinker_list);
+>>>> +    list_add_tail_rcu(&shrinker->list, &shrinker_list);
+>>>>       shrinker->flags |= SHRINKER_REGISTERED;
+>>>>       shrinker_debugfs_add(shrinker);
+>>>>       up_write(&shrinker_rwsem);
+>>>> @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>           return;
+>>>>         down_write(&shrinker_rwsem);
+>>>> -    list_del(&shrinker->list);
+>>>> +    list_del_rcu(&shrinker->list);
+>>>>       shrinker->flags &= ~SHRINKER_REGISTERED;
+>>>>       if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+>>>>           unregister_memcg_shrinker(shrinker);
+>>>>       debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>       up_write(&shrinker_rwsem);
+>>>>   +    synchronize_srcu(&shrinker_srcu);
+>>>> +
+>>>>       debugfs_remove_recursive(debugfs_entry);
+>>>>         kfree(shrinker->nr_deferred);
+>>>> @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
+>>>>   {
+>>>>       down_write(&shrinker_rwsem);
+>>>>       up_write(&shrinker_rwsem);
+>>>> +    synchronize_srcu(&shrinker_srcu);
+>>>>   }
+>>>>   EXPORT_SYMBOL(synchronize_shrinkers);
+>>>>   @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>   {
+>>>>       unsigned long ret, freed = 0;
+>>>>       struct shrinker *shrinker;
+>>>> +    int srcu_idx;
+>>>>         /*
+>>>>        * The root memcg might be allocated even though memcg is disabled
+>>>> @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>       if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>>>           return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>   -    if (!down_read_trylock(&shrinker_rwsem))
+>>>> -        goto out;
+>>>> +    srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>   -    list_for_each_entry(shrinker, &shrinker_list, list) {
+>>>> +    list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>> +                 srcu_read_lock_held(&shrinker_srcu)) {
+>>>>           struct shrink_control sc = {
+>>>>               .gfp_mask = gfp_mask,
+>>>>               .nid = nid,
+>>>> @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>           if (ret == SHRINK_EMPTY)
+>>>>               ret = 0;
+>>>>           freed += ret;
+>>>> -        /*
+>>>> -         * Bail out if someone want to register a new shrinker to
+>>>> -         * prevent the registration from being stalled for long periods
+>>>> -         * by parallel ongoing shrinking.
+>>>> -         */
+>>>> -        if (rwsem_is_contended(&shrinker_rwsem)) {
+>>>> -            freed = freed ? : 1;
+>>>> -            break;
+>>>> -        }
+>>>>       }
+>>>>   -    up_read(&shrinker_rwsem);
+>>>> -out:
+>>>> +    srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>       cond_resched();
+>>>>       return freed;
+>>>>   }
+>>>> -- 
+>>>> 2.20.1
+>>>>
+>>>>
+>>>
+>>> Hi Qi,
+>>>
+>>> A different problem I realized after my old attempt to use SRCU was that the
+>>> unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
+>>> call. Both register_shrinker() *and* unregister_shrinker() are called frequently
+>>> these days, and SRCU is too unfair to the unregister path IMO.
+>>
+>> Hi Sultan,
+>>
+>> IIUC, for unregister_shrinker(), the wait time is hardly longer with
+>> SRCU than with shrinker_rwsem before.
+>>
+>> And I just did a simple test. After using the script in cover letter to
+>> increase the shrink_slab hotspot, I did umount 1k times at the same
+>> time, and then I used bpftrace to measure the time consumption of
+>> unregister_shrinker() as follows:
+>>
+>> bpftrace -e 'kprobe:unregister_shrinker { @start[tid] = nsecs; } kretprobe:unregister_shrinker /@start[tid]/ { @ns[comm] = hist(nsecs - @start[tid]); delete(@start[tid]); }'
+>>
+>> @ns[umount]:
+>> [16K, 32K)             3 |      |
+>> [32K, 64K)            66 |@@@@@@@@@@      |
+>> [64K, 128K)           32 |@@@@@      |
+>> [128K, 256K)          22 |@@@      |
+>> [256K, 512K)          48 |@@@@@@@      |
+>> [512K, 1M)            19 |@@@      |
+>> [1M, 2M)             131 |@@@@@@@@@@@@@@@@@@@@@      |
+>> [2M, 4M)             313 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+>> [4M, 8M)             302 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  |
+>> [8M, 16M)             55 |@@@@@@@@@
+>>
+>> I see that the highest time-consuming of unregister_shrinker() is between 8ms and 16ms, which feels tolerable?
 > 
-> Today, the implicit dependency is already there. Without the DPU DSC 
-> blocks, the DSI cannot operate in compressed mode.
-
-It can not operate, but one will compile w/o other driver.
-
+> The fundamental difference is that before the patchset this for_each_set_bit() iteration could be broken in the middle
+> of two do_shrink_slab() calls, while after the patchset we can leave for_each_set_bit() only after visiting all set bits.
 > 
-> But, from a SW standpoint I agree we can separate this.
+> Using only synchronize_srcu_expedited() won't help here.
 > 
-> We can move this one level up to the disp/ or msm/ folder
+> My opinion is we should restore a check similar to the rwsem_is_contendent() check that we had before. Something like
+> the below on top of your patchset merged into appropriate patch:
 > 
-> What do you think about that?
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 27ef9946ae8a..50e7812468ec 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>  LIST_HEAD(shrinker_list);
+>  DEFINE_MUTEX(shrinker_mutex);
+>  DEFINE_SRCU(shrinker_srcu);
+> +static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>  
+>  #ifdef CONFIG_MEMCG
+>  static int shrinker_nr_max;
+> @@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>  	debugfs_entry = shrinker_debugfs_remove(shrinker);
+>  	mutex_unlock(&shrinker_mutex);
+>  
+> +	atomic_inc(&shrinker_srcu_generation);
+>  	synchronize_srcu(&shrinker_srcu);
+>  
+>  	debugfs_remove_recursive(debugfs_entry);
+> @@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+>   */
+>  void synchronize_shrinkers(void)
+>  {
+> +	atomic_inc(&shrinker_srcu_generation);
+>  	synchronize_srcu(&shrinker_srcu);
+>  }
+>  EXPORT_SYMBOL(synchronize_shrinkers);
+> @@ -908,7 +911,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>  {
+>  	struct shrinker_info *info;
+>  	unsigned long ret, freed = 0;
+> -	int srcu_idx;
+> +	int srcu_idx, generation;
+>  	int i;
+>  
+>  	if (!mem_cgroup_online(memcg))
+> @@ -919,6 +922,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>  	if (unlikely(!info))
+>  		goto unlock;
+>  
+> +	generation = atomic_read(&shrinker_srcu_generation);
+>  	for_each_set_bit(i, info->map, info->map_nr_max) {
+>  		struct shrink_control sc = {
+>  			.gfp_mask = gfp_mask,
+> @@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>  				set_shrinker_bit(memcg, nid, i);
+>  		}
+>  		freed += ret;
+> +
+> +		if (atomic_read(&shrinker_srcu_generation) != generation) {
+> +			freed = freed ? : 1;
+> +			break;
+> +		}
+>  	}
+>  unlock:
+>  	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+> @@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>  {
+>  	unsigned long ret, freed = 0;
+>  	struct shrinker *shrinker;
+> -	int srcu_idx;
+> +	int srcu_idx, generation;
+>  
+>  	/*
+>  	 * The root memcg might be allocated even though memcg is disabled
+> @@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>  		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>  
+>  	srcu_idx = srcu_read_lock(&shrinker_srcu);
+> +	generation = atomic_read(&shrinker_srcu_generation);
+>  
+>  	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>  				 srcu_read_lock_held(&shrinker_srcu)) {
+> @@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>  		if (ret == SHRINK_EMPTY)
+>  			ret = 0;
+>  		freed += ret;
+> +
+> +		if (atomic_read(&shrinker_srcu_generation) != generation) {
+> +			freed = freed ? : 1;
+> +			break;
+> +		}
+>  	}
+>  
+>  	srcu_read_unlock(&shrinker_srcu, srcu_idx);
 
-I think about drivers/gpu/drm/display/drm_dsc_helper.c
+Even more, for memcg shrinkers we may unlock SRCU and continue iterations from the same shrinker id:
 
-> -- 
-With best wishes
-Dmitry
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 27ef9946ae8a..0b197bba1257 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+ LIST_HEAD(shrinker_list);
+ DEFINE_MUTEX(shrinker_mutex);
+ DEFINE_SRCU(shrinker_srcu);
++static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+ 
+ #ifdef CONFIG_MEMCG
+ static int shrinker_nr_max;
+@@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+ 	debugfs_entry = shrinker_debugfs_remove(shrinker);
+ 	mutex_unlock(&shrinker_mutex);
+ 
++	atomic_inc(&shrinker_srcu_generation);
+ 	synchronize_srcu(&shrinker_srcu);
+ 
+ 	debugfs_remove_recursive(debugfs_entry);
+@@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+  */
+ void synchronize_shrinkers(void)
+ {
++	atomic_inc(&shrinker_srcu_generation);
+ 	synchronize_srcu(&shrinker_srcu);
+ }
+ EXPORT_SYMBOL(synchronize_shrinkers);
+@@ -908,18 +911,19 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+ {
+ 	struct shrinker_info *info;
+ 	unsigned long ret, freed = 0;
+-	int srcu_idx;
+-	int i;
++	int srcu_idx, generation;
++	int i = 0;
+ 
+ 	if (!mem_cgroup_online(memcg))
+ 		return 0;
+-
++again:
+ 	srcu_idx = srcu_read_lock(&shrinker_srcu);
+ 	info = shrinker_info_srcu(memcg, nid);
+ 	if (unlikely(!info))
+ 		goto unlock;
+ 
+-	for_each_set_bit(i, info->map, info->map_nr_max) {
++	generation = atomic_read(&shrinker_srcu_generation);
++	for_each_set_bit_from(i, info->map, info->map_nr_max) {
+ 		struct shrink_control sc = {
+ 			.gfp_mask = gfp_mask,
+ 			.nid = nid,
+@@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+ 				set_shrinker_bit(memcg, nid, i);
+ 		}
+ 		freed += ret;
++
++		if (atomic_read(&shrinker_srcu_generation) != generation) {
++			srcu_read_unlock(&shrinker_srcu, srcu_idx);
++			goto again;
++		}
+ 	}
+ unlock:
+ 	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+@@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+ {
+ 	unsigned long ret, freed = 0;
+ 	struct shrinker *shrinker;
+-	int srcu_idx;
++	int srcu_idx, generation;
+ 
+ 	/*
+ 	 * The root memcg might be allocated even though memcg is disabled
+@@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+ 		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+ 
+ 	srcu_idx = srcu_read_lock(&shrinker_srcu);
++	generation = atomic_read(&shrinker_srcu_generation);
+ 
+ 	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+ 				 srcu_read_lock_held(&shrinker_srcu)) {
+@@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+ 		if (ret == SHRINK_EMPTY)
+ 			ret = 0;
+ 		freed += ret;
++
++		if (atomic_read(&shrinker_srcu_generation) != generation) {
++			freed = freed ? : 1;
++			break;
++		}
+ 	}
+ 
+ 	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+
 
