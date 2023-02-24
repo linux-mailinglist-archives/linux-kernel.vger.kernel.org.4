@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FCA6A1D22
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505106A1D1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 14:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjBXNvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 08:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S229600AbjBXNtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 08:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBXNvp (ORCPT
+        with ESMTP id S229669AbjBXNtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 08:51:45 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A5A69ACF;
-        Fri, 24 Feb 2023 05:51:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677246701; x=1708782701;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZukmKbhuckdgYPxcrfE3bKQ6TkEUIZBG4kNxEuFJMEs=;
-  b=bcf5dK0AceYDByhTOLgGLHU6PC0bYN1OArEwbbrQG9ZY56KMkNoA8MNP
-   W5nYLuSCp/bWG/s9KZsgo1qcGPnLfGkyIQbdKsDMxs6ncdJAUQ8iKUaDo
-   s+doXSrKE92oRTL4la79pAg+GcC9VxFyNOlVRTFu5F3vM1octttVwYNPN
-   /aCrB4KT80FpOvpsh4OMDA7lLwAte3ZAqVJ4QekMayNp6UZ0dmfnnSJdc
-   l1OF/0GPvZ4U6AkLg4ikhnCaBUSTGDGg2a1KBBxFCOErABDzRPhNzcqV0
-   FAPV98vy8vUkmmtgf9nTJkjTF4x3ZGauESzJQ4jWJDsBMhftxrncjZoK1
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,324,1669100400"; 
-   d="scan'208";a="138923444"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2023 06:51:39 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 24 Feb 2023 06:51:33 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Fri, 24 Feb 2023 06:51:30 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <linux-riscv@lists.infradead.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>, <conor@kernel.org>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with rust support
-Date:   Fri, 24 Feb 2023 13:50:44 +0000
-Message-ID: <20230224135044.2882109-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230224135044.2882109-1-conor.dooley@microchip.com>
-References: <20230224135044.2882109-1-conor.dooley@microchip.com>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2374; i=conor.dooley@microchip.com; h=from:subject; bh=HpaH7oMTktYgKSCgvr9/FNMbXJinNGLWnda4ScFUHPo=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMk/Dmwo8fSS+rnrslhV3QIxvewyGfVJjuHBOg8sXjq7yN4O SKzsKGVhEONgkBVTZEm83dcitf6Pyw7nnrcwc1iZQIYwcHEKwETSHzEyNLGy7y/49uWRcuOr+Z2vC6 4smbJ76bE1dctbZCoUmMunr2X4X/Ar9bmz27Vrej8EeOez+1t/dfoyxTXEdtfO1T5qXzbdZgQA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 08:49:14 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A95F1815C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 05:49:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PNWH24W9mz9xGYl
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 21:40:14 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.206.133.88])
+        by APP2 (Coremail) with SMTP id GxC2BwAn8lg3wPhjZJxJAQ--.62941S2;
+        Fri, 24 Feb 2023 14:48:49 +0100 (CET)
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+To:     paulmck@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Subject: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+Date:   Fri, 24 Feb 2023 14:52:51 +0100
+Message-Id: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: GxC2BwAn8lg3wPhjZJxJAQ--.62941S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF48GrWDJryktw1UKr4kJFb_yoW8CrWxpr
+        WDG3yrKa1qqr9Y9FyDXw4kuF1fuayrWw48JFWDCa45A3sxXFsxuFWkKFs8ZrySqrZrCayj
+        qr4jvry2v398CFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF0
+        eHDUUUU
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miguel Ojeda <ojeda@kernel.org>
+As stated in the documentation and implied by its name, the ppo
+(preserved program order) relation is intended to link po-earlier
+to po-later instructions under certain conditions.  However, a
+corner case currently allows instructions to be linked by ppo that
+are not executed by the same thread, i.e., instructions are being
+linked that have no po relation.
 
-The rust modules work on 64-bit RISC-V, with no twiddling required.
-Select HAS_RUST and provide the required flags to kbuild so that the
-modules can be used.
-32-bit is broken in core rust code, so support is limited to 64-bit
-only: ld.lld: error: undefined symbol: __udivdi3
+This happens due to the mb/strong-fence/fence relations, which (as
+one case) provide order when locks are passed between threads
+followed by an smp_mb__after_unlock_lock() fence.  This is
+illustrated in the following litmus test (as can be seen when using
+herd7 with `doshow ppo`):
 
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+P0(int *x, int *y)
+{
+    spin_lock(x);
+    spin_unlock(x);
+}
+
+P1(int *x, int *y)
+{
+    spin_lock(x);
+    smp_mb__after_unlock_lock();
+    *y = 1;
+}
+
+The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
+P0 passes a lock to P1 which then uses this fence.
+
+The patch makes ppo a subrelation of po by letting fence contribute
+to ppo only in case the fence links events of the same thread.
+
+Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
 ---
- Documentation/rust/arch-support.rst | 2 ++
- arch/riscv/Kconfig                  | 1 +
- arch/riscv/Makefile                 | 3 ++-
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ tools/memory-model/linux-kernel.cat | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index 6982b63775da..197919158596 100644
---- a/Documentation/rust/arch-support.rst
-+++ b/Documentation/rust/arch-support.rst
-@@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
- ============  ================  ==============================================
- Architecture  Level of support  Constraints
- ============  ================  ==============================================
-+``riscv``     Maintained        ``rv64`` only.
-+============  ================  ==============================================
- ``x86``       Maintained        ``x86_64`` only.
- ============  ================  ==============================================
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 81eb031887d2..73174157212d 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -115,6 +115,7 @@ config RISCV
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
-+	select HAVE_RUST if 64BIT
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select IRQ_DOMAIN
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 76989561566b..0d6fc4e25221 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -29,8 +29,8 @@ ifeq ($(CONFIG_ARCH_RV64I),y)
+diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+index cfc1b8fd46da..adf3c4f41229 100644
+--- a/tools/memory-model/linux-kernel.cat
++++ b/tools/memory-model/linux-kernel.cat
+@@ -82,7 +82,7 @@ let rwdep = (dep | ctrl) ; [W]
+ let overwrite = co | fr
+ let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+ let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+-let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
++let ppo = to-r | to-w | (fence & int) | (po-unlock-lock-po & int)
  
- 	KBUILD_CFLAGS += -mabi=lp64
- 	KBUILD_AFLAGS += -mabi=lp64
--
- 	KBUILD_LDFLAGS += -melf64lriscv
-+	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv64
- else
- 	BITS := 32
- 	UTS_MACHINE := riscv32
-@@ -38,6 +38,7 @@ else
- 	KBUILD_CFLAGS += -mabi=ilp32
- 	KBUILD_AFLAGS += -mabi=ilp32
- 	KBUILD_LDFLAGS += -melf32lriscv
-+	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv32
- endif
- 
- ifeq ($(CONFIG_LD_IS_LLD),y)
+ (* Propagation: Ordering from release operations and strong fences. *)
+ let A-cumul(r) = (rfe ; [Marked])? ; r
 -- 
-2.39.2
+2.17.1
 
