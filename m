@@ -2,261 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CDA6A1D5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2053E6A1D63
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 15:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjBXOVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 09:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S229736AbjBXOXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 09:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBXOV3 (ORCPT
+        with ESMTP id S229476AbjBXOXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 09:21:29 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E7915175
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:21:22 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id a65so2325014qkg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:21:22 -0800 (PST)
+        Fri, 24 Feb 2023 09:23:36 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0011E9C7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:23:35 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id ee7so40292340edb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 06:23:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tQ99BjbVZZswOOXnaBMj0l/ghda0KputEQaaEq/sw54=;
-        b=m9zthKXLJpzSsiNJHftd9McaS1DR020zQLESybP+SLwDC6DoW8PjEyCGUF17xuf3pb
-         HB1E2rktbXs/HTyNIZRndIrFbgH8iz1AYT/NATYw+xUUXVxxhHRdtU8026pJHNuQADuc
-         4Dbb3A4a5tmzMF1nyCIab1NltjvgF05MwZ0rgyn8Cdhm8YxkrAlPRkfsxa57pvJZn5CF
-         Ty4AnIHSD33zWe7lBoWhatQZP0PB904LkyZOVM9Gu7PUGMav0n7JLROnPyLA1ZDWsrwz
-         kiR0yYsDTCyZofOZ9Tfd7pWydFxAFkTZ+po0pCWJpxEdUoWmcWgxD99lrTBnFbtpVgx+
-         LWAQ==
+        bh=jpdwd3xuyVkT/VZTbWwrg7JoT4Mr4P0993yBblOq6r0=;
+        b=AMChXn+jJA0VmC73Ftrt/sIRrMV/w0wOotZDXWGLsSP1YomQXFPzVL8mnlqb7b7lzV
+         51V0c+IriY/1pEjKvkLk2h/fi60sThPAUE6tOBLjQBE47f+9U0WmFdwIS0gUNob4v7CG
+         3J6qGrC7O8D/V4c/J2FcyIAL9SsksxGQ5kOf6xgQ3ereeZski2wxFyLomEdPKsNvzMg/
+         /2BhAvZJcR839+aObwnzAbdwIQOaYPgivbDbpl8AN+VhQqVqFjQiLNwx8nVJxMfKY55z
+         2rMItKrR4aZ77yA7dYiIDPN8yyrxtdbHwmrgKpHWL6C56W7aMUZhhaOR/oMJQLdxLLns
+         +lLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tQ99BjbVZZswOOXnaBMj0l/ghda0KputEQaaEq/sw54=;
-        b=uwzmcrdcCW/0rDVrsfuI1PHyGSwwP4NrZORaR7qK7Wa6EU4NlNylNAezupZLZHj9rM
-         ydrS0xnLUOn4nVk3JLnFWYTUiCkq+q4ZKDbY+LhFIDAnLincImRlKGSuTQza9q1CUbM/
-         7HmA/GMt9u3aT5vZVEA8SPYndbd5/nvGmItMuFW4Crma9AA+DlUDsFPRAdKV/k+ZRHeq
-         bAeFKCjpJvFjkw3U3L/UX05O+uwQeR77D2nwRG46NxYknEETADfgddk1A7wHiqp3ZoKG
-         gRCZbMp++UwP2oAH87oENBKQt60X/zKjmAUTtxWvn1/b8WO+fxEw8Bg9Z0lWGu83AWDU
-         tpcQ==
-X-Gm-Message-State: AO0yUKX8bP+3e3pHCfRjfvjM+cFs8KHg2NbKbx+XckEAu1GvkiKQKnlw
-        CVgQ15OODBYlK4nMxX8k33CGv4DuDZvLrHBLEYE=
-X-Google-Smtp-Source: AK7set9N1tfWwgQ8Via3X1jcPaPxPe3YgddIgIz6yCTOd5dHkSBFcMFb9ie0+LXWB+4r1Mlj4MDDwEPr2DHXa+OWbss=
-X-Received: by 2002:a05:620a:13cd:b0:742:7e5a:4cee with SMTP id
- g13-20020a05620a13cd00b007427e5a4ceemr210470qkl.10.1677248481175; Fri, 24 Feb
- 2023 06:21:21 -0800 (PST)
+        bh=jpdwd3xuyVkT/VZTbWwrg7JoT4Mr4P0993yBblOq6r0=;
+        b=1k0gPf56ULD0RA1XMHYHm/o6Zm0rro5s8UjgmfaJVqyIbMQ0b1sI/6mZjR32Wjw6aJ
+         +kfV5tCRYun56GkzT7NtM6ILAVip5rjPONgkzz6I8m5KFQJKNXCw7H8tTJFvWlijwKaJ
+         BIUGr2Pi4366HGhmYnTMlU+OUGs0OPtXMhW+SeX+VPKswmaOp3ZnP3Gu0y4P543gL+rO
+         1/EpJeB6laJGLwg1oBnHKs0WGvwqc22rnQYHA378KmMILwRu/z79kn1Iidn/Tn0wJRGG
+         i3UkUM8Gw3wHnJoZ8PvEbSlFOgtlHuQ0Wne5iLrbIu7OH0bk1DZsjT+1WmSa2tiSQZw+
+         2jyg==
+X-Gm-Message-State: AO0yUKWPFC+wtloHmlDH2cpJI3oYN69A7gGrcAvBlHZl7RocDRIX4fVM
+        bLSUYXBQTmUPYCiHE0+D9urPRyGDJPlW4UQXMpQ=
+X-Google-Smtp-Source: AK7set8sp/3gTfRdtCcy+zKizs0jW/WBVzqVJ9JeAbeMqmEqgJM9aLXywYmlVQtc3keKz+zZvl0hYxxCGHo723nVkAs=
+X-Received: by 2002:a17:906:9251:b0:8ce:cb8f:3747 with SMTP id
+ c17-20020a170906925100b008cecb8f3747mr8284666ejx.5.1677248613685; Fri, 24 Feb
+ 2023 06:23:33 -0800 (PST)
 MIME-Version: 1.0
-References: <10a855f9adc1d710150b7f647500c3c6a769f9ca.1677243698.git.mazziesaccount@gmail.com>
-In-Reply-To: <10a855f9adc1d710150b7f647500c3c6a769f9ca.1677243698.git.mazziesaccount@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 24 Feb 2023 16:20:45 +0200
-Message-ID: <CAHp75VdAmUhhP0NF19wOFGGc-v0SWSecywdd5=cBhzbCsSn3BA@mail.gmail.com>
-Subject: Re: [RFC PATCH] iio: Add some kerneldoc for channel types
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrea Merello <andrea.merello@iit.it>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a50:7806:0:b0:1f0:12e9:4bf1 with HTTP; Fri, 24 Feb 2023
+ 06:23:32 -0800 (PST)
+Reply-To: cfc.ubagroup013@gmail.com
+From:   Kristalina Georgieva <tonyelumelu918@gmail.com>
+Date:   Fri, 24 Feb 2023 14:23:32 +0000
+Message-ID: <CAHPS+3eiMB9-4vWaJy0WsYw1hT5LaFZYcuNTZVcEk_uXXLgHmQ@mail.gmail.com>
+Subject: HEAD UUDISED
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:534 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tonyelumelu918[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [cfc.ubagroup013[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tonyelumelu918[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 3:02 PM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
->
-> For occasional contributor like me navigating the IIO channel types and
-> modifiers may be a daunting task. One may have hard time finding out
-> what type of channel should be used for device data and what units the
-> data should be converted.
->
-> There is a great documentation for the sysfs interfaces though. What is
-> missing is mapping of the channel types and modifiers to the sysfs
-> documentation (and entries in documentation).
->
-> Give a hand to a driver writer by providing some documentation and by
-> pointing to the sysfs document from the kerneldocs of respective enums.
+Lugupeetud abisaaja!
+Saatsin sulle selle kirja kuu aega tagasi, aga ma pole sinust midagi kuulnu=
+d, ei
+Olen kindel, et saite selle k=C3=A4tte ja sellep=C3=A4rast saatsin selle te=
+ile uuesti.
+Esiteks olen pr Kristalina Georgieva, tegevdirektor ja
+Rahvusvahelise Valuutafondi president.
 
-kernel doc
+Tegelikult oleme l=C3=A4bi vaadanud k=C3=B5ik =C3=BCmbritsevad takistused j=
+a probleemid
+teie mittet=C3=A4ielik tehing ja teie suutmatus tasuda
+=C3=BClekandetasud, mida v=C3=B5etakse teie vastu j=C3=A4rgmiste v=C3=B5ima=
+luste eest
+varasemate =C3=BClekannete kohta k=C3=BClastage kinnituse saamiseks meie sa=
+iti 38
+=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W
 
-Documentation is always welcome!
+Oleme direktorite n=C3=B5ukogu, Maailmapank ja Valuutafond
+Washingtoni Rahvusvaheline (IMF) koos osakonnaga
+Ameerika =C3=9Chendriikide riigikassa ja m=C3=B5ned teised uurimisasutused
+asjakohane siin Ameerika =C3=9Chendriikides. on tellinud
+meie Overseas Payment Remittance Unit, United Bank of
+Africa Lome Togo, et v=C3=A4ljastada teile VISA kaart, kus $
+1,5 miljonit teie fondist, et oma fondist rohkem v=C3=A4lja v=C3=B5tta.
 
-...
+Uurimise k=C3=A4igus avastasime koos
+kardab, et teie makse on hilinenud korrumpeerunud ametnike poolt
+pangast, kes =C3=BCritavad teie raha teie kontodele suunata
+privaatne.
 
->  #ifndef _UAPI_IIO_TYPES_H_
->  #define _UAPI_IIO_TYPES_H_
-> -
+Ja t=C3=A4na anname teile teada, et teie raha on kaardile kantud
+UBA panga VISA ja see on ka kohaletoimetamiseks valmis. N=C3=BC=C3=BCd
+v=C3=B5tke =C3=BChendust UBA panga direktoriga, tema nimi on hr Tony
+Elumelu, e-post: (cfc.ubagroup013@gmail.com)
+et =C3=B6elda, kuidas ATM VISA kaarti k=C3=A4tte saada.
 
-Stray change.
-...
+Lugupidamisega
 
-> +/**
-> + * iio_chan_type - Type of data transferred via IIO channel.
-> + *
-> + * The 'main' type of data transferred via channel. Please note that most
-> + * devices need to specify also a more accurate 'sub category'. See the
-
-devices also need to specify a
-
-> + * enum iio_modifier for this. (For example, IIO_ACCEL channel often needs to
-> + * specify the direction. IIO_CONCENTRATION specifies the type of substance
-> + * it measures etc).
-> + *
-> + * Use of correct units is required but scale and offset that user must apply
-> + * to channel values can be advertised.
-> + *
-> + * Please find the detailed documentation for reported values from the
-> + * Documentation/ABI/testing/sysfs-bus-iio.
-> + *
-
-> + * IIO_ACCEL:          Acceleration, m/s^2
-> + *                     Doc keyword: in_accel_x_raw
-
-Seems you forgot @:s.
-
-> + *
-> + * IIO_ACTIVITY:       Activity state. For example a pedometer signaling
-> + *                     jogging, walking or staying still.
-> + *                     Doc keyword: in_activity_still_thresh_rising_en
-> + *
-> + * IIO_ALTVOLTAGE:
-> + *
-> + * IIO_ANGL:           Angle of rotation, radians.
-> + *                     Doc keyword: in_angl_raw
-> + *
-> + * IIO_ANGL_VEL:       Angular velocity, rad/s
-> + *                     Doc keyword: in_anglvel_x_raw
-> + *
-> + * IIO_CAPACITANCE:    Capacitance, nanofarads.
-> + *                     Doc keyword: in_capacitanceY_raw
-> + *
-> + * IIO_CCT:
-> + *
-> + * IIO_CURRENT:                Current, milliamps
-> + *                     Doc keyword: in_currentY_raw
-> + *
-> + * IIO_CONCENTRATION:  Reading of a substance, percents. Used for example by
-> + *                     deviced measuring amount of CO2, O2, ethanol...
-
-devices
-
-> + *                     Doc keyword: in_concentration_raw
-> + *
-> + * IIO_COUNT:          Deprecated, please use counter subsystem.
-> + *
-> + * IIO_DISTANCE:       Distance in meters. Typically used to report measured
-> + *                     distance to an object or the distance covered by the
-> + *                     user
-> + *                     Doc keyword: in_distance_input
-> + *
-> + * IIO_ELECTRICALCONDUCTIVITY: electric conductivity, siemens per meter
-> + *                     Doc keyword: in_electricalconductivity_raw
-> + *                     TODO: What does "can be processed to siemens per meter"
-> + *                     mean? Do we have unit requirement?
-> + *
-> + * IIO_ENERGY:         Energy in Joules. Typically reported by a device
-> + *                     measuring energy burnt by the user.
-> + *                     Doc keyword: in_energy_input
-> + *
-> + * IIO_GRAVITY:                Gravity, m/s^2
-> + *                     Doc keyword: in_gravity_x_raw
-> + *
-> + * IIO_HUMIDITYRELATIVE: Relative humidity, percents
-> + *                     Doc keyword: in_humidityrelative_raw
-> + *
-> + * IIO_INCLI:          Inclination, degrees
-> + *                     Doc keyword: in_incli_x_raw
-> + *
-> + * IIO_INDEX:          Deprecated, please use Counter subsystem
-> + *
-> + * IIO_INTENSITY:      Unitless intensity.
-> + *                     Doc keyword: in_intensityY_raw
-> + *
-> + * IIO_LIGHT:          Visible light intensity, lux
-> + *                     Doc keyword: in_illuminance_raw
-> + *
-> + * IIO_MAGN:           Magnetic field, Gauss.
-> + *                     Doc keyword: in_magn_x_raw
-> + *
-> + * IIO_MASSCONCENTRATION: Mass concentration, ug / m3
-> + *                     Doc keyword: in_massconcentration_pm1_input
-> + *
-> + * IIO_PH:             pH reading, negative base-10 logarithm of hydrodium
-> + *                     ions in a litre of water
-> + *                     Doc keyword: in_ph_raw
-> + *
-> + * IIO_PHASE:          Phase difference, radians
-> + *                     Doc keyword: in_phaseY_raw
-> + *                     TODO: What does "can be processed to radians" mean? Do
-> + *                     we have unit requirement?
-> + *
-> + * IIO_POSITIONRELATIVE: Relative position.
-> + *                     Doc keyword: in_positionrelative_x_raw
-> + *
-> + * IIO_POWER:          Power, milliwatts
-> + *                     Doc keyword: in_powerY_raw
-> + *
-> + * IIO_PRESSURE:       Pressure, kilopascal
-> + *                     Doc keyword: in_pressureY_raw
-> + *
-> + * IIO_RESISTANCE:     Resistance, ohms
-> + *                     Doc keyword: in_resistance_raw
-> + *                     TODO: What means "can be processed..." Do we have unit
-> + *                     requirement?
-> + *
-> + * IIO_ROT:            Euler angles, deg
-> + *                     Doc keyword: in_rot_yaw_raw
-> + *
-> + * IIO_STEPS:          Steps taken by the user
-> + *                     Doc keyword: in_steps_input
-> + *
-> + * IIO_TEMP:           Temperature, milli degrees Celsius
-> + *                     Doc keyword: in_temp_raw
-> + *
-> + * IIO_UVINDEX:                UV light intensity index
-> + *                     Doc keyword: in_uvindex_input
-> + *
-> + * IIO_VELOCITY:       Current speed (norm or magnitude of the velocity
-> + *                     vector), m/s
-> + *                     Doc keyword: in_velocity_sqrt(x^2+y^2+z^2)_input
-> + *
-> + * IIO_VOLTAGE:                Voltage, millivolts
-> + *                     Doc keyword: in_voltageY_raw
-> + */
-
-...
-
-> +/**
-> + * iio_modifier - accurate class for channel data
-
-> + * IIO_MOD_<X,Y,Z>:    Value represents <X,Y,Z>-axis data.
-
-Missing @:s as well.
-
-> + *                     Typically used by channels of type:
-> + *                     IIO_ACCEL, IIO_TEMP, IIO_GRAVITY, IIO_POSITIONRELATIVE,
-> + *                     IIO_ANGL_VEL, IIO_INCLI, IIO_MAGN
-> + * IIO_MOD_LIGHT_BOTH: Value contains visible and infra red light components
-
-infrared
-
-> + * IIO_MOD_LIGHT_IR:   Value represents infra-red radiation
-> + * IIO_MOD_LIGHT_<RED, GREEN, BLUE>:
-> + *                     Value represents visible <red, green, blue>  light
-> + * IIO_MOD_LIGHT_CLEAR:        Value represents all visible light frequencies
-> + *
-> + * Please find the detailed documentation for reported values from the
-> + * Documentation/ABI/testing/sysfs-bus-iio.
-> + */
-
--- 
-With Best Regards,
-Andy Shevchenko
+Proua Kristalina Georgieva
