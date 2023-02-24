@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D9A6A14FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FED6A14FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 03:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjBXCiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 21:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S229790AbjBXChN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 21:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBXCiX (ORCPT
+        with ESMTP id S229644AbjBXChL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 21:38:23 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E2199FA;
-        Thu, 23 Feb 2023 18:38:17 -0800 (PST)
-X-UUID: 47fa8012b3ec11eda06fc9ecc4dadd91-20230224
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:To:From; bh=B4U1+Q/UYoJiKUsQ/RT3eOwBmSrlf5qH2DnCuR/+E3Y=;
-        b=DVI9z2vNQ3XpIsjTjW+N8kG70w0c0zrcAqXdQbyRkG7WJVZIvyw5yHOCNkJ3VZn7REXB3AQvF7JcPi6rtZ+2W6/gRfQmOOOF5Fkb1bpqRYG4OO+2YEAY4fWlmRqjsGQ3lsDbYmQiv5KzxpD4NKTtnYssKM3wWC16bmDL65m0zBc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:403977e8-6d1a-4c0d-9f0a-0a72fd6328a7,IP:0,U
-        RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-30
-X-CID-META: VersionHash:25b5999,CLOUDID:e93e6db1-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: 47fa8012b3ec11eda06fc9ecc4dadd91-20230224
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-        (envelope-from <weichen.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1515731948; Fri, 24 Feb 2023 10:38:11 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 24 Feb 2023 10:38:09 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 24 Feb 2023 10:38:09 +0800
-From:   Weichen Chen <weichen.chen@mediatek.com>
-To:     <weichen.chen@mediatek.com>, <yt.shen@mediatek.com>,
-        <darren.chen@mediatek.com>, <keescook@chromium.org>,
-        <tony.luck@intel.com>, <angelogioacchino.delregno@collabora.com>,
-        <matthias.bgg@gmail.com>, <gpiccoli@igalia.com>,
-        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/1] pstore/ram: Fix crash when setting number of cpus to an odd number
-Date:   Fri, 24 Feb 2023 10:36:32 +0800
-Message-ID: <20230224023632.6840-1-weichen.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 23 Feb 2023 21:37:11 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C5B5EEDF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:37:07 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id i9so16038231lfc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 18:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9eCkpzltIlGRTF6sYL0yBS3gJolIQPZMfLq+lqf6a/c=;
+        b=XOVv3jtQtWJzCrX/HzfJ1iu/sanBxru7gFmbG938gEue8PMGJGvrmcrOKGfIAjzwlp
+         ShY5wb6VYf28OfbqwQwdXownt4kVAYKJGaHZGAQgTUdh3UETxXimgnRh2iD5AI1Jj/RA
+         mCluCpxFmkGJtXQiGCT7oGzUThGaxX75paCuk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9eCkpzltIlGRTF6sYL0yBS3gJolIQPZMfLq+lqf6a/c=;
+        b=4u1X6hTYSeT9Y581DPow/HXfRsp5VVvSXGrtA6hpC5RWtLq1YTauLEoPyjLK2XFXgy
+         ynHSkr8WZobVr7g6a5cjXFXBfcPvAcIzi8OmKJcUrtcFUothDpSo5C4Go0PtwvmhxmWm
+         cUKHGrWbHuYwD1l5xckhfwGsbaSgt0vfPXuQloqVmewch0n4dxo/GUg/QTia/2vn8qgI
+         6dUlaxIHyp12Gls9bwbLPpux1M6OgRe+W8T6AO2IJj5AwHgEKvOtTCZ10aBrRKz2oCr3
+         T5xsJ58X+zOycLWMZ2YN7a5LLWmqMHasjxmzduOrEfDqAiCK6cDb/QuvxY77a73Y41oc
+         k/9g==
+X-Gm-Message-State: AO0yUKU6kYUu9pgn3Ink8756mkL24kL/Jl9ex/j3d3nkO46wtusPURyP
+        Gk9sH/yklaW8wstsN/jPRzpoaWP1yfkxGsViRbWVKg==
+X-Google-Smtp-Source: AK7set/949p9CR8H2KeCDKiHocUC07GWv3yNQbyW3H0ZtmQ2vDGp6nIHLWFO+k17RLsMOCG9AAs+C2gRQl8RJtAsbd4=
+X-Received: by 2002:a05:6512:208:b0:4d5:ca32:9bdf with SMTP id
+ a8-20020a056512020800b004d5ca329bdfmr4479433lfo.11.1677206225585; Thu, 23 Feb
+ 2023 18:37:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+References: <20230223063022.2592212-1-qiang1.zhang@intel.com>
+ <IA1PR11MB6171F5F6B525B6C599024C9D89AB9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <PH0PR11MB588084641FFB675A102BA503DAAB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <Y/eP4h/chB8J0rAj@google.com> <PH0PR11MB58801B94B0374865394E9F8FDAA89@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <Y/ggCdoMEhMO8vs+@google.com> <CAEXW_YRTOYu5ZR6aX7AaTGyCQJwjB2aEmuPMYExYD4A2csRP1w@mail.gmail.com>
+In-Reply-To: <CAEXW_YRTOYu5ZR6aX7AaTGyCQJwjB2aEmuPMYExYD4A2csRP1w@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 23 Feb 2023 21:36:54 -0500
+Message-ID: <CAEXW_YRH2amT0K3f9c4tEzXZ46GsKHwGkjaznPrH5EOL4ay+dg@mail.gmail.com>
+Subject: Re: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in call_rcu_tasks_generic()
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,36 +72,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the number of cpu cores is adjusted to 7 or other odd numbers,
-the zone size will become an odd number.
-The address of the zone will become:
-    addr of zone0 = BASE
-    addr of zone1 = BASE + zone_size
-    addr of zone2 = BASE + zone_size*2
-    ...
-The address of zone1/3/5/7 will be mapped to non-alignment va.
-Eventually crashes will occur when accessing these va.
+On Thu, Feb 23, 2023 at 9:35 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Thu, Feb 23, 2023 at 9:25 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > On Fri, Feb 24, 2023 at 12:36:05AM +0000, Zhang, Qiang1 wrote:
+> > > On Thu, Feb 23, 2023 at 08:43:05AM +0000, Zhang, Qiang1 wrote:
+> > > > > From: Zqiang <qiang1.zhang@intel.com>
+> > > > > Sent: Thursday, February 23, 2023 2:30 PM
+> > > > > To: paulmck@kernel.org; frederic@kernel.org; quic_neeraju@quicinc.com;
+> > > > > joel@joelfernandes.org
+> > > > > Cc: rcu@vger.kernel.org; linux-kernel@vger.kernel.org
+> > > > > Subject: [PATCH] rcu-tasks: Directly invoke rcuwait_wake_up() in
+> > > > > call_rcu_tasks_generic()
+> > > > >
+> > > > > According to commit '3063b33a347c ("Avoid raw-spinlocked wakeups from
+> > > > > call_rcu_tasks_generic()")', the grace-period kthread is delayed to wakeup
+> > > > > using irq_work_queue() is because if the caller of
+> > > > > call_rcu_tasks_generic() holds a raw spinlock, when the kernel is built with
+> > > > > CONFIG_PROVE_RAW_LOCK_NESTING=y, due to a spinlock will be hold in
+> > > > > wake_up(), so the lockdep splats will happen. but now using
+> > > > > rcuwait_wake_up() to wakeup grace-period kthread instead of wake_up(), in
+> > > > > rcuwait_wake_up() no spinlock will be acquired, so this commit remove using
+> > > > >
+> > > > >There are still spinlock-acquisition and spinlock-release invocations within the call path from rcuwait_wake_up().
+> > > > >
+> > > > >rcuwait_wake_up() -> wake_up_process() -> try_to_wake_up(), then:
+> > > > >
+> > > > >    raw_spin_lock_irqsave()
+> > > > >    ...
+> > > > >    raw_spin_unlock_irqrestore
+> > > >
+> > > > Yes, but this is raw_spinlock acquisition and release(note: spinlock will convert to
+> > > > sleepable lock in Preempt-RT kernel, but raw spinlock is not change).
+> > > >
+> > > > acquire raw_spinlock -> acquire spinlock  will trigger lockdep warning.
+> > > >
+> > > >Is this really safe in the long run though? I seem to remember there are
+> > > >weird locking dependencies if RCU is used from within the scheduler [1].
+> > > >
+> > >
+> > >
+> > > I have  been running rcutorture with rcutorture.type = tasks-tracing,
+> > > so far no problems have been found.
+> > >
+> > >
+> > > >I prefer to keep it as irq_work_queue() unless you are seeing some benefit.
+> > > >Generally, there has to be a 'win' or other justification for adding more
+> > > >risk.
+> > > >
+> > > >thanks,
+> > > >
+> > > >- Joel
+> > > >[1] http://www.joelfernandes.org/rcu/scheduler/locking/2019/09/02/rcu-schedlocks.html
+> > >
+> > >
+> > > The problem in this link,  in an earlier RCU version, rcu_read_unlock_special()
+> > > Invoke wakeup and enter scheduler can lead to deadlock, but my modification is for
+> > > call_rcu_tasks_generic(), even if there is a lock dependency problem, we should pay
+> > > more attention to rcu_read_unlock_trace_special()
+> >
+> > Consider ABBA deadlocks as well, not just self-deadlocks (which IIRC is what
+> > the straight-RCU rcu_read_unlock() issues were about).
+> >
+> > What prevents the following scenario?
+> >
+> > In the scheduler you have code like this:
+> >                 rq = task_rq_lock(p, &rf);
+> >                 trace_sched_wait_task(p);
+> >
+> > Someone can hook up a BPF program to that tracepoint that then calls
+> > rcu_read_unlock_trace() -> rcu_read_unlock_trace_special(). All of
+> > this while holding the rq and pi scheduler locks.
+> >
+> > That's A (rq lock) -> B (rtpcp lock).
+> >
+> > In another path, your change adds the following dependency due to doing
+> > wakeup under the rtpcp lock.
+> >
+> > That's call_rcu_tasks_generic() -> B (rtpcp lock) -> A (rq lock).
+>
+> I would like to correct this last statement. That cannot happen but
+> the concern I guess is, can the following happen due to the change?
+>
+> call_rcu_tasks_generic() -> B (some BPF lock) -> A (rq lock)
+>
 
-So, use ALIGN_DOWN() to make sure the zone size is even
-to avoid this bug.
+Aaargh, one more correction:
+B (some BPF lock) -> call_rcu_tasks_generic() ->  -> A (rq lock)
 
-Signed-off-by: Weichen Chen <weichen.chen@mediatek.com>
----
- fs/pstore/ram.c | 1 +
- 1 file changed, 1 insertion(+)
+ ;-)
 
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66dbe5f39..fc57ac97e506 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -528,6 +528,7 @@ static int ramoops_init_przs(const char *name,
- 	}
- 
- 	zone_sz = mem_sz / *cnt;
-+	zone_sz = ALIGN_DOWN(zone_sz, 2);
- 	if (!zone_sz) {
- 		dev_err(dev, "%s zone size == 0\n", name);
- 		goto fail;
--- 
-2.18.0
-
+-Joel
