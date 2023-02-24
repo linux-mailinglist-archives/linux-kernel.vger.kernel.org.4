@@ -2,239 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B7A6A1C0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE5D6A1C10
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjBXMUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S229966AbjBXMUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjBXMUD (ORCPT
+        with ESMTP id S229911AbjBXMUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:20:03 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0BB5D47C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:20:02 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id o32so3762651vsv.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:20:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M1e7HBrcZISq9fY227NGZfONjmoTlnLB/Lrx8tVCtuk=;
-        b=CxU2+5WxcZ6rhvtBs/kHBSfLnoy/TB2t5slbyRCsm+iKONx9cS9AxKWyHpZg89Tawp
-         mOcIAAvzlEwrNmjh/VgCdNAHKsISLamAHtbE3aOwyj8IqU9YHM3weKfyp5q30VZf8I/I
-         WV0ykFI+arqIcW1wmnlmxMVaabuxg2mU0TqFxRAL5YzY3sfAQ9xMt5JHxUCIZhQfAFXW
-         Ss5zHyRn44sUlvXdLD1RgfRbHh0JJUVepDftIYX5WSVOTi+G+4Seb1J51Jb/u9La9wI5
-         nfqVjtHFcJa0T/Rfgl+7Tgxg8etTueVvOun93Ozj3PxQGtcmX5dpBqLlO+p1eXXhDV1d
-         4OkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M1e7HBrcZISq9fY227NGZfONjmoTlnLB/Lrx8tVCtuk=;
-        b=gZavdmgOfbqlgKDY2fm+O8hH+iF2C8FrF26nd3O0NAfhcFyIxjVHqmjGy/RvRzK5df
-         6YA+wbzI9LBBfJT5ywkz6BCB/MQ910nWZMWbfGEwHQXuXiI+UBbNrj0xdd/qX/QJFQ3i
-         ZpArVrzIkDLn7TEzdpRdk1118Fe052axEi4/80s29lmPvhGCAL7+tTokfe7cfZEMPM4k
-         UuI0ol/WeD21lUigoqWdndblwXZ/3nCxKAjIvaY5ZVc43y8tNHEzkna2FguFR9J4lluf
-         LWUiM5sNnOZUaANeYYvgliPclZcDehT52jluYCRFVmeQrVK2+NYa2KHSyoMWYca1bhe2
-         Kmzw==
-X-Gm-Message-State: AO0yUKWtMYcqsF2Us2aox1DiIKuj/eVXYt8zk/inUDa8q4hIMeQY6zZ/
-        jVCIra04ZpN3aQUbk+DXvI9jJdpCcjosnqpWwOnTCg==
-X-Google-Smtp-Source: AK7set/vPhs6PKjfGGjzmHiL9t8e1WIPdNx3MnAfIWuhS+6njt7Y2gOrJmu9OE69X75WJaK4oNdlIAO5odmwp8YJ6XE=
-X-Received: by 2002:a05:6102:31a9:b0:415:48dd:e0b9 with SMTP id
- d9-20020a05610231a900b0041548dde0b9mr2219853vsh.3.1677241201264; Fri, 24 Feb
- 2023 04:20:01 -0800 (PST)
+        Fri, 24 Feb 2023 07:20:31 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861875D45C;
+        Fri, 24 Feb 2023 04:20:30 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 138CB1EC0723;
+        Fri, 24 Feb 2023 13:20:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677241229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3wlwiK1nNffOcPqzViDroCDgIPey06MUV3oYwrGZbKI=;
+        b=r1POMqdP/hXKk7k7IpdK0dI2u/Hy0OFeiILxv284CCrDQW0R1mSntbXCdxhRuxVklJnZLf
+        0twGNtT0NIrIeG8EErDShXCb0vKAS95g1CejT82cU3t8Ud0c1DXLE6SJHDd07zqEeXrUMK
+        RS9BahVgyen34o3TrlrChBMlA6tXDa4=
+Date:   Fri, 24 Feb 2023 13:20:19 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v6 28/41] x86: Introduce userspace API for shadow stack
+Message-ID: <Y/irg8d6OZ+OCFml@zn.tnic>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-29-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20230223141539.591151658@linuxfoundation.org>
-In-Reply-To: <20230223141539.591151658@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 24 Feb 2023 17:49:50 +0530
-Message-ID: <CA+G9fYt=mG3NPVxgxx_fivWbS2iMMOEryLqN03GjWJjwA_cZnA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/19] 5.4.233-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230218211433.26859-29-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 19:46, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.233 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.233-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, Feb 18, 2023 at 01:14:20PM -0800, Rick Edgecombe wrote:
+> diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+> index 500b96e71f18..b2b3b7200b2d 100644
+> --- a/arch/x86/include/uapi/asm/prctl.h
+> +++ b/arch/x86/include/uapi/asm/prctl.h
+> @@ -20,4 +20,10 @@
+>  #define ARCH_MAP_VDSO_32		0x2002
+>  #define ARCH_MAP_VDSO_64		0x2003
+>  
+> +/* Don't use 0x3001-0x3004 because of old glibcs */
 
+So where is this all new interface to userspace programs documented? Do
+we have an agreement with all the involved parties that this is how
+we're going to support shadow stacks and that this is what userspace
+should do?
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I'd like to avoid one more fiasco with glibc etc here...
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thx.
 
-## Build
-* kernel: 5.4.233-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: ddf919a8b201b902ac977fb211a0191fcd2069d4
-* git describe: v5.4.232-20-gddf919a8b201
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-32-20-gddf919a8b201
+-- 
+Regards/Gruss,
+    Boris.
 
-## Test Regressions (compared to v5.4.232)
-
-## Metric Regressions (compared to v5.4.232)
-
-## Test Fixes (compared to v5.4.232)
-
-## Metric Fixes (compared to v5.4.232)
-
-## Test result summary
-total: 124351, pass: 102308, fail: 3201, skip: 18487, xfail: 355
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 144 total, 143 passed, 1 failed
-* arm64: 44 total, 40 passed, 4 failed
-* i386: 26 total, 20 passed, 6 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 30 total, 30 passed, 0 failed
-* riscv: 12 total, 10 passed, 2 failed
-* s390: 6 total, 6 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 37 total, 35 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+https://people.kernel.org/tglx/notes-about-netiquette
