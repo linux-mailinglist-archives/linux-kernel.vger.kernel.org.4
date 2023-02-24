@@ -2,173 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9A16A1C89
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5248A6A1C8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 13:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjBXM6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 07:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S230123AbjBXM7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 07:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBXM6D (ORCPT
+        with ESMTP id S229504AbjBXM7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 07:58:03 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6BE13526;
-        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so382235pjp.2;
-        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
+        Fri, 24 Feb 2023 07:59:21 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D1416AC6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:59:20 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id s20so17514512lfb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 04:59:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677243482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CXtEyT8xVIkUMApBSTQ3cYy66lfTrvRLYpoVJHa9vcs=;
-        b=fGNjMXdOa/2jFDtcv4zjh5C+rTTvUkujg/MH7jVU3TzF9pgNNfvHMmhe9KdoxBz/IP
-         nmztiOBlWTPhe8cRXO284AFl+WeBp8e9PutPukzpzZTijXvU5PcC9Nwy+uMv/Mg7/qtq
-         65O0QVE2iGRv7s6zI0/YqQm+oO4XGzzePhfEJTl4EHbLKkdZRyyrGgetPgQYcn5MyOt0
-         nWXkaJhYVsiaj+Q125hN1AqIJe9XEGJAPYQOZDSmCVkg9j/6QVnGvmRJ4xPlwhoxDCJb
-         vwEnSRVIkmlUamNSmoPcmYEFDgUuf7R29/rCGuSskTxzfp6gAWVsKMS24m6VaAWqb/kB
-         sQqQ==
+        d=linaro.org; s=google; t=1677243558;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPG+Qu6q3RgNUlyYFOzyQce/Gn7mCKiLFXWosGD/Kpw=;
+        b=Qd1lGW9KedyZEyAKTe4qdwitU0RlltalSkvez+gCBlMtrH6GE0qvZ6N9degexwDUt5
+         dNdu/oVOBfqfI/0nPxjkhgVxa7sXKwkS5f+FHxoKEOvRzW4q2klU98/or9Jw9EWhKccG
+         YlvGp9/Q0lrEj0twzDQzqEMGDA64qhLB9g1sGJUN7fftCaDxxGZOQaLxvZrTeJfJN1Oa
+         pg9hzsnoBOOHk6xywdhAXFvF705SK4k8DYMm5UWruhN0PuRAptn9DiRNmibfihWd+gcq
+         Yc+2ZJ32i9cjW4mg1vJlTH7u5AFJlh9UQkZnMgjptUaUqJYLI7BbP6+tDP7E6gslVGpr
+         789A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677243482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CXtEyT8xVIkUMApBSTQ3cYy66lfTrvRLYpoVJHa9vcs=;
-        b=wRa8CU3XBoRzVO3GyEhciGma5ZpkYZkZ4YAuwZV3GXpaCzgbxVN3uZK/HDIM1N7ojT
-         BQt/SJaxPH8pzGP7QwEQKz2+CQEj0ftGEwciH5m9mwnCuz3QA8KX2OSswrJla4rmX0G/
-         qk47OkQ/dAArL9g27xRv3UIt4BKEiU2NjWkV1Lb4Ilt1uBcpL9Eim5aOGtdEof8c0oaA
-         d8CqzL5ZixMS9m3W3rdHpiEAU+en1cCLo81aVYjihfjzbxErRCpgoGjsmiYe/ZtuoH57
-         9YwM17BhDPANOdGEJZfZxbYAUgzhu3hAaDuUA+I8kYCf6/vcll9BU47m8xMIOFiqviRf
-         FPgw==
-X-Gm-Message-State: AO0yUKVylRHhQ3CJzX6mThM8OyZXOVh626uMMLIX7KPGQXS4yILsdzJk
-        tpMEtER01okB7RSDpd/HUfk=
-X-Google-Smtp-Source: AK7set+YzXg/RfEEChGbQ+6UrrWMwrZYY/kX2hO/BsunvHndn5j3QyvNXnxK3qAajg7VWTkoh4nCsg==
-X-Received: by 2002:a17:902:d2cd:b0:19a:98fd:9c54 with SMTP id n13-20020a170902d2cd00b0019a98fd9c54mr19495973plc.35.1677243482019;
-        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
-Received: from [192.168.1.39] (M014008005000.v4.enabler.ne.jp. [14.8.5.0])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b0019a74841c9bsm6409474pln.192.2023.02.24.04.57.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 04:58:01 -0800 (PST)
-Message-ID: <7d4a218d-8b8a-5a1d-eff8-e154bfde69be@gmail.com>
-Date:   Fri, 24 Feb 2023 21:57:37 +0900
+        d=1e100.net; s=20210112; t=1677243558;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wPG+Qu6q3RgNUlyYFOzyQce/Gn7mCKiLFXWosGD/Kpw=;
+        b=61b6Ot90eQCScXOad2CNZV81QWwb3MGZU8rqOMnxJCE9u7a0ci0Nbrmbmok578rgOs
+         56uVw8WDYaagDuojGzX9vSRv5H7p5fZS5AMy09+5rBNHM1UG+Z4c2wFUD0AI4rGkK7TY
+         4Lz02gmaJpy12JpC4rBS7K8t/9birBnioLu3BC/feCJwNAFmDNztm95sz/PPGZH1mT/y
+         CNxvEPf+WWQH9MbLo7fLQVREGytao5ZUXJj1On1nXF7Rtr+41UW3f7HF/1gLg9eesMCM
+         8yKaAqNAsECir8/W8px3H4vFkMCZlNv8k15Gqb4F/zWYM901nP1YRxb+XTvad0KoKQSY
+         u0Iw==
+X-Gm-Message-State: AO0yUKUbwgpS2EWbIyk6sRWSYkYiHAVs6lBIbOPYPd5QDpMd0jI3v1Y7
+        Ul/sE7hzGUxpUV/lDU5gIOAHGw==
+X-Google-Smtp-Source: AK7set8n74zszsjnxxtFsyIXECuG5SuVuGozOMkL0pV5tL1ZnT+NrhMVipNk0UIgPRZ9uO5w+srZGQ==
+X-Received: by 2002:a19:f514:0:b0:4d5:ae35:b220 with SMTP id j20-20020a19f514000000b004d5ae35b220mr5224038lfb.8.1677243558481;
+        Fri, 24 Feb 2023 04:59:18 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id m28-20020a056512015c00b004d7d13387b5sm1705890lfo.116.2023.02.24.04.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 04:59:18 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Fri, 24 Feb 2023 13:59:17 +0100
+Subject: [PATCH] brcmfmac: pcie: Add 4359C0 firmware definition
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] ARM: dts: mvebu: add device tree for IIJ SA-W2
- appliance
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20230223132502.2045-1-musashino.open@gmail.com>
- <20230223132502.2045-2-musashino.open@gmail.com> <Y/d7gjqQCKKXMHqj@lunn.ch>
-From:   INAGAKI Hiroshi <musashino.open@gmail.com>
-In-Reply-To: <Y/d7gjqQCKKXMHqj@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20230224-topic-brcm_tone-v1-1-333b0ac67934@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAKS0+GMC/x2N0QqDMAxFf0XybCGrQtl+ZQyJNWrApdK6IYj/b
+ vDxnMvhHlA4Cxd4VQdk/kuRpAaPuoI4k07sZDAGj75B71u3pVWi63P8dltSdhjaJ2IIhNSAVT0
+ Vtpk0ztbpb1lMrplH2e+b9+c8L/hAKNZ2AAAA
+To:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677243557; l=2308;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=7y7YEc5odYv03bixlDUyCS4eYv4iVkxtgs1PEzbckmE=;
+ b=CMqJrDCCa6ffqZ9RJPFUNUfgU6DD7V/B3DBJHMVo81dr4UONMpGMvOsRpqcd3UGBlYKd+Y70fi3M
+ nT9QnkaNCmr1xVBXfVXJSSLLIXuPlcmd9TesLNVc1B238uTl32Pz
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+Some phones from around 2016, as well as other random devices have
+this chip called 43956 or 4359C0 or 43596A0, which is more or less
+just a rev bump (v9) of the already-supported 4359. Add a corresponding
+firmware definition to allow for choosing the correct blob.
 
-thank you for your reviews and detailed descriptions.
+Suggested-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Follow up on https://lore.kernel.org/netdev/20220921001630.56765-1-konrad.dybcio@somainline.org/
 
-On 2023/02/23 23:43, Andrew Lunn wrote:
->> +		pcie {
->> +			status = "okay";
->> +
->> +			pcie@1,0 {
->> +				status = "okay";
->> +
->> +				/* Atheros AR9287 */
->> +				wifi@0,0 {
->> +					compatible = "pci168c,002e";
->> +					reg = <0000 0 0 0 0>;
->> +				};
->> +			};
->> +
->> +			pcie@3,0 {
->> +				status = "okay";
->> +
->> +				/* Qualcomm Atheros QCA9880 */
->> +				wifi@0,0 {
->> +					compatible = "qcom,ath10k";
->> +					reg = <0000 0 0 0 0>;
->> +				};
->> +			};
->> +		};
->> +	};
-> These are not wrong, but they are also not needed. PCI devices should
-> be discovered by enumeration, and you don't have any additional
-> properties here, or phandles pointing to these nodes.
->
-> I assume these are COTS wifi modules? By listing them here you are
-> restricting some flexibility. The OEM could for example swap the
-> modules around, and Linux would not care, but the DT would then be
-> wrong. Or you could have a device with a different module because it
-> is cheaper, and again, Linux would not care, but the DT would be
-> wrong.
+Other changes were dropped, as it turned out in the mailing thread
+that the chipid was 4359, which is already taken care of.
 
-Got it. SA-W2 is not designed to allow users to swap cards under 
-normal use, but certainly things like you said can happen...
-I'll remove "wifi" nodes.
+Also, I'm sorry that my "soon" turned into months..
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- > I assume these are COTS wifi modules?
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+index a9b9b2dc62d4..96c059377a2a 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+@@ -57,6 +57,7 @@ BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
+ BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
+ BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
+ BRCMF_FW_DEF(4359, "brcmfmac4359-pcie");
++BRCMF_FW_DEF(4359C, "brcmfmac4359c-pcie");
+ BRCMF_FW_CLM_DEF(4364B2, "brcmfmac4364b2-pcie");
+ BRCMF_FW_CLM_DEF(4364B3, "brcmfmac4364b3-pcie");
+ BRCMF_FW_DEF(4365B, "brcmfmac4365b-pcie");
+@@ -88,7 +89,8 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+ 	BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43570_CHIP_ID, 0xFFFFFFFF, 43570),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4358_CHIP_ID, 0xFFFFFFFF, 4358),
+-	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
++	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0x000001FF, 4359),
++	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFE00, 4359C),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0x0000000F, 4364B2), /* 3 */
+ 	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0xFFFFFFF0, 4364B3), /* 4 */
+ 	BRCMF_FW_ENTRY(BRCM_CC_4365_CHIP_ID, 0x0000000F, 4365B),
 
-Yes, those are the modules manufactured by Silex Technology, Inc. [1][2].
+---
+base-commit: aaf70d5ad5e2b06a8050c51e278b0c3a14fabef5
+change-id: 20230224-topic-brcm_tone-07490077a0a3
 
-[1]: https://www.silex.jp/products/wireless-module/sxpcegn.html
-[2]: https://www.silex.jp/products/wireless-module/sxpceac.html
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
->
->> +&usb0 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pmx_usb_pins>;
->> +	status = "okay";
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +
->> +	/* SMSC USB2514B */
->> +	hub@1 {
->> +		compatible = "usb424,2514";
->> +		reg = <1>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		hub_port1: port@1 {
->> +			reg = <1>;
->> +			#trigger-source-cells = <0>;
->> +		};
->> +
->> +		hub_port2: port@2 {
->> +			reg = <2>;
->> +			#trigger-source-cells = <0>;
->> +		};
->> +	};
->> +};
-> Same comment as PCI. However, it is likely that the USB hub is
-> actually on the board, not a module, so it is a lot less likely to
-> change.
-
-Yes, that USB hub is on the PCB and wired to the SoC directly. But 
-I'll keep it in mind...
-
->
-> As i said, they are not wrong, so you don't need to remove them.
->
-> 	Andrew
->
-
-Regards,
-Hiroshi
