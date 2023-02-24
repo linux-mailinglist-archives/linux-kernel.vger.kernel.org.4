@@ -2,78 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7582D6A1A60
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BABD76A1A51
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 11:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjBXKfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 05:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S229888AbjBXKaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 05:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjBXKez (ORCPT
+        with ESMTP id S230410AbjBXKaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 05:34:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EE657D1D;
-        Fri, 24 Feb 2023 02:33:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E35CB81B2C;
-        Fri, 24 Feb 2023 10:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C26C433EF;
-        Fri, 24 Feb 2023 10:27:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677234479;
-        bh=kM7MCuigNoYDO61daH0fOla+5ecmOkbreNuU2hHUUXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bqaU3TlyXhr1AatFbf81rtky4awB0/+Kqk0aPEIxuEiqvmj3KjxqocLmYEzme1CsV
-         Qpb7U+h6FzTH3QE+N7uN2IpmiFxWSmhHu1S8QjlZxN3qKxpXISZzUx8j9bvzXOI6i+
-         ok8elxwwbNrll4mYRXZ499OGqW9uqsiMNjZVSwIs=
-Date:   Fri, 24 Feb 2023 11:27:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc3 review
-Message-ID: <Y/iRLeEsyiYHjeh5@kroah.com>
-References: <20230224102235.663354088@linuxfoundation.org>
+        Fri, 24 Feb 2023 05:30:11 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9572A35256;
+        Fri, 24 Feb 2023 02:29:49 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id 130so4812297pgg.3;
+        Fri, 24 Feb 2023 02:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677234539;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U3NcJ5Mt2cgzkRxYS86zUoSp3TVBMfDr+z01Tq5U/yI=;
+        b=Xyx1/Zr4PfXGhUX2zcoJv2rzEvCNS6t/0nlsxJEp5tHzmewgvIQfVnzhX1JjNlrmAq
+         CD7C1P43MhE5SHbNvaqf49yYM2ylIvQmHnSEZqPlQm4ZdpG43ofnQZfEIE+FsC4KwWmm
+         SRy0KaQLhOAR72g8fnfYI/J19pQFC7+7i2YuZonwMKfu9N0oaSoDJu8QLxbuQQCHUXCk
+         av9WRcR0BTBFlY6r/Jen6diN6Ze9sPMv4qmj/ieTc80wOXhdGUEKI/au1v3I1FClYNz6
+         DqL22Bvw1RZFSTpQlUaOB86NWieHTUEQJhzwYkYSYLyJD/A3YxkVLVCp3c7TLc/2+cNI
+         P5CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677234539;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U3NcJ5Mt2cgzkRxYS86zUoSp3TVBMfDr+z01Tq5U/yI=;
+        b=L3+Sw8Q3CdMBX7g1vFfZDOaTO3gw23naideKd7bkAclDqjE6jy3dLCisbJGa7G3mLC
+         l6L6yYrzysePneMawpcB8T4XQ2GkenLHlVl0b4lGDZpPqVkwdxGUht8eBXQOKK/t9x8k
+         oPi9VArgxqYLtq7ITv8L0hSLpsH9EeyQQmvyafieHjirZsIh9vJFqDt5R2JakG6+fFMC
+         oEol7WZVJ/wROJQB95hdAkSdPTNHl311KjZZ6amYbOdAehGiAuyNr/HaTcWSWJoBMb5v
+         sQrnfp/dARObYWOdJZMLawfVAaLZey51ztvq45x54BRYToQ+G8p3844EsZhSAfM17RCS
+         uBnA==
+X-Gm-Message-State: AO0yUKW1omI2P1hmxB6QsT/IvXV9J+Y9nxGghZRDlGhMJSAsgRCTDbEN
+        WpKOf8ExbGGIicBetOIvz/g=
+X-Google-Smtp-Source: AK7set81e9zNL+wgZAHpGhIG/9HaIV5A3qX2rx+LdlpMyl6e4oTIDLaCZjb5jT1ANBONskAP0RgyzQ==
+X-Received: by 2002:a05:6a00:23c3:b0:5a8:c179:7b02 with SMTP id g3-20020a056a0023c300b005a8c1797b02mr15302936pfc.1.1677234538733;
+        Fri, 24 Feb 2023 02:28:58 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id g4-20020a62e304000000b005cdbd9c8825sm6618848pfh.195.2023.02.24.02.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 02:28:58 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        ilyal@mellanox.com, aviadye@mellanox.com, sd@queasysnail.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v2] net: tls: fix possible info leak in tls_set_device_offload()
+Date:   Fri, 24 Feb 2023 18:28:39 +0800
+Message-Id: <20230224102839.26538-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224102235.663354088@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 11:23:55AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.96 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 26 Feb 2023 10:22:23 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.96-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+After tls_set_device_offload() fails, we enter tls_set_sw_offload(). But
+tls_set_sw_offload can't set cctx->iv and cctx->rec_seq to NULL if it fails
+before kmalloc cctx->iv. It is better to Set them to NULL to avoid any
+potential info leak.
 
-Only change here is that the permission issue on
-scripts/pahole-version.sh _should_ now be resolved.
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
 
-If not, please let me know.
+	v2: change commit log. The original issue will be fixed in another patch.
 
-thanks,
+ net/tls/tls_device.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-greg k-h
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index 6c593788dc25..a63f6f727f58 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -1241,8 +1241,10 @@ int tls_set_device_offload(struct sock *sk, struct tls_context *ctx)
+ 	kfree(start_marker_record);
+ free_rec_seq:
+ 	kfree(ctx->tx.rec_seq);
++	ctx->tx.rec_seq = NULL;
+ free_iv:
+ 	kfree(ctx->tx.iv);
++	ctx->tx.iv = NULL;
+ release_netdev:
+ 	dev_put(netdev);
+ 	return rc;
+-- 
+2.34.1
+
