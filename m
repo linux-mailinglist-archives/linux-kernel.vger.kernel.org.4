@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2CA6A23C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E2A6A23C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 22:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjBXV0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 16:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S230286AbjBXV0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 16:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjBXV0S (ORCPT
+        with ESMTP id S230133AbjBXV01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 16:26:18 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE8A1B2E8;
-        Fri, 24 Feb 2023 13:26:18 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so4213870pjb.1;
-        Fri, 24 Feb 2023 13:26:18 -0800 (PST)
+        Fri, 24 Feb 2023 16:26:27 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C466F435;
+        Fri, 24 Feb 2023 13:26:25 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id g12so306031pfi.0;
+        Fri, 24 Feb 2023 13:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0GCi2JQwruHr6r5czYS5DePcLBFM0iowN3CE86Y0+c4=;
-        b=gKmSZTycP0MMmvjU1xYwRAmgBXaGOBirUFd70Uq8YM+4URzIt90yKKHRE3wkrm979x
-         eo2L4yIEAxg3NdEpQObI1hWpVemXZ6x2qD1xuvhk1F8E6MafOAziNM83oIKDw3CrV1FM
-         GhtXGGZX3t7fjAZ9jwldK5dp+OtghYKhfdtagUq7dqEdnUQxcTuoboJRT/nIV56mh7hq
-         uPej7Pt/o3awk5z91K9Cbx4q4S7nYo+GVNMpBYvcIxx5j+KlZFJlmvEyfX4ZMLspgNsQ
-         SguJy2oifJ7E193N1zODcWjwwXg7UPL2xtg9RqzKX8dn9J6Glz9zRAtRYh0ZkeR2nECb
-         UwbQ==
+        bh=B5yhkktVaVGYkk/cuH+RN6eD59bu5PZOR28I2frvfH8=;
+        b=VkOQFJ8xlBzwnZbxQH+oouRag+3X3CaYmPLwCYFXBSCRIlvo5BWfDEvGcUkOeGl9GI
+         9PU2R4G9FNUMe21IfrdFgOziFfSCSM9SIdglUv4tw2Oue7OdNIfdf8bQmm5E6yOYJoo4
+         1P2BegwaqtZKFaYYe5QNZB+fHgMS07y7LvxHTg9Pv+GRhBl0uzDVBOIH8YzIca2kFBsr
+         5QM6gnZb+oLl/eULdIzux/MPCrMyg1RtmCTMjpJWU6PdCtAAa2eafOyPlq8S3vt6V/W5
+         qSs+4znoqMx6+9W/5rNiQkmlwOaJbaBdIsaHvorO01gymiDb6DMqEu45JEjw1dLLYykk
+         XQwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GCi2JQwruHr6r5czYS5DePcLBFM0iowN3CE86Y0+c4=;
-        b=FM56dgQi7ax1Pr+fdspdImLnUw5WBmqwWN+ms3wOUXL18i0rBhrN4sXN18GLUJxvNc
-         prRutKYBR9aGYM1MiMnYDI0TWS/dX5kV34L2RltECwgM+Bsa+EkAPClS2CktxPAFfCKg
-         RhnkOJwFWZUJjYomtU41KocsleB94eaTbIkGniXBaK3Hb9poAcUYXuFCPIvh9RR500PJ
-         liXHkvUykfSa1ph6U+u6zJ09h2dHk1sT+2nE+12zAm1eKMbC1Xs5QZvNXbDU1B0DMu/y
-         gFpK1QkIMQeOQyz/VQiDIAGogmNptDuLEiVqhbPMHhzaRl/QI2JkSgNYl57arcYorvia
-         mijw==
-X-Gm-Message-State: AO0yUKXLFJB6XugTtNFIGpfJAFez6uuM3F1Yzdvvaa4locxEO8oVFAKX
-        ZQxhFDnbB1kXnwcn6FZOh2PgaWiWa6s=
-X-Google-Smtp-Source: AK7set+MmDtK6Ik5bPi7L+RxVNTJ/ReiVLOLhWZ1CZYG/0+hYgXc/IO2mPWY/O7Bv/MBuhTJ8KKVIQ==
-X-Received: by 2002:a17:90a:1c5:b0:233:e305:f617 with SMTP id 5-20020a17090a01c500b00233e305f617mr20756061pjd.32.1677273977508;
-        Fri, 24 Feb 2023 13:26:17 -0800 (PST)
+        bh=B5yhkktVaVGYkk/cuH+RN6eD59bu5PZOR28I2frvfH8=;
+        b=zo4UZ6iJcCjkuviOcFbnwd+Vs2Gq+Ip/Z6e8h40wLM+CiFdmZoA7uC5/GOlHkdolRS
+         iln0gZ0IFPII9bFEyTcxqvAm7DkbNpWtOoq8Gxdwg+x5eVCAhMFSLgtfePsmt446nibv
+         Ya+u/AG9N1uegLj6l+Uk3suVafwlolzn3Ocg3RQ15F9Av/bCQrSbNRO7u50NV7f7rG0T
+         gNzvIp0INffNieUsUGAAn2ElfHWvNFz3k8MJEPJaW5g5g06i3s8f0tpsJ8EhZGVBVvB6
+         YV5VyqogJ67E6EvRX8PIkArjj7IR+Q/a6Ifbhgw34ut5Y5Ddoc+JPO8lW+bB+zzY56Ln
+         8WMw==
+X-Gm-Message-State: AO0yUKW8BAygw1Dq36cBQPbpkwtTq/XfVGkiDOJBmFA2IClnQK/v+IeG
+        hvjRDX+nhSVMz1rBTUIfQvE=
+X-Google-Smtp-Source: AK7set++cMvf4ybFhV3Dqm+rgAV0CG1xF6Bbtk0odqKF6J5L83Fyp633n1452sUWkFMNvDpYgKXJmg==
+X-Received: by 2002:aa7:9466:0:b0:5a9:c7bb:4d94 with SMTP id t6-20020aa79466000000b005a9c7bb4d94mr16857757pfq.33.1677273985388;
+        Fri, 24 Feb 2023 13:26:25 -0800 (PST)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id mp4-20020a17090b190400b002375c356b0csm108132pjb.19.2023.02.24.13.26.16
+        by smtp.googlemail.com with ESMTPSA id y6-20020aa78046000000b005df065ebd5esm2941449pfm.209.2023.02.24.13.26.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 13:26:17 -0800 (PST)
-Message-ID: <fae989be-7f12-81f3-f236-f2658cf0f33f@gmail.com>
-Date:   Fri, 24 Feb 2023 13:26:15 -0800
+        Fri, 24 Feb 2023 13:26:24 -0800 (PST)
+Message-ID: <c912fa13-bb62-344d-ef2a-a51514bd953f@gmail.com>
+Date:   Fri, 24 Feb 2023 13:26:23 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 04/27] kbuild, soc: bcm: raspberrypi-power: remove
+Subject: Re: [PATCH 05/27] kbuild, soc: bcm: bcm2835-power: remove
  MODULE_LICENSE in non-modules
 Content-Language: en-US
 To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
 Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-5-nick.alcock@oracle.com>
+ <20230222121453.91915-6-nick.alcock@oracle.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230222121453.91915-5-nick.alcock@oracle.com>
+In-Reply-To: <20230222121453.91915-6-nick.alcock@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -97,6 +100,9 @@ On 2/22/23 04:14, Nick Alcock wrote:
 > Cc: linux-kernel@vger.kernel.org
 > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > Cc: linux-rpi-kernel@lists.infradead.org
 > Cc: linux-arm-kernel@lists.infradead.org
 
