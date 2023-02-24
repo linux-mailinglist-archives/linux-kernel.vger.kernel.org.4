@@ -2,149 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8896A18EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FDA6A18F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Feb 2023 10:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjBXJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 04:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S229513AbjBXJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 04:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBXJhg (ORCPT
+        with ESMTP id S229516AbjBXJlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 04:37:36 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDE64D70;
-        Fri, 24 Feb 2023 01:37:02 -0800 (PST)
+        Fri, 24 Feb 2023 04:41:55 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A7428D39;
+        Fri, 24 Feb 2023 01:41:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677231422; x=1708767422;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qh5dHIF3Zy/2vFiSSHWmzyQvmvJlUbTRwfF+WltTESk=;
-  b=WDRmYASbnHMX3Ojs54SxtR4XRQJcnzIlqgO0LVMrqnnPuoTJUGcsDl+p
-   q7lTPDO1RvYqMufhR4Swyq+ciCjFN5UzzFbTRdCIH31tMDTToidONCaWO
-   wwVgFq3VlbhT2hZsgq6GRfavpzfa4627vKCHOGo6QjKSlXHo1GviywI04
-   Jb9qM+kFi5zX1vpLGvmsqz9i7yiHw8qHcjyh8LDYOHTZlmViKL6GS+xfP
-   lh2NK0dHo/LYlKDOQrSstBW12KHy/00lN/ngwTbVod68HxdA0UGoZc79o
-   DbNRlqAFoks4I6NKWKYWyptQ8/jcGFitNemb/4umoWmXqr2tOM3Kgqt9/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331171606"
+  t=1677231712; x=1708767712;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OeOLLVSe1/js5PTlYfPJkePsPkE4JB+cWEgIxLEaucY=;
+  b=YSK0+k2TbdbxjwL+yakxCz5DOzRC4XhLreUq4cETU9RJPh0jbBsWiJ71
+   lR8GEogFBi1VP0qwArA2/2bNvilq5t3SMIYExt0tmBEs1qMbSRJLhrdsd
+   kPRSY7gjEcOyrCEVH+wEiQS0bTX72jDdY5Nh//gzrlHqzsKKkRFE8dEgC
+   VXLmTp0LmPzC4g8z/vq799XdPdxKYynVzDS+KunmtfOn8kksaAkEGOEgn
+   FuuUfjfwY8CjBZCK3VNOjywyeORtf2cGzoF9hDuwVurZ7I12f+o26D4KI
+   VN7CTCwzdDhnUMSU95oevQ8hoOJxIasx/OeuzDaWk1Hkax06ZZcbqdsWk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334858027"
 X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="331171606"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="741608912"
+   d="scan'208";a="334858027"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:41:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="736744871"
 X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="741608912"
-Received: from rkris18-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.56.190])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:03 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C84DF10A581; Fri, 24 Feb 2023 12:36:00 +0300 (+03)
-Date:   Fri, 24 Feb 2023 12:36:00 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, kvm@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        qemu-devel@nongnu.org, chao.p.peng@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, linmiaohe@huawei.com, luto@kernel.org,
-        mail@maciej.szmigiero.name, mhocko@suse.com, michael.roth@amd.com,
-        mingo@redhat.com, naoya.horiguchi@nec.com, pbonzini@redhat.com,
-        qperret@google.com, rppt@kernel.org, seanjc@google.com,
-        shuah@kernel.org, steven.price@arm.com, tabba@google.com,
-        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
-        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
-        x86@kernel.org, yu.c.zhang@linux.intel.com
-Subject: Re: [RFC PATCH 1/2] mm: restrictedmem: Allow userspace to specify
- mount_path for memfd_restricted
-Message-ID: <20230224093600.osmbpilmsi64wlwb@box.shutemov.name>
-References: <20230216100150.yv2ehwrdcfzbdhcq@box.shutemov.name>
- <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
+   d="scan'208";a="736744871"
+Received: from wmao-mobl.amr.corp.intel.com (HELO [10.212.63.133]) ([10.212.63.133])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:41:48 -0800
+Message-ID: <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
+Date:   Fri, 24 Feb 2023 09:41:46 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+Content-Language: en-US
+To:     Pekka Paalanen <ppaalanen@gmail.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-7-robdclark@gmail.com>
+ <20230220105345.70e46fa5@eldfell>
+ <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
+ <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com>
+ <CAF6AEGuMn3FywPkEtfJ7oZ16A0Bk2aiaRvj4si4od1d3wzXkPw@mail.gmail.com>
+ <20230222114900.1b6baf95@eldfell>
+ <CAF6AEGs1_75gg+LCBj6=PH8Jn60PXiE+Kx_2636nP-+pajN8Hg@mail.gmail.com>
+ <20230223113814.3010cedc@eldfell>
+ <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
+ <20230224112630.313d7b76@eldfell>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230224112630.313d7b76@eldfell>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 12:55:16AM +0000, Ackerley Tng wrote:
-> 
-> "Kirill A. Shutemov" <kirill@shutemov.name> writes:
-> 
-> > On Thu, Feb 16, 2023 at 12:41:16AM +0000, Ackerley Tng wrote:
-> > > By default, the backing shmem file for a restrictedmem fd is created
-> > > on shmem's kernel space mount.
-> 
-> > > With this patch, an optional tmpfs mount can be specified, which will
-> > > be used as the mountpoint for backing the shmem file associated with a
-> > > restrictedmem fd.
-> 
-> > > This change is modeled after how sys_open() can create an unnamed
-> > > temporary file in a given directory with O_TMPFILE.
-> 
-> > > This will help restrictedmem fds inherit the properties of the
-> > > provided tmpfs mounts, for example, hugepage allocation hints, NUMA
-> > > binding hints, etc.
-> 
-> > > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> > > ---
-> > >   include/linux/syscalls.h           |  2 +-
-> > >   include/uapi/linux/restrictedmem.h |  8 ++++
-> > >   mm/restrictedmem.c                 | 63 +++++++++++++++++++++++++++---
-> > >   3 files changed, 66 insertions(+), 7 deletions(-)
-> > >   create mode 100644 include/uapi/linux/restrictedmem.h
-> 
-> > > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> > > index f9e9e0c820c5..4b8efe9a8680 100644
-> > > --- a/include/linux/syscalls.h
-> > > +++ b/include/linux/syscalls.h
-> > > @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int
-> > > flags);
-> > >   asmlinkage long sys_set_mempolicy_home_node(unsigned long start,
-> > > unsigned long len,
-> > >   					    unsigned long home_node,
-> > >   					    unsigned long flags);
-> > > -asmlinkage long sys_memfd_restricted(unsigned int flags);
-> > > +asmlinkage long sys_memfd_restricted(unsigned int flags, const char
-> > > __user *mount_path);
-> 
-> > >   /*
-> > >    * Architecture-specific system calls
-> 
-> > I'm not sure what the right practice now: do we provide string that
-> > contains mount path or fd that represents the filesystem (returned from
-> > fsmount(2) or open_tree(2)).
-> 
-> > fd seems more flexible: it allows to specify unbind mounts.
-> 
-> I tried out the suggestion of passing fds to memfd_restricted() instead
-> of strings.
-> 
-> One benefit I see of using fds is interface uniformity: it feels more
-> aligned with other syscalls like fsopen(), fsconfig(), and fsmount() in
-> terms of using and passing around fds.
-> 
-> Other than being able to use a mount without a path attached to the
-> mount, are there any other benefits of using fds over using the path string?
 
-It would be nice if anyone from fs folks comment on this.
+On 24/02/2023 09:26, Pekka Paalanen wrote:
+> On Thu, 23 Feb 2023 10:51:48 -0800
+> Rob Clark <robdclark@gmail.com> wrote:
+> 
+>> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+>>>
+>>> On Wed, 22 Feb 2023 07:37:26 -0800
+>>> Rob Clark <robdclark@gmail.com> wrote:
+>>>   
+>>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> 
+> ...
+> 
+>>>>> On another matter, if the application uses SET_DEADLINE with one
+>>>>> timestamp, and the compositor uses SET_DEADLINE on the same thing with
+>>>>> another timestamp, what should happen?
+>>>>
+>>>> The expectation is that many deadline hints can be set on a fence.
+>>>> The fence signaller should track the soonest deadline.
+>>>
+>>> You need to document that as UAPI, since it is observable to userspace.
+>>> It would be bad if drivers or subsystems would differ in behaviour.
+>>>   
+>>
+>> It is in the end a hint.  It is about giving the driver more
+>> information so that it can make better choices.  But the driver is
+>> even free to ignore it.  So maybe "expectation" is too strong of a
+>> word.  Rather, any other behavior doesn't really make sense.  But it
+>> could end up being dictated by how the hw and/or fw works.
+> 
+> It will stop being a hint once it has been implemented and used in the
+> wild long enough. The kernel userspace regression rules make sure of
+> that.
 
-> Should I post the patches that allows specifying a mount using fds?
-> Should I post them as a separate RFC, or as a new revision to this RFC?
+Yeah, tricky and maybe a gray area in this case. I think we eluded 
+elsewhere in the thread that renaming the thing might be an option.
 
-Let's first decide what the right direction is.
+So maybe instead of deadline, which is a very strong word, use something 
+along the lines of "present time hint", or "signalled time hint"? Maybe 
+reads clumsy. Just throwing some ideas for a start.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards,
+
+Tvrtko
+
+> See the topic of implementing triple-buffering in Mutter in order to
+> put more work to the GPU in order to have the GPU ramp up clocks in
+> order to not miss rendering deadlines. I don't think that patch set has
+> landed in Mutter upstream, but I hear distributions in downstream are
+> already carrying it.
+> 
+> https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1383
+> https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1441
+> 
+> Granted, GPU clocks are just one side of that story it seems, and
+> triple-buffering may have other benefits.
+> 
+> If SET_DEADLINE would fix that problem without triple-buffering, it is
+> definitely userspace observable, expected and eventually required
+> behaviour.
+> 
+> 
+> Thanks,
+> pq
