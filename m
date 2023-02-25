@@ -2,101 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578C36A284B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13936A2869
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBYJX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 04:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
+        id S229537AbjBYJ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 04:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjBYJX2 (ORCPT
+        with ESMTP id S229471AbjBYJ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 04:23:28 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A626274A5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:23:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677317007; x=1708853007;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0KaL/gxIOysHrqvv1vMBsK1NWBGK86pNW/Ln2ETlXqk=;
-  b=KrC7zuu7+jGR67FLl4JlSlXGbK6pG9teZhW7GZtefuEGnzCSYfoddvA5
-   KVIqn21M4eCsbXjV5Tf0lEUUlStb4R6wamHBfLk00FrL31AsLTwNtgpHe
-   VRj2vgHxdvaDC0QyoocHQU87EwDb7Ak/L6z+0qNCdh9a38qUEkxxeRjhv
-   ND0ufqmY6D4YrLYujIlNjyQ+sEZDgmkz5aAJEil9/lCvOp1OrSQQGOZ31
-   9UXZJpa9gZxBnKwYdFVr95+F/mXO7SpffEYFURdSP2hT+Jg97h8NHvIAn
-   Ylbh0FNZjuU2VKcsszJIyeCnE9Si/OOxZHMslTLZrCQfuzb7ETXw7Go44
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="321851732"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="321851732"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 01:23:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="762055659"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="762055659"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Feb 2023 01:23:25 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVqm4-00035P-39;
-        Sat, 25 Feb 2023 09:23:24 +0000
-Date:   Sat, 25 Feb 2023 17:22:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD SUCCESS
- ea9a78c3a7a44e36fa690e1cc90dc2a758c8eb9a
-Message-ID: <63f9d361.0cY8OO5DYsKd9VbJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 25 Feb 2023 04:29:23 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E17FF03;
+        Sat, 25 Feb 2023 01:29:20 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pVqrh-0000TL-HG; Sat, 25 Feb 2023 10:29:13 +0100
+Message-ID: <1c222195-8fec-5067-c382-78dfd2505974@leemhuis.info>
+Date:   Sat, 25 Feb 2023 10:29:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
+ <Y/nSJvm6h4Sq5PR2@duo.ucw.cz>
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
+In-Reply-To: <Y/nSJvm6h4Sq5PR2@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1677317361;72dcdd09;
+X-HE-SMSGID: 1pVqrh-0000TL-HG
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: ea9a78c3a7a44e36fa690e1cc90dc2a758c8eb9a  genirq/msi: Drop dead domain name assignment
+On 25.02.23 10:17, Pavel Machek wrote:
+>> +If your platform uses techniques like Secure Boot, prepare the system to permit
+>> +starting self-compiled Linux kernels; install compilers and everything else
+>> +needed for building Linux; make sure to have 15 Gigabyte free space in your home
+>> +directory. Now run the following commands to download the sources of Linux,
+>> +which you then use to configure, build and install your own
+>> kernel::
+> 
+> 15GB is quite a lot. Maybe the shallow clone should be given another
+> chance?
 
-elapsed time: 805m
+It got and made it, see v2:
+https://lore.kernel.org/all/8cfcf069d48c1b8d7b83aafe0132f8dad0f1d0ea.1676400947.git.linux@leemhuis.info/
 
-configs tested: 19
-configs skipped: 3
+>> +       mkdir ~/linux/ ~/linux/sources ~/linux/build
+>> +       git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git \
+>> +         ~/linux/sources
+>> +       cd ~/linux/sources/
+>> +       # hint: if you don't want to build any stable or longterm kernels, skip the
+>> +       #   next two commands
+>> +       git remote add linux-stable \
+>> +         https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+>> +       git fetch --all
+>> +       # hint: if you want to apply patches, do it at this point (see below for details)
+>> +       # hint: at this point it's recommended to tag your build (see below for details)
+>> +       yes "" | make O=~/linux/build/ localmodconfig
+>> +       # hint: at this point you might want or have to adjust the build configuration
+>> +       #  (see below for details)
+>> +       # note: if you are running a Debian kernel, you'll have to adjust the configuration
+>> +       #  at this point (see below)
+>> +       make -j $(nproc --all) O=~/linux/build/
+> 
+> Is the complexity of using O= worth it for one-off kernel builds?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+That is a good question. I seemed like the right thing to do when I
+started writing this guide (maybe just because I've been doing it that
+way for ages), but now that you ask I'm unsure myself.
 
-tested configs:
-clang                                   alpha   defconfig
-gcc                                       arc   defconfig
-gcc                                       arm   defconfig
-gcc                                     arm64   defconfig
-gcc                                      csky   defconfig
-gcc                                      i386   defconfig
-gcc                                      ia64   defconfig
-gcc                                 loongarch   defconfig
-gcc                                      m68k   defconfig
-gcc                                     nios2   defconfig
-gcc                                    parisc   defconfig
-gcc                                  parisc64   defconfig
-gcc                                     riscv   defconfig
-gcc                                     riscv   rv32_defconfig
-gcc                                      s390   defconfig
-gcc                                     sparc   defconfig
-gcc                                        um   i386_defconfig
-gcc                                        um   x86_64_defconfig
-gcc                                    x86_64   defconfig
-gcc                                                  
+/me wonders how others feel about it
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Ciao, Thorsten
