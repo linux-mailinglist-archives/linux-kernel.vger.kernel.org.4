@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690086A27E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F4C6A27E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjBYIev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 03:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S229558AbjBYIho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 03:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYIeu (ORCPT
+        with ESMTP id S229445AbjBYIhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 03:34:50 -0500
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D40612F0A;
-        Sat, 25 Feb 2023 00:34:49 -0800 (PST)
-Received: by mail-pf1-f181.google.com with SMTP id g12so858121pfi.0;
-        Sat, 25 Feb 2023 00:34:49 -0800 (PST)
+        Sat, 25 Feb 2023 03:37:42 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D781716E;
+        Sat, 25 Feb 2023 00:37:40 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5384ff97993so43147117b3.2;
+        Sat, 25 Feb 2023 00:37:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cz98R7Ca78KCbduT2+9H7VwReVgB2OnNZzHlXdg3vPg=;
+        b=LslJvRDEXLo8YVQdMr+NYNiAU+2KWc+5HoLP4elf+87SnngnzsWjSRG3ZP1v2tH1Vc
+         ddgHtrk8mJCTJzMgbZ2BDxvt3sY5a75hxfx3qcqc/1WEUGJvZbYJnpDRFoeR2DEKm0L5
+         Tzb+OfXPYDgsLg2+4/K3Hz2vWBFMJ3LHj2ND+65Q6g+uSnn2eYN0Swb/k6kYCnON/D8Y
+         cW+cZyRn+cEVHWBsxQZQrYbsva1lI9AhJN6C6aB9wLPgdBtBNIXxMdcfdhONhY5HkI8X
+         pgDjKPr6YL6jopKLbCsYCzj0yxEY9juoLF/FG8v21O/vhddsBND+QmTbxxW3hvPz5tVl
+         3pew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tgdlhpL67h2C5/Vx2oHavtV4QOTDeiwV5fIx5a2BvQI=;
-        b=FSRTIhl/hUIXtxDLGdLArexGYAzXUCdAAewokG/ZoEy+VPXTUws19p0en9BpzG72I3
-         b6/JrilVDv+eYhzLETi2Z3LdJxQJAGe8JwVHE5Z/x6AuXzILmWnukilzIP+yI18T4rk6
-         T4xa9Jxr58zlJ9QnPSFOVfXKI6p38zenPQaMGT2X2FMLXJ0fpdV6gypC1lZrgdfl0VhR
-         8h6WTU7lCW9b4/uIzTLRpi2vrQ30pUwD1QGTzAWJxVDPGBYjpS/h8y5aeaZsL2OoIa5+
-         41axWY9C99oQ3QyjuVDx3sx2/pLW5m7yPMs9KLzxuTIBUpzOXVOgJAX/uShiK+2Yj9iH
-         hYAQ==
-X-Gm-Message-State: AO0yUKXQZsSX6CzbXEw5iw6JLfDYuePe+QUxGYcjHkVxqHWPNu8TZHuo
-        H0zIFVh7TfX0PV3OQLPbazdMu+G2JyIchF7capMID2SIW9k=
-X-Google-Smtp-Source: AK7set/rSsk9JATGK69ZfTt4pxEx7Lr/OtJW7W+5zkvAsvEy9cx0/Krpl200gXh/mjn8k2Xdq1LxWnIeKuGu/DLDk9M=
-X-Received: by 2002:a62:1993:0:b0:5a8:bdd2:f99c with SMTP id
- 141-20020a621993000000b005a8bdd2f99cmr3757105pfz.1.1677314088667; Sat, 25 Feb
- 2023 00:34:48 -0800 (PST)
+        bh=Cz98R7Ca78KCbduT2+9H7VwReVgB2OnNZzHlXdg3vPg=;
+        b=YtDqLYbArzpxmilnDUGqV2nNqWxn/eTeST/rouEbR6rhEPfAQyLxLxQrjR74JRUOPX
+         2YYmJuHnHqu67+E4am0h2XeQ1Lt4IJOGOx2oydOuuNS7vSt1vSUsQidmEsrrLRfK5eoS
+         6otoGcbmze358fpRBtKoOh6Hn6/cIePDFoClJobNQuHWZqNb7UaSjrsyrbKlKVb5auBn
+         cquTbJZ7mfgX2idQLniqTwAv/aaKLHpbn8pFdcEVMnf6iuEl/NzMRrPGjj8zqcBGqN/u
+         D+ThPcZ8Ti+I0VC2zjOxD8IMvmkcnzXEcqRIx2hqQwnLgbWW6ZduhKGpzTIbbCmIcYBe
+         JrnQ==
+X-Gm-Message-State: AO0yUKX/8WvVwGQroZdVdbdQ5TicV36GBOGG/UAq49EyXymjZ1ThIzZJ
+        CmXzD/zs3cFncFzr97XZ9l4PDtGIRGRzlQT9i1E=
+X-Google-Smtp-Source: AK7set+hqtmF+D+rwbu85iQ+EPP3JZXUmywWfrmNyRB+ZMfHnjDwseewKGZ/t0grf+BbEU4WY0+ueRg+zQ4rY2MteRw=
+X-Received: by 2002:a81:af50:0:b0:533:9ffb:cb12 with SMTP id
+ x16-20020a81af50000000b005339ffbcb12mr6270206ywj.10.1677314260110; Sat, 25
+ Feb 2023 00:37:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230222163754.3711766-1-frank.jungclaus@esd.eu>
-In-Reply-To: <20230222163754.3711766-1-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 25 Feb 2023 17:34:37 +0900
-Message-ID: <CAMZ6RqJwJNxn5nm-PW2yY3BobTNB+vVmeDGi=M80YavN8Ui-OQ@mail.gmail.com>
-Subject: Re: [PATCH] can: esd_usb: Improve code readability by means of
- replacing struct esd_usb_msg with a union
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CANiq72nfGfqnk4QyKsf3kmjgBVPG3WFLQqd7_+jLcYh9jG+fQw@mail.gmail.com>
+ <mhng-b792c358-a678-4ab3-aba4-4bc38da55744@palmer-ri-x1c9a>
+In-Reply-To: <mhng-b792c358-a678-4ab3-aba4-4bc38da55744@palmer-ri-x1c9a>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 25 Feb 2023 09:37:29 +0100
+Message-ID: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>,
+        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 23 Feb. 2023 at 01:56, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
-> As suggested by Vincent Mailhol, declare struct esd_usb_msg as a union
-> instead of a struct. Then replace all msg->msg.something constructs,
-> that make use of esd_usb_msg, with simpler and prettier looking
-> msg->something variants.
+On Sat, Feb 25, 2023 at 12:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
 >
-> Link: https://lore.kernel.org/all/CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com/
-> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> Works for me.
+>
+> I've got a few other things in the pipeline for this merge window so
+> this probably won't make it, but I'll dig in after that.  We've got a
+> bunch of Rust-types floating around Rivos as well, so with any luck
+> someone else will have some time to poke around.  Having a full cycle in
+> linux-next is probably the right way to go for this sort of thing
+> anyway, as it's likely to shake out some long-tail issues.
 
-Thank you for your follow up on this and on all my other comments.
+Thanks a lot! That would be great.
 
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+At least from our side, no rush. In fact, we are letting users (or
+arch maintainers) to request/submit the architectures themselves as
+they need/want them.
+
+Cheers,
+Miguel
