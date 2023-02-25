@@ -2,141 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E4E6A2766
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 06:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480136A2770
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 07:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjBYFuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 00:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S229544AbjBYGIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 01:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBYFuW (ORCPT
+        with ESMTP id S229379AbjBYGI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 00:50:22 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6824E2005A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 21:50:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677304221; x=1708840221;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tadoo5M/i+LL8fWfK0BzHaUGqHVJIW44v22q3UtH/Js=;
-  b=UbQglNzBHoJ+M4s2FHkdKfILZD3n0rddaAz0KRVy1w91pvp5bX1ygauu
-   uz6mfUW/liNqZ2GkE1ifKy+o3Le2XALPi9KdrMtfm4Pm7sOruRYBlMier
-   nO9D8WLx3iWyXx5a89A4KDV88LMEqhBnU0Ey1KPpQoumxIRSIfMhsKlup
-   jk3rNvSI/QR5FLKSC3geBJQ++5fHqSItkytEPr/JIWP2BVZU2pCRDESzK
-   oTA/9+eL9bcqU98xrMulhCp2HDzaiPLm+m39ccmaTC+5Ou0Du6sd8B+ax
-   EH7J4Vq5GmHt1BnC9Tm2kvnSXq7wTT7rEEvwAGOiNv5NTosa6EQFRkNZp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="361145406"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="361145406"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 21:50:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="762021266"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="762021266"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Feb 2023 21:50:19 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVnRq-0002xr-31;
-        Sat, 25 Feb 2023 05:50:18 +0000
-Date:   Sat, 25 Feb 2023 13:49:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wesley Chalmers <Wesley.Chalmers@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6:
- warning: no previous prototype for
- 'optc3_wait_drr_doublebuffer_pending_clear'
-Message-ID: <202302251350.F2SLjQWI-lkp@intel.com>
+        Sat, 25 Feb 2023 01:08:27 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9A012F18
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:08:26 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pVnjF-0004Xf-D3; Sat, 25 Feb 2023 07:08:17 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pVnjA-0007Vf-9X; Sat, 25 Feb 2023 07:08:12 +0100
+Date:   Sat, 25 Feb 2023 07:08:12 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        kernel@pengutronix.de, intel-wired-lan@lists.osuosl.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
+ genphy_c45_write_eee_adv()
+Message-ID: <20230225060812.GB8437@pengutronix.de>
+References: <20230224035553.GA1089605@roeck-us.net>
+ <20230224041604.GA1353778@roeck-us.net>
+ <20230224045340.GN19238@pengutronix.de>
+ <363517fc-d16e-5bcd-763d-fc0e32c2301a@roeck-us.net>
+ <20230224165213.GO19238@pengutronix.de>
+ <20230224174132.GA1224969@roeck-us.net>
+ <20230224183646.GA26307@pengutronix.de>
+ <b0af4518-3c07-726e-79a0-19c53f799204@roeck-us.net>
+ <20230224200207.GA8437@pengutronix.de>
+ <52f8bb78-0913-6e9a-7816-f32cdad688f2@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <52f8bb78-0913-6e9a-7816-f32cdad688f2@roeck-us.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wesley,
+On Fri, Feb 24, 2023 at 04:09:40PM -0800, Guenter Roeck wrote:
+> On 2/24/23 12:02, Oleksij Rempel wrote:
+> [ ... ]
+> > > 
+> > > For cubieboard:
+> > > 
+> > > MDIO_PCS_EEE_ABLE = 0x0000
+> > > 
+> > > qemu reports attempts to access unsupported registers.
+> > > 
+> > > I had a look at the Allwinner mdio driver. There is no indication suggesting
+> > > what the real hardware would return when trying to access unsupported registers,
+> > > and the Ethernet controller datasheet is not public.
+> > 
+> > These are PHY accesses over MDIO bus. Ethernet controller should not
+> > care about content of this operations. But on qemu side, it is implemented as
+> > part of Ethernet controller emulation...
+> > 
+> > Since MDIO_PCS_EEE_ABLE == 0x0000, phydev->supported_eee should prevent
+> > other EEE related operations. But may be actual phy_read_mmd() went
+> > wrong. It is a combination of simple phy_read/write to different
+> > registers.
+> > 
+> 
+> Adding MDD read/write support in qemu doesn't help. Something else in your patch
+> prevents the PHY from coming up. After reverting your patch, I see
+> 
+> sun4i-emac 1c0b000.ethernet eth0: Link is Up - 100Mbps/Full - flow control off
+> IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+> 
+> in the log. This is missing with your patch in place.
+> 
+> Anyway, the key difference is not really the qemu emulation, but the added
+> unconditional call to genphy_c45_write_eee_adv() in your patch. If you look
+> closely into that function, you may notice that the 'changed' variable is
+> never set to 0.
+> 
+> diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
+> index 3813b86689d0..fee514b96ab1 100644
+> --- a/drivers/net/phy/phy-c45.c
+> +++ b/drivers/net/phy/phy-c45.c
+> @@ -672,7 +672,7 @@ EXPORT_SYMBOL_GPL(genphy_c45_read_mdix);
+>   */
+>  int genphy_c45_write_eee_adv(struct phy_device *phydev, unsigned long *adv)
+>  {
+> -       int val, changed;
+> +       int val, changed = 0;
+> 
+>         if (linkmode_intersects(phydev->supported_eee, PHY_EEE_CAP1_FEATURES)) {
+>                 val = linkmode_to_mii_eee_cap1_t(adv);
+> 
+> fixes the problem, both for cubieboard and xtensa.
 
-FYI, the error/warning still remains.
+Good point! Thx for finding it!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   489fa31ea873282b41046d412ec741f93946fc2d
-commit: 8f0d304d21b351d65e8c434c5399a40231876ba1 drm/amd/display: Do not commit pipe when updating DRR
-date:   2 weeks ago
-config: arm64-randconfig-r002-20230224 (https://download.01.org/0day-ci/archive/20230225/202302251350.F2SLjQWI-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f0d304d21b351d65e8c434c5399a40231876ba1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8f0d304d21b351d65e8c434c5399a40231876ba1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302251350.F2SLjQWI-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-     294 | void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/dcn30_fpu.h:29,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:32:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:143:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     143 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:140:22: warning: 'DP_VGA_LVDS_CONVERTER_ID_3' defined but not used [-Wunused-const-variable=]
-     140 | static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] = "dnomlA";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:138:22: warning: 'DP_VGA_LVDS_CONVERTER_ID_2' defined but not used [-Wunused-const-variable=]
-     138 | static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] = "sivarT";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:135:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
-     135 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     133 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     132 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_types.h:36,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:30,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services.h:35,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/reg_helper.h:28,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:26:
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_hdmi_types.h:53:22: warning: 'dp_hdmi_dongle_signature_str' defined but not used [-Wunused-const-variable=]
-      53 | static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/optc3_wait_drr_doublebuffer_pending_clear +294 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c
-
-   293	
- > 294	void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
-   295	{
-   296		struct optc *optc1 = DCN10TG_FROM_TG(optc);
-   297	
-   298		REG_WAIT(OTG_DOUBLE_BUFFER_CONTROL, OTG_DRR_TIMING_DBUF_UPDATE_PENDING, 0, 2, 100000); /* 1 vupdate at 5hz */
-   299	
-
+Do you wont to send the fix against net?
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
