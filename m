@@ -2,167 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210526A261C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 02:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7947C6A2679
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 02:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjBYBJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 20:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S229866AbjBYBVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 20:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjBYBJb (ORCPT
+        with ESMTP id S229698AbjBYBTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 20:09:31 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A930192
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:09:29 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso4584531pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3jQNgmxspEfBmeQNH+ZPGvDx1V4wYSa4DmNt6455Jdw=;
-        b=Pt228mgSte20iA0MsRnaWu+0ibP2IcUQdf1gZzVaT+4P+KeITDZVXeyzwYAJpp8blH
-         yBu9lm0R53H4AeUeuEpPRREhVBXNGFFVzAkUwHZjGQB+MrrYsn4UNhogoL/ZdpoW/bxg
-         4UAWDqSKFAHlb+w/ATfBHHc8SYJp5ErOh5yZsbEoDbcqs40eBQuK85KpqsV8vfdX+y0t
-         cv0jwnprU7vWqOOEQ/ETYhX6ZV3zlIlwramQLBfYZjA7bzZ7yIL/tFAyrJuDPvxrwOYa
-         fy7WY7uHRLhyOW/RIibEkgRVRZllOzO3XPlpU2MV2oykUYmD9Pm55K/o9LchvflGa7Uq
-         jcsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3jQNgmxspEfBmeQNH+ZPGvDx1V4wYSa4DmNt6455Jdw=;
-        b=jyiLeTMv+dEvbZvxv384mjmrYXVhGVyPTQrAGo2mAFqWZ/htJ7aG78ENhLDz82Blgi
-         2rh5XT5vYZ4nNS7s2bIOcMinclWiAV1D8UHtDG2pzjyAPuIEp1Ka2vUlsHHZHyb/zfGA
-         LSdjF7zBdciczUEqkAZTklUwu226YKJDt72PXuuBYHp1JXhO0RTslahuCTS4Uaaqc/GH
-         wTPJJn0mrZ9pyfj2GMYuMoW7gCLXZC+SPqGp8MZc8Ej0joWpGnqeEyi84yeH2ckvdbsI
-         KX55F3OYMjYru88Xon21qAzBRRmEuGghqXdmxUmHPLU/k5wfEZ08TAs8SAQBhVSk7/vh
-         InNg==
-X-Gm-Message-State: AO0yUKW19bP6PViukdPGzBzCT2LkKAGlG3Xu1KTU6poTkIhvLMHu7FO/
-        +x/45yXvmbQ7+XuBO5d9jc9EDg==
-X-Google-Smtp-Source: AK7set9uUvKBjU2onvFrucnnLWXdEOl/7jmN5ocuy7gAmEPQ95OEkcR42Wj3s9YiIWnYf6ZvsmYq9w==
-X-Received: by 2002:a05:6a20:9c:b0:ad:def6:af3 with SMTP id 28-20020a056a20009c00b000addef60af3mr8264378pzg.57.1677287368799;
-        Fri, 24 Feb 2023 17:09:28 -0800 (PST)
-Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
-        by smtp.gmail.com with ESMTPSA id g2-20020a62e302000000b00593e84f2d08sm159873pfh.52.2023.02.24.17.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 17:09:28 -0800 (PST)
-Date:   Sat, 25 Feb 2023 01:09:24 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Chao Gao <chao.gao@intel.com>
-Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
- init_fpstate if fpstate contains the component
-Message-ID: <Y/lfxHXVdqeFadGD@google.com>
-References: <20230221163655.920289-1-mizhang@google.com>
- <20230221163655.920289-2-mizhang@google.com>
- <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
- <87ilfum6xh.ffs@tglx>
- <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
- <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
- <Y/lOlBWTNgROPl0P@google.com>
- <691106c3-b339-578b-6e43-77f737f127f9@intel.com>
+        Fri, 24 Feb 2023 20:19:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A9F30192;
+        Fri, 24 Feb 2023 17:19:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2AFFB81D70;
+        Sat, 25 Feb 2023 01:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D29DC433D2;
+        Sat, 25 Feb 2023 01:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677287950;
+        bh=ggtCBOdroZma1BxMO4zu+ds8Jh2QD1F37oeOd2MCFcc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GGEg1S4inijFQ/Wn94pMABd+G45WjS5aOHod+VYeVhOsuDYs8PVPBF0w99flBYXkT
+         lskaHhZmy0OOYMx5bOnA5Bk0KUcbxl4z/yiP2uWyDy2nv4JpABBaCNk2YJLIK8ouhT
+         60YeEocblefwTms2cXgA87zsyFADhkDWOFntNE7vUMjgdtwQIMnB6KpOr9zG5ETrEu
+         sy6UNc3tra9KPeC41nvU4/MKrn1nXJ52+Uzfr50X55+8l7uyI+3mZZ7AdhPpcGqcAi
+         /uyRHoz8mwwluL9Y/g/3u7BjLNDsV3JHcO1zZxp5r9Nf0osqUywzOscKb6oFTGPNjI
+         fCZdnhPcI9ATg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1C2425C00F6; Fri, 24 Feb 2023 17:19:10 -0800 (PST)
+Date:   Fri, 24 Feb 2023 17:19:10 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-ID: <20230225011910.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+ <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+ <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+ <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
+ <20230225011306.0dd47e760f502b6787096bf7@kernel.org>
+ <20230224163307.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230225095811.926a8ebaee4ca2d1fb9d9e45@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <691106c3-b339-578b-6e43-77f737f127f9@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230225095811.926a8ebaee4ca2d1fb9d9e45@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023, Chang S. Bae wrote:
-> On 2/24/2023 3:56 PM, Mingwei Zhang wrote:
-> > On Wed, Feb 22, 2023, Chang S. Bae wrote:
+On Sat, Feb 25, 2023 at 09:58:11AM +0900, Masami Hiramatsu wrote:
+> On Fri, 24 Feb 2023 08:33:07 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> 
+> > On Sat, Feb 25, 2023 at 01:13:06AM +0900, Masami Hiramatsu wrote:
+> > > Hi Geert,
 > > > 
-> > >          /*
-> > > -        * The ptrace buffer is in non-compacted XSAVE format.  In
-> > > -        * non-compacted format disabled features still occupy state space,
-> > > -        * but there is no state to copy from in the compacted
-> > > -        * init_fpstate. The gap tracking will zero these states.
-> > > +        * Indicate which states to copy from fpstate. When not present in
-> > > +        * fpstate, those extended states are either initialized or
-> > > +        * disabled. They are also known to have an all zeros init state.
-> > > +        * Thus, remove them from 'mask' to zero those features in the user
-> > > +        * buffer instead of retrieving them from init_fpstate.
-> > >           */
-> > > -       mask = fpstate->user_xfeatures;
+> > > On Fri, 24 Feb 2023 09:31:50 +0100
+> > > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > 
+> > > > Hi Paul,
+> > > > 
+> > > > On Sat, Jan 7, 2023 at 5:33 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > > > (or at least recommend to enable this)
+> > > > >
+> > > > > Like this?
+> > > > >
+> > > > >                                                         Thanx, Paul
+> > > > >
+> > > > > ------------------------------------------------------------------------
+> > > > >
+> > > > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > > >
+> > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > > >
+> > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > > > >     will normally be to unconditionally provide the specified kernel-boot
+> > > > >     arguments to the kernel, as opposed to requiring a separately provided
+> > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > > > >
+> > > > >     The old semantics may be obtained by manually overriding this default.
+> > > > >
+> > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > >
+> > > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > > > > --- a/init/Kconfig
+> > > > > +++ b/init/Kconfig
+> > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> > > > >  config BOOT_CONFIG_FORCE
+> > > > >         bool "Force unconditional bootconfig processing"
+> > > > >         depends on BOOT_CONFIG
+> > > > > +       default y if BOOT_CONFIG_EMBED
+> > > > >         help
+> > > > >           With this Kconfig option set, BOOT_CONFIG processing is carried
+> > > > >           out even when the "bootconfig" kernel-boot parameter is omitted.
+> > > > 
+> > > > Thanks for your patch, which is now commit 6ded8a28ed80e4cc
+> > > > ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED").
+> > > > 
+> > > > After this change, an all{mod,yes}config kernel has:
+> > > > 
+> > > >     CONFIG_BOOT_CONFIG_FORCE=y
+> > > >     CONFIG_BOOT_CONFIG_EMBED=y
+> > > >     CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> > > > 
+> > > > Will this actually work? I haven't tried booting such a kernel yet.
+> > > 
+> > > Yeah, good question. It is same as when you boot the kernel with 'bootconfig'
+> > > but do not add the bootconfig file to initrd. You may see below message
+> > > on boot log, but kernel boots normally. :)
+> > > 
+> > >  'bootconfig' found on command line, but no bootconfig found
+> > > 
+> > > (Maybe it is better to fix the message, because if BOOT_CONFIG_FORCE=y, this
+> > > will be shown without 'bootconfig' on command line.)
 > > 
-> > Do we need to change this line and the comments? I don't see any of
-> > these was relevant to this issue. The original code semantic is to
-> > traverse all user_xfeatures, if it is available in fpstate, copy it from
-> > there; otherwise, copy it from init_fpstate. We do not assume the
-> > component in init_fpstate (but not in fpstate) are all zeros, do we? If
-> > it is safe to assume that, then it might be ok. But at least in this
-> > patch, I want to keep the original semantics as is without the
-> > assumption.
+> > I just tried it again, and for me it just silently ignores the bootconfig
+> > setup.  Which is what I recall happening when I tried it when creating
+> > the patch.
+> > 
+> > Here is the .config file pieces of interest:
+> > 
+> > CONFIG_BOOT_CONFIG=y
+> > CONFIG_BOOT_CONFIG_FORCE=y
+> > CONFIG_BOOT_CONFIG_EMBED=y
+> > CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> > 
+> > Anyone else seeing something different?
 > 
-> Here it has [1]:
+> Hmm, from the code, I think you'll see that message in early console log.
 > 
-> 	 *
-> 	 * XSAVE could be used, but that would require to reshuffle the
-> 	 * data when XSAVEC/S is available because XSAVEC/S uses xstate
-> 	 * compaction. But doing so is a pointless exercise because most
-> 	 * components have an all zeros init state except for the legacy
-> 	 * ones (FP and SSE). Those can be saved with FXSAVE into the
-> 	 * legacy area. Adding new features requires to ensure that init
-> 	 * state is all zeroes or if not to add the necessary handling
-> 	 * here.
-> 	 */
-> 	fxsave(&init_fpstate.regs.fxsave);
+> In init/main.c:
+> 
+> ----
+> #ifdef CONFIG_BOOT_CONFIG
+> /* Is bootconfig on command line? */
+> static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
+> static size_t initargs_offs;
+> #else
+> ----
+> And
+> ----
+> static void __init setup_boot_config(void)
+> {
+> ...
+>         strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+>         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+>                          bootconfig_params);
+> 
+>         if (IS_ERR(err) || !bootconfig_found)
+>                 return;
+> 
+>         /* parse_args() stops at the next param of '--' and returns an address */
+>         if (err)
+>                 initargs_offs = err - tmp_cmdline;
+> 
+>         if (!data) {
+>                 pr_err("'bootconfig' found on command line, but no bootconfig found\n");
+>                 return;
+>         }
+> ----
+> 
+> Thus, if CONFIG_BOOT_CONFIG_FORCE=y, the process passes the below check
+> 
+>         if (IS_ERR(err) || !bootconfig_found)
+>                 return;
+> 
+> But since we have an empty 'data', the error should be printed.
 
-ah, I see.
-> 
-> Thus, init_fpstate has zeros for those extended states. Then, copying from
-> init_fpstate is the same as membuf_zero() by the gap tracking. But, we have
-> two ways to do the same thing here.
-> 
-> So I think it works that simply copying the state from fpstate only for
-> those present there, then letting the gap tracking zero out for the rest of
-> the userspace buffer for features that are either disabled or initialized.
-> 
-> Then, we can remove accessing init_fpstate in the copy loop and which is the
-> source of the problem. So I think this line change is relevant and also
-> makes the code simple.
-> 
-> I guess I'm fine if you don't want to do this. Then, let me follow up with
-> something like this at first. Something like yours could be a fallback
-> option for other good reasons, otherwise.
+And you are quite right, the runs without data files did get me this:
 
-hmm. I see. But this is still because of the software implementation.
-What if there is a new hardware component that requires a non-zero init
-state.
+'bootconfig' found on command line, but no bootconfig found
 
-For instance, in the past, we had PKRU component, whose init value is
-0x555...54. Of course, that is a bad example because now we kick it out
-of the XSAVE/XRSTOR and special handling that, but there is no guarantee
-that in the future we will never need a non-zero init state.
+Please accept my apologies for my confusion.
 
-So, I will send out my fix and let you, Thomas and potentially other
-folks to decide what is the best option. Overall, I get your point.
+							Thanx, Paul
 
-Thanks
--Mingwei
->
-> Thanks,
-> Chang
+> Thank you,
 > 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
+> > 
+> > 							Thanx, Paul
+> > 
+> > > Thank you!
+> > > 
+> > > > 
+> > > > Gr{oetje,eeting}s,
+> > > > 
+> > > >                         Geert
+> > > > 
+> > > > -- 
+> > > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > > > 
+> > > > In personal conversations with technical people, I call myself a hacker. But
+> > > > when I'm talking to journalists I just say "programmer" or something like that.
+> > > >                                 -- Linus Torvalds
+> > > 
+> > > 
+> > > -- 
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
 > 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
