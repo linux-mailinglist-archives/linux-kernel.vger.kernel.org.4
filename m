@@ -2,121 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F736A25F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFF86A25F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjBYApj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 19:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S229642AbjBYArp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 19:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjBYAph (ORCPT
+        with ESMTP id S229452AbjBYArn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:45:37 -0500
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2109.outbound.protection.outlook.com [40.107.10.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6411B2FB;
-        Fri, 24 Feb 2023 16:45:36 -0800 (PST)
+        Fri, 24 Feb 2023 19:47:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32F6C8F9;
+        Fri, 24 Feb 2023 16:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677286062; x=1708822062;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=werNeX47U6f+Uoh2po3o5Bp9PbPoyBOmx+X1r7hHkas=;
+  b=g+Qp+dwtSI6upm4AUWmHonDgLYIE/jUblYs9rdtqlUxEw9ajFqGxUji5
+   bs4FTIJJ8BH2KDHjlyaujpEFdjTVdU2IKUCFcK3JlVgrvX/Je1hs5dskq
+   4SDjJPgIJ0GODe94jmawgq5pohJ89lrgDbZeQvjteFUYBqwBvEXGXE1H8
+   MI2lswK9KeYOLDrqsH2QbMHwQ7EqUU8z3HnFfpsBp/52kdeHuS4LYNZfc
+   cH0uWTF2fqOmQE9Bg/Z2Jt2MND4EHllyTJKla/IogGXHBkKZeQjRQE95I
+   bF4bpQLBm6DwmzYTKVr/YryglZr+TkSLO6058DI7rb3+nN6/009UqrECG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314001449"
+X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
+   d="scan'208";a="314001449"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 16:47:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="703360145"
+X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
+   d="scan'208";a="703360145"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga008.jf.intel.com with ESMTP; 24 Feb 2023 16:47:41 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 24 Feb 2023 16:47:41 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 24 Feb 2023 16:47:41 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 24 Feb 2023 16:47:40 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gJWCl10rT82yDpXsscbI369N9djuyOpx1NnsHBdBEtzHRZbpRF6PEBRH65yIDpp5jkqg55OKvGD1SKUeKWWXh6Yr473Gi5UmsR+2m3NJYkEv/3X/tt7xvz3kKq78YLFM6wI1inc92AIf1zxnopKwsPAakYLUnGjLg+ySxh1VTjpvAMJyUIY415ysjv1lKUvgwhVg1/n8oFu1VwjHTsza5UoHeIv09XIDJL0R4sUZVi258kRGl8hUZLc2wb3fB5Manqjduc2oBY7g4P3iZ/BgYoLKm2RTB/SLP7+SFsU9IOgJuhiTZkDcy21F1loTgBn5mKkactx1w0aZETnj1Rh4Wg==
+ b=EvuxHLzhCX3hkgKjBsTc8Wglv751QMZ40iVcShavvcgwlTsMMrxJthKSgab8gnyd/PdMEGhibcPRNjd9vL9UvbGwDg/MWBXZAX19b+KjtujaAZR3UEheijj+bRQwhyZDD9uND7Com3XTwX8Uy8AdLjUIhUPFscRSm6PKL3uwTTYLxaxTC5DnhitmxIPmQrQxDMpdHCNedMjK1mIJQg+vv86gmIBOp6tPJPpB7AvAon8bnA81oVe3ptGqK0JGmu9i2tt+v0hPw6TRZvE0QpeHncQHo3QU8KIBJPUcZAuD6I2hwdPQRnQ1eL6H8wJTMpwn85cDB+XUUtPNWxShUO955w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LmyYIKhTAXVLLs3EmuraMYrCrqqqRD/5BKRIruExsUs=;
- b=Jndr5y2RefPbSONl29em/WKZuG4te8YfncpbDgBTkjXlBwmcKOJhLqKTf+ekmWpTMEYLO88FafRYu6DtzqSCwSUZEwqjd4UhxwYR6YPuyzTQkBV5xYlfFlO3VIcIS9UFpG9Qkv0u0X6AIVYZQWVSwHlNASOQ9l2CWAf5AOTSWHikgNgNhQHVVunnS15ad8pKmgECvs/x+svOpnBuzdE/zfztx2MSghhq8UbLuabwUTK3rO6SSxs7tao+O942/WiRrBzB6c7/dV0iCertj4N6vWbJ2Hg7f89hMg273IQ/ZRkJ7P89w3lw7FTbw2XX8hK3wyARrbjn2u6uFsYIIgudQA==
+ bh=rOZ9x4ZNWU5zMbMuqUFa7Bwf2/Bjs43b75TxsbKkfHA=;
+ b=kwhRDvNQGroTr3UYqdKlFS9JUmWFTvtrr4tJfv4Zl2Blm0EAgbZ6d1d7ZeIhU63wlVgkN8f8bIvQERGp1CO5IQQ+LJ/uQGJk2soFL1gBAgp4N/qMfeOwQuCHz4ClXFEWxK0/BoudRudAjp1fnwmDQhB0QKR0fzdq+5RVv9rImT6TUuz+qWdgisb5KXIsAWf2R8E/nw1rn8We8lMhRf5ksVlloAOXwLYC2S5P0JEKiDe/Sr1MrNBH3z66Kxgv7+xyIbs7NUvDq605W8TCcoSa1oENPyX0pu1PI6S+BarkH+KbP6YUWR3GlzNaq5OKoVOeum3hMz51UdczuotnCTfu9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LmyYIKhTAXVLLs3EmuraMYrCrqqqRD/5BKRIruExsUs=;
- b=uCUXKO4sIDrep1J+jZ0h/shMzyY2vgR0IhGNYKXjtlYamK/HiaR/H9ZxLoYBT2ynOg09WY4UYSIA5eg4ePZsqyMqHIZdKYSkamGsL0jWNlLxP3OaQnLWN3KalNJqNieTugeODrsIv743fuJGANwCeBDvNoWfD/g367wlEcJyn9s=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO4P265MB6617.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2f9::13) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by DS0PR11MB7736.namprd11.prod.outlook.com (2603:10b6:8:f1::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Sat, 25 Feb
- 2023 00:45:34 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6134.021; Sat, 25 Feb 2023
- 00:45:33 +0000
-Date:   Sat, 25 Feb 2023 00:45:32 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH] rust: Enable the new_uninit feature for kernel and
- driver crates
-Message-ID: <20230225004532.5f1bf427.gary@garyguo.net>
-In-Reply-To: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net>
-References: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Sat, 25 Feb
+ 2023 00:47:37 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::f8d2:a65:2549:e36e]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::f8d2:a65:2549:e36e%3]) with mapi id 15.20.6134.025; Sat, 25 Feb 2023
+ 00:47:36 +0000
+Message-ID: <691106c3-b339-578b-6e43-77f737f127f9@intel.com>
+Date:   Fri, 24 Feb 2023 16:47:33 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
+ init_fpstate if fpstate contains the component
+To:     Mingwei Zhang <mizhang@google.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Chao Gao <chao.gao@intel.com>
+References: <20230221163655.920289-1-mizhang@google.com>
+ <20230221163655.920289-2-mizhang@google.com>
+ <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com> <87ilfum6xh.ffs@tglx>
+ <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
+ <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+ <Y/lOlBWTNgROPl0P@google.com>
+Content-Language: en-US
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+In-Reply-To: <Y/lOlBWTNgROPl0P@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0603.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:295::19) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+X-ClientProxiedBy: BY5PR03CA0022.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::32) To PH0PR11MB4855.namprd11.prod.outlook.com
+ (2603:10b6:510:41::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO4P265MB6617:EE_
-X-MS-Office365-Filtering-Correlation-Id: ec47c509-0aa4-4a62-d9dd-08db16c99a65
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|DS0PR11MB7736:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55c6b0ba-b726-454a-3d98-08db16c9e390
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8ow/8K8GNBG6Qb1LEUuHwKaceIDx3kwdz5SUP5Lwofc2P+fMQ3BaFsKv0wm25Zx/F5+jxlO4mvwDMuXMaWIwv7vr8KUp17yBLPyHE5fiJ5wBI6wBzpDY2kFhjX1D1ruLgJ9nnsyoNielPoxZEDBuy7UEcLwZdVY8c9uzT+LD3BuI4sVVlIAIkGbptnQ94P7ObGsutg+92QA87Y5stBlgqgZed8SxqGSUzPOGx4cDyqIT/InyndquGlx/8dGL8uVbPNgzrVTPXHRAHj6NXaMqbttKAc1uYfEktXeHywzCu+Lg7j4G8uNsNjRmMQrv6jyLfdfe1GfRk6JYOrptrto7atHDyW8f+G745/WoP6TSBVicSNnsHiVYKKNXzQD5tTSOeu2wC322PMy8SeyuMWGt1/G+CpLiv3LwzFp68HqJPBWmYoOcANgupnhb1Jm6DbmJpgNlqOax5K/4MQRQG1BxSz7deIdCJOYCK3IOywK2y3ffODX8rAsLWG/GaaDIVH2FXnz+jRiPijiKlVfexq87ScW6hHf/ndipkUdran8nNTfCBDB90xZFbFzmVkMLZ2Bt82dqnT8jcM7+O+3pT4p/T/RjyJJDvRQ4jGmT5gm0DGw4OsmW/pyCAdcfkuLox3y9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(366004)(39830400003)(376002)(346002)(136003)(396003)(451199018)(26005)(186003)(316002)(41300700001)(66476007)(66556008)(66946007)(8676002)(4326008)(6916009)(54906003)(6486002)(966005)(6512007)(6506007)(1076003)(86362001)(478600001)(2906002)(38100700002)(83380400001)(36756003)(2616005)(8936002)(5660300002)(7416002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: cT/PJOSsuO4bendiTQrMDESdkNuxorJhz1t8pECc0a/AugTEm11qXdeFFBWA5yEZAZBcr/vb92SIZof1SfIEUK6dKOU2st79t552+regHma68MU/hxljtIVwACRShuSSV8r9cUrO5NiiSHZtCyiGDZFD8ep7Zzl4kMxkXk6nod7V65kQMBwY5qQN1QQLeUZRgZb0g0P6tt0BhkSUGIRLwpf59iYwTncMsr4a/OVHWDGdEhDo3YIYdv99d/WjjRsrRgoq+vOlv/uPhgdUQKYAM9sgfBaWEdFXB3/neKup/u78gmSaYmrT2lPriYj8Z5kbBKg9C8+GocuhWwvce/DKRQHoox6YNHeD1dcczzQXvA+UD1DUxDKBkoioiXilcdmQaY0WbZBK+NKilCZ++vwO0zyAKnuLwxY4v+6UzixQMusJymx88mogkbuvfkAsZP3dHYwN6IvE9gXfP4iHF7OmKge7UBQrwkAf19LSZx+vf+zaGjtwDmjMTxuNWkbHxAgbPAPuoQhnaKLKVQESeU2Lep/CB8BCwzx9yqfbzvvWna+JORF7vxi6S/+QpXBzrRw7ft9jOLV3+Rhu6/4prmBVU6E8Xo2zPM1aYEvr2941iEL+JAc7chdDsRTBbnXPdFuotYqCZh9kadD1819Bx+QuPK8Z10yqlbQxLESYRDkjY7pkV1J5XDhRXfIuw1SAPxYXfCxSFN55llnxN39T+rnYsTxjM/6BJx//K8Bk5J0mTTY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199018)(8936002)(316002)(53546011)(107886003)(6666004)(31696002)(41300700001)(8676002)(186003)(6916009)(4326008)(54906003)(66476007)(26005)(66946007)(66556008)(7416002)(2616005)(5660300002)(86362001)(31686004)(966005)(6486002)(478600001)(6506007)(6512007)(2906002)(36756003)(38100700002)(83380400001)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OuqUoHe8xD12k08ks7oWhRDJDVOdXp5zz7E7gQgMabA7y4ofY4shC6Gp2uHf?=
- =?us-ascii?Q?Fi/8S6//kM6rgC/Tuw9y89DyIUSGOD/VunhPaeGA/cPqq+0/3K/0Mf6n9VKO?=
- =?us-ascii?Q?U4XmrfmFdmzp8ffTRzo+qip42kSRj1tra1xfpePAA1a2kc4OMhWFeBgfWLbv?=
- =?us-ascii?Q?EXwKUwYxcRP+WM5gpiOT+KKXXomjCyPJcLv4W5y/7lKCfwjHORcL8Ox7Ybwm?=
- =?us-ascii?Q?sZAx94HyCBimGASqVBvKKx6KNikPd7C5eWQAN/CEekSZvKft0IvHsA7OQMXR?=
- =?us-ascii?Q?TjanVfSc+I2IlJzDSfzLVUs6IUbEA2ed4274EKUjSohzCwKqwK/BWNCvPpPj?=
- =?us-ascii?Q?i8g1ED60xntEj4va0kT0+/wYjr6bEK7KhhbkNeOCUI+/BPYoMJP2Xor1Jx3F?=
- =?us-ascii?Q?Aoh5kmIjiUpgJ7fZrDN+drSocsUoKQIMOySUE8O5OjM6GINyV6JsstAZ1BoL?=
- =?us-ascii?Q?xgH5kn+TMXKOYTuN+/EdA2Q+IPMdfkNBKGBZMipV5umuXfdJ2VKIi4ZXxzFB?=
- =?us-ascii?Q?fA27nzkX1s7jKHM5J79JVcGdrhqmrT9D5+0Fuv6mo0fhzKnn2RUcWriky2kk?=
- =?us-ascii?Q?WnpXlmk5Iqh5ZXerWvBI3tcG4aOgFoB2h3qfNcTJaQ2KVjQrOS3cNvtMbEUV?=
- =?us-ascii?Q?GfbUsVzI1kG4zY7XTbIOTLPQe7FnFcpH805rjo3ueNaQKufA92R/DnJ4fwvJ?=
- =?us-ascii?Q?50yo6ql8xJuS8y+/02gxmnz5DtltdgLEDwaMdov5IaA41Dj1rRd89ASKoCk9?=
- =?us-ascii?Q?Bn9J3cfLKqutN2iFlYH+osHNv8d2dBpmJzGQRcQwpozKS9SXKZbLBoCxrl/2?=
- =?us-ascii?Q?1q2kooM5XVXfNAi8TIoiw8x2RD0G5n1DV1kd9pJIZ74zpWUbh8Hqqy2Rvqwb?=
- =?us-ascii?Q?a26WG08lHHakS9CRNyaH5lF8tP4TLtH+O2+jQVU0YJQZ64p105WKwTjT28dC?=
- =?us-ascii?Q?5b7wBNducTe3dt2DbVkZcHf6Ds8nXrXTtUx2DhCoHkne6RyDkGJTu62IH3tF?=
- =?us-ascii?Q?MaDfyCFm8a4fLASjD3VGA0d5faeLehXkDFD+45Voa//mwvI8NiuR6MqB3+Bt?=
- =?us-ascii?Q?wzjnmsA+IDU9lDd4q0fZayW/BF4+6ePuvN0msqP/AHi8tAfRDD904LNa+X3P?=
- =?us-ascii?Q?22Xpm2ZR92STzPbsBgVGlRkyVztWYigZv+Od0olPtdn7DEawzLbGdlGOV51U?=
- =?us-ascii?Q?6/Wq6rbuyn/5bqRQFRtcJ6myeQJv/HbspXLCqjITifa0VqzceJgOpoIqZ7/u?=
- =?us-ascii?Q?pLQaGIcrb1stnq8FFYngz93aZJXsyCJH1g/V+aAbiBNbf1n86ANj372u4/tf?=
- =?us-ascii?Q?h5S6t1+6zImb4yFvQ06DrrxURdqE3wUptzbO4AksQ8Qh8OmNAI79LMHurUkA?=
- =?us-ascii?Q?V1s0i0wNwQTk+UyT82thGlkp6tUs51Ar+Qai5nwmY3it9GfB73HC7h7WlIvp?=
- =?us-ascii?Q?N8zAvhjf/B2Su2DSraZtwvy0T64Ca5KGzX0U51I/GRDfG949PudaMvi7C3oL?=
- =?us-ascii?Q?M/rJ9HCnu82cfwTaXlQjdo641D/isqzK/nUaQcRpl6m6peFKEl5BNaKjqPhB?=
- =?us-ascii?Q?elRPsKbyP7ZYyW9zT0ZfXnw+vCRfeMANP1CMS+qU?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec47c509-0aa4-4a62-d9dd-08db16c99a65
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dU9VUzB6UkRYcmxNbVBsbkNDWk1EZkIrQjFUSFBtaGZZZnd4WmlBeWtGM2FS?=
+ =?utf-8?B?eHUvN3lpZjZTckJuUFVocHRlWk05NnVmcHdXNlN1WHZadjV4R3dXanU5RU95?=
+ =?utf-8?B?eitQcTE1b2UxcXQ2b3lwT2FVdmN0TjZFODJhY2xsdHhXYmFyaHNXN0YrRTU0?=
+ =?utf-8?B?RSttZDRNYzMzbXgxcmFSZXN3aFBPYzRCS2hVVERvSkZsUlkxSEpzb2x1TXZV?=
+ =?utf-8?B?cEhmUDhMdEg1ZGZtQ0xRbGJOZUZzeUR5SU16OHpaOHdSdlprV2ZKUUVYZVRp?=
+ =?utf-8?B?Z21yZXBSSVByM2dzRjQrd2ZZOHVIMjNuTktqbFJNejZPbHdMbFFNMWpTdEFm?=
+ =?utf-8?B?TVQwa3FkTWhrOXhVaGxpY2czcDJjaUl3eDhqaGo3U3VINnpmU0RKbHAwYzdG?=
+ =?utf-8?B?SEhPK0dkZHlzdEFadjNyL3p6ck4zVzFBdnRMUjhYc0FSTHNScjF2OU9HbFAz?=
+ =?utf-8?B?QXFpaU9NRmViamxvd2ZmVFBxRkNjQmVnR0hKazJCR3MzUlZVN2JTelEvRHBo?=
+ =?utf-8?B?UW92ZEtGbkdaSlBIOTdFdmZEZzdaQkdkYmRzd3pCRDFUSUZML0JkOWJZRGk5?=
+ =?utf-8?B?MVR6M1VIUGdlQW1TaE4vMHgyVUhFRW9pY0FoVmJhcU5Fdjh1aVJLN2UwMzdi?=
+ =?utf-8?B?ZHlHWllTcXpOY2Q3ZWNZVDZvaDRuT0RTbGt2QXZxNXUzVyttUTJ2TGFUdjFm?=
+ =?utf-8?B?YVloYlpUUDBER2FVdm9Md3FvSFZkNU9kQ1FRK0wrcGxoSHp6dHJaZExYTkM1?=
+ =?utf-8?B?bTBWQ2srQ2p0Umk3eWFsVlFlTWV1MXhNSmQrVEVqMlowNU85RGVjZGdxVVFK?=
+ =?utf-8?B?enRsM3JhQVlnaEUvWUhqYzFDMXV4TWhrZjltU2hTbzNTek9hRkZIL01xWkdj?=
+ =?utf-8?B?c2ZPQno2UElYa2FiWHNPMGloR0NOSHNLRjlZWDRPc2QwWVBSZjJNcUorc2Vy?=
+ =?utf-8?B?cFNreVZ1NVJpaFEyTzEwWEQ0ME1DdTdSeFM0TjNIanFuNnBQTWFTRUdBcFli?=
+ =?utf-8?B?b3ZYSjI1WkN6UWRmT3NvSnBlMzRWWGdITXB1cG9EeVl4dUJrK0QrdndkaFRD?=
+ =?utf-8?B?ZWxnMlJRdkJEUXd1bEtYVXJKMHAvZ3pPQ0RLbWNUTmRCdlVjMmlhWWNTOFV1?=
+ =?utf-8?B?aUNnRU14aDcyZG9UeC9YVnlrb0c2S2xJSHNtY0I0YVQ5UTVxTVZhbXI4VElJ?=
+ =?utf-8?B?VGZyTVlzWmsray9IMi9FaWNiTllSNkFjZGVrQ0FoWHR4TytOOFIyeUduc01R?=
+ =?utf-8?B?cmpSSFRKY1RKcm5QZU1YNDN6eWZkalNQOUlNVTlTRHpCNlI0a2ZzNUVyR0NK?=
+ =?utf-8?B?UUZJNGxmWnF2L0NSZTJWY0ptT2VkbzBOSG9KTVFKRThjUDdSY3NRSjRXRUJI?=
+ =?utf-8?B?S1YzUitGY0tkQzBGc2JBS0RldmJnWlBmVmxrZkovbXFqYnUwVTVqQ2laTUNj?=
+ =?utf-8?B?QXZtRG90K1JtV1huNUJoQjdDeHVJWGM1TVJPZGdWblllK09LQ0paSEVIbzFx?=
+ =?utf-8?B?UEJKV3dkSXhHYzE1eldlWmQrRlBES3U3V1NLdktZY3dYN3BkUGRyb0tKeE10?=
+ =?utf-8?B?eFNueDRzQi80TTg4TVZJanJCVDNyRVRNQm9SdTg1ZmNUbVAzczdsZkx2MzlW?=
+ =?utf-8?B?czhmTkhmbzZ3ZitsVDllUzMzZGp6ckNDQjJHcC9kV09MeFNGaHNPOHcxT1J1?=
+ =?utf-8?B?QUxyS1h3UURua001TDl5aWJmeU94RktGU1JrQmNxU09jZVZDek5sNWdtVU4r?=
+ =?utf-8?B?WnFBeW8rMFlwR2VwVnVNTVJncDVSbEc5RFFEVnBqbU9QQk1tL2xMcUZyWDhx?=
+ =?utf-8?B?SVlaMGt2WDJjbVl2Y3c5OCtYa1dsaXRINEJBNW5HZUx3NnQ0Tk5GcFZJZFdV?=
+ =?utf-8?B?SUFXU1FGMk43Q3kvVVN0T2h4ckdmSXJLY3drdUtCUk5zVGFBVWpPNzRnRVgy?=
+ =?utf-8?B?SVZiT1VvQnJyUGVzVGRsSEdUOVQwUkh0SDRiVEY1dWd6L21IRzBtempJTlQv?=
+ =?utf-8?B?WSs4U3IzcXBTZUtZWUxRTlhsWE1UcHFTZUZnTklNbldKeDk1VEVjQ01tZExv?=
+ =?utf-8?B?R2hINGR2cTVOOEdocHMrb3ZsSlVGQTh1TlVvUkxHVDdMWjE0bFRBanRIVUJp?=
+ =?utf-8?B?YzFuU0pXZG1ybjR2VGVYWTAramh6Si8vbjNTR1l6STJkd2tSS3pwQm1DYWVB?=
+ =?utf-8?B?OHc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55c6b0ba-b726-454a-3d98-08db16c9e390
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:45:33.8753
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:47:36.7206
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MVP1vFrVHN8IhiCjDgjjhurUZDtMJD9MKo9utiUZ7MsbW8G5gfyN42L7sGnC902Q66BH+AStP76iu3FvsL8nQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P265MB6617
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4SQlvG23WOYEtzkkTvmHp+svqQpCX9MRMTNrt+sYzYaMMF9EUJp/XB3uHSE35Dd+Gac/DXFjsavAwi5mN+WXVzvH+lX9rLeei8feQubjGy0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7736
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,64 +171,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 17:09:47 +0900
-Asahi Lina <lina@asahilina.net> wrote:
+On 2/24/2023 3:56 PM, Mingwei Zhang wrote:
+> On Wed, Feb 22, 2023, Chang S. Bae wrote:
+>>
+>>          /*
+>> -        * The ptrace buffer is in non-compacted XSAVE format.  In
+>> -        * non-compacted format disabled features still occupy state space,
+>> -        * but there is no state to copy from in the compacted
+>> -        * init_fpstate. The gap tracking will zero these states.
+>> +        * Indicate which states to copy from fpstate. When not present in
+>> +        * fpstate, those extended states are either initialized or
+>> +        * disabled. They are also known to have an all zeros init state.
+>> +        * Thus, remove them from 'mask' to zero those features in the user
+>> +        * buffer instead of retrieving them from init_fpstate.
+>>           */
+>> -       mask = fpstate->user_xfeatures;
+> 
+> Do we need to change this line and the comments? I don't see any of
+> these was relevant to this issue. The original code semantic is to
+> traverse all user_xfeatures, if it is available in fpstate, copy it from
+> there; otherwise, copy it from init_fpstate. We do not assume the
+> component in init_fpstate (but not in fpstate) are all zeros, do we? If
+> it is safe to assume that, then it might be ok. But at least in this
+> patch, I want to keep the original semantics as is without the
+> assumption.
 
-> The unstable new_uninit feature enables various library APIs to create
-> uninitialized containers, such as `Box::assume_init()`. This is
-> necessary to build abstractions that directly initialize memory at the
-> target location, instead of doing copies through the stack.
-> 
-> Will be used by the DRM scheduler abstraction in the kernel crate, and
-> by field-wise initialization (e.g. using `place!()` or a future
-> replacement macro which may itself live in `kernel`) in driver crates.
-> 
-> See [1] [2] [3] for background information.
-> 
-> [1] https://github.com/Rust-for-Linux/linux/issues/879
-> [2] https://github.com/Rust-for-Linux/linux/issues/2
-> [3] https://github.com/rust-lang/rust/issues/63291
-> 
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
+Here it has [1]:
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+	 *
+	 * XSAVE could be used, but that would require to reshuffle the
+	 * data when XSAVEC/S is available because XSAVEC/S uses xstate
+	 * compaction. But doing so is a pointless exercise because most
+	 * components have an all zeros init state except for the legacy
+	 * ones (FP and SSE). Those can be saved with FXSAVE into the
+	 * legacy area. Adding new features requires to ensure that init
+	 * state is all zeroes or if not to add the necessary handling
+	 * here.
+	 */
+	fxsave(&init_fpstate.regs.fxsave);
 
-> ---
->  rust/kernel/lib.rs     | 1 +
->  scripts/Makefile.build | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 223564f9f0cc..1118cd3e0b5f 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -17,6 +17,7 @@
->  #![feature(core_ffi_c)]
->  #![feature(dispatch_from_dyn)]
->  #![feature(generic_associated_types)]
-> +#![feature(new_uninit)]
->  #![feature(receiver_trait)]
->  #![feature(unsize)]
->  
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index a0d5c6cca76d..0f637e1ca8dc 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
->  # Compile Rust sources (.rs)
->  # ---------------------------------------------------------------------------
->  
-> -rust_allowed_features := core_ffi_c
-> +rust_allowed_features := core_ffi_c,new_uninit
->  
->  rust_common_cmd = \
->  	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
-> 
-> ---
-> base-commit: 83f978b63fa7ad474ca22d7e2772c5988101c9bd
-> change-id: 20230224-rust-new_uninit-a575d34987c3
-> 
-> Thank you,
-> ~~ Lina
-> 
+Thus, init_fpstate has zeros for those extended states. Then, copying 
+from init_fpstate is the same as membuf_zero() by the gap tracking. But, 
+we have two ways to do the same thing here.
+
+So I think it works that simply copying the state from fpstate only for 
+those present there, then letting the gap tracking zero out for the rest 
+of the userspace buffer for features that are either disabled or 
+initialized.
+
+Then, we can remove accessing init_fpstate in the copy loop and which is 
+the source of the problem. So I think this line change is relevant and 
+also makes the code simple.
+
+I guess I'm fine if you don't want to do this. Then, let me follow up 
+with something like this at first. Something like yours could be a 
+fallback option for other good reasons, otherwise.
+
+Thanks,
+Chang
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
+
 
