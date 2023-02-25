@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9076A2B2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 18:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EB76A2B36
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjBYRz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 12:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S229540AbjBYSDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 13:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYRzZ (ORCPT
+        with ESMTP id S229445AbjBYSDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 12:55:25 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7751284E;
-        Sat, 25 Feb 2023 09:55:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677347718; i=deller@gmx.de;
-        bh=UWr2w1/TKn0HiuzGMzpnxcufJtoJoLzVdfg6XeXTOXY=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=oUwIW9HbYtXHNpaq4ATuospNcULVau1Pt9T/DTAbDHSRPYPlIMdNt+h0qKsISwfxo
-         vQp6i+9b+p1OV9JhUkUJ3mb9Dx+VF3eV23ggGFf+rWMRtFxmRMQtLGiydiZwaqST3H
-         4PaLpBfOA5MHke40jxDl50nSjfxAGX0Qjn9syND2sR2cONrhkQlcPDxVGFJwykMK4D
-         icJwNcNwem9TZ0hvZ4SlEIxWxDfvjcpZv770uLuyKxCMBW/9ris1rlgC1xKXMjILP2
-         hqsE+fMQd0mFzAb+uVoGtFhDHHakVH2+D2/7yFrf4m4jTh7UHvSBchUETSeMeZF4s8
-         9rHGHeoZjs3Cg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.139.251]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0X8u-1obyMr3zzo-00wWJi; Sat, 25
- Feb 2023 18:55:18 +0100
-Message-ID: <4ad0233a-01bf-cf4b-1e3a-0d1cacde2707@gmx.de>
-Date:   Sat, 25 Feb 2023 18:55:17 +0100
+        Sat, 25 Feb 2023 13:03:44 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35E3136DD;
+        Sat, 25 Feb 2023 10:03:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=lCDiPvT3j8u2A6R0sPp3X261HW0Cf+Aq45PS2TyiNhE=; b=2wyCJgIgRiUl9dnGjEo/2WaryM
+        E6DAJf12N9RGO8vPSARGZoDy9ub+l9cXUalpUVbL+k/lqaxuzBPbQIUtqXXsj5+avKl7Yf/Taystk
+        D74GTx8he/u1i9MErynId4Ti0v0Fiq2Q1Sa0vErKM+RP2qcpGrkHaAkp8nqkej/4bv4DWAsxGCSWT
+        8ucgbSp8LNliK8gF4CnoUD1VMwMQ/vfoCQ0MR4Wa0cl0QFOth4WiQWhX/+djLFYsDe9DfKrVGMY0Z
+        UZqmwgUzRO7A8R0qvd+o2kHZliYiQ15IIpABb4x/mbtXyRehZCHIh5lAI/Bdn/9FxV4yL6dZesFP+
+        FJG6gp9w==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVytW-00681H-JX; Sat, 25 Feb 2023 18:03:38 +0000
+Message-ID: <6dd89251-f4d6-8051-8ecf-cdea7d23bc68@infradead.org>
+Date:   Sat, 25 Feb 2023 10:03:38 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] drivers: video: logo: add SPDX comment, remove GPL
- notice in pnmtologo.c
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] tty: serial: fsl_lpuart: select SERIAL_FSL_LPUART for
+ SERIAL_FSL_LPUART_CONSOLE
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nikita Romanyuk <ufh8945@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kelvium@yahoo.com
-References: <20230225071230.11494-1-ufh8945@gmail.com>
- <20230225071230.11494-2-ufh8945@gmail.com>
- <CAMuHMdUNn1Dxmfq+Y-B=CPDepFKZSxn=NTF2nG0BL=WBU-iG9g@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAMuHMdUNn1Dxmfq+Y-B=CPDepFKZSxn=NTF2nG0BL=WBU-iG9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:htIov9ANEKpkLcOwSxeyZ+nvMloeJYSbBEYJca1k5l4VK8x113X
- 2I5pmSxbBM5H1d8hWW12RWkoSZ32oMW5GiXwO/i6v2iIJdCEXEv+jbA6H2YSg5V/nmcNTPi
- J29m3I4bo6lfaX/WRMQMDSjTrYAxePYqdUWY3l9vnWS8NLL8vmsrImt9YQw8DaQAAHCSYij
- 1V/jfYYQ/Cw2JnDyFx0lg==
-UI-OutboundReport: notjunk:1;M01:P0:vAL9zFLoQVA=;kVdn+PYJedox6uLhlk4OGWF4QVP
- Up2ZXsgHXmddbR8UmLG/JZSfMP/9qiPMleXGoIfMcaabbdN0LfCtOqHTF6REU29BrWHhTG7w9
- 4E2NgZCWapNcQLlFLzqO9kW7VK/2pq6S9evbZ1Xlu2CiHmjn2H+uXJm0ZWG5qlnZgClaKzyYn
- I9JQ445jrn0VYVyewdydEZq/vZERdn5ytI3CC/VXxMTP2PkkRAMVhGv9u7Q09Dhktd8ocdCzs
- YTGegBGRtMkHbF1fyKNG2V1C5mmMO8qg1I47UsUE0yroI/WdF0rfV8+IeyXQHXaZOIM0ij1lO
- jXtZfZtVMJL4H1gkYES/i3M9HmNFTkIhLY1eHdPgxPfu1ezdP5xYf2Nr+pYE6XFDZNw8vpTEK
- x6PN12knVpWDOCHlFFZ0l1DFaHoDdfjbJe/1X9BozpgBGMXsKUI9WgyROyOJz8MPkapQCU5FI
- 6HSSZqSVoTKtHoeN1sBhY3tTuLWXqBAvXJ3O5pAKMnPrJky5ymYdhccE3tsbUgb02QcIo2MSi
- /t1q4C10amb4G5P9/YmdqUXO8Ooo6RgjeQAFIhAA3UVDYr58aTSbM9OBWr/7KZJmPgwykQNHM
- HTwAIiMCrAmsdO6XpuJ8moXTnXzZgBheS5dRXAPPeOltvvGnv9OEThmggBvUj5+LS1saxanm1
- kbqPzKnEpFSP8Oe+g1r3vWohRcGnmG5n0HMO3VhKv7hArVI3dYddfbRB+Vvw7g7nktpB6ADA5
- WrpJUkWjo/Mxzlc/F7Ofsb1fvuAuVVY6ataHTDkDOvglJIjrtcYLU/GxpT9VYyoI7bh/SaTPJ
- K1oUMTr13w0e7UjXfpzhgBk3HHPTmThctyuA0e1SsIpBQCXaZ4Huif3o0Ckie7CB5D/WB0xYD
- MIam7Nq57P7T89ZnEdW23ZWM8jF/wgqSSsiBshBJHCcvXi14Ii6dq+zNIToAOYVEkpAQZ3XMz
- uoO/sdS3rm1HUIXpluLrE/qIOlA=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230225173949.651311-1-trix@redhat.com>
+ <0f8a8857-5e18-e49a-0361-197b4bc892ab@infradead.org>
+ <026ee207-3b90-c7ae-a7fd-66a34cd3ee90@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <026ee207-3b90-c7ae-a7fd-66a34cd3ee90@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/23 14:51, Geert Uytterhoeven wrote:
-> On Sat, Feb 25, 2023 at 8:31 AM Nikita Romanyuk <ufh8945@gmail.com> wrot=
-e:
->> Signed-off-by: Nikita Romanyuk <ufh8945@gmail.com>
->
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Both patches applied.
 
-Thanks!
-Helge
+On 2/25/23 09:51, Tom Rix wrote:
+> 
+> On 2/25/23 9:46 AM, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 2/25/23 09:39, Tom Rix wrote:
+>>> A rand config causes this link error
+>>> ld: drivers/tty/serial/earlycon.o: in function `parse_options':
+>>> drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
+>>>
+>>> The rand config has
+>>> CONFIG_SERIAL_CORE=m
+>>> CONFIG_SERIAL_EARLYCON=y
+>>> CONFIG_SERIAL_FSL_LPUART=m
+>>> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+>>>
+>>> SERIAL_FSL_LPUART should have been selected instead of depends on-ed.
+>>>
+>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>> ---
+>>>   drivers/tty/serial/Kconfig | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+>>> index 625358f44419..b24d74d389fc 100644
+>>> --- a/drivers/tty/serial/Kconfig
+>>> +++ b/drivers/tty/serial/Kconfig
+>>> @@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
+>>>     config SERIAL_FSL_LPUART_CONSOLE
+>>>       bool "Console on Freescale lpuart serial port"
+>>> -    depends on SERIAL_FSL_LPUART
+>>> +    select SERIAL_FSL_LPUART
+>> Most other _CONSOLE Kconfig have:
+>>
+>>     depends on SERIAL_FSL_LPUART=y
+> 
+> commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30 removed the =y. so it could be built as a module.
+> 
 
+uh. But it's still a bool, not a tristate. How does that work?
+
+> 
+>>
+>> e.g.
+>>
+>> but I noticed a few others with a similar problem.
+>>
+>>>       select SERIAL_CORE_CONSOLE
+>>>       select SERIAL_EARLYCON
+>>>       help
+> 
+
+-- 
+~Randy
