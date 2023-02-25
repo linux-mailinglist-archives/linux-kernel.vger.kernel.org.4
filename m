@@ -2,71 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2AD6A2B3B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBE26A2B40
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBYSKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 13:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S229485AbjBYSLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 13:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBYSKV (ORCPT
+        with ESMTP id S229492AbjBYSLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 13:10:21 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF06815572;
-        Sat, 25 Feb 2023 10:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677348610; i=deller@gmx.de;
-        bh=8AQPQfQvL5G8QfEl/0wQoBLSYF1PPBCUMr84ExrRXjc=;
-        h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=Rs/zwFqTIQpeJW/174ocjrPK5VhCZbFVtO8gueyaCq23vwb0qqjCJZ5g7nGeY6PLf
-         vSKuKmBJ2jgtMAPJ53vJ5qs38sf6tTXcrdFC38NbiH/7lzWiJ8MwdKbObCIG8a+fsJ
-         19Hx2xW4ozPokmsW35ewlZeP+Eyj/F01JUbxOxiR6iDzdfUy7LCyWKo3USKpo4RZC3
-         x0YtZVNyDNIgPn9JQ3PjDf0mzovBKtjzXIJQnWuA8kfeXQLS1IEDSZl+SWCsFmI9l9
-         /ToTw5wgdsNtsWmc+CmBvOm30Ag5KpECGn78rRBhxBJr2eCGy7hKtirIH9IZJHd2AI
-         3C+tFbY17eZQQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.139.251]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTABT-1p49xF1WSl-00UXkG; Sat, 25
- Feb 2023 19:10:10 +0100
-Message-ID: <97334439-5332-69e5-b36e-9f89e7b511bb@gmx.de>
-Date:   Sat, 25 Feb 2023 19:10:09 +0100
+        Sat, 25 Feb 2023 13:11:39 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A7A168A8;
+        Sat, 25 Feb 2023 10:11:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VkU3wglkazA3WDdsvY+r6GTOXkswm1z2trXm0IechuI=; b=DjStN73s/52C2aKUHJ/N7u+67C
+        xKVsxbGgc73JqCB9UjmsEXo28HLWtkaadn4Qvw3tfQ17fHwFv4xLIaSY4juqo0jfuluJOSt53Nnm0
+        J8miHKoX3rnhGz3CIFW4q/edegpeos3t2+FOnrUohR5FwZmcES4bSpPnvsdPfTmg8vIyGFPAxJ0WL
+        2xtQTXNuwr45ZB2usatus2AtDy+tzz51O8QNmg4FLoCibIJRsy7SLXCoy3hYICxmMM0rpCnf4hXNF
+        toOagD/u7ZgV18tcTWmTxhdx/qim6JhKTXHpKXqQl9N286vfbTxVVsV64HYFhRv988vdiaujpipbm
+        egPcgAcg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pVz1D-00CHC6-39;
+        Sat, 25 Feb 2023 18:11:36 +0000
+Date:   Sat, 25 Feb 2023 18:11:35 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [git pull] vfs.git misc bits
+Message-ID: <Y/pPV0q43R+drVtV@ZenIV>
+References: <Y/gxyQA+yKJECwyp@ZenIV>
+ <CAHk-=wiPHkYmiFY_O=7MK-vbWtLEiRP90ufugj1H1QFeiLPoVw@mail.gmail.com>
+ <Y/mEQUfLqf8m2s/G@ZenIV>
+ <Y/mVP5EsmoCt9NwK@ZenIV>
+ <CAHk-=wgQz8VDDxdaj3rk861Ucjzk72hJoCjZvfaeo8jCyVc_2w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] fbdev: omapfb: cleanup inconsistent indentation
-Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-To:     Lucy Mielke <mielkesteven@icloud.com>, linux-fbdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de
-References: <20230207100630.11644-1-mielkesteven@icloud.com>
- <eb6900d5-148f-85cb-eebc-c20d99802c75@gmx.de>
-In-Reply-To: <eb6900d5-148f-85cb-eebc-c20d99802c75@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:55AUYxC/gCo9Z8HrgVELUyMNGoIXLiZZlRJWj+20rZxhkk6T3Vy
- 8HigZ+zPDnF9ioyGxjtIzeeQ1kaqk2XGJDvgfNafCbWLH9AkwCfvjrs2GIMEEerU7xoYjae
- IATZnpbu77a4L6T3AflJqvA4mEGOWfLu1ejKty/Dc2YqklVqZy7zsrnSV5e2sWoiddXMOR0
- A4St7WcsBA8JCXpHWkTVQ==
-UI-OutboundReport: notjunk:1;M01:P0:0D5CXkyzZSk=;QUZ8EkUZsyoD7rl9N5P+yZOd/7A
- JgWK4OznnIPj3jcQiuvnhmtaEerOFX8FYyUo4MXhTQwZne4dCMAIoJYnLsEF/WFQ/vGATEnPf
- FKUZvsdw/xWSbkr3TbPFyeLY88qbNOrJNUF6RLiUWcKpGG8vRSZps+JWaeTCt45L1eXXidoF5
- gEIs6LXgfjAuwp/PjL610LL1RCU7V9YYvPEZmVXFpMbOCov+6LjuCi1QECxjwTL7AYvXqWD4i
- AQVsznofSvcU1/UIhN2+WBd6benFGrRFrF09ukYl60mNnpnOXVkrdP0BtX2Hj5lejMU7p+4dc
- 2aHnntlKqi+ssyc8XylAgrOHltrdIo4roKS2SEC2uuGKDjKZCr4gY9KwYoulgF1HEdN3UyxMi
- 6wH1m0oLPuweNjOKDyH/7B/UUh95PKIQ0X4YRM8+UIKSGdrYXHDd+irkkEZTEWjb5lmL8+5Yq
- UhJX2EI1NOkZ8z+FFnHeSB1BThQjgzVaHm+L6BOqJZwtv8DY6u8uxXOfZVfi0Xgds1GBfRwiB
- VWN98lw9MhFsPNKq0zV4oG4ZKp6YWzLP4UAVq9YVAdORhhmeQ7AKv4imia2g1jOuFkp7uO/L4
- k2et98kMrtVRubu6KJWF1tCz1LaMqSF4vzfUOoh+A5VP4Z5CN1Cic7ynbf3rSxYN8sazgCUNX
- cwsiHHzyshPTtwIsF5c7o5W3zL7H1HF0kutdcpqiA/9OkEuqO6y5IcZDCmjb3zFjLUI7YQh8D
- Q3hfEwEhbIGebNEMLhwwe0qGAViSUo2l3u5wNbpRnXWyhRUfsa+lPxS0+2aIBB3JGhSeriZsA
- VGEcAuPrwIFNLDP1OT05F/H3U7ZnkDUcbUl/fKd5o7yGAOqkmAOaPl9hCm8T2umGq9dM08/x9
- v3nxVPIqfVRzcMGpKHaUhVVN8LWJZuY/fTJHrR+m4iU08Lp5n/94/x7aJ0HRgtqGQtumy9wTd
- PvQ/hZ/NRH7rrnulQvPTb+dv3SU=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgQz8VDDxdaj3rk861Ucjzk72hJoCjZvfaeo8jCyVc_2w@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,69 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTHVjeSwNCg0KdGhlcmUgd2VyZSBzb21lIG1vcmUgdGhpbmdzIHdyb25nIGluIHlvdXIgcGF0
-Y2g6DQoNCk9uIDIvMjUvMjMgMTg6MjMsIEhlbGdlIERlbGxlciB3cm90ZToNCj4gT24gMi83LzIz
-IDExOjA2LCBMdWN5IE1pZWxrZSB3cm90ZToNCj4+IFRoaXMgY2xlYW5zIHVwIHRoZSBpbmRlbnRh
-dGlvbiBhY2NvcmRpbmcgdG8gdGhlIExpbnV4IGtlcm5lbCBjb2RpbmcNCj4+IHN0eWxlLCBhbmQg
-c2hvdWxkIGZpeCB0aGUgd2FybmluZyBjcmVhdGVkIGJ5IHRoZSBrZXJuZWwgdGVzdCByb2JvdC4N
-Cj4+DQo+PiBGaXhlczogOGIwOGNmMmI2NGY1YTYwNTk0YjA3Nzk1YjJhZDUxOGM2ZDA0NDU2NiAo
-Ik9NQVA6IGFkZCBUSSBPTUFQwqBmcmFtZWJ1ZmZlciBkcml2ZXIiKQ0KDQpQbGVhc2UgdXNlIG9u
-bHkgMTIgY2hhcnMgb2YgdGhlIHNoYTEgaW4gdGhlIEZpeGVzIHRhZy4NCg0KPj4gUmVwb3J0ZWQt
-Ynk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPj4gU2lnbmVkLW9mZi1ieTog
-THVjeSBNaWVsa2UgPG1pZWxrZXN0ZXZlbkBpY2xvdWQuY29tPg0KPj4gLS0tDQo+PiDCoCBkcml2
-ZXJzL3ZpZGVvL2ZiZGV2L29tYXAvb21hcGZiX21haW4uYyB8IDMyICsrKysrKysrKysrKysrKy0t
-LS0tLS0tLS0tDQo+PiDCoCAxIGZpbGUgY2hhbmdlZCwgMTkgaW5zZXJ0aW9ucygrKSwgMTMgZGVs
-ZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvb21hcC9v
-bWFwZmJfbWFpbi5jIGIvZHJpdmVycy92aWRlby9mYmRldi9vbWFwL29tYXBmYl9tYWluLmMNCj4+
-IGluZGV4IDFmM2RmMjA1NWZmMC4uNGI2NzNkYWEzMmNiIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVy
-cy92aWRlby9mYmRldi9vbWFwL29tYXBmYl9tYWluLmMNCj4+ICsrKyBiL2RyaXZlcnMvdmlkZW8v
-ZmJkZXYvb21hcC9vbWFwZmJfbWFpbi5jDQo+PiBAQCAtNzgsNyArNzgsNyBAQCBzdGF0aWMgc3Ry
-dWN0IHBsYXRmb3JtX2RldmljZSBvbWFwZHNzX2RldmljZSA9IHsNCj4+IMKgwqDCoMKgwqAgLm5h
-bWXCoMKgwqDCoMKgwqDCoCA9ICJvbWFwZHNzX2RzcyIsDQo+PiDCoMKgwqDCoMKgIC5pZMKgwqDC
-oMKgwqDCoMKgID0gLTEsDQo+PiDCoMKgwqDCoMKgIC5kZXbCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ID0gew0KPj4gLcKgwqDCoMKgwqDCoMKgIC5yZWxlYXNlID0gb21hcGRzc19yZWxlYXNlLA0KPj4g
-K8KgwqDCoCAucmVsZWFzZcKgwqDCoCA9IG9tYXBkc3NfcmVsZWFzZSw+wqDCoMKgwqDCoMKgIH0s
-DQo+IA0KPiBUaGlzIGlzIHdyb25nLiAicmVsZWFzZSIgYmVsb25ncyBpbnNpZGUgdGhlIC5kZXYN
-Cj4gdmFyaWFibGUsIHNvIHRoZSBwcmV2aW91cyBpbmRlbnRpbmcgaXMgY29ycmVjdC4NCj4gDQo+
-IFRoZSBjaGFuZ2VzIGJlbG93IHNlZW0gY29ycmVjdC4NCj4gDQo+IEhlbGdlDQo+IA0KPj4gwqAg
-fTsNCj4+DQo+PiBAQCAtNTQ0LDE5ICs1NDQsMjUgQEAgc3RhdGljIGludCBzZXRfZmJfdmFyKHN0
-cnVjdCBmYl9pbmZvICpmYmksDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqAgdmFyLT55b2Zmc2V0ID0g
-dmFyLT55cmVzX3ZpcnR1YWwgLSB2YXItPnlyZXM7DQo+Pg0KPj4gwqDCoMKgwqDCoCBpZiAocGxh
-bmUtPmNvbG9yX21vZGUgPT0gT01BUEZCX0NPTE9SX1JHQjQ0NCkgew0KPj4gLcKgwqDCoMKgwqDC
-oMKgIHZhci0+cmVkLm9mZnNldMKgwqDCoMKgwqAgPSA4OyB2YXItPnJlZC5sZW5ndGjCoMKgwqDC
-oCA9IDQ7DQo+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCB2YXItPnJlZC5tc2JfcmlnaHTCoMKgID0gMDsNCj4+IC3CoMKgwqDCoMKgwqDCoCB2YXItPmdy
-ZWVuLm9mZnNldCA9IDQ7IHZhci0+Z3JlZW4ubGVuZ3RoID0gNDsNCj4+IC3CoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZhci0+Z3JlZW4ubXNiX3JpZ2h0ID0g
-MDsNCj4+IC3CoMKgwqDCoMKgwqDCoCB2YXItPmJsdWUub2Zmc2V0wqAgPSAwOyB2YXItPmJsdWUu
-bGVuZ3RowqAgPSA0Ow0KPj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgdmFyLT5ibHVlLm1zYl9yaWdodMKgID0gMDsNCj4+ICvCoMKgwqDCoMKgwqDCoCB2
-YXItPnJlZC5vZmZzZXTCoMKgwqDCoMKgwqDCoCA9IDg7DQo+PiArwqDCoMKgwqDCoMKgwqAgdmFy
-LT5yZWQubGVuZ3RowqDCoMKgwqDCoMKgwqAgPSA0Ow0KDQpBdCB2YXJpb3VzIG9mIHRob3NlIGxp
-bmVzIHlvdSBoYXZlIHRyYWlsaW5nIHdoaXRlc3BhY2VzLg0KDQoNCkkgZml4ZWQgdXAgdGhvc2Ug
-aXNzdWVzLCBkcm9wcGVkIHRoZSBmaXJzdCBwYXJ0IG9mIHlvdXIgcGF0Y2gNCmFuZCBhZGRlZCBp
-dCB0byB0aGUgZmJkZXYgdHJlZS4NCg0KSGVsZ2UNCg0KDQo+PiArwqDCoMKgwqDCoMKgwqAgdmFy
-LT5yZWQubXNiX3JpZ2h0wqDCoMKgID0gMDsNCj4+ICvCoMKgwqDCoMKgwqDCoCB2YXItPmdyZWVu
-Lm9mZnNldMKgwqDCoCA9IDQ7DQo+PiArwqDCoMKgwqDCoMKgwqAgdmFyLT5ncmVlbi5sZW5ndGjC
-oMKgwqAgPSA0Ow0KPj4gK8KgwqDCoMKgwqDCoMKgIHZhci0+Z3JlZW4ubXNiX3JpZ2h0wqDCoMKg
-ID0gMDsNCj4+ICvCoMKgwqDCoMKgwqDCoCB2YXItPmJsdWUub2Zmc2V0wqDCoMKgID0gMDsNCj4+
-ICvCoMKgwqDCoMKgwqDCoCB2YXItPmJsdWUubGVuZ3RowqDCoMKgID0gNDsNCj4+ICvCoMKgwqDC
-oMKgwqDCoCB2YXItPmJsdWUubXNiX3JpZ2h0wqDCoMKgID0gMDsNCj4+IMKgwqDCoMKgwqAgfSBl
-bHNlIHsNCj4+IC3CoMKgwqDCoMKgwqDCoCB2YXItPnJlZC5vZmZzZXTCoMKgwqDCoCA9IDExOyB2
-YXItPnJlZC5sZW5ndGjCoMKgwqDCoCA9IDU7DQo+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB2YXItPnJlZC5tc2JfcmlnaHTCoMKgID0gMDsNCj4+IC3C
-oMKgwqDCoMKgwqDCoCB2YXItPmdyZWVuLm9mZnNldCA9IDU7wqAgdmFyLT5ncmVlbi5sZW5ndGgg
-PSA2Ow0KPj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-dmFyLT5ncmVlbi5tc2JfcmlnaHQgPSAwOw0KPj4gLcKgwqDCoMKgwqDCoMKgIHZhci0+Ymx1ZS5v
-ZmZzZXQgPSAwO8KgIHZhci0+Ymx1ZS5sZW5ndGjCoCA9IDU7DQo+PiAtwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB2YXItPmJsdWUubXNiX3JpZ2h0wqAgPSAw
-Ow0KPj4gK8KgwqDCoMKgwqDCoMKgIHZhci0+cmVkLm9mZnNldMKgwqDCoMKgwqDCoMKgID0gMTE7
-DQo+PiArwqDCoMKgwqDCoMKgwqAgdmFyLT5yZWQubGVuZ3RowqDCoMKgwqDCoMKgwqAgPSA1Ow0K
-Pj4gK8KgwqDCoMKgwqDCoMKgIHZhci0+cmVkLm1zYl9yaWdodMKgwqDCoCA9IDA7DQo+PiArwqDC
-oMKgwqDCoMKgwqAgdmFyLT5ncmVlbi5vZmZzZXTCoMKgwqAgPSA1Ow0KPj4gK8KgwqDCoMKgwqDC
-oMKgIHZhci0+Z3JlZW4ubGVuZ3RowqDCoMKgID0gNjsNCj4+ICvCoMKgwqDCoMKgwqDCoCB2YXIt
-PmdyZWVuLm1zYl9yaWdodMKgwqDCoCA9IDA7DQo+PiArwqDCoMKgwqDCoMKgwqAgdmFyLT5ibHVl
-Lm9mZnNldMKgwqDCoCA9IDA7DQo+PiArwqDCoMKgwqDCoMKgwqAgdmFyLT5ibHVlLmxlbmd0aMKg
-wqDCoCA9IDU7DQo+PiArwqDCoMKgwqDCoMKgwqAgdmFyLT5ibHVlLm1zYl9yaWdodMKgwqDCoCA9
-IDA7DQo+PiDCoMKgwqDCoMKgIH0NCj4+DQo+PiDCoMKgwqDCoMKgIHZhci0+aGVpZ2h0wqDCoMKg
-wqDCoMKgwqAgPSAtMTsNCj4gDQoNCg==
+On Sat, Feb 25, 2023 at 09:04:57AM -0800, Linus Torvalds wrote:
+> On Fri, Feb 24, 2023 at 8:57 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > Let's have it sit around for at least a few days, OK?  I mean, I'm pretty
+> > certain that these are fixes, but they hadn't been in any public tree -
+> > only posted to linux-arch.  At least #fixes gets picked by linux-next...
+> 
+> Ack, sounds good.
+
+... and Intel build-bot had immediately caught a breakage in microblaze.
+Fixed and pushed out; I've checked all architectures affected by
+this series, and that was the only build breakage.  However, I still have
+no way to test it (or anything, for that matter) on microblaze - I've no
+userland images for it.  Status right now:
+
+alpha: bug confirmed, patch fixes it.
+hexagon, m68k, riscv: acked by maintainer (with explicit tested-by for m68k and riscv)
+microblaze, openrisc, nios2: builds, no way for me to test.
+sparc32, sparc64, itanic: builds, preparing to test (itanic - once I resurrect
+the sodding space heater I hadn't tried to boot for a couple of years; no
+idea whether it works).
+parisc: builds, but maintainers say that reproducer doesn't confirm the bug
+in mainline.  I've parisc32 box, will try to resurrect and see what's going
+on.  No way to test parisc64 here - no hardware and qemu/pa-risc doesn't handle
+64bit system emulation.
+
+Incidentally, while digging through the arch code around #PF, something's
+weird on csky.  Not this bug (it's handled correctly there), but...
+looks like vm_get_page_prot(0) returns something that would *not*
+pass pte_present().  Which should make life wonderful for e.g. PROT_READ|PROT_WRITE
+mmap() + memcpy to it + PROT_NONE mprotect() + PROT_READ|PROT_WRITE mprotect().
+
+Unless I'm seriously misunderstanding something, we have 3 mutually exclusive
+cases:
+	absent PTE - no further information in it.  No page at the corresponding
+address range, access will fault and work from scratch; pte_none() is true for those.
+	swap PTE - page had been swapped out, access will fault, the information in
+the entry encodes the location in swap.  is_swap_pte() is true for those.
+	normal page - page is there, access might or might not fault due to permissions,
+PTE contains the page frame number.  pte_present() is true for those.
+
+PROT_NONE should not yield something that looks like a swap entry.  And on csky we
+have
+#define PAGE_NONE       __pgprot(_PAGE_PROT_NONE)
+#define pte_none(pte)           (!(pte_val(pte) & ~_PAGE_GLOBAL))
+#define pte_present(pte)        (pte_val(pte) & _PAGE_PRESENT)
+
+and
+
+arch/csky/abiv1/inc/abi/pgtable-bits.h:26:#define _PAGE_PROT_NONE               _PAGE_READ
+arch/csky/abiv1/inc/abi/pgtable-bits.h:8:#define _PAGE_READ             (1<<1)
+arch/csky/abiv1/inc/abi/pgtable-bits.h:14:#define _PAGE_GLOBAL          (1<<6)
+arch/csky/abiv1/inc/abi/pgtable-bits.h:7:#define _PAGE_PRESENT          (1<<0)
+
+arch/csky/abiv2/inc/abi/pgtable-bits.h:26:#define _PAGE_PROT_NONE               _PAGE_WRITE
+arch/csky/abiv2/inc/abi/pgtable-bits.h:9:#define _PAGE_WRITE            (1<<9)
+arch/csky/abiv2/inc/abi/pgtable-bits.h:14:#define _PAGE_GLOBAL          (1<<0)
+arch/csky/abiv2/inc/abi/pgtable-bits.h:10:#define _PAGE_PRESENT         (1<<10)
+
+IOW, on both ABI variants we have PAGE_NONE looking like a malformed swap entry.
+And is_swap_pte() is simply !pte_none() && !pte_present()...
