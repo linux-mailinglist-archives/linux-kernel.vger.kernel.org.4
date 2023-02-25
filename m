@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B79E6A28E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 11:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CA46A28E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 11:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjBYKRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 05:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S229614AbjBYKRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 05:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBYKRP (ORCPT
+        with ESMTP id S229598AbjBYKRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 05:17:15 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11A0231F8;
-        Sat, 25 Feb 2023 02:17:11 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id ee7so6994443edb.2;
-        Sat, 25 Feb 2023 02:17:11 -0800 (PST)
+        Sat, 25 Feb 2023 05:17:18 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFA822A09;
+        Sat, 25 Feb 2023 02:17:14 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id cq23so7027262edb.1;
+        Sat, 25 Feb 2023 02:17:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SNOc3+gSr8ZmR62uYnPdP5co5re0OgpLu9vaZLf178E=;
-        b=EiIvBQ4GbWPFzedJeC8giVvUC0oKHukVPsn13/vJOzDFgYuk80Nj1emClZAr1NBI5V
-         vBSlUbVdniHkVoWAd7+a5EoAqbIsd/DdcIBm/RkxtLzG7vcANrDA7zMMv3b0WauIMF7Z
-         JWSa5UxGl2kTnwB6MBqRpZW2/baw2wscfSiKVTVY+mVtJ1eLbq6oTiJ4CHiYmf1/nGzT
-         QmdOrMAPFLOo1/cvrUQ8dwoQ8pGovqfNAR3mOWbYuQB1ACk1EBzGKCJBLBaesFSUvtIs
-         C21sBYrpDoKjUqxe2gUfk+Uf7445uuZqw0hyhTwv223q+TDv3Cm9IfY7WTUMwKgaSLwf
-         RWug==
+        bh=NZlTyV5gXSWpUhRTyRZWDDfy9ZYKtV/X37QY0RZg8Qc=;
+        b=lfNgoABENzvAU9vbrDDeIhipKTEOAzm+1ypKOJOfED6srDbCB+THw/3/nsmJfXTk+j
+         9P6wrt3CNxTndnx7wHv4EdutmhyRy9bhOllkOpgCzTtmqKtTeLKYKNFTAO/lzDwr0rvV
+         5fNGKbXpqTyeAT6OfF0478xebq52pK+D2jLjHaAYhrzOtfwr9KmAVEpQ6P6rLZLiTQ+v
+         ujdYh5GrtEimemw1iBAfWwk4Uust9HsNXs7fPaGz3xFG7xwWV0u0x3nr7A0Zt5fuc/2Z
+         HLa3y2auSiKZvwbHDAAm+EvVu1Q9dQiEsRx7hRcSmlgbiDVfCqG1faAQZaSpXs5nDp0J
+         zWSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SNOc3+gSr8ZmR62uYnPdP5co5re0OgpLu9vaZLf178E=;
-        b=L4bpgER1d5aPoNJ+Bxc6tILjdqU5Q/XxhUkjnK8nlINHgqPgJsCAgdF3uOP4xRMvrl
-         eSBHBDGb6pdY/TX/t7TARdcqxZKqlK+jt96T3X7YghGYjR9nt42lIfDG/URN4vtHi9j1
-         5gis0jzu+aM+rw+ivJW4nnewQ7m9J/MBNa9Lm/w6J5YkV3p/ejvajMish0GxbOv4sPJ4
-         pEekbDNmUD8naB5ExwYA+/HXA9dra0nNKv5kssLeGyOYfcAa5dLY23liLPJSt5VBFhrq
-         bKbAGpk6YVwPldbtExODunAhStai1Jbx0deJBB/C4OQe7j4GcAnXS6Hy26rGq4nrwP9V
-         EuHQ==
-X-Gm-Message-State: AO0yUKXivu3Qos2louwvewgJZzHH+W9xUmYYbfNSJg+IkLW0Ge2QiCH+
-        ykF5zfBqcMDhbymKHJKt8s0=
-X-Google-Smtp-Source: AK7set/K6P2ZaMdb52XoOkvgi1/h1i47RQzA9sBuj1bguB5r7y/Kmiv984/NFZkpd2u9AUu9BAVqTw==
-X-Received: by 2002:a05:6402:b04:b0:4ae:f496:10ac with SMTP id bm4-20020a0564020b0400b004aef49610acmr17413203edb.0.1677320230397;
-        Sat, 25 Feb 2023 02:17:10 -0800 (PST)
+        bh=NZlTyV5gXSWpUhRTyRZWDDfy9ZYKtV/X37QY0RZg8Qc=;
+        b=NTo8cb9S3Eplg2aWBTtgH8KPU0Bt2Az1lzItm2RP+grLmNJOBK/YrHRqI2912sPjHx
+         c/FoM7OahudtumC1FQ7ZI89OYKISbhs81v++DVOVKuMH0zxAkGNp7JP4c1Zy+rHjRKnm
+         8EEfxwQ+4n2qJECKYDeD8FqKBnwqNPYkX6PGQnqDRKHOoLiwqr4v1jHYJhVeZf7QK/lM
+         WE6rqihZTfhlcJ9Lon/BO9rZJTJ/Q9gtooqdO8L3f2yVwkJSrM7ipY7lic1DbcPHylFL
+         mP+EAkzaVeDtQcA62WVZyNOq77HhR8RU7bUJxyuxKnwXZCW4AyoyXFrvAwEGR2xDl0ll
+         KyEQ==
+X-Gm-Message-State: AO0yUKW6iIcxCqK7DC+3IDfv7k7NGEGX/ZOQWMz0EE9INYG/h3JC/XD3
+        PAsIKMG5xapLQ7fbXR8pROY=
+X-Google-Smtp-Source: AK7set+p80yxwive0vFrfuDaRCkLAO2YhJ0YF72bVGf3x/DXOphxfSCDrLe8RInslHnX6xHo8AlhOA==
+X-Received: by 2002:a05:6402:845:b0:4a3:43c1:8431 with SMTP id b5-20020a056402084500b004a343c18431mr3099829edz.5.1677320232660;
+        Sat, 25 Feb 2023 02:17:12 -0800 (PST)
 Received: from localhost.localdomain ([95.183.227.97])
-        by smtp.gmail.com with ESMTPSA id y23-20020a50ce17000000b004af6163f845sm677722edi.28.2023.02.25.02.17.09
+        by smtp.gmail.com with ESMTPSA id y23-20020a50ce17000000b004af6163f845sm677722edi.28.2023.02.25.02.17.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 02:17:10 -0800 (PST)
+        Sat, 25 Feb 2023 02:17:12 -0800 (PST)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 1/3] dt-bindings: power: Add bindings for MediaTek MT6735
-Date:   Sat, 25 Feb 2023 13:16:27 +0300
-Message-Id: <20230225101629.264206-2-y.oudjana@protonmail.com>
+Subject: [PATCH 2/3] dt-bindings: soc: mediatek: scpsys: Document MT6735 SCPSYS compatible string
+Date:   Sat, 25 Feb 2023 13:16:28 +0300
+Message-Id: <20230225101629.264206-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230225101629.264206-1-y.oudjana@protonmail.com>
 References: <20230225101629.264206-1-y.oudjana@protonmail.com>
@@ -82,34 +82,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add DT bindings for MediaTek MT6735 SCPSYS.
+Add a compatible string for MT6735 SCPSYS.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- include/dt-bindings/power/mediatek,mt6735-scpsys.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
- create mode 100644 include/dt-bindings/power/mediatek,mt6735-scpsys.h
+ Documentation/devicetree/bindings/soc/mediatek/scpsys.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/dt-bindings/power/mediatek,mt6735-scpsys.h b/include/dt-bindings/power/mediatek,mt6735-scpsys.h
-new file mode 100644
-index 000000000000..5124cdee9dc7
---- /dev/null
-+++ b/include/dt-bindings/power/mediatek,mt6735-scpsys.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef _DT_BINDINGS_POWER_MEDIATEK_MT6735_SCPSYS_H
-+#define _DT_BINDINGS_POWER_MEDIATEK_MT6735_SCPSYS_H
-+
-+#define MT6735_POWER_DOMAIN_MD1		0
-+#define MT6735_POWER_DOMAIN_CONN	1
-+#define MT6735_POWER_DOMAIN_DIS		2
-+#define MT6735_POWER_DOMAIN_MFG		3
-+#define MT6735_POWER_DOMAIN_ISP		4
-+#define MT6735_POWER_DOMAIN_VDE		5
-+#define MT6735_POWER_DOMAIN_VEN		6
-+
-+#endif
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt b/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt
+index 2bc367793aec..54ba2e06403a 100644
+--- a/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt
++++ b/Documentation/devicetree/bindings/soc/mediatek/scpsys.txt
+@@ -10,6 +10,7 @@ domain control.
+ The driver implements the Generic PM domain bindings described in
+ power/power-domain.yaml. It provides the power domains defined in
+ - include/dt-bindings/power/mt8173-power.h
++- include/dt-bindings/power/mediatek,mt6735-scpsys.h
+ - include/dt-bindings/power/mt6797-power.h
+ - include/dt-bindings/power/mt6765-power.h
+ - include/dt-bindings/power/mt2701-power.h
+@@ -20,6 +21,7 @@ Required properties:
+ - compatible: Should be one of:
+ 	- "mediatek,mt2701-scpsys"
+ 	- "mediatek,mt2712-scpsys"
++	- "mediatek,mt6735-scpsys"
+ 	- "mediatek,mt6765-scpsys"
+ 	- "mediatek,mt6797-scpsys"
+ 	- "mediatek,mt7622-scpsys"
 -- 
 2.39.2
 
