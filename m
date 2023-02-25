@@ -2,148 +2,520 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255A26A2AA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 17:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6218E6A2AAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 17:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjBYQId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 11:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
+        id S229674AbjBYQR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 11:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBYQIc (ORCPT
+        with ESMTP id S229605AbjBYQRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 11:08:32 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A393DE385;
-        Sat, 25 Feb 2023 08:08:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QhE64F1JzaQzkBK+28as6frECFA7zQ1lX92irM5RDIytTMEpOVRXyZ3NE0EtA32L7ZxZK1MkLSIFbi/OXDDu4KnaqtZEVM97zayUvT8ngMa14zPxajdk+HGopFCNbigX7JWRDFXCCY09DD3Mc9HhlRCBpLTA1w6mmfjfeh2xyuLDjHs+VcwbqgkyKJee2yFCoXXFoDtjjP/jkOU7/hnSX2O3kjxXc1Eac/yTdpWrJyiiEUrBPvgNLP82vlFaBRQnXSwYWkuLgZCbw51Px/s/zeMiKTrEarf3WeRo7FDq67s1jQ/DdSequT/1+DAxcFA/0uSozdKupi2EqP/C0K/4dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G8q3rZdxZvht1KtN52p03kuzKrzqEkpB1c+4yek1UNE=;
- b=LJQPFp4qXbwLn3g/doOD9l93iRn07M+XvMutWv4ZeFfd0R1Hpfnmn/qrZtyCM9Ryki5SKfrz+xJmCzr6UKNvkwzT/7OLLViakrO4gSIYjcMXhbHumuh6j7GJ7I7YN2X62v28QiJcWpCl0/OmZ+FYhA6iNCxGUhEq+0tRKZLTu3NaaAO8c8j/7VLEnfwBSu16gmoAUW9cHi5qIv7nCSQ5huIVVJ4lLj4/t/L2J15guWS79pBc3b08cvmIJkhBuc+Mt2g0ZxJf45pcl6DfD5JEp24ubEcQbXpK91To1kjH/bJOaNPMnJZha51asK5xbf8PZoDSLn36pz+AdbZntYLBRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G8q3rZdxZvht1KtN52p03kuzKrzqEkpB1c+4yek1UNE=;
- b=V4PnPzikbVsbhbFPT2nJlJxNEDtQNYRuBtqYtxAwKmpZb/DxpB6/tMtvDq/sJKHE/kVslBwlqhD3UeGpIxLiW0n1KBib9KxRI41Mz4uk7FbNZnVtRolbsxOrmMdh3DAN2f/h6dMx7at+AlCZNOAzZATogpSxanlwpNBRnZa+rks=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5921.namprd13.prod.outlook.com (2603:10b6:510:164::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Sat, 25 Feb
- 2023 16:08:26 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%9]) with mapi id 15.20.6134.025; Sat, 25 Feb 2023
- 16:08:26 +0000
-Date:   Sat, 25 Feb 2023 17:08:17 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, paulb@nvidia.com, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net/sched: cls_api: Move call to
- tcf_exts_miss_cookie_base_destroy()
-Message-ID: <Y/oycX7fMP8yJAdd@corigine.com>
-References: <20230224-cls_api-wunused-function-v1-1-12c77986dc2d@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224-cls_api-wunused-function-v1-1-12c77986dc2d@kernel.org>
-X-ClientProxiedBy: AM3PR03CA0074.eurprd03.prod.outlook.com
- (2603:10a6:207:5::32) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Sat, 25 Feb 2023 11:17:53 -0500
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d500])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632F414E82
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 08:17:48 -0800 (PST)
+Received: from myt5-f3d0b203e46f.qloud-c.yandex.net (myt5-f3d0b203e46f.qloud-c.yandex.net [IPv6:2a02:6b8:c12:3b2d:0:640:f3d0:b203])
+        by forward500b.mail.yandex.net (Yandex) with ESMTP id E907B5E8D3;
+        Sat, 25 Feb 2023 19:17:45 +0300 (MSK)
+Received: by myt5-f3d0b203e46f.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id gHUq67PZDuQ1-lIbc4wEB;
+        Sat, 25 Feb 2023 19:17:44 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1677341864;
+        bh=p1QvjcnWyUxN8COgScTrEuZ8d9Nsn8PFiTI4faLCaIQ=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=PvIePKnjOzlnsh5NPoh5o/AksyAV8n2lH+kJyUHP4Cfxp0LtdI/ClWpx5vxTLC/DV
+         XVV5BWHNrT6jbp9cY7TD1N/sI0avgO5Cw1yH35LJe6gNSQCPrSRhe6qDAaIDhukMtM
+         ZxtkZNRmahn3KYctcEFHf4sxWVsB7ysmw3ee8L3Y=
+Authentication-Results: myt5-f3d0b203e46f.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <5663b349-8f6f-874a-eb9b-63d3179dcab7@ya.ru>
+Date:   Sat, 25 Feb 2023 19:17:42 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5921:EE_
-X-MS-Office365-Filtering-Correlation-Id: 841c2975-198f-498b-80e4-08db174a869c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kZ299664d6PP4j5cmqFsjpSxLn343oY0bgaSPEq+xFozJO3eFRvlgrKyNTgi3AlIFT3YGA8KE1/k3rV9L1gylzr49cYmHWOsol9oMRIuOOjiAqx+qKhHzHCqIrmJRUMlI8b1/xV9STL3ej3t5Ok2HW1R62JFMI9xksUw+SZFo+R3HztfxI7qHpS+OVYorcxiuvruoaA9JJBc4euiu8BTI/PNaKPBbh6p7+xUedjPiax+f4gL/Jk1fc1fKEW4onnAvnSkj38GwZHLdIUUKjxB3uZoFP0AV7lJUr8mQ0+mk3D6I0XWB1oVJtbLOAgzjoxX9kn4CrY1/YwNZkTAwT0YUomjcHmfHarO2k9upav6G/A6ykppdT66+ql4P9jT3Hh8B8/3Q7vSMfQc7CvScYFM/p/RdEBTbKCHrrSfXtbEW13QWXLoyf/SL1Bdw4BXN3/VnvZs4GsZXmbgkK7dR48pBw9t0povryzCMEqsJUm5GGWEFJfqx20ZGSyHBGZEJ+tOuuAAgVhI//jLZAeYVS+VbxyTo2Zpnh5FuQBLPrmOGSBPLpNai+MzgGpjEZtI9F+qsp9vv3FXD6szdodK8hjIdFjmdZIX/GSrxMvjl2pMdGmRq/IaF8lXY340l36AEoNgkJY/DlcH7q5qNtnE+ptrCowvcTpF0uZmzbyyLr5EtpRyamyBAcfXu8swZ8JTte8n
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(346002)(39830400003)(366004)(451199018)(316002)(41300700001)(186003)(44832011)(7416002)(2616005)(8936002)(5660300002)(6486002)(6506007)(6512007)(4326008)(66556008)(66946007)(66476007)(8676002)(6916009)(83380400001)(38100700002)(86362001)(6666004)(478600001)(2906002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s5dO44cIvHekjr1mhndV3EcaYY9w9Dug4el8WgjEGMrJXu//PS8ihpWIKx0E?=
- =?us-ascii?Q?w6VhcYfBIN4Lzg0wKoo6NUl8suc1LvU+NTOcZWpN2ZtkXqAoooWNFI76RX8R?=
- =?us-ascii?Q?6Gbq0fE5fvI0OeMZL3KkqnWZd4kcpJdm/03vyPO0+S5JwF4x8VgAu2TsgtiD?=
- =?us-ascii?Q?vSA+AYqzZbs0et9QPW4Y61Dqbix3nov2KWkJRwx4q24UZf6z5U3dT5gGnZnY?=
- =?us-ascii?Q?X12OqFn1C1VvtRfKj2zQbpPEwQrkyPL1kfmcdLqpXLdvdzuqGfUIpF3WcFd6?=
- =?us-ascii?Q?h6XtmetkGxXTSS3d11JBCbUMpvAI/LNmGXLCTg1dH9Mn/Zz/jmoVW8U4q4/Y?=
- =?us-ascii?Q?Dh6ph6ZI5wCHAWlC6sdIGiWr2xETdAO1AaN98iENhSYSz9ZWOyBbOtw369rA?=
- =?us-ascii?Q?sLcC38Mx1telkvT8KK63nOVubKe1/uu2X5JQh8PSKpXquyY9MqWgzIv2G/uu?=
- =?us-ascii?Q?v80djFV3oY56wxpqF0n9FmZKKbJpjP7wxCtgSG9/PdEp8Wuswlqm556EIJxJ?=
- =?us-ascii?Q?EmDAdRsXw8Gwi2c71P/i17pGY0cC4ym2lX4hbVEIi/TFBFQrnXhXd2qDY5uY?=
- =?us-ascii?Q?+6pZ4qXjMrXnfcTLOBpQzwYQ7MSIWeOgQDhFGxh9f/C9iYyQ077pI7lc8GYF?=
- =?us-ascii?Q?Pwpk4q6qNq7qLY8m+OO1+NtGwvt3IQvBSPKbEpNDCSQLZLEVMRvMoPwWdlpR?=
- =?us-ascii?Q?UstEl3Qw004HKq5wDNoCPLOz5PKepNTZShuLxpnq63DOIgTG8BUd2DiP3rgc?=
- =?us-ascii?Q?pa1+hD6aN+jVCLz9ISk1+de9gcpm0o6+/lAhiIVLA4kLJW61mNw3TtYP2NMu?=
- =?us-ascii?Q?lGjUvIxIYA/obgNLQQx2WvvGHjEWpbnmNgwBtNT/3qgAKj+oJ57yskBGLvw7?=
- =?us-ascii?Q?CNzW6HEbP2sJlgr0UcTsbqAmL4WqKJPQI4LAvE5gsmpRu1xA/Fx2I4YYMhEj?=
- =?us-ascii?Q?fOe1bJwARjp0wnwKRs5etbF14RUTZUDUx89SrCxuOUFtbKPnZPJDw4RdVLRU?=
- =?us-ascii?Q?N3CVVjlIdspFWNH3a7Lf0SPC4VjE4uTMHw8rPnCAF2y30tPJIuqV5Rn2hKYB?=
- =?us-ascii?Q?zE/rBmKy/yaJlfkS2E0GbmaTgpxC2hwHtMlszsUSqtXkyQdoN/Z2DVoEkxiF?=
- =?us-ascii?Q?mRk9jNendb4hK5HuPAlZKmVYwWQKweOJJHGU2kSyJD7BBeblZSk8dL2kR1tr?=
- =?us-ascii?Q?SP9h+HPbkbzFN9KeFybpQNrzXiteulsAOH7Ca5p7rBLKwbiI2XNARr/QpPgH?=
- =?us-ascii?Q?I0owuLZktnfUdnXI0yiq9j1geENs1etD9OvOZCcz3Ou96kLC4dzdK+NVIuMY?=
- =?us-ascii?Q?+3LvBXWd32Ztb5CrD13uMABvUoh2zxfu8tSxNvSFuR2HsOZn7YuthDh1InOu?=
- =?us-ascii?Q?750Q3fiqfbgP007K0joQml43Ovetu0dHZTKwwZGwoJyQT+6iDlOPuU967pCR?=
- =?us-ascii?Q?S9GxtNfNXWhICMp0P79zALl/FFMLZdJit3wkRdeaDrEtsSX0leuWYdOKfHk1?=
- =?us-ascii?Q?0/TXw9SKXHjMd2H8LAQ1mla9CcH6cZSme+6eP/f4aETcIno4DNPoxMd2Y8fu?=
- =?us-ascii?Q?RFhjPR+2vy+pNN5jXDVqx8fHTnjDwQ8ChliQ6ulv8gWLiJiPFmDGoWN6gJm+?=
- =?us-ascii?Q?oHHCiASNbUGte70DP4WSPrLUiN7vP8LqStYPb3KMf39oUwPRvZfsQ1Esw+Dp?=
- =?us-ascii?Q?fcvH8g=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 841c2975-198f-498b-80e4-08db174a869c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 16:08:25.8354
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yF46HdyulOtYPYFtvD2Jfx3CqSeynKJTus+aGfQHt21nBglnY5erjUEowH+cvMG2+aSYP+Xt6OPxLDkqEdThnpVoxuHFJE+tVxpUuDMpWDw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5921
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, dave@stgolabs.net,
+        penguin-kernel@i-love.sakura.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+ <20230223132725.11685-3-zhengqi.arch@bytedance.com>
+ <Y/evb+PBeaahx9Os@sultan-box.localdomain>
+ <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
+ <b9593d94-057d-43d3-97e2-07cf83896041@ya.ru>
+ <ed9c844b-c431-df69-21ff-1b6dc6557b20@ya.ru>
+ <f20c6ae7-0dfe-1d4a-9589-05e378961f08@bytedance.com>
+ <1aa70926-af39-0ce1-ae23-d86deb74d1c6@ya.ru>
+ <74c4cf95-9506-98b3-9fc0-0814f63d5d7f@bytedance.com>
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <74c4cf95-9506-98b3-9fc0-0814f63d5d7f@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 11:18:49AM -0700, Nathan Chancellor wrote:
-> When CONFIG_NET_CLS_ACT is disabled:
+On 25.02.2023 18:57, Qi Zheng wrote:
 > 
->   ../net/sched/cls_api.c:141:13: warning: 'tcf_exts_miss_cookie_base_destroy' defined but not used [-Wunused-function]
->     141 | static void tcf_exts_miss_cookie_base_destroy(struct tcf_exts *exts)
->         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Due to the way the code is structured, it is possible for a definition
-> of tcf_exts_miss_cookie_base_destroy() to be present without actually
-> being used. Its single callsite is in an '#ifdef CONFIG_NET_CLS_ACT'
-> block but a definition will always be present in the file. The version
-> of tcf_exts_miss_cookie_base_destroy() that actually does something
-> depends on CONFIG_NET_TC_SKB_EXT, so the stub function is used in both
-> CONFIG_NET_CLS_ACT=n and CONFIG_NET_CLS_ACT=y + CONFIG_NET_TC_SKB_EXT=n
-> configurations.
+> On 2023/2/25 23:30, Kirill Tkhai wrote:
+>> On 25.02.2023 11:08, Qi Zheng wrote:
+>>>
+>>>
+>>> On 2023/2/25 05:14, Kirill Tkhai wrote:
+>>>> On 25.02.2023 00:02, Kirill Tkhai wrote:
+>>>>> On 24.02.2023 07:00, Qi Zheng wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2023/2/24 02:24, Sultan Alsawaf wrote:
+>>>>>>> On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
+>>>>>>>> The shrinker_rwsem is a global lock in shrinkers subsystem,
+>>>>>>>> it is easy to cause blocking in the following cases:
+>>>>>>>>
+>>>>>>>> a. the write lock of shrinker_rwsem was held for too long.
+>>>>>>>>       For example, there are many memcgs in the system, which
+>>>>>>>>       causes some paths to hold locks and traverse it for too
+>>>>>>>>       long. (e.g. expand_shrinker_info())
+>>>>>>>> b. the read lock of shrinker_rwsem was held for too long,
+>>>>>>>>       and a writer came at this time. Then this writer will be
+>>>>>>>>       forced to wait and block all subsequent readers.
+>>>>>>>>       For example:
+>>>>>>>>       - be scheduled when the read lock of shrinker_rwsem is
+>>>>>>>>         held in do_shrink_slab()
+>>>>>>>>       - some shrinker are blocked for too long. Like the case
+>>>>>>>>         mentioned in the patchset[1].
+>>>>>>>>
+>>>>>>>> Therefore, many times in history ([2],[3],[4],[5]), some
+>>>>>>>> people wanted to replace shrinker_rwsem reader with SRCU,
+>>>>>>>> but they all gave up because SRCU was not unconditionally
+>>>>>>>> enabled.
+>>>>>>>>
+>>>>>>>> But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
+>>>>>>>> the SRCU is unconditionally enabled. So it's time to use
+>>>>>>>> SRCU to protect readers who previously held shrinker_rwsem.
+>>>>>>>>
+>>>>>>>> [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
+>>>>>>>> [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
+>>>>>>>> [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
+>>>>>>>> [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
+>>>>>>>> [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
+>>>>>>>>
+>>>>>>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>>>>>>>> ---
+>>>>>>>>     mm/vmscan.c | 27 +++++++++++----------------
+>>>>>>>>     1 file changed, 11 insertions(+), 16 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>>>>>> index 9f895ca6216c..02987a6f95d1 100644
+>>>>>>>> --- a/mm/vmscan.c
+>>>>>>>> +++ b/mm/vmscan.c
+>>>>>>>> @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>>>>>       LIST_HEAD(shrinker_list);
+>>>>>>>>     DECLARE_RWSEM(shrinker_rwsem);
+>>>>>>>> +DEFINE_SRCU(shrinker_srcu);
+>>>>>>>>       #ifdef CONFIG_MEMCG
+>>>>>>>>     static int shrinker_nr_max;
+>>>>>>>> @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>>>>>>>>     void register_shrinker_prepared(struct shrinker *shrinker)
+>>>>>>>>     {
+>>>>>>>>         down_write(&shrinker_rwsem);
+>>>>>>>> -    list_add_tail(&shrinker->list, &shrinker_list);
+>>>>>>>> +    list_add_tail_rcu(&shrinker->list, &shrinker_list);
+>>>>>>>>         shrinker->flags |= SHRINKER_REGISTERED;
+>>>>>>>>         shrinker_debugfs_add(shrinker);
+>>>>>>>>         up_write(&shrinker_rwsem);
+>>>>>>>> @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>>>>>             return;
+>>>>>>>>           down_write(&shrinker_rwsem);
+>>>>>>>> -    list_del(&shrinker->list);
+>>>>>>>> +    list_del_rcu(&shrinker->list);
+>>>>>>>>         shrinker->flags &= ~SHRINKER_REGISTERED;
+>>>>>>>>         if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+>>>>>>>>             unregister_memcg_shrinker(shrinker);
+>>>>>>>>         debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>>>>>         up_write(&shrinker_rwsem);
+>>>>>>>>     +    synchronize_srcu(&shrinker_srcu);
+>>>>>>>> +
+>>>>>>>>         debugfs_remove_recursive(debugfs_entry);
+>>>>>>>>           kfree(shrinker->nr_deferred);
+>>>>>>>> @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
+>>>>>>>>     {
+>>>>>>>>         down_write(&shrinker_rwsem);
+>>>>>>>>         up_write(&shrinker_rwsem);
+>>>>>>>> +    synchronize_srcu(&shrinker_srcu);
+>>>>>>>>     }
+>>>>>>>>     EXPORT_SYMBOL(synchronize_shrinkers);
+>>>>>>>>     @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>>>>     {
+>>>>>>>>         unsigned long ret, freed = 0;
+>>>>>>>>         struct shrinker *shrinker;
+>>>>>>>> +    int srcu_idx;
+>>>>>>>>           /*
+>>>>>>>>          * The root memcg might be allocated even though memcg is disabled
+>>>>>>>> @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>>>>         if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>>>>>>>             return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>>>>>     -    if (!down_read_trylock(&shrinker_rwsem))
+>>>>>>>> -        goto out;
+>>>>>>>> +    srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>>>>>     -    list_for_each_entry(shrinker, &shrinker_list, list) {
+>>>>>>>> +    list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>>>>>> +                 srcu_read_lock_held(&shrinker_srcu)) {
+>>>>>>>>             struct shrink_control sc = {
+>>>>>>>>                 .gfp_mask = gfp_mask,
+>>>>>>>>                 .nid = nid,
+>>>>>>>> @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>>>>             if (ret == SHRINK_EMPTY)
+>>>>>>>>                 ret = 0;
+>>>>>>>>             freed += ret;
+>>>>>>>> -        /*
+>>>>>>>> -         * Bail out if someone want to register a new shrinker to
+>>>>>>>> -         * prevent the registration from being stalled for long periods
+>>>>>>>> -         * by parallel ongoing shrinking.
+>>>>>>>> -         */
+>>>>>>>> -        if (rwsem_is_contended(&shrinker_rwsem)) {
+>>>>>>>> -            freed = freed ? : 1;
+>>>>>>>> -            break;
+>>>>>>>> -        }
+>>>>>>>>         }
+>>>>>>>>     -    up_read(&shrinker_rwsem);
+>>>>>>>> -out:
+>>>>>>>> +    srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>>>>>         cond_resched();
+>>>>>>>>         return freed;
+>>>>>>>>     }
+>>>>>>>> -- 
+>>>>>>>> 2.20.1
+>>>>>>>>
+>>>>>>>>
+>>>>>>>
+>>>>>>> Hi Qi,
+>>>>>>>
+>>>>>>> A different problem I realized after my old attempt to use SRCU was that the
+>>>>>>> unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
+>>>>>>> call. Both register_shrinker() *and* unregister_shrinker() are called frequently
+>>>>>>> these days, and SRCU is too unfair to the unregister path IMO.
+>>>>>>
+>>>>>> Hi Sultan,
+>>>>>>
+>>>>>> IIUC, for unregister_shrinker(), the wait time is hardly longer with
+>>>>>> SRCU than with shrinker_rwsem before.
+>>>>>>
+>>>>>> And I just did a simple test. After using the script in cover letter to
+>>>>>> increase the shrink_slab hotspot, I did umount 1k times at the same
+>>>>>> time, and then I used bpftrace to measure the time consumption of
+>>>>>> unregister_shrinker() as follows:
+>>>>>>
+>>>>>> bpftrace -e 'kprobe:unregister_shrinker { @start[tid] = nsecs; } kretprobe:unregister_shrinker /@start[tid]/ { @ns[comm] = hist(nsecs - @start[tid]); delete(@start[tid]); }'
+>>>>>>
+>>>>>> @ns[umount]:
+>>>>>> [16K, 32K)             3 |      |
+>>>>>> [32K, 64K)            66 |@@@@@@@@@@      |
+>>>>>> [64K, 128K)           32 |@@@@@      |
+>>>>>> [128K, 256K)          22 |@@@      |
+>>>>>> [256K, 512K)          48 |@@@@@@@      |
+>>>>>> [512K, 1M)            19 |@@@      |
+>>>>>> [1M, 2M)             131 |@@@@@@@@@@@@@@@@@@@@@      |
+>>>>>> [2M, 4M)             313 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+>>>>>> [4M, 8M)             302 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  |
+>>>>>> [8M, 16M)             55 |@@@@@@@@@
+>>>>>>
+>>>>>> I see that the highest time-consuming of unregister_shrinker() is between 8ms and 16ms, which feels tolerable?
+>>>
+>>> Hi Kirill,
+>>>
+>>>>>
+>>>>> The fundamental difference is that before the patchset this for_each_set_bit() iteration could be broken in the middle
+>>>>> of two do_shrink_slab() calls, while after the patchset we can leave for_each_set_bit() only after visiting all set bits.
+>>>
+>>> After looking at the git log[1], I saw that we originally introduced
+>>> rwsem_is_contendent() here to aviod blocking register_shrinker(),
+>>> not unregister_shrinker().
+>>>
+>>> So I am curious, do we really care about the speed of
+>>> unregister_shrinker()?
+>>
+>> My opinion is that for general reasons we should avoid long unbreakable actions in kernel. Especially when they may be called
+>> synchronous from userspace.
 > 
-> Move the call to tcf_exts_miss_cookie_base_destroy() in
-> tcf_exts_destroy() out of the '#ifdef CONFIG_NET_CLS_ACT', so that it
-> always appears used to the compiler, while not changing any behavior
-> with any of the various configuration combinations.
+> Got it.
 > 
-> Fixes: 80cd22c35c90 ("net/sched: cls_api: Support hardware miss to tc action")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> And maybe you missed the previous comments below.
 
-Thanks Nathan,
+Oh, I really missed them!
 
-I think the #ifdefs in this file could do with some work.
-But as a fix this looks good to me.
+>>
+>> We even have this as generic rule. See check_hung_task().
+>>
+>> Before, the longest sleep in unregister_shrinker() was a sleep waiting for single longest do_shrink_slab().
+>>
+>> After the patch the longest sleep will be a sleep waiting for all do_shrink_slab() calls (all set bits in shrinker_info).
+>>
+>>> And after using SRCU, register_shrinker() will not be blocked by slab
+>>> shrink at all.
+>>>
+>>> [1]. https://github.com/torvalds/linux/commit/e496612
+>>>
+>>>>>
+>>>>> Using only synchronize_srcu_expedited() won't help here.
+>>>>>
+>>>>> My opinion is we should restore a check similar to the rwsem_is_contendent() check that we had before. Something like
+>>>
+>>> If we really care about the speed of unregister_shrinker() like
+>>> register_shrinker(), I think this is a good idea. This guarantees
+>>> at least the speed of the unregister_shrinker() is not deteriorated. :)
+>>>
+>>>>> the below on top of your patchset merged into appropriate patch:
+>>>>>
+>>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>>> index 27ef9946ae8a..50e7812468ec 100644
+>>>>> --- a/mm/vmscan.c
+>>>>> +++ b/mm/vmscan.c
+>>>>> @@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>>    LIST_HEAD(shrinker_list);
+>>>>>    DEFINE_MUTEX(shrinker_mutex);
+>>>>>    DEFINE_SRCU(shrinker_srcu);
+>>>>> +static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>>>>>      #ifdef CONFIG_MEMCG
+>>>>>    static int shrinker_nr_max;
+>>>>> @@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>>        debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>>        mutex_unlock(&shrinker_mutex);
+>>>>>    +    atomic_inc(&shrinker_srcu_generation);
+>>>>>        synchronize_srcu(&shrinker_srcu);
+>>>>>          debugfs_remove_recursive(debugfs_entry);
+>>>>> @@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+>>>>>     */
+>>>>>    void synchronize_shrinkers(void)
+>>>>>    {
+>>>>> +    atomic_inc(&shrinker_srcu_generation);
+>>>>>        synchronize_srcu(&shrinker_srcu);
+>>>>>    }
+>>>>>    EXPORT_SYMBOL(synchronize_shrinkers);
+>>>>> @@ -908,7 +911,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>>    {
+>>>>>        struct shrinker_info *info;
+>>>>>        unsigned long ret, freed = 0;
+>>>>> -    int srcu_idx;
+>>>>> +    int srcu_idx, generation;
+>>>>>        int i;
+>>>>>          if (!mem_cgroup_online(memcg))
+>>>>> @@ -919,6 +922,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>>        if (unlikely(!info))
+>>>>>            goto unlock;
+>>>>>    +    generation = atomic_read(&shrinker_srcu_generation);
+>>>>>        for_each_set_bit(i, info->map, info->map_nr_max) {
+>>>>>            struct shrink_control sc = {
+>>>>>                .gfp_mask = gfp_mask,
+>>>>> @@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>>                    set_shrinker_bit(memcg, nid, i);
+>>>>>            }
+>>>>>            freed += ret;
+>>>>> +
+>>>>> +        if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>>> +            freed = freed ? : 1;
+>>>>> +            break;
+>>>>> +        }
+>>>>>        }
+>>>>>    unlock:
+>>>>>        srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>> @@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>    {
+>>>>>        unsigned long ret, freed = 0;
+>>>>>        struct shrinker *shrinker;
+>>>>> -    int srcu_idx;
+>>>>> +    int srcu_idx, generation;
+>>>>>          /*
+>>>>>         * The root memcg might be allocated even though memcg is disabled
+>>>>> @@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>            return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>>          srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>> +    generation = atomic_read(&shrinker_srcu_generation);
+>>>>>          list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>>>                     srcu_read_lock_held(&shrinker_srcu)) {
+>>>>> @@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>            if (ret == SHRINK_EMPTY)
+>>>>>                ret = 0;
+>>>>>            freed += ret;
+>>>>> +
+>>>>> +        if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>>> +            freed = freed ? : 1;
+>>>>> +            break;
+>>>>> +        }
+>>>>>        }
+>>>>>          srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>
+>>>> Even more, for memcg shrinkers we may unlock SRCU and continue iterations from the same shrinker id:
+>>>
+>>> Maybe we can also do this for global slab shrink? Like below:
+> 
+> How about this?
+>>>
+>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>> index ffddbd204259..9d8c53075298 100644
+>>> --- a/mm/vmscan.c
+>>> +++ b/mm/vmscan.c
+>>> @@ -1012,7 +1012,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>                                   int priority)
+>>>   {
+>>>          unsigned long ret, freed = 0;
+>>> -       struct shrinker *shrinker;
+>>> +       struct shrinker *shrinker = NULL;
+>>>          int srcu_idx, generation;
+>>>
+>>>          /*
+>>> @@ -1025,11 +1025,15 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>          if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>>                  return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>
+>>> +again:
+>>>          srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>
+>>>          generation = atomic_read(&shrinker_srcu_generation);
+>>> -       list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>> -                                srcu_read_lock_held(&shrinker_srcu)) {
+>>> +       if (!shrinker)
+>>> +               shrinker = list_entry_rcu(shrinker_list.next, struct shrinker, list);
+>>> +       else
+>>> +               shrinker = list_entry_rcu(shrinker->list.next, struct shrinker, list);
+>>> +       list_for_each_entry_from_rcu(shrinker, &shrinker_list, list) {
+>>>                  struct shrink_control sc = {
+>>>                          .gfp_mask = gfp_mask,
+>>>                          .nid = nid,
+>>> @@ -1042,8 +1046,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>                  freed += ret;
+>>>
+>>>                  if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>> -                       freed = freed ? : 1;
+>>> -                       break;
+>>> +                       srcu_read_unlock(&shrinker_srcu, srcu_idx);
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+After SRCU in unlocked we can't believe @shrinker anymore. So, above list_entry_rcu(shrinker->list.next)
+dereferences some random memory.
+
+>>> +                       cond_resched();
+>>> +                       goto again;
+>>>                  }
+>>>          }
+>>>
+>>>>
+>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>> index 27ef9946ae8a..0b197bba1257 100644
+>>>> --- a/mm/vmscan.c
+>>>> +++ b/mm/vmscan.c
+>>>> @@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>    LIST_HEAD(shrinker_list);
+>>>>    DEFINE_MUTEX(shrinker_mutex);
+>>>>    DEFINE_SRCU(shrinker_srcu);
+>>>> +static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>>>>      #ifdef CONFIG_MEMCG
+>>>>    static int shrinker_nr_max;
+>>>> @@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>        debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>        mutex_unlock(&shrinker_mutex);
+>>>>    +    atomic_inc(&shrinker_srcu_generation);
+>>>>        synchronize_srcu(&shrinker_srcu);
+>>>>          debugfs_remove_recursive(debugfs_entry);
+>>>> @@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+>>>>     */
+>>>>    void synchronize_shrinkers(void)
+>>>>    {
+>>>> +    atomic_inc(&shrinker_srcu_generation);
+>>>>        synchronize_srcu(&shrinker_srcu);
+>>>>    }
+>>>>    EXPORT_SYMBOL(synchronize_shrinkers);
+>>>> @@ -908,18 +911,19 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>    {
+>>>>        struct shrinker_info *info;
+>>>>        unsigned long ret, freed = 0;
+>>>> -    int srcu_idx;
+>>>> -    int i;
+>>>> +    int srcu_idx, generation;
+>>>> +    int i = 0;
+>>>>          if (!mem_cgroup_online(memcg))
+>>>>            return 0;
+>>>> -
+>>>> +again:
+>>>>        srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>        info = shrinker_info_srcu(memcg, nid);
+>>>>        if (unlikely(!info))
+>>>>            goto unlock;
+>>>>    -    for_each_set_bit(i, info->map, info->map_nr_max) {
+>>>> +    generation = atomic_read(&shrinker_srcu_generation);
+>>>> +    for_each_set_bit_from(i, info->map, info->map_nr_max) {
+>>>>            struct shrink_control sc = {
+>>>>                .gfp_mask = gfp_mask,
+>>>>                .nid = nid,
+>>>> @@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>                    set_shrinker_bit(memcg, nid, i);
+>>>>            }
+>>>>            freed += ret;
+>>>> +
+>>>> +        if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>> +            srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>
+>>> Maybe we can add the following code here, so as to avoid repeating the
+>>> current id and avoid triggering softlockup:
+>>>
+>>>              i++;
+
+This is OK.
+
+>>>              cond_resched();
+
+Possible, existing cond_resched() in do_shrink_slab() is enough.
+
+> And this. :)
+> 
+> Thanks,
+> Qi
+> 
+>>>
+>>> Thanks,
+>>> Qi
+>>>
+>>>> +            goto again;
+>>>> +        }
+>>>>        }
+>>>>    unlock:
+>>>>        srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>> @@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>    {
+>>>>        unsigned long ret, freed = 0;
+>>>>        struct shrinker *shrinker;
+>>>> -    int srcu_idx;
+>>>> +    int srcu_idx, generation;
+>>>>          /*
+>>>>         * The root memcg might be allocated even though memcg is disabled
+>>>> @@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>            return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>          srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>> +    generation = atomic_read(&shrinker_srcu_generation);
+>>>>          list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>>                     srcu_read_lock_held(&shrinker_srcu)) {
+>>>> @@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>            if (ret == SHRINK_EMPTY)
+>>>>                ret = 0;
+>>>>            freed += ret;
+>>>> +
+>>>> +        if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>> +            freed = freed ? : 1;
+>>>> +            break;
+>>>> +        }
+>>>>        }
+>>>>          srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>
+>>>>
+>>>
+>>
+> 
+
