@@ -2,44 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBAE6A2A49
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6DB6A2A4B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjBYOXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 09:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S229646AbjBYOZS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 25 Feb 2023 09:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYOXA (ORCPT
+        with ESMTP id S229445AbjBYOZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 09:23:00 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064E3D309
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 06:22:57 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pVvRv-0003jp-Ek; Sat, 25 Feb 2023 15:22:55 +0100
-Message-ID: <9f682c4d-e7b7-5e23-84f5-cea4fdac2085@leemhuis.info>
-Date:   Sat, 25 Feb 2023 15:22:55 +0100
+        Sat, 25 Feb 2023 09:25:16 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2068.outbound.protection.outlook.com [40.107.239.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C707F770;
+        Sat, 25 Feb 2023 06:25:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y9elovxeJ7kd19BChvO2KR5U2kl2I6h9PdLKYOUmw+/smZhTXFPuWENzG8FHkR9qjkslZi/D83sfpaTRRWMKhlcM0nuEf4HqWFbtv7D9sQ5L9T1xJ+jZzwNUtnzxmbdIJcM4i/GN9MDcVIrb+ByuL8kmW5eOJ5Zqeqo9x2ANgKWo6GNztP7xA/JUT0bE9blGmvQsKm6EOGOqeQtNVVuii7xWdP0nnp+iMfUNuXdlEdVQKGjbBg7L6nc3QZNUuV/ryUraCdmmDcUGA8taBlGSC8IoT2XuaUskGeHwSVPA38BR0fEbhfJAsOU+dPopbOVyVwpEoHlOQ8zuQvB/u3N0Ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/z57PaWp+G2myo9FbUpbieCSKzvD/MHlE8MixcAwEq8=;
+ b=Bra3KkOAA3GkrovOFav5zTbGpVpWGcY9fBMsS/kZUEQBa1rTgJ+0iltBpe6EZSZNb+heJVXpmHe10xmmDguIibqjqFrlTuvSSUDe/Kg/LgwnEiZe587jSFwdxStRLUIJzr/W32PxgicNGyugGKVEqKWsPn3rpou3Q4a9ewIzYPeRzMk1k8AXOSe2PUw+Hkz+OF6EBk6GlDgv/PxREOioq9bIJmnf0k9UhIm3oM4jLMBZYhHC60ZCMvtjBkJO0lX1hX+nme8N55GvrEFrGDUut4WwCcLcFfwDO/1y2OKe2c9Dk3jFac8zsQOmAiXSuBXKjJnZxuV99p3Z1Kbls5dr+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
+Received: from MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:31::9)
+ by MAZPR01MB6034.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:61::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.12; Sat, 25 Feb
+ 2023 14:25:11 +0000
+Received: from MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::b92a:5a49:da69:235b]) by MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::b92a:5a49:da69:235b%3]) with mapi id 15.20.6156.012; Sat, 25 Feb 2023
+ 14:25:10 +0000
+From:   Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ARM64: dts: debix model-a: enable hdmi
+Thread-Topic: [PATCH] ARM64: dts: debix model-a: enable hdmi
+Thread-Index: AQHZSSPu9xJMN6srJka2w35ih5zwSA==
+Date:   Sat, 25 Feb 2023 14:25:10 +0000
+Message-ID: <MA0PR01MB7145D1E9382C7F91197B259FFFA99@MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MA0PR01MB7145:EE_|MAZPR01MB6034:EE_
+x-ms-office365-filtering-correlation-id: 4051ab19-fc7d-4bed-73bc-08db173c1a3f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bHfHZm+Ucv0GhMoC3HnakW53klLRvyuuwulViweSBGhUnilTqsP8+NWdiHkrC/Bz3YLsj3Tblu72FT0e+pCFjZ/Vx5yEz0lKoLrGjFZAE/FUjc7/jNBrKCAaT81JuFkWtaHAndRNNBnWjTwfs+mjNiZhfrNPH4nRfMyT56py9ML6W1eZlxAgheyncJnpKBM93kBAIJantR3yNhP/EHaEbZPFoOJBqwlKjOqSXXzb4Ch8sUXMF4qxePF+h2ZDvu2iyix2yPK1cs5XNX3n17bty+4NbFTI3V0shoM36qvCErm+sa636qNJWqRbJf4idZItLcFdbDPp2IjotDi/+DAxT9m1P7zP1PfXWcQ9dn4hF1kv3GdvqM/ADg+TpNsx//Nmt0EI2357cwkvfHBKJlA9fw6m7AhRjhKJNnn/LQZN0NtXZ63MSoXXPF4RYDZ83eDW7YF84JlvpdE2asu8kn3qObLEReQ6NHAihBB313IYrzAokEOotEAiNXyIPVvYz25ouSFTLSTWXOUF+X46waAkE2i++bigpH2z67g+HR0PGo27ZAkXJ90W7nrj+eBqr3z1i8Re/zNg/wNHjU+dIOVoKbcocqRDRUjn5KV8TT1AY94hLxZa/BEvG2jTWQK8ERMsqiCDdy04fkRhwGIR1McCN8sewgEZe+xfBqVYH/+7RRHJ1dlTCiQ2ygC/RtB+b4Ym
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(346002)(39830400003)(396003)(366004)(451199018)(86362001)(38070700005)(33656002)(52536014)(4744005)(41300700001)(8936002)(44832011)(5660300002)(2906002)(38100700002)(122000001)(7416002)(71200400001)(66476007)(66556008)(66446008)(91956017)(76116006)(7696005)(66946007)(478600001)(64756008)(53546011)(186003)(9686003)(26005)(55016003)(8676002)(54906003)(316002)(4326008)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?H5zXS8egkU31Au9SfsOzGySeKHoNakpb7GKaHTmipibEySzHtEuirlcvMr?=
+ =?iso-8859-1?Q?LsNrpebDPcsyhnqc8GuCTcLEIan7kGHtfd5DHUuQIW8h2dtjFxeOisiVlE?=
+ =?iso-8859-1?Q?oqfi/Ir7DZHg1dWnyjVrS45Xm5HN1W/DGMD+c7Al8iyL1bn5//mru//asC?=
+ =?iso-8859-1?Q?klWLePGxiPYlljT29VQSl1NctmjtLPmXcoj3RDJbv76mfJcKx4NQDGjoqQ?=
+ =?iso-8859-1?Q?Lhuh0EG7fh93COtM7SSJ3o+8WVXD44zG5i0emeR1VwJHr79+Luz2aS63Oi?=
+ =?iso-8859-1?Q?/07o/UvWmszpUSD1WBkTSuTq61qIeasbmVO9z6lHms7Ow/C02vf8Ch4fZA?=
+ =?iso-8859-1?Q?m2xL2bH1WeKTVfRhmRzHbmgai9xHvJ6T4b/2W/JqVjsP+2O4YhEZp1QLng?=
+ =?iso-8859-1?Q?L07G5g29LJ3xQw6f6Ij4OA/53WHpVynZwRgO5pjCruH4YthHGXXLWsQU/R?=
+ =?iso-8859-1?Q?Li6PejOWdPeXLk9iqlrpTzZuo+ezFUXdOiLBPMphTcZqBf06ZATONtRd7j?=
+ =?iso-8859-1?Q?/ApazbQmpL3Bb1nI1fYaEhGhV7Suk3PN0DB5yQdb1mHpDu6IwrrZ66548b?=
+ =?iso-8859-1?Q?uMMBIdl0ZQ9VARnMo9guuyyBF/49SfULb9gc9Qy1EyTkYzc4O64GTMtXnH?=
+ =?iso-8859-1?Q?as6aBqCF/Ed6qPfxKwQtajZc+JLIgf0oxrDHLIdmnESU+qTya8DoJEzYRW?=
+ =?iso-8859-1?Q?6Tb0VyrkV1cA3pN1Sz7SNTpUhVtmMjpoYmk46hcp2/sEIhMZo3Lp2ZO9m5?=
+ =?iso-8859-1?Q?/9sBzYwj7x4Exb5c66pUm4Mlc3cTAnZ8sW4nmotD2a0xtTW4BPrPQJ6dck?=
+ =?iso-8859-1?Q?XcYG5T9nCvXqhrMcIJWqJex13X/JRzNnHtlFeZ9yAZ5HNNL4D3zjJUKZub?=
+ =?iso-8859-1?Q?VrbxjM8+b7KN7p7u3hyuCp/3Nnv/vczaBTWK7cUW6tLHlcyI9RvFN+enAv?=
+ =?iso-8859-1?Q?WnCtq/Pa8/i6IpmY6kjbX5i15/99PEFP1/AkFQtbFZ2Kj6EMy4oyyg9zaI?=
+ =?iso-8859-1?Q?Fmmxj+GAnMLYIeOipwhT4YLhQYSfZuSGpgVp2g3xK7tl7vaskw0HfC7pdb?=
+ =?iso-8859-1?Q?UM5222atVqN/+Bwltv7PupBH8aYcWDtgnDbVqIEng9glztkX3NdqdUGaKz?=
+ =?iso-8859-1?Q?ENJvlXtn+AKQ8ik5gsSeUg+SFKsuvgUPlqCwo9cJEX0zfMLZ5au0yYJzrz?=
+ =?iso-8859-1?Q?Cjs1ET7fC5mbzXgGFkGp4f6vGeOQZ4kCPlbV7uTmuayuZjiuWLl26vGnIg?=
+ =?iso-8859-1?Q?MquhgSQuxA1Q3PAAkA6LYtnVz47xR+o6WOlb2SFuTUmUpSM0rF3rlHk37D?=
+ =?iso-8859-1?Q?VvvjIJLVDCoDSI88N0x2GZcjI2Y4gJbgKxQ8WYzK/U9tDzR4rJCehL4BOu?=
+ =?iso-8859-1?Q?YRuDWQCfUBzeEjOZr5oHzT6/oinqELmhHjm2hLjFBvyx710tV7jRrGklxm?=
+ =?iso-8859-1?Q?e08kj3r/7hjWPuUdaSaQbvuNyfE1z3PjGujtXTIhHDwOoWAfGYkFmbFsiZ?=
+ =?iso-8859-1?Q?Jkmmu93Ef358SUnhWCzZtiFzUxEQAYzd1gH0y1pP06aZTAWgDMQzESjza6?=
+ =?iso-8859-1?Q?qLnJ9sD+75ySfQm8PMSN8Wut1UNi5+4OkuOIpCGR16qxFGHh4fDUB9OEC/?=
+ =?iso-8859-1?Q?GHNuduBl9tN3pynVTtIAnKmayb7gphuy6stBtdE46CL8EYKrmmz+JVwDKV?=
+ =?iso-8859-1?Q?LNFSbx4M2CPWH+kKBLI=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        davidgow@google.com, rmoar@google.com, brendanhiggins@google.com,
-        skhan@linuxfoundation.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <CABXGCsO4=qKBF=2FRPVwW8FA4iLFh0Dt9n1BLMec3k10GUorpg@mail.gmail.com>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [6.3][regression] after commit
- 7170b7ed6acbde523c5d362c8978c60df4c30f30 my system stuck in initramfs forever
-In-Reply-To: <CABXGCsO4=qKBF=2FRPVwW8FA4iLFh0Dt9n1BLMec3k10GUorpg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1677334977;b15028ee;
-X-HE-SMSGID: 1pVvRv-0003jp-Ek
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4051ab19-fc7d-4bed-73bc-08db173c1a3f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2023 14:25:10.8587
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Hmqvsb5hTG3na4S78/6175BOuh6Xj35MCNKYbdF/2MwI/EO4eSCuqiYP5Gy2Rq306ujCKsvByVPZF4H1owftcM4KjAWedNoqU4JcItZKmw81I7czKRaIdlIw5v4fdoey
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB6034
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,103 +120,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+From: HardevSinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Date: Sat, 25 Feb 2023 19:38:20 +0530
+Subject: [PATCH] arm64: dts: debix model-a: enable hdmi
 
-On 25.02.23 14:51, Mikhail Gavrilov wrote:
-> new kernel release cycle returning with new bugs
-> Today my system got stuck in initramfs environment after updating to
-> commit d2980d8d826554fa6981d621e569a453787472f8.
-> 
-> I still do not understand how to configure the network inside the
-> initramfs environment to grab the logs.
-> Since an attempt to rebuild the initramfs with all modules (dracut
-> --no-hostonly --force) leads to the stuck initramfs environment and
-> impossible entering into initramfs console.
+Enable HDMI support for Polyhex Debix Model A Board
 
-Do you see any error messages? I have problems since Friday morning as
-well (stuck in Fedora's initramfs) and see a lot of BPF warnings like
-"BPF: invalid name" and "failed to validate module". Was able to do a
-screenshot:
+Signed-off-by: HardevSinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
 
-https://www.leemhuis.info/files/misc/Screenshot_ktst-f36-x86-64_2023-02-24_07:53:14.png
-
-Funny detail: my Thursday morning built for my Fedora vanilla repos[1]
-(which happened after the main net and thus bpf merge) worked; my Friday
-morning built (which among others contained the kunit updates) was the
-first to fail, so maybe we have the same problem. I did a quick
-localmodconfig earlier today, which worked (but localmodconfig disabled
-KUNIT, which might explain why it worked).
-
-Ciao, Thorsten
-
-[1] https://fedoraproject.org/wiki/Kernel_Vanilla_Repositories
-
-> But I can bisect the problem and bisection blames this commit:
-> 
-> ❯ git bisect good
-> 7170b7ed6acbde523c5d362c8978c60df4c30f30 is the first bad commit
-> commit 7170b7ed6acbde523c5d362c8978c60df4c30f30
-> Author: David Gow <davidgow@google.com>
-> Date:   Sat Jan 28 15:10:07 2023 +0800
-> 
->     kunit: Add "hooks" to call into KUnit when it's built as a module
-> 
->     KUnit has several macros and functions intended for use from non-test
->     code. These hooks, currently the kunit_get_current_test() and
->     kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
-> 
->     In order to support this case, the required functions and static data
->     need to be available unconditionally, even when KUnit itself is not
->     built-in. The new 'hooks.c' file is therefore always included, and has
->     both the static key required for kunit_get_current_test(), and a table
->     of function pointers in struct kunit_hooks_table. This is filled in with
->     the real implementations by kunit_install_hooks(), which is kept in
->     hooks-impl.h and called when the kunit module is loaded.
-> 
->     This can  be extended for future features which require similar
->     "hook" behaviour, such as static stubs, by simply adding new entries to
->     the struct, and the appropriate code to set them.
-> 
->     Fixed white-space errors during commit:
->     Shuah Khan <skhan@linuxfoundation.org>
-> 
->     Resolved merge conflicts with:
->     db105c37a4d6 ("kunit: Export kunit_running()")
->     This patch supersedes the above.
->     Shuah Khan <skhan@linuxfoundation.org>
-> 
->     Signed-off-by: David Gow <davidgow@google.com>
->     Reviewed-by: Rae Moar <rmoar@google.com>
->     Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
->     Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
->  Documentation/dev-tools/kunit/usage.rst | 15 ++++++---------
->  include/kunit/test-bug.h                | 28 ++++++++++------------------
->  lib/Makefile                            |  8 ++++++++
->  lib/kunit/Makefile                      |  3 +++
->  lib/kunit/hooks-impl.h                  | 27 +++++++++++++++++++++++++++
->  lib/kunit/hooks.c                       | 21 +++++++++++++++++++++
->  lib/kunit/test.c                        | 15 +++++++--------
->  7 files changed, 82 insertions(+), 35 deletions(-)
->  create mode 100644 lib/kunit/hooks-impl.h
->  create mode 100644 lib/kunit/hooks.c
-> 
-> Unfortunately I couldn't revert this commit staying on
-> d2980d8d826554fa6981d621e569a453787472f8 because of conflicts:
-> ❯ git revert 7170b7ed6acbde523c5d362c8978c60df4c30f30 -n
-> Auto-merging include/kunit/test-bug.h
-> CONFLICT (content): Merge conflict in include/kunit/test-bug.h
-> Auto-merging lib/Makefile
-> Auto-merging lib/kunit/Makefile
-> CONFLICT (modify/delete): lib/kunit/hooks-impl.h deleted in parent of
-> 7170b7ed6acb (kunit: Add "hooks" to call into KUnit when it's built as
-> a module) and modified in HEAD.  Version HEAD of
-> lib/kunit/hooks-impl.h left in tree.
-> Auto-merging lib/kunit/test.c
-> CONFLICT (content): Merge conflict in lib/kunit/test.c
-> error: could not revert 7170b7ed6acb... kunit: Add "hooks" to call
-> into KUnit when it's built as a module
-> hint: after resolving the conflicts, mark the corrected paths
-> hint: with 'git add <paths>' or 'git rm <paths>'
-> 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts b/arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts
+index 2876d18f2a38..bc2515113ae3 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts
+@@ -45,6 +45,43 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
+ 	};
+ };
+ 
++
++&irqsteer_hdmi {
++	status = "okay";
++};
++
++&hdmi_blk_ctrl {
++	status = "okay";
++};
++
++&hdmi_pavi {
++	status = "okay";
++};
++
++&hdmi {
++	status = "okay";
++};
++
++&hdmiphy {
++	status = "okay";
++};
++
++&lcdif1 {
++	status = "okay";
++};
++
++&lcdif2 {
++	status = "okay";
++};
++
++&lcdif3 {
++	status = "okay";
++
++	thres-low  = <1 2>;             /* (FIFO * 1 / 2) */
++	thres-high = <3 4>;             /* (FIFO * 3 / 4) */
++};
++
++
+ &A53_0 {
+ 	cpu-supply = <&buck2>;
+ };
+-- 
+2.25.1
