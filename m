@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2786A27A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 07:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5636A27A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 07:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjBYGqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 01:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S229618AbjBYGyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 01:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBYGqW (ORCPT
+        with ESMTP id S229379AbjBYGys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 01:46:22 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975DD16AD2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:46:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677307581; x=1708843581;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Xll5a4CslYEQrb2eC2LPpInDsObKiISqPCz/jp8oaPw=;
-  b=nnc9tXzrIMsqTur9y3Z3LUbTu+fsNCV2G/F7koFMfFCPoiaQqOQeA/jC
-   X6uVI7ZTNmyMw838N6dLX2aULtaJWqq1Gj01TSVBg+Nsh2Wyv2FKl2rtt
-   d29YOKmRb5DKbuHNQNoSDWfAVeL28HsGCsqMd200xoi7zTQplqlQn4sIL
-   UF9aHHjvdivWeixo0jF+0egqw4DHI8rxabPFFePzLK6mL8QJxf32jxlTZ
-   dJZz5MiIoq+Xb+f5eIF+T1Em0hHOkryFmvHk75WMNiYMUBARwMpMij060
-   WAc4uTfogEu5l/KaCBkuOAheXasCGEqimJMLe/iSMBk6OY/+zvtfkzWYi
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314026690"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="314026690"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 22:46:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="675191607"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="675191607"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Feb 2023 22:46:20 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVoK3-0002zX-2t;
-        Sat, 25 Feb 2023 06:46:19 +0000
-Date:   Sat, 25 Feb 2023 14:46:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:kcsan.2023.02.22a] BUILD SUCCESS
- 6ba912f1c081448cf3d1fa9ada9115aae4594ac4
-Message-ID: <63f9aead.Z2xGiBbspnGEjsNP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Feb 2023 01:54:48 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F1F1815A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:54:47 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536af109f9aso30312827b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wIImxg9xqGk7iRLE6VcmUficCLyaW9zBtMXyCa679dw=;
+        b=EYdYZwBJo7rQhONBIENr5THO6qgaJUdnZoGLVs6CBkXZrP12+fd2jIH0Mt5DjloIwb
+         JH+YScG/pmbw9R6lJQIPqKTnJihCvFsZ4Cu9AVKPVTjCEwJKqJnd8gXQrRj1GSYdGfuJ
+         6wCiTdk3oYPE/JqM5Z0nSbdWesFb2NIGhAdJLZmmDPmCaBshuURdZElxj2xwUcU5NbsK
+         YWvW4ZqjnXQdQgERGfcxkfm9rAzqfsjTEtjhwiyOZ4HCGkjIz5QSSP2UwQEFAUP3KtKR
+         PEu65M+ZnL0tjjtWF1ukMFXr+4eDYHDnmDnXXvfa7bGQlGvqAQUbcuol2mYeEAdV5DLd
+         W61g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wIImxg9xqGk7iRLE6VcmUficCLyaW9zBtMXyCa679dw=;
+        b=N2uNWkGGYXvUhWGxMGpLthkS1tq1+xuCtqDb926wnSL7tuoqiSff8N7mandC2/Mdm0
+         DyPvkwXND/uHhYsPQtqgziSNGFD9Xq3iGdOgPNl/GUxN0tl4OQY4sWFx2k91eCrjSLv4
+         nhMyEvA7BwRD7gnwwRVngRsdRsIPoQnQWQquTshjzrAdDvXkmUXiJQih3wPf2BpIC2XF
+         4ABZc1vzQ+XwJVtAVMH4XRanALV3sMnTl93y5quFcpnpw3cAtuQDbh4dtiliekApzz24
+         9XCQ06cyaNFvbWbGnjrXAt8SQ5VsSVBtrFbS2zMyuL0Cl5rUPmlMZuC9tPXE0lDn2Ntu
+         utCw==
+X-Gm-Message-State: AO0yUKWQxVG49VD5WnmP1H8Tj7ltk/jc+Y1gZf5oF1FqXdLamlNQ4MRr
+        emrItBhLkN7PmOk37Rdy8hXJcLb/++xaaDo=
+X-Google-Smtp-Source: AK7set+5e7l97LaUyO/u+xABQzJO6K8dJXbheNNMAogHBhKtFvq1+6CYwOLVgdeqOBD5s1zvPw1r4wdWroH3PLE=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:36e2:326c:12f0:fecd])
+ (user=saravanak job=sendgmr) by 2002:a05:6902:145:b0:a17:c06d:60d2 with SMTP
+ id p5-20020a056902014500b00a17c06d60d2mr4831087ybh.1.1677308086257; Fri, 24
+ Feb 2023 22:54:46 -0800 (PST)
+Date:   Fri, 24 Feb 2023 22:54:42 -0800
+Message-Id: <20230225065443.278284-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Subject: [PATCH v1] driver core: fw_devlink: Print full path and name of fwnode
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git kcsan.2023.02.22a
-branch HEAD: 6ba912f1c081448cf3d1fa9ada9115aae4594ac4  kcsan: select CONFIG_CONSTRUCTORS
+Some of the log messages were printing just the fwnode name. While it's
+short, it's not always uniquely identifiable in system. So print the
+full path and name to make debugging easier.
 
-elapsed time: 722m
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ drivers/base/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-configs tested: 19
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-clang                                   alpha   defconfig
-gcc                                       arc   defconfig
-gcc                                       arm   defconfig
-gcc                                     arm64   defconfig
-gcc                                      csky   defconfig
-gcc                                      i386   defconfig
-gcc                                      ia64   defconfig
-gcc                                 loongarch   defconfig
-gcc                                      m68k   defconfig
-gcc                                     nios2   defconfig
-gcc                                    parisc   defconfig
-gcc                                  parisc64   defconfig
-gcc                                     riscv   defconfig
-gcc                                     riscv   rv32_defconfig
-gcc                                      s390   defconfig
-gcc                                     sparc   defconfig
-gcc                                        um   i386_defconfig
-gcc                                        um   x86_64_defconfig
-gcc                                    x86_64   defconfig
-gcc                                                  
-
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 4f02a10f802f..44a2f6596e54 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -98,7 +98,7 @@ static int __fwnode_link_add(struct fwnode_handle *con,
+ 
+ 	list_add(&link->s_hook, &sup->consumers);
+ 	list_add(&link->c_hook, &con->suppliers);
+-	pr_debug("%pfwP Linked as a fwnode consumer to %pfwP\n",
++	pr_debug("%pfwf Linked as a fwnode consumer to %pfwf\n",
+ 		 con, sup);
+ 
+ 	return 0;
+@@ -122,7 +122,7 @@ int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
+  */
+ static void __fwnode_link_del(struct fwnode_link *link)
+ {
+-	pr_debug("%pfwP Dropping the fwnode link to %pfwP\n",
++	pr_debug("%pfwf Dropping the fwnode link to %pfwf\n",
+ 		 link->consumer, link->supplier);
+ 	list_del(&link->s_hook);
+ 	list_del(&link->c_hook);
+@@ -1104,7 +1104,7 @@ int device_links_check_suppliers(struct device *dev)
+ 		if (!dev_is_best_effort(dev)) {
+ 			fwnode_ret = -EPROBE_DEFER;
+ 			dev_err_probe(dev, -EPROBE_DEFER,
+-				    "wait for supplier %pfwP\n", sup_fw);
++				    "wait for supplier %pfwf\n", sup_fw);
+ 		} else {
+ 			fwnode_ret = -EAGAIN;
+ 		}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2.637.g21b0678d19-goog
+
