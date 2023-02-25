@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE946A2560
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A626A256C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBYANJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 19:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S229566AbjBYATX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 19:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBYANH (ORCPT
+        with ESMTP id S229482AbjBYATV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:13:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C513B76F
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=cIp1vPf5C0pIRZ3gwOB719tgW+A4U3+VOJjnqQvFh+k=; b=NJzOFULQNRvh/Mj/AJDtenyeRh
-        rAQ6jLokeZ3m4QXGcP4vDiOfbRu9RtlqD/AtxtiXKlRC9G1vyTd71c9JYmDKv1rrekNVpLfo9ylEz
-        /nFYyJOEn/fBDinX1fsY6I5I4GfqMYcDd82vzfp029AzPw/jYXRqlrkD+MupXYW2P5Ftn6OoiecIr
-        vCLZkDpY7vEuSnmBzNliCM49M15Fv10hIbtTYcCmgZc2tAuPc/L8GVeqCqs6jv5fceRcQWJ1Vt0k+
-        B0bU1bPQB62oQr2z2+6dcFXpwWTZEDOvIolIIwdhWURXe8zyYCB+GecHmuPwEjAYg5dzz17Bw7wQ+
-        n6vPkVoQ==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pViBG-004OFL-7r; Sat, 25 Feb 2023 00:12:50 +0000
-Message-ID: <d5bd9e86-473e-7577-4472-33eb2acbe8fa@infradead.org>
-Date:   Fri, 24 Feb 2023 16:12:49 -0800
+        Fri, 24 Feb 2023 19:19:21 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C5668689;
+        Fri, 24 Feb 2023 16:19:20 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1DED46602FC5;
+        Sat, 25 Feb 2023 00:19:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677284358;
+        bh=Lih/5chedCssYGvXHYccrZexI9Z6zYFC+WoU9RjkJaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gaFWcnGrf+3jNv8EGARQqO0TMnQQKEvc2DwhJ0askyYyX6e2CU7nguS4u+w5xw7on
+         Pd4PWsF4iZQc+ws6nmTwmq5JuJO7xfM+YMmrbTIUuiMcWRiEyGXknkE12CLNXSIiyS
+         SyogsCESfgYeksWrq908sjidcSVusvZjCyh+jGDR6DH8uVpwOlC/YtC6aJQP3a1dlb
+         JMTDET90Hbqk6Nfza2QBs+5Jvv3E6TrbhW/XRIPDuri32SOawObTRJcKIxnWpPA7Y8
+         kBuK4tJsbUK3afeZvR3Et3krAONhfs4Q6jnQb9TGdEKCE1SAMuQ/0HuZeeuAURRn0q
+         OQpj0z+yEP5yw==
+Received: by mercury (Postfix, from userid 1000)
+        id 045A11060924; Sat, 25 Feb 2023 01:19:15 +0100 (CET)
+Date:   Sat, 25 Feb 2023 01:19:15 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, peterwu.pub@gmail.com
+Subject: Re: [PATCH v4] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Message-ID: <20230225001915.3bcqqshyntvcbue7@mercury.elektranox.org>
+References: <1676627755-14349-1-git-send-email-chiaen_wu@richtek.com>
+ <ec046b79-ac83-1d5c-4a77-59a8f313e52f@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
- <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org> <Y6tAgP7UoP3aYBjq@spud>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y6tAgP7UoP3aYBjq@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nwp35z7h4wqr3x2h"
+Content-Disposition: inline
+In-Reply-To: <ec046b79-ac83-1d5c-4a77-59a8f313e52f@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor, Palmer,
 
-On 12/27/22 10:59, Conor Dooley wrote:
-> Hey Randy,
-> 
-> On Thu, Dec 22, 2022 at 05:00:06PM -0800, Randy Dunlap wrote:
->> On 12/21/22 20:49, kernel test robot wrote:
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
->>> commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
->>> date:   6 weeks ago
->>> config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMSA-0-0
->>> reproduce:
->>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>         git fetch --no-tags linus master
->>>         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->>>         # 1. reproduce by kismet
->>>            # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
->>>            kismet --linux-ksrc=linux --selectees CONFIG_IOMMU_IO_PGTABLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=riscv
->>>         # 2. reproduce by make
->>>            # save the config file to linux source tree
->>>            cd linux
->>>            make ARCH=riscv olddefconfig
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> kismet warnings: (new ones prefixed by >>)
->>>>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
->>>    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
->>>    
->>>    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->>>      Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->>>      Selected by [y]:
->>>      - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->>>
->>
->> Maybe this:
->>
->> ---
->>  drivers/iommu/Kconfig |    3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
->> --- a/drivers/iommu/Kconfig
->> +++ b/drivers/iommu/Kconfig
->> @@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
->>  config IOMMU_IO_PGTABLE_LPAE
->>  	bool "ARMv7/v8 Long Descriptor Format"
->>  	select IOMMU_IO_PGTABLE
->> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
->> +	depends on ARM || ARM64 || ARCH_RENESAS || \
->> +		(COMPILE_TEST && !GENERIC_ATOMIC64)
->>  	help
->>  	  Enable support for the ARM long descriptor pagetable format.
->>  	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
->>
->>
->> or is way off?
-> 
-> Apologies for the radio silence here..
-> 
-> Palmer initially sent a workaround and there was some discussion there:
-> https://lore.kernel.org/all/20221214180409.7354-1-palmer@rivosinc.com/
-> Guo sent a patch too:
-> https://lore.kernel.org/linux-riscv/20221215073212.1966823-1-guoren@kernel.org/
-> 
-> I suppose Christmas is doing Christmas things :)
+--nwp35z7h4wqr3x2h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Has this been solved (merged) yet?
-I'm still seeing a warning on linux-next-20230224.
+Hi,
 
-thanks.
--- 
-~Randy
+On Fri, Feb 17, 2023 at 11:11:47AM +0100, Krzysztof Kozlowski wrote:
+> On 17/02/2023 10:55, ChiaEn Wu wrote:
+> > Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> > "richtek,rt9467" because it has to match the "compatible name" in
+> > the source code.
+> >=20
+> > Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 ba=
+ttery charger")
+> > Reported-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > ---
+>=20
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Thanks, queued for v6.3.
+
+-- Sebastian
+
+--nwp35z7h4wqr3x2h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP5VAAACgkQ2O7X88g7
++pqyNg/+IWC9HSMBeqkfNPuZF+QAasWBADtQcAvSK/acMwR7MBKADSMxKfdAmgdi
+uTEGGDkc5TK5MwD85uwnIQgIjJHtILkOB26jDS0tOvl2ZYfD/0vaxnZtFDVg7xqe
+N2yfalLmARQFfL3f4cdx9lSbsUc8AXirGIGXO0B/5Ffs9Xm1Hid0pAyX9hpySQE4
+BxpHkdMhR7zYyqNMKwttTRxauG8M7EVNUxX6URxCNKxtQwDd03Z0XibRCH/kkMR6
+wjP0N5wW3g0F1fjlhKFBPjuIIDQQ+Pdc/xg8LwzIKdC0FJ9SVTKOsrQrr87VppSx
+3tf6r8tcgpwjHBpzJ2TqxEQ+usmVciDp0MeJkHgF1JB4F/AWjzZgmuJgjfm+xSSo
+DZ/ShC+WvWNeW3Fus8cVIc+4BdgKa1Xqi6hroSL8OWFuI1Yl5CKKd2gzcBtRcD6v
+WeQh6QhJyvDVxn+bIRkFX7TWpD1RwxIfMOVBW9zPYMzh8ZuWliD4lidBvPnaVNqq
+K4r8WRH/Xe25lHWbeOBTZOKaUnl5bIftJHi899b7oATJ++Fb5TL4DlCeEOqfHGsg
+tbnNe7SlvcXyWHUJp8DlkpYhOQuRHpi+zndQsAY6X+wJMWZMDoypTqIkLT7kOxCT
+IIxKWQlPrtTgxs8AUQWjzHSRiqTamWdxsRZliqp6d6uNfU48SyU=
+=pWVp
+-----END PGP SIGNATURE-----
+
+--nwp35z7h4wqr3x2h--
