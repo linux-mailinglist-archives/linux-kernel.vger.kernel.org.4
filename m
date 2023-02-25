@@ -2,102 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B1E6A27E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 690086A27E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjBYIUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 03:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S229535AbjBYIev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 03:34:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBYIUx (ORCPT
+        with ESMTP id S229445AbjBYIeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 03:20:53 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BC41285C;
-        Sat, 25 Feb 2023 00:20:52 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-536be69eadfso42820227b3.1;
-        Sat, 25 Feb 2023 00:20:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+rltlccYYLls/6/80VLpV3Rr0SI6i9Yf8jKNTUIakO0=;
-        b=N1+ynUBP7BIR8yJMHSCe2coIJ9/FqCzScTFU5QefhCaAtsPLV2gl/fke00KY3aAQ34
-         gPD6eDZbDEFK9pfdcCc9u5rjZAKIZJPTp4CzUH4S00DYx+A8kqDSWoWYWgMSWwUzVjPt
-         1/IuNUiTrGEWQNlkt5fobCt/CdVl/29/1SeP6QdfOI7ZcKl8Rw0NlufJPiNRmQGXau/d
-         nRHYTbmcKdSeDGwmwFHGPDtpyrfbRvFtnqsAoFH/oBTwyYxMdBE7uijjrwrGn5ym/CDb
-         nON6om1eA2m0SAHZQzzNC/iTKPX+HssPbFK4+hVk5mWJuCnT3ofpCsnPS2SEPlTskSU9
-         5PsQ==
+        Sat, 25 Feb 2023 03:34:50 -0500
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D40612F0A;
+        Sat, 25 Feb 2023 00:34:49 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id g12so858121pfi.0;
+        Sat, 25 Feb 2023 00:34:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+rltlccYYLls/6/80VLpV3Rr0SI6i9Yf8jKNTUIakO0=;
-        b=C8fVANUimQDkVxSnA1dJp0Ml3shPAlk1jQbPJl9JLox7TxrdmqD0ao9k+NTomRXmSN
-         0fNKViGL7RIvDOC9pSAwNQAyz2D5Poz5tnNpKNCjj3FP2o+QQhP+s/r2xVpEjG7J9ZQv
-         8axR9g4VEOgKUaGiJR23ReaVhybqhLEwjsWf6sIAH1g6XK61aHX20Yw6SGKJAKLx8rDc
-         cD1135Pe+gOsnk88BLjGWtlkiVHXzTjakb+RVHOewv7gm8VYr1lT8BvrWCIpmbq/HoQn
-         HKxhxYlEhBeHv2Bq6Nr2rkGblByH7iJYkb+JgTG0mjEPOOBp9Erzc3VyHPTzfJAz8XDO
-         yRvg==
-X-Gm-Message-State: AO0yUKUHmE2HAfIvDDHWBuzIsrI/TTdTfJycstYT9OZCSSfqr5iYvgRl
-        EHZzWvWqc8qwRbUcsVfr1qNPmSiIULP9skgN+9k=
-X-Google-Smtp-Source: AK7set8e++moIBaY1NhFio11TdxU4kRfW6YaKQ1izSqLuJaajhPq5FeZvpdANs36njnJ85ehD+Io941NVzULcQEL6AY=
-X-Received: by 2002:a5b:50b:0:b0:a36:3875:564a with SMTP id
- o11-20020a5b050b000000b00a363875564amr4043718ybp.2.1677313251960; Sat, 25 Feb
- 2023 00:20:51 -0800 (PST)
+        bh=tgdlhpL67h2C5/Vx2oHavtV4QOTDeiwV5fIx5a2BvQI=;
+        b=FSRTIhl/hUIXtxDLGdLArexGYAzXUCdAAewokG/ZoEy+VPXTUws19p0en9BpzG72I3
+         b6/JrilVDv+eYhzLETi2Z3LdJxQJAGe8JwVHE5Z/x6AuXzILmWnukilzIP+yI18T4rk6
+         T4xa9Jxr58zlJ9QnPSFOVfXKI6p38zenPQaMGT2X2FMLXJ0fpdV6gypC1lZrgdfl0VhR
+         8h6WTU7lCW9b4/uIzTLRpi2vrQ30pUwD1QGTzAWJxVDPGBYjpS/h8y5aeaZsL2OoIa5+
+         41axWY9C99oQ3QyjuVDx3sx2/pLW5m7yPMs9KLzxuTIBUpzOXVOgJAX/uShiK+2Yj9iH
+         hYAQ==
+X-Gm-Message-State: AO0yUKXQZsSX6CzbXEw5iw6JLfDYuePe+QUxGYcjHkVxqHWPNu8TZHuo
+        H0zIFVh7TfX0PV3OQLPbazdMu+G2JyIchF7capMID2SIW9k=
+X-Google-Smtp-Source: AK7set/rSsk9JATGK69ZfTt4pxEx7Lr/OtJW7W+5zkvAsvEy9cx0/Krpl200gXh/mjn8k2Xdq1LxWnIeKuGu/DLDk9M=
+X-Received: by 2002:a62:1993:0:b0:5a8:bdd2:f99c with SMTP id
+ 141-20020a621993000000b005a8bdd2f99cmr3757105pfz.1.1677314088667; Sat, 25 Feb
+ 2023 00:34:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20230224133609.2877396-1-conor.dooley@microchip.com>
- <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com>
- <Y/kldmYcl7+2FBRB@spud> <CANiq72=btcBOmrz0=ib=2eZiiV1z4_3qm1cqyw1=jUFDiJ77bg@mail.gmail.com>
- <Y/k65INC1//tXe2U@spud>
-In-Reply-To: <Y/k65INC1//tXe2U@spud>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 25 Feb 2023 09:20:40 +0100
-Message-ID: <CANiq72mX+vCw=4a7X2oDR-WkVcaQ4KEV-FjYUQZKonJ0anw47A@mail.gmail.com>
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+References: <20230222163754.3711766-1-frank.jungclaus@esd.eu>
+In-Reply-To: <20230222163754.3711766-1-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 25 Feb 2023 17:34:37 +0900
+Message-ID: <CAMZ6RqJwJNxn5nm-PW2yY3BobTNB+vVmeDGi=M80YavN8Ui-OQ@mail.gmail.com>
+Subject: Re: [PATCH] can: esd_usb: Improve code readability by means of
+ replacing struct esd_usb_msg with a union
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 11:32 PM Conor Dooley <conor@kernel.org> wrote:
+On Thu. 23 Feb. 2023 at 01:56, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> As suggested by Vincent Mailhol, declare struct esd_usb_msg as a union
+> instead of a struct. Then replace all msg->msg.something constructs,
+> that make use of esd_usb_msg, with simpler and prettier looking
+> msg->something variants.
 >
-> It was a few hours ago that I looked properly, but, IIRC, it was a
-> conversion from config files to code? My understanding was that
-> config files were not copyrightable, hence I looked only at the
-> authorship of the code. I'm usually on the anal side about SoB stuff,
-> so it is not a matter of me not bothering!
+> Link: https://lore.kernel.org/all/CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com/
+> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 
-It is not so much about copyright, but about crediting people fairly.
-Gary has done a significant amount of the work that eventually became
-part of the patches here, and I would have sent the patch with at
-least a `Co-developed-by` from him.
+Thank you for your follow up on this and on all my other comments.
 
-Not to mention every commit in the kernel has a SoB, regardless of
-what files are modified -- I would not remove a SoB from somebody else
-when forwarding a patch even if they were all non-copyrightable files.
-
-Cheers,
-Miguel
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
