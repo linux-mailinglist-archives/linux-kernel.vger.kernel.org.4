@@ -2,175 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213066A2576
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489C46A2578
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBYAWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 19:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
+        id S229477AbjBYAZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 19:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBYAWb (ORCPT
+        with ESMTP id S229456AbjBYAZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:22:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B466F014
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:22:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B251FB81D6D
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 00:22:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65FC0C433EF;
-        Sat, 25 Feb 2023 00:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677284547;
-        bh=Qss6SEUxbI2WLKHhyg6K0GdmTUqio7emWAHXD4SdPD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FIG2fQ4ezLsZgixCuhgwtH5VMEEi1AYYv347q+42bX46PJz74BqM3Su1WwqdhVhug
-         ipkhypRJH2XqwcjsB3nJvTIC7XsLFeuUiP75dPa5oekG4FjzMYaI7pXpacErhDRzn2
-         kBPc32+EnXWXMA+JaZfORkcll9km1qilXXoqIVHgGmGhSl26xucxCPdy7VmFy21RzM
-         /Ln6me2znCbJ3o5GBJdQSnm7BYkDZ32fWbOVcFh7/TctXiu9QfCVcaU+XVOO4WLqsh
-         UDnwogMeMtNWc2XhI9nN5G3B9FmQCIaF7UomqoLImlR1CPyl7uEqlEdngv/9HFBY4w
-         eIVrbM24VwADw==
-Date:   Sat, 25 Feb 2023 00:22:22 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Message-ID: <Y/lUvq3TSXL6tJOk@spud>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
- <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org>
- <Y6tAgP7UoP3aYBjq@spud>
- <d5bd9e86-473e-7577-4472-33eb2acbe8fa@infradead.org>
+        Fri, 24 Feb 2023 19:25:27 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB7A63A3E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53916ab0c6bso24305687b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qxTzs0Lg6/y7hSm8HzByaKGhxqTF5zrCh6SMRyb4Xys=;
+        b=rR8iucnpz39sq+JL+puu6LgpfB7M3C+cPq6RL2Cd7ujgZ1QMmvOs5fDHUvMxhUNaAN
+         m+jJIWSikfUzSfKPRAIT8JMCduOV2/04wUjm55dpV2OJE+r4iI58BPF2ph0q42BEWAfD
+         Ob1KKfKcVlgDfo5IIzWsjda6QXXjqDFUnOIOCw9aCzZX1e/TD/wef0AiOwgqXfmhQl6d
+         e67QsI0T779pBDpoqbsMRhzKTyAqI5Gw/d5iNLqVyNmq0zrDBh8cH9kObEvsXjx9hbSE
+         ZYH7amxQ5zHO8Xy00sFXdtz8EXt06QqBLOGAK7OFsK8EZiUM6tBTgVLlLEsTzQvpu3+k
+         2MTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qxTzs0Lg6/y7hSm8HzByaKGhxqTF5zrCh6SMRyb4Xys=;
+        b=m/daAfhdfRXc9xG8PjbWg5i1gGJp0PbyMWj5k1tu6y1G9lrWSRXFzvBtHOc7pNVsqK
+         vSyx31knBhRVFWHPNhu+UdRK2gmSdKqj8uGNxpdCCefjDYEyPEtJ3JN/kOSvL5XfZUw+
+         tHH9lHca9cRlrqZkQReFcpysI3UjKGGy466VnD71nSjN35dNOYuQNSO0fIlMxc4x/rrW
+         cX7JaLHGsURpby/vXKfCQdSlIRGCeur7W5E6UlL7vePOCK5wvp18Nze2lFadJzlvhrV5
+         +WpfCROYaEFhMY+wPXvP2Q3t7BuYrukhGKqy1In56rcQEvvG8r6k8OjOBH90g2fazQzO
+         2bZg==
+X-Gm-Message-State: AO0yUKUYRbCM4rRu29fZx45F52VqyHjhObuvlDq0iRIXMbxlx+VLezSL
+        zjvRSNovSS6FjKoLV5yQIrK0BF2nVpdFVVP3wcBT9w==
+X-Google-Smtp-Source: AK7set9/s6MqiL5vrYzNlW80C1p9m82ZTZ7l6K+tReN5z/8pigW+XUSm6O293ENFGUsTUi1mssyjE4IKHzYx7ehFHuI=
+X-Received: by 2002:a81:4425:0:b0:52f:69d:cc75 with SMTP id
+ r37-20020a814425000000b0052f069dcc75mr5532545ywa.6.1677284722871; Fri, 24 Feb
+ 2023 16:25:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Iawm1F09jJguo10X"
-Content-Disposition: inline
-In-Reply-To: <d5bd9e86-473e-7577-4472-33eb2acbe8fa@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <02cf36b9-6526-576b-1fd3-a59b67c8c123@linuxfoundation.org> <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 25 Feb 2023 08:25:11 +0800
+Message-ID: <CABVgOSnqZAuWZJpER4B_hPHorj3DZSpv+ygudC-wSVZ5-o14uQ@mail.gmail.com>
+Subject: Re: [GIT PULL] KUnit next update for Linux 6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001e12c905f57b48cc"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000001e12c905f57b48cc
+Content-Type: text/plain; charset="UTF-8"
 
---Iawm1F09jJguo10X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 25 Feb 2023 at 07:23, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Feb 21, 2023 at 5:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >
+> > This KUnit update for Linux 6.3-rc1 consists of cleanups, new features,
+> > and documentation updates:
+>
+> Hmm. I have not actually bisected this or tried to otherwise figure
+> out exactly what is wrong, but the kunit code ends up being really
+> annoying for my build testing.
 
-On Fri, Feb 24, 2023 at 04:12:49PM -0800, Randy Dunlap wrote:
-> Hi Conor, Palmer,
->=20
-> On 12/27/22 10:59, Conor Dooley wrote:
-> > Hey Randy,
-> >=20
-> > On Thu, Dec 22, 2022 at 05:00:06PM -0800, Randy Dunlap wrote:
-> >> On 12/21/22 20:49, kernel test robot wrote:
-> >>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git master
-> >>> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
-> >>> commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.socs:=
- Add ARCH_RENESAS kconfig option
-> >>> date:   6 weeks ago
-> >>> config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMSA-0=
--0
-> >>> reproduce:
-> >>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
-nux.git/commit/?id=3D8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
-> >>>         git remote add linus https://git.kernel.org/pub/scm/linux/ker=
-nel/git/torvalds/linux.git
-> >>>         git fetch --no-tags linus master
-> >>>         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
-> >>>         # 1. reproduce by kismet
-> >>>            # install kmax per https://github.com/paulgazz/kmax/blob/m=
-aster/README.md
-> >>>            kismet --linux-ksrc=3Dlinux --selectees CONFIG_IOMMU_IO_PG=
-TABLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=3Driscv
-> >>>         # 2. reproduce by make
-> >>>            # save the config file to linux source tree
-> >>>            cd linux
-> >>>            make ARCH=3Driscv olddefconfig
-> >>>
-> >>> If you fix the issue, kindly add following tag where applicable
-> >>> | Reported-by: kernel test robot <lkp@intel.com>
-> >>>
-> >>> kismet warnings: (new ones prefixed by >>)
-> >>>>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO_PG=
-TABLE_LPAE when selected by IPMMU_VMSA
-> >>>    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' i=
-nvalid for ARCH_MMAP_RND_BITS
-> >>>   =20
-> >>>    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_L=
-PAE
-> >>>      Depends on [n]: IOMMU_SUPPORT [=3Dy] && (ARM || ARM64 || COMPILE=
-_TEST [=3Dy] && !GENERIC_ATOMIC64 [=3Dy])
-> >>>      Selected by [y]:
-> >>>      - IPMMU_VMSA [=3Dy] && IOMMU_SUPPORT [=3Dy] && (ARCH_RENESAS [=
-=3Dy] || COMPILE_TEST [=3Dy] && !GENERIC_ATOMIC64 [=3Dy])
-> >>>
-> >>
-> >> Maybe this:
-> >>
-> >> ---
-> >>  drivers/iommu/Kconfig |    3 ++-
-> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> >> --- a/drivers/iommu/Kconfig
-> >> +++ b/drivers/iommu/Kconfig
-> >> @@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
-> >>  config IOMMU_IO_PGTABLE_LPAE
-> >>  	bool "ARMv7/v8 Long Descriptor Format"
-> >>  	select IOMMU_IO_PGTABLE
-> >> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
-> >> +	depends on ARM || ARM64 || ARCH_RENESAS || \
-> >> +		(COMPILE_TEST && !GENERIC_ATOMIC64)
-> >>  	help
-> >>  	  Enable support for the ARM long descriptor pagetable format.
-> >>  	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
-> >>
-> >>
-> >> or is way off?
-> >=20
-> > Apologies for the radio silence here..
-> >=20
-> > Palmer initially sent a workaround and there was some discussion there:
-> > https://lore.kernel.org/all/20221214180409.7354-1-palmer@rivosinc.com/
-> > Guo sent a patch too:
-> > https://lore.kernel.org/linux-riscv/20221215073212.1966823-1-guoren@ker=
-nel.org/
-> >=20
-> > I suppose Christmas is doing Christmas things :)
->=20
-> Has this been solved (merged) yet?
-> I'm still seeing a warning on linux-next-20230224.
+This will be due to 7170b7ed6acb ("kunit: Add "hooks" to call into
+KUnit when it's built as a module").
 
-I thought it was fixed in the iommu tree with this series:
-https://lore.kernel.org/all/7a53ac6f-640b-436d-9bfa-3e49066b2460@arm.com/
+The "hooks.o" file is special in that it needs to be built-in even
+when the other KUnit files are built as a module, and clearly the
+kbuild hackery for that has fallen apart.
 
-If it is not, I'll take a look tomorrow...
+>
+> In particular, if I do
+>
+>      make
+>
+> repeatedly - ie with no other changes in between - the kunit code ends
+> up re-building itself for no apparent reason.
+>
+> Which then causes a re-link and makes it all really slow.
+>
+> Maybe I'm barking up the wrong tree, but just do
+>
+>    make allmodconfig
+>
+> and then do two plain "make"s in succession (feel free to add "-jXYZ"
+> to make it go much faster ;).
+>
+> The second build - that shouldn't have to re-build anything - still does this:
+>
+>   CALL    scripts/checksyscalls.sh
+>   DESCEND objtool
+>   CHK     kernel/kheaders_data.tar.xz
+>   CC      lib/kunit/hooks.o
+>   AR      lib/built-in.a
+>   CC      lib/kunit/hooks.o
+>   AR      lib/kunit/lib.a
+>   AR      built-in.a
+>   AR      vmlinux.a
+>   LD      vmlinux.o
+>   ...
+>
+> and it all takes much longer than an empty kernel build _should_ take.
 
---Iawm1F09jJguo10X
-Content-Type: application/pgp-signature; name="signature.asc"
+As best I can tell, this is kbuild getting very confused by the way
+we're adding lib/kunit/hooks.o directly in lib/Makefile (rather than
+going through lib/kunit/Makefile).
 
------BEGIN PGP SIGNATURE-----
+Moving lib/kunit/hooks.c -> lib/kunit_hooks.c and adjusting the
+makefile to match _seems_ to fix it here:
+---
+diff --git a/lib/Makefile b/lib/Makefile
+index 469be6240523..bb87df427cff 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -131,10 +131,8 @@ obj-$(CONFIG_KUNIT) += kunit/
+# Include the KUnit hooks unconditionally. They'll compile to nothing if
+# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
+# function pointers) which need to be built-in even when KUnit is a module.
+-ifeq ($(CONFIG_KUNIT), m)
+-obj-y += kunit/hooks.o
+-else
+-obj-$(CONFIG_KUNIT) += kunit/hooks.o
++ifdef CONFIG_KUNIT
++obj-y += kunit_hooks.o
+endif
+---
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/lUvgAKCRB4tDGHoIJi
-0p8lAQCU+UmkWkyATaId/nIF1qjSHlGT8wtiNz27kjySSV7BRgD+OxVsF2CfsLdd
-huSzCbwV3/hA4JkKjnPME24s3tf+7gs=
-=2R1r
------END PGP SIGNATURE-----
+Splitting the KUnit code up like that is a little bit ugly, so I'm
+open to any suggestions of how better to structure it.
 
---Iawm1F09jJguo10X--
+Regardless, I'll play around a bit and see if I can come up with
+anything better before sending that out.
+
+Sorry for the inconvenience!
+
+-- David
+
+--0000000000001e12c905f57b48cc
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCp
+qKvRNH0Rzmfp2fP9sc+jV9m0OX00tN7SSCUhn2J5kTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjUwMDI1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAPeDStx3iAnpH5IKWR4Mc
+OspuWCLheUSawkXqD06iO+1oRJDBQglNwSaiMXC9EmcdybOadEn4g83TRNSRWl4x1PTOcn/3FrVb
+yac78QAE/+VTmRhjaW4CQFbu/LzZuOLmLTscbe8tUhwBUH0uRQauWWjI2QrbB/9+9WbkZDbtw4Ie
+9fTpzwy0lp9MOt4wDY6TlO3+63eqJNlgxG7ct8Z7kJPg1/43pXy7Snwy6d1nVaO1DdxFI6Luvvjh
+NaIrASDpa7UA8EQ8uRxB/2yCak66Oha8zmDYMhjZKl6N3H9bwSpJeS/2oiwDwoUkxyrkTSPsSFfb
+A/GROgIbdvI3m2bd7w==
+--0000000000001e12c905f57b48cc--
