@@ -2,137 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165666A27FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E346A281C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjBYJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 04:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S229547AbjBYJNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 04:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBYJAj (ORCPT
+        with ESMTP id S229379AbjBYJNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 04:00:39 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01576FF34
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:00:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677315638; x=1708851638;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N9jhrY5gIQpfxiSF+T+nOZL7yNeI8a74CZhPjBSicyk=;
-  b=cbL9Q8kBTtMu5KAqxfU3SNMJbFKPL2hdBOsCid0aw2WJ8+4oO7O+dwLS
-   kEFQ7gRHIEEVcP5RKZbAsBVpjOa6QRsoMRzCTPPZ+Bf6EpKXK2KyQfjVi
-   wjTrTIYK5Xh6NLSSTo+qK0ShjIe6PSCVd04Lq+w4w9DAoM3GU+4xh2KiR
-   FDjHi69V7zju1VU1njvlmWXtn5Aqr2Bwo6hMIsYLcUsmDqBcb7eDG8xhK
-   C5rZgXJSctiVmX+t0Gjbfh0f6Qf/gG04bRY2Kpe54AFVJeM6zKZUcbKIq
-   EXh5eGr4pSHaTPzAsK+lP3/eMT7dVX6G6li8pT7GqeFZth7kUI+mEGsx/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="313282910"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="313282910"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 01:00:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="650618590"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="650618590"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Feb 2023 01:00:25 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVqPo-00034l-15;
-        Sat, 25 Feb 2023 09:00:24 +0000
-Date:   Sat, 25 Feb 2023 16:59:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Ott <sebott@linux.ibm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: s390-linux-ld: arc-rimi.c:undefined reference to `iounmap'
-Message-ID: <202302251622.fFIHvPR0-lkp@intel.com>
+        Sat, 25 Feb 2023 04:13:45 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A7911E9D;
+        Sat, 25 Feb 2023 01:13:43 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 2F90A1C0AB2; Sat, 25 Feb 2023 10:13:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1677316421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vSGD016VSliM8iYt5hXOdqQTHiF7OfjIaZHqRxtbcps=;
+        b=RbyMdpNrIH7P3FMWlF1hE/phucMmLtKkw+a97ArYLe4bVN+DO4rCZWxfLywxB6v4Wo5Tne
+        qoRyk3O5bhPvoy7jHZ9jqQ/6M+bD/4zpqa0Ob23eFn+nU0VMIXAtCXU4x1GUiDp7jXyRQb
+        mRX8Ufkcx6+AdO8woEwsGvK/MBB6toQ=
+Date:   Sat, 25 Feb 2023 10:13:40 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Michael Everitt <gentoo@veremit.xyz>,
+        Christian Eggers <ceggers@arri.de>,
+        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: linux-6.1-rt ?
+Message-ID: <Y/nRRHo1XtRenC6u@duo.ucw.cz>
+References: <12136223.O9o76ZdvQC@n95hx1g2>
+ <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
+ <Y7/cYsEXHpCEGwwa@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Hrxy3MuuQA4PAN0i"
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7/cYsEXHpCEGwwa@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
 
-FYI, the error/warning still remains.
+--Hrxy3MuuQA4PAN0i
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   489fa31ea873282b41046d412ec741f93946fc2d
-commit: 71ba41c9b1d91042960e9d92a5c8f52dc8531eda s390/pci: provide support for MIO instructions
-date:   3 years, 10 months ago
-config: s390-randconfig-r015-20230225 (https://download.01.org/0day-ci/archive/20230225/202302251622.fFIHvPR0-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Hi!
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302251622.fFIHvPR0-lkp@intel.com/
+> > You probably want this: https://www.spinics.net/lists/linux-rt-users/ms=
+g26345.html
+> >=20
+> > You may wish to wait for the maintainer to complete their processes!
+>=20
+> There is a 6.1-RT but it hasn't been updated for a while. There should
+> be a 6.2-RT later today.
+> As for the link [1] it has not been confirmed nor denied that v6.1 will
+> be a LTS kernel. Once the version 6.1 left its Schr=F6dinger state then
+> there will be an update (or not).
 
-All errors (new ones prefixed by >>):
+Apparently 6.1 left the Schr=F6dinger state, and it is confirmed as LTS.
 
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
-   main.c:(.text+0x8a): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0xce): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
-   main.c:(.text+0x25e): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x29c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
-   main.c:(.text+0x528): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x5e4): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x61a): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x664): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_exit':
-   com90xx.c:(.exit.text+0x5a): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `check_mirror':
-   com90xx.c:(.init.text+0x4c): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x6e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_found':
-   com90xx.c:(.init.text+0xe6): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x1ba): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x2d4): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x3a2): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_probe':
-   com90xx.c:(.init.text+0x64c): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x6a8): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x8d6): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
-   arc-rimi.c:(.exit.text+0x2e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
-   arc-rimi.c:(.init.text+0xb6): undefined reference to `ioremap'
->> s390-linux-ld: arc-rimi.c:(.init.text+0x132): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x29a): undefined reference to `iounmap'
->> s390-linux-ld: arc-rimi.c:(.init.text+0x322): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x3e0): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
->> arc-rimi.c:(.text.unlikely+0x4c): undefined reference to `ioremap'
->> s390-linux-ld: arc-rimi.c:(.text.unlikely+0x6e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   cistpl.c:(.text+0x210): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x222): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x278): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x28e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0xd34): undefined reference to `iounmap'
+If there are any news regarding 6.1-rt, world wants to know :-), but
+maybe that is better discussed on realtime meeting?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--Hrxy3MuuQA4PAN0i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/nRRAAKCRAw5/Bqldv6
+8l4eAJ97T4kgiw4pmSNSrNTNy/kj/TtDtACeK/zt9ibLW+G4i1QJJfwCECa/nJA=
+=92e+
+-----END PGP SIGNATURE-----
+
+--Hrxy3MuuQA4PAN0i--
