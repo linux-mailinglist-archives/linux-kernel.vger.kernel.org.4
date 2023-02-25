@@ -2,216 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED376A2A57
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B373F6A2A58
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBYOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 09:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S229549AbjBYOzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 09:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYOzZ (ORCPT
+        with ESMTP id S229543AbjBYOzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 09:55:25 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AC112043
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 06:55:22 -0800 (PST)
-Received: from [192.168.2.94] (unknown [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 417C96602FB5;
-        Sat, 25 Feb 2023 14:55:20 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677336921;
-        bh=GPaYuR5Gy6chLlPOIU2JZ+7K9lpjG/p10DVFCLmE4vI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MU5VbcbfC0QusKjWBXD79gAq7WtPDI4jCbUCX37OTtNCxYhAzQRsMdIYvIcZQnliX
-         kIXwP//+YsQHnEJ/oLmaSftzRZ5vlhn0Sl6QZGQnajq7AWz9XL5xsNgzfzNW9E9hEc
-         jHjE6VR8vCGBK70YCdNZB05GYvJhsWDy5DEoqGR+AfJnYZbfnw7Uo//Y2gbPd4Ty4+
-         r9RcLrILyKrWv0bNT/hMD3YY3ggV6IoYPPEULvRmjAqyhO/vuV3x36tTCTapKf+zuS
-         sEc4uW51ZoPz/NIiC8l7jCYmwaAKotiLFVU+N8roRIoJIfYJ0kIQBG39ssTUoizeoK
-         rzYbb8McmO57g==
-Message-ID: <4cb50dcb-b877-9602-3802-d651eea57b89@collabora.com>
-Date:   Sat, 25 Feb 2023 17:55:16 +0300
+        Sat, 25 Feb 2023 09:55:43 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB82125B6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 06:55:39 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id q2so648258qki.3
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 06:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Q8gsNHzpb5kSZtMtig8/+UueCt1zs6M93LoCCjgrGo=;
+        b=NxXuAhBYmUdC2MrMV2EFL9Aen3jQKb3jYtB+q7Ty1zm82Fm2n0ZrgTpkYtAL7Jwkx0
+         dP4P4erZ/Ht4J73pJS5KwCmpI8j1AWM+7h02RuL0+PfOrImuXj19XfzQq6ClTcQ5YSVL
+         0tEubcNYqqLc2jzt5/tAtNMP/UGR7/Sy8HvV5hKbTdtANwlXk7hyhCMExuSzLTVCCSyn
+         rzl762yf7jF9WkN2Ye9YeyGVfu6q74ZtViLLtR289BSHDIiuogSmznNWkIHHTX1Yd5DY
+         zzQJTumXahViRWwFmYgRygiJBYgIxbsgh8ZigGsj06Qu98s8NZd4Q8Pl08WnL70iNmZ+
+         fBMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6Q8gsNHzpb5kSZtMtig8/+UueCt1zs6M93LoCCjgrGo=;
+        b=MOpnuoUve6JsbfVhwpcHs8CodZUDLlXxVUNVwdysS4U0+POPpxwK2dscxersWi+OT6
+         hGT5uSeGKr3eFoYcx79j2f2et3RpxTIGbxcOAXmGgte7m9Ykj8RkgidWnbG6aAzf6otl
+         Iuaiad8kujfl2V9D5uzSaF07NDZNotAp0wYEaSW9bAO3JRySaW4hZgdeupcvu+84joRA
+         bDVGpMzE6jpK6y7qlaC+N1Q6VwXAcAHM+E0C50gMpYQrhW+j5QFjiBkk6rUOn8WwcVMN
+         eKyBgJBydcfSCGW67FA7WohUKhEXpPAoRKDaWr6efxq/hZCakekucrehf6u9uF2I5fDd
+         eKZw==
+X-Gm-Message-State: AO0yUKVyhFa0QgF1U0iTKrCsoM+oM3kxDnE/USMAQMSs/W2K2GBtEfZp
+        laIMj5jQjOJqNe4j5nsc8wgJ5SZNlz+1ega7GXkmTwBIqBzeCcl9yfwXMw==
+X-Google-Smtp-Source: AK7set8jA+1nFDnQkwfNDsgRkVHfQxRE0kvqoiPSKE7WECLY+Ny/1Ed0v/fPhmsJcfWj1yCPN4mroOYDfGrai4yml8k=
+X-Received: by 2002:a05:620a:2589:b0:73b:7f8c:5571 with SMTP id
+ x9-20020a05620a258900b0073b7f8c5571mr1261108qko.6.1677336937869; Sat, 25 Feb
+ 2023 06:55:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/virtio: Pass correct device to
- dma_sync_sgtable_for_device()
-Content-Language: en-US
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <20230224153450.526222-1-olekstysh@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230224153450.526222-1-olekstysh@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CABXGCsO4=qKBF=2FRPVwW8FA4iLFh0Dt9n1BLMec3k10GUorpg@mail.gmail.com>
+ <9f682c4d-e7b7-5e23-84f5-cea4fdac2085@leemhuis.info>
+In-Reply-To: <9f682c4d-e7b7-5e23-84f5-cea4fdac2085@leemhuis.info>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Sat, 25 Feb 2023 19:55:27 +0500
+Message-ID: <CABXGCsNruNKfx3d1dpneRUvn3dCqv_bM93TdJsCLeRYiP3qYaA@mail.gmail.com>
+Subject: Re: [6.3][regression] after commit 7170b7ed6acbde523c5d362c8978c60df4c30f30
+ my system stuck in initramfs forever
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     davidgow@google.com, rmoar@google.com, brendanhiggins@google.com,
+        skhan@linuxfoundation.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/23 18:34, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> The "vdev->dev.parent" should be used instead of "vdev->dev" as a device
-> for which to perform the DMA operation in both
-> virtio_gpu_cmd_transfer_to_host_2d(3d).
-> 
-> Because the virtio-gpu device "vdev->dev" doesn't really have DMA OPS
-> assigned to it, but parent (virtio-pci or virtio-mmio) device
-> "vdev->dev.parent" has. The more, the sgtable in question the code is
-> trying to sync here was mapped for the parent device (by using its DMA OPS)
-> previously at:
-> virtio_gpu_object_shmem_init()->drm_gem_shmem_get_pages_sgt()->
-> dma_map_sgtable(), so should be synced here for the same parent device.
-> 
-> Fixes: b5c9ed70d1a9 ("drm/virtio: Improve DMA API usage for shmem BOs")
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> ---
-> This patch fixes the following issue when running on top of Xen with 
-> CONFIG_XEN_VIRTIO=y (patch was only tested in Xen environment (ARM64 guest)
-> w/ and w/o using Xen grants for virtio):
-> 
-> [    0.830235] [drm] pci: virtio-gpu-pci detected at 0000:00:03.0
-> [    0.832078] [drm] features: +virgl +edid -resource_blob -host_visible
-> [    0.832084] [drm] features: -context_init
-> [    0.837320] [drm] number of scanouts: 1
-> [    0.837460] [drm] number of cap sets: 2
-> [    0.904372] [drm] cap set 0: id 1, max-version 1, max-size 308
-> [    0.905399] [drm] cap set 1: id 2, max-version 2, max-size 696
-> [    0.907202] [drm] Initialized virtio_gpu 0.1.0 0 for 0000:00:03.0 on minor 0
-> [    0.927241] virtio-pci 0000:00:03.0: [drm] drm_plane_enable_fb_damage_clips() not called
-> [    0.927279] Unable to handle kernel paging request at virtual address ffffffffc0053000
-> [    0.927284] Mem abort info:
-> [    0.927286]   ESR = 0x0000000096000144
-> [    0.927289]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    0.927293]   SET = 0, FnV = 0
-> [    0.927295]   EA = 0, S1PTW = 0
-> [    0.927298]   FSC = 0x04: level 0 translation fault
-> [    0.927301] Data abort info:
-> [    0.927303]   ISV = 0, ISS = 0x00000144
-> [    0.927305]   CM = 1, WnR = 1
-> [    0.927308] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000004127f000
-> [    0.927312] [ffffffffc0053000] pgd=0000000000000000, p4d=0000000000000000
-> [    0.927323] Internal error: Oops: 0000000096000144 [#1] PREEMPT SMP
-> [    0.927329] Modules linked in:
-> [    0.927336] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.2.0-rc4-yocto-standard #1
-> [    0.927343] Hardware name: XENVM-4.18 (DT)
-> [    0.927346] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    0.927352] pc : dcache_clean_poc+0x20/0x38
-> [    0.927370] lr : arch_sync_dma_for_device+0x24/0x30
-> [    0.927379] sp : ffff80000972b3e0
-> [    0.927381] x29: ffff80000972b3e0 x28: ffff000001aa8a00 x27: 0000000000000000
-> [    0.927389] x26: 0000000000000000 x25: ffff000002815010 x24: 0000000000000000
-> [    0.927396] x23: ffff8000090f9078 x22: 0000000000000001 x21: 0000000000000002
-> [    0.927403] x20: ffff000002b6b580 x19: 8000000000053000 x18: ffffffffffffffff
-> [    0.927410] x17: 0000000000000000 x16: 0000000000000000 x15: ffff80000963b94e
-> [    0.927416] x14: 0000000000000001 x13: ffff80000963b93b x12: 64615f616d645f67
-> [    0.927423] x11: ffff800009513110 x10: 000000000000000a x9 : ffff80000972b360
-> [    0.927430] x8 : ffff8000095130c8 x7 : ffff80000972b150 x6 : 000000000000000c
-> [    0.927436] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 000000000000003f
-> [    0.927443] x2 : 0000000000000040 x1 : ffffffffc0067000 x0 : ffffffffc0053000
-> [    0.927450] Call trace:
-> [    0.927452]  dcache_clean_poc+0x20/0x38
-> [    0.927459]  dma_direct_sync_sg_for_device+0x124/0x130
-> [    0.927466]  dma_sync_sg_for_device+0x64/0xd0
-> [    0.927475]  virtio_gpu_cmd_transfer_to_host_2d+0x10c/0x110
-> [    0.927483]  virtio_gpu_primary_plane_update+0x340/0x3d0
-> [    0.927490]  drm_atomic_helper_commit_planes+0xe8/0x20c
-> [    0.927497]  drm_atomic_helper_commit_tail+0x54/0xa0
-> [    0.927503]  commit_tail+0x160/0x190
-> [    0.927507]  drm_atomic_helper_commit+0x16c/0x180
-> [    0.927513]  drm_atomic_commit+0xa8/0xe0
-> [    0.927521]  drm_client_modeset_commit_atomic+0x200/0x260
-> [    0.927529]  drm_client_modeset_commit_locked+0x5c/0x1a0
-> [    0.927536]  drm_client_modeset_commit+0x30/0x60
-> [    0.927540]  drm_fb_helper_set_par+0xc8/0x120
-> [    0.927548]  fbcon_init+0x3b8/0x510
-> [    0.927557]  visual_init+0xb4/0x104
-> [    0.927565]  do_bind_con_driver.isra.0+0x1c4/0x394
-> [    0.927572]  do_take_over_console+0x144/0x1fc
-> [    0.927577]  do_fbcon_takeover+0x6c/0xe4
-> [    0.927583]  fbcon_fb_registered+0x1e4/0x1f0
-> [    0.927588]  register_framebuffer+0x214/0x310
-> [    0.927592]  __drm_fb_helper_initial_config_and_unlock+0x33c/0x540
-> [    0.927599]  drm_fb_helper_initial_config+0x4c/0x60
-> [    0.927604]  drm_fbdev_client_hotplug+0xc4/0x150
-> [    0.927609]  drm_fbdev_generic_setup+0x90/0x154
-> [    0.927614]  virtio_gpu_probe+0xc8/0x16c
-> [    0.927621]  virtio_dev_probe+0x19c/0x240
-> [    0.927629]  really_probe+0xbc/0x2dc
-> [    0.927637]  __driver_probe_device+0x78/0xe0
-> [    0.927641]  driver_probe_device+0xd8/0x160
-> [    0.927645]  __driver_attach+0x94/0x19c
-> [    0.927649]  bus_for_each_dev+0x70/0xd0
-> [    0.927656]  driver_attach+0x24/0x30
-> [    0.927660]  bus_add_driver+0x154/0x20c
-> [    0.927664]  driver_register+0x78/0x130
-> [    0.927670]  register_virtio_driver+0x24/0x3c
-> [    0.927675]  virtio_gpu_driver_init+0x18/0x24
-> [    0.927684]  do_one_initcall+0x50/0x1d0
-> [    0.927691]  kernel_init_freeable+0x210/0x27c
-> [    0.927699]  kernel_init+0x24/0x12c
-> [    0.927707]  ret_from_fork+0x10/0x20
-> [    0.927716] Code: d2800082 9ac32042 d1000443 8a230000 (d50b7a20)
-> [    0.927721] ---[ end trace 0000000000000000 ]---
-> [    0.927728] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> [    0.927732] SMP: stopping secondary CPUs
-> [    0.927791] Kernel Offset: disabled
-> [    0.927794] CPU features: 0x80000,41058100,0000421b
-> [    0.927799] Memory Limit: none
-> [    1.015063] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> ---
-> ---
->  drivers/gpu/drm/virtio/virtgpu_vq.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
-> index a04a9b20896d..1778a2081fd6 100644
-> --- a/drivers/gpu/drm/virtio/virtgpu_vq.c
-> +++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
-> @@ -604,7 +604,7 @@ void virtio_gpu_cmd_transfer_to_host_2d(struct virtio_gpu_device *vgdev,
->  	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
->  
->  	if (virtio_gpu_is_shmem(bo) && use_dma_api)
-> -		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
-> +		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
->  					    bo->base.sgt, DMA_TO_DEVICE);
->  
->  	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
-> @@ -1026,7 +1026,7 @@ void virtio_gpu_cmd_transfer_to_host_3d(struct virtio_gpu_device *vgdev,
->  	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
->  
->  	if (virtio_gpu_is_shmem(bo) && use_dma_api)
-> -		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
-> +		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
->  					    bo->base.sgt, DMA_TO_DEVICE);
->  
->  	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
+On Sat, Feb 25, 2023 at 7:22=E2=80=AFPM Thorsten Leemhuis <linux@leemhuis.i=
+nfo> wrote:
+>
+> [CCing the regression list, as it should be in the loop for regressions:
+> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+>
+> On 25.02.23 14:51, Mikhail Gavrilov wrote:
+> > new kernel release cycle returning with new bugs
+> > Today my system got stuck in initramfs environment after updating to
+> > commit d2980d8d826554fa6981d621e569a453787472f8.
+> >
+> > I still do not understand how to configure the network inside the
+> > initramfs environment to grab the logs.
+> > Since an attempt to rebuild the initramfs with all modules (dracut
+> > --no-hostonly --force) leads to the stuck initramfs environment and
+> > impossible entering into initramfs console.
+>
+> Do you see any error messages? I have problems since Friday morning as
+> well (stuck in Fedora's initramfs) and see a lot of BPF warnings like
+> "BPF: invalid name" and "failed to validate module". Was able to do a
+> screenshot:
+>
+> https://www.leemhuis.info/files/misc/Screenshot_ktst-f36-x86-64_2023-02-2=
+4_07:53:14.png
+>
 
-Indeed, it's only the vgpu drm device that was moved to use the pci
-parent device. On x86 the vdev always has dma-ops, also
-virtio_has_dma_quirk=true for modern Qemu. So I didn't test this code
-path and apparently it's only testable on Xen, which is good to know.
+I also seen such messages
+https://freeimage.host/i/img-1475.HMPL26l
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+And if initramfs is configured without --no-hostonly I even could
+enter in emergency mode.
 
--- 
-Best regards,
-Dmitry
+https://freeimage.host/i/img-1480.HMPsZ3N
 
+But the module for my Keychrone K1 keyboard couldn't be loaded :(
+
+P.S.: I also use Fedora Rawhide.
+
+--=20
+Best Regards,
+Mike Gavrilov.
