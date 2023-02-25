@@ -2,129 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC74C6A254C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133D96A254F
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjBYACI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 19:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S229620AbjBYACx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 19:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjBYAB7 (ORCPT
+        with ESMTP id S229513AbjBYACv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:01:59 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBFD6A7B0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:01:58 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-53852143afcso23797887b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:01:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGce1k7vLcc005CSr+hSLKXBF5SLmaJtWY6pcwxKx0Q=;
-        b=wmKV6llXzbyV9ZIrbyej2OunFiU741qhFzyT++YfHdH+wiBtK7OyXKguWCb/kxA5lR
-         DgiV/yoxIJFHFT7HIAGeNE09zKS75YuufpetByYC+zQvHhisK1MF1WcBapNZQL2eZoTE
-         QHiLj96u/q3tU+9/uJa4MeMk3UhGRkOxdXZPb8EDh1xZ3nxCyran5snsFAKmTd/5JtEu
-         FzHlHgHlzZp3XLv5EM9LwJixEhKTFFF1gIvYyhd8N03lSvOiQxUSedhNiJdnX0om6B9S
-         ntCGHIcAFPwdHLJL2q3LRLX9MSEOB3M4l/aQIIHL5vFmWJgiaeGOAcJ+ZKIBu2P0b/sx
-         fnvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YGce1k7vLcc005CSr+hSLKXBF5SLmaJtWY6pcwxKx0Q=;
-        b=1w+qIZMT8wvXGaSiujLCotnrQrL40yucc4SFQyeerO5/jPulHnbitd/obqsp1WhmxW
-         z8l6JVd64klVKw1K0HqDRs9mM1/fv+KMMwuqi2itxTfM737PWPTBYZP0djKFd4miUW+V
-         tg3Do4NOo+vsj0mWP35NcRUfcmMfIvtqfmxlO6xwfmpI1blc9tr/XYkZ/uDQrGeQBp4f
-         9C4maXwhFeiE92R9s5NVfnVsi9RBXWejw/UEi1Ph008RHX86wBS0Xiqy4Muy561SC9B9
-         Y2xhLAvXkb5MC4u4zTcuf461TBOTCJ27HFoQVnF2n9PrFXNcN2Nf2P/Gyi4wgrvAOc27
-         Cr7Q==
-X-Gm-Message-State: AO0yUKWY2ItCzZ7aDRmNP9hX9AzTzCnPSRCvUkg/TuW+3UCy0e3NIEAU
-        ZSm0MtXxwp8GKc8Z34lGky0kCxDW+9y7sDQE7crloQ==
-X-Google-Smtp-Source: AK7set99QV/uEaIf43VqawXg5tt6DNfPTfljZt6PYvMnndqiUknRY5fA1wfLo7lx9pLsVMLGPQvxOcTnIyR7ML4cJf4=
-X-Received: by 2002:a81:af1b:0:b0:533:8080:16ee with SMTP id
- n27-20020a81af1b000000b00533808016eemr5627579ywh.10.1677283317533; Fri, 24
- Feb 2023 16:01:57 -0800 (PST)
+        Fri, 24 Feb 2023 19:02:51 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4398BB9B;
+        Fri, 24 Feb 2023 16:02:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=neQlcHeGB7lSrAr1HBUqjcytb2/TukTAS17AbFBIx553bdG3fV7YXP6xMuKPNrJAq3QD59xeG6OC+um0odL/rF7BNXqXUOVzyDZd+TblcZDVMEMOW7weuPiPmiEgpF5Hj09Fc0g2S5k8zcYGkiVnJNPpuoeZUwcd94fBMxjYMJMFEhM4fPG+1Br0i2dHRYIy8SomjmJNhxONoYm7vr5syuce8dw3nfR+zyUuADMEcXpo7yal0B3IKvUv7F8D0yDWaGYHBV4rly32GHvDdI0UiIv3rwKTDaKbE8nfjc/VMNSoyIV1uf+mUpBVmm0OozzoSbP0ik2EBncAxN85DHNfgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GmptfPGVz6H9JPWHonEMVi89Q4smGdevbdMHN4eP2ng=;
+ b=Zl8ryZWz38domvAWufY5M1cI2bGshTlM1g4r6hiqcB/jaRQ1fLTaDsaG8jTqu7Jr1AaBepKuCK4qT2ZVvlDg/FVPrreNNGuOKU9Wh5HM5kUZl/iTeR/Len+Lv1ryXSoEIRvYZyqKPn3mL94FGNkX12S/M9fOg5seolyM3BR1NvKaG38Suql1zgBWQPmmgoWTvhpjASlT4hXQnWXZrnw9V+EFfBI1+ijHP+Z9HavDcqzdgFiAyTRr9+Wg2k/otm0w691eFMXK6nX5SfYHGf2IM/zheRACnbZ1qi9GbdkSU3Ras8JpZ8Q9WyWCTKCW6GM+5EK/4IKi+ikEWTKuH0M7KA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GmptfPGVz6H9JPWHonEMVi89Q4smGdevbdMHN4eP2ng=;
+ b=UDRShEZZDOuXvFvun5d0lS0KmMg81pAXsleoHrft3IDkap13fwSTGvy9Gt+Dgih//0jv5o6KpfPKkb+wDr1GTpLMRFIgC9TEg2AAsHlrVZK1SSdctHGIvcfcJLjUZxclI4l+v0hMX4ngmT/DrMucwM0/6BCLEhJBOwh/HmUHrZrl9e67djVrcNsbmiJ1VXiWxpv/+rjtn8jFhpklBAJTkw6LdH7/OwRImL846H1d3ZeCAX/AH9SRgtwyzAGm0OoNAiFhHGLKIfsjVRLLOBB2kcnJGzqBlVfx5tSLZfdxPD3oYtVsnpFtQvvkc0w5tS1+Y4VQL5A/dmZniKS3Hk2+eg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MN2PR12MB4334.namprd12.prod.outlook.com (2603:10b6:208:1d1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Sat, 25 Feb
+ 2023 00:02:45 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.021; Sat, 25 Feb 2023
+ 00:02:45 +0000
+Date:   Fri, 24 Feb 2023 20:02:43 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     iommu@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>
+Subject: Re: [GIT PULL] Please pull IOMMUFD subsystem changes
+Message-ID: <Y/lQIwcha1DFq2om@nvidia.com>
+References: <Y/Tlx8j3i17n5bzL@nvidia.com>
+ <CAHk-=wiy2XRdvxchyuVYJJ618sAcGiPPam14z8yAW+kyCzgPmA@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiy2XRdvxchyuVYJJ618sAcGiPPam14z8yAW+kyCzgPmA@mail.gmail.com>
+X-ClientProxiedBy: BLAPR03CA0174.namprd03.prod.outlook.com
+ (2603:10b6:208:32f::11) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au> <20230224231430.2948-1-kunyu@nfschina.com>
- <Y/cy5wUtk10OahpO@gondor.apana.org.au> <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
- <Y/c7iVW67Xhhdu8e@gondor.apana.org.au> <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
-In-Reply-To: <Y/hQdzsKMYgkIfMY@gondor.apana.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 25 Feb 2023 01:01:46 +0100
-Message-ID: <CACRpkdZe3cMMxJesD0mpqHTwvuWHjSGVHsiFUQQyuA+VWknMTQ@mail.gmail.com>
-Subject: Re: [v2 PATCH] crypto: stm32 - Save and restore between each request
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4334:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4177b454-f427-463c-9f27-08db16c39f70
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xsXXmQLeXtCL6151+GePgvqBi5k5mpSg/dXVsRm68qk/HRkxnOYlYcjA/4SO13x9n8TZf2VjaRzk6PKBBFNPr8pj7L1g6MGqoG/79watVR2ih5MA6pz6Fen/0TTrv2Xozr2qmRlnfFfjLimDnk2dLgg8EM5FLxmlU28tPf7hB59/Y2P9CcAk2alz7NoLgw+aMGqmpBQ5QCC+zdX6JnvlHYi8JfOrA3clAkiDbXhhKMreQBDyOQdyu+3CcBRyOZTjKPpXoEUPzbXedNzrYeomwge26Gni7lufTXp8NpEDdQQV37oNET0VEnUy+z4vBnVUqYPk2QaGd1xtkEsdivTHNaXJglkszkRvHYn3oL664nNL+mfy4NCVYQd9WkrIa7CaiHqTQcn+UmBylmj2Tbx2jse+qSZyQtAc2oHOHCiGPvWDJ8/bHbRrP89EzgIN+MWFSIYjahCZX5CqzJz4E1Kb3aCeuiFzCSgKcPgn4ePHYf/3lQ1A9TJ/vMc8T62faKcgSFZqwKNw0i9ejGP/kB2QhVmRjAG+q5PiptxXEjeA+GGcX2yDJxbWFyTA/Rd2YuQwwTXDPRBpxCCri29mMkLBGui9gmtJl2jCUVJmAL2qlvYEua7g9jEx1Gtngs8pNwOtacnErleD+Y7lza/I3nKsEw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(451199018)(66556008)(66476007)(66946007)(6916009)(8936002)(41300700001)(8676002)(4326008)(186003)(26005)(5660300002)(83380400001)(316002)(2906002)(6512007)(6506007)(53546011)(6486002)(478600001)(38100700002)(2616005)(36756003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2bDZhLM02s5sY0g6RfZPndS+3uSl1g2O3gxZgOZB/s0u1F2Uo9Rc3bhCyrJ+?=
+ =?us-ascii?Q?a2W5U9kcrlghyP2AnRznQDL5uzpAzWeK4VPLAkAJSCtOZGpjS2sl71cciCtL?=
+ =?us-ascii?Q?ZdSfqRLNYQEDiiOvQA2sC8Na3OsCNNaFxbrl2iDdS6aF42A7gsJUHNSUbY6Z?=
+ =?us-ascii?Q?EgwY7phfUDKnblMaMXdeCwS1XF2rX8XsObwUoTW47ybG5L+7v4oimUk5JEpQ?=
+ =?us-ascii?Q?LiecpsSW0u62OkBc26BaNwfqaJD461HtqTYbzYRDBxCtWwFWH984CSg+VTuR?=
+ =?us-ascii?Q?2MroDLs4YL1/1szrwvxkeIlK8PryByr5V3asiTxuamIzF9QebzG8n2OWtTc3?=
+ =?us-ascii?Q?8aMIlnCqG9QhD1tAi+Uvs4xh5Td4+fVafNdUiwRGPvwq1SAvP8GBDbgwyPOz?=
+ =?us-ascii?Q?Zh87CTxmrpUVkLX1VOjk+YQeAi8AMAYod7P1G8HG/rvkYzrnzRU4nRl9VrET?=
+ =?us-ascii?Q?+YBL+KQizIkoM2mbtS/XSHcQ/2gcgLz441ejKvIm85bSLQd/flKapbZLt7WW?=
+ =?us-ascii?Q?uklOUeb1PWMgcsLFmLWX+MsJGZvXWQ46BSxxTqe8v6vXfpSypNh6ngtAPJjY?=
+ =?us-ascii?Q?4Hb4bzfBRmm+kec98C557O6++w5RUw5+/dgViVpTS8is0qY/abGEiSbBytYt?=
+ =?us-ascii?Q?RoVB/68jr9eJTj3MvnXwl1xExi2g3SaLpjFD7z7dHBFc9jYuSW+dXFJw69xW?=
+ =?us-ascii?Q?Bhz8CNSXT4/DaA9fuJPqGv4wVhTYK03ve5nzflggpNJivjKW3/fnuiItkxbp?=
+ =?us-ascii?Q?DfzXBQfHGDfPj48f4pEQPHrvpdgTq0LwMvJ8pyEpmL5Q53scHnGlPSrKopPJ?=
+ =?us-ascii?Q?E9OfZMa3un1fisuc6NBWV7HLNs6hAavkbZvV5UyXdb4bkG+ZmvfA/VaaSmMu?=
+ =?us-ascii?Q?MQZyZz24u7nX6kWicCKotMYIQKQozSv1sLNA/NgQQ05A/iH6Yckd5r9ZfEz7?=
+ =?us-ascii?Q?lZsW+0M3MVZN1Rofv/adWNq7qW3F61ZcC+EsEpwNQRu+PSpPSFR4Iggt3+RZ?=
+ =?us-ascii?Q?XvPues6/BCM+9wCLcYiL1aW6IBN9m44DA6eAI/rtji93sOFiPMzZVb1j2vGx?=
+ =?us-ascii?Q?q5Qte6T7Ig6HisaqPd33GU8xHVSHvLUho0D9BclvDrXS/Q3UU/tyn87kZ/Rx?=
+ =?us-ascii?Q?1GOlflXuZhDgV7XpY92tfBEX8yb+zekQSYH9lz6V9baLzY72T89rb5HtmuJj?=
+ =?us-ascii?Q?35T8eYKHYiGNiG8i333P6Ocm5ifpMvPkUeEDZmTMeidrpaZTWL+nLjj7dBJ0?=
+ =?us-ascii?Q?Ryy+hel4Bf4GDhEcKI0pp352L78yC9Uq+agL4TM/eMhH4KJxHqc1FGIdPdbd?=
+ =?us-ascii?Q?VyLGuO66xwV7sjBTM3J+HivUrc5s/Fwog/bc0PRPIqXqvcKTXykzFo6+kgNQ?=
+ =?us-ascii?Q?hJ7sqzgi+6cgx5tQzIWI7vcVo48U4mGHILN70w8SThFScZpkeN1XHdOKPAPL?=
+ =?us-ascii?Q?k0SCEUo9KcF5CNHEPIStYQiXRpVV2UBAdBe2mKFxBPMGyysCTkyHwWm7y724?=
+ =?us-ascii?Q?QDUIhKjr3SUxYSXPHcZTo3SIGIGduAtSuCGp8qw5fTbC7Vj/0kV75L3ELq2Q?=
+ =?us-ascii?Q?46QmVvEXypp0G9OCKCi4aDraPflDgxjaaaRkwZ6T?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4177b454-f427-463c-9f27-08db16c39f70
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:02:45.4335
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ExojJMwrTYg/k+07c4bibC/P+pTdxP9gnZV4pD1XuEyoEmvE/7bCaUVKfob2Kg3n
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4334
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Fri, Feb 24, 2023 at 02:50:45PM -0800, Linus Torvalds wrote:
+> On Tue, Feb 21, 2023 at 7:39 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > iommufd for 6.3
+> >
+> > Some polishing and small fixes for iommufd:
+> 
+> Hmm. About half the patches seem to not be about iommufd, but about
+> 'isolated_msi', which isn't even mentioned in the pull request at all
+> (well, it's there in the shortlog, but not in the actual "this is what
+> happened")
 
-I tested this on the Ux500 and sadly this happens
-already in probe():
+Ah, it is perhaps somewhat cryptically mentioned in the tag:
 
-[    2.802539] stm32-hash a03c2000.hash: dma-maxburst not specified, using 0
-[    2.809342] stm32-hash a03c2000.hash: No IRQ, use polling mode
-[    2.815226] stm32-hash a03c2000.hash: DMA mode not available
-[    2.821140] stm32-hash a03c2000.hash: will run requests pump with
-realtime priority
-[    2.828815] stm32-hash a03c2000.hash: Algo 0 : 0 failed
-[    2.834144] stm32-hash: probe of a03c2000.hash failed with error -22
+"Remove IOMMU_CAP_INTR_REMAP, instead rely on the interrupt subsystem"
 
-I don't quite understand why, we never get to the tests...
+In retrospect I can see that is pretty obtuse, but from my POV that
+was the goal of that series :)
 
-On Fri, Feb 24, 2023 at 6:52 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> I already merged it, and am not sure what I would add to the commit
+> message, but I really would have liked to see that mentioned,
+> considering that it wasn't some small part of it all.
 
-> v2 fixes potential state clobbering from the disconnect between
-> hdev->flags and rctx->flags.
->
-> ---8<---
-> The Crypto API hashing paradigm requires the hardware state to
-> be exported between *each* request because multiple unrelated
-> hashes may be processed concurrently.
->
-> The stm32 hardware is capable of producing the hardware hashing
-> state but it was only doing it in the export function.  This is
-> not only broken for export as you can't export a kernel pointer
-> and reimport it, but it also means that concurrent hashing was
-> fundamentally broken.
->
-> Fix this by moving the saving and restoring of hardware hash
-> state between each and every hashing request.
->
-> Fixes: 8a1012d3f2ab ("crypto: stm32 - Support for STM32 HASH module")
-> Reported-by: Li kunyu <kunyu@nfschina.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+I think the missing paragraph is something like:
 
-I think I understand the direction of the patch but it seems
-the pm_runtime_* calls get unbalanced since now this is taken
-in
-stm32_hash_one_request
- -> stm32_hash_hw_init()
-    -> pm_runtime_get_sync()
+ This PR includes some rework of MSI isolation/security capability
+ detection that touches irq, iommu, vfio and iommufd. It consolidates
+ two partially overlapping approaches into a single one.
 
-But no corresponding
-pm_runtime_mark_last_busy(hdev->dev);
-pm_runtime_put_autosuspend(hdev->dev);
+Do you like this sort of explanation in the email or the tag?
 
-Exist anymore? You know the semantics better than me,
-I'm not sure where to put this, I guess where you save
-the HW state in stm32_hash_update_cpu()?
+Honestly, after 5 years (wow time flies) of sending PRs for rdma I'm
+still a bit unclear on the best way to write the tag message.
 
-I don't know about the DMA case then though.
+I suppose you noticed, but I've followed John Corbet's suggestion to
+capture the cover letters in internal merge commits. Eg isolated-msi
+has a lot of words in commit fc3873095a
 
-Yours,
-Linus Walleij
+Thanks,
+Jason
