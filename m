@@ -2,69 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAAC6A26CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 03:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA53D6A26CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 03:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjBYCSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 21:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        id S229522AbjBYC1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 21:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBYCSQ (ORCPT
+        with ESMTP id S229602AbjBYC07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 21:18:16 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A94E17CCA;
-        Fri, 24 Feb 2023 18:18:15 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1131)
-        id 184E1209C26E; Fri, 24 Feb 2023 18:18:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 184E1209C26E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1677291495;
-        bh=IhrwGLqmgF4B8WDfAYas0s8WpUDxNET0ahy0P8cBv64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J6yIiT4tShsq47A508dIj/ODfA5uk1cyFiu/TMb6XB/7oMIwg5SgztPLSKLtrLtfH
-         3Nu1fFr4KI1xoQP9bFLRi4AMljI0CRPbIAhcy+k7cxNTQvU+HY4nwJniYA8QhxIwD4
-         h6Q81vIv7+vFnZW4walnABuX+Rsuk6dN6xt3HEaA=
-Date:   Fri, 24 Feb 2023 18:18:15 -0800
-From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/47] 6.1.14-rc2 review
-Message-ID: <20230225021815.GB16293@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20230223141545.280864003@linuxfoundation.org>
+        Fri, 24 Feb 2023 21:26:59 -0500
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B111D703B5;
+        Fri, 24 Feb 2023 18:26:49 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 4D51F1A00AB6;
+        Sat, 25 Feb 2023 10:27:29 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id f2tf31PPdTLl; Sat, 25 Feb 2023 10:27:28 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.193.131.207])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 3BD691A00AB3;
+        Sat, 25 Feb 2023 10:27:28 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     linus.walleij@linaro.org
+Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        kunyu@nfschina.com, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        lionel.debieve@foss.st.com, mcoquelin.stm32@gmail.com
+Subject: Re: [v2 PATCH] crypto: stm32 - Save and restore between each request
+Date:   Sat, 25 Feb 2023 10:26:26 +0800
+Message-Id: <20230225022627.8275-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <CACRpkdZe3cMMxJesD0mpqHTwvuWHjSGVHsiFUQQyuA+VWknMTQ@mail.gmail.com>
+References: <CACRpkdZe3cMMxJesD0mpqHTwvuWHjSGVHsiFUQQyuA+VWknMTQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223141545.280864003@linuxfoundation.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:16:15PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.14 release.
-> There are 47 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
 
-No regressions found on WSL x86_64 or WSL arm64
+hello senior:
+    I understand the new patch and probably know where to add these two functions.
+ 
+> +static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
 
-Built, booted, and reviewed dmesg.
++	if (rctx->flags & HASH_FLAGS_INIT) {
++		u32 *preg = rctx->hw_context;
++		u32 reg;
++		int i;
++
++		if (!hdev->pdata->ux500)
++			stm32_hash_write(hdev, HASH_IMR, *preg++);
++		stm32_hash_write(hdev, HASH_STR, *preg++);
++		stm32_hash_write(hdev, HASH_CR, *preg);
++		reg = *preg++ | HASH_CR_INIT;
++		stm32_hash_write(hdev, HASH_CR, reg);
++
++		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
++			stm32_hash_write(hdev, HASH_CSR(i), *preg++);
++
++		hdev->flags |= HASH_FLAGS_INIT;
+-------------------------------------------------------------
+Add functions:
+		pm_runtime_mark_last_busy(hdev->dev);
+        	pm_runtime_put_autosuspend(hdev->dev);
+-------------------------------------------------------------
++	}
++
 
-Thank you.
+There is another place:
 
-Tested-by: Kelsey Steele <kelseysteele@linux.microsoft.com> 
+> @@ -442,6 +441,18 @@ static int stm32_hash_update_cpu(struct stm32_hash_dev *hdev)
+ 			hdev->flags |= HASH_FLAGS_OUTPUT_READY;
+ 			err = 0;
+ 		}
++	} else {
++		u32 *preg = rctx->hw_context;
++		int i;
++
++		if (!hdev->pdata->ux500)
++			*preg++ = stm32_hash_read(hdev, HASH_IMR);
++		*preg++ = stm32_hash_read(hdev, HASH_STR);
++		*preg++ = stm32_hash_read(hdev, HASH_CR);
++		for (i = 0; i < HASH_CSR_REGISTER_NUMBER; i++)
++			*preg++ = stm32_hash_read(hdev, HASH_CSR(i));
++
++		rctx->flags |= HASH_FLAGS_INIT;
+-------------------------------------------------------------
+Add functions:
+		pm_runtime_mark_last_busy(hdev->dev);
+        	pm_runtime_put_autosuspend(hdev->dev);
+-------------------------------------------------------------
+ 	}
+
