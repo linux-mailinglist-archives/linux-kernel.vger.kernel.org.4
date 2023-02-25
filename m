@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3F26A27B0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 08:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EBF6A27B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 08:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjBYHOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 02:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
+        id S229507AbjBYHRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 02:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYHOG (ORCPT
+        with ESMTP id S229445AbjBYHQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 02:14:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC43F1AF;
-        Fri, 24 Feb 2023 23:14:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D3ACB801BB;
-        Sat, 25 Feb 2023 07:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC0A5C433D2;
-        Sat, 25 Feb 2023 07:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677309242;
-        bh=lfRzQHcrsc/JXtXVngh6uBLNX7IgQtx5NOSo4BewTUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FDkHLFAzXKoBD8vMsZrA+gOZmE/s+lbQIFztfuO+hxc+YNiL3b5jfapHqoFtNT6uI
-         i+weG5XpWssPOEN7w0NFRD2EV3kI/bb1Fb9QxBetbKd7Bz2UskOk+AqtUBswz76VoW
-         6ccvL3WvYSb1O/rzGVXd6Qq3Pro09fS2YExKCi9RXaKrSIiy13/LYMlHGax4IGlYv0
-         1rjlUjBjxVtGQVKwpufnM9wO5lRYyoLD3yAeXAVfjCWhw4n3bT7wvhGOyaIpBB8eFO
-         l9ctY/Jqei9V6F1ZfnO/njossQ6tlxhtDmu2WmAc8uDctiG8xAAF8JgCI97uEi2LkK
-         j/HtwX2Nic+Yw==
-Date:   Sat, 25 Feb 2023 08:13:55 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
-Message-ID: <20230225071355.437idpjgwy2m3a4d@wittgenstein>
-References: <20230225103951.59997ec3@canb.auug.org.au>
- <20230224180443.1247077f0047c70451e7fc97@linux-foundation.org>
+        Sat, 25 Feb 2023 02:16:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EB27A9C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 23:16:57 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pVonY-0003E1-HE; Sat, 25 Feb 2023 08:16:48 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pVonW-0007hj-Ey; Sat, 25 Feb 2023 08:16:46 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pVonV-00BYge-Mz; Sat, 25 Feb 2023 08:16:45 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH net v1 1/1] net: phy: c45: fix network interface initialization failures on xtensa, arm:cubieboard
+Date:   Sat, 25 Feb 2023 08:16:44 +0100
+Message-Id: <20230225071644.2754893-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230224180443.1247077f0047c70451e7fc97@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,41 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 06:04:43PM -0800, Andrew Morton wrote:
-> On Sat, 25 Feb 2023 10:39:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> > Hi all,
-> > 
-> > Today's linux-next merge of the mm tree got a conflict in:
-> > 
-> >   mm/shmem.c
-> > 
-> > between commit:
-> > 
-> >   7a80e5b8c6fa ("shmem: support idmapped mounts for tmpfs")
-> 
-> mm/shmem.c is under, umm, mm/.
-> 
-> Said patch was not made available to the linux-mm subscribers or to the
-> shmem.c developers.  It doesn't have a Link: tag and doesn't appear to
-> have been cc:linux-kernel and a google search for the title doesn't tell
-> me much.
+Without proper initialization, "changed" returned random numbers and caused
+interface initialization failures.
 
-Hey Andrew,
+Fixes: 022c3f87f88e ("net: phy: add genphy_c45_ethtool_get/set_eee() support")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/phy/phy-c45.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry, I picked up that patch because it deals with a vfs only feature
-we maintain. It has no implications for mm and just deals with per-mount
-file ownership changes (Detailed documentation under
-Documentation/filesystems/idmappings.rst. It needs updates as of v6.3
-but is correct otherwise.). While Hugh was Cced I didn't pay more
-attention to what lists were Cced. Sorry about that. But again, it
-really has no consequences for mm otherwise I'd never have taken it.
+diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
+index 3813b86689d0..fee514b96ab1 100644
+--- a/drivers/net/phy/phy-c45.c
++++ b/drivers/net/phy/phy-c45.c
+@@ -672,7 +672,7 @@ EXPORT_SYMBOL_GPL(genphy_c45_read_mdix);
+  */
+ int genphy_c45_write_eee_adv(struct phy_device *phydev, unsigned long *adv)
+ {
+-	int val, changed;
++	int val, changed = 0;
+ 
+ 	if (linkmode_intersects(phydev->supported_eee, PHY_EEE_CAP1_FEATURES)) {
+ 		val = linkmode_to_mii_eee_cap1_t(adv);
+-- 
+2.30.2
 
-Re Link: Patches I pick up don't have Link [1] tags pointing to the
-submission on lore as Linus had said in a discussion in 2022 that he
-prefers to not have the lore links in the commit message at all.
-
-[1]: https://lore.kernel.org/linux-fsdevel/20230120094346.3182328-1-gscrivan@redhat.com
-
-Thanks!
-Christian
