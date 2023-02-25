@@ -2,394 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07306A2613
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 02:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210526A261C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 02:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjBYBDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 20:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S229661AbjBYBJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 20:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBYBDc (ORCPT
+        with ESMTP id S229591AbjBYBJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 20:03:32 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7464F1ACCF;
-        Fri, 24 Feb 2023 17:03:30 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31P0TJAx003921;
-        Sat, 25 Feb 2023 01:03:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Az2KH2GdEWzN3twvzfNDan9Gs0FTfsv+Qm6CS4ij44I=;
- b=GpecsAkBO5lg94NqU8/dj6hkWv8T/fN1Ge5pYb/paQkH10HcFFpZ9ArbrIyM0NvGUcxW
- 1GuI95NmG3nMi85/ipiQ+Rogynp0m/ErN7+PYLhRW3myHHwhKS798bTKXEHlDoSwRgvH
- PIX5jIMLCikW5KapOVmfvJ4NBrtkF3iQKdGBV9rVh/fS1LF7sBxt2g2uzoAvu5dcy5Uk
- W48GrKMafiK6IhwE6wN8BU26QhGHR0X4tten5ZUcSyNjpiZQjt+43ZBNNO/8AfnryNr0
- tLR1iL+bODRjkkcVy61j1Ay4eHZ0tQb6MZs/bK8+2Jo3CV124hfpdYQOUNbzZCVtyusA ug== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwy9a6aqv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Feb 2023 01:03:13 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31P13Chd015628
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Feb 2023 01:03:12 GMT
-Received: from [10.110.9.108] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
- 2023 17:03:11 -0800
-Message-ID: <1cdb4748-d8e2-fcfa-d71b-827ab248f45a@quicinc.com>
-Date:   Fri, 24 Feb 2023 17:03:10 -0800
+        Fri, 24 Feb 2023 20:09:31 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A930192
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:09:29 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso4584531pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:09:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3jQNgmxspEfBmeQNH+ZPGvDx1V4wYSa4DmNt6455Jdw=;
+        b=Pt228mgSte20iA0MsRnaWu+0ibP2IcUQdf1gZzVaT+4P+KeITDZVXeyzwYAJpp8blH
+         yBu9lm0R53H4AeUeuEpPRREhVBXNGFFVzAkUwHZjGQB+MrrYsn4UNhogoL/ZdpoW/bxg
+         4UAWDqSKFAHlb+w/ATfBHHc8SYJp5ErOh5yZsbEoDbcqs40eBQuK85KpqsV8vfdX+y0t
+         cv0jwnprU7vWqOOEQ/ETYhX6ZV3zlIlwramQLBfYZjA7bzZ7yIL/tFAyrJuDPvxrwOYa
+         fy7WY7uHRLhyOW/RIibEkgRVRZllOzO3XPlpU2MV2oykUYmD9Pm55K/o9LchvflGa7Uq
+         jcsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jQNgmxspEfBmeQNH+ZPGvDx1V4wYSa4DmNt6455Jdw=;
+        b=jyiLeTMv+dEvbZvxv384mjmrYXVhGVyPTQrAGo2mAFqWZ/htJ7aG78ENhLDz82Blgi
+         2rh5XT5vYZ4nNS7s2bIOcMinclWiAV1D8UHtDG2pzjyAPuIEp1Ka2vUlsHHZHyb/zfGA
+         LSdjF7zBdciczUEqkAZTklUwu226YKJDt72PXuuBYHp1JXhO0RTslahuCTS4Uaaqc/GH
+         wTPJJn0mrZ9pyfj2GMYuMoW7gCLXZC+SPqGp8MZc8Ej0joWpGnqeEyi84yeH2ckvdbsI
+         KX55F3OYMjYru88Xon21qAzBRRmEuGghqXdmxUmHPLU/k5wfEZ08TAs8SAQBhVSk7/vh
+         InNg==
+X-Gm-Message-State: AO0yUKW19bP6PViukdPGzBzCT2LkKAGlG3Xu1KTU6poTkIhvLMHu7FO/
+        +x/45yXvmbQ7+XuBO5d9jc9EDg==
+X-Google-Smtp-Source: AK7set9uUvKBjU2onvFrucnnLWXdEOl/7jmN5ocuy7gAmEPQ95OEkcR42Wj3s9YiIWnYf6ZvsmYq9w==
+X-Received: by 2002:a05:6a20:9c:b0:ad:def6:af3 with SMTP id 28-20020a056a20009c00b000addef60af3mr8264378pzg.57.1677287368799;
+        Fri, 24 Feb 2023 17:09:28 -0800 (PST)
+Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id g2-20020a62e302000000b00593e84f2d08sm159873pfh.52.2023.02.24.17.09.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 17:09:28 -0800 (PST)
+Date:   Sat, 25 Feb 2023 01:09:24 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Chao Gao <chao.gao@intel.com>
+Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
+ init_fpstate if fpstate contains the component
+Message-ID: <Y/lfxHXVdqeFadGD@google.com>
+References: <20230221163655.920289-1-mizhang@google.com>
+ <20230221163655.920289-2-mizhang@google.com>
+ <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
+ <87ilfum6xh.ffs@tglx>
+ <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
+ <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+ <Y/lOlBWTNgROPl0P@google.com>
+ <691106c3-b339-578b-6e43-77f737f127f9@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 12/26] gunyah: vm_mgr: Add/remove user memory regions
-Content-Language: en-US
-To:     Alex Elder <alex.elder@linaro.org>, Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212417.3315422-1-quic_eberman@quicinc.com>
- <971726ce-b88a-0e68-45aa-862f821116ae@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <971726ce-b88a-0e68-45aa-862f821116ae@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FaKPV7PuiZEJvk1TSeHYk_eRLEPZw6Zt
-X-Proofpoint-ORIG-GUID: FaKPV7PuiZEJvk1TSeHYk_eRLEPZw6Zt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_18,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302250003
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <691106c3-b339-578b-6e43-77f737f127f9@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 24, 2023, Chang S. Bae wrote:
+> On 2/24/2023 3:56 PM, Mingwei Zhang wrote:
+> > On Wed, Feb 22, 2023, Chang S. Bae wrote:
+> > > 
+> > >          /*
+> > > -        * The ptrace buffer is in non-compacted XSAVE format.  In
+> > > -        * non-compacted format disabled features still occupy state space,
+> > > -        * but there is no state to copy from in the compacted
+> > > -        * init_fpstate. The gap tracking will zero these states.
+> > > +        * Indicate which states to copy from fpstate. When not present in
+> > > +        * fpstate, those extended states are either initialized or
+> > > +        * disabled. They are also known to have an all zeros init state.
+> > > +        * Thus, remove them from 'mask' to zero those features in the user
+> > > +        * buffer instead of retrieving them from init_fpstate.
+> > >           */
+> > > -       mask = fpstate->user_xfeatures;
+> > 
+> > Do we need to change this line and the comments? I don't see any of
+> > these was relevant to this issue. The original code semantic is to
+> > traverse all user_xfeatures, if it is available in fpstate, copy it from
+> > there; otherwise, copy it from init_fpstate. We do not assume the
+> > component in init_fpstate (but not in fpstate) are all zeros, do we? If
+> > it is safe to assume that, then it might be ok. But at least in this
+> > patch, I want to keep the original semantics as is without the
+> > assumption.
+> 
+> Here it has [1]:
+> 
+> 	 *
+> 	 * XSAVE could be used, but that would require to reshuffle the
+> 	 * data when XSAVEC/S is available because XSAVEC/S uses xstate
+> 	 * compaction. But doing so is a pointless exercise because most
+> 	 * components have an all zeros init state except for the legacy
+> 	 * ones (FP and SSE). Those can be saved with FXSAVE into the
+> 	 * legacy area. Adding new features requires to ensure that init
+> 	 * state is all zeroes or if not to add the necessary handling
+> 	 * here.
+> 	 */
+> 	fxsave(&init_fpstate.regs.fxsave);
 
+ah, I see.
+> 
+> Thus, init_fpstate has zeros for those extended states. Then, copying from
+> init_fpstate is the same as membuf_zero() by the gap tracking. But, we have
+> two ways to do the same thing here.
+> 
+> So I think it works that simply copying the state from fpstate only for
+> those present there, then letting the gap tracking zero out for the rest of
+> the userspace buffer for features that are either disabled or initialized.
+> 
+> Then, we can remove accessing init_fpstate in the copy loop and which is the
+> source of the problem. So I think this line change is relevant and also
+> makes the code simple.
+> 
+> I guess I'm fine if you don't want to do this. Then, let me follow up with
+> something like this at first. Something like yours could be a fallback
+> option for other good reasons, otherwise.
 
-On 2/23/2023 4:34 PM, Alex Elder wrote:
-> On 2/14/23 3:24 PM, Elliot Berman wrote:
->>
->> When launching a virtual machine, Gunyah userspace allocates memory for
->> the guest and informs Gunyah about these memory regions through
->> SET_USER_MEMORY_REGION ioctl.
->>
->> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
->>   drivers/virt/gunyah/Makefile    |   2 +-
->>   drivers/virt/gunyah/vm_mgr.c    |  44 ++++++
->>   drivers/virt/gunyah/vm_mgr.h    |  25 ++++
->>   drivers/virt/gunyah/vm_mgr_mm.c | 235 ++++++++++++++++++++++++++++++++
->>   include/uapi/linux/gunyah.h     |  33 +++++
->>   5 files changed, 338 insertions(+), 1 deletion(-)
->>   create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
->>
->> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
->> index 03951cf82023..ff8bc4925392 100644
->> --- a/drivers/virt/gunyah/Makefile
->> +++ b/drivers/virt/gunyah/Makefile
->> @@ -2,5 +2,5 @@
->>   obj-$(CONFIG_GUNYAH) += gunyah.o
->> -gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
->> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
->>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
->> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
->> index fd890a57172e..84102bac03cc 100644
->> --- a/drivers/virt/gunyah/vm_mgr.c
->> +++ b/drivers/virt/gunyah/vm_mgr.c
->> @@ -18,8 +18,16 @@
->>   static void gh_vm_free(struct work_struct *work)
->>   {
->>       struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
->> +    struct gh_vm_mem *mapping, *tmp;
->>       int ret;
->> +    mutex_lock(&ghvm->mm_lock);
->> +    list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, 
->> list) {
->> +        gh_vm_mem_reclaim(ghvm, mapping);
->> +        kfree(mapping);
->> +    }
->> +    mutex_unlock(&ghvm->mm_lock);
->> +
->>       ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
->>       if (ret)
->>           pr_warn("Failed to deallocate vmid: %d\n", ret);
->> @@ -48,11 +56,46 @@ static __must_check struct gh_vm 
->> *gh_vm_alloc(struct gh_rm *rm)
->>       ghvm->vmid = vmid;
->>       ghvm->rm = rm;
->> +    mutex_init(&ghvm->mm_lock);
->> +    INIT_LIST_HEAD(&ghvm->memory_mappings);
->>       INIT_WORK(&ghvm->free_work, gh_vm_free);
->>       return ghvm;
->>   }
->> +static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned 
->> long arg)
->> +{
->> +    struct gh_vm *ghvm = filp->private_data;
->> +    void __user *argp = (void __user *)arg;
->> +    long r;
->> +
->> +    switch (cmd) {
->> +    case GH_VM_SET_USER_MEM_REGION: {
->> +        struct gh_userspace_memory_region region;
->> +
->> +        if (copy_from_user(&region, argp, sizeof(region)))
->> +            return -EFAULT;
->> +
->> +        /* All other flag bits are reserved for future use */
->> +        if (region.flags & ~(GH_MEM_ALLOW_READ | GH_MEM_ALLOW_WRITE | 
->> GH_MEM_ALLOW_EXEC |
->> +            GH_MEM_LENT))
->> +            return -EINVAL;
->> +
->> +
->> +        if (region.memory_size)
-> 
-> Would there be any value in allowing a zero-size memory
-> region to be created?  Maybe that doesn't make sense, but
-> I guess i'm questioning whether a zero memory region size
-> have special meaning in this interface is a good thing to
-> do.  You could sensibly have a separate REMOVE_USER_MEM_REGION
-> request, and still permit 0 to be a valid size.
-> 
+hmm. I see. But this is still because of the software implementation.
+What if there is a new hardware component that requires a non-zero init
+state.
 
-I don't think zero-size memory region makes sense. At best, it only 
-registers an empty region with guest and causes memory overhead for 
-bookkeeping.
+For instance, in the past, we had PKRU component, whose init value is
+0x555...54. Of course, that is a bad example because now we kick it out
+of the XSAVE/XRSTOR and special handling that, but there is no guarantee
+that in the future we will never need a non-zero init state.
 
->> +            r = gh_vm_mem_alloc(ghvm, &region);
->> +        else
->> +            r = gh_vm_mem_free(ghvm, region.label);
->> +        break;
->> +    }
->> +    default:
->> +        r = -ENOTTY;
->> +        break;
->> +    }
->> +
->> +    return r;
->> +}
->> +
->>   static int gh_vm_release(struct inode *inode, struct file *filp)
->>   {
->>       struct gh_vm *ghvm = filp->private_data;
->> @@ -65,6 +108,7 @@ static int gh_vm_release(struct inode *inode, 
->> struct file *filp)
->>   }
->>   static const struct file_operations gh_vm_fops = {
->> +    .unlocked_ioctl = gh_vm_ioctl,
->>       .release = gh_vm_release,
->>       .compat_ioctl    = compat_ptr_ioctl,
->>       .llseek = noop_llseek,
->> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
->> index 76954da706e9..97bc00c34878 100644
->> --- a/drivers/virt/gunyah/vm_mgr.h
->> +++ b/drivers/virt/gunyah/vm_mgr.h
->> @@ -7,16 +7,41 @@
->>   #define _GH_PRIV_VM_MGR_H
->>   #include <linux/gunyah_rsc_mgr.h>
->> +#include <linux/list.h>
->> +#include <linux/miscdevice.h>
->> +#include <linux/mutex.h>
->>   #include <uapi/linux/gunyah.h>
->>   long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, 
->> unsigned long arg);
->> +enum gh_vm_mem_share_type {
->> +    VM_MEM_SHARE,
->> +    VM_MEM_LEND,
-> 
-> Are there any other share types anticipated?  Even if
-> there were, for now you could use a Boolean to distinguish
-> between shared or lent (at least until a third option
-> materializes).
-> 
+So, I will send out my fix and let you, Thomas and potentially other
+folks to decide what is the best option. Overall, I get your point.
 
-There is VM_MEM_DONATE. I can add the type, but it's only used special 
-VMs (there's nothing really stopping a generic unauth VM to use it, but 
-I don't think anyone will want to).
-
->> +};
->> +
->> +struct gh_vm_mem {
->> +    struct list_head list;
->> +    enum gh_vm_mem_share_type share_type;
->> +    struct gh_rm_mem_parcel parcel;
->> +
->> +    __u64 guest_phys_addr;
->> +    struct page **pages;
->> +    unsigned long npages;
->> +};
->> +
->>   struct gh_vm {
->>       u16 vmid;
->>       struct gh_rm *rm;
->>       struct work_struct free_work;
->> +    struct mutex mm_lock;
->> +    struct list_head memory_mappings;
->>   };
->> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct 
->> gh_userspace_memory_region *region);
->> +void gh_vm_mem_reclaim(struct gh_vm *ghvm, struct gh_vm_mem *mapping);
->> +int gh_vm_mem_free(struct gh_vm *ghvm, u32 label);
->> +struct gh_vm_mem *gh_vm_mem_find(struct gh_vm *ghvm, u32 label);
->> +
->>   #endif
->> diff --git a/drivers/virt/gunyah/vm_mgr_mm.c 
->> b/drivers/virt/gunyah/vm_mgr_mm.c
->> new file mode 100644
->> index 000000000000..03e71a36ea3b
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/vm_mgr_mm.c
->> @@ -0,0 +1,235 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
->> rights reserved.
->> + */
->> +
->> +#define pr_fmt(fmt) "gh_vm_mgr: " fmt
->> +
->> +#include <linux/gunyah_rsc_mgr.h>
->> +#include <linux/mm.h>
->> +
->> +#include <uapi/linux/gunyah.h>
->> +
->> +#include "vm_mgr.h"
->> +
->> +static inline bool page_contiguous(phys_addr_t p, phys_addr_t t)
+Thanks
+-Mingwei
+>
+> Thanks,
+> Chang
 > 
-> Is there not some existing function that captures this?
-> In any case, it's used in one place and I think it would
-> be clearer to just put the logic there rather than hiding
-> it behind this function.
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
 > 
-
-Done.
-
->> +{
->> +    return t - p == PAGE_SIZE;
->> +}
->> +
->> +static struct gh_vm_mem *__gh_vm_mem_find(struct gh_vm *ghvm, u32 label)
->> +    __must_hold(&ghvm->mm_lock)
->> +{
->> +    struct gh_vm_mem *mapping;
->> +
->> +    list_for_each_entry(mapping, &ghvm->memory_mappings, list)
->> +        if (mapping->parcel.label == label)
->> +            return mapping;
->> +
->> +    return NULL;
->> +}
->> +
-> 
-> . . .
-> 
->> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
->> index 10ba32d2b0a6..d85d12119a48 100644
->> --- a/include/uapi/linux/gunyah.h
->> +++ b/include/uapi/linux/gunyah.h
->> @@ -20,4 +20,37 @@
->>    */
->>   #define GH_CREATE_VM            _IO(GH_IOCTL_TYPE, 0x0) /* Returns a 
->> Gunyah VM fd */
->> +/*
->> + * ioctls for VM fds
->> + */
->> +
->> +/**
->> + * struct gh_userspace_memory_region - Userspace memory descripion 
->> for GH_VM_SET_USER_MEM_REGION
->> + * @label: Unique identifer to the region.
-> 
-> Maybe this is described somewhere, but what is the purpose
-> of the label?  Who uses it?  Is it meant to be a value
-> only the current owner of a resource understands?  Or does
-> resource manager use it internally, or what?
-> 
-
-The label is used by kernel, userspace, and Gunyah. Userspace decides 
-all the labels and there are no special labels.
-
-  - Userspace can delete memory parcels by label (kernel looks up parcel 
-by label)
-  - The VM's DTB configuration describes where Gunyah should map memory 
-parcels into guest's memory. The VM DTB uses the memory parcel's label 
-as the reference.
-
-Thanks,
-Elliot
-
->> + * @flags: Flags for memory parcel behavior
->> + * @guest_phys_addr: Location of the memory region in guest's memory 
->> space (page-aligned)
->> + * @memory_size: Size of the region (page-aligned)
->> + * @userspace_addr: Location of the memory region in caller 
->> (userspace)'s memory
->> + *
->> + * See Documentation/virt/gunyah/vm-manager.rst for further details.
->> + */
->> +struct gh_userspace_memory_region {
->> +    __u32 label;
-> 
-> Define the possible permission values separate from
-> the structure.
-> 
->                      -Alex
-> 
->> +#define GH_MEM_ALLOW_READ    (1UL << 0)
->> +#define GH_MEM_ALLOW_WRITE    (1UL << 1)
->> +#define GH_MEM_ALLOW_EXEC    (1UL << 2)
->> +/*
->> + * The guest will be lent the memory instead of shared.
->> + * In other words, the guest has exclusive access to the memory 
->> region and the host loses access.
->> + */
->> +#define GH_MEM_LENT        (1UL << 3)
->> +    __u32 flags;
->> +    __u64 guest_phys_addr;
->> +    __u64 memory_size;
->> +    __u64 userspace_addr;
->> +};
->> +
->> +#define GH_VM_SET_USER_MEM_REGION    _IOW(GH_IOCTL_TYPE, 0x1, \
->> +                        struct gh_userspace_memory_region)
->> +
->>   #endif
 > 
