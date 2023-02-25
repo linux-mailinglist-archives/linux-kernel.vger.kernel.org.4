@@ -2,136 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CDA6A26D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 03:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5656A26EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 04:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBYCoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 21:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S229525AbjBYDRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 22:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYCoD (ORCPT
+        with ESMTP id S229445AbjBYDRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 21:44:03 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D95193E4;
-        Fri, 24 Feb 2023 18:44:02 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 0266441A42;
-        Sat, 25 Feb 2023 02:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677293039;
-        bh=i/EW8iI1WXt3iL181qkF6snb7P647ktI1koCI56RqSw=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=wTmCtYW+KwZhGzbBJaPs5CX+u/g5Vj24/8vV8C5IxFsnS6gcbl9eXGB06XyCFjUi8
-         2Qr8vzyRmW6JB6jEg6L9EAKEkzyjQH73z4GYsDasG1u8Bu2afUBnVCbcvmrkfGynuv
-         /vhRmoN9P1FeVyITmZa8faqJmk9qE9fPPYKRm+2i7u5QPq4HIdX4j8/EVCjb0JjfTI
-         DnzCwEieu2sahFb9Q5gHEpcLhP+2bgqdJ6WlTKR7mikinEgsfKOa2WJ1fOd8wNGOUE
-         tWkm/rrwIjkNfbXx7B5NdrNdrTba51tl6DnN5uqJvnuATN/HKkBRXVvOUu/9GicKFo
-         plj+l7Ddw+Skw==
-Message-ID: <61f734d6-1497-755f-3632-3f261b890846@asahilina.net>
-Date:   Sat, 25 Feb 2023 11:43:56 +0900
+        Fri, 24 Feb 2023 22:17:38 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CE82332B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 19:17:37 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id eg37so4697953edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 19:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LmNBVo7uMw1aKq2gIrda4qCIdgm1A6fpKV1+5VP6zB8=;
+        b=CNsccW8tA+8ig58sm067TPguHm1dqrGdvdIfAPEzz6ALh36vuJuyTUG5qKT+eU4uM/
+         7fMH3gXsZbB4TC8buks/zia2MSzAQQ6lVZy35U+/aMqF/7piRqQ0lU6oHnGJQfOSwGLu
+         QjsHiGsYCvsFkN/7u71yE9bcCEGRxqLZw1Vwo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LmNBVo7uMw1aKq2gIrda4qCIdgm1A6fpKV1+5VP6zB8=;
+        b=XwsiWBaLlmMxPlzjXYxDLt4dck942DRjbeiVCsFOx/TA/VJl064Ub9n/lrWp+eyBDY
+         Sw5YtsSIpZAJ4xfMY2XsaWNpbNWWXMI/oglBz1btm/egwHuRQLVJrmmCuFPB65V1dnZ/
+         PGYMuswY7PjIJxBMAWg/KFUn/db/NzHu0IWB1mCkt6PCLSy37YH5HM0ujHmAh9NVvdCl
+         LTJi6UtjUJjKhJ7I4ZKDJVhmUXQR8giHbkzYSmK7SC1Is2VmikStvY6Ql1t5VRBKB87O
+         qXsHc/uDIuTMIJWppltq55x51MQXAW5oNB0rQ1G35q/E7WmZRf9FhnQJVwGmf+Ko/R8l
+         Z05g==
+X-Gm-Message-State: AO0yUKW4JzXuUvdr6TDw8pXrQBy8Q/v49vfnjfH2Wdawunf9MVY38pNB
+        LyWz3nHt7i0dhqPHFaQ5WpCDIIGsGnfOeJd/oiI5XA==
+X-Google-Smtp-Source: AK7set8lNc+yqS0flJLmevlYsEoNCrZV8IkNIMh8+qnHHkMpJhUpAKWljThO5uY29ZE/boq9adIW5Q==
+X-Received: by 2002:a17:907:60d4:b0:8e1:cc38:6e78 with SMTP id hv20-20020a17090760d400b008e1cc386e78mr19584558ejc.39.1677295054427;
+        Fri, 24 Feb 2023 19:17:34 -0800 (PST)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id y4-20020a1709064b0400b008e125ee7be4sm314047eju.176.2023.02.24.19.17.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 19:17:34 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id ee7so4920891edb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 19:17:33 -0800 (PST)
+X-Received: by 2002:a17:907:988c:b0:877:747e:f076 with SMTP id
+ ja12-20020a170907988c00b00877747ef076mr11483974ejc.0.1677295053168; Fri, 24
+ Feb 2023 19:17:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] rust: ioctl: Add ioctl number manipulation functions
-Content-Language: en-US
-From:   Asahi Lina <lina@asahilina.net>
-To:     Gary Guo <gary@garyguo.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
-References: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
- <0818df3a-76c9-4cb3-8016-4717f4d5bf18@app.fastmail.com>
- <20230225003852.1bbedc54.gary@garyguo.net>
- <8d6575bc-ffd8-fe03-c46f-eba9cfdbcbfa@asahilina.net>
-In-Reply-To: <8d6575bc-ffd8-fe03-c46f-eba9cfdbcbfa@asahilina.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/gvQh5+4k8y+IdF@ZenIV>
+In-Reply-To: <Y/gvQh5+4k8y+IdF@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Feb 2023 19:17:16 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whwFeuahxGxCidcaaZ-Xawh2drJV6WFwhs7ujDZGNGV4Q@mail.gmail.com>
+Message-ID: <CAHk-=whwFeuahxGxCidcaaZ-Xawh2drJV6WFwhs7ujDZGNGV4Q@mail.gmail.com>
+Subject: Re: [git pill] vfs.git alpha fixes
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2023 11.38, Asahi Lina wrote:
-> On 25/02/2023 09.38, Gary Guo wrote:
->> On Fri, 24 Feb 2023 09:43:27 +0100
->> "Arnd Bergmann" <arnd@arndb.de> wrote:
->>
->>> On Fri, Feb 24, 2023, at 08:36, Asahi Lina wrote:
->>>> Add simple 1:1 wrappers of the C ioctl number manipulation functions.
->>>> Since these are macros we cannot bindgen them directly, and since they
->>>> should be usable in const context we cannot use helper wrappers, so
->>>> we'll have to reimplement them in Rust. Thankfully, the C headers do
->>>> declare defines for the relevant bitfield positions, so we don't need
->>>> to duplicate that.
->>>>
->>>> Signed-off-by: Asahi Lina <lina@asahilina.net>  
->>>
->>> I don't know much rust yet, but it looks like a correct abstraction
->>> that handles all the corner cases of architectures with unusual
->>> _IOC_*MASK combinations the same way as the C version.
->>>
->>> There is one corner case I'm not sure about:
->>>
->>>> +/// Build an ioctl number, analogous to the C macro of the same name.
->>>> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
->>>> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
->>>> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
->>>> +    core::assert!(nr <= bindings::_IOC_NRMASK);
->>>> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
->>>> +
->>>> +    (dir << bindings::_IOC_DIRSHIFT)
->>>> +        | (ty << bindings::_IOC_TYPESHIFT)
->>>> +        | (nr << bindings::_IOC_NRSHIFT)
->>>> +        | ((size as u32) << bindings::_IOC_SIZESHIFT)
->>>> +}  
->>>
->>> This has the assertions inside of _IOC() while the C version
->>> has them in the outer _IOR()/_IOW() /_IOWR() helpers. This was
->>> intentional since some users of _IOC() pass a variable
->>> length in rather than sizeof(type), and this would cause
->>> a link failure in C.
->>>
->>> How is the _IOC_SIZEMASK assertion evaluated here? It's
->>> probably ok if this is a compile-time assertion that prevents
->>> the variable-length arguments, but it would be bad if this
->>> could lead to a BUG() or panic() in case of a user-supplied
->>> length that is out of range.
->>
->> This is a very good point.
->>
->> The code, as currently written, will cause a compile-time error if
->> `_IOC` is used in const contexts (i.e. used in const generics
->> arguments, or inside a `const {}` block), and it will become a runtime
->> `BUG()` if used elsewhere.
->>
->> We do have a facility to enforce compile-time checks, that's
->> `kernel::build_assert!()`. If runtime values are used and the
->> compiler can't optimise these assertions out, a link failure would
->> be triggered just like how our C code does that.
->>
->> Lina, could you change these `core::assert!` calls to build assert?
-> 
-> Thanks, I'll do that for v2!
+On Thu, Feb 23, 2023 at 7:30 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+>  FEN fault fix deals with a really old oopsable braino
 
-Come to think of it, _IOC() isn't even public right now, so you can only
-use it via the typed wrappers that take an actual struct to take the
-size of. So it would only (always) panic if someone tried to use it with
-a huge structure definition. But anyway, these clearly should be
-compile-time assertions, so I'll change it to that. If someone wants to
-use dynamic sizes in the future we can refactor it then.
+My old alpha architecture manual doesn't even list "clrfen" as a
+PAL-code instruction.
 
+It does have "wrfen", but that's privileged.
 
-~~ Lina
+I have no idea when clrfen became a thing. But it's clearly a later
+addition that somebody didn't think through.
+
+             Linus
