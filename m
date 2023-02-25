@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E346A281C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D4E6A282C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjBYJNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 04:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S229589AbjBYJRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 04:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBYJNp (ORCPT
+        with ESMTP id S229515AbjBYJR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 04:13:45 -0500
+        Sat, 25 Feb 2023 04:17:28 -0500
 Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A7911E9D;
-        Sat, 25 Feb 2023 01:13:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2911ACD0;
+        Sat, 25 Feb 2023 01:17:28 -0800 (PST)
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 2F90A1C0AB2; Sat, 25 Feb 2023 10:13:41 +0100 (CET)
+        id 9FC391C0AB2; Sat, 25 Feb 2023 10:17:26 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1677316421;
+        t=1677316646;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vSGD016VSliM8iYt5hXOdqQTHiF7OfjIaZHqRxtbcps=;
-        b=RbyMdpNrIH7P3FMWlF1hE/phucMmLtKkw+a97ArYLe4bVN+DO4rCZWxfLywxB6v4Wo5Tne
-        qoRyk3O5bhPvoy7jHZ9jqQ/6M+bD/4zpqa0Ob23eFn+nU0VMIXAtCXU4x1GUiDp7jXyRQb
-        mRX8Ufkcx6+AdO8woEwsGvK/MBB6toQ=
-Date:   Sat, 25 Feb 2023 10:13:40 +0100
+        bh=YVomgrlVcKbKHqY20EcIxvF06UgcWi8Fb+JC0ZMX+tw=;
+        b=NKv+VYp6JDa26eqRY+etKicKhm6nejkDfTvC2t8WqUzc43WFqjvixbLmXGqQ5rJOb3wWM0
+        QZg8aDYqIROEwIn7am3YECA70x1odRz7e/ew126Ft2iy7cw/DoqHQSaNpEhpXSlYE8QQ0m
+        AGRxfKAtHcQusiL8yMwUq6KdCa/cc34=
+Date:   Sat, 25 Feb 2023 10:17:26 +0100
 From:   Pavel Machek <pavel@ucw.cz>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Michael Everitt <gentoo@veremit.xyz>,
-        Christian Eggers <ceggers@arri.de>,
-        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: linux-6.1-rt ?
-Message-ID: <Y/nRRHo1XtRenC6u@duo.ucw.cz>
-References: <12136223.O9o76ZdvQC@n95hx1g2>
- <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
- <Y7/cYsEXHpCEGwwa@linutronix.de>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
+Message-ID: <Y/nSJvm6h4Sq5PR2@duo.ucw.cz>
+References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="Hrxy3MuuQA4PAN0i"
+        protocol="application/pgp-signature"; boundary="wUWUakVz7YN0DDf8"
 Content-Disposition: inline
-In-Reply-To: <Y7/cYsEXHpCEGwwa@linutronix.de>
+In-Reply-To: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -52,42 +52,66 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Hrxy3MuuQA4PAN0i
-Content-Type: text/plain; charset=iso-8859-1
+--wUWUakVz7YN0DDf8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi!
 
-> > You probably want this: https://www.spinics.net/lists/linux-rt-users/ms=
-g26345.html
-> >=20
-> > You may wish to wait for the maintainer to complete their processes!
->=20
-> There is a 6.1-RT but it hasn't been updated for a while. There should
-> be a 6.2-RT later today.
-> As for the link [1] it has not been confirmed nor denied that v6.1 will
-> be a LTS kernel. Once the version 6.1 left its Schr=F6dinger state then
-> there will be an update (or not).
+> +If your platform uses techniques like Secure Boot, prepare the system to=
+ permit
+> +starting self-compiled Linux kernels; install compilers and everything e=
+lse
+> +needed for building Linux; make sure to have 15 Gigabyte free space in y=
+our home
+> +directory. Now run the following commands to download the sources of Lin=
+ux,
+> +which you then use to configure, build and install your own
+> kernel::
 
-Apparently 6.1 left the Schr=F6dinger state, and it is confirmed as LTS.
+15GB is quite a lot. Maybe the shallow clone should be given another
+chance?
 
-If there are any news regarding 6.1-rt, world wants to know :-), but
-maybe that is better discussed on realtime meeting?
+> +       mkdir ~/linux/ ~/linux/sources ~/linux/build
+> +       git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git \
+> +         ~/linux/sources
+> +       cd ~/linux/sources/
+> +       # hint: if you don't want to build any stable or longterm kernels=
+, skip the
+> +       #   next two commands
+> +       git remote add linux-stable \
+> +         https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+> +       git fetch --all
+> +       # hint: if you want to apply patches, do it at this point (see be=
+low for details)
+> +       # hint: at this point it's recommended to tag your build (see bel=
+ow for details)
+> +       yes "" | make O=3D~/linux/build/ localmodconfig
+> +       # hint: at this point you might want or have to adjust the build =
+configuration
+> +       #  (see below for details)
+> +       # note: if you are running a Debian kernel, you'll have to adjust=
+ the configuration
+> +       #  at this point (see below)
+> +       make -j $(nproc --all) O=3D~/linux/build/
+
+Is the complexity of using O=3D worth it for one-off kernel builds?
 
 Best regards,
 								Pavel
 --=20
 People of Russia, stop Putin before his war on Ukraine escalates.
 
---Hrxy3MuuQA4PAN0i
+--wUWUakVz7YN0DDf8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/nRRAAKCRAw5/Bqldv6
-8l4eAJ97T4kgiw4pmSNSrNTNy/kj/TtDtACeK/zt9ibLW+G4i1QJJfwCECa/nJA=
-=92e+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/nSJgAKCRAw5/Bqldv6
+8goeAJ9kvJcd1ci6ELgtSrXqqRap8FoLIACggBWRqzdN8Nl8uG0DVJDsTc5V85o=
+=OjwI
 -----END PGP SIGNATURE-----
 
---Hrxy3MuuQA4PAN0i--
+--wUWUakVz7YN0DDf8--
