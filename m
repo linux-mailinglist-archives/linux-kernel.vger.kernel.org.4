@@ -2,172 +2,523 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9E26A27D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 228996A27D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBYII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 03:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S229516AbjBYII4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 03:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBYIIZ (ORCPT
+        with ESMTP id S229497AbjBYIIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 03:08:25 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C17E3AC
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 00:08:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677312504; x=1708848504;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HdPn0nUP9z2e8JaUXV/1MDAjdowwwNaPz5diSsNXVLw=;
-  b=QdxHdK7a99u5amJiwW4vmZ1+cJDmKeDDCFQZLgWR3v56uJcotbmM0WeG
-   ZSI0mSLY/fqp32dgutK1302KH09BrauB0IPjxw2wr3AlJBDg6J+/7yl/9
-   3DFrcbpqq0ieVUHPr2K3oYojqm4lpHNYZolwEHkuxRADlCbXlZ0LdautB
-   4Pc6aXo3YfXGotzjZBqVVQs+idxVu/if6s8w1is+TDU9bYrgXh/9OKfNT
-   5uapx7JGyqzMN/LJ+NDs6iF4BHMcuAYlDcNZp1jKNiBAH+rSlBeqMLnuJ
-   tpm+mEcO0Eq/08Ee97IK6TRtoBzj88VjJdSJPRa/lCsoXR0k4UcYegz7x
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="419876511"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="419876511"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 00:08:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="782646145"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="782646145"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Feb 2023 00:08:23 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVpbS-000333-1V;
-        Sat, 25 Feb 2023 08:08:22 +0000
-Date:   Sat, 25 Feb 2023 16:07:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.02.22a] BUILD REGRESSION
- edc9d419ee8c22821ffd664466a5cf19208c3f02
-Message-ID: <63f9c1d8.kihz/MuydejKYsyt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 25 Feb 2023 03:08:54 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC075E3AC
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 00:08:51 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id kb15so1358477pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 00:08:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1677312531;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ssl5JE1Z/z5T6V3BQ2Y0/DI6+DztQ78rqow/WBCQ3Jc=;
+        b=V63mp88ycvLMF8LxKa8ay4AsKCU3CFWY3YZEkrazr/lggbdp2fVUZtYUb6nuDTttcF
+         KYYdIadjsYABTta/My+SBbl0skdkvuud+EqZX/6MRAlcwAkCucbSQHZ/0GzYkss41iat
+         9TMlYPa4XInX7dI8BLjAJU6efYm/AyoMeVXp8mnVWV9a6UaX4Lm8qej3/Xj5MPMDAgvR
+         aCGh1QDCDyHkS8KNymemjQHjqEVwibKYqnOgQpmg4cthUkZ4eou5uUX4rSzDqwKmg6yR
+         gNHcofCN+UgIUSZpZbYdcroQrqmlwWrN0iTa8EaAOFWhQdaj3uafCEb4CIyif3yHnvZX
+         HxVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677312531;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ssl5JE1Z/z5T6V3BQ2Y0/DI6+DztQ78rqow/WBCQ3Jc=;
+        b=pdrTrxY861bN2fJkM7LJTKTP6ASYNvXsCCIrGlv1Cp6PhjSPJxyQJCvTupD6qu7Gvj
+         m4QeTxCzckuF1HUmAmJMzV3kmEyEFhp/mUuotICzoirwd/ZW1Br0vZLW79J+8YIYHiMr
+         Aluj0kgy48WeDjOAWw/w0OuN9anAzk95EuSWG2LhMMJCQN6v+u/NrEbec1QbbsWGoaj1
+         kU6obQX6J4UM30MA+FpVfsRQN4K9E2kfZAukQ5492rvNjh7F+BpUa2L+OapJ9rUHPhct
+         ToeFxH6UU4t7Qc4wiLcXwsM4pFBCkkgWWEdEZI+aZL+daFjTtOevicregrlVGxQt9hFF
+         0R3A==
+X-Gm-Message-State: AO0yUKXVvV1E/fJBm7sRRIbCTSIHkD7XdldmLMIe3kfAQAWR8HkTh1wM
+        M1fW/SQ6GRGZ9bzeL0UwEjjP7A==
+X-Google-Smtp-Source: AK7set9jIFjH4NjQ54CeBJUbT8pkEaD/mVNHx1FQq3BvRCFuGXrAea/2dj81z8WCs0pzRVsswrdOpg==
+X-Received: by 2002:a17:90a:e54a:b0:230:a67e:3c54 with SMTP id ei10-20020a17090ae54a00b00230a67e3c54mr18495268pjb.4.1677312530991;
+        Sat, 25 Feb 2023 00:08:50 -0800 (PST)
+Received: from [10.200.9.56] ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id e9-20020a17090ac20900b00232cc61e16bsm2618092pjt.35.2023.02.25.00.08.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Feb 2023 00:08:50 -0800 (PST)
+Message-ID: <f20c6ae7-0dfe-1d4a-9589-05e378961f08@bytedance.com>
+Date:   Sat, 25 Feb 2023 16:08:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
+Content-Language: en-US
+To:     Kirill Tkhai <tkhai@ya.ru>, Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, dave@stgolabs.net,
+        penguin-kernel@i-love.sakura.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+ <20230223132725.11685-3-zhengqi.arch@bytedance.com>
+ <Y/evb+PBeaahx9Os@sultan-box.localdomain>
+ <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
+ <b9593d94-057d-43d3-97e2-07cf83896041@ya.ru>
+ <ed9c844b-c431-df69-21ff-1b6dc6557b20@ya.ru>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <ed9c844b-c431-df69-21ff-1b6dc6557b20@ya.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.22a
-branch HEAD: edc9d419ee8c22821ffd664466a5cf19208c3f02  locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
 
-Error/Warning reports:
 
-https://lore.kernel.org/oe-kbuild-all/202302251550.OSl3zbgK-lkp@intel.com
+On 2023/2/25 05:14, Kirill Tkhai wrote:
+> On 25.02.2023 00:02, Kirill Tkhai wrote:
+>> On 24.02.2023 07:00, Qi Zheng wrote:
+>>>
+>>>
+>>> On 2023/2/24 02:24, Sultan Alsawaf wrote:
+>>>> On Thu, Feb 23, 2023 at 09:27:20PM +0800, Qi Zheng wrote:
+>>>>> The shrinker_rwsem is a global lock in shrinkers subsystem,
+>>>>> it is easy to cause blocking in the following cases:
+>>>>>
+>>>>> a. the write lock of shrinker_rwsem was held for too long.
+>>>>>      For example, there are many memcgs in the system, which
+>>>>>      causes some paths to hold locks and traverse it for too
+>>>>>      long. (e.g. expand_shrinker_info())
+>>>>> b. the read lock of shrinker_rwsem was held for too long,
+>>>>>      and a writer came at this time. Then this writer will be
+>>>>>      forced to wait and block all subsequent readers.
+>>>>>      For example:
+>>>>>      - be scheduled when the read lock of shrinker_rwsem is
+>>>>>        held in do_shrink_slab()
+>>>>>      - some shrinker are blocked for too long. Like the case
+>>>>>        mentioned in the patchset[1].
+>>>>>
+>>>>> Therefore, many times in history ([2],[3],[4],[5]), some
+>>>>> people wanted to replace shrinker_rwsem reader with SRCU,
+>>>>> but they all gave up because SRCU was not unconditionally
+>>>>> enabled.
+>>>>>
+>>>>> But now, since commit 1cd0bd06093c ("rcu: Remove CONFIG_SRCU"),
+>>>>> the SRCU is unconditionally enabled. So it's time to use
+>>>>> SRCU to protect readers who previously held shrinker_rwsem.
+>>>>>
+>>>>> [1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
+>>>>> [2]. https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
+>>>>> [3]. https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
+>>>>> [4]. https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
+>>>>> [5]. https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
+>>>>>
+>>>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>>>>> ---
+>>>>>    mm/vmscan.c | 27 +++++++++++----------------
+>>>>>    1 file changed, 11 insertions(+), 16 deletions(-)
+>>>>>
+>>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>>> index 9f895ca6216c..02987a6f95d1 100644
+>>>>> --- a/mm/vmscan.c
+>>>>> +++ b/mm/vmscan.c
+>>>>> @@ -202,6 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>>      LIST_HEAD(shrinker_list);
+>>>>>    DECLARE_RWSEM(shrinker_rwsem);
+>>>>> +DEFINE_SRCU(shrinker_srcu);
+>>>>>      #ifdef CONFIG_MEMCG
+>>>>>    static int shrinker_nr_max;
+>>>>> @@ -706,7 +707,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>>>>>    void register_shrinker_prepared(struct shrinker *shrinker)
+>>>>>    {
+>>>>>        down_write(&shrinker_rwsem);
+>>>>> -    list_add_tail(&shrinker->list, &shrinker_list);
+>>>>> +    list_add_tail_rcu(&shrinker->list, &shrinker_list);
+>>>>>        shrinker->flags |= SHRINKER_REGISTERED;
+>>>>>        shrinker_debugfs_add(shrinker);
+>>>>>        up_write(&shrinker_rwsem);
+>>>>> @@ -760,13 +761,15 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>>            return;
+>>>>>          down_write(&shrinker_rwsem);
+>>>>> -    list_del(&shrinker->list);
+>>>>> +    list_del_rcu(&shrinker->list);
+>>>>>        shrinker->flags &= ~SHRINKER_REGISTERED;
+>>>>>        if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+>>>>>            unregister_memcg_shrinker(shrinker);
+>>>>>        debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>>        up_write(&shrinker_rwsem);
+>>>>>    +    synchronize_srcu(&shrinker_srcu);
+>>>>> +
+>>>>>        debugfs_remove_recursive(debugfs_entry);
+>>>>>          kfree(shrinker->nr_deferred);
+>>>>> @@ -786,6 +789,7 @@ void synchronize_shrinkers(void)
+>>>>>    {
+>>>>>        down_write(&shrinker_rwsem);
+>>>>>        up_write(&shrinker_rwsem);
+>>>>> +    synchronize_srcu(&shrinker_srcu);
+>>>>>    }
+>>>>>    EXPORT_SYMBOL(synchronize_shrinkers);
+>>>>>    @@ -996,6 +1000,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>    {
+>>>>>        unsigned long ret, freed = 0;
+>>>>>        struct shrinker *shrinker;
+>>>>> +    int srcu_idx;
+>>>>>          /*
+>>>>>         * The root memcg might be allocated even though memcg is disabled
+>>>>> @@ -1007,10 +1012,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>        if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>>>>            return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>>    -    if (!down_read_trylock(&shrinker_rwsem))
+>>>>> -        goto out;
+>>>>> +    srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>>    -    list_for_each_entry(shrinker, &shrinker_list, list) {
+>>>>> +    list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>>> +                 srcu_read_lock_held(&shrinker_srcu)) {
+>>>>>            struct shrink_control sc = {
+>>>>>                .gfp_mask = gfp_mask,
+>>>>>                .nid = nid,
+>>>>> @@ -1021,19 +1026,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>            if (ret == SHRINK_EMPTY)
+>>>>>                ret = 0;
+>>>>>            freed += ret;
+>>>>> -        /*
+>>>>> -         * Bail out if someone want to register a new shrinker to
+>>>>> -         * prevent the registration from being stalled for long periods
+>>>>> -         * by parallel ongoing shrinking.
+>>>>> -         */
+>>>>> -        if (rwsem_is_contended(&shrinker_rwsem)) {
+>>>>> -            freed = freed ? : 1;
+>>>>> -            break;
+>>>>> -        }
+>>>>>        }
+>>>>>    -    up_read(&shrinker_rwsem);
+>>>>> -out:
+>>>>> +    srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>>        cond_resched();
+>>>>>        return freed;
+>>>>>    }
+>>>>> -- 
+>>>>> 2.20.1
+>>>>>
+>>>>>
+>>>>
+>>>> Hi Qi,
+>>>>
+>>>> A different problem I realized after my old attempt to use SRCU was that the
+>>>> unregister_shrinker() path became quite slow due to the heavy synchronize_srcu()
+>>>> call. Both register_shrinker() *and* unregister_shrinker() are called frequently
+>>>> these days, and SRCU is too unfair to the unregister path IMO.
+>>>
+>>> Hi Sultan,
+>>>
+>>> IIUC, for unregister_shrinker(), the wait time is hardly longer with
+>>> SRCU than with shrinker_rwsem before.
+>>>
+>>> And I just did a simple test. After using the script in cover letter to
+>>> increase the shrink_slab hotspot, I did umount 1k times at the same
+>>> time, and then I used bpftrace to measure the time consumption of
+>>> unregister_shrinker() as follows:
+>>>
+>>> bpftrace -e 'kprobe:unregister_shrinker { @start[tid] = nsecs; } kretprobe:unregister_shrinker /@start[tid]/ { @ns[comm] = hist(nsecs - @start[tid]); delete(@start[tid]); }'
+>>>
+>>> @ns[umount]:
+>>> [16K, 32K)             3 |      |
+>>> [32K, 64K)            66 |@@@@@@@@@@      |
+>>> [64K, 128K)           32 |@@@@@      |
+>>> [128K, 256K)          22 |@@@      |
+>>> [256K, 512K)          48 |@@@@@@@      |
+>>> [512K, 1M)            19 |@@@      |
+>>> [1M, 2M)             131 |@@@@@@@@@@@@@@@@@@@@@      |
+>>> [2M, 4M)             313 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+>>> [4M, 8M)             302 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  |
+>>> [8M, 16M)             55 |@@@@@@@@@
+>>>
+>>> I see that the highest time-consuming of unregister_shrinker() is between 8ms and 16ms, which feels tolerable?
 
-Error/Warning: (recently discovered and may have been fixed)
+Hi Kirill,
 
-arch/mips/kernel/process.c:46:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
-arch/powerpc/kernel/smp.c:1768:1: error: function declared 'noreturn' should not return [-Werror,-Winvalid-noreturn]
-net/netfilter/ipvs/ip_vs_est.c:552:15: error: too few arguments provided to function-like macro invocation
-net/netfilter/ipvs/ip_vs_est.c:552:17: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
-net/netfilter/ipvs/ip_vs_est.c:552:29: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
-net/netfilter/ipvs/ip_vs_est.c:552:3: error: use of undeclared identifier 'kfree_rcu'; did you mean 'kfree_skb'?
+>>
+>> The fundamental difference is that before the patchset this for_each_set_bit() iteration could be broken in the middle
+>> of two do_shrink_slab() calls, while after the patchset we can leave for_each_set_bit() only after visiting all set bits.
 
-Error/Warning ids grouped by kconfigs:
+After looking at the git log[1], I saw that we originally introduced
+rwsem_is_contendent() here to aviod blocking register_shrinker(),
+not unregister_shrinker().
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- arc-allyesconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- arm-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- arm-allyesconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- arm64-allyesconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- arm64-defconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- m68k-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- mips-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- mips-allyesconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- powerpc-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- riscv-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- riscv-defconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- riscv-rv32_defconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- s390-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- s390-allyesconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- s390-defconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
-|-- sh-allmodconfig
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
-clang_recent_errors
-|-- i386-randconfig-a006
-|   |-- net-netfilter-ipvs-ip_vs_est.c:error:too-few-arguments-provided-to-function-like-macro-invocation
-|   `-- net-netfilter-ipvs-ip_vs_est.c:error:use-of-undeclared-identifier-kfree_rcu
-|-- mips-buildonly-randconfig-r003-20230222
-|   `-- arch-mips-kernel-process.c:warning:function-declared-noreturn-should-not-return
-`-- powerpc-buildonly-randconfig-r004-20230222
-    `-- arch-powerpc-kernel-smp.c:error:function-declared-noreturn-should-not-return-Werror-Winvalid-noreturn
+So I am curious, do we really care about the speed of
+unregister_shrinker()?
 
-elapsed time: 3322m
+And after using SRCU, register_shrinker() will not be blocked by slab
+shrink at all.
 
-configs tested: 19
-configs skipped: 3
+[1]. https://github.com/torvalds/linux/commit/e496612
 
-tested configs:
-clang                                   alpha   defconfig
-gcc                                       arc   defconfig
-gcc                                       arm   defconfig
-gcc                                     arm64   defconfig
-gcc                                      csky   defconfig
-gcc                                      i386   defconfig
-gcc                                      ia64   defconfig
-gcc                                 loongarch   defconfig
-gcc                                      m68k   defconfig
-gcc                                     nios2   defconfig
-gcc                                    parisc   defconfig
-gcc                                  parisc64   defconfig
-gcc                                     riscv   defconfig
-gcc                                     riscv   rv32_defconfig
-gcc                                      s390   defconfig
-gcc                                     sparc   defconfig
-gcc                                        um   i386_defconfig
-gcc                                        um   x86_64_defconfig
-gcc                                    x86_64   defconfig
-gcc                                                  
+>>
+>> Using only synchronize_srcu_expedited() won't help here.
+>>
+>> My opinion is we should restore a check similar to the rwsem_is_contendent() check that we had before. Something like
+
+If we really care about the speed of unregister_shrinker() like
+register_shrinker(), I think this is a good idea. This guarantees
+at least the speed of the unregister_shrinker() is not deteriorated. :)
+
+>> the below on top of your patchset merged into appropriate patch:
+>>
+>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> index 27ef9946ae8a..50e7812468ec 100644
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>   LIST_HEAD(shrinker_list);
+>>   DEFINE_MUTEX(shrinker_mutex);
+>>   DEFINE_SRCU(shrinker_srcu);
+>> +static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>>   
+>>   #ifdef CONFIG_MEMCG
+>>   static int shrinker_nr_max;
+>> @@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>   	debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>   	mutex_unlock(&shrinker_mutex);
+>>   
+>> +	atomic_inc(&shrinker_srcu_generation);
+>>   	synchronize_srcu(&shrinker_srcu);
+>>   
+>>   	debugfs_remove_recursive(debugfs_entry);
+>> @@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+>>    */
+>>   void synchronize_shrinkers(void)
+>>   {
+>> +	atomic_inc(&shrinker_srcu_generation);
+>>   	synchronize_srcu(&shrinker_srcu);
+>>   }
+>>   EXPORT_SYMBOL(synchronize_shrinkers);
+>> @@ -908,7 +911,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>   {
+>>   	struct shrinker_info *info;
+>>   	unsigned long ret, freed = 0;
+>> -	int srcu_idx;
+>> +	int srcu_idx, generation;
+>>   	int i;
+>>   
+>>   	if (!mem_cgroup_online(memcg))
+>> @@ -919,6 +922,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>   	if (unlikely(!info))
+>>   		goto unlock;
+>>   
+>> +	generation = atomic_read(&shrinker_srcu_generation);
+>>   	for_each_set_bit(i, info->map, info->map_nr_max) {
+>>   		struct shrink_control sc = {
+>>   			.gfp_mask = gfp_mask,
+>> @@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>   				set_shrinker_bit(memcg, nid, i);
+>>   		}
+>>   		freed += ret;
+>> +
+>> +		if (atomic_read(&shrinker_srcu_generation) != generation) {
+>> +			freed = freed ? : 1;
+>> +			break;
+>> +		}
+>>   	}
+>>   unlock:
+>>   	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>> @@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>   {
+>>   	unsigned long ret, freed = 0;
+>>   	struct shrinker *shrinker;
+>> -	int srcu_idx;
+>> +	int srcu_idx, generation;
+>>   
+>>   	/*
+>>   	 * The root memcg might be allocated even though memcg is disabled
+>> @@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>   		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>   
+>>   	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>> +	generation = atomic_read(&shrinker_srcu_generation);
+>>   
+>>   	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>   				 srcu_read_lock_held(&shrinker_srcu)) {
+>> @@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>   		if (ret == SHRINK_EMPTY)
+>>   			ret = 0;
+>>   		freed += ret;
+>> +
+>> +		if (atomic_read(&shrinker_srcu_generation) != generation) {
+>> +			freed = freed ? : 1;
+>> +			break;
+>> +		}
+>>   	}
+>>   
+>>   	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+> 
+> Even more, for memcg shrinkers we may unlock SRCU and continue iterations from the same shrinker id:
+
+Maybe we can also do this for global slab shrink? Like below:
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index ffddbd204259..9d8c53075298 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1012,7 +1012,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, 
+int nid,
+                                  int priority)
+  {
+         unsigned long ret, freed = 0;
+-       struct shrinker *shrinker;
++       struct shrinker *shrinker = NULL;
+         int srcu_idx, generation;
+
+         /*
+@@ -1025,11 +1025,15 @@ static unsigned long shrink_slab(gfp_t gfp_mask, 
+int nid,
+         if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+                 return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+
++again:
+         srcu_idx = srcu_read_lock(&shrinker_srcu);
+
+         generation = atomic_read(&shrinker_srcu_generation);
+-       list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+-                                srcu_read_lock_held(&shrinker_srcu)) {
++       if (!shrinker)
++               shrinker = list_entry_rcu(shrinker_list.next, struct 
+shrinker, list);
++       else
++               shrinker = list_entry_rcu(shrinker->list.next, struct 
+shrinker, list);
++       list_for_each_entry_from_rcu(shrinker, &shrinker_list, list) {
+                 struct shrink_control sc = {
+                         .gfp_mask = gfp_mask,
+                         .nid = nid,
+@@ -1042,8 +1046,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, 
+int nid,
+                 freed += ret;
+
+                 if (atomic_read(&shrinker_srcu_generation) != generation) {
+-                       freed = freed ? : 1;
+-                       break;
++                       srcu_read_unlock(&shrinker_srcu, srcu_idx);
++                       cond_resched();
++                       goto again;
+                 }
+         }
+
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 27ef9946ae8a..0b197bba1257 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>   LIST_HEAD(shrinker_list);
+>   DEFINE_MUTEX(shrinker_mutex);
+>   DEFINE_SRCU(shrinker_srcu);
+> +static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>   
+>   #ifdef CONFIG_MEMCG
+>   static int shrinker_nr_max;
+> @@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>   	debugfs_entry = shrinker_debugfs_remove(shrinker);
+>   	mutex_unlock(&shrinker_mutex);
+>   
+> +	atomic_inc(&shrinker_srcu_generation);
+>   	synchronize_srcu(&shrinker_srcu);
+>   
+>   	debugfs_remove_recursive(debugfs_entry);
+> @@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+>    */
+>   void synchronize_shrinkers(void)
+>   {
+> +	atomic_inc(&shrinker_srcu_generation);
+>   	synchronize_srcu(&shrinker_srcu);
+>   }
+>   EXPORT_SYMBOL(synchronize_shrinkers);
+> @@ -908,18 +911,19 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>   {
+>   	struct shrinker_info *info;
+>   	unsigned long ret, freed = 0;
+> -	int srcu_idx;
+> -	int i;
+> +	int srcu_idx, generation;
+> +	int i = 0;
+>   
+>   	if (!mem_cgroup_online(memcg))
+>   		return 0;
+> -
+> +again:
+>   	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>   	info = shrinker_info_srcu(memcg, nid);
+>   	if (unlikely(!info))
+>   		goto unlock;
+>   
+> -	for_each_set_bit(i, info->map, info->map_nr_max) {
+> +	generation = atomic_read(&shrinker_srcu_generation);
+> +	for_each_set_bit_from(i, info->map, info->map_nr_max) {
+>   		struct shrink_control sc = {
+>   			.gfp_mask = gfp_mask,
+>   			.nid = nid,
+> @@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>   				set_shrinker_bit(memcg, nid, i);
+>   		}
+>   		freed += ret;
+> +
+> +		if (atomic_read(&shrinker_srcu_generation) != generation) {
+> +			srcu_read_unlock(&shrinker_srcu, srcu_idx);
+
+Maybe we can add the following code here, so as to avoid repeating the
+current id and avoid triggering softlockup:
+
+			i++;
+			cond_resched();
+
+Thanks,
+Qi
+
+> +			goto again;
+> +		}
+>   	}
+>   unlock:
+>   	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+> @@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>   {
+>   	unsigned long ret, freed = 0;
+>   	struct shrinker *shrinker;
+> -	int srcu_idx;
+> +	int srcu_idx, generation;
+>   
+>   	/*
+>   	 * The root memcg might be allocated even though memcg is disabled
+> @@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>   		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>   
+>   	srcu_idx = srcu_read_lock(&shrinker_srcu);
+> +	generation = atomic_read(&shrinker_srcu_generation);
+>   
+>   	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>   				 srcu_read_lock_held(&shrinker_srcu)) {
+> @@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>   		if (ret == SHRINK_EMPTY)
+>   			ret = 0;
+>   		freed += ret;
+> +
+> +		if (atomic_read(&shrinker_srcu_generation) != generation) {
+> +			freed = freed ? : 1;
+> +			break;
+> +		}
+>   	}
+>   
+>   	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+> 
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Qi
