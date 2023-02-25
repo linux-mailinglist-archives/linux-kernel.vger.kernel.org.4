@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA846A2C8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 00:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137806A2C8E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 00:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjBYXPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 18:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S229724AbjBYXWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 18:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYXPk (ORCPT
+        with ESMTP id S230044AbjBYXWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 18:15:40 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B9CF777
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 15:15:39 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536cb25982eso78476057b3.13
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 15:15:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJmSfEEN4ER+rrwr2AAo+0NwW5TiTbnjxiFoVH+2l9g=;
-        b=lJuA91aU+Z6dTyfnGMZiVv3hrjIkUarjSMsX4//t7Svg2+BqrGDoGH0GjaPHAdBO4u
-         G3blhCZrGSY7lPwfnaKaW39TqZjA/tz4w6Vv1c+0JaDZS2srvRmFlfxteeK3UpfVBreJ
-         5F8qqdMVrlED+IGO+nY37MbRA7IKvEt4wWuVcgZAA84RtrzqTpYeSsqH2SMeL6gpX0lE
-         +n9MzpJR4CBJEDStxxjecE5wzyZK8v8sgZwd7sYVY4RtLz7ZEul2g8HJPy7fggXDL3xB
-         8gWG3WGEGYMnEs1sowTXxetmnWh9yN9AfLCCjOiKo0CniLKCUTCTXaz+sgbee/E0TQGH
-         XHIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SJmSfEEN4ER+rrwr2AAo+0NwW5TiTbnjxiFoVH+2l9g=;
-        b=s4sCo3DM7TrZ+f0N4r1auqVo9nlYUbUwkfj6xV8+UD8nRYOourHmQ4vXmpYCJ8LUA0
-         CN561GHZ9oJvXaLpsWMztt2EEdIDcPLRY/68W6fEOLZaZ1DutnGL8XLIcmGunjmEB2tC
-         Y52B9LQWppnme412h2GdrLqHJX2Rv1STF+Ky03faaQDZJj/rztMLG6eY/cWwRDEiav+R
-         ISOqF4Kj05agwAPhjX0tTdnQPAw11rS7GaFQfewoqOaADni9ky4dxJl9aAiXsErKr9eY
-         0YwWYwELsxMjL5W9s9csY7dA1f+xeYRYJcuxgbdgJtfubI0cB2GCs9TR18lknIHBR0R2
-         tuJA==
-X-Gm-Message-State: AO0yUKVyqyOc7wYmzsmOlgDrnL/WyOtO5Bdtha1BqHOBn4pwxOiFHj0F
-        anBLrUMSbPE71Coo3L0V/qUJMhW8a3FmRPNlRJVrjg==
-X-Google-Smtp-Source: AK7set81k6a7OARPbG8rGRSwKMm+X+pUCEQjYElVtITGMi8kMV0p1mfBo4QFoFXB6q5yGAxkalHBm6shkJcbwLjHKLw=
-X-Received: by 2002:a81:af5d:0:b0:52e:cea7:f6e3 with SMTP id
- x29-20020a81af5d000000b0052ecea7f6e3mr7373343ywj.10.1677366938879; Sat, 25
- Feb 2023 15:15:38 -0800 (PST)
-MIME-Version: 1.0
-References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au> <20230224231430.2948-1-kunyu@nfschina.com>
- <Y/cy5wUtk10OahpO@gondor.apana.org.au> <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
- <Y/c7iVW67Xhhdu8e@gondor.apana.org.au> <Y/hQdzsKMYgkIfMY@gondor.apana.org.au> <CACRpkdZe3cMMxJesD0mpqHTwvuWHjSGVHsiFUQQyuA+VWknMTQ@mail.gmail.com>
-In-Reply-To: <CACRpkdZe3cMMxJesD0mpqHTwvuWHjSGVHsiFUQQyuA+VWknMTQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 26 Feb 2023 00:15:27 +0100
-Message-ID: <CACRpkdY7V=x9+oWsbPtmjc-WBz6v2aSr9RVD1pJ4SGu+Dxejvw@mail.gmail.com>
-Subject: Re: [v2 PATCH] crypto: stm32 - Save and restore between each request
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Sat, 25 Feb 2023 18:22:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DBD14229;
+        Sat, 25 Feb 2023 15:22:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E145B80B46;
+        Sat, 25 Feb 2023 23:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B2F2C433D2;
+        Sat, 25 Feb 2023 23:22:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677367329;
+        bh=laxUjxKUL1KdFBI5/DZLgXrZDWAz4MZtnAzUt4/SxLM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jYpgHvyMEpi0iMzSn6aUzcEi74EEbjbjD0IsZa7aNmLcU3T81w5uCpF1n4bh122Tp
+         B3+9sPO0CG3MY1vhPYegre10PnwXiA4st4NPJDGSv7w19xylQ6btRR7Tfg3h58rTH/
+         EMe88QR9GBK6GWYUR22gj4ZvyLbGZGAwo4hs0LOgSGLy7KNbT4SoKCcxxEvCHNgXfO
+         uss9Y2DV9NAzQ9njpWS9eqBBcXBiYdjQWwJWyycBa/AEg6bsEBxibtiKx7RpR8LpFx
+         IhfaTn0lpiO7tCKKpIpXNggDfejnUm9Fg7DeADF7k6m46uBNDJcmkmFIIT4lDGgsTQ
+         6GcLm66wYiVTQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A0EBE68D26;
+        Sat, 25 Feb 2023 23:22:09 +0000 (UTC)
+Subject: Re: [GIT PULL] clk changes for the merge window
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230225044543.502452-1-sboyd@kernel.org>
+References: <20230225044543.502452-1-sboyd@kernel.org>
+X-PR-Tracked-List-Id: <linux-clk.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230225044543.502452-1-sboyd@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+X-PR-Tracked-Commit-Id: b64baafa24d2c430513329daf5ebb821620d0c03
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1ec35eadc3b448c91a6b763371a7073444e95f9d
+Message-Id: <167736732916.9412.3213886750778915610.pr-tracker-bot@kernel.org>
+Date:   Sat, 25 Feb 2023 23:22:09 +0000
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 1:01 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+The pull request you sent on Fri, 24 Feb 2023 20:45:42 -0800:
 
-> I tested this on the Ux500 and sadly this happens
-> already in probe():
-(...)
-> [    2.828815] stm32-hash a03c2000.hash: Algo 0 : 0 failed
-> [    2.834144] stm32-hash: probe of a03c2000.hash failed with error -22
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
 
-It turns out that this is because this:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1ec35eadc3b448c91a6b763371a7073444e95f9d
 
--       /* Export Context */
--       u32                     *hw_context;
-+       /* hash state */
-+       u32                     hw_context[3 + HASH_CSR_REGISTER_NUMBER];
+Thank you!
 
-Makes struct stm32_hash_request_ctx 580 bytes
-and that fails sanity check in ahash.c because
-HASH_MAX_STATESIZE is 512.
-
-I don't know the story behind why HASH_MAX_STATESIZE
-is 512, the stm32 hash state contains a buffer of 256 bytes
-so I guess either that buffer is a bit big or
-HASH_MAX_STATESIZE is a bit small?
-
-I'm happy to try to change either to make this fit.
-
-Yours,
-Linus Walleij
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
