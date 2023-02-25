@@ -2,72 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2736A2B9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 20:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052AA6A2BA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 21:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjBYT6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 14:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S229675AbjBYU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 15:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjBYT6j (ORCPT
+        with ESMTP id S229507AbjBYU1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 14:58:39 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F7216AEB;
-        Sat, 25 Feb 2023 11:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677355106; i=deller@gmx.de;
-        bh=YkYucz17GSZWPtoOISSnGu7cJxGHlyciXBkecwBVDcA=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=E9VgtiTycyLXcYbKCF91Nf4pk8k0gXJ8Zt2lKrwABCGKq+SCIG/SLjE2r6nxHSJzG
-         YM9sljoX+aDW74+FA3ncZZG1DUow6GtgJ+ZHz6bJdVtt9bb3aH16tZBZA6/GorlRyu
-         S+3SDai9r1fKn+vzokz+dZ1ubNR5X5koMuwfYynAp97x1NB30E+UgT2rlZkdlPb/9s
-         Ap9/WQalBlkgZzkR2jCv0bXayjs1cQZflWAMpeEnaJWtYvVjZAoE1nw0BKrx+fq+mJ
-         3WrJFg4BkXnWydjJ4ZStDpbLksi6CP/EFu12vfbSHaD16oM3h9Pbb6G/IyR8//Npq1
-         1/DYydxDWx2uQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.139.251]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M59C8-1pX79K2xHA-0016fK; Sat, 25
- Feb 2023 20:58:26 +0100
-Message-ID: <a39d97c1-2ced-d159-f742-e5c6008f79ee@gmx.de>
-Date:   Sat, 25 Feb 2023 20:58:25 +0100
+        Sat, 25 Feb 2023 15:27:25 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2136.outbound.protection.outlook.com [40.107.244.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627AC13D62;
+        Sat, 25 Feb 2023 12:27:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ce8F2kWSKLcxhzlM2UDk+HKNT42ZXn8cgwWH4Cb9DF5lQKsUvfhYDx7wxLMPAXfABbgmiKAUr4S88CiUcD5c8ca+GzTDvF7xbcvQHp1AkKXuR6b1U/k/+3BstSr+sfxA0deL4xpNc/AJEo3wOawOkInKsyRblmNMPU6o0HxvHwIeAYpEn+w+EPZPzTv6k3Hl6XxwjShi6XVl14m40VjE4j7ScMWnCQD1H+GqmAfD7ZzW+i90fgMdg/XCEIrpgvFhRl0mP8Y1ZAsp0Tcw6bz4SJLCXVf85FbmsvwBe5cC6PSd7NtSzc1hLrh4tEXrMscFSKtqXTzW/4Z8uf3KWCi/Vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=INrfJlaSgYmKA/H3dosPLXX/9fnXwo1Vk9KLgW38K40=;
+ b=Me2AOVFiqe5BiqFGW5qc4LeUbEwM5Femv5Ly9lQdCpj6c+IaCdX2tkJ4cbX0YVAdNEM2IqLVrCpE0DneDiFtAsF6zEpE7WPtJD++eS40fyLFKmvsfaxm88h7CuxfEcYbMShKD/LwkegAAW4VONnKlewT7cCPMoV2GBFE/7yL1gyGuUjDyIguBXiYq0CnQ825M6/pGhBxGo466KTnDgXdFwfx+GbbIihZLGO4CqdKLyqrvXT7ff9n/2RLeC8K2sAzEeUWhaWbvlzuOjaBtfoxGU3wEweosIdNiD9M1VlH+Z25HWWBlhnismL5orjEoUug7fs2v17X/iTv0+YEgRXSTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=INrfJlaSgYmKA/H3dosPLXX/9fnXwo1Vk9KLgW38K40=;
+ b=jQ+RgzfN7o4N/okPweH1xkTrOJ8GhpVOkG7V/gySKe1bRPBB4P6F/3EgND99KT2iAETPwa2a8b9LA6X9PvP0L/Mat4oqfFW2EFj1SuDl7vZ7KQLn69x0uJsgAe8UPEZlkiP1YAOhvB8WI8s+H2UN9c96CYuRN4Lzvn7ppjEdhgM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5373.namprd13.prod.outlook.com (2603:10b6:806:20c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Sat, 25 Feb
+ 2023 20:27:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%9]) with mapi id 15.20.6134.025; Sat, 25 Feb 2023
+ 20:27:18 +0000
+Date:   Sat, 25 Feb 2023 21:27:05 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH net-next 6/7] net: sunhme: Consolidate mac address
+ initialization
+Message-ID: <Y/pvGVvjGkjTAXXM@corigine.com>
+References: <20230222210355.2741485-1-seanga2@gmail.com>
+ <20230222210355.2741485-7-seanga2@gmail.com>
+ <Y/pV6KDgopeiPEPo@corigine.com>
+ <0b105dca-c273-1fd2-339d-26e08b29c44c@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b105dca-c273-1fd2-339d-26e08b29c44c@gmail.com>
+X-ClientProxiedBy: AS4P190CA0041.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d1::15) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Syzkaller & bisect] There is "xfs_dquot_alloc" related BUG in
- v6.2 in guest
-Content-Language: en-US
-To:     Pengfei Xu <pengfei.xu@intel.com>,
-        linux-xfs <linux-xfs@vger.kernel.org>
-Cc:     asml.silence@gmail.com, geert@linux-m68k.org,
-        linux-kernel@vger.kernel.org, heng.su@intel.com
-References: <Y/g/femUL7jZ9gF3@xpf.sh.intel.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <Y/g/femUL7jZ9gF3@xpf.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zFjy7zM7kQgttKY7AdWK8QOY5DW1tVcCEpTXA0dbG7T//w0QzNU
- eer9q9Bo+uuvKAfVpPa0nvQopZ/y6WwOi/IW3Wa55ObgEQ58DOsQupahKlhakpVti6sAwwk
- gcJrA5RItyMENdr3/2aryxWzckxJ6VvDH+xOcDEqZxgvqmv/+9zSyUvUJJgpWk1lNcsUPnX
- v9+7uI0zgBOgUvXzWZPUQ==
-UI-OutboundReport: notjunk:1;M01:P0:RNtvFinAGmA=;qw8tztkx3MF9T7OOrv9vmimDcF+
- btlNY2+0piR5r5MubSqmuEj9elfIM9wLFSaJrMqlLt0nSV343XjTyoMjR6E9i57ZHWg5ZxkDO
- 0Ou6EhxlsSypUtEtrVo24WwvqIaLwAuwZVo6ndmxsWgvy4ZaQeit/C/YDFlcGhIWNLTt2FSRZ
- AmkDv6OwZWfZNtlOcIsyfKRxShPMmbrYEUhTHVBeS1Aes0Ba8CcaphTgoWL3arL/BgmrrdcsC
- pVdJG22PMTk60XLEGJshSt6pg8W9+X2UggEkwcZxxn275OikDpB2nExWWDn7o6YjVVFIwtKY0
- 4lTJKz9Igb3MVZ8D7/25wRk2q5CkIGmlYRKKdGA9Pl/+yJv8Xp+s8dCEaCQGujgxx5z/4v6d7
- 4eDivoG9ShSqVbsR18P1Ssu/IBZnAQMu0gMoEvTklqb+NULl+t104hl9fQgbYIuQvbFjUphNK
- obZ/QJfCXTAiIShLTEnzOiiSqYJqhXucWAwauU0zjlwwnsz1HksTeIKgZtssskhTiieoJUFcl
- nhK+8Hf+BYo+xwtfsosC5Ah3dLb0+mHxN5xCFQfSjZr6i6kydsElb9SEsUeXw7HSzsq6XJZug
- AXRTSvrDj+Eq7bJro775rExRp0A2ZpVygIMQf2XZJ9C4RO9hFka82Qj2501P3qbh/6nx5r1ZD
- GFUwg91zFnUPdJcxxXyeqR7KxC370JK/uYj9XnBjJSPSolVFPEHZImM/tR2mBM22GldReKJpB
- V6C5dizJw8gsYzoBKq1uyaRDaooDktz2VBTC5kh2phYNKSwI/47RcsTnUGuyfrHghoc0zFOhy
- isvaAOMk/ooo6HrEUlnln5wf3jFfDVqtxMDxEgGQFBy1Gc04S61vdjvzNzEjWGoY2uX3L7P0y
- sIy72nusidrXmT8BRERKs+KLIGlSTQmJ3dnFQ5I/iiZ5Z2Iq4OF9yAORsoaq2L4vDI48POsgU
- 7K/M+YypCN8luUxSj2PN/OFVUss=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5373:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c4a4a6f-f2c5-4e50-9ad9-08db176eb04b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IuxCL4ei9eDxBJDBPLsxRMYjN1E2Echt5Kw0aqYtPDq2e6mUKoFzgqGTEzqjh/jekusMSgC9Rr2KFPpMDf/+tN6eYXOr1XVnQSAtWVwU+EhS0FiDIQcmBebn8uSUaW8PVYJbC+/oiUKPxQDGgYBQsVkvgom0JHI6m8b/SW1PyIOwA5ByojYgxypOrV78koGQsZ7jHAecAEIL9SrTKQ8/1cTxHK+Al6cddxIeoJiwBl8dtke88aRp2YxJcrkr7rcueywKJ46bPLojgXq3ad+68876jY2PL1qPfQuipzkhv6ZXMsyg7oUhUxnaj+RmaxWiM5IRKUqQB6ckdtlFP5WMhOzOYyKUWWT85eQZwoPFWWl1H4c7T+IdJQJ8fmiB8TtSYcssXRElERUuZI8ObcEUCSzIfBPsElb5JNmAOFCcYpV0LxdgNqRhZa3p0epqKoT6dw8lg4Tniddzs/lPoK2eLWyrj++0rTOd/Oyd1qostNTK5wKnecXWerfB2VGjNPtyzYWud9JmLGpI/IXqNrVDmss/pwF3/bTaTBwDj5OlV/REBLWYTPfZLkXWiWr1tpD2uGObBA+adiwtvmCg1VTG7OlULD4zQDCk8XGRAIBvSJGBymi/bj8u7y6CtI/DNwqIt7pN1sNLl+KT1fp21rQq/zxNO+uCZYLGIQc4r3y1oiFMRwrPI0tbvf45d40pDLNV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(346002)(39840400004)(396003)(366004)(451199018)(316002)(5660300002)(186003)(53546011)(41300700001)(4326008)(66946007)(8676002)(6916009)(66476007)(54906003)(6486002)(86362001)(6506007)(66556008)(6512007)(478600001)(36756003)(2906002)(6666004)(38100700002)(83380400001)(8936002)(44832011)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IbRhtgL/3y+u97Prk6csQRzjLnYfh1STA2KFd2NXhack4WYeMHRuNL+PqJVv?=
+ =?us-ascii?Q?GBqqAnBgaGUSqr/tzTp6mu1NLiqVyCM4Mw0laSzyo+jsPmuP3JKzC/1G5W98?=
+ =?us-ascii?Q?4eIZNlJEwiRI4lD4Zorfu127w7Hd+OhuhQKEKWQRxpuWug4epKKoBy8fN67R?=
+ =?us-ascii?Q?4xFv3uBLaosv4S1gk5pGszI+wsn42tjE9wKsdXgPyByBiN7L2Z8a4QvyXuPC?=
+ =?us-ascii?Q?crY5vb4+WIuTmKFrSxANMJT5trsmaCGkeWcQmmoSYMMzCO8AYOWlaMcTs9tZ?=
+ =?us-ascii?Q?Lme+Up4XqsCljs4I9UT3PqVIHk8Nl3Ozzgdhf8sDN9Opul7cLpNSGGsDmQGV?=
+ =?us-ascii?Q?jTJXo3td9girl2Tek7i/OGyWUAh78Le5y4LVUl3dgE9X6JWhgFjyZJqCwxLT?=
+ =?us-ascii?Q?oaA4cwj3zXBpZsC4EcajXyARaCdMqms2vxnFn8eMeTBKLlTssFRLQi/bC1rJ?=
+ =?us-ascii?Q?wHOWOhusrYC5Mx5KlV3Yf+QOUyGI9vFOFGBdAJF4FHSQ6wX7YqQLhYlLPg2j?=
+ =?us-ascii?Q?zJ49vwpTaouGXZAHdQJa0otRP2M0rbZpcg76a18egUJcKf4ppgu4Wy3EPxis?=
+ =?us-ascii?Q?/pn5lHfByncoawUR8/hE6AJ2PSrcwp/ncpL1cUg5Nww/lIighYhtRwHgQLaa?=
+ =?us-ascii?Q?IlF9urcqXHATGemYEnx7Sec59nBIqFXi4akjRLEZBo/xsoUcm2TLcHlbjESl?=
+ =?us-ascii?Q?RJPmpYrKJbonbYBDJA0AYQlOlrU32Qz8On/ZIw0BxDSz6eY2sQl+J34l8f1C?=
+ =?us-ascii?Q?Uo8Y0PJwGOQT+lDy2DxSzsOqxNiKYtUnd94TrkQSX2x0EjqI1pVhX4DEATjZ?=
+ =?us-ascii?Q?GVJgq52jHTjAQVyba25JqnQP2vhusIyHNZjx/SOwwHGhplH81lwWIK46/yAQ?=
+ =?us-ascii?Q?J5mk9Hp25e7tMf6CJVf5tYNDSUQwFJltOPsHoBbVnY88uXkEAuOIB8ho9LLh?=
+ =?us-ascii?Q?fqQEhF1pA608mdW2IDQt3DPhTHq6Y1kuUmNxpe66B9oc1nAAg7dCSjRYtyWQ?=
+ =?us-ascii?Q?WcDMIBCYlKFb7dC0eXnPy3dxc0Wc+k8Wb2YgnR/YKaORI95Pd6GANmC4yE8Y?=
+ =?us-ascii?Q?xGK+0ZyaA3ikEXH96DXFSjFjZKnRI9SGCfLJSmjtZiYQVk9KgCw2DazgAAdF?=
+ =?us-ascii?Q?LAbxsTbnUcevlyKJfkjspTlGgxDak99nYgVf7+LueEe2RxBDI7HKElWgTFMU?=
+ =?us-ascii?Q?NGqnIYEULYW09WtGHrXA5zsr4fuNjdzobmLRbPS0D5uTfkjzL+yhB2sTm9j4?=
+ =?us-ascii?Q?GOTKk0cJnPjdSdesDPp+cPWfb7o2PQtAa/GLi5BrXG8De+utY9T6ajraN//M?=
+ =?us-ascii?Q?d+t4bf9lW4NlPyGVBBJvfPzHfoujXca2PKtsEHWwxhL+FlUiEZ1ohhyWm26u?=
+ =?us-ascii?Q?NQ3X6r4i/GMsKcNx2hpEr2S5VIsV754FNHENEdTQix1yp+Uz2L8bAvJG0Ccy?=
+ =?us-ascii?Q?ROhdhTdAkDG4MtViN6HWIVB4CPMaRsP2LNvYXrp3xkuyOhN6Hp7K6b3PF+4g?=
+ =?us-ascii?Q?2xujH2OAwiKgmk42+eTZb+JxEr3VC0IzWWArwm5CK3s7zcY8/3q4vQp9myx0?=
+ =?us-ascii?Q?Tp4/YjEkyJm8LIKu19rIuUP6PBnUpm6jQYXR2f1lHkmbj2yP1kbZo4v5NcgY?=
+ =?us-ascii?Q?2crBTssYYttM9z8EkX/clLXSPttb/TBtaVp0Dhj7GAccoaqU4zo+/lOh1gSN?=
+ =?us-ascii?Q?JJd5gA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c4a4a6f-f2c5-4e50-9ad9-08db176eb04b
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 20:27:17.8383
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2B7d4tXTBLIxHux2GVRzbVHXqlL8LJF1gQHtxEnZUKBtfuQYEolmvIP429zI0abWFWmJCCsmcWZpWzTx6znd76gWaa4/QYwydPemHPi/lbg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5373
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,328 +121,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looping in xfs mailing list as this seems to be a XFS problem...
+On Sat, Feb 25, 2023 at 01:59:33PM -0500, Sean Anderson wrote:
+> On 2/25/23 13:39, Simon Horman wrote:
+> > On Wed, Feb 22, 2023 at 04:03:54PM -0500, Sean Anderson wrote:
+> > > The mac address initialization is braodly the same between PCI and SBUS,
+> > > and one was clearly copied from the other. Consolidate them. We still have
+> > > to have some ifdefs because pci_(un)map_rom is only implemented for PCI,
+> > > and idprom is only implemented for SPARC.
+> > > 
+> > > Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> > 
+> > Overall this looks to correctly move code around as suggest.
+> > Some minor nits and questions inline.
+> > 
+> > > ---
+> > > 
+> > >   drivers/net/ethernet/sun/sunhme.c | 284 ++++++++++++++----------------
+> > >   1 file changed, 135 insertions(+), 149 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+> > > index 75993834729a..9b55adbe61df 100644
+> > > --- a/drivers/net/ethernet/sun/sunhme.c
+> > > +++ b/drivers/net/ethernet/sun/sunhme.c
+> > > @@ -34,6 +34,7 @@
+> > >   #include <linux/mm.h>
+> > >   #include <linux/module.h>
+> > >   #include <linux/netdevice.h>
+> > > +#include <linux/of.h>
+> > >   #include <linux/random.h>
+> > >   #include <linux/skbuff.h>
+> > >   #include <linux/slab.h>
+> > > @@ -47,7 +48,6 @@
+> > >   #include <asm/oplib.h>
+> > >   #include <asm/prom.h>
+> > >   #include <linux/of_device.h>
+> > > -#include <linux/of.h>
+> > >   #endif
+> > >   #include <linux/uaccess.h>
+> > 
+> > nit: The above hunks don't seem related to the rest of this patch.
+> 
+> I think I originally included this because I referenced some of_ thing from non-sparc
+> code. But it seems like that got refactored out.
+> 
+> > > @@ -2313,6 +2313,133 @@ static const struct net_device_ops hme_netdev_ops = {
+> > >   	.ndo_validate_addr	= eth_validate_addr,
+> > >   };
+> > > +#ifdef CONFIG_PCI
+> > > +static int is_quattro_p(struct pci_dev *pdev)
+> > 
+> > nit: I know you are moving code around here,
+> >       and likewise for many of my other comments.
+> >       But I think bool would be a better return type for this function.
+> 
+> I agree. I will address these sorts of things in a separate patch.
 
-On 2/24/23 05:39, Pengfei Xu wrote:
-> Hi Helge Deller,
->
-> Greeting!
->
-> Reproduced code: https://github.com/xupengfe/syzkaller_logs/blob/main/23=
-0222_152458_xfs_dquot_alloc_bug/repro.c
-> Kconfig: https://github.com/xupengfe/syzkaller_logs/blob/main/230222_152=
-458_xfs_dquot_alloc_bug/kconfig_origin
-> Issue dmesg: https://github.com/xupengfe/syzkaller_logs/blob/main/230222=
-_152458_xfs_dquot_alloc_bug/v6.2_c9c3395d5e3dcc6daee66c6908354d47bf98cb0c_=
-dmesg.log
-> Bisect info(Might not be correct this time, but just gave some clues to =
-the problem)
-> https://github.com/xupengfe/syzkaller_logs/blob/main/230222_152458_xfs_d=
-quot_alloc_bug/bisect_info.log
->
-> All detailed info: https://github.com/xupengfe/syzkaller_logs/tree/main/=
-230222_152458_xfs_dquot_alloc_bug
->
-> Platform: ADL-S, and it could be reproduced on x86 platform in guest.
-> There is "xfs_dquot_alloc" related BUG in v6.2:
->
-> [   71.149963] xfs filesystem being mounted at /root/syzkaller.6TPmw0/0/=
-file0 supports timestamps until 2038 (0x7fffffff)
-> [   71.150653] 00000000: 58 41 47 49 00 00 00 01 00 00 00 00 00 00 80 00=
-  XAGI............
-> [   71.151006] 00000010: 00 00 00 40 00 00 00 06 00 00 00 01 00 00 00 37=
-  ...@...........7
-> [   71.151321] 00000020: 00 00 00 20 ff ff ff ff ff ff ff ff ff ff ff ff=
-  ... ............
-> [   71.151633] 00000030: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.151946] 00000040: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.152259] 00000050: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.152570] 00000060: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.152881] 00000070: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.153193] 00000080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.153607] 00000090: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.153921] 000000a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.154237] 000000b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.154549] 000000c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.154865] 000000d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.155180] 000000e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.155494] 000000f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.155807] 00000100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.156119] 00000110: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff=
-  ................
-> [   71.156433] 00000120: ff ff ff ff ff ff ff ff 00 00 00 00 00 00 00 00=
-  ................
-> [   71.156747] 00000130: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00=
-  ................
-> [   71.157059] 00000140: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00=
-  ................
-> [   71.157382] 00000150: 00 00 00 00 00 00 00 00                        =
-  ........
-> [   71.157671] XFS (loop3): Internal error xfs_iunlink_remove_inode at l=
-ine 2013 of file fs/xfs/xfs_inode.c.  Caller xfs_ifree+0xed/0x9e0
-> [   71.158154] CPU: 1 PID: 137 Comm: kworker/1:3 Not tainted 6.2.0-c9c33=
-95d5e3d #1
-> [   71.158447] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BI=
-OS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [   71.158890] Workqueue: xfs-inodegc/loop3 xfs_inodegc_worker
-> [   71.159117] Call Trace:
-> [   71.159220]  <TASK>
-> [   71.159313]  dump_stack_lvl+0xa7/0xdb
-> [   71.159478]  dump_stack+0x19/0x1f
-> [   71.159621]  xfs_corruption_error+0xd7/0xe0
-> [   71.159805]  ? xfs_ifree+0xed/0x9e0
-> [   71.159957]  xfs_iunlink_remove+0x32e/0x590
-> [   71.160136]  ? xfs_ifree+0xed/0x9e0
-> [   71.160290]  xfs_ifree+0xed/0x9e0
-> [   71.160432]  ? write_comp_data+0x2f/0x90
-> [   71.160600]  ? xfs_trans_ijoin+0x47/0x70
-> [   71.160768]  ? __sanitizer_cov_trace_pc+0x25/0x60
-> [   71.160964]  ? xfs_trans_add_item+0x79/0x1c0
-> [   71.161151]  xfs_inactive_ifree+0xf8/0x2a0
-> [   71.161324]  xfs_inactive+0x226/0x340
-> [   71.161482]  xfs_inodegc_worker+0xd3/0x430
-> [   71.161657]  process_one_work+0x3b1/0x960
-> [   71.161837]  worker_thread+0x52/0x660
-> [   71.161999]  ? __pfx_worker_thread+0x10/0x10
-> [   71.162184]  kthread+0x161/0x1a0
-> [   71.162331]  ? __pfx_kthread+0x10/0x10
-> [   71.162498]  ret_from_fork+0x29/0x50
-> [   71.162670]  </TASK>
-> [   71.162773] XFS (loop3): Corruption detected. Unmount and run xfs_rep=
-air
-> [   71.163039] XFS (loop3): xfs_inactive_ifree: xfs_ifree returned error=
- -117
-> [   71.163869] repro: attempt to access beyond end of device
-> [   71.163869] loop3: rw=3D432129, sector=3D65535, nr_sectors =3D 16 lim=
-it=3D65536
-> [   71.164410] XFS (loop3): log I/O error -5
-> [   71.166002] XFS (loop3): Metadata I/O Error (0x1) detected at xfs_ina=
-ctive_ifree+0x232/0x2a0 (fs/xfs/xfs_inode.c:1612).  Shutting down filesyst=
-em.
-> [   71.166541] XFS (loop3): Please unmount the filesystem and rectify th=
-e problem(s)
-> [   71.167188] XFS (loop1): DAX unsupported by block device. Turning off=
- DAX.
-> [   71.167530] XFS (loop7): DAX unsupported by block device. Turning off=
- DAX.
-> [   71.167859] XFS (loop6): DAX unsupported by block device. Turning off=
- DAX.
-> [   71.168188] XFS (loop4): DAX unsupported by block device. Turning off=
- DAX.
-> [   71.168554] XFS (loop1): Mounting V4 Filesystem 86ecfda0-089a-461f-b0=
-78-1b43afedebc1
-> [   71.168995] XFS (loop7): Mounting V4 Filesystem 86ecfda0-089a-461f-b0=
-78-1b43afedebc1
-> [   71.169595] XFS (loop2): Unmounting Filesystem 86ecfda0-089a-461f-b07=
-8-1b43afedebc1
-> [   71.169614] XFS (loop6): Mounting V4 Filesystem 86ecfda0-089a-461f-b0=
-78-1b43afedebc1
-> [   71.170444] XFS (loop4): Mounting V4 Filesystem 86ecfda0-089a-461f-b0=
-78-1b43afedebc1
-> [   71.172161] XFS (loop3): Quotacheck: Unsuccessful (Error -5): Disabli=
-ng quotas.
-> [   71.172510] xfs filesystem being mounted at /root/syzkaller.mc3H24/0/=
-file0 supports timestamps until 2038 (0x7fffffff)
-> [   71.174633] XFS (loop3): Unmounting Filesystem 86ecfda0-089a-461f-b07=
-8-1b43afedebc1
-> [   71.175936] XFS (loop5): DAX unsupported by block device. Turning off=
- DAX.
-> [   71.176303] XFS (loop5): Mounting V4 Filesystem 86ecfda0-089a-461f-b0=
-78-1b43afedebc1
-> [   71.178679] XFS (loop4): totally zeroed log
-> [   71.179069] XFS (loop4): Ending clean mount
-> [   71.179442] XFS (loop4): Quotacheck needed: Please wait.
-> [   71.183738] XFS (loop6): totally zeroed log
-> [   71.184537] repro: attempt to access beyond end of device
-> [   71.184537] loop4: rw=3D432129, sector=3D65535, nr_sectors =3D 16 lim=
-it=3D65536
-> [   71.184637] XFS (loop6): Ending clean mount
-> [   71.185052] XFS (loop4): log I/O error -5
-> [   71.185339] XFS (loop6): Quotacheck needed: Please wait.
-> [   71.185404] XFS (loop4): Filesystem has been shut down due to log err=
-or (0x2).
-> [   71.185883] XFS (loop4): Please unmount the filesystem and rectify th=
-e problem(s).
-> [   71.186372] XFS (loop4): Quotacheck: Unsuccessful (Error -5): Disabli=
-ng quotas.
-> [   71.186705] xfs filesystem being mounted at /root/syzkaller.uq7iOt/0/=
-file0 supports timestamps until 2038 (0x7fffffff)
-> [   71.187608] repro: attempt to access beyond end of device
-> [   71.187608] loop6: rw=3D432129, sector=3D65535, nr_sectors =3D 16 lim=
-it=3D65536
-> [   71.188127] XFS (loop6): log I/O error -5
-> [   71.188317] XFS (loop6): Filesystem has been shut down due to log err=
-or (0x2).
-> [   71.188599] XFS (loop6): Please unmount the filesystem and rectify th=
-e problem(s).
-> [   71.188998] XFS (loop6): Quotacheck: Unsuccessful (Error -5): Disabli=
-ng quotas.
-> [   71.189324] xfs filesystem being mounted at /root/syzkaller.OjSrkA/0/=
-file0 supports timestamps until 2038 (0x7fffffff)
-> [   71.191782] XFS (loop4): Unmounting Filesystem 86ecfda0-089a-461f-b07=
-8-1b43afedebc1
-> [   71.193911] XFS (loop6): Unmounting Filesystem 86ecfda0-089a-461f-b07=
-8-1b43afedebc1
-> [   71.207573] XFS (loop1): totally zeroed log
-> [   71.207813] XFS (loop7): totally zeroed log
-> [   71.208396] XFS (loop7): Ending clean mount
-> [   71.208664] XFS (loop1): Ending clean mount
-> [   71.209093] XFS (loop1): Quotacheck needed: Please wait.
-> [   71.210841] XFS (loop7): Quotacheck needed: Please wait.
-> [   71.216659] repro: attempt to access beyond end of device
-> [   71.216659] loop7: rw=3D432129, sector=3D65535, nr_sectors =3D 16 lim=
-it=3D65536
-> [   71.217165] XFS (loop7): log I/O error -5
-> [   71.217375] XFS (loop7): Filesystem has been shut down due to log err=
-or (0x2).
-> [   71.217674] XFS (loop7): Please unmount the filesystem and rectify th=
-e problem(s).
-> [   71.218071] XFS (loop7): Quotacheck: Unsuccessful (Error -5): Disabli=
-ng quotas.
-> [   71.218402] xfs filesystem being mounted at /root/syzkaller.Q5dMMG/0/=
-file0 supports timestamps until 2038 (0x7fffffff)
-> [   71.219906] XFS (loop7): Unmounting Filesystem 86ecfda0-089a-461f-b07=
-8-1b43afedebc1
-> [   71.224443] repro: attempt to access beyond end of device
-> [   71.224443] loop1: rw=3D432129, sector=3D65535, nr_sectors =3D 16 lim=
-it=3D65536
-> [   71.224960] XFS (loop1): log I/O error -5
-> [   71.225151] XFS (loop1): Filesystem has been shut down due to log err=
-or (0x2).
-> [   71.225543] XFS (loop1): Please unmount the filesystem and rectify th=
-e problem(s).
-> [   71.225966] XFS (loop1): Quotacheck: Unsuccessful (Error -5): Disabli=
-ng quotas.
-> [   71.226310] xfs filesystem being mounted at /root/syzkaller.qCVHXV/0/=
-file0 supports timestamps until 2038 (0x7fffffff)
-> [   71.227591] BUG: kernel NULL pointer dereference, address: 0000000000=
-0002a8
-> [   71.227873] #PF: supervisor read access in kernel mode
-> [   71.228077] #PF: error_code(0x0000) - not-present page
-> [   71.228280] PGD c313067 P4D c313067 PUD c1fe067 PMD 0
-> [   71.228494] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [   71.228673] CPU: 0 PID: 161 Comm: kworker/0:4 Not tainted 6.2.0-c9c33=
-95d5e3d #1
-> [   71.228961] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BI=
-OS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [   71.229400] Workqueue: xfs-inodegc/loop1 xfs_inodegc_worker
-> [   71.229626] RIP: 0010:xfs_dquot_alloc+0x95/0x1e0
-> [   71.229820] Code: 80 15 ad 85 48 c7 c6 7c 6b 92 83 e8 75 0f 6b ff 49 =
-8b 8d 60 01 00 00 44 89 e0 31 d2 48 c7 c6 18 ae 8f 83 48 8d bb 18 02 00 00=
- <f7> b1 a8 02 2
-> [   71.230528] RSP: 0018:ffffc90000babc20 EFLAGS: 00010246
-> [   71.230737] RAX: 0000000000000009 RBX: ffff8880093c98c0 RCX: 00000000=
-00000000
-> [   71.231014] RDX: 0000000000000000 RSI: ffffffff838fae18 RDI: ffff8880=
-093c9ad8
-> [   71.231292] RBP: ffffc90000babc48 R08: 0000000000000002 R09: 00000000=
-00000000
-> [   71.231570] R10: ffffc90000baba80 R11: ffff88800af08d98 R12: 00000000=
-00000009
-> [   71.231850] R13: ffff88800c4bc000 R14: ffff88800c4bc000 R15: 00000000=
-00000004
-> [   71.232129] FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knl=
-GS:0000000000000000
-> [   71.232441] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   71.232668] CR2: 00000000000002a8 CR3: 000000000a1d2002 CR4: 00000000=
-00770ef0
-> [   71.232949] PKRU: 55555554
-> [   71.233061] Call Trace:
-> [   71.233162]  <TASK>
-> [   71.233254]  xfs_qm_dqread+0x46/0x440
-> [   71.233410]  ? xfs_qm_dqget_inode+0x13e/0x500
-> [   71.233596]  xfs_qm_dqget_inode+0x154/0x500
-> [   71.233774]  xfs_qm_dqattach_one+0x142/0x3c0
-> [   71.233961]  xfs_qm_dqattach_locked+0x14a/0x170
-> [   71.234149]  xfs_qm_dqattach+0x52/0x80
-> [   71.234307]  xfs_inactive+0x186/0x340
-> [   71.234461]  xfs_inodegc_worker+0xd3/0x430
-> [   71.234630]  process_one_work+0x3b1/0x960
-> [   71.234802]  worker_thread+0x52/0x660
-> [   71.234957]  ? __pfx_worker_thread+0x10/0x10
-> [   71.235136]  kthread+0x161/0x1a0
-> [   71.235279]  ? __pfx_kthread+0x10/0x10
-> [   71.235442]  ret_from_fork+0x29/0x50
-> [   71.235602]  </TASK>
-> [   71.235696] Modules linked in:
-> [   71.235826] CR2: 00000000000002a8
-> [   71.235964] ---[ end trace 0000000000000000 ]---
->
-> Reporting the above issue and providing a reproduced way seems valuable.
->
-> But not sure report to who in kernel community.
-> So used RIP: "xfs_dquot_alloc" key word to bisect between v6.2 and v5.11=
-.
-> I know there is BUG also but with some other RIP info.
->
-> Related commit:
-> 29837019d5ebb80a5f180af3107a0645c731a770
-> Merge tag 'io_uring-5.19-2022-07-08' of git://git.kernel.dk/linux-block
->
-> This might not be the right point of suspicion.
-> Could you help to take a look or add the correct developer for this issu=
-e?
-> Thanks a lot!
->
-> ---
->
-> If you don't need an environment to reproduce the problem or if you alre=
-ady
-> have one, please ignore the following information.
->
-> How to reproduce:
-> git clone https://gitlab.com/xupengfe/repro_vm_env.git
-> cd repro_vm_env
-> tar -xvf repro_vm_env.tar.gz
-> cd repro_vm_env; ./start3.sh  // it needs qemu-system-x86_64 and I used =
-v7.1.0
->     // start3.sh will load bzImage_2241ab53cbb5cdb08a6b2d4688feb13971058=
-f65 v6.2-rc5 kernel
->     // You could change the bzImage_xxx as you want
-> In vm and login with root,  there is no password for root.
->
-> After login vm successfully, you could transfer reproduced binary to the=
- VM by below way, and reproduce the problem:
-> gcc -pthread -o repro repro.c
-> scp -P 10023 repro root@localhost:/root/
->
-> Get the bzImage for target kernel:
-> Please use target kconfig and copy it to kernel_src/.config
-> make olddefconfig
-> make -jx bzImage           //x should equal or less than cpu num your pc=
- has
->
-> Fill the bzImage file into above start3.sh to load the target kernel vm.
->
->
-> Tips:
-> If you already have qemu-system-x86_64, please ignore below info.
-> If you want to install qemu v7.1.0 version:
-> git clone https://github.com/qemu/qemu.git
-> cd qemu
-> git checkout -f v7.1.0
-> mkdir build
-> cd build
-> yum install -y ninja-build.x86_64
-> ../configure --target-list=3Dx86_64-softmmu --enable-kvm --enable-vnc --=
-enable-gtk --enable-sdl
-> make
-> make install
->
-> Thanks!
-> BR.
+Thanks.
 
+> > > +{
+> > > +	struct pci_dev *busdev = pdev->bus->self;
+> > > +	struct pci_dev *this_pdev;
+> > > +	int n_hmes;
+> > > +
+> > > +	if (!busdev || busdev->vendor != PCI_VENDOR_ID_DEC ||
+> > > +	    busdev->device != PCI_DEVICE_ID_DEC_21153)
+> > > +		return 0;
+> > > +
+> > > +	n_hmes = 0;
+> > > +	list_for_each_entry(this_pdev, &pdev->bus->devices, bus_list) {
+> > > +		if (this_pdev->vendor == PCI_VENDOR_ID_SUN &&
+> > > +		    this_pdev->device == PCI_DEVICE_ID_SUN_HAPPYMEAL)
+> > > +			n_hmes++;
+> > > +	}
+> > > +
+> > > +	if (n_hmes != 4)
+> > > +		return 0;
+> > > +
+> > > +	return 1;
+> > > +}
+> > > +
+> > > +/* Fetch MAC address from vital product data of PCI ROM. */
+> > > +static int find_eth_addr_in_vpd(void __iomem *rom_base, int len, int index, unsigned char *dev_addr)
+> > 
+> > nit: At some point it might be better
+> >       to update this function to return 0 on success and
+> >       an error otherwise.
+> > 
+> > > +{
+> > > +	int this_offset;
+> > > +
+> > > +	for (this_offset = 0x20; this_offset < len; this_offset++) {
+> > > +		void __iomem *p = rom_base + this_offset;
+> > > +
+> > > +		if (readb(p + 0) != 0x90 ||
+> > > +		    readb(p + 1) != 0x00 ||
+> > > +		    readb(p + 2) != 0x09 ||
+> > > +		    readb(p + 3) != 0x4e ||
+> > > +		    readb(p + 4) != 0x41 ||
+> > > +		    readb(p + 5) != 0x06)
+> > > +			continue;
+> > > +
+> > > +		this_offset += 6;
+> > > +		p += 6;
+> > > +
+> > > +		if (index == 0) {
+> > > +			int i;
+> > > +
+> > > +			for (i = 0; i < 6; i++)
+> > 
+> > nit: This could be,
+> > 
+> > 			for (int i = 0; i < 6; i++)
+> 
+> That's kosher now?
+
+I can't vouch for all architectures (e.g. sparc).
+But in general, yes, I think so.
+
+> > > +	/* Sun MAC prefix then 3 random bytes. */
+> > > +	dev_addr[0] = 0x08;
+> > > +	dev_addr[1] = 0x00;
+> > > +	dev_addr[2] = 0x20;
+> > > +	get_random_bytes(&dev_addr[3], 3);
+> > > +}
+> > > +#endif /* !(CONFIG_SPARC) */
+> > 
+> > Should this be CONFIG_PCI ?
+> 
+> No idea. I think I will just remove it...
+
+Yes, that would remove the problem quite nicely.
+
+> > > @@ -2346,34 +2472,11 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
+> > >   		return -ENOMEM;
+> > >   	SET_NETDEV_DEV(dev, &op->dev);
+> > > -	/* If user did not specify a MAC address specifically, use
+> > > -	 * the Quattro local-mac-address property...
+> > > -	 */
+> > > -	for (i = 0; i < 6; i++) {
+> > > -		if (macaddr[i] != 0)
+> > > -			break;
+> > > -	}
+> > > -	if (i < 6) { /* a mac address was given */
+> > > -		for (i = 0; i < 6; i++)
+> > > -			addr[i] = macaddr[i];
+> > > -		eth_hw_addr_set(dev, addr);
+> > > -		macaddr[5]++;
+> > > -	} else {
+> > > -		const unsigned char *addr;
+> > > -		int len;
+> > > -
+> > > -		addr = of_get_property(dp, "local-mac-address", &len);
+> > > -
+> > > -		if (qfe_slot != -1 && addr && len == ETH_ALEN)
+> > > -			eth_hw_addr_set(dev, addr);
+> > > -		else
+> > > -			eth_hw_addr_set(dev, idprom->id_ethaddr);
+> > > -	}
+> > > -
+> > >   	hp = netdev_priv(dev);
+> > > -
+> > > +	hp->dev = dev;
+> > 
+> > I'm not clear how this change relates to the rest of the patch.
+> 
+> This mirrors the initialization on the PCI side. Makes their equivalence
+> more obvious.
+
+Thanks, understood.
+
+> > >   	hp->happy_dev = op;
+> > >   	hp->dma_dev = &op->dev;
+> > > +	happy_meal_addr_init(hp, dp, qfe_slot);
+> > >   	spin_lock_init(&hp->happy_lock);
+> > > @@ -2451,7 +2554,6 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
+> > >   	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
+> > > -	hp->dev = dev;
+> > >   	dev->netdev_ops = &hme_netdev_ops;
+> > >   	dev->watchdog_timeo = 5*HZ;
+> > >   	dev->ethtool_ops = &hme_ethtool_ops;
+> > 
+> > ...
+> > 
+> > >   static int happy_meal_pci_probe(struct pci_dev *pdev,
+> > >   				const struct pci_device_id *ent)
+> > >   {
+> > >   	struct quattro *qp = NULL;
+> > > -#ifdef CONFIG_SPARC
+> > > -	struct device_node *dp;
+> > 
+> > Was dp not being initialised previously a bug?
+> 
+> No. All uses are protected by CONFIG_SPARC. But passing garbage to other
+> functions is bad form.
+
+Thanks, agreed.
+
+> > > -#endif
+> > > +	struct device_node *dp = NULL;
+> > 
+> > nit: I think it would be good to move towards, rather than away from,
+> > reverse xmas tree here.
+> 
+> Which is why this line comes first ;)
+
+Yes, silly me.
+
+> But I am not a fan of introducing churn just to organize line lengths. So the
+> following will stay as-is until it needs to be reworked further.
+> 
+
+Yes, no objections there.
+I just misread the diff. Sorry.
+
+...
