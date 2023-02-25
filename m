@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5786A2966
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 12:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CC26A2967
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 12:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjBYLwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 06:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S229668AbjBYLwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 06:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBYLv5 (ORCPT
+        with ESMTP id S229589AbjBYLv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 06:51:57 -0500
+        Sat, 25 Feb 2023 06:51:59 -0500
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8225DEB56;
-        Sat, 25 Feb 2023 03:51:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91230EC78;
+        Sat, 25 Feb 2023 03:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677325910; i=w_armin@gmx.de;
-        bh=9r+ibg9eKkn9LExgzAaFAAWxIQXWfKeAQOOzxQ4bOco=;
+        t=1677325912; i=w_armin@gmx.de;
+        bh=aFx93Bs3vYD/A1ztGnO44q1Pozj+Rsgp1DXI8DNLUVM=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=suEfYPFINR/U/BcFNv/JmDGwoghohvyQEZAP8M89uDhziNaD7UHoPw0Msc9n3fE79
-         U8XNWMUEv3CQXo6fF92lSWr/lmG//Q3bfXOLa5z+U8zOY2weAx6zilSUYWMy2XrxFY
-         KryXXt9yq5yco8vCd8FUyyPlKhZWM0lfFlxhaId/QoUx5t+Q2Nqylgu1pb4MfRmVUh
-         d+N99etPwPErwqfbCuXmrQ3k2agfhcbg8myOfy8418FYF5gqkq1NygcGO67O8m7eV6
-         ThTbv1y6VRLfaIg6rP7/wgwE+wisMXuz/yekZTe1t0ra5C6lDLVN84KJT4lZXW1Vc/
-         T1Usum1C8c/ZA==
+        b=SsJIX2Njz3jsKKh5Lhjm7mgnEedGtKoTZeJsl9W/wW+MDKmveRzdE8fxOf9PeM8CR
+         6pcgMX3WLkAbZG5jMupEf8lck5Nm8m1HY8iZcGq/iFjZOr+ScgO3k+2jXglqQWaVfz
+         iqJ2CxEskcAj6co4hYrg5NxYHsZEqyK6CouP+tpMy+upC+MDsuaGYv6p7S8f2Wdy2x
+         1q41sB7CXUGE4uqiHhL4xPWssRW0Xo+iF3Ioav0uVeqQilVkP7D0Bja7eIUmzYLS3d
+         v3Bzw4l69GPEcogDZg/Ym1/lewtmtsUT+NZUObSQQUQ60oG4ymPmDPDtld3KZS24oy
+         JwAbgqL3xgIKw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Ml6mE-1omciw2sWa-00lR83; Sat, 25 Feb 2023 12:51:50 +0100
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MYNNo-1p1W6f3XKk-00VQAL; Sat, 25 Feb 2023 12:51:51 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     rafael@kernel.org, lenb@kernel.org
 Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] ACPI: sbshc: Use ec query notifier call chain
-Date:   Sat, 25 Feb 2023 12:51:42 +0100
-Message-Id: <20230225115144.31212-3-W_Armin@gmx.de>
+Subject: [PATCH v2 3/4] ACPI: EC: Make query handlers private
+Date:   Sat, 25 Feb 2023 12:51:43 +0100
+Message-Id: <20230225115144.31212-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230225115144.31212-1-W_Armin@gmx.de>
 References: <20230225115144.31212-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:97y7HOV9TVYZthxibjFFCPaN/VhpTWBWew6Ay/XiBe1eLrtT4jU
- Fw7QnixGQ+kddXPMRCfPm+sCmGWIpAiCtFO77dDa3Ch0PSVr4hMVctzHWpIfaXHslgfZG0c
- PJ7PPyzdYR2u98MAL7rWUCdi+bRrBCgFvU6y7D76zaapP65gCd2obDYrwb4pEymtj+9EtBD
- EYsqKPTYqQANHFWJm5Mdg==
-UI-OutboundReport: notjunk:1;M01:P0:vAzVw2yu2HA=;MiXpS3/tw8r/Yfje2i/WqqIDtp7
- iHaRRPBz8EYzStKtlluD1ePm7TuWvXkbzJM/ElzrZv97eAk9rGU2ty1oV9Jl2MtuGh0QJ2A/B
- i5KMFfjkUU7H+97HNjrVHj4ubTJLrjhPBqQAZwPZ6hE2nFExjoBsq44mad/jLaBPMKDwT+LEw
- zhBa3aydp6ZmgELlnnmZDUrH/BsMzpAgxzpgwgQM0ky6MPPCUfWbLcnUBvDL5M8Je+T+kN5n8
- U95xVMZqixfPgY8otFl98CSfXXbX7BwHgD3cwc1YPTlQyepj/9wyOTzsXfQfwsVcWWbXPGYIk
- 6jdU06pLdQ0z4+vHDV7nXz/yF/GJhleRQ27UK6wBTlsx/mjnc7DdThP/sCUux/uNN/HFoi/8L
- SMiTC7Ppu14UByRDJhhLFLvSGOMICWgRxWaFso/871yCTcjRPUBaJ0yk8HvAYZn3D9jGtH0dz
- R4j1pbTmNEeyANrckKrLirR+NfHVcAN236IF+obSeI41qP/auvipSHGAxEB3iKAEkoOiZViII
- WOP76AURq0+MXEex5+CZ8ORgYGJcKHCvmfeFlNDm+BaB0fN0aCeSWdVIwrFOxIdx9vRExtjmE
- va5TNRr9ptnYDONfmJFvp4Lvpr4Rn/iKE7oiINb52NOD5SsPWunnengA/2rfN6l+fsq2/bif5
- ded8GX2m7bKgpEr5qx9Xxv8d6KTbvOkAXUK1vGoVyENtzSippq3UncJg/SZX31U5Jt+JDGOxF
- yLfZ2BDOYavfP45LMOrhBtKBjSKFqNan6BSM7r1aA6uq/eiGftvGg+WD0oIZ228+3xRkKOYjW
- H3vRQ7UdRuqD9yA0VpSrQlhNvCznt3ONY2UlkXgiVrKS6Q8QTdn9wt5KXwhhcc8SgmYvILzmL
- BhrJWGzL8B1OqwuWS4Qs1w/R+UWpt65DzsSkAc5pjT601mR0CVvu98QVSTNV3SO6ssXJV/zUm
- OCT9BiQqDoEuFL4hx3pchgdpiMg=
+X-Provags-ID: V03:K1:T1zgduE095Lm7fr46vit2+r1mQQBRoLtysiBLIe5Di/dtntRgX/
+ SGZw+ZrC0mRUw+JqhLkxeO/dQ/rfdg0vhlEXaupE2L3f2ZIfh1mPuaOHJHE+uFQLMlaHXQO
+ 3YWlp3Be9d56uWZJv0W7nzZmtbsXNW0ned8fE9wq1auIWMUm9lieIf6E7UG15EyirimnRkj
+ 91/pZzMKbA3mzkdTCaCEw==
+UI-OutboundReport: notjunk:1;M01:P0:2GkJ2W75xrA=;bJ9/Q6+fTsu/4GD2mYpVsCqek00
+ hlQCHZWut9//8qLl9Byamr+z8jNdel2St0RoFPq6YfgOow6PGiGfw41479Cm7e0bhsoqnjx+4
+ 9h+/BdYCVLoN+YQCEzUOuCWtm1UXrUKgmAhwfrBaMPIQ5hlxvYZlCt4l47P/GezgcjHdWW92d
+ EiRHxn5hgGoEZQsyqWSjcewZaMi8LLGP3CEtOn44vcx5Mr6et2uCiXOXFav+TePiqYgPYeuI/
+ N7+mCPObWfVdalrvsGJwhtp7fzt7Uwkfw9oH0S4oS6m/Koggo0I7kqp5lrj9zgmV8foLEXMJy
+ uVLcPvoYNTYDreGz0YRoMd6K/KM2mzYv20g8subpDgmS1BEY8wchoGelomVi1V2pQm8dgeGec
+ MauwYr4CoClrQhpwQ3SDVNnz/QFsLV8/N+KGQOxDEC5lZct2ZE3hGZvSQ5D7i2byddUEWKQgU
+ VLodB7ejfBgAbw/bYR6bkXrJxZ2xpqINpLhz2JjuGMtI4+qOpyuj357/YnIjPWFsunJngJipP
+ psjAx/yDFflf3Leciai2qdQAeTOsEF9ShWhU8+mIfb0m9HKjcoB1ULOm99zwCmTCZj4F210kT
+ TfNjxjD9JRx/M+11L+KeFlR2CoQZ4R4PGeqjnJUwVn8WenTfqwpvvp1K0DhGCgcLkOPrsJzuM
+ X73b+HokU17kAenKcLFleTdW1T0n8M1DXeretzJoysP1bNEaqK8bcIDxbhcRwy57CfKpZjQxg
+ 3AhdhorpiAy2pBO5RdahBW8zCw8OgifgIvr/txEjcwLP+RdUlzuCFLIuF9JRUR77M9ujB63tP
+ mVxP9iapVbRJXkVRI+1bHRCcduAwo5HJYOX1S+A/5AGWdY2IW55+etqYoJj7Q5DP9f0vIR/Fa
+ KZJHyvLMKRXQ6aYveF262Q0qZ73kBf9mmfkdGQ87iqMD2OnbOvH3GvA6W5VZIPBaPsHfEfEDZ
+ UB3hiEtq83wdADHQaNtQo1izfQM=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,154 +69,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using acpi_ec_add_query_handler(), a kernel oops
-can occur when unloading the sbshc module, since the
-handler callback might still be used by a work item
-inside the ec workqueue.
-Use the new ec query notifier call chain to register
-the handler in a safe way. Return NOTIFY_BAD to override
-the existing _Qxx handler in case the query was meant
-for the EC SMBus controller.
+The ability for external modules to register query handlers
+was broken for a long time due to having only a single user.
+With the only user (sbshc) having been converted to use the
+more robust query notifier call chain, the query handler
+functionality can be made private. This also allows for some
+cleanups.
 
-Tested on a Acer Travelmate 4002WLMi.
+Tested on a Acer Travelmate 4000WLMi.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/acpi/sbshc.c | 45 ++++++++++++++++++++++++++++----------------
- 1 file changed, 29 insertions(+), 16 deletions(-)
+ drivers/acpi/ec.c       | 36 ++++++++----------------------------
+ drivers/acpi/internal.h |  5 -----
+ 2 files changed, 8 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/acpi/sbshc.c b/drivers/acpi/sbshc.c
-index 16f2daaa2c45..e3280f646eb5 100644
-=2D-- a/drivers/acpi/sbshc.c
-+++ b/drivers/acpi/sbshc.c
-@@ -8,11 +8,14 @@
- #define pr_fmt(fmt) "ACPI: " fmt
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index dc7860a825a0..825493d38a4f 100644
+=2D-- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -143,9 +143,7 @@ MODULE_PARM_DESC(ec_no_wakeup, "Do not wake up from su=
+spend-to-idle");
 
- #include <linux/acpi.h>
-+#include <linux/notifier.h>
- #include <linux/wait.h>
- #include <linux/slab.h>
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/interrupt.h>
-+
-+#include "internal.h"
- #include "sbshc.h"
+ struct acpi_ec_query_handler {
+ 	struct list_head node;
+-	acpi_ec_query_func func;
+ 	acpi_handle handle;
+-	void *data;
+ 	u8 query_bit;
+ 	struct kref kref;
+ };
+@@ -1082,9 +1080,7 @@ static void acpi_ec_put_query_handler(struct acpi_ec=
+_query_handler *handler)
+ 	kref_put(&handler->kref, acpi_ec_query_handler_release);
+ }
 
- #define ACPI_SMB_HC_CLASS	"smbus_host_ctl"
-@@ -20,6 +23,7 @@
+-int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
+-			      acpi_handle handle, acpi_ec_query_func func,
+-			      void *data)
++static int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit, ac=
+pi_handle handle)
+ {
+ 	struct acpi_ec_query_handler *handler =3D
+ 	    kzalloc(sizeof(struct acpi_ec_query_handler), GFP_KERNEL);
+@@ -1094,40 +1090,28 @@ int acpi_ec_add_query_handler(struct acpi_ec *ec, =
+u8 query_bit,
 
- struct acpi_smb_hc {
- 	struct acpi_ec *ec;
-+	struct notifier_block nb;
- 	struct mutex lock;
- 	wait_queue_head_t wait;
- 	u8 offset;
-@@ -194,6 +198,7 @@ int acpi_smbus_unregister_callback(struct acpi_smb_hc =
-*hc)
- 	hc->context =3D NULL;
- 	mutex_unlock(&hc->lock);
- 	acpi_os_wait_events_complete();
-+
+ 	handler->query_bit =3D query_bit;
+ 	handler->handle =3D handle;
+-	handler->func =3D func;
+-	handler->data =3D data;
+ 	mutex_lock(&ec->mutex);
+ 	kref_init(&handler->kref);
+ 	list_add(&handler->node, &ec->list);
+ 	mutex_unlock(&ec->mutex);
  	return 0;
  }
+-EXPORT_SYMBOL_GPL(acpi_ec_add_query_handler);
 
-@@ -206,20 +211,28 @@ static inline void acpi_smbus_callback(void *context=
-)
- 		hc->callback(hc->context);
+-static void acpi_ec_remove_query_handlers(struct acpi_ec *ec,
+-					  bool remove_all, u8 query_bit)
++static void acpi_ec_remove_query_handlers(struct acpi_ec *ec)
+ {
+ 	struct acpi_ec_query_handler *handler, *tmp;
+ 	LIST_HEAD(free_list);
+
+ 	mutex_lock(&ec->mutex);
+ 	list_for_each_entry_safe(handler, tmp, &ec->list, node) {
+-		if (remove_all || query_bit =3D=3D handler->query_bit) {
+-			list_del_init(&handler->node);
+-			list_add(&handler->node, &free_list);
+-		}
++		list_del_init(&handler->node);
++		list_add(&handler->node, &free_list);
+ 	}
+ 	mutex_unlock(&ec->mutex);
+ 	list_for_each_entry_safe(handler, tmp, &free_list, node)
+ 		acpi_ec_put_query_handler(handler);
  }
 
--static int smbus_alarm(void *context)
-+static int acpi_smbus_hc_notify(struct notifier_block *block, unsigned lo=
-ng action, void *data)
- {
--	struct acpi_smb_hc *hc =3D context;
-+	struct acpi_smb_hc *hc =3D container_of(block, struct acpi_smb_hc, nb);
- 	union acpi_smb_status status;
-+	struct acpi_ec *ec =3D data;
- 	u8 address;
-+
-+	if (ec !=3D hc->ec || action !=3D hc->query_bit)
-+		return NOTIFY_DONE;
-+
- 	if (smb_hc_read(hc, ACPI_SMB_STATUS, &status.raw))
--		return 0;
-+		return NOTIFY_OK;
-+
- 	/* Check if it is only a completion notify */
- 	if (status.fields.done && status.fields.status =3D=3D SMBUS_OK) {
- 		hc->done =3D true;
- 		wake_up(&hc->wait);
- 	}
-+
- 	if (!status.fields.alarm)
--		return 0;
-+		return NOTIFY_BAD;
-+
- 	mutex_lock(&hc->lock);
- 	smb_hc_read(hc, ACPI_SMB_ALARM_ADDRESS, &address);
- 	status.fields.alarm =3D 0;
-@@ -233,20 +246,16 @@ static int smbus_alarm(void *context)
- 					acpi_smbus_callback, hc);
- 	}
- 	mutex_unlock(&hc->lock);
--	return 0;
+-void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit)
+-{
+-	acpi_ec_remove_query_handlers(ec, false, query_bit);
 -}
-
--typedef int (*acpi_ec_query_func) (void *data);
+-EXPORT_SYMBOL_GPL(acpi_ec_remove_query_handler);
 -
--extern int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
+ int register_acpi_ec_query_notifier(struct notifier_block *nb)
+ {
+ 	return blocking_notifier_chain_register(&acpi_ec_chain_head, nb);
+@@ -1151,12 +1135,8 @@ static void acpi_ec_event_processor(struct work_str=
+uct *work)
+
+ 	/* Allow notifier handlers to override query handlers */
+ 	ret =3D blocking_notifier_call_chain(&acpi_ec_chain_head, handler->query=
+_bit, ec);
+-	if (ret !=3D NOTIFY_BAD) {
+-		if (handler->func)
+-			handler->func(handler->data);
+-		else if (handler->handle)
+-			acpi_evaluate_object(handler->handle, NULL, NULL, NULL);
+-	}
++	if (ret !=3D NOTIFY_BAD && handler->handle)
++		acpi_evaluate_object(handler->handle, NULL, NULL, NULL);
+
+ 	ec_dbg_evt("Query(0x%02x) stopped", handler->query_bit);
+
+@@ -1402,7 +1382,7 @@ acpi_ec_register_query_methods(acpi_handle handle, u=
+32 level,
+ 	status =3D acpi_get_name(handle, ACPI_SINGLE_NAME, &buffer);
+
+ 	if (ACPI_SUCCESS(status) && sscanf(node_name, "_Q%x", &value) =3D=3D 1)
+-		acpi_ec_add_query_handler(ec, value, handle, NULL, NULL);
++		acpi_ec_add_query_handler(ec, value, handle);
+ 	return AE_OK;
+ }
+
+@@ -1587,7 +1567,7 @@ static void ec_remove_handlers(struct acpi_ec *ec)
+ 		clear_bit(EC_FLAGS_EVENT_HANDLER_INSTALLED, &ec->flags);
+ 	}
+ 	if (test_bit(EC_FLAGS_QUERY_METHODS_INSTALLED, &ec->flags)) {
+-		acpi_ec_remove_query_handlers(ec, true, 0);
++		acpi_ec_remove_query_handlers(ec);
+ 		clear_bit(EC_FLAGS_QUERY_METHODS_INSTALLED, &ec->flags);
+ 	}
+ }
+diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+index 6f41d42375ab..72ce5a9ba57f 100644
+=2D-- a/drivers/acpi/internal.h
++++ b/drivers/acpi/internal.h
+@@ -202,17 +202,12 @@ extern struct acpi_ec *first_ec;
+
+ /* If we find an EC via the ECDT, we need to keep a ptr to its context */
+ /* External interfaces use first EC only, so remember */
+-typedef int (*acpi_ec_query_func) (void *data);
+
+ void acpi_ec_init(void);
+ void acpi_ec_ecdt_probe(void);
+ void acpi_ec_dsdt_probe(void);
+ void acpi_ec_block_transactions(void);
+ void acpi_ec_unblock_transactions(void);
+-int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
 -			      acpi_handle handle, acpi_ec_query_func func,
 -			      void *data);
-+	/* We may need to override existing _Qxx handlers */
-+	return NOTIFY_BAD;
-+}
+-void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit);
 
- static int acpi_smbus_hc_add(struct acpi_device *device)
- {
--	int status;
- 	unsigned long long val;
- 	struct acpi_smb_hc *hc;
-+	int status, ret;
-
- 	if (!device)
- 		return -EINVAL;
-@@ -271,15 +280,19 @@ static int acpi_smbus_hc_add(struct acpi_device *dev=
-ice)
- 	hc->query_bit =3D val & 0xff;
- 	device->driver_data =3D hc;
-
--	acpi_ec_add_query_handler(hc->ec, hc->query_bit, NULL, smbus_alarm, hc);
-+	hc->nb.notifier_call =3D acpi_smbus_hc_notify;
-+	ret =3D register_acpi_ec_query_notifier(&hc->nb);
-+	if (ret < 0) {
-+		kfree(hc);
-+		return ret;
-+	}
-+
- 	dev_info(&device->dev, "SBS HC: offset =3D 0x%0x, query_bit =3D 0x%0x\n"=
-,
- 		 hc->offset, hc->query_bit);
-
- 	return 0;
- }
-
--extern void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit=
-);
--
- static void acpi_smbus_hc_remove(struct acpi_device *device)
- {
- 	struct acpi_smb_hc *hc;
-@@ -288,7 +301,7 @@ static void acpi_smbus_hc_remove(struct acpi_device *d=
-evice)
- 		return;
-
- 	hc =3D acpi_driver_data(device);
--	acpi_ec_remove_query_handler(hc->ec, hc->query_bit);
-+	unregister_acpi_ec_query_notifier(&hc->nb);
- 	acpi_os_wait_events_complete();
- 	kfree(hc);
- 	device->driver_data =3D NULL;
+ int register_acpi_ec_query_notifier(struct notifier_block *nb);
+ int unregister_acpi_ec_query_notifier(struct notifier_block *nb);
 =2D-
 2.30.2
 
