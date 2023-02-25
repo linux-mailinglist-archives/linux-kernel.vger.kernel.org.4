@@ -2,128 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFE86A28A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F130A6A28AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 11:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBYJv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 04:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S229529AbjBYKA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 05:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBYJvy (ORCPT
+        with ESMTP id S229379AbjBYKAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 04:51:54 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F3C15C94
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677318700; bh=QZa+LEt/cPq+ovYlsNxbLE6A9xjUI1MvFbnWwo3v9PY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To;
-        b=lBxjET/Q9XcCY3gX53+YZ9Hs4Edv1zlQNAHLEigoJdpavPum58coRdyhZZ+6RDNIl
-         0lh17a7II1Ygvh10/TV/FGnhh3wkCzb4LUmdKtciUWYaScIXoPmagpY4Eod6swlDwE
-         ktLOGiCj5b3jpE3NSQfYsZHnqVID9P4IdJha6nyQ=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 25 Feb 2023 10:51:40 +0100 (CET)
-X-EA-Auth: yZz1+C1/MjC5ncrx5wOQgOycezkKrk2hyKt6oIYF6g7zmrY3iw4M3Np10UsU8E/3aCfUX8N8/uuDTK9309JPdpN53zkxLRx6
-Date:   Sat, 25 Feb 2023 15:21:34 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     =?utf-8?B?0JvQtdC+0L3QuNC0INCf0LXRgNGI0LjQvQ==?= 
-        <leonid.pershin@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: rtl8192u: remove split in user-visible string
-Message-ID: <Y/naJmGeQKtzgG5h@ubun2204.myguest.virtualbox.org>
-References: <20230223193559.157880-1-leonid.pershin@gmail.com>
- <Y/hD10Ir9g/On6ME@ubun2204.myguest.virtualbox.org>
- <CABa+115WFC0cJ+-L_rNHy3YPOVuVMxgVDidyCLoNE4xYhsRxZg@mail.gmail.com>
+        Sat, 25 Feb 2023 05:00:54 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A6B1DBA1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 02:00:52 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so993640wmi.3
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 02:00:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BOT0daIqYTUXHjO378HNb59W9he2Y4mmNd7ANSY/Y+o=;
+        b=OKaiNDgjPSyLjeH5ZmcvHRIjucbaPGoZiUn22mN1HvjIEj/ahtqbj6yjWyOVWuhipY
+         CKo8XEz/yxYWxB+zuYreM3zVwj43/T9e46w6UFoDp+d7TJzFX5X2J3mFQxOXXa3aL4ie
+         WJLgW1mk1UjKEzteJYWaCLJLFSk1PJurAsagnLT0EmVzlznEv5qQiXpMtmizfpi/5G8Y
+         bWngyqyMC9QO00LOZwrhrfbFnxKHGqEA0KVdtiZcDfsQtJAeRLDQGcJudj4drwwRNVnU
+         bX0DqEHlbv2flhWHBGsO/cSwpuGsHkhP0KRXxKkAuioDV2kdIc0VsOtk2MaWCO7iAWjF
+         BlAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BOT0daIqYTUXHjO378HNb59W9he2Y4mmNd7ANSY/Y+o=;
+        b=J3rKkkz3H5c6PN/LxZ5ihV4AE8hjTbW7S/xG58UAA/k16uqf/CM/HrW/RQPe0plHrU
+         nsRFnX+MCMxtgVNn3aF2m/XmVnjvAL59PBRLTbVMl3n3TFX1OkscEEnjFxra+PqMzHol
+         cT66Kz2x/HrUuAizKVoYQTWCpSKE4UZlrSVBe2r136guB1I7vBUIwfrgMK8zOcVUsFTU
+         Oj7RBeC0ay8MKLVBdatc12f60SzOVT64h/NEajI9CnaPpbpv8PUo7KkvGexvs5wr+5BQ
+         d78vvS9030XVXMgeYIudLhNEMBMNoUtpY1iU+UYQI/wAO07v/oaWR3Qft23do4QtgTGD
+         2riA==
+X-Gm-Message-State: AO0yUKWXDgp/DTKrZK3D60bhnHsFAai6bDDBBL+Zvi/ECnYM1Iyaa/2+
+        Gd9oekxRFAj7Y6wlJ4ETHbFnGA==
+X-Google-Smtp-Source: AK7set/lZdy5+f/JBn8126aa7oflTbLTWZlZXIwwPxt36QIs5XE+jeRYRpMGz9n3f4Az/NyHRN+jiw==
+X-Received: by 2002:a05:600c:ac8:b0:3e2:91c:7cb7 with SMTP id c8-20020a05600c0ac800b003e2091c7cb7mr13427963wmr.39.1677319250774;
+        Sat, 25 Feb 2023 02:00:50 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f5-20020a1c6a05000000b003d9aa76dc6asm5623414wmc.0.2023.02.25.02.00.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Feb 2023 02:00:50 -0800 (PST)
+Message-ID: <28c72c1a-df7d-db05-f32f-23b170b96db5@linaro.org>
+Date:   Sat, 25 Feb 2023 11:00:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABa+115WFC0cJ+-L_rNHy3YPOVuVMxgVDidyCLoNE4xYhsRxZg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: PCI: dwc: Add snps,skip-wait-link-up
+To:     Sajid Dalvi <sdalvi@google.com>, Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     kernel-team@android.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230224195749.818282-1-sdalvi@google.com>
+ <20230224195749.818282-2-sdalvi@google.com>
+ <b50ab99f-e307-3a66-9198-85a71b012e5e@linaro.org>
+ <CAEbtx1k-7TJPcd3+cueRoKLJcoUQLfF6nfOQFVfzB0YCUrbtqg@mail.gmail.com>
+ <2e4964c1-0831-c156-3372-81a56f8d623e@linaro.org>
+ <CAEbtx1=EGC+4LfSz+HqGzjJvF2O1vsB7a42ESTqbU8p5N-yUHg@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAEbtx1=EGC+4LfSz+HqGzjJvF2O1vsB7a42ESTqbU8p5N-yUHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:54:22PM +0300, Леонид Першин wrote:
-> On Fri, Feb 24, 2023 at 7:58 AM Deepak R Varma <drv@mailo.com> wrote:
-> > Hello Leonid,
-> > I was not able to trace the v1 of this patch. Did that have a different
-> subject?
-
-The line above broke for me in your response. This could be the email editor
-issue on your side.
-
-> >
-> > Thank you,
-> > Deepak.
+On 24/02/2023 23:09, Sajid Dalvi wrote:
+> On Fri, Feb 24, 2023 at 3:29 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 24/02/2023 22:27, Sajid Dalvi wrote:
+>>> On Fri, Feb 24, 2023 at 2:40 PM Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 24/02/2023 20:57, Sajid Dalvi wrote:
+>>>>> When the Root Complex is probed, the default behavior is to spin in a loop
+>>>>> waiting for the link to come up. In some systems the link is not brought up
+>>>>> during probe, but later in the context of an end-point turning on.
+>>>>> This property will allow the loop to be skipped.
+>>>>>
+>>>>> Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+>>>>> ---
+>>>>
+>>>> Thank you for your patch. There is something to discuss/improve.
+>>>>
+>>>>>  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml | 8 ++++++++
+>>>>>  1 file changed, 8 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+>>>>> index 1a83f0f65f19..0b8950a73b7e 100644
+>>>>> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+>>>>> @@ -197,6 +197,14 @@ properties:
+>>>>>        - contains:
+>>>>>            const: msi
+>>>>>
+>>>>> +  snps,skip-wait-link-up:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>> +    description:
+>>>>> +      When the Root Complex is probed, the default behavior is to spin in a
+>>>>> +      loop waiting for the link to come up. In some systems the link is not
+>>>>> +      brought up during probe, but later in the context of an end-point turning
+>>>>> +      on. This property will allow the loop to be skipped.
+>>>>
+>>>> I fail to see how probe behavior is related to properties of hardware.
+>>>> You describe OS behavior, not hardware. This does not look like
+>>>> belonging to DT.
+>>>>
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>
+>>> Thanks for your response Krzysztof.
+>>> The hardware configuration of the system determines whether an
+>>> endpoint device is available during host init. If it isn't available
+>>> on a particular and dedicated pcie interface, we should skip waiting
+>>> for the link to be up. For other interfaces, possibly even on the same
+>>> system, where a device is present or maybe present we should wait for
+>>> the link to come up.
+>>
+>> Keep discussions public.
+>>
+>> Your commit and property description mentions probe, which is nothing
+>> related to hardware. Why the device would not be available during host
+>> init (I understand we do not talk about hotplug as it is already
+>> supported by Linux) in a way it is hardware property, not OS?
+>>
+>> Best regards,
+>> Krzysztof
+>>
 > 
-> Hello Deepak,
-> Sorry, I've sent v1 directly to Greg by mistake. Here it is:
-
-No problem. It is important to record such reasons for the reviewer's awareness.
-Also, it is a common practice to give credit to the reviewers by mentioning
-their name in the  "Change in vx" section.
-
-Good luck.
-Deepak.
-
+> + everyone else I mistakenly didn't reply to earlier
 > 
-> On Wed, Feb 22, 2023 at 02:20:29AM +0300, Leonid Pershin wrote:
-> > According to coding style, user-visible strings in printk()
-> > function calls cannot be split across multiple lines.
-> > Issue found with checkpatch.pl.
-> >
-> > Signed-off-by: Leonid Pershin <leonid.pershin@gmail.com>
-> > ---
-> > Changes in v2:
-> >   - Replace printk(KERN_DEBUG...) with pr_debug()
-> >
-> >  drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> > index 9bfd24ad46b6..c378bdff453b 100644
-> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> > @@ -72,16 +72,14 @@ static void *ieee80211_tkip_init(int key_idx)
-> >
-> >       priv->tx_tfm_michael = crypto_alloc_shash("michael_mic", 0, 0);
-> >       if (IS_ERR(priv->tx_tfm_michael)) {
-> > -             printk(KERN_DEBUG "ieee80211_crypt_tkip: could not allocate
-> "
-> > -                             "crypto API michael_mic\n");
-> > +             pr_debug("ieee80211_crypt_tkip: could not allocate crypto
-> API michael_mic\n");
-> >               priv->tx_tfm_michael = NULL;
-> >               goto fail;
-> >       }
-> >
-> >       priv->rx_tfm_michael = crypto_alloc_shash("michael_mic", 0, 0);
-> >       if (IS_ERR(priv->rx_tfm_michael)) {
-> > -             printk(KERN_DEBUG "ieee80211_crypt_tkip: could not allocate
-> "
-> > -                             "crypto API michael_mic\n");
-> > +             pr_debug("ieee80211_crypt_tkip: could not allocate crypto
-> API michael_mic\n");
-> >               priv->rx_tfm_michael = NULL;
-> >               goto fail;
-> >       }
-> > --
-> > 2.39.2
-> >
-> 
-> Sincerely,
-> Leonid
+> If I understand you correctly, the usage of probe is misleading
+> because it doesn't have anything to do with the hardware.
+> So your recommendation is to replace probe with device init, in the
+> description of the property and the commit message?
 
+No, I asked there a question for which we need answer.
+
+device init is also OS task... You need to explain why this is a
+property of hardware, not OS behavior.
+
+Best regards,
+Krzysztof
 
