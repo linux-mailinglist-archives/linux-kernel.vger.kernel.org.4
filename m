@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59796A26D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 03:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADFE6A26D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 03:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBYCbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 21:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S229570AbjBYCiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 21:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBYCbX (ORCPT
+        with ESMTP id S229452AbjBYCiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 21:31:23 -0500
+        Fri, 24 Feb 2023 21:38:22 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1084E13D71;
-        Fri, 24 Feb 2023 18:31:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675D813507;
+        Fri, 24 Feb 2023 18:38:21 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id D0BDA3FA55;
-        Sat, 25 Feb 2023 02:31:15 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 2C2A241A42;
+        Sat, 25 Feb 2023 02:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677292278;
-        bh=d7fNCc0OXWajjux2XtUPq9jeuVNkW9eE2qqP/QqkV9E=;
+        s=default; t=1677292700;
+        bh=H5ENYInAYvHrJ8BkuKWlBs/J217pLqXDi1xYMhKVuVA=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=uPuxPeuIMiA3/pG9mj3tq26RVvZw6XOx+p/mf8zoWUVGDBwu4NuCCGJlwIwCA+Aqb
-         5hTGTj03EMoKTJs+MDUB4YVbPrae9yJwWfXqLUXBaypapt72p5m6iSxmZi3UcN9O4r
-         J+c8cN38Xhucb/ylLRmPjpFVBhBBjcXMOb57ga7qQDBaDbfKEjQ5Yr2CQqgl7sYEcy
-         ag0NGLoGcDUSycEFwkHXW700FsN8oIsE+zlxCClxZz1161YitPnRTJWmCFg7jneFko
-         TXmsSCVISszbOsY5yZPEPPa2Ca7rx5LQgaeMlqAD/YQGz7cVVhx2KkB3v5y+Rax6EW
-         4l2E2Td0duvrA==
-Message-ID: <18fb86aa-4c63-d455-4bee-ff6fcf95f8a4@asahilina.net>
-Date:   Sat, 25 Feb 2023 11:31:13 +0900
+        b=NqEAlt8tK9wLg/p6SOgF1D63LYdBroITfWVN5MSGUo1nMcKl120EeIp3j3d0LsSww
+         LdX3ufC6FvtAIDa952IupVJVDFHgfV/uYFw5zCzRx8n83b3Od9OsVlv/iEKNAD9gCl
+         6A+4up25FnMjI4zlZzMGjJxkyxOVXdozIFZoogdI0u/jVJf+a+bq9YSGnePT16AwV0
+         8agOpCCGUIFdmG/tUKmybD4ycrKwjnchk5PVudhv3HiGb7zHUGIetI0vFT9qSVXc1J
+         mkUqAJIDBCwbwyo9fcOWbSB6CurPMxRVSRY6geCbeyhRXz8DwzXUyT4y2K7nLADNic
+         JPeUWdKZxwDGA==
+Message-ID: <8d6575bc-ffd8-fe03-c46f-eba9cfdbcbfa@asahilina.net>
+Date:   Sat, 25 Feb 2023 11:38:15 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 5/5] rust: error: Add from_kernel_result!() macro
+Subject: Re: [PATCH] rust: ioctl: Add ioctl number manipulation functions
 Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>
+To:     Gary Guo <gary@garyguo.net>, Arnd Bergmann <arnd@arndb.de>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
+        Boqun Feng <boqun.feng@gmail.com>,
         =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
- <20230224-rust-error-v1-5-f8f9a9a87303@asahilina.net>
- <Y/lOlcSpc+d9ytq/@boqun-archlinux>
+        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
+References: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
+ <0818df3a-76c9-4cb3-8016-4717f4d5bf18@app.fastmail.com>
+ <20230225003852.1bbedc54.gary@garyguo.net>
 From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <Y/lOlcSpc+d9ytq/@boqun-archlinux>
+In-Reply-To: <20230225003852.1bbedc54.gary@garyguo.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,103 +63,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2023 08.56, Boqun Feng wrote:
-> On Fri, Feb 24, 2023 at 05:50:23PM +0900, Asahi Lina wrote:
->> From: Wedson Almeida Filho <wedsonaf@gmail.com>
+On 25/02/2023 09.38, Gary Guo wrote:
+> On Fri, 24 Feb 2023 09:43:27 +0100
+> "Arnd Bergmann" <arnd@arndb.de> wrote:
+> 
+>> On Fri, Feb 24, 2023, at 08:36, Asahi Lina wrote:
+>>> Add simple 1:1 wrappers of the C ioctl number manipulation functions.
+>>> Since these are macros we cannot bindgen them directly, and since they
+>>> should be usable in const context we cannot use helper wrappers, so
+>>> we'll have to reimplement them in Rust. Thankfully, the C headers do
+>>> declare defines for the relevant bitfield positions, so we don't need
+>>> to duplicate that.
+>>>
+>>> Signed-off-by: Asahi Lina <lina@asahilina.net>  
 >>
->> Add a helper macro to easily return C result codes from a Rust function
->> that calls functions which return a Result<T>.
+>> I don't know much rust yet, but it looks like a correct abstraction
+>> that handles all the corner cases of architectures with unusual
+>> _IOC_*MASK combinations the same way as the C version.
 >>
->> Lina: Imported from rust-for-linux/rust, originally developed by Wedson
->> as part of file_operations.rs. Added the allow() flags since there is no
->> user in the kernel crate yet and fixed a typo in a comment.
+>> There is one corner case I'm not sure about:
 >>
->> Co-developed-by: Fox Chen <foxhlchen@gmail.com>
->> Signed-off-by: Fox Chen <foxhlchen@gmail.com>
->> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
->> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
->> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
->> ---
->>  rust/kernel/error.rs | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 52 insertions(+)
+>>> +/// Build an ioctl number, analogous to the C macro of the same name.
+>>> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
+>>> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
+>>> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
+>>> +    core::assert!(nr <= bindings::_IOC_NRMASK);
+>>> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
+>>> +
+>>> +    (dir << bindings::_IOC_DIRSHIFT)
+>>> +        | (ty << bindings::_IOC_TYPESHIFT)
+>>> +        | (nr << bindings::_IOC_NRSHIFT)
+>>> +        | ((size as u32) << bindings::_IOC_SIZESHIFT)
+>>> +}  
 >>
->> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
->> index cf3d089477d2..8a9222595cd1 100644
->> --- a/rust/kernel/error.rs
->> +++ b/rust/kernel/error.rs
->> @@ -226,3 +226,55 @@ pub(crate) fn from_kernel_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
->>      }
->>      Ok(ptr)
->>  }
->> +
->> +// TODO: Remove `dead_code` marker once an in-kernel client is available.
->> +#[allow(dead_code)]
->> +pub(crate) fn from_kernel_result_helper<T>(r: Result<T>) -> T
->> +where
->> +    T: From<i16>,
->> +{
->> +    match r {
->> +        Ok(v) => v,
->> +        // NO-OVERFLOW: negative `errno`s are no smaller than `-bindings::MAX_ERRNO`,
->> +        // `-bindings::MAX_ERRNO` fits in an `i16` as per invariant above,
->> +        // therefore a negative `errno` always fits in an `i16` and will not overflow.
->> +        Err(e) => T::from(e.to_kernel_errno() as i16),
->> +    }
->> +}
->> +
->> +/// Transforms a [`crate::error::Result<T>`] to a kernel C integer result.
->> +///
->> +/// This is useful when calling Rust functions that return [`crate::error::Result<T>`]
->> +/// from inside `extern "C"` functions that need to return an integer
->> +/// error result.
->> +///
->> +/// `T` should be convertible from an `i16` via `From<i16>`.
->> +///
->> +/// # Examples
->> +///
->> +/// ```ignore
->> +/// # use kernel::from_kernel_result;
->> +/// # use kernel::bindings;
->> +/// unsafe extern "C" fn probe_callback(
->> +///     pdev: *mut bindings::platform_device,
->> +/// ) -> core::ffi::c_int {
->> +///     from_kernel_result! {
->> +///         let ptr = devm_alloc(pdev)?;
->> +///         bindings::platform_set_drvdata(pdev, ptr);
->> +///         Ok(0)
->> +///     }
->> +/// }
->> +/// ```
->> +// TODO: Remove `unused_macros` marker once an in-kernel client is available.
->> +#[allow(unused_macros)]
->> +macro_rules! from_kernel_result {
+>> This has the assertions inside of _IOC() while the C version
+>> has them in the outer _IOR()/_IOW() /_IOWR() helpers. This was
+>> intentional since some users of _IOC() pass a variable
+>> length in rather than sizeof(type), and this would cause
+>> a link failure in C.
+>>
+>> How is the _IOC_SIZEMASK assertion evaluated here? It's
+>> probably ok if this is a compile-time assertion that prevents
+>> the variable-length arguments, but it would be bad if this
+>> could lead to a BUG() or panic() in case of a user-supplied
+>> length that is out of range.
 > 
-> This actually doesn't need to be a macro, right? The following function
-> version:
+> This is a very good point.
 > 
-> 	pub fn from_kernel_result<T, F>(f: F) -> T
-> 	where
-> 	    T: From<i16>,
-> 	    F: FnOnce() -> Result<T>;
+> The code, as currently written, will cause a compile-time error if
+> `_IOC` is used in const contexts (i.e. used in const generics
+> arguments, or inside a `const {}` block), and it will become a runtime
+> `BUG()` if used elsewhere.
 > 
-> is not bad, the above case then can be written as:
+> We do have a facility to enforce compile-time checks, that's
+> `kernel::build_assert!()`. If runtime values are used and the
+> compiler can't optimise these assertions out, a link failure would
+> be triggered just like how our C code does that.
 > 
-> 	unsafe extern "C" fn probe_callback(
-> 	    pdev: *mut bindings::platform_device,
-> 	) -> core::ffi::c_int {
-> 	    from_kernel_result(|| {
-> 		let ptr = devm_alloc(pdev)?;
-> 		bindings::platform_set_drvdata(pdev, ptr);
-> 		Ok(0)
-> 	    })
-> 	}
-> 
-> less magical, but the control flow is more clear.
-> 
-> Thoughts?
+> Lina, could you change these `core::assert!` calls to build assert?
 
-Looks good to me! I guess the macro was mostly to hide and call the
-closure, but it's not really necessary. I'll change it ^^
+Thanks, I'll do that for v2!
 
 ~~ Lina
