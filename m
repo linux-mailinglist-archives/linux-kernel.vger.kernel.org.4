@@ -2,215 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4356A25C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB4E6A25D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjBYAhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 19:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S229578AbjBYAjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 19:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBYAhD (ORCPT
+        with ESMTP id S229464AbjBYAi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:37:03 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39237686A9;
-        Fri, 24 Feb 2023 16:37:02 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31P0QVHd032234;
-        Sat, 25 Feb 2023 00:36:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DH8XUo1wfrsST3Y5skMmkcChZYkiX39vQsitKaeRFMI=;
- b=SZTutDF6u/8Ng/ZIgi0DZmT/TUh/LVcQnr/KtFPqJeaQ80/6zFxZsULNkuy64zYHr5yP
- 7Wf5ZHtpH5PF4hYzHwBXBJoLVPUiMzt1efJZpAkrjQeoZ6TxlsG8RjQJrbVrAxfb2BpQ
- N1+WSWUc/Jh6oLK9pWX4pI6Oq5lNiXicWcbXMsgaRggn6PVcYI7cYx8TbC/orb3uy4t9
- 1i3qSNdwCLKKNdIcXYpLyhK1q4+GQt3qbTZ9U6lxwZhdD4LMmEHfj2bG2O5jKlA42bQX
- PbDuSKq+Czy0CmP7eCg+JqW5awXi2cwhn+8FEWza6Wxpcc6nvf1H+fOgOYXvUdN8OYrC rw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nxwb7ss7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Feb 2023 00:36:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31P0an1d017815
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Feb 2023 00:36:49 GMT
-Received: from [10.110.89.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Feb
- 2023 16:36:47 -0800
-Message-ID: <f0dfba42-4674-3748-bf5d-39f6e1745f67@quicinc.com>
-Date:   Fri, 24 Feb 2023 16:36:46 -0800
+        Fri, 24 Feb 2023 19:38:59 -0500
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on0711.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe14::711])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAE263A1E;
+        Fri, 24 Feb 2023 16:38:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GJ6Q6TFNx1MX6jdhkV4mZcl5muZ+0W7POmBvLG6HwI5gd5NPJwQtdqbcKCw0kYH279kSaz5J7cm3/PMCzYLWMBKPKEDsPcwbpvO1xSeXjwFBmXxoWOTzD6qhZWhZfA1xYA1qNT1xLzClvH0kcBuD5Kjl57frHl9XhCsC46baimc+fjWVjbit8nM+AjzRS4Ais5XI9vX5IQFqNgRCnAVODAF8ehM9dHRe47Dd5Rj3rMXluf3XNqIB8j0WA/RUzG99vSbFJJRK6IruXRkSHxkXkvANjJT1KnbQeMkfnOZ08d5I2xbRrHlJ/AkQW8g1gT90BtZ3+AUHhADjYPOOnAzpxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5YDe2KOc7vhEbaOiydcHaKlxU6DLCBemy/0LRbmP4Fk=;
+ b=YUqlgO2PSR/alHQRX4LP6RmmiA1UkvcdIjYDZoD6Ex3aEjy2i5q3U8Np5MXvJzuUVbUwPfB83UelVECXJemNUGtGs7HTbTTlp59ESxJ5n37N0AShQPvORrip8hDuYxmnNVS0eKfvbFzb5YQ2RLcF9SxllRQqmNmaRVfDouNVZ6LLVGmzm+dGjno3fAzGNlA5WvKz1d7Xe/eU013R76dRiO5x5/I721z7M1PRtyTGXbLCB3LuTsD9IlKlfrxYDOxdXenXbU8ttq3DS5D148SdrPIn4MRccHvfBhfrod/gorCThqWZsyfJ99EetO/WPRk146gsGINq807uZJ2Mm3S/7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5YDe2KOc7vhEbaOiydcHaKlxU6DLCBemy/0LRbmP4Fk=;
+ b=rqLQHsaZOGJiM6u4W9vWBxtMnj79v549bBn9vRkN3WxUoxkZ1hUKMQrM8gzhztH6i37BkcV+xnU95zWMxsm+FYDtjlHUNmsCzr9mz1I+NeIOvWLP4R9YR+prcO/aeKTq9JX+SKDv0ZGJohjOCs3i+sg5CBNQg2YOmnTBe+foVc4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by CWLP265MB5379.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1c7::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Sat, 25 Feb
+ 2023 00:38:54 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6134.021; Sat, 25 Feb 2023
+ 00:38:54 +0000
+Date:   Sat, 25 Feb 2023 00:38:52 +0000
+From:   Gary Guo <gary@garyguo.net>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Asahi Lina" <lina@asahilina.net>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        =?UTF-8?B?Qmo=?= =?UTF-8?B?w7Zybg==?= Roy Baron 
+        <bjorn3_gh@protonmail.com>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] rust: ioctl: Add ioctl number manipulation functions
+Message-ID: <20230225003852.1bbedc54.gary@garyguo.net>
+In-Reply-To: <0818df3a-76c9-4cb3-8016-4717f4d5bf18@app.fastmail.com>
+References: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
+        <0818df3a-76c9-4cb3-8016-4717f4d5bf18@app.fastmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0263.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:8a::35) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
- <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
- <741be2a3-0208-2f40-eedf-d439c4e6795b@quicinc.com>
- <F8A4FC18-C64E-4011-BC08-18EB3B95A357@linaro.org>
- <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
- <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xgZfQM1bSOPNTPNPPrunkcCEdrBrQapC
-X-Proofpoint-ORIG-GUID: xgZfQM1bSOPNTPNPPrunkcCEdrBrQapC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-24_18,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302250000
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB5379:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0413223a-d245-478e-8cf2-08db16c8ac41
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /IHPaTHOCOhHc6GceR2kiAGMRmkA3xbE/wjazzX7E3piUBpUEcCgsiEks7fhEQs2bfuMCIxz7MhApwCpQWbDM9816x7Ye+gtXc9SMy1ql4tzyYU5Gtbj0qF4oCl+Yb4IaplaV8rxo9oGTP5H1YdEo2LOO2ktkYkiPlSgshMWxsNP3eVKbt/eWlH70WjeeMywvnfv+NPW1MUY2MU7C0rO1uDWX+gBayrps6UoR+6Gy2qBSN5yAnbkiCnNIkSrlf8geP6ZCKqQOeCmk1c7aNvZRW0ENWbg5xJbu7ifAj0nrhXtbucdBuw2YnrcrRWck3x9Ty0BXpwnqtO6U41GhphydvFxxgmpgW5m543baVd9g91Bev+I75EjUaPTuS3M50xtVuwA6JYpGa8+muz27QIyoojBoJ5RXG2gW7VGWepazrOMtlUg0f9CZUWVEBEcv0HcdTbLJz778NBpJJ6eHBipkTHQEb2zHues5m2yZueLwTKXK/PsYqBaBkAWJWnJ98+h34v32VU3dTWu8uSziiDvEt2OfD4X/R/N7tg7Re9m8XYdYagQR8iHT+19VCOzcnRapAW83y0VVJKMtAoWF9PXxLFZEFuKCpcNlLSavcQwuIYvchNlzCiI6ecDuGdVJ3l55gYmBWGY0X2+kh2oH3ModQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(366004)(39830400003)(376002)(136003)(346002)(396003)(451199018)(5660300002)(54906003)(66556008)(66476007)(66946007)(316002)(7416002)(478600001)(8936002)(6916009)(8676002)(2906002)(41300700001)(4326008)(6486002)(6512007)(1076003)(6506007)(38100700002)(186003)(26005)(2616005)(36756003)(83380400001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?my9mGts0YG5dTIvXOpD7SnLlIYMztXFEcKOxgiLcjzjhnsvKB1V+MHJizu4e?=
+ =?us-ascii?Q?cuC3sldohPNuSIH29sTvIPgXANFeKjpyNwAkTZ8bb9FGcpKIj6jRyRlD3/lf?=
+ =?us-ascii?Q?Jo8kygd4o4hfRhZqPsXECyQFX0q4jNfpDtAqn1U+oE+BhMbA0O5MIjqCqjXW?=
+ =?us-ascii?Q?o/pCBaeCZuW1iXTtUGtPmNKnALPpXU8WcFDeL0TGlEgYjjWZlIhGCUsS9VdL?=
+ =?us-ascii?Q?hS37XJFDcdCH0oLYnc/LlqFmFzljedbzheIETPQhI29fYZIT4kdIqnx/6azX?=
+ =?us-ascii?Q?9qw+SAkZPtKfdH3Ikk2Oabmx4aL5MhBVBGbulljB6B2km90NDWGYUUXDcy5B?=
+ =?us-ascii?Q?rRc1kBWHikuSB/62XcSNJKFBpZNeD4+/2G+aYzF5jTuY7gYJ7qIUZWsKCkIy?=
+ =?us-ascii?Q?eDHMviupk1/LCJzTEpWgAlZmrNK7I5YrSadp24lqWVj+J3zSB7/hF2rKrLIh?=
+ =?us-ascii?Q?e6pY7+HBZ16mllq4LT77X/QW8/i9Vw614tErDeKZKd6IbIolHgo9tt85AbzA?=
+ =?us-ascii?Q?QJ70KcPHAsmWFzTWoNuI1wXU1gE4Ow4FC0Xxy4yYoRVKvNKiyY77pYd9FIEh?=
+ =?us-ascii?Q?9LXz/drwRgC0nxpOquTSmNL129/9aw670uitX55FlfBEjac4kxJIUT4mSGQd?=
+ =?us-ascii?Q?RRGkf9nhl58/MXMBrr9Iei7y+v0OQ9qNnB/b4WfOy4xcuCdom1r//VrXLg+Q?=
+ =?us-ascii?Q?0psslHUbpf211ggiRyEy2HhBvciUl4UQ7nOYTSRf7qc91h3ANj4H6BzssUnh?=
+ =?us-ascii?Q?Q5g9WSKOaN0K+3VrZ62QUphetZy2LP2B4SXgeWF1MMtiF+ZZjkmQvYOkWueG?=
+ =?us-ascii?Q?25sEJ78l8YWdwyk36oErnwjE/GYfcDCB0RhBFssjfg/BUdqxfknsdgFr+cP7?=
+ =?us-ascii?Q?kJx5BYpvXtISVnFhZGYmn8hKAis4qZHldKjenMgIoYZ+kJmVxAsHcnl4P14N?=
+ =?us-ascii?Q?4h66JOFa6a23e+sU0j5a824nya13x0L62lzrmfECbvCE197TBLeI5InPqzjC?=
+ =?us-ascii?Q?+vubviDazYtui3qW810DBdkVp7WF+5WsmgS0p/GODQh2BT17+XVohS3+2aC4?=
+ =?us-ascii?Q?TUMXJdpH4oORCJL6zqphAmxpbQgLN8tbduTqtL3PVtqeehpzu6In+/PpUYDP?=
+ =?us-ascii?Q?Rn5PL9JJSGTUDd4LofwH4okggCKC6+xZkrHDqA9T1guR94+XoCzG17CwjcvL?=
+ =?us-ascii?Q?9lLIDp8i2j7Ki2uaPVg6BELOK23AegcBDrjAmFGUx4G7XxqfbRZXKcAtwfT+?=
+ =?us-ascii?Q?oyfjbXDrGISi7uzKaRyjVASj8DJ3NL+nsoS8JVBPgcYeZ65ElAV7kuw4BBol?=
+ =?us-ascii?Q?4abiGKQAP2mstVqQY7XOD2uzy5l3tsrsyMm0pMuRN2lMyMpAvgIoWUS6Vi9Z?=
+ =?us-ascii?Q?URbO9W5TYHEZohvTbU0sfVnG9JsiWGwhruqtb2WHutVsZNh7yjIbZtqOwCWA?=
+ =?us-ascii?Q?3mVVNFRbJNTDwVQ5C6JOLA3Rlz/TSK4X2RjIPhNWsW5dzCBSNzNx+YNUlGsK?=
+ =?us-ascii?Q?oyiT0sHzEZ9lW6X6MXCOuzsHGcyJQDSGXqFew+wwp40naeXijiVWNGsrF55g?=
+ =?us-ascii?Q?aZ0lW+9yvqU2+WOpLWhJI3pcLRiFVdZQzOKqbt0O?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0413223a-d245-478e-8cf2-08db16c8ac41
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:38:54.3566
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vozOZLzUtiv8ySeTYu4GW97EQtOyiqiwIXjMkmQMAnE4610PjthviiuMk73759OZHSTxgQL4XaH3J/b49FtLJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB5379
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 24 Feb 2023 09:43:27 +0100
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-
-On 2/24/2023 3:53 PM, Dmitry Baryshkov wrote:
-> On Sat, 25 Feb 2023 at 00:26, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->> On 2/24/2023 1:36 PM, Dmitry Baryshkov wrote:
->>> 24 февраля 2023 г. 23:23:03 GMT+02:00, Abhinav Kumar <quic_abhinavk@quicinc.com> пишет:
->>>> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
->>>>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->>>>>> Add DSC helper functions based on DSC configuration profiles to produce
->>>>>> DSC related runtime parameters through both table look up and runtime
->>>>>> calculation to support DSC on DPU.
->>>>>>
->>>>>> There are 6 different DSC configuration profiles are supported currently.
->>>>>> DSC configuration profiles are differiented by 5 keys, DSC version (V1.1),
->>>>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
->>>>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
->>>>>>
->>>>>> Only DSC version V1.1 added and V1.2 will be added later.
->>>>>
->>>>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
->>>>> Also please check that they can be used for i915 or for amdgpu (ideally for both of them).
->>>>>
->>>>
->>>> No, it cannot. So each DSC encoder parameter is calculated based on the HW core which is being used.
->>>>
->>>> They all get packed to the same DSC structure which is the struct drm_dsc_config but the way the parameters are computed is specific to the HW.
->>>>
->>>> This DPU file helper still uses the drm_dsc_helper's drm_dsc_compute_rc_parameters() like all other vendors do but the parameters themselves are very HW specific and belong to each vendor's dir.
->>>>
->>>> This is not unique to MSM.
->>>>
->>>> Lets take a few other examples:
->>>>
->>>> AMD: https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c#L165
->>>>
->>>> i915: https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L379
->>>
->>> I checked several values here. Intel driver defines more bpc/bpp combinations, but the ones which are defined in intel_vdsc and in this patch seem to match. If there are major differences there, please point me to the exact case.
->>>
->>> I remember that AMD driver might have different values.
->>>
->>
->> Some values in the rc_params table do match. But the rc_buf_thresh[] doesnt.
+> On Fri, Feb 24, 2023, at 08:36, Asahi Lina wrote:
+> > Add simple 1:1 wrappers of the C ioctl number manipulation functions.
+> > Since these are macros we cannot bindgen them directly, and since they
+> > should be usable in const context we cannot use helper wrappers, so
+> > we'll have to reimplement them in Rust. Thankfully, the C headers do
+> > declare defines for the relevant bitfield positions, so we don't need
+> > to duplicate that.
+> >
+> > Signed-off-by: Asahi Lina <lina@asahilina.net>  
 > 
-> Because later they do:
+> I don't know much rust yet, but it looks like a correct abstraction
+> that handles all the corner cases of architectures with unusual
+> _IOC_*MASK combinations the same way as the C version.
 > 
-> vdsc_cfg->rc_buf_thresh[i] = rc_buf_thresh[i] >> 6;
+> There is one corner case I'm not sure about:
 > 
->>
->> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L40
->>
->> Vs
->>
->> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
->> +               0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
->> +               0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
->> +};
+> > +/// Build an ioctl number, analogous to the C macro of the same name.
+> > +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
+> > +    core::assert!(dir <= bindings::_IOC_DIRMASK);
+> > +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
+> > +    core::assert!(nr <= bindings::_IOC_NRMASK);
+> > +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
+> > +
+> > +    (dir << bindings::_IOC_DIRSHIFT)
+> > +        | (ty << bindings::_IOC_TYPESHIFT)
+> > +        | (nr << bindings::_IOC_NRSHIFT)
+> > +        | ((size as u32) << bindings::_IOC_SIZESHIFT)
+> > +}  
 > 
-> I'd prefer to have 896, 1792, etc. here, as those values come from the
-> standard. As it's done in the Intel driver.
+> This has the assertions inside of _IOC() while the C version
+> has them in the outer _IOR()/_IOW() /_IOWR() helpers. This was
+> intentional since some users of _IOC() pass a variable
+> length in rather than sizeof(type), and this would cause
+> a link failure in C.
 > 
+> How is the _IOC_SIZEMASK assertion evaluated here? It's
+> probably ok if this is a compile-time assertion that prevents
+> the variable-length arguments, but it would be bad if this
+> could lead to a BUG() or panic() in case of a user-supplied
+> length that is out of range.
 
-Got it, thanks
+This is a very good point.
 
->> I dont know the AMD calculation very well to say that moving this to the
->> helper is going to help.
-> 
-> Those calculations correspond (more or less) at the first glance to
-> what intel does for their newer generations. I think that's not our
-> problem for now.
-> 
+The code, as currently written, will cause a compile-time error if
+`_IOC` is used in const contexts (i.e. used in const generics
+arguments, or inside a `const {}` block), and it will become a runtime
+`BUG()` if used elsewhere.
 
-Well, we have to figure out if each value matches and if each of them 
-come from the spec for us and i915 and from which section. So it is 
-unfortunately our problem.
+We do have a facility to enforce compile-time checks, that's
+`kernel::build_assert!()`. If runtime values are used and the
+compiler can't optimise these assertions out, a link failure would
+be triggered just like how our C code does that.
 
->>
->> Also, i think its too risky to change other drivers to use whatever math
->> we put in the drm_dsc_helper to compute thr RC params because their code
->> might be computing and using this tables differently.
->>
->> Its too much ownership for MSM developers to move this to drm_dsc_helper
->> and own that as it might cause breakage of basic DSC even if some values
->> are repeated.
-> 
-> It's time to stop thinking about ownership and start thinking about
-> shared code. We already have two instances of DSC tables. I don't
-> think having a third instance, which is a subset of an existing
-> dataset, would be beneficial to anybody.
-> AMD has complicated code which supports half-bit bpp and calculates
-> some of the parameters. But sharing data with the i915 driver is
-> straightforward.
-> 
+Lina, could you change these `core::assert!` calls to build assert?
 
-Sorry, but I would like to get an ack from i915 folks if this is going
-to be useful to them if we move this to helper because we have to look 
-at every table. Not just one.
-
-Also, this is just 1.1, we will add more tables for 1.2. So we will have 
-to end up changing both 1.1 and 1.2 tables as they are different for QC.
-
-So if you look at the DSC spec from where these tables have come it says
-
-"Common Recommended Rate Control-Related Parameter Values"
-
-Its Recommended but its NOT mandated by the spec to follow every value 
-to the dot. I have confirmed this point with more folks.
-
-So, if someone from i915 this is useful and safe to move their code to 
-the tables, we can try it.
-
->> I would prefer to keep it in the msm code but in a top level directory
->> so that we dont have to make DSI dependent on DPU.
-> 
-> I haven't changed my opinion. Please move relevant i915's code to
-> helpers, verify data against standards and reuse it.
-> 
-
-
-
->>>> All vendors compute the values differently and eventually call drm_dsc_compute_rc_parameters()
->>>>
->>>>> I didn't check the tables against the standard (or against the current source code), will do that later.
-> 
+Best,
+Gary
