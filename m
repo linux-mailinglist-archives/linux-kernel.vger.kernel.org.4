@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91A56A26A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 02:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A296A26A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 02:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBYBpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 20:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
+        id S229681AbjBYBtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 20:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBYBpw (ORCPT
+        with ESMTP id S229473AbjBYBtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 20:45:52 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD24A63DF2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:45:50 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536bf635080so18974287b3.23
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:45:50 -0800 (PST)
+        Fri, 24 Feb 2023 20:49:17 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C144667E04
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:49:15 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id z11so547989pfh.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 17:49:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sfeWRo0fTOF5FILLunZvL4iOLuWT2s/FUKmq+WiUJJo=;
-        b=f7jJdMTH/6WrBvdqAZ59+T/e3Yloov2i13fv/nLWqtIUzaFIJgeFXnUazRWkC2S+vV
-         cGe25yFMUT1AqleoBCScrJOSXi3p7Z/aaZiQDk/C2fLDeJsNF6WPxujQCAjvGYJjwzJ6
-         qMQ28W3S6mJJyjqJhBHQZ68mthu68I5gOhUw0REFv6Whfz1BMTBYruqdka5SKoeI+jzy
-         YyN2Xq84inp93xbHWhqjsE9vKUT5TWBIL4sWCkVh1636bjz9sOnLCbhVlXvt6cdtzJPx
-         ZRRA0Wh2qbsiJjsx8cO3AbzP6XLEUKmYE6z4+9wEwJyn+Gklt5JiK7Jw9s+hJNOQL8SI
-         BdfQ==
+        d=sladewatkins.net; s=googled;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FsXprsvi/YhUEqRRcjwtxL/wg4XbNep96f8DIcPmGEw=;
+        b=q8EJppLt0O5T2/9CH2xtxHV9Z5taBbo4wM4eE24o9JiWVaNHPV8VUW4YT7M6rprdtP
+         ehNzLP40Zn6XVfpHhPeYpf3OvHMpt8ejgKp97/cg3RV5e2wDK9nnd156IZc6Gz8ldibA
+         UlhJAVF8llLRsevoFdlkLqCmvpowYc+sR2nmerRWSz2ZE8fPe52xRlUmmLdViwwBj7ak
+         fUiENtFj0c452iJb0iyKw73Z4n/5dcWCB4mNR8sHqhUCYit9s/yGw7ZEC/TZH5nav8Pw
+         FLPEfzPSlEsTONs2oAscLBId9b6RyFmNlcjphQX7wzvaqAy92sazTzjqTx/Tu0JU0Fz1
+         dCmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sfeWRo0fTOF5FILLunZvL4iOLuWT2s/FUKmq+WiUJJo=;
-        b=MBIxmSmEiynd1usXWVc60UQvPd3ZuWI4aoIF5m8SdKGZI92gcCUKuz0uXfpOP7x5Y3
-         VUhyYImP06vQbU/HHo5E57htcE0jP+A/sM98Nj4/GKjiD5KzNCt60ikHAF8v8jt2l49d
-         Fur+z6zjOWaF/2XPppWeDX/cpqwf+JE6DM1jko5eWsTNi8XWqULpYQQdoS+bfXo5VKdk
-         nf8ZfRsTuYeIJFxu+czo1bshvHifvHmugZ7QGbSzXuUXHGaS8/15sfursVT7204AU6M+
-         ynfv++hf2DdDMJYzfdcl/HCvT3z/ak5d0+/pDvGi1QzqlkThDJufZZWN2ifxeHkR4yqJ
-         f7Kw==
-X-Gm-Message-State: AO0yUKVbAXGl5ui9IgNE7D8IVO7+SU6I9A7Y/roe8hkHFOHMYBdxRany
-        c3wXDGG4OhMNyC7uyw3iYaRAWX/kL2ZaNw==
-X-Google-Smtp-Source: AK7set9mVPJXSm2LqIDNOlJOARvbkMoO0jRzztqXdbE7wUBIOKD86QoTogleYpnETVHn4uRFoE3hDyMraIq+eg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a5b:b07:0:b0:9fe:1493:8b8 with SMTP id
- z7-20020a5b0b07000000b009fe149308b8mr4985732ybp.6.1677289549973; Fri, 24 Feb
- 2023 17:45:49 -0800 (PST)
-Date:   Sat, 25 Feb 2023 09:45:30 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230225014529.2259752-1-davidgow@google.com>
-Subject: [PATCH] kunit: Fix 'hooks.o' build by recursing into kunit
-From:   David Gow <davidgow@google.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FsXprsvi/YhUEqRRcjwtxL/wg4XbNep96f8DIcPmGEw=;
+        b=Tgl8yueNGtmgZNi9LHNurn0lxjVQ/GkyMgdrN61DyOmkYmX73JprkgDaBIeuDJljg1
+         /rTtBxmen59ft6IbTy2mXCSUrIEOE+Ta18BmUHK07oXB7C30oYUwIZwJFbzrUz0Q+58j
+         Y/RTatJtOTzXT5STihjWUXP1hE1JegA9O5ae2m0aGHSMakdMZ9Q4GXal3RQtAxMOETWT
+         DSOSS7SxE/3XfCfkS7BiuNZ2A14bhV3V/cHXO4UgjvfojX2t/0NV/kKS/k2MFhgs37ck
+         mIfLseGyV1m5bnZEPJexmKXINTkFfCPr00P6UFBky0SGQ3UrnPlBYNvvP41Cijiv/vMs
+         lFDQ==
+X-Gm-Message-State: AO0yUKVAe69NR4ezlulBnfQnn+YZnKSgEHoExBWJ/wS6Y0PJ6r9WKN0C
+        HWUKrP7Zpz57ikKimLVFOapOJ/gQMEe23jMDdVCA/g==
+X-Google-Smtp-Source: AK7set8EECIrO70bFlm0qs8tzFwXkFUhmdbhq+Zol1pwHUaugvv/K+AkqOeuRGNYr39LD11euEgKKdFPe00LrhrqnPo=
+X-Received: by 2002:a63:3855:0:b0:503:253a:1da3 with SMTP id
+ h21-20020a633855000000b00503253a1da3mr188284pgn.1.1677289755055; Fri, 24 Feb
+ 2023 17:49:15 -0800 (PST)
+MIME-Version: 1.0
+References: <CAPM=9txhVJ3t_3-wMdWH7F+=_BbW19NYxAnm2cceP2uHR47_5w@mail.gmail.com>
+ <CAPM=9tzPxixXnRuk0Jfs2ESw-eY43H_e5_FtGbxAhRmvaByYwA@mail.gmail.com> <CAHk-=wj4ShzDcZVx07ObELz06dL7m3Ax-p014rAmxGQ3D0brXA@mail.gmail.com>
+In-Reply-To: <CAHk-=wj4ShzDcZVx07ObELz06dL7m3Ax-p014rAmxGQ3D0brXA@mail.gmail.com>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Fri, 24 Feb 2023 20:49:03 -0500
+Message-ID: <CA+pv=HMOXiftTEcSLeTnQLxdxxD+GushtCwO197icDYm=kPwMw@mail.gmail.com>
+Subject: Re: drm next for 6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,70 +70,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KUnit's 'hooks.o' file need to be built-in whenever KUnit is enabled
-(even if CONFIG_KUNIT=m). We'd previously attemtped to do this by adding
-'kunit/hooks.o' to obj-y in lib/Makefile, but this caused hooks.c to be
-rebuilt even when it was unchanged.
+On Fri, Feb 24, 2023 at 8:35 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> If you were waiting for a pr-tracker-bot reply, I think you need to
+> put "{GIT PULL]" in the subject line for the automation to trigger on
+> it.
 
-Instead, always recurse into lib/kunit using obj-y when KUnit is
-enabled, and add the hooks there.
+Had to double check, but yes, that's exactly it:
 
-Fixes: 7170b7ed6acb ("kunit: Add "hooks" to call into KUnit when it's built as a module").
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/linux-kselftest/CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com/
-Signed-off-by: David Gow <davidgow@google.com>
----
+PULL_SUBJECT_RE = [
+    re.compile(r'^\S*:?\s*\[GIT', re.IGNORECASE),
+    re.compile(r'^\S*:?\s*\[PULL', re.IGNORECASE),
+    re.compile(r'^\S*:?\s*\[PLEASE PULL', re.IGNORECASE),
+]
 
-I like this way of handling the makefiles much better. I had tried it
-when originally writing the hooks patch and not managed to get it
-working. Not sure what's changed now, but it works in all of the usual
-cases (CONFIG_KUNIT={n,y,m}, kunit.py run, etc).
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/mricon/korg-helpers.git/tree/pr-tracker-bot.py
 
-Linus, Shuah: Let me know if you want this to go via the KUnit branch,
-or if you just want to apply it directly and get rid of the annoyances
-ASAP.
-
----
- lib/Makefile       | 12 ++++--------
- lib/kunit/Makefile |  2 +-
- 2 files changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/lib/Makefile b/lib/Makefile
-index 469be6240523..baf2821f7a00 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -127,14 +127,10 @@ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
- 
- obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
- 
--obj-$(CONFIG_KUNIT) += kunit/
--# Include the KUnit hooks unconditionally. They'll compile to nothing if
--# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
--# function pointers) which need to be built-in even when KUnit is a module.
--ifeq ($(CONFIG_KUNIT), m)
--obj-y += kunit/hooks.o
--else
--obj-$(CONFIG_KUNIT) += kunit/hooks.o
-+# Some KUnit files (hooks.o) need to be built-in even when KUnit is a module,
-+# so we can't just use obj-$(CONFIG_KUNIT).
-+ifdef CONFIG_KUNIT
-+obj-y += kunit/
- endif
- 
- ifeq ($(CONFIG_DEBUG_KOBJECT),y)
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index da665cd4ea12..cb417f504996 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -13,7 +13,7 @@ kunit-objs +=				debugfs.o
- endif
- 
- # KUnit 'hooks' are built-in even when KUnit is built as a module.
--lib-y +=				hooks.o
-+obj-y +=				hooks.o
- 
- obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
- 
--- 
-2.39.2.637.g21b0678d19-goog
-
+-- Slade
