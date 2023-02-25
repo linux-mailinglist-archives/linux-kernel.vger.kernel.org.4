@@ -2,259 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6BB6A2AF9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 18:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5CA6A2B0C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 18:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjBYRHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 12:07:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S229625AbjBYRRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 12:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYRHN (ORCPT
+        with ESMTP id S229488AbjBYRRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 12:07:13 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9471710ABA;
-        Sat, 25 Feb 2023 09:07:12 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id bi17so2020492oib.3;
-        Sat, 25 Feb 2023 09:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VnB5gujaVnqBoC9xX9EZBRVvHCjUNdsJN9CYSYynhMU=;
-        b=SDMyW4qDukwZFMcU5CQNRAdfiXi0lbT7F4EhbSZMS9xvHQc76yxbx7UZp+hUgE/0IX
-         e21i5b7yCa+nwA+ShZPj/fFsFG3Ig2uJyuWubrkRWxmZ05GHhzlRfqKgAdfFYmLSgps6
-         t4eiwRl2vtvX5PLCYydUDmxmlkWcNltTVM9IsXh/7BQONvqQkn7Gfle9iADCmxodnTW9
-         bbIO+oDQC+wAG5wEUQSUhP+cmvm6qvxSAxDUpuJCDdUGWcaK8+fQG8xmdneI1jNadhs7
-         f+LsbAjYsFTs5slCQjT3lI2dKBR5oLY1ddkwGO2viE4FvHMBS7e0sLvXPFSrldHQiyCk
-         V6FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VnB5gujaVnqBoC9xX9EZBRVvHCjUNdsJN9CYSYynhMU=;
-        b=1Ql0vSjwlncOb2848GZ34JADvdxDcB5OYv9zbxKb2sRjDOXJDqjvg7q2hVmMrLhG3b
-         px0J1JLgLd+IdkvdB9OP9jEScO+LgDzb7BDWNAsS8EDqxFwKdVNpZIc/l5ZIR67ruQDE
-         1v3tHRv3tZBcveroBpWLrsmR7hAV0ge4TqJnmndAB8kOdh0MKIqHWbCwbY3M0+tG82Qk
-         rUbnkOobbIKQ206Z8ll/kXLxX98wIpELqk4KCnkca8dLNy484dmHg0hB/jQwZpyaKfjt
-         Hv4Dba1Ok7FNMxbT/GSgDellLWQ58RUzB8DNxiscpul9LJ/oVVecQKZEiYcuC/iU04hc
-         jCpw==
-X-Gm-Message-State: AO0yUKVHjU86SsI7YslDzIGnOz0/WGq8akZaByiJyL07lVrGMZZwMinu
-        zseBOCJ3mTKIf5svhXZotbM=
-X-Google-Smtp-Source: AK7set+82KW0G5rNagd+LFTsfSeMjj+S09cUq48u546rV0mTqnu8fBLCeWkKeWhUiceVxjxA5aabJA==
-X-Received: by 2002:a05:6808:319:b0:37f:83cb:8e92 with SMTP id i25-20020a056808031900b0037f83cb8e92mr8702983oie.57.1677344830443;
-        Sat, 25 Feb 2023 09:07:10 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f12-20020a9d038c000000b0068bd3001922sm788156otf.45.2023.02.25.09.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 09:07:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Feb 2023 09:07:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] hwmon: (pmbus/core) Generalise pmbus get status
-Message-ID: <20230225170708.GA3995447@roeck-us.net>
-References: <20230217083631.657430-1-Naresh.Solanki@9elements.com>
- <20230217083631.657430-2-Naresh.Solanki@9elements.com>
+        Sat, 25 Feb 2023 12:17:30 -0500
+X-Greylist: delayed 567 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 25 Feb 2023 09:17:28 PST
+Received: from out-56.mta1.migadu.com (out-56.mta1.migadu.com [95.215.58.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D047D12862
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 09:17:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217083631.657430-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosenzweig.io;
+        s=key1; t=1677344879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y7PlEP+T3ywtdXp5JitW0ulIPd3g9+rROb4eABEC9Xg=;
+        b=FDU2+uKCtdcByFBbeUvmHSI/1MzMFsVdvofgWZzHN6BxQhtr/IhHnha09zIiRD2tfiLxg6
+        +A5tqyviacVbPMpKJC8Pny2nVYHtCnoRSZtLI/v9YXKG4o5C9Bjow/RPvYOSCVNdK/l5oH
+        w4f3ewR2iTLgcI9MU2a+1HgHnEjzPuKBg5oV1/8X10CyXaXWXdUta4M7ND5R8c1DR+ffTB
+        N5MCeWpBklPBHXQ92awTucDOPwdDCgPB7XChP+/ufXiysR1TpD1uDFsKQXMyoI9gSbdRy6
+        dFulp8MXDt3WJ2/77Tz6DfJ8kvkAdgqAh8U0Exm4H8DSutposKawa6A36J0cwA==
+Date:   Sat, 25 Feb 2023 17:07:58 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   alyssa@rosenzweig.io
+Message-ID: <96e9949bf7210225515ed48911627743@rosenzweig.io>
+Subject: Re: [PATCH 2/5] rust: device: Add a minimal RawDevice trait
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Asahi Lina" <lina@asahilina.net>
+Cc:     "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        "=?utf-8?B?QmrDtnJuIFJveSBCYXJvbg==?=" <bjorn3_gh@protonmail.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Sven Peter" <sven@svenpeter.dev>, "Arnd Bergmann" <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Neal Gompa" <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+In-Reply-To: <Y/jW161RuT7OtlSf@kroah.com>
+References: <Y/jW161RuT7OtlSf@kroah.com>
+ <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
+ <20230224-rust-iopt-rtkit-v1-2-49ced3391295@asahilina.net>
+ <Y/ieQ0UX/niAG1Hg@kroah.com>
+ <ef3a3638-6381-87ab-d674-644306b6b6ce@asahilina.net>
+ <Y/jFeZzZVCpBGvGv@kroah.com> <Y/jHeP4LileLYxO8@kroah.com>
+ <bbc824ee-ef4e-40cb-f009-0d693d757869@asahilina.net>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 09:36:29AM +0100, Naresh Solanki wrote:
-> Add function pmbus get status that can be used to get both pmbus
-> specific status & regulator status
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ...
-> Changes in V3:
-> - Add pmbus_is_enabled function
-> Changes in V2:
-> - Add __maybe attribute for pmbus_get_status function
-> - Remove unrelated changes
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 98 ++++++++++++++++++++------------
->  1 file changed, 62 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 1b70cf3be313..f8ac9016ea0e 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2735,18 +2735,12 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->  	},
->  };
->  
-> -#if IS_ENABLED(CONFIG_REGULATOR)
-> -static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> +static int _pmbus_is_enabled(struct device *dev, u8 page)
->  {
-> -	struct device *dev = rdev_get_dev(rdev);
->  	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
->  	int ret;
->  
-> -	mutex_lock(&data->update_lock);
->  	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> -	mutex_unlock(&data->update_lock);
->  
->  	if (ret < 0)
->  		return ret;
-> @@ -2754,58 +2748,38 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
->  	return !!(ret & PB_OPERATION_CONTROL_ON);
->  }
->  
-> -static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +static int __maybe_unused pmbus_is_enabled(struct device *dev, u8 page)
->  {
-> -	struct device *dev = rdev_get_dev(rdev);
->  	struct i2c_client *client = to_i2c_client(dev->parent);
->  	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
->  	int ret;
->  
->  	mutex_lock(&data->update_lock);
-> -	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> -				     PB_OPERATION_CONTROL_ON,
-> -				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	ret = _pmbus_is_enabled(dev, page);
->  	mutex_unlock(&data->update_lock);
->  
-> -	return ret;
-> -}
-> -
-> -static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 1);
-> -}
-> -
-> -static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 0);
-> +	return !!(ret & PB_OPERATION_CONTROL_ON);
->  }
->  
-> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
->  {
->  	int i, status;
->  	const struct pmbus_status_category *cat;
->  	const struct pmbus_status_assoc *bit;
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> +	struct device *dev = data->dev;
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	int func = data->info->func[page];
->  
->  	*flags = 0;
->  
-> -	mutex_lock(&data->update_lock);
-> -
->  	for (i = 0; i < ARRAY_SIZE(pmbus_status_flag_map); i++) {
->  		cat = &pmbus_status_flag_map[i];
->  		if (!(func & cat->func))
->  			continue;
->  
->  		status = _pmbus_read_byte_data(client, page, cat->reg);
-> -		if (status < 0) {
-> -			mutex_unlock(&data->update_lock);
-> +		if (status < 0)
->  			return status;
-> -		}
->  
->  		for (bit = cat->bits; bit->pflag; bit++) {
->  			if (status & bit->pflag)
-> @@ -2823,11 +2797,10 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	 * REGULATOR_ERROR_<foo>_WARN.
->  	 */
->  	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-> -	mutex_unlock(&data->update_lock);
->  	if (status < 0)
->  		return status;
->  
-> -	if (pmbus_regulator_is_enabled(rdev)) {
-> +	if (_pmbus_is_enabled(dev, page)) {
->  		if (status & PB_STATUS_OFF)
->  			*flags |= REGULATOR_ERROR_FAIL;
->  
-> @@ -2855,6 +2828,59 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
->  }
->  
-> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_get_flags(data, page, flags);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_REGULATOR)
-> +static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> +{
-> +	return pmbus_is_enabled(rdev_get_dev(rdev), rdev_get_id(rdev));
-> +}
-> +
-> +static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> +				     PB_OPERATION_CONTROL_ON,
-> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 1);
-> +}
-> +
-> +static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 0);
-> +}
-> +
-> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +
-> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
-> +}
-> +
->  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->  {
->  	struct device *dev = rdev_get_dev(rdev);
+February 24, 2023 10:25 AM, "Greg Kroah-Hartman" <gregkh@linuxfoundation.=
+org> wrote:=0A=0A> On Fri, Feb 24, 2023 at 11:44:59PM +0900, Asahi Lina w=
+rote:=0A> =0A>> On 2023/02/24 23:19, Greg Kroah-Hartman wrote:>> Can we s=
+ee some users=0A>> of this code posted so I can see how struct device=0A>=
+> is going to work in a rust driver? That's the thing I worry most about=
+=0A>> the rust/C interaction here as we have two different ways of thinki=
+ng=0A>> about reference counts from the two worlds and putting them toget=
+her is=0A>> going to be "interesting", as can be seen here already.=0A>> =
+=0A>> Also, where are you getting your 'struct device' from in the first=
+=0A>> place? What bus is createing it and giving it to your rust driver?=
+=0A>> =0A>> That would be platform for my GPU driver, matched via OF comp=
+atible.=0A> =0A> Ick, a platform device? The GPU isn't on the PCI bus? Wo=
+w, that's=0A> horrid...=0A=0AThis is bog standard for Arm SoCs... As far =
+as I know, it's all platform devices in the Arm GPU world: Mali, Adreno, =
+Tegra, VideoCore, and yes, Imaginapple. not really sure what good PCI wou=
+ld do for integrated GPUs.
