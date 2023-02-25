@@ -2,99 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A856A2B6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 20:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F06E6A2B75
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 20:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjBYTJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 14:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S229682AbjBYTOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 14:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYTJX (ORCPT
+        with ESMTP id S229452AbjBYTOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 14:09:23 -0500
-X-Greylist: delayed 1464 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 25 Feb 2023 11:09:22 PST
-Received: from fallback24.mail.ru (fallback24.m.smailru.net [94.100.187.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45352136C0
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 11:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=iNjSXs1/pAI2/74XOyD7PBWqqCwksjLfgXSNEmVMZXc=;
-        t=1677352162;x=1677442162; 
-        b=athUix0kTsuGa10PkPRoHVZQE3lzRYcrVpaNwUNxpMCB+Og9fJDRTR+bQnfWwBzbR+rlTgLNTANE39aaPwE33/wCD8GdI7qvnznlI1VPKqWeTM/tUd7oHnP85ryZGe0f/+91CopzmEtDzl1DMXwt+hw0oZAoiokNfV1HkZMvG/YuKBrMAaa/0DYksn9r/fgRbdi9ZNhWh/7rzJZXLIAosP1zDBMzn5Da4Qr5fILzC1svmeXVK9hBKGIKPgR/oAeaqcn2W66o3vyc1qWJVs8P76F+VrU8pHPyfrqnFUq3sXfkhC5Fcjt+7NQ2Ky89MNu33gLnKglFOZ/6lFx7xpKKYA==;
-Received: from [10.12.4.6] (port=44576 helo=smtp32.i.mail.ru)
-        by fallback24.m.smailru.net with esmtp (envelope-from <fomindmitriyfoma@mail.ru>)
-        id 1pVzXU-0000WM-Bj
-        for linux-kernel@vger.kernel.org; Sat, 25 Feb 2023 21:44:56 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=iNjSXs1/pAI2/74XOyD7PBWqqCwksjLfgXSNEmVMZXc=;
-        t=1677350696;x=1677440696; 
-        b=Rb7PYIAtkSlcjoMwuKMcbD7ZFbIiKUQ4Wrz734t3alpzNAAIFGMWyjcW+J0Te8PQentENmUKDB8/hXrV0rGxnxutUHry/sp7dlxTsksVk8bPnv1qbDHBOrK6n5ArLwtrW9GSmF2DrrRHiy5vr4YYWT2AEvo2gjl9CLcvVFi1kkSRiZP2lXiAsv46lsYz88IcumFGqLMsZPcUnRGWeRiT1guSd79/NWjcMmQ6LRR/9G+M2q5DWU78RWcWSELz+gFKzMtCZlR6b8kRuPG8dWfX9Sh6AejfXg2VR7HrbIO4VwREUJ6G3zNtbrgbWan2w0ihUqL+kHH2BRewf2m1ZiVg8Q==;
-Received: by smtp32.i.mail.ru with esmtpa (envelope-from <fomindmitriyfoma@mail.ru>)
-        id 1pVzXO-00Gb09-EE; Sat, 25 Feb 2023 21:44:50 +0300
-From:   Dmitry Fomin <fomindmitriyfoma@mail.ru>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     Dmitry Fomin <fomindmitriyfoma@mail.ru>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH 2/2] ALSA: ice1712: Delete unreachable code in aureon_add_controls()
-Date:   Sat, 25 Feb 2023 21:43:22 +0300
-Message-Id: <20230225184322.6286-2-fomindmitriyfoma@mail.ru>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230225184322.6286-1-fomindmitriyfoma@mail.ru>
-References: <20230225184322.6286-1-fomindmitriyfoma@mail.ru>
+        Sat, 25 Feb 2023 14:14:44 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF1122
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 11:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677352483; x=1708888483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0KoMKXjQUApcRlDXH4w7hCtoT6tBYjfCi+UzayKz7cM=;
+  b=kQyIYGIk0QcMvm9f/PiUdlTPn4SK020wwlBW4XFSZdrHLRKP2WNCj9Ml
+   0Zw5KjU/dJHR3Hxq3aNbEEHhOOxz9xcOpeaxwcXQWmF6BXMAPXvWr3XZj
+   ZyKueABbA9e1IMZ3AR1FVOJauzkPkwx1RzNn/HL4EOuQ54vOofxkyNvry
+   Up7GkRi6D0A8JEhFhnKwMd0ZcDShXedNQL7ORQr8zuljBzhoeQI/wlDHw
+   0wqNo6/aLDy88iDwt/8VCewMF13BSH+xEg6GmIpqgkNsONRIy0UW13F6R
+   l7ISniRYsDTV9VWGMwjYtO31yCU7Mjk0+bHfAA4sK8f6l9LmDxImvcRTW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="332380335"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="332380335"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 11:14:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="705644472"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="705644472"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2023 11:14:41 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pW00H-0003Nn-0U;
+        Sat, 25 Feb 2023 19:14:41 +0000
+Date:   Sun, 26 Feb 2023 03:14:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Subject: drivers/i2c/busses/i2c-xiic.c:994:39: warning: 'xiic_2_00' defined
+ but not used
+Message-ID: <202302260317.PpagiXGe-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mailru-Src: smtp
-X-7564579A: EEAE043A70213CC8
-X-77F55803: 4F1203BC0FB41BD94A31EA4B0797EF2E72E18A16E4E351571D10D7A4E1A7C577182A05F5380850404C228DA9ACA6FE2772FD89AFC1BD152604AD72DFEC20B72A596BB80F61077AB2EC6E566672E4BD32
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7544B1CCE26E01C74EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371DF52D98DC3592C48638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D87AD58D5F9F375A8D483D9D6ECE6AC8696F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE7A6779F98BF527B7A9FA2833FD35BB23D9E625A9149C048EE0AC5B80A05675ACDCB629EEF1311BF91D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BCF01C05423B8DB1BA471835C12D1D977C4224003CC836476EB9C4185024447017B076A6E789B0E975F5C1EE8F4F765FC816C0BE60F4BE6A73AA81AA40904B5D9CF19DD082D7633A078D18283394535A93AA81AA40904B5D98AA50765F79006376A29911348193673D81D268191BDAD3D3666184CF4C3C14F3FC91FA280E0CE3D1A620F70A64A45A98AA50765F79006372E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89F890A246B268E114E6D8C47C27EEC5E9FB5C8C57E37DE458BEDA766A37F9254B7
-X-C1DE0DAB: 0D63561A33F958A54C7D87F68171D30A228B4F7132AA19AA9BF48DDA06A8B4C74EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF50F2237FE565727C05
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D349FF8F8245A2FAA7B765DBEB7D7068BB28BD7841ADBD0D15FB1DA42271785A3B06EA05D50451ED2F31D7E09C32AA3244C8991D915C426C1936EAD3CD2928DDD87F522A1CF68F4BE058D5DD81C2BAB7D1D
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojEITt8lw84mdnaKL8vyrTVQ==
-X-Mailru-Sender: 5C3750E245F36200A6D18CED7D1071012E5E7A86C4A45F003C7BCD20960ADBDAF8580613C06DCA7AAA53FFDDC28CFB2AE047E8EF59C4A8C5CB2BD3896A7551E65350DE7942F9BA8DF4CD7D804643C5AF3E90D834D112973461E9E6D348337FCC993B91D010849960EAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-7564579A: 646B95376F6C166E
-X-77F55803: 6242723A09DB00B48F971C29D06D6C0B4F378AFA56BA89B95ED4E50D0EF0848B049FFFDB7839CE9ED3673F440215217FED171F1978CF00A185AB127ABB504862DA19650599EEF603
-X-7FA49CB5: 0D63561A33F958A502A01C5FDF0925657677ACDBC922E551C8CC61CBB7FF8C81CACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F79006371CE0A079F1B3D4BD389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8D2B897A0B7B208E1F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947C17119E5299B287EE040F9FF01DFDA4A84AD6D5ED66289B52698AB9A7B718F8C442539A7722CA490CD5E8D9A59859A8B698B1B85E56A716AC089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojEITt8lw84md7I/+GLSltew==
-X-Mailru-MI: 800
-X-Mras: Ok
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the check (id != 0x41) fails, then id == 0x41 and
-the other check in 'else' branch also
-fails: id & 0x0F = 0b01000001 & 0b00001111 = 0b00000001.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7c3dc440b1f5c75f45e24430f913e561dc82a419
+commit: 2fd5cf352efa0c62dd20d1e046bc8767395b1ec0 i2c: xiic: Switch to Xiic standard mode for i2c-read
+date:   3 weeks ago
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20230226/202302260317.PpagiXGe-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2fd5cf352efa0c62dd20d1e046bc8767395b1ec0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2fd5cf352efa0c62dd20d1e046bc8767395b1ec0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/i2c/busses/
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302260317.PpagiXGe-lkp@intel.com/
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Dmitry Fomin <fomindmitriyfoma@mail.ru>
----
- sound/pci/ice1712/aureon.c | 4 ----
- 1 file changed, 4 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/sound/pci/ice1712/aureon.c b/sound/pci/ice1712/aureon.c
-index 9a30f6d35d13..aa24f826d91b 100644
---- a/sound/pci/ice1712/aureon.c
-+++ b/sound/pci/ice1712/aureon.c
-@@ -1895,10 +1895,6 @@ static int aureon_add_controls(struct snd_ice1712 *ice)
- 		if (id != 0x41)
- 			dev_info(ice->card->dev,
- 				 "No CS8415 chip. Skipping CS8415 controls.\n");
--		else if ((id & 0x0F) != 0x01)
--			dev_info(ice->card->dev,
--				 "Detected unsupported CS8415 rev. (%c)\n",
--				 (char)((id & 0x0F) + 'A' - 1));
- 		else {
- 			for (i = 0; i < ARRAY_SIZE(cs8415_controls); i++) {
- 				struct snd_kcontrol *kctl;
+>> drivers/i2c/busses/i2c-xiic.c:994:39: warning: 'xiic_2_00' defined but not used [-Wunused-const-variable=]
+     994 | static const struct xiic_version_data xiic_2_00 = {
+         |                                       ^~~~~~~~~
+
+
+vim +/xiic_2_00 +994 drivers/i2c/busses/i2c-xiic.c
+
+   993	
+ > 994	static const struct xiic_version_data xiic_2_00 = {
+   995		.quirks = DYNAMIC_MODE_READ_BROKEN_BIT,
+   996	};
+   997	
+
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
