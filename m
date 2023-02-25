@@ -2,82 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CD56A2A1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 14:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7196A2A1B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 14:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBYNv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 08:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S229567AbjBYNvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 08:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBYNv0 (ORCPT
+        with ESMTP id S229534AbjBYNvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 08:51:26 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05A413DFB;
-        Sat, 25 Feb 2023 05:51:25 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id z6so2371750qtv.0;
-        Sat, 25 Feb 2023 05:51:25 -0800 (PST)
+        Sat, 25 Feb 2023 08:51:45 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F1614983
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 05:51:43 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id bj35so602545qkb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 05:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fDEOKBLxVt4XI6LHqy/jkVAOmYwz/nUQYhcof9UI6Ik=;
+        b=TRYtyxD475zo2BDSyGiRfYlroFOyUIRCQHEJFtuTHqG9g38lMuquY+Dot48Z4lSim9
+         wTyjsYf1ABYDjSHh/5Wmu8+wVJve5D5NrnxJrkcFaoNb0W/VjujKNj0bQ/xQWDY7ZRey
+         iqP+X6xjWBeBrCCUghnmWkrwx8Q+y0vA8nt1KqCrIxKTcE4wClnFDSqjefPdOc/4G0S2
+         rI5iH6sG69iNlgshQJCzePiRzQjdg5TEAXCwXLHctxpm+k88eqjyRessFQqADkxn+bcm
+         29ltyJKCzuk3lapWfs/ZaZpDZiBF6nrRkbydulyMHCQSxdV9EY28c8wQsQn/JdSmWUiC
+         5EjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0SRlfWig3tEGxTbW3x+e5tDuKYCknmRIInoXInN6npI=;
-        b=q6tSzQ0/6ZxtWNIs3WZQXuiMiZ1L53WV2mdvblUW/QRzQi/z1VGMuK/ReAaamAvkb8
-         OQVm6KSzcP+pzEyBs07CcM9aR/67z+HQlmR/qRC3HjLuu4nOgjH3VwyipAmOsTvL31+m
-         S52TRMr2goVKPpLeJMStYeqn45uhVneMSVOP82efQTDCUa5yb/tlCdrNkfvSea/hqHUl
-         8+xGXNBg/taZVn/WhoAvgXHItqS+8kuAFMWOiaw2geMRC/hcZiUDpyVldCqWyY/gP45K
-         wEwBfJ6sfc9MXJlNLAH1NB2/yxgTVYACj4eYYrd2cuIB8NjwMfd7KCiBUiaiIlCgPBCD
-         JHNQ==
-X-Gm-Message-State: AO0yUKXXa/J+FXPSRnIlQt1E/0k4L96B7vD1u0bomdAxtFtiq87+Dd+9
-        E9FVdN4mfbwvL3eLago33uo2GBGnud0WAg==
-X-Google-Smtp-Source: AK7set/bIKgSocfoSJyqECVj6lSKGxb++KOG/KU8wUohZ252Uv8bjGIBhReOqqhifpKwoVWPe0Aj2Q==
-X-Received: by 2002:ac8:4e89:0:b0:3bd:18c:4f7c with SMTP id 9-20020ac84e89000000b003bd018c4f7cmr20172262qtp.45.1677333084568;
-        Sat, 25 Feb 2023 05:51:24 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac86b42000000b003b635a5d56csm1360679qts.30.2023.02.25.05.51.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Feb 2023 05:51:24 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-536c02eea4dso55843847b3.4;
-        Sat, 25 Feb 2023 05:51:24 -0800 (PST)
-X-Received: by 2002:a05:690c:c8f:b0:52f:184a:da09 with SMTP id
- cm15-20020a05690c0c8f00b0052f184ada09mr2636587ywb.2.1677333083756; Sat, 25
- Feb 2023 05:51:23 -0800 (PST)
+        bh=fDEOKBLxVt4XI6LHqy/jkVAOmYwz/nUQYhcof9UI6Ik=;
+        b=JyEF2+XEJiVhYznmQu2rms4HZ7pKVD/O7HKiaeUdlALAc42mS5RjOo/MfSEwMfCOk/
+         V2mavigQwWpoYDhtzNRe9W1sKzVg7c1Q16oe3qaqk/yoHWEHoD/d80YPDX0h5UD5g96l
+         sZjxVXaRvIkeY5g4dgsDWbAp86pl+G5LRSAUwQkj2qRbdi5FHjVekHrhEhTn1OtBVQIp
+         7iQlE1nYIaLgTL+ss1/yTd9tie4yUojrIBH2ridJXdOqnMl3A0uB0P3SyLoMcEpSZrpK
+         9xMQDrPWKj509MVuHr6z2ZlcAQo7ekWTEB1qPlWKJr+CGx7yG/hH2GkPsoZrgX/EQdss
+         78Gw==
+X-Gm-Message-State: AO0yUKX+Q0p0rBkeRX06f2FEbLB5Pj6z2y3nHSGiVXR1x2L5zTziQ3b0
+        dL4xZ9iUWoxkOWhGqMQSi5oGM+cmTfbiKsrFvP33d85OUhipuWpeuf8=
+X-Google-Smtp-Source: AK7set/fxQZKfHBRnm5VbbYeGh8ZZB4txN3uwEx4RgVT3DabV0ylBYqKPm0MnYxSnjokdSHlwasnV/DhmI2ms+U4rf0=
+X-Received: by 2002:a37:ef11:0:b0:742:412d:1dc6 with SMTP id
+ j17-20020a37ef11000000b00742412d1dc6mr2464660qkk.14.1677333102347; Sat, 25
+ Feb 2023 05:51:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20230225071230.11494-1-ufh8945@gmail.com> <20230225071230.11494-2-ufh8945@gmail.com>
-In-Reply-To: <20230225071230.11494-2-ufh8945@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 25 Feb 2023 14:51:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUNn1Dxmfq+Y-B=CPDepFKZSxn=NTF2nG0BL=WBU-iG9g@mail.gmail.com>
-Message-ID: <CAMuHMdUNn1Dxmfq+Y-B=CPDepFKZSxn=NTF2nG0BL=WBU-iG9g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drivers: video: logo: add SPDX comment, remove GPL
- notice in pnmtologo.c
-To:     Nikita Romanyuk <ufh8945@gmail.com>
-Cc:     deller@gmx.de, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kelvium@yahoo.com
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Sat, 25 Feb 2023 18:51:31 +0500
+Message-ID: <CABXGCsO4=qKBF=2FRPVwW8FA4iLFh0Dt9n1BLMec3k10GUorpg@mail.gmail.com>
+Subject: [6.3][regression] after commit 7170b7ed6acbde523c5d362c8978c60df4c30f30
+ my system stuck in initramfs forever
+To:     davidgow@google.com, rmoar@google.com, brendanhiggins@google.com,
+        skhan@linuxfoundation.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 8:31 AM Nikita Romanyuk <ufh8945@gmail.com> wrote:
-> Signed-off-by: Nikita Romanyuk <ufh8945@gmail.com>
+Hi,
+new kernel release cycle returning with new bugs
+Today my system got stuck in initramfs environment after updating to
+commit d2980d8d826554fa6981d621e569a453787472f8.
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+I still do not understand how to configure the network inside the
+initramfs environment to grab the logs.
+Since an attempt to rebuild the initramfs with all modules (dracut
+--no-hostonly --force) leads to the stuck initramfs environment and
+impossible entering into initramfs console.
 
-Gr{oetje,eeting}s,
+But I can bisect the problem and bisection blames this commit:
 
-                        Geert
+=E2=9D=AF git bisect good
+7170b7ed6acbde523c5d362c8978c60df4c30f30 is the first bad commit
+commit 7170b7ed6acbde523c5d362c8978c60df4c30f30
+Author: David Gow <davidgow@google.com>
+Date:   Sat Jan 28 15:10:07 2023 +0800
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+    kunit: Add "hooks" to call into KUnit when it's built as a module
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+    KUnit has several macros and functions intended for use from non-test
+    code. These hooks, currently the kunit_get_current_test() and
+    kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=3Dm.
+
+    In order to support this case, the required functions and static data
+    need to be available unconditionally, even when KUnit itself is not
+    built-in. The new 'hooks.c' file is therefore always included, and has
+    both the static key required for kunit_get_current_test(), and a table
+    of function pointers in struct kunit_hooks_table. This is filled in wit=
+h
+    the real implementations by kunit_install_hooks(), which is kept in
+    hooks-impl.h and called when the kunit module is loaded.
+
+    This can  be extended for future features which require similar
+    "hook" behaviour, such as static stubs, by simply adding new entries to
+    the struct, and the appropriate code to set them.
+
+    Fixed white-space errors during commit:
+    Shuah Khan <skhan@linuxfoundation.org>
+
+    Resolved merge conflicts with:
+    db105c37a4d6 ("kunit: Export kunit_running()")
+    This patch supersedes the above.
+    Shuah Khan <skhan@linuxfoundation.org>
+
+    Signed-off-by: David Gow <davidgow@google.com>
+    Reviewed-by: Rae Moar <rmoar@google.com>
+    Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+    Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+
+ Documentation/dev-tools/kunit/usage.rst | 15 ++++++---------
+ include/kunit/test-bug.h                | 28 ++++++++++------------------
+ lib/Makefile                            |  8 ++++++++
+ lib/kunit/Makefile                      |  3 +++
+ lib/kunit/hooks-impl.h                  | 27 +++++++++++++++++++++++++++
+ lib/kunit/hooks.c                       | 21 +++++++++++++++++++++
+ lib/kunit/test.c                        | 15 +++++++--------
+ 7 files changed, 82 insertions(+), 35 deletions(-)
+ create mode 100644 lib/kunit/hooks-impl.h
+ create mode 100644 lib/kunit/hooks.c
+
+Unfortunately I couldn't revert this commit staying on
+d2980d8d826554fa6981d621e569a453787472f8 because of conflicts:
+=E2=9D=AF git revert 7170b7ed6acbde523c5d362c8978c60df4c30f30 -n
+Auto-merging include/kunit/test-bug.h
+CONFLICT (content): Merge conflict in include/kunit/test-bug.h
+Auto-merging lib/Makefile
+Auto-merging lib/kunit/Makefile
+CONFLICT (modify/delete): lib/kunit/hooks-impl.h deleted in parent of
+7170b7ed6acb (kunit: Add "hooks" to call into KUnit when it's built as
+a module) and modified in HEAD.  Version HEAD of
+lib/kunit/hooks-impl.h left in tree.
+Auto-merging lib/kunit/test.c
+CONFLICT (content): Merge conflict in lib/kunit/test.c
+error: could not revert 7170b7ed6acb... kunit: Add "hooks" to call
+into KUnit when it's built as a module
+hint: after resolving the conflicts, mark the corrected paths
+hint: with 'git add <paths>' or 'git rm <paths>'
+
+--=20
+Best Regards,
+Mike Gavrilov.
