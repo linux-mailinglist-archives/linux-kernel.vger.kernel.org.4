@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13936A2869
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FFF6A2875
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBYJ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 04:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S229607AbjBYJab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 04:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjBYJ3X (ORCPT
+        with ESMTP id S229563AbjBYJa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 04:29:23 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E17FF03;
-        Sat, 25 Feb 2023 01:29:20 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pVqrh-0000TL-HG; Sat, 25 Feb 2023 10:29:13 +0100
-Message-ID: <1c222195-8fec-5067-c382-78dfd2505974@leemhuis.info>
-Date:   Sat, 25 Feb 2023 10:29:12 +0100
+        Sat, 25 Feb 2023 04:30:28 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A35FF39
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:30:26 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id bd34so866886pfb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QwJ3djsgu7EpFGFjesrarL0td1XXwZi3NukCRezNELs=;
+        b=optnimXpIydzp/+PWndFOQjbgLlMpy3vFttLCCQRdLUitavfgO3O8hWdo5CjF/sTe0
+         Wm8wrBn7zBQG+1EKFdrRWBOQ83MEHrmfryE0Szri53CrRwl0YalIfzI5VW20MAf73E++
+         6ZFFwJeLOlgkwII48SVvuntW4LeUU27IdF0RvUV4h1JsrMgMyzhc7lhpuSAxtt4VOiW0
+         v0a4/sylwTCgoyKsJZ8Zt7yEY/yEDoFjDPTjl1Mijb1Ya9yoI8hKiYua/iCVVKRScdg8
+         fBBDXNEyJ5ykM5+PslILzk8ey7LhEyOM/AdPbbfitSdV+GE3n7Rs+NztqSEQfTFb81vf
+         WZSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwJ3djsgu7EpFGFjesrarL0td1XXwZi3NukCRezNELs=;
+        b=b5OoK159Q0wKTLcS8O+vhALBbcSWAQ1ZGai5/VtwtvYkVEflKjyt9lSONxz97T8icG
+         QhGSAxTNu444wjhR5ZRObLFDqvKEm0NK+LM5GzBacL176hGOjXtDqVV4bpv8xc5kRgpK
+         tk5f8Mk98SXdW0DTudR0rPNcanHFXVmzKvfFRO5Y40OJduFVoAUf5EYzIry43G9UwWhS
+         cv3eGiF+xczm3Y6XVtMpgG+95ybXlxKJaCKMDN+vfCnwPRBRdgbbuD+WAAhTbVvLvaV5
+         /CPPxgXKP8PaulOmsSwuIyjPtxPxtGSmcpPAsfSaUqHzJpmyq3uwGDPMCbaa77bDTQQJ
+         fAAw==
+X-Gm-Message-State: AO0yUKUiHtGtEJzO7usdziZmiTy0oC6JTo1Qi/VNr7Qx15n3ZqXKLv7M
+        Jxu/FS/N0QKINMf9xoz1iGeDT/SVZZqoz2PLDEg=
+X-Google-Smtp-Source: AK7set8DjEjXobqY1+0xwn7dDh6+tMMwGXg8yycT4d+IfKsY14jRQSpBywK26Am9dX6t1Bl5lHQa8e1kSXjNvWKsErw=
+X-Received: by 2002:a05:6a00:7c8:b0:5df:9809:621f with SMTP id
+ n8-20020a056a0007c800b005df9809621fmr2406272pfu.0.1677317426001; Sat, 25 Feb
+ 2023 01:30:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
- <Y/nSJvm6h4Sq5PR2@duo.ucw.cz>
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
-In-Reply-To: <Y/nSJvm6h4Sq5PR2@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1677317361;72dcdd09;
-X-HE-SMSGID: 1pVqrh-0000TL-HG
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a17:902:9a87:b0:19c:92af:ad17 with HTTP; Sat, 25 Feb 2023
+ 01:30:25 -0800 (PST)
+Reply-To: lassounadage5@gmail.com
+From:   Ms Nadage Lassou <nadagelassou@gmail.com>
+Date:   Sat, 25 Feb 2023 10:30:25 +0100
+Message-ID: <CAJ97MqQUY4HeeHOPN6sWPSeFG-4bUAmVuOwd3SbU8BnrwM7Zmw@mail.gmail.com>
+Subject: YOUR URGENT ATTENTION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,SUBJ_ATTENTION,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:430 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lassounadage5[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nadagelassou[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.5 SUBJ_ATTENTION ATTENTION in Subject
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.02.23 10:17, Pavel Machek wrote:
->> +If your platform uses techniques like Secure Boot, prepare the system to permit
->> +starting self-compiled Linux kernels; install compilers and everything else
->> +needed for building Linux; make sure to have 15 Gigabyte free space in your home
->> +directory. Now run the following commands to download the sources of Linux,
->> +which you then use to configure, build and install your own
->> kernel::
-> 
-> 15GB is quite a lot. Maybe the shallow clone should be given another
-> chance?
+Greetings.
 
-It got and made it, see v2:
-https://lore.kernel.org/all/8cfcf069d48c1b8d7b83aafe0132f8dad0f1d0ea.1676400947.git.linux@leemhuis.info/
-
->> +       mkdir ~/linux/ ~/linux/sources ~/linux/build
->> +       git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git \
->> +         ~/linux/sources
->> +       cd ~/linux/sources/
->> +       # hint: if you don't want to build any stable or longterm kernels, skip the
->> +       #   next two commands
->> +       git remote add linux-stable \
->> +         https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
->> +       git fetch --all
->> +       # hint: if you want to apply patches, do it at this point (see below for details)
->> +       # hint: at this point it's recommended to tag your build (see below for details)
->> +       yes "" | make O=~/linux/build/ localmodconfig
->> +       # hint: at this point you might want or have to adjust the build configuration
->> +       #  (see below for details)
->> +       # note: if you are running a Debian kernel, you'll have to adjust the configuration
->> +       #  at this point (see below)
->> +       make -j $(nproc --all) O=~/linux/build/
-> 
-> Is the complexity of using O= worth it for one-off kernel builds?
-
-That is a good question. I seemed like the right thing to do when I
-started writing this guide (maybe just because I've been doing it that
-way for ages), but now that you ask I'm unsure myself.
-
-/me wonders how others feel about it
-
-Ciao, Thorsten
+I am Ms Nadage lassou,I have something important to tell you
+Thanks, i will send you the details once i hear from you.
+Regards.
+Ms Nadage Lassou
