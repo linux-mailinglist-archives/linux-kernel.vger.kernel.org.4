@@ -2,149 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4B16A2B19
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 18:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55346A2B1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 18:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjBYRYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 12:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S229486AbjBYR2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 12:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjBYRYA (ORCPT
+        with ESMTP id S229578AbjBYR2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 12:24:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4281310277;
-        Sat, 25 Feb 2023 09:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677345829; i=deller@gmx.de;
-        bh=ydbPDJcHWeZTcYVlzmYYqStnw+/P96AIc5NwdbKyn40=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=eD66dsiB0azJNfyuQ4auBfz9Bcaf2Yx9V0k55fZCjHxvk7d6hyK5K8FK60K/IIlP8
-         luzW0erF9YPtvwaYtm9Kg/JEXA2rcBdbZyxgE8ci9ya+MximYiKhzTvFp6713JIxRZ
-         yT3Lmz1g+Tnh6EpJQ7EeoHwTkVGGFOYcHPE4gQDvnIBnRXLFQ4IRLEDTMOqN0VVahX
-         Cd7LLvG2oAeI8h8aPr16RE43SYPuL0xhRZ6EiFdWf4GIGrNPducWkCImo0tVlV3n8n
-         THCgzOazZN8PSr+0QPyCgoJQrxI9zsplr5YtUD4Tobk3Hqieo78pGJx5M7tkpWuEAc
-         9GAePEVFC2tdQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.139.251]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mq2nK-1ojDS30LI2-00nAWR; Sat, 25
- Feb 2023 18:23:49 +0100
-Message-ID: <eb6900d5-148f-85cb-eebc-c20d99802c75@gmx.de>
-Date:   Sat, 25 Feb 2023 18:23:48 +0100
+        Sat, 25 Feb 2023 12:28:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD88C11653;
+        Sat, 25 Feb 2023 09:28:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21F0660B51;
+        Sat, 25 Feb 2023 17:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBB2C433EF;
+        Sat, 25 Feb 2023 17:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677346115;
+        bh=OQY775V7tq8tLvORC1v+ZouMR4NkgEeJqiRqqDQjHKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UYQdlVogKngmxvP/3HxRVbDMpZjmw8R4UaFy0fZtMwYkonGfTO48sYVSYIZ8xZs9m
+         sfxYvrqldYa1qg1tzHCwwS9bR+3ZAyYtwAHZn7zMlb9pdv05c2VqFIY1TBsXrPWYzt
+         bGlJUTsmy3nMAFn0lxWJrZkv3/s4/FnoMvaDZFgZTNtB7u0IY++87+ANUOue+ldtJ4
+         +1RokzbkSlPeF0CtNj4xh34oA9EoCVMi1/Vr2qGo8ve3t6Gkau+QOgHVuRUqHZVu/m
+         dhMse7A70f8yLkgrwnfaJazl+8EEZjSOyuBGSiwFjbnWQGfDZspTjpbCzwfQCJBF4x
+         5+8MwgWK4ZVBA==
+Date:   Sat, 25 Feb 2023 09:28:32 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/CPU/AMD: Make sure EFER[AIBRSE] is set
+Message-ID: <20230225172832.sqdd7dejkkmjxpt6@treble>
+References: <20230124163319.2277355-1-kim.phillips@amd.com>
+ <20230124163319.2277355-8-kim.phillips@amd.com>
+ <20230224185257.o3mcmloei5zqu7wa@treble>
+ <Y/knUC0s+rg6ef2r@zn.tnic>
+ <Y/k/ZXUXOFiBhOiI@zn.tnic>
+ <20230225000931.wrednfun4jifkqau@treble>
+ <Y/lUSC5x2ZkTIGu4@zn.tnic>
+ <20230225005221.425yahqvxb57c43x@desk>
+ <20230225013202.g7tibykvylprsxs5@treble>
+ <Y/n9XcbnCzWv2Vul@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-To:     Lucy Mielke <mielkesteven@icloud.com>, linux-fbdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de
-References: <20230207100630.11644-1-mielkesteven@icloud.com>
-Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] fbdev: omapfb: cleanup inconsistent indentation
-In-Reply-To: <20230207100630.11644-1-mielkesteven@icloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qIG4lpqWeR7O/1JJ/i5c5OuLExiquuoNnoBBFoR/goYZhYz6ASu
- J46WSrD3h8hcBp+bUVxTN2ZG9FWJJOxYkKR7ZMOFUzdoustA8L5toWMxKWbh60u2WO770Mp
- Eu+GXwCDZVW2RY1Lfg8NlAm9Md5UYls9XkSJT+5W0H6TzsQDmEM2LYkMw4GN68e956hd9rz
- ZNhh2OW+ZSUa3OGzMFk1w==
-UI-OutboundReport: notjunk:1;M01:P0:+nerpTkWZA4=;4WVBWKdsfeKYxjmXLx1UHf3Tiw5
- bBjjK3b1xY36R7kL4nIpF4UOc3Vtw574UDmGeZfZJ7v2Cd8c/1RkQ1r/GxtWgT7P/xiRX6Lw+
- RFkIdxd4CenGF19hlOqfEHQMgahSf5xRwAlsJKwoOQ15s1a9yfkXns1Ub/xo0BiTQRqhqsias
- wAR23/XW2yGO8snG9Pi3OPMEGtaOH/OSiFsreb0dLXyy/c+/RndBYCRDRzINvPlQ2Rm5AroA+
- 3gMPSkIk7lbIFsSLy1zv9T7wxkzk5QFDyIzZQ6N/Hq75BbGjhoocaEuimftyC1VRPT9XYkeE7
- subazo7rw46xyLdz1CqemGCEcz3wOeMVDroEqQDCzsrScnu9SYC6vl2LgdH/oD8QW5AIwXPoY
- Zxh6FrDPCI9JHAODjYfug+Arv4dyEe6qHcq23w/j7NbLEsrdBCLeqFsf9aRDL2pBSHYkmNnNm
- CT35t2bM9dSNIkmol6ID3jdbCQaGTbcvwjZA79gvVFZcGnL+T4moxiQ2VUMKqpApNPrVvght+
- zubT6tKi8lkz+Tux0hzfFRojKQK49Gw2NaaKv6+P4iRd6oGxuICymtpgzWQH2tAm3rZraaBDY
- ZnLsVatE3TQIOn1SGixaSuT1SiqKN3FcX4JKHU3roiir6Uahn113AU121a43VAJMgIdsywJhY
- 66tKAHNcIbbd3RG1F94K33SkAFVoLJR2/5s7Qk5Mk2hsFw3zA/7wzJWfPO4eeSmzQ0ERIldge
- hRU5eKiS+cgPwWVFoRUibIma6aQuCvUhEe+3ZgbxicZ2WjM3V3KYH2t0cGkr18f9Ui5OKWpGN
- MqufO3xth5TtFFPuiEt1uH7jJe8mlzx8V/IeGaJ/sEFmrhC+byzD6zmnSbRrdbfn0rK18UYzH
- 1d+n1oRcPztDYzdvxw43xk6xgnOdNPHSRe4JcB43wSEFeBBnxeV7Px1Ddwhh47TcA+K9syYDa
- UJ1KN1M+rMpIn1yxPvyyKybUqSE=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/n9XcbnCzWv2Vul@zn.tnic>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lucy,
+On Sat, Feb 25, 2023 at 01:21:49PM +0100, Borislav Petkov wrote:
+> On Fri, Feb 24, 2023 at 05:32:02PM -0800, Josh Poimboeuf wrote:
+> > > Is it intended to be set regardless of the spectre_v2 mitigation status?
+> > 
+> > Right, it needs to check spectre_v2_enabled.
+> 
+> Right, I realized this too this morning, while sleeping, so I made me
+> a note on the nightstand to fix it... :-)
+> 
+> > Also, this code might be a better fit in identify_secondary_cpu() with
+> > the other MSR-writing bug-related code.
+> 
+> Same path:
+> 
+> identify_secondary_cpu->identify_cpu->this_cpu->c_init(c)->init_amd
+> 
+> Plus, it keeps the vendor code where it belongs.
 
-On 2/7/23 11:06, Lucy Mielke wrote:
-> This cleans up the indentation according to the Linux kernel coding
-> style, and should fix the warning created by the kernel test robot.
->
-> Fixes: 8b08cf2b64f5a60594b07795b2ad518c6d044566 ("OMAP: add TI OMAP
-> 	framebuffer driver")
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Lucy Mielke <mielkesteven@icloud.com>
-> ---
->   drivers/video/fbdev/omap/omapfb_main.c | 32 +++++++++++++++-----------
->   1 file changed, 19 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/video/fbdev/omap/omapfb_main.c b/drivers/video/fbde=
-v/omap/omapfb_main.c
-> index 1f3df2055ff0..4b673daa32cb 100644
-> --- a/drivers/video/fbdev/omap/omapfb_main.c
-> +++ b/drivers/video/fbdev/omap/omapfb_main.c
-> @@ -78,7 +78,7 @@ static struct platform_device omapdss_device =3D {
->   	.name		=3D "omapdss_dss",
->   	.id		=3D -1,
->   	.dev            =3D {
-> -		.release =3D omapdss_release,
-> +	.release	=3D omapdss_release,>   	},
+All the other "bug" code in identify_secondary_cpu() *is*
+vendor-specific.
 
-This is wrong. "release" belongs inside the .dev
-variable, so the previous indenting is correct.
+And for that matter, so is most of the code in bugs.c.
 
-The changes below seem correct.
+I'm thinking we should just move all this MSR-writing bug-related code
+into a new cpu_init_bugs() function in bugs.c which can be called by
+identify_secondary_cpu().
 
-Helge
+Then we have more "bug" code together and all the local
+variables/functions like spectre_v2_in_ibrs_mode() can remain local.
 
->   };
->
-> @@ -544,19 +544,25 @@ static int set_fb_var(struct fb_info *fbi,
->   		var->yoffset =3D var->yres_virtual - var->yres;
->
->   	if (plane->color_mode =3D=3D OMAPFB_COLOR_RGB444) {
-> -		var->red.offset	  =3D 8; var->red.length	 =3D 4;
-> -						var->red.msb_right   =3D 0;
-> -		var->green.offset =3D 4; var->green.length =3D 4;
-> -						var->green.msb_right =3D 0;
-> -		var->blue.offset  =3D 0; var->blue.length  =3D 4;
-> -						var->blue.msb_right  =3D 0;
-> +		var->red.offset		=3D 8;
-> +		var->red.length		=3D 4;
-> +		var->red.msb_right	=3D 0;
-> +		var->green.offset	=3D 4;
-> +		var->green.length	=3D 4;
-> +		var->green.msb_right	=3D 0;
-> +		var->blue.offset	=3D 0;
-> +		var->blue.length	=3D 4;
-> +		var->blue.msb_right	=3D 0;
->   	} else {
-> -		var->red.offset	 =3D 11; var->red.length	 =3D 5;
-> -						var->red.msb_right   =3D 0;
-> -		var->green.offset =3D 5;  var->green.length =3D 6;
-> -						var->green.msb_right =3D 0;
-> -		var->blue.offset =3D 0;  var->blue.length  =3D 5;
-> -						var->blue.msb_right  =3D 0;
-> +		var->red.offset		=3D 11;
-> +		var->red.length		=3D 5;
-> +		var->red.msb_right	=3D 0;
-> +		var->green.offset	=3D 5;
-> +		var->green.length	=3D 6;
-> +		var->green.msb_right	=3D 0;
-> +		var->blue.offset	=3D 0;
-> +		var->blue.length	=3D 5;
-> +		var->blue.msb_right	=3D 0;
->   	}
->
->   	var->height		=3D -1;
-
+-- 
+Josh
