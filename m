@@ -2,81 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF4C6A288A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40566A288C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 10:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBYJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 04:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S229570AbjBYJjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 04:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBYJhP (ORCPT
+        with ESMTP id S229445AbjBYJjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 04:37:15 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3FD9CA2F
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:37:13 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 31P9b635029945;
-        Sat, 25 Feb 2023 10:37:06 +0100
-Date:   Sat, 25 Feb 2023 10:37:06 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Vincent Dagonneau <v@vda.io>
-Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] tools/nolibc: add tests for the integer limits in
- stdint.h
-Message-ID: <Y/nWwuqLLG8A0xT7@1wt.eu>
-References: <20230223010025.11092-1-v@vda.io>
- <20230223010025.11092-5-v@vda.io>
+        Sat, 25 Feb 2023 04:39:09 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E021206D
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:39:08 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id h16so6606189edz.10
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 01:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iEX7kiTnmPMmcWsePbfgzYz4jb8Fx2x4hoDMfgu0V80=;
+        b=smswoQUuwUF4XY9LDbRmqUcx0OKWdA9ePrsQVB6KU0TUncGg/HFOeZDRQErPWVcnwC
+         h33FfHaRo1bvBUNLyOaHEkiISPvZCFGdE+YPAFJKlf9gpOcF3c3xY7sQ4Y4sLC7qYcul
+         xYWi9SgSdtEmaRxZXpCf10qZwUqKvIaZ6QPuRLGvl44yTkjVD0pIvtQuD0pCueE4I4QI
+         qwlJ/gFdDY1bzMXein1Qp5Q6d9mwOSHYczuRNGGRAAvKfSZNppbnsOVDu8wyra4Lw5Td
+         4pldOG3htUTw94jldyivuKgDTeyITzvKNRnYLEYI2YZsa18GqUafsAT9O5zpo6ZzD7Vf
+         B14w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iEX7kiTnmPMmcWsePbfgzYz4jb8Fx2x4hoDMfgu0V80=;
+        b=neE3enaiJWcD/OUpQwycWi7OZvqoBFkxuAwoPuWBnBWCOjs9uXHrenmCtfFltouDui
+         MxTYuXgAn/7+nQ4aES36KQgz1ghwFdiCv1Ai3ZRie3JiDpToPT0QthnOPJrSLTgoV/rq
+         Bc0TxxvWZVwancAwHsSS7OvBp6SZvuvYrjg/l4Kb9QNyIPDoviWplkOp8DPSz9jCBDNj
+         r86VDUdORgDNYqrKQ180xTuJmV3FAgPmmCMCfUrEjk2AFVE/fEl2uVZsG0nlEyZ5CgV2
+         mgJ827dWQ9Yfb2U2YgSByrohW/jLu4jzz7XF1k7agrWU+h/fZUDuMuHJfMb0OSDvFy7U
+         gjyw==
+X-Gm-Message-State: AO0yUKVKvW4nZFd+qNlbNoMBe54OD99PlomTCXdHpAJ59zFxcbuYRmYV
+        FU9o9W3VdpBiTw2FX0VQ6gNJVDbHoW6lmL/aGe++3A==
+X-Google-Smtp-Source: AK7set++MnoeXQd72vVgpXhRE0kCu5mb/bg06wZYyCPMNKgIUS3bvXglSOQnhR3IZsU/EjQNxWWXsYJhvb6B+BVpJHI=
+X-Received: by 2002:a17:907:2ce6:b0:8df:dc64:30d2 with SMTP id
+ hz6-20020a1709072ce600b008dfdc6430d2mr1821694ejc.1.1677317946487; Sat, 25 Feb
+ 2023 01:39:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223010025.11092-5-v@vda.io>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+ <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
+ <CANaxB-x2OrTPziL_hgwgQ1xe-ypVrvEJZK5i4ZvmUwsLqfTcvA@mail.gmail.com>
+In-Reply-To: <CANaxB-x2OrTPziL_hgwgQ1xe-ypVrvEJZK5i4ZvmUwsLqfTcvA@mail.gmail.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Sat, 25 Feb 2023 10:38:54 +0100
+Message-ID: <CABb0KFHYr-_o9bQAwqaXkKC9Bipo18b95FawhkUG-vOQwGNpxQ@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Andrei Vagin <avagin@gmail.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Fri, 24 Feb 2023 at 03:20, Andrei Vagin <avagin@gmail.com> wrote:
+>
+> On Tue, Feb 21, 2023 at 4:42=E2=80=AFAM Micha=C5=82 Miros=C5=82aw <emmir@=
+google.com> wrote:
+> >
+> > On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> > >
+> > > Hi Micha=C5=82,
+> > >
+> > > Thank you so much for comment!
+> > >
+> > > On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > [...]
+> > > > For the page-selection mechanism, currently required_mask and
+> > > > excluded_mask have conflicting
+> > > They are opposite of each other:
+> > > All the set bits in required_mask must be set for the page to be sele=
+cted.
+> > > All the set bits in excluded_mask must _not_ be set for the page to b=
+e
+> > > selected.
+> > >
+> > > > responsibilities. I suggest to rework that to:
+> > > > 1. negated_flags: page flags which are to be negated before applyin=
+g
+> > > > the page selection using following masks;
+> > > Sorry I'm unable to understand the negation (which is XOR?). Lets loo=
+k at
+> > > the truth table:
+> > > Page Flag       negated_flags
+> > > 0               0                       0
+> > > 0               1                       1
+> > > 1               0                       1
+> > > 1               1                       0
+> > >
+> > > If a page flag is 0 and negated_flag is 1, the result would be 1 whic=
+h has
+> > > changed the page flag. It isn't making sense to me. Why the page flag=
+ bit
+> > > is being fliped?
+> > >
+> > > When Anrdei had proposed these masks, they seemed like a fancy way of
+> > > filtering inside kernel and it was straight forward to understand. Th=
+ese
+> > > masks would help his use cases for CRIU. So I'd included it. Please c=
+an you
+> > > elaborate what is the purpose of negation?
+> >
+> > The XOR is a way to invert the tested value of a flag (from positive
+> > to negative and the other way) without having the API with invalid
+> > values (with required_flags and excluded_flags you need to define a
+> > rule about what happens if a flag is present in both of the masks -
+> > either prioritise one mask over the other or reject the call).
+> > (Note: the XOR is applied only to the value of the flags for the
+> > purpose of testing page-selection criteria.)
+>
+> Micha=C5=82,
+>
+> Your API isn't much different from the current one, but it requires
+> a bit more brain activity for understanding.
+>
+> The current set of masks can be easy translated to the new one:
+> negated_flags =3D excluded_flags
+> required_flags_new =3D excluded_flags | required_flags
+>
+> As for invalid values, I think it is an advantage of the current API.
+> I mean we can easily detect invalid values and return EINVAL. With your
+> API, such mistakes will be undetectable.
+>
+> As for priorities, I don't see this problem here If I don't miss somethin=
+g.
+>
+> We can rewrite the code this way:
+> ```
+> if (required_mask && ((page_flags & required_mask) !=3D required_mask)
+>   skip page;
+> if (anyof_mask && !(page_flags & anyof_mask))
+>   skip page;
+> if (page_flags & excluded_mask)
+>   skip page;
+> ```
+>
+> I think the result is always the same no matter in what order each
+> mask is applied.
 
-I'm currently integrating your patches. I'm having a quick question
-below:
+Hi,
 
-On Wed, Feb 22, 2023 at 08:00:25PM -0500, Vincent Dagonneau wrote:
-> This commit adds tests for the limits added in a previous commit. The
-> limits are defined in decimal in stdint.h and as hexadecimal in the
-> tests (e.g. 0x7f = 127 or 0x80 = -128). Hopefully it catches some of the
-> most egregious mistakes.
-> 
-> As we rely on the compiler to provide __SIZEOF_LONG__, we also test
-> whether it is defined.
-> 
-> Signed-off-by: Vincent Dagonneau <v@vda.io>
-> Signed-off-by: Willy Tarreau <w@1wt.eu>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 53 ++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 882140508d56..d6886f900e79 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -561,6 +561,59 @@ int run_syscall(int min, int max)
->  		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
->  		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
->  		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
-> +		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,         (int8_t)          0x7f); break;
-> +		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,         (int8_t)          0x80); break;
-> +		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,        (uint8_t)         0xff); break;
-(...)
+I would not want the discussion to wander into easier/harder territory
+as that highty depends on experience one has. What I'm arguing about
+is the consistency of the API. Let me expand a bit on that.
 
-I'm just realizing now that the test was added at the end of the syscalls
-tests instead of the stdlib test (e.g. after memcmp()). Are you OK with me
-moving it there, given that it has nothing to do with syscalls but rather
-with what the nolibc itself provides ?
+We have two ways to look at the page_flags:
+ A. the field represents a *set of elements* (tags, attributes)
+present on the page;
+ B. the field represents a bitfield (structure; a fixed set of boolean
+fields having a value of 0 or 1)
 
-Thanks!
-Willy
+From A follows the include/exclude way of API design for matching the
+flags, and from B the matched mask (which flags to check) + value set
+(what values to require).
+
+My argument is that B is consistent with how the flags are used in the
+kernel: we don't have operations that add or remove flags, but we have
+operations that set or change their value.
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
