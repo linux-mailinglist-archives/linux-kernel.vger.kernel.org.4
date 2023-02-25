@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E82F6A2BDA
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 22:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E246A2BE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 22:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjBYVPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 16:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S229523AbjBYV2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 16:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYVPc (ORCPT
+        with ESMTP id S229452AbjBYV2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 16:15:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C33EB55;
-        Sat, 25 Feb 2023 13:15:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8E1B60B83;
-        Sat, 25 Feb 2023 21:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B57C433D2;
-        Sat, 25 Feb 2023 21:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677359730;
-        bh=BpARRTf6rfSnrbYTS3JhjbbD0rRqVzMgAzySjmTujaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eW/VvIWtrdKm6TFABFItNxDj9LjVdVhS3YUZob5rVdGDxAZYy3egVPnGfmoFFqokB
-         Hxv4vAXnWrLD6trFC6sRzBqRlPVgSX7yFw0b13ZhSK2N48eEwvVoWWhBQLJoVFVY9m
-         0HFDH+VkrTUx8MntpurXdow845n1yKfv4kDNGCyvxV/9WbSiaSZ2pAbUHRCXlZ/UwI
-         y5kaB8brNYmePy5lPUNvVt0q4hRERM7Ln51S+uSRPo9MUfshcRCNYDupPST7AQjYCc
-         pbgWJZRM9sE4f1V1Tb2DtXSIOvMRX1pHaYoHOuvramjm8p8L3AS6e2nA3NpMRE+wFV
-         f4GVKl0DXliQQ==
-Date:   Sat, 25 Feb 2023 14:15:27 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, paulb@nvidia.com, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net/sched: cls_api: Move call to
- tcf_exts_miss_cookie_base_destroy()
-Message-ID: <Y/p6b4rGiUqGHSsW@dev-arch.thelio-3990X>
-References: <20230224-cls_api-wunused-function-v1-1-12c77986dc2d@kernel.org>
- <Y/oycX7fMP8yJAdd@corigine.com>
+        Sat, 25 Feb 2023 16:28:45 -0500
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d500])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D031285B
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 13:28:41 -0800 (PST)
+Received: from sas8-838e1e461505.qloud-c.yandex.net (sas8-838e1e461505.qloud-c.yandex.net [IPv6:2a02:6b8:c1b:28d:0:640:838e:1e46])
+        by forward500b.mail.yandex.net (Yandex) with ESMTP id B688E5EA02;
+        Sun, 26 Feb 2023 00:28:38 +0300 (MSK)
+Received: by sas8-838e1e461505.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id WSZIpPQaBeA1-JjOV2dp5;
+        Sun, 26 Feb 2023 00:28:36 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1677360516;
+        bh=SHc+R/cTRGNnSQKTHxpZJZ2zZcUrDIgedP9JZjwRsMM=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=vm+H5gmeFIFVO1g601VkmuMwvWq2lerqoWIWIJe+1mVEdodWzFpQsZVZfx50L02NJ
+         yllPTGOqLLMyFMv3YRi0jzqE/AyX12e2dO+DcGpUnyJJaA8I10pqvH2aLf6bM/W6Bs
+         WrwiUjYsDVSu/myvPzvb5VKQ+mItChHR+lic+4QY=
+Authentication-Results: sas8-838e1e461505.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <8dab3b27-7282-f8bc-7d04-ca63c9b872cf@ya.ru>
+Date:   Sun, 26 Feb 2023 00:28:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/oycX7fMP8yJAdd@corigine.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/7] mm: vmscan: make global slab shrink lockless
+To:     Qi Zheng <zhengqi.arch@bytedance.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, shakeelb@google.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, dave@stgolabs.net,
+        penguin-kernel@i-love.sakura.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230223132725.11685-1-zhengqi.arch@bytedance.com>
+ <20230223132725.11685-3-zhengqi.arch@bytedance.com>
+ <Y/evb+PBeaahx9Os@sultan-box.localdomain>
+ <8049b6ed-435f-b518-f947-5516a514aec2@bytedance.com>
+ <b9593d94-057d-43d3-97e2-07cf83896041@ya.ru>
+ <ed9c844b-c431-df69-21ff-1b6dc6557b20@ya.ru>
+ <f20c6ae7-0dfe-1d4a-9589-05e378961f08@bytedance.com>
+ <1aa70926-af39-0ce1-ae23-d86deb74d1c6@ya.ru>
+ <74c4cf95-9506-98b3-9fc0-0814f63d5d7f@bytedance.com>
+ <5663b349-8f6f-874a-eb9b-63d3179dcab7@ya.ru>
+ <2ba86f45-f0a5-3a85-4aa6-f8beb50491b3@bytedance.com>
+Content-Language: en-US
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <2ba86f45-f0a5-3a85-4aa6-f8beb50491b3@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,45 +66,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 05:08:17PM +0100, Simon Horman wrote:
-> On Fri, Feb 24, 2023 at 11:18:49AM -0700, Nathan Chancellor wrote:
-> > When CONFIG_NET_CLS_ACT is disabled:
-> > 
-> >   ../net/sched/cls_api.c:141:13: warning: 'tcf_exts_miss_cookie_base_destroy' defined but not used [-Wunused-function]
-> >     141 | static void tcf_exts_miss_cookie_base_destroy(struct tcf_exts *exts)
-> >         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Due to the way the code is structured, it is possible for a definition
-> > of tcf_exts_miss_cookie_base_destroy() to be present without actually
-> > being used. Its single callsite is in an '#ifdef CONFIG_NET_CLS_ACT'
-> > block but a definition will always be present in the file. The version
-> > of tcf_exts_miss_cookie_base_destroy() that actually does something
-> > depends on CONFIG_NET_TC_SKB_EXT, so the stub function is used in both
-> > CONFIG_NET_CLS_ACT=n and CONFIG_NET_CLS_ACT=y + CONFIG_NET_TC_SKB_EXT=n
-> > configurations.
-> > 
-> > Move the call to tcf_exts_miss_cookie_base_destroy() in
-> > tcf_exts_destroy() out of the '#ifdef CONFIG_NET_CLS_ACT', so that it
-> > always appears used to the compiler, while not changing any behavior
-> > with any of the various configuration combinations.
-> > 
-> > Fixes: 80cd22c35c90 ("net/sched: cls_api: Support hardware miss to tc action")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On 25.02.2023 19:37, Qi Zheng wrote:
 > 
-> Thanks Nathan,
 > 
-> I think the #ifdefs in this file could do with some work.
-
-Yes, it is definitely an eye sore. I thought about cleaning it up but it
-felt like net-next material to me, plus I have no other interest in this
-code other than making the warning in my builds go away, if I am being
-honest :)
-
-> But as a fix this looks good to me.
+> On 2023/2/26 00:17, Kirill Tkhai wrote:
+>> On 25.02.2023 18:57, Qi Zheng wrote:
+>>>
+> <...>
+>>> How about this?
+>>>>>
+>>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>>> index ffddbd204259..9d8c53075298 100644
+>>>>> --- a/mm/vmscan.c
+>>>>> +++ b/mm/vmscan.c
+>>>>> @@ -1012,7 +1012,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>                                    int priority)
+>>>>>    {
+>>>>>           unsigned long ret, freed = 0;
+>>>>> -       struct shrinker *shrinker;
+>>>>> +       struct shrinker *shrinker = NULL;
+>>>>>           int srcu_idx, generation;
+>>>>>
+>>>>>           /*
+>>>>> @@ -1025,11 +1025,15 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>           if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
+>>>>>                   return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>>
+>>>>> +again:
+>>>>>           srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>>
+>>>>>           generation = atomic_read(&shrinker_srcu_generation);
+>>>>> -       list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>>> -                                srcu_read_lock_held(&shrinker_srcu)) {
+>>>>> +       if (!shrinker)
+>>>>> +               shrinker = list_entry_rcu(shrinker_list.next, struct shrinker, list);
+>>>>> +       else
+>>>>> +               shrinker = list_entry_rcu(shrinker->list.next, struct shrinker, list);
+>>>>> +       list_for_each_entry_from_rcu(shrinker, &shrinker_list, list) {
+>>>>>                   struct shrink_control sc = {
+>>>>>                           .gfp_mask = gfp_mask,
+>>>>>                           .nid = nid,
+>>>>> @@ -1042,8 +1046,9 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>                   freed += ret;
+>>>>>
+>>>>>                   if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>>> -                       freed = freed ? : 1;
+>>>>> -                       break;
+>>>>> +                       srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>
+>> After SRCU in unlocked we can't believe @shrinker anymore. So, above list_entry_rcu(shrinker->list.next)
+>> dereferences some random memory.
 > 
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Indeed.
+> 
+>>
+>>>>> +                       cond_resched();
+>>>>> +                       goto again;
+>>>>>                   }
+>>>>>           }
+>>>>>
+>>>>>>
+>>>>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>>>>> index 27ef9946ae8a..0b197bba1257 100644
+>>>>>> --- a/mm/vmscan.c
+>>>>>> +++ b/mm/vmscan.c
+>>>>>> @@ -204,6 +204,7 @@ static void set_task_reclaim_state(struct task_struct *task,
+>>>>>>     LIST_HEAD(shrinker_list);
+>>>>>>     DEFINE_MUTEX(shrinker_mutex);
+>>>>>>     DEFINE_SRCU(shrinker_srcu);
+>>>>>> +static atomic_t shrinker_srcu_generation = ATOMIC_INIT(0);
+>>>>>>       #ifdef CONFIG_MEMCG
+>>>>>>     static int shrinker_nr_max;
+>>>>>> @@ -782,6 +783,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>>>>         debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>>>>         mutex_unlock(&shrinker_mutex);
+>>>>>>     +    atomic_inc(&shrinker_srcu_generation);
+>>>>>>         synchronize_srcu(&shrinker_srcu);
+>>>>>>           debugfs_remove_recursive(debugfs_entry);
+>>>>>> @@ -799,6 +801,7 @@ EXPORT_SYMBOL(unregister_shrinker);
+>>>>>>      */
+>>>>>>     void synchronize_shrinkers(void)
+>>>>>>     {
+>>>>>> +    atomic_inc(&shrinker_srcu_generation);
+>>>>>>         synchronize_srcu(&shrinker_srcu);
+>>>>>>     }
+>>>>>>     EXPORT_SYMBOL(synchronize_shrinkers);
+>>>>>> @@ -908,18 +911,19 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>>>     {
+>>>>>>         struct shrinker_info *info;
+>>>>>>         unsigned long ret, freed = 0;
+>>>>>> -    int srcu_idx;
+>>>>>> -    int i;
+>>>>>> +    int srcu_idx, generation;
+>>>>>> +    int i = 0;
+>>>>>>           if (!mem_cgroup_online(memcg))
+>>>>>>             return 0;
+>>>>>> -
+>>>>>> +again:
+>>>>>>         srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>>>         info = shrinker_info_srcu(memcg, nid);
+>>>>>>         if (unlikely(!info))
+>>>>>>             goto unlock;
+>>>>>>     -    for_each_set_bit(i, info->map, info->map_nr_max) {
+>>>>>> +    generation = atomic_read(&shrinker_srcu_generation);
+>>>>>> +    for_each_set_bit_from(i, info->map, info->map_nr_max) {
+>>>>>>             struct shrink_control sc = {
+>>>>>>                 .gfp_mask = gfp_mask,
+>>>>>>                 .nid = nid,
+>>>>>> @@ -965,6 +969,11 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>>>>>>                     set_shrinker_bit(memcg, nid, i);
+>>>>>>             }
+>>>>>>             freed += ret;
+>>>>>> +
+>>>>>> +        if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>>>> +            srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>>
+>>>>> Maybe we can add the following code here, so as to avoid repeating the
+>>>>> current id and avoid triggering softlockup:
+>>>>>
+>>>>>               i++;
+>>
+>> This is OK.
+>>
+>>>>>               cond_resched();
+>>
+>> Possible, existing cond_resched() in do_shrink_slab() is enough.
+> 
+> Yeah.
+> 
+> I will add this patch in the next version. May I mark you as the author
+> of this patch?
 
-Thanks for the quick review!
+I think, yes
 
-Cheers,
-Nathan
+>>
+>>> And this. :)
+>>>
+>>> Thanks,
+>>> Qi
+>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Qi
+>>>>>
+>>>>>> +            goto again;
+>>>>>> +        }
+>>>>>>         }
+>>>>>>     unlock:
+>>>>>>         srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>>> @@ -1004,7 +1013,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>>     {
+>>>>>>         unsigned long ret, freed = 0;
+>>>>>>         struct shrinker *shrinker;
+>>>>>> -    int srcu_idx;
+>>>>>> +    int srcu_idx, generation;
+>>>>>>           /*
+>>>>>>          * The root memcg might be allocated even though memcg is disabled
+>>>>>> @@ -1017,6 +1026,7 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>>             return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
+>>>>>>           srcu_idx = srcu_read_lock(&shrinker_srcu);
+>>>>>> +    generation = atomic_read(&shrinker_srcu_generation);
+>>>>>>           list_for_each_entry_srcu(shrinker, &shrinker_list, list,
+>>>>>>                      srcu_read_lock_held(&shrinker_srcu)) {
+>>>>>> @@ -1030,6 +1040,11 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
+>>>>>>             if (ret == SHRINK_EMPTY)
+>>>>>>                 ret = 0;
+>>>>>>             freed += ret;
+>>>>>> +
+>>>>>> +        if (atomic_read(&shrinker_srcu_generation) != generation) {
+>>>>>> +            freed = freed ? : 1;
+>>>>>> +            break;
+>>>>>> +        }
+>>>>>>         }
+>>>>>>           srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>>>>>>
+>>>>>>
+>>>>>
+>>>>
+>>>
+>>
+> 
+
