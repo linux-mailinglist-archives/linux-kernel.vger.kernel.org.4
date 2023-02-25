@@ -2,166 +2,386 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EC76A2B60
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B0C6A2B66
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjBYSrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 13:47:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
+        id S229652AbjBYS7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 13:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYSrG (ORCPT
+        with ESMTP id S229512AbjBYS7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 13:47:06 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EDC17148;
-        Sat, 25 Feb 2023 10:47:05 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id bg11so2144297oib.5;
-        Sat, 25 Feb 2023 10:47:05 -0800 (PST)
+        Sat, 25 Feb 2023 13:59:37 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2147DD530;
+        Sat, 25 Feb 2023 10:59:36 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id ff4so1808336qvb.2;
+        Sat, 25 Feb 2023 10:59:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mU8ouxaMVERSCUbXEf9OwfJ4PuquWDWLaI3fKf0e7O0=;
-        b=i2gR2OWZzLr/IrXj7DUSMkK5l8xThJQ+UBmRFwSBdr0293XSFQKpoTBRObmlutJn3l
-         akOz0p9AyqFE3HfBxbrrWvgHimJDoWdXkPCrMyhII+GrpgMM6ICsOH1mi8map0ukXw3M
-         tYdfUw05uyL27NCkoo45uWOoqi52ojqYSONUh3dm/39O8BZmb0I/PpVIXwqrqcKCbQpU
-         ms7WV52PrRkQfuwe/092kqnqCZzbfYzs23WcfIeKPTToClGRLgGMwgc5a3LWS3WTQ0FR
-         Su3YAOz1sYkADVnxEDIN5Qq/EJZPa1zr12aGQkiwqzu19FgWfEyEckgo5XzGqOCDfgv1
-         T7zQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rnqGVM0+Yl+LxrM8a64hnYzeIieuQSZyZkIUmez4wgc=;
+        b=jtpYSG8UuCzs2lueJ+I4mt1hz3X/+UlQPMLFGYdDLk1ixDpOckeFMO1yZHSFNpwGyA
+         AkldkQSHon2FgsWfs01yxN+clVsabwpEFTGTIuLp1vO0RuexziqNc9EMRCfKrFuaOnSb
+         UZcyI41Vk3ef1AY07yHWn439YNCC0TzULYZwRjNDSxWjxROhI02OBHWX8YMOXkLz6Q0w
+         BmaoqQZz5xPOS4taUocY4R2H6V3mZXNq3zukkSLPGn5Ljj+qtaSCzLfb2cmsmSlVHZ3P
+         37nf48ckL/lgosRIo+HBrdEQuF/0uPcG8sbWqS/cXCzIdjYjI1o4+HOot9Ldizws8siQ
+         mjZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mU8ouxaMVERSCUbXEf9OwfJ4PuquWDWLaI3fKf0e7O0=;
-        b=XW6Z7D76ClqIAkT8kX5WdfKTFrh0vl0ha0m6fxtR7v05EfGkh7emVIH2Ys/Jb68WuE
-         vJl50hRB90rpxUMhIEvrnlzwGscuOY+h7a4S2Cn3mG3MytlQfm2kJYYp11oixc93K+YF
-         RqsZyjNULm5QVpr+uVFelzMxgvyTNdBtgxUv3x1ZMia1ia9bPeRWA7+m8igeNJkgYSlL
-         FWWGmVIsUx0v+iAcqrBkc3pqT9klmUHQ5yOMKM5s6/c5N8fd8LaZsZqKs1wJjshF6eS0
-         YOecuNoSof/xAYllUWeY67HipcBxj41OXIMzVPwCa7Pw/ZSAfeApjl7gkYtQuQEXHp9d
-         /03Q==
-X-Gm-Message-State: AO0yUKUTYZEiEVddQGCAgLDCDcfuULAkPzLG3dvXT92zN1RoqZs8sb2p
-        rIIzbYYHWkxkpTGfqDJea/U=
-X-Google-Smtp-Source: AK7set8VkV7Xov5x1fGY/9JN477Pgs4zaXeT7d9Ep3yomVCmotjwktaMsPjW73v7lwJwTsd9my6GUQ==
-X-Received: by 2002:a05:6808:199:b0:37f:8682:9383 with SMTP id w25-20020a056808019900b0037f86829383mr7756010oic.9.1677350824676;
-        Sat, 25 Feb 2023 10:47:04 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id eb3-20020a056808634300b0037d8c2ff0acsm1162023oib.12.2023.02.25.10.47.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 10:47:03 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Feb 2023 10:47:02 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
-Message-ID: <20230225184702.GA3587246@roeck-us.net>
-References: <20220428205116.861003-1-yury.norov@gmail.com>
- <20220428205116.861003-4-yury.norov@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rnqGVM0+Yl+LxrM8a64hnYzeIieuQSZyZkIUmez4wgc=;
+        b=r1JbeGTyZY1tTjpsQ+hnnmuBYsTTJHKewqqnbJomZoAGmEcw/ISsH4Laxlv9mS5/af
+         jHLfdL6INQ91foV4Qv+tnBn2NZgDevlEIBBzdb18fOZNeop3q+Oisvh1JxkhlqB46ZZT
+         dwPQGPNihUl3CzZ6BzZHeb1rOwUUSb9DqPdXGK7Ncqu+RRScYUTWJh4RtqHKrNrla8gX
+         kifUiy/zwl7NDGCsYoon+B5lbw+zCKwLxMcCUsyJU7/4FZIYWHdfaLxkR2umZ4HJ14mh
+         P/TaY9nb+uFP6F07XZ9PniQnhNwYdNfosczmDRFccE+6vYp4O/CttY+wLiPFL9tts9EA
+         oNQQ==
+X-Gm-Message-State: AO0yUKVBx/onThdaAT8bUgQzglk51yfSKcGG/dcqyKrM2pNsNjnC0N0P
+        wSZW+qjk6Z1v6jm66QDvjeU=
+X-Google-Smtp-Source: AK7set/A3VVFzyzUyqth9lpuuHI+GmZbtg9FQCX55/yzT6KGriXY/qrKxDKDXvC19iarDAdhc/Yu+w==
+X-Received: by 2002:a05:6214:2505:b0:56e:f8db:aeb8 with SMTP id gf5-20020a056214250500b0056ef8dbaeb8mr44608482qvb.3.1677351575117;
+        Sat, 25 Feb 2023 10:59:35 -0800 (PST)
+Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with ESMTPSA id w1-20020a05620a0e8100b0073b7568d998sm1672922qkm.2.2023.02.25.10.59.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Feb 2023 10:59:34 -0800 (PST)
+Message-ID: <0b105dca-c273-1fd2-339d-26e08b29c44c@gmail.com>
+Date:   Sat, 25 Feb 2023 13:59:33 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428205116.861003-4-yury.norov@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH net-next 6/7] net: sunhme: Consolidate mac address
+ initialization
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230222210355.2741485-1-seanga2@gmail.com>
+ <20230222210355.2741485-7-seanga2@gmail.com> <Y/pV6KDgopeiPEPo@corigine.com>
+From:   Sean Anderson <seanga2@gmail.com>
+In-Reply-To: <Y/pV6KDgopeiPEPo@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
-> Test newly added bitmap_{from,to}_arr64() functions similarly to
-> already existing bitmap_{from,to}_arr32() tests.
+On 2/25/23 13:39, Simon Horman wrote:
+> On Wed, Feb 22, 2023 at 04:03:54PM -0500, Sean Anderson wrote:
+>> The mac address initialization is braodly the same between PCI and SBUS,
+>> and one was clearly copied from the other. Consolidate them. We still have
+>> to have some ifdefs because pci_(un)map_rom is only implemented for PCI,
+>> and idprom is only implemented for SPARC.
+>>
+>> Signed-off-by: Sean Anderson <seanga2@gmail.com>
 > 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-
-Ever since this test is in the tree, several of my boot tests show
-lots of messages such as
-
-test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
-test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
-test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
-...
-test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
-test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
-
-but then:
-
-test_bitmap: all 6550 tests passed
-
-The message suggests an error, given that it is displayed with pr_err,
-but the summary suggests otherwise.
-
-Is the message just noise, or is there a problem ?
-
-Thanks,
-Guenter
-
-> ---
->  lib/test_bitmap.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+> Overall this looks to correctly move code around as suggest.
+> Some minor nits and questions inline.
 > 
-> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-> index 0c82f07f74fc..d5923a640457 100644
-> --- a/lib/test_bitmap.c
-> +++ b/lib/test_bitmap.c
-> @@ -585,6 +585,30 @@ static void __init test_bitmap_arr32(void)
->  	}
->  }
->  
-> +static void __init test_bitmap_arr64(void)
-> +{
-> +	unsigned int nbits, next_bit;
-> +	u64 arr[EXP1_IN_BITS / 64];
-> +	DECLARE_BITMAP(bmap2, EXP1_IN_BITS);
-> +
-> +	memset(arr, 0xa5, sizeof(arr));
-> +
-> +	for (nbits = 0; nbits < EXP1_IN_BITS; ++nbits) {
-> +		memset(bmap2, 0xff, sizeof(arr));
-> +		bitmap_to_arr64(arr, exp1, nbits);
-> +		bitmap_from_arr64(bmap2, arr, nbits);
-> +		expect_eq_bitmap(bmap2, exp1, nbits);
-> +
-> +		next_bit = find_next_bit(bmap2, round_up(nbits, BITS_PER_LONG), nbits);
-> +		if (next_bit < round_up(nbits, BITS_PER_LONG))
-> +			pr_err("bitmap_copy_arr64(nbits == %d:"
-> +				" tail is not safely cleared: %d\n", nbits, next_bit);
-> +
-> +		if (nbits < EXP1_IN_BITS - 64)
-> +			expect_eq_uint(arr[DIV_ROUND_UP(nbits, 64)], 0xa5a5a5a5);
-> +	}
-> +}
-> +
->  static void noinline __init test_mem_optimisations(void)
->  {
->  	DECLARE_BITMAP(bmap1, 1024);
-> @@ -852,6 +876,7 @@ static void __init selftest(void)
->  	test_copy();
->  	test_replace();
->  	test_bitmap_arr32();
-> +	test_bitmap_arr64();
->  	test_bitmap_parse();
->  	test_bitmap_parselist();
->  	test_bitmap_printlist();
-> -- 
-> 2.32.0
+>> ---
+>>
+>>   drivers/net/ethernet/sun/sunhme.c | 284 ++++++++++++++----------------
+>>   1 file changed, 135 insertions(+), 149 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+>> index 75993834729a..9b55adbe61df 100644
+>> --- a/drivers/net/ethernet/sun/sunhme.c
+>> +++ b/drivers/net/ethernet/sun/sunhme.c
+>> @@ -34,6 +34,7 @@
+>>   #include <linux/mm.h>
+>>   #include <linux/module.h>
+>>   #include <linux/netdevice.h>
+>> +#include <linux/of.h>
+>>   #include <linux/random.h>
+>>   #include <linux/skbuff.h>
+>>   #include <linux/slab.h>
+>> @@ -47,7 +48,6 @@
+>>   #include <asm/oplib.h>
+>>   #include <asm/prom.h>
+>>   #include <linux/of_device.h>
+>> -#include <linux/of.h>
+>>   #endif
+>>   #include <linux/uaccess.h>
+>>   
 > 
+> nit: The above hunks don't seem related to the rest of this patch.
+
+I think I originally included this because I referenced some of_ thing from non-sparc
+code. But it seems like that got refactored out.
+
+>> @@ -2313,6 +2313,133 @@ static const struct net_device_ops hme_netdev_ops = {
+>>   	.ndo_validate_addr	= eth_validate_addr,
+>>   };
+>>   
+>> +#ifdef CONFIG_PCI
+>> +static int is_quattro_p(struct pci_dev *pdev)
+> 
+> nit: I know you are moving code around here,
+>       and likewise for many of my other comments.
+>       But I think bool would be a better return type for this function.
+
+I agree. I will address these sorts of things in a separate patch.
+
+>> +{
+>> +	struct pci_dev *busdev = pdev->bus->self;
+>> +	struct pci_dev *this_pdev;
+>> +	int n_hmes;
+>> +
+>> +	if (!busdev || busdev->vendor != PCI_VENDOR_ID_DEC ||
+>> +	    busdev->device != PCI_DEVICE_ID_DEC_21153)
+>> +		return 0;
+>> +
+>> +	n_hmes = 0;
+>> +	list_for_each_entry(this_pdev, &pdev->bus->devices, bus_list) {
+>> +		if (this_pdev->vendor == PCI_VENDOR_ID_SUN &&
+>> +		    this_pdev->device == PCI_DEVICE_ID_SUN_HAPPYMEAL)
+>> +			n_hmes++;
+>> +	}
+>> +
+>> +	if (n_hmes != 4)
+>> +		return 0;
+>> +
+>> +	return 1;
+>> +}
+>> +
+>> +/* Fetch MAC address from vital product data of PCI ROM. */
+>> +static int find_eth_addr_in_vpd(void __iomem *rom_base, int len, int index, unsigned char *dev_addr)
+> 
+> nit: At some point it might be better
+>       to update this function to return 0 on success and
+>       an error otherwise.
+> 
+>> +{
+>> +	int this_offset;
+>> +
+>> +	for (this_offset = 0x20; this_offset < len; this_offset++) {
+>> +		void __iomem *p = rom_base + this_offset;
+>> +
+>> +		if (readb(p + 0) != 0x90 ||
+>> +		    readb(p + 1) != 0x00 ||
+>> +		    readb(p + 2) != 0x09 ||
+>> +		    readb(p + 3) != 0x4e ||
+>> +		    readb(p + 4) != 0x41 ||
+>> +		    readb(p + 5) != 0x06)
+>> +			continue;
+>> +
+>> +		this_offset += 6;
+>> +		p += 6;
+>> +
+>> +		if (index == 0) {
+>> +			int i;
+>> +
+>> +			for (i = 0; i < 6; i++)
+> 
+> nit: This could be,
+> 
+> 			for (int i = 0; i < 6; i++)
+
+That's kosher now?
+
+>> +				dev_addr[i] = readb(p + i);
+>> +			return 1;
+>> +		}
+>> +		index--;
+>> +	}
+> 
+> nit: blank line
+
+OK
+
+>> +	return 0;
+>> +}
+>> +
+>> +static void __maybe_unused get_hme_mac_nonsparc(struct pci_dev *pdev,
+>> +						unsigned char *dev_addr)
+>> +{
+>> +	size_t size;
+>> +	void __iomem *p = pci_map_rom(pdev, &size);
+> 
+> nit: reverse xmas tree.
+
+OK
+
+>> +
+>> +	if (p) {
+>> +		int index = 0;
+>> +		int found;
+>> +
+>> +		if (is_quattro_p(pdev))
+>> +			index = PCI_SLOT(pdev->devfn);
+>> +
+>> +		found = readb(p) == 0x55 &&
+>> +			readb(p + 1) == 0xaa &&
+>> +			find_eth_addr_in_vpd(p, (64 * 1024), index, dev_addr);
+>> +		pci_unmap_rom(pdev, p);
+>> +		if (found)
+>> +			return;
+>> +	}
+>> +
+>> +	/* Sun MAC prefix then 3 random bytes. */
+>> +	dev_addr[0] = 0x08;
+>> +	dev_addr[1] = 0x00;
+>> +	dev_addr[2] = 0x20;
+>> +	get_random_bytes(&dev_addr[3], 3);
+>> +}
+>> +#endif /* !(CONFIG_SPARC) */
+> 
+> Should this be CONFIG_PCI ?
+
+No idea. I think I will just remove it...
+
+>> @@ -2346,34 +2472,11 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
+>>   		return -ENOMEM;
+>>   	SET_NETDEV_DEV(dev, &op->dev);
+>>   
+>> -	/* If user did not specify a MAC address specifically, use
+>> -	 * the Quattro local-mac-address property...
+>> -	 */
+>> -	for (i = 0; i < 6; i++) {
+>> -		if (macaddr[i] != 0)
+>> -			break;
+>> -	}
+>> -	if (i < 6) { /* a mac address was given */
+>> -		for (i = 0; i < 6; i++)
+>> -			addr[i] = macaddr[i];
+>> -		eth_hw_addr_set(dev, addr);
+>> -		macaddr[5]++;
+>> -	} else {
+>> -		const unsigned char *addr;
+>> -		int len;
+>> -
+>> -		addr = of_get_property(dp, "local-mac-address", &len);
+>> -
+>> -		if (qfe_slot != -1 && addr && len == ETH_ALEN)
+>> -			eth_hw_addr_set(dev, addr);
+>> -		else
+>> -			eth_hw_addr_set(dev, idprom->id_ethaddr);
+>> -	}
+>> -
+>>   	hp = netdev_priv(dev);
+>> -
+>> +	hp->dev = dev;
+> 
+> I'm not clear how this change relates to the rest of the patch.
+
+This mirrors the initialization on the PCI side. Makes their equivalence
+more obvious.
+
+>>   	hp->happy_dev = op;
+>>   	hp->dma_dev = &op->dev;
+>> +	happy_meal_addr_init(hp, dp, qfe_slot);
+>>   
+>>   	spin_lock_init(&hp->happy_lock);
+>>   
+>> @@ -2451,7 +2554,6 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
+>>   
+>>   	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
+>>   
+>> -	hp->dev = dev;
+>>   	dev->netdev_ops = &hme_netdev_ops;
+>>   	dev->watchdog_timeo = 5*HZ;
+>>   	dev->ethtool_ops = &hme_ethtool_ops;
+> 
+> ...
+> 
+>>   static int happy_meal_pci_probe(struct pci_dev *pdev,
+>>   				const struct pci_device_id *ent)
+>>   {
+>>   	struct quattro *qp = NULL;
+>> -#ifdef CONFIG_SPARC
+>> -	struct device_node *dp;
+> 
+> Was dp not being initialised previously a bug?
+
+No. All uses are protected by CONFIG_SPARC. But passing garbage to other
+functions is bad form.
+
+>> -#endif
+>> +	struct device_node *dp = NULL;
+> 
+> nit: I think it would be good to move towards, rather than away from,
+> reverse xmas tree here.
+
+Which is why this line comes first ;)
+
+But I am not a fan of introducing churn just to organize line lengths. So the
+following will stay as-is until it needs to be reworked further.
+
+>>   	struct happy_meal *hp;
+>>   	struct net_device *dev;
+>>   	void __iomem *hpreg_base;
+>>   	struct resource *hpreg_res;
+>> -	int i, qfe_slot = -1;
+>> +	int qfe_slot = -1;
+>>   	char prom_name[64];
+>> -	u8 addr[ETH_ALEN];
+>>   	int err;
+>>   
+>>   	/* Now make sure pci_dev cookie is there. */
+> 
+> ...
+> 
+>> @@ -2680,35 +2695,7 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+>>   		goto err_out_clear_quattro;
+>>   	}
+>>   
+>> -	for (i = 0; i < 6; i++) {
+>> -		if (macaddr[i] != 0)
+>> -			break;
+>> -	}
+>> -	if (i < 6) { /* a mac address was given */
+>> -		for (i = 0; i < 6; i++)
+>> -			addr[i] = macaddr[i];
+>> -		eth_hw_addr_set(dev, addr);
+>> -		macaddr[5]++;
+>> -	} else {
+>> -#ifdef CONFIG_SPARC
+>> -		const unsigned char *addr;
+>> -		int len;
+>> -
+>> -		if (qfe_slot != -1 &&
+>> -		    (addr = of_get_property(dp, "local-mac-address", &len))
+>> -			!= NULL &&
+>> -		    len == 6) {
+>> -			eth_hw_addr_set(dev, addr);
+>> -		} else {
+>> -			eth_hw_addr_set(dev, idprom->id_ethaddr);
+>> -		}
+>> -#else
+>> -		u8 addr[ETH_ALEN];
+>> -
+>> -		get_hme_mac_nonsparc(pdev, addr);
+>> -		eth_hw_addr_set(dev, addr);
+>> -#endif
+>> -	}
+>> +	happy_meal_addr_init(hp, dp, qfe_slot);
+>>   
+>>   	/* Layout registers. */
+>>   	hp->gregs      = (hpreg_base + 0x0000UL);
+>> @@ -2757,7 +2744,6 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+>>   	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
+>>   
+>>   	hp->irq = pdev->irq;
+>> -	hp->dev = dev;
+>>   	dev->netdev_ops = &hme_netdev_ops;
+>>   	dev->watchdog_timeo = 5*HZ;
+>>   	dev->ethtool_ops = &hme_ethtool_ops;
+>> -- 
+>> 2.37.1
+>>
+
+--Sean
