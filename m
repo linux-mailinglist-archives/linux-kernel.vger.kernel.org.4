@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489C46A2578
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A566A2579
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 01:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjBYAZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Feb 2023 19:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S229612AbjBYA1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Feb 2023 19:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjBYAZ1 (ORCPT
+        with ESMTP id S229489AbjBYA1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:25:27 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB7A63A3E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53916ab0c6bso24305687b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
+        Fri, 24 Feb 2023 19:27:24 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0956F03A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:27:23 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id u20so467928pfm.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 16:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qxTzs0Lg6/y7hSm8HzByaKGhxqTF5zrCh6SMRyb4Xys=;
-        b=rR8iucnpz39sq+JL+puu6LgpfB7M3C+cPq6RL2Cd7ujgZ1QMmvOs5fDHUvMxhUNaAN
-         m+jJIWSikfUzSfKPRAIT8JMCduOV2/04wUjm55dpV2OJE+r4iI58BPF2ph0q42BEWAfD
-         Ob1KKfKcVlgDfo5IIzWsjda6QXXjqDFUnOIOCw9aCzZX1e/TD/wef0AiOwgqXfmhQl6d
-         e67QsI0T779pBDpoqbsMRhzKTyAqI5Gw/d5iNLqVyNmq0zrDBh8cH9kObEvsXjx9hbSE
-         ZYH7amxQ5zHO8Xy00sFXdtz8EXt06QqBLOGAK7OFsK8EZiUM6tBTgVLlLEsTzQvpu3+k
-         2MTA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7imomsGhYVx3/JSl/FyH9/lFO1lKu8iotm2Oy6VkN0w=;
+        b=aeKg7DhtLl97cOgt2SUx5er1ahPkr0ANXeTCJenpj/Yyhgk+iDkLe8wPpw9TXXBHdF
+         uzNREuvOK8g6z9GPpss98jZmBh33akwkaw8F4wHNCXsGR3PkR52TF8MoL6ESWuWcKDq7
+         pOOAGfhiTDnfA1X4PEyCrrvgHWGg0tkvBl3qjXPdViSnDW/YCnt07BaUAGJ3HX3tlJ4o
+         Jm0SztEOMb1GSkLjGKx4M6Hv+u3NxWJw8/Uf/81xIZjBMGWvKKFeiq3sph810A4zxrri
+         /BfapUw/6qDSCoOT0tpaDT0ppfOOGuVoRo7Q5vb1JQnYuuF7JWu5bsk49JMBrEJMacoR
+         +ZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qxTzs0Lg6/y7hSm8HzByaKGhxqTF5zrCh6SMRyb4Xys=;
-        b=m/daAfhdfRXc9xG8PjbWg5i1gGJp0PbyMWj5k1tu6y1G9lrWSRXFzvBtHOc7pNVsqK
-         vSyx31knBhRVFWHPNhu+UdRK2gmSdKqj8uGNxpdCCefjDYEyPEtJ3JN/kOSvL5XfZUw+
-         tHH9lHca9cRlrqZkQReFcpysI3UjKGGy466VnD71nSjN35dNOYuQNSO0fIlMxc4x/rrW
-         cX7JaLHGsURpby/vXKfCQdSlIRGCeur7W5E6UlL7vePOCK5wvp18Nze2lFadJzlvhrV5
-         +WpfCROYaEFhMY+wPXvP2Q3t7BuYrukhGKqy1In56rcQEvvG8r6k8OjOBH90g2fazQzO
-         2bZg==
-X-Gm-Message-State: AO0yUKUYRbCM4rRu29fZx45F52VqyHjhObuvlDq0iRIXMbxlx+VLezSL
-        zjvRSNovSS6FjKoLV5yQIrK0BF2nVpdFVVP3wcBT9w==
-X-Google-Smtp-Source: AK7set9/s6MqiL5vrYzNlW80C1p9m82ZTZ7l6K+tReN5z/8pigW+XUSm6O293ENFGUsTUi1mssyjE4IKHzYx7ehFHuI=
-X-Received: by 2002:a81:4425:0:b0:52f:69d:cc75 with SMTP id
- r37-20020a814425000000b0052f069dcc75mr5532545ywa.6.1677284722871; Fri, 24 Feb
- 2023 16:25:22 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7imomsGhYVx3/JSl/FyH9/lFO1lKu8iotm2Oy6VkN0w=;
+        b=ogGOlWQhNiVR1SdI58nDQAaQkJVHrtznULeIlyHbCxgpooIFgpPRm+mVoHMo+4+LGq
+         Gb1e5mwacXhUDEgEcawex3VSpDv/Exzl2UDnoqtxyWa/Tgqx3cM6ng6iwNHyFS+KQIDE
+         YEOLYfqs+egw4QEsAPOx9BrnAVrolMitSWC0+qOWEf5ZR9Lsveh75L3tmJvFvZ1y3eHl
+         Y5Jcrnnrb1trLCPP5ZpISQIh0m7m1nhNBDhWxGIbq2ucUgjHkPR7UJR90VMZuLVDASbh
+         cKHNKERpPNvbxZoUU8zrIbOydx3hWvqWjlzbt/Lie3XggPNM4hYwf51YhWMSZklB5scp
+         V9ZQ==
+X-Gm-Message-State: AO0yUKUxKxQ7dnzp1YVgbHP4FzE4qx5KLfJidQEUPOBBRY3Hiym1UTex
+        R0xYkTOZJiJ/RLKboJRaUeU=
+X-Google-Smtp-Source: AK7set/35G++W+DHFJI+SBH6YN76kPsYA33MUom6cAhbS1azanquMiDSLqkalkke99nXZ1T5CcYBuQ==
+X-Received: by 2002:a05:6a00:2302:b0:594:26a7:cbd2 with SMTP id h2-20020a056a00230200b0059426a7cbd2mr1842234pfh.8.1677284842633;
+        Fri, 24 Feb 2023 16:27:22 -0800 (PST)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id u23-20020aa78397000000b0058bca264253sm119518pfm.126.2023.02.24.16.27.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 16:27:21 -0800 (PST)
+Date:   Fri, 24 Feb 2023 16:27:19 -0800
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     Colin Walters <walters@verbum.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>, bristot@redhat.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexander Larsson <alexl@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, bmasney@redhat.com
+Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
+Message-ID: <Y/lV53Dc+zwj2dla@gmail.com>
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+ <20230124015348.6rvic5g6ymsfvj4e@senku>
+ <87h6wgcrv6.fsf@redhat.com>
+ <20230125152847.wr443tggzb3no6mg@senku>
+ <871qnibmqa.fsf@redhat.com>
+ <ceac106b-ddac-4ee6-bfdf-1505cc699eaa@app.fastmail.com>
+ <20230129165812.sqypj6nzam7o33lf@wittgenstein>
+ <e637b476-6cc4-4d7f-bab2-4f623617a8ee@app.fastmail.com>
+ <20230130095324.p2gnsvdnpgfehgqt@wittgenstein>
+ <20230130100602.elyvs6oorfzukjwh@wittgenstein>
 MIME-Version: 1.0
-References: <02cf36b9-6526-576b-1fd3-a59b67c8c123@linuxfoundation.org> <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 25 Feb 2023 08:25:11 +0800
-Message-ID: <CABVgOSnqZAuWZJpER4B_hPHorj3DZSpv+ygudC-wSVZ5-o14uQ@mail.gmail.com>
-Subject: Re: [GIT PULL] KUnit next update for Linux 6.3-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001e12c905f57b48cc"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20230130100602.elyvs6oorfzukjwh@wittgenstein>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,170 +86,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001e12c905f57b48cc
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Jan 30, 2023 at 11:06:02AM +0100, Christian Brauner wrote:
+> On Mon, Jan 30, 2023 at 10:53:31AM +0100, Christian Brauner wrote:
+> > On Sun, Jan 29, 2023 at 01:12:45PM -0500, Colin Walters wrote:
+> > > 
+> > > 
+> > > On Sun, Jan 29, 2023, at 11:58 AM, Christian Brauner wrote:
+> > > > On Sun, Jan 29, 2023 at 08:59:32AM -0500, Colin Walters wrote:
+> > > >> 
+> > > >> 
+> > > >> On Wed, Jan 25, 2023, at 11:30 AM, Giuseppe Scrivano wrote:
+> > > >> > 
+> > > >> > After reading some comments on the LWN.net article, I wonder if
+> > > >> > PR_HIDE_SELF_EXE should apply to CAP_SYS_ADMIN in the initial user
+> > > >> > namespace or if in this case root should keep the privilege to inspect
+> > > >> > the binary of a process.  If a container runs with that many privileges
+> > > >> > then it has already other ways to damage the host anyway.
+> > > >> 
+> > > >> Right, that's what I was trying to express with the "make it work the same as map_files".  Hiding the entry entirely even for initial-namespace-root (real root) seems like it's going to potentially confuse profiling/tracing/debugging tools for no good reason.
+> > > >
+> > > > If this can be circumvented via CAP_SYS_ADMIN 
+> > > 
+> > > To be clear, I'm proposing CAP_SYS_ADMIN in the current user namespace at the time of the prctl().  (Or if keeping around a reference just for this is too problematic, perhaps hardcoding to the init ns)
+> > 
+> > Oh no, I fully understand. The point was that the userspace fix protects
+> > even against attackers with CAP_SYS_ADMIN in init_user_ns. And that was
+> > important back then and is still relevant today for some workloads.
+> > 
+> > For unprivileged containers where host and container are separate by a
+> > meaningful user namespace boundary this whole mitigation is irrelevant
+> > as the binary can't be overwritten.
+> > 
+> > > 
+> > > A process with CAP_SYS_ADMIN in a child namespace would still not be able to read the binary.
+> > > 
+> > > > then this mitigation
+> > > > becomes immediately way less interesting because the userspace
+> > > > mitigation we came up with protects against CAP_SYS_ADMIN as well
+> > > > without any regression risk. 
+> > > 
+> > > The userspace mitigation here being "clone self to memfd"?  But that's a sufficiently ugly workaround that it's created new problems; see https://lwn.net/Articles/918106/
+> > 
+> > But this is a problem with the memfd api not with the fix. Following the
+> > thread the ability to create executable memfds will stay around. As it
+> > should be given how long this has been supported. And they have backward
+> > compatibility in mind which is great.
+> 
+> Following up from yesterday's promise to check with the criu org I'm
+> part of: this is going to break criu unforunately as it dumps (and
+> restores) /proc/self/exe. Even with an escape hatch we'd still risk
+> breaking it. Whereas again, the memfd solution doesn't cause those
+> issues.
+> 
+> Don't get me wrong it's pretty obvious that I was pretty supportive of
+> this fix especially because it looked rather simple but this is turning
+> out to be less simple than we tought. I don't think that this is worth
+> it given the functioning fixes we already have.
 
-On Sat, 25 Feb 2023 at 07:23, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Feb 21, 2023 at 5:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >
-> > This KUnit update for Linux 6.3-rc1 consists of cleanups, new features,
-> > and documentation updates:
->
-> Hmm. I have not actually bisected this or tried to otherwise figure
-> out exactly what is wrong, but the kunit code ends up being really
-> annoying for my build testing.
+btw: can we use PR_SET_MM_EXE_FILE or PR_SET_MM_MAP (prctl_map.exe_fd) to
+set a dummy exe. Will it have the required effect?
 
-This will be due to 7170b7ed6acb ("kunit: Add "hooks" to call into
-KUnit when it's built as a module").
-
-The "hooks.o" file is special in that it needs to be built-in even
-when the other KUnit files are built as a module, and clearly the
-kbuild hackery for that has fallen apart.
-
->
-> In particular, if I do
->
->      make
->
-> repeatedly - ie with no other changes in between - the kunit code ends
-> up re-building itself for no apparent reason.
->
-> Which then causes a re-link and makes it all really slow.
->
-> Maybe I'm barking up the wrong tree, but just do
->
->    make allmodconfig
->
-> and then do two plain "make"s in succession (feel free to add "-jXYZ"
-> to make it go much faster ;).
->
-> The second build - that shouldn't have to re-build anything - still does this:
->
->   CALL    scripts/checksyscalls.sh
->   DESCEND objtool
->   CHK     kernel/kheaders_data.tar.xz
->   CC      lib/kunit/hooks.o
->   AR      lib/built-in.a
->   CC      lib/kunit/hooks.o
->   AR      lib/kunit/lib.a
->   AR      built-in.a
->   AR      vmlinux.a
->   LD      vmlinux.o
->   ...
->
-> and it all takes much longer than an empty kernel build _should_ take.
-
-As best I can tell, this is kbuild getting very confused by the way
-we're adding lib/kunit/hooks.o directly in lib/Makefile (rather than
-going through lib/kunit/Makefile).
-
-Moving lib/kunit/hooks.c -> lib/kunit_hooks.c and adjusting the
-makefile to match _seems_ to fix it here:
----
-diff --git a/lib/Makefile b/lib/Makefile
-index 469be6240523..bb87df427cff 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -131,10 +131,8 @@ obj-$(CONFIG_KUNIT) += kunit/
-# Include the KUnit hooks unconditionally. They'll compile to nothing if
-# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
-# function pointers) which need to be built-in even when KUnit is a module.
--ifeq ($(CONFIG_KUNIT), m)
--obj-y += kunit/hooks.o
--else
--obj-$(CONFIG_KUNIT) += kunit/hooks.o
-+ifdef CONFIG_KUNIT
-+obj-y += kunit_hooks.o
-endif
----
-
-Splitting the KUnit code up like that is a little bit ugly, so I'm
-open to any suggestions of how better to structure it.
-
-Regardless, I'll play around a bit and see if I can come up with
-anything better before sending that out.
-
-Sorry for the inconvenience!
-
--- David
-
---0000000000001e12c905f57b48cc
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCp
-qKvRNH0Rzmfp2fP9sc+jV9m0OX00tN7SSCUhn2J5kTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjUwMDI1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAPeDStx3iAnpH5IKWR4Mc
-OspuWCLheUSawkXqD06iO+1oRJDBQglNwSaiMXC9EmcdybOadEn4g83TRNSRWl4x1PTOcn/3FrVb
-yac78QAE/+VTmRhjaW4CQFbu/LzZuOLmLTscbe8tUhwBUH0uRQauWWjI2QrbB/9+9WbkZDbtw4Ie
-9fTpzwy0lp9MOt4wDY6TlO3+63eqJNlgxG7ct8Z7kJPg1/43pXy7Snwy6d1nVaO1DdxFI6Luvvjh
-NaIrASDpa7UA8EQ8uRxB/2yCak66Oha8zmDYMhjZKl6N3H9bwSpJeS/2oiwDwoUkxyrkTSPsSFfb
-A/GROgIbdvI3m2bd7w==
---0000000000001e12c905f57b48cc--
+> 
+> The good thing is that - even if it will take a longer - that Aleksa's
+> patchset will provide a more general solution by making it possible for
+> runc/crun/lxc to open the target binary with a restricted upgrade mask
+> making it impossible to open the binary read-write again. This won't
+> break criu and will fix this issue and is generally useful.
