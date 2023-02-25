@@ -2,67 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9706A2791
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 07:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744CF6A279A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 07:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBYGgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 01:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S229543AbjBYGly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 01:41:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYGgU (ORCPT
+        with ESMTP id S229379AbjBYGlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 01:36:20 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0539C58B47
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:36:17 -0800 (PST)
-Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 7BF14223E49;
-        Sat, 25 Feb 2023 07:36:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1677306976;
-        bh=fINj1L/2N/K34tvWL4lOCuHLc/Au0lnD8D8hQA8Fx/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LpUIrqBQHyU0lARI5wVll2WEC9NpecnTYoxYpSHtmdXA0ausjLdaqrJcJUr5XIcav
-         S4Mp4JLWYeXzRspDBvMYQ9pEikVSbl3l7p+jSlLpsTt5FdUSYKrohqW+BEpi6EMxFW
-         OJTcq3WKx5UpApjpcXdiSRla1EJvo8flca4MiN2IU05fYXWCMO8BLn3lGe4oYgPiOV
-         plJuG6t/VS14brV2yYSyUCJfNMXpFhxh8azE+jb6a/Ch/OmtPlQDLCcUY8tibPqWBa
-         UKYR3qO3hiyS1WP2zn3CT4oHlagglUW/Trlxp+Qjepc0SzaFgWcp+P7lJRxENQZM4V
-         8CHi4vrLxH4tw==
-Date:   Sat, 25 Feb 2023 07:36:15 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [git pull] IOMMU Updates for Linux v6.3
-Message-ID: <Y/msX5PwHtvg3Jnv@8bytes.org>
-References: <Y/SGAafMEGBn4fWy@8bytes.org>
- <CAHk-=wg71g9S0F8V-=97XQsaf6Edbxhfx-xS+x894w8sMZW+=w@mail.gmail.com>
- <Y/k1pGjjRIznCIu2@8bytes.org>
- <CAHk-=wg__gUh4gSVzCJqoCFMDiiQRDRuBaX=Yhra3=mxb7uSHA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg__gUh4gSVzCJqoCFMDiiQRDRuBaX=Yhra3=mxb7uSHA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Feb 2023 01:41:53 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9054F628CF
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:41:52 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-53865bdc1b1so29580697b3.16
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Feb 2023 22:41:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OrQSP8TAn8N+zYQK8fGqHLRC5rsrL7DpO0WJomJKQV8=;
+        b=sICGMTCOH2lNa54l5A62ZPY+JQ6qjceag6FBJ5Yl9YrHlc8563mk1XHCL+OLpvRdRF
+         FwoutWmKj/QBhHrP+CMV4P2GUk0AfzXQKMrqDfGnrPZB8zODZB5OHrW+AAO7zvy6jZYN
+         IY8D3KBlujCpc9yrRNq3SArLBXXFgpcYO/U7PosPxqu3XMYhmUKjGLCcWQxUnkYi5gaJ
+         IEky3qNyzF0cuC7aWsqdc8ovelOCyH0Ajw3z565ofKvfA9EZm6zQqUzvT8rJ8u0/VwN7
+         0sp+AK6F/fhYOaKmCKkCcoMET2xL8VvAvB2ltWK1RRj3fXNvDzfeJ7DECCE8G16x+dWJ
+         /wtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OrQSP8TAn8N+zYQK8fGqHLRC5rsrL7DpO0WJomJKQV8=;
+        b=Wz01U/MKQncso8NPIf2+Vhk+SRPwpz0AVLdPuw1KF19w13Ay2y6RNIn9Pv8nRsONQn
+         jg12NjFWHsxsdOcfnUvU1+DKuMNTK1SABPj5SdcZuzurC39gb6DlEGgQslm9r3De7JgI
+         7tXjIkgx9wvv6hDsqwf5HT9QC2d6mO3gTYmRll8bhIoB1hdUjiJburJK37gZM+G359Jt
+         iA05MR2DDTFQpq2mBQC/bdwgzenHLTmlKQCOfjQcIwUfNUEcM96MhaepmnwszwCKtP3p
+         c3CXwlze18PCqXEZx+jn0RYpR1nyLOPibs+MmOL0kZ4f5kkS/BE4vIkqHi/03CxWpOjc
+         92gg==
+X-Gm-Message-State: AO0yUKXwnvj+ig0aEsnTH4aJVWxNoc5rgKXkp1w9byezSkLZ96C3iSP3
+        nSXp64Bj6iQDXYq4Jgu4S1iJ+I0zLCwyNO0=
+X-Google-Smtp-Source: AK7set83+emUmGYMsuXLMtnzV0gp5ViuLB18ckxCcUUoiUUlF2WdayF4F0npFHUhNE7Mj6rAwVq4uVy8Y2k2MI8=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:36e2:326c:12f0:fecd])
+ (user=saravanak job=sendgmr) by 2002:a5b:c85:0:b0:a64:658a:5710 with SMTP id
+ i5-20020a5b0c85000000b00a64658a5710mr512228ybq.9.1677307311760; Fri, 24 Feb
+ 2023 22:41:51 -0800 (PST)
+Date:   Fri, 24 Feb 2023 22:41:47 -0800
+Message-Id: <20230225064148.274376-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Subject: [PATCH v1] driver core: fw_devlink: Avoid spurious error message
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 03:14:21PM -0800, Linus Torvalds wrote:
-> I suspect you mean rpmsg, not rdma. Because I just pulled the latter
-> with no conflicts that I can tell.
+fw_devlink can sometimes try to create a device link with the consumer
+and supplier as the same device. These attempts will fail (correctly),
+but are harmless. So, avoid printing an error for these cases. Also, add
+more detail to the error message.
 
-Right[1], it was rpmsg and not rdma.
+Fixes: 3fb16866b51d ("driver core: fw_devlink: Make cycle detection more robust")
+Reported-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ drivers/base/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index f9297c68214a..4f02a10f802f 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2088,9 +2088,9 @@ static int fw_devlink_create_devlink(struct device *con,
+ 			goto out;
+ 		}
+ 
+-		if (!device_link_add(con, sup_dev, flags)) {
+-			dev_err(con, "Failed to create device link with %s\n",
+-				dev_name(sup_dev));
++		if (con != sup_dev && !device_link_add(con, sup_dev, flags)) {
++			dev_err(con, "Failed to create device link (0x%x) with %s\n",
++				flags, dev_name(sup_dev));
+ 			ret = -EINVAL;
+ 		}
+ 
+-- 
+2.39.2.637.g21b0678d19-goog
 
-	Joerg
-
-[1] https://lore.kernel.org/all/20230127180226.783baf07@canb.auug.org.au/
