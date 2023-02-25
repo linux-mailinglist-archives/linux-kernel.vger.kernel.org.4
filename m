@@ -2,230 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA216A28EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 11:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6456A28F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 11:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjBYKRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 05:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S229500AbjBYKU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 05:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjBYKRV (ORCPT
+        with ESMTP id S229476AbjBYKU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 05:17:21 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757682684B;
-        Sat, 25 Feb 2023 02:17:16 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id h16so6816161edz.10;
-        Sat, 25 Feb 2023 02:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yqdAqtl2HyM6weGdRUYSI5fz6MeLKme641FAPtX5r3Y=;
-        b=SJOypASA17J1FKOo6kyyV500JXZQFVFCO776wNmuV4SCzUTMoivR3arUdg0Hq6bd20
-         Q57GtAFi/UATECSfJnIWOuOxDuD4nK1qEO/Yn3i3/UMy4M1g/Xkmu4zO2IYpOBQ6GADi
-         dkBppSVdbq3TPlWwsKavCiY8a2PtzoRY9d2mZg+ZVaoKEhz+wWX9nM1U4zByz9bTGP7u
-         1RmUmwpv0J02HnrnhhC4MD3SXobdjlSRtbyDesa8XywGxzSo0YVEjhImkzSBYtaT1VtP
-         CWQbmvQEzU1FolZSnppWJ5bBrU37lbnoO9i6w+kcprbo3/kgudAKooj2yfgTgRUYhEuy
-         GiIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yqdAqtl2HyM6weGdRUYSI5fz6MeLKme641FAPtX5r3Y=;
-        b=vi1QkycY6SVriBQerpdl1bUs0r7MxLbaAqJ7BmBnxKFR3nMm8aF+kF5LLQdgaN2YPH
-         QT+cFSODZsi4KOXMeVkQ2jIERmc4WT2xIA/FNdlkv9DWAlzT8UAXquHmHUxkhF1smX7k
-         uQ3Vv2pTl2QISi8QQqQlUjGTPuzLrn12FArLEr8YTWeEGiQa9Q0CzBLGI2+gsb6KvP2t
-         UADpNsLMXNUbe7zUJ2HX+MwnHR2P5gyONur6TG6okzh1RrOz2MM65UYjxTblqm84QJ7i
-         ZJecENkGL/s8JOlc3ghC9khHKeY4EFrDNxkkT4PC2BTkw1PGQPyzm9lwXuIijYJi1upx
-         94OA==
-X-Gm-Message-State: AO0yUKV/1ibfJdA9pG8LmartqLDl1cTClw9UsSnTyLGJxGWTRkXlmv0y
-        huRok3k3DMmwfF62uchKr2E=
-X-Google-Smtp-Source: AK7set+M//y5jAG54Dw5hwWPqfgJ4BDNdS66Iw9Q5xh131Vo6pX8zFC8LqZeCc3It6fTNWWUmbnA4A==
-X-Received: by 2002:a17:906:86d4:b0:87b:3d29:2982 with SMTP id j20-20020a17090686d400b0087b3d292982mr26298346ejy.11.1677320235019;
-        Sat, 25 Feb 2023 02:17:15 -0800 (PST)
-Received: from localhost.localdomain ([95.183.227.97])
-        by smtp.gmail.com with ESMTPSA id y23-20020a50ce17000000b004af6163f845sm677722edi.28.2023.02.25.02.17.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 02:17:14 -0800 (PST)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 3/3] soc: mediatek: scpsys: Add support for MT6735
-Date:   Sat, 25 Feb 2023 13:16:29 +0300
-Message-Id: <20230225101629.264206-4-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230225101629.264206-1-y.oudjana@protonmail.com>
-References: <20230225101629.264206-1-y.oudjana@protonmail.com>
+        Sat, 25 Feb 2023 05:20:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0891515A
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 02:20:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VTP+UPyX9gq8NaBI0DA44WQYoHYRCVM4DFdVCPQ5Pik=; b=eeCMssC+rfwvQqAE3HHSpF5+lw
+        XzjNRu6trFQ4ygUwIc72UWFRVA1MRYyy/ctnuTd0JuNoVUZGBnJ8esNeZ1Y6sScwl4NDSkjJX82HO
+        H5IRyc8gqmxW/zwRBGvnQbp2igsvXEb2fSLttEgUlpkDhOaRs+Dl7limd27k0GYH6cE0rHNyrVsAn
+        CSZQocSmR+ul5psiPA5LCOngF4KPuaCUoZWbKB6MMUZaRF9f1BOcU9EtmrU1wrUuQauezXp5kC1gg
+        V4cbnNmpQNdS4KzEcj0H374yEmB5KGy+RUpfvqjSvDDQQXds6h15H7tAy9vRlF677aP5lby/xrrYo
+        x7KpPI8A==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVrf7-00G35T-HW; Sat, 25 Feb 2023 10:20:18 +0000
+Message-ID: <ca5788873c373249983ab6ac9ee173b12293641e.camel@infradead.org>
+Subject: Re: [External] [PATCH v2 0/5] x86-64: Remove global variables from
+ boot
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Brian Gerst <brgerst@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Date:   Sat, 25 Feb 2023 10:20:16 +0000
+In-Reply-To: <CAMzpN2hvPHWYOeyzfpRmk39XYwCrSJx0UyqxE48F1TjTNyoKAg@mail.gmail.com>
+References: <20230224154235.277350-1-brgerst@gmail.com>
+         <cfdb9c5a-4723-d920-511e-b57ae6c492f7@bytedance.com>
+         <CAMzpN2hvPHWYOeyzfpRmk39XYwCrSJx0UyqxE48F1TjTNyoKAg@mail.gmail.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-O3BYsEpGVrSNDl+GXmQU"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add support for SCPSYS power domains of MT6735. All non-CPU power domains
-are added except for MD2 (C2K modem), which is left out due to issues
-with powering it on.
+--=-O3BYsEpGVrSNDl+GXmQU
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- drivers/soc/mediatek/mtk-scpsys.c | 84 +++++++++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
+On Fri, 2023-02-24 at 16:38 -0500, Brian Gerst wrote:
+> Removing the globals before the parallel boot series, would be the
+> best option IMO.=C2=A0 That would make the transition simpler.
 
-diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
-index 7a668888111c..b771bfb93cc9 100644
---- a/drivers/soc/mediatek/mtk-scpsys.c
-+++ b/drivers/soc/mediatek/mtk-scpsys.c
-@@ -13,6 +13,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/soc/mediatek/infracfg.h>
- 
-+#include <dt-bindings/power/mediatek,mt6735-scpsys.h>
- #include <dt-bindings/power/mt2701-power.h>
- #include <dt-bindings/power/mt2712-power.h>
- #include <dt-bindings/power/mt6797-power.h>
-@@ -32,6 +33,7 @@
- #define SPM_VEN_PWR_CON			0x0230
- #define SPM_ISP_PWR_CON			0x0238
- #define SPM_DIS_PWR_CON			0x023c
-+#define SPM_MD1_PWR_CON			0x0284	/* MT6735 */
- #define SPM_CONN_PWR_CON		0x0280
- #define SPM_VEN2_PWR_CON		0x0298
- #define SPM_AUDIO_PWR_CON		0x029c	/* MT8173, MT2712 */
-@@ -57,11 +59,13 @@
- #define PWR_ON_2ND_BIT			BIT(3)
- #define PWR_CLK_DIS_BIT			BIT(4)
- 
-+#define PWR_STATUS_MD1			BIT(0)
- #define PWR_STATUS_CONN			BIT(1)
- #define PWR_STATUS_DISP			BIT(3)
- #define PWR_STATUS_MFG			BIT(4)
- #define PWR_STATUS_ISP			BIT(5)
- #define PWR_STATUS_VDEC			BIT(7)
-+#define PWR_STATUS_VEN			BIT(8)	/* MT6735 */
- #define PWR_STATUS_BDP			BIT(14)
- #define PWR_STATUS_ETH			BIT(15)
- #define PWR_STATUS_HIF			BIT(16)
-@@ -750,6 +754,73 @@ static const struct scp_subdomain scp_subdomain_mt2712[] = {
- 	{MT2712_POWER_DOMAIN_MFG_SC2, MT2712_POWER_DOMAIN_MFG_SC3},
- };
- 
-+/*
-+ * MT6735 power domain support
-+ */
-+
-+static const struct scp_domain_data scp_domain_data_mt6735[] = {
-+	[MT6735_POWER_DOMAIN_MD1] = {
-+		.name = "md1",
-+		.sta_mask = PWR_STATUS_MD1,
-+		.ctl_offs = SPM_MD1_PWR_CON,
-+		.sram_pdn_bits = GENMASK(8, 8),
-+		.sram_pdn_ack_bits = 0,
-+		.clk_id = {CLK_NONE},
-+		.bus_prot_mask = (BIT(24) | BIT(25) | BIT(26) | BIT(27) | BIT(28)),
-+	},
-+	[MT6735_POWER_DOMAIN_CONN] = {
-+		.name = "conn",
-+		.sta_mask = PWR_STATUS_CONN,
-+		.ctl_offs = SPM_CONN_PWR_CON,
-+		.sram_pdn_bits = GENMASK(8, 8),
-+		.sram_pdn_ack_bits = 0,
-+		.clk_id = {CLK_NONE},
-+		.bus_prot_mask = (BIT(2) | BIT(8)),
-+	},
-+	[MT6735_POWER_DOMAIN_DIS] = {
-+		.name = "dis",
-+		.sta_mask = PWR_STATUS_DISP,
-+		.ctl_offs = SPM_DIS_PWR_CON,
-+		.sram_pdn_bits = GENMASK(11, 8),
-+		.sram_pdn_ack_bits = GENMASK(12, 12),
-+		.clk_id = {CLK_NONE},
-+		.bus_prot_mask = (BIT(1)),
-+	},
-+	[MT6735_POWER_DOMAIN_MFG] = {
-+		.name = "mfg",
-+		.sta_mask = PWR_STATUS_MFG,
-+		.ctl_offs = SPM_MFG_PWR_CON,
-+		.sram_pdn_bits = GENMASK(11, 8),
-+		.sram_pdn_ack_bits = GENMASK(12, 12),
-+		.clk_id = {CLK_NONE},
-+		.bus_prot_mask = BIT(14),
-+	},
-+	[MT6735_POWER_DOMAIN_ISP] = {
-+		.name = "isp",
-+		.sta_mask = PWR_STATUS_ISP,
-+		.ctl_offs = SPM_ISP_PWR_CON,
-+		.sram_pdn_bits = GENMASK(11, 8),
-+		.sram_pdn_ack_bits = GENMASK(13, 12),
-+		.clk_id = {CLK_NONE},
-+	},
-+	[MT6735_POWER_DOMAIN_VDE] = {
-+		.name = "vde",
-+		.sta_mask = PWR_STATUS_VDEC,
-+		.ctl_offs = SPM_VDE_PWR_CON,
-+		.sram_pdn_bits = GENMASK(11, 8),
-+		.sram_pdn_ack_bits = GENMASK(12, 12),
-+		.clk_id = {CLK_NONE},
-+	},
-+	[MT6735_POWER_DOMAIN_VEN] = {
-+		.name = "ven",
-+		.sta_mask = PWR_STATUS_VEN,
-+		.ctl_offs = SPM_VEN_PWR_CON,
-+		.sram_pdn_bits = GENMASK(11, 8),
-+		.sram_pdn_ack_bits = GENMASK(15, 12),
-+		.clk_id = {CLK_NONE},
-+	},
-+};
-+
- /*
-  * MT6797 power domain support
-  */
-@@ -1033,6 +1104,16 @@ static const struct scp_soc_data mt2712_data = {
- 	.bus_prot_reg_update = false,
- };
- 
-+static const struct scp_soc_data mt6735_data = {
-+	.domains = scp_domain_data_mt6735,
-+	.num_domains = ARRAY_SIZE(scp_domain_data_mt6735),
-+	.regs = {
-+		.pwr_sta_offs = SPM_PWR_STATUS,
-+		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND
-+	},
-+	.bus_prot_reg_update = true,
-+};
-+
- static const struct scp_soc_data mt6797_data = {
- 	.domains = scp_domain_data_mt6797,
- 	.num_domains = ARRAY_SIZE(scp_domain_data_mt6797),
-@@ -1088,6 +1169,9 @@ static const struct of_device_id of_scpsys_match_tbl[] = {
- 	}, {
- 		.compatible = "mediatek,mt2712-scpsys",
- 		.data = &mt2712_data,
-+	}, {
-+		.compatible = "mediatek,mt6735-scpsys",
-+		.data = &mt6735_data,
- 	}, {
- 		.compatible = "mediatek,mt6797-scpsys",
- 		.data = &mt6797_data,
--- 
-2.39.2
+Looks like this:
 
+https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/paralle=
+l-6.2-rc8-brfirst
+
+Passes basic smoke testing in qemu, including suspend to RAM and
+offlining CPU0.
+
+--=-O3BYsEpGVrSNDl+GXmQU
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjI1MTAyMDE2WjAvBgkqhkiG9w0BCQQxIgQgToTIH9AJ
+dOpZsD8cU4FhKb9PAlf/W93MqnuLdldNa7Awgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAnjqE+48znRxIlvN3Z2+3Z5k47VCrHIoeL
+ygqq1xQe6XQNKSeY/MnoE039p4PhXUzE7D+bJtZMBY48PT1kDsSH0Mn+vdZKWFLfaXUzasPZKWys
+ntdH54xNQO18XcoTocxq5ynnY38J0iqImjDQH/m6f1uXBY1WFMMaoS9YjP/oIdSw3HaF3KXiMX7P
+ZHeBIxXupj2GuDzSrRT350ApSz770iOM6ehNxNKDqptCEjd6drcG7vDdctcxKQVVaizFEUpbceES
+T+C6osr0zlqwmEtqOx8ikYwRPASzOBTC4lnXrWBdHV2bullJzhlUZchjDe85X5dzkvj+BMI0oufY
+vjGy5R5Kikzd5+Tx/tvbxDTGKqLqaCTFjsfHMGdMVIL0FFWQlNrx9VOOcHYGxHkbRhu8luiwVvDS
+CVorJZ4J7bA2u8V1Q0HPPs5dxNCnj0heWa5HIFgsHlN4QlEd9YbWDyNowf1a4j4QTTGaAZ1/J44p
+EAzOEBR5cSUssvYQRR9ugo0j9LeJKpIes0wPo6FdvDpN/eh48JrBMkbxxILb6Z83eQf/i4WAy9iL
+AGkRxiDqkhi0qZS+R0Sf5CPHk1jh0T1gGBCwj2WF9I4t9t9M+lPyKa38Uh1ebl0nk7uCgaEwTAzu
+q3M8Jhqk6xoytXb2NJYe0VIg3+GkdjQJQye+w/VlPgAAAAAAAA==
+
+
+--=-O3BYsEpGVrSNDl+GXmQU--
