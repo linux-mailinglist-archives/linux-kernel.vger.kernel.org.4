@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6196A2A4F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1DF6A2A4E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjBYO3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 09:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYO3h (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229571AbjBYO3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 25 Feb 2023 09:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229445AbjBYO3g (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Feb 2023 09:29:36 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44ABA14EB9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 06:29:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2069514E8C
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 06:29:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677335376; x=1708871376;
+  t=1677335375; x=1708871375;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w1W/AMJDxz9O6GDSQ7Gc/2CpG0+hwqtjiAduiRVeLY8=;
-  b=OvnREbFsIL6nplLk2JrRuPULXKKjMMaabXhdbhKwmzyRUwUs18jmL763
-   Xlgw0B8Xjt1swJHVErZvfuLwXleJNzth3VaQ5KG/HnJxt6kifZpoWFb/O
-   O3favRbpDt3ZNAAyFGZhfri4DDu73DUwdxrESD+Qd/qRTOwenVs7C7KMs
-   jtFYDAFfPPEcwEjaoTvD/1acUzNShqTAgphEg6o4BJIK5P9yLII8hkgaN
-   BU+B82l+9G6iJzskR8mPyhNtsdiJ2b6JoOviG/kwAS2OPzPmYOpLkm7g8
-   uXt0C0ZFyuq3AV5jDRu2Zz5MMYYMdn0PdSjwxGpsY0JWWed61kHR618Vz
+  bh=yEkCgk0qdxam3842EPDUAaAEj9sbPPlM9MJlt5GSFu0=;
+  b=LteHyYDru6wViPKrveTxNyTpE3KKluzmIxZeM7tRfeTKQMAj8fbcjrru
+   xHfF7yQeD/0eEiBgej/qavoHNKocS4eGHEeNgswR7kVFrCDNUO0iKuhOD
+   jO+Oqo+VQC2rds46Zkh7rpGEvmda40+zgPgGzeURybVEDS/IOTapLYzeG
+   NDroO3v6E9aJcjw+CvTl5K6dmxuuHtQRVKRxZM+HieOTG9pZcOrzawDCj
+   uL3GBwrm+YyDmC2QjOvGYU5Anw9mgTj88eB9qjGV33hM6k12tmmriM3BW
+   7U24VU6oBU+oYK4IEPrick8GUQePlNLXgY4w0UuGYgRMuQbJJntW9W1vo
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335100418"
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335100416"
 X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="335100418"
+   d="scan'208";a="335100416"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 06:29:34 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="705602973"
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="705602975"
 X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="705602973"
+   d="scan'208";a="705602975"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
   by orsmga001.jf.intel.com with ESMTP; 25 Feb 2023 06:29:33 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pVvYK-0003FP-0f;
+        id 1pVvYK-0003FR-0u;
         Sat, 25 Feb 2023 14:29:32 +0000
-Date:   Sat, 25 Feb 2023 22:29:19 +0800
+Date:   Sat, 25 Feb 2023 22:29:21 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Chen Lin <chen45464546@163.com>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result
- of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned
- short') is always true
-Message-ID: <202302252229.YIQcjpNG-lkp@intel.com>
+        linux-kernel@vger.kernel.org
+Subject: arch/arm/mm/copypage-xsc3.c:64:6: warning: no previous prototype for
+ function 'xsc3_mc_copy_user_highpage'
+Message-ID: <202302252213.uGXXs6Lo-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,201 +63,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen,
+Hi Arnd,
 
 FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   489fa31ea873282b41046d412ec741f93946fc2d
-commit: 2f2c0d2919a14002760f89f4e02960c735a316d2 net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
-date:   9 months ago
-config: arm64-randconfig-r035-20230225 (https://download.01.org/0day-ci/archive/20230225/202302252229.YIQcjpNG-lkp@intel.com/config)
+commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
+date:   10 months ago
+config: arm-randconfig-r046-20230225 (https://download.01.org/0day-ci/archive/20230225/202302252213.uGXXs6Lo-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f2c0d2919a14002760f89f4e02960c735a316d2
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 2f2c0d2919a14002760f89f4e02960c735a316d2
+        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/mediatek/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302252229.YIQcjpNG-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302252213.uGXXs6Lo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+>> arch/arm/mm/copypage-xsc3.c:64:6: warning: no previous prototype for function 'xsc3_mc_copy_user_highpage' [-Wmissing-prototypes]
+   void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
+        ^
+   arch/arm/mm/copypage-xsc3.c:64:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
+   ^
+   static 
+>> arch/arm/mm/copypage-xsc3.c:80:6: warning: no previous prototype for function 'xsc3_mc_clear_user_highpage' [-Wmissing-prototypes]
+   void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+        ^
+   arch/arm/mm/copypage-xsc3.c:80:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+   ^
+   static 
    2 warnings generated.
 
 
-vim +1481 drivers/net/ethernet/mediatek/mtk_eth_soc.c
+vim +/xsc3_mc_copy_user_highpage +64 arch/arm/mm/copypage-xsc3.c
 
-  1434	
-  1435	static int mtk_poll_rx(struct napi_struct *napi, int budget,
-  1436			       struct mtk_eth *eth)
-  1437	{
-  1438		struct dim_sample dim_sample = {};
-  1439		struct mtk_rx_ring *ring;
-  1440		int idx;
-  1441		struct sk_buff *skb;
-  1442		u8 *data, *new_data;
-  1443		struct mtk_rx_dma_v2 *rxd, trxd;
-  1444		int done = 0, bytes = 0;
-  1445	
-  1446		while (done < budget) {
-  1447			struct net_device *netdev;
-  1448			unsigned int pktlen;
-  1449			dma_addr_t dma_addr;
-  1450			u32 hash, reason;
-  1451			int mac = 0;
-  1452	
-  1453			ring = mtk_get_rx_ring(eth);
-  1454			if (unlikely(!ring))
-  1455				goto rx_done;
-  1456	
-  1457			idx = NEXT_DESP_IDX(ring->calc_idx, ring->dma_size);
-  1458			rxd = ring->dma + idx * eth->soc->txrx.rxd_size;
-  1459			data = ring->data[idx];
-  1460	
-  1461			if (!mtk_rx_get_desc(eth, &trxd, rxd))
-  1462				break;
-  1463	
-  1464			/* find out which mac the packet come from. values start at 1 */
-  1465			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-  1466				mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
-  1467			else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
-  1468				 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
-  1469				mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
-  1470	
-  1471			if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
-  1472				     !eth->netdev[mac]))
-  1473				goto release_desc;
-  1474	
-  1475			netdev = eth->netdev[mac];
-  1476	
-  1477			if (unlikely(test_bit(MTK_RESETTING, &eth->state)))
-  1478				goto release_desc;
-  1479	
-  1480			/* alloc new buffer */
-> 1481			if (ring->frag_size <= PAGE_SIZE)
-  1482				new_data = napi_alloc_frag(ring->frag_size);
-  1483			else
-  1484				new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
-  1485			if (unlikely(!new_data)) {
-  1486				netdev->stats.rx_dropped++;
-  1487				goto release_desc;
-  1488			}
-  1489			dma_addr = dma_map_single(eth->dma_dev,
-  1490						  new_data + NET_SKB_PAD +
-  1491						  eth->ip_align,
-  1492						  ring->buf_size,
-  1493						  DMA_FROM_DEVICE);
-  1494			if (unlikely(dma_mapping_error(eth->dma_dev, dma_addr))) {
-  1495				skb_free_frag(new_data);
-  1496				netdev->stats.rx_dropped++;
-  1497				goto release_desc;
-  1498			}
-  1499	
-  1500			dma_unmap_single(eth->dma_dev, trxd.rxd1,
-  1501					 ring->buf_size, DMA_FROM_DEVICE);
-  1502	
-  1503			/* receive data */
-  1504			skb = build_skb(data, ring->frag_size);
-  1505			if (unlikely(!skb)) {
-  1506				skb_free_frag(data);
-  1507				netdev->stats.rx_dropped++;
-  1508				goto skip_rx;
-  1509			}
-  1510			skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
-  1511	
-  1512			pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
-  1513			skb->dev = netdev;
-  1514			skb_put(skb, pktlen);
-  1515			if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
-  1516				skb->ip_summed = CHECKSUM_UNNECESSARY;
-  1517			else
-  1518				skb_checksum_none_assert(skb);
-  1519			skb->protocol = eth_type_trans(skb, netdev);
-  1520			bytes += pktlen;
-  1521	
-  1522			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
-  1523			if (hash != MTK_RXD4_FOE_ENTRY) {
-  1524				hash = jhash_1word(hash, 0);
-  1525				skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
-  1526			}
-  1527	
-  1528			reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
-  1529			if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
-  1530				mtk_ppe_check_skb(eth->ppe, skb,
-  1531						  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
-  1532	
-  1533			if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
-  1534				if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-  1535					if (trxd.rxd3 & RX_DMA_VTAG_V2)
-  1536						__vlan_hwaccel_put_tag(skb,
-  1537							htons(RX_DMA_VPID(trxd.rxd4)),
-  1538							RX_DMA_VID(trxd.rxd4));
-  1539				} else if (trxd.rxd2 & RX_DMA_VTAG) {
-  1540					__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
-  1541							       RX_DMA_VID(trxd.rxd3));
-  1542				}
-  1543	
-  1544				/* If the device is attached to a dsa switch, the special
-  1545				 * tag inserted in VLAN field by hw switch can * be offloaded
-  1546				 * by RX HW VLAN offload. Clear vlan info.
-  1547				 */
-  1548				if (netdev_uses_dsa(netdev))
-  1549					__vlan_hwaccel_clear_tag(skb);
-  1550			}
-  1551	
-  1552			skb_record_rx_queue(skb, 0);
-  1553			napi_gro_receive(napi, skb);
-  1554	
-  1555	skip_rx:
-  1556			ring->data[idx] = new_data;
-  1557			rxd->rxd1 = (unsigned int)dma_addr;
-  1558	
-  1559	release_desc:
-  1560			if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
-  1561				rxd->rxd2 = RX_DMA_LSO;
-  1562			else
-  1563				rxd->rxd2 = RX_DMA_PREP_PLEN0(ring->buf_size);
-  1564	
-  1565			ring->calc_idx = idx;
-  1566	
-  1567			done++;
-  1568		}
-  1569	
-  1570	rx_done:
-  1571		if (done) {
-  1572			/* make sure that all changes to the dma ring are flushed before
-  1573			 * we continue
-  1574			 */
-  1575			wmb();
-  1576			mtk_update_rx_cpu_idx(eth);
-  1577		}
-  1578	
-  1579		eth->rx_packets += done;
-  1580		eth->rx_bytes += bytes;
-  1581		dim_update_sample(eth->rx_events, eth->rx_packets, eth->rx_bytes,
-  1582				  &dim_sample);
-  1583		net_dim(&eth->rx_dim, dim_sample);
-  1584	
-  1585		return done;
-  1586	}
-  1587	
+d73e60b7144a86 Russell King  2008-10-31   63  
+063b0a4207e43a Russell King  2008-10-31  @64  void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
+f00a75c094c340 Russell King  2009-10-05   65  	unsigned long vaddr, struct vm_area_struct *vma)
+063b0a4207e43a Russell King  2008-10-31   66  {
+063b0a4207e43a Russell King  2008-10-31   67  	void *kto, *kfrom;
+063b0a4207e43a Russell King  2008-10-31   68  
+5472e862de2bc4 Cong Wang     2011-11-25   69  	kto = kmap_atomic(to);
+5472e862de2bc4 Cong Wang     2011-11-25   70  	kfrom = kmap_atomic(from);
+2725898fc9bb21 Russell King  2009-10-05   71  	flush_cache_page(vma, vaddr, page_to_pfn(from));
+063b0a4207e43a Russell King  2008-10-31   72  	xsc3_mc_copy_user_page(kto, kfrom);
+5472e862de2bc4 Cong Wang     2011-11-25   73  	kunmap_atomic(kfrom);
+5472e862de2bc4 Cong Wang     2011-11-25   74  	kunmap_atomic(kto);
+063b0a4207e43a Russell King  2008-10-31   75  }
+063b0a4207e43a Russell King  2008-10-31   76  
+d73e60b7144a86 Russell King  2008-10-31   77  /*
+d73e60b7144a86 Russell King  2008-10-31   78   * XScale optimised clear_user_page
+d73e60b7144a86 Russell King  2008-10-31   79   */
+303c6443659bc1 Russell King  2008-10-31  @80  void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+d73e60b7144a86 Russell King  2008-10-31   81  {
+5472e862de2bc4 Cong Wang     2011-11-25   82  	void *ptr, *kaddr = kmap_atomic(page);
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   83  	asm volatile ("\
+c8a91428941b91 Arnd Bergmann 2022-04-04   84  .arch xscale					\n\
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   85  	mov	r1, %2				\n\
+d73e60b7144a86 Russell King  2008-10-31   86  	mov	r2, #0				\n\
+d73e60b7144a86 Russell King  2008-10-31   87  	mov	r3, #0				\n\
+303c6443659bc1 Russell King  2008-10-31   88  1:	mcr	p15, 0, %0, c7, c6, 1		@ invalidate line\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   89  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   90  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   91  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   92  	strd	r2, r3, [%0], #8		\n\
+d73e60b7144a86 Russell King  2008-10-31   93  	subs	r1, r1, #1			\n\
+303c6443659bc1 Russell King  2008-10-31   94  	bne	1b"
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   95  	: "=r" (ptr)
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   96  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
+303c6443659bc1 Russell King  2008-10-31   97  	: "r1", "r2", "r3");
+5472e862de2bc4 Cong Wang     2011-11-25   98  	kunmap_atomic(kaddr);
+d73e60b7144a86 Russell King  2008-10-31   99  }
+d73e60b7144a86 Russell King  2008-10-31  100  
+
+:::::: The code at line 64 was first introduced by commit
+:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
+
+:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
 
 -- 
 0-DAY CI Kernel Test Service
