@@ -2,148 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF06B6A27D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9E26A27D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 09:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjBYIGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 03:06:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S229505AbjBYII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 03:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBYIFx (ORCPT
+        with ESMTP id S229468AbjBYIIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 03:05:53 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997011ACC8;
-        Sat, 25 Feb 2023 00:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677312346; i=w_armin@gmx.de;
-        bh=Kf5tr2Sg9Jqyp+j3xyIw9/QWCzBL3T6tk+vssRythnI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=K99OKWKHOOzh05TDpZSxJE4GN6wiueUJLo6LO0haukLOys0FpZNus5BsgoIogxz/V
-         k+NUWpPFENWVi5MNRNGIH0MqCmq++w9KTv1hPte4Tvnt6FfMfUXFsD0qXvUFxR+lAl
-         VZlKp4Rq8plMnv4PyaSsvvv1Ct4ubVhBoenahAOfQyPrx3Cs0quL6TzRMBSRBcsLAW
-         IkxCR9v6ubd6O1HtTzyk8zj4H8dmxIU+pozts1YYeWxLiJuMJEK0rYIcDeeFdy/I7B
-         8mvytGFZnplh9I+p9DRRIRdr7blAXGdpRK18+if/PbRJ+E1JGRFZJvAP3/UcAs7/bP
-         usEcy5zKn+nEA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MIMbU-1pJmsX44gO-00ENWP; Sat, 25 Feb 2023 09:05:46 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     rafael@kernel.org, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] ACPI: SBS: Fix handling of Smart Battery Selectors
-Date:   Sat, 25 Feb 2023 09:04:58 +0100
-Message-Id: <20230225080458.1342359-5-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230225080458.1342359-1-W_Armin@gmx.de>
-References: <20230225080458.1342359-1-W_Armin@gmx.de>
+        Sat, 25 Feb 2023 03:08:25 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C17E3AC
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 00:08:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677312504; x=1708848504;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HdPn0nUP9z2e8JaUXV/1MDAjdowwwNaPz5diSsNXVLw=;
+  b=QdxHdK7a99u5amJiwW4vmZ1+cJDmKeDDCFQZLgWR3v56uJcotbmM0WeG
+   ZSI0mSLY/fqp32dgutK1302KH09BrauB0IPjxw2wr3AlJBDg6J+/7yl/9
+   3DFrcbpqq0ieVUHPr2K3oYojqm4lpHNYZolwEHkuxRADlCbXlZ0LdautB
+   4Pc6aXo3YfXGotzjZBqVVQs+idxVu/if6s8w1is+TDU9bYrgXh/9OKfNT
+   5uapx7JGyqzMN/LJ+NDs6iF4BHMcuAYlDcNZp1jKNiBAH+rSlBeqMLnuJ
+   tpm+mEcO0Eq/08Ee97IK6TRtoBzj88VjJdSJPRa/lCsoXR0k4UcYegz7x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="419876511"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="419876511"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 00:08:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="782646145"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="782646145"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Feb 2023 00:08:23 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pVpbS-000333-1V;
+        Sat, 25 Feb 2023 08:08:22 +0000
+Date:   Sat, 25 Feb 2023 16:07:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.02.22a] BUILD REGRESSION
+ edc9d419ee8c22821ffd664466a5cf19208c3f02
+Message-ID: <63f9c1d8.kihz/MuydejKYsyt%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2Bj5TWsf+QBe1Q82Bfbxp7fvAaNYpdVIE+7sHR7gg5pI5R2KZ89
- GjKiyw3051qnnEkkMujFls+DULQzloyQ6TTSb5CiWZkMkJVZFTKw9pBo610rbhDv2TM4yGd
- ztSqxkFrnYOfcGZGR/wOMuT5WvHAFsH5Q9/4fqiKPgfdBUrWM0ndgshCxZo2gck3hNuu9KK
- tIRp+9XmMymNx1TEEZdBA==
-UI-OutboundReport: notjunk:1;M01:P0:YkRaH1XJPhs=;4hmhe8YZBtQQPoxtSkBWjWo3gb+
- 4kHbhaTEwcR4ZA8DeiCZnZb5nzpAM4uMPrrEN0+4kxKXzA4Z8K/AHKRmP406obwwew7GUPOsA
- WIifAuWREaZsEr4F0lWWMAtIm6D/Hxm0ta6wacRWeofnLfuOqPwtppyVMKAuhX82QyzY2q5cO
- uRWSAjJFFHiPJNCrE5oYjtPfZkm5ieKo0cNQrmwzRetT4V5i+cWMDgoI9697KGtmIGU/Mu+9h
- 8wZsmz/e/uMmnxzaol18mynTh1XtV7gPaDxzK+KH4VNbrJUOF9K7GQFhq/qNVi4oBk4zqzTf8
- E79KPqizKKKb9dJNOaMA4gCErFgsSFKhbCzrwq+QDJi143i+jVdQycxVx45djmtB50Vo81sIU
- S+jPcfn6iViiyD2ZQ5iobu7J4JFzC3VeIj4fHr40NdmxmvlCl3AmTme2+1Q6APtOocenaK+gR
- 9x8nTqpnd+E1eQNnaPIjtgEh8VYc0Ev4i2aKazy/PlRfUGYaiu8ci0LZfh9ghTPfqLnRh0cO0
- jQJ2oLXamKDRNdq+G2vPxAF9cLQM3UvCYVklac5l4ARYtSwL6NhIjv8mO3vGOTPlQnuW2voR/
- sEVewAOMqsRRPgp1m7R6cHv1AdCbGzPYOtVQemq8nkwlSiF37Qfq+H7U0e7GbnPTJ/1sTQn4Y
- zLIr5RLB0EXMP9qSmchtFqJOpdkkJ2HkhDm0VcNAbeeYcTeCaCum/P4nQyxHGNxIeLLLru/7G
- 0DewxKlAjP9XscQ9ZftRa6dsc7kJeRW06dBCroH6Fb68BB0jjTcrRJfpXs+DapOU4iOoWPlCY
- JYQh4+t05CqH83CK2KIObGgXRON/ZqhdVPHwdJyukKcgiGXO5RJp4yzVd0dDxXVbc/lF3QcS4
- OaP+uQEegNhU46fEoU+nu8i4bDL7SRY1l8vRrTlIXgCoZJT9QTDuRDfbm3GFgAY6EgoNakzmL
- LcYgGNLeaHZA2Xj8FV5S6oFpwss=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "Smart Battery Selector" standard says that when writing
-SelectorState (0x1), the nibbles which should not be modified
-need to be masked with 0xff. This is necessary since in contrast
-to a "Smart Battery Manager", the last three nibbles are writable.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.22a
+branch HEAD: edc9d419ee8c22821ffd664466a5cf19208c3f02  locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
 
-Failing to do so might trigger the following cycle:
-1. Host accidentally changes power source of the system (3rd nibble)
-   when selecting a battery.
-2. Power source is invalid, Selector changes to another power source.
-3. Selector notifies host that it changed the power source.
-4. Host re-reads some batteries.
-5. goto 1 for each re-read battery.
+Error/Warning reports:
 
-This loop might also be entered when a battery which is not present
-is selected for SMBus access. In the end some workqueues fill up,
-which causes the system to lockup upon suspend/shutdown.
+https://lore.kernel.org/oe-kbuild-all/202302251550.OSl3zbgK-lkp@intel.com
 
-Fix this by correctly masking the value to be written, and avoid
-selecting batteries which are absent.
+Error/Warning: (recently discovered and may have been fixed)
 
-Tested on a Acer Travelmate 4002WLMi.
+arch/mips/kernel/process.c:46:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+arch/powerpc/kernel/smp.c:1768:1: error: function declared 'noreturn' should not return [-Werror,-Winvalid-noreturn]
+net/netfilter/ipvs/ip_vs_est.c:552:15: error: too few arguments provided to function-like macro invocation
+net/netfilter/ipvs/ip_vs_est.c:552:17: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
+net/netfilter/ipvs/ip_vs_est.c:552:29: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
+net/netfilter/ipvs/ip_vs_est.c:552:3: error: use of undeclared identifier 'kfree_rcu'; did you mean 'kfree_skb'?
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/acpi/sbs.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+Error/Warning ids grouped by kconfigs:
 
-diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
-index e90752d4f488..94e3c000df2e 100644
-=2D-- a/drivers/acpi/sbs.c
-+++ b/drivers/acpi/sbs.c
-@@ -473,23 +473,32 @@ static const struct device_attribute alarm_attr =3D =
-{
-    ----------------------------------------------------------------------=
----- */
- static int acpi_battery_read(struct acpi_battery *battery)
- {
--	int result =3D 0, saved_present =3D battery->present;
-+	int result, saved_present =3D battery->present;
- 	u16 state;
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- arc-allyesconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- arm-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- arm-allyesconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- arm64-allyesconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- arm64-defconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- m68k-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- mips-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- mips-allyesconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- powerpc-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- riscv-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- riscv-defconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- riscv-rv32_defconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- s390-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- s390-allyesconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- s390-defconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+|-- sh-allmodconfig
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+clang_recent_errors
+|-- i386-randconfig-a006
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:too-few-arguments-provided-to-function-like-macro-invocation
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:use-of-undeclared-identifier-kfree_rcu
+|-- mips-buildonly-randconfig-r003-20230222
+|   `-- arch-mips-kernel-process.c:warning:function-declared-noreturn-should-not-return
+`-- powerpc-buildonly-randconfig-r004-20230222
+    `-- arch-powerpc-kernel-smp.c:error:function-declared-noreturn-should-not-return-Werror-Winvalid-noreturn
 
- 	if (battery->sbs->manager_present) {
- 		result =3D acpi_smbus_read(battery->sbs->hc, SMBUS_READ_WORD,
- 				ACPI_SBS_MANAGER, 0x01, (u8 *)&state);
--		if (!result)
--			battery->present =3D state & (1 << battery->id);
--		state &=3D 0x0fff;
-+		if (result)
-+			return result;
-+
-+		battery->present =3D state & (1 << battery->id);
-+		if (!battery->present)
-+			return 0;
-+
-+		/* Masking necessary for Smart Battery Selectors */
-+		state =3D 0x0fff;
- 		state |=3D 1 << (battery->id + 12);
- 		acpi_smbus_write(battery->sbs->hc, SMBUS_WRITE_WORD,
- 				  ACPI_SBS_MANAGER, 0x01, (u8 *)&state, 2);
--	} else if (battery->id =3D=3D 0)
--		battery->present =3D 1;
--
--	if (result || !battery->present)
--		return result;
-+	} else {
-+		if (battery->id =3D=3D 0) {
-+			battery->present =3D 1;
-+		} else {
-+			if (!battery->present)
-+				return 0;
-+		}
-+	}
+elapsed time: 3322m
 
- 	if (saved_present !=3D battery->present) {
- 		battery->update_time =3D 0;
-=2D-
-2.30.2
+configs tested: 19
+configs skipped: 3
 
+tested configs:
+clang                                   alpha   defconfig
+gcc                                       arc   defconfig
+gcc                                       arm   defconfig
+gcc                                     arm64   defconfig
+gcc                                      csky   defconfig
+gcc                                      i386   defconfig
+gcc                                      ia64   defconfig
+gcc                                 loongarch   defconfig
+gcc                                      m68k   defconfig
+gcc                                     nios2   defconfig
+gcc                                    parisc   defconfig
+gcc                                  parisc64   defconfig
+gcc                                     riscv   defconfig
+gcc                                     riscv   rv32_defconfig
+gcc                                      s390   defconfig
+gcc                                     sparc   defconfig
+gcc                                        um   i386_defconfig
+gcc                                        um   x86_64_defconfig
+gcc                                    x86_64   defconfig
+gcc                                                  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
