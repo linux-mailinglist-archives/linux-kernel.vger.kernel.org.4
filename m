@@ -2,108 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC31E6A2A3F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5426A2A48
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 15:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBYOCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 09:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S229665AbjBYOWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 09:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjBYOB6 (ORCPT
+        with ESMTP id S229445AbjBYOWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 09:01:58 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB08B19F0E;
-        Sat, 25 Feb 2023 06:01:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677333705; x=1708869705;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=B9y8b6VOGAgZmhcCzXb/p9gXQak0qJFRrYNMZF8AG6M=;
-  b=mSO5p6C45VW1ROF1VxzjrckZfYe/CLdnSCYOuIPnItVrpKYBKiy8f4Dq
-   /Gtlue778c+QP8+ctIpMNxsi8TsKSAadNNfSA+As7uc5q43eosAKwbzaL
-   2jNeExq/KMlqUJYuG1sjxkT4pboZDwCa3pyyvJnWxCrHp5dPcQUiCgRnS
-   6Ftzn27i28u64Bnwk6zE6dghQOSjkBE/xBMeI3NOxim+0Ex4mbu8Tf0cM
-   kf6r8fJVIN7boePkK2KS7QrTPMBR/uz5MMz6bqiNEWRJMWfr1ujZ+yRR8
-   SWuU0sZUqWUPbcdVcHcmCKcAuFhzF/pFOdjXIcH5XxesTc00vVqC7vfTV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314053475"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="314053475"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 06:01:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="918740221"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="918740221"
-Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Feb 2023 06:01:40 -0800
-From:   Ye Xiang <xiang.ye@intel.com>
-To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH v2 5/5] Documentation: Add ABI doc for attributes of LJCA device
-Date:   Sat, 25 Feb 2023 22:01:18 +0800
-Message-Id: <20230225140118.2037220-6-xiang.ye@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230225140118.2037220-1-xiang.ye@intel.com>
-References: <20230225140118.2037220-1-xiang.ye@intel.com>
+        Sat, 25 Feb 2023 09:22:06 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B75193D5;
+        Sat, 25 Feb 2023 06:22:04 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id f16so1912788ljq.10;
+        Sat, 25 Feb 2023 06:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w6yuzfd4cfp7Wsvy7k4YO2yj3vuOSi9NJ8184ii/QaI=;
+        b=jKeELB5zxaByVRQ7zIEZKejXHBlGSr33O4qU1N4sXVlemwwFzuoG95k6UalgDoXwxI
+         VjWyjfpJz338gOP6PncGnM7/RmfruyykMzTqu2+HU/PZMGOkFfISLG2sl4GwGUrJ+/Ye
+         QglXHbIzKYP2SqNdKg3vaRIzbxK1RIYKEwIfMBI4tNYFB9AUzc67xnmrU/UDJiHI5EVZ
+         i1XPC8DU9dzq+JZ1I/4gJvpnzw/iEQlICVQWrkyiXt+x0gU+fmuODf2zjuCoQtx26y8Y
+         OFvQFyRirMsfFJCaT7Q1EnoSU8Ex9M8Mr2UFyRRyxuDaiUtqMlU457ydh9lzTSjL8nAS
+         GeBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6yuzfd4cfp7Wsvy7k4YO2yj3vuOSi9NJ8184ii/QaI=;
+        b=mGJjlV+fpQryfi4kBxeOTldX/Dikzby+X+Q3jVZkymQ9Ix79lmo45lNrHgl/aTL9BR
+         84POL7kSXj4SE2Htfo/JEBAZEhfQnM91joiubZ9auoabueT3OkEqR4SF0PKQjxDrtX0V
+         Mu1XReXrIQAEKyprLiix449em+2gh/9SnlI34zNU0C75Fe/SyS3iWkBvPWU3FdTu/lbQ
+         TAJoIWTPaCeQFG8JZ+p3No1oMsVeMPavdWhl2oyYltlq9zh/lSDnicLuK7gCjSe46vAp
+         DuQ9cZxx3gX/ZTi23368XEc/2IGWx1Wr9z4SrJoC6LamvUffMOEJ6sDEX78ibHeatUg2
+         MC8w==
+X-Gm-Message-State: AO0yUKVw8xqOpaQbplA2ilDXrHDYJFBYuAkANrx0Ockld9yj5LXbPMWs
+        3UklpTBhrEYw7VumT3WUrF4=
+X-Google-Smtp-Source: AK7set8mcFf4FIjIFyxlQvO1ZfJzK9NiS+iW+wCQMwBiGg8NB9oEVbadDs58iRjc/bQtENEpo6xFEw==
+X-Received: by 2002:a2e:9a8a:0:b0:295:a3a6:95b with SMTP id p10-20020a2e9a8a000000b00295a3a6095bmr2207012lji.0.1677334922705;
+        Sat, 25 Feb 2023 06:22:02 -0800 (PST)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id f25-20020a05651c03d900b00295a5aa9d05sm180069ljp.120.2023.02.25.06.22.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Feb 2023 06:22:02 -0800 (PST)
+Message-ID: <52813148-fef6-aac3-09ff-65aac8426528@gmail.com>
+Date:   Sat, 25 Feb 2023 16:22:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+To:     Alistair Francis <alistair@alistair23.me>, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     arnd@arndb.de, alistair23@gmail.com, kernel@pengutronix.de,
+        jernej.skrabec@gmail.com, linux@armlinux.org.uk, festevam@gmail.com
+References: <20230225113712.340612-1-alistair@alistair23.me>
+ <20230225113712.340612-4-alistair@alistair23.me>
+Content-Language: en-US, en-GB
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 3/3] ARM: dts: imx7d-remarkable2: Enable the
+ rohm,bd71815
+In-Reply-To: <20230225113712.340612-4-alistair@alistair23.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sysfs attributes Documentation entries for LJCA device
+Hi Alistair,
 
-Signed-off-by: Ye Xiang <xiang.ye@intel.com>
----
- .../ABI/testing/sysfs-bus-usb-devices-ljca    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+On 2/25/23 13:37, Alistair Francis wrote:
+> Add support for the rohm,bd71815 power controller controller for the
+> reMarkable 2.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>   arch/arm/boot/dts/imx7d-remarkable2.dts | 158 ++++++++++++++++++++++++
+>   1 file changed, 158 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> index 288fc8611117..9ecb733545cc 100644
+> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> @@ -91,6 +91,10 @@ wifi_pwrseq: wifi_pwrseq {
+>   	};
+>   };
+>   
+> +&cpu0 {
+> +	cpu-supply = <&buck1_reg>;
+> +};
+> +
+>   &clks {
+>   	assigned-clocks = <&clks IMX7D_CLKO2_ROOT_SRC>,
+>   			  <&clks IMX7D_CLKO2_ROOT_DIV>;
+> @@ -118,6 +122,147 @@ wacom_digitizer: digitizer@9 {
+>   	};
+>   };
+>   
+> +&i2c2 {
+> +	clock-frequency = <100000>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_i2c2>;
+> +	status = "okay";
+> +
+> +	bd71815: pmic@4b {
+> +		compatible = "rohm,bd71815";
+> +		reg = <0x4b>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_bd71815>;
+> +		interrupt-parent = <&gpio6>; /* PMIC_INT_B GPIO6_IO16 */
+> +		interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
+> +		gpio-controller;
+> +		clocks = <&clks IMX7D_CLKO2_ROOT_SRC>;
+> +		clock-output-names = "bd71815-32k-out";
+> +		#clock-cells = <0>;
+> +		#gpio-cells = <1>;
+> +
+> +		regulators {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			buck1_reg: regulator@0 {
+> +				reg = <0>;
+> +				regulator-compatible = "buck1";
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-new file mode 100644
-index 000000000000..43b95effdefc
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-@@ -0,0 +1,22 @@
-+What:		/sys/bus/usb/.../version
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Provides the current firmware version of LJCA device.
-+		The format is Major.Minor.Patch.Build, where
-+		Major, Minor, Patch, and Build are decimal numbers.
-+		For example: 1.0.0.256
-+
-+What:		/sys/bus/usb/.../cmd
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Commands supported by LJCA device.
-+		When read, it will return valid commands.
-+		When write with a command, it will execute the command.
-+		Valid commands are [dfu, debug]
-+		dfu:	Echo dfu to this file so as to put the device into
-+			DFU mode so the firmware can be updated.
-+		debug:	Enable debug logging.
+I'm sure you have learned to regard my comments with certain care ;) (I 
+think it was you for whom I gave an advice - which resulted a board to 
+be bricked :| So, please treat my comment as if I did not know what I am 
+talking about).
+
+Anyways, I believe the "regulator-compatible" is deprecated and should 
+no longer be used to match the node with the regulator? Instead, the 
+regulator node name itself should be used for the matching.
+
+ref. 
+https://elixir.bootlin.com/linux/latest/source/drivers/regulator/of_regulator.c#L380
+
+I don't think the regulator-compatible can even be found from the 
+regulator.yaml binding list...
+
+With this remark - (and what ever it is worth):
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
 -- 
-2.34.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
