@@ -2,116 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBE26A2B40
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852A06A2B44
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 19:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjBYSLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 13:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S229571AbjBYSQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 13:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBYSLj (ORCPT
+        with ESMTP id S229482AbjBYSQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 13:11:39 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A7A168A8;
-        Sat, 25 Feb 2023 10:11:38 -0800 (PST)
+        Sat, 25 Feb 2023 13:16:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA90B17CC6;
+        Sat, 25 Feb 2023 10:16:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VkU3wglkazA3WDdsvY+r6GTOXkswm1z2trXm0IechuI=; b=DjStN73s/52C2aKUHJ/N7u+67C
-        xKVsxbGgc73JqCB9UjmsEXo28HLWtkaadn4Qvw3tfQ17fHwFv4xLIaSY4juqo0jfuluJOSt53Nnm0
-        J8miHKoX3rnhGz3CIFW4q/edegpeos3t2+FOnrUohR5FwZmcES4bSpPnvsdPfTmg8vIyGFPAxJ0WL
-        2xtQTXNuwr45ZB2usatus2AtDy+tzz51O8QNmg4FLoCibIJRsy7SLXCoy3hYICxmMM0rpCnf4hXNF
-        toOagD/u7ZgV18tcTWmTxhdx/qim6JhKTXHpKXqQl9N286vfbTxVVsV64HYFhRv988vdiaujpipbm
-        egPcgAcg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pVz1D-00CHC6-39;
-        Sat, 25 Feb 2023 18:11:36 +0000
-Date:   Sat, 25 Feb 2023 18:11:35 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [git pull] vfs.git misc bits
-Message-ID: <Y/pPV0q43R+drVtV@ZenIV>
-References: <Y/gxyQA+yKJECwyp@ZenIV>
- <CAHk-=wiPHkYmiFY_O=7MK-vbWtLEiRP90ufugj1H1QFeiLPoVw@mail.gmail.com>
- <Y/mEQUfLqf8m2s/G@ZenIV>
- <Y/mVP5EsmoCt9NwK@ZenIV>
- <CAHk-=wgQz8VDDxdaj3rk861Ucjzk72hJoCjZvfaeo8jCyVc_2w@mail.gmail.com>
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=fVrpl5WJWda12A8/sxhmUrbHI57a/9Ptg9NvLuEHny8=; b=k8tSxjfVJBHCZGrwzw67lx7x0J
+        MoKyuZU5XseVvJIj8R3Tcy1HEZwPXBpXuYsjGWe0lWxwRnKqaxdeK/I787Xl2vGjB5Tq/uTjngu1u
+        cXUqMT+pGXGXF9xs3XP9UYUyi7OuuU07DUhFUey8/EkXinI5FdtWjbUTNqhmEoAZ6PD1RsC1dBbhT
+        ixylnYlsBmkHFKROI6DclI+8jKKwPjfQxXPXUKQ+H0g1U/TWdsTSKyj1I4zEudulo8254eoyriE7y
+        W8En/L2dNuWItALW0uVafq0UeJgsHAanCwqbeeNcjNDYfmNtAQ+WsgVWziRc/+gcLs/IpN/Kb1rur
+        OHqimp0g==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVz5X-0068af-Q7; Sat, 25 Feb 2023 18:16:03 +0000
+Message-ID: <c3ca14dc-14d0-959c-0f55-8f584457db33@infradead.org>
+Date:   Sat, 25 Feb 2023 10:16:03 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgQz8VDDxdaj3rk861Ucjzk72hJoCjZvfaeo8jCyVc_2w@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] tty: serial: fsl_lpuart: select SERIAL_FSL_LPUART for
+ SERIAL_FSL_LPUART_CONSOLE
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230225173949.651311-1-trix@redhat.com>
+ <0f8a8857-5e18-e49a-0361-197b4bc892ab@infradead.org>
+ <026ee207-3b90-c7ae-a7fd-66a34cd3ee90@redhat.com>
+ <6dd89251-f4d6-8051-8ecf-cdea7d23bc68@infradead.org>
+In-Reply-To: <6dd89251-f4d6-8051-8ecf-cdea7d23bc68@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 09:04:57AM -0800, Linus Torvalds wrote:
-> On Fri, Feb 24, 2023 at 8:57 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Let's have it sit around for at least a few days, OK?  I mean, I'm pretty
-> > certain that these are fixes, but they hadn't been in any public tree -
-> > only posted to linux-arch.  At least #fixes gets picked by linux-next...
+
+
+On 2/25/23 10:03, Randy Dunlap wrote:
 > 
-> Ack, sounds good.
+> 
+> On 2/25/23 09:51, Tom Rix wrote:
+>>
+>> On 2/25/23 9:46 AM, Randy Dunlap wrote:
+>>> Hi--
+>>>
+>>> On 2/25/23 09:39, Tom Rix wrote:
+>>>> A rand config causes this link error
+>>>> ld: drivers/tty/serial/earlycon.o: in function `parse_options':
+>>>> drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
+>>>>
+>>>> The rand config has
+>>>> CONFIG_SERIAL_CORE=m
+>>>> CONFIG_SERIAL_EARLYCON=y
+>>>> CONFIG_SERIAL_FSL_LPUART=m
+>>>> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+>>>>
+>>>> SERIAL_FSL_LPUART should have been selected instead of depends on-ed.
+>>>>
+>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>> ---
+>>>>   drivers/tty/serial/Kconfig | 2 +-
+>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+>>>> index 625358f44419..b24d74d389fc 100644
+>>>> --- a/drivers/tty/serial/Kconfig
+>>>> +++ b/drivers/tty/serial/Kconfig
+>>>> @@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
+>>>>     config SERIAL_FSL_LPUART_CONSOLE
+>>>>       bool "Console on Freescale lpuart serial port"
+>>>> -    depends on SERIAL_FSL_LPUART
+>>>> +    select SERIAL_FSL_LPUART
+>>> Most other _CONSOLE Kconfig have:
+>>>
+>>>     depends on SERIAL_FSL_LPUART=y
+>>
+>> commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30 removed the =y. so it could be built as a module.
+>>
+> 
+> uh. But it's still a bool, not a tristate. How does that work?
 
-... and Intel build-bot had immediately caught a breakage in microblaze.
-Fixed and pushed out; I've checked all architectures affected by
-this series, and that was the only build breakage.  However, I still have
-no way to test it (or anything, for that matter) on microblaze - I've no
-userland images for it.  Status right now:
+OK, I see. :)
 
-alpha: bug confirmed, patch fixes it.
-hexagon, m68k, riscv: acked by maintainer (with explicit tested-by for m68k and riscv)
-microblaze, openrisc, nios2: builds, no way for me to test.
-sparc32, sparc64, itanic: builds, preparing to test (itanic - once I resurrect
-the sodding space heater I hadn't tried to boot for a couple of years; no
-idea whether it works).
-parisc: builds, but maintainers say that reproducer doesn't confirm the bug
-in mainline.  I've parisc32 box, will try to resurrect and see what's going
-on.  No way to test parisc64 here - no hardware and qemu/pa-risc doesn't handle
-64bit system emulation.
+Well, I don't see another decent solution ATM.
 
-Incidentally, while digging through the arch code around #PF, something's
-weird on csky.  Not this bug (it's handled correctly there), but...
-looks like vm_get_page_prot(0) returns something that would *not*
-pass pte_present().  Which should make life wonderful for e.g. PROT_READ|PROT_WRITE
-mmap() + memcpy to it + PROT_NONE mprotect() + PROT_READ|PROT_WRITE mprotect().
+Tom, does your patch fix the build error?
 
-Unless I'm seriously misunderstanding something, we have 3 mutually exclusive
-cases:
-	absent PTE - no further information in it.  No page at the corresponding
-address range, access will fault and work from scratch; pte_none() is true for those.
-	swap PTE - page had been swapped out, access will fault, the information in
-the entry encodes the location in swap.  is_swap_pte() is true for those.
-	normal page - page is there, access might or might not fault due to permissions,
-PTE contains the page frame number.  pte_present() is true for those.
+What are the listed CONFIG settings after the patch?
 
-PROT_NONE should not yield something that looks like a swap entry.  And on csky we
-have
-#define PAGE_NONE       __pgprot(_PAGE_PROT_NONE)
-#define pte_none(pte)           (!(pte_val(pte) & ~_PAGE_GLOBAL))
-#define pte_present(pte)        (pte_val(pte) & _PAGE_PRESENT)
+Thanks.
 
-and
+>>> e.g.
+>>>
+>>> but I noticed a few others with a similar problem.
+>>>
+>>>>       select SERIAL_CORE_CONSOLE
+>>>>       select SERIAL_EARLYCON
+>>>>       help
+>>
+> 
 
-arch/csky/abiv1/inc/abi/pgtable-bits.h:26:#define _PAGE_PROT_NONE               _PAGE_READ
-arch/csky/abiv1/inc/abi/pgtable-bits.h:8:#define _PAGE_READ             (1<<1)
-arch/csky/abiv1/inc/abi/pgtable-bits.h:14:#define _PAGE_GLOBAL          (1<<6)
-arch/csky/abiv1/inc/abi/pgtable-bits.h:7:#define _PAGE_PRESENT          (1<<0)
-
-arch/csky/abiv2/inc/abi/pgtable-bits.h:26:#define _PAGE_PROT_NONE               _PAGE_WRITE
-arch/csky/abiv2/inc/abi/pgtable-bits.h:9:#define _PAGE_WRITE            (1<<9)
-arch/csky/abiv2/inc/abi/pgtable-bits.h:14:#define _PAGE_GLOBAL          (1<<0)
-arch/csky/abiv2/inc/abi/pgtable-bits.h:10:#define _PAGE_PRESENT         (1<<10)
-
-IOW, on both ABI variants we have PAGE_NONE looking like a malformed swap entry.
-And is_swap_pte() is simply !pte_none() && !pte_present()...
+-- 
+~Randy
