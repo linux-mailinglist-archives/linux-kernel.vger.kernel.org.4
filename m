@@ -2,106 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37A56A29B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 13:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783FA6A29C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 13:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjBYMmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 07:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S229597AbjBYMrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 07:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYMmh (ORCPT
+        with ESMTP id S229445AbjBYMrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 07:42:37 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB28149A9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 04:42:36 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 55EB35C0089;
-        Sat, 25 Feb 2023 07:42:33 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 25 Feb 2023 07:42:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1677328953; x=
-        1677415353; bh=Izlq7GJvIZYKMQ2vXJDJuy9U6xU3dEpHgXToMZ98+t4=; b=o
-        jxn2sRXB1u3i+gNKQodhwGwkobmlJaCZ9ntxdT5z2+/G1vtIPpj3OmR/dvMK3UnO
-        0i1ZMxTqAaT3/72EsnRwvRMEwzOaLov9f5eUvVuVqoMyNJFP2aL0fFOhNeNEa5by
-        /LQGjiRJdiDBy6l6SCd4SeH9+4WQPLEvISDNKp/vpDhYPdE6RsfEh/IxLdI2qOgd
-        xzFYmv0ixJec52VvpulbpKqUqBSVixXl8qnlk5EH38eRhRGTo6xDBZNauBcgR0pp
-        uXDONOLqVbXsb1qcEjfYTTBK3+ODkY4WuycRO3eYQws1DSWHi/ljXmwvh2eOgYtp
-        yk3DC7+nM8DJeSwrk+k2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677328953; x=
-        1677415353; bh=Izlq7GJvIZYKMQ2vXJDJuy9U6xU3dEpHgXToMZ98+t4=; b=g
-        0lEiEwZ1s8l6Anbs+TtwYLYW3H4v4BiVVo4BtAA/6MdpGkU2fdXPDszwtaUf4Rnv
-        awd4og41HyfCKVEbmlbHLpcHmskw6AndfO9dgQKpn8RwT1s/7rEjPhjeBRHuJVEz
-        TBWaAzXnYgVox/rMXdAiIJdihQ4JXmO10IFrF1VzDjhiXVHUQtUtzr87Tjlad/p1
-        CIPrQcf0tXBjxkckJQsY66t8gMLvH/vv8U8xmPbtu67Cr/XjOeb5D13acAt8xK+F
-        F2wVO1UvWx9obLj/gVZojeGjOF0xX2qXpjiPFXSFMN3OWbyX1RaHRxc2ZzYnYdWj
-        dbLT2U3d7UcJ6gjXAN9FA==
-X-ME-Sender: <xms:OAL6YxHA_Vhtp5D3IXfI-ldnC3YkxnBxGt0930hWgl9E-DL46ZfVIQ>
-    <xme:OAL6Y2UpPPQScMwvAsdfjlTW7vw06y5_GaJoq5RkGqJ74--CiIL5ojJJdI5OcQba0
-    MROxH1moM_XUmbgXwM>
-X-ME-Received: <xmr:OAL6YzK2SsENoNYeZcWK4N5cJGyOr2yW5iKByisXl1nOqnnYFe6t8M4GoAjAo0e07Uq1x_04O4Ji4qAClwznH_EtizmRlu33Kx9dbf_XY1VI9y2gPpfSJDF7YTK9prbM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekhedgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptgfghfggufffkfhfvegjvffosehtqhhmtdhhtdejnecuhfhrohhmpefuvhgv
-    nhcurfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
-    htvghrnhepvdfhtdduuddvueejueffgfdukedvfeevgfeuieeivdeltdehgeeivefftdet
-    kedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    hvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:OAL6Y3HrewNJsgW81Fbz8dNrNh98woFrw1Xz50eLLk26QartykPjxw>
-    <xmx:OAL6Y3WJuheddgGm0q_MG-FZ-5auUUWJSSxlIlQa5HJKKXZByedrtA>
-    <xmx:OAL6YyNBrmAYUG49idrU9tdRs5j_tGdYbNRpQZP9Wbu0O5mh2_1xBw>
-    <xmx:OQL6Y9zuR1ZmXIABQzAIVEHc5W-M_WCfNAlOAlVrn5EZGqpICjIqHw>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 25 Feb 2023 07:42:32 -0500 (EST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Sven Peter <sven@svenpeter.dev>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] soc: apple: rtkit: Fix buffer address field width
-Date:   Sat, 25 Feb 2023 13:42:19 +0100
-Message-Id: <AE9570F8-6D5E-4314-AD21-21DD8B38D7F1@svenpeter.dev>
-References: <20230224-gpu-up-rtkit-v1-1-671178cb2a5e@asahilina.net>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230224-gpu-up-rtkit-v1-1-671178cb2a5e@asahilina.net>
-To:     Asahi Lina <lina@asahilina.net>
-X-Mailer: iPhone Mail (20D47)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Feb 2023 07:47:47 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3194818AAF
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 04:47:45 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id h17so562626qka.11
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 04:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ppt8xrJTok6dPPvHOc17Af1SESjrgSpeCBregmeAoWo=;
+        b=OE5CDuZ4uoGuXthbAXSnvToCXo47fumN91CJ7Y5cQRlPWcSbCpAcLL0tjzdVniromD
+         vvLL8+EzFfX3+7J0fLJ1WfYrIYqCqQ+J6+zoUWpvo5856BFVF5M42MJLtnD0Zrosiszo
+         E4+XA53X2ulBhtHWixDW1z+rGYISnVqVM6r7Qmx5P9V3QqR1oHpdHXI2PkXJ8dFP+yZe
+         jJUg9w0mibVX1EZGZ12FHb++1FXCl6uiFoolVQqVck+C7Twtkn8CnPyGhBp0WFVEWQ0B
+         aLIas6WsnYI49GsxV0aFaIv8fJqKgMQEhFirzKWX4JUJSClpkByohPmJziblqHZyMP1i
+         ELQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ppt8xrJTok6dPPvHOc17Af1SESjrgSpeCBregmeAoWo=;
+        b=mkNKgmAmWdR7S7/szPdMchUKMdsRa7htwZt9Jdo0qtGpqcZSL0kcgyE3Jv599f6/5c
+         DEWB032eoaF8/hSw83uK49hgxEoyeCslQ3Zmp6Nms9DL9r7B/drxtHn/oSGRH1tFebI/
+         cZtZjU/ToY1MKnqm2jjRZc1JBIMXgb2FYFmsWYgGuaGP7VbMQ6BFrq0lwxC5yorMYA7U
+         PdPJbj4P5T6fGH6t44UGxwohxJFXd+cHl859Dwn4adaJlhPLYP3CROzl4apvrg2Sk/fn
+         ITpMlxWYoUv8JbNC/JFHBLv3GQ5icMHcv/T15lYvnGXWhx4S8fWUzH/8QX0kKNHCezsS
+         Cr8A==
+X-Gm-Message-State: AO0yUKU1ECxkEQh/lz1cF6dh3pGEmYnkTWo9yJLVHcVfp60WEnIieiXV
+        DigD0rakCC6iuTHHo5UGppBYumkmEqIdul4WWQ==
+X-Google-Smtp-Source: AK7set+aavpjNvIKpx9y9NBzkxKtTW9OrtSVecHJGHPKleA6RbAa6ZIRXpUA9WswIZMz7U+8jUx4OOWtO29AxtGLafI=
+X-Received: by 2002:a05:620a:158a:b0:71f:b917:f4df with SMTP id
+ d10-20020a05620a158a00b0071fb917f4dfmr3197262qkk.2.1677329264031; Sat, 25 Feb
+ 2023 04:47:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20230224154235.277350-1-brgerst@gmail.com> <cfdb9c5a-4723-d920-511e-b57ae6c492f7@bytedance.com>
+ <CAMzpN2hvPHWYOeyzfpRmk39XYwCrSJx0UyqxE48F1TjTNyoKAg@mail.gmail.com> <ca5788873c373249983ab6ac9ee173b12293641e.camel@infradead.org>
+In-Reply-To: <ca5788873c373249983ab6ac9ee173b12293641e.camel@infradead.org>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Sat, 25 Feb 2023 07:47:33 -0500
+Message-ID: <CAMzpN2ixYTKQaNoizkeNBrHQH_2SN9OMexnK9t3oVMDDCMwbOA@mail.gmail.com>
+Subject: Re: [External] [PATCH v2 0/5] x86-64: Remove global variables from boot
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Usama Arif <usama.arif@bytedance.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Feb 25, 2023 at 5:20 AM David Woodhouse <dwmw2@infradead.org> wrote:
+>
+> On Fri, 2023-02-24 at 16:38 -0500, Brian Gerst wrote:
+> > Removing the globals before the parallel boot series, would be the
+> > best option IMO.  That would make the transition simpler.
+>
+> Looks like this:
+>
+> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-rc8-brfirst
+>
+> Passes basic smoke testing in qemu, including suspend to RAM and
+> offlining CPU0.
 
+Looks good, thanks.
 
-> On 24. Feb 2023, at 07:50, Asahi Lina <lina@asahilina.net> wrote:
->=20
-> =EF=BB=BFThe buffer address field is missing two bits. This matters for th=
-e GPU,
-> which uses upper-half 64-bit addresses on the ASC and those get sign
-> extended from the mailbox message field, so the right number of high
-> bits need to be set.
->=20
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> --
-
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-
-
-
+--
+Brian Gerst
