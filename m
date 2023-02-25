@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113EF6A2961
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 12:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1596A2962
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Feb 2023 12:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjBYLv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 06:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S229606AbjBYLwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 06:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBYLvy (ORCPT
+        with ESMTP id S229558AbjBYLv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 06:51:54 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFE9EB56;
-        Sat, 25 Feb 2023 03:51:53 -0800 (PST)
+        Sat, 25 Feb 2023 06:51:56 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2B6EB66;
+        Sat, 25 Feb 2023 03:51:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677325907; i=w_armin@gmx.de;
-        bh=oG+tB6ssXoXEofK3HsqQ2ix++xKtWIxgzJb4QDsF1RA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=m0kC9ZVcpnUqA4EuBCq+71qCSzBxNegN2ifJFDshV5QtfMY9B0m35XD0mq0saOIOG
-         JYlHWK7ZLf+NilYAaphysJf8b8x0DitineoCnJLg3+It/0h+GOb73rqg0+tFmrpa18
-         7F2jhXjPgrrMn0zhVfn5IfNP2crNapqOGeCGhRnN2XD7nqHWoqi/HewKffyjc9/+3x
-         asEy1temCqygFlIeVVmnMjJtwOUmh7+wnlkZjUBfbhyc5Pn/7yYbDVyQyfbzvKv9QH
-         GK5wK3qNadULlLVWmA3q4ehGF3G06KACvSj2mTAj8Zgb0s7H1OC50mWPwhQGSPGWL6
-         RJvm9+T5KLdQQ==
+        t=1677325909; i=w_armin@gmx.de;
+        bh=uNkbSijDFzzTJZKTSAPmytRUJkMoQgMb2ySqr5S1jhI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Z0Mwqs/1QKrzB00G56YTFOiw15irpwTvDO68WHXEiTlY34aDPhWtgOvoXfaHiyytq
+         EAglFYr+CsZzg0T3iTq18Od3qxShMV4dk38ePGRh2Lt2qyKTSCgyFPkW3wONrNXhEx
+         i4FrajEoG6OJu2wCPjjRJta4VeH9OPzdEQsp8lriSRmav4/Nu6WtqmnQ0WPJJN7FPu
+         iHHoVRzdzf2kr9nK03eqIhXmxjg8GTHL87q55L19tq0s5yg4hLIwkfiCShiO71ECSu
+         TYUmvTe67lMazZAJYKGbgbUSZkJM/eUTav8j4PEUfWNsFjcL19LWuOoslkZcgOfdYd
+         MDoqzflLqqnlA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Mo6qp-1ohNvM2pvn-00pdnA; Sat, 25 Feb 2023 12:51:47 +0100
+ 1MWzfl-1oyVIq106D-00XH2d; Sat, 25 Feb 2023 12:51:49 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     rafael@kernel.org, lenb@kernel.org
 Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/4] ACPI: SBS: Fix various issues
-Date:   Sat, 25 Feb 2023 12:51:40 +0100
-Message-Id: <20230225115144.31212-1-W_Armin@gmx.de>
+Subject: [PATCH v2 1/4] ACPI: EC: Add query notifier support
+Date:   Sat, 25 Feb 2023 12:51:41 +0100
+Message-Id: <20230225115144.31212-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230225115144.31212-1-W_Armin@gmx.de>
+References: <20230225115144.31212-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wSdh3QZ5TfA72bLW4j1TVQlYE9Fz2wCZXYtXmxMQ+OHSSgW9vsY
- dvBM5ju6D46RQJ7mKCFz+vxglSJ4ZGNHZNCPcOnsOPUrwrBBufwxgqJlQWyX7M1aGLDWoEo
- yKUZdUeTElgtL1lcvCLUWUBEnv5LppkMbuEclIRoo2uJWCQ9v/93WSh5DYcMctx/WcbOmQ0
- Lvy9g2SUYGZSP3MloojSA==
-UI-OutboundReport: notjunk:1;M01:P0:s79fxxbmHAs=;9AYyQVcWuaWsP5nnzWsb0BVuw85
- Qw8Ua0fIFB2hymSCIH5ygLwKYdFfIY9GMK7COcqZ3A+42TjxpJr48ueuR0ELjevzmncrb2FF6
- Vg55uRHJKU1B/3PXWh2ycqPGzVmEog8gBpt+Gu1qZs1YC94FbiGXaH2tPVt6mRzP044qXNMSo
- CrTf2V8hXGK40Pa4gBvO3sUj1F2nhuy71IdRDkJDyMxsApWdSOJzzhaX6UMroNnduoW8zFSjS
- dumoE5+85tfp0GqqwKL4aniodU0wMywsuQBkQX7OOYa67t+g8QAmnIjZlb4wAQxfNggH7xTcE
- nqFlmUK9eOFui5SZf9jVrOoQyXgNu/GOMhdsIZIQu9MzUCqMVUvLKZvuMcZ2cbd9QHxJ3t18F
- BoxuBlyZvRYreEeNMdrq4ng3Vvu0+k4apWUXhGz36viXif/LlCA9QGEOar+i2t8JU0lFankM5
- XDmTUYd3Pc/zlW+Fh+LCp/MOPznDDY8DYrb7VewnscWc7sV7Z4y5jLm10xMfOjYZSRSXH/vid
- zJWIrNGgGVzar6QX2KcEA5aEphUaPkYKmUfxS6tc34KfzxwO0SaQKeZmk6/i8AAATtOJ+bU9T
- 4dGdQOQAZJe3yZO/xNmvSld9TJnbEk8l2VXYaAAe71xpEpUy4Kjk0ydyYbNvZA8Ui8wyYVlM4
- BGLx0DNHk0ZjYIzPhwNHGTygXrwhnIzm5SazCKj9aJ/BlB00aoEHZ64F6EV0YReELOqui8TSe
- 7geq8vYp9A47ckTsj4Lp6z5a9sl6YuZ9eHCL4Jqgsjb/rCAU1dUTX9eLpB5WI5Vt1hQG5iTv+
- fSLGs+4Sz6qGXZni0CRUumTy7tyKSny+QC438BLXSrvwNzo9dSMYhnwj4wwoKC0R2pYayhxSY
- Uq7yDPJCPLzxFBpcXK5tKmFaeS18D5+M4/U6zJeOEMTCjYE7WpLDH6TXLRY9xSXBD9ooGHkDN
- Mhp2+FTXiVUfkLRbJ1d5GZEiaF8=
+X-Provags-ID: V03:K1:9qgZ5XlFM1dryjZe2sJc4b7Jw5L9axQsA1h4k3y+Zz7idOC6AjV
+ +Yi6jVeciqKezY5I+NJ8gOD3G949OkqtS9X/mjfILfFkBlcALfEEru9YySIK0D5kljYPqoH
+ iExcNfLy7BiMrCl5mK2clH0dMri8Vt1KT3iG7Yul/sNnKHA3VxXSo1J48fpCwO4Ok9ayhAR
+ SUJaft8Ub5SXn+Sjb36Vg==
+UI-OutboundReport: notjunk:1;M01:P0:ydJxzquC0oA=;LaAWoSS1aHtgk6pESX/9Q62um7y
+ iVOKgI+IUGy+wUD8bRNFa95biLuSgdO/MYjpLC2JMlk0lpUVoctLShTBV619AGgXjHDF9rHr8
+ KjANzzvmCG4NzKMZnqhYnJ6WsZL1YKspUjovPF+914FPhp/B38iDwNrrG5lyRH5HXX6aLF/gM
+ Zppuh70gFmBcas+NzlPbY6eMjOGHw4DDVmWhu2Rbnz0R4J+LNTkMM3kwzoteRMRw+5ICzTYlk
+ W60GsdzMsMdPOY6dfY8WwK8/7yg8ePV+5CKZlu+D76kk/QrNj8Wr/Htl9+GZzN3Y4N1BJxfv0
+ bKorxlt22atlV/m1BRUMMem280815pvTWsStHUAOoZb4EFvhUQrMR8pR9EPjQMoEQBWtVGuDC
+ K+NZwN/RGolAypQCo4+wtWtn0J+acnm847/I0PUw2S1puV7rs5qmUcvD5lDaGFCC8YttEUwOT
+ GXUR96DeH8UZSvjjsVyv3RJzK+SLBan4MfwV0apH5tVuCOCSLyGKbmCi1OzBZW5cNKpvYULwg
+ l77gO7UcTsYuPlZRKRgxFOqciiNCJSrrulCWw5PIyRxS/njJrbMetGKNvYfBw0rLWgqlAJBXe
+ d5WBFXMwm5vmP1tUXi/pfoOCuKRRBsKRgsiuhkKJ5fqK2BerucJ/0o19FIp0jB2LrZzmhIsqb
+ naajBPqYBGMeFLPX/DhATVRrs8pwpALYEl3gePXQtOrPXFPaSVSs3cgPfSpmMlsVosOIIDgAF
+ iPkgcXbY6bg//VtVsXgagKJUOimc8fKGpDUGwtv6Hze2oLRhM9qEW8ZpyoiAaoNIL2wAFFrcM
+ ehaFdpTRgiE/TkYB1z7hntBlTdgbn8izw7BUVy7fIv3s4zHy1QEOYJfcEgwNp9Dgs1pSDS8su
+ NkgXe4/bbBbyZ0jBOaK2JYOiWmzBBG/2pQDVZjNzJxZ4Tp8Robq+WmYL3tPqCUobwVfaB91Ts
+ o5OiVt9MX9yNHDKtQ89sIEnfxwY=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -67,40 +69,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On my Acer Travelmate 4002WLMi, the system locks up upon
-suspend/shutdown. After a lot of research, it turned out
-that the sbs module was the culprit. The driver would not
-correctly mask out the value used to select a battery using
-the "Smart Battery Selector" (subset of the "Smart Battery Manager").
-This accidentally caused a invalid power source to be selected,
-which was automatically corrected by the selector. Upon
-notifing the host about the corrected power source, some batteries
-would be selected for re-reading, causing a endless loop.
-This would lead to some workqueues filling up, which caused the
-lockup upon suspend/shutdown.
+Allow external drivers to register notifiers to act on
+query events and possibly override the query handler.
+Use the existing notifier infrastructure for this to
+ensure correct locking.
 
-The first three patches fix a stacktrace on module removal caused
-by some locking issues. The last patch finally fixes the
-suspend/shutdown issues.
+Tested on a Acer Travelmate 4002WLMi.
 
-As a side note: This was the first machine on which i installed Linux,
-to finally fixing this took ~5 years of tinkering.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
-Changes in v2:
-- make acpi_ec_add_query_handler() static to fix warning
+ drivers/acpi/ec.c       | 28 ++++++++++++++++++++++++----
+ drivers/acpi/internal.h |  5 +++++
+ 2 files changed, 29 insertions(+), 4 deletions(-)
 
-Armin Wolf (4):
-  ACPI: EC: Add query notifier support
-  ACPI: sbshc: Use ec query notifier call chain
-  ACPI: EC: Make query handlers private
-  ACPI: SBS: Fix handling of Smart Battery Selectors
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index 105d2e795afa..dc7860a825a0 100644
+=2D-- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -18,6 +18,7 @@
 
- drivers/acpi/ec.c       | 44 ++++++++++++++++++++--------------------
- drivers/acpi/internal.h | 10 ++++-----
- drivers/acpi/sbs.c      | 27 ++++++++++++++++---------
- drivers/acpi/sbshc.c    | 45 ++++++++++++++++++++++++++---------------
- 4 files changed, 74 insertions(+), 52 deletions(-)
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/notifier.h>
+ #include <linux/init.h>
+ #include <linux/types.h>
+ #include <linux/delay.h>
+@@ -184,6 +185,8 @@ static int EC_FLAGS_CORRECT_ECDT; /* Needs ECDT port a=
+ddress correction */
+ static int EC_FLAGS_TRUST_DSDT_GPE; /* Needs DSDT GPE as correction setti=
+ng */
+ static int EC_FLAGS_CLEAR_ON_RESUME; /* Needs acpi_ec_clear() on boot/res=
+ume */
 
++static BLOCKING_NOTIFIER_HEAD(acpi_ec_chain_head);
++
+ /* ----------------------------------------------------------------------=
+----
+  *                           Logging/Debugging
+  * ----------------------------------------------------------------------=
+---- */
+@@ -1125,18 +1128,35 @@ void acpi_ec_remove_query_handler(struct acpi_ec *=
+ec, u8 query_bit)
+ }
+ EXPORT_SYMBOL_GPL(acpi_ec_remove_query_handler);
+
++int register_acpi_ec_query_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&acpi_ec_chain_head, nb);
++}
++EXPORT_SYMBOL_GPL(register_acpi_ec_query_notifier);
++
++int unregister_acpi_ec_query_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&acpi_ec_chain_head, nb);
++}
++EXPORT_SYMBOL_GPL(unregister_acpi_ec_query_notifier);
++
+ static void acpi_ec_event_processor(struct work_struct *work)
+ {
+ 	struct acpi_ec_query *q =3D container_of(work, struct acpi_ec_query, wor=
+k);
+ 	struct acpi_ec_query_handler *handler =3D q->handler;
+ 	struct acpi_ec *ec =3D q->ec;
++	int ret;
+
+ 	ec_dbg_evt("Query(0x%02x) started", handler->query_bit);
+
+-	if (handler->func)
+-		handler->func(handler->data);
+-	else if (handler->handle)
+-		acpi_evaluate_object(handler->handle, NULL, NULL, NULL);
++	/* Allow notifier handlers to override query handlers */
++	ret =3D blocking_notifier_call_chain(&acpi_ec_chain_head, handler->query=
+_bit, ec);
++	if (ret !=3D NOTIFY_BAD) {
++		if (handler->func)
++			handler->func(handler->data);
++		else if (handler->handle)
++			acpi_evaluate_object(handler->handle, NULL, NULL, NULL);
++	}
+
+ 	ec_dbg_evt("Query(0x%02x) stopped", handler->query_bit);
+
+diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+index ec584442fb29..6f41d42375ab 100644
+=2D-- a/drivers/acpi/internal.h
++++ b/drivers/acpi/internal.h
+@@ -11,6 +11,8 @@
+
+ #include <linux/idr.h>
+
++struct notifier_block;
++
+ int early_acpi_osi_init(void);
+ int acpi_osi_init(void);
+ acpi_status acpi_os_initialize1(void);
+@@ -212,6 +214,9 @@ int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 q=
+uery_bit,
+ 			      void *data);
+ void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit);
+
++int register_acpi_ec_query_notifier(struct notifier_block *nb);
++int unregister_acpi_ec_query_notifier(struct notifier_block *nb);
++
+ #ifdef CONFIG_PM_SLEEP
+ void acpi_ec_flush_work(void);
+ bool acpi_ec_dispatch_gpe(void);
 =2D-
 2.30.2
 
