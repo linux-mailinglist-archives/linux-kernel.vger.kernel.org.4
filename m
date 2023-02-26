@@ -2,84 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1812E6A3383
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 19:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5F56A336E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 19:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBZSvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 13:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S229670AbjBZS01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 13:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBZSvJ (ORCPT
+        with ESMTP id S229557AbjBZS0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 13:51:09 -0500
-Received: from antispamsnwll.cedia.org.ec (antispamsnwll.cedia.org.ec [201.159.220.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877BE193FB
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 10:51:04 -0800 (PST)
-Received: from antispamsnwll.cedia.org.ec (127.0.0.1) id hvel1e0171s1; Sun, 26 Feb 2023 13:25:31 -0500 (envelope-from <prvs=1421df1a3c=phernandez@cuenca.gob.ec>)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cuenca.gob.ec; s=cuenca; i=@cuenca.gob.ec; h=Received:Received:
-        Received:Received:Received:Content-Type:MIME-Version:
-        Content-Transfer-Encoding:Content-Description:Subject:To:From:
-        Date:Reply-To:Message-Id; bh=4Q8sM1WnLl2+Gbtb3rrOkEcuzcuZBE8iv+H
-        DJ7a/1zw=; b=g8POkRfwHe7VDlaHXQ5+PmZqGux5e0eY0gQaHlphG/F7Rzt/j4d
-        UI+LsxhxJoRxKcjEt4K55+aij7Ek7sNnOXHDbUF+G4E3V5H02DpTk9pLoU2AcDUZ
-        U9NDTS0f3TkEtVkwwpQcZ4TgipOXlxZS9Sz+Gg0w5vF41XlWi4Y16VQ0=
-Received: from mtace.cuenca.gob.ec ([200.55.234.131])
-        by antispamsnwll.cedia.org.ec ([192.168.205.200]) (SonicWall 10.0.21.7607)
-        with ESMTP id o202302261825300028170-2; Sun, 26 Feb 2023 13:25:30 -0500
-Received: from mtace.cuenca.gob.ec (localhost [127.0.0.1])
-        by mtace.cuenca.gob.ec (Postfix) with ESMTPS id 2949E4205D12;
-        Sun, 26 Feb 2023 13:25:30 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mtace.cuenca.gob.ec (Postfix) with ESMTP id 059B54205D11;
-        Sun, 26 Feb 2023 13:25:30 -0500 (-05)
-Received: from mtace.cuenca.gob.ec ([127.0.0.1])
-        by localhost (mtace.cuenca.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id c69ir4Iz3jDk; Sun, 26 Feb 2023 13:25:29 -0500 (-05)
-Received: from [10.20.18.117] (unknown [156.146.63.154])
-        by mtace.cuenca.gob.ec (Postfix) with ESMTPSA id 0583D4205D21;
-        Sun, 26 Feb 2023 13:25:20 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Sun, 26 Feb 2023 13:26:25 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C0711EB0;
+        Sun, 26 Feb 2023 10:26:24 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.169])
+        by gnuweeb.org (Postfix) with ESMTPSA id 8C45E83191;
+        Sun, 26 Feb 2023 18:26:20 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1677435984;
+        bh=Iz5h8+IvB6AGuGph3EUQwH4CjEnn4umqDZWcNOgJEhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XmoHYGC+4XhKP+Syq5r9hpOCyl3yg8Xx/8d669vPKBl7eFyJUSGrRhheM9/1baMmP
+         K1o48wOEL17Kzehoq3ICGyDQRKXrmh4/zvoE/EwsCWNEubD4NORt9yUgPDy0e1E4aS
+         fgk0v3Ms1+TEjwmt5+XfsJbFBuN7zHnlC5yhyMNCQyTCTuTLjjOI3YYVUVvdSAosRY
+         gwrNbez2CLyCg0YwV5ZgRhHV4swMlLHhDqYAawuouYWCc06HJq/PzuR/YvtZMrQy2U
+         BdLJSfiZQfthlsrUxT7iTfmXKNyhgYLXyfsBm326fAqefkfAgt6gfO8yIGXZDSk+9O
+         r7MEDUsqCzp1Q==
+Date:   Mon, 27 Feb 2023 01:26:16 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fsdevel Mailing List <linux-fsdevel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: Re: [RFC PATCH v1 0/6] Introducing `wq_cpu_set` mount option for
+ btrfs
+Message-ID: <Y/ukSBodK65MEsuL@biznet-home.integral.gnuweeb.org>
+References: <20230226160259.18354-1-ammarfaizi2@gnuweeb.org>
+ <Y/uQdXp8ioY1WQEp@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Investment proposition
-To:     Recipients <phernandez@cuenca.gob.ec>
-From:   "Franklin C. James QC" <phernandez@cuenca.gob.ec>
-Date:   Sun, 26 Feb 2023 19:25:08 +0100
-Reply-To: franklin.c34@aol.com
-X-Antivirus: Avast (VPS 230226-0, 2/26/2023), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20230226182521.0583D4205D21@mtace.cuenca.gob.ec>
-X-Mlf-DSE-Version: 7077
-X-Mlf-Rules-Version: s20230112191048; ds20200715013501;
-        di20230221222152; ri20160318003319; fs20230223174059
-X-Mlf-Smartnet-Version: 20210917223710
-X-Mlf-Envelope-From: phernandez@cuenca.gob.ec
-X-Mlf-CnxnMgmt-Allow: 200.55.234.131
-X-Mlf-Version: 10.0.21.7607
-X-Mlf-License: BSV_C_AP_T_R
-X-Mlf-UniqueId: o202302261825300028170
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/uQdXp8ioY1WQEp@slm.duckdns.org>
+X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I trust you are staying safe and well, I am Franklin C. James QC. from Glas=
-gow, Scotland. I have an investment proposition for your consideration and =
-more details will be revealed once your interest is indicated.
-   
-Yours in service,
-Franklin C. James QC.
-____________________
-Secretary: Phillip Hernandez
+Hello,
+
+On Sun, 26 Feb 2023 07:01:41 -1000, Tejun Heo wrote:
+> Hmm... the allowed cpumasks for unbounded workqueues can already be set
+> through /sys/devices/virtual/workqueue/cpumask and also each individual
+> workqueue can be exposed in the matching subdirectory by setting WQ_SYSFS.
+> Wouldn't the proposed btrfs option be a bit reduandant?
+
+Thank you for the comment. I just realized the sysfs facility for this.
+So I will take a look into it deeper. For now, I have several reasons to
+use the `wq_cpu_set` option:
+
+1. Currently, there are 15 btrfs workqueues. It would not be convenient
+   to let the user manage each of them via the sysfs. Using `wq_cpu_set`
+   option at mounting time allows the user to set all of them in one
+   shot.
+
+   (for btrfs maintainers):
+   I am also not sure if the number of btrfs workqueues is stable so
+   that the user can rely on the WQ_SYSFS facility.
+
+2. I looked at /sys/devices/virtual/workqueue/ and saw its
+   subdirectories. The directory name is taken from the wq->name. But
+   how to distinguish multiple workqueues with the same name?
+
+Each btrfs mount will at least do this:
+
+	alloc_workqueue("btrfs-compressed-write", flags, max_active);
+
+When we do:
+
+	mount -t -o rw btrfs /dev/sda1 a;
+	mount -t -o rw btrfs /dev/sda2 b;
+	mount -t -o rw btrfs /dev/sda3 c;
+	mount -t -o rw btrfs /dev/sda4 d;
+
+Is there a way to identify which sysfs devices correspond to a specific
+mounted btrfs fs workqueues? Let's say I want each mount to have a
+different CPU mask.
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-www.avast.com
+Ammar Faizi
+
