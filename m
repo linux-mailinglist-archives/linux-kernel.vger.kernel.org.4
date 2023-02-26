@@ -2,346 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539886A2FB9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357D76A2FB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjBZNJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 08:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S229679AbjBZNHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 08:07:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBZNJ5 (ORCPT
+        with ESMTP id S229495AbjBZNHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 08:09:57 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8876F744
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:09:54 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id f41so5068211lfv.13
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:09:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YnjF1sEV5Slpav8CN8W9wle1FqVe/LUBAIS6618cS64=;
-        b=xMUS3PIsVLoJmEzlubNdZAIZ/PiGdEN57jv6aV6vVmvmLoxP8BF0SweDPw8bmjwP9a
-         SnIzGfiQm9PCNVJIkl4E06B7p1L0wKlazERHaLElDwJvrPKNyp10TVyjUN1WUQLklmWZ
-         fAeFKhRo6z/NYKT1V12rS2p7UBzRTjvXz68lcwAjiFhSL/d41lrgyJvfYPgsW5P8Osl2
-         TrtZsUPpdpQbNxzjZjzTlk5PB6IYw2wd4WH7V+WBm+VROa3ocmiMRoGG1zxtWPPEHxPJ
-         pwuZZW38WSEGX/At4lS0H+zYQ5sjtwAbRos2/Ubem3tlLj8A3xi/BvF2XEMLv9qWlaz3
-         uhcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YnjF1sEV5Slpav8CN8W9wle1FqVe/LUBAIS6618cS64=;
-        b=nQBlNGUFCvCKsmE7Iq5UeFkVtOQT4SirRaZ6jzMvMVBLLfmM96/MdOULmEHp2LDExn
-         AskNYvctJiphtpcKa88+upksfvbPmvkoj7n8ConVbkGb98pMWKaazE9U1Q43mTXLgPw0
-         KrxrNeb4qeJ+XzUVcIwI6CcFvzK/wCwOFpaSvorJyr8rOMGGsYl31en3O4Gmkb4M7I78
-         SuAVLod2+WrhcOfylP82RFIJBVq/vNBt/ydHQspBabdQInl40OK3jwn/zvlo63OXv5Qe
-         fauorhPYyyqATQpXVXV77YCquNDSpm0WrE/+ow6IJHnGQbGt43JcdCkfn4EVhMruj2a1
-         eJuA==
-X-Gm-Message-State: AO0yUKWEv5XOlS4qlSwceyF71EV0E/flLmJH19d8733Mcd0OlOWeDUDL
-        Aa/1WmpuHCmN0017vOHXUDEYfQ==
-X-Google-Smtp-Source: AK7set/le4LmGOWaS7f3NvN7MniMRSRHgIY7TP+eWhLs8+POZ8+GqLWBfmn8IKvpWAsFn6IlvicZhg==
-X-Received: by 2002:ac2:5961:0:b0:4dc:823c:8127 with SMTP id h1-20020ac25961000000b004dc823c8127mr6458141lfp.57.1677416992898;
-        Sun, 26 Feb 2023 05:09:52 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id r26-20020ac25a5a000000b004dda87e7de7sm553762lfn.81.2023.02.26.05.09.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 05:09:52 -0800 (PST)
-Message-ID: <113a10b6-6097-c80e-c29c-6f61b2b2896a@linaro.org>
-Date:   Sun, 26 Feb 2023 15:09:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
-        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
- <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
- <741be2a3-0208-2f40-eedf-d439c4e6795b@quicinc.com>
- <F8A4FC18-C64E-4011-BC08-18EB3B95A357@linaro.org>
- <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
- <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
- <f0dfba42-4674-3748-bf5d-39f6e1745f67@quicinc.com>
- <f1a6ee82-9502-7ea5-fe48-f296fc7df497@linaro.org>
- <3e114c0f-a042-6801-69bf-67436cb2a448@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <3e114c0f-a042-6801-69bf-67436cb2a448@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 26 Feb 2023 08:07:35 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2053.outbound.protection.outlook.com [40.107.241.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5330F8;
+        Sun, 26 Feb 2023 05:07:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YTHulXEa+UiueVpf25yVSnXtlng5HIKObFRxUXS1BOg2gNu0mejOkZgMzWB/0NhE0e9kkcSz/m0V7Vv33m0SaKQet1VhdQ+aJzWT9yYMQBTLsNtzqfLyWJwkSlh849alfiBxLGJSgE3imshBzBViiGEmiu/mlcIjVRnNOiBB33L85lBIHhoXKaLGQL9jlWRXJaWOf2Ry7O/jxjLJkwGqUBNWuRnwz/f0KTFa87mL7xpIGbnjjilc2efpxxqYjX1pnhCIbtyE6Wtlp4sBcO3j6QXsgu/d9WGsTQ3eUBGftj1mEDoPyzV+PbaZprQlmwkCR6kbdhcwJg52uPbEjyAusQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lPeChp+Hhy6LO/GJbCYgrurAT/gnM/15Bg8oXOXgMhM=;
+ b=c/toLBWJmos2c/7nahSI038rmnICtviY7SZTP+qhWTD6jg6tjGTSs6hjUvJNMZC9YatEUhQTv9knOoVCQxQiD8fnI9Rd22/CbzXFN2ezRdR0aPNj1/yxb2STNEJZ2KVKD8RkJ8Ufo8bOJGEv+WRrNILJRvFAPe06o4oVUFRBGzQdp7IZXcFvEvjQZRrpVuvZVBC79sDNEzTfuD1EsF94IlqFJMhRlIQwS8javxvpG8vGnzWnliTOt26G2CNbfpt18qgBLEwmcZmsmAMd0mFS7+aQlFAAZCE7e52TgOMmG0DEn0CMPkhtESPwh/vmS/s0CTLG+pW5AahpfJUpl8U0Mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lPeChp+Hhy6LO/GJbCYgrurAT/gnM/15Bg8oXOXgMhM=;
+ b=LiODzaf1E3zqNBejoGJkpIXrFNKZ4xVdkYeyczcFgglmsObLr0ug3Hefy66/V8XSr67wSdNKKS7OmoUNF9K4aG/avKdBFJThFybXcX85ByM6t8yFqtkiIX6oa43CU3RdmRVZdVP4Tszg7ozEHYUcM8N08rEsuluU/Kq7SDRM0Dg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DBBPR04MB7962.eurprd04.prod.outlook.com (2603:10a6:10:1e7::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27; Sun, 26 Feb
+ 2023 13:07:30 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6134.025; Sun, 26 Feb 2023
+ 13:07:30 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH 1/3] ARM: dts: imx6sll: e70k02: fix usbotg1 pinctrl
+Date:   Sun, 26 Feb 2023 21:12:12 +0800
+Message-Id: <20230226131214.278911-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0007.apcprd04.prod.outlook.com
+ (2603:1096:4:197::19) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DBBPR04MB7962:EE_
+X-MS-Office365-Filtering-Correlation-Id: 735e87c8-52b0-4aa5-d062-08db17fa6ac6
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /KP7hPgSr4zyxde63jMrX9gBBVSEzo8rewf09zBNVIJlcemJkrqZLT28akqVeV2M/xyk430zfSMeSb4c59KtDq3Y8CLU4Kx84P7FL52174ItKX7GkN9aK3G4T7vevUp2Gikl73kR68gUEWvqHh2CrQLWuUjqhTbVw6OkNOzSGOhQGWZpCiZRZ9v2LBbk6CIwxnDbvLZWf6YvvYazBAwm61900ysx+Qrjg38+jqfPZX5Cdr/XkKILB/SlGQ+eoCzp4FCeLxLXGZLpkhpk8e3xQwItf4Uhvo/AIUVwopXXmTNt2as044Ejd/LdYGsbP9jQQk6U7yHB/Csyc2dMW2u/rET6Bp26Tc6Cb3ALhxzo09ssvZT4/6Tn1KWcDR/BWixMhWN+0VCmFVZtvYwfvBYLKWAcxE5IlChc1vulV8VH1c15rm6mz85vrlQuoMviFtltZZol1zCMkWCZE4E8o+VEMW4A4APURpwPIYzNLW9qt6QIZdIDGhbafG7v1OfJP612JEpu7ZLv/8mqclmm2L/RCcINOycV7BF0j/npBx5pcuXzCYMh0Q01hqt6EKyY4XjIUFDcHmx2y0FkKB6WaffmZPOv8Z/GIRiuzZLF+Ma4OFeNws5eBw/8jGgaJhUA6QNw7d1/DDTIIJU7gn5Z/oal04YVhHAjX7L0akNmtyVn2riEpeZ1unEtA7d89ia/yz/KqqM/A66qua09pyj5GhoOLKzrTwVJ3Mf61YLodCuwk7o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199018)(1076003)(26005)(186003)(41300700001)(6506007)(6512007)(6666004)(478600001)(8676002)(4326008)(66476007)(66556008)(66946007)(316002)(6486002)(52116002)(86362001)(4744005)(2616005)(8936002)(5660300002)(38100700002)(38350700002)(2906002)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oRtW0n+VIsgK8hldwUvqiqm1c/m94906DjfYYmj8jFe9QW7JoxVT+rR7sSy0?=
+ =?us-ascii?Q?t5+Xh771OE1BYeoVNFozb70IW3p4PiKjU09gs/anGcZ5MEC95f40KCAf7GaW?=
+ =?us-ascii?Q?n+pkC5JiBq88p5YfDFc5Vl8yL6Mpus3wl3UqRDKcLUrip2opndB915MlnfZH?=
+ =?us-ascii?Q?RnkK4BoatHgzVD7HpGsCp8IfBBwFWXoyS3sjFVHTL9N1ujeKw770sVDMauGu?=
+ =?us-ascii?Q?CyidzNtXBexJKdm4GHX+sEwErVGUp94ve0oZJ/5UH9cPSh0nCrmj04J49U8y?=
+ =?us-ascii?Q?lsYJ8r/mYW2VBPRlHZw3QYMQ7uK6NQxiaaRa3r2IAetvOsOA49xSG6dcNaMQ?=
+ =?us-ascii?Q?AvZ8X6VNOLg2ZFh0a7USkRd5KOatKBsFEHEPbar9mv0jl8tD6lKO63plJJbf?=
+ =?us-ascii?Q?wjQUn/E8Ckf0UBvVtOMJaWYju3JsuvU24ZzkDGp4IwhdvhKztZ6wA+Jy+yTj?=
+ =?us-ascii?Q?YbqMdhByMu1zHbncQ0q21aSwChCR6MJ9X7gxGor+6vJ6NkSxhw8pFO08sRQp?=
+ =?us-ascii?Q?JQZAAP5XmxWy2wF3EWaqHPBd5HnkUbLkltVrCM+98KOibGnj6tICg0ccE2py?=
+ =?us-ascii?Q?CqJN2S8luSmt2psV6mqMFqTo1ocHjECR+r3KuNLqiVafZVhf8RuuSgyz9GNg?=
+ =?us-ascii?Q?xFTWM6M9o5X1v7/0t/B3cGz2ZRoroVTKEVOP4or8aJRkNrsZNclEcta3jW+C?=
+ =?us-ascii?Q?YoKelQixYnrDpgzJd4yNA1SUMw2grcB8ax0CDislnJXC2bvSqIkSoU5rGhpJ?=
+ =?us-ascii?Q?wqbYLwRYhvvOUP68N07RZiFmRw2cOvgDZctBmH+yONoM7AhYZUfin5OcxbLk?=
+ =?us-ascii?Q?arHEm7M7kea6JUZM4gli6OhsBN/DCKrRAdMFfmIUZiUezuQzclaPpaNT4YlC?=
+ =?us-ascii?Q?0aFXRSRLW0ijZyjC0XImQny8MMFEXiY7ztINcA7sDzsaChlUx6FwH0HatyuE?=
+ =?us-ascii?Q?cHTvnwVz/zg7ktsdnUNAArstGfRh5D3zM2dQjGZmffac+Jq41pyVPShoi1WR?=
+ =?us-ascii?Q?K+qZo9qZdHEYRbT7WrMUj6Kc5jAi1q0ltz6THSQmxXPN9MxO1Ao0SC+jpoAi?=
+ =?us-ascii?Q?/zPxw0TQH8oZNFOE+eu3drLEMhbPZZxJnqenAMXGWB9RlgjaMhLIRn3fky45?=
+ =?us-ascii?Q?vtEZz6WDF/TsvS1TjuQRrcGoUpQ8wbJBncioJMAatirVeCp74Q80jTyRL5J6?=
+ =?us-ascii?Q?Hy92OzLsruNvsEo8Yyn6WYI9Rga/LNiVrZ7M3LqhRZ816kuQLiP27xbe9cbV?=
+ =?us-ascii?Q?7S3fD/aKBgb4b8mz8Qj0LkHjQ2dbt2BO1ZlTnD5yIfblF0FbI9bqDCyJZi26?=
+ =?us-ascii?Q?jZYF2XsnozquSVdkukPVecGRL5iYPC3EHxkiivOnv3bStxXqKn1Dyc009mN/?=
+ =?us-ascii?Q?VR5xR0SutBu7t2ozCK5LCq4RYniXxOJc8SrbZE0WYZwJtkyReBTSy9iDg8w/?=
+ =?us-ascii?Q?gLfJ6uTO05iQ2HcbvyBskh7lj8OmUMqZk67AZ5B0dIlg86QrUYiXo6zkMvuE?=
+ =?us-ascii?Q?2jVoG3Gr3jRKJNtw+/et6+fjjlX620Jk1Qfi6Zt4i2gwfAYa6x/HZZpCqoDn?=
+ =?us-ascii?Q?PR/WGI0Z4QQidcX5g9AN7QsFbOCYVQbsfNVVNxIO?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 735e87c8-52b0-4aa5-d062-08db17fa6ac6
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2023 13:07:30.7015
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 568IEf+dY1ZlcF78zxSdxh+4JY9W6SuXsgNQ3FFqwUQ/o5y5jXLRRbqNdMqOUM7GrrSUZInp+Dw/XRMT5GjRkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7962
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/02/2023 02:47, Abhinav Kumar wrote:
-> Hi Dmitry
-> 
-> On 2/25/2023 7:23 AM, Dmitry Baryshkov wrote:
->> On 25/02/2023 02:36, Abhinav Kumar wrote:
->>>
->>>
->>> On 2/24/2023 3:53 PM, Dmitry Baryshkov wrote:
->>>> On Sat, 25 Feb 2023 at 00:26, Abhinav Kumar 
->>>> <quic_abhinavk@quicinc.com> wrote:
->>>>> On 2/24/2023 1:36 PM, Dmitry Baryshkov wrote:
->>>>>> 24 февраля 2023 г. 23:23:03 GMT+02:00, Abhinav Kumar 
->>>>>> <quic_abhinavk@quicinc.com> пишет:
->>>>>>> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
->>>>>>>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->>>>>>>>> Add DSC helper functions based on DSC configuration profiles to 
->>>>>>>>> produce
->>>>>>>>> DSC related runtime parameters through both table look up and 
->>>>>>>>> runtime
->>>>>>>>> calculation to support DSC on DPU.
->>>>>>>>>
->>>>>>>>> There are 6 different DSC configuration profiles are supported 
->>>>>>>>> currently.
->>>>>>>>> DSC configuration profiles are differiented by 5 keys, DSC 
->>>>>>>>> version (V1.1),
->>>>>>>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
->>>>>>>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
->>>>>>>>>
->>>>>>>>> Only DSC version V1.1 added and V1.2 will be added later.
->>>>>>>>
->>>>>>>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
->>>>>>>> Also please check that they can be used for i915 or for amdgpu 
->>>>>>>> (ideally for both of them).
->>>>>>>>
->>>>>>>
->>>>>>> No, it cannot. So each DSC encoder parameter is calculated based 
->>>>>>> on the HW core which is being used.
->>>>>>>
->>>>>>> They all get packed to the same DSC structure which is the struct 
->>>>>>> drm_dsc_config but the way the parameters are computed is 
->>>>>>> specific to the HW.
->>>>>>>
->>>>>>> This DPU file helper still uses the drm_dsc_helper's 
->>>>>>> drm_dsc_compute_rc_parameters() like all other vendors do but the 
->>>>>>> parameters themselves are very HW specific and belong to each 
->>>>>>> vendor's dir.
->>>>>>>
->>>>>>> This is not unique to MSM.
->>>>>>>
->>>>>>> Lets take a few other examples:
->>>>>>>
->>>>>>> AMD: 
->>>>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c#L165
->>>>>>>
->>>>>>> i915: 
->>>>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L379
->>>>>>
->>>>>> I checked several values here. Intel driver defines more bpc/bpp 
->>>>>> combinations, but the ones which are defined in intel_vdsc and in 
->>>>>> this patch seem to match. If there are major differences there, 
->>>>>> please point me to the exact case.
->>>>>>
->>>>>> I remember that AMD driver might have different values.
->>>>>>
->>>>>
->>>>> Some values in the rc_params table do match. But the 
->>>>> rc_buf_thresh[] doesnt.
->>>>
->>>> Because later they do:
->>>>
->>>> vdsc_cfg->rc_buf_thresh[i] = rc_buf_thresh[i] >> 6;
->>>>
->>>>>
->>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L40
->>>>>
->>>>> Vs
->>>>>
->>>>> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
->>>>> +               0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
->>>>> +               0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
->>>>> +};
->>>>
->>>> I'd prefer to have 896, 1792, etc. here, as those values come from the
->>>> standard. As it's done in the Intel driver.
->>>>
->>>
->>> Got it, thanks
->>>
->>>>> I dont know the AMD calculation very well to say that moving this 
->>>>> to the
->>>>> helper is going to help.
->>>>
->>>> Those calculations correspond (more or less) at the first glance to
->>>> what intel does for their newer generations. I think that's not our
->>>> problem for now.
->>>>
->>>
->>> Well, we have to figure out if each value matches and if each of them 
->>> come from the spec for us and i915 and from which section. So it is 
->>> unfortunately our problem.
->>
->> Otherwise it will have to be handled by Marijn, me or anybody else 
->> wanting to hack up the DSC code. Or by anybody adding DSC support to 
->> the next platform and having to figure out the difference between 
->> i915, msm and their platform.
->>
-> 
-> Yes, I wonder why the same doubt didn't arise when the other vendors 
-> added their support both from other maintainers and others.
-> 
-> Which makes me think that like I wrote in my previous response, these 
-> are "recommended" values in the spec but its not mandatory.
+From: Peng Fan <peng.fan@nxp.com>
 
-I think, it is because there were no other drivers to compare. In other 
-words, for a first driver it is pretty logical to have everything 
-handled on its own. As soon as we start getting other implementations of 
-a feature, it becomes logical to think if the code can be generalized. 
-This is what we see we with the HDCP series or with the code being moved 
-to DP helpers.
+usb@2184000: 'pinctrl-0' is a dependency of 'pinctrl-names'
 
-> 
-> Moving this to the drm_dsc_helper is generalizing the tables and not 
-> giving room for the vendors to customize even if they want to (which the 
-> spec does allow).
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ arch/arm/boot/dts/e70k02.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-That depends on the API you select. For example, in 
-intel_dsc_compute_params() I see customization being applied to 
-rc_buf_thresh in 6bpp case. I'd leave that to the i915 driver.
-
-In case the driver needs to perform customization of the params, nothing 
-stops it drop applying after filling all the RC params in the 
-drm_dsc_config struct via the generic helper.
-
-
-> So if this has any merit and if you or Marijn would like to take it up, 
-> go for it. We would do the same thing as either of you would have to in 
-> terms of figuring out the difference between msm and the i915 code.
-> 
-> This is not a generic API we are trying to put in a helper, these are 
-> hard-coded tables so there is a difference between looking at these Vs 
-> looking at some common code which can move to the core.
-> 
->>>
->>>>>
->>>>> Also, i think its too risky to change other drivers to use whatever 
->>>>> math
->>>>> we put in the drm_dsc_helper to compute thr RC params because their 
->>>>> code
->>>>> might be computing and using this tables differently.
->>>>>
->>>>> Its too much ownership for MSM developers to move this to 
->>>>> drm_dsc_helper
->>>>> and own that as it might cause breakage of basic DSC even if some 
->>>>> values
->>>>> are repeated.
->>>>
->>>> It's time to stop thinking about ownership and start thinking about
->>>> shared code. We already have two instances of DSC tables. I don't
->>>> think having a third instance, which is a subset of an existing
->>>> dataset, would be beneficial to anybody.
->>>> AMD has complicated code which supports half-bit bpp and calculates
->>>> some of the parameters. But sharing data with the i915 driver is
->>>> straightforward.
->>>>
->>>
->>> Sorry, but I would like to get an ack from i915 folks if this is going
->>> to be useful to them if we move this to helper because we have to 
->>> look at every table. Not just one.
->>
->> Added i915 maintainers to the CC list for them to be able to answer.
->>
-> 
-> Thanks, lets wait to hear from them about where finally these tables 
-> should go but thats can be taken up as a separate effort too.
-> 
->>>
->>> Also, this is just 1.1, we will add more tables for 1.2. So we will 
->>> have to end up changing both 1.1 and 1.2 tables as they are different 
->>> for QC.
->>
->> I haven't heard back from Kuogee about the possible causes of using 
->> rc/qp values from 1.2 even for 1.1 panels. Maybe you can comment on 
->> that? In other words, can we always stick to the values from 1.2 
->> standard? What will be the drawback?
->>
->> Otherwise, we'd have to have two different sets of values, like you do 
->> in your vendor driver.
->>
-> 
-> I have responded to this in the other email.
-> 
-> All this being said, even if the rc tables move the drm_dsc_helper 
-> either now or later on, we will still need MSM specific calculations for 
-> many of the other encoder parameters (which are again either hard-coded 
-> or calculated). Please refer to the sde_dsc_populate_dsc_config() 
-> downstream. And yes, you will not find those in the DP spec directly.
-> 
-> So we will still need a dsc helper for MSM calculations to be common for 
-> DSI / DP irrespective of where the tables go.
-> 
-> So, lets finalize that first.
-
-I went on and trimmed sde_dsc_populate_dsc_config() to remove 
-duplication with the drm_dsc_compute_rc_parameters() (which we already 
-use for the MSM DSI DSC).
-
-Not much is left:
-
-dsc->first_line_bpg_offset set via the switch
-
-dsc->line_buf_depth = bpc + 1;
-dsc->mux_word_size = bpc > 10 ? DSC_MUX_WORD_SIZE_12_BPC:
-         DSC_MUX_WORD_SIZE_8_10_BPC;
-
-if ((dsc->dsc_version_minor == 0x2) && (dsc->native_420))
-     dsc->nsl_bpg_offset = (2048 *
-              (DIV_ROUND_UP(dsc->second_line_bpg_offset,
-                                 (dsc->slice_height - 1))));
-
-dsc->initial_scale_value = 8 * dsc->rc_model_size /
-                         (dsc->rc_model_size - dsc->initial_offset);
-
-
-mux_word_size comes from the standard (must)
-initial_scale_value calculation is recommended, but not required
-nsl_bpg_offset follows the standard (must), also see below (*).
-
-first_line_bpg_offset calculation differs between three drivers. The 
-standard also provides a recommended formulas. I think we can leave it 
-as is for now.
-
-I think, that mux_word_size and nsl_bpg_offset calculation should be 
-moved to drm_dsc_compute_rc_parameters(), while leaving 
-initial_scale_value in place (in the driver code).
-
-* I think nsl_bpg_offset is slightly incorrectly calculated. Standard 
-demands that it is set to 'second_line_bpg_offset / (slice_height - 1), 
-rounded up to 16 fraction bits', while SDE driver code sets it to the 
-value rounded up to the next integer (having 16 fraction bits 
-representation).
-
-In my opinion correct calculation should be:
-dsc->nsl_bpg_offset = DIV_ROUND_UP(2048 * dsc->second_line_bpg_offset,
-                                 (dsc->slice_height - 1));
-
-Could you please check, which one is correct according to the standard?
-
-
+diff --git a/arch/arm/boot/dts/e70k02.dtsi b/arch/arm/boot/dts/e70k02.dtsi
+index ace3eb8a97b8..4e1bf080eaca 100644
+--- a/arch/arm/boot/dts/e70k02.dtsi
++++ b/arch/arm/boot/dts/e70k02.dtsi
+@@ -321,6 +321,7 @@ &usdhc3 {
+ 
+ &usbotg1 {
+ 	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usbotg1>;
+ 	disable-over-current;
+ 	srp-disable;
+ 	hnp-disable;
 -- 
-With best wishes
-Dmitry
+2.37.1
 
