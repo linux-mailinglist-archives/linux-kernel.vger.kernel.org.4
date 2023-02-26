@@ -2,103 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EB26A2ECD
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 09:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7FE6A2ED0
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 09:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjBZH7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 02:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S229569AbjBZIBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 03:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBZH7y (ORCPT
+        with ESMTP id S229445AbjBZIBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 02:59:54 -0500
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62E2C65C;
-        Sat, 25 Feb 2023 23:59:51 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so1537864wmq.1;
-        Sat, 25 Feb 2023 23:59:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DGCngb9cE5yE6M3a4MEomrCzATYJDSH8ymK+LBwgxOM=;
-        b=ONF4gXqPLX71AvJCCqRoiH0k1+wIcJTtekmSM4T92mrL6mjklpVgtJUAyWAF3BU5c+
-         ktbMVgqoj/p3AX4JXOr7UXHQA+b6NTeuk8+oOL9eLrb9SzznMdnjogCTWAylHXejtQlq
-         QJKDE45bGYm/N2l+wWmBZuHqp/0nhUBIU/sc/js09GHfDca/7isJM3osKgS5+M69gty6
-         C/6oDp1492+mxUISZqL85nh8Y4i8AtczEHJ+Yr5lL9hD/fFu4jAxGBYoxuhfOUVIOALF
-         HllvKQjwcHa/GEg8Iopsv9gz/Uy1P4gh7m5iDKJyf1eFawwzfQi1fwmZPdFv5hfW5yki
-         2c8w==
-X-Gm-Message-State: AO0yUKWr7j14CrfI55WyqvGZMxTZ0Sn42eXG+H9P5koU2TBmvZ9x73q8
-        td0bE+VDrPj8eMQHCwdisfU=
-X-Google-Smtp-Source: AK7set9unaczVbzdJ61bhZUDAp9ZSY4c0yfMIwvnYMtDVvtvVCPDBk6Sw9xH6RsTakaisDcD5DxDww==
-X-Received: by 2002:a05:600c:1895:b0:3e2:f80:3df1 with SMTP id x21-20020a05600c189500b003e20f803df1mr15890132wmp.19.1677398389950;
-        Sat, 25 Feb 2023 23:59:49 -0800 (PST)
-Received: from [10.1.0.47] ([87.224.71.110])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600c4f0400b003df7b40f99fsm9261670wmq.11.2023.02.25.23.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Feb 2023 23:59:49 -0800 (PST)
-Message-ID: <3130cb3e-eaca-04c2-ad97-b32ffddad397@debian.org>
-Date:   Sun, 26 Feb 2023 07:59:48 +0000
+        Sun, 26 Feb 2023 03:01:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8746586;
+        Sun, 26 Feb 2023 00:01:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C640B80B6B;
+        Sun, 26 Feb 2023 08:01:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 400FEC4339C;
+        Sun, 26 Feb 2023 08:01:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677398497;
+        bh=T3YiMZrZv9x7rYN7KtRQhi1giiiXR4qVRoYZFZz0pg4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=N+e0RFHmBKCWVSjLVm7irhRk6+jQhncgRg9pXmwKkCrhzHhIXU6+UA+q9pLO/8xgQ
+         oTYPjnzKtjbd++yUtslxRKNWVcJNAvcoIQT5cMmcZjh1F0liPqIF6Jcim4BCssEF3a
+         SsVA55452UrRW1oBGgepdNd3pa4/nkwpI6p55bXuxPn+HrQFvinTj5OJUS3TU+AtTJ
+         nNVNqeYsGphnKPYtXg5/SmrtYAmFv0tqYn5ru8fUUI0r2VIo1cclh/0s38i0iTBbho
+         kSs8wpkJPdg7g2Njskuz7Rki6ZylYU7GhmAVmj1kkpi199oi4q+RucdUcuEGYazo3u
+         ilakLI1krr0Vw==
+Received: by mail-oi1-f178.google.com with SMTP id e21so2986665oie.1;
+        Sun, 26 Feb 2023 00:01:37 -0800 (PST)
+X-Gm-Message-State: AO0yUKWuPJKKrNUvF9f7AZ5JSsdWa70OB7Tqumrz4dvoPSQSAVTV+tpW
+        U0XzAcORZBNJGAAHLA5YQLOQrmoRBJvvzfsTsyg=
+X-Google-Smtp-Source: AK7set/X44EtzNoIKakWEDFH3LEQb8kjMbPcJzV7cMQiW84e+HxCwrC+NakeFj3ZXypTxiP5Z1auH0yI4/A9aeErYTE=
+X-Received: by 2002:a05:6808:4d7:b0:384:893:a91d with SMTP id
+ a23-20020a05680804d700b003840893a91dmr1521265oie.8.1677398496386; Sun, 26 Feb
+ 2023 00:01:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] blk-iocost: initialize rqos before accessing it
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     axboe@kernel.dk, tj@kernel.org, josef@toxicpanda.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        aherrmann@suse.de, linux-kernel@vger.kernel.org, hch@lst.de,
-        leit@fb.com
-References: <20230224160714.172884-1-leitao@debian.org>
- <20230224185126.bxkreilofbp2t4on@blackpad>
-Content-Language: en-US
-From:   Breno Leitao <leitao@debian.org>
-In-Reply-To: <20230224185126.bxkreilofbp2t4on@blackpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230215012034.403356-1-masahiroy@kernel.org>
+In-Reply-To: <20230215012034.403356-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 26 Feb 2023 17:01:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATzsVCMsR-43erVnZ_xdDZoZHOMRnxXpKPxBvaaP4e-aA@mail.gmail.com>
+Message-ID: <CAK7LNATzsVCMsR-43erVnZ_xdDZoZHOMRnxXpKPxBvaaP4e-aA@mail.gmail.com>
+Subject: Re: [PATCH v6 01/12] kbuild: add a tool to list files ignored by git
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Michal,
+On Wed, Feb 15, 2023 at 10:21=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+>
+> In short, the motivation of this commit is to build a source package
+> without cleaning the source tree.
+>
+> The deb-pkg and (src)rpm-pkg targets first run 'make clean' before
+> creating a source tarball. Otherwise build artifacts such as *.o,
+> *.a, etc. would be included in the tarball. Yet, the tarball ends up
+> containing several garbage files since 'make clean' does not clean
+> everything.
+>
+> Cleaning the tree every time is annoying since it makes the incremental
+> build impossible. It is desirable to create a source tarball without
+> cleaning the tree.
+>
+> In fact, there are some ways to achieve this.
+>
+> The easiest solution is 'git archive'. 'make perf-tar*-src-pkg' uses
+> it, but I do not like it because it works only when the source tree is
+> managed by git, and all files you want in the tarball must be committed
+> in advance.
+>
+> I want to make it work without relying on git. We can do this.
+>
+> Files that are ignored by git are generated files, so should be excluded
+> from the source tarball. We can list them out by parsing the .gitignore
+> files. Of course, .gitignore does not cover all the cases, but it works
+> well enough.
+>
+> tar(1) claims to support it:
+>
+>   --exclude-vcs-ignores
+>
+>     Exclude files that match patterns read from VCS-specific ignore files=
+.
+>     Supported files are: .cvsignore, .gitignore, .bzrignore, and .hgignor=
+e.
+>
+> The best scenario would be to use 'tar --exclude-vcs-ignores', but this
+> option does not work. --exclude-vcs-ignore does not understand any of
+> the negation (!), preceding slash, following slash, etc.. So, this option
+> is just useless.
+>
+> Hence, I wrote this gitignore parser. The previous version [1], written
+> in Python, was so slow. This version is implemented in C, so it works
+> much faster.
+>
+> I imported the code from git (commit: 23c56f7bd5f1), so we get the same
+> result.
+>
+> This tool traverses the source tree, parsing all .gitignore files, and
+> prints file paths that are ignored by git.
+>
+> The output is similar to 'git ls-files --ignored --directory --others
+> --exclude-per-directory=3D.gitignore', except
+>
+>   [1] Not sorted
+>   [2] No trailing slash for directories
+>
+> [2] is intentional because tar's --exclude-from option cannot handle
+> trailing slashes.
+>
+> [How to test this tool]
+>
+>   $ git clean -dfx
+>   $ make -s -j$(nproc) defconfig all                       # or allmodcon=
+ifg or whatever
+>   $ git archive -o ../linux1.tar --prefix=3D./ HEAD
+>   $ tar tf ../linux1.tar | LANG=3DC sort > ../file-list1     # files emit=
+ted by 'git archive'
+>   $ make scripts_package
+>     HOSTCC  scripts/list-gitignored
+>   $ scripts/list-gitignored  --prefix=3D./ -o ../exclude-list
+>   $ tar cf ../linux2.tar --exclude-from=3D../exclude-list .
+>   $ tar tf ../linux2.tar | LANG=3DC sort > ../file-list2     # files emit=
+ted by 'tar'
+>   $ diff  ../file-list1 ../file-list2 | grep -E '^(<|>)'
+>   < ./Documentation/devicetree/bindings/.yamllint
+>   < ./drivers/clk/.kunitconfig
+>   < ./drivers/gpu/drm/tests/.kunitconfig
+>   < ./drivers/hid/.kunitconfig
+>   < ./fs/ext4/.kunitconfig
+>   < ./fs/fat/.kunitconfig
+>   < ./kernel/kcsan/.kunitconfig
+>   < ./lib/kunit/.kunitconfig
+>   < ./mm/kfence/.kunitconfig
+>   < ./tools/testing/selftests/arm64/tags/
+>   < ./tools/testing/selftests/arm64/tags/.gitignore
+>   < ./tools/testing/selftests/arm64/tags/Makefile
+>   < ./tools/testing/selftests/arm64/tags/run_tags_test.sh
+>   < ./tools/testing/selftests/arm64/tags/tags_test.c
+>   < ./tools/testing/selftests/kvm/.gitignore
+>   < ./tools/testing/selftests/kvm/Makefile
+>   < ./tools/testing/selftests/kvm/config
+>   < ./tools/testing/selftests/kvm/settings
+>
+> The source tarball contains most of files that are tracked by git. You
+> see some diffs, but it is just because some .gitignore files are wrong.
+>
+>   $ git ls-files -i -c --exclude-per-directory=3D.gitignore
+>   Documentation/devicetree/bindings/.yamllint
+>   drivers/clk/.kunitconfig
+>   drivers/gpu/drm/tests/.kunitconfig
+>   drivers/hid/.kunitconfig
+>   fs/ext4/.kunitconfig
+>   fs/fat/.kunitconfig
+>   kernel/kcsan/.kunitconfig
+>   lib/kunit/.kunitconfig
+>   mm/kfence/.kunitconfig
+>   tools/testing/selftests/arm64/tags/.gitignore
+>   tools/testing/selftests/arm64/tags/Makefile
+>   tools/testing/selftests/arm64/tags/run_tags_test.sh
+>   tools/testing/selftests/arm64/tags/tags_test.c
+>   tools/testing/selftests/kvm/.gitignore
+>   tools/testing/selftests/kvm/Makefile
+>   tools/testing/selftests/kvm/config
+>   tools/testing/selftests/kvm/settings
+>
+> [1]: https://lore.kernel.org/all/20230128173843.765212-1-masahiroy@kernel=
+.org/
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-On 2/24/23 18:51, Michal Koutný wrote:
->> 	blk_iocost_init (include/asm-generic/qspinlock.h:128
->> 			 include/linux/spinlock.h:203
->> 			 include/linux/spinlock_api_smp.h:158
->> 			 include/linux/spinlock.h:400
->> 			 block/blk-iocost.c:2884)
->> 	ioc_qos_write (block/blk-iocost.c:3198)
->> 	? kretprobe_perf_func (kernel/trace/trace_kprobe.c:1566)
->> 	? kernfs_fop_write_iter (include/linux/slab.h:584 fs/kernfs/file.c:311)
->> 	? __kmem_cache_alloc_node (mm/slab.h:? mm/slub.c:3452 mm/slub.c:3491)
->> 	? _copy_from_iter (arch/x86/include/asm/uaccess_64.h:46
->> 			   arch/x86/include/asm/uaccess_64.h:52
->> 			   lib/iov_iter.c:183 lib/iov_iter.c:628)
->> 	? kretprobe_dispatcher (kernel/trace/trace_kprobe.c:1693)
->> 	cgroup_file_write (kernel/cgroup/cgroup.c:4061)
->> 	kernfs_fop_write_iter (fs/kernfs/file.c:334)
->> 	vfs_write (include/linux/fs.h:1849 fs/read_write.c:491
->> 		   fs/read_write.c:584)
->> 	ksys_write (fs/read_write.c:637)
->> 	do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
->> 	entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> 
-> BTW, out of curiosity what tool did you use to list stack with line
-> numbers?
 
-I use the decode_stacktrace.sh from kernel's scripts directory. You 
-basically
-pipe the stack to it, and call it passing the vmlinux file. It is 
-incredible handy.
+01 - 11 applied to linux-kbuild.
 
-https://elixir.bootlin.com/linux/latest/source/scripts/decode_stacktrace.sh
 
-Thanks for the review,
-Breno
+I will update 12/12 (postponed to v6.4)
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
