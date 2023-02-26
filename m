@@ -2,105 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24AB6A3365
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 19:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA4D6A3368
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 19:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBZSRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 13:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S229618AbjBZSVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 13:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjBZSRJ (ORCPT
+        with ESMTP id S229495AbjBZSVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 13:17:09 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80158FF10;
-        Sun, 26 Feb 2023 10:17:06 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id c3so248846qtc.8;
-        Sun, 26 Feb 2023 10:17:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IxTc3RYjx8Z6j1Ud65V9EMwg2hzF0dyvk+bnE0WctnY=;
-        b=gkRVFmZKo/2uiw/LHVqI6QfMX2/cL6pXmY/lyDjRopJFWwBdDsEiLzqNEbrfUPedCG
-         4znjI+8JDm/Usjlb/kDjE8KBKYuP819aBn1TxzhrLSah9LBAmGYZVkyWy8kYF/wacZlA
-         uA8XTCJ1RARBREkcp9Q+YDjppLRTrWBKIWCaaqzw0L4JHj0rARe40Ww9OAaxmMcadQIA
-         vE/YpwzThwjYzQ7NXBsGkE5Py7uAbsalo4CSkSX2iHAgWFfcYE9qAq+NUTI51RtVvKkc
-         LYN2pbY92DqlCQcFKyRo2y3FXKmdAhlee79K6a9N2bnr4IOEGS0TEr9uNlVSLw0NYzqx
-         om+w==
+        Sun, 26 Feb 2023 13:21:04 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B1AEC42;
+        Sun, 26 Feb 2023 10:21:03 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id d7so4493779qtr.12;
+        Sun, 26 Feb 2023 10:21:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IxTc3RYjx8Z6j1Ud65V9EMwg2hzF0dyvk+bnE0WctnY=;
-        b=y3mEMhFi6Z+tLeuYbj/CZR6yzWbmkqnTeDQE3dRo7mKE7QUyOuR/9Lq+bpFQOb81vr
-         fVU2v+4bOGDh9CSU/HwOuepajeR0B36ty13mQps/uujLgQ9gYF8jCg1v0zUkUJgctVrH
-         HlRyZBP0m3iTezmAYR3DVAPEmm6QKAEW6gON4ynAzocapql66g2eYD9x4mpoqsj08NvA
-         41ZhQHRVe80cCM+pId/8IoTnvEx7JzwjBqpPVfdlCitIzE2wf8WUEaWHgOpgfVVui7ax
-         CYJjTNfyMaPO/UmqitHQdlQ8LOmBxpuBSxwDKUu5BhlqcmJ5e8SeCJGKJIfQ019T2UZD
-         6dLQ==
-X-Gm-Message-State: AO0yUKVqTE3kOvgdP7FNjFZCcVZhgg74wpASOO49cfkJl5py5lfTnWvT
-        LrjsyI5u1cSZEVKFgdCLFXo=
-X-Google-Smtp-Source: AK7set+alyjI6amc+2ubZu1BL2Rz4veyv2vVY8UnIxbvFjxrTEy7GQ3JlpfQv/b3GOWhtOKFcsZySg==
-X-Received: by 2002:ac8:5cc6:0:b0:3b9:bc8c:c1f6 with SMTP id s6-20020ac85cc6000000b003b9bc8cc1f6mr12043316qta.1.1677435425574;
-        Sun, 26 Feb 2023 10:17:05 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id o22-20020a05620a15d600b0074235386738sm3404007qkm.37.2023.02.26.10.17.04
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jWb7q6a1sjSV59Lcz+2CiIFUSCE7SfdoeaOuYsGveyU=;
+        b=GvkUsQq2FDXukScYPSpxWhP/2VajK3bAhZAMaaJis4UQ7qq9YkA6vaHxot74Nn+UzG
+         J+ap2GuEMDKHXUEE+KVRP50NB9Qf3FyHTKWVXgdoensXr15TWoVWlGM09dDbAju9eKK6
+         X0Kn5BRAaAasq/jSRp+EEowHH5bbpWk1P/DIry3i71/b6oh7jogyIZjNu3dQRumfxYiW
+         ISOzxMb0WjKO/pJMXI/cn0lurm9Ct906d1a6llh7Cotp7QG+JTATwhW4YcDa54pVASQ2
+         EGaG3CaLv3XGfUB/VGQbHU/kniA3Y0nH63zu1MSnx7hoZ/9SGqORe5J4521jqSxlQLhm
+         GDpg==
+X-Gm-Message-State: AO0yUKVpRBfTwl+07xd/s1LG7DF/lssZ6J0tTAwdEbZ82Wjba27zf7l8
+        5jGU8Sf2QHGrC4HyjeYeAw==
+X-Google-Smtp-Source: AK7set/8RjhCS8uCEoAy2xabB8INjsVI7tWDO1zL4yi2RCkP+y0VVyQsRNeK/ts3oz3nVdnhGmvCXg==
+X-Received: by 2002:a05:622a:10b:b0:3bf:d4c3:3659 with SMTP id u11-20020a05622a010b00b003bfd4c33659mr2820971qtw.66.1677435662247;
+        Sun, 26 Feb 2023 10:21:02 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:8069:8ddf:ff6b:c94c:94fd:4442])
+        by smtp.gmail.com with ESMTPSA id i25-20020ac84899000000b003b9a6d54b6csm3251099qtq.59.2023.02.26.10.20.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 10:17:05 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id A01FE27C0054;
-        Sun, 26 Feb 2023 13:17:04 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 26 Feb 2023 13:17:04 -0500
-X-ME-Sender: <xms:H6L7Y5bSq1DkIEcnWZbfRQUbn37G1Rx4eANoTiKaAiOkl_ryI5NdyA>
-    <xme:H6L7YwaKmTa7oKdKVxjHgjvg_rSDozSezAG5MXfz8FwK1RQ5dIVKvWKkqWRu7NW4P
-    KGdeW9JWXwXSLqRcg>
-X-ME-Received: <xmr:H6L7Y7-ASZoOBlyvPGQ7rOmgHFmdYotn-Kx5Hn1L0jlrsvB60ge7PAg9-WQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekkedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeejiefhtdeuvdegvddtudffgfegfeehgfdtiedvveevleevhfekhefftdek
-    ieehvdenucffohhmrghinheprhhushhtqdhlrghnghdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgr
-    uhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsoh
-    hquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:H6L7Y3rX7lFA087B6SffnCDnHhXfe7d2L1ldVg2a7-p9jkVfWQCz5A>
-    <xmx:H6L7Y0ofBSVAOmY5ejvO8wBvl_eV2G0wlk1hu_euCbpzezCZiLqe2Q>
-    <xmx:H6L7Y9RqaeJMVH09fZKijateLwZrdJpByon1nUznxjC1rItOtYAS5w>
-    <xmx:IKL7YxgYeu7He99Dm3w80G7vsHjTnDgNllxRMCzqQn7B7Ms6tpIseQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Feb 2023 13:17:03 -0500 (EST)
-Date:   Sun, 26 Feb 2023 10:16:33 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH 5/5] rust: error: Add from_kernel_result!() macro
-Message-ID: <Y/uiAfZnfbbMrQuD@boqun-archlinux>
-References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
- <20230224-rust-error-v1-5-f8f9a9a87303@asahilina.net>
- <Y/lOlcSpc+d9ytq/@boqun-archlinux>
- <20230225222340.34d749ee.gary@garyguo.net>
- <Y/rCU1S+GDgIojNf@boqun-archlinux>
- <20230226133606.583cd1d8.gary@garyguo.net>
+        Sun, 26 Feb 2023 10:21:01 -0800 (PST)
+Received: (nullmailer pid 126949 invoked by uid 1000);
+        Sun, 26 Feb 2023 18:20:58 -0000
+Date:   Sun, 26 Feb 2023 12:20:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        michal.simek@xilinx.com, radhey.shyam.pandey@xilinx.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+Subject: Re: [PATCH net-next V6] dt-bindings: net: xlnx,axi-ethernet: convert
+ bindings document to yaml
+Message-ID: <20230226182058.GA108914-robh@kernel.org>
+References: <20230220122252.3575380-1-sarath.babu.naidu.gaddam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230226133606.583cd1d8.gary@garyguo.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230220122252.3575380-1-sarath.babu.naidu.gaddam@amd.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,185 +68,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 01:36:06PM +0000, Gary Guo wrote:
-> On Sat, 25 Feb 2023 18:22:11 -0800
-> Boqun Feng <boqun.feng@gmail.com> wrote:
+On Mon, Feb 20, 2023 at 05:52:52PM +0530, Sarath Babu Naidu Gaddam wrote:
+> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 > 
-> > On Sat, Feb 25, 2023 at 10:23:40PM +0000, Gary Guo wrote:
-> > > On Fri, 24 Feb 2023 15:56:05 -0800
-> > > Boqun Feng <boqun.feng@gmail.com> wrote:
-> > >   
-> > > > On Fri, Feb 24, 2023 at 05:50:23PM +0900, Asahi Lina wrote:  
-> > > > > From: Wedson Almeida Filho <wedsonaf@gmail.com>
-> > > > > 
-> > > > > Add a helper macro to easily return C result codes from a Rust function
-> > > > > that calls functions which return a Result<T>.
-> > > > > 
-> > > > > Lina: Imported from rust-for-linux/rust, originally developed by Wedson
-> > > > > as part of file_operations.rs. Added the allow() flags since there is no
-> > > > > user in the kernel crate yet and fixed a typo in a comment.
-> > > > > 
-> > > > > Co-developed-by: Fox Chen <foxhlchen@gmail.com>
-> > > > > Signed-off-by: Fox Chen <foxhlchen@gmail.com>
-> > > > > Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> > > > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> > > > > Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> > > > > Signed-off-by: Asahi Lina <lina@asahilina.net>
-> > > > > ---
-> > > > >  rust/kernel/error.rs | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 52 insertions(+)
-> > > > > 
-> > > > > diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-> > > > > index cf3d089477d2..8a9222595cd1 100644
-> > > > > --- a/rust/kernel/error.rs
-> > > > > +++ b/rust/kernel/error.rs
-> > > > > @@ -226,3 +226,55 @@ pub(crate) fn from_kernel_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
-> > > > >      }
-> > > > >      Ok(ptr)
-> > > > >  }
-> > > > > +
-> > > > > +// TODO: Remove `dead_code` marker once an in-kernel client is available.
-> > > > > +#[allow(dead_code)]
-> > > > > +pub(crate) fn from_kernel_result_helper<T>(r: Result<T>) -> T
-> > > > > +where
-> > > > > +    T: From<i16>,
-> > > > > +{
-> > > > > +    match r {
-> > > > > +        Ok(v) => v,
-> > > > > +        // NO-OVERFLOW: negative `errno`s are no smaller than `-bindings::MAX_ERRNO`,
-> > > > > +        // `-bindings::MAX_ERRNO` fits in an `i16` as per invariant above,
-> > > > > +        // therefore a negative `errno` always fits in an `i16` and will not overflow.
-> > > > > +        Err(e) => T::from(e.to_kernel_errno() as i16),
-> > > > > +    }
-> > > > > +}
-> > > > > +
-> > > > > +/// Transforms a [`crate::error::Result<T>`] to a kernel C integer result.
-> > > > > +///
-> > > > > +/// This is useful when calling Rust functions that return [`crate::error::Result<T>`]
-> > > > > +/// from inside `extern "C"` functions that need to return an integer
-> > > > > +/// error result.
-> > > > > +///
-> > > > > +/// `T` should be convertible from an `i16` via `From<i16>`.
-> > > > > +///
-> > > > > +/// # Examples
-> > > > > +///
-> > > > > +/// ```ignore
-> > > > > +/// # use kernel::from_kernel_result;
-> > > > > +/// # use kernel::bindings;
-> > > > > +/// unsafe extern "C" fn probe_callback(
-> > > > > +///     pdev: *mut bindings::platform_device,
-> > > > > +/// ) -> core::ffi::c_int {
-> > > > > +///     from_kernel_result! {
-> > > > > +///         let ptr = devm_alloc(pdev)?;
-> > > > > +///         bindings::platform_set_drvdata(pdev, ptr);
-> > > > > +///         Ok(0)
-> > > > > +///     }
-> > > > > +/// }
-> > > > > +/// ```
-> > > > > +// TODO: Remove `unused_macros` marker once an in-kernel client is available.
-> > > > > +#[allow(unused_macros)]
-> > > > > +macro_rules! from_kernel_result {    
-> > > > 
-> > > > This actually doesn't need to be a macro, right? The following function
-> > > > version:
-> > > > 
-> > > > 	pub fn from_kernel_result<T, F>(f: F) -> T
-> > > > 	where
-> > > > 	    T: From<i16>,
-> > > > 	    F: FnOnce() -> Result<T>;
-> > > > 
-> > > > is not bad, the above case then can be written as:
-> > > > 
-> > > > 	unsafe extern "C" fn probe_callback(
-> > > > 	    pdev: *mut bindings::platform_device,
-> > > > 	) -> core::ffi::c_int {
-> > > > 	    from_kernel_result(|| {
-> > > > 		let ptr = devm_alloc(pdev)?;
-> > > > 		bindings::platform_set_drvdata(pdev, ptr);
-> > > > 		Ok(0)
-> > > > 	    })
-> > > > 	}
-> > > > 
-> > > > less magical, but the control flow is more clear.
-> > > > 
-> > > > Thoughts?  
-> > > 
-> > > I don't think even the closure is necessary? Why not just
-> > > 
-> > >  	pub fn from_kernel_result<T: From<i16>>(r: Result<T>) -> T
-> > > 
-> > > and
-> > > 
-> > >  	unsafe extern "C" fn probe_callback(
-> > >  	    pdev: *mut bindings::platform_device,
-> > >  	) -> core::ffi::c_int {
-> > >  	    from_kernel_result({
-> > >  		let ptr = devm_alloc(pdev)?;  
-> > 
-> > Hmm.. looks like the `?` only "propagating them (the errors) to the
-> > calling *function*":
-> > 
-> > 	https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator
-> > 
-> > , so this doesn't work as we expect:
-> > 
-> > 	https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=64c9039e1da2c436f9f4f5ea46e97e90
+> Convert the bindings document for Xilinx AXI Ethernet Subsystem
+> from txt to yaml. No changes to existing binding description.
 > 
-> Oh, you're absolutely right, I guess I shouldn't be doing code review
-> in the middle of the night...
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+> ---
+> Changes in V6:
+> 1) Addressed below review comments.
+> 	a)add a $ref to ethernet-controller.yaml for pcs-handle.
+> 	b)Drop unused labels(axi_ethernetlite_0_mdio).
+> 	c)Not relevant to the binding(interrupt-parent).
 > 
-
-;-)
-
-> However, if we have the try blocks then we should be able to just
-> rewrite it as
+> Changes in V5:
+> 1) Removed .txt file which was missed in V4
 > 
-> 	from_kernel_result(try {
-> 	    ...
-> 	})
+> Changes in V4:
+> 1)Changed the interrupts property and add allOf:if:then for it.
 > 
-
-Thank you and Miguel for the references on try blocks, I vaguely
-remember I heard of them, but never take a close look.
-
-> I guess in this sense it might worth keeping this as a macro so we can
-> tweak the implementation from closure to try blocks without having to
-> edit all use sites?
+> Changes in V3:
+> 1) Moved RFC to PATCH.
+> 2) Addressed below review comments
+> 	a) Indentation.
+> 	b) maxItems:3 does not match your description.
+> 	c) Filename matching compatibles.
 > 
+> Changes in V2:
+> 1) remove .txt and change the name of file to xlnx,axiethernet.yaml.
+> 2) Fix DT check warning('device_type' does not match any of the regexes:
+>    'pinctrl-[0-9]+' From schema: Documentation/devicetree/bindings/net
+>     /xilinx_axienet.yaml).
+> ---
+>  .../bindings/net/xilinx_axienet.txt           | 101 -----------
+>  .../bindings/net/xlnx,axi-ethernet.yaml       | 165 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 166 insertions(+), 101 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/xilinx_axienet.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
 
-My preference to function instead of macro here is because I want to
-avoid the extra level of abstraction and make things explict, so that
-users and reviewers can understand the API behavior solely based on
-Rust's types, functions and closures: they are simpler than macros, at
-least to me ;-)
+[...]
 
-Speak of future changes in the implementation:
+> +++ b/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
+> @@ -0,0 +1,165 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/xlnx,axi-ethernet.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AXI 1G/2.5G Ethernet Subsystem
+> +
+> +description: |
+> +  Also called  AXI 1G/2.5G Ethernet Subsystem, the xilinx axi ethernet IP core
+> +  provides connectivity to an external ethernet PHY supporting different
+> +  interfaces: MII, GMII, RGMII, SGMII, 1000BaseX. It also includes two
+> +  segments of memory for buffering TX and RX, as well as the capability of
+> +  offloading TX/RX checksum calculation off the processor.
+> +
+> +  Management configuration is done through the AXI interface, while payload is
+> +  sent and received through means of an AXI DMA controller. This driver
+> +  includes the DMA driver code, so this driver is incompatible with AXI DMA
+> +  driver.
+> +
+> +maintainers:
+> +  - Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,axi-ethernet-1.00.a
+> +      - xlnx,axi-ethernet-1.01.a
+> +      - xlnx,axi-ethernet-2.01.a
+> +
+> +  reg:
+> +    description:
+> +      Address and length of the IO space, as well as the address
+> +      and length of the AXI DMA controller IO space, unless
+> +      axistream-connected is specified, in which case the reg
+> +      attribute of the node referenced by it is used.
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Ethernet core interrupt
+> +      - description: Tx DMA interrupt
+> +      - description: Rx DMA interrupt
+> +    description:
+> +      Ethernet core interrupt is optional. If axistream-connected property is
+> +      present DMA node should contains TX/RX DMA interrupts else DMA interrupt
+> +      resources are mentioned on ethernet node.
+> +    minItems: 1
+> +
+> +  phy-handle: true
+> +
+> +  xlnx,rxmem:
+> +    description:
+> +      Set to allocated memory buffer for Rx/Tx in the hardware.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  phy-mode: true
 
-First, I think the macro version here is just a poor-man's try block, in
-other words, I'd expect explicit use of try blocks intead of
-`from_kernel_result` when the feature is ready. If that's the case, we
-need to change the use sites anyway.
+I'd assume only a subset of modes are supported by this h/w. If so, list 
+them.
 
-Second, I think the semantics is a little different between try block
-implementation and closure implemention? Consider the following case:
+> +
+> +  xlnx,phy-type:
+> +    description:
+> +      Do not use, but still accepted in preference to phy-mode.
+> +    deprecated: true
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  xlnx,txcsum:
+> +    description:
+> +      TX checksum offload. 0 or empty for disabling TX checksum offload,
+> +      1 to enable partial TX checksum offload and 2 to enable full TX
+> +      checksum offload.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2]
+> +
+> +  xlnx,rxcsum:
+> +    description:
+> +      RX checksum offload. 0 or empty for disabling RX checksum offload,
+> +      1 to enable partial RX checksum offload and 2 to enable full RX
+> +      checksum offload.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2]
+> +
+> +  xlnx,switch-x-sgmii:
+> +    type: boolean
+> +    description:
+> +      Indicate the Ethernet core is configured to support both 1000BaseX and
+> +      SGMII modes. If set, the phy-mode should be set to match the mode
+> +      selected on core reset (i.e. by the basex_or_sgmii core input line).
+> +
+> +  clocks:
+> +    items:
+> +      - description: Clock for AXI register slave interface.
+> +      - description: AXI4-Stream clock for TXD RXD TXC and RXS interfaces.
+> +      - description: Ethernet reference clock, used by signal delay primitives
+> +                     and transceivers.
+> +      - description: MGT reference clock (used by optional internal PCS/PMA PHY)
+> +
+> +  clock-names:
+> +    items:
+> +      - const: s_axi_lite_clk
+> +      - const: axis_clk
+> +      - const: ref_clk
+> +      - const: mgt_clk
+> +
+> +  axistream-connected:
+> +    type: object
+> +    description: Reference to another node which contains the resources
 
-	// the outer function return a Result<i32>
+Reference? Meaning a phandle? Or this is a node because that's what 
+'type: object' says.
 
-	let a = from_kernel_result!({
-		...
-		return Some(0); // x is i32
-		..
-	});
+> +      for the AXI DMA controller used by this device. If this is specified,
+> +      the DMA-related resources from that device (DMA registers and DMA
+> +      TX/RX interrupts) rather than this one will be used.
+> +
+> +  mdio: true
 
-	return Some(a + 1);
+type: object
 
-Do both implementation share the same behavior?
+> +
+> +  pcs-handle:
+> +    description: Phandle to the internal PCS/PMA PHY in SGMII or 1000Base-X
+> +      modes, where "pcs-handle" should be used to point to the PCS/PMA PHY,
+> +      and "phy-handle" should point to an external PHY if exists.
+> +    $ref: /schemas/net/ethernet-controller.yaml#
 
-No one can predict the future, but being simple at the beginning sounds
-a good strategy to me.
+The reference applies to nodes, but 'pcs-handle' is a property. It needs 
+to be at the top-level:
 
-Regards,
-Boqun
+allOf:
+  - $ref: /schemas/net/ethernet-controller.yaml#
 
-> Best,
-> Gary
+Rob
