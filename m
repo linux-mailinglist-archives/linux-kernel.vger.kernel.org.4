@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74AA6A2E1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 05:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547A06A2E1E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 05:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjBZEVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 23:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
+        id S229794AbjBZEVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 23:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjBZEVP (ORCPT
+        with ESMTP id S229749AbjBZEVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 23:21:15 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AAEC643
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 20:21:14 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id kb15so2954300pjb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 20:21:14 -0800 (PST)
+        Sat, 25 Feb 2023 23:21:20 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A271D506
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 20:21:18 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l1so2948340pjt.2
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 20:21:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JpZ5nkw8exH6pwfmixa8Q7/xf5HABCQppgg+JZ7ONP0=;
-        b=hK6xtK0P+jdDy+P5lKMWHE4668MH19RL3AO3pqibo0WUV5zMY4MaoRrYR2uxTjfVjG
-         Pha2OP+A0X8Q5sqoQZj0EpFZS9fKVPCzOJwI/6JUIebAngQCEd14aJ1u3yDpqzFO3CpG
-         e1CoMW6O7S/jJrpkvCSxFbWz1Uyo8KBclfAVgSpD86+lOpoSVlFnXJF72E2UPwy5QVIm
-         MCbqV/JrqyPCNZhGZkGcb77JK0UQ+JsgJfNPZex+AuUQgdnjY5sICBtSBsa7Av6vSZUn
-         IfiT1+GVe79nfFRDw50GGsJGluI/FFYPUvvgEEv8/mVYpgd+/Jhm0AgNXJ2nzWJJjFSR
-         /jDg==
+        bh=fdGtU8CdVJ5aQaJfBI2DSk5cEkPEgW68Xd4/KtBW9/E=;
+        b=VjxdWvAIfc1gAme/swteXdbpUmEZxEL6e7VSNv9Znpl+9QVpRe25OZxU3211okGiUW
+         LG1A2ET4g/nr5TshBejSK1ExgS+BNGh1zHczpvQyYWZ07A9+n/8xRb2G084kmAU8OM9X
+         OwKvNNwVhO5Nx+buk9mrduSPetSxVw0ZkaFWDECybAp+CXI0wSc13AyznTJXOkMCacyI
+         97Bycukn1Nexk7j7GOW1fKkC2XFfC8nRBXa1InSOya1MIQB1wbQdcTfcdn9aikk7tCBF
+         WGgaGt+i/bwSY5YxdMZ11hPHRILFYLvBZXS/R6GDMAUvzQhdRTuo46iMHdovDnwh5APs
+         4FSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JpZ5nkw8exH6pwfmixa8Q7/xf5HABCQppgg+JZ7ONP0=;
-        b=YVumJ8XTfNO5ElSzJ8vYHBev5DxpCnoz6HBM3ZbVcTjXc+ytCkXnWnIZVhkO4JwVuU
-         tiShOv4alNSRSaLWR+LmPs0LasnSWHioVUgMPunckCFbIW5F8PwFGWh+JYPDSPEDCThB
-         wiGUGTOKQIEqQmCLonfBK1D20Fu07oAHV2GjqiDd0QyvB0/RluYPIWHBkDVWOWn0RrZc
-         8aAtwqBF2bm1BLrNXXCPz0nxdAFMOEgrEc7czpOrJavq0q8aDkdCuXjaC+oo2673Dklw
-         q0ynTLoaWyplrQYZfJG1vKpCTjLG8M87o+n5ctfDpYNOt/SOnB0zxpKvYIgVAedeJqU0
-         Ce2Q==
-X-Gm-Message-State: AO0yUKWaS95jRGvLgKWy2rRkXWkGk171h0PmNc7Wtb++gIxmJo3nvbjs
-        Tww2nRAENvCxub+0Q1JSwns+OQ==
-X-Google-Smtp-Source: AK7set8Rw6G5gGFspCo7/rafoJ5m63fbiew7+V0e7kuxuc5Ui/qx5oWz4YB7Gu918mbOFbH9wgXNEA==
-X-Received: by 2002:a17:903:2347:b0:19b:64bb:d546 with SMTP id c7-20020a170903234700b0019b64bbd546mr4820182plh.18.1677385273638;
-        Sat, 25 Feb 2023 20:21:13 -0800 (PST)
+        bh=fdGtU8CdVJ5aQaJfBI2DSk5cEkPEgW68Xd4/KtBW9/E=;
+        b=sBmY7RJuu+hGbUm4tPXY2tvuj78AbHcKms0swpBMIanMHRjrOBHTLrQf7ENcnvccy1
+         lduPhy4OHn9EiXSPhx7LJFntMbzwx86cnQAf8lbEWxOrAQeV8aHGSXsCja8LKXAZ2SsK
+         RKIaMNm9Hyor86036WZ52SQtwYOekLCH7bKyMUYdmtH/lZ16Lt/8GF+dygtzIc0ULHmn
+         26Qn2pWzwvk+qpaQklV6EahYZ2//oMOftVVYlc18bc+mTF2fauu+LqchGO0sEzxJLXNI
+         kY0MDoOV36L46MLneLW5NgZpvn8xPBHztaMm2H6THqtWZnJ0lwqcIoma3D8qMxEVcPsZ
+         jOHw==
+X-Gm-Message-State: AO0yUKX/JrJzNmlGEgzqdlVknWSwJUNrkh7jbaCOMc1tQ8/Yd/v11JJL
+        mxvHebf7JtKgen3OIFtFKMT916drtkh5C7IhAZjNpw==
+X-Google-Smtp-Source: AK7set/9mSOtpCIVqQgW3czbPioSQE/zJy9l2G4KrL6S20vznCy8d2bS0ATvkuamMHO6L8bnbN5aZQ==
+X-Received: by 2002:a17:903:32cf:b0:19a:9686:ea8b with SMTP id i15-20020a17090332cf00b0019a9686ea8bmr23988286plr.28.1677385277500;
+        Sat, 25 Feb 2023 20:21:17 -0800 (PST)
 Received: from leoy-huanghe.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id jj2-20020a170903048200b0019aaab3f9d7sm1976036plb.113.2023.02.25.20.21.10
+        by smtp.gmail.com with ESMTPSA id jj2-20020a170903048200b0019aaab3f9d7sm1976036plb.113.2023.02.25.20.21.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 20:21:13 -0800 (PST)
+        Sat, 25 Feb 2023 20:21:17 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -62,9 +62,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v1 02/14] perf kvm: Add pointer to 'perf_kvm_stat' in kvm event
-Date:   Sun, 26 Feb 2023 12:20:41 +0800
-Message-Id: <20230226042053.1492409-3-leo.yan@linaro.org>
+Subject: [PATCH v1 03/14] perf kvm: Move up metrics helpers
+Date:   Sun, 26 Feb 2023 12:20:42 +0800
+Message-Id: <20230226042053.1492409-4-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230226042053.1492409-1-leo.yan@linaro.org>
 References: <20230226042053.1492409-1-leo.yan@linaro.org>
@@ -80,77 +80,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sometimes, handling kvm events needs to base on global variables, e.g.
-when read event counts we need to know the target vcpu ID; the global
-variables are stored in structure perf_kvm_stat.
+This patch moves up the helper functions of event's metrics for later
+adding code to call them.
 
-This patch adds add a 'perf_kvm_stat' pointer in kvm event structure,
-it is to be used by later refactoring.
+No any functionality changes, but has a function renaming from
+compare_kvm_event_{metric}() to cmp_event_{metric}().
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- tools/perf/builtin-kvm.c   | 6 ++++--
- tools/perf/util/kvm-stat.h | 5 +++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ tools/perf/builtin-kvm.c | 72 ++++++++++++++++++++--------------------
+ 1 file changed, 36 insertions(+), 36 deletions(-)
 
 diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index 0172e5b0d26e..3d2560ec6b37 100644
+index 3d2560ec6b37..62c097a37da9 100644
 --- a/tools/perf/builtin-kvm.c
 +++ b/tools/perf/builtin-kvm.c
-@@ -209,7 +209,8 @@ static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
+@@ -49,6 +49,42 @@
+ #include <math.h>
+ #include <perf/mmap.h>
+ 
++#define GET_EVENT_KEY(func, field)					\
++static u64 get_event_ ##func(struct kvm_event *event, int vcpu)		\
++{									\
++	if (vcpu == -1)							\
++		return event->total.field;				\
++									\
++	if (vcpu >= event->max_vcpu)					\
++		return 0;						\
++									\
++	return event->vcpu[vcpu].field;					\
++}
++
++#define COMPARE_EVENT_KEY(func, field)					\
++GET_EVENT_KEY(func, field)						\
++static int cmp_event_ ## func(struct kvm_event *one,			\
++			      struct kvm_event *two, int vcpu)		\
++{									\
++	return get_event_ ##func(one, vcpu) >				\
++	       get_event_ ##func(two, vcpu);				\
++}
++
++GET_EVENT_KEY(time, time);
++GET_EVENT_KEY(max, stats.max);
++GET_EVENT_KEY(min, stats.min);
++COMPARE_EVENT_KEY(count, stats.n);
++COMPARE_EVENT_KEY(mean, stats.mean);
++
++#define DEF_SORT_NAME_KEY(name, compare_key)				\
++	{ #name, cmp_event_ ## compare_key }
++
++static struct kvm_event_key keys[] = {
++	DEF_SORT_NAME_KEY(sample, count),
++	DEF_SORT_NAME_KEY(time, mean),
++	{ NULL, NULL }
++};
++
+ static const char *get_filename_for_perf_kvm(void)
+ {
+ 	const char *filename;
+@@ -461,42 +497,6 @@ static bool handle_kvm_event(struct perf_kvm_stat *kvm,
  	return true;
  }
  
--static struct kvm_event *kvm_alloc_init_event(struct event_key *key)
-+static struct kvm_event *kvm_alloc_init_event(struct perf_kvm_stat *kvm,
-+					      struct event_key *key)
- {
- 	struct kvm_event *event;
- 
-@@ -219,6 +220,7 @@ static struct kvm_event *kvm_alloc_init_event(struct event_key *key)
- 		return NULL;
- 	}
- 
-+	event->perf_kvm = kvm;
- 	event->key = *key;
- 	init_stats(&event->total.stats);
- 	return event;
-@@ -238,7 +240,7 @@ static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
- 			return event;
- 	}
- 
--	event = kvm_alloc_init_event(key);
-+	event = kvm_alloc_init_event(kvm, key);
- 	if (!event)
- 		return NULL;
- 
-diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
-index 6f0fa05b62b6..40a4b66cfee6 100644
---- a/tools/perf/util/kvm-stat.h
-+++ b/tools/perf/util/kvm-stat.h
-@@ -24,10 +24,13 @@ struct kvm_event_stats {
- 	struct stats stats;
- };
- 
-+struct perf_kvm_stat;
-+
- struct kvm_event {
- 	struct list_head hash_entry;
- 	struct rb_node rb;
- 
-+	struct perf_kvm_stat *perf_kvm;
- 	struct event_key key;
- 
- 	struct kvm_event_stats total;
-@@ -44,8 +47,6 @@ struct kvm_event_key {
- 	key_cmp_fun key;
- };
- 
--struct perf_kvm_stat;
+-#define GET_EVENT_KEY(func, field)					\
+-static u64 get_event_ ##func(struct kvm_event *event, int vcpu)		\
+-{									\
+-	if (vcpu == -1)							\
+-		return event->total.field;				\
+-									\
+-	if (vcpu >= event->max_vcpu)					\
+-		return 0;						\
+-									\
+-	return event->vcpu[vcpu].field;					\
+-}
 -
- struct child_event_ops {
- 	void (*get_key)(struct evsel *evsel,
- 			struct perf_sample *sample,
+-#define COMPARE_EVENT_KEY(func, field)					\
+-GET_EVENT_KEY(func, field)						\
+-static int compare_kvm_event_ ## func(struct kvm_event *one,		\
+-					struct kvm_event *two, int vcpu)\
+-{									\
+-	return get_event_ ##func(one, vcpu) >				\
+-				get_event_ ##func(two, vcpu);		\
+-}
+-
+-GET_EVENT_KEY(time, time);
+-COMPARE_EVENT_KEY(count, stats.n);
+-COMPARE_EVENT_KEY(mean, stats.mean);
+-GET_EVENT_KEY(max, stats.max);
+-GET_EVENT_KEY(min, stats.min);
+-
+-#define DEF_SORT_NAME_KEY(name, compare_key)				\
+-	{ #name, compare_kvm_event_ ## compare_key }
+-
+-static struct kvm_event_key keys[] = {
+-	DEF_SORT_NAME_KEY(sample, count),
+-	DEF_SORT_NAME_KEY(time, mean),
+-	{ NULL, NULL }
+-};
+-
+ static bool select_key(struct perf_kvm_stat *kvm)
+ {
+ 	int i;
 -- 
 2.34.1
 
