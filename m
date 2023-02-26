@@ -2,1205 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F19F6A2EC7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 08:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0807C6A2ECA
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 08:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjBZHXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 02:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        id S229633AbjBZHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 02:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjBZHW4 (ORCPT
+        with ESMTP id S229445AbjBZHb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 02:22:56 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3F7211D
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 23:22:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677396135; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=HG1qhtwob/qaM9m0Jqf+gyBJNEwucjErxQZWQAq5yQNlZDLEjCVMg6SCwcU09EePDtI7stbPaEugA1Ngi/Rw4L4GY0qDuysRLMqo0GiXRkM2MSTL7NBjyI9t/3kYw6xwYta/RDGEmrbSV7mwhkCyJdLYWbPfD69YSNtpus80FfU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1677396135; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=HvpogCAO4+Ce/JExy2Ty5vKfzJ+uXHYrO1HaFFeKRJ8=; 
-        b=b17b1kn/WuNEnhB6qoHvaNUxq7p4U+DTE2eD/eUjbfwShJKjbyKvq4e4Sl7x+GPPc91pTKs5W2koPV8CMncCh0EZe5LF1kQVjOO84UwVjv2+yy8kYJMk1/IZN2TfaTTXO9CUzmFQVMvpGIC1IoNecbotlcDb9jyILNq4/ig7K5M=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677396135;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=HvpogCAO4+Ce/JExy2Ty5vKfzJ+uXHYrO1HaFFeKRJ8=;
-        b=gSFvsVlKMw2zTtIy/1X14XIA9wPzE6XcUs/5gjowql0bUc4MnTwGhseyh6i+94fS
-        JKRk/BU8gM7B67CjfdQf08HMIYSow3jTt9TZINBk0WrphQqdnsWCYBtFdHJAMMOFC9a
-        Wxd1pH3owianm9kt8kt60Fm4sY6STy0Dgqh76VvM=
-Received: from kampyooter.. (122.170.64.102 [122.170.64.102]) by mx.zoho.in
-        with SMTPS id 1677396130373500.2654526510513; Sun, 26 Feb 2023 12:52:10 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Message-ID: <d496126b2daf87f2cabbd6d9512bf6ee4d720ee5.1677395403.git.code@siddh.me>
-Subject: [PATCH v7 7/7] drm: Remove usage of deprecated DRM_DEBUG_KMS
-Date:   Sun, 26 Feb 2023 12:51:54 +0530
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1677395403.git.code@siddh.me>
-References: <cover.1677395403.git.code@siddh.me>
+        Sun, 26 Feb 2023 02:31:59 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082AFCA27
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 23:31:57 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id x14so6209594vso.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 23:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+5xIw5mKWNDq2g4oN5XawWgEOR+TjZNFX15AeuMQCE=;
+        b=ca1IUcAsxXKjF+3v9YV4jeVVbp+MYicRymxQFmA10tPnxWd/VO/9wy++powaPrz6H5
+         8GzJS3S3YHIF/bIiDWho2qbhFUdDCIiRZu5ieqdzUHk+DQnxKzjOvHMwfWg4utMZ/C0D
+         2OaZnud/78oqQSVoAKKYfM4xRNHzhx95R59AZNWg9H1CzlrwwSB2g4RCoyOOXippsrVO
+         ggP2qvH793Igt6OK+rPkUFMjx64WwnhyIdLC7zWF839Q6/CzsG/p1jpcnWy7u+F5xQqX
+         1Wt45c36/VzgGMPq4C6EWNu+2OPpojj+BVXnQkTuMpVlceZOLWn/zqgjhGyaWnQ31jxm
+         f1Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+5xIw5mKWNDq2g4oN5XawWgEOR+TjZNFX15AeuMQCE=;
+        b=NnfFlCUOBNSVLG1m24JtW/rxfPMFIEukgXXESXtPiQbatJnbWteH8/BRX+ruF4+Ucv
+         wsmEpNKkAi5UKWW1MG5/CcLO5IBTiAU9Dec53WZ9KpgezgXn0N2HGjXGSGjCib/gp8Xe
+         tSdVnKEeWYzsvKat/EJLiNuwex94WIsSV+pfbynRnLuQPBNQUe0VJQKNMNksbtjZtBxi
+         SM2LH1aUm45ogsMy6r+flifTY6/7/+YDYz6bejM0KORZk1TYRbwXdbwACEW63ns3JRHk
+         WMmBUcsBZdl1tJDlPc9Vlr9HeyQ8mrQtIrehkmIZQbZwWDeK4T2O8CLApXSYdmEspVzF
+         07ug==
+X-Gm-Message-State: AO0yUKXtnUG8kCUg7dpK3ZXN+hf8BJdoWvBtxZokL632kVa3jnIU25wP
+        5GA1171Ip2WFKHPLMIYf4VsYJhaLXfM5OU4QZ8vhrg==
+X-Google-Smtp-Source: AK7set+BxCi/kbivKfeS7a0LI/3BCu14qyiIYuyczxig2cXabDYYfVCEQXrNRzFM/rT4RsgQqKINjhWroPbb4yifXc0=
+X-Received: by 2002:a1f:bf4a:0:b0:401:4daf:d581 with SMTP id
+ p71-20020a1fbf4a000000b004014dafd581mr5193411vkf.0.1677396715951; Sat, 25 Feb
+ 2023 23:31:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CABXGCsO4=qKBF=2FRPVwW8FA4iLFh0Dt9n1BLMec3k10GUorpg@mail.gmail.com>
+ <9f682c4d-e7b7-5e23-84f5-cea4fdac2085@leemhuis.info> <CABXGCsNruNKfx3d1dpneRUvn3dCqv_bM93TdJsCLeRYiP3qYaA@mail.gmail.com>
+ <6bfa6d67-27ce-04b3-a1f9-3768b8a0169f@leemhuis.info> <CABVgOSnCLbqHHA-gT6FwtJYKYAHt_9uwR_S2r6ZE8hm6eZaLBA@mail.gmail.com>
+ <f6616a9e-d250-b808-8c2c-e321e215f622@leemhuis.info>
+In-Reply-To: <f6616a9e-d250-b808-8c2c-e321e215f622@leemhuis.info>
+From:   David Gow <davidgow@google.com>
+Date:   Sun, 26 Feb 2023 15:31:43 +0800
+Message-ID: <CABVgOS=7JMGisPq_QUQpKV1mz8z8D2Esg0TwdMKx23yJhPbQGw@mail.gmail.com>
+Subject: Re: [6.3][regression] after commit 7170b7ed6acbde523c5d362c8978c60df4c30f30
+ my system stuck in initramfs forever
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, rmoar@google.com,
+        brendanhiggins@google.com, skhan@linuxfoundation.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000006d07e205f5955b98"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_print.h says DRM_DEBUG_KMS is deprecated in favor of
-drm_dbg_kms().
+--0000000000006d07e205f5955b98
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
----
- drivers/gpu/drm/drm_client_modeset.c   | 112 ++++++++++++++-----------
- drivers/gpu/drm/drm_color_mgmt.c       |   4 +-
- drivers/gpu/drm/drm_connector.c        |  21 ++---
- drivers/gpu/drm/drm_crtc.c             |  36 ++++----
- drivers/gpu/drm/drm_crtc_helper.c      |  54 ++++++------
- drivers/gpu/drm/drm_debugfs_crc.c      |   5 +-
- drivers/gpu/drm/drm_displayid.c        |   4 +-
- drivers/gpu/drm/drm_edid.c             |  17 ++--
- drivers/gpu/drm/drm_gem_shmem_helper.c |   4 +-
- drivers/gpu/drm/drm_lease.c            |   2 +-
- drivers/gpu/drm/drm_mipi_dbi.c         |   7 +-
- drivers/gpu/drm/drm_modes.c            |  10 +--
- drivers/gpu/drm/drm_plane.c            |  32 +++----
- drivers/gpu/drm/drm_probe_helper.c     |  39 ++++-----
- drivers/gpu/drm/drm_rect.c             |   4 +-
- drivers/gpu/drm/drm_sysfs.c            |   8 +-
- 16 files changed, 189 insertions(+), 170 deletions(-)
+On Sun, 26 Feb 2023 at 14:02, Thorsten Leemhuis <linux@leemhuis.info> wrote=
+:
+>
+> On 26.02.23 02:11, David Gow wrote:
+> > On Sat, 25 Feb 2023 at 23:53, Thorsten Leemhuis <linux@leemhuis.info> w=
+rote:
+> >> On 25.02.23 15:55, Mikhail Gavrilov wrote:
+> >>> On Sat, Feb 25, 2023 at 7:22=E2=80=AFPM Thorsten Leemhuis <linux@leem=
+huis.info> wrote:
+> >>>>
+> >>>> [CCing the regression list, as it should be in the loop for regressi=
+ons:
+> >>>> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+> >>>>
+> >>>> On 25.02.23 14:51, Mikhail Gavrilov wrote:
+> >>>>> new kernel release cycle returning with new bugs
+> >>>>> Today my system got stuck in initramfs environment after updating t=
+o
+> >>>>> commit d2980d8d826554fa6981d621e569a453787472f8.
+> >>>>>
+> >>>>> I still do not understand how to configure the network inside the
+> >>>>> initramfs environment to grab the logs.
+> >>>>> Since an attempt to rebuild the initramfs with all modules (dracut
+> >>>>> --no-hostonly --force) leads to the stuck initramfs environment and
+> >>>>> impossible entering into initramfs console.
+> >>>>
+> >>>> Do you see any error messages? I have problems since Friday morning =
+as
+> >>>> well (stuck in Fedora's initramfs) and see a lot of BPF warnings lik=
+e
+> >>>> "BPF: invalid name" and "failed to validate module". Was able to do =
+a
+> >>>> screenshot:
+> >>>>
+> >>>> https://www.leemhuis.info/files/misc/Screenshot_ktst-f36-x86-64_2023=
+-02-24_07:53:14.png
+> >>>
+> >>> I also seen such messages
+> >>> https://freeimage.host/i/img-1475.HMPL26l
+> >>
+> >> Pretty sure that's the same problem, at least the symptoms match. If
+> >> anyone needs a config to reproduce this, here's one of mine that shows
+> >> the problem:
+> >>
+> >> https://www.leemhuis.info/files/misc/config
+> >>
+> >>> P.S.: I also use Fedora Rawhide.
+> >>
+> >> Happens for me on all Fedora 36, 37, and 38 (my rawhide build failed f=
+or
+> >> other reasons, so I couldn't test).
+> >
+> > Thanks for the report, and sorry this seems to have broken.
+> >
+> > I've not been able to reproduce this locally yet, but I'm looking into =
+it.
+> >
+> > In the meantime, a few questions if you have time:
+> > - Does this happen with CONFIG_KUNIT=3Dy as well as CONFIG_KUNIT=3Dm?
+> > - Does this patch fix it?
+> > https://lore.kernel.org/linux-kselftest/20230225014529.2259752-1-davidg=
+ow@google.com/T/#u
+>
+> Sorry, limited time and about to leave the house for the day. I only
+> could try the latter and did only do a very quick test, but it seems
+> that patch fixes the issue for me.
+>
 
-diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_cli=
-ent_modeset.c
-index e2403b8c6347..4e08ae688b83 100644
---- a/drivers/gpu/drm/drm_client_modeset.c
-+++ b/drivers/gpu/drm/drm_client_modeset.c
-@@ -242,8 +242,9 @@ static void drm_client_connectors_enabled(struct drm_co=
-nnector **connectors,
- =09for (i =3D 0; i < connector_count; i++) {
- =09=09connector =3D connectors[i];
- =09=09enabled[i] =3D drm_connector_enabled(connector, true);
--=09=09DRM_DEBUG_KMS("connector %d enabled? %s\n", connector->base.id,
--=09=09=09      connector->display_info.non_desktop ? "non desktop" : str_y=
-es_no(enabled[i]));
-+=09=09drm_dbg_kms(connector->dev, "connector %d enabled? %s\n",
-+=09=09=09    connector->base.id,
-+=09=09=09    connector->display_info.non_desktop ? "non desktop" : str_yes=
-_no(enabled[i]));
-=20
- =09=09any_enabled |=3D enabled[i];
- =09}
-@@ -303,7 +304,7 @@ static bool drm_client_target_cloned(struct drm_device =
-*dev,
- =09}
-=20
- =09if (can_clone) {
--=09=09DRM_DEBUG_KMS("can clone using command line\n");
-+=09=09drm_dbg_kms(dev, "can clone using command line\n");
- =09=09return true;
- =09}
-=20
-@@ -328,7 +329,7 @@ static bool drm_client_target_cloned(struct drm_device =
-*dev,
- =09}
-=20
- =09if (can_clone) {
--=09=09DRM_DEBUG_KMS("can clone using 1024x768\n");
-+=09=09drm_dbg_kms(dev, "can clone using 1024x768\n");
- =09=09return true;
- =09}
- =09drm_info(dev, "kms: can't enable cloning when we probably wanted to.\n"=
-);
-@@ -352,8 +353,9 @@ static int drm_client_get_tile_offsets(struct drm_conne=
-ctor **connectors,
- =09=09=09continue;
-=20
- =09=09if (!modes[i] && (h_idx || v_idx)) {
--=09=09=09DRM_DEBUG_KMS("no modes for connector tiled %d %d\n", i,
--=09=09=09=09      connector->base.id);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "no modes for connector tiled %d %d\n",
-+=09=09=09=09    i, connector->base.id);
- =09=09=09continue;
- =09=09}
- =09=09if (connector->tile_h_loc < h_idx)
-@@ -364,7 +366,8 @@ static int drm_client_get_tile_offsets(struct drm_conne=
-ctor **connectors,
- =09}
- =09offsets[idx].x =3D hoffset;
- =09offsets[idx].y =3D voffset;
--=09DRM_DEBUG_KMS("returned %d %d for %d %d\n", hoffset, voffset, h_idx, v_=
-idx);
-+=09drm_dbg_kms(NULL, "returned %d %d for %d %d\n",
-+=09=09    hoffset, voffset, h_idx, v_idx);
- =09return 0;
- }
-=20
-@@ -421,14 +424,16 @@ static bool drm_client_target_preferred(struct drm_co=
-nnector **connectors,
- =09=09=09drm_client_get_tile_offsets(connectors, connector_count, modes, o=
-ffsets, i,
- =09=09=09=09=09=09    connector->tile_h_loc, connector->tile_v_loc);
- =09=09}
--=09=09DRM_DEBUG_KMS("looking for cmdline mode on connector %d\n",
--=09=09=09      connector->base.id);
-+=09=09drm_dbg_kms(connector->dev,
-+=09=09=09    "looking for cmdline mode on connector %d\n",
-+=09=09=09    connector->base.id);
-=20
- =09=09/* got for command line mode first */
- =09=09modes[i] =3D drm_connector_pick_cmdline_mode(connector);
- =09=09if (!modes[i]) {
--=09=09=09DRM_DEBUG_KMS("looking for preferred mode on connector %d %d\n",
--=09=09=09=09      connector->base.id, connector->tile_group ? connector->t=
-ile_group->id : 0);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "looking for preferred mode on connector %d %d\n",
-+=09=09=09=09    connector->base.id, connector->tile_group ? connector->til=
-e_group->id : 0);
- =09=09=09modes[i] =3D drm_connector_has_preferred_mode(connector, width, h=
-eight);
- =09=09}
- =09=09/* No preferred modes, pick one off the list */
-@@ -450,16 +455,17 @@ static bool drm_client_target_preferred(struct drm_co=
-nnector **connectors,
- =09=09=09    (connector->tile_h_loc =3D=3D 0 &&
- =09=09=09     connector->tile_v_loc =3D=3D 0 &&
- =09=09=09     !drm_connector_get_tiled_mode(connector))) {
--=09=09=09=09DRM_DEBUG_KMS("Falling back to non tiled mode on Connector %d\=
-n",
--=09=09=09=09=09      connector->base.id);
-+=09=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09=09    "Falling back to non tiled mode on Connector %d\n",
-+=09=09=09=09=09    connector->base.id);
- =09=09=09=09modes[i] =3D drm_connector_fallback_non_tiled_mode(connector);
- =09=09=09} else {
- =09=09=09=09modes[i] =3D drm_connector_get_tiled_mode(connector);
- =09=09=09}
- =09=09}
-=20
--=09=09DRM_DEBUG_KMS("found mode %s\n", modes[i] ? modes[i]->name :
--=09=09=09  "none");
-+=09=09drm_dbg_kms(connector->dev, "found mode %s\n",
-+=09=09=09    modes[i] ? modes[i]->name : "none");
- =09=09conn_configured |=3D BIT_ULL(i);
- =09}
-=20
-@@ -619,15 +625,17 @@ static bool drm_client_firmware_config(struct drm_cli=
-ent_dev *client,
- =09=09=09num_connectors_detected++;
-=20
- =09=09if (!enabled[i]) {
--=09=09=09DRM_DEBUG_KMS("connector %s not enabled, skipping\n",
--=09=09=09=09      connector->name);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "connector %s not enabled, skipping\n",
-+=09=09=09=09    connector->name);
- =09=09=09conn_configured |=3D BIT(i);
- =09=09=09continue;
- =09=09}
-=20
- =09=09if (connector->force =3D=3D DRM_FORCE_OFF) {
--=09=09=09DRM_DEBUG_KMS("connector %s is disabled by user, skipping\n",
--=09=09=09=09      connector->name);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "connector %s is disabled by user, skipping\n",
-+=09=09=09=09    connector->name);
- =09=09=09enabled[i] =3D false;
- =09=09=09continue;
- =09=09}
-@@ -637,8 +645,9 @@ static bool drm_client_firmware_config(struct drm_clien=
-t_dev *client,
- =09=09=09if (connector->force > DRM_FORCE_OFF)
- =09=09=09=09goto bail;
-=20
--=09=09=09DRM_DEBUG_KMS("connector %s has no encoder or crtc, skipping\n",
--=09=09=09=09      connector->name);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "connector %s has no encoder or crtc, skipping\n",
-+=09=09=09=09    connector->name);
- =09=09=09enabled[i] =3D false;
- =09=09=09conn_configured |=3D BIT(i);
- =09=09=09continue;
-@@ -655,28 +664,32 @@ static bool drm_client_firmware_config(struct drm_cli=
-ent_dev *client,
- =09=09 */
- =09=09for (j =3D 0; j < count; j++) {
- =09=09=09if (crtcs[j] =3D=3D new_crtc) {
--=09=09=09=09DRM_DEBUG_KMS("fallback: cloned configuration\n");
-+=09=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09=09    "fallback: cloned configuration\n");
- =09=09=09=09goto bail;
- =09=09=09}
- =09=09}
-=20
--=09=09DRM_DEBUG_KMS("looking for cmdline mode on connector %s\n",
--=09=09=09      connector->name);
-+=09=09drm_dbg_kms(connector->dev,
-+=09=09=09    "looking for cmdline mode on connector %s\n",
-+=09=09=09    connector->name);
-=20
- =09=09/* go for command line mode first */
- =09=09modes[i] =3D drm_connector_pick_cmdline_mode(connector);
-=20
- =09=09/* try for preferred next */
- =09=09if (!modes[i]) {
--=09=09=09DRM_DEBUG_KMS("looking for preferred mode on connector %s %d\n",
--=09=09=09=09      connector->name, connector->has_tile);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "looking for preferred mode on connector %s %d\n",
-+=09=09=09=09    connector->name, connector->has_tile);
- =09=09=09modes[i] =3D drm_connector_has_preferred_mode(connector, width, h=
-eight);
- =09=09}
-=20
- =09=09/* No preferred mode marked by the EDID? Are there any modes? */
- =09=09if (!modes[i] && !list_empty(&connector->modes)) {
--=09=09=09DRM_DEBUG_KMS("using first mode listed on connector %s\n",
--=09=09=09=09      connector->name);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "using first mode listed on connector %s\n",
-+=09=09=09=09    connector->name);
- =09=09=09modes[i] =3D list_first_entry(&connector->modes,
- =09=09=09=09=09=09    struct drm_display_mode,
- =09=09=09=09=09=09    head);
-@@ -695,8 +708,9 @@ static bool drm_client_firmware_config(struct drm_clien=
-t_dev *client,
- =09=09=09 * This is crtc->mode and not crtc->state->mode for the
- =09=09=09 * fastboot check to work correctly.
- =09=09=09 */
--=09=09=09DRM_DEBUG_KMS("looking for current mode on connector %s\n",
--=09=09=09=09      connector->name);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "looking for current mode on connector %s\n",
-+=09=09=09=09    connector->name);
- =09=09=09modes[i] =3D &connector->state->crtc->mode;
- =09=09}
- =09=09/*
-@@ -705,18 +719,20 @@ static bool drm_client_firmware_config(struct drm_cli=
-ent_dev *client,
- =09=09 */
- =09=09if (connector->has_tile &&
- =09=09    num_tiled_conns < connector->num_h_tile * connector->num_v_tile)=
- {
--=09=09=09DRM_DEBUG_KMS("Falling back to non tiled mode on Connector %d\n",
--=09=09=09=09      connector->base.id);
-+=09=09=09drm_dbg_kms(connector->dev,
-+=09=09=09=09    "Falling back to non tiled mode on Connector %d\n",
-+=09=09=09=09    connector->base.id);
- =09=09=09modes[i] =3D drm_connector_fallback_non_tiled_mode(connector);
- =09=09}
- =09=09crtcs[i] =3D new_crtc;
-=20
--=09=09DRM_DEBUG_KMS("connector %s on [CRTC:%d:%s]: %dx%d%s\n",
--=09=09=09      connector->name,
--=09=09=09      connector->state->crtc->base.id,
--=09=09=09      connector->state->crtc->name,
--=09=09=09      modes[i]->hdisplay, modes[i]->vdisplay,
--=09=09=09      modes[i]->flags & DRM_MODE_FLAG_INTERLACE ? "i" : "");
-+=09=09drm_dbg_kms(connector->dev,
-+=09=09=09    "connector %s on [CRTC:%d:%s]: %dx%d%s\n",
-+=09=09=09    connector->name,
-+=09=09=09    connector->state->crtc->base.id,
-+=09=09=09    connector->state->crtc->name,
-+=09=09=09    modes[i]->hdisplay, modes[i]->vdisplay,
-+=09=09=09    modes[i]->flags & DRM_MODE_FLAG_INTERLACE ? "i" : "");
-=20
- =09=09fallback =3D false;
- =09=09conn_configured |=3D BIT(i);
-@@ -732,15 +748,15 @@ static bool drm_client_firmware_config(struct drm_cli=
-ent_dev *client,
- =09 */
- =09if (num_connectors_enabled !=3D num_connectors_detected &&
- =09    num_connectors_enabled < dev->mode_config.num_crtc) {
--=09=09DRM_DEBUG_KMS("fallback: Not all outputs enabled\n");
--=09=09DRM_DEBUG_KMS("Enabled: %i, detected: %i\n", num_connectors_enabled,
--=09=09=09      num_connectors_detected);
-+=09=09drm_dbg_kms(NULL, "fallback: Not all outputs enabled\n");
-+=09=09drm_dbg_kms(NULL, "Enabled: %i, detected: %i\n",
-+=09=09=09    num_connectors_enabled, num_connectors_detected);
- =09=09fallback =3D true;
- =09}
-=20
- =09if (fallback) {
- bail:
--=09=09DRM_DEBUG_KMS("Not using firmware configuration\n");
-+=09=09drm_dbg_kms(NULL, "Not using firmware configuration\n");
- =09=09memcpy(enabled, save_enabled, count);
- =09=09ret =3D false;
- =09}
-@@ -777,7 +793,7 @@ int drm_client_modeset_probe(struct drm_client_dev *cli=
-ent, unsigned int width,
- =09int i, ret =3D 0;
- =09bool *enabled;
-=20
--=09DRM_DEBUG_KMS("\n");
-+=09drm_dbg_kms(dev, "\n");
-=20
- =09if (!width)
- =09=09width =3D dev->mode_config.max_width;
-@@ -819,7 +835,7 @@ int drm_client_modeset_probe(struct drm_client_dev *cli=
-ent, unsigned int width,
- =09for (i =3D 0; i < connector_count; i++)
- =09=09total_modes_count +=3D connectors[i]->funcs->fill_modes(connectors[i=
-], width, height);
- =09if (!total_modes_count)
--=09=09DRM_DEBUG_KMS("No connectors reported connected with modes\n");
-+=09=09drm_dbg_kms(dev, "No connectors reported connected with modes\n");
- =09drm_client_connectors_enabled(connectors, connector_count, enabled);
-=20
- =09if (!drm_client_firmware_config(client, connectors, connector_count, cr=
-tcs,
-@@ -834,8 +850,8 @@ int drm_client_modeset_probe(struct drm_client_dev *cli=
-ent, unsigned int width,
- =09=09=09=09=09=09 offsets, enabled, width, height))
- =09=09=09drm_err(client->dev, "Unable to find initial modes\n");
-=20
--=09=09DRM_DEBUG_KMS("picking CRTCs for %dx%d config\n",
--=09=09=09      width, height);
-+=09=09drm_dbg_kms(dev, "picking CRTCs for %dx%d config\n",
-+=09=09=09    width, height);
-=20
- =09=09drm_client_pick_crtcs(client, connectors, connector_count,
- =09=09=09=09      crtcs, modes, 0, width, height);
-@@ -853,8 +869,8 @@ int drm_client_modeset_probe(struct drm_client_dev *cli=
-ent, unsigned int width,
- =09=09=09struct drm_mode_set *modeset =3D drm_client_find_modeset(client, =
-crtc);
- =09=09=09struct drm_connector *connector =3D connectors[i];
-=20
--=09=09=09DRM_DEBUG_KMS("desired mode %s set on crtc %d (%d,%d)\n",
--=09=09=09=09      mode->name, crtc->base.id, offset->x, offset->y);
-+=09=09=09drm_dbg_kms(dev, "desired mode %s set on crtc %d (%d,%d)\n",
-+=09=09=09=09    mode->name, crtc->base.id, offset->x, offset->y);
-=20
- =09=09=09if (WARN_ON_ONCE(modeset->num_connectors =3D=3D DRM_CLIENT_MAX_CL=
-ONED_CONNECTORS ||
- =09=09=09=09=09 (dev->mode_config.num_crtc > 1 && modeset->num_connectors =
-=3D=3D 1))) {
-diff --git a/drivers/gpu/drm/drm_color_mgmt.c b/drivers/gpu/drm/drm_color_m=
-gmt.c
-index d021497841b8..a2761a6ce11f 100644
---- a/drivers/gpu/drm/drm_color_mgmt.c
-+++ b/drivers/gpu/drm/drm_color_mgmt.c
-@@ -612,7 +612,7 @@ int drm_color_lut_check(const struct drm_property_blob =
-*lut, u32 tests)
- =09=09if (tests & DRM_COLOR_LUT_EQUAL_CHANNELS) {
- =09=09=09if (entry[i].red !=3D entry[i].blue ||
- =09=09=09    entry[i].red !=3D entry[i].green) {
--=09=09=09=09DRM_DEBUG_KMS("All LUT entries must have equal r/g/b\n");
-+=09=09=09=09drm_dbg_kms(NULL, "All LUT entries must have equal r/g/b\n");
- =09=09=09=09return -EINVAL;
- =09=09=09}
- =09=09}
-@@ -621,7 +621,7 @@ int drm_color_lut_check(const struct drm_property_blob =
-*lut, u32 tests)
- =09=09=09if (entry[i].red < entry[i - 1].red ||
- =09=09=09    entry[i].green < entry[i - 1].green ||
- =09=09=09    entry[i].blue < entry[i - 1].blue) {
--=09=09=09=09DRM_DEBUG_KMS("LUT entries must never decrease.\n");
-+=09=09=09=09drm_dbg_kms(NULL, "LUT entries must never decrease.\n");
- =09=09=09=09return -EINVAL;
- =09=09=09}
- =09=09}
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connecto=
-r.c
-index cd1a23fc82e1..457bf4c205c3 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -181,13 +181,14 @@ static void drm_connector_get_cmdline_mode(struct drm=
-_connector *connector)
- =09=09=09=09=09=09    mode->panel_orientation);
- =09}
-=20
--=09DRM_DEBUG_KMS("cmdline mode for connector %s %s %dx%d@%dHz%s%s%s\n",
--=09=09      connector->name, mode->name,
--=09=09      mode->xres, mode->yres,
--=09=09      mode->refresh_specified ? mode->refresh : 60,
--=09=09      mode->rb ? " reduced blanking" : "",
--=09=09      mode->margins ? " with margins" : "",
--=09=09      mode->interlace ?  " interlaced" : "");
-+=09drm_dbg_kms(connector->dev,
-+=09=09    "cmdline mode for connector %s %s %dx%d@%dHz%s%s%s\n",
-+=09=09    connector->name, mode->name,
-+=09=09    mode->xres, mode->yres,
-+=09=09    mode->refresh_specified ? mode->refresh : 60,
-+=09=09    mode->rb ? " reduced blanking" : "",
-+=09=09    mode->margins ? " with margins" : "",
-+=09=09    mode->interlace ?  " interlaced" : "");
- }
-=20
- static void drm_connector_free(struct kref *kref)
-@@ -247,9 +248,9 @@ static int __drm_connector_init(struct drm_device *dev,
- =09/* connector index is used with 32bit bitmasks */
- =09ret =3D ida_alloc_max(&config->connector_ida, 31, GFP_KERNEL);
- =09if (ret < 0) {
--=09=09DRM_DEBUG_KMS("Failed to allocate %s connector index: %d\n",
--=09=09=09      drm_connector_enum_list[connector_type].name,
--=09=09=09      ret);
-+=09=09drm_dbg_kms(dev, "Failed to allocate %s connector index: %d\n",
-+=09=09=09    drm_connector_enum_list[connector_type].name,
-+=09=09=09    ret);
- =09=09goto out_put;
- =09}
- =09connector->index =3D ret;
-diff --git a/drivers/gpu/drm/drm_crtc.c b/drivers/gpu/drm/drm_crtc.c
-index df9bf3c9206e..adc426561e17 100644
---- a/drivers/gpu/drm/drm_crtc.c
-+++ b/drivers/gpu/drm/drm_crtc.c
-@@ -730,10 +730,10 @@ int drm_mode_setcrtc(struct drm_device *dev, void *da=
-ta,
-=20
- =09crtc =3D drm_crtc_find(dev, file_priv, crtc_req->crtc_id);
- =09if (!crtc) {
--=09=09DRM_DEBUG_KMS("Unknown CRTC ID %d\n", crtc_req->crtc_id);
-+=09=09drm_dbg_kms(dev, "Unknown CRTC ID %d\n", crtc_req->crtc_id);
- =09=09return -ENOENT;
- =09}
--=09DRM_DEBUG_KMS("[CRTC:%d:%s]\n", crtc->base.id, crtc->name);
-+=09drm_dbg_kms(dev, "[CRTC:%d:%s]\n", crtc->base.id, crtc->name);
-=20
- =09plane =3D crtc->primary;
-=20
-@@ -756,7 +756,7 @@ int drm_mode_setcrtc(struct drm_device *dev, void *data=
-,
- =09=09=09=09old_fb =3D plane->fb;
-=20
- =09=09=09if (!old_fb) {
--=09=09=09=09DRM_DEBUG_KMS("CRTC doesn't have current FB\n");
-+=09=09=09=09drm_dbg_kms(dev, "CRTC doesn't have current FB\n");
- =09=09=09=09ret =3D -EINVAL;
- =09=09=09=09goto out;
- =09=09=09}
-@@ -767,8 +767,7 @@ int drm_mode_setcrtc(struct drm_device *dev, void *data=
-,
- =09=09} else {
- =09=09=09fb =3D drm_framebuffer_lookup(dev, file_priv, crtc_req->fb_id);
- =09=09=09if (!fb) {
--=09=09=09=09DRM_DEBUG_KMS("Unknown FB ID%d\n",
--=09=09=09=09=09=09crtc_req->fb_id);
-+=09=09=09=09drm_dbg_kms(dev, "Unknown FB ID%d\n", crtc_req->fb_id);
- =09=09=09=09ret =3D -ENOENT;
- =09=09=09=09goto out;
- =09=09=09}
-@@ -781,7 +780,7 @@ int drm_mode_setcrtc(struct drm_device *dev, void *data=
-,
- =09=09}
- =09=09if (!file_priv->aspect_ratio_allowed &&
- =09=09    (crtc_req->mode.flags & DRM_MODE_FLAG_PIC_AR_MASK) !=3D DRM_MODE=
-_FLAG_PIC_AR_NONE) {
--=09=09=09DRM_DEBUG_KMS("Unexpected aspect-ratio flag bits\n");
-+=09=09=09drm_dbg_kms(dev, "Unexpected aspect-ratio flag bits\n");
- =09=09=09ret =3D -EINVAL;
- =09=09=09goto out;
- =09=09}
-@@ -789,8 +788,8 @@ int drm_mode_setcrtc(struct drm_device *dev, void *data=
-,
-=20
- =09=09ret =3D drm_mode_convert_umode(dev, mode, &crtc_req->mode);
- =09=09if (ret) {
--=09=09=09DRM_DEBUG_KMS("Invalid mode (ret=3D%d, status=3D%s)\n",
--=09=09=09=09      ret, drm_get_mode_status_name(mode->status));
-+=09=09=09drm_dbg_kms(dev, "Invalid mode (ret=3D%d, status=3D%s)\n",
-+=09=09=09=09    ret, drm_get_mode_status_name(mode->status));
- =09=09=09drm_mode_debug_printmodeline(mode);
- =09=09=09goto out;
- =09=09}
-@@ -807,9 +806,8 @@ int drm_mode_setcrtc(struct drm_device *dev, void *data=
-,
- =09=09=09=09=09=09=09   fb->format->format,
- =09=09=09=09=09=09=09   fb->modifier);
- =09=09=09if (ret) {
--=09=09=09=09DRM_DEBUG_KMS("Invalid pixel format %p4cc, modifier 0x%llx\n",
--=09=09=09=09=09      &fb->format->format,
--=09=09=09=09=09      fb->modifier);
-+=09=09=09=09drm_dbg_kms(dev, "Invalid pixel format %p4cc, modifier 0x%llx\=
-n",
-+=09=09=09=09=09    &fb->format->format, fb->modifier);
- =09=09=09=09goto out;
- =09=09=09}
- =09=09}
-@@ -822,14 +820,14 @@ int drm_mode_setcrtc(struct drm_device *dev, void *da=
-ta,
- =09}
-=20
- =09if (crtc_req->count_connectors =3D=3D 0 && mode) {
--=09=09DRM_DEBUG_KMS("Count connectors is 0 but mode set\n");
-+=09=09drm_dbg_kms(dev, "Count connectors is 0 but mode set\n");
- =09=09ret =3D -EINVAL;
- =09=09goto out;
- =09}
-=20
- =09if (crtc_req->count_connectors > 0 && (!mode || !fb)) {
--=09=09DRM_DEBUG_KMS("Count connectors is %d but no mode or fb set\n",
--=09=09=09  crtc_req->count_connectors);
-+=09=09drm_dbg_kms(dev, "Count connectors is %d but no mode or fb set\n",
-+=09=09=09    crtc_req->count_connectors);
- =09=09ret =3D -EINVAL;
- =09=09goto out;
- =09}
-@@ -861,14 +859,14 @@ int drm_mode_setcrtc(struct drm_device *dev, void *da=
-ta,
-=20
- =09=09=09connector =3D drm_connector_lookup(dev, file_priv, out_id);
- =09=09=09if (!connector) {
--=09=09=09=09DRM_DEBUG_KMS("Connector id %d unknown\n",
--=09=09=09=09=09=09out_id);
-+=09=09=09=09drm_dbg_kms(dev, "Connector id %d unknown\n",
-+=09=09=09=09=09    out_id);
- =09=09=09=09ret =3D -ENOENT;
- =09=09=09=09goto out;
- =09=09=09}
--=09=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s]\n",
--=09=09=09=09=09connector->base.id,
--=09=09=09=09=09connector->name);
-+=09=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s]\n",
-+=09=09=09=09    connector->base.id,
-+=09=09=09=09    connector->name);
-=20
- =09=09=09connector_set[i] =3D connector;
- =09=09}
-diff --git a/drivers/gpu/drm/drm_crtc_helper.c b/drivers/gpu/drm/drm_crtc_h=
-elper.c
-index b74b4301a471..59e7b86eab93 100644
---- a/drivers/gpu/drm/drm_crtc_helper.c
-+++ b/drivers/gpu/drm/drm_crtc_helper.c
-@@ -338,7 +338,7 @@ bool drm_crtc_helper_set_mode(struct drm_crtc *crtc,
- =09=09if (encoder_funcs->mode_fixup) {
- =09=09=09if (!(ret =3D encoder_funcs->mode_fixup(encoder, mode,
- =09=09=09=09=09=09=09      adjusted_mode))) {
--=09=09=09=09DRM_DEBUG_KMS("Encoder fixup failed\n");
-+=09=09=09=09drm_dbg_kms(dev, "Encoder fixup failed\n");
- =09=09=09=09goto done;
- =09=09=09}
- =09=09}
-@@ -347,11 +347,11 @@ bool drm_crtc_helper_set_mode(struct drm_crtc *crtc,
- =09if (crtc_funcs->mode_fixup) {
- =09=09if (!(ret =3D crtc_funcs->mode_fixup(crtc, mode,
- =09=09=09=09=09=09adjusted_mode))) {
--=09=09=09DRM_DEBUG_KMS("CRTC fixup failed\n");
-+=09=09=09drm_dbg_kms(dev, "CRTC fixup failed\n");
- =09=09=09goto done;
- =09=09}
- =09}
--=09DRM_DEBUG_KMS("[CRTC:%d:%s]\n", crtc->base.id, crtc->name);
-+=09drm_dbg_kms(dev, "[CRTC:%d:%s]\n", crtc->base.id, crtc->name);
-=20
- =09drm_mode_copy(&crtc->hwmode, adjusted_mode);
-=20
-@@ -390,8 +390,8 @@ bool drm_crtc_helper_set_mode(struct drm_crtc *crtc,
- =09=09if (!encoder_funcs)
- =09=09=09continue;
-=20
--=09=09DRM_DEBUG_KMS("[ENCODER:%d:%s] set [MODE:%s]\n",
--=09=09=09encoder->base.id, encoder->name, mode->name);
-+=09=09drm_dbg_kms(dev, "[ENCODER:%d:%s] set [MODE:%s]\n",
-+=09=09=09    encoder->base.id, encoder->name, mode->name);
- =09=09if (encoder_funcs->mode_set)
- =09=09=09encoder_funcs->mode_set(encoder, mode, adjusted_mode);
- =09}
-@@ -567,7 +567,7 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set=
-,
- =09int ret;
- =09int i;
-=20
--=09DRM_DEBUG_KMS("\n");
-+=09drm_dbg_kms(NULL, "\n");
-=20
- =09BUG_ON(!set);
- =09BUG_ON(!set->crtc);
-@@ -586,13 +586,13 @@ int drm_crtc_helper_set_config(struct drm_mode_set *s=
-et,
- =09=09set->fb =3D NULL;
-=20
- =09if (set->fb) {
--=09=09DRM_DEBUG_KMS("[CRTC:%d:%s] [FB:%d] #connectors=3D%d (x y) (%i %i)\n=
-",
--=09=09=09      set->crtc->base.id, set->crtc->name,
--=09=09=09      set->fb->base.id,
--=09=09=09      (int)set->num_connectors, set->x, set->y);
-+=09=09drm_dbg_kms(dev, "[CRTC:%d:%s] [FB:%d] #connectors=3D%d (x y) (%i %i=
-)\n",
-+=09=09=09    set->crtc->base.id, set->crtc->name,
-+=09=09=09    set->fb->base.id,
-+=09=09=09    (int)set->num_connectors, set->x, set->y);
- =09} else {
--=09=09DRM_DEBUG_KMS("[CRTC:%d:%s] [NOFB]\n",
--=09=09=09      set->crtc->base.id, set->crtc->name);
-+=09=09drm_dbg_kms(dev, "[CRTC:%d:%s] [NOFB]\n",
-+=09=09=09    set->crtc->base.id, set->crtc->name);
- =09=09drm_crtc_helper_disable(set->crtc);
- =09=09return 0;
- =09}
-@@ -642,7 +642,7 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set=
-,
- =09if (set->crtc->primary->fb !=3D set->fb) {
- =09=09/* If we have no fb then treat it as a full mode set */
- =09=09if (set->crtc->primary->fb =3D=3D NULL) {
--=09=09=09DRM_DEBUG_KMS("crtc has no fb, full mode set\n");
-+=09=09=09drm_dbg_kms(dev, "crtc has no fb, full mode set\n");
- =09=09=09mode_changed =3D true;
- =09=09} else if (set->fb->format !=3D set->crtc->primary->fb->format) {
- =09=09=09mode_changed =3D true;
-@@ -654,7 +654,7 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set=
-,
- =09=09fb_changed =3D true;
-=20
- =09if (!drm_mode_equal(set->mode, &set->crtc->mode)) {
--=09=09DRM_DEBUG_KMS("modes are different, full mode set\n");
-+=09=09drm_dbg_kms(dev, "modes are different, full mode set\n");
- =09=09drm_mode_debug_printmodeline(&set->crtc->mode);
- =09=09drm_mode_debug_printmodeline(set->mode);
- =09=09mode_changed =3D true;
-@@ -690,7 +690,7 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set=
-,
- =09=09=09=09=09fail =3D 1;
-=20
- =09=09=09=09if (connector->dpms !=3D DRM_MODE_DPMS_ON) {
--=09=09=09=09=09DRM_DEBUG_KMS("connector dpms not on, full mode switch\n");
-+=09=09=09=09=09drm_dbg_kms(dev, "connector dpms not on, full mode switch\n=
-");
- =09=09=09=09=09mode_changed =3D true;
- =09=09=09=09}
-=20
-@@ -699,7 +699,7 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set=
-,
- =09=09}
-=20
- =09=09if (new_encoder !=3D connector->encoder) {
--=09=09=09DRM_DEBUG_KMS("encoder changed, full mode switch\n");
-+=09=09=09drm_dbg_kms(dev, "encoder changed, full mode switch\n");
- =09=09=09mode_changed =3D true;
- =09=09=09/* If the encoder is reused for another connector, then
- =09=09=09 * the appropriate crtc will be set later.
-@@ -740,17 +740,17 @@ int drm_crtc_helper_set_config(struct drm_mode_set *s=
-et,
- =09=09=09goto fail;
- =09=09}
- =09=09if (new_crtc !=3D connector->encoder->crtc) {
--=09=09=09DRM_DEBUG_KMS("crtc changed, full mode switch\n");
-+=09=09=09drm_dbg_kms(dev, "crtc changed, full mode switch\n");
- =09=09=09mode_changed =3D true;
- =09=09=09connector->encoder->crtc =3D new_crtc;
- =09=09}
- =09=09if (new_crtc) {
--=09=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] to [CRTC:%d:%s]\n",
--=09=09=09=09      connector->base.id, connector->name,
--=09=09=09=09      new_crtc->base.id, new_crtc->name);
-+=09=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] to [CRTC:%d:%s]\n",
-+=09=09=09=09    connector->base.id, connector->name,
-+=09=09=09=09    new_crtc->base.id, new_crtc->name);
- =09=09} else {
--=09=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] to [NOCRTC]\n",
--=09=09=09=09      connector->base.id, connector->name);
-+=09=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] to [NOCRTC]\n",
-+=09=09=09=09    connector->base.id, connector->name);
- =09=09}
- =09}
- =09drm_connector_list_iter_end(&conn_iter);
-@@ -761,8 +761,7 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set=
-,
-=20
- =09if (mode_changed) {
- =09=09if (drm_helper_crtc_in_use(set->crtc)) {
--=09=09=09DRM_DEBUG_KMS("attempting to set mode from"
--=09=09=09=09=09" userspace\n");
-+=09=09=09drm_dbg_kms(dev, "attempting to set mode from userspace\n");
- =09=09=09drm_mode_debug_printmodeline(set->mode);
- =09=09=09set->crtc->primary->fb =3D set->fb;
- =09=09=09if (!drm_crtc_helper_set_mode(set->crtc, set->mode,
-@@ -774,10 +773,11 @@ int drm_crtc_helper_set_config(struct drm_mode_set *s=
-et,
- =09=09=09=09ret =3D -EINVAL;
- =09=09=09=09goto fail;
- =09=09=09}
--=09=09=09DRM_DEBUG_KMS("Setting connector DPMS state to on\n");
-+=09=09=09drm_dbg_kms(dev, "Setting connector DPMS state to on\n");
- =09=09=09for (i =3D 0; i < set->num_connectors; i++) {
--=09=09=09=09DRM_DEBUG_KMS("\t[CONNECTOR:%d:%s] set DPMS on\n", set->connec=
-tors[i]->base.id,
--=09=09=09=09=09      set->connectors[i]->name);
-+=09=09=09=09drm_dbg_kms(dev, "\t[CONNECTOR:%d:%s] set DPMS on\n",
-+=09=09=09=09=09    set->connectors[i]->base.id,
-+=09=09=09=09=09    set->connectors[i]->name);
- =09=09=09=09set->connectors[i]->funcs->dpms(set->connectors[i], DRM_MODE_D=
-PMS_ON);
- =09=09=09}
- =09=09}
-diff --git a/drivers/gpu/drm/drm_debugfs_crc.c b/drivers/gpu/drm/drm_debugf=
-s_crc.c
-index a59ef3f0e4a1..f29d286f4760 100644
---- a/drivers/gpu/drm/drm_debugfs_crc.c
-+++ b/drivers/gpu/drm/drm_debugfs_crc.c
-@@ -131,8 +131,9 @@ static ssize_t crc_control_write(struct file *file, con=
-st char __user *ubuf,
- =09=09return 0;
-=20
- =09if (len > PAGE_SIZE - 1) {
--=09=09DRM_DEBUG_KMS("Expected < %lu bytes into crtc crc control\n",
--=09=09=09      PAGE_SIZE);
-+=09=09drm_dbg_kms(crtc->dev,
-+=09=09=09    "Expected < %lu bytes into crtc crc control\n",
-+=09=09=09    PAGE_SIZE);
- =09=09return -E2BIG;
- =09}
-=20
-diff --git a/drivers/gpu/drm/drm_displayid.c b/drivers/gpu/drm/drm_displayi=
-d.c
-index 67fed6cee9e9..5304ab4337b3 100644
---- a/drivers/gpu/drm/drm_displayid.c
-+++ b/drivers/gpu/drm/drm_displayid.c
-@@ -15,8 +15,8 @@ static int validate_displayid(const u8 *displayid, int le=
-ngth, int idx)
-=20
- =09base =3D (const struct displayid_header *)&displayid[idx];
-=20
--=09DRM_DEBUG_KMS("base revision 0x%x, length %d, %d %d\n",
--=09=09      base->rev, base->bytes, base->prod_id, base->ext_count);
-+=09drm_dbg_kms(NULL, "base revision 0x%x, length %d, %d %d\n",
-+=09=09    base->rev, base->bytes, base->prod_id, base->ext_count);
-=20
- =09/* +1 for DispID checksum */
- =09dispid_length =3D sizeof(*base) + base->bytes + 1;
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index 3d0a4da661bc..71adb2e6bffd 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -1986,7 +1986,7 @@ bool drm_edid_block_valid(u8 *_block, int block_num, =
-bool print_bad_edid,
-=20
- =09status =3D edid_block_check(block, is_base_block);
- =09if (status =3D=3D EDID_BLOCK_HEADER_REPAIR) {
--=09=09DRM_DEBUG_KMS("Fixing EDID header, your hardware may be failing\n");
-+=09=09drm_dbg_kms(NULL, "Fixing EDID header, your hardware may be failing\=
-n");
- =09=09edid_header_fix(block);
-=20
- =09=09/* Retry with fixed header, update status if that worked. */
-@@ -2172,8 +2172,9 @@ drm_do_probe_ddc_edid(void *data, u8 *buf, unsigned i=
-nt block, size_t len)
- =09=09ret =3D i2c_transfer(adapter, &msgs[3 - xfers], xfers);
-=20
- =09=09if (ret =3D=3D -ENXIO) {
--=09=09=09DRM_DEBUG_KMS("drm: skipping non-existent adapter %s\n",
--=09=09=09=09=09adapter->name);
-+=09=09=09drm_dbg_kms(NULL,
-+=09=09=09=09    "drm: skipping non-existent adapter %s\n",
-+=09=09=09=09    adapter->name);
- =09=09=09break;
- =09=09}
- =09} while (ret !=3D xfers && --retries);
-@@ -5576,7 +5577,7 @@ static int _drm_edid_to_sad(const struct drm_edid *dr=
-m_edid,
- =09}
- =09cea_db_iter_end(&iter);
-=20
--=09DRM_DEBUG_KMS("Found %d Short Audio Descriptors\n", count);
-+=09drm_dbg_kms(NULL, "Found %d Short Audio Descriptors\n", count);
-=20
- =09return count;
- }
-@@ -5621,7 +5622,7 @@ static int _drm_edid_to_speaker_allocation(const stru=
-ct drm_edid *drm_edid,
- =09}
- =09cea_db_iter_end(&iter);
-=20
--=09DRM_DEBUG_KMS("Found %d Speaker Allocation Data Blocks\n", count);
-+=09drm_dbg_kms(NULL, "Found %d Speaker Allocation Data Blocks\n", count);
-=20
- =09return count;
- }
-@@ -5748,7 +5749,7 @@ static bool _drm_detect_monitor_audio(const struct dr=
-m_edid *drm_edid)
- =09drm_edid_iter_end(&edid_iter);
-=20
- =09if (has_audio) {
--=09=09DRM_DEBUG_KMS("Monitor has basic audio support\n");
-+=09=09drm_dbg_kms(NULL, "Monitor has basic audio support\n");
- =09=09goto end;
- =09}
-=20
-@@ -5759,8 +5760,8 @@ static bool _drm_detect_monitor_audio(const struct dr=
-m_edid *drm_edid)
- =09=09=09int i;
-=20
- =09=09=09for (i =3D 0; i < cea_db_payload_len(db); i +=3D 3)
--=09=09=09=09DRM_DEBUG_KMS("CEA audio format %d\n",
--=09=09=09=09=09      (data[i] >> 3) & 0xf);
-+=09=09=09=09drm_dbg_kms(NULL, "CEA audio format %d\n",
-+=09=09=09=09=09    (data[i] >> 3) & 0xf);
- =09=09=09has_audio =3D true;
- =09=09=09break;
- =09=09}
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_g=
-em_shmem_helper.c
-index 259176d78f3b..032b9f7926dd 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -175,7 +175,7 @@ static int drm_gem_shmem_get_pages_locked(struct drm_ge=
-m_shmem_object *shmem)
-=20
- =09pages =3D drm_gem_get_pages(obj);
- =09if (IS_ERR(pages)) {
--=09=09DRM_DEBUG_KMS("Failed to get pages (%ld)\n", PTR_ERR(pages));
-+=09=09drm_dbg_kms(NULL, "Failed to get pages (%ld)\n", PTR_ERR(pages));
- =09=09shmem->pages_use_count =3D 0;
- =09=09return PTR_ERR(pages);
- =09}
-@@ -328,7 +328,7 @@ static int drm_gem_shmem_vmap_locked(struct drm_gem_shm=
-em_object *shmem,
- =09}
-=20
- =09if (ret) {
--=09=09DRM_DEBUG_KMS("Failed to vmap pages, error %d\n", ret);
-+=09=09drm_dbg_kms(NULL, "Failed to vmap pages, error %d\n", ret);
- =09=09goto err_put_pages;
- =09}
-=20
-diff --git a/drivers/gpu/drm/drm_lease.c b/drivers/gpu/drm/drm_lease.c
-index af72fc38bb7c..c1b8717b5794 100644
---- a/drivers/gpu/drm/drm_lease.c
-+++ b/drivers/gpu/drm/drm_lease.c
-@@ -403,7 +403,7 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09}
-=20
- =09=09if (!drm_mode_object_lease_required(objects[o]->type)) {
--=09=09=09DRM_DEBUG_KMS("invalid object for lease\n");
-+=09=09=09drm_dbg_kms(dev, "invalid object for lease\n");
- =09=09=09ret =3D -EINVAL;
- =09=09=09goto out_free_objects;
- =09=09}
-diff --git a/drivers/gpu/drm/drm_mipi_dbi.c b/drivers/gpu/drm/drm_mipi_dbi.=
-c
-index ab5dd5933a1a..793fdd7da1d0 100644
---- a/drivers/gpu/drm/drm_mipi_dbi.c
-+++ b/drivers/gpu/drm/drm_mipi_dbi.c
-@@ -265,7 +265,8 @@ static void mipi_dbi_fb_dirty(struct iosys_map *src, st=
-ruct drm_framebuffer *fb,
-=20
- =09full =3D width =3D=3D fb->width && height =3D=3D fb->height;
-=20
--=09DRM_DEBUG_KMS("Flushing [FB:%d] " DRM_RECT_FMT "\n", fb->base.id, DRM_R=
-ECT_ARG(rect));
-+=09drm_dbg_kms(fb->dev, "Flushing [FB:%d] " DRM_RECT_FMT "\n",
-+=09=09    fb->base.id, DRM_RECT_ARG(rect));
-=20
- =09if (!dbi->dc || !full || swap ||
- =09    fb->format->format =3D=3D DRM_FORMAT_XRGB8888) {
-@@ -408,7 +409,7 @@ void mipi_dbi_pipe_disable(struct drm_simple_display_pi=
-pe *pipe)
- {
- =09struct mipi_dbi_dev *dbidev =3D drm_to_mipi_dbi_dev(pipe->crtc.dev);
-=20
--=09DRM_DEBUG_KMS("\n");
-+=09drm_dbg_kms(&dbidev->drm, "\n");
-=20
- =09if (dbidev->backlight)
- =09=09backlight_disable(dbidev->backlight);
-@@ -627,7 +628,7 @@ int mipi_dbi_dev_init_with_formats(struct mipi_dbi_dev =
-*dbidev,
- =09drm->mode_config.max_height =3D dbidev->mode.vdisplay;
- =09dbidev->rotation =3D rotation;
-=20
--=09DRM_DEBUG_KMS("rotation =3D %u\n", rotation);
-+=09drm_dbg_kms(drm, "rotation =3D %u\n", rotation);
-=20
- =09return 0;
- }
-diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-index f5171bf91eae..440e3b015cc6 100644
---- a/drivers/gpu/drm/drm_modes.c
-+++ b/drivers/gpu/drm/drm_modes.c
-@@ -53,11 +53,11 @@
-  * drm_mode_debug_printmodeline - print a mode to dmesg
-  * @mode: mode to print
-  *
-- * Describe @mode using DRM_DEBUG.
-+ * Describe @mode using drm_dbg_kms().
-  */
- void drm_mode_debug_printmodeline(const struct drm_display_mode *mode)
- {
--=09DRM_DEBUG_KMS("Modeline " DRM_MODE_FMT "\n", DRM_MODE_ARG(mode));
-+=09drm_dbg_kms(NULL, "Modeline " DRM_MODE_FMT "\n", DRM_MODE_ARG(mode));
- }
- EXPORT_SYMBOL(drm_mode_debug_printmodeline);
-=20
-@@ -1813,9 +1813,9 @@ void drm_mode_prune_invalid(struct drm_device *dev,
- =09=09=09}
- =09=09=09if (verbose) {
- =09=09=09=09drm_mode_debug_printmodeline(mode);
--=09=09=09=09DRM_DEBUG_KMS("Not using %s mode: %s\n",
--=09=09=09=09=09      mode->name,
--=09=09=09=09=09      drm_get_mode_status_name(mode->status));
-+=09=09=09=09drm_dbg_kms(dev, "Not using %s mode: %s\n",
-+=09=09=09=09=09    mode->name,
-+=09=09=09=09=09    drm_get_mode_status_name(mode->status));
- =09=09=09}
- =09=09=09drm_mode_destroy(dev, mode);
- =09=09}
-diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
-index 1e8727b7bce9..12fed5f812a1 100644
---- a/drivers/gpu/drm/drm_plane.c
-+++ b/drivers/gpu/drm/drm_plane.c
-@@ -275,7 +275,7 @@ static int __drm_universal_plane_init(struct drm_device=
- *dev,
- =09plane->format_types =3D kmalloc_array(format_count, sizeof(uint32_t),
- =09=09=09=09=09    GFP_KERNEL);
- =09if (!plane->format_types) {
--=09=09DRM_DEBUG_KMS("out of memory when allocating plane\n");
-+=09=09drm_dbg_kms(dev, "out of memory when allocating plane\n");
- =09=09drm_mode_object_unregister(dev, &plane->base);
- =09=09return -ENOMEM;
- =09}
-@@ -302,7 +302,7 @@ static int __drm_universal_plane_init(struct drm_device=
- *dev,
- =09=09=09=09=09 GFP_KERNEL);
-=20
- =09if (format_modifier_count && !plane->modifiers) {
--=09=09DRM_DEBUG_KMS("out of memory when allocating plane\n");
-+=09=09drm_dbg_kms(dev, "out of memory when allocating plane\n");
- =09=09kfree(plane->format_types);
- =09=09drm_mode_object_unregister(dev, &plane->base);
- =09=09return -ENOMEM;
-@@ -786,7 +786,7 @@ static int __setplane_check(struct drm_plane *plane,
-=20
- =09/* Check whether this plane is usable on this CRTC */
- =09if (!(plane->possible_crtcs & drm_crtc_mask(crtc))) {
--=09=09DRM_DEBUG_KMS("Invalid crtc for plane\n");
-+=09=09drm_dbg_kms(plane->dev, "Invalid crtc for plane\n");
- =09=09return -EINVAL;
- =09}
-=20
-@@ -794,8 +794,9 @@ static int __setplane_check(struct drm_plane *plane,
- =09ret =3D drm_plane_check_pixel_format(plane, fb->format->format,
- =09=09=09=09=09   fb->modifier);
- =09if (ret) {
--=09=09DRM_DEBUG_KMS("Invalid pixel format %p4cc, modifier 0x%llx\n",
--=09=09=09      &fb->format->format, fb->modifier);
-+=09=09drm_dbg_kms(fb->dev,
-+=09=09=09    "Invalid pixel format %p4cc, modifier 0x%llx\n",
-+=09=09=09    &fb->format->format, fb->modifier);
- =09=09return ret;
- =09}
-=20
-@@ -804,8 +805,8 @@ static int __setplane_check(struct drm_plane *plane,
- =09    crtc_x > INT_MAX - (int32_t) crtc_w ||
- =09    crtc_h > INT_MAX ||
- =09    crtc_y > INT_MAX - (int32_t) crtc_h) {
--=09=09DRM_DEBUG_KMS("Invalid CRTC coordinates %ux%u+%d+%d\n",
--=09=09=09      crtc_w, crtc_h, crtc_x, crtc_y);
-+=09=09drm_dbg_kms(crtc->dev, "Invalid CRTC coordinates %ux%u+%d+%d\n",
-+=09=09=09    crtc_w, crtc_h, crtc_x, crtc_y);
- =09=09return -ERANGE;
- =09}
-=20
-@@ -982,24 +983,23 @@ int drm_mode_setplane(struct drm_device *dev, void *d=
-ata,
- =09 */
- =09plane =3D drm_plane_find(dev, file_priv, plane_req->plane_id);
- =09if (!plane) {
--=09=09DRM_DEBUG_KMS("Unknown plane ID %d\n",
--=09=09=09      plane_req->plane_id);
-+=09=09drm_dbg_kms(dev, "Unknown plane ID %d\n", plane_req->plane_id);
- =09=09return -ENOENT;
- =09}
-=20
- =09if (plane_req->fb_id) {
- =09=09fb =3D drm_framebuffer_lookup(dev, file_priv, plane_req->fb_id);
- =09=09if (!fb) {
--=09=09=09DRM_DEBUG_KMS("Unknown framebuffer ID %d\n",
--=09=09=09=09      plane_req->fb_id);
-+=09=09=09drm_dbg_kms(dev, "Unknown framebuffer ID %d\n",
-+=09=09=09=09    plane_req->fb_id);
- =09=09=09return -ENOENT;
- =09=09}
-=20
- =09=09crtc =3D drm_crtc_find(dev, file_priv, plane_req->crtc_id);
- =09=09if (!crtc) {
- =09=09=09drm_framebuffer_put(fb);
--=09=09=09DRM_DEBUG_KMS("Unknown crtc ID %d\n",
--=09=09=09=09      plane_req->crtc_id);
-+=09=09=09drm_dbg_kms(dev, "Unknown crtc ID %d\n",
-+=09=09=09=09    plane_req->crtc_id);
- =09=09=09return -ENOENT;
- =09=09}
- =09}
-@@ -1048,7 +1048,7 @@ static int drm_mode_cursor_universal(struct drm_crtc =
-*crtc,
- =09=09if (req->handle) {
- =09=09=09fb =3D drm_internal_framebuffer_create(dev, &fbreq, file_priv);
- =09=09=09if (IS_ERR(fb)) {
--=09=09=09=09DRM_DEBUG_KMS("failed to wrap cursor buffer in drm framebuffer=
-\n");
-+=09=09=09=09drm_dbg_kms(dev, "failed to wrap cursor buffer in drm framebuf=
-fer\n");
- =09=09=09=09return PTR_ERR(fb);
- =09=09=09}
-=20
-@@ -1119,7 +1119,7 @@ static int drm_mode_cursor_common(struct drm_device *=
-dev,
-=20
- =09crtc =3D drm_crtc_find(dev, file_priv, req->crtc_id);
- =09if (!crtc) {
--=09=09DRM_DEBUG_KMS("Unknown CRTC ID %d\n", req->crtc_id);
-+=09=09drm_dbg_kms(dev, "Unknown CRTC ID %d\n", req->crtc_id);
- =09=09return -ENOENT;
- =09}
-=20
-@@ -1340,7 +1340,7 @@ int drm_mode_page_flip_ioctl(struct drm_device *dev,
- =09 * to modifier changes.
- =09 */
- =09if (old_fb->format->format !=3D fb->format->format) {
--=09=09DRM_DEBUG_KMS("Page flip is not allowed to change frame buffer forma=
-t.\n");
-+=09=09drm_dbg_kms(dev, "Page flip is not allowed to change frame buffer fo=
-rmat.\n");
- =09=09ret =3D -EINVAL;
- =09=09goto out;
- =09}
-diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe=
-_helper.c
-index 8127be134c39..8f3174107141 100644
---- a/drivers/gpu/drm/drm_probe_helper.c
-+++ b/drivers/gpu/drm/drm_probe_helper.c
-@@ -532,8 +532,8 @@ int drm_helper_probe_single_connector_modes(struct drm_=
-connector *connector,
-=20
- =09drm_modeset_acquire_init(&ctx, 0);
-=20
--=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s]\n", connector->base.id,
--=09=09=09connector->name);
-+=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s]\n", connector->base.id,
-+=09=09    connector->name);
-=20
- retry:
- =09ret =3D drm_modeset_lock(&dev->mode_config.connection_mutex, &ctx);
-@@ -576,11 +576,12 @@ int drm_helper_probe_single_connector_modes(struct dr=
-m_connector *connector,
- =09 * check here, and if anything changed start the hotplug code.
- =09 */
- =09if (old_status !=3D connector->status) {
--=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] status updated from %s to %s\n",
--=09=09=09      connector->base.id,
--=09=09=09      connector->name,
--=09=09=09      drm_get_connector_status_name(old_status),
--=09=09=09      drm_get_connector_status_name(connector->status));
-+=09=09drm_dbg_kms(dev,
-+=09=09=09    "[CONNECTOR:%d:%s] status updated from %s to %s\n",
-+=09=09=09    connector->base.id,
-+=09=09=09    connector->name,
-+=09=09=09    drm_get_connector_status_name(old_status),
-+=09=09=09    drm_get_connector_status_name(connector->status));
-=20
- =09=09/*
- =09=09 * The hotplug event code might call into the fb
-@@ -598,8 +599,8 @@ int drm_helper_probe_single_connector_modes(struct drm_=
-connector *connector,
- =09drm_kms_helper_poll_enable(dev);
-=20
- =09if (connector->status =3D=3D connector_status_disconnected) {
--=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] disconnected\n",
--=09=09=09connector->base.id, connector->name);
-+=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] disconnected\n",
-+=09=09=09    connector->base.id, connector->name);
- =09=09drm_connector_update_edid_property(connector, NULL);
- =09=09drm_mode_prune_invalid(dev, &connector->modes, false);
- =09=09goto exit;
-@@ -657,8 +658,8 @@ int drm_helper_probe_single_connector_modes(struct drm_=
-connector *connector,
-=20
- =09drm_mode_sort(&connector->modes);
-=20
--=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] probed modes :\n", connector->base.id,
--=09=09=09connector->name);
-+=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] probed modes :\n",
-+=09=09    connector->base.id, connector->name);
- =09list_for_each_entry(mode, &connector->modes, head) {
- =09=09drm_mode_set_crtcinfo(mode, CRTC_INTERLACE_HALVE_V);
- =09=09drm_mode_debug_printmodeline(mode);
-@@ -792,14 +793,14 @@ static void output_poll_execute(struct work_struct *w=
-ork)
- =09=09=09old =3D drm_get_connector_status_name(old_status);
- =09=09=09new =3D drm_get_connector_status_name(connector->status);
-=20
--=09=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] "
--=09=09=09=09      "status updated from %s to %s\n",
--=09=09=09=09      connector->base.id,
--=09=09=09=09      connector->name,
--=09=09=09=09      old, new);
--=09=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] epoch counter %llu -> %llu\n",
--=09=09=09=09      connector->base.id, connector->name,
--=09=09=09=09      old_epoch_counter, connector->epoch_counter);
-+=09=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] "
-+=09=09=09=09    "status updated from %s to %s\n",
-+=09=09=09=09    connector->base.id,
-+=09=09=09=09    connector->name,
-+=09=09=09=09    old, new);
-+=09=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] epoch counter %llu -> %llu\n"=
-,
-+=09=09=09=09    connector->base.id, connector->name,
-+=09=09=09=09    old_epoch_counter, connector->epoch_counter);
-=20
- =09=09=09changed =3D true;
- =09=09}
-diff --git a/drivers/gpu/drm/drm_rect.c b/drivers/gpu/drm/drm_rect.c
-index 85c79a38c13a..8f4abcb1cbd8 100644
---- a/drivers/gpu/drm/drm_rect.c
-+++ b/drivers/gpu/drm/drm_rect.c
-@@ -228,9 +228,9 @@ EXPORT_SYMBOL(drm_rect_calc_vscale);
- void drm_rect_debug_print(const char *prefix, const struct drm_rect *r, bo=
-ol fixed_point)
- {
- =09if (fixed_point)
--=09=09DRM_DEBUG_KMS("%s" DRM_RECT_FP_FMT "\n", prefix, DRM_RECT_FP_ARG(r))=
-;
-+=09=09drm_dbg_kms(NULL, "%s" DRM_RECT_FP_FMT "\n", prefix, DRM_RECT_FP_ARG=
-(r));
- =09else
--=09=09DRM_DEBUG_KMS("%s" DRM_RECT_FMT "\n", prefix, DRM_RECT_ARG(r));
-+=09=09drm_dbg_kms(NULL, "%s" DRM_RECT_FMT "\n", prefix, DRM_RECT_ARG(r));
- }
- EXPORT_SYMBOL(drm_rect_debug_print);
-=20
-diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-index 6b090d71d45a..873818348bb4 100644
---- a/drivers/gpu/drm/drm_sysfs.c
-+++ b/drivers/gpu/drm/drm_sysfs.c
-@@ -179,10 +179,10 @@ static ssize_t status_store(struct device *device,
- =09=09ret =3D -EINVAL;
-=20
- =09if (old_force !=3D connector->force || !connector->force) {
--=09=09DRM_DEBUG_KMS("[CONNECTOR:%d:%s] force updated from %d to %d or repr=
-obing\n",
--=09=09=09      connector->base.id,
--=09=09=09      connector->name,
--=09=09=09      old_force, connector->force);
-+=09=09drm_dbg_kms(dev, "[CONNECTOR:%d:%s] force updated from %d to %d or r=
-eprobing\n",
-+=09=09=09    connector->base.id,
-+=09=09=09    connector->name,
-+=09=09=09    old_force, connector->force);
-=20
- =09=09connector->funcs->fill_modes(connector,
- =09=09=09=09=09     dev->mode_config.max_width,
---=20
-2.39.1
+Thanks! Glad to hear that patch seems to fix it: we'll try to get it
+upstream as soon as possible, then.
 
+I wouldn't worry about testing with CONFIG_KUNIT=3Dy as well at this
+point: I doubt it'll shed any more light on the situation.
 
+I've still been unable to reproduce the issue here, even with a fresh
+install of Fedora Rawhide, and a very recent torvalds/master:
+1ec35eadc3b4 ("Merge tag 'clk-for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux")[1].
+I even tried plugging in a Keychron C2 keyboard (which also uses
+hid_apple), as well as running several KUnit tests which make use of
+the hooks functionality: everything worked fine.
+
+Given everything else seems fine here, and the makefile issues fixed
+by the above patch both seems to fix this, and is the only real issue
+I could imagine having unpredictable behaviour, I'm reasonably happy
+to consider this "fixed" by that patch. But if this patch _doesn't_
+fix it, or you continue to see some other strange behaviour, we can
+look into fixing it further.
+
+Thanks again,
+
+-- David
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/?id=3D1ec35eadc3b448c91a6b763371a7073444e95f9d
+
+--0000000000006d07e205f5955b98
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAHHLXCbS0CYcocWQtL1
+FY8wDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzAxMjkw
+NjQ2MThaFw0yMzA3MjgwNjQ2MThaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+31G8qfgjYj6KzASqulKfP5LGLw1o
+hZ6j8Uv9o+fA+zL+2wOPYHLNIb6jyAS16+FwevgTr7d9QynTPBiCGE9Wb/i2ob9aBcupQVtBjlJZ
+I6qUXdVBlo5zsORdNV7/XEqlpu+X5MK5gNHlWhe8gNpAhADSib2H4rjBvFF2yi9BHBAYZU95f0IN
+cSS0WDNSSCktPaXtAGsI3tslroyjFYUluwGklmQms/tV8f/52zc7A5lzX+hxnnJdsRgirJRI9Sb6
+Uypzk06KLxOO2Pg9SFn6MwbAO6LuInpokhxcULUz3g/CMQBmEMSEzPPnfDIAqwDI0Kqh0NAin+V4
+fQxJfDCZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFJyglaiY
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDL
+/R5DETUoKVm5UeWYT5O0YELB580cxs+bQukGWA15qDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjYwNzMxNTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAABsQNa11yttI+wnc6JOn
+jm80XlhJOLHTs2JoCjwB5vJOKlbN+zGcdFdIrO9vquAExcpFoulQO59MHNrXHpO221GRajYWtUSd
+/GuB2i9nlmtt4ztR9nw8BtvWnzg5JyfgQwOXzXLTWJqGjyRmXIP+vLmdGg6+fW2DULiw4e15GHp5
+AFjFTMa+cLUy8km6Zh5sbKCEhguLbVAtD40TW/Z5Eg2WpEwt1oc5ml4lvbhBnmyoLP57itUbESpW
+7QIfDq8tmf7SPtLh//C3MEqv1E2jsrGRWSiljKQhkOhrPJvNvxt8Bmrrp30pAvlp7YkouWtcGXOK
+5Xwz2ue6w9BJVoBEZg==
+--0000000000006d07e205f5955b98--
