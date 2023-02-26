@@ -2,240 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885B46A2CC9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2259F6A2CDA
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjBZAQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 19:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S229672AbjBZAnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 19:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjBZAQT (ORCPT
+        with ESMTP id S229665AbjBZAm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 19:16:19 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3B514E8F;
-        Sat, 25 Feb 2023 16:16:18 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31Q00NfJ015119;
-        Sun, 26 Feb 2023 00:16:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=35muwSCUtuPsvNbRk3WyZqi1DQAVgPWtAY8EKeE/V10=;
- b=Ig2OJnaQWsUV/SeWIoUT1Vt6jzJySwQ5CJGGVkAhpY0JChnTMVKlAW+9/eTkOOSmKynB
- SuLscpmb4BEcx4IDiq+aAQWwhAxWQULoChomUuF3JGm1EToxsn9aILX27R5WQjlR2ZVW
- 8WPYJyM/J/zYJAFLG9mkrWOqYJoEmqeT/4nq5huwDcNcNNJxvFliOlw5c8p9DlS8xikP
- QIlttYdd43xn4uEk2cRayyjBLDL6basJtbOv/sEMgNkRXXTZvH/XpsLnzhxxhmpA56Jb
- O0fUW/T9KcF+MmG+GFPpTQ36Muv4JKnLC045IsrqMXFpOz2naRMgocjGV4Igv3WwsckD LQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny81q9vqg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Feb 2023 00:16:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31Q0G2j0002994
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Feb 2023 00:16:02 GMT
-Received: from [10.110.89.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sat, 25 Feb
- 2023 16:16:01 -0800
-Message-ID: <7650f183-9860-9074-e5d5-539afdf41248@quicinc.com>
-Date:   Sat, 25 Feb 2023 16:16:00 -0800
+        Sat, 25 Feb 2023 19:42:58 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D39415C92
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 16:42:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677372168; x=1708908168;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rANK/SNxPC9nhu84mwGAzLILj+az2aP73wL8OHsDx/Y=;
+  b=gUlu3FcOUXfZSX4G6Uhv+HjoHy5rRlthyOqqX58Vsk9YinXu1RHjNXGc
+   hWsOa474KvFHj9eCgwUhR6ERLMR1jo1Yaoam5dm2ketrM96DinYgZpEnF
+   afSb062oZwLAUztYxeRhWK9lXkSgzt9dlBl5UbghYQKwefGXoiTG+y5cV
+   aw7PBvM+WpDv8WlaCOL2i+QmMsZNH6ezM4ow94R8BUoxBiIAiYGrydm73
+   AjlMF9wI3uvM+QulGHb01wU/KdziS7WADEvEonepGRdqTqwhgCp1t76yv
+   21Yci/7H6Z2Ij6B9mywcyHBxt1b7LfYHF2QmMmbyrPsXORjjuoeTG9kpi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="314097254"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="314097254"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 16:42:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="705693539"
+X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
+   d="scan'208";a="705693539"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2023 16:42:45 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pW57k-0003TT-34;
+        Sun, 26 Feb 2023 00:42:44 +0000
+Date:   Sun, 26 Feb 2023 08:41:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matt Evans <mev@rivosinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: include/asm-generic/cmpxchg-local.h:29:33: sparse: sparse: cast
+ truncates bits from constant value (5f0ecafe becomes fe)
+Message-ID: <202302260820.OtjXVnT4-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
- <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
- <1b5afec9-454d-e1b9-0274-f0476edb4d21@quicinc.com>
- <CAA8EJprowFyBMdW5QC2zG0gYUtxJ-hHXqhPfYTct2GzYJKLSHg@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAA8EJprowFyBMdW5QC2zG0gYUtxJ-hHXqhPfYTct2GzYJKLSHg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O4notuUZSk1pgo_Z_iXzcnhWBMFM3xjE
-X-Proofpoint-GUID: O4notuUZSk1pgo_Z_iXzcnhWBMFM3xjE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-25_14,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302260000
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1ec35eadc3b448c91a6b763371a7073444e95f9d
+commit: 6246541522845a443b7ae4a8f0e16facc5a91198 locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare against zero-extended 'old' value
+date:   3 weeks ago
+config: nios2-randconfig-s053-20230226 (https://download.01.org/0day-ci/archive/20230226/202302260820.OtjXVnT4-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6246541522845a443b7ae4a8f0e16facc5a91198
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6246541522845a443b7ae4a8f0e16facc5a91198
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash fs/erofs/
 
-On 2/24/2023 3:57 PM, Dmitry Baryshkov wrote:
-> On Sat, 25 Feb 2023 at 01:51, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->>
->>
->> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
->>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->>>> Add DSC helper functions based on DSC configuration profiles to produce
->>>> DSC related runtime parameters through both table look up and runtime
->>>> calculation to support DSC on DPU.
->>>>
->>>> There are 6 different DSC configuration profiles are supported
->>>> currently.
->>>> DSC configuration profiles are differiented by 5 keys, DSC version
->>>> (V1.1),
->>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
->>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
->>>>
->>>> Only DSC version V1.1 added and V1.2 will be added later.
->>>
->>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
->>> Also please check that they can be used for i915 or for amdgpu
->>> (ideally for both of them).
->>>
->>> I didn't check the tables against the standard (or against the current
->>> source code), will do that later.
->>>
->>>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> ---
->>>>    drivers/gpu/drm/msm/Makefile                   |   1 +
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c | 209
->>>> +++++++++++++++++++++++++
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h |  34 ++++
->>>>    3 files changed, 244 insertions(+)
->>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/Makefile b/drivers/gpu/drm/msm/Makefile
->>>> index 7274c412..28cf52b 100644
->>>> --- a/drivers/gpu/drm/msm/Makefile
->>>> +++ b/drivers/gpu/drm/msm/Makefile
->>>> @@ -65,6 +65,7 @@ msm-$(CONFIG_DRM_MSM_DPU) += \
->>>>        disp/dpu1/dpu_hw_catalog.o \
->>>>        disp/dpu1/dpu_hw_ctl.o \
->>>>        disp/dpu1/dpu_hw_dsc.o \
->>>> +    disp/dpu1/dpu_dsc_helper.o \
->>>>        disp/dpu1/dpu_hw_interrupts.o \
->>>>        disp/dpu1/dpu_hw_intf.o \
->>>>        disp/dpu1/dpu_hw_lm.o \
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>> new file mode 100644
->>>> index 00000000..88207e9
->>>> --- /dev/null
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>> @@ -0,0 +1,209 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>> +/*
->>>> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights
->>>> reserved
->>>> + */
->>>> +
->>>> +#include <drm/display/drm_dsc_helper.h>
->>>> +#include "msm_drv.h"
->>>> +#include "dpu_kms.h"
->>>> +#include "dpu_hw_dsc.h"
->>>> +#include "dpu_dsc_helper.h"
->>>> +
->>>> +
->>>
->>> Extra empty line
->>>
->>>> +#define DPU_DSC_PPS_SIZE       128
->>>> +
->>>> +enum dpu_dsc_ratio_type {
->>>> +    DSC_V11_8BPC_8BPP,
->>>> +    DSC_V11_10BPC_8BPP,
->>>> +    DSC_V11_10BPC_10BPP,
->>>> +    DSC_V11_SCR1_8BPC_8BPP,
->>>> +    DSC_V11_SCR1_10BPC_8BPP,
->>>> +    DSC_V11_SCR1_10BPC_10BPP,
->>>> +    DSC_RATIO_TYPE_MAX
->>>> +};
->>>> +
->>>> +
->>>> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
->>>> +        0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
->>>> +        0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
->>>
->>> Weird indentation
->>>
->>>> +};
->>>> +
->>>> +/*
->>>> + * Rate control - Min QP values for each ratio type in
->>>> dpu_dsc_ratio_type
->>>> + */
->>>> +static char
->>>> dpu_dsc_rc_range_min_qp[DSC_RATIO_TYPE_MAX][DSC_NUM_BUF_RANGES] = {
->>>> +    /* DSC v1.1 */
->>>> +    {0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13},
->>>> +    {0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 17},
->>>> +    {0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
->>>> +    /* DSC v1.1 SCR and DSC v1.2 RGB 444 */
->>>
->>> What is SCR? Is there any reason to use older min/max Qp params
->>> instead of always using the ones from the VESA-DSC-1.1 standard?
->>
->> Standards change request, some vendors may use scr to work with their panel.
->>
->> These table value are provided by system team.
-> 
-> So, what will happen if we use values from 1.2 standard (aka 1.1 SCR
-> 1) with the older panel?
-> 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302260820.OtjXVnT4-lkp@intel.com/
 
-Standards change request means fixing errors/errata for the given 
-standard. Those are typically released as a different spec.
+sparse warnings: (new ones prefixed by >>)
+   fs/erofs/zdata.c: note: in included file (through include/asm-generic/cmpxchg.h, arch/nios2/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, ...):
+   include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (e0f510cc becomes cc)
+   include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (e0f510cc becomes 10cc)
+>> include/asm-generic/cmpxchg-local.h:29:33: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes fe)
+>> include/asm-generic/cmpxchg-local.h:33:34: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes cafe)
+>> include/asm-generic/cmpxchg-local.h:29:33: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes fe)
+   include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (5f0edead becomes ad)
+>> include/asm-generic/cmpxchg-local.h:33:34: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes cafe)
+   include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (5f0edead becomes dead)
 
-So I referred the DSC 1.1 SCR spec, and it does have a few differences 
-in the table compared to DSC 1.1 which will get into DSC 1.2.
+vim +29 include/asm-generic/cmpxchg-local.h
 
-Hence the table entries are same between DSC 1.1 SCR and DSC 1.2
+     7	
+     8	extern unsigned long wrong_size_cmpxchg(volatile void *ptr)
+     9		__noreturn;
+    10	
+    11	/*
+    12	 * Generic version of __cmpxchg_local (disables interrupts). Takes an unsigned
+    13	 * long parameter, supporting various types of architectures.
+    14	 */
+    15	static inline unsigned long __generic_cmpxchg_local(volatile void *ptr,
+    16			unsigned long old, unsigned long new, int size)
+    17	{
+    18		unsigned long flags, prev;
+    19	
+    20		/*
+    21		 * Sanity checking, compile-time.
+    22		 */
+    23		if (size == 8 && sizeof(unsigned long) != 8)
+    24			wrong_size_cmpxchg(ptr);
+    25	
+    26		raw_local_irq_save(flags);
+    27		switch (size) {
+    28		case 1: prev = *(u8 *)ptr;
+  > 29			if (prev == (u8)old)
+    30				*(u8 *)ptr = (u8)new;
+    31			break;
+    32		case 2: prev = *(u16 *)ptr;
+  > 33			if (prev == (u16)old)
+    34				*(u16 *)ptr = (u16)new;
+    35			break;
+    36		case 4: prev = *(u32 *)ptr;
+    37			if (prev == (u32)old)
+    38				*(u32 *)ptr = (u32)new;
+    39			break;
+    40		case 8: prev = *(u64 *)ptr;
+    41			if (prev == old)
+    42				*(u64 *)ptr = (u64)new;
+    43			break;
+    44		default:
+    45			wrong_size_cmpxchg(ptr);
+    46		}
+    47		raw_local_irq_restore(flags);
+    48		return prev;
+    49	}
+    50	
 
-You are right, ideally DSC 1.2 should be backwards compatible with DSC 
-1.1 in terms of the values (thats what the spec says too) but I am not 
-sure if we can expect every panel/DP monitor to be forward compatible 
-without any SW change because it might need some firmware update (for 
-the panel) or SW update to support that especially during transitions of 
-the spec revisions (SCR to be precise).
-
-Typically we do below for DP monitors exactly for the same reason:
-
-DSC_ver_to_use = min(what_we_support, what_DP_monitor_supports) and use 
-that table.
-
-For DSI panels, typically in the panel spec it should say whether the 
-SCR version needs to be used because we have seen that for some panels ( 
-I dont remember exactly which one ) based on which panel and which 
-revision of the panel, it might not.
-
-Thats why downstream started adding qcom,mdss-dsc-scr-version to the 
-devicetree.
-
->>>> +    {0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 9, 12},
->>>> +    {0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 13, 16},
->>>> +    {0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
