@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB3E6A2F03
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 10:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CCB6A2F06
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 10:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBZJku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 04:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S229545AbjBZJp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 04:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBZJks (ORCPT
+        with ESMTP id S229504AbjBZJp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 04:40:48 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED1C1041B;
-        Sun, 26 Feb 2023 01:40:46 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso7137214pjb.5;
-        Sun, 26 Feb 2023 01:40:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7fHwmrCRCxm2Kglss2PSZMaGgwhyeQygsMnvaMvHoa0=;
-        b=cslYMk0gyd3EEsE8+9ioTOMDqscQXZRHyVJuqP79QqL2jQJBS0hhjHjz3mW+o+CRS4
-         Q/lkXjHyTc/zGaUpjAfFXbQggCR3ZEvPgfkKDdP8TL0KOSG3tn4WLXz7W3+ywkYgMOhl
-         LhmtKYxSVD45mcmDqYqOpeCROX36DD4jlGdD98i4IE95n1u8FE23u6sHAqpcm3i+WODJ
-         v4qkNngjLw8y5S2RSKPza4Ph50ytTdtVXjBkUp1Fsy5OxA7k7xtGCLluoMpsj1IFez9w
-         PuovoQ4+sv/9kq9v4EkY8xeyflqZaG/YuoSC7hbx7u8UkKU+M7M4Bkz1PJrbHcM8jN3g
-         j6HA==
+        Sun, 26 Feb 2023 04:45:58 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804541352D;
+        Sun, 26 Feb 2023 01:45:56 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id h19so3822194qtk.7;
+        Sun, 26 Feb 2023 01:45:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7fHwmrCRCxm2Kglss2PSZMaGgwhyeQygsMnvaMvHoa0=;
-        b=VNZxRNpUqQZ45HTJeDqPoZDnev4RXYoIm21HL159mZc8Y58A4dMW4h5vHpZw7xn9Lq
-         YoPTboFYEAoQUU7jRdMt51820FHX75C5Wszruz8FjXC/aHT/afTIDzo004tkF31ySkfB
-         adzo7DZpP+jHiymfwuG+Vk1CKHnNwHR4N9swQc+/Kqv/86h984S1yQ6uTsAUCxlrgIRV
-         GiZ/ia8yGBe0eg/XTg+QYiCraU5IF9Ud1QoMGqDSkfX4g5TNs6Sbr2DAFbbGIzasrlGQ
-         nmvWlHnNKPPHN0hj6upIPlj7gdtkRRQJrvbl2z8sifTDcDxfpn5+/2Xza0Peveri3z2c
-         F3sw==
-X-Gm-Message-State: AO0yUKUAwVqqPPjdPDg618Ukc1i3zmdD5G7m0+s1KPhtyMvF/EStWXMR
-        j9/5qm4k5fvApNQlvT+g/fnUF2tRdQsATo4+
-X-Google-Smtp-Source: AK7set+dFUFPxr0bAdTB9AXnq3YP45AzvRNMPw2W1SzQs6TFUEu5nMH9qZBNfLTGg45ryBOUQox9fw==
-X-Received: by 2002:a17:90b:4aca:b0:237:9f75:6937 with SMTP id mh10-20020a17090b4aca00b002379f756937mr7743616pjb.28.1677404445540;
-        Sun, 26 Feb 2023 01:40:45 -0800 (PST)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        by smtp.gmail.com with ESMTPSA id p5-20020a17090b010500b002349fcf17f8sm4206453pjz.15.2023.02.26.01.40.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 01:40:45 -0800 (PST)
-From:   Kang Chen <void0red@gmail.com>
-To:     peter.ujfalusi@gmail.com
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
-Subject: [PATCH] dmaengine: ti: add null check of devm_kasprintf in edma_probe and udma_probe
-Date:   Sun, 26 Feb 2023 17:40:38 +0800
-Message-Id: <20230226094038.3227062-1-void0red@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=iDxhZAFqdoRCuyb8oRhrVi/sFN15zqpxYYgqeqQ31+A=;
+        b=EFS29tu6qJAvSqtD7DEXa56teJh1gLs3/nKOc+Bci6Tv6izKI5qN/dZVh/PNznX3j3
+         qmwnjhwC0CV8K5SyFWaN/5+ApehSoD7XnljE0gSDxhyh8wRC7gKEBJhhekH0b2uS6X8j
+         UFrFXLifPR8UzRuh2jwr+icoveA/EHec6favMkcEnG/zQYmLlfBQoTCyd+hp0UwQzluy
+         A2uuEE4ckH/DnxP7YxWbkWn3UhQ5EC725Rv8RorMbKeNWCRJ/fbdHBxXdRFi0ap4+NPt
+         SJZTjxASctDsjgZOJa2eeJAnOGP5A2mTURFbdYm/RTBkSsQwORO3XUYbJmgjyAWfAK6S
+         CuJQ==
+X-Gm-Message-State: AO0yUKVT/2CkNRUYAO2x2juuoJ8cnBpS4O7leHuLEBedlgljqZzsxVhb
+        mKXWJljykoy352XSGvbC319YtRhNoHI0tA==
+X-Google-Smtp-Source: AK7set/FCeMksqTqFg2svfYGUVNl26KNGtKHN/eNL/1NcSe4U9Wwff4zy19/doD0ZTQuKQcf7oTgUg==
+X-Received: by 2002:a05:622a:552:b0:3bf:c83d:5d4c with SMTP id m18-20020a05622a055200b003bfc83d5d4cmr6819811qtx.64.1677404755057;
+        Sun, 26 Feb 2023 01:45:55 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id z22-20020ac87f96000000b003b63dfad2b4sm2799983qtj.0.2023.02.26.01.45.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Feb 2023 01:45:54 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-536c02eea4dso99547877b3.4;
+        Sun, 26 Feb 2023 01:45:54 -0800 (PST)
+X-Received: by 2002:a5b:d46:0:b0:a67:c976:c910 with SMTP id
+ f6-20020a5b0d46000000b00a67c976c910mr1348469ybr.7.1677404754091; Sun, 26 Feb
+ 2023 01:45:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230225121523.3288544-1-geert+renesas@glider.be>
+ <20230225203052.0fd823a1ccf0619e89b315d8@linux-foundation.org> <20230225205749.2effb5f902dee8919704f3cd@linux-foundation.org>
+In-Reply-To: <20230225205749.2effb5f902dee8919704f3cd@linux-foundation.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 26 Feb 2023 10:45:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXuP2f78t4ykRP37xNGSOZxEizd3ZvqOyedbLaHhfE1iw@mail.gmail.com>
+Message-ID: <CAMuHMdXuP2f78t4ykRP37xNGSOZxEizd3ZvqOyedbLaHhfE1iw@mail.gmail.com>
+Subject: Re: [PATCH] zram: Use atomic_long_read() to read atomic_long_t
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Minchan Kim <minchan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-devm_kasprintf may fails, irq_name and uc->name might be null and wrong irq
-name will be used in request.
+Hi Andrew,
 
-Signed-off-by: Kang Chen <void0red@gmail.com>
----
- drivers/dma/ti/edma.c    | 8 ++++++++
- drivers/dma/ti/k3-udma.c | 2 ++
- 2 files changed, 10 insertions(+)
+On Sun, Feb 26, 2023 at 5:57 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+> On Sat, 25 Feb 2023 20:30:52 -0800 Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > Fix this by using atomic_long_read() instead.
+> > >
+> > > Reported-by; noreply@ellerman.id.au
+> >
+> > That's an interesting one.  Was this mpe@?
 
-diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-index fa06d7e6d..85cd72b64 100644
---- a/drivers/dma/ti/edma.c
-+++ b/drivers/dma/ti/edma.c
-@@ -2413,6 +2413,10 @@ static int edma_probe(struct platform_device *pdev)
- 	if (irq >= 0) {
- 		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_ccint",
- 					  dev_name(dev));
-+		if (!irq_name) {
-+			ret = -ENOMEM;
-+			goto err_disable_pm;
-+		}
- 		ret = devm_request_irq(dev, irq, dma_irq_handler, 0, irq_name,
- 				       ecc);
- 		if (ret) {
-@@ -2429,6 +2433,10 @@ static int edma_probe(struct platform_device *pdev)
- 	if (irq >= 0) {
- 		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_ccerrint",
- 					  dev_name(dev));
-+		if (!irq_name) {
-+			ret = -ENOMEM;
-+			goto err_disable_pm;
-+		}
- 		ret = devm_request_irq(dev, irq, dma_ccerr_handler, 0, irq_name,
- 				       ecc);
- 		if (ret) {
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index 7e23a6fde..692d1d25c 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -5494,6 +5494,8 @@ static int udma_probe(struct platform_device *pdev)
- 		uc->config.dir = DMA_MEM_TO_MEM;
- 		uc->name = devm_kasprintf(dev, GFP_KERNEL, "%s chan%d",
- 					  dev_name(dev), i);
-+		if (!uc->name)
-+			return -ENOMEM;
- 
- 		vchan_init(&uc->vc, &ud->ddev);
- 		/* Use custom vchan completion handling */
+No, from the kisskb build bot, which sends private emails to the
+architecture maintainers when one of their builds fail:
+
+----8<-------------------------------------------------------------------------------------------
+Subject: kisskb: FAILED linux-next/m68k-defconfig/m68k-gcc8 Sat Feb 25, 14:34
+From: noreply@ellerman.id.au
+To: geert@linux-m68k.org
+Date: Sat, 25 Feb 2023 03:35:59 -0000
+Message-ID: <20230225033559.1.93322@37da20578230>
+
+FAILED linux-next/m68k-defconfig/m68k-gcc8 Sat Feb 25, 14:34
+
+http://kisskb.ellerman.id.au/kisskb/buildresult/14885627/
+
+Commit:   Add linux-next specific files for 20230225
+          8232539f864ca60474e38eb42d451f5c26415856
+Compiler: m68k-linux-gcc (GCC) 8.5.0 / GNU ld (GNU Binutils) 2.36.1
+
+Possible errors
+---------------
+
+drivers/block/zram/zram_drv.c:1234:23: error: passing argument 1 of
+'atomic64_read' from incompatible pointer type
+[-Werror=incompatible-pointer-types]
+cc1: some warnings being treated as errors
+make[5]: *** [scripts/Makefile.build:252: drivers/block/zram/zram_drv.o] Error 1
+make[4]: *** [scripts/Makefile.build:494: drivers/block/zram] Error 2
+make[3]: *** [scripts/Makefile.build:494: drivers/block] Error 2
+make[2]: *** [scripts/Makefile.build:494: drivers] Error 2
+make[1]: *** [Makefile:2028: .] Error 2
+make: *** [Makefile:226: __sub-make] Error 2
+
+Possible warnings (1)
+----------------------
+
+include/linux/list.h:74:12: warning: 'seed_devices' may be used
+uninitialized in this function [-Wmaybe-uninitialized]
+------------------------------------------------------------------------------------------>8-----
+
+> > I like it when a Reported-by: is followed by a Link: to the report, so
+> > I can go hunt down such things.
+>
+> I found this, and added it to the changelog:
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+>   Link: https://lore.kernel.org/oe-kbuild-all/202302241840.nwdXqE5r-lkp@intel.com/
+
+That's a different bot ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
