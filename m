@@ -2,129 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD756A33F8
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 21:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6794D6A33FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 21:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjBZUhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 15:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S229733AbjBZUiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 15:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjBZUhL (ORCPT
+        with ESMTP id S229529AbjBZUiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 15:37:11 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3706F74C
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 12:37:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677443829; x=1708979829;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MF7W5ToNpxqhj9OuUAwzsK+DaREoe75GSKBU8pPaFHY=;
-  b=CV+QpcgN8CIDpAybIquZroYUJTsm600mf2VlS7X/3YB6MP2mdDWHHvhp
-   npkltmpKsLQa+lOQ6c9m5kX1XXLbwoN6ee7UhYFPZXg53BMIh6lkG44h8
-   eBAKri39lQ/7gF9/5K2vrNFBnNFyVIjb4rTZiKKEvE3aFflJtdf6jfqSL
-   oUGFEQIPoUhO7/0aBVNvspabXplKZAFcgZwxlXVJfa6j4gpiqkGnRsw+z
-   RuZ47JKapWbt3E06FSbblQaGSOsfbU0y+jP3aj6TS4qUrYULWsKd8Bzl0
-   ZGPSrTlo3Pe7cOf7xA33jw+c55QpezzbK96ZZUTpcWTaJ5LkJoiEU1chw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="398514700"
-X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="398514700"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 12:37:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="737417605"
-X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="737417605"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Feb 2023 12:37:06 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWNlZ-0003sk-2R;
-        Sun, 26 Feb 2023 20:37:05 +0000
-Date:   Mon, 27 Feb 2023 04:36:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-versatile/versatile.c:56:14: warning: no previous
- prototype for function 'mmc_status'
-Message-ID: <202302270413.KYK0ByNB-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 26 Feb 2023 15:38:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949786EAA;
+        Sun, 26 Feb 2023 12:38:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECCCCB80B86;
+        Sun, 26 Feb 2023 20:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 418A9C433D2;
+        Sun, 26 Feb 2023 20:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1677443895;
+        bh=FqOwZ1KiLarzLNaFojBpikgn+mbiZr/mALVgv4DFdxg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YWEJ8gUmujjdLDytk9zdHMjmjeElCaeHmxsa12Koi3PGWUd2pB3DTQqVapa0ss+rQ
+         h1p412xVL07fLn/3Hcm3vLAX+7psysGjtNt9ABHd7ZUKGBLPykcXskslx3GP/gIwCN
+         y4g1uH+SD8bOvR1QkjuQntUt06Y94C/t2+72WYvY=
+Date:   Sun, 26 Feb 2023 12:38:14 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com>
+Cc:     glider@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org,
+        Nicolas Pitre <nico@fluxnic.net>
+Subject: Re: [syzbot] [fs?] [mm?] KMSAN: uninit-value in ondemand_readahead
+Message-Id: <20230226123814.1d9afb8c3de438155593c378@linux-foundation.org>
+In-Reply-To: <0000000000008f74e905f56df987@google.com>
+References: <0000000000007dcc0b05e91943c2@google.com>
+        <0000000000008f74e905f56df987@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Fri, 24 Feb 2023 00:32:50 -0800 syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com> wrote:
 
-FYI, the error/warning still remains.
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    97e36f4aa06f Revert "sched/core: kmsan: do not instrument ..
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10e46944c80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=46c642641b9ef616
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8ce7f8308d91e6b8bbe2
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: i386
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b8650c80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a22f2cc80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/9931a9627dc6/disk-97e36f4a.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/1aafdb2fd6dc/vmlinux-97e36f4a.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/90df5872c7ff/bzImage-97e36f4a.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/ea75a01297dd/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com
+> 
+> loop0: detected capacity change from 0 to 16
+> =====================================================
+> BUG: KMSAN: uninit-value in ondemand_readahead+0xddf/0x1720 mm/readahead.c:596
+>  ondemand_readahead+0xddf/0x1720 mm/readahead.c:596
+>  page_cache_sync_ra+0x72b/0x760 mm/readahead.c:709
+>  page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
+>  cramfs_blkdev_read fs/cramfs/inode.c:217 [inline]
+>  cramfs_read+0x611/0x1280 fs/cramfs/inode.c:278
+>  cramfs_lookup+0x1b8/0x870 fs/cramfs/inode.c:767
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2fcd07b7ccd5fd10b2120d298363e4e6c53ccf9c
-commit: d7445676e86900f8dc363825033ff62416c216e0 ARM: versatile: move integrator/realview/vexpress to versatile
-date:   11 months ago
-config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20230227/202302270413.KYK0ByNB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d7445676e86900f8dc363825033ff62416c216e0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Thanks.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302270413.KYK0ByNB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-   unsigned int mmc_status(struct device *dev)
-                ^
-   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int mmc_status(struct device *dev)
-   ^
-   static 
-   1 warning generated.
+file_ra_state_init() says "Assumes that the caller has memset *ra to
+zero".  This should fix:
 
 
-vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: fs/cramfs/inode.c: initialize file_ra_state
+Date: Sun Feb 26 12:31:11 PM PST 2023
 
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
+file_ra_state_init() assumes that the file_ra_state has been zeroed out. 
+Fixes a KMSAN used-unintialized issue (at least).
 
-:::::: The code at line 56 was first introduced by commit
-:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
+Fixes: cf948cbc35e80 ("cramfs: read_mapping_page() is synchronous")
+Reported-by: syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com>
+  Link: https://lkml.kernel.org/r/0000000000008f74e905f56df987@google.com
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Nicolas Pitre <nico@fluxnic.net>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
 
-:::::: TO: Rob Herring <robh@kernel.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--- a/fs/cramfs/inode.c~a
++++ b/fs/cramfs/inode.c
+@@ -183,7 +183,7 @@ static void *cramfs_blkdev_read(struct super_block *sb, unsigned int offset,
+ 				unsigned int len)
+ {
+ 	struct address_space *mapping = sb->s_bdev->bd_inode->i_mapping;
+-	struct file_ra_state ra;
++	struct file_ra_state ra = {};
+ 	struct page *pages[BLKS_PER_BUF];
+ 	unsigned i, blocknr, buffer;
+ 	unsigned long devsize;
+_
+
