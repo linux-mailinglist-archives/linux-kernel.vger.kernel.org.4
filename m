@@ -2,317 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0246A3240
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 16:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5A06A32C5
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjBZP3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 10:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S229660AbjBZQW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 11:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjBZP3X (ORCPT
+        with ESMTP id S229529AbjBZQW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 10:29:23 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6AD18174
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:25:24 -0800 (PST)
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+        Sun, 26 Feb 2023 11:22:26 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8658318A9E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 08:22:24 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5AD9C3F71C
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 15:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677424552;
-        bh=wIBy6U41Dj5n4ITVB/Mns+jjmQ4eaV8djJQzjN4oRmU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=YY1lYwftwx/w5BIGEbceF++jawqPgcS/hKW8hstBlR7F1kAt2uBs2/8Y13xmLAWyj
-         XoRlPBktBtg+/EHvTQMCz0lh44fKKk/c8aFHE162+JY2eay3nX0zfdi0vELW5ovj5u
-         zsQ2h+l1jkpo4jKaO++OSGJ0+fwFk+NoCtDKxMa5q6p/AjP2PECFSdfqPUBDvt532w
-         1FlEl7gjX2u3JSX+1Q4C57sPQKuyEpNim9d9Pi1TIls/wNo9xxslGsPbvhyYdjhV3H
-         PI4yfF5p4V1fRflj6BKQp7ZHoZCecgcq0hnJlD3vnQvaZf/47J2MIbDHrJFRlH/gyV
-         0L9Nqjq2bC3zw==
-Received: by mail-qv1-f70.google.com with SMTP id pp11-20020a056214138b00b0056c228fa15cso2105906qvb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:15:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wIBy6U41Dj5n4ITVB/Mns+jjmQ4eaV8djJQzjN4oRmU=;
-        b=dF2E5tc4LixmU3+H8l3BQovZG8I5FCDcoFD4F60MOFSHbrtS+VB9rbk/qTc4ofTA+X
-         I1x35/YTaIa8ROdTrgBvgocEkGnPBjTPF4KBZUDcPN+BwYFrby8Le7AkZZDFYoa6WECY
-         Nu81SjUnf35TqYgZ1My5k7fr5wqe6sSYmVg970Fx1yGc08TXVH4HT4bSxRttRZIUJdGv
-         G6/Mp8y4JgEx8nu7thB7O6KokkrCgLLocAFBwg9NDgL92AeiYKTP6Ne5tq7cwqsUJ7kK
-         vShU6qbFs+LNv/GS3Y8ymfdnhpIzVWrP3yBntAEv73UE+AzYBkGLTR6XQh6/kQfMG4QZ
-         lcwA==
-X-Gm-Message-State: AO0yUKUWmlVThi9die3FtgmjYSPPIPbN94XZXj3kcfjxU8SlyCEqWoEU
-        Fo8oYdkj3WPWcXbPZ+e7gG7rALWcuIDhPPNOlpm3gDh3BYMk2YygMR7w46rqGnK+GbS7kBO4ZPU
-        dPuMFaIp8aA7hNDkzptxFyNygDorpMVJ1g2QBKaM1K0TQ7DOzwaIKhVdw0g==
-X-Received: by 2002:a05:620a:a07:b0:73b:a941:7206 with SMTP id i7-20020a05620a0a0700b0073ba9417206mr4398873qka.7.1677424551261;
-        Sun, 26 Feb 2023 07:15:51 -0800 (PST)
-X-Google-Smtp-Source: AK7set8kQriIg1Y8SjWJC50nqEv7gKjengpifGiOd7lR5AGwmNGEmtjmOyntTOaSQCXjHHlWUCWd3sZxCSc6ihPh31c=
-X-Received: by 2002:a05:620a:a07:b0:73b:a941:7206 with SMTP id
- i7-20020a05620a0a0700b0073ba9417206mr4398863qka.7.1677424550956; Sun, 26 Feb
- 2023 07:15:50 -0800 (PST)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PPpn81DrXz9sS9;
+        Sun, 26 Feb 2023 17:22:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1677428540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GeYK5BT9h66VwNjG4DOXCbRc5mY33nHGF0n866cCNfk=;
+        b=O7ocRnSVeb6PxmMCGvOOycFANQN23dOLnwv2BXMB1H6qnoezhqCs9cL6w/msTsU7Blu6Ib
+        ck5+p87gt9GWAHOjwtWqOQJHBkL1GV99vKz6bKJPYM97+j/F4DcMuczU7LG7fHixgaFT3d
+        3H2Mb2KjylU7WWfv506WRuBZJLZVNJJ+1HNnh4ad5JpoHcKYMTVVuix3tMOyTh03ED3qPN
+        jxCaEZSnuTubIY0J9UTqwl0zYUGGQ6ESTuViK3VS8HHq8gQ8snsqPzlt/NMrADOoGoUztF
+        Tpvghm5mWjTtCp/Dt1L7bNuTtHQEQowgVCu7XNnMcnMM6MoQDxTCDUKsQS8hWw==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        =?utf-8?Q?Ond=C5=99e?= =?utf-8?Q?j?= Jirman <megous@megous.com>
+Cc:     Purism Kernel Team <kernel@puri.sm>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of XBD599
+Date:   Sun, 26 Feb 2023 16:17:32 +0100
+References: <20230219114553.288057-1-frank@oltmanns.dev>
+ <20230219114553.288057-2-frank@oltmanns.dev>
+ <20230219123542.yxb5ixe424ig6ofv@core>
+In-reply-to: <20230219123542.yxb5ixe424ig6ofv@core>
+Message-ID: <87zg90e6s5.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <20230118061701.30047-6-yanhong.wang@starfivetech.com> <CAJM55Z-zvb5CJq4PU4c=YKvY0xPY216MAALFsmWTcVFjSd=wEA@mail.gmail.com>
- <dfddde90-ddce-d0e5-d31c-bbbbecaf7323@starfivetech.com>
-In-Reply-To: <dfddde90-ddce-d0e5-d31c-bbbbecaf7323@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Sun, 26 Feb 2023 16:15:34 +0100
-Message-ID: <CAJM55Z-Pkd5+GBi4NYEuRSHezvJ_vUYiWLdQCpY2D2RqLa-btw@mail.gmail.com>
-Subject: Re: [PATCH v4 5/7] net: stmmac: Add glue layer for StarFive JH7110 SoCs
-To:     yanhong wang <yanhong.wang@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, samin.guo@starfivetech.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="=-=-="
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 03:27, yanhong wang
-<yanhong.wang@starfivetech.com> wrote:
->
-> add  samin.guo@starfivetech.com  to loop.
->
-> On 2023/2/16 18:53, Emil Renner Berthing wrote:
-> > On Wed, 18 Jan 2023 at 07:20, Yanhong Wang
-> > <yanhong.wang@starfivetech.com> wrote:
-> >>
-> >> This adds StarFive dwmac driver support on the StarFive JH7110 SoCs.
-> >>
-> >> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> >> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> ---
-> >>  MAINTAINERS                                   |   1 +
-> >>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
-> >>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
-> >>  .../stmicro/stmmac/dwmac-starfive-plat.c      | 118 ++++++++++++++++++
-> >>  4 files changed, 132 insertions(+)
-> >>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
-> >>
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index 56be59bb09f7..5b50b52d3dbb 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -19609,6 +19609,7 @@ F:      include/dt-bindings/clock/starfive*
-> >>  STARFIVE DWMAC GLUE LAYER
-> >>  M:     Yanhong Wang <yanhong.wang@starfivetech.com>
-> >>  S:     Maintained
-> >> +F:     Documentation/devicetree/bindings/net/dwmac-starfive-plat.c
-> >>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
-> >>
-> >>  STARFIVE PINCTRL DRIVER
-> >> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> >> index 31ff35174034..f9a4ad4abd54 100644
-> >> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> >> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> >> @@ -235,6 +235,18 @@ config DWMAC_INTEL_PLAT
-> >>           the stmmac device driver. This driver is used for the Intel Keem Bay
-> >>           SoC.
-> >>
-> >> +config DWMAC_STARFIVE_PLAT
-> >> +       tristate "StarFive dwmac support"
-> >> +       depends on OF && COMMON_CLK
-> >> +       depends on STMMAC_ETH
-> >> +       default SOC_STARFIVE
-> >> +       help
-> >> +         Support for ethernet controllers on StarFive RISC-V SoCs
-> >> +
-> >> +         This selects the StarFive platform specific glue layer support for
-> >> +         the stmmac device driver. This driver is used for StarFive JH7110
-> >> +         ethernet controller.
-> >> +
-> >>  config DWMAC_VISCONTI
-> >>         tristate "Toshiba Visconti DWMAC support"
-> >>         default ARCH_VISCONTI
-> >> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> >> index d4e12e9ace4f..a63ab0ab5071 100644
-> >> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
-> >> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> >> @@ -31,6 +31,7 @@ obj-$(CONFIG_DWMAC_DWC_QOS_ETH)       += dwmac-dwc-qos-eth.o
-> >>  obj-$(CONFIG_DWMAC_INTEL_PLAT) += dwmac-intel-plat.o
-> >>  obj-$(CONFIG_DWMAC_GENERIC)    += dwmac-generic.o
-> >>  obj-$(CONFIG_DWMAC_IMX8)       += dwmac-imx.o
-> >> +obj-$(CONFIG_DWMAC_STARFIVE_PLAT)      += dwmac-starfive-plat.o
-> >
-> > Hi Yanhong,
-> >
-> > For the next version could you please drop the _PLAT from the config
-> > symbol and -plat from filename. I know the intel wrapper does the
-> > same, but it's the only one, so lets do like the majority of other
-> > wrappers and not add more different ways of doing things.
-> >
->
-> Thanks. I will fix.
->
-> >>  obj-$(CONFIG_DWMAC_VISCONTI)   += dwmac-visconti.o
-> >>  stmmac-platform-objs:= stmmac_platform.o
-> >>  dwmac-altr-socfpga-objs := altr_tse_pcs.o dwmac-socfpga.o
-> >> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
-> >> new file mode 100644
-> >> index 000000000000..e441d920933a
-> >> --- /dev/null
-> >> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
-> >> @@ -0,0 +1,118 @@
-> >> +// SPDX-License-Identifier: GPL-2.0+
-> >> +/*
-> >> + * StarFive DWMAC platform driver
-> >> + *
-> >> + * Copyright(C) 2022 StarFive Technology Co., Ltd.
-> >> + *
-> >> + */
-> >> +
-> >> +#include <linux/of_device.h>
-> >> +
-> >> +#include "stmmac_platform.h"
-> >> +
-> >> +struct starfive_dwmac {
-> >> +       struct device *dev;
-> >> +       struct clk *clk_tx;
-> >> +       struct clk *clk_gtx;
-> >> +       struct clk *clk_gtxc;
-> >> +};
-> >
-> > I like this name. For the next version could you also
-> > s/starfive_eth_plat_/starfive_dwmac_/ on the function/struct names
-> > below for consistency.
-> >
->
-> I will fix.
->
-> >> +
-> >> +static void starfive_eth_plat_fix_mac_speed(void *priv, unsigned int speed)
-> >> +{
-> >> +       struct starfive_dwmac *dwmac = priv;
-> >> +       unsigned long rate;
-> >> +       int err;
-> >> +
-> >> +       rate = clk_get_rate(dwmac->clk_gtx);
-> >> +
-> >> +       switch (speed) {
-> >> +       case SPEED_1000:
-> >> +               rate = 125000000;
-> >> +               break;
-> >> +       case SPEED_100:
-> >> +               rate = 25000000;
-> >> +               break;
-> >> +       case SPEED_10:
-> >> +               rate = 2500000;
-> >> +               break;
-> >> +       default:
-> >> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
-> >> +               break;
-> >> +       }
-> >> +
-> >> +       err = clk_set_rate(dwmac->clk_gtx, rate);
-> >> +       if (err)
-> >> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
-> >> +}
-> >> +
-> >> +static int starfive_eth_plat_probe(struct platform_device *pdev)
-> >> +{
-> >> +       struct plat_stmmacenet_data *plat_dat;
-> >> +       struct stmmac_resources stmmac_res;
-> >> +       struct starfive_dwmac *dwmac;
-> >> +       int err;
-> >> +
-> >> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
-> >> +       if (err)
-> >> +               return err;
-> >> +
-> >> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-> >> +       if (IS_ERR(plat_dat)) {
-> >> +               dev_err(&pdev->dev, "dt configuration failed\n");
-> >> +               return PTR_ERR(plat_dat);
-> >> +       }
-> >> +
-> >> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
-> >> +       if (!dwmac)
-> >> +               return -ENOMEM;
-> >> +
-> >> +       dwmac->clk_tx = devm_clk_get_enabled(&pdev->dev, "tx");
-> >> +       if (IS_ERR(dwmac->clk_tx))
-> >> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
-> >> +                                               "error getting tx clock\n");
-> >> +
-> >> +       dwmac->clk_gtx = devm_clk_get_enabled(&pdev->dev, "gtx");
-> >> +       if (IS_ERR(dwmac->clk_gtx))
-> >> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtx),
-> >> +                                               "error getting gtx clock\n");
-> >> +
-> >> +       dwmac->clk_gtxc = devm_clk_get_enabled(&pdev->dev, "gtxc");
-> >> +       if (IS_ERR(dwmac->clk_gtxc))
-> >> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtxc),
-> >> +                                               "error getting gtxc clock\n");
-> >> +
-> >> +       dwmac->dev = &pdev->dev;
-> >> +       plat_dat->fix_mac_speed = starfive_eth_plat_fix_mac_speed;
-> >> +       plat_dat->init = NULL;
-> >> +       plat_dat->bsp_priv = dwmac;
-> >> +       plat_dat->dma_cfg->dche = true;
-> >> +
-> >> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
-> >> +       if (err) {
-> >> +               stmmac_remove_config_dt(pdev, plat_dat);
-> >> +               return err;
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static const struct of_device_id starfive_eth_plat_match[] = {
-> >> +       { .compatible = "starfive,jh7110-dwmac" },
-> >> +       { }
-> >> +};
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I noticed you're missing a
-MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
-here, so udev will load the module automatically.
+Hi Ond=C5=99ej,
+hi Guido,
 
-While you're at it I also like the idiom of using { /* sentinel */ }
-for the last entry here.
+On 2023-02-19 at 13:35:42 +0100, Ond=C5=99ej Jirman <megous@megous.com> wro=
+te:
 
-> >> +static struct platform_driver starfive_eth_plat_driver = {
-> >> +       .probe  = starfive_eth_plat_probe,
-> >> +       .remove = stmmac_pltfr_remove,
-> >> +       .driver = {
-> >> +               .name = "starfive-eth-plat",
-> >> +               .pm = &stmmac_pltfr_pm_ops,
-> >> +               .of_match_table = starfive_eth_plat_match,
-> >> +       },
-> >> +};
-> >> +
-> >> +module_platform_driver(starfive_eth_plat_driver);
-> >> +
-> >> +MODULE_LICENSE("GPL");
-> >> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
-> >> +MODULE_AUTHOR("Yanhong Wang <yanhong.wang@starfivetech.com>");
-> >> --
-> >> 2.17.1
-> >>
-> >>
-> >> _______________________________________________
-> >> linux-riscv mailing list
-> >> linux-riscv@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> On Sun, Feb 19, 2023 at 12:45:53PM +0100, Frank Oltmanns wrote:
+>> Fix the XBD599 panel=E2=80=99s slight visual stutter by correcting the p=
+ixel
+>> clock speed so that the panel=E2=80=99s 60Hz vertical refresh rate is me=
+t.
+>>
+>> Set the clock speed using the underlying formula instead of a magic
+>> number. To have a consistent procedure for both panels, set the JH057N
+>> panel=E2=80=99s clock also as a formula.
+>>
+>> =E2=80=94
+>>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++=E2=80=93
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/driv=
+ers/gpu/drm/panel/panel-sitronix-st7703.c
+>> index 6747ca237ced..cd7d631f7573 100644
+>> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> @@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mod=
+e =3D {
+>>  	.vsync_start =3D 1440 + 20,
+>>  	.vsync_end   =3D 1440 + 20 + 4,
+>>  	.vtotal	     =3D 1440 + 20 + 4 + 12,
+>> -	.clock	     =3D 75276,
+>> +	.clock	     =3D (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 100=
+0,
+>>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+>>  	.width_mm    =3D 65,
+>>  	.height_mm   =3D 130,
+>> @@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode =3D=
+ {
+>>  	.vsync_start =3D 1440 + 18,
+>>  	.vsync_end   =3D 1440 + 18 + 10,
+>>  	.vtotal	     =3D 1440 + 18 + 10 + 17,
+>> -	.clock	     =3D 69000,
+>> +	.clock	     =3D (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 10=
+00,
+>
+> As for pinephone, A64 can=E2=80=99t produce 74.844 MHz precisely, so this=
+ will not work.
+>
+> Better fix is to alter the mode so that clock can be something the only S=
+oC this
+> panel is used with can actually produce.
+>
+> See eg. <https://github.com/megous/linux/commit/dd070679d717e7f34af755856=
+3698240a43981a6>
+> which is tested to actually produce 60Hz by measuring the vsync events ag=
+ainst
+> the CPU timer.
+
+I did some testing using a 60fps video I produced using the following comma=
+nd:
+    ffmpeg -f lavfi -i testsrc=3Dduration=3D10:size=3D80x50:rate=3D60 -vf =
+=E2=80=9Cdrawtext=3Dtext=3D%{n}:fontsize=3D36:r=3D60:x=3D(w-tw)/2: y=3Dh-(1=
+*lh):fontcolor=3Dwhite:box=3D1:boxcolor=3D0x00000099=E2=80=9D test_80x50.mp4
+
+This 10-second video shows an increasing number on every frame, which makes=
+ it easy to spot dropped frames by recording the playback with a camera tha=
+t can record more than 60fps (I used a 240fps camera).
+
+When playing back that video with your current drm-6.2 branch I get a stead=
+y 60fps. But applying either your or my patch to mainline, only helps very =
+little. Frames are being skipped more often than not in both cases.
+
+Therefore, I need to investigate more and retract the patch for now.
+
+The other two patches I sent earlier, however, are far more important for m=
+aking the pinephone usable on mainline.
+
+Best regards,
+  Frank
+
+>
+> Your patch will not produce the intended effect.
+>
+> kind regards,
+> 	o.
+>
+>>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+>>  	.width_mm    =3D 68,
+>>  	.height_mm   =3D 136,
+>> =E2=80=93
+>> 2.39.1
+>>
+
+--=-=-=--
