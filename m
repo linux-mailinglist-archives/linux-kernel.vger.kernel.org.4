@@ -2,96 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAD06A2FD4
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907956A2FC6
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBZNeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 08:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S229665AbjBZNRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 08:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBZNeJ (ORCPT
+        with ESMTP id S229486AbjBZNRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 08:34:09 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D632113FA
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:34:08 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id i5so2418478pla.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:34:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Z78SjOk/k03WYB7CJ5uRFHoK2AySrR3qvUt493wtnY=;
-        b=k1wLDiepy9Cc0cSjgunHysVh4L8B7sk1mLB2epfI5aU+TiQ2lo1e+LTALzdt/kabAa
-         nawkWR1DGaoA6aXGZkp0x5YaxfL/hGNtNODS6mOX4kDSASG7WaiWgGVU5oFnYtBaiKfy
-         Aa4LdIUlROsdJRF6Af7KG91ufCLll7R1HkaSTZabFbDLLFdzKb9qBIEMgUBuz0OmD3Wu
-         RVEpK3DrWhmfmmsIqVOllGY6kmYse2aMC2rLdq3G46kr7jztLo5e+M13UgPRBuMKdAvu
-         b1ApJAiDaQAUGaVDn0ky+c7Lt/9v2XPH+56iweUIZBoJY3jNVwpKJhEeW/SijL+bwMeg
-         THRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Z78SjOk/k03WYB7CJ5uRFHoK2AySrR3qvUt493wtnY=;
-        b=kVtpOhybR+/rcqQUtX9GsnBNORr5L/B2YEUQAnSgLJ2M/jzW/Ny7nuHi/sIWxZp3SZ
-         nCzB95hRvJUye64XcgY/C70RBhLLHsjTkRU3fQBYj1cSXLwVwPCLvjyvYGmJlHHkQoP6
-         nwucEixOXBNKaJ9OK8pKKbSl35/fc8ujX1ku1UnvSZybsuA5dbOaZC35uV5zy+A4lAtk
-         8/gq2aiIr2rD3+BZcXupsgeQ48bIQupaY6+SZkyu/sSJGDXMhv0mi52k8zDRKTgQkZ2d
-         ZAib46wyLFvQTJ7jWcIhZ1EaEbdhwtUCisuiaHs7myeBF+bqUscOUE+Gw2kHjls8PEPt
-         /ihw==
-X-Gm-Message-State: AO0yUKUaVghnXZZCTqqPrQxMxuDbkzGi5T+WP7T4N4dual7GviwXvMHj
-        0GsJ20CUF27fI1R9iSiy+Bs=
-X-Google-Smtp-Source: AK7set908GPWLSLvg8NNt2V9uR0HJjhY7jxq9d3VJxmFsFO/mETCnwtdTKW286228P2YCkHxItkcgw==
-X-Received: by 2002:a17:903:41cd:b0:199:1b8a:42a8 with SMTP id u13-20020a17090341cd00b001991b8a42a8mr26128915ple.6.1677418447827;
-        Sun, 26 Feb 2023 05:34:07 -0800 (PST)
-Received: from localhost.localdomain ([199.101.192.172])
-        by smtp.gmail.com with ESMTPSA id jb21-20020a170903259500b0019abd4ddbf2sm2668787plb.179.2023.02.26.05.34.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 05:34:07 -0800 (PST)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drivers: pcmcia: fix a typo in pcmcia_request_irq
-Date:   Sun, 26 Feb 2023 21:31:20 +0800
-Message-Id: <20230226133123.3180376-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Sun, 26 Feb 2023 08:17:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944F2113F4;
+        Sun, 26 Feb 2023 05:17:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 223B060C25;
+        Sun, 26 Feb 2023 13:17:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985DDC433D2;
+        Sun, 26 Feb 2023 13:16:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677417419;
+        bh=Of+a0epo/ltgvupP7Y6hFvl1uyJBENPTgmCisbRck34=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bbZuttuRXrwvICTzhNKLPnQ13SSNmX7xsC+RJSf27qf0mZmJqoHC+nevwKBgu0RDa
+         I/izR7nWnQ2ItKHzZMzA/cPV9v/4kvfXohWPCf7PQgKZZNrnI6FsWKhMcpjTaSmv5V
+         cBygcQxPzEGqwWbY3SNpjK0AEihrxmdIR8sLYeHdVSpy2tV4cnq2zKf8+9Ezgxn1+4
+         QK6T6zPe17/3GKzOe+0DKbc4IW2qYSCRqcxgNcMXou1HXhVy17jv3w6Y+vaXjVH5XX
+         egyLLgBSMe2eP/l7f0WNYQ8lAHgd3XXqwHx4dZ4EOF+LgfDOWIW0xsxnKvJblBFxrB
+         //v4lRuAwvlFA==
+Date:   Sun, 26 Feb 2023 13:31:23 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandru Lazar <alazar@startmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] iio: pressure: bmp280: Add nvmem operations for
+ BMP580
+Message-ID: <20230226133123.2b96a82c@jic23-huawei>
+In-Reply-To: <f3f453d9b2c0f7820ca9c56e24e2165b6c39bb67.1676823250.git.ang.iglesiasg@gmail.com>
+References: <cover.1676823250.git.ang.iglesiasg@gmail.com>
+        <f3f453d9b2c0f7820ca9c56e24e2165b6c39bb67.1676823250.git.ang.iglesiasg@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a typo in the comment of pcmcia_request_irq - themselfves.
+On Sun, 19 Feb 2023 18:03:06 +0100
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
-Fix it by changing themselves to themselves.
+> The pressure sensor BMP580 contains a non-volatile memory that stores
+> trimming and configuration params. That memory provides an programmable
+> user range of three 2-byte words.
+> 
+> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
-v1->v2: change the title and modify my email.
- drivers/pcmcia/pcmcia_resource.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Trivial missing static marking in here... Fixed up whilst applying.
 
-diff --git a/drivers/pcmcia/pcmcia_resource.c b/drivers/pcmcia/pcmcia_resource.c
-index d78091e79a0f..e9e31c638a67 100644
---- a/drivers/pcmcia/pcmcia_resource.c
-+++ b/drivers/pcmcia/pcmcia_resource.c
-@@ -684,7 +684,7 @@ EXPORT_SYMBOL(pcmcia_request_io);
-  * pcmcia_request_irq() is a wrapper around request_irq() which allows
-  * the PCMCIA core to clean up the registration in pcmcia_disable_device().
-  * Drivers are free to use request_irq() directly, but then they need to
-- * call free_irq() themselfves, too. Also, only %IRQF_SHARED capable IRQ
-+ * call free_irq() themselves, too. Also, only %IRQF_SHARED capable IRQ
-  * handlers are allowed.
-  */
- int __must_check pcmcia_request_irq(struct pcmcia_device *p_dev,
--- 
-2.39.1
+Whole series applied to the togreg branch of iio.git. Not that will only be pushed
+out as testing until after rc1 (on which I'll rebase it).
+
+Thanks,
+
+Jonathan
+>  
+> +const int bmp580_nvmem_addrs[] = { 0x20, 0x21, 0x22 };
+static
 
