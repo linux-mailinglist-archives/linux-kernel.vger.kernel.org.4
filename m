@@ -2,122 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37C36A3534
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 00:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B876A3573
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 00:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjBZXAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 18:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S229590AbjBZXB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 18:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjBZXAi (ORCPT
+        with ESMTP id S229682AbjBZXBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 18:00:38 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8567C1A4A2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 14:59:56 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id y10so300394qtj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 14:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PuxVktP8ly6XYuWVV4eBaobSoUkGl5I6o/QFWMFqZ4U=;
-        b=MDWGB4/Ivj5Q9bj67cpTq7udIQdS1WirVd6PJlCOAR4N/wq6G7FZQYl6CAyCg4b3/3
-         bCWOqPK0/soz4Ennv5NMA4a/A1S5EcFy6rkC2FNII0mRzikypnk5YKuO8kJ5zRdDZtlA
-         rbWnmDIgwiMW7bUWazrNMA7d3oKFt6i2w1jNJk9vl6r3Cyzuoub9iAzujgYb4+WpR5J7
-         xpI0h/TC3KPsJUHVgTSFwnmPvSQ2h9MGV85P1AvfQfdcHkKgDWsBB/mYo/NJJ6d/uXBw
-         Fp7r5zQtpc4bBUB3cKg1xsSnqORrILn+I6TXy+ZdR5Uu9mrYmP6BiB2DKSDRRiKKlHAj
-         ZQ+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PuxVktP8ly6XYuWVV4eBaobSoUkGl5I6o/QFWMFqZ4U=;
-        b=l1UAO1286+IIHvF+mtfS56Srow23gl+G7cHuIKXV7udz2qi4DoboINJK7eX3c+FZML
-         ITy9q9Ej2DGVxtBhmQg08ExUgBVoObWNw7Hc3XVyh1KxY38fir1eyNRSix+kflIIHGwp
-         93dbenwP2Khkbi9iu0Jkd+AwEb5940BhkNkn8/EPi5gzADahl4OH4X/8A6MPgIoL5dpH
-         KrW2ug1gYHm0IsvozX0Mbq/sAxS1UOeivwwWGuK9hgwUZKkDDGXUZXkVyRdcIafi7BR/
-         jegXYXHsAk02U28c2aBeu89LX6QFtXhvXYw6rAxZaMdYiRNITidhQqcent2gyPUTu0Qh
-         tvbw==
-X-Gm-Message-State: AO0yUKXI4FHbnNHPKL5h58hbJupEsTpWGbDy1GIo9+PL0blxd1CqER0V
-        +jplYEUBvefI9iJcxcNxBKhdx/R00w==
-X-Google-Smtp-Source: AK7set8050Smi8oXXAQzH/O20B7tO2/f1YvHXizbD1pzfvqNoXw1qRvF1SP7ncxm4J/UP4XN73iyOA==
-X-Received: by 2002:ac8:5d8f:0:b0:3bf:d87d:4948 with SMTP id d15-20020ac85d8f000000b003bfd87d4948mr3711209qtx.14.1677452347322;
+        Sun, 26 Feb 2023 18:01:24 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9542F1A97B
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 15:00:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1677452449; x=1708988449;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=J9Xh3CSLaOh0wPb+8qljSocu9qIOGDzuCRuMHEY8zLA=;
+  b=PmcBqklYRAlnFwxHUOJ3k172lyJnT3SBzF5/PV+fVXTsdHQjwExZF4/u
+   e3HSZuHHyrlQopHyuyuX8Le/xL3+trbzbp3Dpb74NwgOVZfwpMcaj/pAr
+   jQ9tFMAemOaJ8UwHJr1+n65teZyItRKAr6iIwSKQCr5x0Ymg/zIHEyfu8
+   x4X7Uj8+8uJ1j74EUwPP/E2xU+dxQTl6O57Mz4wEsm6kX5RrpLNj5V5T+
+   /Hat965o7KLeQV44Bg2qkn5zyq827BSSN2XsNf8MciHSJDonX5lO6HlJC
+   dvIv8DGdyOin3jSCxSxWDIfveMR7rW5RRQI35m1zQ7qPxB2yKI8JxmGkW
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,330,1669046400"; 
+   d="scan'208";a="222554291"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Feb 2023 06:59:15 +0800
+IronPort-SDR: N9QTtUmSwTmvflL6JYeWkIYbgfC3RYEpDsKuM1iR/HJCqCpoekv6M6IuUwyV3rPQX2H+JPPUIC
+ 49YzfZ9FaXbPTUATkU2AcI4NvnspsbW/YbPoFFBxPIoZhQnkhw3s23GKr+7cGxou7yjPib7ML+
+ H0AjpzGDpnB5GcOqbKA9RRDZwK6lgfwT9PW0TYVq/AdHVffOHKm1wynHo6ukFhuHu8imG2tSWV
+ KHcnBh/+gm21xwR14m2IvkYQqdZLL1fwviESSxGAFRRnWns54eeYbt96h2/KH7xP/oq7fy2vOb
+ 5kQ=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Feb 2023 14:10:24 -0800
+IronPort-SDR: 1TKUcZJvmHFaEuhQuhLgzrL66h1vQ3vUhzNUsu8R9oo4P8/eWW9X+N9StG8skJQOpj4aNAx2Rf
+ qDET5agrzGJoKRcBZqVr9He8XD6P73Iff2f87kru1/cc+aNKu+jTRE4hqcYBsZQtLF+D958Kix
+ SPkaAME1IvX7EyMLwFIS1xkR0F/FWfyjsoPoT33WOjUT0uHmd6jXj2hBt+pgTFKC0++4HfNGVN
+ pfWa3NxVKzUJBRqHj/fzWy3VEeCl0yaS6TK0k1oRUlpwKJ/k2hS4Q8136f3ZVFP2keUuQvBfZu
+ 43M=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Feb 2023 14:59:16 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PPzb739fqz1RwtC
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 14:59:15 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1677452354; x=1680044355; bh=J9Xh3CSLaOh0wPb+8qljSocu9qIOGDzuCRu
+        MHEY8zLA=; b=iAFv7gkoa1pp+0xeoFxAdTchRJcF7b5UmjXwypMYYaMEb+gXnhh
+        i+xBLhRs7ybC6NKcaFw1srFUizSpMJeDj3DQb3u52D15SERUpb3qogMC05ahSV0Y
+        Rfu9IKYjLO8ZUjHo834CD/sYRhYEslbVwDIEgc2ZmU1mFVQU7vxDbCob9DXmC60R
+        A78dZnTzDMksnw3bnTzp+W8BcBYl0KqZEcYY13QB5+bS3Z0Bt7BmxsEweV82kybH
+        cIMGUln2jO0hFnxaRlIQBZpOOvSZTLpgd3fHkasBzpalSwtP1irBSCNzj1UrwHzU
+        e2IJ7N7AouJmgR9knygZsoS8VFPenj4hDWw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QkM0skjmTQ-r for <linux-kernel@vger.kernel.org>;
+        Sun, 26 Feb 2023 14:59:14 -0800 (PST)
+Received: from [10.225.163.40] (unknown [10.225.163.40])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PPzZz6V4Rz1RvLy;
         Sun, 26 Feb 2023 14:59:07 -0800 (PST)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id x15-20020a05620a098f00b0073b929d0371sm3808644qkx.4.2023.02.26.14.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 14:59:06 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:35b5:7210:c525:93a0])
-        by serve.minyard.net (Postfix) with ESMTPSA id B469A1800BD;
-        Sun, 26 Feb 2023 22:59:05 +0000 (UTC)
-Date:   Sun, 26 Feb 2023 16:59:04 -0600
-From:   Corey Minyard <minyard@acm.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        openipmi-developer@lists.sourceforge.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead
- of depending on it
-Message-ID: <Y/vkOCLCeubl6B34@minyard.net>
-Reply-To: minyard@acm.org
-References: <20230226053953.4681-1-rdunlap@infradead.org>
- <20230226053953.4681-2-rdunlap@infradead.org>
+Message-ID: <fc0adb2c-8be0-ec89-ba68-032862b700a9@opensource.wdc.com>
+Date:   Mon, 27 Feb 2023 07:59:06 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226053953.4681-2-rdunlap@infradead.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 04/20] thermal/core: Use the thermal zone 'devdata'
+ accessor in remaining drivers
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Petr Machata <petrm@nvidia.com>, Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
+        <linux-input@vger.kernel.org>,
+        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
+        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
+        <linux-wireless@vger.kernel.org>
+References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
+ <20230226225406.979703-5-daniel.lezcano@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230226225406.979703-5-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 09:39:46PM -0800, Randy Dunlap wrote:
-> REGMAP is a hidden (not user visible) symbol. Users cannot set it
-> directly thru "make *config", so drivers should select it instead of
-> depending on it if they need it.
+On 2/27/23 07:53, Daniel Lezcano wrote:
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
 > 
-> Consistently using "select" or "depends on" can also help reduce
-> Kconfig circular dependency issues.
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
 > 
-> Therefore, change the use of "depends on REGMAP_MMIO" to
-> "select REGMAP_MMIO", which will also set REGMAP.
+> Use the devdata accessor introduced in the previous patch.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com> #mlxsw
+> Acked-by: Gregory Greenman <gregory.greenman@intel.com> #iwlwifi
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> #power_supply
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This seems reasonable.  I can take it into my tree, or..
+For the ahci change:
 
-Acked-by: Corey Minyard <cminyard@mvista.com>
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-> 
-> Fixes: eb994594bc22 ("ipmi: bt-bmc: Use a regmap for register access")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Corey Minyard <minyard@acm.org>
-> Cc: openipmi-developer@lists.sourceforge.net
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/char/ipmi/Kconfig |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff -- a/drivers/char/ipmi/Kconfig b/drivers/char/ipmi/Kconfig
-> --- a/drivers/char/ipmi/Kconfig
-> +++ b/drivers/char/ipmi/Kconfig
-> @@ -162,7 +162,8 @@ config IPMI_KCS_BMC_SERIO
->  
->  config ASPEED_BT_IPMI_BMC
->  	depends on ARCH_ASPEED || COMPILE_TEST
-> -	depends on REGMAP && REGMAP_MMIO && MFD_SYSCON
-> +	depends on MFD_SYSCON
-> +	select REGMAP_MMIO
->  	tristate "BT IPMI bmc driver"
->  	help
->  	  Provides a driver for the BT (Block Transfer) IPMI interface
+-- 
+Damien Le Moal
+Western Digital Research
+
