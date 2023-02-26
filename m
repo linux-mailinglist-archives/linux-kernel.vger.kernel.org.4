@@ -2,142 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4794F6A2FB7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BB96A2FBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjBZNHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 08:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S229615AbjBZNNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 08:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBZNHn (ORCPT
+        with ESMTP id S229486AbjBZNNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 08:07:43 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2089.outbound.protection.outlook.com [40.107.104.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C63B760;
-        Sun, 26 Feb 2023 05:07:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WNs8eB1FaLm810vP5ibFWuCJAHFUwzj25N3j3OZKqCoL/TLlfIpTBX8rQNpLQBS8oH8SKbJ1UgcdJ3HIcQGxU7UioRCaOAc8tr3zq9gbjve2U0hRswFKL+wU5/x9+QA9uHgJ53X4i+a2Smtj8d4bwCiFuY/3qFsF1A09b5cf2SC22h+lc3SH+3A1Tb2NMUzSG+xmMzyjuCd/0Jk37mmc37KZghazsPyzIhcVSsb2XzqO2X7K8vFoGgoNvL5vqMsqb03z8hiTMmoiAHpHPRINqt8RyhJP9jha+SXnt/q0iD4/VO9Hh/L1AIiEmtMpD98ERPF5bSWvtV9bQbc9/6rv2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Rag+zOPnj6/zARi7+95BuQXfim6XrsczTr4CapuVvI=;
- b=RESb7B28VXK+mtfNyej8V/hXmgZO5YoaJ0hNCfTsErI7s6GzOJQv3RiBRYs/l9qEqsBoydUNKGHLleEFbLAITX+BaRZrZYPFbs2WWbkWdfMWp4va5NZMb76FXyJ35qpIQHzJ2KXGO5aLF5rL0WjbWd6b70V4TXlqXX35XWSi2A30feRh0HXcSNJS+3vGd8oVCd7oMBMMbiRwveEqA+qH21G0I226kkJueMNcGV0c08kBXEeECcpNsFPsgdl/bfCOT9oWjYJ6m8ApzeaYhZ6KTRkzTtX/rIQG9fF3T+k1l6NtHY3mzB6s1twmSt7vXiLAX5j3ZmmzCICR4CMFAOZ6KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Rag+zOPnj6/zARi7+95BuQXfim6XrsczTr4CapuVvI=;
- b=lwEnTzNZ52iBeSELpqBJw/bQOUS/WoijIglrYpsm12JXA5Zz6FTn1BYpIbn904G+Wf2lBRRllQGlJOQhZkaKqytr2k5tMiU1VPqA4Rxb09oCiCvpTIL+0V1f3QVx4HaTqrQLBO1okW8QyOj6qPj4Q+4ipjg1Euly+XOAeaOeaPw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DBBPR04MB7962.eurprd04.prod.outlook.com (2603:10a6:10:1e7::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27; Sun, 26 Feb
- 2023 13:07:38 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6134.025; Sun, 26 Feb 2023
- 13:07:38 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 3/3] ARM: dts: imx6sl: tolino-shine2hd: fix usbotg1 pinctrl
-Date:   Sun, 26 Feb 2023 21:12:14 +0800
-Message-Id: <20230226131214.278911-3-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230226131214.278911-1-peng.fan@oss.nxp.com>
-References: <20230226131214.278911-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR04CA0007.apcprd04.prod.outlook.com
- (2603:1096:4:197::19) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Sun, 26 Feb 2023 08:13:43 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3573610272
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:13:42 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m7so5120196lfj.8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:13:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=04CVCq5QDsSsRhbW4z4uIT/WR7uzqDfoUDjv5E0r+XE=;
+        b=JlUAT2RIAAGcMUotOo7foENJSQNz0aAzLQ7JI7d1AKy3Abw+klLl4+VfxqIwgSzRmt
+         OfbE4/H99S4/K3tIck2yrn+D/92rFPujJTVAh1Ns8t3OgjwI4Qn4zTUb2ubJU2dxHGCh
+         QUErcfDj2MTrhutjbpRzRtkuzCmXHx/je51ZgjrIBgHWJ0ANPynzmVGGE8QuK/dSsiOv
+         j6uSWLg9LI/UrdPY9sAiEI/FlZNnFQtjIJeRqSapY9MMkSX2bO9Y++9tQkp7ccr0dhC4
+         B5B+06AoY7War6i+MGjQBcDr8dxS7XXUQ53XextXKODDQJsatY3uwhIBFxpUVEAjVGYU
+         znJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=04CVCq5QDsSsRhbW4z4uIT/WR7uzqDfoUDjv5E0r+XE=;
+        b=37YZ4LR3gIVghLE0JqH2bKdt5EhZuwdKoJYMuGsuDPnu+juKjax/QviTWXaNmsO0OI
+         obiIrJZllZA5MhsFHLVGeJxTJuxI3y/pbpS2VxswmWZr+9eK+8XPaxTB3/r58zZiEnDj
+         0L31BspXt4tCqT3nl7KIcj4pjmDTl+zn/jiSgKbAbg3MZVnX9a6mwXtJJFdA4lWP6zMA
+         3ZuZ1PMxbzZO6DxPvlcgRCVw08EB1wt7cQQBRpf2T3QeDcM+fj818RwT3VwrrItHR1Wg
+         m0Pz6K+ndmOyN1fumsSQRM9WQS2HYKhHKwqGl6wuDP9mMswwMQfuD+RhQE8PSjT5TBhn
+         D5cA==
+X-Gm-Message-State: AO0yUKVWD0MK0y0IFcBlYYhz+9JGpWltE9jwyIBiV/scVFqjb/CQq5Mb
+        QIsxcXN4fyYE31QHFdkwei2f2A==
+X-Google-Smtp-Source: AK7set+BeKFRt03jsGvtd7WQ8AxrX4vGXFJalbx1uI46DSm15P8eB/PTAEtUpaG6Y2t21anZgAu8iQ==
+X-Received: by 2002:a19:c20c:0:b0:4db:26b1:ec4b with SMTP id l12-20020a19c20c000000b004db26b1ec4bmr6795399lfc.49.1677417220417;
+        Sun, 26 Feb 2023 05:13:40 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id q6-20020ac25146000000b004cc8196a308sm551952lfd.98.2023.02.26.05.13.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Feb 2023 05:13:40 -0800 (PST)
+Message-ID: <11c43f8b-eb17-50c0-5158-6c485e5be423@linaro.org>
+Date:   Sun, 26 Feb 2023 15:13:39 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DBBPR04MB7962:EE_
-X-MS-Office365-Filtering-Correlation-Id: 47d0aff5-c64d-4df7-f69c-08db17fa6f75
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3fNYic0FAIBnbGeSOeB11DbsUMOeXuHc/mq5Qpch3Lq3v13aqu8xR98QxuRJp0fLxT8XIHYfSyeDWjLioCEWfDUqb0Cm1LxmhEL6rv4kxMPcRIz/YcMbDPMLQVzRIcerozJknfNDT9s3wRIZdIS1xpQJAV1CmU4wMbldWnEgPeljUpQFCXdSVfZUOajB1EnuHWk6RW6j4af4X3ygxsxrT+FE4QWB7Ffo91RfutkfVw3dsVGOv//KBw1ND8c9u1E+dG8f/MbgM5IfvMo/OmDWNWEgC1dKsWgPs6o3OdFZrwwJsKPPzD3BZzstkOBx9sl95+j7u0hSgAGVX2qU/TW5pqe7LNqrKdt2LwjqrPkoqCXkxN7iTmT7dqe6FUf4nsdN3wDM7ri3ukC1JdmKFTiOco5iI6JBTROFHpw9Emw+IXHMtY+slYbqs7n30x67pW3/cxPJN8BucwFf6ZVKXLNZmQHUcFOxwK0/Fl1Y01CtR7ELy/ckt53Un4ts8NVqSJRrw62D3apGFTYiq3IorG/EpVQEhEbkpDEuY0Q64GHfkJG7pORTnT5QuaCvgdixpKrYcQQN+kcNs8nybC4LPGoJshCoX7+flIo5+Ucmt44Snkxf9b2F3AR2O8a1CzkHbyVBW3Zo4ARi+5t0ory3XykcyT85X1N3ohYLCuuf83CLad7uOqik7ZaPRIooGPZM4XRXM51VWJgeShXabnuR4ShZjDvFZpnfUuPbPHV/1gtT7hE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199018)(1076003)(26005)(186003)(41300700001)(6506007)(6512007)(6666004)(478600001)(8676002)(4326008)(66476007)(66556008)(66946007)(316002)(6486002)(52116002)(86362001)(4744005)(2616005)(8936002)(5660300002)(38100700002)(38350700002)(2906002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MzIDx7Z3aLwirwPEeFnPwvNw3HHQGCnO1GRkY6CR5dfmShZrOjG2PkDlK6OA?=
- =?us-ascii?Q?+HRn5m6b+si5VFVQLYaMH4LOxcKPvJRwM9lXBxQDU6JqgVhspZoO4LFNZZat?=
- =?us-ascii?Q?5CXoTlUwdeYoRKO/Nz3cQ757eUBi4jhUaSqx4dFvn4yZbG8SnAacMwYFFczo?=
- =?us-ascii?Q?zXzum9Irk2DRg5aJjsACCWvcnkYpQN7bWaQs3syrXC/ePVNDDMAEkMJ29DZe?=
- =?us-ascii?Q?gciqJD+wjsj9F+30+ZGdHq0et1U6I9qEM/7dqUnI2VHvbuLtOfn0mPeYN90g?=
- =?us-ascii?Q?5osDA45G8lWWE9yhmwc3pjMF2OKBKvviQGQi7Rcs47ka2FpYsveMYtph8Ytp?=
- =?us-ascii?Q?ZNjHFvPr+tBaz2s2TZxZKooaFKHnZnyGBT0axD5ZuiCkOe6opHvGIFUNOfoJ?=
- =?us-ascii?Q?QUkEgl+QQCSjezMZrE6jzoZ0yYY2pE8EzslJERqJTIOP5iiiolew/05SX6In?=
- =?us-ascii?Q?BtT3l79DM0DzvV2pso9qciQOBQUh8BigNsgijL30oCq6z4v9F0O9wp8S5q/M?=
- =?us-ascii?Q?DK369moNGueADq6SFefptdLCuiPJ8JeVJ5qST4oFqOh8zcOlPVZV4+mtHjTZ?=
- =?us-ascii?Q?DHLd1VJ/vyy3GDBRF1TsZ4EAcCLnPJK4gOIJiVfta2PkVkOZYnI3xbXLxBII?=
- =?us-ascii?Q?k6/1MSVgz4ri8FLuof1LdiBH3QkCc4Vxt2txF64dOWyvWrzfF5Likyn+NEfP?=
- =?us-ascii?Q?G0EWvJOmpvbOTlIKq6ZkMVdDKVow37qutYh9SrD3VL5/f0Tfmgdoz1dg2Azv?=
- =?us-ascii?Q?pxjIaUOAS0V77ePtGYwr0dCDjGBmt12+qVDBw93L49jcSCNGQg0dEPnq1a1p?=
- =?us-ascii?Q?Dux9uclBTX10H7jNZkLUCNwLF2hIpEZWJ4Jf7bT78z3wqeEo4nX59VTuy/Py?=
- =?us-ascii?Q?efPDbJYQgeLZ6o4ckqeZwDTIi4V48GmgXub3q2qgYPuOiUDlGdTOvVo6r93a?=
- =?us-ascii?Q?MSfCdx/kjbxjQ8ZJtB3Pd20P5cR93asLqqeFhTJmV6sP0Y6Zg1fuSCwuryzm?=
- =?us-ascii?Q?nenDSPbzJI/ZYwx73cOSmodJIeNSvm8LncEqnDQ1eRjl5xcFT9eJjUNES00p?=
- =?us-ascii?Q?V5Hgx1QxQXMlsrXSiikDGs/VdreD2rKJdism/MEgK0L4Cy2OtxwAMVblW+kc?=
- =?us-ascii?Q?0NUUBbc78yukZSxShH5Ci5XcZ8Iy6KgQwXpi8v6wjcr0HfhdBpPlb4af16Lu?=
- =?us-ascii?Q?8cJfa+r62hnmKzfa0UzAK2Hj87VvO2kGIBN6LJ1OywiaeGK/M7h59oe7SpYA?=
- =?us-ascii?Q?RAHR7bSUj04bHbRMK3x8Ae7a1KLA4DrfyO2uOfJ78JDgL3qLFa+nXC+nWYQQ?=
- =?us-ascii?Q?wjRXtsq39X3liwvvNCj0QFspjjIB6lhP7C7V8ui0hYaXPSRxQ5sITTEIcW2O?=
- =?us-ascii?Q?J5uafakFgVwGX+zAbxdtoHK+lKJLlFPkpPg73IqZFUPsAvtAO+rLo75PB+GP?=
- =?us-ascii?Q?UZOaDHTAt4tms7olheFt1K5+I5Jx5jymQnj3Fb7zi6hwoHYJntELi2lm1KOo?=
- =?us-ascii?Q?TR4RUFy5o+S0tNp2tkNr/P1cELlPHhOAAZmU2xcJvb1NYmB6YFjDuIYZHiWj?=
- =?us-ascii?Q?rok+ia4Rzfe5XHdCAmf6qJqSFEUVaPvmcQs0nJlL?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47d0aff5-c64d-4df7-f69c-08db17fa6f75
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2023 13:07:38.5577
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KTxteiznxTlvl0Chd1x67k+sDxzmshch/Fc+2zIUcHJGFWtTPWkRkTqVVrzaPoPL4Qweie+zNV22AfdVkLOwsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7962
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
+ <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
+ <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
+ <1b5afec9-454d-e1b9-0274-f0476edb4d21@quicinc.com>
+ <CAA8EJprowFyBMdW5QC2zG0gYUtxJ-hHXqhPfYTct2GzYJKLSHg@mail.gmail.com>
+ <7650f183-9860-9074-e5d5-539afdf41248@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <7650f183-9860-9074-e5d5-539afdf41248@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On 26/02/2023 02:16, Abhinav Kumar wrote:
+> Hi Dmitry
+> 
+> On 2/24/2023 3:57 PM, Dmitry Baryshkov wrote:
+>> On Sat, 25 Feb 2023 at 01:51, Kuogee Hsieh <quic_khsieh@quicinc.com> 
+>> wrote:
+>>>
+>>>
+>>> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
+>>>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
+>>>>> Add DSC helper functions based on DSC configuration profiles to 
+>>>>> produce
+>>>>> DSC related runtime parameters through both table look up and runtime
+>>>>> calculation to support DSC on DPU.
+>>>>>
+>>>>> There are 6 different DSC configuration profiles are supported
+>>>>> currently.
+>>>>> DSC configuration profiles are differiented by 5 keys, DSC version
+>>>>> (V1.1),
+>>>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
+>>>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
+>>>>>
+>>>>> Only DSC version V1.1 added and V1.2 will be added later.
+>>>>
+>>>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
+>>>> Also please check that they can be used for i915 or for amdgpu
+>>>> (ideally for both of them).
+>>>>
+>>>> I didn't check the tables against the standard (or against the current
+>>>> source code), will do that later.
+>>>>
+>>>>>
+>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>>> ---
+>>>>>    drivers/gpu/drm/msm/Makefile                   |   1 +
+>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c | 209
+>>>>> +++++++++++++++++++++++++
+>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h |  34 ++++
+>>>>>    3 files changed, 244 insertions(+)
+>>>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+>>>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/Makefile 
+>>>>> b/drivers/gpu/drm/msm/Makefile
+>>>>> index 7274c412..28cf52b 100644
+>>>>> --- a/drivers/gpu/drm/msm/Makefile
+>>>>> +++ b/drivers/gpu/drm/msm/Makefile
+>>>>> @@ -65,6 +65,7 @@ msm-$(CONFIG_DRM_MSM_DPU) += \
+>>>>>        disp/dpu1/dpu_hw_catalog.o \
+>>>>>        disp/dpu1/dpu_hw_ctl.o \
+>>>>>        disp/dpu1/dpu_hw_dsc.o \
+>>>>> +    disp/dpu1/dpu_dsc_helper.o \
+>>>>>        disp/dpu1/dpu_hw_interrupts.o \
+>>>>>        disp/dpu1/dpu_hw_intf.o \
+>>>>>        disp/dpu1/dpu_hw_lm.o \
+>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+>>>>> new file mode 100644
+>>>>> index 00000000..88207e9
+>>>>> --- /dev/null
+>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
+>>>>> @@ -0,0 +1,209 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>>> +/*
+>>>>> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights
+>>>>> reserved
+>>>>> + */
+>>>>> +
+>>>>> +#include <drm/display/drm_dsc_helper.h>
+>>>>> +#include "msm_drv.h"
+>>>>> +#include "dpu_kms.h"
+>>>>> +#include "dpu_hw_dsc.h"
+>>>>> +#include "dpu_dsc_helper.h"
+>>>>> +
+>>>>> +
+>>>>
+>>>> Extra empty line
+>>>>
+>>>>> +#define DPU_DSC_PPS_SIZE       128
+>>>>> +
+>>>>> +enum dpu_dsc_ratio_type {
+>>>>> +    DSC_V11_8BPC_8BPP,
+>>>>> +    DSC_V11_10BPC_8BPP,
+>>>>> +    DSC_V11_10BPC_10BPP,
+>>>>> +    DSC_V11_SCR1_8BPC_8BPP,
+>>>>> +    DSC_V11_SCR1_10BPC_8BPP,
+>>>>> +    DSC_V11_SCR1_10BPC_10BPP,
+>>>>> +    DSC_RATIO_TYPE_MAX
+>>>>> +};
+>>>>> +
+>>>>> +
+>>>>> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
+>>>>> +        0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
+>>>>> +        0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
+>>>>
+>>>> Weird indentation
+>>>>
+>>>>> +};
+>>>>> +
+>>>>> +/*
+>>>>> + * Rate control - Min QP values for each ratio type in
+>>>>> dpu_dsc_ratio_type
+>>>>> + */
+>>>>> +static char
+>>>>> dpu_dsc_rc_range_min_qp[DSC_RATIO_TYPE_MAX][DSC_NUM_BUF_RANGES] = {
+>>>>> +    /* DSC v1.1 */
+>>>>> +    {0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13},
+>>>>> +    {0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 17},
+>>>>> +    {0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
+>>>>> +    /* DSC v1.1 SCR and DSC v1.2 RGB 444 */
+>>>>
+>>>> What is SCR? Is there any reason to use older min/max Qp params
+>>>> instead of always using the ones from the VESA-DSC-1.1 standard?
+>>>
+>>> Standards change request, some vendors may use scr to work with their 
+>>> panel.
+>>>
+>>> These table value are provided by system team.
+>>
+>> So, what will happen if we use values from 1.2 standard (aka 1.1 SCR
+>> 1) with the older panel?
+>>
+> 
+> Standards change request means fixing errors/errata for the given 
+> standard. Those are typically released as a different spec.
+> 
+> So I referred the DSC 1.1 SCR spec, and it does have a few differences 
+> in the table compared to DSC 1.1 which will get into DSC 1.2.
+> 
+> Hence the table entries are same between DSC 1.1 SCR and DSC 1.2
+> 
+> You are right, ideally DSC 1.2 should be backwards compatible with DSC 
+> 1.1 in terms of the values (thats what the spec says too) but I am not 
+> sure if we can expect every panel/DP monitor to be forward compatible 
+> without any SW change because it might need some firmware update (for 
+> the panel) or SW update to support that especially during transitions of 
+> the spec revisions (SCR to be precise).
+> 
+> Typically we do below for DP monitors exactly for the same reason:
+> 
+> DSC_ver_to_use = min(what_we_support, what_DP_monitor_supports) and use 
+> that table.
+> 
+> For DSI panels, typically in the panel spec it should say whether the 
+> SCR version needs to be used because we have seen that for some panels ( 
+> I dont remember exactly which one ) based on which panel and which 
+> revision of the panel, it might not.
 
-usb@2184000: 'pinctrl-0' is a dependency of 'pinctrl-names'
+So, what happens if we use DSC 1.1 SCR (= DSC 1.2) values with older 
+panel? Does it result in the broken image?
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts | 1 +
- 1 file changed, 1 insertion(+)
+I'm asking here, because I think that these parameters tune the 
+_encoder_. The decoder should be able to handle different compressed 
+streams as long as values fit into the required 'profile'.
 
-diff --git a/arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts b/arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts
-index da1399057634..815119c12bd4 100644
---- a/arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts
-+++ b/arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts
-@@ -625,6 +625,7 @@ &usdhc3 {
- 
- &usbotg1 {
- 	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usbotg1>;
- 	disable-over-current;
- 	srp-disable;
- 	hnp-disable;
+> 
+> Thats why downstream started adding qcom,mdss-dsc-scr-version to the 
+> devicetree.
+> 
+>>>>> +    {0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 9, 12},
+>>>>> +    {0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 13, 16},
+>>>>> +    {0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
+>>
+>>
+
 -- 
-2.37.1
+With best wishes
+Dmitry
 
