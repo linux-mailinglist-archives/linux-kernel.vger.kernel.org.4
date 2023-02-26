@@ -2,162 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E976A34C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 23:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7645B6A34CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 23:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjBZWjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 17:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
+        id S229527AbjBZWpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 17:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjBZWjC (ORCPT
+        with ESMTP id S229379AbjBZWpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 17:39:02 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC486B1;
-        Sun, 26 Feb 2023 14:39:01 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id bg11so3889286oib.5;
-        Sun, 26 Feb 2023 14:39:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VzpBwp3oShh8wVDIYVSkwUb32WyiTPO4uenKxBnQUrA=;
-        b=A+J1nW0IPmauykGlF+vygA8nAyR9IwhAHFNuoA/AJ5Rn5npaREFBktMdPOzoP7Tuk9
-         JBBXxXdVQR23f2XNXzMd6sVbtAZl0y5MQmKYVDIuLyqdOfsNn+lnvYN3eA/NF2Y7UA6c
-         CJG9aphHk8uPqQXqP7kAtbzwnov4DfrFZ98Wr95YTwwMZsARDVbnDrbWEfnPxfjmNMU2
-         ukhStosgdkiUo8PwUyPBkwzdd711xvDA2vQHmRiTvS2FTuv1Tpr5RmFSF0NyIRbGeJNO
-         CTSz9LDb/bjAIGSrtomyD3POjQw4F0rrHt/GpHVvdJD4ad28RmzzXXMpzwc44A+W5EJd
-         1w2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VzpBwp3oShh8wVDIYVSkwUb32WyiTPO4uenKxBnQUrA=;
-        b=azJYm85q6MFHqk+kumGbAwYCBQQGqqkht8/XJ/5XTabOY6lWHnDIU9mZsYK9pRQRph
-         ze+C2e+k55xqymjsR7DayL6SwtcSYbbI9/PVgCsWOJUJwXNIShe4vBJ0vj87xbGpbBAg
-         zRk8+6eVYKqMDpYhZHaP59Vx5zaYapwwYJfDpHW3oKsjvd7+mbtRdiVVfpZE7pG3YEEj
-         QAfRpVU8Nj3iyqa9n8EYGyQtP88kcPN5UK9Q1lXOAgp2YsAPJ0O4Cn/c4Pgc6So+z6PA
-         RhYbHuTJcakvLykIrGgQ/h0dGfAswtKXNa19GRojryP7Nx+5N39GNX/6Jnrp31EFlLyQ
-         /m8g==
-X-Gm-Message-State: AO0yUKX+7iP+16UxVDIT4eaqLvjrZqJiuAgLxBLXIHiPqFwE9XYfOIbw
-        J/JVv1PPCXplBmkOcIZ+Ro4=
-X-Google-Smtp-Source: AK7set+tmjzbD3ss2mi+MOQD7jFlN1kNftoFakoV2t7t9oBU7H3W8FkZ6zbUkyS/eF0k6gj4DF3qeQ==
-X-Received: by 2002:a05:6808:118:b0:383:eaea:7dcb with SMTP id b24-20020a056808011800b00383eaea7dcbmr172358oie.15.1677451140318;
-        Sun, 26 Feb 2023 14:39:00 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:319d:ae28:d693:d868? ([2600:1700:2442:6db0:319d:ae28:d693:d868])
-        by smtp.gmail.com with ESMTPSA id ec12-20020a056808638c00b00383e12bedebsm2434628oib.9.2023.02.26.14.38.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 14:38:59 -0800 (PST)
-Message-ID: <954cc40b-c484-5ba9-9039-eed3c1c722c3@gmail.com>
-Date:   Sun, 26 Feb 2023 16:38:58 -0600
+        Sun, 26 Feb 2023 17:45:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BD5CC0E;
+        Sun, 26 Feb 2023 14:45:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=qWnDKBNh35K+ganeqMEvc7orr2tqqQPr3nUxaAl0qYs=; b=edHC6/cA8EGZHvetsmv5VVqAhR
+        RKBBjjSeCp1k5i858eNYHM1xgAsVD37Y/HBvxByEDpbZZjbxzBOOgxLTK/xKmoUIKlGmtht7TNe49
+        N0Ch4UpHLSryJe8P57LbRA4Ch/TrwrouDcikCuzLydUBAWflO4YGYMXTij+Nn8a38B2Yt4rwxYGRW
+        aXcYPDxSvijS6l+6hY57n4eIKSuFbWfXsHgK8tGpGJLyelIajyrZXUzj9QyOSCtT2oD8jIdY6fiLb
+        qGo/XY/WmTnRigAbz1p6iQj0ZkNDCV3PLY1ZmFlNTgTAnPzS7FF7eQeqWbg4VbpDzEsKwdFBwv6JZ
+        L25wy4Sg==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWPld-007wJD-AX; Sun, 26 Feb 2023 22:45:17 +0000
+Message-ID: <c32f8b2b-7137-c15e-9786-601b94a4ada4@infradead.org>
+Date:   Sun, 26 Feb 2023 14:45:15 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V7 0/3] Generate device tree node for pci devices
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] Revert "tty: serial: fsl_lpuart: adjust
+ SERIAL_FSL_LPUART_CONSOLE config dependency"
 Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org, helgaas@kernel.org
-Cc:     clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
+To:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, sherry.sun@nxp.com, jindong.yue@nxp.com
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230226173846.236691-1-trix@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230226173846.236691-1-trix@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément, Hi Lizhi,
 
-On 1/19/23 21:02, Lizhi Hou wrote:
-> This patch series introduces OF overlay support for PCI devices which
-> primarily addresses two use cases. First, it provides a data driven method
-> to describe hardware peripherals that are present in a PCI endpoint and
-> hence can be accessed by the PCI host. Second, it allows reuse of a OF
-> compatible driver -- often used in SoC platforms -- in a PCI host based
-> system.
+
+On 2/26/23 09:38, Tom Rix wrote:
+> This reverts commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30.
 > 
-> There are 2 series devices rely on this patch:
+> This results in a link error of
 > 
->   1) Xilinx Alveo Accelerator cards (FPGA based device)
->   2) Microchip LAN9662 Ethernet Controller
+> ld: drivers/tty/serial/earlycon.o: in function `parse_options':
+> drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
 > 
-
-Digging back through some history:
-
->      Please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
-
-(I am selectively pulling two fragments, see the above link for the
-full email.)
-
-Includes the following:
-
-   A driver using this support was added and can be seen at [3]. This
-   driver embeds a builtin overlay and applies it to the live tree using
-   of_overlay_fdt_apply_to_node(). An interrupt driver is also included and
-
-and
-
-   This series was tested on a x86 kernel using CONFIG_OF under a virtual
-   machine using PCI passthrough.
-
-   Link: [1] https://lore.kernel.org/lkml/YhQHqDJvahgriDZK@lunn.ch/t/
-   Link: [2] https://lore.kernel.org/lkml/20220408174841.34458529@fixe.home/T/
-   Link: [3] https://github.com/clementleger/linux/tree/lan966x/of_support
-
-Following link 3 to see how the driver implemented the concept, I arrived
-at a git tree, with the commit be42efa "mfd: lan966x: add pci driver",
-and have been looking at the code there.
-
-Clément, is this still the best example of a driver implementation that
-would use the framework proposed in the "[PATCH V7 0/3] Generate device
-tree node for pci devices" patch series? And this is the driver for the
-device listed as item 2 above "2) Microchip LAN9662 Ethernet Controller"?
-
--Frank
-
+> When the config is in this state
 > 
-> Normally, the PCI core discovers PCI devices and their BARs using the
-> PCI enumeration process. However, the process does not provide a way to
-> discover the hardware peripherals that are present in a PCI device, and
-> which can be accessed through the PCI BARs. Also, the enumeration process
-> does not provide a way to associate MSI-X vectors of a PCI device with the
-> hardware peripherals that are present in the device. PCI device drivers
-> often use header files to describe the hardware peripherals and their
-> resources as there is no standard data driven way to do so. This patch
-> series proposes to use flattened device tree blob to describe the
-> peripherals in a data driven way. Based on previous discussion, using
-> device tree overlay is the best way to unflatten the blob and populate
-> platform devices. To use device tree overlay, there are three obvious
-> problems that need to be resolved.
+> CONFIG_SERIAL_CORE=m
+> CONFIG_SERIAL_CORE_CONSOLE=y
+> CONFIG_SERIAL_EARLYCON=y
+> CONFIG_SERIAL_FSL_LPUART=m
+> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
 > 
-> First, we need to create a base tree for non-DT system such as x86_64. A
-> patch series has been submitted for this:
-> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
-> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
-> 
-> Second, a device tree node corresponding to the PCI endpoint is required
-> for overlaying the flattened device tree blob for that PCI endpoint.
-> Because PCI is a self-discoverable bus, a device tree node is usually not
-> created for PCI devices. This series adds support to generate a device
-> tree node for a PCI device which advertises itself using PCI quirks
-> infrastructure.
-> 
-> Third, we need to generate device tree nodes for PCI bridges since a child
-> PCI endpoint may choose to have a device tree node created.
-> 
-> This patch series is made up of three patches.
+> Fixes: 5779a072c248 ("tty: serial: fsl_lpuart: adjust SERIAL_FSL_LPUART_CONSOLE config dependency")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-< snip >
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
+Thanks.
+
+> ---
+>  drivers/tty/serial/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 625358f44419..0072892ca7fc 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
+>  
+>  config SERIAL_FSL_LPUART_CONSOLE
+>  	bool "Console on Freescale lpuart serial port"
+> -	depends on SERIAL_FSL_LPUART
+> +	depends on SERIAL_FSL_LPUART=y
+>  	select SERIAL_CORE_CONSOLE
+>  	select SERIAL_EARLYCON
+>  	help
+
+-- 
+~Randy
