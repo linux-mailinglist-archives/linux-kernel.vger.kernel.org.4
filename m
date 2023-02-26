@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6794D6A33FA
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 21:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C64176A3403
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 21:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjBZUiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 15:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
+        id S229901AbjBZUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 15:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjBZUiV (ORCPT
+        with ESMTP id S229898AbjBZUkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 15:38:21 -0500
+        Sun, 26 Feb 2023 15:40:14 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949786EAA;
-        Sun, 26 Feb 2023 12:38:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3D8BDDC;
+        Sun, 26 Feb 2023 12:40:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECCCCB80B86;
-        Sun, 26 Feb 2023 20:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 418A9C433D2;
-        Sun, 26 Feb 2023 20:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1677443895;
-        bh=FqOwZ1KiLarzLNaFojBpikgn+mbiZr/mALVgv4DFdxg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YWEJ8gUmujjdLDytk9zdHMjmjeElCaeHmxsa12Koi3PGWUd2pB3DTQqVapa0ss+rQ
-         h1p412xVL07fLn/3Hcm3vLAX+7psysGjtNt9ABHd7ZUKGBLPykcXskslx3GP/gIwCN
-         y4g1uH+SD8bOvR1QkjuQntUt06Y94C/t2+72WYvY=
-Date:   Sun, 26 Feb 2023 12:38:14 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com>
-Cc:     glider@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org,
-        Nicolas Pitre <nico@fluxnic.net>
-Subject: Re: [syzbot] [fs?] [mm?] KMSAN: uninit-value in ondemand_readahead
-Message-Id: <20230226123814.1d9afb8c3de438155593c378@linux-foundation.org>
-In-Reply-To: <0000000000008f74e905f56df987@google.com>
-References: <0000000000007dcc0b05e91943c2@google.com>
-        <0000000000008f74e905f56df987@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43976B80B4A;
+        Sun, 26 Feb 2023 20:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9B05C433D2;
+        Sun, 26 Feb 2023 20:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677444013;
+        bh=yBJttvv33ZQb5C0Xe6rjk6BKXNL3j5AM7R6vuvNLIyg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=DTOpKPYW4Nx2YsdIqJqf1wcx0WwnFdFIWcNDGZf20mzkJgYR2cjZnGMhswslyvJKK
+         zcxL3nFGGCtsUIJ47zK3DS3zGDvkoiv39mXyxcykqdeu8543ETZy6X5q9E3ndnGG8j
+         AQUsNba4QJ9+hgK0rzxvtWOAAGNy07GjYjKv2NYJkrSXfI4UTXUgP8H8h0GAimI53o
+         z83fWlLiKdmAzAm66lvi1IlNuTlIkInxoYdu5kkwt3spR5/qhZJfZhH1gNABsCBVWR
+         pJl9m5ay9Vt04V23gTXSqMev7XNeCWVcyH8TenYtaFBiHA6wd0h2B5ASrLNG4tOB3E
+         T2wrMKHRAnkOA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1F74C41676;
+        Sun, 26 Feb 2023 20:40:12 +0000 (UTC)
+Subject: Re: [GIT PULL for v6.3-rc1] media updates
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230226114551.68480d44@coco.lan>
+References: <20230226114551.68480d44@coco.lan>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230226114551.68480d44@coco.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.3-1
+X-PR-Tracked-Commit-Id: 3e62aba8284de0994a669d07983299242e68fe72
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4b8c673b761e74add4fd185d806ac16c9b40158f
+Message-Id: <167744401282.16333.2884325415530923772.pr-tracker-bot@kernel.org>
+Date:   Sun, 26 Feb 2023 20:40:12 +0000
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,72 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 00:32:50 -0800 syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com> wrote:
+The pull request you sent on Sun, 26 Feb 2023 11:45:51 +0100:
 
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    97e36f4aa06f Revert "sched/core: kmsan: do not instrument ..
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10e46944c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=46c642641b9ef616
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8ce7f8308d91e6b8bbe2
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b8650c80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a22f2cc80000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/9931a9627dc6/disk-97e36f4a.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/1aafdb2fd6dc/vmlinux-97e36f4a.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/90df5872c7ff/bzImage-97e36f4a.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/ea75a01297dd/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com
-> 
-> loop0: detected capacity change from 0 to 16
-> =====================================================
-> BUG: KMSAN: uninit-value in ondemand_readahead+0xddf/0x1720 mm/readahead.c:596
->  ondemand_readahead+0xddf/0x1720 mm/readahead.c:596
->  page_cache_sync_ra+0x72b/0x760 mm/readahead.c:709
->  page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
->  cramfs_blkdev_read fs/cramfs/inode.c:217 [inline]
->  cramfs_read+0x611/0x1280 fs/cramfs/inode.c:278
->  cramfs_lookup+0x1b8/0x870 fs/cramfs/inode.c:767
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.3-1
 
-Thanks.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4b8c673b761e74add4fd185d806ac16c9b40158f
 
-file_ra_state_init() says "Assumes that the caller has memset *ra to
-zero".  This should fix:
+Thank you!
 
-
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: fs/cramfs/inode.c: initialize file_ra_state
-Date: Sun Feb 26 12:31:11 PM PST 2023
-
-file_ra_state_init() assumes that the file_ra_state has been zeroed out. 
-Fixes a KMSAN used-unintialized issue (at least).
-
-Fixes: cf948cbc35e80 ("cramfs: read_mapping_page() is synchronous")
-Reported-by: syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com>
-  Link: https://lkml.kernel.org/r/0000000000008f74e905f56df987@google.com
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Nicolas Pitre <nico@fluxnic.net>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
-
---- a/fs/cramfs/inode.c~a
-+++ b/fs/cramfs/inode.c
-@@ -183,7 +183,7 @@ static void *cramfs_blkdev_read(struct super_block *sb, unsigned int offset,
- 				unsigned int len)
- {
- 	struct address_space *mapping = sb->s_bdev->bd_inode->i_mapping;
--	struct file_ra_state ra;
-+	struct file_ra_state ra = {};
- 	struct page *pages[BLKS_PER_BUF];
- 	unsigned i, blocknr, buffer;
- 	unsigned long devsize;
-_
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
