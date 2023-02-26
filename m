@@ -2,207 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973126A2CD9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265E16A2CE1
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjBZAmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 19:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S229668AbjBZArb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 19:47:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBZAmX (ORCPT
+        with ESMTP id S229504AbjBZAr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 19:42:23 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7004158BF;
-        Sat, 25 Feb 2023 16:42:19 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id y184so2567158oiy.8;
-        Sat, 25 Feb 2023 16:42:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vqR8kMH8N8ZUldMBakO+fuxfrqtewrnxRblVc35UfD8=;
-        b=D73s6uhirVM43CmtpxoNBPU0reDdA+KFDsxMwcsetcWH8+AmgkOwQSkaBVktCTEuZQ
-         cWAPPmpELJN0ns7QhgKYYa8FtfxXGhDlAJGWdg8AYmvgIvdk8hn/AKabl5+mFPzzeMvj
-         igQCmonfOG0k0ErG/FlHsrBz9VOR6h1m9n4EVptqKrAt6cUgrDk8AULk4TW0ouYoIbSP
-         Pwpudim+4D2yEWAm/DXKPcBONhd59a9FwH2zF+MGDAyM+uc0bb9EsHWmLkAxOnu5Iu7L
-         nHNYD006BaqkrXtJTRDSpnJr1vNpmh2Dz+PWhosyWQUE7diTDtVoNc/b5WJq0pewq3//
-         k9bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vqR8kMH8N8ZUldMBakO+fuxfrqtewrnxRblVc35UfD8=;
-        b=nZ8O8ooRD8hxJbtAUKRDYBmCI60M5yGS1+jLWS7fTG7Ovq3dsSgWtFTjr0TliFMalL
-         u58+Jj/r7UOAUXh6p8R7E3rPrEjt3rvY7TMxhUuMX5lVMEyzWQAvMadMK5+jWKqoZUK6
-         OfGbSbXYtaASEaJizvsdNvLf3c55d7eUfZHII/ajXxXMBBxm7YGqMl8BDUi4gfSEkT7L
-         2DLKNeW8m9gytc6ynDBH6CXmi1VNLoRysR6MJyaTgwAS7eIbaQmUk1+JDbtldoRw4C8/
-         f4pR246oprogeyr5ez2CPlSDriMgiWbrbVORcphFhkkcOzyNPYSBNXoPuY+OBcn0Mvf8
-         NNKw==
-X-Gm-Message-State: AO0yUKVPDl06FvmmVP7IRX2yLYGB45ZYlwoTeBg7CLP0yaQtnWBwYyKW
-        wX0RZOUmKQfBz8Re7Ckm5zU=
-X-Google-Smtp-Source: AK7set+e5+VTpITDEr4HeSf1IjPvczLluTV+P6OjRl87fjfm18XAEB2Qe4hHrmzbQ5RMdIbkpOEGBA==
-X-Received: by 2002:a05:6808:2a09:b0:37f:a72c:257e with SMTP id ez9-20020a0568082a0900b0037fa72c257emr7118772oib.14.1677372138764;
-        Sat, 25 Feb 2023 16:42:18 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i5-20020acaea05000000b00383b8084203sm1431047oih.26.2023.02.25.16.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Feb 2023 16:42:17 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <996a23fa-5ddf-4562-8675-5caeecc6368f@roeck-us.net>
-Date:   Sat, 25 Feb 2023 16:42:15 -0800
+        Sat, 25 Feb 2023 19:47:29 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E959FF17;
+        Sat, 25 Feb 2023 16:47:28 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31Q0ePVY006275;
+        Sun, 26 Feb 2023 00:47:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=fc5KU9u4VAdx6JbXdhxWSDZuULBVAGHDaJBhGMwKtYc=;
+ b=aObmjX3vItKwrgDZoVAtWNggK/FHlpl1D+bGzbYC7GngVBKWNUcZHVigpEC3CmkD1MAO
+ y+yYwSp4oXArvrxuvfCZFStE5wOKc3z6EOl/WqqW70eJl6vadGaV5kWUFh3NJu4Usr+6
+ XavcGPnAVe2JrGtwK754NKEFoDRXr43qxE8lzM8ikLCy57ktoGwdHRp68mDt5pSiuOOV
+ N5blsTjcFKF1g0HkTjLfVdNwwQ3eBLiiKYJvcP9dwnYsJataNfXaSb4x9sUoK2XRfGdH
+ oRKVuO2TF3YR3xq53zRElcjhSN03fHRgdSimSHryFxHbuIxcYHZIRpMBJMN9n/3THjwT gw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny9bf9pc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Feb 2023 00:47:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31Q0lCcv004526
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Feb 2023 00:47:12 GMT
+Received: from [10.110.89.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sat, 25 Feb
+ 2023 16:47:11 -0800
+Message-ID: <3e114c0f-a042-6801-69bf-67436cb2a448@quicinc.com>
+Date:   Sat, 25 Feb 2023 16:47:10 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
 Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220428205116.861003-1-yury.norov@gmail.com>
- <20220428205116.861003-4-yury.norov@gmail.com>
- <20230225184702.GA3587246@roeck-us.net> <Y/qhL8kSzzhMm+tO@yury-laptop>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
-In-Reply-To: <Y/qhL8kSzzhMm+tO@yury-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
+References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
+ <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
+ <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
+ <741be2a3-0208-2f40-eedf-d439c4e6795b@quicinc.com>
+ <F8A4FC18-C64E-4011-BC08-18EB3B95A357@linaro.org>
+ <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
+ <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
+ <f0dfba42-4674-3748-bf5d-39f6e1745f67@quicinc.com>
+ <f1a6ee82-9502-7ea5-fe48-f296fc7df497@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <f1a6ee82-9502-7ea5-fe48-f296fc7df497@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aTnFXpqCSD9tgUGPcdN8oSAkzEJjgf5r
+X-Proofpoint-ORIG-GUID: aTnFXpqCSD9tgUGPcdN8oSAkzEJjgf5r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-25_14,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302260003
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/23 16:04, Yury Norov wrote:
-> On Sat, Feb 25, 2023 at 10:47:02AM -0800, Guenter Roeck wrote:
->> Hi,
+Hi Dmitry
+
+On 2/25/2023 7:23 AM, Dmitry Baryshkov wrote:
+> On 25/02/2023 02:36, Abhinav Kumar wrote:
 >>
->> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
->>> Test newly added bitmap_{from,to}_arr64() functions similarly to
->>> already existing bitmap_{from,to}_arr32() tests.
+>>
+>> On 2/24/2023 3:53 PM, Dmitry Baryshkov wrote:
+>>> On Sat, 25 Feb 2023 at 00:26, Abhinav Kumar 
+>>> <quic_abhinavk@quicinc.com> wrote:
+>>>> On 2/24/2023 1:36 PM, Dmitry Baryshkov wrote:
+>>>>> 24 февраля 2023 г. 23:23:03 GMT+02:00, Abhinav Kumar 
+>>>>> <quic_abhinavk@quicinc.com> пишет:
+>>>>>> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
+>>>>>>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
+>>>>>>>> Add DSC helper functions based on DSC configuration profiles to 
+>>>>>>>> produce
+>>>>>>>> DSC related runtime parameters through both table look up and 
+>>>>>>>> runtime
+>>>>>>>> calculation to support DSC on DPU.
+>>>>>>>>
+>>>>>>>> There are 6 different DSC configuration profiles are supported 
+>>>>>>>> currently.
+>>>>>>>> DSC configuration profiles are differiented by 5 keys, DSC 
+>>>>>>>> version (V1.1),
+>>>>>>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
+>>>>>>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
+>>>>>>>>
+>>>>>>>> Only DSC version V1.1 added and V1.2 will be added later.
+>>>>>>>
+>>>>>>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
+>>>>>>> Also please check that they can be used for i915 or for amdgpu 
+>>>>>>> (ideally for both of them).
+>>>>>>>
+>>>>>>
+>>>>>> No, it cannot. So each DSC encoder parameter is calculated based 
+>>>>>> on the HW core which is being used.
+>>>>>>
+>>>>>> They all get packed to the same DSC structure which is the struct 
+>>>>>> drm_dsc_config but the way the parameters are computed is specific 
+>>>>>> to the HW.
+>>>>>>
+>>>>>> This DPU file helper still uses the drm_dsc_helper's 
+>>>>>> drm_dsc_compute_rc_parameters() like all other vendors do but the 
+>>>>>> parameters themselves are very HW specific and belong to each 
+>>>>>> vendor's dir.
+>>>>>>
+>>>>>> This is not unique to MSM.
+>>>>>>
+>>>>>> Lets take a few other examples:
+>>>>>>
+>>>>>> AMD: 
+>>>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c#L165 
+>>>>>>
+>>>>>>
+>>>>>> i915: 
+>>>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L379 
+>>>>>>
+>>>>>
+>>>>> I checked several values here. Intel driver defines more bpc/bpp 
+>>>>> combinations, but the ones which are defined in intel_vdsc and in 
+>>>>> this patch seem to match. If there are major differences there, 
+>>>>> please point me to the exact case.
+>>>>>
+>>>>> I remember that AMD driver might have different values.
+>>>>>
+>>>>
+>>>> Some values in the rc_params table do match. But the rc_buf_thresh[] 
+>>>> doesnt.
 >>>
->>> Signed-off-by: Yury Norov <yury.norov@gmail.com>
->>
->> Ever since this test is in the tree, several of my boot tests show
->> lots of messages such as
->>
->> test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
->> test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
->> test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
->> ...
->> test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
->> test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
-> 
-> This may be a real problem. Can you share what's the system is? What's
-> endianness and register length?
-> 
-
-https://kerneltests.org/builders/qemu-arm-v7-master/builds/532/steps/qemubuildcommand/logs/stdio
-https://kerneltests.org/builders/qemu-arm-next/builds/2086/steps/qemubuildcommand/logs/stdio
-
-are examples from different arm machines.
-
-https://kerneltests.org/builders/qemu-xtensa-master/builds/2178/steps/qemubuildcommand/logs/stdio
-
-is an example from xtensa.
-
-https://kerneltests.org/builders/qemu-x86-master/builds/2248/steps/qemubuildcommand/logs/stdio
-
-is an example from a 32-bit x86 test.
-
-I am sure there are others; I only notice the messages if there is some other problem,
-and came to believe that they must be noise because it happens across several
-architectures and because it claimed at the end that all tests passed.
-
-Just to confirm, I ran a test with big and little endian mips machines.
-The problem is only seen with the little endian 32-bit machine. It is not
-seen with the 32-bit big endian machine, and it is not seen with any of
-the 64-bit machines (big and little endian).
-
-Guenter
-
-> + Alexander Lobakin, the author of the exact subtest.
->   
->> but then:
->>
->> test_bitmap: all 6550 tests passed
-> 
-> It's because corresponding error path doesn't increment failed_tests
-> counter. I'll send a fix shortly.
-> 
->>
->> The message suggests an error, given that it is displayed with pr_err,
->> but the summary suggests otherwise.
->>
->> Is the message just noise, or is there a problem ?
->>
->> Thanks,
->> Guenter
->>
->>> ---
->>>   lib/test_bitmap.c | 25 +++++++++++++++++++++++++
->>>   1 file changed, 25 insertions(+)
+>>> Because later they do:
 >>>
->>> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
->>> index 0c82f07f74fc..d5923a640457 100644
->>> --- a/lib/test_bitmap.c
->>> +++ b/lib/test_bitmap.c
->>> @@ -585,6 +585,30 @@ static void __init test_bitmap_arr32(void)
->>>   	}
->>>   }
->>>   
->>> +static void __init test_bitmap_arr64(void)
->>> +{
->>> +	unsigned int nbits, next_bit;
->>> +	u64 arr[EXP1_IN_BITS / 64];
->>> +	DECLARE_BITMAP(bmap2, EXP1_IN_BITS);
->>> +
->>> +	memset(arr, 0xa5, sizeof(arr));
->>> +
->>> +	for (nbits = 0; nbits < EXP1_IN_BITS; ++nbits) {
->>> +		memset(bmap2, 0xff, sizeof(arr));
->>> +		bitmap_to_arr64(arr, exp1, nbits);
->>> +		bitmap_from_arr64(bmap2, arr, nbits);
->>> +		expect_eq_bitmap(bmap2, exp1, nbits);
->>> +
->>> +		next_bit = find_next_bit(bmap2, round_up(nbits, BITS_PER_LONG), nbits);
->>> +		if (next_bit < round_up(nbits, BITS_PER_LONG))
->>> +			pr_err("bitmap_copy_arr64(nbits == %d:"
->>> +				" tail is not safely cleared: %d\n", nbits, next_bit);
->>> +
->>> +		if (nbits < EXP1_IN_BITS - 64)
->>> +			expect_eq_uint(arr[DIV_ROUND_UP(nbits, 64)], 0xa5a5a5a5);
->>> +	}
->>> +}
->>> +
->>>   static void noinline __init test_mem_optimisations(void)
->>>   {
->>>   	DECLARE_BITMAP(bmap1, 1024);
->>> @@ -852,6 +876,7 @@ static void __init selftest(void)
->>>   	test_copy();
->>>   	test_replace();
->>>   	test_bitmap_arr32();
->>> +	test_bitmap_arr64();
->>>   	test_bitmap_parse();
->>>   	test_bitmap_parselist();
->>>   	test_bitmap_printlist();
->>> -- 
->>> 2.32.0
+>>> vdsc_cfg->rc_buf_thresh[i] = rc_buf_thresh[i] >> 6;
 >>>
+>>>>
+>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L40 
+>>>>
+>>>>
+>>>> Vs
+>>>>
+>>>> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
+>>>> +               0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
+>>>> +               0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
+>>>> +};
+>>>
+>>> I'd prefer to have 896, 1792, etc. here, as those values come from the
+>>> standard. As it's done in the Intel driver.
+>>>
+>>
+>> Got it, thanks
+>>
+>>>> I dont know the AMD calculation very well to say that moving this to 
+>>>> the
+>>>> helper is going to help.
+>>>
+>>> Those calculations correspond (more or less) at the first glance to
+>>> what intel does for their newer generations. I think that's not our
+>>> problem for now.
+>>>
+>>
+>> Well, we have to figure out if each value matches and if each of them 
+>> come from the spec for us and i915 and from which section. So it is 
+>> unfortunately our problem.
+> 
+> Otherwise it will have to be handled by Marijn, me or anybody else 
+> wanting to hack up the DSC code. Or by anybody adding DSC support to the 
+> next platform and having to figure out the difference between i915, msm 
+> and their platform.
+> 
 
+Yes, I wonder why the same doubt didn't arise when the other vendors 
+added their support both from other maintainers and others.
+
+Which makes me think that like I wrote in my previous response, these 
+are "recommended" values in the spec but its not mandatory.
+
+Moving this to the drm_dsc_helper is generalizing the tables and not 
+giving room for the vendors to customize even if they want to (which the 
+spec does allow).
+
+So if this has any merit and if you or Marijn would like to take it up, 
+go for it. We would do the same thing as either of you would have to in 
+terms of figuring out the difference between msm and the i915 code.
+
+This is not a generic API we are trying to put in a helper, these are 
+hard-coded tables so there is a difference between looking at these Vs 
+looking at some common code which can move to the core.
+
+>>
+>>>>
+>>>> Also, i think its too risky to change other drivers to use whatever 
+>>>> math
+>>>> we put in the drm_dsc_helper to compute thr RC params because their 
+>>>> code
+>>>> might be computing and using this tables differently.
+>>>>
+>>>> Its too much ownership for MSM developers to move this to 
+>>>> drm_dsc_helper
+>>>> and own that as it might cause breakage of basic DSC even if some 
+>>>> values
+>>>> are repeated.
+>>>
+>>> It's time to stop thinking about ownership and start thinking about
+>>> shared code. We already have two instances of DSC tables. I don't
+>>> think having a third instance, which is a subset of an existing
+>>> dataset, would be beneficial to anybody.
+>>> AMD has complicated code which supports half-bit bpp and calculates
+>>> some of the parameters. But sharing data with the i915 driver is
+>>> straightforward.
+>>>
+>>
+>> Sorry, but I would like to get an ack from i915 folks if this is going
+>> to be useful to them if we move this to helper because we have to look 
+>> at every table. Not just one.
+> 
+> Added i915 maintainers to the CC list for them to be able to answer.
+> 
+
+Thanks, lets wait to hear from them about where finally these tables 
+should go but thats can be taken up as a separate effort too.
+
+>>
+>> Also, this is just 1.1, we will add more tables for 1.2. So we will 
+>> have to end up changing both 1.1 and 1.2 tables as they are different 
+>> for QC.
+> 
+> I haven't heard back from Kuogee about the possible causes of using 
+> rc/qp values from 1.2 even for 1.1 panels. Maybe you can comment on 
+> that? In other words, can we always stick to the values from 1.2 
+> standard? What will be the drawback?
+> 
+> Otherwise, we'd have to have two different sets of values, like you do 
+> in your vendor driver.
+> 
+
+I have responded to this in the other email.
+
+All this being said, even if the rc tables move the drm_dsc_helper 
+either now or later on, we will still need MSM specific calculations for 
+many of the other encoder parameters (which are again either hard-coded 
+or calculated). Please refer to the sde_dsc_populate_dsc_config() 
+downstream. And yes, you will not find those in the DP spec directly.
+
+So we will still need a dsc helper for MSM calculations to be common for 
+DSI / DP irrespective of where the tables go.
+
+So, lets finalize that first.
+
+>> So if you look at the DSC spec from where these tables have come it says
+>>
+>> "Common Recommended Rate Control-Related Parameter Values"
+>>
+>> Its Recommended but its NOT mandated by the spec to follow every value 
+>> to the dot. I have confirmed this point with more folks.
+>>
+>> So, if someone from i915 this is useful and safe to move their code to 
+>> the tables, we can try it.
+>>
+>>>> I would prefer to keep it in the msm code but in a top level directory
+>>>> so that we dont have to make DSI dependent on DPU.
+>>>
+>>> I haven't changed my opinion. Please move relevant i915's code to
+>>> helpers, verify data against standards and reuse it.
+>>>
+>>
+>>
+>>
+>>>>>> All vendors compute the values differently and eventually call 
+>>>>>> drm_dsc_compute_rc_parameters()
+>>>>>>
+>>>>>>> I didn't check the tables against the standard (or against the 
+>>>>>>> current source code), will do that later.
+>>>
+> 
