@@ -2,159 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ED86A322B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 16:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBD76A329A
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjBZPZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 10:25:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S229554AbjBZQCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 11:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjBZPZH (ORCPT
+        with ESMTP id S229486AbjBZQCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 10:25:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFB1FF1E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:17:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677424587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zWuCETYlGm5nXIPBM19Dg25vOC37BZrnNuNH9S7qgEM=;
-        b=ioCsOvSjaP43VP7dXev/O00ALB9NeBNzChAWBTc/EELR3GEc3nkiCyn/hO/ipWOmaMShWZ
-        I8OKr4//PP9iOIDbQveQ/EbVDfzWKImRjDx3clWBcEuIo7R30nPGq7WWsQJpBUXX7nSTuw
-        j2P78NnzhIQsDRDAasriZEuBIKRNjPw=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-507-D62xYjmuNxKKZpp49_TjIA-1; Sun, 26 Feb 2023 10:02:11 -0500
-X-MC-Unique: D62xYjmuNxKKZpp49_TjIA-1
-Received: by mail-qv1-f69.google.com with SMTP id u18-20020a0cec92000000b0056ea549d728so2099017qvo.10
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:02:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWuCETYlGm5nXIPBM19Dg25vOC37BZrnNuNH9S7qgEM=;
-        b=SNE8zDpBoASa13TCP3KbLrz7UiFn61A3pEnBtnzA/xFxv50a8hsK+CxgiUe1c0AaZR
-         j8dAWX7RSWKvbam80AN1oKdlRvSYiIV9queqLi932q0B9Pk6ltEEyKxCf1owxvFZMn2h
-         pPQGyQ+s2NBviQ0u2V1tmcp2cUOdO/bXlYzzdILIHAovAP5Wv3uC58WtB9SKZsCqM5yc
-         flyYI/GDOlsndCMD4ZoYciWHnx1UPnjHLBMdN6GAhBBJTvcPnUjMp/cb1oWqIN0vQEb9
-         FzfLAqHX8kUcAI6nBz16+BNUxHZJj96z8kbuNOt8mUKA44cOfKYsh4D32rDniE2+kx16
-         LlCA==
-X-Gm-Message-State: AO0yUKUqg5ud5H8JHgYhj5oj0Fkd1ycul0XiSgy6TeNrt0lklEckiMgO
-        85WN2IVA/sJAHPIG+OX1giwLEZwAYYGOuec4XmGeiq8FxUrTOhw4YVwgzkwKI3J4FhadttPEUSC
-        PUFPV5lR46AzJesX2Xr3hCc6gYCxpm9kAEsa4byz9+oDKg7nE2mu7BSMHtLFWSJEbSAQBfUutlA
-        yc
-X-Received: by 2002:ac8:584f:0:b0:3ba:ef:fc0e with SMTP id h15-20020ac8584f000000b003ba00effc0emr38862251qth.57.1677423730406;
-        Sun, 26 Feb 2023 07:02:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set/SXesiOhOnAgh3EpQdbpIYg1w5jnpyIXaoHzasz8z/7gzWSqqsQylwzoVbm8kRJ4sdLh/n4w==
-X-Received: by 2002:ac8:584f:0:b0:3ba:ef:fc0e with SMTP id h15-20020ac8584f000000b003ba00effc0emr38862208qth.57.1677423729999;
-        Sun, 26 Feb 2023 07:02:09 -0800 (PST)
-Received: from [192.168.1.19] (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id p3-20020ac84083000000b003b9a573aec6sm2982825qtl.70.2023.02.26.07.02.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 07:02:09 -0800 (PST)
-Subject: Re: [PATCH] tty: serial: fsl_lpuart: select SERIAL_FSL_LPUART for
- SERIAL_FSL_LPUART_CONSOLE
-To:     Randy Dunlap <rdunlap@infradead.org>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230225173949.651311-1-trix@redhat.com>
- <0f8a8857-5e18-e49a-0361-197b4bc892ab@infradead.org>
- <026ee207-3b90-c7ae-a7fd-66a34cd3ee90@redhat.com>
- <6dd89251-f4d6-8051-8ecf-cdea7d23bc68@infradead.org>
- <c3ca14dc-14d0-959c-0f55-8f584457db33@infradead.org>
- <9a16ee6f-5a49-167e-fc33-9ca147b3686a@infradead.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <e767cb93-eb46-a82c-186c-68d12cefce31@redhat.com>
-Date:   Sun, 26 Feb 2023 07:02:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 26 Feb 2023 11:02:01 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFA310257
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 08:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Xa7VjT4CRQrbYYzS7d+rfaPxV+rb2tyxrX3efVtfnBc=; b=ZOJ9RAfoDTbLN2RiZS0x0F9ozJ
+        u6YVnW6SG45ORM1yylFv7BoEy3qvs40r8OhnPUmeZqMmOXzp3nELeW7fy8ZiftuQbuOhqQ80dGPK1
+        s93yGk5b1LyYvA2YcHjfq1Q99VizV25xz4TrtHANC1MN6uzZ0Zh9XyqG3xHrtCxW0y/VeiwtbcUWW
+        ESgElQY+yzxQYX2kWDMguIXebS+FPOqib5vLi+D7aI2vpyP6Rr3ZiJ1hbaLsd0zdkmhc178zrwjS6
+        Dn/pubc3Q0pmJ2cXZHCi6Xt+xawgeCa+8lkYjiuURS0oeqnxlcvvbNRYDI4dbiJvTmbQRBoNhJoqD
+        Nwlacrwg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pWIZp-00DwBq-0D;
+        Sun, 26 Feb 2023 15:04:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AEA01300269;
+        Sun, 26 Feb 2023 16:04:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8F41B23A0ED63; Sun, 26 Feb 2023 16:04:35 +0100 (CET)
+Date:   Sun, 26 Feb 2023 16:04:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     longman@redhat.com, mingo@redhat.com, will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com
+Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
+Message-ID: <Y/t1AwGC9OoN/lFc@hirez.programming.kicks-ass.net>
+References: <20230223122642.491637862@infradead.org>
+ <20230223123319.487908155@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <9a16ee6f-5a49-167e-fc33-9ca147b3686a@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223123319.487908155@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 23, 2023 at 01:26:45PM +0100, Peter Zijlstra wrote:
+> @@ -1072,7 +1067,7 @@ rwsem_down_read_slowpath(struct rw_semap
+>  	for (;;) {
+>  		set_current_state(state);
+>  		if (!smp_load_acquire(&waiter.task)) {
+> -			/* Matches rwsem_mark_wake()'s smp_store_release(). */
+> +			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+>  			break;
+>  		}
+>  		if (signal_pending_state(state, current)) {
+> @@ -1143,54 +1138,36 @@ rwsem_down_write_slowpath(struct rw_sema
+>  	} else {
+>  		atomic_long_or(RWSEM_FLAG_WAITERS, &sem->count);
 
-On 2/25/23 10:38 AM, Randy Dunlap wrote:
->
-> On 2/25/23 10:16, Randy Dunlap wrote:
->>
->> On 2/25/23 10:03, Randy Dunlap wrote:
->>>
->>> On 2/25/23 09:51, Tom Rix wrote:
->>>> On 2/25/23 9:46 AM, Randy Dunlap wrote:
->>>>> Hi--
->>>>>
->>>>> On 2/25/23 09:39, Tom Rix wrote:
->>>>>> A rand config causes this link error
->>>>>> ld: drivers/tty/serial/earlycon.o: in function `parse_options':
->>>>>> drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
->>>>>>
->>>>>> The rand config has
->>>>>> CONFIG_SERIAL_CORE=m
->>>>>> CONFIG_SERIAL_EARLYCON=y
->>>>>> CONFIG_SERIAL_FSL_LPUART=m
->>>>>> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
->>>>>>
->>>>>> SERIAL_FSL_LPUART should have been selected instead of depends on-ed.
->>>>>>
->>>>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>>>> ---
->>>>>>    drivers/tty/serial/Kconfig | 2 +-
->>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
->>>>>> index 625358f44419..b24d74d389fc 100644
->>>>>> --- a/drivers/tty/serial/Kconfig
->>>>>> +++ b/drivers/tty/serial/Kconfig
->>>>>> @@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
->>>>>>      config SERIAL_FSL_LPUART_CONSOLE
->>>>>>        bool "Console on Freescale lpuart serial port"
->>>>>> -    depends on SERIAL_FSL_LPUART
->>>>>> +    select SERIAL_FSL_LPUART
->>>>> Most other _CONSOLE Kconfig have:
->>>>>
->>>>>      depends on SERIAL_FSL_LPUART=y
->>>> commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30 removed the =y. so it could be built as a module.
->>>>
->>> uh. But it's still a bool, not a tristate. How does that work?
->> OK, I see. :)
->>
->> Well, I don't see another decent solution ATM.
->>
->> Tom, does your patch fix the build error?
->>
->> What are the listed CONFIG settings after the patch?
-> OK, after I apply the patch, all of the listed config symbols are
-> changed to =y (builtin), so not built as a loadable module.
->
-> Do you see something different?
+Found it; if we remove the try_write_lock below, then at least this
+new-waiter path needs to still do a trylock.
 
-No, all y's.
+Let me go test the other patches on top of all this and push out a fresh
+set if that all still works.
 
-Since the showing the after state is useful, I added it to v2
-
->
->
->>>>> e.g.
->>>>>
->>>>> but I noticed a few others with a similar problem.
->>>>>
->>>>>>        select SERIAL_CORE_CONSOLE
->>>>>>        select SERIAL_EARLYCON
->>>>>>        help
-
+>  	}
+> +	raw_spin_unlock_irq(&sem->wait_lock);
+>  
+>  	/* wait until we successfully acquire the lock */
+> -	set_current_state(state);
+>  	trace_contention_begin(sem, LCB_F_WRITE);
+>  
+>  	for (;;) {
+> -		if (rwsem_try_write_lock(sem, &waiter)) {
+> -			/* rwsem_try_write_lock() implies ACQUIRE on success */
+> +		set_current_state(state);
+> +		if (!smp_load_acquire(&waiter.task)) {
+> +			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+>  			break;
+>  		}
+> -
+> -		raw_spin_unlock_irq(&sem->wait_lock);
+> -
+> -		if (signal_pending_state(state, current))
+> -			goto out_nolock;
+> -
+> -		/*
+> -		 * After setting the handoff bit and failing to acquire
+> -		 * the lock, attempt to spin on owner to accelerate lock
+> -		 * transfer. If the previous owner is a on-cpu writer and it
+> -		 * has just released the lock, OWNER_NULL will be returned.
+> -		 * In this case, we attempt to acquire the lock again
+> -		 * without sleeping.
+> -		 */
+> -		if (waiter.handoff_set) {
+> -			enum owner_state owner_state;
+> -
+> -			owner_state = rwsem_spin_on_owner(sem);
+> -			if (owner_state == OWNER_NULL)
+> -				goto trylock_again;
+> +		if (signal_pending_state(state, current)) {
+> +			raw_spin_lock_irq(&sem->wait_lock);
+> +			if (waiter.task)
+> +				goto out_nolock;
+> +			raw_spin_unlock_irq(&sem->wait_lock);
+> +			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
+> +			break;
+>  		}
+> -
+>  		schedule_preempt_disabled();
+>  		lockevent_inc(rwsem_sleep_writer);
+> -		set_current_state(state);
+> -trylock_again:
+> -		raw_spin_lock_irq(&sem->wait_lock);
+>  	}
+>  	__set_current_state(TASK_RUNNING);
+> -	raw_spin_unlock_irq(&sem->wait_lock);
+>  	lockevent_inc(rwsem_wlock);
+>  	trace_contention_end(sem, 0);
+>  	return sem;
+>  
+>  out_nolock:
+> -	__set_current_state(TASK_RUNNING);
+> -	raw_spin_lock_irq(&sem->wait_lock);
+>  	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+> +	__set_current_state(TASK_RUNNING);
+>  	lockevent_inc(rwsem_wlock_fail);
+>  	trace_contention_end(sem, -EINTR);
+>  	return ERR_PTR(-EINTR);
+> 
+> 
