@@ -2,148 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4977C6A2DE6
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 04:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D4D6A2DF6
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 04:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjBZDwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 22:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S230172AbjBZDy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 22:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjBZDw0 (ORCPT
+        with ESMTP id S230193AbjBZDyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 22:52:26 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D9F19F22
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:51:50 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id u10so2887002pjc.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w4y311XvzcL4qcpLEKERp48i6Icgj5mKMLUZWjnpXrI=;
-        b=OiTnRUDpZ4YIjM2/sq915dvhW8mbZNbYCM3fJcj4eY6ey/xyl0tjd8h8eP2IlN06Vz
-         sGVNoH3/7AQxUFUlXxAVRYyBLocEm4uI2nu1aXCYgB7qye8lsY8qxBY3KMoIl1JP9iqb
-         fGcJmXFt9XP65T3Kbuw+ClqJAwZ2GjHrWebSU=
+        Sat, 25 Feb 2023 22:54:11 -0500
+Received: from mail-io1-xd48.google.com (mail-io1-xd48.google.com [IPv6:2607:f8b0:4864:20::d48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822E2E385
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:41 -0800 (PST)
+Received: by mail-io1-xd48.google.com with SMTP id c13-20020a0566022d0d00b0074cc4ed52d9so1424289iow.18
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w4y311XvzcL4qcpLEKERp48i6Icgj5mKMLUZWjnpXrI=;
-        b=WCTB1jE+wLAR6k+djQJNXk8dYfFTAs6d6w1Vhqq6Xi0ktKfANJpfWRCmCJ2cx4clY0
-         QeU1oyAbJffaPcN8wfn4fJ3hYsQbvrf72wtgD68rowbJ94KTrPNQ5IInOCdlh00BFumY
-         /z6TlqnBdRSNGpoYiQrAENCOvHzTzdD7F1QNbXqmxaJHXCxXhYfqvxUgsWUJ9HoIRvDd
-         itJ0nFh6WmbukIa9HcMP2TciUt3TEmiiyuz2SogOVuzlR1VowmPE9s04XCMMlTTcTDIQ
-         XjvGgXwjpl/1LAuDpUO/LR+ldYO7IiEVRYEbScVlNMuLpDVkrRq1GB7sDALFozueZDN9
-         ObLA==
-X-Gm-Message-State: AO0yUKXO9/hqHuBLhpjCo0LKF2xeKKb3aSM35Qkm7zwISKF+Zi0k88fS
-        UZKS4xcYvDwBVP8IY44IOrMPYg==
-X-Google-Smtp-Source: AK7set/i11X7lphfd5+MPslv0zxE4QFrWYN6+0mbt2yItzGiX93i/bOA95HL6K2M022D8wc9hw8W2w==
-X-Received: by 2002:a17:902:dac6:b0:19b:c491:21be with SMTP id q6-20020a170902dac600b0019bc49121bemr24607680plx.64.1677383450004;
-        Sat, 25 Feb 2023 19:50:50 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id y21-20020a63b515000000b00502e48db9aesm1662256pge.53.2023.02.25.19.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 19:50:49 -0800 (PST)
-Date:   Sun, 26 Feb 2023 12:50:45 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 0/6] zsmalloc: fine-grained fullness and new compaction
- algorithm
-Message-ID: <Y/rXFc4dI+190uJa@google.com>
-References: <20230223030451.543162-1-senozhatsky@chromium.org>
- <Y/f8esHswgLtjkee@google.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cd31VU10PJZuIxtn4bPfkjZ2X0Vloo3og5W58I5g+Pc=;
+        b=ZEToO6v6OJ60NKM/H29xnb0CJVdpamf8U2z1bX2gFn/JWJ0uuPi+q18GaIfVP6WxHV
+         IkQx4IYYABm0zOjafH7AHF2kCrWfw0ewetDbC6HA8FbVBdt01i8t+jtP7G7QJpyo128E
+         YCF865skwDE69KK9D4yzgApbhDhmGJiGEe9yY8m0GZl2R5niQrZTzFaz4X9eZf6Rf7Gh
+         GgBj2M88U2p1baTUKFkdnv0+cQNsef3d9NfvCdSnHrlDMQ1xgH5MGIGHPSBG0P1BcAq7
+         zavbpTCIGuV8IVh6sBLwLd22CRnMYdAmjsdoLnVuGAnOeirsj8yDB7EntgfnhWFQjJpT
+         Q2ow==
+X-Gm-Message-State: AO0yUKUSLK919xIOGgFqgl5W/uVAsLoBgO/kx+WrmnAk8CECqj3RRpe4
+        jnNauQXcTwW1SwZq53zIKtkb54V+LpKisfLIf3WIvzJLhfyN
+X-Google-Smtp-Source: AK7set9v5MKlOPXoI0zkAmoPq4P8x+H+7gnV15auRynzkYRxq7WzLRcqgNF+bpNd+NSYmqI0y1EvxMnLfy3Dbkiljc4/52V/v/cQ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/f8esHswgLtjkee@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1066:b0:310:9fc1:a92b with SMTP id
+ q6-20020a056e02106600b003109fc1a92bmr6813796ilj.0.1677383502889; Sat, 25 Feb
+ 2023 19:51:42 -0800 (PST)
+Date:   Sat, 25 Feb 2023 19:51:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d7894b05f5924787@google.com>
+Subject: [syzbot] [reiserfs?] [fat?] [fuse?] general protection fault in
+ timerqueue_add (4)
+From:   syzbot <syzbot+21f2b8753d8bfc6bb816@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        miklos@szeredi.hu, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/02/23 15:53), Minchan Kim wrote:
-> > TEST
-> > ====
-> > 
-> > It's very challenging to reliably test this series. I ended up
-> > developing my own synthetic test that has 100% reproducibility.
-> > The test generates significan fragmentation (for each size class)
-> > and then performs compaction for each class individually and tracks
-> > the number of memcpy() in zs_object_copy(), so that we can compare
-> > the amount work compaction does on per-class basis.
-> > 
-> > Total amount of work (zram mm_stat objs_moved)
-> > ----------------------------------------------
-> > 
-> > Old fullness grouping, old compaction algorithm:
-> > 323977 memcpy() in zs_object_copy().
-> > 
-> > Old fullness grouping, new compaction algorithm:
-> > 262944 memcpy() in zs_object_copy().
-> > 
-> > New fullness grouping, new compaction algorithm:
-> > 213978 memcpy() in zs_object_copy().
-> > 
-> > 
-> > Per-class compaction memcpy() comparison (T-test)
-> 
-> Just curiosity: What's the T-test?
+Hello,
 
-T-test is a statistical method used to compare the means
-of two independent groups or samples and determine if the
-difference between them is statistically significant.
+syzbot found the following issue on:
 
-> > x Old fullness grouping, old compaction algorithm
-> > + Old fullness grouping, new compaction algorithm
-> > 
-> >     N           Min           Max        Median           Avg        Stddev
-> > x 140           349          3513          2461     2314.1214     806.03271
-> > + 140           289          2778          2006     1878.1714     641.02073
-> > Difference at 95.0% confidence
-> > 	-435.95 +/- 170.595
-> > 	-18.8387% +/- 7.37193%
-> > 	(Student's t, pooled s = 728.216)
-> > 
-> > 
-> > x Old fullness grouping, old compaction algorithm
-> > + New fullness grouping, new compaction algorithm
-> > 
-> >     N           Min           Max        Median           Avg        Stddev
-> > x 140           349          3513          2461     2314.1214     806.03271
-> > + 140           226          2279          1644     1528.4143     524.85268
-> > Difference at 95.0% confidence
-> > 	-785.707 +/- 159.331
-> > 	-33.9527% +/- 6.88516%
-> > 	(Student's t, pooled s = 680.132)
-> 
-> What's the different with result above? Did you just run two times and
-> shows they are consistent or this is new result based on different
-> testing?
+HEAD commit:    4a7d37e824f5 Merge tag 'hardening-v6.3-rc1' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fbf928c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b969c5af147d31c
+dashboard link: https://syzkaller.appspot.com/bug?extid=21f2b8753d8bfc6bb816
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c64f20c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13734ba0c80000
 
-The test is exactly the same, it is designed to have 0 variability, it
-creates exactly same fragmentation during each run, so we always compare
-apples to apples. What is being changed (and hence tested) are fullness
-grouping and compaction algorithm.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6c3d867561ee/disk-4a7d37e8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/422516721d17/vmlinux-4a7d37e8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/164340e12ac4/bzImage-4a7d37e8.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/71954e6c3886/mount_1.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/89d5f0b5f58a/mount_5.gz
 
-The first one tests the effect of new compaction algorithm alone:
-old fullness grouping and old compaction algorithm VS old fullness
-grouping and new compaction algorithm. The data show that with
-sufficient level of confidence (95%) we can claim that new compaction
-does make a statstically significant improvement and reduce the number
-of memcpy() calls (by 18.3% in this particular case).
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21f2b8753d8bfc6bb816@syzkaller.appspotmail.com
 
-The second one tests the effect of new fullness grouping and new
-compaction algorithm. The data show that with sufficient level of
-confidence we can claim that new fullness grouping and new compaction
-do make a statstically significant improvement and reduce the number
-of memcpy() calls (by 33.9% in this particular case).
+general protection fault, probably for non-canonical address 0xe3fffb24000f33f5: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0x1ffff92000799fa8-0x1ffff92000799faf]
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.2.0-syzkaller-02299-g4a7d37e824f5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:__timerqueue_less lib/timerqueue.c:22 [inline]
+RIP: 0010:rb_add_cached include/linux/rbtree.h:174 [inline]
+RIP: 0010:timerqueue_add+0xf7/0x330 lib/timerqueue.c:40
+Code: 48 c1 ea 03 42 80 3c 22 00 0f 85 c4 01 00 00 49 8b 17 48 85 d2 74 40 48 89 d3 e8 44 f1 c3 f7 48 8d 7b 18 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 ab 01 00 00 4c 8b 7b 18 4c 89 ef 4c 89 fe e8
+RSP: 0018:ffffc900001e0da8 EFLAGS: 00010017
+RAX: 03ffff24000f33f5 RBX: 1ffff92000799f95 RCX: 0000000000000000
+RDX: ffff88813feb1d40 RSI: ffffffff89bdeb3c RDI: 1ffff92000799fad
+RBP: ffff8880b992c0e0 R08: 0000000000000006 R09: 00000009dd72e480
+R10: ffffc90003c9f5f8 R11: 0000000000000000 R12: dffffc0000000000
+R13: 00000009dd72e480 R14: 0000000000000000 R15: ffffc90003ccfc58
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f16907af000 CR3: 000000001de6d000 CR4: 0000000000350ee0
+Call Trace:
+ <IRQ>
+ enqueue_hrtimer+0x1aa/0x490 kernel/time/hrtimer.c:1091
+ __run_hrtimer kernel/time/hrtimer.c:1702 [inline]
+ __hrtimer_run_queues+0xc71/0x1010 kernel/time/hrtimer.c:1749
+ hrtimer_interrupt+0x320/0x790 kernel/time/hrtimer.c:1811
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1096 [inline]
+ __sysvec_apic_timer_interrupt+0x180/0x660 arch/x86/kernel/apic/apic.c:1113
+ sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1107
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:37 [inline]
+RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:72 [inline]
+RIP: 0010:acpi_safe_halt+0x40/0x50 drivers/acpi/processor_idle.c:113
+Code: eb 03 83 e3 01 89 de 0f 1f 44 00 00 84 db 75 1b 0f 1f 44 00 00 eb 0c 0f 1f 44 00 00 0f 00 2d e7 5a a8 00 0f 1f 44 00 00 fb f4 <fa> 5b c3 cc 0f 1f 00 66 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 0f
+RSP: 0018:ffffc90000177d10 EFLAGS: 00000246
+RAX: ffff88813feb1d40 RBX: 0000000000000000 RCX: ffffffff8a096b45
+RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff8880179b1864 R08: 0000000000000001 R09: ffff8880b993606b
+R10: ffffed1017326c0d R11: 0000000000000000 R12: 0000000000000001
+R13: ffff8880179b1800 R14: ffff8880179b1864 R15: 0000000000000000
+ acpi_idle_do_entry+0x53/0x70 drivers/acpi/processor_idle.c:573
+ acpi_idle_enter+0x173/0x290 drivers/acpi/processor_idle.c:711
+ cpuidle_enter_state+0xd3/0x6f0 drivers/cpuidle/cpuidle.c:267
+ cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
+ cpuidle_idle_call kernel/sched/idle.c:215 [inline]
+ do_idle+0x348/0x440 kernel/sched/idle.c:282
+ cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:379
+ start_secondary+0x256/0x300 arch/x86/kernel/smpboot.c:264
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__timerqueue_less lib/timerqueue.c:22 [inline]
+RIP: 0010:rb_add_cached include/linux/rbtree.h:174 [inline]
+RIP: 0010:timerqueue_add+0xf7/0x330 lib/timerqueue.c:40
+Code: 48 c1 ea 03 42 80 3c 22 00 0f 85 c4 01 00 00 49 8b 17 48 85 d2 74 40 48 89 d3 e8 44 f1 c3 f7 48 8d 7b 18 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 ab 01 00 00 4c 8b 7b 18 4c 89 ef 4c 89 fe e8
+RSP: 0018:ffffc900001e0da8 EFLAGS: 00010017
+
+RAX: 03ffff24000f33f5 RBX: 1ffff92000799f95 RCX: 0000000000000000
+RDX: ffff88813feb1d40 RSI: ffffffff89bdeb3c RDI: 1ffff92000799fad
+RBP: ffff8880b992c0e0 R08: 0000000000000006 R09: 00000009dd72e480
+R10: ffffc90003c9f5f8 R11: 0000000000000000 R12: dffffc0000000000
+R13: 00000009dd72e480 R14: 0000000000000000 R15: ffffc90003ccfc58
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f16907af000 CR3: 000000001de6d000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess):
+   0:	48 c1 ea 03          	shr    $0x3,%rdx
+   4:	42 80 3c 22 00       	cmpb   $0x0,(%rdx,%r12,1)
+   9:	0f 85 c4 01 00 00    	jne    0x1d3
+   f:	49 8b 17             	mov    (%r15),%rdx
+  12:	48 85 d2             	test   %rdx,%rdx
+  15:	74 40                	je     0x57
+  17:	48 89 d3             	mov    %rdx,%rbx
+  1a:	e8 44 f1 c3 f7       	callq  0xf7c3f163
+  1f:	48 8d 7b 18          	lea    0x18(%rbx),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
+  2f:	0f 85 ab 01 00 00    	jne    0x1e0
+  35:	4c 8b 7b 18          	mov    0x18(%rbx),%r15
+  39:	4c 89 ef             	mov    %r13,%rdi
+  3c:	4c 89 fe             	mov    %r15,%rsi
+  3f:	e8                   	.byte 0xe8
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
