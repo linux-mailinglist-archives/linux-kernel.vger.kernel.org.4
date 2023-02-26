@@ -2,142 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A7C6A3491
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 23:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871DC6A3494
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 23:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjBZWSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 17:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S229714AbjBZWSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 17:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjBZWSI (ORCPT
+        with ESMTP id S229682AbjBZWSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 17:18:08 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F49BBB3;
-        Sun, 26 Feb 2023 14:18:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PPygc2nm8z4x80;
-        Mon, 27 Feb 2023 09:18:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677449885;
-        bh=AiXfxdXTWzEsQr34CRW3iDvQyVOgrswdRHZ4Y6rELTo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ps++lvJA+yZaLNtxbZt/mzhOsekkdFcVsf4UPvyYVFmDeGVVa8IAljJiBUiYpLZbu
-         j3sFtvM8bNC7oVGJv8U5qu1tTXd49zmQicgdHpqFxiojpaA1LGbIEBAegGDTIBB2O4
-         gQia9uKXKFiWbbnRCY2FkpvC3yjV1SRgftUq448gMvior9Uae5CjIVkpYnmNWTyFBV
-         q+f1FObI99YP3erIPjaifowucqaLh67afoK218SLdPmy77XzhITQJxQFGg4l6gzF5Y
-         MaYoZlisG0zCaxPVoLOB/SOgi+9MybW+UX/6iw0gB1oJQSvxpa/U+YFJwRIvRTtHgd
-         tQQkY/uxW+TxA==
-Date:   Mon, 27 Feb 2023 09:18:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20230227091803.5e29b563@canb.auug.org.au>
-In-Reply-To: <20230130080956.ikb3w5cjkhtxqzcr@wittgenstein>
-References: <20230130161414.25a71a87@canb.auug.org.au>
-        <20230130080956.ikb3w5cjkhtxqzcr@wittgenstein>
+        Sun, 26 Feb 2023 17:18:39 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A72BDF8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 14:18:38 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id m14-20020a7bce0e000000b003e00c739ce4so2754586wmc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 14:18:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bpKKmg/YcLP+pSehPY1RvJN7ppvx9uaUoxuTxOaRUnQ=;
+        b=xWtlOxPRt4hOw3zHSQDokjqCy49f8sDxGOOOe7xM7TH99y9Su99sEhFU3lyWNJ+fPX
+         +LS7MaghJfYsHttFdgfvNMNJCZ66Nwy3W8T5Yz7ZuNS8JaBc//mcIfgEXz8YuCtIn2lF
+         X/PbmBAWlehW+ZP/MERp/z1qlNPxV/dgnv99CBWae2eXdVTTIVtgt2zdwAKacGZ/mkbP
+         6JWaViSttzTYknk0MqPHqBl/6QayhpwwOhF8kHVinRvuHaWc4NQqLxdsa2jTjQd1TSXA
+         WB/hYypCkC1L9nBtTrSuuDgGMYRKuep2hBsPWAg/t8SAs8CwrJsjE8RX6b6yXJMLZPW5
+         X6NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bpKKmg/YcLP+pSehPY1RvJN7ppvx9uaUoxuTxOaRUnQ=;
+        b=ydSeh0Y8FMP3KE5jgp1jUlYNopZfnIz4xHi8qAcvkUeEIn7LJgOfYNrd23tJYwEPzS
+         SElC6weXxef4wIOZoZA7HWMsyavfR5aol+5el0F7+OU2q9V+RnVYIlKOeINWjQ8/oQuu
+         kFj9gxh2SeIUpO/8hBRkqshQysOg/eyfPAgr3LPuXw0mTlzvePMohWTEc7fgB2pmunbu
+         7GRQ7sLxPdtw0yNL7HzERMUeTXe3SS/F1b3b6eWJxv4KarpTs3LI6p0THRfoiQugf2yJ
+         b+eTg89319fatz3Y4xlqft/eatquRUF9+qfSgpm7S8z8V7VgB5ifJomu7yVcFpdvaedT
+         rmjg==
+X-Gm-Message-State: AO0yUKU6Riio+QJ28LkDAyF67H7mirbG/qmVOfLKfKwsrTdnbAdo/Gft
+        HeUAdO0i+xTI4GCZIojqkx1d0g==
+X-Google-Smtp-Source: AK7set+uAzPJnO+Z5LC4HJXhX+IcqZ7dKL9mlxxGTRYTbLDK7Q+7hlCKDv2Fqy+ZYQLDctgEEmoe2g==
+X-Received: by 2002:a05:600c:43d3:b0:3eb:253c:faae with SMTP id f19-20020a05600c43d300b003eb253cfaaemr8403192wmn.36.1677449916997;
+        Sun, 26 Feb 2023 14:18:36 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id a2-20020a05600c348200b003e8f0334db8sm10865568wmq.5.2023.02.26.14.18.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Feb 2023 14:18:36 -0800 (PST)
+Message-ID: <a005dc2c-510b-3961-e00a-b69e85a702c7@linaro.org>
+Date:   Sun, 26 Feb 2023 23:18:35 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MDSDkz7un69i84TtOnuOtUC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/4] MIPS: Remove DMA_PERDEV_COHERENT
+Content-Language: en-US
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        Christoph Hellwig <hch@lst.de>
+References: <20230222132425.7442-1-jiaxun.yang@flygoat.com>
+ <20230222132425.7442-2-jiaxun.yang@flygoat.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230222132425.7442-2-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MDSDkz7un69i84TtOnuOtUC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 22/2/23 14:24, Jiaxun Yang wrote:
+> As now we are always managing DMA coherence on per dev bias,
+> there is no need to have such option. And it's not selected
+> by any platform.
 
-Hi Christian,
+Leftover from 4e0664416c70 ("MIPS: remove CONFIG_DMA_PERDEV_COHERENT").
 
-On Mon, 30 Jan 2023 09:09:56 +0100 Christian Brauner <brauner@kernel.org> w=
-rote:
->
-> On Mon, Jan 30, 2023 at 04:14:14PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the mm tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> >=20
-> > kernel/sys.c: In function '__do_sys_prctl':
-> > kernel/sys.c:2664:9: error: duplicate case value
-> >  2664 |         case PR_SET_HIDE_SELF_EXE:
-> >       |         ^~~~
-> > kernel/sys.c:2655:9: note: previously used here
-> >  2655 |         case PR_SET_MDWE:
-> >       |         ^~~~
-> > kernel/sys.c:2669:9: error: duplicate case value
-> >  2669 |         case PR_GET_HIDE_SELF_EXE:
-> >       |         ^~~~
-> > kernel/sys.c:2658:9: note: previously used here
-> >  2658 |         case PR_GET_MDWE:
-> >       |         ^~~~
-> >=20
-> > Caused by commit
-> >=20
-> >   ab30677b499c ("mm: implement memory-deny-write-execute as a prctl")
-> >=20
-> > interacting with commit
-> >=20
-> >   966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-> >=20
-> > from the pidfd tree.
-> >=20
-> > I have applied the following merge fix patch.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 30 Jan 2023 16:08:34 +1100
-> > Subject: [PATCH] mm: fixup for "mm: implement memory-deny-write-execute=
- as a prctl"
-> >=20
-> > interacting with
-> >=20
-> >   966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > --- =20
->=20
-> Thanks Stephen,
->=20
-> I'm moving this out of -next for now until we've settled a few more
-> details.
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Remove unrelated change.
+> ---
+>   arch/mips/Kconfig | 5 -----
+>   1 file changed, 5 deletions(-)
 
-I am still applying this to the merge of the pidfd tree.  Also I
-noticed that a similar fixup will need to be applied to
-tools/testing/selftests/prctl/hide-self-exe.c
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MDSDkz7un69i84TtOnuOtUC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP72psACgkQAVBC80lX
-0GyPQQf+IXLCzLRVcFE2V22gMpcgkUwWa0ErgmMOQPeUBlV59213loGEByX2LhPN
-gaKH3FiCW/cfRKgdiMMTh/4u/v13h4xKgEt4D67HFtPKXcb/UqKW6+PuU3O/Xh+v
-2Ktr4QR3eKSV8W2I9sK78La847K5LjbfpOvNYFmA/aOFJO0Iv/b5e+zDPmMSONO7
-OIwrtEb/x6OMVhTX8mO6y6Qt8FTfmmcyP0Am33n131Zl9wC6tQUwVJq0iE0rnE8b
-LocUffkPLWrrVTbCLfj84LRFtzT/XemUuoVI4HOGAKWgS3Hvn8LFDn5hXRBMAgDB
-n8DDyLXhhS0Dk1OQAdIUzcNxK5RXKA==
-=DvlT
------END PGP SIGNATURE-----
-
---Sig_/MDSDkz7un69i84TtOnuOtUC--
