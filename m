@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D9E6A2D0B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FEE6A2D0E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBZCF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 21:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S229527AbjBZCG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 21:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBZCFz (ORCPT
+        with ESMTP id S229504AbjBZCG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 21:05:55 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53CC113C0;
-        Sat, 25 Feb 2023 18:05:54 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id b5so1238516iow.0;
-        Sat, 25 Feb 2023 18:05:54 -0800 (PST)
+        Sat, 25 Feb 2023 21:06:27 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A568113DA;
+        Sat, 25 Feb 2023 18:06:26 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id q6so1220993iot.2;
+        Sat, 25 Feb 2023 18:06:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=x/0MEJE8eloddSd5KLY1ASt9rHQoQE4Cfr7iia6AURE=;
-        b=B3g3/YTYCORgwWWLF4iJlTMvpGOrOtxDVMearm05vuwTR7VnMT0YMktYnfCvk57nr6
-         hfqtxaNgU6PgokEN5ivb+fO8JHuAy9tDAHSYdronSPdV40rOwvs67vCY3JbFS6hpalYI
-         IBhVDQKDiCacYQVx/+d5qp4MTicO6/dFPzpIYZgQWcT45FC/1OH3wQodzbJDX3/6+y48
-         2safF1xZbnZH3ShH5FohXsbA0PuBzXkxWn0DscXRRMGHTUAVTaFZyS5Z4tJmN6kivzpW
-         CL+/wea8RiPywO3F2clR10qtGPH1xwoGq9K6gWC23dVR2CFmNIrb340Z1ohKZv6HvsdX
-         xL7A==
+        bh=EFQbRxHSsPKNCItLK55Hjyu7uq3Glv5bk5SL/HPENLw=;
+        b=pWl9WeshiUsJJpSN94ckZrzGj8ltCX4QfX3dzF6nARHNtRoAXdghfuRZf4/vGXUJUW
+         sBbfR7GSZoF0L4vP+oi5w9YxWVGK5Pn2hSymO9bcaYg1mCtKrdACDzuRlCbzHJUPJneR
+         cS2G2kA5UMrR+ly5+pz6W/9B6XhTQjXg/0KUsNeOZ1VLEqTINL8i3AW6u6o7vegrbjfN
+         XQSqyClPFVy1LrEHgCTr5711M4o6uUvyAKzqWRwfhQOUXdW5A6/iIpIMvX3k+AV3gboi
+         2cCgVlNGbFIlazjeF+pRTo/tSfOhu+E9riJK6xid9d+sz7NMmkGcAqCUEwKXOtFlS+ox
+         HU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=x/0MEJE8eloddSd5KLY1ASt9rHQoQE4Cfr7iia6AURE=;
-        b=OlvcNeMFBAaUWIt9GgwU1nXsvHhX+rf0dCVAkGMS8Z5tdXpSmwricSOXugeOsAvDtD
-         z+a9LdthYu5R6Q85fToSScEG2XDNRPlRUaytyk4orAJMiPVBaWkYGkfytxKEOyDaCeA3
-         fpe2bJICzktXG1Wnapj8Cz8w/Xplmt3m0S84JCOFF6VbE7nyNH8RNm0IHLqccwxFwCrw
-         IMlitVEkcC+0P+Q+TiX1c6rY20gAjb3O0+LFR8DlF4l/A4FeON3FNCBvM/G6gm+JhNVi
-         Z8zD5SLEjtrAEtLRks2qJ5gVt43XgwrAzGYliI3Ssy6kVOuhUUcRa4MaW5v+YPtLDAmH
-         ukOQ==
-X-Gm-Message-State: AO0yUKWd+AN1p6hNZVALaCuznoBgQK7ptA8bHqN49R39jej0mifsp45Z
-        qmxKJHYyKyvc8VeR0gI96FSS/JtntBzjfH3rE/M=
-X-Google-Smtp-Source: AK7set+58Mh0Ks2ffDoUFBfLA+3gK+Y7iXCq4YAsGujRDITldiSnnN49ICUzOMR8phZqcqomY+jV3HRN4kuLD8jjvUg=
-X-Received: by 2002:a6b:1481:0:b0:745:5dec:be5b with SMTP id
- 123-20020a6b1481000000b007455decbe5bmr4076170iou.0.1677377154273; Sat, 25 Feb
- 2023 18:05:54 -0800 (PST)
+        bh=EFQbRxHSsPKNCItLK55Hjyu7uq3Glv5bk5SL/HPENLw=;
+        b=JGqCzhzpTLbfcqEpE5LuoPotZ+LEJqIV5K8lBUbXpc7mM9RLSPoLWOYpOpTmih/di1
+         U1pBmgvnoWHE+SKYzwwTn9qIcxH+m4LCrZHvA0b+Rx5Wtah16Ad4OuHqf+YbQmGh4DdX
+         dSTs8udZxjMyqoCIPUOJmeY9vSZs8dO206Ge9t1ON+aF7GTuqlp+Gw/FdxohsIXZGf1T
+         LZh8wAQs1krKtCUHrnnKz5C4nKvQ6FTgG47mAJv/ACkD/yuqTzVzcSaoTPfTYSFq9IY2
+         oozum1r+0XCqntj+d5Mz41helF9UKZ0Ej016GYbBpXTXw3s24oLHkKQQJbZSXKsgFUG3
+         TSag==
+X-Gm-Message-State: AO0yUKVD/LlVOxU1p+Nvo3y9cTeMv47zl1BpgpaHqVhtaFZAyAnwwIQ4
+        tWVt95oPGhm6Ky1e2TcV5z9We4Wv7Bapwg0s0dQrd3Nllojz5g==
+X-Google-Smtp-Source: AK7set/MlPlEPWlLadEyKgt76qfDiD1Iz/AOVbvZ4H8WCSAmhnYu/DiJXy6NU2VZEz/DY7PVFKYxnwwJ0fwprCFhX9A=
+X-Received: by 2002:a02:85ae:0:b0:3e5:c536:392 with SMTP id
+ d43-20020a0285ae000000b003e5c5360392mr4590406jai.5.1677377185660; Sat, 25 Feb
+ 2023 18:06:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221021201838.306176-1-helgaas@kernel.org>
-In-Reply-To: <20221021201838.306176-1-helgaas@kernel.org>
+References: <20220929101329.31036-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220929101329.31036-1-lukas.bulwahn@gmail.com>
 From:   Matt Turner <mattst88@gmail.com>
-Date:   Sat, 25 Feb 2023 21:05:43 -0500
-Message-ID: <CAEdQ38Er01WkGqydMSU3VAfiZCJREhOFDRxnujDp53jLVdN7Gg@mail.gmail.com>
-Subject: Re: [PATCH] alpha: remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
+Date:   Sat, 25 Feb 2023 21:06:14 -0500
+Message-ID: <CAEdQ38Gp0rFZjpRKsrYp94WyBQPB6=7YbHu6JvjYwf2odx+TgQ@mail.gmail.com>
+Subject: Re: [PATCH] alpha: update config files
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
+        linux-alpha@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -69,49 +69,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 4:18 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Thu, Sep 29, 2022 at 6:14 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> From: Bjorn Helgaas <bhelgaas@google.com>
+> Clean up config files by:
+>   - removing configs that were deleted in the past
+>   - removing configs not in tree and without recently pending patches
+>   - adding new configs that are replacements for old configs in the file
 >
-> Remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions.
+> For some detailed information, see Link.
 >
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
+>  arch/alpha/configs/defconfig | 2 --
+>  1 file changed, 2 deletions(-)
 >
-> [Sorry for the noise; I sent this a few minutes ago, but it bounced from
-> all the individual recipients because of DMARC issues]
->
-> Previously posted v1 4/15/2022 at
->   https://lore.kernel.org/all/20220415190817.842864-1-helgaas@kernel.org/
-> and reposted v1 10/13/2022 at
->   https://lore.kernel.org/all/20221014001911.3342485-1-helgaas@kernel.org/
->
-> Changes from v1 to v2:
->   - Drop the ia64 patch because Andrew applied it
->       https://lore.kernel.org/all/20221021045245.99636C433C1@smtp.kernel.org/
->
->   - Split sh and alpha to separate series
->
->  arch/alpha/include/asm/io.h | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
-> index 1c3605d874e9..7aeaf7c30a6f 100644
-> --- a/arch/alpha/include/asm/io.h
-> +++ b/arch/alpha/include/asm/io.h
-> @@ -14,10 +14,6 @@
->     the implementation we have here matches that interface.  */
->  #include <asm-generic/iomap.h>
->
-> -/* We don't use IO slowdowns on the Alpha, but.. */
-> -#define __SLOW_DOWN_IO do { } while (0)
-> -#define SLOW_DOWN_IO   do { } while (0)
-> -
->  /*
->   * Virtual -> physical identity mapping starts at this offset
->   */
+> diff --git a/arch/alpha/configs/defconfig b/arch/alpha/configs/defconfig
+> index 6a39fe8ce9e5..1816c1dc22b1 100644
+> --- a/arch/alpha/configs/defconfig
+> +++ b/arch/alpha/configs/defconfig
+> @@ -39,14 +39,12 @@ CONFIG_PATA_CYPRESS=y
+>  CONFIG_ATA_GENERIC=y
+>  CONFIG_NETDEVICES=y
+>  CONFIG_DUMMY=m
+> -CONFIG_NET_ETHERNET=y
+>  CONFIG_NET_VENDOR_3COM=y
+>  CONFIG_VORTEX=y
+>  CONFIG_NET_TULIP=y
+>  CONFIG_DE2104X=m
+>  CONFIG_TULIP=y
+>  CONFIG_TULIP_MMIO=y
+> -CONFIG_NET_PCI=y
+>  CONFIG_YELLOWFIN=y
+>  CONFIG_SERIAL_8250=y
+>  CONFIG_SERIAL_8250_CONSOLE=y
 > --
-> 2.25.1
+> 2.17.1
 >
 
 Thanks for the patch! This was included in my pull request today and
