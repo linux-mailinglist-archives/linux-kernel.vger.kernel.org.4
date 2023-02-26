@@ -2,108 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1696A2CAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD3F6A2CB1
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBZABs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 19:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S229563AbjBZAFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 19:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBZABr (ORCPT
+        with ESMTP id S229489AbjBZAFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 19:01:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41D813D7B
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 16:01:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53D50B80B62
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 00:01:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815CDC433EF;
-        Sun, 26 Feb 2023 00:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677369703;
-        bh=eWj6PIOaCae4y8z9IQbNFV+J1m/e0EEztX9tQWxRspc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tCEOKJ8UPoF6+r0yC5w5nKqYONy5Pz8vioHFiiKzWyx/UNNcfeZPjt5RaCwVfAASk
-         LrieXXyp0tu1aQUl3GukQEOS8sBjZH+JBzijTq9HsaUlKeP8VBHWmQgUj3RgWSk2l4
-         WOmHctB03WR9K7tYdMh7s0bIjx5pU5q6H4zuAK1teVbMUbOSTAX/q6+pWJHMLkdWuc
-         ligk7fbyNj8BTx8J4U+wPunQAV5v3NRAwh90fwiLX4Z/D/NN6YXFgo890TBU2Rp3xa
-         RKXqSBm7SWzh1PuvEATRqRU91ks34DUlroq2MPjArSs4dgsBEopXNw4NJiQLizxWwJ
-         EXOp+/Xpuk3zQ==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     x86@kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/entry: Fix noinstr warning in __enter_from_user_mode()
-Date:   Sat, 25 Feb 2023 16:01:36 -0800
-Message-Id: <d8955fa6d68dc955dda19baf13ae014ae27926f5.1677369694.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Sat, 25 Feb 2023 19:05:04 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C820C1024B;
+        Sat, 25 Feb 2023 16:05:02 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id e18-20020a0568301e5200b00690e6abbf3fso1678703otj.13;
+        Sat, 25 Feb 2023 16:05:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVCbU2imVIcW8tPi1Mg3K5vbKs5hIvJLd7KMCksABfg=;
+        b=WKmYp31tCnNCUDEcgbLJbWizDQR+9lWDkaxYjGPeSWmC/9r6CHdJmnwMwBXNORQIpW
+         rIys8rl0LmuWU4dwnb3oZkaj5Tr/T7fGS2YbJ4iOyjN3S15cykky1YDVHnvnTEVRday9
+         JIhx5IIkuc6qU48keLM1Xh5i/Ck0HH1m50HFO//zfEXjie6AYqhXibadjDv7VVSdBovd
+         6BxPGnTfC8dC+Maba+2HAsnz6HRNqletDL7lKe8dvyjtXG+5Z9nw6b/it21yuaflqvbq
+         xr/LiJp6BaOETEbx80vfZdvFj+cqZi25wU1WRN6+6Zhm6pnf0jPMndvrsVdL9qg3qeVw
+         Hruw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yVCbU2imVIcW8tPi1Mg3K5vbKs5hIvJLd7KMCksABfg=;
+        b=j1xRdAji+f1HNFqikX5qIP2kdRnjehPT2lZ5ZdCi97YjfcX2Cbl1Lc/3wPyYjIpbgV
+         7mZ/O7M4ipRD6E62EvEDVQ/6LQfEvXQwnPYKM4Fg/Q7M5e35lApW+aZmGmB5Z9G16UGh
+         P/UZBODMjm59+5PYckE5ipTo/UWWPxr+StIvSkmG/OgP7UsyT7OAyWub1HUrMfsWqdF2
+         YVLpxgzAZdQP57ZabKXDocQ8rutH7ZiZujC3bHYFt3RR5sslZHdgB5PuLsdTss8ZleVA
+         s1zGtMSFLTMCJYrSkw0P8otKHWhlqwIzeSp8wqUwLS0riVIkjWJl2NSc8AfMgh6ivVkr
+         WtbQ==
+X-Gm-Message-State: AO0yUKVMSCG3ThRMVo6dH70mtrdO/GDhvw7Nq43W6C+R1OOJ5STQql8p
+        SfQaubIGqhUe7FFRh54Ul/w=
+X-Google-Smtp-Source: AK7set9+sdwFCKrvJTz9NuJPDiuB/MBL7XzfB3R8oneaIjYfPnaEMm8Hk9b+7iUUEtmk1KiDWykHKA==
+X-Received: by 2002:a9d:7194:0:b0:68b:d266:e6cc with SMTP id o20-20020a9d7194000000b0068bd266e6ccmr10854384otj.19.1677369902012;
+        Sat, 25 Feb 2023 16:05:02 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id d13-20020a056830138d00b00690e6d56670sm1095628otq.25.2023.02.25.16.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Feb 2023 16:05:01 -0800 (PST)
+Date:   Sat, 25 Feb 2023 16:04:59 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
+Message-ID: <Y/qhL8kSzzhMm+tO@yury-laptop>
+References: <20220428205116.861003-1-yury.norov@gmail.com>
+ <20220428205116.861003-4-yury.norov@gmail.com>
+ <20230225184702.GA3587246@roeck-us.net>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230225184702.GA3587246@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__enter_from_user_mode() is triggering noinstr warnings with
-CONFIG_DEBUG_PREEMPT due to its call of preempt_count_add() via
-ct_state().
+On Sat, Feb 25, 2023 at 10:47:02AM -0800, Guenter Roeck wrote:
+> Hi,
+> 
+> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
+> > Test newly added bitmap_{from,to}_arr64() functions similarly to
+> > already existing bitmap_{from,to}_arr32() tests.
+> > 
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> 
+> Ever since this test is in the tree, several of my boot tests show
+> lots of messages such as
+> 
+> test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
+> test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
+> test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
+> ...
+> test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
+> test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
 
-The preemption disable isn't needed as interrupts are already disabled.
-And the context_tracking_enabled() check in ct_state() also isn't needed
-as that's already being done by the CT_WARN_ON().
+This may be a real problem. Can you share what's the system is? What's
+endianness and register length?
 
-Just use __ct_state() instead.
-
-Fixes the following warnings:
-
-  vmlinux.o: warning: objtool: enter_from_user_mode+0xba: call to preempt_count_add() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0xf9: call to preempt_count_add() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0xc7: call to preempt_count_add() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0xba: call to preempt_count_add() leaves .noinstr.text section
-
-Fixes: 171476775d32 ("context_tracking: Convert state to atomic_t")
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- include/linux/context_tracking.h | 1 +
- kernel/entry/common.c            | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index d4afa8508a80..3a7909ed5498 100644
---- a/include/linux/context_tracking.h
-+++ b/include/linux/context_tracking.h
-@@ -96,6 +96,7 @@ static inline void user_exit_irqoff(void) { }
- static inline int exception_enter(void) { return 0; }
- static inline void exception_exit(enum ctx_state prev_ctx) { }
- static inline int ct_state(void) { return -1; }
-+static inline int __ct_state(void) { return -1; }
- static __always_inline bool context_tracking_guest_enter(void) { return false; }
- static inline void context_tracking_guest_exit(void) { }
- #define CT_WARN_ON(cond) do { } while (0)
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index 846add8394c4..1314894d2efa 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -21,7 +21,7 @@ static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
- 	arch_enter_from_user_mode(regs);
- 	lockdep_hardirqs_off(CALLER_ADDR0);
++ Alexander Lobakin, the author of the exact subtest.
  
--	CT_WARN_ON(ct_state() != CONTEXT_USER);
-+	CT_WARN_ON(__ct_state() != CONTEXT_USER);
- 	user_exit_irqoff();
- 
- 	instrumentation_begin();
--- 
-2.39.1
+> but then:
+> 
+> test_bitmap: all 6550 tests passed
 
+It's because corresponding error path doesn't increment failed_tests
+counter. I'll send a fix shortly.
+
+> 
+> The message suggests an error, given that it is displayed with pr_err,
+> but the summary suggests otherwise.
+> 
+> Is the message just noise, or is there a problem ?
+> 
+> Thanks,
+> Guenter
+> 
+> > ---
+> >  lib/test_bitmap.c | 25 +++++++++++++++++++++++++
+> >  1 file changed, 25 insertions(+)
+> > 
+> > diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+> > index 0c82f07f74fc..d5923a640457 100644
+> > --- a/lib/test_bitmap.c
+> > +++ b/lib/test_bitmap.c
+> > @@ -585,6 +585,30 @@ static void __init test_bitmap_arr32(void)
+> >  	}
+> >  }
+> >  
+> > +static void __init test_bitmap_arr64(void)
+> > +{
+> > +	unsigned int nbits, next_bit;
+> > +	u64 arr[EXP1_IN_BITS / 64];
+> > +	DECLARE_BITMAP(bmap2, EXP1_IN_BITS);
+> > +
+> > +	memset(arr, 0xa5, sizeof(arr));
+> > +
+> > +	for (nbits = 0; nbits < EXP1_IN_BITS; ++nbits) {
+> > +		memset(bmap2, 0xff, sizeof(arr));
+> > +		bitmap_to_arr64(arr, exp1, nbits);
+> > +		bitmap_from_arr64(bmap2, arr, nbits);
+> > +		expect_eq_bitmap(bmap2, exp1, nbits);
+> > +
+> > +		next_bit = find_next_bit(bmap2, round_up(nbits, BITS_PER_LONG), nbits);
+> > +		if (next_bit < round_up(nbits, BITS_PER_LONG))
+> > +			pr_err("bitmap_copy_arr64(nbits == %d:"
+> > +				" tail is not safely cleared: %d\n", nbits, next_bit);
+> > +
+> > +		if (nbits < EXP1_IN_BITS - 64)
+> > +			expect_eq_uint(arr[DIV_ROUND_UP(nbits, 64)], 0xa5a5a5a5);
+> > +	}
+> > +}
+> > +
+> >  static void noinline __init test_mem_optimisations(void)
+> >  {
+> >  	DECLARE_BITMAP(bmap1, 1024);
+> > @@ -852,6 +876,7 @@ static void __init selftest(void)
+> >  	test_copy();
+> >  	test_replace();
+> >  	test_bitmap_arr32();
+> > +	test_bitmap_arr64();
+> >  	test_bitmap_parse();
+> >  	test_bitmap_parselist();
+> >  	test_bitmap_printlist();
+> > -- 
+> > 2.32.0
+> > 
