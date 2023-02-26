@@ -2,120 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B146A32C7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B996A32C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjBZQXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 11:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S229638AbjBZQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 11:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBZQXG (ORCPT
+        with ESMTP id S229489AbjBZQXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 11:23:06 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128A3CC10;
-        Sun, 26 Feb 2023 08:23:05 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id t25-20020a1c7719000000b003eb052cc5ccso5124638wmi.4;
-        Sun, 26 Feb 2023 08:23:04 -0800 (PST)
+        Sun, 26 Feb 2023 11:23:46 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C1DEB40
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 08:23:45 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id cf14so4333939qtb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 08:23:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w2PLHhwdaQbS2cYnTTtwyaA7Q4BGApIwwoUz5TUfv2I=;
-        b=kp2I+Ep8bT/N1ioJjCGtSrL/YKVRLtf4sTHYL4Gg2e8QTtXo3zu3EbR0zqipC5VoKV
-         fSOeeYFlaAAyGYn4nsXjopQ4K61zr4BV5+CC/ucON7swIA1ZJbAb87rBt5vFg7SPBTKe
-         V3m4mh6vLQW6VEjAMM6iowjk72+bV1hCNznaej7byur+UXpiouL8iobzvzc6h3vbTHCl
-         5grb2L/ZNIKjn7YpNJVxd7fA11fy/B2yM3rUMVpZ5h3x1Xr7gAJC8wyNOx/XkuVesBn2
-         pIwZ573N8a14qQeCJLypL/ADg9S5gBZ1d8qQhFQu5mAptQSgVTZm0soCum6eYrfdf87k
-         mVlQ==
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EcpRif0/nyISXGZBTlI6XTPUCNr7MqrEsC0iU84mP18=;
+        b=kuxN9hYINaVZbF8I0GOUxZpb33zSs9DbhFz6ccdhT6v5oqtMAoQ4E65VxW9RCedJf1
+         k8A4CVUMzBSw25r7uO80v4exlpTOfSrgEdiq3Ai0/YTkvlgOjf1IxoagQ+3ZbeoOwzUO
+         rdB4COEV2Ex3zLRo7SitfIAp+BtLBroWy5t/I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2PLHhwdaQbS2cYnTTtwyaA7Q4BGApIwwoUz5TUfv2I=;
-        b=Rb2hP7EwczHbrp8WgbyZ1aDiv/xELOz0ews+/pRQHYvDpRxdHmKw5mGDSCRc4F7RWa
-         RrxCwfjDvCEPXYfEGRdoyEaHVafILuKNQywDlAOuQFonJzsfncTtL8dWiHk38InJOW9M
-         VlUiSaMc5K0QeSNuM2UrvMXcgse2kF5hSAUOc+W0iabE74pSFwj9w6WwVGTJNtlg+iEZ
-         xkxDsQWvnMbpEE2HZuZOmND8DqkEIelBO0VB7mn3+8JrVhmthSUuAZm0H+cKQzy1tlPD
-         Xg4y7Xz96HssdXuLo1SdJHstkbsIiOL7rxQYYVEbP1LhakY81Hc8SPRZYM54p6QQM6mF
-         EOeQ==
-X-Gm-Message-State: AO0yUKU9aojKs+XdJpwe4ZurZqfq6ZDv9zRgkYvkqda/V4l5jlMiPyfV
-        OaxDOj/bw4G2+BGdNSeCHzw=
-X-Google-Smtp-Source: AK7set+XH2HKW8gykxK8QLLfvaADjEB2az3jjR9ernI2o1HPKmxYMjHjNFATDIJv0x+BvhfHrefErQ==
-X-Received: by 2002:a05:600c:810:b0:3db:2e06:4091 with SMTP id k16-20020a05600c081000b003db2e064091mr17369419wmp.37.1677428583449;
-        Sun, 26 Feb 2023 08:23:03 -0800 (PST)
-Received: from ?IPV6:2003:c5:8708:4321:dcf1:ac0e:cc8d:62ca? (p200300c587084321dcf1ac0ecc8d62ca.dip0.t-ipconnect.de. [2003:c5:8708:4321:dcf1:ac0e:cc8d:62ca])
-        by smtp.gmail.com with ESMTPSA id a5-20020a5d4565000000b002c3f81c51b6sm4710874wrc.90.2023.02.26.08.23.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 08:23:02 -0800 (PST)
-Message-ID: <eda65f0b-bbd1-5e3d-5d85-a5686a06ba5a@gmail.com>
-Date:   Sun, 26 Feb 2023 17:23:01 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EcpRif0/nyISXGZBTlI6XTPUCNr7MqrEsC0iU84mP18=;
+        b=NSi6jHW8AmjuEkBCJN+Iq1tjlDY2hLjURD+DwrUjnVB2Zdm2BhnRdOqlGRpjxPxXtx
+         DhuaTVsRDeDoTehWAF0RoP9Z0hP23x0aDOFDyzfkj6KqkPJb/FQfZrHyUhQL95uXo0w8
+         Jr7yPS8xXnaIif+Uwk1wCez/rDzUDim7N1mD8K4b26vCmO47LCExz5po8Rv4vcSgIzSA
+         1+G9B9MSIulXESbW1HUzNHvoRb3ma+d1/MrHEMtnWc+WVJcAAz93c5y8J+uXj6wtHNxJ
+         4W08mPSETo3CkSfRJKXp1b7vpCopOWdxccjlmQrvybnYw23O7bls+SPOobb9vLwVLsR8
+         ZA5g==
+X-Gm-Message-State: AO0yUKU70mLZzIFW5JbBajQGi50unT/voIwrRPUYR1eYyfumrLAZIOFl
+        +9M5PnjC59taN9dXPc88Z/ijYw==
+X-Google-Smtp-Source: AK7set9e1aTZzywk1H7dfnFtWZ5TCRoKhCgXdwBK/XBW0edsIuW3lQlcWHwDsvQZAkkzY6sN6o6SGw==
+X-Received: by 2002:a05:622a:14d:b0:3af:4d45:b73 with SMTP id v13-20020a05622a014d00b003af4d450b73mr37089461qtw.33.1677428624463;
+        Sun, 26 Feb 2023 08:23:44 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id l22-20020ac84596000000b003b9e1d3a502sm3146609qtn.54.2023.02.26.08.23.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 08:23:43 -0800 (PST)
+Date:   Sun, 26 Feb 2023 16:23:42 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y/uHjpbJ3JmVAe9d@google.com>
+References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 4/6] scsi: ufs: core: Remove redundant check
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com,
-        mason.zhang@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com
-References: <20230223152757.13606-1-powen.kao@mediatek.com>
- <20230223152757.13606-5-powen.kao@mediatek.com>
-From:   Bean Huo <huobean@gmail.com>
-In-Reply-To: <20230223152757.13606-5-powen.kao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.02.23 4:27 PM, Po-Wen Kao wrote:
-> is_mcq_supported() already check on use_mcq_mode.
->
-> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
-> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-> Reviewed-by: Ziqi Chen <quic_ziqichen@quicinc.com>
+On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
+> As stated in the documentation and implied by its name, the ppo
+> (preserved program order) relation is intended to link po-earlier
+> to po-later instructions under certain conditions.  However, a
+> corner case currently allows instructions to be linked by ppo that
+> are not executed by the same thread, i.e., instructions are being
+> linked that have no po relation.
+> 
+> This happens due to the mb/strong-fence/fence relations, which (as
+> one case) provide order when locks are passed between threads
+> followed by an smp_mb__after_unlock_lock() fence.  This is
+> illustrated in the following litmus test (as can be seen when using
+> herd7 with `doshow ppo`):
+> 
+> P0(int *x, int *y)
+> {
+>     spin_lock(x);
+>     spin_unlock(x);
+> }
+> 
+> P1(int *x, int *y)
+> {
+>     spin_lock(x);
+>     smp_mb__after_unlock_lock();
+>     *y = 1;
+> }
+> 
+> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
+> P0 passes a lock to P1 which then uses this fence.
+> 
+> The patch makes ppo a subrelation of po by letting fence contribute
+> to ppo only in case the fence links events of the same thread.
+> 
+> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
 > ---
->   drivers/ufs/core/ufshcd.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 81c9f07ebfc8..3357cfa23616 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -8544,7 +8544,7 @@ static int ufshcd_device_init(struct ufs_hba *hba, bool init_dev_params)
->   			hba->scsi_host_added = true;
->   		}
->   		/* MCQ may be disabled if ufshcd_alloc_mcq() fails */
-> -		if (is_mcq_supported(hba) && use_mcq_mode)
+>  tools/memory-model/linux-kernel.cat | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> index cfc1b8fd46da..adf3c4f41229 100644
+> --- a/tools/memory-model/linux-kernel.cat
+> +++ b/tools/memory-model/linux-kernel.cat
+> @@ -82,7 +82,7 @@ let rwdep = (dep | ctrl) ; [W]
+>  let overwrite = co | fr
+>  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+>  let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+> -let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+> +let ppo = to-r | to-w | (fence & int) | (po-unlock-lock-po & int)
 
-This has been removed/optimized  by commit:
+Alternatively can be the following appended diff? Requires only single 'int'
+in ->ppo then and prevents future similar issues caused by sub relations.
+Also makes clear that ->ppo can only be CPU-internal.
 
-https://patches.linaro.org/project/linux-scsi/patch/8840cea4a57b46dabce18acc39afc50ab826330f.1676567593.git.quic_asutoshd@quicinc.com/
+Or would that not work for some reason? For the test you shared at least, the
+graphs are the same.
 
-so this patch is not necessary anymore???
+Either way:
 
+Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-> +		if (is_mcq_supported(hba))
->   			ufshcd_config_mcq(hba);
->   	}
->   
+---8<-----------------------
+
+diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+index 07f884f9b2bf..63052d1628e9 100644
+--- a/tools/memory-model/linux-kernel.cat
++++ b/tools/memory-model/linux-kernel.cat
+@@ -70,7 +70,7 @@ let rwdep = (dep | ctrl) ; [W]
+ let overwrite = co | fr
+ let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+ let to-r = addr | (dep ; [Marked] ; rfi)
+-let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
++let ppo = (to-r | to-w | fence | po-unlock-lock-po) & int
+ 
+ (* Propagation: Ordering from release operations and strong fences. *)
+ let A-cumul(r) = (rfe ; [Marked])? ; r
