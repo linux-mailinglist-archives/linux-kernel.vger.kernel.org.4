@@ -2,93 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3435E6A32BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D756A32C2
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjBZQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 11:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S229820AbjBZQPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 11:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjBZQLX (ORCPT
+        with ESMTP id S229529AbjBZQPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 11:11:23 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6E218146;
-        Sun, 26 Feb 2023 08:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Dz6wvhhZodWOX7hNA0c1gSql4IyZN9lBKSgUgMAtsLA=; b=cg8mJ2QZHJeWo9G29AGtRwycwX
-        gOYuitq/SEVfc5FOLq1a7unoogXL9+eZidG3CIuaCL3ap1LjNEshAouvpmKzaKZdhduDkvWZOaJJk
-        8cx69rKdB+g7Jom9djfrvimbM9gA3qbv7gi9mekj7LlEzf4Cm34VWbUirMloZGjO6+XFmVT0eAwPT
-        BCOsNDFUCejWpK+B3f9OHK+miLyscOKzkoSZRNmMJHtTlJmU3jjIDtPbSwKLs8i3Kz55FZQ92x1Lp
-        tw6dCLIgGDtnUByB8aGBqk7dChnunJPgns7kub9/oP0vNavILiW5iSJg3Pzz37OxR+8gsfGOiS6Cq
-        y6SiMo3Q==;
-Received: from [152.254.196.162] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pWJcJ-00FweO-SJ; Sun, 26 Feb 2023 17:11:16 +0100
-Message-ID: <4753106d-b370-5393-2908-4067f3c306e5@igalia.com>
-Date:   Sun, 26 Feb 2023 13:11:09 -0300
+        Sun, 26 Feb 2023 11:15:45 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7697B199FF
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 08:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=I/vNKcv8YFn/TMDGw57ceVhj7ZgaN7emxI2MAl5HQpw=; b=G4K/GhqVAsA6spj/BLXM4HObnc
+        WW82tRNF9tckyMuoBAydUmZkQOLXUeS5EqkuLfuQikSYLTgCaI3Zm/BtJHsXLrTIWM83d/hRHJkpr
+        SXFGnwbvNet5rDfTOPWgTgcXtcPonG/CfdugA/pcXvchW4Yf9IGVfwwDRxhZXCtu9b9UEBc82QYJy
+        bGZEz7sFAQZQMncL2LIceEnPT+Wpsojfmo9whKfZatuuiGUDFW8y9M34xmCOlUN3y1trCLkml8PMC
+        VzSYqioxzZM4HPn2vRB/khd5fWnHr0eV1mWH7v3iDlosn5Xe4Yu2Cn+YXTC4vRXjNzaI1aXDUH2kB
+        rvP1EMug==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pWJgR-00DxAP-0a;
+        Sun, 26 Feb 2023 16:15:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0371F300269;
+        Sun, 26 Feb 2023 17:15:27 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BC16B20C0F373; Sun, 26 Feb 2023 17:15:27 +0100 (CET)
+Date:   Sun, 26 Feb 2023 17:15:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     mingo@redhat.com, will@kernel.org, linux-kernel@vger.kernel.org,
+        boqun.feng@gmail.com
+Subject: Re: [PATCH 5/6] locking/rwsem: Unify wait loop
+Message-ID: <Y/uFn4WwZ8R3Dh4S@hirez.programming.kicks-ass.net>
+References: <20230223122642.491637862@infradead.org>
+ <20230223123319.608133045@infradead.org>
+ <0be586e4-8c08-63ff-a78d-ffb5ae37adc3@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] panic: Fixes the panic_print NMI backtrace setting
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     bhe@redhat.com, pmladek@suse.com, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        d.hatayama@jp.fujitsu.com, feng.tang@intel.com,
-        hidehiro.kawai.ez@hitachi.com, keescook@chromium.org,
-        mikelley@microsoft.com, vgoyal@redhat.com, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, stable@vger.kernel.org
-References: <20230210203510.1734835-1-gpiccoli@igalia.com>
- <20230225214454.5eb25ff8a937a99d357c44ad@linux-foundation.org>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20230225214454.5eb25ff8a937a99d357c44ad@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0be586e4-8c08-63ff-a78d-ffb5ae37adc3@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/02/2023 02:44, Andrew Morton wrote:
-> On Fri, 10 Feb 2023 17:35:10 -0300 "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
-> [...] 
->> Notice that while at it, I got rid of the "crash_kexec_post_notifiers"
->> local copy in panic(). This was introduced by commit b26e27ddfd2a
->> ("kexec: use core_param for crash_kexec_post_notifiers boot option"),
->> but it is not clear from comments or commit message why this local copy
->> is required.
->>
->> My understanding is that it's a mechanism to prevent some concurrency,
->> in case some other CPU modify this variable while panic() is running.
->> I find it very unlikely, hence I removed it - but if people consider
->> this copy needed, I can respin this patch and keep it, even providing a
->> comment about that, in order to be explict about its need.
-> 
-> Only two sites change crash_kexec_post_notifiers, in
-> arch/powerpc/kernel/fadump.c and drivers/hv/hv_common.c.  Yes, it's
-> very unlikely that this will be altered while panic() is running and
-> the consequences will be slight anyway.
-> 
-> But formally, we shouldn't do this, especially in a -stable
-> backportable patch.  So please, let's have the minimal bugfix for now
-> and we can look at removing that local at a later time?
-> 
+On Thu, Feb 23, 2023 at 05:45:56PM -0500, Waiman Long wrote:
 
-Thanks Andrew, I agree with you! I just sent a V5 with the bugfix alone,
-not changing this local/global variable behavior.
+> Unfortunately, lockevent_inc() doesn't work with waiter_type() like that as
+> the compilation will fail if CONFIG_LOCK_EVENT_COUNTS is enabled.  Could you
+> include the attached patch in your series and make the following changes?
 
-Cheers,
+Yeah, robot told me; fixed it like so:
 
-
-Guilherme
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -995,13 +995,16 @@ static inline void rwsem_cond_wake_waite
+ 	rwsem_mark_wake(sem, wake_type, wake_q);
+ }
+ 
+-#define waiter_type(_waiter, _r, _w)	\
+-	((_waiter)->type == RWSEM_WAITING_FOR_READ ? (_r) : (_w))
++#define lockevent_rw_inc(rd, evr, evw)	do {	\
++	lockevent_cond_inc(evr, (rd));		\
++	lockevent_cond_inc(evw, !(rd));		\
++} while (0)
+ 
+ static __always_inline struct rw_semaphore *
+-rwsem_waiter_wait(struct rw_semaphore *sem, struct rwsem_waiter *waiter, int state)
++rwsem_waiter_wait(struct rw_semaphore *sem, struct rwsem_waiter *waiter,
++		  int state, bool reader)
+ {
+-	trace_contention_begin(sem, waiter_type(waiter, LCB_F_READ, LCB_F_WRITE));
++	trace_contention_begin(sem, reader ? LCB_F_READ : LCB_F_WRITE);
+ 
+ 	/* wait to be given the lock */
+ 	for (;;) {
+@@ -1019,18 +1022,19 @@ rwsem_waiter_wait(struct rw_semaphore *s
+ 			break;
+ 		}
+ 		schedule_preempt_disabled();
+-		lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
++		lockevent_rw_inc(reader, rwsem_sleep_reader, rwsem_sleep_writer);
+ 	}
+ 
+ 	__set_current_state(TASK_RUNNING);
+-	lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
++
++	lockevent_rw_inc(reader, rwsem_rlock, rwsem_wlock);
+ 	trace_contention_end(sem, 0);
+ 	return sem;
+ 
+ out_nolock:
+ 	rwsem_del_wake_waiter(sem, waiter);
+ 	__set_current_state(TASK_RUNNING);
+-	lockevent_inc(waiter_type(waiter, rwsem_rlock_fail, rwsem_wlock_fail));
++	lockevent_rw_inc(reader, rwem_rlock_fail, rwsem_wlock_fail);
+ 	trace_contention_end(sem, -EINTR);
+ 	return ERR_PTR(-EINTR);
+ }
+@@ -1112,7 +1116,7 @@ rwsem_down_read_slowpath(struct rw_semap
+ 	if (!wake_q_empty(&wake_q))
+ 		wake_up_q(&wake_q);
+ 
+-	return rwsem_waiter_wait(sem, &waiter, state);
++	return rwsem_waiter_wait(sem, &waiter, state, true);
+ }
+ 
+ /*
+@@ -1162,7 +1166,7 @@ rwsem_down_write_slowpath(struct rw_sema
+ 	}
+ 	raw_spin_unlock_irq(&sem->wait_lock);
+ 
+-	return rwsem_waiter_wait(sem, &waiter, state);
++	return rwsem_waiter_wait(sem, &waiter, state, false);
+ }
+ 
+ /*
