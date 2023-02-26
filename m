@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABDF6A33A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 20:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B2C6A33A7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 20:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjBZTck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 14:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
+        id S229718AbjBZTdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 14:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBZTci (ORCPT
+        with ESMTP id S229720AbjBZTdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 14:32:38 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 47CD1CC04
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 11:32:37 -0800 (PST)
-Received: (qmail 102798 invoked by uid 1000); 26 Feb 2023 14:32:36 -0500
-Date:   Sun, 26 Feb 2023 14:32:36 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
-        frederic@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y/uz1FYR0rP8uTzg@rowland.harvard.edu>
-References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
- <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
- <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
- <Y/rEH2r9i0BtfxEW@rowland.harvard.edu>
- <Y/rNUfW509AQYCYn@boqun-archlinux>
- <Y/rSQ2FNTJyj2bqR@rowland.harvard.edu>
- <a862ee59-ca12-b609-48cc-0784c7ce24af@huaweicloud.com>
- <Y/uOA3umovz06/SV@rowland.harvard.edu>
- <20230226184528.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+        Sun, 26 Feb 2023 14:33:36 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBDE1722
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 11:33:34 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id y2so4019407pjg.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 11:33:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sladewatkins.net; s=googled;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J3rRDs2lIx7wKb02F3SdqpHY3GUhiuvybUOWg1tlwMI=;
+        b=hYxUj/jwmRn0NMrBbqN7sklYwDndvjf7JcERPmwIN31tvJXpKZwkbUCOSovMhRQA8L
+         cgob2760zBB/dy+hBtMHK76PpeGS+bLFW24Tufs2AV9JNBAs8NHvsF9C2txjffy6WMs8
+         r+LGMTGx0+pTDvknHF6jc0G9RcBtIqU2qQ0UXV+cEZygrfsaele2zETbpjjqauet4eyx
+         MXT13MPv0pYDx6LAU4xfDkfqVag3n8c4YHd6gE+7ydJxqOBNvh8IOQWre4kekrk3LjZ2
+         GrnYEdp41I5jTMeEm2yqD+2yTcxncIbTN+ZEQvhu92yD9Ya71D2h3LOkhtNfWighdAt7
+         oeQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J3rRDs2lIx7wKb02F3SdqpHY3GUhiuvybUOWg1tlwMI=;
+        b=t9Xu1Qb9wrjLjFdKYBAndwsglydPHtrtTmZij0sCQTt7B3SK16uFcJMh4lFY6jJYQT
+         fhG8AkbHA00FoyHpc1f3zr5Pnz8YaPWgjDMYkiCX/UEi6s+h9+x5H5X9RwNUvHrnKx0Y
+         26ZHKtX2e7MW+AYjoSJhwUSR72uVannFHvQa+7P8APJBaHrKq+W8xyxFsRZsNM4FUc19
+         z2ziSgPTxvb33TvwQFd12t3iv7qyfWa1vtCPyaToNc6zsBZN7aK0fDkZ/a8X0PIl1kvq
+         uX+Ny+2IABqpog1+royPOSzbEMRIZF+10V3SyLJF+VieL2yW3WF8ctsPoIinHLtlMAFe
+         w9kQ==
+X-Gm-Message-State: AO0yUKUM7zwZy+Ctv/akbvJUQTpjMSKDSOHoj4ZqM3m8YmD9JbTE4iY9
+        MklzSH6LcXuzKJaYi4rb2SYTIRqVG4A9FujJHMDFsGNGSCh0Xg4ZE+6Z8A==
+X-Google-Smtp-Source: AK7set/KIkktj+QU9jFlQGMilLa0+bzuQhk2W5nRcoDIZ3zfoDo2QrOA/X8kP/fCb/4dPU5BTSutR4JbuY4l23X2ylE=
+X-Received: by 2002:a17:90a:b394:b0:237:c367:edda with SMTP id
+ e20-20020a17090ab39400b00237c367eddamr1649580pjr.5.1677440013968; Sun, 26 Feb
+ 2023 11:33:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226184528.GY2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230226034256.771769-1-sashal@kernel.org> <20230226034256.771769-12-sashal@kernel.org>
+ <Y/rbGxq8oAEsW28j@sol.localdomain> <Y/rufenGRpoJVXZr@sol.localdomain> <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+In-Reply-To: <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Sun, 26 Feb 2023 14:33:22 -0500
+Message-ID: <CA+pv=HONnqX-mv9aieRAqbVnzUL70=cVE+H5ZwW855nVuRph1w@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.1 12/21] fs/super.c: stop calling
+ fscrypt_destroy_keyring() from __put_super()
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,102 +72,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 10:45:28AM -0800, Paul E. McKenney wrote:
-> On Sun, Feb 26, 2023 at 11:51:15AM -0500, Alan Stern wrote:
-> > Here's a related question to think about.  Suppose a compiler does make 
-> > this change, adding a load-and-test in front of a store.  Can that load 
-> > cause a data race?
-> > 
-> > Normally I'd say no, because compilers aren't allowed to create data 
-> > races where one didn't already exist.  But that restriction is part of 
-> > the C/C++ standard, and what we consider to be a data race differs from 
-> > what the standard considers.
-> > 
-> > So what's the answer?  Is the compiler allowed to translate:
-> > 
-> > 	r1 = READ_ONCE(*x);
-> > 	if (r1)
-> > 		*y = 1;
-> > 
-> > into something resembling:
-> > 
-> > 	r1 = READ_ONCE(*x);
-> > 	rtemp = *y;
-> > 	if (r1) {
-> > 		if (rtemp != 1)
-> > 			*y = 1;
-> > 	}
-> > 
-> > (Note that whether the load to rtemp occurs inside the "if (r1)" 
-> > conditional or not makes no difference; either way the CPU can execute 
-> > it before testing the condition.  Even before reading the value of *x.)
-> > 
-> > _If_ we assume that these manufactured loads can never cause a data race 
-> > then it should be safe to remove the r-pre/post-bounded tests for plain 
-> > writes.
-> > 
-> > But what if rtemp reads from a plain write that was torn, and the 
-> > intermediate value it observes happens to be 1, even though neither the 
-> > initial nor the final value of *y was 1?
-> 
-> I am not worried about compilers creating data races, so that assignment
-> to rtemp would be within the "if (r1)" statement.  Not that this matters,
-> as you say, from a hardware ordering viewpoint.
-> 
-> However, tearing is a concern.  Just to make sure I undersand, one
-> scenario might be where the initial value of *y was zero and the final
-> value was 0x10001, correct?  In that case, we have seen compilers that
-> would write that constant 16 bits at a time, resulting in an transitory
-> value of 0x1.
-> 
-> But in this case, we would need the value to -not- be 1 for bad things
-> to happen, correct?
-> 
-> And in that case, we would need the value to initially be 1 and the
-> desired value to be 1 and some other store to redundantly set it to
-> 1, but tear is such a way that the transitory value is not 1, correct?
-> Plus we should detect the data race in that case, not?
-> 
-> Or am I missing yet another opportunity for a mischievous compiler?
+On Sun, Feb 26, 2023 at 2:24=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
+wrote:
+>
+> On Sat, Feb 25, 2023 at 09:30:37PM -0800, Eric Biggers wrote:
+> > On Sat, Feb 25, 2023 at 08:07:55PM -0800, Eric Biggers wrote:
+> > > On Sat, Feb 25, 2023 at 10:42:47PM -0500, Sasha Levin wrote:
+> > > > From: Eric Biggers <ebiggers@google.com>
+> > > >
+> > > > [ Upstream commit ec64036e68634231f5891faa2b7a81cdc5dcd001 ]
+> > > >
+> > > > Now that the key associated with the "test_dummy_operation" mount o=
+ption
+> > > > is added on-demand when it's needed, rather than immediately when t=
+he
+> > > > filesystem is mounted, fscrypt_destroy_keyring() no longer needs to=
+ be
+> > > > called from __put_super() to avoid a memory leak on mount failure.
+> > > >
+> > > > Remove this call, which was causing confusion because it appeared t=
+o be
+> > > > a sleep-in-atomic bug (though it wasn't, for a somewhat-subtle reas=
+on).
+> > > >
+> > > > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> > > > Link: https://lore.kernel.org/r/20230208062107.199831-5-ebiggers@ke=
+rnel.org
+> > > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > >
+> > > Why is this being backported?
+> > >
+> > > - Eric
+> >
+> > BTW, can you please permanently exclude all commits authored by me from=
+ AUTOSEL
+> > so that I don't have to repeatedly complain about every commit individu=
+ally?
+> > Especially when these mails often come on weekends and holidays.
+> >
+> > I know how to use Cc stable, and how to ask explicitly for a stable bac=
+kport if
+> > I find out after the fact that one is needed.  (And other real people c=
+an always
+> > ask too... not counting AUTOSEL, even though you are sending the AUTOSE=
+L emails,
+> > since clearly they go through no or very little human review.)
+> >
+> > Of course, it's not just me that AUTOSEL isn't working for.  So, you'll=
+ still
+> > continue backporting random commits that I have to spend hours bisectin=
+g, e.g.
+> > https://lore.kernel.org/stable/20220921155332.234913-7-sashal@kernel.or=
+g.
+> >
+> > But at least I won't have to deal with this garbage for my own commits.
+> >
+> > Now, I'm not sure I'll get a response to this --- I received no respons=
+e to my
+> > last AUTOSEL question at
+> > https://lore.kernel.org/stable/Y1DTFiP12ws04eOM@sol.localdomain.  So to
+> > hopefully entice you to actually do something, I'm also letting you kno=
+w that I
+> > won't be reviewing any AUTOSEL mails for my commits anymore.
+> >
+>
+> The really annoying thing is that someone even replied to your AUTOSEL em=
+ail for
+> that broken patch and told you it is broken
+> (https://lore.kernel.org/stable/d91aaff1-470f-cfdf-41cf-031eea9d6aca@mail=
+box.org),
+> and ***you ignored it and applied the patch anyway***.
+>
+> Why are you even sending these emails if you are ignoring feedback anyway=
+?
+>
+> How do I even get you to not apply a patch?  Is it even possible?
+>
+> I guess I might as well just add an email filter that auto-deletes all AU=
+TOSEL
+> emails, as apparently there's no point in responding anyway?
 
-Let's try a better example:
+I test this branch for Greg but don't pay attention to these emails
+Sasha sends out (because there's just waaaaay too many of them to look
+through unless they get a reply; I find them quite annoying
+otherwise.) But if these commits automatically get applied to stable
+trees, even with objections from the committers, then I personally
+question the methodology for having AUTOSEL in the first place.
+Commits should be tested and backported with explicit purpose by their
+developers, IMO.
 
-P0(int *x, int *y)
-{
-	*y = 0x10001;
-	smp_store_release(x, 1);
-}
-
-P1(int *x, int *y)
-{
-	int r1;
-
-	r1 = READ_ONCE(*x);
-	if (r1)
-		*y = 1;
-}
-
-exists (1:r1=1 /\ y=0x10001)
-
-Assume the compiler translates "*y = 1;" to:
-
-	{
-		rtemp = *y;
-		if (rtemp != 1)
-			*y = 1;
-	}
-
-Then there is nothing preventing P1's CPU from loading *y into rtemp 
-before it reads *x.  If the plain write in P0 is torn then rtemp could 
-end up getting set to 1, so P1 wouldn't write anything to *y and the 
-litmus test would succeed.
-
-If the LKMM should think this litmus test has no data race then it 
-should also think the test will never succeed.  But I've just shown how 
-it might succeed.  Ergo the LKMM should say this test has a data race, 
-and thus we shouldn't remove the r-pre-bounded tests for plain writes.
-
-Of course, this is a separate question from whether w-pre-bounded should 
-be changed to use rwdep instead of addr.
-
-Alan
+-- Slade
