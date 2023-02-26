@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD286A2E7C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 06:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D042F6A2E7E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 06:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjBZFw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 00:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
+        id S229507AbjBZFyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 00:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBZFwr (ORCPT
+        with ESMTP id S229379AbjBZFye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 00:52:47 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69FD136EF;
-        Sat, 25 Feb 2023 21:52:46 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id x14so6053215vso.9;
-        Sat, 25 Feb 2023 21:52:46 -0800 (PST)
+        Sun, 26 Feb 2023 00:54:34 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC8CF766;
+        Sat, 25 Feb 2023 21:54:33 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so6910100pjb.3;
+        Sat, 25 Feb 2023 21:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O2H4Vh3JQEN1PhARpU0GTYpYqzp5jLNHawwZOVptfOk=;
-        b=nBrjA9gf93Wv1r7E/fwn2YVmNO9mbMQnSARhXaoLn0sVcV5I1CM86kfUOjYrxZgGTJ
-         f3xvQlDd0tAR301V30W0jOhP0ZfxKCWik67qI7wHnKP9aE0i6LiztDQ6h3XgFbafGPwv
-         Zk8oVB3Uidg7VQcTSQ8ilusDI6Js8hB+kiLpGoGOjv5J/0CUE25sY7tHWa36JXltOlgv
-         1lIJJahMr6aNK7l5vACyOcnzU54X8tQfKXy4LbWlqgGYNfuuxn3sBE/oMP9ECC9ekA/R
-         ISQ/ewj5h4DDfeVa3XO2endeFx3uSm6MdvvGo6gzfm4vQoFuCxCF6dkcvvRep6gaIpwI
-         uiNw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1KU4UKwDKBhb3LB8IBaolpZP0aXG6lbdDGveHBNcajY=;
+        b=PVkpTdH/j4Zk41D9854onJLUFNleBil8ezXgBr9h7Gq/p/99RCPJPocAQVjvIi6kMc
+         5mpkYl4ZrDkQUtz/XsHaUlx64M3pCaEHGwneocwl03JqI1ZP9a1wI3qD5Ie2dAsy6ECE
+         ii2PmNWEJyZJkOluYxVsGTYf1CvZtEwWdBNYhC5Y9EVhLe4CPbDKlhN2TqpWKNHlRtnq
+         iWR/tBx3KODwMCh3ZG4eDMlbAWAErCsklP/IZNAE8uld51dCtg1Ef5HJZnVMiJHuJ9Hv
+         mkaO5vYXME4Pbtj+GX7iR4uvKkNiP0/29tOXCzWR+2fneZngbwPZ8Evgmy74l2LzNUuz
+         JeiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O2H4Vh3JQEN1PhARpU0GTYpYqzp5jLNHawwZOVptfOk=;
-        b=sBCygAMZR+Iiu/+49fk5xrb3sGnLjSJ2hu2B+b2eYUUNcgDcm+aERNPTRJctdfDs0s
-         hfOdJTey+JbJ92KeuaSJIwsXlLcFsjxAxITaQztTKLVc7nGEWdQjY28jjuPDRdwwVtuU
-         TrHsOXOyk3/uCXVQODX2IcZZbHKRTkbuIwt/uLBj6d6uCjDIv6Y2IR+/LNz+aSHvXHd6
-         nfxh96kWcBYMw3bNm7GUbk9WkLoaXVUaHEaD+oSTnR523KNzjU3gyjQa0nvp92iamaTR
-         qLQqU4ZAK+D7QX9zczNG23Nt4JIkkOGPaBcL+hAS2PcMiW/JLPIw1KTC0a3ZXz6UvoDL
-         tRzQ==
-X-Gm-Message-State: AO0yUKXMRRZH/8dwigrPyYQrcnaAq6VpZ2cujDwfsIUimGww5ZLz17Th
-        2dXvoq4iKNTnysUuFpU3GkkrQpK2eVvpTtFP15E=
-X-Google-Smtp-Source: AK7set9UIGHgIySyWRZA7668der+RjU5uY/74VdNrOKuNVsqxPQuUApOuo6GdWnoYTEogHc/mJhuuAuXLkcX1njp88Q=
-X-Received: by 2002:a67:db02:0:b0:411:c666:583b with SMTP id
- z2-20020a67db02000000b00411c666583bmr5020787vsj.5.1677390765792; Sat, 25 Feb
- 2023 21:52:45 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1KU4UKwDKBhb3LB8IBaolpZP0aXG6lbdDGveHBNcajY=;
+        b=t6eIzJCCoptOjTXzvy7xb5AicML9Pin54ysPBVIhAoFlED/1pb5pa84XLGsmGCeNzd
+         lfYuMDI4kyt2ftSVzD1CzIwf7y0aa4TAZh/ESIImUx9vA2LZ16UTrg85iS6o2XWpd4Vo
+         cF0koM/JbcoNOXo66nVJhQFExYGK7EhR6u0QfogErk+/j1Bt/+IXLkL7Bwb66CgYR+9C
+         5jHqCVFnW+iGidYbjjtk0cggUoC54taDNdRAgI0JTS7sCEsVcqDEHXjUeTCGeK3k9a5S
+         igvkGUCz29XcsKeKWRpdecYk2mQeDYRDUEi7PxTwDdb80nvpBm5eeGyfoyOPv1E8iYzM
+         3Tqw==
+X-Gm-Message-State: AO0yUKWhrdDudtWK3VcBrj2nAVD1fdbuGXMqD2ULo3b52ZL+bmegczyp
+        FDRS2LInYZImJpKJ7MdKlvk=
+X-Google-Smtp-Source: AK7set91V52B1esubCcF+lnxwPQ0rLhC0bc07ISISeNB2K4/mJ+WCFa9kpkQKEujKGIk15AtBGeiAQ==
+X-Received: by 2002:a17:903:8c4:b0:19a:b5cd:6e73 with SMTP id lk4-20020a17090308c400b0019ab5cd6e73mr5051874plb.3.1677390872747;
+        Sat, 25 Feb 2023 21:54:32 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id v1-20020a1709028d8100b00194d2f14ef0sm2095504plo.23.2023.02.25.21.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Feb 2023 21:54:32 -0800 (PST)
+From:   Kang Chen <void0red@gmail.com>
+To:     lenb@kernel.org
+Cc:     rafael@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
+Subject: [PATCH] acpi: check for null return of devm_kzalloc in fch_misc_setup
+Date:   Sun, 26 Feb 2023 13:54:27 +0800
+Message-Id: <20230226055427.2512453-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230225113712.340612-1-alistair@alistair23.me>
- <20230225113712.340612-4-alistair@alistair23.me> <CAOMZO5COg7wZbG3aWcwMsvTBQ9Ft8CQ9wearXMh+00o29CTaeg@mail.gmail.com>
-In-Reply-To: <CAOMZO5COg7wZbG3aWcwMsvTBQ9Ft8CQ9wearXMh+00o29CTaeg@mail.gmail.com>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Sun, 26 Feb 2023 15:52:19 +1000
-Message-ID: <CAKmqyKPuuHcqYqNinrSfziN1+=5bVTyg=8eZh5j=yYS3BEWMRA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Alistair Francis <alistair@alistair23.me>, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
-        kernel@pengutronix.de, jernej.skrabec@gmail.com,
-        linux@armlinux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,51 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 6:37 AM Fabio Estevam <festevam@gmail.com> wrote:
->
-> On Sat, Feb 25, 2023 at 8:37=E2=80=AFAM Alistair Francis <alistair@alista=
-ir23.me> wrote:
->
-> > +&i2c2 {
-> > +       clock-frequency =3D <100000>;
-> > +       pinctrl-names =3D "default";
-> > +       pinctrl-0 =3D <&pinctrl_i2c2>;
-> > +       status =3D "okay";
-> > +
-> > +       bd71815: pmic@4b {
-> > +               compatible =3D "rohm,bd71815";
-> > +               reg =3D <0x4b>;
-> > +               pinctrl-names =3D "default";
-> > +               pinctrl-0 =3D <&pinctrl_bd71815>;
-> > +               interrupt-parent =3D <&gpio6>; /* PMIC_INT_B GPIO6_IO16=
- */
-> > +               interrupts =3D <16 IRQ_TYPE_LEVEL_LOW>;
-> > +               gpio-controller;
-> > +               clocks =3D <&clks IMX7D_CLKO2_ROOT_SRC>;
-> > +               clock-output-names =3D "bd71815-32k-out";
-> > +               #clock-cells =3D <0>;
-> > +               #gpio-cells =3D <1>;
->
-> The binding document says #gpio-cells =3D <2>;
+devm_kzalloc may fail, clk_data->name might be null and will
+cause illegal address access later.
 
-Fixed!
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+ drivers/acpi/acpi_apd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->
-> > +
-> > +               regulators {
-> > +                       #address-cells =3D <1>;
-> > +                       #size-cells =3D <0>;
-> > +
-> > +                       buck1_reg: regulator@0 {
-> > +                               reg =3D <0>;
->
-> The regulator@0 and reg should not be present.
+diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+index 3bbe2276c..80f945cbe 100644
+--- a/drivers/acpi/acpi_apd.c
++++ b/drivers/acpi/acpi_apd.c
+@@ -83,6 +83,8 @@ static int fch_misc_setup(struct apd_private_data *pdata)
+ 	if (!acpi_dev_get_property(adev, "clk-name", ACPI_TYPE_STRING, &obj)) {
+ 		clk_data->name = devm_kzalloc(&adev->dev, obj->string.length,
+ 					      GFP_KERNEL);
++		if (!clk_data->name)
++			return -ENOMEM;
+ 
+ 		strcpy(clk_data->name, obj->string.pointer);
+ 	} else {
+-- 
+2.34.1
 
-Fixed
-
->
-> Please check Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
-
-Thanks, I double checked my latest code against the bindings.
-
-Alistair
