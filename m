@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FEE6A2D0E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310886A2D10
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjBZCG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 21:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S229589AbjBZCHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 21:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBZCG1 (ORCPT
+        with ESMTP id S229504AbjBZCHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 21:06:27 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A568113DA;
-        Sat, 25 Feb 2023 18:06:26 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id q6so1220993iot.2;
-        Sat, 25 Feb 2023 18:06:26 -0800 (PST)
+        Sat, 25 Feb 2023 21:07:10 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A617A113FC;
+        Sat, 25 Feb 2023 18:07:09 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id y140so1210314iof.6;
+        Sat, 25 Feb 2023 18:07:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EFQbRxHSsPKNCItLK55Hjyu7uq3Glv5bk5SL/HPENLw=;
-        b=pWl9WeshiUsJJpSN94ckZrzGj8ltCX4QfX3dzF6nARHNtRoAXdghfuRZf4/vGXUJUW
-         sBbfR7GSZoF0L4vP+oi5w9YxWVGK5Pn2hSymO9bcaYg1mCtKrdACDzuRlCbzHJUPJneR
-         cS2G2kA5UMrR+ly5+pz6W/9B6XhTQjXg/0KUsNeOZ1VLEqTINL8i3AW6u6o7vegrbjfN
-         XQSqyClPFVy1LrEHgCTr5711M4o6uUvyAKzqWRwfhQOUXdW5A6/iIpIMvX3k+AV3gboi
-         2cCgVlNGbFIlazjeF+pRTo/tSfOhu+E9riJK6xid9d+sz7NMmkGcAqCUEwKXOtFlS+ox
-         HU/A==
+        bh=oUrV65DvJz1MlLRNg+iPzZY8aqrFbPa/knFZvxr1Kbw=;
+        b=SGLOso4TUPA1ykJmwAoTQWhovHzSENx0gsg++egebJJ38y7f8WUlwKUrRS/lhSFwBh
+         gVgI/fsabQF8fhIhJCIcpZzW+fyoCG/sclP7/Zp6VBCdvr0YT+9PRQiGhCqGoi8S0Xmo
+         2uKjrWfoc+UaR0bDyk3low8Rl+7GqX5ZiG4S0CIAiqa8qk93oF3v97QHLAnIH/iQ4Tv5
+         VHnPkQPYEJZEf+aSgNc+q2RdLEOvBR30T/AIKBwXXDL/hug3fRCmyMxgbha0PuKcuZjq
+         6kmAM6b+XOWi1SNYiYKbgaEQ/dlrrbH8bGagwRomDcgAd7hThiFdhIVAeGndOjK/3p0y
+         m1JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EFQbRxHSsPKNCItLK55Hjyu7uq3Glv5bk5SL/HPENLw=;
-        b=JGqCzhzpTLbfcqEpE5LuoPotZ+LEJqIV5K8lBUbXpc7mM9RLSPoLWOYpOpTmih/di1
-         U1pBmgvnoWHE+SKYzwwTn9qIcxH+m4LCrZHvA0b+Rx5Wtah16Ad4OuHqf+YbQmGh4DdX
-         dSTs8udZxjMyqoCIPUOJmeY9vSZs8dO206Ge9t1ON+aF7GTuqlp+Gw/FdxohsIXZGf1T
-         LZh8wAQs1krKtCUHrnnKz5C4nKvQ6FTgG47mAJv/ACkD/yuqTzVzcSaoTPfTYSFq9IY2
-         oozum1r+0XCqntj+d5Mz41helF9UKZ0Ej016GYbBpXTXw3s24oLHkKQQJbZSXKsgFUG3
-         TSag==
-X-Gm-Message-State: AO0yUKVD/LlVOxU1p+Nvo3y9cTeMv47zl1BpgpaHqVhtaFZAyAnwwIQ4
-        tWVt95oPGhm6Ky1e2TcV5z9We4Wv7Bapwg0s0dQrd3Nllojz5g==
-X-Google-Smtp-Source: AK7set/MlPlEPWlLadEyKgt76qfDiD1Iz/AOVbvZ4H8WCSAmhnYu/DiJXy6NU2VZEz/DY7PVFKYxnwwJ0fwprCFhX9A=
-X-Received: by 2002:a02:85ae:0:b0:3e5:c536:392 with SMTP id
- d43-20020a0285ae000000b003e5c5360392mr4590406jai.5.1677377185660; Sat, 25 Feb
- 2023 18:06:25 -0800 (PST)
+        bh=oUrV65DvJz1MlLRNg+iPzZY8aqrFbPa/knFZvxr1Kbw=;
+        b=gYOwSiZLbns3uwUvJUTcmTw2lgJjcyNqQZOtDcfdtK1QsPnk6HXe/SaPoDcTTxSo5p
+         22G0DqPlPeQPFr0Zx+OAMSpo4c45SqwHasYvey3hd/XpYnjb6ZCwIU1tNRZFlbf1Gs5F
+         bj2XRinHYeflwnrWLB8AjR6ff+6oEcM9JAR46v7IcXEzd1SJRGD28xepz+0a4SgjMEGI
+         Tom/q/Z0yn5geUCESf2nVGURjwgPOqtLV0DYE7HUgjfPOMAsLDZ5yQnRjyiLYsor/XRn
+         N15rMsHUvvnKFj9XrAg9jMFWHwjg/3c/4kIp6W9yxQVjoEBW24FeDEaHPxuhWaWQRMrB
+         kASw==
+X-Gm-Message-State: AO0yUKVObA/KuTYbTTTMGr7ybv5lqOf+H+7Uh7aYLr2Yc+y+0+gla+00
+        ks/B32reMA78lZEZd8KuwmBqAODzCHsKIsdwfsdPnzWiE5XdSA==
+X-Google-Smtp-Source: AK7set/M+mqinePR1EhKVLfvDJPGeXbG/PPPOrXHzrYDx/R+R5Rs/ow2rhQugFKuYXcjHgkwb3e/2OSvb+9qg3N/KL8=
+X-Received: by 2002:a6b:14c7:0:b0:745:934c:cc65 with SMTP id
+ 190-20020a6b14c7000000b00745934ccc65mr4098916iou.0.1677377229002; Sat, 25 Feb
+ 2023 18:07:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220929101329.31036-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220929101329.31036-1-lukas.bulwahn@gmail.com>
+References: <20220621081506.50096-1-jiaming@nfschina.com>
+In-Reply-To: <20220621081506.50096-1-jiaming@nfschina.com>
 From:   Matt Turner <mattst88@gmail.com>
-Date:   Sat, 25 Feb 2023 21:06:14 -0500
-Message-ID: <CAEdQ38Gp0rFZjpRKsrYp94WyBQPB6=7YbHu6JvjYwf2odx+TgQ@mail.gmail.com>
-Subject: Re: [PATCH] alpha: update config files
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-alpha@vger.kernel.org
+Date:   Sat, 25 Feb 2023 21:06:57 -0500
+Message-ID: <CAEdQ38EDxV=K-kxB=u0Z+YRaBr1yTT7iN5gzhxw6-QJo+n9y3Q@mail.gmail.com>
+Subject: Re: [PATCH] alpha: Add some spaces to ensure format specification
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -69,43 +68,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 6:14 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Tue, Jun 21, 2022 at 4:15 AM Zhang Jiaming <jiaming@nfschina.com> wrote:
 >
-> Clean up config files by:
->   - removing configs that were deleted in the past
->   - removing configs not in tree and without recently pending patches
->   - adding new configs that are replacements for old configs in the file
+> Add a space after ','.
+> Add spaces around the '=', '>' and '=='.
 >
-> For some detailed information, see Link.
->
-> Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
 > ---
->  arch/alpha/configs/defconfig | 2 --
->  1 file changed, 2 deletions(-)
+>  arch/alpha/boot/stdio.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 >
-> diff --git a/arch/alpha/configs/defconfig b/arch/alpha/configs/defconfig
-> index 6a39fe8ce9e5..1816c1dc22b1 100644
-> --- a/arch/alpha/configs/defconfig
-> +++ b/arch/alpha/configs/defconfig
-> @@ -39,14 +39,12 @@ CONFIG_PATA_CYPRESS=y
->  CONFIG_ATA_GENERIC=y
->  CONFIG_NETDEVICES=y
->  CONFIG_DUMMY=m
-> -CONFIG_NET_ETHERNET=y
->  CONFIG_NET_VENDOR_3COM=y
->  CONFIG_VORTEX=y
->  CONFIG_NET_TULIP=y
->  CONFIG_DE2104X=m
->  CONFIG_TULIP=y
->  CONFIG_TULIP_MMIO=y
-> -CONFIG_NET_PCI=y
->  CONFIG_YELLOWFIN=y
->  CONFIG_SERIAL_8250=y
->  CONFIG_SERIAL_8250_CONSOLE=y
+> diff --git a/arch/alpha/boot/stdio.c b/arch/alpha/boot/stdio.c
+> index 60f73ccd2e89..e6d1ebff4209 100644
+> --- a/arch/alpha/boot/stdio.c
+> +++ b/arch/alpha/boot/stdio.c
+> @@ -42,8 +42,8 @@ static int skip_atoi(const char **s)
+>
+>  static char * number(char * str, unsigned long long num, int base, int size, int precision, int type)
+>  {
+> -       char c,sign,tmp[66];
+> -       const char *digits="0123456789abcdefghijklmnopqrstuvwxyz";
+> +       char c, sign, tmp[66];
+> +       const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
+>         int i;
+>
+>         if (type & LARGE)
+> @@ -83,14 +83,14 @@ static char * number(char * str, unsigned long long num, int base, int size, int
+>                 precision = i;
+>         size -= precision;
+>         if (!(type&(ZEROPAD+LEFT)))
+> -               while(size-->0)
+> +               while (size-- > 0)
+>                         *str++ = ' ';
+>         if (sign)
+>                 *str++ = sign;
+>         if (type & SPECIAL) {
+>                 if (base==8)
+>                         *str++ = '0';
+> -               else if (base==16) {
+> +               else if (base == 16) {
+>                         *str++ = '0';
+>                         *str++ = digits[33];
+>                 }
+> @@ -125,7 +125,7 @@ int vsprintf(char *buf, const char *fmt, va_list args)
+>                                 /* 'z' changed to 'Z' --davidm 1/25/99 */
+>
+>
+> -       for (str=buf ; *fmt ; ++fmt) {
+> +       for (str = buf ; *fmt ; ++fmt) {
+>                 if (*fmt != '%') {
+>                         *str++ = *fmt;
+>                         continue;
+> @@ -296,7 +296,7 @@ int sprintf(char * buf, const char *fmt, ...)
+>         int i;
+>
+>         va_start(args, fmt);
+> -       i=vsprintf(buf,fmt,args);
+> +       i = vsprintf(buf, fmt, args);
+>         va_end(args);
+>         return i;
+>  }
 > --
-> 2.17.1
+> 2.25.1
 >
 
 Thanks for the patch! This was included in my pull request today and
