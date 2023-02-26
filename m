@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DBB6A2D16
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E3B6A2D19
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjBZCIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 21:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S229615AbjBZCJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 21:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjBZCIu (ORCPT
+        with ESMTP id S229540AbjBZCJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 21:08:50 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFEA11157;
-        Sat, 25 Feb 2023 18:08:48 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id bf15so1208886iob.7;
-        Sat, 25 Feb 2023 18:08:48 -0800 (PST)
+        Sat, 25 Feb 2023 21:09:15 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A611041C;
+        Sat, 25 Feb 2023 18:09:14 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id f14so1214263iow.5;
+        Sat, 25 Feb 2023 18:09:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrjdtBILIDq+NV0DYk67jfytffL1y4tAnBSHMKXYiGE=;
-        b=d6kmUKplnpCinpxYtGel4x9i/A3TT7tllyN6U5q2EzObKlKOA5nH9Qdfh06S1n97Wf
-         9DhUo3Z6z8rUs3JeEPKZu/HgGpbfyjvGaZFVvOIlRsvJN2S5iD+OgucMIpNfmT42qKWd
-         TRRdiRtMbiYa9n0jPyWtjuIIbtylvj4+OPFIVqF7tuIxVXhme9aNB83Isx23zzxJQ0KM
-         7TXEMWEyrnaC/gIHaQw2DTqNdAaT73GpsMGwhe95HgYWL96WFv35ixpNANQqpdY0iuu5
-         Ksx+l/3n4RHXw8IOXDbgYvXUH6beOE3+s9vOawQKWGBH1W27ArPfPBcFAWbxoFwLPvve
-         CQeg==
+        bh=zOiw7v4d0b1KPpG9R/9yiqx5BWikVuJtMLZ9Bzv3kSo=;
+        b=k+yMM7OX2Vq1cfpvwqtoq1c2EUROQBBVjl3ijtcoyhwuSOIBRGGC4N+G3mnkyTuLGR
+         DCbHX2YI/bH0kNvM8g2nLmO8kV3h4WGNmQIdqLXI8C/5MqTd/zGJwh6T0F0YiYSkDxqR
+         HrAixy5lA+PS6Z+hMXrB5ZQUSlpWE2ptOTd23u3NBHIQ1Psr3/kSAHVkLsS9KC19IbzQ
+         U7O436YrEHzpxwSlUmW1Kx4oOZQ8Tov54qKH1/PDhy/wHfFrLbHMKgovXSN8JxpJDIr1
+         GNENh4oT94YSVAOSzlY1WTNbCuwR2xKH4ImghicSABzEge7lnX66moQnucgURb5j9U5j
+         q72A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZrjdtBILIDq+NV0DYk67jfytffL1y4tAnBSHMKXYiGE=;
-        b=x3Y2zzIvTHjO54qV84Do3ml1N1TrChw0bzTbUL1u3/WMC3xWizz6GX7nlLwpa0Rn6z
-         /sJ1uIsPqI38GO+/oZk2uHxzaSsjYPtdpq4ny9HgL82ypUf1HrAzk5tD5XTdOsXXUoXi
-         6IuFpp6yaKayeWVEFfCmfHGFD+4J81Wunlgk0XUl2Xje3DkIfMigywYD5BddKmxlUZNL
-         bh1D+yT3aEmXEpoXNmTQqqaCinOEU4yZWr8d9mJj3Aek177IUTnyDANx2NeruhcCinqT
-         gZc4fEkIgQdM4gZAI9tkoGAve3YSMOOSabCckS3gkMNWVy1Y+CgvJyuOPQUzJbVK4k7J
-         NrfQ==
-X-Gm-Message-State: AO0yUKXst7/5DJigZMbq+LJCVFFqHl31durquFPjSXugnipElm9Ro3FI
-        ZwePT4vaiXYIkHSNe1S77JGB1zG3BEO/2J9rkoM=
-X-Google-Smtp-Source: AK7set8NXG7XzplL6Lbk5ufmQAIWK7F8jnvQJX+YRsxLo9IaAZhKMPpj3Z6d4ohfmTGPflB99o9bRDch5WRUc4qPkF8=
-X-Received: by 2002:a05:6602:2d89:b0:74c:a82e:eed1 with SMTP id
- k9-20020a0566022d8900b0074ca82eeed1mr2999725iow.0.1677377328284; Sat, 25 Feb
- 2023 18:08:48 -0800 (PST)
+        bh=zOiw7v4d0b1KPpG9R/9yiqx5BWikVuJtMLZ9Bzv3kSo=;
+        b=ULmB8JlkKBXa/NKO0/yg5//syzDJj0bvNBX9R8RpwZYcSVKFS6x5bdmxXZBUgHiy2z
+         fQUAIodN0BUKPCT5tMZL1zVna85H3LylBlIC0RsafoxeHnQJwfJ0p9wNnUGgWsFkzv9B
+         ySikpi+9JFpbVCEXUcb01s8tptfFxq1in0SJJ/+yFUbvEWgubPoqUffW32qj9i5w5IWi
+         IwhCHNRj6fRGSbQdOXV/cMolhFGloimaNTBvoT58OmfOoFXIyObxUjiGLA1zAqujuXsz
+         0NorbXC7o4ZiN9xw3AZ6zHyj4Tefcwv/o/GZP6lK8KoAE1c7bpFm7frC29iH5JzZwRZi
+         DtvQ==
+X-Gm-Message-State: AO0yUKWwymZ8fa/nm4Os7fNH9XfnyE/O5w9KRvm8C2advbLA2FeXl6R1
+        N5rDu9JHaKHazTgTjf5DhfDnosuSJ2Pn48URXvPqHoa8XrEOIrgG
+X-Google-Smtp-Source: AK7set/CAIQiJKl/9sFKTHtLe+J96h6rAxuX1mBEyeygUXcd0YNkvyyyyO+qiU5URQMYF7lDmYcLSIB4aXSMQMhoeWM=
+X-Received: by 2002:a05:6602:399c:b0:74c:deb9:538 with SMTP id
+ bw28-20020a056602399c00b0074cdeb90538mr398320iob.0.1677377353864; Sat, 25 Feb
+ 2023 18:09:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224060558.1856804-1-keescook@chromium.org>
-In-Reply-To: <20220224060558.1856804-1-keescook@chromium.org>
+References: <20211213185625.546358-1-colin.i.king@gmail.com>
+In-Reply-To: <20211213185625.546358-1-colin.i.king@gmail.com>
 From:   Matt Turner <mattst88@gmail.com>
-Date:   Sat, 25 Feb 2023 21:08:37 -0500
-Message-ID: <CAEdQ38Fg=Au5=BbyTHiEO+GaivheCe6hPBjcZhjgALxn4503Mg@mail.gmail.com>
-Subject: Re: [PATCH] alpha: Implement "current_stack_pointer"
-To:     Kees Cook <keescook@chromium.org>
+Date:   Sat, 25 Feb 2023 21:09:02 -0500
+Message-ID: <CAEdQ38GpkM8mZJ2oiADjCgKfEmavCrq9mcYErqPf-CHvWZX84g@mail.gmail.com>
+Subject: Re: [PATCH] alpha: osf_sys: reduce kernel log spamming on invalid
+ osf_mount call typenr
+To:     Colin Ian King <colin.i.king@gmail.com>
 Cc:     Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        linux-alpha@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+        linux-alpha@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -76,70 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 1:06 AM Kees Cook <keescook@chromium.org> wrote:
+On Mon, Dec 13, 2021 at 10:58 PM Colin Ian King <colin.i.king@gmail.com> wrote:
 >
-> To follow the existing per-arch conventions replace open-coded use
-> of asm "$30" as "current_stack_pointer". This will let it be used in
-> non-arch places (like HARDENED_USERCOPY).
+> Calling the osf_mount system call with an invalid typenr value will
+> spam the kernel log with error messages. Reduce the spamming by making
+> it a ratelimited printk.  Issue found when exercising with the stress-ng
+> enosys system call stressor.
 >
-> Cc: Richard Henderson <rth@twiddle.net>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Cc: "Alexander A. Klimov" <grandmaster@al2klimov.de>
-> Cc: linux-alpha@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->  arch/alpha/Kconfig                   | 1 +
->  arch/alpha/include/asm/thread_info.h | 2 ++
->  arch/alpha/lib/stacktrace.c          | 2 +-
->  3 files changed, 4 insertions(+), 1 deletion(-)
+>  arch/alpha/kernel/osf_sys.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-> index 4e87783c90ad..31f3dbcdc28c 100644
-> --- a/arch/alpha/Kconfig
-> +++ b/arch/alpha/Kconfig
-> @@ -3,6 +3,7 @@ config ALPHA
->         bool
->         default y
->         select ARCH_32BIT_USTAT_F_TINODE
-> +       select ARCH_HAS_CURRENT_STACK_POINTER
->         select ARCH_MIGHT_HAVE_PC_PARPORT
->         select ARCH_MIGHT_HAVE_PC_SERIO
->         select ARCH_NO_PREEMPT
-> diff --git a/arch/alpha/include/asm/thread_info.h b/arch/alpha/include/asm/thread_info.h
-> index 2592356e3215..28214db31053 100644
-> --- a/arch/alpha/include/asm/thread_info.h
-> +++ b/arch/alpha/include/asm/thread_info.h
-> @@ -43,6 +43,8 @@ struct thread_info {
->  register struct thread_info *__current_thread_info __asm__("$8");
->  #define current_thread_info()  __current_thread_info
+> diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+> index 8bbeebb73cf0..2367a385d726 100644
+> --- a/arch/alpha/kernel/osf_sys.c
+> +++ b/arch/alpha/kernel/osf_sys.c
+> @@ -521,7 +521,7 @@ SYSCALL_DEFINE4(osf_mount, unsigned long, typenr, const char __user *, path,
+>                 break;
+>         default:
+>                 retval = -EINVAL;
+> -               printk("osf_mount(%ld, %x)\n", typenr, flag);
+> +               printk_ratelimited("osf_mount(%ld, %x)\n", typenr, flag);
+>         }
 >
-> +register unsigned long *current_stack_pointer __asm__ ("$30");
-> +
->  #endif /* __ASSEMBLY__ */
->
->  /* Thread information allocation.  */
-> diff --git a/arch/alpha/lib/stacktrace.c b/arch/alpha/lib/stacktrace.c
-> index 62454a7810e2..2b1176dd5174 100644
-> --- a/arch/alpha/lib/stacktrace.c
-> +++ b/arch/alpha/lib/stacktrace.c
-> @@ -92,7 +92,7 @@ stacktrace(void)
->  {
->         instr * ret_pc;
->         instr * prologue = (instr *)stacktrace;
-> -       register unsigned char * sp __asm__ ("$30");
-> +       unsigned char *sp = (unsigned char *)current_stack_pointer;
->
->         printk("\tstack trace:\n");
->         do {
+>         return retval;
 > --
-> 2.30.2
+> 2.33.1
 >
 
 Thanks for the patch! This was included in my pull request today and
