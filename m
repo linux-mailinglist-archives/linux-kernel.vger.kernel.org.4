@@ -2,117 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761BB6A321C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 16:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ED86A322B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 16:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjBZPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 10:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S230330AbjBZPZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 10:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbjBZPQb (ORCPT
+        with ESMTP id S230231AbjBZPZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 10:16:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A006520576
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:06:09 -0800 (PST)
+        Sun, 26 Feb 2023 10:25:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFB1FF1E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:17:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677423912;
+        s=mimecast20190719; t=1677424587;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oP3oPuchm6C78y0w7FcABuS+2qv7jrRkSYqeHoyGogM=;
-        b=EFyqWWn6TboWgX/FvVOJqQTgBljeMvOKtOak7aL4KuqQJmoAZ2gPkdermCNiZajuEURIoW
-        N4YrwPI3lK+FjkfOROaS+bB/l8X3i7cODNcLOgG6ZM0829J0V/F0hV1h36QDVQh88D2mP5
-        nj3vqdBItxd/gKoMNJDbXnV4dUNLrTo=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zWuCETYlGm5nXIPBM19Dg25vOC37BZrnNuNH9S7qgEM=;
+        b=ioCsOvSjaP43VP7dXev/O00ALB9NeBNzChAWBTc/EELR3GEc3nkiCyn/hO/ipWOmaMShWZ
+        I8OKr4//PP9iOIDbQveQ/EbVDfzWKImRjDx3clWBcEuIo7R30nPGq7WWsQJpBUXX7nSTuw
+        j2P78NnzhIQsDRDAasriZEuBIKRNjPw=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-549-siEkVi1SN0y5ELi2tsttoQ-1; Sun, 26 Feb 2023 09:54:47 -0500
-X-MC-Unique: siEkVi1SN0y5ELi2tsttoQ-1
-Received: by mail-qv1-f70.google.com with SMTP id e9-20020a0cf749000000b00571f1377451so2119575qvo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:54:46 -0800 (PST)
+ us-mta-507-D62xYjmuNxKKZpp49_TjIA-1; Sun, 26 Feb 2023 10:02:11 -0500
+X-MC-Unique: D62xYjmuNxKKZpp49_TjIA-1
+Received: by mail-qv1-f69.google.com with SMTP id u18-20020a0cec92000000b0056ea549d728so2099017qvo.10
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:02:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oP3oPuchm6C78y0w7FcABuS+2qv7jrRkSYqeHoyGogM=;
-        b=6hvRrInv+oMFzb6dz1uFTg5pd2ijD07JJNyVLxBswNA5PL13b3YXIcB11YOHTm914E
-         99+uxqsM4gRB8Lwz7vhppZNoSxEDmGl5j4DtN/r93uPT0QUHia06C05jKx8CNv8H45u0
-         bF7vwO9CFibOf8esj+DNaiVdw1AeDLlRQuDxR1a7ZhOL02Nt/qhL/KKMsVV43e2eJRP+
-         m64zoQWP0TAYGO1FHOBaoHHCUK5VWkfj5SY4mno07grP0IqLMeCRbnh42SGnescqlILP
-         xfIwY+6//iGXwpi9dpqXOBg0TwBevHAUTzmRbaLfc5DTrzHNgpZY/o/Zt+VUCainueGG
-         X1Dw==
-X-Gm-Message-State: AO0yUKXGe5ulMcsTEb9698AbkUbNKdacNdZSdNeIScnrEro6U7PYZk0p
-        npmvU4b4G0j9N1HGJCU7nUUfI315RehCG27XKz8Pzgd05hjiZiEwr2ID9Q0QZN30bUfnPrgV+FG
-        9GgFL3kkD9RsXfctnK8ENSfHC
-X-Received: by 2002:ad4:5bae:0:b0:56e:957f:dd5f with SMTP id 14-20020ad45bae000000b0056e957fdd5fmr35934662qvq.50.1677423286584;
-        Sun, 26 Feb 2023 06:54:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set/Dvnqu/AWuG3VmERieiYOLTpNGZ6BWRhVKDWe6qiHzJf2eI0ns0naoQAZr4A3CqW7FmHsMRA==
-X-Received: by 2002:ad4:5bae:0:b0:56e:957f:dd5f with SMTP id 14-20020ad45bae000000b0056e957fdd5fmr35934643qvq.50.1677423286344;
-        Sun, 26 Feb 2023 06:54:46 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id f64-20020a37d243000000b0073ba46a585asm3127203qkj.64.2023.02.26.06.54.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 06:54:45 -0800 (PST)
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zWuCETYlGm5nXIPBM19Dg25vOC37BZrnNuNH9S7qgEM=;
+        b=SNE8zDpBoASa13TCP3KbLrz7UiFn61A3pEnBtnzA/xFxv50a8hsK+CxgiUe1c0AaZR
+         j8dAWX7RSWKvbam80AN1oKdlRvSYiIV9queqLi932q0B9Pk6ltEEyKxCf1owxvFZMn2h
+         pPQGyQ+s2NBviQ0u2V1tmcp2cUOdO/bXlYzzdILIHAovAP5Wv3uC58WtB9SKZsCqM5yc
+         flyYI/GDOlsndCMD4ZoYciWHnx1UPnjHLBMdN6GAhBBJTvcPnUjMp/cb1oWqIN0vQEb9
+         FzfLAqHX8kUcAI6nBz16+BNUxHZJj96z8kbuNOt8mUKA44cOfKYsh4D32rDniE2+kx16
+         LlCA==
+X-Gm-Message-State: AO0yUKUqg5ud5H8JHgYhj5oj0Fkd1ycul0XiSgy6TeNrt0lklEckiMgO
+        85WN2IVA/sJAHPIG+OX1giwLEZwAYYGOuec4XmGeiq8FxUrTOhw4YVwgzkwKI3J4FhadttPEUSC
+        PUFPV5lR46AzJesX2Xr3hCc6gYCxpm9kAEsa4byz9+oDKg7nE2mu7BSMHtLFWSJEbSAQBfUutlA
+        yc
+X-Received: by 2002:ac8:584f:0:b0:3ba:ef:fc0e with SMTP id h15-20020ac8584f000000b003ba00effc0emr38862251qth.57.1677423730406;
+        Sun, 26 Feb 2023 07:02:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set/SXesiOhOnAgh3EpQdbpIYg1w5jnpyIXaoHzasz8z/7gzWSqqsQylwzoVbm8kRJ4sdLh/n4w==
+X-Received: by 2002:ac8:584f:0:b0:3ba:ef:fc0e with SMTP id h15-20020ac8584f000000b003ba00effc0emr38862208qth.57.1677423729999;
+        Sun, 26 Feb 2023 07:02:09 -0800 (PST)
+Received: from [192.168.1.19] (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id p3-20020ac84083000000b003b9a573aec6sm2982825qtl.70.2023.02.26.07.02.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Feb 2023 07:02:09 -0800 (PST)
+Subject: Re: [PATCH] tty: serial: fsl_lpuart: select SERIAL_FSL_LPUART for
+ SERIAL_FSL_LPUART_CONSOLE
+To:     Randy Dunlap <rdunlap@infradead.org>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230225173949.651311-1-trix@redhat.com>
+ <0f8a8857-5e18-e49a-0361-197b4bc892ab@infradead.org>
+ <026ee207-3b90-c7ae-a7fd-66a34cd3ee90@redhat.com>
+ <6dd89251-f4d6-8051-8ecf-cdea7d23bc68@infradead.org>
+ <c3ca14dc-14d0-959c-0f55-8f584457db33@infradead.org>
+ <9a16ee6f-5a49-167e-fc33-9ca147b3686a@infradead.org>
 From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] tty: serial: fsl_lpuart: select SERIAL_FSL_LPUART for SERIAL_FSL_LPUART_CONSOLE
-Date:   Sun, 26 Feb 2023 09:54:41 -0500
-Message-Id: <20230226145441.3150640-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+Message-ID: <e767cb93-eb46-a82c-186c-68d12cefce31@redhat.com>
+Date:   Sun, 26 Feb 2023 07:02:07 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <9a16ee6f-5a49-167e-fc33-9ca147b3686a@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A rand config causes this link error
-ld: drivers/tty/serial/earlycon.o: in function `parse_options':
-drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
 
-The rand config has
-CONFIG_SERIAL_CORE=m
-CONFIG_SERIAL_EARLYCON=y
-CONFIG_SERIAL_FSL_LPUART=m
-CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+On 2/25/23 10:38 AM, Randy Dunlap wrote:
+>
+> On 2/25/23 10:16, Randy Dunlap wrote:
+>>
+>> On 2/25/23 10:03, Randy Dunlap wrote:
+>>>
+>>> On 2/25/23 09:51, Tom Rix wrote:
+>>>> On 2/25/23 9:46 AM, Randy Dunlap wrote:
+>>>>> Hi--
+>>>>>
+>>>>> On 2/25/23 09:39, Tom Rix wrote:
+>>>>>> A rand config causes this link error
+>>>>>> ld: drivers/tty/serial/earlycon.o: in function `parse_options':
+>>>>>> drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
+>>>>>>
+>>>>>> The rand config has
+>>>>>> CONFIG_SERIAL_CORE=m
+>>>>>> CONFIG_SERIAL_EARLYCON=y
+>>>>>> CONFIG_SERIAL_FSL_LPUART=m
+>>>>>> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+>>>>>>
+>>>>>> SERIAL_FSL_LPUART should have been selected instead of depends on-ed.
+>>>>>>
+>>>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>>>> ---
+>>>>>>    drivers/tty/serial/Kconfig | 2 +-
+>>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+>>>>>> index 625358f44419..b24d74d389fc 100644
+>>>>>> --- a/drivers/tty/serial/Kconfig
+>>>>>> +++ b/drivers/tty/serial/Kconfig
+>>>>>> @@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
+>>>>>>      config SERIAL_FSL_LPUART_CONSOLE
+>>>>>>        bool "Console on Freescale lpuart serial port"
+>>>>>> -    depends on SERIAL_FSL_LPUART
+>>>>>> +    select SERIAL_FSL_LPUART
+>>>>> Most other _CONSOLE Kconfig have:
+>>>>>
+>>>>>      depends on SERIAL_FSL_LPUART=y
+>>>> commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30 removed the =y. so it could be built as a module.
+>>>>
+>>> uh. But it's still a bool, not a tristate. How does that work?
+>> OK, I see. :)
+>>
+>> Well, I don't see another decent solution ATM.
+>>
+>> Tom, does your patch fix the build error?
+>>
+>> What are the listed CONFIG settings after the patch?
+> OK, after I apply the patch, all of the listed config symbols are
+> changed to =y (builtin), so not built as a loadable module.
+>
+> Do you see something different?
 
-SERIAL_FSL_LPUART should have been selected instead of depends on-ed.
+No, all y's.
 
-After applying the configs are
-CONFIG_SERIAL_CORE=y
-CONFIG_SERIAL_EARLYCON=y
-CONFIG_SERIAL_FSL_LPUART=y
-CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+Since the showing the after state is useful, I added it to v2
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: Add how the configs changed to commit log
----
- drivers/tty/serial/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 625358f44419..b24d74d389fc 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
- 
- config SERIAL_FSL_LPUART_CONSOLE
- 	bool "Console on Freescale lpuart serial port"
--	depends on SERIAL_FSL_LPUART
-+	select SERIAL_FSL_LPUART
- 	select SERIAL_CORE_CONSOLE
- 	select SERIAL_EARLYCON
- 	help
--- 
-2.27.0
+>
+>
+>>>>> e.g.
+>>>>>
+>>>>> but I noticed a few others with a similar problem.
+>>>>>
+>>>>>>        select SERIAL_CORE_CONSOLE
+>>>>>>        select SERIAL_EARLYCON
+>>>>>>        help
 
