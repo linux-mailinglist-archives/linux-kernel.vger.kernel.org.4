@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207AC6A2FE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 15:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E80E6A2FE3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 15:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBZOR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 09:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S229593AbjBZOOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 09:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjBZOR4 (ORCPT
+        with ESMTP id S229470AbjBZOOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 09:17:56 -0500
-X-Greylist: delayed 383 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Feb 2023 06:17:55 PST
-Received: from forward108j.mail.yandex.net (forward108j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5813A2D6A
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:17:55 -0800 (PST)
-Received: from iva2-656890eaceb5.qloud-c.yandex.net (iva2-656890eaceb5.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:6902:0:640:6568:90ea])
-        by forward108j.mail.yandex.net (Yandex) with ESMTP id 9464E3F215F8;
-        Sun, 26 Feb 2023 17:11:30 +0300 (MSK)
-Received: by iva2-656890eaceb5.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id tATvDFdaca61-K1oQtVIF;
-        Sun, 26 Feb 2023 17:11:29 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lach.pw; s=mail; t=1677420689;
-        bh=4OZH6E6CsjLO+EJW2LJh4x68QtAphhfAjHOaUhriUQw=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=Bq3mjqWKGG+aRyBMIRQvvUaXlBGNUVmOPd8PZxlOY0f9q6/WR31LtRUUC+RQiItZz
-         QtSyWfRrAkIEKLUUazGYZrh33mLGeEDa//HuYKeKJbDJTxqYwMRyEziFQUflQPOcnZ
-         AjWKdn8iZ52hvgtxSGykBxWP8KX1W2UicVhgz+0Y=
-Authentication-Results: iva2-656890eaceb5.qloud-c.yandex.net; dkim=pass header.i=@lach.pw
-From:   Yaroslav Bolyukin <iam@lach.pw>
-To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Sun, 26 Feb 2023 09:14:37 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20DA11E9B
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:14:35 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id y11so16909plg.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oAQg12p/07ljiI4mBI5ZR7TWyWKasJobRzn1kv4e9h8=;
+        b=BJkdZ1fqbDvcR8wt5DR64B/i9aiX4o4PeNbOldidF9WnLVP6y8LTFCdLrPcSDzMS7I
+         Nz+q/EbV0neqif7/M4nAoyDTidVnheTui52g0bYCQt2X85vr6NDKKFgG/vpvedo2t2xd
+         kd79sPaIONkq94qrS5aAET9E+gWAoTQyDO/I64EnXtW8C40gGZ03bed9XVJ5c1xkDJ57
+         hIM7lf5jsFpDPZDoPmZ8ijCZq3QTmdXLpotaeCuU0d1QYTxFL8Q6w8HVZlEAAeoLeTft
+         mHeojp+TRbyzgwBsVG5Ow/Nj6PyB9gUO4LJIaStEt0oY+I6geFqtCbt8ZVuZl9unXEGL
+         Pw5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oAQg12p/07ljiI4mBI5ZR7TWyWKasJobRzn1kv4e9h8=;
+        b=wolN4KHh9L61yFh3cP8q0GQe9ga4a1LsSVf+xf5M71SoG9nk+VG629HaLkwMzvSGhf
+         nBH1b4+QDYts23vrKrhW3INophcCZe1Mbh+WpbSAu71ppUZXt1UoZ5oU2xrXZnX5Aiu9
+         5K8pFrky71OC/zpAWo5VU5kyteaPpejKIGfjVeiEfF+WNLuQOnkjee54DrHB4HtwGY1Y
+         yTBDSxSI+wSpgzOWoQYeMmmmFlgOU6341h/I86ifSAD86k5j08PHmo4LbArj2fMueXZz
+         kY8wkdBmqnVQdAiAX6o1lO/FEIVHMkh3VM3xGWfyaeHUXIAUsqFcIDzKQGDx0zoTEmkJ
+         7XEg==
+X-Gm-Message-State: AO0yUKUTwFT/8De/9p0At198kQNPg8Eo0sfnbPOGAaW82FwVZDcsVsJY
+        sANwbM5pki38eDRAT3sOmIA=
+X-Google-Smtp-Source: AK7set+3tINTYEvd0acZfGwn7reu55jXetSRZrY4aQ/GR8IzpcikOCpdje8kNkdiu89FpcWs/7eMMw==
+X-Received: by 2002:a17:902:da89:b0:19a:f02c:a06d with SMTP id j9-20020a170902da8900b0019af02ca06dmr26558010plx.29.1677420875038;
+        Sun, 26 Feb 2023 06:14:35 -0800 (PST)
+Received: from udknight.localhost ([117.30.83.133])
+        by smtp.gmail.com with ESMTPSA id jj13-20020a170903048d00b001967692d6f5sm2698552plb.227.2023.02.26.06.14.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 26 Feb 2023 06:14:34 -0800 (PST)
+Received: from udknight.localhost (localhost [127.0.0.1])
+        by udknight.localhost (8.14.9/8.14.4) with ESMTP id 31QEEJOh032202;
+        Sun, 26 Feb 2023 22:14:19 +0800
+Received: (from root@localhost)
+        by udknight.localhost (8.14.9/8.14.9/Submit) id 31QEE6mg032201;
+        Sun, 26 Feb 2023 22:14:06 +0800
+Date:   Sun, 26 Feb 2023 22:14:06 +0800
+From:   Wang YanQing <udknight@gmail.com>
+To:     miquel.raynal@bootlin.com, bbrezillon@kernel.org, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Yaroslav Bolyukin <iam@lach.pw>, Wayne Lin <Wayne.Lin@amd.com>
-Subject: [PATCH v3 2/2] drm/amd: use fixed dsc bits-per-pixel from edid
-Date:   Sun, 26 Feb 2023 15:10:51 +0100
-Message-Id: <20230226141051.21767-3-iam@lach.pw>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230226141051.21767-1-iam@lach.pw>
-References: <20230226141051.21767-1-iam@lach.pw>
+Subject: Re: [PATCH] mtd: ubi: eba.c: fix return value overwrite issue in
+ try_write_vid_and_data()
+Message-ID: <20230226141406.GA32048@udknight>
+Mail-Followup-To: Wang YanQing <udknight@gmail.com>,
+        miquel.raynal@bootlin.com, bbrezillon@kernel.org, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230217165442.GA28288@udknight>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217165442.GA28288@udknight>
+User-Agent: Mutt/1.7.1 (2016-10-04)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VESA vendor header from DisplayID spec may contain fixed bit per pixel
-rate, it should be respected by drm driver
+On Sat, Feb 18, 2023 at 12:58:08AM +0800, Wang YanQing wrote:
+> The commit 2d78aee426d8 ("UBI: simplify LEB write and atomic LEB change code")
+> adds helper function, try_write_vid_and_data(), to simplify the code, but this
+> helper function has bug, it will return 0 (success) when ubi_io_write_vid_hdr()
+> or the ubi_io_write_data() return error number (-EIO, etc), because the return
+> value of ubi_wl_put_peb() will overwrite the original return value.
+> 
+> This issue will cause unexpected data loss issue, because the caller of this
+> function and UBIFS willn't know the data is lost.
+> 
+> Fixes: 2d78aee426d8 ("UBI: simplify LEB write and atomic LEB change code")
+> 
+> Signed-off-by: Wang YanQing <udknight@gmail.com>
 
-Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
-Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 2 ++
- drivers/gpu/drm/amd/display/dc/core/dc_stream.c           | 2 ++
- drivers/gpu/drm/amd/display/dc/dc_types.h                 | 3 +++
- 3 files changed, 7 insertions(+)
+Hi! Miquel Raynal
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-index 6fdc2027c2b4..dba720d5df4c 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-@@ -89,6 +89,8 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
- 
- 	edid_caps->edid_hdmi = connector->display_info.is_hdmi;
- 
-+	edid_caps->dsc_fixed_bits_per_pixel_x16 = connector->display_info.dp_dsc_bpp;
-+
- 	sad_count = drm_edid_to_sad((struct edid *) edid->raw_edid, &sads);
- 	if (sad_count <= 0)
- 		return result;
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-index 72b261ad9587..a82362417379 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-@@ -103,6 +103,8 @@ static bool dc_stream_construct(struct dc_stream_state *stream,
- 
- 	/* EDID CAP translation for HDMI 2.0 */
- 	stream->timing.flags.LTE_340MCSC_SCRAMBLE = dc_sink_data->edid_caps.lte_340mcsc_scramble;
-+	stream->timing.dsc_fixed_bits_per_pixel_x16 =
-+		dc_sink_data->edid_caps.dsc_fixed_bits_per_pixel_x16;
- 
- 	memset(&stream->timing.dsc_cfg, 0, sizeof(stream->timing.dsc_cfg));
- 	stream->timing.dsc_cfg.num_slices_h = 0;
-diff --git a/drivers/gpu/drm/amd/display/dc/dc_types.h b/drivers/gpu/drm/amd/display/dc/dc_types.h
-index 27d0242d6cbd..22fedf4c7547 100644
---- a/drivers/gpu/drm/amd/display/dc/dc_types.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc_types.h
-@@ -228,6 +228,9 @@ struct dc_edid_caps {
- 	bool edid_hdmi;
- 	bool hdr_supported;
- 
-+	/* DisplayPort caps */
-+	uint32_t dsc_fixed_bits_per_pixel_x16;
-+
- 	struct dc_panel_patch panel_patch;
- };
- 
--- 
-2.39.1
+What is the status about this patch?
 
+Thanks!
