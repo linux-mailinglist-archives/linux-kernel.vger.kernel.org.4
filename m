@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9186A2F18
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 11:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BBE6A2F1A
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 11:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjBZKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 05:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S229598AbjBZKYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 05:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBZKXs (ORCPT
+        with ESMTP id S229539AbjBZKYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 05:23:48 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C1AC656;
-        Sun, 26 Feb 2023 02:23:48 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id bh1so3849855plb.11;
-        Sun, 26 Feb 2023 02:23:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wi2xVqzSevhJpXDSWkdsF+oMBiFQhK5PRJ0HvFg4vlU=;
-        b=XVsyQL5PSgI1Bs57Jf0fpotc041iuxQGTzEalwWqck+/0/DLnF/HYIjP3S413PkD46
-         4YS5FAR9dyNcebTBt0pUxja4xIQPbhcpHEpS2P445I1SzBjmawPEndyKyoF/NxzcLW/N
-         ziQSzVGCMkzOOIlYXu0BgSA1S5oWPG4S1Qi6igpQnAHUjJ95DKb8ajnCN1RY5znOofDZ
-         s+6bCOlVJ6NOGqNrt951Jhpz1LeJltQ9oRVgw4AJF6obIm2Enzl+0zSb99ZAf1M7Gh9S
-         VoOmkbJ3F4jhihG0fc6nwgzf623JnLQzkoAV7EQH3AuWioew9q6lOImZ1e+O502tTNPj
-         DRig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wi2xVqzSevhJpXDSWkdsF+oMBiFQhK5PRJ0HvFg4vlU=;
-        b=z5D8hh6giwI610mRLBsarvfPi2+lqIfM2OoAp4/A9fxR2RbdyqXyBdL/I1qFVzYmyB
-         1qRaPuvfFawfZjEdWDxOFFk6hdi1TYBMXi/2HqqyE6/97hmWFF/CKiqHb5FbrZjlaI5s
-         k7Rob+UZw51gMGptFFYLPSKDPcCOSjv5FBVY/tYIL/eA4zJwMMyrPVGT7mx1KL0OvSbo
-         uPk7wHwFmhSJyPHD8KT8l6EVwiSV2WAnwKSiiR2wJquCCk92Gl+f35HMZ4k7pCa/gKQ4
-         B6X7dzE95S2a+lpg6zVqYLQ3tWJpLxz9Z/EC7+/J7f3R5D823CA5tgkcOkg/rvR6olBj
-         SKMQ==
-X-Gm-Message-State: AO0yUKVRTJAkwsG6WpSJT29aXoIstonG+T5ak2cD/iU8I82GxYbf3TA5
-        NCRAGYgtJZEIiYdrEzqixCzkwypIzhpQlKhk
-X-Google-Smtp-Source: AK7set8fOwUHoXXIC2sCunIL7TGItqvkkxWcvg76HdDyFcZROi5Xwn0/6ZQnpJu8Q9DV1M4Oqh9jRQ==
-X-Received: by 2002:a05:6a20:4298:b0:c7:6c6f:7722 with SMTP id o24-20020a056a20429800b000c76c6f7722mr29478842pzj.7.1677407027552;
-        Sun, 26 Feb 2023 02:23:47 -0800 (PST)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b005d6999eec90sm2263051pfo.120.2023.02.26.02.23.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 02:23:47 -0800 (PST)
-From:   Kang Chen <void0red@gmail.com>
-To:     jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
-Subject: [PATCH] scsi: lpfc: add null check of kzalloc in lpfc_sli4_cgn_params_read
-Date:   Sun, 26 Feb 2023 18:23:38 +0800
-Message-Id: <20230226102338.3362585-1-void0red@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 26 Feb 2023 05:24:48 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDECBC65B;
+        Sun, 26 Feb 2023 02:24:47 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4645C5C00DB;
+        Sun, 26 Feb 2023 05:24:47 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 26 Feb 2023 05:24:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677407087; x=1677493487; bh=qvprucDJaZ
+        MPGC2xxQDJGF4hnoZoF7bFF2Ldncdq+yE=; b=OI6MSH8tehUg+t61CTC6oBr3tK
+        BagtQQc4URzzPmCvMIcefcYHkeoj50796rbyZ9/RJmx/ZIXs+gxZjDTOJSMY/Y6m
+        bWk1DYSQlTrWE7FHYfiIZNOk+JZ4q0gXMHCfzwc0+U1/Ozm9ppchzU5nkdsPwOsJ
+        L6+iDv5OVXTCqhfho3xTsDaV0LEix46TNePpteDqEBMNP09Fy9Ccv8zGsHIwbVYv
+        8gYmj1lUgqo1xrswDJuAv/qawHQL/b5q0XDvIxVNhr7mndeVXhchvyTBpx1xMEXO
+        exV1gK14efpV0EZ/uMm/+gZOjMc73fedf0UDQDCkSJ/hLpwnktT6R5WGeZ8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677407087; x=1677493487; bh=qvprucDJaZMPGC2xxQDJGF4hnoZo
+        F7bFF2Ldncdq+yE=; b=PRmE3mnXSeWF2pOk7TXh5n+ECRx06eFYFNHqGpPffp5t
+        OoAn2hroGJuIWdEKxo6bWxbgEk+U0cvvN6j6ODD31EECmoVFaRWf50ig7IConEs0
+        yqKuTjFz+d2IFVBLiRpDkKc4K2Kl6MZn7X6I5lLx1hhsUUrXcrecoMMWKGZI4/wQ
+        DDwwgh5hPIBFi3xTptf1B4IuZ87Stagr0uVIjSlYzIcSUaMN59BDw6QXaMo96YBn
+        XXLKRdFDvqt7IRAzmqY3dDUtGEVC3FGHDJEp2sblJIQKMUvc+atppzvEvmSUJeRz
+        NCYnpzqRNBxrvPu+UFcxhXYSHfFH8lwHS1PLCaV0sQ==
+X-ME-Sender: <xms:bjP7Y2MLSakTKUF_D3wLDuOkhK_Zfb1VXTOjvisOqRDS45Yf-QfC1A>
+    <xme:bjP7Y0_njlW-hqXBmLKntdURqk3V0krBfGvcgY29eTiTVe25fQmxPkeAtadwfL0Ot
+    t6SnflKRRq15EJjczo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekjedgudeflecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:bjP7Y9TO3YfKUWSvJRd46fZ_bikekAHZy6_AUw1YksZRemHPP37d0Q>
+    <xmx:bjP7Y2v0lul7D46mfmHU3nYMoy5tDuWLqOLM-QxkWZ9a1zLLkRwWYA>
+    <xmx:bjP7Y-f3xW2n5UrgPJ45YMwHVIG37vSMEHKwPQxthhuntVSVpN6vhQ>
+    <xmx:bzP7YyECEsKessVEl51ERGEMozqFhGHBMSWQkqqdG_6EbbbGZbvsSA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B2B4CB60086; Sun, 26 Feb 2023 05:24:46 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <29763841-bdaa-4a4b-aa0e-5e1b3935317d@app.fastmail.com>
+In-Reply-To: <CAEdQ38Fg=Au5=BbyTHiEO+GaivheCe6hPBjcZhjgALxn4503Mg@mail.gmail.com>
+References: <20220224060558.1856804-1-keescook@chromium.org>
+ <CAEdQ38Fg=Au5=BbyTHiEO+GaivheCe6hPBjcZhjgALxn4503Mg@mail.gmail.com>
+Date:   Sun, 26 Feb 2023 11:24:13 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Matt Turner" <mattst88@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] alpha: Implement "current_stack_pointer"
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kzalloc may fails, pdata might be null and it may cause
-null pointer dereference later.
+On Sun, Feb 26, 2023, at 03:08, Matt Turner wrote:
+>
+> Thanks for the patch! This was included in my pull request today and
+> is now upstream in Linus' tree.
 
-Signed-off-by: Kang Chen <void0red@gmail.com>
----
- drivers/scsi/lpfc/lpfc_init.c | 2 ++
- 1 file changed, 2 insertions(+)
+[trimming Cc list for hijacked thread]
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 6eb4085a3..54134d782 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -7291,6 +7291,8 @@ lpfc_sli4_cgn_params_read(struct lpfc_hba *phba)
- 	/* Find out if the FW has a new set of congestion parameters. */
- 	len = sizeof(struct lpfc_cgn_param);
- 	pdata = kzalloc(len, GFP_KERNEL);
-+	if (!pdata)
-+		return -ENOMEM;
- 	ret = lpfc_read_object(phba, (char *)LPFC_PORT_CFG_NAME,
- 			       pdata, len);
- 
--- 
-2.34.1
+Hi Matt,
 
+I remember that Stephen Rothwell mentioned he dropped a couple of
+architecture trees from linux-next due to long inactivity, and I
+see that none of your branches are included any more. Should
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mattst88/alpha.git/log/?h=for-linus
+
+or the (currently empty) alpha-next branch be added back there?
+
+      Arnd
