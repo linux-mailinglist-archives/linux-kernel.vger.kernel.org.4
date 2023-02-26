@@ -2,114 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3088B6A2DF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 04:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B3F6A2DF7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 04:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjBZDyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 22:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
+        id S230120AbjBZDy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 22:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjBZDyN (ORCPT
+        with ESMTP id S230298AbjBZDyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 22:54:13 -0500
-Received: from mail-io1-xd46.google.com (mail-io1-xd46.google.com [IPv6:2607:f8b0:4864:20::d46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4E26A48
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:42 -0800 (PST)
-Received: by mail-io1-xd46.google.com with SMTP id k23-20020a5e8917000000b0074cbfb58b5bso1757007ioj.14
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:42 -0800 (PST)
+        Sat, 25 Feb 2023 22:54:50 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E75199C6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:54:25 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id d30so12828518eda.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:54:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B3jzL0y6Ler5qUbb1nqA59NxYv4O7GPc8dG7aoiVSCI=;
+        b=QLHt3ynSiWLdbW+mwY8WM0pFw+QPheMzsqFmcvauKPsFIdlaYmeyyVLbA4lQawcg4d
+         rsoeJffGH7ki5ChbK3/YyLOGD/nrs+Uww7HdhEyNe/2b5z2lJy4TJ8RoemtH7InNWeDZ
+         TpAqTpWyI/4aS4+2CnNU1BZoUUG1asBgcSfAQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AMWDSG4ofUC76oZC/HF6WgUrzHwbcEsF1WIvKhrXRfQ=;
-        b=rFVfvowcyW679H3Q7RRsL3Q3NuqAdxT4EwbVdk0FibHZRdDZ+aA9e3Draiz3c83lCs
-         Ajqq+sbBN7qL4l4XkCjlXrw89zg6OH6Ps9KbHEeuX4zYiu1U1ZEeesqeWsotXa8GPq3E
-         sLByuFcrKNR4km2LN+bPUJ66TUYzcil4m2yiU+FUugpuBIErF1/oEpIDIkePANKG+wz0
-         rLIAaPzlQgkGl/eRPyYc+JR7TrkYaLQFp8t3+L3RU2kuWWTen1yeZ2imfwZmgUePVLzp
-         TpsTNlrPubG8DNhOWp+ds7mBROPtT1bfDAKz40/VR3vYgPNZZz7FP18KwL6us+mJLmJt
-         Po3g==
-X-Gm-Message-State: AO0yUKWci65rmJsiR7s2CG3NwgX40vRWBaCYqHt7HDXws4B5JMochuvO
-        c9QQC4ibJS1FEZQrBOBKRYvVFsGt/KU9Oyea49J1UIhtdwpk
-X-Google-Smtp-Source: AK7set/NFTcU+mrjLl1rEV4e6JebJ6p5ilLGRMi1+RAe7mYzqJjrb2YkDAIVblPOiN7GEEQB/tuNLOpBRlT0LT+e2GjvNaV5iwEC
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B3jzL0y6Ler5qUbb1nqA59NxYv4O7GPc8dG7aoiVSCI=;
+        b=ZupwJZNnhrlS8Zn0OTWlIfLQi5RZV3I8UrOJXN9M+7oZjrqjueLKh6jisksnyAT+9+
+         QqaIxIvgxnDwFc6JRjPFIl+ZwXtMcC0+xpXL4mnDCmFDD+szztlFV/hwQ0E5clfIAkeN
+         bI0FeZUJ5RjPVnxuRjKVjoFAHAi/ind7plvKGWz9qGpiW2NOsXKrln/mUfmvh74G6ruR
+         gAvEAy8eN276mg7Jg1wjN2QxZC7Qw7MmlowiTj2ia5Egz6Fam+nEC69vduooA81ImHuC
+         RXH31C7pXkU4QXlOMjcBBvmlRVM98HklPmG28T1C+6H2sCWFYC4aQDEUMqCeCHzZIRzX
+         UamQ==
+X-Gm-Message-State: AO0yUKWypoOqrPntDlaQP/Mki69xiiBMFuaXfLv75hKfXMMERz5zDXxj
+        mXUL/3HcKqTVzYY2jLJg/KWO+MqVEPBfdEL77bJbuw==
+X-Google-Smtp-Source: AK7set988hIGFzuQqbNlKENXH6JFBu2BxfXcX8PaEOdZAvi/m9kWKmtHgb8VeuxcOarCf9iUm8zelQ==
+X-Received: by 2002:a17:907:76ad:b0:8b1:749f:b2bc with SMTP id jw13-20020a17090776ad00b008b1749fb2bcmr28951185ejc.11.1677383601838;
+        Sat, 25 Feb 2023 19:53:21 -0800 (PST)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id qw26-20020a170906fcba00b008edf49f10a7sm1519782ejb.100.2023.02.25.19.53.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Feb 2023 19:53:21 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id ec43so12742802edb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:21 -0800 (PST)
+X-Received: by 2002:a17:906:9f25:b0:8f5:2e0e:6def with SMTP id
+ fy37-20020a1709069f2500b008f52e0e6defmr3062810ejc.0.1677383601014; Sat, 25
+ Feb 2023 19:53:21 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:f90:b0:313:fad9:a014 with SMTP id
- v16-20020a056e020f9000b00313fad9a014mr6641816ilo.5.1677383503103; Sat, 25 Feb
- 2023 19:51:43 -0800 (PST)
-Date:   Sat, 25 Feb 2023 19:51:43 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dace2005f592479a@google.com>
-Subject: [syzbot] [btrfs?] WARNING in __btrfs_update_delayed_inode
-From:   syzbot <syzbot+742938912a8c5436cfed@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org>
+ <CAHk-=whVN2gKO_7UvMqgG8cetrVs3BCTxQovJvhC5x7AcJDJgQ@mail.gmail.com> <CAHk-=wgxWDgLJ-e3uDiYQvmMEqTNYFvDxtHbu4inR=zgBEP11Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wgxWDgLJ-e3uDiYQvmMEqTNYFvDxtHbu4inR=zgBEP11Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 25 Feb 2023 19:53:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjFmVL7NiuxL54qLkoabni_yD-oF9=dpDgETtdsiCbhUg@mail.gmail.com>
+Message-ID: <CAHk-=wjFmVL7NiuxL54qLkoabni_yD-oF9=dpDgETtdsiCbhUg@mail.gmail.com>
+Subject: Re: [GIT PULL] MM updates for 6.3-rc1
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Feb 25, 2023 at 7:27=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Will bisect further, but adding Liam to the participants because it's
+> now narrowed down to his changes.
 
-syzbot found the following issue on:
+Ok, it's commit 2286a6914c77 ("mm: change mprotect_fixup to vma iterator")
 
-HEAD commit:    9e58df973d22 Merge tag 'irq-core-2023-02-20' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11aa59f7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2ac7065d93fcf412
-dashboard link: https://syzkaller.appspot.com/bug?extid=742938912a8c5436cfed
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+It was entirely consistent, and bisected right to that all the way
+from my current git tip.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Without that commit, google-chrome works fine.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b4f13d97f464/disk-9e58df97.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1f533b623da7/vmlinux-9e58df97.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0288113d3224/bzImage-9e58df97.xz
+With that commit, I get "Aww snap" and a
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+742938912a8c5436cfed@syzkaller.appspotmail.com
+  traps: ThreadPoolForeg[4337] trap invalid opcode ip:55d5542363ee
+sp:7fa5e04f1f80 error:0 in chrome[55d5537d3000+a14c000]
 
-------------[ cut here ]------------
-BTRFS: Transaction aborted (error -28)
-WARNING: CPU: 1 PID: 6353 at fs/btrfs/delayed-inode.c:1065 __btrfs_update_delayed_inode+0x8f0/0xab0 fs/btrfs/delayed-inode.c:1065
-Modules linked in:
-CPU: 1 PID: 6353 Comm: btrfs-transacti Not tainted 6.2.0-syzkaller-02172-g9e58df973d22 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-RIP: 0010:__btrfs_update_delayed_inode+0x8f0/0xab0 fs/btrfs/delayed-inode.c:1065
-Code: 8c aa f8 ff ff be 08 00 00 00 4c 89 e7 e8 b8 2c 3d fe e9 98 f8 ff ff e8 2e e7 e7 fd 48 c7 c7 40 3a 2b 8b 89 de e8 f0 0f af fd <0f> 0b e9 3a ff ff ff 89 d1 80 e1 07 80 c1 03 38 c1 0f 8c 6a f9 ff
-RSP: 0018:ffffc90016297700 EFLAGS: 00010246
-RAX: 47bd4e3c7cf3e600 RBX: 00000000ffffffe4 RCX: ffff888024020000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffffc90016297850 R08: ffffffff81532f72 R09: fffff52002c52e59
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
-R13: ffff88802b938001 R14: ffff888012b86cc8 R15: 1ffff11002570d99
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f829a785058 CR3: 0000000042388000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_update_delayed_inode fs/btrfs/delayed-inode.c:1099 [inline]
- __btrfs_commit_inode_delayed_items+0x234a/0x2400 fs/btrfs/delayed-inode.c:1119
- __btrfs_run_delayed_items+0x1db/0x430 fs/btrfs/delayed-inode.c:1153
- btrfs_commit_transaction+0xa34/0x3440 fs/btrfs/transaction.c:2264
- transaction_kthread+0x326/0x4c0 fs/btrfs/disk-io.c:1818
- kthread+0x270/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+message in the kernel dumps (and core dump noise in journalctl).
 
+The commit before is fine.
+
+Sadly, it doesn't revert cleanly on my current top-of-tree (or even
+_remotely_ cleanly_ because of all the other vma changes), so I can't
+test just reverting that on the current state.
+
+Also, it's not like I can debug google-chrome very much. It presumably
+does complex vma's and unusual mprotect() stuff to trigger this, when
+nothing else seems to care.
+
+Liam?
+
+             Linus
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+2286a6914c776ec34cd97e4573b1466d055cb9de is the first bad commit
+commit 2286a6914c776ec34cd97e4573b1466d055cb9de
+Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Date:   Fri Jan 20 11:26:18 2023 -0500
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+    mm: change mprotect_fixup to vma iterator
+
+    Use the vma iterator so that the iterator can be invalidated or updated=
+ to
+    avoid each caller doing so.
+
+    Link: https://lkml.kernel.org/r/20230120162650.984577-18-Liam.Howlett@o=
+racle.com
+    Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+
+ fs/exec.c          |  5 ++++-
+ include/linux/mm.h |  6 +++---
+ mm/mprotect.c      | 47 ++++++++++++++++++++++-------------------------
+ 3 files changed, 29 insertions(+), 29 deletions(-)
