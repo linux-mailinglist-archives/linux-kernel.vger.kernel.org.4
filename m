@@ -2,311 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265E16A2CE1
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 01:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3CE6A2CE7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBZArb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 19:47:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229678AbjBZBBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 20:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBZAr3 (ORCPT
+        with ESMTP id S229482AbjBZBBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 19:47:29 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E959FF17;
-        Sat, 25 Feb 2023 16:47:28 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31Q0ePVY006275;
-        Sun, 26 Feb 2023 00:47:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fc5KU9u4VAdx6JbXdhxWSDZuULBVAGHDaJBhGMwKtYc=;
- b=aObmjX3vItKwrgDZoVAtWNggK/FHlpl1D+bGzbYC7GngVBKWNUcZHVigpEC3CmkD1MAO
- y+yYwSp4oXArvrxuvfCZFStE5wOKc3z6EOl/WqqW70eJl6vadGaV5kWUFh3NJu4Usr+6
- XavcGPnAVe2JrGtwK754NKEFoDRXr43qxE8lzM8ikLCy57ktoGwdHRp68mDt5pSiuOOV
- N5blsTjcFKF1g0HkTjLfVdNwwQ3eBLiiKYJvcP9dwnYsJataNfXaSb4x9sUoK2XRfGdH
- oRKVuO2TF3YR3xq53zRElcjhSN03fHRgdSimSHryFxHbuIxcYHZIRpMBJMN9n/3THjwT gw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny9bf9pc7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Feb 2023 00:47:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31Q0lCcv004526
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Feb 2023 00:47:12 GMT
-Received: from [10.110.89.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sat, 25 Feb
- 2023 16:47:11 -0800
-Message-ID: <3e114c0f-a042-6801-69bf-67436cb2a448@quicinc.com>
-Date:   Sat, 25 Feb 2023 16:47:10 -0800
+        Sat, 25 Feb 2023 20:01:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4ED12582
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:01:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B41DCB80B46
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 01:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF2BC433EF;
+        Sun, 26 Feb 2023 01:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677373271;
+        bh=D8jzb0FTnkYEVCyrIyivvcYn19NODDgx6FMuvpFYVRA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=m+ue7k/kc5f0l1rfWrgkfLOOwtymFNyvqNd4pLZcPeN81PvCa06Ks9T84DnrTq99l
+         Yfq92b7EhID/bSBlUIgo/4pz98+BsCxBWUvtBHHpuUv8nsNiIXGWdYVorvbAw+nhCC
+         wIvHn7tkf0Mr70oP8/20TtA1sXT5KXhjOGK6XVM+TOSDuHdV6BdVaHkCOCj05BfZ/1
+         q9MpThCOIzXZczXfI2w760cxHaxoMJQde5p7XByK7dgxGVmfvWyFpVoIP2WQzR0oXh
+         vm//PByiAhNB6K3ObE2v4G3PMLErjGQPWN2IMlIYfQxNyw5EUDZU39CyyH57aDYboZ
+         4p70n1zOiCHyA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D28525C0292; Sat, 25 Feb 2023 17:01:10 -0800 (PST)
+Date:   Sat, 25 Feb 2023 17:01:10 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
+        quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
+ <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
+ <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
- <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
- <741be2a3-0208-2f40-eedf-d439c4e6795b@quicinc.com>
- <F8A4FC18-C64E-4011-BC08-18EB3B95A357@linaro.org>
- <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
- <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
- <f0dfba42-4674-3748-bf5d-39f6e1745f67@quicinc.com>
- <f1a6ee82-9502-7ea5-fe48-f296fc7df497@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <f1a6ee82-9502-7ea5-fe48-f296fc7df497@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aTnFXpqCSD9tgUGPcdN8oSAkzEJjgf5r
-X-Proofpoint-ORIG-GUID: aTnFXpqCSD9tgUGPcdN8oSAkzEJjgf5r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-25_14,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302260003
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry
-
-On 2/25/2023 7:23 AM, Dmitry Baryshkov wrote:
-> On 25/02/2023 02:36, Abhinav Kumar wrote:
->>
->>
->> On 2/24/2023 3:53 PM, Dmitry Baryshkov wrote:
->>> On Sat, 25 Feb 2023 at 00:26, Abhinav Kumar 
->>> <quic_abhinavk@quicinc.com> wrote:
->>>> On 2/24/2023 1:36 PM, Dmitry Baryshkov wrote:
->>>>> 24 февраля 2023 г. 23:23:03 GMT+02:00, Abhinav Kumar 
->>>>> <quic_abhinavk@quicinc.com> пишет:
->>>>>> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
->>>>>>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->>>>>>>> Add DSC helper functions based on DSC configuration profiles to 
->>>>>>>> produce
->>>>>>>> DSC related runtime parameters through both table look up and 
->>>>>>>> runtime
->>>>>>>> calculation to support DSC on DPU.
->>>>>>>>
->>>>>>>> There are 6 different DSC configuration profiles are supported 
->>>>>>>> currently.
->>>>>>>> DSC configuration profiles are differiented by 5 keys, DSC 
->>>>>>>> version (V1.1),
->>>>>>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
->>>>>>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
->>>>>>>>
->>>>>>>> Only DSC version V1.1 added and V1.2 will be added later.
->>>>>>>
->>>>>>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
->>>>>>> Also please check that they can be used for i915 or for amdgpu 
->>>>>>> (ideally for both of them).
->>>>>>>
->>>>>>
->>>>>> No, it cannot. So each DSC encoder parameter is calculated based 
->>>>>> on the HW core which is being used.
->>>>>>
->>>>>> They all get packed to the same DSC structure which is the struct 
->>>>>> drm_dsc_config but the way the parameters are computed is specific 
->>>>>> to the HW.
->>>>>>
->>>>>> This DPU file helper still uses the drm_dsc_helper's 
->>>>>> drm_dsc_compute_rc_parameters() like all other vendors do but the 
->>>>>> parameters themselves are very HW specific and belong to each 
->>>>>> vendor's dir.
->>>>>>
->>>>>> This is not unique to MSM.
->>>>>>
->>>>>> Lets take a few other examples:
->>>>>>
->>>>>> AMD: 
->>>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c#L165 
->>>>>>
->>>>>>
->>>>>> i915: 
->>>>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L379 
->>>>>>
->>>>>
->>>>> I checked several values here. Intel driver defines more bpc/bpp 
->>>>> combinations, but the ones which are defined in intel_vdsc and in 
->>>>> this patch seem to match. If there are major differences there, 
->>>>> please point me to the exact case.
->>>>>
->>>>> I remember that AMD driver might have different values.
->>>>>
->>>>
->>>> Some values in the rc_params table do match. But the rc_buf_thresh[] 
->>>> doesnt.
->>>
->>> Because later they do:
->>>
->>> vdsc_cfg->rc_buf_thresh[i] = rc_buf_thresh[i] >> 6;
->>>
->>>>
->>>> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L40 
->>>>
->>>>
->>>> Vs
->>>>
->>>> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
->>>> +               0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
->>>> +               0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
->>>> +};
->>>
->>> I'd prefer to have 896, 1792, etc. here, as those values come from the
->>> standard. As it's done in the Intel driver.
->>>
->>
->> Got it, thanks
->>
->>>> I dont know the AMD calculation very well to say that moving this to 
->>>> the
->>>> helper is going to help.
->>>
->>> Those calculations correspond (more or less) at the first glance to
->>> what intel does for their newer generations. I think that's not our
->>> problem for now.
->>>
->>
->> Well, we have to figure out if each value matches and if each of them 
->> come from the spec for us and i915 and from which section. So it is 
->> unfortunately our problem.
+On Fri, Feb 24, 2023 at 10:37:58AM -0800, Paul E. McKenney wrote:
+> On Fri, Feb 24, 2023 at 10:32:43AM -0500, Alan Stern wrote:
+> > On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
+> > > As stated in the documentation and implied by its name, the ppo
+> > > (preserved program order) relation is intended to link po-earlier
+> > > to po-later instructions under certain conditions.  However, a
+> > > corner case currently allows instructions to be linked by ppo that
+> > > are not executed by the same thread, i.e., instructions are being
+> > > linked that have no po relation.
+> > > 
+> > > This happens due to the mb/strong-fence/fence relations, which (as
+> > > one case) provide order when locks are passed between threads
+> > > followed by an smp_mb__after_unlock_lock() fence.  This is
+> > > illustrated in the following litmus test (as can be seen when using
+> > > herd7 with `doshow ppo`):
+> > > 
+> > > P0(int *x, int *y)
+> > > {
+> > >     spin_lock(x);
+> > >     spin_unlock(x);
+> > > }
+> > > 
+> > > P1(int *x, int *y)
+> > > {
+> > >     spin_lock(x);
+> > >     smp_mb__after_unlock_lock();
+> > >     *y = 1;
+> > > }
+> > > 
+> > > The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
+> > > P0 passes a lock to P1 which then uses this fence.
+> > > 
+> > > The patch makes ppo a subrelation of po by letting fence contribute
+> > > to ppo only in case the fence links events of the same thread.
+> > > 
+> > > Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> > > ---
+> > >  tools/memory-model/linux-kernel.cat | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> > > index cfc1b8fd46da..adf3c4f41229 100644
+> > > --- a/tools/memory-model/linux-kernel.cat
+> > > +++ b/tools/memory-model/linux-kernel.cat
+> > > @@ -82,7 +82,7 @@ let rwdep = (dep | ctrl) ; [W]
+> > >  let overwrite = co | fr
+> > >  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+> > >  let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+> > > -let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+> > > +let ppo = to-r | to-w | (fence & int) | (po-unlock-lock-po & int)
+> > >  
+> > >  (* Propagation: Ordering from release operations and strong fences. *)
+> > >  let A-cumul(r) = (rfe ; [Marked])? ; r
+> > 
+> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
 > 
-> Otherwise it will have to be handled by Marijn, me or anybody else 
-> wanting to hack up the DSC code. Or by anybody adding DSC support to the 
-> next platform and having to figure out the difference between i915, msm 
-> and their platform.
-> 
+> Queued for the v6.4 merge window (not the current one), thank you both!
 
-Yes, I wonder why the same doubt didn't arise when the other vendors 
-added their support both from other maintainers and others.
+I tested both Alan's and Jonas's commit.  These do not see to produce
+any significant differences in behavior, which is of course a good thing.
 
-Which makes me think that like I wrote in my previous response, these 
-are "recommended" values in the spec but its not mandatory.
+Here are the differences and a few oddities:
 
-Moving this to the drm_dsc_helper is generalizing the tables and not 
-giving room for the vendors to customize even if they want to (which the 
-spec does allow).
+auto/C-RR-G+RR-R+RR-G+RR-G+RR-R+RR-R+RR-R+RR-R.litmus
 
-So if this has any merit and if you or Marijn would like to take it up, 
-go for it. We would do the same thing as either of you would have to in 
-terms of figuring out the difference between msm and the i915 code.
+	Timed out with changes, completed without them.  But it completed
+	in 558.29 seconds against a limit of 600 seconds, so never mind.
 
-This is not a generic API we are trying to put in a helper, these are 
-hard-coded tables so there is a difference between looking at these Vs 
-looking at some common code which can move to the core.
+auto/C-RR-G+RR-R+RR-R+RR-G+RR-R+RR-R+RR-G+RR-R.litmus
 
->>
->>>>
->>>> Also, i think its too risky to change other drivers to use whatever 
->>>> math
->>>> we put in the drm_dsc_helper to compute thr RC params because their 
->>>> code
->>>> might be computing and using this tables differently.
->>>>
->>>> Its too much ownership for MSM developers to move this to 
->>>> drm_dsc_helper
->>>> and own that as it might cause breakage of basic DSC even if some 
->>>> values
->>>> are repeated.
->>>
->>> It's time to stop thinking about ownership and start thinking about
->>> shared code. We already have two instances of DSC tables. I don't
->>> think having a third instance, which is a subset of an existing
->>> dataset, would be beneficial to anybody.
->>> AMD has complicated code which supports half-bit bpp and calculates
->>> some of the parameters. But sharing data with the i915 driver is
->>> straightforward.
->>>
->>
->> Sorry, but I would like to get an ack from i915 folks if this is going
->> to be useful to them if we move this to helper because we have to look 
->> at every table. Not just one.
-> 
-> Added i915 maintainers to the CC list for them to be able to answer.
-> 
+	Timed out with changes, completed without them.  But it completed
+	in 580.01 seconds against a limit of 600 seconds, so never mind. *
 
-Thanks, lets wait to hear from them about where finally these tables 
-should go but thats can be taken up as a separate effort too.
+auto/C-RR-G+RR-R+RR-R+RR-R+RR-R+RR-G+RR-R+RR-R.litmus
 
->>
->> Also, this is just 1.1, we will add more tables for 1.2. So we will 
->> have to end up changing both 1.1 and 1.2 tables as they are different 
->> for QC.
-> 
-> I haven't heard back from Kuogee about the possible causes of using 
-> rc/qp values from 1.2 even for 1.1 panels. Maybe you can comment on 
-> that? In other words, can we always stick to the values from 1.2 
-> standard? What will be the drawback?
-> 
-> Otherwise, we'd have to have two different sets of values, like you do 
-> in your vendor driver.
-> 
+	Timed out with changes, completed without them.  But it completed
+	in 522.29 seconds against a limit of 600 seconds, so never mind.
 
-I have responded to this in the other email.
+auto/C-RR-G+RR-R+RR-R+RR-R+RR-R+RR-G+RR-G+RR-R.litmus
 
-All this being said, even if the rc tables move the drm_dsc_helper 
-either now or later on, we will still need MSM specific calculations for 
-many of the other encoder parameters (which are again either hard-coded 
-or calculated). Please refer to the sde_dsc_populate_dsc_config() 
-downstream. And yes, you will not find those in the DP spec directly.
+	Timed out with changes, completed without them.  But it completed
+	in 588.70 seconds against a limit of 600 seconds, so never mind.
 
-So we will still need a dsc helper for MSM calculations to be common for 
-DSI / DP irrespective of where the tables go.
+All tests that didn't time out matched Results comments.
 
-So, lets finalize that first.
+The reason I am so cavalier about the times is that I was foolishly
+running rcutorture concurrently with the new-version testing.  I re-ran
+and of them, only auto/C-RR-G+RR-R+RR-R+RR-G+RR-R+RR-R+RR-G+RR-R.litmus
+timed out the second time.  I re-ran it again, but without a time limit,
+and it completed properly in 364.8 seconds compared to 580.  A rerun
+took 360.1 seconds.  So things have slowed down a bit.
 
->> So if you look at the DSC spec from where these tables have come it says
->>
->> "Common Recommended Rate Control-Related Parameter Values"
->>
->> Its Recommended but its NOT mandated by the spec to follow every value 
->> to the dot. I have confirmed this point with more folks.
->>
->> So, if someone from i915 this is useful and safe to move their code to 
->> the tables, we can try it.
->>
->>>> I would prefer to keep it in the msm code but in a top level directory
->>>> so that we dont have to make DSI dependent on DPU.
->>>
->>> I haven't changed my opinion. Please move relevant i915's code to
->>> helpers, verify data against standards and reuse it.
->>>
->>
->>
->>
->>>>>> All vendors compute the values differently and eventually call 
->>>>>> drm_dsc_compute_rc_parameters()
->>>>>>
->>>>>>> I didn't check the tables against the standard (or against the 
->>>>>>> current source code), will do that later.
->>>
-> 
+A few other oddities:
+
+litmus/auto/C-LB-Lww+R-OC.litmus
+
+	Both versions flag a data race, which I am not seeing.	It appears
+	to me that P1's store to u0 cannot happen unless P0's store
+	has completed.  So what am I missing here?
+
+litmus/auto/C-LB-Lrw+R-OC.litmus
+litmus/auto/C-LB-Lww+R-Oc.litmus
+litmus/auto/C-LB-Lrw+R-Oc.litmus
+litmus/auto/C-LB-Lrw+R-A+R-Oc.litmus
+litmus/auto/C-LB-Lww+R-A+R-OC.litmus
+
+	Ditto.  (There are likely more.)
+
+Thoughts?
+
+							Thanx, Paul
