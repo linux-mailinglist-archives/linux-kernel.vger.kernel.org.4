@@ -2,106 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383466A2CF9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32406A2CFA
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBZBs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 20:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S229539AbjBZBum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 20:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBZBsy (ORCPT
+        with ESMTP id S229445AbjBZBuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 20:48:54 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02955D33E;
-        Sat, 25 Feb 2023 17:48:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677376113; i=w_armin@gmx.de;
-        bh=WUcYVEwqrG6usAiQFxSS5/w7vamMXRwl23OvRi5cT6o=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=I97Ono275JMIR9NazH2Rjw2tD1SSrKjYRayQKSTB+W/BN+SYo4fjRwoYBC8ixcl/L
-         L1ywzcJ4+hhMee1aFgMqBVKBepHYP26MVaff30Pc805fZDRn8Pqg3QCQIlIpg682Of
-         vQ6dJ4zoqfVmexUaygnxfI8NSo712WKL/jMLwAAauHH8U+purR+QiZyUAqoQyh/Eu4
-         9tMHcILAnPtCyMTHmu3cptA3lV1UkQgV2yzvdMcWF2N1LA/ZLiAGqzFl/eCYyc6lob
-         5BOqSXkEFAvDInyRCF7zZ6iy2MoMLT3KP7U1Z8NvJ3SRwm+R6cwuZzFMtZYoeX57gs
-         py2L/caJEMC/w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MsHs0-1ocTMZ2UYc-00tom9; Sun, 26 Feb 2023 02:48:33 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (ftsteutates) Update specifications website
-Date:   Sun, 26 Feb 2023 02:48:30 +0100
-Message-Id: <20230226014830.10929-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Sat, 25 Feb 2023 20:50:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF5FFF09
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:50:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62779B80B68
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 01:50:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A77C433A4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 01:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677376237;
+        bh=0ec8hqU/IcJqPrO03/gIMI1/Z8q9iuH3dZL66CSWwz8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AJtri/wB/SKFE6K/mAE/MK5ktv5dmwtYgmTUyinfUW6kXtdzUqv9JdsWZw9pR9UMS
+         gEpuvRwB6nVXFFc60uPh7glhfKvGHv0rJerBkENe83beBUucIeFxopViVeV+FPjEfE
+         zz9FjFOYVBxHhZE8TNTNMfg2S42/9j+KLOYDMVuo2n6NSLdEru7TEF7xArNBQ6oaO4
+         zXBgdMVuSXGMg0i7TpL76K+I9xauJlvdJ1MLUJPe+91dc0CD/gPNsWkqmj9uh5U81L
+         SSTPYIIwMHUdw4ikdON1qES5+v3WO7Qn5uIZCjf0JNRFiSkdmbnMq9pWx/bLDcA6Yf
+         6mQ/L1/uUPtbw==
+Received: by mail-ed1-f51.google.com with SMTP id cq23so12398894edb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:50:36 -0800 (PST)
+X-Gm-Message-State: AO0yUKUxtQG2V0DXUExJsPuA3tmqDlQrEu9NYUS5rxANcnkwHOIB4v5s
+        3iyi6C+H43Mt6m/A2tH2uebT3uOGZVwc1aVJO1I4zg==
+X-Google-Smtp-Source: AK7set/xRFpwnCoxLgum99HQ8FIFLRRgT/l3eH1cvDGf+UzSwwXcm9V5PbhfhnYZYOxG7ukQKQgQl3xTop4QDQVG4wI=
+X-Received: by 2002:a17:907:1dda:b0:8b0:fbd5:2145 with SMTP id
+ og26-20020a1709071dda00b008b0fbd52145mr12925454ejc.15.1677376235219; Sat, 25
+ Feb 2023 17:50:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KJfAOvKDHvVsmTGKmNASb4WX+dMdFthNqzuX6yhwDdxyEwtZ7WJ
- iBhadcBQjFBWJ+hmC/Er+F7WGsv2cAVzFqcPeRtnDNLbUvfCJwMm0uDA2ysNVc3gd+D07V9
- ZwV7RWTWltGPQi3Hm3263p4OFLYcwwFx6QBBa1eFq8u9Nnr5z9z7M1a0ASEhzZAq2rat8Vv
- 7vYmLymHWTBcHqWcbD3dw==
-UI-OutboundReport: notjunk:1;M01:P0:sVSSp4pGbGc=;YG7R0optsPk+XgcLp70gjL2xbJ9
- 1pCohmGnqs3n34oeOgukXte742FHGOpfTSJ0yYXqT++2tTuoGxcY7VFqYZD85XUbrT/kLylxF
- sMt3DsK7AYMPZE7AIr5QrM6pe9hXwpgTboYjYLyHRw+AGHqonkrGskls5oTNcdWeqtT1dAxwB
- hwx0nyRlzS3aPFeJlLZLfS9DIBGeu9HG2UEcCIKk0yfpUZSv8NZCt/v6sd0M7/tB32g4n5KW2
- hyBVotgdqRfuuJD5TJ6juKbolboF21AWSocJ5L6gKuJbiNgg0QBAtYJ6dAkQcymyBS9ExRu+U
- JKgDaJhXORMRPA5SGZRvhe5QbTTRzVSq9VLVrdResIerICLMgi7KUbievC4Vda6IMmWfRaplZ
- caHObdYZyPNLSnDIadduFmAB/o1MCxCd7wQbf05Uk1Uv4uIwdB9uc3eQFX5u+TrPZWwt27n45
- kv5moWqIlpTeo5HXqDlzWKxtY90t9vBD8ZOKfWxOHYRiM1bbR9lxhU89Y0V7rwD8QWFDffM61
- lGJoKv7msHE1SDRZM0yRj+EfUfP7kYI87SDXrpNekcZkbJZZHgvlNb93DO0ZB2Fykj4ma4DJD
- wKO7bm6pyErgdPtoOTE4+MDEDo8EJbVhxORreTcJwK04tqDAI+6HC+Pe8eTGqBusBFJFlj4hF
- 7ECVuTIdNEd/FMCQGgp8p1JoXRWt/JskNGTP+pvPmFlCgGnbZ4J2ChepAu/L2GfFY4jPPHeoW
- YP8k/YYMPmtPfaSmwBN5cJgFN+X9ivoBFF7fwAOnPRKoH6EOnQhLGh1mjcit2c7j0SbMuVNaV
- R2znAuU3xcdxXXLmRLjSEMNbbCpD4uTdamKPm2yq1iZesDC61Ra1gz8UxP4NK21IhgsZNAhpR
- CLOl98veU12B9tis4/otuNndLPcNb5zkqEjhQH2RiYxOMmpk8ehPH2z0aeMTUorzV1nqgVClg
- I2rknsl3Ud5i4NZGkoobNv0cB0A=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230221184908.2349578-1-kpsingh@kernel.org> <Y/YJisQdorH1aAKV@zn.tnic>
+ <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com>
+ <Y/ZVaBKwbWUbF7u+@zn.tnic> <CACYkzJ4WigzaOCR4V9=e60ka=NNncWRB-j78DLRuzdSOZXvwrA@mail.gmail.com>
+ <Y/dfyh1U/qDR1Ymw@zn.tnic>
+In-Reply-To: <Y/dfyh1U/qDR1Ymw@zn.tnic>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Sat, 25 Feb 2023 20:50:23 -0500
+X-Gmail-Original-Message-ID: <CACYkzJ6U9HbMCPbZTnLf5_vWzRwCxk5j74pOSAVt-26ZS_C=pw@mail.gmail.com>
+Message-ID: <CACYkzJ6U9HbMCPbZTnLf5_vWzRwCxk5j74pOSAVt-26ZS_C=pw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy IBRS
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
+        jmattson@google.com,
+        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Fujitsu OEM Mainboard business was acquired by Kontron,
-so the specifications of the Teutates chip was transferred to
-the new Kontron FTP server.
+On Thu, Feb 23, 2023 at 7:45 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Wed, Feb 22, 2023 at 11:41:59AM -0800, KP Singh wrote:
+> > Sure, I think the docs do already cover it,
+>
+> I mean *our docs*. The stuff you're adding in your patch 2.
+>
+> > but I sort of disagree with your statement around the commit message.
+> > I feel the more context you can add in the commit message, the better
+> > it is.
+>
+> That's ofc wrong. And you'll find that out when you do git archeology
+> and you come across a huuuge wall of text explaining the world and some
+> more.
+>
+> No, commit messages should be to the point with a structure similar to
+> something like this:
+>
+> 1. Prepare the context for the explanation briefly.
+>
+> 2. Explain the problem at hand.
+>
+> 3. "It happens because of <...>"
+>
+> 4. "Fix it by doing X"
+>
+> 5. "(Potentially do Y)."
+>
+> concentrating on *why* the fix is being done.
+>
+> > When I am looking at the change log, it would be helpful to have the
+> > information that I mentioned in the Q&A. Small things like, "eIBRS
+> > needs the IBRS bit set which also enables cross-thread protections" is
+> > a very important context for this patch IMHO. Without this one is just
+> > left head scratching and scrambling to read lengthy docs and processor
+> > manuals.
+>
+> Yes, that's why you say in the commit message: "For more details, see
+> Documentation/admin-guide/hw-vuln/spectre.rst." where:
+>
+> 1. you can explain in a lot more detail
+>
+> 2. put it in place where people can find it *easily*
+>
+> > This sort of loosely implies that the IBRS bit also enables
+> > cross-thread protections. Can you atleast add this one explicitly?
+> >
+> > "Setting the IBRS bit also enables cross thread protections"
+>
+> Ok.
+>
+> > Not at the stage when the kernel decides to drop the STIBP protection
+> > when eIBRS is enabled.
+>
+> We can't dump every possible interaction between the mitigations. It is
+> a huge mess already. But I'm open to looking at improvements of the
+> situation *and* documenting stuff as we go.
+>
 
-Update the specifications website accordingly. The outdated
-sensors how-to was omitted.
+Well, we can try our best to print a message when we take a decision
+on behalf of the user. As I mentioned, had I got any message that the
+kernel was doing this it would have been much easier for me to figure
+out why the POC was working. It was tricky without this to figure out
+and I am capturing my broad chain of thought here:
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/ftsteutates.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+1. cross thread training seems to work, this seems to be a bug
+2. let me enable cross thread protections with a prctl
+3. it still seems to work, did I get a printnk that my prctl did not
+succeed or the kernel did something special? - no - why?
 
-diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/fts=
-teutates.rst
-index b3bfec36661d..2abd16830c99 100644
-=2D-- a/Documentation/hwmon/ftsteutates.rst
-+++ b/Documentation/hwmon/ftsteutates.rst
-@@ -36,7 +36,7 @@ correct path to the alarm file::
+I will still go ahead with the patch that was "re-written" for me and
+we can add debug information subsequently / as a follow up.
 
- 	echo 0 >XXXX_alarm
-
--Specification of the chip can be found here:
-+Specifications of the chip can be found at the `Kontron FTP Server <http:=
-//ftp.kontron.com/>`_ (username =3D "anonymous", no password required)
-+under the following path:
-
-=2D- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&To=
-ols/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.=
-pdf
-=2D- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&To=
-ols/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowT=
-o-en-US.pdf
-+  /Services/Software_Tools/Linux_SystemMonitoring_Watchdog_GPIO/BMC-Teuta=
-tes_Specification_V1.21.pdf
-=2D-
-2.30.2
-
+> Thx.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
