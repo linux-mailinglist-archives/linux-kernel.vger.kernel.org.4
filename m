@@ -2,160 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5A06A32C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 17:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20B76A3259
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 16:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjBZQW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 11:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S229991AbjBZPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 10:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjBZQW0 (ORCPT
+        with ESMTP id S229914AbjBZPcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 11:22:26 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8658318A9E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 08:22:24 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PPpn81DrXz9sS9;
-        Sun, 26 Feb 2023 17:22:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1677428540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GeYK5BT9h66VwNjG4DOXCbRc5mY33nHGF0n866cCNfk=;
-        b=O7ocRnSVeb6PxmMCGvOOycFANQN23dOLnwv2BXMB1H6qnoezhqCs9cL6w/msTsU7Blu6Ib
-        ck5+p87gt9GWAHOjwtWqOQJHBkL1GV99vKz6bKJPYM97+j/F4DcMuczU7LG7fHixgaFT3d
-        3H2Mb2KjylU7WWfv506WRuBZJLZVNJJ+1HNnh4ad5JpoHcKYMTVVuix3tMOyTh03ED3qPN
-        jxCaEZSnuTubIY0J9UTqwl0zYUGGQ6ESTuViK3VS8HHq8gQ8snsqPzlt/NMrADOoGoUztF
-        Tpvghm5mWjTtCp/Dt1L7bNuTtHQEQowgVCu7XNnMcnMM6MoQDxTCDUKsQS8hWw==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        =?utf-8?Q?Ond=C5=99e?= =?utf-8?Q?j?= Jirman <megous@megous.com>
-Cc:     Purism Kernel Team <kernel@puri.sm>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of XBD599
-Date:   Sun, 26 Feb 2023 16:17:32 +0100
-References: <20230219114553.288057-1-frank@oltmanns.dev>
- <20230219114553.288057-2-frank@oltmanns.dev>
- <20230219123542.yxb5ixe424ig6ofv@core>
-In-reply-to: <20230219123542.yxb5ixe424ig6ofv@core>
-Message-ID: <87zg90e6s5.fsf@oltmanns.dev>
+        Sun, 26 Feb 2023 10:32:02 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC077BDCC
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:29:29 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id k23-20020a5e8917000000b0074cbfb58b5bso2429282ioj.14
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 07:29:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRV0BVLtP52549vMKkrKGdQrZnP3iMyF48xKc9khzkU=;
+        b=ylhb+ovjQJ+qdtetf57Hkuid94c/l70sjMIF5agpmY3Vkv4sB86dm2V63x+wKP+oDb
+         x/eXpoOZXDwaPCw9+R3kFhedYZvW/yHaczsabsnDx74f1Pj3mm69J1v5jUr+7sPiuEkC
+         3OUByrYOVyHE2MNNmtaoNtpIfDCagTvdoiNqdB0Bbo4JFLcY522aEcBGdyugZQkktixH
+         1gBRC867xLDQcwljOgVoOrpNtWiZb5tobN9+eAA12oZvFMvspLuPSE0E1RTHNA0CTsUc
+         txCtmvFbc1D0D00PPLnlwZEoxDV75rN7WY7C0bpFf/mFlY7X6uASphtRi12O4maMctCU
+         sHbA==
+X-Gm-Message-State: AO0yUKUQa2byMQaM/Ja+OpcxvO3y7/xny+OWW5qrxCaTN4PNKJsAOqw+
+        EsAflp3qWLDjuG9cxWu4Uu4mWZ4WxWQz0KAJljPK+xmXd0uL
+X-Google-Smtp-Source: AK7set+v0Hn3n2ZAEuS+Wqe6EcNo8pDjg3JjlhF/vEFT4/WgAfZQa9gUNQHzdlXwX6c+ZDNBF5593VEE/ylJTF6ntEUPamhKzOdP
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1122:b0:3c5:1302:c88c with SMTP id
+ f2-20020a056638112200b003c51302c88cmr9012652jar.0.1677425324833; Sun, 26 Feb
+ 2023 07:28:44 -0800 (PST)
+Date:   Sun, 26 Feb 2023 07:28:44 -0800
+In-Reply-To: <0000000000001b987605f47b72d3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009fc0a105f59c0428@google.com>
+Subject: Re: [syzbot] [overlayfs?] WARNING: locking bug in take_dentry_name_snapshot
+From:   syzbot <syzbot+5a195884ee3ad761db4e@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot has found a reproducer for the following issue on:
 
-Hi Ond=C5=99ej,
-hi Guido,
+HEAD commit:    8232539f864c Add linux-next specific files for 20230225
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f3f254c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4fe68735401a6111
+dashboard link: https://syzkaller.appspot.com/bug?extid=5a195884ee3ad761db4e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11de1350c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e26960c80000
 
-On 2023-02-19 at 13:35:42 +0100, Ond=C5=99ej Jirman <megous@megous.com> wro=
-te:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4259815e0cee/disk-8232539f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5ea6ea28200d/vmlinux-8232539f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e461f15ffd6b/bzImage-8232539f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ba8c8f871670/mount_0.gz
 
-> On Sun, Feb 19, 2023 at 12:45:53PM +0100, Frank Oltmanns wrote:
->> Fix the XBD599 panel=E2=80=99s slight visual stutter by correcting the p=
-ixel
->> clock speed so that the panel=E2=80=99s 60Hz vertical refresh rate is me=
-t.
->>
->> Set the clock speed using the underlying formula instead of a magic
->> number. To have a consistent procedure for both panels, set the JH057N
->> panel=E2=80=99s clock also as a formula.
->>
->> =E2=80=94
->>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++=E2=80=93
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/driv=
-ers/gpu/drm/panel/panel-sitronix-st7703.c
->> index 6747ca237ced..cd7d631f7573 100644
->> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> @@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mod=
-e =3D {
->>  	.vsync_start =3D 1440 + 20,
->>  	.vsync_end   =3D 1440 + 20 + 4,
->>  	.vtotal	     =3D 1440 + 20 + 4 + 12,
->> -	.clock	     =3D 75276,
->> +	.clock	     =3D (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 100=
-0,
->>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->>  	.width_mm    =3D 65,
->>  	.height_mm   =3D 130,
->> @@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode =3D=
- {
->>  	.vsync_start =3D 1440 + 18,
->>  	.vsync_end   =3D 1440 + 18 + 10,
->>  	.vtotal	     =3D 1440 + 18 + 10 + 17,
->> -	.clock	     =3D 69000,
->> +	.clock	     =3D (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 10=
-00,
->
-> As for pinephone, A64 can=E2=80=99t produce 74.844 MHz precisely, so this=
- will not work.
->
-> Better fix is to alter the mode so that clock can be something the only S=
-oC this
-> panel is used with can actually produce.
->
-> See eg. <https://github.com/megous/linux/commit/dd070679d717e7f34af755856=
-3698240a43981a6>
-> which is tested to actually produce 60Hz by measuring the vsync events ag=
-ainst
-> the CPU timer.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5a195884ee3ad761db4e@syzkaller.appspotmail.com
 
-I did some testing using a 60fps video I produced using the following comma=
-nd:
-    ffmpeg -f lavfi -i testsrc=3Dduration=3D10:size=3D80x50:rate=3D60 -vf =
-=E2=80=9Cdrawtext=3Dtext=3D%{n}:fontsize=3D36:r=3D60:x=3D(w-tw)/2: y=3Dh-(1=
-*lh):fontcolor=3Dwhite:box=3D1:boxcolor=3D0x00000099=E2=80=9D test_80x50.mp4
+overlayfs: upper fs does not support tmpfile.
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 9271 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:232 [inline]
+WARNING: CPU: 0 PID: 9271 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:221 [inline]
+WARNING: CPU: 0 PID: 9271 at kernel/locking/lockdep.c:232 check_wait_context kernel/locking/lockdep.c:4730 [inline]
+WARNING: CPU: 0 PID: 9271 at kernel/locking/lockdep.c:232 __lock_acquire+0x1615/0x5d40 kernel/locking/lockdep.c:5006
+Modules linked in:
+CPU: 0 PID: 9271 Comm: syz-executor233 Not tainted 6.2.0-next-20230225-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+RIP: 0010:hlock_class kernel/locking/lockdep.c:232 [inline]
+RIP: 0010:hlock_class kernel/locking/lockdep.c:221 [inline]
+RIP: 0010:check_wait_context kernel/locking/lockdep.c:4730 [inline]
+RIP: 0010:__lock_acquire+0x1615/0x5d40 kernel/locking/lockdep.c:5006
+Code: 08 84 d2 0f 85 b4 3d 00 00 8b 15 22 11 13 0d 85 d2 0f 85 31 fb ff ff 48 c7 c6 a0 74 4c 8a 48 c7 c7 e0 68 4c 8a e8 5b 4f e6 ff <0f> 0b 31 ed e9 e9 ed ff ff e8 2d 6f b3 02 85 c0 0f 84 c1 fa ff ff
+RSP: 0018:ffffc90003a9f7f8 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffffffff9200089f RCX: 0000000000000000
+RDX: ffff88807d953a80 RSI: ffffffff814c1907 RDI: 0000000000000001
+RBP: 0000000000000e17 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 000000002d2d2d2d R12: ffff88807d954530
+R13: ffff88807d953a80 R14: 0000000000040000 R15: 0000000000040e17
+FS:  00007fba7628a700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fba6e0b3000 CR3: 0000000021c3d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire.part.0+0x11a/0x370 kernel/locking/lockdep.c:5669
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ take_dentry_name_snapshot+0x2b/0x170 fs/dcache.c:315
+ ovl_check_rename_whiteout fs/overlayfs/super.c:1207 [inline]
+ ovl_make_workdir fs/overlayfs/super.c:1329 [inline]
+ ovl_get_workdir fs/overlayfs/super.c:1444 [inline]
+ ovl_fill_super+0x2090/0x7270 fs/overlayfs/super.c:2000
+ mount_nodev+0x64/0x120 fs/super.c:1417
+ legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x8d/0x350 fs/super.c:1501
+ do_new_mount fs/namespace.c:3042 [inline]
+ path_mount+0x1342/0x1e40 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount fs/namespace.c:3571 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3571
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fba762deb29
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fba7628a2f8 EFLAGS: 00000246
+ ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007fba76364780 RCX: 00007fba762deb29
+RDX: 0000000020000080 RSI: 00000000200000c0 RDI: 0000000000000000
+RBP: 00007fba763311d0 R08: 0000000020000480 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0079616c7265766f
+R13: d5e172a4510865ec R14: 9837512483e3bdcd R15: 00007fba76364788
+ </TASK>
 
-This 10-second video shows an increasing number on every frame, which makes=
- it easy to spot dropped frames by recording the playback with a camera tha=
-t can record more than 60fps (I used a 240fps camera).
-
-When playing back that video with your current drm-6.2 branch I get a stead=
-y 60fps. But applying either your or my patch to mainline, only helps very =
-little. Frames are being skipped more often than not in both cases.
-
-Therefore, I need to investigate more and retract the patch for now.
-
-The other two patches I sent earlier, however, are far more important for m=
-aking the pinephone usable on mainline.
-
-Best regards,
-  Frank
-
->
-> Your patch will not produce the intended effect.
->
-> kind regards,
-> 	o.
->
->>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->>  	.width_mm    =3D 68,
->>  	.height_mm   =3D 136,
->> =E2=80=93
->> 2.39.1
->>
-
---=-=-=--
