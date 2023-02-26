@@ -2,83 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9912B6A2E6F
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 06:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DCF6A2E75
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 06:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjBZFkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 00:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S229535AbjBZFpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 00:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjBZFj7 (ORCPT
+        with ESMTP id S229445AbjBZFo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 00:39:59 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6B8136E9;
-        Sat, 25 Feb 2023 21:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=cSNByO9fFLUH/bsd79G915kzP5bO5cbyzpjf2Z+gFkk=; b=Wc+ujKzBtm+iV66xOvUoAUGW1r
-        emDMt3GkBYnW0zXqvn/HmExzeY6gQDdMGhpcFu4c8lxCp3UQHRmYnYPxdl+RiiEWrmwdVJtoDo8ic
-        2AJ2rMwrf3jXoLafx9hsLP7nJOHL5h2VmuUqb2XpeE8cJwkdWo/k3V+LmYLOkDow6LK+ly4VEI3/q
-        JMbwUBLaJhg3VGoL+4IAzrZukTKM3QBl2T00aO8Cu5bYdy2744qx2geTxx22LnV3UAjkaUVdk4buX
-        TApEbcGYagRdqgIdrXjnnjZAknRduFfiREeJpas6LHqLXhXECpCapPST1GWw0NdCcXTOg7A3zGYMc
-        Jps0jjIw==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pW9lO-006qYL-6D; Sun, 26 Feb 2023 05:39:58 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
-Subject: [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
-Date:   Sat, 25 Feb 2023 21:39:53 -0800
-Message-Id: <20230226053953.4681-9-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230226053953.4681-1-rdunlap@infradead.org>
-References: <20230226053953.4681-1-rdunlap@infradead.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 26 Feb 2023 00:44:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4823D301;
+        Sat, 25 Feb 2023 21:44:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2815460C09;
+        Sun, 26 Feb 2023 05:44:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F039C433EF;
+        Sun, 26 Feb 2023 05:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1677390295;
+        bh=tdqNtzVVQiNAGo+d23F6Rjsew/mx9y+fMs7cnvra67Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bUJc72SJrw994D6SiFP/QwiH3zQiYfy1kslI+lGU7nvqzpKabCVnBbw9BA24jKb5o
+         hpOl8KPp5GQVHbH5DWOWbG4VFm3uSaIlaRtbOnK3efzwU+nOjqzy7RNLXUb9o26qj4
+         /wKMLNhcNv3WK7Rn4ylq7oawj9mzKoW6XZgeHMIU=
+Date:   Sat, 25 Feb 2023 21:44:54 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     bhe@redhat.com, pmladek@suse.com, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        d.hatayama@jp.fujitsu.com, feng.tang@intel.com,
+        hidehiro.kawai.ez@hitachi.com, keescook@chromium.org,
+        mikelley@microsoft.com, vgoyal@redhat.com, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, stable@vger.kernel.org
+Subject: Re: [PATCH v4] panic: Fixes the panic_print NMI backtrace setting
+Message-Id: <20230225214454.5eb25ff8a937a99d357c44ad@linux-foundation.org>
+In-Reply-To: <20230210203510.1734835-1-gpiccoli@igalia.com>
+References: <20230210203510.1734835-1-gpiccoli@igalia.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-REGMAP is a hidden (not user visible) symbol. Users cannot set it
-directly thru "make *config", so drivers should select it instead of
-depending on it if they need it.
+On Fri, 10 Feb 2023 17:35:10 -0300 "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 
-Consistently using "select" or "depends on" can also help reduce
-Kconfig circular dependency issues.
+> Commit 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
+> introduced a setting for the "panic_print" kernel parameter to allow
+> users to request a NMI backtrace on panic. Problem is that the panic_print
+> handling happens after the secondary CPUs are already disabled, hence
+> this option ended-up being kind of a no-op - kernel skips the NMI trace
+> in idling CPUs, which is the case of offline CPUs.
+> 
+> Fix it by checking the NMI backtrace bit in the panic_print prior to
+> the CPU disabling function.
+> 
+> ...
+> 
+> Notice that while at it, I got rid of the "crash_kexec_post_notifiers"
+> local copy in panic(). This was introduced by commit b26e27ddfd2a
+> ("kexec: use core_param for crash_kexec_post_notifiers boot option"),
+> but it is not clear from comments or commit message why this local copy
+> is required.
+> 
+> My understanding is that it's a mechanism to prevent some concurrency,
+> in case some other CPU modify this variable while panic() is running.
+> I find it very unlikely, hence I removed it - but if people consider
+> this copy needed, I can respin this patch and keep it, even providing a
+> comment about that, in order to be explict about its need.
 
-Therefore, change the use of "depends on REGMAP" to "select REGMAP".
+Only two sites change crash_kexec_post_notifiers, in
+arch/powerpc/kernel/fadump.c and drivers/hv/hv_common.c.  Yes, it's
+very unlikely that this will be altered while panic() is running and
+the consequences will be slight anyway.
 
-Fixes: 8d310c9107a2 ("drivers/tty/serial/8250: Make Aspeed VUART SIRQ polarity configurable")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Oskar Senft <osk@google.com>
-Cc: linux-serial@vger.kernel.org
----
- drivers/tty/serial/8250/Kconfig |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+But formally, we shouldn't do this, especially in a -stable
+backportable patch.  So please, let's have the minimal bugfix for now
+and we can look at removing that local at a later time?
 
-diff -- a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -257,8 +257,9 @@ config SERIAL_8250_ASPEED_VUART
- 	tristate "Aspeed Virtual UART"
- 	depends on SERIAL_8250
- 	depends on OF
--	depends on REGMAP && MFD_SYSCON
-+	depends on MFD_SYSCON
- 	depends on ARCH_ASPEED || COMPILE_TEST
-+	select REGMAP
- 	help
- 	  If you want to use the virtual UART (VUART) device on Aspeed
- 	  BMC platforms, enable this option. This enables the 16550A-
