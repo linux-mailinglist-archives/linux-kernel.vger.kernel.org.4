@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B954C6A33EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 21:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD3A6A33F0
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 21:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjBZUSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 15:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S229661AbjBZUXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 15:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjBZUSl (ORCPT
+        with ESMTP id S229529AbjBZUW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 15:18:41 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A47044A9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 12:18:39 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id gi3-20020a17090b110300b0023762f642dcso4216540pjb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 12:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1677442718;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WfnsNCyMqf3Mvd4sjmsuEBgREKEXaVYDac63SQuhJJw=;
-        b=xeercA6ozu6jEy9thlUQk8vkH/YTR96f0IViO1Dd3uXuyyLB5NfTBmcFVhKTngRvRA
-         2f49+/lo4TiAE5KvzX4q24Kev36C8ojQTFOy3X0UVnx5eQmylfgENGtw+ncKQkT0ZdyE
-         6hZjQ446RbHXB1Hmyepo7E4f0NwGfkaEqriZeqSCXeU0TIvRyTeXRyUHyyccIRd8GmgE
-         ji0ET9Rqclso4EgTnJTLDQbWOXCxCau7rIEHHSrvWAMjZYSZ1wMH12bhIn50gjdy4SLF
-         hUV2keahta5WiQtrQ/UQbOi5RWdMIdZGA4HFHXeVYq1MtXOR8ZKdWS7X3UekCO5qKh3h
-         cw7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677442718;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WfnsNCyMqf3Mvd4sjmsuEBgREKEXaVYDac63SQuhJJw=;
-        b=m088bSiTRmo80B0Z3OyP1jeIis87QUI44JtbHfPLwqrKVMxSizCoynosylrfyczYX6
-         Dcca3K1DcgOrjMedgqc7WWEFjV8FviOCWkzZc2u/uF4Sd3RyltNRDWTymgLxhc1KAaic
-         m/ASGu/YqvEUp6AMXc1WtJizRMkNnOyz68rs40mKesVC7E5BoYQR3egNQLGF20lDYBzU
-         xXlvuusP1xM0GXuqNJN1pGy2lfQq9dB46saPUrHGGFNLGnBulSl+edIRXXoLYoMNA10V
-         N8RV7oJLNCORJB66sbN8ZnkrYCdpVxdGMUNROwmPdMbALh9L7l3oY9hXVDpwnbF3q1nD
-         igeQ==
-X-Gm-Message-State: AO0yUKW2G2OcKNp9keo5g+fARVb5x/v+65XUHrASpHi3NMR8DNhKZOEL
-        bVjW5KZkh5XgmNqZxS+kGaHz3Q==
-X-Google-Smtp-Source: AK7set/NKoCQKyOK9Tjmqh9lx6pUyZta2wpOHwrNO4eLt0JKw7PWAHd/dpA5RW1uXGrfn2GnDji9CQ==
-X-Received: by 2002:a17:90a:fd8e:b0:230:dc97:9da2 with SMTP id cx14-20020a17090afd8e00b00230dc979da2mr19308012pjb.1.1677442718485;
-        Sun, 26 Feb 2023 12:18:38 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v14-20020a17090a088e00b002311c4596f6sm4651060pjc.54.2023.02.26.12.18.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 12:18:38 -0800 (PST)
-Message-ID: <99297e45-e5d7-e582-ed66-4080baf5c884@kernel.dk>
-Date:   Sun, 26 Feb 2023 13:18:36 -0700
+        Sun, 26 Feb 2023 15:22:58 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78B73AAB
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 12:22:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1677442974; bh=FRkGvJDmaEz0swKnwZzPE0L9HyhTVuotpdyes0dJpOM=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=jqw+0L6varzZLT18Aylj+/ynQKFNmxTlAHp8XSG3in1t/wYA6y2GZhz83ApBFdnPg
+         DKA6Z8JCYhcPNoEY5VHhbz7ESqbGEFIJyM6fY7w914G/GmXeAfhk/xJZ/q25BYcPlL
+         kNIIsmZiISvER+/bs9FZcWng56EeqcG3XMnavuLo=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun, 26 Feb 2023 21:22:54 +0100 (CET)
+X-EA-Auth: TAIhNcv5bfuO/MsWc1+6zY1h5Un2D9etJ70zxWicPeOZiIPqBBoL5iUIxv+so2EeDpR4HrVZUDaPoN3Gbbke0SdwJA6tU8Fz
+Date:   Mon, 27 Feb 2023 01:52:49 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     nicolas palix <nicolas.palix@imag.fr>, cocci <cocci@inria.fr>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] coccinelle: put_device: Include of_node_put to avoid
+ false positives
+Message-ID: <Y/u/mV6GUC5+l3m6@ubun2204.myguest.virtualbox.org>
+References: <Y+/DQ6l0pDcxC2c3@ubun2204.myguest.virtualbox.org>
+ <597798313.18813704.1677352621708.JavaMail.zimbra@inria.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] blk-iocost: initialize rqos before accessing it
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Breno Leitao <leitao@debian.org>
-Cc:     josef@toxicpanda.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, aherrmann@suse.de,
-        linux-kernel@vger.kernel.org, hch@lst.de, leit@fb.com
-References: <20230224160714.172884-1-leitao@debian.org>
- <Y/uPFT7w+XQ9l0XE@slm.duckdns.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y/uPFT7w+XQ9l0XE@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <597798313.18813704.1677352621708.JavaMail.zimbra@inria.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/26/23 9:55 AM, Tejun Heo wrote:
-> Hello, Breno.
+On Sat, Feb 25, 2023 at 08:17:01PM +0100, Julia Lawall wrote:
+> > The node reference increased by of_find_device_by_node() can also be
+> > released by using a call to of_node_put(). Hence when this exists, the
+> > script should not trigger a warning, which otherwise will be a false
+> > positive.
 > 
-> On Fri, Feb 24, 2023 at 08:07:14AM -0800, Breno Leitao wrote:
->> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
->> index ff534e9d92dc..6cced8a76e9c 100644
->> --- a/block/blk-iocost.c
->> +++ b/block/blk-iocost.c
->> @@ -2878,11 +2878,6 @@ static int blk_iocost_init(struct gendisk *disk)
->>  	atomic64_set(&ioc->cur_period, 0);
->>  	atomic_set(&ioc->hweight_gen, 0);
->>  
->> -	spin_lock_irq(&ioc->lock);
->> -	ioc->autop_idx = AUTOP_INVALID;
->> -	ioc_refresh_params(ioc, true);
->> -	spin_unlock_irq(&ioc->lock);
->> -
->>  	/*
->>  	 * rqos must be added before activation to allow ioc_pd_init() to
->>  	 * lookup the ioc from q. This means that the rqos methods may get
->> @@ -2893,6 +2888,11 @@ static int blk_iocost_init(struct gendisk *disk)
->>  	if (ret)
->>  		goto err_free_ioc;
->>  
->> +	spin_lock_irq(&ioc->lock);
->> +	ioc->autop_idx = AUTOP_INVALID;
->> +	ioc_refresh_params(ioc, true);
->> +	spin_unlock_irq(&ioc->lock);
->> +
+> Could you explain more about why of_node_put is sufficient?
+
+You are right. In fact, I think calling of_node_put() for a prior
+of_find_device_by_node() is buggy as a call to of_find_device_by_node()
+increments the kref for the device embedding the node and not the kref of the
+node. Hence a call to put_device() is required to decrement the device kref.
+Calling the of_node_put() attempts to decrement the kref of the node, which I
+think is not correct.
+
+May I request any comment on my understanding?
+
+Thank you,
+deepak.
+
 > 
-> I'm a bit worried about registering the rqos before ioc_refresh_params() as
-> that initializes all the internal parameters and letting IOs flow through
-> without initializing them can lead to subtle issues. Can you please instead
-> explicitly pass @q into ioc_refresh_params() (and explain why we need it
-> passed explicitly in the function comment)?
-
-Sorry missed this, I'll drop it for now.
-
--- 
-Jens Axboe
+> thanks,
+> julia
+> 
+> > Also, improve the warning message to include of_node_put too is missing.
+> > 
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> > scripts/coccinelle/free/put_device.cocci | 4 +++-
+> > 1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/scripts/coccinelle/free/put_device.cocci
+> > b/scripts/coccinelle/free/put_device.cocci
+> > index f09f1e79bfa6..259195b501aa 100644
+> > --- a/scripts/coccinelle/free/put_device.cocci
+> > +++ b/scripts/coccinelle/free/put_device.cocci
+> > @@ -18,8 +18,10 @@ type T,T1,T2,T3;
+> > 
+> > id = of_find_device_by_node@p1(x)
+> > ... when != e = id
+> > +    when != of_node_put(x)
+> > if (id == NULL || ...) { ... return ...; }
+> > ... when != put_device(&id->dev)
+> > +    when != of_node_put(x)
+> >     when != platform_device_put(id)
+> >     when != if (id) { ... put_device(&id->dev) ... }
+> >     when != e1 = (T)id
+> > @@ -42,7 +44,7 @@ p2 << search.p2;
+> > @@
+> > 
+> > coccilib.report.print_report(p2[0],
+> > -                             "ERROR: missing put_device; call
+> > of_find_device_by_node on line "
+> > +                             "ERROR: missing put_device or of_node_put; call
+> > of_find_device_by_node on line "
+> >                              + p1[0].line
+> >                              + ", but without a corresponding object release within this function.")
+> > 
+> > --
+> > 2.34.1
 
 
