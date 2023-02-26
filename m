@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6BA6A2FCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAD06A2FD4
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 14:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjBZNZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 08:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S229556AbjBZNeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 08:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjBZNZH (ORCPT
+        with ESMTP id S229379AbjBZNeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 08:25:07 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CBE12BF5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:25:06 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id a7so1980856pfx.10
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:25:06 -0800 (PST)
+        Sun, 26 Feb 2023 08:34:09 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D632113FA
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:34:08 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id i5so2418478pla.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 05:34:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WIdIsNJqgjcgtgkT28wQ/X13SL46siMQE4Wb+rfuVYs=;
-        b=OFF+HS/j6e9XUDNsULpXyIrj1eeG0iuwwuEALp/mbz2yZYlgxUAu0sX7OPAgcKb6cc
-         lLkx/0/GsRl/ZE4Mx5Op2bD8xnPCv2H1ZDl88IflWmZTgybi0Du1hHzoH4m/u+L3B9TZ
-         db/pxVcUKqkMLg3yXeXZ5IJBJtwr9+cGXIlDyZ67grF2ImzdKoQOQynWvyndBp69IbIN
-         DDt4sxONV10oHhm/ht+54Xq3Wwz8YjkHC/xz1X2BnQtX8f8GLVmi6ENh7ZLsK2wBZt0E
-         OfUiAaNvZTYzeGf+ZG6KFDZEIY/XPLweqy2Vlb6fIKtVkMN+mobgU8sCdbk2srskg7ho
-         9d7w==
+        bh=4Z78SjOk/k03WYB7CJ5uRFHoK2AySrR3qvUt493wtnY=;
+        b=k1wLDiepy9Cc0cSjgunHysVh4L8B7sk1mLB2epfI5aU+TiQ2lo1e+LTALzdt/kabAa
+         nawkWR1DGaoA6aXGZkp0x5YaxfL/hGNtNODS6mOX4kDSASG7WaiWgGVU5oFnYtBaiKfy
+         Aa4LdIUlROsdJRF6Af7KG91ufCLll7R1HkaSTZabFbDLLFdzKb9qBIEMgUBuz0OmD3Wu
+         RVEpK3DrWhmfmmsIqVOllGY6kmYse2aMC2rLdq3G46kr7jztLo5e+M13UgPRBuMKdAvu
+         b1ApJAiDaQAUGaVDn0ky+c7Lt/9v2XPH+56iweUIZBoJY3jNVwpKJhEeW/SijL+bwMeg
+         THRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WIdIsNJqgjcgtgkT28wQ/X13SL46siMQE4Wb+rfuVYs=;
-        b=TuK4fNreddne60+hVnQbQ+d2SaUrM+NaciI2V6CM+vMieRG6jLFEsFRd7UOj2eAKlJ
-         icyZfJ6UuoXnJJPiHONVCqQwcZHmNrry+f727PSasAFVXzeNT+Cm2v/CThMrOnPCoS8l
-         aNviyMyRejdeM6dCb/Tx/gh919tSd5dDOLYlRke94F+WSYGFnI1R8refLUsYFeS67tB+
-         ubGw6T7kuZbD+0e1Xd2SXH9DJ3X6QFCwkVHAAWoa7b2P6vxO3G2/lT5Pd0RyYm1JIPYE
-         AlBdCNYAenr2gSZj7oDBGM0dg6O9+sqhwtcGZviGv7ikQxyCb9AZxFintQaMysShLhEv
-         QfIA==
-X-Gm-Message-State: AO0yUKWOjS6gCXHepsqh8cM07fPA107ax8AmIUK5qysECvk2KAlbNs7C
-        ym1nWO0AzvJXbtq7wI3Jtmk=
-X-Google-Smtp-Source: AK7set+cLoNNrU1K3IL3FiBj8M7xOsOAR4VcJfsntkyKZJDBUtf9dogiTalemjQAwLMS7WRPmTwRYQ==
-X-Received: by 2002:a62:790f:0:b0:593:befd:848c with SMTP id u15-20020a62790f000000b00593befd848cmr20422654pfc.16.1677417905841;
-        Sun, 26 Feb 2023 05:25:05 -0800 (PST)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        by smtp.gmail.com with ESMTPSA id e13-20020aa78c4d000000b005a75d85c0c7sm2495932pfd.51.2023.02.26.05.25.03
+        bh=4Z78SjOk/k03WYB7CJ5uRFHoK2AySrR3qvUt493wtnY=;
+        b=kVtpOhybR+/rcqQUtX9GsnBNORr5L/B2YEUQAnSgLJ2M/jzW/Ny7nuHi/sIWxZp3SZ
+         nCzB95hRvJUye64XcgY/C70RBhLLHsjTkRU3fQBYj1cSXLwVwPCLvjyvYGmJlHHkQoP6
+         nwucEixOXBNKaJ9OK8pKKbSl35/fc8ujX1ku1UnvSZybsuA5dbOaZC35uV5zy+A4lAtk
+         8/gq2aiIr2rD3+BZcXupsgeQ48bIQupaY6+SZkyu/sSJGDXMhv0mi52k8zDRKTgQkZ2d
+         ZAib46wyLFvQTJ7jWcIhZ1EaEbdhwtUCisuiaHs7myeBF+bqUscOUE+Gw2kHjls8PEPt
+         /ihw==
+X-Gm-Message-State: AO0yUKUaVghnXZZCTqqPrQxMxuDbkzGi5T+WP7T4N4dual7GviwXvMHj
+        0GsJ20CUF27fI1R9iSiy+Bs=
+X-Google-Smtp-Source: AK7set908GPWLSLvg8NNt2V9uR0HJjhY7jxq9d3VJxmFsFO/mETCnwtdTKW286228P2YCkHxItkcgw==
+X-Received: by 2002:a17:903:41cd:b0:199:1b8a:42a8 with SMTP id u13-20020a17090341cd00b001991b8a42a8mr26128915ple.6.1677418447827;
+        Sun, 26 Feb 2023 05:34:07 -0800 (PST)
+Received: from localhost.localdomain ([199.101.192.172])
+        by smtp.gmail.com with ESMTPSA id jb21-20020a170903259500b0019abd4ddbf2sm2668787plb.179.2023.02.26.05.34.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 05:25:05 -0800 (PST)
-From:   Kang Chen <void0red@gmail.com>
-To:     paskripkin@gmail.com
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
-Subject: [PATCH] staging: r8188eu: add a null check of kzalloc in go_add_group_info_attr
-Date:   Sun, 26 Feb 2023 21:25:00 +0800
-Message-Id: <20230226132500.3933232-1-void0red@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 26 Feb 2023 05:34:07 -0800 (PST)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drivers: pcmcia: fix a typo in pcmcia_request_irq
+Date:   Sun, 26 Feb 2023 21:31:20 +0800
+Message-Id: <20230226133123.3180376-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,27 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kzalloc may fails, pdata_attr might be null and will cause
-illegal address access later.
+There is a typo in the comment of pcmcia_request_irq - themselfves.
 
-Signed-off-by: Kang Chen <void0red@gmail.com>
+Fix it by changing themselves to themselves.
+
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_p2p.c | 2 ++
- 1 file changed, 2 insertions(+)
+v1->v2: change the title and modify my email.
+ drivers/pcmcia/pcmcia_resource.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-index 93d3c9c43..802e1170a 100644
---- a/drivers/staging/r8188eu/core/rtw_p2p.c
-+++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-@@ -31,6 +31,8 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
- 	struct sta_priv *pstapriv = &padapter->stapriv;
- 
- 	pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
-+	if (!pdata_attr)
-+		return 0;
- 
- 	pstart = pdata_attr;
- 	pcur = pdata_attr;
+diff --git a/drivers/pcmcia/pcmcia_resource.c b/drivers/pcmcia/pcmcia_resource.c
+index d78091e79a0f..e9e31c638a67 100644
+--- a/drivers/pcmcia/pcmcia_resource.c
++++ b/drivers/pcmcia/pcmcia_resource.c
+@@ -684,7 +684,7 @@ EXPORT_SYMBOL(pcmcia_request_io);
+  * pcmcia_request_irq() is a wrapper around request_irq() which allows
+  * the PCMCIA core to clean up the registration in pcmcia_disable_device().
+  * Drivers are free to use request_irq() directly, but then they need to
+- * call free_irq() themselfves, too. Also, only %IRQF_SHARED capable IRQ
++ * call free_irq() themselves, too. Also, only %IRQF_SHARED capable IRQ
+  * handlers are allowed.
+  */
+ int __must_check pcmcia_request_irq(struct pcmcia_device *p_dev,
 -- 
-2.34.1
+2.39.1
 
