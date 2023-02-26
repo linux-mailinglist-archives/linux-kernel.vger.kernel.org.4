@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF50C6A2F38
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 12:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282886A2F3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 12:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjBZLI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 06:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S229486AbjBZLI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 06:08:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjBZLIk (ORCPT
+        with ESMTP id S229684AbjBZLIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 26 Feb 2023 06:08:40 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C65A5DA
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E025BAD0D
         for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 03:08:11 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so5277698wms.2
+Received: by mail-wm1-x332.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so5277715wms.2
         for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 03:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kmlw8LHyg0IiYBrAdMu6qbL5s9Zil0lzZnE7VOWUkds=;
-        b=YEGYsFMsvxLJX/fdLNzxLhuHtxeMp64LLiiB2UXeKc5gJVwV+rLhpZJ6cMDln5oJg1
-         /yCnEDf0Hvh/57lcw0wKiRvB74wLu0MjPZTMwbYKwnapuJhniXs5NiHw2byDkAP0rm8P
-         nZ8ONT/oKVf932e1j/Qm7nWAjbbccV5P8TzJugmwMfBKDVeFMC5p7BJwKyR6RPgHsvhh
-         +xS7F7fk5eVnNlOueqgXgg5fdrR8mLO0xEPN6Fj6qXjShXRrvyCXVOVDXRH3VLyi1sWa
-         wWoSz+Pb3Tmi2YzR5AwNeaZ955C90N21ErbfOmB/IKPWAwsRlR5U/KSBVI7xZ/UjDlc+
-         77fw==
+        bh=o/vcGB3tRiPqgIjGstr77HWq6H41b6Xz6eyjpGifXDM=;
+        b=C3SqKIThhTfaMRirw+2QelUYjbwo9roa+7rXabxBaMR7RmAMK7OOh+HPfPvyuKktfP
+         AXVauvuRgbNfibMHLPZ8BiuNnE6APMiMWUhZuHMya4ztY4vR63hnsF+twu6QZYw1lwfV
+         MTJgF6KXtwKl0fg1OvZGtvZQcIeNaFAegMzZp/f2TolsAxwx2UnX5BPTWN3ZNQebZfnh
+         7zln4a5UXunWlVs10HjwK0MfYcQ4e5ma6wF/cYmtj+PaWV9UsHcT75T9M4jY7jgib94x
+         m0qnVaAmqHb1Oyep/vcRptVrzUinPU92cGHsH8zaZR2L16lgcoaq9BgTE+3P4+j4e0Dk
+         N/tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kmlw8LHyg0IiYBrAdMu6qbL5s9Zil0lzZnE7VOWUkds=;
-        b=INqjKpY/NuMESnb3i6eXjjdl8h7eUG9o1t5W1mvYw2t1p5TZIu98xPhWe71kHNktNj
-         4o/BEgD7IERNiUsAsRn+gJAwLHWpwXPD6PZkRigDkcguB7SQ4B/DN7WEUvRYAX8NUMAU
-         f2ZVgoZ2sKoyHjI3GB57kIHPoAE7QfoNAL/jq+HhSe/ttxdKC9Rp4Awqc+2n6vrv4Klp
-         DrmIH9GO/1BY98V5WoeNzk7PEsIYf1+WdKTfitDTIpYXuSb5rIi5YEYPziUum5EA1WCt
-         M9cREGKAlLAQEbj5AacIjEq/RDB1Y6zzg0xPzGolQDtylGLxn3TlpdEK/zAbyY5FCmY8
-         RRJA==
-X-Gm-Message-State: AO0yUKVn28xQt6qmdnuzQS2f3Sq9XCPuAvw4Zaqiq8eoChr1YMT3oagW
-        JbNoIuicgZEHWbs/15jdG6TC8A==
-X-Google-Smtp-Source: AK7set/kxO5N/OaFkkciaz/8Yuc3TgYfp3hUQj1bV6HS4gcEX7YglwcMCTT2vc5AQMxMjZefdS7pkQ==
-X-Received: by 2002:a1c:ed1a:0:b0:3ea:f6c4:305e with SMTP id l26-20020a1ced1a000000b003eaf6c4305emr7289958wmh.38.1677409689563;
-        Sun, 26 Feb 2023 03:08:09 -0800 (PST)
+        bh=o/vcGB3tRiPqgIjGstr77HWq6H41b6Xz6eyjpGifXDM=;
+        b=1Re57lauFWzyHKZ1R/wi+jflJgLuahSutx05YfJ0O7L/D8FGZuPqbYr/Wl3+bIN+XJ
+         kmpZQEOI/t/Mh+286dfdC85LqlG2nHh0lpr3Zc4p1t98Y1UtyYjjgItEVgjN8UOYbpbn
+         BMTUv3EqQHvpt51waD3LtVx8p1z6TRvCHnV8pZFQDAcRbYqWxIwdvmKx8Tzo3AspHWX+
+         ZyhGvcSBTnvjhhmvGlRn8XEFWiO2SqAXYNtcxAChMIJPdOrl0jYriRUqo+2nWk0CkU8d
+         vDMUoOJDVRmCqudWAy4YE/s2FfZmHkKWqsSNBIBgrZlf5bq6RIylGaaa0li53CctxuNw
+         FwjA==
+X-Gm-Message-State: AO0yUKU5hKhWDwoyAl/yjsnvqi45xGp5GklcQ1sbz5kcIPBH2Vn/eCOw
+        kyvwaiBHTAfB535DOxwXxZNy3w==
+X-Google-Smtp-Source: AK7set9mL8Niyd0GcyAD80gTw0dOANgXeCK88Szy7Y9FMs2NS9e/IcJVyYZXlOxdJM8d3LUJSSX40A==
+X-Received: by 2002:a05:600c:3c91:b0:3eb:36fa:b78d with SMTP id bg17-20020a05600c3c9100b003eb36fab78dmr2533431wmb.23.1677409690383;
+        Sun, 26 Feb 2023 03:08:10 -0800 (PST)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:df7b:4668:3e23:d0c9])
-        by smtp.gmail.com with ESMTPSA id v22-20020a1cf716000000b003e1fee8baacsm9157318wmh.25.2023.02.26.03.08.08
+        by smtp.gmail.com with ESMTPSA id v22-20020a1cf716000000b003e1fee8baacsm9157318wmh.25.2023.02.26.03.08.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 03:08:09 -0800 (PST)
+        Sun, 26 Feb 2023 03:08:10 -0800 (PST)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
         brgerst@gmail.com
@@ -64,9 +64,9 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         simon.evans@bytedance.com, liangma@liangbit.com,
         David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v12 05/11] x86/smpboot: Split up native_cpu_up into separate phases and document them
-Date:   Sun, 26 Feb 2023 11:07:56 +0000
-Message-Id: <20230226110802.103134-6-usama.arif@bytedance.com>
+Subject: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
+Date:   Sun, 26 Feb 2023 11:07:57 +0000
+Message-Id: <20230226110802.103134-7-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230226110802.103134-1-usama.arif@bytedance.com>
 References: <20230226110802.103134-1-usama.arif@bytedance.com>
@@ -81,292 +81,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+From: Brian Gerst <brgerst@gmail.com>
 
-There are four logical parts to what native_cpu_up() does on the BSP (or
-on the controlling CPU for a later hotplug):
+Eliminating global variables from the CPU startup path in order to simplify
+it and facilitate parallel startup.
 
- 1) Wake the AP by sending the INIT/SIPI/SIPI sequence.
+Remove initial_stack, and load RSP from current_task->thread.sp instead.
 
- 2) Wait for the AP to make it as far as wait_for_master_cpu() which
-    sets that CPU's bit in cpu_initialized_mask, then sets the bit in
-    cpu_callout_mask to let the AP proceed through cpu_init().
-
- 3) Wait for the AP to finish cpu_init() and get as far as the
-    smp_callin() call, which sets that CPU's bit in cpu_callin_mask.
-
- 4) Perform the TSC synchronization and wait for the AP to actually
-    mark itself online in cpu_online_mask.
-
-In preparation to allow these phases to operate in parallel on multiple
-APs, split them out into separate functions and document the interactions
-a little more clearly in both the BSP and AP code paths.
-
-No functional change intended.
-
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Tested-by: Usama Arif <usama.arif@bytedance.com>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Kim Phillips <kim.phillips@amd.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
- arch/x86/kernel/smpboot.c | 181 ++++++++++++++++++++++++++------------
- 1 file changed, 127 insertions(+), 54 deletions(-)
+ arch/x86/include/asm/processor.h |  6 ++++-
+ arch/x86/include/asm/smp.h       |  5 +++-
+ arch/x86/kernel/acpi/sleep.c     |  5 ++--
+ arch/x86/kernel/asm-offsets.c    |  1 +
+ arch/x86/kernel/head_64.S        | 43 +++++++++++++++++++++-----------
+ arch/x86/kernel/smpboot.c        |  7 +++++-
+ arch/x86/xen/xen-head.S          |  2 +-
+ 7 files changed, 48 insertions(+), 21 deletions(-)
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 3a793772a2aa..b18c1385e181 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -204,6 +204,10 @@ static void smp_callin(void)
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 4e35c66edeb7..bdde7316e75b 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -648,7 +648,11 @@ static inline void spin_lock_prefetch(const void *x)
+ #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
  
- 	wmb();
+ #else
+-#define INIT_THREAD { }
++extern unsigned long __end_init_task[];
++
++#define INIT_THREAD {							    \
++	.sp	= (unsigned long)&__end_init_task - sizeof(struct pt_regs), \
++}
  
-+	/*
-+	 * This runs the AP through all the cpuhp states to its target
-+	 * state (CPUHP_ONLINE in the case of serial bringup).
-+	 */
- 	notify_cpu_starting(cpuid);
+ extern unsigned long KSTK_ESP(struct task_struct *task);
  
- 	/*
-@@ -231,17 +235,32 @@ static void notrace start_secondary(void *unused)
- 	load_cr3(swapper_pg_dir);
- 	__flush_tlb_all();
+diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+index b4dbb20dab1a..bf2c51df9e0b 100644
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -199,5 +199,8 @@ extern void nmi_selftest(void);
+ #define nmi_selftest() do { } while (0)
  #endif
-+	/*
-+	 * Sync point with do_wait_cpu_initialized(). Before proceeding through
-+	 * cpu_init(), the AP will call wait_for_master_cpu() which sets its
-+	 * own bit in cpu_initialized_mask and then waits for the BSP to set
-+	 * its bit in cpu_callout_mask to release it.
-+	 */
- 	cpu_init_secondary();
- 	rcu_cpu_starting(raw_smp_processor_id());
- 	x86_cpuinit.early_percpu_clock_init();
+ 
+-#endif /* __ASSEMBLY__ */
++extern unsigned int smpboot_control;
++
++#endif /* !__ASSEMBLY__ */
++
+ #endif /* _ASM_X86_SMP_H */
+diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+index 3b7f4cdbf2e0..ab6e29b32c04 100644
+--- a/arch/x86/kernel/acpi/sleep.c
++++ b/arch/x86/kernel/acpi/sleep.c
+@@ -111,13 +111,14 @@ int x86_acpi_suspend_lowlevel(void)
+ 	saved_magic = 0x12345678;
+ #else /* CONFIG_64BIT */
+ #ifdef CONFIG_SMP
+-	initial_stack = (unsigned long)temp_stack + sizeof(temp_stack);
++	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+ 	early_gdt_descr.address =
+ 			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
+ 	initial_gs = per_cpu_offset(smp_processor_id());
++	smpboot_control = smp_processor_id();
+ #endif
+ 	initial_code = (unsigned long)wakeup_long64;
+-       saved_magic = 0x123456789abcdef0L;
++	saved_magic = 0x123456789abcdef0L;
+ #endif /* CONFIG_64BIT */
+ 
+ 	/*
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 82c783da16a8..797ae1a15c91 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -108,6 +108,7 @@ static void __used common(void)
+ 	OFFSET(TSS_sp1, tss_struct, x86_tss.sp1);
+ 	OFFSET(TSS_sp2, tss_struct, x86_tss.sp2);
+ 	OFFSET(X86_top_of_stack, pcpu_hot, top_of_stack);
++	OFFSET(X86_current_task, pcpu_hot, current_task);
+ #ifdef CONFIG_CALL_DEPTH_TRACKING
+ 	OFFSET(X86_call_depth, pcpu_hot, call_depth);
+ #endif
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 222efd4a09bc..5a2417d788d1 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -61,8 +61,8 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 	 * tables and then reload them.
+ 	 */
+ 
+-	/* Set up the stack for verify_cpu(), similar to initial_stack below */
+-	leaq	(__end_init_task - FRAME_SIZE)(%rip), %rsp
++	/* Set up the stack for verify_cpu() */
++	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 
+ 	leaq	_text(%rip), %rdi
+ 
+@@ -241,6 +241,24 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	UNWIND_HINT_EMPTY
+ 	ANNOTATE_NOENDBR // above
+ 
++#ifdef CONFIG_SMP
++	movl	smpboot_control(%rip), %ecx
++
++	/* Get the per cpu offset for the given CPU# which is in ECX */
++	movq	__per_cpu_offset(,%rcx,8), %rdx
++#else
++	xorl	%edx, %edx
++#endif /* CONFIG_SMP */
 +
 +	/*
-+	 * Sync point with do_wait_cpu_callin(). The AP doesn't wait here
-+	 * but just sets the bit to let the controlling CPU (BSP) know that
-+	 * it's got this far.
++	 * Setup a boot time stack - Any secondary CPU will have lost its stack
++	 * by now because the cr3-switch above unmaps the real-mode stack.
++	 *
++	 * RDX contains the per-cpu offset
 +	 */
- 	smp_callin();
- 
- 	enable_start_cpu0 = 0;
- 
- 	/* otherwise gcc will move up smp_processor_id before the cpu_init */
- 	barrier();
++	movq	pcpu_hot + X86_current_task(%rdx), %rax
++	movq	TASK_threadsp(%rax), %rsp
 +
  	/*
--	 * Check TSC synchronization with the boot CPU:
-+	 * Check TSC synchronization with the boot CPU (or whichever CPU
-+	 * is controlling the bringup). It will do its part of this from
-+	 * do_wait_cpu_online(), making it an implicit sync point.
- 	 */
- 	check_tsc_sync_target();
- 
-@@ -254,6 +273,7 @@ static void notrace start_secondary(void *unused)
- 	 * half valid vector space.
- 	 */
- 	lock_vector_lock();
-+	/* Sync point with do_wait_cpu_online() */
- 	set_cpu_online(smp_processor_id(), true);
- 	lapic_online();
- 	unlock_vector_lock();
-@@ -1083,7 +1103,6 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 	unsigned long start_ip = real_mode_header->trampoline_start;
- 
- 	unsigned long boot_error = 0;
--	unsigned long timeout;
- 
- #ifdef CONFIG_X86_64
- 	/* If 64-bit wakeup method exists, use the 64-bit mode trampoline IP */
-@@ -1144,55 +1163,94 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 		boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
- 						     cpu0_nmi_registered);
- 
--	if (!boot_error) {
--		/*
--		 * Wait 10s total for first sign of life from AP
--		 */
--		boot_error = -1;
--		timeout = jiffies + 10*HZ;
--		while (time_before(jiffies, timeout)) {
--			if (cpumask_test_cpu(cpu, cpu_initialized_mask)) {
--				/*
--				 * Tell AP to proceed with initialization
--				 */
--				cpumask_set_cpu(cpu, cpu_callout_mask);
--				boot_error = 0;
--				break;
--			}
--			schedule();
--		}
--	}
-+	return boot_error;
-+}
- 
--	if (!boot_error) {
--		/*
--		 * Wait till AP completes initial initialization
--		 */
--		while (!cpumask_test_cpu(cpu, cpu_callin_mask)) {
--			/*
--			 * Allow other tasks to run while we wait for the
--			 * AP to come online. This also gives a chance
--			 * for the MTRR work(triggered by the AP coming online)
--			 * to be completed in the stop machine context.
--			 */
--			schedule();
--		}
-+static int do_wait_cpu_cpumask(unsigned int cpu, const struct cpumask *mask)
-+{
-+	unsigned long timeout;
-+
-+	/*
-+	 * Wait up to 10s for the CPU to report in.
-+	 */
-+	timeout = jiffies + 10*HZ;
-+	while (time_before(jiffies, timeout)) {
-+		if (cpumask_test_cpu(cpu, mask))
-+			return 0;
-+
-+		schedule();
- 	}
-+	return -1;
-+}
- 
--	if (x86_platform.legacy.warm_reset) {
--		/*
--		 * Cleanup possible dangling ends...
--		 */
--		smpboot_restore_warm_reset_vector();
-+/*
-+ * Bringup step two: Wait for the target AP to reach cpu_init_secondary()
-+ * and thus wait_for_master_cpu(), then set cpu_callout_mask to allow it
-+ * to proceed.  The AP will then proceed past setting its 'callin' bit
-+ * and end up waiting in check_tsc_sync_target() until we reach
-+ * do_wait_cpu_online() to tend to it.
-+ */
-+static int do_wait_cpu_initialized(unsigned int cpu)
-+{
-+	/*
-+	 * Wait for first sign of life from AP.
-+	 */
-+	if (do_wait_cpu_cpumask(cpu, cpu_initialized_mask))
-+		return -1;
-+
-+	cpumask_set_cpu(cpu, cpu_callout_mask);
-+	return 0;
-+}
-+
-+/*
-+ * Bringup step three: Wait for the target AP to reach smp_callin().
-+ * The AP is not waiting for us here so we don't need to parallelise
-+ * this step. Not entirely clear why we care about this, since we just
-+ * proceed directly to TSC synchronization which is the next sync
-+ * point with the AP anyway.
-+ */
-+static int do_wait_cpu_callin(unsigned int cpu)
-+{
-+	/*
-+	 * Wait till AP completes initial initialization.
-+	 */
-+	return do_wait_cpu_cpumask(cpu, cpu_callin_mask);
-+}
-+
-+/*
-+ * Bringup step four: Synchronize the TSC and wait for the target AP
-+ * to reach set_cpu_online() in start_secondary().
-+ */
-+static int do_wait_cpu_online(unsigned int cpu)
-+{
-+	unsigned long flags;
-+
-+	/*
-+	 * Check TSC synchronization with the AP (keep irqs disabled
-+	 * while doing so):
-+	 */
-+	local_irq_save(flags);
-+	check_tsc_sync_source(cpu);
-+	local_irq_restore(flags);
-+
-+	/*
-+	 * Wait for the AP to mark itself online. Not entirely
-+	 * clear why we care, since the generic cpuhp code will
-+	 * wait for it to each CPUHP_AP_ONLINE_IDLE before going
-+	 * ahead with the rest of the bringup anyway.
-+	 */
-+	while (!cpu_online(cpu)) {
-+		cpu_relax();
-+		touch_nmi_watchdog();
- 	}
- 
--	return boot_error;
-+	return 0;
- }
- 
--int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
-+static int do_cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
- 	int apicid = apic->cpu_present_to_apicid(cpu);
- 	int cpu0_nmi_registered = 0;
--	unsigned long flags;
- 	int err, ret = 0;
- 
- 	lockdep_assert_irqs_enabled();
-@@ -1239,19 +1297,6 @@ int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
- 		goto unreg_nmi;
- 	}
+ 	 * We must switch to a new descriptor in kernel space for the GDT
+ 	 * because soon the kernel won't have access anymore to the userspace
+@@ -275,12 +293,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	movl	initial_gs+4(%rip),%edx
+ 	wrmsr
  
 -	/*
--	 * Check TSC synchronization with the AP (keep irqs disabled
--	 * while doing so):
+-	 * Setup a boot time stack - Any secondary CPU will have lost its stack
+-	 * by now because the cr3-switch above unmaps the real-mode stack
 -	 */
--	local_irq_save(flags);
--	check_tsc_sync_source(cpu);
--	local_irq_restore(flags);
+-	movq initial_stack(%rip), %rsp
 -
--	while (!cpu_online(cpu)) {
--		cpu_relax();
--		touch_nmi_watchdog();
--	}
+ 	/* Setup and Load IDT */
+ 	pushq	%rsi
+ 	call	early_setup_idt
+@@ -372,7 +384,11 @@ SYM_CODE_END(secondary_startup_64)
+ SYM_CODE_START(start_cpu0)
+ 	ANNOTATE_NOENDBR
+ 	UNWIND_HINT_EMPTY
+-	movq	initial_stack(%rip), %rsp
++
++	/* Find the idle task stack */
++	movq	PER_CPU_VAR(pcpu_hot) + X86_current_task, %rcx
++	movq	TASK_threadsp(%rcx), %rsp
++
+ 	jmp	.Ljump_to_C_code
+ SYM_CODE_END(start_cpu0)
+ #endif
+@@ -420,12 +436,6 @@ SYM_DATA(initial_gs,	.quad INIT_PER_CPU_VAR(fixed_percpu_data))
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
+ #endif
 -
- unreg_nmi:
- 	/*
- 	 * Clean up the nmi handler. Do this after the callin and callout sync
-@@ -1263,6 +1308,34 @@ int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
- 	return ret;
- }
+-/*
+- * The FRAME_SIZE gap is a convention which helps the in-kernel unwinder
+- * reliably detect the end of the stack.
+- */
+-SYM_DATA(initial_stack, .quad init_thread_union + THREAD_SIZE - FRAME_SIZE)
+ 	__FINITDATA
  
-+int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
-+{
-+	int ret;
+ 	__INIT
+@@ -660,6 +670,9 @@ SYM_DATA_END(level1_fixmap_pgt)
+ SYM_DATA(early_gdt_descr,		.word GDT_ENTRIES*8-1)
+ SYM_DATA_LOCAL(early_gdt_descr_base,	.quad INIT_PER_CPU_VAR(gdt_page))
+ 
++	.align 16
++SYM_DATA(smpboot_control,		.long 0)
 +
-+	ret = do_cpu_up(cpu, tidle);
-+	if (ret)
-+		return ret;
+ 	.align 16
+ /* This must match the first entry in level2_kernel_pgt */
+ SYM_DATA(phys_base, .quad 0x0)
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index b18c1385e181..62e3bf37f0b8 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1112,7 +1112,12 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+ 	idle->thread.sp = (unsigned long)task_pt_regs(idle);
+ 	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
+ 	initial_code = (unsigned long)start_secondary;
+-	initial_stack  = idle->thread.sp;
 +
-+	ret = do_wait_cpu_initialized(cpu);
-+	if (ret)
-+		return ret;
-+
-+	ret = do_wait_cpu_callin(cpu);
-+	if (ret)
-+		return ret;
-+
-+	ret = do_wait_cpu_online(cpu);
-+
-+	if (x86_platform.legacy.warm_reset) {
-+		/*
-+		 * Cleanup possible dangling ends...
-+		 */
-+		smpboot_restore_warm_reset_vector();
++	if (IS_ENABLED(CONFIG_X86_32)) {
++		initial_stack  = idle->thread.sp;
++	} else {
++		smpboot_control = cpu;
 +	}
-+
-+	return ret;
-+}
-+
- /**
-  * arch_disable_smp_support() - disables SMP support for x86 at runtime
-  */
+ 
+ 	/* Enable the espfix hack for this CPU */
+ 	init_espfix_ap(cpu);
+diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+index ffaa62167f6e..6bd391476656 100644
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -49,7 +49,7 @@ SYM_CODE_START(startup_xen)
+ 	ANNOTATE_NOENDBR
+ 	cld
+ 
+-	mov initial_stack(%rip), %rsp
++	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 
+ 	/* Set up %gs.
+ 	 *
 -- 
 2.25.1
 
