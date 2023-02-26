@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0856A2CF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5DC6A2CF6
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjBZBhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 20:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S229556AbjBZBmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 20:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBZBhj (ORCPT
+        with ESMTP id S229512AbjBZBmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 20:37:39 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727EB11EA1;
-        Sat, 25 Feb 2023 17:37:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1677375458; x=1708911458;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VN9+lKpIv8OFPEcx6C6zFpPockwjmo2bbc4mI4drChU=;
-  b=agMyv5n/xH0t7jZeTsPah1ijEaVIrVNbDVyS15RkowlqX7z5QGYjcU3N
-   8429CVCwSXf+LP0FTqIprH63V2Ypqw/ztdFN2PfvbbtXP2IKzmG5BsLLJ
-   ApvWSEiSn/JatbzLWXnRIQonJ6/cNhnIpCw7szXtQlfkBNSg2g8QEmH2H
-   s=;
-X-IronPort-AV: E=Sophos;i="5.97,328,1669075200"; 
-   d="scan'208";a="303015007"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 01:37:37 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com (Postfix) with ESMTPS id C71F7A2992;
-        Sun, 26 Feb 2023 01:37:35 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Sun, 26 Feb 2023 01:37:34 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.106.100.27) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Sun, 26 Feb 2023 01:37:34 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <thierry.reding@gmail.com>
-CC:     <u.kleine-koenig@pengutronix.de>, <tobetter@gmail.com>,
-        <linux-pwm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Munehisa Kamata <kamatam@amazon.com>, <stable@vger.kernel.org>
-Subject: [PATCH] pwm: core: Zero-initialize the temp state
-Date:   Sat, 25 Feb 2023 17:37:21 -0800
-Message-ID: <20230226013722.1802842-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 25 Feb 2023 20:42:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6879B2D62
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:42:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2805C60BA6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 01:42:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C2DC433A0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 01:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677375769;
+        bh=evQtqprYp2YzoSjohCbMzh6BUpQ0pST41R4LboOjlmg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=G9yZ6QxremJYTZ0/uQyiFrR9KL2qD0k/RgbSfNDwDuZtltw0mmJTLQCIIjrg1kNLk
+         5SnZvLc5DEBTVFDQBlcDhHspCp/SvKiqFVCC2wbZA6/abSD54XRF2qSdm71XQ2NrIf
+         5GYcgXsyx6vGOQP6JQ7vf+eiEITLpZ1ROdI/qvBP7hJQJjl+JqO8nSpxIqCIi1zxpb
+         RH6wzT2mySEwFMOU3QPO9ORNlxYPx9y1flHBWRUOLk/OCf2CrAcKhKOKhW3VBN5b7d
+         +nCVr6Pg7bIGMxo4EaN014vnqNWd6kBnnCElAibBYPuk16NujQTvd5y+9g06ol3ff+
+         rDLg3CrmlEJ4Q==
+Received: by mail-ed1-f53.google.com with SMTP id d30so12288558eda.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:42:49 -0800 (PST)
+X-Gm-Message-State: AO0yUKXDpp5sFYxiAPjlvSbbhrBYz0tjb2LPLoGxLcQolcnRknnXTq+9
+        9ZEuTYqUF6RGHzPF5zB8xt96Qw6e29jkC5WGY/B/hw==
+X-Google-Smtp-Source: AK7set+06E8/lgR4vi5ax3Z4E+4KAX8LwoMZDwzJy6deIDj1DixOwKIdDx6+jtAd2S7wpllbXTHl+wYvPx7xmZAlV7A=
+X-Received: by 2002:a50:9fa8:0:b0:4ad:6052:ee90 with SMTP id
+ c37-20020a509fa8000000b004ad6052ee90mr9628677edf.7.1677375767605; Sat, 25 Feb
+ 2023 17:42:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.100.27]
-X-ClientProxiedBy: EX19D031UWC003.ant.amazon.com (10.13.139.252) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+References: <20230221184908.2349578-1-kpsingh@kernel.org> <20230221184908.2349578-2-kpsingh@kernel.org>
+ <Y/d9qajJnR/ZcHvB@zn.tnic>
+In-Reply-To: <Y/d9qajJnR/ZcHvB@zn.tnic>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Sat, 25 Feb 2023 20:42:35 -0500
+X-Gmail-Original-Message-ID: <CACYkzJ5=Ru1MvMWKHmfuHO-+nVPSgM8n3JSeCfFTvZgSFcmOmA@mail.gmail.com>
+Message-ID: <CACYkzJ5=Ru1MvMWKHmfuHO-+nVPSgM8n3JSeCfFTvZgSFcmOmA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Documentation/hw-vuln: Document the interaction
+ between IBRS and STIBP
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
+        jmattson@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-initialize the on-stack structure to avoid unexpected behaviors. Some
-drivers may not set or initialize all the values in pwm_state through their
-.get_state() callback and therefore some random values may remain there and
-be set into pwm->state eventually.
+On Thu, Feb 23, 2023 at 9:52 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Feb 21, 2023 at 07:49:08PM +0100, KP Singh wrote:
+> > ... Consequently, STIBP needs to be explicitly
+> > +   enabled to guard against cross-thread attacks in userspace.
+>
+> needs?
+>
+> That sounds like something the user needs to do. But we do it by
+> default. Let's rephrase:
+>
+> "Systems which support enhanced IBRS (eIBRS) enable IBRS protections once at
+> boot and they're automatically protected against Spectre v2 variant
+> attacks, including cross-thread branch target injections on SMT systems
+> (STIBP). IOW, eIBRS enables STIBP too.
+>
+> Legacy IBRS systems clear the IBRS bit on exit to userspace and
+> therefore explicitly enable STIBP for that."
 
-This actually caused regression on ODROID-N2+ as reported in [1]; kernel
-fails to boot due to random panic or hang-up.
++   Systems which support enhanced IBRS (eIBRS) enable IBRS protection once at
++   boot, by setting the IBRS bit, and they're automatically protected against
++   Spectre v2 variant attacks, including cross-thread branch target injections
++   on SMT systems (STIBP). In other words, eIBRS enables STIBP too.
++
++   Legacy IBRS systems clear the IBRS bit on exit to userspace and
++   therefore explicitly enable STIBP for that
 
-[1] https://forum.odroid.com/viewtopic.php?f=177&t=46360
 
-Fixes: c73a3107624d ("pwm: Handle .get_state() failures")
-Cc: stable@vger.kernel.org # 6.2
-Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
----
- drivers/pwm/core.c | 1 +
- 1 file changed, 1 insertion(+)
+I did add one phrase, we really need to stress on the IBRS bit here.
+Had we been enabling KERNEL_IBRS accidentally with eIBRS, it would
+still mess things up as the bit being set is important.
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index e01147f66e15..6eac8022a2c2 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -117,6 +117,7 @@ static int pwm_device_request(struct pwm_device *pwm, const char *label)
- 	if (pwm->chip->ops->get_state) {
- 		struct pwm_state state;
- 
-+		memset(&state, 0, sizeof(struct pwm_state));
- 		err = pwm->chip->ops->get_state(pwm->chip, pwm, &state);
- 		trace_pwm_get(pwm, &state, err);
- 
--- 
-2.25.1
+This is why my original patch felt "obtuse" as it focused on
+KERNEL_IBRS instead of IBRS or eIBRS :).
 
+
+>
+> Simple.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
