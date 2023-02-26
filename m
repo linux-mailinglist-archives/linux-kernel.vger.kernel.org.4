@@ -2,171 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39DC6A2F0D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 11:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9186A2F18
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 11:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjBZKNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 05:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S229592AbjBZKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 05:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBZKNg (ORCPT
+        with ESMTP id S229445AbjBZKXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 05:13:36 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C166CD315;
-        Sun, 26 Feb 2023 02:13:34 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B11735C00C3;
-        Sun, 26 Feb 2023 05:13:31 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 26 Feb 2023 05:13:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677406411; x=1677492811; bh=l4r/xag3fP
-        iBIa7AoulX8EdHZShxnE+pA73Y6qWVSEY=; b=nOTnHLqj9YttJI8fGL7WALpUpj
-        4ELRxvFFI8Z7K2APjEu/Qx/cyjhnLKMZreunCQXb5JUE5FBBPp5w9n9LfxPYHbHI
-        4GCNFiWf4tqsuYqvXoViguwM+Q+sEVB2Fcu3dUJLKNg0uPZ/j8asch8gbtT52cjr
-        cltviyJbOlZzacFRP/8i8TwEUDgGCczR9DYxGLs1044rvh097QeKykKDvhZPb+eA
-        cFq2itmLIqIThYn+OJQceCWSC32h03jw4D3KNKKePFoOPM5txEWr7yDK92mapJaI
-        XhN1jZ+XA3vmEMR78aacoB1H+bAaAZ+XTe/GkaEYd7GWW9UL7bOIgiJzla4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677406411; x=1677492811; bh=l4r/xag3fPiBIa7AoulX8EdHZShx
-        nE+pA73Y6qWVSEY=; b=M0Q1n7p4AaMHdV3UNTytWG8R5WT3WdTny5jyhiU3KOBf
-        VpEmwrSVGnzllmR00FUaUIkcieW30clMHc03LeX5ATfNFhDg058WS8kZuBDqg48H
-        Kqi5Hdpxhz3wmM+S/gwx2WLCTriY8ivlsvxO1bRzBcuJgD0VBfZAJuDXGe+dAkft
-        D7zYIOOV61zNheAN8NpIcgA7ztslCFgqFZKKHRd3sxlDuAr3ev+0dablLxqjbBnn
-        fa+A4bf0t4bpCQTKr3Q1gjPnONWMq8i0HY7eTXM+dTAN7pBpQrS6PiMTy44KxZ0p
-        JewSgQZWVoR2RkI31Ed2QhNSjMU1RTQm8OYsrsbSZg==
-X-ME-Sender: <xms:yzD7Y9KoqWEXdfzWRqTcn1fS4GqqLkwRDIJaXPKojlg31g4FndnPvA>
-    <xme:yzD7Y5Kpdwjevnqjd9AESgCQJZgZk6fl__jgWxV6_c0siS-eIU-FgFdn4I_YLf-5H
-    vGRFq8PE6UG1k45xxo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekjedgudefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:yzD7Y1u3RAPn4wV6irKf3R6E95wWsMJfUfHADLrtvBWN-qejwdW-lg>
-    <xmx:yzD7Y-Y_xVd61_BWCIy9dOqQ2RCUL7ZIrBXEfZqCMSoDZ_W-a8G1Zg>
-    <xmx:yzD7Y0adsC63qIxqO6a38Pa9-YX1j-53fS0bzzXcZaAJlOpVFGvVNQ>
-    <xmx:yzD7Y_whsgQlL6NFNyDHuD2GOwUeI11fpXOsb-3nkTC6ZobTozwJJQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 31714B60086; Sun, 26 Feb 2023 05:13:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
-Mime-Version: 1.0
-Message-Id: <e27d184e-2561-4efe-a191-8c0401f815b0@app.fastmail.com>
-In-Reply-To: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
-References: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
-Date:   Sun, 26 Feb 2023 11:13:10 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Matt Evans" <mev@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>
-Subject: Re: [PATCH] locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare
- against zero-extended 'old' value
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 26 Feb 2023 05:23:48 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C1AC656;
+        Sun, 26 Feb 2023 02:23:48 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id bh1so3849855plb.11;
+        Sun, 26 Feb 2023 02:23:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wi2xVqzSevhJpXDSWkdsF+oMBiFQhK5PRJ0HvFg4vlU=;
+        b=XVsyQL5PSgI1Bs57Jf0fpotc041iuxQGTzEalwWqck+/0/DLnF/HYIjP3S413PkD46
+         4YS5FAR9dyNcebTBt0pUxja4xIQPbhcpHEpS2P445I1SzBjmawPEndyKyoF/NxzcLW/N
+         ziQSzVGCMkzOOIlYXu0BgSA1S5oWPG4S1Qi6igpQnAHUjJ95DKb8ajnCN1RY5znOofDZ
+         s+6bCOlVJ6NOGqNrt951Jhpz1LeJltQ9oRVgw4AJF6obIm2Enzl+0zSb99ZAf1M7Gh9S
+         VoOmkbJ3F4jhihG0fc6nwgzf623JnLQzkoAV7EQH3AuWioew9q6lOImZ1e+O502tTNPj
+         DRig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wi2xVqzSevhJpXDSWkdsF+oMBiFQhK5PRJ0HvFg4vlU=;
+        b=z5D8hh6giwI610mRLBsarvfPi2+lqIfM2OoAp4/A9fxR2RbdyqXyBdL/I1qFVzYmyB
+         1qRaPuvfFawfZjEdWDxOFFk6hdi1TYBMXi/2HqqyE6/97hmWFF/CKiqHb5FbrZjlaI5s
+         k7Rob+UZw51gMGptFFYLPSKDPcCOSjv5FBVY/tYIL/eA4zJwMMyrPVGT7mx1KL0OvSbo
+         uPk7wHwFmhSJyPHD8KT8l6EVwiSV2WAnwKSiiR2wJquCCk92Gl+f35HMZ4k7pCa/gKQ4
+         B6X7dzE95S2a+lpg6zVqYLQ3tWJpLxz9Z/EC7+/J7f3R5D823CA5tgkcOkg/rvR6olBj
+         SKMQ==
+X-Gm-Message-State: AO0yUKVRTJAkwsG6WpSJT29aXoIstonG+T5ak2cD/iU8I82GxYbf3TA5
+        NCRAGYgtJZEIiYdrEzqixCzkwypIzhpQlKhk
+X-Google-Smtp-Source: AK7set8fOwUHoXXIC2sCunIL7TGItqvkkxWcvg76HdDyFcZROi5Xwn0/6ZQnpJu8Q9DV1M4Oqh9jRQ==
+X-Received: by 2002:a05:6a20:4298:b0:c7:6c6f:7722 with SMTP id o24-20020a056a20429800b000c76c6f7722mr29478842pzj.7.1677407027552;
+        Sun, 26 Feb 2023 02:23:47 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b005d6999eec90sm2263051pfo.120.2023.02.26.02.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 02:23:47 -0800 (PST)
+From:   Kang Chen <void0red@gmail.com>
+To:     jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
+Subject: [PATCH] scsi: lpfc: add null check of kzalloc in lpfc_sli4_cgn_params_read
+Date:   Sun, 26 Feb 2023 18:23:38 +0800
+Message-Id: <20230226102338.3362585-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023, at 19:39, Matt Evans wrote:
-> __generic_cmpxchg_local takes unsigned long old/new arguments which
-> might end up being up-cast from smaller signed types (which will
-> sign-extend).  The loaded compare value must be compared against a
-> truncated smaller type, so down-cast appropriately for each size.
->
-> The issue is apparent on 64-bit machines with code, such as
-> atomic_dec_unless_positive(), that sign-extends from int.
->
-> 64-bit machines generally don't use the generic cmpxchg but
-> development/early ports might make use of it, so make it correct.
->
-> Signed-off-by: Matt Evans <mev@rivosinc.com>
+kzalloc may fails, pdata might be null and it may cause
+null pointer dereference later.
 
-Hi Matt,
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I'm getting emails about nios2 sparse warnings from the
-kernel test robot about your patch. I can also reproduce
-this on armv5:
-
-
-fs/erofs/zdata.c: note: in included file (through /home/arnd/arm-soc/arch/arm/include/asm/cmpxchg.h, /home/arnd/arm-soc/arch/arm/include/asm/atomic.h, /home/arnd/arm-soc/include/linux/atomic.h, ...):
-include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates bits from constant value (5f0ecafe becomes fe)
-include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates bits from constant value (5f0ecafe becomes cafe)
-include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates bits from constant value (5f0ecafe becomes fe)
-include/asm-generic/cmpxchg-local.h:30:42: warning: cast truncates bits from constant value (5f0edead becomes ad)
-include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates bits from constant value (5f0ecafe becomes cafe)
-include/asm-generic/cmpxchg-local.h:34:44: warning: cast truncates bits from constant value (5f0edead becomes dead)
-
-This was already warning for the 'new' cast, but now also warns
-for the 'old' cast, so the bot thinks this is a new problem.
-
-I managed to shut up the warning by using a binary '&' operator
-instead of the cast, but I wonder if it would be better to do
-also mask this in the caller, when arch_atomic_cmpxchg() with its
-signed argument calls into arch_cmpxchg() with its unsigned argument:
-
-diff --git a/include/asm-generic/atomic.h b/include/asm-generic/atomic.h
-index 04b8be9f1a77..e271d6708c87 100644
---- a/include/asm-generic/atomic.h
-+++ b/include/asm-generic/atomic.h
-@@ -130,7 +130,7 @@ ATOMIC_OP(xor, ^)
- #define arch_atomic_read(v)                    READ_ONCE((v)->counter)
- #define arch_atomic_set(v, i)                  WRITE_ONCE(((v)->counter), (i))
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 6eb4085a3..54134d782 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -7291,6 +7291,8 @@ lpfc_sli4_cgn_params_read(struct lpfc_hba *phba)
+ 	/* Find out if the FW has a new set of congestion parameters. */
+ 	len = sizeof(struct lpfc_cgn_param);
+ 	pdata = kzalloc(len, GFP_KERNEL);
++	if (!pdata)
++		return -ENOMEM;
+ 	ret = lpfc_read_object(phba, (char *)LPFC_PORT_CFG_NAME,
+ 			       pdata, len);
  
--#define arch_atomic_xchg(ptr, v)               (arch_xchg(&(ptr)->counter, (v)))
--#define arch_atomic_cmpxchg(v, old, new)       (arch_cmpxchg(&((v)->counter), (old), (new)))
-+#define arch_atomic_xchg(ptr, v)               (arch_xchg(&(ptr)->counter, (u32)(v)))
-+#define arch_atomic_cmpxchg(v, old, new)       (arch_cmpxchg(&((v)->counter), (u32)(old), (u32)(new)))
- 
- #endif /* __ASM_GENERIC_ATOMIC_H */
-diff --git a/include/asm-generic/cmpxchg-local.h b/include/asm-generic/cmpxchg-local.h
-index c3e7315b7c1d..f9d52d1f0472 100644
---- a/include/asm-generic/cmpxchg-local.h
-+++ b/include/asm-generic/cmpxchg-local.h
-@@ -26,20 +26,20 @@ static inline unsigned long __generic_cmpxchg_local(volatile void *ptr,
-        raw_local_irq_save(flags);
-        switch (size) {
-        case 1: prev = *(u8 *)ptr;
--               if (prev == (u8)old)
--                       *(u8 *)ptr = (u8)new;
-+               if (prev == (old & 0xff))
-+                       *(u8 *)ptr = (new & 0xffu);
-                break;
-        case 2: prev = *(u16 *)ptr;
--               if (prev == (u16)old)
--                       *(u16 *)ptr = (u16)new;
-+               if (prev == (old & 0xffffu))
-+                       *(u16 *)ptr = (new & 0xffffu);
-                break;
-        case 4: prev = *(u32 *)ptr;
--               if (prev == (u32)old)
--                       *(u32 *)ptr = (u32)new;
-+               if (prev == (old & 0xffffffffu))
-+                       *(u32 *)ptr = (new & 0xffffffffu);
-                break;
-        case 8: prev = *(u64 *)ptr;
-                if (prev == old)
--                       *(u64 *)ptr = (u64)new;
-+                       *(u64 *)ptr = new;
-                break;
-        default:
-                wrong_size_cmpxchg(ptr);
+-- 
+2.34.1
 
-
-     Arnd
