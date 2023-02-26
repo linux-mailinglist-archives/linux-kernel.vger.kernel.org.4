@@ -2,195 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AD56A2FF0
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 15:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7B46A2FF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 15:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjBZOZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 09:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S229646AbjBZO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 09:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBZOZr (ORCPT
+        with ESMTP id S229565AbjBZO1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 09:25:47 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AABAFF2B
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:25:43 -0800 (PST)
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 286713F597
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 14:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677421541;
-        bh=CE3OT5IllSccKQ947nt7em2EjnyBc3+YZANwp69JN68=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=I8Esoa7MZ8h/NXPF3Wihs3B7VE5EKqxDIsPAsV02BDV0tE+DdJSkdzSpTp9Mtw0s0
-         xiEhMi6BQMiYNojL/+TAahDQ1cIX3PtXybsm4IUYf2UG87Qx/e+lsFzUVv5JWqh6gS
-         xsFiJfIrUAStT9ls9xp+88Gzlw+pTmXruUftPuL8mE28X/HTtBu/voyPMg7P7gdOfi
-         9rHbJ9MBXUawtdO7WCXsC8om/T/ZndVlbCrx6trY2Zob3Oc0Ggd380N3tVMNTuYxQG
-         56A16gZ4XfJe1PM733piV/o0C/YJ9LyyKPWUsVZnjwEuEbiW1uClfvkgmX3WKZWES0
-         XkYJFaGoHzK+w==
-Received: by mail-qv1-f71.google.com with SMTP id l13-20020ad44d0d000000b004c74bbb0affso2035968qvl.21
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:25:41 -0800 (PST)
+        Sun, 26 Feb 2023 09:27:06 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E103BFF2B;
+        Sun, 26 Feb 2023 06:27:01 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-536bbef1c5eso108879127b3.9;
+        Sun, 26 Feb 2023 06:27:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bGH9kXSraDN+mVD9fqltVHucO9c601DRLuGoJN4kmTQ=;
+        b=QaX5VGmC41VJmIz8TPU/W9pU9Rlq9pZ/fyEg+Y2vn9A1f8ToZJReD9OrGqJ+DTKLRD
+         ns1/z9DlMNvs6CUQN7zDHeudlxt1ro/FaxhLR78SSphz+727jJALOFuSJBjiWbxLsj4L
+         S7krOunD0mliF8uwQvIlK6TtZ5l2L0kySnNA9lZ+vU9GHTrjl0DgynOjiTWfgxsZO6ot
+         q16VJY0Tex84DLUmC12L+ZLNI93kDG9RuQ1boJ+xK1cNEIl0OSUBvueq0do2L9rmZRAp
+         HZsnO6EQQWLCdo1OM9TxtRSJCXCNn+c3H4LijfegmZqH0LIdbLicdKPx5vS/we4W6X9x
+         V84g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CE3OT5IllSccKQ947nt7em2EjnyBc3+YZANwp69JN68=;
-        b=2P72SPi6+DmAUqBkCdGWHObgXV1D0NB769LYIRXw9h1DtJNGYlDOFiW9+r0t8ERrju
-         SkFHx5O+jGXaEb01NWoutSbK7P8YuM1J941GSuXwAcmLitphCWcQdVJTbgzkJczYOwhS
-         UBUkR6xI9kzCP1jdgrZK/BdtOFNUFPeWwYR6C7mr9DXV+HxjBRrYzBqs48S164phyfer
-         +DCVE2NHv6VU3lWXo37EImpklBu+1t+oAbEdm6rpFnkPCxiONLSC5e+FOf1j4O51x3p6
-         qBqun/cntfYI5VVQoZTLUKW/OHf020uVfWtfAWY5GRc+58NjbYcJ85KF86Pgq1mIgdtP
-         SXFQ==
-X-Gm-Message-State: AO0yUKXPZvYs1bt1KtGTD+T1vVrfItMAt8MFCVPF7tg5CJ6w86g2S4B5
-        TGgt+Ma1KIznV3V8ZULzOnz2dvdQRZtRxlr9rlZB2gLxL54VY6VVmcjBTt2SBrospPMeVG2hmtX
-        pJZ8Oq474en+94+9ffWCaLY+C4TlrSgDlWqjzkWErk+IAvALA+QxFrYrpVQ==
-X-Received: by 2002:ac8:7007:0:b0:3bf:c91e:2cad with SMTP id x7-20020ac87007000000b003bfc91e2cadmr898436qtm.3.1677421540103;
-        Sun, 26 Feb 2023 06:25:40 -0800 (PST)
-X-Google-Smtp-Source: AK7set/zy1s2v+Lzd9J0sv9I/9lsKv+esWVBt0QC2Ah3KHHqofKm+G9VBwwKfAON+OfBw4vmzheo5xJnbGkq5mOaqdI=
-X-Received: by 2002:ac8:7007:0:b0:3bf:c91e:2cad with SMTP id
- x7-20020ac87007000000b003bfc91e2cadmr898429qtm.3.1677421539852; Sun, 26 Feb
- 2023 06:25:39 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bGH9kXSraDN+mVD9fqltVHucO9c601DRLuGoJN4kmTQ=;
+        b=k7lEoq2MzBrp7YfnxnzaO6UUFtx8KEPVz6csqaqESZ2EH4MFHXB2Oy7hnJaOhsFPrb
+         6w1C4Th9s6h3mE3dTCJTwS+iuPHaQ8x8uQCVchlQVHqng8h+o/h7CZbMX+eDfZ5XTh/o
+         TG6nCdAwsibtPoYHZZKnKpZttOpGcOrPUJglfL8zbS/JsjWbVmfHtGYAMArXnZ9jwXDW
+         /OGFGd6nU7jsbk0XMnA156eoJV7G7dTW3iEgpw3bCkuJkd3zHMgYYq+pNW4EHREOwvGZ
+         Z066hHze+52MTjlGz67tbeGkUhzsO82dYVjM0ceCjicKn2m/FLKL9G4Jk4g280Ntpbfa
+         Y5Ew==
+X-Gm-Message-State: AO0yUKVG1r/zA0ly6pNy4F3h3dK5uqEYKQKgjFn/gbVoEkYkU/OJWjX4
+        ghtRHKZpNvImSPiLobTO0sBNJBN9nQ2wZBs4Xkc=
+X-Google-Smtp-Source: AK7set+BtJD8RCDTOmU2TeKNwV20RDhvx+4CTS3ldjyAjzOcc5t/EOb7HDEA56Nq2rWGpj4W8kY/ScQOG4rqMg4sfDQ=
+X-Received: by 2002:a05:6902:1:b0:a27:40c4:e12c with SMTP id
+ l1-20020a056902000100b00a2740c4e12cmr6759616ybh.2.1677421621166; Sun, 26 Feb
+ 2023 06:27:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20230221140424.719-1-walker.chen@starfivetech.com> <20230221140424.719-3-walker.chen@starfivetech.com>
-In-Reply-To: <20230221140424.719-3-walker.chen@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Sun, 26 Feb 2023 15:25:23 +0100
-Message-ID: <CAJM55Z_buj_CBKtJw=n_K-Ma4ZGP9pmy_uM20nLpJhTMNh=bJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dmaengine: dw-axi-dmac: Add support for StarFive
- JH7110 DMA
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
+ <20230224-rust-error-v1-1-f8f9a9a87303@asahilina.net> <20230225221405.62e989c8.gary@garyguo.net>
+In-Reply-To: <20230225221405.62e989c8.gary@garyguo.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 26 Feb 2023 15:26:50 +0100
+Message-ID: <CANiq72kOb9mbh4HQzH40Ey+Rax3vREsd0Nf2O0apjDpsboE6vQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] rust: error: Add Error::to_ptr()
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 15:04, Walker Chen <walker.chen@starfivetech.com> wrote:
+On Sat, Feb 25, 2023 at 11:14=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> Add DMA reset operation in device probe and use different configuration
-> on CH_CFG registers according to compatible string.
+> I know that we already have `IS_ERR` in helpers.c, but having to go
+> through FFI and helper functions for something as simple as a cast
+> feels awkward to me.
 >
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> ---
->  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 19 +++++++++++++++++--
->  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  3 +++
->  2 files changed, 20 insertions(+), 2 deletions(-)
+> Given that `ERR_PTR`'s C definition is very unlike to change, would it
+> be problematic if we just reimplement it in Rust as
 >
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> index bf85aa0979ec..858c4337650f 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> @@ -25,6 +25,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/property.h>
-> +#include <linux/reset.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
+> ```rust
+> fn ERR_PTR(error: core::ffi::c_long) -> *mut core::ffi::c_void {
+>     error as _
+>     // Or `core::ptr::invalid(error as _)` with strict provenance
+> }
+> ```
+> ?
 >
-> @@ -86,7 +87,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
->
->         cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
->                   config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
-> -       if (chan->chip->dw->hdata->reg_map_8_channels) {
-> +       if (chan->chip->dw->hdata->reg_map_8_channels &&
-> +           !chan->chip->dw->hdata->use_cfg2) {
->                 cfg_hi = config->tt_fc << CH_CFG_H_TT_FC_POS |
->                          config->hs_sel_src << CH_CFG_H_HS_SEL_SRC_POS |
->                          config->hs_sel_dst << CH_CFG_H_HS_SEL_DST_POS |
-> @@ -1142,7 +1144,7 @@ static int dma_chan_terminate_all(struct dma_chan *dchan)
->         axi_chan_disable(chan);
->
->         ret = readl_poll_timeout_atomic(chan->chip->regs + DMAC_CHEN, val,
-> -                                       !(val & chan_active), 1000, 10000);
-> +                                       !(val & chan_active), 1000, DMAC_TIMEOUT_US);
->         if (ret == -ETIMEDOUT)
->                 dev_warn(dchan2dev(dchan),
->                          "%s failed to stop\n", axi_chan_name(chan));
-> @@ -1416,6 +1418,18 @@ static int dw_probe(struct platform_device *pdev)
->         if (IS_ERR(chip->cfgr_clk))
->                 return PTR_ERR(chip->cfgr_clk);
->
-> +       if (of_device_is_compatible(node, "starfive,jh7110-axi-dma")) {
-> +               chip->resets = devm_reset_control_array_get_exclusive(&pdev->dev);
-> +               if (IS_ERR(chip->resets))
-> +                       return PTR_ERR(chip->resets);
-> +
-> +               ret = reset_control_deassert(chip->resets);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               chip->dw->hdata->use_cfg2 = true;
-> +       }
-> +
+> I personally think it should be fine, but I'll leave the decision to
+> Miguel.
 
-In the future it would be great to use match data rather than all the
-calls to of_device_is_compatible.
+On one hand, we have tried to minimize duplication (and, in general,
+any changes to the C side) so far where possible, especially
+pre-merge, doing it only when needed, e.g. for `const` purposes.
 
->         ret = parse_device_properties(chip);
->         if (ret)
->                 return ret;
-> @@ -1560,6 +1574,7 @@ static const struct dev_pm_ops dw_axi_dma_pm_ops = {
->  static const struct of_device_id dw_dma_of_id_table[] = {
->         { .compatible = "snps,axi-dma-1.01a" },
->         { .compatible = "intel,kmb-axi-dma" },
-> +       { .compatible = "starfive,jh7110-axi-dma" },
->         {}
->  };
->  MODULE_DEVICE_TABLE(of, dw_dma_of_id_table);
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> index e9d5eb0fd594..761d95691c02 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> @@ -21,6 +21,7 @@
->  #define DMAC_MAX_CHANNELS      16
->  #define DMAC_MAX_MASTERS       2
->  #define DMAC_MAX_BLK_SIZE      0x200000
-> +#define DMAC_TIMEOUT_US                200000
->
->  struct dw_axi_dma_hcfg {
->         u32     nr_channels;
-> @@ -33,6 +34,7 @@ struct dw_axi_dma_hcfg {
->         /* Register map for DMAX_NUM_CHANNELS <= 8 */
->         bool    reg_map_8_channels;
->         bool    restrict_axi_burst_len;
-> +       bool    use_cfg2;
->  };
->
->  struct axi_dma_chan {
-> @@ -70,6 +72,7 @@ struct axi_dma_chip {
->         struct clk              *core_clk;
->         struct clk              *cfgr_clk;
->         struct dw_axi_dma       *dw;
-> +       struct reset_control    *resets;
+On the other hand, being in the kernel opens up a few possibilities to
+consider, and it is true it feels like some of these could get
+reimplemented, even if not strictly needed. If we can show a
+performance/text size difference on e.g. a non-trivial subsystem or
+module, I think we should do it.
 
-This added field only seems to be written, but not read from anywhere.
-With that fixed:
+If we do it, then I think we should add a note on the C side so that
+it is clear there is a duplicated implementation elsewhere, avoiding
+future problems. In fact, it would be ideal to do it consistently,
+e.g. also for the ioctl ones. Something like:
 
-Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+    /* Rust: reimplemented as `kernel::error::ERR_PTR`. */
+    static inline void * __must_check ERR_PTR(long error)
+    {
+        return (void *) error;
+    }
 
->  };
->
->  /* LLI == Linked List Item */
-> --
-> 2.17.1
->
+Or perhaps something even smaller.
+
+But I don't want to block the rest of the work on this, which may need
+some extra/parallel discussion, so let's keep the helper for the time
+being. That way we can also do that change independently and justify
+the change showing the difference in performance/text, if any, in the
+commit message.
+
+Cheers,
+Miguel
