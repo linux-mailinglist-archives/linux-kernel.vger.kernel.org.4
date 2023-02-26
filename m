@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EC86A357E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 00:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C90CC6A3580
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 00:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjBZXFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 18:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S229629AbjBZXHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 18:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjBZXE7 (ORCPT
+        with ESMTP id S229681AbjBZXHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 18:04:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4A8AD12;
-        Sun, 26 Feb 2023 15:04:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PPzj74Cmbz4x4r;
-        Mon, 27 Feb 2023 10:04:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677452668;
-        bh=p5aLGF30JMtgDVRTFTm3FLalHuhWdaHAP7ZDSNjotnY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TQt3kvfnGka3+LJC3WOPw0Ncrysj4+gW26+2yOuKHUWUeVSrmep7WigoLQSnUs3wL
-         zIo9emLF1GB66xMQmmwG9iVs4emdXR2hg53x8aID7Gx+pa1uyk+n32PlJsty93WhkR
-         pRGD/BFETQV9sT/8CLf7qChB55kDJTrZQePfN3y/B/Im8cmfqfR0BOcatP8vL/wZPu
-         khx808XExS5yz1w9/DfVLpVOaM9+c/6/um0RukclE3v++ciJqiTuM+SkoatddmT7oE
-         r2Ii7u+bJJZIiyPGMCAlbX3dky9O2AxH7R2VX33kH0ybp+nBAXGFkZpB8kDhS9aY1l
-         dVHZGYEV9CNHg==
-Date:   Mon, 27 Feb 2023 10:04:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: nvme boot problems after merge of mm-stable tree into
- linux-next
-Message-ID: <20230227100426.65fe5352@canb.auug.org.au>
-In-Reply-To: <d4260bee-2bec-40e4-b07f-3a9fa18c3d72@roeck-us.net>
-References: <ed33b9ff-e6f2-dae8-ede6-59dc3c649ece@roeck-us.net>
-        <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
-        <a276d6ae-677d-e4cf-13d7-934c0a7639d2@gmail.com>
-        <58fb32f8-ce1e-913b-3b85-c41b0630d4c6@roeck-us.net>
-        <20230214172040.60657882@canb.auug.org.au>
-        <07c870d3-5d98-ca51-5de8-034abc631673@roeck-us.net>
-        <02f796c7-c1d5-2f2b-3385-e72298f5f470@gmail.com>
-        <20230227091423.3797ba8e@canb.auug.org.au>
-        <d4260bee-2bec-40e4-b07f-3a9fa18c3d72@roeck-us.net>
+        Sun, 26 Feb 2023 18:07:42 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569F31353C
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 15:07:40 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id h3so4630888lja.12
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 15:07:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H5x0vQDpxWguEQIXMoOtNR062YwVBVQqRtTi8dw0538=;
+        b=e+37hKxoFgCJcsF8oMRhepTAxSEt8aZedQfrEOQdSzxNbFrU/rcd85OjBJWX2f1AKW
+         d3Ff3jfZXD24TnCD9j19HGyIo41k8gYv+gHND72hmvEZyxSwcO8ruiU/zWypihPyPJYe
+         K6JCVsMeegfR2k3Ahs8wkNR9IQWIoBd9qbYJo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H5x0vQDpxWguEQIXMoOtNR062YwVBVQqRtTi8dw0538=;
+        b=aBrDoV3o4KaSSe9rEs4/ZmqjUQuZmNu0iLdEKwB/pfz4nXwPtyI70JTzPWb2p6xixr
+         95zDBsch+eT9eExQ0cF46aJVgTMM3Q1xtrw2sQ7P00/QnhG3QvH5ewbcc8ZAw8xPABdj
+         BwpWmWC8g4xj/OGYbQCyRECVog0v7J8Y9szyGFweGgAycG3fFjDXCC1UVWxIzg1oZwe8
+         qW3B765BS4zu4YiF8Cw64rDUTHe1cms700rEqePWXEdG5pitnzQ3TUZOo5Y3wBa1aDmx
+         ThTZvTo5TcNmQW2gnfKJP87aL3IibMdy8xd30MVDyVL+t0+GKhFeYr7tfFEqaXpY/ULp
+         LA9w==
+X-Gm-Message-State: AO0yUKXaY6w2m2pgC5XMekRmtZBVe6tWOBtiqrn/9MDUyy1adOhXGiV2
+        XUEM5GnPJhWQvNNOSsSicXXZQ0guMcm2D5RwHSy43zauom6HkA==
+X-Google-Smtp-Source: AK7set+8UsGBpYY6QUwiYxRipQYljLsgmxgXJrZkOzmONJTh5Pi4Hpd1aUxyRgx7rhliUkyNHfOLwfoqN5d03Qg99J0=
+X-Received: by 2002:a2e:8e7c:0:b0:293:2d18:36a0 with SMTP id
+ t28-20020a2e8e7c000000b002932d1836a0mr6727596ljk.3.1677452858413; Sun, 26 Feb
+ 2023 15:07:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fc3Ie.uRp6/BU6yV3Cxc2Dw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230225033421.3323164-1-joel@joelfernandes.org> <Y/u2xK8FHwKMsJNh@lothringen>
+In-Reply-To: <Y/u2xK8FHwKMsJNh@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 26 Feb 2023 18:07:26 -0500
+Message-ID: <CAEXW_YT7v42_AcJfOKDxbXoWxfMkfK1-sU8E=nMiSZTk0b2krA@mail.gmail.com>
+Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as completed
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fc3Ie.uRp6/BU6yV3Cxc2Dw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Guenter,
-
-On Sun, 26 Feb 2023 14:53:29 -0800 Guenter Roeck <linux@roeck-us.net> wrote:
+On Sun, Feb 26, 2023 at 2:45=E2=80=AFPM Frederic Weisbecker <frederic@kerne=
+l.org> wrote:
 >
-> On 2/26/23 14:14, Stephen Rothwell wrote:
-> >=20
-> > Did this get resolved?
->=20
-> I think so. Either the offending patch was reverted, or it has been fixed.
-> I still see various boot problems in -next (and most of them are now
-> seen in mainline as well), but none of them are nvme related.
+> On Sat, Feb 25, 2023 at 03:34:21AM +0000, Joel Fernandes (Google) wrote:
+> > On many systems, a great deal of boot happens after the kernel thinks t=
+he boot
+> > has completed. It is difficult to determine if the system has really bo=
+oted
+> > from the kernel side.
+>
+> Is this only about kernel booting? What makes it hard to determine if the
+> system has really booted?
 
-Thanks.
+Yes, I should probably clarify in the change log. It is more than the
+kernel booting, it is all OS userspace code that runs as well during
+which the CPU load is high (init spawning new programs such as shells,
+daemons setup etc). The kernel does not know when that will complete
+per-se. A timer based approach is not ideal, but it does not hurt
+either IMHO. In other words, it is a "something better than nothing"
+patch which reduces risk of slowness.
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/fc3Ie.uRp6/BU6yV3Cxc2Dw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP75XoACgkQAVBC80lX
-0GwDvAgAowUk2nkJZtxpeCdFhnTZ4oCdp7k8OwmzK1Pa0k4ZrGpER7vcTkHOEpBi
-FWIkMbjOT94F3mQ1w7vjFVcJGS2Ud/RXo0Xoq5pO96vvS6bGe5TSxTaUJMVrjFkp
-vUIEQHb94TGaCiWhgPwiPvWRGwEFmG+g4msOkyxsOn3BqZxAysMVSgC48kQImaUS
-3Iy7CS+r2ZRddPSJ0vWlAsuQJJzZPmN3sSiZldSTTlYbDEOze0GLiAP3Dvba6i7q
-xloGvkBAAzJMePvdSRoMziwpzLIfkhsTfeJ9dhw5p76OAVpsor+Q8Ca66C0+MAdK
-fM9lAxPeaQWg2BKGgwpSLmNNQXsmGw==
-=V5FX
------END PGP SIGNATURE-----
-
---Sig_/fc3Ie.uRp6/BU6yV3Cxc2Dw--
+ - Joel
