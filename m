@@ -2,175 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3CE6A2CE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 920D06A2CEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjBZBBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 20:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S229688AbjBZBLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 20:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBZBBP (ORCPT
+        with ESMTP id S229681AbjBZBLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 20:01:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4ED12582
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:01:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B41DCB80B46
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 01:01:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF2BC433EF;
-        Sun, 26 Feb 2023 01:01:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677373271;
-        bh=D8jzb0FTnkYEVCyrIyivvcYn19NODDgx6FMuvpFYVRA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=m+ue7k/kc5f0l1rfWrgkfLOOwtymFNyvqNd4pLZcPeN81PvCa06Ks9T84DnrTq99l
-         Yfq92b7EhID/bSBlUIgo/4pz98+BsCxBWUvtBHHpuUv8nsNiIXGWdYVorvbAw+nhCC
-         wIvHn7tkf0Mr70oP8/20TtA1sXT5KXhjOGK6XVM+TOSDuHdV6BdVaHkCOCj05BfZ/1
-         q9MpThCOIzXZczXfI2w760cxHaxoMJQde5p7XByK7dgxGVmfvWyFpVoIP2WQzR0oXh
-         vm//PByiAhNB6K3ObE2v4G3PMLErjGQPWN2IMlIYfQxNyw5EUDZU39CyyH57aDYboZ
-         4p70n1zOiCHyA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D28525C0292; Sat, 25 Feb 2023 17:01:10 -0800 (PST)
-Date:   Sat, 25 Feb 2023 17:01:10 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
- <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
- <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+        Sat, 25 Feb 2023 20:11:38 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2ED1C671
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:11:36 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id f13so5610719vsg.6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:11:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9RFZ7AWt4X2lrI5xhdLQ/HTqb8VHpflL4SruE6foLkY=;
+        b=lEIe2g7PaVP/GmG7rynzYTb+aEGbZu6LXRW2Ho3rm6CV+r79icUuxNUYA1A/iOLoVk
+         17EO3H3CDwvya/qSqkzR40iMf0HwDf8lMytmDTUKuirtALANZnXaMPFtYoPPva9Nzreu
+         Sr4HX7zvpIeXcToAEltUXc+hZ5LTZv6BrgC/WOvWvy/8JdtAKSS6Ra9NYOFFEaZb5VvT
+         ZSxtqzoWNvkKHmJM3JPcdPzJP0peAbktZvEZcjBLpq4/KqxoOmPqh8PsJaGN2uA+Lodw
+         nHsyBkZ4f5LaT8jTL/volkDFFQrXM3Pdj90RdL43XuR6uFlOuDp4aGzOibJwNT1gvXy4
+         edVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9RFZ7AWt4X2lrI5xhdLQ/HTqb8VHpflL4SruE6foLkY=;
+        b=x//v05YtRW5jQuERwBapG04KbpeWBqF1GLOPG2SJgwDiXw+b9cP0899YSkVCAXsbVy
+         puOYqoGKTEO0ZP+C1si0vKaPQJWATeli7B+z7Wg1Hjk0fq30d6v3h8NwmPHh2j5I+Xql
+         DRDrUuFvYpAK3mABkRk0BvsyKU1yPmUnEB2N0Z8HX2ROAvDFskxnIDwN+halquOG+YWm
+         cAJG/fBuomlWh044DfAoJGYbJYApEPWiD882C+loRPH3DQQ5ltnP8jQE2d/jREg9riXN
+         yMtYMZymek5geiKQy8X+U3B6+1+4B4nOzqbLJZhM3151SbyJwpU99aWgKMJ/+6izJR1P
+         kSaw==
+X-Gm-Message-State: AO0yUKUzs+pBKk8E9FuQEs0VQFrhY0hkr1SEMKeuYoenRh3203k3uJXH
+        C2CnjIrjpj1VbouYtZ+goZOu7Xp8/FhMfL5vsFyGtg==
+X-Google-Smtp-Source: AK7set8gfDEGYUkFKjm7qFEk5GBdkDmBsmBomEh5CU9ofdegKezl2/MITT4ZdTT26fpyC6xR4Dd3+MOoXm1/tjFpf8M=
+X-Received: by 2002:a1f:4343:0:b0:400:ea69:7082 with SMTP id
+ q64-20020a1f4343000000b00400ea697082mr4973937vka.0.1677373895820; Sat, 25 Feb
+ 2023 17:11:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CABXGCsO4=qKBF=2FRPVwW8FA4iLFh0Dt9n1BLMec3k10GUorpg@mail.gmail.com>
+ <9f682c4d-e7b7-5e23-84f5-cea4fdac2085@leemhuis.info> <CABXGCsNruNKfx3d1dpneRUvn3dCqv_bM93TdJsCLeRYiP3qYaA@mail.gmail.com>
+ <6bfa6d67-27ce-04b3-a1f9-3768b8a0169f@leemhuis.info>
+In-Reply-To: <6bfa6d67-27ce-04b3-a1f9-3768b8a0169f@leemhuis.info>
+From:   David Gow <davidgow@google.com>
+Date:   Sun, 26 Feb 2023 09:11:23 +0800
+Message-ID: <CABVgOSnCLbqHHA-gT6FwtJYKYAHt_9uwR_S2r6ZE8hm6eZaLBA@mail.gmail.com>
+Subject: Re: [6.3][regression] after commit 7170b7ed6acbde523c5d362c8978c60df4c30f30
+ my system stuck in initramfs forever
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, rmoar@google.com,
+        brendanhiggins@google.com, skhan@linuxfoundation.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000003c1f7705f5900b1c"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:37:58AM -0800, Paul E. McKenney wrote:
-> On Fri, Feb 24, 2023 at 10:32:43AM -0500, Alan Stern wrote:
-> > On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
-> > > As stated in the documentation and implied by its name, the ppo
-> > > (preserved program order) relation is intended to link po-earlier
-> > > to po-later instructions under certain conditions.  However, a
-> > > corner case currently allows instructions to be linked by ppo that
-> > > are not executed by the same thread, i.e., instructions are being
-> > > linked that have no po relation.
-> > > 
-> > > This happens due to the mb/strong-fence/fence relations, which (as
-> > > one case) provide order when locks are passed between threads
-> > > followed by an smp_mb__after_unlock_lock() fence.  This is
-> > > illustrated in the following litmus test (as can be seen when using
-> > > herd7 with `doshow ppo`):
-> > > 
-> > > P0(int *x, int *y)
-> > > {
-> > >     spin_lock(x);
-> > >     spin_unlock(x);
-> > > }
-> > > 
-> > > P1(int *x, int *y)
-> > > {
-> > >     spin_lock(x);
-> > >     smp_mb__after_unlock_lock();
-> > >     *y = 1;
-> > > }
-> > > 
-> > > The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
-> > > P0 passes a lock to P1 which then uses this fence.
-> > > 
-> > > The patch makes ppo a subrelation of po by letting fence contribute
-> > > to ppo only in case the fence links events of the same thread.
-> > > 
-> > > Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> > > ---
-> > >  tools/memory-model/linux-kernel.cat | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> > > index cfc1b8fd46da..adf3c4f41229 100644
-> > > --- a/tools/memory-model/linux-kernel.cat
-> > > +++ b/tools/memory-model/linux-kernel.cat
-> > > @@ -82,7 +82,7 @@ let rwdep = (dep | ctrl) ; [W]
-> > >  let overwrite = co | fr
-> > >  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
-> > >  let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
-> > > -let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
-> > > +let ppo = to-r | to-w | (fence & int) | (po-unlock-lock-po & int)
-> > >  
-> > >  (* Propagation: Ordering from release operations and strong fences. *)
-> > >  let A-cumul(r) = (rfe ; [Marked])? ; r
-> > 
-> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> Queued for the v6.4 merge window (not the current one), thank you both!
+--0000000000003c1f7705f5900b1c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I tested both Alan's and Jonas's commit.  These do not see to produce
-any significant differences in behavior, which is of course a good thing.
+On Sat, 25 Feb 2023 at 23:53, Thorsten Leemhuis <linux@leemhuis.info> wrote=
+:
+>
+> On 25.02.23 15:55, Mikhail Gavrilov wrote:
+> > On Sat, Feb 25, 2023 at 7:22=E2=80=AFPM Thorsten Leemhuis <linux@leemhu=
+is.info> wrote:
+> >>
+> >> [CCing the regression list, as it should be in the loop for regression=
+s:
+> >> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+> >>
+> >> On 25.02.23 14:51, Mikhail Gavrilov wrote:
+> >>> new kernel release cycle returning with new bugs
+> >>> Today my system got stuck in initramfs environment after updating to
+> >>> commit d2980d8d826554fa6981d621e569a453787472f8.
+> >>>
+> >>> I still do not understand how to configure the network inside the
+> >>> initramfs environment to grab the logs.
+> >>> Since an attempt to rebuild the initramfs with all modules (dracut
+> >>> --no-hostonly --force) leads to the stuck initramfs environment and
+> >>> impossible entering into initramfs console.
+> >>
+> >> Do you see any error messages? I have problems since Friday morning as
+> >> well (stuck in Fedora's initramfs) and see a lot of BPF warnings like
+> >> "BPF: invalid name" and "failed to validate module". Was able to do a
+> >> screenshot:
+> >>
+> >> https://www.leemhuis.info/files/misc/Screenshot_ktst-f36-x86-64_2023-0=
+2-24_07:53:14.png
+> >
+> > I also seen such messages
+> > https://freeimage.host/i/img-1475.HMPL26l
+>
+> Pretty sure that's the same problem, at least the symptoms match. If
+> anyone needs a config to reproduce this, here's one of mine that shows
+> the problem:
+>
+> https://www.leemhuis.info/files/misc/config
+>
+> > P.S.: I also use Fedora Rawhide.
+>
+> Happens for me on all Fedora 36, 37, and 38 (my rawhide build failed for
+> other reasons, so I couldn't test).
+>
+> Ciao, Thorsten
 
-Here are the differences and a few oddities:
+Thanks for the report, and sorry this seems to have broken.
 
-auto/C-RR-G+RR-R+RR-G+RR-G+RR-R+RR-R+RR-R+RR-R.litmus
+I've not been able to reproduce this locally yet, but I'm looking into it.
 
-	Timed out with changes, completed without them.  But it completed
-	in 558.29 seconds against a limit of 600 seconds, so never mind.
+In the meantime, a few questions if you have time:
+- Does this happen with CONFIG_KUNIT=3Dy as well as CONFIG_KUNIT=3Dm?
+- Does this patch fix it?
+https://lore.kernel.org/linux-kselftest/20230225014529.2259752-1-davidgow@g=
+oogle.com/T/#u
 
-auto/C-RR-G+RR-R+RR-R+RR-G+RR-R+RR-R+RR-G+RR-R.litmus
+I can't think of any particular reason this commit would cause these
+problems, but there were some issues with the way these 'hooks' were
+built, so it's possibly related.
 
-	Timed out with changes, completed without them.  But it completed
-	in 580.01 seconds against a limit of 600 seconds, so never mind. *
+Sorry again for the inconvenience!
 
-auto/C-RR-G+RR-R+RR-R+RR-R+RR-R+RR-G+RR-R+RR-R.litmus
+Cheers,
+-- David
 
-	Timed out with changes, completed without them.  But it completed
-	in 522.29 seconds against a limit of 600 seconds, so never mind.
+--0000000000003c1f7705f5900b1c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-auto/C-RR-G+RR-R+RR-R+RR-R+RR-R+RR-G+RR-G+RR-R.litmus
-
-	Timed out with changes, completed without them.  But it completed
-	in 588.70 seconds against a limit of 600 seconds, so never mind.
-
-All tests that didn't time out matched Results comments.
-
-The reason I am so cavalier about the times is that I was foolishly
-running rcutorture concurrently with the new-version testing.  I re-ran
-and of them, only auto/C-RR-G+RR-R+RR-R+RR-G+RR-R+RR-R+RR-G+RR-R.litmus
-timed out the second time.  I re-ran it again, but without a time limit,
-and it completed properly in 364.8 seconds compared to 580.  A rerun
-took 360.1 seconds.  So things have slowed down a bit.
-
-A few other oddities:
-
-litmus/auto/C-LB-Lww+R-OC.litmus
-
-	Both versions flag a data race, which I am not seeing.	It appears
-	to me that P1's store to u0 cannot happen unless P0's store
-	has completed.  So what am I missing here?
-
-litmus/auto/C-LB-Lrw+R-OC.litmus
-litmus/auto/C-LB-Lww+R-Oc.litmus
-litmus/auto/C-LB-Lrw+R-Oc.litmus
-litmus/auto/C-LB-Lrw+R-A+R-Oc.litmus
-litmus/auto/C-LB-Lww+R-A+R-OC.litmus
-
-	Ditto.  (There are likely more.)
-
-Thoughts?
-
-							Thanx, Paul
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDQ
+3aalqUbG+39zrnaDH2VwfOpzCFFJmKes+jVFif8aGjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjYwMTExMzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEADRFftbwkR7WRok5V4vi1
++/bGrTAxaPe66uQecVpmXER2nS5d6MP/VZ6A1hts/ojQ5iZwLchaaqOHEA/JY2O1Vi4I2Hsr/k2+
+DBWMa31W56t1Y+/A3efCFf9gpqC2lUIh0XrjRO0V0Fd2GiEnO7sapRM7MhiHq7pMM9XDRadxZLX+
+szsJBj7DRGA+RNlWGkanNutT1jmO0Kzl2K10hE4Nh8hHFC1Y0r3LscevU6jV5hB5b04bOR0a+2rh
+ezoO9CUUeDZeursm7Uh4FefmCnl6U+aCYJw80IrNW0z6I15Hzsj/e3n39VJrIiuwAEfNZcF+QpF7
+A8qsbaCga1dm54lduw==
+--0000000000003c1f7705f5900b1c--
