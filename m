@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60316A2D03
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 02:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D9E6A2D0B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 03:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjBZB6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Feb 2023 20:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S229567AbjBZCF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Feb 2023 21:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBZB62 (ORCPT
+        with ESMTP id S229504AbjBZCFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Feb 2023 20:58:28 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA4BCA3A
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:58:27 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id h8so91081plf.10
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Feb 2023 17:58:27 -0800 (PST)
+        Sat, 25 Feb 2023 21:05:55 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53CC113C0;
+        Sat, 25 Feb 2023 18:05:54 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id b5so1238516iow.0;
+        Sat, 25 Feb 2023 18:05:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oo3uPGqFe9qxhSafXTbcqHa1iqkVF6jZJyZwrrstAQQ=;
-        b=bzH3XZ+CPyGFOwbYWMzFz0HdwaNyI7+MKGARhjTvB28cgdTFj/Y51mJ2DufNv0GZvD
-         PR8k/F29kZ5owkP8h2SSKsnw8jQOPAMRnIkPhUyD8plxD/TrxaekuS6FIxMPtkNncBN6
-         MfjWOCy5/6HpHPeqps6YOd1sxbfQLiElYHYLzinITBJIFMwpakf63BL1G3YQC1ptnqjo
-         rdoI+oIy00xXzgVI27RrWciOIb55ExN1SfNxmtVjHU4zY/YnC44DdAjhQC9CL3XsBtE/
-         8PqCpON/A6lrQpqNU5hcGdAWujZtYyUVFGBJEndKat5zcnNTby1rusD12pEetcH4Ce68
-         DJ5A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x/0MEJE8eloddSd5KLY1ASt9rHQoQE4Cfr7iia6AURE=;
+        b=B3g3/YTYCORgwWWLF4iJlTMvpGOrOtxDVMearm05vuwTR7VnMT0YMktYnfCvk57nr6
+         hfqtxaNgU6PgokEN5ivb+fO8JHuAy9tDAHSYdronSPdV40rOwvs67vCY3JbFS6hpalYI
+         IBhVDQKDiCacYQVx/+d5qp4MTicO6/dFPzpIYZgQWcT45FC/1OH3wQodzbJDX3/6+y48
+         2safF1xZbnZH3ShH5FohXsbA0PuBzXkxWn0DscXRRMGHTUAVTaFZyS5Z4tJmN6kivzpW
+         CL+/wea8RiPywO3F2clR10qtGPH1xwoGq9K6gWC23dVR2CFmNIrb340Z1ohKZv6HvsdX
+         xL7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oo3uPGqFe9qxhSafXTbcqHa1iqkVF6jZJyZwrrstAQQ=;
-        b=n7VKB9YzHwN9+LugXH1hS8TsnSP8XjR/uQUyEfTrOR8W1tUkAxHFq+DQD2oGzJhYad
-         STFvbF9ku8XLv8nBGMdyWFBPmm9KGbCl7RQnCnpJpu2EZQSiZWB3/wFfYjJ+EvX4bl/H
-         WE63h3VBGwQ13xva0HWUFBK1PWzMqAYODHnJ4Ax/wOQX61btMrhtc/7uFTQ0PMjyNejC
-         qWvP6LC1aTCTjw+1Dc9lvpGaMImvxUJLlO/22O6KtCemRO9Dbc23HvPSiioKOkzDl1Ak
-         nSq7H9PkWA8DdqDlXDzinTJkzufZXaxHm+Wkj46OP8SzT2ckSA99anwMI2nj6arSx/Pm
-         IV0A==
-X-Gm-Message-State: AO0yUKVGimU6jaW4bkmUyoUdrf14Qrcd3yLA9t6FIN+kB8bbD+QVA8to
-        8a28ZxYZXztH1+e47tdxiaAcg4gtLvU=
-X-Google-Smtp-Source: AK7set+gjq08m3bAEEdl66LVIgBE0mxVxbAO9s09vw4iXzMNw7nNTA/Ua3M0QTRvX6I2stXG/JIvkg==
-X-Received: by 2002:a05:6a20:3943:b0:cc:a8d7:ad62 with SMTP id r3-20020a056a20394300b000cca8d7ad62mr6153082pzg.27.1677376706971;
-        Sat, 25 Feb 2023 17:58:26 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:1c16:31cb:9a06:c73e? ([2600:8802:b00:4a48:1c16:31cb:9a06:c73e])
-        by smtp.gmail.com with ESMTPSA id b11-20020aa7810b000000b005d72e54a7e1sm1710413pfi.215.2023.02.25.17.58.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Feb 2023 17:58:26 -0800 (PST)
-Message-ID: <0fa79232-18f7-af96-e116-a71b735a903d@gmail.com>
-Date:   Sat, 25 Feb 2023 17:58:24 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x/0MEJE8eloddSd5KLY1ASt9rHQoQE4Cfr7iia6AURE=;
+        b=OlvcNeMFBAaUWIt9GgwU1nXsvHhX+rf0dCVAkGMS8Z5tdXpSmwricSOXugeOsAvDtD
+         z+a9LdthYu5R6Q85fToSScEG2XDNRPlRUaytyk4orAJMiPVBaWkYGkfytxKEOyDaCeA3
+         fpe2bJICzktXG1Wnapj8Cz8w/Xplmt3m0S84JCOFF6VbE7nyNH8RNm0IHLqccwxFwCrw
+         IMlitVEkcC+0P+Q+TiX1c6rY20gAjb3O0+LFR8DlF4l/A4FeON3FNCBvM/G6gm+JhNVi
+         Z8zD5SLEjtrAEtLRks2qJ5gVt43XgwrAzGYliI3Ssy6kVOuhUUcRa4MaW5v+YPtLDAmH
+         ukOQ==
+X-Gm-Message-State: AO0yUKWd+AN1p6hNZVALaCuznoBgQK7ptA8bHqN49R39jej0mifsp45Z
+        qmxKJHYyKyvc8VeR0gI96FSS/JtntBzjfH3rE/M=
+X-Google-Smtp-Source: AK7set+58Mh0Ks2ffDoUFBfLA+3gK+Y7iXCq4YAsGujRDITldiSnnN49ICUzOMR8phZqcqomY+jV3HRN4kuLD8jjvUg=
+X-Received: by 2002:a6b:1481:0:b0:745:5dec:be5b with SMTP id
+ 123-20020a6b1481000000b007455decbe5bmr4076170iou.0.1677377154273; Sat, 25 Feb
+ 2023 18:05:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Raspberry Pi 4B: Failed to create device link with
- soc:firmware:gpio
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-References: <03b70a8a-0591-f28b-a567-9d2f736f17e5@gmail.com>
- <CAGETcx-KLfxKae6-Kc74gOu2fiuu+5528j_TNEaY21U3_yZO0w@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAGETcx-KLfxKae6-Kc74gOu2fiuu+5528j_TNEaY21U3_yZO0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221021201838.306176-1-helgaas@kernel.org>
+In-Reply-To: <20221021201838.306176-1-helgaas@kernel.org>
+From:   Matt Turner <mattst88@gmail.com>
+Date:   Sat, 25 Feb 2023 21:05:43 -0500
+Message-ID: <CAEdQ38Er01WkGqydMSU3VAfiZCJREhOFDRxnujDp53jLVdN7Gg@mail.gmail.com>
+Subject: Re: [PATCH] alpha: remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,47 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 21, 2022 at 4:18 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>
+> [Sorry for the noise; I sent this a few minutes ago, but it bounced from
+> all the individual recipients because of DMARC issues]
+>
+> Previously posted v1 4/15/2022 at
+>   https://lore.kernel.org/all/20220415190817.842864-1-helgaas@kernel.org/
+> and reposted v1 10/13/2022 at
+>   https://lore.kernel.org/all/20221014001911.3342485-1-helgaas@kernel.org/
+>
+> Changes from v1 to v2:
+>   - Drop the ia64 patch because Andrew applied it
+>       https://lore.kernel.org/all/20221021045245.99636C433C1@smtp.kernel.org/
+>
+>   - Split sh and alpha to separate series
+>
+>  arch/alpha/include/asm/io.h | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
+> index 1c3605d874e9..7aeaf7c30a6f 100644
+> --- a/arch/alpha/include/asm/io.h
+> +++ b/arch/alpha/include/asm/io.h
+> @@ -14,10 +14,6 @@
+>     the implementation we have here matches that interface.  */
+>  #include <asm-generic/iomap.h>
+>
+> -/* We don't use IO slowdowns on the Alpha, but.. */
+> -#define __SLOW_DOWN_IO do { } while (0)
+> -#define SLOW_DOWN_IO   do { } while (0)
+> -
+>  /*
+>   * Virtual -> physical identity mapping starts at this offset
+>   */
+> --
+> 2.25.1
+>
 
-
-On 2/25/2023 4:01 PM, Saravana Kannan wrote:
-> On Sat, Feb 25, 2023 at 7:38 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> Hi Saravana,
->>
->> Using v6.2-10217-ga93e884edf61v my Raspberry Pi 4B issues the following
->> for the "extended GPIO" provider:
->>
->> [    5.969855] uart-pl011 fe201000.serial: Failed to create device link
->> with soc:firmware:gpio
-> 
-> Outside of this error, is it actually breaking anything? 
-
-There is just this warning, there does not appear to be a functional issue.
-
-> Also, can you
-> pull in this patch and tell me what it says? I want to know what the
-> flags are.
-> https://lore.kernel.org/lkml/20230225064148.274376-1-saravanak@google.com/
-> 
-> Can you also change every pr_debug and dev_dbg in drivers/base/core.c
-> to an info and then give me the logs as an attachment?
-
-Sure will do.
-
-> 
->> The kernel configuration I am using can be found here:
->>
->> https://gist.github.com/ffainelli/4eb83740c25b10f75b54560f8c8febb1
->>
->> And the DTS is arch/arm*/boot/dts/bcm2711-rpi-4-b.dts
-> 
-> Ah, is this yet another case of a DTS that's not upstream? Don't
-> worry, I'll still look at it as it might point to some existing
-> upstream issue too.
-
-This is with the upstream DTS file under that directory, I used * to 
-denote that this was used equally for both arm and arm64.
-
-Thanks!
--- 
-Florian
+Thanks for the patch! This was included in my pull request today and
+is now upstream in Linus' tree.
