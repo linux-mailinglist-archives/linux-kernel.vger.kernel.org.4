@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277356A2F7E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 13:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47A06A2F76
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 13:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBZMwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 07:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S229578AbjBZMuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 07:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjBZMwa (ORCPT
+        with ESMTP id S229445AbjBZMuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 07:52:30 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE34BBAE;
-        Sun, 26 Feb 2023 04:52:29 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id kb15so3464214pjb.1;
-        Sun, 26 Feb 2023 04:52:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yS+TlC+EiV0VF2Rz3BRf4GEHgtRgdd+dzhIKTko3Adc=;
-        b=J3uh/yzOf0BMd6HVZ427c8iw0Q3fhTNqjTvvEpAFqErAaEE+9oRuC1giLmhLFg2hUC
-         rHoMSLwG5Reteaiu7wXv7O1mo5J0n/g5G8D7gt66MBgVTCcUMEXap09Y9DjPK9xeeIeW
-         kJpSobXfi0in5dTgl3Q/WzQg95sGmPCRN1c48aqLtxUIcSXx6ABFwQ3LgO2f2z77gjJv
-         n3OhMJSF7F0c9VSW+TWMnSWEjBFmwubOHDxn4utTTjEHP7/YEanU/sZysApBGoJ2yweE
-         OZTc4G+Rb02mPH8+0krx15HDQW9hG1GZYBrXfYOwP1tyfA3mul33LRpmrG/Lcxy8Lm+D
-         cjKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yS+TlC+EiV0VF2Rz3BRf4GEHgtRgdd+dzhIKTko3Adc=;
-        b=AZnPTUkwHUaGSHxzLkHXyBO1EpRQjx+oLjYfFoC/vEWdig3aGDMYPrrwM7ygxXjmR5
-         vNV6kbmtnA1TWyRlxq5wO1qCc3bfrc4Q4ozGLmaErP2uINtKVthb8lE1CKRE3S/PrmDt
-         MJKsJvbTVTjdJEGEILeVFXfGBcQtxqFbFHGNxwLQ0yxcM9YPV9ABtj/mB8iUNp00dixp
-         Dn0JbSdHyYY2jICPWKE8fBMl1S3uEFiU0aCfuyCXAUahOAlOYbkZiK0qZDOtvyB1k/Df
-         x5AxTxWwokABL1/zTKC5PdzrfNg/qsA0Dq8IXX9g9aeMNcCDMC9rJczX7J+/4bsaemAv
-         2fTg==
-X-Gm-Message-State: AO0yUKXgRx3L+V9fRHo2Q+E/DVbzu7ctnyT9GfPAIyyk14FD5UnPSe+A
-        jbhPPnnL4x/3et3aGKK2DvJbcWhayw3Lq3BoMoE=
-X-Google-Smtp-Source: AK7set9TIYU+I5MesW9FJSEiOVUVnuHHXfjTXQN0VZana3vFUqwCAUeTBbeWbH3QtVY1to3laVZtHw==
-X-Received: by 2002:a05:6a20:4417:b0:cd:4ad1:cffb with SMTP id ce23-20020a056a20441700b000cd4ad1cffbmr279401pzb.51.1677415948615;
-        Sun, 26 Feb 2023 04:52:28 -0800 (PST)
-Received: from localhost.localdomain ([199.101.192.110])
-        by smtp.gmail.com with ESMTPSA id c24-20020aa78c18000000b005ac419804d5sm2506090pfd.98.2023.02.26.04.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 04:52:28 -0800 (PST)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+57e3e98f7e3b80f64d56@syzkaller.appspotmail.com,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fs: hfsplus: Fix UAF issue in hfsplus_put_super
-Date:   Sun, 26 Feb 2023 20:49:47 +0800
-Message-Id: <20230226124948.3175736-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Sun, 26 Feb 2023 07:50:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEA8BDC8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 04:50:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C549160C22
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 12:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51897C4339B;
+        Sun, 26 Feb 2023 12:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677415812;
+        bh=tXoBBwH1mWvTjMnK88lV0o+/UEzJ2oHsXRNStxiv+/A=;
+        h=From:Subject:Date:To:Cc:From;
+        b=cY7wxPIkOJ9Su0CV/be3QlhZE0V3hA8nA3WxZNg5qSszdqcxG+bA2ylvtrMtt5Dn9
+         qpaI/FQuYJnSL2z99R17v9VNyWn1z9Ak5M5ELm9k5O89KCyS4u2b5bHWiFF8ojxfxq
+         MaKp5FDULs033FP2OF2w1CYqNhxmayozQN8SoNXYySl5WzNt5c4xxp7Mp/kP8G/U4a
+         r73cFb4fGtZXWjfXqQjzUO1FG3iWk2fU6gR6C3HDz7xVK6BhkLj6dYWTmvItlNhe7D
+         kmr412gVcDJ4/HgrCIQEFvSYMFqwiZPIlcItbL2T6504iAtQ//m2AjQ0OTWr+NoNFV
+         R7VlotBjMAtVg==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/2] ASoC: mt8183: Fixes from an initial glance at a
+ kselftest run
+Date:   Sun, 26 Feb 2023 12:49:55 +0000
+Message-Id: <20230224-asoc-mt8183-quick-fixes-v1-0-041f29419ed5@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHNV+2MC/x2LSQ7CMAwAv1L5jKU2JaTiK6iHxBhqVSRgs0lV/
+ 07KcUYzCxirsMGxWUD5LSYlV+h2DdAU85VRzpXBta5vndtjtEJ4ew7d0OPjJTTjRb5sSJQC+UO
+ g4D3UO0VjTBozTdv/KTpv+q7876s7jev6A0QTTneAAAAA
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
+        <nfraprado@collabora.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-ada30
+X-Developer-Signature: v=1; a=openpgp-sha256; l=721; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=tXoBBwH1mWvTjMnK88lV0o+/UEzJ2oHsXRNStxiv+/A=;
+ b=owGbwMvMwMWocq27KDak/QLjabUkhuTfoXXxNR2nlmlIJVTdS7pxMuNHXu8nl8XdL0paBfV+N/6N
+ vryjk9GYhYGRi0FWTJFl7bOMVenhElvnP5r/CmYQKxPIFAYuTgGYiKES+z/j2lY/pz4gvGuTOD/F6C
+ eD0Dxp46TWpL/7GXIOFz3z1nsZmPyRsSh5AffHHieD3vCeACv9TL00/ayrCacOlKYs6pBYvfTNUw+b
+ 6z4r/zgt39K0WujIkfeuPCd3/7i1vH5Z5eaDGo++lM/c6Dvn3+Ku74UXDr6dd2lNamzw/gsHDilnb2
+ BJTrqRqlvYZyDxKPv05CfvrLivWQb+fZ2vFF3omLVfvXLnmzxv0xLzeUYrZUxsRW9+LpH/99lpwa3i
+ pqnneeri34l5L+n0WxW9+M7JGfs4fArXsRz6tdV1eY7bG6Ytu0OzgoLOnlmlcyL56J9IFV6hmgmaL1
+ Y16/Iqz2R68XJdsM/epQqdpYLfAQ==
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current hfsplus_put_super first calls hfs_btree_close on
-sbi->ext_tree, then invokes iput on sbi->hidden_dir, resulting in an
-use-after-free issue in hfsplus_release_folio.
+This is a collection of fixes I came up after glancing through an
+initial test run with the snappily named Kukui Jacuzzi SKU16 Chromebook
+on KernelCI.  There are more issues flagged, this is just what I fixed
+thus far.
 
-As shown in hfsplus_fill_super, the error handling code also calls iput
-before hfs_btree_close.
-
-To fix this error, we move all iput calls before hfsplus_btree_close.
-
-Note that this patch is tested on Syzbot.
-
-Reported-by: syzbot+57e3e98f7e3b80f64d56@syzkaller.appspotmail.com
-Tested-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- fs/hfsplus/super.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Mark Brown (2):
+      ASoC: mt8183: Remove spammy logging from I2S DAI driver
+      ASoC: mt8183: Fix event generation for I2S DAI operations
 
-diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
-index 122ed89ebf9f..1986b4f18a90 100644
---- a/fs/hfsplus/super.c
-+++ b/fs/hfsplus/super.c
-@@ -295,11 +295,11 @@ static void hfsplus_put_super(struct super_block *sb)
- 		hfsplus_sync_fs(sb, 1);
- 	}
- 
-+	iput(sbi->alloc_file);
-+	iput(sbi->hidden_dir);
- 	hfs_btree_close(sbi->attr_tree);
- 	hfs_btree_close(sbi->cat_tree);
- 	hfs_btree_close(sbi->ext_tree);
--	iput(sbi->alloc_file);
--	iput(sbi->hidden_dir);
- 	kfree(sbi->s_vhdr_buf);
- 	kfree(sbi->s_backup_vhdr_buf);
- 	unload_nls(sbi->nls);
+ sound/soc/mediatek/mt8183/mt8183-dai-i2s.c | 21 +++------------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
+---
+base-commit: d2980d8d826554fa6981d621e569a453787472f8
+change-id: 20230224-asoc-mt8183-quick-fixes-ccb7c567c755
+
+Best regards,
 -- 
-2.34.1
+Mark Brown <broonie@kernel.org>
 
