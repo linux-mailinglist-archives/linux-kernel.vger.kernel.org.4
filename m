@@ -2,171 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179106A3395
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 20:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146A16A3398
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 20:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjBZTXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 14:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S229560AbjBZTYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 14:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBZTXP (ORCPT
+        with ESMTP id S229470AbjBZTYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 14:23:15 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F15A24F
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 11:23:13 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id ck15so17723588edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 11:23:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JbQyXtJLfRv0Q9GivC5bqVQS8/nMln8gSjbi3txdErA=;
-        b=fm3vHIaWK9rL2C8TZFa5QqvhZR2O/3RhNA0r6oCs8csV7XGPLgSQFt9ibl3reauPWi
-         SBqGiQJBNQeUlgwOnBve4SswW2VQ/NwEOPNQKlniv+12R6SmayFKy77HVX6Wx3YdRFat
-         3hK2T4vfyyid+dJcWomQADp0YuMk5/b8goYjs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JbQyXtJLfRv0Q9GivC5bqVQS8/nMln8gSjbi3txdErA=;
-        b=PGlWFoO2VwHVl8/kuOuFlWwKKu7CbRp+wP6S2G4WoeueuuvLD4fcZUYbflJ8StOitw
-         Z0kDODKzTpxe3tO5SXdKq6olDr2M3J5o3TS5Sc3hW4twyqyxIt25Psj+lI/sflbm5Mly
-         zW+MMPWp+BCJq0l42d+SfZmHvJhflRZXkqpFOD48tOLholZ4i2zitfMCoibSiViBAE6i
-         FCHipSKc17umG9E9HYpVGI1HdAnbzc0xd4NMINsU7mjhNnUYbs1tPk0Mmce+kLdoAM6o
-         2uPGVWeb2PM9S9gaLtLp557GWEzlOMkJn9u4PvbuavedKMGQrrUNs3nDAGB0oKrIuNh1
-         yk3A==
-X-Gm-Message-State: AO0yUKUFT2su6SrMUgKCGICvs8VuXBQW2mUGTBshTQtDx6E+C9sgXc2c
-        jQylDiMQ3Qr6mF4rgOGSULgymKF5hiZbjX1wPf+L8A==
-X-Google-Smtp-Source: AK7set/RhwZg1mGnUrtO8vTDV+3E59Fa0S9rB6M6ZFt/xs7ANgfdvtdHveeXag1MaNbSvLSB7Vh/B6s4NuQCz3G3GlQ=
-X-Received: by 2002:a17:907:bb89:b0:8b1:2916:9804 with SMTP id
- xo9-20020a170907bb8900b008b129169804mr13789290ejc.9.1677439392099; Sun, 26
- Feb 2023 11:23:12 -0800 (PST)
+        Sun, 26 Feb 2023 14:24:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6834BDC2;
+        Sun, 26 Feb 2023 11:24:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E1760C2E;
+        Sun, 26 Feb 2023 19:24:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F56C433D2;
+        Sun, 26 Feb 2023 19:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677439478;
+        bh=DvhJHcnQg5b3D6o4WSuhZGJ4vMGsFhwAjTFGFXetlFs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UswRLnk654isemwy1KrzCnEQKuxtOkNdSwGsddCNrRcigsvX7OHlNaHTw7DYJTLAH
+         n8JsYV5ffuyvNLcVWWRaUhD44t+xrWsRB6eFY/irX9S0XhDMxSGtLhwzYJApXewQ9I
+         TtIC71EoQwvOAfEq9Fi/qm1zT7DtAK8GF1jxRD4CEo5tnv9aONu0CiRJX2aoVL7mvP
+         xNUYanxibycGHo0QaQNnLl2A3EoClHzkwfIhjeRs+sABamWDkv5D4pYa1/rDZD2x6M
+         3OtJ7oJDcnb4SDWJc7gTxtEzQg6X+TFkXEOdESjHaOZX43DdfuQWrhwruaHQIoQ3z+
+         vEUIzUYPmwBpA==
+Date:   Sun, 26 Feb 2023 11:24:36 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.1 12/21] fs/super.c: stop calling
+ fscrypt_destroy_keyring() from __put_super()
+Message-ID: <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+References: <20230226034256.771769-1-sashal@kernel.org>
+ <20230226034256.771769-12-sashal@kernel.org>
+ <Y/rbGxq8oAEsW28j@sol.localdomain>
+ <Y/rufenGRpoJVXZr@sol.localdomain>
 MIME-Version: 1.0
-References: <20230219145453.1.Idaaf79c3e768b85750d5a7eb732052576c5e07e5@changeid>
- <CAPnjgZ0BxS3CHKzofGE1SbAZouhMakAU_KUmfpy_OmJTkzyhSA@mail.gmail.com>
- <CAPnjgZ3xpoJ33fgSG589E+xoUk4-dVbhwadfo+sd=hxqF-z0Vg@mail.gmail.com>
- <CAK7LNAT=tmXdJahjdXBrj8ASmEDhdeeqbXfSdyXCzkJZgix+Hg@mail.gmail.com>
- <CAPnjgZ0r431WyRgZH=37_OQ_L9UgzYB+GmSk=a6g4UUe_5t0sw@mail.gmail.com>
- <CAK7LNARpzPqt76vGeu6c14cHaf2=UU0o8H4HrM-NKQYc-19qjQ@mail.gmail.com>
- <Y/twXr2IOM4Dua8J@bill-the-cat> <CAK7LNAQyDnDiL4iY31Z82aWi-e-eiTdOqdsf3qzQ8f9dJTYwJQ@mail.gmail.com>
-In-Reply-To: <CAK7LNAQyDnDiL4iY31Z82aWi-e-eiTdOqdsf3qzQ8f9dJTYwJQ@mail.gmail.com>
-From:   Simon Glass <sjg@chromium.org>
-Date:   Sun, 26 Feb 2023 12:23:00 -0700
-Message-ID: <CAPnjgZ2hcKnzzAyy4m44L1hQ_wYbCq-3ZX0g57bvVdYjyPPL_g@mail.gmail.com>
-Subject: Re: [PATCH] kconfig: Proposed language extension for multiple builds
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Tom Rini <trini@konsulko.com>,
-        U-Boot Mailing List <u-boot@lists.denx.de>,
-        lk <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/rufenGRpoJVXZr@sol.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On Sat, Feb 25, 2023 at 09:30:37PM -0800, Eric Biggers wrote:
+> On Sat, Feb 25, 2023 at 08:07:55PM -0800, Eric Biggers wrote:
+> > On Sat, Feb 25, 2023 at 10:42:47PM -0500, Sasha Levin wrote:
+> > > From: Eric Biggers <ebiggers@google.com>
+> > > 
+> > > [ Upstream commit ec64036e68634231f5891faa2b7a81cdc5dcd001 ]
+> > > 
+> > > Now that the key associated with the "test_dummy_operation" mount option
+> > > is added on-demand when it's needed, rather than immediately when the
+> > > filesystem is mounted, fscrypt_destroy_keyring() no longer needs to be
+> > > called from __put_super() to avoid a memory leak on mount failure.
+> > > 
+> > > Remove this call, which was causing confusion because it appeared to be
+> > > a sleep-in-atomic bug (though it wasn't, for a somewhat-subtle reason).
+> > > 
+> > > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> > > Link: https://lore.kernel.org/r/20230208062107.199831-5-ebiggers@kernel.org
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > 
+> > Why is this being backported?
+> > 
+> > - Eric
+> 
+> BTW, can you please permanently exclude all commits authored by me from AUTOSEL
+> so that I don't have to repeatedly complain about every commit individually?
+> Especially when these mails often come on weekends and holidays.
+> 
+> I know how to use Cc stable, and how to ask explicitly for a stable backport if
+> I find out after the fact that one is needed.  (And other real people can always
+> ask too... not counting AUTOSEL, even though you are sending the AUTOSEL emails,
+> since clearly they go through no or very little human review.)
+> 
+> Of course, it's not just me that AUTOSEL isn't working for.  So, you'll still
+> continue backporting random commits that I have to spend hours bisecting, e.g.
+> https://lore.kernel.org/stable/20220921155332.234913-7-sashal@kernel.org.
+> 
+> But at least I won't have to deal with this garbage for my own commits.
+> 
+> Now, I'm not sure I'll get a response to this --- I received no response to my
+> last AUTOSEL question at
+> https://lore.kernel.org/stable/Y1DTFiP12ws04eOM@sol.localdomain.  So to
+> hopefully entice you to actually do something, I'm also letting you know that I
+> won't be reviewing any AUTOSEL mails for my commits anymore.
+> 
 
-On Sun, 26 Feb 2023 at 10:36, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sun, Feb 26, 2023 at 11:44=E2=80=AFPM Tom Rini <trini@konsulko.com> wr=
-ote:
-> >
-> > On Sun, Feb 26, 2023 at 11:32:03PM +0900, Masahiro Yamada wrote:
-> > > On Sun, Feb 26, 2023 at 11:04=E2=80=AFPM Simon Glass <sjg@chromium.or=
-g> wrote:
-> > > >
-> > > > Hi Masahiro,
-> > > >
-> > > > On Sat, 25 Feb 2023 at 20:31, Masahiro Yamada <masahiroy@kernel.org=
-> wrote:
-> > > > >
-> > > > > On Sat, Feb 25, 2023 at 11:38=E2=80=AFAM Simon Glass <sjg@chromiu=
-m.org> wrote:
-> > > > > >
-> > > > > > +Masahiro Yamada
-> > > > >
-> > > > >
-> > > > >
-> > > > >
-> > > > > I do not know.
-> > > > > This seems a shorthand in Kconfig level.
-> > > > >
-> > > > >
-> > > > > masahiro@zoe:~/ref/u-boot(master)$ rgrep '^config SPL_' | wc
-> > > > >     540    1080   24872
-> > > > > masahiro@zoe:~/ref/u-boot(master)$ rgrep '^config TPL_' | wc
-> > > > >     163     326    7462
-> > > > >
-> > > > > If hundreds of duplications are not manageable,
-> > > > > go for it, but kconfig will be out-of-sync from the
-> > > > > upstream Kconfig.
-> > > >
-> > > > Yes that's right, it is a shorthand in Kconfig.
-> > > >
-> > > > The counts above understand the problem a little since quite a few
-> > > > CONFIG options without an SPL prefix are used in SPL. We don't have
-> > > > tools to estimate how many, and we sometimes add a new symbol to 'g=
-ain
-> > > > control' of a particular feature in a phase.
-> > > >
-> > > > My intent in sending this patch was to check whether this support f=
-or
-> > > > configuring multiple related builds (or something like it) could go
-> > > > upstream, which for Kconfig is Linux, I believe. What do you think?
-> > >
-> > >
-> > > This complexity is absolutely unneeded for Linux.
-> > >
-> > > So, the answer is no.
-> >
-> > Well, I think Simon summarized himself a bit shorter here than he did i=
-n
-> > the patch itself.  So, to what extent does the kernel want to consider
-> > all of the other projects using the Kconfig language and their needs /
-> > use cases?
-> >
-> > --
-> > Tom
->
->
->
-> In principle, only features that are useful for Linux.
+The really annoying thing is that someone even replied to your AUTOSEL email for
+that broken patch and told you it is broken
+(https://lore.kernel.org/stable/d91aaff1-470f-cfdf-41cf-031eea9d6aca@mailbox.org),
+and ***you ignored it and applied the patch anyway***.
 
-I'm disappointed in this attitude. It is the same thing that we saw
-from the DT bindings until recently.
+Why are you even sending these emails if you are ignoring feedback anyway?
 
->
-> Kconfig has small piece of code that is useful for other projects,
-> for example,
->
->     #ifndef CONFIG_
->     #define CONFIG_ "CONFIG_"
->     #endif
->
-> which might be useful for Buildroot, but this is exceptionally small.
+How do I even get you to not apply a patch?  Is it even possible?
 
-How about refactoring patches that would make a possible
-implementation easier to maintain, like [1] ? Would they be
-acceptable?
+I guess I might as well just add an email filter that auto-deletes all AUTOSEL
+emails, as apparently there's no point in responding anyway?
 
->
->
-> The multi-phase is too cluttered, and that is not what Linux wants to hav=
-e.
-
-Clearly it is not useful to Linux, which only has one build.
-
-Regards,
-Simon
-
-[1] https://patchwork.ozlabs.org/project/uboot/patch/20230212231638.1134219=
--61-sjg@chromium.org/
+- Eric
