@@ -2,155 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B611C6A2FFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 15:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA48A6A3033
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Feb 2023 15:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjBZOoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 09:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S229766AbjBZOra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 09:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjBZOow (ORCPT
+        with ESMTP id S229800AbjBZOrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 09:44:52 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E024113D9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:44:51 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id z6so4314176qtv.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 06:44:51 -0800 (PST)
+        Sun, 26 Feb 2023 09:47:22 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33B01353C;
+        Sun, 26 Feb 2023 06:46:44 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so7573485pjb.1;
+        Sun, 26 Feb 2023 06:46:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=efJXFXwY6vJocv4Vp0zxvm6czbP+CiCC1ojz3TRq1qU=;
-        b=VsF70Rc2IrHkESbXORC/IpaHslG+5KW16Av+HtUDKSxvryy7t1Vi2+l6i9UCYdFedL
-         QOPSTV/i2V+/lQT3LuPrMYPOBb25to0ZLW+bin12D2PD2EQ1XLr+1YQPu1Rc3yYPfpCX
-         ybG5s0V1rrUH6Osu54Wci/A+N4VbrVmYvfJHg=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Eh6AmMfT4Z+u0BxDIOeBlEartGnGmnuI1Dw64al8WY=;
+        b=pP5ekyYkj7NMTorx/wTpbuMcCiQg3gopUUJX0FqPDE1nicPxdCSlEPbuEaXTHut52k
+         PIUIw3esd40bPzQ8F8CZf3dYarXzmUE7VRhZP4CB4xNtmgH+jUpxvuBW8gkmcfUeUMDY
+         x2PUjesUnaQr8eI56WbJOOo2Vr5+bBJgW+R5klg2mws0KG6hM80UI5HqJ/vcbuVcJeDq
+         V+1fWoMlL43fhs4m5VjQMfl9oLCfSnlaTuYLey4f8L+TXZP6/3xLhv8935/amIUCyjDI
+         IQWnG0B47gaoYe/hyid3o5mkAjp9zke07nN68ql8mfPWVSNs5WaaACfP82fhK4MS2lQs
+         FvWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=efJXFXwY6vJocv4Vp0zxvm6czbP+CiCC1ojz3TRq1qU=;
-        b=3ES3u683eLP3/wMj5dor/0J/QSSX/48otd38SawhtP1O772Wqgk5DudE6xYRBrN6Rj
-         KspVDKgD+ohnQ6SAlFxyC6dHAy4yfo8UV71dK4sNLz5fpGoySaXBWbIO7wRu17hq3Up6
-         GZ6Vdm8Pf+aTyKI7d762HoBzlAkVQZuz0hCSVoS381cLbjV+nE+IcE65H2BcmZnW+k5K
-         q+CmxAfl1OdFiL+y+2r48LWTS2msAZQP9hRUS/A5fgOtV+ks6QbtEqkK9PLxnFX8uskT
-         X9ZJKq9SHgml0eYHOP25zmC7aZJ32zwRI4Wbe93/SimvUjQoXKlU79TzetseDU05o58C
-         duBA==
-X-Gm-Message-State: AO0yUKXzprMAuC2K+nMZQ8ti6uXljfKGa0oOseFONcct2EWmcTsBXuiR
-        5zKF0XXh5ASiKbc26HvIyjIPXgNBPZxVoObQm1M=
-X-Google-Smtp-Source: AK7set9WP631DBgRKTXzIhUfxr4a691vb3RXOD0CyoEZiWPgMeug6fTNyJHqi+yTopY/SOsBjhOJJA==
-X-Received: by 2002:a05:622a:190:b0:3b9:bc8c:c207 with SMTP id s16-20020a05622a019000b003b9bc8cc207mr10441639qtw.18.1677422690281;
-        Sun, 26 Feb 2023 06:44:50 -0800 (PST)
-Received: from bill-the-cat (2603-6081-7b00-6400-0000-0000-0000-036b.res6.spectrum.com. [2603:6081:7b00:6400::36b])
-        by smtp.gmail.com with ESMTPSA id 207-20020a3704d8000000b007427fce1377sm3167893qke.7.2023.02.26.06.44.48
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Eh6AmMfT4Z+u0BxDIOeBlEartGnGmnuI1Dw64al8WY=;
+        b=WtgvyKwg9hfRV/2MOxu6x94hczU8Xg1x/j647Jnq6zuMtszaqA+Vx+1y2Oqa0QYIqT
+         B1791IofuTYYwARDY+v10diqAWWwZOzd4hixMAXWGb1O/9SPUimiNEpWs3JGrK60YPUW
+         mgyosEUF7yjz0lfqht2vrlw778L4ZnW9vD8pnIds2q8WUd/eCejyqCvstuMEnkE1dJvx
+         txgM+QocsAo95u6ME0M/5zAv6loZRmOpOzpShQ6MvGHXKFc3yKCcGCyg03QD6FnevgKu
+         kLVZPo4yhM8LkWNJhUqWrke8hjTRsOQexisj00zMQIjRtV5ES+sQXN7q1VweVaqQBhqS
+         scnw==
+X-Gm-Message-State: AO0yUKWnD9WkMpbShEYC04Q207yXEqxa/bCBGmrI25YHtwBKzXm+ezsb
+        dQv8/4h2ANKT6/e6B6zJ6N8=
+X-Google-Smtp-Source: AK7set/r42gZuvNsks4Vk9J9KM00FWB0ahB9jvPWHetB3KtfZqT2HXPauXzdqLggsnYBHBU9A0v0WA==
+X-Received: by 2002:a05:6a21:78a0:b0:cc:4db0:f2c7 with SMTP id bf32-20020a056a2178a000b000cc4db0f2c7mr6444731pzc.23.1677422769035;
+        Sun, 26 Feb 2023 06:46:09 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id k4-20020aa792c4000000b0058bcb42dd1asm2545898pfa.111.2023.02.26.06.46.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 06:44:48 -0800 (PST)
-Date:   Sun, 26 Feb 2023 09:44:46 -0500
-From:   Tom Rini <trini@konsulko.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Simon Glass <sjg@chromium.org>,
-        U-Boot Mailing List <u-boot@lists.denx.de>,
-        lk <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kconfig: Proposed language extension for multiple builds
-Message-ID: <Y/twXr2IOM4Dua8J@bill-the-cat>
-References: <20230219145453.1.Idaaf79c3e768b85750d5a7eb732052576c5e07e5@changeid>
- <CAPnjgZ0BxS3CHKzofGE1SbAZouhMakAU_KUmfpy_OmJTkzyhSA@mail.gmail.com>
- <CAPnjgZ3xpoJ33fgSG589E+xoUk4-dVbhwadfo+sd=hxqF-z0Vg@mail.gmail.com>
- <CAK7LNAT=tmXdJahjdXBrj8ASmEDhdeeqbXfSdyXCzkJZgix+Hg@mail.gmail.com>
- <CAPnjgZ0r431WyRgZH=37_OQ_L9UgzYB+GmSk=a6g4UUe_5t0sw@mail.gmail.com>
- <CAK7LNARpzPqt76vGeu6c14cHaf2=UU0o8H4HrM-NKQYc-19qjQ@mail.gmail.com>
+        Sun, 26 Feb 2023 06:46:08 -0800 (PST)
+From:   Kang Chen <void0red@gmail.com>
+To:     konrad.dybcio@linaro.org
+Cc:     agross@kernel.org, andersson@kernel.org, ohad@wizery.com,
+        baolin.wang@linux.alibaba.com, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kang Chen <void0red@gmail.com>
+Subject: [PATCH] hwspinlock: add a check of devm_regmap_field_alloc in qcom_hwspinlock_probe
+Date:   Sun, 26 Feb 2023 22:45:45 +0800
+Message-Id: <20230226144545.4187442-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nZoFPyLGA3ncA+OI"
-Content-Disposition: inline
-In-Reply-To: <CAK7LNARpzPqt76vGeu6c14cHaf2=UU0o8H4HrM-NKQYc-19qjQ@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+devm_regmap_field_alloc may fails, priv field might be error pointer and
+cause illegal address access later.
 
---nZoFPyLGA3ncA+OI
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+ drivers/hwspinlock/qcom_hwspinlock.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Sun, Feb 26, 2023 at 11:32:03PM +0900, Masahiro Yamada wrote:
-> On Sun, Feb 26, 2023 at 11:04=E2=80=AFPM Simon Glass <sjg@chromium.org> w=
-rote:
-> >
-> > Hi Masahiro,
-> >
-> > On Sat, 25 Feb 2023 at 20:31, Masahiro Yamada <masahiroy@kernel.org> wr=
-ote:
-> > >
-> > > On Sat, Feb 25, 2023 at 11:38=E2=80=AFAM Simon Glass <sjg@chromium.or=
-g> wrote:
-> > > >
-> > > > +Masahiro Yamada
-> > >
-> > >
-> > >
-> > >
-> > > I do not know.
-> > > This seems a shorthand in Kconfig level.
-> > >
-> > >
-> > > masahiro@zoe:~/ref/u-boot(master)$ rgrep '^config SPL_' | wc
-> > >     540    1080   24872
-> > > masahiro@zoe:~/ref/u-boot(master)$ rgrep '^config TPL_' | wc
-> > >     163     326    7462
-> > >
-> > > If hundreds of duplications are not manageable,
-> > > go for it, but kconfig will be out-of-sync from the
-> > > upstream Kconfig.
-> >
-> > Yes that's right, it is a shorthand in Kconfig.
-> >
-> > The counts above understand the problem a little since quite a few
-> > CONFIG options without an SPL prefix are used in SPL. We don't have
-> > tools to estimate how many, and we sometimes add a new symbol to 'gain
-> > control' of a particular feature in a phase.
-> >
-> > My intent in sending this patch was to check whether this support for
-> > configuring multiple related builds (or something like it) could go
-> > upstream, which for Kconfig is Linux, I believe. What do you think?
->=20
->=20
-> This complexity is absolutely unneeded for Linux.
->=20
-> So, the answer is no.
+diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+index 9cf186362..b69d43d30 100644
+--- a/drivers/hwspinlock/qcom_hwspinlock.c
++++ b/drivers/hwspinlock/qcom_hwspinlock.c
+@@ -197,6 +197,8 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
+ 
+ 		bank->lock[i].priv = devm_regmap_field_alloc(&pdev->dev,
+ 							     regmap, field);
++		if (IS_ERR(bank->lock[i].priv)
++			return -ENOMEM;
+ 	}
+ 
+ 	return devm_hwspin_lock_register(&pdev->dev, bank, &qcom_hwspinlock_ops,
+-- 
+2.34.1
 
-Well, I think Simon summarized himself a bit shorter here than he did in
-the patch itself.  So, to what extent does the kernel want to consider
-all of the other projects using the Kconfig language and their needs /
-use cases?
-
---=20
-Tom
-
---nZoFPyLGA3ncA+OI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEEGjx/cOCPqxcHgJu/FHw5/5Y0tywFAmP7cFQACgkQFHw5/5Y0
-tyxhbAv8DBSBvnDibjp5ZrVi/6xFG0glS5ZojvpVZIcigtRXsYz/WhhJY9uH2BSh
-wzhevCoA0/2tJIssURuq3ywbzT1LIR+oIXXgBL/aBISF8Jpa6qM933hLB4G9CfeR
-moo10+/0/E9PBDy1LCoVLXIG0A0iYZivZcYGHgE1iHKESqCjJMu10KpjlCdC/IWZ
-jcFAnRP8urGwn1Ir1OS8LhJV3g+vrl01NHVEFcmF4UwGLnDbSYVZkcGZ3yTxfpal
-zk55xdR9uqGcVOsQ8UIWzQWTZPeXxtgl7V9fdShVRpJvoQp3/ASTLOlHcVJbcdsb
-VQHApqyRPGkfGpGZTXNIFbKrxxqcdm4FF10hv2E3pRz1amHEl0wXKdGZjhs64TTD
-ZiB0aFAaZClVvupHQViMDvcmtMnUSvonNXrtdTFtp7/vL3TV6tf0Ml1zNrDq+pLS
-TJxbNsd2+JkNzKjoxe/Hm+YCRZvYEJ8i9akvSgHnrtYi5XsVF0U8ZjiEghQj4YsP
-52pfpUhz
-=hqob
------END PGP SIGNATURE-----
-
---nZoFPyLGA3ncA+OI--
