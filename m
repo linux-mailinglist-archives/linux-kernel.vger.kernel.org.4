@@ -2,215 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1946A4C93
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED056A4CA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjB0U5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S229512AbjB0VAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjB0U5b (ORCPT
+        with ESMTP id S229558AbjB0VAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:57:31 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A480425E15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:57:29 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id c18so5076250wmr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:57:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mIN6ww9oLAv0WN7ho6gwiiph4rXuoFMoHbwtuWGbIHU=;
-        b=Bs3g5spl/LV0O4iixDMwb4HTPJIpTc4sSBY9TtNyJL/a3/Nrx2kG5iGhiEX08R9jBR
-         gCcRIOqtI3O6Y3suKyaQJfD7NVzanN4Vj5SFZOL854LgBBdVnnQwJcG3WpU3k89X744Y
-         IiZlrJdvjiVqN0gYOioxEghDHwwp+0DdIOlpwzB18fM00B8mVRsockbPsOkP4mfo2eNp
-         ZRz3sxf5CAG7g9y+dy7ZEieNW7LQY3+UX3vy1Pxh6mNeA1dNKYnhLC+/CDdKre9YRDhb
-         Gnczi0b8tPU04O1L0L2Sg6YmZo8O6b05iyzA19wLaeNrkoSaWVYPq8TySqXIzDw7bHRu
-         qS0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mIN6ww9oLAv0WN7ho6gwiiph4rXuoFMoHbwtuWGbIHU=;
-        b=TA9srj/I5t3px4wIXxFVUbS6E5Lpok4stZDP3uCjwL4EVjvsni0hYlL+ZbBTP+RQmC
-         5eQnB/X3Vss+BHrSCTy76cpHoQEN97kg/tTvkd2hfQa8em71tRs39CQ3D4CFZZFIG99L
-         Kr5LBM7bbZysK9sfNHSNc3OsZSfz3pfbPmpeKOi/EiXcqSzoEIsYAWjz3cD0lIrxkrHB
-         l/OJ61OOJnMvWv6ClqnwouWr4rA24XXMeb9iF733UJwCbAEctPJUpy0Gh8c891FMrMXq
-         JcdDg3hTul5J9Jg/Xw2JXg4Bd5HzYUSjeZ56ECOHDy3TMLm4+5WisL6SDo3Zmpxe5x5w
-         psEQ==
-X-Gm-Message-State: AO0yUKVsb2sV6UVohzq53/nopg/GgQv6XIKQ0aY9ifMX4vc4x2FEOUwa
-        ExC1jRDhoCeonDcpQNzAvb77dw==
-X-Google-Smtp-Source: AK7set9cV982AukExVNBM7MELBIvJxaOh5XSQ0Jm7pXb7qLYusYIVl6TO/LrXSSLszGi4N40OISX5g==
-X-Received: by 2002:a05:600c:540a:b0:3eb:fc6:79cf with SMTP id he10-20020a05600c540a00b003eb0fc679cfmr398908wmb.6.1677531447998;
-        Mon, 27 Feb 2023 12:57:27 -0800 (PST)
-Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
-        by smtp.gmail.com with ESMTPSA id c16-20020a05600c0ad000b003e214803343sm13479356wmr.46.2023.02.27.12.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 12:57:27 -0800 (PST)
-Date:   Mon, 27 Feb 2023 20:57:25 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on
- suspend-resume
-Message-ID: <20230227205725.dipvh3i7dvyrv4tv@airbuntu>
-References: <20230206221428.2125324-1-qyousef@layalina.io>
- <20230223153859.37tqoqk33oc6tv7o@airbuntu>
- <5f087dd8-3e39-ce83-fe24-afa5179c05d9@arm.com>
+        Mon, 27 Feb 2023 16:00:08 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA0623C61;
+        Mon, 27 Feb 2023 13:00:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yxNQq6iAQdNqxHxg6xpTtkOHUc+Bubub8MOHjovJQps=; b=qyVfgukQMEl2DxmqtcwlmlPvAS
+        zB0a5j0IaU+dxaa+FZ/IrkDC1aspPRZqLBVqU/IRHkrXqonSnmBFUMTmdh2tcYPrQSuypIAHnm0b1
+        5nq6HJBj0bHs+FMmFAGL7rFgfDSjnVnNau1zD4uX6PoNp/gn/PZqO9OJ+Q+t9IOSEgdIzGVjlnExq
+        ivSxHAYdsaCHjb7xSXNSR5lKVZta2YosZU6uAKuG9E5SaeJyLyY0zgYZqWg4R35ZetWFvFy6ffs/f
+        fxJv1XsiUiYUHph/6lWq07apbkvD7+RNGehLp3qdjHr8/OXCMR2nnTUD4VA1sa5QNJq1aXf7S0Q6j
+        qzusSVVg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39650)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pWkbF-0003hx-So; Mon, 27 Feb 2023 20:59:57 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pWkbD-0001zh-G7; Mon, 27 Feb 2023 20:59:55 +0000
+Date:   Mon, 27 Feb 2023 20:59:55 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Olof Johansson <olof@lixom.net>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Message-ID: <Y/0Zy0nUmorvrp1u@shell.armlinux.org.uk>
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
+ <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5f087dd8-3e39-ce83-fe24-afa5179c05d9@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/24/23 16:14, Dietmar Eggemann wrote:
-> On 23/02/2023 16:38, Qais Yousef wrote:
+On Mon, Feb 27, 2023 at 09:38:54PM +0100, Arnd Bergmann wrote:
+> On Mon, Feb 27, 2023, at 21:23, Larry Finger wrote:
+> > On 2/27/23 07:34, Arnd Bergmann wrote:
 > 
-> IMHO the patch title is misleading since what you want to avoid in
-> certain cases is that the RD DL accounting is updated.
+> >
+> > Your patch set also breaks my PowerBook G4. The output of 'lspci -nn | grep 
+> > Network' shows the following before your patch is applied:
+> >
+> > 0001:10:12.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4306 
+> > 802.11b/g Wireless LAN Controller [14e4:4320] (rev 03)
+> > 0001:11:00.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4318 
+> > [AirForce One 54g] 802.11g Wireless LAN Controller [14e4:4318] (rev 02)
+> >
+> > The first of these is broken and built into the laptop. The second is plugged 
+> > into a PCMCIA slot, and uses yenta-socket as a driver.
+> >
+> > When your patches are applied, the second entry vanishes.
+> >
+> > Yes, this hardware is ancient, but I would prefer having this wifi interface 
+> > work. I can provide any output you need.
+> 
+> Is this the Cardbus or the PCMCIA version of the BCM4306 device? As far
+> as I understand this particular chip can be wired up either way inside
+> of the card, and the PowerBook G4 supports both types of devices.
+> 
+> If it's the PCMCIA version, then dropping support for it was the idea
+> of the patch series that we can debate, but if it was the Cardbus version
+> that broke, then this was likely a bug I introduced by accident.
 
-The code calls it rebuild_root_domain() ..
+If it shows up as a PCI device, it will be cardbus, not 16-bit ISA.
 
-> 
-> > On 02/06/23 22:14, Qais Yousef wrote:
-> >> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
+PCMCIA cards don't show up in lspci.
 
-.. and so is the original patch title.
-
-I think I have enough explanation in the commit message and renamed the
-function name to be more descriptive too.
-
-> >> enabled rebuilding root domain on cpuset and hotplug operations to
-> >> correct deadline accounting.
-> >>
-> >> Rebuilding root domain is a slow operation and we see 10+ of ms delays
-> >> on suspend-resume because of that (worst case captures 20ms which
-> >> happens often).
-> >>
-> >> Since nothing is expected to change on suspend-resume operation; skip
-> >> rebuilding the root domains to regain the some of the time lost.
-> >>
-> >> Achieve this by refactoring the code to pass whether dl accoutning needs
-> >> an update to rebuild_sched_domains(). And while at it, rename
-> >> rebuild_root_domains() to update_dl_rd_accounting() which I believe is
-> >> a more representative name since we are not really rebuilding the root
-> >> domains, but rather updating dl accounting at the root domain.
-> >>
-> >> Some users of rebuild_sched_domains() will skip dl accounting update
-> >> now:
-> >>
-> >> 	* Update sched domains when relaxing the domain level in cpuset
-> >> 	  which only impacts searching level in load balance
-> 
-> This one is cpuset related. (1)
-> 
-> >> 	* update sched domains when cpufreq governor changes and we need
-> >> 	  to create the perf domains
-> 
-> This one is drivers/base/arch_topology.c [arm/arm64/...] related. (2)
-> 
-> There are several levels of passing this `update_dl_accounting`
-> information through. I guess it looks like this:
-> 
-> 					update_dl_accounting
-> 
-> arm/arm64/riscv/parisc specific:
-> update_topology_flags_workfn()		true
-> rebuild_sched_domains_energy()		false (2)
-> 
-> cpuset_hotplug_workfn()                 cpus_updated ||
->                          force_rebuild == CPUSET_FORCE_REBUILD_PRS_ERROR
-> 
-> ->rebuild_sched_domains(update_dl_accounting)
-> 
->   update_cpumasks_hier()		true
->   update_relax_domain_level()		false (1)
->   update_flag()				true
->   update_prstate()			true
-> 
->   ->rebuild_sched_domains_locked(update_dl_accounting)
-> 
->     ->partition_and_rebuild_sched_domains(..., update_dl_accounting)
-> 
->         if (update_dl_accounting)
->           update_dl_rd_accounting()
-> 
-> 
-> There is already a somehow hidden interface for `sd/rd rebuild`
-> 
->   int __weak arch_update_cpu_topology(void)
-> 
-> which lets partition_sched_domains_locked() figure out whether sched
-> domains have to be rebuild..
-> 
-> But in your case it is more on the interface `cpuset/hotplug -> sd/rd
-> rebuild` and not only `arch -> `sd/rd rebuild``.
-> 
-> IMHO, it would be still nice to have only one way to tell `sd/rd
-> rebuild` what to do and what not to do during sd/rd/(pd) rebuild.
-
-IIUC you're suggesting to introduce some new mechanism to detect if hotplug has
-lead to a cpu to disappear or not and use that instead? Are you saying I can
-use arch_update_cpu_topology() for that? Something like this?
-
-	diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-	index e5ddc8e11e5d..60c3dcf06f0d 100644
-	--- a/kernel/cgroup/cpuset.c
-	+++ b/kernel/cgroup/cpuset.c
-	@@ -1122,7 +1122,7 @@ partition_and_rebuild_sched_domains(int ndoms_new, cpumask_var_t doms_new[],
-	 {
-		mutex_lock(&sched_domains_mutex);
-		partition_sched_domains_locked(ndoms_new, doms_new, dattr_new);
-	-       if (update_dl_accounting)
-	+       if (arch_update_cpu_topology())
-			update_dl_rd_accounting();
-		mutex_unlock(&sched_domains_mutex);
-	 }
-
-I am not keen on this. arm64 seems to just read a value without a side effect.
-But x86 does reset this value so we can't read it twice in the same call tree
-and I'll have to extract it.
-
-The better solution that was discussed before is to not iterate through every
-task in the system and let cpuset track when dl tasks are added to it and do
-smarter iteration. ATM even if there are no dl tasks in the system we'll
-blindly go through every task in the hierarchy to update nothing.
-
-But I'll leave that to Juri to address if he wants. The original change has
-introduced a regression and people have noticed when phones cycle through
-suspend resume (screen unlock). Juri - could you please chip in on how you want
-to address this regression? In theory I should be just a reporter, but trying
-my best to help ;-)
-
-
-Cheers
-
---
-Qais Yousef
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
