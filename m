@@ -2,161 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE546A4C34
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847876A4C36
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjB0UYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S229932AbjB0UYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjB0UYE (ORCPT
+        with ESMTP id S229779AbjB0UYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:24:04 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E332384E;
-        Mon, 27 Feb 2023 12:23:59 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-17227cba608so8709748fac.3;
-        Mon, 27 Feb 2023 12:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4AFZ9m2Uo0roC/no8Q0t3rsuUCj3YEMdleppwDbbZ0w=;
-        b=CM81SwPHmyUGm/GQeR7qj5jBPrjlR+voIRtCrsnzbrB4S20f1QYqkhPw6wlD4rwCee
-         hu0lwmWD5nd99ACC1pmn9zD7Sz0IeJQOk5GdvT3PZHusQX0/DaBdqhh5Ha+5r2P7rMdQ
-         C6dNkblhacfdvZ2GNYFNXECQaN0Gnoaqxe8v3nWeIKTeO+gCZThGpwP0SoMb46KV793v
-         jzX0FLmtQihCk2wA2R78iRiTOm6LahWIe8mNvreRl++twD2KOsG04rqG/bC6kI47lg8+
-         /am2Yf4zMI/Hj1fGNrlO0WRJtn7wT/wUeY0vodFe+nu3S8SLz0twBzrL5KJNaZ2N3rQX
-         HpHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4AFZ9m2Uo0roC/no8Q0t3rsuUCj3YEMdleppwDbbZ0w=;
-        b=5kIXtEUmbqx9Xe9gWgLWPJVdznCVvX+7RLKFN+DILHkBJc7gCpbj/NzCFxbk0W255q
-         Z5gsu7TZdvNz3gdkHtpgXZnIpcTxQZExIQZi+O+5PpnkWE6qtCZNulB7koeyAMKIYy7Y
-         akTdRXf5+WiYc7Hdo5sNdk6SK7LN1adcZnxEFyJb8zS45lFNjy4/jtXcy5kg0tnxR1ub
-         DicieuwPd48cmRH40RBZO38wxA3CCufq6/eJ3RLvbZTupJ3mjkOR7WfghheMCQTzXD23
-         uaFBpzZoiaY8WE3o0vH29B6kLLQSXeAiH6GQ1uujAlfQfPO1OYjfX5gIaJhaC73Wic5X
-         17DA==
-X-Gm-Message-State: AO0yUKWsP5yKtVJYqArIWsJCKC69aQFDiJCGmk5TgeLlRlbR9TW8bFqI
-        ffwmfvf39hFjvVCBtySDvi4=
-X-Google-Smtp-Source: AK7set9W6WLCz+dx+ySEZpPGkbpRb5svOjsSEklcRriG8mHuhdKSqyX27vGIsZtNpEXNGPsvKAnRWQ==
-X-Received: by 2002:a05:6870:a116:b0:16e:87f:424 with SMTP id m22-20020a056870a11600b0016e087f0424mr19167088oae.47.1677529439164;
-        Mon, 27 Feb 2023 12:23:59 -0800 (PST)
-Received: from [192.168.1.135] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id h9-20020a4aa289000000b005253a5cc3cfsm3002535ool.29.2023.02.27.12.23.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 12:23:58 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
-Date:   Mon, 27 Feb 2023 14:23:56 -0600
+        Mon, 27 Feb 2023 15:24:42 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27D24121
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:24:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677529474; x=1709065474;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iTd/k0mMIIx7db8A87KH6nHt2zM3+2Nlr7MQUFWEhqs=;
+  b=YKUzseU8yeMmf5ko34GlDFeBmwtW0yKOS2CAKc5FxUCdZIYf+owL73gk
+   MdsM9InJiCj46mSTR3sueJSbVI6c6iKr1SDpO+lAZk3YZxb6VlSwP7Xnz
+   YyRlZcI5d/2aQqGt5wexs4q4fO6rk27WU40mh4WCf06Q0pb4nNYl8bwph
+   391f+GIFcP3HE8/mA0j1gaN07QQaJ5IFSRPRBvBUxboKsjyiGorDshI0X
+   ChDFhUuVUwIhvsY1MjCloOtxViaA3T43S3HkcOuUsX5IMGT4wSbOAzzKq
+   0NVsEF64ixkyY/QLpS/9erzSnBKR04RGhifIR5slT/lO6SpTO03OLrAmK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="398736688"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="398736688"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 12:24:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="1002936862"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="1002936862"
+Received: from jekeller-desk.amr.corp.intel.com (HELO jekeller-desk.jekeller.internal) ([10.166.241.1])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 12:24:33 -0800
+From:   Jacob Keller <jacob.e.keller@intel.com>
+To:     Julia Lawall <Julia.Lawall@lip6.fr>
+Cc:     Jacob Keller <jacob.e.keller@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        cocci@systeme.lip6.fr, linux-kernel@vger.kernel.org
+Subject: [PATCH] coccinelle: semantic patch to check for potential struct_size calls
+Date:   Mon, 27 Feb 2023 12:24:28 -0800
+Message-Id: <20230227202428.3657443-1-jacob.e.keller@intel.com>
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f83
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Olof Johansson <olof@lixom.net>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-References: <20230227133457.431729-1-arnd@kernel.org>
-Content-Language: en-US
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <20230227133457.431729-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/23 07:34, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Based on some recent discussions [1][2][3], I experimented wtih what
-> drivers/pcmcia would look like if we completely removed 16-bit support,
-> which was one of the options that Dominik suggested for winding down
-> pcmcia maintenance.
-> 
-> The remaining cardbus/yenta support is essentially a PCI hotplug driver
-> with a slightly unusual sysfs interface, and it would still support all
-> 32-bit cardbus hosts and cards, but no longer work with the even older
-> 16-bit cards that require the pcmcia_driver infrastructure.
-> 
-> I don't expect this to be a problem normal laptop support, as the last
-> PC models that predate Cardbus support (e.g. 1997 ThinkPad 380ED) are
-> all limited to i586MMX CPUs and 80MB of RAM. This is barely enough to
-> boot Tiny Core Linux but not a regular distro.
-> 
-> Support for device drivers is somewhat less clear. Losing support for
-> 16-bit cards in cardbus sockets is obviously a limiting factor for
-> anyone who still has those cards, but there is also a good chance that
-> the only reason to keep the cards around is for using them in pre-cardbus
-> machines that cannot be upgrade to 32-bit devices.
-> 
-> Completely removing the 16-bit PCMCIA support would however break some
-> 20+ year old embedded machines that rely on CompactFlash cards as their
-> mass-storage device (extension), this notably includes early PocketPC
-> models and the reference implementations for OMAP1, StrongARM1100,
-> Alchemy and PA-Semi. All of these are still maintained, though most
-> of the PocketPC machines got removed in the 6.3 merge window and the
-> PA-Semi Electra board is the only one that was introduced after
-> 2003.
-> 
-> The approach that I take in this series is to split drivers/pcmcia
-> into two mutually incompatible parts: the Cardbus support contains
-> all the code that is relevant for post-1997 laptops and gets moved
-> to drivers/pci/hotplug, while the drivers/pcmcia/ subsystem is
-> retained for both the older laptops and the embedded systems but no
-> longer works with the yenta socket host driver. The BCM63xx
-> PCMCIA/Cardbus host driver appears to be unused and conflicts with
-> this series, so it is removed in the process.
-> 
-> My series does not touch any of the pcmcia_driver instances, but
-> if there is consensus about splitting out the cardbus support,
-> a lot of them can probably get removed as a follow-up.
+include/linux/overflow.h includes helper macros intended for calculating
+sizes of allocations. These macros prevent accidental overflow by
+saturating at SIZE_MAX.
 
-Arnd,
+In general when calculating such sizes use of the macros is preferred. Add
+a semantic patch which can detect code patterns which can be replaced by
+struct_size.
 
-Your patch set also breaks my PowerBook G4. The output of 'lspci -nn | grep 
-Network' shows the following before your patch is applied:
+Note that I set the confidence to medium because this patch doesn't make an
+attempt to ensure that the relevant array is actually a flexible array. The
+struct_size macro does specifically require a flexible array. In many cases
+the detected code could be refactored to a flexible array, but this is not
+always possible (such as if there are multiple over-allocations).
 
-0001:10:12.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4306 
-802.11b/g Wireless LAN Controller [14e4:4320] (rev 03)
-0001:11:00.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4318 
-[AirForce One 54g] 802.11g Wireless LAN Controller [14e4:4318] (rev 02)
+Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Julia Lawall <Julia.Lawall@lip6.fr>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+Cc: cocci@systeme.lip6.fr
+Cc: linux-kernel@vger.kernel.org
 
-The first of these is broken and built into the laptop. The second is plugged 
-into a PCMCIA slot, and uses yenta-socket as a driver.
+ scripts/coccinelle/misc/struct_size.cocci | 74 +++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 scripts/coccinelle/misc/struct_size.cocci
 
-When your patches are applied, the second entry vanishes.
+diff --git a/scripts/coccinelle/misc/struct_size.cocci b/scripts/coccinelle/misc/struct_size.cocci
+new file mode 100644
+index 000000000000..4ede9586e3c6
+--- /dev/null
++++ b/scripts/coccinelle/misc/struct_size.cocci
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0-only
++///
++/// Check for code that could use struct_size().
++///
++// Confidence: Medium
++// Author: Jacob Keller <jacob.e.keller@intel.com>
++// Copyright: (C) 2023 Intel Corporation
++// Options: --no-includes --include-headers
++
++virtual patch
++virtual context
++virtual org
++virtual report
++
++// the overflow Kunit tests have some code which intentionally does not use
++// the macros, so we want to ignore this code when reporting potential
++// issues.
++@overflow_tests@
++identifier f = overflow_size_helpers_test;
++@@
++
++f
++
++//----------------------------------------------------------
++//  For context mode
++//----------------------------------------------------------
++
++@depends on !overflow_tests && context@
++expression E1, E2;
++identifier m;
++@@
++(
++* (sizeof(*E1) + (E2 * sizeof(*E1->m)))
++)
++
++//----------------------------------------------------------
++//  For patch mode
++//----------------------------------------------------------
++
++@depends on !overflow_tests && patch@
++expression E1, E2;
++identifier m;
++@@
++(
++- (sizeof(*E1) + (E2 * sizeof(*E1->m)))
+++ struct_size(E1, m, E2)
++)
++
++//----------------------------------------------------------
++//  For org and report mode
++//----------------------------------------------------------
++
++@r depends on !overflow_tests && (org || report)@
++expression E1, E2;
++identifier m;
++position p;
++@@
++(
++ (sizeof(*E1)@p + (E2 * sizeof(*E1->m)))
++)
++
++@script:python depends on org@
++p << r.p;
++@@
++
++coccilib.org.print_todo(p[0], "WARNING should use struct_size")
++
++@script:python depends on report@
++p << r.p;
++@@
++
++msg="WARNING: Use struct_size"
++coccilib.report.print_report(p[0], msg)
++
 
-Yes, this hardware is ancient, but I would prefer having this wifi interface 
-work. I can provide any output you need.
-
-Larry
-
+base-commit: 982818426a0ffaf93b0621826ed39a84be3d7d62
+-- 
+2.39.1.405.gd4c25cc71f83
 
