@@ -2,395 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E0A6A3BDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51F16A3BDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjB0Hyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 02:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S230025AbjB0Hz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 02:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB0Hyx (ORCPT
+        with ESMTP id S229471AbjB0Hz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 02:54:53 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065D8EC66
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:54:51 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id c3so1411985qtc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:54:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=snnxk3R92ahys5e04/EBmiQcmHyLqTEXiwOEel0/hFE=;
-        b=nthjjN7F18kRwv+48Iyl0RX0Qii5yotlmEg9MWcNO5K0QwP+8FFIjQL4w7Wv8A5eTb
-         H2PF1Q1+CxKx3xdedQGwn5H4V1FmShL/CyteobA5E+wOMrQaz6FHhqFrHFznbtYHxfnj
-         PfOiRHYOwBdahlS7h9PqN3XwNEMmtlmHLJIoEgJfZBMK/Y6ysb9ZfQxZlfU8VtCVoEw0
-         Ly2obf7xDiqbxWrB40nwcRPJPfy3EihV2bN646nX8R3+irNHMhetKfAZYvfwm3YjwccP
-         FL4K0fexvYujbmHOwQpyzpaYtX7oHMv9SlELftHitnCUpsbw1HxuFyYSTR6WLR8T8xsr
-         bMsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=snnxk3R92ahys5e04/EBmiQcmHyLqTEXiwOEel0/hFE=;
-        b=zwY027lvdevlUfFRBHz1gexwYzBy+PgIUyD3P8Yyf7JwzBQZbIfH3XQHrfsxlIG5wR
-         UjME8ykq/GqxFusWh+fRVesw5hGL0snm+bbX8ocVowhg10asBpLQ+mYHfJNh6U4stm4v
-         hWHD11uv8S6XNvJGZSK/Nov4wEPaiMnKNN5cCUTqMGffceupyLKXkYYIHE2DiVaERlaf
-         SUkrZuvmY38X9WOix/JeU8MRUhSswstqjD3gTEkvAIhE31H35SG4cQM/jM+p3oXobdUE
-         fU6f6/J+r5BtsNwwcL5o7vAPbwkDRN8FfrCGOBn5R9SOUy2X37yv6tJi9vdX7myBSE52
-         COsg==
-X-Gm-Message-State: AO0yUKU3JoeDq09xmRcbS7PwliJRhBwyEjbIBnWEvQpFDg83xGtlVl+f
-        J4GlYr6JFU/kAnF9tjbQNYoXER1vK/w=
-X-Google-Smtp-Source: AK7set/C5bCr630zyecI6+trMCubXC9xPZO58fw95qgfjznPusl5KIqb7YUlG+Q4SOS0pQEacu6iDw==
-X-Received: by 2002:a05:622a:1a29:b0:3ac:1bd5:b7ad with SMTP id f41-20020a05622a1a2900b003ac1bd5b7admr29204131qtb.33.1677484489581;
-        Sun, 26 Feb 2023 23:54:49 -0800 (PST)
-Received: from MBP.lan ([68.74.118.125])
-        by smtp.gmail.com with ESMTPSA id r23-20020ac85217000000b003b8238114d9sm4235937qtn.12.2023.02.26.23.54.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 Feb 2023 23:54:49 -0800 (PST)
-From:   Schspa Shi <schspa@gmail.com>
-To:     linux-kernel@vger.kernel.org, cocci@inria.fr, peterz@infradead.org,
-        mcgrof@kernel.org
-Cc:     Schspa Shi <schspa@gmail.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [RFC PATCH] cocci: cpi: add complete api check script
-Date:   Mon, 27 Feb 2023 15:53:47 +0800
-Message-Id: <20230227075346.69658-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 27 Feb 2023 02:55:27 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200F71027A
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677484526; x=1709020526;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=xQsnLwR6WvsW3HYMB5OebnDeFXQGQNEsYlVg6eCzsdo=;
+  b=GqX/DlM/h+UK5gHHCJGJzVgBKBn/EtsdCnWFJokG1XATCIwQlc+vzyr7
+   MDhk6ZmsuqlHfpct+IEdcT9+kLu7DrayyXLbtkZwEs9CJTr3UrACbTLOp
+   sP2+8NjXvZSOCxhV10Y4QtlX7TlHO/gFatpRnhcV6s863GwfMbpkqvzQY
+   LO3mgqA1IeBJisatj5TVa6oHLJoF8HU5CygJNDq0mo85oyvDELlSU83sT
+   aWI7yJoWwmR2IwaKD9if079IW6s+bYeelhdRu76yvZPCBBinaK3abfjC9
+   +etNZ6keMJrvUn4oS5DYgPg2hetbS8aIRknxdMcyTPDmjC9uPJwpjnh+t
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="332525920"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="332525920"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 23:55:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="623478659"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="623478659"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 23:55:20 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Bharata B Rao <bharata@amd.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <mgorman@suse.de>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <akpm@linux-foundation.org>, <luto@kernel.org>,
+        <tglx@linutronix.de>, <yue.li@memverge.com>,
+        <Ravikumar.Bangoria@amd.com>
+Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+References: <20230208073533.715-1-bharata@amd.com>
+        <878rh2b5zt.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <72b6ec8b-f141-3807-d7f2-f853b0f0b76c@amd.com>
+        <87zg9i9iw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <1547d291-1512-faae-aba5-0f84c3502be4@amd.com>
+        <c3e79d2e-97da-726e-bcaa-0258e3ddfafe@amd.com>
+        <87zg9c7rrf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <8fea74ec-8feb-1709-14f2-cecb63fdc9ed@amd.com>
+Date:   Mon, 27 Feb 2023 15:54:13 +0800
+In-Reply-To: <8fea74ec-8feb-1709-14f2-cecb63fdc9ed@amd.com> (Bharata B. Rao's
+        message of "Fri, 24 Feb 2023 09:06:49 +0530")
+Message-ID: <87v8jnbl22.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When DECLARE_COMPLETION_ONSTACK was used, the user must to ensure the other
-process won't reference the completion variable on stack. For a
-killable/interruptiable version, we need extra code(add locks/use xchg) to
-ensure this.
+Bharata B Rao <bharata@amd.com> writes:
 
-This patch provide a SmPL script to detect bad
-DECLARE_COMPLETION_ONSTACK(_MAP) API usage, but far from perfect.
+> On 17-Feb-23 11:33 AM, Huang, Ying wrote:
+>> Bharata B Rao <bharata@amd.com> writes:
+>> 
+>>> On 14-Feb-23 10:25 AM, Bharata B Rao wrote:
+>>>> On 13-Feb-23 12:00 PM, Huang, Ying wrote:
+>>>>>> I have a microbenchmark where two sets of threads bound to two 
+>>>>>> NUMA nodes access the two different halves of memory which is
+>>>>>> initially allocated on the 1st node.
+>>>>>>
+>>>>>> On a two node Zen4 system, with 64 threads in each set accessing
+>>>>>> 8G of memory each from the initial allocation of 16G, I see that
+>>>>>> IBS driven NUMA balancing (i,e., this patchset) takes 50% less time
+>>>>>> to complete a fixed number of memory accesses. This could well
+>>>>>> be the best case and real workloads/benchmarks may not get this much
+>>>>>> uplift, but it does show the potential gain to be had.
+>>>>>
+>>>>> Can you find a way to show the overhead of the original implementation
+>>>>> and your method?  Then we can compare between them?  Because you think
+>>>>> the improvement comes from the reduced overhead.
+>>>>
+>>>> Sure, will measure the overhead.
+>>>
+>>> I used ftrace function_graph tracer to measure the amount of time (in us)
+>>> spent in fault handling and task_work handling in both the methods when
+>>> the above mentioned benchmark was running.
+>>>
+>>> 			Default		IBS
+>>> Fault handling		29879668.71	1226770.84
+>>> Task work handling	24878.894	10635593.82
+>>> Sched switch handling			78159.846
+>>>
+>>> Total			29904547.6	11940524.51
+>> 
+>> Thanks!  You have shown the large overhead difference between the
+>> original method and your method.  Can you show the number of the pages
+>> migrated too?  I think the overhead / page can be a good overhead
+>> indicator too.
+>> 
+>> Can it be translated to the performance improvement?  Per my
+>> understanding, the total overhead is small compared with total run time.
+>
+> I captured some of the numbers that you wanted for two different runs.
+> The first case shows the data for a short run (less number of memory access
+> iterations) and the second one is for a long run (more number of iterations)
+>
+> Short-run
+> =========
+> Time taken or overhead (us) for fault, task_work and sched_switch
+> handling
+>
+> 			Default		IBS
+> Fault handling		29017953.99	1196828.67
+> Task work handling	10354.40	10356778.53
+> Sched switch handling			56572.21
+> Total overhead		29028308.39	11610179.41
+>
+> Benchmark score(us)	194050290	53963650
+> numa_pages_migrated	2097256		662755
+> Overhead / page		13.84		17.51
 
-This is a common problem, and a lot of drivers have simpler problem. The
-fellowing is a list of problems find by this SmPL patch, due to the complex
-use of wait_for_complete* API, there will still be some false negatives and
-false positives. This RFC patch is mainly used to discuss improvement
-methods. If we introduce the wait_for_complete*_onstack API, it will be
-easier to modify these problems, and the patch rules of SmPL will be very
-easy. In the process of trying to write SmPL scripts, I strongly recommend
-introducing two onstack APIs to complete this operation.
+From above, the overhead/page is similar.
 
-file:/Users/schspa/work/src/linux/drivers/infiniband/ulp/srpt/ib_srpt.c::2962 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/misc/tifm_7xx1.c::268 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/firmware/arm_scmi/driver.c::1001 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dispc-compat.c::595 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dispc-compat.c::491 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dispc-compat.c::538 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dispc-compat.c::645 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dsi.c::3175 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dsi.c::2360 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dsi.c::2314 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/video/fbdev/omap2/omapfb/dss/dsi.c::2634 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/gpu/drm/omapdrm/dss/dsi.c::1804 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/gpu/drm/omapdrm/dss/dsi.c::1758 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/gpu/drm/omapdrm/dss/dsi.c::2034 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/net/wireless/marvell/mwl8k.c::2259 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/net/wireless/mediatek/mt7601u/mcu.c::317 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/net/wireless/ti/wlcore/main.c::6674 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/net/wwan/t7xx/t7xx_state_monitor.c::416 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/soc/apple/rtkit.c::647 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/soc/apple/rtkit.c::653 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/soc/qcom/rpmh.c::269 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/aic94xx/aic94xx_tmf.c::339 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/snic/snic_ctl.c::242 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/snic/snic_scsi.c::1811 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/snic/snic_scsi.c::2266 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/snic/snic_scsi.c::1603 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/snic/snic_scsi.c::2073 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/qla2xxx/qla_os.c::1807 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/qla2xxx/qla_os.c::1328 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/ibmvscsi/ibmvfc.c::2466 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/aic7xxx/aic79xx_osm.c::844 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/aic7xxx/aic79xx_osm.c::2334 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/aic7xxx/aic7xxx_osm.c::2297 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/lpfc/lpfc_nvmet.c::2119 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/ipr.c::5153 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/scsi_error.c::1157 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/hisi_sas/hisi_sas_main.c::1215 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c::996 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c::867 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/isci/task.c::317 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/fnic/fnic_scsi.c::1844 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/fnic/fnic_scsi.c::2310 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/fnic/fnic_scsi.c::2086 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/scsi/fnic/fnic_scsi.c::2579 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/ufs/core/ufshcd.c::6752 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/ufs/core/ufshcd.c::4074 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/thunderbolt/ctl.c::604 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/i2c/busses/i2c-hisi.c::206 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/s390/cio/vfio_ccw_drv.c::71 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/slimbus/messaging.c::154 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/slimbus/qcom-ngd-ctrl.c::894 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/slimbus/qcom-ngd-ctrl.c::932 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/slimbus/qcom-ctrl.c::377 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/usb/core/devio.c::1142 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/usb/core/hcd.c::2229 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/spi/spi-hisi-sfc-v3xx.c::337 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/bluetooth/hci_bcm4377.c::955 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/i3c/master/mipi-i3c-hci/cmd_v1.c::336 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/i3c/master/mipi-i3c-hci/cmd_v2.c::278 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/i3c/master/mipi-i3c-hci/core.c::360 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/i3c/master/mipi-i3c-hci/core.c::312 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/i3c/master/mipi-i3c-hci/core.c::238 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/ata/libata-core.c::1558 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/w1/masters/ds1wm.c::285 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/w1/masters/ds1wm.c::233 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/drivers/w1/masters/ds1wm.c::262 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/lib/kunit/try-catch.c::76 was suspected to return a variable on stack
-file:/Users/schspa/work/src/linux/sound/aoa/soundbus/i2sbus/pcm.c::264 was suspected to return a variable on stack
+> Pages migrated per sec	72248.64	57083.95
+>
+> Default
+> -------
+> 			Total		Min	Max		Avg
+> do_numa_page		29017953.99	0.1	307.63		15.97
+> task_numa_work		10354.40	2.86	4573.60		175.50
+> Total			29028308.39
+>
+> IBS
+> ---
+> 			Total		Min	Max		Avg
+> ibs_overflow_handler	1196828.67	0.15	100.28		1.26
+> task_ibs_access_work	10356778.53	0.21	10504.14	28.42
+> hw_access_sched_in	56572.21	0.15	16.94		1.45
+> Total			11610179.41
+>
+>
+> Long-run
+> ========
+> Time taken or overhead (us) for fault, task_work and sched_switch
+> handling
+> 			Default		IBS
+> Fault handling		27437756.73	901406.37
+> Task work handling	1741.66		4902935.32
+> Sched switch handling			100590.33
+> Total overhead		27439498.38	5904932.02
+>
+> Benchmark score(us)	306786210.0	153422489.0
+> numa_pages_migrated	2097218		1746099
+> Overhead / page		13.08		3.38
 
-To fix this, we can add introducing two new API for this.
+But from this, the overhead/page is quite different.
 
-+
-+void complete_on_stack(struct completion **x)
-+{
-+       struct completion *comp = xchg(*x, NULL);
-+
-+       if (comp)
-+               complete(comp);
-+}
-+EXPORT_SYMBOL(complete_on_stack);
-+
-+int __sched wait_for_completion_state_on_stack(struct completion **x,
-+                                       unsigned int state)
-+{
-+       struct completion *comp = *x;
-+       int retval;
-+
-+       retval = wait_for_completion_state(comp, state);
-+       if (retval) {
-+               if (xchg(*x, NULL))
-+                       return retval;
-+
-+               /*
-+                * complete_on_stack will call complete shortly.
-+                */
-+               wait_for_completion(comp);
-+       }
-+
-+       return retval;
-+}
-+EXPORT_SYMBOL(wait_for_completion_state_on_stack);
+One possibility is that there's more "local" hint page faults in the
+original implementation, we can check "numa_hint_faults" and
+"numa_hint_faults_local" in /proc/vmstat for that.
 
-Link: https://lore.kernel.org/all/20221115140233.21981-1-schspa@gmail.com/T/#mf6a41a7009bb47af1b15adf2b7b355e495f609c4
-Link: https://lore.kernel.org/all/7d1021f1-c88e-5a03-3b92-087f9be37491@I-love.SAKURA.ne.jp/
+If
 
-CC: Julia Lawall <Julia.Lawall@inria.fr>
-CC: Nicolas Palix <nicolas.palix@imag.fr>
-CC: Matthias Brugger <matthias.bgg@gmail.com>
-CC: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Juri Lelli <juri.lelli@redhat.com>
-CC: Vincent Guittot <vincent.guittot@linaro.org>
-CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
-CC: Steven Rostedt <rostedt@goodmis.org>
-CC: Ben Segall <bsegall@google.com>
-CC: Mel Gorman <mgorman@suse.de>
-CC: Daniel Bristot de Oliveira <bristot@redhat.com>
-CC: Valentin Schneider <vschneid@redhat.com>
+  numa_hint_faults_local / numa_hint_faults
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- scripts/coccinelle/api/complete.cocci | 160 ++++++++++++++++++++++++++
- 1 file changed, 160 insertions(+)
- create mode 100644 scripts/coccinelle/api/complete.cocci
+is similar.  For each page migrated, the number of hint page fault is
+similar, and the run time for each hint page fault handler is similar
+too.  Or I made some mistake in analysis?
 
-diff --git a/scripts/coccinelle/api/complete.cocci b/scripts/coccinelle/api/complete.cocci
-new file mode 100644
-index 000000000000..d4cf32187180
---- /dev/null
-+++ b/scripts/coccinelle/api/complete.cocci
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+///
-+//  Copyright: (C) 2023 Schspa Shi.
-+//  Confidence: High
-+virtual report
-+
-+@r1 exists@
-+declarer name DECLARE_COMPLETION_ONSTACK;
-+declarer name DECLARE_COMPLETION_ONSTACK_MAP;
-+position p;
-+identifier done;
-+identifier func;
-+@@
-+
-+func(...) {
-+...
-+(
-+DECLARE_COMPLETION_ONSTACK(done@p);
-+|
-+DECLARE_COMPLETION_ONSTACK_MAP(done@p, ...);
-+)
-+...
-+}
-+
-+@locked exists@
-+identifier func=r1.func;
-+identifier done=r1.done;
-+position p1,p;
-+@@
-+
-+func(...) {
-+...
-+(
-+mutex_lock@p1
-+|
-+mutex_trylock@p1
-+)
-+ (...)
-+...  when != mutex_unlock(...)
-+done@p
-+...
-+}
-+
-+
-+@elocked exists@
-+identifier func=r1.func;
-+identifier done=r1.done;
-+position p1,p;
-+expression e;
-+@@
-+
-+func(...) {
-+...
-+e = &done;
-+...
-+(
-+mutex_lock@p1
-+|
-+mutex_trylock@p1
-+)
-+ (...)
-+...  when != mutex_unlock(...)
-+e@p
-+...
-+}
-+
-+
-+@has_wait_for_completion exists@
-+position p;
-+identifier done;
-+identifier func=r1.func;
-+identifier fb = { wait_for_completion, wait_for_completion_io};
-+expression e;
-+@@
-+
-+func(...) {
-+...
-+(
-+...
-+fb(&done@p);
-+...
-+|
-+e = &done;
-+...
-+fb(e@p);
-+)
-+...
-+}
-+
-+@has_while_wait exists@
-+position p;
-+identifier done, ret;
-+identifier func=r1.func;
-+identifier fb =~ "wait_for_completion.*";
-+expression e;
-+@@
-+
-+func(...) {
-+...
-+while (...) {
-+	...
-+	ret = fb(&done@p, e);
-+	...
-+}
-+...
-+}
-+
-+@has_while_wait2 exists@
-+position p;
-+identifier done;
-+identifier func=r1.func;
-+expression fb =~ "wait_for_completion.*";
-+@@
-+
-+func(...) {
-+...
-+while (fb(&done@p, ...) == 0) {
-+	...
-+}
-+...
-+}
-+
-+
-+@r2 depends on (!has_wait_for_completion && !has_while_wait && !has_while_wait2) exists@
-+declarer name DECLARE_COMPLETION_ONSTACK;
-+position p!={locked.p, elocked.p};
-+identifier done=r1.done;
-+identifier func=r1.func;
-+expression e;
-+@@
-+
-+func(...) {
-+...
-+(
-+wait_for_completion_interruptible(&done@p)
-+|
-+wait_for_completion_killable(&done@p)
-+|
-+wait_for_completion_timeout(&done@p, ...)
-+|
-+wait_for_completion_io_timeout(&done@p, ...)
-+|
-+wait_for_completion_interruptible_timeout(&done@p, ...)
-+|
-+wait_for_completion_killable_timeout(&done@p, ...)
-+|
-+try_wait_for_completion(&done@p)
-+|
-+wait_for_completion_timeout(e@p, ...)
-+)
-+...
-+}
-+
-+
-+@script:python depends on report@
-+fp << r2.p;
-+@@
-+
-+print('file:{:s}::{:s} was suspected to return a variable on stack'.format(fp[0].file, fp[0].line))
-+
--- 
-2.37.3
+> Pages migrated per sec	6836.08		11380.98
+>
+> Default
+> -------
+> 			Total		Min	Max		Avg
+> do_numa_page		27437756.73	0.08	363.475		15.03
+> task_numa_work		1741.66		3.294	1200.71		42.48
+> Total			27439498.38
+>
+> IBS
+> ---
+> 			Total		Min	Max		Avg
+> ibs_overflow_handler	901406.37	0.15	95.51		1.06
+> task_ibs_access_work	4902935.32	0.22	11013.68	9.64
+> hw_access_sched_in	100590.33	0.14	91.97		1.52
+> Total			5904932.02
+
+Thank you very much for detailed data.  Can you provide some analysis
+for your data?
+
+Best Regards,
+Huang, Ying
 
