@@ -2,234 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224276A387A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 03:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177F66A38A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 03:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjB0CZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 21:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        id S230145AbjB0CcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 21:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjB0CZd (ORCPT
+        with ESMTP id S231573AbjB0CcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 21:25:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD02ECDF8
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 18:22:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD9B960D33
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 02:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D44C4339B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 02:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677464438;
-        bh=DKX4bjELnRDqNqB8Xibfj95F2AwEphb/8kHdo67CygU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hfdS6BftSt27OjmlOt+JUdbKAi0qalls81x3ScbHGIIUbfIzzCm9NSBYVRPkCAoZi
-         +Hfq/v/eUSHQR28qshjGh6DKDOeaokVDtg95loi1nk4IvsWfKSXuwbc3rrFJGFGo70
-         rX/63w7FgJidAgnQC1StIAuJboVRR2jDifdpEOdB3eIeeDj/7PAzL+SlCKLGSFFsZh
-         yiB4zgam4cIRCKzGrX1rseOMW1ae/EYsUZgvM0whYZHbaaxBWTkLpqHEeh6PqrnWEv
-         uDisw9R56m0/hTykIPD2EbSEOuqQL90P+0NhuIcd2Psaj6bO9m1R4O2V5TEqUbNW+e
-         KgYKqSAJZSFjA==
-Received: by mail-lj1-f172.google.com with SMTP id y14so4941882ljq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 18:20:38 -0800 (PST)
-X-Gm-Message-State: AO0yUKWzvDno9WJQ6veAKlO0WK/AFY64m5q5WdqQX9cVQGXQwvbF2B8O
-        YX2z4mXbbWgp6Vk6/mgXNb07RfGMQ8Rgty7K0A==
-X-Google-Smtp-Source: AK7set9TwQ+Yn52E98mmUGHtGbh3/2lCt51pVRpWc51R7zlsaGH1EKaIm1duY59Jn1xjlBsYZwZCnHK6Q6CV2N4dFys=
-X-Received: by 2002:a05:651c:2cc:b0:295:b1af:64ca with SMTP id
- f12-20020a05651c02cc00b00295b1af64camr1067491ljo.7.1677464436309; Sun, 26 Feb
- 2023 18:20:36 -0800 (PST)
+        Sun, 26 Feb 2023 21:32:05 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B19059D9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 18:30:21 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 67AA524E1F5;
+        Mon, 27 Feb 2023 10:21:57 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 10:21:57 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 10:21:57 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Mon, 27 Feb 2023 10:21:57 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Alexandre Ghiti <alex@ghiti.fr>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: RE: [PATCH v4 2/4] RISC-V: Factor out common code of
+ __cpu_resume_enter()
+Thread-Topic: [PATCH v4 2/4] RISC-V: Factor out common code of
+ __cpu_resume_enter()
+Thread-Index: AQHZRZ0usaQdEx0RFEu95aWg+gkHKK7dYYwAgAS2G0A=
+Date:   Mon, 27 Feb 2023 02:21:56 +0000
+Message-ID: <3415321bb1a1451ca7cca68c9eae9511@EXMBX066.cuchost.com>
+References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
+ <20230221023523.1498500-3-jeeheng.sia@starfivetech.com>
+ <651d5f06-a22b-4cd9-1ec7-d198adf0a6f1@ghiti.fr>
+In-Reply-To: <651d5f06-a22b-4cd9-1ec7-d198adf0a6f1@ghiti.fr>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230221081224.23017-1-yongqiang.niu@mediatek.com>
-In-Reply-To: <20230221081224.23017-1-yongqiang.niu@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 27 Feb 2023 10:20:24 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-wcao3GF=uaGJvMRy+mJJkBz8wib1eAN98XHr195G_9g@mail.gmail.com>
-Message-ID: <CAAOTY_-wcao3GF=uaGJvMRy+mJJkBz8wib1eAN98XHr195G_9g@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/mediatek: add dma buffer control for drm plane disable
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>
-Cc:     CK Hu <ck.hu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yongqiang:
-
-Yongqiang Niu <yongqiang.niu@mediatek.com> =E6=96=BC 2023=E5=B9=B42=E6=9C=
-=8821=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=884:12=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> dma buffer release before overlay disable, that will cause
-> m4u translation fault warning.
->
-> add dma buffer control flow in mediatek driver:
-> get dma buffer when drm plane disable
-> put dma buffer when overlay really disable
-
-Add Fixes tag.
-
->
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.c  | 19 +++++++++++++++++--
->  drivers/gpu/drm/mediatek/mtk_drm_plane.c | 12 ++++++++++++
->  drivers/gpu/drm/mediatek/mtk_drm_plane.h |  1 +
->  3 files changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/me=
-diatek/mtk_drm_crtc.c
-> index 5071f1263216..ff7924d8a167 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> @@ -4,6 +4,7 @@
->   */
->
->  #include <linux/clk.h>
-> +#include <linux/dma-buf.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/mailbox_controller.h>
->  #include <linux/pm_runtime.h>
-> @@ -282,6 +283,14 @@ struct mtk_ddp_comp *mtk_drm_ddp_comp_for_plane(stru=
-ct drm_crtc *crtc,
->         return NULL;
->  }
->
-> +static void mtk_drm_dma_buf_put(struct mtk_plane_state *plane_state)
-> +{
-> +       if (plane_state && plane_state->pending.dma_buf) {
-> +               dma_buf_put(plane_state->pending.dma_buf);
-> +               plane_state->pending.dma_buf =3D NULL;
-> +       }
-> +}
-> +
->  #if IS_REACHABLE(CONFIG_MTK_CMDQ)
->  static void ddp_cmdq_cb(struct mbox_client *cl, void *mssg)
->  {
-> @@ -306,6 +315,7 @@ static void ddp_cmdq_cb(struct mbox_client *cl, void =
-*mssg)
->                         plane_state =3D to_mtk_plane_state(plane->state);
->
->                         plane_state->pending.config =3D false;
-> +                       mtk_drm_dma_buf_put(plane_state);
->                 }
->                 mtk_crtc->pending_planes =3D false;
->         }
-> @@ -318,6 +328,7 @@ static void ddp_cmdq_cb(struct mbox_client *cl, void =
-*mssg)
->                         plane_state =3D to_mtk_plane_state(plane->state);
->
->                         plane_state->pending.async_config =3D false;
-> +                       mtk_drm_dma_buf_put(plane_state);
->                 }
->                 mtk_crtc->pending_async_planes =3D false;
->         }
-> @@ -498,8 +509,10 @@ static void mtk_crtc_ddp_config(struct drm_crtc *crt=
-c,
->                                 mtk_ddp_comp_layer_config(comp, local_lay=
-er,
->                                                           plane_state,
->                                                           cmdq_handle);
-> -                       if (!cmdq_handle)
-> +                       if (!cmdq_handle) {
->                                 plane_state->pending.config =3D false;
-> +                               mtk_drm_dma_buf_put(plane_state);
-
-In shadow register case, it would also call into here, but it should
-put dma buf in irq handler.
-
-> +                       }
->                 }
->
->                 if (!cmdq_handle)
-> @@ -523,8 +536,10 @@ static void mtk_crtc_ddp_config(struct drm_crtc *crt=
-c,
->                                 mtk_ddp_comp_layer_config(comp, local_lay=
-er,
->                                                           plane_state,
->                                                           cmdq_handle);
-> -                       if (!cmdq_handle)
-> +                       if (!cmdq_handle) {
->                                 plane_state->pending.async_config =3D fal=
-se;
-> +                               mtk_drm_dma_buf_put(plane_state);
-> +                       }
->                 }
->
->                 if (!cmdq_handle)
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/m=
-ediatek/mtk_drm_plane.c
-> index d54fbf34b000..16495a057c42 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-> @@ -12,6 +12,7 @@
->  #include <drm/drm_framebuffer.h>
->  #include <drm/drm_gem_atomic_helper.h>
->  #include <linux/align.h>
-> +#include <linux/dma-buf.h>
->
->  #include "mtk_drm_crtc.h"
->  #include "mtk_drm_ddp_comp.h"
-> @@ -280,6 +281,17 @@ static void mtk_plane_atomic_disable(struct drm_plan=
-e *plane,
->         struct drm_plane_state *new_state =3D drm_atomic_get_new_plane_st=
-ate(state,
->                                                                          =
-  plane);
->         struct mtk_plane_state *mtk_plane_state =3D to_mtk_plane_state(ne=
-w_state);
-> +       struct drm_plane_state *old_state =3D drm_atomic_get_old_plane_st=
-ate(state,
-> +                                                                        =
-  plane);
-> +
-> +       if (old_state && old_state->fb) {
-> +               struct drm_gem_object *gem =3D old_state->fb->obj[0];
-> +
-> +               if (gem && gem->dma_buf) {
-> +                       get_dma_buf(gem->dma_buf);
-> +                       mtk_plane_state->pending.dma_buf =3D gem->dma_buf=
-;
-
-Should we check old pending.dma_buf is null here or somewhere else?
-I would like to make sure that old dma buf is put before new dma buf
-need to be put.
-
-Regards,
-Chun-Kuang.
-
-> +               }
-> +       }
->         mtk_plane_state->pending.enable =3D false;
->         wmb(); /* Make sure the above parameter is set before update */
->         mtk_plane_state->pending.dirty =3D true;
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.h b/drivers/gpu/drm/m=
-ediatek/mtk_drm_plane.h
-> index 8f39011cdbfc..b724e56b7283 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
-> @@ -33,6 +33,7 @@ struct mtk_plane_pending_state {
->         bool                            async_dirty;
->         bool                            async_config;
->         enum drm_color_encoding         color_encoding;
-> +       struct dma_buf                  *dma_buf;
->  };
->
->  struct mtk_plane_state {
-> --
-> 2.25.1
->
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQWxleGFuZHJlIEdoaXRp
+IDxhbGV4QGdoaXRpLmZyPg0KPiBTZW50OiBGcmlkYXksIDI0IEZlYnJ1YXJ5LCAyMDIzIDY6MTkg
+UE0NCj4gVG86IEplZUhlbmcgU2lhIDxqZWVoZW5nLnNpYUBzdGFyZml2ZXRlY2guY29tPjsgcGF1
+bC53YWxtc2xleUBzaWZpdmUuY29tOyBwYWxtZXJAZGFiYmVsdC5jb207IGFvdUBlZWNzLmJlcmtl
+bGV5LmVkdQ0KPiBDYzogbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2Vy
+bmVsQHZnZXIua2VybmVsLm9yZzsgTGV5Zm9vbiBUYW4gPGxleWZvb24udGFuQHN0YXJmaXZldGVj
+aC5jb20+OyBNYXNvbiBIdW8NCj4gPG1hc29uLmh1b0BzdGFyZml2ZXRlY2guY29tPg0KPiBTdWJq
+ZWN0OiBSZTogW1BBVENIIHY0IDIvNF0gUklTQy1WOiBGYWN0b3Igb3V0IGNvbW1vbiBjb2RlIG9m
+IF9fY3B1X3Jlc3VtZV9lbnRlcigpDQo+IA0KPiBIaSBTaWEsDQo+IA0KPiBPbiAyLzIxLzIzIDAz
+OjM1LCBTaWEgSmVlIEhlbmcgd3JvdGU6DQo+ID4gVGhlIGNwdV9yZXN1bWUoKSBmdW5jdGlvbiBp
+cyB2ZXJ5IHNpbWlsYXIgZm9yIHRoZSBzdXNwZW5kIHRvIGRpc2sgYW5kDQo+ID4gc3VzcGVuZCB0
+byByYW0gY2FzZXMuIEZhY3RvciBvdXQgdGhlIGNvbW1vbiBjb2RlIGludG8gcmVzdG9yZV9jc3Ig
+bWFjcm8NCj4gPiBhbmQgcmVzdG9yZV9yZWcgbWFjcm8uDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBTaWEgSmVlIEhlbmcgPGplZWhlbmcuc2lhQHN0YXJmaXZldGVjaC5jb20+DQo+ID4gLS0tDQo+
+ID4gICBhcmNoL3Jpc2N2L2luY2x1ZGUvYXNtL2Fzc2VtYmxlci5oIHwgNjIgKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrDQo+ID4gICBhcmNoL3Jpc2N2L2tlcm5lbC9zdXNwZW5kX2VudHJ5
+LlMgIHwgMzQgKystLS0tLS0tLS0tLS0tLQ0KPiA+ICAgMiBmaWxlcyBjaGFuZ2VkLCA2NSBpbnNl
+cnRpb25zKCspLCAzMSBkZWxldGlvbnMoLSkNCj4gPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNo
+L3Jpc2N2L2luY2x1ZGUvYXNtL2Fzc2VtYmxlci5oDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
+aC9yaXNjdi9pbmNsdWRlL2FzbS9hc3NlbWJsZXIuaCBiL2FyY2gvcmlzY3YvaW5jbHVkZS9hc20v
+YXNzZW1ibGVyLmgNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAw
+MDAwMC4uNzI3YTk3NzM1NDkzDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2FyY2gvcmlz
+Y3YvaW5jbHVkZS9hc20vYXNzZW1ibGVyLmgNCj4gPiBAQCAtMCwwICsxLDYyIEBADQo+ID4gKy8q
+IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkgKi8NCj4gPiArLyoNCj4gPiAr
+ICogQ29weXJpZ2h0IChDKSAyMDIzIFN0YXJGaXZlIFRlY2hub2xvZ3kgQ28uLCBMdGQuDQo+ID4g
+KyAqDQo+ID4gKyAqIEF1dGhvcjogSmVlIEhlbmcgU2lhIDxqZWVoZW5nLnNpYUBzdGFyZml2ZXRl
+Y2guY29tPg0KPiA+ICsgKi8NCj4gPiArDQo+ID4gKyNpZm5kZWYgX19BU1NFTUJMWV9fDQo+ID4g
+KyNlcnJvciAiT25seSBpbmNsdWRlIHRoaXMgZnJvbSBhc3NlbWJseSBjb2RlIg0KPiA+ICsjZW5k
+aWYNCj4gPiArDQo+ID4gKyNpZm5kZWYgX19BU01fQVNTRU1CTEVSX0gNCj4gPiArI2RlZmluZSBf
+X0FTTV9BU1NFTUJMRVJfSA0KPiA+ICsNCj4gPiArI2luY2x1ZGUgPGFzbS9hc20uaD4NCj4gPiAr
+I2luY2x1ZGUgPGFzbS9hc20tb2Zmc2V0cy5oPg0KPiA+ICsjaW5jbHVkZSA8YXNtL2Nzci5oPg0K
+PiA+ICsNCj4gPiArLyoNCj4gPiArICogcmVzdG9yZV9jc3IgLSByZXN0b3JlIGhhcnQncyBDU1Ig
+dmFsdWUNCj4gPiArICovDQo+ID4gKwkubWFjcm8gcmVzdG9yZV9jc3INCj4gPiArCQlSRUdfTAl0
+MCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfRVBDKShhMCkNCj4gPiArCQljc3J3CUNTUl9F
+UEMsIHQwDQo+ID4gKwkJUkVHX0wJdDAsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1NUQVRV
+UykoYTApDQo+ID4gKwkJY3NydwlDU1JfU1RBVFVTLCB0MA0KPiA+ICsJCVJFR19MCXQwLCAoU1VT
+UEVORF9DT05URVhUX1JFR1MgKyBQVF9CQURBRERSKShhMCkNCj4gPiArCQljc3J3CUNTUl9UVkFM
+LCB0MA0KPiA+ICsJCVJFR19MCXQwLCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9DQVVTRSko
+YTApDQo+ID4gKwkJY3NydwlDU1JfQ0FVU0UsIHQwDQo+ID4gKwkuZW5kbQ0KPiA+ICsNCj4gPiAr
+LyoNCj4gPiArICogcmVzdG9yZV9yZWcgLSBSZXN0b3JlIHJlZ2lzdGVycyAoZXhjZXB0IEEwIGFu
+ZCBUMC1UNikNCj4gPiArICovDQo+ID4gKwkubWFjcm8gcmVzdG9yZV9yZWcNCj4gPiArCQlSRUdf
+TAlyYSwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfUkEpKGEwKQ0KPiA+ICsJCVJFR19MCXNw
+LCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9TUCkoYTApDQo+ID4gKwkJUkVHX0wJZ3AsIChT
+VVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX0dQKShhMCkNCj4gPiArCQlSRUdfTAl0cCwgKFNVU1BF
+TkRfQ09OVEVYVF9SRUdTICsgUFRfVFApKGEwKQ0KPiA+ICsJCVJFR19MCXMwLCAoU1VTUEVORF9D
+T05URVhUX1JFR1MgKyBQVF9TMCkoYTApDQo+ID4gKwkJUkVHX0wJczEsIChTVVNQRU5EX0NPTlRF
+WFRfUkVHUyArIFBUX1MxKShhMCkNCj4gPiArCQlSRUdfTAlhMSwgKFNVU1BFTkRfQ09OVEVYVF9S
+RUdTICsgUFRfQTEpKGEwKQ0KPiA+ICsJCVJFR19MCWEyLCAoU1VTUEVORF9DT05URVhUX1JFR1Mg
+KyBQVF9BMikoYTApDQo+ID4gKwkJUkVHX0wJYTMsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBU
+X0EzKShhMCkNCj4gPiArCQlSRUdfTAlhNCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfQTQp
+KGEwKQ0KPiA+ICsJCVJFR19MCWE1LCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9BNSkoYTAp
+DQo+ID4gKwkJUkVHX0wJYTYsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX0E2KShhMCkNCj4g
+PiArCQlSRUdfTAlhNywgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfQTcpKGEwKQ0KPiA+ICsJ
+CVJFR19MCXMyLCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9TMikoYTApDQo+ID4gKwkJUkVH
+X0wJczMsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1MzKShhMCkNCj4gPiArCQlSRUdfTAlz
+NCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfUzQpKGEwKQ0KPiA+ICsJCVJFR19MCXM1LCAo
+U1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9TNSkoYTApDQo+ID4gKwkJUkVHX0wJczYsIChTVVNQ
+RU5EX0NPTlRFWFRfUkVHUyArIFBUX1M2KShhMCkNCj4gPiArCQlSRUdfTAlzNywgKFNVU1BFTkRf
+Q09OVEVYVF9SRUdTICsgUFRfUzcpKGEwKQ0KPiA+ICsJCVJFR19MCXM4LCAoU1VTUEVORF9DT05U
+RVhUX1JFR1MgKyBQVF9TOCkoYTApDQo+ID4gKwkJUkVHX0wJczksIChTVVNQRU5EX0NPTlRFWFRf
+UkVHUyArIFBUX1M5KShhMCkNCj4gPiArCQlSRUdfTAlzMTAsIChTVVNQRU5EX0NPTlRFWFRfUkVH
+UyArIFBUX1MxMCkoYTApDQo+ID4gKwkJUkVHX0wJczExLCAoU1VTUEVORF9DT05URVhUX1JFR1Mg
+KyBQVF9TMTEpKGEwKQ0KPiA+ICsJLmVuZG0NCj4gPiArDQo+ID4gKyNlbmRpZgkvKiBfX0FTTV9B
+U1NFTUJMRVJfSCAqLw0KPiANCj4gDQo+IFlvdSBpbnRyb2R1Y2UgYXNzZW1ibGVyLmggd2hpY2gg
+aW4gdGhlIGZ1dHVyZSBtYXkgY29udGFpbiBvdGhlciBhc3NlbWJseQ0KPiBmdW5jdGlvbnMgbm90
+IHJlbGF0ZWQgdG8gc3VzcGVuZDogSSdkIHJlbmFtZSB0aG9zZSBtYWNyb3Mgc28gdGhhdCB3ZQ0K
+PiBrbm93IHRoZXkgYXJlIHN1c3BlbmQgcmVsYXRlZCwgc29tZXRoaW5nIGxpa2UNCj4gc3VzcGVu
+ZF9yZXN0b3JlX3JlZ3Mvc3VzcGVuZF9yZXN0b3JlX2NzcnMuDQpTdXJlLCB0aGVzZSBjYW4gYmUg
+ZG9uZS4NCj4gDQo+IEFuZCBpbnN0ZWFkIG9mIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1hY
+WCkgeW91IGNvdWxkIGludHJvZHVjZQ0KPiBTVVNQRU5EX0NPTlRFWFRfUkVHU19QVF9YWFggaW4g
+YXNtLW9mZnNldHMuYz8NClRoZXJlIGFyZSBhbHJlYWR5IFBUX1hYWCBkZWZpbmVkIGluIHRoZSBh
+c20tb2Zmc2V0LmMsIHdlIHNob3VsZCBub3QgY3JlYXRlIGFub3RoZXIgc2V0IG9mIFNVU1BFTkRf
+Q09OVEVYVF9SRUdTX1BUX1hYWCBiZWNhdXNlIHdlIGNhbiBqdXN0IHJlLXVzZSB0aGUgZGVmaW5p
+dGlvbiBpbnN0ZWFkIG9mIGR1cGxpY2F0ZSBhbm90aGVyIHNldCBvZiBvZmZzZXQgd2hpY2ggYXJl
+IGRvaW5nIHRoZSBzYW1lIHRoaW5nLiBTbywgSSB3b3VsZCByYXRoZXIgc3RpY2sgd2l0aCB0aGUg
+Y3VycmVudCBkZWZpbml0aW9uLg0KCURFRklORShQVF9TSVpFLCBzaXplb2Yoc3RydWN0IHB0X3Jl
+Z3MpKTsNCglPRkZTRVQoUFRfRVBDLCBwdF9yZWdzLCBlcGMpOw0KCU9GRlNFVChQVF9SQSwgcHRf
+cmVncywgcmEpOw0KCU9GRlNFVChQVF9GUCwgcHRfcmVncywgczApOw0KCU9GRlNFVChQVF9TMCwg
+cHRfcmVncywgczApOw0KCU9GRlNFVChQVF9TMSwgcHRfcmVncywgczEpOw0KCU9GRlNFVChQVF9T
+MiwgcHRfcmVncywgczIpOw0KPiANCj4gDQo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3Yva2Vy
+bmVsL3N1c3BlbmRfZW50cnkuUyBiL2FyY2gvcmlzY3Yva2VybmVsL3N1c3BlbmRfZW50cnkuUw0K
+PiA+IGluZGV4IGFhZmNjYTU4YzE5ZC4uNzRhOGZhYjhlMGY2IDEwMDY0NA0KPiA+IC0tLSBhL2Fy
+Y2gvcmlzY3Yva2VybmVsL3N1c3BlbmRfZW50cnkuUw0KPiA+ICsrKyBiL2FyY2gvcmlzY3Yva2Vy
+bmVsL3N1c3BlbmRfZW50cnkuUw0KPiA+IEBAIC03LDYgKzcsNyBAQA0KPiA+ICAgI2luY2x1ZGUg
+PGxpbnV4L2xpbmthZ2UuaD4NCj4gPiAgICNpbmNsdWRlIDxhc20vYXNtLmg+DQo+ID4gICAjaW5j
+bHVkZSA8YXNtL2FzbS1vZmZzZXRzLmg+DQo+ID4gKyNpbmNsdWRlIDxhc20vYXNzZW1ibGVyLmg+
+DQo+ID4gICAjaW5jbHVkZSA8YXNtL2Nzci5oPg0KPiA+ICAgI2luY2x1ZGUgPGFzbS94aXBfZml4
+dXAuaD4NCj4gPg0KPiA+IEBAIC04MywzOSArODQsMTAgQEAgRU5UUlkoX19jcHVfcmVzdW1lX2Vu
+dGVyKQ0KPiA+ICAgCWFkZAlhMCwgYTEsIHplcm8NCj4gPg0KPiA+ICAgCS8qIFJlc3RvcmUgQ1NS
+cyAqLw0KPiA+IC0JUkVHX0wJdDAsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX0VQQykoYTAp
+DQo+ID4gLQljc3J3CUNTUl9FUEMsIHQwDQo+ID4gLQlSRUdfTAl0MCwgKFNVU1BFTkRfQ09OVEVY
+VF9SRUdTICsgUFRfU1RBVFVTKShhMCkNCj4gPiAtCWNzcncJQ1NSX1NUQVRVUywgdDANCj4gPiAt
+CVJFR19MCXQwLCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9CQURBRERSKShhMCkNCj4gPiAt
+CWNzcncJQ1NSX1RWQUwsIHQwDQo+ID4gLQlSRUdfTAl0MCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdT
+ICsgUFRfQ0FVU0UpKGEwKQ0KPiA+IC0JY3NydwlDU1JfQ0FVU0UsIHQwDQo+ID4gKwlyZXN0b3Jl
+X2Nzcg0KPiA+DQo+ID4gICAJLyogUmVzdG9yZSByZWdpc3RlcnMgKGV4Y2VwdCBBMCBhbmQgVDAt
+VDYpICovDQo+ID4gLQlSRUdfTAlyYSwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfUkEpKGEw
+KQ0KPiA+IC0JUkVHX0wJc3AsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1NQKShhMCkNCj4g
+PiAtCVJFR19MCWdwLCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9HUCkoYTApDQo+ID4gLQlS
+RUdfTAl0cCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfVFApKGEwKQ0KPiA+IC0JUkVHX0wJ
+czAsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1MwKShhMCkNCj4gPiAtCVJFR19MCXMxLCAo
+U1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9TMSkoYTApDQo+ID4gLQlSRUdfTAlhMSwgKFNVU1BF
+TkRfQ09OVEVYVF9SRUdTICsgUFRfQTEpKGEwKQ0KPiA+IC0JUkVHX0wJYTIsIChTVVNQRU5EX0NP
+TlRFWFRfUkVHUyArIFBUX0EyKShhMCkNCj4gPiAtCVJFR19MCWEzLCAoU1VTUEVORF9DT05URVhU
+X1JFR1MgKyBQVF9BMykoYTApDQo+ID4gLQlSRUdfTAlhNCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdT
+ICsgUFRfQTQpKGEwKQ0KPiA+IC0JUkVHX0wJYTUsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBU
+X0E1KShhMCkNCj4gPiAtCVJFR19MCWE2LCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9BNiko
+YTApDQo+ID4gLQlSRUdfTAlhNywgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfQTcpKGEwKQ0K
+PiA+IC0JUkVHX0wJczIsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1MyKShhMCkNCj4gPiAt
+CVJFR19MCXMzLCAoU1VTUEVORF9DT05URVhUX1JFR1MgKyBQVF9TMykoYTApDQo+ID4gLQlSRUdf
+TAlzNCwgKFNVU1BFTkRfQ09OVEVYVF9SRUdTICsgUFRfUzQpKGEwKQ0KPiA+IC0JUkVHX0wJczUs
+IChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBUX1M1KShhMCkNCj4gPiAtCVJFR19MCXM2LCAoU1VT
+UEVORF9DT05URVhUX1JFR1MgKyBQVF9TNikoYTApDQo+ID4gLQlSRUdfTAlzNywgKFNVU1BFTkRf
+Q09OVEVYVF9SRUdTICsgUFRfUzcpKGEwKQ0KPiA+IC0JUkVHX0wJczgsIChTVVNQRU5EX0NPTlRF
+WFRfUkVHUyArIFBUX1M4KShhMCkNCj4gPiAtCVJFR19MCXM5LCAoU1VTUEVORF9DT05URVhUX1JF
+R1MgKyBQVF9TOSkoYTApDQo+ID4gLQlSRUdfTAlzMTAsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyAr
+IFBUX1MxMCkoYTApDQo+ID4gLQlSRUdfTAlzMTEsIChTVVNQRU5EX0NPTlRFWFRfUkVHUyArIFBU
+X1MxMSkoYTApDQo+ID4gKwlyZXN0b3JlX3JlZw0KPiA+DQo+ID4gICAJLyogUmV0dXJuIHplcm8g
+dmFsdWUgKi8NCj4gPiAgIAlhZGQJYTAsIHplcm8sIHplcm8NCg==
