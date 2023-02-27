@@ -2,154 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A517C6A4BE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3516A4BBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjB0UAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S229756AbjB0TyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjB0UAy (ORCPT
+        with ESMTP id S229726AbjB0TyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:00:54 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F20523D85;
-        Mon, 27 Feb 2023 12:00:52 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id AF5825C0072;
-        Mon, 27 Feb 2023 14:53:32 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 27 Feb 2023 14:53:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677527612; x=1677614012; bh=yC30tR58lD
-        WMAbC3WznvtUEL6VSBZ1Xu0Ye4jfaff4E=; b=jkSIlNorAIKuVx/vedrggy/bfW
-        oydMrIo9XFGFDAbd8/D5bVMHMfyhG/wiEytF8dkgRqFzFcit17qG1ITq+ByzC+77
-        RaezKUIBNHiWC2+XMoLCqXZ4G3iOl5D3uWMYqb37YX78pqX6V2SBuNBQkOslmzlh
-        sHPCJSELqlpK+HSmC8QPO4TbkZ7D1tqNpfJwt6v0QzZzxfI/SPdZ570TvYcztU8S
-        FfHiDPMmb7gkwO7gyvD/eUy7gvAWlzxNP9g/dw5UGorTv+eaPciRfpJZQTxFFg9N
-        4H71GsoX5OxdNUlTA2NEaLoYRozfZZAc+zQhOq+UI/3lNKQ5QUkHyVPIWGnA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677527612; x=1677614012; bh=yC30tR58lDWMAbC3WznvtUEL6VSB
-        Z1Xu0Ye4jfaff4E=; b=CaznXqVrGCF/7CkuE4qsh1nNvy3qZ0VsgAzx/RYeDcvW
-        hajBnnqt020TlccB7ZrjN6n3k/76uiBjIRrsdfj5JReYYtjAST3p7GnKdkCLIxjj
-        zbzLehkioMkAaehIoCaQ10+ix08xHgrTZ5bffa3gguQ6Av21r42tmyho7twwxYLx
-        alDf3y0Sxgv9asu+X1qwBjMvTU7r2cJS5PbXw+dRrf6m5o+za7SXBhIHH9marFRb
-        Ru6bwY4qFkSTLFRNkBLtxcsffMnwoInR1YsfBNDLaX7NE3MBTDH90GPmejp48LDs
-        JSx3RI6u5cLSjIkBYS/Skbr6c5CNkpoeQI3FSl+P5g==
-X-ME-Sender: <xms:Owr9Y5CjfJQMxjg0vkuoq5FGG0-w9czhxzJYAZrdl_9gLzm6Yby8lg>
-    <xme:Owr9Y3gguyQCvcLGy0iQLYUIfgRzhcuI29r8g53fk3-A66BsgTeiufX0PcwWx9ImR
-    RRLfOxRBWNd73EaemM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeelgffhgedvueeuffdtveeutddtfeehlefffeetvdffleejjeevffejjeek
-    teevgeenucffohhmrghinhepsghoohhtlhhinhdrtghomhdpkhgvrhhnvghlrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgu
-    segrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Owr9Y0n72Lh-6iiY43f1qXuG1cB1AMF4XSH1BKzMPkjzFIUVeu3Jpg>
-    <xmx:Owr9YzwAVuC3mXk5s674S4oBdOv2YfNu4TDmIJS4Ciudk7zx_HL9Ew>
-    <xmx:Owr9Y-TFZ0Q62NIaUS35WBkpKDZPoqNSRxcCKISuk8mvUblpI9AWFA>
-    <xmx:PAr9Y8nu7ufuM1nV1G_gYiQuX9hLo0sw9jeSyhnO2nbhntu-nwIOuw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3EF77B60086; Mon, 27 Feb 2023 14:53:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <c5ea695e-8693-4033-9941-c582f1c6f6be@app.fastmail.com>
-In-Reply-To: <1daa9f1f-6a68-273f-0866-72a4496cd0db@hartkopp.net>
-References: <20230227133457.431729-1-arnd@kernel.org>
- <1daa9f1f-6a68-273f-0866-72a4496cd0db@hartkopp.net>
-Date:   Mon, 27 Feb 2023 20:53:09 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Oliver Hartkopp" <socketcan@hartkopp.net>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Ian Abbott" <abbotti@mev.co.uk>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Kevin Cernekee" <cernekee@gmail.com>,
-        "Lukas Wunner" <lukas@wunner.de>,
-        "Manuel Lauss" <manuel.lauss@gmail.com>,
-        "Olof Johansson" <olof@lixom.net>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 14:54:19 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00FD28D0C
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 11:53:52 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id t14so7714460ljd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 11:53:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1677527625;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Iog3w5RRep9QzX37UOT5VU6YtZPIJP1phd7Cipxg/4=;
+        b=MlrScDn0uLRC083HdGy5QHOQFhYZ0UhHe8h98ssx4wE9iG2IlU14pW+svk1bwuUUXh
+         lmtOrZ6TQLAstp4sXJgny76pWW++iPT2/N4XgNoaAf8qXxmrxDckPD8YuKhA56ZQADXO
+         5iufKDnd0bCNkJlQHhteTngGIXOEme+n5fX80=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677527625;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Iog3w5RRep9QzX37UOT5VU6YtZPIJP1phd7Cipxg/4=;
+        b=tywidB9DYxnj+Eby4vgkRotVfHI5e3JMjWrE/ZwNBqHrl02yoU880NyBp2m3CxH0dF
+         8pMygy/Y25PiKZm9g8Ohx0tv6jm93fjddTUE7k93Hxr2fFyOQd6FumaK7xRjfJw8JVRg
+         K8CpbECJEWsZ+FtA9jDfp1ZTseQQOryZ68HZbbRpze8dvozCEBGpxproUG1qxLjHhXLk
+         OySvY1nZmhbWmUDFfnXb/cQkn/2fF4oZN50zARXE+i5lfR312FKiPVz0SpzdKX2LxufI
+         VBXyuyvBRtfK4eDjPa8bl/nCK00nDinGwkZDx+rJcm8H87ooqECWXgJ8frMt72S51OTH
+         OXDA==
+X-Gm-Message-State: AO0yUKWCIcyR3BPyFH7M4V5bEH6dRAz7SHCoQhI9UrHZ/MzUVVAZT7S0
+        O02/BBCt49sahfmtbvepEeGlnodc6BoPf0ddCyJKTQ==
+X-Google-Smtp-Source: AK7set9u/nN5Vzao374dais8uxKf3RxzP5pIYQ6lkrJ2r0ZXV/mqpKtvXzlYxqTmuIGQ+TLof9Pu75FYo+aKuNXKi3U=
+X-Received: by 2002:a2e:a4b7:0:b0:295:897c:6f7a with SMTP id
+ g23-20020a2ea4b7000000b00295897c6f7amr6940229ljm.0.1677527624730; Mon, 27 Feb
+ 2023 11:53:44 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 27 Feb 2023 14:53:44 -0500
+MIME-Version: 1.0
+In-Reply-To: <1677263398-13801-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1677263398-13801-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 27 Feb 2023 14:53:44 -0500
+Message-ID: <CAE-0n514WpXDhE17DzqF9X7DYg_3DYuYSGzhvx-=eXVJpgq3Yg@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: check core_initialized flag at both
+ host_init() and host_deinit()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@gmail.com, andersson@kernel.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023, at 20:07, Oliver Hartkopp wrote:
-> Hello Arnd,
->
-> On 27.02.23 14:34, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->
-> (..)
->
->> The remaining cardbus/yenta support is essentially a PCI hotplug driver
->> with a slightly unusual sysfs interface, and it would still support all
->> 32-bit cardbus hosts and cards, but no longer work with the even older
->> 16-bit cards that require the pcmcia_driver infrastructure.
->
-> I'm using a 2005 Samsung X20 laptop (Pentium M 1.6GHz, Centrino) with 
-> PCMCIA (type 2) CAN bus cards:
->
-> - EMS PCMCIA
-> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/sja1000/ems_pcmcia.c
->
-> - PEAK PCCard
-> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/sja1000/peak_pcmcia.c
->
-> As I still maintain the EMS PCMCIA and had to tweak and test a patch 
-> recently (with a 5.16-rc2 kernel):
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/can/sja1000/ems_pcmcia.c?id=3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45
->
-> I assume these CAN bus PCMCIA interfaces won't work after your patch 
-> set, right?
+Quoting Kuogee Hsieh (2023-02-24 10:29:58)
+> There is a reboot/suspend test case where system suspend is forced during
+> system booting up. Since host_init() of external DP is executed at hpd
 
-Correct, the patch series in its current form breaks this since
-your laptop is cardbus compatible. The options I can see are:
+dp_display_host_init()?
 
-- abandon my series and keep everything unchanged, possibly removing
-  some of the pcmcia drivers that Dominik identified as candidates
+> thread context, this test case may created a scenario that host_deinit()
 
-- decide on a future timeline for when you are comfortable with
-  discontinuing this setup and require any CAN users with cardbus
-  laptops to move to USB or cardbus CAN adapters, apply the series
-  then
+dp_display_host_deinit()?
 
-- duplicate the yenta_socket driver to have two variants of that,
-  require the user to choose between the cardbus and the pcmcia
-  variant depending on what card is going to be used.
+> from pm_suspend() run before host_init() if hpd thread has no chance to
+> run during booting up while suspend request command was issued.
+> At this scenario system will crash at aux register access at host_deinit()
+> since aux clock had not yet been enabled by host_init().  Therefore we
 
-Can you give more background on who is using the EMS PCMCIA card?
-I.e. are there reasons to use this device on modern kernels with
-machines that could also support the USB, expresscard or cardbus
-variants, or are you likely the only one doing this for the
-purpose of maintaining the driver?
+The aux clk is enabled in dp_power_clk_enable() right? Can you clarify?
 
-      Arnd
+> have to ensure aux clock enabled by checking core_initialized flag before
+> access aux registers at pm_suspend.
+
+I'd much more like to get rid of 'core_initialized'. What is preventing
+us from enabling the power (i.e. dp_power_init()), or at least enough
+clks and pm runtime state, during probe? That would fix this problem and
+also clean things up. As I understand, the device is half initialized in
+probe and half initialized in the kthread. If we put all power
+management into the runtime PM ops and synced that state during probe so
+that runtime PM state matched device probe state we could make runtime
+PM be the only suspend function and then push the power state tracking
+into the device core.
+
+>
+> Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+The code looks OK to me, so
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+once the commit text is cleaned up to indicate the proper function
+names.
