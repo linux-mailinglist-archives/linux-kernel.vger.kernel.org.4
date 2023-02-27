@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E317E6A3C28
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEDB6A3C16
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjB0IRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 03:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S230086AbjB0INh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjB0IRM (ORCPT
+        with ESMTP id S229606AbjB0INf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:17:12 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D61B337
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:17:10 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id r5so5759493qtp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:17:10 -0800 (PST)
+        Mon, 27 Feb 2023 03:13:35 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C14E166D8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:13:34 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id df20so9679465vsb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:13:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W7xaHTTjjwPzcROeiG6rMkbFuYzhGubT8ddT/2NI1II=;
-        b=jrFhqOO/Q7AL0OwbKB0kyzg9htz8UY7+m3HXQ6tGkqK1jIntlMSScnfX4DR28XHlMi
-         v5HLkZD46RcG6E4ZIMQ61ksYHPpNGljTObwzcA4fHWEnpexqnXvEqrnZQxphVms4lhBc
-         ysOEmGFy5XvptLB89hF1uWe4rgyq5y6WA4eHbs71R24nD6YP6aIMpo3WEvmSmymuStO1
-         Qet9yxTjo6T9XSMfb05UsIXw3h3vzJ9reXyDq8ICVgPZJK47g1lMtggh8hNbbBpiVNG3
-         o8c0vihZUe51E2M5wZUeJrMpWw99QkG+/2feq0VWeW/U8mi6E4vDGmOt4sDiDv2E8Tbz
-         JJCg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wdl9GK7NYLudHv+065gtQBOUCVSu0p7AyWwbwCzE8vc=;
+        b=iI0xF7UQb7KpWVxDANMZP1YPXehsV6nQ5TFAdr6iUjIO6hz05Z4fco4GJIwVFCXiuz
+         K9BeymwdW0hdeHQZlGenSg295ZnYOW9swtSjKmhc9+2Rdm1DQ2qmbGKyuDGvFlrmXsPe
+         fJE1qzNAHv+SzuqzIOrKV63544fQGOmOIUQTGbBFeBr9xp6uhZwoGLE9+tevc+3TatAa
+         IP9DZRZGdDZWZ7d50OLRCqhF+ESIy6XWZyPHg0s883bDk9Lw0ftsdXjYPA1Xeo4KhVgT
+         N7tFgvuN890SgJftD1fsgmGsvH4YfJefnYPaDhVjQn22r6OdxHxV5j+8pz1J4SHaXE8S
+         RETA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=W7xaHTTjjwPzcROeiG6rMkbFuYzhGubT8ddT/2NI1II=;
-        b=YhArZ51i/gYq3X4ZsAF6POHtOT9l6KUCe7uGtc/baYovVKgIiGWJUL7IDfZWNcpeEf
-         scpy0ktTaVDMPBP/1QtNvInsBippCW8pN1h9XwdkfgDiBJskers6BL0eO6s/VIrjtNA5
-         iy6w/tkSuHGHMWwwfZ/vM9oitBDdgqd+4ikCNhrmV7ogkgjGkbNFPzucCSq5e/G6j8AD
-         YH0G3WTtCtvQDCAxlYjPPm5rCY1jJZOLvJfLFYKc1NLkAaDG1r0gW8VARigYRNzYTn74
-         p+vkU3rkpQjiXPEQptBxuHtz5aKKjS4KVi0yGGRvMXApvAEFExcbOeiGK666p7s3jrAJ
-         cXrA==
-X-Gm-Message-State: AO0yUKU8LFDAC2WCY3M4ETbWtZHXvqJ+rPfK9pgl5grqBEu71MU/IIF9
-        SAiJLovw/E4H8AV4RrRSHf+NPhSRR3ZSOw==
-X-Google-Smtp-Source: AK7set8LoBbOD6ZI28Zmw94NaEhIRWVBbo7qG03ZYN1OeZi/+GsZ+e6Kl904eQgKDmz1M9LZwgiTzg==
-X-Received: by 2002:a05:622a:1002:b0:3bf:c7f4:24b with SMTP id d2-20020a05622a100200b003bfc7f4024bmr10372066qte.42.1677485829173;
-        Mon, 27 Feb 2023 00:17:09 -0800 (PST)
-Received: from localhost.localdomain ([154.16.192.130])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac86b42000000b003b635a5d56csm4265387qts.30.2023.02.27.00.17.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 00:17:08 -0800 (PST)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, unixbhaskar@gmail.com,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     hch@lst.de, acme@redhat.com, jpoimboe@redhat.com,
-        namhyung@kernel.org, jolsa@kernel.org
-Subject: [PATCH] tools: scripts: Remove SH architecture build entry
-Date:   Mon, 27 Feb 2023 13:42:53 +0530
-Message-Id: <20230227081253.15909-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        bh=Wdl9GK7NYLudHv+065gtQBOUCVSu0p7AyWwbwCzE8vc=;
+        b=GVv/zGK/fDsfkwHLeB4YjBcOlqwFpwCkfUqjV4myfW6v23zS9YExx4tTQ7Ryh6995M
+         nor7RKcOHTu1tZkdBP9JrGIlOHUouxANwYkwk4pW72qgXTnKou08K0MqlGrIbtzrr1wa
+         nOCMIMYPRHnaLbB0bB8h2pw8XkgotM5/kemE4PB35nbwLd3AaLJh0GzcrNQ8TL6XO/TX
+         ZKsvwjcDnitJzrsmtXz+wqxLNqzwP9vu7DXHDFveibVk/Z18OQfm//dZ/dYq0sTQE+QU
+         7ZrVt9wyrSW4gFUT2WRD1Vd0wiv5abwT0DmOJwcNB6RE48C1pDLsJ+1FxIOY7TYGqX7O
+         UvFA==
+X-Gm-Message-State: AO0yUKXY82bCpdXG4SfuJzroDpLxicp6Pvwbckh5nGMiNwhYwW+EoUQ9
+        Qzud/96lpdW72wIMREQHDY96SdMssEjCzVVHpsI0yw==
+X-Google-Smtp-Source: AK7set+UyyQ9BOyFeVp27YqxolrYd5i/RxRehyRGW+YZ4PIz/4Nw0MOJiqVLa7vQ7Ya33nVybi9AQCJlWjk6IeN+CI4=
+X-Received: by 2002:a05:6122:11b3:b0:401:82ca:8592 with SMTP id
+ y19-20020a05612211b300b0040182ca8592mr7055728vkn.3.1677485613244; Mon, 27 Feb
+ 2023 00:13:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230227011700.23947-1-rdunlap@infradead.org>
+In-Reply-To: <20230227011700.23947-1-rdunlap@infradead.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 27 Feb 2023 09:12:53 +0100
+Message-ID: <CANpmjNNmnRNos4ZtQrHuf3o4-hmN3nCEo-FDGdMPRo=JiJwWEw@mail.gmail.com>
+Subject: Re: [PATCH] instrumented.h: fix all kernel-doc format warnings
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,49 +72,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per Christoph's effort to remove the defunct architecture,which you can
-see it here :
+On Mon, 27 Feb 2023 at 02:17, Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Fix 26 kernel-doc notation warnings by converting the function
+> documentation to kernel-doc format.
+>
+> Warning example:
+>
+> instrumented.h:155: warning: Function parameter or member 'to' not described in 'instrument_copy_from_user_after'
+> instrumented.h:155: warning: Function parameter or member 'from' not described in 'instrument_copy_from_user_after'
+> instrumented.h:155: warning: Function parameter or member 'n' not described in 'instrument_copy_from_user_after'
+> instrumented.h:155: warning: Function parameter or member 'left' not described in 'instrument_copy_from_user_after'
+>
+> Fixes: 36e4d4dd4fc4 ("include/linux: Add instrumented.h infrastructure")
+> Fixes: 00047c2e6d7c ("instrumented.h: Introduce read-write instrumentation hooks")
+> Fixes: 33b75c1d884e ("instrumented.h: allow instrumenting both sides of copy_from_user()")
+> Fixes: 888f84a6da4d ("x86: asm: instrument usercopy in get_user() and put_user()")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Ingo Molnar <mingo@kernel.org>
 
-https://lore.kernel.org/all/20230113062339.1909087-4-hch@lst.de/
+Reviewed-by: Marco Elver <elver@google.com>
 
-I have remove the sh related build option.
+Thanks for the fixes.
 
-cc: hch@lst.de
-cc: acme@redhat.com
-cc: jpoimboe@redhat.com
-cc: namhyung@kernel.org
-cc: jolsa@kernel.org
-
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- tools/scripts/Makefile.arch | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
-index 0c6c7f456887..43bc1c4bf301 100644
---- a/tools/scripts/Makefile.arch
-+++ b/tools/scripts/Makefile.arch
-@@ -4,7 +4,7 @@ HOSTARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-                                   -e /arm64/!s/arm.*/arm/ -e s/sa110/arm/ \
-                                   -e s/s390x/s390/ -e s/parisc64/parisc/ \
-                                   -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
--                                  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-+                                   -e s/aarch64.*/arm64/ \
-                                   -e s/riscv.*/riscv/)
-
- ifndef ARCH
-@@ -29,11 +29,6 @@ ifeq ($(ARCH),sparc64)
-        SRCARCH := sparc
- endif
-
--# Additional ARCH settings for sh
--ifeq ($(ARCH),sh64)
--       SRCARCH := sh
--endif
--
- LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
- ifeq ($(LP64), 1)
-   IS_64_BIT := 1
---
-2.39.2
-
+> ---
+>  include/linux/instrumented.h |   63 +++++++++++++--------------------
+>  1 file changed, 26 insertions(+), 37 deletions(-)
+>
+> diff -- a/include/linux/instrumented.h b/include/linux/instrumented.h
+> --- a/include/linux/instrumented.h
+> +++ b/include/linux/instrumented.h
+> @@ -15,12 +15,11 @@
+>
+>  /**
+>   * instrument_read - instrument regular read access
+> + * @v: address of access
+> + * @size: size of access
+>   *
+>   * Instrument a regular read access. The instrumentation should be inserted
+>   * before the actual read happens.
+> - *
+> - * @ptr address of access
+> - * @size size of access
+>   */
+>  static __always_inline void instrument_read(const volatile void *v, size_t size)
+>  {
+> @@ -30,12 +29,11 @@ static __always_inline void instrument_r
+>
+>  /**
+>   * instrument_write - instrument regular write access
+> + * @v: address of access
+> + * @size: size of access
+>   *
+>   * Instrument a regular write access. The instrumentation should be inserted
+>   * before the actual write happens.
+> - *
+> - * @ptr address of access
+> - * @size size of access
+>   */
+>  static __always_inline void instrument_write(const volatile void *v, size_t size)
+>  {
+> @@ -45,12 +43,11 @@ static __always_inline void instrument_w
+>
+>  /**
+>   * instrument_read_write - instrument regular read-write access
+> + * @v: address of access
+> + * @size: size of access
+>   *
+>   * Instrument a regular write access. The instrumentation should be inserted
+>   * before the actual write happens.
+> - *
+> - * @ptr address of access
+> - * @size size of access
+>   */
+>  static __always_inline void instrument_read_write(const volatile void *v, size_t size)
+>  {
+> @@ -60,12 +57,11 @@ static __always_inline void instrument_r
+>
+>  /**
+>   * instrument_atomic_read - instrument atomic read access
+> + * @v: address of access
+> + * @size: size of access
+>   *
+>   * Instrument an atomic read access. The instrumentation should be inserted
+>   * before the actual read happens.
+> - *
+> - * @ptr address of access
+> - * @size size of access
+>   */
+>  static __always_inline void instrument_atomic_read(const volatile void *v, size_t size)
+>  {
+> @@ -75,12 +71,11 @@ static __always_inline void instrument_a
+>
+>  /**
+>   * instrument_atomic_write - instrument atomic write access
+> + * @v: address of access
+> + * @size: size of access
+>   *
+>   * Instrument an atomic write access. The instrumentation should be inserted
+>   * before the actual write happens.
+> - *
+> - * @ptr address of access
+> - * @size size of access
+>   */
+>  static __always_inline void instrument_atomic_write(const volatile void *v, size_t size)
+>  {
+> @@ -90,12 +85,11 @@ static __always_inline void instrument_a
+>
+>  /**
+>   * instrument_atomic_read_write - instrument atomic read-write access
+> + * @v: address of access
+> + * @size: size of access
+>   *
+>   * Instrument an atomic read-write access. The instrumentation should be
+>   * inserted before the actual write happens.
+> - *
+> - * @ptr address of access
+> - * @size size of access
+>   */
+>  static __always_inline void instrument_atomic_read_write(const volatile void *v, size_t size)
+>  {
+> @@ -105,13 +99,12 @@ static __always_inline void instrument_a
+>
+>  /**
+>   * instrument_copy_to_user - instrument reads of copy_to_user
+> + * @to: destination address
+> + * @from: source address
+> + * @n: number of bytes to copy
+>   *
+>   * Instrument reads from kernel memory, that are due to copy_to_user (and
+>   * variants). The instrumentation must be inserted before the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+>   */
+>  static __always_inline void
+>  instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+> @@ -123,13 +116,12 @@ instrument_copy_to_user(void __user *to,
+>
+>  /**
+>   * instrument_copy_from_user_before - add instrumentation before copy_from_user
+> + * @to: destination address
+> + * @from: source address
+> + * @n: number of bytes to copy
+>   *
+>   * Instrument writes to kernel memory, that are due to copy_from_user (and
+>   * variants). The instrumentation should be inserted before the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+>   */
+>  static __always_inline void
+>  instrument_copy_from_user_before(const void *to, const void __user *from, unsigned long n)
+> @@ -140,14 +132,13 @@ instrument_copy_from_user_before(const v
+>
+>  /**
+>   * instrument_copy_from_user_after - add instrumentation after copy_from_user
+> + * @to: destination address
+> + * @from: source address
+> + * @n: number of bytes to copy
+> + * @left: number of bytes not copied (as returned by copy_from_user)
+>   *
+>   * Instrument writes to kernel memory, that are due to copy_from_user (and
+>   * variants). The instrumentation should be inserted after the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+> - * @left number of bytes not copied (as returned by copy_from_user)
+>   */
+>  static __always_inline void
+>  instrument_copy_from_user_after(const void *to, const void __user *from,
+> @@ -158,12 +149,11 @@ instrument_copy_from_user_after(const vo
+>
+>  /**
+>   * instrument_get_user() - add instrumentation to get_user()-like macros
+> + * @to: destination variable, may not be address-taken
+>   *
+>   * get_user() and friends are fragile, so it may depend on the implementation
+>   * whether the instrumentation happens before or after the data is copied from
+>   * the userspace.
+> - *
+> - * @to destination variable, may not be address-taken
+>   */
+>  #define instrument_get_user(to)                                \
+>  ({                                                     \
+> @@ -175,14 +165,13 @@ instrument_copy_from_user_after(const vo
+>
+>  /**
+>   * instrument_put_user() - add instrumentation to put_user()-like macros
+> + * @from: source address
+> + * @ptr: userspace pointer to copy to
+> + * @size: number of bytes to copy
+>   *
+>   * put_user() and friends are fragile, so it may depend on the implementation
+>   * whether the instrumentation happens before or after the data is copied from
+>   * the userspace.
+> - *
+> - * @from source address
+> - * @ptr userspace pointer to copy to
+> - * @size number of bytes to copy
+>   */
+>  #define instrument_put_user(from, ptr, size)                   \
+>  ({                                                             \
