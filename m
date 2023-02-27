@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC696A496B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AACF6A4970
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjB0SQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S229912AbjB0SSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjB0SQC (ORCPT
+        with ESMTP id S229916AbjB0SSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:16:02 -0500
-Received: from out-61.mta1.migadu.com (out-61.mta1.migadu.com [95.215.58.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD0924CAB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:15:56 -0800 (PST)
-Date:   Mon, 27 Feb 2023 10:15:49 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677521754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1FqEARzb0Q6bxxQRwlEFlZpVOXV7iA8ldzvL5C+2zTY=;
-        b=Tpv77X0esdfptb1uj8Rrr0hRzuL5puORlWX8o5J/DfmWTURVT9shN0EbHrTP11S++Sbdu8
-        v/9OzxLRjdNJyX+p364t2Jge4JmkLORX1/Q3vZ0Q81liICuuAU+++u9EL7Y4uEcNtPJhYE
-        mgqS0a16KP0cyGPiUzqotahGbhpspBc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        muchun.song@linux.dev, tj@kernel.org, lizefan.x@bytedance.com,
-        shuah@kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests: cgroup: Add 'malloc' failures checks in
- test_memcontrol
-Message-ID: <Y/zzVWJ5PHs5My6x@P9FQF9L96D>
-References: <20230226131634.34366-1-ivan.orlov0322@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226131634.34366-1-ivan.orlov0322@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 13:18:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A6BE06E;
+        Mon, 27 Feb 2023 10:18:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CF6060EEA;
+        Mon, 27 Feb 2023 18:18:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D8315C433D2;
+        Mon, 27 Feb 2023 18:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677521889;
+        bh=ooVWcWHIEeGj8G37FUu4v9GfLrGz5Dde9blpD2uLqVM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=rIT0oU/lhJyINdiya16xLwdeabKDXx/qp/dXadcO/tUTCsXcSvnmNlVn3UBA7GMnX
+         CBq2p67OeNHO7ZBpgclBbcCHF4KI6rraA+vBEZ8udFdPwGYEpTjA300ke3pCOhxjF8
+         erQIbounOuwTY5jP4yhaNACzc79KU1qjWaAzrPWkk9EjdyAT+V/JoK3DbktShv1xNZ
+         iJLwi5+z8fB6RGllQhiL++nY5+K/Cus9W5Ma+1wkZQeCQ6Q4nHrYOpH7A2hIOrcJ7O
+         rOhXshThcB4JmG7Qt3idviH9AV0HF39Ltlak3vAV0OCtkQniTuY/oQ6+8T7byStWu0
+         sw0vuQQVFMF/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C77D7E68D2D;
+        Mon, 27 Feb 2023 18:18:09 +0000 (UTC)
+Subject: Re: [GIT PULL] fuse update for 6.3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y/zYyN7NeLKusmSj@miu.piliscsaba.redhat.com>
+References: <Y/zYyN7NeLKusmSj@miu.piliscsaba.redhat.com>
+X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y/zYyN7NeLKusmSj@miu.piliscsaba.redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.3
+X-PR-Tracked-Commit-Id: 1cc4606d19e3710bfab3f6704b87ff9580493c69
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d40b2f4c94f221bd5aab205f945e6f88d3df0929
+Message-Id: <167752188980.27343.711244069441124562.pr-tracker-bot@kernel.org>
+Date:   Mon, 27 Feb 2023 18:18:09 +0000
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 04:16:33PM +0300, Ivan Orlov wrote:
-> There are several 'malloc' calls in test_memcontrol, which can be
-> unsuccessful. This patch will add 'malloc' failures checking to
-> give more details about test's fail reasons and avoid possible
-> undefined behavior during the future null dereference (like the
-> one in alloc_anon_50M_check_swap function).
-> 
-> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+The pull request you sent on Mon, 27 Feb 2023 17:23:04 +0100:
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.3
 
-Thanks!
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d40b2f4c94f221bd5aab205f945e6f88d3df0929
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
