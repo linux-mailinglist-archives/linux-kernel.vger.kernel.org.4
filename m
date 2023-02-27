@@ -2,147 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D887D6A4CBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D0E6A4CB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjB0VFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        id S229849AbjB0VFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjB0VFT (ORCPT
+        with ESMTP id S229547AbjB0VE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:05:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B1C27D7E;
-        Mon, 27 Feb 2023 13:05:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8B80B80DB9;
-        Mon, 27 Feb 2023 21:05:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9C7C4339C;
-        Mon, 27 Feb 2023 21:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677531911;
-        bh=wM7CKQVbmGuH345EmkznKBI9Vbtt2sSUgczg9Ty7nXs=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=jOPmsQJ92zMVF6JYFsoNUtFmfqH1qn9yNHrBFNCHK1WfW7u5eh/4Dt9Wuis7K36N0
-         zrL+jhWh1yWTKKzwbuI8LAi0DKDAghFiaLH5lvECf285Web9rihBnkQ8C3DESaEWK0
-         /j7dTBTpjCyFT8vHLXWUy9qwvesNEnhkTG5aQlFxMcvzvM6AKOkT0GNU1MFopQ68Gj
-         htVUyVIN5jq24tsH7EHUCjm7Wqg+o4VRa+39BcSkQqAtkTiNRkF1yHoI7FytKL3qRN
-         /mnyrfziJh7++JU+FiEifPiPb2v4w4HMEJbpJnpyNS69v66VYxTCeW/J/rBk/0TyWV
-         6UaSXElMaBwCA==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id D2E5827C0054;
-        Mon, 27 Feb 2023 16:05:09 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 27 Feb 2023 16:05:09 -0500
-X-ME-Sender: <xms:BBv9Yyq_yU45rwjslj9ZPw3LnS_Yd3JCkKAXSvmFzr69CFR2sOj88A>
-    <xme:BBv9Ywo9VLxxtN8HDdkLGcOtVPWMG59yBVPaDlDViIdcBzPiuWwE2xiNKgG-bC3C8
-    14R5VUgpEdn9d0GJO4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeeh
-    udegtdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
-    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
-    druggv
-X-ME-Proxy: <xmx:BBv9Y3NRTcfPS0EYvfk5Q21Jb-QcLDWCcZQkB9uda8GiiBfkXPK7Qg>
-    <xmx:BBv9Yx5sAGjH5WS5nTp0Ao8kgK1098XeOqkPFFLTZ5Ul3ATxZpcFJw>
-    <xmx:BBv9Yx7BPJU4ThUSrb8hCmt20IPwURbUGqPfv2ohP3vz_7e7CjhkNQ>
-    <xmx:BRv9Y_7DCKSXNgCtRbgu-759t33EYkEgxuDAtp_duzO0SmzYx8s2_w>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7653FB60086; Mon, 27 Feb 2023 16:05:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <3e94a109-66cc-4774-8317-3ae249e34c54@app.fastmail.com>
-In-Reply-To: <Y/0PbJzvrzpvLbcW@shell.armlinux.org.uk>
-References: <20230227133457.431729-1-arnd@kernel.org>
- <Y/0PbJzvrzpvLbcW@shell.armlinux.org.uk>
-Date:   Mon, 27 Feb 2023 22:04:07 +0100
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Russell King" <linux@armlinux.org.uk>
-Cc:     "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Ian Abbott" <abbotti@mev.co.uk>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Kevin Cernekee" <cernekee@gmail.com>,
-        "Lukas Wunner" <lukas@wunner.de>,
-        "Manuel Lauss" <manuel.lauss@gmail.com>,
-        "Oliver Hartkopp" <socketcan@hartkopp.net>,
-        "Olof Johansson" <olof@lixom.net>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+        Mon, 27 Feb 2023 16:04:58 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9313D27489;
+        Mon, 27 Feb 2023 13:04:57 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RKvCqV007373;
+        Mon, 27 Feb 2023 21:04:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ziTSNs2w1gPgKI5IplUtCEzZNpMIPg+DqPtMLsQ79xM=;
+ b=CNftfVD2pkWXCARdYcV5+dRhFStTQyUuDB58/JUl8UZadXA+3wOioec4PsyLW8Jqfs3A
+ 0rTWQwDDC8UnvTSUGdDbLq4CQ5RYicjVF6SqjyLIhjUNNE/sCtmUUJG5Si9oXxOapMlT
+ lGyiuClCUqCX/PFqD4eKA+rwmr+ZVuaBKYuK3WRUFIHVP5HPqD5xSB6HMSVANvHGzitF
+ 3cMNCEve9KUBxlpWRiQZFZ4nWTnOiQzJ9QDKeIwF3EJuvINt94NcLbW8AiFzW80YyD7I
+ 2rsYxztFM8bVRz1Tb9cB2436xRoBWHZeKuue847+e6N5eQd+eXTY+CaQzKA+X0Zbki7h +g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p0u3jsgch-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 21:04:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RL4nKC006493
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 21:04:49 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 27 Feb 2023 13:04:49 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@gmail.com>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/msm/dp: check core_initialized flag at both host_init() and host_deinit()
+Date:   Mon, 27 Feb 2023 13:04:37 -0800
+Message-ID: <1677531877-10849-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jwe3n-let1_Y8wDzAveWvp3Op7pmIJuY
+X-Proofpoint-GUID: jwe3n-let1_Y8wDzAveWvp3Op7pmIJuY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302270168
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023, at 21:15, Russell King (Oracle) wrote:
-> On Mon, Feb 27, 2023 at 02:34:51PM +0100, Arnd Bergmann wrote:
->> I don't expect this to be a problem normal laptop support, as the last
->> PC models that predate Cardbus support (e.g. 1997 ThinkPad 380ED) are
->> all limited to i586MMX CPUs and 80MB of RAM. This is barely enough to
->> boot Tiny Core Linux but not a regular distro.
->
-> Am I understanding that the argument you're putting forward here is
-> "cardbus started in year X, so from year X we can ignore 16-bit
-> PCMCIA support" ?
+There is a reboot/suspend test case where system suspend is forced during
+system booting up. Since dp_display_host_init() of external DP is executed
+at hpd thread context, this test case may created a scenario that
+dp_display_host_deinit() from pm_suspend() run before dp_display_host_init()
+if hpd thread has no chance to run during booting up while suspend request
+command was issued. At this scenario system will crash at aux register
+access at dp_display_host_deinit() since aux clock had not yet been enabled
+by dp_display_host_init().  Therefore we have to ensure aux clock enabled
+by checking core_initialized flag before access aux registers at pm_suspend.
 
-Right, but I'm asking this as a question, hence the
-'RFC' in the subject.
+Changes in v2:
+-- at commit text, dp_display_host_init() instead of host_init()
+-- at commit text, dp_display_host_deinit() instead of host_deinit()
 
-> Given that PCMCIA support has been present in x86 hardware at least
-> up to 2010, I don't see how that is any basis for making a decision
-> about 16-bit PCMCIA support.
+Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-I assume you mean machines with Cardbus slots that can use
-16-bit PCMCIA slots, rather than laptops with only PCMCIA here,
-right?
-
-> Isn't the relevant factor here whether 16-bit PCMCIA cards are still
-> in use on hardware that can run a modern distro? (And yes, x86
-> machines that have 16-bit PCMCIA can still run Debian Stable today.)
-
-There are three combinations that are supported at the moment:
-
-1. Machines with only 16-bit PCMCIA support, all very old,
-   which rely on these slots for basic functionality.
-2. Machines that support Cardbus slots that are actually
-   used to connect 16-bit cards.
-3. Machines that have a Cardbus slot and can just use 32-bit
-   cards for whatever they need.
-
-Dominik originally raised the question whether we could
-kill off all PCMCIA support already given its age, which
-would either break all three of the above or at least
-the first two if Yenta-socket is kept as a PCI hotplug
-driver.
-
-I wanted to make sure that we keep both case 1) for
-sa1100/omap1/pxa and case 3) for x86, while case 2) seems
-much less important because there are presumably fewer
-users than 3), and they have an upgrade path that only
-involves replacing one cheap card instead of trashing the
-whole machine.
-
-   Arnd
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index bde1a7c..1850738 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -460,10 +460,12 @@ static void dp_display_host_init(struct dp_display_private *dp)
+ 		dp->dp_display.connector_type, dp->core_initialized,
+ 		dp->phy_initialized);
+ 
+-	dp_power_init(dp->power, false);
+-	dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+-	dp_aux_init(dp->aux);
+-	dp->core_initialized = true;
++	if (!dp->core_initialized) {
++		dp_power_init(dp->power, false);
++		dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
++		dp_aux_init(dp->aux);
++		dp->core_initialized = true;
++	}
+ }
+ 
+ static void dp_display_host_deinit(struct dp_display_private *dp)
+@@ -472,10 +474,12 @@ static void dp_display_host_deinit(struct dp_display_private *dp)
+ 		dp->dp_display.connector_type, dp->core_initialized,
+ 		dp->phy_initialized);
+ 
+-	dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+-	dp_aux_deinit(dp->aux);
+-	dp_power_deinit(dp->power);
+-	dp->core_initialized = false;
++	if (dp->core_initialized) {
++		dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
++		dp_aux_deinit(dp->aux);
++		dp_power_deinit(dp->power);
++		dp->core_initialized = false;
++	}
+ }
+ 
+ static int dp_display_usbpd_configure_cb(struct device *dev)
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
