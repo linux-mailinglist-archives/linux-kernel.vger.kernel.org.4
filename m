@@ -2,244 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D8D6A39ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6B56A39DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjB0EA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 23:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
+        id S229912AbjB0D4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 22:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjB0EA4 (ORCPT
+        with ESMTP id S230516AbjB0D4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 23:00:56 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CCD449D;
-        Sun, 26 Feb 2023 20:00:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nRRUPLrpzZdP9kpRkU+2WiztXWJ6Lc7WErLA0n8BvRfdU7NMvmetHZSNPvnTepLPM0n0M3dD5CyIECSsStZemJPS5SIUVijeXTgPFc3y8SiJsPkv44mCJQBWjXvhBSEhe31kdDlEsfbSIVzTn8ElYwW0A5cLB9LGXXBYkTnb/oeMoQ5mcMBSaetUUBOeoXbVmg4MzrtpGEQWyAJGCMAWk9SZ2okV3zNPRW++vKQinzNOBWNFNIeVKmOZkO00r8sEXakOA4IQtx5NxIGoMUQJxsq/zSza4vpBbLZL3XFSq42uiMt9f286U5upmIWBNM8EprKAM0qkd9fD71UiJh6q2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9u4xVXYBKQLka0SdRLlVEKG9tVqHgP9QE+7II39nWow=;
- b=TRUpU11cDXga+IPJ1RnHk8V8loc69zlAU43pbZz1D9oFF0mBWqJDYsQj5YaYgaMQGd5YpjdhfX2fxessUk3Y17CiJZI46vmAA5n1GcKwt/mxNSgDY0oO5DiFDV9c+tYqTAanP1iU+mTrRhD4X2pznxgmAw2L9AD1pki5OtdWB6G1Q5FrHP5M12SVDuYE28VHBju9dLFIo0pt+XIMjSIZszzXeLPvwXpcpel/oCRfhJGrxH2x6ZrUd9iV0ixPvSP9MtTuXrSnxMaIx9R6l+slbfCTjIgs45/shc48gMKTMrSU8jnmj8ckeec2ESz1IkJ190+GLcXqQVXk4UocsBwSEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9u4xVXYBKQLka0SdRLlVEKG9tVqHgP9QE+7II39nWow=;
- b=iPBQSgjT8p3oPG8cF9NqRCiriWHDRRvNOZ63DiN6w8O4A/gyEQTAZWbmjmQmBv9mkZ03dsjKuAiyUO6Ma/BD7/fCkd9K6HmOl9fP63AYYFkOgyIQ9aM6Hju8ADhBnkJ0bzia2r9UF7V0yo16WaH9LilGbpXj4mU6E7agFb1i89I=
-Received: from DS7PR03CA0227.namprd03.prod.outlook.com (2603:10b6:5:3ba::22)
- by IA0PR12MB7724.namprd12.prod.outlook.com (2603:10b6:208:430::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Mon, 27 Feb
- 2023 03:57:23 +0000
-Received: from DM6NAM11FT114.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ba:cafe::9d) by DS7PR03CA0227.outlook.office365.com
- (2603:10b6:5:3ba::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
- Transport; Mon, 27 Feb 2023 03:57:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT114.mail.protection.outlook.com (10.13.172.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Mon, 27 Feb 2023 03:57:23 +0000
-Received: from BLR-L-SASHUKLA.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sun, 26 Feb
- 2023 21:57:18 -0600
-From:   Santosh Shukla <santosh.shukla@amd.com>
-To:     <kvm@vger.kernel.org>, <seanjc@google.com>
-CC:     <pbonzini@redhat.com>, <jmattson@google.com>, <joro@8bytes.org>,
-        <linux-kernel@vger.kernel.org>, <mail@maciej.szmigiero.name>,
-        <mlevitsk@redhat.com>, <thomas.lendacky@amd.com>,
-        <vkuznets@redhat.com>
-Subject: [PATCHv3 10/10] KVM: nSVM: implement support for nested VNMI
-Date:   Mon, 27 Feb 2023 09:24:00 +0530
-Message-ID: <20230227035400.1498-11-santosh.shukla@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230227035400.1498-1-santosh.shukla@amd.com>
-References: <20230227035400.1498-1-santosh.shukla@amd.com>
+        Sun, 26 Feb 2023 22:56:00 -0500
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0161D910
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 19:55:38 -0800 (PST)
+Received: by mail-il1-f208.google.com with SMTP id k10-20020a92b70a000000b00316fed8644fso3096480ili.21
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 19:55:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bHeqdS5JI3h3jdYxFHUssBoKIiehTxJlUXYm5bHMKHY=;
+        b=zO8GxMMjPogAdtqpZfYnBHTF3iXsJSpZWSXxFySmyyWyxge/8q7L7RmwRWYx2XZtCd
+         ax1nNO71pw1CbyhA1uQoOH0gwnRIgtkygG+ZOGNMMHCkM3SSuQ8d1HfMBJdjuxzwgaX+
+         XFW/ldfwmvkkP9MpU+6JxUPrkqLa6g+fG0PYyfnnt+S1MCYE2P1uTwm9fQ/7WmuvVvuJ
+         emsVu+RNHNoWm7Y0rj7j2kcHXZdpfFV1MHsGkeEoOBdMLp0h1LXq7WbCNRnKv1MQbvyY
+         mPPQUu9+DvRqhKvE8BaUDY5Nbh+4UCNqcXPvsUhJM1DEWTUV2IhYELQtNobGwRZ6lM86
+         YrSg==
+X-Gm-Message-State: AO0yUKWb+KW2u0qfJGqSC2wDlrtJwyvmB8TBqBMNB4ztWV19Dc/kFUr/
+        xPBtmEC5Uq153bOJpVPwPAmNbhYltYeNhYrp0xrqMSTnCCP7
+X-Google-Smtp-Source: AK7set/maQJkLbknHRVglI/85Neazi+v0x28Gd9bPloAvMzai4/XPCokfwk2rzFkn2oP22EusSizAPKizh2xuCujSRXpeRnuiHq4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT114:EE_|IA0PR12MB7724:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f73c24a-64dd-45b3-b459-08db1876bb6c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b2FYZ68RVOM26ioss4wsAUt+vA8/nqGkL4iaygKZAHJTbFQFYn5u0sazX3zDyi9HLrE8yQjq4JU963kJ77JxvfeNObsetK9pYarKw9TzhVRLRfTdOP1Kvtq0yzENbnX0p82eALmcx0ec7gxpbjHzeSHg2J4dybBfd69NhK+ScEo4eGQ+mBzGLI4ZPgU3Ef3WWq37410F4NDLiXh2h1DvUXpo4L5WsZ3br00xu9305beyk3ZWgoYwYmWGCP0Pw669PKeaJBq5KhV6SKC55ElpBYl3aBcXXc9d0LgHz/ZjJNm8IAUYuRtuhuYn24ATa6kD3pD1G+EmXQMQYICcef5N6gzbCj6u3ZUlaSr2PNAbZnKl/RvzU8lmymwdq3+/+LB718RTRx3iz+28+yw63V9ePXvEIoXfAOD12ixUdhbs8SFx0mo7ISmLJyk2V07tt2F6fqqt2P+K/DCk13Vsy/r5DfYyFWgHDYsQCQEM6hmxkgwmU6/KfQC8Za4/v3+24IyW1D7v0ZhvS7qz1mQd6bJrshk+nlTNRo9+ffYCUQkTCWgM1H6IOBn1iSvEcVSYNwXsy1DHXCP58d1apbFIUuKnp6ocj9lX0kJUawT9htOfy5K90BtUE7dG7L8OqpqFcOGMhO7yOKNaP7s+2WCCWeOstHPfhcMjygS/9I5wZqsIi/n0lygWGYyK4XpCZPVPdFbo9CH9tr06swZmRMO3dVm/tvHWtlPhTJ0kvjJXYZTfV54=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199018)(46966006)(40470700004)(36840700001)(40460700003)(16526019)(82740400003)(81166007)(356005)(4326008)(8936002)(41300700001)(70586007)(8676002)(2906002)(70206006)(36860700001)(5660300002)(40480700001)(336012)(26005)(478600001)(7696005)(44832011)(1076003)(186003)(426003)(2616005)(6666004)(47076005)(966005)(83380400001)(316002)(36756003)(82310400005)(86362001)(54906003)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 03:57:23.1946
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f73c24a-64dd-45b3-b459-08db1876bb6c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT114.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7724
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:444e:0:b0:315:9761:6965 with SMTP id
+ a14-20020a92444e000000b0031597616965mr7653994ilm.5.1677470137812; Sun, 26 Feb
+ 2023 19:55:37 -0800 (PST)
+Date:   Sun, 26 Feb 2023 19:55:37 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000af8f7c05f5a673bb@google.com>
+Subject: [syzbot] [keyrings?] [lsm?] WARNING in __mod_timer
+From:   syzbot <syzbot+5093ba19745994288b53@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, jarkko@kernel.org, jmorris@namei.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        serge@hallyn.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allows L1 to use vNMI to accelerate its injection of NMI
-to L2 by passing through vNMI int_ctl bits from vmcb12
-to/from vmcb02.
+Hello,
 
-In case of L1 and L2 both using VNMI- Copy VNMI bits from vmcb12 to
-vmcb02 during entry and vice-versa during exit.
-And in case of L1 uses VNMI and L2 doesn't- Copy VNMI bits from vmcb01 to
-vmcb02 during entry and vice-versa during exit.
+syzbot found the following issue on:
 
-Tested with the KVM-unit-test and Nested Guest scenario.
+HEAD commit:    d8ca6dbb8de7 Merge tag 'nfs-for-6.3-1' of git://git.linux-..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=109cec8cc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=636897a0dac3d81e
+dashboard link: https://syzkaller.appspot.com/bug?extid=5093ba19745994288b53
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Co-developed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6eea6a7459e5/disk-d8ca6dbb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6bcbaedb88c0/vmlinux-d8ca6dbb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/981f6d71a5c5/bzImage-d8ca6dbb.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5093ba19745994288b53@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ODEBUG: assert_init not available (active state 0) object: ffffffff8d4fcbc0 object type: timer_list hint: key_gc_timer_func+0x0/0x80 security/keys/gc.c:117
+WARNING: CPU: 1 PID: 10646 at lib/debugobjects.c:512 debug_print_object lib/debugobjects.c:509 [inline]
+WARNING: CPU: 1 PID: 10646 at lib/debugobjects.c:512 debug_object_assert_init+0x1f2/0x240 lib/debugobjects.c:899
+Modules linked in:
+CPU: 1 PID: 10646 Comm: syz-executor.3 Not tainted 6.2.0-syzkaller-06695-gd8ca6dbb8de7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:debug_print_object lib/debugobjects.c:509 [inline]
+RIP: 0010:debug_object_assert_init+0x1f2/0x240 lib/debugobjects.c:899
+Code: a0 fd 4c 8b 4d 00 48 c7 c7 20 68 38 8b 48 c7 c6 00 65 38 8b 48 c7 c2 e0 69 38 8b 31 c9 4d 89 e8 53 e8 42 6f 10 fd 48 83 c4 08 <0f> 0b ff 05 42 e1 10 0a 48 83 c5 38 48 89 e8 48 c1 e8 03 42 80 3c
+RSP: 0018:ffffc9000b1276f8 EFLAGS: 00010282
+RAX: caefb79dfa053800 RBX: ffffffff83f63700 RCX: 0000000000040000
+RDX: ffffc90014421000 RSI: 0000000000018ba9 RDI: 0000000000018baa
+RBP: ffffffff8aec5400 R08: ffffffff81536d42 R09: fffff52001624e55
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: ffffffff8d4fcbc0 R14: 0000000000000004 R15: ffffffff91d3e4e8
+FS:  00007f122cc29700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055555632f708 CR3: 00000000690df000 CR4: 00000000003526e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ debug_timer_assert_init kernel/time/timer.c:792 [inline]
+ debug_assert_init kernel/time/timer.c:837 [inline]
+ __mod_timer+0x10d/0xf40 kernel/time/timer.c:1020
+ key_reject_and_link+0x3f5/0x6e0 security/keys/key.c:610
+ key_negate_and_link include/linux/key-type.h:187 [inline]
+ complete_request_key security/keys/request_key.c:64 [inline]
+ call_sbin_request_key+0xa7b/0xcd0 security/keys/request_key.c:213
+ construct_key security/keys/request_key.c:244 [inline]
+ construct_key_and_link security/keys/request_key.c:503 [inline]
+ request_key_and_link+0x11e3/0x18e0 security/keys/request_key.c:637
+ __do_sys_request_key security/keys/keyctl.c:222 [inline]
+ __se_sys_request_key+0x271/0x3b0 security/keys/keyctl.c:167
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f122be8c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f122cc29168 EFLAGS: 00000246 ORIG_RAX: 00000000000000f9
+RAX: ffffffffffffffda RBX: 00007f122bfabf80 RCX: 00007f122be8c0f9
+RDX: 00000000200016c0 RSI: 0000000020001680 RDI: 0000000020001640
+RBP: 00007f122bee7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000a0c74db R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcdaafcfef R14: 00007f122cc29300 R15: 0000000000022000
+ </TASK>
+
+
 ---
-v3:
-- Fix identiation and style issue.
-- Fix SOB
-- Removed `svm->nmi_masked` var use for nested svm case.
-- Reworded the commit description.
-https://lore.kernel.org/all/Y9m15P8xQ2dxvIzd@google.com/
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- arch/x86/kvm/svm/nested.c | 33 +++++++++++++++++++++++++++++++++
- arch/x86/kvm/svm/svm.c    |  5 +++++
- arch/x86/kvm/svm/svm.h    |  6 ++++++
- 3 files changed, 44 insertions(+)
-
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 74e9e9e76d77..b018fe2fdf88 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -281,6 +281,11 @@ static bool __nested_vmcb_check_controls(struct kvm_vcpu *vcpu,
- 	if (CC(!nested_svm_check_tlb_ctl(vcpu, control->tlb_ctl)))
- 		return false;
- 
-+	if (CC((control->int_ctl & V_NMI_ENABLE_MASK) &&
-+	       !vmcb12_is_intercept(control, INTERCEPT_NMI))) {
-+		return false;
-+	}
-+
- 	return true;
- }
- 
-@@ -436,6 +441,9 @@ void nested_sync_control_from_vmcb02(struct vcpu_svm *svm)
- 	if (nested_vgif_enabled(svm))
- 		mask |= V_GIF_MASK;
- 
-+	if (nested_vnmi_enabled(svm))
-+		mask |= V_NMI_BLOCKING_MASK | V_NMI_PENDING_MASK;
-+
- 	svm->nested.ctl.int_ctl        &= ~mask;
- 	svm->nested.ctl.int_ctl        |= svm->vmcb->control.int_ctl & mask;
- }
-@@ -655,6 +663,17 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
- 	else
- 		int_ctl_vmcb01_bits |= (V_GIF_MASK | V_GIF_ENABLE_MASK);
- 
-+	if (vnmi) {
-+		if (vmcb01->control.int_ctl & V_NMI_PENDING_MASK) {
-+			svm->vcpu.arch.nmi_pending++;
-+			kvm_make_request(KVM_REQ_EVENT, &svm->vcpu);
-+		}
-+		if (nested_vnmi_enabled(svm))
-+			int_ctl_vmcb12_bits |= (V_NMI_PENDING_MASK |
-+						V_NMI_ENABLE_MASK |
-+						V_NMI_BLOCKING_MASK);
-+	}
-+
- 	/* Copied from vmcb01.  msrpm_base can be overwritten later.  */
- 	vmcb02->control.nested_ctl = vmcb01->control.nested_ctl;
- 	vmcb02->control.iopm_base_pa = vmcb01->control.iopm_base_pa;
-@@ -1058,6 +1077,20 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 		svm_update_lbrv(vcpu);
- 	}
- 
-+	if (vnmi) {
-+		if (vmcb02->control.int_ctl & V_NMI_BLOCKING_MASK)
-+			vmcb01->control.int_ctl |= V_NMI_BLOCKING_MASK;
-+		else
-+			vmcb01->control.int_ctl &= ~V_NMI_BLOCKING_MASK;
-+
-+		if (vcpu->arch.nmi_pending) {
-+			vcpu->arch.nmi_pending--;
-+			vmcb01->control.int_ctl |= V_NMI_PENDING_MASK;
-+		} else
-+			vmcb01->control.int_ctl &= ~V_NMI_PENDING_MASK;
-+
-+	}
-+
- 	/*
- 	 * On vmexit the  GIF is set to false and
- 	 * no event can be injected in L1.
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 84d9d2566629..08b7856e2da2 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4226,6 +4226,8 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 
- 	svm->vgif_enabled = vgif && guest_cpuid_has(vcpu, X86_FEATURE_VGIF);
- 
-+	svm->vnmi_enabled = vnmi && guest_cpuid_has(vcpu, X86_FEATURE_AMD_VNMI);
-+
- 	svm_recalc_instruction_intercepts(vcpu, svm);
- 
- 	/* For sev guests, the memory encryption bit is not reserved in CR3.  */
-@@ -4981,6 +4983,9 @@ static __init void svm_set_cpu_caps(void)
- 		if (vgif)
- 			kvm_cpu_cap_set(X86_FEATURE_VGIF);
- 
-+		if (vnmi)
-+			kvm_cpu_cap_set(X86_FEATURE_AMD_VNMI);
-+
- 		/* Nested VM can receive #VMEXIT instead of triggering #GP */
- 		kvm_cpu_cap_set(X86_FEATURE_SVME_ADDR_CHK);
- 	}
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index fb48c347bbe0..e229eadbf1ce 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -266,6 +266,7 @@ struct vcpu_svm {
- 	bool pause_filter_enabled         : 1;
- 	bool pause_threshold_enabled      : 1;
- 	bool vgif_enabled                 : 1;
-+	bool vnmi_enabled                 : 1;
- 
- 	u32 ldr_reg;
- 	u32 dfr_reg;
-@@ -540,6 +541,11 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
- 	return svm->nested.ctl.nested_ctl & SVM_NESTED_CTL_NP_ENABLE;
- }
- 
-+static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
-+{
-+	return svm->vnmi_enabled && (svm->nested.ctl.int_ctl & V_NMI_ENABLE_MASK);
-+}
-+
- static inline bool is_x2apic_msrpm_offset(u32 offset)
- {
- 	/* 4 msrs per u8, and 4 u8 in u32 */
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
