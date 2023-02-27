@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6ED6A4D22
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1603B6A4D24
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjB0VZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S229996AbjB0V0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjB0VZ1 (ORCPT
+        with ESMTP id S229991AbjB0V0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:25:27 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD42199CA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:25:22 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id h16so31429405edz.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:25:22 -0800 (PST)
+        Mon, 27 Feb 2023 16:26:09 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA422054D;
+        Mon, 27 Feb 2023 13:26:08 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso6487878pjs.3;
+        Mon, 27 Feb 2023 13:26:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+o0pueVZ861PFNaPrYiHg3vpUPtRa7x51nOh+6VPgio=;
-        b=O+DW/abiqE8z4YZl36fMZTGAz/Lj7u9E0Bzt5eg3a2mlQDhc9Alkgc1dLhRNqQ3OeX
-         TejbetlpJjspldFMLGQdz1BBEgsks6HENBSRBBswV+gv06fp7EfZPQsSRu8wAcI9rdri
-         iSVnmVgz/q0j5RBiQ3sGvb0MzLVBJbIuqekhUgo0y3Wc5Yb2DIjsjsdaoltdVcIdFXJr
-         DKMiayRMkZvdogje62ZJX4lGZM+McfDGhWPMWN1YwhTTJzgHsZMCJJIwMeYnyMAlRdwf
-         iDTk2lNPsPXMNNKaleSqhWpw0K/+PpzfC88maLG9yygiIn1WNxDshhsebSm8EYwKacuV
-         pwBQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iRgWuAbWaYxaiebMMWCeq+aeo/6fiHCnGOaa9qpqar0=;
+        b=FLR3Uzb2mMn6x7N41MVMKirl5eDlUeQFmHrQzq4KuYUoJj+7s7Cn2vZ9vtgN2irNo4
+         6mQ+vt/ENjeuoAhG/aICwWXdpPgtN9rG1fgBuXdjRKe0Z9diRDVB9BDSshEIn5bSW2D+
+         uDZa3D5JkvyN9LxNMElUiDhV+qysCG6ozueK1vk3tSo9rTLk3EC0wLjgTEIG262gN83s
+         ZLjbaCfJYE4bVoFBtsEWAsVEvRLVWYDmDRl9VCbX5syj1oT20kHYxEl6lQ44OR+x9kpM
+         1/Ne/DH9EDbOmqOMGX5nukYcATlIikNtu48eO3sCGXxo8KzU6B7W8fm1RyYvM6+Cznx6
+         SBxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+o0pueVZ861PFNaPrYiHg3vpUPtRa7x51nOh+6VPgio=;
-        b=zMb2Y62aotiYsN491SdEMMfdhTTnW7Wvn54edBVw7bX7y6mG+ipKoDIUbgI0F+F6PV
-         HjzTsUX+C4P19qGesD8VQWhaoSD24QanYLTZJi7un53XthXOldTqhc6ALAhZmpkNseG1
-         +GGtRwu4OwzTBvks5lhC8r0R+jePD/zadcRtkpvryIxGphYoRetVWh0XgZQaEEqtSfuA
-         gmJWO6tRSw+8ez9AgSKn3Nx9AWj8lBp+4gR94qDSob+jkcdprcg8VBVBllDIfjNNDwNZ
-         xF+emdi0smiEEgBkQmcHCY1Fag5Xxgc5jpJ6iyBHkfXPMBsXZs79bn0/VgkctqoIv9UI
-         yVcw==
-X-Gm-Message-State: AO0yUKXu283UV0htT/paWT7iYQp/7/9fPsNoMaQK65vQKJhh7ODJordx
-        2YBrbHHlPnHZ+jNhaQw+jrM70bNHAGZZgdH0UYwHf9XhVCtcf8RZ/1g=
-X-Google-Smtp-Source: AK7set/GWx//9aZEijFPoTVfWw9sKvwUTfvj0kgyHagHyHFEJyc4e8pb0A3QvVkheCxX6hn4K4vAs5HkjbXhWO8nQCs=
-X-Received: by 2002:a17:906:3586:b0:8ab:b606:9728 with SMTP id
- o6-20020a170906358600b008abb6069728mr77255ejb.5.1677533120740; Mon, 27 Feb
- 2023 13:25:20 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iRgWuAbWaYxaiebMMWCeq+aeo/6fiHCnGOaa9qpqar0=;
+        b=INjl3zYZWATofMjtQn4zL3ftCCOjIYYZadPc3YQQKqckbmD//AiJW5Ws9vv+4IwRbG
+         1capKuq6p33hhUO8ZemFTuSuYkx6GmfH79mwvwiPlp2G/NLDe5AamU3MQWHEM6TpR/rn
+         AXWXY/3hvmLlC0HxPWqj+gpYnqZt9YrFtsZWmpw9Sgp4oz5+yt1P07pWDHgzGO2/bbV8
+         gE/RKNzzQ29EatozQ8/jSL1hb5CWrCFtJMvfQPRGwaVM2vhKy3Kc7OlahcCusk/i7Ifa
+         M80TZCHeCblZj7fBIzIqZDFEcHCdUBRIePVN8CqHT0pSCKqZ7Bl3vMLGIIWRzWgxMXuy
+         knxg==
+X-Gm-Message-State: AO0yUKVS4tWcrvjvPzXcPqiONQ7QkWi2YAsxeCEIsIw4x4oq1dsMd1dh
+        GfXupudIuPfDvYNRUE7m+9Y=
+X-Google-Smtp-Source: AK7set/lb4Hog6/fs4T3YpHJSQaUlbZos02J/Ar96DtxxxfFWW1TluOahg0CUwmMwUCetiwE+Oz23w==
+X-Received: by 2002:a17:903:32d2:b0:19a:9686:ea8b with SMTP id i18-20020a17090332d200b0019a9686ea8bmr384992plr.28.1677533167726;
+        Mon, 27 Feb 2023 13:26:07 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id ik6-20020a170902ab0600b0019cb4166266sm5054462plb.83.2023.02.27.13.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 13:26:07 -0800 (PST)
+Date:   Mon, 27 Feb 2023 13:26:05 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v11 017/113] KVM: Support KVM_CAP_MAX_VCPUS for
+ KVM_ENABLE_CAP
+Message-ID: <20230227212605.GF4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <01e061779b88ce4d32bbe483ed2bd3224cd8e330.1673539699.git.isaku.yamahata@intel.com>
+ <5f9870acec07c47de5bab460c8c0d4a2c0db08fc.camel@intel.com>
 MIME-Version: 1.0
-References: <20230225014529.2259752-1-davidgow@google.com>
-In-Reply-To: <20230225014529.2259752-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 27 Feb 2023 16:25:09 -0500
-Message-ID: <CAFd5g46DFJayFnjJ4JGEUwvVDc-n=msHkMOR7SNd7Uverd6g+Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix 'hooks.o' build by recursing into kunit
-To:     David Gow <davidgow@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5f9870acec07c47de5bab460c8c0d4a2c0db08fc.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,20 +83,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 8:45 PM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> KUnit's 'hooks.o' file need to be built-in whenever KUnit is enabled
-> (even if CONFIG_KUNIT=m). We'd previously attemtped to do this by adding
-> 'kunit/hooks.o' to obj-y in lib/Makefile, but this caused hooks.c to be
-> rebuilt even when it was unchanged.
->
-> Instead, always recurse into lib/kunit using obj-y when KUnit is
-> enabled, and add the hooks there.
->
-> Fixes: 7170b7ed6acb ("kunit: Add "hooks" to call into KUnit when it's built as a module").
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Link: https://lore.kernel.org/linux-kselftest/CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com/
-> Signed-off-by: David Gow <davidgow@google.com>
+On Mon, Jan 16, 2023 at 04:44:21AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> On Thu, 2023-01-12 at 08:31 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > TDX attestation includes the maximum number of vcpu that the guest can
+> > accommodate.  
+> > 
+> 
+> I don't understand why "attestation" is the reason here.  Let's say TDX is used
+> w/o attestation, I don't think this patch can be discarded?
+>
+> IMHO the true reason is TDX has it's own control of maximum number of vcpus,
+> i.e. asking you to specify the value when creating the TD.  Therefore, the
+> constant KVM_MAX_VCPUS doesn't work for TDX guest anymore.
+
+Without TDX attestation, this can be discarded.  The TD is created with
+max_vcpus=KVM_MAX_VCPUS by default.
+
+
+> 
+>  
+> > For that, the maximum number of vcpu needs to be specified
+> > instead of constant, KVM_MAX_VCPUS.  Make KVM_ENABLE_CAP support
+> > KVM_CAP_MAX_VCPUS.
+> > 
+> > Suggested-by: Sagi Shahar <sagis@google.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  virt/kvm/kvm_main.c | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index a235b628b32f..1cfa7da92ad0 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -4945,7 +4945,27 @@ static int kvm_vm_ioctl_enable_cap_generic(struct kvm *kvm,
+> >  		}
+> >  
+> >  		mutex_unlock(&kvm->slots_lock);
+> > +		return r;
+> > +	}
+> > +	case KVM_CAP_MAX_VCPUS: {
+> > +		int r;
+> >  
+> > +		if (cap->flags || cap->args[0] == 0)
+> > +			return -EINVAL;
+> > +		if (cap->args[0] >  kvm_vm_ioctl_check_extension(kvm, KVM_CAP_MAX_VCPUS))
+> > +			return -E2BIG;
+> > +
+> > +		mutex_lock(&kvm->lock);
+> > +		/* Only decreasing is allowed. */
+> 
+> Why?
+
+I'll make it x86 specific and will drop this check.
+
+
+> > +		if (cap->args[0] > kvm->max_vcpus)
+> > +			r = -E2BIG;
+> > +		else if (kvm->created_vcpus)
+> > +			r = -EBUSY;
+> > +		else {
+> > +			kvm->max_vcpus = cap->args[0];
+> > +			r = 0;
+> > +		}
+> > +		mutex_unlock(&kvm->lock);
+> >  		return r;
+> >  	}
+> >  	default:
+> 
+> Also, IIUC this change is made to the generic kvm_main.c, which means other
+> archs are  affected too.  Is this OK to other archs?  Why such change cannot
+> TDX-specific (or, at least x86, or vmx specific)? 
+
+Ok, I made it x86 specific. 
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
