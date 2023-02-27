@@ -2,161 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44286A3B55
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0416A3B58
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjB0Goh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 01:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S229818AbjB0Gps convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Feb 2023 01:45:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB0Gog (ORCPT
+        with ESMTP id S229451AbjB0Gpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 01:44:36 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A89510AB1;
-        Sun, 26 Feb 2023 22:44:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677480275; x=1709016275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l7fNlOQJTNMVvMxezJZRa8jk93MTm7z8h1o/L1+XyGw=;
-  b=D6cWj6ahbhDL4C6f6dII5CfR23hqwZqU2W/ejPj09phJZlboMZEYS4j8
-   DPGywoVCQ4727WILjv8rsee6Sp3q1LsCD9xATKSZHFO82mg1Wju+hudZQ
-   SdB0GsUzMsiy2hjb3TjKyKv0Ld241AO3JtTWiBI+ChBmvHz72qIcMl6+S
-   o6CQCQxFJhI9JahuzCmEnl9RTFCPyAm6bKOIVJ7e6wz54AeOnBwaI8nDT
-   FQkRM793RwzolszBM+xeWu1GZS9e7Qn/wgOLPMf1i8GppgVFi8q26bmHw
-   5DrpTd7+AZo5qaUtDbyRP3zfFkhx0zfeyXM08oERnqkajDe6XgM2FpcWw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="332514897"
-X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="332514897"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 22:44:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="651085796"
-X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="651085796"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2023 22:44:27 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWXFK-0004A3-0T;
-        Mon, 27 Feb 2023 06:44:26 +0000
-Date:   Mon, 27 Feb 2023 14:43:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mark Brown <broonie@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata'
- accessor in thermal located drivers
-Message-ID: <202302271421.ZjVUJ4DB-lkp@intel.com>
-References: <20230226225406.979703-3-daniel.lezcano@linaro.org>
+        Mon, 27 Feb 2023 01:45:46 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A0710AB1;
+        Sun, 26 Feb 2023 22:45:44 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id BC51724E2B1;
+        Mon, 27 Feb 2023 14:45:36 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 14:45:36 +0800
+Received: from [192.168.125.128] (113.72.145.171) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 14:45:35 +0800
+Message-ID: <2b79e1ac-3399-075d-1d1d-e6d7f88351fc@starfivetech.com>
+Date:   Mon, 27 Feb 2023 14:45:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226225406.979703-3-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>
+References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
+ <20230220081926.267695-3-xingyu.wu@starfivetech.com>
+ <20230223182341.GA200380@roeck-us.net>
+ <8ba002ea-299c-2eaf-b1a7-d7d38a540152@starfivetech.com>
+ <ae998eb6-54ce-05c4-2961-bdb2393eac64@roeck-us.net>
+ <58cab864-2a59-b82c-bdfe-2e805a04fd7a@starfivetech.com>
+ <547a469d-eeaa-750c-4fe5-cc82d92493a6@roeck-us.net>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <547a469d-eeaa-750c-4fe5-cc82d92493a6@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.145.171]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 2023/2/27 14:36, Guenter Roeck wrote:
+> On 2/26/23 22:26, Xingyu Wu wrote:
+>> On 2023/2/24 23:18, Guenter Roeck wrote:
+>>> On 2/23/23 23:42, Xingyu Wu wrote:
+>>>> On 2023/2/24 2:23, Guenter Roeck wrote:
+>>>>> On Mon, Feb 20, 2023 at 04:19:26PM +0800, Xingyu Wu wrote:
+>>>>>> [...]
+>>>>>> +
+>>>>>> +    wdt->wdt_device.min_timeout = 1;
+>>>>>> +    wdt->wdt_device.max_timeout = starfive_wdt_max_timeout(wdt);
+>>>>>
+>>>>>      wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
+>>>>>
+>>>>> should be set here. Otherwise the warning below would always be seen
+>>>>> if the module parameter is not set.
+>>>>>
+>>>>>> +
+>>>>>> +    watchdog_set_drvdata(&wdt->wdt_device, wdt);
+>>>>>> +
+>>>>>> +    /*
+>>>>>> +     * see if we can actually set the requested heartbeat,
+>>>>>> +     * and if not, try the default value.
+>>>>>> +     */
+>>>>>> +    watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev);
+>>>>>> +    if (wdt->wdt_device.timeout == 0 ||
+>>>>>
+>>>>> If wdt->wdt_device.timeout is pre-initialized, it will never be 0 here.
+>>>>>
+>>>>>> +        wdt->wdt_device.timeout > wdt->wdt_device.max_timeout) {
+>>>>>
+>>>>> That won't happen because watchdog_init_timeout() validates it and does
+>>>>> not update the value if it is out of range.
+>>>>>
+>>>>>> +        dev_warn(dev, "heartbeat value out of range, default %d used\n",
+>>>>>> +             STARFIVE_WDT_DEFAULT_TIME);
+>>>>>> +        wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
+>>>>>
+>>>>> And this is then unnecessary. wdt->wdt_device.timeout will always be
+>>>>> valid if it was pre-initialized.
+>>>>
+>>>> It is changed to be this at beginning of the driver:
+>>>>
+>>>> static int heartbeat = STARFIVE_WDT_DEFAULT_TIME;
+>>>>
+>>>
+>>> No, this is wrong. The static variable should be set to 0 to indicate
+>>> "use default".
+>>>
+>>>> and it is changed to be this here:
+>>>>
+>>>> ret = watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev);
+>>>> if (ret)
+>>>>      return ret;
+>>>>
+>>>> Would that be better?
+>>>>
+>>>
+>>> No, it is worse, because it would not instantiate the watchdog at all
+>>> if a bad heartbeat is provided.
+>>>
+>>
+>> So instantiate the watchdog with hearbeat first. And if this wrong, use default timeout.
+>> :
+>> if (watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev))
+>>     wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
+>>
+> 
+> I am kind of lost why you have to make it that complicated.
+> Just pre-initialize wdt->wdt_device.timeout like all the other drivers do,
+> and as I had suggested earlier.
+> 
 
-I love your patch! Yet something to improve:
+So you mean just use :
+wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
+to initialize watchdog directly?
 
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on groeck-staging/hwmon-next]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230226225406.979703-3-daniel.lezcano%40linaro.org
-patch subject: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata' accessor in thermal located drivers
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230227/202302271421.ZjVUJ4DB-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
-        git checkout c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302271421.ZjVUJ4DB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/thermal/db8500_thermal.c: In function 'db8500_thermal_get_temp':
->> drivers/thermal/db8500_thermal.c:63:42: error: implicit declaration of function 'therma_zone_device_priv'; did you mean 'thermal_zone_device_priv'? [-Werror=implicit-function-declaration]
-      63 |         struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~
-         |                                          thermal_zone_device_priv
-   drivers/thermal/db8500_thermal.c:63:42: warning: initialization of 'struct db8500_thermal_zone *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   cc1: some warnings being treated as errors
-
-
-vim +63 drivers/thermal/db8500_thermal.c
-
-    59	
-    60	/* Callback to get current temperature */
-    61	static int db8500_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-    62	{
-  > 63		struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
-    64	
-    65		/*
-    66		 * TODO: There is no PRCMU interface to get temperature data currently,
-    67		 * so a pseudo temperature is returned , it works for thermal framework
-    68		 * and this will be fixed when the PRCMU interface is available.
-    69		 */
-    70		*temp = th->interpolated_temp;
-    71	
-    72		return 0;
-    73	}
-    74	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+Xingyu Wu
