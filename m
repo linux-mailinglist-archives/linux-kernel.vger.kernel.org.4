@@ -2,123 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBC66A4D05
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8256A4D03
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjB0VSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S229835AbjB0VSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjB0VSh (ORCPT
+        with ESMTP id S229590AbjB0VSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:18:37 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5491FC167
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:18:03 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5384ff97993so214533527b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:18:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=861ENRhd8EcHSgkNed94lLcOy+3hO+Ai15ZLxiI8kpM=;
-        b=kloYiVK17/dt2g3sp7Dfx3rk4LMRwTyDQgC5p0DMXht369w9cWMi9xv7oVE/2p3m9q
-         APhG6yjBMR1RV1BkutloNYHI/oKXML0JscnUGWpgoPTr5hGSK0RWsyasxlZsVIFSkbdt
-         dgUIrX23diNJXG+RUt9nJMrga98jtbyGd0PpIzC8UGEi4uaKfVOOlSnkr2BVp636gGPU
-         oCwBueM+qUp0hrN52MRgMAxZmDDufSyBMPqz7wni4mu0VjOUOBF9KAmDfsUv1rxN3BPA
-         kQcR9YDXDLcH8SC/JjCS8CZNtglOl6t+57ywwIDCk/zhZMj0yljfLe6CE0/zDKwsrLxc
-         gDNw==
+        Mon, 27 Feb 2023 16:18:33 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8E865A2;
+        Mon, 27 Feb 2023 13:18:01 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-172b0ba97b0so8834574fac.4;
+        Mon, 27 Feb 2023 13:18:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=861ENRhd8EcHSgkNed94lLcOy+3hO+Ai15ZLxiI8kpM=;
-        b=ilfOldbicCfM9Ao1Vas1OqOZGrWzepZACiAzmFZg1sH/9ft6kUGyoIRD75FQk/r7Ub
-         sdhonGvLS6YujkwHM1uf+hSMA9TP1rzhJfluxvG3Rwu3TQsELLn7kfkBl4f/3qedDytu
-         au17rXSS4g5YYejevtLIuugX6NTSzyIY7W5pG/hhU4mKr2rO6Xupn66aTyYnmS1LVsUV
-         753211qSeP+MZOowMM6xcksDVt7TYU4V21bPF1fLZyaD5r6it+H86pDuYuPJ/zK52NTg
-         Oh8EaoFd7qQTIXn3UVSz4Ovpd9L0VDztk9acfPpPzLyJBqHkt0OgWkJr0SRrx/O0mocf
-         K8jg==
-X-Gm-Message-State: AO0yUKUuiTOVrwx5Y07j2xNN+5wqvu5XOu2tib/nPW3TTW6EBsh4/44h
-        a570wc5YAiQyd3pV0/gtdbw/lgTMfam7RsX1ySc4wg==
-X-Google-Smtp-Source: AK7set//HnE1NkogtMQUUnKRN9ZnMZvonCvFO7FMIxs+p8rQ32omlyXDjNQIPGNptsPySH4EGsfKDlYCxpjMnXONZwM=
-X-Received: by 2002:a5b:685:0:b0:9f1:6c48:f95f with SMTP id
- j5-20020a5b0685000000b009f16c48f95fmr75674ybq.5.1677532681340; Mon, 27 Feb
- 2023 13:18:01 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zX271Z17IYJYFZ6+Pw+108O6ngWW7LHtxo4jChDSQAk=;
+        b=4TvjRj0zDDnuuomX39E/b65iiPdsiSpxuQf+FSpiw6tXNbixJhn9qseslBCofqv94H
+         x4tvCnntD9bEpP87aVy6GVXFD6RPprnT3HbJp9weana2JStkPi0Je4Sm/Nnimz7R7OW6
+         Im9x4T1M5k9p5M8w72/OSNNhB+4s9+xYzpocTeTgQWBeytIy+l0+BjXep08zczPQWpPg
+         UK/UIn2+sfqfLPLb5iQWNONajB4CbAnL0eaTvyV3QzliMqTIvqLWzKm+tULw5QmmBWqE
+         pxw716uUXtDnnHySAsTI9qvRZQGzejswdhF5ohpOOlzaJQRTnVvmO+01goLvHSxmUQ3C
+         x4NQ==
+X-Gm-Message-State: AO0yUKXgGCdmg2nrL7kY3hIqli99nq3FAtqYmsCZv5lbtWgMf8awwAn9
+        PbzSDlAzn4qyodruR7p3AQ==
+X-Google-Smtp-Source: AK7set87cmHJ99JvcXzPYgR9FAh4isXl9RqfL2fZbfCBS7wGcQ6E0/WU3h+pSrDm2KXqH5Egd/UlcQ==
+X-Received: by 2002:a05:6870:4796:b0:15f:4dc3:8800 with SMTP id c22-20020a056870479600b0015f4dc38800mr97787oaq.23.1677532680017;
+        Mon, 27 Feb 2023 13:18:00 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g5-20020a4ae885000000b004a3d98b2ccdsm3050775ooe.42.2023.02.27.13.17.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 13:17:59 -0800 (PST)
+Received: (nullmailer pid 993604 invoked by uid 1000);
+        Mon, 27 Feb 2023 21:17:58 -0000
+Date:   Mon, 27 Feb 2023 15:17:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kernel@pengutronix.de,
+        linux-usb@vger.kernel.org, jun.li@nxp.com, robh+dt@kernel.org,
+        festevam@gmail.com, linux-arm-kernel@lists.infradead.org,
+        Peng Fan <peng.fan@nxp.com>, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, xu.yang_2@nxp.com, linux-imx@nxp.com,
+        shawnguo@kernel.org
+Subject: Re: [PATCH V3 7/7] dt-bindings: usb: usb-nop-xceiv: add
+ power-domains property
+Message-ID: <167753267847.993544.14425185872687600268.robh@kernel.org>
+References: <20230226130539.277336-1-peng.fan@oss.nxp.com>
+ <20230226130539.277336-8-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <Y/cBB+q0Ono9j2Jy@gondor.apana.org.au> <20230224231430.2948-1-kunyu@nfschina.com>
- <Y/cy5wUtk10OahpO@gondor.apana.org.au> <CACRpkdYyB=-UnE1bmdVszSSB5ReECZ0fUoWJX6XtYbKHEe52tA@mail.gmail.com>
- <Y/c7iVW67Xhhdu8e@gondor.apana.org.au> <Y/hQdzsKMYgkIfMY@gondor.apana.org.au> <Y/yIbPBVCPx9K/0s@gondor.apana.org.au>
-In-Reply-To: <Y/yIbPBVCPx9K/0s@gondor.apana.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 27 Feb 2023 22:17:49 +0100
-Message-ID: <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
-Subject: Re: [v3 PATCH] crypto: stm32 - Save and restore between each request
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230226130539.277336-8-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 11:39 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
 
-> v3 moves the exported state into its own structure so that it
-> doesn't contain unnecessary data.  It also subsumes the "empty
-> message" patch, as only the stm32_hash_copy_hash hunk was really
-> needed and it's easiest if we put that here.
+On Sun, 26 Feb 2023 21:05:39 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add power-domains optional property
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-Thanks Herbert, now the driver probes fine, but unfortunately the tests
-fail:
+Acked-by: Rob Herring <robh@kernel.org>
 
-[    2.963725] alg: extra crypto tests enabled.  This is intended for
-developer use only.
-[   17.106532] Key type encrypted registered
-[   23.804729] stm32-hash a03c2000.hash: allocated hmac(sha256) fallback
-[   23.812529] alg: ahash: stm32-hmac-sha256 test failed (wrong
-result) on test vector 0, cfg="init+update+final aligned buffer"
-[   23.823902] alg: self-tests for hmac(sha256) using
-stm32-hmac-sha256 failed (rc=-22)
-[   23.823924] ------------[ cut here ]------------
-[   23.836312] WARNING: CPU: 0 PID: 72 at crypto/testmgr.c:5858
-alg_test.part.0+0x4d0/0x4dc
-[   23.844449] alg: self-tests for hmac(sha256) using
-stm32-hmac-sha256 failed (rc=-22)
-[   23.844460] Modules linked in:
-[   23.855261] CPU: 0 PID: 72 Comm: cryptomgr_test Not tainted
-6.2.0-12019-g4bc85a2f8f63 #65
-[   23.863440] Hardware name: ST-Ericsson Ux5x0 platform (Device Tree Support)
-[   23.870408]  unwind_backtrace from show_stack+0x10/0x14
-[   23.875653]  show_stack from dump_stack_lvl+0x40/0x4c
-[   23.880727]  dump_stack_lvl from __warn+0x94/0xc0
-[   23.885450]  __warn from warn_slowpath_fmt+0x118/0x164
-[   23.890603]  warn_slowpath_fmt from alg_test.part.0+0x4d0/0x4dc
-[   23.896540]  alg_test.part.0 from cryptomgr_test+0x18/0x38
-[   23.902042]  cryptomgr_test from kthread+0xc0/0xc4
-[   23.906847]  kthread from ret_from_fork+0x14/0x2c
-[   23.911557] Exception stack(0xf0f39fb0 to 0xf0f39ff8)
-[   23.916609] 9fa0:                                     00000000
-00000000 00000000 00000000
-[   23.924783] 9fc0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[   23.932956] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[   23.939604] ---[ end trace 0000000000000000 ]---
-
-
-All tests fail on vector 0 or 1.
-
-I am trying to debug!
-
-Yours,
-Linus Walleij
