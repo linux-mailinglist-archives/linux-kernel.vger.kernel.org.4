@@ -2,82 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F656A4ED2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E85F76A4ED5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjB0Wn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S229836AbjB0WoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjB0Wns (ORCPT
+        with ESMTP id S230001AbjB0WoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:43:48 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B9923DB4;
-        Mon, 27 Feb 2023 14:43:15 -0800 (PST)
-Received: by mail-pj1-f50.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so11734159pjb.1;
-        Mon, 27 Feb 2023 14:43:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qCxd0o6I6PVpHD5qrk9QAafoCFUoiKj6VQ7yh68C05c=;
-        b=pj9I6gwKSepklgj6KYDtEs0pMjYUoG3gNIjz0Wh2YIj35XCpgV84o44l0kaQkmlbnF
-         Avj7UHRTJW4O05Pvzpzz+/a4EbSUmH+km8pXDfoK8YE9XtlAWyOWLoNL/rFtZiDV/xXr
-         X5aQ860sSdMaozXYv+J7MfOoP63L+EqVJE+02ztABtVMPD3NsYggSH9B4wmB33/YeQrr
-         mefHsfn/doNRKVuZ//jp28C9wxCz8mNye8CTQn8UL3J89z+mqHTqWBQNGZblm2pVlXNg
-         kPd8XYf0r9mrhx98JcgvDXxlE6wq7pJQ1M0xx5sqos9tx6xlaYfi/wRN/ayNcMGK9nHF
-         JGoQ==
-X-Gm-Message-State: AO0yUKW7NtEGWhVmdM10i0f5aOBZBMcNu6aLHXkZqRlecaIkbDq5710H
-        66+rIHURs4pJ3B49FYxLEufg2TZKBNU=
-X-Google-Smtp-Source: AK7set98soD4yjnc2MvbeieY+/GJvE6ANtpYsxx5d+GZ34/Z/sdYAUIKvRTqAfLminupo0FWOhZgoQ==
-X-Received: by 2002:a17:90b:1d88:b0:237:c52f:a54d with SMTP id pf8-20020a17090b1d8800b00237c52fa54dmr9522892pjb.21.1677537719315;
-        Mon, 27 Feb 2023 14:41:59 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:6cf3:f584:1162:e48a? ([2620:15c:211:201:6cf3:f584:1162:e48a])
-        by smtp.gmail.com with ESMTPSA id k15-20020a637b4f000000b004fb26a80875sm4487449pgn.22.2023.02.27.14.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 14:41:58 -0800 (PST)
-Message-ID: <f7e6028c-7ed9-a410-19c7-268ac701d03d@acm.org>
-Date:   Mon, 27 Feb 2023 14:41:55 -0800
+        Mon, 27 Feb 2023 17:44:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF4FDBC1;
+        Mon, 27 Feb 2023 14:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2e4LOLQwFxhDgGoXmiL7+U4YyT78y3H+UWPeZs33bwQ=; b=rjNviUim7sg9Zj9XO/LNgcGiY9
+        2uZu5WYDay3SvE4O1bC0Sw9LZWKuoTJzRtSQE8/+Wbb6D3kcN4PgDJFL725btb61JyyC/+K/AzphF
+        FEwgutMOHjmJmK/FNKrXdp7VOXmsxNV0uBIPYg5RL5bny6z6W1ELLV9sfUde0wZRG3Mfjj6Jxumul
+        Hh1r6z1CKUirlBGVIh/iGr37RDLHXFRAr4LflScXutkRNNJBJL60L+UaGaLIGaXPe2G9ipmfKZF4L
+        ajru3FQFcZllB0+TdqvaxCe6OoVfbwqm4623UjdTAsQJx0213SDsk/DNKLaVOOfuXkdKsp9zM/uwn
+        1VsVMEwQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWmCF-00BVMN-Cs; Mon, 27 Feb 2023 22:42:15 +0000
+Date:   Mon, 27 Feb 2023 14:42:15 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
+ 165
+Message-ID: <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
+References: <20230206234344.2433950-1-mcgrof@kernel.org>
+ <20230206234344.2433950-2-mcgrof@kernel.org>
+ <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/7] scsi: ufs: core: Fix mcq nr_hw_queues
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com,
-        mason.zhang@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com
-References: <20230222030427.957-1-powen.kao@mediatek.com>
- <20230222030427.957-4-powen.kao@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230222030427.957-4-powen.kao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 19:04, Po-Wen Kao wrote:
-> Need to add one to MAXQ to obtain number of hardware queue.
+On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
+> On 2/6/23 16:43, Luis Chamberlain wrote:
+> > The default sefltests timeout is 45 seconds. If you run the kmod
+> > selftests on your own with say:
+> > 
+> > ./tools/testings/selftests/kmod.sh
+> > 
+> > Then the default timeout won't be in effect.
+> > 
+> > I've never ran kmod selftests using the generic make wrapper
+> > (./tools/testing/selftests/run_kselftest.sh -s) util now
+> > that I have support for it on kdevops [0]. And with that the
+> > test is limitted to the default timeout which we quickly run
+> > into. Bump this up to what I see is required on 8GiB / 8 vcpu
+> > libvirt q35 guest as can be easily created now with kdevops.
+> > 
+> > To run selftests with kdevops:
+> > 
+> > make menuconfig # enable dedicated selftests and kmod test
+> > make
+> > make bringup
+> > make linux
+> > make selftests-kmod
+> > 
+> > This ends up taking about 280 seconds now, give or take add
+> > 50 seconds more more and we end up with 350. Document the
+> > rationale.
+> > 
+> > [0] https://github.com/linux-kdevops/kdevops
+> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > ---
+> >   tools/testing/selftests/kmod/settings | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> >   create mode 100644 tools/testing/selftests/kmod/settings
+> > 
+> > diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+> > new file mode 100644
+> > index 000000000000..6fca0f1a4594
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kmod/settings
+> > @@ -0,0 +1,4 @@
+> > +# measured from a manual run:
+> > +# time ./tools/testing/selftests/kmod/kmod.sh
+> > +# Then add ~50 seconds more gracetime.
+> > +timeout=350
+> 
+> Adding timeouts like this for individual tests increases the overall kselftest
+> run-time. I am not in favor of adding timeouts.
+> 
+> We have to find a better way to do this.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Well if folks don't have this the test will fail, and so a false
+positive. If the goal is to have a low time timeout for "do not run
+tests past this time and do not fail if we stopped the test" then
+that seems to be likely one way to go and each test may need to be
+modified to not fail fatally in case of a special signal.
 
-
+  Luis
