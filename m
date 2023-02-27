@@ -2,146 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6A26A4C48
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F696A4C42
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjB0UdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
+        id S229830AbjB0UdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjB0UdV (ORCPT
+        with ESMTP id S229501AbjB0UdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:33:21 -0500
-X-Greylist: delayed 4962 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Feb 2023 12:33:12 PST
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98091C14F;
-        Mon, 27 Feb 2023 12:33:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677529967; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=IhyRK/LCSLXFmhDRD/Dr1guGh+7yYw8ILz5Ya6JLhCqlTkilCKeq4ncdICStUDhptw
-    Hs4vULkR/DB4Y9gGUeqRvlebAIPE67RCnultI+PybtWhvnCAd7AB/87MTsS/grvxsj8Q
-    D6Ofi5q7iLe8mnRWThJpKV2DW6HDpVf0Be173esQuB/XxVvD1G4lszA0s89P4rtFO1wR
-    isfwGJUkcSklnAhtXGBWt0zLKltshyrVHSax4r3/Hsg3Er5l55MDFq+Qve9Evjb6/IOM
-    fffjRyT5an+h+A5SmTTymMsj23sFeyDocdZ91WZkaGmTIlg//pfbM5LQmjJ3rNNK0xTZ
-    bqhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1677529967;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wKj3foVIx8l1HkzeDENrj553SI1e2euuTmuWcuQpxeY=;
-    b=OHxih5nm72pjhM4dgaSVeDPtcaCAMbMJ80B2QCiJI/M3zwrTno8j0i6bLvlJDLGEDB
-    78ZEM7jt3erWHSf71KqTp3UzHx/kGHsCSPKyV8FyYcRQGLROxE90T1Kv/dG8Uo+JIAMa
-    MqcQdzdvrRr1S9+xAGo2hSDaUP7xvadSWIWTBLm4391Lk7I/iskkISLjGrIdm222q6pQ
-    d/R3fsrxC8pNIEODz1k3dVZCpFqprMaIDBqRIpUwFf50QaZynCFxdHAKacikLBg5TJDc
-    7D78wRDiCRxQYPJ2VKFU3TVujCgkO344Qcr0j4Benw9LjB7vBxdQJGQekSDZdG1HVjUB
-    aSrw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1677529967;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wKj3foVIx8l1HkzeDENrj553SI1e2euuTmuWcuQpxeY=;
-    b=Xb4ZTrw8FighxuOGDkFoVS7BNHKs0YJZMEPPef9v7rb110Sbl2r4w09XRLtX/5OfQ6
-    UHaaGtZi+el4xG0O1+hdd5vMnh7XyM0mMpUNZxjbGDxbtlWoVV9deQpwoxTOZi6HVMtT
-    SfQzC5QhthQrVrbJvKp+aYTF/tbZOCKTmJvvNZIal/Wfjs5cl8UAEuCBDJUS66jByUq1
-    JraL6Ta7PJ11tuWQCyO6U/fc4c+qINyk/5WVgRQaQWz8i5nrcxpUOHdJcytSIANTXeGH
-    XhZ/Ts3yj5ASLikVxUL4Pen0SSTa3OmdfLyCu8CV5uf6QIy/DALxigwWiTiJILvv5FJP
-    LRkw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id x84a76z1RKWkrhm
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 27 Feb 2023 21:32:46 +0100 (CET)
-Message-ID: <c5f1e652-b7e7-ff79-11e3-8c5c91011b83@hartkopp.net>
-Date:   Mon, 27 Feb 2023 21:32:40 +0100
+        Mon, 27 Feb 2023 15:33:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD59BB8C;
+        Mon, 27 Feb 2023 12:33:06 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677529984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aSq3U8vm3tPDYRLicDf/4tQ5XJoyg12J2HKCMxx/oIM=;
+        b=UFgsDsc3BVDY0ST5cC8kRV6aW75Q8+Uw9k/qYdlIf7ai3haStL/5lo/odeUf9gCw40SHJq
+        6bPqNPHdJIts50Shf5ToscR1yMe2XaXaYygeTY+11/8snbPkldMCBaXV70C3u4bxT9lUuE
+        vFstBx2f1xYwlYmn2Azc6DsKNkZVMJIDkjNPTErYUUyGQidArBglOuOCsDwTOoB8FCkj49
+        xC3+srFIBwVJ1actrV0d8wwyh/jaBAQuFt0sd5QDDKAbx+6tvRa6lD8+nR0kuNAsQ+c5ud
+        za9ElFnVHThDhyj6lvOvvBL6FmIIbssdljrbef6L183i3iiJcmX/EllGu4gxMw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677529984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aSq3U8vm3tPDYRLicDf/4tQ5XJoyg12J2HKCMxx/oIM=;
+        b=WVcrt4Uz9bCFKMvLHR9CMqyT+IYdO23FfU0dOGi+I/89mxZG6bulg2jos4Ed66M4fzR1oI
+        /WjIby+pfyEDQTBw==
+To:     syzbot <syzbot+5093ba19745994288b53@syzkaller.appspotmail.com>,
+        dhowells@redhat.com, jarkko@kernel.org, jmorris@namei.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        serge@hallyn.com, syzkaller-bugs@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [syzbot] [keyrings?] [lsm?] WARNING in __mod_timer
+In-Reply-To: <000000000000af8f7c05f5a673bb@google.com>
+References: <000000000000af8f7c05f5a673bb@google.com>
+Date:   Mon, 27 Feb 2023 21:33:03 +0100
+Message-ID: <87ttz6n91c.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Olof Johansson <olof@lixom.net>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-References: <20230227133457.431729-1-arnd@kernel.org>
- <1daa9f1f-6a68-273f-0866-72a4496cd0db@hartkopp.net>
- <c5ea695e-8693-4033-9941-c582f1c6f6be@app.fastmail.com>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <c5ea695e-8693-4033-9941-c582f1c6f6be@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.02.23 20:53, Arnd Bergmann wrote:
-> On Mon, Feb 27, 2023, at 20:07, Oliver Hartkopp wrote:
+On Sun, Feb 26 2023 at 19:55, syzbot wrote:
+> ODEBUG: assert_init not available (active state 0) object: ffffffff8d4fcbc0 object type: timer_list hint: key_gc_timer_func+0x0/0x80 security/keys/gc.c:117
 
->> I assume these CAN bus PCMCIA interfaces won't work after your patch
->> set, right?
-> 
-> Correct, the patch series in its current form breaks this since
-> your laptop is cardbus compatible. The options I can see are:
-> 
-> - abandon my series and keep everything unchanged, possibly removing
->    some of the pcmcia drivers that Dominik identified as candidates
-> 
-> - decide on a future timeline for when you are comfortable with
->    discontinuing this setup and require any CAN users with cardbus
->    laptops to move to USB or cardbus CAN adapters, apply the series
->    then
-> 
-> - duplicate the yenta_socket driver to have two variants of that,
->    require the user to choose between the cardbus and the pcmcia
->    variant depending on what card is going to be used.
-> 
-> Can you give more background on who is using the EMS PCMCIA card?
-> I.e. are there reasons to use this device on modern kernels with
-> machines that could also support the USB, expresscard or cardbus
-> variants, or are you likely the only one doing this for the
-> purpose of maintaining the driver?
+>  WARNING: CPU: 1 PID: 10646 at lib/debugobjects.c:512 debug_object_assert_init+0x1f2/0x240 lib/debugobjects.c:899
+>  debug_assert_init kernel/time/timer.c:837 [inline]
+>  __mod_timer+0x10d/0xf40 kernel/time/timer.c:1020
+>  key_reject_and_link+0x3f5/0x6e0 security/keys/key.c:610
+>  key_negate_and_link include/linux/key-type.h:187 [inline]
+>  complete_request_key security/keys/request_key.c:64 [inline]
+>  call_sbin_request_key+0xa7b/0xcd0 security/keys/request_key.c:213
+>  construct_key security/keys/request_key.c:244 [inline]
+>  construct_key_and_link security/keys/request_key.c:503 [inline]
+>  request_key_and_link+0x11e3/0x18e0 security/keys/request_key.c:637
+>  __do_sys_request_key security/keys/keyctl.c:222 [inline]
+>  __se_sys_request_key+0x271/0x3b0 security/keys/keyctl.c:167
 
-Haha, good point.
+This is odd. The timer object is statically allocated via
+DEFINE_TIMER(). That macro sets
 
-In fact the EMS PCMCIA, the PEAK PCMCIA (PCAN PC Card) and the supported 
-Softing PCMCIA cards are nearly 20 year old designs and they are all 
-discontinued for some time now. Today you can easily get a high 
-performance Classical CAN USB adapter with an excellent OSS firmware for 
-~13 EUR.
+       timer.entry.next = TIMER_ENTRY_STATIC
 
-The only other laptop CAN "Cards" I'm aware of are PCIe "ExpressCard" 
-34/54 from PEAK System which use the PCI subsystem.
+which is used to detect statically allocated timer objects via
+timer_is_static_object() and that checks for:
 
-Maybe you are right and we should simply drop the support for those old 
-PCMCIA drivers which will still be supported for the LTS 6.1 lifetime then.
+     timer.entry.pprev == NULL && timer.entry.next == TIMER_ENTRY_STATIC
 
-@Marc Kleine-Budde: What do you think about removing these three drivers?
+The only function which touches key_gc_timer is
 
-Best regards,
-Oliver
+    key_reject_and_link()
+      mod_timer()
+        __mod_timer()
+          debug_assert_init()
+            debug_timer_assert_init()
+              debug_object_assert_init()
+                if (!lookup_object()) {
+                   if (!check_for_static_object()) <- Invokes timer_is_static_object()
+                      WARN()
+
+If this is the first invocation of mod_timer(&key_gc_timer,...) then
+key_gc_timer is corrupted.
+
+If this is not the first invocation of mod_timer(&key_gc_timer,...) then
+the debugobjects hash is corrupted.
+
+Either way neither the timer code nor debugobjects have been changed
+since the 6.2 release and certainly are innocent here.
+
+That smells like a nasty memory corruption issue and the two other
+syzbot reports which arrived in my filtered inbox:
+
+ https://lore.kernel.org/all/000000000000d7894b05f5924787@google.com
+ https://lore.kernel.org/all/000000000000840dae05f5a7fb53@google.com
+
+point to memory corruption as well.
+
+The first one has a C reproducer. Can that be used for bisection?
+
+Thanks,
+
+        tglx
