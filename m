@@ -2,83 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BEA6A4893
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCA76A4897
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjB0RuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S229854AbjB0Rvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjB0RuO (ORCPT
+        with ESMTP id S229542AbjB0Rvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:50:14 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4504A83E8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:50:13 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-536bbe5f888so197834597b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NoJU+P+wk0oP4uOQVAulVzE7C+CLPILBxmnJLRQCZ04=;
-        b=PiMWHRJUpVelTbxf7LJVGiZYvQnIU3y8Qacrg9vzNxq2j3lwg+vo/OZkyZllDmIpIh
-         KIwD10qtsZtlacmxcJAvI+IOxTl2OMd78qzCYpADGpGkbHYgF8JTH1OAJS2gxfaqbva1
-         Ampsmh7LW/cdt1IMF583Yq0R8mDIK3gD4fFaN5xq9N/CYkmKy57ydA+dWMrW9VQ4K9Vi
-         twbl3C44EY4+K2+vd38kHJQvyew+ugfDirLXryujzn+4EUbS4pNPZQFTd80oBNSB1eOD
-         EhoiujTNyy6Q63JD98dL4xAXk89mwbViAXrxemw1QVXvzvpjnFD0DQZTJ//sW7PGky6h
-         KG2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NoJU+P+wk0oP4uOQVAulVzE7C+CLPILBxmnJLRQCZ04=;
-        b=X6VrVGXUKB9hw/0vrE7H5Ng4/Hr5ZnSFYU4RGXQXdUlxFrCLj0eKliSfjro7bxK34A
-         1QOIPnD91QMiSKvX5DLMrEiL6PuNHQqJQ8YT6/UbjvCWjCiZOqa+kSxFH6t6u56GpSzP
-         QWVeSFb6slxLjDULb2pUQAwUwSWcjv110NsfL03pPp/qrWajvkr/MK0V0F7DlorOESHP
-         q8g1YxsILZxhlOlEHOAAsLfxh5B9Hg/R3suLqoUA3b7V2Aqt0gWsIn1ArvjuBcY/Pt62
-         VjmbOcDPO08IhTF29A/wdyG0nmdFpVd8ZjkQK5LKMhj3TI568MEDykyJcxU4rrO5LY1y
-         Vx3g==
-X-Gm-Message-State: AO0yUKX7kh8///JaPwNihegSWjhdD2k3y7ihpM9AczUDwLzjDW0f/ifC
-        FzUkK3u66mDotAltW21ZIDEY0kdy9mwdXCZMy9Cgjg==
-X-Google-Smtp-Source: AK7set+AuUEVky3TlKUD481gMrdm00yhbolbqC6ZjtveZ4fmE3p+G7HBX+5fhoi8eN6gwoWKepOXmPldg78dfHdQaV4=
-X-Received: by 2002:a81:ad27:0:b0:533:9d49:f9c9 with SMTP id
- l39-20020a81ad27000000b005339d49f9c9mr11022028ywh.0.1677520212213; Mon, 27
- Feb 2023 09:50:12 -0800 (PST)
+        Mon, 27 Feb 2023 12:51:31 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF9510ABA;
+        Mon, 27 Feb 2023 09:51:28 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 7428F604E9;
+        Mon, 27 Feb 2023 18:51:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1677520282; bh=YdTE5lDjvSSCYH2seOlusLqO3HeakuTrMpKlRWsfD7U=;
+        h=Date:To:Cc:From:Subject:From;
+        b=PsaigPuDqLpEVTR5iDmXZmLDHZ+pa5Bm8yWi73hCBBxJ84N5SK8UOGCRQ85A27LcO
+         3IAHHadhCkFpgZFDiwnWKRTedStfiCYKmqVFCTmXBVKPDmHfP3AUVC/RFFxUEapTdp
+         cEZiaMrksCMGrPuouGgGpJzQJ2G+7ZZvqku3HfggONDr6jkLioyBpBm5r0dYDnrN87
+         uYl3N7uvLp+mZwH+PYbX/dmga1vyUglhTo87kC9+NoeTomxmUAeU2Zqz8QK6vgsl+S
+         8hd71trlysAulyw41ErQDQfLAY1/FFYjsw7Z1cpOgIZapUYWdRXKoIVd11JRRmnDGD
+         E/pKP09rQBflw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7lCOyHGiZN8z; Mon, 27 Feb 2023 18:51:15 +0100 (CET)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id B8CEF604EA;
+        Mon, 27 Feb 2023 18:51:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1677520274; bh=YdTE5lDjvSSCYH2seOlusLqO3HeakuTrMpKlRWsfD7U=;
+        h=Date:To:Cc:From:Subject:From;
+        b=rCwgAO6/UwD90lz2DFg8oBL/MAFEn1xTnP3vVmO77p62MjzmoA5JOspIU+zux5aAy
+         ck9M6pHcf/mtGc212aVPmTM3gR7yc9+fT59Cr4kTFhGSmRIIiQxJPfPFHGkr7Q3KCI
+         07RPmQ+isyO2lnydHrtCN3vcTtGoLB50OIcVJ62OuVp+NQSXfpa9+hp5FO+v7R6Vac
+         BeauQSWcXvOUPf+4kCF00VMQcQHFgg4/jT8BXT3b1KaigHNiRLetME00HBLljt0MNc
+         ITIqDArIVPm3kKdfULd8J6ojOdMQsY81b5CHT3HDULjnH8QbjAW1bACIUHMQ7g6HCm
+         ihxyw5sqgPiuw==
+Message-ID: <fe030b8e-0573-93de-88ae-38ee48d6c89f@alu.unizg.hr>
+Date:   Mon, 27 Feb 2023 18:51:09 +0100
 MIME-Version: 1.0
-References: <cover.1676067791.git.quic_sudaraja@quicinc.com>
- <CAJuCfpHWQ8NV=iR3BN+pt1c8FynCnRqyyriHb1gLxFgiNVrwjA@mail.gmail.com>
- <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com> <CAJuCfpGLkkS2yx0d9+2nYtEtxANSH5H3EgCmWZax4N-ieEBG7g@mail.gmail.com>
- <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com> <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
- <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com> <CAJuCfpHrhO7_fMwNuu2hdQob=MPjZTW8eaJpNhEhPmDMqz2qTA@mail.gmail.com>
- <Y/ix53x8i/ViuBXf@dhcp22.suse.cz> <CAJuCfpG1c5v6qOotPV6t-o1T1p7EbOLs90eFnoEBjts+gafovA@mail.gmail.com>
- <Y/yxSqhpQh9yR7L4@dhcp22.suse.cz>
-In-Reply-To: <Y/yxSqhpQh9yR7L4@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 27 Feb 2023 09:49:59 -0800
-Message-ID: <CAJuCfpHXwbtjdhH_K9r28-LUYtzC6+NaZ+RrKCtiNBk8PfXhLw@mail.gmail.com>
-Subject: Re: [PATCH] psi: reduce min window size to 50ms
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        mark.rutland@arm.com, will@kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Patrick Daly <quic_pdaly@quicinc.com>, johunt@akamai.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US, hr
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-gpio@vger.kernel.org
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: selftests/gpio: gpio-sim.sh: BUG: test FAILED due to recent change in
+ sh source
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,65 +66,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 5:34 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Fri 24-02-23 13:07:57, Suren Baghdasaryan wrote:
-> > On Fri, Feb 24, 2023 at 4:47 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Tue 14-02-23 11:34:30, Suren Baghdasaryan wrote:
-> > > [...]
-> > > > Your suggestion to have this limit configurable sounds like obvious
-> > > > solution. I would like to get some opinions from other maintainers.
-> > > > Johannes, WDYT? CC'ing Michal to chime in as well since this is mostly
-> > > > related to memory stalls.
-> > >
-> > > I do not think that making this configurable helps much. Many users will
-> > > be bound to distribution config and also it would be hard to experiment
-> > > with a recompile cycle every time. This seems just too impractical.
-> > >
-> > > Is there any reason why we shouldn't allow any timeout? Shorter
-> > > timeouts could be restricted to a priviledged context to avoid an easy
-> > > way to swamp system by too frequent polling.
-> >
-> > Hmm, ok. Maybe then we just ensure that only privileged users can set
-> > triggers and remove the min limit (use a >0 check)?
->
-> This could break existing userspace which is not privileged. I would
-> just go with CAP_SYS_NICE or similar with small (sub min) timeouts.
+Hi,
 
-Yeah, that's what I meant. /proc/pressure/* files already check for
-CAP_SYS_RESOURCE
-(https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L1440)
-but per-cgroup pressure files do not have this check. I think the
-original patch which added this check
-(https://lore.kernel.org/all/20210402025833.27599-1-johunt@akamai.com/)
-missed the cgroup ones. This should be easy to add but I wonder if
-that was left that way intentionally.
+The gpio-sim.sh test appears to FAIL in a wrong way due to missing initialisation
+of shell variables:
 
-CC'ing the author. Josh, Johannes is that inconsistency between system
-pressure files and cgroup-specific ones intentional? Can we change
-them all to check for CAP_SYS_RESOURCE?
+$ sudo gpio-sim.sh
+.
+.
+.
+4. Simulated GPIO chips are functional
+4.1. Values can be read from sysfs
+4.2. Bias settings work correctly
+cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No such file or directory
+./gpio-sim.sh: line 393: test: =: unary operator expected
+bias setting does not work
+GPIO gpio-sim test FAIL
+$
 
->
-> > > Btw. it seems that there is is only a limit on a single trigger per fd
-> > > but no limits per user so it doesn't sound too hard to end up with too
-> > > much polling even with a larger timeouts. To me it seems like we need to
-> > > contain the polling thread to be bound by the cpu controller.
-> >
-> > Hmm. We have one "psimon" thread per cgroup (+1 system-level one) and
-> > poll_min_period for each thread is chosen as the min() of polling
-> > periods between triggers created in that group. So, a bad trigger that
-> > causes overly aggressive polling and polling thread being throttled,
-> > might affect other triggers in that cgroup.
->
-> Yes, and why that would be a problem?
+This patch fixed the issue:
 
-If unprivileged processes are allowed to add new triggers then a
-malicious process can add a bad trigger and affect other legit
-processes. That sounds like a problem to me.
-Thanks,
-Suren.
+diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
+index 9f539d454ee4..fa2ce2b9dd5f 100755
+--- a/tools/testing/selftests/gpio/gpio-sim.sh
++++ b/tools/testing/selftests/gpio/gpio-sim.sh
+@@ -389,6 +389,9 @@ create_chip chip
+  create_bank chip bank
+  set_num_lines chip bank 8
+  enable_chip chip
++DEVNAME=`configfs_dev_name chip`
++CHIPNAME=`configfs_chip_name chip bank`
++SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
+  $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
+  test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
+  remove_chip chip
 
-> --
-> Michal Hocko
-> SUSE Labs
+... after which the test passed:
+
+4. Simulated GPIO chips are functional
+4.1. Values can be read from sysfs
+4.2. Bias settings work correctly
+GPIO gpio-sim test PASS
+
+Which I believe proves that the bug was in the script and not in the gpio-sim driver.
+Or I am doing something very wrong, but I got the above error on AlmaLinux 8.7
+on my Lenovo desktop box with the 6.2+ latest pull Linux kernel:
+
+[marvin@pc-mtodorov linux_torvalds]$ uname -rms
+Linux 6.2.0-mglru-kmlk-andy-09238-gd2980d8d8265 x86_64
+
+Regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
