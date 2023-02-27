@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ED26A4F6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A02E6A4F74
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjB0XDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S230020AbjB0XDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjB0XD2 (ORCPT
+        with ESMTP id S229823AbjB0XDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:03:28 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5008A248
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:03:24 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id q23so4568386pgt.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:03:24 -0800 (PST)
+        Mon, 27 Feb 2023 18:03:51 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428AB15177;
+        Mon, 27 Feb 2023 15:03:42 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso305408pjv.0;
+        Mon, 27 Feb 2023 15:03:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pg8jLCETrGkaL4VJFja7UtTlA/JJG8XOO2LhkC01X9c=;
-        b=bsG+3jnQABLG/bbMBh9XjeX88bwj0SQ9Jx5uEJhWlMr1tpY8WoEdbEE3Pr3JQQF3RV
-         b+MquoPqUZlakvxWscfmUggSBaVALuqQMwvDr24dwQoKpxZVB2dSHQNmH4SU2hpLiefC
-         ZuGAMlK8YfKdgeFNOo5FJHkeS+wCud+0B1fFXpjfBtQVP3+BW522wIZurQCYhaPy4ZiQ
-         Q/EiX/QQHYfJEINrAUJc1lnQQ7kTSEY3tllwzt6EmR7PgMn0G2EYR9Go7rhdjBV+AylT
-         pF+mzkkoRGK20ybR508t9437vk5pwwk3DkToO7W29vcAEEgg8odGV/IpyBZ2OroTovFX
-         Feiw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U5BrsfedqjmcNewid3MjJRJMLrBkItr7J+vimPIv1pY=;
+        b=V/LtQcsdtnwLA3l1X7Sdb/bUYGoRaqPEWOOnRpbxO8W0mqIJ3lp1UgHXkxS9fbVw5i
+         j7aVefIdFw/NOAFs8Xp3RwleoABcucy2UaxE2tV5lYAZ2t7336Xbpe4yGYKtbVgIr7dp
+         Dc2c5Ca7J0BJF5c6VwAJVG/PWen77oiV9IONT+qggSUwAon9zNKvApMJxlJDa1pkAV3q
+         8fOAnaqQGGq1Culmq7DkKUF0ziTmDxko7bhsXj0jXUzwGU98pSiR65easXpMeeF8iQwS
+         wAYY3E6Uox3dZ5fCPxzjrDT32kmSoCWqFb43niD0ith/h6C6bcFGXWglm2uMQerCAdIn
+         7zIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pg8jLCETrGkaL4VJFja7UtTlA/JJG8XOO2LhkC01X9c=;
-        b=MmAFgEt04w6gsXXZB4ctULfNBai64Xr82o6IFdu3yGw6ZTkqYujivlej/g7JfFDPgL
-         sspw8DUpwM2vz6o2zY3cu44b5j2A5yPe5epzK6UCI28Wy0IACu0fVKBmhS5tPhxEbWgz
-         FIq1UY7vE+e6l8pF3Q0cKZT1EdLyEO9L4zZOS57E0WtFCkrZZNzwG8vcolaV/43yEGsA
-         i0IrvQeKIxlrAozrkmJDLzs6LxRRZ3s9eHBEP/8ksmAoOlNKtF5XpUL3AJhHXfnqldJz
-         5opE2xau4Zpuuiwi8+5hJSJdUwEDknhtgYt3Uah73kY5LxrjPGT8/0AYICZg5TBUSvyC
-         ZDpA==
-X-Gm-Message-State: AO0yUKWXT1ycsQXYzcS+LKXjr+0WtlLnaCrLpJxKZadnX3li5rS4wQnZ
-        JtQ80KmFrjIwiQQwd7GPALfpULyvl2QNMQ6kL8nUng==
-X-Google-Smtp-Source: AK7set/fd9hoddiJWkR+2I3PuNhNzBSMhE/0+J/LoWTvdfY2Nxv2qR4uxnorljhiprYWSqvXEZFZkgPE4WAPbMdg5aA=
-X-Received: by 2002:a63:8c1d:0:b0:503:354c:41ad with SMTP id
- m29-20020a638c1d000000b00503354c41admr43761pgd.11.1677539003795; Mon, 27 Feb
- 2023 15:03:23 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U5BrsfedqjmcNewid3MjJRJMLrBkItr7J+vimPIv1pY=;
+        b=HM7wVjNLvLLQjwirObHUbRfxGLORMRNRt6D8fWs4GLzC9VC1ARspj4xDaflcTQmkme
+         /BzvwJs72F7PkNfwVuJVsIEqKa51OMgzb6b4sZkbVIponUW+QDp2k62dd126LO8tXBqn
+         k/5ZBGkJ/C3YED0s/riiZdlylNwJh7CP/QRQ/YBrIrHKCHiUUX7m6vfrtagRakhtplHp
+         vFtTHShivqD5gbdn53k7QzaZUeGZDYddFAj3M14Ef4B2RREDQRvKYbkfCLxOyJiZSlnS
+         2gShFbreHKP/Akuwn3v6C+EsmsA4cLYWBA2KkmQq1APTQumBXGT39enakaQIFWhzwXNY
+         vptQ==
+X-Gm-Message-State: AO0yUKVAqHwqPUIYm9p8LFn8CoO2w9HJm7Vq6Dh4bwS0F7nYAZtuw7xE
+        70ENL+GLviePOzLGf9ZCa1dZ71qEZkI=
+X-Google-Smtp-Source: AK7set/YQVhyFkanAp+++PRcsHvqrcIDF3t+kktsniJCQQU91v5eweHfCGPjixWj04TDVueYehbweg==
+X-Received: by 2002:a17:902:e741:b0:19c:f1f7:681f with SMTP id p1-20020a170902e74100b0019cf1f7681fmr787393plf.9.1677539021449;
+        Mon, 27 Feb 2023 15:03:41 -0800 (PST)
+Received: from MacBook-Pro-6.local ([2620:10d:c090:400::5:6245])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b0019896d29197sm5082714pld.46.2023.02.27.15.03.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 15:03:40 -0800 (PST)
+Date:   Mon, 27 Feb 2023 15:03:38 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
+ in BPF
+Message-ID: <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-References: <20230221113428.19324-1-bp@alien8.de> <20230221113428.19324-12-bp@alien8.de>
- <3cb5d149-699a-b649-1986-23d7f6783e6f@amd.com>
-In-Reply-To: <3cb5d149-699a-b649-1986-23d7f6783e6f@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Mon, 27 Feb 2023 15:03:12 -0800
-Message-ID: <CAAH4kHaH=Xpnq48LtwPra=Mhu=110oFzs=dv40vsZT7WOAvDqw@mail.gmail.com>
-Subject: Re: [PATCH -v2 11/11] x86/sev: Change snp_guest_issue_request()'s
- fw_err argument
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Peter Gonda <pgonda@google.com>, linux-coco@lists.linux.dev,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1677526810.git.dxu@dxuuu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,24 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Should this be?
->
->         input.exitinfo2 = SEV_RET_NO_FW_CALL;
->
-> or make it part of patch #1?
->
+On Mon, Feb 27, 2023 at 12:51:02PM -0700, Daniel Xu wrote:
+> === Context ===
+> 
+> In the context of a middlebox, fragmented packets are tricky to handle.
+> The full 5-tuple of a packet is often only available in the first
+> fragment which makes enforcing consistent policy difficult. There are
+> really only two stateless options, neither of which are very nice:
+> 
+> 1. Enforce policy on first fragment and accept all subsequent fragments.
+>    This works but may let in certain attacks or allow data exfiltration.
+> 
+> 2. Enforce policy on first fragment and drop all subsequent fragments.
+>    This does not really work b/c some protocols may rely on
+>    fragmentation. For example, DNS may rely on oversized UDP packets for
+>    large responses.
+> 
+> So stateful tracking is the only sane option. RFC 8900 [0] calls this
+> out as well in section 6.3:
+> 
+>     Middleboxes [...] should process IP fragments in a manner that is
+>     consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
+>     must maintain state in order to achieve this goal.
+> 
+> === BPF related bits ===
+> 
+> However, when policy is enforced through BPF, the prog is run before the
+> kernel reassembles fragmented packets. This leaves BPF developers in a
+> awkward place: implement reassembly (possibly poorly) or use a stateless
+> method as described above.
+> 
+> Fortunately, the kernel has robust support for fragmented IP packets.
+> This patchset wraps the existing defragmentation facilities in kfuncs so
+> that BPF progs running on middleboxes can reassemble fragmented packets
+> before applying policy.
+> 
+> === Patchset details ===
+> 
+> This patchset is (hopefully) relatively straightforward from BPF perspective.
+> One thing I'd like to call out is the skb_copy()ing of the prog skb. I
+> did this to maintain the invariant that the ctx remains valid after prog
+> has run. This is relevant b/c ip_defrag() and ip_check_defrag() may
+> consume the skb if the skb is a fragment.
 
-This is something I'm not fully 100% on. You said that there's not
-that many bits for firmware errors, so -1 or 0xff are fine by me so
-long as neither are possible results from the firmware. I don't recall
-the details on that, so if we go back to 0xff for SEV_RET_NO_FW_CALL,
-I'd want a clearer explanation for why 0xff is sufficient.
-
-Apart from the other comments from Tom which are a matter of style and
-not semantics,
-
-Tested-by: Dionna Glaze <dionnaglaze@google.com>
-
--- 
--Dionna Glaze, PhD (she/her)
+Instead of doing all that with extra skb copy can you hook bpf prog after
+the networking stack already handled ip defrag?
+What kind of middle box are you doing? Why does it have to run at TC layer?
