@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6046A3B38
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE096A3B3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjB0GX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 01:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S229872AbjB0GYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 01:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjB0GX0 (ORCPT
+        with ESMTP id S229749AbjB0GX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 01:23:26 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A1AB45A;
-        Sun, 26 Feb 2023 22:23:23 -0800 (PST)
+        Mon, 27 Feb 2023 01:23:58 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250F1C668;
+        Sun, 26 Feb 2023 22:23:36 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CL09wlAATM/fF7na61+F3pPiHavpKweF6hCOJlVM2o781DidK54L4aOXCLTMH+K2LreZiPE1jE1oSzftTSWFIKeY7CW+a0c3P9N5arnr5DIYEZteT0lDzQ3kR76vcicZyZtNsd5BOZ+XIVdbFKDkwsAC7Fgw8unmnpMLETU5pZC5Dx4WH5tjFsZ8e4VZYHk3uvSq+yy8r6C6Fetok7Gk92VlYLvQe2eBdTy9IdinT27qQqPQfoAW5JnKtK3mkURUXskdAR++RF+PPBmtCGMJEauEjBxfbwG/nN4VCbxzKr7Z2Lo1qbLai5GeB+uO5JjpSR+bZ751cSSJV/OLMJCJpQ==
+ b=DVNuHCfE7wspwwiNno0XtGW6YarA47ewtgKbRhno5JtbpyKhVB/VW1i/3TQYMN4LnlaeKhg3n2rcsZvPRRyb79QuVQzcWvAS8CjUsZPUiB1hph0RzC/l9f97qRMO4obqbTtjgLzPQGezFkakXnC3a8dbxYVHAXjof1+AP9YgqymApPd2FoLtsrX+SXLPDC6S1jj6LimQoaVN6Px/pGQBhrIV+Dd1I/CUPVaPm8MxeJnmUV9heq20Rl5Jbv6+N6EmQER5h7s2NjjWnc63Afrb3KhJNo73a610zxekFwFc8vdxUjEvbecH9ht7vAGj/pM6U+0YoFzg+RyJaqianDKSNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HIM+2c+lcbTY56Kyd228nq81iepZyz6Q25Gh08keacU=;
- b=SoRQMXD5uaFzagucrOG6sDxLgXxop2VFyqfo5jqKfh4J7ksYB53//Pa1YcPeMu8Agv+8TW74A0p3zhWw+g7XadytF0xxdvlvR5k355ZNU7ExBgnx1/bTl6ttyoAubH/LzqRy28qtL8TqIshnTuOgmIC8lCzQeJ5v7f+FuTPBvr39+aiITdhO8ooir66rHuW5tggVHrXwnj2x5mimNlLpJXfG8fAI+RcgyYW0tMN24CVXKVy8lut0hSJT1IDQXiKWDYDeCaNFg3GhraJKKsw8qOPaN0CrAJdcYtSTG4+MTldOmpKrSZz4KEaR8iJreRMcU1pOx8qv4V5wtdjbUKOyKA==
+ bh=876IegzJofdeU5rSG2ONjjWBOx68PM4Zjk5YZzo3dAA=;
+ b=imeaJ2bZy8XMRZREgYf+QMR4GW+p3siB1ScOe5eD4VM0WoJw75crR8vbzu0gGjm7AajhWdjSqYKcYHcDemWpz2cu6yBXyXQt+IRIks+8fp9tfgDWAPuCQ4+AQINtbYEYewFd6E+S2Nc+gks3YrWAaQ02GrqtDW6jUQD+gpa4WZknAXUdm6CPie60u7R9ln9WwJfUNcvb2laDSZILHRqJT6PhNiXd8nkeeO3uiMX/h7ip3uBItZkHRIMACY76/y6yreuULUphEPJRxhk4rmneIJ76n+0z0CMjYD0FfvJUoZmXpEHxbtriQvcicyOnDSDoyleZIjsN7LUYXpSjmz7CtA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=knights.ucf.edu; dmarc=pass action=none
  header.from=knights.ucf.edu; dkim=pass header.d=knights.ucf.edu; arc=none
@@ -29,36 +29,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=knightsucfedu39751.onmicrosoft.com;
  s=selector2-knightsucfedu39751-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HIM+2c+lcbTY56Kyd228nq81iepZyz6Q25Gh08keacU=;
- b=HH3qsm5theoutiNzpLjpVrUMEH6JH6HWzKl9r+DbrUVOfu2sQkY/s4SU/D9A2cWIF4HJJIbGFcWESGC5rdbkA3mud/IG/+6b2FfUr61xQB/XENuEwojFGSgDQWt9hvaHG5wgb5aJVNtIJji8tv7WGME0eguuyPX5jiqZRKNIYzU=
+ bh=876IegzJofdeU5rSG2ONjjWBOx68PM4Zjk5YZzo3dAA=;
+ b=GZB/b9GB1r1RihvN5PSEeq4b7pK1ghv99pQR1mX4HEyWG/SxAg30gFE7awHJKYNy5hm/DeFFxZK/9D4hPyJmWH4/7Hb3WqMI3zOI17NsfkI7DawL8VO3TXOBjf0Y38a6qDJ547ada9uZQ4tG0ZRoiACDRu1zXd9udYCSMFIUrfU=
 Received: from IA1PR07MB9830.namprd07.prod.outlook.com (2603:10b6:208:44b::14)
  by SJ0PR07MB9123.namprd07.prod.outlook.com (2603:10b6:a03:3f8::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27; Mon, 27 Feb
- 2023 06:23:22 +0000
+ 2023 06:23:34 +0000
 Received: from IA1PR07MB9830.namprd07.prod.outlook.com
  ([fe80::d883:f078:37f:dace]) by IA1PR07MB9830.namprd07.prod.outlook.com
  ([fe80::d883:f078:37f:dace%4]) with mapi id 15.20.6134.029; Mon, 27 Feb 2023
- 06:23:21 +0000
+ 06:23:34 +0000
 From:   Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+To:     "clm@fb.com" <clm@fb.com>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 CC:     "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
         "contact@pgazz.com" <contact@pgazz.com>
-Subject: BUG: unable to handle kernel NULL pointer dereference in rcu_core
-Thread-Topic: BUG: unable to handle kernel NULL pointer dereference in
- rcu_core
-Thread-Index: AQHZSnHWBOuzu5f2AkiK0ceFnKP0iw==
-Date:   Mon, 27 Feb 2023 06:23:21 +0000
-Message-ID: <IA1PR07MB983057EE02C56A3FF3E0ED1BABAF9@IA1PR07MB9830.namprd07.prod.outlook.com>
+Subject: kernel BUG in btrfs_global_root_insert
+Thread-Topic: kernel BUG in btrfs_global_root_insert
+Thread-Index: AQHZSnMzTuEAqcOzNEC5oBl5E9uMxQ==
+Date:   Mon, 27 Feb 2023 06:23:34 +0000
+Message-ID: <IA1PR07MB9830E423E811EADC458805E3ABAF9@IA1PR07MB9830.namprd07.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -68,41 +62,41 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=Knights.ucf.edu;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: IA1PR07MB9830:EE_|SJ0PR07MB9123:EE_
-x-ms-office365-filtering-correlation-id: 6457ee72-242c-4778-fe76-08db188b1ff3
+x-ms-office365-filtering-correlation-id: 5c18a7d0-0963-4092-1660-08db188b2752
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: byT6w/WHptiYlz/3HocuqD5Zv+giIDy7rkw+CDSON5roePCmZM55Padd5gdd4Eu6ma5o1X86YNiYZz7JppIUGuvuBBgdFKPLtJrVDfcevPDwFnGcjNds2+hkZUjFUBZlVNk8QL45Upkr4an2U214jjbDo/yA5WgC7Rog8F+eXJLQmXP8Yi5ar3lmpxtSw+5c3nOT2NVgSnEoS6Q9npV37GZr2RgmXJKt97K/emBSrlGpsDKN1/OtkMDXASIunJwKjtUBiRdF6xkFlPbIqWxHpVCQBw0JWpyC0Seh6m+Wxm2jc2egdHIk1Dzc0u5lCCj6UoeL+lr7lHyk9SXv7uMjv3YkwL87YR7mPm5Tqpb+rMcQXqu1Rp+eH+vjJ8msOSEaadk7XslQ3QmmKk9UiSWvoZSvdcglv4T4dwIXs4X+X9beb8OriTtP4GGu/CpardfvkDHEaIsyOlBgXO1iMP1OizSzvJxn5pNcl3vIC16AiFx58KHW72bBmFgQWeGGtsbZGyVUCDHF7XTDq77n6uKA7sN5QYoS49DHQIe714WPGTHiLTTrkZURUVHH+j/W36nxzjJhOavSYRjV8T4ZMuR8PwfZL2Nj8cEWCd/Hqw85gtZbUI+yX0V5oCExJUkr51I9ResdTaVIysvlTZu07uP0PYjI6tUUvTRze4ta8d9GmRBunC8F0SnCoMpeRf+y+60NEOyMgla1HJN2XHi93n2qK6K/+VgMx2KSt42Rm3CQOF4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR07MB9830.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(366004)(376002)(451199018)(83380400001)(52536014)(44832011)(7416002)(8936002)(2906002)(5660300002)(122000001)(55016003)(38070700005)(41300700001)(76116006)(64756008)(66446008)(66476007)(66556008)(91956017)(66946007)(5930299012)(8676002)(38100700002)(4326008)(7696005)(45080400002)(966005)(86362001)(41320700001)(921005)(9686003)(186003)(26005)(6506007)(71200400001)(478600001)(75432002)(33656002)(316002)(786003)(110136005)(54906003);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 4KTi2DaPmfjP1r3CZP0r4No63ZKNvmuM0BFqt1vEYFHLWL5+WvN3VyWxcNd+AhdMLeNygb+sZ2roOzuFFg75cytawy49m/wgxHT+gAT9pz0qiYgtC0n7cA0tzEl4B7Ad0OfAgZwgbGx5Bhz0eXL0a/te/TRwYfKmm2J61C3vjl0FfMgq0IgtNg/vG6jLpk5FTzks0dC7V6qjKJtFU+AkJJaNUwB43mOmig2vieeugJde1qrp/JAwQQbetNNC5DwuNZ49HYP/T0YTc8zLbg+bUaezMyeYzKHj5ESd/J/POlXqLGqChWzMwu2ay1WfpP9GsJ2R/eY+BeLk162WDvRZKhcczk7raaKZYdS5qXk/buO2Hk4CNixxM3aksQPvW8ueF+L2qzmT2Ti/zw7yBEPv9K0syQHVetCStENnRQmDTFI3pSQg5tQkg66MP0EWxhMClWBt5gMfz8ODtojfvE0tLSAaj+Ibdkb1mEJCoBlJ9WvbPTCXYV7B9nXeIXvh6/vsbTluZ/ELNM4v6w0BelSLc2rzzFbCkFYQFSN0ZrVZ2kdd/S7M6wyuDw2Jd61Gbl3gxTpMt1M//iTLvT4XYqB2rP7xotQl1055izkgcXiaIi71okaZPx0+nXUYdqqQTn5PkbN6fmB3+yXuS3I1eI+OO3PGG7S+f7Qq7p+xv8NzBlfflZz8DrtEkMQK6rXsE/rq0ZVWZxkCD1x+BUfOSMCU/XA5fTwOs2Xw0A4F+z6oqdGxVLFtARbV+4kk33QeFk6m
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR07MB9830.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(366004)(376002)(451199018)(83380400001)(52536014)(44832011)(8936002)(2906002)(5660300002)(122000001)(55016003)(38070700005)(41300700001)(76116006)(64756008)(66446008)(66476007)(66556008)(91956017)(66946007)(5930299012)(8676002)(38100700002)(4326008)(7696005)(45080400002)(966005)(86362001)(41320700001)(9686003)(186003)(26005)(6506007)(71200400001)(478600001)(75432002)(33656002)(316002)(786003)(110136005)(54906003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?59EM7E+zlLAV/NJEX9zHzlJr2P0WuwQ0h/gQLopOo2GSLk8Qejs/1eZeVo?=
- =?iso-8859-1?Q?WvZWKwL+86d05oKd8WsYws61xDxDImXd2A87oLcDRt7w5hxFqSF5mLNXZB?=
- =?iso-8859-1?Q?V3usmGD2KhJ3h4dPxR/j5jSNrLUprSl3JPV5wLFKABP5qtBfdj5pkF/LMF?=
- =?iso-8859-1?Q?27hC4L6gF7DwmguD8G+2JhAVi5Mr141jNl/+2ECMIK5gHrajPjsye3e6/z?=
- =?iso-8859-1?Q?dyVkZhMWwHVgMGQ8g0xeGKhUcEcsdkSpJnMnmsIuqInbwsnI4V/isZ60q1?=
- =?iso-8859-1?Q?FQJG21yog/IB92Emt4OAVi5mbzaGevQitk2b2v/mUS6b9a9s/tfY/Nnpi3?=
- =?iso-8859-1?Q?IpSU8RToNEhRU24L7PwRtkpu2ahf70jZQbYE7T+/J7BXCEFX8JLMxMgXpp?=
- =?iso-8859-1?Q?0k8cqFxELbwmYYqCpGnrnvla1j7BMWqXlbKNIFPgaVVwpfABjCDfya9Tx1?=
- =?iso-8859-1?Q?jnbC9tARRF4BjLF9xE6Kdtku8S4rv7Pt4OfHTeZZ7qXBXrmG7trtgTpJkz?=
- =?iso-8859-1?Q?4VHpdkudlU4+tnfPFm/9LxAtcfZfMJFwQGom2/t4JWXv5kAmE2qH9UZ/6G?=
- =?iso-8859-1?Q?1bwSQY5tdAZa34Ox26fgM180VEC1Mhh3koFkvd/dssFvITezU8f6Mr7HxL?=
- =?iso-8859-1?Q?4hXxAeIwiCmffjcGHCWmdAq1YGNY9wjrW7+G2tNyVAMeulwv5TCc9F71H1?=
- =?iso-8859-1?Q?HdJYr4IX9pWoRBG45augDoumwg21WdQ+fQWBNaL/Gnr4C8FjBLolH6ZJmG?=
- =?iso-8859-1?Q?35ChbKn+gfMX9AWoWY9ciumZJKcRPLjdjaMFA3ilkva4I6xRSPyQupfFQQ?=
- =?iso-8859-1?Q?XbgagqdUiOGVIs1L5FBFGFZ3jFZMBP9ExGXOs58i/3djChg1xv2vqUNWVp?=
- =?iso-8859-1?Q?jwhFD/krMHRYj3Lyh9FyFoluzPvjw2FUKUdsHCKvzKaO8mfSi7WIpfU3dG?=
- =?iso-8859-1?Q?cFboaDTHdX26OedDk3r8EUoNnaWIWHLfoGVqNY+lBXOl/ScMfM3Kpf4brc?=
- =?iso-8859-1?Q?TI76C7m2qGv8co42wrJzpFqEGpQ7mP0dhHZaVF0p+QvkI9t3BW9N9ClyLi?=
- =?iso-8859-1?Q?0H4jx2INwxQJR+Cvb2Tc+MvmfHlt+wATp6DRsC+Q5o7tiUcdEt45Ohkpq8?=
- =?iso-8859-1?Q?rgyjtYifcs7VaxXRySNMF3zAOSw2oJdeLEAMrOV1K60noBMmbuAZbJjvib?=
- =?iso-8859-1?Q?NKxpmOfIk0QqKME0GVO7juIB7glpq9XXl2DM2sAlSJBZ3bT4SM+X8ibxEm?=
- =?iso-8859-1?Q?08TIHisuEhrQWEVz7KIZporv7GKbz9YSS48QeVMX/NYRxu5rQervIl/Qa6?=
- =?iso-8859-1?Q?I69eNHFISTkSCsTQW3ZSjPvRXMGBfvlg/0fjVBRVoiirun2/l8OS7Z6jWJ?=
- =?iso-8859-1?Q?QTBmJNbnt7rhq3Y8PyX6nQfzCftQIet2qo5iH8C6Pjqp79To3Nc/QbzNUy?=
- =?iso-8859-1?Q?mhoQ8MpCDDTCw/D5BEYRnUh5jmI1EbaoLlNA6zx3SXRxXeayJWUssddQnH?=
- =?iso-8859-1?Q?vN0AOB8pbknf6Nj/O2lADGc8W86WZpfi3p37AN6T8RoDHRA5U8nQIGGYuS?=
- =?iso-8859-1?Q?kMVjPpA4Ho3FulZeSMO7Dij6qofnk9s4Yop3uun9FJoPeskmVH2uSkGIcG?=
- =?iso-8859-1?Q?iPMX9pMirhBcJEDRruq9UuHs59Psos6gqYIZ7QkVSfU0dyOiuMdJg6dA?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?foMbqusKPRP7x5Eutb7e1p8wFY/wcU8c3LO3QtObeqPb6ZyP7n+9Y6k71p?=
+ =?iso-8859-1?Q?xmi0eMpqiH/bW33er8MphgeJw6Uhryab8o43TCP4y7R49mr17QX3PZQgX1?=
+ =?iso-8859-1?Q?mUdvwLRloutiDrt2UWkg6zK0ADwpukdKL3euEof/gZ+NT7FZ3jgY1OArR1?=
+ =?iso-8859-1?Q?3xgff8lhWJs2/soD74SKrq36wfJF3R87YxbIdwd3giJq2dt08PibtVCoKi?=
+ =?iso-8859-1?Q?sSO06NSsSVjB5ENz8O+scLql2xfthNQI52+2IyZTG7HhmaV8F1ldn/N7C1?=
+ =?iso-8859-1?Q?PqH8JttBXM6ucVvlkg+etfuYw48c7osguFiIEOWneAIGSKMMHyTGoqQ1Xy?=
+ =?iso-8859-1?Q?6UKINlzoTD2EgY6sWAydKvIvAg4MsgKzRKj/0o+7aUyxtrqQ5tc6ZpyQVs?=
+ =?iso-8859-1?Q?24FMudQHw6eOpXg0t3j0UUaiUSz4MTf6EVwRUfDlxsEDM2nZRJOkKegWID?=
+ =?iso-8859-1?Q?1/1v1Qz0UpO1sT2tO7CUA0HnnOAJZ95iecmnohm4r6QwfNKyChqa5YSkhc?=
+ =?iso-8859-1?Q?x2zpfrin/yzw5WVDg2/DzZM4+tGhZ1GkiMUJnfovzhWw8sbz4fSSQ+197f?=
+ =?iso-8859-1?Q?chBK3AgoUKr41y6nuiVF8Lv4GpxMe2APvyKLRJL/Spey5rVCjZKt9NAiWa?=
+ =?iso-8859-1?Q?G+VxaM+ixsOA09PlZ8imp9mfo6Lz08ZHZfnrwccW4HyS44Iv+VO9PhkIWm?=
+ =?iso-8859-1?Q?7Rkl+zEu9D7dUMBDd+QfVPr62MPnmyDrf8T+4aJ8J05B8ZtKb8iJcquPPx?=
+ =?iso-8859-1?Q?6HCgz25PM7FhSCx0v7mwRb5uICRZj1Bsxs+CXuw4GAWR8DqvZID5tL0gvQ?=
+ =?iso-8859-1?Q?oTpHIb4WR+/INoxVAzWpQVC9wXLiC3Xq/JR1lZACtGk+Dt4JCrMdYXbMeM?=
+ =?iso-8859-1?Q?hgMLRfy8DCFatgXZ6pb+bDMoW+Wg1HiqWaaKjMZgyp78KPYHloZfHWgOY3?=
+ =?iso-8859-1?Q?AXPfuAGvFLVC0EP/DWYerow4lVT61Td2rShh7CD1oI6135QaPnhvgPmxA/?=
+ =?iso-8859-1?Q?vh62FEdDFcGJNEbiBo6DwcTyxVZsNRoNmjSTreUv6ytyUrPHT1oWAmpEGq?=
+ =?iso-8859-1?Q?fk9Lm561IV8uuAHyqwPitA0XV9jwUnKHeFRsQzK5rcXvjaa9UnGbqXFXPS?=
+ =?iso-8859-1?Q?q0ndn+Q8u1bR2WBJ+Ta43STuUBpbZPYsjj0XNw65I+RDLqthGIv/vw1cUC?=
+ =?iso-8859-1?Q?3LrfAjNvNMHOG+HTq5jFKf9x1hP+mIRdF5nJgPFl4MQtQeb6ifDMxwwJGD?=
+ =?iso-8859-1?Q?Gca7CJpWV0dEOc1Na06IJQ/tCoooYvxY+08RC7V4EMQJuAK5SpwyFAJr86?=
+ =?iso-8859-1?Q?/PkinEfP0HOkQznb3NYAwaPRdFhZSO5Xic/fwWDdSiAQawNdHGQdzNpZDL?=
+ =?iso-8859-1?Q?TMOHiunr7s4X92QTAx7Ve4PFyHUt+lfqeqKxeCYLNwpuySli8l2VUvypTC?=
+ =?iso-8859-1?Q?9eVdWxusMTlSQXq7cPMWSzPg98zIRWUhGoaYXpXLus2vGaHONUjRjAr1CW?=
+ =?iso-8859-1?Q?Nr9ToiODe3OkexUa4IDFu2hKCym/RXJ0iA+vCshUTLiqQILxvNecNTooCR?=
+ =?iso-8859-1?Q?Jj0EVbtk+7i8hNgH9Gb2aW5PCwHOJ8feA2ioVyHnb7OYEAk7FrQMnbC1uv?=
+ =?iso-8859-1?Q?nyYs9FuyzGBZ1oC3sOHXuPVypvBzRgxxTqnZN+y7U7NXjGB/w4p9vsDg?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -110,13 +104,13 @@ MIME-Version: 1.0
 X-OriginatorOrg: knights.ucf.edu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: IA1PR07MB9830.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6457ee72-242c-4778-fe76-08db188b1ff3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Feb 2023 06:23:21.8193
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c18a7d0-0963-4092-1660-08db188b2752
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Feb 2023 06:23:34.1643
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5b16e182-78b3-412c-9196-68342689eeb7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8qt57OLWK0G+HDQiLs2OOhwkO8RHpag8RoEVX1OOyllJDFlXiWQAKyk30vkA7GWb7iE4VQ+xaGUg+3xdViXwrUVc+ewlAXx5GSvQRmZww+U=
+X-MS-Exchange-CrossTenant-userprincipalname: ir9aKLr4RC07ONEB1kMPXZ+qCOPqYPfpSX9KvZQEYo/RqU0En77PhTS23nTFtW7JO9ObcipheT1iXKQICbNkPfz4YKLx9ePLZGTk1WWWHPE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB9123
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
@@ -135,100 +129,92 @@ We found a bug using a modified kernel configuration file used by syzbot.=
 We enhanced the coverage of the configuration file using our tool, klocaliz=
 er.=0A=
 =0A=
-Kernel Branch: 6.2.0-next-20230221=0A=
-Kernel config:=A0https://drive.google.com/file/d/1QKAQV11zjOwISifUc-skRBoTo=
-3EXhutY/view?usp=3Dshare_link=0A=
-C Reproducer:=A0Unfortunately, there is no reproducer yet.=0A=
+Kernel Branch: 6.2.0-rc8-next-20230216=0A=
+Kernel config: https://drive.google.com/file/d/1kpgNI36h0EQvewtvqC6j8Qv2VGr=
+Wuiwz/view?usp=3Dshare_link=0A=
+C Reproducer:=A0https://drive.google.com/file/d/1HS0Rd6uxycIxCq0Qv8KwKXgHSZ=
+9W27fb/view?usp=3Dshare_link=0A=
 =0A=
 Thank you!=0A=
 =0A=
 Best regards,=0A=
 Sanan Hasanov=0A=
 =0A=
-BUG: kernel NULL pointer dereference, address: 0000000000000000=0A=
-#PF: supervisor instruction fetch in kernel mode=0A=
-#PF: error_code(0x0010) - not-present page=0A=
-PGD 53756067 P4D 53756067 PUD 0 =0A=
-Oops: 0010 [#1] PREEMPT SMP KASAN=0A=
-CPU: 7 PID: 0 Comm: swapper/7 Not tainted 6.2.0-next-20230221 #1=0A=
+BTRFS warning (device loop0): couldn't read tree root=0A=
+assertion failed: !tmp, in fs/btrfs/disk-io.c:1002=0A=
+------------[ cut here ]------------=0A=
+kernel BUG at fs/btrfs/messages.c:259!=0A=
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN=0A=
+CPU: 1 PID: 24800 Comm: syz-executor.0 Not tainted 6.2.0-rc8-next-20230216+=
+ #1=0A=
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/=
 2014=0A=
-RIP: 0010:0x0=0A=
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.=0A=
-RSP: 0018:ffffc900003f8e48 EFLAGS: 00010246=0A=
-RAX: 0000000000000000 RBX: ffff888100833900 RCX: 00000000b9582f6c=0A=
-RDX: 1ffff11020106853 RSI: ffffffff816b2769 RDI: ffff888043f64708=0A=
-RBP: 000000000000000c R08: 0000000000000000 R09: ffffffff900b895f=0A=
-R10: fffffbfff201712b R11: 000000000008e001 R12: dffffc0000000000=0A=
-R13: ffffc900003f8ec8 R14: ffff888043f64708 R15: 000000000000000b=0A=
-FS:  0000000000000000(0000) GS:ffff888119f80000(0000) knlGS:000000000000000=
+RIP: 0010:btrfs_assertfail+0x2c/0x30 fs/btrfs/messages.c:259=0A=
+Code: 1f 00 41 55 41 89 d5 41 54 49 89 f4 55 48 89 fd e8 c9 7a 21 fe 44 89 =
+e9 4c 89 e2 48 89 ee 48 c7 c7 e0 e3 d4 8a e8 94 e1 07 fe <0f> 0b 66 90 66 0=
+f 1f 00 55 48 89 fd e8 a3 7a 21 fe 48 89 ef 5d 48=0A=
+RSP: 0018:ffffc9000c1af670 EFLAGS: 00010286=0A=
+RAX: 0000000000000032 RBX: ffff8880453be000 RCX: ffffc900126de000=0A=
+RDX: 0000000000000000 RSI: ffffffff81614205 RDI: 0000000000000001=0A=
+RBP: ffffffff8ad239a0 R08: 0000000000000001 R09: ffff8881198a898b=0A=
+R10: ffffed1023315131 R11: 6f69747265737361 R12: ffffffff8ad22a40=0A=
+R13: 00000000000003ea R14: ffff888116e98060 R15: 0000000000000000=0A=
+FS:  00007f036ab58700(0000) GS:ffff888119880000(0000) knlGS:000000000000000=
 0=0A=
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033=0A=
-CR2: ffffffffffffffd6 CR3: 0000000054e64000 CR4: 0000000000350ee0=0A=
+CR2: 00007fff8adf26c0 CR3: 000000004c692000 CR4: 0000000000350ee0=0A=
 Call Trace:=0A=
- <IRQ>=0A=
- rcu_core+0x85d/0x1960=0A=
- __do_softirq+0x2e5/0xae2=0A=
- __irq_exit_rcu+0x11d/0x190=0A=
- irq_exit_rcu+0x9/0x20=0A=
- sysvec_apic_timer_interrupt+0x97/0xc0=0A=
- </IRQ>=0A=
  <TASK>=0A=
- asm_sysvec_apic_timer_interrupt+0x1a/0x20=0A=
-RIP: 0010:default_idle+0xf/0x20=0A=
-Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c 01 c7 4c 29 c2 e9 76 ff ff ff =
-cc cc cc cc f3 0f 1e fa eb 07 0f 00 2d e3 8a 34 00 fb f4 <fa> c3 66 66 2e 0=
-f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa 65=0A=
-RSP: 0018:ffffc9000017fe00 EFLAGS: 00000202=0A=
-RAX: 0000000000dfbea1 RBX: dffffc0000000000 RCX: ffffffff89b1da9c=0A=
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000=0A=
-RBP: 0000000000000007 R08: 0000000000000001 R09: ffff888119fb6c23=0A=
-R10: ffffed10233f6d84 R11: dffffc0000000000 R12: 0000000000000003=0A=
-R13: ffff888100833900 R14: ffffffff8e112850 R15: 0000000000000000=0A=
- default_idle_call+0x67/0xa0=0A=
- do_idle+0x361/0x440=0A=
- cpu_startup_entry+0x18/0x20=0A=
- start_secondary+0x256/0x300=0A=
- secondary_startup_64_no_verify+0xce/0xdb=0A=
+ btrfs_global_root_insert+0x1e6/0x250 fs/btrfs/disk-io.c:1002=0A=
+ load_global_roots_objectid+0x11d/0x850 fs/btrfs/disk-io.c:2361=0A=
+ load_global_roots fs/btrfs/disk-io.c:2395 [inline]=0A=
+ btrfs_read_roots fs/btrfs/disk-io.c:2422 [inline]=0A=
+ init_tree_roots fs/btrfs/disk-io.c:2845 [inline]=0A=
+ open_ctree+0x213f/0x4ee0 fs/btrfs/disk-io.c:3541=0A=
+ btrfs_fill_super fs/btrfs/super.c:1152 [inline]=0A=
+ btrfs_mount_root+0x98b/0xcd0 fs/btrfs/super.c:1521=0A=
+ legacy_get_tree+0x107/0x210 fs/fs_context.c:610=0A=
+ vfs_get_tree+0x8d/0x330 fs/super.c:1501=0A=
+ fc_mount fs/namespace.c:1035 [inline]=0A=
+ vfs_kern_mount.part.0+0xaf/0x140 fs/namespace.c:1065=0A=
+ vfs_kern_mount+0x40/0x60 fs/namespace.c:1052=0A=
+ btrfs_mount+0x20d/0x990 fs/btrfs/super.c:1581=0A=
+ legacy_get_tree+0x107/0x210 fs/fs_context.c:610=0A=
+ vfs_get_tree+0x8d/0x330 fs/super.c:1501=0A=
+ do_new_mount fs/namespace.c:3042 [inline]=0A=
+ path_mount+0x4bf/0x1ac0 fs/namespace.c:3372=0A=
+ do_mount fs/namespace.c:3385 [inline]=0A=
+ __do_sys_mount fs/namespace.c:3594 [inline]=0A=
+ __se_sys_mount fs/namespace.c:3571 [inline]=0A=
+ __x64_sys_mount+0x235/0x2c0 fs/namespace.c:3571=0A=
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]=0A=
+ do_syscall_64+0x39/0x80 arch/x86/entry/common.c:80=0A=
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd=0A=
+RIP: 0033:0x7f0369a9176e=0A=
+Code: 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 =
+00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff f=
+f 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48=0A=
+RSP: 002b:00007f036ab57a08 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5=0A=
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0369a9176e=0A=
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f036ab57a60=0A=
+RBP: 00007f036ab57aa0 R08: 00007f036ab57aa0 R09: 0000000020000000=0A=
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000=0A=
+R13: 0000000020000100 R14: 00007f036ab57a60 R15: 0000000020000040=0A=
  </TASK>=0A=
 Modules linked in:=0A=
-CR2: 0000000000000000=0A=
 ---[ end trace 0000000000000000 ]---=0A=
-RIP: 0010:0x0=0A=
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.=0A=
-RSP: 0018:ffffc900003f8e48 EFLAGS: 00010246=0A=
-=0A=
-RAX: 0000000000000000 RBX: ffff888100833900 RCX: 00000000b9582f6c=0A=
-RDX: 1ffff11020106853 RSI: ffffffff816b2769 RDI: ffff888043f64708=0A=
-RBP: 000000000000000c R08: 0000000000000000 R09: ffffffff900b895f=0A=
-R10: fffffbfff201712b R11: 000000000008e001 R12: dffffc0000000000=0A=
-R13: ffffc900003f8ec8 R14: ffff888043f64708 R15: 000000000000000b=0A=
-FS:  0000000000000000(0000) GS:ffff888119f80000(0000) knlGS:000000000000000=
+RIP: 0010:btrfs_assertfail+0x2c/0x30 fs/btrfs/messages.c:259=0A=
+Code: 1f 00 41 55 41 89 d5 41 54 49 89 f4 55 48 89 fd e8 c9 7a 21 fe 44 89 =
+e9 4c 89 e2 48 89 ee 48 c7 c7 e0 e3 d4 8a e8 94 e1 07 fe <0f> 0b 66 90 66 0=
+f 1f 00 55 48 89 fd e8 a3 7a 21 fe 48 89 ef 5d 48=0A=
+RSP: 0018:ffffc9000c1af670 EFLAGS: 00010286=0A=
+RAX: 0000000000000032 RBX: ffff8880453be000 RCX: ffffc900126de000=0A=
+RDX: 0000000000000000 RSI: ffffffff81614205 RDI: 0000000000000001=0A=
+RBP: ffffffff8ad239a0 R08: 0000000000000001 R09: ffff8881198a898b=0A=
+R10: ffffed1023315131 R11: 6f69747265737361 R12: ffffffff8ad22a40=0A=
+R13: 00000000000003ea R14: ffff888116e98060 R15: 0000000000000000=0A=
+FS:  00007f036ab58700(0000) GS:ffff888119880000(0000) knlGS:000000000000000=
 0=0A=
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033=0A=
-CR2: ffffffffffffffd6 CR3: 0000000054e64000 CR4: 0000000000350ee0=0A=
-----------------=0A=
-Code disassembly (best guess):=0A=
-   0:	89 07                	mov    %eax,(%rdi)=0A=
-   2:	49 c7 c0 08 00 00 00 	mov    $0x8,%r8=0A=
-   9:	4d 29 c8             	sub    %r9,%r8=0A=
-   c:	4c 01 c7             	add    %r8,%rdi=0A=
-   f:	4c 29 c2             	sub    %r8,%rdx=0A=
-  12:	e9 76 ff ff ff       	jmp    0xffffff8d=0A=
-  17:	cc                   	int3=0A=
-  18:	cc                   	int3=0A=
-  19:	cc                   	int3=0A=
-  1a:	cc                   	int3=0A=
-  1b:	f3 0f 1e fa          	endbr64=0A=
-  1f:	eb 07                	jmp    0x28=0A=
-  21:	0f 00 2d e3 8a 34 00 	verw   0x348ae3(%rip)        # 0x348b0b=0A=
-  28:	fb                   	sti=0A=
-  29:	f4                   	hlt=0A=
-* 2a:	fa                   	cli <-- trapping instruction=0A=
-  2b:	c3                   	ret=0A=
-  2c:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)=0A=
-  33:	00 00 00 00=0A=
-  37:	0f 1f 40 00          	nopl   0x0(%rax)=0A=
-  3b:	f3 0f 1e fa          	endbr64=0A=
-  3f:	65                   	gs=0A=
+CR2: 00007fff8adf26c0 CR3: 000000004c692000 CR4: 0000000000350ee0=0A=
 =0A=
