@@ -2,101 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120AC6A476B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3536A4771
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjB0Q7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S230074AbjB0RAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjB0Q7s (ORCPT
+        with ESMTP id S230324AbjB0RAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:59:48 -0500
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F5B1ACDB;
-        Mon, 27 Feb 2023 08:59:47 -0800 (PST)
-Received: by mail-pf1-f172.google.com with SMTP id c4so1044419pfl.0;
-        Mon, 27 Feb 2023 08:59:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cetFDf1NFYgP8RIWSMrRAlJBHdWqEvMTTTCcK4WGr3A=;
-        b=hr7sIC7LWKAbrpE60IE46R1WO3/5SjVykBoyPlyNMpaUr7CzkBfljiH47AnYTqEdlT
-         OUt1dB+snxS6vqnvAAAaVOZIPulQFweOOqcoRwsOTuZtxfFiAte/qrf2tTlnFRV8fU8f
-         OjsbWdZ1QReOWxgcjbPvMAeEuQAed5vSWOVytpb5oNlCumlayrmzziToP4JPNgcbQHg5
-         t+iEx5tAzjmEgyrHp64MAAOpUQ84Cys3rF0gDskgYjYpAO6Gkm86Ai5iePK9b4E+5bX5
-         +YXAzAYBGNICmZ/vvQRAMvt/ZzU+pFh5t70cvUmd8n8jSAb61O8CI+1hgOMLUmj1hUWJ
-         tgbw==
-X-Gm-Message-State: AO0yUKUvswiyQquwWPR/Dm4JZvh2wVCUmtrBUte/aF/+AaBIwJG/QCti
-        08RjcgslhSeevY6kDh9+NstL2odveDA=
-X-Google-Smtp-Source: AK7set9SulBRpkxpWtvUBsnGmBfaWh12g+qSKuKCB//RgoIFO1CLr2gSNDgam7mYI2fM4jN6HOEYGw==
-X-Received: by 2002:aa7:982b:0:b0:5a8:2008:d1eb with SMTP id q11-20020aa7982b000000b005a82008d1ebmr21151842pfl.17.1677517186979;
-        Mon, 27 Feb 2023 08:59:46 -0800 (PST)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id t11-20020aa7938b000000b005a8a4665d3bsm4458612pfe.116.2023.02.27.08.59.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 08:59:46 -0800 (PST)
-Message-ID: <21f73bfd-1d91-106f-d3a8-eb4674c517e6@acm.org>
-Date:   Mon, 27 Feb 2023 08:59:41 -0800
-MIME-Version: 1.0
+        Mon, 27 Feb 2023 12:00:12 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C391C32B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:00:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YaJ0vf3F8nfVesbQG93B41WWPaSqkht49L8HAyxaCGxqoHrISlTGjNOiTaxaropD0Dihaw7oXPUtGn1uXw/cuYSg4JzPZqhikz+8iooMQsV9vyASGHQNL7J2o7vvHAXbwT+AUGwxz7f9gM0JvgZRNbWkdmUixGf08/d98h6Se/+wmdyZ2TjYvm63J7U5EN2fmvWmyvFmzNnpA7qB+CEPjKCicjtKQGeF4h/PO57DK/xdyVUDk4iw3+5Jtwj7CUhxL3qMcwkWizY1tOtruzfSdB+X3u7uJ7d10v+lZwr0g7I3PT/3P7Q7+h9PlnFsPcs9aX6YQ2AzzfLMANR39BR+OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gn4CBK+FIIW6nZCNi38R9uxfr/ltjIpRX8UerbeKUPY=;
+ b=G1TC2kZALKIMiguctHyBEtz4QlvuK+9qEQ94m86ddpEeaz7G00OHUAQm9fz6fT42n1R7sI0DUd3eb9br6wlWp5+ZGy6+go05y8fOwf2XUa0hFnwLzOAivCPGd2VHNJbhNq2yRZAxNims+aFzXaLUUOMJcZRCGnAFHAtq6C9AZeYqNg2tW2T3OkYLOjg/hS+iZPQUJA7L+0liA94dUU6bPtbopquPrhm0WbtA6RW05Q07gnfrkNO5SZ8G1v+8mYvmBtIPXZ0bCAZbKwT2Q1J7tgOqYOhK+GSL9fmmYQs9JA67BXbLkaxsSAWbf8wgzt0Vny1KCHeuMhIToTRrN+7o4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Gn4CBK+FIIW6nZCNi38R9uxfr/ltjIpRX8UerbeKUPY=;
+ b=wbl7yuO4T7e7FDJeolD09QUFCtbHM6b/kfK+t7tMmvICLWt46e9JzaeZ74K4sQS2T5yBZx4x0JL74bx+b66/i1lXndZcyJtP0/2NDX35apRB12VJdVIdooeLU9bfouocooeDyWqeGZO75il9E/7WCChaJv3JmydYPvoB2qDh/NI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by DM4PR12MB7718.namprd12.prod.outlook.com (2603:10b6:8:102::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
+ 2023 17:00:06 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a%8]) with mapi id 15.20.6134.029; Mon, 27 Feb 2023
+ 17:00:06 +0000
+Message-ID: <bed5e04a-a0e3-fb80-d75e-cdcd85efe7ab@amd.com>
+Date:   Mon, 27 Feb 2023 12:00:00 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] include: uapi: scsi: Change utp_upiu_query struct
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/2] drm/edid: parse DRM VESA dsc bpp target
 Content-Language: en-US
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc:     "beanhuo@micron.com" <beanhuo@micron.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1677078770-30994-1-git-send-email-Arthur.Simchaev@wdc.com>
- <1677078770-30994-2-git-send-email-Arthur.Simchaev@wdc.com>
- <b1f0ed44-d707-5593-7449-8a6bd23c9902@acm.org>
- <BY5PR04MB632717453EB0D403388B4F1EEDAF9@BY5PR04MB6327.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <BY5PR04MB632717453EB0D403388B4F1EEDAF9@BY5PR04MB6327.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yaroslav Bolyukin <iam@lach.pw>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@intel.com>,
+        "Liu, Wenjing" <Wenjing.Liu@amd.com>
+References: <20230226141051.21767-1-iam@lach.pw>
+ <20230226141051.21767-2-iam@lach.pw>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230226141051.21767-2-iam@lach.pw>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YT1PR01CA0156.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2f::35) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|DM4PR12MB7718:EE_
+X-MS-Office365-Filtering-Correlation-Id: 811f98ec-4041-47cb-eb62-08db18e41352
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wc0UCkiUdFsiZP2oLelnlA8Fg5yM2OB6c468+Sjj4YfZD29g7swaRjaR+F45C98pEAICJEfxa8ec4Hymaxvve/tjBcQSKmpaedMd3fdhuxMufL+J0JIBo4GrhiwGGBLhcuGkK2K4olIMyH0A+3DQMNauIe5G7EjbUZB38yQzJ4b9bpfMjj9ZtMHVQFxTO2n8i3cTw8D0A2Qm9BbrCEorknhvhDlAtj9trQ23cmAxljxXRAUvGJlI7EZPSrKdh3VcMrlZ3zv4vVZanGKDn9hmrQf9kQbKWW2cbWB9lAskFOETg/nPufD88QYR68xzVqH/Ix8AAfAQaiThGg2fVWYyZdy7xq8e0p0w4ReYh6e+wc8EkE9moINLpa9WthUi0sObBgbN+o6jispsqgErbxtUcrT7Gz/PuXvk6W7BVNq9y66Gggc1g479oGFTlbtAwVyYJHM/+LVxE3gj7cgkXzQssM6T2aiweJaxPtCYafOeQ7YOUcKzyLEnxliRyoqn1N7ByFrszMt7rSX/U9c9/K4TT1Re9lHfbRItz4gRE0ltX5kyonswXIZlPWX73ZIz2K0J3G23AbQomGXVZTUNWd6sXcTHkrBRHDTuWTf3mfVanCRsk68XbDHDnVDW5Y832vKIZ6SMc9eZIfycX1tI5/4oddzl8IFEydcnOq8f04qS6ooZ0XCkUQQm9UvzdvqeEQZWAQu2f3CbSx8TYzjx+fs22HsZIxGBEAM42riUfNLRCss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(451199018)(36756003)(316002)(54906003)(86362001)(478600001)(6486002)(8936002)(7416002)(2906002)(44832011)(66556008)(66946007)(8676002)(66476007)(4326008)(41300700001)(5660300002)(31696002)(38100700002)(6506007)(186003)(2616005)(26005)(6666004)(53546011)(83380400001)(6512007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVVITGNMbUp1c3RWSUQ2dC9iWjhXaUtMTVhYK3FOR2t3dnIyQiszK0swRmpX?=
+ =?utf-8?B?bEJPWVdyMWkwZHhBUG16Sk50cVphTUVZenhIUGplSmVJTk9qZzJLQW9scUZj?=
+ =?utf-8?B?RFQ0eE5uNzUxVmU2WFZsczZObVA5ZGgzc2RlU21odUVFRmhlTE5HMjl4VHE5?=
+ =?utf-8?B?L1JBTWdnZ3BiMnNCSU56VTJGcHJGTUxKM0RJV1pKbFYzZEV0ZlJNMzB1VjhU?=
+ =?utf-8?B?MnpVZStCRWRVR015UkViRFBPcXdvTkVicFhpUEh6SmJUdU5Vc1c5Qlp0K2dp?=
+ =?utf-8?B?aUlwZlIxUlBqcUQ1WGFiVFIzZHBQVlRQYVlDREswcWovT1BXaUI2RU5VbUJt?=
+ =?utf-8?B?TXR3bXlSbEQ4NVNNOUw2N1V3SmF3ZitDMG5VVDhpNEQwNVlEZ1hCcUZOc3Q0?=
+ =?utf-8?B?QW1aSDE2MHhSS2llOWM4KzJTTi8rMXk4cllsaWx0NkNlZTlCU0dvZzRTZlJE?=
+ =?utf-8?B?QUd2TTVTdFQ1S2hUUUlWTndYS1RZSHFnWW5CdlByelFEQmxsZlFLelU1SnJB?=
+ =?utf-8?B?UklOMzl2REJqeHcrR0U4T201UFczc0ZwR1g4blkzTjFJRzc1ZVJFYUNpRWRC?=
+ =?utf-8?B?dkpxemw3dHFLS0RDYWlLOGNXd2UwVk9CcGhXTVJDK251bnpYUklEd3E1MTVh?=
+ =?utf-8?B?OFZZOTVEWk95UlJudEhYaTBMNmhYb28yV2tqTk9TT2FTdGV6SmxUa0hPZ1Yr?=
+ =?utf-8?B?bHRnekFKc2xIZ1kzcVVXNVZYVWZ3QnBOS0JrZTd5dzdyeHpPamhOMXh6RmJO?=
+ =?utf-8?B?c0xLcGdQNVkxWENKWkxLOTRtczdtVm1GaGthVS96TU9zTHc2SjRHMmxOdHh5?=
+ =?utf-8?B?RlhTbk5jVmczdzN4UUFWNVdqa25XazBwSFFXcWliQ2xCRk05Ui9NNitaQkZC?=
+ =?utf-8?B?dkJWa1FJNDR3dkd2UXZiTk1DR0Z4YmI4TkF3MlN2Z0VuT1NRdUs0ZmFYRE1i?=
+ =?utf-8?B?UTBod3E5V0d5bmZacFA5MFJIM0o2Vko5R0tuV3Q2ODQ2TFZRTTVlUlY4WnJr?=
+ =?utf-8?B?S3lEYlBDRmJtWXZoaXpZcVcxRWxpbGpLQVBDRU1adjJDWTAycXhQRkxNU0Rp?=
+ =?utf-8?B?R1hBTmlHS2l4VnozZEVQVGNkdjF2a0VKRDJYSTdWVkJXNGxNcmtOejYwMFhu?=
+ =?utf-8?B?L0x4R1RBNm1hWUtJRHB5b0RJdDFHTWV2TnNHOGxSVXM5SXBGbU1XU0Z6NEZF?=
+ =?utf-8?B?RnozNkFMbktwU1pUNnRuZ2ZLdnMzMEpVUlhrS2Y0b1pvZVNERW9oeEVEQW1s?=
+ =?utf-8?B?K2s5L21BZ3ZzT0F5cldJelc2N0ZOb3NIOFJhN2kxQ3kydjBXL1NyYkNPTmJL?=
+ =?utf-8?B?c1FxelhEM0FUS2lMRTk0bER3U2FXWFBnSmtVYzZiVmkwVkZkOVQ4TkxZWmN5?=
+ =?utf-8?B?NXNoOVk4WnVwaFBnQldNb3h4WTAvQk51WGY3T3k5d0tMNmJzNUcwM1BBSmJC?=
+ =?utf-8?B?YXRhU0dpazdoeW9lK0ZhalRhTy9na0d5QW4yaGRiQUpHcGpYZjdxOG14SWVJ?=
+ =?utf-8?B?OEVSU296MjNPbUNkbEJzczNaNjdacU1XaUVmeXBoQ0REekFUcXBuSldNd2tB?=
+ =?utf-8?B?K3JybFlRMEFEQjY3YkN5a29mWkFMek02VU0zZVRHQk1kWGpuaXRJcDJRNWlW?=
+ =?utf-8?B?KytLZ2d2aEczbDhCZm9oR1dGejV4MWhqMXdtNkh2VnlxbnlQZ21xVE80Yysw?=
+ =?utf-8?B?Y3Q3L1lla1JyTTRQQzdkdS8zR0Zneldxanp4SVd6Q3Z5YkFHMnRobjAyMEtT?=
+ =?utf-8?B?eVlvbGpEUjFWQXkyNDE4ZUZhcm9UaVU0R0FYSldlTWFIcW9wQkNjREZZdFlR?=
+ =?utf-8?B?a0JoeTM2RnhmUDhBTWM4MEh0MUJvbnUwRWJad0hKRVhFUjZEbkJsQUp3MzJi?=
+ =?utf-8?B?M2w1ODRRdHhkRWhmRUNGbUdRYlFWQ0dUc3NpWUkyUGdjNmxBZ3hQRS9uMXF4?=
+ =?utf-8?B?MXQvQ2U2emh1M0VQRk8zY2JKTDdBaDlyR0xpbTBTRGhLVDJ3MVdIbE9oUDJC?=
+ =?utf-8?B?STF2SWtCKzhzZCtmUTNnazhNbHk5V2NnT3ZOSnh4Q0ZoSkU0Sm93QnNhSXVp?=
+ =?utf-8?B?VkdnN3c2dDJ3ZG5GenJSZHJGNUI4NmJWUzZEUFZBRXJ0RFFwVG9CN0tDb2tM?=
+ =?utf-8?Q?2H8v6UpyiMkfZbYuj0P7maTKt?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 811f98ec-4041-47cb-eb62-08db18e41352
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 17:00:06.1211
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cvFB9Lj5RwwPRe1RzRl6OlkeQioHZvddIRZxHAxkLBFCoL5nh/2No0hjggHCAvYFunIfU7Lw/177bUi4J4UkVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7718
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/23 08:03, Arthur Simchaev wrote:
->>>
->>>    */
->>>   struct utp_upiu_query {
->>>   	__u8 opcode;
->>>   	__u8 idn;
->>>   	__u8 index;
->>>   	__u8 selector;
->>> -	__be16 reserved_osf;
->>> -	__be16 length;
->>> -	__be32 value;
->>> -	__be32 reserved[2];
->>> +	__u8 osf3;
->>> +	__u8 osf4;
->>> +	__be16 osf5;
->>> +	__be32 osf6;
->>> +	__be32 osf7;
->>>   };
->> All changes in UAPI headers must be backwards compatible. The above doesn't look like a backwards compatible change to me.
->
-> This API was originally invented to support ufs-bsg.
-> AFAIK, ufs-utils is the only app that makes use of this API,
-> and it doesn't dig into struct utp_upiu_query inner fields.
 
-That does not match what I see. I see that code in ufs-utils accesses 
-the 'length' and 'value' members of the above data structure.
 
-Please follow the rules for UAPI header files.
+On 2/26/23 09:10, Yaroslav Bolyukin wrote:
+> As per DisplayID v2.0 Errata E9 spec "DSC pass-through timing support"
+> VESA vendor-specific data block may contain target DSC bits per pixel
+> fields
+> 
 
-Thanks,
+According to the errata this should only apply to VII timings. The way
+it is currently implemented will make it apply to everything which is
+not what we want.
 
-Bart.
+Can we add this field to drm_mode_info instead of drm_display_info and
+set it inside drm_mode_displayid_detailed when parsing a type_7 timing?
+
+Harry
+
+
+> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+> ---
+>  drivers/gpu/drm/drm_edid.c  | 38 +++++++++++++++++++++++++------------
+>  include/drm/drm_connector.h |  6 ++++++
+>  include/drm/drm_displayid.h |  4 ++++
+>  3 files changed, 36 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+> index 3d0a4da661bc..aa88ac82cbe0 100644
+> --- a/drivers/gpu/drm/drm_edid.c
+> +++ b/drivers/gpu/drm/drm_edid.c
+> @@ -6338,7 +6338,7 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+>  	if (oui(vesa->oui[0], vesa->oui[1], vesa->oui[2]) != VESA_IEEE_OUI)
+>  		return;
+>  
+> -	if (sizeof(*vesa) != sizeof(*block) + block->num_bytes) {
+> +	if (block->num_bytes < 5) {
+>  		drm_dbg_kms(connector->dev,
+>  			    "[CONNECTOR:%d:%s] Unexpected VESA vendor block size\n",
+>  			    connector->base.id, connector->name);
+> @@ -6361,24 +6361,37 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+>  		break;
+>  	}
+>  
+> -	if (!info->mso_stream_count) {
+> -		info->mso_pixel_overlap = 0;
+> -		return;
+> -	}
+> +	info->mso_pixel_overlap = 0;
+> +
+> +	if (info->mso_stream_count) {
+> +		info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+> +
+> +		if (info->mso_pixel_overlap > 8) {
+> +			drm_dbg_kms(connector->dev,
+> +				    "[CONNECTOR:%d:%s] Reserved MSO pixel overlap value %u\n",
+> +				    connector->base.id, connector->name,
+> +				    info->mso_pixel_overlap);
+> +			info->mso_pixel_overlap = 8;
+> +		}
+>  
+> -	info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+> -	if (info->mso_pixel_overlap > 8) {
+>  		drm_dbg_kms(connector->dev,
+> -			    "[CONNECTOR:%d:%s] Reserved MSO pixel overlap value %u\n",
+> +			    "[CONNECTOR:%d:%s] MSO stream count %u, pixel overlap %u\n",
+>  			    connector->base.id, connector->name,
+> -			    info->mso_pixel_overlap);
+> -		info->mso_pixel_overlap = 8;
+> +			    info->mso_stream_count, info->mso_pixel_overlap);
+> +	}
+> +
+> +	if (block->num_bytes < 7) {
+> +		/* DSC bpp is optional */
+> +		return;
+>  	}
+>  
+> +	info->dp_dsc_bpp = FIELD_GET(DISPLAYID_VESA_DSC_BPP_INT, vesa->dsc_bpp_int) * 16
+> +		+ FIELD_GET(DISPLAYID_VESA_DSC_BPP_FRACT, vesa->dsc_bpp_fract);
+> +
+>  	drm_dbg_kms(connector->dev,
+> -		    "[CONNECTOR:%d:%s] MSO stream count %u, pixel overlap %u\n",
+> +		    "[CONNECTOR:%d:%s] DSC bits per pixel %u\n",
+>  		    connector->base.id, connector->name,
+> -		    info->mso_stream_count, info->mso_pixel_overlap);
+> +		    info->dp_dsc_bpp);
+>  }
+>  
+>  static void drm_update_mso(struct drm_connector *connector,
+> @@ -6425,6 +6438,7 @@ static void drm_reset_display_info(struct drm_connector *connector)
+>  	info->mso_stream_count = 0;
+>  	info->mso_pixel_overlap = 0;
+>  	info->max_dsc_bpp = 0;
+> +	info->dp_dsc_bpp = 0;
+>  
+>  	kfree(info->vics);
+>  	info->vics = NULL;
+> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> index 7b5048516185..1d01e0146a7f 100644
+> --- a/include/drm/drm_connector.h
+> +++ b/include/drm/drm_connector.h
+> @@ -719,6 +719,12 @@ struct drm_display_info {
+>  	 */
+>  	u32 max_dsc_bpp;
+>  
+> +	/**
+> +	 * @dp_dsc_bpp: DP Display-Stream-Compression (DSC) timing's target
+> +	 * DST bits per pixel in 6.4 fixed point format. 0 means undefined
+> +	 */
+> +	u16 dp_dsc_bpp;
+> +
+>  	/**
+>  	 * @vics: Array of vics_len VICs. Internal to EDID parsing.
+>  	 */
+> diff --git a/include/drm/drm_displayid.h b/include/drm/drm_displayid.h
+> index 49649eb8447e..0fc3afbd1675 100644
+> --- a/include/drm/drm_displayid.h
+> +++ b/include/drm/drm_displayid.h
+> @@ -131,12 +131,16 @@ struct displayid_detailed_timing_block {
+>  
+>  #define DISPLAYID_VESA_MSO_OVERLAP	GENMASK(3, 0)
+>  #define DISPLAYID_VESA_MSO_MODE		GENMASK(6, 5)
+> +#define DISPLAYID_VESA_DSC_BPP_INT	GENMASK(5, 0)
+> +#define DISPLAYID_VESA_DSC_BPP_FRACT	GENMASK(3, 0)
+>  
+>  struct displayid_vesa_vendor_specific_block {
+>  	struct displayid_block base;
+>  	u8 oui[3];
+>  	u8 data_structure_type;
+>  	u8 mso;
+> +	u8 dsc_bpp_int;
+> +	u8 dsc_bpp_fract;
+>  } __packed;
+>  
+>  /* DisplayID iteration */
+
