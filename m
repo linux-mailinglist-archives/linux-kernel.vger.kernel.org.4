@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006386A426C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA766A426F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjB0NR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:17:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        id S229931AbjB0NS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjB0NRz (ORCPT
+        with ESMTP id S229644AbjB0NS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:17:55 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECB1449A;
-        Mon, 27 Feb 2023 05:17:52 -0800 (PST)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PQLd44BMjzdbC3;
-        Mon, 27 Feb 2023 21:17:12 +0800 (CST)
-Received: from [10.67.101.126] (10.67.101.126) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Feb 2023 21:17:49 +0800
-Message-ID: <bd22a19a-dd51-aa34-0794-780368660683@huawei.com>
-Date:   Mon, 27 Feb 2023 21:17:49 +0800
+        Mon, 27 Feb 2023 08:18:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D715CA7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:18:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14B6AB80C95
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:18:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81091C4339C;
+        Mon, 27 Feb 2023 13:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677503902;
+        bh=CDhuW7QDNLA6JLvIVxDhgYfgxT0x9vTLa1YeUHVjBrY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cuu+YVFva4h0BP/qJOUfMYHXoIqDM2HxQHHhd1yUhfga+7SaVeZlWe85X7G3gzpBq
+         Hv7QootJvOEbh/KVEvzqdtkaeao190Jy7LKay+rVo5I8Yk/AK44pgx54sOCkGo3I14
+         1PPrbmzD0g9GSDQwpV+iXgYoIn56CkKP26N1vXueudv5VWEne6VKUJKblmJZ7Dogq8
+         TuEym53MmBn3zIbr3CQLfdsjltc4iKYreQk8wu1VTbucHUvz/RyyDiXNAB3KEvqiFJ
+         o2Vo8grnFheVlcHZhxUYxV/xvbILC6DGWPjo9VfeYcbma7sYrmid775845dyWZBjGu
+         vYdtPjB95Q61Q==
+Date:   Mon, 27 Feb 2023 13:18:18 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Sascha Hauer <sha@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: Re: About regulator error events
+Message-ID: <Y/ytmh9QrXN9Tw17@sirena.org.uk>
+References: <20230227130542.GM32097@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: [bug report] scsi: libsas: Fix hung when disable phys
-Content-Language: en-CA
-References: <cf7ba927-c872-79c8-6e84-2196c350216e@huawei.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Linuxarm <linuxarm@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Kangfenglong <kangfenglong@huawei.com>,
-        John Garry <john.g.garry@oracle.com>
-From:   yangxingui <yangxingui@huawei.com>
-In-Reply-To: <cf7ba927-c872-79c8-6e84-2196c350216e@huawei.com>
-X-Forwarded-Message-Id: <cf7ba927-c872-79c8-6e84-2196c350216e@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.126]
-X-ClientProxiedBy: dggpemm100019.china.huawei.com (7.185.36.251) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qb9y2E/9/0TA1vTZ"
+Content-Disposition: inline
+In-Reply-To: <20230227130542.GM32097@pengutronix.de>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,98 +56,53 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi, All
+--qb9y2E/9/0TA1vTZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If disabling remote PHY just after disabling all local PHYs in expander
-envirnment,as follows:
-echo 0 > /sys/class/sas_phy/phy-4\:0/enable
-echo 0 > /sys/class/sas_phy/phy-4\:1/enable
-echo 0 > /sys/class/sas_phy/phy-4\:2/enable
-echo 0 > /sys/class/sas_phy/phy-4\:3/enable
-echo 0 > /sys/class/sas_phy/phy-4\:4/enable
-echo 0 > /sys/class/sas_phy/phy-4\:5/enable
-echo 0 > /sys/class/sas_phy/phy-4\:6/enable
-echo 0 > /sys/class/sas_phy/phy-4\:7/enable
-echo 0 > /sys/class/sas_phy/phy-4:0:7/enable
+On Mon, Feb 27, 2023 at 02:05:42PM +0100, Sascha Hauer wrote:
 
-a hung as follows occurs.
+> The strategy I had in mind was to disable the regulator, enable it again
+> to see if the errors persists and if it does, permanently disable the
+> device.  Disabling the regulator only works though when there's only one
+> consumer.  With multiple consumers only the enable count decreases, but
 
-[  245.564088] INFO: task kworker/u256:1:883 blocked for more than 120 
-seconds.
-[  245.571115]       Tainted: G           O      5.16.0-rc4+ #1
-[  245.576759] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[  245.584557] task:kworker/u256:1  state:D stack:    0 pid:  883 ppid: 
-    2 flags:0x00000008
-[  245.592878] Workqueue: 0000:74:02.0_event_q sas_phy_event_worker [libsas]
-[  245.599652] Call trace:
-[  245.602092]  __switch_to+0xd8/0x114
-[  245.605574]  __schedule+0x2f0/0x85c
-[  245.609054]  schedule+0x60/0x100
-[  245.612273]  __kernfs_remove.part.0+0x288/0x2e0
-[  245.616791]  kernfs_remove_by_name_ns+0x70/0xc0
-[  245.621307]  sysfs_remove_file_ns+0x24/0x30
-[  245.625477]  device_remove_file+0x24/0x34
-[  245.629475]  attribute_container_remove_attrs+0x50/0x8c
-[  245.634684]  attribute_container_class_device_del+0x24/0x3c
-[  245.640237]  transport_remove_classdev+0x64/0x80
-[  245.644839]  attribute_container_device_trigger+0x11c/0x124
-[  245.650393]  transport_remove_device+0x24/0x30
-[  245.654823]  sas_phy_delete+0x34/0x60
-[  245.658475]  do_sas_phy_delete+0x60/0x70
-[  245.662385]  device_for_each_child+0x68/0xb0
-[  245.666640]  sas_remove_children+0x44/0x54
-[  245.670723]  sas_destruct_devices+0x5c/0xa0 [libsas]
-[  245.675676]  sas_deform_port+0x178/0x1bc [libsas]
-[  245.680371]  sas_phye_loss_of_signal+0x28/0x34 [libsas]
-[  245.685583]  sas_phy_event_worker+0x3c/0x60 [libsas]
-[  245.690536]  process_one_work+0x1e0/0x46c
-[  245.694534]  worker_thread+0x15c/0x464
-[  245.698272]  kthread+0x188/0x194
-[  245.701491]  ret_from_fork+0x10/0x20
-[  245.705120] INFO: task bash:25579 blocked for more than 120 seconds.
-[  245.711450]       Tainted: G           O      5.16.0-rc4+ #1
-[  245.717087] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[  245.724883] task:bash            state:D stack:    0 pid:25579 ppid: 
-25113 flags:0x00000200
-[  245.733202] Call trace:
-[  245.735639]  __switch_to+0xd8/0x114
-[  245.739117]  __schedule+0x2f0/0x85c
-[  245.742595]  schedule+0x60/0x100
-[  245.745814]  schedule_timeout+0x180/0x1bc
-[  245.749811]  wait_for_completion+0x8c/0x100
-[  245.753984]  flush_workqueue+0x108/0x3d4
-[  245.757896]  drain_workqueue+0xc8/0x16c
-[  245.761722]  __sas_drain_work+0x54/0x90 [libsas]
-[  245.766328]  sas_drain_work+0x68/0x70 [libsas]
-[  245.770760]  queue_phy_enable+0x9c/0xec [libsas]
-[  245.775368]  store_sas_phy_enable+0xf0/0x10c
-[  245.779624]  dev_attr_store+0x24/0x40
-[  245.783275]  sysfs_kf_write+0x50/0x60
-[  245.786930]  kernfs_fop_write_iter+0x124/0x1b4
-[  245.791361]  new_sync_write+0xf0/0x190
-[  245.795098]  vfs_write+0x23c/0x2a0
-[  245.798490]  ksys_write+0x78/0x104
-[  245.801882]  __arm64_sys_write+0x28/0x3c
-[  245.805794]  invoke_syscall.constprop.0+0x58/0xf0
-[  245.810483]  do_el0_svc+0x19c/0x1b0
-[  245.813962]  el0_svc+0x28/0xec
-[  245.817009]  el0t_64_sync_handler+0x1a8/0x1ac
-[  245.821351]  el0t_64_sync+0x1a0/0x1a4
+Might also be a good idea to turn off any other supplies to the device
+as well but yes.
 
-We find that when all local PHYs are disabled, all the devices will be
-removed in work PHY_LOSS_OF_SIGNAL which will try to wait the kn->active
-of the device to be deactivated (in function kernfs_drain)，but
-kn->active may be still activated as we use sysfs interface to disable
-remote PHYs at the same time, meanwhile it will drain libsas work
-including work PHY_LOSS_OF_SIGNAL in the sysfs interface, so hung
-occurs.
+> A first good step might be to notify the user somehow. While we can get
+> the overcurrent status of a regulator from
+> /sys/class/regulator/*/over_current there doesn't seem to be any way to
+> get a regulator event in userspace, right?  Would patches changing that
+> be welcomed?
 
-How to fix the problem in this scenario?
+Sure.
 
-regards,
+> There doesn't seem to be much prior art for handling regulator error
+> events in the kernel. It would be great to get some input what others do
+> in this situation, or to get some ideas what they would do if they had
+> the time to do so ;)
 
-Xingui
+The general issue is that if the regulators get upset enough to start
+complaining something has generally gone really badly wrong and there
+isn't anything constructive that can be done other than logging.  You
+might potentially want to power off the system as a whole or something
+too.  I do think any big actions are going to be userspace policy
+things.
 
-.
+--qb9y2E/9/0TA1vTZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP8rZkACgkQJNaLcl1U
+h9DeFQgAhPYK3DRv220gpQLpEwPGJieeofQ5tB1x3GYHBxmXMD1RjkTj5ZEDvPSt
+/kKbAQFaTW4A9VXeklarIjF0BLHnf7q62/MkVl2B9nG7dV+w9iCj/Qudu8LcZPQt
+DTEHPcTszELqYhNBWHZv3P15kl73J+lg/vLht0JmoT8eHbkRINBzDdsMINAWmY6T
+jMQreKbWuZRon2yYZhQczWOrqrOnyYJ0NR17QeIn5Wckc0z2GjWxFWHVlioYxjGV
+dmCs8SOTXNlUKk5n32LgTVS9jhnIQxPCv2xGlUa+ccgl+9dQdcPs3JJQnIpmMo9f
+454kxniD7Iym92bkfdArBiM2kWzFhA==
+=GTmk
+-----END PGP SIGNATURE-----
+
+--qb9y2E/9/0TA1vTZ--
