@@ -2,154 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D13C6A4686
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6D66A4688
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjB0Pyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S229690AbjB0PzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjB0Pym (ORCPT
+        with ESMTP id S229667AbjB0PzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:54:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C11219F3F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:53:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677513234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FSg5+r6je78Oo6DOHt1spvGdIu0PScSllKZjUp4heJA=;
-        b=OinFvJZw/DzeakHBnCaZlfr4DaNzxb+zlk0TdwS1JTNjTp/a9s8rEwAqNlcmGNAxzpqP7+
-        a9IPjnDSLO3S1/iGJD5XxKT3A0ZpVzBO0vgJ6WuavfeUzn7er4yGgALAgmMtdSn8liOQUN
-        nEKB20wE+W7hYeZRpuArvQU/0VYSnyo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-416-inavr7DaPlSPxeWPDMSTeg-1; Mon, 27 Feb 2023 10:53:49 -0500
-X-MC-Unique: inavr7DaPlSPxeWPDMSTeg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 70F14185A7A4;
-        Mon, 27 Feb 2023 15:53:48 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 348811121314;
-        Mon, 27 Feb 2023 15:53:47 +0000 (UTC)
-Date:   Mon, 27 Feb 2023 10:53:45 -0500
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     vgoyal@redhat.com
-Cc:     dri-devel@lists.freedesktop.org, helen.koike@collabora.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa+renesas@sang-engineering.com, akpm@linux-foundation.org,
-        David Heidelberg <david@ixit.cz>
-Subject: Re: [RESEND v2 PATCH] init/do_mounts.c: add virtiofs root fs support
-Message-ID: <Y/zSCarxyabSC1Zf@fedora>
-References: <20230224143751.36863-1-david@ixit.cz>
+        Mon, 27 Feb 2023 10:55:02 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4D110423
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:54:58 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4PQQ740mdsz9sRw;
+        Mon, 27 Feb 2023 16:54:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KGyF3kxzZLfU; Mon, 27 Feb 2023 16:54:56 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4PQQ74028Zz9sRt;
+        Mon, 27 Feb 2023 16:54:56 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E4FAA8B76D;
+        Mon, 27 Feb 2023 16:54:55 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id vfkc5fTz5JcQ; Mon, 27 Feb 2023 16:54:55 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C23438B763;
+        Mon, 27 Feb 2023 16:54:55 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 31RFssvf1956906
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 16:54:54 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 31RFssGo1956874;
+        Mon, 27 Feb 2023 16:54:54 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH] powerpc/perf: Properly detect mpc7450 family
+Date:   Mon, 27 Feb 2023 16:54:45 +0100
+Message-Id: <99ca1da2e5a6cf82a8abf4bc034918e500e31781.1677513277.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="RSf3QCTu5WhPlQBP"
-Content-Disposition: inline
-In-Reply-To: <20230224143751.36863-1-david@ixit.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677513283; l=2016; s=20211009; h=from:subject:message-id; bh=4PyH6HbcpuO9nDmeuWz6wcx7EIrP9V8mGLim+adlsII=; b=T4CqsEZgRLkFNfGpZ75Sbz1cFkt41Nktbqye7Evon1YDxcslSZqI50f3sYzwptr59qA+48DTpcnE M2rm6P+vCZg1pcSnef/Roa62/MITz7H/nnYcYst77FaEKsA+qDy/
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Unlike PVR_POWER8, etc ...., PVR_7450 represents a full PVR
+value and not a family value.
 
---RSf3QCTu5WhPlQBP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+To avoid confusion, do like E500 family and define the relevant
+PVR_VER_xxxx values for the 7450 family:
+  0x8000 ==> 7450
+  0x8001 ==> 7455
+  0x8002 ==> 7447
+  0x8003 ==> 7447A
+  0x8004 ==> 7448
 
-On Fri, Feb 24, 2023 at 03:37:51PM +0100, David Heidelberg wrote:
-> From: Stefan Hajnoczi <stefanha@redhat.com>
->=20
-> Make it possible to boot directly from a virtiofs file system with tag
-> 'myfs' using the following kernel parameters:
->=20
->   rootfstype=3Dvirtiofs root=3Dmyfs rw
->=20
-> Booting directly from virtiofs makes it possible to use a directory on
-> the host as the root file system.  This is convenient for testing and
-> situations where manipulating disk image files is cumbersome.
->=20
-> Reviewed-by: Helen Koike <helen.koike@collabora.com>
-> Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
-> v2: added Reviewed-by and CCed everyone interested.
->=20
-> We have used this option in Mesa3D CI for testing crosvm for
-> more than one years and it's proven to work reliably.
->=20
-> We are working on effort to removing custom patches to be able to do=20
-> automated apply and test of patches from any tree.                       =
-      =20
->=20
-> https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/.gitlab-ci/crosvm-ru=
-nner.sh#L85
->  init/do_mounts.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+And use them to detect 7450 family for perf events.
 
-Vivek, do you remember where we ended up with boot from virtiofs? I
-thought a different solution was merged some time ago.
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202302260657.7dM9Uwev-lkp@intel.com/
+Fixes: ec3eb9d941a9 ("powerpc/perf: Use PVR rather than oprofile field to determine CPU version")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/reg.h  | 5 +++++
+ arch/powerpc/perf/mpc7450-pmu.c | 6 +++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-There is documentation from the virtiofs community here:
-https://virtio-fs.gitlab.io/howto-boot.html
-
-Stefan
-
->=20
-> diff --git a/init/do_mounts.c b/init/do_mounts.c
-> index 811e94daf0a8..11c11abe23d7 100644
-> --- a/init/do_mounts.c
-> +++ b/init/do_mounts.c
-> @@ -578,6 +578,16 @@ void __init mount_root(void)
->  			printk(KERN_ERR "VFS: Unable to mount root fs via SMB.\n");
->  		return;
->  	}
-> +#endif
-> +#ifdef CONFIG_VIRTIO_FS
-> +	if (root_fs_names && !strcmp(root_fs_names, "virtiofs")) {
-> +		if (!do_mount_root(root_device_name, "virtiofs",
-> +				   root_mountflags, root_mount_data))
-> +			return;
-> +
-> +		panic("VFS: Unable to mount root fs \"%s\" from virtiofs",
-> +		      root_device_name);
-> +	}
->  #endif
->  	if (ROOT_DEV =3D=3D 0 && root_device_name && root_fs_names) {
->  		if (mount_nodev_root() =3D=3D 0)
-> --=20
-> 2.39.1
->=20
-
---RSf3QCTu5WhPlQBP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmP80gkACgkQnKSrs4Gr
-c8gQDAf/S5FKAUxYW0RXBL8p7kqYdskcOGTgDOV7axCS6K87pK4tYT7M3RqheN3+
-edcQhwOIM1ycR+xuYS5AA60sUtNKlsF4RIZu8+ug1sJPoXZE2WDtQbMk4sCpctgt
-oWQTTVA35jvOv8SnfVL6AYcYTtymB6bpXaX/cYdUn5ERaOleKRvt4E8Rpjv9hCjS
-2pg+KhGCoTWLicimXqEmHZI4FwChxJgvmw8EmNmyNm9wzuh9xibsLbm0tB6wyIdt
-f7FWURT1T+yIr8TIChaWUg7pb+HldwDxpcFSsLeZGgaPB22os24ZTalYNrd8KQrm
-320U02Kiol90+QZLWEVXkJQ1z2HlmA==
-=igqY
------END PGP SIGNATURE-----
-
---RSf3QCTu5WhPlQBP--
+diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/reg.h
+index 1e8b2e04e626..8fda87af2fa5 100644
+--- a/arch/powerpc/include/asm/reg.h
++++ b/arch/powerpc/include/asm/reg.h
+@@ -1310,6 +1310,11 @@
+ #define PVR_VER_E500MC	0x8023
+ #define PVR_VER_E5500	0x8024
+ #define PVR_VER_E6500	0x8040
++#define PVR_VER_7450	0x8000
++#define PVR_VER_7455	0x8001
++#define PVR_VER_7447	0x8002
++#define PVR_VER_7447A	0x8003
++#define PVR_VER_7448	0x8004
+ 
+ /*
+  * For the 8xx processors, all of them report the same PVR family for
+diff --git a/arch/powerpc/perf/mpc7450-pmu.c b/arch/powerpc/perf/mpc7450-pmu.c
+index 552d51a925d3..db451b9aac35 100644
+--- a/arch/powerpc/perf/mpc7450-pmu.c
++++ b/arch/powerpc/perf/mpc7450-pmu.c
+@@ -417,9 +417,9 @@ struct power_pmu mpc7450_pmu = {
+ 
+ static int __init init_mpc7450_pmu(void)
+ {
+-	unsigned int pvr = mfspr(SPRN_PVR);
+-
+-	if (PVR_VER(pvr) != PVR_7450)
++	if (!pvr_version_is(PVR_VER_7450) && !pvr_version_is(PVR_VER_7455) &&
++	    !pvr_version_is(PVR_VER_7447) && !pvr_version_is(PVR_VER_7447A) &&
++	    !pvr_version_is(PVR_VER_7448))
+ 		return -ENODEV;
+ 
+ 	return register_power_pmu(&mpc7450_pmu);
+-- 
+2.39.1
 
