@@ -2,107 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA766A426F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F346A4272
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjB0NS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S229965AbjB0NS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjB0NS0 (ORCPT
+        with ESMTP id S229994AbjB0NSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:18:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D715CA7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:18:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Feb 2023 08:18:54 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361BE15CA7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:18:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14B6AB80C95
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81091C4339C;
-        Mon, 27 Feb 2023 13:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677503902;
-        bh=CDhuW7QDNLA6JLvIVxDhgYfgxT0x9vTLa1YeUHVjBrY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cuu+YVFva4h0BP/qJOUfMYHXoIqDM2HxQHHhd1yUhfga+7SaVeZlWe85X7G3gzpBq
-         Hv7QootJvOEbh/KVEvzqdtkaeao190Jy7LKay+rVo5I8Yk/AK44pgx54sOCkGo3I14
-         1PPrbmzD0g9GSDQwpV+iXgYoIn56CkKP26N1vXueudv5VWEne6VKUJKblmJZ7Dogq8
-         TuEym53MmBn3zIbr3CQLfdsjltc4iKYreQk8wu1VTbucHUvz/RyyDiXNAB3KEvqiFJ
-         o2Vo8grnFheVlcHZhxUYxV/xvbILC6DGWPjo9VfeYcbma7sYrmid775845dyWZBjGu
-         vYdtPjB95Q61Q==
-Date:   Mon, 27 Feb 2023 13:18:18 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
-Subject: Re: About regulator error events
-Message-ID: <Y/ytmh9QrXN9Tw17@sirena.org.uk>
-References: <20230227130542.GM32097@pengutronix.de>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C26B0219AB;
+        Mon, 27 Feb 2023 13:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1677503930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9ECJneu3XfYwEqhsgqHRN+XdG1YJYS7sQp3PmHlNv5c=;
+        b=VkXaQglEEVpbFP8gGcH4XeF/nQWn/yOTsjM9qEdDKW86eHlkdzznZHJq0DWXIJo/gafPDG
+        DREWI7EaPmro5ahK9CVCPNMtxmAlPQtUkK0He2R8vIb6VygwIUb39CbWtUp6wtXZeFOe8M
+        jLHSw5g2gzWVgOGIl5K+h5wV/u8xFpk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8202C13A43;
+        Mon, 27 Feb 2023 13:18:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2bavHrqt/GM8YAAAMHmgww
+        (envelope-from <petr.pavlu@suse.com>); Mon, 27 Feb 2023 13:18:50 +0000
+From:   Petr Pavlu <petr.pavlu@suse.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        corbet@lwn.net, linux-kernel@vger.kernel.org,
+        Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH v4] x86: Avoid relocation information in final vmlinux
+Date:   Mon, 27 Feb 2023 14:18:29 +0100
+Message-Id: <20230227131829.26824-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qb9y2E/9/0TA1vTZ"
-Content-Disposition: inline
-In-Reply-To: <20230227130542.GM32097@pengutronix.de>
-X-Cookie: On the eighth day, God created FORTRAN.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Linux build process on x86 roughly consists of compiling all input
+files, statically linking them into a vmlinux ELF file, and then taking
+and turning this file into an actual bzImage bootable file.
 
---qb9y2E/9/0TA1vTZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+vmlinux has in this process two main purposes:
+1) It is an intermediate build target on the way to produce the final
+   bootable image.
+2) It is a file that is expected to be used by debuggers and standard
+   ELF tooling to work with the built kernel.
 
-On Mon, Feb 27, 2023 at 02:05:42PM +0100, Sascha Hauer wrote:
+For the second purpose, a vmlinux file is typically collected by various
+package build recipes, such as distribution spec files, including the
+kernel's own binrpm-pkg target.
 
-> The strategy I had in mind was to disable the regulator, enable it again
-> to see if the errors persists and if it does, permanently disable the
-> device.  Disabling the regulator only works though when there's only one
-> consumer.  With multiple consumers only the enable count decreases, but
+When building a kernel supporting KASLR with CONFIG_X86_NEED_RELOCS,
+vmlinux contains also relocation information produced by using the
+--emit-relocs linker option. This is utilized by subsequent build steps
+to create vmlinux.relocs and produce a relocatable image. However, the
+information is not needed by debuggers and other standard ELF tooling.
 
-Might also be a good idea to turn off any other supplies to the device
-as well but yes.
+The issue is then that the collected vmlinux file and hence distribution
+packages end up unnecessarily large because of this extra data. The
+following is a size comparison of vmlinux v6.0 with and without the
+relocation information:
+| Configuration      | With relocs | Stripped relocs |
+| x86_64_defconfig   |       70 MB |           43 MB |
+| +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
 
-> A first good step might be to notify the user somehow. While we can get
-> the overcurrent status of a regulator from
-> /sys/class/regulator/*/over_current there doesn't seem to be any way to
-> get a regulator event in userspace, right?  Would patches changing that
-> be welcomed?
+Optimize a resulting vmlinux by adding a postlink step that splits the
+relocation information into vmlinux.relocs and then strips it from the
+vmlinux binary.
 
-Sure.
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
 
-> There doesn't seem to be much prior art for handling regulator error
-> events in the kernel. It would be great to get some input what others do
-> in this situation, or to get some ideas what they would do if they had
-> the time to do so ;)
+Changes since v3 [1]:
+- Update the Kbuild.include path in arch/x86/Makefile.postlink to work after
+  67d7c3023a67 ("kbuild: remove --include-dir MAKEFLAG from top Makefile").
 
-The general issue is that if the regulators get upset enough to start
-complaining something has generally gone really badly wrong and there
-isn't anything constructive that can be done other than logging.  You
-might potentially want to power off the system as a whole or something
-too.  I do think any big actions are going to be userspace policy
-things.
+Changes since v2 [2]:
+- Ignore only the moved vmlinux.relocs, add it to .gitignore and
+  Documentation/dontdiff.
+- Clean up the patch description.
 
---qb9y2E/9/0TA1vTZ
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes since v1 [3]:
+- Fix the command to remove relocations to work with llvm-objcopy too.
 
------BEGIN PGP SIGNATURE-----
+[1] https://lore.kernel.org/lkml/20221211141227.7622-1-petr.pavlu@suse.com/
+[2] https://lore.kernel.org/lkml/20220927084632.14531-1-petr.pavlu@suse.com/
+[3] https://lore.kernel.org/lkml/20220913132911.6850-1-petr.pavlu@suse.com/
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP8rZkACgkQJNaLcl1U
-h9DeFQgAhPYK3DRv220gpQLpEwPGJieeofQ5tB1x3GYHBxmXMD1RjkTj5ZEDvPSt
-/kKbAQFaTW4A9VXeklarIjF0BLHnf7q62/MkVl2B9nG7dV+w9iCj/Qudu8LcZPQt
-DTEHPcTszELqYhNBWHZv3P15kl73J+lg/vLht0JmoT8eHbkRINBzDdsMINAWmY6T
-jMQreKbWuZRon2yYZhQczWOrqrOnyYJ0NR17QeIn5Wckc0z2GjWxFWHVlioYxjGV
-dmCs8SOTXNlUKk5n32LgTVS9jhnIQxPCv2xGlUa+ccgl+9dQdcPs3JJQnIpmMo9f
-454kxniD7Iym92bkfdArBiM2kWzFhA==
-=GTmk
------END PGP SIGNATURE-----
+ .gitignore                          |  1 +
+ Documentation/dontdiff              |  1 +
+ arch/x86/Makefile.postlink          | 41 +++++++++++++++++++++++++++++
+ arch/x86/boot/compressed/.gitignore |  1 -
+ arch/x86/boot/compressed/Makefile   | 10 +++----
+ 5 files changed, 47 insertions(+), 7 deletions(-)
+ create mode 100644 arch/x86/Makefile.postlink
 
---qb9y2E/9/0TA1vTZ--
+diff --git a/.gitignore b/.gitignore
+index 8fe465f251c0..ab47fd6a04ef 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -65,6 +65,7 @@ modules.order
+ /vmlinux
+ /vmlinux.32
+ /vmlinux.map
++/vmlinux.relocs
+ /vmlinux.symvers
+ /vmlinux-gdb.py
+ /vmlinuz
+diff --git a/Documentation/dontdiff b/Documentation/dontdiff
+index 3c399f132e2d..a62ad01e6d11 100644
+--- a/Documentation/dontdiff
++++ b/Documentation/dontdiff
+@@ -254,6 +254,7 @@ vmlinux.aout
+ vmlinux.bin.all
+ vmlinux.lds
+ vmlinux.map
++vmlinux.relocs
+ vmlinux.symvers
+ vmlinuz
+ voffset.h
+diff --git a/arch/x86/Makefile.postlink b/arch/x86/Makefile.postlink
+new file mode 100644
+index 000000000000..195af937aa4d
+--- /dev/null
++++ b/arch/x86/Makefile.postlink
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0
++# ===========================================================================
++# Post-link x86 pass
++# ===========================================================================
++#
++# 1. Separate relocations from vmlinux into vmlinux.relocs.
++# 2. Strip relocations from vmlinux.
++
++PHONY := __archpost
++__archpost:
++
++-include include/config/auto.conf
++include $(srctree)/scripts/Kbuild.include
++
++CMD_RELOCS = arch/x86/tools/relocs
++quiet_cmd_relocs = RELOCS  $@.relocs
++      cmd_relocs = $(CMD_RELOCS) $@ > $@.relocs;$(CMD_RELOCS) --abs-relocs $@
++
++quiet_cmd_strip_relocs = RSTRIP  $@
++      cmd_strip_relocs = $(OBJCOPY) --remove-section='.rel.*' --remove-section='.rel__*' --remove-section='.rela.*' --remove-section='.rela__*' $@
++
++# `@true` prevents complaint when there is nothing to be done
++
++vmlinux: FORCE
++	@true
++ifeq ($(CONFIG_X86_NEED_RELOCS),y)
++	$(call cmd,relocs)
++	$(call cmd,strip_relocs)
++endif
++
++%.ko: FORCE
++	@true
++
++clean:
++	@rm -f vmlinux.relocs
++
++PHONY += FORCE clean
++
++FORCE:
++
++.PHONY: $(PHONY)
+diff --git a/arch/x86/boot/compressed/.gitignore b/arch/x86/boot/compressed/.gitignore
+index 25805199a506..b2968175fc27 100644
+--- a/arch/x86/boot/compressed/.gitignore
++++ b/arch/x86/boot/compressed/.gitignore
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ relocs
+ vmlinux.bin.all
+-vmlinux.relocs
+ vmlinux.lds
+ mkpiggy
+ piggy.S
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 6b6cfe607bdb..19d1fb601796 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -121,14 +121,12 @@ $(obj)/vmlinux.bin: vmlinux FORCE
+ 
+ targets += $(patsubst $(obj)/%,%,$(vmlinux-objs-y)) vmlinux.bin.all vmlinux.relocs
+ 
+-CMD_RELOCS = arch/x86/tools/relocs
+-quiet_cmd_relocs = RELOCS  $@
+-      cmd_relocs = $(CMD_RELOCS) $< > $@;$(CMD_RELOCS) --abs-relocs $<
+-$(obj)/vmlinux.relocs: vmlinux FORCE
+-	$(call if_changed,relocs)
++# vmlinux.relocs is created by the vmlinux postlink step.
++vmlinux.relocs: vmlinux
++	@true
+ 
+ vmlinux.bin.all-y := $(obj)/vmlinux.bin
+-vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += $(obj)/vmlinux.relocs
++vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += vmlinux.relocs
+ 
+ $(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
+ 	$(call if_changed,gzip)
+-- 
+2.35.3
+
