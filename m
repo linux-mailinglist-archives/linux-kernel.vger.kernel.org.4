@@ -2,106 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A5B6A4230
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC306A4237
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjB0NE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
+        id S229916AbjB0NF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:05:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjB0NE1 (ORCPT
+        with ESMTP id S229908AbjB0NFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:04:27 -0500
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E8A9752
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:04:26 -0800 (PST)
-Received: by mail-ed1-f49.google.com with SMTP id ee7so25555169edb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:04:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oeakewSvoTrri3R4W0qg/KkIdPobixgJ6jfXkFBCQm8=;
-        b=2gl+/3oNj8YHjMe5m8cwFCQvIGdPiANxTSZyPcEmhqJm5RkcwSxrGI2qhpmH9iAcvs
-         o1oZ3WumVo026ydYfua591IIAoNX31pAprj++Sv+/7TZiODE2d2w43SNxxxnLBWVDTx/
-         EddisyZhKoZYk0GA/Vbvfc5IY/gSsXv9TjCmrdnmQTD4OAHGFNNd6ZIaFbpnLHFN7jbl
-         E7N/ZkJ4U9OV/P/B1fqV6jS/0+Z3EFHJlixbVOoe/q4Q7S80AqebL7NzvzgB+kxF7M2Q
-         weyV22/dD4EHJlqEBAN5pYFGu6jy6yrR1KzePzZh+CqvGPQvNK7NBBZn2gPppCBMA7EV
-         8cNw==
-X-Gm-Message-State: AO0yUKXq6+jn+2cUywZOrRFF/+tM2lgeQqUSQgJCMm7AfkcyOT+ryT05
-        DpeFtgGGCShI/qyifdK4IqhFkJOIraFTSU2sjzg=
-X-Google-Smtp-Source: AK7set9osPw45kOmhQyAm/xxmQf673f0iaFQ4yCTfK8no1bKD4W35Hmv0zBFVCl/gbl9FnOKcj1YIzo1tSqaEFZyltk=
-X-Received: by 2002:a50:d51d:0:b0:4ac:b618:7fb1 with SMTP id
- u29-20020a50d51d000000b004acb6187fb1mr11665003edi.6.1677503065120; Mon, 27
- Feb 2023 05:04:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20230225065443.278284-1-saravanak@google.com>
-In-Reply-To: <20230225065443.278284-1-saravanak@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Feb 2023 14:04:10 +0100
-Message-ID: <CAJZ5v0jFDAG7GaTLAMA0m=jvZRE-Gp4+iLoe-JjOfEXta9F1kA@mail.gmail.com>
-Subject: Re: [PATCH v1] driver core: fw_devlink: Print full path and name of fwnode
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, kernel-team@android.com,
+        Mon, 27 Feb 2023 08:05:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E63A5FB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:05:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677503105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xRmR1CN+obq5pY+FZwyMcM5CeiZouCVJNHeLMfMNdyw=;
+        b=BqpnZFsJgF/YZoH1YKC2KO22HekiH7J2rkMG/qTb68K99bjpQhKEPd7yELM9ouA+1DzKSg
+        LARbY0xPI03cWecN4VoryUDGEBvQvB8BK2PqK2oNVCAukNI1WaaV2HkTAY0onWDrxhMcZg
+        mEuqaYT8wsTSJDIxS5gk2d/Rz2CrfNw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-5AxZlnDrPsK3vqtJG9fKtg-1; Mon, 27 Feb 2023 08:04:59 -0500
+X-MC-Unique: 5AxZlnDrPsK3vqtJG9fKtg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22BAD87A9E2;
+        Mon, 27 Feb 2023 13:04:59 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E042D1121314;
+        Mon, 27 Feb 2023 13:04:57 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: [PATCH 0/2] smb3: Miscellaneous fixes
+Date:   Mon, 27 Feb 2023 13:04:52 +0000
+Message-Id: <20230227130454.2673622-1-dhowells@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 7:54 AM Saravana Kannan <saravanak@google.com> wrote:
->
-> Some of the log messages were printing just the fwnode name. While it's
-> short, it's not always uniquely identifiable in system. So print the
-> full path and name to make debugging easier.
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+Hi Steve,
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Here are a couple more fix patches for you.
 
-> ---
->  drivers/base/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 4f02a10f802f..44a2f6596e54 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -98,7 +98,7 @@ static int __fwnode_link_add(struct fwnode_handle *con,
->
->         list_add(&link->s_hook, &sup->consumers);
->         list_add(&link->c_hook, &con->suppliers);
-> -       pr_debug("%pfwP Linked as a fwnode consumer to %pfwP\n",
-> +       pr_debug("%pfwf Linked as a fwnode consumer to %pfwf\n",
->                  con, sup);
->
->         return 0;
-> @@ -122,7 +122,7 @@ int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
->   */
->  static void __fwnode_link_del(struct fwnode_link *link)
->  {
-> -       pr_debug("%pfwP Dropping the fwnode link to %pfwP\n",
-> +       pr_debug("%pfwf Dropping the fwnode link to %pfwf\n",
->                  link->consumer, link->supplier);
->         list_del(&link->s_hook);
->         list_del(&link->c_hook);
-> @@ -1104,7 +1104,7 @@ int device_links_check_suppliers(struct device *dev)
->                 if (!dev_is_best_effort(dev)) {
->                         fwnode_ret = -EPROBE_DEFER;
->                         dev_err_probe(dev, -EPROBE_DEFER,
-> -                                   "wait for supplier %pfwP\n", sup_fw);
-> +                                   "wait for supplier %pfwf\n", sup_fw);
->                 } else {
->                         fwnode_ret = -EAGAIN;
->                 }
-> --
-> 2.39.2.637.g21b0678d19-goog
->
+David
+
+David Howells (2):
+  cifs: Fix cifs_write_back_from_locked_folio()
+  iov: Fix netfs_extract_user_to_sg()
+
+ fs/cifs/file.c      | 1 +
+ fs/netfs/iterator.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
