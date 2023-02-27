@@ -2,264 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AAA6A49DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547F36A49CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjB0Sdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S229946AbjB0Scm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjB0Sdk (ORCPT
+        with ESMTP id S229919AbjB0Scf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:33:40 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281451BEC;
-        Mon, 27 Feb 2023 10:33:05 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RCtrGm024141;
-        Mon, 27 Feb 2023 10:32:58 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=fQab6WUMutx/fbt1Cv76HS54/iDOgLv7WzzaWGHfPV0=;
- b=eyXLvXqHhmYg+r7i42V6obXra795BnvAeRLT3oEjJG1FVW2NhsZJzFWv2LdlQ/HdhMQ5
- pYq2fBad0sG7FcpXTzG7JZiw152jp53LUdM3cd7lrrnRle2YkTmbcL7KAk3qKeM4LArw
- tflnRY1BvpQvsDDy9tV7nsORnPakZBSwRIWc8WHkuTPeYEqQvl6NOkXqCpZ/Cteh7CP5
- UD47Wf84UaUAbw8ahiAuZcSX8tnd75fa6dHSFplKgey/F/RPCqsYPakQWomY5UY0+UlX
- hYco2TityKDyTsn7maaFHejjvtTmDlhQ3tpUG8rG1GyoRlZ283qpJJ333BJ+Kfqkbjrh /A== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nyjqtsbny-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 10:32:58 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
- 2023 10:32:56 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 27 Feb 2023 10:32:56 -0800
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id D48A33F7054;
-        Mon, 27 Feb 2023 10:32:55 -0800 (PST)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>
-CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH v3 6/6] mmc: sdhci-cadence: Add debug option for sdhci-cadence driver
-Date:   Mon, 27 Feb 2023 10:31:51 -0800
-Message-ID: <20230227183151.27912-7-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230227183151.27912-1-pmalgujar@marvell.com>
-References: <20230227183151.27912-1-pmalgujar@marvell.com>
+        Mon, 27 Feb 2023 13:32:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1836C1EBE2;
+        Mon, 27 Feb 2023 10:32:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB1460F04;
+        Mon, 27 Feb 2023 18:32:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDAFC4339B;
+        Mon, 27 Feb 2023 18:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677522751;
+        bh=weS85/lOsn/LMYJaFWTKyZTGqxtEczoWbtTju5iXwJQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qfRPiNBzo42N5MKvg8gwdgA2gOBA1u1hItWtosOvdX8lLBx2lza4eYBP1SkcD0bWv
+         5dfH3+YQCXjUL0Ijs6ZcXpMvhG4VBZtvIaepRFmynP86tRhGPzouK2UlKdL+5lJmDt
+         kV/uwMTejzrWB2wtq5vDJ9Qp4o+ruBpvHndiAJvaPKL6rtQ7hrhe8NNCvvaehejXwu
+         RSKtLFcCF1r3eopsu1zdeCVjl9j/31RvVs3P4lngTXvQDwtPkTatUvQQ7dYJ/4notV
+         H5tmLDW35o8aL23TUnspLI4ZwphXkl+bBgUl2vmvlQJDRh54lqnfCyu2abaURVoyQ3
+         udmAOppWsYc6A==
+Date:   Mon, 27 Feb 2023 20:32:26 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next] scm: fix MSG_CTRUNC setting condition for
+ SO_PASSSEC
+Message-ID: <Y/z3OtIA+25GjjH2@unreal>
+References: <20230226201730.515449-1-aleksandr.mikhalitsyn@canonical.com>
+ <Y/x8H4qCNsj4mEkA@unreal>
+ <CAEivzxeorZoiE4VmJ45CoF4ZRoW3B+rkT0ufX7y1bxn510yzPQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: NOT4gKCeAfrXK-AvruGiid8pvfjDM5gW
-X-Proofpoint-GUID: NOT4gKCeAfrXK-AvruGiid8pvfjDM5gW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_15,2023-02-27_01,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEivzxeorZoiE4VmJ45CoF4ZRoW3B+rkT0ufX7y1bxn510yzPQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jayanthi Annadurai <jannadurai@marvell.com>
+On Mon, Feb 27, 2023 at 10:55:04AM +0100, Aleksandr Mikhalitsyn wrote:
+> On Mon, Feb 27, 2023 at 10:47 AM Leon Romanovsky <leon@kernel.org> wrote:
+> >
+> > On Sun, Feb 26, 2023 at 09:17:30PM +0100, Alexander Mikhalitsyn wrote:
+> > > Currently, we set MSG_CTRUNC flag is we have no
+> > > msg_control buffer provided and SO_PASSCRED is set
+> > > or if we have pending SCM_RIGHTS.
+> > >
+> > > For some reason we have no corresponding check for
+> > > SO_PASSSEC.
+> > >
+> > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > Cc: Eric Dumazet <edumazet@google.com>
+> > > Cc: Jakub Kicinski <kuba@kernel.org>
+> > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> > > ---
+> > >  include/net/scm.h | 13 ++++++++++++-
+> > >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > Is it a bugfix? If yes, it needs Fixes line.
+> 
+> It's from 1da177e4c3 ("Linux-2.6.12-rc2") times :)
+> I wasn't sure that it's correct to put the "Fixes" tag on such an old
+> and big commit. Will do. Thanks!
+> 
+> >
+> > >
+> > > diff --git a/include/net/scm.h b/include/net/scm.h
+> > > index 1ce365f4c256..585adc1346bd 100644
+> > > --- a/include/net/scm.h
+> > > +++ b/include/net/scm.h
+> > > @@ -105,16 +105,27 @@ static inline void scm_passec(struct socket *sock, struct msghdr *msg, struct sc
+> > >               }
+> > >       }
+> > >  }
+> > > +
+> > > +static inline bool scm_has_secdata(struct socket *sock)
+> > > +{
+> > > +     return test_bit(SOCK_PASSSEC, &sock->flags);
+> > > +}
+> > >  #else
+> > >  static inline void scm_passec(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm)
+> > >  { }
+> > > +
+> > > +static inline bool scm_has_secdata(struct socket *sock)
+> > > +{
+> > > +     return false;
+> > > +}
+> > >  #endif /* CONFIG_SECURITY_NETWORK */
+> >
+> > There is no need in this ifdef, just test bit directly.
+> 
+> The problem is that even if the kernel is compiled without
+> CONFIG_SECURITY_NETWORK
+> userspace can still set the SO_PASSSEC option. IMHO it's better not to
+> set MSG_CTRUNC
+> if CONFIG_SECURITY_NETWORK is disabled, msg_control is not set but
+> SO_PASSSEC is enabled.
+> Because in this case SCM_SECURITY will never be sent. Please correct
+> me if I'm wrong.
 
-Use Kernel config CONFIG_MMC_DEBUG to support dumping PHY and host
-controller register configuration for debug.
+I don't know enough in this area to say if it is wrong or not.
+My remark was due to the situation where user sets some bit which is
+going to be ignored silently. It will be much cleaner do not set it
+if CONFIG_SECURITY_NETWORK is disabled instead of masking its usage.
 
-Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
----
- drivers/mmc/host/sdhci-cadence.c | 154 +++++++++++++++++++++++++++++++
- 1 file changed, 154 insertions(+)
+Thanks
 
-diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-index badff2df70b904779c70775b02b40086780b118d..c448a100f32c8c44a0da7c71c2aa5d25ac5a4b44 100644
---- a/drivers/mmc/host/sdhci-cadence.c
-+++ b/drivers/mmc/host/sdhci-cadence.c
-@@ -115,6 +115,10 @@
- #define	SDHCI_CDNS_SD6_PHY_DLL_SLAVE_CLK_WR_DELAY		GENMASK(15, 8)
- #define	SDHCI_CDNS_SD6_PHY_DLL_SLAVE_READ_DQS_DELAY		GENMASK(7, 0)
- 
-+#define SDHCI_CDNS_SD6_PHY_DLL_OBS_REG0				0x201C
-+#define SDHCI_CDNS_SD6_PHY_DLL_OBS_REG1				0x2020
-+#define SDHCI_CDNS_SD6_PHY_DLL_OBS_REG2				0x2024
-+
- #define SDHCI_CDNS_SD6_PHY_CTRL					0x2080
- #define	SDHCI_CDNS_SD6_PHY_CTRL_PHONY_DQS_TIMING		GENMASK(9, 4)
- 
-@@ -968,6 +972,154 @@ static void sdhci_cdns_sd6_calc_phy(struct sdhci_cdns_sd6_phy *phy)
- 	}
- }
- 
-+#ifdef CONFIG_MMC_DEBUG
-+
-+static
-+void sdhci_cdns_sd6_phy_dump(struct sdhci_cdns_sd6_phy *phy,
-+			     struct sdhci_host *host)
-+{
-+	dev_dbg(mmc_dev(host->mmc), "PHY Timings\n");
-+	dev_dbg(mmc_dev(host->mmc), "mode %d t_sdclk %d\n", phy->mode,
-+		phy->t_sdclk);
-+
-+	dev_dbg(mmc_dev(host->mmc), "cp_clk_wr_delay %d\n",
-+		phy->settings.cp_clk_wr_delay);
-+	dev_dbg(mmc_dev(host->mmc), "cp_clk_wrdqs_delay %d\n",
-+		phy->settings.cp_clk_wrdqs_delay);
-+	dev_dbg(mmc_dev(host->mmc), "cp_data_select_oe_end %d\n",
-+		phy->settings.cp_data_select_oe_end);
-+	dev_dbg(mmc_dev(host->mmc), "cp_dll_bypass_mode %d\n",
-+		phy->settings.cp_dll_bypass_mode);
-+	dev_dbg(mmc_dev(host->mmc), "cp_dll_locked_mode %d\n",
-+		phy->settings.cp_dll_locked_mode);
-+	dev_dbg(mmc_dev(host->mmc), "cp_dll_start_point %d\n",
-+		phy->settings.cp_dll_start_point);
-+	dev_dbg(mmc_dev(host->mmc), "cp_io_mask_always_on %d\n",
-+		phy->settings.cp_io_mask_always_on);
-+	dev_dbg(mmc_dev(host->mmc), "cp_io_mask_end %d\n",
-+		phy->settings.cp_io_mask_end);
-+	dev_dbg(mmc_dev(host->mmc), "cp_io_mask_start %d\n",
-+		phy->settings.cp_io_mask_start);
-+	dev_dbg(mmc_dev(host->mmc), "cp_rd_del_sel %d\n",
-+		phy->settings.cp_rd_del_sel);
-+	dev_dbg(mmc_dev(host->mmc), "cp_read_dqs_cmd_delay %d\n",
-+		phy->settings.cp_read_dqs_cmd_delay);
-+	dev_dbg(mmc_dev(host->mmc), "cp_read_dqs_delay %d\n",
-+		phy->settings.cp_read_dqs_delay);
-+	dev_dbg(mmc_dev(host->mmc), "cp_sw_half_cycle_shift %d\n",
-+		phy->settings.cp_sw_half_cycle_shift);
-+	dev_dbg(mmc_dev(host->mmc), "cp_sync_method %d\n",
-+		phy->settings.cp_sync_method);
-+	dev_dbg(mmc_dev(host->mmc), "cp_use_ext_lpbk_dqs %d\n",
-+		phy->settings.cp_use_ext_lpbk_dqs);
-+	dev_dbg(mmc_dev(host->mmc), "cp_use_lpbk_dqs %d\n",
-+		phy->settings.cp_use_lpbk_dqs);
-+	dev_dbg(mmc_dev(host->mmc), "cp_use_phony_dqs %d\n",
-+		phy->settings.cp_use_phony_dqs);
-+	dev_dbg(mmc_dev(host->mmc), "cp_use_phony_dqs_cmd %d\n",
-+		phy->settings.cp_use_phony_dqs_cmd);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_extended_rd_mode %d\n",
-+		phy->settings.sdhc_extended_rd_mode);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_extended_wr_mode %d\n",
-+		phy->settings.sdhc_extended_wr_mode);
-+
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_hcsdclkadj %d\n",
-+		phy->settings.sdhc_hcsdclkadj);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_idelay_val %d\n",
-+		phy->settings.sdhc_idelay_val);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_rdcmd_en %d\n",
-+		phy->settings.sdhc_rdcmd_en);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_rddata_en %d\n",
-+		phy->settings.sdhc_rddata_en);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_rw_compensate %d\n",
-+		phy->settings.sdhc_rw_compensate);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_sdcfsh %d\n",
-+		phy->settings.sdhc_sdcfsh);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_sdcfsl %d\n",
-+		phy->settings.sdhc_sdcfsl);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_wrcmd0_dly %d %d\n",
-+		phy->settings.sdhc_wrcmd0_dly,
-+		phy->settings.sdhc_wrcmd0_sdclk_dly);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_wrcmd1_dly %d %d\n",
-+		phy->settings.sdhc_wrcmd1_dly,
-+		phy->settings.sdhc_wrcmd1_sdclk_dly);
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_wrdata0_dly %d %d\n",
-+		phy->settings.sdhc_wrdata0_dly,
-+		phy->settings.sdhc_wrdata0_sdclk_dly);
-+
-+	dev_dbg(mmc_dev(host->mmc), "sdhc_wrdata1_dly %d %d\n",
-+		phy->settings.sdhc_wrdata1_dly,
-+		phy->settings.sdhc_wrdata1_sdclk_dly);
-+	dev_dbg(mmc_dev(host->mmc), "hs200_tune_val %d\n",
-+		phy->settings.hs200_tune_val);
-+}
-+
-+static
-+void sdhci_cdns_sd6_dump(struct sdhci_cdns_priv *priv, struct sdhci_host *host)
-+{
-+	struct sdhci_cdns_sd6_phy *phy = priv->phy;
-+	int id;
-+
-+	sdhci_cdns_sd6_phy_dump(phy);
-+
-+	dev_dbg(mmc_dev(host->mmc), "Host controller Register Dump\n");
-+	for (id = 0; id < 14; id++) {
-+		dev_dbg(mmc_dev(host->mmc), "HRS%d 0x%x\n", id,
-+			readl(priv->hrs_addr + (id * 4)));
-+	}
-+
-+	id = 29;
-+	dev_dbg(mmc_dev(host->mmc), "HRS%d 0x%x\n", id,
-+		readl(priv->hrs_addr + (id * 4)));
-+	id = 30;
-+	dev_dbg(mmc_dev(host->mmc), "HRS%d 0x%x\n", id,
-+		readl(priv->hrs_addr + (id * 4)));
-+
-+	for (id = 0; id < 27; id++) {
-+		dev_dbg(mmc_dev(host->mmc), "SRS%d 0x%x\n", id,
-+			readl(priv->hrs_addr + 0x200 + (id * 4)));
-+	}
-+
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DQS_TIMING 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DQS_TIMING));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_GATE_LPBK 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_GATE_LPBK));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DLL_MASTER 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DLL_MASTER));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DLL_SLAVE 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DLL_SLAVE));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_CTRL 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv, SDHCI_CDNS_SD6_PHY_CTRL));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_GPIO_CTRL0 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_GPIO_CTRL0));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DQ_TIMING 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DQ_TIMING));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DLL_OBS_REG0 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DLL_OBS_REG0));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DLL_OBS_REG1 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DLL_OBS_REG1));
-+	dev_dbg(mmc_dev(host->mmc), "SDHCI_CDNS_SD6_PHY_DLL_OBS_REG2 0x%x\n",
-+		sdhci_cdns_sd6_read_phy_reg(priv,
-+					    SDHCI_CDNS_SD6_PHY_DLL_OBS_REG2));
-+}
-+
-+#else
-+
-+static inline void sdhci_cdns_sd6_dump(struct sdhci_cdns_priv *priv,
-+				       struct sdhci_host *host)
-+{
-+}
-+
-+#endif
-+
- static
- int sdhci_cdns_sd6_get_delay_params(struct device *dev,
- 				    struct sdhci_cdns_priv *priv)
-@@ -1319,6 +1471,8 @@ static void sdhci_cdns_sd6_set_clock(struct sdhci_host *host,
- 		pr_debug("%s: phy init failed\n", __func__);
- 
- 	sdhci_set_clock(host, clock);
-+
-+	sdhci_cdns_sd6_dump(priv, host);
- }
- 
- static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
--- 
-2.17.1
-
+> 
+> Kind regards,
+> Alex
+> 
+> >
+> > >
+> > >  static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+> > >                               struct scm_cookie *scm, int flags)
+> > >  {
+> > >       if (!msg->msg_control) {
+> > > -             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp)
+> > > +             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
+> > > +                 scm_has_secdata(sock))
+> > >                       msg->msg_flags |= MSG_CTRUNC;
+> > >               scm_destroy(scm);
+> > >               return;
+> > > --
+> > > 2.34.1
+> > >
