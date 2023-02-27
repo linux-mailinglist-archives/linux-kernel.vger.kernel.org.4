@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8CB6A4DCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA7C6A4DCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjB0WOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S230229AbjB0WPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjB0WO3 (ORCPT
+        with ESMTP id S230198AbjB0WPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:14:29 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FEB25BAF;
-        Mon, 27 Feb 2023 14:14:28 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id u3-20020a4ad0c3000000b0052541ef0bafso1246311oor.5;
-        Mon, 27 Feb 2023 14:14:28 -0800 (PST)
+        Mon, 27 Feb 2023 17:15:12 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C948C2917A;
+        Mon, 27 Feb 2023 14:15:10 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso823799pjr.5;
+        Mon, 27 Feb 2023 14:15:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yd/7Cq6SQonRclW5fSsjKrCDJc+mFVGxr8w4LVRPlHg=;
+        b=iHDyQaCUPzs/wNxXh4G9VfFWF9JKM0sitaiNLTvyVwzcaHIMDHnGyBcANZbCeFRqCi
+         aeLpCmmnq6AMjdinuEJ/zFauvypZ5PJfzI54euET3O7yU+3BIOg1oh8yuBAM8WuYYfo/
+         O/a2yUWca3w0HqWqiEmDJVBDyxwYdCRV4rLcbMvO/JWrxlG9k+UX7Wx+JtluwWyo5FG+
+         WVBfD4ZLC8IVq2UV2xRbrzzAjxoTwkGMGiOnznRBgXJwVA9fhxLcla8qtmJeRlcHBnkq
+         xGDYQk1YsKSp4TlZtfCOxpajjWbpXbyCm97E9BPfFHBhAtiy1UxCdxZaXw/YLH+D8XQR
+         pNbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZS2bF3+Kst9y6aMOuXBKptVY4beKNpQcXiRFClTf/bI=;
-        b=LN7/I+ZZPE9RfxMCZhRC953nSOruGQdL4dYLlIoLhc1bocwP+CvKROMsoFGMmvWKWw
-         dh86kG5EGd4n1zK4Qq1Hzst4cotF7fDyqfJrQmIojGYoed5RIZovQiwh9ys0Ydl0r+cU
-         lqvBirRAyH2bQ9mgTza16oBPPX+mx0T+QkkbI9mZWno+rKEnQbODBNLnxEUp1inSEp7J
-         4chS3G+cSdQMGGnkXHQzPIfMGY7Zu+3z3CxoneLY4ZS/ZHm2WPBnCqeBZ9FSnMBRmFsI
-         Hzf7E1v0/G4IvJV6EmyVOJxxCJG1pLEaVGbyjngC1Bejrr8kI+BB6Rk8lUjGJ1KT0M4K
-         bgOA==
-X-Gm-Message-State: AO0yUKX1WhZ2P0nC5TWPSjXzwMqmfQQg+gU9zJ1Nyjx98BbXkTwRk4fM
-        B9BugDAz+5vKHjxbXlw16w==
-X-Google-Smtp-Source: AK7set9a9wt8dYLW0+D9GTxaOE63A+at2SMod+AKLVoJqf5EzvyD9tdF199K0X72Q60jeiCDGB6/0A==
-X-Received: by 2002:a4a:6b12:0:b0:4f2:8f8:d2ff with SMTP id g18-20020a4a6b12000000b004f208f8d2ffmr70403ooc.6.1677536067377;
-        Mon, 27 Feb 2023 14:14:27 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056820017600b00517a7ac36c8sm3124614ood.24.2023.02.27.14.14.26
+        bh=Yd/7Cq6SQonRclW5fSsjKrCDJc+mFVGxr8w4LVRPlHg=;
+        b=5rCQClZhJKDaDas45HkvqxJx94hltBr6ZpbILEaeamdyRP1EBHF8Lns0EqDoGxYrsT
+         cV9c9esTLPX6vu5rnrTXk56Ab9uvYCgWw752KICj/SZfRfxaMiS6FjCJYabx/o2ycG9N
+         dujGd0ioLFnFmOOV102mVxEfFqOl50mF2WKFFSBwhNHlWenuKSS+P+WXuuss9DvmFpRI
+         1pzPS+6/HkIDt4Cpy3z73iEk8RISfj4TmCzQ9lbb6JD+DuC59SavznC46ZZ4ZTpZzREN
+         hR8aiHLLSrHoMGU3qarGBhFYr1qAzfxlS+MYnDQNhsdwRn14ItCmD5Sm2SGSwHfvcY+w
+         HB5g==
+X-Gm-Message-State: AO0yUKU9xc/qMKX+QU64SBTsogKvlb3qFJE/Uz2nlgUH5XljZVvEMD0l
+        3yzP2bmLl8CZkaC7SqPwMIk=
+X-Google-Smtp-Source: AK7set+AhMrSIziXntXX6bkcHMuEFmUPHZJDKgBFtjwuEzfLyDUsIe/uWea2VpEWhjUUp2CKTDcNsw==
+X-Received: by 2002:a05:6a20:918a:b0:cd:7d01:7671 with SMTP id v10-20020a056a20918a00b000cd7d017671mr873806pzd.22.1677536110258;
+        Mon, 27 Feb 2023 14:15:10 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id j63-20020a638b42000000b005030113f46dsm4567577pge.37.2023.02.27.14.15.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 14:14:27 -0800 (PST)
-Received: (nullmailer pid 1193336 invoked by uid 1000);
-        Mon, 27 Feb 2023 22:14:26 -0000
-Date:   Mon, 27 Feb 2023 16:14:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <asahi@lists.linux.dev>, Henrik Rydberg <rydberg@bitmath.org>,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2
- controller bindings.
-Message-ID: <20230227221426.GA1048218-robh@kernel.org>
-References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
- <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
- <20230227195139.GA677578-robh@kernel.org>
- <CAMT+MTRodB_+sMtoPxv-gP_+sJAwNb36XuLOGo=HvuCQq6h+gQ@mail.gmail.com>
+        Mon, 27 Feb 2023 14:15:09 -0800 (PST)
+Date:   Mon, 27 Feb 2023 14:15:08 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v11 058/113] KVM: TDX: MTRR: implement get_mt_mask() for
+ TDX
+Message-ID: <20230227221508.GS4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <21e0d94ccf2fd3d766d6aa7b45441791c04e5e4f.1673539699.git.isaku.yamahata@intel.com>
+ <20230203065545.piywnc3jnxqotehv@yy-desk-7060>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMT+MTRodB_+sMtoPxv-gP_+sJAwNb36XuLOGo=HvuCQq6h+gQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20230203065545.piywnc3jnxqotehv@yy-desk-7060>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,58 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 09:06:28PM +0100, Sasha Finkelstein wrote:
-> On Mon, 27 Feb 2023 at 20:51, Rob Herring <robh@kernel.org> wrote:
+On Fri, Feb 03, 2023 at 02:55:45PM +0800,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index e68816999387..c4c5a8f786c1 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -309,6 +309,25 @@ int tdx_vm_init(struct kvm *kvm)
+> >  	return 0;
+> >  }
 > >
-> > > +properties:
-> > > +  compatible:
-> > > +    const: apple,z2-touchscreen
-> >
-> > Is 'z2' anything other than a touchscreen? If not, '-touchscreen' is
-> > redundant. If so, then what else is there? You should be describing
-> > physical devices, not just a protocol for touchscreen.
-> >
+> > +u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> > +{
+> > +	/* TDX private GPA is always WB. */
+> > +	if (gfn & kvm_gfn_shared_mask(vcpu->kvm)) {
+> > +		WARN_ON_ONCE(is_mmio);
+> > +		return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
+> > +	}
 > 
-> This is a class of touchscreen controllers that talk the z2 protocol
-> over spi.
+> This looks not clear enough, the comment says things about private GPA
+> but the code returns WB for shared GPA, please align them.
 
-Yes, you already said that much. So nothing else for this piece of h/w? 
-Then 'apple,z2' is sufficient. Well maybe. You are assuming all h/w in 
-the world speaking 'z2' is the same (to software). Usually that's not a 
-safe assumption, but maybe Apple is better at not changing the h/w...
-
-Normally, the 'protocol' to talk to a device is only part of it. There's 
-other pieces like how to turn the device on and off which need h/w 
-specific knowledge. If you need any of that, then you need specific 
-compatibles. Adding properties for each variation doesn't end up well.
-
-
-> 
-> > > +                    touchscreen-size-y = <640>;
-> > > +                    apple,z2-device-name = "MacBookPro17,1 Touch Bar";
-> >
-> > Why do we need this string? If you want a human consumed label for
-> > some identification, we have a property for that purpose. It's called
-> > 'label'. But when there is only 1 instance, I don't really see the
-> > point.
-> 
-> I want a libinput-consumed label to distinguish between devices
-> using this protocol. 
-
-I know little about libinput, but how would it know about 
-'apple,z2-device-name'?
-
-> It is used both for 'normal' touchscreens, and,
-> as is in this example a 'touchbar', which absolutely should not be
-> treated as a normal touchscreen, and needs special handling in
-> userspace.
-
-Meaning there are both touchscreens and touchbars using this? That 
-sounds like s/w needs this information. From a DT perspective, 
-'compatible' is how DT defines exactly what the h/w is and how to use 
-it. That also doesn't sound like a unique issue. Doesn't the kernel 
-provide a standard way to tell userspace what's a touchscreen vs. 
-touchpad vs. ???
-
-Rob
-
+It should be !(gfn & shared mask). Thanks for the catch.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
