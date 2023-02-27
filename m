@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F280F6A4FCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3C36A4FD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjB0Xs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S229934AbjB0XtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjB0XsZ (ORCPT
+        with ESMTP id S229718AbjB0XtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:48:25 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059ED1CF78;
-        Mon, 27 Feb 2023 15:48:20 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id bp19so3891104oib.4;
-        Mon, 27 Feb 2023 15:48:19 -0800 (PST)
+        Mon, 27 Feb 2023 18:49:18 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A5D12071;
+        Mon, 27 Feb 2023 15:49:17 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id oj5so3987358pjb.5;
+        Mon, 27 Feb 2023 15:49:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKSwno4yMBuKuVi+ZSrCp4LKarUpIQwJn0aROTJSVPk=;
-        b=K6xIqoXZ6FP/ajGp3qSSJ4Yl3u566BiU+rbIovj9i84oH3hdsB8ClIBzNENHKdz6FI
-         w+2FZIU+pxZMLQiC3P5GAO4FdmJSbVRYmgSv500SW0QV0PMj27cX5jAV45jeffNn/KK9
-         uwGgWNZ/F511Q+mjhjRWws10NF1c3FiAg/akkkcjHGQwk8p5CSI82fbhoHg4UzpDtdJk
-         xMIFJssvIqOYtdqnyefqJFPTg3Vu14lRRoQ84SAhWSVAPRSVGzZSnLnPgd/wjkZ1B26Q
-         wYW3FA5ffz0ARuShl5bv+yrJTUJ3vWbDiACDmqIe53YTcBr++8NtONRvxpq9R/cqo4kS
-         ssKw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iaK4exlP6cuHCiOEqpBzfYG37GPKonhUqR5A05jDKXU=;
+        b=Xn2zD7ih8EQEtkwuJGWzblMcvnmGk65uOvowlc9rvf2pNU7Jks6lmkG2N7u4rTnzc9
+         r3i584dwHOZ8tEjH3kEmrhwYcdLpXixpsdEnwl+Hpvv87lQeOBKUEOXI5/A9q3dsTW80
+         DMAABM4yOHi+Ph1PWBDRa8sey6rtwuZ8cPJDPPItvwwFDdl1tLPHpniRB/dMSNiwJ2E2
+         r2VcE8wHJd4ruDvwrzwGHQ7ZU2oS/M212Wd/40aX6JHcq9kASbdXoFaavTUsEW8BUVVa
+         HlazU9BEoEgDDECtkKZhk4GdTkaqZhVngrMKWpw6amlBzswOI2LxkeVm9c2Ur2Csl7Z0
+         dLyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FKSwno4yMBuKuVi+ZSrCp4LKarUpIQwJn0aROTJSVPk=;
-        b=wjuxGGldLuVMyBJK51L/YYtFlX3XYsWmNtAikycq25cjB19OgLMS1Zr98W2VMN8P3B
-         mfx36RtT73VDlOQWIhmJ6PALV/FIlTLJXozWWJ0qLFFND/GLWNzbOTToBtVX2mFVXtOZ
-         kX8KJNkjMozdRoysZhXLXTFmeIKvi+BDtbe6ddrKH9JQxMe8YNk8daTi5Wi46XB6nGe/
-         POAKc0k4UEbada57UyEQ8qZ6G2cK2gqSPfWl4luHiIYetmHR92yD+PK5ozGIRzNwIEpS
-         s+HczB5CjK2dlPRIcUlUwML0taHkoTUcmZ8dYZs+XIRrakJnISUcE5LVIiUuajH746NJ
-         Ud2w==
-X-Gm-Message-State: AO0yUKXX1x28RWubq2Xhad8mRg4eMmCdU2jS/YKAAxiGVOSJUJ3+ICYN
-        O8uVDapldP+I9oyL3td9galcBTcoCeprBJkqfzI=
-X-Google-Smtp-Source: AK7set9BeCESARwhg9B9YCHYV9PwJ6DW0BgtK7IdrrsVF68N42nIyfb0Mo0ZjTXVcd7JG36WHxaYDqm6rTmVVJlmVS0=
-X-Received: by 2002:a05:6808:180b:b0:37f:b1ac:6b90 with SMTP id
- bh11-20020a056808180b00b0037fb1ac6b90mr651474oib.0.1677541699155; Mon, 27 Feb
- 2023 15:48:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iaK4exlP6cuHCiOEqpBzfYG37GPKonhUqR5A05jDKXU=;
+        b=dyOWr9OXYzYwJhLYfkmIVI5o/s4yfiKp5eMEh8reM4eksfS7zdHjirvVtLnpY2GxZx
+         jNPf8jwKeUKP4deP9ZOhn29PmmtVa17C/iI3oYalkVVCqu+jbDUYD8HZPN4/E8bpsg4Q
+         apFiN7JlGrAhNALEN8d/5b+PLyuQN/J7KWXpfWA/EvWV3krFPgT+qr5fVpdcYps5wayG
+         pZBD/uoyuBUAfbHceXi7K5QysDD0giSrKgr5pNfB7xIapT2mDy+kHu00kUZ7uJSpxuTf
+         XaWp3XwuaMyPXyatBT82AL1XwWCvDaqV4EmCPMD+oehwu0pX/oSAeRLkRLrmIqPgWkQM
+         BDpg==
+X-Gm-Message-State: AO0yUKXIEhYaxAX9/cAWoLJ5M7XV7K1c/f44Bcm+qe7Sw43202NmMDd3
+        Rk2YuTXW/o8xArtTeepOvQ5Ao5sWKV4=
+X-Google-Smtp-Source: AK7set8VkhgDytwgkpHqYbthkizT5p0eFBYbfclNUM8rlM/XuCYY3sI89boooNNNn96YErl0/8n90g==
+X-Received: by 2002:a17:903:27d0:b0:19e:25b4:7752 with SMTP id km16-20020a17090327d000b0019e25b47752mr599575plb.24.1677541756404;
+        Mon, 27 Feb 2023 15:49:16 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902f7cc00b0019d1f42b00csm2022272plw.17.2023.02.27.15.49.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 15:49:15 -0800 (PST)
+Date:   Mon, 27 Feb 2023 15:49:14 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v11 023/113] KVM: TDX: allocate/free TDX vcpu structure
+Message-ID: <20230227234914.GU4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <db53b2c6c7718df7df89bb36b83257a2588b58e1.1673539699.git.isaku.yamahata@intel.com>
+ <20230116124606.00003872@gmail.com>
 MIME-Version: 1.0
-References: <20230223113814.3010cedc@eldfell> <CAF6AEGuE89kuKTjjzwW1xMppcVw-M4-hcrtifed-mvsCA=cshQ@mail.gmail.com>
- <20230224112630.313d7b76@eldfell> <a47e2686-1e35-39a3-0f0c-6c3b9522f8ff@linux.intel.com>
- <20230224122403.6a088da1@eldfell> <582a9b92-d246-fce2-cf39-539d9a2db17f@linux.intel.com>
- <20230224130053.3f8939e2@eldfell> <c5d046d6-ab8e-2bc7-5110-dba78b91348b@linux.intel.com>
- <74e409dc-b642-779e-a755-b793c378e43a@amd.com> <CAF6AEGs_yzEj81yNP3KhmVP9Yo3rwTc5vntEVrm9tHw6+w1G_g@mail.gmail.com>
- <Y/0iM+ycUozaVbbC@intel.com> <CAF6AEGtXSEyyjELjGtPvnAN7mX+NwzngmB0PbKHsZqjTm-xYsg@mail.gmail.com>
- <CA+hFU4wtW6wNP2Y0e_iE6NhBSSfVRDxTBUk7kOUNHQPRXpSzrQ@mail.gmail.com>
-In-Reply-To: <CA+hFU4wtW6wNP2Y0e_iE6NhBSSfVRDxTBUk7kOUNHQPRXpSzrQ@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 27 Feb 2023 15:48:07 -0800
-Message-ID: <CAF6AEGtaxbJ83sfviVWMic6Q8XoyhLvWCdtYwiSd8A4sV4ZXSQ@mail.gmail.com>
-Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
-To:     Sebastian Wick <sebastian.wick@redhat.com>
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230116124606.00003872@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -89,268 +77,332 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 2:44 PM Sebastian Wick
-<sebastian.wick@redhat.com> wrote:
->
-> On Mon, Feb 27, 2023 at 11:20 PM Rob Clark <robdclark@gmail.com> wrote:
+On Mon, Jan 16, 2023 at 12:46:06PM +0200,
+Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+
+> On Thu, 12 Jan 2023 08:31:31 -0800
+> isaku.yamahata@intel.com wrote:
+> 
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
+> > structures, partially initialize it.  Allocate pages of TDX vcpu for the
+> > TDX module.  Actual donation TDX vcpu pages to the TDX module is not done
+> > yet.
+> > 
+> > In the case of the conventional case, cpuid is empty at the initialization.
+> > and cpuid is configured after the vcpu initialization.  Because TDX
+> > supports only X2APIC mode, cpuid is forcibly initialized to support X2APIC
+> > on the vcpu initialization.
+> > 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> > Changes v10 -> v11:
+> > - NULL check of kvmalloc_array() in tdx_vcpu_reset. Move it to
+> >   tdx_vcpu_create()
+> > 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/vmx/main.c    | 40 ++++++++++++++++++--
+> >  arch/x86/kvm/vmx/tdx.c     | 75 ++++++++++++++++++++++++++++++++++++++
+> >  arch/x86/kvm/vmx/x86_ops.h | 10 +++++
+> >  arch/x86/kvm/x86.c         |  2 +
+> >  4 files changed, 123 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> > index ddf0742f1f67..59813ca05f36 100644
+> > --- a/arch/x86/kvm/vmx/main.c
+> > +++ b/arch/x86/kvm/vmx/main.c
+> > @@ -63,6 +63,38 @@ static void vt_vm_free(struct kvm *kvm)
+> >  		tdx_vm_free(kvm);
+> >  }
+> >  
+> > +static int vt_vcpu_precreate(struct kvm *kvm)
+> > +{
+> > +	if (is_td(kvm))
+> > +		return 0;
+> > +
+> > +	return vmx_vcpu_precreate(kvm);
+> > +}
+> > +
+> > +static int vt_vcpu_create(struct kvm_vcpu *vcpu)
+> > +{
+> > +	if (is_td_vcpu(vcpu))
+> > +		return tdx_vcpu_create(vcpu);
+> > +
+> > +	return vmx_vcpu_create(vcpu);
+> > +}
+> > +
+> 
+> -----
+> > +static void vt_vcpu_free(struct kvm_vcpu *vcpu)
+> > +{
+> > +	if (is_td_vcpu(vcpu))
+> > +		return tdx_vcpu_free(vcpu);
+> > +
+> > +	return vmx_vcpu_free(vcpu);
+> > +}
+> > +
+> > +static void vt_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> > +{
+> > +	if (is_td_vcpu(vcpu))
+> > +		return tdx_vcpu_reset(vcpu, init_event);
+> > +
+> > +	return vmx_vcpu_reset(vcpu, init_event);
+> > +}
+> > +
+> ----
+> 
+> It seems a little strange to use return in this style. Would it be better like:
+> 
+> -----
+> if (xxx) {
+> 	tdx_vcpu_reset(xxx);
+> 	return; 
+> }
+> 
+> vmx_vcpu_reset(xxx);
+> ----
+> 
+> ?
+
+It's C11.  I updated the code to not use the feature.
+
+
+> >  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+> >  {
+> >  	if (!is_td(kvm))
+> > @@ -90,10 +122,10 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+> >  	.vm_destroy = vt_vm_destroy,
+> >  	.vm_free = vt_vm_free,
+> >  
+> > -	.vcpu_precreate = vmx_vcpu_precreate,
+> > -	.vcpu_create = vmx_vcpu_create,
+> > -	.vcpu_free = vmx_vcpu_free,
+> > -	.vcpu_reset = vmx_vcpu_reset,
+> > +	.vcpu_precreate = vt_vcpu_precreate,
+> > +	.vcpu_create = vt_vcpu_create,
+> > +	.vcpu_free = vt_vcpu_free,
+> > +	.vcpu_reset = vt_vcpu_reset,
+> >  
+> >  	.prepare_switch_to_guest = vmx_prepare_switch_to_guest,
+> >  	.vcpu_load = vmx_vcpu_load,
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index 557a609c5147..099f0737a5aa 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -281,6 +281,81 @@ int tdx_vm_init(struct kvm *kvm)
+> >  	return 0;
+> >  }
+> >  
+> > +int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+> > +{
+> > +	struct kvm_cpuid_entry2 *e;
+> > +
+> > +	/*
+> > +	 * On cpu creation, cpuid entry is blank.  Forcibly enable
+> > +	 * X2APIC feature to allow X2APIC.
+> > +	 * Because vcpu_reset() can't return error, allocation is done here.
+> > +	 */
+> > +	WARN_ON_ONCE(vcpu->arch.cpuid_entries);
+> > +	WARN_ON_ONCE(vcpu->arch.cpuid_nent);
+> > +	e = kvmalloc_array(1, sizeof(*e), GFP_KERNEL_ACCOUNT);
+> > +	if (!e)
+> > +		return -ENOMEM;
+> > +	*e  = (struct kvm_cpuid_entry2) {
+> > +		.function = 1,	/* Features for X2APIC */
+> > +		.index = 0,
+> > +		.eax = 0,
+> > +		.ebx = 0,
+> > +		.ecx = 1ULL << 21,	/* X2APIC */
+> > +		.edx = 0,
+> > +	};
+> > +	vcpu->arch.cpuid_entries = e;
+> > +	vcpu->arch.cpuid_nent = 1;
+> > +
+> > +	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
+> > +	if (!vcpu->arch.apic)
+> > +		return -EINVAL;
+> > +
+> > +	fpstate_set_confidential(&vcpu->arch.guest_fpu);
+> > +
+> > +	vcpu->arch.efer = EFER_SCE | EFER_LME | EFER_LMA | EFER_NX;
+> > +
+> > +	vcpu->arch.cr0_guest_owned_bits = -1ul;
+> > +	vcpu->arch.cr4_guest_owned_bits = -1ul;
+> > +
+> > +	vcpu->arch.tsc_offset = to_kvm_tdx(vcpu->kvm)->tsc_offset;
+> > +	vcpu->arch.l1_tsc_offset = vcpu->arch.tsc_offset;
+> > +	vcpu->arch.guest_state_protected =
+> > +		!(to_kvm_tdx(vcpu->kvm)->attributes & TDX_TD_ATTRIBUTE_DEBUG);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +void tdx_vcpu_free(struct kvm_vcpu *vcpu)
+> > +{
+> > +	/* This is stub for now.  More logic will come. */
+> > +}
+> > +
+> > +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> > +{
+> > +	struct msr_data apic_base_msr;
+> > +
+> > +	/* TDX doesn't support INIT event. */
+> > +	if (WARN_ON_ONCE(init_event))
+> > +		goto td_bugged;
+> > +
+> > +	/* TDX rquires X2APIC. */
+>                 ^
+>                requires
+> > +	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
+> > +	if (kvm_vcpu_is_reset_bsp(vcpu))
+> > +		apic_base_msr.data |= MSR_IA32_APICBASE_BSP;
+> > +	apic_base_msr.host_initiated = true;
+> > +	if (WARN_ON_ONCE(kvm_set_apic_base(vcpu, &apic_base_msr)))
+> > +		goto td_bugged;
+> > +
+> > +	/*
+> > +	 * Don't update mp_state to runnable because more initialization
+> > +	 * is needed by TDX_VCPU_INIT.
+> > +	 */
+> > +	return;
+> > +
+> > +td_bugged:
+> > +	vcpu->kvm->vm_bugged = true;
+> > +}
+> > +
+> 
+> 1) Using vm_bugged to terminate the VM creation feels off. When
+> using it in creation path, the termination still happens in xx_vcpu_run().
+> 
+> Thus, even something wrong happens at a certain point of the creation path,
+> the VM creation still continues. Until the xxx_vcpu_run(), the VM termination
+> finally happens.
+> 
+> Why not just fail in the creation path?
+
+I converted vm_bugged to KVM_BUG_ON.  Because the td_bugged case shouldn't
+happen for TDX case, it's worthwhile for KVM_BUG_ON()
+
+
+> 2) Move 
+> 
+> > +	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
+> > +	if (kvm_vcpu_is_reset_bsp(vcpu))
+> > +		apic_base_msr.data |= MSR_IA32_APICBASE_BSP;
+> > +	apic_base_msr.host_initiated = true;
+> 
+> to:
+> 
+> void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+> {
+>         struct kvm_lapic *apic = vcpu->arch.apic;
+>         u64 msr_val;
+>         int i;
+> 
+>         if (!init_event) {
+>                 msr_val = APIC_DEFAULT_PHYS_BASE | MSR_IA32_APICBASE_ENABLE;
+> 
+> 		/* here */
+> 		if (is_td_vcpu(vcpu)) 
+> 			msr_val = xxxx;
+>                 if (kvm_vcpu_is_reset_bsp(vcpu))
+>                         msr_val |= MSR_IA32_APICBASE_BSP;
+>                 kvm_lapic_set_base(vcpu, msr_val);
+>         }
+
+No. Because I'm trying to contain is_td/is_td_vcpu in vmx specific and not use
+in common x86 code.
+
+
+> PS: Is there any reason that APIC MSR in TDX doesn't need
+> MSR_IA32_APICBASE_ENABLE?
+
+because LAPIC_MODE_X2APIC includes MSR_IA32_APICBASE_ENABLE.
+In lapic.h
+        LAPIC_MODE_X2APIC = MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE,
+
+
+
+> 3) Change the following:
+> 
+> > +
+> > +	/* TDX doesn't support INIT event. */
+> > +	if (WARN_ON_ONCE(init_event))
+> > +		goto td_bugged;
+> > +
+> 
+> to 
+> 	WARN_ON_ONCE(init_event);
+> 
+> kvm_cpu_deliver_init() will trigger a kvm_vcpu_reset(xxx, init_event=true),
+> but you have already avoided this in vt_vcpu_deliver_init(). A warn
+> is good enough to remind people.
+
+I converted it into KVM_BUG_ON().
+
+
+> With these changes, tdx_vcpu_reset() will only contain the CPUID configuration
+> , using the vm_bugged to terminate the VM in tdx_vcpu_reset() can be removed.
+> 
+> >  int tdx_dev_ioctl(void __user *argp)
+> >  {
+> >  	struct kvm_tdx_capabilities __user *user_caps;
+> > diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> > index 6c40dda1cc2f..37ab2cfd35bc 100644
+> > --- a/arch/x86/kvm/vmx/x86_ops.h
+> > +++ b/arch/x86/kvm/vmx/x86_ops.h
+> > @@ -147,7 +147,12 @@ int tdx_offline_cpu(void);
+> >  int tdx_vm_init(struct kvm *kvm);
+> >  void tdx_mmu_release_hkid(struct kvm *kvm);
+> >  void tdx_vm_free(struct kvm *kvm);
+> > +
+> >  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
+> > +
+> > +int tdx_vcpu_create(struct kvm_vcpu *vcpu);
+> > +void tdx_vcpu_free(struct kvm_vcpu *vcpu);
+> > +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
+> >  #else
+> >  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
+> >  static inline void tdx_hardware_unsetup(void) {}
+> > @@ -159,7 +164,12 @@ static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
+> >  static inline void tdx_mmu_release_hkid(struct kvm *kvm) {}
+> >  static inline void tdx_flush_shadow_all_private(struct kvm *kvm) {}
+> >  static inline void tdx_vm_free(struct kvm *kvm) {}
+> > +
+> >  static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+> > +
+> > +static inline int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+> > +static inline void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+> > +static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+> >  #endif
+> >  
+> >  #endif /* __KVM_X86_VMX_X86_OPS_H */
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 1fb135e0c98f..e8bc66031a1d 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -492,6 +492,7 @@ int kvm_set_apic_base(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+> >  	kvm_recalculate_apic_map(vcpu->kvm);
+> >  	return 0;
+> >  }
+> > +EXPORT_SYMBOL_GPL(kvm_set_apic_base);
+> >  
+> >  /*
+> >   * Handle a fault on a hardware virtualization (VMX or SVM) instruction.
+> > @@ -12109,6 +12110,7 @@ bool kvm_vcpu_is_reset_bsp(struct kvm_vcpu *vcpu)
+> >  {
+> >  	return vcpu->kvm->arch.bsp_vcpu_id == vcpu->vcpu_id;
+> >  }
+> > +EXPORT_SYMBOL_GPL(kvm_vcpu_is_reset_bsp);
 > >
-> > On Mon, Feb 27, 2023 at 1:36 PM Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
-> > >
-> > > On Fri, Feb 24, 2023 at 09:59:57AM -0800, Rob Clark wrote:
-> > > > On Fri, Feb 24, 2023 at 7:27 AM Luben Tuikov <luben.tuikov@amd.com> wrote:
-> > > > >
-> > > > > On 2023-02-24 06:37, Tvrtko Ursulin wrote:
-> > > > > >
-> > > > > > On 24/02/2023 11:00, Pekka Paalanen wrote:
-> > > > > >> On Fri, 24 Feb 2023 10:50:51 +0000
-> > > > > >> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> > > > > >>
-> > > > > >>> On 24/02/2023 10:24, Pekka Paalanen wrote:
-> > > > > >>>> On Fri, 24 Feb 2023 09:41:46 +0000
-> > > > > >>>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> > > > > >>>>
-> > > > > >>>>> On 24/02/2023 09:26, Pekka Paalanen wrote:
-> > > > > >>>>>> On Thu, 23 Feb 2023 10:51:48 -0800
-> > > > > >>>>>> Rob Clark <robdclark@gmail.com> wrote:
-> > > > > >>>>>>
-> > > > > >>>>>>> On Thu, Feb 23, 2023 at 1:38 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > > > > >>>>>>>>
-> > > > > >>>>>>>> On Wed, 22 Feb 2023 07:37:26 -0800
-> > > > > >>>>>>>> Rob Clark <robdclark@gmail.com> wrote:
-> > > > > >>>>>>>>
-> > > > > >>>>>>>>> On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > > > > >>>>>>
-> > > > > >>>>>> ...
-> > > > > >>>>>>
-> > > > > >>>>>>>>>> On another matter, if the application uses SET_DEADLINE with one
-> > > > > >>>>>>>>>> timestamp, and the compositor uses SET_DEADLINE on the same thing with
-> > > > > >>>>>>>>>> another timestamp, what should happen?
-> > > > > >>>>>>>>>
-> > > > > >>>>>>>>> The expectation is that many deadline hints can be set on a fence.
-> > > > > >>>>>>>>> The fence signaller should track the soonest deadline.
-> > > > > >>>>>>>>
-> > > > > >>>>>>>> You need to document that as UAPI, since it is observable to userspace.
-> > > > > >>>>>>>> It would be bad if drivers or subsystems would differ in behaviour.
-> > > > > >>>>>>>>
-> > > > > >>>>>>>
-> > > > > >>>>>>> It is in the end a hint.  It is about giving the driver more
-> > > > > >>>>>>> information so that it can make better choices.  But the driver is
-> > > > > >>>>>>> even free to ignore it.  So maybe "expectation" is too strong of a
-> > > > > >>>>>>> word.  Rather, any other behavior doesn't really make sense.  But it
-> > > > > >>>>>>> could end up being dictated by how the hw and/or fw works.
-> > > > > >>>>>>
-> > > > > >>>>>> It will stop being a hint once it has been implemented and used in the
-> > > > > >>>>>> wild long enough. The kernel userspace regression rules make sure of
-> > > > > >>>>>> that.
-> > > > > >>>>>
-> > > > > >>>>> Yeah, tricky and maybe a gray area in this case. I think we eluded
-> > > > > >>>>> elsewhere in the thread that renaming the thing might be an option.
-> > > > > >>>>>
-> > > > > >>>>> So maybe instead of deadline, which is a very strong word, use something
-> > > > > >>>>> along the lines of "present time hint", or "signalled time hint"? Maybe
-> > > > > >>>>> reads clumsy. Just throwing some ideas for a start.
-> > > > > >>>>
-> > > > > >>>> You can try, but I fear that if it ever changes behaviour and
-> > > > > >>>> someone notices that, it's labelled as a kernel regression. I don't
-> > > > > >>>> think documentation has ever been the authoritative definition of UABI
-> > > > > >>>> in Linux, it just guides drivers and userspace towards a common
-> > > > > >>>> understanding and common usage patterns.
-> > > > > >>>>
-> > > > > >>>> So even if the UABI contract is not documented (ugh), you need to be
-> > > > > >>>> prepared to set the UABI contract through kernel implementation.
-> > > > > >>>
-> > > > > >>> To be the devil's advocate it probably wouldn't be an ABI regression but
-> > > > > >>> just an regression. Same way as what nice(2) priorities mean hasn't
-> > > > > >>> always been the same over the years, I don't think there is a strict
-> > > > > >>> contract.
-> > > > > >>>
-> > > > > >>> Having said that, it may be different with latency sensitive stuff such
-> > > > > >>> as UIs though since it is very observable and can be very painful to users.
-> > > > > >>>
-> > > > > >>>> If you do not document the UABI contract, then different drivers are
-> > > > > >>>> likely to implement it differently, leading to differing behaviour.
-> > > > > >>>> Also userspace will invent wild ways to abuse the UABI if there is no
-> > > > > >>>> documentation guiding it on proper use. If userspace or end users
-> > > > > >>>> observe different behaviour, that's bad even if it's not a regression.
-> > > > > >>>>
-> > > > > >>>> I don't like the situation either, but it is what it is. UABI stability
-> > > > > >>>> trumps everything regardless of whether it was documented or not.
-> > > > > >>>>
-> > > > > >>>> I bet userspace is going to use this as a "make it faster, make it
-> > > > > >>>> hotter" button. I would not be surprised if someone wrote a LD_PRELOAD
-> > > > > >>>> library that stamps any and all fences with an expired deadline to
-> > > > > >>>> just squeeze out a little more through some weird side-effect.
-> > > > > >>>>
-> > > > > >>>> Well, that's hopefully overboard in scaring, but in the end, I would
-> > > > > >>>> like to see UABI documented so I can have a feeling of what it is for
-> > > > > >>>> and how it was intended to be used. That's all.
-> > > > > >>>
-> > > > > >>> We share the same concern. If you read elsewhere in these threads you
-> > > > > >>> will notice I have been calling this an "arms race". If the ability to
-> > > > > >>> make yourself go faster does not required additional privilege I also
-> > > > > >>> worry everyone will do it at which point it becomes pointless. So yes, I
-> > > > > >>> do share this concern about exposing any of this as an unprivileged uapi.
-> > > > > >>>
-> > > > > >>> Is it possible to limit access to only compositors in some sane way?
-> > > > > >>> Sounds tricky when dma-fence should be disconnected from DRM..
-> > > > > >>
-> > > > > >> Maybe it's not that bad in this particular case, because we are talking
-> > > > > >> only about boosting GPU clocks which benefits everyone (except
-> > > > > >> battery life) and it does not penalize other programs like e.g.
-> > > > > >> job priorities do.
-> > > > > >
-> > > > > > Apart from efficiency that you mentioned, which does not always favor
-> > > > > > higher clocks, sometimes thermal budget is also shared between CPU and
-> > > > > > GPU. So more GPU clocks can mean fewer CPU clocks. It's really hard to
-> > > > > > make optimal choices without the full coordination between both schedulers.
-> > > > > >
-> > > > > > But that is even not the main point, which is that if everyone sets the
-> > > > > > immediate deadline then having the deadline API is a bit pointless. For
-> > > > > > instance there is a reason negative nice needs CAP_SYS_ADMIN.
-> > > > > >
-> > > > > > However Rob has also pointed out the existence of uclamp.min via
-> > > > > > sched_setattr which is unprivileged and can influence frequency
-> > > > > > selection in the CPU world, so I conceded on that point. If CPU world
-> > > > > > has accepted it so can we I guess.
-> > > > > >
-> > > > > > So IMO we are back to whether we can agree defining it is a hint is good
-> > > > > > enough, be in via the name of the ioctl/flag itself or via documentation.
-> > > > > >
-> > > > > >> Drivers are not going to use the deadline for scheduling priorities,
-> > > > > >> right? I don't recall seeing any mention of that.
-> > > > > >>
-> > > > > >> ...right?
-> > > > > >
-> > > > > > I wouldn't have thought it would be beneficial to preclude that, or
-> > > > > > assume what drivers would do with the info to begin with.
-> > > > > >
-> > > > > > For instance in i915 we almost had a deadline based scheduler which was
-> > > > > > much fairer than the current priority sorted fifo and in an ideal world
-> > > > > > we would either revive or re-implement that idea. In which case
-> > > > > > considering the fence deadline would naturally slot in and give true
-> > > > > > integration with compositor deadlines (not just boost clocks and pray it
-> > > > > > helps).
-> > > > > How is user-space to decide whether to use ioctl(SET_DEADLINE) or
-> > > > > poll(POLLPRI)?
-> > > >
-> > > > Implementation of blocking gl/vk/cl APIs, like glFinish() would use
-> > > > poll(POLLPRI).  It could also set an immediate deadline and then call
-> > > > poll() without POLLPRI.
-> > > >
-> > > > Other than compositors which do frame-pacing I expect the main usage
-> > > > of either of these is mesa.
-> > >
-> > > Okay, so it looks like we already agreed that having a way to bump frequency
-> > > from userspace is acceptable. either because there are already other ways
-> > > that you can waste power and because this already acceptable in the CPU
-> > > world.
-> > >
-> > > But why we are doing this in hidden ways then?
-> > >
-> > > Why can't we have this hint per context that is getting executed?
-> > > (either with a boost-context flag or with some low/med/max or '-1' to '1'
-> > > value like the latency priority)?
-> > >
-> > > I don't like the waitboost because this heurisitic fails in some media cases.
-> > > I don't like the global setting because we might be alternating a top-priority
-> > > with low-priority cases...
-> > >
-> > > So, why not something per context in execution?
-> > >
-> >
-> > It needs to be finer granularity than per-context, because not all
-> > waits should trigger boosting.  For example, virglrenderer ends up
-> > with a thread polling unsignaled fences to know when to signal an
-> > interrupt to the guest virtgpu.  This alone shouldn't trigger
-> > boosting.  (We also wouldn't want to completely disable boosting for
-> > virglrenderer.)  Or the usermode driver could be waiting on a fence to
-> > know when to do some cleanup.
-> >
-> > That is not to say that there isn't room for per-context flags to
-> > disable/enable boosting for fences created by that context, meaning it
-> > could be an AND operation for i915 if it needs to be.
->
-> First of all, I believe that the fence deadline hint is a good idea.
-> With that being said, I also don't think it is sufficient in a lot of
-> cases.
->
-> The one thing I was alluding to before and that Pekka mentioned as
-> well is that mutter for example has a problem where we're missing the
-> deadline consistently because the clocks don't ramp up fast enough and
-> there is a MR which is just trying to keep the GPU busy to avoid this.
+> 
+> The symbols don't need to be exported with the changes mentioned above.
+>   
+> >  bool kvm_vcpu_is_bsp(struct kvm_vcpu *vcpu)
+> >  {
+> 
 
-the dynamic double/triple buffer thing?
-
-> It would be much better if the kernel could make sure the clocks are
-> all ramped up when we start submitting work. In the compositor we
-> actually have a lot of information that *should* influence clocks. We
-> know when we're going to start submitting work and when the deadline
-> for that work is beforehand. We know which windows are visible, and
-> which one should have the highest priority.
-
-This sounds like something orthogonal.. something for cgroups?  Ie.
-android moves visible/foreground apps to a different cgroup to given
-them higher priority.  Tvrtko had a patchset to add drm cgroup
-support..
-
-> We know when there are
-> input events which actually matter.
-
-This I see input as a different boost source for the driver.  (Ie. one
-boost signal is missing fence deadlines, another is input events,
-etc.)
-
-We end up using downstream input-handlers on the kernel side for this.
-Partially for the freq boost (but mostly not, UI interactive workloads
-like touchscreen scrolling don't generally need high GPU freqs, they
-are more memory bandwidth limited if they are limited by anything)..
-really the reason here is to get a head-start on the ~2ms that it
-takes to power up the GPU if it is suspended.
-
-But this is not quite perfect, since for example some keys should be
-handled on key-down but others on key-up.
-
-But again, this is something different from fence deadlines.  I'm
-interested in proposals because we do need something for this.  But I
-think it is something is orthogonal to this series.  For input, we
-want the kernel to know long before userspace is ready to submit
-rendering.
-
-> We know when the deadline for
-> client work is.
->
-> In the future we also want to make sure clients know beforehand when
-> they should start their work and when the deadline is but that's all
-> very much WIP in both wayland and vulkan.
->
-> There are two issues:
->
-> 1. The compositor has no way to communicate any of that information to
-> the kernel.
-> 2. The only connection to client work the compositor has is a fence to
-> the last bit of work that must be done before the deadline after a
-> wl_surface.commit.
-
-If the client isn't using multiple GPUs, a single fence should be
-sufficient.  And even if it is, well we still have all the dependency
-information on the kernel side.  Ie. drm/sched knows what fences it is
-waiting on if it is waiting to schedule the work associated with the
-last fence.  It would otherwise require drm/sched to be a bit more
-tricky than it is so far in this series.
-
-But I think the normal dual-gpu case, the app is only dealing with a single GPU?
-
-> So in both cases a fence is just not the right primitive for us. We
-> need to be able to provide per-context/queue information for work that
-> will happen in the future and we need a way to refer to a
-> context/queue generically and over IPC to boost the clocks of the
-> device that a client is actually using and maybe even give priority.
->
-> But like I said, having a per-fence deadline is probably still a good
-> idea and doesn't conflict with any of the more coarse information.
-
-Yeah, I think the thing is you need multiple things, and this is only
-one of them ;-)
-
-BR,
--R
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
