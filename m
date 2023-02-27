@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EE66A3A01
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AB56A3A08
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjB0EGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 23:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        id S229701AbjB0EN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 23:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjB0EGn (ORCPT
+        with ESMTP id S229610AbjB0ENN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 23:06:43 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35DA10AB2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:06:42 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id cc12-20020a05683061cc00b00693daa9016fso2897760otb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:06:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=efficientek-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=flnML7b+bSQRGsvQ8NZIpa8v6ijknaB9o2IhQpg86OM=;
-        b=HydNKyWBQ6INfb8aCWugSFRRQyXuUfSnrsfrPH0qpTanBmBdOmE1ChbsPcS5RlCnAU
-         L7YgU3avoC/d1NOa46vC/Z+gc+YxTaWNe26fm4YZo8BuRs119GWsZVkQnITEc9jwc0kX
-         4sVWLWm601f2CzphpW/FitMhVF2j+c/f23fPhsMcXbyEvyIuBJGiDKDo7l7DW6YOq09H
-         X5SB4lV3tIB46+TqV1VsXybHxVk1T84M+hsxfnC+YU97M/vKPdhsTHYx/nqM1G7SiU4/
-         CMPuvLCgFmIwyxgHgd5J7sXnfAD48nipqDexhVH0QL/7pBPar+sw5XaUQ9wMO6GnjsQF
-         bczg==
+        Sun, 26 Feb 2023 23:13:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65A6113C8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:12:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677471137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bF6aiagdS4QYKhUwnh5wvwibqsaVZLVPjb91E7IR+3w=;
+        b=aqpZw07LQpP7CMvPCj5XN0x3njFB+IhjsYsMq7yXdy0jJKIpSytBURPHM0lIR6SmO2Qryn
+        6rMlxvebbTytKlEgUHvFE0r2MINIq8feLa8xl4DC/NKd6kwOdnHOD9xg1XiC4fgWAN8hZ/
+        eJ3FPSOBEryg3xUBmv9SQ/O8DA0hobY=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-492-Qsn7XYw5M2-11aYPnICuYQ-1; Sun, 26 Feb 2023 23:12:15 -0500
+X-MC-Unique: Qsn7XYw5M2-11aYPnICuYQ-1
+Received: by mail-ot1-f72.google.com with SMTP id t9-20020a9d7f89000000b00693c3bb8cc1so3091938otp.17
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:12:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=flnML7b+bSQRGsvQ8NZIpa8v6ijknaB9o2IhQpg86OM=;
-        b=W0pEkPyqn78OiM/aWBSSreSjlZX/1dge9s8Q9oueUXY/E0vry6u47VA/UD66lVPGfw
-         wSJW5UAJ49IrZ9LTcCT7oKjVDsN8jdZys3xxI3tF7Gfi0qLtFlOf9I+RHTWjzGCSJxWO
-         MnzMIyBsYGNsMF3O/cyeR9udsy7DFoEf6/z+rPzJzvaYS0TYrG3J63vt052VchfrqjYp
-         VsbENQEI6gGEa9NQ1tYA3q18PpaJ9Y3hAMpiJuja1dKnq5QQQ5n2TMtswZoroWqvYWOq
-         BlUGYRwMYBKsnutFaCHWevrsLGD1jHQk+4QR1UxcSJN6rR6PQ/McC+yqs54LZ8KaseHy
-         nlFw==
-X-Gm-Message-State: AO0yUKUdoq9RohJe3k84FIQSu6IPtUI0+nzvLMnn9NPG3nl3lo3IX5aR
-        spiLWw4mQM4/huzMnFbNkJBOPJZYGQWv8qMq
-X-Google-Smtp-Source: AK7set9J0nTW4hS4HuqvLTM2KAs1wmypF/nBiEPT9XNeaZovonDhj8PaKB0xQUZm95HarPWlm8HBNg==
-X-Received: by 2002:a9d:1cb:0:b0:690:edd1:a86 with SMTP id e69-20020a9d01cb000000b00690edd10a86mr12439347ote.7.1677470802128;
-        Sun, 26 Feb 2023 20:06:42 -0800 (PST)
-Received: from localhost.localdomain ([37.218.244.251])
-        by smtp.gmail.com with ESMTPSA id j19-20020a9d7f13000000b00690dd5e7345sm2219589otq.26.2023.02.26.20.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 20:06:41 -0800 (PST)
-From:   Glenn Washburn <development@efficientek.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>
-Cc:     linux-um <linux-um@lists.infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Anton Ivanov <anton.ivanov@kot-begemot.co.uk>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Glenn Washburn <development@efficientek.com>
-Subject: [PATCH v3 2/2] scripts/gdb: Support getting current task struct in UML
-Date:   Sun, 26 Feb 2023 22:06:00 -0600
-Message-Id: <b839d611e2906ccef2725c34d8e353fab35fe75e.1677469905.git.development@efficientek.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1677469905.git.development@efficientek.com>
-References: <cover.1677469905.git.development@efficientek.com>
+        bh=bF6aiagdS4QYKhUwnh5wvwibqsaVZLVPjb91E7IR+3w=;
+        b=2UBWOl93WbPWj/9uV6CBbCnWJf6eztd94VWU8Ds7QHOlcXLoQdlR+QW/2MrOwgqrA0
+         YbGZ0RpsfOUXNQ+VIx7+Q3R1YwngXA7H7qWHCsl4dETEITTi1wK9ZBmeT/heN/XqM+wW
+         C7cULtcehRADF3HC+OsEdKEmQurBIU8IihvJKBUiNET367TqkuWMVpPGC9hqNl+SHqap
+         NLZL+B1RXTjkmiHpPuc1ZO15fBV+tQ2JXuzDj83/2jp266vvipAYBjgi6KR9llw5ucWR
+         CsGIWh8YS1Ag65CMJELDk/rSbT0Mu5wmxl3X5mpF/kMKmOp7hBMfxwLfuUXyaJE7QtOM
+         WZOw==
+X-Gm-Message-State: AO0yUKU8B3kChR6ZtWwHQgW6WtO5qFLMeiNYpqxfpq+B608l6xBhGlnj
+        yicEEyIDDS4A7mCp3lCmbNxD7PP2jWNijq1BzenLbcAqll68MK7UpuNcAUt+CkFk1lujFE/iyUb
+        g/oFeSgkSTqAHdkMA4DbEBTSegwoxJGJTdRyb4rOu
+X-Received: by 2002:aca:170c:0:b0:37f:ab56:ff42 with SMTP id j12-20020aca170c000000b0037fab56ff42mr3473925oii.9.1677471135098;
+        Sun, 26 Feb 2023 20:12:15 -0800 (PST)
+X-Google-Smtp-Source: AK7set/s+nbucOcz9b2Oq/7thNtMbK8QBjD/2uF5c2KiU21IMrI5QTglUfGm3DOphwmfmZOT3QQigLJlfH4Zl+n1WLc=
+X-Received: by 2002:aca:170c:0:b0:37f:ab56:ff42 with SMTP id
+ j12-20020aca170c000000b0037fab56ff42mr3473919oii.9.1677471134909; Sun, 26 Feb
+ 2023 20:12:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230223-virtio-net-kvmtool-v2-1-8ec93511e67f@rivosinc.com> <20230224031932-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230224031932-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 27 Feb 2023 12:12:03 +0800
+Message-ID: <CACGkMEs8f6akn62UKGUC=N=+MMRdLuGrzC7OpOps5_Ug6h933g@mail.gmail.com>
+Subject: Re: [PATCH v2] virtio-net: Fix probe of virtio-net on kvmtool
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     rbradford@rivosinc.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,40 +79,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A running x86 UML kernel reports with architecture "i386:x86-64" as
-it is a sub-architecture. However, a difference with bare-metal x86
-kernels is in how it manages tasks and the current task struct. To
-identify that the inferior is a UML kernel and not bare-metal, check
-for the existence of the UML specific symbol "cpu_tasks" which
-contains the current task struct.
+On Fri, Feb 24, 2023 at 4:25=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
+>
+> On Thu, Feb 23, 2023 at 07:38:25PM +0000, Rob Bradford via B4 Relay wrote=
+:
+> > From: Rob Bradford <rbradford@rivosinc.com>
+> >
+> > kvmtool does not support the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature
+> > but does advertise the VIRTIO_NET_F_GUEST_TSO{4,6} features. Check that
+> > the VIRTIO_NET_F_CTRL_GUEST_OFFLOADS feature is present before setting
+> > the NETIF_F_GRO_HW feature bit as otherwise an attempt will be made to
+> > program the virtio-net device using the ctrl queue which will fail.
+> >
+> > This resolves the following error when running on kvmtool:
+> >
+> > [    1.865992] net eth0: Fail to set guest offload.
+> > [    1.872491] virtio_net virtio2 eth0: set_features() failed (-22); wa=
+nted 0x0000000000134829, left 0x0080000000134829
+> >
+> > Signed-off-by: Rob Bradford <rbradford@rivosinc.com>
+> > ---
+> > Changes in v2:
+> > - Use parentheses to group logical OR of features
+> > - Link to v1:
+> >   https://lore.kernel.org/r/20230223-virtio-net-kvmtool-v1-1-fc23d29b9d=
+7a@rivosinc.com
+> > ---
+> >  drivers/net/virtio_net.c | 7 +++----
+> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 61e33e4dd0cd..f8341d1a4ccd 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -3780,10 +3780,9 @@ static int virtnet_probe(struct virtio_device *v=
+dev)
+> >       }
+> >       if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_CSUM))
+> >               dev->features |=3D NETIF_F_RXCSUM;
+> > -     if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> > -         virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
+> > -             dev->features |=3D NETIF_F_GRO_HW;
+> > -     if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+> > +     if ((virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> > +         virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6)) &&
+> > +         virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
+> >               dev->hw_features |=3D NETIF_F_GRO_HW;
+>
+> This will disable GRO/LRO on kvmtool completely causing a significant
+> performance regression.
+>
+> Jason, isn't this what
+>         commit dbcf24d153884439dad30484a0e3f02350692e4c
+>         Author: Jason Wang <jasowang@redhat.com>
+>         Date:   Tue Aug 17 16:06:59 2021 +0800
+>
+>             virtio-net: use NETIF_F_GRO_HW instead of NETIF_F_LRO
+>
+> was supposed to address?
+>
 
-Signed-off-by: Glenn Washburn <development@efficientek.com>
-Reviewed-by: Jan Kiszka <jan.kiszka@siemens.com>
----
- scripts/gdb/linux/cpus.py | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Yes, I've asked a similar question in another thread.
 
-diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-index e8d2a62ff119..255dc18cb9da 100644
---- a/scripts/gdb/linux/cpus.py
-+++ b/scripts/gdb/linux/cpus.py
-@@ -163,8 +163,14 @@ def get_current_task(cpu):
-     task_ptr_type = task_type.get_type().pointer()
- 
-     if utils.is_target_arch("x86"):
--        var_ptr = gdb.parse_and_eval("&pcpu_hot.current_task")
--        return per_cpu(var_ptr, cpu).dereference()
-+        if gdb.lookup_global_symbol("cpu_tasks"):
-+            # This is a UML kernel, which stores the current task
-+            # differently than other x86 sub architectures
-+            var_ptr = gdb.parse_and_eval("(struct task_struct *)cpu_tasks[0].task")
-+            return var_ptr.dereference()
-+        else:
-+            var_ptr = gdb.parse_and_eval("&pcpu_hot.current_task")
-+            return per_cpu(var_ptr, cpu).dereference()
-     elif utils.is_target_arch("aarch64"):
-         current_task_addr = gdb.parse_and_eval("$SP_EL0")
-         if (current_task_addr >> 63) != 0:
--- 
-2.30.2
+>
+> And apropos this:
+>
+>     Fix this by using NETIF_F_GRO_HW instead. Though the spec does not
+>     guarantee packets to be re-segmented as the original ones,
+>     we can add that to the spec, possibly with a flag for devices to
+>     differentiate between GRO and LRO.
+>
+> this never happened. What's the plan exactly?
+
+It's in the backlog, but I'm out of bandwidth for doing that now.
+
+Thanks
+
+>
+>
+>
+>
+> >       dev->vlan_features =3D dev->features;
+> >
+> > ---
+> > base-commit: c39cea6f38eefe356d64d0bc1e1f2267e282cdd3
+> > change-id: 20230223-virtio-net-kvmtool-87f37515be22
+> >
+> > Best regards,
+> > --
+> > Rob Bradford <rbradford@rivosinc.com>
+>
 
