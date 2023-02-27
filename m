@@ -2,312 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B006A6A4550
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC686A4554
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjB0O4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        id S229854AbjB0O5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjB0O4E (ORCPT
+        with ESMTP id S229671AbjB0O5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:56:04 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2434D22037;
-        Mon, 27 Feb 2023 06:55:57 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id r4so4078734ila.2;
-        Mon, 27 Feb 2023 06:55:57 -0800 (PST)
+        Mon, 27 Feb 2023 09:57:19 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B17959CB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:57:18 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id p20so5763597plw.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:57:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fIZrbcYhhaV6jhmoNmRMCVDORccR0aGA9PJtZWw33Mk=;
-        b=jhlY8WbJ1Bl5eCLzE+nliO5pdQxyuMSVerLIuOI1qp1L8HyFsRnC5awUHkd73MkIH9
-         pXFmeVPTTkRncoEuJPy0axMCtPwd3U5/O0CA3WNr7qrdTjwW+cTbDCHCHpz5qdYgJFUf
-         6JhtEaRtbyOiVfOjqjlTwkPC5AImqdIpS6G4uknMj+wipZ1KSHUEjmfkswY3TIpaK61+
-         FQRayGCdnDPDBp4nDeoNw9vsfgR6F+HVssORjoRP4s3hn67B5FEOPSvh9tUyrg0PQ4i3
-         YpNkyY6UhCnXY5I+n+a+o/qPW7FA59KrBJO9WiOTffx9YQUF8QpL1YavZrmmm7lTdKSZ
-         OBBA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMWRWsx+NX+ZsoBdeAksgis3WCgc+mV0ObFhcVdcQt8=;
+        b=kf+IMnpHKi2YohvVX3jI9exE0YcLnVPKVbiWhYA0UsaOt3gj0DslKbWmTeAJF+deBn
+         meF+9izukLixfjd9BAswfCNqywEex2kf9QA/qhU+V9kPWfK1QM/Z5nIKkPlfSJdGt/Zs
+         62ZV4eVachhOHvjCfu+QEoUGqRT7hhbk3Q8s0lPpd2/p+XoGLvfU3jwu2Ke5wb/n5SG4
+         imntlpnh8xUOpTeKpRfzwHPcVUuumEOHH/Zs42uN3TrVRiA5xTA5Xccd1OUgpGEFzNQz
+         d+fbSrwCyN7xcjU/bJE8aNXI83hY4vEOKzwwQc84FjnNMU0YJz+fTC+7CLznLtASAs3M
+         aDsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fIZrbcYhhaV6jhmoNmRMCVDORccR0aGA9PJtZWw33Mk=;
-        b=qDFwN7cwTjmmvH3WDqhvEAZZz3ajlQkXtlyBzMqs1goiljpMIOA4Vg2LEbtynr3gPF
-         ymAEHAdJ7S47ErfHPDOiQ47P53CshKvc10X4dj6jzGdvIVWBBPGEeAYUNtlXu1c6Fe4F
-         8OshIsHKNi+5jyezPZZeS++SFrzRbXksM7n8OSDw0mmr/3v84cHBb+ymaRxn41VhpwpS
-         MZdZ25NfZ7KAgPUaPlY/Sx0M67RWAc7lZ2OIuywUpfrP+JLM90Yq08BK+NUs5s/zBAxG
-         0CMHMjgyzdE4QkUfoyMYI5oUvMuvBOskXQtcTn+HKnNIe7k9pFU7KJgEz/YHaGpHCWE4
-         ioUA==
-X-Gm-Message-State: AO0yUKVjfSvk8N2iasvgY8SqieJ5edT3Qw1lC9WaR73Jw2qutnwNvxKg
-        WU62AiOrcs6c0MmTslDG8xPuxeY9+bA=
-X-Google-Smtp-Source: AK7set+NBlgXCYY+OUn3mJlYLEJ2ojN3RdiwQEj5I+KV3052OBljjjTdo4tMNItMpSk5XDC0Z0y5Dw==
-X-Received: by 2002:a05:6e02:152f:b0:316:e64b:2367 with SMTP id i15-20020a056e02152f00b00316e64b2367mr17776530ilu.8.1677509756379;
-        Mon, 27 Feb 2023 06:55:56 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i23-20020a02ca17000000b003eea9880111sm298109jak.163.2023.02.27.06.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 06:55:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 27 Feb 2023 06:55:54 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        stable@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: disable hwrng for fTPM on some AMD designs
-Message-ID: <20230227145554.GA3714281@roeck-us.net>
-References: <20230220180729.23862-1-mario.limonciello@amd.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fMWRWsx+NX+ZsoBdeAksgis3WCgc+mV0ObFhcVdcQt8=;
+        b=IjVo8DI7TIqiI0Sck6Gid4gAYAFXUffaF0bhCqg1rs3SE4ebShVWpTAAgIzTotohij
+         RS+6QIk0rwFEn7LGvD9YZMOmav0EbcmNEmTAKN/QgcPMG2m9x6wSxa9l4dXQSMoxMqti
+         U4AC5bJLxircyELKVLHD5t1pQboKVPyRBNsyov5tiOGPDGKW0wPG+Ep3t0tVY+DkHSln
+         mrjuGEnlnjF9l9FLCSNKbwWtHpt89wOIDwdoNvzXwoJzrxtD0Gr9NVUP/tU/1ePAwNH4
+         BFrR71z36XjA2dQs0gEj8pWo+rCYWcepOmvitewINAsnR1u2w9w6iElbzCvKrXU5wTM1
+         P3Zg==
+X-Gm-Message-State: AO0yUKV9lSOcXa0zLvz+XnptLSCn/zBazcjnCKEEnCNhA+U5Guy+iFGj
+        /MQ9B+j9vXSbaoBQh6p2cVNIkOYSoqkoFC1rEQs/ng==
+X-Google-Smtp-Source: AK7set/cIdRiYJnqStSeE4iB/dHP9Z6P3eJh8irZ4IU0wViUJxA8Hd4ovr+/3O68jVXLLarklUF2irVjnaHo0Uj/7rE=
+X-Received: by 2002:a17:903:48e:b0:19a:e617:34ff with SMTP id
+ jj14-20020a170903048e00b0019ae61734ffmr6114366plb.11.1677509837733; Mon, 27
+ Feb 2023 06:57:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220180729.23862-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230223141402.23979-1-swati.agarwal@amd.com>
+In-Reply-To: <20230223141402.23979-1-swati.agarwal@amd.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 27 Feb 2023 15:56:41 +0100
+Message-ID: <CAPDyKFoGmHpdt5UckyDTWQSK7OmZ789g9Owz7sPP4VJ6ezJbsQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-of-arasan: Add support to request the "gate" clock
+To:     Swati Agarwal <swati.agarwal@amd.com>
+Cc:     adrian.hunter@intel.com, michal.simek@xilinx.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, git@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 12:07:28PM -0600, Mario Limonciello wrote:
-> AMD has issued an advisory indicating that having fTPM enabled in
-> BIOS can cause "stuttering" in the OS.  This issue has been fixed
-> in newer versions of the fTPM firmware, but it's up to system
-> designers to decide whether to distribute it.
-> 
-> This issue has existed for a while, but is more prevalent starting
-> with kernel 6.1 because commit b006c439d58db ("hwrng: core - start
-> hwrng kthread also for untrusted sources") started to use the fTPM
-> for hwrng by default. However, all uses of /dev/hwrng result in
-> unacceptable stuttering.
-> 
-> So, simply disable registration of the defective hwrng when detecting
-> these faulty fTPM versions.  As this is caused by faulty firmware, it
-> is plausible that such a problem could also be reproduced by other TPM
-> interactions, but this hasn't been shown by any user's testing or reports.
-> 
-> It is hypothesized to be triggered more frequently by the use of the RNG
-> because userspace software will fetch random numbers regularly.
-> 
-> Intentionally continue to register other TPM functionality so that users
-> that rely upon PCR measurements or any storage of data will still have
-> access to it.  If it's found later that another TPM functionality is
-> exacerbating this problem a module parameter it can be turned off entirely
-> and a module parameter can be introduced to allow users who rely upon
-> fTPM functionality to turn it on even though this problem is present.
-> 
-> Link: https://www.amd.com/en/support/kb/faq/pa-410
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216989
-> Link: https://lore.kernel.org/all/20230209153120.261904-1-Jason@zx2c4.com/
-> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted sources")
-> Cc: stable@vger.kernel.org
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-> Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
-> Co-developed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+On Thu, 23 Feb 2023 at 15:14, Swati Agarwal <swati.agarwal@amd.com> wrote:
+>
+> Add support to read the optional "gate" clock property and request the
+> clock which will be used to ungate the DLL clock.
+>
+> For Xilinx platforms which has DLL module, dll clock must be
+> ungated/enabled when SD controller operates at higher frequencies like 50
+> MHz, 100 MHz and 200 MHz. This will be done by explicitly requesting gate
+> clock from the driver.
+
+I guess we need to update the DT bindings too?
+
+Kind regards
+Uffe
+
+>
+> Signed-off-by: Swati Agarwal <swati.agarwal@amd.com>
 > ---
-> v1->v2:
->  * Minor style from Jarkko's feedback
->  * Move comment above function
->  * Explain further in commit message
-> ---
->  drivers/char/tpm/tpm-chip.c | 61 ++++++++++++++++++++++++++++++-
->  drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 133 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 741d8f3e8fb3..1b066d7a6e21 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -512,6 +512,64 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
->  	return 0;
->  }
->  
-> +/*
-> + * Some AMD fTPM versions may cause stutter
-> + * https://www.amd.com/en/support/kb/faq/pa-410
-> + *
-> + * Fixes are available in two series of fTPM firmware:
-> + * 6.x.y.z series: 6.0.18.6 +
-> + * 3.x.y.z series: 3.57.y.5 +
-> + */
-> +static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> +{
-> +	u32 val1, val2;
-> +	u64 version;
-> +	int ret;
+>  drivers/mmc/host/sdhci-of-arasan.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+> index 4eebbf801b41..1fd7528c14fc 100644
+> --- a/drivers/mmc/host/sdhci-of-arasan.c
+> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> @@ -1870,6 +1870,7 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
+>         int ret;
+>         struct device_node *node;
+>         struct clk *clk_xin;
+> +       struct clk *clk_dll;
+>         struct sdhci_host *host;
+>         struct sdhci_pltfm_host *pltfm_host;
+>         struct device *dev = &pdev->dev;
+> @@ -1943,6 +1944,12 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
+>                 goto clk_dis_ahb;
+>         }
+>
+> +       clk_dll = devm_clk_get_optional_enabled(dev, "gate");
+> +       if (IS_ERR(clk_dll)) {
+> +               ret = dev_err_probe(dev, PTR_ERR(clk_dll), "failed to get dll clk\n");
+> +               goto clk_disable_all;
+> +       }
 > +
-> +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-> +		return false;
-> +
-> +	ret = tpm_request_locality(chip);
-> +	if (ret)
-> +		return false;
-> +
-> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
-> +	if (ret)
-> +		goto release;
-> +	if (val1 != 0x414D4400U /* AMD */) {
-> +		ret = -ENODEV;
-> +		goto release;
-> +	}
-> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
-> +	if (ret)
-> +		goto release;
-> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
-> +	if (ret)
-> +		goto release;
-
-This goto is unnecessary.
-
-> +
-> +release:
-> +	tpm_relinquish_locality(chip);
-> +
-> +	if (ret)
-> +		return false;
-> +
-> +	version = ((u64)val1 << 32) | val2;
-> +	if ((version >> 48) == 6) {
-> +		if (version >= 0x0006000000180006ULL)
-> +			return false;
-> +	} else if ((version >> 48) == 3) {
-> +		if (version >= 0x0003005700000005ULL)
-> +			return false;
-> +	} else
-> +		return false;
-
-checkpatch:
-
-CHECK: braces {} should be used on all arms of this statement
-#200: FILE: drivers/char/tpm/tpm-chip.c:557:
-+	if ((version >> 48) == 6) {
-[...]
-+	} else if ((version >> 48) == 3) {
-[...]
-+	} else
-[...]
-
-> +
-> +	dev_warn(&chip->dev,
-> +		 "AMD fTPM version 0x%llx causes system stutter; hwrng disabled\n",
-> +		 version);
-> +
-> +	return true;
-> +}
-> +
->  static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
->  {
->  	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
-> @@ -521,7 +579,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
->  
->  static int tpm_add_hwrng(struct tpm_chip *chip)
->  {
-> -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
-> +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
-> +	    tpm_amd_is_rng_defective(chip))
->  		return 0;
->  
->  	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 24ee4e1cc452..830014a26609 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -150,6 +150,79 @@ enum tpm_sub_capabilities {
->  	TPM_CAP_PROP_TIS_DURATION = 0x120,
->  };
->  
-> +enum tpm2_pt_props {
-> +	TPM2_PT_NONE = 0x00000000,
-> +	TPM2_PT_GROUP = 0x00000100,
-> +	TPM2_PT_FIXED = TPM2_PT_GROUP * 1,
-> +	TPM2_PT_FAMILY_INDICATOR = TPM2_PT_FIXED + 0,
-> +	TPM2_PT_LEVEL = TPM2_PT_FIXED + 1,
-> +	TPM2_PT_REVISION = TPM2_PT_FIXED + 2,
-> +	TPM2_PT_DAY_OF_YEAR = TPM2_PT_FIXED + 3,
-> +	TPM2_PT_YEAR = TPM2_PT_FIXED + 4,
-> +	TPM2_PT_MANUFACTURER = TPM2_PT_FIXED + 5,
-> +	TPM2_PT_VENDOR_STRING_1 = TPM2_PT_FIXED + 6,
-> +	TPM2_PT_VENDOR_STRING_2 = TPM2_PT_FIXED + 7,
-> +	TPM2_PT_VENDOR_STRING_3 = TPM2_PT_FIXED + 8,
-> +	TPM2_PT_VENDOR_STRING_4 = TPM2_PT_FIXED + 9,
-> +	TPM2_PT_VENDOR_TPM_TYPE = TPM2_PT_FIXED + 10,
-> +	TPM2_PT_FIRMWARE_VERSION_1 = TPM2_PT_FIXED + 11,
-> +	TPM2_PT_FIRMWARE_VERSION_2 = TPM2_PT_FIXED + 12,
-> +	TPM2_PT_INPUT_BUFFER = TPM2_PT_FIXED + 13,
-> +	TPM2_PT_HR_TRANSIENT_MIN = TPM2_PT_FIXED + 14,
-> +	TPM2_PT_HR_PERSISTENT_MIN = TPM2_PT_FIXED + 15,
-> +	TPM2_PT_HR_LOADED_MIN = TPM2_PT_FIXED + 16,
-> +	TPM2_PT_ACTIVE_SESSIONS_MAX = TPM2_PT_FIXED + 17,
-> +	TPM2_PT_PCR_COUNT = TPM2_PT_FIXED + 18,
-> +	TPM2_PT_PCR_SELECT_MIN = TPM2_PT_FIXED + 19,
-> +	TPM2_PT_CONTEXT_GAP_MAX = TPM2_PT_FIXED + 20,
-> +	TPM2_PT_NV_COUNTERS_MAX = TPM2_PT_FIXED + 22,
-> +	TPM2_PT_NV_INDEX_MAX = TPM2_PT_FIXED + 23,
-> +	TPM2_PT_MEMORY = TPM2_PT_FIXED + 24,
-> +	TPM2_PT_CLOCK_UPDATE = TPM2_PT_FIXED + 25,
-> +	TPM2_PT_CONTEXT_HASH = TPM2_PT_FIXED + 26,
-> +	TPM2_PT_CONTEXT_SYM = TPM2_PT_FIXED + 27,
-> +	TPM2_PT_CONTEXT_SYM_SIZE = TPM2_PT_FIXED + 28,
-> +	TPM2_PT_ORDERLY_COUNT = TPM2_PT_FIXED + 29,
-> +	TPM2_PT_MAX_COMMAND_SIZE = TPM2_PT_FIXED + 30,
-> +	TPM2_PT_MAX_RESPONSE_SIZE = TPM2_PT_FIXED + 31,
-> +	TPM2_PT_MAX_DIGEST = TPM2_PT_FIXED + 32,
-> +	TPM2_PT_MAX_OBJECT_CONTEXT = TPM2_PT_FIXED + 33,
-> +	TPM2_PT_MAX_SESSION_CONTEXT = TPM2_PT_FIXED + 34,
-> +	TPM2_PT_PS_FAMILY_INDICATOR = TPM2_PT_FIXED + 35,
-> +	TPM2_PT_PS_LEVEL = TPM2_PT_FIXED + 36,
-> +	TPM2_PT_PS_REVISION = TPM2_PT_FIXED + 37,
-> +	TPM2_PT_PS_DAY_OF_YEAR = TPM2_PT_FIXED + 38,
-> +	TPM2_PT_PS_YEAR = TPM2_PT_FIXED + 39,
-> +	TPM2_PT_SPLIT_MAX = TPM2_PT_FIXED + 40,
-> +	TPM2_PT_TOTAL_COMMANDS = TPM2_PT_FIXED + 41,
-> +	TPM2_PT_LIBRARY_COMMANDS = TPM2_PT_FIXED + 42,
-> +	TPM2_PT_VENDOR_COMMANDS = TPM2_PT_FIXED + 43,
-> +	TPM2_PT_NV_BUFFER_MAX = TPM2_PT_FIXED + 44,
-> +	TPM2_PT_MODES = TPM2_PT_FIXED + 45,
-> +	TPM2_PT_MAX_CAP_BUFFER = TPM2_PT_FIXED + 46,
-> +	TPM2_PT_VAR = TPM2_PT_GROUP * 2,
-> +	TPM2_PT_PERMANENT = TPM2_PT_VAR + 0,
-> +	TPM2_PT_STARTUP_CLEAR = TPM2_PT_VAR + 1,
-> +	TPM2_PT_HR_NV_INDEX = TPM2_PT_VAR + 2,
-> +	TPM2_PT_HR_LOADED = TPM2_PT_VAR + 3,
-> +	TPM2_PT_HR_LOADED_AVAIL = TPM2_PT_VAR + 4,
-> +	TPM2_PT_HR_ACTIVE = TPM2_PT_VAR + 5,
-> +	TPM2_PT_HR_ACTIVE_AVAIL = TPM2_PT_VAR + 6,
-> +	TPM2_PT_HR_TRANSIENT_AVAIL = TPM2_PT_VAR + 7,
-> +	TPM2_PT_HR_PERSISTENT = TPM2_PT_VAR + 8,
-> +	TPM2_PT_HR_PERSISTENT_AVAIL = TPM2_PT_VAR + 9,
-> +	TPM2_PT_NV_COUNTERS = TPM2_PT_VAR + 10,
-> +	TPM2_PT_NV_COUNTERS_AVAIL = TPM2_PT_VAR + 11,
-> +	TPM2_PT_ALGORITHM_SET = TPM2_PT_VAR + 12,
-> +	TPM2_PT_LOADED_CURVES = TPM2_PT_VAR + 13,
-> +	TPM2_PT_LOCKOUT_COUNTER = TPM2_PT_VAR + 14,
-> +	TPM2_PT_MAX_AUTH_FAIL = TPM2_PT_VAR + 15,
-> +	TPM2_PT_LOCKOUT_INTERVAL = TPM2_PT_VAR + 16,
-> +	TPM2_PT_LOCKOUT_RECOVERY = TPM2_PT_VAR + 17,
-> +	TPM2_PT_NV_WRITE_RECOVERY = TPM2_PT_VAR + 18,
-> +	TPM2_PT_AUDIT_COUNTER_0 = TPM2_PT_VAR + 19,
-> +	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
-> +};
->  
->  /* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
->   * bytes, but 128 is still a relatively large number of random bytes and
-> -- 
-> 2.34.1
-> 
+>         if (of_property_read_bool(np, "xlnx,fails-without-test-cd"))
+>                 sdhci_arasan->quirks |= SDHCI_ARASAN_QUIRK_FORCE_CDTEST;
+>
+> --
+> 2.17.1
+>
