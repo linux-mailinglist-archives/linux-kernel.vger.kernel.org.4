@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B11E6A3BCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552B46A3BD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjB0Hp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 02:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S229948AbjB0Hry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 02:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB0HpY (ORCPT
+        with ESMTP id S229669AbjB0Hrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 02:45:24 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AF1CC10
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:45:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B05AD219E7;
-        Mon, 27 Feb 2023 07:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1677483922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m6C2YtCUwbWaNDlaF/RnsiFAj2ARPeeH2f0QMrrp0V0=;
-        b=tkj9gADs54FhfCQ5mHtJEDBpxTtnzZKuwtEhOUAv8h4lVWSR8WmGYKwPNlGcbbQ+fphf93
-        ZREsAsidEp6kxlr3NYkTJbaw+EHwfSm91bY39wqTubrj5iBaNrycU7L8M5dvjoUkCmbw26
-        2DvGnQafqtPlUjW6nHlv3RDUEe3Np50=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1677483922;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m6C2YtCUwbWaNDlaF/RnsiFAj2ARPeeH2f0QMrrp0V0=;
-        b=Qs8Cw9aX3X5J3r6O1OQ7LGuoW/SWeE2HT1Y0baQEI9C2qc6fVR4+pV9CXutWIJayt4b38L
-        54OnwhWY7lwqoHCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76DDE13A43;
-        Mon, 27 Feb 2023 07:45:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id f90MHJJf/GNuIgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 27 Feb 2023 07:45:22 +0000
-Message-ID: <cc1c34c6-18d1-a8c5-bf70-078e7b7205f8@suse.de>
-Date:   Mon, 27 Feb 2023 08:45:22 +0100
+        Mon, 27 Feb 2023 02:47:52 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4538E;
+        Sun, 26 Feb 2023 23:47:49 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7173C24E094;
+        Mon, 27 Feb 2023 15:47:48 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 15:47:48 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 15:47:47 +0800
+Message-ID: <ca9bed19-9809-9443-7ca1-1d11984ded55@starfivetech.com>
+Date:   Mon, 27 Feb 2023 15:47:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/shmem-helper: Fix locking for
- drm_gem_shmem_get_pages_sgt()
+Subject: Re: [PATCH v4 0/4] StarFive's SDIO/eMMC driver support
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        asahi@lists.linux.dev
-References: <20230205125124.2260-1-lina@asahilina.net>
- <eddfa36c-4553-d392-0047-313002c613d4@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <eddfa36c-4553-d392-0047-313002c613d4@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------t3CUJmibwv6xqIDKWGtbfHoK"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230215113249.47727-1-william.qiu@starfivetech.com>
+ <CAPDyKFqJxrLh+pgQ-u_Lwxv4_TsH--rga049GBTqKAa_M14_yw@mail.gmail.com>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <CAPDyKFqJxrLh+pgQ-u_Lwxv4_TsH--rga049GBTqKAa_M14_yw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,65 +57,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------t3CUJmibwv6xqIDKWGtbfHoK
-Content-Type: multipart/mixed; boundary="------------SyFyrz6r7HAItUFMrHojnBJz";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- Asahi Lina <lina@asahilina.net>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- asahi@lists.linux.dev
-Message-ID: <cc1c34c6-18d1-a8c5-bf70-078e7b7205f8@suse.de>
-Subject: Re: [PATCH] drm/shmem-helper: Fix locking for
- drm_gem_shmem_get_pages_sgt()
-References: <20230205125124.2260-1-lina@asahilina.net>
- <eddfa36c-4553-d392-0047-313002c613d4@collabora.com>
-In-Reply-To: <eddfa36c-4553-d392-0047-313002c613d4@collabora.com>
 
---------------SyFyrz6r7HAItUFMrHojnBJz
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-SGkNCg0KQW0gMjUuMDIuMjMgdW0gMjI6NTEgc2NocmllYiBEbWl0cnkgT3NpcGVua286DQo+
-IE9uIDIvNS8yMyAxNTo1MSwgQXNhaGkgTGluYSB3cm90ZToNCj4+IC1FWFBPUlRfU1lNQk9M
-X0dQTChkcm1fZ2VtX3NobWVtX2dldF9wYWdlc19zZ3QpOw0KPj4gK0VYUE9SVF9TWU1CT0wo
-ZHJtX2dlbV9zaG1lbV9nZXRfcGFnZXNfc2d0KTsNCj4gDQo+IE5vdGUgaXQgd2FzIGEgR1BM
-IHN5bWJvbC4gSSBleHBlY3QgdGhhdCBhbGwgZHJtLXNobWVtIGV4cG9ydHMgc2hvdWxkIGJl
-IEdQTC4NCg0KUmlnaHQuIEkgZGlkbid0IG5vdGljZSB0aGF0IGNoYW5nZSwgYnV0IGl0J3Mg
-cHJvYmFibHkgbm90IGFsbG93ZWQuIFRoaXMgDQpuZWVkcyB0byBiZSByZXZlcnRlZCB0byBh
-IEdQTCBleHBvcnQNCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCg0KLS0gDQpUaG9t
-YXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2Fy
-ZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJl
-cmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xo
-cmVyOiBJdm8gVG90ZXYNCg==
+On 2023/2/15 20:37, Ulf Hansson wrote:
+> On Wed, 15 Feb 2023 at 12:32, William Qiu <william.qiu@starfivetech.com> wrote:
+>>
+>> Hi,
+>>
+>> This patchset adds initial rudimentary support for the StarFive
+>> designware mobile storage host controller driver. And this driver will
+>> be used in StarFive's VisionFive 2 board. The main purpose of adding
+>> this driver is to accommodate the ultra-high speed mode of eMMC.
+>>
+>> The last patch should be applied after the patchset [1]:
+>> [1] https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
+>>
+>> Changes v3->v4:
+>> - Added documentation to describe StarFive System Controller Registers.
+>> - Added aon_syscon and stg_syscon node.
+>> - Fixed some checkpatch errors/warnings.
+>>
+>> Changes v2->v3:
+>> - Wraped commit message according to Linux coding style.
+>> - Rephrased the description of the patches.
+>> - Changed the description of syscon regsiter.
+>> - Dropped redundant properties.
+>>
+>> Changes v1->v2:
+>> - Renamed the dt-binding 'starfive,jh7110-sdio.yaml' to 'starfive,jh7110-mmc.yaml'.
+>> - Changed the type of 'starfive,syscon' and modify its description.
+>> - Deleted unused head files like '#include <linux/gpio.h>'.
+>> - Added comment for the 'rise_point' and 'fall_point'.
+>> - Changed the API 'num_caps' to 'common_caps'.
+>> - Changed the node name 'sys_syscon' to 'syscon'.
+>> - Changed the node name 'sdio' to 'mmc'.
+>>
+>> The patch series is based on v6.1.
+>>
+>> William Qiu (4):
+>>   dt-bindings: mmc: Add StarFive MMC module
+>>   mmc: starfive: Add sdio/emmc driver support
+>>   riscv: dts: starfive: Add mmc node
+>>   dt-bindings: syscon: Add StarFive syscon doc
+>>
+>>  .../bindings/mmc/starfive,jh7110-mmc.yaml     |  77 ++++++++
+>>  .../bindings/soc/starfive/jh7110-syscon.yaml  |  51 +++++
+>>  MAINTAINERS                                   |  11 ++
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  23 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  47 +++++
+>>  drivers/mmc/host/Kconfig                      |  10 +
+>>  drivers/mmc/host/Makefile                     |   1 +
+>>  drivers/mmc/host/dw_mmc-starfive.c            | 186 ++++++++++++++++++
+>>  8 files changed, 406 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
+>>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
+>>  create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
+>>
+> 
+> I have dropped the v3 patches and applied patch1 and patch2 from the
+> v4 series instead, for my next branch, thanks!
+> 
+> Kind regards
+> Uffe
 
---------------SyFyrz6r7HAItUFMrHojnBJz--
+Hi Uffe,
 
---------------t3CUJmibwv6xqIDKWGtbfHoK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Sorry to bother you.But I found a bug that in drivers/mmc/host/dw_mmc-starfive.c:
 
------BEGIN PGP SIGNATURE-----
+    47 static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
+    48                                              u32 opcode)
+    49 {
+    50         static const int grade  = MAX_DELAY_CHAIN;
+    51         struct dw_mci *host = slot->host;
+    52         struct starfive_priv *priv = host->priv;
+    53         int rise_point = -1, fall_point = -1;
+    54         int err, prev_err;
+    55         int i;
+    56         bool found = 0;
+    57         u32 regval;
+    58 
+    59         /*
+    60          * Use grade as the max delay chain, and use the rise_point and
+    61          * fall_point to ensure the best sampling point of a data input
+    62          * signals.
+    63          */
+    64         for (i = 0; i < grade; i++) {
+    65                 regval = i << priv->syscon_shift;
+    66                 err = regmap_update_bits(priv->reg_syscon, priv->syscon_offset,
+    67                                                 priv->syscon_mask, regval);
+    68                 if (err)
+    69                         return err;
+    70                 mci_writel(host, RINTSTS, ALL_INT_CLR);
+    71 
+    72                 err = mmc_send_tuning(slot->mmc, opcode, NULL);
+    73                 if (!err)
+    74                         found = 1;
+    75 
+    76                 if (i > 0) {
+--> 77                         if (err && !prev_err)
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP8X5IFAwAAAAAACgkQlh/E3EQov+BE
-eA//W/oNYhh8ARtVjltctdgJdVhT044vycFZPo61yOY3eSRk+80NM8QHwp15+zPlZLCukKOWDd11
-rTNl5kJ2Isax00AWsEnq1yVVRkb+230nx7dCdA++8tCWFdViE2+A7PCRGgFWg433ubX7a9zK1Ble
-m9Jr7AO/WFkaMpcEdLwsK8MXJZ2SNljXNI7GFDVBj3OUsfKJ3zCVydW12ernAtMhii5pVfTKr9GJ
-fYZngHmqlRNR91gxdt433M4FGYGa1FZILHkZ3OPdy+d9vOXX8Z2XlP16CyLmMVtVeY0YyChAre4B
-/S3B5Nr8tf+OlLV8HlnYvdhyT6nRB4MpO48+Q6kM6MheGZM/K5ujcnIOofePnpllinKVVyhAihsl
-5t/v8n+sj412FIG1bptUTRvamB3/qLJUjTdsRq+4N7i75dMMcd6bV8nTitJ59mRYlXu4sPWop3em
-SlBxFwQk1Tj5ZUtLBHErFkQ/usWDEi5jF89jFCLqd8uSjcHCWbLqNGvA3wtuLCztdIwqhaNnnJYz
-ZpywaR8MxzWsgVbjnHs18GVxLMflirZytAH5b2pazntDcGkuU9Y4rFnr38Hu+76s6uofyu3x88Ii
-n3A2rZT7FHcUcoJYiyyEgvTeVOtv/rrhvF/5z/TvNz1p3pST6KUyG8URKkQ4jY8WDDyyV/0auHat
-ED8=
-=QQYM
------END PGP SIGNATURE-----
+prev_err was never initialized to zero.
 
---------------t3CUJmibwv6xqIDKWGtbfHoK--
+So I'm here to ask for your suggestion, should I send a new version
+to fix it or send you a patch with a fixes tag?
+
+Best regards
+William
