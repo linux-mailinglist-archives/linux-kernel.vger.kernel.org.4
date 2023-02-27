@@ -2,146 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D936A4B80
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B436A4B83
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjB0TrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 14:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S230238AbjB0Tr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjB0TrQ (ORCPT
+        with ESMTP id S230352AbjB0Trs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:47:16 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA028202;
-        Mon, 27 Feb 2023 11:46:48 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id w23so8016473qtn.6;
-        Mon, 27 Feb 2023 11:46:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zgbfP6t1iEXlYeQDHgpgkGKrmlu/wPbkfmiZJDZsq5c=;
-        b=PeklCc/BUNFCM4ElJPmsx7n8MV2Iwl7q5/6ZPW3lCqlV0dMVC71bUn6ySKhihacRzX
-         IhLjkT0taaowmeHkjhqcFjY42CZF3KDVUY920L/intcsjFkVCc92QmU6ESE91dLH9qqs
-         V3sLiIIK128WszIJ9B7tbufuqevD12qezThCbonkuk3CPRtE9KNzSf+rSsBX0KMmXCT3
-         +Yjkpx/NDjxKtTNEsS7Lw4xz/pqZVVRInUsB7OPGfgDt+AWZsfiYWcwVyZRQoHcUkzDM
-         zBLMNGBSVhgNGmNAK4cWhJW8rVsEcT3kNheHkBquP/cEltZS6iHTNcLNoBthBFvRZfmE
-         406w==
-X-Gm-Message-State: AO0yUKU2kiVR8Z6e10D3Yg2rJy4ajsfSR3Icpd5EZkzuMmyjFb/fVh/f
-        9rbA4MyhoEEmv4O+n6cUCizaH3lW93uHzw==
-X-Google-Smtp-Source: AK7set/pQ6JDnl+0gvg72l8iO9kyYF90JvlZkNPQjMM+HJ4miR7SQEsMKDfQzYgWmCLw7AgxTXFqhg==
-X-Received: by 2002:a05:622a:50:b0:3bf:ce27:e1fc with SMTP id y16-20020a05622a005000b003bfce27e1fcmr1053059qtw.7.1677527206826;
-        Mon, 27 Feb 2023 11:46:46 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm5463580qkh.22.2023.02.27.11.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 11:46:45 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-536cb25982eso206302047b3.13;
-        Mon, 27 Feb 2023 11:46:45 -0800 (PST)
-X-Received: by 2002:a5b:d4e:0:b0:967:f8b2:7a42 with SMTP id
- f14-20020a5b0d4e000000b00967f8b27a42mr7816406ybr.7.1677527205039; Mon, 27 Feb
- 2023 11:46:45 -0800 (PST)
+        Mon, 27 Feb 2023 14:47:48 -0500
+Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF9A2821D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 11:47:45 -0800 (PST)
+Received: from iva8-eaa10739bb9b.qloud-c.yandex.net (iva8-eaa10739bb9b.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:c20e:0:640:eaa1:739])
+        by forward501c.mail.yandex.net (Yandex) with ESMTP id 2A29B5EAA1;
+        Mon, 27 Feb 2023 22:47:41 +0300 (MSK)
+Received: by iva8-eaa10739bb9b.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id blZ8Kj3ciGk1-zYRhZlf2;
+        Mon, 27 Feb 2023 22:47:39 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1677527260;
+        bh=7x+2O2vwk1crFQMJn6wa5ov1ZXmzM7JLk5gLrVHmDcI=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=ohEAtnfuzeVc18cdf2uBEFMJv9RXfhyz/mQbh48eORTpeMcXVt96ett/cig0pQP+1
+         7jGqBIH8pvmYAicPsSS2G3DbV8wNihxf/BcPb1R0rAP5pjBWFFyqGTY5wqABp5+FiG
+         Vim3MJawtf/a5Cgu1duzQJukxN1UQUZmFSqs2Epw=
+Authentication-Results: iva8-eaa10739bb9b.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <1d9f16b0-2581-8649-eabf-395c7042cf07@ya.ru>
+Date:   Mon, 27 Feb 2023 22:47:37 +0300
 MIME-Version: 1.0
-References: <20230113171026.582290-1-david@redhat.com> <20230113171026.582290-12-david@redhat.com>
- <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
- <9ed766a6-cf06-535d-3337-ea6ff25c2362@redhat.com> <CAMuHMdWSaoKqO1Nx7QMDCcXrRmFbqqX8uwDRezXs8g+HdEFjKA@mail.gmail.com>
- <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
-In-Reply-To: <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Feb 2023 20:46:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
-Message-ID: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 11/26] microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Michal Simek <monstr@monstr.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 0/8] make slab shrink lockless
+Content-Language: en-US
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>, hannes@cmpxchg.org,
+        shakeelb@google.com, mhocko@kernel.org, muchun.song@linux.dev,
+        david@redhat.com, shy828301@gmail.com, sultan@kerneltoast.com,
+        dave@stgolabs.net, penguin-kernel@i-love.sakura.ne.jp,
+        paulmck@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230226144655.79778-1-zhengqi.arch@bytedance.com>
+ <20230226115100.7e12bda7931dd65dbabcebe3@linux-foundation.org>
+ <b7e8929c-8fd5-a248-f8a8-d9177fc01b4b@bytedance.com>
+ <Y/zHbhxnQ2YsP+wX@kernel.org> <dcf1d336-cfe1-964e-efe7-4aa40d4a3520@ya.ru>
+ <Y/0FUjmqDVF1lhfn@P9FQF9L96D>
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <Y/0FUjmqDVF1lhfn@P9FQF9L96D>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On 27.02.2023 22:32, Roman Gushchin wrote:
+> On Mon, Feb 27, 2023 at 10:20:59PM +0300, Kirill Tkhai wrote:
+>> On 27.02.2023 18:08, Mike Rapoport wrote:
+>>> Hi,
+>>>
+>>> On Mon, Feb 27, 2023 at 09:31:51PM +0800, Qi Zheng wrote:
+>>>>
+>>>>
+>>>> On 2023/2/27 03:51, Andrew Morton wrote:
+>>>>> On Sun, 26 Feb 2023 22:46:47 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>>>>
+>>>>>> Hi all,
+>>>>>>
+>>>>>> This patch series aims to make slab shrink lockless.
+>>>>>
+>>>>> What an awesome changelog.
+>>>>>
+>>>>>> 2. Survey
+>>>>>> =========
+>>>>>
+>>>>> Especially this part.
+>>>>>
+>>>>> Looking through all the prior efforts and at this patchset I am not
+>>>>> immediately seeing any statements about the overall effect upon
+>>>>> real-world workloads.  For a good example, does this patchset
+>>>>> measurably improve throughput or energy consumption on your servers?
+>>>>
+>>>> Hi Andrew,
+>>>>
+>>>> I re-tested with the following physical machines:
+>>>>
+>>>> Architecture:        x86_64
+>>>> CPU(s):              96
+>>>> On-line CPU(s) list: 0-95
+>>>> Model name:          Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
+>>>>
+>>>> I found that the reason for the hotspot I described in cover letter is
+>>>> wrong. The reason for the down_read_trylock() hotspot is not because of
+>>>> the failure to trylock, but simply because of the atomic operation
+>>>> (cmpxchg). And this will lead to a significant reduction in IPC (insn
+>>>> per cycle).
+>>>
+>>> ... 
+>>>  
+>>>> Then we can use the following perf command to view hotspots:
+>>>>
+>>>> perf top -U -F 999
+>>>>
+>>>> 1) Before applying this patchset:
+>>>>
+>>>>   32.31%  [kernel]           [k] down_read_trylock
+>>>>   19.40%  [kernel]           [k] pv_native_safe_halt
+>>>>   16.24%  [kernel]           [k] up_read
+>>>>   15.70%  [kernel]           [k] shrink_slab
+>>>>    4.69%  [kernel]           [k] _find_next_bit
+>>>>    2.62%  [kernel]           [k] shrink_node
+>>>>    1.78%  [kernel]           [k] shrink_lruvec
+>>>>    0.76%  [kernel]           [k] do_shrink_slab
+>>>>
+>>>> 2) After applying this patchset:
+>>>>
+>>>>   27.83%  [kernel]           [k] _find_next_bit
+>>>>   16.97%  [kernel]           [k] shrink_slab
+>>>>   15.82%  [kernel]           [k] pv_native_safe_halt
+>>>>    9.58%  [kernel]           [k] shrink_node
+>>>>    8.31%  [kernel]           [k] shrink_lruvec
+>>>>    5.64%  [kernel]           [k] do_shrink_slab
+>>>>    3.88%  [kernel]           [k] mem_cgroup_iter
+>>>>
+>>>> 2. At the same time, we use the following perf command to capture IPC
+>>>> information:
+>>>>
+>>>> perf stat -e cycles,instructions -G test -a --repeat 5 -- sleep 10
+>>>>
+>>>> 1) Before applying this patchset:
+>>>>
+>>>>  Performance counter stats for 'system wide' (5 runs):
+>>>>
+>>>>       454187219766      cycles                    test                    (
+>>>> +-  1.84% )
+>>>>        78896433101      instructions              test #    0.17  insn per
+>>>> cycle           ( +-  0.44% )
+>>>>
+>>>>         10.0020430 +- 0.0000366 seconds time elapsed  ( +-  0.00% )
+>>>>
+>>>> 2) After applying this patchset:
+>>>>
+>>>>  Performance counter stats for 'system wide' (5 runs):
+>>>>
+>>>>       841954709443      cycles                    test                    (
+>>>> +- 15.80% )  (98.69%)
+>>>>       527258677936      instructions              test #    0.63  insn per
+>>>> cycle           ( +- 15.11% )  (98.68%)
+>>>>
+>>>>           10.01064 +- 0.00831 seconds time elapsed  ( +-  0.08% )
+>>>>
+>>>> We can see that IPC drops very seriously when calling
+>>>> down_read_trylock() at high frequency. After using SRCU,
+>>>> the IPC is at a normal level.
+>>>
+>>> The results you present do show improvement in IPC for an artificial test
+>>> script. But more interesting would be to see how a real world workloads
+>>> benefit from your changes.
+>>
+>> One of the real workloads from my experience is start of an overcommitted node
+>> containing many starting containers after node crash (or many resuming containers
+>> after reboot for kernel update). In these cases memory pressure is huge, and
+>> the node goes round in long reclaim.
+>>
+>> This patch patchset makes prealloc_memcg_shrinker() independent of do_shrink_slab(),
+>> so prealloc_memcg_shrinker() won't have to wait till shrink_slab_memcg() completes its
+>> current bit iteration, sees rwsem_is_contended() and the iteration breaks.
+>>
+>> Also, it's important to mention that currently we have the strange behavior:
+>>
+>> prealloc_memcg_shrinker()
+>>   down_write(&shrinker_rwsem)
+>>   idr_alloc()
+>>     reclaim
+>>       for each child memcg
+>>         shrink_slab_memcg()
+>>           down_read_trylock(&shrinker_rwsem) -> fail
+> 
+> But this can happen only if we get -ENOMEM in idr_alloc()?
+> Doesn't seem to be a very hot path.
 
-On Mon, Feb 27, 2023 at 6:01 PM David Hildenbrand <david@redhat.com> wrote:
-> >>>>    /*
-> >>>>     * Externally used page protection values.
-> >>>> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
-> >>>> index 42f5988e998b..7e3de54bf426 100644
-> >>>> --- a/arch/microblaze/include/asm/pgtable.h
-> >>>> +++ b/arch/microblaze/include/asm/pgtable.h
+There is not only idr_alloc(), but expand_shrinker_info() too. The last is more heavier.
+But despite that, yes, it's not a hot path.
 
-> >>>>     * - All other bits of the PTE are loaded into TLBLO without
-> >>>>     *  * modification, leaving us only the bits 20, 21, 24, 25, 26, 30 for
-> >>>>     * software PTE bits.  We actually use bits 21, 24, 25, and
-> >>>> @@ -155,6 +155,9 @@ extern pte_t *va_to_pte(unsigned long address);
-> >>>>    #define _PAGE_ACCESSED 0x400   /* software: R: page referenced */
-> >>>>    #define _PMD_PRESENT   PAGE_MASK
-> >>>>
-> >>>> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
-> >>>> +#define _PAGE_SWP_EXCLUSIVE    _PAGE_DIRTY
-> >>>
-> >>> _PAGE_DIRTY is 0x80, so this is also bit 7, thus the new comment is
-> >>> wrong?
-> >>
-> >> In the example, I use MSB-0 bit numbering (which I determined to be
-> >> correct in microblaze context eventually, but I got confused a couple a
-> >> times because it's very inconsistent). That should be MSB-0 bit 24.
-> >
-> > Thanks, TIL microblaze uses IBM bit numbering...
->
-> I assume IBM bit numbering corresponds to MSB-0 bit numbering, correct?
-
-Correct, as seen in s370 and PowerPC manuals...
-
-> I recall that I used the comment above "/* Definitions for MicroBlaze.
-> */" as an orientation.
->
-> 0  1  2  3  4  ... 18 19 20 21 22 23 24 25 26 27 28 29 30 31
-> RPN.....................  0  0 EX WR ZSEL.......  W  I  M  G
-
-Indeed, that's where I noticed the "unconventional" numbering...
-
-> So ... either we adjust both or we leave it as is. (again, depends on
-> what the right thing to to is -- which I don't know :) )
-
-It depends whether you want to match the hardware documentation,
-or the Linux BIT() macro and friends...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+The memory pressure on overcommited node start I described above is a regular situation.
+There are lots of register_shrinker() contending with reclaim.
