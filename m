@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7276F6A4443
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AD56A444C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjB0OXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S229768AbjB0OYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB0OXR (ORCPT
+        with ESMTP id S229471AbjB0OYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:23:17 -0500
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5824FDBF8;
-        Mon, 27 Feb 2023 06:23:15 -0800 (PST)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 27 Feb 2023 09:24:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48777EB72
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677507816;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yg76FnkX04HHXW1mHvn8i4mIGRu2T9NZWGFYq1EPWQo=;
+        b=bXXp3fjh5NsFaqxA8r14vEAtSDXaNcMSD8BXnP55yZo6EZ5gezOfU6jcm233oI2bOCNdRo
+        Re6WZOc7wXKWcCaKRTIRzfz8qaKtcjc+5SmTXutcAGopLUvHfiQQjhQc50lyq2odtEpQsH
+        W0JX0hm70BIN+fLgZ+OcowgA+W9WDo4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-7dPZkuwNNC6edyeI5CsAig-1; Mon, 27 Feb 2023 09:23:35 -0500
+X-MC-Unique: 7dPZkuwNNC6edyeI5CsAig-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D1ECF61CC40F9;
-        Mon, 27 Feb 2023 15:23:13 +0100 (CET)
-Message-ID: <97708c11-ac85-fb62-2c8e-d37739ca826f@molgen.mpg.de>
-Date:   Mon, 27 Feb 2023 15:23:13 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A5291C0418D;
+        Mon, 27 Feb 2023 14:23:34 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2FFABC15BAD;
+        Mon, 27 Feb 2023 14:23:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>, Amit Shah <amit@kernel.org>
+cc:     dhowells@redhat.com, linux-fsdevel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] splice: Prevent gifting of multipage folios
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Dell.Client.Kernel@dell.com,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Accelerometer lis3lv02d is present on SMBus but its address is
- unknown, skipping registration
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2734057.1677507812.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 27 Feb 2023 14:23:32 +0000
+Message-ID: <2734058.1677507812@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+    =
 
+Don't let parts of multipage folios be gifted by (vm)splice into a pipe as
+the other end may only be expecting single-page gifts (fuse and virtio
+console for example).
 
-On the Dell Precision 3540, BIOS 1.23.0 12/19/2022, with Debian 
-sid/unstable, Linux 6.1.12 logs the warning below:
+replace_page_cache_folio(), for example, will do the wrong thing if it
+tries to replace a single paged folio with a multipage folio.
 
-     Accelerometer lis3lv02d is present on SMBus but its address is 
-unknown, skipping registration
+Try to avoid this by making add_to_pipe() remove the gift flag on multipag=
+e
+folios.
 
-This warning was already logged by
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: Miklos Szeredi <miklos@szeredi.hu>
+cc: Amit Shah <amit@kernel.org>
+cc: linux-fsdevel@vger.kernel.org
+cc: virtualization@lists.linux-foundation.org
+cc: linux-mm@kvack.org
+---
+ fs/splice.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-     Linux version 5.19.0-2-amd64 (debian-kernel@lists.debian.org) 
-(gcc-11 (Debian 11.3.0-6) 11.3.0, GNU ld (GNU Binutils for Debian) 
-2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.19.11-1 (2022-09-24)
+diff --git a/fs/splice.c b/fs/splice.c
+index 2e76dbb81a8f..33caa28a86e4 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -240,6 +240,8 @@ ssize_t add_to_pipe(struct pipe_inode_info *pipe, stru=
+ct pipe_buffer *buf)
+ 	} else if (pipe_full(head, tail, pipe->max_usage)) {
+ 		ret =3D -EAGAIN;
+ 	} else {
++		if (folio_nr_pages(page_folio(buf->page)) > 1)
++			buf->flags &=3D ~PIPE_BUF_FLAG_GIFT;
+ 		pipe->bufs[head & mask] =3D *buf;
+ 		pipe->head =3D head + 1;
+ 		return buf->len;
 
-with firmware BIOS 1.15.0 12/08/2021.
-
-What can a user do about this? It looks like the I2C addresses need to 
-be added to `dell_lis3lv02d_devices[]` in `drivers/i2c/busses/i2c-i801.c`.
-
-
-Kind regards,
-
-Paul
-
-
-PS: Some more logs:
-
-```
-[    0.000000] Linux version 6.1.0-5-amd64 
-(debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14) 12.2.0, GNU 
-ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 
-6.1.12-1 (2023-02-15)
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.1.0-5-amd64 
-root=UUID=c9342a55-b747-4442-b2f4-bc03eb7a51cf ro quiet noisapnp 
-log_buf_len=2M cryptomgr.notests btusb.enable_autosuspend=y 
-random.trust_cpu=on drm.debug=0xe log_buf_len=8M
-[…]
-[    0.000000] DMI: Dell Inc. Precision 3540/0M14W7, BIOS 1.23.0 12/19/2022
-[…]
-[   20.631866] i801_smbus 0000:00:1f.4: SPD Write Disable is set
-[   20.631925] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
-[   20.662022] i801_smbus 0000:00:1f.4: Accelerometer lis3lv02d is 
-present on SMBus but its address is unknown, skipping registration
-[…]
-```
