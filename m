@@ -2,212 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28576A3927
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 03:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1C86A393E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjB0C6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 21:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
+        id S229971AbjB0DIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 22:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjB0C6X (ORCPT
+        with ESMTP id S229699AbjB0DIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 21:58:23 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DA87A96;
-        Sun, 26 Feb 2023 18:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=nk7Pr1obO0KzFpH/1rdv7+SUyAIN0BhF0eRcIL8vnR4=; b=4Nwn5v+X79NKJEsKF+Vd4+Rveq
-        caJOLBqnQZxIEDT3U0y41MLkQc0r8B3O0wAJ4bXkSENTHbKnKdtrf5qIzQLCI8gzHJVZPVNScUIEn
-        dKvbxFdKO5V6aUxZ5szLnQn2qqctQOvPag4WgJQbj/fNNI8pAB7/0Wvl1rq09sSahfyGJuycDe8DR
-        LOPi3UmwrQfuplC/ybH8Ohayrs4hslJ8YcRGhDpDJYEA1PgPi+94KvEp62ol4JcEAvQl0dIdC+oA8
-        JdNE9M/HYBCPM4G6/ObV9pnf06ai+3cek5sAkwp1Gzx/kE6PfPsBhlM9G0p2IEC/b/G7K8ou2JN2p
-        prKlftcw==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWTiT-008JyX-8P; Mon, 27 Feb 2023 02:58:17 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org
-Subject: [PATCH] Documentation: kernel-parameters: sort NFS parameters
-Date:   Sun, 26 Feb 2023 18:58:16 -0800
-Message-Id: <20230227025816.1083-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
+        Sun, 26 Feb 2023 22:08:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683C8659E;
+        Sun, 26 Feb 2023 19:08:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AD18B80CAE;
+        Mon, 27 Feb 2023 02:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70810C433EF;
+        Mon, 27 Feb 2023 02:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677463491;
+        bh=D77E3HGkEAgVD99HBKOVsC4nyEMEuQC/qaki7GUfkTE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LsUNoOFSXngM+Oymo7EwOILT8bJz+9uLoK96zkjpRvliL2RUQ+VP+GM2Qr8VjTXsr
+         dEHcxbip8Oleg8Dml6AMqx+Gf4ieT3bPFi8DPQqY7iYpwUfqMvi5lUug5kcHDoQpMB
+         p7Bh1heWuDZwpZ1oju6qeZdD+OluZZpnAet6ZFaJqhmquspLsEX+6NSmwTkRVgmRwb
+         is9LUScRGKtfE1QNNbkmj3IxV2t7yiJ03SHUh5LcagSdCQPpk0VjO0BrRzYX/Zdar4
+         ckC7F42KlrQxUNNREOdcKbHfMY6vB2YTrIxBk3EreDnlnyfuhwNWRkvPyfyeEG1Cpp
+         O/7gEnpGSpjgg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mike Snitzer <snitzer@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        agk@redhat.com, dm-devel@redhat.com
+Subject: [PATCH AUTOSEL 6.2 56/60] dm cache: add cond_resched() to various workqueue loops
+Date:   Sun, 26 Feb 2023 21:00:41 -0500
+Message-Id: <20230227020045.1045105-56-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230227020045.1045105-1-sashal@kernel.org>
+References: <20230227020045.1045105-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sort the NFS kernel command line parameters. This is done in 4 groups
-so as to not have them intermingled: 'nfs' module parameters, 'nfs4'
-module parameters, 'nfsd' module parameters, and nfs "global" (__setup,
-no module) parameters.
+From: Mike Snitzer <snitzer@kernel.org>
 
-There were 5 parameters which were listed with a space between the
-parameter name and the following '=' sign. The space has been
-removed since module parameters expect 'parameter=' with no intervening
-space.
+[ Upstream commit 76227f6dc805e9e960128bcc6276647361e0827c ]
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc: Anna Schumaker <anna@kernel.org>
-Cc: Chuck Lever <chuck.lever@oracle.com>
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: linux-nfs@vger.kernel.org
+Otherwise on resource constrained systems these workqueues may be too
+greedy.
+
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt |   74 +++++++-------
- 1 file changed, 37 insertions(+), 37 deletions(-)
+ drivers/md/dm-cache-target.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff -- a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3428,14 +3428,13 @@
- 			1 to enable accounting
- 			Default value is 0.
+diff --git a/drivers/md/dm-cache-target.c b/drivers/md/dm-cache-target.c
+index 5e92fac90b675..17fde3e5a1f7b 100644
+--- a/drivers/md/dm-cache-target.c
++++ b/drivers/md/dm-cache-target.c
+@@ -1805,6 +1805,7 @@ static void process_deferred_bios(struct work_struct *ws)
  
--	nfsaddrs=	[NFS] Deprecated.  Use ip= instead.
--			See Documentation/admin-guide/nfs/nfsroot.rst.
--
--	nfsroot=	[NFS] nfs root filesystem for disk-less boxes.
--			See Documentation/admin-guide/nfs/nfsroot.rst.
-+	nfs.cache_getent=
-+			[NFS] sets the pathname to the program which is used
-+			to update the NFS client cache entries.
+ 		else
+ 			commit_needed = process_bio(cache, bio) || commit_needed;
++		cond_resched();
+ 	}
  
--	nfsrootdebug	[NFS] enable nfsroot debugging messages.
--			See Documentation/admin-guide/nfs/nfsroot.rst.
-+	nfs.cache_getent_timeout=
-+			[NFS] sets the timeout after which an attempt to
-+			update a cache entry is deemed to have failed.
+ 	if (commit_needed)
+@@ -1827,6 +1828,7 @@ static void requeue_deferred_bios(struct cache *cache)
+ 	while ((bio = bio_list_pop(&bios))) {
+ 		bio->bi_status = BLK_STS_DM_REQUEUE;
+ 		bio_endio(bio);
++		cond_resched();
+ 	}
+ }
  
- 	nfs.callback_nr_threads=
- 			[NFSv4] set the total number of threads that the
-@@ -3446,18 +3445,6 @@
- 			[NFS] set the TCP port on which the NFSv4 callback
- 			channel should listen.
- 
--	nfs.cache_getent=
--			[NFS] sets the pathname to the program which is used
--			to update the NFS client cache entries.
--
--	nfs.cache_getent_timeout=
--			[NFS] sets the timeout after which an attempt to
--			update a cache entry is deemed to have failed.
--
--	nfs.idmap_cache_timeout=
--			[NFS] set the maximum lifetime for idmapper cache
--			entries.
--
- 	nfs.enable_ino64=
- 			[NFS] enable 64-bit inode numbers.
- 			If zero, the NFS client will fake up a 32-bit inode
-@@ -3465,6 +3452,10 @@
- 			of returning the full 64-bit number.
- 			The default is to return 64-bit inode numbers.
- 
-+	nfs.idmap_cache_timeout=
-+			[NFS] set the maximum lifetime for idmapper cache
-+			entries.
+@@ -1867,6 +1869,8 @@ static void check_migrations(struct work_struct *ws)
+ 		r = mg_start(cache, op, NULL);
+ 		if (r)
+ 			break;
 +
- 	nfs.max_session_cb_slots=
- 			[NFSv4.1] Sets the maximum number of session
- 			slots the client will assign to the callback
-@@ -3492,21 +3483,14 @@
- 			will be autodetected by the client, and it will fall
- 			back to using the idmapper.
- 			To turn off this behaviour, set the value to '0'.
-+
- 	nfs.nfs4_unique_id=
- 			[NFS4] Specify an additional fixed unique ident-
- 			ification string that NFSv4 clients can insert into
- 			their nfs_client_id4 string.  This is typically a
- 			UUID that is generated at system install time.
++		cond_resched();
+ 	}
+ }
  
--	nfs.send_implementation_id =
--			[NFSv4.1] Send client implementation identification
--			information in exchange_id requests.
--			If zero, no implementation identification information
--			will be sent.
--			The default is to send the implementation identification
--			information.
--
--	nfs.recover_lost_locks =
-+	nfs.recover_lost_locks=
- 			[NFSv4] Attempt to recover locks that were lost due
- 			to a lease timeout on the server. Please note that
- 			doing this risks data corruption, since there are
-@@ -3518,7 +3502,15 @@
- 			The default parameter value of '0' causes the kernel
- 			not to attempt recovery of lost locks.
- 
--	nfs4.layoutstats_timer =
-+	nfs.send_implementation_id=
-+			[NFSv4.1] Send client implementation identification
-+			information in exchange_id requests.
-+			If zero, no implementation identification information
-+			will be sent.
-+			The default is to send the implementation identification
-+			information.
-+
-+	nfs4.layoutstats_timer=
- 			[NFSv4.2] Change the rate at which the kernel sends
- 			layoutstats to the pNFS metadata server.
- 
-@@ -3527,12 +3519,19 @@
- 			driver. A non-zero value sets the minimum interval
- 			in seconds between layoutstats transmissions.
- 
--	nfsd.inter_copy_offload_enable =
-+	nfsd.inter_copy_offload_enable=
- 			[NFSv4.2] When set to 1, the server will support
- 			server-to-server copies for which this server is
- 			the destination of the copy.
- 
--	nfsd.nfsd4_ssc_umount_timeout =
-+	nfsd.nfs4_disable_idmapping=
-+			[NFSv4] When set to the default of '1', the NFSv4
-+			server will return only numeric uids and gids to
-+			clients using auth_sys, and will accept numeric uids
-+			and gids from such clients.  This is intended to ease
-+			migration from NFSv2/v3.
-+
-+	nfsd.nfsd4_ssc_umount_timeout=
- 			[NFSv4.2] When used as the destination of a
- 			server-to-server copy, knfsd temporarily mounts
- 			the source server.  It caches the mount in case
-@@ -3540,13 +3539,14 @@
- 			used for the number of milliseconds specified by
- 			this parameter.
- 
--	nfsd.nfs4_disable_idmapping=
--			[NFSv4] When set to the default of '1', the NFSv4
--			server will return only numeric uids and gids to
--			clients using auth_sys, and will accept numeric uids
--			and gids from such clients.  This is intended to ease
--			migration from NFSv2/v3.
-+	nfsaddrs=	[NFS] Deprecated.  Use ip= instead.
-+			See Documentation/admin-guide/nfs/nfsroot.rst.
-+
-+	nfsroot=	[NFS] nfs root filesystem for disk-less boxes.
-+			See Documentation/admin-guide/nfs/nfsroot.rst.
- 
-+	nfsrootdebug	[NFS] enable nfsroot debugging messages.
-+			See Documentation/admin-guide/nfs/nfsroot.rst.
- 
- 	nmi_backtrace.backtrace_idle [KNL]
- 			Dump stacks even of idle CPUs in response to an
+-- 
+2.39.0
+
