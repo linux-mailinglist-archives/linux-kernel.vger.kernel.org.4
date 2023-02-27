@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5F86A3DCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4D56A3DDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjB0JHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S229547AbjB0JI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjB0JGs (ORCPT
+        with ESMTP id S229852AbjB0JIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:06:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6179330C8;
-        Mon, 27 Feb 2023 00:57:52 -0800 (PST)
+        Mon, 27 Feb 2023 04:08:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8207D2DE47
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:59:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29DC5B80CAE;
-        Mon, 27 Feb 2023 08:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8899C433EF;
-        Mon, 27 Feb 2023 08:56:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8476360C7C
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:58:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0FAC433EF;
+        Mon, 27 Feb 2023 08:58:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677488195;
-        bh=hZFXPE1G1IOogWxssAFdNmsEjPCefrDxFpP6NdmV6Bs=;
+        s=k20201202; t=1677488336;
+        bh=C1E2gKQQ6zAKsQYIT+4AqLKUHJ/N8g0P98PgENo6NUw=;
         h=From:To:Cc:Subject:Date:From;
-        b=OR0I7qX+Fp3CMPL4kNqPkMgb2XWqa2PhPO2ypF3yNw11COAb3YriGBaEOqf6XRYX2
-         c+f8DfetqdyxBn50OA05mMF59vvsjAL1m7vSYE/UON40LaKlOFOAXCfby4DF6DmHK0
-         ONH3od0HFZ2+eXh6x/WteokRFOhCsUVmRHfLF1BKgWAVTNGjUDrtL03/nOmb6TmfWi
-         lPRbRC0s4x7ZsmhF0KWUoG/1rWP6ddd3AIi72G2Z/4z5r0l1Vtz2xggDpoyY3GGPbJ
-         iFnsxzPw7pl9XleeBwhZauuSnBoaZtyX7Ri4W+lqv8oNl4ArYOmEUJ3o5HjxPCmCZU
-         D87hW1pV7WgHA==
+        b=r8bma6NOlrhYSSk7Z8pXKRUqvjv03el/pcVZTZbvecpqM/ufpW2NPA014A3OAzL/e
+         L1+qoW45crCtV/DJIZ9WCQ44sP6F46m3O8xmzOqvJTuFTnbi4WnhUgUKVr9Xaevq7g
+         P6JKD13sx9jAOUeLoI9ZmFbpFZhADh8cHyplXO6Y4Up8ktW7QxhVrCfFMAoNFpzhT0
+         T0EzaaBQ5sIWEZrHvFMyjpMY/6FBvA1SnXkjn00tKFUMw1cS7623C+1HC1R/suBlPy
+         g0cGACzj6G/0EnNWNxU60JDhAZK6oMqlBvwtVFPORxbhwMOewuZ9bAqYtrpZDPi4FT
+         RQcRxdpJGcMkg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Minchan Kim <minchan@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jan Kara <jack@suse.cz>,
-        Alexey Romanov <avromanov@sberdevices.ru>,
-        Brian Geffon <bgeffon@google.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: [PATCH] zram: fix 32-bit atomic_long_t print
-Date:   Mon, 27 Feb 2023 09:56:21 +0100
-Message-Id: <20230227085629.2362316-1-arnd@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: zl38060 add gpiolib dependency
+Date:   Mon, 27 Feb 2023 09:58:26 +0100
+Message-Id: <20230227085850.2503725-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,33 +57,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The type used to print &pool_stats.objs_moved is inconsistent with the
-definition:
+Without gpiolib, this driver fails to link:
 
-drivers/block/zram/zram_drv.c: In function 'mm_stat_show':
-drivers/block/zram/zram_drv.c:1234:44: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
+arm-linux-gnueabi-ld: sound/soc/codecs/zl38060.o: in function `chip_gpio_get':
+zl38060.c:(.text+0x30): undefined reference to `gpiochip_get_data'
+arm-linux-gnueabi-ld: sound/soc/codecs/zl38060.o: in function `zl38_spi_probe':
+zl38060.c:(.text+0xa18): undefined reference to `devm_gpiochip_add_data_with_key'
 
-Change the printing code to match.
+This appears to have been in the driver since the start, but is hard to
+hit in randconfig testing since gpiolib is almost always selected by something
+else.
 
-Fixes: b7d89654a988 ("zram: show zsmalloc objs_moved stat in mm_stat")
+Fixes: 52e8a94baf90 ("ASoC: Add initial ZL38060 driver")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/block/zram/zram_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 3194e9254c6f..5c4ac0d3e850 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1231,7 +1231,7 @@ static ssize_t mm_stat_show(struct device *dev,
- 			atomic_long_read(&pool_stats.pages_compacted),
- 			(u64)atomic64_read(&zram->stats.huge_pages),
- 			(u64)atomic64_read(&zram->stats.huge_pages_since),
--			(u64)atomic64_read(&pool_stats.objs_moved));
-+			(u64)atomic_long_read(&pool_stats.objs_moved));
- 	up_read(&zram->init_lock);
- 
- 	return ret;
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index bd72c426a93d..07747565c3b5 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -2103,6 +2103,7 @@ config SND_SOC_WSA883X
+ config SND_SOC_ZL38060
+ 	tristate "Microsemi ZL38060 Connected Home Audio Processor"
+ 	depends on SPI_MASTER
++	depends on GPIOLIB
+ 	select REGMAP
+ 	help
+ 	  Support for ZL38060 Connected Home Audio Processor from Microsemi,
 -- 
 2.39.2
 
