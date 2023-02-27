@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68D66A4D39
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130EB6A4D40
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjB0VcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
+        id S230036AbjB0Vdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjB0VcF (ORCPT
+        with ESMTP id S229697AbjB0Vdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:32:05 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B0233FD;
-        Mon, 27 Feb 2023 13:32:04 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id p20so7036916plw.13;
-        Mon, 27 Feb 2023 13:32:04 -0800 (PST)
+        Mon, 27 Feb 2023 16:33:40 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1673710A9C;
+        Mon, 27 Feb 2023 13:33:38 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so11550428pjb.1;
+        Mon, 27 Feb 2023 13:33:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KoB9//B5yE19yj53mu7FgLkDEsSMqaL6dT9iqC2ncgs=;
-        b=ZFuZiZJGEFILwex8MnrV3gHdW+LaSdi9X5ZZt1AsqtMFYjQwWrsabJ0QrgHZj6NNmy
-         nX3zB6aTv8M1LqO7QF8Po27co/kGu3yam/z3QvG79dl2HnwcgiCZ+TwJ1Fpc4tIgiJOd
-         DIAXvb/iWr/19fqCMyitUm8Ty2Mud2mKq2yq4V9jZedQsFnCvHhLB5Lu3H9Qu1xrL7S0
-         j6UjS4i2SSejXqczCKzwIw/nLjozcdKPUShq9Dj+0aIBamVKAtGe/ZzAU04oV3dD75zw
-         opuMeAGKkhXtiTv1atyIxevbJk9/yECGj0Ud5v0sCvIq9Bjme6jZfXMJwWjlC9OhPWLa
-         uBFg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ve+EiTDRh+FfVslrvuW6ND3c+EkAOghkR0bTRqY34mw=;
+        b=nG9k5PUYyTk9cXwSYUmLu0yrF4No7aZ7/j/GCfuUY5xgoHrZDPNfM6zHTPp6CPMQrY
+         csPNNfaU2qBj8SAfH/+FRhs6L9iiigqIukeS1JKzOFYXdxgPJW9yuXz5NpirfvhXGTCb
+         xLFxSpabRXJSKcez/VAzL+YUFQe/4F+bEo6+4nDc1eRH55IE0SfVyz8HaCTTg9cbdV7r
+         kH4ZCAOqn5JxHem9siLOwV41VN+cFDUUQKB5J7Nfk88i+KLc80ilAXEqTW029nF8qaqO
+         om9JYmf34845ZmPzQpQ2Xaek4r4bQU5nQVzyT6saIbpJ0JcoiyI3H7xcSfEr0na88oO0
+         yOdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KoB9//B5yE19yj53mu7FgLkDEsSMqaL6dT9iqC2ncgs=;
-        b=z/CdqEisDLYCQLlpQauv/1yRVDAZlwJ8raizvumzgWGaks5jeX4l9IT64i/7+d+ypO
-         i4BPV+ZkXmfyXSgv3XlSU9XaQeR1q7AzoCQNTx+/Z+3cLv9C/5H4HRARYG7hvc6laOCE
-         RsMglRstPu3t9NmXTsQE0mG9mUtPj146hPssa+R7DwJNlgZT71c6QuIuIDQS/k8Ab9NC
-         UbE/7jpQBKFgciI1hzOCewHEaKSddEkoaVVEzn7c5VA6TcpyVhq3md1kp/Uf//YqM1tG
-         qEiGPELr7zxHqnDh85I96+LuIwg3dMIDWlvqvPDWOP1pZh0lQLUPYj83RWnmVrRdyoTB
-         zzjQ==
-X-Gm-Message-State: AO0yUKXDtNzQ6wzlvU9ENl8mwG2gXzkXJbLJz9dUfl8KbTfJOy0TnG9J
-        12Fx5XGnwN2qpx/gR90sNL4HGDJt0uc=
-X-Google-Smtp-Source: AK7set9gJUnaS8ZF/4R4Gr0hfeLQvngJllTlKjLyDo9YzBbzVmQ0b/C25fbSGo0FF7GE9iOP77Yscg==
-X-Received: by 2002:a17:902:c406:b0:19a:5958:15e7 with SMTP id k6-20020a170902c40600b0019a595815e7mr880175plk.15.1677533523745;
-        Mon, 27 Feb 2023 13:32:03 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170902eec600b0019b089bc8d7sm5048425plb.78.2023.02.27.13.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 13:32:03 -0800 (PST)
-Date:   Mon, 27 Feb 2023 13:32:01 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v11 019/113] KVM: TDX: initialize VM with TDX specific
- parameters
-Message-ID: <20230227213201.GH4175971@ls.amr.corp.intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <a0b5c459cce27c83a1275a3108f810299635d217.1673539699.git.isaku.yamahata@intel.com>
- <426aa7c48100b4577dd107ca54896286c60b9d4e.camel@intel.com>
+        bh=ve+EiTDRh+FfVslrvuW6ND3c+EkAOghkR0bTRqY34mw=;
+        b=MrTgiGCqkmZqCHuTC7LL52+sEGU/VOTEiIkY60Z6PZykCJVGAziEZElLjd+2S2+dMF
+         5UeVS0bR8SbIW00nJ1x8Dd1gVBA8hwsVq8HGcobKizhUBg4ZPGaMiVWNnnYzEzlaEUS5
+         R7phhHvTlCiR/bma5dgf/iZG2pmbXOrxKmBCTTKZKLvIY+yLkdAsEQIL9L0A/zRuYIPt
+         a6qrQlCVxyGkPyyxe63RQa9gBCtpQaxZqV9lnw2Jvcjh1O9tIM0yn8Qp7Quv5Dcxf9Bx
+         vq7ZVPJ2JA2B3YH2vsogtwu3Rh0bhuCqIc/q7s2B+17NUzKVNb1We5a/uo90GSb8aspG
+         mExA==
+X-Gm-Message-State: AO0yUKVVv4gbNnLKx4Eq94q4Ih+AeXYxzO4vCiBh1h+w6okKm81yxSt1
+        7cH2Yp8AK86WDm/3y0B/XWM=
+X-Google-Smtp-Source: AK7set82EY0Ze9K+PMz/2QqLiZ2lBwEKU9+cegh7cYoTwIxLBwjgTCUujf+sWWp9lby0tECEwsoCcA==
+X-Received: by 2002:a17:902:ea04:b0:199:4be8:be48 with SMTP id s4-20020a170902ea0400b001994be8be48mr793237plg.19.1677533617451;
+        Mon, 27 Feb 2023 13:33:37 -0800 (PST)
+Received: from [10.69.71.131] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id iw9-20020a170903044900b0019cc28bfc0fsm5079465plb.34.2023.02.27.13.33.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 13:33:36 -0800 (PST)
+Message-ID: <8d6896f5-3710-0b35-582a-fb482e5f4196@gmail.com>
+Date:   Mon, 27 Feb 2023 13:33:32 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <426aa7c48100b4577dd107ca54896286c60b9d4e.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 1/6] pccard: remove bcm63xx socket driver
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Olof Johansson <olof@lixom.net>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <20230227133457.431729-2-arnd@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230227133457.431729-2-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,89 +92,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:04:19AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
++Maxime,
 
-> On Thu, 2023-01-12 at 08:31 -0800, isaku.yamahata@intel.com wrote:
-> > +struct kvm_tdx_init_vm {
-> > +	__u64 attributes;
-> > +	__u64 mrconfigid[6];	/* sha384 digest */
-> > +	__u64 mrowner[6];	/* sha384 digest */
-> > +	__u64 mrownerconfig[6];	/* sha348 digest */
-> > +	union {
-> > +		/*
-> > +		 * KVM_TDX_INIT_VM is called before vcpu creation, thus before
-> > +		 * KVM_SET_CPUID2.  CPUID configurations needs to be passed.
-> > +		 *
-> > +		 * This configuration supersedes KVM_SET_CPUID{,2}.
+On 2/27/2023 5:34 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> What does "{,2}" mean?
+> The bcm63xx pcmcia driver is the only nonstandard cardbus implementation,
+> everything else is handled by the yenta_socket driver. Upon a closer
+> look, this seems entirely unused, because:
+> 
+>   - There are two ports for bcm63xx in arch/mips, both of which
+>     support the bcm6358 hardware, but the newer one does not
+>     use this driver at all.
+> 
+>   - The only distro I could find for bcm63xx is OpenWRT, but they
+>     do not enable pcmcia support. However they have 130 patches,
+>     a lot of which are likely required to run anything at all.
+> 
+>   - The device list at https://deviwiki.com/wiki/Broadcom only
+>     lists machines using mini-PCI cards rather than PCMCIA or
+>     Cardbus devices.
+> 
+>   - The cardbus support is entirely made up to work with the
+>     kernel subsystem, but the hardware appears to just be a normal
+>     PCI host that should work fine after removing all the cardbus
+>     code.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Both KVM_SET_CPUID and KVM_SET_CPUID2.  For comment purpose, only KVM_SET_CPUID2
-suffice. I'll drop "{,2}".
-
-> 
-> > +		 * The user space VMM, e.g. qemu, should make them consistent
-> > +		 * with this values.
-> 
-> You are already using 'struct kvm_cpuid2' below.  Isn't it enough to imply that
-> userspace should organize data in the format of 'struct kvm_cpuid2'?
-> 
-> > +		 * sizeof(struct kvm_cpuid_entry2) * KVM_MAX_CPUID_ENTRIES(256)
-> > +		 * = 8KB.
-> > +		 */
-> 
-> What does this comment try to imply?
-> 
-> > +		struct {
-> > +			struct kvm_cpuid2 cpuid;
-> > +			/* 8KB with KVM_MAX_CPUID_ENTRIES. */
-> > +			struct kvm_cpuid_entry2 entries[];
-> 
-> I don't understand what's the purpose of the second field?
-> 
-> Shouldn't the 'struct kvm_cpuid2' already have all the CPUID entries?
-> 
-> > +		};
-> > +		/*
-> > +		 * For future extensibility.
-> > +		 * The size(struct kvm_tdx_init_vm) = 16KB.
-> > +		 * This should be enough given sizeof(TD_PARAMS) = 1024
-> > +		 */
-> > +		__u64 reserved[2029];
-> 
-> I think this is just wrong.  How can you extend something after a dynamic size
-> CPUID array?
-> 
-> If you want extensibility, you need to put the space before the flexible array.
-> 
-> > +	};
-> > +};
-
-I changed the struct as follows.
-
-struct kvm_tdx_init_vm {
-        __u64 attributes;
-        __u64 mrconfigid[6];    /* sha384 digest */
-        __u64 mrowner[6];       /* sha384 digest */
-        __u64 mrownerconfig[6]; /* sha348 digest */
-        /*
-         * For future extensibility to make sizeof(struct kvm_tdx_init_vm) = 8KB.
-         * This should be enough given sizeof(TD_PARAMS) = 1024.
-         * 8KB was chosen given because
-         * sizeof(struct kvm_cpuid_entry2) * KVM_MAX_CPUID_ENTRIES(=256) = 8KB.
-         */
-        __u64 reserved[1004];
-
-        /*
-         * KVM_TDX_INIT_VM is called before vcpu creation, thus before
-         * KVM_SET_CPUID2.
-         * This configuration supersedes KVM_SET_CPUID2s for VCPUs. The user
-         * space VMM, e.g. qemu, should make KVM_SET_CPUID2 consistent with this
-         * values.
-         */
-        struct kvm_cpuid2 cpuid;
-};
-
+This is probably fine because PCMCIA on BCM63xx was only needed for the 
+very old and early devices like the 6348 which modern kernels are 
+unlikely to be able to run on since they are usually RAM constrained 
+with 16MB or 32MB of DRAM populated. Maxime, do you care if this driver 
+gets removed?
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Florian
