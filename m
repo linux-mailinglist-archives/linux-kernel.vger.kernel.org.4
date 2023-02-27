@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6B86A3E57
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7046C6A3E5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjB0JaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S229686AbjB0Jay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjB0JaB (ORCPT
+        with ESMTP id S229915AbjB0Jat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:30:01 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B517ED8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:29:56 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id i3so6054397plg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:29:56 -0800 (PST)
+        Mon, 27 Feb 2023 04:30:49 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A029EE0;
+        Mon, 27 Feb 2023 01:30:47 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id f13so9936189vsg.6;
+        Mon, 27 Feb 2023 01:30:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=orrUFQepqPS8GeN9rfXGjnnQp/FMyS0GGVp2Umis7mI=;
-        b=ylnXtXLbC4YroRtValaCEdd6gZwQ3YJY+oB2gPMozZn7oPwb955TfjYBE9zURSS8Cq
-         qq/8Tv+vuqPVyJ/MlPTqoS3jjViiuM5zUIY0VOEEbmoWdKRXoenn6pECdvijZTPcy0/F
-         IvIzq+exhHeIO8Uml202DAWV7VSb1Ovd0rktQkCjnRA6uhDMjAd8sffqTTme/CZNzkBg
-         jIx20wURc6GaBTEoSiUu81pa0lH0Tm9ZnLoi/MCdSwxZRlhcHYlwEi/lI8E6I3ckS2yG
-         5kYqrrx39kzBKEgpYFtjFdV5A5bjUdKQlQposmCedhX9B43tPkB2rzBS2mqRXF0mc0zr
-         UBCA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z6nC/mfNKMWoB1dpOd/sE0PMhduJWN71ddJbcR3Nbko=;
+        b=HlkJ7Nql/4LWvDw0s31J2GIrotG96fPFEToJNZu6QHe0GFAF0iUszUrolbLeFWo+4p
+         HK5ZADJrxqkqIzYv1I06U3r/dvncnxHQol5Hzk4Cqn8xmp1lYW+vmzI69qtaJZNFTnNv
+         RZMINF1DxrYY/eXv28NpzQtS7r/V21iGChbveaC0pDoKLiskV5YUh5QSv7MnLvZ6ItFG
+         G3s7HoBZvOWuQHOMA8o+a8Yh9xfRZ4ARbMbsU6XAq52RbRdUSCmpUuF8OfaZmoH2RSdZ
+         21c27DnjB0zRgZY9vhYva/raj3mRqiQ/aoIoEnv5QgCYVV6ukVcxcQm7wG5/fNBqu0ha
+         OgSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=orrUFQepqPS8GeN9rfXGjnnQp/FMyS0GGVp2Umis7mI=;
-        b=Y2evS2OVN+6CGL0jkon9iW3nwp40Afv6WMlrqf7TF9NsyGX8qJUMMbbg/3CCWx6lM6
-         8NHFu+IA86Os0i+pDQWjvafh4QNNgIXTmV/j5ayc/8Cbz+DOSbjeZbQLxpCHZtLxx2Yx
-         QT7cbvKmICwXm4yCQfC1y52mAP0muf/R6PM/vHjN6ocyxiawl/i9AaCIOGjjrgbLHsct
-         kbbddfw2XQCOCwsoXq2vstzC55e+z/hDClgRqKv4NpcDxDafBDVPeh8xQZxaI0JjBcB6
-         5sFIvvegJEMNLMatkyn+S+wABYC7Gvi29nD2JcDKkSZqoFpWpxz6GsUCEtjVrjUvkhb5
-         /a5g==
-X-Gm-Message-State: AO0yUKWRhJkDyqfIJTY6E4g8G3Rca6Fq9215GoftY91IrHcybcEbr1ns
-        7Qjhtj7ejWAv0TPS83uEYzbJLQ==
-X-Google-Smtp-Source: AK7set/zj4mcmcU9rSQGoc5y7aZGnjUK6AnhP3Dl9Qd3GmqCjAR0w1nC3wYbit6WJwoVrxA+3yFMNw==
-X-Received: by 2002:a17:902:d488:b0:199:2932:615e with SMTP id c8-20020a170902d48800b001992932615emr29016356plg.18.1677490196173;
-        Mon, 27 Feb 2023 01:29:56 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902d38600b0019cb8ffd592sm4118341pld.163.2023.02.27.01.29.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 01:29:55 -0800 (PST)
-Date:   Mon, 27 Feb 2023 14:59:53 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jun Nie <jun.nie@linaro.org>
-Cc:     cw00.choi@samsung.com, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
-Message-ID: <20230227092953.ekh72r5h6xcqgusn@vireshk-i7>
-References: <cover.1677063656.git.viresh.kumar@linaro.org>
- <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
- <20230224021713.stpcykx2tjkjwyti@vireshk-i7>
- <Y/hyf+/EqEeTu436@niej-dt-7B47>
- <20230227042349.3p2ijo6s6yyqc267@vireshk-i7>
- <CABymUCNBkr_65JHNVfbUGjxs6rhnj=eUyZ+5j6VtiDwqzLYtcA@mail.gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z6nC/mfNKMWoB1dpOd/sE0PMhduJWN71ddJbcR3Nbko=;
+        b=kWCrWaJgSh8UUGYcW6XDaSLOHVzPURQuoR6ZTVUH3jwuqHxjvIK3Oi2upmbGxn13yB
+         DsZ64wvRHcxVKI8HkjEPlHxWj3uefI+kfi7W8Dph3vXiTAP0WvvzxaXPeuRY/xmN7n7Q
+         ar7WmMwiP0Sj1jhe5LoyVndo5tCx91fZqPRMZyCkrIxwR9c2LR9CNVo7Od1RLxKYcZ3V
+         1uHPemG7RqASXAjqPcDtEmNSvVagHYuOTEPvwLMYkTXbQoMO7afQYRzk3Zv/YQLZms6K
+         +AbiQ7Xx2DZoyelEMzpxPqyJnSXiEMqInQis14RqOGZ0vA8YNtB6LB0pwchXao2YMFhN
+         yvGg==
+X-Gm-Message-State: AO0yUKX/D+ytzMrraFSBMkDyZZa8rOikJDLip2vjtXrw+pS/v4WDHMwc
+        cyGVu6znHRtuFVz0zIJYnIDcZvjtYB1LyrSlI5w=
+X-Google-Smtp-Source: AK7set+ROjFsGcad92rIu+oStwChXML4as5oWIghu15luSw3JLsqVTKaL1C6iBJRsPCtBcgzXQj6J5Dpr2Jql0Oye3E=
+X-Received: by 2002:a05:6122:18b1:b0:401:a4bf:210d with SMTP id
+ bi49-20020a05612218b100b00401a4bf210dmr6742561vkb.1.1677490246823; Mon, 27
+ Feb 2023 01:30:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABymUCNBkr_65JHNVfbUGjxs6rhnj=eUyZ+5j6VtiDwqzLYtcA@mail.gmail.com>
+References: <20230227074104.42153-1-josef@miegl.cz>
+In-Reply-To: <20230227074104.42153-1-josef@miegl.cz>
+From:   Eyal Birger <eyal.birger@gmail.com>
+Date:   Mon, 27 Feb 2023 11:30:34 +0200
+Message-ID: <CAHsH6GtArNCyA3UAJbSYYD86fb2QxskbSoNQo2RVHQzKC643zg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/1] net: geneve: accept every ethertype
+To:     Josef Miegl <josef@miegl.cz>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-02-23, 17:21, Jun Nie wrote:
-> Sorry for not expressing it accurately. I should say devfreq devices
-> pointers, just
-> devfreq_virt_devs vs genpd_virt_devs. Then you know why I add devfreq-devs
-> dts nodes below.
+Hi,
 
-Won't something like dev_pm_opp_set_clkname() would be enough here too ? We
-already do this kind of work for clks and regulators.
+On Mon, Feb 27, 2023 at 10:19=E2=80=AFAM Josef Miegl <josef@miegl.cz> wrote=
+:
+>
+> The Geneve encapsulation, as defined in RFC 8926, has a Protocol Type
+> field, which states the Ethertype of the payload appearing after the
+> Geneve header.
+>
+> Commit 435fe1c0c1f7 ("net: geneve: support IPv4/IPv6 as inner protocol")
+> introduced a new IFLA_GENEVE_INNER_PROTO_INHERIT flag that allowed the
+> use of other Ethertypes than Ethernet. However, for a reason not known
+> to me, it imposed a restriction that prohibits receiving payloads other
+> than IPv4, IPv6 and Ethernet.
 
-Having power domain specific information within CPU nodes isn't a requirement of
-the OPP core, but the general requirement of genpd core instead.
+FWIW I added support for IPv4/IPv6 because these are the use cases I had
+and could validate. I don't know what problems could arise from supporting
+all possible ethertypes and can't test that.
 
--- 
-viresh
+>
+> This patch removes this restriction, making it possible to receive any
+> Ethertype as a payload, if the IFLA_GENEVE_INNER_PROTO_INHERIT flag is
+> set.
+
+This seems like an addition not a bugfix so personally seems like it should
+be targeting net-next (which is currently closed afaik).
+
+Eyal.
+
+>
+> This is especially useful if one wants to encapsulate MPLS, because with
+> this patch the control-plane traffic (IP, LLC) and the data-plane
+> traffic (MPLS) can be encapsulated without an Ethernet frame, making
+> lightweight overlay networks a possibility.
+>
+> Changes in v2:
+>   - added a cover letter
+>   - lines no longer exceed 80 columns
+>
+>
+> Josef Miegl (1):
+>   net: geneve: accept every ethertype
+>
+>  drivers/net/geneve.c | 15 ++++-----------
+>  1 file changed, 4 insertions(+), 11 deletions(-)
+>
+> --
+> 2.37.1
+>
