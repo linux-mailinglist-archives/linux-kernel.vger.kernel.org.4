@@ -2,124 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9A66A487E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E27106A4884
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjB0RrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S229893AbjB0Rrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjB0RrM (ORCPT
+        with ESMTP id S229671AbjB0Rrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:47:12 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C99B24103
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:47:11 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id g13-20020a63f40d000000b005015be7b9faso2188444pgi.15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:47:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bx7GMwBIOHxrHorivUo24uUgRWemT3+721qT8hA0RRM=;
-        b=fL0sCAtJCbBQmUG9K1il5cmtYgU+ic6RembCIXUKuPBlJzRuirBy8XzEmXwgH1PU31
-         kkpjFWighHghmJVkVQltONa/wKox7B8FVpYn27OhLvhYDq9l3gFmp2uavdK4dbsIRPIs
-         p6hT2TYtw2O1FmzxBjIR6E3nJWQCqGc/ICMdXPprWdFVQlEBTlgYjA8qiVLqAihMPQ25
-         K9iFdZVJOJrtL6AugVJN5qR2lA0rJOhOrTeaYjBIryyDheil7WOfb5fzdqMp2ivFylsv
-         tjFfvQlIsax/515iS33dcPRRbtggsuz+LI7vS0bZ992wD4rJLMsA6tbdVdfFaiMvE5K+
-         9rLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bx7GMwBIOHxrHorivUo24uUgRWemT3+721qT8hA0RRM=;
-        b=RK0ET4xhhESVHZX6TIwuKwVJdhyeRBtOYrnnc8kuyu+UnY48EPX+sRx6ffKP2zIWnf
-         snvN/xXMSMr1aYG645z8/nJXbBNlHLV+RNSykX0qJ2X4lvHf42LOCHGV1ZXH/4h7rZGY
-         VKzRIUUP7fD91w0ehRF/jXlKQrZ8x1JaLLSIRMcyUNAL7RDXeOBD9myalru1HymS4BM+
-         5Sjysapmq/A9JY3lHMFVxY4uehQBEShdz+58mCwdHJ5rjitkMB8nG0ipEr66Ew74GO93
-         DQW3qPvo7snFCboIjReZY+FCVSyM1VopV8oVdyHGidBe07QtN07vK4029uMWwba6Ef99
-         vgMg==
-X-Gm-Message-State: AO0yUKWnpwRe7z83KAF6DfjMe/s53UFI3TwJxNEPWgsLPlN0nrEwJ93m
-        lpcu8djomyNOHMy3TBvH7jQj7gRz48F2fNCMng==
-X-Google-Smtp-Source: AK7set+vnOMHR/cn8CdD2DfS9+dSlM7HFryOJfCIJPWETMAvw/+OV5UIcKBg4NX/PtA17R+5rlfEtd6GoQ73nZQ9bA==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a63:921c:0:b0:503:6bbe:20cf with SMTP
- id o28-20020a63921c000000b005036bbe20cfmr606208pgd.0.1677520030680; Mon, 27
- Feb 2023 09:47:10 -0800 (PST)
-Date:   Mon, 27 Feb 2023 17:46:54 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227174654.94641-1-ackerleytng@google.com>
-Subject: [PATCH] tools: Copy linux/align.h into tools/
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, seanjc@google.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 12:47:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CED18F;
+        Mon, 27 Feb 2023 09:47:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ED2560EEE;
+        Mon, 27 Feb 2023 17:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC39C433D2;
+        Mon, 27 Feb 2023 17:47:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677520049;
+        bh=je6Bz/Pb53L7AJRKDXmLUBTm/Pxb0Qt9+y/hqaITn18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XVrT/nnMvPYu6UzG9YF0HNpeuGQhj+LuLQX66SXtYRTyunL5K5XjWYt2R/chjUB0L
+         ABjkS9XDUbz9wDdqOS+LzWiXqzB+BWP+5SeZ0xd8oXuKg3b2oR+e40lw9G7nxMMYa/
+         KfPUmbmXpn11A64K2xAUgBFQ2YHGzYaZnFHfv4BAa9Srop7qfPIwxXuBB3p3EBQTdI
+         M3HOHIluptoMazcnOnX2NT0nQ6kEga61TmLI+knHe00KjyiBbhm5ztOsNzkPzj21wI
+         sGpbnMi4PUYZUO2T+1gQ6AQeflLhje8/4QfyuiSGMhlQeK74Dh54v3lESIzpxfyILA
+         5Sjd1BjhM2L6A==
+Date:   Mon, 27 Feb 2023 17:47:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     =?utf-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        krzysztof.kozlowski@linaro.org, rf@opensource.cirrus.com,
+        ckeepax@opensource.cirrus.com, herve.codina@bootlin.com,
+        wangweidong.a@awinic.com, james.schulman@cirrus.com,
+        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
+        povik+lin@cutebit.org, flatmax@flatmax.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        ryans.lee@analog.com
+Subject: Re: [PATCH 1/2] ASoC: max98363: add soundwire amplifier driver
+Message-ID: <Y/zsqjOWFKrpDtl8@sirena.org.uk>
+References: <20230224010814.504016-1-ryan.lee.analog@gmail.com>
+ <0fb47fe7-719b-0773-fc14-3d62d7d33619@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X8+/QatuS77Fl/Hx"
+Content-Disposition: inline
+In-Reply-To: <0fb47fe7-719b-0773-fc14-3d62d7d33619@linux.intel.com>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This provides alignment macros for use in selftests.
 
-Also clean up tools/include/linux/bitmap.h's inline definition of
-IS_ALIGNED().
+--X8+/QatuS77Fl/Hx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/include/linux/align.h  | 15 +++++++++++++++
- tools/include/linux/bitmap.h |  2 +-
- 2 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 tools/include/linux/align.h
+On Mon, Feb 27, 2023 at 10:17:45AM -0500, Pierre-Louis Bossart wrote:
 
-diff --git a/tools/include/linux/align.h b/tools/include/linux/align.h
-new file mode 100644
-index 000000000000..2b4acec7b95a
---- /dev/null
-+++ b/tools/include/linux/align.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_ALIGN_H
-+#define _LINUX_ALIGN_H
-+
-+#include <linux/const.h>
-+
-+/* @a is a power of 2 value */
-+#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
-+#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
-+#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
-+#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
-+#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
-+#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
-+
-+#endif	/* _LINUX_ALIGN_H */
-diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
-index f3566ea0f932..8c6852dba04f 100644
---- a/tools/include/linux/bitmap.h
-+++ b/tools/include/linux/bitmap.h
-@@ -3,6 +3,7 @@
- #define _TOOLS_LINUX_BITMAP_H
- 
- #include <string.h>
-+#include <linux/align.h>
- #include <linux/bitops.h>
- #include <linux/find.h>
- #include <stdlib.h>
-@@ -126,7 +127,6 @@ static inline bool bitmap_and(unsigned long *dst, const unsigned long *src1,
- #define BITMAP_MEM_ALIGNMENT (8 * sizeof(unsigned long))
- #endif
- #define BITMAP_MEM_MASK (BITMAP_MEM_ALIGNMENT - 1)
--#define IS_ALIGNED(x, a) (((x) & ((typeof(x))(a) - 1)) == 0)
- 
- static inline bool bitmap_equal(const unsigned long *src1,
- 				const unsigned long *src2, unsigned int nbits)
--- 
-2.39.2.722.g9855ee24e9-goog
+> > +static struct reg_default max98363_reg[] = {
+> > +	{MAX98363_R0040_SCP_INIT_STAT_1, 0x00},
+> > +	{MAX98363_R0041_SCP_INIT_MASK_1, 0x00},
+> > +	{MAX98363_R0042_SCP_INIT_STAT_2, 0x00},
+> > +	{MAX98363_R0044_SCP_CTRL, 0x00},
+> > +	{MAX98363_R0045_SCP_SYSTEM_CTRL, 0x00},
+> > +	{MAX98363_R0046_SCP_DEV_NUMBER, 0x00},
+> > +	{MAX98363_R004D_SCP_BUS_CLK, 0x00},
+> > +	{MAX98363_R0050_SCP_DEV_ID_0, 0x21},
+> > +	{MAX98363_R0051_SCP_DEV_ID_1, 0x01},
+> > +	{MAX98363_R0052_SCP_DEV_ID_2, 0x9F},
+> > +	{MAX98363_R0053_SCP_DEV_ID_3, 0x87},
+> > +	{MAX98363_R0054_SCP_DEV_ID_4, 0x08},
+> > +	{MAX98363_R0055_SCP_DEV_ID_5, 0x00},
 
+> That seems wrong, why would you declare standard registers that are
+> known to the bus and required to be implemented?
+
+This is the register defaults table, it gets used to initialise the
+register cache and optimise resync after suspend - all this does is
+supply defaults for the cache.  That said...
+
+I would suggest it's better to not supply defaults for ID registers and
+read them back from the device otherwise things might get confused.
+
+> > +static const struct regmap_config max98363_sdw_regmap = {
+> > +	.reg_bits = 32,
+> > +	.val_bits = 8,
+> > +	.max_register = MAX98363_R21FF_REV_ID,
+> > +	.reg_defaults  = max98363_reg,
+> > +	.num_reg_defaults = ARRAY_SIZE(max98363_reg),
+> > +	.readable_reg = max98363_readable_register,
+> > +	.volatile_reg = max98363_volatile_reg,
+
+> I don't see why the SoundWire standard registers are part of regmap?
+
+...if there's an issue with the SoundWire core modifying the registers
+directly then the driver would need to mark all the core registers as
+volatile so that they're not cached otherwise there will be collisions.
+Or is it the case that we always need to go via the SoundWire core for
+the generic registers, so they should just never be written at all?
+
+> > +	if (max98363->dvddio) {
+> > +		ret = regulator_enable(max98363->dvddio);
+> > +		if (ret < 0)
+> > +			return ret;
+> > +	}
+> > +
+> > +	if (max98363->vdd) {
+> > +		ret = regulator_enable(max98363->vdd);
+> > +		if (ret < 0)
+> > +			return ret;
+> > +	}
+
+> that is very very odd. It's the first time we see a SoundWire codec
+> driver that has a power dependency, and it's quite likely that it's too
+> late to enable power resources *AFTER* dealing with all the
+> initialization and enumeration.
+
+> It's not even clear to me how this device would be enumerated.
+
+> You'd need to explain what part of the amplifier is controlled by those
+> regulator, otherwise it's impossible to review and understand if the
+> driver does the 'right thing'
+
+It's also buggy to have regulators treated as optional unless they may
+be physically absent.
+
+--X8+/QatuS77Fl/Hx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP87KkACgkQJNaLcl1U
+h9Bv7Qf/YeP3QSU5T9ffyKOEPzEa0RwdpuLjBCjiDvdaCTaKpPSEZ74eMbh7LDJa
+Pp+Nl3FhE3e3gYMZgJsU92VB2blKAyJ2ucRVdVon2R4KibZcmQo5uzJMm2Atc65e
+psqnyn8ivHkOD7VNLgISErLRKchM+1tWbpchvxGXFrB/1atwRQ0w4I8AAr7tAeya
+ArpGpzwcry/mZxUkqNlaVPkvCWnVQ2bSTBFg1VRGPkDAd3Ut97UWE8rN3/JVdUbL
+GucL8qXeDkpIQsS9e6oNOgS6smmVpl7tMVOY+P1B1O6K8mZywLJW/1SKvuj9f8fl
+yokBKgAoCkD7b0UzeepBdGDDtu7Vkg==
+=FsGr
+-----END PGP SIGNATURE-----
+
+--X8+/QatuS77Fl/Hx--
