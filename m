@@ -2,106 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9125C6A3A1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1936A3A1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjB0EZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 23:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S229733AbjB0E2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 23:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0EZX (ORCPT
+        with ESMTP id S229470AbjB0E16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 23:25:23 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F31EEF87
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:25:22 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso1386793wmo.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WKY+nM73n92PPNk57uTNynvXNt+CICVYCNxlZP1mrDg=;
-        b=LmtQWJBHze3Ia9GRyyQvObT5COCtGlIGbDHu4nrcLEWds3cgWjt54fAM6XPL2HNGrH
-         SIAF2DU6TLGPrpGEfUgwz7SdolMaLJ+Fu3+moyUSsy73hK8mBSBUJbzAZTFIAgCxBLQB
-         2hp+9ZKBn080PrOhSYpDAf7odWHoHOM8ohp6GMftzAXNo3zP77ChH7FwnlUtjqSPns6q
-         CvQ5ey+g75CO/gr42zA+vGvOLN8Z943WfsHnUKvnZIlJ1x9oX0FmWTjs41/I+UNK4wyn
-         3BIJ+NZ4dLcCYHORGLH3MJjMi7PoN48i4sqIDyKVsKaNJ0IQ8pV9zNBoeNu+X/T0MFSD
-         mGnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WKY+nM73n92PPNk57uTNynvXNt+CICVYCNxlZP1mrDg=;
-        b=3DbzVo8eIsmbkE1LwASNOirE/zOguf2bRTlebOapGU29OqOX/kemRT5I086Z8guk4F
-         5zjUBLLSpEAsSYZn5hDOUDwEgSYpKL8EsW4MJbRf+l2S2QVfgKj5VoMLFn0v7Y43EPT0
-         YoKgr79rElmVt+YnMU935E2R0RIK4M4QO9yie9df6lyML8evYE+eIVFn1MHMVF4qHnYC
-         74/spwVTJ1CwwkJioV1kjnXgQMDd883VKMMp7S2Njw0153wzmqBvSxF4d4x6Qch06OnM
-         wDwqEStQtxJBOqd1tBP/02+pMKPNelwK1X9bzOoKtuSYgiZ2aGRlUssYJequ3PK64GM7
-         Hk5Q==
-X-Gm-Message-State: AO0yUKU8vE8jdxWp+Ln4p8yXvCMPyUM29iZkjE9OvJ+XO/iDOdMSob+L
-        3n7XLaCwXgefxffhIOMnP+o=
-X-Google-Smtp-Source: AK7set9oWKWHoPK378Dz39H2oIP6OLjKI/lm5WT5tSFlk4qAGO0cK8EJfXNPz67Cf15Re5mQAZrXHg==
-X-Received: by 2002:a05:600c:1e1f:b0:3ea:fca4:8c48 with SMTP id ay31-20020a05600c1e1f00b003eafca48c48mr7590460wmb.23.1677471920607;
-        Sun, 26 Feb 2023 20:25:20 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id p13-20020a1c544d000000b003e208cec49bsm17688381wmi.3.2023.02.26.20.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 20:25:19 -0800 (PST)
-Date:   Mon, 27 Feb 2023 07:25:16 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Rashmica Gupta <rashmica.g@gmail.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Madhavan Srinivasan <maddy@linux.vnet.ibm.com>
-Subject: arch/powerpc/perf/mpc7450-pmu.c:422 init_mpc7450_pmu() warn: masked
- condition '((pvr >> 16) & 65535) != 2147483648' is always true.
-Message-ID: <202302260657.7dM9Uwev-lkp@intel.com>
+        Sun, 26 Feb 2023 23:27:58 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA5744BE
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:27:57 -0800 (PST)
+Received: from [192.168.2.206] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C73CD660210B;
+        Mon, 27 Feb 2023 04:27:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677472075;
+        bh=kGcDbR4j3314+FTKe5Y7VXHs4Heb3IW139yRkBeOUHE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=b6pZBgVLX08t2YqV5olnHu19OeCoqB/Pm9rJVvl1XsvpURdJl5pAkl/KFEncqUPLm
+         WH/OI8V39hmkRzCMr7+8+53/GdvfmBHLFqudl1IKzB/Mvpc9nIYG58SE6/8BvZZEO4
+         w2DKaRa/Tjpz8AGIB58dHehk2+HDKr/9Knt3u5F5sWStdDWKRtvthKm9wZqQ9kGfdL
+         k65gnWGlhEaZkkd2mIjigeJZCvJuFITIWf8qmqmmtOXHXwBKMVh9azo6OIgz5ogjOA
+         bv6DOQVh5MFRUu37Wiet7YY9sahysVOG2QtMnrpWSiNEQ5QoUWOd7+bOlXFx1xcq0J
+         ZIWVn1cPp6VgA==
+Message-ID: <4d6e096b-4f04-5e17-ff23-4842b69fdc95@collabora.com>
+Date:   Mon, 27 Feb 2023 07:27:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 01/11] drm/msm/gem: Prevent blocking within shrinker
+ loop
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <20230108210445.3948344-2-dmitry.osipenko@collabora.com>
+ <d1c560f1-0201-7b41-bb27-d6bcb332b8d4@suse.de>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <d1c560f1-0201-7b41-bb27-d6bcb332b8d4@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   116b41162f8b267987ea9a73eb7e73eaa7c2cce5
-commit: ec3eb9d941a98f4c0dac263110729680a734279b powerpc/perf: Use PVR rather than oprofile field to determine CPU version
-config: powerpc-randconfig-m031-20230226 (https://download.01.org/0day-ci/archive/20230226/202302260657.7dM9Uwev-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
+On 2/17/23 15:02, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 08.01.23 um 22:04 schrieb Dmitry Osipenko:
+>> Consider this scenario:
+>>
+>> 1. APP1 continuously creates lots of small GEMs
+>> 2. APP2 triggers `drop_caches`
+>> 3. Shrinker starts to evict APP1 GEMs, while APP1 produces new purgeable
+>>     GEMs
+>> 4. msm_gem_shrinker_scan() returns non-zero number of freed pages
+>>     and causes shrinker to try shrink more
+>> 5. msm_gem_shrinker_scan() returns non-zero number of freed pages again,
+>>     goto 4
+>> 6. The APP2 is blocked in `drop_caches` until APP1 stops producing
+>>     purgeable GEMs
+>>
+>> To prevent this blocking scenario, check number of remaining pages
+>> that GPU shrinker couldn't release due to a GEM locking contention
+>> or shrinking rejection. If there are no remaining pages left to shrink,
+>> then there is no need to free up more pages and shrinker may break out
+>> from the loop.
+>>
+>> This problem was found during shrinker/madvise IOCTL testing of
+>> virtio-gpu driver. The MSM driver is affected in the same way.
+>>
+>> Reviewed-by: Rob Clark <robdclark@gmail.com>
+>> Fixes: b352ba54a820 ("drm/msm/gem: Convert to using drm_gem_lru")
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> ---
+>>   drivers/gpu/drm/drm_gem.c              | 9 +++++++--
+>>   drivers/gpu/drm/msm/msm_gem_shrinker.c | 8 ++++++--
+>>   include/drm/drm_gem.h                  | 4 +++-
+>>   3 files changed, 16 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>> index 59a0bb5ebd85..c6bca5ac6e0f 100644
+>> --- a/drivers/gpu/drm/drm_gem.c
+>> +++ b/drivers/gpu/drm/drm_gem.c
+>> @@ -1388,10 +1388,13 @@ EXPORT_SYMBOL(drm_gem_lru_move_tail);
+>>    *
+>>    * @lru: The LRU to scan
+>>    * @nr_to_scan: The number of pages to try to reclaim
+>> + * @remaining: The number of pages left to reclaim
+>>    * @shrink: Callback to try to shrink/reclaim the object.
+>>    */
+>>   unsigned long
+>> -drm_gem_lru_scan(struct drm_gem_lru *lru, unsigned nr_to_scan,
+>> +drm_gem_lru_scan(struct drm_gem_lru *lru,
+>> +         unsigned int nr_to_scan,
+>> +         unsigned long *remaining,
+>>            bool (*shrink)(struct drm_gem_object *obj))
+>>   {
+>>       struct drm_gem_lru still_in_lru;
+>> @@ -1430,8 +1433,10 @@ drm_gem_lru_scan(struct drm_gem_lru *lru,
+>> unsigned nr_to_scan,
+>>            * hit shrinker in response to trying to get backing pages
+>>            * for this obj (ie. while it's lock is already held)
+>>            */
+>> -        if (!dma_resv_trylock(obj->resv))
+>> +        if (!dma_resv_trylock(obj->resv)) {
+>> +            *remaining += obj->size >> PAGE_SHIFT;
+>>               goto tail;
+>> +        }
+>>             if (shrink(obj)) {
+>>               freed += obj->size >> PAGE_SHIFT;
+>> diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c
+>> b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+>> index 051bdbc093cf..b7c1242014ec 100644
+>> --- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
+>> +++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+>> @@ -116,12 +116,14 @@ msm_gem_shrinker_scan(struct shrinker *shrinker,
+>> struct shrink_control *sc)
+>>       };
+>>       long nr = sc->nr_to_scan;
+>>       unsigned long freed = 0;
+>> +    unsigned long remaining = 0;
+>>         for (unsigned i = 0; (nr > 0) && (i < ARRAY_SIZE(stages)); i++) {
+>>           if (!stages[i].cond)
+>>               continue;
+>>           stages[i].freed =
+>> -            drm_gem_lru_scan(stages[i].lru, nr, stages[i].shrink);
+>> +            drm_gem_lru_scan(stages[i].lru, nr, &remaining,
+> 
+> This function relies in remaining being pre-initialized. That's not
+> obvious and error prone. At least, pass-in something like
+> &stages[i].remaining that is then initialized internally by
+> drm_gem_lru_scan() to zero. And similar to freed, sum up the individual
+> stages' remaining here.
+> 
+> TBH I somehow don't like the overall design of how all these functions
+> interact with each other. But I also can't really point to the actual
+> problem. So it's best to take what you have here; maybe with the change
+> I proposed.
+> 
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202302260657.7dM9Uwev-lkp@intel.com/
-
-smatch warnings:
-arch/powerpc/perf/mpc7450-pmu.c:422 init_mpc7450_pmu() warn: masked condition '((pvr >> 16) & 65535) != 2147483648' is always true.
-
-vim +422 arch/powerpc/perf/mpc7450-pmu.c
-
-77c2342a578c11 arch/powerpc/kernel/mpc7450-pmu.c Dmitry Baryshkov 2011-06-29  418  static int __init init_mpc7450_pmu(void)
-7325927e5a20bf arch/powerpc/kernel/mpc7450-pmu.c Paul Mackerras   2009-06-17  419  {
-ec3eb9d941a98f arch/powerpc/perf/mpc7450-pmu.c   Rashmica Gupta   2022-07-07  420  	unsigned int pvr = mfspr(SPRN_PVR);
-ec3eb9d941a98f arch/powerpc/perf/mpc7450-pmu.c   Rashmica Gupta   2022-07-07  421  
-ec3eb9d941a98f arch/powerpc/perf/mpc7450-pmu.c   Rashmica Gupta   2022-07-07 @422  	if (PVR_VER(pvr) != PVR_7450)
-                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^
-Impossible.  Unclear what was intended.
-
-7325927e5a20bf arch/powerpc/kernel/mpc7450-pmu.c Paul Mackerras   2009-06-17  423  		return -ENODEV;
-7325927e5a20bf arch/powerpc/kernel/mpc7450-pmu.c Paul Mackerras   2009-06-17  424  
-7325927e5a20bf arch/powerpc/kernel/mpc7450-pmu.c Paul Mackerras   2009-06-17  425  	return register_power_pmu(&mpc7450_pmu);
-7325927e5a20bf arch/powerpc/kernel/mpc7450-pmu.c Paul Mackerras   2009-06-17  426  }
+I had to keep to the remaining being pre-initialized because moving the
+initialization was hurting the rest of the code. Though, updated the MSM
+patch to use &stages[i].remaining
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+Dmitry
 
