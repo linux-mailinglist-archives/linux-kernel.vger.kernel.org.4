@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECA96A43C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4547C6A43B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjB0OIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S230037AbjB0OH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjB0OI0 (ORCPT
+        with ESMTP id S229888AbjB0OHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:08:26 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E22AFF38;
-        Mon, 27 Feb 2023 06:08:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677506902; x=1709042902;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iQdGRiKPZjZMBQPADUzT+Bwwba26L0M/zf5vmcYHm2E=;
-  b=HpODl6NT6+VuPohEDyY5+jqOejfERjLYD3gZSmoLwuMcEwyBA0svvjhj
-   9ZV32HsJgbJ/nK56MjbA3i3nrnPS7kI9cRENcTe1sl49Dhq1jyF+ju4Ie
-   CmdrXUuXxXwQ3z8GKMlrGnY+minpdqi9zbWA3RKF9S256Or5mHH/jnYN2
-   cilSYrhcmt0E28M1gxyplFwIzxcyb4nKphCQ8b5UmKI/UJT0IbehUXeZr
-   QMu4C69h80XYGnKl84SuZlaSbz5TKS2WB7c24py5JGGibB+hWTCv5D/AW
-   BZDEB+ZdqGVYxt/2db9wdaSJIdMt7SYcr/Mze9bn8nd/euKbzJ+n3Cx7i
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="396416703"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="396416703"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 06:06:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="919366160"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="919366160"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Feb 2023 06:06:17 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH] platform/x86/intel/tpmi: Fix double free reported by Smatch
-Date:   Mon, 27 Feb 2023 06:06:14 -0800
-Message-Id: <20230227140614.2913474-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 27 Feb 2023 09:07:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA821C7E3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677506825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aFTvFQ3q5aWSqvyw9AelhhhkIt6I0O9TBRHfypnLJlQ=;
+        b=GEcndyobv9GWtT9DftMcqy+RVDZRHvLBaiVaAtQobRey6fEObKRbXNVtWyBX0Fp8xPS74b
+        osEQO+vJJzJ4Oj1pLgA52/KFbxJIniJrjFvRFa6Qexk2VJbAm2SRLvMKi5kU8ZVFlN6rBb
+        0mCfpP7j8wRb4gzwZgQjaWOWGiWnccw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-319-RTsNvR7HOH2bsdSAc6baxQ-1; Mon, 27 Feb 2023 09:07:03 -0500
+X-MC-Unique: RTsNvR7HOH2bsdSAc6baxQ-1
+Received: by mail-wm1-f70.google.com with SMTP id y16-20020a1c4b10000000b003dd1b5d2a36so2229306wma.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:07:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aFTvFQ3q5aWSqvyw9AelhhhkIt6I0O9TBRHfypnLJlQ=;
+        b=5kcYGzc4YhWd7UPTk06gVzAhCNisUHOowY08HBU9GmUA6FP9EQ4s/WeaeYjQH2OY/O
+         9FIzdBuhHqtWFw99MD/4Ksp01g1e/RISOI4J9q9tcciqlHTfZgSGT86qLCAhowiJSuEU
+         fB9jGoZKRb1dP1KqBftxRlL3Q/msLizPLEM69o4M/ZMGp+O3tyId+gWJNxB2MzbVyppE
+         ZgS/gxWJFg2AHHve/8ugpJFDQ8uFcGd0wyaCN30G7GMHnA6TYN+TvDGzbLxYZ+IAi6Z3
+         1HRQ/rnZN06fwEcRZc6JUsKLSvB6fvbNGq4J74bXVhfyTCUPsLyF4/4uRmio2guPnw7l
+         e5XQ==
+X-Gm-Message-State: AO0yUKWD9DDetmJBcfqjh58ej61tDFJYwVnuz8iXBHjYkNVSM+Yiu/sL
+        xQtEiCC0u9w/QCDuCIIXTBy06t1G07bAKosdI6RwqDlqkj20GXjgr86mpbxcPm0YvQ6rPgFCAYH
+        gVsoQtaZUscqyosGje56apYaB
+X-Received: by 2002:a5d:4f89:0:b0:2c7:1d70:561 with SMTP id d9-20020a5d4f89000000b002c71d700561mr9516591wru.45.1677506821182;
+        Mon, 27 Feb 2023 06:07:01 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ec/Yueab8Bvk6eJi8LCRz4+aeuNEBluM/tCSwA288dNuu0Nq41jbKDNy7uFxhcbonKrPSew==
+X-Received: by 2002:a5d:4f89:0:b0:2c7:1d70:561 with SMTP id d9-20020a5d4f89000000b002c71d700561mr9516553wru.45.1677506820885;
+        Mon, 27 Feb 2023 06:07:00 -0800 (PST)
+Received: from localhost (net-188-216-77-84.cust.vodafonedsl.it. [188.216.77.84])
+        by smtp.gmail.com with ESMTPSA id g9-20020a056000118900b002c794495f6fsm6993704wrx.117.2023.02.27.06.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 06:07:00 -0800 (PST)
+Date:   Mon, 27 Feb 2023 15:06:58 +0100
+From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To:     void0red <void0red@gmail.com>
+Cc:     angelogioacchino.delregno@collabora.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, kvalo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-wireless@vger.kernel.org,
+        lorenzo@kernel.org, matthias.bgg@gmail.com, nbd@nbd.name,
+        netdev@vger.kernel.org, pabeni@redhat.com, ryder.lee@mediatek.com,
+        sean.wang@mediatek.com, shayne.chen@mediatek.com
+Subject: Re: [PATCH v2] wifi: mt76: add a check of vzalloc in
+ mt7615_coredump_work
+Message-ID: <Y/y5Asxw3T3m4jCw@lore-desk>
+References: <Y/yxGMvBbMGiehC6@lore-desk>
+ <20230227135241.947052-1-void0red@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="suqa0cLxZu8I2O6i"
+Content-Disposition: inline
+In-Reply-To: <20230227135241.947052-1-void0red@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix warning:
-drivers/platform/x86/intel/tpmi.c:253 tpmi_create_device()
-	warn: 'feature_vsec_dev' was already freed.
 
-If there is some error, feature_vsec_dev memory is freed as part
-of resource managed call intel_vsec_add_aux(). So, additional
-kfree() call is not required.
+--suqa0cLxZu8I2O6i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reordered res allocation and feature_vsec_dev, so that on error
-only res is freed.
+> From: Kang Chen <void0red@gmail.com>
+>=20
+> vzalloc may fails, dump might be null and will cause
+> illegal address access later.
+>=20
+> Fixes: d2bf7959d9c0 ("mt76: mt7663: introduce coredump support")
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+> ---
+> v2 -> v1: add Fixes tag
+>=20
+>  drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/ne=
+t/wireless/mediatek/mt76/mt7615/mac.c
+> index a95602473..73d84c301 100644
+> --- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+> +++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+> @@ -2367,6 +2367,9 @@ void mt7615_coredump_work(struct work_struct *work)
+>  	}
+> =20
+>  	dump =3D vzalloc(MT76_CONNAC_COREDUMP_SZ);
+> +	if (!dump)
+> +		return;
+> +
+>  	data =3D dump;
+> =20
+>  	while (true) {
+> --=20
+> 2.34.1
+>=20
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/platform-driver-x86/Y%2FxYR7WGiPayZu%2FR@kili/T/#u
-Fixes: 47731fd2865f ("platform/x86/intel: Intel TPMI enumeration driver")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/platform/x86/intel/tpmi.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+revieweing the code I guess the right approach would be the one used in
+mt7921_coredump_work():
+- free pending skbs
+- not run dev_coredumpv()
 
-diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
-index c60733261c89..c999732b0f1e 100644
---- a/drivers/platform/x86/intel/tpmi.c
-+++ b/drivers/platform/x86/intel/tpmi.c
-@@ -209,14 +209,14 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
- 	if (!name)
- 		return -EOPNOTSUPP;
- 
--	feature_vsec_dev = kzalloc(sizeof(*feature_vsec_dev), GFP_KERNEL);
--	if (!feature_vsec_dev)
-+	res = kcalloc(pfs->pfs_header.num_entries, sizeof(*res), GFP_KERNEL);
-+	if (!res)
- 		return -ENOMEM;
- 
--	res = kcalloc(pfs->pfs_header.num_entries, sizeof(*res), GFP_KERNEL);
--	if (!res) {
-+	feature_vsec_dev = kzalloc(sizeof(*feature_vsec_dev), GFP_KERNEL);
-+	if (!feature_vsec_dev) {
- 		ret = -ENOMEM;
--		goto free_vsec;
-+		goto free_res;
- 	}
- 
- 	snprintf(feature_id_name, sizeof(feature_id_name), "tpmi-%s", name);
-@@ -239,6 +239,8 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
- 	/*
- 	 * intel_vsec_add_aux() is resource managed, no explicit
- 	 * delete is required on error or on module unload.
-+	 * feature_vsec_dev memory is also freed as part of device
-+	 * delete.
- 	 */
- 	ret = intel_vsec_add_aux(vsec_dev->pcidev, &vsec_dev->auxdev.dev,
- 				 feature_vsec_dev, feature_id_name);
-@@ -249,8 +251,6 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
- 
- free_res:
- 	kfree(res);
--free_vsec:
--	kfree(feature_vsec_dev);
- 
- 	return ret;
- }
--- 
-2.39.1
+What do you think?
+
+Regards,
+Lorenzo
+
+--suqa0cLxZu8I2O6i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY/y5AgAKCRA6cBh0uS2t
+rNvNAQChxct9I9hvxziffNgrIyEvdXvuQxbOt0yeiX8oblnPWwEA4qXx39acNsg6
+Q0MSG7S8eufwOP2IXUXhOgXTb9tFZQw=
+=ErB1
+-----END PGP SIGNATURE-----
+
+--suqa0cLxZu8I2O6i--
 
