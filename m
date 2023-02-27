@@ -2,138 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD8E6A4FA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5BF6A4FA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjB0XU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
+        id S229671AbjB0XZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjB0XUy (ORCPT
+        with ESMTP id S229485AbjB0XZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:20:54 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893E02195A;
-        Mon, 27 Feb 2023 15:20:52 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RJD2Oo013766;
-        Mon, 27 Feb 2023 23:20:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=e/5+7AwQGL46bVz4ybl5pWLY3xCLSybzysKgF3CQVeI=;
- b=Zo8ApJgsyw6BV+tBjjEupn1n0URupuLJBQNn/CJBQpaM5SjOePYtj8PU8i5Nr2cMJ22X
- PDlfZN7iUgxbg9zSLVkBf08r9PZnVjnJ4Zbpe3CoLnE5c+onVM7+Z7Pdf0MGFQ8KbtvH
- wkeTM1/pL4rR6crg3w+7csQwGeeJ6wjXwZokXGWUL8vj5vLLa856S5Q+jUL2IRs11mdJ
- JiAtfoCNJkvTc0GPZfuxcOMUPJOgdIM3LCWvSisnUq7LeZrvhfAjjk+MQpfJSaet3UXT
- kWI+ljtjFjtNl/hapOCQPgHz8+vVjN5RhtKqrw2ntETG42mkQHNNdy78WHViXp1e+bZg 9w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nybgue9wx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 23:20:49 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RNKmu7021748
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 23:20:48 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 27 Feb 2023 15:20:48 -0800
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH] usb: dwc3: gadget: Add 100uS delay after end transfer command without IOC
-Date:   Mon, 27 Feb 2023 15:20:35 -0800
-Message-ID: <20230227232035.13759-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 27 Feb 2023 18:25:06 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F139525E3E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:25:02 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z5so8271787ljc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:25:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AJJWaVVSIZjZ+G1Kq23FeuZRyr8NP+H9jObI+RlAcBc=;
+        b=OAqBVmHElZUUac2UEEd5qN3zHG0rmaqrkQFbRTl5Udk6yioQ5yN+6IOWG7JrnOo/Dd
+         QpnUS0uiNCVFNl9LwoJ1a4gvICtAA7T9+YGFBjEHgT804BaMohkfqlUhxSqCJGrZMGpq
+         jefEB2JNLfK01bmZVlUWcm7uJRmSNK+iDbAag=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AJJWaVVSIZjZ+G1Kq23FeuZRyr8NP+H9jObI+RlAcBc=;
+        b=XxAVJ1AN3yiJoauEU5jv21JNHqihAUtHYAl+7FhU+2uB30LSipKx0lZlmvWkBmXE9h
+         rty95KQbaeE30MOjd17B8gvrb8MizZNX4sRnzZGA7gYcx0GMUA8l4gNAPT/q7Ps47tV4
+         cQ1uBE39b1KPC92F9ayplH2t2P59tBr/in+imPcNxboqqKzlxA8K9ty++ThPb0lf57qL
+         S1piKymlrRlt0PcTdXJEvQSR30X4W41SMLwmc0+nCHDeslvQbfWbrjmuanbmPvzKIUxG
+         JKmw0YPp0828HUiirkARdKN8ZZridf9BA95C5Fi2XLy7PkLcnutdFjP1XrhVjd3+mdxL
+         D7aw==
+X-Gm-Message-State: AO0yUKUukuVqV39tkdt1ZYylschOEmjyKg6YA8wLU3usQmLRMzn8Ob71
+        bZrAL3zoJoDUiHpxngX1hPIDQ2dkg/XyI65AEIdbfw==
+X-Google-Smtp-Source: AK7set/31E/pohifRX6cBtI3PF7l0+17H08NElgVXjj+uGTprnsv18lGVW0twqT0rAUeaZWgH2gNo66h2V8LZzozUlU=
+X-Received: by 2002:a05:651c:10af:b0:295:a8d1:8a28 with SMTP id
+ k15-20020a05651c10af00b00295a8d18a28mr139590ljn.3.1677540301001; Mon, 27 Feb
+ 2023 15:25:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fEq-p8KukAdKcPlVBtAPUyP8dzqSns2Y
-X-Proofpoint-ORIG-GUID: fEq-p8KukAdKcPlVBtAPUyP8dzqSns2Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- lowpriorityscore=0 impostorscore=0 bulkscore=0 phishscore=0 spamscore=0
- adultscore=0 priorityscore=1501 suspectscore=0 mlxscore=0 mlxlogscore=461
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302270187
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/z0fHHYdxEXcWMT@pc636> <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
+ <Y/z9Its1RKetIr8V@pc636> <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
+ <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 27 Feb 2023 18:24:49 -0500
+Message-ID: <CAEXW_YR6qnU=35Ang7S5brRRDX_HgiNgPpQ_w-+REYkujZE6rQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as completed
+To:     paulmck@kernel.org
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, there was a 100uS delay inserted after issuing an end transfer
-command for specific controller revisions.  This was due to the fact that
-there was a GUCTL2 bit field which enabled synchronous completion of the
-end transfer command once the CMDACT bit was cleared in the DEPCMD
-register.  Since this bit does not exist for all controller revisions, add
-the delay back in.
+On Mon, Feb 27, 2023 at 6:05=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
+g> wrote:
+[...]
+> > > > >>>>> On Mon, Feb 27, 2023 at 08:22:06AM -0500, Joel Fernandes wrot=
+e:
+> > > > >>>>>>
+> > > > >>>>>>
+> > > > >>>>>>> On Feb 27, 2023, at 2:53 AM, Zhuo, Qiuxu <qiuxu.zhuo@intel.=
+com> wrote:
+> > > > >>>>>>>
+> > > > >>>>>>> =EF=BB=BF
+> > > > >>>>>>>>
+> > > > >>>>>>>> From: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > >>>>>>>> Sent: Saturday, February 25, 2023 11:34 AM
+> > > > >>>>>>>> To: linux-kernel@vger.kernel.org
+> > > > >>>>>>>> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>; Fred=
+eric Weisbecker
+> > > > >>>>>>>> <frederic@kernel.org>; Lai Jiangshan <jiangshanlai@gmail.c=
+om>; linux-
+> > > > >>>>>>>> doc@vger.kernel.org; Paul E. McKenney <paulmck@kernel.org>=
+;
+> > > > >>>>>>>> rcu@vger.kernel.org
+> > > > >>>>>>>> Subject: [PATCH RFC v2] rcu: Add a minimum time for markin=
+g boot as
+> > > > >>>>>>>> completed
+> > > > >>>>>>>>
+> > > > >>>>>>>> On many systems, a great deal of boot happens after the ke=
+rnel thinks the
+> > > > >>>>>>>> boot has completed. It is difficult to determine if the sy=
+stem has really
+> > > > >>>>>>>> booted from the kernel side. Some features like lazy-RCU c=
+an risk slowing
+> > > > >>>>>>>> down boot time if, say, a callback has been added that the=
+ boot
+> > > > >>>>>>>> synchronously depends on.
+> > > > >>>>>>>>
+> > > > >>>>>>>> Further, it is better to boot systems which pass 'rcu_norm=
+al_after_boot' to
+> > > > >>>>>>>> stay expedited for as long as the system is still booting.
+> > > > >>>>>>>>
+> > > > >>>>>>>> For these reasons, this commit adds a config option
+> > > > >>>>>>>> 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter
+> > > > >>>>>>>> rcupdate.boot_end_delay.
+> > > > >>>>>>>>
+> > > > >>>>>>>> By default, this value is 20s. A system designer can choos=
+e to specify a value
+> > > > >>>>>>>> here to keep RCU from marking boot completion.  The boot s=
+equence will not
+> > > > >>>>>>>> be marked ended until at least boot_end_delay milliseconds=
+ have passed.
+> > > > >>>>>>>
+> > > > >>>>>>> Hi Joel,
+> > > > >>>>>>>
+> > > > >>>>>>> Just some thoughts on the default value of 20s, correct me =
+if I'm wrong :-).
+> > > > >>>>>>>
+> > > > >>>>>>> Does the OS with CONFIG_PREEMPT_RT=3Dy kernel concern more =
+about the
+> > > > >>>>>>> real-time latency than the overall OS boot time?
+> > > > >>>>>>
+> > > > >>>>>> But every system has to boot, even an RT system.
+> > > > >>>>>>
+> > > > >>>>>>>
+> > > > >>>>>>> If so, we might make rcupdate.boot_end_delay =3D 0 as the d=
+efault value
+> > > > >>>>>>> (NOT the default 20s) for CONFIG_PREEMPT_RT=3Dy kernels?
+> > > > >>>>>>
+> > > > >>>>>> Could you measure how much time your RT system takes to boot=
+ before the application runs?
+> > > > >>>>>>
+> > > > >>>>>> I can change it to default 0 essentially NOOPing it, but I w=
+ould rather have a saner default (10 seconds even), than having someone for=
+get to tune this for their system.
+> > > > >>>>>
+> > > > >>>>> Provide a /sys location that the userspace code writes to whe=
+n it
+> > > > >>>>> is ready?  Different systems with different hardware and soft=
+ware
+> > > > >>>>> configurations are going to take different amounts of time to=
+ boot,
+> > > > >>>>> correct?
+> > > > >>>>
+> > > > >>>> I could add a sysfs node, but I still wanted this patch as wel=
+l
+> > > > >>>> because I am wary of systems where yet more userspace changes =
+are
+> > > > >>>> required. I feel the kernel should itself be able to do this. =
+Yes, it
+> > > > >>>> is possible the system completes "booting" at a different time=
+ than
+> > > > >>>> what the kernel thinks. But it does that anyway (even without =
+this
+> > > > >>>> patch), so I am not seeing a good reason to not do this in the=
+ kernel.
+> > > > >>>> It is also only a minimum cap, so if the in-kernel boot takes =
+too
+> > > > >>>> long, then the patch will have no effect.
+> > > > >>>>
+> > > > >>>> Thoughts?
+> > > > >>>>
+> > > > >>> Why "rcu_boot_ended" is not enough? As i see right after that a=
+n "init"
+> > > > >>> process or shell or panic is going to be invoked by the kernel.=
+ It basically
+> > > > >>> indicates that a kernel is fully functional.
+> > > > >>>
+> > > > >>> Or an idea to wait even further? Until all kernel modules are l=
+oaded by
+> > > > >>> user space.
+> > > > >>
+> > > > >> I mentioned in commit message it is daemons, userspace initializ=
+ation etc. There is a lot of userspace booting up as well and using the ker=
+nel while doing so.
+> > > > >>
+> > > > >> So, It does not make sense to me to mark kernel as booted too ea=
+rly. And no harm in adding some builtin kernel hysteresis. What am I missin=
+g?
+> > > > >>
+> > > > > Than it is up to user space to decide when it is ready in terms o=
+f "boot completed".
+> > > >
+> > > > I dont know if you caught up with the other threads. See replies fr=
+om Paul and my reply to that.
+> > > >
+> > > > Also what you are proposing can be more harmful. If user space has =
+a bug and does not notify the kernel that boot completed, then the boot can=
+ stay incomplete forever. The idea with this patch is to make things better=
+, not worse.
+> > > >
+> > > I saw that Paul proposed to have a sysfs attribute using which you ca=
+n
+> > > send a notification.
+> >
+> > Maybe I am missing something but how will a sysfs node on its own work =
+really?
+> >
+> > 1. delete kernel marking itself boot completed  -- and then sysfs
+> > marks it completed?
+> >
+> > 2. delete kernel marking itself boot completed  -- and then sysfs
+> > marks it completed, if sysfs does not come in in N seconds, then
+> > kernel marks as completed?
+> >
+> > #1 is a no go, that just means a bug waiting to happen if userspace
+> > forgets to write to sysfs.
+> >
+> > #2 is just an extension of this patch. So I can add a sysfs node on
+> > top of this. And we can make the minimum time as a long period of
+> > time, as you noted below:
+> >
+> > > IMHO, to me this patch does not provide a clear correlation between w=
+hat
+> > > is a boot complete and when it occurs. A boot complete is a synchrono=
+us
+> > > event whereas the patch thinks that after some interval a "boot" is c=
+ompleted.
+> >
+> > But that is exactly how the kernel code is now without this patch, so
+> > it is already broken in that sense, I am not really breaking it more
+> > ;-)
+> >
+> > > We can imply that after, say 100 seconds an initialization of user sp=
+ace
+> > > is done. Maybe 100 seconds then? :)
+> >
+> > Yes I am Ok with that. So are you suggesting we change the default to
+> > 100 seconds and then add a sysfs node to mark as boot done whenever
+> > userspace notifies?
+>
+> The combination of sysfs manipulated by userspace and a kernel failsafe
+> makes sense to me.  Especially if by default triggering the failsafe
+> splats.  That way, bugs where userspace fails to update the sysfs file
+> get caught.
 
-An issue was seen where the USB request buffer was unmapped while the DWC3
-controller was still accessing the TRB.  However, it was confirmed that the
-end transfer command was successfully submitted. (no end transfer timeout)
-In situations, such as dwc3_gadget_soft_disconnect() and
-__dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
-will issue the end transfer command, and follow up with
-dwc3_gadget_giveback().  At least for the USB ep disable path, it is
-required for any pending and started requests to be completed and returned
-to the function driver in the same context of the disable call.  Without
-the GUCTL2 bit, it is not ensured that the end transfer is completed before
-the buffers are unmapped.
+By splat, if we could do an "info" message, that would work for me
+instead of a WARN_ON. I'm afraid of Android and other folks who
+upgrade to the new kernel only to now have to go patch userspace.
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+So,
+pr_info("RCU is still in boot-mode for the next N seconds, please
+consider writing X to /sys/.. to avoid this message.");
+?
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 3c63fa97a680..a4c02e4f7f7c 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1699,6 +1699,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
-  */
- static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
- {
-+	struct dwc3 *dwc = dep->dwc;
- 	struct dwc3_gadget_ep_cmd_params params;
- 	u32 cmd;
- 	int ret;
-@@ -1722,10 +1723,13 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
- 	WARN_ON_ONCE(ret);
- 	dep->resource_index = 0;
- 
--	if (!interrupt)
-+	if (!interrupt) {
-+		if (DWC3_IP_IS(DWC31) || DWC3_VER_IS_PRIOR(DWC3, 310A))
-+			udelay(100);
- 		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
--	else if (!ret)
-+	} else if (!ret) {
- 		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-+	}
- 
- 	dep->flags &= ~DWC3_EP_DELAY_STOP;
- 	return ret;
-@@ -3774,7 +3778,11 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 	 * enabled, the EndTransfer command will have completed upon
- 	 * returning from this function.
- 	 *
--	 * This mode is NOT available on the DWC_usb31 IP.
-+	 * This mode is NOT available on the DWC_usb31 IP.  In this
-+	 * case, if the IOC bit is not set, then delay by 100uS
-+	 * after issuing the EndTransfer command.  This allows for the
-+	 * controller to handle the command completely before DWC3
-+	 * remove requests attempts to unmap USB request buffers.
- 	 */
- 
- 	__dwc3_stop_active_transfer(dep, force, interrupt);
+> The non-default silent-failsafe mode is also useful to allow some power
+> savings in advance of userspace getting the sysfs updating in place.
+> And of course the default splatting setup can be used in internal testing
+> with the release software being more tolerant of userspace foibles.
+
+Sounds good, would 100 seconds be a good fail-safe trigger value?
+
+Thanks,
+
+ - Joel
