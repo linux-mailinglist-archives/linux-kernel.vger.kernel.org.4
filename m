@@ -2,66 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C76D6A4C39
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28EE86A4C3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjB0UZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S229731AbjB0U2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjB0UZW (ORCPT
+        with ESMTP id S229501AbjB0U2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:25:22 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2521E9FF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:25:20 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PQWx425FWz9xrt5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:16:40 +0800 (CST)
-Received: from [10.45.159.185] (unknown [10.45.159.185])
-        by APP1 (Coremail) with SMTP id LxC2BwBHzwqMEf1jVi9aAQ--.22302S2;
-        Mon, 27 Feb 2023 21:24:55 +0100 (CET)
-Message-ID: <a02d8d53-713d-4aba-31a4-6d54185f3701@huaweicloud.com>
-Date:   Mon, 27 Feb 2023 21:24:40 +0100
-MIME-Version: 1.0
+        Mon, 27 Feb 2023 15:28:49 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A4FB77A;
+        Mon, 27 Feb 2023 12:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677529728; x=1709065728;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qCYmV93ovlSIbv13cvH3FUQWKyDK7YaMSdQwbV+zzXo=;
+  b=l1qUtwg7F0Lw5PYBNn6RZlbp48L6SSSswOIvh0woRDKibV4YPkR4FW9G
+   iQlkroRhbBl2deoidgUqdHirtIL6dSy27ZAUWNBpLdbBPy9Xl3E2B+/MP
+   EeK0jJcP4ZDRA59DMckK3yR8AA4gkYIYq2nLi8Br3MLpTOjL0cL7RVlC0
+   /3/ha2n2LVaCX7TYTVbRypcaak09xUVIf8K8RFqOSm/ifukOI1CrndWPh
+   2LmYu0IdHpDc4L4kgfgsCH36GW/yBjUDbuI7UXIWdz8E4wzOU8y6Zm2Z7
+   SzGajRyl0y9XJ3cbZxUwoIcXQVGtjEP0YG4096pd0Tz506W8HrbMrR4X8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="317760104"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="317760104"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 12:28:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="623754709"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="623754709"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga003.jf.intel.com with ESMTP; 27 Feb 2023 12:28:48 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 12:28:48 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 27 Feb 2023 12:28:48 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 27 Feb 2023 12:28:47 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ep4IHlbgzgkx/2NTkEwzNsON5+GUzpD4iY+uT33mDzNDrO0vEVZIYcMwtywCh5W5j/SI0i4rOiQYJk0I+8jA7EwoiioV6qaaLg7IRz78pCZ+F243nEtPJvhKOhTFRTePS0PoKzerUnR7EcXb7kT2eyCwpy1lGkPjig9PzrNfwdHx2Rzb7BmcexdFQNEKWfwUvdSgXmBiglJaRLPVFvfEASDqjfneWPWa48hCM+QP38RVqQEEz+7xPWdHsXzdhvOwsonY5HwcziSj8ygFEZCbwdlTRGmPsUlooJ/EDMRPvvFtNDh4xuci59PebeP1HSe7VtScxQFuKyWprp9pvBV3fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2PmmzQWLcmaXxGn5C4Z2/fYuRjcXPmJK4WxsKZ/THcQ=;
+ b=SXHyVoP1PJhTeIolQKYQElxPDBIyum8v8+SxbrLdVz6nhvi2NhJ67SSIypkJamnq4T5oJ11gDMb8qxpSbnYsfCw2zLa3lK0lQfg2PNwfUx8zHpC6wU7MjOzNoSGbHVsmXCdZfhPRrY/7pUnYbhFFX3jh8fA6aSPKpkK/kqDw85zbb5cHdBSxZRp2Qrb6NVnKUc0KiNgdiOfIbJ5Hr4xkUbcuAQOAG9q3QxkC+agLxF6EONSrU/GwQpKti7Le6gpJuJOAJuiIsKm9qvleCOZCytLIN86nFmc/x7TdaPbMGEXWguLkT90Yd5DoHBKiMTL5jCN377mqumQFHo6GIf4g4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
+ by SJ0PR11MB4911.namprd11.prod.outlook.com (2603:10b6:a03:2ad::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
+ 2023 20:28:46 +0000
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::8905:ba85:9f03:8e2b]) by CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::8905:ba85:9f03:8e2b%4]) with mapi id 15.20.6134.029; Mon, 27 Feb 2023
+ 20:28:45 +0000
+Message-ID: <e8782296-49bc-33a2-47b3-45c204551806@intel.com>
+Date:   Mon, 27 Feb 2023 12:28:43 -0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     paulmck@kernel.org, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, urezki@gmail.com, quic_neeraju@quicinc.com,
-        frederic@kernel.org, linux-kernel@vger.kernel.org
-References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
- <Y/uHjpbJ3JmVAe9d@google.com>
- <a5f1695d-cc1f-04aa-fe61-f2b8687cfb0e@huaweicloud.com>
- <CAEXW_YQMXKDx0gr1S5HkraVA+ori-AnQL-yGU6r=u6B5_XciUA@mail.gmail.com>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <CAEXW_YQMXKDx0gr1S5HkraVA+ori-AnQL-yGU6r=u6B5_XciUA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBHzwqMEf1jVi9aAQ--.22302S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCFyUAr1kKFyrXrW8AFWfuFg_yoW5Cr1rpF
-        W3Ga9rKFn5JF1Iy3s2vr1DX3WFyw4ftrW5JFy3Grn8Zw15WFySgF4xKw4Y9F9rCrs5u34Y
-        vrWj9FyUAa4DZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUo0eHDUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+ Thunderbird/102.8.0
+Subject: Re: [PATCH -next] mux: convert mux_chip->mux to flexible array
+Content-Language: en-US
+To:     Jacob Keller <jacob.e.keller@intel.com>,
+        Peter Rosin <peda@axentia.se>, <keescook@chromium.org>,
+        <gustavoars@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <20230223014221.1710307-1-jacob.e.keller@intel.com>
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+In-Reply-To: <20230223014221.1710307-1-jacob.e.keller@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR03CA0008.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::18) To CO1PR11MB4914.namprd11.prod.outlook.com
+ (2603:10b6:303:90::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4914:EE_|SJ0PR11MB4911:EE_
+X-MS-Office365-Filtering-Correlation-Id: 301334c3-01b3-4b55-582f-08db19013999
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZsAj+OKiyHHgqOlb4mnS6OpuJtkrUu8rbm70ZG3gmI8OeHhNyfuwE0kF3JS1A3fMlOz/aHR39RrASOtlgjyW+mw4SIWXx7Ysel+vygXvi21yGSw65hGYqN2RtPMH/Az/KUGyYgHvRxj0l4+FS6DsE66ow5UQSgF8XV7u1Ej8RkLNRONrIqf2QoAOk4yv7OdJ2TMefnlpPyn+rroNRqzwGHbGVFbtOnHEtYDnlzKH0xuOXfhEwhJgN9mqMZX6G6pKlanISxhygVY0uULNc5YHNEUh5ydi3Zx0une0MxwB/rxqPkG+CB/Oj97zZdHNfgPtDEeScXzBdl/otZ6c1eUTTw++pqM8YzOV05rdUy2EQpPHaxiipWTynwqecwhRJ72xxzAC4QNY0uLhEi2Q1GUpHJuMT05WUBAOjUFA9pn3ct2hK9ihdAM4hjzQ2ciwc36H0lbks+657uJODgLx+97jK6xmPkxixSOWMB/5tvfT61/cMCDiHBiupUlp6bvHOKoFF22M5E7J7qRyibsmmDBrthLV/u+JIym9M/nC+EojgjmqQz84x/jelQggZNdDcFOdSpUohR2HHwOMK8HYjwCJwmzbVJd9RcsRanDrwE1W/5Tjf0YPMm+KIBddMuMvsZaAuSAYM3gBk2/EjH0dF5pH4AUfH4T/X3MMwsgyKuDy+LEe0RX1D3ul8E0DDIqWshurs7yQLi5U6zms79CqmjHR6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199018)(6486002)(186003)(82960400001)(38100700002)(83380400001)(66556008)(66476007)(66946007)(41300700001)(4326008)(2906002)(8676002)(6506007)(5660300002)(6512007)(44832011)(478600001)(53546011)(8936002)(26005)(2616005)(316002)(110136005)(36756003)(86362001)(31696002)(31686004)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVoybjFVd255d2VZemZKVFc0ck5CdklaV2J4aHg2V2cwOENtMnY2WUliK0Jz?=
+ =?utf-8?B?WDNadmM5alQwZVFBU0tWTU9wWmJLb1hMQzgwVkpuU2xXNDNYSHE4M3FRQnQw?=
+ =?utf-8?B?eE1EUkxPRWZGbURCUHZKUTlJNUc5V2hXaEhXYytGbzdBeElicXF2bXJSNkl0?=
+ =?utf-8?B?Z1ZSK1FUQzUzZ0FyUUV2Q3hFZG02dCtoM3ZBblZreUZZK0Z2ajBmdkUyWDg1?=
+ =?utf-8?B?bGFXVzNLRTFqNEY0Zkh6NnNVUjU3TGlGbDNBY1hQV0hxMSs0OXg2eUZVbDRa?=
+ =?utf-8?B?bzdneDFLaTZJUXFoRVpUUHR4ZU5lMGtOcy9wU1RGSkhsZTNqQ3dmNjhYWHl4?=
+ =?utf-8?B?eHpJbXhxSjVWYTVlK3o4aG1hL29LUU5FOTBNWUl5ZzB6VVYrVWZJNCszRnJh?=
+ =?utf-8?B?bzVxM1ltRW05cysva01oVm8rTXNicHlFSTN1MHNEWlV5RGdHRlErc01rOFBw?=
+ =?utf-8?B?aVQ4L2lNajZZQWk2aWNhNWVLcVBldGpuTTBJUzQ0Q1R2cWNvYmQrdHFLSSsz?=
+ =?utf-8?B?R3R4aTJLSjQzK0w0a2xoeVVtcmlkZGhrUHZzL2ExNFROSTNZTHF3Q3lVR3Vx?=
+ =?utf-8?B?cU1qNHNTSmtQekVRUDB5Skt4VXNrOGtOaUV0VUZYdXg0QTZZVENSV3IvMmpG?=
+ =?utf-8?B?TmovSkFuVVpiSGZjTThPMFhDY09jYTJhK0Uya1NYRlBnRitGSEZIZ2h4dGJo?=
+ =?utf-8?B?RW9BZzlVRUs4WCtKZUhxdUNma1FndnM1VU10cGZMelFqUW9nVHk4WWViQVpl?=
+ =?utf-8?B?SUo5RVh2bzdFcHBORXJPZ2cxR3dDajlxWUxqNUprdVVRL1FSWmZJVUNiM0V5?=
+ =?utf-8?B?ZDdDSHZ5MUNKQ2Ivazc2c05ZWTRUeW5hN0RIQVpQWGJyZDlrTFNwQ3BiVGRZ?=
+ =?utf-8?B?WW5PcExSU0pWd0hSdDFhZHpyd1gyb25rZG91N2lJTmtpa1VURVVvUTMrWGw4?=
+ =?utf-8?B?cUcrcHZxdTRoc2l6M2cvajRmWUJLZStCa3h1Mm16aWtqM2Ezb1BEanNvcUtO?=
+ =?utf-8?B?OXJFL1VtcWFBdUhTVnJlYkdRUVpOeVhpMVdubVhsQUlqY05aQVVxNlRvL0RM?=
+ =?utf-8?B?Z0g2TkRQWS9iTWtnbnlrek1HcTBhN0xDWHNWZWw3cTBidU9LM1RlUldqRFF2?=
+ =?utf-8?B?VHBkUUFxV3lKVVkwcUN2N2xxUFVuRGRSWExQTlBZMlAzM2p4TzM5b2lod2Vh?=
+ =?utf-8?B?cWU4dTR3UlZDd2FqUUVjb28wWUpxOFFibmhkcDROMXpmcEpXalArbmhod3Iy?=
+ =?utf-8?B?VU1LdHJXa1VZbnFiTXNzc092TTc3TWZ3aEpnbDNMM0lTV29VOHpIeFlKVW56?=
+ =?utf-8?B?MWdkYU1DT1R5ZDZXeXNENDlmcGxuM3k2bVVXYzR4YURKR0d5b0E3U1cwNFNm?=
+ =?utf-8?B?VDBBWjBSQmgrNU1LY0N4WFdITG5FRFcyVWVRV2J4d0tCUHhXaCtiWmpIZlBZ?=
+ =?utf-8?B?eUdaRjNWNFBmR29aZXUwVFFFa2U2WlhrM2hKSnhDenRLZC9DMjlaL2J2bzlZ?=
+ =?utf-8?B?NkFTN0tGVjhTVVpqK2RJNHExd3prSjZ6WEQ1ekFvNXJFaXBoMG9EbGtJbjh0?=
+ =?utf-8?B?ZEtDMGZGRUVtY3lIeWdJWHJtQUxQYlFsSGcxRHhGQ01JeGtUQmZrdmV5bVN3?=
+ =?utf-8?B?T015Y1EwWG5xd1p2eEJWM29WOGI4VURIRGFkd2hGZ0JjaUdsb1hHb2s2SVI1?=
+ =?utf-8?B?M3lNVG1KUldUbTRKZm1rZndocmhrYk9nc1hWTnVkVWZxaDJiWmdUYzhGaUhm?=
+ =?utf-8?B?NHFGWXlEU0xMaHNRaWZuUWp4TEs1cnhrY1Z0bkNmVTZ6cGVBZHlWOXdWS09H?=
+ =?utf-8?B?T1l0T1B1QnlhRVozM3FqMkVKaCszWDF5ZE9leDUvcDQwcndrdzVZUDNQWWZa?=
+ =?utf-8?B?M2UxcFQ0Ump1STBkeHJwUlVUVUwvMUgrRzlrSkxaT2JKcEc2SjdsVTk5WFBj?=
+ =?utf-8?B?dlk5TGF1Y0EzbCs0dlUzajRHREtQMG5LQk5BSXUvN05iTWtueWFTYVJ3cUND?=
+ =?utf-8?B?aUFwbGFjZDBnRGlXOVZkd0NTb0RNVVhWU1ppdE1LOE5VNm1RVStSV3ZySTlY?=
+ =?utf-8?B?SGw1dUkvSmt1eWUzNVhQUmZibWN3dXlQZ1c3RmtWUFRiaENrcElvR2VhZFVG?=
+ =?utf-8?B?VmtHMlZYZGg2eE1HU0VkTVVJdmRIZCt5OXNBUFhzaHJ0ZmdqcjA1QkM2NWtJ?=
+ =?utf-8?B?Q3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 301334c3-01b3-4b55-582f-08db19013999
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 20:28:45.8037
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Dn8iYUZzkjOOkzeR+0THigeTyrbzjY9jmrv9FNi8LGTl1y/Rl8RGNsmZN1OjxuuR+VeLhq15vW5qAxhfz3+DMWNg2iLiqMYIabq+25irayk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4911
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,78 +157,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/22/2023 5:42 PM, Jacob Keller wrote:
+> The mux_chip structure size is over allocated to additionally include both
+> the array of mux controllers as well as a device specific private area.
+> The controllers array is then pointed to by assigning mux_chip->mux to the
+> first block of extra memory, while the private area is extracted via
+> mux_chip_priv() and points to the area just after the controllers.
+> 
+> The size of the mux_chip allocation uses direct multiplication and addition
+> rather than the <linux/overflow.h> helpers. In addition, the mux_chip->mux
+> struct member wastes space by having to store the pointer as part of the
+> structures.
+> 
+> Convert struct mux_chip to use a flexible array member for the mux
+> controller array. Use struct_size() and size_add() to compute the size of
+> the structure while protecting against overflow.
+> 
+> After converting the mux pointer, notice that two 4-byte holes remain in
+> the structure layout due to the alignment requirements for the dev
+> sub-structure and the ops pointer.
+> 
+> These can be easily fixed through re-ordering the id field to the 4-byte
+> hole just after the controllers member.
+
+Looks good to me (just a driver dev, not a mux dev!). Also added
+linux-i2c mailing list and a couple others for more review.
+
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+
+related thread (cocci script) at [1]
+
+[1]
+https://lore.kernel.org/all/20230227202428.3657443-1-jacob.e.keller@intel.com/
 
 
-On 2/27/2023 6:57 PM, Joel Fernandes wrote:
-> On Mon, Feb 27, 2023 at 9:39 AM Jonas Oberhauser
-> <jonas.oberhauser@huaweicloud.com> wrote:
->>
->>
->> On 2/26/2023 5:23 PM, Joel Fernandes wrote:
->>> On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
->>>> [...]
->>> Alternatively can be the following appended diff? Requires only single 'int'
->>> in ->ppo then and prevents future similar issues caused by sub relations.
->>> Also makes clear that ->ppo can only be CPU-internal.
->> I had thought about going in that direction, but it doesn't prevent
->> future similar issues, at best makes them less likely.
-> Making less likely still sounds like a win to me.
->
->> For example, you could have an xfence that somehow goes back to the
->> original thread, but to a po-earlier event (e.g., like prop).
->>
->> Given that to-r and to-w are unlikely to ever become become inconsistent
->> with po, I am not sure it even really helps much.
-> I am not sure I understand, what is the problem with enforcing that
-> ppo is only supposed to ever be -int ? Sounds like it makes it super
-> clear.
-
-You could go further and do ... & po.
-
-But it would still make me feel that it's a plaster used to hold 
-together a steampipe.
-It reminds me a bit of college when some of my class mates passed the 
-nightly tests in the programming lab by doing
-"if input == (the input of the specific test case they were having 
-problem with) return (value expected by testcase)".
-Or making everything atomic so that tsan does not complain about data 
-races anymore.
-
-If there's something in one of these relations tying together events of 
-different threads, is it intentional or a bug?
-I prefer to be very conscious about what is being tied together by the 
-relations.
-
-I'd rather take Boqun's suggestion to add some "debug/testing" flags to 
-see if a litmus test violates a property assumed by LKMM.
-
-Yet I think the ideal way is to have a mechanized proof that LKMM 
-satisfies these properties and use that to avoid regressions.
-
-
->
->> Personally I'm not too happy with the ad-hoc '& int' because it's like
-> So, with the idea I suggest, you will have fewer ints so you should be happy ;-)
-
-haha : ) An alternative perspective is that the &int now covers more 
-cases of the relation ; )
-
-
->
->> adding some unused stuff (via ... | unused-stuff) and then cutting it
->> back out with &int, unlike prop & int which has a real semantic meaning
->> (propagate back to the thread). The fastest move is the move we avoid
->> doing, so I rather wouldn't add those parts in the first place.
->>
->> However fixing the fence relation turned out to be a lot trickier, both
->> because of the missed data race and also rmw-sequences, essentially I
->> would have had to disambiguate between xfences and fences already in
->> this patch. So I did this minimal local fix for now and we can discuss
->> whether it makes sense to get rid of the '& int' once/if we have xfence etc.
-> I see. Ok, I'll defer to your expertise on this since you know more
-> than I. I am relatively only recent with even opening up the CAT code.
-
-Enjoy : )
-
-jonas
 
