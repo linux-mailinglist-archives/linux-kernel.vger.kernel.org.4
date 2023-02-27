@@ -2,130 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C606A3E52
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFA26A3E6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjB0J2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S229961AbjB0JcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjB0J2l (ORCPT
+        with ESMTP id S229950AbjB0JcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:28:41 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC8583C5;
-        Mon, 27 Feb 2023 01:28:38 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB35520002;
-        Mon, 27 Feb 2023 09:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677490116;
+        Mon, 27 Feb 2023 04:32:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B251E9EF8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:31:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677490288;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZE5reitxUCyBN81BMuspQYpUlEWnwOCS93SMxWW2VGY=;
-        b=C/0voqUiOGNCP5DEpBM5Mvz0D1VhzuXBjjfTIz1Yjmm3tJ1xMBMrglOqkTNKWbXFut2Nsx
-        qWzJVvo9kQyUAnR55vLiT5yRhttL2NZc70Ya/12LQ+ctj0OoRmgit1zlFfQPoXQ5veLdSi
-        OKCDF0/P1qPhwEFCiAe0C/ooAkLttYkqPkUOaAjdfJvs6tiVDGDAZPEo5zLUG5qI+QFylo
-        AXYABLurR5xlkv6Nm2nC0jSZy1xeJ6smmsAy7CHVlg/wbS2BenfsqwVOVmkqmwoU67uhed
-        aoZR5ENxYzX3cPEJCaawiWDFLjOzIdSIJwus5iBeBPz1MIBNKp++4nynbAfJ0w==
-Date:   Mon, 27 Feb 2023 10:31:12 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 0/2] of: populate of_root_node if not set (alternate)
-Message-ID: <20230227103112.47a5c0c3@fixe.home>
-In-Reply-To: <12492b9f-1961-7d75-3197-41b4bce90b63@gmail.com>
-References: <20230223213418.891942-1-frowand.list@gmail.com>
-        <12492b9f-1961-7d75-3197-41b4bce90b63@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        bh=RZ7tgd2yMldNRnjyOaSsgByklv9W+sBvCfRkPHDmb94=;
+        b=AulAr32E/BbqvfLAZ0y56TpIyXCZhTX62R3j6dYQDpUQx9xHh9VFjzfyfSSz/wllzAb98+
+        u8nu6FQKkZZYYsTv3GzZse0Ojq3Z0dAjSUV4H1LymMOTBCBYWpRMU4I5WrhvauU0ARhY/v
+        iIK0GymWgtriG+cgi4vVB5TGK87rxxU=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-532-rfmJlkqbNX2PHcaPWQQUyw-1; Mon, 27 Feb 2023 04:31:25 -0500
+X-MC-Unique: rfmJlkqbNX2PHcaPWQQUyw-1
+Received: by mail-ed1-f69.google.com with SMTP id eg35-20020a05640228a300b004ad6e399b73so7637772edb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:31:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZ7tgd2yMldNRnjyOaSsgByklv9W+sBvCfRkPHDmb94=;
+        b=nm+6S1UmuQtZJlrdBXu2pmY7C068T4gzVSrxdHNJTh6u3Fj69t83rREvQR4NVzQQ0W
+         bvCg42xSCbmeFQj4FH74jBibiLOUlm5fCZeFii49HnZ7Ha5uXrdpMIXJjiF/66HE5Rai
+         Cb99QDJGE2gs08tMxj07R72w+X9ZTbQ5f3jpaNygkSrhSl5HQiBCPcBWkUYVOswwnsnQ
+         8ULPigmvONg864B4XKU5pIeYT9sjgE9ulrR0VDDgUzEYW6YVvbK76YIFJzH2+Ek9rc/h
+         HBsVVawmZeWcxDsMP+JJ2H+CIcKZXQ9xSmsbxcxCrGufP49FMIPwJqgfxV1W/6Fa2a74
+         MBmg==
+X-Gm-Message-State: AO0yUKUvZnHzpHv+/YLQzSnfiqrCIGNmtx+tggX1zadOP0gIFKbGgO4n
+        PizwsF37TeuNluT7FVy6tIsAz01u8h5fIcJbylAFDjlAZ1rWFmYCt7U/IbCLBWrfpcCaSnV0ZDB
+        QUtAvzBHMOtD/RsmioUY5ngHE
+X-Received: by 2002:a17:906:4d8c:b0:8ae:f73e:233f with SMTP id s12-20020a1709064d8c00b008aef73e233fmr36187958eju.32.1677490284511;
+        Mon, 27 Feb 2023 01:31:24 -0800 (PST)
+X-Google-Smtp-Source: AK7set+NbVSpt4yOAnECcpAr2/cCoG6u5mlrIrkJajmml4ubXI2EjR7IrG3eLzjCQWCzYYep+F5FNw==
+X-Received: by 2002:a17:906:4d8c:b0:8ae:f73e:233f with SMTP id s12-20020a1709064d8c00b008aef73e233fmr36187918eju.32.1677490284210;
+        Mon, 27 Feb 2023 01:31:24 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id qq10-20020a17090720ca00b008e09deb6610sm2942505ejb.200.2023.02.27.01.31.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 01:31:23 -0800 (PST)
+Message-ID: <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
+Date:   Mon, 27 Feb 2023 10:31:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/8] drivers: select REGMAP instead of depending on it
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Andrew Jeffery <andrew@aj.id.au>, Corey Minyard <minyard@acm.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Riku Voipio <riku.voipio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        platform-driver-x86@vger.kernel.org,
+        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
+        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
+References: <20230226053953.4681-1-rdunlap@infradead.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230226053953.4681-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 23 Feb 2023 15:39:31 -0600,
-Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
+Hi Randy,
 
-> Hi Cl=C3=A9ment,
->=20
-> Can you please test this version of the patch series?
+On 2/26/23 06:39, Randy Dunlap wrote:
+> REGMAP is a hidden (not user visible) symbol. Users cannot set it
+> directly thru "make *config", so drivers should select it instead of
+> depending on it if they need it.
+> 
+> Consistently using "select" or "depends on" can also help reduce
+> Kconfig circular dependency issues.
+> 
+> REGMAP is selected 94 times and is depended on 11 times in
+> current linux-next. Eliminate the uses of "depends on" by
+> converting them to "select".
 
-Hi Frank,
+Thank you for your work on this. Mixing of depends on vs select
+is a real problem with many Kconfig symbols.
 
-I can confirm it now works as expected, thanks for your patch !
+>  [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead of depending on it
+>  [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
+>  [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending on it
+>  [PATCH 4/8] leds: TI_LMU_COMMON: select REGMAP instead of depending on it
+>  [PATCH 5/8] platform: mellanox: select REGMAP instead of depending on it
+>  [PATCH 6/8] platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
+>  [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
+>  [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
 
-Tested-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+For patch 5/8 and 6/8, do you want me to merge them through the pdx86
+(platform-drivers-x86) tree, or do you plan to merge this whole series
+in one go through some other tree?
 
-Cl=C3=A9ment
+If you plan to merge the whole series through some other tree,
+here is my acked by for doing so for 5/8 and 6/8:
 
->=20
-> Thanks!
->=20
-> -Frank
->=20
-> On 2/23/23 15:34, Frank Rowand wrote:
-> > This series is a different implementation to achieve the goals of
-> > https://lore.kernel.org/r/20220623105044.152832-1-clement.leger@bootlin=
-.com
-> >=20
-> > In order to apply overlays or create new nodes under the root node, the
-> > kernel expects of_root to be set. On some system where a device-tree was
-> > not provided by firmware (x86 for instance) if CONFIG_OF is enabled,
-> > then we will end up with a null of_root. This series adds support to
-> > create this root node using a builtin dtb and removes the manual
-> > creation of the root node done in unittests.c.
-> >=20
-> > Changes since version 2: (patch 1/2)
-> >   - change of __dtb_empty_root_* from "void *" to "uint8_t []"
-> >=20
-> > Changes since version 1: (patch 1/2)
-> >   - refresh for 6.2-rc1
-> >   - update Signed-off-by
-> >   - fix typo in of_fdt.h: s/of_setup/setup_of
-> >   - unflatten_device_tree(): validate size in header field dtb_empty_ro=
-ot
-> >     that will be used to copy dtb_empty_root
-> >   - add Kconfig option to manually select CONFIG_OF_EARLY_FLATTREE
-> >=20
-> > Changes since version 1: (patch 2/2)
-> >   - refresh for 6.2-rc1
-> >   - update Signed-off-by
-> >   - fix formatting error (leading space) in patch comment
-> >=20
-> > Frank Rowand (2):
-> >   of: create of_root if no dtb provided
-> >   of: unittest: treat missing of_root as error instead of fixing up
-> >=20
-> >  drivers/of/Kconfig        |  7 ++++++-
-> >  drivers/of/Makefile       |  2 +-
-> >  drivers/of/empty_root.dts |  6 ++++++
-> >  drivers/of/fdt.c          | 27 ++++++++++++++++++++++++++-
-> >  drivers/of/unittest.c     | 16 ++++++----------
-> >  include/linux/of_fdt.h    |  2 ++
-> >  init/main.c               |  2 ++
-> >  7 files changed, 49 insertions(+), 13 deletions(-)
-> >  create mode 100644 drivers/of/empty_root.dts
-> >  =20
->=20
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
 
 
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+
+> 
+> diffstat:
+>  drivers/char/ipmi/Kconfig         |    3 ++-
+>  drivers/clk/Kconfig               |    2 +-
+>  drivers/gpio/Kconfig              |    2 +-
+>  drivers/leds/Kconfig              |    2 +-
+>  drivers/platform/mellanox/Kconfig |    9 ++++-----
+>  drivers/platform/x86/Kconfig      |    3 ++-
+>  drivers/thermal/intel/Kconfig     |    3 ++-
+>  drivers/tty/serial/8250/Kconfig   |    3 ++-
+>  8 files changed, 15 insertions(+), 12 deletions(-)
+> 
+> Cc: Andrew Jeffery <andrew@aj.id.au>
+> Cc: Corey Minyard <minyard@acm.org>
+> Cc: openipmi-developer@lists.sourceforge.net
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Riku Voipio <riku.voipio@linaro.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: linux-clk@vger.kernel.org
+> Cc: Michael Walle <michael@walle.cc>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: Dan Murphy <dmurphy@ti.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: linux-leds@vger.kernel.org
+> Cc: Darren Hart <dvhart@infradead.org>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Michael Shych <michaelsh@nvidia.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> Cc: Vadim Pasternak <vadimp@nvidia.com>
+> Cc: platform-driver-x86@vger.kernel.org
+> Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
+> Cc: Bin Gao <bin.gao@intel.com>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Oskar Senft <osk@google.com>
+> Cc: linux-serial@vger.kernel.org
+> 
+
