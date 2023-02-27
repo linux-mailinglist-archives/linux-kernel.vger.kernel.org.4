@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A5E6A4C58
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3E76A4C68
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjB0Uis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S230001AbjB0Ujb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:39:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0Uiq (ORCPT
+        with ESMTP id S229629AbjB0Uj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:38:46 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63ED1BBB4;
-        Mon, 27 Feb 2023 12:38:44 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v16so4763507wrn.0;
-        Mon, 27 Feb 2023 12:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hE1FHM1U2zm1erfLjZRxZpbmVUkLBg3sA/DLB4dzuBo=;
-        b=qj4arBGe+jk9mWesxN2xwdEoJ6DAJDdkL4ptrKn8esZCMAbN95b4ax50iWLja43blW
-         zwy5fZF4ncEeD9WSs5Hmj+ikaGqh3ET88l0Rsd1/MFpgUfTe5c1kscjJ5S2JveA/QgB3
-         wZRg/PHlUv15pMlCr838F+NcvSQvWFB3d/oSxvvzrKZsnyUGaLwmTd3cGfwVPFUqa2UM
-         b3L2oydkQgj6LfZTlOkDBX4QbkkVHbl03L6f+sKweTxhfM1dJodOWiXkozWihNe8X1K6
-         FVqBA+MdbrMQZyt70TOD9mbYwwNkXJdftUiy1evANJNa3LVdviNhVu4NBBsl+9gX9/Tu
-         Dncw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hE1FHM1U2zm1erfLjZRxZpbmVUkLBg3sA/DLB4dzuBo=;
-        b=nuvF9WSDHgcttmXJ2hVQnP1D2arcatkkoZyAtn6qM5qE8ilf9LRiJ0VJDJik6EESxG
-         PqCnXkS9Jgh7EsO1JBT2y2pnr5PSFXu6VshFU8Yxelp0pj7aTZxOP7irjLz4c0ZNv3Vq
-         2BjdaLeWQGQDATtgc3oNGArgpTA/euILlD+PNDJ80soU6JPc8tz8thbdGiz92HoDgcDJ
-         8Ju/1SqEJgVhk+NMDCYNDgrpdF1i7O57jwRYLfBEs+d5OXfc4kjON0t1GRA3a+HuB8Lw
-         gtorFl37m8/vd3eSFS2MhHJiU4o8N7hiXuJ5Vm2gGYC6fBLDX7/e/TZ4BwHGmOCB83Ts
-         hh/w==
-X-Gm-Message-State: AO0yUKXz3Th5xnfS/COVRKYwjFyIUBCSyg2fEjLTg8pw7NGPSC41lF+c
-        WxBgraBHIbfFLirenEaGyQIccZa6JYQ=
-X-Google-Smtp-Source: AK7set9V3tdK/RYak+pa1dRZ1YYwxGzKCQiX+KQ3sP4NGLhdDLjKb6HD//k7/hhgNrsfda6ZAV1btQ==
-X-Received: by 2002:a5d:4cc7:0:b0:2bf:94ea:67ca with SMTP id c7-20020a5d4cc7000000b002bf94ea67camr369325wrt.25.1677530322739;
-        Mon, 27 Feb 2023 12:38:42 -0800 (PST)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id i14-20020a5d55ce000000b002c559405a1csm7849754wrw.20.2023.02.27.12.38.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 12:38:42 -0800 (PST)
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in
- BPF
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
-Date:   Mon, 27 Feb 2023 20:38:41 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <cover.1677526810.git.dxu@dxuuu.xyz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 15:39:26 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A6C241DD;
+        Mon, 27 Feb 2023 12:39:20 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E63645C012F;
+        Mon, 27 Feb 2023 15:39:19 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 27 Feb 2023 15:39:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677530359; x=1677616759; bh=S1e3ePYKPA
+        RVzg5R0A+d2tPWsFwcVvoNQZq9oGxMJlk=; b=AM0evC64PkAurLIav8Kvp5pRWz
+        rrJUXArt/YaCrSSTBXPkOap91I1/GoSj9jD5tLmokjU+dAK2AAKGghYSKg2L898x
+        5NV4W92OvLTmEI62WFINDwBjhGiFwIrVcg/fEOFO7ZTQbIGG9H2K6/zOiEFad4Mu
+        vrSSyOtZX5rSqqFHvWSvJR0cGOJ7zym/dvH1MRXVAba4xcUIaZnqoKp9vsS1MzI5
+        a1BVImUD1rwnFf5m7UiXSePDfToc9Y/MxOTPYGKAFxv6WpEgdJEo5YiYuZXczPgv
+        RM1sLOqIjT/9vPNPcvVb+DN6gjVz2As+gT3blIsj/+tg2V/p5rUIoABkcjEg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677530359; x=1677616759; bh=S1e3ePYKPARVzg5R0A+d2tPWsFwc
+        VvoNQZq9oGxMJlk=; b=RCWu7QtK9uPN/g1Pss5r3EAsnZLvd9r9wXX0v8xYZiMV
+        lj5mDFj1gR69ANKaBudSuQ1upTyEYtmZOanh1bwBTtwcNhw+d97WS0qjNZxDFs0i
+        BB1rbtGi6JjV/ontuqVRpo0H8zNk5MBq4NSv0T3JhHo9LA6U80RNFBu1bcYyjlwT
+        WTS59/kNS8pkhIPazPaE5ynoWNFo34Dy/jrPOzzmVqoRK+QLolJziYbTowLJKkhR
+        SlydfJR7i2UufWwf+8apkjxqj0HzZc5isyI9P9Ud9FHfecJ8mAa4vmf4sSLaquMY
+        pUNzklG9MbRFPiYowvwcu4q7hSXn6waFs+SQR1BuOQ==
+X-ME-Sender: <xms:9xT9Y5oIUNzx0xP9NUq-9ER4s7qWMn-oyleahK4fJ5sXY_k9-RYBdw>
+    <xme:9xT9Y7ohvHc1zphjIfVI0OqEGTEHYoLswWPAOtqumQnj7EmkWvzLAGQSFq77GdfiV
+    0GSCYlyIJaSx4vlbDI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddgudefiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:9xT9Y2PQP1we4fnztxFZDGJ7oi0C8hxrVtFpGyQEWRyK8nhYF0_yVg>
+    <xmx:9xT9Y04YjNZnx1v967R6eTqh6uvjLEB8eZzupR317raNQ3b7GO1-aA>
+    <xmx:9xT9Y44xqH9MS-EREdaaa4DCmQPj3HO_ES_YIQfKn2UHcCyxbCCpDw>
+    <xmx:9xT9Y-7rwHi_mMxi8Xq_-Vt-0PIIyO3hZwzEkgq54JOYzY6Csy0AsA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 887CEB60086; Mon, 27 Feb 2023 15:39:19 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
+In-Reply-To: <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
+Date:   Mon, 27 Feb 2023 21:38:54 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Larry Finger" <Larry.Finger@lwfinger.net>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Hartley Sweeten" <hsweeten@visionengravers.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Kevin Cernekee" <cernekee@gmail.com>,
+        "Lukas Wunner" <lukas@wunner.de>,
+        "Manuel Lauss" <manuel.lauss@gmail.com>,
+        "Oliver Hartkopp" <socketcan@hartkopp.net>,
+        "Olof Johansson" <olof@lixom.net>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 19:51, Daniel Xu wrote:
-> However, when policy is enforced through BPF, the prog is run before the
-> kernel reassembles fragmented packets. This leaves BPF developers in a
-> awkward place: implement reassembly (possibly poorly) or use a stateless
-> method as described above.
+On Mon, Feb 27, 2023, at 21:23, Larry Finger wrote:
+> On 2/27/23 07:34, Arnd Bergmann wrote:
 
-Just out of curiosity - what stops BPF progs using the middle ground of
- stateful validation?  I'm thinking of something like:
-First-frag: run the usual checks on L4 headers etc, if we PASS then save
- IPID and maybe expected next frag-offset into a map.  But don't try to
- stash the packet contents anywhere for later reassembly, just PASS it.
-Subsequent frags: look up the IPID in the map.  If we find it, validate
- and update the frag-offset in the map; if this is the last fragment then
- delete the map entry.  If the frag-offset was bogus or the IPID wasn't
- found in the map, DROP; otherwise PASS.
-(If re-ordering is prevalent then use something more sophisticated than
- just expected next frag-offset, but the principle is the same. And of
- course you might want to put in timers for expiry etc.)
-So this avoids the need to stash the packet data and modify/consume SKBs,
- because you're not actually doing reassembly; the down-side is that the
- BPF program can't so easily make decisions about the application-layer
- contents of the fragmented datagram, but for the common case (we just
- care about the 5-tuple) it's simple enough.
-But I haven't actually tried it, so maybe there's some obvious reason why
- it can't work this way.
+>
+> Your patch set also breaks my PowerBook G4. The output of 'lspci -nn | grep 
+> Network' shows the following before your patch is applied:
+>
+> 0001:10:12.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4306 
+> 802.11b/g Wireless LAN Controller [14e4:4320] (rev 03)
+> 0001:11:00.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4318 
+> [AirForce One 54g] 802.11g Wireless LAN Controller [14e4:4318] (rev 02)
+>
+> The first of these is broken and built into the laptop. The second is plugged 
+> into a PCMCIA slot, and uses yenta-socket as a driver.
+>
+> When your patches are applied, the second entry vanishes.
+>
+> Yes, this hardware is ancient, but I would prefer having this wifi interface 
+> work. I can provide any output you need.
 
--ed
+Is this the Cardbus or the PCMCIA version of the BCM4306 device? As far
+as I understand this particular chip can be wired up either way inside
+of the card, and the PowerBook G4 supports both types of devices.
+
+If it's the PCMCIA version, then dropping support for it was the idea
+of the patch series that we can debate, but if it was the Cardbus version
+that broke, then this was likely a bug I introduced by accident.
+
+      Arnd
