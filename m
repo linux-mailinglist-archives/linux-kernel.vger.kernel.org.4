@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF926A4D91
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C33246A4D93
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjB0VwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229540AbjB0VxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjB0VwS (ORCPT
+        with ESMTP id S229496AbjB0VxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:52:18 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7532597B;
-        Mon, 27 Feb 2023 13:52:17 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id l1so7697612pjt.2;
-        Mon, 27 Feb 2023 13:52:17 -0800 (PST)
+        Mon, 27 Feb 2023 16:53:11 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A83C145;
+        Mon, 27 Feb 2023 13:53:09 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id eg37so31606210edb.12;
+        Mon, 27 Feb 2023 13:53:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=79M5izvZlgTo6A22u+eX+TrcYuaXNkrng6+4N70gQwg=;
-        b=S5er77Z/Pj5Khy6d3pJVBeblU07lDTrvAEUhTDLSpp5eLBBTdzqxBLNncBf/jlzt8N
-         wT2aDkYJn/JIlM2RxkL8OomYYW9oR7dVN/amQSLKLlUG5zbaKgsWvGOJDhK/AtYXpkTy
-         YzPPQAf0wuwylv1AZQxKWOheDuKqT4Q5pbHuy4g/6ZgLMsVcwy8GLf4EQP4lzchwKUbz
-         KhZNDzqd3iWS22iJWoZNr5lTiapDAOPncMdNCu5BkvvCCwGHLrOPq16K9/Du8X4Kw4nv
-         cVGj8vGT300IwadDJ8+EQr0+jvUHaxUCeuDgId8qmQ8vjCuNJZo9vyrUX17GztuOnSmm
-         vZ9g==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w9z124L20+hh0HCTcO7AmeuiFRfRqYkVMIUFf5toEJs=;
+        b=NGPYEbDWEhSbOy6wnJ2m7XIky7l5xE3MF5HAnxi42VXm5C0eLVxz/rHMMsgc4ZbjqX
+         5khgFYU7rJaPNw7pD1i3pqApw7TSXLTvwYtm0fY+HHsYMseY2cRhhkDZOXgijhQz4jA8
+         BajWlcQJrCiCcJuES9SbZIb8XfBQokBbCJlzlM9iI9DWJvUEtPkgkTVWABwJNC0OogDx
+         VdO5tU7qQGEMmadCfVBL1o/w8SzdXoOcJg+fasa0lrULwOaE0DblvBPf5gJgJupNQBp7
+         wWNk0naBQ3alcQv/tARNhi094s+a2gbbq3NhSxFTIyvedjUXnXIXfrCNMXN4V3pHP1zM
+         ITXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=79M5izvZlgTo6A22u+eX+TrcYuaXNkrng6+4N70gQwg=;
-        b=Qx2ErKdwOeAnyOUPDX9uS7kuDMO8qKrDTKFwhza/xNkR45ptlbDWEVBjAKhQMWOBQz
-         4LX0CHJ/3wZaG9K1UdaZ/Z3tZZqkZrV1wFiRVjWZDuAiSUHA+cgapXw+fsZRN/8hdaWz
-         W692T4XXlhWXSm1MD5v8Q7BLDpWOkGBa/DWf0iIdotvsTkvtX+NZzA8fA89mhRuLkjld
-         +aS2aEoDMddkbXCHt70eMqvQY2pMw31ysZAqD28Cfr1NlX3052kASnvUHoWLOM8IHpMY
-         JjexeIekhN6K1ZzgqSAPJMSsdHLYv435bw5SaGISNYhMDxSpiEAxhUIRHIAz1QWFXatF
-         mbww==
-X-Gm-Message-State: AO0yUKUyOeC41IvSa51gsn4SKAx0ax7OGxf6T1IFOFFXzgXM8/Z/w91r
-        ya/f2DOoCaMGeeUazLHHWNs=
-X-Google-Smtp-Source: AK7set/0vGzuLzCEi+0Hluan+aLL/lFF91iIavzjTWcYddq6eEciFMoXDOHY596UD/FB58S9RTfOhg==
-X-Received: by 2002:a05:6a20:2444:b0:cc:ac05:88f7 with SMTP id t4-20020a056a20244400b000ccac0588f7mr1044373pzc.34.1677534737078;
-        Mon, 27 Feb 2023 13:52:17 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id s17-20020a639251000000b00502ecb91940sm4461605pgn.55.2023.02.27.13.52.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 13:52:16 -0800 (PST)
-Date:   Mon, 27 Feb 2023 13:52:15 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>
-Subject: Re: [PATCH v11 030/113] KVM: x86/mmu: Replace hardcoded value 0 for
- the initial value for SPTE
-Message-ID: <20230227215215.GL4175971@ls.amr.corp.intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <dee30f0562d8be0102547d8eb9fc77736eae679d.1673539699.git.isaku.yamahata@intel.com>
- <20230125112434.0000512a@gmail.com>
- <Y9Fj/vgPEzfU1eof@google.com>
- <0be55c001aa1a538a02055aa244c655262228ce4.camel@intel.com>
- <Y9L4RQXuTJ4RTVcF@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w9z124L20+hh0HCTcO7AmeuiFRfRqYkVMIUFf5toEJs=;
+        b=LIvropUqgp58jDjvE3a5+pe97QIuLup5LteJY2TwU2JxoYQ0YWNR725B0rcbq6pLSp
+         /HUCc1n7d7bFoj0BoGPMaf9iez379bAhKfXqi8cfPLe+DJRTzW1eYoqmpCXK394q+IIz
+         2F5aMm+6qVrXJys6e6oCVYx/6EJDQUjfVSvMV3Jso3VjRM1MOJZRUPyLrFa9BJpevogM
+         av6tDD/oxqHzo6GAvR5qMK0Kw7+7wODtWyMSFoK5c1S4W8g7o82rt6J8mXYhyCqbJSN0
+         BSGRfHMvB0dXb8KduDtQH7zNhrWF1bdrpVzdpizigPbp71jyJ1ys1BlgDXgcSq7v/PZf
+         ngVw==
+X-Gm-Message-State: AO0yUKUhMwE9J5PsxZhDrBsh8k9hHSuaNBQCatli1CjoXRPbA2EWv34T
+        xUMqHB1EXs/5XujX2GHkJDX0706NF+vc1J/VC5I=
+X-Google-Smtp-Source: AK7set+gHPmXspe3hy+PNeH9+HNlPSO1DERqWhmqOOgQltNSdEDqhehgsls0/3Xcs4yd7/DVrgFNv7u2l0M6clq5at4=
+X-Received: by 2002:a17:907:60cd:b0:8b1:3540:7632 with SMTP id
+ hv13-20020a17090760cd00b008b135407632mr7168607ejc.2.1677534788434; Mon, 27
+ Feb 2023 13:53:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y9L4RQXuTJ4RTVcF@google.com>
+References: <20230221025347.389047-1-imagedong@tencent.com> <20230221025347.389047-3-imagedong@tencent.com>
+In-Reply-To: <20230221025347.389047-3-imagedong@tencent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Feb 2023 13:52:56 -0800
+Message-ID: <CAEf4Bzac+SmdosLf=nnieuEBx6azVTg1_fVNWScsWb9-Hap6pw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: split test_attach_probe
+ into multi subtests
+To:     menglong8.dong@gmail.com
+Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        benbjiang@tencent.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -86,52 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:01:41PM +0000,
-Sean Christopherson <seanjc@google.com> wrote:
+On Mon, Feb 20, 2023 at 6:54=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> In order to adapt to the older kernel, now we split the "attach_probe"
+> testing into multi subtests:
+>
+>   manual // manual attach tests for kprobe/uprobe
+>   auto // auto-attach tests for kprobe and uprobe
+>   kprobe-sleepable // kprobe sleepable test
+>   uprobe-lib // uprobe tests for library function by name
+>   uprobe-sleepable // uprobe sleepable test
+>   uprobe-ref_ctr // uprobe ref_ctr test
+>
+> As sleepable kprobe needs to set BPF_F_SLEEPABLE flag before loading,
+> we need to move it to a stand alone skel file, in case of it is not
+> supported by kernel and make the whole loading fail.
+>
+> Therefore, we can only enable part of the subtests for older kernel.
+>
+> Reviewed-by: Biao Jiang <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+> v3:
+> - rename test_uporbe_ref_ctr() to test_uprobe_ref_ctr() to fix the
+>   typo
+> ---
 
-> On Thu, Jan 26, 2023, Huang, Kai wrote:
-> > On Wed, 2023-01-25 at 17:22 +0000, Sean Christopherson wrote:
-> > > I agree that handling this in the common code would be cleaner, but repurposing
-> > > gfp_zero gets kludgy because it would require a magic value to say "don't initialize
-> > > the data", e.g. x86's mmu_shadowed_info_cache isn't pre-filled.
-> 
-> ...
-> 
-> > > @@ -400,6 +405,13 @@ int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity,
-> > >  		if (WARN_ON_ONCE(!capacity))
-> > >  			return -EIO;
-> > >  
-> > > +		/*
-> > > +		 * Custom init values can be used only for page allocations,
-> > > +		 * and obviously conflict with __GFP_ZERO.
-> > > +		 */
-> > > +		if (WARN_ON_ONCE(mc->init_value && (mc->kmem_cache || mc->gfp_zero)))
-> > > +			return -EIO;
-> > > +
-> > >  		mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> > >  		if (!mc->objects)
-> > >  			return -ENOMEM;
-> > > 
-> > > base-commit: 503f0315c97739d3f8e645c500d81757dfbf76be
-> > 
-> > init_value and gfp_zone is kinda redundant.  How about removing gfp_zero
-> > completely?
-> > 
-> > 	mmu_memory_cache_alloc_obj(...)
-> > 	{
-> > 		...
-> > 		if (!mc->init_value)
-> > 			gfp_flags |= __GFP_ZERO;
-> > 		...
-> > 	}
-> > 
-> > And in kvm_mmu_create() you initialize all caches' init_value explicitly.
-> 
-> No, as mentioned above there's also a "don't initialize the data" case.  Leaving
-> init_value=0 means those users would see unnecessary zeroing, and again I don't
-> want to use a magic value to say "don't initialize".
 
-The abuses of gfp_flags as zeroing doesn't work for Secure-EPT page table.
-It doesn't need zeroing without initial value.  So I used the patch as is.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+One of the patches in this patch set broke BPF CI ([0]), please take a look
+
+  [0] https://github.com/kernel-patches/bpf/actions/runs/4267719970/jobs/74=
+29701318
+
+>  .../selftests/bpf/prog_tests/attach_probe.c   | 268 +++++++++++-------
+>  .../bpf/progs/test_attach_kprobe_sleepable.c  |  23 ++
+>  .../selftests/bpf/progs/test_attach_probe.c   |  23 +-
+>  3 files changed, 208 insertions(+), 106 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_attach_kprobe_=
+sleepable.c
+>
+
+[...]
