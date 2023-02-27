@@ -2,89 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C0A6A4B52
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4926A4B57
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjB0Tl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 14:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S230045AbjB0Tmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0Tl1 (ORCPT
+        with ESMTP id S229547AbjB0Tmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:41:27 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1A327D59
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 11:41:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677526866; x=1709062866;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wCFnF2gzwXlFH5IRtpyapY9jGTWsCFYXSJ90EedowJo=;
-  b=RsPa+scvbrUETTAVQm8eqoNk8Z1TE/E2vsZJ7aVDPjsYSMlfbdWrX+e+
-   hQreJagjFQojR3uyGXMYOYRYWBnaRGNJ6F+x9+W/0AsPHUaNuX0TJ2zqU
-   37BpgFWbwyzK7INqPnGCIUhnIlTHC8QOKkRG4WnXoDdEGhpyIdCmrPDGW
-   FSBMcvdmksXCXjIYzY4CHExIs7t8oOwIX0B1A9rGKjWguVjdS3Pamz36U
-   43+S0xqQ8OmK8wfN8ce2kcHWKTkhhyle9zA8Hl0HYSCZUAhIi54ai0czg
-   dCNwItnWUc2/jYEWVKsJgckclDSf8E35OuHFpeV8n1iyxZCyJbk9Gd4co
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313622850"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="313622850"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 11:41:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="783512734"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="783512734"
-Received: from jaidenno-mobl.amr.corp.intel.com (HELO [10.212.85.4]) ([10.212.85.4])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 11:40:58 -0800
-Message-ID: <3a6d02a6-0b1d-6e9e-2f14-337373edec48@linux.intel.com>
-Date:   Mon, 27 Feb 2023 14:40:57 -0500
+        Mon, 27 Feb 2023 14:42:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE76626CE8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 11:41:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677526904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T5EHg8kPWMCSbaL6BDDyElln71bXn4w1AjwdqeSKwPo=;
+        b=iQmaOWCsU3XGPvwj2oMBP3H046v0X5T63wZU3OHKbm5ycR/RPCMF3KIcuCgniRK/7mm+1f
+        tu3ee+M5sFdXX1Nop7i+mHWtY55aBEVXRECIKEOOXji5LfQHdYfQmbwcrWR8nyLS4QTVSv
+        Rt0BTBZ3+Ri1JYs3GC4gTimk7XAOFbc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-474-9Y3So9MEM_SG5dyC6CCJ3Q-1; Mon, 27 Feb 2023 14:41:40 -0500
+X-MC-Unique: 9Y3So9MEM_SG5dyC6CCJ3Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15529857D07;
+        Mon, 27 Feb 2023 19:41:40 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A5613140EBF4;
+        Mon, 27 Feb 2023 19:41:39 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id F3A0E403BC530; Mon, 27 Feb 2023 16:41:18 -0300 (-03)
+Date:   Mon, 27 Feb 2023 16:41:18 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 00/11] fold per-CPU vmstats remotely
+Message-ID: <Y/0HXjDXtMSKlwR8@tpad>
+References: <20230209150150.380060673@redhat.com>
+ <20230224023410.2940-1-hdanton@sina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH V4 8/8] soundwire: amd: add pm_prepare callback and pm ops
- support
-Content-Language: en-US
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mario.Limonciello@amd.com,
-        amadeuszx.slawinski@linux.intel.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230227154801.50319-1-Vijendar.Mukunda@amd.com>
- <20230227154801.50319-9-Vijendar.Mukunda@amd.com>
- <82c7303b-131e-0633-2c08-5b4b414ad941@linux.intel.com>
- <acd3a560-1218-9f1d-06ec-19e4d3d4e2c9@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <acd3a560-1218-9f1d-06ec-19e4d3d4e2c9@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224023410.2940-1-hdanton@sina.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 24, 2023 at 10:34:10AM +0800, Hillf Danton wrote:
+> On Thu, Feb 09, 2023 at 12:01:50PM -0300, Marcelo Tosatti wrote:
+> > This patch series addresses the following two problems:
+> > 
+> >     1. A customer provided some evidence which indicates that
+> >        the idle tick was stopped; albeit, CPU-specific vmstat
+> >        counters still remained populated.
+> > 
+> >        Thus one can only assume quiet_vmstat() was not
+> >        invoked on return to the idle loop. If I understand
+> >        correctly, I suspect this divergence might erroneously
+> >        prevent a reclaim attempt by kswapd. If the number of
+> >        zone specific free pages are below their per-cpu drift
+> >        value then zone_page_state_snapshot() is used to
+> >        compute a more accurate view of the aforementioned
+> >        statistic.  Thus any task blocked on the NUMA node
+> >        specific pfmemalloc_wait queue will be unable to make
+> >        significant progress via direct reclaim unless it is
+> >        killed after being woken up by kswapd
+> >        (see throttle_direct_reclaim())
+> > 
+> >     2. With a SCHED_FIFO task that busy loops on a given CPU,
+> >        and kworker for that CPU at SCHED_OTHER priority,
+> >        queuing work to sync per-vmstats will either cause that
+> >        work to never execute, or stalld (i.e. stall daemon)
+> >        boosts kworker priority which causes a latency
+> >        violation
+> > 
+> > By having vmstat_shepherd flush the per-CPU counters to the
+> > global counters from remote CPUs.
+> > 
+> > This is done using cmpxchg to manipulate the counters,
+> > both CPU locally (via the account functions),
+> > and remotely (via cpu_vm_stats_fold).
+> 
+> Frankly another case of bandaid[1] ?
+> 
+> [1] https://lore.kernel.org/lkml/20230223150624.GA29739@lst.de/
+
+Only if you disable per-CPU vmstat counters for isolated CPUs
+(then maintenance of the data structures in isolated CPUs is
+not necessary).
+
+Which would be terrible for performance, however.
 
 
-On 2/27/23 13:42, Mukunda,Vijendar wrote:
-> On 27/02/23 22:37, Pierre-Louis Bossart wrote:
->>
->> On 2/27/23 10:48, Vijendar Mukunda wrote:
->>> Add pm_prepare callback and System level pm ops support for
->>> AMD SoundWire manager driver.
->>>
->>> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
->>> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
->> seems like you missed my comments in
->> https://lore.kernel.org/alsa-devel/7d32d552-6ca0-3c40-11ce-c8d727cadc05@linux.intel.com/
-> you missed my mail in reply thread. That's why we couldn't
-> get a chance to check your review comments.
-
-I don't see a reply be it in my local mail client or lore?
