@@ -2,164 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525E86A3EC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBF76A3ED4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjB0JzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S229820AbjB0Jzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:55:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjB0JzV (ORCPT
+        with ESMTP id S229807AbjB0Jzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:55:21 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5521ACE5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:55:17 -0800 (PST)
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 54D063F59E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:55:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677491716;
-        bh=tg5JUGrzf9zAyKPvBm2SxqJ3gGjUcKX+UWSCeqq+tvk=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=mrM1y/QNHfhJYcIQYqi8e/PVqZTqImJEzgdE24d1S9eSwv49ihercnJNj3s6xkaHR
-         3TqFXlF6LzkYno1fB/kjVQn47z1Ovr8hY2GoQO7fgGX2InyslEVxyU0MmJYlQ9iO8G
-         dEdiXO4hxFdRrTNL7VOtZ2JJ7AQNl+yM8BxAnPKKi4gsqcszwB2LRPLH3GOeTqPfzP
-         FFX/8nfsoea7wMvVht8evm/iMSrvjI1MdE0F7/c9zKYnN58fGpOwc5gejzcRnf1shB
-         XVipyQNvKMOlYz51Si0ADHqbGZA/6usEyT6/Q9HGgp7qOcXNPB1t46Xv9E8AFwwy2b
-         a16A7D3av7PQw==
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-536c6ce8d74so128267547b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:55:16 -0800 (PST)
+        Mon, 27 Feb 2023 04:55:50 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363E91B316
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:55:43 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m6so7749577lfq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZhaELgleS6+r+Ibfx7TrEKluNYIWjG4LoxKJl7PWG5U=;
+        b=Pv5L5SFIBIKlbiDrf20eyYOxXqDu4tIMuaF7OCiVWutcAYW9vA5wMU4sMuFvpKVM9P
+         BRTsL77XTKS75AVm9PTrfthBrrqn9Yb1vpJUKmAmjzrwO/1QLt5RY3JR2TORrYLOn7r6
+         ZWjiR0bsNpktEgaoamv5CeD50tvanAqBvDG8guLdBk9EgaQ5TpJ+DdRVffbHAWu3NF2j
+         88aliUG9pEuMvv0eHAowiAagjmMqCC2oHtA7U8jriAS++fZdTmDLJtYwFgBaD08fhOHK
+         xujFFMJvumRb4SBbfdzClnV6arnZBMI0Hk5Rrj+U73I7/aeeonCC550VgqJLC62mjenT
+         piYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tg5JUGrzf9zAyKPvBm2SxqJ3gGjUcKX+UWSCeqq+tvk=;
-        b=6shUnk8OSDIScG7x+HU0s9IN8CprNrfuucpj+9esC+3cfPS82DJYh4Sg4YJTF1EMSn
-         v8qjhgaTZAwtuCozM6ytfrZ9MGSb92tn1dDrt0eFMC8NaecB3/bx2EkCCwS+9AwrXgWG
-         +ExqTJVRxYRaSsOVtVN+FSTOVveiNd+t2C/bGIkz+M6xENLqs8bVlQNylwtdYvpMaGF4
-         V5OAtCYH6l3BGnuHjJjm13+qoOEs+oHm/a4NNIU7QXG0T2/HXm8gKXPHVhoqwiDgwVSI
-         c1OOuvGirqr/TDiMJbacXn0ZTjVjn9viazP8PV36GelHoUIwD1vyDHqB8DNlBqw+tDTF
-         Wh9Q==
-X-Gm-Message-State: AO0yUKU023syWQRTIzZiac8qZn8mMoxLXNZkvWs40rHXG0a2AqYxI7cQ
-        Od42OU3ns5GxTBaftqMoR8IgYPZiI+nVgw90VQzSXgg+W4XWqC0SGoQSflbKUeYHRwS0rNIaLXB
-        oMewuTjnM4SnHoFxI28RiaIznxe86y8KttsbTe69I2OIv/2MfuaNTMoYSKg==
-X-Received: by 2002:a5b:ecb:0:b0:a03:da3f:3e68 with SMTP id a11-20020a5b0ecb000000b00a03da3f3e68mr8668939ybs.12.1677491715355;
-        Mon, 27 Feb 2023 01:55:15 -0800 (PST)
-X-Google-Smtp-Source: AK7set8WlubDkM1Faogvy9cX8bjJidGkXf+S6l1wxuHu2gKvS1jpHhjUX5yhJ76wvykGnTzky2R/5XHH8FkhD6NkQ+o=
-X-Received: by 2002:a5b:ecb:0:b0:a03:da3f:3e68 with SMTP id
- a11-20020a5b0ecb000000b00a03da3f3e68mr8668935ybs.12.1677491715165; Mon, 27
- Feb 2023 01:55:15 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZhaELgleS6+r+Ibfx7TrEKluNYIWjG4LoxKJl7PWG5U=;
+        b=IRaDBo+o6Lx5iLm1LtJYcXF1QylkyZS9Wy79mER8OVPDog1sZmcfXhxgMzjq0TaZ7O
+         /9pbmDOH8JqwG9cOrD+y1ME/0vCbS6oqRIrcYIdxOQoo752zm6CdC3Ir3SgZpBO9i3ni
+         kOVFxTrGBo0x3y9k+fGBIPHVyEpQ9BFej5KNSH/Hd2V2zfwfXIcA2tjazBmo4kopzgNI
+         ta06yV8SagLytrao66THr3K9JhKn2Ib2F0r983zFD+yylx/ChGGctr/b3IS4i/jgPchs
+         HtlA6eXnkuLjHZN4vPCeuVdhV6tVFQZUWLHUNbimrCjkbXHm5TN3jZiA3gBZALmgTQQ9
+         h6xg==
+X-Gm-Message-State: AO0yUKUVYnOiCy4CgauRL605WqOuuWs2kgE0D2VtsHf3DdjbQa0kE8yu
+        cpgnXndQUJlqx4KDWEzDHgAEq3FNOY22DXRE937+8g==
+X-Google-Smtp-Source: AK7set+eRFLwmofDycetmUw4kVPKIe20hDcCWvU1Q09bxSkaosoMqAzmXAjjIx3XbLUV25e/AgPwzszOwhyIFFWoK3k=
+X-Received: by 2002:a05:6512:b10:b0:4dd:9eb6:444e with SMTP id
+ w16-20020a0565120b1000b004dd9eb6444emr3712409lfu.5.1677491741277; Mon, 27 Feb
+ 2023 01:55:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20230226201730.515449-1-aleksandr.mikhalitsyn@canonical.com> <Y/x8H4qCNsj4mEkA@unreal>
-In-Reply-To: <Y/x8H4qCNsj4mEkA@unreal>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 27 Feb 2023 10:55:04 +0100
-Message-ID: <CAEivzxeorZoiE4VmJ45CoF4ZRoW3B+rkT0ufX7y1bxn510yzPQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] scm: fix MSG_CTRUNC setting condition for SO_PASSSEC
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212417.3315422-1-quic_eberman@quicinc.com> <CA+EHjTxEeiBWXJMCnv0V+5n=jB8w=m0EFdgK=FKtSqKOkiaChg@mail.gmail.com>
+ <7b6d4c14-ebde-1bc3-04de-59cae9d4b7be@quicinc.com>
+In-Reply-To: <7b6d4c14-ebde-1bc3-04de-59cae9d4b7be@quicinc.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Mon, 27 Feb 2023 09:55:05 +0000
+Message-ID: <CA+EHjTzZu4m_RGU0dbNjXhfHLRsHqnAWS24ZhL2SK0hV5M39dQ@mail.gmail.com>
+Subject: Re: [PATCH v10 12/26] gunyah: vm_mgr: Add/remove user memory regions
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Will Deacon <will@kernel.org>,
+        "smoreland@google.com" <smoreland@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:47=E2=80=AFAM Leon Romanovsky <leon@kernel.org> =
-wrote:
+Hi,
+
+On Fri, Feb 24, 2023 at 6:08 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
 >
-> On Sun, Feb 26, 2023 at 09:17:30PM +0100, Alexander Mikhalitsyn wrote:
-> > Currently, we set MSG_CTRUNC flag is we have no
-> > msg_control buffer provided and SO_PASSCRED is set
-> > or if we have pending SCM_RIGHTS.
+>
+>
+> On 2/24/2023 2:19 AM, Fuad Tabba wrote:
+> > Hi,
 > >
-> > For some reason we have no corresponding check for
-> > SO_PASSSEC.
+> > On Tue, Feb 14, 2023 at 9:26 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+> >>
+> >>
+> >> When launching a virtual machine, Gunyah userspace allocates memory for
+> >> the guest and informs Gunyah about these memory regions through
+> >> SET_USER_MEMORY_REGION ioctl.
 > >
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> >  include/net/scm.h | 13 ++++++++++++-
-> >  1 file changed, 12 insertions(+), 1 deletion(-)
->
-> Is it a bugfix? If yes, it needs Fixes line.
-
-It's from 1da177e4c3 ("Linux-2.6.12-rc2") times :)
-I wasn't sure that it's correct to put the "Fixes" tag on such an old
-and big commit. Will do. Thanks!
-
->
+> > I'm working on pKVM [1], and regarding the problem of donating private
+> > memory to a guest, we and others working on confidential computing
+> > have faced a similar issue that this patch is trying to address. In
+> > pKVM, we've initially taken an approach similar to the one here by
+> > pinning the pages being donated to prevent swapping or migration [2].
+> > However, we've encountered issues with this approach since the memory
+> > is still mapped by the host, which could cause the system to crash on
+> > an errant access.
 > >
-> > diff --git a/include/net/scm.h b/include/net/scm.h
-> > index 1ce365f4c256..585adc1346bd 100644
-> > --- a/include/net/scm.h
-> > +++ b/include/net/scm.h
-> > @@ -105,16 +105,27 @@ static inline void scm_passec(struct socket *sock=
-, struct msghdr *msg, struct sc
-> >               }
-> >       }
-> >  }
-> > +
-> > +static inline bool scm_has_secdata(struct socket *sock)
-> > +{
-> > +     return test_bit(SOCK_PASSSEC, &sock->flags);
-> > +}
-> >  #else
-> >  static inline void scm_passec(struct socket *sock, struct msghdr *msg,=
- struct scm_cookie *scm)
-> >  { }
-> > +
-> > +static inline bool scm_has_secdata(struct socket *sock)
-> > +{
-> > +     return false;
-> > +}
-> >  #endif /* CONFIG_SECURITY_NETWORK */
+> > Instead, we've been working on adopting an fd-based restricted memory
+> > approach that was initially proposed for TDX [3] and is now being
+> > considered by others in the confidential computing space as well
+> > (e.g., Arm CCA [4]). The basic idea is that the host manages the guest
+> > memory via a file descriptor instead of a userspace address. It cannot
+> > map that memory (unless explicitly shared by the guest [5]),
+> > eliminating the possibility of the host trying to access private
+> > memory accidentally or being tricked by a malicious actor. This is
+> > based on memfd with some restrictions. It handles swapping and
+> > migration by disallowing them (for now [6]), and adds a new type of
+> > memory region to KVM to accommodate having an fd representing guest
+> > memory.
+> >
+> > Although the fd-based restricted memory isn't upstream yet, we've
+> > ported the latest patches to arm64 and made changes and additions to
+> > make it work with pKVM, to test it and see if the solution is feasible
+> > for us (it is). I wanted to mention this work in case you find it
+> > useful, and in the hopes that we can all work on confidential
+> > computing using the same interfaces as much as possible.
 >
-> There is no need in this ifdef, just test bit directly.
+> Thanks for highlighting the memfd_restricted changes to us! We'll
+> investigate how/if it can suit Gunyah usecases. It sounds like you
+> might've made memfd_restricted changes as well? Are those posted on the
+> mailing lists? Also, are example userspace (crosvm?) changes posted?
 
-The problem is that even if the kernel is compiled without
-CONFIG_SECURITY_NETWORK
-userspace can still set the SO_PASSSEC option. IMHO it's better not to
-set MSG_CTRUNC
-if CONFIG_SECURITY_NETWORK is disabled, msg_control is not set but
-SO_PASSSEC is enabled.
-Because in this case SCM_SECURITY will never be sent. Please correct
-me if I'm wrong.
+I have posted kvmtool changes to make it work with memfd_restricted
+and pKVM as an RFC [1] (git [2]). I haven't posted the arm64 port, but
+it's in a git repo [3]. Chao has a repository with qemu support (TDX)
+as well [4].
 
-Kind regards,
-Alex
+Eventually, we're likely to have crosvm support as well. If you're
+interested, I can keep you CCed on anything we post upstream.
+
+Cheers,
+/fuad
+
+[1] https://lore.kernel.org/all/20221202174417.1310826-1-tabba@google.com/
+[2] https://android-kvm.googlesource.com/kvmtool/+/refs/heads/tabba/fdmem-v10-core
+[3] https://android-kvm.googlesource.com/linux/+/refs/heads/tabba/fdmem-v10-core
+[4] https://github.com/chao-p/qemu/tree/privmem-v10
 
 >
+> Thanks,
+> Elliot
+>
 > >
-> >  static __inline__ void scm_recv(struct socket *sock, struct msghdr *ms=
-g,
-> >                               struct scm_cookie *scm, int flags)
-> >  {
-> >       if (!msg->msg_control) {
-> > -             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp)
-> > +             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
-> > +                 scm_has_secdata(sock))
-> >                       msg->msg_flags |=3D MSG_CTRUNC;
-> >               scm_destroy(scm);
-> >               return;
-> > --
-> > 2.34.1
+> > Some comments inline below...
 > >
+> > Cheers,
+> > /fuad
+> >
+> > [1] https://lore.kernel.org/kvmarm/20220519134204.5379-1-will@kernel.org/
+> > [2] https://lore.kernel.org/kvmarm/20220519134204.5379-34-will@kernel.org/
+> > [3] https://lore.kernel.org/all/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
+> > [4] https://lore.kernel.org/lkml/20230127112932.38045-1-steven.price@arm.com/
+> > [5] This is a modification we've done for the arm64 port, after
+> > discussing it with the original authors.
+> > [6] Nothing inherent in the proposal to stop migration and swapping.
+> > There are some technical issues that need to be resolved.
+> >
+> > <snip>
+> <snip, looking at comments in parallel>
