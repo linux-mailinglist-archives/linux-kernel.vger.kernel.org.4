@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668056A38D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 03:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F79F6A38F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 03:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjB0Cia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 21:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S231713AbjB0CnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 21:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjB0CiK (ORCPT
+        with ESMTP id S230201AbjB0Cmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 21:38:10 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DDD5FCA;
-        Sun, 26 Feb 2023 18:37:38 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id b12so3261966ils.8;
-        Sun, 26 Feb 2023 18:37:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zFvtZ/nUv89yuwhTihR0eeZSdlr0yVt+BERhKSqzcYs=;
-        b=M8I3A0vgaQoP4QAv9psHU7BgffF8/j5d5ENtSquHP7WVfEsB5utm78JuArTUgbMCV8
-         sBeasFN02jRiQ5y9FyhEX3DWWLdFFbyOLQfRYQi5qL8bJNJVsAcbfzlYz8x41kSaotjg
-         of+3Y+9htRFVLivchaeMVHWGthjfNS2eRxpkwUbCAbjYDXo5/TcpSHt8qr+T9kTxH2sO
-         bhB6BqUNUIVjdKCFqFwtukaTU7242cyoezVfT5KNEHFNpakfpHdHooxinurYT/rePsIW
-         mmfwLqGvuwrsASkcM2QXZTJFqfYzH2FUzuBd//0cIPy8+0kFSXxAYPKDyGNt02jWLryd
-         2pOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zFvtZ/nUv89yuwhTihR0eeZSdlr0yVt+BERhKSqzcYs=;
-        b=a1VF7VYmrnK4h6zPsgPmBsWzS8+PzFEl5GnfnoYbEi5tZ12xcPVQRR2PqjCvXjl3g8
-         8rGeRCyFzDCYod9i1LmQbaXbvyX9kNjVs1OTlYJnQTRJAXRD1KJRQmxpR8kbiXVb7gIs
-         RSeziald4hG7cTiG71VXpYy7C/xmwO5tl7bgQfL7bLu1kwiiXo+Gd1ZHG6g7vvrx6P9x
-         L90VM7UpG1CwT0JhvPMEyx27AL9GivmKUMkTLJu5v+1bqGsx4XNW/IRMnq2uaNwCCSLi
-         HF0PgRpIMeZHIAgPpKbARXj/WmDAGwzG7lw/Ja+qsYNEnOE3bBfGrZKZczXENa2oJjHx
-         GPbA==
-X-Gm-Message-State: AO0yUKUXSWaHjMkigitDiCj7w/WL4R6q9IzmFKQpnoVVQ/rFLSLZymQg
-        7Q3J3VApJEvvSv328L4s0N9qDD+gI/w=
-X-Google-Smtp-Source: AK7set/a1pfEuG2fR1fgJAbAaYhpx43Bjl5HLJyJ6A5ZA+oYG9+sbFwhZ+acENpTTtT7gSDEiWEwzQ==
-X-Received: by 2002:a05:6e02:154c:b0:313:e397:ee95 with SMTP id j12-20020a056e02154c00b00313e397ee95mr18908143ilu.4.1677465409649;
-        Sun, 26 Feb 2023 18:36:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v11-20020a02b90b000000b003c502198ffbsm1759540jan.22.2023.02.26.18.36.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 18:36:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <42cdd5e4-c9da-b31a-0ffd-76846757645c@roeck-us.net>
-Date:   Sun, 26 Feb 2023 18:36:47 -0800
+        Sun, 26 Feb 2023 21:42:47 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8966C1C307;
+        Sun, 26 Feb 2023 18:42:30 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31R23t6O011457;
+        Mon, 27 Feb 2023 02:41:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Kq+Lb1wDxc0gbhEvr/JhQGRxh2SaRG9wtEZhr5n7njY=;
+ b=AaluKABq04Vsl9EeV+EJ0/zYb7HTym8L0NCYoCXlE0Hg1JaN9b5Pa9szqwnX4B3TStSo
+ uphXsnR+jhZ0KyUnqXW6W28bcfBtrVM5R1/XbGbOiK1pNVcgHfHkd6o04JV2TFDG5mul
+ q0NU35aiCrkk1+oa307Kg7jqU8aD8mv2HZnbmtbtWdgzXX6nDK7Jyq5PJ9I9RLntKVSo
+ 8fDpXqEAySO0mETv8p6bSfZcU8eJnn/4IMfr0ol6dUKIzqdIHpxMq0ReaNtjovC3ejsp
+ XtaB0219JehHLKRYjzdsnszBMPeESUuZdUYw0iGLmAbML3hR46M2UUWnRoeyFoiNUPGA CQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nyb3qbbt7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 02:41:42 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31R2ffJJ021355
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 02:41:41 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sun, 26 Feb
+ 2023 18:41:36 -0800
+Message-ID: <04ba2810-f9f0-631d-b4a6-0c99edb31701@quicinc.com>
+Date:   Mon, 27 Feb 2023 10:41:33 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] hwmon: add a check of devm_add_action
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 2/9] coresight-tpda: Add DSB dataset support
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        Tao Zhang <taozha@qti.qualcomm.com>
+References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
+ <1674114105-16651-3-git-send-email-quic_taozha@quicinc.com>
+ <6072a788-74b9-6521-882c-c1637a68ccb2@arm.com>
 Content-Language: en-US
-To:     Kang Chen <void0red@gmail.com>, jdelvare@suse.com
-Cc:     mezin.alexander@gmail.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230227021720.1578781-1-void0red@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230227021720.1578781-1-void0red@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <6072a788-74b9-6521-882c-c1637a68ccb2@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Vd1KucQNxERtVm7IojT1ncFObhCaQ9l3
+X-Proofpoint-GUID: Vd1KucQNxERtVm7IojT1ncFObhCaQ9l3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-26_22,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 phishscore=0 spamscore=0
+ suspectscore=0 adultscore=0 clxscore=1011 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302270019
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/26/23 18:17, Kang Chen wrote:
-> devm_add_action may fails, do the cleanup when if fails.
-> 
-> Signed-off-by: Kang Chen <void0red@gmail.com>
-> ---
->   drivers/hwmon/g762.c        | 6 +++++-
->   drivers/hwmon/nzxt-smart2.c | 4 +++-
+Hi Suzuki,
 
-Two patches, please.
+Currently if the dsb_esize is not set to 32 or 64, we will not set the 
+DSBSIZE bit of the register here.
 
-Guenter
+This design is really not good enough.
 
->   2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-> index 64a0599b2..d06d8bf20 100644
-> --- a/drivers/hwmon/g762.c
-> +++ b/drivers/hwmon/g762.c
-> @@ -620,7 +620,11 @@ static int g762_of_clock_enable(struct i2c_client *client)
->   	data = i2c_get_clientdata(client);
->   	data->clk = clk;
->   
-> -	devm_add_action(&client->dev, g762_of_clock_disable, data);
-> +	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to add disable clock action\n");
-> +		goto clk_unprep;
-> +	}
->   	return 0;
->   
->    clk_unprep:
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 2b93ba896..725974cb3 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -737,8 +737,10 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   	init_waitqueue_head(&drvdata->wq);
->   
->   	mutex_init(&drvdata->mutex);
-> -	devm_add_action(&hdev->dev, (void (*)(void *))mutex_destroy,
-> +	ret = devm_add_action(&hdev->dev, (void (*)(void *))mutex_destroy,
->   			&drvdata->mutex);
-> +	if (ret)
-> +		return ret;
->   
->   	ret = hid_parse(hdev);
->   	if (ret)
+I will change this in the next version of patch to issue a warning if an 
+unexpected value is obtained.
+
+在 2/22/2023 8:46 PM, Suzuki K Poulose 写道:
+> On 19/01/2023 07:41, Tao Zhang wrote:
+>> Read the DSB element size from the device tree. Set the register
+>> bit that controls the DSB element size of the corresponding port.
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-tpda.c | 62 
+>> ++++++++++++++++++++++++++++
+>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
+>>   2 files changed, 66 insertions(+)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
+>> b/drivers/hwtracing/coresight/coresight-tpda.c
+>> index 5989798..be13e08 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
+>> @@ -37,6 +37,15 @@ static void tpda_enable_port(struct tpda_drvdata 
+>> *drvdata, int port)
+>>       u32 val;
+>>         val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
+>> +    /*
+>> +     * Configure aggregator port n DSB data set element size
+>> +     * Set the bit to 0 if the size is 32
+>> +     * Set the bit to 1 if the size is 64
+>> +     */
+>> +    if (drvdata->dsb_esize[port] == 32)
+>> +        val &= ~TPDA_Pn_CR_DSBSIZE;
+>> +    else if (drvdata->dsb_esize[port] == 64)
+>> +        val |= TPDA_Pn_CR_DSBSIZE;
+>
+> What are the chances of having a value other than 32 or 64 ?
+> What should we do in that case ? Should the driver at least
+> give out a warning at least in the unhandled case rather than
+> silently reusing the existing setting ?
+>
+> Suzuki
+>
+Best,
+
+Tao
 
