@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF376A3BEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1896A3BEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjB0H7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 02:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S230024AbjB0ICd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjB0H7y (ORCPT
+        with ESMTP id S229486AbjB0ICc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 02:59:54 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68346903B
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:59:51 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so3252905wmq.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:59:51 -0800 (PST)
+        Mon, 27 Feb 2023 03:02:32 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD30CDC8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:02:30 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id t15so5183583wrz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:02:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oBEaEM+5kR2B6hYon6rfQuhVploLmAO32rnMTOOLlM8=;
-        b=VHcpY3NS2kT5Nbl+Vm3xSYn+M169ZihE9pjGC0R8LODIka00AQdjNIA+C8c544zPD9
-         FKYbMxNpUVg7WGJMRUnYZWn+D01GYu8p02wg6Mw4PRybC4H7kz0oqxifVHoIeOS/x1zi
-         dwVjyXY/ZucXCAuFX40jykxHRjfA6sGIoy5xLi92gXufBJsfGZLs3hN/ni5U8rb72zb+
-         fcVLQ/wmXhjA6X5XIfn35Et2VAYyZDBzZ9h0pSRKLSa6QpPFYY/EFWzU027R/ccW6npi
-         9MDvRwoE0Dc0jVAg+rCG+8eJQkC+mA2AYfMdiKI908kCH6p68kW5ANZFkTVzofanUQcN
-         MmwA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vfziqb8YksBosxbn3K0pIcuXigp7qU5wKoiZkbxkiDg=;
+        b=yOlNJenzkYYnKk8n6E3S2GLZAQIwpz++zn1jYc82ndkv0N5idZQfiS9pBgejEMkBao
+         1pHu8vgq5nry5galU20LKtE7B4ySaycDfEnqYBQJawifOkV4mauFenQVS+irPhr8wkI6
+         NZJy1v3JOtn5Oha6JK/KrkYeBaAslfDg80UNBwtlDEE2X06XWsWojg+75DszZVjQZlge
+         wbXiySg0L1V0hPTmS/lPYTlpoLeNTq1qQLsqAw+rc7Dimz/TJ2wbNWLJ6EaTWwSHJ4zg
+         LkEq3oFuZVKlVW0D+XRAOU6S4EibY2NAQ1yDHQzkd2q5ByYsPVQSCVxYSTSnM6QFacMQ
+         /Jcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oBEaEM+5kR2B6hYon6rfQuhVploLmAO32rnMTOOLlM8=;
-        b=alFl6F5sZMKCiyBMq/kLwNFm+U182Ub+xWfa5rn3mIoXXmIzpCCKiFnAgLYtCsS3HG
-         dov50Uco58/CRGr2tcdtuZcHdS6zpLYIFdASte4tfZpBz+FoXhsxR8oJ/B00HIBbcgll
-         wupG7v/cB91yGQl/NZ14+BnrhFggfDHvsMXChNS+tgxlTvRwcBW3iQbkrTzQFTBxMaJx
-         XgkkA5FStmZ3Z9rfrT8yrx3jUGkmtPvFSKkBcE84Hc8bg4l7TAhB1/2u9H1XIwxnFsDs
-         DHttslvos/pFRqWEZiju7WiQIDNUexU7rMBFh+jH0y7hsvCD9Rhhs1zo8vk44JxDPDme
-         04DA==
-X-Gm-Message-State: AO0yUKXZJG1D2VrXzRq8GJjWSq0yfdaru1CNOlzhilVqbtkK9j8+NpLM
-        XPJ/1sTH6vbdzI7KEZekchB64v2TqO9YG5ek
-X-Google-Smtp-Source: AK7set+yRM7tjNtutkUTnNPpvXeJ2qyPuyEWfcZb9RmIhZeibtfeHZh+5wwLO8XvWnPBT5QEViPTlQ==
-X-Received: by 2002:a05:600c:32af:b0:3ea:ea8a:a94a with SMTP id t47-20020a05600c32af00b003eaea8aa94amr9322875wmp.27.1677484789833;
-        Sun, 26 Feb 2023 23:59:49 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id i2-20020adfdec2000000b002c71dd1109fsm6326128wrn.47.2023.02.26.23.59.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 23:59:49 -0800 (PST)
-Date:   Mon, 27 Feb 2023 08:59:42 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
-Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Message-ID: <20230227075942.rgl4hqnwttwvoroe@orel>
-References: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
- <20230221023523.1498500-5-jeeheng.sia@starfivetech.com>
- <20230223180720.55fgbxzlx6xvzgms@orel>
- <b26264a20b5f4bc5abfc6dd87aa4e38f@EXMBX066.cuchost.com>
- <20230224090010.nmy6latszfkdqcft@orel>
- <9cfd485d1e0d46cdb1323bb6ea330f6e@EXMBX066.cuchost.com>
- <20230224095526.ctctpzw3p3csf6qj@orel>
- <24a6dbe6aa2043c7812bf7e258786e13@EXMBX066.cuchost.com>
- <20230224120715.wgqnqmkadsbqusus@orel>
- <180fda36f9974809b436c52e4b3eda58@EXMBX066.cuchost.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vfziqb8YksBosxbn3K0pIcuXigp7qU5wKoiZkbxkiDg=;
+        b=pX9gzNDtZmymLsCF1FBQjepSgLRDqSOgZIuNUh/6+LyX4YWLh5UnzRZncEEAJTIraa
+         dNNxabJ1mdjZmzP0E2FbO4sArMb/vvZ+JS1YJM1nv4YCg9NLN3pstfKhY5GE80WJNFHf
+         p8c2y6p/qfRsAh+py6qeZpK9NAVVLAolnDROYSKTimMXAFdpNJYBJ9i2+lEYB7P8LUBe
+         g3XqEgiLvUEeHNGUmFxuKLxm5kh0aRm9u7XJXDtrlkdvDtdqtwyAduJkOO53JFnFamIh
+         SGwT6KJS5LHALi74Yx+XtXVOUUVkpuqMYuS4HPsuBlqGNYUrnaI1vQF+9fUntF8HglLN
+         8DMA==
+X-Gm-Message-State: AO0yUKWRgWvPx+w6Pej/IiGU3f1NGle3y4SnO7lmAdNOBUKtIulTFuoe
+        KhoU6vC3JxtG9JLeqaZq2p4wS3H3pJMcR9tW
+X-Google-Smtp-Source: AK7set+y7rgcS0Yor/fhOZ2XgFF/YWcH+WLOGtlxUX4URNezF1NGkg5ut3i6aNa2gFiveQNe6M8xCQ==
+X-Received: by 2002:a05:6000:1b8f:b0:2cc:459b:8bc7 with SMTP id r15-20020a0560001b8f00b002cc459b8bc7mr573961wru.2.1677484949033;
+        Mon, 27 Feb 2023 00:02:29 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w15-20020adfee4f000000b002be5bdbe40csm6312729wro.27.2023.02.27.00.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 00:02:28 -0800 (PST)
+Message-ID: <35ddd789-4dd9-3b87-3128-268905ec9a13@linaro.org>
+Date:   Mon, 27 Feb 2023 09:02:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <180fda36f9974809b436c52e4b3eda58@EXMBX066.cuchost.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] nfc: fdp: add null check of devm_kmalloc_array in
+ fdp_nci_i2c_read_device_properties
+Content-Language: en-US
+To:     Kang Chen <void0red@gmail.com>, simon.horman@corigine.com
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <Y/t729AIYjxuP6X6@corigine.com>
+ <20230227014144.1466102-1-void0red@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230227014144.1466102-1-void0red@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,392 +75,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:14:27AM +0000, JeeHeng Sia wrote:
+On 27/02/2023 02:41, Kang Chen wrote:
+> devm_kmalloc_array may fails, *fw_vsc_cfg might be null and cause
+> out-of-bounds write in device_property_read_u8_array later.
 > 
+> Fixes: a06347c04c13 ("NFC: Add Intel Fields Peak NFC solution driver")
 > 
-> > -----Original Message-----
-> > From: Andrew Jones <ajones@ventanamicro.com>
-> > Sent: Friday, 24 February, 2023 8:07 PM
-> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > 
-> > On Fri, Feb 24, 2023 at 10:30:19AM +0000, JeeHeng Sia wrote:
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > > Sent: Friday, 24 February, 2023 5:55 PM
-> > > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > > >
-> > > > On Fri, Feb 24, 2023 at 09:33:31AM +0000, JeeHeng Sia wrote:
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > > > > Sent: Friday, 24 February, 2023 5:00 PM
-> > > > > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > > > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > > > > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > > > > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > > > > >
-> > > > > > On Fri, Feb 24, 2023 at 02:05:43AM +0000, JeeHeng Sia wrote:
-> > > > > > >
-> > > > > > >
-> > > > > > > > -----Original Message-----
-> > > > > > > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > > > > > > Sent: Friday, 24 February, 2023 2:07 AM
-> > > > > > > > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > > > > > > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> > > > > > > > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> > > > > > > > Subject: Re: [PATCH v4 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> > > > > > > >
-> > > > > > > > On Tue, Feb 21, 2023 at 10:35:23AM +0800, Sia Jee Heng wrote:
-> > > > > > > > > Low level Arch functions were created to support hibernation.
-> > > > > > > > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-> > > > > > > > > cpu state onto the stack, then calling swsusp_save() to save the memory
-> > > > > > > > > image.
-> > > > > > > > >
-> > > > > > > > > Arch specific hibernation header is implemented and is utilized by the
-> > > > > > > > > arch_hibernation_header_restore() and arch_hibernation_header_save()
-> > > > > > > > > functions. The arch specific hibernation header consists of satp, hartid,
-> > > > > > > > > and the cpu_resume address. The kernel built version is also need to be
-> > > > > > > > > saved into the hibernation image header to making sure only the same
-> > > > > > > > > kernel is restore when resume.
-> > > > > > > > >
-> > > > > > > > > swsusp_arch_resume() creates a temporary page table that covering only
-> > > > > > > > > the linear map. It copies the restore code to a 'safe' page, then start
-> > > > > > > > > to restore the memory image. Once completed, it restores the original
-> > > > > > > > > kernel's page table. It then calls into __hibernate_cpu_resume()
-> > > > > > > > > to restore the CPU context. Finally, it follows the normal hibernation
-> > > > > > > > > path back to the hibernation core.
-> > > > > > > > >
-> > > > > > > > > To enable hibernation/suspend to disk into RISCV, the below config
-> > > > > > > > > need to be enabled:
-> > > > > > > > > - CONFIG_ARCH_HIBERNATION_HEADER
-> > > > > > > > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> > > > > > > > > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > > > > > > > > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> > > > > > > > > ---
-> > > > > > > > >  arch/riscv/Kconfig                 |   7 +
-> > > > > > > > >  arch/riscv/include/asm/assembler.h |  20 ++
-> > > > > > > > >  arch/riscv/include/asm/suspend.h   |  19 ++
-> > > > > > > > >  arch/riscv/kernel/Makefile         |   1 +
-> > > > > > > > >  arch/riscv/kernel/asm-offsets.c    |   5 +
-> > > > > > > > >  arch/riscv/kernel/hibernate-asm.S  |  77 +++++
-> > > > > > > > >  arch/riscv/kernel/hibernate.c      | 447 +++++++++++++++++++++++++++++
-> > > > > > > > >  7 files changed, 576 insertions(+)
-> > > > > > > > >  create mode 100644 arch/riscv/kernel/hibernate-asm.S
-> > > > > > > > >  create mode 100644 arch/riscv/kernel/hibernate.c
-> > > > > > > > >
-> > > > > > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > > > > > > index e2b656043abf..4555848a817f 100644
-> > > > > > > > > --- a/arch/riscv/Kconfig
-> > > > > > > > > +++ b/arch/riscv/Kconfig
-> > > > > > > > > @@ -690,6 +690,13 @@ menu "Power management options"
-> > > > > > > > >
-> > > > > > > > >  source "kernel/power/Kconfig"
-> > > > > > > > >
-> > > > > > > > > +config ARCH_HIBERNATION_POSSIBLE
-> > > > > > > > > +	def_bool y
-> > > > > > > > > +
-> > > > > > > > > +config ARCH_HIBERNATION_HEADER
-> > > > > > > > > +	def_bool y
-> > > > > > > > > +	depends on HIBERNATION
-> > > > > > > >
-> > > > > > > > nit: I think this can be simplified as def_bool HIBERNATION
-> > > > > > > good suggestion. will change it.
-> > > > > > > >
-> > > > > > > > > +
-> > > > > > > > >  endmenu # "Power management options"
-> > > > > > > > >
-> > > > > > > > >  menu "CPU Power Management"
-> > > > > > > > > diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
-> > > > > > > > > index 727a97735493..68c46c0e0ea8 100644
-> > > > > > > > > --- a/arch/riscv/include/asm/assembler.h
-> > > > > > > > > +++ b/arch/riscv/include/asm/assembler.h
-> > > > > > > > > @@ -59,4 +59,24 @@
-> > > > > > > > >  		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
-> > > > > > > > >  	.endm
-> > > > > > > > >
-> > > > > > > > > +/*
-> > > > > > > > > + * copy_page - copy 1 page (4KB) of data from source to destination
-> > > > > > > > > + * @a0 - destination
-> > > > > > > > > + * @a1 - source
-> > > > > > > > > + */
-> > > > > > > > > +	.macro	copy_page a0, a1
-> > > > > > > > > +		lui	a2, 0x1
-> > > > > > > > > +		add	a2, a2, a0
-> > > > > > > > > +1 :
-> > > > > > > >     ^ please remove this space
-> > > > > > > can't remove it otherwise checkpatch will throws ERROR: spaces required around that ':'
-> > > > > >
-> > > > > > Oh, right, labels in macros have this requirement.
-> > > > > >
-> > > > > > > >
-> > > > > > > > > +		REG_L	t0, 0(a1)
-> > > > > > > > > +		REG_L	t1, SZREG(a1)
-> > > > > > > > > +
-> > > > > > > > > +		REG_S	t0, 0(a0)
-> > > > > > > > > +		REG_S	t1, SZREG(a0)
-> > > > > > > > > +
-> > > > > > > > > +		addi	a0, a0, 2 * SZREG
-> > > > > > > > > +		addi	a1, a1, 2 * SZREG
-> > > > > > > > > +		bne	a2, a0, 1b
-> > > > > > > > > +	.endm
-> > > > > > > > > +
-> > > > > > > > >  #endif	/* __ASM_ASSEMBLER_H */
-> > > > > > > > > diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-> > > > > > > > > index 75419c5ca272..3362da56a9d8 100644
-> > > > > > > > > --- a/arch/riscv/include/asm/suspend.h
-> > > > > > > > > +++ b/arch/riscv/include/asm/suspend.h
-> > > > > > > > > @@ -21,6 +21,11 @@ struct suspend_context {
-> > > > > > > > >  #endif
-> > > > > > > > >  };
-> > > > > > > > >
-> > > > > > > > > +/*
-> > > > > > > > > + * Used by hibernation core and cleared during resume sequence
-> > > > > > > > > + */
-> > > > > > > > > +extern int in_suspend;
-> > > > > > > > > +
-> > > > > > > > >  /* Low-level CPU suspend entry function */
-> > > > > > > > >  int __cpu_suspend_enter(struct suspend_context *context);
-> > > > > > > > >
-> > > > > > > > > @@ -36,4 +41,18 @@ int __cpu_resume_enter(unsigned long hartid, unsigned long context);
-> > > > > > > > >  /* Used to save and restore the csr */
-> > > > > > > > >  void suspend_save_csrs(struct suspend_context *context);
-> > > > > > > > >  void suspend_restore_csrs(struct suspend_context *context);
-> > > > > > > > > +
-> > > > > > > > > +/* Low-level API to support hibernation */
-> > > > > > > > > +int swsusp_arch_suspend(void);
-> > > > > > > > > +int swsusp_arch_resume(void);
-> > > > > > > > > +int arch_hibernation_header_save(void *addr, unsigned int max_size);
-> > > > > > > > > +int arch_hibernation_header_restore(void *addr);
-> > > > > > > > > +int __hibernate_cpu_resume(void);
-> > > > > > > > > +
-> > > > > > > > > +/* Used to resume on the CPU we hibernated on */
-> > > > > > > > > +int hibernate_resume_nonboot_cpu_disable(void);
-> > > > > > > > > +
-> > > > > > > > > +asmlinkage void hibernate_restore_image(unsigned long resume_satp, unsigned long satp_temp,
-> > > > > > > > > +					unsigned long cpu_resume);
-> > > > > > > > > +asmlinkage int hibernate_core_restore_code(void);
-> > > > > > > > >  #endif
-> > > > > > > > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > > > > > > > > index 4cf303a779ab..daab341d55e4 100644
-> > > > > > > > > --- a/arch/riscv/kernel/Makefile
-> > > > > > > > > +++ b/arch/riscv/kernel/Makefile
-> > > > > > > > > @@ -64,6 +64,7 @@ obj-$(CONFIG_MODULES)		+= module.o
-> > > > > > > > >  obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
-> > > > > > > > >
-> > > > > > > > >  obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-> > > > > > > > > +obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate-asm.o
-> > > > > > > > >
-> > > > > > > > >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
-> > > > > > > > >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
-> > > > > > > > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > > > > > > > > index df9444397908..d6a75aac1d27 100644
-> > > > > > > > > --- a/arch/riscv/kernel/asm-offsets.c
-> > > > > > > > > +++ b/arch/riscv/kernel/asm-offsets.c
-> > > > > > > > > @@ -9,6 +9,7 @@
-> > > > > > > > >  #include <linux/kbuild.h>
-> > > > > > > > >  #include <linux/mm.h>
-> > > > > > > > >  #include <linux/sched.h>
-> > > > > > > > > +#include <linux/suspend.h>
-> > > > > > > > >  #include <asm/kvm_host.h>
-> > > > > > > > >  #include <asm/thread_info.h>
-> > > > > > > > >  #include <asm/ptrace.h>
-> > > > > > > > > @@ -116,6 +117,10 @@ void asm_offsets(void)
-> > > > > > > > >
-> > > > > > > > >  	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
-> > > > > > > > >
-> > > > > > > > > +	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-> > > > > > > > > +	OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
-> > > > > > > > > +	OFFSET(HIBERN_PBE_NEXT, pbe, next);
-> > > > > > > > > +
-> > > > > > > > >  	OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
-> > > > > > > > >  	OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
-> > > > > > > > >  	OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
-> > > > > > > > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
-> > > > > > > > > new file mode 100644
-> > > > > > > > > index 000000000000..846affe4dced
-> > > > > > > > > --- /dev/null
-> > > > > > > > > +++ b/arch/riscv/kernel/hibernate-asm.S
-> > > > > > > > > @@ -0,0 +1,77 @@
-> > > > > > > > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > > > > > > > +/*
-> > > > > > > > > + * Hibernation low level support for RISCV.
-> > > > > > > > > + *
-> > > > > > > > > + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> > > > > > > > > + *
-> > > > > > > > > + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
-> > > > > > > > > + */
-> > > > > > > > > +
-> > > > > > > > > +#include <asm/asm.h>
-> > > > > > > > > +#include <asm/asm-offsets.h>
-> > > > > > > > > +#include <asm/assembler.h>
-> > > > > > > > > +#include <asm/csr.h>
-> > > > > > > > > +
-> > > > > > > > > +#include <linux/linkage.h>
-> > > > > > > > > +
-> > > > > > > > > +/*
-> > > > > > > > > + * int __hibernate_cpu_resume(void)
-> > > > > > > > > + * Switch back to the hibernated image's page table prior to restoring the CPU
-> > > > > > > > > + * context.
-> > > > > > > > > + *
-> > > > > > > > > + * Always returns 0
-> > > > > > > > > + */
-> > > > > > > > > +ENTRY(__hibernate_cpu_resume)
-> > > > > > > > > +	/* switch to hibernated image's page table. */
-> > > > > > > > > +	csrw CSR_SATP, s0
-> > > > > > > > > +	sfence.vma
-> > > > > > > > > +
-> > > > > > > > > +	REG_L	a0, hibernate_cpu_context
-> > > > > > > > > +
-> > > > > > > > > +	restore_csr
-> > > > > > > > > +	restore_reg
-> > > > > > > > > +
-> > > > > > > > > +	/* Return zero value. */
-> > > > > > > > > +	add	a0, zero, zero
-> > > > > > > >
-> > > > > > > > nit: mv a0, zero
-> > > > > > > sure
-> > > > > > > >
-> > > > > > > > > +
-> > > > > > > > > +	ret
-> > > > > > > > > +END(__hibernate_cpu_resume)
-> > > > > > > > > +
-> > > > > > > > > +/*
-> > > > > > > > > + * Prepare to restore the image.
-> > > > > > > > > + * a0: satp of saved page tables.
-> > > > > > > > > + * a1: satp of temporary page tables.
-> > > > > > > > > + * a2: cpu_resume.
-> > > > > > > > > + */
-> > > > > > > > > +ENTRY(hibernate_restore_image)
-> > > > > > > > > +	mv	s0, a0
-> > > > > > > > > +	mv	s1, a1
-> > > > > > > > > +	mv	s2, a2
-> > > > > > > > > +	REG_L	s4, restore_pblist
-> > > > > > > > > +	REG_L	a1, relocated_restore_code
-> > > > > > > > > +
-> > > > > > > > > +	jalr	a1
-> > > > > > > > > +END(hibernate_restore_image)
-> > > > > > > > > +
-> > > > > > > > > +/*
-> > > > > > > > > + * The below code will be executed from a 'safe' page.
-> > > > > > > > > + * It first switches to the temporary page table, then starts to copy the pages
-> > > > > > > > > + * back to the original memory location. Finally, it jumps to __hibernate_cpu_resume()
-> > > > > > > > > + * to restore the CPU context.
-> > > > > > > > > + */
-> > > > > > > > > +ENTRY(hibernate_core_restore_code)
-> > > > > > > > > +	/* switch to temp page table. */
-> > > > > > > > > +	csrw satp, s1
-> > > > > > > > > +	sfence.vma
-> > > > > > > > > +.Lcopy:
-> > > > > > > > > +	/* The below code will restore the hibernated image. */
-> > > > > > > > > +	REG_L	a1, HIBERN_PBE_ADDR(s4)
-> > > > > > > > > +	REG_L	a0, HIBERN_PBE_ORIG(s4)
-> > > > > > > >
-> > > > > > > > Are we sure restore_pblist will never be NULL?
-> > > > > > > restore_pblist is a link-list, it will be null during initialization or during page clean up by hibernation core. During the initial
-> > > > resume
-> > > > > > process, the hibernation core will check the header and load the pages. If everything works correctly, the page will be linked to
-> > the
-> > > > > > restore_pblist and then invoke swsusp_arch_resume() else hibernation core will throws error and failed to resume from the
-> > > > > > hibernated image.
-> > > > > >
-> > > > > > I know restore_pblist is a linked-list and this doesn't answer the
-> > > > > > question. The comment above restore_pblist says
-> > > > > >
-> > > > > > /*
-> > > > > >  * List of PBEs needed for restoring the pages that were allocated before
-> > > > > >  * the suspend and included in the suspend image, but have also been
-> > > > > >  * allocated by the "resume" kernel, so their contents cannot be written
-> > > > > >  * directly to their "original" page frames.
-> > > > > >  */
-> > > > > >
-> > > > > > which implies the pages that end up on this list are "special". My
-> > > > > > question is whether or not we're guaranteed to have at least one
-> > > > > > of these special pages. If not, we shouldn't assume s4 is non-null.
-> > > > > > If so, then a comment stating why that's guaranteed would be nice.
-> > > > > The restore_pblist will not be null otherwise swsusp_arch_resume wouldn't get invoked. you can find how the link-list are link
-> > and
-> > > > how it checks against validity at https://elixir.bootlin.com/linux/v6.2-rc8/source/kernel/power/snapshot.c . " A comment stating
-> > why
-> > > > that's guaranteed would be nice" ? Hmm, perhaps this is out of my scope but I do believe in the page validity checking in the link I
-> > > > shared.
-> > > >
-> > > > Sorry, but pointing to an entire source file (one that I've obviously
-> > > > already looked at, since I quoted a comment from it...) is not helpful.
-> > > > I don't see where restore_pblist is being checked before
-> > > > swsusp_arch_resume() is issued (from its callsite in hibernate.c).
-> > > Sure, below shows the hibernation flow for your reference. The link-list creation and checking found at:
-> > https://elixir.bootlin.com/linux/v6.2/source/kernel/power/snapshot.c#L2576
-> > > software_resume()
-> > > 	load_image_and_restore()
-> > > 		swsusp_read()
-> > > 			load_image()
-> > >  				snapshot_write_next()
-> > > 					get_buffer() <-- This is the function checks and links the pages to the restore_pblist
-> > 
-> > Yup, I've read this path, including get_buffer(), where I saw that
-> > get_buffer() can return an address without allocating a PBE. Where is the
-> > check that restore_pblist isn't NULL, i.e. we see that at least one PBE
-> > has been allocated by get_buffer(), before we call swsusp_arch_resume()?
-> > 
-> > Or, is known that at least one or more pages match the criteria pointed
-> > out in the comment below (copied from get_buffer())?
-> > 
-> >         /*
-> >          * The "original" page frame has not been allocated and we have to
-> >          * use a "safe" page frame to store the loaded page.
-> >          */
-> > 
-> > If so, then which ones? And where does it state that?
-> Let's look at the below pseudocode and hope it clear your doubt. restore_pblist depends on safe_page_list and pbe and both pointers are checked. I couldn't find from where the restore_pblist will be null..
-> 	//Pseudocode to illustrate the image loading
-> 	initialize restore_pblist to null;
-> 	initialize safe_pages_list to null;
-> 	Allocate safe page list, return error if failed;
-> 	load image;
-> loop:	Create pbe chain, return error if failed;
+No blank lines between tags.
 
-This loop pseudocode is incomplete. It's
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+> ---
+> v2 -> v1: add debug prompt and Fixes tag
+> 
+>  drivers/nfc/fdp/i2c.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nfc/fdp/i2c.c b/drivers/nfc/fdp/i2c.c
+> index 2d53e0f88..d3272a54b 100644
+> --- a/drivers/nfc/fdp/i2c.c
+> +++ b/drivers/nfc/fdp/i2c.c
+> @@ -247,6 +247,11 @@ static void fdp_nci_i2c_read_device_properties(struct device *dev,
+>  					   len, sizeof(**fw_vsc_cfg),
+>  					   GFP_KERNEL);
+>  
+> +		if (!*fw_vsc_cfg) {
+> +			dev_dbg(dev, "Not enough memory\n");
 
-loop:
-        if (swsusp_page_is_forbidden(page) && swsusp_page_is_free(page))
-	   return page_address(page);
-	Create pbe chain, return error if failed;
-	...
+No prints for memory allocation errors. Core prints it. Just go to
+err_kmalloc.
 
-which I pointed out explicitly in my last reply. Also, as I asked in my
-last reply (and have been asking four times now, albeit less explicitly
-the first two times), how do we know at least one PBE will be linked?
-Or, even more specifically this time, where is the proof that for each
-hibernation resume, there exists some page such that
-!swsusp_page_is_forbidden(page) or !swsusp_page_is_free(page) is true?
+> +			goto out;
+> +		}
+> +
+>  		r = device_property_read_u8_array(dev, FDP_DP_FW_VSC_CFG_NAME,
+>  						  *fw_vsc_cfg, len);
+>  
+> @@ -259,7 +264,7 @@ static void fdp_nci_i2c_read_device_properties(struct device *dev,
+>  		dev_dbg(dev, "FW vendor specific commands not present\n");
+>  		*fw_vsc_cfg = NULL;
+>  	}
+> -
 
-Thanks,
-drew
+Why? Line break seems nice here.
 
-> 	assign orig_addr and safe_page to pbe;
-> 	link pbe to restore_pblist;
-> 	return pbe to handle->buffer;
-> 	check handle->buffer;
-> 	goto loop if no error else return with error;
-> > 
-> > Thanks,
-> > drew
-> > 
-> > 
-> > > 		hibernation_restore()
-> > > 			resume_target_kernel()
-> > > 				swsusp_arch_resume()
-> > > >
-> > > > Thanks,
-> > > > drew
+> +out:
+>  	dev_dbg(dev, "Clock type: %d, clock frequency: %d, VSC: %s",
+>  		*clock_type, *clock_freq, *fw_vsc_cfg != NULL ? "yes" : "no");
+>  }
+
+Best regards,
+Krzysztof
+
