@@ -2,196 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0739E6A3E01
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4786A3DEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjB0JNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S229512AbjB0JK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjB0JMw (ORCPT
+        with ESMTP id S229927AbjB0JKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:12:52 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B355F244BC;
-        Mon, 27 Feb 2023 01:05:17 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31R8VmGR098538;
-        Mon, 27 Feb 2023 02:31:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1677486708;
-        bh=cOUx36NOUV9wAf7n+j0ODqotAHa1wOpCu5dRigafLDI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=vr+2ovQ6+2lZQx63tBxZ9o1uH87lUE3ik7Vpj+1euaMMO/cOd2xrCBYVPmjKonIzM
-         CMZFBcvK2Tdx4pexCx3+lUn4WJkrs/BRfSln05RtPod/Pu9nFubmTIZOdPEG0tA8zK
-         +ZK8UcbUD3AB2wS8KRcudUQ4Xf834eN9tmpJ2MLs=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31R8Vm8d062728
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Feb 2023 02:31:48 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 27
- Feb 2023 02:31:47 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 27 Feb 2023 02:31:47 -0600
-Received: from [10.24.69.79] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31R8VhNo006934;
-        Mon, 27 Feb 2023 02:31:44 -0600
-Message-ID: <a50f4623-edc6-f7c6-333d-551cf1f7eea7@ti.com>
-Date:   Mon, 27 Feb 2023 14:01:43 +0530
+        Mon, 27 Feb 2023 04:10:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45828EC4D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:02:22 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pWYyM-0001rR-Ow; Mon, 27 Feb 2023 09:35:02 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pWYyL-00049n-Bm; Mon, 27 Feb 2023 09:35:01 +0100
+Date:   Mon, 27 Feb 2023 09:35:01 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: drivers/media/i2c/tc358746.c:817:13: warning: 'p_best' is used
+ uninitialized
+Message-ID: <20230227083501.nlep2r3ng5d4vkot@pengutronix.de>
+References: <202302240951.roaFGUy5-lkp@intel.com>
+ <20230224084559.x2ceoc6r24uh3wms@pengutronix.de>
+ <CAMuHMdXOr5OFwte3FNVXRUERRwJiqxVXgwCjGC_y6jxmftxrLA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [PATCH v11 3/8] arm64: dts: ti:
- k3-j721s2-mcu-wakeup: Add support of OSPI
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <nm@ti.com>,
-        <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-vadapalli@ti.com>, <vaishnav.a@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230224102438.6541-1-r-gunasekaran@ti.com>
- <20230224102438.6541-4-r-gunasekaran@ti.com>
- <7e236ecc-1cb4-b53b-fb68-c23aa45c4cd2@linaro.org>
-Content-Language: en-US
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <7e236ecc-1cb4-b53b-fb68-c23aa45c4cd2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXOr5OFwte3FNVXRUERRwJiqxVXgwCjGC_y6jxmftxrLA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
-
-On 24/02/23 4:39 pm, Krzysztof Kozlowski wrote:
-> On 24/02/2023 11:24, Ravi Gunasekaran wrote:
->> From: Aswath Govindraju <a-govindraju@ti.com>
->>
->> Add support for two instance of OSPI in J721S2 SoC.
->>
->> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> Signed-off-by: Matt Ranostay <mranostay@ti.com>
->> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
->> ---
->> Changes from v10:
->> * Documented the reason for disabling the nodes by default.
->> * Removed Link tag from commmit message
->>
-
-[...]
-
->>
->>  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 62 +++++++++++++++++++
->>  1 file changed, 62 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> index 0af242aa9816..5005a3ebbd34 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> @@ -306,4 +306,66 @@
->>  			ti,cpts-periodic-outputs = <2>;
->>  		};
->>  	};
->> +
->> +	fss: bus@47000000 {
->> +		compatible = "simple-bus";
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges = <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
->> +			 <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>,
->> +			 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>;
->> +
->> +		/*
->> +		 * Disable the node by default in the common include file.
->> +		 * And enable it in the board specific DT file where the
->> +		 * pinmux property is added.
+On 23-02-24, Geert Uytterhoeven wrote:
+> Hi Marco,
 > 
-> Why? Bus does not need pinmux.
-
-Right. The comment is invalid for the bus node. Will remove it in the next
-series.
-
+> On Fri, Feb 24, 2023 at 9:58 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+> > On 23-02-24, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > head:   e4bc15889506723d7b93c053ad4a75cd58248d74
+> > > commit: 80a21da360516fa602f3a50eb9792f9dfbfb5fdb media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver
+> > > date:   4 months ago
+> > > config: arc-randconfig-r031-20230223 (https://download.01.org/0day-ci/archive/20230224/202302240951.roaFGUy5-lkp@intel.com/config)
+> > > compiler: arceb-elf-gcc (GCC) 12.1.0
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80a21da360516fa602f3a50eb9792f9dfbfb5fdb
+> > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > >         git fetch --no-tags linus master
+> > >         git checkout 80a21da360516fa602f3a50eb9792f9dfbfb5fdb
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/media/i2c/
+> >
+> > This is still a false positive, should we initialize p_best to make the
+> > compiler happy? I think Hans did this once, but he said that this will
+> > be gone with gcc-13 if I remember correctly.
 > 
->> +		 */
->> +		status = "disabled";
->> +
->> +		ospi0: spi@47040000 {
->> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
->> +			reg = <0x00 0x47040000 0x00 0x100>,
->> +			      <0x05 0x00000000 0x01 0x00000000>;
->> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
->> +			cdns,fifo-depth = <256>;
->> +			cdns,fifo-width = <4>;
->> +			cdns,trigger-address = <0x0>;
->> +			clocks = <&k3_clks 109 5>;
->> +			assigned-clocks = <&k3_clks 109 5>;
->> +			assigned-clock-parents = <&k3_clks 109 7>;
->> +			assigned-clock-rates = <166666666>;
->> +			power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			/*
->> +			 * Disable the node by default in the common include
->> +			 * file. And enable it in the board specific DT file
->> +			 * where the pinmux property is added.
+> Are you sure this is a false positive?
 > 
-> Isn't this comment obvious? It's what we do everywhere on every platform
-> every SoC?
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Link: https://lore.kernel.org/oe-kbuild-all/202302240951.roaFGUy5-lkp@intel.com/
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > >    drivers/media/i2c/tc358746.c: In function 'tc358746_find_pll_settings':
+> > > >> drivers/media/i2c/tc358746.c:817:13: warning: 'p_best' is used uninitialized [-Wuninitialized]
+> > >      817 |         u16 p_best, p;
+> > >          |             ^~~~~~
+> > > >> drivers/media/i2c/tc358746.c:816:13: warning: 'm_best' is used uninitialized [-Wuninitialized]
+> > >      816 |         u16 m_best, mul;
+> > >          |             ^~~~~~
+> > >
+> > >
+> > > vim +/p_best +817 drivers/media/i2c/tc358746.c
+> > >
+> > >    805
+> > >    806        static unsigned long tc358746_find_pll_settings(struct tc358746 *tc358746,
+> > >    807                                                        unsigned long refclk,
+> > >    808                                                        unsigned long fout)
+> > >    809
+> > >    810        {
+> > >    811                struct device *dev = tc358746->sd.dev;
+> > >    812                unsigned long best_freq = 0;
+> > >    813                u32 min_delta = 0xffffffff;
+> > >    814                u16 prediv_max = 17;
+> > >    815                u16 prediv_min = 1;
+> > >  > 816                u16 m_best, mul;
+> > >  > 817                u16 p_best, p;
+> > >    818                u8 postdiv;
+> > >    819
+> > >    820                if (fout > 1000 * HZ_PER_MHZ) {
+> > >    821                        dev_err(dev, "HS-Clock above 1 Ghz are not supported\n");
+> > >    822                        return 0;
+> > >    823                }
+> > >    824
+> > >    825                if (fout >= 500 * HZ_PER_MHZ)
+> > >    826                        postdiv = 1;
+> > >    827                else if (fout >= 250 * HZ_PER_MHZ)
+> > >    828                        postdiv = 2;
+> > >    829                else if (fout >= 125 * HZ_PER_MHZ)
+> > >    830                        postdiv = 4;
+> > >    831                else
+> > >    832                        postdiv = 8;
+> > >    833
+> > >    834                for (p = prediv_min; p <= prediv_max; p++) {
+> > >    835                        unsigned long delta, fin;
+> > >    836                        u64 tmp;
+> > >    837
+> > >    838                        fin = DIV_ROUND_CLOSEST(refclk, p);
+> > >    839                        if (fin < 4 * HZ_PER_MHZ || fin > 40 * HZ_PER_MHZ)
+> > >    840                                continue;
+> > >    841
+> > >    842                        tmp = fout * p * postdiv;
+> > >    843                        do_div(tmp, fin);
+> > >    844                        mul = tmp;
+> > >    845                        if (mul > 511)
+> > >    846                                continue;
+> > >    847
+> > >    848                        tmp = mul * fin;
+> > >    849                        do_div(tmp, p * postdiv);
+> > >    850
+> > >    851                        delta = abs(fout - tmp);
+> > >    852                        if (delta < min_delta) {
 > 
+> So you assume this branch will be taken at least once.
+> However, if the smallest delta is 0xffffffff, this is never true.
+> Moreover, tmp is u64, while delta is unsigned long, which is
+> either 32-bit or 64-bit (it is 32-bit on ARC, I think).
 
-Noted. Will remove the elaborate comment.
+You're right about the u64/unsigned long problem, I will check this :)
+But for 'p_best' usaage I'm sure, since we initialze best_freq to zero
+and set it only within this if where we set p_best too.
 
->> +			 */
->> +			status = "disabled";
->> +		};
->> +
->> +		ospi1: spi@47050000 {
->> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
->> +			reg = <0x00 0x47050000 0x00 0x100>,
->> +			      <0x07 0x00000000 0x01 0x00000000>;
->> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
->> +			cdns,fifo-depth = <256>;
->> +			cdns,fifo-width = <4>;
->> +			cdns,trigger-address = <0x0>;
->> +			clocks = <&k3_clks 110 5>;
->> +			power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			/*
->> +			 * Disable the node by default in the common include
->> +			 * file. And enable it in the board specific DT file
->> +			 * where the pinmux property is added.
->> +			 */
->> +			status = "disabled";
->> +		};
->> +
+> So I think the code can definitely be improved by cleaning up
+> the types, possibly killing the warning as well...
 > 
-> No need for blank line.
+> > >    853                                p_best = p;
+> > >    854                                m_best = mul;
+> > >    855                                min_delta = delta;
+> > >    856                                best_freq = tmp;
+> > >    857                        };
+> > >    858
+> > >    859                        if (delta == 0)
+> > >    860                                break;
+> > >    861                };
+> > >    862
+> > >    863                if (!best_freq) {
+> > >    864                        dev_err(dev, "Failed find PLL frequency\n");
+> > >    865                        return 0;
+> > >    866                }
 
-Will remove the blank line.
+If the above if wasn't reached, we will never pass the above if.
 
-> 
->> +	};
->>  };
-> 
-> Best regards,
-> Krzysztof
-> 
-
--- 
 Regards,
-Ravi
+  Marco
+
+> > >    867
+> > >    868                tc358746->pll_post_div = postdiv;
+> > >    869                tc358746->pll_pre_div = p_best;
+> > >    870                tc358746->pll_mul = m_best;
+> > >    871
+> > >    872                if (best_freq != fout)
+> > >    873                        dev_warn(dev, "Request PLL freq:%lu, found PLL freq:%lu\n",
+> > >    874                                 fout, best_freq);
+> > >    875
+> > >    876                dev_dbg(dev, "Found PLL settings: freq:%lu prediv:%u multi:%u postdiv:%u\n",
+> > >    877                        best_freq, p_best, m_best, postdiv);
+> > >    878
+> > >    879                return best_freq;
+> > >    880        }
+> > >    881
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
