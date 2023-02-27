@@ -2,133 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129926A41D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CCF6A41DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjB0Ml2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S229745AbjB0Mm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB0Ml1 (ORCPT
+        with ESMTP id S229470AbjB0Mm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:41:27 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FD91E286;
-        Mon, 27 Feb 2023 04:41:22 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s17so3452291pgv.4;
-        Mon, 27 Feb 2023 04:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8051CX7GPwWvxqPme+h1NtjPhHXl6yhdGNxnSFiTIOA=;
-        b=DkVsZ7W6sLSIbxXqO3RoUSQbMxy+34TToWoKm83zULMAtyl1ogv9SxlV5LzIqI0lyP
-         69NKWYIwkNWmBdOaWfGR4/pZ1TXJL273lB9247VA8pD50IIdZcQHJHCAGyDlBvuToTJq
-         6tRcO44j60Agew8QWEjJUbShHfFjIkZnpEP4oX+UclT1W5vprZPTfsUucuLoCIh75Yyl
-         6XUfq3vPoPlDtbrELgyTjeWySVIBbfhO0P5YgwqvzYLdCkVg1KbB7nf/U+iza0TLhIvQ
-         /8iUib+n0EolvYMXtODbhqDZMOUaZEwp/R1qtbZbDSdOfvxAh5x2SPZNbzs+w+3MjpRw
-         R3zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8051CX7GPwWvxqPme+h1NtjPhHXl6yhdGNxnSFiTIOA=;
-        b=AgGJECPrWshvuMaD4KvFo4seEtyh8ysejvZ+f7z1Cj5C4btbJKMp/5HRKDxBY/yjge
-         FOEDQWKAjO/HYxJ9laVpR0KDDAzvMeWVN6F3MF/fPnr3MxfOsJ6OXXGjlvrJANSrSYJv
-         1oxtZCBkB7PXV4gEUCBgB//OIXlfvlgm3vimydX7RIP2oWflMaBcCBaMJVVBDrTmPRxd
-         IgWwCmH9Rt8CowUzSlYmvaC1rIuI+SuniNUDbpUPPWPev/bJ45VZDBeFadDG0q3LEp9N
-         uYSUGvvE5rvh+uegtGX/567sFr3lgBmKreK1J6bgWvUgKCiuLpDoCOjb+l+SwtzQPiLy
-         ak6w==
-X-Gm-Message-State: AO0yUKWb1sdcyDmhbMHZK5MqMvycapGDB3PwuIqd1irtpLRuFSPfhZc3
-        l6jCdt6LQQySscsrCFJ1bU6LCgZ4+ZcqTtjjRrY=
-X-Google-Smtp-Source: AK7set+VPHNc0Uj3lGJtVWGyyyOmXD3p+bICegEcbCtoyyDOa/JLV6ZlwR96+FshBmRFyL71aTMFUEuoS6vHb1bDNu8=
-X-Received: by 2002:a63:7556:0:b0:4fb:9902:fc4a with SMTP id
- f22-20020a637556000000b004fb9902fc4amr5794446pgn.10.1677501682153; Mon, 27
- Feb 2023 04:41:22 -0800 (PST)
+        Mon, 27 Feb 2023 07:42:28 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840AB1E286;
+        Mon, 27 Feb 2023 04:42:26 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16DEB66021A2;
+        Mon, 27 Feb 2023 12:42:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677501744;
+        bh=iW9qUjoYU5TcTSIT7TSX2TjEtgvMi1cEDF94UKbSCnY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DTPALC+RftSqebkYk9e80kG+mMwiz9bKRVpVWHD9oK99dVz0sJ2D42LNo8Eme/C1l
+         +4Pr+7FXrZ0HLSP4QsgI3pzcAzj/gwdYlFzBH3K5yeYOr7iJtu81RuxvBPEL0p3uFS
+         Tn9J9GceWMMCmkiC91zh57lEXJgbHDjsTo/DHFWgCsFQ6s4PSZ6idPk6+T/tTvM0xl
+         4AMaBRJzCcouZx5WUD5VhRChz763W6cbqBrqlNYnp/K5HHaOhW6WsYRsqApygFlD1M
+         vJBVA/7MSKBPS+YwvDkuybwIWxatvY/OYFbQ/EDej5FR48TdreKLJw7tI5L7kv/f1G
+         EbIrgVYnNGZvw==
+Message-ID: <04acf661-06b5-22b5-ca5d-50078495f7e8@collabora.com>
+Date:   Mon, 27 Feb 2023 13:42:20 +0100
 MIME-Version: 1.0
-References: <20230227105941.2749193-1-suagrfillet@gmail.com> <Y/yagE7jfRGo1FgY@wendy>
-In-Reply-To: <Y/yagE7jfRGo1FgY@wendy>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Mon, 27 Feb 2023 12:40:45 +0000
-Message-ID: <CAAYs2=jSt9=d=N98DCVvtNA9FE6KcVYVdHPG-wpuDPknBFUndQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/doc: supplement CPU capacity with RISC-V
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     corbet@lwn.net, alexs@kernel.org, siyanteng@loongson.cn,
-        robh@kernel.org, palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 4/4] clk: mediatek: Add drivers for MediaTek MT6735
+ main clock and reset drivers
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230225094246.261697-1-y.oudjana@protonmail.com>
+ <20230225094246.261697-5-y.oudjana@protonmail.com>
+ <cd634833-b28e-d6d3-692d-5a391b85ad34@collabora.com>
+ <AYIQQR.5R1644EUJNRV2@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <AYIQQR.5R1644EUJNRV2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor Dooley <conor.dooley@microchip.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=882=
-7=E6=97=A5=E5=91=A8=E4=B8=80 11:57=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, Feb 27, 2023 at 06:59:41PM +0800, Song Shuai wrote:
-> > This commit 7d2078310cbf ("dt-bindings: arm: move cpu-capacity to a
-> > shared loation") updates some references about capacity-dmips-mhz
->
-> Not requesting a respin for this, but mentioning commit 991994509ee9
-> ("dt-bindings: riscv: add a capacity-dmips-mhz cpu property") is
-> probably more relevant as a justification for this change.
->
-Thanks for your correction, I'll pay attention next time.
+Il 27/02/23 11:39, Yassine Oudjana ha scritto:
+> 
+> On Mon, Feb 27 2023 at 10:28:06 AM +01:00:00, AngeloGioacchino Del Regno 
+> <angelogioacchino.delregno@collabora.com> wrote:
+>> Il 25/02/23 10:42, Yassine Oudjana ha scritto:
+>>> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>
+>>> Add drivers for MT6735 apmixedsys, topckgen, infracfg and pericfg
+>>> clock and reset controllers. These provide the base clocks and resets
+>>> on the platform, and should be enough to bring up all essential blocks
+>>> including PWRAP, MSDC and peripherals (UART, I2C, SPI).
+>>>
+>>> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>> ---
+>>>   MAINTAINERS                                  |   4 +
+>>>   drivers/clk/mediatek/Kconfig                 |   9 +
+>>>   drivers/clk/mediatek/Makefile                |   1 +
+>>>   drivers/clk/mediatek/clk-mt6735-apmixedsys.c | 139 ++++++
+>>>   drivers/clk/mediatek/clk-mt6735-infracfg.c   |  78 ++++
+>>>   drivers/clk/mediatek/clk-mt6735-pericfg.c    |  91 ++++
+>>>   drivers/clk/mediatek/clk-mt6735-topckgen.c   | 450 +++++++++++++++++++
+>>>   7 files changed, 772 insertions(+)
+>>>   create mode 100644 drivers/clk/mediatek/clk-mt6735-apmixedsys.c
+>>>   create mode 100644 drivers/clk/mediatek/clk-mt6735-infracfg.c
+>>>   create mode 100644 drivers/clk/mediatek/clk-mt6735-pericfg.c
+>>>   create mode 100644 drivers/clk/mediatek/clk-mt6735-topckgen.c
+>>>
+>>
+>> ..snip..
+>>
+>>> diff --git a/drivers/clk/mediatek/clk-mt6735-topckgen.c 
+>>> b/drivers/clk/mediatek/clk-mt6735-topckgen.c
+>>> new file mode 100644
+>>> index 000000000000..5fa743e4b0fc
+>>> --- /dev/null
+>>> +++ b/drivers/clk/mediatek/clk-mt6735-topckgen.c
+>>> @@ -0,0 +1,450 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Copyright (c) 2022 Yassine Oudjana <y.oudjana@protonmail.com>
+>>> + */
+>>> +
+>>> +#include <linux/clk-provider.h>
+>>> +#include <linux/platform_device.h>
+>>> +
+>>> +#include "clk-mtk.h"
+>>> +#include "clk-mux.h"
+>>> +
+>>> +#include <dt-bindings/clock/mediatek,mt6735-topckgen.h>
+>>> +
+>>
+>> ..snip..
+>>
+>>> +
+>>> +int clk_mt6735_topckgen_probe(struct platform_device *pdev)
+>>
+>> It gets *even easier* than that!
+>>
+>> Check out this one:
+>> https://patchwork.kernel.org/project/linux-mediatek/patch/20230222092543.19187-5-angelogioacchino.delregno@collabora.com/
+>>
+>> ...being part of:
+>> https://patchwork.kernel.org/project/linux-mediatek/list/?series=724004
+>>
+>> So you can use simple_probe for MT6735's topckgen too!
+> 
+> Isn't this basically what I did in v2[1][2]? What changed now?
+> 
 
-I have a question about the patch you mentioned:
-The patch uses cpu_scale per_cpu variable to store the CPU capacity
-through arch_topology,
-But arch_scale_cpu_capacity() interface seems not defined to deliver
-the cpu_scale to the scheduler
-In contrast, arm64 defines it as the topology_get_cpu_scale() in its
-arch/arm64/include/asm/topology.h.
-Is this an oversight or a particular purpose?
+*Basically*, yes. *Practically*, no.
 
-> > property in this document.
-> >
-> > The list of architectures using capacity-dmips-mhz omits RISC-V, so
-> > supplements it here.
-> >
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > ---
-> >  Documentation/scheduler/sched-capacity.rst                    | 2 +-
-> >  Documentation/translations/zh_CN/scheduler/sched-capacity.rst | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/scheduler/sched-capacity.rst b/Documentation=
-/scheduler/sched-capacity.rst
-> > index 8e2b8538bc2b..e2c1cf743158 100644
-> > --- a/Documentation/scheduler/sched-capacity.rst
-> > +++ b/Documentation/scheduler/sched-capacity.rst
-> > @@ -258,7 +258,7 @@ Linux cannot currently figure out CPU capacity on i=
-ts own, this information thus
-> >  needs to be handed to it. Architectures must define arch_scale_cpu_cap=
-acity()
-> >  for that purpose.
-> >
-> > -The arm and arm64 architectures directly map this to the arch_topology=
- driver
-> > +The arm, arm64, and RISC-V architectures directly map this to the arch=
-_topology driver
->
-> My grep clearly missed this change, thanks.
-> For the only part of the patch I understand:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-> Thanks,
-> Conor.
->
+To answer all your questions about that, please read my part 1 series that already
+landed. The part 2 adds the factor clocks to the mix and performs a full migration
+to platform_driver and modularity to 99% of MediaTek clock drivers.
 
-
---=20
-Thanks,
-Song
+>>
+>> In this case, it would be...
+>>
+>> static const struct mtk_clk_desc topck_desc = {
+>>     .clks = topckgen_muxes,
+>>     .num_clks = ARRAY_SIZE(topckgen_muxes),
+>>     .fixed_clks = topckgen_fixed_clks,
+>>     .num_fixed_clks = ARRAY_SIZE(topckgen_fixed_clks),
+>>     .factor_clks = topckgen_factors,
+>>     .num_factor_clks = ARRAY_SIZE(topckgen_factors),
+>>     .clk_lock = &mt6735_topckgen_lock,
+>> };
+>>
+>> static const struct of_device_id of_match_mt6735_topckgen[] = {
+>>     { .compatible = "mediatek,mt6735-topckgen", .data = &topck_desc },
+>>     { /* sentinel */ }
+>> };
+>>
+>> MODULE_DEVICE_TABLE(of, of_match_mt6735_topckgen)
+>>     ^^^^^
+>> You're missing that on multiple clock drivers ;-)
+>>
+>> ...And you're replacing .probe(), .remove() callbacks with
+>>
+>> static struct platform_driver clk_mt6735_topckgen = {
+>>     .probe = mtk_clk_simple_probe,
+>>     .remove = mtk_clk_simple_remove,
+>>
+>>     ......
+>>
+>> Other than that, good job!
+>>
+>> After performing these changes, please make sure to mention the dependency on
+>> my last cleanup series on your cover letter for v4, so that maintainers will
+>> be aware of what to do.
+>>
+>> Your v4 smells like Reviewed-by tags all over. Keep up the great work!
+>>
+>> Cheers,
+>> Angelo
+> 
+> [1] 
+> https://lore.kernel.org/linux-mediatek/20220519142211.458336-5-y.oudjana@protonmail.com/
+> [2] 
+> https://patchwork.kernel.org/project/linux-clk/patch/20220519134728.456643-7-y.oudjana@protonmail.com/
+> 
+> 
+> 
