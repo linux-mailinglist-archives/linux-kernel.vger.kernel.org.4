@@ -2,84 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD486A47B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C876A47BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjB0RSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S229760AbjB0RST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjB0RR6 (ORCPT
+        with ESMTP id S229781AbjB0RSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:17:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0966A7D;
-        Mon, 27 Feb 2023 09:17:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6665360EC4;
-        Mon, 27 Feb 2023 17:17:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC198C433EF;
-        Mon, 27 Feb 2023 17:17:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677518273;
-        bh=vafCIT6H1I4k0W6RFiw6dTjBQ+VyQHZVQ//gt0JC+fE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tpL0kByaUk37GU31DjSD6PYQ5VIEm52R2JBYCJ42CKOr0Mx8IMcRkjT+FV0C9PFkL
-         o3VrN1WaeUs8pwiRzhHs3lBEr2X0pVk/e2ZkjbyQAyT3zFm1eIerisWDy6CufqMOOQ
-         Y2oSJfM2O4rsIJf8k6wZk0xJOepi2qC6izBB5PKf9O8cSd3qQJN3KGXAVTRHUSWv1i
-         T2gZpra1OhXI2M4Tj36OU0mzGFnTu/tTl5fXhKglfMhlS0qMwRqPSWP5hdot3Vp3Ig
-         IvijMtuwjK5vdTcvH1omABXrWv/UfFJJH/XKP24T5Enhyt2E3Xk9DrOimRz86VOjcI
-         alw+JW4KvjpZw==
-Received: by mail-vs1-f42.google.com with SMTP id x14so12217039vso.9;
-        Mon, 27 Feb 2023 09:17:53 -0800 (PST)
-X-Gm-Message-State: AO0yUKUDPc6zPv+cZBJyVFM5cABd3GnqXWU12bn3guqr/+unTgZlrgRk
-        qqkS8lcQQ6U6A/dCHFJwCrs/sTrR3sr61igIeQ==
-X-Google-Smtp-Source: AK7set9NuVEKfi72PjX1EY+Wg3qJ8QkdMjcM1qKsL8dFIkVmkbYyZCYJNZ3p3Ep3WZ2ONWrRKwkBPb2l6lq/IeUGTy8=
-X-Received: by 2002:ab0:53d5:0:b0:68a:5c52:7f2b with SMTP id
- l21-20020ab053d5000000b0068a5c527f2bmr10777056uaa.1.1677518272796; Mon, 27
- Feb 2023 09:17:52 -0800 (PST)
+        Mon, 27 Feb 2023 12:18:17 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A77E96EB0;
+        Mon, 27 Feb 2023 09:18:15 -0800 (PST)
+Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A6B2F20BC5E7;
+        Mon, 27 Feb 2023 09:18:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A6B2F20BC5E7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1677518295;
+        bh=fknedrBN9SwzuVi6ot1s6RGt4uHR8qcI6hAfSyjoEfM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ThR2HyTEPb8Z4zjVX+cn1Rno45lCerw0KQn0uxlZNWM1DtDzFCX+sAc8fK61cK1Rn
+         0lcaY50yjzua3uHlxiKwxCunnqxlbws+KanjnafbyzzZGWhxLCRufKHaSxGPOAU6XE
+         JJUGO1/hJdQ0CZUWDtOoClvOXhMDOWonCG1rmTQo=
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
+Date:   Mon, 27 Feb 2023 17:17:51 +0000
+Message-Id: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230223213418.891942-1-frowand.list@gmail.com> <20230223213418.891942-2-frowand.list@gmail.com>
-In-Reply-To: <20230223213418.891942-2-frowand.list@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 27 Feb 2023 11:17:41 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLR9sm+GRU8EP4eO_Ln2UhD=ztdAU834CzP8RSv2s2jQg@mail.gmail.com>
-Message-ID: <CAL_JsqLR9sm+GRU8EP4eO_Ln2UhD=ztdAU834CzP8RSv2s2jQg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] of: create of_root if no dtb provided
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 3:34=E2=80=AFPM Frank Rowand <frowand.list@gmail.co=
-m> wrote:
->
-> When enabling CONFIG_OF on a platform where of_root is not populated by
-> firmware, we end up without a root node. In order to apply overlays and
-> create subnodes of the root node, we need one. Create this root node
-> by unflattening an empty builtin dtb.
->
-> If firmware provides a flattened device tree (FDT) then the FDT is
-> unflattened via setup_arch().  Otherwise, setup_of() which is called
-> immediately after setup_arch(), and will create the default root node
-> if it does not exist.
+TDP MMU has been broken on AMD CPUs when running on Hyper-V since v5.17.
+The issue was first introduced by two commmits:
 
-Why do we need a hook after setup_arch() rather than an initcall?
+- bb95dfb9e2dfbe6b3f5eb5e8a20e0259dadbe906 "KVM: x86/mmu: Defer TLB
+  flush to caller when freeing TDP MMU shadow pages"
+- efd995dae5eba57c5d28d6886a85298b390a4f07 "KVM: x86/mmu: Zap defunct
+  roots via asynchronous worker"
 
-Rob
+The root cause is that since then there are missing TLB flushes which
+are required by HV_X64_NESTED_ENLIGHTENED_TLB. The failure manifests
+as L2 guest VMs being unable to complete boot due to memory
+inconsistencies between L1 and L2 guests which lead to various
+assertion/emulation failures.
+
+The HV_X64_NESTED_ENLIGHTENED_TLB enlightenment is always exposed by
+Hyper-V on AMD and is always used by Linux. The TLB flush required by
+HV_X64_NESTED_ENLIGHTENED_TLB is much stricter than the local TLB flush
+that TDP MMU wants to issue. We have also found that with TDP MMU L2 guest
+boot performance on AMD is reproducibly slower compared to when TDP MMU is
+disabled.
+
+Disable TDP MMU when using SVM Hyper-V for the time being while we
+search for a better fix.
+
+Link: https://lore.kernel.org/lkml/43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com/t/#u
+Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+---
+Based on kvm-x86-mmu-6.3. The approach used here does not apply cleanly to
+<=v6.2. This would be needed in stable too, and I don't know about putting
+fixes tags.
+
+Jeremi
+
+ arch/x86/include/asm/kvm_host.h |  3 ++-
+ arch/x86/kvm/mmu/mmu.c          |  5 +++--
+ arch/x86/kvm/svm/svm.c          |  6 +++++-
+ arch/x86/kvm/svm/svm_onhyperv.h | 10 ++++++++++
+ arch/x86/kvm/vmx/vmx.c          |  3 ++-
+ 5 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 4d2bc08794e4..a0868ae3688d 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -2031,7 +2031,8 @@ void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid);
+ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd);
+ 
+ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
+-		       int tdp_max_root_level, int tdp_huge_page_level);
++		       int tdp_max_root_level, int tdp_huge_page_level,
++		       bool enable_tdp_mmu);
+ 
+ static inline u16 kvm_read_ldt(void)
+ {
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index c91ee2927dd7..5c0e28a7a3bc 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5787,14 +5787,15 @@ void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid)
+ }
+ 
+ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
+-		       int tdp_max_root_level, int tdp_huge_page_level)
++		       int tdp_max_root_level, int tdp_huge_page_level,
++		       bool enable_tdp_mmu)
+ {
+ 	tdp_enabled = enable_tdp;
+ 	tdp_root_level = tdp_forced_root_level;
+ 	max_tdp_level = tdp_max_root_level;
+ 
+ #ifdef CONFIG_X86_64
+-	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
++	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && enable_tdp_mmu;
+ #endif
+ 	/*
+ 	 * max_huge_page_level reflects KVM's MMU capabilities irrespective
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index d13cf53e7390..070c3f7f8c9f 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4925,6 +4925,7 @@ static __init int svm_hardware_setup(void)
+ 	struct page *iopm_pages;
+ 	void *iopm_va;
+ 	int r;
++	bool enable_tdp_mmu;
+ 	unsigned int order = get_order(IOPM_SIZE);
+ 
+ 	/*
+@@ -4991,9 +4992,12 @@ static __init int svm_hardware_setup(void)
+ 	if (!boot_cpu_has(X86_FEATURE_NPT))
+ 		npt_enabled = false;
+ 
++	enable_tdp_mmu = svm_hv_enable_tdp_mmu();
++
+ 	/* Force VM NPT level equal to the host's paging level */
+ 	kvm_configure_mmu(npt_enabled, get_npt_level(),
+-			  get_npt_level(), PG_LEVEL_1G);
++			  get_npt_level(), PG_LEVEL_1G,
++			  enable_tdp_mmu);
+ 	pr_info("Nested Paging %sabled\n", npt_enabled ? "en" : "dis");
+ 
+ 	/* Setup shadow_me_value and shadow_me_mask */
+diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+index 6981c1e9a809..aa49ac5d66bc 100644
+--- a/arch/x86/kvm/svm/svm_onhyperv.h
++++ b/arch/x86/kvm/svm/svm_onhyperv.h
+@@ -30,6 +30,11 @@ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+ 		hve->hv_enlightenments_control.msr_bitmap = 1;
+ }
+ 
++static inline bool svm_hv_enable_tdp_mmu(void)
++{
++	return !(npt_enabled && ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB);
++}
++
+ static inline void svm_hv_hardware_setup(void)
+ {
+ 	if (npt_enabled &&
+@@ -84,6 +89,11 @@ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+ {
+ }
+ 
++static inline bool svm_hv_enable_tdp_mmu(void)
++{
++	return true;
++}
++
+ static inline void svm_hv_hardware_setup(void)
+ {
+ }
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index c788aa382611..4d3808755d39 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -8442,7 +8442,8 @@ static __init int hardware_setup(void)
+ 	vmx_setup_me_spte_mask();
+ 
+ 	kvm_configure_mmu(enable_ept, 0, vmx_get_max_tdp_level(),
+-			  ept_caps_to_lpage_level(vmx_capability.ept));
++			  ept_caps_to_lpage_level(vmx_capability.ept),
++			  true);
+ 
+ 	/*
+ 	 * Only enable PML when hardware supports PML feature, and both EPT
+-- 
+2.25.1
+
