@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346236A3D63
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 008376A3D86
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjB0IoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 03:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S231657AbjB0IzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbjB0Ine (ORCPT
+        with ESMTP id S229923AbjB0Iyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:43:34 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FE86A7D;
-        Mon, 27 Feb 2023 00:37:57 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31R8a2FF010670;
-        Mon, 27 Feb 2023 02:36:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1677486962;
-        bh=SReC7eYRtCBD2x7utOeo4OljISiDCLbGnFbv8a2yxVA=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=qKlW1zuGWWvOhIrWRNPAy0BuVV/B9yMvUZqCa9xs853NgFAPjjOacOBUdmoVp0A9x
-         rUODm+KaPjFTgqKwwYLaRKwHUG/0MNS2ZhbbIrh+4KcaCDocdZYYe5ZEV92P3Klaib
-         r5xPRT+D10US24Ye/geXEEH455OlGqi7SVuH/XRw=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31R8a2RG059093
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Feb 2023 02:36:02 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 27
- Feb 2023 02:36:01 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 27 Feb 2023 02:36:01 -0600
-Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31R8ZvXB010628;
-        Mon, 27 Feb 2023 02:35:58 -0600
-Message-ID: <1a98fe0a-fd6f-91ed-ff72-efecdf377334@ti.com>
-Date:   Mon, 27 Feb 2023 14:05:57 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v11 6/8] arm64: dts: ti: k3-j721s2: Add support for OSPI
- Flashes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <nm@ti.com>,
-        <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-vadapalli@ti.com>, <vaishnav.a@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230224102438.6541-1-r-gunasekaran@ti.com>
- <20230224102438.6541-7-r-gunasekaran@ti.com>
- <e20f5d80-e53a-559d-9a21-fcf77c1cf968@linaro.org>
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <e20f5d80-e53a-559d-9a21-fcf77c1cf968@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Mon, 27 Feb 2023 03:54:35 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77117244BF;
+        Mon, 27 Feb 2023 00:47:00 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5F6835C0097;
+        Mon, 27 Feb 2023 03:37:31 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 27 Feb 2023 03:37:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677487051; x=1677573451; bh=g9r9vd6/Le
+        bwP6b/3KMuSXY3MGtskFDgCJPE8mZ9wWQ=; b=cYd/THi1GEsGQbZSXqBAUX+fVa
+        o5kNbsi0otx8q8jrkPuCMH67QiXIH936Suj0L3OMfYKHWH3ajSNXYcQbIbIhI2WP
+        diReo5S97blbQYXu2jZzfczx6GbWJgQxMbBqcIofN4Ues19x2sMl88nVG+IhlTTo
+        8fNz4jwFGPoL771mQUhaONN6UUVkg8EJmeKBVxO75/ha5fkpL/sic5QkQJtQisSB
+        epw3pRz6zv/0qS1QuwvC3bRTKWr+vJYj25soKew7Ke4EWJRlxnvHZPNO4jZSIklX
+        LuXd7AhVkw9BW8+eHztR2VJ9qg/V0rdZ3B81Ojb5VCxkgl6QkjSXdHoQd83Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677487051; x=1677573451; bh=g9r9vd6/LebwP6b/3KMuSXY3MGts
+        kFDgCJPE8mZ9wWQ=; b=YEnqEQkyyeo8rcRi8TQsF044IIoNeJocJiy4T3vi/Nlr
+        sf9pOPxmN4FFBGzc5vr66r6Lis4a5Rv4yz47kPguWBpgPzuoGXJDjUr9+tcAERdd
+        cEBdmG3oWS+5Ui3nD1ykNu9Un1+P1/gDTUAnpE98G4nai6fDebbveRKgUpjWRnRh
+        ZQgCVQUa2Xfbpny0XoKmA8SCstSbJIkCu4nlWibyUUWMolMBViNBxCZ8WZYpNCjA
+        FxoYKZa+EHF8oo7Lmlo+twcMz/INp57ugaSH2/FBr2kDYeUU6diK9r+zTCR7bIXw
+        dOBCofYupUpICvm6G0RLCuOjYg+2e0xl2IYzsnWjqA==
+X-ME-Sender: <xms:ymv8YygRUKmJmReynlRKFbZkfZFvxFuaq3A3jysS7bTjHLCXSz1lww>
+    <xme:ymv8YzBaV8885jc6fubbGWv5GoWydSbPXfHQA9B2gsdnxU0K_zlqCYFihWUxVfa3A
+    pOcFNEpkOl_LE4RJbI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekledguddukecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ymv8Y6He2H7lZCXXRAS9FgTenJU2GpdLuhs6LdLYbe7eex9i_CHuqg>
+    <xmx:ymv8Y7TcqvkBMVWseaGn0MyJKOkCwYZ6eaaKkzLkCb-h427OnLO-0Q>
+    <xmx:ymv8Y_x0PZqJylU36Vj2YcvYt6fJtNRZRjpWwDtwXMOKk3mjgPTBpg>
+    <xmx:y2v8Y2zQCyRtpeICrVwDTnJEMiRYLIM527AXjAzy-gQtP0M5llv5nA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D2D36B60086; Mon, 27 Feb 2023 03:37:30 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <d888d651-0ea6-4d0e-9e34-c27acbc7388a@app.fastmail.com>
+In-Reply-To: <04374e51-c7e5-b1d9-d617-d1abf47ec44b@redhat.com>
+References: <20230219150321.2683358-1-trix@redhat.com>
+ <Y/JnZwUEXycgp8QJ@corigine.com> <Y/LKpsjteUAXVIb0@lunn.ch>
+ <Y/MXNWKrrI3aRju+@corigine.com> <Y/QskwGx+A1jACB2@lunn.ch>
+ <Y/TvS+D76/N0WyWc@corigine.com>
+ <04374e51-c7e5-b1d9-d617-d1abf47ec44b@redhat.com>
+Date:   Mon, 27 Feb 2023 09:37:07 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Tom Rix" <trix@redhat.com>,
+        "Simon Horman" <simon.horman@corigine.com>,
+        "Andrew Lunn" <andrew@lunn.ch>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, steen.hegelund@microchip.com,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: lan743x: LAN743X selects FIXED_PHY to resolve a link error
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,104 +92,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24/02/23 4:41 pm, Krzysztof Kozlowski wrote:
-> On 24/02/2023 11:24, Ravi Gunasekaran wrote:
->> From: Aswath Govindraju <a-govindraju@ti.com>
+On Sun, Feb 26, 2023, at 16:15, Tom Rix wrote:
+> On 2/21/23 8:20 AM, Simon Horman wrote:
+>> On Tue, Feb 21, 2023 at 03:29:39AM +0100, Andrew Lunn wrote:
+>>> On Mon, Feb 20, 2023 at 07:46:13AM +0100, Simon Horman wrote:
+>>>>
+>>>> LAN743X=y and FIXED_PHY=m does indeed produce the problem that Tom
+>>>> describes. And his patch does appear to resolve the problem.
+>>> O.K. So the commit message needs updating to describe the actual
+>>> problem.
+>> Yes, that would be a good improvement.
 >>
->> J721S2 has an OSPI NOR flash on its SOM connected the OSPI0 instance and a
->> QSPI NOR flash on the common processor board connected to the OSPI1
->> instance. Add support for the same
+>> Perhaps a fixes tag too?
 >>
->> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> Signed-off-by: Matt Ranostay <mranostay@ti.com>
->> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
->> ---
->> Changes from v10:
->> * Removed Link tag from commit message
+>>>> Unfortunately your proposed solution seems to run foul of a complex
+>>>> dependency situation.
+>>> I was never any good at Kconfig. Arnd is the expert at solving
+>>> problems like this.
+>>>
+>>> You want either everything built in, or FIXED_PHY built in and LAN743X
+>>> modular, or both modular.
+>> I _think_ the patch, which uses select FIXED_PHY for LAN743X,
+>> achieves that.
 >>
+>> I CCed Arnd in case he has any input. Though I think I read
+>> in an recent email from him that he is out most of this week.
 
-[...]
+FWIW, the original patch looks good to me,
 
->>
->>  .../dts/ti/k3-j721s2-common-proc-board.dts    | 39 +++++++++++++++++
->>  arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 43 +++++++++++++++++++
->>  2 files changed, 82 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->> index fa38940fe6cd..76b420379645 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->> @@ -206,6 +206,20 @@
->>  			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
->>  		>;
->>  	};
->> +
->> +	mcu_fss0_ospi1_pins_default: mcu-fss0-ospi1-pins-default {
->> +		pinctrl-single,pins = <
->> +			J721S2_WKUP_IOPAD(0x040, PIN_OUTPUT, 0) /* (A19) MCU_OSPI1_CLK */
->> +			J721S2_WKUP_IOPAD(0x05c, PIN_OUTPUT, 0) /* (D20) MCU_OSPI1_CSn0 */
->> +			J721S2_WKUP_IOPAD(0x060, PIN_OUTPUT, 0) /* (C21) MCU_OSPI1_CSn1 */
->> +			J721S2_WKUP_IOPAD(0x04c, PIN_INPUT, 0) /* (D21) MCU_OSPI1_D0 */
->> +			J721S2_WKUP_IOPAD(0x050, PIN_INPUT, 0) /* (G20) MCU_OSPI1_D1 */
->> +			J721S2_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (C20) MCU_OSPI1_D2 */
->> +			J721S2_WKUP_IOPAD(0x058, PIN_INPUT, 0) /* (A20) MCU_OSPI1_D3 */
->> +			J721S2_WKUP_IOPAD(0x048, PIN_INPUT, 0) /* (B19) MCU_OSPI1_DQS */
->> +			J721S2_WKUP_IOPAD(0x044, PIN_INPUT, 0) /* (B20) MCU_OSPI1_LBCLKO */
->> +		>;
->> +	};
->>  };
->>  
->>  &main_gpio2 {
->> @@ -347,6 +361,31 @@
->>  	maximum-speed = "high-speed";
->>  };
->>  
->> +&fss {
->> +	status = "okay";
-> 
-> Where is the pinmux usage you said is required for the bus?
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Will remove the comment in [3/8] in the next series.
+I'm not sure if the #else path in include/linux/phy_fixed.h
+is actually helpful, as it does not avoid a link failure but
+just makes it less common. Maybe we should just drop that
+from the header and require all users of fixed_phy to
+'select' that symbol even when they are built-in?
 
-> 
->> +};
->> +
->> +&ospi1 {
->> +	status = "okay";
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&mcu_fss0_ospi1_pins_default>;
->> +
->> +	flash@0{
->> +		compatible = "jedec,spi-nor";
->> +		reg = <0x0>;
->> +		spi-tx-bus-width = <1>;
->> +		spi-rx-bus-width = <4>;
->> +		spi-max-frequency = <40000000>;
->> +		cdns,tshsl-ns = <60>;
->> +		cdns,tsd2d-ns = <60>;
->> +		cdns,tchsh-ns = <60>;
->> +		cdns,tslch-ns = <60>;
->> +		cdns,read-delay = <2>;
->> +		#address-cells = <1>;
->> +		#size-cells = <1>;
-> 
-> Are you sure these are correct? Aren't they marked as deprecated?
-
-Right. I found that "address-cells" and "size-cells" are deprecated. 
-I will remove these in the next series.
-
-Thank you for reviewing the patch.
-
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-
--- 
-Regards,
-Ravi
+       Arnd
