@@ -2,179 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617BA6A49DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 433F56A49E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjB0SfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S229665AbjB0Sgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjB0Sey (ORCPT
+        with ESMTP id S229486AbjB0Sgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:34:54 -0500
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD5E524E;
-        Mon, 27 Feb 2023 10:34:36 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1720600a5f0so8323607fac.11;
-        Mon, 27 Feb 2023 10:34:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/n6Yv51jW5LAwlzGIh67sJQM+UVRJdiU8ADnwyoJqp4=;
-        b=QdL0Cp4nD+WawZSxMM+oEIAz/zw1MDKPG8bnlcF8p4Yr3/HaAHB7i8nTFIbOPoUkZK
-         gFZJthbKVS2EPQFXyBg75yMcMLMLptOoz/kRTB4/otyx9MBHk35WL5bNLIiOCqoe0sNv
-         ZYfi90dYcvaJJvlUtD5dPPjRrX3piHO61xK5/o0BSL1GP8wX0XZ3DuezTwNZfIjSfOyt
-         +Oj0neG2qpl/uRxboyEdI0R7aEa6DBCmmydjIWepymM96gOlWuEuDOV2/97Y45dCtkJB
-         9BIc7SMVFbShWQ3DWu70uKFUscmrkiMqudceLm+gwRDjXGa0JgjJNuhgADPvqF0MlTCB
-         yjqA==
-X-Gm-Message-State: AO0yUKW+/D4XKmyHE+LWP4xwmcZL12f7lc5jNIotbkIE09TJzSqqrAXv
-        9zsaZiULjgdRCT6Jk5q4Ow==
-X-Google-Smtp-Source: AK7set/ZtQIEXLigG6HKVUhIDHBY2W/Gvzvr0DTnjglSjgXggcIfBsaT1ydf9BJAYYtr0mOVbmGB4A==
-X-Received: by 2002:a05:6870:f283:b0:172:fda1:5773 with SMTP id u3-20020a056870f28300b00172fda15773mr3395641oap.32.1677522875743;
-        Mon, 27 Feb 2023 10:34:35 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ef27-20020a0568701a9b00b00152c52608dbsm2545569oab.34.2023.02.27.10.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 10:34:35 -0800 (PST)
-Received: (nullmailer pid 647312 invoked by uid 1000);
-        Mon, 27 Feb 2023 18:34:34 -0000
-Date:   Mon, 27 Feb 2023 12:34:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Message-ID: <20230227183434.GA642331-robh@kernel.org>
-References: <20230223015952.201841-1-changhuang.liang@starfivetech.com>
- <20230223015952.201841-2-changhuang.liang@starfivetech.com>
+        Mon, 27 Feb 2023 13:36:31 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477DB59D5;
+        Mon, 27 Feb 2023 10:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oQVtxUWoJZl5nryf+nzdarBkbw9Vk2BNb3zqSC+Ure4=; b=pKi8Eqg5g5LTjQP97WuOMpYlAp
+        BU68dqbTorIcqBm91Y6wPURRk9CqQBMiX6P7qADqMmR/e/Z06E7gIDZh0grS8dKP7ij0jtJhZpsdH
+        g2z6lAueIFbChdiBi/zf2JjOma6p0P5+8v7aIOp5LybFzsOlv7DJBWLjOKhJIGXSgOYuGSTBffylh
+        jG9Qk5+pg5PpPAGMO7BqZQ2klKQsE7Wfz2J6hyn1hCeJ/l1GnhcVaKPScr7MJOZv5jrxMAhR/kAEJ
+        fErXkKZKCz8Ef+UbhijzAmMoTJo/HHdtl2rQi5gphUhtGwkxi7uQiWBSWKf8CBLAQYwB+3xJ1RCfI
+        uwZAwzKg==;
+Received: from [152.254.196.162] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pWiMD-00Gztq-Do; Mon, 27 Feb 2023 19:36:17 +0100
+Message-ID: <421678cb-6ec0-903c-a84b-c833f013815d@igalia.com>
+Date:   Mon, 27 Feb 2023 15:36:05 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223015952.201841-2-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] soc: bcm: brcmstb: Remove bare-metal ARM suspend/resume
+ code
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@vger.kernel.org
+Cc:     drv@mailo.com, ssengar@microsoft.com,
+        kumarpraveen@linux.microsoft.com, christophe.jaillet@wanadoo.fr,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Miaoqian Lin <linmq006@gmail.com>, Liang He <windhl@126.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230224215249.239405-1-f.fainelli@gmail.com>
+Content-Language: en-US
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20230224215249.239405-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 05:59:50PM -0800, Changhuang Liang wrote:
-> Starfive SoCs like the jh7110 use a MIPI D-PHY RX controller based on
-> a M31 IP. Add a binding for it.
+On 24/02/2023 18:52, Florian Fainelli wrote:
+> Since 2018 these platforms have supported entry via the ARM Trusted
+> Firmware using the standard PSCI SYSTEM_SUSPEND function calls. Remove
+> this legacy code.
 > 
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
-> new file mode 100644
-> index 000000000000..a67ca57a6f21
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
-> @@ -0,0 +1,74 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-dphy-rx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Starfive SoC MIPI D-PHY Rx Controller
-> +
-> +maintainers:
-> +  - Jack Zhu <jack.zhu@starfivetech.com>
-> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> +
-> +description:
-> +  The Starfive SoC uses the MIPI CSI D-PHY based on M31 IP to transfer
-> +  CSI camera data.
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jh7110-dphy-rx
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: cfg
-> +      - const: ref
-> +      - const: tx
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> [...]
+> -/*
+> - * The AON is a small domain in the SoC that can retain its state across
+> - * various system wide sleep states and specific reset conditions; the
+> - * AON DATA RAM is a small RAM of a few words (< 1KB) which can store
+> - * persistent information across such events.
+> - *
+> - * The purpose of the below panic notifier is to help with notifying
+> - * the bootloader that a panic occurred and so that it should try its
+> - * best to preserve the DRAM contents holding that buffer for recovery
+> - * by the kernel as opposed to wiping out DRAM clean again.
+> - *
+> - * Reference: comment from Florian Fainelli, at
+> - * https://lore.kernel.org/lkml/781cafb0-8d06-8b56-907a-5175c2da196a@gmail.com
+> - */
+> -static int brcmstb_pm_panic_notify(struct notifier_block *nb,
+> -		unsigned long action, void *data)
+> -{
+> -	writel_relaxed(BRCMSTB_PANIC_MAGIC, ctrl.aon_sram + AON_REG_PANIC);
+> -
+> -	return NOTIFY_DONE;
+> [...]
 
-Should be 'rx' given this is the 'rx' block? A description of each clock 
-in 'clocks' would be good.
+Hi Florian, thanks for the clean-up!
 
-> +
-> +  resets:
-> +    items:
-> +      - description: DPHY_HW reset
-> +      - description: DPHY_B09_ALWAYS_ON reset
-> +
-> +  starfive,aon-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
+I'm curious with the above panic notifier - is it not necessary when
+PSCI is used?
 
-- items: ?
-
-Otherwise, multiple 2 cell entries are allowed. Is that intended?
-
-> +        - description: phandle of AON SYSCON
-> +        - description: register offset
-> +    description: The power of dphy rx is configured by AON SYSCON
-> +      in this property.
+Cheers,
 
 
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - starfive,aon-syscon
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    phy@19820000 {
-> +      compatible = "starfive,jh7110-dphy-rx";
-> +      reg = <0x19820000 0x10000>;
-> +      clocks = <&ispcrg 3>,
-> +               <&ispcrg 4>,
-> +               <&ispcrg 5>;
-> +      clock-names = "cfg", "ref", "tx";
-> +      resets = <&ispcrg 2>,
-> +               <&ispcrg 3>;
-> +      starfive,aon-syscon = <&aon_syscon 0x00>;
-> +      #phy-cells = <0>;
-> +    };
-> -- 
-> 2.25.1
-> 
+Guilherme
