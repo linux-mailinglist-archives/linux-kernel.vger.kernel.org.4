@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6C96A4636
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F816A463C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjB0PkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S229842AbjB0Pkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjB0PkY (ORCPT
+        with ESMTP id S229632AbjB0Pkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:40:24 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B861E5FB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:40:23 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id r40so4472049oiw.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CyTB/8yjHEGeVb5eYubYQqNDzW1fdOoIcMGH96ABpv4=;
-        b=oI9zcZYjxrQqI5sYOaUtqe/5zhMZErmABdHSldC6FrXKdAHLIc51dMDe5gV3uHW+Sj
-         WduVlXX2H1y0qnMrwVnxVOL79HAsX+q/8PqyZmSxC3+q7tzpSAdM6VvzBN8SwQ1x7DMV
-         IYzXTUyH7EroFrtoQC45sSNzp7yFQDODcKIMPCKQMKXnkZtC3eohfaP5y3+hME4QLIUA
-         zx9gWufCFU8QRWqia6+SjTJSW+nLIgw2Z164GAbcHI3Q9e1UmOTnGU1/R86td0RUWYe8
-         yFfrdDSXHf/vtV5Q2HbH0bMJ0ssqfaOizzn0u6O7K12fvzRYES8no82mhajBy8V7g6gC
-         oYCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CyTB/8yjHEGeVb5eYubYQqNDzW1fdOoIcMGH96ABpv4=;
-        b=NOBYb+izfeMo47YSjyjiyHq1XDjbsCc002GRs0L+4YXPwGAXDHMXdaOGceWFqsuxlX
-         tSLni2KVPxDWMqZFf5Z445t1GwSx3TxWaFANF8X7FVDRuv/z672OGTVbjnuGFUxNrYmx
-         f255FPpVNfD2Qpva+Q1spIZB/kSzrsnFAEJJ0uTx0MX3biO2SHBMyPUf2TbeKNeaw9dy
-         BpY3m1UTgNSoXtpqXFPC+v2OGKQghH8s00VEXSYq1uCVAtMmQ3n0KcgoPIW6ZXZXO9XE
-         FhQJo73sHMpDWWsD4PM/eCZWr2LEQTN9HN7Xw/b99VJYl2wx7xXY95dxuojklHcD9Dqm
-         Eznw==
-X-Gm-Message-State: AO0yUKViHuDoz5zMi6Pxc2MOXlRn5WI8XLzdH9HS16IrOO02lMVpQ09W
-        9q7CQiR7+D7ca77hEnFGMo08GAi/GAKHunB9ibM=
-X-Google-Smtp-Source: AK7set+WPiN+PMC33D7dGKvMOq4tjpD5BANv/fOXy/omKUC1JZ4GUk6hlHvST2Ba9zIlMFuhIdoN5PtweesP99tGF+U=
-X-Received: by 2002:a05:6808:486:b0:384:23ed:1ff6 with SMTP id
- z6-20020a056808048600b0038423ed1ff6mr1448259oid.3.1677512422552; Mon, 27 Feb
- 2023 07:40:22 -0800 (PST)
+        Mon, 27 Feb 2023 10:40:35 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23A118B02;
+        Mon, 27 Feb 2023 07:40:34 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8BD0D1EC0513;
+        Mon, 27 Feb 2023 16:40:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677512432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UdrfF8W9f5LmbfgjeMlZzOpnxPRWTTrJk+wzvyZ0r2o=;
+        b=Ca34fwdL4MmIkFlZsp6hRnt9UrI5me63irUBCouAEeomNEo5YUCXpvSLahB68Vk2Oc8rWY
+        hI8qE7uMSSuOVQ2qF00RMv2g0agghp50OWemXGXZR/EEHUaHsj/xljiYHvzdiWeJUEaGur
+        oeiMwjGtnL54xnU3BKie1gXb2e4Tsos=
+Date:   Mon, 27 Feb 2023 16:40:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/CPU/AMD: Make sure EFER[AIBRSE] is set
+Message-ID: <Y/zO7MtvjiVLCiLg@zn.tnic>
+References: <20230124163319.2277355-8-kim.phillips@amd.com>
+ <20230224185257.o3mcmloei5zqu7wa@treble>
+ <Y/knUC0s+rg6ef2r@zn.tnic>
+ <Y/k/ZXUXOFiBhOiI@zn.tnic>
+ <20230225000931.wrednfun4jifkqau@treble>
+ <Y/lUSC5x2ZkTIGu4@zn.tnic>
+ <20230225005221.425yahqvxb57c43x@desk>
+ <20230225013202.g7tibykvylprsxs5@treble>
+ <Y/n9XcbnCzWv2Vul@zn.tnic>
+ <445daef5-8417-ddbb-abbf-3c5ab38e1c9c@intel.com>
 MIME-Version: 1.0
-References: <20230224180225.2477641-1-robdclark@gmail.com> <20230227063821.dg2gbjjwcekbxyzw@sirius.home.kraxel.org>
-In-Reply-To: <20230227063821.dg2gbjjwcekbxyzw@sirius.home.kraxel.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 27 Feb 2023 07:40:11 -0800
-Message-ID: <CAF6AEGsv1G7CPSkCPe3iHGB9JEO4iy+bTbkFLoitmx64U78RJw@mail.gmail.com>
-Subject: Re: [PATCH] drm/virtio: Add option to disable KMS support
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, Chia-I Wu <olvaffe@gmail.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <445daef5-8417-ddbb-abbf-3c5ab38e1c9c@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 10:38 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
->
-> On Fri, Feb 24, 2023 at 10:02:24AM -0800, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Add a build option to disable modesetting support.  This is useful in
-> > cases where the guest only needs to use the GPU in a headless mode, or
-> > (such as in the CrOS usage) window surfaces are proxied to a host
-> > compositor.
->
-> Why make that a compile time option?  There is a config option for the
-> number of scanouts (aka virtual displays) a device has.  Just set that
-> to zero (and fix the driver to not consider that configuration an
-> error).
+On Mon, Feb 27, 2023 at 07:25:00AM -0800, Dave Hansen wrote:
+> It will freak some users out, but it does seem like the kind of thing we
+> _want_ a bug report for.
 
-The goal is to not advertise DRIVER_MODESET (and DRIVER_ATOMIC).. I
-guess that could be done based on whether there are any scanouts, but
-it would mean making the drm_driver struct non-const.  And I think it
-is legitimate to allow the guest to make this choice, regardless of
-what the host decides to expose, since it is about the ioctl surface
-area that the guest kernel exposes to guest userspace.
+You mean, something like:
 
-BR,
--R
+	if (spectre_v2_in_ibrs_mode(spectre_v2_enabled) &&
+	    cpu_has(c, X86_FEATURE_AUTOIBRS))
+		WARN_ON_ONCE(msr_set_bit(MSR_EFER, _EFER_AUTOIBRS));
+
+?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
