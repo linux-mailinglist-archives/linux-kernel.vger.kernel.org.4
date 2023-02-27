@@ -2,70 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F306A4C2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A83606A4C2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjB0UWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S229823AbjB0UXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB0UWM (ORCPT
+        with ESMTP id S229589AbjB0UXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:22:12 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CCF1C7F9;
-        Mon, 27 Feb 2023 12:22:12 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RIioNo027473;
-        Mon, 27 Feb 2023 20:21:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2022-7-12;
- bh=VWpkQXpnWOnVO4rf4vkzWMatqHdeMgv7xqpeqXkJar0=;
- b=HPHbOUO6sZOhs5AWCG1MyJCSl3orA276vprxTxarKHTwKiXL/qoiJeM1rM+F42FHig9O
- 9CUDW5aAKbhDwvw5F+WuAg2M2fNOPV6A3B8ju1HvcWfM4kkWtCkUXSzXSlPJFw/9o+2s
- EIU3E5/egLj3z3AGm3edPPayCIYB/SqIeM+AqylTZJGGPWt90pxNK/rXiNXQjuytSt1L
- xRDhfstSzLqn+PMgy1R3vaYK0G5/FJVDzB55JJFnWcHjLwKHmWEGfvs3t3fKnZSfGPb8
- hPZIlpm+7qfpyvstpvgAE9+z0RHEIcEUl+fwIEqEt1cF2iRnfe4vxWND7L9tvK4OnQgV gA== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nyb9acja1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Feb 2023 20:21:59 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31RJBxdt032919;
-        Mon, 27 Feb 2023 20:21:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8s5t3nm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Feb 2023 20:21:58 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31RKLvmQ021428;
-        Mon, 27 Feb 2023 20:21:57 GMT
-Received: from dhcp-10-152-13-169.usdhcp.oraclecorp.com.com (dhcp-10-152-13-169.usdhcp.oraclecorp.com [10.152.13.169])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ny8s5t3md-1;
-        Mon, 27 Feb 2023 20:21:57 +0000
-From:   George Kennedy <george.kennedy@oracle.com>
-To:     jirislaby@kernel.org, gregkh@linuxfoundation.org,
-        torvalds@linux-foundation.org
-Cc:     george.kennedy@oracle.com, sfr@canb.auug.org.au,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux@weissschuh.net,
-        regressions@lists.linux.dev
-Subject: [PATCH v2] vc_screen: modify vcs_size() handling in vcs_read()
-Date:   Mon, 27 Feb 2023 15:21:41 -0500
-Message-Id: <1677529301-19530-1-git-send-email-george.kennedy@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 spamscore=0 suspectscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270161
-X-Proofpoint-GUID: 563-FF90gCLmJuL1VO2vsbRln0f648sN
-X-Proofpoint-ORIG-GUID: 563-FF90gCLmJuL1VO2vsbRln0f648sN
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 27 Feb 2023 15:23:43 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5583118169;
+        Mon, 27 Feb 2023 12:23:40 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1723ab0375eso8711106fac.1;
+        Mon, 27 Feb 2023 12:23:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tQl9Er/LZyPguZdc7hsvFLd57KkAlUhYoP7LJ7OMkY8=;
+        b=LX9G03P9f5wQYTd+LDJ277TTFDhfXvEYOktZKGdOgQqSRuKqtoWS6VX8IQHDEHiiKh
+         2/VZcygOGUSfc3V5sg+D6aYG54vJ/5Kjdfv4Tjn8BWAinwtlDuSxpnFby/u5B2a0NPcm
+         /RzwkuX/WNCbmLZhppkuFHBVd+LaGuWxQHbObkNloT8Fq0KfVcFXuVHx/PAv7cDWtQfa
+         eeTLZd60cOLSVH7XETAW1480LCG88UubTbs3mRQL5iZSCV6CY1XoZa79damhFnxEzTz4
+         Pklgzvib0IuwveHUymAm4o7FggQ8hK74mZ0bZEMz9ssW2goP+WZncfgmXEuAvs9p17Qg
+         Z4rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tQl9Er/LZyPguZdc7hsvFLd57KkAlUhYoP7LJ7OMkY8=;
+        b=pVh7r7gx8cq+SuE7DlPhoXxjTdv3owKhhTRxezawm2qpMMYqHdx30uV5m6DQhyBbvt
+         kjjGDR+d7p6IWffAXPV70MQRpylQ/81B5TU5L16vnH/xUoAXNe6EBveXgIQQd6CcH5mJ
+         YztrR17y1Rfiy2L9SDRoVeqRhHQ9Leh6xvhPznG1lxjh8TlGn9z1g8TDIOZkW6wIqpFu
+         xebcM0jiwOudDF7uSA1BRcjq6Jc7j0Orn770Zj6X/TrYAhfgSm6sdqtQXC75vRXGPRNg
+         GEwhstKWAVIfIbKvOvJ4w+9cWHCYOjPL2DKmfixzY96DttOGuewXyDLzfQmcTEpV2Fn0
+         DIlg==
+X-Gm-Message-State: AO0yUKUyr7VeHq8FqNScaII214DEYvUSXWj/CP/bSJv4BZjxd3hp5dLM
+        uQ9BSWETfYEncNQBepqIygk=
+X-Google-Smtp-Source: AK7set+mrWLU3Bm7ta3XbGGLzsTQu5bUFZs/+3Q0837U/3VDjtXJiRiiO/aLWPqjVe90FKGsfdB7hQ==
+X-Received: by 2002:a05:6870:b6a7:b0:172:8998:9185 with SMTP id cy39-20020a056870b6a700b0017289989185mr5221796oab.18.1677529419420;
+        Mon, 27 Feb 2023 12:23:39 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id b5-20020a05687061c500b001435fe636f2sm2576133oah.53.2023.02.27.12.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 12:23:38 -0800 (PST)
+Date:   Mon, 27 Feb 2023 12:23:37 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
+Message-ID: <Y/0RSTYYnCsBRfXg@yury-laptop>
+References: <20220428205116.861003-1-yury.norov@gmail.com>
+ <20220428205116.861003-4-yury.norov@gmail.com>
+ <20230225184702.GA3587246@roeck-us.net>
+ <Y/qhL8kSzzhMm+tO@yury-laptop>
+ <Y/qilU0cW6ebmrnM@yury-laptop>
+ <95377047-6b26-b434-fc90-2289fccc2a0b@intel.com>
+ <19587ea3-e54c-e3b0-5341-eb7ee486474b@roeck-us.net>
+ <Y/0DcqXBDvp7tv0r@yury-laptop>
+ <00ed5135-8cd2-dc40-44af-1cbf64a02591@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00ed5135-8cd2-dc40-44af-1cbf64a02591@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,34 +91,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Restore the vcs_size() handling in vcs_read() to what
-it had been in previous version.
+On Mon, Feb 27, 2023 at 12:12:01PM -0800, Guenter Roeck wrote:
+> On 2/27/23 11:24, Yury Norov wrote:
+> > On Mon, Feb 27, 2023 at 06:59:12AM -0800, Guenter Roeck wrote:
+> > > On 2/27/23 06:46, Alexander Lobakin wrote:
+> > > > From: Yury Norov <yury.norov@gmail.com>
+> > > > Date: Sat, 25 Feb 2023 16:06:45 -0800
+> > > > 
+> > > > > On Sat, Feb 25, 2023 at 04:05:02PM -0800, Yury Norov wrote:
+> > > > > > On Sat, Feb 25, 2023 at 10:47:02AM -0800, Guenter Roeck wrote:
+> > > > > > > Hi,
+> > > > > > > 
+> > > > > > > On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
+> > > > > > > > Test newly added bitmap_{from,to}_arr64() functions similarly to
+> > > > > > > > already existing bitmap_{from,to}_arr32() tests.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > > > > > > 
+> > > > > > > Ever since this test is in the tree, several of my boot tests show
+> > > > > > > lots of messages such as
+> > > > > > > 
+> > > > > > > test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
+> > > > 
+> > > > Hmmm, the whole 4 bytes weren't touched.
+> > > > 
+> > > > > > > test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
+> > > > > > > test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
+> > > > 
+> > > > This is where it gets worse...
+> > > > 
+> > > > > > > ...
+> > > > > > > test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
+> > > > > > > test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
+> > > > 
+> > > > I don't see the pattern how the actual result gets generated. But the
+> > > > problem is in the bitmap code rather than in the subtest -- "must be"s
+> > > > are fully correct.
+> > > > 
+> > > > Given that the 0xa5s are present in the upper 32 bits, it is Big Endian
+> > > > I guess? Maybe even 32-bit Big Endian? Otherwise I'd start concerning
+> > > > how comes it doesn't reproduce on x86_64s :D
+> > > > 
+> > > 
+> > > It does reproduce on 32-bit x86 builds, and as far as I can see
+> > > it is only seen with 32-bit little endian systems.
+> > 
+> > Hi Guenter, Alexander,
+> > 
+> > I think that the reason for the failures like this:
+> > 
+> > > test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
+> > 
+> > is that bitmap_to_arr64 is overly optimized for 32-bit LE architectures.
+> > 
+> > Regarding this:
+> > 
+> > > test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
+> > 
+> > I am not sure what happens, but because this again happens on 32-bit
+> > LE only, I hope the following fix would help too.
+> > 
+> > Can you please check if the patch works for you? I don't have a 32-bit LE
+> > machine in hand, and all my 32-bit VMs (arm and i386) refuse to load the
+> > latest kernels for some weird reason, so it's only build-tested.
+> > 
+> > I'll give it a full-run when restore my 32-bit setups.
+> > 
+> > Thanks,
+> > Yury
+> > 
+> > > From 2881714db497aed103e310865da075e7b0ce7e1a Mon Sep 17 00:00:00 2001
+> > From: Yury Norov <yury.norov@gmail.com>
+> > Date: Mon, 27 Feb 2023 09:21:59 -0800
+> > Subject: [PATCH] lib/bitmap: drop optimization of bitmap_{from,to}_arr64
+> > 
+> > bitmap_{from,to}_arr64() optimization is overly optimistic on 32-bit LE
+> > architectures when it's wired to bitmap_copy_clear_tail().
+> > 
+> > bitmap_copy_clear_tail() takes care of unused bits in the bitmap up to
+> > the next word boundary. But on 32-bit machines when copying bits from
+> > bitmap to array of 64-bit words, it's expected that the unused part of
+> > a recipient array must be cleared up to 64-bit boundary, so the last 4
+> > bytes may stay untouched.
+> > 
+> > While the copying part of the optimization works correct, that clear-tail
+> > trick makes corresponding tests reasonably fail when nbits % 64 <= 32:
+> > 
+> > test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
+> > 
+> > Fix it by removing bitmap_{from,to}_arr64() optimization for 32-bit LE
+> > arches.
+> > 
+> > Reported-by: Guenter Roeck <linux@roeck-us.net>
+> > Fixes: 0a97953fd2210 ("lib: add bitmap_{from,to}_arr64")
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> 
+> Tested with 32-bit i386 image. With this patch on top of
+> v6.2-12765-g982818426a0f, the log messages are gone. Without this patch,
+> they are still seen.
+> 
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Fixes: 226fae124b2d ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
-Suggested-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
----
-v2: added Fixes
+Thanks!
 
- drivers/tty/vt/vc_screen.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Then, I'll submit it properly together with a fix for fail_counter.
 
-diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-index f566eb1839dc..c0a2273bb998 100644
---- a/drivers/tty/vt/vc_screen.c
-+++ b/drivers/tty/vt/vc_screen.c
-@@ -414,10 +414,8 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		 */
- 		size = vcs_size(vc, attr, uni_mode);
- 		if (size < 0) {
--			if (read)
--				break;
- 			ret = size;
--			goto unlock_out;
-+			break;
- 		}
- 		if (pos >= size)
- 			break;
--- 
-2.31.1
-
+Thanks,
+Yury
