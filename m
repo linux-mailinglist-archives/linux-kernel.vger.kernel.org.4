@@ -2,83 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1169D6A431D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D407B6A4322
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjB0Nmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S230142AbjB0NnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjB0Nms (ORCPT
+        with ESMTP id S229883AbjB0NnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:42:48 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3819510401;
-        Mon, 27 Feb 2023 05:42:47 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.2.39.140])
-        by gnuweeb.org (Postfix) with ESMTPSA id A06DC831EE;
-        Mon, 27 Feb 2023 13:42:43 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1677505366;
-        bh=sPMDNczqziOn29+Dhl16L3xNY5YIHG7rWMEp6/Gq5uY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BuXtL1GppH1wQW8Q9hth0QwTBc8n5vLNgDjnfqM322/I9Vvl1VVn/XHxMdG6dlef5
-         6QYC0/T1kAya1lzJsDd/0wcZExODJgc1DTW7E9islsADWEL+6jX1AqjeLddLEq00TT
-         kcthdylzgNMJyIywzUOPFJ1S7brs93pGp1K3rhaBwvGJRO0SAUC9iHrAB1GhlUOAPZ
-         y0oGkcrDtKl4K6sd7wZgHrsVwT5rMP3AQs1pbddQ5EC75Y1H/1Twj2JtwDE+yFnj8t
-         Z5OJ3r7v+uRVKmggYDlrDpM2GgM11yK9qW71gzmlNNfnb8bEBbtG9oACJLW1nLBkIo
-         bGH91GxKPXZtQ==
-Date:   Mon, 27 Feb 2023 20:42:35 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fsdevel Mailing List <linux-fsdevel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [RFC PATCH v1 0/6] Introducing `wq_cpu_set` mount option for
- btrfs
-Message-ID: <Y/yzS7aQ6PDyFsbm@biznet-home.integral.gnuweeb.org>
-References: <20230226160259.18354-1-ammarfaizi2@gnuweeb.org>
- <19732428-010d-582c-0aed-9dd09b11d403@gmx.com>
+        Mon, 27 Feb 2023 08:43:18 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BFB19F39;
+        Mon, 27 Feb 2023 05:43:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677505398; x=1709041398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B8kKgrBjxWQyCV0wZXde3NVGF5SDI0kmpRoxcky0ObQ=;
+  b=STO1rlWWvlglTb0fpPF8CIZC75XILfQ6S5hwgU3CklD2PCIr9vnFliD/
+   1qLFvtVOu4FPQt+uqXeAf29LkFzPlAD4f8xv4bO836de9R6Nzv0NBEos9
+   uqB+J9Dl2AMCs7JljUezv+mmr1h3xZAEeSIj75IdQQbAG+FhIyvyxmBaq
+   Jv9CgdwHa996WMxlw0IU/vhBj5A4pvA4Bto+CUDduToUFbCe8LftcSzkz
+   FVZmN0yNlKijiTFRqXKi+mWG2I5EFkjniqe5ir6LsegPGth+baHlowXoI
+   8AJMlHg9bKy4/OE7zp/THCu8USUcwmeJQt7A+y9C63+rmsR1nipVrxlla
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,332,1669100400"; 
+   d="asc'?scan'208";a="198931385"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 06:43:17 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 06:43:16 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Mon, 27 Feb 2023 06:43:13 -0700
+Date:   Mon, 27 Feb 2023 13:42:46 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Alexandre Ghiti <alex@ghiti.fr>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        <nathan@kernel.org>, <llvm@lists.linux.dev>,
+        <ndesaulniers@google.com>
+Subject: Re: [PATCH v7 1/1] riscv: Allow to downgrade paging mode from the
+ command line
+Message-ID: <Y/yzVv717htZLuRY@wendy>
+References: <20230224100218.1824569-1-alexghiti@rivosinc.com>
+ <20230224100218.1824569-2-alexghiti@rivosinc.com>
+ <Y/yilORflGv3vXjX@wendy>
+ <CAMj1kXGCkqpHY7rHZv0EFKhPNk6jpbh1OfG_Jm3vSW8c5Y+9_A@mail.gmail.com>
+ <6bd8012a-7311-7956-b0ae-966b8534a64a@ghiti.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="i8ZwX1OEi/syzAPO"
 Content-Disposition: inline
-In-Reply-To: <19732428-010d-582c-0aed-9dd09b11d403@gmx.com>
-X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6bd8012a-7311-7956-b0ae-966b8534a64a@ghiti.fr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 06:18:43PM +0800, Qu Wenruo wrote: 
-> I'm not sure if pinning the wq is really the best way to your problem.
-> 
-> Yes, I understand you want to limit the CPU usage of btrfs workqueues, but
-> have you tried "thread_pool=" mount option?
-> 
-> That mount option should limit the max amount of in-flight work items, thus
-> at least limit the CPU usage.
+--i8ZwX1OEi/syzAPO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have tried to use the thread_poll=%u mount option previously. But I
-didn't observe the effect intensively. I'll try to play with this option
-more and see if it can yield the desired behavior.
+On Mon, Feb 27, 2023 at 02:27:11PM +0100, Alexandre Ghiti wrote:
+> On 2/27/23 13:56, Ard Biesheuvel wrote:
 
-> For the wq CPU pinning part, I'm not sure if it's really needed, although
-> it's known CPU pinning can affect some performance characteristics.
+> > Note that we switched
+> > to --orphan-handling=error on other arches, as the linker sometimes
 
-What I like about CPU pinning is that we can dedicate CPUs for specific
-workloads so it won't cause scheduling noise to the app we've dedicated
-other CPUs for.
+> It seems orphan-handling is set to "error" only when WERROR is set (see
+> CONFIG_LD_ORPHAN_WARN_LEVEL).
 
--- 
-Ammar Faizi
+My CI explicitly disables CONFIG_WERROR for allmodconfig builds so that
+it can run with W=1, it is indeed set to "error" for regular
+allmodconfig runs.
 
+Thanks Alex/Ard,
+Conor.
+
+
+--i8ZwX1OEi/syzAPO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/yzVgAKCRB4tDGHoIJi
+0v7sAP97bImU6hzDN3fw3MI74GR1HLzo1JA7yvIRvToGW+BFVQD9E0SqjMsSvsa0
+8IM3znP8VY/yIXWltmbmNqpvKDHp5QI=
+=46Kj
+-----END PGP SIGNATURE-----
+
+--i8ZwX1OEi/syzAPO--
