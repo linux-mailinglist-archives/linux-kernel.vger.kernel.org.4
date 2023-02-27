@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F806A4835
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB876A483B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjB0RiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S229944AbjB0RiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjB0Rhf (ORCPT
+        with ESMTP id S230083AbjB0Rhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:37:35 -0500
+        Mon, 27 Feb 2023 12:37:45 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0204C23DA2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:12 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536c039f859so154178577b3.21
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B5224120
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:18 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536be78056eso152392247b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnWzHyaDa4xKEsusiA17Gd0QXhxkYtF9yictDdgKzrI=;
-        b=eYNrKBSiv4pp3yC/iTCyZADelL0yGuzmaY6iqmhnRhO2ZC4AwjZBlMwQ60T7+F6v5V
-         W9pXVV/VzgegCAMywuIjmCwiOA+90SLBeJW+MLSiosTMfuWNrFFPzi/DpMcpFnT2QAIz
-         CS8A9pF/mDc6TBfXFulN3NvXyigohh18r+RbFrpjgpOYnpRGGrUngztXOUUKHZu+O84j
-         vZr6z0eLJ0rZFHfCy+yhp6M25rLJHKBYEd4jK+R2iR3coHxysAy7kDI+ez956k4JFPra
-         ihhR22fhGEVzhhNLMgR5SxjkhXirQ5xjL8arQw+dXDtDF4Wmy1/3QOzDKcZaxxbfGAP+
-         YaEQ==
+        bh=h8ePWaoI68GEISPuC9Ge+4qXkO8FW2G00MOJpn9vfbw=;
+        b=MCQ0c4ia6IOTYMEFJR7GcbSkx2aCS+J3n3kLqdT/eCneA5RnZIfOSsLVqqbhg8oV3C
+         z6a/cjMHL2s70DKPWTui5sWqdtSoRO2Sa3X/ZDXnFAdUlSIwaWZO5o28PzA9YRicQEsL
+         lrmb7xLSeO5Upy8PojNo03zIknEUlOaIGEk3GY2vDeeMswBskS1b7cfH1kyMJjq2FiTa
+         EPOOWdtU+2jcY+efHi/NzqtHu6KIrndJCcMf9jiuRTBG5FPDsaXOxEi35OK/QcXUq7OH
+         bWHqrLVOAQNuSwHdqjlfEqvb31BygBYoGvuY/kisE56Bi1ONNPXA+NnMTkKqBCgcNMjA
+         jbEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnWzHyaDa4xKEsusiA17Gd0QXhxkYtF9yictDdgKzrI=;
-        b=2Fxm5Iv6bnWXs4BbDzdxGuugicHlbt6h+PqaFjEksMCD+yBml2TXzHmlij2wxT/Mzi
-         OvO5ch2SIadmqpzeRpeIi5WR5eqokaUIlOB958mRjaI9605mdmMENdCj/wn24jSb05qp
-         /oSTEDET2nxeNjI7U5jFDvlcUGiVIz4TIoIq7b0JpJlT3qNSmgSSaduhga4gIP4G/ZYx
-         WnCrPasWArMGizfBKXIJjv+yVzwBYSLkV7yI6kHqIozdM1tR1SgXOUSGpm9pUJp6eGWc
-         LMRH31Mc5v0ypWc7iOXueW/KqtvgyBxuIGq26J9ETHwdWW+if0o0II3HpSIvYce3eR3Q
-         H0/g==
-X-Gm-Message-State: AO0yUKWJ9dsLbey3k8x5xBJG3OTHxc+q6z6uENqJBXSp8f8do8NL/CIP
-        tms+USsYin05tN1GE/PGA+svpVKV40c=
-X-Google-Smtp-Source: AK7set85RoEyMLPPVhWwtVXRmKlr9rEFzrfKcusuRBnfvQixZvHj1lhFnYPTkzBCMOeQSYlYKbHYaDSIuDs=
+        bh=h8ePWaoI68GEISPuC9Ge+4qXkO8FW2G00MOJpn9vfbw=;
+        b=NY7LEFwc1vGVA77aOtp2hjNZxLVNpSbdpk6+MZEbc5uo989LxxNT4m+0kEkPnyM/Z4
+         vpfrDkUxDzKATM3/5qDN50qUfu41o1lNeWozqkFmMhTRlP+Y9m+JDKSlGXV6JTT8WKWj
+         D+CCRo/7CpYN6mZxpitHUSCub74pFgAEAG/2NkO8dSzoCbxKsorNWMzgYHe7cGDHoYGY
+         sSCLW74foZ7921lJ149xWMHaU4t1UDmWV32yX4vTMBjkVwzL87UWjL2Vb4PTUZdGW8Cx
+         AWMBEMsufn5qseHJfM/2007m9/dQ8Er7NSj+/gPCda2+yUFTCwokvJfcyQzwR5gwj6A9
+         B9KQ==
+X-Gm-Message-State: AO0yUKXsNdmkm3PQIP9zyZ9XKqKnMmjfeQB1OCZcNPF/ksZK3Q5H1XD6
+        SRZCSDHe/fOQ6yp+IDPejsslXNAh0yU=
+X-Google-Smtp-Source: AK7set9am1xybr1j78qWLG/uhzYsiBlXA8SkEZQ4RtcwObl9A6wj5gHEFg0gqcEhjrM4bOMvHErmcMX4UGI=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:e1f6:21d1:eead:3897])
- (user=surenb job=sendgmr) by 2002:a05:6902:118c:b0:a06:538f:265f with SMTP id
- m12-20020a056902118c00b00a06538f265fmr8111185ybu.4.1677519432589; Mon, 27 Feb
- 2023 09:37:12 -0800 (PST)
-Date:   Mon, 27 Feb 2023 09:36:14 -0800
+ (user=surenb job=sendgmr) by 2002:a5b:84b:0:b0:a09:32fb:be73 with SMTP id
+ v11-20020a5b084b000000b00a0932fbbe73mr9490924ybq.0.1677519434899; Mon, 27 Feb
+ 2023 09:37:14 -0800 (PST)
+Date:   Mon, 27 Feb 2023 09:36:15 -0800
 In-Reply-To: <20230227173632.3292573-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230227173632.3292573-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227173632.3292573-16-surenb@google.com>
-Subject: [PATCH v4 15/33] mm/khugepaged: write-lock VMA while collapsing a
- huge page
+Message-ID: <20230227173632.3292573-17-surenb@google.com>
+Subject: [PATCH v4 16/33] mm/mmap: write-lock VMAs in vma_prepare before
+ modifying them
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -86,97 +86,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Protect VMA from concurrent page fault handler while collapsing a huge
-page. Page fault handler needs a stable PMD to use PTL and relies on
-per-VMA lock to prevent concurrent PMD changes. pmdp_collapse_flush(),
-set_huge_pmd() and collapse_and_free_pmd() can modify a PMD, which will
-not be detected by a page fault handler without proper locking.
-
-Before this patch, page tables can be walked under any one of the
-mmap_lock, the mapping lock, and the anon_vma lock; so when khugepaged
-unlinks and frees page tables, it must ensure that all of those either
-are locked or don't exist. This patch adds a fourth lock under which
-page tables can be traversed, and so khugepaged must also lock out that
-one.
+Write-lock all VMAs which might be affected by a merge, split, expand
+or shrink operations. All these operations use vma_prepare() before
+making the modifications, therefore it provides a centralized place to
+perform VMA locking.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/khugepaged.c |  5 +++++
- mm/rmap.c       | 31 ++++++++++++++++---------------
- 2 files changed, 21 insertions(+), 15 deletions(-)
+ mm/mmap.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 941d1c7ea910..c64e01f03f27 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1147,6 +1147,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
- 	if (result != SCAN_SUCCEED)
- 		goto out_up_write;
- 
-+	vma_start_write(vma);
- 	anon_vma_lock_write(vma->anon_vma);
- 
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, address,
-@@ -1614,6 +1615,9 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 		goto drop_hpage;
- 	}
- 
-+	/* Lock the vma before taking i_mmap and page table locks */
-+	vma_start_write(vma);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 92893d86c0af..e73fbb84ce12 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -502,6 +502,16 @@ static inline void init_vma_prep(struct vma_prepare *vp,
+  */
+ static inline void vma_prepare(struct vma_prepare *vp)
+ {
++	if (vp->vma)
++		vma_start_write(vp->vma);
++	if (vp->adj_next)
++		vma_start_write(vp->adj_next);
++	/* vp->insert is always a newly created VMA, no need for locking */
++	if (vp->remove)
++		vma_start_write(vp->remove);
++	if (vp->remove2)
++		vma_start_write(vp->remove2);
 +
- 	/*
- 	 * We need to lock the mapping so that from here on, only GUP-fast and
- 	 * hardware page walks can access the parts of the page tables that
-@@ -1819,6 +1823,7 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
- 				result = SCAN_PTE_UFFD_WP;
- 				goto unlock_next;
- 			}
-+			vma_start_write(vma);
- 			collapse_and_free_pmd(mm, vma, addr, pmd);
- 			if (!cc->is_khugepaged && is_target)
- 				result = set_huge_pmd(vma, addr, pmd, hpage);
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 8632e02661ac..cfdaa56cad3e 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -25,21 +25,22 @@
-  *     mapping->invalidate_lock (in filemap_fault)
-  *       page->flags PG_locked (lock_page)
-  *         hugetlbfs_i_mmap_rwsem_key (in huge_pmd_share, see hugetlbfs below)
-- *           mapping->i_mmap_rwsem
-- *             anon_vma->rwsem
-- *               mm->page_table_lock or pte_lock
-- *                 swap_lock (in swap_duplicate, swap_info_get)
-- *                   mmlist_lock (in mmput, drain_mmlist and others)
-- *                   mapping->private_lock (in block_dirty_folio)
-- *                     folio_lock_memcg move_lock (in block_dirty_folio)
-- *                       i_pages lock (widely used)
-- *                         lruvec->lru_lock (in folio_lruvec_lock_irq)
-- *                   inode->i_lock (in set_page_dirty's __mark_inode_dirty)
-- *                   bdi.wb->list_lock (in set_page_dirty's __mark_inode_dirty)
-- *                     sb_lock (within inode_lock in fs/fs-writeback.c)
-- *                     i_pages lock (widely used, in set_page_dirty,
-- *                               in arch-dependent flush_dcache_mmap_lock,
-- *                               within bdi.wb->list_lock in __sync_single_inode)
-+ *           vma_start_write
-+ *             mapping->i_mmap_rwsem
-+ *               anon_vma->rwsem
-+ *                 mm->page_table_lock or pte_lock
-+ *                   swap_lock (in swap_duplicate, swap_info_get)
-+ *                     mmlist_lock (in mmput, drain_mmlist and others)
-+ *                     mapping->private_lock (in block_dirty_folio)
-+ *                       folio_lock_memcg move_lock (in block_dirty_folio)
-+ *                         i_pages lock (widely used)
-+ *                           lruvec->lru_lock (in folio_lruvec_lock_irq)
-+ *                     inode->i_lock (in set_page_dirty's __mark_inode_dirty)
-+ *                     bdi.wb->list_lock (in set_page_dirty's __mark_inode_dirty)
-+ *                       sb_lock (within inode_lock in fs/fs-writeback.c)
-+ *                       i_pages lock (widely used, in set_page_dirty,
-+ *                                 in arch-dependent flush_dcache_mmap_lock,
-+ *                                 within bdi.wb->list_lock in __sync_single_inode)
-  *
-  * anon_vma->rwsem,mapping->i_mmap_rwsem   (memory_failure, collect_procs_anon)
-  *   ->tasklist_lock
+ 	if (vp->file) {
+ 		uprobe_munmap(vp->vma, vp->vma->vm_start, vp->vma->vm_end);
+ 
 -- 
 2.39.2.722.g9855ee24e9-goog
 
