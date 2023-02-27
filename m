@@ -2,74 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F146A45D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559176A45D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjB0PSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:18:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S229974AbjB0PTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjB0PSq (ORCPT
+        with ESMTP id S229720AbjB0PS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:18:46 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A978900B;
-        Mon, 27 Feb 2023 07:18:45 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id A33F592009C; Mon, 27 Feb 2023 16:18:43 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 9BF7B92009B;
-        Mon, 27 Feb 2023 15:18:43 +0000 (GMT)
-Date:   Mon, 27 Feb 2023 15:18:43 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
-cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Mon, 27 Feb 2023 10:18:56 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6173AD332;
+        Mon, 27 Feb 2023 07:18:54 -0800 (PST)
+Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A65066602F93;
+        Mon, 27 Feb 2023 15:18:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677511132;
+        bh=BZOWK6rfvJBAo+rrMVEDVF17jJpwJrzKHXdauB9aZYk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FLOuFAjKJJn75VH3nEocm2Y6f/4TvswwOCgM37zBwcffv5yVIhQm55MWEPaFQohqX
+         SLkEBSApFi8kdGawyMbK+2YSUPAbjyv2ZOI6beS3ru5czOB7ThDkuCmEkWCF/awiUB
+         ppzkDL+cTPFQdRFcX1c9CpHCcMqOEf/JN4IyZ1a3yGgEUarO1qKWhLK9rAx3hG79+v
+         3XoXyOmvPYPbHOe2wlPgyDLQqX9YQx7pB6Bzjw9ySaV6gUX7p5LNKUf1L4hVSfWIgo
+         e03Yp9eHAYA8apM6bdrS7D9nLaCaMhHaLJ65ru0fA4G0LttRlCwNDf29ag+kr8UpqH
+         a63NjUIu43F6A==
+From:   Lucas Tanure <lucas.tanure@collabora.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
-In-Reply-To: <CAM1=_QS_ewcFdrZ1ypV15wOkK_SKkb0UUe5_Ozi_CDBdxF5JmA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2302271515100.63909@angie.orcam.me.uk>
-References: <20230222161222.11879-1-jiaxun.yang@flygoat.com> <20230222161222.11879-3-jiaxun.yang@flygoat.com> <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com> <70C80F6D-A727-48FD-A767-A2CA54AA7C1E@flygoat.com>
- <CAM1=_QS_ewcFdrZ1ypV15wOkK_SKkb0UUe5_Ozi_CDBdxF5JmA@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Lucas Tanure <lucas.tanure@collabora.com>, kernel@collabora.com
+Subject: [RFC 0/1] ITS fails to allocate on rk3588
+Date:   Mon, 27 Feb 2023 15:18:46 +0000
+Message-Id: <20230227151847.207922-1-lucas.tanure@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023, Johan Almbladh wrote:
+I am assisting with PCIe and networking bring-up for Rock Pi 5B (RK3588).
+This chip uses the same GICv3 as RK356X but has fixed the previous
+limitation of GIC only supporting 32-bit addresses.
 
-> > > R4000 is a 64-bit CPU, so the 32-bit JIT implementation will not be
-> > > used. From the Makefile:
-> > >
-> > > ifeq ($(CONFIG_32BIT),y)
-> > >        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
-> > > else
-> > >        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
-> > > endif
-> >
-> > It’s common practice to run 32-bit kernel on R4000 based systems to save some memory :-)
-> 
-> Ok, I understand.
+But the implementation decision for shareability in GICR and GITS is
+still the same.
 
- Likewise:
+I read the previous thread about this topic:
+https://lore.kernel.org/lkml/2791594e-db60-e1d0-88e5-7e5bbd98ae4d@rock-chips.com/T/#m5dbc70ff308d81e98dd0d797e23d3fbf9c353245
 
-	select CPU_R4000_WORKAROUNDS if 64BIT
-	select CPU_R4400_WORKAROUNDS if 64BIT
+From my understanding, the errata numbers Marc Zyngier is referring to
+are found in Arm errata documents at developer.arm.com/documentation.
+But I could not find Cavium or Broadcom pages for errata with those
+numbers in Documentation/arm64/silicon-errata.rst
 
-This only applies to 64-bit operations, which are not used in 32-bit code 
-(one reason why these early silicon revisions were originally used with 
-32-bit software only).
+I could not find an errata document about this shareability issue,
+and by what Kever said in the previous thread this could be a
+RockChip design decision.
 
-  Maciej
+Marc, as I could only find ARM errata numbers, is the errata number
+you were expecting generated by ARM only, or RockChip should issue
+a document like Arm to detail the issue?
+
+Can this shareability issue be seen as a quirk without an
+errata number?
+
+The following patch is based on the work of Peter Geis for the
+Quartz64 board and the previous thread feedback.
+
+Lucas Tanure (1):
+  irqchip/gic-v3: Add RK3588 GICR and GITS no share workaround
+
+ Documentation/arm64/silicon-errata.rst |  4 +++
+ arch/arm64/Kconfig                     | 13 ++++++++
+ drivers/irqchip/irq-gic-v3-its.c       | 42 ++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
+
+-- 
+2.39.2
+
