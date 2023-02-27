@@ -2,173 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C2B6A3D5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75046A3D59
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjB0Ilb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 03:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
+        id S231752AbjB0Ig1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjB0IlE (ORCPT
+        with ESMTP id S232532AbjB0Ifj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:41:04 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3760212A4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:36:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677486970; x=1709022970;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3femBW50VuFuS6ruRz4PZ9bn3eoVxZ9MAUBA8SF1+/0=;
-  b=oKzx+PndRy/viqM2b9LeUqazjNLpVADqruTYi9osS5d+4zjQKB4x5+uS
-   l02/1STX1/XfJm1uQzFb4k4X1liUzKAm+AgT/aY58BgdwSE8venvNwLk6
-   Qunl3WS0ITQl7iQ0VVNYjszwjbIHH4Ld2STcy8XikfFtLRrKLiqVZZA6N
-   5vLdszbhpbaokSEYmgVXr3uh2rCG1JCHT4LYdaK3ngo4E8b7VWb+k+3+l
-   Q9ISoRw436fPY/cYnzuM0YkwrwT4UyA11hMkw6LPGjO7rBVZYHQggujhe
-   N6hqDFzcWDsvkY7BkRBtwrK/7PSljO+goil32PkN41vT4rRJzyWkR+2kl
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="314232999"
-X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="314232999"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 00:26:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="1002647446"
-X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="1002647446"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Feb 2023 00:26:32 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWYq7-0004Er-1v;
-        Mon, 27 Feb 2023 08:26:31 +0000
-Date:   Mon, 27 Feb 2023 16:25:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v11 05/10] drm/shmem-helper: Add memory shrinker
-Message-ID: <202302271624.aEDOT0UV-lkp@intel.com>
-References: <20230227060219.904986-6-dmitry.osipenko@collabora.com>
+        Mon, 27 Feb 2023 03:35:39 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F2D2115;
+        Mon, 27 Feb 2023 00:31:06 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id eg37so22186229edb.12;
+        Mon, 27 Feb 2023 00:31:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=07+qdTDQ6UBJE1ppAUMQ9P0jdgbB7pl5uWXEfVl4Vtk=;
+        b=PdYt7oEElXres1wTHUrJs0HhWeO98wzJ9CWly9kW6imArKG1ucr7eFri/kFG0u4D9o
+         IOEmZAILEx7y5UXi+4dV9d36NyK0hmfAtH5LZhWJEnUJPrbgA5BPF1GAQ9i8iFF/1GFo
+         TA/NMigaHCDOW8vMg0LR7S83IMB/n/doN0RAUObgRDzfnhylR4g/qegxJssiugwDSYds
+         wYGZtNX/EP4Iy9khTpNJ/A4P4HhpP+Ux+tGRZ9uZ9r7lVkyVk1duONUvdVxS3wzduJT0
+         nXlgAujayHG4snkp58oz7nYqWav/KaVM7JHVi9L0v1eACwLXy1IUP/NGz8SVllyN5J4G
+         5pAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=07+qdTDQ6UBJE1ppAUMQ9P0jdgbB7pl5uWXEfVl4Vtk=;
+        b=A+jYxD9i0FY/jnLolUUmiSSjnjtqYFhHKjYkX2Yy+1HuXjJ7gy1GDZj2hTm4UOM2gI
+         WobPPQ4eiTdXodGH8TvHBX+i0DclNb1oGtEhR4EasO8YseQ0EighGCuxGD/6VeJ39SZR
+         kpu925FCtGTvtI/RdlBqGUnxeIxj7ivg9zKwJDsqcMana+HHnGR+7keHNDt94PUo7dCB
+         873uADwNG735GIfp7rifS6jMTmczvTW+gF1XPJNsXGRxKQwlsTs8lFf8p8jmtK2f4sZ6
+         EC52U5y4QYaH3gD4jg9eFmZD69qKiAuubkNLA/6hAfc4oNZ5ERbmR8jL2G2IG+CVEJCo
+         uvfQ==
+X-Gm-Message-State: AO0yUKXgZVWGTDnM8AssOobH4f6eH6pgp4iQi9j66L2c7JZNSDohd0we
+        IYTZ3tsQIK87IuD0pNr94G12Pyi2pXU=
+X-Google-Smtp-Source: AK7set9HQ4ELfhFlAbdj5+Og+m9HexOksW8t+xT3bndkDTCmcqH05zqH4lnjwZoNhTBpFC3gadonOg==
+X-Received: by 2002:a17:907:94c5:b0:8f7:68ca:c004 with SMTP id dn5-20020a17090794c500b008f768cac004mr12022799ejc.64.1677486589371;
+        Mon, 27 Feb 2023 00:29:49 -0800 (PST)
+Received: from [10.33.2.246] ([95.183.227.97])
+        by smtp.gmail.com with ESMTPSA id p25-20020a170906141900b008b30e2a450csm2971396ejc.144.2023.02.27.00.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 00:29:49 -0800 (PST)
+Date:   Mon, 27 Feb 2023 11:29:26 +0300
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: clock: Add MediaTek MT6735 clock
+ bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+Message-Id: <2XCQQR.YSBPBN01H6D31@gmail.com>
+In-Reply-To: <52d479ff-14c6-b65d-952b-e7753fee2dea@linaro.org>
+References: <20230225094246.261697-1-y.oudjana@protonmail.com>
+        <20230225094246.261697-2-y.oudjana@protonmail.com>
+        <52d479ff-14c6-b65d-952b-e7753fee2dea@linaro.org>
+X-Mailer: geary/43.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227060219.904986-6-dmitry.osipenko@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
 
-I love your patch! Yet something to improve:
+On Mon, Feb 27 2023 at 09:18:45 AM +01:00:00, Krzysztof Kozlowski 
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 25/02/2023 10:42, Yassine Oudjana wrote:
+>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>> 
+>>  Add clock definitions for the main clock controllers of MT6735 
+>> (apmixedsys,
+>>  topckgen, infracfg and pericfg).
+>> 
+>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>  Acked-by: Rob Herring <robh@kernel.org>
+>>  ---
+>>   MAINTAINERS                                   | 10 +++
+>>   .../clock/mediatek,mt6735-apmixedsys.h        | 16 ++++
+>>   .../clock/mediatek,mt6735-infracfg.h          | 25 ++++++
+>>   .../clock/mediatek,mt6735-pericfg.h           | 37 +++++++++
+>>   .../clock/mediatek,mt6735-topckgen.h          | 79 
+>> +++++++++++++++++++
+>>   5 files changed, 167 insertions(+)
+> 
+> You should squash it with other part of binding. What is the reason
+> behind splitting one binding into three patches?
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[cannot apply to drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.2 next-20230227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Osipenko/drm-shmem-helper-Factor-out-pages-alloc-release-from-drm_gem_shmem_get-put_pages/20230227-140619
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230227060219.904986-6-dmitry.osipenko%40collabora.com
-patch subject: [PATCH v11 05/10] drm/shmem-helper: Add memory shrinker
-config: riscv-randconfig-r006-20230227 (https://download.01.org/0day-ci/archive/20230227/202302271624.aEDOT0UV-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c4d106484ddbebccf4219dacbc2a9975909f4c2a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Osipenko/drm-shmem-helper-Factor-out-pages-alloc-release-from-drm_gem_shmem_get-put_pages/20230227-140619
-        git checkout c4d106484ddbebccf4219dacbc2a9975909f4c2a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302271624.aEDOT0UV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/drm_gem_shmem_helper.c:832:18: warning: no previous prototype for function 'drm_gem_shmem_get_pages_sgt_locked' [-Wmissing-prototypes]
-   struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_object *shmem)
-                    ^
-   drivers/gpu/drm/drm_gem_shmem_helper.c:832:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_object *shmem)
-   ^
-   static 
->> drivers/gpu/drm/drm_gem_shmem_helper.c:1016:7: error: too many arguments to function call, expected 3, have 4
-                                     drm_gem_shmem_shrinker_purge);
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_gem.h:489:15: note: 'drm_gem_lru_scan' declared here
-   unsigned long drm_gem_lru_scan(struct drm_gem_lru *lru, unsigned nr_to_scan,
-                 ^
-   drivers/gpu/drm/drm_gem_shmem_helper.c:1022:8: error: too many arguments to function call, expected 3, have 4
-                                             drm_gem_shmem_shrinker_evict);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_gem.h:489:15: note: 'drm_gem_lru_scan' declared here
-   unsigned long drm_gem_lru_scan(struct drm_gem_lru *lru, unsigned nr_to_scan,
-                 ^
-   1 warning and 2 errors generated.
+It seemed logical to me that each of clock and reset bindings as well 
+as documentation would be separate parts especially since they go in 
+different paths, but if combining them is how it's done then sure, I'll 
+squash them and resend.
 
 
-vim +1016 drivers/gpu/drm/drm_gem_shmem_helper.c
 
-  1001	
-  1002	static unsigned long
-  1003	drm_gem_shmem_shrinker_scan_objects(struct shrinker *shrinker,
-  1004					    struct shrink_control *sc)
-  1005	{
-  1006		struct drm_gem_shmem_shrinker *shmem_shrinker;
-  1007		unsigned long nr_to_scan = sc->nr_to_scan;
-  1008		unsigned long remaining = 0;
-  1009		unsigned long freed = 0;
-  1010	
-  1011		shmem_shrinker = to_drm_gem_shmem_shrinker(shrinker);
-  1012	
-  1013		/* purge as many objects as we can */
-  1014		freed += drm_gem_lru_scan(&shmem_shrinker->lru_evictable,
-  1015					  nr_to_scan, &remaining,
-> 1016					  drm_gem_shmem_shrinker_purge);
-  1017	
-  1018		/* evict as many objects as we can */
-  1019		if (freed < nr_to_scan)
-  1020			freed += drm_gem_lru_scan(&shmem_shrinker->lru_evictable,
-  1021						  nr_to_scan - freed, &remaining,
-  1022						  drm_gem_shmem_shrinker_evict);
-  1023	
-  1024		return (freed > 0 && remaining > 0) ? freed : SHRINK_STOP;
-  1025	}
-  1026	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
