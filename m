@@ -2,76 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7466A46E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9166A46E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjB0QVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S230122AbjB0QXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjB0QVJ (ORCPT
+        with ESMTP id S229685AbjB0QXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:21:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696DF21941
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:21:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AF9AB80D6B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 16:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED1AC433D2;
-        Mon, 27 Feb 2023 16:21:04 +0000 (UTC)
-Date:   Mon, 27 Feb 2023 11:21:02 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, vincent.guittot@linaro.org,
-        mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        zhaoyang.huang@unisoc.com
-Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
- when yield
-Message-ID: <20230227112102.028b2f81@gandalf.local.home>
-In-Reply-To: <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
-References: <20230222080314.2146-1-xuewen.yan@unisoc.com>
-        <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 27 Feb 2023 11:23:15 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260005269
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:23:12 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ec43so28062764edb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:23:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wFR4tLzU09oPdFCdK8fx8YknXRfN/zDcEZwuvmhL1BA=;
+        b=VbaiOZLX1Bg4n5ZQb3SBvby6nX//Y2ZKzBgmRJmh6gTUuH3/QtNmyyX7kOw+C1jIEa
+         QkCkI57rKxsOgL37Os0SN+EntqnIxU4NK6FqaGF0TVRnoHhHjNRil3vLGtza0/kgAxhq
+         0FPL5HNtqzPYjPMULPqS1S8x50Uu3NBVjyuFQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFR4tLzU09oPdFCdK8fx8YknXRfN/zDcEZwuvmhL1BA=;
+        b=0OGd0pVIfX4yCAIO+o6GEiV89gxY4DQN013GCJlYjFcV1xFYc/yihFTAznpDmtepP0
+         iA0Y/CcCZbk8NA8+HGdAKAm5jaFruEvWx2LnW9B7WBwZEFgG1C7sjwUAmeNjRj01/Oks
+         Y0+KD3WR9A3oheFgU/w8vCiL458xQd5uH2kcP5MymeSADnBfhLxgUoxX2ISaGhgyaxxG
+         flhDAK3QxJwKKQQ4askvqrnhOT7ZnWaHOBofeLNchHO3e438qF27AqrtcWVH6GU2YS0C
+         Rtk7ETglvnvVt1x+TbBPDG18bQ6stxSCD8myuzDBU0cVdepNSNPyUs/8qpamJ38gFI94
+         rY5g==
+X-Gm-Message-State: AO0yUKVl8LeJq93BKEKLN82yrWbvGENYUs3PKNRZfG2PcNrp1IMQ+M/m
+        rJf2UfWDUbz91dRO2wNvv7oQ8Q==
+X-Google-Smtp-Source: AK7set8MmGZpi2A29kYf3EdaoDWaJ7iO2C6l7g8xQqGEBfJ9UCgJk/1Bhmou+fSDZs/nHW/FNyzSUQ==
+X-Received: by 2002:a17:906:99d3:b0:8ef:fd8:9d04 with SMTP id s19-20020a17090699d300b008ef0fd89d04mr17295247ejn.27.1677514990668;
+        Mon, 27 Feb 2023 08:23:10 -0800 (PST)
+Received: from miu.piliscsaba.redhat.com (91-82-183-158.pool.digikabel.hu. [91.82.183.158])
+        by smtp.gmail.com with ESMTPSA id lc8-20020a170906f90800b008d57e796dcbsm3375610ejb.25.2023.02.27.08.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 08:23:10 -0800 (PST)
+Date:   Mon, 27 Feb 2023 17:23:04 +0100
+From:   Miklos Szeredi <miklos@szeredi.hu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [GIT PULL] fuse update for 6.3
+Message-ID: <Y/zYyN7NeLKusmSj@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 16:40:33 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+Hi Linus,
 
-> On Wed, Feb 22, 2023 at 04:03:14PM +0800, Xuewen Yan wrote:
-> > When task call the sched_yield, cfs would set the cfs's skip buddy.
-> > If there is no other task call the sched_yield syscall, the task would
-> > always be skiped when there are tasks in rq.   
-> 
-> So you have two tasks A) which does sched_yield() and becomes ->skip,
-> and B) which is while(1). And you're saying that once A does it's thing,
-> B runs forever and starves A?
+Please pull from:
 
-If Xuewen has an example program that demonstrates the issue (pinning to a
-CPU the two tasks), that could be very useful.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.3
 
-> This is a bad solution, SCHED_IDLE tasks have very low weight and can be
-> shot really far to the right, leading to other trouble.
+ - Fix regression in fileattr permission checking
 
-Does SCHED_IDLE tasks have to run on a busy CPU? That is, if you have a
-SCHED_OTHER task running in a while loop, a SCHED_IDLE task will still get
-runtime on that CPU? I always thought SCHED_IDLE tasks were just background
-tasks for running when there was nothing else to run?
+ - Fix possible hang during PID namespace destruction
 
--- Steve
+ - Add generic support for request extensions
 
+ - Add supplementary group list extension
+
+ - Add limited support for supplying supplementary groups in create
+   requests
+
+ - Documentation fixes
+
+Thanks,
+Miklos
+
+---
+Alexander Mikhalitsyn (1):
+      fuse: add inode/permission checks to fileattr_get/fileattr_set
+
+Eric W. Biederman (1):
+      fuse: in fuse_flush only wait if someone wants the return code
+
+Miklos Szeredi (2):
+      fuse: add request extension
+      fuse: optional supplementary group in create requests
+
+Randy Dunlap (1):
+      fuse: fix all W=1 kernel-doc warnings
+
+---
+ fs/fuse/cuse.c            |   2 +-
+ fs/fuse/dev.c             |   4 +-
+ fs/fuse/dir.c             | 126 +++++++++++++++++++++++++++++++++++-----------
+ fs/fuse/file.c            |  91 +++++++++++++++++++++++----------
+ fs/fuse/fuse_i.h          |   9 +++-
+ fs/fuse/inode.c           |   4 +-
+ fs/fuse/ioctl.c           |   6 +++
+ include/uapi/linux/fuse.h |  45 ++++++++++++++++-
+ 8 files changed, 225 insertions(+), 62 deletions(-)
