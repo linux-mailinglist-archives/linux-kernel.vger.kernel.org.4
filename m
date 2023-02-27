@@ -2,277 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0396A3A3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7277F6A3A3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjB0EvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 23:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S229585AbjB0FB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 00:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjB0EvI (ORCPT
+        with ESMTP id S229451AbjB0FBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 23:51:08 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3837B1BAFE;
-        Sun, 26 Feb 2023 20:50:58 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id A201B320051E;
-        Sun, 26 Feb 2023 23:50:56 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 26 Feb 2023 23:50:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1677473456; x=
-        1677559856; bh=TJroo3DveOVWOH9H0vj3EtrJ4rUtjS/zD73NY4F8tF8=; b=f
-        fiNJuVc0q9QGnSw3b1GTjixHCboZbzB2J/hD6yBMVm40JAEIiLru2+oRxj7BhC4j
-        bFQ/q1MGhL4eWECZ2HTkeKpyeLEhlUFPCTuZ7dgwhzfytcPyUbX+Qdmrg+jbs1ra
-        TeAlr6hPaAG2nxMQ+FXHceEOKG46nnwAo+SjKRGm+9ddWz2d+L0khFLNARFCY1/E
-        kluRz0AwXrEo1H6Kwa+npnPDpXCKTSJd/mnAjCIaEVaSJUYceJOXINxEiX5dFneB
-        jplM+WQieFF7xURdOHSEpP1Vc2D/zyKc2CRMkcUa6CVC2H1yrJLATMILg+jtTCYZ
-        V57YSz61IZ5MfX2XA0MxQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677473456; x=1677559856; bh=TJroo3DveOVWO
-        H9H0vj3EtrJ4rUtjS/zD73NY4F8tF8=; b=VzboF+piuBzq2EtlHZvNT6/0Gldb/
-        7QO6EuyrbPppae1XaYj/G5nmXDSrDmZcP/QB5AJj/NvJxiKoOzInQz1jNUr3QbqS
-        vgSrJnCQ390TGxYLj6tPxFBB1mr5dmYgZUyvVWTBhnDgnAY96GGWPPSRcdnKXTnn
-        oqUT9QIwDiblOoBa6x6XGiUqHgA5ILHlYyPMGI1Z6GYMqeJNOtZ8oI+jlxQ6rKiR
-        rENGapubslsDNptYq7FR1CKPJ6DL+rSs2FjT9ND11vVzuNDNIuJq5Wf36F4OHSSm
-        Z86ShOl8doF79FXXjen1+Gg/tMd2Nj1MdxQ0bgDB6QJjk/Hw+Ht38z0Ow==
-X-ME-Sender: <xms:rzb8Yx1MOfkZFZAsy6dOuXvZPHBHv0gGqD3KkmuHuNhVX88hpsuzbw>
-    <xme:rzb8Y4GSeTDsBR23MoHZMUN7LBDm196VFp2psZh8AgHiyfcLQcT_OUtMaEG-4yYvb
-    ajHr3PqoHLjnF2zv1U>
-X-ME-Received: <xmr:rzb8Yx6fr8FnlrWLrw2ZhGTDCyw9uTXDiaxa81Ts6f2Yg8jKRUt9liRXGhDnh8h11onSyPLrY8Li>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekledgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishht
-    rghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepiedtfeekte
-    elvdelveevueeujeffuefguedvteekveejjeeutedufeethffgheehnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlh
-    hishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:rzb8Y-0fRzk5lRSCHpOvXObBcW8GgpuQt5Lso5v4XMWR2B2BHxAnJg>
-    <xmx:rzb8Y0FKt3ouwjSDfmvXbtu1_4x8ZX2QL_9SXFrAZmrUM2HhCYcQbw>
-    <xmx:rzb8Y_-fkz_3KzqZ0Xf1NKlsVpRQYa2H0ynqLLEkhEYDYQpDp4Gpuw>
-    <xmx:sDb8YxdQ7Xt2qPkHBlJtU9YbLrGnXmzcNWFwYZzASMMPubTJeYpvAA>
-Feedback-ID: ifd214418:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Feb 2023 23:50:50 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     devicetree@vger.kernel.org, s.hauer@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, linux-imx@nxp.com
-Cc:     linux@armlinux.org.uk, arnd@arndb.de, alistair23@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com,
-        jernej.skrabec@gmail.com,
-        Alistair Francis <alistair@alistair23.me>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: [PATCH v4 3/3] ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
-Date:   Mon, 27 Feb 2023 14:50:23 +1000
-Message-Id: <20230227045023.560319-4-alistair@alistair23.me>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230227045023.560319-1-alistair@alistair23.me>
-References: <20230227045023.560319-1-alistair@alistair23.me>
+        Mon, 27 Feb 2023 00:01:25 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F335614209
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 21:01:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677474084; x=1709010084;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I9MweRS0RdSIl+GXYceA9uh8+KzrfaUr24cxpGTLpH0=;
+  b=g02uUJtKTMeDmCZu9+QhbRZgjgEnkA0Wh3AjKMMNiIalbahysyI1lG8A
+   zkPzhx2EI1TxJyTIlouymCZPdApTUcTb9SogIDS95cSfz5kPz+D/YO8UD
+   HqJR9m0XekoYZO4Mh+ne07k+yneDeQ1y+/q+euJBq6RrZ2PqwnDE1exYC
+   qx2/zR1qkZNarsPNmYTTapFmQjgkU1RcfZKvpLiEsAc7tmLCG1pjOzWGV
+   dWy0A/P9x8OLV1Epw5HtjbJk80srr94/9gibFaxKHvxZJAN6qHTsnwdSr
+   otwu5uIGwFOtu8AAPagV+hcaC+grgrYe1WBPSi8MnqAkQU/aY82zQvOf8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="322022580"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="322022580"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 21:01:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="762516267"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="762516267"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Feb 2023 21:01:21 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWVdZ-00046F-0o;
+        Mon, 27 Feb 2023 05:01:21 +0000
+Date:   Mon, 27 Feb 2023 13:00:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     KiseokJo <kiseok.jo@irondevice.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: sound/soc/codecs/sma1303.c:1517:28: sparse: sparse: symbol
+ 'sma_i2c_regmap' was not declared. Should it be static?
+Message-ID: <202302271204.H1QKC6Vv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the rohm,bd71815 power controller controller for the
-reMarkable 2.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f3a2439f20d918930cc4ae8f76fe1c1afd26958f
+commit: 68cd394efd0fdce25d0def8d6cb1b8898b2c13d9 ASoC: The Iron Device SMA1303 is a boosted Class-D audio amplifier.
+date:   4 weeks ago
+config: sparc-randconfig-s032-20230226 (https://download.01.org/0day-ci/archive/20230227/202302271204.H1QKC6Vv-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=68cd394efd0fdce25d0def8d6cb1b8898b2c13d9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 68cd394efd0fdce25d0def8d6cb1b8898b2c13d9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash sound/soc/codecs/
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 142 ++++++++++++++++++++++++
- 1 file changed, 142 insertions(+)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302271204.H1QKC6Vv-lkp@intel.com/
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 288fc8611117..dc954e4f63e0 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -91,6 +91,10 @@ wifi_pwrseq: wifi_pwrseq {
- 	};
- };
- 
-+&cpu0 {
-+	cpu-supply = <&buck1>;
-+};
-+
- &clks {
- 	assigned-clocks = <&clks IMX7D_CLKO2_ROOT_SRC>,
- 			  <&clks IMX7D_CLKO2_ROOT_DIV>;
-@@ -118,6 +122,131 @@ wacom_digitizer: digitizer@9 {
- 	};
- };
- 
-+&i2c2 {
-+	clock-frequency = <100000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	bd71815: pmic@4b {
-+		compatible = "rohm,bd71815";
-+		reg = <0x4b>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_bd71815>;
-+		interrupt-parent = <&gpio6>; /* PMIC_INT_B GPIO6_IO16 */
-+		interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
-+		gpio-controller;
-+		clocks = <&clks IMX7D_CLKO2_ROOT_SRC>;
-+		clock-output-names = "bd71815-32k-out";
-+		#clock-cells = <0>;
-+		#gpio-cells = <2>;
-+
-+		regulators {
-+			buck1: buck1 {
-+				regulator-name = "buck1";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <2000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <1250>;
-+			};
-+
-+			buck2: buck2 {
-+				regulator-name = "buck2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <2000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <1250>;
-+			};
-+
-+			buck3: buck3 {
-+				regulator-name = "buck3";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <2700000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck4: buck4 {
-+				regulator-name = "buck4";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1850000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck5: buck5 {
-+				regulator-name = "buck5";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo1: ldo1 {
-+				regulator-name = "ldo1";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo2: ldo2 {
-+				regulator-name = "ldo2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo3: ldo3 {
-+				regulator-name = "ldo3";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo4: ldo4 {
-+				regulator-name = "ldo4";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo5: ldo5 {
-+				regulator-name = "ldo5";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo6: ldodvref {
-+				regulator-name = "ldodvref";
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo7: ldolpsr {
-+				regulator-name = "ldolpsr";
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			boost: wled {
-+				regulator-name = "wled";
-+				regulator-min-microamp = <10>;
-+				regulator-max-microamp = <25000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+		};
-+	};
-+};
-+
- &i2c3 {
- 	clock-frequency = <100000>;
- 	pinctrl-names = "default";
-@@ -292,6 +421,12 @@ MX7D_PAD_LPSR_GPIO1_IO01__GPIO1_IO1	0x00000034 /* WACOM INT */
- };
- 
- &iomuxc {
-+	pinctrl_bd71815: bd71815grp {
-+		fsl,pins = <
-+			MX7D_PAD_SAI1_RX_SYNC__GPIO6_IO16	0x59
-+		>;
-+	};
-+
- 	pinctrl_brcm_reg: brcmreggrp {
- 		fsl,pins = <
- 			/* WIFI_PWR_EN */
-@@ -322,6 +457,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX7D_PAD_I2C2_SDA__I2C2_SDA		0x4000007f
-+			MX7D_PAD_I2C2_SCL__I2C2_SCL		0x4000007f
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX7D_PAD_I2C3_SDA__I2C3_SDA		0x4000007f
+sparse warnings: (new ones prefixed by >>)
+>> sound/soc/codecs/sma1303.c:1517:28: sparse: sparse: symbol 'sma_i2c_regmap' was not declared. Should it be static?
+
+vim +/sma_i2c_regmap +1517 sound/soc/codecs/sma1303.c
+
+  1457	
+  1458	static void sma1303_check_fault_worker(struct work_struct *work)
+  1459	{
+  1460		struct sma1303_priv *sma1303 =
+  1461			container_of(work, struct sma1303_priv, check_fault_work.work);
+  1462		int ret = 0;
+  1463		unsigned int over_temp, ocp_val, uvlo_val;
+  1464	
+  1465		if (sma1303->tsdw_cnt)
+  1466			ret = sma1303_regmap_read(sma1303,
+  1467				SMA1303_0A_SPK_VOL, &sma1303->cur_vol);
+  1468		else
+  1469			ret = sma1303_regmap_read(sma1303,
+  1470				SMA1303_0A_SPK_VOL, &sma1303->init_vol);
+  1471	
+  1472		if (ret != 0) {
+  1473			dev_err(sma1303->dev,
+  1474				"failed to read SMA1303_0A_SPK_VOL : %d\n", ret);
+  1475			return;
+  1476		}
+  1477	
+  1478		ret = sma1303_regmap_read(sma1303, SMA1303_FA_STATUS1, &over_temp);
+  1479		if (ret != 0) {
+  1480			dev_err(sma1303->dev,
+  1481				"failed to read SMA1303_FA_STATUS1 : %d\n", ret);
+  1482			return;
+  1483		}
+  1484	
+  1485		ret = sma1303_regmap_read(sma1303, SMA1303_FB_STATUS2, &ocp_val);
+  1486		if (ret != 0) {
+  1487			dev_err(sma1303->dev,
+  1488				"failed to read SMA1303_FB_STATUS2 : %d\n", ret);
+  1489			return;
+  1490		}
+  1491	
+  1492		ret = sma1303_regmap_read(sma1303, SMA1303_FF_DEVICE_INDEX, &uvlo_val);
+  1493		if (ret != 0) {
+  1494			dev_err(sma1303->dev,
+  1495				"failed to read SMA1303_FF_DEVICE_INDEX : %d\n", ret);
+  1496			return;
+  1497		}
+  1498	
+  1499		if (~over_temp & SMA1303_OT1_OK_STATUS) {
+  1500			dev_crit(sma1303->dev,
+  1501				"%s : OT1(Over Temperature Level 1)\n", __func__);
+  1502	
+  1503			if ((sma1303->cur_vol + 6) <= 0xFF)
+  1504				sma1303_regmap_write(sma1303,
+  1505					SMA1303_0A_SPK_VOL, sma1303->cur_vol + 6);
+  1506	
+  1507			sma1303->tsdw_cnt++;
+  1508		} else if (sma1303->tsdw_cnt) {
+  1509			sma1303_regmap_write(sma1303,
+  1510					SMA1303_0A_SPK_VOL, sma1303->init_vol);
+  1511			sma1303->tsdw_cnt = 0;
+  1512			sma1303->cur_vol = sma1303->init_vol;
+  1513		}
+  1514	
+  1515		if (~over_temp & SMA1303_OT2_OK_STATUS) {
+  1516			dev_crit(sma1303->dev,
+> 1517				"%s : OT2(Over Temperature Level 2)\n", __func__);
+  1518		}
+  1519		if (ocp_val & SMA1303_OCP_SPK_STATUS) {
+  1520			dev_crit(sma1303->dev,
+  1521				"%s : OCP_SPK(Over Current Protect SPK)\n", __func__);
+  1522		}
+  1523		if (ocp_val & SMA1303_OCP_BST_STATUS) {
+  1524			dev_crit(sma1303->dev,
+  1525				"%s : OCP_BST(Over Current Protect Boost)\n", __func__);
+  1526		}
+  1527		if ((ocp_val & SMA1303_CLK_MON_STATUS) && (sma1303->amp_power_status)) {
+  1528			dev_crit(sma1303->dev,
+  1529				"%s : CLK_FAULT(No clock input)\n", __func__);
+  1530		}
+  1531		if (uvlo_val & SMA1303_UVLO_BST_STATUS) {
+  1532			dev_crit(sma1303->dev,
+  1533				"%s : UVLO(Under Voltage Lock Out)\n", __func__);
+  1534		}
+  1535	
+  1536		if ((over_temp != sma1303->last_over_temp) ||
+  1537			(ocp_val != sma1303->last_ocp_val)) {
+  1538	
+  1539			dev_crit(sma1303->dev, "Please check AMP status");
+  1540			dev_dbg(sma1303->dev, "STATUS1=0x%02X : STATUS2=0x%02X\n",
+  1541					over_temp, ocp_val);
+  1542			sma1303->last_over_temp = over_temp;
+  1543			sma1303->last_ocp_val = ocp_val;
+  1544		}
+  1545	
+  1546		if (sma1303->check_fault_status) {
+  1547			if (sma1303->check_fault_period > 0)
+  1548				queue_delayed_work(system_freezable_wq,
+  1549					&sma1303->check_fault_work,
+  1550						sma1303->check_fault_period * HZ);
+  1551			else
+  1552				queue_delayed_work(system_freezable_wq,
+  1553					&sma1303->check_fault_work,
+  1554						CHECK_PERIOD_TIME * HZ);
+  1555		}
+  1556	
+  1557		if (!(~over_temp & SMA1303_OT1_OK_STATUS)
+  1558				&& !(~over_temp & SMA1303_OT2_OK_STATUS)
+  1559				&& !(ocp_val & SMA1303_OCP_SPK_STATUS)
+  1560				&& !(ocp_val & SMA1303_OCP_BST_STATUS)
+  1561				&& !(ocp_val & SMA1303_CLK_MON_STATUS)
+  1562				&& !(uvlo_val & SMA1303_UVLO_BST_STATUS)) {
+  1563		}
+  1564	}
+  1565	
+
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
