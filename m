@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111D56A4376
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F056A438C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjB0N4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S230029AbjB0N7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjB0N4f (ORCPT
+        with ESMTP id S229566AbjB0N7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:56:35 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AD11F4B2;
-        Mon, 27 Feb 2023 05:56:33 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PQMVL6W5Yz4f3l81;
-        Mon, 27 Feb 2023 21:56:26 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP2 (Coremail) with SMTP id Syh0CgAXB+WJtvxjUNV0EQ--.30054S2;
-        Mon, 27 Feb 2023 21:56:28 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-Subject: Re: [PATCH v2] blk-ioprio: Introduce promote-to-rt policy
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-block@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-References: <20230220135428.2632906-1-houtao@huaweicloud.com>
- <20230227130305.2idxwmz2kdnacolc@quack3>
-Message-ID: <05eafc4f-2d60-b7e6-1d5d-9a08709916e8@huaweicloud.com>
-Date:   Mon, 27 Feb 2023 21:56:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 27 Feb 2023 08:59:18 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E10E9EFE;
+        Mon, 27 Feb 2023 05:59:16 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso3559814ots.9;
+        Mon, 27 Feb 2023 05:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=unp+qLGJP8+58YKKISdSfno956lsSwpDkwJ9G7KtJjc=;
+        b=bgH1FCe4rig0MtFhhCFj1NGgZUm4UtF77mkd/1Q/HjtjYuksmHVUr/r/Qpzc1o1H8F
+         8c5EQrMlkgow5oofpdFWHlHlYYgUO5K7JCEE7Y9Axid1CRyS//HSbPjbcxodfL/G247a
+         g/ey4y6JAVgXSsGIEwW73QxFkOBGul+jWM6iBefMoQbSwimkbxR+pR29ROX2jOBlYeqV
+         OsZZCjYK4OzRWROtwBfnzqykI8XDYghZwDJ/eFRhWSBQmQoTuREpAruQrdxqKolLzV/E
+         tISjRD/OAXqSiWNDJs9JcR6czijxbShGaaoRCNr3Oxyxvtup0M3MK32xxv8nabPrqnR5
+         vlkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=unp+qLGJP8+58YKKISdSfno956lsSwpDkwJ9G7KtJjc=;
+        b=myr3ItirQ/PVjWSi08k8YiTJEM5L98tlGwp86PViB/ppL4ZUwhFoREvXaIufDCmXJC
+         4i8tkR21TDxjh5lqdlRowuvkZBbVa1SFrpCTAUpQiSsSIvQist53Z08XmUAB5KbC7uat
+         VWbtjxzbcXGHZKnnR5CQKUi/qOMtrCcMIl8fm9cNg3oDf0Xt9Y/d54PY3r879dT9AJry
+         7gYMWAX6qYl81iA1rmG1XG2KccKcJbNSx0uc1JNjtdywNk9/HIj/yiFLUzoYkrI8fQI9
+         YSp30+UVqReAvvdelRpShmnWKig2uqUJpCEGnMEiUItkBNfp/63+1I0f/O1quQ9T/cV9
+         fJyQ==
+X-Gm-Message-State: AO0yUKXzjcAX5lmDHeYxyxzbDYPz8htpQ3h+b0ZRulxUs7XK9pkX1gl0
+        pg/n2eonalzQ1cGaEkAGdahyIT7ZMv8=
+X-Google-Smtp-Source: AK7set8W4wfK9yMevPg4QyZg5y3a741TO2MJpfMAbvCN2Eyfyg90eSqe24+1IzevZqWCWzrrh+qgQg==
+X-Received: by 2002:a05:6830:43a2:b0:68b:e2bc:3f7 with SMTP id s34-20020a05683043a200b0068be2bc03f7mr4427410otv.18.1677506355439;
+        Mon, 27 Feb 2023 05:59:15 -0800 (PST)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id z14-20020a9d468e000000b00686a19ffef1sm2606492ote.80.2023.02.27.05.59.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 05:59:15 -0800 (PST)
+Message-ID: <066e7233-e248-aad5-7db9-63d009eafa19@gmail.com>
+Date:   Mon, 27 Feb 2023 10:59:10 -0300
 MIME-Version: 1.0
-In-Reply-To: <20230227130305.2idxwmz2kdnacolc@quack3>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 5/5] rust: error: Add from_kernel_result!() macro
 Content-Language: en-US
-X-CM-TRANSID: Syh0CgAXB+WJtvxjUNV0EQ--.30054S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw4kJF1UAF4UGryrKrykZrb_yoW8CrW5pF
-        4fWas3WryktF4fCF1DXF48AFW8t397Jw1UJr1YqrWru3y3Ar9xKw12gayfXFW5CrWkGr4Y
-        q3W5ZrWvkF4UZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU1zuWJUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     Gary Guo <gary@garyguo.net>, Asahi Lina <lina@asahilina.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
+ <20230224-rust-error-v1-5-f8f9a9a87303@asahilina.net>
+ <Y/lOlcSpc+d9ytq/@boqun-archlinux> <20230225222340.34d749ee.gary@garyguo.net>
+ <Y/rCU1S+GDgIojNf@boqun-archlinux> <20230226133606.583cd1d8.gary@garyguo.net>
+ <Y/uiAfZnfbbMrQuD@boqun-archlinux>
+ <CANiq72kTiHF76T0AycM43qj4rUgQpHzBqXujdvk+H2qoDz22AQ@mail.gmail.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <CANiq72kTiHF76T0AycM43qj4rUgQpHzBqXujdvk+H2qoDz22AQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 2/26/23 17:59, Miguel Ojeda wrote:
+> On Sun, Feb 26, 2023 at 7:17 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+>>
+>> My preference to function instead of macro here is because I want to
+>> avoid the extra level of abstraction and make things explict, so that
+>> users and reviewers can understand the API behavior solely based on
+>> Rust's types, functions and closures: they are simpler than macros, at
+>> least to me ;-)
+> 
+> There is one extra problem with the macro: `rustfmt` does not format
+> the contents if called with braces (as we currently do).
+> 
+> So when I was cleaning some things up for v8, one of the things I did
+> was run manually `rustfmt` on the blocks by removing the macro
+> invocation, in commit 77a1a8c952e1 ("rust: kernel: apply `rustfmt` to
+> `from_kernel_result!` blocks").
+> 
+> Having said that, it does format it when called with parenthesis
+> wrapping the block, so we could do that if we end up with the macro.
 
-On 2/27/2023 9:03 PM, Jan Kara wrote:
-> On Mon 20-02-23 21:54:28, Hou Tao wrote:
->> From: Hou Tao <houtao1@huawei.com>
->>
->> Since commit a78418e6a04c ("block: Always initialize bio IO priority on
->> submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
->> blkcg_set_ioprio(), so there will be no way to promote the io-priority
->> of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
->> greater than or equals to IOPRIO_CLASS_RT.
->>
->> It seems possible to call blkcg_set_ioprio() first then try to
->> initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
->> for bio in which bi_ioprio is already initialized (e.g., direct-io), so
->> introduce a new ioprio policy to promote the iopriority of bio to
->> IOPRIO_CLASS_RT if the ioprio is not already RT.
->>
->> So introduce a new promote-to-rt policy to achieve this. For none-to-rt
->> policy, although it doesn't work now, but considering that its purpose
->> was also to override the io-priority to RT and allow for a smoother
->> transition, just keep it and treat it as an alias of the promote-to-rt
->> policy.
->>
->> Signed-off-by: Hou Tao <houtao1@huawei.com>
-> Looks good to me. Feel free to add:
->
-> Reviewed-by: Jan Kara <jack@suse.cz>
-Thanks for the review.
->
-> Just one question regarding doc below:
->
->> ++----------------+---+
->> +| no-change      | 0 |
->> ++----------------+---+
->> +| rt-to-be       | 2 |
->> ++----------------+---+
->> +| all-to-idle    | 3 |
->> ++----------------+---+
-> Shouldn't there be preempt-to-rt somewhere in this table as well? Or why
-> this this in the doc at all? I'd consider the numbers to be kernel internal
-> thing?
-These numbers are used in the algorithm paragraph below to explain how the final
-ioprio is calculated. For prompt-to-rt policy, the algorithm is different and
-the number is unnecessary.
-
-> 								Honza
-
+Also rust-analyzer can't analyze the insides of a from_kernel_result!
+block. Only thing it can do is to suggest a macro expansion. Plus, this
+macro triggers a clippy lint on a redundant call on a closure. So it's a
+bit annoying to work with.
