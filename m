@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526E06A4DAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00436A4DAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjB0WBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S229926AbjB0WCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjB0WBa (ORCPT
+        with ESMTP id S229718AbjB0WCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:01:30 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE4F2448F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:01:28 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id bh1so8308329plb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:01:28 -0800 (PST)
+        Mon, 27 Feb 2023 17:02:12 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83392917B;
+        Mon, 27 Feb 2023 14:02:11 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id h31so4475923pgl.6;
+        Mon, 27 Feb 2023 14:02:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mynabXo4cpyA3e0b0Y0qXprTLx8CBBWuxgvZGBpHlv0=;
-        b=g5o20xX4qD4BcV7V9E+4dphcfJoi/SET3KNDf8b/Ao1Wv9qwrz7hMN6524iRMV7i7J
-         Ny2hgl31MS170Rdsw4kcYuCSv4e8epzFXu1MEiJbAKbzBaI0q2tTPrBwXwjPtEJgSahU
-         NrMuRVsaz4fAqcwW/Y3rTSLRUpHrvSHFF9qtlKeyIn67x35gi5NGXE2mEGAsRcRXPhHA
-         p91nvwTCatxx96uC1O1Q/ArDoKPx2mo29yIUrh4/YDPQH3YyZ5dh6AUFdZNIekotONbL
-         kDala6xwGJlZY36cMbGAI4hoaiKqOVLjQ0VwfLbUbAOhW9YxT2L+OMI1Rq5+I4cZ4rgG
-         uD0A==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ai6zFC9uGuQAlCaHJ/4eqI5LFQoBaErq6+wpvdVxCqE=;
+        b=i0v3AXRw5vzptsM4yZdGgFqhZeZcZ30wZQ3Y36b8usUpS1oSQuf0uhGWKLFuHYDpU8
+         t0jG4j6yNo19zSROEW476StJowRctfEXuXqbjRaHVpRat470zTCFj33bctx32WPPj8YJ
+         sgubfT0wR5gpC8geZtyIynZAw2FyaZVtcebv3/xF0vDrBPM++edZkqQOQlzXZrqHeFj3
+         IPWrak6NtOVfw1yFfLGhbM2E4UBMi69RneRisL89ph49NKEQnwGuF+I8omX5ZspI8UCA
+         /5BysVmXngCwl/heIhaLYttudkuphP3rxfgjuYOiV96316PacXyg4709EKm+3au28z7G
+         oeuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mynabXo4cpyA3e0b0Y0qXprTLx8CBBWuxgvZGBpHlv0=;
-        b=RDdmnRyUFZbCq/dke3qo+yn8czb1m2XdMMhorTjrtJgDJcD13TlGM8DsofHLzZ0k1/
-         96JbMfvuSuU3HWWy7ZSUqxp+Kv472l6rG+k4mjXZKg668AkcZYlcToBFpQcjqg7/wkLk
-         bemSSspcNPgfu3r2yGVjGtWbH5Rd/SG3j4oGdnU0jKz9hlAFtIckJFTUNjUQQpR4P1u6
-         2RrbZXS6ThUvL6fRzaJxp75vBPHMAvFyc/zdpbNuyaRSul6BlAaKzfBGrn+lvSbicGVc
-         8hdSlfMcbVBPw/NGuOgqTzYd9MSiqZhiT7QMLLSd9EAfct1IQLqxDet0BQwO55nbMewA
-         zKtA==
-X-Gm-Message-State: AO0yUKUwTJtdkELPuEK9dXq9l6ihV5OaGLmQQlgoBxiyrhnI34kXiKBJ
-        Ryi9SwHLgXCuc8VcciBeR6S6Bx2DR0ATcnQgrwVa6A==
-X-Google-Smtp-Source: AK7set8B4JODEvBJt9o1jV56Rx0zqj4tv+AWBoGDp1haH+rYM7QCS7sx0FEir1G4JjWgCMZSFVNmAYAeRHSYXKKQTjE=
-X-Received: by 2002:a17:903:130b:b0:19a:f3f8:c31a with SMTP id
- iy11-20020a170903130b00b0019af3f8c31amr147983plb.10.1677535287540; Mon, 27
- Feb 2023 14:01:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ai6zFC9uGuQAlCaHJ/4eqI5LFQoBaErq6+wpvdVxCqE=;
+        b=qxabpfv6RjO0+k2lO02hcAGsFs8lnvILjYLq+tm+Oz1xDcCvdjl3IldlaV3Zjx4XdG
+         zlnW1dNQkAi/dGO6TvcBU0SZ2B9Lik8ZhFqNkkhPp0dbciPHuiOY4mvtAIDE2hVXYkR+
+         562grV7X0Xt/XHTnUkENq9oZmOKuvIeNS95zRznX6ZBKjmZD+jkvRuoT8BdnyyuLRITO
+         3MCX5R8MTEOF2axzwEWoVlO4rtWPbBKmZZ3ZtONrRgTcIV4Qw4f8a5kJPS8+0P1FMniN
+         Cx//8TvrOkyGw2tKW1PcbS3IrKIERgWXxzby81JV/e95HYjy6lZpBWvRN3bF97xp9Xy2
+         sGQA==
+X-Gm-Message-State: AO0yUKVaJQ7/TKTVr2YwZ6fJS4VXIpycJFEOY7J7xvbuFOp633J0Q2Ea
+        5Vt7i4dkWFDcvkL8SHQCvLE=
+X-Google-Smtp-Source: AK7set8PnnaHY69gD2OKAL0ztcViyUrp2etiqfpbLNgRfywSwSZVAEWJ3lb7LBYA8pKHcI9G7WHLZg==
+X-Received: by 2002:a62:5c5:0:b0:5a8:a82a:bd8b with SMTP id 188-20020a6205c5000000b005a8a82abd8bmr390442pff.20.1677535331278;
+        Mon, 27 Feb 2023 14:02:11 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id p18-20020a62ab12000000b005ae02dc6285sm4643759pff.203.2023.02.27.14.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 14:02:10 -0800 (PST)
+Date:   Mon, 27 Feb 2023 14:02:09 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v11 050/113] KVM: x86/tdp_mmu: Ignore unsupported mmu
+ operation on private GFNs
+Message-ID: <20230227220209.GP4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <7a0fb2a0dddc87fb8d34d5af8fc73b288dbcc63c.1673539699.git.isaku.yamahata@intel.com>
+ <20230217102747.00001d7f@gmail.com>
 MIME-Version: 1.0
-References: <CACRpkdamxDX6EBVjKX5=D3rkHp17f5pwGdBVhzFU90-0MHY6dQ@mail.gmail.com>
- <CAGETcx-Ws4zZJ-KWoOLM6ELpyM6pWh7cfRWaYB1zrtTn5sov+w@mail.gmail.com>
- <CACRpkdaw9uJHgMVMdXcwu83fV83uo8r5vtYC8UmO6w=MaWaFdw@mail.gmail.com> <CACRpkdbkM1ipwnerQBK86Azziz+reNhbkfXMWVmNOjc+-FMnzw@mail.gmail.com>
-In-Reply-To: <CACRpkdbkM1ipwnerQBK86Azziz+reNhbkfXMWVmNOjc+-FMnzw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 27 Feb 2023 14:00:51 -0800
-Message-ID: <CAGETcx8cb4JSNMqRXfq2zAMjky_033wu1Ygrb1YqAL=a8voyRA@mail.gmail.com>
-Subject: Re: Regression in probing some AMBA devices possibly devlink related
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230217102747.00001d7f@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,191 +78,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 1:07=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> On Sun, Feb 26, 2023 at 10:55 PM Linus Walleij <linus.walleij@linaro.org>=
- wrote:
-> > On Sun, Feb 26, 2023 at 12:56 AM Saravana Kannan <saravanak@google.com>=
- wrote:
-> > > On Sat, Feb 25, 2023 at 6:29 AM Linus Walleij <linus.walleij@linaro.o=
-rg> wrote:
-> > > >
-> > > > Hi Saravana,
-> > > >
-> > > > I have a boot regression for Ux500 on mainline, but bisecting mainl=
-ine
-> > > > isn't quite working for misc reasons :/
-> > > >
-> > > > I'm not sure about this regression, but it smells like devlink-rela=
-ted.
-> > > >
-> > > > Ux500 have a bunch of normal and some AMBA devices. After
-> > > > boot this happens and we hang waiting for rootfs (which is on eMMC)=
-:
-> > >
-> > > Hmmm... my recent changes were definitely tested on systems with AMBA
-> > > devices and it worked.
-> >
-> > Some of them work, such as the TWD, interrupt controller GIC
-> > and the CoreSight stuff.
-> >
-> > > > [   31.849586] amba 80126000.mmc: deferred probe pending
-> > > > [   31.854801] amba 80118000.mmc: deferred probe pending
-> > > > [   31.859895] amba 80005000.mmc: deferred probe pending
-> > > > [   31.870297] amba 80120000.uart: deferred probe pending
-> > > > [   31.875472] amba 80121000.uart: deferred probe pending
-> > > > [   31.880689] amba 80004000.i2c: deferred probe pending
-> > > > [   31.885799] amba 80128000.i2c: deferred probe pending
-> > > > [   31.890932] amba 80110000.i2c: deferred probe pending
-> > > > [   51.688361] vmem_3v3: disabling
-> > >
-> > > What does /debug/devices_deferred say about these? That should tell u=
-s
-> > > exactly what's blocking it.
-> >
-> > Can't get to check that sadly, because the root fs is on eMMC and
-> > that one is deferring indefinitely.
-> >
-> > I tried to compile in an initramfs but that became too big for this
-> > target. I'll check if I can use that on another target which I
-> > can boot directly from RAM.
-> >
-> > > Also if you convert all the pr_debug and dev_dbg in
-> > > drivers/base/core.c that should give us enough of an idea of what's
-> > > happening. Can you do that too and send it as an attachment (I logs
-> > > are hard to read when they get word wrapped)?
-> >
-> > This I could do!
-> >
-> > See attachment.
-> >
-> > It seems these devices are waiting for the PRCC reset-controller
-> > which is in
-> > drivers/clk/ux500/reset-prcc.c
-> >
-> > Very well! I went into
-> > arch/arm/boot/dts/ste-dbx5x0.dtsi
-> > and commented out all "resets =3D < &prcc....>; statements,
-> > and indeed then the system comes up fine! (The resets are
-> > not vital to boot the system.)
-> >
-> > But this is weird because the driver for the resets is spawn from
-> > the same device node that is spawning the clocks...
-> > All resources (clocks and resets) are spawn from here:
-> > drivers/clk/ux500/u8500_of_clk.c
-> >
-> > From these nodes in the DTS
-> > arch/arm/boot/dts/ste-dbx5x0.dtsi:
-> >
-> >                 clocks {
-> >                         compatible =3D "stericsson,u8500-clks";
-> >                         /*
-> >                          * Registers for the CLKRST block on peripheral
-> >                          * groups 1, 2, 3, 5, 6,
-> >                          */
-> >                         reg =3D <0x8012f000 0x1000>, <0x8011f000 0x1000=
->,
-> >                             <0x8000f000 0x1000>, <0xa03ff000 0x1000>,
-> >                             <0xa03cf000 0x1000>;
-> >
-> >                         prcmu_clk: prcmu-clock {
-> >                                 #clock-cells =3D <1>;
-> >                         };
-> >
-> >                         prcc_pclk: prcc-periph-clock {
-> >                                 #clock-cells =3D <2>;
-> >                         };
-> >
-> >                         prcc_kclk: prcc-kernel-clock {
-> >                                 #clock-cells =3D <2>;
-> >                         };
-> >
-> >                         prcc_reset: prcc-reset-controller {
-> >                                 #reset-cells =3D <2>;
-> >                         };
-> >
-> >                         rtc_clk: rtc32k-clock {
-> >                                 #clock-cells =3D <0>;
-> >                         };
-> >
-> >                         smp_twd_clk: smp-twd-clock {
-> >                                 #clock-cells =3D <0>;
-> >                         };
-> >
-> >                         clkout_clk: clkout-clock {
-> >                                 /* Cell 1 id, cell 2 source, cell 3 div=
- */
-> >                                 #clock-cells =3D <3>;
-> >                         };
-> >                 };
-> >
-> > So it seems like the device core things that the
-> > resets are never coming online. But they are! I put some
-> > debug prints into the PRCC reset driver to make sure.
-> >
-> > diff --git a/drivers/clk/ux500/reset-prcc.c b/drivers/clk/ux500/reset-p=
-rcc.c
-> > index f7e48941fbc7..b1ed9a48cdfb 100644
-> > --- a/drivers/clk/ux500/reset-prcc.c
-> > +++ b/drivers/clk/ux500/reset-prcc.c
-> > @@ -178,4 +178,6 @@ void u8500_prcc_reset_init(struct device_node *np,
-> > struct u8500_prcc_reset *ur)
-> >         ret =3D reset_controller_register(rcdev);
-> >         if (ret)
-> >                 pr_err("PRCC failed to register reset controller\n");
+On Fri, Feb 17, 2023 at 10:27:47AM +0200,
+Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+
+> On Thu, 12 Jan 2023 08:31:58 -0800
+> isaku.yamahata@intel.com wrote:
+> 
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > Some KVM MMU operations (dirty page logging, page migration, aging page)
+> > aren't supported for private GFNs (yet) with the first generation of TDX.
+> > Silently return on unsupported TDX KVM MMU operations.
+> > 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c     |  3 +++
+> >  arch/x86/kvm/mmu/tdp_mmu.c | 50 ++++++++++++++++++++++++++++++++++----
+> >  arch/x86/kvm/x86.c         |  3 +++
+> >  3 files changed, 51 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 484e615196aa..ad0482a101a3 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -6635,6 +6635,9 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
+> >  	for_each_rmap_spte(rmap_head, &iter, sptep) {
+> >  		sp = sptep_to_sp(sptep);
+> >  
+> > +		/* Private page dirty logging is not supported yet. */
+> > +		KVM_BUG_ON(is_private_sptep(sptep), kvm);
 > > +
-> > +       pr_info("PRCC reset controller registered\n");
-> >  }
-> >
-> > [    0.000000] PRCC reset controller registered
-> >
-> > It is registered as early as the clocks.
-> >
-> > So it seems something is fishy with the reset resource resolution?
-> >
-> > > > The last regulator (vmem_3v3) is something the eMMC that didn't
-> > > > probe was supposed to use.
-> > > >
-> > > > All the failing drivers are AMBA PrimeCell devices:
-> > > > drivers/mmc/host/mmci.c
-> > > > drivers/tty/serial/amba-pl011.c
-> > > > drivers/i2c/busses/i2c-nomadik.c
-> > > >
-> > > > This makes me suspect something was done for ordinary (platform)
-> > > > devices that didn't happen for AMBA devices?
-> > > >
-> > > > This is the main portion of the device tree containing these
-> > > > devices and their resources:
-> > > > arch/arm/boot/dts/ste-dbx5x0.dtsi
-> > >
-> > > I'll take a closer look on Monday. Btw, I always prefer the dts file
-> > > because there's always some property that adds a dependency and that
-> > > might be the clue to whatever is broken. But I'll take a look at this=
-.
-> >
-> > The top level DTS for this system I'm testing on (source for the
-> > log) is
-> > arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-> >
-> > > It's unlikely the patch attached might fix it, but can you give it a =
-shot?
-> >
-> > Sadly does not help!
->
-> Did this mail go through with the attachment?
+> >  		/*
+> >  		 * We cannot do huge page mapping for indirect shadow pages,
+> >  		 * which are found on the last rmap (level = 1) when not using
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index 5ce0328c71df..69e202bd1897 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -1478,7 +1478,8 @@ typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
+> >  
+> >  static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+> >  						   struct kvm_gfn_range *range,
+> > -						   tdp_handler_t handler)
+> > +						   tdp_handler_t handler,
+> > +						   bool only_shared)
+> 
+> What's the purpose of having only_shared while all the callers will set it as
+> true?
 
-Attachment came through for me. I should be able to give you a test
-patch this week. My guess on what the issue is: I have to walk up to
-the parents and check for FWNODE_FLAG_DEV_INITIALIZED or set it
-recursively for all the child nodes (termination condition being when
-the fwnode has a device).
+I dropped only_shared argument.
 
--Saravana
 
->
-> I have pastebin:ed it here as well:
-> https://pastebin.com/Fwc7E1Sm
->
-> Yours,
-> Linus Walleij
+> >  {
+> >  	struct kvm_mmu_page *root;
+> >  	struct tdp_iter iter;
+> > @@ -1489,9 +1490,23 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+> >  	 * into this helper allow blocking; it'd be dead, wasteful code.
+> >  	 */
+> >  	for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
+> > +		gfn_t start;
+> > +		gfn_t end;
+> > +
+> > +		if (only_shared && is_private_sp(root))
+> > +			continue;
+> > +
+> >  		rcu_read_lock();
+> >  
+> > -		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
+> > +		/*
+> > +		 * For TDX shared mapping, set GFN shared bit to the range,
+> > +		 * so the handler() doesn't need to set it, to avoid duplicated
+> > +		 * code in multiple handler()s.
+> > +		 */
+> > +		start = kvm_gfn_for_root(kvm, root, range->start);
+> > +		end = kvm_gfn_for_root(kvm, root, range->end);
+> > +
+> 
+> The coco implementation tends to treat the SHARED bit / C bit as a page_prot,
+> an attribute, not a part of the GFN. From that prospective, the caller needs to
+> be aware if it is operating on the private memory or shared memory, so does
+> the handler. The page table walker should know the SHARED bit as a attribute.
+> 
+> I don't think it is a good idea to have two different understandings, which
+> will cause conversion and confusion.
+
+I think you're mixing how guest observes it (guest page table) with how
+host/VMM manages it(EPT).
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
