@@ -2,85 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3396A4124
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 12:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B212C6A4126
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 12:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjB0LsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 06:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S229595AbjB0LtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 06:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjB0LsR (ORCPT
+        with ESMTP id S229709AbjB0Ls6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 06:48:17 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312501E9EE;
-        Mon, 27 Feb 2023 03:48:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1677498451; bh=CI8s0gM0tMtJHBxeXCTI0IQpxz9851TtDO86l4aVjx8=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=dJliIvk6QlvwU3rCzUk7QBq8DjwevOBDejXxpnGzrv5IRr35EL9X+AqYuXMlkhaBZ
-         rA4TE7VY6Drey4OqIjNoESTa/LM0N9qYlr1cSr6j7eAjQu4C3E4b5jMK1WnrbuMku0
-         qo7RAi3ekl3i4jnj2hO9r0hCJfIVVXR4Axqs7SmQ=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 27 Feb 2023 12:47:31 +0100 (CET)
-X-EA-Auth: vnFL1j1Pzw06bs3ZGVnme+e34tOLBxQ0GRjIE9QE87xaKerSboINzXlNieTuym4CdlL72C+mDKJR3y52TlF1tA==
-Date:   Mon, 27 Feb 2023 17:17:25 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] perf/x86/core: Remove repeating test expression
-Message-ID: <Y/yYTY7c7L0+d+Gb@ubun2204.myguest.virtualbox.org>
+        Mon, 27 Feb 2023 06:48:58 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884FD1E280
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 03:48:49 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id i34so24586780eda.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 03:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=FrL5lYUkqDlmCEsBUKLgTEfbH9XDD8w+e14IRfNrUoc=;
+        b=7rJVxVp/slSrMx5UlCYNy7nCehokTnlhjyxnBBsk6sQmT0bX/mUzeIIbqN4Qm7tEBB
+         rentsmMLfqNGnWAaGcaiNRkaGIBNkMgbzZ5V2kTDW+983it6bpGtdDFEL7ggW/g3G6fi
+         apmDnxQa7x+b062svrIi4FJUmBHWhLN6uKjXwSEdcTRPghB4eTweMz06byLYNSHztmEV
+         k9GNRfGMwco94gGjVER/Il4JQZ9c01eBQJAchBfvEFOZyj8gv9izFTqhanXJxg/FCto3
+         qbzRRejgV+biY6YF/pQnvV6jsoeiwLD3Tw80pwbeZqiD3J7PpsQgvLeGtka3yq2wFAyk
+         QBbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FrL5lYUkqDlmCEsBUKLgTEfbH9XDD8w+e14IRfNrUoc=;
+        b=v3C6/Ig0Gdh7/AxQSypTWbRSxVQti5OqnTYztcmpHALrOODY4RJPdxe5SvjZmmfSSY
+         GLiR3BTjWP69CNyZmDxlsWbHxtUyXaf4lLMo9SX50iECRTv4aooZMtrHZIM8VdFIpXvl
+         NXqL3UlrIFg6ameUUIqUq1yJsa4nBupR6bBx+SHievZTn0cX0KeNrkTcYHcWvcmC6eZf
+         GniKcbnzftDCl/5HNPoK8LrRRSAtoRtm7O3Cloomh5zzKoz4Bd/rQO+fESI0QX60JptQ
+         WK4kTq4Z61J7bc11MqlQRa0jz1yGQK3lzuNMZKyxyQbBxfzUfUWfN3TXgZZBVRF6qhxq
+         Pkpw==
+X-Gm-Message-State: AO0yUKWIls5fancXI0t5+jX0ADHN8Ee8CB3/Qz8vg7tCL5UL3uYTNw1G
+        KTh00qBbMqeuFoszwDSj2qUgLw==
+X-Google-Smtp-Source: AK7set+1Xufy3lZTLIWLc/LUY9FQT3FcF0q4uexR/2U7zd+hpwLiFESBhwLurbO+FFlq8cewx0M4Ig==
+X-Received: by 2002:a17:907:6f0e:b0:8f9:ed75:f962 with SMTP id sy14-20020a1709076f0e00b008f9ed75f962mr7928483ejc.18.1677498527989;
+        Mon, 27 Feb 2023 03:48:47 -0800 (PST)
+Received: from localhost ([194.62.217.2])
+        by smtp.gmail.com with ESMTPSA id jr6-20020a170906a98600b008b980c3e013sm3144257ejb.179.2023.02.27.03.48.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 03:48:47 -0800 (PST)
+References: <20230224-rust-arc-v1-0-568eea613a41@asahilina.net>
+ <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Subject: Re: [PATCH 2/2] rust: sync: arc: Add
+ UniqueArc<MaybeUninit<T>::assume_init()
+Date:   Mon, 27 Feb 2023 12:48:34 +0100
+In-reply-to: <20230224-rust-arc-v1-2-568eea613a41@asahilina.net>
+Message-ID: <87y1oj9vmp.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current implementation already checks validity of the cpu_type for the
-hybrid pmu two lines above. Hence there is no need to again include
-it in the immediate if test evaluation.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- arch/x86/events/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Asahi Lina <lina@asahilina.net> writes:
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 87a7f0cd77fd..89db2352deb9 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -1893,7 +1893,7 @@ ssize_t events_hybrid_sysfs_show(struct device *dev,
- 	for (i = 0; i < x86_pmu.num_hybrid_pmus; i++) {
- 		if (!(x86_pmu.hybrid_pmu[i].cpu_type & pmu_attr->pmu_type))
- 			continue;
--		if (x86_pmu.hybrid_pmu[i].cpu_type & pmu->cpu_type) {
-+		if (pmu->cpu_type) {
- 			next_str = strchr(str, ';');
- 			if (next_str)
- 				return snprintf(page, next_str - str + 1, "%s", str);
--- 
-2.34.1
+> We can already create `UniqueArc<MaybeUninit<T>>` instances with
+> `UniqueArc::try_new_uninit()` and write to them with `write()`. Add
+> the missing unsafe `assume_init()` function to promote it to
+> `UniqueArc<T>`, so users can do piece-wise initialization of the
+> contents instead of doing it all at once as long as they keep the
+> invariants (the same requirements as `MaybeUninit::assume_init()`).
+>
+> This mirrors the std `Arc::assume_init()` function. In the kernel,
+> since we have `UniqueArc`, arguably this only belongs there since most
+> use cases will initialize it immediately after creating it, before
+> demoting it to `Arc` to share it.
+>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
 
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 
+>  rust/kernel/sync/arc.rs | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index 752bd7c4699e..b8e9477fe865 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -512,6 +512,15 @@ impl<T> UniqueArc<MaybeUninit<T>> {
+>      /// Converts a `UniqueArc<MaybeUninit<T>>` into a `UniqueArc<T>` by writing a value into it.
+>      pub fn write(mut self, value: T) -> UniqueArc<T> {
+>          self.deref_mut().write(value);
+> +        // SAFETY: We have just written the contents fully.
+> +        unsafe { self.assume_init() }
+> +    }
+> +
+> +    /// Returns a UniqueArc<T>, assuming the MaybeUninit<T> has already been initialized.
+> +    ///
+> +    /// # Safety
+> +    /// The contents of the UniqueArc must have already been fully initialized.
+> +    pub unsafe fn assume_init(self) -> UniqueArc<T> {
+>          let inner = ManuallyDrop::new(self).inner.ptr;
+>          UniqueArc {
+>              // SAFETY: The new `Arc` is taking over `ptr` from `self.inner` (which won't be
 
