@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847876A4C36
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C76D6A4C39
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjB0UYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S229914AbjB0UZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjB0UYm (ORCPT
+        with ESMTP id S229688AbjB0UZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:24:42 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27D24121
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:24:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677529474; x=1709065474;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iTd/k0mMIIx7db8A87KH6nHt2zM3+2Nlr7MQUFWEhqs=;
-  b=YKUzseU8yeMmf5ko34GlDFeBmwtW0yKOS2CAKc5FxUCdZIYf+owL73gk
-   MdsM9InJiCj46mSTR3sueJSbVI6c6iKr1SDpO+lAZk3YZxb6VlSwP7Xnz
-   YyRlZcI5d/2aQqGt5wexs4q4fO6rk27WU40mh4WCf06Q0pb4nNYl8bwph
-   391f+GIFcP3HE8/mA0j1gaN07QQaJ5IFSRPRBvBUxboKsjyiGorDshI0X
-   ChDFhUuVUwIhvsY1MjCloOtxViaA3T43S3HkcOuUsX5IMGT4wSbOAzzKq
-   0NVsEF64ixkyY/QLpS/9erzSnBKR04RGhifIR5slT/lO6SpTO03OLrAmK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="398736688"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="398736688"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 12:24:33 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="1002936862"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="1002936862"
-Received: from jekeller-desk.amr.corp.intel.com (HELO jekeller-desk.jekeller.internal) ([10.166.241.1])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 12:24:33 -0800
-From:   Jacob Keller <jacob.e.keller@intel.com>
-To:     Julia Lawall <Julia.Lawall@lip6.fr>
-Cc:     Jacob Keller <jacob.e.keller@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        cocci@systeme.lip6.fr, linux-kernel@vger.kernel.org
-Subject: [PATCH] coccinelle: semantic patch to check for potential struct_size calls
-Date:   Mon, 27 Feb 2023 12:24:28 -0800
-Message-Id: <20230227202428.3657443-1-jacob.e.keller@intel.com>
-X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f83
+        Mon, 27 Feb 2023 15:25:22 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2521E9FF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:25:20 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PQWx425FWz9xrt5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:16:40 +0800 (CST)
+Received: from [10.45.159.185] (unknown [10.45.159.185])
+        by APP1 (Coremail) with SMTP id LxC2BwBHzwqMEf1jVi9aAQ--.22302S2;
+        Mon, 27 Feb 2023 21:24:55 +0100 (CET)
+Message-ID: <a02d8d53-713d-4aba-31a4-6d54185f3701@huaweicloud.com>
+Date:   Mon, 27 Feb 2023 21:24:40 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     paulmck@kernel.org, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
+ <Y/uHjpbJ3JmVAe9d@google.com>
+ <a5f1695d-cc1f-04aa-fe61-f2b8687cfb0e@huaweicloud.com>
+ <CAEXW_YQMXKDx0gr1S5HkraVA+ori-AnQL-yGU6r=u6B5_XciUA@mail.gmail.com>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <CAEXW_YQMXKDx0gr1S5HkraVA+ori-AnQL-yGU6r=u6B5_XciUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-CM-TRANSID: LxC2BwBHzwqMEf1jVi9aAQ--.22302S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFyUAr1kKFyrXrW8AFWfuFg_yoW5Cr1rpF
+        W3Ga9rKFn5JF1Iy3s2vr1DX3WFyw4ftrW5JFy3Grn8Zw15WFySgF4xKw4Y9F9rCrs5u34Y
+        vrWj9FyUAa4DZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUo0eHDUUUU
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,113 +69,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-include/linux/overflow.h includes helper macros intended for calculating
-sizes of allocations. These macros prevent accidental overflow by
-saturating at SIZE_MAX.
 
-In general when calculating such sizes use of the macros is preferred. Add
-a semantic patch which can detect code patterns which can be replaced by
-struct_size.
 
-Note that I set the confidence to medium because this patch doesn't make an
-attempt to ensure that the relevant array is actually a flexible array. The
-struct_size macro does specifically require a flexible array. In many cases
-the detected code could be refactored to a flexible array, but this is not
-always possible (such as if there are multiple over-allocations).
+On 2/27/2023 6:57 PM, Joel Fernandes wrote:
+> On Mon, Feb 27, 2023 at 9:39 AM Jonas Oberhauser
+> <jonas.oberhauser@huaweicloud.com> wrote:
+>>
+>>
+>> On 2/26/2023 5:23 PM, Joel Fernandes wrote:
+>>> On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
+>>>> [...]
+>>> Alternatively can be the following appended diff? Requires only single 'int'
+>>> in ->ppo then and prevents future similar issues caused by sub relations.
+>>> Also makes clear that ->ppo can only be CPU-internal.
+>> I had thought about going in that direction, but it doesn't prevent
+>> future similar issues, at best makes them less likely.
+> Making less likely still sounds like a win to me.
+>
+>> For example, you could have an xfence that somehow goes back to the
+>> original thread, but to a po-earlier event (e.g., like prop).
+>>
+>> Given that to-r and to-w are unlikely to ever become become inconsistent
+>> with po, I am not sure it even really helps much.
+> I am not sure I understand, what is the problem with enforcing that
+> ppo is only supposed to ever be -int ? Sounds like it makes it super
+> clear.
 
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Cc: Julia Lawall <Julia.Lawall@lip6.fr>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: cocci@systeme.lip6.fr
-Cc: linux-kernel@vger.kernel.org
+You could go further and do ... & po.
 
- scripts/coccinelle/misc/struct_size.cocci | 74 +++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 scripts/coccinelle/misc/struct_size.cocci
+But it would still make me feel that it's a plaster used to hold 
+together a steampipe.
+It reminds me a bit of college when some of my class mates passed the 
+nightly tests in the programming lab by doing
+"if input == (the input of the specific test case they were having 
+problem with) return (value expected by testcase)".
+Or making everything atomic so that tsan does not complain about data 
+races anymore.
 
-diff --git a/scripts/coccinelle/misc/struct_size.cocci b/scripts/coccinelle/misc/struct_size.cocci
-new file mode 100644
-index 000000000000..4ede9586e3c6
---- /dev/null
-+++ b/scripts/coccinelle/misc/struct_size.cocci
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+///
-+/// Check for code that could use struct_size().
-+///
-+// Confidence: Medium
-+// Author: Jacob Keller <jacob.e.keller@intel.com>
-+// Copyright: (C) 2023 Intel Corporation
-+// Options: --no-includes --include-headers
-+
-+virtual patch
-+virtual context
-+virtual org
-+virtual report
-+
-+// the overflow Kunit tests have some code which intentionally does not use
-+// the macros, so we want to ignore this code when reporting potential
-+// issues.
-+@overflow_tests@
-+identifier f = overflow_size_helpers_test;
-+@@
-+
-+f
-+
-+//----------------------------------------------------------
-+//  For context mode
-+//----------------------------------------------------------
-+
-+@depends on !overflow_tests && context@
-+expression E1, E2;
-+identifier m;
-+@@
-+(
-+* (sizeof(*E1) + (E2 * sizeof(*E1->m)))
-+)
-+
-+//----------------------------------------------------------
-+//  For patch mode
-+//----------------------------------------------------------
-+
-+@depends on !overflow_tests && patch@
-+expression E1, E2;
-+identifier m;
-+@@
-+(
-+- (sizeof(*E1) + (E2 * sizeof(*E1->m)))
-++ struct_size(E1, m, E2)
-+)
-+
-+//----------------------------------------------------------
-+//  For org and report mode
-+//----------------------------------------------------------
-+
-+@r depends on !overflow_tests && (org || report)@
-+expression E1, E2;
-+identifier m;
-+position p;
-+@@
-+(
-+ (sizeof(*E1)@p + (E2 * sizeof(*E1->m)))
-+)
-+
-+@script:python depends on org@
-+p << r.p;
-+@@
-+
-+coccilib.org.print_todo(p[0], "WARNING should use struct_size")
-+
-+@script:python depends on report@
-+p << r.p;
-+@@
-+
-+msg="WARNING: Use struct_size"
-+coccilib.report.print_report(p[0], msg)
-+
+If there's something in one of these relations tying together events of 
+different threads, is it intentional or a bug?
+I prefer to be very conscious about what is being tied together by the 
+relations.
 
-base-commit: 982818426a0ffaf93b0621826ed39a84be3d7d62
--- 
-2.39.1.405.gd4c25cc71f83
+I'd rather take Boqun's suggestion to add some "debug/testing" flags to 
+see if a litmus test violates a property assumed by LKMM.
+
+Yet I think the ideal way is to have a mechanized proof that LKMM 
+satisfies these properties and use that to avoid regressions.
+
+
+>
+>> Personally I'm not too happy with the ad-hoc '& int' because it's like
+> So, with the idea I suggest, you will have fewer ints so you should be happy ;-)
+
+haha : ) An alternative perspective is that the &int now covers more 
+cases of the relation ; )
+
+
+>
+>> adding some unused stuff (via ... | unused-stuff) and then cutting it
+>> back out with &int, unlike prop & int which has a real semantic meaning
+>> (propagate back to the thread). The fastest move is the move we avoid
+>> doing, so I rather wouldn't add those parts in the first place.
+>>
+>> However fixing the fence relation turned out to be a lot trickier, both
+>> because of the missed data race and also rmw-sequences, essentially I
+>> would have had to disambiguate between xfences and fences already in
+>> this patch. So I did this minimal local fix for now and we can discuss
+>> whether it makes sense to get rid of the '& int' once/if we have xfence etc.
+> I see. Ok, I'll defer to your expertise on this since you know more
+> than I. I am relatively only recent with even opening up the CAT code.
+
+Enjoy : )
+
+jonas
 
