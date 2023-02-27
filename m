@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC786A3949
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547BC6A394C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjB0DJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 22:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S230178AbjB0DKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 22:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjB0DJt (ORCPT
+        with ESMTP id S229524AbjB0DKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 22:09:49 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3972F1ABE2;
-        Sun, 26 Feb 2023 19:09:41 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1677467379;
-        bh=M96BHr6D8PREKeYkC4HEQ3Rau29GrZ2n9RtbMYx//sY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=kr5DzsxoEKmWimZcCDEoTW2gduowwC96E5oSb+YYbPerKR58/PqPz7qLJ0WcEvhcV
-         9riPJA65WjuJhmEYw483yNe49eA+9I3wkc1lGowGFfYxdWL+UkMgyWfJ/bpFggjWkk
-         9Qk2GAvaxwSXIcatMh0HCAT3DI5VnmlLCrcvBmmc=
-Date:   Mon, 27 Feb 2023 03:09:36 +0000
-Subject: [PATCH] efi: x86: make kobj_type structure constant
+        Sun, 26 Feb 2023 22:10:36 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573CCEC4A;
+        Sun, 26 Feb 2023 19:10:35 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id ky4so5333849plb.3;
+        Sun, 26 Feb 2023 19:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+L49kKjVGMIflTo4gi5GnHRy5nclrp50XkY2Jw83y4=;
+        b=hgSt6v6G9VDAbJqgK7g9QfroWxBrNOV2r1Ld5MVmnUKzQ0OcPsLieSZr9/2emBH7Pa
+         MdBQ5IJkP8tshfHVGnXQgNfyu0dZNxv+3vcSGZPlsQQ8Km3vm718XBfaMuoLDASYlvli
+         hqPPIEPDnlcyi8zzhgIv0VF+zG/9nZGlIyeFPvS5iQ3LTbVP5RtZHkc/qRWhZ3W+lDsw
+         8bILxN223uH4eaaVGZYN+gWvdFY9SKlJRyfpi9ynbwaOG8koC7ESj8968WEtB/cTjFGx
+         DIpjkmYmcslEyXMtjx9pRgwXrSjVxpXwuKIqucdkD2iEMCjThalWm7y16sMCc8JKmC7q
+         V9qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B+L49kKjVGMIflTo4gi5GnHRy5nclrp50XkY2Jw83y4=;
+        b=1mqJ59VzvbLsiJr7E76AZwFWeGGXAOiV3gbeCZiRkidP12UBeBo2yAuBmS9mzQwB1y
+         XpAmielKiSvvnv6YZu38zNfwdyM7rxy+9Xf/uam0eqIyw3pxoDEiEP8lcK4zfIQmktji
+         ZBjLctC3hsn0ePTLiXnhwhWPBKSerPrzkp0GEytTHPbApwQ77yhsjRvyY1vB1bA+Fcta
+         KwfAq26oHJ6zlkH39OdR1Qk3xv5/MybRi6QH0WUBvffpON7URbgBW0z5Dm733rTNK1WW
+         0IWNP3TruGR6/g/3JUlM7/9RvSGAB7ceNcnkRq++B38umpolQeEQ/PuJ29NVDM3LYgww
+         qyBA==
+X-Gm-Message-State: AO0yUKWxCOEzSkpAbEABY7D9JNBFdjAlPqeTSy4P1b59YFjH7VPY/W6d
+        2jeLwx9faROmVxqXrWMTrhA=
+X-Google-Smtp-Source: AK7set+vghs+qHTn5OT71t1bQa0u4ftTPxr7Mtq40zyzDydbd1l4PYbPaGoxH7qXRt/kAdkMvm3QwA==
+X-Received: by 2002:a17:903:1205:b0:19c:36c9:2449 with SMTP id l5-20020a170903120500b0019c36c92449mr29523026plh.17.1677467434876;
+        Sun, 26 Feb 2023 19:10:34 -0800 (PST)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id ix17-20020a170902f81100b0019cbb055a95sm3336562plb.94.2023.02.26.19.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 19:10:34 -0800 (PST)
+From:   void0red <void0red@gmail.com>
+To:     chenxiang66@hisilicon.com
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kang Chen <void0red@gmail.com>
+Subject: [PATCH] scsi: hisi_sas: add a check of devm_add_action
+Date:   Mon, 27 Feb 2023 11:10:30 +0800
+Message-Id: <20230227031030.893324-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230227-kobj_type-x86-efi-v1-1-a335952d2536@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAO8e/GMC/x2N6wqCQBBGX0XmdwN7yUu9SkTs6JhTsspuhSG+u
- 4M/z+E7fCtkTsIZrsUKiX+SZYoK9lRAO4T4ZJROGZxx3jhX43ui1+PznxmXpkLuBevyYsn6syf
- TgHYUMiOlENtBy/gdR5Vz0ulyHN3u27YDbLDhfXgAAAA=
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677467377; l=1069;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=M96BHr6D8PREKeYkC4HEQ3Rau29GrZ2n9RtbMYx//sY=;
- b=hjHjN4C4yK57HVHj9bFzkPD3hnpxM4psSwDftz37HChSVdWAwLGzp6NBw79dZkDBZdDbNOfU0
- EWRAXD8qeSTAvRkrY0gwOSehaFtD7Wy5QsOSFMw6VflvmSh0HUjFdiX
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+From: Kang Chen <void0red@gmail.com>
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+devm_add_action may fails, check it in the caller of
+interrupt_preinit_v3_hw
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Kang Chen <void0red@gmail.com>
 ---
- arch/x86/platform/efi/runtime-map.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/platform/efi/runtime-map.c b/arch/x86/platform/efi/runtime-map.c
-index bbee682ef8cd..a6f02cef3ca2 100644
---- a/arch/x86/platform/efi/runtime-map.c
-+++ b/arch/x86/platform/efi/runtime-map.c
-@@ -93,7 +93,7 @@ static void map_release(struct kobject *kobj)
- 	kfree(entry);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 0c3fcb807..a63279f55 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -2495,8 +2495,7 @@ static int interrupt_preinit_v3_hw(struct hisi_hba *hisi_hba)
+ 	hisi_hba->cq_nvecs = vectors - BASE_VECTORS_V3_HW;
+ 	shost->nr_hw_queues = hisi_hba->cq_nvecs;
+ 
+-	devm_add_action(&pdev->dev, hisi_sas_v3_free_vectors, pdev);
+-	return 0;
++	return devm_add_action(&pdev->dev, hisi_sas_v3_free_vectors, pdev);
  }
  
--static struct kobj_type __refdata map_ktype = {
-+static const struct kobj_type __refconst map_ktype = {
- 	.sysfs_ops	= &map_attr_ops,
- 	.default_groups	= def_groups,
- 	.release	= map_release,
-
----
-base-commit: 2fcd07b7ccd5fd10b2120d298363e4e6c53ccf9c
-change-id: 20230227-kobj_type-x86-efi-7591b1343b08
-
-Best regards,
+ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.34.1
 
