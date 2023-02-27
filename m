@@ -2,163 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B4F6A49EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71066A497D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjB0Siy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S230515AbjB0SUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjB0Siw (ORCPT
+        with ESMTP id S230310AbjB0SUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:38:52 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88850D30C;
-        Mon, 27 Feb 2023 10:38:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677523121; x=1709059121;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XI4+ng0G/han3RQEY/xW6B4U/2rCkKwLGFaf1iDMkc4=;
-  b=jvv8W4AW56LDOoIJe0mzh2eqkcIRsAiN8Z4FyBWCFhuZbsrxhYv+Z9xB
-   xP5e0n78zVufOU/tlK3BCdO7lmErVpGMvV7lab2HUJwQE+RXS/18ULz7v
-   Nymh/x7LLbstXSJ66lX0Q/4WDvL7Hkee+mnsCS6cmj/aXrta8VG0GZQ+x
-   x0KjrVR+tbPpv0BzbyZsb0pQuw0MLFOKeknVtyNofGRj6zStXB2TFSVwK
-   JSOm2MhnGd4FOZgx4aX+hAemp7ve4skZtp7zI6dlrf7/+2iwfzc8Bl7II
-   xGF6QSK7TGLNeboGDe97NDYCbT/Y/SobKqSM4vlPf0rkdIr2yxky0eCit
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="332660739"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="332660739"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 10:38:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="737837214"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="737837214"
-Received: from jaidenno-mobl.amr.corp.intel.com (HELO [10.212.85.4]) ([10.212.85.4])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 10:38:32 -0800
-Message-ID: <d95d15f3-34c3-32df-1a50-0ebce35bf81f@linux.intel.com>
-Date:   Mon, 27 Feb 2023 13:19:15 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] ASoC: max98363: add soundwire amplifier driver
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        krzysztof.kozlowski@linaro.org, rf@opensource.cirrus.com,
-        ckeepax@opensource.cirrus.com, herve.codina@bootlin.com,
-        wangweidong.a@awinic.com, james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-References: <20230224010814.504016-1-ryan.lee.analog@gmail.com>
- <0fb47fe7-719b-0773-fc14-3d62d7d33619@linux.intel.com>
- <Y/zsqjOWFKrpDtl8@sirena.org.uk>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <Y/zsqjOWFKrpDtl8@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 13:20:06 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21BD244B3;
+        Mon, 27 Feb 2023 10:20:04 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 476C65C0036;
+        Mon, 27 Feb 2023 13:20:00 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 27 Feb 2023 13:20:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677522000; x=1677608400; bh=RVTlLb8n50
+        XGcQuBIt7qqzi2yYXGnyOm8P26ox+Wrpc=; b=GaD5doaretM6A1f/fO2rhersoK
+        SXJ83sBxCfFA8RkVSbIYnTKJXGHnKWGyn9A3ri5dFoiHOBYcMoPGA03dNRsDBidA
+        8phOORR91nRFKwsNvKRa6A56tMUTPFFsv37Ciyb3Xm26AZ3/E/gH+2kU43NxGmZg
+        ixxLL8eLwO1S/sDosBhrPqGxzVcYqrIS13EdjOtW6LKT23zfFrYfYT5JuXJlq7BJ
+        8ZTj6gfXP/PxUEMhLbnhVMMxPN+V6MOlRXo0GpoLb8fBJW+aHZt8sAz5xqLzxzzs
+        /oT9w2pb05YIV0VBsIEusiWHCfwWvOegxLG1ta+YMNXaGjv/XWnRQvjH8aaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677522000; x=1677608400; bh=RVTlLb8n50XGcQuBIt7qqzi2yYXG
+        nyOm8P26ox+Wrpc=; b=rfdkkmaJPoyqPw1pChMyE+KI/R2Q+KyLxSMO6D2qCqzi
+        2/FsOmlysVLym22AAK5T6GGZ8qsF8HkWl+4zVL7Z0+yHsjvDGGN2TGSerhktz9jH
+        IP0HyMlrh7bas8a9LgOP4uNyprcMSE5UMg78rxiWzgVWOE3jw5PvBfX/mKfRJhhx
+        Y1X8mRfAxLOCwJDEWbvVTxdnDNOLhjQ7+NUMKEoouAiPa6SSUTD4UvEVxUFJrSO6
+        39gZSjK/ud3GojuGY4ecaznmqDpG3yE1a+8M1fehe6K1uFYnKGd9yZprur+tD80Q
+        ZiwCwT7jI8hnhygjVRaS91+prES4B6Bli0lk5USm8A==
+X-ME-Sender: <xms:T_T8Y991Y2CYNjbOBfzfnEpnUmwoqWc9Ikpie93O9dfbahgNitSQ1Q>
+    <xme:T_T8Yxumybl14yhIjSmGX11dSePAAPs42_BuH9kPH6V-rKxPwK4jg-zqObQRyYhY7
+    vU_RriZA5-y1IEmw1c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:T_T8Y7BTXMg7bXhLs4vPXXijkAoBSpNpMRiURxB-itlPWWks_XFFAw>
+    <xmx:T_T8Yxcuo03NCUAntT-86Nl9Bw4faYTm6XWtd9oPv0pHfxvClLXQ8Q>
+    <xmx:T_T8YyMOW1UbNP54OL071P_S35YAq-qHZi6CCw704CLBUIm3vvI43Q>
+    <xmx:UPT8Yzlm-Az41o5oGDJNui__mBIaWjEF5-a9e8jmkbAluMfFXAUbBg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9C132B60086; Mon, 27 Feb 2023 13:19:59 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <7d29f3fd-b8c8-4687-b6a0-b8956dd39f0b@app.fastmail.com>
+In-Reply-To: <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
+References: <20230222115020.55867-1-avromanov@sberdevices.ru>
+ <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
+ <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
+ <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
+ <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
+ <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
+ <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
+ <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
+Date:   Mon, 27 Feb 2023 19:19:38 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Dmitry Rokosov" <ddrokosov@sberdevices.ru>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>
+Cc:     "Alexey Romanov" <avromanov@sberdevices.ru>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Kevin Hilman" <khilman@baylibre.com>, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023, at 17:50, Dmitry Rokosov wrote:
+> On Mon, Feb 27, 2023 at 05:38:49PM +0100, Neil Armstrong wrote:
+>> On 27/02/2023 17:15, Arnd Bergmann wrote:
+>> > On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
+>> > 
+>> > Most of these don't apply in userspace, so the incentive to
+>> > run smaller 32-bit userland on systems with less than 1GB of
+>> > RAM usually outweighs the benefits of 64-bit userspace.
+>> 
+>> Thanks for the details!
+>
+> Looks like Thomas has already prepared a basic patch series for buildroot,
+> but maintainers declined it.
+>
+> https://lore.kernel.org/all/20220730194331.GA2515056@scaer/
 
+I see. I know very little about buildroot, but it sounds like
+there are other ways of doing the same thing here. In general,
+this is pretty much an Arm specific problem. While you clearly
+want compat mode for small userland on any architecture but don't
+want 32-bit kernels, arm is the only one that has a different
+kernel "ARCH=" value and needs a separate gcc toolchain.
 
-On 2/27/23 12:47, Mark Brown wrote:
-> On Mon, Feb 27, 2023 at 10:17:45AM -0500, Pierre-Louis Bossart wrote:
-> 
->>> +static struct reg_default max98363_reg[] = {
->>> +	{MAX98363_R0040_SCP_INIT_STAT_1, 0x00},
->>> +	{MAX98363_R0041_SCP_INIT_MASK_1, 0x00},
->>> +	{MAX98363_R0042_SCP_INIT_STAT_2, 0x00},
->>> +	{MAX98363_R0044_SCP_CTRL, 0x00},
->>> +	{MAX98363_R0045_SCP_SYSTEM_CTRL, 0x00},
->>> +	{MAX98363_R0046_SCP_DEV_NUMBER, 0x00},
->>> +	{MAX98363_R004D_SCP_BUS_CLK, 0x00},
->>> +	{MAX98363_R0050_SCP_DEV_ID_0, 0x21},
->>> +	{MAX98363_R0051_SCP_DEV_ID_1, 0x01},
->>> +	{MAX98363_R0052_SCP_DEV_ID_2, 0x9F},
->>> +	{MAX98363_R0053_SCP_DEV_ID_3, 0x87},
->>> +	{MAX98363_R0054_SCP_DEV_ID_4, 0x08},
->>> +	{MAX98363_R0055_SCP_DEV_ID_5, 0x00},
-> 
->> That seems wrong, why would you declare standard registers that are
->> known to the bus and required to be implemented?
-> 
-> This is the register defaults table, it gets used to initialise the
-> register cache and optimise resync after suspend - all this does is
-> supply defaults for the cache.  That said...
-> 
-> I would suggest it's better to not supply defaults for ID registers and
-> read them back from the device otherwise things might get confused.
+If the problem is only the toolchain, an easy way out may
+be to use clang instead of gcc as your compiler, as a single
+clang binary can target both 32-bit userland and 64-bit kernel
+on all supported architectures.
 
-The 'device_id' register is the good counter example: it includes a
-'unique_id' field to deal with cases where there are identical devices
-on the same link. The unique_id is usually set with board-specific
-pin-strapping, so there's no good default value here. In previous Maxim
-98373 amplifier configurations the unique IDs were 3 and 7 IIRC. The
-codec driver should not, rather shall not, assume any specific value here.
-
->>> +static const struct regmap_config max98363_sdw_regmap = {
->>> +	.reg_bits = 32,
->>> +	.val_bits = 8,
->>> +	.max_register = MAX98363_R21FF_REV_ID,
->>> +	.reg_defaults  = max98363_reg,
->>> +	.num_reg_defaults = ARRAY_SIZE(max98363_reg),
->>> +	.readable_reg = max98363_readable_register,
->>> +	.volatile_reg = max98363_volatile_reg,
-> 
->> I don't see why the SoundWire standard registers are part of regmap?
-> 
-> ...if there's an issue with the SoundWire core modifying the registers
-> directly then the driver would need to mark all the core registers as
-> volatile so that they're not cached otherwise there will be collisions.
-> Or is it the case that we always need to go via the SoundWire core for
-> the generic registers, so they should just never be written at all?
-
-It's really that the SoundWire core will 'own' or take care of all
-'standard' programming registers. There is no good reason for a codec
-driver to interfere with standard port programming or clock stop. The
-bus provides a set of callbacks that can be used for vendor-specific
-registers and sequences.
-
-Put differently, SoundWire codec drivers should only deal with
-non-standard vendor-specific registers.
-
-
-> 
->>> +	if (max98363->dvddio) {
->>> +		ret = regulator_enable(max98363->dvddio);
->>> +		if (ret < 0)
->>> +			return ret;
->>> +	}
->>> +
->>> +	if (max98363->vdd) {
->>> +		ret = regulator_enable(max98363->vdd);
->>> +		if (ret < 0)
->>> +			return ret;
->>> +	}
-> 
->> that is very very odd. It's the first time we see a SoundWire codec
->> driver that has a power dependency, and it's quite likely that it's too
->> late to enable power resources *AFTER* dealing with all the
->> initialization and enumeration.
-> 
->> It's not even clear to me how this device would be enumerated.
-> 
->> You'd need to explain what part of the amplifier is controlled by those
->> regulator, otherwise it's impossible to review and understand if the
->> driver does the 'right thing'
-> 
-> It's also buggy to have regulators treated as optional unless they may
-> be physically absent.
+      Arnd
