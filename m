@@ -2,49 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4826A471B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A4C6A4732
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjB0Qe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S229804AbjB0Qlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjB0Qez (ORCPT
+        with ESMTP id S229516AbjB0Qld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:34:55 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC91BFE;
-        Mon, 27 Feb 2023 08:34:54 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id E5D441C0AB2; Mon, 27 Feb 2023 17:34:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1677515692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ktO3Rbjq63JIQYyF79cKaeyJl8mq0I/C+Gd1rfs+flQ=;
-        b=e+K/uL1wgdHsRR2bJkP4h2MgGY5sFBEX+nLO5wIfy8ZaP/bC7gSYAYuWryTUk4z0EiiN25
-        sCisIBwansU0ST3n5HSI+K+Y4UP2d1eAry3NwQl1L+Kq3I9C4fkWDznTT4rLyyaQ0ZfFH9
-        xz2WqiI2UwqrGptNq3HmbhGy7mScMUw=
-Date:   Mon, 27 Feb 2023 17:34:52 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Eric Biggers <ebiggers@google.com>, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 4/5] fs/super.c: stop calling
- fscrypt_destroy_keyring() from __put_super()
-Message-ID: <Y/zbrCJz4SONlZFs@duo.ucw.cz>
-References: <20230226034408.774670-1-sashal@kernel.org>
- <20230226034408.774670-4-sashal@kernel.org>
+        Mon, 27 Feb 2023 11:41:33 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE7A23107
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:41:32 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c18so7317810qte.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:41:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZK6LeX7z5VZYct/x3qbpKzfYxbIlheF7rhtEPOT3/8=;
+        b=I5O5uZecNoO8yiPrQ8I40mdCE2jF9q9/jiCuSWkn4+4XpmLRp6+E/uHofwQaLm2tKK
+         BaVnbOA0Cc9zD8CF4+vfUiUHAywVdR86dilzPLPVrpFT34+JzzZ4Z9yDWHUlsDoXXJNd
+         9bW5z5455LPCpwyNQdPZ2JvvCTB4jMKcKizffH9BCrQQYp5XcRnxXZU9sfOUimoyOOta
+         JFI7yKFKEUKijQTaQRm0VJAL74GrJ7viAQ+dm+tNQsOD+886Yo+IqDruoTecf767/50i
+         vEr69rXB+xhsv00T1m9MRCWegS9EEYfzZM6x1YVnsD6qH9fV7pH/Uaz0jSTdnnMrQcpz
+         1MHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mZK6LeX7z5VZYct/x3qbpKzfYxbIlheF7rhtEPOT3/8=;
+        b=Ou1ePQIizI89wv5WoIAH2Q640vU20z3uOsNdXvc+FXEu61Y+18NMweeDXBWaxIbrSl
+         i0ILorHc97+wEqqKowwB4xskFutC/UKfNgY4LTlWWu+NLRhSX1hBHIPnJ0ThFY4c4t5F
+         1lAh31j62fxotOp7kVRDIQ/rCt/L1jqH4/GFkLbiMZzJJ4YUj9JUuvOpYjJx2wW3QZSJ
+         Sx5+oaWoht4udRkTO9p6RDKq1+G6GlQocioEZCPn6apqW1iO8RMSOqAancG85W02/HCU
+         NrM+za1w2alvS/s0Fu/9jOWPqr1wAZL0opAzIKW7BD8nLJMZC6NLIiv2d31YbwIUDR2o
+         ukOw==
+X-Gm-Message-State: AO0yUKUxMUkXXkPleMBlv4jDATxI1LvqjdfpENnBsouD8VDFZr7N1wze
+        SDmkfYHnxAwK20kGngVR3MY=
+X-Google-Smtp-Source: AK7set8dfzlW7a/WkPN2lUpzoC8W7qX3y3mq+kVuU0A3p0XBKYanpamyYslp9JtVHLn56Xh34vZOSw==
+X-Received: by 2002:ac8:5803:0:b0:3b6:2c3b:8c00 with SMTP id g3-20020ac85803000000b003b62c3b8c00mr44096137qtg.66.1677516091850;
+        Mon, 27 Feb 2023 08:41:31 -0800 (PST)
+Received: from ArchLinux ([68.74.118.125])
+        by smtp.gmail.com with ESMTPSA id z8-20020ac87108000000b003bf9f9f1844sm4869361qto.71.2023.02.27.08.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 08:41:31 -0800 (PST)
+References: <20230227075346.69658-1-schspa@gmail.com>
+ <Y/yR/LypvJQXRhAr@hirez.programming.kicks-ass.net>
+ <20230227102808.2cea9705@gandalf.local.home>
+ <Y/zPv+L2iqOkD2Oa@hirez.programming.kicks-ass.net>
+ <20230227105310.08d9a46e@gandalf.local.home>
+User-agent: mu4e 1.7.5; emacs 28.2
+From:   Schspa Shi <schspa@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, cocci@inria.fr, mcgrof@kernel.org,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        buytenh@wantstofly.org, johannes.berg@intel.com,
+        gregkh@linuxfoundation.org, tomba@kernel.org, airlied@gmail.com,
+        daniel@ffwll.ch
+Subject: Re: [RFC PATCH] cocci: cpi: add complete api check script
+Date:   Tue, 28 Feb 2023 00:36:26 +0800
+In-reply-to: <20230227105310.08d9a46e@gandalf.local.home>
+Message-ID: <m2mt4z5adr.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ciODApcgPoRi2ROG"
-Content-Disposition: inline
-In-Reply-To: <20230226034408.774670-4-sashal@kernel.org>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,52 +91,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ciODApcgPoRi2ROG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-Hi!
+> On Mon, 27 Feb 2023 16:43:59 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
+>
+>> On Mon, Feb 27, 2023 at 10:28:08AM -0500, Steven Rostedt wrote:
+>> 
+>> > So what exact race are you trying to catch here?  
+>> 
+>> on-stack copmletion with a wait_for_completion that can return early
+>> (eg. killable, interruptible, or timeout) can go out of scope (eg, free
+>> the completion) with the other side calling complete() on some possibly
+>> re-used piece of stack.
+>> 
+>> IOW, Use-after-Free.
+>> 
+>> Care must be taken to ensure the other side (whatever does complete())
+>> is either terminated or otherwise stopped from calling complete() on an
+>> out-of-scope variable.
+>
+> I got that. But as you were stating as well, when care is taken, the script
+> appears to still report it. The example I gave has:
+>
+>         req = blk_mq_alloc_request(q, REQ_OP_DRV_OUT, 0);
+> [..]
+>         req->end_io_data = &wait;
+> [..]
+>         hba->tmf_rqs[req->tag] = req;
+> [..]
+>         err = wait_for_completion_io_timeout(&wait,
+> [..]
+>         spin_lock_irqsave(hba->host->host_lock, flags);
+>         hba->tmf_rqs[req->tag] = NULL;
+>         __clear_bit(task_tag, &hba->outstanding_tasks);
+>         spin_unlock_irqrestore(hba->host->host_lock, flags);
+>
+>
+> And where the complete is:
+>
+>         spin_lock_irqsave(hba->host->host_lock, flags);
+>         pending = ufshcd_readl(hba, REG_UTP_TASK_REQ_DOOR_BELL);
+>         issued = hba->outstanding_tasks & ~pending;
+>         for_each_set_bit(tag, &issued, hba->nutmrs) {
+>                 struct request *req = hba->tmf_rqs[tag];
+>                 struct completion *c = req->end_io_data;
+>  
+>                 complete(c);
+>                 ret = IRQ_HANDLED;
+>         }
+>         spin_unlock_irqrestore(hba->host->host_lock, flags);
+>
+> So the spinlock is making sure that the complete() only works on a
+> completion if it is still there.
+>
+There is nothing wrong with your code.
 
-> From: Eric Biggers <ebiggers@google.com>
->=20
-> [ Upstream commit ec64036e68634231f5891faa2b7a81cdc5dcd001 ]
->=20
-> Now that the key associated with the "test_dummy_operation" mount option
-> is added on-demand when it's needed, rather than immediately when the
-> filesystem is mounted, fscrypt_destroy_keyring() no longer needs to be
-> called from __put_super() to avoid a memory leak on mount failure.
->=20
-> Remove this call, which was causing confusion because it appeared to be
-> a sleep-in-atomic bug (though it wasn't, for a somewhat-subtle
-> reason).
+This script will not check the hba->host->host_lock lock, and there is
+another hba->outstanding_tasks bit mask to ensure that there is no UAF
+here. But this script doesn't have a way to get these implicit
+conditions.
 
-Not a bugfix, so should not be in -stable. Plus, have someone verified
-that its dependencies are in 5.10?
+> I guess I should have asked, how is this script differentiating between
+> where there's a problem and where there isn't.
+>
+> If you remove the spinlocks, then there would most definitely be a race,
+> and I'm not even sure if the supplied patch would improve this much.
+>
+> -- Steve
 
-Best regards,
-								Pavel
-> +++ b/fs/super.c
-> @@ -293,7 +293,6 @@ static void __put_super(struct super_block *s)
->  		WARN_ON(s->s_inode_lru.node);
->  		WARN_ON(!list_empty(&s->s_mounts));
->  		security_sb_free(s);
-> -		fscrypt_destroy_keyring(s);
->  		put_user_ns(s->s_user_ns);
->  		kfree(s->s_subtype);
->  		call_rcu(&s->rcu, destroy_super_rcu);
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---ciODApcgPoRi2ROG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/zbrAAKCRAw5/Bqldv6
-8qXxAJ9/dQJ6j0oncg7mDsIO9KEa/UDdBwCeMsXPKOE98RMQxhMpVhGbfWL1hbM=
-=AVsw
------END PGP SIGNATURE-----
-
---ciODApcgPoRi2ROG--
+-- 
+BRs
+Schspa Shi
