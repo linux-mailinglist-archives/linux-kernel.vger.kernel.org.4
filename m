@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E406A4B3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2B96A4AE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjB0ThY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 14:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S230083AbjB0TdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjB0ThL (ORCPT
+        with ESMTP id S229557AbjB0TdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:37:11 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD5D23874;
-        Mon, 27 Feb 2023 11:36:43 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 130so4250030pgg.3;
-        Mon, 27 Feb 2023 11:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9VcsUu3unD+maL4g/jB1gMbq//XnoqiDQvEiNIyt7mI=;
-        b=b8736n309kh1uRXrJE2k/Um3KXaZinC+6/mnagsKOXeEGCtqaoZLgHv9EkxoYXJRwS
-         zyfCbEC9JCFtyMY7WQZQPA8QXUcFZpDWSYCWxuW4uo5KMmZNxa3byyQC4DpXMEz57VDW
-         Zw5iYZd+QeBYbIOF1BQ1Eia/s4rwzzlK2s84N1dnJwf5tGJNaxNafY0Cpat++4+DvNxA
-         QTZIhRflMHWIC2tqDzr8HnGn2dB3Tbtf/FH9dH0okN2XWWTyh3gILz3ZL7r3mGxDZkTt
-         MB+UWg7+BAmCJaxpPhV7lKnZdCBx78OnQCLcpiO9Kk3Ymo4t4WnLNcx245/XFreVCcK2
-         zh8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9VcsUu3unD+maL4g/jB1gMbq//XnoqiDQvEiNIyt7mI=;
-        b=zLmu5IIJMc9XkKLd14YMT1bSMEk2HqMz05dDJYg7wSOs08vmaMYKGOLd0kXRjePP8U
-         4oavbamMwrt86FYuagfRyTIYpzw6yWP8YBZ4JYUa5XbX5PC3S6KdqVRAAKgpdeo+fs97
-         +h1aaemBvhB3XFGAysApAOMJssqYYFRwTkJSAKCzzJG1hhALWgfFWeDh6jwiSHOuX8Fp
-         2nDJX/3+WoDITO8PN7xdnhFA7chYfmPVUQ6hSRVXKig8nQ6SA/odBVZThUe4fzyskY+8
-         E5VCi3YOtAhVDSfFFasoVR6BiSoMvdj0ND2TInVmSK7R6d1U5Tqc8pm9bHQJjAWpCIhb
-         7elw==
-X-Gm-Message-State: AO0yUKWOP5lCyiz7A1LAUU1OzYL/dyk01UmQJw5dODTe7CW9DL5VJg6k
-        MmNXv2kb7zIMXOH7qYDDYhE=
-X-Google-Smtp-Source: AK7set/P8itus1p3okGBUFN9rk94RkS0E5Ql6lniMhVceVdpcIjzF9h/Mu+zklRPMkDx5JHA+kdklg==
-X-Received: by 2002:a62:1881:0:b0:5e0:a86:a76f with SMTP id 123-20020a621881000000b005e00a86a76fmr189244pfy.0.1677526596830;
-        Mon, 27 Feb 2023 11:36:36 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id k23-20020aa78217000000b005d4360ed2bbsm4551115pfi.197.2023.02.27.11.36.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 11:36:36 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK)
-Subject: [PATCH v7 15/15] drm/i915: Add deadline based boost support
-Date:   Mon, 27 Feb 2023 11:35:21 -0800
-Message-Id: <20230227193535.2822389-16-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230227193535.2822389-1-robdclark@gmail.com>
-References: <20230227193535.2822389-1-robdclark@gmail.com>
+        Mon, 27 Feb 2023 14:33:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CAC9033;
+        Mon, 27 Feb 2023 11:33:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2EC5B80BAA;
+        Mon, 27 Feb 2023 19:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94263C433EF;
+        Mon, 27 Feb 2023 19:32:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677526380;
+        bh=tD3AeHrLgU89owJCVTQQS+07OI5+csQxxiYLD8AN3Jw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=om9MfLpxOS9Ov+xk+Mo9BtZGQ5BZsmxgYSgLnE5dfgvHC7yx4GrL5+NRKd9MaaZ+c
+         m5uAzQkTw5HfDeZ+Dybzbv2FnAfaOvTEIvzwBhZ3bIggg6GvUc91eJGDF/uHxrnCan
+         xPs8EIj6wl0AoILJgyGb3kE4dqwR2BfrV3p6/haxErqCRM4z6knAkYP2tGw8DHT9QM
+         cyG+v2vjKsqZtcNXmL2Q3qlYJIygDRLrDt3FI4wUX3B01Z77DaFskTI6I81+yFam8U
+         01Ddg8LaAhf8/fmpChjEmqReqYcfXk1fhIg11QiwfBdI2zc6swNB7+MvrYS8zvlQvG
+         KQQjsTStIUeLg==
+Date:   Mon, 27 Feb 2023 11:36:20 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/1] Add trace events for remoteproc
+Message-ID: <20230227193620.hzrlt3e5vh5xz74v@ripper>
+References: <20230224165142.17745-1-quic_gokukris@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224165142.17745-1-quic_gokukris@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Fri, Feb 24, 2023 at 08:51:41AM -0800, Gokul krishna Krishnakumar wrote:
+> This patch attempts to add traces for important remoteproc events,
+> this will help in debugging errors with the subsystem restart and
+> also helps in getting an estimate on how long each event takes to run.
+> 
 
-v2: rebase
+Please skip sending cover-letters for single patches. Also, this is the
+kind of motivation that should be included in the commit message.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Thanks,
+Bjorn
 
-diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-index 7503dcb9043b..44491e7e214c 100644
---- a/drivers/gpu/drm/i915/i915_request.c
-+++ b/drivers/gpu/drm/i915/i915_request.c
-@@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dma_fence *fence)
- 	return i915_request_enable_breadcrumb(to_request(fence));
- }
- 
-+static void i915_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
-+{
-+	struct i915_request *rq = to_request(fence);
-+
-+	if (i915_request_completed(rq))
-+		return;
-+
-+	if (i915_request_started(rq))
-+		return;
-+
-+	/*
-+	 * TODO something more clever for deadlines that are in the
-+	 * future.  I think probably track the nearest deadline in
-+	 * rq->timeline and set timer to trigger boost accordingly?
-+	 */
-+
-+	intel_rps_boost(rq);
-+}
-+
- static signed long i915_fence_wait(struct dma_fence *fence,
- 				   bool interruptible,
- 				   signed long timeout)
-@@ -182,6 +201,7 @@ const struct dma_fence_ops i915_fence_ops = {
- 	.signaled = i915_fence_signaled,
- 	.wait = i915_fence_wait,
- 	.release = i915_fence_release,
-+	.set_deadline = i915_fence_set_deadline,
- };
- 
- static void irq_execute_cb(struct irq_work *wrk)
--- 
-2.39.1
-
+> Gokul krishna Krishnakumar (1):
+>   remoteproc: qcom: Add remoteproc tracing
+> 
+>  drivers/remoteproc/Makefile           |  3 ++-
+>  drivers/remoteproc/qcom_common.c      | 25 +++++++++++++++++++
+>  drivers/remoteproc/qcom_q6v5.c        |  3 +++
+>  drivers/remoteproc/qcom_q6v5_pas.c    | 17 +++++++++++++
+>  drivers/remoteproc/qcom_sysmon.c      | 13 ++++++++++
+>  drivers/remoteproc/qcom_tracepoints.c | 10 ++++++++
+>  include/trace/events/rproc_qcom.h     | 36 +++++++++++++++++++++++++++
+>  7 files changed, 106 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/remoteproc/qcom_tracepoints.c
+>  create mode 100644 include/trace/events/rproc_qcom.h
+> 
+> 
+> base-commit: 7c855ef7137a67bcff0e039691b969428dd8ef6a
+> -- 
+> 2.39.2
+> 
