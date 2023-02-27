@@ -2,80 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCADC6A434F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7196A434B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjB0NuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S229942AbjB0NuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjB0NuS (ORCPT
+        with ESMTP id S230015AbjB0NuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:50:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3E6C1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677505774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mbh0k81SJj8KXcQWsPETE7GSsJc/6C/vn1XuCZ3ElNk=;
-        b=ambqytsH/wKefaUyeMiPMzwV4BxMpBLK2G9RZK3O3kfTZgBMKwWSvWZh9dcRYgFb5rfvVj
-        Cl7FLMxxLDvdalO9sxaOcJtBQi+2YH4JFwdghoX5bnsn11o3lxUoiwEqPldzq1hHgLMeHA
-        w5Qrv+QhLyrqc58/eR9WBwvBHPE+uno=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-SA1C-3EVN9iuDzHDZrUQJg-1; Mon, 27 Feb 2023 08:49:29 -0500
-X-MC-Unique: SA1C-3EVN9iuDzHDZrUQJg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EEC33C21C21;
-        Mon, 27 Feb 2023 13:49:29 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28010404BEC5;
-        Mon, 27 Feb 2023 13:49:28 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230202204428.3267832-5-willy@infradead.org>
-References: <20230202204428.3267832-5-willy@infradead.org> <20230202204428.3267832-1-willy@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     dhowells@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-mm@kvack.org,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-        fstests@vger.kernel.org
-Subject: Re: [PATCH 4/5] afs: Zero bytes after 'oldsize' if we're expanding the file
+        Mon, 27 Feb 2023 08:50:15 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D698821974;
+        Mon, 27 Feb 2023 05:50:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EhR9H533iLJtMrWDRv6QbWK1xC5aZF5Krew4cuVbhkY=; b=pjNHlWPfx/mT2hbu+ptXuX0Bfl
+        6zxwF35vF7M+uOcH6tkINiOev6YsMPaubnFo73g9CYU3Ll3T9vll1nI0RNIz3WNlOYgiQa0tIVuKA
+        B74bpcIknADwNfdW3qiqy/LodWENLcXyHOE5GDwPy8SDC2sGnAK8XRozKiqv3/orCAw1mdFzv6HIi
+        4Fd5+VtHusrJQM9si0oyzylM6PKjlqGcBBcB0+w8I4L93cScTcRI07ARzhig2+xcpAnwonlHY3QlK
+        3t2CJ+UJ429TvOFTkQzXQL9J1jWkm2YGGPGX0C52K8tzDWANXamImjRh/q37GBZi3LXqJmVgYbqO9
+        qyPvOYaw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWdt1-00093q-0o; Mon, 27 Feb 2023 13:49:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7835530030B;
+        Mon, 27 Feb 2023 14:49:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 56A33200AAFE3; Mon, 27 Feb 2023 14:49:49 +0100 (CET)
+Date:   Mon, 27 Feb 2023 14:49:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
+        linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
+        intel-gfx@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, loongarch@lists.linux.dev,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [Intel-gfx] [PATCH v5 0/7] Introduce __xchg, non-atomic xchg
+Message-ID: <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net>
+References: <20230118153529.57695-1-andrzej.hajda@intel.com>
+ <Y/ZLH5F8LA3H10aL@hirez.programming.kicks-ass.net>
+ <17f40b7c-f98d-789d-fa19-12ec077b756a@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2730678.1677505767.1@warthog.procyon.org.uk>
-Date:   Mon, 27 Feb 2023 13:49:27 +0000
-Message-ID: <2730679.1677505767@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17f40b7c-f98d-789d-fa19-12ec077b756a@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox (Oracle) <willy@infradead.org> wrote:
-
-> POSIX requires that "If the file size is increased, the extended area
-> shall appear as if it were zero-filled".  It is possible to use mmap to
-> write past EOF and that data will become visible instead of zeroes.
+On Thu, Feb 23, 2023 at 10:24:19PM +0100, Andrzej Hajda wrote:
+> On 22.02.2023 18:04, Peter Zijlstra wrote:
+> > On Wed, Jan 18, 2023 at 04:35:22PM +0100, Andrzej Hajda wrote:
+> > 
+> > > Andrzej Hajda (7):
+> > >    arch: rename all internal names __xchg to __arch_xchg
+> > >    linux/include: add non-atomic version of xchg
+> > >    arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr
+> > >    llist: simplify __llist_del_all
+> > >    io_uring: use __xchg if possible
+> > >    qed: use __xchg if possible
+> > >    drm/i915/gt: use __xchg instead of internal helper
+> > 
+> > Nothing crazy in here I suppose, I somewhat wonder why you went through
+> > the trouble, but meh.
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> If you are asking why I have proposed this patchset, then the answer is
+> simple, 1st I've tried to find a way to move internal i915 helper to core
+> (see patch 7).
+> Then I was looking for possible other users of this helper. And apparently
+> there are many of them, patches 3-7 shows some.
+> 
+> 
+> > 
+> > You want me to take this through te locking tree (for the next cycle,
+> > not this one) where I normally take atomic things or does someone else
+> > want this?
+> 
+> If you could take it I will be happy.
 
-That seems to work.  Do you want me to pass it on to Linus?  If not:
-
-Acked-by: David Howells <dhowells@redhat.com>
-
+OK, I'll go queue it in tip/locking/core after -rc1. Thanks!
