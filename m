@@ -2,142 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DEE6A450C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5996A4519
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjB0OrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S229722AbjB0OsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB0OrA (ORCPT
+        with ESMTP id S229515AbjB0OsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:47:00 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323B52197F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:46:54 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id h14so6503074wru.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=p5uPmXHKG/K2eyX0uTKfopGR5q6ewnoODzWdHrgpksY=;
-        b=xsDmR4Do5X7GXRqXrx1sWPPfkkQPSeeWpP2+i4dOxIWxcR7fP6Movgw/jx9+PTcgt7
-         hZJVmOvfvsqEjjlzatHhw1inycwyCGnF5AWqhfEdY8DqC4BB+6YJ8HfIKyumuaLjA4+6
-         8DWMB+gPmdduGXGL0H74VPktXjL82h5h0pmTvXBxiNrZiftH4CdztJlVo01814iYUGpJ
-         ZLIXJh4m2TyOrtln5FH1941ZRWVUy077IrohbwK1dJZBaR5k9BFLu0Y4QYZXkQZm0Bh0
-         XeG4HbNyRQ4pE6zIAYWUiZUqw0AU4Cm5MppLmtKFbDPVVXqXg5hGfBkZrOCekLklyq8S
-         0OFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p5uPmXHKG/K2eyX0uTKfopGR5q6ewnoODzWdHrgpksY=;
-        b=qU972gm7usMjXcF/lz0N4peyttb5gVTJEVyJqlqukIAEqggE5jKF3ZcV3hpavtMQb5
-         PEe3nWmQkQEtaewFqanpRJ48RkgIv9sxdVk0EMSZzIzQ47Tx7K1uxU7/JPsVQE1V+KIn
-         d9CCWTSFKT+MHaFFvs+CQDIRcR/a0FBrgRALwm06Hf26j9jQGGWSn9fC8VWOHfbL42l8
-         mFpaivssZ01wgEIkpUI49aAR+vrYnMIM5/WlYRGFanlY/OyE7+J1nqL+9feZPMeEKEvb
-         qFCErWdFRYRKvkP4CaMBBN4/5tI92bx9M1UlrtFYWcslFD+hH6zfybAK2astSAifPRU3
-         kEJw==
-X-Gm-Message-State: AO0yUKXmi+p5j8+MKSg4mLYeejMTDaZBlwkNoWuqcmn1AHHODZTHoMTR
-        6K0CGJp2MSuivy/CHLSrDxu2bA==
-X-Google-Smtp-Source: AK7set+8chJEYzHKg+uduZ4y4OCNK6TUtWWaAIZZOVMlrI6GcnZITmCye0/0qIuUiQY19BZvAuI4wg==
-X-Received: by 2002:a5d:6187:0:b0:2c8:b9cb:885e with SMTP id j7-20020a5d6187000000b002c8b9cb885emr7599221wru.24.1677509212571;
-        Mon, 27 Feb 2023 06:46:52 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:94c3:7db:6fa6:5605? ([2a01:e0a:982:cbb0:94c3:7db:6fa6:5605])
-        by smtp.gmail.com with ESMTPSA id n4-20020a7bcbc4000000b003dc3f3d77e3sm8873890wmi.7.2023.02.27.06.46.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 06:46:52 -0800 (PST)
-Message-ID: <13cf3223-d3fb-1a3e-f13a-77db3b6d144c@linaro.org>
-Date:   Mon, 27 Feb 2023 15:46:50 +0100
-MIME-Version: 1.0
+        Mon, 27 Feb 2023 09:48:11 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0B37284;
+        Mon, 27 Feb 2023 06:48:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677509290; x=1709045290;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=icoUvm4HLbQs+ZnPWO3vMGdHRMQw3tl5Nu9MACzBjqE=;
+  b=VXwM/LuZhhgDC3737cbdOc1egYLLnNwbJOlqYekBzz58TWaqlw948dQr
+   5WHZT9v+gbLDDQGuIu0oFZEvID+bNN7MoSmQe5Lza3Q1tBMKHm+g8SCPJ
+   jCZg6Hce6NvITX55rk2Qd1b220/EmrJlqAte6H8bJAjXkKYu0PuV32hda
+   Alkv77Y+RNGQ+hgly21Tsmf3XjeEb9vUrYIs19aYgej0jtAtZLyqGzNfN
+   ztTQhPHU9elzA3nFMGjs1dmZXj8t/E16m/ZIQfgEvlOlumzHnRU2c0aao
+   pnIsvBc65UhNZXGCLGHkKu3ZQAAQgetU9h1KLV71+hP+k1RNJOpwenpnV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="332594205"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="332594205"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 06:47:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="651253674"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="651253674"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga006.jf.intel.com with ESMTP; 27 Feb 2023 06:47:56 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 06:47:55 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 27 Feb 2023 06:47:55 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 27 Feb 2023 06:47:55 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nWuYtdgIZBkFezhuq6NFhSauSV17LvHu1+GZt7glIlks6Pr/DZ7xQFg0C4Mr4GTXnf+RkUyw4AXtdATokGgzdn2gmWTAZmvgS+ghpIhK15Uqvg+H0HC1jqaQqGgTDubd+MCNhqKfv7YG7txCXvPbOtAIJO3mMlRIzvWXxM+bmaNlHi3BXcrnNouDjSmDr0+lGynSx2NuB/DzvnwYabMeIpJVmWkpoYVpcZBhgyDh7y1leJxm3B5n/L3uVZ4OIo74R96HyAnt0E9dCEYulp/QubpTStMUluRxr5izjG2LlT/uIsZltKsdTYKdTG2l1GzOn1pGfxmdRWr0obzBqgnKkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pVoQIVB/DzldRPaGZHdNRwYcIbs0nTlHrE3TdlZ0iPo=;
+ b=F2GKqpTVZ0RxPSYDAvilJ84oAQYFMBtFulHi4gJ/eO0HO+/pmVuD7ZxNTPEpkn2H7BPz4/Et19KFUN/H/4lqeRaimsaA/TwnLInxJQ4Q/E1+6oY/tJSsC4CBueUjZ6ap1328iVK9kEKsBgf377uQbU2AU3UXxilzXoY0wSnaDMUcIcsf6hiJLs3dK539OU/JwYeQWyo3+Qdyq7pp1YO2e/eSPLoT78pk+JcyhBKIpDZisKnJSl5d0gP4VXb0x1vUdh1yOdNUgj+z6PeHBqXe0rgQ/DlKFkM5uZhR961IJHj/t7fEIog8xtCnAvPBQ8V/BR9cQa/q0gXt5SIbWOSBbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by PH8PR11MB6831.namprd11.prod.outlook.com (2603:10b6:510:22d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
+ 2023 14:47:53 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6134.029; Mon, 27 Feb 2023
+ 14:47:53 +0000
+Message-ID: <95377047-6b26-b434-fc90-2289fccc2a0b@intel.com>
+Date:   Mon, 27 Feb 2023 15:46:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>, arm@kernel.org,
-        soc@kernel.org
-Cc:     Alexey Romanov <avromanov@sberdevices.ru>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-References: <20230222115020.55867-1-avromanov@sberdevices.ru>
- <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
- <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
 Content-Language: en-US
-Organization: Linaro Developer Services
-In-Reply-To: <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yury Norov <yury.norov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     <linux-kernel@vger.kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        <linux-s390@vger.kernel.org>, <kvm@vger.kernel.org>
+References: <20220428205116.861003-1-yury.norov@gmail.com>
+ <20220428205116.861003-4-yury.norov@gmail.com>
+ <20230225184702.GA3587246@roeck-us.net> <Y/qhL8kSzzhMm+tO@yury-laptop>
+ <Y/qilU0cW6ebmrnM@yury-laptop>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <Y/qilU0cW6ebmrnM@yury-laptop>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: LO2P123CA0016.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:a6::28) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH8PR11MB6831:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15c6e445-9a11-453a-04d2-08db18d19afc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YJnQ/eMfbDp2KLVM4UpwMx2AiEWZtUksf5pwCeWhHoZi8eo6k/JHCi2AaQPRDYrO8YWVirG4hy7KKJGnMT02NTOX5XS49EJV2kKkjBvgV48CkB1vbrhOol1TktWMxgo0ZccuWKqkjoY0esnvKfLGRGunPDqlj1tfujBxeMRuCePqXaYffOvgnl62SHFbhSDMPQoKrVBYJnBhEePKujyOOBt6jGtuJh0/qcROq19LKYbKNdApVw7Q/IIU2AoxCT19z3fEHlcR0JfrQKDQd8sUItD+ZPvkVSwR+6JSskFiB7YokA9JVXIjPhZr/vbXiAJYkaPWjCf8t6Po0d4K7N+ni2O2j7fBTPSuT3wt3xr79vjub/DQuwTxQzAEjo8o+27ekfskOkgASmJDobprFnnjPGMYLAiGELTS8sFb0I52Q5hLbTdHI7ax3w68XCoe+phRKR29OydPhsSWXLL4JVEFnC282O+gnDJ2rFxsAp4h8/e2pOIwZTQCV6AJaE0dEyvSUCPySe04qS7IKq6A8pjj4hb9P9Y3MfW4RbiF+NbxiHiLqsjzV3PJrjEMRzKZSrvvf8T2NPW891XNPYPihbM4VSaZxGVSqXoKTOzcGYzN6/TU+7Mo3w+fQ+AScGGQ4f6i9XJ5r2EZ3lxeiSaLroCXb4U5pQE2zZt1SDPTpKaCKIifX1njzWm3ZmME16HekLyXjzy1vyYAPPs1FfYJ3AdvTJatqZsXxzFGelEvLCDdFRo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199018)(36756003)(54906003)(110136005)(316002)(83380400001)(6486002)(66556008)(478600001)(2616005)(6506007)(6512007)(26005)(186003)(5660300002)(8936002)(2906002)(41300700001)(86362001)(31696002)(7416002)(66946007)(66476007)(38100700002)(4326008)(8676002)(82960400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFU3Mi9KYUpGQjRWN280dWZIRlFJVzF2MldLZDdGUm95ajQ5cTZOZnNxYWda?=
+ =?utf-8?B?M0ZhQUMwQ1ViZ0JSR3drVEhtRGJRN2VKTUFmZ1VheUIxTU0wcXBaQ1dxSG9K?=
+ =?utf-8?B?QStselVhd2xvUVZQY2xncnd3NWlETGkycHAwMm9lZTlYNGFIYzV2TEFTRjZj?=
+ =?utf-8?B?OXRLOUcwSTJlaFZsMTFZT1c5Z1pQL1NMZmhyL0sxYVVCQ284TExxWkc1OXVx?=
+ =?utf-8?B?U2ZsZmxKN0NEV25qak5zK2kwdmtGVE5ZVzh6OVAreWFRUStsbUFoMTFyVHhv?=
+ =?utf-8?B?M3FVUWxWZ0x0Zzc3K0tvVXpqejFicWJ6eU90K2w4THFpODF6SEZIb2pEbkhw?=
+ =?utf-8?B?bTgweFp0My9KY2oxNjEyeDllYVJsbTR2cHl6WUhSb1o3b0Q3OU5pcmgvOWNt?=
+ =?utf-8?B?eVdtb0ZtNm9YM2I0Y1RKWjJabDBPSHU5Wlh0YXBrMHRCV2FETWxzU1B3ZGhp?=
+ =?utf-8?B?dHNkNmFZSG5Hb1RuY2xpQ3JVTnR2bFpDRzY4dTk0SXdrUldQRU9WLzZWbEwr?=
+ =?utf-8?B?eTBHU1BmUGE5dlhEa0U0bnljNTJudTVoVzE2blllMm5HemEwQyswSHQrQlBR?=
+ =?utf-8?B?L3Uva0tFSTd1b0ozQktjYit1dFREWXd1WUh6cWxUbXZlbXpRb2dZMHFWaFkw?=
+ =?utf-8?B?T3k3QXhtSFBFNXJOTnAyMzcwMk5UTVlhNzIyam9Db0hienFuNjZVZVc2aEN1?=
+ =?utf-8?B?SGw5YTdlNlRpeUpTdUJ4TXYzOHJmTHRJaWF2SHNiUjVGWThTNGtLOGxHTDdK?=
+ =?utf-8?B?SkszZkpvd1N4Nm0reHhHRlZlYmZOd0JCeHVJalVYV0psdm9Nd3UwY3FweDYw?=
+ =?utf-8?B?MmUxUWtqTS9NNTl3Qkh5VHVDbmREV25rV05JTmVGZ1lYSjlUamdpVmsxSFM4?=
+ =?utf-8?B?cHNRMTVzYnBYaEFEQjVpblRvcU1GZDllZit3eDI5UE0xRVBRL3lGektxeUYx?=
+ =?utf-8?B?bWtXQ0VteEhFbVhTZ2hHeTgvRmY5MDN1TUZ0OGJaU01NakRoTHZGWDIycnlZ?=
+ =?utf-8?B?TFdBYVIxQlpRSVN6aFVNYkhaNzJDYUVsRWNSWjJZR3pydU1PenArZWFvTml5?=
+ =?utf-8?B?eFlJWTAvQVAzcWlxQ2lVZ2Z0ZkE2OWdaYjVmMml5NWF2YkNBUzBnam1hUXM1?=
+ =?utf-8?B?eG1JSFJSaUR1dWhvbXRvQmdpS0EyVG1lK21uUmxiN3FLM2FjYUVmM2Y5YVpn?=
+ =?utf-8?B?Q09tRXBXTWZRMW4rNTAvWHVXd3NPY2NxTW9nZ2xTVmhqU0pGNmZ3TTZORE1i?=
+ =?utf-8?B?NFZnbU9YYS90RDdrcmF3NUREL0ZsWDh5dkZFVithbmlyUHFBVy9NTUJBL3dr?=
+ =?utf-8?B?WEdFeTl6ajJXVklxR1hsY2pEOFVobGd5d2luSGxCUVovc1NLd3RUWXVsbFdF?=
+ =?utf-8?B?aW5DUjVKYlNjTlV3V29mV0xvSHltanZDNndVNGNHRU9LeVRmRG5lWFlyc1Zj?=
+ =?utf-8?B?MWI5aUVQcXg1YmptSlljNXVEM29ITVd6Z0dQcVA5RCtkV2RDMXFWMkVxRVRE?=
+ =?utf-8?B?Q2xkQ0ROWVl6MWRoN1hWRm9Od1k0R1RMMlkvZWRON0pVMzBEVGMwWGtDQ1Jr?=
+ =?utf-8?B?VzIyY1oydlo3ZE9DTHBvalVGcU9rdkhHQVZDaFV5S2twQnZJbGF3MkNWMWxJ?=
+ =?utf-8?B?dURzOGFabjZPUEYxUWRDcmkxUGRyT3ZaR0VuVHh1Yld4ZVlXSTBDczNWd2R5?=
+ =?utf-8?B?ZGxqWFVmb3dHaWlNT0F2YnlnSi92NlE0azJUeEtZWUtSNlNSaGVLV1RuS0J0?=
+ =?utf-8?B?b3A0ZkpJWEZUMW56RUsreGVLRGRQUHFhWnhJMjY3ZzZXV05wUFVOb01hNDVX?=
+ =?utf-8?B?dWVjSUJmekRvVkdtNFdQc0FudzEvc1lOdUdCbnF6cDZDSjVMTWY4T2d3WXVl?=
+ =?utf-8?B?RlkzSzhoOVIrQTNaZzNSbUhOZ2JsVWRubzVrS09mbnF2aXhRTkNXcmZXWlVr?=
+ =?utf-8?B?NHFITmR1RmZmcVp0ZEVDUEhZaHd4NTNad01BNnhvWFFYa1pvMWYxb3pkUWsx?=
+ =?utf-8?B?emluR1VMbFBIeGhtdHRHb3JVNEkvemhqdHRmbEFjTC93MkNUR2pWUWJpVHVF?=
+ =?utf-8?B?NWNtQUo4b2o3KzFEaFBmdjZqQ0FLV1dIWDRqUEx4K1pvZlRFa3BkbHBkWXBr?=
+ =?utf-8?B?amtrZWFyKy9wNnJHd29IK2UyZTZLTzlqem9LM05qbkkwbG9scnBKTTFHSmxt?=
+ =?utf-8?Q?E4KSaUTTmjs4z4TRVIgmOUk=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15c6e445-9a11-453a-04d2-08db18d19afc
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 14:47:53.2996
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d7jfRlRkU3ZlKvSV0M45Tzmdz1Dmpip82nlcWOQ1pJFDZY/6nri6Sy7YdYVo/gs/T+5o3sAYsKeRWJP0K/FXJ9a71G53EsI8Dx7+Yx9t9Tg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6831
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 15:28, Dmitry Rokosov wrote:
-> Hello Neil!
-> 
-> On Mon, Feb 27, 2023 at 09:15:04AM +0100, neil.armstrong@linaro.org wrote:
-> 
-> [...]
-> 
->> I'm aware Amlogic also runs their kernel as 32bit to gain a few kbytes
->> of memory, but those processors are ARMv8 and the arm64 arch code
->> has been designed for those CPUs.
->>
->> So far I didn't find a single good reason to add 32bit support for
->> ARMv8 Amlogic based SoCs, if you have a solid reason please share.
-> 
-> I totally agree with you, but I suppose it's fully related to 'big'
-> Amlogic SoC like S905_ or A311_ series. A113L (aka 'a1') is
-> a cost-efficient dual-core SoC which is used for small, cheap solutions
-> with cheap components. Every cent is important during BoM development.
-> That's why usually ODMs install small ROM and RAM capacity, and each
-> megabyte is important for RAM/ROM kernel and rootfs footprints.
+From: Yury Norov <yury.norov@gmail.com>
+Date: Sat, 25 Feb 2023 16:06:45 -0800
 
-Do you have figures ? is 32bit ARM kernel really lighter when ARM64 one is correctly configured ?
+> On Sat, Feb 25, 2023 at 04:05:02PM -0800, Yury Norov wrote:
+>> On Sat, Feb 25, 2023 at 10:47:02AM -0800, Guenter Roeck wrote:
+>>> Hi,
+>>>
+>>> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
+>>>> Test newly added bitmap_{from,to}_arr64() functions similarly to
+>>>> already existing bitmap_{from,to}_arr32() tests.
+>>>>
+>>>> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+>>>
+>>> Ever since this test is in the tree, several of my boot tests show
+>>> lots of messages such as
+>>>
+>>> test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
 
-> Why am I talking about rootfs? For such small projects a good
-> choice is buildroot rootfs assembling framework. Unfortunatelly,
-> buildroot doesn't support 'compat' mode when kernel and userspace have
-> a different bitness. 
+Hmmm, the whole 4 bytes weren't touched.
 
-well this is a buildroot problem... the kernel itself is perfectly capable
-of running an AArch32 userspace.
+>>> test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
+>>> test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
 
-> In the internal project, we save several
-> percents of ROM/RAM free space using 32-bit configuration (mostly rootfs
-> ROM space, to be honest). Therefore, for such 'little' cost-efficient
-> SoCs we can make an exception and support 32-bit configuration, from my
-> point of view.
+This is where it gets worse...
 
-32bit ARM is now "legacy", I would need to have an advice from the ARM SoC
-maintainers, but AFAIK new ARMv8 SoCs should stay in arm64 arch.
+>>> ...
+>>> test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
+>>> test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
 
-Arnd ? Olof ? do you have an opinion on this ?
+I don't see the pattern how the actual result gets generated. But the
+problem is in the bitmap code rather than in the subtest -- "must be"s
+are fully correct.
 
-> 
-> What do you think about that?
+Given that the 0xa5s are present in the upper 32 bits, it is Big Endian
+I guess? Maybe even 32-bit Big Endian? Otherwise I'd start concerning
+how comes it doesn't reproduce on x86_64s :D
 
 >>
->> And as Krzysztof stated, the support is incomplete and cannot work
->> without a dts file.
+>> This may be a real problem. Can you share what's the system is? What's
+>> endianness and register length?
+>>
+>> + Alexander Lobakin, the author of the exact subtest.
 > 
-> Agreed, we shouldn't merge dead code. But there are several question to
-> discuss there. Please check my reply to Krzysztof message.
-> 
-> [...]
-> 
+> Forgot to add
 
+Oh, thanks for letting me know!
+
+>   
+>>> but then:
+>>>
+>>> test_bitmap: all 6550 tests passed
+>>
+>> It's because corresponding error path doesn't increment failed_tests
+>> counter. I'll send a fix shortly.
+
+[...]
+
+Thanks,
+Olek
