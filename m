@@ -2,154 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069E26A3C2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEC86A3C2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjB0IR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 03:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S230111AbjB0IRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjB0IR0 (ORCPT
+        with ESMTP id S230076AbjB0IR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:17:26 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81451C7C2;
-        Mon, 27 Feb 2023 00:17:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FOSr3w+iAEqXsLn6LIyzh8zEWlLewBzbi9tDu0zPhwOlV9Rrq2Yva0FEajt/utcVcazw2zz1CDP6XS4Pjx48FLPIEeILgThaXrzsXPHV8dNOLCCAd00ab2LSlcqvGEtc7cihjRSPCzaP2lTZ0iJ6Bwg00xdTK7nkLZZK2jcbwbtTimoWtMkMPdtqiiKrAAnjbb5b3s88k14oDDBr7pnh5bN6r9V3AVQOA0skltPoPA4waP9esIPNRBhJ8nfzxKBN9iDQXZ82CM6Et0jpWL6vZ5cS6e1vjucYW38KyCc6mCR10zGl/1rkqVfa/QD9XV/BH5pe1STx87bbnHQUPapyQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xJcpID4SNOYib70EMuZebEz/Tke5UL9H80+xPapihhI=;
- b=lc30y1l0JsfU2AHMjLCjvEm7XvqAStzCGBKAO89IDmljoUyVjErgR2s+bEiQTboG2cmsPa4SGxf36xBxGmD22hhIv5R+2lsnXojYmsa4u23Mnrg8hEWjJSfkk+2T9H5VbtioCyduRha5752OXIAxUclA8QZEE55SqNstxLsZBSgwuK7Q7xsI/h6ZB463ijc7fssNvCqRVnvhHhDPOvlPLsPI24LQC9dOZ4ANS+/W8XjjoBG7OlG3POgL0s1O1EeYjZMysZIpUe79Bi+c4qhqXnCtENGbswp+KEZ7EYxWlXARggBYD6lZu5UcELlI7fJ3ekULQ3M2BMJ1HfNeRYZKlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xJcpID4SNOYib70EMuZebEz/Tke5UL9H80+xPapihhI=;
- b=EawbdWtmeRnty4x6z2vZpSJAPE3MCxyMdqFbmmYLsfKkXAew/eNKiSylS2G2NIF7D9ImNP76FCuQF82P/RcAyL5QgWEU7F9o5W3XvlnYBbp22l3S0SafFut0g3dvYx9bKkX+1GRBfP7jg6c6T7zvzRBoG7HgMlP2sk/QHpEX8nk=
-Received: from CYZPR05CA0034.namprd05.prod.outlook.com (2603:10b6:930:a3::20)
- by MW4PR12MB6951.namprd12.prod.outlook.com (2603:10b6:303:207::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Mon, 27 Feb
- 2023 08:17:21 +0000
-Received: from CY4PEPF0000C97D.namprd02.prod.outlook.com
- (2603:10b6:930:a3:cafe::8a) by CYZPR05CA0034.outlook.office365.com
- (2603:10b6:930:a3::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.16 via Frontend
- Transport; Mon, 27 Feb 2023 08:17:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000C97D.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Mon, 27 Feb 2023 08:17:20 +0000
-Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
- 2023 02:17:16 -0600
-Message-ID: <9a4448cf-9064-c763-8887-791c4518af8e@amd.com>
-Date:   Mon, 27 Feb 2023 09:16:58 +0100
+        Mon, 27 Feb 2023 03:17:29 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693D01C5B6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:17:28 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id r18so5248779wrx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:17:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SXjvdSe0Xoy2F99alaan33seTEDoFO78h4PoWaqWgOY=;
+        b=Lz4+9beKVbWGlNZ6JCP58x/xj/5GDQnJ5jCtQqyk+1Udl9BuMfMaqAUXJVrX2gGAWA
+         H22mr9hUSs6gxP/dkX1KUIEXR3e6LG214vFsWVbuboi5zufMdpFYmshF4cwGF2NV4H0z
+         qvRYWIvNKBbfobB6eeUdLDOkT0LAjGmu4KvfNxDHTvEse8d28/WUysicQIdl0aApCADF
+         7J5mfxUFaThBrPciFhRLWq5t5tVGNN5vOglz34rOh4yJx5jBo9GxMZZyWytU9fihJRsn
+         kOaZr0OIMAaAjnSkR9viY0q+ix5LePgu5IImhO7Rk0mYSW/eBZNbsSAZBts88SH9xCWR
+         xHnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SXjvdSe0Xoy2F99alaan33seTEDoFO78h4PoWaqWgOY=;
+        b=Jn6WUFUuUd/01lqqeAasDhpH7lcDbcjMsFJAumh+fEXpwrOhHwssXjZNTKBPdNd+l6
+         gBcFkkmCSlU4VEH9YqHvWDeT5Xx3zLrrPbUBFLYOAObKNEuGLn0/Kax9wx5+0YtAdRuq
+         cmMc571WNOGrz0QsEh42FvR3aP+Pn2eqblL9ZctH0vEoPG8RslogWQvKvZbYT7J1W7kJ
+         tOEAGcyFiYiNm5noXkHsfwhbCN+XRhA3e0EIetEhEXv6t8mtEv21wwBrGpucDY2mMxeM
+         7UZiZHx0w6tpJ5C6P+WsuMqc7MEcEZnPWLpAwQ/fNetgwpN2mZn5yYhJMY1KqpDq517X
+         MMEQ==
+X-Gm-Message-State: AO0yUKWCyngt8n5fRhi7USwWVUTpLhxikABfbNfxOcWEcg2Vfx/8BOqh
+        5JjsgsiiuS/WY8buNDv5D7n5Lw==
+X-Google-Smtp-Source: AK7set+LGhJeW/YV/Plyh6BkEVwsi5ztKVwgCyYUJRw0gktnM8wdTkBmFtmQU+S6gcfBUUuXp8EDLg==
+X-Received: by 2002:a5d:58ea:0:b0:2c7:d56:7d72 with SMTP id f10-20020a5d58ea000000b002c70d567d72mr13130426wrd.19.1677485846867;
+        Mon, 27 Feb 2023 00:17:26 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c4-20020adffb04000000b002c70bfe505esm6324326wrr.82.2023.02.27.00.17.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 00:17:26 -0800 (PST)
+Message-ID: <481a732d-8867-b811-e96c-caf43d08e9f9@linaro.org>
+Date:   Mon, 27 Feb 2023 09:17:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: reset: Add MediaTek MT6735 reset
+ bindings
 Content-Language: en-US
-To:     Swati Agarwal <swati.agarwal@amd.com>, <adrian.hunter@intel.com>,
-        <michal.simek@xilinx.com>, <ulf.hansson@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@amd.com>
-References: <20230223141402.23979-1-swati.agarwal@amd.com>
-From:   Michal Simek <michal.simek@amd.com>
-Subject: Re: [PATCH] mmc: sdhci-of-arasan: Add support to request the "gate"
- clock
-In-Reply-To: <20230223141402.23979-1-swati.agarwal@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97D:EE_|MW4PR12MB6951:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52539c99-13a0-4909-bc10-08db189b0c42
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wVY5iLhvodoDzsmc26/3t88X7Ty4g3iMggUQee6ic7Y6YqYeEoVJcudZ8tovh7+liIEyFNUe4WHf6/Hf7cINHmLgGYARblaqzTjsEb2K9vHGjIthujoOpa/AqwWuaZIWPZGbIc4PuHYjkaKxi5fPuSqjYtf3W2aZ1tVLpRcn8FUnGo2h6jbN2sZ9ecfl4gC7Ge24OxZaOZap868XIQUB7AHIx8mfA7ZXpyuu6NxxDcKkhKy6dGIA2e/nSHAB5PVbdFFZrpA5XdzReC0mvMNSwW3SNebtsYWdHDF0HaSAuS4My9gd68vgFhcOCzMDPQy1mnvlJTZkHLSwFCQnL5cNdObytHKR6owZr7o8hxYPRIYlDSU5aag+pU0vy1x2B+75beT3GPaVZTV12CcFuh2FBRJUNnQYrW08OSJrYtqUyZ1/SKTP9ZKKBliJw8GLBzcTy+I8M7LCzRTq2VoVFlrfE2lXmLpX+I0v+apfXwqlJ3/HIrapUQYnzH5tDyvxWiHJM8QaF7I8lbqklRe51Y2Ciis+w6u6Wtai9t+TFNh75R2KN6t6uQdLqAtH4aflYWpYLXpuRlAeTHXd0RZAGZLvC6H7+hpeHeMzOAnRdXWG+hH3BA7wC5Wq61EcoQ5+4uuynvyMPd4hCQzhOFYjwQd+6cVkeMe2wdiReZ57vOncI1cdPRUpYgBmrT1YDRY6s79DE6tsQuZllqLFCQi/wipwoY5WKoOruduhbm9Qay7+1hVFyP69qgzpF6lCDsZHIAmz8frnL32W7b573RSOxi8ocg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(40470700004)(46966006)(36840700001)(36756003)(86362001)(31696002)(40480700001)(40460700003)(41300700001)(4326008)(8676002)(356005)(8936002)(70206006)(70586007)(478600001)(110136005)(82310400005)(16576012)(316002)(5660300002)(54906003)(26005)(44832011)(2906002)(36860700001)(83380400001)(82740400003)(81166007)(6666004)(186003)(16526019)(53546011)(426003)(47076005)(336012)(2616005)(31686004)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 08:17:20.6660
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52539c99-13a0-4909-bc10-08db189b0c42
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6951
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+References: <20230225094246.261697-1-y.oudjana@protonmail.com>
+ <20230225094246.261697-3-y.oudjana@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230225094246.261697-3-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/23/23 15:14, Swati Agarwal wrote:
-> Add support to read the optional "gate" clock property and request the
-> clock which will be used to ungate the DLL clock.
+On 25/02/2023 10:42, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
-> For Xilinx platforms which has DLL module, dll clock must be
-> ungated/enabled when SD controller operates at higher frequencies like 50
-> MHz, 100 MHz and 200 MHz. This will be done by explicitly requesting gate
-> clock from the driver.
+> Add reset definitions for the main reset controllers of MT6735 (infracfg
+> and pericfg).
 > 
-> Signed-off-by: Swati Agarwal <swati.agarwal@amd.com>
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 > ---
->   drivers/mmc/host/sdhci-of-arasan.c | 7 +++++++
->   1 file changed, 7 insertions(+)
+>  MAINTAINERS                                   |  4 ++-
+>  .../reset/mediatek,mt6735-infracfg.h          | 31 +++++++++++++++++++
+>  .../reset/mediatek,mt6735-pericfg.h           | 31 +++++++++++++++++++
+>  3 files changed, 65 insertions(+), 1 deletion(-)
+>  create mode 100644 include/dt-bindings/reset/mediatek,mt6735-infracfg.h
+>  create mode 100644 include/dt-bindings/reset/mediatek,mt6735-pericfg.h
 > 
-> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
-> index 4eebbf801b41..1fd7528c14fc 100644
-> --- a/drivers/mmc/host/sdhci-of-arasan.c
-> +++ b/drivers/mmc/host/sdhci-of-arasan.c
-> @@ -1870,6 +1870,7 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
->   	int ret;
->   	struct device_node *node;
->   	struct clk *clk_xin;
-> +	struct clk *clk_dll;
->   	struct sdhci_host *host;
->   	struct sdhci_pltfm_host *pltfm_host;
->   	struct device *dev = &pdev->dev;
-> @@ -1943,6 +1944,12 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
->   		goto clk_dis_ahb;
->   	}
->   
-> +	clk_dll = devm_clk_get_optional_enabled(dev, "gate");
-> +	if (IS_ERR(clk_dll)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(clk_dll), "failed to get dll clk\n");
-> +		goto clk_disable_all;
-> +	}
-> +
->   	if (of_property_read_bool(np, "xlnx,fails-without-test-cd"))
->   		sdhci_arasan->quirks |= SDHCI_ARASAN_QUIRK_FORCE_CDTEST;
->   
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5323f71c48fb..f617042790ee 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13101,7 +13101,7 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+>  F:	drivers/mmc/host/mtk-sd.c
+>  
+> -MEDIATEK MT6735 CLOCK DRIVERS
+> +MEDIATEK MT6735 CLOCK & RESET DRIVERS
 
-Based on available information, that it is not clear what gate clock really is 
-and what it is used for, I think the patch is correct.
+You just added this line in previous patch. Don't add code which
+immediately you fix.
 
-Acked-by: Michal Simek <michal.simek@amd.com>
 
-Thanks,
-Michal
+
+Best regards,
+Krzysztof
+
