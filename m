@@ -2,199 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B796A4EE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C66D6A4EE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjB0Ws3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S229919AbjB0Wsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjB0WsZ (ORCPT
+        with ESMTP id S229886AbjB0WsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Feb 2023 17:48:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2F977D;
-        Mon, 27 Feb 2023 14:47:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 978C8B80DC4;
-        Mon, 27 Feb 2023 22:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E722C433D2;
-        Mon, 27 Feb 2023 22:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677538065;
-        bh=BQC2Xe6hyxIuIr07Xnnpv5N2HK5t+HJGmgw69hotKhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IUdwByaAfmWSQWUwaa2Pzj7uqN5fr/iyGfkHiph0wlw6lBaS7nN54qr2XkJrl6K4q
-         pZooF51PQQQ/fBKH4rabmZ+c50pagzmIbskodCuRNPyZuJNWoHjRGGBRWfrZg2l9VZ
-         7zA9ZxTg/DdI+lFynt2kUBi3vBv8dtccg/I9JOqbzTwQsRb/P7QpVGPZHr9KtxJPO2
-         qhOr0fCsTxe+ZvbBlZmOHSx8vESp4rS+zeAHgKiKRz2NIuPas2I4AicdI8eu41kS/w
-         +V8j5RYKH6VIM7/O5n9kg3DcUNyOzAR0jL+e6S6h8zLPXegg6ChgxMwg9jTVHVPsZ3
-         HNbMnJERCqs2w==
-Date:   Mon, 27 Feb 2023 22:47:39 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, heiko@sntech.de,
-        slewis@rivosinc.com, vineetg@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 3/7] RISC-V: hwprobe: Add support for
- RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-Message-ID: <Y/0zC0Dn9gwC8N5w@spud>
-References: <20230221190858.3159617-1-evan@rivosinc.com>
- <20230221190858.3159617-4-evan@rivosinc.com>
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B159EDF;
+        Mon, 27 Feb 2023 14:47:58 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id z2so8430728plf.12;
+        Mon, 27 Feb 2023 14:47:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lG6vB3dP9H3e//Mg7ICB0IjrePifa0YDIvFrmLOhqlQ=;
+        b=yB6u+k7H/fps2LM42gtr0Rpne8TG6JTKSX9Vi/v/Yo7yNjZKEHeIKCCzRhY6NSSaew
+         tGs9ccX9NsnjPCIfmaJVe7DTdNk2kWcc2kIyCR1AbEuRiDQ6kF9VqP5x8NtUeC6ZYjyI
+         5QGjQnNP0j9bQNcwVDiDw4P7Zee5NRre9DTw9OlbBcIoiM9dZjNP+EdXTmhIBenJaJwo
+         44C8boVKjD3OJ5ah/x7X16cJy7KCVfcOU5YbUuwvZHv/3TbW9e6QdSb2hLpUX7pRBVqc
+         FL8ZJYvnLfxYRMNQP1YT5eCy72Mh26plXQZEzq/hG1inY+jKgJ6W6AdlBX50DEeOztsG
+         TpBw==
+X-Gm-Message-State: AO0yUKWrcw3S6u+sbwbmbAo2hbPltWo/HL5lZH+MCatsOnIVwZZqyfDy
+        m048VMoVr3+6iMXR5xloe4inLnAGNRI=
+X-Google-Smtp-Source: AK7set9vcQ/F8WhIG+6XsqcHSIU5HVBhAJ1lVW44QSnhAm+ORXEIjQ6fFA1tdKOn1Sl1SStdekryLg==
+X-Received: by 2002:a17:902:db04:b0:19d:90f:6c50 with SMTP id m4-20020a170902db0400b0019d090f6c50mr583309plx.58.1677538070772;
+        Mon, 27 Feb 2023 14:47:50 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:6cf3:f584:1162:e48a? ([2620:15c:211:201:6cf3:f584:1162:e48a])
+        by smtp.gmail.com with ESMTPSA id 3-20020a170902c10300b00186b69157ecsm5088744pli.202.2023.02.27.14.47.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 14:47:49 -0800 (PST)
+Message-ID: <99993a45-acc6-176f-d846-e278f173171c@acm.org>
+Date:   Mon, 27 Feb 2023 14:47:46 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YEhy8lQvUbxojQ+D"
-Content-Disposition: inline
-In-Reply-To: <20230221190858.3159617-4-evan@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 4/7] scsi: ufs: core: Add hwq print for debug
+Content-Language: en-US
+To:     Ziqi Chen <quic_ziqichen@quicinc.com>,
+        Po-Wen Kao <powen.kao@mediatek.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
+        cc.chou@mediatek.com, eddie.huang@mediatek.com,
+        mason.zhang@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com
+References: <20230222030427.957-1-powen.kao@mediatek.com>
+ <20230222030427.957-5-powen.kao@mediatek.com>
+ <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/23/23 02:14, Ziqi Chen wrote:
+> Calling registers dump function in ufshcd_print_trs() is not reasonable, 
+> eg.. for each aborted request, it would print out all hwq registers, 
+> it's not make sense.
+> 
+> I think we should move it out of ufshcd_print_trs().
 
---YEhy8lQvUbxojQ+D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Evan,
-
-On Tue, Feb 21, 2023 at 11:08:54AM -0800, Evan Green wrote:
-> We have an implicit set of base behaviors that userspace depends on,
-> which are mostly defined in various ISA specifications.
->=20
-> Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> ---
->=20
-> Changes in v3:
->  - Refactored base ISA behavior probe to allow kernel probing as well,
->    in prep for vDSO data initialization.
->  - Fixed doc warnings in IMA text list, use :c:macro:.
->=20
->  Documentation/riscv/hwprobe.rst       | 21 +++++++++++++++++++++
->  arch/riscv/include/asm/hwprobe.h      |  2 +-
->  arch/riscv/include/uapi/asm/hwprobe.h |  5 +++++
->  arch/riscv/kernel/sys_riscv.c         | 20 ++++++++++++++++++++
->  4 files changed, 47 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprob=
-e.rst
-> index 88b015a2026e..9f2da414fbf8 100644
-> --- a/Documentation/riscv/hwprobe.rst
-> +++ b/Documentation/riscv/hwprobe.rst
-> @@ -37,3 +37,24 @@ The following keys are defined:
->    defined by the RISC-V privileged architecture specification.
->  * :c:macro:`RISCV_HWPROBE_KEY_MIMPLID`: Contains the value of ``mimplid`=
-`, as
->    defined by the RISC-V privileged architecture specification.
-> +* :c:macro:`RISCV_HWPROBE_KEY_BASE_BEHAVIOR`: A bitmask containing the b=
-ase
-> +  user-visible behavior that this kernel supports.  The following base u=
-ser ABIs
-> +  are defined:
-> +
-> +  * :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`: Support for rv32ima or
-> +    rv64ima, as defined by version 2.2 of the user ISA and version 1.10 =
-of the
-> +    privileged ISA, with the following known exceptions (more exceptions=
- may be
-> +    added, but only if it can be demonstrated that the user ABI is not b=
-roken):
-> +
-> +    * The :fence.i: instruction cannot be directly executed by userspace
-> +      programs (it may still be executed in userspace via a
-> +      kernel-controlled mechanism such as the vDSO).
-> +* :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`: A bitmask containing the exten=
-sions
-> +  that are compatible with the :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA=
-`:
-> +  base system behavior.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_IMA_FD`: The F and D extensions are supporte=
-d, as
-> +    defined by commit cd20cee ("FMIN/FMAX now implement
-> +    minimumNumber/maximumNumber, not minNum/maxNum") of the RISC-V ISA m=
-anual.
-> +  * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as def=
-ined
-> +    by version 2.2 of the RISC-V ISA manual.
-
-I think I asked for some newlines, but this all seems kinda random now
-as to whether there is a blank line between list items or not.
-
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 02c2f1f7417e..f2b224550923 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -9,6 +9,7 @@
->  #include <asm/cacheflush.h>
->  #include <asm/hwprobe.h>
->  #include <asm/sbi.h>
-> +#include <asm/switch_to.h>
->  #include <asm/uaccess.h>
->  #include <asm/unistd.h>
->  #include <asm-generic/mman-common.h>
-> @@ -124,6 +125,25 @@ static void hwprobe_one_pair(struct riscv_hwprobe *p=
-air,
->  	case RISCV_HWPROBE_KEY_MIMPID:
->  		hwprobe_arch_id(pair, cpus);
->  		break;
-> +	/*
-> +	 * The kernel already assumes that the base single-letter ISA
-> +	 * extensions are supported on all harts, and only supports the
-> +	 * IMA base, so just cheat a bit here and tell that to
-> +	 * userspace.
-> +	 */
-> +	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
-> +		pair->value =3D RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-> +		break;
-> +
-> +	case RISCV_HWPROBE_KEY_IMA_EXT_0:
-> +		pair->value =3D 0;
-> +		if (has_fpu())
-> +			pair->value |=3D RISCV_HWPROBE_IMA_FD;
-> +
-> +		if (elf_hwcap & RISCV_ISA_EXT_c)
-> +			pair->value |=3D RISCV_HWPROBE_IMA_C;
-> +
-> +		break;
-> =20
->  	/*
->  	 * For forward compatibility, unknown keys don't fail the whole
-
-This looks a lot nicer after the refactor, sans the {}.
-With a consistent approach taken to newlines:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
++1
 
 
---YEhy8lQvUbxojQ+D
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/0zCwAKCRB4tDGHoIJi
-0nP/AP4/GMxjR+8aS2db8L6UNa8dMZrUVlDVN9gqSAuBgYHEdQEAjO85CrCUpq4r
-bNmr88hLkiB/gnFkN44wqNyLANSZLgk=
-=hgpt
------END PGP SIGNATURE-----
-
---YEhy8lQvUbxojQ+D--
