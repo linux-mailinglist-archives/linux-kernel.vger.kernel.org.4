@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0A86A4DD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EF66A4DDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjB0WRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S229726AbjB0WRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjB0WRB (ORCPT
+        with ESMTP id S229569AbjB0WRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:17:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49F529E23;
-        Mon, 27 Feb 2023 14:16:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7522560C4F;
-        Mon, 27 Feb 2023 22:16:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441BCC433D2;
-        Mon, 27 Feb 2023 22:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677536218;
-        bh=OLAhKikfvMU2wuyCBxDcxu9OcxDIG7wn+gzFNNSS2LA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rEzRzUKrj3jDGruk+xEddZcrntXRp0kq+4nj9UXPm7blo6WDX+rqljA9ROsFXSOiz
-         owg9O0VO4rIRmWwzRktjQ5R/8QVUCsIQXAl43Un/SiKJsPhdODRnHwl9nHbMe5ZBDQ
-         OmnxGWP1383XZtkoQkJD8umtbcQlqUlovpOmk9GaGZJWadQhGJ9EB1nJwx9XxSfDTB
-         mofhfiTLX9YEFC/A9cLaOKyOugQLmVsqcbC1m3+N+GNYai1EW8UnY+8noWib9BrXx9
-         SoVQD90gg6G9GZOEw4fncF4LixN2SsQz7bsq9LAvxdDSmY3K1SPRN0doamIugrb3lM
-         lx8cePZAguxPA==
-Date:   Mon, 27 Feb 2023 22:16:53 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] PolarFire SoC Auto Update Support
-Message-ID: <Y/0r1aR6Wik2KYBd@spud>
-References: <20230217164023.14255-1-conor@kernel.org>
- <Y/ht1eHgtRrLxIhC@yilunxu-OptiPlex-7050>
- <Y/h1KFGSw13OabYw@wendy>
- <21bebf9d-eb27-5607-b0a9-274c46ef8aa3@intel.com>
+        Mon, 27 Feb 2023 17:17:52 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBC010C2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:17:49 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso232232pjv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:17:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mPM2MT4l22bSLqZbp1zzdMjwuCto4MQv4gVU0GLg09o=;
+        b=c3RRuHU2onk5Ll4yH0rWp94BqSk4DSJw35QyBkGUaFa0WGN4tgO2TcNVzhoYIx+7PH
+         DVLzen85rSVguCwv9NApLo93L2laz9K6tOeBUBJvz486/ZLlTL5qVvC6kpnmwOCm9Pjr
+         LVfvQcT4dxC4qxQBqbsYuUqwvU50L5wJerBgWIDGMGeV+E1BQas6rvjFc65e3rs3IA2q
+         9KlezrP7s25qLNC2O8rGQ2Rf2lu7RDsHCfqiwB1XmqR6ubPxGCE+79xQ8nWxaEf4u+wc
+         m298ViMCUknvpjJh5377alzfmmeSpITHNi140aNl0erKfh0vAWKeHCIOR2TY7vPLFA8N
+         4R3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mPM2MT4l22bSLqZbp1zzdMjwuCto4MQv4gVU0GLg09o=;
+        b=PvUnRGVUh4geZnRfFbE3TOStzU7wsm+AhzRjki9rWBp6l0vg5cEC4vFfeOknChLYJ9
+         cPVfas/XdNkFKtQw39VjPk0WL9qXJClZKQ8mWWSBxMcFyFYmonXJrm1pbVMVgnhz/tWl
+         mWkJtj+56Wts2jAzHXQT9C/BbKxHtGLTvVm+FTGLRTVzD3SJHf75GeLG3wvBcHrvRJJi
+         3JT5mQUIqGfTyo7mA58WN7XYS4hVa8wl5e3IVlHRwuPHQUrzr3vlW2woyRF3Dzbf/G9/
+         xdX+oW49lfGXGIU/pR64K72Rhurc7jQZ1ElxMLIkG9WDnAIxcL/yFxpK+Ne4NXc/Wglv
+         VHGw==
+X-Gm-Message-State: AO0yUKUc2ynuwJ6iNDw2nRJoZqk7RhwuhK0Dxi3vdEVhzbx0aJrg54FR
+        PxZfiTTa6Y8YFSruQ7RrIKc2Kg==
+X-Google-Smtp-Source: AK7set/UWLuA22t/X7nw5ppBZa0/KoERUzGb05/5qRp1Ftv4fGoo0pk3i5p98gZJeVqpUqkw9mF5YQ==
+X-Received: by 2002:a17:903:22cf:b0:19d:1686:989 with SMTP id y15-20020a17090322cf00b0019d16860989mr490126plg.59.1677536269102;
+        Mon, 27 Feb 2023 14:17:49 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902714d00b00198e7d97171sm5059718plm.128.2023.02.27.14.17.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 14:17:48 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pWloX-002tUp-Ps; Tue, 28 Feb 2023 09:17:45 +1100
+Date:   Tue, 28 Feb 2023 09:17:45 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fsdevel Mailing List <linux-fsdevel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: Re: [RFC PATCH v1 0/6] Introducing `wq_cpu_set` mount option for
+ btrfs
+Message-ID: <20230227221745.GI2825702@dread.disaster.area>
+References: <20230226160259.18354-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oZi0E9zvZH+0qkiw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <21bebf9d-eb27-5607-b0a9-274c46ef8aa3@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230226160259.18354-1-ammarfaizi2@gnuweeb.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Feb 26, 2023 at 11:02:53PM +0700, Ammar Faizi wrote:
+> ## Test wq_cpu_set
+> sudo mount -t btrfs -o rw,compress-force=zstd:15,commit=1500,wq_cpu_set=0.4.1.5 /dev/sda2 hdd/a;
+> cp -rf /path/folder_with_many_large_files/ hdd/a/test;
+> sync; # See the CPU usage in htop.
+> sudo umount hdd/a;
 
---oZi0E9zvZH+0qkiw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This seems like the wrong model for setting cpu locality for
+internal filesystem threads.
 
-Hey Russ,
+Users are used to controlling cpu sets and other locality behaviour
+of a task with wrapper tools like numactl. Wrap th emount command
+with a numactl command to limit the CPU set, then have the btrfs
+fill_super() callback set the cpu mask for the work queues it
+creates based on the cpu mask that has been set for the mount task.
 
-On Mon, Feb 27, 2023 at 02:04:36PM -0800, Russ Weight wrote:
-> On 2/24/23 00:28, Conor Dooley wrote:
-> > On Fri, Feb 24, 2023 at 03:57:09PM +0800, Xu Yilun wrote:
-> >> On 2023-02-17 at 16:40:17 +0000, Conor Dooley wrote:
-> >>> This patchset adds support for the "Auto Update" feature on PolarFire
-> >>> SoC that allows for writing an FPGA bistream to the SPI flash connect=
-ed
-> >>> to the system controller.
-> >> I haven't fully checked the patches yet, just some quick comments:
-> >>
-> >> Since this feature is just to R/W the flash, and would not affect the
-> >> runtime FPGA region, I don't think an FPGA manager is actually needed.
-> >> Why not just use the MTD uAPI? There is a set of exsiting MTD uAPI &
-> >> MTD tool if I remember correctly.
-> > A lack of interest in opening up the system controller to userspace!
-> > You're right in that the writing of the image can be done that way, and
-> > while I was testing I used the userspace bits of mtd along the way - but
-> > for validating that the image we are writing we rely on the system
-> > controller.
-> > I'm really not interested in exposing the system controller's
-> > functionality, especially the bitstream manipulation parts, to userspace
-> > due to the risk of input validation bugs, so at least that side of
-> > things should remain in the kernel.
-> > I suppose I could implement something custom in drivers/soc that does
-> > the validation only, and push the rest out to userspace. Just seemed
-> > fitting to do the whole lot in drivers/fpga.
+That is, I think the model should be "inherit cpu mask from parent
+task" rather than adding mount options. This model allows anything
+that numactl can control (e.g. memory locality) to also influence
+the filesystem default behaviour without having to add yet more
+mount options in the future....
 
-> In case you haven't already looked at the new firmware-upload
-> support in the firmware-loader, I'll give you some references
-> here to see if it fit you needs. This would only support the
-> write (not the read) but it would allow the controller to do
-> validation on the write.
->=20
-> The is the cover letter which shows a usage example:
-> https://lore.kernel.org/lkml/20220421212204.36052-1-russell.h.weight@inte=
-l.com/
->=20
-> And this is a pointer to the latest documentation for it:
-> https://docs.kernel.org/driver-api/firmware/fw_upload.html
->=20
-> The only current user is: drivers/fpga/intel-m10-bmc-sec-update.c
-
-Sounds interesting, I shall go and take a look. Just quickly, when you
-say it wouldn't support the read, what exactly do you mean?
-The only read that I am really interested in doing is reading the first
-1K of flash as I need to RMW it, but I don't think that that's what you
-mean.
-Do you mean that I would not be able to dump the firmware using your
-fw_upload interface? If so, that's an acceptable constraint IMO.
-
-Your interface also circumvents us (Microchip) defining yet another
-method for interacting with the FPGA, since from my nosing around,
-everyone seems to do something different.
-
-Cheers,
-Conor.
-
-
---oZi0E9zvZH+0qkiw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/0rvwAKCRB4tDGHoIJi
-0r+IAP4wAN2eZl5ZZIhcWD47ZvM5gRJMjwQZYIsh50e8WJnPeAD/Spa80AeaY4RT
-237fwTSQ7qtB3Ui47ifyETMLaC9V+wA=
-=mVqh
------END PGP SIGNATURE-----
-
---oZi0E9zvZH+0qkiw--
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
