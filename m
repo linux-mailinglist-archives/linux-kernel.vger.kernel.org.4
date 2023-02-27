@@ -2,105 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667D26A3E0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B3D6A3E10
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjB0JPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
+        id S229905AbjB0JPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjB0JOp (ORCPT
+        with ESMTP id S229874AbjB0JPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:14:45 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247823119
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:07:45 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9042E3FA55;
-        Mon, 27 Feb 2023 09:07:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677488863;
-        bh=Hu1UiUDZneAOWvyF5UlmcAk7mfpmmxARWq2Li7lV4JM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=luigA52L7N8RNgk0yjpn7ADs9Goq2bWRnQo9vRIc/HWGJV/3PO+KKSvHIUQBJvj9j
-         NQOcD8JqUqLH0aqAk6BdJwtTUDudJoP84wwc5Fgk82sxjGG5gUoXhmu4PxEOYnacl6
-         ZEaR4Ctd561uBlyDC9nmKgSMIHRpTHNm8i83ZEQMuqjnkaHcAR2sKt10qiaVx50Dws
-         czeVVv5XEYruxL7QdktFvDFDZJSIWGg9RWpMCgF9gTCZiTd6MGcfbNIRdHMwxcopLd
-         KRi6/28D9Krk1VQeH+V+427UfcSiJTFi7fNUWwPq/P2Ie6wz3ZEI/aQ6ovdMuSiNr1
-         eCLYaEtN7rKTg==
-Message-ID: <ad89998c-0ede-72da-b8e6-fe1de0f009f1@asahilina.net>
-Date:   Mon, 27 Feb 2023 18:07:38 +0900
+        Mon, 27 Feb 2023 04:15:16 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335DD265B1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:08:28 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso3350853wmp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:08:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q+3pF92mSwYUhZy9VRH+vsVoYv/M6+lCoICkuRbVNPs=;
+        b=tUj0g530f3WAX6zMkiIob+nD3+znuJH4ZEokLzpC9j0yMozZ+6j4xtIysbReCzryyc
+         hmmVw4LwVO+K2a0x1sTkTF1fmfE7o06O02wHgNXEbAptfuXSch+ew/MNWqFtFEqGjZME
+         90gBrUhTclwaxlicifCU9E18i2aLswra3wMOB/JnZynfRBKWyhuWhcF0L9VxuOVNIjCX
+         7dzuvotjWXMRGOXquSEyEZ4ZRCo9Nvr3imV6Ng+aEVPMc8H7BwkiFuARGkHaLyCkP0tc
+         M3xt61M+nC6QnKYIqM1x01Kt5ENmULXB0+NHnhZv0XgFfCES6v8uQkeKHYCpfE5GMcxA
+         oyiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q+3pF92mSwYUhZy9VRH+vsVoYv/M6+lCoICkuRbVNPs=;
+        b=xGatfXQVS5tywIYJJPG2cK1qCMBaM6JMsmMhG/qxhA050k5XRXnVjEhf25ptNxCALj
+         36ixFJOiuJV+O470tl5Grclqiof0e1LxlTnIBIs/4SJdjLH0R9sSO0/tmrRNXybQeyLu
+         dMuXIqIJhOinDoB12U7OogYeEbJxlKHfUCt5zdCElKWASr0lMKnmnoXPzMVvcEdWIOSs
+         Ex7SLeihJ0cRYCXDwssKUEjfF7QX+XBa3l86DRGoJZM3QByHzJ7YijLkikQ4PyzT2lzu
+         WsxPromlR15lM7X42n1cA6et/jc5mKeLlo67I+rR6OFKc9BnrcHhwZtm2PNOqzd6xy/5
+         z4Gw==
+X-Gm-Message-State: AO0yUKV+laL1ludmmr5g39kKHQYYbjLtI+buFbhHQ8xEabhom0rRbPsZ
+        lYmh2nsEisxcxf8znTjXWXBjHA==
+X-Google-Smtp-Source: AK7set+CgWk1B+qEbO2S6zEfsqUjUh/9Lug+Zx2H+A7mNnO3xd751GxZ8Zsy42rsWWaEMswByX9LgQ==
+X-Received: by 2002:a05:600c:4e12:b0:3eb:3998:8bca with SMTP id b18-20020a05600c4e1200b003eb39988bcamr3861828wmq.17.1677488903422;
+        Mon, 27 Feb 2023 01:08:23 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o25-20020a05600c511900b003dfe549da4fsm13368751wms.18.2023.02.27.01.08.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 01:08:23 -0800 (PST)
+Message-ID: <d2e43fe8-2072-6723-dbb4-500a6ff8f719@linaro.org>
+Date:   Mon, 27 Feb 2023 10:08:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drm/shmem-helper: Fix locking for
- drm_gem_shmem_get_pages_sgt()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: clock: Add MediaTek MT6735 clock
+ bindings
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        asahi@lists.linux.dev
-References: <20230205125124.2260-1-lina@asahilina.net>
- <eddfa36c-4553-d392-0047-313002c613d4@collabora.com>
- <cc1c34c6-18d1-a8c5-bf70-078e7b7205f8@suse.de>
- <e49127fb-abb9-16fc-42bd-2f380d1bd29d@asahilina.net>
- <3d94a119-dc83-aede-fd39-df7a3ee7cdc0@suse.de>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <3d94a119-dc83-aede-fd39-df7a3ee7cdc0@suse.de>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+References: <20230225094246.261697-1-y.oudjana@protonmail.com>
+ <20230225094246.261697-2-y.oudjana@protonmail.com>
+ <52d479ff-14c6-b65d-952b-e7753fee2dea@linaro.org>
+ <2XCQQR.YSBPBN01H6D31@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2XCQQR.YSBPBN01H6D31@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 17.04, Thomas Zimmermann wrote:
-> Hi
+On 27/02/2023 09:29, Yassine Oudjana wrote:
 > 
-> Am 27.02.23 um 08:55 schrieb Asahi Lina:
->> On 27/02/2023 16.45, Thomas Zimmermann wrote:
->>> Hi
+> On Mon, Feb 27 2023 at 09:18:45 AM +01:00:00, Krzysztof Kozlowski 
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 25/02/2023 10:42, Yassine Oudjana wrote:
+>>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
 >>>
->>> Am 25.02.23 um 22:51 schrieb Dmitry Osipenko:
->>>> On 2/5/23 15:51, Asahi Lina wrote:
->>>>> -EXPORT_SYMBOL_GPL(drm_gem_shmem_get_pages_sgt);
->>>>> +EXPORT_SYMBOL(drm_gem_shmem_get_pages_sgt);
->>>>
->>>> Note it was a GPL symbol. I expect that all drm-shmem exports should be GPL.
+>>>  Add clock definitions for the main clock controllers of MT6735 
+>>> (apmixedsys,
+>>>  topckgen, infracfg and pericfg).
 >>>
->>> Right. I didn't notice that change, but it's probably not allowed. This
->>> needs to be reverted to a GPL export
+>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>  Acked-by: Rob Herring <robh@kernel.org>
+>>>  ---
+>>>   MAINTAINERS                                   | 10 +++
+>>>   .../clock/mediatek,mt6735-apmixedsys.h        | 16 ++++
+>>>   .../clock/mediatek,mt6735-infracfg.h          | 25 ++++++
+>>>   .../clock/mediatek,mt6735-pericfg.h           | 37 +++++++++
+>>>   .../clock/mediatek,mt6735-topckgen.h          | 79 
+>>> +++++++++++++++++++
+>>>   5 files changed, 167 insertions(+)
 >>
->> I'm sorry, this was not intentional! I think I removed and re-added the
->> export as part of making the wrapper and didn't notice it used to be _GPL...
->>
->> Do you want me to send a patch to add it back?
+>> You should squash it with other part of binding. What is the reason
+>> behind splitting one binding into three patches?
 > 
-> Yes, please do. The Fixes tag is
-> 
->    Fixes: ddddedaa0db9 ("drm/shmem-helper: Fix locking for 
-> drm_gem_shmem_get_pages_sgt()")
-> 
-> This commit is in drm-misc-next-fixes. But the branch is closed already 
-> as we're in the middle of the merge window. I think it's best to merge 
-> the fix through drm-misc-fixes after the -rc1 hs been tagged.
+> It seemed logical to me that each of clock and reset bindings as well 
+> as documentation would be separate parts especially since they go in 
 
-Sent! I also noticed that there are quite a few other non-GPL exports in
-the file, with no real logic that I can see... I'm guessing most of
-those weren't intentional either?
+I don't understand. All of these are bindings. What do you mean by
+"documentation"?
 
-~~ Lina
+> different paths, but if combining them is how it's done then sure, I'll 
+> squash them and resend.
+
+They cannot go different paths and your submissions creates false
+impression they can. If you want to see - apply these on separate
+branches and test if: driver compiles and paths to files in doc are not
+broken. Answer: driver won't compile and paths will point to
+non-existing files.
+
+
+Best regards,
+Krzysztof
+
