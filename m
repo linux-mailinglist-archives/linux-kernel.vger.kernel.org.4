@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012B66A3DE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BABBF6A3DE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjB0JIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S229842AbjB0JK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjB0JIR (ORCPT
+        with ESMTP id S229796AbjB0JKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:08:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BAB2DE71;
-        Mon, 27 Feb 2023 00:59:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Feb 2023 04:10:08 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111FA234EB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:01:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D46FCB80CAF;
-        Mon, 27 Feb 2023 08:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18BEEC433EF;
-        Mon, 27 Feb 2023 08:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677488362;
-        bh=1tHIKd104QyfvtA3q/kKbEIMUdEcyl2i2c8bvAcFeJM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Kw5Zqn3DimaluDdXJOPEW3TIh2enf/BL6FWitZ2pgqn32NU8fyQBiFD9SWkcBm7qN
-         +emkN8tvZ/4iESvOQ/UtudrbbXa/LWWs6KiVoxtoVZAyqPCMSCoTsgt0Bn7u+0nQA9
-         XWtBYwPhn+52wPffdcA5meTR6EeB13RrAhvxDZlRO4Yp3isQHC/Pdc0u8ZSQnYTVuY
-         jMm5tZBNmigDFqPMsheWS9xEQiLqfv7JzVNYQYBKYaVGxX0n4oXiVY+hdnmAJzCzmy
-         rlWMljaC521Ik8QRNFNo0NpDy5oOVp8S9l9khz4Iny/Kbxq44BeHeaiWbAJgJEpgBS
-         hBRrx2DZF805g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Miaoqian Lin <linmq006@gmail.com>, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: tegra20: fix gcc-7 constant overflow warning
-Date:   Mon, 27 Feb 2023 09:59:10 +0100
-Message-Id: <20230227085914.2560984-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 46B981F8D9;
+        Mon, 27 Feb 2023 09:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1677488511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MqQ43OG15avgCT0fmGnm5bD0I8p/oLDbgvSGYXF/h1o=;
+        b=hlVYqgE90CjKvF6iD9xK7aQW29XOnA3ZzvzuKi+6W/2iUG2a14+F6u2s+8oDfOy7EDNDSC
+        LKu+TZmSsRN9mdCoz/lUMeNogDas7FTr+7ZNfHE1JC9SfGSUHbgiwzbr4HvVQeBebRlXc1
+        94QdU9/VShAC0vwVD6izokgJXUo5N1g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1677488511;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MqQ43OG15avgCT0fmGnm5bD0I8p/oLDbgvSGYXF/h1o=;
+        b=aPLeaAWRrWXDsJG2UAsh2HBmBbOmAwZDmz7+4Cq/zI76iGHq6E+QFVSXJziqs+6SFuT7EZ
+        kyZn/xylelTdgCBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0890013912;
+        Mon, 27 Feb 2023 09:01:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Y78EAX9x/GMnSQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 27 Feb 2023 09:01:51 +0000
+Message-ID: <21c1675f-4184-e6f9-c9da-06722d6d7a12@suse.de>
+Date:   Mon, 27 Feb 2023 10:01:50 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
+ omap_fbdev_init()
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
+Cc:     ndesaulniers@google.com, trix@redhat.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        kernel test robot <lkp@intel.com>
+References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------q10EuzWHVcDjYqavMproQccF"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,68 +76,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------q10EuzWHVcDjYqavMproQccF
+Content-Type: multipart/mixed; boundary="------------HjzVTbLD5v5nBTUmqFGrZB7r";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
+ airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
+Cc: ndesaulniers@google.com, trix@redhat.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev,
+ kernel test robot <lkp@intel.com>
+Message-ID: <21c1675f-4184-e6f9-c9da-06722d6d7a12@suse.de>
+Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
+ omap_fbdev_init()
+References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
 
-Older gcc versions get confused by comparing a u32 value to a negative
-constant in a switch()/case block:
+--------------HjzVTbLD5v5nBTUmqFGrZB7r
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-drivers/clk/tegra/clk-tegra20.c: In function 'tegra20_clk_measure_input_freq':
-drivers/clk/tegra/clk-tegra20.c:581:2: error: case label does not reduce to an integer constant
-  case OSC_CTRL_OSC_FREQ_12MHZ:
-  ^~~~
-drivers/clk/tegra/clk-tegra20.c:593:2: error: case label does not reduce to an integer constant
-  case OSC_CTRL_OSC_FREQ_26MHZ:
+SGkNCg0KQW0gMjQuMDIuMjMgdW0gMTg6MjUgc2NocmllYiBOYXRoYW4gQ2hhbmNlbGxvcjoN
+Cj4gQ2xhbmcgd2FybnMgKG9yIGVycm9ycyB3aXRoIENPTkZJR19XRVJST1IpOg0KPiANCj4g
+ICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jOjIzNTo2OiBlcnJv
+cjogdmFyaWFibGUgJ2hlbHBlcicgaXMgdXNlZCB1bmluaXRpYWxpemVkIHdoZW5ldmVyICdp
+ZicgY29uZGl0aW9uIGlzIHRydWUgWy1XZXJyb3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXpl
+ZF0NCj4gICAgICAgICAgICBpZiAoIWZiZGV2KQ0KPiAgICAgICAgICAgICAgICBefn5+fn4N
+Cj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jOjI1OToyNjog
+bm90ZTogdW5pbml0aWFsaXplZCB1c2Ugb2NjdXJzIGhlcmUNCj4gICAgICAgICAgICBkcm1f
+ZmJfaGVscGVyX3VucHJlcGFyZShoZWxwZXIpOw0KPiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIF5+fn5+fg0KPiAgICAuLi9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9v
+bWFwX2ZiZGV2LmM6MjM1OjI6IG5vdGU6IHJlbW92ZSB0aGUgJ2lmJyBpZiBpdHMgY29uZGl0
+aW9uIGlzIGFsd2F5cyBmYWxzZQ0KPiAgICAgICAgICAgIGlmICghZmJkZXYpDQo+ICAgICAg
+ICAgICAgXn5+fn5+fn5+fn4NCj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21h
+cF9mYmRldi5jOjIyODozMDogbm90ZTogaW5pdGlhbGl6ZSB0aGUgdmFyaWFibGUgJ2hlbHBl
+cicgdG8gc2lsZW5jZSB0aGlzIHdhcm5pbmcNCj4gICAgICAgICAgICBzdHJ1Y3QgZHJtX2Zi
+X2hlbHBlciAqaGVscGVyOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBeDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA9IE5V
+TEwNCj4gICAgMSBlcnJvciBnZW5lcmF0ZWQuDQo+IA0KPiBSZXR1cm4gZWFybHksIGFzIHRo
+ZXJlIGlzIG5vdGhpbmcgZm9yIHRoZSBmdW5jdGlvbiB0byBkbyBpZiBtZW1vcnkNCj4gY2Fu
+bm90IGJlIGFsbG9jYXRlZC4gVGhlcmUgaXMgbm8gcG9pbnQgaW4gYWRkaW5nIGFub3RoZXIg
+bGFiZWwgdG8ganVzdA0KPiBlbWl0IHRoZSB3YXJuaW5nIGF0IHRoZSBlbmQgb2YgdGhlIGZ1
+bmN0aW9uIGluIHRoaXMgY2FzZSwgYXMgbWVtb3J5DQo+IGFsbG9jYXRpb24gZmFpbHVyZXMg
+YXJlIGFscmVhZHkgbG9nZ2VkLg0KPiANCj4gRml4ZXM6IDNmYjFmNjJmODBhMSAoImRybS9m
+Yi1oZWxwZXI6IFJlbW92ZSBkcm1fZmJfaGVscGVyX3VucHJlcGFyZSgpIGZyb20gZHJtX2Zi
+X2hlbHBlcl9maW5pKCkiKQ0KPiBMaW5rOiBodHRwczovL2dpdGh1Yi5jb20vQ2xhbmdCdWls
+dExpbnV4L2xpbnV4L2lzc3Vlcy8xODA5DQo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL29lLWtidWlsZC1hbGwvMjAyMzAyMjUwMDU4LmZZVGU5YVRQLWxrcEBpbnRlbC5jb20v
+DQo+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4g
+U2lnbmVkLW9mZi1ieTogTmF0aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPg0K
+DQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+
+DQoNCj4gLS0tDQo+IFRoaXMgaXMgY3VycmVudGx5IHNob3dpbmcgaW4gbWFpbmxpbmUgc28g
+SSBiZWxpZXZlIHRoaXMgc2hvdWxkIGdvIHRvDQo+IGRybS1taXNjLW5leHQtZml4ZXMuDQoN
+ClRoaXMgdHJlZSBpcyBvbmx5IGFjdGl2ZSBmcm9tIC1yYzYgdG8gc29tZXRpbWUgZHVyaW5n
+IHRoZSBtZXJnZSB3aW5kb3cuIA0KSSdsbCBhZGQgeW91ciBwYXRjaCB0byBkcm0tbWlzYy1m
+aXhlcyBBU0FQLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC0tLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS9vbWFwZHJtL29tYXBfZmJkZXYuYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hh
+bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9vbWFwX2ZiZGV2LmMgYi9kcml2ZXJzL2dwdS9k
+cm0vb21hcGRybS9vbWFwX2ZiZGV2LmMNCj4gaW5kZXggODQ0Mjk3MjgzNDdmLi5hNmM4NTQy
+MDg3ZWMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9vbWFwZHJtL29tYXBfZmJk
+ZXYuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9vbWFwX2ZiZGV2LmMNCj4g
+QEAgLTIzMyw3ICsyMzMsNyBAQCB2b2lkIG9tYXBfZmJkZXZfaW5pdChzdHJ1Y3QgZHJtX2Rl
+dmljZSAqZGV2KQ0KPiAgIA0KPiAgIAlmYmRldiA9IGt6YWxsb2Moc2l6ZW9mKCpmYmRldiks
+IEdGUF9LRVJORUwpOw0KPiAgIAlpZiAoIWZiZGV2KQ0KPiAtCQlnb3RvIGZhaWw7DQo+ICsJ
+CXJldHVybjsNCj4gICANCj4gICAJSU5JVF9XT1JLKCZmYmRldi0+d29yaywgcGFuX3dvcmtl
+cik7DQo+ICAgDQo+IA0KPiAtLS0NCj4gYmFzZS1jb21taXQ6IGUwMzRiOGExOGQ0YmFkY2Vl
+Y2I2NzJjNThiNDg4YmFkMWU5MDFkOTUNCj4gY2hhbmdlLWlkOiAyMDIzMDIyNC1vbWFwZHJt
+LXdzb21ldGltZXMtdW5pbml0aWFsaXplZC0wMTI1Zjc2OTJmYmINCj4gDQo+IEJlc3QgcmVn
+YXJkcywNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
+b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
+LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
+ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Make the constants unsigned instead.
+--------------HjzVTbLD5v5nBTUmqFGrZB7r--
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/clk/tegra/clk-tegra20.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+--------------q10EuzWHVcDjYqavMproQccF
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
-index 422d78247553..dcacc5064d33 100644
---- a/drivers/clk/tegra/clk-tegra20.c
-+++ b/drivers/clk/tegra/clk-tegra20.c
-@@ -21,24 +21,24 @@
- #define MISC_CLK_ENB 0x48
- 
- #define OSC_CTRL 0x50
--#define OSC_CTRL_OSC_FREQ_MASK (3<<30)
--#define OSC_CTRL_OSC_FREQ_13MHZ (0<<30)
--#define OSC_CTRL_OSC_FREQ_19_2MHZ (1<<30)
--#define OSC_CTRL_OSC_FREQ_12MHZ (2<<30)
--#define OSC_CTRL_OSC_FREQ_26MHZ (3<<30)
--#define OSC_CTRL_MASK (0x3f2 | OSC_CTRL_OSC_FREQ_MASK)
--
--#define OSC_CTRL_PLL_REF_DIV_MASK (3<<28)
--#define OSC_CTRL_PLL_REF_DIV_1		(0<<28)
--#define OSC_CTRL_PLL_REF_DIV_2		(1<<28)
--#define OSC_CTRL_PLL_REF_DIV_4		(2<<28)
-+#define OSC_CTRL_OSC_FREQ_MASK (3u<<30)
-+#define OSC_CTRL_OSC_FREQ_13MHZ (0u<<30)
-+#define OSC_CTRL_OSC_FREQ_19_2MHZ (1u<<30)
-+#define OSC_CTRL_OSC_FREQ_12MHZ (2u<<30)
-+#define OSC_CTRL_OSC_FREQ_26MHZ (3u<<30)
-+#define OSC_CTRL_MASK (0x3f2u | OSC_CTRL_OSC_FREQ_MASK)
-+
-+#define OSC_CTRL_PLL_REF_DIV_MASK	(3u<<28)
-+#define OSC_CTRL_PLL_REF_DIV_1		(0u<<28)
-+#define OSC_CTRL_PLL_REF_DIV_2		(1u<<28)
-+#define OSC_CTRL_PLL_REF_DIV_4		(2u<<28)
- 
- #define OSC_FREQ_DET 0x58
--#define OSC_FREQ_DET_TRIG (1<<31)
-+#define OSC_FREQ_DET_TRIG (1u<<31)
- 
- #define OSC_FREQ_DET_STATUS 0x5c
--#define OSC_FREQ_DET_BUSY (1<<31)
--#define OSC_FREQ_DET_CNT_MASK 0xFFFF
-+#define OSC_FREQ_DET_BUSYu (1<<31)
-+#define OSC_FREQ_DET_CNT_MASK 0xFFFFu
- 
- #define TEGRA20_CLK_PERIPH_BANKS	3
- 
--- 
-2.39.2
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP8cX4FAwAAAAAACgkQlh/E3EQov+CP
+Lg/+O3KPvS14LZLKqprtUdbcMhI4wXFn4aIjXQtV9PWFCMknkXgtUR9ETCS3zdSCrAXJiMcKzJ8b
+qT46fwogMcM59Uopkl5d7GCicmVaOZXXX2nuN4ykumbTZyn6A8JhZSokpEG3fOFqAhl4qxChMheW
+xkwxjozljgOvkcOnrrRzuZ7FddSU1V2NkQPwsn5Pn9Izjy9xIrobS3XMbFysTSE4wXFmAXn3NiXq
+ggk3RU/8Ah3Z1pRnadkcW2weOysz24iu+eQ0cxTZWqT1b/MU0ckToiLLyM7LWq4wlI0rqADLOuN1
+yNLEEu7O/Bskr7OtLwbG1gm0zPcokeNq8WcoFNiroANSGoTsHxcuDecsd82+WoyP+bXYqqUJojDz
+jbgeVXQcaqOex5s+/ykbeRgHvlMFwZHHcSB6U2XoPYH9CHj96SngARpJtDhx4kuRHUHDi9laM9Qu
+UY2L/RC4cvNkbRiQw6Dk6xOPAk2vlXGeaCxt7nfD9q5NHJmpBDNgQPq3iR4xOsFXSlC6XzVy6vr5
+j9wmSKYpsr/ChdJ+AGw2z8RXS0IyAx74EgsjaNK4YPp2q3QYtwmqK7w2tqjqaLB0B6l4lWQ4qcvD
+saMy6AMzI0i0CQ/gWEoZ9TT91p7lwoD07uZIVD6DcFj58axck7lVzfMP+TMerwKIYyOXh81vFK4e
+t0I=
+=QygN
+-----END PGP SIGNATURE-----
+
+--------------q10EuzWHVcDjYqavMproQccF--
