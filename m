@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3C26A3FBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C246A3FC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjB0K5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 05:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S229994AbjB0K6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 05:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjB0K5U (ORCPT
+        with ESMTP id S229817AbjB0K6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 05:57:20 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAEB16AF0;
-        Mon, 27 Feb 2023 02:57:18 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pWbBz-0007Bw-Rm; Mon, 27 Feb 2023 11:57:15 +0100
-Message-ID: <2a381d6c-25d9-0027-4951-c0012d09b498@leemhuis.info>
-Date:   Mon, 27 Feb 2023 11:57:15 +0100
+        Mon, 27 Feb 2023 05:58:11 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132BA93FE;
+        Mon, 27 Feb 2023 02:58:10 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r7so5729615wrz.6;
+        Mon, 27 Feb 2023 02:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZXZ5C7P9D/0s9CDFL6gpMuOWFVtyKmkspdci0k4HMiI=;
+        b=IQZi6OJV1GYXqnOActUwI/xKfypALKlUY8g7CA2Zs2DocpaieW3D+tk0XZSlm8qpGN
+         m/YNDLhI+YRJIgOH6J1a2Rw8bHsMx0rbA9gqViZQY5mFuHZIatlkD53/R/cLmLUi+rKQ
+         NpG/GR2ciwXHyZy8qpI0iX+r6JGP6yhPCwjJYqEdroeZu3CcRC35xXEI5gdZJ5L8+0EQ
+         aasc2VSKW2qyLt7hDJtuYYMcU5PvaSO54sc1SDZMKOmFrHHgMs3JjXJ3fCvzAngQ5Tbh
+         dVpYe04MheYyJvqNWCrhq3fSmKBoU4sjetEp/PUEFg/nit53jdhn/lKWQYrnbRdneJtA
+         Vicw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZXZ5C7P9D/0s9CDFL6gpMuOWFVtyKmkspdci0k4HMiI=;
+        b=5nlNKNSi+m7YC+AFIR2zqWDZv3TmQG5llRuCIEAUasoZc4YxQBHwVG2CVc2GfAqXu3
+         vyzRfn+zcPVXeTe50wkaczTr+vURDpjTsiulDig+AWLnpStr7f00JvzMLSVYQVEjkHyu
+         wmPpxJr3WpzfkymLIlMtQpO2PrDif93kTke14vp2VU2ao4fTJUDpV2nuPNI8BarhG3z3
+         Aq9/T8xt/MzisJFpXlBUULEi8HvvdnLrJhOP1bNEK0b7C1PLNOq6P2XStY+9TqmqPfit
+         Pp/1RLIIbYs6j+TWSOtQFvtizQuSS2jNQ6vpm8kgpjzEqqWh5oK3SJJoaIVSrJqeLYqZ
+         wa5g==
+X-Gm-Message-State: AO0yUKUBLL3v7PwZPTFUR8wf6n8kXh8niLzLxXue9HxTkhV6bsXUfQJY
+        I3/1ln2ALWEYs6ykXLfORJ3YtMUcQck=
+X-Google-Smtp-Source: AK7set/yg0coYPUua9emIAvNbNrL1XODizmXr1pCt+xD4exeZZTsG8oQ359Tl4RTZPtwfVC2rRfpdQ==
+X-Received: by 2002:a5d:42c3:0:b0:2c7:3c96:18d7 with SMTP id t3-20020a5d42c3000000b002c73c9618d7mr9842046wrr.20.1677495488059;
+        Mon, 27 Feb 2023 02:58:08 -0800 (PST)
+Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
+        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm6806122wrv.10.2023.02.27.02.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 02:58:07 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, git@johnthomson.fastmail.com.au
+Subject: [PATCH 00/12] mips: ralink: introduce 'soc_device' initialization
+Date:   Mon, 27 Feb 2023 11:57:54 +0100
+Message-Id: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     "Jason@zx2c4.com" <Jason@zx2c4.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-References: <20230214201955.7461-1-mario.limonciello@amd.com>
- <20230214201955.7461-2-mario.limonciello@amd.com>
- <50b5498c-38fb-e2e8-63f0-3d5bbc047737@leemhuis.info>
- <Y/ABPhpMQrQgQ72l@kernel.org> <03c045b5-73f8-0522-9966-472404068949@amd.com>
- <Y/VLYxAqmlF8nbw3@kernel.org>
- <MN0PR12MB610146866686D09CBFEC7AA2E2A59@MN0PR12MB6101.namprd12.prod.outlook.com>
-Content-Language: en-US, de-DE
-In-Reply-To: <MN0PR12MB610146866686D09CBFEC7AA2E2A59@MN0PR12MB6101.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677495438;e9c5d3f5;
-X-HE-SMSGID: 1pWbBz-0007Bw-Rm
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,123 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
+This series align old SoCs ralink code with current mt7621 code refactoring
+SoC related information into more readable functions as well as introducing
+'soc_device' for all of them. This allows to be able to distinc SoC info
+from driver code without using architecture dependent includes. 
 
-Jarkko (or James), what is needed to get this regression resolved? More
-people showed up that are apparently affected by this. Sure, 6.2 is out,
-but it's a regression in 6.1 it thus would be good to fix rather sooner
-than later. Ideally this week, if you ask me.
+I am also planning to extract from ralink code current clock related stuff 
+into proper clk drivers at some time and be able to distinc SoC in this way
+let me to mark future drivers to be easily marked for COMPILE_TEST target.
 
-FWIW, latest version of this patch is here, but it didn't get any
-replies since it was posted last Tuesday (and the mail quoted below is
-just one day younger):
+Changes have been compile tested for:
+- RT2880
+- RT3883
+- MT7620
 
-https://lore.kernel.org/all/20230220180729.23862-1-mario.limonciello@amd.com/
+Changes have been properly tested in RT5350 SoC based board (ALL5003 board)
+resulting in a working platform.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+Thanks in advance for your time.
 
-#regzbot poke
+Best regards,
+    Sergio Paracuellos
 
-On 22.02.23 00:10, Limonciello, Mario wrote:
-> [Public]
-> 
->> -----Original Message-----
->> From: Jarkko Sakkinen <jarkko@kernel.org>
->> Sent: Tuesday, February 21, 2023 16:53
->> To: Limonciello, Mario <Mario.Limonciello@amd.com>
->> Cc: Thorsten Leemhuis <regressions@leemhuis.info>; James Bottomley
->> <James.Bottomley@hansenpartnership.com>; Jason@zx2c4.com; linux-
->> integrity@vger.kernel.org; linux-kernel@vger.kernel.org;
->> stable@vger.kernel.org; Linus Torvalds <torvalds@linux-foundation.org>;
->> Linux kernel regressions list <regressions@lists.linux.dev>
->> Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
->>
->> On Fri, Feb 17, 2023 at 08:25:56PM -0600, Limonciello, Mario wrote:
->>> On 2/17/2023 16:05, Jarkko Sakkinen wrote:
->>>
->>>> Perhaps tpm_amd_* ?
->>>
->>> When Jason first proposed this patch I feel the intent was it could cover
->>> multiple deficiencies.
->>> But as this is the only one for now, sure re-naming it is fine.
->>>
->>>>
->>>> Also, just a question: is there any legit use for fTPM's, which are not
->>>> updated? I.e. why would want tpm_crb to initialize with a dysfunctional
->>>> firmware?>
->>>> I.e. the existential question is: is it better to workaround the issue and
->>>> let pass through, or make the user aware that the firmware would really
->>>> need an update.
->>>>
->>>
->>> On 2/17/2023 16:35, Jarkko Sakkinen wrote:
->>>>>
->>>>> Hmm, no reply since Mario posted this.
->>>>>
->>>>> Jarkko, James, what's your stance on this? Does the patch look fine
->> from
->>>>> your point of view? And does the situation justify merging this on the
->>>>> last minute for 6.2? Or should we merge it early for 6.3 and then
->>>>> backport to stable?
->>>>>
->>>>> Ciao, Thorsten
->>>>
->>>> As I stated in earlier response: do we want to forbid tpm_crb in this case
->>>> or do we want to pass-through with a faulty firmware?
->>>>
->>>> Not weighting either choice here I just don't see any motivating points
->>>> in the commit message to pick either, that's all.
->>>>
->>>> BR, Jarkko
->>>
->>> Even if you're not using RNG functionality you can still do plenty of other
->>> things with the TPM.  The RNG functionality is what tripped up this issue
->>> though.  All of these issues were only raised because the kernel started
->>> using it by default for RNG and userspace wants random numbers all the
->> time.
->>>
->>> If the firmware was easily updatable from all the OEMs I would lean on
->>> trying to encourage people to update.  But alas this has been available for
->>> over a year and a sizable number of OEMs haven't distributed a fix.
->>>
->>> The major issue I see with forbidding tpm_crb is that users may have been
->>> using the fTPM for something and taking it away in an update could lead to
->> a
->>> no-boot scenario if they're (for example) tying a policy to PCR values and
->>> can no longer access those.
->>>
->>> If the consensus were to go that direction instead I would want to see a
->>> module parameter that lets users turn on the fTPM even knowing this
->> problem
->>> exists so they could recover.  That all seems pretty expensive to me for
->>> this problem.
->>
->> I agree with the last argument.
-> 
-> FYI, I did send out a v2 and folded in this argument to the commit message
-> and adjusted for your feedback.  You might not have found it in your inbox
-> yet.
-> 
->>
->> I re-read the commit message and
->> https://www.amd.com/en/support/kb/faq/pa-410.
->>
->> Why this scopes down to only rng? Should TPM2_CC_GET_RANDOM also
->> blocked
->> from /dev/tpm0?
->>
-> 
-> The only reason that this commit was created is because the kernel utilized
-> the fTPM for hwrng which triggered the problem.  If that never happened
-> this probably wouldn't have been exposed either.
-> 
-> Yes; I would agree that if someone was to do other fTPM operations over
-> an extended period of time it's plausible they can cause the problem too. 
-> 
-> But picking and choosing functionality to block seems quite arbitrary to me.
-> 
+Sergio Paracuellos (12):
+  mips: ralink: rt305x: define RT305X_SYSC_BASE with __iomem
+  mips: ralink: rt305x: soc queries and tests as functions
+  mips: ralink: rt305x: introduce 'soc_device' initialization
+  mips: ralink: rt3883: define RT3883_SYSC_BASE with __iomem
+  mips: ralink: rt3883: soc queries and tests as functions
+  mips: ralink: rt3883: introduce 'soc_device' initialization
+  mips: ralink: rt288x: define RT2880_SYSC_BASE with __iomem
+  mips: ralink: rt288x: soc queries and tests as functions
+  mips: ralink: rt288x: introduce 'soc_device' initialization
+  mips: ralink: mt7620: define MT7620_SYSC_BASE with __iomem
+  mips: ralink: mt7620: soc queries and tests as functions
+  mips: ralink: mt7620: introduce 'soc_device' initialization
+
+ arch/mips/include/asm/mach-ralink/mt7620.h |   3 +-
+ arch/mips/include/asm/mach-ralink/rt288x.h |   3 +-
+ arch/mips/include/asm/mach-ralink/rt305x.h |   3 +-
+ arch/mips/include/asm/mach-ralink/rt3883.h |   4 +-
+ arch/mips/ralink/Kconfig                   |   4 +
+ arch/mips/ralink/mt7620.c                  | 145 ++++++++++++++++----
+ arch/mips/ralink/rt288x.c                  |  94 ++++++++++---
+ arch/mips/ralink/rt305x.c                  | 147 +++++++++++++++++----
+ arch/mips/ralink/rt3883.c                  |  94 ++++++++++---
+ 9 files changed, 410 insertions(+), 87 deletions(-)
+
+-- 
+2.25.1
+
