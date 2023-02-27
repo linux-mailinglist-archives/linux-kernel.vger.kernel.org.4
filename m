@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175B96A458E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192296A4590
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjB0PGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S229735AbjB0PGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjB0PGb (ORCPT
+        with ESMTP id S230051AbjB0PGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:06:31 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FCD22023;
-        Mon, 27 Feb 2023 07:06:24 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id z5so4122525ilq.0;
-        Mon, 27 Feb 2023 07:06:24 -0800 (PST)
+        Mon, 27 Feb 2023 10:06:33 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747B622010;
+        Mon, 27 Feb 2023 07:06:27 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id l25so6580392wrb.3;
+        Mon, 27 Feb 2023 07:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LYsXh7yFjvc6hXHyqIsE8hhFTTffTHd8InHSgGAxhw=;
-        b=G3r076THYu1XxK5yt2OEuJazbW1iXDsihzJa9XbBcdRhA0QfFMiDLteUmypKGGBD+H
-         8O3JOtdpzO91UOpfLULgQw/BvUcNB65BkxFl98zHOEV6KuaovsfAKJ7OXwI7RW4WoV+X
-         AVW6dEMGBqP8ZC3sEwOhsQQzrrJnxvF8eEsnudWS4cA/mAZw2fQwDhoRbKWojTP8n8lU
-         FH4p4LCVnII+kcN284UzZSEnG261vJ3XSFPUoqjwz4acG5N34tByG5Vous3VdOXR8RIN
-         UwewuIqYWSaOo01f8TBwNIYeXyM2lAqPrCKWLqnpzMSr27qKGsNi9lLA6dBPJyutb7BW
-         yJJQ==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YPvzl5AQcLke1QfhjznfZBkz9Qxeo9m3sAaerkELoHk=;
+        b=DxfGrXQf5uucvaH/jk4OeIZlgdP6Y2S24+bFg4IJUCklraz7RrSwfK0fV9GxL6dfAa
+         81PJaQW14FAkKGJPmWc3FMqteWpCtoYL9PAAHaJYjMm2lPBBGj4pQwoE69ZcHilgCpdS
+         51XjGgTfvsBoTbcgVA77H6VIaRq33mvjwaNBRZluDXfJByNDAn3kSlO8fC4cgbNMt2Dz
+         flzMPQAhEQLty2thW4Bz3USDJOVLY3Ya0oJV4R0Q6PX2yNjwywer4FUteHsKFBnN0z5b
+         ku6Xh2wywy+6DGA8cS9/AcRVNIC32hKFdKeETCCekovicipBHFy9lVrRW17YsduGDRl1
+         HbKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7LYsXh7yFjvc6hXHyqIsE8hhFTTffTHd8InHSgGAxhw=;
-        b=Cn5bk1vPPqC6k+9qOa9q2mlZxyDOE8TcYBLGt+OPVDbF9EVil7RYTGMUWkJqLJyvcT
-         EDU0PJbb/cYtA73r7+B6upCr5vmzhMk+jD7SuAbSyu20U8yeLps1ra04a8xg5y1D8/97
-         fVKj8uUvA2ZSP/FoK4wVoxTx8Iqd1xZ3p+Nd62lz5QzHeAXcH/j4NPrx2oXf9SLVYm/Y
-         unuWlS41ebasg17yMQenhtklocQBT+XTSTFMmayX9JJOCCUfJEICmL15tuoulDqiij2D
-         xt49Y8jFIyGVZqxNJYx0Ri0HoN4Gy8zmbUHQMUtfUErGoXWnNHUDP/EuOuKLnJiFr31S
-         HrsA==
-X-Gm-Message-State: AO0yUKViI8KZeUG5yIZJ0P04zxvK5AEVpoxvxyZDsSl34XcgNdkrkUiR
-        vsbNI2eDR3I9qzsYcW9R4+s=
-X-Google-Smtp-Source: AK7set/5kSpmSZ8xsksz1cCxD2giHtys6ziE4PL/RiA0pYR+mOLxUY4e7ksmBC0+cQ+pC4kFd0+YsQ==
-X-Received: by 2002:a05:6e02:2197:b0:315:4169:c5ac with SMTP id j23-20020a056e02219700b003154169c5acmr23554700ila.30.1677510383862;
-        Mon, 27 Feb 2023 07:06:23 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056e02104300b003157696c04esm2058369ilj.46.2023.02.27.07.06.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 07:06:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3ed3054d-0ede-4557-4590-a01861c338e3@roeck-us.net>
-Date:   Mon, 27 Feb 2023 07:06:21 -0800
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YPvzl5AQcLke1QfhjznfZBkz9Qxeo9m3sAaerkELoHk=;
+        b=Yflr3Av2ag0wkaXY0dgweuKAI4+SfS6VPOZxpuh9mM2I/DIl+HwNPaozoHdYbxSp6L
+         xA1qo5+bUP6twBz0ax3sJ0loln3o73WCSkk783iIZ5nqL2K4nRC1GE7Xg8YAUaXRs+vQ
+         mXacPOS50jiyBHyu+KiKlrjxeyQ+wbJNsp/Zn3H/rRRLSquBKI1c5haa+5uCGv/hFirl
+         h88sOrLAtMJGhab9ks3EcQsddmsBzTNaCoUztF7VGLePpYErvWdWBOv/pTrJeDeEaOlj
+         J6yXKW7YOlZBfqtfFlU8HxExYRg6yc0ba1WmrU7kczscMgtaWYCWLvBVzJHz+gNQxrL6
+         hdRQ==
+X-Gm-Message-State: AO0yUKX/1HeNFTS5jpHFwxPpkn85HlguP0DehAJtmNX1EG8v8qa9zSt9
+        FPBufjGGwM2S9tFQhbreHt/LQ6DVRm0=
+X-Google-Smtp-Source: AK7set+QhiPGzqs7w6yfbUv09BRoz3Z0B9Ssu4dBhAxnmVgHXZdG7H+4oY2VVDWXKEJ3/CUIfETT+g==
+X-Received: by 2002:a05:6000:38e:b0:2c5:4c9f:cf3b with SMTP id u14-20020a056000038e00b002c54c9fcf3bmr7433395wrf.7.1677510385852;
+        Mon, 27 Feb 2023 07:06:25 -0800 (PST)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id m34-20020a05600c3b2200b003df5be8987esm14410840wms.20.2023.02.27.07.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 07:06:25 -0800 (PST)
+Date:   Mon, 27 Feb 2023 16:06:23 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Any more work on "regulator: tps65090: Convert to json-schema"?
+Message-ID: <Y/zG77uzHkyHBrhU@orome>
+References: <e48669a4-8fd1-dc0b-1446-7fbe1266c32c@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] tpm: disable hwrng for fTPM on some AMD designs
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        stable@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230220180729.23862-1-mario.limonciello@amd.com>
- <20230227145554.GA3714281@roeck-us.net>
- <7f5bd6a2-2eed-a27e-8655-181bb37a7c1c@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <7f5bd6a2-2eed-a27e-8655-181bb37a7c1c@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KlVJJU4Pn9yv3mYm"
+Content-Disposition: inline
+In-Reply-To: <e48669a4-8fd1-dc0b-1446-7fbe1266c32c@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,35 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/23 06:58, Mario Limonciello wrote:
-[ ... ]
->>> +    version = ((u64)val1 << 32) | val2;
->>> +    if ((version >> 48) == 6) {
->>> +        if (version >= 0x0006000000180006ULL)
->>> +            return false;
->>> +    } else if ((version >> 48) == 3) {
->>> +        if (version >= 0x0003005700000005ULL)
->>> +            return false;
->>> +    } else
->>> +        return false;
->>
->> checkpatch:
->>
->> CHECK: braces {} should be used on all arms of this statement
->> #200: FILE: drivers/char/tpm/tpm-chip.c:557:
->> +    if ((version >> 48) == 6) {
->> [...]
->> +    } else if ((version >> 48) == 3) {
->> [...]
->> +    } else
->> [...]
-> 
-> It was requested by Jarko explicitly in v1 to do it this way.
-> 
-> https://lore.kernel.org/lkml/Y+%2F6G+UlTI7GpW6o@kernel.org/
-> 
 
-Interesting. We live and learn.
+--KlVJJU4Pn9yv3mYm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+On Sat, Feb 25, 2023 at 04:14:09PM +0100, Krzysztof Kozlowski wrote:
+> Hi Thierry,
+>=20
+> Long time ago you sent:
+> https://lore.kernel.org/all/20211217170507.2843568-6-thierry.reding@gmail=
+=2Ecom/
+>=20
+> Any plans to resubmit it?
 
+It's in my bucket of things to circle back to eventually. I've got about
+60 or so other conversions in various stages of review, but things have
+been going slower than I expected.
+
+I can upload a branch somewhere with what I have if you want to take a
+stab at submitting those. I don't expect to get back to these within the
+next two to three weeks.
+
+Thierry
+
+--KlVJJU4Pn9yv3mYm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP8xu0ACgkQ3SOs138+
+s6FppQ/8DDD5TbjVZkQdLBx7Xw2wxM4QQ8ejh9ekHyT9jW2MgiHM2yDnHLzkvOP/
+AtmYp5s1+03Kv3a2pQmCGIkZYnCP30o9qkRB/wtH+F/aRDuZyvg65UlsgVMSK3sD
+sbnDNkdC20t+30hNXU6ma5ygS4Wj612KAj1ZtElRiNAat1PqcEBQFhYIXOaXZFwL
+yhJlDsfuv1MFrJxzquGhRpmlrqA7yxsJ10/H9WqF546bIk2Q1RCs6k+Q+6RW4Prl
+CYJo9OqwmBc9oSmXXhGahCutP6jGzdplRr7WZoRK9r6FV0SRmEMQt5FYUVetTeA5
+WI5TgYLO1MYZ1+zXaLpeq4T+MY0DPcRSFw26MQkD7PxZdPQ6/lH3y+0Qao1CoJW1
+dzvenNvhPN0oLzmcP6h4V3Ml9fKOz3UMViLzVbFpd+sKoPrGEcsEt3XMV8GzLe86
+XgekqKVvcjbZEkKh83X2JW9r1qlqIkPNCHknXUAssphxhnFhRGyFF79UVAhQTdxQ
+jsRff1Qq3R8EFQeJDAOZFpkZxRDBppXx4hcylh8n/9R7U5OJUxJYNTysezlzsqi5
+Y+Wm0Hd+gc5tMvD1GpdBMon9C2UQgSVTZB/V2WRfXUhsRj7TxnJbq9CxldFxV5LT
+mH2rVmn6xkzeEFAy5J06oeGXaWMXRIWhZUbrTDIZtqM4MiHr6ZQ=
+=F9ls
+-----END PGP SIGNATURE-----
+
+--KlVJJU4Pn9yv3mYm--
