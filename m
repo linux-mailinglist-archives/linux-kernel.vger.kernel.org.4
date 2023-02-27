@@ -2,113 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D407B6A4322
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C77F6A432B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjB0NnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S230235AbjB0No5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjB0NnS (ORCPT
+        with ESMTP id S230217AbjB0Not (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:43:18 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BFB19F39;
-        Mon, 27 Feb 2023 05:43:17 -0800 (PST)
+        Mon, 27 Feb 2023 08:44:49 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8E11C302
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:44:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677505398; x=1709041398;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677505487; x=1709041487;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=B8kKgrBjxWQyCV0wZXde3NVGF5SDI0kmpRoxcky0ObQ=;
-  b=STO1rlWWvlglTb0fpPF8CIZC75XILfQ6S5hwgU3CklD2PCIr9vnFliD/
-   1qLFvtVOu4FPQt+uqXeAf29LkFzPlAD4f8xv4bO836de9R6Nzv0NBEos9
-   uqB+J9Dl2AMCs7JljUezv+mmr1h3xZAEeSIj75IdQQbAG+FhIyvyxmBaq
-   Jv9CgdwHa996WMxlw0IU/vhBj5A4pvA4Bto+CUDduToUFbCe8LftcSzkz
-   FVZmN0yNlKijiTFRqXKi+mWG2I5EFkjniqe5ir6LsegPGth+baHlowXoI
-   8AJMlHg9bKy4/OE7zp/THCu8USUcwmeJQt7A+y9C63+rmsR1nipVrxlla
+  bh=7msrzgjWYVf6Tlhokxp8pkIAtikCgkjHo/2h8nTwrmY=;
+  b=hidPYAQseUJuoK23oI25XEY7z51A7lUOeS8HY0fsMtsuKQPvccIdth7X
+   6z1BnjjyTIC22FpQGhcK0024E/z+yoocC3rpDYCHAMKz7JykQQvhPGDxC
+   ZD4T03juB8AyVFiRJsNOv7Ad6k3zFhD4C4nTmB+Y+cvl9yAjReM3lerL7
+   0QYDMYMpCWlQ3aD14LP5Jj8ttnxKM2h7SHM+FO1BLku9obsG6rfHTuC5A
+   zDZos+S9Wj64fCLiCzCLeO7E1cv2vqTiA+JZicw4ccY+fTbIu0lrBmx2Q
+   7qoMn26PVCbOHytZ1q1ndYnJHNl456fpCtfGI8qnOeH3jHg1L4P7gh3xJ
    Q==;
-X-IronPort-AV: E=Sophos;i="5.97,332,1669100400"; 
-   d="asc'?scan'208";a="198931385"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 06:43:17 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 27 Feb 2023 06:43:16 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 27 Feb 2023 06:43:13 -0700
-Date:   Mon, 27 Feb 2023 13:42:46 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-CC:     Ard Biesheuvel <ardb@kernel.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        <nathan@kernel.org>, <llvm@lists.linux.dev>,
-        <ndesaulniers@google.com>
-Subject: Re: [PATCH v7 1/1] riscv: Allow to downgrade paging mode from the
- command line
-Message-ID: <Y/yzVv717htZLuRY@wendy>
-References: <20230224100218.1824569-1-alexghiti@rivosinc.com>
- <20230224100218.1824569-2-alexghiti@rivosinc.com>
- <Y/yilORflGv3vXjX@wendy>
- <CAMj1kXGCkqpHY7rHZv0EFKhPNk6jpbh1OfG_Jm3vSW8c5Y+9_A@mail.gmail.com>
- <6bd8012a-7311-7956-b0ae-966b8534a64a@ghiti.fr>
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="396410914"
+X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
+   d="scan'208";a="396410914"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 05:44:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="783383473"
+X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
+   d="scan'208";a="783383473"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 27 Feb 2023 05:44:43 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWdo2-0004SM-1t;
+        Mon, 27 Feb 2023 13:44:42 +0000
+Date:   Mon, 27 Feb 2023 21:44:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yuanzhi Wang <wangyuanzhi@uniontech.com>,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        mario.limonciello@amd.com, Bokun.Zhang@amd.com,
+        tzimmermann@suse.de, hdegoede@redhat.com, jingyuwang_vip@163.com,
+        rafael.j.wysocki@intel.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Yuanzhi Wang <wangyuanzhi@uniontech.com>
+Subject: Re: [PATCH] amdgpu: add a filter condition when set brightness
+Message-ID: <202302272122.p3DfX4S8-lkp@intel.com>
+References: <20230227073953.326-1-wangyuanzhi@uniontech.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="i8ZwX1OEi/syzAPO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6bd8012a-7311-7956-b0ae-966b8534a64a@ghiti.fr>
+In-Reply-To: <20230227073953.326-1-wangyuanzhi@uniontech.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---i8ZwX1OEi/syzAPO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Yuanzhi,
 
-On Mon, Feb 27, 2023 at 02:27:11PM +0100, Alexandre Ghiti wrote:
-> On 2/27/23 13:56, Ard Biesheuvel wrote:
+Thank you for the patch! Yet something to improve:
 
-> > Note that we switched
-> > to --orphan-handling=error on other arches, as the linker sometimes
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.2 next-20230227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> It seems orphan-handling is set to "error" only when WERROR is set (see
-> CONFIG_LD_ORPHAN_WARN_LEVEL).
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230227073953.326-1-wangyuanzhi%40uniontech.com
+patch subject: [PATCH] amdgpu: add a filter condition when set brightness
+config: loongarch-randconfig-r036-20230226 (https://download.01.org/0day-ci/archive/20230227/202302272122.p3DfX4S8-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/95d9579e31d0b601aa1422cf767ca5138d3efcee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
+        git checkout 95d9579e31d0b601aa1422cf767ca5138d3efcee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/gpu/
 
-My CI explicitly disables CONFIG_WERROR for allmodconfig builds so that
-it can run with W=1, it is indeed set to "error" for regular
-allmodconfig runs.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302272122.p3DfX4S8-lkp@intel.com/
 
-Thanks Alex/Ard,
-Conor.
+All errors (new ones prefixed by >>):
 
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c: In function 'amdgpu_atif_handler':
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:50: warning: missing terminating " character
+     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
+         |                                                  ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:450:53: warning: missing terminating " character
+     450 |                                                 %d\n", old_brightness, req.backlight_level);
+         |                                                     ^
+>> cc1: error: unterminated argument list invoking macro "DRM_WARN"
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: 'DRM_WARN' undeclared (first use in this function)
+     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
+         |                                         ^~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:49: error: expected ';' at end of input
+     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
+         |                                                 ^
+         |                                                 ;
+   ......
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:33: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
+     448 |                                 if (old_brightness > req.backlight_level)
+         |                                 ^~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:33: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
+     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
+         |                                         ^~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c: At top level:
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:404:12: warning: 'amdgpu_atif_handler' defined but not used [-Wunused-function]
+     404 | static int amdgpu_atif_handler(struct amdgpu_device *adev,
+         |            ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:308:12: warning: 'amdgpu_atif_query_backlight_caps' defined but not used [-Wunused-function]
+     308 | static int amdgpu_atif_query_backlight_caps(struct amdgpu_atif *atif)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:240:12: warning: 'amdgpu_atif_get_notification_params' defined but not used [-Wunused-function]
+     240 | static int amdgpu_atif_get_notification_params(struct amdgpu_atif *atif)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:195:12: warning: 'amdgpu_atif_verify_interface' defined but not used [-Wunused-function]
+     195 | static int amdgpu_atif_verify_interface(struct amdgpu_atif *atif)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_types.h:36,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:30,
+                    from drivers/gpu/drm/amd/amdgpu/../include/dm_pp_interface.h:26,
+                    from drivers/gpu/drm/amd/amdgpu/amdgpu.h:64,
+                    from drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:35:
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_hdmi_types.h:53:22: warning: 'dp_hdmi_dongle_signature_str' defined but not used [-Wunused-const-variable=]
+      53 | static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
---i8ZwX1OEi/syzAPO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/yzVgAKCRB4tDGHoIJi
-0v7sAP97bImU6hzDN3fw3MI74GR1HLzo1JA7yvIRvToGW+BFVQD9E0SqjMsSvsa0
-8IM3znP8VY/yIXWltmbmNqpvKDHp5QI=
-=46Kj
------END PGP SIGNATURE-----
-
---i8ZwX1OEi/syzAPO--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
