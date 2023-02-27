@@ -2,136 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6E96A419F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DAA6A41A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjB0MUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S229379AbjB0MXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjB0MUG (ORCPT
+        with ESMTP id S229568AbjB0MXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:20:06 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469DF1B336
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:20:01 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id c4so492436pfl.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MLMXRXE6p7M2wI/v/8zIreJMb38Cw+t13v0pmAsHMHg=;
-        b=ISCrTbX0cGZo4rt8H1qM6YmqIFbVPz/ztodfosWEkfyna3o6tDcFIYSi216s73nw2n
-         JU6mgjeL9DQNvrLbkhBskOCANmhf5G41bewOClq+DVnbEafyDGY6eF9gr031wc/13NqF
-         EdF0fw9wir/BqotzQq+cGTXKsHIOkjx3DYHpwBp+S61bd9zdBvMlo/HInDe4IE1oubVY
-         RFyFVWtUs1k2yEPuiFFQHsxoBe2i3KdHnrPWAOWsTM/0xbfEdTpkrrtIJjYqGEJv9txl
-         WBWiqpJysadKTuFH8Y/T45FJTALW3evmXhH8oIXbz21P6qQxj/G3bi5fngXcE5cwrEE8
-         TaeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MLMXRXE6p7M2wI/v/8zIreJMb38Cw+t13v0pmAsHMHg=;
-        b=Y0gJ+9DVdJ8yWnDzsZAC7fi5b8dqiRXrlfpyJ1zXJeKfxZ/7sCkLe389mbHCiGWCvA
-         mU/uvYFFkN0maUTuLp7t5es4aM3ycMOHMc2/AuJdQDbOqVQuGTTMmbSDm7cohBmzVJH7
-         sL6LueuLqIQqwYUHa1zYs4LabK8VbRoewrsHEFWpHOHw4sqqUrRLIyAZPt7BMFJRZwRv
-         jbLj87dBse48YLh/bgKxerrNEpT2tBdroQ895R+Wc94yXcgKcvgXWmpk5010G1UVj0mn
-         gpeG09bU6eZqo9CcHeyrGspcY5ZLmXTgvC4Q0Xz+EHJfrS1SHQQJPZezNhdvgRgjIprf
-         Mwlg==
-X-Gm-Message-State: AO0yUKUu/K5GZHFZGUh4t72t3qCzAYcp5DaR0lCzRrfsTOqX3SikiQES
-        jghXDlYr7hK586JTdVh5I/ectNb92rTnOP99XyGsfA==
-X-Google-Smtp-Source: AK7set+pRin2+DrQij1wsBd87m6EHrzz0VpUgURYwl63znWqJGO/4vKGVim0XwC9giSb9cx+snGEAxFrGhlofsJDJss=
-X-Received: by 2002:a05:6a00:302a:b0:5a8:a56f:1c3a with SMTP id
- ay42-20020a056a00302a00b005a8a56f1c3amr3972323pfb.0.1677500400659; Mon, 27
- Feb 2023 04:20:00 -0800 (PST)
+        Mon, 27 Feb 2023 07:23:06 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D090CA2E;
+        Mon, 27 Feb 2023 04:23:04 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DFFED1FD63;
+        Mon, 27 Feb 2023 12:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1677500582; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnCaGxLM9o5v+srx8eCrRSPyZtndDAvxj3Myw/6GoFE=;
+        b=kSqbc45voUU9N4EwiF4i9ogkNjInIHniJKd0yh7TKyJSCW/hIbKboorkfvFrJddZF7/stG
+        G3nBFqlHdRktKR1Qci5EOg0yp4MBI5ndVd93D+GHXcEyLWp2MYqI/DOC1VW7S4sdOIooKG
+        9y4D/YWil/RnqxtIZc4jzdwBIVhLy8k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1677500582;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnCaGxLM9o5v+srx8eCrRSPyZtndDAvxj3Myw/6GoFE=;
+        b=E5KYuE3Z7IQPbA1dtW4HUc4hR1sBmAC7ihHsLMXNw9t9dCMek9YZRATadX9BZFuQL3rd4z
+        hhS5xmc3wtr+VhCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69DAA13A43;
+        Mon, 27 Feb 2023 12:23:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ISg+GKag/GMVPgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 27 Feb 2023 12:23:02 +0000
+Date:   Mon, 27 Feb 2023 13:23:00 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Allen Ballway <ballway@chromium.org>,
+        Jiri Kosina <jkosina@suse.cz>, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, groeck@chromium.org,
+        alistair@alistair23.me, dmitry.torokhov@gmail.com,
+        jk@codeconstruct.com.au, Jonathan.Cameron@huawei.com,
+        cmo@melexis.com, u.kleine-koenig@pengutronix.de,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 10/25] HID: multitouch: Add quirks for
+ flipped axes
+Message-ID: <20230227132300.4a3c3fad@endymion.delvare>
+In-Reply-To: <20230227020855.1051605-10-sashal@kernel.org>
+References: <20230227020855.1051605-1-sashal@kernel.org>
+        <20230227020855.1051605-10-sashal@kernel.org>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
- <20230222161222.11879-3-jiaxun.yang@flygoat.com> <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
- <70C80F6D-A727-48FD-A767-A2CA54AA7C1E@flygoat.com>
-In-Reply-To: <70C80F6D-A727-48FD-A767-A2CA54AA7C1E@flygoat.com>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Mon, 27 Feb 2023 13:19:49 +0100
-Message-ID: <CAM1=_QS_ewcFdrZ1ypV15wOkK_SKkb0UUe5_Ozi_CDBdxF5JmA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 11:32=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.c=
-om> wrote:
-> >> --- a/arch/mips/Kconfig
-> >> +++ b/arch/mips/Kconfig
-> >> @@ -63,9 +63,7 @@ config MIPS
-> >>        select HAVE_DEBUG_STACKOVERFLOW
-> >>        select HAVE_DMA_CONTIGUOUS
-> >>        select HAVE_DYNAMIC_FTRACE
-> >> -       select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
-> >> -                               !CPU_R4000_WORKAROUNDS && \
-> >> -                               !CPU_R4400_WORKAROUNDS
-> >
-> > Is the R4400 errata also covered by this workaround?
->
-> Yes, R4400 errata is basically a reduced version of R4000 one.
-> They managed to fix some parts of the issue but not all.
+Hi Sasha,
 
-Ok.
+On Sun, 26 Feb 2023 21:08:33 -0500, Sasha Levin wrote:
+> From: Allen Ballway <ballway@chromium.org>
+> 
+> [ Upstream commit a2f416bf062a38bb76cccd526d2d286b8e4db4d9 ]
+> 
+> Certain touchscreen devices, such as the ELAN9034, are oriented
+> incorrectly and report touches on opposite points on the X and Y axes.
+> For example, a 100x200 screen touched at (10,20) would report (90, 180)
+> and vice versa.
+> 
+> This is fixed by adding device quirks to transform the touch points
+> into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
+> 
+> Signed-off-by: Allen Ballway <ballway@chromium.org>
+> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/hid/hid-multitouch.c             | 39 ++++++++++++++++++---
+>  drivers/hid/hid-quirks.c                 |  6 ++++
+>  drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 43 ++++++++++++++++++++++++
+>  drivers/hid/i2c-hid/i2c-hid.h            |  3 ++
+>  4 files changed, 87 insertions(+), 4 deletions(-)
+> (...)
 
-> >> --- a/arch/mips/net/bpf_jit_comp32.c
-> >> +++ b/arch/mips/net/bpf_jit_comp32.c
-> >> @@ -446,6 +446,9 @@ static void emit_mul_i64(struct jit_context *ctx, =
-const u8 dst[], s32 imm)
-> >>                } else {
-> >>                        emit(ctx, multu, hi(dst), src);
-> >>                        emit(ctx, mflo, hi(dst));
-> >> +                       /* Ensure multiplication is completed */
-> >> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
-> >> +                               emit(ctx, mfhi, MIPS_R_ZERO);
-> >>                }
-> >>
-> >>                /* hi(dst) =3D hi(dst) - lo(dst) */
-> >> @@ -504,6 +507,7 @@ static void emit_mul_r64(struct jit_context *ctx,
-> >>        } else {
-> >>                emit(ctx, multu, lo(dst), lo(src));
-> >>                emit(ctx, mflo, lo(dst));
-> >> +               /* No need for workaround because we have this mfhi */
+Second rule of acceptance for stable patches:
 
-For context, please specify which workaround this comment refers to:
-"workaround" -> "R4000 workaround".
+ - It cannot be bigger than 100 lines, with context.
 
-> > R4000 is a 64-bit CPU, so the 32-bit JIT implementation will not be
-> > used. From the Makefile:
-> >
-> > ifeq ($(CONFIG_32BIT),y)
-> >        obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp32.o
-> > else
-> >        obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp64.o
-> > endif
->
-> It=E2=80=99s common practice to run 32-bit kernel on R4000 based systems =
-to save some memory :-)
+Clearly not met here.
 
-Ok, I understand.
+To me, this commit is something distributions may want to backport if
+their users run are likely to run the affected hardware. But it's out
+of scope for stable kernel branches.
 
-Looks good! I have run the test_bpf.ko test suite on MIPS and MIPS64
-in QEMU with and without the workarounds enabled.
-
-With above comment fix:
-Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
