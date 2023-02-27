@@ -2,120 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50846A4216
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B152F6A4218
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjB0M42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S229824AbjB0M5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjB0M40 (ORCPT
+        with ESMTP id S229530AbjB0M5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:56:26 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708891CF71;
-        Mon, 27 Feb 2023 04:56:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677502585; x=1709038585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SYzO1Z5QiAchp6VlN8dlhG1cZc1ViNp1xpnQxa5rYlA=;
-  b=whhPiTvRV8SCNiS13Zw1r6cz03GFz4J/Q9OUbE11dmPTdKC+Ys7GoqKY
-   NpbQj1wRGO/zjzARMs3uVYmZGfuFgDWJsrafS0PcCZwLXHqkJpj1RbfVy
-   VuiXa+dNqWaJ4lpd5d8sAEgorKHKIxXh66Ly+dC5KTt1qjInfwujnlH6b
-   KO5uoqyZH/HmEtInxF8QuPtwx2bvfdVfY5MjWOU0JS7TZn4jss1sBoLTv
-   bumcto7oY2fqBcV8TUiB8zTXBx4ipC8EBG3wvJSqMok+06I6kL3HwOklN
-   b0Uh4W1T2e62rBWNGf1DF0IlZQ5KBjzMNO+sCdEFwQqlxNq12mL1uI3no
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,332,1669100400"; 
-   d="asc'?scan'208";a="202388109"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 05:56:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 27 Feb 2023 05:56:23 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 27 Feb 2023 05:56:21 -0700
-Date:   Mon, 27 Feb 2023 12:55:54 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Song Shuai <suagrfillet@gmail.com>
-CC:     <corbet@lwn.net>, <alexs@kernel.org>, <siyanteng@loongson.cn>,
-        <robh@kernel.org>, <palmer@rivosinc.com>,
-        <leyfoon.tan@starfivetech.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH] sched/doc: supplement CPU capacity with RISC-V
-Message-ID: <Y/yoWt+Y7n8/A6m9@wendy>
-References: <20230227105941.2749193-1-suagrfillet@gmail.com>
- <Y/yagE7jfRGo1FgY@wendy>
- <CAAYs2=jSt9=d=N98DCVvtNA9FE6KcVYVdHPG-wpuDPknBFUndQ@mail.gmail.com>
+        Mon, 27 Feb 2023 07:57:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925AF1CAC1;
+        Mon, 27 Feb 2023 04:57:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D1E160DF6;
+        Mon, 27 Feb 2023 12:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9101AC433A8;
+        Mon, 27 Feb 2023 12:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677502628;
+        bh=zedX3PdU562c+Q1Gru7wIFDB2Pb4iAhIkFLPWy35NEU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sgKlU8T7UnCzCGpc2Ptin2Yo+usa0g1LIyoX6AHWNJX+cAeTVWPsCekMElbdRZTd7
+         yVAuodfK5Yk9dM3GAv7cLT/0VnAMP2q/IQIBs4NE2iWBp59pO1k9yXRxxpq0N5iS7C
+         rt3PXCYzUMbQqcfRjrfZZQa9FitCYgCft7Q6YEUgs/EXLC/lGv3h0wbs4cLNPIbfLf
+         pVRJTJBrQdPFhAH8PTAqJoax84OVsNw6oXmhrM9gdYt/s8uXBWB7erR/+WyDocXkPm
+         +nKIjmNwA/XTUezg1EVIp3ki9wyobdAwaq48s1YpJMRTj6JHTl9MTCLeZilzOT5J/Z
+         TwuTLiafgIBcg==
+Received: by mail-lf1-f45.google.com with SMTP id f18so8428006lfa.3;
+        Mon, 27 Feb 2023 04:57:08 -0800 (PST)
+X-Gm-Message-State: AO0yUKU9fxwMau8imkqxiDdjpYX238H4FDMh1RDWhudzDrdc75nmzapK
+        WYf2BIh3YESJEM1sndBVlALiCuDP50rnriaIWyI=
+X-Google-Smtp-Source: AK7set9VVtyfreeHcNt3/ckrXOFuAsLW/BdgFHIDhxvPasrYVOh6UMsLhaVKKjKkGGJH2QPPePGPWvRpd3iC4i7i69A=
+X-Received: by 2002:ac2:44a8:0:b0:4d8:6fd3:b8bf with SMTP id
+ c8-20020ac244a8000000b004d86fd3b8bfmr7422782lfm.7.1677502626519; Mon, 27 Feb
+ 2023 04:57:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wnAnL+HDoyre5KCO"
-Content-Disposition: inline
-In-Reply-To: <CAAYs2=jSt9=d=N98DCVvtNA9FE6KcVYVdHPG-wpuDPknBFUndQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230224100218.1824569-1-alexghiti@rivosinc.com>
+ <20230224100218.1824569-2-alexghiti@rivosinc.com> <Y/yilORflGv3vXjX@wendy>
+In-Reply-To: <Y/yilORflGv3vXjX@wendy>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 27 Feb 2023 13:56:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGCkqpHY7rHZv0EFKhPNk6jpbh1OfG_Jm3vSW8c5Y+9_A@mail.gmail.com>
+Message-ID: <CAMj1kXGCkqpHY7rHZv0EFKhPNk6jpbh1OfG_Jm3vSW8c5Y+9_A@mail.gmail.com>
+Subject: Re: [PATCH v7 1/1] riscv: Allow to downgrade paging mode from the
+ command line
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        nathan@kernel.org, llvm@lists.linux.dev, ndesaulniers@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---wnAnL+HDoyre5KCO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Feb 27, 2023 at 12:40:45PM +0000, Song Shuai wrote:
-> Conor Dooley <conor.dooley@microchip.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=
-=8827=E6=97=A5=E5=91=A8=E4=B8=80 11:57=E5=86=99=E9=81=93=EF=BC=9A
+On Mon, 27 Feb 2023 at 13:32, Conor Dooley <conor.dooley@microchip.com> wro=
+te:
+>
+> Hey Alex, clang/llvm folk,
+>
+> On Fri, Feb 24, 2023 at 11:02:18AM +0100, Alexandre Ghiti wrote:
+> > Add 2 early command line parameters that allow to downgrade satp mode
+> > (using the same naming as x86):
+> > - "no5lvl": use a 4-level page table (down from sv57 to sv48)
+> > - "no4lvl": use a 3-level page table (down from sv57/sv48 to sv39)
 > >
-> > On Mon, Feb 27, 2023 at 06:59:41PM +0800, Song Shuai wrote:
-> > > This commit 7d2078310cbf ("dt-bindings: arm: move cpu-capacity to a
-> > > shared loation") updates some references about capacity-dmips-mhz
+> > Note that going through the device tree to get the kernel command line
+> > works with ACPI too since the efi stub creates a device tree anyway wit=
+h
+> > the command line.
 > >
-> > Not requesting a respin for this, but mentioning commit 991994509ee9
-> > ("dt-bindings: riscv: add a capacity-dmips-mhz cpu property") is
-> > probably more relevant as a justification for this change.
+> > In KASAN kernels, we can't use the libfdt that early in the boot proces=
+s
+> > since we are not ready to execute instrumented functions. So instead of
+> > using the "generic" libfdt, we compile our own versions of those functi=
+ons
+> > that are not instrumented and that are prefixed so that they do not
+> > conflict with the generic ones. We also need the non-instrumented versi=
+ons
+> > of the string functions and the prefixed versions of memcpy/memmove.
 > >
-> Thanks for your correction, I'll pay attention next time.
->=20
-> I have a question about the patch you mentioned:
-> The patch uses cpu_scale per_cpu variable to store the CPU capacity
-> through arch_topology,
-> But arch_scale_cpu_capacity() interface seems not defined to deliver
-> the cpu_scale to the scheduler
-> In contrast, arm64 defines it as the topology_get_cpu_scale() in its
-> arch/arm64/include/asm/topology.h.
-> Is this an oversight or a particular purpose?
+> > This is largely inspired by commit aacd149b6238 ("arm64: head: avoid
+> > relocating the kernel twice for KASLR") from which I removed compilatio=
+n
+> > flags that were not relevant to RISC-V at the moment (LTO, SCS, pie).
+> >
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > Tested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> > ---
+> >  .../admin-guide/kernel-parameters.txt         |  5 +-
+> >  arch/riscv/kernel/Makefile                    |  2 +
+> >  arch/riscv/kernel/pi/Makefile                 | 37 +++++++++++
+> >  arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
+>
+> +      4 ld.lld: warning: vmlinux.a(arch/riscv/kernel/pi/string.pi.o):(.i=
+nit.sdata) is being placed in '.init.sdata'
+>
+> I'm getting 4 new linker warnings with LLVM=3D1 clang-15 allmodconfig
+> builds - but I don't really understand this issue.
+> Is this spurious, and a just consequence of...
+>
+> > diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makef=
+ile
+> > new file mode 100644
+> > index 000000000000..4002ed94b6d3
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/pi/Makefile
+> > @@ -0,0 +1,37 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +# This file was copied from arm64/kernel/pi/Makefile.
+> > +
+> > +KBUILD_CFLAGS        :=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)=
+) \
+> > +                -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLU=
+GIN) \
+> > +                $(call cc-option,-mbranch-protection=3Dnone) \
+> > +                -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
+> > +                -D__DISABLE_EXPORTS -ffreestanding \
+> > +                -fno-asynchronous-unwind-tables -fno-unwind-tables \
+> > +                $(call cc-option,-fno-addrsig)
+> > +
+> > +CFLAGS_cmdline_early.o +=3D -D__NO_FORTIFY
+> > +CFLAGS_lib-fdt_ro.o +=3D -D__NO_FORTIFY
+> > +
+> > +GCOV_PROFILE :=3D n
+> > +KASAN_SANITIZE       :=3D n
+> > +KCSAN_SANITIZE       :=3D n
+> > +UBSAN_SANITIZE       :=3D n
+> > +KCOV_INSTRUMENT      :=3D n
+> > +
+> > +$(obj)/%.pi.o: OBJCOPYFLAGS :=3D --prefix-symbols=3D__pi_ \
+> > +                            --remove-section=3D.note.gnu.property \
+> > +                            --prefix-alloc-sections=3D.init
+>
+> ...this?
+>
 
-Intentional oversight I suppose? It wasn't my intention to do anything
-other than document the property that people were already using in
-their devicetrees (and finding bugs with!).
-In retrospect, perhaps it is better if I un-review this patch until
-we know it is plumbed into the scheduler properly?
+Yes. if the input object has a .sdata section, the output .pi.o object
+will have a .init.sdata section, and if the common linker script does
+not place it explicitly, you will get a warning. Note that we switched
+to --orphan-handling=3Derror on other arches, as the linker sometimes
+does unexpected things with sections it doesn't know about.
 
-Ley Foon Tan is the one that found the RISC-V bugs with this property in
-their devicetree, so perhaps they've already done the work here?
-
-Thanks,
-Conor.
-
---wnAnL+HDoyre5KCO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/yoWgAKCRB4tDGHoIJi
-0lWMAP9MODOvtDm5vvcJ/DtkXxIsbk5s7zLjS+U2FljJQmwtiAD/bGwqZS4S3cwB
-OaA5EaPDOFOMmnwePguHgv/seh1dFAM=
-=ZDSm
------END PGP SIGNATURE-----
-
---wnAnL+HDoyre5KCO--
+I'd imagine this needs to be combined with .init.data
