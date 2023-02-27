@@ -2,258 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77016A4A9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8056A4AA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjB0TMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 14:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
+        id S229795AbjB0TRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjB0TMq (ORCPT
+        with ESMTP id S229542AbjB0TRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:12:46 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B62E24C9B;
-        Mon, 27 Feb 2023 11:12:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677525163; x=1709061163;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V94xqAh8cPT2rlnyn1+jwV18O+aWYMzqBGsDGXUiGC8=;
-  b=cD1+o0GL94qiZ8yxHAyDFrK7wzIEpuQoh7BuvQ2xFlxDfWcnE8fBMZoj
-   vnqg5sj9DR56trQYdVLAtqQiFXyrFtlQEyXtLNAGbtkxwT6Wk1eL1NTvS
-   fB86/m7mxo4fN4aDQMgSuxR1FDVCZ/3SLtznGPkaBf8FDv0t+ZcjaWd+x
-   y21z1T2HDMurKTVnSicE+hkWEmCG2nu6KwuPzxfkO/GBUbRFXnXdPRIC3
-   zzOHYuURTcCJ3L4eBBAR4gYtRDZQOqdi46Zw1JUF1tNblpC4J0u4BAu8O
-   yaq8BDxidet8spd5sD+t4vyaH0WO5DHO3PGO3G0lDrQPvM8XiF/Q45QD+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="396503988"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="396503988"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 11:12:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="667143353"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="667143353"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 27 Feb 2023 11:12:41 -0800
-Received: from [10.212.193.244] (kliang2-mobl1.ccr.corp.intel.com [10.212.193.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id E5F7E580689;
-        Mon, 27 Feb 2023 11:12:37 -0800 (PST)
-Message-ID: <09f0e75a-a11d-7db1-6308-f1b00462908c@linux.intel.com>
-Date:   Mon, 27 Feb 2023 14:12:36 -0500
+        Mon, 27 Feb 2023 14:17:49 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9246D25296
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 11:17:47 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RIho9W016327;
+        Mon, 27 Feb 2023 19:17:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=XVFDYg5CX7aX+nptpdmvI8wEhO1D5Nym3Xf8lPSL2Vw=;
+ b=b9s3ysJ0XEPltMqefxso1C5yx8xj1Wio/bXxMOhqaH4NxnawZCTUUzlMtZ8mzYxKUkS+
+ T/zkTpC0Aq8DX8JrS8kJMzhqA4/WFALxNpeDdWAXcdzVYAtrWKjyyWq4jUAFaB/cWmM0
+ 5CpvOCeoziV2WPS1GxegupWuydE8QY38jq+A+kVOOmZEmBaR4FcTN42f65plBQAW9ElB
+ 9uLZJicBCBeED/0XiYJHq3BxHydFPCX6RQ5Fky3x4GcC7NeMv3WKlphUwgjK+ovyco3a
+ 91WSMoskNOO951Ux5K7qoHK4MwglQ75QqtEZXapKX5E9mViqGUGPgXtRIzAPh2H46MML 0w== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nyba24h3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Feb 2023 19:17:00 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31RJ56Qg013778;
+        Mon, 27 Feb 2023 19:16:59 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ny8s5qm1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Feb 2023 19:16:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DJwA7IQA/5DZAgqH0MndOZOdEOVFmWssCIZ/HAZ748k0W6C0Tqk5D3i6vvZmxHo2DNSrMhxbeZqr+q9wr7OyIYCGLKjmE7H/HZLC8l3m8RZ5sKKQbvHeG2RoFc4nX573XNaOA1xmFwiuOu8HJZSXULgJjeGUA1R0IBP0p8jXalLlVkNMxNcfIVDFHursplc5aSNTwEPDQQnGETyABTkMeJCIqbTnbySSSn8C7PlVgpZ2jq+apmpJcKTF1BZwSJX/DzQPpd6iXkx69jITGexxnVhwBpJhkhe66VgN/yYPHYnPbFS0Ed1458zlHn8iCiaYbHr9frEalwyWHBIhB6ju1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XVFDYg5CX7aX+nptpdmvI8wEhO1D5Nym3Xf8lPSL2Vw=;
+ b=BeBmW2ciuAxscKg1xWThsvKYeBJAWwPXiQUMm7tL7D/V6HDdUiHjijjzVbOFvz6PhvzG+cU4IBo4cW6Z3Rp32PD/738QvdYDHVWxI+FXVPAsuL2LHNK3rRR1z6dHizgmxWBStERAN/27wRcAFISiD2F72UcHSBcy/tSEAq+EN+3/Ewa3sld0l3ig/tzLykJSWU3jUMfWQ7o9SAeQDpYlmxg39rmYKzk/SuSY8ifGpZ81AH1gahQW8AMChDL2Vy1tPkmLVsPRFa2Vj2Bz9P7UgTrvSNa8oHmINOBAEHmYVkHS+bC/4ZR0A2NO9adMy1nprgXeVk7wYKwZdVxYQtV/Ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XVFDYg5CX7aX+nptpdmvI8wEhO1D5Nym3Xf8lPSL2Vw=;
+ b=KANzNt/sUwJdiPBbBuoojyZOgwZzb4NcKk2ksZnYEi/ArLpYHNI4igx6MJzrUC5rNeSiYxfQJK5lFuU9OBcS9Bx9sB+hnxzxMTeFHBtg+SAay76CIPsK9uMlETL9YionG1IvPubecxV+ABR1ZdrUTK7pZ6vQdK0rp4kbuT2+Ils=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DS7PR10MB4942.namprd10.prod.outlook.com (2603:10b6:5:3ab::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.16; Mon, 27 Feb
+ 2023 19:16:57 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3db5:6e11:9aca:708a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3db5:6e11:9aca:708a%7]) with mapi id 15.20.6156.016; Mon, 27 Feb 2023
+ 19:16:56 +0000
+Date:   Mon, 27 Feb 2023 11:16:53 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 12/46] hugetlb: add hugetlb_alloc_pmd and
+ hugetlb_alloc_pte
+Message-ID: <Y/0BpWmWNGOxNqXx@monkey>
+References: <20230218002819.1486479-1-jthoughton@google.com>
+ <20230218002819.1486479-13-jthoughton@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230218002819.1486479-13-jthoughton@google.com>
+X-ClientProxiedBy: MW4PR03CA0269.namprd03.prod.outlook.com
+ (2603:10b6:303:b4::34) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 39/51] perf stat: Add TopdownL1 metric as a default if
- present
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        James Clark <james.clark@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20230219092848.639226-1-irogers@google.com>
- <20230219092848.639226-40-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230219092848.639226-40-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|DS7PR10MB4942:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc5f7c60-bb7c-43dd-a42b-08db18f7312a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NGBYu2Jz3mojYPvEF+oi/Mrj9FSq8sK0GgZvHofx7Ut9VXIM849OKJLeodL07dwYT21StPJg375oDsd7aSb1iZeYnqjeb3j2Ptdy3zYhURK7ADxLG2THN7GfW75IfoCqy1W90+uyP6g3OxQFSERxIjrCmngsT45/GaPS07R8sW+dpymuFIdw0hpoH+ZZeH35tT/G0Z+zqzzuRzHsKgml+ZUQvgrQQcJqu08Ve1szD0F737E4N7T+hCwNZ1oV8kJ/Uu9VA2ldUYE4s15tRDJbSHQNYi1Noq+3CuCvnxoEsfFia97nrK3Z4XvEWhyYch3XTIoJEGkC6wNcmsuz8hEARDMVZKYBBprLlP0oUo1W7SC7OCriuyEHCoSw4AAgZYVGLpWbacMOJNQPHp+fbPVtpvGIqSghS4XC3+K9pUjsGwWINdQKLWCwqGJDbdeBDDVq5GUSbWXv5JqX5T08R+VQf5VHgts/dzne+9s1Qtm0VxKpfNEAvs+WzjFOrTCE/G5seloA4wcqHowRYXBa/5Ez62JJx99Gy2NiZ5UCT29HbF2d0w3zJWr30D7kSAtZxsOdvhamYSm0gl8L5PfwrX5i2sxbaO5JEl9Ii7OBVv1unZIldtEn47h51K+rdhAIVDmj3e/PC2DsxOmu7bnyEhAvaA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(376002)(366004)(396003)(136003)(39860400002)(451199018)(316002)(54906003)(86362001)(38100700002)(6666004)(83380400001)(6506007)(53546011)(9686003)(26005)(33716001)(6512007)(186003)(7416002)(2906002)(8936002)(6486002)(5660300002)(478600001)(4326008)(41300700001)(44832011)(6916009)(8676002)(66946007)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SudzqF4d4XO/cybuyL9i6dBz8k0IyUcciA7pyuxUVLVx88irv634Mv6Pl1tm?=
+ =?us-ascii?Q?2jErCnGdWgwxnAqFVSOKo95TL6+d3hgWD3HeHvPrYV9skn/s44mYZJ44YASn?=
+ =?us-ascii?Q?hwqhGPc/CXpLHPxe50kRinMKNt5hxiB38GrV+b+JPWHv6MtG1U+zbSRKJ8Mn?=
+ =?us-ascii?Q?aNxvK/lwLkao4AxeVK36wb7nUdaX/h8n8u84JG/nt/vdGIfsQMd2UeVyi3zk?=
+ =?us-ascii?Q?9XVZzQkYRHnOuXyW2LATQAqdbs3Wr8X2ELCK0gKDIUwu8kfYDejdUtbnHvi8?=
+ =?us-ascii?Q?DrH7F1bByWsECO/5HQiTLNabXGPAxWCKk3779wFjGlOoNFZZaYUDEbI5S2oy?=
+ =?us-ascii?Q?xbP/DvBIbBZnqGZyjS5/c6N0I9Hx1vaL0knOyWV2YWBypCXQeuqzehGF67hf?=
+ =?us-ascii?Q?3HDQhyRJmupZom8PYoTl9sqLR8UU6IXPBTs0MJHYLtrhLOvh0wwplm+woK1q?=
+ =?us-ascii?Q?DvAmiGMf1ElV+1uzxGNcQCev1mc6IX2pvrLvQqadT/kQac3hWWLFfCqks5Sj?=
+ =?us-ascii?Q?i6fnavP/TbU446l1SmxoHEbzoGwkotVHj/tZf4Au9VP0qkFHAsQAjZfkh6sP?=
+ =?us-ascii?Q?TXcu7jh+v+W216ZfDb1qx4J87ElGEgzpy+4P97wQFGxD1hqzOpm2Oxw/yz9y?=
+ =?us-ascii?Q?qhGahvjuin3hjoxJ3y3bOkbp88s5P0+TD62YoH5i+If+3qXGZf4kXLeD9F4s?=
+ =?us-ascii?Q?w9r5Yhn/jmxG+x3fK2Y9uwvi6anaipSe4d/wXX3BiRrDGBT3dYISEsR2HdCf?=
+ =?us-ascii?Q?McTQVTYfHhLoaMl496c9Un7Zp3uOiUJT1xxiFz9OWIlpQPNK1LIgNPd9NmmE?=
+ =?us-ascii?Q?LgWYOSzm8npWAhYVNoQekr4OW8wNuJQZE9SeKo5gOz55ogYY8sL8Om3KCMc6?=
+ =?us-ascii?Q?gJUgGZQQZx/ee1jK4QFJHucZhMkBhE3MNnIaEOd1v8ybGH/t6Nnyuof7wCR1?=
+ =?us-ascii?Q?A+vF9wJcCFKiFXmd+aiEIrtOGAY6+qCd0LWy1ZoLlbtEKPhJLryVESoL19M3?=
+ =?us-ascii?Q?54ynXlTxcj68jyo8mTyXmspjp0R4Hz5pU4QFC/eSG9jc0iRm6rQG49b8WUHS?=
+ =?us-ascii?Q?Ot9YqMDOPoI269q+JAC3KEjfZ8U3m+bkDBrBAOMJXRpRWMrQGXzKnWVDEhuW?=
+ =?us-ascii?Q?yg3oAd79MRomieu3gwOKlvlsbPMi02BCgMz2YglEa1m7SCuYlu1Abwgljlrd?=
+ =?us-ascii?Q?Z6kXJAq4xhMX68HZ2K/MGI8By9ZS9IcfOYkZnRziuHoyAA9aSDH+m1zR+zXy?=
+ =?us-ascii?Q?VjXIesWZpjZyDRtbWIpK5Czn/UKyik6fvYuPFUOGwgd7cxcKcpgq6YzcAjNR?=
+ =?us-ascii?Q?/ypDbiXlEthpdj+uA55nVgY6Qo1H/skXrS8/fRnHWWqtCM/YkmoRfA1MxiPg?=
+ =?us-ascii?Q?AvZQ8ZvpV1KSLTGmoYEN9Ma8NyiXvkIfm1v+lMxHEKMqs6JQOm1yktFBa0Nz?=
+ =?us-ascii?Q?NVF2ayewhipkG6IQtsQtp0FuTuvKADUWA/I3X0K5qeaeBfC4MH0usO6QfrNS?=
+ =?us-ascii?Q?YDwXSt8OSTQSqIWBQGNZNuAzy6hvOb9TQh9xpUJa0y5PkoD1elWSuyHyaloh?=
+ =?us-ascii?Q?b2cVw96xNdLqdC6H1iqlxuEzuy0696Q++cm4tipCI5IImyFgkxJY/bjJbC4C?=
+ =?us-ascii?Q?oQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?PoLyRLziW3nxD3QtZcIsbYLVMRbKl8hCPaLG6gNk6gp4rsD70HC3gibwpUXq?=
+ =?us-ascii?Q?rxI/4/QI3gzYDpFvil4BGSAqII/Ig8XUzQZBrqyPWErCE9bU/t6XJOPcMuZc?=
+ =?us-ascii?Q?Hip6GeexPLzzPV23YhISEO4jpu654+5cEVGQZfblUfzXUKbBbYc/SH9dioqm?=
+ =?us-ascii?Q?g4qJB28zFfOIU4BJ3mErJe9yMFIWZN7cNItRjVnJkBFOgbGhS+GbDhwJKu+x?=
+ =?us-ascii?Q?v+Zqai0p2alsbd5awW29WYEHhlN9qK9VznEMyjzUJvtTl49yeM/9qDEqtpIj?=
+ =?us-ascii?Q?2mKM5L7F5i+UaW5YZs7yrI6747caXEZdjmpcONDe2NLzxgZdOHeYMOfy+4K4?=
+ =?us-ascii?Q?fOT5cQNezi42e+i0ahWVOtYNHSgw4Q6k0ifef3f1mij2RAOACc+Q4sRkNz3K?=
+ =?us-ascii?Q?eLyNeDetLP9ZM0JjjP04O0e8a6WuEzFZcq+cxGklG20FiGtH21Ka+Hyg+Y9L?=
+ =?us-ascii?Q?ubs+4bPEHVdBEX4nu6pUfkPR5k5PVdS0udrLJC4uhEdfu0/agV4H1zj3ZoGO?=
+ =?us-ascii?Q?mAKe1LQ+7nqKmBhh1VNn5oHZpxlhb4zKX8FEHUTyW6QQeeh3Z1uOSDKKmPom?=
+ =?us-ascii?Q?PEZdPUJ2d+PtPXZmei+TKcUklGg+DmktH9DM0588PQy9TuwIBnK0kUBiOiJB?=
+ =?us-ascii?Q?MkeMN1Xvx8o7krx6ivXQwyZs3AwRMWrQe3S07HCBZEmDrEud1A+RH+bEhdPt?=
+ =?us-ascii?Q?+ChTJXz2r8BOOR9UJakKcBxjCEuPt7VQS3aJ/nbjQNapLK+ila8Sh+nWla4e?=
+ =?us-ascii?Q?PtNtCekQKGg8zxXx+tlZUzXGmWU29rY582FYPN+PnauOhoTLLuEwfmT3WKjM?=
+ =?us-ascii?Q?B7zvFr6OHzEj//NkozcLZsidcjv9YEUyUHX/nqz6fdadd/10wAHTe2nF2VBi?=
+ =?us-ascii?Q?nK8vYplkGW2ukAZu29uTnwzq3BUAVrvlzqPbHEHniXlC3c18Lt9A5CZ7YSOA?=
+ =?us-ascii?Q?+fP/LbJe51TwcjIUu9LKt59zY927URZHrxq8wo3hzxXChk1v9Tg9LJUTEgoZ?=
+ =?us-ascii?Q?Ct2P8TsWUVfiyXmedqhqzcPC1/F8OX+AiGT2ysin1yW+XtswmvVDQvUC5ASB?=
+ =?us-ascii?Q?mbRi2VRO/ksAchSUV93A+LWuBMj1R7dQqp65zJ1avd2/ODJq1hP/GFv1tTIu?=
+ =?us-ascii?Q?Tt05A+dWltdkpCiNLkH2uUMZ8PhcfvTwsQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc5f7c60-bb7c-43dd-a42b-08db18f7312a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 19:16:56.7985
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bh0eQk8M29bF6n9toElc7gYmyqxji6Cg5K3nPyhepmZycrjAq3iS68kppJw4+7MDjKSul1qzXPp5h55XcPmwYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4942
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_16,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302270152
+X-Proofpoint-GUID: 35rDfUJrOPP1b_7ilaQFZ82wohHFHCnR
+X-Proofpoint-ORIG-GUID: 35rDfUJrOPP1b_7ilaQFZ82wohHFHCnR
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-02-19 4:28 a.m., Ian Rogers wrote:
-> When there are no events and on Intel, the topdown events will be
-> added by default if present. To display the metrics associated with
-> these request special handling in stat-shadow.c. To more easily update
-> these metrics use the json metric version via the TopdownL1
-> group. This makes the handling less platform specific.
+On 02/18/23 00:27, James Houghton wrote:
+> These functions are used to allocate new PTEs below the hstate PTE. This
+> will be used by hugetlb_walk_step, which implements stepping forwards in
+> a HugeTLB high-granularity page table walk.
 > 
-> Modify the metricgroup__has_metric code to also cover metric groups.
+> The reasons that we don't use the standard pmd_alloc/pte_alloc*
+> functions are:
+>  1) This prevents us from accidentally overwriting swap entries or
+>     attempting to use swap entries as present non-leaf PTEs (see
+>     pmd_alloc(); we assume that !pte_none means pte_present and
+>     non-leaf).
+>  2) Locking hugetlb PTEs can different than regular PTEs. (Although, as
+>     implemented right now, locking is the same.)
+>  3) We can maintain compatibility with CONFIG_HIGHPTE. That is, HugeTLB
+>     HGM won't use HIGHPTE, but the kernel can still be built with it,
+>     and other mm code will use it.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/arch/x86/util/evlist.c  |  6 +++---
->  tools/perf/arch/x86/util/topdown.c | 30 ------------------------------
->  tools/perf/arch/x86/util/topdown.h |  1 -
->  tools/perf/builtin-stat.c          | 14 ++++++++++++++
->  tools/perf/util/metricgroup.c      |  6 ++----
->  5 files changed, 19 insertions(+), 38 deletions(-)
+> When GENERAL_HUGETLB supports P4D-based hugepages, we will need to
+> implement hugetlb_pud_alloc to implement hugetlb_walk_step.
 > 
-> diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-> index cb59ce9b9638..8a7ae4162563 100644
-> --- a/tools/perf/arch/x86/util/evlist.c
-> +++ b/tools/perf/arch/x86/util/evlist.c
-> @@ -59,10 +59,10 @@ int arch_evlist__add_default_attrs(struct evlist *evlist,
->  				   struct perf_event_attr *attrs,
->  				   size_t nr_attrs)
->  {
-> -	if (nr_attrs)
-> -		return ___evlist__add_default_attrs(evlist, attrs, nr_attrs);
-> +	if (!nr_attrs)
-> +		return 0;
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> 
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index eeacadf3272b..9d839519c875 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -72,6 +72,11 @@ unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
 >  
-> -	return topdown_parse_events(evlist);
-> +	return ___evlist__add_default_attrs(evlist, attrs, nr_attrs);
->  }
+>  bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte);
 >  
->  struct evsel *arch_evlist__leader(struct list_head *list)
-> diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
-> index 54810f9acd6f..eb3a7d9652ab 100644
-> --- a/tools/perf/arch/x86/util/topdown.c
-> +++ b/tools/perf/arch/x86/util/topdown.c
-> @@ -9,11 +9,6 @@
->  #include "topdown.h"
->  #include "evsel.h"
->  
-> -#define TOPDOWN_L1_EVENTS       "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
-> -#define TOPDOWN_L1_EVENTS_CORE  "{slots,cpu_core/topdown-retiring/,cpu_core/topdown-bad-spec/,cpu_core/topdown-fe-bound/,cpu_core/topdown-be-bound/}"
-> -#define TOPDOWN_L2_EVENTS       "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
-> -#define TOPDOWN_L2_EVENTS_CORE  "{slots,cpu_core/topdown-retiring/,cpu_core/topdown-bad-spec/,cpu_core/topdown-fe-bound/,cpu_core/topdown-be-bound/,cpu_core/topdown-heavy-ops/,cpu_core/topdown-br-mispredict/,cpu_core/topdown-fetch-lat/,cpu_core/topdown-mem-bound/}"
-> -
->  /* Check whether there is a PMU which supports the perf metrics. */
->  bool topdown_sys_has_perf_metrics(void)
->  {
-> @@ -99,28 +94,3 @@ const char *arch_get_topdown_pmu_name(struct evlist *evlist, bool warn)
->  
->  	return pmu_name;
->  }
-> -
-> -int topdown_parse_events(struct evlist *evlist)
-> -{
-> -	const char *topdown_events;
-> -	const char *pmu_name;
-> -
-> -	if (!topdown_sys_has_perf_metrics())
-> -		return 0;
-> -
-> -	pmu_name = arch_get_topdown_pmu_name(evlist, false);
-> -
-> -	if (pmu_have_event(pmu_name, "topdown-heavy-ops")) {
-> -		if (!strcmp(pmu_name, "cpu_core"))
-> -			topdown_events = TOPDOWN_L2_EVENTS_CORE;
-> -		else
-> -			topdown_events = TOPDOWN_L2_EVENTS;
-> -	} else {
-> -		if (!strcmp(pmu_name, "cpu_core"))
-> -			topdown_events = TOPDOWN_L1_EVENTS_CORE;
-> -		else
-> -			topdown_events = TOPDOWN_L1_EVENTS;
-> -	}
-> -
-> -	return parse_event(evlist, topdown_events);
-> -}
-> diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
-> index 7eb81f042838..46bf9273e572 100644
-> --- a/tools/perf/arch/x86/util/topdown.h
-> +++ b/tools/perf/arch/x86/util/topdown.h
-> @@ -3,6 +3,5 @@
->  #define _TOPDOWN_H 1
->  
->  bool topdown_sys_has_perf_metrics(void);
-> -int topdown_parse_events(struct evlist *evlist);
->  
+> +pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		unsigned long addr);
+> +pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		unsigned long addr);
+> +
+>  struct hugepage_subpool {
+>  	spinlock_t lock;
+>  	long count;
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 6c74adff43b6..bb424cdf79e4 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -483,6 +483,120 @@ static bool has_same_uncharge_info(struct file_region *rg,
 >  #endif
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 5e13171a7bba..796e98e453f6 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -1996,6 +1996,7 @@ static int add_default_attributes(void)
->  		stat_config.topdown_level = TOPDOWN_MAX_LEVEL;
+>  }
 >  
->  	if (!evsel_list->core.nr_entries) {
-> +		/* No events so add defaults. */
->  		if (target__has_cpu(&target))
->  			default_attrs0[0].config = PERF_COUNT_SW_CPU_CLOCK;
->  
-> @@ -2011,6 +2012,19 @@ static int add_default_attributes(void)
->  		}
->  		if (evlist__add_default_attrs(evsel_list, default_attrs1) < 0)
->  			return -1;
+> +/*
+> + * hugetlb_alloc_pmd -- Allocate or find a PMD beneath a PUD-level hpte.
+> + *
+> + * This is meant to be used to implement hugetlb_walk_step when one must go to
+> + * step down to a PMD. Different architectures may implement hugetlb_walk_step
+> + * differently, but hugetlb_alloc_pmd and hugetlb_alloc_pte are architecture-
+> + * independent.
+> + *
+> + * Returns:
+> + *	On success: the pointer to the PMD. This should be placed into a
+> + *		    hugetlb_pte. @hpte is not changed.
+> + *	ERR_PTR(-EINVAL): hpte is not PUD-level
+> + *	ERR_PTR(-EEXIST): there is a non-leaf and non-empty PUD in @hpte
+
+I often get this confused, should this really be 'non-leaf'?  Because, ...
+
+> + *	ERR_PTR(-ENOMEM): could not allocate the new PMD
+> + */
+> +pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		unsigned long addr)
+> +{
+> +	spinlock_t *ptl = hugetlb_pte_lockptr(hpte);
+> +	pmd_t *new;
+> +	pud_t *pudp;
+> +	pud_t pud;
+> +
+> +	if (hpte->level != HUGETLB_LEVEL_PUD)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	pudp = (pud_t *)hpte->ptep;
+> +retry:
+> +	pud = READ_ONCE(*pudp);
+> +	if (likely(pud_present(pud)))
+> +		return unlikely(pud_leaf(pud))
+> +			? ERR_PTR(-EEXIST)
+> +			: pmd_offset(pudp, addr);
+
+... it seems we return -EEXIST in the pud_leaf case.
+-- 
+Mike Kravetz
+
+> +	else if (!pud_none(pud))
 > +		/*
-> +		 * Add TopdownL1 metrics if they exist. To minimize
-> +		 * multiplexing, don't request threshold computation.
+> +		 * Not present and not none means that a swap entry lives here,
+> +		 * and we can't get rid of it.
 > +		 */
-> +		if (metricgroup__has_metric("TopdownL1") &&
-> +		    metricgroup__parse_groups(evsel_list, "TopdownL1",
-> +					    /*metric_no_group=*/false,
-> +					    /*metric_no_merge=*/false,
-> +					    /*metric_no_threshold=*/true,
-> +					    stat_config.user_requested_cpu_list,
-> +					    stat_config.system_wide,
-> +					    &stat_config.metric_events) < 0)
-
-Does the metricgroup__* function check the existances of the events on
-the machine? If not, it may not be reliable to only check the event list.
-
-The existing code supports both L1 and L2 Topdown for SPR. But this
-patch seems remove the L2 Topdown support for SPR.
-
-The TopdownL1/L2 metric is added only for the big core with perf stat
-default. It's because that the perf_metrics is a dedicated register,
-which should not impact other events (using GP counters.) But this patch
-seems don't check the CPU type. It may brings extra multiplexing for the
-perf stat default on an ATOM platform.
-
-Thanks,
-Kan
-
-> +			return -1;
->  		/* Platform specific attrs */
->  		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
->  			return -1;
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-> index afb6f2fdc24e..64a35f2787dc 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -1647,10 +1647,8 @@ static int metricgroup__has_metric_callback(const struct pmu_metric *pm,
+> +		return ERR_PTR(-EEXIST);
+> +
+> +	new = pmd_alloc_one(mm, addr);
+> +	if (!new)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	spin_lock(ptl);
+> +	if (!pud_same(pud, *pudp)) {
+> +		spin_unlock(ptl);
+> +		pmd_free(mm, new);
+> +		goto retry;
+> +	}
+> +
+> +	mm_inc_nr_pmds(mm);
+> +	smp_wmb(); /* See comment in pmd_install() */
+> +	pud_populate(mm, pudp, new);
+> +	spin_unlock(ptl);
+> +	return pmd_offset(pudp, addr);
+> +}
+> +
+> +/*
+> + * hugetlb_alloc_pte -- Allocate a PTE beneath a pmd_none PMD-level hpte.
+> + *
+> + * See the comment above hugetlb_alloc_pmd.
+> + */
+> +pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		unsigned long addr)
+> +{
+> +	spinlock_t *ptl = hugetlb_pte_lockptr(hpte);
+> +	pgtable_t new;
+> +	pmd_t *pmdp;
+> +	pmd_t pmd;
+> +
+> +	if (hpte->level != HUGETLB_LEVEL_PMD)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	pmdp = (pmd_t *)hpte->ptep;
+> +retry:
+> +	pmd = READ_ONCE(*pmdp);
+> +	if (likely(pmd_present(pmd)))
+> +		return unlikely(pmd_leaf(pmd))
+> +			? ERR_PTR(-EEXIST)
+> +			: pte_offset_kernel(pmdp, addr);
+> +	else if (!pmd_none(pmd))
+> +		/*
+> +		 * Not present and not none means that a swap entry lives here,
+> +		 * and we can't get rid of it.
+> +		 */
+> +		return ERR_PTR(-EEXIST);
+> +
+> +	/*
+> +	 * With CONFIG_HIGHPTE, calling `pte_alloc_one` directly may result
+> +	 * in page tables being allocated in high memory, needing a kmap to
+> +	 * access. Instead, we call __pte_alloc_one directly with
+> +	 * GFP_PGTABLE_USER to prevent these PTEs being allocated in high
+> +	 * memory.
+> +	 */
+> +	new = __pte_alloc_one(mm, GFP_PGTABLE_USER);
+> +	if (!new)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	spin_lock(ptl);
+> +	if (!pmd_same(pmd, *pmdp)) {
+> +		spin_unlock(ptl);
+> +		pgtable_pte_page_dtor(new);
+> +		__free_page(new);
+> +		goto retry;
+> +	}
+> +
+> +	mm_inc_nr_ptes(mm);
+> +	smp_wmb(); /* See comment in pmd_install() */
+> +	pmd_populate(mm, pmdp, new);
+> +	spin_unlock(ptl);
+> +	return pte_offset_kernel(pmdp, addr);
+> +}
+> +
+>  static void coalesce_file_region(struct resv_map *resv, struct file_region *rg)
 >  {
->  	const char *metric = vdata;
->  
-> -	if (!pm->metric_expr)
-> -		return 0;
-> -
-> -	if (match_metric(pm->metric_name, metric))
-> +	if (match_metric(pm->metric_name, metric) ||
-> +	    match_metric(pm->metric_group, metric))
->  		return 1;
->  
->  	return 0;
+>  	struct file_region *nrg, *prg;
+> -- 
+> 2.39.2.637.g21b0678d19-goog
+> 
