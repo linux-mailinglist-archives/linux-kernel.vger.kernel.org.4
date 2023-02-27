@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD5C6A3EE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22ED6A3EF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjB0J5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S230009AbjB0J60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjB0J5L (ORCPT
+        with ESMTP id S229595AbjB0J6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:57:11 -0500
-Received: from ocelot.miegl.cz (ocelot.miegl.cz [195.201.216.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42091CF60;
-        Mon, 27 Feb 2023 01:57:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=miegl.cz; s=dkim;
-        t=1677491823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EEgFqYreOAbd5d/AfWjIpth5dvxJuzD8COIGV7jYZwU=;
-        b=RxUxd7Wt2zkk3+1dNqfjpIvdOAC6iyCZWPS8EOBSvMkM8ZEkPItCnc6t1Q2OhMXbfWsM7V
-        gcIV78qXbYDd/VN5Jqv/o4oVT6ClGHTMYmYbhw59jqTV5dZX1ht25Tdo51QG0/Ezj3QQXL
-        1F0czrxnJ4fDhVJj/PWGLnapI2tAWIxgAW1j8wfia39qZJtqXhW2OUFDL4sbD/8o3jA00H
-        DMzai/vJWutZzAvbujNzyyfOQc9tNxDDmz8jVCuDpYXtD8BB2v3ovKAPo54QIzjFkPtjZE
-        fKkxDT1DsX3iiQ7aKSl24hMzNAgWmZnwusoWZcv4pMzXlB/jhRawqlTEpOTqEQ==
+        Mon, 27 Feb 2023 04:58:25 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490961042D;
+        Mon, 27 Feb 2023 01:58:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677491904; x=1709027904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WLpJB0qI2/zRDKGnG+kitqzMLkyJLUqz1gpLf8+y3Pw=;
+  b=PlC9UhwO3iZ+X+U+rY+V2CiZkJb5c8ZAh9BGeJngS91fgKHio3qK64hy
+   vm1eQW3+NBVGrBTAWim3S83tiGrG1QukRqNn3jKSUJbf3cegAI8CpJC5q
+   jH9DQxLYjHVkGHxjZEKXmThkj7h0tCWHcGo0fRBaimX0ykwmicxxi4LB7
+   ShmbWdBx1uySvWfrRYKMaMUOKqwxecYIHArIoeJ6//GB0oLKPhursMExL
+   RSjm1AF9PWcU7nZ/h7TXUceqSJs7KRwY+/sv5ryafWDit33kd5/QgHO9U
+   xAwhCCmr66W1S/v/XdyviJRQ40JNT9FVm944YucpynEBI4/Q2LcDZamWt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="361380480"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="361380480"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 01:58:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="847757997"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="847757997"
+Received: from jrissane-mobl2.ger.corp.intel.com (HELO intel.com) ([10.249.41.42])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 01:58:16 -0800
+Date:   Mon, 27 Feb 2023 10:58:13 +0100
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [Intel-gfx] [PATCH v5 7/7] drm/i915/gt: use __xchg instead of
+ internal helper
+Message-ID: <Y/x+tckkW3BbHBYa@ashyti-mobl2.lan>
+References: <20230118153529.57695-1-andrzej.hajda@intel.com>
+ <20230118154450.73842-1-andrzej.hajda@intel.com>
+ <20230118154450.73842-7-andrzej.hajda@intel.com>
 MIME-Version: 1.0
-Date:   Mon, 27 Feb 2023 09:57:03 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: RainLoop/1.16.0
-From:   "Josef Miegl" <josef@miegl.cz>
-Message-ID: <79dee14b9b96d5916a8652456b78c7a5@miegl.cz>
-Subject: Re: [PATCH v2 0/1] net: geneve: accept every ethertype
-To:     "Eyal Birger" <eyal.birger@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <CAHsH6GtArNCyA3UAJbSYYD86fb2QxskbSoNQo2RVHQzKC643zg@mail.gmail.com>
-References: <CAHsH6GtArNCyA3UAJbSYYD86fb2QxskbSoNQo2RVHQzKC643zg@mail.gmail.com>
- <20230227074104.42153-1-josef@miegl.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118154450.73842-7-andrzej.hajda@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-February 27, 2023 10:30 AM, "Eyal Birger" <eyal.birger@gmail.com> wrote:
+Hi Andrzej,
 
-> Hi,
->=20
->=20On Mon, Feb 27, 2023 at 10:19 AM Josef Miegl <josef@miegl.cz> wrote:
->=20
->>=20The Geneve encapsulation, as defined in RFC 8926, has a Protocol Typ=
-e
->> field, which states the Ethertype of the payload appearing after the
->> Geneve header.
->>=20
->>=20Commit 435fe1c0c1f7 ("net: geneve: support IPv4/IPv6 as inner protoc=
-ol")
->> introduced a new IFLA_GENEVE_INNER_PROTO_INHERIT flag that allowed the
->> use of other Ethertypes than Ethernet. However, for a reason not known
->> to me, it imposed a restriction that prohibits receiving payloads othe=
-r
->> than IPv4, IPv6 and Ethernet.
->=20
->=20FWIW I added support for IPv4/IPv6 because these are the use cases I =
-had
-> and could validate. I don't know what problems could arise from support=
-ing
-> all possible ethertypes and can't test that.
+On Wed, Jan 18, 2023 at 04:44:50PM +0100, Andrzej Hajda wrote:
+> Prefer core helper if available.
+> 
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-Yeah, I am hoping someone knowledgeable will tell whether this is a good
-or bad idea. However I think that if any problem could arise, this is not
-the place to artificially restrict payload types and potentional safeguar=
-ding
-should be done somewhere down the packet chain.
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
-I can't imagine adding a payload Ethertype every time someone needs a
-specific use-case would be a good idea.
-
->> This patch removes this restriction, making it possible to receive any
->> Ethertype as a payload, if the IFLA_GENEVE_INNER_PROTO_INHERIT flag is
->> set.
->=20
->=20This seems like an addition not a bugfix so personally seems like it =
-should
-> be targeting net-next (which is currently closed afaik).
-
-One could say the receive function should have behaved like that, the
-transmit function already encapsulates every possible Ethertype and
-IFLA_GENEVE_INNER_PROTO_INHERIT doesn't sound like it should be limited t=
-o
-IPv4 and IPv6.
-
-If no further modifications down the packet chain are required, I'd say i=
-t's
-50/50. However I haven't contributed to the Linux kernel ever before, so =
-I
-really have no clue as to how things go.
-
-> Eyal.
->=20
->>=20This is especially useful if one wants to encapsulate MPLS, because =
-with
->> this patch the control-plane traffic (IP, LLC) and the data-plane
->> traffic (MPLS) can be encapsulated without an Ethernet frame, making
->> lightweight overlay networks a possibility.
->>=20
->>=20Changes in v2:
->> - added a cover letter
->> - lines no longer exceed 80 columns
->>=20
->>=20Josef Miegl (1):
->> net: geneve: accept every ethertype
->>=20
->>=20drivers/net/geneve.c | 15 ++++-----------
->> 1 file changed, 4 insertions(+), 11 deletions(-)
->>=20
->>=20--
->> 2.37.1
+Thanks,
+Andi
