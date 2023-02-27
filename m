@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8D66A49C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087456A49CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjB0Sce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S229930AbjB0Scr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:32:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjB0Scb (ORCPT
+        with ESMTP id S229935AbjB0Scf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:32:31 -0500
+        Mon, 27 Feb 2023 13:32:35 -0500
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E65233D9;
-        Mon, 27 Feb 2023 10:32:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8599E1ABF3;
+        Mon, 27 Feb 2023 10:32:33 -0800 (PST)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RCtrGg024141;
-        Mon, 27 Feb 2023 10:32:16 -0800
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RESxPG010097;
+        Mon, 27 Feb 2023 10:32:25 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=pfpt0220;
- bh=RHzj6uyWx8SH0FRtFBz8mmCK+chcvMg5DLn8MtS4kKU=;
- b=W9RbYZjuC0/jRUVoBqNWtfxhk5wG8xPhrzD9VJgbiuqPTwZ9MWcz1nYx6qeYJOj5hUoP
- hIMSX4aTkTJZt1/O4r7E2xEC6+JjQbKkKXqqUcyq+5cM3+IneQo0DI3CbqyW7I3adxDj
- 3Kg9ISS5rEmymjrsmIEY69InmmK0QMItj/lHzzJpBGI2m6+qXcdGI83jaNi6J1U4hKnV
- ZSIRoVwKzqjcv6JRMbHvsfCdYAwGEd041YlbRr9OvtF8TFvywhGP7PCRMLFjItgMbKh+
- 0/KSnE/6Y9OO15ugp0anWvcj3DXJj7GPm09tXy1pHNpxYb3jS3J4kjJbAxbeATkDJRcV jg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nyjqtsbk5-1
+ bh=jDbE8v3rf+RJ+BclwtUNkLvJ/wtCjWMqhoplcULcO0o=;
+ b=NqrrjiUInnntA5wh+nasg+UdVDSrmEOgVCbgKMhtOgoAuq0+ft4JhJWHg890mN/+JIw0
+ uxlKV+LUR25aMuyy5spmswuLT0ucmq2dqDSPmLITFdyu7ByU3pETFOWw9whr1IT4FLBI
+ doh4hfhs0B+Vs8UTKgHbwZsGyqbTJwCzQOQHQ2SSj2myjwxKcz6GxT9WFgUPKftUKgub
+ H7azbEgZ6AdmR0vAjoNwVdhGMDb8TTUbGY75J58qKKqhVDWZA1c9tHRqyP4/UFXsmRRi
+ SOw0YBdBm7hMc9H45FfhUpzRYmLP85qhj29aG7TwC/P+gQ8MI1KGBq+T9U4PWXeDAnDa 1w== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nyjqtsbks-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 10:32:16 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
- 2023 10:32:13 -0800
+        Mon, 27 Feb 2023 10:32:25 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 10:32:23 -0800
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 27 Feb 2023 10:32:13 -0800
+ Transport; Mon, 27 Feb 2023 10:32:23 -0800
 Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 79B213F7059;
-        Mon, 27 Feb 2023 10:32:13 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 29D113F7040;
+        Mon, 27 Feb 2023 10:32:23 -0800 (PST)
 From:   Piyush Malgujar <pmalgujar@marvell.com>
 To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
@@ -48,17 +48,17 @@ To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
         Dhananjay Kangude <dkangude@cadence.com>,
         Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH v3 1/6] mmc: sdhci-cadence: Rename functions to SD4 specific
-Date:   Mon, 27 Feb 2023 10:31:46 -0800
-Message-ID: <20230227183151.27912-2-pmalgujar@marvell.com>
+Subject: [PATCH v3 2/6] mmc: sdhci-cadence: Restructure the code
+Date:   Mon, 27 Feb 2023 10:31:47 -0800
+Message-ID: <20230227183151.27912-3-pmalgujar@marvell.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230227183151.27912-1-pmalgujar@marvell.com>
 References: <20230227183151.27912-1-pmalgujar@marvell.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: N1GlcsgcbJPSjiybBQGV-qOefFf3X9EB
-X-Proofpoint-GUID: N1GlcsgcbJPSjiybBQGV-qOefFf3X9EB
+X-Proofpoint-ORIG-GUID: nynrHgX2lKnOQBJDpjbL5pGaYIwzAdQe
+X-Proofpoint-GUID: nynrHgX2lKnOQBJDpjbL5pGaYIwzAdQe
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-27_15,2023-02-27_01,2023-02-09_01
@@ -73,269 +73,228 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dhananjay Kangude <dkangude@cadence.com>
 
-Renaming the functions and structures specific to SD4 so
-that it can be separated from upcoming SD6 related
-functionality.
+Restructured the code, added new structures and functions for
+SD4 operations. Also this adds some abstraction to the code
+which will make it modular and adaptable for further SD6 operations.
 
 Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
 Co-developed-by: Jayanthi Annadurai <jannadurai@marvell.com>
 Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
 Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
 ---
- drivers/mmc/host/sdhci-cadence.c | 96 ++++++++++++++++----------------
- 1 file changed, 48 insertions(+), 48 deletions(-)
+ drivers/mmc/host/sdhci-cadence.c | 100 ++++++++++++++++++++++++-------
+ 1 file changed, 80 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-index 6f2de54a598773879bf339aae8450f63e1251509..5276cdbc652f7faac13bb0244af4926b63dc119a 100644
+index 5276cdbc652f7faac13bb0244af4926b63dc119a..4f7e63c90e3d68da338b8964f08b7c65ebaf1ffd 100644
 --- a/drivers/mmc/host/sdhci-cadence.c
 +++ b/drivers/mmc/host/sdhci-cadence.c
-@@ -15,16 +15,16 @@
- 
- #include "sdhci-pltfm.h"
- 
--/* HRS - Host Register Set (specific to Cadence) */
--#define SDHCI_CDNS_HRS04		0x10		/* PHY access port */
--#define   SDHCI_CDNS_HRS04_ACK			BIT(26)
--#define   SDHCI_CDNS_HRS04_RD			BIT(25)
--#define   SDHCI_CDNS_HRS04_WR			BIT(24)
--#define   SDHCI_CDNS_HRS04_RDATA		GENMASK(23, 16)
--#define   SDHCI_CDNS_HRS04_WDATA		GENMASK(15, 8)
--#define   SDHCI_CDNS_HRS04_ADDR			GENMASK(5, 0)
--
--#define SDHCI_CDNS_HRS06		0x18		/* eMMC control */
-+/* SD 4.0 Controller HRS - Host Register Set (specific to Cadence) */
-+#define SDHCI_CDNS_HRS04			0x10	/* PHY access port */
-+#define SDHCI_CDNS_SD4_HRS04_ACK		BIT(26)
-+#define SDHCI_CDNS_SD4_HRS04_RD			BIT(25)
-+#define SDHCI_CDNS_SD4_HRS04_WR			BIT(24)
-+#define SDHCI_CDNS_SD4_HRS04_RDATA		GENMASK(23, 16)
-+#define SDHCI_CDNS_SD4_HRS04_WDATA		GENMASK(15, 8)
-+#define SDHCI_CDNS_SD4_HRS04_ADDR		GENMASK(5, 0)
-+
-+#define SDHCI_CDNS_HRS06			0x18	/* eMMC control */
- #define   SDHCI_CDNS_HRS06_TUNE_UP		BIT(15)
- #define   SDHCI_CDNS_HRS06_TUNE			GENMASK(13, 8)
- #define   SDHCI_CDNS_HRS06_MODE			GENMASK(2, 0)
-@@ -38,7 +38,7 @@
- /* SRS - Slot Register Set (SDHCI-compatible) */
- #define SDHCI_CDNS_SRS_BASE		0x200
- 
--/* PHY */
-+/* PHY registers for SD4 controller */
- #define SDHCI_CDNS_PHY_DLY_SD_HS	0x00
- #define SDHCI_CDNS_PHY_DLY_SD_DEFAULT	0x01
- #define SDHCI_CDNS_PHY_DLY_UHS_SDR12	0x02
-@@ -59,7 +59,7 @@
+@@ -59,16 +59,28 @@
   */
  #define SDHCI_CDNS_MAX_TUNING_LOOP	40
  
--struct sdhci_cdns_phy_param {
-+struct sdhci_cdns_sd4_phy_param {
++struct sdhci_cdns_priv;
++
+ struct sdhci_cdns_sd4_phy_param {
  	u8 addr;
  	u8 data;
  };
-@@ -68,15 +68,15 @@ struct sdhci_cdns_priv {
+ 
++struct sdhci_cdns_data {
++	int (*phy_init)(struct sdhci_cdns_priv *priv);
++	int (*set_tune_val)(struct sdhci_host *host, unsigned int val);
++};
++
++struct sdhci_cdns_sd4_phy {
++	unsigned int nr_phy_params;
++	struct sdhci_cdns_sd4_phy_param phy_params[];
++};
++
+ struct sdhci_cdns_priv {
  	void __iomem *hrs_addr;
  	bool enhanced_strobe;
- 	unsigned int nr_phy_params;
--	struct sdhci_cdns_phy_param phy_params[];
-+	struct sdhci_cdns_sd4_phy_param phy_params[];
+-	unsigned int nr_phy_params;
+-	struct sdhci_cdns_sd4_phy_param phy_params[];
++	const struct sdhci_cdns_data *cdns_data;
++	void *phy;
  };
  
--struct sdhci_cdns_phy_cfg {
-+struct sdhci_cdns_sd4_phy_cfg {
- 	const char *property;
+ struct sdhci_cdns_sd4_phy_cfg {
+@@ -76,6 +88,13 @@ struct sdhci_cdns_sd4_phy_cfg {
  	u8 addr;
  };
  
--static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
-+static const struct sdhci_cdns_sd4_phy_cfg sdhci_cdns_sd4_phy_cfgs[] = {
++struct sdhci_cdns_of_data {
++	const struct sdhci_pltfm_data *pltfm_data;
++	const struct sdhci_cdns_data *cdns_data;
++	int (*phy_probe)(struct platform_device *pdev,
++			 struct sdhci_cdns_priv *priv);
++};
++
+ static const struct sdhci_cdns_sd4_phy_cfg sdhci_cdns_sd4_phy_cfgs[] = {
  	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
  	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
- 	{ "cdns,phy-input-delay-sd-uhs-sdr12", SDHCI_CDNS_PHY_DLY_UHS_SDR12, },
-@@ -90,76 +90,76 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
- 	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
- };
- 
--static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
--				    u8 addr, u8 data)
-+static int sdhci_cdns_sd4_write_phy_reg(struct sdhci_cdns_priv *priv,
-+					u8 addr, u8 data)
- {
- 	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS04;
- 	u32 tmp;
- 	int ret;
- 
--	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
-+	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
- 				 0, 10);
- 	if (ret)
- 		return ret;
- 
--	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
--	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
-+	tmp = FIELD_PREP(SDHCI_CDNS_SD4_HRS04_WDATA, data) |
-+	      FIELD_PREP(SDHCI_CDNS_SD4_HRS04_ADDR, addr);
- 	writel(tmp, reg);
- 
--	tmp |= SDHCI_CDNS_HRS04_WR;
-+	tmp |= SDHCI_CDNS_SD4_HRS04_WR;
- 	writel(tmp, reg);
- 
--	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
-+	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_SD4_HRS04_ACK, 0, 10);
- 	if (ret)
- 		return ret;
- 
--	tmp &= ~SDHCI_CDNS_HRS04_WR;
-+	tmp &= ~SDHCI_CDNS_SD4_HRS04_WR;
- 	writel(tmp, reg);
- 
--	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
-+	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
- 				 0, 10);
- 
- 	return ret;
+@@ -135,9 +154,9 @@ static unsigned int sdhci_cdns_sd4_phy_param_count(struct device_node *np)
  }
  
--static unsigned int sdhci_cdns_phy_param_count(struct device_node *np)
-+static unsigned int sdhci_cdns_sd4_phy_param_count(struct device_node *np)
+ static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
+-					   struct sdhci_cdns_priv *priv)
++					   struct sdhci_cdns_sd4_phy *phy)
  {
- 	unsigned int count = 0;
- 	int i;
- 
--	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++)
--		if (of_property_read_bool(np, sdhci_cdns_phy_cfgs[i].property))
-+	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++)
-+		if (of_property_read_bool(np, sdhci_cdns_sd4_phy_cfgs[i].property))
- 			count++;
- 
- 	return count;
- }
- 
--static void sdhci_cdns_phy_param_parse(struct device_node *np,
--				       struct sdhci_cdns_priv *priv)
-+static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
-+					   struct sdhci_cdns_priv *priv)
- {
--	struct sdhci_cdns_phy_param *p = priv->phy_params;
-+	struct sdhci_cdns_sd4_phy_param *p = priv->phy_params;
+-	struct sdhci_cdns_sd4_phy_param *p = priv->phy_params;
++	struct sdhci_cdns_sd4_phy_param *p = phy->phy_params;
  	u32 val;
  	int ret, i;
  
--	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++) {
--		ret = of_property_read_u32(np, sdhci_cdns_phy_cfgs[i].property,
-+	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++) {
-+		ret = of_property_read_u32(np, sdhci_cdns_sd4_phy_cfgs[i].property,
- 					   &val);
- 		if (ret)
- 			continue;
- 
--		p->addr = sdhci_cdns_phy_cfgs[i].addr;
-+		p->addr = sdhci_cdns_sd4_phy_cfgs[i].addr;
- 		p->data = val;
- 		p++;
- 	}
- }
- 
--static int sdhci_cdns_phy_init(struct sdhci_cdns_priv *priv)
-+static int sdhci_cdns_sd4_phy_init(struct sdhci_cdns_priv *priv)
+@@ -156,10 +175,11 @@ static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
+ static int sdhci_cdns_sd4_phy_init(struct sdhci_cdns_priv *priv)
  {
  	int ret, i;
++	struct sdhci_cdns_sd4_phy *phy = priv->phy;
  
- 	for (i = 0; i < priv->nr_phy_params; i++) {
--		ret = sdhci_cdns_write_phy_reg(priv, priv->phy_params[i].addr,
--					       priv->phy_params[i].data);
-+		ret = sdhci_cdns_sd4_write_phy_reg(priv, priv->phy_params[i].addr,
-+						   priv->phy_params[i].data);
+-	for (i = 0; i < priv->nr_phy_params; i++) {
+-		ret = sdhci_cdns_sd4_write_phy_reg(priv, priv->phy_params[i].addr,
+-						   priv->phy_params[i].data);
++	for (i = 0; i < phy->nr_phy_params; i++) {
++		ret = sdhci_cdns_sd4_write_phy_reg(priv, phy->phy_params[i].addr,
++						   phy->phy_params[i].data);
  		if (ret)
  			return ret;
  	}
-@@ -202,7 +202,7 @@ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
+@@ -202,6 +222,27 @@ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
  	return FIELD_GET(SDHCI_CDNS_HRS06_MODE, tmp);
  }
  
--static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
-+static int sdhci_cdns_sd4_set_tune_val(struct sdhci_host *host, unsigned int val)
++static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
++				    struct sdhci_cdns_priv *priv)
++{
++	unsigned int nr_phy_params;
++	struct sdhci_cdns_sd4_phy *phy;
++	struct device *dev = &pdev->dev;
++
++	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
++	phy = devm_kzalloc(dev, struct_size(phy, phy_params, nr_phy_params),
++			   GFP_KERNEL);
++	if (!phy)
++		return -ENOMEM;
++
++	phy->nr_phy_params = nr_phy_params;
++
++	sdhci_cdns_sd4_phy_param_parse(dev->of_node, phy);
++	priv->phy = phy;
++
++	return 0;
++}
++
+ static int sdhci_cdns_sd4_set_tune_val(struct sdhci_host *host, unsigned int val)
  {
  	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
- 	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS06;
-@@ -255,7 +255,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
- 		return 0;
- 
- 	for (i = 0; i < SDHCI_CDNS_MAX_TUNING_LOOP; i++) {
--		if (sdhci_cdns_set_tune_val(host, i) ||
-+		if (sdhci_cdns_sd4_set_tune_val(host, i) ||
- 		    mmc_send_tuning(host->mmc, opcode, NULL)) { /* bad */
- 			cur_streak = 0;
- 		} else { /* good */
-@@ -272,7 +272,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
- 		return -EIO;
- 	}
- 
--	return sdhci_cdns_set_tune_val(host, end_of_streak - max_streak / 2);
-+	return sdhci_cdns_sd4_set_tune_val(host, end_of_streak - max_streak / 2);
- }
- 
- static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
-@@ -309,7 +309,7 @@ static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
- 		sdhci_set_uhs_signaling(host, timing);
- }
- 
--static const struct sdhci_ops sdhci_cdns_ops = {
-+static const struct sdhci_ops sdhci_cdns_sd4_ops = {
- 	.set_clock = sdhci_set_clock,
- 	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
- 	.set_bus_width = sdhci_set_bus_width,
-@@ -319,12 +319,12 @@ static const struct sdhci_ops sdhci_cdns_ops = {
- };
- 
- static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
--	.ops = &sdhci_cdns_ops,
-+	.ops = &sdhci_cdns_sd4_ops,
+@@ -323,10 +364,25 @@ static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
  	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
  };
  
--static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
--	.ops = &sdhci_cdns_ops,
-+static const struct sdhci_pltfm_data sdhci_cdns_sd4_pltfm_data = {
-+	.ops = &sdhci_cdns_sd4_ops,
++static const struct sdhci_cdns_of_data sdhci_cdns_uniphier_of_data = {
++	.pltfm_data = &sdhci_cdns_uniphier_pltfm_data,
++};
++
+ static const struct sdhci_pltfm_data sdhci_cdns_sd4_pltfm_data = {
+ 	.ops = &sdhci_cdns_sd4_ops,
  };
  
++static const struct sdhci_cdns_data sdhci_cdns_sd4_data = {
++	.phy_init = sdhci_cdns_sd4_phy_init,
++	.set_tune_val = sdhci_cdns_sd4_set_tune_val,
++};
++
++static const struct sdhci_cdns_of_data sdhci_cdns_sd4_of_data = {
++	.pltfm_data = &sdhci_cdns_sd4_pltfm_data,
++	.cdns_data = &sdhci_cdns_sd4_data,
++	.phy_probe = sdhci_cdns_sd4_phy_probe,
++};
++
  static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
-@@ -369,9 +369,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+ 					     struct mmc_ios *ios)
+ {
+@@ -350,11 +406,10 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+ static int sdhci_cdns_probe(struct platform_device *pdev)
+ {
+ 	struct sdhci_host *host;
+-	const struct sdhci_pltfm_data *data;
++	const struct sdhci_cdns_of_data *data;
+ 	struct sdhci_pltfm_host *pltfm_host;
+ 	struct sdhci_cdns_priv *priv;
+ 	struct clk *clk;
+-	unsigned int nr_phy_params;
+ 	int ret;
+ 	struct device *dev = &pdev->dev;
+ 	static const u16 version = SDHCI_SPEC_400 << SDHCI_SPEC_VER_SHIFT;
+@@ -368,12 +423,12 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+ 		return ret;
  
  	data = of_device_get_match_data(dev);
- 	if (!data)
--		data = &sdhci_cdns_pltfm_data;
-+		data = &sdhci_cdns_sd4_pltfm_data;
+-	if (!data)
+-		data = &sdhci_cdns_sd4_pltfm_data;
++	if (!data) {
++		ret = -EINVAL;
++		goto disable_clk;
++	}
  
--	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
-+	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
- 	host = sdhci_pltfm_init(pdev, data,
- 				struct_size(priv, phy_params, nr_phy_params));
+-	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
+-	host = sdhci_pltfm_init(pdev, data,
+-				struct_size(priv, phy_params, nr_phy_params));
++	host = sdhci_pltfm_init(pdev, data->pltfm_data, sizeof(*priv));
  	if (IS_ERR(host)) {
-@@ -398,9 +398,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+ 		ret = PTR_ERR(host);
+ 		goto disable_clk;
+@@ -383,9 +438,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+ 	pltfm_host->clk = clk;
+ 
+ 	priv = sdhci_pltfm_priv(pltfm_host);
+-	priv->nr_phy_params = nr_phy_params;
+ 	priv->hrs_addr = host->ioaddr;
+ 	priv->enhanced_strobe = false;
++	priv->cdns_data = data->cdns_data;
+ 	host->ioaddr += SDHCI_CDNS_SRS_BASE;
+ 	host->mmc_host_ops.hs400_enhanced_strobe =
+ 				sdhci_cdns_hs400_enhanced_strobe;
+@@ -398,9 +453,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
  	if (ret)
  		goto free;
  
--	sdhci_cdns_phy_param_parse(dev->of_node, priv);
-+	sdhci_cdns_sd4_phy_param_parse(dev->of_node, priv);
+-	sdhci_cdns_sd4_phy_param_parse(dev->of_node, priv);
++	ret = data->phy_probe(pdev, priv);
++	if (ret)
++		goto free;
  
--	ret = sdhci_cdns_phy_init(priv);
-+	ret = sdhci_cdns_sd4_phy_init(priv);
+-	ret = sdhci_cdns_sd4_phy_init(priv);
++	ret = priv->cdns_data->phy_init(priv);
  	if (ret)
  		goto free;
  
-@@ -429,7 +429,7 @@ static int sdhci_cdns_resume(struct device *dev)
+@@ -429,7 +486,7 @@ static int sdhci_cdns_resume(struct device *dev)
  	if (ret)
  		return ret;
  
--	ret = sdhci_cdns_phy_init(priv);
-+	ret = sdhci_cdns_sd4_phy_init(priv);
+-	ret = sdhci_cdns_sd4_phy_init(priv);
++	ret = priv->cdns_data->phy_init(priv);
  	if (ret)
  		goto disable_clk;
  
+@@ -453,9 +510,12 @@ static const struct dev_pm_ops sdhci_cdns_pm_ops = {
+ static const struct of_device_id sdhci_cdns_match[] = {
+ 	{
+ 		.compatible = "socionext,uniphier-sd4hc",
+-		.data = &sdhci_cdns_uniphier_pltfm_data,
++		.data = &sdhci_cdns_uniphier_of_data,
++	},
++	{
++		.compatible = "cdns,sd4hc",
++		.data = &sdhci_cdns_sd4_of_data,
+ 	},
+-	{ .compatible = "cdns,sd4hc" },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, sdhci_cdns_match);
 -- 
 2.17.1
 
