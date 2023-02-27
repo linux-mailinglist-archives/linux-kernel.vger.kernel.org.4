@@ -2,145 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554496A4202
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7F46A420E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjB0MtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S229777AbjB0Mxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0MtR (ORCPT
+        with ESMTP id S229684AbjB0Mxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:49:17 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B98BA5D4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:49:16 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id A821C5C010C;
-        Mon, 27 Feb 2023 07:49:15 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 27 Feb 2023 07:49:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1677502155; x=1677588555; bh=Eq
-        S+idSS171sl5ym4IciX/DeVIr0POofqgdNAlp+/BA=; b=eCmMQpmzY3R58t6Q23
-        6py5de8w/F9GS+89rLtnTUlRUrMvS0gHKEiWD/AP4PmqIIYHLaoOT5Jy5KmJjDhZ
-        pz0XqlfK+iwAUdcP5p2OQDRpOmzNi8Oi+wDzfg2O4rjvSR8EbRAm5ahMrQGpoejT
-        M5sUI9irfO/WUqiBKxTi2JLcTMX10xHC7/tRqyX3UF9O9pK/V9amZ2vQGXmlg3Jv
-        xQhlud8gQ2LVmpxfEypjL0zv/v1ISTzA5LmNCZGlaOYgUrvpwoHOln1ZVJCYRPQj
-        CNBPiqFU4bD7yXP9pg3y2UpJQiET3hbg46Uxr13+4rH4PObgsHtv7hNOniKOuMWZ
-        hHFg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677502155; x=1677588555; bh=EqS+idSS171sl5ym4IciX/DeVIr0
-        POofqgdNAlp+/BA=; b=LMKo8sKk7QfAYAO/BQT7tJdHBbybDDpdNoZQ14kWO2l1
-        7UzXWeJbI65bGRuawLwLtgcoVafQnkqljVdsM6raJ6rgSxkCq/4aeqfciMJfQhQc
-        aBKE4Y7UFPyt+GwxwQOmGrcSvoNIjer2el4tpEPRirIe1uMNuK7FdcwU0h+S76C3
-        5uz9DgkriGoT7VIBekLCI4j1fZr3w2hQjeN8Aic5hoimF/xMDtj45a8CxT53cv8y
-        77Ajw2+n20fYaWxds3BOtmAJMRW5IherfntOnz04K88pvCMKPA2FOufZVhHlGVHr
-        McUHIIEUctTfQptW69wlP6cGvKbBKQQLQD5rV9UDLg==
-X-ME-Sender: <xms:y6b8Y7tLm_tGyaojFrGUycOSgnehDFmBMLJSfDRrRjIOFFK5SzyUcQ>
-    <xme:y6b8Y8dcg-mAcN-SzfDhxe0oUYCn3YsaPyt6NooBb7qIXzTAi5VKiWdGzjXbsZfQM
-    oYhQi-SHTH4M1jlWfA>
-X-ME-Received: <xmr:y6b8Y-yiHYP9bTeK4AvdNvau1opou0-oj6FmcMwsFCnMsy_2Vyn9hxwVuIVLsRJJGAXo8ufYdD_czULd1CzG8iHsZwQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghk
-    rghshhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeehhffhte
-    etgfekvdeiueffveevueeftdelhfejieeitedvleeftdfgfeeuudekueenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhise
-    hsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:y6b8Y6PScZK-cYHAu8AE8ufjZOD-EPd4cRRH5xl1IH8cWrc-NCSEyg>
-    <xmx:y6b8Y7_lPGLHAIsaytJnHe-WGfyCAYifAr7r4UUO8LxeoVmZpwC-9Q>
-    <xmx:y6b8Y6UIUnmfWJI1aAx2iSu5Yhcw-Dfz_lAjGWAE88Za28odWficOw>
-    <xmx:y6b8Y9JL8Q5yBXHKGKcQIG2-g5CNrrBBYhb-09jITiRYC4fNF5UOkw>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Feb 2023 07:49:14 -0500 (EST)
-Date:   Mon, 27 Feb 2023 21:49:11 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [bug report] firewire: cdev: obsolete NULL check to detect IEC
- 61883-1 FCP region
-Message-ID: <Y/ymx6WZIAlrtjLc@workstation>
-Mail-Followup-To: Dan Carpenter <error27@gmail.com>,
-        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <Y/yOy6Ddz1263Zln@kili>
+        Mon, 27 Feb 2023 07:53:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05F4E59ED
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:53:42 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E48D2C14;
+        Mon, 27 Feb 2023 04:54:24 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.17.201])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE3D53F67D;
+        Mon, 27 Feb 2023 04:53:40 -0800 (PST)
+Date:   Mon, 27 Feb 2023 12:53:38 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Subject: Re: include/acpi/actypes.h:525:42: warning: 'strncpy' specified
+ bound 4 equals destination size
+Message-ID: <Y/yn0oSpUop8UPon@FVFF77S0Q05N>
+References: <202302230414.sQbDHtiC-lkp@intel.com>
+ <Y/dM77YdzDKRDdj1@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/yOy6Ddz1263Zln@kili>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y/dM77YdzDKRDdj1@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-(C.C.ed to LKML and alsa-devel)
-
-On Mon, Feb 27, 2023 at 02:06:51PM +0300, Dan Carpenter wrote:
-> Hello Takashi Sakamoto,
+On Thu, Feb 23, 2023 at 11:24:31AM +0000, Catalin Marinas wrote:
+> On Thu, Feb 23, 2023 at 04:32:41AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   70756b49be4ea8bf36a664322df6e7e89895fa60
+> > commit: 8f9e0a52810dd83406c768972d022c37e7a18f1f ACPI: Don't build ACPICA with '-Os'
+> > date:   4 weeks ago
+> > config: ia64-defconfig (https://download.01.org/0day-ci/archive/20230223/202302230414.sQbDHtiC-lkp@intel.com/config)
+> > compiler: ia64-linux-gcc (GCC) 12.1.0
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f9e0a52810dd83406c768972d022c37e7a18f1f
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 8f9e0a52810dd83406c768972d022c37e7a18f1f
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/acpi/acpica/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202302230414.sQbDHtiC-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> >    In file included from include/acpi/acpi.h:24,
+> >                     from drivers/acpi/acpica/tbfind.c:10:
+> >    drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
+> > >> include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4 equals destination size [-Wstringop-truncation]
+> >      525 | #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
+> >          |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> The patch e699600232e0: "firewire: cdev: obsolete NULL check to
-> detect IEC 61883-1 FCP region" from Jan 20, 2023, leads to the
-> following Smatch static checker warning:
-> 
-> 	drivers/firewire/core-transaction.c:947 handle_fcp_region_request()
-> 	warn: passing freed memory 'request'
-> 
-> drivers/firewire/core-transaction.c
->     930                 fw_send_response(card, request, RCODE_TYPE_ERROR);
->     931 
->     932                 return;
->     933         }
->     934 
->     935         rcu_read_lock();
->     936         list_for_each_entry_rcu(handler, &address_handler_list, link) {
->     937                 if (is_enclosing_handler(handler, offset, request->length))
->     938                         handler->address_callback(card, request, tcode,
->                                                                 ^^^^^^^
-> This warning is because fwnet_receive_packet() has a kfree(r) on the
-> first return path.
-> 
->     939                                                   destination, source,
->     940                                                   p->generation, offset,
->     941                                                   request->data,
->     942                                                   request->length,
->     943                                                   handler->callback_data);
->     944         }
->     945         rcu_read_unlock();
->     946 
-> --> 947         fw_send_response(card, request, RCODE_COMPLETE);
->     948 }
+> I don't see how this is related to the reported commit (which only
+> removed the -Os option for gcc).
 
-Thanks for your report.
+I looks like `-Os` disables the warning for some reason. I suspect that's down
+to compiler passes not propagating the constants when using `-Os`.
 
-Fortunately, We can not see the access to the released memory since the
-fwnet's address handler is registered to high memory region
-(0x'0001'0000'0000 to 0x'ffff'e000'0000). The region does not overlap
-IEC 61883-1 FCP region (0x'ffff'f000'0b00 to 0x'ffff'f000'0f00). The
-handler is called from handle_exclusive_region_request() instead of
-handle_fcp_region_request().
+The actual issue has nothing to do with this patch; this patch just happens to
+have unearthed it.
 
-However, the code in fwnet is against the design of address handler
-apparently. The callee never release the memory for the request structure
-directly. It should be done by the call of fw_send_response(). I'll
-correct it for next merge window; i.e. for v6.4.
+> I think ACPI_COPY_NAMESEG() should just use memcpy() on ia64 but this
+> strncpy() has been around for over 10 years.
 
+Agreed.
 
-Thanks
+IIUC ia64 is likely to disappear soon, so maybe we don't need to touch this...
 
-Takashi Sakamoto
+Thanks,
+Mark.
