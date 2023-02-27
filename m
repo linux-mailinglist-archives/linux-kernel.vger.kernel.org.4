@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C41B6A4FA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED68A6A4FAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjB0X3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        id S229775AbjB0XbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjB0X3l (ORCPT
+        with ESMTP id S229592AbjB0XbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:29:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0730B1ABE8;
-        Mon, 27 Feb 2023 15:29:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7893260A48;
-        Mon, 27 Feb 2023 23:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B69C433EF;
-        Mon, 27 Feb 2023 23:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677540578;
-        bh=/k3ORxC9jKd4eyRM/QUTSmbMh9ghJRSzv/EcqL2v5dE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WwA2OHMv1w/5Uyo6xYtro9b1mSTlIPNSoElUoeETMEvhjftkGvHNCxmga57btVgQA
-         rkfDl9VWxjrH1xl3Fe8dTL5zhPaH9b7I+NUwQFXDR0+8yyWffOZccLslrmnn8d7Su/
-         HPPRJxxT7hULCtK687jwLdcEkxtwdVwuS9uTh+5cY/mskk48/Fla5bia3sMktImycs
-         9lmvBlWI+ZVdCUBChiAbzIskKSCr37MYbo2aaJXqCC+ESNPgsMwR710qA3eoP62pJW
-         DcQNA6KwCcUP8XqNGi9mh+K4frUUSalNYmAp+hjqrBNITGQCyXlkiiGC2FKTjlgxve
-         l7OPURu12sakQ==
-Date:   Tue, 28 Feb 2023 08:29:34 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     paulmck@kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-Id: <20230228082934.7d73533a923dd753c0c76793@kernel.org>
-In-Reply-To: <20230227165628.GH2948950@paulmck-ThinkPad-P17-Gen-1>
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
-        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
-        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
-        <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
-        <20230225011306.0dd47e760f502b6787096bf7@kernel.org>
-        <20230224163307.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-        <20230225095811.926a8ebaee4ca2d1fb9d9e45@kernel.org>
-        <20230225011910.GV2948950@paulmck-ThinkPad-P17-Gen-1>
-        <20230227081632.da70c54f3eede048549fb7af@kernel.org>
-        <20230227165628.GH2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 27 Feb 2023 18:31:00 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A82C1C7E0;
+        Mon, 27 Feb 2023 15:30:59 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id bh1so8539989plb.11;
+        Mon, 27 Feb 2023 15:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=emzKQEZEK1f8jAf8bULtQV5jNFQ3wM/05AWToSpzXYM=;
+        b=FOAYuX9TWAHLeXJBAN0GZUx8AYuIU70g/AhZ1+jf0uzNA/2+DaJdrgrM8Ws4G99vuD
+         r6N2rk6lpZjYdouI+XnvtqdZUMAlHa4ViF1RBPYGjcn9hmP66LCmh6bGOBxUfM1Cf2lT
+         FIW2AliSn8KC3wQnprOtXk5p7MR5VYbg94hc2dq+8kbSNKDomPedbYrS3WaSQ+8MiRjK
+         42NX5C1RblWOJZTuCo8rDGaLc6BQE2qqM2s7pWwohFmjXV2TIVBtyo2c1dkIdq2jWT73
+         cifTJrFxXxtIAM1xKhS5MjUFEHY7BmVXLi6DnSXAHCbGySLW3F0krkXBTuVrE1QmaJA2
+         5PRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=emzKQEZEK1f8jAf8bULtQV5jNFQ3wM/05AWToSpzXYM=;
+        b=xzURQr6U6MVGIywl9YmBgN+Is5G52bsP2m0YqDZa0sAM72kbgwo/hM4bkfFoPdR2j9
+         w7VpG/T5jQ0DjYyKuREbv70voyI3RoNUbUsri131+Q6eSZcGh0OmbJ9cqEkXe4mZgfT1
+         1bAV5hHTiK5sXaF3l5rDqlMleK1bgIMVWm0I/bCxlX6kXumhu36rvnamTWxw4nTm5o9e
+         OgM32er4UbblxExsj1FFZLRhdHc4P9mkYCWlN9TxEKB+eCJQeTa+b9HHvzrbfv+5lumz
+         fMgrQWxKXMznvBKrWZKX5kBDvuw8zCvDKElDJEgM8UwE8JI8RoBwFdM+AgkNiVQt7LOm
+         VumA==
+X-Gm-Message-State: AO0yUKU3Q+JwcT1YuN4lxXXaAo0tJyngV7Ic+tIu/JSSGRQS/IYyftN9
+        qXuClScCJ8dztJm3JbFJG7s=
+X-Google-Smtp-Source: AK7set//Dgr8W+5J/yRWe2lIxX5azB3y8WUjSkhLhZzznPGm1IKUKVQdowz65usft+svvgLfM99EvA==
+X-Received: by 2002:a05:6a20:29a9:b0:cc:ba66:88a1 with SMTP id f41-20020a056a2029a900b000ccba6688a1mr892391pzh.60.1677540658774;
+        Mon, 27 Feb 2023 15:30:58 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id d18-20020aa78152000000b00590ede84b1csm4882437pfn.147.2023.02.27.15.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 15:30:57 -0800 (PST)
+Date:   Mon, 27 Feb 2023 15:30:56 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v11 058/113] KVM: TDX: MTRR: implement get_mt_mask() for
+ TDX
+Message-ID: <20230227233056.GT4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <21e0d94ccf2fd3d766d6aa7b45441791c04e5e4f.1673539699.git.isaku.yamahata@intel.com>
+ <1a32f2570f13fa0125ddbbceeabcd36fc4beb9db.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1a32f2570f13fa0125ddbbceeabcd36fc4beb9db.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,209 +81,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 08:56:28 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+On Tue, Jan 17, 2023 at 03:11:46AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-> On Mon, Feb 27, 2023 at 08:16:32AM +0900, Masami Hiramatsu wrote:
-> > On Fri, 24 Feb 2023 17:19:10 -0800
-> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> On Thu, 2023-01-12 at 08:32 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
 > > 
-> > > On Sat, Feb 25, 2023 at 09:58:11AM +0900, Masami Hiramatsu wrote:
-> > > > On Fri, 24 Feb 2023 08:33:07 -0800
-> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > 
-> > > > > On Sat, Feb 25, 2023 at 01:13:06AM +0900, Masami Hiramatsu wrote:
-> > > > > > Hi Geert,
-> > > > > > 
-> > > > > > On Fri, 24 Feb 2023 09:31:50 +0100
-> > > > > > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > > 
-> > > > > > > Hi Paul,
-> > > > > > > 
-> > > > > > > On Sat, Jan 7, 2023 at 5:33 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > > > > > > (or at least recommend to enable this)
-> > > > > > > >
-> > > > > > > > Like this?
-> > > > > > > >
-> > > > > > > >                                                         Thanx, Paul
-> > > > > > > >
-> > > > > > > > ------------------------------------------------------------------------
-> > > > > > > >
-> > > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > > > > > >
-> > > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > > > > > >
-> > > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > > > > > > >     will normally be to unconditionally provide the specified kernel-boot
-> > > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
-> > > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > > > > > > >
-> > > > > > > >     The old semantics may be obtained by manually overriding this default.
-> > > > > > > >
-> > > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > >
-> > > > > > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > > > > > > > --- a/init/Kconfig
-> > > > > > > > +++ b/init/Kconfig
-> > > > > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> > > > > > > >  config BOOT_CONFIG_FORCE
-> > > > > > > >         bool "Force unconditional bootconfig processing"
-> > > > > > > >         depends on BOOT_CONFIG
-> > > > > > > > +       default y if BOOT_CONFIG_EMBED
-> > > > > > > >         help
-> > > > > > > >           With this Kconfig option set, BOOT_CONFIG processing is carried
-> > > > > > > >           out even when the "bootconfig" kernel-boot parameter is omitted.
-> > > > > > > 
-> > > > > > > Thanks for your patch, which is now commit 6ded8a28ed80e4cc
-> > > > > > > ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED").
-> > > > > > > 
-> > > > > > > After this change, an all{mod,yes}config kernel has:
-> > > > > > > 
-> > > > > > >     CONFIG_BOOT_CONFIG_FORCE=y
-> > > > > > >     CONFIG_BOOT_CONFIG_EMBED=y
-> > > > > > >     CONFIG_BOOT_CONFIG_EMBED_FILE=""
-> > > > > > > 
-> > > > > > > Will this actually work? I haven't tried booting such a kernel yet.
-> > > > > > 
-> > > > > > Yeah, good question. It is same as when you boot the kernel with 'bootconfig'
-> > > > > > but do not add the bootconfig file to initrd. You may see below message
-> > > > > > on boot log, but kernel boots normally. :)
-> > > > > > 
-> > > > > >  'bootconfig' found on command line, but no bootconfig found
-> > > > > > 
-> > > > > > (Maybe it is better to fix the message, because if BOOT_CONFIG_FORCE=y, this
-> > > > > > will be shown without 'bootconfig' on command line.)
-> > > > > 
-> > > > > I just tried it again, and for me it just silently ignores the bootconfig
-> > > > > setup.  Which is what I recall happening when I tried it when creating
-> > > > > the patch.
-> > > > > 
-> > > > > Here is the .config file pieces of interest:
-> > > > > 
-> > > > > CONFIG_BOOT_CONFIG=y
-> > > > > CONFIG_BOOT_CONFIG_FORCE=y
-> > > > > CONFIG_BOOT_CONFIG_EMBED=y
-> > > > > CONFIG_BOOT_CONFIG_EMBED_FILE=""
-> > > > > 
-> > > > > Anyone else seeing something different?
-> > > > 
-> > > > Hmm, from the code, I think you'll see that message in early console log.
-> > > > 
-> > > > In init/main.c:
-> > > > 
-> > > > ----
-> > > > #ifdef CONFIG_BOOT_CONFIG
-> > > > /* Is bootconfig on command line? */
-> > > > static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
-> > > > static size_t initargs_offs;
-> > > > #else
-> > > > ----
-> > > > And
-> > > > ----
-> > > > static void __init setup_boot_config(void)
-> > > > {
-> > > > ...
-> > > >         strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-> > > >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> > > >                          bootconfig_params);
-> > > > 
-> > > >         if (IS_ERR(err) || !bootconfig_found)
-> > > >                 return;
-> > > > 
-> > > >         /* parse_args() stops at the next param of '--' and returns an address */
-> > > >         if (err)
-> > > >                 initargs_offs = err - tmp_cmdline;
-> > > > 
-> > > >         if (!data) {
-> > > >                 pr_err("'bootconfig' found on command line, but no bootconfig found\n");
-> > > >                 return;
-> > > >         }
-> > > > ----
-> > > > 
-> > > > Thus, if CONFIG_BOOT_CONFIG_FORCE=y, the process passes the below check
-> > > > 
-> > > >         if (IS_ERR(err) || !bootconfig_found)
-> > > >                 return;
-> > > > 
-> > > > But since we have an empty 'data', the error should be printed.
-> > > 
-> > > And you are quite right, the runs without data files did get me this:
-> > > 
-> > > 'bootconfig' found on command line, but no bootconfig found
-> > > 
-> > > Please accept my apologies for my confusion.
-> > 
-> > No problem :), so should we skip this message if CONFIG_BOOT_CONFIG_FORCE=y,
-> > because user may not pass 'bootconfig'?
-> > 
-> > Or, may be we can make it;
-> > 
-> >  "Skip bootconfig, because no bootconfig data found."
-> > 
-> > so that user can notice they forget to set up bootconfig data?
+> > Although TDX supports only WB for private GPA, MTRR/PAT for shared GPA
+> > should be supported. Implement get_mt_mask() following vmx case.
 > 
-> Good point, the current message could be quite confusing.  Me, I already
-> knew what was happening, so I just looked for the change in console-log
-> output.  ;-)
+> By far this is the first patch to handle MTRR/PAT.  There's absolutely no
+> background have been explained.
 > 
-> How about something like this?
+> So what about MTRR/PAT related MSRs handling?  No code needed to handle?
 > 
-> 	"No bootconfig data provided, so skipping bootconfig"
+> I was expecting there should be at least some words here to explain how TDX
+> handles them, and if no handling is required in KVM, why.
 > 
-> But as you say, keeping the current message in kernels that have been
-> built with CONFIG_BOOT_CONFIG_FORCE=n.
+> W/o those, I don't think this patch is reviewable.  
 
-That sounds good to me. OK, let me update that.
-
-Thank you,
-
-> 
-> 							Thanx, Paul
-> 
-> > Thank you,
-> > 
-> > 
-> > > 
-> > > 							Thanx, Paul
-> > > 
-> > > > Thank you,
-> > > > 
-> > > > > 
-> > > > > 							Thanx, Paul
-> > > > > 
-> > > > > > Thank you!
-> > > > > > 
-> > > > > > > 
-> > > > > > > Gr{oetje,eeting}s,
-> > > > > > > 
-> > > > > > >                         Geert
-> > > > > > > 
-> > > > > > > -- 
-> > > > > > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> > > > > > > 
-> > > > > > > In personal conversations with technical people, I call myself a hacker. But
-> > > > > > > when I'm talking to journalists I just say "programmer" or something like that.
-> > > > > > >                                 -- Linus Torvalds
-> > > > > > 
-> > > > > > 
-> > > > > > -- 
-> > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > 
-> > > > 
-> > > > -- 
-> > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+I've updated the commit message.
 
 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/vmx/main.c    | 10 +++++++++-
+> >  arch/x86/kvm/vmx/tdx.c     | 19 +++++++++++++++++++
+> >  arch/x86/kvm/vmx/x86_ops.h |  2 ++
+> >  3 files changed, 30 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> > index 770d1b29d1c3..4319f6d7a4da 100644
+> > --- a/arch/x86/kvm/vmx/main.c
+> > +++ b/arch/x86/kvm/vmx/main.c
+> > @@ -158,6 +158,14 @@ static void vt_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+> >  	vmx_load_mmu_pgd(vcpu, root_hpa, pgd_level);
+> >  }
+> >  
+> > +static u8 vt_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> > +{
+> > +	if (is_td_vcpu(vcpu))
+> > +		return tdx_get_mt_mask(vcpu, gfn, is_mmio);
+> > +
+> > +	return vmx_get_mt_mask(vcpu, gfn, is_mmio);
+> > +}
+> > +
+> >  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+> >  {
+> >  	if (!is_td(kvm))
+> > @@ -267,7 +275,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+> >  
+> >  	.set_tss_addr = vmx_set_tss_addr,
+> >  	.set_identity_map_addr = vmx_set_identity_map_addr,
+> > -	.get_mt_mask = vmx_get_mt_mask,
+> > +	.get_mt_mask = vt_get_mt_mask,
+> >  
+> >  	.get_exit_info = vmx_get_exit_info,
+> >  
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index e68816999387..c4c5a8f786c1 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -309,6 +309,25 @@ int tdx_vm_init(struct kvm *kvm)
+> >  	return 0;
+> >  }
+> >  
+> > +u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> > +{
+> > +	/* TDX private GPA is always WB. */
+> > +	if (gfn & kvm_gfn_shared_mask(vcpu->kvm)) {
+> 
+> First of all, private GPA doesn't have 'shared bit' set, so comment  doesn't
+> reflect code.
+> 
+> Secondly (and again), IIUC the shared bit of the gfn has been stripped out long
+> time ago, so this is incorrect.
+> 
+> Please don't sliently ignore other people's comment:
+> 
+> https://lore.kernel.org/lkml/Y19NzlQcwhV%2F2wl3@debian.me/T/#mf319d5b718519709362f9f094bfc5b53fd870241
+
+Make the logic common for vmx and tdx. the difference is to check cr0.cd.
+
+Thanks,
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Isaku Yamahata <isaku.yamahata@gmail.com>
