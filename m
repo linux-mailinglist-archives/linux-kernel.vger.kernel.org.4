@@ -2,111 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DF66A418F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE7B6A4190
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjB0MSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S229821AbjB0MSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjB0MSG (ORCPT
+        with ESMTP id S229512AbjB0MSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:18:06 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F95B443
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:18:05 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id s17so3414633pgv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:18:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8O3Wbk4PyzeJv8vEVqhgTB6nRT41+PZyv3EpdVvZLss=;
-        b=kLBr+8AAjfUN+W39IHft0s19JEo3QXQvA4IJHevtsTRa6ZWK6ueOUV11+5pyKRXV0Z
-         87V1gl2zCTQjCKRVo6peImHHVA0SnxHk8FBWi4FMPsK0IlmBTUT6WARMogA3vTBxDV+y
-         e4gD477Z/23mreZ44MJtExd040W89lvvtvqn79KApu/reuqUz4cYnb+onBTUxdlDsesO
-         mCo2T4HnwBIVcsKdgZpfKqXP53Y5dUUDNb/HcnGRiMY85y7D3Y+HQQ9B+AwW8o7N/xmQ
-         3+OQwcI8Bkn8lvDN3/9VJyaooFFguSDsDIJj0a0Bp9PBJtuY7oHMo+RusdQv4VsRvCvl
-         MD/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8O3Wbk4PyzeJv8vEVqhgTB6nRT41+PZyv3EpdVvZLss=;
-        b=Ki1Z0ClzQWvxe2JsbMhPwMKhI3eWuX1ABe0tDh9jCnaYkeayVAORltEswcpbQYly9W
-         tZ8B20v//n1vLWhPVfara0C0FVp3ngh4xuAU4XPa7hyuABWnlAdWKKQaFeYItgtmYlFh
-         hnb6Inf9ckpigJKp8dKSNDRcDJ8z3oSo3ncESQk/XIn0YzFEMguGul5I2ZohO5Yg6NOt
-         LAWvX2yisNPZqHAqdVOBeapUlceZbgohnvwAaoDu/6dQbeqT4DTbUrC7+7ddYKxXUwrC
-         Lue4s+yQTWpFMNfV3vS7jXNfXzS9X7KHHoUsWVt5/x+o2Yz9nWFF0sNilegUNyiEzTdS
-         9XMg==
-X-Gm-Message-State: AO0yUKWr6WskzKFcGw/Q6hOxlYyNwdjW5cHHHREDe1TAI1FRxQ+bvcfN
-        h1P0C0eMloB/P3ebQZbCwarvlDiVs6RN6N3R9tNT9w==
-X-Google-Smtp-Source: AK7set8wIvfOUTxpgUk1eqPvVSg2OskvjVdzsJ3NgROYebIQXNVp3jUycVc1FS2zPrMjnKbVJwVF3adhec31up6OZDw=
-X-Received: by 2002:a62:864d:0:b0:5e5:7376:ea4d with SMTP id
- x74-20020a62864d000000b005e57376ea4dmr3475333pfd.1.1677500284525; Mon, 27 Feb
- 2023 04:18:04 -0800 (PST)
+        Mon, 27 Feb 2023 07:18:47 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4728F974
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677500325; x=1709036325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KuX2ifj23XIiHvM0u+wPf0HERefBeu0ux+Zf9Ufg1CE=;
+  b=S2aFb+YgzwdRcYUGq4ugONwLMxVEP6Esk6CUsgVkXt5nIWPW5JEkr+Ec
+   TCXmT7DxBtfAdY83YyqqFkj13Q/KJKcV2orM/i1dgcpHuHxTOXWiBFtje
+   YfPy0rU8G1x6Y8OM/3V/QccPo2MeXUWdtoBoxA4M72MhCvwU3hUKDpBCa
+   v21pDaSl46iLbAFo/I37HKM4fz77zTKXKO1pGsdaWIgnPbBbQn8/2YiT4
+   /uKwE4ZXLR1h6sRGV7Dw7SjVxiOC95Bf1tcOMBXvlZWduCZ+8e6Eu7gLz
+   fXSrEcOkRmXDLtADFqP6DjIH99Qymi1QcrszePGX4ica76sfjiYXrIXIg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="331319318"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="331319318"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 04:18:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="623560454"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="623560454"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 27 Feb 2023 04:18:41 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWcSm-0004OY-1T;
+        Mon, 27 Feb 2023 12:18:40 +0000
+Date:   Mon, 27 Feb 2023 20:18:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yuanzhi Wang <wangyuanzhi@uniontech.com>,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        mario.limonciello@amd.com, Bokun.Zhang@amd.com,
+        tzimmermann@suse.de, hdegoede@redhat.com, jingyuwang_vip@163.com,
+        rafael.j.wysocki@intel.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Yuanzhi Wang <wangyuanzhi@uniontech.com>
+Subject: Re: [PATCH] amdgpu: add a filter condition when set brightness
+Message-ID: <202302272051.KDJqRyl5-lkp@intel.com>
+References: <20230227073953.326-1-wangyuanzhi@uniontech.com>
 MIME-Version: 1.0
-References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
- <20230222161222.11879-2-jiaxun.yang@flygoat.com> <CAM1=_QQRmTaAnn0w6wteQ_FKgoF=vGX_okfbiUHdyUB0ZzNghQ@mail.gmail.com>
- <7CAF04EF-FC1D-4BE1-A639-92D677525C63@flygoat.com>
-In-Reply-To: <7CAF04EF-FC1D-4BE1-A639-92D677525C63@flygoat.com>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Mon, 27 Feb 2023 13:17:53 +0100
-Message-ID: <CAM1=_QRVEG0Fw9U99V3ohMe60h0DwMzyWvV_gYdJ=SrQ1D11Fg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: ebpf jit: Implement DADDI workarounds
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230227073953.326-1-wangyuanzhi@uniontech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 11:29=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.c=
-om> wrote:
-> I didn=E2=80=99t see any place emitting DADDI.
+Hi Yuanzhi,
 
-Right, the JIT only uses unsigned arithmetics :)
+Thank you for the patch! Yet something to improve:
 
-> Yes I analysed all other place, most of them are just calculating memory
-> address offsets and they should never overflow. Other two is doing additi=
-on
-> to zero to load immediate, which should be still fine.
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.2 next-20230227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ok.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230227073953.326-1-wangyuanzhi%40uniontech.com
+patch subject: [PATCH] amdgpu: add a filter condition when set brightness
+config: arm64-randconfig-r012-20230226 (https://download.01.org/0day-ci/archive/20230227/202302272051.KDJqRyl5-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/95d9579e31d0b601aa1422cf767ca5138d3efcee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
+        git checkout 95d9579e31d0b601aa1422cf767ca5138d3efcee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-> >> --- a/arch/mips/net/bpf_jit_comp.c
-> >> +++ b/arch/mips/net/bpf_jit_comp.c
-> >> @@ -218,9 +218,17 @@ bool valid_alu_i(u8 op, s32 imm)
-> >>                /* All legal eBPF values are valid */
-> >>                return true;
-> >>        case BPF_ADD:
-> >> +#ifdef CONFIG_64BIT
-> >
-> > DADDI/DADDIU are only available on 64-bit CPUs, so the errata would
-> > only be applicable to that. No need for the CONFIG_64BIT conditional.
->
-> It=E2=80=99s possible to compile a 32bit kernel for R4000 with CONFIG_CPU=
-_DADDI_WORKAROUNDS
-> enabled.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302272051.KDJqRyl5-lkp@intel.com/
 
-Yes, but DADDI/DADDIU are 64-bit instructions so they would not be
-available when compiling the kernel in 32-bit mode for R4000, and
-hence the workaround would not be applicable, right? If this is
-correct, I would imagine CONFIG_CPU_DADDI_WORKAROUNDS itself to be
-conditional on CONFIG_64BIT. That way the this relationship is
-expressed once in the Kconfig file, instead of being spread out over
-multiple places in the code.
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:15: warning: missing terminating '"' character [-Winvalid-pp-token]
+                                           DRM_WARN("old brightness %d is greater than ACPI brightness
+                                                    ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:450:11: warning: missing terminating '"' character [-Winvalid-pp-token]
+                                                   %d\n", old_brightness, req.backlight_level);
+                                                       ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:6: error: unterminated function-like macro invocation
+                                           DRM_WARN("old brightness %d is greater than ACPI brightness
+                                           ^
+   include/drm/drm_print.h:543:9: note: macro 'DRM_WARN' defined here
+   #define DRM_WARN(fmt, ...)                                              \
+           ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected expression
+   #endif /* CONFIG_SUSPEND */
+                              ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:5: note: previous statement is here
+                                   if (old_brightness > req.backlight_level)
+                                   ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:439:18: note: to match this '{'
+                           if (atif->bd) {
+                                         ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:438:59: note: to match this '{'
+                   if (req.pending & ATIF_PANEL_BRIGHTNESS_CHANGE_REQUEST) {
+                                                                           ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:427:38: note: to match this '{'
+           if (atif->functions.sbios_requests) {
+                                               ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:406:1: note: to match this '{'
+   {
+   ^
+   3 warnings and 6 errors generated.
+
+
+vim +449 drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+
+   391	
+   392	/**
+   393	 * amdgpu_atif_handler - handle ATIF notify requests
+   394	 *
+   395	 * @adev: amdgpu_device pointer
+   396	 * @event: atif sbios request struct
+   397	 *
+   398	 * Checks the acpi event and if it matches an atif event,
+   399	 * handles it.
+   400	 *
+   401	 * Returns:
+   402	 * NOTIFY_BAD or NOTIFY_DONE, depending on the event.
+   403	 */
+   404	static int amdgpu_atif_handler(struct amdgpu_device *adev,
+   405				       struct acpi_bus_event *event)
+   406	{
+   407		struct amdgpu_atif *atif = &amdgpu_acpi_priv.atif;
+   408		int count;
+   409		int old_brightness;
+   410	
+   411		DRM_DEBUG_DRIVER("event, device_class = %s, type = %#x\n",
+   412				event->device_class, event->type);
+   413	
+   414		if (strcmp(event->device_class, ACPI_VIDEO_CLASS) != 0)
+   415			return NOTIFY_DONE;
+   416	
+   417		/* Is this actually our event? */
+   418		if (!atif->notification_cfg.enabled ||
+   419		    event->type != atif->notification_cfg.command_code) {
+   420			/* These events will generate keypresses otherwise */
+   421			if (event->type == ACPI_VIDEO_NOTIFY_PROBE)
+   422				return NOTIFY_BAD;
+   423			else
+   424				return NOTIFY_DONE;
+   425		}
+   426	
+   427		if (atif->functions.sbios_requests) {
+   428			struct atif_sbios_requests req;
+   429	
+   430			/* Check pending SBIOS requests */
+   431			count = amdgpu_atif_get_sbios_requests(atif, &req);
+   432	
+   433			if (count <= 0)
+   434				return NOTIFY_BAD;
+   435	
+   436			DRM_DEBUG_DRIVER("ATIF: %d pending SBIOS requests\n", count);
+   437	
+   438			if (req.pending & ATIF_PANEL_BRIGHTNESS_CHANGE_REQUEST) {
+   439				if (atif->bd) {
+   440					DRM_DEBUG_DRIVER("Changing brightness to %d\n",
+   441							 req.backlight_level);
+   442					/*
+   443					 * XXX backlight_device_set_brightness() is
+   444					 * hardwired to post BACKLIGHT_UPDATE_SYSFS.
+   445					 * It probably should accept 'reason' parameter.
+   446					 */
+   447					old_brightness = backlight_get_brightness(atif->bd);
+   448					if (old_brightness > req.backlight_level)
+ > 449						DRM_WARN("old brightness %d is greater than ACPI brightness
+   450							%d\n", old_brightness, req.backlight_level);
+   451					else
+   452						backlight_device_set_brightness(atif->bd,
+   453							req.backlight_level);
+   454				}
+   455			}
+   456	
+   457			if (req.pending & ATIF_DGPU_DISPLAY_EVENT) {
+   458				if (adev->flags & AMD_IS_PX) {
+   459					pm_runtime_get_sync(adev_to_drm(adev)->dev);
+   460					/* Just fire off a uevent and let userspace tell us what to do */
+   461					drm_helper_hpd_irq_event(adev_to_drm(adev));
+   462					pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+   463					pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+   464				}
+   465			}
+   466			/* TODO: check other events */
+   467		}
+   468	
+   469		/* We've handled the event, stop the notifier chain. The ACPI interface
+   470		 * overloads ACPI_VIDEO_NOTIFY_PROBE, we don't want to send that to
+   471		 * userspace if the event was generated only to signal a SBIOS
+   472		 * request.
+   473		 */
+   474		return NOTIFY_BAD;
+   475	}
+   476	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
