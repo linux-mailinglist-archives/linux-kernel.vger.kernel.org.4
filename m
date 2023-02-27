@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDACC6A4F08
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9658E6A4F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjB0W6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S229947AbjB0W6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjB0W6C (ORCPT
+        with ESMTP id S229486AbjB0W6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:58:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249ED83CD;
-        Mon, 27 Feb 2023 14:58:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6A1360EAC;
-        Mon, 27 Feb 2023 22:58:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8F9C433D2;
-        Mon, 27 Feb 2023 22:57:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677538680;
-        bh=DOn3IqzBFJ3kATuBFE3wlApyPVODRfIIpiPTqiQJYuI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hEq+oLArpAqLo/uoxoF59arOtl6M6jRIvJqAuX3WHRl4PLpQZA6Z0rPAPoE+nzGjt
-         83yytWT6c9k7ck/YuF7rBbApyD7/z9f4o8W7ywZl333hGqtzFQHEp4NXExPNVNJGP6
-         Huv1fuKuBYUTL6HOIKXDY+N28CP61hkUMMaxPou+tmNLerpTVD5IW3e31hAzhbJ3py
-         Jg6Zk0O4MNbT++ZEdVAHyXc8HI8m5QdiPrLfTgEa9ut+rkZ63JP5DcjYUJQGOz8P6+
-         /iIckHedliE5RZmBfoD+/54BcryPhAPw1z4sxx86V8dm/zX1IS/lbmgcQxf3MWs4fv
-         OeLcMXmk+J/dw==
-Date:   Mon, 27 Feb 2023 22:57:55 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, heiko@sntech.de,
-        slewis@rivosinc.com, vineetg@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 4/7] dt-bindings: Add RISC-V misaligned access
- performance
-Message-ID: <Y/01c7sZ9ri5i8ao@spud>
-References: <20230221190858.3159617-1-evan@rivosinc.com>
- <20230221190858.3159617-5-evan@rivosinc.com>
+        Mon, 27 Feb 2023 17:58:52 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD7765B4;
+        Mon, 27 Feb 2023 14:58:50 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8315091wms.2;
+        Mon, 27 Feb 2023 14:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H6xWs38kFFRDAh0TFymIbiQKfi/uzaXf1tagUWDeIW0=;
+        b=Dq6vHEXxVniMMEpmWwFKAkW+Zc2x83TVWydAdMc3glHrI0mwLUgp5yzfANsu0QEKnG
+         0ZJJB7b3+19u/s77805CpMG5TsShphc7wFKJT/uLFtdr+rLRcn5vPShcCUMl8BtQa6h0
+         wh3KHNSIR3xfINBdaKRCRkFdAl3FwskI63Ce4H5ctJ2IN9CHLiW6zcDo+Nsl8yxlvbIX
+         rfmGaWz118gk//ZxJH61pp3BJavGZqsOaIIsP3ULVvPl6vKXrrrXzp4CuzUp75AlP8Qp
+         FD8xHmsXNDy5M2Vv1It+2zuUFcry8wOmxxXcKeneRJmMIEatx+qeDSJO92on4CEDbNPT
+         dpTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H6xWs38kFFRDAh0TFymIbiQKfi/uzaXf1tagUWDeIW0=;
+        b=CLet/afrIdZN5qn3YzDUNjk1kqhq8Ak6kDNQWTrcc2qg7L6xCuVl6SpQJ1pZyl6fcB
+         Xr8FCKrVGNKq1h8b4EzGWNJxGKbTO0vL+/cXl9APRwGoUJLPZ5iyBnQKilKUoDXBkQY0
+         RvGul4cDVj5QwxyKkp72UHtFQlVmMZ9MKdLTSACW6DJYRNGHuSeRw/v2FgqM9ngdc0on
+         zH+nLMoAZ/AEZQ+6zqdbZSJgWyMeAg16gZUN60vtV90A+qtkAyNL2MhWPAfY2orGKYbw
+         mAvTScJbKQRvnmhLAgqpnj+Yd5WIxSu0pywzNpzicMpO7rCMHHNSPq0ra45gLv8IPgTk
+         h1Og==
+X-Gm-Message-State: AO0yUKVfimPOzmZf5RVNVIrxezY+0xkUxEfcQu7kZJwdDLK3R0/WLokf
+        g/lTVtPR7uNScw8A+b9aEEhhVopwmq4=
+X-Google-Smtp-Source: AK7set8xecthH7WDnyqAS2Sx3sy62KG6JBF5aaG2pGLKBeVULhlH0EvAwOxFgOkVbSAZcaYZav/yQQ==
+X-Received: by 2002:a05:600c:3b28:b0:3eb:3104:efe7 with SMTP id m40-20020a05600c3b2800b003eb3104efe7mr606906wms.23.1677538728724;
+        Mon, 27 Feb 2023 14:58:48 -0800 (PST)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id u17-20020adff891000000b002c553e061fdsm8115016wrp.112.2023.02.27.14.58.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 14:58:48 -0800 (PST)
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in
+ BPF
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+ <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
+ <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <cc4712f7-c723-89fc-dc9c-c8db3ff8c760@gmail.com>
+Date:   Mon, 27 Feb 2023 22:58:47 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YuphDP/Rndy0HYOx"
-Content-Disposition: inline
-In-Reply-To: <20230221190858.3159617-5-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27/02/2023 22:04, Daniel Xu wrote:
+> I don't believe full L4 headers are required in the first fragment.
+> Sufficiently sneaky attackers can, I think, send a byte at a time to
+> subvert your proposed algorithm. Storing skb data seems inevitable here.
+> Someone can correct me if I'm wrong here.
 
---YuphDP/Rndy0HYOx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My thinking was that legitimate traffic would never do this and thus if
+ your first fragment doesn't have enough data to make a determination
+ then you just DROP the packet.
 
-Hey Evan,
+> What I find valuable about this patch series is that we can
+> leverage the well understood and battle hardened kernel facilities. So
+> avoid all the correctness and security issues that the kernel has spent
+> 20+ years fixing.
 
-On Tue, Feb 21, 2023 at 11:08:55AM -0800, Evan Green wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->=20
-> This key allows device trees to specify the performance of misaligned
-> accesses to main memory regions from each CPU in the system.
+I can certainly see the argument here.  I guess it's a question of are
+ you more worried about the DoS from tricking the validator into thinking
+ good fragments are bad (the reverse is irrelevant because if you can
+ trick a validator into thinking your bad fragment belongs to a previously
+ seen good packet, then you can equally trick a reassembler into stitching
+ your bad fragment into that packet), or are you more worried about the
+ DoS from tying lots of memory down in the reassembly cache.
+Even with reordering handling, a data structure to record which ranges of
+ a packet have been seen takes much less memory than storing the complete
+ fragment bodies.  (Just a simple bitmap of 8-byte blocks — the resolution
+ of iph->frag_off — reduces size by a factor of 64, not counting all the
+ overhead of a struct sk_buff for each fragment in the queue.  Or you
+ could re-use the rbtree-based code from the reassembler, just with a
+ freshly allocated node containing only offset & length, instead of the
+ whole SKB.)
+And having a BPF helper effectively consume the skb is awkward, as you
+ noted; someone is likely to decide that skb_copy() is too slow, try to
+ add ctx invalidation, and thereby create a whole new swathe of potential
+ correctness and security issues.
+Plus, imagine trying to support this in a hardware-offload XDP device.
+ They'd have to reimplement the entire frag cache, which is a much bigger
+ attack surface than just a frag validator, and they couldn't leverage
+ the battle-hardened kernel implementation.
 
-Could you fold some of Palmer's explanation for why this must be in the
-devicetree? Think this is where he explained it:
-https://lore.kernel.org/all/mhng-8736b349-e27a-4372-81ca-3a25d2ec1e94@palme=
-r-ri-x1c9/
+> And make it trivial for the next person that comes
+> along to do the right thing.
 
->=20
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> ---
->=20
-> Changes in v3:
->  - Added | to description: to make dt-checker happy.
->=20
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
-ation/devicetree/bindings/riscv/cpus.yaml
-> index c6720764e765..f79e9e5c5ee9 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -85,6 +85,21 @@ properties:
->      $ref: "/schemas/types.yaml#/definitions/string"
->      pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
-> =20
-> +  riscv,misaligned-access-performance:
-> +    description: |
-> +      Identifies the performance of misaligned memory accesses to main m=
-emory
-> +      regions.  There are three flavors of unaligned access performance:=
- "emulated"
-> +      means that misaligned accesses are emulated via software and thus
-> +      extremely slow, "slow" means that misaligned accesses are supporte=
-d by
-> +      hardware but still slower that aligned accesses sequences, and "fa=
-st"
+Fwiw the validator approach could *also* be a helper, it doesn't have to
+ be something the BPF developer writes for themselves.
 
-s/that/than/
+But if after thinking about the possibility you still prefer your way, I
+ won't try to stop you — I just wanted to ensure it had been considered.
 
-> +      means that misaligned accesses are as fast or faster than the
-> +      cooresponding aligned accesses sequences.
-
-s/cooresponding/corresponding/
-
-Thanks,
-Conor.
-
-> +    $ref: "/schemas/types.yaml#/definitions/string"
-> +    enum:
-> +      - emulated
-> +      - slow
-> +      - fast
-> +
->    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
->    timebase-frequency: false
-> =20
-> --=20
-> 2.25.1
->=20
-
---YuphDP/Rndy0HYOx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/01cwAKCRB4tDGHoIJi
-0nAeAQDSm+Ztzo3Tbf7N3R9oO20Sh+ylQ2JQ5FZnSgknEmJYYwD+IOIvf5vpBkfu
-PcnfnXXl8a2pwxomgK/WBgQbomX0IQg=
-=KSgx
------END PGP SIGNATURE-----
-
---YuphDP/Rndy0HYOx--
+-ed
