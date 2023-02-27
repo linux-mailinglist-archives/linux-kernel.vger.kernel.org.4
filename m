@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643B26A4141
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 12:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2266A4144
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 12:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjB0L5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 06:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S229501AbjB0L53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 06:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjB0L5W (ORCPT
+        with ESMTP id S229667AbjB0L51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 06:57:22 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2757BAD15;
-        Mon, 27 Feb 2023 03:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677499039; x=1709035039;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OYWmC+11VkZ07K9SxaUsII3U3gMEbonSgeOzevEiM9w=;
-  b=bJ9Vci8cErnadxxIVKZNe5esHuvRBAtMyZb9qiUbw6Pv9iDgPTY5uYP7
-   d6+fONMTgixAJYmboGqQfyG+PwIo251neOtRh/Z+Mra0XVp/kMiGnfQH5
-   /0tFEj57KWItbO7WUttQatPfuWcB41X+jKu+AnuSkNzlA9ig8b6NgYGBe
-   uYXSecPgs59X8yc3X8+iLsLvpcfTrI7RLu+8Ngk/IpvwsNWLGln5qjMfY
-   DjwqlN+ggTAENh3p19DP0QVEwbGpTYY2lOBMOhdSsxlM/TycYSa67HpRX
-   pw41gZkBrMPB+H1ln+s4z843rry9YPOK0IIMO1hyvAJLZBLEgNzgjqCf0
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,331,1669100400"; 
-   d="asc'?scan'208";a="198902334"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 04:57:18 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 27 Feb 2023 04:57:16 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 27 Feb 2023 04:57:15 -0700
-Date:   Mon, 27 Feb 2023 11:56:48 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Song Shuai <suagrfillet@gmail.com>
-CC:     <corbet@lwn.net>, <alexs@kernel.org>, <siyanteng@loongson.cn>,
-        <robh@kernel.org>, <palmer@rivosinc.com>,
-        <leyfoon.tan@starfivetech.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH] sched/doc: supplement CPU capacity with RISC-V
-Message-ID: <Y/yagE7jfRGo1FgY@wendy>
-References: <20230227105941.2749193-1-suagrfillet@gmail.com>
+        Mon, 27 Feb 2023 06:57:27 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2261F900;
+        Mon, 27 Feb 2023 03:57:25 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso11585143pjv.0;
+        Mon, 27 Feb 2023 03:57:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UL2ps8yaPj+oovF7HkNPRUPm6/ExhIXpUcFA+LZV1i4=;
+        b=mX8m8PH4kwuZFOdGmAjNOVMEHyrxdN+oHDHiDLndFYfPmKmlIQhlaWu9lodb+RDDWK
+         BBTuTnw6joramjEwLl/njhxU83ctQyLqjN80SFFTjyIoCoLMLcY8wR/L7rJOijEWvRLa
+         R3sMCrvfp7mjceLiUNf7vrSJav+7KnfFumfqaZsGnoV9PL9UkfIEDMBkS4nnOO4VW54k
+         ewDp0dBPWg1etRzldVARQFFBq+nqNnIzCDrEWjMRPnzb9Pdx6thP2X3UbFjl0E/YPogi
+         /9r4l+XKyjih1CK8zSpb1HaEXKe8e0UPyEYWKYl27KP/gxM9J+b70QmrIgNKkFlyP8kv
+         u5Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UL2ps8yaPj+oovF7HkNPRUPm6/ExhIXpUcFA+LZV1i4=;
+        b=C5Vn1GHxcUtgGOF+KI/m3OHy5N6KEcj04k+mJplG1VPbKmT8KrPl2PNhpcj+Aet3F3
+         TmEvZiiXr4G9dkBtr1lYlWufaEi5/dbgeeAn6qAUhI5YmjxsqD+Z1lYWe5vS6fuQVmXB
+         4KL1AJd5/Ki8fPfekHre6z5AQVckB/qyXR/gHhl6gT7xvWfXUhpBRuYQRUU7bKZW6xkB
+         b+hQ6wN3UrWcqVMSzCDABZFLXHujaffcIIJVR4AsER0sjTNRwtefxtGWqFUoaaIdWUjX
+         xdGB3fdnEaCopF2buEuPYf1RciIgD8Uk79QRZKHNZZRfhScpX/ZkH7Ywy6WYtdnPGq/j
+         wZdg==
+X-Gm-Message-State: AO0yUKXCJTnavviWbniO8R9RUK7ismMPBGswIq5He1Xi0N4HNhhuRcvv
+        1fxQCbMXEQRLIjXEqG7cNeg=
+X-Google-Smtp-Source: AK7set+BLyzHJFtVSyKmZHTYpge+3sc6hQOxe+auHdzmUX0POIcjrnIIsYgxojEj7pDzaw4Rr1Gc8g==
+X-Received: by 2002:a17:902:bd89:b0:19d:1509:5848 with SMTP id q9-20020a170902bd8900b0019d15095848mr2419219pls.29.1677499045263;
+        Mon, 27 Feb 2023 03:57:25 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id w13-20020a170902d70d00b0019aeddce6casm4390573ply.205.2023.02.27.03.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 03:57:24 -0800 (PST)
+From:   Kang Chen <void0red@gmail.com>
+To:     shayne.chen@mediatek.com
+Cc:     sean.wang@mediatek.com, kvalo@kernel.org, nbd@nbd.name,
+        lorenzo@kernel.org, ryder.lee@mediatek.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Kang Chen <void0red@gmail.com>
+Subject: [PATCH] wifi: mt76: add a check of vzalloc in mt7615_coredump_work
+Date:   Mon, 27 Feb 2023 19:57:17 +0800
+Message-Id: <20230227115717.3360755-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Qu+vqTjLVyvhigH7"
-Content-Disposition: inline
-In-Reply-To: <20230227105941.2749193-1-suagrfillet@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,63 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Qu+vqTjLVyvhigH7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vzalloc may fails, dump might be null and will cause
+illegal address access later.
 
-On Mon, Feb 27, 2023 at 06:59:41PM +0800, Song Shuai wrote:
-> This commit 7d2078310cbf ("dt-bindings: arm: move cpu-capacity to a
-> shared loation") updates some references about capacity-dmips-mhz
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+ drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Not requesting a respin for this, but mentioning commit 991994509ee9
-("dt-bindings: riscv: add a capacity-dmips-mhz cpu property") is
-probably more relevant as a justification for this change.
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+index a95602473..73d84c301 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+@@ -2367,6 +2367,9 @@ void mt7615_coredump_work(struct work_struct *work)
+ 	}
+ 
+ 	dump = vzalloc(MT76_CONNAC_COREDUMP_SZ);
++	if (!dump)
++		return;
++
+ 	data = dump;
+ 
+ 	while (true) {
+-- 
+2.34.1
 
-> property in this document.
->=20
-> The list of architectures using capacity-dmips-mhz omits RISC-V, so
-> supplements it here.
->=20
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> ---
->  Documentation/scheduler/sched-capacity.rst                    | 2 +-
->  Documentation/translations/zh_CN/scheduler/sched-capacity.rst | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/scheduler/sched-capacity.rst b/Documentation/s=
-cheduler/sched-capacity.rst
-> index 8e2b8538bc2b..e2c1cf743158 100644
-> --- a/Documentation/scheduler/sched-capacity.rst
-> +++ b/Documentation/scheduler/sched-capacity.rst
-> @@ -258,7 +258,7 @@ Linux cannot currently figure out CPU capacity on its=
- own, this information thus
->  needs to be handed to it. Architectures must define arch_scale_cpu_capac=
-ity()
->  for that purpose.
-> =20
-> -The arm and arm64 architectures directly map this to the arch_topology d=
-river
-> +The arm, arm64, and RISC-V architectures directly map this to the arch_t=
-opology driver
-
-My grep clearly missed this change, thanks.
-For the only part of the patch I understand:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
-
---Qu+vqTjLVyvhigH7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/yacQAKCRB4tDGHoIJi
-0jMuAPUS3U8wKt0dDvUC5JFcU2VrD5RRUuYkkJESmDvd+oMvAPsE9NZjwV40Eqvv
-MRChuLnLfK6qyIngBouG73xf0TMeBQ==
-=v5xR
------END PGP SIGNATURE-----
-
---Qu+vqTjLVyvhigH7--
