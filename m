@@ -2,109 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B1A6A4358
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43196A438B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjB0Nwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S229976AbjB0N7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjB0Nwv (ORCPT
+        with ESMTP id S229535AbjB0N7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:52:51 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D8B173B;
-        Mon, 27 Feb 2023 05:52:49 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id u5so3352714plq.7;
-        Mon, 27 Feb 2023 05:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OFdbUl+sYIQgnR7y3RfQ5RiA+9IP39LqLOl/aV9q3zI=;
-        b=EFzKKKAkCXggSiJtbusq0EjhbQls/15WMHchEJtsAXtQZv6S8jM2EOzCvxSZmKedLF
-         9hC0a2bQRNjcJqTHaJeXS0oRaKpyYPli6Q77Da5dc9MUuLHsaJspvEaJu8Yr9Pfx2GdS
-         5Pwwun7dsIiw1dAGpVat1fo4n6mqs8KGujVGZewSP7A0im+2h807SiaEdGJckMwiZreN
-         egy5h+84pB0n5uIiPYRxSl+BMJxHDP91ClundBtQQVnNnbZKK+JTw9KqE+DCROPMRlbR
-         iF8cQcgq4cO058Y0Jf/12U58OPFTY0V/koRyabAgOuNmTjX4EZf/zOQ81EdJSMLx+Vzn
-         wHZA==
+        Mon, 27 Feb 2023 08:59:18 -0500
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B5E86B7;
+        Mon, 27 Feb 2023 05:59:15 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so7208958wmb.5;
+        Mon, 27 Feb 2023 05:59:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OFdbUl+sYIQgnR7y3RfQ5RiA+9IP39LqLOl/aV9q3zI=;
-        b=uFwKNonBAYMg0juuD8TQZOIC13ClTjaW80sTiDQCuRDAi7ZjWo78GJyXpjtAtDs+oy
-         f4HBumdSuM7czZqNIaoye/2G6nkjj5ujX8AH2opqv1n4UdRV8u8TnBHStdIjUw9s4pDX
-         3wOv4vFRkGJqBR2gL8YrvOpmaYyXbkj/5JgguOlz9KOX3esMVWi+YLcWYQL0dP8TNvbX
-         wx6NAaRtvygZOsfGDLXcL+CLsxXXXb5+kIpUUFswoB/tBIkG2QqCuCP3nETcfh+wW/ic
-         hg1G7PKFfXvfnCNlPf06Chw+J508MrSV4EgnW598VE6WjYyuqP8rjT3SC2p849giWQVy
-         oQ3w==
-X-Gm-Message-State: AO0yUKUHadL1iHZMdYZ/eAgVhjSdbhHg4xl//EboG2tX+n4/21Df+/c0
-        FGxLcbpeglIRMxfOTJTS8Oo=
-X-Google-Smtp-Source: AK7set83IcOdxqMc3dSgY9xvLVXeXFCRBH+C6k4sHnlfwetrp7xrZQdP+3UsQYEDeXn1Sor/ZC4lEg==
-X-Received: by 2002:a17:90b:3148:b0:237:c5cc:15bf with SMTP id ip8-20020a17090b314800b00237c5cc15bfmr8389013pjb.13.1677505968711;
-        Mon, 27 Feb 2023 05:52:48 -0800 (PST)
-Received: from localhost.localdomain ([103.116.245.58])
-        by smtp.gmail.com with ESMTPSA id j191-20020a6380c8000000b004fb681ea0e1sm4115425pgd.84.2023.02.27.05.52.44
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=01vdwOPhnCC3qxNKYSax3Iv0n2lLnfqxMKTZz/Dv3X8=;
+        b=vtxuwgF6GF3tBN/dpnSn9PteSnTcKO0J26e9zPSAGRc0euIM4GMD86ns7omZxtse2r
+         QPLfa6t8xaLLaZXVfDgvNnyp1DwRRqtor12rqwDlc5znSPVle9fFJ2I3m1kzu4ljBurF
+         9hIkVzk8lnYOrMNbMMUvFfgjgstFamoeUvf8pxKp6dvon05CbSo/dJenowCvWTslnLBE
+         hV1q9PLk/FrMYv1mV9TH0gYZZukrG7OMLiLMwKwsd+w9VNLFtHqT6ZhfZJOiwvUeqose
+         1X3wXfrSRgVIXSyJzmbE6vG+zSHZ7vFJwHBzqRUrXrNfN0KEIZPtmUEJFKY2S2OIwB6o
+         CESQ==
+X-Gm-Message-State: AO0yUKVzI45+mwKNkKYsujjU3UogSGEbWKPDswzZNJYebVHog01ML8DP
+        C+LUveQNx0lPw/E3H//r5LY=
+X-Google-Smtp-Source: AK7set9FALw06c5ZOVwEnrXx5yRQRi1uB4uutUrdbpwVDPrIHiHm962pbaXpHwwgqo/rXzJCMI2/pQ==
+X-Received: by 2002:a05:600c:6023:b0:3e7:cee4:f8a with SMTP id az35-20020a05600c602300b003e7cee40f8amr19586526wmb.29.1677506354223;
+        Mon, 27 Feb 2023 05:59:14 -0800 (PST)
+Received: from localhost (fwdproxy-cln-004.fbsv.net. [2a03:2880:31ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id l1-20020a1c7901000000b003e2058a7109sm12674194wme.14.2023.02.27.05.59.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 05:52:48 -0800 (PST)
-From:   void0red <void0red@gmail.com>
-To:     lorenzo.bianconi@redhat.com
-Cc:     angelogioacchino.delregno@collabora.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, kvalo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-wireless@vger.kernel.org,
-        lorenzo@kernel.org, matthias.bgg@gmail.com, nbd@nbd.name,
-        netdev@vger.kernel.org, pabeni@redhat.com, ryder.lee@mediatek.com,
-        sean.wang@mediatek.com, shayne.chen@mediatek.com,
-        void0red@gmail.com
-Subject: [PATCH v2] wifi: mt76: add a check of vzalloc in mt7615_coredump_work
-Date:   Mon, 27 Feb 2023 21:52:41 +0800
-Message-Id: <20230227135241.947052-1-void0red@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <Y/yxGMvBbMGiehC6@lore-desk>
-References: <Y/yxGMvBbMGiehC6@lore-desk>
+        Mon, 27 Feb 2023 05:59:13 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     axboe@kernel.dk, tj@kernel.org, josef@toxicpanda.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     aherrmann@suse.de, mkoutny@suse.com, linux-kernel@vger.kernel.org,
+        hch@lst.de, leit@fb.com
+Subject: [PATCH v2] blk-iocost: Pass disk queue to ioc_refresh_params
+Date:   Mon, 27 Feb 2023 05:56:10 -0800
+Message-Id: <20230227135610.501884-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kang Chen <void0red@gmail.com>
+Current kernel (d2980d8d826554fa6981d621e569a453787472f8) crashes
+when blk_iocost_init for `nvme1` disk.
 
-vzalloc may fails, dump might be null and will cause
-illegal address access later.
+	BUG: kernel NULL pointer dereference, address: 0000000000000050
+	#PF: supervisor read access in kernel mode
+	#PF: error_code(0x0000) - not-present page
 
-Fixes: d2bf7959d9c0 ("mt76: mt7663: introduce coredump support")
-Signed-off-by: Kang Chen <void0red@gmail.com>
+	blk_iocost_init (include/asm-generic/qspinlock.h:128
+			 include/linux/spinlock.h:203
+			 include/linux/spinlock_api_smp.h:158
+			 include/linux/spinlock.h:400
+			 block/blk-iocost.c:2884)
+	ioc_qos_write (block/blk-iocost.c:3198)
+	? kretprobe_perf_func (kernel/trace/trace_kprobe.c:1566)
+	? kernfs_fop_write_iter (include/linux/slab.h:584 fs/kernfs/file.c:311)
+	? __kmem_cache_alloc_node (mm/slab.h:? mm/slub.c:3452 mm/slub.c:3491)
+	? _copy_from_iter (arch/x86/include/asm/uaccess_64.h:46
+			   arch/x86/include/asm/uaccess_64.h:52
+			   lib/iov_iter.c:183 lib/iov_iter.c:628)
+	? kretprobe_dispatcher (kernel/trace/trace_kprobe.c:1693)
+	cgroup_file_write (kernel/cgroup/cgroup.c:4061)
+	kernfs_fop_write_iter (fs/kernfs/file.c:334)
+	vfs_write (include/linux/fs.h:1849 fs/read_write.c:491
+		   fs/read_write.c:584)
+	ksys_write (fs/read_write.c:637)
+	do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+	entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+
+This happens because ioc_refresh_params() is being called without
+a properly initialized ioc->rqos, which is happening later in the callee
+side.
+
+ioc_refresh_params() -> ioc_autop_idx() tries to access
+ioc->rqos.disk->queue but ioc->rqos.disk is NULL, causing the BUG above.
+
+Create a function that is similar to ioc_refresh_params() but where the
+"struct request_queue" could be passed as an explicit argument. This
+function will be called when ioc->rqos.disk->queue could not be trusted.
+
+Fixes: ce57b558604e ("blk-rq-qos: make rq_qos_add and rq_qos_del more useful")
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-v2 -> v1: add Fixes tag
+ block/blk-iocost.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
- drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 3 +++
- 1 file changed, 3 insertions(+)
+---
+Changes in v2:
+- Pass the struct request_queue explictly to ioc_refresh_params()
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-index a95602473..73d84c301 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-@@ -2367,6 +2367,9 @@ void mt7615_coredump_work(struct work_struct *work)
- 	}
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index ff534e9d92dc..28f9b802241d 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -800,7 +800,7 @@ static void ioc_refresh_period_us(struct ioc *ioc)
+ 	ioc_refresh_margins(ioc);
+ }
  
- 	dump = vzalloc(MT76_CONNAC_COREDUMP_SZ);
-+	if (!dump)
-+		return;
+-static int ioc_autop_idx(struct ioc *ioc)
++static int ioc_autop_idx(struct ioc *ioc, struct request_queue *queue)
+ {
+ 	int idx = ioc->autop_idx;
+ 	const struct ioc_params *p = &autop[idx];
+@@ -808,11 +808,11 @@ static int ioc_autop_idx(struct ioc *ioc)
+ 	u64 now_ns;
+ 
+ 	/* rotational? */
+-	if (!blk_queue_nonrot(ioc->rqos.disk->queue))
++	if (!blk_queue_nonrot(queue))
+ 		return AUTOP_HDD;
+ 
+ 	/* handle SATA SSDs w/ broken NCQ */
+-	if (blk_queue_depth(ioc->rqos.disk->queue) == 1)
++	if (blk_queue_depth(queue) == 1)
+ 		return AUTOP_SSD_QD1;
+ 
+ 	/* use one of the normal ssd sets */
+@@ -901,14 +901,19 @@ static void ioc_refresh_lcoefs(struct ioc *ioc)
+ 		    &c[LCOEF_WPAGE], &c[LCOEF_WSEQIO], &c[LCOEF_WRANDIO]);
+ }
+ 
+-static bool ioc_refresh_params(struct ioc *ioc, bool force)
++/*
++ * struct request_queue is required as an argument because ioc->rqos.disk->queue
++ * might not be properly initialized
++ */
++static bool _ioc_refresh_params(struct ioc *ioc, bool force,
++				struct request_queue *queue)
+ {
+ 	const struct ioc_params *p;
+ 	int idx;
+ 
+ 	lockdep_assert_held(&ioc->lock);
+ 
+-	idx = ioc_autop_idx(ioc);
++	idx = ioc_autop_idx(ioc, queue);
+ 	p = &autop[idx];
+ 
+ 	if (idx == ioc->autop_idx && !force)
+@@ -939,6 +944,11 @@ static bool ioc_refresh_params(struct ioc *ioc, bool force)
+ 	return true;
+ }
+ 
++static bool ioc_refresh_params(struct ioc *ioc, bool force)
++{
++	return _ioc_refresh_params(ioc, force, ioc->rqos.disk->queue);
++}
 +
- 	data = dump;
+ /*
+  * When an iocg accumulates too much vtime or gets deactivated, we throw away
+  * some vtime, which lowers the overall device utilization. As the exact amount
+@@ -2880,7 +2890,7 @@ static int blk_iocost_init(struct gendisk *disk)
  
- 	while (true) {
+ 	spin_lock_irq(&ioc->lock);
+ 	ioc->autop_idx = AUTOP_INVALID;
+-	ioc_refresh_params(ioc, true);
++	_ioc_refresh_params(ioc, true, disk->queue);
+ 	spin_unlock_irq(&ioc->lock);
+ 
+ 	/*
 -- 
-2.34.1
+2.30.2
 
