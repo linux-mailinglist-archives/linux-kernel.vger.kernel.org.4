@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF87B6A4BAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BACA6A4BBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjB0TxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 14:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S230076AbjB0Tx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjB0TxH (ORCPT
+        with ESMTP id S229705AbjB0Txm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:53:07 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A30B29149;
-        Mon, 27 Feb 2023 11:52:38 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id n8so2138858qkp.5;
-        Mon, 27 Feb 2023 11:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vSsgZWyIjjhvP3sjrbbVr8r5Vs+/XtNNoaaW0/Jw94k=;
-        b=Jo/gB88R3PcJRGED/liLAt1U7D7EMYrsWbKO/RBG/SEZzZ0x8Bp5CbuTMygLdl3G+n
-         dVG/YQpfGxJBV3tgmSrcPIq+sWuMXE2KwZFXPdYdzo10TPBoshMftmasXgwzTpF2SZwa
-         bEcq3ytV+buZkIX9IkF1HvfEhk1AVmgv1PLYo+yUKnilRZEYbyYbuIaptyVgwdHWcAlV
-         agRuHl0V/K4JCQ9bpvPspfev9ma7ss0FPJ7VaK5WGO8vahGWQaN+a/1MevY7b8P+4/ZN
-         Jd5pwsk/vLKQf4axcDslkqm+hKSxN5AQu5WAyN9T493Ov99czED2G6SXwFHXuCKpFAru
-         4U5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vSsgZWyIjjhvP3sjrbbVr8r5Vs+/XtNNoaaW0/Jw94k=;
-        b=A578MQQTIEm4vH1cQeukYq0+V6/auWPpsLDiD2yq2Q/+aX95wFCtmZ/Q5u+9niL3Td
-         K0IcB7PVwJVS+LvZxiBGENq7gFg1QlQDh0eOgzzdfX9/wbL8eGfl7f0itLwFqShSgT7j
-         bns+SynryLlDhaAis21h8eDrjdDr8J08Pu2BDqOx3nuvvxfBulTAnoTrL6VCyiWCt4Rs
-         gRlo+u+zCcSnXGojRa0KCptnXvThd8hGbhIv3JcqtMzaaqZKn7TAgN5+OwlVeom4pjyL
-         ziJNDcuDFBQn1FPN8ky15jdJO9m4akyL1RU5IN5urXRNRDabI5kcb0RMBBoB5Qc2BDd9
-         MclA==
-X-Gm-Message-State: AO0yUKU7SKBBTYdFSCZZDA4hv6+yQELc6gitsmYoUGGFHZGX7Zo6ogs/
-        Jl+kBaKKCIczp/BfTdO+7+B4n5V+gK+oPm9kozc=
-X-Google-Smtp-Source: AK7set9FhqzZNm4d5fnk3uPKs07IVfxLRaRdUfHyGCSsNLMR9tksR/Whi1dm5kNCEAntRNyZEB9onhn6/SayTbktlT4=
-X-Received: by 2002:a37:745:0:b0:741:5749:283c with SMTP id
- 66-20020a370745000000b007415749283cmr4703325qkh.10.1677527550767; Mon, 27 Feb
- 2023 11:52:30 -0800 (PST)
+        Mon, 27 Feb 2023 14:53:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69B926CEA;
+        Mon, 27 Feb 2023 11:53:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BCC560F1B;
+        Mon, 27 Feb 2023 19:53:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AF4C433EF;
+        Mon, 27 Feb 2023 19:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677527592;
+        bh=FN7q+7LSkEQEP880hk5AYmzKXSJvzUeUVUoebZQ16HA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tYj+uDZDne/XGQiIqDWNdSQzxsv/OBNbwggrKIK5fDT5AdGAdFlLg7n1KODd+NYf+
+         EV1Ne8D2msXpPrcqoSSSSy3os+Z0QHTf/KSQWv7RdFamOk16lGvZcGShDlqko/Rftm
+         1J9NTjHHxoAzBVROVwzTTvqxwX4ykZpGgjxd571UFCAZ+a7WyvJUBlWzQwjzN1nGdQ
+         Na6nld+VvRuyiOj2pQt2uIExSPPVE5JDc3ioC1axM5c3VHqmVmJbtE+J1k37rNYakU
+         HC0hpyzsdMk36kbPalLwJBHb9nM5yvEdz65WHE5FpHQjgr/8HJ6u7QVb2ORaXyTWB3
+         JiVsEeuo8RBXA==
+Date:   Mon, 27 Feb 2023 19:53:07 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] riscv: dts: starfive: jh7110: Add
+ STGCRG/ISPCRG/VOUTCRG nodes
+Message-ID: <Y/0KI0rgqjqMi1Db@spud>
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+ <20230221083323.302471-12-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
-References: <20230224113837.874264-1-jneanne@baylibre.com> <20230224113837.874264-2-jneanne@baylibre.com>
- <Y/iqhsEIvHgnZ+5l@surfacebook> <CADL8D3bm82+=LwYnve04FB2zsSJ6ceKQHycV9oNWoYFiOQnVCA@mail.gmail.com>
-In-Reply-To: <CADL8D3bm82+=LwYnve04FB2zsSJ6ceKQHycV9oNWoYFiOQnVCA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Feb 2023 21:51:54 +0200
-Message-ID: <CAHp75Vc52cqPaTFTvi2E-3Gg6gAsDWc7wSWjn7wMuhcxWqFXBA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
-To:     Jon Cormier <jcormier@criticallink.com>
-Cc:     Jerome Neanne <jneanne@baylibre.com>, linus.walleij@linaro.org,
-        brgl@bgdev.pl, tony@atomide.com, lee@kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zQa043iT/WKT54d9"
+Content-Disposition: inline
+In-Reply-To: <20230221083323.302471-12-xingyu.wu@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 9:20=E2=80=AFPM Jon Cormier <jcormier@criticallink.=
-com> wrote:
-> On Fri, Feb 24, 2023 at 7:16 AM <andy.shevchenko@gmail.com> wrote:
-> > Fri, Feb 24, 2023 at 12:38:36PM +0100, Jerome Neanne kirjoitti:
 
-...
+--zQa043iT/WKT54d9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> > > Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> >
-> > Not sure how to interpet this along with the From line.
-> Are two sign-offs not allowed/expected?  I wrote the initial
-> implementation of this driver and Jerome updated it and is handling
-> submitting it since he did the rest of the TPS65219 drivers.
+On Tue, Feb 21, 2023 at 04:33:23PM +0800, Xingyu Wu wrote:
+> Add STGCRG/ISPCRG/VOUTCRG new node to support JH7110
+> System-Top-Group, Image-Signal-Process and Video-Output
+> clock and reset drivers for the JH7110 RISC-V SoC.
+>=20
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 59 ++++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>=20
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/d=
+ts/starfive/jh7110.dtsi
+> index a5e6fb3ad188..697ab59191a1 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -6,6 +6,7 @@
+> =20
+>  /dts-v1/;
+>  #include <dt-bindings/clock/starfive,jh7110-crg.h>
+> +#include <dt-bindings/power/starfive,jh7110-pmu.h>
+>  #include <dt-bindings/reset/starfive,jh7110-crg.h>
 
-1. Submitter's SoB must be the last SoB in the chain.
-2. Developers also need to be marked with Co-developed-by.
+Please keep these sorted alphabetically, otherwise this *looks* fine to
+me.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+--zQa043iT/WKT54d9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/0KIwAKCRB4tDGHoIJi
+0jvJAQDekG/U779L3Qjyj6JbBBmIo+FDgfYF3Uun3G4Hi9mw+AD/XmgxAMbFNf8a
+ktj4/8QaSfT2gPFgTUOnACOYIdRbDw0=
+=e2v5
+-----END PGP SIGNATURE-----
+
+--zQa043iT/WKT54d9--
