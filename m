@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F053C6A4834
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEAF76A4836
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjB0RiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S229756AbjB0RiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjB0Rha (ORCPT
+        with ESMTP id S229889AbjB0Rhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:37:30 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1556244AC
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:08 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5395c8fc4a1so108715137b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:08 -0800 (PST)
+        Mon, 27 Feb 2023 12:37:33 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87C623C78
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:11 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id ki15-20020a170903068f00b0019ce282dc68so3909227plb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I212iwzKiM4RAh4/x5atSdllFVTlqkGJNP08f3JbnWQ=;
-        b=XBhlBuuWfB0rAIGd6hmSTNeCzmJSeNc8sCljBThxSUCF4xl/MSw7wD8HJnBQqXsjUJ
-         57kJQANXg6fNdWd8Pt4eiSrUjDCyUw1I4L84NqCzMgqp7jq/T8VmsbuNmrFrLa4O4XYU
-         GqAQJ+b6Oca+hy9pxgzol0kd/HIC9ER2wtl/KEZHOhFYwY8HxJnljLvK30eOyvBMk653
-         HhqyRDcfvr4BXt/19NWrR6/WQesJSjC/tN0jtggmEFB14E/QwVd/f4szWEolKHRDFF2I
-         b8hGsHDba//nCM47ED9hrsor6X6kCcWnUTvy8GzRTm8e9DVF7x8YXaJ1E8nG+/bnJf9E
-         7yEg==
+        bh=QWCYeH3rb3vSAFp54Mmrv1+eix/+tyqClZQn+3lumNA=;
+        b=qq9ST5KYd7H0i08HiNSL8c29Xrjl3aIZNo0vqd33ohY7IlOekjqUFmHX1pCbc/0CIB
+         UJYRScXv/uQI5WgiH6m5n3NDzNqXvXc+EBT3Nr8sb84051cUA5rcu7NsZAUPZLQbAT+k
+         L1+D52rxNhib5vRaYFXHr0l0OBrPbhYiKHs0HG8E+v4FWKdNvWFhRWhiPM7+2blQtGKB
+         AQqKpecJF/PSLRs/Iu3OWc/90nRfqSr4OY1HTu201oV1jp1/8gN3EH/qUSvYipkLdMaB
+         KA1JreUYCECV/wYDbpy6/KFPjd6XlpEX5mJczzYRoBrzVCeQlTDt7q+I0gm0goYKe+3A
+         HbFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I212iwzKiM4RAh4/x5atSdllFVTlqkGJNP08f3JbnWQ=;
-        b=E4AukLGt3jKn6naeNishIxs21cVl7GqQC4bcYfUiXSNZ4qZGcmAV1YZRmOUku2ZdUV
-         xk3L5MeJlyOfRMO8PgwCYzcfe2xzLAN6HhDelg3suOAJIyP5TjeP0ofKPKtetCiIKU1V
-         Xmlv3frGoV/NvXPMN56eapgWNRWMnAf2u46k73BgZhLL7s0a1Eonr+yNny4+Phlj+hr1
-         nB9jxzMRc60zKuInnE9Tw/YJpZYaPt+tH349k9kyGlhEY2it+8KmLcZ9oFUZvu9cRsbf
-         cJkyWN4SCcq2IUfGIWDAb4CwtqY/rfkwijF88Kqmko45STvOe1nXiPoWquCTzuwZeBcT
-         TiLQ==
-X-Gm-Message-State: AO0yUKXEPbglgUTMRqRDjCRkX6/xkTbplYM95SSod1Q+7q22d+wbbqXl
-        PaVRcz5yJYUXnPNWp6QMg2drepbckrs=
-X-Google-Smtp-Source: AK7set92Gr75A5uaM9VLoSN3m2+g8CdJzSD2poMBi0hZE65OwRnSrd/3zaVdEb4P76h2ChlMWirB5h4UQZs=
+        bh=QWCYeH3rb3vSAFp54Mmrv1+eix/+tyqClZQn+3lumNA=;
+        b=OICOCI6F+eOIk+OzMnv/sWdUs/hAi3kIxg+VtxYshKA4wgIqL1HIBacsnVSPyOi1Ma
+         LF/0WwguV/8ijYWzV2rWn/PPDSdDpxwCItI45SfFK5dBnKpsyiqlYFThRvrz2Qjv6LxN
+         wb+vwpLcTMKbU2gddyDtlOU8Q0FNLCWsMvkwTu3OOW3S+Ifl+Ics78n+LAY7K36TdTtW
+         VQcQKqHOYoJC8eODI2hFQqxZmoIAXGy228JRFd4Xz9wc5tEak/MUaFspcppJgDeKELOw
+         LX8fDbJsInkccqCzLmMx0QYkFOrIEi0wYsEfZVZxgGx0huxbOqFIxM2LNtW/W23Sy0sj
+         ISXg==
+X-Gm-Message-State: AO0yUKUKJMpzEdLYsFwuwB7UyC48LWdEqp/toH0SLeCa3t+8o7Rsvt5o
+        WxBoXdxftrzV+MZN1jy6PBgR5yw6SFA=
+X-Google-Smtp-Source: AK7set8jO949nwq1qPTfiOwF5d/NxOGl9PwUBICmy0J7iLD+CPMrX0ZITRyhhJB1FHKtenUKzwzPrWF2iBQ=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:e1f6:21d1:eead:3897])
- (user=surenb job=sendgmr) by 2002:a5b:a4b:0:b0:a06:5ef5:3a82 with SMTP id
- z11-20020a5b0a4b000000b00a065ef53a82mr7473143ybq.5.1677519427726; Mon, 27 Feb
- 2023 09:37:07 -0800 (PST)
-Date:   Mon, 27 Feb 2023 09:36:12 -0800
+ (user=surenb job=sendgmr) by 2002:a17:903:2682:b0:199:56f2:3fc4 with SMTP id
+ jf2-20020a170903268200b0019956f23fc4mr6277864plb.8.1677519430200; Mon, 27 Feb
+ 2023 09:37:10 -0800 (PST)
+Date:   Mon, 27 Feb 2023 09:36:13 -0800
 In-Reply-To: <20230227173632.3292573-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230227173632.3292573-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227173632.3292573-14-surenb@google.com>
-Subject: [PATCH v4 13/33] mm: mark VMA as being written when changing vm_flags
+Message-ID: <20230227173632.3292573-15-surenb@google.com>
+Subject: [PATCH v4 14/33] mm/mmap: move vma_prepare before vma_adjust_trans_huge
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -85,60 +85,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updates to vm_flags have to be done with VMA marked as being written for
-preventing concurrent page faults or other modifications.
+vma_prepare() acquires all locks required before VMA modifications.
+Move vma_prepare() before vma_adjust_trans_huge() so that VMA is locked
+before any modification.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h | 10 +++++-----
+ mm/mmap.c | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bbad5d4fa81b..3d5e8666892d 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -726,28 +726,28 @@ static inline void vm_flags_init(struct vm_area_struct *vma,
- static inline void vm_flags_reset(struct vm_area_struct *vma,
- 				  vm_flags_t flags)
- {
--	mmap_assert_write_locked(vma->vm_mm);
-+	vma_start_write(vma);
- 	vm_flags_init(vma, flags);
- }
+diff --git a/mm/mmap.c b/mm/mmap.c
+index c234443ee24c..92893d86c0af 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -683,12 +683,12 @@ int vma_expand(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 	if (vma_iter_prealloc(vmi))
+ 		goto nomem;
  
- static inline void vm_flags_reset_once(struct vm_area_struct *vma,
- 				       vm_flags_t flags)
- {
--	mmap_assert_write_locked(vma->vm_mm);
-+	vma_start_write(vma);
- 	WRITE_ONCE(ACCESS_PRIVATE(vma, __vm_flags), flags);
- }
++	vma_prepare(&vp);
+ 	vma_adjust_trans_huge(vma, start, end, 0);
+ 	/* VMA iterator points to previous, so set to start if necessary */
+ 	if (vma_iter_addr(vmi) != start)
+ 		vma_iter_set(vmi, start);
  
- static inline void vm_flags_set(struct vm_area_struct *vma,
- 				vm_flags_t flags)
- {
--	mmap_assert_write_locked(vma->vm_mm);
-+	vma_start_write(vma);
- 	ACCESS_PRIVATE(vma, __vm_flags) |= flags;
- }
+-	vma_prepare(&vp);
+ 	vma->vm_start = start;
+ 	vma->vm_end = end;
+ 	vma->vm_pgoff = pgoff;
+@@ -723,8 +723,8 @@ int vma_shrink(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		return -ENOMEM;
  
- static inline void vm_flags_clear(struct vm_area_struct *vma,
- 				  vm_flags_t flags)
- {
--	mmap_assert_write_locked(vma->vm_mm);
-+	vma_start_write(vma);
- 	ACCESS_PRIVATE(vma, __vm_flags) &= ~flags;
- }
+ 	init_vma_prep(&vp, vma);
+-	vma_adjust_trans_huge(vma, start, end, 0);
+ 	vma_prepare(&vp);
++	vma_adjust_trans_huge(vma, start, end, 0);
  
-@@ -768,7 +768,7 @@ static inline void __vm_flags_mod(struct vm_area_struct *vma,
- static inline void vm_flags_mod(struct vm_area_struct *vma,
- 				vm_flags_t set, vm_flags_t clear)
- {
--	mmap_assert_write_locked(vma->vm_mm);
-+	vma_start_write(vma);
- 	__vm_flags_mod(vma, set, clear);
- }
+ 	if (vma->vm_start < start)
+ 		vma_iter_clear(vmi, vma->vm_start, start);
+@@ -994,12 +994,12 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ 	if (vma_iter_prealloc(vmi))
+ 		return NULL;
  
+-	vma_adjust_trans_huge(vma, vma_start, vma_end, adj_next);
+ 	init_multi_vma_prep(&vp, vma, adjust, remove, remove2);
+ 	VM_WARN_ON(vp.anon_vma && adjust && adjust->anon_vma &&
+ 		   vp.anon_vma != adjust->anon_vma);
+ 
+ 	vma_prepare(&vp);
++	vma_adjust_trans_huge(vma, vma_start, vma_end, adj_next);
+ 	if (vma_start < vma->vm_start || vma_end > vma->vm_end)
+ 		vma_expanded = true;
+ 
+@@ -2198,10 +2198,10 @@ int __split_vma(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 	if (new->vm_ops && new->vm_ops->open)
+ 		new->vm_ops->open(new);
+ 
+-	vma_adjust_trans_huge(vma, vma->vm_start, addr, 0);
+ 	init_vma_prep(&vp, vma);
+ 	vp.insert = new;
+ 	vma_prepare(&vp);
++	vma_adjust_trans_huge(vma, vma->vm_start, addr, 0);
+ 
+ 	if (new_below) {
+ 		vma->vm_start = addr;
+@@ -2910,9 +2910,9 @@ static int do_brk_flags(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		if (vma_iter_prealloc(vmi))
+ 			goto unacct_fail;
+ 
+-		vma_adjust_trans_huge(vma, vma->vm_start, addr + len, 0);
+ 		init_vma_prep(&vp, vma);
+ 		vma_prepare(&vp);
++		vma_adjust_trans_huge(vma, vma->vm_start, addr + len, 0);
+ 		vma->vm_end = addr + len;
+ 		vm_flags_set(vma, VM_SOFTDIRTY);
+ 		vma_iter_store(vmi, vma);
 -- 
 2.39.2.722.g9855ee24e9-goog
 
