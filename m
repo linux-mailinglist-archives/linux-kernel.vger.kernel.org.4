@@ -2,147 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4547C6A43B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FEE6A43CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjB0OH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S230252AbjB0OJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjB0OHz (ORCPT
+        with ESMTP id S230148AbjB0OJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:07:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA821C7E3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677506825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aFTvFQ3q5aWSqvyw9AelhhhkIt6I0O9TBRHfypnLJlQ=;
-        b=GEcndyobv9GWtT9DftMcqy+RVDZRHvLBaiVaAtQobRey6fEObKRbXNVtWyBX0Fp8xPS74b
-        osEQO+vJJzJ4Oj1pLgA52/KFbxJIniJrjFvRFa6Qexk2VJbAm2SRLvMKi5kU8ZVFlN6rBb
-        0mCfpP7j8wRb4gzwZgQjaWOWGiWnccw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-319-RTsNvR7HOH2bsdSAc6baxQ-1; Mon, 27 Feb 2023 09:07:03 -0500
-X-MC-Unique: RTsNvR7HOH2bsdSAc6baxQ-1
-Received: by mail-wm1-f70.google.com with SMTP id y16-20020a1c4b10000000b003dd1b5d2a36so2229306wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:07:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aFTvFQ3q5aWSqvyw9AelhhhkIt6I0O9TBRHfypnLJlQ=;
-        b=5kcYGzc4YhWd7UPTk06gVzAhCNisUHOowY08HBU9GmUA6FP9EQ4s/WeaeYjQH2OY/O
-         9FIzdBuhHqtWFw99MD/4Ksp01g1e/RISOI4J9q9tcciqlHTfZgSGT86qLCAhowiJSuEU
-         fB9jGoZKRb1dP1KqBftxRlL3Q/msLizPLEM69o4M/ZMGp+O3tyId+gWJNxB2MzbVyppE
-         ZgS/gxWJFg2AHHve/8ugpJFDQ8uFcGd0wyaCN30G7GMHnA6TYN+TvDGzbLxYZ+IAi6Z3
-         1HRQ/rnZN06fwEcRZc6JUsKLSvB6fvbNGq4J74bXVhfyTCUPsLyF4/4uRmio2guPnw7l
-         e5XQ==
-X-Gm-Message-State: AO0yUKWD9DDetmJBcfqjh58ej61tDFJYwVnuz8iXBHjYkNVSM+Yiu/sL
-        xQtEiCC0u9w/QCDuCIIXTBy06t1G07bAKosdI6RwqDlqkj20GXjgr86mpbxcPm0YvQ6rPgFCAYH
-        gVsoQtaZUscqyosGje56apYaB
-X-Received: by 2002:a5d:4f89:0:b0:2c7:1d70:561 with SMTP id d9-20020a5d4f89000000b002c71d700561mr9516591wru.45.1677506821182;
-        Mon, 27 Feb 2023 06:07:01 -0800 (PST)
-X-Google-Smtp-Source: AK7set9ec/Yueab8Bvk6eJi8LCRz4+aeuNEBluM/tCSwA288dNuu0Nq41jbKDNy7uFxhcbonKrPSew==
-X-Received: by 2002:a5d:4f89:0:b0:2c7:1d70:561 with SMTP id d9-20020a5d4f89000000b002c71d700561mr9516553wru.45.1677506820885;
-        Mon, 27 Feb 2023 06:07:00 -0800 (PST)
-Received: from localhost (net-188-216-77-84.cust.vodafonedsl.it. [188.216.77.84])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056000118900b002c794495f6fsm6993704wrx.117.2023.02.27.06.07.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 06:07:00 -0800 (PST)
-Date:   Mon, 27 Feb 2023 15:06:58 +0100
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     void0red <void0red@gmail.com>
-Cc:     angelogioacchino.delregno@collabora.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, kvalo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-wireless@vger.kernel.org,
-        lorenzo@kernel.org, matthias.bgg@gmail.com, nbd@nbd.name,
-        netdev@vger.kernel.org, pabeni@redhat.com, ryder.lee@mediatek.com,
-        sean.wang@mediatek.com, shayne.chen@mediatek.com
-Subject: Re: [PATCH v2] wifi: mt76: add a check of vzalloc in
- mt7615_coredump_work
-Message-ID: <Y/y5Asxw3T3m4jCw@lore-desk>
-References: <Y/yxGMvBbMGiehC6@lore-desk>
- <20230227135241.947052-1-void0red@gmail.com>
+        Mon, 27 Feb 2023 09:09:01 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C933596
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:08:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YjGPAr6Sp29E62Gk0cXJTGmExlUuZDb0WBWJO8kQCuw=; b=rDzRWuB3K6/CfENKKSefj7FQs7
+        vOMngL626grQnQhzz6v8XOBS/NAX1dowYD4mj51VR1h4D9jV+ghSrzrA3Azz5iU+FWQSLqpC+sW+C
+        3FaMM0OfQ3C76ZVsDoKFdrhmQWcuAtgt/qX08gYGDobT9SRY9SEMRC61echfxQUdSDXALiOLa/5Sy
+        dO/9jHund/hF0TCrtn14uAkws/cYTAXDVcEHlXk7z+XY5tT+biij4E3lH5Bf96W47Ksxhd9/vkY4r
+        QBDyEgWWlzZ6ws5lnwWPt7HxmIRWgrIg90fGQuOvl0WlPuPrtuXVxYfUCD5q1P+iArF8D2+UBhO0y
+        iq6ohQGg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pWeBH-00EF0T-1U;
+        Mon, 27 Feb 2023 14:08:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 599EC30030B;
+        Mon, 27 Feb 2023 15:08:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1BE41235D5684; Mon, 27 Feb 2023 15:08:42 +0100 (CET)
+Date:   Mon, 27 Feb 2023 15:08:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: vmlinux.o: warning: objtool: mptscsih_abort+0x7f4: unreachable
+ instruction
+Message-ID: <Y/y5aucdGL7U+W7a@hirez.programming.kicks-ass.net>
+References: <202302271743.78emit6I-lkp@intel.com>
+ <Y/ykNfK+1G8ZNYSU@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="suqa0cLxZu8I2O6i"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227135241.947052-1-void0red@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y/ykNfK+1G8ZNYSU@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023 at 12:38:13PM +0000, Mark Rutland wrote:
+> [adding Peter and Josh, given objtool]
+> 
+> On Mon, Feb 27, 2023 at 05:28:53PM +0800, kernel test robot wrote:
+> > Hi Mark,
+> > 
+> > FYI, the error/warning still remains.
+> > 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   f3a2439f20d918930cc4ae8f76fe1c1afd26958f
+> > commit: c27cd083cfb9d392f304657ed00fcde1136704e7 Compiler attributes: GCC cold function alignment workarounds
+> > date:   5 weeks ago
+> > config: x86_64-randconfig-r026-20230227 (https://download.01.org/0day-ci/archive/20230227/202302271743.78emit6I-lkp@intel.com/config)
+> > compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> > reproduce (this is a W=1 build):
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c27cd083cfb9d392f304657ed00fcde1136704e7
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout c27cd083cfb9d392f304657ed00fcde1136704e7
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         make W=1 O=build_dir ARCH=x86_64 olddefconfig
+> >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202302271743.78emit6I-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> vmlinux.o: warning: objtool: mptscsih_abort+0x7f4: unreachable instruction
 
---suqa0cLxZu8I2O6i
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > 07ef  2fb7bff:	e8 00 00 00 00       	call   2fb7c04 <mptscsih_abort+0x7f4>	2fb7c00: R_X86_64_PLT32	mpt_halt_firmware-0x4
+> > 07f4  2fb7c04:	e9 75 fb ff ff       	jmp    2fb777e <mptscsih_abort+0x36e>
 
-> From: Kang Chen <void0red@gmail.com>
->=20
-> vzalloc may fails, dump might be null and will cause
-> illegal address access later.
->=20
-> Fixes: d2bf7959d9c0 ("mt76: mt7663: introduce coredump support")
-> Signed-off-by: Kang Chen <void0red@gmail.com>
-> ---
-> v2 -> v1: add Fixes tag
->=20
->  drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/ne=
-t/wireless/mediatek/mt76/mt7615/mac.c
-> index a95602473..73d84c301 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-> +++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-> @@ -2367,6 +2367,9 @@ void mt7615_coredump_work(struct work_struct *work)
->  	}
-> =20
->  	dump =3D vzalloc(MT76_CONNAC_COREDUMP_SZ);
-> +	if (!dump)
-> +		return;
-> +
->  	data =3D dump;
-> =20
->  	while (true) {
-> --=20
-> 2.34.1
->=20
-
-revieweing the code I guess the right approach would be the one used in
-mt7921_coredump_work():
-- free pending skbs
-- not run dev_coredumpv()
-
-What do you think?
-
-Regards,
-Lorenzo
-
---suqa0cLxZu8I2O6i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY/y5AgAKCRA6cBh0uS2t
-rNvNAQChxct9I9hvxziffNgrIyEvdXvuQxbOt0yeiX8oblnPWwEA4qXx39acNsg6
-Q0MSG7S8eufwOP2IXUXhOgXTb9tFZQw=
-=ErB1
------END PGP SIGNATURE-----
-
---suqa0cLxZu8I2O6i--
+this is one of those noreturn things again... objtool was clever enough
+to figure out that mpt_halt_firmware() does not return (all it's control
+flow ends in panic()) and hence it 'knows' that +7f4 will not be
+executed. But GCC didn't figure out the same.
 
