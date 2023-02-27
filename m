@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BAF6A4F05
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDACC6A4F08
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjB0W4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S229676AbjB0W6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjB0W4P (ORCPT
+        with ESMTP id S229486AbjB0W6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:56:15 -0500
+        Mon, 27 Feb 2023 17:58:02 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589D828858;
-        Mon, 27 Feb 2023 14:56:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249ED83CD;
+        Mon, 27 Feb 2023 14:58:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5DC660ED5;
-        Mon, 27 Feb 2023 22:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82AA7C433EF;
-        Mon, 27 Feb 2023 22:56:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6A1360EAC;
+        Mon, 27 Feb 2023 22:58:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8F9C433D2;
+        Mon, 27 Feb 2023 22:57:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677538572;
-        bh=dpHi37mfVvbBGOpxpxT24SQip4gsSfxZgt5gs1idsfE=;
+        s=k20201202; t=1677538680;
+        bh=DOn3IqzBFJ3kATuBFE3wlApyPVODRfIIpiPTqiQJYuI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EmP+nTqncuAUTTbmpiWanrCN4o0CN+b3vmSDO/YDnkocYGthdPgr/iBiWWLahd9yu
-         3EA64PabxwXev2sxjFjAIAvjALkA81Br8j/k/OA9c4i0itfJUpVcdT+d8ac5h2b7R3
-         gffZruDbCuWlb3ZeLJiRH41WJOakKk97RkEdTUG+ThEeE9qqj9sQXoft1ggCp3aBsa
-         Iag6Ed8VkcFOWBSjJI+eBp5iCcqOpcatcjS+fktKVWy9ish10CDSRDs5Ck2WiOi0v4
-         P9xrhuVrm43rkYHyUYq0vB7/y+qjkYsX0tGJpXvkM6UZu1FVLMmYHPHqAgHnQoMRr0
-         4tQQoU4CANk1Q==
-Date:   Mon, 27 Feb 2023 22:56:07 +0000
+        b=hEq+oLArpAqLo/uoxoF59arOtl6M6jRIvJqAuX3WHRl4PLpQZA6Z0rPAPoE+nzGjt
+         83yytWT6c9k7ck/YuF7rBbApyD7/z9f4o8W7ywZl333hGqtzFQHEp4NXExPNVNJGP6
+         Huv1fuKuBYUTL6HOIKXDY+N28CP61hkUMMaxPou+tmNLerpTVD5IW3e31hAzhbJ3py
+         Jg6Zk0O4MNbT++ZEdVAHyXc8HI8m5QdiPrLfTgEa9ut+rkZ63JP5DcjYUJQGOz8P6+
+         /iIckHedliE5RZmBfoD+/54BcryPhAPw1z4sxx86V8dm/zX1IS/lbmgcQxf3MWs4fv
+         OeLcMXmk+J/dw==
+Date:   Mon, 27 Feb 2023 22:57:55 +0000
 From:   Conor Dooley <conor@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Evan Green <evan@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, heiko@sntech.de,
+        slewis@rivosinc.com, vineetg@rivosinc.com,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] PolarFire SoC Auto Update Support
-Message-ID: <Y/01B4hCOs9JPfR8@spud>
-References: <20230217164023.14255-1-conor@kernel.org>
- <Y/ht1eHgtRrLxIhC@yilunxu-OptiPlex-7050>
- <Y/h1KFGSw13OabYw@wendy>
- <21bebf9d-eb27-5607-b0a9-274c46ef8aa3@intel.com>
- <Y/0r1aR6Wik2KYBd@spud>
- <cc6176cb-6792-ef11-f42a-d2d5b12d04b4@intel.com>
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 4/7] dt-bindings: Add RISC-V misaligned access
+ performance
+Message-ID: <Y/01c7sZ9ri5i8ao@spud>
+References: <20230221190858.3159617-1-evan@rivosinc.com>
+ <20230221190858.3159617-5-evan@rivosinc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ddJkjCSxr4LPX3qv"
+        protocol="application/pgp-signature"; boundary="YuphDP/Rndy0HYOx"
 Content-Disposition: inline
-In-Reply-To: <cc6176cb-6792-ef11-f42a-d2d5b12d04b4@intel.com>
+In-Reply-To: <20230221190858.3159617-5-evan@rivosinc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,91 +63,88 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ddJkjCSxr4LPX3qv
+--YuphDP/Rndy0HYOx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 27, 2023 at 02:42:30PM -0800, Russ Weight wrote:
->=20
->=20
-> On 2/27/23 14:16, Conor Dooley wrote:
-> > Hey Russ,
-> >
-> > On Mon, Feb 27, 2023 at 02:04:36PM -0800, Russ Weight wrote:
-> >> On 2/24/23 00:28, Conor Dooley wrote:
-> >>> On Fri, Feb 24, 2023 at 03:57:09PM +0800, Xu Yilun wrote:
-> >>>> On 2023-02-17 at 16:40:17 +0000, Conor Dooley wrote:
-> >>>>> This patchset adds support for the "Auto Update" feature on PolarFi=
-re
-> >>>>> SoC that allows for writing an FPGA bistream to the SPI flash conne=
-cted
-> >>>>> to the system controller.
-> >>>> I haven't fully checked the patches yet, just some quick comments:
-> >>>>
-> >>>> Since this feature is just to R/W the flash, and would not affect the
-> >>>> runtime FPGA region, I don't think an FPGA manager is actually neede=
-d.
-> >>>> Why not just use the MTD uAPI? There is a set of exsiting MTD uAPI &
-> >>>> MTD tool if I remember correctly.
-> >>> A lack of interest in opening up the system controller to userspace!
-> >>> You're right in that the writing of the image can be done that way, a=
-nd
-> >>> while I was testing I used the userspace bits of mtd along the way - =
-but
-> >>> for validating that the image we are writing we rely on the system
-> >>> controller.
-> >>> I'm really not interested in exposing the system controller's
-> >>> functionality, especially the bitstream manipulation parts, to usersp=
-ace
-> >>> due to the risk of input validation bugs, so at least that side of
-> >>> things should remain in the kernel.
-> >>> I suppose I could implement something custom in drivers/soc that does
-> >>> the validation only, and push the rest out to userspace. Just seemed
-> >>> fitting to do the whole lot in drivers/fpga.
-> >> In case you haven't already looked at the new firmware-upload
-> >> support in the firmware-loader, I'll give you some references
-> >> here to see if it fit you needs. This would only support the
-> >> write (not the read) but it would allow the controller to do
-> >> validation on the write.
-> >>
-> >> The is the cover letter which shows a usage example:
-> >> https://lore.kernel.org/lkml/20220421212204.36052-1-russell.h.weight@i=
-ntel.com/
-> >>
-> >> And this is a pointer to the latest documentation for it:
-> >> https://docs.kernel.org/driver-api/firmware/fw_upload.html
-> >>
-> >> The only current user is: drivers/fpga/intel-m10-bmc-sec-update.c
-> > Sounds interesting, I shall go and take a look. Just quickly, when you
-> > say it wouldn't support the read, what exactly do you mean?
-> > The only read that I am really interested in doing is reading the first
-> > 1K of flash as I need to RMW it, but I don't think that that's what you
-> > mean.
-> > Do you mean that I would not be able to dump the firmware using your
-> > fw_upload interface? If so, that's an acceptable constraint IMO.
->=20
-> Yes - I mean that you couldn't dump the firmware image from userspace
-> using the fw_upload interface. The sysfs interface allows you to read
-> and write a temporary buffer, but once you "echo 0 > loading", there
-> is no sysfs interface associated with the firmware-loader that would
-> allow you to read the image from flash. Your controller actually does
-> the writes, so RMW in that context is fine.
+Hey Evan,
 
-Ahh cool. I don't really care about dumping the firmware via such a
-mechanism, so that sounds good to me.
-I'll check out your approach, the immediate thought is that it sounds
-suitable to my use case, so thanks!
+On Tue, Feb 21, 2023 at 11:08:55AM -0800, Evan Green wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+>=20
+> This key allows device trees to specify the performance of misaligned
+> accesses to main memory regions from each CPU in the system.
 
---ddJkjCSxr4LPX3qv
+Could you fold some of Palmer's explanation for why this must be in the
+devicetree? Think this is where he explained it:
+https://lore.kernel.org/all/mhng-8736b349-e27a-4372-81ca-3a25d2ec1e94@palme=
+r-ri-x1c9/
+
+>=20
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Evan Green <evan@rivosinc.com>
+> ---
+>=20
+> Changes in v3:
+>  - Added | to description: to make dt-checker happy.
+>=20
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
+ation/devicetree/bindings/riscv/cpus.yaml
+> index c6720764e765..f79e9e5c5ee9 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -85,6 +85,21 @@ properties:
+>      $ref: "/schemas/types.yaml#/definitions/string"
+>      pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
+> =20
+> +  riscv,misaligned-access-performance:
+> +    description: |
+> +      Identifies the performance of misaligned memory accesses to main m=
+emory
+> +      regions.  There are three flavors of unaligned access performance:=
+ "emulated"
+> +      means that misaligned accesses are emulated via software and thus
+> +      extremely slow, "slow" means that misaligned accesses are supporte=
+d by
+> +      hardware but still slower that aligned accesses sequences, and "fa=
+st"
+
+s/that/than/
+
+> +      means that misaligned accesses are as fast or faster than the
+> +      cooresponding aligned accesses sequences.
+
+s/cooresponding/corresponding/
+
+Thanks,
+Conor.
+
+> +    $ref: "/schemas/types.yaml#/definitions/string"
+> +    enum:
+> +      - emulated
+> +      - slow
+> +      - fast
+> +
+>    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
+>    timebase-frequency: false
+> =20
+> --=20
+> 2.25.1
+>=20
+
+--YuphDP/Rndy0HYOx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/01BgAKCRB4tDGHoIJi
-0nOzAQCVzNJeksXU+zI1ruvAN/DTsh07Pw5PSCFafnRQ3Cg2zwD/XfUj6xyLgU5H
-ucBsaFA67jnQdJVy7N+LZx7RyDGalQA=
-=gW8R
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/01cwAKCRB4tDGHoIJi
+0nAeAQDSm+Ztzo3Tbf7N3R9oO20Sh+ylQ2JQ5FZnSgknEmJYYwD+IOIvf5vpBkfu
+PcnfnXXl8a2pwxomgK/WBgQbomX0IQg=
+=KSgx
 -----END PGP SIGNATURE-----
 
---ddJkjCSxr4LPX3qv--
+--YuphDP/Rndy0HYOx--
