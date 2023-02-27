@@ -2,303 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EE26A47B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9A26A47B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjB0RRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S229968AbjB0RRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjB0RRO (ORCPT
+        with ESMTP id S229891AbjB0RRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:17:14 -0500
-Received: from out-33.mta1.migadu.com (out-33.mta1.migadu.com [95.215.58.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F9B1DBA6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:17:12 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677518229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=i9zSXzAdjq87uOVavd3XUT89sHIO+bwDfGwXckE+rVI=;
-        b=ZL6S5E+rmLgkemFRx5NmNh/pkMtGRent6m1mnlGFVfXv1cO/N4viUTJtIhd4KTrtJ/4nqd
-        RFeu4zlYN9zbntBxYG2bSDwTgZqyYzWRNdyVtzQmNo/Kgz+fV+Rg8CXMSbJGGnjITj5BYI
-        F9r9Sa9MmhoAWbxCsHLlz8yAshrKVfI=
-From:   andrey.konovalov@linux.dev
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH] kcov: improve documentation
-Date:   Mon, 27 Feb 2023 18:17:03 +0100
-Message-Id: <0b5efd70e31bba7912cf9a6c951f0e76a8df27df.1677517724.git.andreyknvl@google.com>
+        Mon, 27 Feb 2023 12:17:38 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ADF233C2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:17:32 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pWh7n-0005Ah-59; Mon, 27 Feb 2023 18:17:19 +0100
+Message-ID: <5a05e758-3c26-875a-af3a-6d7c8ddde653@leemhuis.info>
+Date:   Mon, 27 Feb 2023 18:17:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC] arm64/vmalloc: use module region only for
+ module_alloc() if CONFIG_RANDOMIZE_BASE is set
+Content-Language: en-US, de-DE
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Liu Shixin <liushixin2@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Will Deacon <will@kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20221227092634.445212-1-liushixin2@huawei.com>
+ <b93ec55c-f6f0-274a-e7d6-edb419b4be8a@huawei.com>
+ <20230129134147.f19ca0641f1133f3e3bc185b@linux-foundation.org>
+ <20230131150644.GA2605@willie-the-truck>
+ <20230131150750.GB2605@willie-the-truck>
+ <CAMj1kXGaxehOcrQqFZNA+C3dTk_H8sBr_1wsN3_KN82nXVaG_g@mail.gmail.com>
+ <20230207112940.GA12147@willie-the-truck>
+ <8c287b1d-476c-7b00-27f6-76c3a1a5fd46@leemhuis.info>
+ <CAMj1kXGWEaQXoKj=DzG9XpVGi4t5zfE-RSG0BodVL-b47nsj-A@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAMj1kXGWEaQXoKj=DzG9XpVGi4t5zfE-RSG0BodVL-b47nsj-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1677518252;838407aa;
+X-HE-SMSGID: 1pWh7n-0005Ah-59
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
 
-Improve KCOV documentation:
 
-- Use KCOV instead of kcov, as the former is more widely-used.
+On 27.02.23 17:14, Ard Biesheuvel wrote:
+> On Mon, 27 Feb 2023 at 16:08, Linux regression tracking (Thorsten
+> Leemhuis) <regressions@leemhuis.info> wrote:
+>>
+>> [CCing the regression list, as it should be in the loop for regressions:
+>> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+>>
+>> On 07.02.23 12:29, Will Deacon wrote:
+>>> On Tue, Jan 31, 2023 at 05:03:32PM +0100, Ard Biesheuvel wrote:
+>>>> On Tue, 31 Jan 2023 at 16:07, Will Deacon <will@kernel.org> wrote:
+>>>>> On Tue, Jan 31, 2023 at 03:06:44PM +0000, Will Deacon wrote:
+>>>>>> On Sun, Jan 29, 2023 at 01:41:47PM -0800, Andrew Morton wrote:
+>>>>>>> On Sun, 29 Jan 2023 10:44:31 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
+>>>>>>>> On 2022/12/27 17:26, Liu Shixin wrote:
+>>>>>>>>> After I add a 10GB pmem device, I got the following error message when
+>>>>>>>>> insert module:
+>>>>>>>>>
+>>>>>>>>>  insmod: vmalloc error: size 16384, vm_struct allocation failed,
+>>>>>>>>>  mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
+>>>>>>>>>
+>>>>>>>>> If CONFIG_RANDOMIZE_BASE is set, the module region can be located in the
+>>>>>>>>> vmalloc region entirely. Although module_alloc() can fall back to a 2GB
+>>>>>>>>> window if ARM64_MODULE_PLTS is set, the module region is still easily
+>>>>>>>>> exhausted because the module region is located at bottom of vmalloc region
+>>>>>>>>> and the vmalloc region is allocated from bottom to top.
+>>>>>>>>>
+>>>>>>>>> Skip module region if not calling from module_alloc().
+>>>>>>>
+>>>>>>> I'll assume this is for the arm tree.
+>>>>>>>
+>>>>>>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
+>>>>>>
+>>>>>> This looks like the same issue previously reported at:
+>>>>>>
+>>>>>> https://lore.kernel.org/all/e6a804de-a5f7-c551-ffba-e09d04e438fc@hisilicon.com/
+>>>>>>
+>>>>>> where Ard had a few suggestions but, afaict, they didn't help.
+>>>>>>
+>>>>
+>>>> Thanks for the cc.
+>>>>
+>>>> So this is a bit clunky, and I wonder whether we wouldn't be better
+>>>> off just splitting the vmalloc region into two separate regions: one
+>>>> for the kernel and modules, and one for everything else. That way, we
+>>>> lose one bit of entropy in the randomized placement, but the default
+>>>> 48-bit VA space is vast anway, and even on 39-bit VA configs (such as
+>>>> Android), I seriously doubt that we come anywhere close to exhausting
+>>>> the vmalloc space today.
+>>>
+>>> That sounds like a good idea to me.
+>>>
+>>> Liu Shixin -- do you think you could have a go at implementing Ard's
+>>> suggestion instead?
+>>
+>> Liu Shixin, did you ever look into realizing this idea?
+>>
+>> Or was some progress already made and I just missed it?
+> 
+> This patch
+> 
+> https://lore.kernel.org/all/20230223204101.1500373-1-ardb@kernel.org/
+> 
+> should fix the issue.
 
-- Mention Clang in compiler requirements.
+Great, many thx.
 
-- Use ``annotations`` for inline code.
+>> I'm asking, as the idea discussed afaics is not only supposed to fix the
+>> regression you tried to address, but also one that is now three months
+>> old and stalled since Mid-December -- which is really unfortunate, as
+>> that's not how regressions should be handled. :-/
+> 
+> Is it documented anywhere how regressions should be handled?
 
-- Rework remote coverage collection documentation for better clarity.
+https://docs.kernel.org/process/handling-regressions.html
 
-- Various smaller changes.
+Side note: that also mentions use of the "Link" tag. If the patch had
+one, I'd noticed it and wouldn't bothered anyone here.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- Documentation/dev-tools/kcov.rst | 169 +++++++++++++++++++------------
- 1 file changed, 102 insertions(+), 67 deletions(-)
+> The
+> mailing list is flooded with hard to reproduce reports from users as
+> well as automatic fuzzers and build bots, so I don't think it is
+> entirely unreasonable to move unresponsive reporters to the back of
+> the queue.
 
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index d83c9ab49427..a113a03a475f 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -1,42 +1,50 @@
--kcov: code coverage for fuzzing
-+KCOV: code coverage for fuzzing
- ===============================
- 
--kcov exposes kernel code coverage information in a form suitable for coverage-
--guided fuzzing (randomized testing). Coverage data of a running kernel is
--exported via the "kcov" debugfs file. Coverage collection is enabled on a task
--basis, and thus it can capture precise coverage of a single system call.
-+KCOV collects and exposes kernel code coverage information in a form suitable
-+for coverage-guided fuzzing. Coverage data of a running kernel is exported via
-+the ``kcov`` debugfs file. Coverage collection is enabled on a task basis, and
-+thus KCOV can capture precise coverage of a single system call.
- 
--Note that kcov does not aim to collect as much coverage as possible. It aims
--to collect more or less stable coverage that is function of syscall inputs.
--To achieve this goal it does not collect coverage in soft/hard interrupts
--and instrumentation of some inherently non-deterministic parts of kernel is
--disabled (e.g. scheduler, locking).
-+Note that KCOV does not aim to collect as much coverage as possible. It aims
-+to collect more or less stable coverage that is a function of syscall inputs.
-+To achieve this goal, it does not collect coverage in soft/hard interrupts
-+(unless remove coverage collection is enabled, see below) and from some
-+inherently non-deterministic parts of the kernel (e.g. scheduler, locking).
- 
--kcov is also able to collect comparison operands from the instrumented code
--(this feature currently requires that the kernel is compiled with clang).
-+Besides collecting code coverage, KCOV can also collect comparison operands.
-+See the "Comparison operands collection" section for details.
-+
-+Besides collecting coverage data from syscall handlers, KCOV can also collect
-+coverage for annotated parts of the kernel executing in background kernel
-+tasks or soft interrupts. See the "Remote coverage collection" section for
-+details.
- 
- Prerequisites
- -------------
- 
--Configure the kernel with::
-+KCOV relies on compiler instrumentation and requires GCC 6.1.0 or later
-+or any Clang version supported by the kernel.
- 
--        CONFIG_KCOV=y
-+Collecting comparison operands is only supported with Clang.
- 
--CONFIG_KCOV requires gcc 6.1.0 or later.
-+To enable KCOV, configure the kernel with::
- 
--If the comparison operands need to be collected, set::
-+        CONFIG_KCOV=y
-+
-+To enable comparison operands collection, set::
- 
- 	CONFIG_KCOV_ENABLE_COMPARISONS=y
- 
--Profiling data will only become accessible once debugfs has been mounted::
-+Coverage data only becomes accessible once debugfs has been mounted::
- 
-         mount -t debugfs none /sys/kernel/debug
- 
- Coverage collection
- -------------------
- 
--The following program demonstrates coverage collection from within a test
--program using kcov:
-+The following program demonstrates how to use KCOV to collect coverage for a
-+single syscall from within a test program:
- 
- .. code-block:: c
- 
-@@ -84,7 +92,7 @@ program using kcov:
- 		perror("ioctl"), exit(1);
- 	/* Reset coverage from the tail of the ioctl() call. */
- 	__atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED);
--	/* That's the target syscal call. */
-+	/* Call the target syscall call. */
- 	read(-1, NULL, 0);
- 	/* Read number of PCs collected. */
- 	n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
-@@ -103,7 +111,7 @@ program using kcov:
- 	return 0;
-     }
- 
--After piping through addr2line output of the program looks as follows::
-+After piping through ``addr2line`` the output of the program looks as follows::
- 
-     SyS_read
-     fs/read_write.c:562
-@@ -121,12 +129,13 @@ After piping through addr2line output of the program looks as follows::
-     fs/read_write.c:562
- 
- If a program needs to collect coverage from several threads (independently),
--it needs to open /sys/kernel/debug/kcov in each thread separately.
-+it needs to open ``/sys/kernel/debug/kcov`` in each thread separately.
- 
- The interface is fine-grained to allow efficient forking of test processes.
--That is, a parent process opens /sys/kernel/debug/kcov, enables trace mode,
--mmaps coverage buffer and then forks child processes in a loop. Child processes
--only need to enable coverage (disable happens automatically on thread end).
-+That is, a parent process opens ``/sys/kernel/debug/kcov``, enables trace mode,
-+mmaps coverage buffer, and then forks child processes in a loop. The child
-+processes only need to enable coverage (it gets disabled automatically when
-+a thread exits).
- 
- Comparison operands collection
- ------------------------------
-@@ -205,52 +214,78 @@ Comparison operands collection is similar to coverage collection:
- 	return 0;
-     }
- 
--Note that the kcov modes (coverage collection or comparison operands) are
--mutually exclusive.
-+Note that the KCOV modes (collection of code coverage or comparison operands)
-+are mutually exclusive.
- 
- Remote coverage collection
- --------------------------
- 
--With KCOV_ENABLE coverage is collected only for syscalls that are issued
--from the current process. With KCOV_REMOTE_ENABLE it's possible to collect
--coverage for arbitrary parts of the kernel code, provided that those parts
--are annotated with kcov_remote_start()/kcov_remote_stop().
--
--This allows to collect coverage from two types of kernel background
--threads: the global ones, that are spawned during kernel boot in a limited
--number of instances (e.g. one USB hub_event() worker thread is spawned per
--USB HCD); and the local ones, that are spawned when a user interacts with
--some kernel interface (e.g. vhost workers); as well as from soft
--interrupts.
--
--To enable collecting coverage from a global background thread or from a
--softirq, a unique global handle must be assigned and passed to the
--corresponding kcov_remote_start() call. Then a userspace process can pass
--a list of such handles to the KCOV_REMOTE_ENABLE ioctl in the handles
--array field of the kcov_remote_arg struct. This will attach the used kcov
--device to the code sections, that are referenced by those handles.
--
--Since there might be many local background threads spawned from different
--userspace processes, we can't use a single global handle per annotation.
--Instead, the userspace process passes a non-zero handle through the
--common_handle field of the kcov_remote_arg struct. This common handle gets
--saved to the kcov_handle field in the current task_struct and needs to be
--passed to the newly spawned threads via custom annotations. Those threads
--should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
--
--Internally kcov stores handles as u64 integers. The top byte of a handle
--is used to denote the id of a subsystem that this handle belongs to, and
--the lower 4 bytes are used to denote the id of a thread instance within
--that subsystem. A reserved value 0 is used as a subsystem id for common
--handles as they don't belong to a particular subsystem. The bytes 4-7 are
--currently reserved and must be zero. In the future the number of bytes
--used for the subsystem or handle ids might be increased.
--
--When a particular userspace process collects coverage via a common
--handle, kcov will collect coverage for each code section that is annotated
--to use the common handle obtained as kcov_handle from the current
--task_struct. However non common handles allow to collect coverage
--selectively from different subsystems.
-+Besides collecting coverage data from handlers of syscalls issued from a
-+userspace process, KCOV can also collect coverage for parts of the kernel
-+executing in other contexts - so-called "remote" coverage.
-+
-+Using KCOV to collect remote coverage requires:
-+
-+1. Modifying kernel code to annotate the code section from where coverage
-+   should be collected with ``kcov_remote_start`` and ``kcov_remote_stop``.
-+
-+2. Using `KCOV_REMOTE_ENABLE`` instead of ``KCOV_ENABLE`` in the userspace
-+   process that collects coverage.
-+
-+Both ``kcov_remote_start`` and ``kcov_remote_stop`` annotations and the
-+``KCOV_REMOTE_ENABLE`` ioctl accept handles that identify particular coverage
-+collection sections. The way a handle is used depends on the context where the
-+matching code section executes.
-+
-+KCOV supports collecting remote coverage from the following contexts:
-+
-+1. Global kernel background tasks. These are the tasks that are spawned during
-+   kernel boot in a limited number of instances (e.g. one USB ``hub_event``
-+   worker is spawned per one USB HCD).
-+
-+2. Local kernel background tasks. These are spawned when a userspace process
-+   interacts with some kernel interface and are usually killed when the process
-+   exits (e.g. vhost workers).
-+
-+3. Soft interrupts.
-+
-+For #1 and #3, a unique global handle must be chosen and passed to the
-+corresponding ``kcov_remote_start`` call. Then a userspace process must pass
-+this handle to ``KCOV_REMOTE_ENABLE`` in the ``handles`` array field of the
-+``kcov_remote_arg`` struct. This will attach the used KCOV device to the code
-+section referenced by this handle. Multiple global handles identifying
-+different code sections can be passed at once.
-+
-+For #2, the userspace process instead must pass a non-zero handle through the
-+``common_handle`` field of the ``kcov_remote_arg`` struct. This common handle
-+gets saved to the ``kcov_handle`` field in the current ``task_struct`` and
-+needs to be passed to the newly spawned local tasks via custom kernel code
-+modifications. Those tasks should in turn use the passed handle in their
-+``kcov_remote_start`` and ``kcov_remote_stop`` annotations.
-+
-+KCOV follows a predefined format for both global and common handles. Each
-+handle is a ``u64`` integer. Currently, only the one top and the lower 4 bytes
-+are used. Bytes 4-7 are reserved and must be zero.
-+
-+For global handles, the top byte of the handle denotes the id of a subsystem
-+this handle belongs to. For example, KCOV uses ``1`` as the USB subsystem id.
-+The lower 4 bytes of a global handle denote the id of a task instance within
-+that subsystem. For example, each ``hub_event`` worker uses the USB bus number
-+as the task instance id.
-+
-+For common handles, a reserved value ``0`` is used as a subsystem id, as such
-+handles don't belong to a particular subsystem. The lower 4 bytes of a common
-+handle identify a collective instance of all local tasks spawned by the
-+userspace process that passed a common handle to ``KCOV_REMOTE_ENABLE``.
-+
-+In practice, any value can be used for common handle instance id if coverage
-+is only collected from a single userspace process on the system. However, if
-+common handles are used by multiple processes, unique instance ids must be
-+used for each process. One option is to use the process id as the common
-+handle instance id.
-+
-+The following program demonstrates using KCOV to collect coverage from both
-+local tasks spawned by the process and the global task that handles USB bus #1:
- 
- .. code-block:: c
- 
--- 
-2.25.1
+I do that sometimes, but fwiw, from what I can see it wasn't a reporter
+that was unresponsive:
 
+https://lore.kernel.org/linux-arm-kernel/c1ff5cae-7f56-7fdb-c832-ffbcc177535b@leemhuis.info/
+
+But I might be missing something, sorry if I do. And there was the
+festive season what complicated everything. Whatever, as long as this
+this is fixed.
+
+/me wonders if we should ask "chenxiang (M)" to test that patch, too;
+but /me is not even totally sure it's the same problem
+
+>> But well, it afaik was
+>> caused by a patch from Ard, so it's obviously not your job to address
+>> it. But it seems you were working on it.
+> 
+> We are all working together here, so please refrain from telling
+> people what they should or should not be working on. (I am aware that
+> you probably did not mean it that way, but things tend to get lost in
+> translation very easily on the mailing list)
+
+Maybe I found the wrong words, sorry.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
