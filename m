@@ -2,165 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A4C6A4732
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB656A471E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjB0Qlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S229786AbjB0QhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjB0Qld (ORCPT
+        with ESMTP id S229560AbjB0QhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:41:33 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE7A23107
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:41:32 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c18so7317810qte.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZK6LeX7z5VZYct/x3qbpKzfYxbIlheF7rhtEPOT3/8=;
-        b=I5O5uZecNoO8yiPrQ8I40mdCE2jF9q9/jiCuSWkn4+4XpmLRp6+E/uHofwQaLm2tKK
-         BaVnbOA0Cc9zD8CF4+vfUiUHAywVdR86dilzPLPVrpFT34+JzzZ4Z9yDWHUlsDoXXJNd
-         9bW5z5455LPCpwyNQdPZ2JvvCTB4jMKcKizffH9BCrQQYp5XcRnxXZU9sfOUimoyOOta
-         JFI7yKFKEUKijQTaQRm0VJAL74GrJ7viAQ+dm+tNQsOD+886Yo+IqDruoTecf767/50i
-         vEr69rXB+xhsv00T1m9MRCWegS9EEYfzZM6x1YVnsD6qH9fV7pH/Uaz0jSTdnnMrQcpz
-         1MHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mZK6LeX7z5VZYct/x3qbpKzfYxbIlheF7rhtEPOT3/8=;
-        b=Ou1ePQIizI89wv5WoIAH2Q640vU20z3uOsNdXvc+FXEu61Y+18NMweeDXBWaxIbrSl
-         i0ILorHc97+wEqqKowwB4xskFutC/UKfNgY4LTlWWu+NLRhSX1hBHIPnJ0ThFY4c4t5F
-         1lAh31j62fxotOp7kVRDIQ/rCt/L1jqH4/GFkLbiMZzJJ4YUj9JUuvOpYjJx2wW3QZSJ
-         Sx5+oaWoht4udRkTO9p6RDKq1+G6GlQocioEZCPn6apqW1iO8RMSOqAancG85W02/HCU
-         NrM+za1w2alvS/s0Fu/9jOWPqr1wAZL0opAzIKW7BD8nLJMZC6NLIiv2d31YbwIUDR2o
-         ukOw==
-X-Gm-Message-State: AO0yUKUxMUkXXkPleMBlv4jDATxI1LvqjdfpENnBsouD8VDFZr7N1wze
-        SDmkfYHnxAwK20kGngVR3MY=
-X-Google-Smtp-Source: AK7set8dfzlW7a/WkPN2lUpzoC8W7qX3y3mq+kVuU0A3p0XBKYanpamyYslp9JtVHLn56Xh34vZOSw==
-X-Received: by 2002:ac8:5803:0:b0:3b6:2c3b:8c00 with SMTP id g3-20020ac85803000000b003b62c3b8c00mr44096137qtg.66.1677516091850;
-        Mon, 27 Feb 2023 08:41:31 -0800 (PST)
-Received: from ArchLinux ([68.74.118.125])
-        by smtp.gmail.com with ESMTPSA id z8-20020ac87108000000b003bf9f9f1844sm4869361qto.71.2023.02.27.08.41.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 08:41:31 -0800 (PST)
-References: <20230227075346.69658-1-schspa@gmail.com>
- <Y/yR/LypvJQXRhAr@hirez.programming.kicks-ass.net>
- <20230227102808.2cea9705@gandalf.local.home>
- <Y/zPv+L2iqOkD2Oa@hirez.programming.kicks-ass.net>
- <20230227105310.08d9a46e@gandalf.local.home>
-User-agent: mu4e 1.7.5; emacs 28.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, cocci@inria.fr, mcgrof@kernel.org,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        buytenh@wantstofly.org, johannes.berg@intel.com,
-        gregkh@linuxfoundation.org, tomba@kernel.org, airlied@gmail.com,
-        daniel@ffwll.ch
-Subject: Re: [RFC PATCH] cocci: cpi: add complete api check script
-Date:   Tue, 28 Feb 2023 00:36:26 +0800
-In-reply-to: <20230227105310.08d9a46e@gandalf.local.home>
-Message-ID: <m2mt4z5adr.fsf@gmail.com>
+        Mon, 27 Feb 2023 11:37:22 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F984BDC3;
+        Mon, 27 Feb 2023 08:37:19 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 1C89C5FD23;
+        Mon, 27 Feb 2023 19:37:17 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1677515837;
+        bh=XV8j+HbOiRy1aa6d+0JDl+RpUDnhvQ0IDo+fq+PYfjM=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=OL6DFWLWlPu1DV+ky2V9w8NQ5beb/Yd7Y5L0uQGbnq/G2l1Wy3RtMNUHPddDc7Fis
+         VSOeJ/6XxFtbZWgMR1+Mpnh44pnyXMe9Bn5xXPEbhSm5db9STCn858yMIA4hnNthp2
+         iO0hdfqpiJveJbmwPkV3+XsFj2ZPIssy8U0wdIH5Z0nkkkYjrAsIS1hWkhxqvW0daR
+         amhCsPLbOEwAFrXBsSQVEeKqNgmMPjPQL+2Fzad2CuNB7JFoXWUkivJrEU73+cWgJZ
+         3mqAA53SwuqPxxeh7EMNaqxlFUrM7t89r2wHA74xlRDDDufTdN+waJu+Ruuz+oec//
+         LAr4IpAbBRa6g==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 27 Feb 2023 19:37:16 +0300 (MSK)
+Date:   Mon, 27 Feb 2023 19:37:16 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>
+Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
+Message-ID: <20230227163716.fxlczbqol2csumpa@CAB-WSD-L081021>
+References: <20230222115020.55867-1-avromanov@sberdevices.ru>
+ <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
+ <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
+ <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
+ <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
+ <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/27 12:14:00 #20900843
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023 at 05:15:58PM +0100, Arnd Bergmann wrote:
+> On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
+> > On Mon, Feb 27, 2023 at 03:58:50PM +0100, Arnd Bergmann wrote:
+> >> 
+> >> I would argue that is a problem with buildroot, and using a 32-bit
+> >> kernel is not something we should encourage over fixing buildroot
+> >> to do it right, or building the kernel separately from the rootfs.
+> >> 
+> >> We do allow building support for a couple of ARMv8 SoCs in 32-bit
+> >> mode, but that is usually because they ship with a 32-bit bootrom
+> >> and cannot actually run a 64-bit kernel.
+> >
+> > To be honest, I didn't know about this principle. It looks like a very
+> > rational approach "start from max supported bitness".
+> > Based on overall maintainers opinion, we have to prepare a patch for
+> > buildroot to support compat mode :)
+> 
+> That would be great, thanks a lot!
+> 
+> For what it's worth, the main arguments in favor of running a 64-bit
+> kernel with compat user space over a 32-bit kernel are support for:
+> 
+> - larger RAM sizes without highmem (most 32-bit kernels only
+>   support 768MB of lowmem, and highmem sucks)
+> - larger virtual address space (4GB vs 3GB or less)
+> - CPU specific errata workarounds (arch/arm/ only has those for 32-bit cpus)
+> - mitigations for common attacks such as spectre
+> - security hardening that depends on larger address space
+>   (KASLR, BTI, ptrauth, PAN, ...)
+> - emulating instructions that were removed in Armv8 (setend, swp, ...)
+> 
+> Most of these don't apply in userspace, so the incentive to
+> run smaller 32-bit userland on systems with less than 1GB of
+> RAM usually outweighs the benefits of 64-bit userspace.
 
-Steven Rostedt <rostedt@goodmis.org> writes:
-
-> On Mon, 27 Feb 2023 16:43:59 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
->
->> On Mon, Feb 27, 2023 at 10:28:08AM -0500, Steven Rostedt wrote:
->> 
->> > So what exact race are you trying to catch here?  
->> 
->> on-stack copmletion with a wait_for_completion that can return early
->> (eg. killable, interruptible, or timeout) can go out of scope (eg, free
->> the completion) with the other side calling complete() on some possibly
->> re-used piece of stack.
->> 
->> IOW, Use-after-Free.
->> 
->> Care must be taken to ensure the other side (whatever does complete())
->> is either terminated or otherwise stopped from calling complete() on an
->> out-of-scope variable.
->
-> I got that. But as you were stating as well, when care is taken, the script
-> appears to still report it. The example I gave has:
->
->         req = blk_mq_alloc_request(q, REQ_OP_DRV_OUT, 0);
-> [..]
->         req->end_io_data = &wait;
-> [..]
->         hba->tmf_rqs[req->tag] = req;
-> [..]
->         err = wait_for_completion_io_timeout(&wait,
-> [..]
->         spin_lock_irqsave(hba->host->host_lock, flags);
->         hba->tmf_rqs[req->tag] = NULL;
->         __clear_bit(task_tag, &hba->outstanding_tasks);
->         spin_unlock_irqrestore(hba->host->host_lock, flags);
->
->
-> And where the complete is:
->
->         spin_lock_irqsave(hba->host->host_lock, flags);
->         pending = ufshcd_readl(hba, REG_UTP_TASK_REQ_DOOR_BELL);
->         issued = hba->outstanding_tasks & ~pending;
->         for_each_set_bit(tag, &issued, hba->nutmrs) {
->                 struct request *req = hba->tmf_rqs[tag];
->                 struct completion *c = req->end_io_data;
->  
->                 complete(c);
->                 ret = IRQ_HANDLED;
->         }
->         spin_unlock_irqrestore(hba->host->host_lock, flags);
->
-> So the spinlock is making sure that the complete() only works on a
-> completion if it is still there.
->
-There is nothing wrong with your code.
-
-This script will not check the hba->host->host_lock lock, and there is
-another hba->outstanding_tasks bit mask to ensure that there is no UAF
-here. But this script doesn't have a way to get these implicit
-conditions.
-
-> I guess I should have asked, how is this script differentiating between
-> where there's a problem and where there isn't.
->
-> If you remove the spinlocks, then there would most definitely be a race,
-> and I'm not even sure if the supplied patch would improve this much.
->
-> -- Steve
-
+Thank you very for the detailed clarification! It's strong arguments.
 
 -- 
-BRs
-Schspa Shi
+Thank you,
+Dmitry
