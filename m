@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864CC6A4D75
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8EE6A4D77
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjB0Vmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S229698AbjB0Vm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjB0Vml (ORCPT
+        with ESMTP id S230117AbjB0Vmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:42:41 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08F9166E3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:42:40 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id i34so31643142eda.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pF1j/L5vcGNedAFcqAPgWkFtpGwjYImsiIMrNw4zJE=;
-        b=cmg1GhtUWNg0amzNtPEbxGednqlpD557j0u1IKcgpmkITfq1Oz+tJFYMC7p/x9OU2y
-         BOq4SpMn1KAijc2tVeaXciy6iOU2QgbCagR7gL8AooFNzjPQ7VA/U4ECwps8/S8+SWo6
-         QZmy1bmdHLI9lhRQIke5WNcjRWT0KjR+Shju29zGYbglgTk4Yz6q8jTghwmiPHc6+OSF
-         gy/UOuYfWPdlp6WJSvi1JWsY95llVhIzW/lG1W5/nhTijoHKWbfRKYHdp/l311P3BCzu
-         zzx3icxL/Kz9IVvW7AO12c7BjX1z4zBfUnLokT3yk4lq8llJ0NAfOeqAKBxJb6pNYlj0
-         OIBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3pF1j/L5vcGNedAFcqAPgWkFtpGwjYImsiIMrNw4zJE=;
-        b=t3jUEipl0HRYP4XQx9Woei9V/CZEy180N+jXRAS0rY9EpxsnYUhy4ZBIfms8fyxmlZ
-         abRmIaBrcgyX2gefFKLJrXSWnsRXxWT/4dkBT8btqmmO92bKlqgYLEt15jP+tK1lRPuh
-         IhtdyA1BusVV6H9Tk0KupLe83PLGZ0Vzlp5F+Kl9ucf7VOGy0rNNIAYcy0l1uF4bWU/E
-         bmdEFxBVS90l7SwTuG7XTtSCaEAtJFonagx8ezpKTHkt91iRqaJ58Blv/VokIPBaZ4EF
-         jL/x6oVDGcgabRPH53MmvXexNwisu77YB8/GbRk5LZ9siWGE5Az6PTW0WiWzRn51yRtu
-         S1Iw==
-X-Gm-Message-State: AO0yUKXRrR/F4cp3E+Etg+DPcJvvLvmcr/pd4fJipjOckO86mybuZDaN
-        J+plvNKPLSAEOnSDTH5Fr20=
-X-Google-Smtp-Source: AK7set+SHic5PlVPa0PeP9RtaugqvXfIG224So+n+xk6rcAlubCuUE4yJg2fTshm8DbBatHRcZnDXQ==
-X-Received: by 2002:a17:906:d158:b0:8b1:2f0e:e3a4 with SMTP id br24-20020a170906d15800b008b12f0ee3a4mr222842ejb.26.1677534159118;
-        Mon, 27 Feb 2023 13:42:39 -0800 (PST)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id rh4-20020a17090720e400b008c801141d58sm3681327ejb.109.2023.02.27.13.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 13:42:38 -0800 (PST)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] mm/rmap: use atomic_try_cmpxchg in set_tlb_ubc_flush_pending
-Date:   Mon, 27 Feb 2023 22:42:28 +0100
-Message-Id: <20230227214228.3533299-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 27 Feb 2023 16:42:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9892422F;
+        Mon, 27 Feb 2023 13:42:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83AAFB80D9A;
+        Mon, 27 Feb 2023 21:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23671C433D2;
+        Mon, 27 Feb 2023 21:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677534168;
+        bh=XdvhKAZNwBj8e9elHvQSuhkRlbQ2LLpDgNtffZnQFWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Agz4zbDyBLaLkryl9xedMsq1U3IRpXLyoILaeYYWAwIoQDER81nwqI403s+GWq7z2
+         U6Zv7prEseOrZGAjuxfm5O8Xx3vfXQuLhttk9gM5oT4Xx8iPkfYG7SATY2decIC+q2
+         WxHQfz3kRsb0EKVRy6iOBevQJSH63xGwT19cd+AhlB98vIMzRhSN7rbmVohF8F4hXn
+         kgCyQ3NJ5Y+Pcc0q+Mg8ZWGJ9q66qf3IUicvtpkIita7U8keSKCbYtLE5B/XTfpyvd
+         PH4Na2mME1GWC47IQ8q11y6yry67GlQy4qtYHc4kDIzN8Zh1V+rVLSEvkLy1Y2t2DY
+         UhZ06LevR9mZA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5CEC84049F; Mon, 27 Feb 2023 18:42:46 -0300 (-03)
+Date:   Mon, 27 Feb 2023 18:42:46 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Edward Baker <edward.baker@intel.com>
+Subject: Re: [PATCH v1 0/3] Update Alderlake and IcelakeX events
+Message-ID: <Y/0j1qdJdma/TC1B@kernel.org>
+References: <20230223055306.296179-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223055306.296179-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old in
-set_tlb_ubc_flush_pending. 86 CMPXCHG instruction returns success in ZF flag,
-so this change saves a compare after cmpxchg (and related move instruction in
-front of cmpxchg).
+Em Wed, Feb 22, 2023 at 09:53:03PM -0800, Ian Rogers escreveu:
+> Update Alderlake and IcelakeX events to v1.19.
+> 
+> Developed on the perf-tools-next branch of:
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
 
-Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg fails.
+Thanks, applied.
 
-No functional change intended.
+- Arnaldo
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
----
- mm/rmap.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 15ae24585fc4..f964c197fc3c 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -644,7 +644,7 @@ void try_to_unmap_flush_dirty(void)
- static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
- {
- 	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
--	int batch, nbatch;
-+	int batch;
  
- 	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
- 	tlb_ubc->flush_required = true;
-@@ -662,11 +662,8 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
- 		 * overflow.  Reset `pending' and `flushed' to be 1 and 0 if
- 		 * `pending' becomes large.
- 		 */
--		nbatch = atomic_cmpxchg(&mm->tlb_flush_batched, batch, 1);
--		if (nbatch != batch) {
--			batch = nbatch;
-+		if (!atomic_try_cmpxchg(&mm->tlb_flush_batched, &batch, 1))
- 			goto retry;
--		}
- 	} else {
- 		atomic_inc(&mm->tlb_flush_batched);
- 	}
--- 
-2.39.2
+> Ian Rogers (3):
+>   perf vendor events intel: Update alderlake to v1.19
+>   perf vendor events intel: Update alderlaken to v1.19
+>   perf vendor events intel: Update icelakex to v1.19
+> 
+>  .../pmu-events/arch/x86/alderlake/memory.json |  8 +++++
+>  .../arch/x86/alderlake/pipeline.json          | 10 ++++++
+>  .../arch/x86/alderlaken/memory.json           |  7 +++++
+>  .../pmu-events/arch/x86/icelakex/cache.json   |  8 +++++
+>  .../arch/x86/icelakex/floating-point.json     | 31 +++++++++++++++++++
+>  .../arch/x86/icelakex/pipeline.json           | 10 ++++++
+>  tools/perf/pmu-events/arch/x86/mapfile.csv    |  6 ++--
+>  7 files changed, 77 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.39.2.637.g21b0678d19-goog
+> 
 
+-- 
+
+- Arnaldo
