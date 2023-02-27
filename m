@@ -2,265 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5BF6A4FA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C41B6A4FA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjB0XZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:25:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S229727AbjB0X3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjB0XZG (ORCPT
+        with ESMTP id S229592AbjB0X3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:25:06 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F139525E3E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:25:02 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id z5so8271787ljc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:25:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AJJWaVVSIZjZ+G1Kq23FeuZRyr8NP+H9jObI+RlAcBc=;
-        b=OAqBVmHElZUUac2UEEd5qN3zHG0rmaqrkQFbRTl5Udk6yioQ5yN+6IOWG7JrnOo/Dd
-         QpnUS0uiNCVFNl9LwoJ1a4gvICtAA7T9+YGFBjEHgT804BaMohkfqlUhxSqCJGrZMGpq
-         jefEB2JNLfK01bmZVlUWcm7uJRmSNK+iDbAag=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AJJWaVVSIZjZ+G1Kq23FeuZRyr8NP+H9jObI+RlAcBc=;
-        b=XxAVJ1AN3yiJoauEU5jv21JNHqihAUtHYAl+7FhU+2uB30LSipKx0lZlmvWkBmXE9h
-         rty95KQbaeE30MOjd17B8gvrb8MizZNX4sRnzZGA7gYcx0GMUA8l4gNAPT/q7Ps47tV4
-         cQ1uBE39b1KPC92F9ayplH2t2P59tBr/in+imPcNxboqqKzlxA8K9ty++ThPb0lf57qL
-         S1piKymlrRlt0PcTdXJEvQSR30X4W41SMLwmc0+nCHDeslvQbfWbrjmuanbmPvzKIUxG
-         JKmw0YPp0828HUiirkARdKN8ZZridf9BA95C5Fi2XLy7PkLcnutdFjP1XrhVjd3+mdxL
-         D7aw==
-X-Gm-Message-State: AO0yUKUukuVqV39tkdt1ZYylschOEmjyKg6YA8wLU3usQmLRMzn8Ob71
-        bZrAL3zoJoDUiHpxngX1hPIDQ2dkg/XyI65AEIdbfw==
-X-Google-Smtp-Source: AK7set/31E/pohifRX6cBtI3PF7l0+17H08NElgVXjj+uGTprnsv18lGVW0twqT0rAUeaZWgH2gNo66h2V8LZzozUlU=
-X-Received: by 2002:a05:651c:10af:b0:295:a8d1:8a28 with SMTP id
- k15-20020a05651c10af00b00295a8d18a28mr139590ljn.3.1677540301001; Mon, 27 Feb
- 2023 15:25:01 -0800 (PST)
-MIME-Version: 1.0
-References: <Y/z0fHHYdxEXcWMT@pc636> <7EBE4F51-F2BD-4B42-AFC1-CA234E78CC7B@joelfernandes.org>
- <Y/z9Its1RKetIr8V@pc636> <CAEXW_YSjT_orp8TbomBFU+ETS7YJ7TrbHTdrsBRTzCKG5_SBdw@mail.gmail.com>
- <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20230227230502.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 27 Feb 2023 18:24:49 -0500
-Message-ID: <CAEXW_YR6qnU=35Ang7S5brRRDX_HgiNgPpQ_w-+REYkujZE6rQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as completed
+        Mon, 27 Feb 2023 18:29:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0730B1ABE8;
+        Mon, 27 Feb 2023 15:29:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7893260A48;
+        Mon, 27 Feb 2023 23:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B69C433EF;
+        Mon, 27 Feb 2023 23:29:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677540578;
+        bh=/k3ORxC9jKd4eyRM/QUTSmbMh9ghJRSzv/EcqL2v5dE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WwA2OHMv1w/5Uyo6xYtro9b1mSTlIPNSoElUoeETMEvhjftkGvHNCxmga57btVgQA
+         rkfDl9VWxjrH1xl3Fe8dTL5zhPaH9b7I+NUwQFXDR0+8yyWffOZccLslrmnn8d7Su/
+         HPPRJxxT7hULCtK687jwLdcEkxtwdVwuS9uTh+5cY/mskk48/Fla5bia3sMktImycs
+         9lmvBlWI+ZVdCUBChiAbzIskKSCr37MYbo2aaJXqCC+ESNPgsMwR710qA3eoP62pJW
+         DcQNA6KwCcUP8XqNGi9mh+K4frUUSalNYmAp+hjqrBNITGQCyXlkiiGC2FKTjlgxve
+         l7OPURu12sakQ==
+Date:   Tue, 28 Feb 2023 08:29:34 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To:     paulmck@kernel.org
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-Id: <20230228082934.7d73533a923dd753c0c76793@kernel.org>
+In-Reply-To: <20230227165628.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+        <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
+        <20230225011306.0dd47e760f502b6787096bf7@kernel.org>
+        <20230224163307.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+        <20230225095811.926a8ebaee4ca2d1fb9d9e45@kernel.org>
+        <20230225011910.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+        <20230227081632.da70c54f3eede048549fb7af@kernel.org>
+        <20230227165628.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 6:05=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
-g> wrote:
-[...]
-> > > > >>>>> On Mon, Feb 27, 2023 at 08:22:06AM -0500, Joel Fernandes wrot=
-e:
-> > > > >>>>>>
-> > > > >>>>>>
-> > > > >>>>>>> On Feb 27, 2023, at 2:53 AM, Zhuo, Qiuxu <qiuxu.zhuo@intel.=
-com> wrote:
-> > > > >>>>>>>
-> > > > >>>>>>> =EF=BB=BF
-> > > > >>>>>>>>
-> > > > >>>>>>>> From: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > >>>>>>>> Sent: Saturday, February 25, 2023 11:34 AM
-> > > > >>>>>>>> To: linux-kernel@vger.kernel.org
-> > > > >>>>>>>> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>; Fred=
-eric Weisbecker
-> > > > >>>>>>>> <frederic@kernel.org>; Lai Jiangshan <jiangshanlai@gmail.c=
-om>; linux-
-> > > > >>>>>>>> doc@vger.kernel.org; Paul E. McKenney <paulmck@kernel.org>=
-;
-> > > > >>>>>>>> rcu@vger.kernel.org
-> > > > >>>>>>>> Subject: [PATCH RFC v2] rcu: Add a minimum time for markin=
-g boot as
-> > > > >>>>>>>> completed
-> > > > >>>>>>>>
-> > > > >>>>>>>> On many systems, a great deal of boot happens after the ke=
-rnel thinks the
-> > > > >>>>>>>> boot has completed. It is difficult to determine if the sy=
-stem has really
-> > > > >>>>>>>> booted from the kernel side. Some features like lazy-RCU c=
-an risk slowing
-> > > > >>>>>>>> down boot time if, say, a callback has been added that the=
- boot
-> > > > >>>>>>>> synchronously depends on.
-> > > > >>>>>>>>
-> > > > >>>>>>>> Further, it is better to boot systems which pass 'rcu_norm=
-al_after_boot' to
-> > > > >>>>>>>> stay expedited for as long as the system is still booting.
-> > > > >>>>>>>>
-> > > > >>>>>>>> For these reasons, this commit adds a config option
-> > > > >>>>>>>> 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter
-> > > > >>>>>>>> rcupdate.boot_end_delay.
-> > > > >>>>>>>>
-> > > > >>>>>>>> By default, this value is 20s. A system designer can choos=
-e to specify a value
-> > > > >>>>>>>> here to keep RCU from marking boot completion.  The boot s=
-equence will not
-> > > > >>>>>>>> be marked ended until at least boot_end_delay milliseconds=
- have passed.
-> > > > >>>>>>>
-> > > > >>>>>>> Hi Joel,
-> > > > >>>>>>>
-> > > > >>>>>>> Just some thoughts on the default value of 20s, correct me =
-if I'm wrong :-).
-> > > > >>>>>>>
-> > > > >>>>>>> Does the OS with CONFIG_PREEMPT_RT=3Dy kernel concern more =
-about the
-> > > > >>>>>>> real-time latency than the overall OS boot time?
-> > > > >>>>>>
-> > > > >>>>>> But every system has to boot, even an RT system.
-> > > > >>>>>>
-> > > > >>>>>>>
-> > > > >>>>>>> If so, we might make rcupdate.boot_end_delay =3D 0 as the d=
-efault value
-> > > > >>>>>>> (NOT the default 20s) for CONFIG_PREEMPT_RT=3Dy kernels?
-> > > > >>>>>>
-> > > > >>>>>> Could you measure how much time your RT system takes to boot=
- before the application runs?
-> > > > >>>>>>
-> > > > >>>>>> I can change it to default 0 essentially NOOPing it, but I w=
-ould rather have a saner default (10 seconds even), than having someone for=
-get to tune this for their system.
-> > > > >>>>>
-> > > > >>>>> Provide a /sys location that the userspace code writes to whe=
-n it
-> > > > >>>>> is ready?  Different systems with different hardware and soft=
-ware
-> > > > >>>>> configurations are going to take different amounts of time to=
- boot,
-> > > > >>>>> correct?
-> > > > >>>>
-> > > > >>>> I could add a sysfs node, but I still wanted this patch as wel=
-l
-> > > > >>>> because I am wary of systems where yet more userspace changes =
-are
-> > > > >>>> required. I feel the kernel should itself be able to do this. =
-Yes, it
-> > > > >>>> is possible the system completes "booting" at a different time=
- than
-> > > > >>>> what the kernel thinks. But it does that anyway (even without =
-this
-> > > > >>>> patch), so I am not seeing a good reason to not do this in the=
- kernel.
-> > > > >>>> It is also only a minimum cap, so if the in-kernel boot takes =
-too
-> > > > >>>> long, then the patch will have no effect.
-> > > > >>>>
-> > > > >>>> Thoughts?
-> > > > >>>>
-> > > > >>> Why "rcu_boot_ended" is not enough? As i see right after that a=
-n "init"
-> > > > >>> process or shell or panic is going to be invoked by the kernel.=
- It basically
-> > > > >>> indicates that a kernel is fully functional.
-> > > > >>>
-> > > > >>> Or an idea to wait even further? Until all kernel modules are l=
-oaded by
-> > > > >>> user space.
-> > > > >>
-> > > > >> I mentioned in commit message it is daemons, userspace initializ=
-ation etc. There is a lot of userspace booting up as well and using the ker=
-nel while doing so.
-> > > > >>
-> > > > >> So, It does not make sense to me to mark kernel as booted too ea=
-rly. And no harm in adding some builtin kernel hysteresis. What am I missin=
-g?
-> > > > >>
-> > > > > Than it is up to user space to decide when it is ready in terms o=
-f "boot completed".
-> > > >
-> > > > I dont know if you caught up with the other threads. See replies fr=
-om Paul and my reply to that.
-> > > >
-> > > > Also what you are proposing can be more harmful. If user space has =
-a bug and does not notify the kernel that boot completed, then the boot can=
- stay incomplete forever. The idea with this patch is to make things better=
-, not worse.
-> > > >
-> > > I saw that Paul proposed to have a sysfs attribute using which you ca=
-n
-> > > send a notification.
-> >
-> > Maybe I am missing something but how will a sysfs node on its own work =
-really?
-> >
-> > 1. delete kernel marking itself boot completed  -- and then sysfs
-> > marks it completed?
-> >
-> > 2. delete kernel marking itself boot completed  -- and then sysfs
-> > marks it completed, if sysfs does not come in in N seconds, then
-> > kernel marks as completed?
-> >
-> > #1 is a no go, that just means a bug waiting to happen if userspace
-> > forgets to write to sysfs.
-> >
-> > #2 is just an extension of this patch. So I can add a sysfs node on
-> > top of this. And we can make the minimum time as a long period of
-> > time, as you noted below:
-> >
-> > > IMHO, to me this patch does not provide a clear correlation between w=
-hat
-> > > is a boot complete and when it occurs. A boot complete is a synchrono=
-us
-> > > event whereas the patch thinks that after some interval a "boot" is c=
-ompleted.
-> >
-> > But that is exactly how the kernel code is now without this patch, so
-> > it is already broken in that sense, I am not really breaking it more
-> > ;-)
-> >
-> > > We can imply that after, say 100 seconds an initialization of user sp=
-ace
-> > > is done. Maybe 100 seconds then? :)
-> >
-> > Yes I am Ok with that. So are you suggesting we change the default to
-> > 100 seconds and then add a sysfs node to mark as boot done whenever
-> > userspace notifies?
->
-> The combination of sysfs manipulated by userspace and a kernel failsafe
-> makes sense to me.  Especially if by default triggering the failsafe
-> splats.  That way, bugs where userspace fails to update the sysfs file
-> get caught.
+On Mon, 27 Feb 2023 08:56:28 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-By splat, if we could do an "info" message, that would work for me
-instead of a WARN_ON. I'm afraid of Android and other folks who
-upgrade to the new kernel only to now have to go patch userspace.
+> On Mon, Feb 27, 2023 at 08:16:32AM +0900, Masami Hiramatsu wrote:
+> > On Fri, 24 Feb 2023 17:19:10 -0800
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > On Sat, Feb 25, 2023 at 09:58:11AM +0900, Masami Hiramatsu wrote:
+> > > > On Fri, 24 Feb 2023 08:33:07 -0800
+> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > 
+> > > > > On Sat, Feb 25, 2023 at 01:13:06AM +0900, Masami Hiramatsu wrote:
+> > > > > > Hi Geert,
+> > > > > > 
+> > > > > > On Fri, 24 Feb 2023 09:31:50 +0100
+> > > > > > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > > 
+> > > > > > > Hi Paul,
+> > > > > > > 
+> > > > > > > On Sat, Jan 7, 2023 at 5:33 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > > > > > > (or at least recommend to enable this)
+> > > > > > > >
+> > > > > > > > Like this?
+> > > > > > > >
+> > > > > > > >                                                         Thanx, Paul
+> > > > > > > >
+> > > > > > > > ------------------------------------------------------------------------
+> > > > > > > >
+> > > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > > > > > >
+> > > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > > > > > >
+> > > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > > > > > > >     will normally be to unconditionally provide the specified kernel-boot
+> > > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
+> > > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > > > > > > >
+> > > > > > > >     The old semantics may be obtained by manually overriding this default.
+> > > > > > > >
+> > > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > > >
+> > > > > > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > > > > > > > --- a/init/Kconfig
+> > > > > > > > +++ b/init/Kconfig
+> > > > > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> > > > > > > >  config BOOT_CONFIG_FORCE
+> > > > > > > >         bool "Force unconditional bootconfig processing"
+> > > > > > > >         depends on BOOT_CONFIG
+> > > > > > > > +       default y if BOOT_CONFIG_EMBED
+> > > > > > > >         help
+> > > > > > > >           With this Kconfig option set, BOOT_CONFIG processing is carried
+> > > > > > > >           out even when the "bootconfig" kernel-boot parameter is omitted.
+> > > > > > > 
+> > > > > > > Thanks for your patch, which is now commit 6ded8a28ed80e4cc
+> > > > > > > ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED").
+> > > > > > > 
+> > > > > > > After this change, an all{mod,yes}config kernel has:
+> > > > > > > 
+> > > > > > >     CONFIG_BOOT_CONFIG_FORCE=y
+> > > > > > >     CONFIG_BOOT_CONFIG_EMBED=y
+> > > > > > >     CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> > > > > > > 
+> > > > > > > Will this actually work? I haven't tried booting such a kernel yet.
+> > > > > > 
+> > > > > > Yeah, good question. It is same as when you boot the kernel with 'bootconfig'
+> > > > > > but do not add the bootconfig file to initrd. You may see below message
+> > > > > > on boot log, but kernel boots normally. :)
+> > > > > > 
+> > > > > >  'bootconfig' found on command line, but no bootconfig found
+> > > > > > 
+> > > > > > (Maybe it is better to fix the message, because if BOOT_CONFIG_FORCE=y, this
+> > > > > > will be shown without 'bootconfig' on command line.)
+> > > > > 
+> > > > > I just tried it again, and for me it just silently ignores the bootconfig
+> > > > > setup.  Which is what I recall happening when I tried it when creating
+> > > > > the patch.
+> > > > > 
+> > > > > Here is the .config file pieces of interest:
+> > > > > 
+> > > > > CONFIG_BOOT_CONFIG=y
+> > > > > CONFIG_BOOT_CONFIG_FORCE=y
+> > > > > CONFIG_BOOT_CONFIG_EMBED=y
+> > > > > CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> > > > > 
+> > > > > Anyone else seeing something different?
+> > > > 
+> > > > Hmm, from the code, I think you'll see that message in early console log.
+> > > > 
+> > > > In init/main.c:
+> > > > 
+> > > > ----
+> > > > #ifdef CONFIG_BOOT_CONFIG
+> > > > /* Is bootconfig on command line? */
+> > > > static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
+> > > > static size_t initargs_offs;
+> > > > #else
+> > > > ----
+> > > > And
+> > > > ----
+> > > > static void __init setup_boot_config(void)
+> > > > {
+> > > > ...
+> > > >         strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> > > >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> > > >                          bootconfig_params);
+> > > > 
+> > > >         if (IS_ERR(err) || !bootconfig_found)
+> > > >                 return;
+> > > > 
+> > > >         /* parse_args() stops at the next param of '--' and returns an address */
+> > > >         if (err)
+> > > >                 initargs_offs = err - tmp_cmdline;
+> > > > 
+> > > >         if (!data) {
+> > > >                 pr_err("'bootconfig' found on command line, but no bootconfig found\n");
+> > > >                 return;
+> > > >         }
+> > > > ----
+> > > > 
+> > > > Thus, if CONFIG_BOOT_CONFIG_FORCE=y, the process passes the below check
+> > > > 
+> > > >         if (IS_ERR(err) || !bootconfig_found)
+> > > >                 return;
+> > > > 
+> > > > But since we have an empty 'data', the error should be printed.
+> > > 
+> > > And you are quite right, the runs without data files did get me this:
+> > > 
+> > > 'bootconfig' found on command line, but no bootconfig found
+> > > 
+> > > Please accept my apologies for my confusion.
+> > 
+> > No problem :), so should we skip this message if CONFIG_BOOT_CONFIG_FORCE=y,
+> > because user may not pass 'bootconfig'?
+> > 
+> > Or, may be we can make it;
+> > 
+> >  "Skip bootconfig, because no bootconfig data found."
+> > 
+> > so that user can notice they forget to set up bootconfig data?
+> 
+> Good point, the current message could be quite confusing.  Me, I already
+> knew what was happening, so I just looked for the change in console-log
+> output.  ;-)
+> 
+> How about something like this?
+> 
+> 	"No bootconfig data provided, so skipping bootconfig"
+> 
+> But as you say, keeping the current message in kernels that have been
+> built with CONFIG_BOOT_CONFIG_FORCE=n.
 
-So,
-pr_info("RCU is still in boot-mode for the next N seconds, please
-consider writing X to /sys/.. to avoid this message.");
-?
+That sounds good to me. OK, let me update that.
 
-> The non-default silent-failsafe mode is also useful to allow some power
-> savings in advance of userspace getting the sysfs updating in place.
-> And of course the default splatting setup can be used in internal testing
-> with the release software being more tolerant of userspace foibles.
+Thank you,
 
-Sounds good, would 100 seconds be a good fail-safe trigger value?
+> 
+> 							Thanx, Paul
+> 
+> > Thank you,
+> > 
+> > 
+> > > 
+> > > 							Thanx, Paul
+> > > 
+> > > > Thank you,
+> > > > 
+> > > > > 
+> > > > > 							Thanx, Paul
+> > > > > 
+> > > > > > Thank you!
+> > > > > > 
+> > > > > > > 
+> > > > > > > Gr{oetje,eeting}s,
+> > > > > > > 
+> > > > > > >                         Geert
+> > > > > > > 
+> > > > > > > -- 
+> > > > > > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > > > > > > 
+> > > > > > > In personal conversations with technical people, I call myself a hacker. But
+> > > > > > > when I'm talking to journalists I just say "programmer" or something like that.
+> > > > > > >                                 -- Linus Torvalds
+> > > > > > 
+> > > > > > 
+> > > > > > -- 
+> > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > 
+> > > > 
+> > > > -- 
+> > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > 
+> > -- 
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Thanks,
 
- - Joel
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
