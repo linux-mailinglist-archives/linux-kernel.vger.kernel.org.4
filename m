@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011FE6A41CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 129926A41D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjB0Miz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S229735AbjB0Ml2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjB0Miy (ORCPT
+        with ESMTP id S229515AbjB0Ml1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:38:54 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10F91D93A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:38:41 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id p20so5311634plw.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:38:41 -0800 (PST)
+        Mon, 27 Feb 2023 07:41:27 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FD91E286;
+        Mon, 27 Feb 2023 04:41:22 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id s17so3452291pgv.4;
+        Mon, 27 Feb 2023 04:41:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:subject:to:date:from:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=knY8erri7Al7Rbw0Mlzq10z3XLQCpm6GRDGhp6tSwts=;
-        b=fXMH3+1o3+BJ2szxXx3b0iQyiTiVOTXmeFKZeaqJZ1JU/CX9es95LdKY43NinQgRsN
-         4JG/3xfV24tbvlcK7ymobth8Oey+sBEJlZypNl3cuERr7cp94QMRVFsMEfc51qSoBsu+
-         K/eXbZv/f4lg3km11+rL7+ow+XOXh0ld7GNFwUJxv2+/PHB0l5+/E9/SYyVoa97WvieV
-         QakiAX+XBUwIxUUWgKGqBz41KoVjl2ii3xqqBD7ClcSvERS7cggDYh8MpEL3B1c01oYl
-         JAnq+Qxkv/b/ivQR6DUgLqri0Ju6eNWfiv+uK0Mn8sPhr1Q5I0ZxrEWPOFEwbXLip1E+
-         ibTg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8051CX7GPwWvxqPme+h1NtjPhHXl6yhdGNxnSFiTIOA=;
+        b=DkVsZ7W6sLSIbxXqO3RoUSQbMxy+34TToWoKm83zULMAtyl1ogv9SxlV5LzIqI0lyP
+         69NKWYIwkNWmBdOaWfGR4/pZ1TXJL273lB9247VA8pD50IIdZcQHJHCAGyDlBvuToTJq
+         6tRcO44j60Agew8QWEjJUbShHfFjIkZnpEP4oX+UclT1W5vprZPTfsUucuLoCIh75Yyl
+         6XUfq3vPoPlDtbrELgyTjeWySVIBbfhO0P5YgwqvzYLdCkVg1KbB7nf/U+iza0TLhIvQ
+         /8iUib+n0EolvYMXtODbhqDZMOUaZEwp/R1qtbZbDSdOfvxAh5x2SPZNbzs+w+3MjpRw
+         R3zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:subject:to:date:from:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=knY8erri7Al7Rbw0Mlzq10z3XLQCpm6GRDGhp6tSwts=;
-        b=X9DA9E6+pr1yAbGjHjqEaaWsgN2DDIkborDEkh66UAXUERDLKlYvHedOMb5fBtcaE5
-         5j/UmLSN1g5EyBBpchwKtBD0nx63HMQaY4OkAPDlqaY4YVEaO0PahW0TX1bXZluokQNj
-         g2sGizgqnxmM5ekhoaugn6FsQISe31h1BVgCtBjcyo4j9T3CD9H74bXk42R0Oy95AY0Q
-         yW7b2TycnEyJBl9EgG7kSY5tz6r4ZITZ/EXedO+3s98/KW2RDahk5Tkmbe4Z9Au6Wz3h
-         okC+bBQUWJWy9MzOiiNo/IksMG+T9ByyikxqmJJ40paPA2pFvys/g5qqxQQR2CcCuxGF
-         VkGg==
-X-Gm-Message-State: AO0yUKVeQ1luRExVi3DicdTkEYj8XPBWsDmwlW7KRmXwfJ5rOfxH87lu
-        NH01Cw6o3qPz47RU2/8i3k8=
-X-Google-Smtp-Source: AK7set8kx3J/O+vfdEgH/w3+9Wpj+8KdJek3C4qPhbE/x323eGgBYYX6cc5sIq5PFSMvr32lTztNQg==
-X-Received: by 2002:a17:903:234b:b0:196:595b:2580 with SMTP id c11-20020a170903234b00b00196595b2580mr29689685plh.0.1677501521385;
-        Mon, 27 Feb 2023 04:38:41 -0800 (PST)
-Received: from sie-luc. ([124.89.8.225])
-        by smtp.gmail.com with ESMTPSA id jd1-20020a170903260100b001991942dde7sm4522195plb.125.2023.02.27.04.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 04:38:41 -0800 (PST)
-Message-ID: <63fca451.170a0220.3cfe.698c@mx.google.com>
-X-Google-Original-Message-ID: <20230227123743.GA25685@sie-luc.>
-From:   Luc Ma <onion0709@gmail.com>
-X-Google-Original-From: Luc Ma <luc@sietium.com>
-Date:   Mon, 27 Feb 2023 20:38:36 +0800
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/vram-helper: fix typos in vram helper doc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8051CX7GPwWvxqPme+h1NtjPhHXl6yhdGNxnSFiTIOA=;
+        b=AgGJECPrWshvuMaD4KvFo4seEtyh8ysejvZ+f7z1Cj5C4btbJKMp/5HRKDxBY/yjge
+         FOEDQWKAjO/HYxJ9laVpR0KDDAzvMeWVN6F3MF/fPnr3MxfOsJ6OXXGjlvrJANSrSYJv
+         1oxtZCBkB7PXV4gEUCBgB//OIXlfvlgm3vimydX7RIP2oWflMaBcCBaMJVVBDrTmPRxd
+         IgWwCmH9Rt8CowUzSlYmvaC1rIuI+SuniNUDbpUPPWPev/bJ45VZDBeFadDG0q3LEp9N
+         uYSUGvvE5rvh+uegtGX/567sFr3lgBmKreK1J6bgWvUgKCiuLpDoCOjb+l+SwtzQPiLy
+         ak6w==
+X-Gm-Message-State: AO0yUKWb1sdcyDmhbMHZK5MqMvycapGDB3PwuIqd1irtpLRuFSPfhZc3
+        l6jCdt6LQQySscsrCFJ1bU6LCgZ4+ZcqTtjjRrY=
+X-Google-Smtp-Source: AK7set+VPHNc0Uj3lGJtVWGyyyOmXD3p+bICegEcbCtoyyDOa/JLV6ZlwR96+FshBmRFyL71aTMFUEuoS6vHb1bDNu8=
+X-Received: by 2002:a63:7556:0:b0:4fb:9902:fc4a with SMTP id
+ f22-20020a637556000000b004fb9902fc4amr5794446pgn.10.1677501682153; Mon, 27
+ Feb 2023 04:41:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230227105941.2749193-1-suagrfillet@gmail.com> <Y/yagE7jfRGo1FgY@wendy>
+In-Reply-To: <Y/yagE7jfRGo1FgY@wendy>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Mon, 27 Feb 2023 12:40:45 +0000
+Message-ID: <CAAYs2=jSt9=d=N98DCVvtNA9FE6KcVYVdHPG-wpuDPknBFUndQ@mail.gmail.com>
+Subject: Re: [PATCH] sched/doc: supplement CPU capacity with RISC-V
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     corbet@lwn.net, alexs@kernel.org, siyanteng@loongson.cn,
+        robh@kernel.org, palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,43 +71,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: a5f23a72355d ("drm/vram-helper: Managed vram helpers")
-Signed-off-by: Luc Ma <luc@sietium.com>
----
- drivers/gpu/drm/drm_gem_vram_helper.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Conor Dooley <conor.dooley@microchip.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=882=
+7=E6=97=A5=E5=91=A8=E4=B8=80 11:57=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Feb 27, 2023 at 06:59:41PM +0800, Song Shuai wrote:
+> > This commit 7d2078310cbf ("dt-bindings: arm: move cpu-capacity to a
+> > shared loation") updates some references about capacity-dmips-mhz
+>
+> Not requesting a respin for this, but mentioning commit 991994509ee9
+> ("dt-bindings: riscv: add a capacity-dmips-mhz cpu property") is
+> probably more relevant as a justification for this change.
+>
+Thanks for your correction, I'll pay attention next time.
 
-diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
-index d40b3edb52d0..f1539d4448c6 100644
---- a/drivers/gpu/drm/drm_gem_vram_helper.c
-+++ b/drivers/gpu/drm/drm_gem_vram_helper.c
-@@ -45,7 +45,7 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs;
-  * the frame's scanout buffer or the cursor image. If there's no more space
-  * left in VRAM, inactive GEM objects can be moved to system memory.
-  *
-- * To initialize the VRAM helper library call drmm_vram_helper_alloc_mm().
-+ * To initialize the VRAM helper library call drmm_vram_helper_init().
-  * The function allocates and initializes an instance of &struct drm_vram_mm
-  * in &struct drm_device.vram_mm . Use &DRM_GEM_VRAM_DRIVER to initialize
-  * &struct drm_driver and  &DRM_VRAM_MM_FILE_OPERATIONS to initialize
-@@ -73,7 +73,7 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs;
-  *		// setup device, vram base and size
-  *		// ...
-  *
-- *		ret = drmm_vram_helper_alloc_mm(dev, vram_base, vram_size);
-+ *		ret = drmm_vram_helper_init(dev, vram_base, vram_size);
-  *		if (ret)
-  *			return ret;
-  *		return 0;
-@@ -86,7 +86,7 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs;
-  * to userspace.
-  *
-  * You don't have to clean up the instance of VRAM MM.
-- * drmm_vram_helper_alloc_mm() is a managed interface that installs a
-+ * drmm_vram_helper_init() is a managed interface that installs a
-  * clean-up handler to run during the DRM device's release.
-  *
-  * For drawing or scanout operations, rsp. buffer objects have to be pinned
--- 
-2.25.1
+I have a question about the patch you mentioned:
+The patch uses cpu_scale per_cpu variable to store the CPU capacity
+through arch_topology,
+But arch_scale_cpu_capacity() interface seems not defined to deliver
+the cpu_scale to the scheduler
+In contrast, arm64 defines it as the topology_get_cpu_scale() in its
+arch/arm64/include/asm/topology.h.
+Is this an oversight or a particular purpose?
 
+> > property in this document.
+> >
+> > The list of architectures using capacity-dmips-mhz omits RISC-V, so
+> > supplements it here.
+> >
+> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> > ---
+> >  Documentation/scheduler/sched-capacity.rst                    | 2 +-
+> >  Documentation/translations/zh_CN/scheduler/sched-capacity.rst | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/scheduler/sched-capacity.rst b/Documentation=
+/scheduler/sched-capacity.rst
+> > index 8e2b8538bc2b..e2c1cf743158 100644
+> > --- a/Documentation/scheduler/sched-capacity.rst
+> > +++ b/Documentation/scheduler/sched-capacity.rst
+> > @@ -258,7 +258,7 @@ Linux cannot currently figure out CPU capacity on i=
+ts own, this information thus
+> >  needs to be handed to it. Architectures must define arch_scale_cpu_cap=
+acity()
+> >  for that purpose.
+> >
+> > -The arm and arm64 architectures directly map this to the arch_topology=
+ driver
+> > +The arm, arm64, and RISC-V architectures directly map this to the arch=
+_topology driver
+>
+> My grep clearly missed this change, thanks.
+> For the only part of the patch I understand:
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>
+> Thanks,
+> Conor.
+>
+
+
+--=20
+Thanks,
+Song
