@@ -2,268 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0FB6A35D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 01:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3BE6A35E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 01:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjB0APr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 19:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S229646AbjB0AWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 19:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0APp (ORCPT
+        with ESMTP id S229558AbjB0AWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 19:15:45 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A58710A9C;
-        Sun, 26 Feb 2023 16:15:43 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31QNkEZI017252;
-        Mon, 27 Feb 2023 00:15:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0SH0HI3QnIRvf6NWoDuWMk7WZnqomgOD1T1uQ2PXp1A=;
- b=TykM8M/0pmSvWGPlkRyk/W9yQsTUpiRRNAoFqbi0sWPaj0sXk1pRVZrFFM+5XMJZz/Hf
- A9nP0+KYDU3chx56YuxSWDB9qo8uKzw8S7Hd+e4FSnZg1BDESlcwIgTtimxvzpJ+0vAc
- ookRTpJqozzjleZz/ZF2nOiZjQGO/pJbsXMJvsur4QpIjTs0KbtgWAAQvLrLTJgGEmml
- iGdzC3ZzYFQXxgvenSQyqkkcXId0ZijegutjXZcLnZsXTsa8ZmuHxFztLcc6DxbymTtz
- /PbHyHAFtS5Du2g7Yc9h8vRscR5JbW3yTe1WRFPrDHpxGON2TgTr2FDGisJPczl2R4gj Sw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nyae2k5xh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 00:15:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31R0FVrq000488
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 00:15:31 GMT
-Received: from [10.110.89.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sun, 26 Feb
- 2023 16:15:30 -0800
-Message-ID: <e18d4bf9-67ff-e093-6edc-cdc8b29f757c@quicinc.com>
-Date:   Sun, 26 Feb 2023 16:15:29 -0800
+        Sun, 26 Feb 2023 19:22:03 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35B8CDD4;
+        Sun, 26 Feb 2023 16:22:01 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id y10so416615qtj.2;
+        Sun, 26 Feb 2023 16:22:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677457321;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5be06YHYRkke1Ci4JVJc3LyV4Jo5b0vnSbZ7t2ii5Mo=;
+        b=O95IqFgj68nB6P/Llv29DHMzJgP1wxZsLN9fh3QjGxpIUFBlTkj/W6KFGcpSCU1/Y+
+         cktLsuuR/evXRxVGHkmqeWlD2mzyak+0vjDlPAPJ6niTX+GZMaLm/+juH2kpIyYJxLDP
+         gdsFINv/Y+pXue47VYLP1Oxm98M3qLEvHj8uEvs1Pl01Jk14DssNJzUCAJmumTMgI8K9
+         S/f2+CUVwjVkY3Tj5cXqB70vBNQ50UlSzUHYXlBcqW5dwf53fmATQvNm++JqS9zCmRsf
+         CKVsYd2AYN+sqZ4x38FuKzog7ZGQcP/uO+mq6arNZZF0udzewYSfUMBtRTHCCjsninyy
+         2ihQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677457321;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5be06YHYRkke1Ci4JVJc3LyV4Jo5b0vnSbZ7t2ii5Mo=;
+        b=AOmtEz8C0ExuhJ1ZXk+SSkXB/PmfdDLvSEmzg67I/mIh2HbxlOrsYqeJRFf2mvhs8f
+         //NfA1cTGH6/GBcKvZ+KxdTAte3ZdRo1nnZUSocIOm+uVNUby9aeAP0S6ewD5lphG9nl
+         Uc3cccjVuSEJkYDR3v1bspOXN8tV1BYJMGCIKgS6G4pZLfzxK9XcXmAXNjkOMZE/OAti
+         3JAAA8nyfyVsLaH5PXCvU0Vta5SO5X5cgZA7w16KXRAyR2uL/WV3VzYAdb0rflX6MUGe
+         9pR74EyCdLqIODr7W9r12QdXyktT1Bfm3f5RT7YDg7FTSDuyXtyLWzm/kctpehnleMeI
+         lCTw==
+X-Gm-Message-State: AO0yUKUmx1Nejr8NQql516giMec8zVEkuonWbtip+ECORzffhS/R36eN
+        50kEMfBNAO8AF4pwswBGJ5E=
+X-Google-Smtp-Source: AK7set+ZvlZjQTIMJrvwb52BT2vwI4cRuXdGf37WVLj+2OyNfYrTEM/vvRdDjmaH0UQZEtlXTB/RyQ==
+X-Received: by 2002:a05:622a:184:b0:3b4:7efb:36a7 with SMTP id s4-20020a05622a018400b003b47efb36a7mr12705451qtw.27.1677457320657;
+        Sun, 26 Feb 2023 16:22:00 -0800 (PST)
+Received: from localhost.localdomain (c-68-48-11-160.hsd1.mi.comcast.net. [68.48.11.160])
+        by smtp.gmail.com with ESMTPSA id o26-20020ac8429a000000b003b64f1b1f40sm3698071qtl.40.2023.02.26.16.21.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 16:22:00 -0800 (PST)
+From:   Sukrut Bellary <sukrut.bellary@gmail.com>
+To:     shuah@kernel.org, ray.huang@amd.com, li.meng@amd.com
+Cc:     Sukrut Bellary <sukrut.bellary@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest: amd-pstate: Fix spelling mistakes
+Date:   Sun, 26 Feb 2023 16:21:55 -0800
+Message-Id: <20230227002155.3287-1-sukrut.bellary@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
- <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
- <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org>
- <1b5afec9-454d-e1b9-0274-f0476edb4d21@quicinc.com>
- <CAA8EJprowFyBMdW5QC2zG0gYUtxJ-hHXqhPfYTct2GzYJKLSHg@mail.gmail.com>
- <7650f183-9860-9074-e5d5-539afdf41248@quicinc.com>
- <11c43f8b-eb17-50c0-5158-6c485e5be423@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <11c43f8b-eb17-50c0-5158-6c485e5be423@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pUuXcQ2CnXcuKzVocdJhCgujNMDvoz7h
-X-Proofpoint-GUID: pUuXcQ2CnXcuKzVocdJhCgujNMDvoz7h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-26_22,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0
- phishscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302260204
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix spelling mistakes in run.sh "drvier" => "driver" and
+in gitsource.sh "senconds" => "seconds".
 
+Signed-off-by: Sukrut Bellary <sukrut.bellary@gmail.com>
+---
+ tools/testing/selftests/amd-pstate/gitsource.sh | 4 ++--
+ tools/testing/selftests/amd-pstate/run.sh       | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2/26/2023 5:13 AM, Dmitry Baryshkov wrote:
-> On 26/02/2023 02:16, Abhinav Kumar wrote:
->> Hi Dmitry
->>
->> On 2/24/2023 3:57 PM, Dmitry Baryshkov wrote:
->>> On Sat, 25 Feb 2023 at 01:51, Kuogee Hsieh <quic_khsieh@quicinc.com> 
->>> wrote:
->>>>
->>>>
->>>> On 2/24/2023 1:13 PM, Dmitry Baryshkov wrote:
->>>>> On 24/02/2023 21:40, Kuogee Hsieh wrote:
->>>>>> Add DSC helper functions based on DSC configuration profiles to 
->>>>>> produce
->>>>>> DSC related runtime parameters through both table look up and runtime
->>>>>> calculation to support DSC on DPU.
->>>>>>
->>>>>> There are 6 different DSC configuration profiles are supported
->>>>>> currently.
->>>>>> DSC configuration profiles are differiented by 5 keys, DSC version
->>>>>> (V1.1),
->>>>>> chroma (444/422/420), colorspace (RGB/YUV), bpc(8/10),
->>>>>> bpp (6/7/7.5/8/9/10/12/15) and SCR (0/1).
->>>>>>
->>>>>> Only DSC version V1.1 added and V1.2 will be added later.
->>>>>
->>>>> These helpers should go to drivers/gpu/drm/display/drm_dsc_helper.c
->>>>> Also please check that they can be used for i915 or for amdgpu
->>>>> (ideally for both of them).
->>>>>
->>>>> I didn't check the tables against the standard (or against the current
->>>>> source code), will do that later.
->>>>>
->>>>>>
->>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>>> ---
->>>>>>    drivers/gpu/drm/msm/Makefile                   |   1 +
->>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c | 209
->>>>>> +++++++++++++++++++++++++
->>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h |  34 ++++
->>>>>>    3 files changed, 244 insertions(+)
->>>>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/msm/Makefile 
->>>>>> b/drivers/gpu/drm/msm/Makefile
->>>>>> index 7274c412..28cf52b 100644
->>>>>> --- a/drivers/gpu/drm/msm/Makefile
->>>>>> +++ b/drivers/gpu/drm/msm/Makefile
->>>>>> @@ -65,6 +65,7 @@ msm-$(CONFIG_DRM_MSM_DPU) += \
->>>>>>        disp/dpu1/dpu_hw_catalog.o \
->>>>>>        disp/dpu1/dpu_hw_ctl.o \
->>>>>>        disp/dpu1/dpu_hw_dsc.o \
->>>>>> +    disp/dpu1/dpu_dsc_helper.o \
->>>>>>        disp/dpu1/dpu_hw_interrupts.o \
->>>>>>        disp/dpu1/dpu_hw_intf.o \
->>>>>>        disp/dpu1/dpu_hw_lm.o \
->>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>>>> new file mode 100644
->>>>>> index 00000000..88207e9
->>>>>> --- /dev/null
->>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->>>>>> @@ -0,0 +1,209 @@
->>>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>>> +/*
->>>>>> + * Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights
->>>>>> reserved
->>>>>> + */
->>>>>> +
->>>>>> +#include <drm/display/drm_dsc_helper.h>
->>>>>> +#include "msm_drv.h"
->>>>>> +#include "dpu_kms.h"
->>>>>> +#include "dpu_hw_dsc.h"
->>>>>> +#include "dpu_dsc_helper.h"
->>>>>> +
->>>>>> +
->>>>>
->>>>> Extra empty line
->>>>>
->>>>>> +#define DPU_DSC_PPS_SIZE       128
->>>>>> +
->>>>>> +enum dpu_dsc_ratio_type {
->>>>>> +    DSC_V11_8BPC_8BPP,
->>>>>> +    DSC_V11_10BPC_8BPP,
->>>>>> +    DSC_V11_10BPC_10BPP,
->>>>>> +    DSC_V11_SCR1_8BPC_8BPP,
->>>>>> +    DSC_V11_SCR1_10BPC_8BPP,
->>>>>> +    DSC_V11_SCR1_10BPC_10BPP,
->>>>>> +    DSC_RATIO_TYPE_MAX
->>>>>> +};
->>>>>> +
->>>>>> +
->>>>>> +static u16 dpu_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
->>>>>> +        0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54,
->>>>>> +        0x62, 0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
->>>>>
->>>>> Weird indentation
->>>>>
->>>>>> +};
->>>>>> +
->>>>>> +/*
->>>>>> + * Rate control - Min QP values for each ratio type in
->>>>>> dpu_dsc_ratio_type
->>>>>> + */
->>>>>> +static char
->>>>>> dpu_dsc_rc_range_min_qp[DSC_RATIO_TYPE_MAX][DSC_NUM_BUF_RANGES] = {
->>>>>> +    /* DSC v1.1 */
->>>>>> +    {0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13},
->>>>>> +    {0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 17},
->>>>>> +    {0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
->>>>>> +    /* DSC v1.1 SCR and DSC v1.2 RGB 444 */
->>>>>
->>>>> What is SCR? Is there any reason to use older min/max Qp params
->>>>> instead of always using the ones from the VESA-DSC-1.1 standard?
->>>>
->>>> Standards change request, some vendors may use scr to work with 
->>>> their panel.
->>>>
->>>> These table value are provided by system team.
->>>
->>> So, what will happen if we use values from 1.2 standard (aka 1.1 SCR
->>> 1) with the older panel?
->>>
->>
->> Standards change request means fixing errors/errata for the given 
->> standard. Those are typically released as a different spec.
->>
->> So I referred the DSC 1.1 SCR spec, and it does have a few differences 
->> in the table compared to DSC 1.1 which will get into DSC 1.2.
->>
->> Hence the table entries are same between DSC 1.1 SCR and DSC 1.2
->>
->> You are right, ideally DSC 1.2 should be backwards compatible with DSC 
->> 1.1 in terms of the values (thats what the spec says too) but I am not 
->> sure if we can expect every panel/DP monitor to be forward compatible 
->> without any SW change because it might need some firmware update (for 
->> the panel) or SW update to support that especially during transitions 
->> of the spec revisions (SCR to be precise).
->>
->> Typically we do below for DP monitors exactly for the same reason:
->>
->> DSC_ver_to_use = min(what_we_support, what_DP_monitor_supports) and 
->> use that table.
->>
->> For DSI panels, typically in the panel spec it should say whether the 
->> SCR version needs to be used because we have seen that for some panels 
->> ( I dont remember exactly which one ) based on which panel and which 
->> revision of the panel, it might not.
-> 
-> So, what happens if we use DSC 1.1 SCR (= DSC 1.2) values with older 
-> panel? Does it result in the broken image?
-> 
-> I'm asking here, because I think that these parameters tune the 
-> _encoder_. The decoder should be able to handle different compressed 
-> streams as long as values fit into the required 'profile'.
-> 
-Yes, this can cause screen corruption issues.
+diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
+index dbc1fe45599d..5f2171f0116d 100755
+--- a/tools/testing/selftests/amd-pstate/gitsource.sh
++++ b/tools/testing/selftests/amd-pstate/gitsource.sh
+@@ -117,7 +117,7 @@ parse_gitsource()
+ 	printf "Gitsource-$1-#$2 power consumption(J): $en_sum\n" | tee -a $OUTFILE_GIT.result
+ 
+ 	# Permance is the number of run gitsource per second, denoted 1/t, where 1 is the number of run gitsource in t
+-	# senconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
++	# seconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
+ 	# and t is time measured in seconds(s). This means that performance per watt becomes
+ 	#        1/t     1/t     1
+ 	#       ----- = ----- = ---
+@@ -175,7 +175,7 @@ gather_gitsource()
+ 	printf "Gitsource-$1 avg power consumption(J): $avg_en\n" | tee -a $OUTFILE_GIT.result
+ 
+ 	# Permance is the number of run gitsource per second, denoted 1/t, where 1 is the number of run gitsource in t
+-	# senconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
++	# seconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
+ 	# and t is time measured in seconds(s). This means that performance per watt becomes
+ 	#        1/t     1/t     1
+ 	#       ----- = ----- = ---
+diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
+index 57cad57e59c0..de4d8e9c9565 100755
+--- a/tools/testing/selftests/amd-pstate/run.sh
++++ b/tools/testing/selftests/amd-pstate/run.sh
+@@ -244,7 +244,7 @@ prerequisite()
+ 		if [ "$scaling_driver" != "$CURRENT_TEST" ]; then
+ 			echo "$0 # Skipped: Test can only run on $CURRENT_TEST driver or run comparative test."
+ 			echo "$0 # Please set X86_AMD_PSTATE enabled or run comparative test."
+-			echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
++			echo "$0 # Current cpufreq scaling driver is $scaling_driver."
+ 			exit $ksft_skip
+ 		fi
+ 	else
+@@ -252,7 +252,7 @@ prerequisite()
+ 			"tbench" | "gitsource")
+ 				if [ "$scaling_driver" != "$COMPARATIVE_TEST" ]; then
+ 					echo "$0 # Skipped: Comparison test can only run on $COMPARISON_TEST driver."
+-					echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
++					echo "$0 # Current cpufreq scaling driver is $scaling_driver."
+ 					exit $ksft_skip
+ 				fi
+ 				;;
+-- 
+2.25.1
 
-The RC parameters table is used both in the encoder and in the PPS too 
-and will be used to decode too.
-
-If we use the DSC 1.2 tables for a monitor/panel which advertizes that 
-it supports only 1.1, we cannot be certain it will work.
-
-
->>
->> Thats why downstream started adding qcom,mdss-dsc-scr-version to the 
->> devicetree.
->>
->>>>>> +    {0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 9, 12},
->>>>>> +    {0, 4, 5, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 13, 16},
->>>>>> +    {0, 4, 5, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 11, 15},
->>>
->>>
-> 
