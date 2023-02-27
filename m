@@ -2,48 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93806A4234
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5471F6A4241
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjB0NFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S229933AbjB0NGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjB0NFq (ORCPT
+        with ESMTP id S229649AbjB0NGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:05:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721EA11EAB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:05:44 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pWdCI-0006PM-PC; Mon, 27 Feb 2023 14:05:42 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pWdCI-0001VE-AZ; Mon, 27 Feb 2023 14:05:42 +0100
-Date:   Mon, 27 Feb 2023 14:05:42 +0100
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org
-Subject: About regulator error events
-Message-ID: <20230227130542.GM32097@pengutronix.de>
+        Mon, 27 Feb 2023 08:06:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F911F909;
+        Mon, 27 Feb 2023 05:06:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 552B1CE0FD9;
+        Mon, 27 Feb 2023 13:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C8FC433D2;
+        Mon, 27 Feb 2023 13:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677503179;
+        bh=+TZvd92l9qjnJ46cOT5L9UcQe7CKFe0gXGAYlHM+pn4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MBZPUuouC2wHJXTMDns2HmltZ/Am3KtGB6qtPlCrb3/MBdH12QLCyQ124jkJwejTj
+         /9jv3pfgL9kql6Rp3/Mq2/oP7T0TD+IVY2I/dEo4N2srigsxf9hH5lZRHbih9dWDwj
+         bKmH5HuGP7y3RcKuUDughHTcAD0HLkjvOCAa0YLQU63I5krx7OlxqjLjJRKRa5iMW1
+         1WqULk3QoqzkYDvk171oAv6DocJ1wuNnQRljHqnVaZ3QnM0+BZNRt9FqYD6ukaYhF9
+         4YfWL+ENcpjdEgqhggrilecv9D1A/jzeAWs5nQjTAv+W3u/OFvR0OfJHKMWv/o+m+N
+         5kgeZLeLoTRXw==
+Date:   Mon, 27 Feb 2023 13:06:10 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Subject: Re: [PATCH net-next v8 5/9] net: phy: add
+ genphy_c45_ethtool_get/set_eee() support
+Message-ID: <Y/yqwifeQBC3sSaD@sirena.org.uk>
+References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
+ <20230211074113.2782508-6-o.rempel@pengutronix.de>
+ <Y/ufuLJdMcxc6f47@sirena.org.uk>
+ <20230227055241.GC8437@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="18YmcFoX2FMeA9qB"
 Content-Disposition: inline
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-From:   Sascha Hauer <sha@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230227055241.GC8437@pengutronix.de>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,45 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have a board here which has some current limited power switches on it
-and I wonder if I can do something reasonable with the error interrupt
-pins these switches have.
 
-The devices do not have a communication channel, instead they only have
-an enable pin and an error interrupt pin. See
-https://www.diodes.com/assets/Datasheets/AP22652_53_52A_53A.pdf for a
-datasheet.  The devices come in two variants, one goes into current
-limiting mode in case of overcurrent and the other variant switches off
-until it gets re-enabled again.
+--18YmcFoX2FMeA9qB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-At first sight it seemed logical to me to wire up the error interrupt
-pins to REGULATOR_EVENT_OVER_CURRENT events. That was easy to do, but
-now the question is: What can a regulator consumer do with these events?
+On Mon, Feb 27, 2023 at 06:52:41AM +0100, Oleksij Rempel wrote:
+> On Sun, Feb 26, 2023 at 06:06:48PM +0000, Mark Brown wrote:
 
-The strategy I had in mind was to disable the regulator, enable it again
-to see if the errors persists and if it does, permanently disable the
-device.  Disabling the regulator only works though when there's only one
-consumer.  With multiple consumers only the enable count decreases, but
-the regulator itself stays enabled. This means implementing such a
-policy at the consumer side is not generally possible. Implementing a
-policy in the regulator core seems awkward as well, as a good strategy
-likely differs between different consumers.
+> > Currently mainline is failing to bring up networking on the Libre
+> > Computer AML-S905X-CC, with a bisect pointing at this commit,
+> > 022c3f87f88 upstream (although I'm not 100% sure I trust the bisect it
+> > seems to be in roughly the right place).  I've not dug into what's going
+> > on more than running the bisect yet.
 
-A first good step might be to notify the user somehow. While we can get
-the overcurrent status of a regulator from
-/sys/class/regulator/*/over_current there doesn't seem to be any way to
-get a regulator event in userspace, right?  Would patches changing that
-be welcomed?
+> Can you please test following fixes:
+> https://lore.kernel.org/all/167715661799.11159.2057121677394149658.git-patchwork-notify@kernel.org/
+> https://lore.kernel.org/all/20230225071644.2754893-1-o.rempel@pengutronix.de/
 
-There doesn't seem to be much prior art for handling regulator error
-events in the kernel. It would be great to get some input what others do
-in this situation, or to get some ideas what they would do if they had
-the time to do so ;)
+They seem to work, thanks!  I had found and tried the second patch but
+it doesn't apply without the first series.  Will those patches be going
+to Linus for -rc1?  It's pretty disruptive to a bunch of the test
+infrastructure to not be able to NFS boot.
 
-Sascha
+--18YmcFoX2FMeA9qB
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP8qsIACgkQJNaLcl1U
+h9Bl6Qf+Kb7ZKOT7CiUaam7FNIgjrgALxbl+vEoK4Jd449ZZ8D4wKW/ZCeFYsMtX
+jDz4FdBm3yWIycYw0aDgBv+Rx5022ewQlSidOoHLtqJFyn4C8anRLgge2fCwGXRt
+87RUPWhKsqyl7wpZaQirbjkkS5e2eJnXYg7qRUIkNYwjO4IGBxdx4Y05qCGI90vD
+d5orhnfGEb5O5rf9JpGlz6X6FuoTaNF+QE8PJWaYve86GxFeZ45r2LA2mwO5KXK2
+lR9TEJAspu738yEXGCxU4J6pZn/PAH6MdaAL3nz5SonmmQ4xcPZxveXbYEI2amK+
+qUGMfJEdqtVeKb0reNsl0z2pPn1Lwg==
+=p/hg
+-----END PGP SIGNATURE-----
+
+--18YmcFoX2FMeA9qB--
