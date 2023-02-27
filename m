@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65026A4940
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5BB6A493F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjB0SIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S230259AbjB0SIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjB0SIL (ORCPT
+        with ESMTP id S230228AbjB0SIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:08:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA9A23863
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677521214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A0XiMaVk2NRHD3G7gBjNzwZV65APgDc5PN3bQr3CxgQ=;
-        b=NbY45/nsk4nsMpGpHhShV5xPLj7/GMhg7nKS72KCMu5GyZ39l1Wx7zrBrQE8SADm/qQ0ik
-        RS2XKN4XPbAZsIdx+6yepqdiNoJML1Wge+HjpPe35+S17jcwgqiYRUxLklToMNip1b8mO8
-        baGBPZzb6mOINY/cneQxSKy4kCzarfU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-xsKvlzbSMLCqXzj1QpnMwQ-1; Mon, 27 Feb 2023 13:06:52 -0500
-X-MC-Unique: xsKvlzbSMLCqXzj1QpnMwQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FD97802D2E;
-        Mon, 27 Feb 2023 18:06:52 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.33.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A71062026D4B;
-        Mon, 27 Feb 2023 18:06:51 +0000 (UTC)
-Received: by fedora.redhat.com (Postfix, from userid 1000)
-        id 40EAF139788; Mon, 27 Feb 2023 13:06:51 -0500 (EST)
-Date:   Mon, 27 Feb 2023 13:06:51 -0500
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, helen.koike@collabora.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa+renesas@sang-engineering.com, akpm@linux-foundation.org,
-        David Heidelberg <david@ixit.cz>
-Subject: Re: [RESEND v2 PATCH] init/do_mounts.c: add virtiofs root fs support
-Message-ID: <Y/zxO9PMaES8SenN@redhat.com>
-References: <20230224143751.36863-1-david@ixit.cz>
- <Y/zSCarxyabSC1Zf@fedora>
+        Mon, 27 Feb 2023 13:08:07 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FAD24490;
+        Mon, 27 Feb 2023 10:07:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677521257; x=1709057257;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=scY7UonjFChQcjD94QJl2vOVah5UAvdvzWmSDMUa7Ss=;
+  b=xg3CvFsV/BejjorWOjs52uL91fLXCdSvmsQuBZvW25fPqGgplprfAmtR
+   Xlv8VmX71n4vNtSB3TTegVOcnDU1JxbMiuhKOQqY9tktQUBnQJKoVSu8z
+   4cc7PRWP3gvNo1V33Q7ub6iXAd9/nmZz+kqI8GnkitBMfaD+iwG7Mqq5L
+   g5z6v/aLRh8Ms3CJb5lN10kP0WcvLuWRCkBQSmNKT5Lr6qJNM2Es04dag
+   /j54NEhggr1lXBXTdy4VKdluZ7b/uPYmni70m7msjxJz+pV9b7JqegbUr
+   kIh80PQOKxoO8+AJwwGX775j054XfheCw7v1jxAJguVJGTOxGtsk+NAVX
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,219,1673938800"; 
+   d="scan'208";a="202436815"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 11:07:25 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 11:07:19 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 27 Feb 2023 11:07:19 -0700
+From:   <Ryan.Wanner@microchip.com>
+To:     <ludovic.desroches@microchip.com>, <linus.walleij@linaro.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH v3 0/2]Sama7g5 drive strength options updated
+Date:   Mon, 27 Feb 2023 11:07:26 -0700
+Message-ID: <cover.1677520830.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/zSCarxyabSC1Zf@fedora>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,85 +65,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:53:45AM -0500, Stefan Hajnoczi wrote:
-> On Fri, Feb 24, 2023 at 03:37:51PM +0100, David Heidelberg wrote:
-> > From: Stefan Hajnoczi <stefanha@redhat.com>
-> > 
-> > Make it possible to boot directly from a virtiofs file system with tag
-> > 'myfs' using the following kernel parameters:
-> > 
-> >   rootfstype=virtiofs root=myfs rw
-> > 
-> > Booting directly from virtiofs makes it possible to use a directory on
-> > the host as the root file system.  This is convenient for testing and
-> > situations where manipulating disk image files is cumbersome.
-> > 
-> > Reviewed-by: Helen Koike <helen.koike@collabora.com>
-> > Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
-> > Signed-off-by: David Heidelberg <david@ixit.cz>
-> > ---
-> > v2: added Reviewed-by and CCed everyone interested.
-> > 
-> > We have used this option in Mesa3D CI for testing crosvm for
-> > more than one years and it's proven to work reliably.
-> > 
-> > We are working on effort to removing custom patches to be able to do 
-> > automated apply and test of patches from any tree.                              
-> > 
-> > https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/.gitlab-ci/crosvm-runner.sh#L85
-> >  init/do_mounts.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> 
-> Vivek, do you remember where we ended up with boot from virtiofs? I
-> thought a different solution was merged some time ago.
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-We merged a patch from Christoph Hellwig to support this.
+This patch set updates drive strength options for the Sama7g5 to align
+with drive strength options in the Sama7g5 data sheet.
 
-commit f9259be6a9e7c22d92e5a5000913147ae17e8321
-Author: Christoph Hellwig <hch@lst.de>
-Date:   Wed Jul 14 16:23:20 2021 -0400
+changes since v1:
+- Fix ABI break.
+- Add explanation for drive strength macros.
 
-    init: allow mounting arbitrary non-blockdevice filesystems as root
+changes since v2:
+-Fix subject prefix to match subsystem.
+-Add more indepth discription of sama7g5 define values.
+-Fix formatting issues.
+-Add sama7g5 differences to dbg_show.
+-Remove array length for xlate.
 
-Now one should be able to mount virtiofs using following syntax.
+Ryan Wanner (2):
+  pinctrl: at91-pio4: Implement the correct drive values for sama7g5
+  dt-bindings:pinctrl:at91:Adding macros for sama7g5
 
-"root=myfs rootfstype=virtiofs rw"
+ drivers/pinctrl/pinctrl-at91-pio4.c | 54 ++++++++++++++++++++++++++---
+ include/dt-bindings/pinctrl/at91.h  | 15 +++++++-
+ 2 files changed, 63 insertions(+), 6 deletions(-)
 
-IIUC, this patch should not be required anymore.
-
-Thanks
-Vivek
-
-> 
-> There is documentation from the virtiofs community here:
-> https://virtio-fs.gitlab.io/howto-boot.html
-> 
-> Stefan
-> 
-> > 
-> > diff --git a/init/do_mounts.c b/init/do_mounts.c
-> > index 811e94daf0a8..11c11abe23d7 100644
-> > --- a/init/do_mounts.c
-> > +++ b/init/do_mounts.c
-> > @@ -578,6 +578,16 @@ void __init mount_root(void)
-> >  			printk(KERN_ERR "VFS: Unable to mount root fs via SMB.\n");
-> >  		return;
-> >  	}
-> > +#endif
-> > +#ifdef CONFIG_VIRTIO_FS
-> > +	if (root_fs_names && !strcmp(root_fs_names, "virtiofs")) {
-> > +		if (!do_mount_root(root_device_name, "virtiofs",
-> > +				   root_mountflags, root_mount_data))
-> > +			return;
-> > +
-> > +		panic("VFS: Unable to mount root fs \"%s\" from virtiofs",
-> > +		      root_device_name);
-> > +	}
-> >  #endif
-> >  	if (ROOT_DEV == 0 && root_device_name && root_fs_names) {
-> >  		if (mount_nodev_root() == 0)
-> > -- 
-> > 2.39.1
-> > 
-
+-- 
+2.37.2
 
