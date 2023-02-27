@@ -2,78 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29676A46D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1034E6A46D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjB0QQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:16:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S230121AbjB0QQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjB0QQc (ORCPT
+        with ESMTP id S230102AbjB0QQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:16:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4847F23328;
-        Mon, 27 Feb 2023 08:16:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD42460EA7;
-        Mon, 27 Feb 2023 16:16:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE044C433D2;
-        Mon, 27 Feb 2023 16:16:27 +0000 (UTC)
-Date:   Mon, 27 Feb 2023 11:16:26 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
-        contact@pgazz.com
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in
- rcu_core
-Message-ID: <20230227111626.463b8f85@gandalf.local.home>
-In-Reply-To: <CAABZP2zZHQ22MPsWkPZ5kPW5SNDPt0mT37xw3f4VNLeBsxRPvw@mail.gmail.com>
-References: <CAABZP2z+Hk_w7nAhhyhJA9zidQViibMUO_xYianfm3xcG1QQwQ@mail.gmail.com>
-        <D59B7575-FAB1-4446-BBA9-DF5EAA1B5DCA@joelfernandes.org>
-        <20230227103257.4b99b6fb@gandalf.local.home>
-        <CAEXW_YT6_cSaEODPu3HLWUB5kJhs6U=CQrQ4v4ODKtk-D+Bzug@mail.gmail.com>
-        <CAABZP2zZHQ22MPsWkPZ5kPW5SNDPt0mT37xw3f4VNLeBsxRPvw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 27 Feb 2023 11:16:36 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5955720691
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:16:34 -0800 (PST)
+Received: (qmail 129376 invoked by uid 1000); 27 Feb 2023 11:16:33 -0500
+Date:   Mon, 27 Feb 2023 11:16:33 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y/zXYXM1lgk7Msig@rowland.harvard.edu>
+References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
+ <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
+ <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
+ <Y/rEH2r9i0BtfxEW@rowland.harvard.edu>
+ <Y/rNUfW509AQYCYn@boqun-archlinux>
+ <Y/rSQ2FNTJyj2bqR@rowland.harvard.edu>
+ <a862ee59-ca12-b609-48cc-0784c7ce24af@huaweicloud.com>
+ <Y/uOA3umovz06/SV@rowland.harvard.edu>
+ <dd87369d-825f-e932-dd86-8e46e92d1a7e@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dd87369d-825f-e932-dd86-8e46e92d1a7e@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 00:11:51 +0800
-Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+On Mon, Feb 27, 2023 at 03:03:16PM +0100, Jonas Oberhauser wrote:
+> Note that I don't want to remove the r-pre/post-bounded tests.
+> What I agreed to is that the restriction to only addr for plain writes is an
+> overly conservative "r-pre/post-bounded-style" test which is made redundant
+> by the existence of the actual r-pre/post-bounded test.
 
-> > Yes certainly, the rcu_head is allocated on the caller side so it
-> > could have been trampled while the callback was still in flight.  
-> Thank you all for your guidance, I learned a lot during this process
-> >  
-> > > OR it could be a bug with RCU if the synchronize_rcu() ended before the
-> > > grace periods have finished.  
-> Thanks again.
+Good, that agrees with what I've been thinking.
+
+> > > Note there's also rw-xbstar (used with fr) which doesn't check for
+> > > r-pre-bounded, but it should be ok. That's because only reads would be
+> > > unordered, as a result the read (in the if (x != ..) x=..) should provide
+> > > the correct value. The store would be issued as necessary, and the issued
+> > > store would still be ordered correctly w.r.t the read.
+> > That isn't the reason I left r-pre-bounded out from rw-xbstar.  If the
+> > write gets changed to a read there's no need for rw-xbstar to check
+> > r-pre-bounded, because then rw-race would be comparing a read with
+> > another read (instead of with a write) and so there would be no
+> > possibility of a race in any case.
 > 
-> By the way, the syzkaller on my local machine has been running for 8
-> hours, only three bugs reported[1][2][3], but they don't seem to be
-> related to Sanan's original report.
-> Maybe there are some configuration mismatches between us.The test
-> continues,  I will report to you once I have any new discovery.
+> That is the first part of my explanation (only reads would be unordered) but
 
-Note, the above races (either bug, the one that tramples on something in
-RCU flight, or a synchronize_sched() returning early) may be extremely hard
-to hit. It could have been the planets were lined up just right to hit the
-bug, and won't happen for another 27,000 years.
+It is?  I couldn't tell from what you wrote that this was supposed to 
+imply we didn't have to worry about a data race.
 
--- Steve
+> I don't think it's sufficient in general.
+> Imagine a hypothetical memory model with a release fence that upgrades the
+> next memory operation only (and only stores) to release (e.g., to save some
+> opcode design space you do weird_release_fence;str x1 x2 instead of stlr x1
+> x2).
+> Then in the message passing pattern
+> 
+> T1 {
+>    u = a;
+>    release(&x, 1);
+> }
+> 
+> T2 {
+>   t = READ_ONCE(&x);
+>   weird_release_fence;
+>   a = 1;
+> }
+
+[That isn't the Message Passing pattern.  In the MP pattern, one thread 
+does two writes and the other thread does two reads.  This is the Read 
+Buffering (RB) pattern: Each thread does a read followed by a write.]
+
+> 
+> where T2 is changed by the compiler to
+> 
+> T2 {
+>   t = READ_ONCE(&x);
+>   weird_release_fence();
+>   if (a!=1) a = 1;
+> }
+> 
+> In the specific executions where t==1, there wouldn't be a data race when
+> just considering the equivalent of rw-xbstar, but u==1 and t==1 would be
+> possible (even though it might not seem so from the first example).
+
+If such a fence existed in the LKMM, we would handle this case by saying 
+that weird_release_fence() does not give release semantics to an 
+immediately following plain store; only to an immediately following 
+marked store.  The reason being that the compiler is allowed to muck 
+around with the code generated for plain accesses, so there's no 
+guarantee that the first machine instruction generated for "a = 1;" will 
+be a store.
+
+As a result, there would not be an rw-xbstar link from T1 to T2.
+
+> Of course in LKMM there's no such fence, but I think to make the argument
+> complete you still need to go through every case that provides the
+> w-pre-bounding and make sure it still provides the necessary order in the
+> compiler-generated version. (or you can try a more complicated argument of
+> the form "there would be another execution of the same program that would
+> have a data race", which works at least for this example, not sure in
+> general)
+
+So I don't see this as a valid argument for not using rw-xbstar in 
+rw-race.  Even theoretically.
+
+Alan
