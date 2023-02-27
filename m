@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6AF6A4932
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD62A6A4930
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjB0SGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjB0SGo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229984AbjB0SGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 27 Feb 2023 13:06:44 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8672737
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:06:16 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a545bfbaso156191667b3.20
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:06:16 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229685AbjB0SGm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Feb 2023 13:06:42 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486F82385D;
+        Mon, 27 Feb 2023 10:06:13 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id f18so9722324lfa.3;
+        Mon, 27 Feb 2023 10:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CCs6UT8o6jWjsVnlpOlGQvwvfh2gZBztGVt5ejScdkA=;
-        b=n1Hm70B2pVQ4JlAhGiUDyj4CEH8k0YYYiRK+CxFnN6Ks5AuOrDlHiK9oH4W9oR6D/Z
-         IyAD9aW7E6kJPybduNEV2dOGlxSucL/cGgipuHi8rs8KB6gj2Mb7+ZMgxgc6HiW7t74w
-         r6TtEub/Ib2L65WI0R/PZrqIF3GvfS5n64uVujKPFkeCh0/CDcBxibe+cUGdL4Gs4FSr
-         rck6QYtvVtC6jUs3hMWknorvuedx97yfjeQ4/38KVfggUKU7rSIg1Xy33rKgKSCFTeU6
-         IDlFX/b8umtqUw/L8+NF64Erf7JpxHtUoWok77B/UBFxLIQPpMXOowJlWJIlZD2NtbcP
-         nbNQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OqXiBQXvXH+tElXzgaTKSkwKZs1Zusa9JO9iVkTj7A0=;
+        b=iy+0fhbHz6snA10bci0QtKJt88K/3Lw7c2jTc7+6u1oEW66HHQJR6saRkRG4ngQbeK
+         mMll76DaahOTkOtmvsgo0LTOlLFQvAAXyU2X+naTl0QDADMcCz6yBOjePB7vScArCHCV
+         cIKHQ2CXob2AHDZ1X/a/why/vwAkdaf/CvZ+FnfZPjt8pf06XXfTZUFBdYWVpb3251NU
+         noJwpSz8TZkmgSC0vChAf5xNQWjP10DHdvpJpFkcjOI0GpaL+JUmcm7sYE570O9QktTE
+         AtjDixJ0hxArDsyWeaOHgeh53tX+rH2PmQbHYgceqaOgQbuqpt1Vumss6UrUHvK+0x+W
+         plSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CCs6UT8o6jWjsVnlpOlGQvwvfh2gZBztGVt5ejScdkA=;
-        b=URC67HUzsi/fo+87w/fCpqJLmxmt28sFLYFBJRVCezYjFhLRl3vP52y4NdDdNYEdnL
-         0933sb07Vn9ATTxuntrx6yyWLJMDq7iQyUk+Yt/8DW4M3t/FiPcDek/P3xz9n5oO2v8k
-         lCaLKHnifXGVk+rxkBMRVAGHvwgOFLEzD17Np6g1js5DNy78U1wXkIogE1VI2S08vRpG
-         kO/kamI34706oohsIKLeEmL/OpZuZK0Bc/g7ceCuNzwR1dTYVdebhLaCoGFZoXNpaeVW
-         AmdJMvMD3cKLjyixsLSr83yiPWuJgQpJnkWxugbKFs8aUvpTmt84HIsUdwVKCmrui3mW
-         8hlw==
-X-Gm-Message-State: AO0yUKW+x4dG3sXMQFBAagXyqG8BoRePgj6QVbYqlZo5GuU9WkNaBvCQ
-        fjFh4G5jkCSqhlOZPky39yl/Z9P4+R0LN4XdUA==
-X-Google-Smtp-Source: AK7set/qINqQKKt6kZE0c8d6Ua2qChgsBAHGHkegT5aaQvUm1/8fbeJe6dPKfUwIaRlyeMAyPAhNbh4GJO50EFxRGQ==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:118c:b0:a06:538f:265f with
- SMTP id m12-20020a056902118c00b00a06538f265fmr8185254ybu.4.1677521173110;
- Mon, 27 Feb 2023 10:06:13 -0800 (PST)
-Date:   Mon, 27 Feb 2023 18:06:01 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227180601.104318-1-ackerleytng@google.com>
-Subject: [PATCH v2 1/1] KVM: selftests: Adjust VM's initial stack address to
- align with SysV ABI spec
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     erdemaktas@google.com, vannapurve@google.com, sagis@google.com,
-        mail@maciej.szmigiero.name, Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OqXiBQXvXH+tElXzgaTKSkwKZs1Zusa9JO9iVkTj7A0=;
+        b=OeNLp5oAu0vQrSxV2u1cfgpmDNsKEWQLFf9HpFbuzJiocBuy9a90M9v4+MuUEtkZYj
+         VfQMaX+XXaJHayJDfyvh1/KovC2jfm2s2WPbFBfPqhq95UxklitZ4kkCopWw6lv4weu8
+         nLtTT84i52tDO4onwnqtYAJm8NDemqwTdHIvYGdyiDEUCBwD3jtPiWUd9ZOJwawLiqhl
+         ahgwT76FUAecCuXwfbj02cFCI3Z78BVwMgSNx78cuL4iMj0AH0IBgekJgEQF0nTzqCAl
+         v4LWVHqkTpIJ8VxP33NuvtFWzGkfpB2NJdVPxpWGAU+CPN3ZKebLuBvHAAsT05Uexfk3
+         yTIQ==
+X-Gm-Message-State: AO0yUKWyrIChVQrK8lwBmggWrqQFLVBhYw28FVPq94RmsbhE5e9gbQDn
+        1oOxFy5IRJi8sLht8ylH2fI=
+X-Google-Smtp-Source: AK7set+mfTLrmu9GZtWHsgxdDFJz1H3Z7GZiePM0rFjZ200NmwtXLNwsJqcyvq18l5VAb6NvGLkhHQ==
+X-Received: by 2002:a05:6512:3b9a:b0:4dd:9931:c560 with SMTP id g26-20020a0565123b9a00b004dd9931c560mr3144983lfv.15.1677521169479;
+        Mon, 27 Feb 2023 10:06:09 -0800 (PST)
+Received: from pc636 (host-90-235-25-56.mobileonline.telia.com. [90.235.25.56])
+        by smtp.gmail.com with ESMTPSA id v1-20020a2e7a01000000b00295a318ace7sm810530ljc.77.2023.02.27.10.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 10:06:08 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Mon, 27 Feb 2023 19:06:06 +0100
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     paulmck@kernel.org, "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
+ completed
+Message-ID: <Y/zxDuxsihJXTdxf@pc636>
+References: <IA1PR11MB617175CA398D425B7489CE4889AF9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <764CA486-6FB2-4667-B8CB-56E3AC31FD58@joelfernandes.org>
+ <20230227145544.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YSVm7fjJaX=AT-Yg70wXL-_1RxoVPfzN8M8zJAkc0um3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YSVm7fjJaX=AT-Yg70wXL-_1RxoVPfzN8M8zJAkc0um3g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,78 +81,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Align the guest stack to match calling sequence requirements in
-section "The Stack Frame" of the System V ABI AMD64 Architecture
-Processor Supplement, which requires the value (%rsp + 8), NOT %rsp,
-to be a multiple of 16 when control is transferred to the function
-entry point. I.e. in a normal function call, %rsp needs to be 16-byte
-aligned _before_ CALL, not after.
+On Mon, Feb 27, 2023 at 10:16:51AM -0500, Joel Fernandes wrote:
+> On Mon, Feb 27, 2023 at 9:55 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Feb 27, 2023 at 08:22:06AM -0500, Joel Fernandes wrote:
+> > >
+> > >
+> > > > On Feb 27, 2023, at 2:53 AM, Zhuo, Qiuxu <qiuxu.zhuo@intel.com> wrote:
+> > > >
+> > > > ﻿
+> > > >>
+> > > >> From: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >> Sent: Saturday, February 25, 2023 11:34 AM
+> > > >> To: linux-kernel@vger.kernel.org
+> > > >> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>; Frederic Weisbecker
+> > > >> <frederic@kernel.org>; Lai Jiangshan <jiangshanlai@gmail.com>; linux-
+> > > >> doc@vger.kernel.org; Paul E. McKenney <paulmck@kernel.org>;
+> > > >> rcu@vger.kernel.org
+> > > >> Subject: [PATCH RFC v2] rcu: Add a minimum time for marking boot as
+> > > >> completed
+> > > >>
+> > > >> On many systems, a great deal of boot happens after the kernel thinks the
+> > > >> boot has completed. It is difficult to determine if the system has really
+> > > >> booted from the kernel side. Some features like lazy-RCU can risk slowing
+> > > >> down boot time if, say, a callback has been added that the boot
+> > > >> synchronously depends on.
+> > > >>
+> > > >> Further, it is better to boot systems which pass 'rcu_normal_after_boot' to
+> > > >> stay expedited for as long as the system is still booting.
+> > > >>
+> > > >> For these reasons, this commit adds a config option
+> > > >> 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter
+> > > >> rcupdate.boot_end_delay.
+> > > >>
+> > > >> By default, this value is 20s. A system designer can choose to specify a value
+> > > >> here to keep RCU from marking boot completion.  The boot sequence will not
+> > > >> be marked ended until at least boot_end_delay milliseconds have passed.
+> > > >
+> > > > Hi Joel,
+> > > >
+> > > > Just some thoughts on the default value of 20s, correct me if I'm wrong :-).
+> > > >
+> > > > Does the OS with CONFIG_PREEMPT_RT=y kernel concern more about the
+> > > > real-time latency than the overall OS boot time?
+> > >
+> > > But every system has to boot, even an RT system.
+> > >
+> > > >
+> > > > If so, we might make rcupdate.boot_end_delay = 0 as the default value
+> > > > (NOT the default 20s) for CONFIG_PREEMPT_RT=y kernels?
+> > >
+> > > Could you measure how much time your RT system takes to boot before the application runs?
+> > >
+> > > I can change it to default 0 essentially NOOPing it, but I would rather have a saner default (10 seconds even), than having someone forget to tune this for their system.
+> >
+> > Provide a /sys location that the userspace code writes to when it
+> > is ready?  Different systems with different hardware and software
+> > configurations are going to take different amounts of time to boot,
+> > correct?
+> 
+> I could add a sysfs node, but I still wanted this patch as well
+> because I am wary of systems where yet more userspace changes are
+> required. I feel the kernel should itself be able to do this. Yes, it
+> is possible the system completes "booting" at a different time than
+> what the kernel thinks. But it does that anyway (even without this
+> patch), so I am not seeing a good reason to not do this in the kernel.
+> It is also only a minimum cap, so if the in-kernel boot takes too
+> long, then the patch will have no effect.
+> 
+> Thoughts?
+> 
+Why "rcu_boot_ended" is not enough? As i see right after that an "init"
+process or shell or panic is going to be invoked by the kernel. It basically
+indicates that a kernel is fully functional.
 
-This fixes unexpected #GPs in guest code when the compiler uses SSE
-instructions, e.g. to initialize memory, as many SSE instructions
-require memory operands (including those on the stack) to be
-16-byte-aligned.
+Or an idea to wait even further? Until all kernel modules are loaded by
+user space.
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
-
-This patch is a follow-up from discussions at
-https://lore.kernel.org/lkml/20230121001542.2472357-9-ackerleytng@google.com/
-
-v1 -> v2: Cleaned the patch up after getting comments from Sean in
-
-v1: https://lore.kernel.org/lkml/Y%2FfHLdvKHlK6D%2F1v@google.com/
-
-Please also see
-https://lore.kernel.org/lkml/20230227174654.94641-1-ackerleytng@google.com/
-regarding providing alignment macros for selftests.
-
----
- .../selftests/kvm/lib/x86_64/processor.c       | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index ae1e573d94ce..a0669d31bb85 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2018, Google LLC.
-  */
-
-+#include "linux/bitmap.h"
- #include "test_util.h"
- #include "kvm_util.h"
- #include "processor.h"
-@@ -573,6 +574,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 				       DEFAULT_GUEST_STACK_VADDR_MIN,
- 				       MEM_REGION_DATA);
-
-+	stack_vaddr += DEFAULT_STACK_PGS * getpagesize();
-+
-+	/*
-+	 * Align stack to match calling sequence requirements in section "The
-+	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
-+	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
-+	 * 16 when control is transferred to the function entry point.
-+	 *
-+	 * If this code is ever used to launch a vCPU with 32-bit entry point it
-+	 * may need to subtract 4 bytes instead of 8 bytes.
-+	 */
-+	TEST_ASSERT(IS_ALIGNED(stack_vaddr, PAGE_SIZE),
-+		    "__vm_vaddr_alloc() did not provide a page-aligned address");
-+	stack_vaddr -= 8;
-+
- 	vcpu = __vm_vcpu_add(vm, vcpu_id);
- 	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
- 	vcpu_setup(vm, vcpu);
-@@ -580,7 +596,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 	/* Setup guest general purpose registers */
- 	vcpu_regs_get(vcpu, &regs);
- 	regs.rflags = regs.rflags | 0x2;
--	regs.rsp = stack_vaddr + (DEFAULT_STACK_PGS * getpagesize());
-+	regs.rsp = stack_vaddr;
- 	regs.rip = (unsigned long) guest_code;
- 	vcpu_regs_set(vcpu, &regs);
+Thanks!
 
 --
-2.39.2.722.g9855ee24e9-goog
+Uladzislau Rezki
