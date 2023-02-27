@@ -2,107 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83C96A47A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3079D6A47AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjB0ROB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
+        id S229876AbjB0RPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjB0RNg (ORCPT
+        with ESMTP id S229813AbjB0RPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:13:36 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35552068D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:13:32 -0800 (PST)
+        Mon, 27 Feb 2023 12:15:07 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020341F93E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677518013; x=1709054013;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EfJ+wiUku1hkq0d47Oy5g8m14Cz3X/xe9TB1bDrDMVg=;
-  b=hv04K0b2vCgW6NFyolSPaFgHuooc6dpGwsvUC4PmkSM7gD5kOvcaKriA
-   HrL/zOh70y11TT/29pzGTRRWSaKh1q/GsVdzaE4abB5a+67c1vJ4pay6Y
-   xCrd1GjbfTBFnvXP7igZHJjpLy+p6ixythwmB+DzFE3w2aBFVMzK+WeH3
-   QPHDrPo+fdICrCl/wbj9mmIGCuaDIm5Y5v5kXraBSkt6giLsX3a406+Ea
-   bJ6YIj0g0o/nGEPZaH2M/n0UPyoR2Ut5rtE2/URpBoeGWnRxDbkHdkNnS
-   aK8jTjK0uRNSctAeRsCg21XNLwNwQIinDholbJnrwLV3g02VIhDt5oArK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="314339983"
+  t=1677518105; x=1709054105;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=1OcPQbo8ePg+DLDJ2lHGXCZf3gRhxG8iTP1M5TYKjZA=;
+  b=GG5yeWI0g6CRwGq2eggImrdamzrw9Y6lsm+96WmmGXHghhAOxDQtHf8Y
+   aSZhTF2rjycbGHJELuTaFPKE6Ig3sj/Q4l81CTMjjdGmKtIhQIyI++H/M
+   1u+uVZxJhxsXw35fEzoW7Yt8CmhN+cnFWzniB/s8ijoKMmfx29vp8D+qk
+   dP3A9pHgFPTQ8MdmfU4pJyp8slUxci+mJWuzmN4tuXCirD62o1O/+Tu9L
+   YtSBP5nkLPG0l9irpURrj8I2hh1zr+AVy/T0ByhuzxNkXQ2OQD3PTFO6W
+   8jLeCWfh8JUtG6ICdcikjEVFY9yBWN68AhT/QgWMl9qqB7i5KMd4vSi8g
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313585175"
 X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="314339983"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 09:09:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="704099478"
+   d="scan'208";a="313585175"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 09:13:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="651302683"
 X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="704099478"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Feb 2023 09:09:52 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWh0Z-0004bv-0m;
-        Mon, 27 Feb 2023 17:09:51 +0000
-Date:   Tue, 28 Feb 2023 01:08:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore
- files
-Message-ID: <202302280150.LBCCD7Fo-lkp@intel.com>
+   d="scan'208";a="651302683"
+Received: from jkaisrli-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.56.158])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 09:12:57 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Yaroslav Bolyukin <iam@lach.pw>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Liu, Wenjing" <Wenjing.Liu@amd.com>
+Subject: Re: [PATCH v3 1/2] drm/edid: parse DRM VESA dsc bpp target
+In-Reply-To: <bed5e04a-a0e3-fb80-d75e-cdcd85efe7ab@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230226141051.21767-1-iam@lach.pw>
+ <20230226141051.21767-2-iam@lach.pw>
+ <bed5e04a-a0e3-fb80-d75e-cdcd85efe7ab@amd.com>
+Date:   Mon, 27 Feb 2023 19:12:54 +0200
+Message-ID: <87356r117t.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f3a2439f20d918930cc4ae8f76fe1c1afd26958f
-commit: 91ecf7ff1b036f3fe1183809661119b1ee109b19 kbuild: make W=1 warn files that are tracked but ignored by git
-date:   5 weeks ago
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20230228/202302280150.LBCCD7Fo-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=91ecf7ff1b036f3fe1183809661119b1ee109b19
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 91ecf7ff1b036f3fe1183809661119b1ee109b19
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Mon, 27 Feb 2023, Harry Wentland <harry.wentland@amd.com> wrote:
+> On 2/26/23 09:10, Yaroslav Bolyukin wrote:
+>> As per DisplayID v2.0 Errata E9 spec "DSC pass-through timing support"
+>> VESA vendor-specific data block may contain target DSC bits per pixel
+>> fields
+>> 
+>
+> According to the errata this should only apply to VII timings. The way
+> it is currently implemented will make it apply to everything which is
+> not what we want.
+>
+> Can we add this field to drm_mode_info instead of drm_display_info and
+> set it inside drm_mode_displayid_detailed when parsing a type_7 timing?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302280150.LBCCD7Fo-lkp@intel.com/
+That's actually difficult to do nicely. I think the patch at hand is
+fine, and it's fine to add the information to drm_display_info. It's a
+dependency to parsing the modes.
 
-All warnings (new ones prefixed by >>):
+How the info will actually be used is a different matter, and obviously
+needs to follow the spec. As it is, *this* patch doesn't say anything
+about that. But whether it's handled in VII timings parsing or
+elsewhere, I still think this part is fine.
 
-   Documentation/devicetree/bindings/.yamllint: warning: ignored by one of the .gitignore files
->> drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore files
->> drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .gitignore files
->> drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore files
->> fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
->> fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
->> kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore files
->> lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
->> mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
+
+BR,
+Jani.
+
+>
+> Harry
+>
+>
+>> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+>> ---
+>>  drivers/gpu/drm/drm_edid.c  | 38 +++++++++++++++++++++++++------------
+>>  include/drm/drm_connector.h |  6 ++++++
+>>  include/drm/drm_displayid.h |  4 ++++
+>>  3 files changed, 36 insertions(+), 12 deletions(-)
+>> 
+>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+>> index 3d0a4da661bc..aa88ac82cbe0 100644
+>> --- a/drivers/gpu/drm/drm_edid.c
+>> +++ b/drivers/gpu/drm/drm_edid.c
+>> @@ -6338,7 +6338,7 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+>>  	if (oui(vesa->oui[0], vesa->oui[1], vesa->oui[2]) != VESA_IEEE_OUI)
+>>  		return;
+>>  
+>> -	if (sizeof(*vesa) != sizeof(*block) + block->num_bytes) {
+>> +	if (block->num_bytes < 5) {
+>>  		drm_dbg_kms(connector->dev,
+>>  			    "[CONNECTOR:%d:%s] Unexpected VESA vendor block size\n",
+>>  			    connector->base.id, connector->name);
+>> @@ -6361,24 +6361,37 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+>>  		break;
+>>  	}
+>>  
+>> -	if (!info->mso_stream_count) {
+>> -		info->mso_pixel_overlap = 0;
+>> -		return;
+>> -	}
+>> +	info->mso_pixel_overlap = 0;
+>> +
+>> +	if (info->mso_stream_count) {
+>> +		info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+>> +
+>> +		if (info->mso_pixel_overlap > 8) {
+>> +			drm_dbg_kms(connector->dev,
+>> +				    "[CONNECTOR:%d:%s] Reserved MSO pixel overlap value %u\n",
+>> +				    connector->base.id, connector->name,
+>> +				    info->mso_pixel_overlap);
+>> +			info->mso_pixel_overlap = 8;
+>> +		}
+>>  
+>> -	info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+>> -	if (info->mso_pixel_overlap > 8) {
+>>  		drm_dbg_kms(connector->dev,
+>> -			    "[CONNECTOR:%d:%s] Reserved MSO pixel overlap value %u\n",
+>> +			    "[CONNECTOR:%d:%s] MSO stream count %u, pixel overlap %u\n",
+>>  			    connector->base.id, connector->name,
+>> -			    info->mso_pixel_overlap);
+>> -		info->mso_pixel_overlap = 8;
+>> +			    info->mso_stream_count, info->mso_pixel_overlap);
+>> +	}
+>> +
+>> +	if (block->num_bytes < 7) {
+>> +		/* DSC bpp is optional */
+>> +		return;
+>>  	}
+>>  
+>> +	info->dp_dsc_bpp = FIELD_GET(DISPLAYID_VESA_DSC_BPP_INT, vesa->dsc_bpp_int) * 16
+>> +		+ FIELD_GET(DISPLAYID_VESA_DSC_BPP_FRACT, vesa->dsc_bpp_fract);
+>> +
+>>  	drm_dbg_kms(connector->dev,
+>> -		    "[CONNECTOR:%d:%s] MSO stream count %u, pixel overlap %u\n",
+>> +		    "[CONNECTOR:%d:%s] DSC bits per pixel %u\n",
+>>  		    connector->base.id, connector->name,
+>> -		    info->mso_stream_count, info->mso_pixel_overlap);
+>> +		    info->dp_dsc_bpp);
+>>  }
+>>  
+>>  static void drm_update_mso(struct drm_connector *connector,
+>> @@ -6425,6 +6438,7 @@ static void drm_reset_display_info(struct drm_connector *connector)
+>>  	info->mso_stream_count = 0;
+>>  	info->mso_pixel_overlap = 0;
+>>  	info->max_dsc_bpp = 0;
+>> +	info->dp_dsc_bpp = 0;
+>>  
+>>  	kfree(info->vics);
+>>  	info->vics = NULL;
+>> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+>> index 7b5048516185..1d01e0146a7f 100644
+>> --- a/include/drm/drm_connector.h
+>> +++ b/include/drm/drm_connector.h
+>> @@ -719,6 +719,12 @@ struct drm_display_info {
+>>  	 */
+>>  	u32 max_dsc_bpp;
+>>  
+>> +	/**
+>> +	 * @dp_dsc_bpp: DP Display-Stream-Compression (DSC) timing's target
+>> +	 * DST bits per pixel in 6.4 fixed point format. 0 means undefined
+>> +	 */
+>> +	u16 dp_dsc_bpp;
+>> +
+>>  	/**
+>>  	 * @vics: Array of vics_len VICs. Internal to EDID parsing.
+>>  	 */
+>> diff --git a/include/drm/drm_displayid.h b/include/drm/drm_displayid.h
+>> index 49649eb8447e..0fc3afbd1675 100644
+>> --- a/include/drm/drm_displayid.h
+>> +++ b/include/drm/drm_displayid.h
+>> @@ -131,12 +131,16 @@ struct displayid_detailed_timing_block {
+>>  
+>>  #define DISPLAYID_VESA_MSO_OVERLAP	GENMASK(3, 0)
+>>  #define DISPLAYID_VESA_MSO_MODE		GENMASK(6, 5)
+>> +#define DISPLAYID_VESA_DSC_BPP_INT	GENMASK(5, 0)
+>> +#define DISPLAYID_VESA_DSC_BPP_FRACT	GENMASK(3, 0)
+>>  
+>>  struct displayid_vesa_vendor_specific_block {
+>>  	struct displayid_block base;
+>>  	u8 oui[3];
+>>  	u8 data_structure_type;
+>>  	u8 mso;
+>> +	u8 dsc_bpp_int;
+>> +	u8 dsc_bpp_fract;
+>>  } __packed;
+>>  
+>>  /* DisplayID iteration */
+>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Jani Nikula, Intel Open Source Graphics Center
