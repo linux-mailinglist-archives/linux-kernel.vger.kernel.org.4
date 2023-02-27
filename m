@@ -2,190 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B446A4569
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831B86A456D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjB0O7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S230032AbjB0O7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjB0O7K (ORCPT
+        with ESMTP id S230025AbjB0O7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:59:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DEA1CF4A;
-        Mon, 27 Feb 2023 06:59:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A773C60DFD;
-        Mon, 27 Feb 2023 14:59:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0232FC433EF;
-        Mon, 27 Feb 2023 14:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677509943;
-        bh=Qd7KuEgfZnLJE7sF6cQgd6N1JrAhH9cKK4jfvtXKGoY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FlaKjmz6cHh4W2oJP6X4w0imrBSj08evyX4PYTdT/TFFV5XENYryt7AzAVnbC8gpC
-         cOJODxjiO8XjFOfSp2qHqw+dCMyUVVZ7wSAXbgrfVt9nE87WUB/c8smvq1ipZURbjO
-         ODPRN3Qeovb3I7oPyH0H2gasfCnwyuCXFrSLfCis/XM9cfqNmCBEHulZl/RKX5H3td
-         fdN3vJxOA5A3ga6+c6ufwTZn62sVCtjVF/1S5E2HS29dtCva68lHSejnWXJO2E2xUr
-         CKgQgTws+LD80cRCwjSA7Z5o8xUXMVUK8OXnuLN+9TML9QIF3jHR0fiaO4PGktjUbc
-         Ro4eUgUHEyi9Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7CBD25C0165; Mon, 27 Feb 2023 06:59:02 -0800 (PST)
-Date:   Mon, 27 Feb 2023 06:59:02 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller@googlegroups.com, contact@pgazz.com
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in rcu_core
-Message-ID: <20230227145902.GD2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CAABZP2z+Hk_w7nAhhyhJA9zidQViibMUO_xYianfm3xcG1QQwQ@mail.gmail.com>
- <D59B7575-FAB1-4446-BBA9-DF5EAA1B5DCA@joelfernandes.org>
+        Mon, 27 Feb 2023 09:59:18 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE972203A;
+        Mon, 27 Feb 2023 06:59:15 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id i202so2650268ioa.3;
+        Mon, 27 Feb 2023 06:59:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y3GCNwTUZB8kzZG/gYuYfLxJdLZvnUgoAzuOHI0jCdY=;
+        b=S6iE4D8qfxp6Zf1z3MJFBlZvXshZkI5deCZvjwk+Ldb5nohj3XWFLrnHHGtLYjtpx5
+         oU0r2v3M2QIFIGv/8jJeeU8W7jhYa+6ExZe2xNYpgzExSDhxbGewLxaIvwe/I+bMA1oq
+         uO4toeIGCyx4xb4iP1v7uDywXR4F7fnjoh+z817RaSDJJXcPzQkzhPQoBfA3heXqWbGW
+         6sRN+cosKJEzPmmSh1BcQqDGckK6oX2ee/3bIm/UXnoXBB4gHxEzC5oEi9eBlLD2MqZ9
+         dAlTQYmOpMlb0KMqA93mffS2JIc1598FbG56zC2dOEMJELIpXTwmfGvljO3uv7kOFtHM
+         Q8XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y3GCNwTUZB8kzZG/gYuYfLxJdLZvnUgoAzuOHI0jCdY=;
+        b=bi0ff8U4b0/1G5ErkJhWN/K1exwvWtoDJjfPL3mEhUCPpKmHglRvIqEmUZF3eKVbmU
+         oaeNJ4gJ2iYI+Xl13h02yb0aWs2/jN3udqqOKswn7hzaFzuSQFZ08tQsZWZqOKNB2a3S
+         p2JUhhHWqWsFI63sG/S1ztR70bFUhzSMGuhgSlElQ27mhQqNIYQER+lBgysAHCC22dX5
+         HLk55LNvNN0xCzh5oBQ5sclCm3cJLGtzsAhf2G2soPAybHmd8dF0r1P1wq3pQIcNP4Dq
+         qxdiIWmHqznYfSudNT6HtQpQ++HhYWvCXB+hxnsEIHnwUj4sUY/gfio14t5slSYKZp1N
+         pOgA==
+X-Gm-Message-State: AO0yUKVfejR2uR8SaZdKbcT5ANq9AOyxAze6gadnT6oGAUNqyEm+f4Ru
+        2NCD2vdGLWYJ3shuvMLjnz0=
+X-Google-Smtp-Source: AK7set9dR0iQjzKlEIv6bGw6qiR9kUVSzphDuGcQaV2R+/Hhe/OK3u3U1m2vKlQLNv6dC/YksZGM7w==
+X-Received: by 2002:a6b:7504:0:b0:6e9:d035:45df with SMTP id l4-20020a6b7504000000b006e9d03545dfmr15378337ioh.6.1677509954692;
+        Mon, 27 Feb 2023 06:59:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m20-20020a92c534000000b00315813e404esm2015491ili.58.2023.02.27.06.59.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 06:59:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <19587ea3-e54c-e3b0-5341-eb7ee486474b@roeck-us.net>
+Date:   Mon, 27 Feb 2023 06:59:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D59B7575-FAB1-4446-BBA9-DF5EAA1B5DCA@joelfernandes.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
+Content-Language: en-US
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220428205116.861003-1-yury.norov@gmail.com>
+ <20220428205116.861003-4-yury.norov@gmail.com>
+ <20230225184702.GA3587246@roeck-us.net> <Y/qhL8kSzzhMm+tO@yury-laptop>
+ <Y/qilU0cW6ebmrnM@yury-laptop>
+ <95377047-6b26-b434-fc90-2289fccc2a0b@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <95377047-6b26-b434-fc90-2289fccc2a0b@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 08:15:26AM -0500, Joel Fernandes wrote:
+On 2/27/23 06:46, Alexander Lobakin wrote:
+> From: Yury Norov <yury.norov@gmail.com>
+> Date: Sat, 25 Feb 2023 16:06:45 -0800
 > 
+>> On Sat, Feb 25, 2023 at 04:05:02PM -0800, Yury Norov wrote:
+>>> On Sat, Feb 25, 2023 at 10:47:02AM -0800, Guenter Roeck wrote:
+>>>> Hi,
+>>>>
+>>>> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
+>>>>> Test newly added bitmap_{from,to}_arr64() functions similarly to
+>>>>> already existing bitmap_{from,to}_arr32() tests.
+>>>>>
+>>>>> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+>>>>
+>>>> Ever since this test is in the tree, several of my boot tests show
+>>>> lots of messages such as
+>>>>
+>>>> test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
 > 
-> > On Feb 27, 2023, at 3:03 AM, Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
-> > 
-> > ﻿Hi
-> > 
-> >> On Mon, Feb 27, 2023 at 2:30 PM Sanan Hasanov
-> >> <sanan.hasanov@knights.ucf.edu> wrote:
-> >> 
-> >> Good day, dear maintainers,
-> >> 
-> >> We found a bug using a modified kernel configuration file used by syzbot.
-> >> 
-> >> We enhanced the coverage of the configuration file using our tool, klocalizer.
-> >> 
-> >> Kernel Branch: 6.2.0-next-20230221
-> >> Kernel config: https://drive.google.com/file/d/1QKAQV11zjOwISifUc-skRBoTo3EXhutY/view?usp=share_link
-> >> C Reproducer: Unfortunately, there is no reproducer yet.
+> Hmmm, the whole 4 bytes weren't touched.
 > 
-> Sanan/Zhoui,
-> Could you also provide the full kernel dmesg? Could you enable CONFIG_DEBUG_INFO_DWARF5 and provide the vmlinux after the crash?
+>>>> test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
+>>>> test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
 > 
-> More comments below:
+> This is where it gets worse...
 > 
-> >> 
-> >> BUG: kernel NULL pointer dereference, address: 0000000000000000
-> >> #PF: supervisor instruction fetch in kernel mode
-> >> #PF: error_code(0x0010) - not-present page
-> >> PGD 53756067 P4D 53756067 PUD 0
-> >> Oops: 0010 [#1] PREEMPT SMP KASAN
-> >> CPU: 7 PID: 0 Comm: swapper/7 Not tainted 6.2.0-next-20230221 #1
-> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-> >> RIP: 0010:0x0
-> >> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-> >> RSP: 0018:ffffc900003f8e48 EFLAGS: 00010246
-> >> RAX: 0000000000000000 RBX: ffff888100833900 RCX: 00000000b9582f6c
-> >> RDX: 1ffff11020106853 RSI: ffffffff816b2769 RDI: ffff888043f64708
-> >> RBP: 000000000000000c R08: 0000000000000000 R09: ffffffff900b895f
-> >> R10: fffffbfff201712b R11: 000000000008e001 R12: dffffc0000000000
-> >> R13: ffffc900003f8ec8 R14: ffff888043f64708 R15: 000000000000000b
-> >> FS:  0000000000000000(0000) GS:ffff888119f80000(0000) knlGS:0000000000000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: ffffffffffffffd6 CR3: 0000000054e64000 CR4: 0000000000350ee0
-> >> Call Trace:
-> >> <IRQ>
-> >> rcu_core+0x85d/0x1960
-> >> __do_softirq+0x2e5/0xae2
-> >> __irq_exit_rcu+0x11d/0x190
-> >> irq_exit_rcu+0x9/0x20
-> >> sysvec_apic_timer_interrupt+0x97/0xc0
-> >> </IRQ>
-> >> <TASK>
-> >> asm_sysvec_apic_timer_interrupt+0x1a/0x20
-> >> RIP: 0010:default_idle+0xf/0x20
-> >> Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c 01 c7 4c 29 c2 e9 76 ff ff ff cc cc cc cc f3 0f 1e fa eb 07 0f 00 2d e3 8a 34 00 fb f4 <fa> c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa 65
-> >> RSP: 0018:ffffc9000017fe00 EFLAGS: 00000202
-> >> RAX: 0000000000dfbea1 RBX: dffffc0000000000 RCX: ffffffff89b1da9c
-> >> RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-> >> RBP: 0000000000000007 R08: 0000000000000001 R09: ffff888119fb6c23
-> >> R10: ffffed10233f6d84 R11: dffffc0000000000 R12: 0000000000000003
-> >> R13: ffff888100833900 R14: ffffffff8e112850 R15: 0000000000000000
-> >> default_idle_call+0x67/0xa0
-> >> do_idle+0x361/0x440
-> >> cpu_startup_entry+0x18/0x20
-> >> start_secondary+0x256/0x300
-> >> secondary_startup_64_no_verify+0xce/0xdb
-> >> </TASK>
-> >> Modules linked in:
-> >> CR2: 0000000000000000
-> >> ---[ end trace 0000000000000000 ]---
-> >> RIP: 0010:0x0
-> >> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+>>>> ...
+>>>> test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
+>>>> test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
 > 
-> I have seen this exact signature when the processor tries to execute a function that has a NULL address. That causes IP to goto 0 and the exception. Sounds like something corrupted rcu_head (Just a guess).
+> I don't see the pattern how the actual result gets generated. But the
+> problem is in the bitmap code rather than in the subtest -- "must be"s
+> are fully correct.
+> 
+> Given that the 0xa5s are present in the upper 32 bits, it is Big Endian
+> I guess? Maybe even 32-bit Big Endian? Otherwise I'd start concerning
+> how comes it doesn't reproduce on x86_64s :D
+> 
 
-Quite possibly!  If so, then building with CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
-might be helpful.
+It does reproduce on 32-bit x86 builds, and as far as I can see
+it is only seen with 32-bit little endian systems.
 
-Once a reproducer is foud, of course...
+Guenter
 
-							Thanx, Paul
-
-> >> RSP: 0018:ffffc900003f8e48 EFLAGS: 00010246
-> >> 
-> >> RAX: 0000000000000000 RBX: ffff888100833900 RCX: 00000000b9582f6c
-> >> RDX: 1ffff11020106853 RSI: ffffffff816b2769 RDI: ffff888043f64708
-> >> RBP: 000000000000000c R08: 0000000000000000 R09: ffffffff900b895f
-> >> R10: fffffbfff201712b R11: 000000000008e001 R12: dffffc0000000000
-> >> R13: ffffc900003f8ec8 R14: ffff888043f64708 R15: 000000000000000b
-> >> FS:  0000000000000000(0000) GS:ffff888119f80000(0000) knlGS:0000000000000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: ffffffffffffffd6 CR3: 0000000054e64000 CR4: 0000000000350ee0
-> >> ----------------
-> >> Code disassembly (best guess):
-> >>   0:   89 07                   mov    %eax,(%rdi)
-> >>   2:   49 c7 c0 08 00 00 00    mov    $0x8,%r8
-> >>   9:   4d 29 c8                sub    %r9,%r8
-> >>   c:   4c 01 c7                add    %r8,%rdi
-> >>   f:   4c 29 c2                sub    %r8,%rdx
-> >>  12:   e9 76 ff ff ff          jmp    0xffffff8d
-> >>  17:   cc                      int3
-> >>  18:   cc                      int3
-> >>  19:   cc                      int3
-> >>  1a:   cc                      int3
-> >>  1b:   f3 0f 1e fa             endbr64
-> >>  1f:   eb 07                   jmp    0x28
-> >>  21:   0f 00 2d e3 8a 34 00    verw   0x348ae3(%rip)        # 0x348b0b
-> >>  28:   fb                      sti
-> >>  29:   f4                      hlt
-> >> * 2a:   fa                      cli <-- trapping instruction
+>>>
+>>> This may be a real problem. Can you share what's the system is? What's
+>>> endianness and register length?
+>>>
+>>> + Alexander Lobakin, the author of the exact subtest.
+>>
+>> Forgot to add
 > 
-> This probably happened before the crash and it is likely unrelated IMO. cli just means interrupts were enabled, the actual problem happened after softirq fired (likely at the tail end of the interrupt).
+> Oh, thanks for letting me know!
+> 
+>>    
+>>>> but then:
+>>>>
+>>>> test_bitmap: all 6550 tests passed
+>>>
+>>> It's because corresponding error path doesn't increment failed_tests
+>>> counter. I'll send a fix shortly.
+> 
+> [...]
 > 
 > Thanks,
-> 
->  - Joel 
-> 
-> 
-> >>  2b:   c3                      ret
-> >>  2c:   66 66 2e 0f 1f 84 00    data16 cs nopw 0x0(%rax,%rax,1)
-> >>  33:   00 00 00 00
-> >>  37:   0f 1f 40 00             nopl   0x0(%rax)
-> >>  3b:   f3 0f 1e fa             endbr64
-> >>  3f:   65                      gs
-> >> 
+> Olek
+
