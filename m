@@ -2,85 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2864F6A3D75
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7496A3D89
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjB0Iwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 03:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S231633AbjB0IzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjB0IwS (ORCPT
+        with ESMTP id S229710AbjB0Iyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:52:18 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D19193E4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:45:01 -0800 (PST)
+        Mon, 27 Feb 2023 03:54:45 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D89244BD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:47:08 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id p20so4724994plw.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 00:47:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1677487502; x=1709023502;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4+h0aoYkidJgeWb694GJg+GljUa72J6p/ycCwVzrKtg=;
-  b=BllJI9mBZ5mOhvaXcH4Th5OY5pvAovkqN4B8uUSqHOzTNDQhVT5Zzt6/
-   LRMNik79RbqwukwBO/WdewhUmVGGiKUpOWbm4T1VrcAcaL2ZbDAZgbJA3
-   6n0OLvCL7v1/560r/qBC6QBzBe5qup41YExEwfFNFS4lDh+vTYdVWjWk9
-   E=;
-X-IronPort-AV: E=Sophos;i="5.97,331,1669075200"; 
-   d="scan'208";a="186841133"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-96feee09.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 08:43:14 +0000
-Received: from EX19D020EUA004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-m6i4x-96feee09.us-east-1.amazon.com (Postfix) with ESMTPS id DD33444555;
-        Mon, 27 Feb 2023 08:43:08 +0000 (UTC)
-Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
- EX19D020EUA004.ant.amazon.com (10.252.50.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Mon, 27 Feb 2023 08:43:07 +0000
-Received: from u40bc5e070a0153.ant.amazon.com (10.1.212.27) by
- EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.24; Mon, 27 Feb 2023 08:43:01 +0000
-Date:   Mon, 27 Feb 2023 09:42:54 +0100
-From:   Roman Kagan <rkagan@amazon.de>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Ben Segall <bsegall@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
-Message-ID: <Y/xtDWYTKLutOqrM@u40bc5e070a0153.ant.amazon.com>
-Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Ben Segall <bsegall@google.com>, Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>
-References: <20230209193107.1432770-1-rkagan@amazon.de>
- <CAKfTPtB7ZDyCh0MiNQtyimVhYJ6E3C+2bTptj9CX3+mepH8YAQ@mail.gmail.com>
- <Y/T36NvaCxSfS8Z/@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
-X-Originating-IP: [10.1.212.27]
-X-ClientProxiedBy: EX19D045UWA004.ant.amazon.com (10.13.139.91) To
- EX19D033EUC004.ant.amazon.com (10.252.61.133)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NFpin/ECaOJex7YpZnFv6bGio0mg33EAQtvXgREUayQ=;
+        b=K0762jnEJeB99RHRGn9nhBNoRCkFPx0Ljg3EZyQXsyQFII/I1EkFO5qgAOccMNyeD6
+         UJiRPUyOF88EKQ64ReXpDogSAEzm1FhfT5k1GGBx9mn7HhitR+o37RAqUeuqWlQoOikt
+         +7R+89Z+KoE/Ogow5wLHeo3vcvkfdxI5BB0JPnxpfd3IN7NCfNdGBGKkxhDyiFFlEQIl
+         SVPrbPfz1t9hPC+p/lRJSXw2i2wdFlh8CDDiZrPYsE9aVljQ5XZOY3TgKeJeik8HLUzL
+         pTiOS4BhrdtYCU67A7KUe4ppA7u80fNvJeQueGLVph63Z76f/+cezeihw8RdEVY9krcM
+         XIjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NFpin/ECaOJex7YpZnFv6bGio0mg33EAQtvXgREUayQ=;
+        b=sq1Dijrx2BogcbGxFMF2dcVOYR5J2GCs+lBW6skx2dH7piEqkysmDXwxyc+QRLJXy8
+         QNdh7YtX+2Gye/9H2hAX28QDFDe25haeCVwhKqVsPKC0KHjftku17RmQCMFTPmwFrvpx
+         TEKQ6v4gZZrH8TvSiN2FO8sRS9Sq618hiFbh1QOOF/Edat5wYfq+4seOwMx+JXbj4BQC
+         sHFeVt3osMnOdg5O4dMNjJ8ixrMEhPok9BAZ6HbuB6Ore4eKD5OdhmH5y1qXsFNeOzNM
+         p/wH5VIZJiAxSOhJJIE0P07Wrr3HY5aqq3aTEmyBoFHZFu87t56frb1dJTCbuX1EJHSm
+         kEIQ==
+X-Gm-Message-State: AO0yUKVkTEkLR+kfSQngSeLGhEfiXhAie3Xjr9Nivc6ke5zduIp+FN38
+        kl+o+KyCT0/bNgbSjU2r8M0=
+X-Google-Smtp-Source: AK7set8rUqbwDb6YN70TZCYUV86Ojz9rmvp/fH3/kyj5o5+FHv+eATzeub1Rvw+C1JsZIKHgA9XKnA==
+X-Received: by 2002:a17:903:22c8:b0:192:4f85:b91d with SMTP id y8-20020a17090322c800b001924f85b91dmr27141271plg.46.1677487558137;
+        Mon, 27 Feb 2023 00:45:58 -0800 (PST)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902ba8300b0019aa8fd9485sm4013688pls.145.2023.02.27.00.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 00:45:57 -0800 (PST)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        zhangwen@coolpad.com, Yue Hu <huyue2@coolpad.com>
+Subject: [PATCH] erofs: don't warn ztailpacking feature anymore
+Date:   Mon, 27 Feb 2023 16:44:57 +0800
+Message-Id: <20230227084457.3510-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,37 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 06:26:11PM +0100, Vincent Guittot wrote:
-> On Tue, 21 Feb 2023 at 17:57, Roman Kagan <rkagan@amazon.de> wrote:
-> > What scares me, though, is that I've got a message from the test robot
-> > that this commit drammatically affected hackbench results, see the quote
-> > below.  I expected the commit not to affect any benchmarks.
-> >
-> > Any idea what could have caused this change?
-> 
-> Hmm, It's most probably because se->exec_start is reset after a
-> migration and the condition becomes true for newly migrated task
-> whereas its vruntime should be after min_vruntime.
-> 
-> We have missed this condition
+From: Yue Hu <huyue2@coolpad.com>
 
-Makes sense to me.
+The ztailpacking feature has been merged for a year, it has been mostly
+stable now.
 
-But what would then be the reliable way to detect a sched_entity which
-has slept for long and risks overflowing in .vruntime comparison?
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+ fs/erofs/super.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Thanks,
-Roman.
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 19b1ae79cec4..733c22bcc3eb 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -417,8 +417,6 @@ static int erofs_read_superblock(struct super_block *sb)
+ 	/* handle multiple devices */
+ 	ret = erofs_scan_devices(sb, dsb);
+ 
+-	if (erofs_sb_has_ztailpacking(sbi))
+-		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+ 	if (erofs_is_fscache_mode(sb))
+ 		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+ 	if (erofs_sb_has_fragments(sbi))
+-- 
+2.17.1
 
