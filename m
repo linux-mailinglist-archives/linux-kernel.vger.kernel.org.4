@@ -2,180 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6739A6A4529
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10A26A452F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjB0Ouv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S229823AbjB0OwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjB0Out (ORCPT
+        with ESMTP id S229657AbjB0OwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:50:49 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765B8212AB;
-        Mon, 27 Feb 2023 06:50:48 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id h10so4034756ila.11;
-        Mon, 27 Feb 2023 06:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+jYyq1jhOJX4L8R02OOarqFh4Kn9adYP/VGoKDxS3Y=;
-        b=nNOIXYN7JiHPmx34v6yMlx1tq5eUxFsnvQTj7QKj2zffdl3f/8TTirINmPwsHtqoIk
-         PaOZfE257b4iBHJCytvTZP6mZoYsA7cycoYXmeNxfceEgV9wfd3i93XkP6+RMW6O/WOe
-         Up6mtIxn6Q4kqtv0YJfB37mJRh63CzAbBbVM6h+hesHAb2QWyPgfZ10zCG7BMkEqXSff
-         DvOUeGxkj2G+eBB24Pfvhm11wMxnMDwOgtJitlHbcAik1hG/VJXJ/Wixa8Z1xlUSLKWm
-         GB0C039siTeYlazbQ+1jXbxRYDYJfNTiPo5cglaocrWk63Bpnw6ic2pxWaBnz0kCEtsf
-         depQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L+jYyq1jhOJX4L8R02OOarqFh4Kn9adYP/VGoKDxS3Y=;
-        b=SGPU24RFJlGQKqEF7JWLrgpXSENaLQ8mFdEpFn2nNi/qXB5Iwg5KY/MXZqcZMSWQ5J
-         J7TMp8gyxPOLBokuOtqx7siNmysMZeGyTwuQqZrLLdXRJ7/8KPuf47m0u/QXjUCMyVE8
-         bLa3jSlcLRUtlNar7hpJpko8CHjxEaEE7fsv7ABW3YtM1jzSO9vIA/sNTwruF8MfI12X
-         pCMzqAl3IzZGhoVhjaosHRgReb+jiMpTO4kfAWJ/luKfut5oO76mBj9bFRF57Pf3ZtEH
-         WAMmAlmhb1TlwXbkhUU40moP4wKiW4l8wMJNu4UoKBFx1m0JU3MzmBVUWXnHEL+yrZJP
-         Xglg==
-X-Gm-Message-State: AO0yUKXjjAG+m8WNf8CLOgOQqROPYicr/G0m5jiROxr4DpycshY21TCe
-        MlwgMomKMxrAq6DKef0XhAg=
-X-Google-Smtp-Source: AK7set/5YiCfPaih4CO+pmCM2/MrPak5lsrv8POHxOAFXyUa0OqdaFeC6cXDbBKhR/j9tNcIvnmjEg==
-X-Received: by 2002:a05:6e02:1906:b0:315:3252:655f with SMTP id w6-20020a056e02190600b003153252655fmr23175858ilu.21.1677509447731;
-        Mon, 27 Feb 2023 06:50:47 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e23-20020a02a797000000b003c4f902cca5sm2124648jaj.172.2023.02.27.06.50.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 06:50:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a7ffe026-a48b-9ffd-20d3-7d25caba120d@roeck-us.net>
-Date:   Mon, 27 Feb 2023 06:50:44 -0800
+        Mon, 27 Feb 2023 09:52:14 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9262199DF;
+        Mon, 27 Feb 2023 06:52:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=BEf3+GrVy/Ve5Mra+H11XKmh4RTr6rjhGhJDtl+7Fjk=; b=CbUGOZLK4Cx9tQ0rL/NWMu0Y87
+        1JJFkljLbMyH/er35Uc99ineykFQA6zjdYmmLOdT5sZTIhZRJAKadEYBXcjHbaJFyOmzl3bg4vpKm
+        hol8DUnU33/C404gRxmcSZ+yu7M7rYMXh+Hv0mI4+Ds97lBOuBdRf3A6sU6pr2uLSSjE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pWerJ-0065MP-Ch; Mon, 27 Feb 2023 15:52:09 +0100
+Date:   Mon, 27 Feb 2023 15:52:09 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH v2 net-next 3/5] net: dsa: microchip: add eth mac
+ grouping for ethtool statistics
+Message-ID: <Y/zDmZDPnwvBqAST@lunn.ch>
+References: <20230217110211.433505-1-rakesh.sankaranarayanan@microchip.com>
+ <20230217110211.433505-4-rakesh.sankaranarayanan@microchip.com>
+ <84835bee-a074-eb46-f1e4-03e53cd7f9ec@intel.com>
+ <20230217164227.mw2cyp22bsnvuh6t@skbuf>
+ <47a67799-27d9-094e-11c3-a18efcf281e2@intel.com>
+ <20230224215349.umzw46xvzccjdndd@skbuf>
+ <ca1f4970-206d-64f2-d210-e4e54b59d301@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
-References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
- <20230220081926.267695-3-xingyu.wu@starfivetech.com>
- <20230223182341.GA200380@roeck-us.net>
- <8ba002ea-299c-2eaf-b1a7-d7d38a540152@starfivetech.com>
- <ae998eb6-54ce-05c4-2961-bdb2393eac64@roeck-us.net>
- <58cab864-2a59-b82c-bdfe-2e805a04fd7a@starfivetech.com>
- <547a469d-eeaa-750c-4fe5-cc82d92493a6@roeck-us.net>
- <2b79e1ac-3399-075d-1d1d-e6d7f88351fc@starfivetech.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <2b79e1ac-3399-075d-1d1d-e6d7f88351fc@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca1f4970-206d-64f2-d210-e4e54b59d301@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/26/23 22:45, Xingyu Wu wrote:
-> On 2023/2/27 14:36, Guenter Roeck wrote:
->> On 2/26/23 22:26, Xingyu Wu wrote:
->>> On 2023/2/24 23:18, Guenter Roeck wrote:
->>>> On 2/23/23 23:42, Xingyu Wu wrote:
->>>>> On 2023/2/24 2:23, Guenter Roeck wrote:
->>>>>> On Mon, Feb 20, 2023 at 04:19:26PM +0800, Xingyu Wu wrote:
->>>>>>> [...]
->>>>>>> +
->>>>>>> +    wdt->wdt_device.min_timeout = 1;
->>>>>>> +    wdt->wdt_device.max_timeout = starfive_wdt_max_timeout(wdt);
->>>>>>
->>>>>>       wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
->>>>>>
->>>>>> should be set here. Otherwise the warning below would always be seen
->>>>>> if the module parameter is not set.
->>>>>>
->>>>>>> +
->>>>>>> +    watchdog_set_drvdata(&wdt->wdt_device, wdt);
->>>>>>> +
->>>>>>> +    /*
->>>>>>> +     * see if we can actually set the requested heartbeat,
->>>>>>> +     * and if not, try the default value.
->>>>>>> +     */
->>>>>>> +    watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev);
->>>>>>> +    if (wdt->wdt_device.timeout == 0 ||
->>>>>>
->>>>>> If wdt->wdt_device.timeout is pre-initialized, it will never be 0 here.
->>>>>>
->>>>>>> +        wdt->wdt_device.timeout > wdt->wdt_device.max_timeout) {
->>>>>>
->>>>>> That won't happen because watchdog_init_timeout() validates it and does
->>>>>> not update the value if it is out of range.
->>>>>>
->>>>>>> +        dev_warn(dev, "heartbeat value out of range, default %d used\n",
->>>>>>> +             STARFIVE_WDT_DEFAULT_TIME);
->>>>>>> +        wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
->>>>>>
->>>>>> And this is then unnecessary. wdt->wdt_device.timeout will always be
->>>>>> valid if it was pre-initialized.
->>>>>
->>>>> It is changed to be this at beginning of the driver:
->>>>>
->>>>> static int heartbeat = STARFIVE_WDT_DEFAULT_TIME;
->>>>>
->>>>
->>>> No, this is wrong. The static variable should be set to 0 to indicate
->>>> "use default".
->>>>
->>>>> and it is changed to be this here:
->>>>>
->>>>> ret = watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev);
->>>>> if (ret)
->>>>>       return ret;
->>>>>
->>>>> Would that be better?
->>>>>
->>>>
->>>> No, it is worse, because it would not instantiate the watchdog at all
->>>> if a bad heartbeat is provided.
->>>>
->>>
->>> So instantiate the watchdog with hearbeat first. And if this wrong, use default timeout.
->>> :
->>> if (watchdog_init_timeout(&wdt->wdt_device, heartbeat, dev))
->>>      wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
->>>
->>
->> I am kind of lost why you have to make it that complicated.
->> Just pre-initialize wdt->wdt_device.timeout like all the other drivers do,
->> and as I had suggested earlier.
->>
+> > Easiest way to see a disassembly (also has C code interleaved) would be
+> > this:
+> > 
+> > make drivers/net/dsa/microchip/ksz_ethtool.lst
 > 
-> So you mean just use :
-> wdt->wdt_device.timeout = STARFIVE_WDT_DEFAULT_TIME;
-> to initialize watchdog directly?
-> 
+> Oh, nice! I didn't know Kbuild has capability of listing the assembly
+> code built-in. I was adding it manually to Makefiles when needed >_<
+> Thanks! :D
 
-Yes, as I had suggested before, before calling watchdog_init_timeout().
+You can also do
 
-Guenter
+make drivers/net/dsa/microchip/ksz_ethtool.o
+make drivers/net/dsa/microchip/ksz_ethtool.S
 
-> Best regards,
-> Xingyu Wu
+etc to get any of the intermediary files from the build process.
 
+Also
+
+make drivers/net/dsa/microchip/
+
+will build everything in that subdirectory and below. That can be much
+faster, especially when you have an allmodconf configuration and it
+needs to check 1000s of modules before getting around to building the
+one module you just changed. FYI: the trailing / is important.
+
+       Andrew
