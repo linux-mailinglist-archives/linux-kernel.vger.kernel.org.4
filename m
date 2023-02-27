@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83646A4EBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1256A4EC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjB0Whr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S230404AbjB0WiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjB0WhL (ORCPT
+        with ESMTP id S231126AbjB0Whj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:37:11 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F05EDBC0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:33:04 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id s8so5191044ilv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:33:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1677537172;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T3Cu6m8epvNA3UH0d8Dsxgstk0bjTjSw6TnY3URCJJo=;
-        b=AL/xWpTQxYIWU2CQdF9m3fgKqRfcbDNwa9X3KuJd+7vuCknxuhMILoHf8Qyoz6hxSP
-         93dAcrC0+I68Uh7ASzQCB4hqpQegSYXghxbM0ulujSZPY9tnaqq3qHJuTo5xVT9PKEzc
-         DCpulpc4GycrvelfquQkgO7NaudZ+MniqwvQo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677537172;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T3Cu6m8epvNA3UH0d8Dsxgstk0bjTjSw6TnY3URCJJo=;
-        b=QlL/bYHAjXuXw/MdeBms+UEHLqHTg9SX9+TIs6NTQYx9R/E14eCVvUyiPVn3eEcIja
-         y5OyocUSQpctXJLMrJb9n6OvS2Y3Z+ESj7FMyju3YHmB0wARLvplSAdxOl63Kj2VIWOw
-         JMTqNslnj32++Ii3nF7iT6Z4/zYjaoHuVXgroALb01Or51xKmXgCyIhuCC7SNEceYXdp
-         y6y0j4yuYbR+3W0ukveOU+S/6KclPvZAJVYtOqj7hifRyD9BMiTYjDo2W2bnoHfSbjl/
-         aPkmJDEuihP3P4Y23SRqypbSAygVqXeG+JGFcTbGu7mjeh6/O9Sb2KnQYHvgFqxtOIxo
-         a6aA==
-X-Gm-Message-State: AO0yUKWyfl4LK8iLORv40YXbti3SH9U2CeKOoQEn/kWUhvZASbhr5MHz
-        kvjPQwFk70rhoEiho0r1C71PKg==
-X-Google-Smtp-Source: AK7set8U1d+59mHvSc7yWPEluziqNi1JNCxZke/Kq4W9ZnHwWbidQmuEkdyZ3SQBsry4cHKjKFfPvw==
-X-Received: by 2002:a05:6e02:1a8d:b0:317:1ca3:f518 with SMTP id k13-20020a056e021a8d00b003171ca3f518mr965058ilv.0.1677537171811;
-        Mon, 27 Feb 2023 14:32:51 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v15-20020a92c80f000000b003158ac24ccfsm2259873iln.38.2023.02.27.14.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 14:32:51 -0800 (PST)
-Message-ID: <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
-Date:   Mon, 27 Feb 2023 15:32:50 -0700
+        Mon, 27 Feb 2023 17:37:39 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79C62A16B;
+        Mon, 27 Feb 2023 14:33:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677537226; x=1709073226;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=j9BBL22OrgQurYvsCPk5r9pfycy08TYIh2Hg/JVbOWI=;
+  b=UYnZO4N5Gy3fmMwhsLJApLRwotz6r8FsUztJPM2aKegOGyE/x9f35OyR
+   mkCkT9EYNcGBVkDz3Om0u5ld87aDi9jDVoXgHLAKm639fKiEFYPb3/35L
+   alNmqujfGdRKLKxIvdO1k7ATWofQ4+S0TJ8jmQN4r0pOPtscwDUse0XmH
+   VJ3+eXv2G6QHxQxw8O294jDsmWhyQDVOo2PNbntKOEOnUo+03sbN9AUnx
+   uVEOGVRbZls2rNJS3BN+LBOBceWJDLEDoV3XBI6UN3e9b03BT3ROiUsJ5
+   NkFbNQy9sWd2au1MTRXgj9srD0Ay12U3feE54KbrM/iYhekO35IhBuha6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313658490"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="313658490"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:33:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="742734203"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="742734203"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Feb 2023 14:33:20 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pWm3a-00D1je-1i;
+        Tue, 28 Feb 2023 00:33:18 +0200
+Date:   Tue, 28 Feb 2023 00:33:18 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [GIT PULL] TTY/Serial driver updates for 6.3-rc1
+Message-ID: <Y/0vrqZjKcAnaZAH@smile.fi.intel.com>
+References: <Y/iywbFbiUAA6ZD3@kroah.com>
+ <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
+ <CAHk-=wjyFhdR-M7H6JpH7zF0k_z5xj8+qERaHsh5+0c4uOmv+g@mail.gmail.com>
+ <Y/qcXOxTVHTNDQbY@mit.edu>
+ <CAHk-=wjPrei8BkaJ3wjGF_fTsehhQZVZppzqYrt76oc+oYXk8w@mail.gmail.com>
+ <Y/u59FFG+ID0OAbg@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230206234344.2433950-2-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y/u59FFG+ID0OAbg@mit.edu>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/23 16:43, Luis Chamberlain wrote:
-> The default sefltests timeout is 45 seconds. If you run the kmod
-> selftests on your own with say:
+On Sun, Feb 26, 2023 at 02:58:44PM -0500, Theodore Ts'o wrote:
+> On Sat, Feb 25, 2023 at 06:14:11PM -0800, Linus Torvalds wrote:
+> > On Sat, Feb 25, 2023 at 3:40 PM Theodore Ts'o <tytso@mit.edu> wrote:
+> > >
+> > > For what it's worth, in the VM world (e.g., qemu, AWS, GCP, Azure,
+> > > Linode, etc.)  serial consoles are quite common way of debugging VM's,
+> > > and as an emergency login path when the networking has been screwed up
+> > > for some reason....
+> > 
+> > Everybody seems to be missing the point.
+> > 
+> > We don't make new drivers "default y" (or, in this case, "default SERIAL_8250".
+> > 
+> > It does not matter ONE WHIT if you have a serial device in your
+> > machine. If your old driver was enabled and worked for you and you
+> > used it daily, that is ENTIRELY IMMATERIAL to a new driver, even if
+> > that new driver then happens to use some of the same infrastructure as
+> > the old one did.
 > 
-> ./tools/testings/selftests/kmod.sh
-> 
-> Then the default timeout won't be in effect.
-> 
-> I've never ran kmod selftests using the generic make wrapper
-> (./tools/testing/selftests/run_kselftest.sh -s) util now
-> that I have support for it on kdevops [0]. And with that the
-> test is limitted to the default timeout which we quickly run
-> into. Bump this up to what I see is required on 8GiB / 8 vcpu
-> libvirt q35 guest as can be easily created now with kdevops.
-> 
-> To run selftests with kdevops:
-> 
-> make menuconfig # enable dedicated selftests and kmod test
-> make
-> make bringup
-> make linux
-> make selftests-kmod
-> 
-> This ends up taking about 280 seconds now, give or take add
-> 50 seconds more more and we end up with 350. Document the
-> rationale.
-> 
-> [0] https://github.com/linux-kdevops/kdevops
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->   tools/testing/selftests/kmod/settings | 4 ++++
->   1 file changed, 4 insertions(+)
->   create mode 100644 tools/testing/selftests/kmod/settings
-> 
-> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
-> new file mode 100644
-> index 000000000000..6fca0f1a4594
-> --- /dev/null
-> +++ b/tools/testing/selftests/kmod/settings
-> @@ -0,0 +1,4 @@
-> +# measured from a manual run:
-> +# time ./tools/testing/selftests/kmod/kmod.sh
-> +# Then add ~50 seconds more gracetime.
-> +timeout=350
+> Oh, agreed, I wasn't responding to that part of your message.  New
+> serial drivers should never be enabled by default.
 
-Adding timeouts like this for individual tests increases the overall kselftest
-run-time. I am not in favor of adding timeouts.
++1 here. I don't know how I missed that during review.
 
-We have to find a better way to do this.
+Some of the "new" (not really, the split of the 8250_pci) drivers
+I made in the past inherited that so user won't see the change
+(sudden disappearance of the console w/o touching defconfig).
 
-thanks,
--- Shuah
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
