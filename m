@@ -2,160 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1F06A4D85
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F258F6A4D87
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjB0Vqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        id S230152AbjB0VrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjB0Vq1 (ORCPT
+        with ESMTP id S229831AbjB0Vq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:46:27 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E89298C7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:46:11 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id bh1so8266167plb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:46:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mXgojBwrlxtAqkqi3m8eA8saXCE8aC8dYvlKT0132G8=;
-        b=qm5ux6gnD5DjmItwJsdIJ2BBKADH1JcBq3kTwtFWTBJW+Cg5DL53I4/MU2Juj0bUkk
-         gMMYmiYa8DpdOBfSY5SFVpNJYH2fCoMOpKPQeeQNtKcPI/pCZMKqF+ruBiprzNydctGK
-         c2M5V48o1EcgjhU2yCbhPqkJTQf7fwX2UE3ucEVrEdRzLd6eDdcamxv6vItr/PCbxNYP
-         PjHv8BqmbmEv+m0NwK0V6M5lkTUF/raLlk60FfaMZK2cfPqH5hv5ruw2FeWTuLd8qMNx
-         WEaZGoxek4024i+78l/nKMuB3zLfvbgFoqk4MZj/icKngIBjOLwu7Ez4CyaMVDG2welh
-         RDKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mXgojBwrlxtAqkqi3m8eA8saXCE8aC8dYvlKT0132G8=;
-        b=1IMfvv9dPnPdrt9e/oPrY5YSvt2luM13wAUSUkvbLc4HdtK4lu5k2wAQPrNzqjTmnh
-         Q1RfWlm9A33JP2pwTfM0kgy4Lm5KpEuR5TqNhuaZReprfLg+CkkubkbcNVHxagfQA3aB
-         cQHPpkmsCnRpu3GFKi7TuEULDLNCNB8ZpuJNot2GTMfdIOVn1lp4Xf2zRdQuc/1nZ5t8
-         4goyDet0fcN5z1c5RTaXraCNfN4F19K6gFr8aTLnLXT4lsAlxTlhhcpgIFNepNm4MNkq
-         iyl/8DaNRHfvIVUF+AmIrpD5PTBRlqvuiJLtXc0sa//ngsapbmH+wpDxl4W1AR2UiDrr
-         9RdA==
-X-Gm-Message-State: AO0yUKVwaoRPb5c5bINa49et6/f/1vBdc5JmomkMo5CgBpMKrEcedJYt
-        lUfWPXuuXctEiZLdYO+C5hG9PDUtiA0iejM0
-X-Google-Smtp-Source: AK7set+RaJjdc/yi8v5IzW1B2wtX/FN5jbCYbEoHd/Mbo9tOb8tVGchKcWTC2jhLVHnO9/NC99l8LQ==
-X-Received: by 2002:a17:902:e851:b0:19a:839f:435 with SMTP id t17-20020a170902e85100b0019a839f0435mr10097058plg.3.1677534370439;
-        Mon, 27 Feb 2023 13:46:10 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0019608291564sm5065061plb.134.2023.02.27.13.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 13:46:09 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pWlJv-002szD-7q; Tue, 28 Feb 2023 08:46:07 +1100
-Date:   Tue, 28 Feb 2023 08:46:07 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     Helge Deller <deller@gmx.de>,
-        linux-xfs <linux-xfs@vger.kernel.org>, asml.silence@gmail.com,
-        geert@linux-m68k.org, linux-kernel@vger.kernel.org,
-        heng.su@intel.com
-Subject: Re: [Syzkaller & bisect] There is "xfs_dquot_alloc" related BUG in
- v6.2 in guest
-Message-ID: <20230227214607.GB360264@dread.disaster.area>
-References: <Y/g/femUL7jZ9gF3@xpf.sh.intel.com>
- <a39d97c1-2ced-d159-f742-e5c6008f79ee@gmx.de>
- <20230226223403.GU360264@dread.disaster.area>
- <Y/xbyABFGZEeKduv@xpf.sh.intel.com>
+        Mon, 27 Feb 2023 16:46:59 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA061F909;
+        Mon, 27 Feb 2023 13:46:57 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RLIGAr020104;
+        Mon, 27 Feb 2023 21:46:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RMY240oahL23plEikFUklqVHDD5xMLS3GDtXfnEQWn4=;
+ b=jW7BqaCOg/npZmYBkXsBBpVhRWttBo9JBUz7GevpfbU4yuZ0oSA1IEvLz7sh9nfYWp2A
+ CxPcJRoXhu0D35gJDNsDbA1UovgtZPrqDwhHr3AqJMGh6MXOiCEa//8WP47sWjrBelbR
+ pKnaXlmjFz4xOUmH3xwvLjdDWbgxjft+Pe5EDdaF99sD0clNfboNnj7NikRxm0bHmMac
+ 6R48AuTKnDRzTxFq4ND0xJa2hxnVvxQD13EW5VgIPMgO4L/ggSB7qpIpXE0JJluhU7DO
+ Y59jHkya9CqHTf77VgRISGHTaL94sFb+oC23qI8fCPMoj64EIj5M5zm6mNgSo8mtsMX4 bg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny81qeewy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 21:46:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RLkqkk020784
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 21:46:52 GMT
+Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
+ 2023 13:46:52 -0800
+Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
+ probe
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gregkh@google.com>
+References: <20220531183054.6476-1-quic_manafm@quicinc.com>
+ <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
+From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Message-ID: <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
+Date:   Mon, 27 Feb 2023 13:46:52 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/xbyABFGZEeKduv@xpf.sh.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
+X-Proofpoint-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302270173
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 03:29:12PM +0800, Pengfei Xu wrote:
-> Hi Dave and Helge Deller,
-> 
-> Thanks Helge Deller to add the xfs mailing list!
-> 
-> On 2023-02-27 at 09:34:03 +1100, Dave Chinner wrote:
-> > On Sat, Feb 25, 2023 at 08:58:25PM +0100, Helge Deller wrote:
-> > > Looping in xfs mailing list as this seems to be a XFS problem...
-> > > On 2/24/23 05:39, Pengfei Xu wrote:
-> > > > [   71.225966] XFS (loop1): Quotacheck: Unsuccessful (Error -5): Disabling quotas.
-> > > > [   71.226310] xfs filesystem being mounted at /root/syzkaller.qCVHXV/0/file0 supports timestamps until 2038 (0x7fffffff)
-> > > > [   71.227591] BUG: kernel NULL pointer dereference, address: 00000000000002a8
-> > > > [   71.227873] #PF: supervisor read access in kernel mode
-> > > > [   71.228077] #PF: error_code(0x0000) - not-present page
-> > > > [   71.228280] PGD c313067 P4D c313067 PUD c1fe067 PMD 0
-> > > > [   71.228494] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > > > [   71.228673] CPU: 0 PID: 161 Comm: kworker/0:4 Not tainted 6.2.0-c9c3395d5e3d #1
-> > > > [   71.228961] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> > > > [   71.229400] Workqueue: xfs-inodegc/loop1 xfs_inodegc_worker
-> > > > [   71.229626] RIP: 0010:xfs_dquot_alloc+0x95/0x1e0
-> > > > [   71.229820] Code: 80 15 ad 85 48 c7 c6 7c 6b 92 83 e8 75 0f 6b ff 49 8b 8d 60 01 00 00 44 89 e0 31 d2 48 c7 c6 18 ae 8f 83 48 8d bb 18 02 00 00 <f7> b1 a8 02 2
-> > > > [   71.230528] RSP: 0018:ffffc90000babc20 EFLAGS: 00010246
-> > > > [   71.230737] RAX: 0000000000000009 RBX: ffff8880093c98c0 RCX: 0000000000000000
-> > > > [   71.231014] RDX: 0000000000000000 RSI: ffffffff838fae18 RDI: ffff8880093c9ad8
-> > > > [   71.231292] RBP: ffffc90000babc48 R08: 0000000000000002 R09: 0000000000000000
-> > > > [   71.231570] R10: ffffc90000baba80 R11: ffff88800af08d98 R12: 0000000000000009
-> > > > [   71.231850] R13: ffff88800c4bc000 R14: ffff88800c4bc000 R15: 0000000000000004
-> > > > [   71.232129] FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> > > > [   71.232441] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > [   71.232668] CR2: 00000000000002a8 CR3: 000000000a1d2002 CR4: 0000000000770ef0
-> > > > [   71.232949] PKRU: 55555554
-> > > > [   71.233061] Call Trace:
-> > > > [   71.233162]  <TASK>
-> > > > [   71.233254]  xfs_qm_dqread+0x46/0x440
-> > > > [   71.233410]  ? xfs_qm_dqget_inode+0x13e/0x500
-> > > > [   71.233596]  xfs_qm_dqget_inode+0x154/0x500
-> > > > [   71.233774]  xfs_qm_dqattach_one+0x142/0x3c0
-> > > > [   71.233961]  xfs_qm_dqattach_locked+0x14a/0x170
-> > > > [   71.234149]  xfs_qm_dqattach+0x52/0x80
-> > > > [   71.234307]  xfs_inactive+0x186/0x340
-> > > > [   71.234461]  xfs_inodegc_worker+0xd3/0x430
-> > > > [   71.234630]  process_one_work+0x3b1/0x960
-> > > > [   71.234802]  worker_thread+0x52/0x660
-> > > > [   71.234957]  ? __pfx_worker_thread+0x10/0x10
-> > > > [   71.235136]  kthread+0x161/0x1a0
-> > > > [   71.235279]  ? __pfx_kthread+0x10/0x10
-> > > > [   71.235442]  ret_from_fork+0x29/0x50
-> > > > [   71.235602]  </TASK>
-> > > > [   71.235696] Modules linked in:
-> > > > [   71.235826] CR2: 00000000000002a8
-> > > > [   71.235964] ---[ end trace 0000000000000000 ]---
-> > 
-> > Looks like a quota disable race with background inode inactivation
-> > reading in dquots.
-> > 
-> > Can you test the patch below?
-> > 
-> Thanks for your fixed patch in short time!
-> I installed below patch on top of v6.2 kernel.
-> And there was no any BUG dmesg anyway, so the fixed patch worked.
-> 
-> And left some "Internal error xfs_iunlink_remove_inode" related Call Trace.
-> I'm new to xfs, could you help to check if it is some other issue or we
-> could ignore it.
+On 6/9/22 3:12 PM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+>> Registering the cooling device from the probe can result in the
+>> execution of get_property() function before it gets initialized.
+>>
+>> To avoid this, register the cooling device from a workqueue
+>> instead of registering in the probe.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+>> ---
+> This removes error handling from the psy_register_cooler() call, so
+> it introduces a new potential problem. If power_supply_get_property()
+> is called to early -EAGAIN is returned. So can you elaborate the problem
+> that you are seeing with the current code?
+>
+> -- Sebastian
 
-I'm guessing this the filesystem detecting a corruption and shutting
-down. That's normal behaviour when tools like syzkaller through
-random crap at the filesystem and expect it to like it.
+When the device boots up with all the vendor modules getting loaded,           
+here is what we're seeing when booting up with 6.1.11 recently. First          
+log is printed with adding a pr_err() in __power_supply_register().                 
+                                                                               
+[    7.008938][  T682] power_supply battery: psy_register_cooler failed, rc=-11
+[    7.030941][  T682] qti_battery_charger: probe of qcom,battery_charger failed with error -11
+                                                                               
+Here, our downstream qti_battery_charger driver exposes the following          
+power supply properties POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and             
+POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX under a power supply device.        
+                                                                               
+This is happening because of the following call sequence,                      
+                                                                               
+battery_chg_probe() ->                                                         
+  power_supply_register() ->                                                   
+    psy_register_cooler() ->                                                   
+      thermal_cooling_device_register() ->                                     
+        cdev->ops->get_max_state() ->                                          
+          ps_get_max_charge_cntl_limit() ->                                    
+            power_supply_get_property()                                        
+                                                                               
+ends up calling power_supply_get_property() to read CHARGE_CONTROL_LIMIT       
+property.                                                                      
+                                                                               
+However, it returns -EAGAIN because psy->initialized is set to true            
+later after psy_register_cooler() succeeds. So, this ends up in a              
+driver probe failure forever.
 
-> I put the dmesg in bugzilla attachment as follow:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217078 ->
-> https://bugzilla.kernel.org/attachment.cgi?id=303793
+-Subbaraman
+>
+>>  drivers/power/supply/power_supply_core.c | 10 ++++------
+>>  1 file changed, 4 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+>> index 385814a14a0a..74623c4977db 100644
+>> --- a/drivers/power/supply/power_supply_core.c
+>> +++ b/drivers/power/supply/power_supply_core.c
+>> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+>>  }
+>>  EXPORT_SYMBOL_GPL(power_supply_changed);
+>>  
+>> +static int psy_register_cooler(struct power_supply *psy);
+>>  /*
+>>   * Notify that power supply was registered after parent finished the probing.
+>>   *
+>> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+>>   * calling power_supply_changed() directly from power_supply_register()
+>>   * would lead to execution of get_property() function provided by the driver
+>>   * too early - before the probe ends.
+>> + * Also, registering cooling device from the probe will execute the
+>> + * get_property() function. So register the cooling device after the probe.
+>>   *
+>>   * Avoid that by waiting on parent's mutex.
+>>   */
+>> @@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
+>>  	}
+>>  
+>>  	power_supply_changed(psy);
+>> +	psy_register_cooler(psy);
+>>  
+>>  	if (psy->dev.parent)
+>>  		mutex_unlock(&psy->dev.parent->mutex);
+>> @@ -1261,10 +1265,6 @@ __power_supply_register(struct device *parent,
+>>  	if (rc)
+>>  		goto register_thermal_failed;
+>>  
+>> -	rc = psy_register_cooler(psy);
+>> -	if (rc)
+>> -		goto register_cooler_failed;
+>> -
+>>  	rc = power_supply_create_triggers(psy);
+>>  	if (rc)
+>>  		goto create_triggers_failed;
+>> @@ -1294,8 +1294,6 @@ __power_supply_register(struct device *parent,
+>>  add_hwmon_sysfs_failed:
+>>  	power_supply_remove_triggers(psy);
+>>  create_triggers_failed:
+>> -	psy_unregister_cooler(psy);
+>> -register_cooler_failed:
+>>  	psy_unregister_thermal(psy);
+>>  register_thermal_failed:
+>>  	device_del(dev);
 
-I am not authorised to access bug 217078, so I can't read any of
-this. Just cut out and attach the relevant dmesg output to the email.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
