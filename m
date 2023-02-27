@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6871B6A3F6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9D46A3F7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjB0K1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 05:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S229718AbjB0KbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 05:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjB0K1G (ORCPT
+        with ESMTP id S229548AbjB0KbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 05:27:06 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A652056F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 02:26:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 27 Feb 2023 05:31:11 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F971A485
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 02:31:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ejmSjp5ilFhyYrBBpq16zUoi1mBnjuRQo93r6GReCME=; b=tqeL5joEcDckVW9arljhlxpppL
+        Egb7aGR4EY0KknodHfMPreGW4IZfd6FBWW+V3em+kp4WDyN0Bw9RDQKzY1v4t/u1POHtMuiKZ4gmO
+        MnvwOYI4tNvpyctq3wV51QTiSPHTJGfIafDv4HYRaexVRWF8u6QAogDm93rqIDt9YOIrzoTp0yxZb
+        jd81z0gXEfWIuHZ/SGmsbmBKdsQjKCq0T8PmVkaeSuwwW1MD0eRoyMX4prBs2o+c3y+0d7hmx/TGS
+        ccaUZwPB21UWTCQo5smVuBjaWoc97iRVUA6RUtmJUn9qBH/r1zOClb6K4XOanO2Tkwjmf9zSHgEcD
+        LP7bpENA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWamd-0002JJ-DR; Mon, 27 Feb 2023 10:31:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 73729219F3;
-        Mon, 27 Feb 2023 10:26:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1677493618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCe3/NUSI20pyKbeY5vCliFS4zMF2RtYUo+EbZzRxSI=;
-        b=Sh2JBIxrmiUelCHj4X+gCdWLUKR9nG15uy2dinyQb9G03o8JdsfXVuZQbuSowTUM/wws21
-        S9Sv6elIaQwGZZdMdtamuivSghlE+0QkiSXZsx4JEMjnKAeec49/cktN65n7JFBNACReMm
-        gz1aMXFvMrr6ntQFmGeYWwzI2wogfqY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1677493618;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCe3/NUSI20pyKbeY5vCliFS4zMF2RtYUo+EbZzRxSI=;
-        b=DSboxC02tqOQ7rvakxJpbvDTlt4dINdB/sVeYBvQoyORPeUVVBFHME4K3RBlT2TLDqJWTe
-        aNwZTri6+zcJqDCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66FA713A43;
-        Mon, 27 Feb 2023 10:26:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AZEbGXKF/GPkdAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 27 Feb 2023 10:26:58 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CD529A06F2; Mon, 27 Feb 2023 11:26:57 +0100 (CET)
-Date:   Mon, 27 Feb 2023 11:26:57 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     jack@suse.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] quota: make dquot_set_dqinfo return errors from
- ->write_info
-Message-ID: <20230227102657.hppbkhhcfcq3gmud@quack3>
-References: <20230220134652.6204-1-frank.li@vivo.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55B0A30049E;
+        Mon, 27 Feb 2023 11:31:02 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3F13922F1DD83; Mon, 27 Feb 2023 11:31:02 +0100 (CET)
+Date:   Mon, 27 Feb 2023 11:31:02 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     mingo@redhat.com, will@kernel.org, linux-kernel@vger.kernel.org,
+        boqun.feng@gmail.com
+Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
+Message-ID: <Y/yGZgz1cJ1+pTt5@hirez.programming.kicks-ass.net>
+References: <20230223122642.491637862@infradead.org>
+ <20230223123319.487908155@infradead.org>
+ <Y/t1AwGC9OoN/lFc@hirez.programming.kicks-ass.net>
+ <Y/uN+89FlTw45uiA@hirez.programming.kicks-ass.net>
+ <943686ee-975d-a463-46d1-04b200ac19b1@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230220134652.6204-1-frank.li@vivo.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <943686ee-975d-a463-46d1-04b200ac19b1@redhat.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 20-02-23 21:46:52, Yangtao Li wrote:
-> dquot_set_dqinfo() ignores the return code from the ->write_info
-> call, which means that quotacalls like Q_SETINFO never see the error.
-> This doesn't seem right, so fix that.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Sun, Feb 26, 2023 at 07:22:47PM -0500, Waiman Long wrote:
 
-Thanks for the fix. It looks good but if you have a look into
-implementations you'll notice that v2_write_file_info() returns 0 or -1,
-not the error code. So before doing this, you also need to fixup
-v2_write_file_info() to return proper error code. What v1_write_file_info()
-does looks like a good inspiration.
-
-								Honza
-
-> ---
->  fs/quota/dquot.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> @@ -1151,55 +1154,39 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem,
+> int state)
+>                 }
+>         } else {
+>                 atomic_long_or(RWSEM_FLAG_WAITERS, &sem->count);
+> +               if (rwsem_try_write_lock(sem, &waiter))
+> +                       waiter.task = NULL;
+>         }
+> +       raw_spin_unlock_irq(&sem->wait_lock);
 > 
-> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-> index f27faf5db554..be702905c74f 100644
-> --- a/fs/quota/dquot.c
-> +++ b/fs/quota/dquot.c
-> @@ -2819,7 +2819,6 @@ EXPORT_SYMBOL(dquot_get_state);
->  int dquot_set_dqinfo(struct super_block *sb, int type, struct qc_info *ii)
->  {
->  	struct mem_dqinfo *mi;
-> -	int err = 0;
->  
->  	if ((ii->i_fieldmask & QC_WARNS_MASK) ||
->  	    (ii->i_fieldmask & QC_RT_SPC_TIMER))
-> @@ -2846,8 +2845,7 @@ int dquot_set_dqinfo(struct super_block *sb, int type, struct qc_info *ii)
->  	spin_unlock(&dq_data_lock);
->  	mark_info_dirty(sb, type);
->  	/* Force write to disk */
-> -	sb->dq_op->write_info(sb, type);
-> -	return err;
-> +	return sb->dq_op->write_info(sb, type);
->  }
->  EXPORT_SYMBOL(dquot_set_dqinfo);
->  
-> -- 
-> 2.25.1
+>         /* wait until we successfully acquire the lock */
+> -       set_current_state(state);
+>         trace_contention_begin(sem, LCB_F_WRITE);
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>         for (;;) {
+> -               if (rwsem_try_write_lock(sem, &waiter)) {
+> -                       /* rwsem_try_write_lock() implies ACQUIRE on success
+> */
+> +               set_current_state(state);
+> +               if (!smp_load_acquire(&waiter.task)) {
+> +                       /* Matches rwsem_waiter_wake()'s
+> smp_store_release(). */
+>                         break;
+>                 }
+> -
+> 
+> The additional rwsem_try_write_lock() call seems to address the missed
+> wakeup problem AFAICT.
+
+Indeed, prior to this I could readily reproduce the lockup.
+
+So when thinking about missing wakeups I noticed this race on WAITERS.
+If we queue but the unlock does not yet observe WAITERS the unlock does
+not go into the slow path and wakeup gets lost.
+
+Reader side fixes this with rwsem_cond_wake_waiter(), but I could not
+convince myself that is correct for writer side -- perhaps it is, will
+need to think more on that.
+
+> I do have some concern that early lock transfer to a lock owner that has not
+> been woken up yet may suppress writer lock stealing from optimistic spinning
+> causing some performance regression in some cases. Let's see if the test
+> robot report anything.
+
+Ah yes, I suppose that is indeed a possibility. Given this is all under
+wait_lock and the spinner is not, I was hoping it would still have
+sufficient time to win. But yes, robots will tell us.
