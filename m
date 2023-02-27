@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FCE6A4C65
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 431546A4C6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjB0Uj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S229762AbjB0Uk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjB0UjZ (ORCPT
+        with ESMTP id S229615AbjB0UkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:39:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C93422DEC;
-        Mon, 27 Feb 2023 12:39:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E3A6ACE115B;
-        Mon, 27 Feb 2023 20:39:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D5CC433D2;
-        Mon, 27 Feb 2023 20:39:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677530356;
-        bh=vU0SzPPftW1Pk2q0BkvhVj0n+YleexbfpMDKgqWko8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XfhECdkIewZ88wJ2x3gOyDZv4y2QxQmyyeNMETFZxZG8a1NO7U4gcS1n713GRALYO
-         Uv9Q1IuCvV6vrsH2fjq3x7ThsShZojLxqNl+LF2y+ijIbAsk/VP4+GvLLvtCYaKOq9
-         p7bVKX/fylCy9/I39WzVHmjOgbCPcSdgqC6mCkqgWr6xqLk+uR2Unt/MOubmX8qwnx
-         tr4VO3L2kqb/GMVF5FfrQjnENprdtUo2FG8BTAJmQhLIv0z4bGqZDsnMBa8qzRitkU
-         OPDvZKzUgkMzPu8zptnBU3xmh/FlcsCrWRCLl+L2ObnaYX7HOGtUnCnP1P0dEyy887
-         +MdF3zbDmPfmQ==
-Date:   Mon, 27 Feb 2023 15:39:14 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <Y/0U8tpNkgePu00M@sashalap>
-References: <20230226034256.771769-1-sashal@kernel.org>
- <20230226034256.771769-12-sashal@kernel.org>
- <Y/rbGxq8oAEsW28j@sol.localdomain>
- <Y/rufenGRpoJVXZr@sol.localdomain>
- <Y/ux9JLHQKDOzWHJ@sol.localdomain>
- <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
+        Mon, 27 Feb 2023 15:40:25 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99A940C6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=skccS5dCHnUWuDDB7Qkqv95X91Iw1J6jxu1lqMy1F1M=; b=OMC/ULOELfp3GHxMbmwvDd92f+
+        3XC5UUjde61y0pWmQVIAsg9N/loY+0FdX/bo47xZiwJ+PmDOMzsIw85uBvLw/Qb/jG71r07NzwQIL
+        Z9rXJqFRqRFNfvfWTThc4TzAyfV5vi1McYXCZ1H33FFiO802/VNBXK6bKDigPI4ymtPlDbS/rl8LN
+        KWXqstkVH4GT8vFkZMZbTYcbmRbOMX4sDfBrGOAR5FKG5gfeJt6y2SRXFp+iRn3vlxfEN3c7k+IQ8
+        UP0b0weaHwOYq1JWqXiUF9PI7WNAk1o3NQDNiy5gGMWvZwCv+Iy25c0oLtbKrZlPoEotynXQiDqQA
+        YO52NAhA==;
+Received: from [181.199.58.72] (helo=localhost.localdomain)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1pWkI2-00H62x-4L; Mon, 27 Feb 2023 21:40:06 +0100
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        contactshashanksharma@gmail.com, amaranath.somalapuram@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        "Simon Ser" <contact@emersion.fr>,
+        "Rob Clark" <robdclark@gmail.com>,
+        "Pekka Paalanen" <ppaalanen@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Daniel Stone" <daniel@fooishbar.org>,
+        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
+        "Dave Airlie" <airlied@gmail.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v2 0/1] drm: Add doc about GPU reset
+Date:   Mon, 27 Feb 2023 15:39:59 -0500
+Message-Id: <20230227204000.56787-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y/zxKOBTLXFjSVyI@sol.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:06:32AM -0800, Eric Biggers wrote:
->On Mon, Feb 27, 2023 at 09:47:48AM -0800, Eric Biggers wrote:
->> > > > Of course, it's not just me that AUTOSEL isn't working for.  So, you'll still
->> > > > continue backporting random commits that I have to spend hours bisecting, e.g.
->> > > > https://lore.kernel.org/stable/20220921155332.234913-7-sashal@kernel.org.
->> > > >
->> > > > But at least I won't have to deal with this garbage for my own commits.
->> > > >
->> > > > Now, I'm not sure I'll get a response to this --- I received no response to my
->> > > > last AUTOSEL question at
->> > > > https://lore.kernel.org/stable/Y1DTFiP12ws04eOM@sol.localdomain.  So to
->> > > > hopefully entice you to actually do something, I'm also letting you know that I
->> > > > won't be reviewing any AUTOSEL mails for my commits anymore.
->> > > >
->> > >
->> > > The really annoying thing is that someone even replied to your AUTOSEL email for
->> > > that broken patch and told you it is broken
->> > > (https://lore.kernel.org/stable/d91aaff1-470f-cfdf-41cf-031eea9d6aca@mailbox.org),
->> > > and ***you ignored it and applied the patch anyway***.
->> > >
->> > > Why are you even sending these emails if you are ignoring feedback anyway?
->> >
->> > I obviously didn't ignore it on purpose, right?
->> >
->>
->> I don't know, is it obvious?  You've said in the past that sometimes you'd like
->> to backport a commit even if the maintainer objects and/or it is known buggy.
->> https://lore.kernel.org/stable/d91aaff1-470f-cfdf-41cf-031eea9d6aca@mailbox.org
->> also didn't explicitly say "Don't backport this" but instead "This patch has
->> issues", so maybe that made a difference?
+Hi,
 
- From what I gather I missed the reply - I would not blindly ignore a
-maintainer.
+Thanks everyone that gave feedback. v2 Changes:
+- This new version is a section of drm-uapi instead of a new file
+- Drop requirement for KMD to kill applications
+- Drop role of init systems on compositors recover
+- Drop assumption that robust apps creates new contexts
 
->> Anyway, the fact is that it happened.  And if it happened in the one bug that I
->> happened to look at because it personally affected me and I spent hours
->> bisecting, it probably is happening in lots of other cases too.  So it seems the
->> process is not working...
+Original cover letter bellow:
 
-This one is tricky, becuase we also end up taking a lot of commits that
-do fix real bugs, and were never tagged for stable or even had a fixes
-tag.
+Due to the complexity of its stack and the apps that we run on it, GPU resets
+are for granted. What's left for driver developers is how to make resets a
+smooth experience as possible. While some OS's can recover or show an error
+message in such cases, Linux is more a hit-and-miss due to its lack of
+standardization and guidelines of what to do in such cases.
 
-Maybe I should run the numbers again, but when we compared regression
-rates of stable tagged releases and AUTOSEL ones, it was fairly
-identical.
+This is the goal of this document, to proper define what should happen after a
+GPU reset so developers can start acting on top of this. An IGT test should be
+created to validate this for each driver.
 
->> Separately from responses to the AUTOSEL email, it also seems that you aren't
->> checking for any reported regressions or pending fixes for a commit before
->> backporting it.  Simply searching lore for the commit title
->> https://lore.kernel.org/all/?q=%22drm%2Famdgpu%3A+use+dirty+framebuffer+helper%22
->> would have turned up the bug report
->> https://lore.kernel.org/dri-devel/20220918120926.10322-1-user@am64/ that
->> bisected a regression to that commit, as well as a patch that Fixes that commit:
->> https://lore.kernel.org/all/20220920130832.2214101-1-alexander.deucher@amd.com/
->> Both of these existed before you even sent the AUTOSEL email!
+Initially my approach was to expose an uevent for GPU resets, as it can be seen
+here[1]. However, even if an uevent can be useful for some use cases (e.g.
+telemetry and error reporting), for the "OS integration" case of GPU resets
+it would be more productive to have something defined through the stack.
 
-I would love to have a way to automatically grep lore for reported
-issues that are pinpointed to a given commit. I'm hoping that Thorsten's
-regression tracker could be used that way soon enough.
+Thanks,
+	André
 
->> So to summarize, that buggy commit was backported even though:
->>
->>   * There were no indications that it was a bug fix (and thus potentially
->>     suitable for stable) in the first place.
->>   * On the AUTOSEL thread, someone told you the commit is broken.
->>   * There was already a thread that reported a regression caused by the commit.
->>     Easily findable via lore search.
->>   * There was also already a pending patch that Fixes the commit.  Again easily
->>     findable via lore search.
->>
->> So it seems a *lot* of things went wrong, no?  Why?  If so many things can go
->> wrong, it's not just a "mistake" but rather the process is the problem...
->
->BTW, another cause of this is that the commit (66f99628eb24) was AUTOSEL'd after
->only being in mainline for 4 days, and *released* in all LTS kernels after only
->being in mainline for 12 days.  Surely that's a timeline befitting a critical
->security vulnerability, not some random neural-network-selected commit that
->wasn't even fixing anything?
+[1] https://lore.kernel.org/amd-gfx/20221125175203.52481-1-andrealmeid@igalia.com/
 
-I would love to have a mechanism that tells me with 100% confidence if a
-given commit fixes a bug or not, could you provide me with one?
+André Almeida (1):
+  drm/doc: Document DRM device reset expectations
 
-w.r.t timelines, this is something that was discussed on the mailing
-list a few years ago where we decided that giving AUTOSEL commits 7 days
-of soaking time is sufficient, if anything changed we can have this
-discussion again.
-
-Note, however, that it's not enough to keep pointing at a tiny set and
-using it to suggest that the entire process is broken. How many AUTOSEL
-commits introduced a regression? How many -stable tagged ones did? How
-many bugs did AUTOSEL commits fix?
+ Documentation/gpu/drm-uapi.rst | 51 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
 -- 
-Thanks,
-Sasha
+2.39.2
+
