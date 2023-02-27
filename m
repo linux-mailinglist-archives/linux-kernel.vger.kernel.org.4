@@ -2,469 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0225C6A4857
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD6E6A487A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjB0RlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S229930AbjB0RrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjB0Rkv (ORCPT
+        with ESMTP id S229761AbjB0RrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:40:51 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EBF25290;
-        Mon, 27 Feb 2023 09:40:09 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id u3-20020a4ad0c3000000b0052541ef0bafso1112326oor.5;
-        Mon, 27 Feb 2023 09:40:09 -0800 (PST)
+        Mon, 27 Feb 2023 12:47:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5141BF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677519981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3mkc3cHryKoQlVgV2zVl+0PzzwDJTUCgbCBX7Jw82OE=;
+        b=cM9OPig+7nHtfKxOdc8qz4kRoAGnVQK5gIiML3Us4h4Ybsnx8iYpktEHLvG3gVbh+UHiQI
+        33pNqgchdz/Q6XyTt7JkbHb6wCp/wpCVvJdlC8aC6MQNqagOmph9bFoQ3BjAUC3ynYNQxm
+        yImLiupYhq85anpIZjuwyAfK5duwwbE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-554-NRACiFujM9KPGror2wlpfg-1; Mon, 27 Feb 2023 12:39:43 -0500
+X-MC-Unique: NRACiFujM9KPGror2wlpfg-1
+Received: by mail-ed1-f71.google.com with SMTP id cy28-20020a0564021c9c00b004acc6cf6322so9535192edb.18
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:39:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KgkZ/7Ar4KpMlYo0Ie0qrRnEDsnDl1Cx4IjEfHmmGEs=;
-        b=csBwCiFZ7RC7zhDI6FhNj7MCxGPGeE1mjVlJH7CO1VFBLQ9D6pU/r73gZN9LrQBKrL
-         kqmBY16vi4Vyumx9FF1wUtZ29mmnV4ahLSz2DYHXcdR6cWrwSLrxiYmLUNqmFbvVLLWe
-         uHixoyRQ7oozQx2njPhE+W73x5D7mrwxu/wykON1GhnfgH5JIQQyuxi07IA+W6SENXPW
-         8vu3vfmsgBRua5KGScAmIqkuaSyLLSuekTBUBvzb1n3yKC2Q1gUExb5FARY9N4TZ9r9+
-         yLx+PbEq9JgTVbRpgr2O3UkykFZUco2f9gV9HCYNAIUQKv3yWCalAZZxo3h+sffsXDd8
-         1S8Q==
-X-Gm-Message-State: AO0yUKWMBB3vlVgOksl+QMaUmvpJz7R2bNZ1nsqEWROu5P6NX7Xfm1BD
-        gUDybg/1d0Ffh8Iqh+Zgzg==
-X-Google-Smtp-Source: AK7set8FJe5xztcBF6GRv+jcUAEBTrhZshKAEsTcASPsfocC0zofE+fXHQXjcEGimqKxXkMCQR//dw==
-X-Received: by 2002:a4a:ca13:0:b0:525:3ac1:28be with SMTP id w19-20020a4aca13000000b005253ac128bemr4392209ooq.1.1677519497795;
-        Mon, 27 Feb 2023 09:38:17 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f9-20020a4a6709000000b0051ffe0fe11bsm2886260ooc.6.2023.02.27.09.38.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 09:38:17 -0800 (PST)
-Received: (nullmailer pid 510693 invoked by uid 1000);
-        Mon, 27 Feb 2023 17:38:16 -0000
-Date:   Mon, 27 Feb 2023 11:38:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Subject: Re: [RFC PATCH 09/16] dt-bindings: pinctrl: mediatek: rt305x: split
- binding
-Message-ID: <20230227173816.GA505343-robh@kernel.org>
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-10-arinc.unal@arinc9.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3mkc3cHryKoQlVgV2zVl+0PzzwDJTUCgbCBX7Jw82OE=;
+        b=Pb5HtmlAvuwnTvUE/L+eUzF9pBoCYHOn7UzQ24OzqHI4j95lLYqY2Kug1tCSlmVjP7
+         6zRG5RgmnbehM7vG5CGgLvE4jNimc0zV6tlCRoOEEjI4RwR0lbYhPYgRP/VSb9KzVwxb
+         usJeX7/BQNKaddZVGtsDhhfLngdqIZ146PlVCPNP9VU+vWHfbpNNPGufMml9bC0DQ5S5
+         XHGbE34zrRIymN53qr3RIVxQtvc89IAqPnWfl8BY7TWePVafd/qTzlWo9Lqvw9USAV8h
+         PlgfLfG23rMbb+wsgZP8fSrRXYYb+m+KKciR60281n6DCta13ZGj6TZQWz/Ar3RicJ3p
+         5khQ==
+X-Gm-Message-State: AO0yUKW7rfa0hw5Xp6nFz+BxgvPpOTAB0HxnVqyQqb4bv0e2m56PUuIM
+        NVaP0oc12/Bl+GsCQM7LlyKywd92VTAOybOjmxNNbViFJXrY/rCvORiGL1ATxe3XwjAjv7qi+9D
+        BY5+KcpV6kxSSX4sY/7yP9IGH
+X-Received: by 2002:a17:907:97c3:b0:8af:ef00:b853 with SMTP id js3-20020a17090797c300b008afef00b853mr44969565ejc.73.1677519576275;
+        Mon, 27 Feb 2023 09:39:36 -0800 (PST)
+X-Google-Smtp-Source: AK7set8dwfwqQmqPjam8UzWIoP7CWEacRLfEPhcixYlLH9/bKx4zKjhRg3obJwXpommPMEyYgK8mKw==
+X-Received: by 2002:a17:907:97c3:b0:8af:ef00:b853 with SMTP id js3-20020a17090797c300b008afef00b853mr44969529ejc.73.1677519575989;
+        Mon, 27 Feb 2023 09:39:35 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id e19-20020a1709061e9300b008d83ad86fe8sm3481538ejj.59.2023.02.27.09.39.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 09:39:35 -0800 (PST)
+Message-ID: <67942a68-2ae7-8883-25d7-c6d595c3587e@redhat.com>
+Date:   Mon, 27 Feb 2023 18:39:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230222183932.33267-10-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 04/16] maple_tree: add flag MT_FLAGS_LOCK_NONE
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     matthew.brost@intel.com, dri-devel@lists.freedesktop.org,
+        corbet@lwn.net, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, boris.brezillon@collabora.com,
+        bskeggs@redhat.com, tzimmermann@suse.de, Liam.Howlett@oracle.com,
+        bagasdotme@gmail.com, christian.koenig@amd.com,
+        jason@jlekstrand.net
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-5-dakr@redhat.com>
+ <Y+/Xn11dfdn7SfBD@casper.infradead.org>
+ <3bb02ec3-4d19-9135-cabc-26ed210f7396@redhat.com>
+ <Y/ONYhyDCPEYH1ml@casper.infradead.org>
+ <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
+ <Y/PZH/q2Xsr3od9m@casper.infradead.org> <Y/TXPasvkhtGiR+w@pollux>
+ <Y/UN50hCaRe+8ZCg@casper.infradead.org>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <Y/UN50hCaRe+8ZCg@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 09:39:25PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 2/21/23 19:31, Matthew Wilcox wrote:
+> On Tue, Feb 21, 2023 at 03:37:49PM +0100, Danilo Krummrich wrote:
+>> On Mon, Feb 20, 2023 at 08:33:35PM +0000, Matthew Wilcox wrote:
+>>> On Mon, Feb 20, 2023 at 06:06:03PM +0100, Danilo Krummrich wrote:
+>>>> On 2/20/23 16:10, Matthew Wilcox wrote:
+>>>>> This is why we like people to use the spinlock embedded in the tree.
+>>>>> There's nothing for the user to care about.  If the access really is
+>>>>> serialised, acquiring/releasing the uncontended spinlock is a minimal
+>>>>> cost compared to all the other things that will happen while modifying
+>>>>> the tree.
+>>>>
+>>>> I think as for the users of the GPUVA manager we'd have two cases:
+>>>>
+>>>> 1) Accesses to the manager (and hence the tree) are serialized, no lock
+>>>> needed.
+>>>>
+>>>> 2) Multiple operations on the tree must be locked in order to make them
+>>>> appear atomic.
+>>>
+>>> Could you give an example here of what you'd like to do?  Ideally
+>>> something complicated so I don't say "Oh, you can just do this" when
+>>> there's a more complex example for which "this" won't work.  I'm sure
+>>> that's embedded somewhere in the next 20-odd patches, but it's probably
+>>> quicker for you to describe in terms of tree operations that have to
+>>> appear atomic than for me to try to figure it out.
+>>>
+>>
+>> Absolutely, not gonna ask you to read all of that. :-)
+>>
+>> One thing the GPUVA manager does is to provide drivers the (sub-)operations
+>> that need to be processed in order to fulfill a map or unmap request from
+>> userspace. For instance, when userspace asks the driver to map some memory
+>> the GPUVA manager calculates which existing mappings must be removed, split up
+>> or can be merged with the newly requested mapping.
+>>
+>> A driver has two ways to fetch those operations from the GPUVA manager. It can
+>> either obtain a list of operations or receive a callback for each operation
+>> generated by the GPUVA manager.
+>>
+>> In both cases the GPUVA manager walks the maple tree, which keeps track of
+>> existing mappings, for the given range in __drm_gpuva_sm_map() (only considering
+>> the map case, since the unmap case is a subset basically). For each mapping
+>> found in the given range the driver, as mentioned, either receives a callback or
+>> a list entry is added to the list of operations.
+>>
+>> Typically, for each operation / callback one entry within the maple tree is
+>> removed and, optionally at the beginning and end of a new mapping's range, a
+>> new entry is inserted. An of course, as the last operation, there is the new
+>> mapping itself to insert.
+>>
+>> The GPUVA manager delegates locking responsibility to the drivers. Typically,
+>> a driver either serializes access to the VA space managed by the GPUVA manager
+>> (no lock needed) or need to lock the processing of a full set of operations
+>> generated by the GPUVA manager.
 > 
-> The RT3352 and RT5350 SoCs each contain different pin muxing information,
-> therefore, should be split. This can be done now that there are compatible
-> strings to distinguish them from other SoCs.
+> OK, that all makes sense.  It does make sense to have the driver use its
+> own mutex and then take the spinlock inside the maple tree code.  It
+> shouldn't ever be contended.
 > 
-> Split the schema out to mediatek,rt3352-pinctrl.yaml and
-> mediatek,rt5350-pinctrl.yaml.
+>>>> In either case the embedded spinlock wouldn't be useful, we'd either need an
+>>>> external lock or no lock at all.
+>>>>
+>>>> If there are any internal reasons why specific tree operations must be
+>>>> mutually excluded (such as those you explain below), wouldn't it make more
+>>>> sense to always have the internal lock and, optionally, allow users to
+>>>> specify an external lock additionally?
+>>>
+>>> So the way this works for the XArray, which is a little older than the
+>>> Maple tree, is that we always use the internal spinlock for
+>>> modifications (possibly BH or IRQ safe), and if someone wants to
+>>> use an external mutex to make some callers atomic with respect to each
+>>> other, they're free to do so.  In that case, the XArray doesn't check
+>>> the user's external locking at all, because it really can't know.
+>>>
+>>> I'd advise taking that approach; if there's really no way to use the
+>>> internal spinlock to make your complicated updates appear atomic
+>>> then just let the maple tree use its internal spinlock, and you can
+>>> also use your external mutex however you like.
+>>>
+>>
+>> That sounds like the right thing to do.
+>>
+>> However, I'm using the advanced API of the maple tree (and that's the reason
+>> why the above example appears a little more detailed than needed) because I
+>> think with the normal API I can't insert / remove tree entries while walking
+>> the tree, right?
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../pinctrl/mediatek,rt305x-pinctrl.yaml      |  78 +-----
->  .../pinctrl/mediatek,rt3352-pinctrl.yaml      | 247 ++++++++++++++++++
->  .../pinctrl/mediatek,rt5350-pinctrl.yaml      | 210 +++++++++++++++
->  3 files changed, 462 insertions(+), 73 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
+> Right.  The normal API is for simple operations while the advanced API
+> is for doing compound operations.
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-> index 61fcf3ab1091..1e6c7e7f2fe2 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-> @@ -11,8 +11,7 @@ maintainers:
->    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
->  
->  description:
-> -  MediaTek RT305X pin controller for RT3050, RT3052, RT3350, RT3352 and RT5350
-> -  SoCs.
-> +  MediaTek RT305X pin controller for RT3050, RT3052, and RT3350 SoCs.
->    The pin controller can only set the muxing of pin groups. Muxing individual
->    pins is not supported. There is no pinconf support.
->  
-> @@ -36,21 +35,9 @@ patternProperties:
->            function:
->              description:
->                A string containing the name of the function to mux to the group.
-> -            anyOf:
-> -              - description: For RT3050, RT3052 and RT3350 SoCs
-> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
-> -                       pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
-> -                       uartlite]
-> -
-> -              - description: For RT3352 SoC
-> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
-> -                       lna, mdio, pa, pcm gpio, pcm i2s, pcm uartf, rgmii, spi,
-> -                       spi_cs1, uartf, uartlite, wdg_cs1]
-> -
-> -              - description: For RT5350 SoC
-> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
-> -                       pcm gpio, pcm i2s, pcm uartf, spi, spi_cs1, uartf,
-> -                       uartlite, wdg_cs1]
-> +            enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
-> +                   pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
-> +                   uartlite]
->  
->            groups:
->              description:
-> @@ -69,17 +56,7 @@ patternProperties:
->              then:
->                properties:
->                  groups:
-> -                  anyOf:
-> -                    - description: For RT3050, RT3052 and RT3350 SoCs
-> -                      enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf,
-> -                             uartlite]
-> -
-> -                    - description: For RT3352 SoC
-> -                      enum: [i2c, jtag, led, lna, mdio, pa, rgmii, spi, spi_cs1,
-> -                             uartf, uartlite]
-> -
-> -                    - description: For RT5350 SoC
-> -                      enum: [i2c, jtag, led, spi, spi_cs1, uartf, uartlite]
-> +                  enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf, uartlite]
->  
->            - if:
->                properties:
-> @@ -126,24 +103,6 @@ patternProperties:
->                  groups:
->                    enum: [jtag]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: led
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [led]
-> -
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: lna
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [lna]
-> -
->            - if:
->                properties:
->                  function:
-> @@ -153,15 +112,6 @@ patternProperties:
->                  groups:
->                    enum: [mdio]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: pa
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [pa]
-> -
->            - if:
->                properties:
->                  function:
-> @@ -216,15 +166,6 @@ patternProperties:
->                  groups:
->                    enum: [spi]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: spi_cs1
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [spi_cs1]
-> -
->            - if:
->                properties:
->                  function:
-> @@ -243,15 +184,6 @@ patternProperties:
->                  groups:
->                    enum: [uartlite]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: wdg_cs1
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [spi_cs1]
-> -
->          additionalProperties: false
->  
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..7a74c1602afc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-> @@ -0,0 +1,247 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/mediatek,rt3352-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek RT3352 Pin Controller
-> +
-> +maintainers:
-> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
-> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> +
-> +description:
-> +  MediaTek RT3352 pin controller for RT3352 SoC.
-> +  The pin controller can only set the muxing of pin groups. Muxing individual
-> +  pins is not supported. There is no pinconf support.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,rt3352-pinctrl
-> +      - ralink,rt305x-pinctrl
-> +      - ralink,rt2880-pinmux
-> +
-> +patternProperties:
-> +  '-pins$':
-> +    type: object
-> +    patternProperties:
-> +      '^(.*-)?pinmux$':
-> +        type: object
-> +        description: node for pinctrl.
-> +        $ref: pinmux-node.yaml#
-> +
-> +        properties:
-> +          function:
-> +            description:
-> +              A string containing the name of the function to mux to the group.
-> +            enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led, lna,
-> +                   mdio, pa, pcm gpio, pcm i2s, pcm uartf, rgmii, spi, spi_cs1,
-> +                   uartf, uartlite, wdg_cs1]
-> +
-> +          groups:
-> +            description:
-> +              An array of strings. Each string contains the name of a group.
-> +            maxItems: 1
-> +
-> +        required:
-> +          - groups
-> +          - function
-> +
-> +        allOf:
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: gpio
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [i2c, jtag, led, lna, mdio, pa, rgmii, spi, spi_cs1,
-> +                         uartf, uartlite]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: gpio i2s
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: gpio uartf
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: i2c
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [i2c]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: i2s uartf
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: jtag
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [jtag]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: led
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [led]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: lna
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [lna]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: mdio
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [mdio]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: pa
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [pa]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: pcm gpio
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: pcm i2s
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: pcm uartf
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: rgmii
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [rgmii]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: spi
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [spi]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: spi_cs1
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [spi_cs1]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: uartf
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartf]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: uartlite
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [uartlite]
-> +
-> +          - if:
-> +              properties:
-> +                function:
-> +                  const: wdg_cs1
-> +            then:
-> +              properties:
-> +                groups:
-> +                  enum: [spi_cs1]
-> +
-> +        additionalProperties: false
-> +
-> +    additionalProperties: false
-> +
-> +allOf:
-> +  - $ref: "pinctrl.yaml#"
+>> As by the documentation the advanced API, however, doesn't take care of locking
+>> itself, hence just letting the maple tree use its internal spinlock doesn't
+>> really work - I need to take care of that myself, right?
+> 
+> Yes; once you're using the advanced API, you get to compose the entire
+> operation yourself.
+> 
+>> It feels a bit weird that I, as a user of the API, would need to lock certain
+>> (or all?) mas_*() functions with the internal spinlock in order to protect
+>> (future) internal features of the tree, such as the slab cache defragmentation
+>> you mentioned. Because from my perspective, as the generic component that tells
+>> it's users (the drivers) to take care of locking VA space operations (and hence
+>> tree operations) I don't have an own purpose of this internal spinlock, right?
+> 
+> You don't ... but we can't know that.
+> 
+>> Also I'm a little confused how I'd know where to take the spinlock? E.g. for
+>> inserting entries in the tree I use mas_store_gfp() with GFP_KERNEL.
+> 
+> Lockdep will shout at you if you get it wrong ;-)  But you can safely
+> take the spinlock before calling mas_store_gfp(GFP_KERNEL) because
+> mas_nomem() knows to drop the lock before doing a sleeping allocation.
+> Essentially you're open-coding mtree_store_range() but doing your own
+> thing in addition to the store.
+> 
 
-Drop quotes here and other refs.
+As already mentioned, I went with your advice to just take the maple 
+tree's internal spinlock within the GPUVA manager and leave all the 
+other locking to the drivers as intended.
+
+However, I run into the case that lockdep shouts at me for not taking 
+the spinlock before calling mas_find() in the iterator macros.
+
+Now, I definitely don't want to let the drivers take the maple tree's 
+spinlock before they use the iterator macro. Of course, drivers 
+shouldn't even know about the underlying maple tree of the GPUVA manager.
+
+One way to make lockdep happy in this case seems to be taking the 
+spinlock right before mas_find() and drop it right after for each iteration.
+
+What do you advice to do in this case?
+
+Thanks,
+Danilo
 
