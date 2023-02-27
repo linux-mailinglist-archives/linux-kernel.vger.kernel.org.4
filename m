@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0641F6A35C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 01:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D24A36A35CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 01:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjB0AD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 19:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S229685AbjB0AEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 19:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0AD1 (ORCPT
+        with ESMTP id S229470AbjB0AEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 19:03:27 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643039742;
-        Sun, 26 Feb 2023 16:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=+nha29/AKnCiNonhjL1b/Xu2lJjtfS87odZR9H1Cc0s=; b=ArdVyRxKOIKlcRkICMv/DL5jxJ
-        celGImU9YTrL6d6N/2lA4YGL2+XddjRfOw9k1xPbrR+swIwvIz4SHMvrcdY2E/Swz7Zs5rZpKoMgj
-        LL5jFE72NpjaUbxqC8+Anc/t+5qUn/8HHaF4XSsjnRkdqYL+g1hWX1PlMDSHU+afIY2KGbM1rGv4L
-        7GtW41DMrtsuk3iY6fVIlEmi4c9aXQYvs8itp1y6JWv1W7oq/UgBbSc8xgjOGg78eTU+yzlszOR3Y
-        EyBr7ajIATLucXJ18843/0nelWMknh6CtQJd/135IexW7ugDIjh21T5SHjeABMIiqS8+sv1L23jXa
-        E+r3BtEQ==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWQzF-0082zE-9M; Mon, 27 Feb 2023 00:03:25 +0000
-Message-ID: <d24bff4c-9426-296a-d43a-f22983ab9086@infradead.org>
-Date:   Sun, 26 Feb 2023 16:03:24 -0800
+        Sun, 26 Feb 2023 19:04:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F020B44D
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 16:04:34 -0800 (PST)
+Received: from [192.168.2.206] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BF3866020AF;
+        Mon, 27 Feb 2023 00:04:32 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677456273;
+        bh=+8W31VeoOfS5KCIykRP7XjN5krIxqbI1vA8JOGyKkHY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dm8LY/SHievdfP/cJSC6IWrO5UXPQiUIobNosRTLGq+DfkAGG2x0FcpUnsGPeuODB
+         VFuNrA4bgf7fSKv/1ws3xWL4WS567ILYvDuzXJrhpsBVpWk2xiej+f1jgRU729xLfw
+         +9BIyVIC0jd0++oqRmK4gnUhiRM73YlGa69O4bygAriFpXQ3h2gct2yCVYwqaiY7Or
+         1VrVslPrbEPq9H/beYY4hvVc7OSY3cAZZ8b+kViTuI8KNBHVaNwx4qKQ285LJhtN6j
+         +7mwKQaw6SR2gkdeOTW4P1esVaSPSG5iDnVOhE98/5CKidjeaN99dNvNnt6IbBSb63
+         vmgp03r0ZkbCw==
+Message-ID: <257f88ec-6bfc-0e91-610a-41a1af8e1180@collabora.com>
+Date:   Mon, 27 Feb 2023 03:04:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH RFC] rcu: Add a minimum time for marking boot as completed
+ Thunderbird/102.8.0
+Subject: Re: [PATCH linux-next] drm/virtio: use strscpy() to instead of
+ strncpy()
 Content-Language: en-US
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        rcu@vger.kernel.org
-References: <20230225032716.3320124-1-joel@joelfernandes.org>
- <ea03e810-95f0-abd8-2a83-f83174a99dbf@infradead.org>
- <Y/mHpOrr1C8NkMWm@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y/mHpOrr1C8NkMWm@google.com>
+To:     yang.yang29@zte.com.cn, airlied@redhat.com
+Cc:     xu.panda@zte.com.cn, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, kraxel@redhat.com,
+        gurchetansingh@chromium.org
+References: <202212070913161959936@zte.com.cn>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <202212070913161959936@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/24/23 19:59, Joel Fernandes wrote:
-> On Fri, Feb 24, 2023 at 07:32:22PM -0800, Randy Dunlap wrote:
-> [..] 
->>> +
->>> +	  Accept the default if unsure.
->>> +
->>>  config RCU_EXP_KTHREAD
->>>  	bool "Perform RCU expedited work in a real-time kthread"
->>>  	depends on RCU_BOOST && RCU_EXPERT
->>> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
->>> index 19bf6fa3ee6a..5b73341d9b89 100644
->>> --- a/kernel/rcu/update.c
->>> +++ b/kernel/rcu/update.c
->>> @@ -62,6 +62,10 @@ module_param(rcu_normal_after_boot, int, 0444);
->>>  #endif
->>>  #endif /* #ifndef CONFIG_TINY_RCU */
->>>  
->>> +/* Minimum time until RCU considers boot as completed. */
->>> +static int boot_end_delay = CONFIG_RCU_BOOT_END_DELAY;
->>> +module_param(boot_end_delay, int, 0444);
->>> +
->>>  #ifdef CONFIG_DEBUG_LOCK_ALLOC
->>>  /**
->>>   * rcu_read_lock_held_common() - might we be in RCU-sched read-side critical section?
->>> @@ -225,12 +229,29 @@ void rcu_unexpedite_gp(void)
->>>  EXPORT_SYMBOL_GPL(rcu_unexpedite_gp);
->>>  
->>>  static bool rcu_boot_ended __read_mostly;
->>> -
->>>  /*
->>> - * Inform RCU of the end of the in-kernel boot sequence.
->>> + * Inform RCU of the end of the in-kernel boot sequence. The boot sequence will
->>> + * not be marked ended until at least boot_end_delay milliseconds have passed.
->>>   */
->>> +void rcu_end_inkernel_boot(void);
->>> +static void boot_rcu_work_fn(struct work_struct *work)
->>> +{
->>> +	rcu_end_inkernel_boot();
->>> +}
->>> +static DECLARE_DELAYED_WORK(boot_rcu_work, boot_rcu_work_fn);
->>> +
->>>  void rcu_end_inkernel_boot(void)
->>>  {
->>> +	if (boot_end_delay) {
->>> +		u64 boot_ms = ktime_get_boot_fast_ns() / 1000000UL;
->>
->> Is that division OK on 32-bit?  Might have to use a helper macro. (I dunno.)
+On 12/7/22 04:13, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
 > 
-> I believe the below should work on 32-bit, but I will test it more. It does
-> on 64-bit.
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL terminated strings.
 > 
-> Thanks!
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+> ---
+>  drivers/gpu/drm/virtio/virtgpu_vq.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> ---8<-----------------------
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
+> index 9ff8660b50ad..7d95bc74b307 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_vq.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
+> @@ -916,8 +916,7 @@ void virtio_gpu_cmd_context_create(struct virtio_gpu_device *vgdev, uint32_t id,
+>  	cmd_p->hdr.ctx_id = cpu_to_le32(id);
+>  	cmd_p->nlen = cpu_to_le32(nlen);
+>  	cmd_p->context_init = cpu_to_le32(context_init);
+> -	strncpy(cmd_p->debug_name, name, sizeof(cmd_p->debug_name) - 1);
+> -	cmd_p->debug_name[sizeof(cmd_p->debug_name) - 1] = 0;
+> +	strscpy(cmd_p->debug_name, name, sizeof(cmd_p->debug_name));
+>  	virtio_gpu_queue_ctrl_buffer(vgdev, vbuf);
+>  }
 > 
-> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> index cbdad7b46841..2f539c18b310 100644
-> --- a/kernel/rcu/update.c
-> +++ b/kernel/rcu/update.c
-> @@ -243,7 +243,7 @@ static DECLARE_DELAYED_WORK(boot_rcu_work, boot_rcu_work_fn);
->  void rcu_end_inkernel_boot(void)
->  {
->  	if (boot_end_delay) {
-> -		u64 boot_ms = ktime_get_boot_fast_ns() / 1000000UL;
-> +		u64 boot_ms = div_u64(ktime_get_boot_fast_ns(), 1000000UL);
->  
->  		if (boot_ms < boot_end_delay) {
->  			schedule_delayed_work(&boot_rcu_work,
 
-Joel, this now builds cleanly on 32-bit. Before the patch:
+Applied to misc-next
 
-ld: kernel/rcu/update.o: in function `boot_rcu_work_fn':
-update.c:(.text+0x4623): undefined reference to `__udivdi3'
-ld: kernel/rcu/update.o: in function `rcu_end_inkernel_boot':
-update.c:(.text+0x46b3): undefined reference to `__udivdi3'
-
-I don't know what the second one refers to, but it didn't show up
-after the patch above (using div_u64()).
-
-Thanks.
 -- 
-~Randy
+Best regards,
+Dmitry
+
