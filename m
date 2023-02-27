@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99366A3ADD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 001D16A3AF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjB0Fvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 00:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S229768AbjB0FxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 00:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjB0Fvk (ORCPT
+        with ESMTP id S229560AbjB0FxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 00:51:40 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A941A663;
-        Sun, 26 Feb 2023 21:51:38 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id bp25so7089661lfb.0;
-        Sun, 26 Feb 2023 21:51:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pz1yizsyui2FqkdAA8FMl9zuctHHJgs12xaY9f2guwI=;
-        b=CCpkojk5zNYu/f616oRSZP+In6HPCcNRFWO3jgWuieZE7gO+2/byzhSarlKjnr+u/y
-         LDmJd27wp8rFljXbLNk3W85sk6C0qElg/umNI6+nYitY8MWD9SmR++bEorK0nAz067kM
-         FufbqzELGoznT3Ivhsdzpg/Fy+REMy53OUBstITy46jcTFlQ3FaRmJ3nJehFpM0JyZ9K
-         E3HDe/Ec2sYewjGCW1CcDB/OcX4avIVwyI+hR4PfKjSkTfkwpiG6zfm/CDEJMWIYw5tC
-         TW3E+dERGVHipWAeU0QKQ6Z9vtP2eHtIFtFqO25Z+XGlj09OwDVjqy1FwY1jmD+ICfHS
-         Hv3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pz1yizsyui2FqkdAA8FMl9zuctHHJgs12xaY9f2guwI=;
-        b=VWrgZdX8jJefBI+09xe6iBMC3CvO7Xgm7P0el6F5JRHMF+wq8S9NHo237yzqfGOgge
-         IX6Kj6wPNs6dnr8IchkbNDR8VywbaRZHwBIXTXIZBLAj2d2lYA/dUbvK/pEW2JjqfHmE
-         DHqkAYs9d9s3DacU5XnhyENchR0TidZM9jiV1lf3maE5WM5oLEfh3uYEbC18GgKGnpLG
-         QJZMH0GCav5UF472ei8tHShjmBl594GipItbSt6k5B99WZbWrx4x54ceuIcbMl9aktjf
-         /uOiHJ4CR1x4EU9iOrMCcNmfgU3QXfdPcuegy3/tjRUnYXhNBLna46A2uJ/IwQmnnSR4
-         tbAg==
-X-Gm-Message-State: AO0yUKUdToZ8gswI3fOhTxLicEwIwTGPVODe97vGjHh/D9RCuX4sNVbC
-        Wtzhfi7ziab2YPWbAfNQG7o=
-X-Google-Smtp-Source: AK7set8eVtDP59cMapvu5MoQb5HB8n3l+kpwMnV1leKmsKzj4Hc49bk96fv6pdCE55ymq/tPP3Kegw==
-X-Received: by 2002:ac2:44b4:0:b0:4d1:616d:33a4 with SMTP id c20-20020ac244b4000000b004d1616d33a4mr7266170lfm.66.1677477096332;
-        Sun, 26 Feb 2023 21:51:36 -0800 (PST)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id l29-20020ac24a9d000000b004d862e9b453sm788052lfp.196.2023.02.26.21.51.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 21:51:35 -0800 (PST)
-Message-ID: <c2ad4682-16dc-6aa8-4931-d185f0d5332b@gmail.com>
-Date:   Mon, 27 Feb 2023 07:51:35 +0200
+        Mon, 27 Feb 2023 00:53:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF2FD535
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 21:52:58 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pWWRK-0008Db-1o; Mon, 27 Feb 2023 06:52:46 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pWWRF-00059C-Aw; Mon, 27 Feb 2023 06:52:41 +0100
+Date:   Mon, 27 Feb 2023 06:52:41 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Subject: Re: [PATCH net-next v8 5/9] net: phy: add
+ genphy_c45_ethtool_get/set_eee() support
+Message-ID: <20230227055241.GC8437@pengutronix.de>
+References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
+ <20230211074113.2782508-6-o.rempel@pengutronix.de>
+ <Y/ufuLJdMcxc6f47@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 6/6] MAINTAINERS: Add ROHM BU27034
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1677080089.git.mazziesaccount@gmail.com>
- <8dbdf68749389605cc4dff396ddd66d27fdb2a0d.1677080089.git.mazziesaccount@gmail.com>
- <20230226134200.423649e1@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230226134200.423649e1@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/ufuLJdMcxc6f47@sirena.org.uk>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/26/23 15:42, Jonathan Cameron wrote:
-> On Wed, 22 Feb 2023 18:16:18 +0200
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+Hi Mark,
+
+On Sun, Feb 26, 2023 at 06:06:48PM +0000, Mark Brown wrote:
+> On Sat, Feb 11, 2023 at 08:41:09AM +0100, Oleksij Rempel wrote:
+> > Add replacement for phy_ethtool_get/set_eee() functions.
+> > 
+> > Current phy_ethtool_get/set_eee() implementation is great and it is
+> > possible to make it even better:
+> > - this functionality is for devices implementing parts of IEEE 802.3
+> >   specification beyond Clause 22. The better place for this code is
+> >   phy-c45.c
 > 
->> Add myself as a maintainer for ROHM BU27034 ALS driver.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->> ---
->>   MAINTAINERS | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 43f5a024daa2..8d31ef852372 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -18090,6 +18090,11 @@ S:	Maintained
->>   F:	Documentation/devicetree/bindings/iio/light/bh1750.yaml
->>   F:	drivers/iio/light/bh1750.c
->>   
->> +ROHM BU27034 AMBIENT LIGHT SENSOR DRIVER
->> +M:	Matti Vaittinen <mazziesaccount@gmail.com>
-> Whilst the wild cards stuff for IIO should also catch this, it's (fairly)
-> conventional to still add the list entry to make it easy for
-> people reading the file directly.
+> Currently mainline is failing to bring up networking on the Libre
+> Computer AML-S905X-CC, with a bisect pointing at this commit,
+> 022c3f87f88 upstream (although I'm not 100% sure I trust the bisect it
+> seems to be in roughly the right place).  I've not dug into what's going
+> on more than running the bisect yet.
 
-Good catch, thanks! Will add:
-L:      linux-iio@vger.kernel.org
+Can you please test following fixes:
+https://lore.kernel.org/all/167715661799.11159.2057121677394149658.git-patchwork-notify@kernel.org/
+https://lore.kernel.org/all/20230225071644.2754893-1-o.rempel@pengutronix.de/
 
-for v2.
-
--- Matti
-
+Regards,
+Oleksij
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
