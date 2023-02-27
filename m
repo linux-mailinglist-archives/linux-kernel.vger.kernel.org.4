@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52936A4FD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 475986A4FD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjB0Xtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        id S229963AbjB0XuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB0Xti (ORCPT
+        with ESMTP id S229451AbjB0XuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:49:38 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B48829E2B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:49:32 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso4931181wmb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 15:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RmGHrJS0CdMHCznjZxbk3tDqwQcVokCoUIpr6DAOEI=;
-        b=i6C5R8HSVhydMGiWEqUzXtK49WziOZJsqrBIwxrYGvymjIVGTcOp0O8137EbwkHFDK
-         QeRdoSAebhHQwg3cDokGpGxxKhaEHW4VUPv6PwrmoFO9KAmcAw3GdAoTzjCqjKnG8fpb
-         FpEUT4Rxg7AVCLZCgSNC8DRaU6G7dqMEeS3/Bl68bnnMzK5yFWNvWBf4Z60zdyAfmQCx
-         3kcAkr3Lyv5NcG4o0/PyRIPcCkmna4Oie0L7eb1rHUzkO3rVsIMn2B5UkqEjsfsmqDtY
-         STdN+MF0dzeoBnorZtAbsUR6gH0sVYWsOk05SpSsRszuBbGsK9ES4iOFE+F9QpPgEjiN
-         XK8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1RmGHrJS0CdMHCznjZxbk3tDqwQcVokCoUIpr6DAOEI=;
-        b=jFAGDUuPjfIHpxCe+Jmqcr6oLSKxIjHfb6IzIW8flJ7JlNl+sV7wK2wYmZg/XLHDv5
-         aXM7dtdIV+xN8z9f2ESBwarkv6SJfqT+OZeuX3skXe5Vbg5UTUbDX0Dxfovuzg6NcJBq
-         x7E2Vdo55RrO5yAaZ0If5Jeb34+q4BfMelB9pa9eDZtkW5x69l5TAHt8T+KsPZPKP85B
-         WIyOE81/ENO+9P6l9ykcYFtt7cDiCyNHxEty5njWUt1YvGjPKRpc3ErwZPv+SUjBn2d3
-         vZRdNEnQhwyLJqY2iFdai4odh2vWr1yHHepRko7rWdnKOx70LMelFx/cJx3akwLIxT5j
-         BkWw==
-X-Gm-Message-State: AO0yUKUP9PuTp+ojck/OH2AXJNp6Lp9kMcu+2lxVgwv0Z5GCcWXd8oIW
-        sxyRrLT9j3FL/iUqI5m3VT2962JSpbRjew==
-X-Google-Smtp-Source: AK7set/1CgH8bnhHkVG2+skBvkiQIEjx38OKqAP+hJncaUgOipM6V/zyl1ks2KzWQ/A5PTD3ZUKYVw==
-X-Received: by 2002:a05:600c:354c:b0:3df:9858:c03a with SMTP id i12-20020a05600c354c00b003df9858c03amr7646124wmq.15.1677541770144;
-        Mon, 27 Feb 2023 15:49:30 -0800 (PST)
-Received: from ducanhle-OMEN-16n0.home (2a01cb058424d4006dccd80de8a63aa6.ipv6.abo.wanadoo.fr. [2a01:cb05:8424:d400:6dcc:d80d:e8a6:3aa6])
-        by smtp.gmail.com with ESMTPSA id fc19-20020a05600c525300b003e215a796fasm11767472wmb.34.2023.02.27.15.49.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 15:49:29 -0800 (PST)
-From:   Duc Anh Le <lub.the.studio@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Duc Anh Le <lub.the.studio@gmail.com>
-Subject: [PATCH v2] ASoC: amd: yc: Add DMI entries to support HP OMEN 16-n0xxx (8A43)
-Date:   Tue, 28 Feb 2023 00:49:21 +0100
-Message-Id: <20230227234921.7784-1-lub.the.studio@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Mon, 27 Feb 2023 18:50:18 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD50E1CF78;
+        Mon, 27 Feb 2023 15:50:16 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MzhnN-1obPHS29iL-00vhw5; Tue, 28
+ Feb 2023 00:50:00 +0100
+Message-ID: <3c843d9e-3813-dc02-160c-4a46ad47f941@gmx.com>
+Date:   Tue, 28 Feb 2023 07:49:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fsdevel Mailing List <linux-fsdevel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+References: <20230226160259.18354-1-ammarfaizi2@gnuweeb.org>
+ <19732428-010d-582c-0aed-9dd09b11d403@gmx.com>
+ <Y/yzS7aQ6PDyFsbm@biznet-home.integral.gnuweeb.org>
+Content-Language: en-US
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: [RFC PATCH v1 0/6] Introducing `wq_cpu_set` mount option for
+ btrfs
+In-Reply-To: <Y/yzS7aQ6PDyFsbm@biznet-home.integral.gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:8U7vfGoppnHui+sb1hPoMVrAT9T7+PhUT+g8R09pRxR5vrU3RuK
+ zs37SUa6sEvTLT2hiu+qrQ7GGRW9wWDC/T64jUNB/Z83BsTdfNjEz805ujmxc4kJl5T9Jyl
+ fQpx3K5BaANta82BhfoKLBlQVhpqaZgIYKt2Jae7/DHD8kHqcwoXDH5QaPcJ6uFjL2vd/dc
+ x3DAdPqP7eZI+m7i8fKEA==
+UI-OutboundReport: notjunk:1;M01:P0:m6AqjQi+rdE=;Cd6yJ4f34yvH+hUmF7tn1wCCRvI
+ WTqAynjVD06InRrwdBWQ7WBnqUOTWNc/YPAM4+4LR97PVViwcv+MyhsBzwCYUBoVpaWsEibyo
+ P6DUMQoK3goleN1WNbmQbS+MEXdq6y7O/Jpi4rUOORKmhaVgXOb7Ka1UIj6wAkVDzmz4AllDs
+ LEDKvU2YTGtDd5DswYBQskKhSUYU35P7Dq4IOJkD6SUlMEQYtz8qzM7s/54JSmGOntW57rQHt
+ k15ehH6FNNo5Bf5KkZ509xd4bO5wiSbWfapnwddF2t2Iif2mRBTUqD76xk9EhMsoqOFTsJI/U
+ JPoztMp2+bE4BLxAxhTEq/ttuXXirxjMy4dvXnNeRoB96k5D/f2vd5Tb0ZEkG07OK6lRH7Xvv
+ 9CYKFhll6tmCQ3k4U6tIHx+8MHWP/o1B1crMNnAeW+ZJjWR5EMAglljlAYxdfno77V5TMnfaq
+ 6wTyqfybhD8Pug3U7tW1aQd+m8udRfhn+yvfxrbNDH7NzFBidvK/i6+lSBWxJL70EQzOvzxww
+ whxBo7wb9ZAyviZJ2Cz/ctIGxh1k6/0d5u6ewVvEWpzBL13EyWTNmsKCXIXrpf6GhIc5sadDL
+ XNFRYW8ejAlhXJ220v19u2/ynutwAJG+WC67GH4LH/xNnSVzmwkqZhG1rBlw50kzynk5DoXnP
+ 9lXjvG2T23shfNz3O1MJQPOYo0aYKv2Hum9hmAAZq7jzwyEfL9SaVHjKVhV6PfHvv2pgPKddy
+ +Z4r5uB6d/ku5rHZN+vqJvN2z5kj2cKMYe5NuMm5hDlJ7ORvPNLe9aw3pwLTEEoaP3vsp3DAH
+ tGyyoN65HvVKiHy+8pvhvUXK4G2wq/Fs9WaMSPmSjeM07qsAQiYraLCFCwzW4tMc6mBzpNL8l
+ MYH+lxbgQV7+R2TbZmET0zc/y5AAbBci6DJUcHgrkTrAQIVYz/bbYpl3u3cp6s3/tnwxe7e2E
+ xo/yR88EDbt0KcK1QiT7C8aunN0=
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This model requires an additional detection quirk to enable the internal microphone.
-Signed-off-by: Duc Anh Le <lub.the.studio@gmail.com>
----
- sound/soc/amd/yc/acp6x-mach.c | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/sound/soc/amd/yc/acp6x-mach.c b/sound/soc/amd/yc/acp6x-mach.c
-index 36314753923b..baad3bce3b7c 100644
---- a/sound/soc/amd/yc/acp6x-mach.c
-+++ b/sound/soc/amd/yc/acp6x-mach.c
-@@ -255,6 +255,13 @@ static const struct dmi_system_id yc_acp_quirk_table[] = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "15NBC1011"),
- 		}
- 	},
-+	{
-+		.driver_data = &acp6x_card,
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "HP"),
-+			DMI_MATCH(DMI_BOARD_NAME, "8A43"),
-+		}
-+	},
- 	{}
- };
- 
--- 
-2.37.2
 
+On 2023/2/27 21:42, Ammar Faizi wrote:
+> On Mon, Feb 27, 2023 at 06:18:43PM +0800, Qu Wenruo wrote:
+>> I'm not sure if pinning the wq is really the best way to your problem.
+>>
+>> Yes, I understand you want to limit the CPU usage of btrfs workqueues, but
+>> have you tried "thread_pool=" mount option?
+>>
+>> That mount option should limit the max amount of in-flight work items, thus
+>> at least limit the CPU usage.
+> 
+> I have tried to use the thread_poll=%u mount option previously. But I
+> didn't observe the effect intensively. I'll try to play with this option
+> more and see if it can yield the desired behavior.
+
+The thread_pool mount option is much harder to observe the behavior change.
+
+As wq pinned to one or two CPUs is easy to observe using htop, while the 
+unbounded wq, even with thread_pool, is much harder to observe.
+
+Thus it needs more systematic testing to find the difference.
+
+> 
+>> For the wq CPU pinning part, I'm not sure if it's really needed, although
+>> it's known CPU pinning can affect some performance characteristics.
+> 
+> What I like about CPU pinning is that we can dedicate CPUs for specific
+> workloads so it won't cause scheduling noise to the app we've dedicated
+> other CPUs for.
+> 
+
+I'm not 100% sure if we're really any better than the scheduler 
+developers, as there are a lot of more things to consider.
+
+E.g. for recent Intel CPUs, they have BIG and little cores, and BIG 
+cores even have SMT supports.
+For current kernels, scheduler would avoid putting workloads into the 
+threads sharing the same physical cores.
+
+Thus it can result seemingly weird priority like BIG core thread1 > 
+little core > BIG core thread2.
+But that results overall better performance.
+
+So overall, unless necessary I'd avoid manual CPU pinning.
+
+Thanks,
+Qu
