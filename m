@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ED16A4DC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8CB6A4DCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjB0WNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
+        id S230105AbjB0WOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjB0WNE (ORCPT
+        with ESMTP id S229761AbjB0WO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:13:04 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC12213531;
-        Mon, 27 Feb 2023 14:13:02 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id u5so4969432plq.7;
-        Mon, 27 Feb 2023 14:13:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSoyIRdk2necibNGHW1XNcmlnKUC/UGS7KXWUhWzN54=;
-        b=K8scKwSRgffkGyn/nz0CjNmeUu9IkROiI9wYW2WOXsLWOzbtNxmjFDQgirrYf63N3N
-         gs5Rj/aml0czFpP6Kc/PO/trA3i34d1twm1kI18lRt3b/G2LkD7FkoQve0Zt6e4tQ4lq
-         Tk55sYyuK9gAeQGX/xVPNFhievWGq2loLNa0jNAgUCLg+c6+N0CXuIgT+ZnNWWUlEsmI
-         q4m1WL/KmSgWof+FHaH2uy15xTMDuDKyrONurQg3mCLL5HdhYcbqLzcQqjkEhQZCrk+s
-         wFH2UHYIMOviHVtCQBgSa/Kzj8IPF/yeesMbuVdPJCrI1MmbuBSWaoxOzz3xBeuWu4FA
-         iQQQ==
+        Mon, 27 Feb 2023 17:14:29 -0500
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FEB25BAF;
+        Mon, 27 Feb 2023 14:14:28 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id u3-20020a4ad0c3000000b0052541ef0bafso1246311oor.5;
+        Mon, 27 Feb 2023 14:14:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gSoyIRdk2necibNGHW1XNcmlnKUC/UGS7KXWUhWzN54=;
-        b=hHF2BWTlxdKUECKBihci4uGG4r/VBOW3xpYvL9QxOe+kDvcqIA7xvnPQPGoC1LyaTB
-         b6uv6RuSZv9CLTizeIUPZO7duyxXp3y+Ei4/aCENGEfcpUsE73Olun99p8pKClhmNaRh
-         Z9/UgV3Tq7YQ7iqzuPFYi4XrPxkm54W6ftjYTIJzXiuFvc9Y9VJIVGZ3KBY7957D2Zuc
-         mLfbgnm4DygIDYP8LhxkWnIpQto5CVm9CikgpkuDi/1RGjqN6ihuZohSk8hUNEw2LxbH
-         RKzVTab5ncL9BhdWCV/T0UISUb6V7c6jZJNw4MtugX+jGwgkQ29wWal7aPbl1zUF+9l1
-         hvOA==
-X-Gm-Message-State: AO0yUKUIPKBVzPDi99E5XkQnRz9ZqPn9XgqMmAtw6iwWEnoNqMBas5X6
-        n7CcIiOpKeR5TE45/aZJhSk=
-X-Google-Smtp-Source: AK7set+Uy+nFOhkmkQDDLJ1gqsEs1tmKs4LqyIleZkZP3Xt0pM9IqSPX4XpDeIgMX9/zEelfiGiG/g==
-X-Received: by 2002:a17:902:7c97:b0:19d:244:a3a8 with SMTP id y23-20020a1709027c9700b0019d0244a3a8mr410725pll.10.1677535982069;
-        Mon, 27 Feb 2023 14:13:02 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id g3-20020a1709026b4300b00198e346c35dsm5100350plt.9.2023.02.27.14.13.01
+        bh=ZS2bF3+Kst9y6aMOuXBKptVY4beKNpQcXiRFClTf/bI=;
+        b=LN7/I+ZZPE9RfxMCZhRC953nSOruGQdL4dYLlIoLhc1bocwP+CvKROMsoFGMmvWKWw
+         dh86kG5EGd4n1zK4Qq1Hzst4cotF7fDyqfJrQmIojGYoed5RIZovQiwh9ys0Ydl0r+cU
+         lqvBirRAyH2bQ9mgTza16oBPPX+mx0T+QkkbI9mZWno+rKEnQbODBNLnxEUp1inSEp7J
+         4chS3G+cSdQMGGnkXHQzPIfMGY7Zu+3z3CxoneLY4ZS/ZHm2WPBnCqeBZ9FSnMBRmFsI
+         Hzf7E1v0/G4IvJV6EmyVOJxxCJG1pLEaVGbyjngC1Bejrr8kI+BB6Rk8lUjGJ1KT0M4K
+         bgOA==
+X-Gm-Message-State: AO0yUKX1WhZ2P0nC5TWPSjXzwMqmfQQg+gU9zJ1Nyjx98BbXkTwRk4fM
+        B9BugDAz+5vKHjxbXlw16w==
+X-Google-Smtp-Source: AK7set9a9wt8dYLW0+D9GTxaOE63A+at2SMod+AKLVoJqf5EzvyD9tdF199K0X72Q60jeiCDGB6/0A==
+X-Received: by 2002:a4a:6b12:0:b0:4f2:8f8:d2ff with SMTP id g18-20020a4a6b12000000b004f208f8d2ffmr70403ooc.6.1677536067377;
+        Mon, 27 Feb 2023 14:14:27 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k22-20020a056820017600b00517a7ac36c8sm3124614ood.24.2023.02.27.14.14.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 14:13:01 -0800 (PST)
-Date:   Mon, 27 Feb 2023 14:12:59 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH v11 099/113] KVM: TDX: Handle TDX PV map_gpa hypercall
-Message-ID: <20230227221259.GR4175971@ls.amr.corp.intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <1a7c87931d303b2e66874e0bbbd791aa308bc918.1673539699.git.isaku.yamahata@intel.com>
- <20230131013029.qtansdeuvwe7nlzt@yy-desk-7060>
+        Mon, 27 Feb 2023 14:14:27 -0800 (PST)
+Received: (nullmailer pid 1193336 invoked by uid 1000);
+        Mon, 27 Feb 2023 22:14:26 -0000
+Date:   Mon, 27 Feb 2023 16:14:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <asahi@lists.linux.dev>, Henrik Rydberg <rydberg@bitmath.org>,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2
+ controller bindings.
+Message-ID: <20230227221426.GA1048218-robh@kernel.org>
+References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
+ <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com>
+ <20230227195139.GA677578-robh@kernel.org>
+ <CAMT+MTRodB_+sMtoPxv-gP_+sJAwNb36XuLOGo=HvuCQq6h+gQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230131013029.qtansdeuvwe7nlzt@yy-desk-7060>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CAMT+MTRodB_+sMtoPxv-gP_+sJAwNb36XuLOGo=HvuCQq6h+gQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,101 +72,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 09:30:29AM +0800,
-Yuan Yao <yuan.yao@linux.intel.com> wrote:
-
-> On Thu, Jan 12, 2023 at 08:32:47AM -0800, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Mon, Feb 27, 2023 at 09:06:28PM +0100, Sasha Finkelstein wrote:
+> On Mon, 27 Feb 2023 at 20:51, Rob Herring <robh@kernel.org> wrote:
 > >
-> > Wire up TDX PV map_gpa hypercall to the kvm/mmu backend.
+> > > +properties:
+> > > +  compatible:
+> > > +    const: apple,z2-touchscreen
 > >
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/kvm/vmx/tdx.c | 53 ++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 53 insertions(+)
+> > Is 'z2' anything other than a touchscreen? If not, '-touchscreen' is
+> > redundant. If so, then what else is there? You should be describing
+> > physical devices, not just a protocol for touchscreen.
 > >
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index 4bbde58510a4..486d0f0c6dd1 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -1181,6 +1181,57 @@ static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
-> >  	return 1;
-> >  }
-> >
-> > +static int tdx_map_gpa(struct kvm_vcpu *vcpu)
-> > +{
-> > +	struct kvm *kvm = vcpu->kvm;
-> > +	gpa_t gpa = tdvmcall_a0_read(vcpu);
-> > +	gpa_t size = tdvmcall_a1_read(vcpu);
-> > +	gpa_t end = gpa + size;
-> > +	gfn_t s = gpa_to_gfn(gpa) & ~kvm_gfn_shared_mask(kvm);
-> > +	gfn_t e = gpa_to_gfn(end) & ~kvm_gfn_shared_mask(kvm);
-> > +	int i;
-> > +
-> > +	if (!IS_ALIGNED(gpa, 4096) || !IS_ALIGNED(size, 4096) ||
-> > +	    end < gpa ||
-> > +	    end > kvm_gfn_shared_mask(kvm) << (PAGE_SHIFT + 1) ||
-> > +	    kvm_is_private_gpa(kvm, gpa) != kvm_is_private_gpa(kvm, end)) {
-> > +		tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
-> > +		return 1;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Check how the requested region overlaps with the KVM memory slots.
-> > +	 * For simplicity, require that it must be contained within a memslot or
-> > +	 * it must not overlap with any memslots (MMIO).
-> > +	 */
-> > +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> > +		struct kvm_memslots *slots = __kvm_memslots(kvm, i);
-> > +		struct kvm_memslot_iter iter;
-> > +
-> > +		kvm_for_each_memslot_in_gfn_range(&iter, slots, s, e) {
-> > +			struct kvm_memory_slot *slot = iter.slot;
-> > +			gfn_t slot_s = slot->base_gfn;
-> > +			gfn_t slot_e = slot->base_gfn + slot->npages;
-> > +
-> > +			/* no overlap */
-> > +			if (e < slot_s || s >= slot_e)
-> > +				continue;
-> > +
-> > +			/* contained in slot */
-> > +			if (slot_s <= s && e <= slot_e) {
-> > +				if (kvm_slot_can_be_private(slot))
-> > +					return tdx_vp_vmcall_to_user(vcpu);
-> > +				continue;
-> > +			}
-> > +
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
 > 
-> This returns TDG_VP_VMCALL_INVALID_OPERAND if the TD is running with
-> non-private slots, which looks incorrect to the caller in TD guest(because
-> the operands are correct). Can we just refuse to create TD if private memory
-> slot is the only supported slot type for it ?
+> This is a class of touchscreen controllers that talk the z2 protocol
+> over spi.
 
-TD needs to support both private and non-private memory slot for device
-assignment via shared pages.
+Yes, you already said that much. So nothing else for this piece of h/w? 
+Then 'apple,z2' is sufficient. Well maybe. You are assuming all h/w in 
+the world speaking 'z2' is the same (to software). Usually that's not a 
+safe assumption, but maybe Apple is better at not changing the h/w...
 
-So question should be, what's the expectation for non-private memory slot with
-memory attribute change or TDX map_gpa.
+Normally, the 'protocol' to talk to a device is only part of it. There's 
+other pieces like how to turn the device on and off which need h/w 
+specific knowledge. If you need any of that, then you need specific 
+compatibles. Adding properties for each variation doesn't end up well.
 
-- setting memory attributes: KVM_SET_MEMORY_ATTRIBUTES
-  - option 1. return error
-  - option 2. silently ignore as nop
-              Following get-attributes returns non-private.
-  - option 3. Allow setting attributes value. but no effect.
-              Following get-attributes returns private. but kvm page fault
-              doesn't have any effect.
 
-- TDX MAP GPA hypercall
-  Let's assume the region is contained in a single memory slot.
-  - option 1. return error
-  - option 2. silently ignore as nop
+> 
+> > > +                    touchscreen-size-y = <640>;
+> > > +                    apple,z2-device-name = "MacBookPro17,1 Touch Bar";
+> >
+> > Why do we need this string? If you want a human consumed label for
+> > some identification, we have a property for that purpose. It's called
+> > 'label'. But when there is only 1 instance, I don't really see the
+> > point.
+> 
+> I want a libinput-consumed label to distinguish between devices
+> using this protocol. 
 
-For map gpa hypercall, it's better to return error because guest should know
-which region is for private memory or device assignment.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+I know little about libinput, but how would it know about 
+'apple,z2-device-name'?
+
+> It is used both for 'normal' touchscreens, and,
+> as is in this example a 'touchbar', which absolutely should not be
+> treated as a normal touchscreen, and needs special handling in
+> userspace.
+
+Meaning there are both touchscreens and touchbars using this? That 
+sounds like s/w needs this information. From a DT perspective, 
+'compatible' is how DT defines exactly what the h/w is and how to use 
+it. That also doesn't sound like a unique issue. Doesn't the kernel 
+provide a standard way to tell userspace what's a touchscreen vs. 
+touchpad vs. ???
+
+Rob
+
