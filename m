@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06816A482D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 046326A482F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjB0RhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S230174AbjB0Rhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjB0RhB (ORCPT
+        with ESMTP id S229969AbjB0RhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:37:01 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3A82413A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:36:57 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a545bfbaso154418717b3.20
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:36:57 -0800 (PST)
+        Mon, 27 Feb 2023 12:37:12 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E843241FC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:36:59 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536c039f859so154165257b3.21
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:36:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9aVmQ+gMlQiQzO0BzppdTJNpvPFfXe9SF4GFtX+8IdI=;
-        b=D/TbQt2c2awJMi6HOd9NzTPN8Wh6HIDVRf22VcVpKnoo2iG9BW3cveeUmkm8PKhRJw
-         e8yR0ZbMCGkBSW5fis3LsBzhCw5i+IpUgPXTff0+yi++DCnoiZhErYzM/F+7mHgcikXH
-         QOit+1nZssfs8RFlG5fSiSPYICEv1yz50+pHU8s0ps/vZirUhJuz0Ulrl1hrsOJOpcE3
-         znNNgdhtvb5jKMhdVyGD/B9paUJjeax2LqQ02QvRkavKjrbvwoC4jih7/m+HHIs6ILLw
-         YfzP5gfYx0HByoaWOc2LKVichxZvwcYhuSo6etH4BNZtHefRK1x1pNfZ+dtw2h02k/FS
-         yoOQ==
+        bh=ycuncMhySgAqKB0JKjWQ87T3vvxMS9R2K+oLMhIEJ8Y=;
+        b=jatZw+vavHEldR/zWx4fIqW8wAPU7kuskm2fNsdTmUbEoYYRUK1QgmfSQwty0F7vyh
+         In/5k0Ybu4OL/7+U8XoT4kd5dwj6nkMsSYSfl49SjuU4fWHkZmC7EvE/NA5jUKV5mijt
+         tEPaHMFzYqt7Ecgvi/GqjzXDl7rzKrsdjxUTz3IPQXQFpGFBi+tum9hpbaiwuAQcs7YP
+         AcTg6xqgjkoCojGsNiAv0DLTEBbzq13kS5i64Oy3wTmze25CUcKHKdl0RIiSjO/ZdJhS
+         rd+Ro59v2yktpIygy3VtQ7oiDpWrjQ+HLII3XoEVuOsktTglELO3PMbQ5C9t6zyu7z8h
+         3t1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9aVmQ+gMlQiQzO0BzppdTJNpvPFfXe9SF4GFtX+8IdI=;
-        b=08DNEBUsmdO0WD+AYuEk0k79T3f1dxgUhEEimJoGOCjYSxfzOhkyH3XEZVZGbA2wj6
-         gwY+Rweebw2swIgBrQdGlKV0siBADj6i04pyUZ3/zZOvqWPMH/2ywvQayrRLthkpImWE
-         JTtoaaZEjrt3OyD0PoX9QJOh+12rsr8hC0I7JYSyZHBSPCbNgop0dyA9JIf1hfP/mQpo
-         hqTpw3vU5JJcIBfiZMxDDMv0/ES0faje8R1KuLSBO0pxRQ1at3GOcJUFXXkkNjuXZlCK
-         ck9wRGBjac4dGDiwbPlkvOy09LWumhJsMOGaciVcOf5u9tEbIrypH5hpbsM9HP5zTGsc
-         XvVA==
-X-Gm-Message-State: AO0yUKWl4K8MOjHV9OLs40tggPEJENpLbDgV5rtF9W0ZEu392mNscn6/
-        /0tLcB1du79PD360bUh61QVQdYjquCs=
-X-Google-Smtp-Source: AK7set8Y6D5rMaDNffZrErpNBudkJshlslCM/7lUMkyK7fj0ZkdAWXrQW4GsW7RGl7OL0nGeq+RMkIj/EqM=
+        bh=ycuncMhySgAqKB0JKjWQ87T3vvxMS9R2K+oLMhIEJ8Y=;
+        b=SdqssnPkY4Kj/eENE6VbijM6COf8LIdVX/AwTSWn3R3yYiQsYQyOqETc/hLf+c9UgB
+         fPNICW7fYZSekB9EpGrwxFyd4i4EQdzq0nPj79EjA/hbgoaCMPH4yctatiA3cYn3vjEh
+         X9hO3YwJ7c6DJMDAImxKebFyE/bK/WmMSrv6CFbOSYLc/0nibipIfJbxpPz2+oT3lFyk
+         qpXlQFx296k5+5zaJIebwZGKOtWvOo+9DcU9OHEelpGuRzLYEsA3fjDEuE704Gw3k4Ru
+         D93Ay1zvxDy6SdqjqG8AZLjWYOkeCQ5lZ6dIdK2vz455Fw7invYQ71xrhTB0Q7D8yOuG
+         JvCA==
+X-Gm-Message-State: AO0yUKU+B/ElbbK253s5XAM/Igw0uvplkvslzUAMsXM2AHQ/tHpkU5M1
+        Y4x6bmTNNKf1NOCPzuA4Cp/mUsYuOsw=
+X-Google-Smtp-Source: AK7set+sQnwo5grHRclokRwp0C+SftMLAAuN7gXfh+MOPKXwAKaiWwA4Ongifn/fr7bxEOF3Yk7Tuxt7Hwo=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:e1f6:21d1:eead:3897])
- (user=surenb job=sendgmr) by 2002:a05:6902:1205:b0:a09:314f:9f09 with SMTP id
- s5-20020a056902120500b00a09314f9f09mr214802ybu.6.1677519416349; Mon, 27 Feb
- 2023 09:36:56 -0800 (PST)
-Date:   Mon, 27 Feb 2023 09:36:07 -0800
+ (user=surenb job=sendgmr) by 2002:a81:af1f:0:b0:52f:1c40:b1f9 with SMTP id
+ n31-20020a81af1f000000b0052f1c40b1f9mr10776885ywh.7.1677519418452; Mon, 27
+ Feb 2023 09:36:58 -0800 (PST)
+Date:   Mon, 27 Feb 2023 09:36:08 -0800
 In-Reply-To: <20230227173632.3292573-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230227173632.3292573-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227173632.3292573-9-surenb@google.com>
-Subject: [PATCH v4 08/33] mm: Enable maple tree RCU mode by default.
+Message-ID: <20230227173632.3292573-10-surenb@google.com>
+Subject: [PATCH v4 09/33] mm: introduce CONFIG_PER_VMA_LOCK
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -73,7 +73,6 @@ Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@android.com,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Suren Baghdasaryan <surenb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -86,80 +85,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+This configuration variable will be used to build the support for VMA
+locking during page fault handling.
 
-Use the maple tree in RCU mode for VMA tracking.  This is necessary for
-the use of per-VMA locking.  RCU mode is enabled by default but disabled
-when exiting an mm and for the new tree during a fork.
+This is enabled on supported architectures with SMP and MMU set.
 
-Also enable RCU for the tree used in munmap operations to ensure the
-nodes remain valid for readers.
+The architecture support is needed since the page fault handler is called
+from the architecture's page faulting code which needs modifications to
+handle faults under VMA lock.
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm_types.h | 3 ++-
- kernel/fork.c            | 3 +++
- mm/mmap.c                | 4 +++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+ mm/Kconfig | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 417d25c6a262..22b2ac82bffd 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -779,7 +779,8 @@ struct mm_struct {
- 	unsigned long cpu_bitmap[];
- };
+diff --git a/mm/Kconfig b/mm/Kconfig
+index ca98b2072df5..2e4a7e61768a 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1211,6 +1211,18 @@ config LRU_GEN_STATS
+ 	  This option has a per-memcg and per-node memory overhead.
+ # }
  
--#define MM_MT_FLAGS	(MT_FLAGS_ALLOC_RANGE | MT_FLAGS_LOCK_EXTERN)
-+#define MM_MT_FLAGS	(MT_FLAGS_ALLOC_RANGE | MT_FLAGS_LOCK_EXTERN | \
-+			 MT_FLAGS_USE_RCU)
- extern struct mm_struct init_mm;
++config ARCH_SUPPORTS_PER_VMA_LOCK
++       def_bool n
++
++config PER_VMA_LOCK
++	def_bool y
++	depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
++	help
++	  Allow per-vma locking during page fault handling.
++
++	  This feature allows locking each virtual memory area separately when
++	  handling page faults instead of taking mmap_lock.
++
+ source "mm/damon/Kconfig"
  
- /* Pointer magic because the dynamic array size confuses some compilers. */
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 0cbfdc4b509e..abfcf95734c7 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -617,6 +617,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 	if (retval)
- 		goto out;
- 
-+	mt_clear_in_rcu(vmi.mas.tree);
- 	for_each_vma(old_vmi, mpnt) {
- 		struct file *file;
- 
-@@ -700,6 +701,8 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 	retval = arch_dup_mmap(oldmm, mm);
- loop_out:
- 	vma_iter_free(&vmi);
-+	if (!retval)
-+		mt_set_in_rcu(vmi.mas.tree);
- out:
- 	mmap_write_unlock(mm);
- 	flush_tlb_mm(oldmm);
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 740b54be3ed4..c234443ee24c 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2277,7 +2277,8 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 	int count = 0;
- 	int error = -ENOMEM;
- 	MA_STATE(mas_detach, &mt_detach, 0, 0);
--	mt_init_flags(&mt_detach, MT_FLAGS_LOCK_EXTERN);
-+	mt_init_flags(&mt_detach, vmi->mas.tree->ma_flags &
-+		      (MT_FLAGS_LOCK_MASK | MT_FLAGS_USE_RCU));
- 	mt_set_external_lock(&mt_detach, &mm->mmap_lock);
- 
- 	/*
-@@ -3042,6 +3043,7 @@ void exit_mmap(struct mm_struct *mm)
- 	 */
- 	set_bit(MMF_OOM_SKIP, &mm->flags);
- 	mmap_write_lock(mm);
-+	mt_clear_in_rcu(&mm->mm_mt);
- 	free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
- 		      USER_PGTABLES_CEILING);
- 	tlb_finish_mmu(&tlb);
+ endmenu
 -- 
 2.39.2.722.g9855ee24e9-goog
 
