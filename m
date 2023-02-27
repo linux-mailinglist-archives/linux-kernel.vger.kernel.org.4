@@ -2,116 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A0B6A4816
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCEC6A4817
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjB0Rd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S229816AbjB0ReP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjB0Rd4 (ORCPT
+        with ESMTP id S229684AbjB0ReM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:33:56 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0C510E3;
-        Mon, 27 Feb 2023 09:33:37 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1729bdcca99so8111540fac.12;
-        Mon, 27 Feb 2023 09:33:36 -0800 (PST)
+        Mon, 27 Feb 2023 12:34:12 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4C31E2B6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:34:01 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-536c02eea4dso197242297b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:34:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=clSo+ynhBcgd5P9oqBCplVUWaCRz+bAuQWNUwRUeW4A=;
+        b=EmYlVn1xvrcf7zrr5iy4RTNshyBLoKiKAZKUtboCL/A941OU+Fr6WmnHBG9wnH64cw
+         hNBCUpkYIEcf4MNUBwUoZw0b2MIu6JUMAPcHXGaKgsYyJuQR6NlXSN9FkPIWduRVuC9V
+         zsAjMHnyTstST8ItvKvXKtLK5ei8ulndGMVe0+lik/LE5VQmzs18Dkzt2+uqlYlWoF0g
+         psRsRKJvyAca+Xc0847actyvz2EtyQPXcEgyqcP0hlcvy2m+GgqNR1i9NYntIpolO9lz
+         e9Ky8rIShfMPGeWPHTJ8yH6QdzBXma6FLbEfF1Vpmh0GBu/TSSr5BSTiSYHZBuSNVK/I
+         RqZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/oN8FxBckZtmYaMSZo87sPI384Nrsl3rmx9eLsbfMrE=;
-        b=UfZfQSWmOJp6iLuXrUWUxCazXW0zXROs+OOdDhDQ5dFHrhCGeneptVi1CNglD+7OLZ
-         c5S276vktWy/x4JMKzVJWiBLeUqan5dwztA3wF2adJFq6q6AVbYLI1i+GNtptdMgaels
-         NdEJswK/3WCm78XcmRt8SAMheqPj79TYwxjBWEieEB8IzEPrAE3JMur3aNRsHCxRv/3D
-         2f2nep+6/gSrMGs47TC2iTJ8HjVa4NCwMME7ooDJ3GE5C0ySIAj0FgYO36U85pvAi3jg
-         g45gnR6GtMYqYxVCgr2vHk5Ze61lOY21szDX6Mw+qGTBX1ATFK27Lyq+Ft/jyGq+M+h7
-         UCvA==
-X-Gm-Message-State: AO0yUKWrluBPS14ECP4Yj6VhQKOhyIqhh8ctFA82VnxPUXvzZzWUvLg8
-        yNFRuxuSi5+BaERj+tRKpQ==
-X-Google-Smtp-Source: AK7set9iB+Y2H2YVIxACw0NlHiSHBMwnkJWQVinPxVxj6RyNikXsn6AAahpz+oWM/OgaYUHPeqIz/w==
-X-Received: by 2002:a05:6870:5387:b0:15b:8856:f0cb with SMTP id h7-20020a056870538700b0015b8856f0cbmr20100932oan.57.1677519214294;
-        Mon, 27 Feb 2023 09:33:34 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w18-20020a4aded2000000b00525270c233asm2828098oou.39.2023.02.27.09.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 09:33:33 -0800 (PST)
-Received: (nullmailer pid 504389 invoked by uid 1000);
-        Mon, 27 Feb 2023 17:33:33 -0000
-Date:   Mon, 27 Feb 2023 11:33:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-Message-ID: <20230227173333.GA496999-robh@kernel.org>
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
+        bh=clSo+ynhBcgd5P9oqBCplVUWaCRz+bAuQWNUwRUeW4A=;
+        b=k4rC6Z7qy3RHeWMMGk1q2NR2rbreuhJs1h2KTBW9OEu65vieUGO8YJUG7K9iyeLINS
+         Y84ek6m5SgwscSTRX39QM40VoPQStpctGKyL1ZhoDla3RDSfintF2dQfO28txAHWLbXC
+         Lhug+26PUfHYtE/j+kG7QsoZ4L2Otl5t5v2mXPc0pahn+L4zuI4SG8SNkU9Oh+N2CEcY
+         lXxUJOoQuJIOa1IgpqW1nza3D4+yWfH44jHkUADOpXQdkMrsRtB9l+QLuKKDWAGogbBb
+         mJi9eS8NgKwc7m/biRawsgfDbo9z0hhY+BVgJy8iXees9ZSYX/KEPo+5fgjUvDcL2U8q
+         eBQw==
+X-Gm-Message-State: AO0yUKU/XsJ+h7G9ZtHH/B8Kwz9kNvnhvUTFjiulKwJSx0XAFlEcXD5F
+        yAtYfAtD/kviyMg3owFzeGdvAEgWenm1ypi0ZtdW9A==
+X-Google-Smtp-Source: AK7set850RJ3FwfeF2E4weG1y1xeomWWv7+ssvA8wEpEPU3XPf/dB2vZaBErWfbEaagv9IhdIaDDiNfth2tpmFqVxEs=
+X-Received: by 2002:a81:ae01:0:b0:533:9c5b:7278 with SMTP id
+ m1-20020a81ae01000000b005339c5b7278mr10669499ywh.0.1677519240376; Mon, 27 Feb
+ 2023 09:34:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230222183932.33267-8-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230216051750.3125598-1-surenb@google.com> <20230216051750.3125598-18-surenb@google.com>
+ <20230223202011.dahh6cidqxhzoxne@revolver> <20230223202844.noant5suylne3dnh@revolver>
+ <CAJuCfpE3YtSQuXJwOYWKe1z9O4GASS9pA_FTWGkdveHb3bcMXA@mail.gmail.com>
+ <20230224014624.gnirnx625ylhoevb@revolver> <CAJuCfpG4JOv4aeJ6KJDi7R649vuhc0h75230ZRJgUg8spqti8w@mail.gmail.com>
+ <20230224161402.o7phj2crnt2xg4nl@revolver> <CAJuCfpFdvNZ-O7ku7ivUz=iuHLzypVCvseU58D=fVFoSyPFCeA@mail.gmail.com>
+In-Reply-To: <CAJuCfpFdvNZ-O7ku7ivUz=iuHLzypVCvseU58D=fVFoSyPFCeA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 27 Feb 2023 09:33:49 -0800
+Message-ID: <CAJuCfpEgagE7CJx5m3w_3rjpcZAvQtqO6bYMQnaqj1DN+Nx5OQ@mail.gmail.com>
+Subject: Re: [PATCH v3 17/35] mm/mmap: write-lock VMA before shrinking or
+ expanding it
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, peterz@infradead.org, ldufour@linux.ibm.com,
+        paulmck@kernel.org, mingo@redhat.com, will@kernel.org,
+        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
+        david@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Add the ralink,rt2880-pinmux compatible string. It had been removed from
-> the driver which broke the ABI.
-> 
-> Add the mediatek compatible strings. Change the compatible string on the
-> examples with the mediatek compatible strings.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
->  .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
->  .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
->  .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
->  .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
->  5 files changed, 25 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
-> index 1e63ea34146a..531b5f616c3d 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
-> @@ -17,7 +17,10 @@ description:
->  
->  properties:
->    compatible:
-> -    const: ralink,mt7620-pinctrl
-> +    enum:
-> +      - mediatek,mt7620-pinctrl
-> +      - ralink,mt7620-pinctrl
+On Fri, Feb 24, 2023 at 8:19 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Fri, Feb 24, 2023 at 8:14 AM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> >
+> > * Suren Baghdasaryan <surenb@google.com> [230223 21:06]:
+> > > On Thu, Feb 23, 2023 at 5:46 PM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> > > >
+> > > > * Suren Baghdasaryan <surenb@google.com> [230223 16:16]:
+> > > > > On Thu, Feb 23, 2023 at 12:28 PM Liam R. Howlett
+> > > > > <Liam.Howlett@oracle.com> wrote:
+> > > > > >
+> > > > > >
+> > > > > > Wait, I figured a better place to do this.
+> > > > > >
+> > > > > > init_multi_vma_prep() should vma_start_write() on any VMA that is passed
+> > > > > > in.. that we we catch any modifications here & in vma_merge(), which I
+> > > > > > think is missed in this patch set?
+> > > > >
+> > > > > Hmm. That looks like a good idea but in that case, why not do the
+> > > > > locking inside vma_prepare() itself? From the description of that
+> > > > > function it sounds like it was designed to acquire locks before VMA
+> > > > > modifications, so would be the ideal location for doing that. WDYT?
+> > > >
+> > > > That might be even better.  I think it will result in even less code.
+> > >
+> > > Yes.
+> > >
+> > > >
+> > > > There is also a vma_complete() which might work to call
+> > > > vma_end_write_all() as well?
+> > >
+> > > If there are other VMAs already locked before vma_prepare() then we
+> > > would unlock them too. Safer to just let mmap_unlock do
+> > > vma_end_write_all().
+> > >
+> > > >
+> > > > > The only concern is vma_adjust_trans_huge() being called before
+> > > > > vma_prepare() but I *think* that's safe because
+> > > > > vma_adjust_trans_huge() does its modifications after acquiring PTL
+> > > > > lock, which page fault handlers also have to take. Does that sound
+> > > > > right?
+> > > >
+> > > > I am not sure.  We are certainly safe the way it is, and the PTL has to
+> > > > be safe for concurrent faults.. but this could alter the walk to a page
+> > > > table while that walk is occurring and I don't think that happens today.
+> > > >
+> > > > It might be best to leave the locking order the way you have it, unless
+> > > > someone can tell us it's safe?
+> > >
+> > > Yes, I have the same feelings about changing this.
+> > >
+> > > >
+> > > > We could pass through the three extra variables that are needed to move
+> > > > the vma_adjust_trans_huge() call within that function as well?  This
+> > > > would have the added benefit of having all locking grouped in the one
+> > > > location, but the argument list would be getting long, however we could
+> > > > use the struct.
+> > >
+> > > Any issues if I change the order to have vma_prepare() called always
+> > > before vma_adjust_trans_huge()? That way the VMA will always be locked
+> > > before vma_adjust_trans_huge() executes and we don't need any
+> > > additional arguments.
+> >
+> > I preserved the locking order from __vma_adjust() to ensure there was no
+> > issues.
+> >
+> > I am not sure but, looking through the page table information [1], it
+> > seems that vma_adjust_trans_huge() uses the pmd lock, which is part of
+> > the split page table lock.  According to the comment in rmap, it should
+> > be fine to reverse the ordering here.
+> >
+> > Instead of:
+> >
+> > mmap_lock()
+> > vma_adjust_trans_huge()
+> >         pte_lock
+> >         pte_unlock
+> >
+> > vma_prepare()
+> >         mapping->i_mmap_rwsem lock
+> >         anon_vma->rwsem lock
+> >
+> > <changes to tree/VMAs>
+> >
+> > vma_complete()
+> >         anon_vma->rwsem unlock
+> >         mapping->i_mmap_rwsem unlock
+> >
+> > mmap_unlock()
+> >
+> > ---------
+> >
+> > We would have:
+> >
+> > mmap_lock()
+> > vma_prepare()
+> >         mapping->i_mmap_rwsem lock
+> >         anon_vma->rwsem lock
+> >
+> > vma_adjust_trans_huge()
+> >         pte_lock
+> >         pte_unlock
+> >
+> > <changes to tree/VMAs>
+> >
+> > vma_complete()
+> >         anon_vma->rwsem unlock
+> >         mapping->i_mmap_rwsem unlock
+> >
+> > mmap_unlock()
+> >
+> >
+> > Essentially, increasing the nesting of the pte lock, but not violating
+> > the ordering.
+> >
+> > 1. https://docs.kernel.org/mm/split_page_table_lock.html
+>
+> Thanks for the confirmation, Liam. I'll make the changes and test over
+> the weekend. If everything's still fine, I will post the next version
+> with these and other requested changes on Monday.
 
-We don't update compatible strings based on acquistions nor marketing 
-whims. If you want to use 'mediatek' for new things, then fine.
+Weekend testing results look good with all the changes. I'll post v4 shortly.
+Thanks,
+Suren.
 
-Rob
+>
+> >
+> > >
+> > > >
+> > > > remove & remove2 should be be detached in vma_prepare() or
+> > > > vma_complete() as well?
+> > >
+> > > They are marked detached in vma_complete() (see
+> > > https://lore.kernel.org/all/20230216051750.3125598-25-surenb@google.com/)
+> > > and that should be enough. We should be safe as long as we mark them
+> > > detached before unlocking the VMA.
+> > >
+> >
+> > Right, Thanks.
+> >
+> > ...
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> >
