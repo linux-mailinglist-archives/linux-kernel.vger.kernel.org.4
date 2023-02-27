@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD636A49EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516E16A4A02
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjB0SjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S229981AbjB0SlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjB0SjC (ORCPT
+        with ESMTP id S229773AbjB0SlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:39:02 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9A312064;
-        Mon, 27 Feb 2023 10:38:54 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id d10so4118764pgt.12;
-        Mon, 27 Feb 2023 10:38:54 -0800 (PST)
+        Mon, 27 Feb 2023 13:41:19 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848D4252AB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:41:18 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id ev13so5101214qvb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:41:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+AboAji3jAYuO4XvdPAjYRB2J/AMaxq+rrnO3NBE3aY=;
-        b=qwtEN0DGOBja7E0YJ9cfiMfTzhyOC20jJeOjJg48mfG+iu20AcbX7Nwi2jGXqzyFGP
-         o3808ii7YGCZZ0VWmGt3MHbmRk8hL+z/7T/UN6Iggtoittggl+dc2LVjMUUZBe0gDtsS
-         jUEZ+7ITV2Pic17CmdlZoxdgAV7C5iepBpi0jnX3YNabI53AHQRL3kS1d9x6orQpp9zf
-         /fZwwHVzQGoMUAbVBoxzYKWqLkemx/epjNQ4jP9zDeLVw17g79ayBwHaP3smV6R0CQnv
-         5zODXCsisr1A5hq7+XlK3LDi70+HgeVRbN25vpftkj84NULczpjf0NwTt3h7CRZjVUZx
-         Cseg==
+        d=efficientek-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A/ulrwzIZworYzpsVbD55851xLgzvV7G5hrKbS1T2G8=;
+        b=IbvZeAIiHHVHbpQ2DAC4KkKBVmBL4vsQW7CGtp6pPwV5YMCJjtP72xR7TaLNtapAg5
+         hVZl64CYzSAwncUX2umFsIoSh5M3TZzD32G3hlwlT+6h9DoPf0OMwg/0vk3wmGCQeIk0
+         E37ULciG/82PrXrswWg/4mj71Sa9svhDHmg5d+QBbVo7WsVM8besbHtDSE4WufhxQHmd
+         4POVCVeH5tXhpW4UO3arKSZbPCIljBWeqLwzRKPawyzR0wMnK8zxhjNZfVT0kXDDt2/6
+         26f/SqQ9yO4PKvLaG0w2C0u+VcOemXUwCYWDKgqD4QkUWxm1vrixiXuR9t0cxwqnin4W
+         x2IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+AboAji3jAYuO4XvdPAjYRB2J/AMaxq+rrnO3NBE3aY=;
-        b=Dj2bjspxz7qNY7NfMNldljUONeVa+jMInvhBGP756izc+0WeqU5KMGkE+vr9lxCii6
-         T07PLC2G4b9YiQDiA2JESW+lbk6lCE5RfBYhk0VZl3q1H0Wuy9axXW9P+VUS1XMcTmrq
-         k9e6MERAofhnt3rbpi1bGNOCYXMMDiZ5buwW2dCb1BWZxN9xpIblUtzoXZPL/RuxtLEg
-         EX8wXPjSg9IJ35tLsIWjQCk/jddkiyRS3Ve9Yc2QWaZ5nRohDE81jE6LO739lkzUZPIv
-         bhSfOxLkrFeNjkIuW+a5pIK1tK0wR0IZ31RK4HIMIRIHYP978bfe6bGWuvvvWLliZXOL
-         tFrw==
-X-Gm-Message-State: AO0yUKVGhnMeW/jSMv+kdll0rhGl/NEkxAk939PcDd6F4nEbc/nzRUx7
-        qUTw+BJg68llaO14g7fz6HI=
-X-Google-Smtp-Source: AK7set8WYWh/LMiPRCCVzOfK763vGatTubEy0na0hD4jEwPQhc6elxzgYPfp/8HaRV+BaMFI/TCHZA==
-X-Received: by 2002:a62:1cc4:0:b0:5e3:a299:da83 with SMTP id c187-20020a621cc4000000b005e3a299da83mr9848408pfc.19.1677523134170;
-        Mon, 27 Feb 2023 10:38:54 -0800 (PST)
-Received: from [10.69.71.131] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m12-20020aa78a0c000000b005a8ae0c52cfsm4726039pfa.16.2023.02.27.10.38.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 10:38:53 -0800 (PST)
-Message-ID: <35dc0b00-0de4-f1b4-8d43-7efd181e7dbf@gmail.com>
-Date:   Mon, 27 Feb 2023 10:38:51 -0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A/ulrwzIZworYzpsVbD55851xLgzvV7G5hrKbS1T2G8=;
+        b=da1WU0O5W7F8Qt+XcYte30Do1EQzsClxxJqb0HY+P/XEhpfrGlkMhfTDgb5Sv5pp72
+         rHn/aLP/vi2burMHZvMZNah3F0WUI4y2XwtCDzBp0hbiQKnJLGvl9Vj+cRtjqrxYQyRQ
+         MI4MXsCnImut/H5KQGMH6/Q5MYjU4IjvPV9l5Cv4cBc9ryIwmr2B/RQeXq1PVYeDdZoG
+         skec6TLfNC+5DGfZhoUKkhlhXRCC/hdFCiGKJ/f+tGupCMuIY7jrqhXSpfVvZzxRDigN
+         XcvdmiG0d4f4VM0Ykok11WiXizaw8R8tqrH6BVXLSjYzl48gb6FJJewV+UvIrrVfcjfN
+         U6dQ==
+X-Gm-Message-State: AO0yUKXpZOTFS8kfxtD0j5lWjCFIQeZx7TaxxSp3ENE39ItwjSFi52cy
+        uxvwKJK0jsojKPypj/Snzs4E+A==
+X-Google-Smtp-Source: AK7set/LuVuasIVGB6lWomVJu25FMp222NzwbdwPoY2fFQ8GTwHs2oMIIQxlhbK7QXO0UDzEOpA6JQ==
+X-Received: by 2002:a05:6214:d49:b0:56e:c00c:bf5c with SMTP id 9-20020a0562140d4900b0056ec00cbf5cmr808386qvr.31.1677523277734;
+        Mon, 27 Feb 2023 10:41:17 -0800 (PST)
+Received: from localhost.localdomain ([37.218.244.251])
+        by smtp.gmail.com with ESMTPSA id d184-20020a37b4c1000000b0073b3316bbd0sm5392861qkf.29.2023.02.27.10.41.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 10:41:16 -0800 (PST)
+From:   Glenn Washburn <development@efficientek.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Glenn Washburn <development@efficientek.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Tobin C. Harding" <tobin@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: Correct missing "d_" prefix for dentry_operations member d_weak_revalidate
+Date:   Mon, 27 Feb 2023 12:40:42 -0600
+Message-Id: <20230227184042.2375235-1-development@efficientek.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] soc: bcm: brcmstb: Remove bare-metal ARM suspend/resume
- code
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@vger.kernel.org
-Cc:     drv@mailo.com, ssengar@microsoft.com,
-        kumarpraveen@linux.microsoft.com, christophe.jaillet@wanadoo.fr,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miaoqian Lin <linmq006@gmail.com>, Liang He <windhl@126.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230224215249.239405-1-f.fainelli@gmail.com>
- <421678cb-6ec0-903c-a84b-c833f013815d@igalia.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <421678cb-6ec0-903c-a84b-c833f013815d@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,43 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The details for struct dentry_operations member d_weak_revalidate is
+missing a "d_" prefix.
 
+Fixes: af96c1e304f7 (docs: filesystems: vfs: Convert vfs.txt to RST)
+Signed-off-by: Glenn Washburn <development@efficientek.com>
+---
+ Documentation/filesystems/vfs.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2/27/2023 10:36 AM, Guilherme G. Piccoli wrote:
-> On 24/02/2023 18:52, Florian Fainelli wrote:
->> Since 2018 these platforms have supported entry via the ARM Trusted
->> Firmware using the standard PSCI SYSTEM_SUSPEND function calls. Remove
->> this legacy code.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> [...]
->> -/*
->> - * The AON is a small domain in the SoC that can retain its state across
->> - * various system wide sleep states and specific reset conditions; the
->> - * AON DATA RAM is a small RAM of a few words (< 1KB) which can store
->> - * persistent information across such events.
->> - *
->> - * The purpose of the below panic notifier is to help with notifying
->> - * the bootloader that a panic occurred and so that it should try its
->> - * best to preserve the DRAM contents holding that buffer for recovery
->> - * by the kernel as opposed to wiping out DRAM clean again.
->> - *
->> - * Reference: comment from Florian Fainelli, at
->> - * https://lore.kernel.org/lkml/781cafb0-8d06-8b56-907a-5175c2da196a@gmail.com
->> - */
->> -static int brcmstb_pm_panic_notify(struct notifier_block *nb,
->> -		unsigned long action, void *data)
->> -{
->> -	writel_relaxed(BRCMSTB_PANIC_MAGIC, ctrl.aon_sram + AON_REG_PANIC);
->> -
->> -	return NOTIFY_DONE;
->> [...]
-> 
-> Hi Florian, thanks for the clean-up!
-> 
-> I'm curious with the above panic notifier - is it not necessary when
-> PSCI is used?
+diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
+index c53f30251a66..f3b344f0c0a4 100644
+--- a/Documentation/filesystems/vfs.rst
++++ b/Documentation/filesystems/vfs.rst
+@@ -1222,7 +1222,7 @@ defined:
+ 	return
+ 	-ECHILD and it will be called again in ref-walk mode.
+ 
+-``_weak_revalidate``
++``d_weak_revalidate``
+ 	called when the VFS needs to revalidate a "jumped" dentry.  This
+ 	is called when a path-walk ends at dentry that was not acquired
+ 	by doing a lookup in the parent directory.  This includes "/",
 
-This is a bit of long story, but no, it is not necessary.
+base-commit: 7fa08de735e41001a70c8ca869b2b159d74c2339
 -- 
-Florian
+2.30.2
+
