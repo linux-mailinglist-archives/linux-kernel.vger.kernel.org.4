@@ -2,157 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C77F6A432B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8EB6A4327
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjB0No5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S230187AbjB0Noi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjB0Not (ORCPT
+        with ESMTP id S229542AbjB0Nog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:44:49 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8E11C302
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:44:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677505487; x=1709041487;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7msrzgjWYVf6Tlhokxp8pkIAtikCgkjHo/2h8nTwrmY=;
-  b=hidPYAQseUJuoK23oI25XEY7z51A7lUOeS8HY0fsMtsuKQPvccIdth7X
-   6z1BnjjyTIC22FpQGhcK0024E/z+yoocC3rpDYCHAMKz7JykQQvhPGDxC
-   ZD4T03juB8AyVFiRJsNOv7Ad6k3zFhD4C4nTmB+Y+cvl9yAjReM3lerL7
-   0QYDMYMpCWlQ3aD14LP5Jj8ttnxKM2h7SHM+FO1BLku9obsG6rfHTuC5A
-   zDZos+S9Wj64fCLiCzCLeO7E1cv2vqTiA+JZicw4ccY+fTbIu0lrBmx2Q
-   7qoMn26PVCbOHytZ1q1ndYnJHNl456fpCtfGI8qnOeH3jHg1L4P7gh3xJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="396410914"
-X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
-   d="scan'208";a="396410914"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 05:44:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="783383473"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="783383473"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Feb 2023 05:44:43 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWdo2-0004SM-1t;
-        Mon, 27 Feb 2023 13:44:42 +0000
-Date:   Mon, 27 Feb 2023 21:44:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yuanzhi Wang <wangyuanzhi@uniontech.com>,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        mario.limonciello@amd.com, Bokun.Zhang@amd.com,
-        tzimmermann@suse.de, hdegoede@redhat.com, jingyuwang_vip@163.com,
-        rafael.j.wysocki@intel.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Yuanzhi Wang <wangyuanzhi@uniontech.com>
-Subject: Re: [PATCH] amdgpu: add a filter condition when set brightness
-Message-ID: <202302272122.p3DfX4S8-lkp@intel.com>
-References: <20230227073953.326-1-wangyuanzhi@uniontech.com>
+        Mon, 27 Feb 2023 08:44:36 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6518F1C302
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:44:35 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id bd34so3539834pfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z110NAjU0K09Me/E1RV39MMihHyn6kMCAJzzQuDRvLM=;
+        b=Bt25ZvB0N308yiyf/YLK6YTdoFkc2Qa+32onq9WBjhU/OTcfuk9JA3esrW4xhcahv+
+         7C8KuGS41htHANVW9KbDLzdQ7VxEyp3H2nDqK/0W7L4QdxuVfnOlUUnnGg1H5AyhtrIL
+         0bQufJpjUNdNJ85Y6SUmYAGRzWyphsj0y3VxG8sugulYIxbJpKsfcqYB4dTJAjoQ8y5u
+         m2HxHiO/mCzujS2P4vOwiStsfHE/T0oCBSpn/UJbPe2SSXoaXMb8SxIFFUUQNQ34E3Dz
+         8B24mQVHov6TeFvUwvAUAOPyjvje0N4cLw6nsmfh0L3ZXwJSAoXqIaGf0FwznVrWHUFv
+         f8zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z110NAjU0K09Me/E1RV39MMihHyn6kMCAJzzQuDRvLM=;
+        b=0YUUTrQPaBbB9hOV0JbncF5yMJgrAbVaTOf7y+sfdlBlV3ZEIkRo5q87G4VsbJB0TU
+         0Ti9SRQ0cwxDLasTi1Ed0pTwLkHwCvCoDhzjtA9uVipTfyMcZjd6QtGYS9iqB+/3I/dD
+         KYokGvcUb2CefYMnSsPBr260PByJAEFT3DLXiZdVdAAUs09Cg8l22T2jQCqnYG2LbO3A
+         6ABHcrztzg3Di4+XFpb7ArsITJnekXPHLz3q6/8sajWyG+tUOe08moLn3ioiBZq+yggI
+         28I0DtDj0CZvyV9kRiewOTOBc/dbHJZxXIt9vtBs+SuntBpfAstWaAZvv9S9JQ8e7T/D
+         WU7g==
+X-Gm-Message-State: AO0yUKVGewbJMn8VbZa8QVt3+Wdpk2mSpYcItH9ALKztUje6k1W618zd
+        +GQF3JEBEEbpuaNZCxJ8HSCTjrkMWeo1n4M26pdKDg==
+X-Google-Smtp-Source: AK7set87NqLRpSozE6kg2p4o0pb3XUQaQz7B9sYHA7YkNrwzCDZ04rxsE1XWwJm5J825W1si6bN1i5xRQxMQsUL0Yvo=
+X-Received: by 2002:a05:6a00:1629:b0:5e9:57b1:5bda with SMTP id
+ e9-20020a056a00162900b005e957b15bdamr2461691pfc.3.1677505474786; Mon, 27 Feb
+ 2023 05:44:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227073953.326-1-wangyuanzhi@uniontech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224093454.956298-1-vincent.guittot@linaro.org>
+ <20230224093454.956298-7-vincent.guittot@linaro.org> <20230224192919.d4fcde3dwh7betvm@blackpad>
+In-Reply-To: <20230224192919.d4fcde3dwh7betvm@blackpad>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 27 Feb 2023 14:44:22 +0100
+Message-ID: <CAKfTPtBorwnjU2=nprBo7aAEjoz+7x5nRYUdajZc53cuVgHSBw@mail.gmail.com>
+Subject: Re: [PATCH v12 6/8] sched/fair: Add sched group latency support
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yuanzhi,
+On Fri, 24 Feb 2023 at 20:29, Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
+>
+> Hello Vincent.
+>
+> On Fri, Feb 24, 2023 at 10:34:52AM +0100, Vincent Guittot <vincent.guitto=
+t@linaro.org> wrote:
+> > +  cpu.latency.nice
+> > +     A read-write single value file which exists on non-root
+> > +     cgroups.  The default is "0".
+> > +
+> > +     The nice value is in the range [-20, 19].
+> > +
+> > +     This interface file allows reading and setting latency using the
+> > +     same values used by sched_setattr(2). The latency_nice of a group=
+ is
+> > +     used to limit the impact of the latency_nice of a task outside th=
+e
+> > +     group.
+>
+> IIUC, the latency priority is taken into account when deciding between
+> entitites at the same level (as in pick_next_entity() or
+> check_preempt_wake()/find_matchig_se()).
+>
+> So this group attribute is relevant in context of siblings (i.e. like
+> cpu.weight ~ bandwidth priority)?
 
-Thank you for the patch! Yet something to improve:
+Yes
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.2 next-20230227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> I'm thus confused when it's referred to as a limit (in vertical sense).
+> You somewhat imply that in [1]:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230227073953.326-1-wangyuanzhi%40uniontech.com
-patch subject: [PATCH] amdgpu: add a filter condition when set brightness
-config: loongarch-randconfig-r036-20230226 (https://download.01.org/0day-ci/archive/20230227/202302272122.p3DfX4S8-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/95d9579e31d0b601aa1422cf767ca5138d3efcee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
-        git checkout 95d9579e31d0b601aa1422cf767ca5138d3efcee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/gpu/
+There were discussions about adding more features that could make use
+of the latency nice. This comment mainly wants to describe how this
+would behave in case that we need to compre entities/tasks not at the
+same level.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302272122.p3DfX4S8-lkp@intel.com/
+Regarding the current use of latency nice to set a latency offset, the
+problem doesn't appear because latency offset applies between entities
+at the same level as you mentioned above
 
-All errors (new ones prefixed by >>):
+>
+> > Regarding the behavior, the rule remains the same that a sched_entity
+> > attached to a cgroup will not get more (latency in this case) than
+> > what has been set for the group entity.
+>
+> But I don't see where such a constraint would be implemented in the
+> code. (My cursory understanding above tends to horizontal comparisons.)
+>
+> Could you please hint me which is right?
 
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c: In function 'amdgpu_atif_handler':
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:50: warning: missing terminating " character
-     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
-         |                                                  ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:450:53: warning: missing terminating " character
-     450 |                                                 %d\n", old_brightness, req.backlight_level);
-         |                                                     ^
->> cc1: error: unterminated argument list invoking macro "DRM_WARN"
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: 'DRM_WARN' undeclared (first use in this function)
-     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
-         |                                         ^~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:49: error: expected ';' at end of input
-     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
-         |                                                 ^
-         |                                                 ;
-   ......
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:33: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-     448 |                                 if (old_brightness > req.backlight_level)
-         |                                 ^~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:33: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
-     449 |                                         DRM_WARN("old brightness %d is greater than ACPI brightness
-         |                                         ^~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:41: error: expected declaration or statement at end of input
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c: At top level:
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:404:12: warning: 'amdgpu_atif_handler' defined but not used [-Wunused-function]
-     404 | static int amdgpu_atif_handler(struct amdgpu_device *adev,
-         |            ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:308:12: warning: 'amdgpu_atif_query_backlight_caps' defined but not used [-Wunused-function]
-     308 | static int amdgpu_atif_query_backlight_caps(struct amdgpu_atif *atif)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:240:12: warning: 'amdgpu_atif_get_notification_params' defined but not used [-Wunused-function]
-     240 | static int amdgpu_atif_get_notification_params(struct amdgpu_atif *atif)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:195:12: warning: 'amdgpu_atif_verify_interface' defined but not used [-Wunused-function]
-     195 | static int amdgpu_atif_verify_interface(struct amdgpu_atif *atif)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_types.h:36,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:30,
-                    from drivers/gpu/drm/amd/amdgpu/../include/dm_pp_interface.h:26,
-                    from drivers/gpu/drm/amd/amdgpu/amdgpu.h:64,
-                    from drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:35:
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_hdmi_types.h:53:22: warning: 'dp_hdmi_dongle_signature_str' defined but not used [-Wunused-const-variable=]
-      53 | static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Does  my explanation above make sense to you ?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> Thanks,
+> Michal
+>
+> [1] https://lore.kernel.org/r/CAKfTPtDu=3Dc-psGnHkoWSPRWoh1Z0VBBfsN++g+kr=
+v4B1SJmFjg@mail.gmail.com/
+>
