@@ -2,263 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545EA6A4761
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4606A4765
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjB0Q4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
+        id S230310AbjB0Q5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB0Q4f (ORCPT
+        with ESMTP id S229635AbjB0Q5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:56:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A810610438;
-        Mon, 27 Feb 2023 08:56:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1AFC3CE10CE;
-        Mon, 27 Feb 2023 16:56:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E2CC433EF;
-        Mon, 27 Feb 2023 16:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677516989;
-        bh=84ta+lWwSex/bYBLNE9tWM13WCnje6JwFdlD5uoryTw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nKGMuRiBWB8XuP86peRjJL0yfayDQaVI68GyIABdBoeK+Yfa5HH3v4VueT8dZSdBu
-         0kMM8Zf/In0RET530Jpk1toMe7dgIXugFBVIpzgFzvaSbLC/VHsuFNismtao/5CzBT
-         jMXKDRryKvDoTx47G81o62boeNNYfaSFc0ixHXk99Cp9qbJrONtyCpUkSKzJ84tqO3
-         JZLgVgJN1Dy9licAmVjSqfoDlF0dP3+RPXeDWSp0oQ6lu+rhg2xYic8K5vbCmWNW5/
-         aJvJ7sbkBDHDiw95OEe8b0RzsZHsj4tYvIy5Gvae9N6T2w7JkPvP+8aaf0XGNKHYJc
-         ue9c40oSIfchA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C08075C0267; Mon, 27 Feb 2023 08:56:28 -0800 (PST)
-Date:   Mon, 27 Feb 2023 08:56:28 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-ID: <20230227165628.GH2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
- <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
- <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
- <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
- <20230225011306.0dd47e760f502b6787096bf7@kernel.org>
- <20230224163307.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230225095811.926a8ebaee4ca2d1fb9d9e45@kernel.org>
- <20230225011910.GV2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230227081632.da70c54f3eede048549fb7af@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227081632.da70c54f3eede048549fb7af@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 11:57:31 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A45416ADC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:57:19 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 5F5DA32002FB;
+        Mon, 27 Feb 2023 11:57:18 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 27 Feb 2023 11:57:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677517037; x=1677603437; bh=MNs1U7afNx
+        12k6nIyMzzxsgiph/OGstNMM2IjWEFD94=; b=OqCinnghlu7ktExI979tKz5HTy
+        367auNLoJHvL46H83nMdERn/1CpHc1o0Gg2/Vo9y/ywJzSTV2vqniDpKYpStQeyA
+        0nnULxPk2s3oX2Auz9wXDgJI4+aCxRPbQxjv2LYHYKLxH5XrqLE17qAWWldiQHpn
+        TUoeRVhWA1yGkw/R+6meCy6+QeDCMgdmodPMowl1YKPcvJA9czpSG8h2GFVOFN6U
+        rpP8P75lfPQLrNmNaTQ1qMFsEzKw14khd/sJqm34EyrCQIVLVmNju6gPN0qypa9O
+        C6it9Xo/DQjjT1duX2Ut0vNRODgZSdpjsnNLB5miJ2TbZGnssHBAcyQ9RsmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677517037; x=1677603437; bh=MNs1U7afNx12k6nIyMzzxsgiph/O
+        GstNMM2IjWEFD94=; b=rzeLFM3QISIYZYP+GL3NRyNUB8PlPZTxpJxWMEJKAopD
+        s0gXb4zy8DlM3VRzLr2YRPcZYHskER6POROZUjcraqnnHuajo7oN3gfrCSd3YTtV
+        ZOs7xA4su9wLAe/fa11Zx3ib9z4/tFQLRCKhR1WTMUUZg/GNYnXPIfyiCua2aQMY
+        eV10XVYoRpGJ3HCRaqArC4qOXlivLvds3S+hi4q+i9rzDTx2bNXbORJ/0ESqJy2L
+        /xJz3WFyBcXpcdkwLRzR1v/PdIQgaWOk7i5uJv3ts6ApWs7gQ0lDbkPCMK99/KF9
+        rwf0Vtjt5lz5UbmF7H8QCPtwjecYrN2bLZ2WMYR2Iw==
+X-ME-Sender: <xms:7eD8YxYS1_JTxTtNY-mvHIa07j5SKd4kXH1h5ZEFFwRWjAZ29oBUtQ>
+    <xme:7eD8Y4aTEKjN8OpFt8a3oInT7I_afxDekogxofbv_X-O_SCZYESSnSlcs3Pp-2mv7
+    7DaZIOkWbSf9X5_Sx8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddgledtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:7eD8Yz-MgZ5NAISQWDcpLT324ud5limJSXfoHa09CL6jfH6WcSlL1w>
+    <xmx:7eD8Y_q8IBIb0pT660iuPxAOqSDzg-j0njRSggH-055KMpGBOcA0vA>
+    <xmx:7eD8Y8rWdGCBUEYt0qW8YQDRrCsccUtvXTQKtbmm-b4PcB4GfFqGxg>
+    <xmx:7eD8Y5CtEF37hz5N2CXcIpTRUllWez3lWwm79zCZ0XTgn3oml7hUwQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CA92AB60086; Mon, 27 Feb 2023 11:57:17 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <413dd8bd-32d3-40a3-93b3-a3c9e3d8e621@app.fastmail.com>
+In-Reply-To: <99657e61-81b7-4f03-b81d-fd2a49e67eef@app.fastmail.com>
+References: <99657e61-81b7-4f03-b81d-fd2a49e67eef@app.fastmail.com>
+Date:   Mon, 27 Feb 2023 17:56:57 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL 2/2] ARM: SoC fixes for 6.3, part 1
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 08:16:32AM +0900, Masami Hiramatsu wrote:
-> On Fri, 24 Feb 2023 17:19:10 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> 
-> > On Sat, Feb 25, 2023 at 09:58:11AM +0900, Masami Hiramatsu wrote:
-> > > On Fri, 24 Feb 2023 08:33:07 -0800
-> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > 
-> > > > On Sat, Feb 25, 2023 at 01:13:06AM +0900, Masami Hiramatsu wrote:
-> > > > > Hi Geert,
-> > > > > 
-> > > > > On Fri, 24 Feb 2023 09:31:50 +0100
-> > > > > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > 
-> > > > > > Hi Paul,
-> > > > > > 
-> > > > > > On Sat, Jan 7, 2023 at 5:33 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > > > > > (or at least recommend to enable this)
-> > > > > > >
-> > > > > > > Like this?
-> > > > > > >
-> > > > > > >                                                         Thanx, Paul
-> > > > > > >
-> > > > > > > ------------------------------------------------------------------------
-> > > > > > >
-> > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > > > > >
-> > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > > > > >
-> > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > > > > > >     will normally be to unconditionally provide the specified kernel-boot
-> > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
-> > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > > > > > >
-> > > > > > >     The old semantics may be obtained by manually overriding this default.
-> > > > > > >
-> > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > >
-> > > > > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > > > > > > --- a/init/Kconfig
-> > > > > > > +++ b/init/Kconfig
-> > > > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> > > > > > >  config BOOT_CONFIG_FORCE
-> > > > > > >         bool "Force unconditional bootconfig processing"
-> > > > > > >         depends on BOOT_CONFIG
-> > > > > > > +       default y if BOOT_CONFIG_EMBED
-> > > > > > >         help
-> > > > > > >           With this Kconfig option set, BOOT_CONFIG processing is carried
-> > > > > > >           out even when the "bootconfig" kernel-boot parameter is omitted.
-> > > > > > 
-> > > > > > Thanks for your patch, which is now commit 6ded8a28ed80e4cc
-> > > > > > ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED").
-> > > > > > 
-> > > > > > After this change, an all{mod,yes}config kernel has:
-> > > > > > 
-> > > > > >     CONFIG_BOOT_CONFIG_FORCE=y
-> > > > > >     CONFIG_BOOT_CONFIG_EMBED=y
-> > > > > >     CONFIG_BOOT_CONFIG_EMBED_FILE=""
-> > > > > > 
-> > > > > > Will this actually work? I haven't tried booting such a kernel yet.
-> > > > > 
-> > > > > Yeah, good question. It is same as when you boot the kernel with 'bootconfig'
-> > > > > but do not add the bootconfig file to initrd. You may see below message
-> > > > > on boot log, but kernel boots normally. :)
-> > > > > 
-> > > > >  'bootconfig' found on command line, but no bootconfig found
-> > > > > 
-> > > > > (Maybe it is better to fix the message, because if BOOT_CONFIG_FORCE=y, this
-> > > > > will be shown without 'bootconfig' on command line.)
-> > > > 
-> > > > I just tried it again, and for me it just silently ignores the bootconfig
-> > > > setup.  Which is what I recall happening when I tried it when creating
-> > > > the patch.
-> > > > 
-> > > > Here is the .config file pieces of interest:
-> > > > 
-> > > > CONFIG_BOOT_CONFIG=y
-> > > > CONFIG_BOOT_CONFIG_FORCE=y
-> > > > CONFIG_BOOT_CONFIG_EMBED=y
-> > > > CONFIG_BOOT_CONFIG_EMBED_FILE=""
-> > > > 
-> > > > Anyone else seeing something different?
-> > > 
-> > > Hmm, from the code, I think you'll see that message in early console log.
-> > > 
-> > > In init/main.c:
-> > > 
-> > > ----
-> > > #ifdef CONFIG_BOOT_CONFIG
-> > > /* Is bootconfig on command line? */
-> > > static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
-> > > static size_t initargs_offs;
-> > > #else
-> > > ----
-> > > And
-> > > ----
-> > > static void __init setup_boot_config(void)
-> > > {
-> > > ...
-> > >         strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-> > >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> > >                          bootconfig_params);
-> > > 
-> > >         if (IS_ERR(err) || !bootconfig_found)
-> > >                 return;
-> > > 
-> > >         /* parse_args() stops at the next param of '--' and returns an address */
-> > >         if (err)
-> > >                 initargs_offs = err - tmp_cmdline;
-> > > 
-> > >         if (!data) {
-> > >                 pr_err("'bootconfig' found on command line, but no bootconfig found\n");
-> > >                 return;
-> > >         }
-> > > ----
-> > > 
-> > > Thus, if CONFIG_BOOT_CONFIG_FORCE=y, the process passes the below check
-> > > 
-> > >         if (IS_ERR(err) || !bootconfig_found)
-> > >                 return;
-> > > 
-> > > But since we have an empty 'data', the error should be printed.
-> > 
-> > And you are quite right, the runs without data files did get me this:
-> > 
-> > 'bootconfig' found on command line, but no bootconfig found
-> > 
-> > Please accept my apologies for my confusion.
-> 
-> No problem :), so should we skip this message if CONFIG_BOOT_CONFIG_FORCE=y,
-> because user may not pass 'bootconfig'?
-> 
-> Or, may be we can make it;
-> 
->  "Skip bootconfig, because no bootconfig data found."
-> 
-> so that user can notice they forget to set up bootconfig data?
+The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
 
-Good point, the current message could be quite confusing.  Me, I already
-knew what was happening, so I just looked for the change in console-log
-output.  ;-)
+  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
 
-How about something like this?
+are available in the Git repository at:
 
-	"No bootconfig data provided, so skipping bootconfig"
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.3-1
 
-But as you say, keeping the current message in kernels that have been
-built with CONFIG_BOOT_CONFIG_FORCE=n.
+for you to fetch changes up to 9f79762ef8d90a6fab85e4ac0d153bdd8b4868ca:
 
-							Thanx, Paul
+  Merge tag 'samsung-dt-fixes-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/fixes (2023-02-27 14:47:00 +0100)
 
-> Thank you,
-> 
-> 
-> > 
-> > 							Thanx, Paul
-> > 
-> > > Thank you,
-> > > 
-> > > > 
-> > > > 							Thanx, Paul
-> > > > 
-> > > > > Thank you!
-> > > > > 
-> > > > > > 
-> > > > > > Gr{oetje,eeting}s,
-> > > > > > 
-> > > > > >                         Geert
-> > > > > > 
-> > > > > > -- 
-> > > > > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> > > > > > 
-> > > > > > In personal conversations with technical people, I call myself a hacker. But
-> > > > > > when I'm talking to journalists I just say "programmer" or something like that.
-> > > > > >                                 -- Linus Torvalds
-> > > > > 
-> > > > > 
-> > > > > -- 
-> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > 
-> > > 
-> > > -- 
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+----------------------------------------------------------------
+ARM: SoC fixes for 6.3, part 1
+
+A few bugfixes already came up during the merge window. Samsung, ASpeed,
+Spear have minor DT changes, in case of Samsung this fixes a regression
+compared to earlier versions.
+
+Bartosz takes over as the primary maintainer for the TI DaVinci platform,
+and we get a few last minute defconfig changes.
+
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      Merge tag 'davinci-fixes-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux into arm/fixes
+      Merge tag 'samsung-dt-fixes-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/fixes
+
+Bartosz Golaszewski (1):
+      MAINTAINERS: make me the maintainer of DaVinci platforms
+
+Eddie James (1):
+      ARM: dts: aspeed: p10bmc: Update battery node name
+
+Krzysztof Kozlowski (7):
+      ARM: dts: exynos: correct TMU phandle in Exynos4
+      ARM: dts: exynos: correct TMU phandle in Exynos4210
+      ARM: dts: exynos: correct TMU phandle in Exynos5250
+      ARM: dts: exynos: correct TMU phandle in Odroid XU
+      ARM: dts: exynos: correct TMU phandle in Odroid HC1
+      ARM: dts: exynos: correct TMU phandle in Odroid XU3 family
+      ARM: dts: spear320-hmi: correct STMPE GPIO compatible
+
+Linus Walleij (1):
+      arm64: defconfig: Add IOSCHED_BFQ to the default configs
+
+Mark Brown (1):
+      arm64: defconfig: Fix unintentional disablement of PCI on i.MX
+
+ MAINTAINERS                                        |  7 +++----
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts       |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |  2 +-
+ arch/arm/boot/dts/exynos4-cpu-thermal.dtsi         |  2 +-
+ arch/arm/boot/dts/exynos4210.dtsi                  |  1 -
+ arch/arm/boot/dts/exynos5250.dtsi                  |  2 +-
+ arch/arm/boot/dts/exynos5410-odroidxu.dts          |  1 -
+ arch/arm/boot/dts/exynos5422-odroidhc1.dts         | 10 +++++-----
+ arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi | 10 +++++-----
+ arch/arm/boot/dts/spear320-hmi.dts                 |  2 +-
+ arch/arm64/configs/defconfig                       |  3 ++-
+ 12 files changed, 21 insertions(+), 23 deletions(-)
