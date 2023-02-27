@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3099E6A47D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A996A47DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjB0RXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S229746AbjB0R0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjB0RXU (ORCPT
+        with ESMTP id S229529AbjB0R0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:23:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20A21205D;
-        Mon, 27 Feb 2023 09:23:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE52BB80CAE;
-        Mon, 27 Feb 2023 17:23:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2209CC433D2;
-        Mon, 27 Feb 2023 17:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677518596;
-        bh=+SBZwkALRB0cxBJAoCsB3XkME62yCRKd3uRseS1J/I0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bJUYjCEtD4l38C7r/2OsKb+m59lda5sPVo0k8zL1CA78ooEyfu9im+NP+gS5NuTag
-         5KVesuQRBqS8z4oLkynsemQGkosAxpmZYqev/Jxkqh0Mfo5m2znLsEEXLAeeQhvfWI
-         km3GDcQ3JnfjMmcBLazVb+4V6+HWumdqxXNlkW2Bgf9cAeR+WLpSXGY+S+pUPTNN20
-         aDp/XUGMy6ntE2t3PqpJfDZVuIHMNWdhM4mgEJwswDTWuxsojuAXu6iaFyhJJYarOj
-         zBASj0Fxxsz2IzU/AFyEgYguRBeSphKk4y1whzG2wVFzdUjCFdDxc/eusBOQHTHt8s
-         /HSlsV24Qrevg==
-Date:   Mon, 27 Feb 2023 17:23:09 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v2 4/5] spi: Add support for Intel LJCA USB SPI driver
-Message-ID: <Y/zm/Uk/d6VRxLBx@sirena.org.uk>
-References: <20230225140118.2037220-1-xiang.ye@intel.com>
- <20230225140118.2037220-5-xiang.ye@intel.com>
+        Mon, 27 Feb 2023 12:26:14 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA3123336
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:26:13 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id eg37so28722605edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZogG8tw+q6uDbu7auN6I0HH9fxImm1GBhQWedC4se+w=;
+        b=KvnKFTkD9OVy+iVEzQSCtDmq561fwnCc359FGEJqYF9HGgIH7FK0mQM6jvycCUtvjd
+         ouuWpWhQ5Z8374288fSNpq+CMUFLx0iH+CZEy2EvQhxCQahhiE1HOvYRnd7j6TkEQc/6
+         w7IOlZOiUqlwvGIwzPpkssmVvxkQ3Q24s1RmQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZogG8tw+q6uDbu7auN6I0HH9fxImm1GBhQWedC4se+w=;
+        b=v7VrUo+pe/+OlYGEC2sfrW0PeOWmMyeD4Be4oYCwWTWefaSK73btrbL8Huwi8hAJwi
+         SztaJwP7zAdR3/6AbgxIyK3q3BvMhT5W1q3AV60ZfoPvuZGQCx0Xl+0PAASRgFR1oEsP
+         tpS2ruc7d+OGo6g8Etsp7VqrAwNOTVFmLNQr/V5oeoXYX0UrSnR0GCCCCBemY1cuxduk
+         LM2t9HdMwwiZNNFyhNJDQl0guuK8zEhEwVU/vsEXziRnpzTrg56+Zp2bQggsiOdonIpH
+         Q9OarxB1iZDBYsbOXbaNUd4T1aJlSZ1gpFluHzjAKM93Rxh4OCY7QU1WkUtZU1Ioyxg0
+         jZIA==
+X-Gm-Message-State: AO0yUKUU3GCTPniqjn9uu4q5cyCO6nMaCdJH0xkP6RmDYmlXmqtBUudm
+        Q8K5NHS2w+a02UKkFmRqcITjTNpxHVZ9SqW8KZ8=
+X-Google-Smtp-Source: AK7set9S0p+W3Y0sa3hR+SK4KyhcAyLTImghpdYeMMcIPIFjsB8BdDlqzs0+kpbICO0ZQy1xdbBceg==
+X-Received: by 2002:a05:6402:50d:b0:4aa:ca81:a528 with SMTP id m13-20020a056402050d00b004aaca81a528mr212865edv.40.1677518772208;
+        Mon, 27 Feb 2023 09:26:12 -0800 (PST)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id j24-20020a508a98000000b004acde0a1ae5sm3368342edj.89.2023.02.27.09.26.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 09:26:12 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id o12so28815803edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:26:11 -0800 (PST)
+X-Received: by 2002:a50:c34a:0:b0:4ae:f144:2c8e with SMTP id
+ q10-20020a50c34a000000b004aef1442c8emr148730edb.5.1677518771169; Mon, 27 Feb
+ 2023 09:26:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N252Zu7nZpqEMZYb"
-Content-Disposition: inline
-In-Reply-To: <20230225140118.2037220-5-xiang.ye@intel.com>
-X-Cookie: On the eighth day, God created FORTRAN.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAK7LNATJ-3JQ0QQGQ5R+R8aBJEq-tmBL8iBZrbM_4t0zeoYTaw@mail.gmail.com>
+ <CAHk-=wi49sMaC7vY1yMagk7eqLK=1jHeHQ=yZ_k45P=xBccnmA@mail.gmail.com>
+ <CAK7LNAR40OOCJhz2oNF4FXWeyF=MOQPwfojHCU=XZ0jHcuSP5g@mail.gmail.com> <CAHk-=wh5AixGsLeT0qH2oZHKq0FLUTbyTw4qY921L=PwYgoGVw@mail.gmail.com>
+In-Reply-To: <CAHk-=wh5AixGsLeT0qH2oZHKq0FLUTbyTw4qY921L=PwYgoGVw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 27 Feb 2023 09:25:54 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgM-W6Fu==EoAVCabxyX8eYBz9kNC88-tm9ExRQwA79UQ@mail.gmail.com>
+Message-ID: <CAHk-=wgM-W6Fu==EoAVCabxyX8eYBz9kNC88-tm9ExRQwA79UQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Kbuild updates for v6.3-rc1
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023 at 9:08=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So here's the simple rule: if the packaging people can't be bothered
+> to use "gti archive" to make their packages, then they had better just
+> do a "make clean" first (or, better yet, do "git clean -dqfx" to
+> really clean up, because "make clean" isn't 100% reliable either).
+>
+> We don't add more broken infrastructure to deal with broken workflows.
+> Just do the right thing.
 
---N252Zu7nZpqEMZYb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Note: I'm perfectly happy to just revert this, but if I have to do it,
+then pretty much _all_ the packaging changes get reverted, because I'm
+not going to be able to figure out which parts don't rely on the new
+broken script.
 
-On Sat, Feb 25, 2023 at 10:01:17PM +0800, Ye Xiang wrote:
+So I'd rather take a more directed revert from you. Or, better yet,
+just a rewrite to do the right thing (ie "git archive").
 
-> +struct spi_xfer_packet {
-> +	u8 indicator;
-> +	s8 len;
-> +	u8 data[];
-> +} __packed;
+Because really - any distro packager had better have the git tree.
 
-> +static int ljca_spi_read_write(struct ljca_spi_dev *ljca_spi, const u8 *w_data, u8 *r_data, int len,
-> +			       int id, int complete, int cmd)
-> +{
-> +	struct spi_xfer_packet *w_packet = (struct spi_xfer_packet *)ljca_spi->obuf;
-> +	struct spi_xfer_packet *r_packet = (struct spi_xfer_packet *)ljca_spi->ibuf;
-> +	unsigned int ibuf_len = LJCA_SPI_BUF_SIZE;
-> +	int ret;
-> +
-> +	w_packet->indicator = FIELD_PREP(LJCA_SPI_XFER_INDICATOR_ID, id) |
-> +			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_CMPL, complete) |
-> +			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_INDEX,
-> +					 ljca_spi->spi_info->id);
-> +
-> +	if (cmd == LJCA_SPI_READ) {
-> +		w_packet->len = sizeof(u16);
-> +		*(u16 *)&w_packet->data[0] = len;
-
-Are there no endianness considerations here?
-
-> +static int ljca_spi_transfer(struct ljca_spi_dev *ljca_spi, const u8 *tx_data,
-> +			     u8 *rx_data, u16 len)
-> +{
-
-This function has one caller with barely anything in it - perhaps just
-inline it?
-
---N252Zu7nZpqEMZYb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP85v0ACgkQJNaLcl1U
-h9BIlwf+Nbje3veuBnpfv+ZeclyBPPaTReO9MEpZHFwpOILoA2mQxVdtQ5DBqObm
-mnXmP3TdRdJvYf4n0MxtflxvgukIGaQoDm7LHx3JxeRESqtTpORJS8S3CkCWQATF
-2Ui/NP1tvJILrljgtOWTI1UmvWXprj8wz4UsUY1mxcDLwKKbEvAe7UOXnB1dZEW8
-m7Bo2PXG9URgmLsk1/nnGyZEkLquy2z2pqXUIWfHz7N1lgbbXbYyB7SWsFUeYGg4
-sUvHu0PcSMbm83+RGm+xzA/LcTJ2BOgKZFXF6scLdijA0nu2nPf0d7UCMonsPDqr
-wxUmVY06/ThUdahIiJArdgBJSkG13g==
-=mOKa
------END PGP SIGNATURE-----
-
---N252Zu7nZpqEMZYb--
+                   Linus
