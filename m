@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2DF6A42A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3536A42A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjB0NaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S230025AbjB0Nax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjB0NaM (ORCPT
+        with ESMTP id S229901AbjB0Naw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:30:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CF11C303;
-        Mon, 27 Feb 2023 05:30:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AB/JJQoz7Q3YSgyTBOyspLv2ZEi2yhJlHwTRl8RgmcI=; b=IDrwwV6BUNud8U9fRntTASkSMH
-        ZjLWpC+aiFuWVnovyo1te3tMFRKO3ZyDIO3x0iNv1YskrQJfmFGjmxxDGeJlTozh5OBHwQyzynoqh
-        Y8JW086CTgeio8ueWCt8u4l9XYG7mOKI1mreVzU0qgCbUDhqU+qhJoT9TatgBw7x6MOXUwoa3M1ug
-        L5bVFP8oY5Gwl5WHdDLKHYhHl+pPD22GB6D0EeWABivGof/q9ZmfVRzEwEyAvCg0+Ku1qNiE3ziEB
-        VLQUqEGyheEFwIXLT9NatbYetmw4JO3CBOa3+qEDij/Bard6BM7EcWJYjLYZckNyAlaH0HMn5fWkZ
-        rJigvvyg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWdZL-0008Kg-7o; Mon, 27 Feb 2023 13:29:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3341300328;
-        Mon, 27 Feb 2023 14:29:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B5CAE23B2480F; Mon, 27 Feb 2023 14:29:27 +0100 (CET)
-Date:   Mon, 27 Feb 2023 14:29:27 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        cgroups@vger.kernel.org, qyousef@layalina.io,
-        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Subject: Re: [PATCH v10 8/9] sched/fair: Add latency list
-Message-ID: <Y/ywN3Sz33gHO3Vj@hirez.programming.kicks-ass.net>
-References: <20230113141234.260128-1-vincent.guittot@linaro.org>
- <20230113141234.260128-9-vincent.guittot@linaro.org>
- <Y/XlR+wLtn54CkE4@hirez.programming.kicks-ass.net>
- <CAKfTPtBJD6So-0-S3sgFqTE1HVMypg_S23+uuH6BnGk5atxUKA@mail.gmail.com>
+        Mon, 27 Feb 2023 08:30:52 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96D81F933
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:30:50 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id x34so6152213pjj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:30:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nrlqkyNhx5Y9J/eloABTQEhuK4mEKVoWLJBJOEPVQu0=;
+        b=mQU8pset9BooU3jzDqbQhgS4BYtT04chvJX646MRug8Def2PUH67YE9LLRZZjtxvoD
+         6FnUwhoGoLGiTYUCCMEkd4JmJBsE+LslYcsK7xUe9t8MtYKAXHdUpk4CGxlIZbM1m3Dt
+         FZMeMU4UGstobcZBN3TJQ5d1hZzZtR/F0d6dqDPEFNCD6AwGN+ZCJjVQxKqFBCQWoCFp
+         j7M/xxiCgLQ+jcbD6kZqPpt0r9oZ+frd5oyfSIXHHB6/64KPvTb9wupL49KOCSsKlydB
+         xaEI7pz/vT6EFDi4smuf+uxt5hOvVs9VYsLzdqFePVEtRmDd3kDS09OLeV7TRdLrj/2F
+         YS3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nrlqkyNhx5Y9J/eloABTQEhuK4mEKVoWLJBJOEPVQu0=;
+        b=c+UYCAXSks/zV1X40ndVrQZ03uuoX4U6ycpWl1l1KdECVqztx+JAyHK113NRaEVOJ8
+         wwp35UgLMqfES2Gkr0RlFT4Xt25jhRFobr/OzLYjIPAJ06dcZcVAPcYNw0n34WrCkJzG
+         8+bVAk8q9YPdrALWTirsaCVQKfwi1tRQmFNqpBbB2ZwB4mB7StrClkJZYV0B7Xex96p+
+         5YJMm4tZcocAzwBFwFhLFjcSlaILda6+VNJr6uMXPjKYynRQVyCykDNlNK/nqBBzgWw+
+         cmeHQdT6NrRK9J01zC7WF/jWv0WTZkI47+nL4rXf9mPy1uo/5wLQQmtfY/Nck9MjP8tk
+         bI0A==
+X-Gm-Message-State: AO0yUKW4qVaFGCSx9h97+hHY/3Qk9U/tRUeA21dkVpyv/2ObTPPEPEuO
+        bBUSoMk20RVB40P8iPwyn730QWw9oAGMSvTEPCWrIg==
+X-Google-Smtp-Source: AK7set+y9/1kpprFY1OXKEHgrB85hu8mL9Xs/CkAgyUFKPWIL513Klt7JDZqMu91zLA0aFlMVuNpZvdkd6ZWQ9+Xmps=
+X-Received: by 2002:a17:902:ab07:b0:19a:7e41:5a2c with SMTP id
+ ik7-20020a170902ab0700b0019a7e415a2cmr6144088plb.2.1677504649857; Mon, 27 Feb
+ 2023 05:30:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtBJD6So-0-S3sgFqTE1HVMypg_S23+uuH6BnGk5atxUKA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126184157.27626-1-tony.luck@intel.com> <20230126184157.27626-8-tony.luck@intel.com>
+In-Reply-To: <20230126184157.27626-8-tony.luck@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Mon, 27 Feb 2023 14:30:38 +0100
+Message-ID: <CALPaoCgnOWLdEqKtonNeq+d_Fj0yr3Y7tgwwmAHmuhL5xBhqyg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] x86/resctrl: Determine if Sub-NUMA Cluster is enabled
+ and initialize.
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
+        James Morse <james.morse@arm.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 12:16:29PM +0100, Vincent Guittot wrote:
-> On Wed, 22 Feb 2023 at 10:50, Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Jan 13, 2023 at 03:12:33PM +0100, Vincent Guittot wrote:
-> >
-> > > +static void __enqueue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> > > +{
-> > > +
-> > > +     /* Only latency sensitive entity can be added to the list */
-> > > +     if (se->latency_offset >= 0)
-> > > +             return;
-> > > +
-> > > +     if (!RB_EMPTY_NODE(&se->latency_node))
-> > > +             return;
-> > > +
-> > > +     /*
-> > > +      * An execution time less than sysctl_sched_min_granularity means that
-> > > +      * the entity has been preempted by a higher sched class or an entity
-> > > +      * with higher latency constraint.
-> > > +      * Put it back in the list so it gets a chance to run 1st during the
-> > > +      * next slice.
-> > > +      */
-> > > +     if (!(flags & ENQUEUE_WAKEUP)) {
-> > > +             u64 delta_exec = se->sum_exec_runtime - se->prev_sum_exec_runtime;
-> > > +
-> > > +             if (delta_exec >= sysctl_sched_min_granularity)
-> > > +                     return;
-> > > +     }
-> >
-> > I'm not a big fan of this dynamic enqueueing condition; it makes it
-> > rather hard to interpret the below addition to pick_next_entity().
-> >
-> > Let me think about this more... at the very least the comment with
-> > __pick_first_latency() use below needs to be expanded upon if we keep it
-> > like so.
->
-> Only the waking tasks should be added in the latency rb tree so they
+Hi Tony,
 
-But that's what I'm saying, you can game this by doing super short
-sleeps every min_gran.
+On Thu, Jan 26, 2023 at 7:42=E2=80=AFPM Tony Luck <tony.luck@intel.com> wro=
+te:
+> +static __init int find_snc_ways(void)
+> +{
+> +       unsigned long *node_caches;
+> +       int cpu, node, ret;
+> +
+> +       node_caches =3D kcalloc(BITS_TO_LONGS(nr_node_ids), sizeof(*node_=
+caches), GFP_KERNEL);
+> +       if (!node_caches)
+> +               return 1;
+> +
+> +       cpus_read_lock();
+> +       for_each_node(node) {
 
-> can be selected to run 1st (as long as they don't use too much
-> runtime). But task A can wake up, preempts current task B thanks to
-> its latency nice , starts to run few usecs but then is immediately
-> preempted by a RT task C as an example. In this case, we consider that
-> the task A didn't get a chance to run after its wakeup and we put it
-> back to the latency rb tree just as if task A has just woken up but
-> didn't preempted the new current task C.
+Someone tried this patch on a machine with a CPU-less node...
 
-So ideally, and this is where I'm very slow with thinking, that
-wakeup_preempt_entity() condition here:
+We need to check for this:
 
-> > > @@ -5008,6 +5082,12 @@ pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> > >               se = cfs_rq->last;
-> > >       }
-> > >
-> > > +     /* Check for latency sensitive entity waiting for running */
-> > > +     latency = __pick_first_latency(cfs_rq);
-> > > +     if (latency && (latency != se) &&
-> > > +         wakeup_preempt_entity(latency, se) < 1)
-> > > +             se = latency;
++               if (cpumask_empty(cpumask_of_node(node)))
++                       continue;
 
-should be sufficient to provide fair bandwidth usage. The EEVDF paper
-achieves this by selecting the leftmost elegible task, where elegibility
-is dependent on negative lag. Only those tasks that are behind the pack
-are allowed runtime.
+> +               cpu =3D cpumask_first(cpumask_of_node(node));
+> +               set_bit(get_cpu_cacheinfo_id(cpu, 3), node_caches);
+> +       }
+> +       cpus_read_unlock();
 
-Now clearly our min_vruntime is unsuited for that exact scheme, but iirc
-wake_preempt_entity() does not allow for starvation, so we should be
-good, even without that weird condition in __enqueue_latency(), hmm?
+Thanks!
+-Peter
