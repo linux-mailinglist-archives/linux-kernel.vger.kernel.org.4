@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192296A4590
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC186A4596
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjB0PGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S230127AbjB0PHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjB0PGd (ORCPT
+        with ESMTP id S229512AbjB0PHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:06:33 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747B622010;
-        Mon, 27 Feb 2023 07:06:27 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id l25so6580392wrb.3;
-        Mon, 27 Feb 2023 07:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YPvzl5AQcLke1QfhjznfZBkz9Qxeo9m3sAaerkELoHk=;
-        b=DxfGrXQf5uucvaH/jk4OeIZlgdP6Y2S24+bFg4IJUCklraz7RrSwfK0fV9GxL6dfAa
-         81PJaQW14FAkKGJPmWc3FMqteWpCtoYL9PAAHaJYjMm2lPBBGj4pQwoE69ZcHilgCpdS
-         51XjGgTfvsBoTbcgVA77H6VIaRq33mvjwaNBRZluDXfJByNDAn3kSlO8fC4cgbNMt2Dz
-         flzMPQAhEQLty2thW4Bz3USDJOVLY3Ya0oJV4R0Q6PX2yNjwywer4FUteHsKFBnN0z5b
-         ku6Xh2wywy+6DGA8cS9/AcRVNIC32hKFdKeETCCekovicipBHFy9lVrRW17YsduGDRl1
-         HbKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YPvzl5AQcLke1QfhjznfZBkz9Qxeo9m3sAaerkELoHk=;
-        b=Yflr3Av2ag0wkaXY0dgweuKAI4+SfS6VPOZxpuh9mM2I/DIl+HwNPaozoHdYbxSp6L
-         xA1qo5+bUP6twBz0ax3sJ0loln3o73WCSkk783iIZ5nqL2K4nRC1GE7Xg8YAUaXRs+vQ
-         mXacPOS50jiyBHyu+KiKlrjxeyQ+wbJNsp/Zn3H/rRRLSquBKI1c5haa+5uCGv/hFirl
-         h88sOrLAtMJGhab9ks3EcQsddmsBzTNaCoUztF7VGLePpYErvWdWBOv/pTrJeDeEaOlj
-         J6yXKW7YOlZBfqtfFlU8HxExYRg6yc0ba1WmrU7kczscMgtaWYCWLvBVzJHz+gNQxrL6
-         hdRQ==
-X-Gm-Message-State: AO0yUKX/1HeNFTS5jpHFwxPpkn85HlguP0DehAJtmNX1EG8v8qa9zSt9
-        FPBufjGGwM2S9tFQhbreHt/LQ6DVRm0=
-X-Google-Smtp-Source: AK7set+QhiPGzqs7w6yfbUv09BRoz3Z0B9Ssu4dBhAxnmVgHXZdG7H+4oY2VVDWXKEJ3/CUIfETT+g==
-X-Received: by 2002:a05:6000:38e:b0:2c5:4c9f:cf3b with SMTP id u14-20020a056000038e00b002c54c9fcf3bmr7433395wrf.7.1677510385852;
-        Mon, 27 Feb 2023 07:06:25 -0800 (PST)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id m34-20020a05600c3b2200b003df5be8987esm14410840wms.20.2023.02.27.07.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 07:06:25 -0800 (PST)
-Date:   Mon, 27 Feb 2023 16:06:23 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Any more work on "regulator: tps65090: Convert to json-schema"?
-Message-ID: <Y/zG77uzHkyHBrhU@orome>
-References: <e48669a4-8fd1-dc0b-1446-7fbe1266c32c@linaro.org>
+        Mon, 27 Feb 2023 10:07:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3393D1EBED;
+        Mon, 27 Feb 2023 07:07:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90FEC60EA5;
+        Mon, 27 Feb 2023 15:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F17C4339C;
+        Mon, 27 Feb 2023 15:07:17 +0000 (UTC)
+Date:   Mon, 27 Feb 2023 10:07:15 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: Re: [PATCH v3 20/20] thermal/traces: Replace the thermal zone
+ structure parameter with the field value
+Message-ID: <20230227100715.7d896836@gandalf.local.home>
+In-Reply-To: <20230226225406.979703-21-daniel.lezcano@linaro.org>
+References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
+        <20230226225406.979703-21-daniel.lezcano@linaro.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KlVJJU4Pn9yv3mYm"
-Content-Disposition: inline
-In-Reply-To: <e48669a4-8fd1-dc0b-1446-7fbe1266c32c@linaro.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 26 Feb 2023 23:54:06 +0100
+Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 
---KlVJJU4Pn9yv3mYm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> In the work of the thermal zone device self-encapsulation, let's pass
+> the field value instead of dereferencing them in the traces which
+> force us to export publicly the thermal_zone_device structure.
+> 
+> No fonctionnal change intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/gov_fair_share.c              |  4 +++-
+>  drivers/thermal/gov_power_allocator.c         |  6 +++--
+>  drivers/thermal/gov_step_wise.c               |  4 +++-
+>  drivers/thermal/thermal_core.c                |  8 +++++--
+>  include/trace/events/thermal.h                | 24 +++++++++----------
+>  .../trace/events/thermal_power_allocator.h    | 12 +++++-----
+>  6 files changed, 34 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
+> index aad7d5fe3a14..cdddd593021d 100644
+> --- a/drivers/thermal/gov_fair_share.c
+> +++ b/drivers/thermal/gov_fair_share.c
+> @@ -35,7 +35,9 @@ static int get_trip_level(struct thermal_zone_device *tz)
+>  	 * point, in which case, trip_point = count - 1
+>  	 */
+>  	if (count > 0)
+> -		trace_thermal_zone_trip(tz, count - 1, trip.type);
+> +		trace_thermal_zone_trip(thermal_zone_device_type(tz),
+> +					thermal_zone_device_id(tz),
+> +					count - 1, trip.type);
 
-On Sat, Feb 25, 2023 at 04:14:09PM +0100, Krzysztof Kozlowski wrote:
-> Hi Thierry,
->=20
-> Long time ago you sent:
-> https://lore.kernel.org/all/20211217170507.2843568-6-thierry.reding@gmail=
-=2Ecom/
->=20
-> Any plans to resubmit it?
+The problem with this approach is that you are moving all the work to
+dereference the pointers into the hot paths (the code execution), instead
+of doing it in the slow path (where the tracepoint work is done).
 
-It's in my bucket of things to circle back to eventually. I've got about
-60 or so other conversions in various stages of review, but things have
-been going slower than I expected.
+If you are concerned with exporting a structure then move the trace file
+from:
 
-I can upload a branch somewhere with what I have if you want to take a
-stab at submitting those. I don't expect to get back to these within the
-next two to three weeks.
+  include/trace/events/thermal.h to drivers/thermal/trace.h
 
-Thierry
+like drivers/vfio/pci/trace.h and many other drivers do.
 
---KlVJJU4Pn9yv3mYm
-Content-Type: application/pgp-signature; name="signature.asc"
+Read
+   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/trace_events/Makefile
+to see how to use a trace header outside the include/trace/events directory.
 
------BEGIN PGP SIGNATURE-----
+also, by removing the pointer, you lose out on BPF and kprobe traces that
+could dereference the pointer if you needed to trace something that was not
+exported by the trace point itself.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP8xu0ACgkQ3SOs138+
-s6FppQ/8DDD5TbjVZkQdLBx7Xw2wxM4QQ8ejh9ekHyT9jW2MgiHM2yDnHLzkvOP/
-AtmYp5s1+03Kv3a2pQmCGIkZYnCP30o9qkRB/wtH+F/aRDuZyvg65UlsgVMSK3sD
-sbnDNkdC20t+30hNXU6ma5ygS4Wj612KAj1ZtElRiNAat1PqcEBQFhYIXOaXZFwL
-yhJlDsfuv1MFrJxzquGhRpmlrqA7yxsJ10/H9WqF546bIk2Q1RCs6k+Q+6RW4Prl
-CYJo9OqwmBc9oSmXXhGahCutP6jGzdplRr7WZoRK9r6FV0SRmEMQt5FYUVetTeA5
-WI5TgYLO1MYZ1+zXaLpeq4T+MY0DPcRSFw26MQkD7PxZdPQ6/lH3y+0Qao1CoJW1
-dzvenNvhPN0oLzmcP6h4V3Ml9fKOz3UMViLzVbFpd+sKoPrGEcsEt3XMV8GzLe86
-XgekqKVvcjbZEkKh83X2JW9r1qlqIkPNCHknXUAssphxhnFhRGyFF79UVAhQTdxQ
-jsRff1Qq3R8EFQeJDAOZFpkZxRDBppXx4hcylh8n/9R7U5OJUxJYNTysezlzsqi5
-Y+Wm0Hd+gc5tMvD1GpdBMon9C2UQgSVTZB/V2WRfXUhsRj7TxnJbq9CxldFxV5LT
-mH2rVmn6xkzeEFAy5J06oeGXaWMXRIWhZUbrTDIZtqM4MiHr6ZQ=
-=F9ls
------END PGP SIGNATURE-----
+-- Steve
 
---KlVJJU4Pn9yv3mYm--
+
+>  
+>  	return count;
+>  }
