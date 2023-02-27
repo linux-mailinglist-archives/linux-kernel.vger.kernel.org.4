@@ -2,264 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DEF6A4762
+	by mail.lfdr.de (Postfix) with ESMTP id 545EA6A4761
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjB0Q4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
+        id S230174AbjB0Q4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB0Q4i (ORCPT
+        with ESMTP id S229515AbjB0Q4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:56:38 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C202331B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:56:36 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r40so4675489oiw.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UFOFhw8IRNqs5cPEOOn1fmt/veQOghOiXH0c0ACn44g=;
-        b=Ihkny839qJsF9eJvYoIxD5wZsPdFIkxSe2idlYePFV7G/ClKpGzvX1tsvulQ526bZs
-         jwhfQQDDdy0W0NyL4gxvnE4D1/BO0CSOhEnRqag/roMIUr+y9H6aDTaA20HwjGsJYJpV
-         aseRMPqIXjL8X/S+wVfgA/OBjiLvEi629ygZDNbzcgaV1TFCrrJAYqmf0zxGG+TcrFb+
-         V/EHim8g3XCqUpz+IdAGbZ1gc9VbdgrIb1OV/Q3v2xTzMvfRvLtzWZKU/yHq3UyN/BzB
-         h74E2WrSACowm/TakUCYDXQvqSXRtDJeRj7HRhgHSDMEB05WFeZvwrGDhIuD/VgdsxQS
-         YnKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UFOFhw8IRNqs5cPEOOn1fmt/veQOghOiXH0c0ACn44g=;
-        b=EDQHNHFNcvkzLd3AOr9IPhvCxCcV4zCa7HhWEZkixigG9x0RSs81+de234Q6HooD0s
-         xP4w/OUKPrHX/ktFTZRCQ2Hw9SJ/npPwZI4n2w/gb8Ti18fVBE/Ep5u9ZDCq0vkDjisR
-         Wk5SBPxIujaKG9wlVtYb9SYAZ59uz9Yoe+KFKC/c5xMxGlYRmfTrbgM9eMyUWpMb0Iyg
-         AuKn0RO8BW+0wOn9x/tWj1DhkMNZy0PIn21TCx0kEgpoCl/6Q1J1js6WvXq7FcBqtsfG
-         Q45sSNWkTepeMdYTmgi/aWbTpXuoVbcvZ1eF9PsA5UwvFpldQ2mDIZAk6cvRPeD+Vzo5
-         B6wA==
-X-Gm-Message-State: AO0yUKVlTj2mXejk9dWsy+Egz9GLsEyKuwQ5tKlGVbVsUxU9a91PwdAq
-        /wAZog7mnLdFhYNIXwtGf0SmO7HoACY4e6ALjxU=
-X-Google-Smtp-Source: AK7set9KKDyOAtXfl6ttjcR6L1Q7g1Em64KRPcVyPy0CnlrqZJRRGo704yVg02/SL9WYEkXwyrCt9VRtT9E2YEAE+Wc=
-X-Received: by 2002:a54:409a:0:b0:384:253:642d with SMTP id
- i26-20020a54409a000000b003840253642dmr3506494oii.3.1677516996023; Mon, 27 Feb
- 2023 08:56:36 -0800 (PST)
+        Mon, 27 Feb 2023 11:56:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A810610438;
+        Mon, 27 Feb 2023 08:56:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1AFC3CE10CE;
+        Mon, 27 Feb 2023 16:56:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E2CC433EF;
+        Mon, 27 Feb 2023 16:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677516989;
+        bh=84ta+lWwSex/bYBLNE9tWM13WCnje6JwFdlD5uoryTw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nKGMuRiBWB8XuP86peRjJL0yfayDQaVI68GyIABdBoeK+Yfa5HH3v4VueT8dZSdBu
+         0kMM8Zf/In0RET530Jpk1toMe7dgIXugFBVIpzgFzvaSbLC/VHsuFNismtao/5CzBT
+         jMXKDRryKvDoTx47G81o62boeNNYfaSFc0ixHXk99Cp9qbJrONtyCpUkSKzJ84tqO3
+         JZLgVgJN1Dy9licAmVjSqfoDlF0dP3+RPXeDWSp0oQ6lu+rhg2xYic8K5vbCmWNW5/
+         aJvJ7sbkBDHDiw95OEe8b0RzsZHsj4tYvIy5Gvae9N6T2w7JkPvP+8aaf0XGNKHYJc
+         ue9c40oSIfchA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C08075C0267; Mon, 27 Feb 2023 08:56:28 -0800 (PST)
+Date:   Mon, 27 Feb 2023 08:56:28 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-ID: <20230227165628.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+ <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+ <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+ <CAMuHMdV9jJvE2y8gY5V_CxidUikCf5515QMZHzTA3rRGEOj6=w@mail.gmail.com>
+ <20230225011306.0dd47e760f502b6787096bf7@kernel.org>
+ <20230224163307.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230225095811.926a8ebaee4ca2d1fb9d9e45@kernel.org>
+ <20230225011910.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230227081632.da70c54f3eede048549fb7af@kernel.org>
 MIME-Version: 1.0
-References: <20230227160114.2799001-1-robdclark@gmail.com> <Y/zXaaFJhi8Q5YRZ@phenom.ffwll.local>
-In-Reply-To: <Y/zXaaFJhi8Q5YRZ@phenom.ffwll.local>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 27 Feb 2023 08:56:24 -0800
-Message-ID: <CAF6AEGt1fjSVhV03uP2v-jxzwRvZLia+0CZOwxbbS038rAZgzw@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/virtio: Add option to disable KMS support
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230227081632.da70c54f3eede048549fb7af@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 8:16 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Feb 27, 2023 at 08:01:13AM -0800, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Add a build option to disable modesetting support.  This is useful in
-> > cases where the guest only needs to use the GPU in a headless mode, or
-> > (such as in the CrOS usage) window surfaces are proxied to a host
-> > compositor.
-> >
-> > v2: Use more if (IS_ENABLED(...))
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
->
-> This feels a bit much like a worksforus solution. Not objecting to landing
-> this, but would some kind of feature bit on the virtio hw and
-> autodetection in the guest driver side work? Especially if people ever
-> want to get this to a Just Works model with standard distros.
+On Mon, Feb 27, 2023 at 08:16:32AM +0900, Masami Hiramatsu wrote:
+> On Fri, 24 Feb 2023 17:19:10 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> 
+> > On Sat, Feb 25, 2023 at 09:58:11AM +0900, Masami Hiramatsu wrote:
+> > > On Fri, 24 Feb 2023 08:33:07 -0800
+> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > 
+> > > > On Sat, Feb 25, 2023 at 01:13:06AM +0900, Masami Hiramatsu wrote:
+> > > > > Hi Geert,
+> > > > > 
+> > > > > On Fri, 24 Feb 2023 09:31:50 +0100
+> > > > > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > 
+> > > > > > Hi Paul,
+> > > > > > 
+> > > > > > On Sat, Jan 7, 2023 at 5:33 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > > > > > (or at least recommend to enable this)
+> > > > > > >
+> > > > > > > Like this?
+> > > > > > >
+> > > > > > >                                                         Thanx, Paul
+> > > > > > >
+> > > > > > > ------------------------------------------------------------------------
+> > > > > > >
+> > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > > > > >
+> > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > > > > >
+> > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > > > > > >     will normally be to unconditionally provide the specified kernel-boot
+> > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
+> > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > > > > > >
+> > > > > > >     The old semantics may be obtained by manually overriding this default.
+> > > > > > >
+> > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > >
+> > > > > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > > > > > > --- a/init/Kconfig
+> > > > > > > +++ b/init/Kconfig
+> > > > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> > > > > > >  config BOOT_CONFIG_FORCE
+> > > > > > >         bool "Force unconditional bootconfig processing"
+> > > > > > >         depends on BOOT_CONFIG
+> > > > > > > +       default y if BOOT_CONFIG_EMBED
+> > > > > > >         help
+> > > > > > >           With this Kconfig option set, BOOT_CONFIG processing is carried
+> > > > > > >           out even when the "bootconfig" kernel-boot parameter is omitted.
+> > > > > > 
+> > > > > > Thanks for your patch, which is now commit 6ded8a28ed80e4cc
+> > > > > > ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED").
+> > > > > > 
+> > > > > > After this change, an all{mod,yes}config kernel has:
+> > > > > > 
+> > > > > >     CONFIG_BOOT_CONFIG_FORCE=y
+> > > > > >     CONFIG_BOOT_CONFIG_EMBED=y
+> > > > > >     CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> > > > > > 
+> > > > > > Will this actually work? I haven't tried booting such a kernel yet.
+> > > > > 
+> > > > > Yeah, good question. It is same as when you boot the kernel with 'bootconfig'
+> > > > > but do not add the bootconfig file to initrd. You may see below message
+> > > > > on boot log, but kernel boots normally. :)
+> > > > > 
+> > > > >  'bootconfig' found on command line, but no bootconfig found
+> > > > > 
+> > > > > (Maybe it is better to fix the message, because if BOOT_CONFIG_FORCE=y, this
+> > > > > will be shown without 'bootconfig' on command line.)
+> > > > 
+> > > > I just tried it again, and for me it just silently ignores the bootconfig
+> > > > setup.  Which is what I recall happening when I tried it when creating
+> > > > the patch.
+> > > > 
+> > > > Here is the .config file pieces of interest:
+> > > > 
+> > > > CONFIG_BOOT_CONFIG=y
+> > > > CONFIG_BOOT_CONFIG_FORCE=y
+> > > > CONFIG_BOOT_CONFIG_EMBED=y
+> > > > CONFIG_BOOT_CONFIG_EMBED_FILE=""
+> > > > 
+> > > > Anyone else seeing something different?
+> > > 
+> > > Hmm, from the code, I think you'll see that message in early console log.
+> > > 
+> > > In init/main.c:
+> > > 
+> > > ----
+> > > #ifdef CONFIG_BOOT_CONFIG
+> > > /* Is bootconfig on command line? */
+> > > static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
+> > > static size_t initargs_offs;
+> > > #else
+> > > ----
+> > > And
+> > > ----
+> > > static void __init setup_boot_config(void)
+> > > {
+> > > ...
+> > >         strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> > >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> > >                          bootconfig_params);
+> > > 
+> > >         if (IS_ERR(err) || !bootconfig_found)
+> > >                 return;
+> > > 
+> > >         /* parse_args() stops at the next param of '--' and returns an address */
+> > >         if (err)
+> > >                 initargs_offs = err - tmp_cmdline;
+> > > 
+> > >         if (!data) {
+> > >                 pr_err("'bootconfig' found on command line, but no bootconfig found\n");
+> > >                 return;
+> > >         }
+> > > ----
+> > > 
+> > > Thus, if CONFIG_BOOT_CONFIG_FORCE=y, the process passes the below check
+> > > 
+> > >         if (IS_ERR(err) || !bootconfig_found)
+> > >                 return;
+> > > 
+> > > But since we have an empty 'data', the error should be printed.
+> > 
+> > And you are quite right, the runs without data files did get me this:
+> > 
+> > 'bootconfig' found on command line, but no bootconfig found
+> > 
+> > Please accept my apologies for my confusion.
+> 
+> No problem :), so should we skip this message if CONFIG_BOOT_CONFIG_FORCE=y,
+> because user may not pass 'bootconfig'?
+> 
+> Or, may be we can make it;
+> 
+>  "Skip bootconfig, because no bootconfig data found."
+> 
+> so that user can notice they forget to set up bootconfig data?
 
-I could probably make this also work if the host advertises zero
-scanouts.  But I don't expect distro's would want to disable this
-option, which is why it is "If unsure, say Y".  The CrOS guest kernel
-already needs a special "virtio-wl" driver, so we are already
-venturing outside of "guest is just a generic distro" territory.
+Good point, the current message could be quite confusing.  Me, I already
+knew what was happening, so I just looked for the change in console-log
+output.  ;-)
 
-BR,
--R
+How about something like this?
 
-> Usually the argument for compile option is "binary size", but you're
-> leaving most of the kms stuff in there so that's clearly not it :-)
-> -Daniel
->
->
->
-> > ---
-> >  drivers/gpu/drm/virtio/Kconfig       | 11 +++++++++
-> >  drivers/gpu/drm/virtio/Makefile      |  5 +++-
-> >  drivers/gpu/drm/virtio/virtgpu_drv.c |  6 ++++-
-> >  drivers/gpu/drm/virtio/virtgpu_drv.h | 10 ++++++++
-> >  drivers/gpu/drm/virtio/virtgpu_kms.c | 35 ++++++++++++++++------------
-> >  5 files changed, 50 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/virtio/Kconfig b/drivers/gpu/drm/virtio/Kconfig
-> > index 51ec7c3240c9..ea06ff2aa4b4 100644
-> > --- a/drivers/gpu/drm/virtio/Kconfig
-> > +++ b/drivers/gpu/drm/virtio/Kconfig
-> > @@ -11,3 +11,14 @@ config DRM_VIRTIO_GPU
-> >          QEMU based VMMs (like KVM or Xen).
-> >
-> >          If unsure say M.
-> > +
-> > +config DRM_VIRTIO_GPU_KMS
-> > +     bool "Virtio GPU driver modesetting support"
-> > +     depends on DRM_VIRTIO_GPU
-> > +     default y
-> > +     help
-> > +        Enable modesetting support for virtio GPU driver.  This can be
-> > +        disabled in cases where only "headless" usage of the GPU is
-> > +        required.
-> > +
-> > +        If unsure, say Y.
-> > diff --git a/drivers/gpu/drm/virtio/Makefile b/drivers/gpu/drm/virtio/Makefile
-> > index b99fa4a73b68..24c7ebe87032 100644
-> > --- a/drivers/gpu/drm/virtio/Makefile
-> > +++ b/drivers/gpu/drm/virtio/Makefile
-> > @@ -4,8 +4,11 @@
-> >  # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
-> >
-> >  virtio-gpu-y := virtgpu_drv.o virtgpu_kms.o virtgpu_gem.o virtgpu_vram.o \
-> > -     virtgpu_display.o virtgpu_vq.o \
-> > +     virtgpu_vq.o \
-> >       virtgpu_fence.o virtgpu_object.o virtgpu_debugfs.o virtgpu_plane.o \
-> >       virtgpu_ioctl.o virtgpu_prime.o virtgpu_trace_points.o
-> >
-> > +virtio-gpu-$(CONFIG_DRM_VIRTIO_GPU_KMS) += \
-> > +     virtgpu_display.o
-> > +
-> >  obj-$(CONFIG_DRM_VIRTIO_GPU) += virtio-gpu.o
-> > diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
-> > index ae97b98750b6..9cb7d6dd3da6 100644
-> > --- a/drivers/gpu/drm/virtio/virtgpu_drv.c
-> > +++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
-> > @@ -172,7 +172,11 @@ MODULE_AUTHOR("Alon Levy");
-> >  DEFINE_DRM_GEM_FOPS(virtio_gpu_driver_fops);
-> >
-> >  static const struct drm_driver driver = {
-> > -     .driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC,
-> > +     .driver_features =
-> > +#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
-> > +                     DRIVER_MODESET | DRIVER_ATOMIC |
-> > +#endif
-> > +                     DRIVER_GEM | DRIVER_RENDER,
-> >       .open = virtio_gpu_driver_open,
-> >       .postclose = virtio_gpu_driver_postclose,
-> >
-> > diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
-> > index af6ffb696086..ffe8faf67247 100644
-> > --- a/drivers/gpu/drm/virtio/virtgpu_drv.h
-> > +++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
-> > @@ -426,8 +426,18 @@ virtio_gpu_cmd_set_scanout_blob(struct virtio_gpu_device *vgdev,
-> >                               uint32_t x, uint32_t y);
-> >
-> >  /* virtgpu_display.c */
-> > +#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
-> >  int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev);
-> >  void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev);
-> > +#else
-> > +static inline int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
-> > +{
-> > +     return 0;
-> > +}
-> > +static inline void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev)
-> > +{
-> > +}
-> > +#endif
-> >
-> >  /* virtgpu_plane.c */
-> >  uint32_t virtio_gpu_translate_format(uint32_t drm_fourcc);
-> > diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
-> > index 27b7f14dae89..70d87e653d07 100644
-> > --- a/drivers/gpu/drm/virtio/virtgpu_kms.c
-> > +++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
-> > @@ -161,7 +161,8 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
-> >       if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_VIRGL))
-> >               vgdev->has_virgl_3d = true;
-> >  #endif
-> > -     if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
-> > +     if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) &&
-> > +         virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
-> >               vgdev->has_edid = true;
-> >       }
-> >       if (virtio_has_feature(vgdev->vdev, VIRTIO_RING_F_INDIRECT_DESC)) {
-> > @@ -218,17 +219,19 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
-> >               goto err_vbufs;
-> >       }
-> >
-> > -     /* get display info */
-> > -     virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
-> > -                     num_scanouts, &num_scanouts);
-> > -     vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
-> > -                                 VIRTIO_GPU_MAX_SCANOUTS);
-> > -     if (!vgdev->num_scanouts) {
-> > -             DRM_ERROR("num_scanouts is zero\n");
-> > -             ret = -EINVAL;
-> > -             goto err_scanouts;
-> > +     if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
-> > +             /* get display info */
-> > +             virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
-> > +                             num_scanouts, &num_scanouts);
-> > +             vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
-> > +                                         VIRTIO_GPU_MAX_SCANOUTS);
-> > +             if (!vgdev->num_scanouts) {
-> > +                     DRM_ERROR("num_scanouts is zero\n");
-> > +                     ret = -EINVAL;
-> > +                     goto err_scanouts;
-> > +             }
-> > +             DRM_INFO("number of scanouts: %d\n", num_scanouts);
-> >       }
-> > -     DRM_INFO("number of scanouts: %d\n", num_scanouts);
-> >
-> >       virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
-> >                       num_capsets, &num_capsets);
-> > @@ -246,10 +249,12 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
-> >               virtio_gpu_get_capsets(vgdev, num_capsets);
-> >       if (vgdev->has_edid)
-> >               virtio_gpu_cmd_get_edids(vgdev);
-> > -     virtio_gpu_cmd_get_display_info(vgdev);
-> > -     virtio_gpu_notify(vgdev);
-> > -     wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
-> > -                        5 * HZ);
-> > +     if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
-> > +             virtio_gpu_cmd_get_display_info(vgdev);
-> > +             virtio_gpu_notify(vgdev);
-> > +             wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
-> > +                                5 * HZ);
-> > +     }
-> >       return 0;
-> >
-> >  err_scanouts:
-> > --
-> > 2.39.1
-> >
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+	"No bootconfig data provided, so skipping bootconfig"
+
+But as you say, keeping the current message in kernels that have been
+built with CONFIG_BOOT_CONFIG_FORCE=n.
+
+							Thanx, Paul
+
+> Thank you,
+> 
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > > Thank you,
+> > > 
+> > > > 
+> > > > 							Thanx, Paul
+> > > > 
+> > > > > Thank you!
+> > > > > 
+> > > > > > 
+> > > > > > Gr{oetje,eeting}s,
+> > > > > > 
+> > > > > >                         Geert
+> > > > > > 
+> > > > > > -- 
+> > > > > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > > > > > 
+> > > > > > In personal conversations with technical people, I call myself a hacker. But
+> > > > > > when I'm talking to journalists I just say "programmer" or something like that.
+> > > > > >                                 -- Linus Torvalds
+> > > > > 
+> > > > > 
+> > > > > -- 
+> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > 
+> > > 
+> > > -- 
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
