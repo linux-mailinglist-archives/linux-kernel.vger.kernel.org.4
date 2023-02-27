@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27106A4884
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FB46A4889
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjB0Rrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S230048AbjB0RsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjB0Rrn (ORCPT
+        with ESMTP id S229954AbjB0Rr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:47:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CED18F;
-        Mon, 27 Feb 2023 09:47:31 -0800 (PST)
+        Mon, 27 Feb 2023 12:47:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7652C1998;
+        Mon, 27 Feb 2023 09:47:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ED2560EEE;
-        Mon, 27 Feb 2023 17:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC39C433D2;
-        Mon, 27 Feb 2023 17:47:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C912B80D58;
+        Mon, 27 Feb 2023 17:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CE3C4339B;
+        Mon, 27 Feb 2023 17:47:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677520049;
-        bh=je6Bz/Pb53L7AJRKDXmLUBTm/Pxb0Qt9+y/hqaITn18=;
+        s=k20201202; t=1677520068;
+        bh=DvG46GSct8ejJkcJckq54zAIl2grLPSZihgf4Ioz51I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XVrT/nnMvPYu6UzG9YF0HNpeuGQhj+LuLQX66SXtYRTyunL5K5XjWYt2R/chjUB0L
-         ABjkS9XDUbz9wDdqOS+LzWiXqzB+BWP+5SeZ0xd8oXuKg3b2oR+e40lw9G7nxMMYa/
-         KfPUmbmXpn11A64K2xAUgBFQ2YHGzYaZnFHfv4BAa9Srop7qfPIwxXuBB3p3EBQTdI
-         M3HOHIluptoMazcnOnX2NT0nQ6kEga61TmLI+knHe00KjyiBbhm5ztOsNzkPzj21wI
-         sGpbnMi4PUYZUO2T+1gQ6AQeflLhje8/4QfyuiSGMhlQeK74Dh54v3lESIzpxfyILA
-         5Sjd1BjhM2L6A==
-Date:   Mon, 27 Feb 2023 17:47:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     =?utf-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        krzysztof.kozlowski@linaro.org, rf@opensource.cirrus.com,
-        ckeepax@opensource.cirrus.com, herve.codina@bootlin.com,
-        wangweidong.a@awinic.com, james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-Subject: Re: [PATCH 1/2] ASoC: max98363: add soundwire amplifier driver
-Message-ID: <Y/zsqjOWFKrpDtl8@sirena.org.uk>
-References: <20230224010814.504016-1-ryan.lee.analog@gmail.com>
- <0fb47fe7-719b-0773-fc14-3d62d7d33619@linux.intel.com>
+        b=uKiob6bBYwVqkRSXCOT6fNR2EGw7bcaPwTHURL5h83uxDRWEtOew5AknDNkwCzWBg
+         YKUYY1sTnTUK7+UwOs9W0jy0z5zZrBqef9kA+u2dsnRyeBjCIvqp0/24cYXDCfg+0x
+         CUZCzSKqtzS3I7MfjpP03UIDSxNKSNY8LFZ0GkUGFSPBwQFjyEpIFKzj5qVHaMcQz4
+         lDxcB0rn4uV/DKN+9/Z0J7Wr5fu5qAnM+eVq+aAg8801kQiasG+0nQLvR+ipppL+Kn
+         IHhER6O49M2yH0eCWxRiLrVT+cHttko6G2u0C+CUIqJjTw2ZtopYE9la/V8qAMytKV
+         A166262OFxSIQ==
+Date:   Mon, 27 Feb 2023 09:47:46 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <Y/zswi91axMN8OsA@sol.localdomain>
+References: <20230226034256.771769-1-sashal@kernel.org>
+ <20230226034256.771769-12-sashal@kernel.org>
+ <Y/rbGxq8oAEsW28j@sol.localdomain>
+ <Y/rufenGRpoJVXZr@sol.localdomain>
+ <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+ <Y/y70zJj4kjOVfXa@sashalap>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="X8+/QatuS77Fl/Hx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0fb47fe7-719b-0773-fc14-3d62d7d33619@linux.intel.com>
-X-Cookie: On the eighth day, God created FORTRAN.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <Y/y70zJj4kjOVfXa@sashalap>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,94 +58,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023 at 09:18:59AM -0500, Sasha Levin wrote:
+> On Sun, Feb 26, 2023 at 11:24:36AM -0800, Eric Biggers wrote:
+> > On Sat, Feb 25, 2023 at 09:30:37PM -0800, Eric Biggers wrote:
+> > > On Sat, Feb 25, 2023 at 08:07:55PM -0800, Eric Biggers wrote:
+> > > > On Sat, Feb 25, 2023 at 10:42:47PM -0500, Sasha Levin wrote:
+> > > > > From: Eric Biggers <ebiggers@google.com>
+> > > > >
+> > > > > [ Upstream commit ec64036e68634231f5891faa2b7a81cdc5dcd001 ]
+> > > > >
+> > > > > Now that the key associated with the "test_dummy_operation" mount option
+> > > > > is added on-demand when it's needed, rather than immediately when the
+> > > > > filesystem is mounted, fscrypt_destroy_keyring() no longer needs to be
+> > > > > called from __put_super() to avoid a memory leak on mount failure.
+> > > > >
+> > > > > Remove this call, which was causing confusion because it appeared to be
+> > > > > a sleep-in-atomic bug (though it wasn't, for a somewhat-subtle reason).
+> > > > >
+> > > > > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> > > > > Link: https://lore.kernel.org/r/20230208062107.199831-5-ebiggers@kernel.org
+> > > > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > > >
+> > > > Why is this being backported?
+> > > >
+> > > > - Eric
+> > > 
+> > > BTW, can you please permanently exclude all commits authored by me from AUTOSEL
+> > > so that I don't have to repeatedly complain about every commit individually?
+> > > Especially when these mails often come on weekends and holidays.
+> 
+> Yup, no problem - I'll ignore any commits authored by you.
+> 
+> > > I know how to use Cc stable, and how to ask explicitly for a stable backport if
+> > > I find out after the fact that one is needed.  (And other real people can always
+> > > ask too... not counting AUTOSEL, even though you are sending the AUTOSEL emails,
+> > > since clearly they go through no or very little human review.)
+> 
+> One of the challanges here is that it's difficult to solicit reviews or
+> really any interaction from authors after a commit lands upstream. Look
+> at the response rates to Greg's "FAILED" emails that ask authors to
+> provide backports to commits they tagged for stable.
 
---X8+/QatuS77Fl/Hx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Well, it doesn't help that most of the stable emails aren't sent to the
+subsystem's mailing list, but instead just to the individual people mentioned in
+the commit.  So many people who would like to help never know about it.
 
-On Mon, Feb 27, 2023 at 10:17:45AM -0500, Pierre-Louis Bossart wrote:
+> > > Of course, it's not just me that AUTOSEL isn't working for.  So, you'll still
+> > > continue backporting random commits that I have to spend hours bisecting, e.g.
+> > > https://lore.kernel.org/stable/20220921155332.234913-7-sashal@kernel.org.
+> > > 
+> > > But at least I won't have to deal with this garbage for my own commits.
+> > > 
+> > > Now, I'm not sure I'll get a response to this --- I received no response to my
+> > > last AUTOSEL question at
+> > > https://lore.kernel.org/stable/Y1DTFiP12ws04eOM@sol.localdomain.  So to
+> > > hopefully entice you to actually do something, I'm also letting you know that I
+> > > won't be reviewing any AUTOSEL mails for my commits anymore.
+> > > 
+> > 
+> > The really annoying thing is that someone even replied to your AUTOSEL email for
+> > that broken patch and told you it is broken
+> > (https://lore.kernel.org/stable/d91aaff1-470f-cfdf-41cf-031eea9d6aca@mailbox.org),
+> > and ***you ignored it and applied the patch anyway***.
+> > 
+> > Why are you even sending these emails if you are ignoring feedback anyway?
+> 
+> I obviously didn't ignore it on purpose, right?
+> 
 
-> > +static struct reg_default max98363_reg[] = {
-> > +	{MAX98363_R0040_SCP_INIT_STAT_1, 0x00},
-> > +	{MAX98363_R0041_SCP_INIT_MASK_1, 0x00},
-> > +	{MAX98363_R0042_SCP_INIT_STAT_2, 0x00},
-> > +	{MAX98363_R0044_SCP_CTRL, 0x00},
-> > +	{MAX98363_R0045_SCP_SYSTEM_CTRL, 0x00},
-> > +	{MAX98363_R0046_SCP_DEV_NUMBER, 0x00},
-> > +	{MAX98363_R004D_SCP_BUS_CLK, 0x00},
-> > +	{MAX98363_R0050_SCP_DEV_ID_0, 0x21},
-> > +	{MAX98363_R0051_SCP_DEV_ID_1, 0x01},
-> > +	{MAX98363_R0052_SCP_DEV_ID_2, 0x9F},
-> > +	{MAX98363_R0053_SCP_DEV_ID_3, 0x87},
-> > +	{MAX98363_R0054_SCP_DEV_ID_4, 0x08},
-> > +	{MAX98363_R0055_SCP_DEV_ID_5, 0x00},
+I don't know, is it obvious?  You've said in the past that sometimes you'd like
+to backport a commit even if the maintainer objects and/or it is known buggy.
+https://lore.kernel.org/stable/d91aaff1-470f-cfdf-41cf-031eea9d6aca@mailbox.org
+also didn't explicitly say "Don't backport this" but instead "This patch has
+issues", so maybe that made a difference?
 
-> That seems wrong, why would you declare standard registers that are
-> known to the bus and required to be implemented?
+Anyway, the fact is that it happened.  And if it happened in the one bug that I
+happened to look at because it personally affected me and I spent hours
+bisecting, it probably is happening in lots of other cases too.  So it seems the
+process is not working...
 
-This is the register defaults table, it gets used to initialise the
-register cache and optimise resync after suspend - all this does is
-supply defaults for the cache.  That said...
+Separately from responses to the AUTOSEL email, it also seems that you aren't
+checking for any reported regressions or pending fixes for a commit before
+backporting it.  Simply searching lore for the commit title
+https://lore.kernel.org/all/?q=%22drm%2Famdgpu%3A+use+dirty+framebuffer+helper%22
+would have turned up the bug report
+https://lore.kernel.org/dri-devel/20220918120926.10322-1-user@am64/ that
+bisected a regression to that commit, as well as a patch that Fixes that commit:
+https://lore.kernel.org/all/20220920130832.2214101-1-alexander.deucher@amd.com/
+Both of these existed before you even sent the AUTOSEL email!
 
-I would suggest it's better to not supply defaults for ID registers and
-read them back from the device otherwise things might get confused.
+So to summarize, that buggy commit was backported even though:
 
-> > +static const struct regmap_config max98363_sdw_regmap = {
-> > +	.reg_bits = 32,
-> > +	.val_bits = 8,
-> > +	.max_register = MAX98363_R21FF_REV_ID,
-> > +	.reg_defaults  = max98363_reg,
-> > +	.num_reg_defaults = ARRAY_SIZE(max98363_reg),
-> > +	.readable_reg = max98363_readable_register,
-> > +	.volatile_reg = max98363_volatile_reg,
+  * There were no indications that it was a bug fix (and thus potentially
+    suitable for stable) in the first place.
+  * On the AUTOSEL thread, someone told you the commit is broken.
+  * There was already a thread that reported a regression caused by the commit.
+    Easily findable via lore search.
+  * There was also already a pending patch that Fixes the commit.  Again easily
+    findable via lore search.
 
-> I don't see why the SoundWire standard registers are part of regmap?
+So it seems a *lot* of things went wrong, no?  Why?  If so many things can go
+wrong, it's not just a "mistake" but rather the process is the problem...
 
-...if there's an issue with the SoundWire core modifying the registers
-directly then the driver would need to mark all the core registers as
-volatile so that they're not cached otherwise there will be collisions.
-Or is it the case that we always need to go via the SoundWire core for
-the generic registers, so they should just never be written at all?
-
-> > +	if (max98363->dvddio) {
-> > +		ret = regulator_enable(max98363->dvddio);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (max98363->vdd) {
-> > +		ret = regulator_enable(max98363->vdd);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +	}
-
-> that is very very odd. It's the first time we see a SoundWire codec
-> driver that has a power dependency, and it's quite likely that it's too
-> late to enable power resources *AFTER* dealing with all the
-> initialization and enumeration.
-
-> It's not even clear to me how this device would be enumerated.
-
-> You'd need to explain what part of the amplifier is controlled by those
-> regulator, otherwise it's impossible to review and understand if the
-> driver does the 'right thing'
-
-It's also buggy to have regulators treated as optional unless they may
-be physically absent.
-
---X8+/QatuS77Fl/Hx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP87KkACgkQJNaLcl1U
-h9Bv7Qf/YeP3QSU5T9ffyKOEPzEa0RwdpuLjBCjiDvdaCTaKpPSEZ74eMbh7LDJa
-Pp+Nl3FhE3e3gYMZgJsU92VB2blKAyJ2ucRVdVon2R4KibZcmQo5uzJMm2Atc65e
-psqnyn8ivHkOD7VNLgISErLRKchM+1tWbpchvxGXFrB/1atwRQ0w4I8AAr7tAeya
-ArpGpzwcry/mZxUkqNlaVPkvCWnVQ2bSTBFg1VRGPkDAd3Ut97UWE8rN3/JVdUbL
-GucL8qXeDkpIQsS9e6oNOgS6smmVpl7tMVOY+P1B1O6K8mZywLJW/1SKvuj9f8fl
-yokBKgAoCkD7b0UzeepBdGDDtu7Vkg==
-=FsGr
------END PGP SIGNATURE-----
-
---X8+/QatuS77Fl/Hx--
+- Eric
