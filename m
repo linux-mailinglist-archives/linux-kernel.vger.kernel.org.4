@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09526A425C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C776A4260
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjB0NNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S229958AbjB0NPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB0NNU (ORCPT
+        with ESMTP id S229933AbjB0NPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:13:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC470EC64
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:13:18 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 27 Feb 2023 08:15:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC1AF753;
+        Mon, 27 Feb 2023 05:15:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7539A1FD65;
-        Mon, 27 Feb 2023 13:13:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1677503597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x2DEKGHfumA9lvpgWaY+ZCs9xLVwQt4ICEP1TCK1db8=;
-        b=IWyBBMZUPQADRlItR8uZpaGOX4o0Vq/woNnvih4Y3vVSzhb/w66dqLXdcPFydRQ0ChU4vs
-        E9TZVFRSuQCMCXT4B1K+9PnSBN6v6Rf4KzcLWCmtEtI1yduCReBgiVORmA8XqZrU4bZ8iT
-        9vQixuPNWPcxR2wDFIpSf6X3bCkFrZc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1677503597;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x2DEKGHfumA9lvpgWaY+ZCs9xLVwQt4ICEP1TCK1db8=;
-        b=Ldr3Zj+AiJx+/5JFEVnsZ4FzRbxxip9FOVD2wZSg950YggyGVBlBcdi/3i+b9Y5oY3Dq/R
-        m3Y7pTYZxesDvHDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F6D413A43;
-        Mon, 27 Feb 2023 13:13:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eQObEm2s/GP2XAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 27 Feb 2023 13:13:17 +0000
-Message-ID: <4a44a2a9-e78b-06e6-f3fb-f4bb7b09cd94@suse.de>
-Date:   Mon, 27 Feb 2023 14:13:16 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B24EB80C94;
+        Mon, 27 Feb 2023 13:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB44C4339C;
+        Mon, 27 Feb 2023 13:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677503703;
+        bh=zJRZGvJSsndRbdRqpKpyfMIAZ4V2sTYXfUa93Tykhj4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=bSi2lpcJ71zaE9649OxRBNTnQaX1CzXQDWmUHZDMgwdnp9C1GvX4qAq7BFW0ZpPlj
+         USAuOQOPfmroixGBl7nN1jRTTuSRr/bZxLKkDYVWL3veybabZj4jVBcyvMFxd02pm9
+         jf2Sxz+KX9dxIAlG0TW1aFg0ysW/sCHQW6VlkOR3E2ZHaBZtw3saYuSaSs7ybqubQu
+         MCdA1HcD0vBqdCWfLi8zurMhV7g0jC5PQ0g3smMLkCXjb8rhtn34X9LA7igGV8Wphy
+         AIZHAEu4nQC3ZBYTGhBmQlpbmVK+BEvmJZQNMNHfU+lqa5ynStrQ8dDTCnSX1CqVvb
+         rczQBMr5mUiZA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] wifi: ath11k: Add a warning for wcn6855 spurious wakeup events
+References: <20230220213807.28523-1-mario.limonciello@amd.com>
+        <87r0ubqo81.fsf@kernel.org>
+        <980959ea-b72f-4cc0-7662-4dd64932d005@amd.com>
+Date:   Mon, 27 Feb 2023 15:14:54 +0200
+In-Reply-To: <980959ea-b72f-4cc0-7662-4dd64932d005@amd.com> (Mario
+        Limonciello's message of "Mon, 27 Feb 2023 07:07:21 -0600")
+Message-ID: <87mt4zqmgh.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/vram-helper: fix typos in vram helper doc
-Content-Language: en-US
-To:     Luc Ma <onion0709@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <63fca451.170a0220.3cfe.698c@mx.google.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <63fca451.170a0220.3cfe.698c@mx.google.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FSsx6t0dAzho60g0fYthybB0"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,96 +60,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FSsx6t0dAzho60g0fYthybB0
-Content-Type: multipart/mixed; boundary="------------jWflPBaqu49ldgogVj80aTIF";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Luc Ma <onion0709@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Sam Ravnborg <sam@ravnborg.org>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <4a44a2a9-e78b-06e6-f3fb-f4bb7b09cd94@suse.de>
-Subject: Re: [PATCH] drm/vram-helper: fix typos in vram helper doc
-References: <63fca451.170a0220.3cfe.698c@mx.google.com>
-In-Reply-To: <63fca451.170a0220.3cfe.698c@mx.google.com>
+Mario Limonciello <mario.limonciello@amd.com> writes:
 
---------------jWflPBaqu49ldgogVj80aTIF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> On 2/27/23 06:36, Kalle Valo wrote:
+>
+>> Mario Limonciello <mario.limonciello@amd.com> writes:
+>>
+>>> When WCN6855 firmware versions less than 0x110B196E are used with
+>>> an AMD APU and the user puts the system into s2idle spurious wakeup
+>>> events can occur. These are difficult to attribute to the WLAN F/W
+>>> so add a warning to the kernel driver to give users a hint where
+>>> to look.
+>>>
+>>> This was tested on WCN6855 and a Lenovo Z13 with the following
+>>> firmware versions:
+>>> WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.9
+>>> WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.23
+>>>
+>>> Link: http://lists.infradead.org/pipermail/ath11k/2023-February/004024.html
+>>> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2377
+>>> Link: https://bugs.launchpad.net/ubuntu/+source/linux-firmware/+bug/2006458
+>>> Link:
+>>> https://lore.kernel.org/linux-gpio/20221012221028.4817-1-mario.limonciello@amd.com/
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> [...]
+>>
+>>> +static void ath11k_check_s2idle_bug(struct ath11k_base *ab)
+>>> +{
+>>> +	struct pci_dev *rdev;
+>>> +
+>>> +	if (pm_suspend_target_state != PM_SUSPEND_TO_IDLE)
+>>> +		return;
+>>> +
+>>> +	if (ab->id.device != WCN6855_DEVICE_ID)
+>>> +		return;
+>>> +
+>>> +	if (ab->qmi.target.fw_version >= WCN6855_S2IDLE_VER)
+>>> +		return;
+>>> +
+>>> +	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
+>>> +	if (rdev->vendor == PCI_VENDOR_ID_AMD)
+>>> + ath11k_warn(ab, "fw_version 0x%x may cause spurious wakeups.
+>>> Upgrade to 0x%x or later.",
+>>> +			    ab->qmi.target.fw_version, WCN6855_S2IDLE_VER);
+>>
+>> I understand the reasons for this warning but I don't really trust the
+>> check 'ab->qmi.target.fw_version >= WCN6855_S2IDLE_VER'. I don't know
+>> how the firmware team populates the fw_version so I'm worried that if we
+>> ever switch to a different firmware branch (or similar) this warning
+>> might all of sudden start triggering for the users.
+>>
+>
+> In that case, maybe would it be better to just have a list of the
+> public firmware with issue and ensure it doesn't match one of those?
 
-SGkNCg0KdGhhbmtzIGZvciB0aGUgZml4LiBBIGZldyB0aGluZ3MgY291bGQgYmUgaW1wcm92
-ZWQuDQoNClRoZSBzdWJqZWN0IGxpbmUgc2hvdWxkIHNheSAnZml4IGZ1bmN0aW9uIG5hbWVz
-JyBpbnN0ZWFkIG9mICdmaXggdHlwb3MnLiANClRoZSBwYXRjaCBhbHNvIGRlc2VydmVzIGF0
-IGxlYXN0IGEgbWluaW1hbCBkZXNjcmlwdGlvbiBpZiB0aGUgY2hhbmdlLiANClNvbWV0aGlu
-ZyBsaWtlICdSZWZlciB0byBkcm1tX3ZyYW1faGVscGVyX2luaXQoKSBpbnN0ZWFkIG9mIHRo
-ZSANCm5vbi1leGlzdGVudCBkcm1tX3ZyYW1faGVscGVyX2FsbG9jX21tKCkuJyBJZiBzb21l
-b25lIGxhdGVyIHNlYXJjaGVzIHRoZSANCmdpdCBoaXN0b3J5IGZvciBzdWNoIGNoYW5nZXMs
-IGl0J3MgaGVscGZ1bCB0byBoYXZlIHRoZSBmdW5jdGlvbiBuYW1lcyANCm1lbnRpb25lZC4N
-Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KQW0gMjcuMDIuMjMgdW0gMTM6Mzggc2Nocmll
-YiBMdWMgTWE6DQo+IEZpeGVzOiBhNWYyM2E3MjM1NWQgKCJkcm0vdnJhbS1oZWxwZXI6IE1h
-bmFnZWQgdnJhbSBoZWxwZXJzIikNCj4gU2lnbmVkLW9mZi1ieTogTHVjIE1hIDxsdWNAc2ll
-dGl1bS5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3ZyYW1faGVs
-cGVyLmMgfCA2ICsrKy0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyks
-IDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2Ry
-bV9nZW1fdnJhbV9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3ZyYW1faGVs
-cGVyLmMNCj4gaW5kZXggZDQwYjNlZGI1MmQwLi5mMTUzOWQ0NDQ4YzYgMTAwNjQ0DQo+IC0t
-LSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3ZyYW1faGVscGVyLmMNCj4gKysrIGIvZHJp
-dmVycy9ncHUvZHJtL2RybV9nZW1fdnJhbV9oZWxwZXIuYw0KPiBAQCAtNDUsNyArNDUsNyBA
-QCBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9nZW1fb2JqZWN0X2Z1bmNzIGRybV9nZW1fdnJh
-bV9vYmplY3RfZnVuY3M7DQo+ICAgICogdGhlIGZyYW1lJ3Mgc2Nhbm91dCBidWZmZXIgb3Ig
-dGhlIGN1cnNvciBpbWFnZS4gSWYgdGhlcmUncyBubyBtb3JlIHNwYWNlDQo+ICAgICogbGVm
-dCBpbiBWUkFNLCBpbmFjdGl2ZSBHRU0gb2JqZWN0cyBjYW4gYmUgbW92ZWQgdG8gc3lzdGVt
-IG1lbW9yeS4NCj4gICAgKg0KPiAtICogVG8gaW5pdGlhbGl6ZSB0aGUgVlJBTSBoZWxwZXIg
-bGlicmFyeSBjYWxsIGRybW1fdnJhbV9oZWxwZXJfYWxsb2NfbW0oKS4NCj4gKyAqIFRvIGlu
-aXRpYWxpemUgdGhlIFZSQU0gaGVscGVyIGxpYnJhcnkgY2FsbCBkcm1tX3ZyYW1faGVscGVy
-X2luaXQoKS4NCj4gICAgKiBUaGUgZnVuY3Rpb24gYWxsb2NhdGVzIGFuZCBpbml0aWFsaXpl
-cyBhbiBpbnN0YW5jZSBvZiAmc3RydWN0IGRybV92cmFtX21tDQo+ICAgICogaW4gJnN0cnVj
-dCBkcm1fZGV2aWNlLnZyYW1fbW0gLiBVc2UgJkRSTV9HRU1fVlJBTV9EUklWRVIgdG8gaW5p
-dGlhbGl6ZQ0KPiAgICAqICZzdHJ1Y3QgZHJtX2RyaXZlciBhbmQgICZEUk1fVlJBTV9NTV9G
-SUxFX09QRVJBVElPTlMgdG8gaW5pdGlhbGl6ZQ0KPiBAQCAtNzMsNyArNzMsNyBAQCBzdGF0
-aWMgY29uc3Qgc3RydWN0IGRybV9nZW1fb2JqZWN0X2Z1bmNzIGRybV9nZW1fdnJhbV9vYmpl
-Y3RfZnVuY3M7DQo+ICAgICoJCS8vIHNldHVwIGRldmljZSwgdnJhbSBiYXNlIGFuZCBzaXpl
-DQo+ICAgICoJCS8vIC4uLg0KPiAgICAqDQo+IC0gKgkJcmV0ID0gZHJtbV92cmFtX2hlbHBl
-cl9hbGxvY19tbShkZXYsIHZyYW1fYmFzZSwgdnJhbV9zaXplKTsNCj4gKyAqCQlyZXQgPSBk
-cm1tX3ZyYW1faGVscGVyX2luaXQoZGV2LCB2cmFtX2Jhc2UsIHZyYW1fc2l6ZSk7DQo+ICAg
-ICoJCWlmIChyZXQpDQo+ICAgICoJCQlyZXR1cm4gcmV0Ow0KPiAgICAqCQlyZXR1cm4gMDsN
-Cj4gQEAgLTg2LDcgKzg2LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBkcm1fZ2VtX29iamVj
-dF9mdW5jcyBkcm1fZ2VtX3ZyYW1fb2JqZWN0X2Z1bmNzOw0KPiAgICAqIHRvIHVzZXJzcGFj
-ZS4NCj4gICAgKg0KPiAgICAqIFlvdSBkb24ndCBoYXZlIHRvIGNsZWFuIHVwIHRoZSBpbnN0
-YW5jZSBvZiBWUkFNIE1NLg0KPiAtICogZHJtbV92cmFtX2hlbHBlcl9hbGxvY19tbSgpIGlz
-IGEgbWFuYWdlZCBpbnRlcmZhY2UgdGhhdCBpbnN0YWxscyBhDQo+ICsgKiBkcm1tX3ZyYW1f
-aGVscGVyX2luaXQoKSBpcyBhIG1hbmFnZWQgaW50ZXJmYWNlIHRoYXQgaW5zdGFsbHMgYQ0K
-PiAgICAqIGNsZWFuLXVwIGhhbmRsZXIgdG8gcnVuIGR1cmluZyB0aGUgRFJNIGRldmljZSdz
-IHJlbGVhc2UuDQo+ICAgICoNCj4gICAgKiBGb3IgZHJhd2luZyBvciBzY2Fub3V0IG9wZXJh
-dGlvbnMsIHJzcC4gYnVmZmVyIG9iamVjdHMgaGF2ZSB0byBiZSBwaW5uZWQNCg0KLS0gDQpU
-aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
-d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
-bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
-w7xocmVyOiBJdm8gVG90ZXYNCg==
+You mean ath11k checking for known broken versions and reporting that?
+We have so many different firmwares to support in ath11k, I'm not really
+keen on adding tests for a specific version.
 
---------------jWflPBaqu49ldgogVj80aTIF--
+We have a list of known important bugs in the wiki:
 
---------------FSsx6t0dAzho60g0fYthybB0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+https://wireless.wiki.kernel.org/en/users/drivers/ath11k#known_bugslimitations
 
------BEGIN PGP SIGNATURE-----
+What about adding the issue there, would that get more exposure to the
+bug and hopefully the users would upgrade the firmware?
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP8rGwFAwAAAAAACgkQlh/E3EQov+Bf
-6A//YmczZOIclfTUfSaiOENwvdOnjSEgx3bFE43YRLoyQW6aIBKhFO7zrDXnIgftrtPTGdPpXjPD
-RWd8qE0xFhfojvblFg5qmwWRAkc0y2MDU8dk7/ERGD8RieeRhWGZIRqTvs4ABgzT6aTe9PMHXJGP
-2cFY8Eirfedv1Zg4Mk7B0zanuf4YDyH22d41sXRzDEaoeeH2ONWhuvnNYdubFlZAtspPzXTrjJzO
-Gcqk/M07zmuuP0zgPzK/5PXCc1caXsoX9DqKfItfS6pSyeACaYmdTgLOeBlxJPtfE8t7vbLMzcrk
-mYSPYPMxuq82/t5n8cSRmAjVvqEbfxuoGoEyVA6fNmxzfrK2R88fjUJQjs3quKHMkBgSpHkcd0tf
-leolAJbAy/GRTR77xVjy0G2eYhx3zqjc4iRb8r2IXiN/A+OB4DDaKPRBobENlPBOES4jO64so1gJ
-/iyOXgYlQKy4PIdKyHBE1aIqYIyA6qizxbElCfQIFOZyxUA480ByFruocSfe5eJOGHOCvn/8DUeE
-2HO02W2fhLQ6OEO8nsD2i9094Ow6SR8XfTThKaJnK/HEBU569PIuC0TZULdYIgT4lzTYpTLUouQt
-/Cfb1yMBNivjqF59H5DH006ZTP6a7HdPeZWJHUMy+Omrdmi8q2cBOiIMjqqi0YdscvfpTW5f3Ceg
-9+4=
-=wVP0
------END PGP SIGNATURE-----
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
---------------FSsx6t0dAzho60g0fYthybB0--
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
