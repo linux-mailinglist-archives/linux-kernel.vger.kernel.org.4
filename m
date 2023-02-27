@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A746A3FD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66936A3FD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjB0K6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 05:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S230206AbjB0K6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 05:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjB0K6S (ORCPT
+        with ESMTP id S230107AbjB0K6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 05:58:18 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97449CA37;
-        Mon, 27 Feb 2023 02:58:16 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h14so5736883wru.4;
-        Mon, 27 Feb 2023 02:58:16 -0800 (PST)
+        Mon, 27 Feb 2023 05:58:19 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7881BDE7;
+        Mon, 27 Feb 2023 02:58:17 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id bt28so5724382wrb.8;
+        Mon, 27 Feb 2023 02:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=job8OjNMmgGAToT54F6bhg5jAGzIyUdmtqvbHKYK1dE=;
-        b=Dq5nTkrv4NsOu2ZhEiH1eT4O+XdbX5EPH3rS+KF0eEt3F/81ZXxFmNFQOVZSALlAbq
-         KU95NDES7wkBgmUbjb9L2pypbQEQvxcdzXecOKm9UWRgfX0VIhkyu80qHvsyCIvVLV4K
-         vJ/FGhO9baaKJlebaeWrSy1VxmyGE3QifeWyG1gsA+jDFjKmUQiPg59SHa+UQWqoSIfa
-         HzvEUCH9W3bzthq9VohIkQlC2KnVbw8hkrGPxW+JCaWpnsC3coovH82rka3IW/OiQHws
-         ERWZwoDxByiQzvBAIn83vg2mSZJWNucimNzaAU28m12qTF11a3vVsZlYBf+MMmk14PM+
-         hX6A==
+        bh=pyFswsU5blBWB3R8zkCeMIKub72woh5mwnj70Smv9S8=;
+        b=WrKoEYCRoiuoijz+5EgwT0GCDCgA7OStrdV3smFUHQPZHv89J9KydYSzFCcjbWc3ST
+         rWKZNxQ9M8HXJ/7V4vjSou7rLCtQB3oK+u+I+Eszd4VmqmpfrmIMYnYe0Y5VZOP5sPqS
+         N/m774P7238e0xWhOp7Oys5nMIc3HGnCla9xlYT2MDb0NFcfEWApHmLF7knEPSmizOtO
+         BFd9KoeDqhFkzWmNmlEKvpWr82nbI+5RhDPGvaTm+/O9qA4j06K+GQ6YkP3ulflPART/
+         p+MNtPZt6cH70sca6IszV+jkXWftMpacM15tQSW/S6sSODBevCcBnQ1B9jqlxW6srYrD
+         TFpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=job8OjNMmgGAToT54F6bhg5jAGzIyUdmtqvbHKYK1dE=;
-        b=XegnYYCYggxx4JefFIEekLRz4DyNSQcE26LenCniAgNuYqbYbsYBYYAzmV1fKAw5Lb
-         RoRncQZAVTxvr46VL5rwN1lPPKeJJ3a3GHRMC5PhtNXjRfTqXczfJKS9UCjFqYXIvUzS
-         o790suGamS/OLx5FwaY+fb4dkTBEsa4zBUhkmubGBAH0kgcbxHdD1+XUa6TFpJ5QZcSb
-         LzDP55MRlLRdV9dLr+zS6QjNZiwF7HDWKdsnFsg0vheAL1upqHz4Gt5JMRgtjRPvU9OG
-         fwwz6w6LxzXrPSxMGz52cdSGI3n31uK7AMO9dN4+b/ieA5RILMoog01hmKaDvlhE0UV4
-         Iypg==
-X-Gm-Message-State: AO0yUKVmKiMKbOUFUofWoT8JIY+Ju2f0s65mUDEmoshZ+A0pBWzqZ07r
-        S8cM36mI6Mogpz4U8FR7GOiibtVVG7g=
-X-Google-Smtp-Source: AK7set/Svomg/t/SIOSOkAXql0lxaZjxzyOXD3Ly6NJKJ/Y6mqXBwLAxQg50AYQ4UYRc/GAOLNwgiw==
-X-Received: by 2002:adf:eacd:0:b0:2c7:107c:e172 with SMTP id o13-20020adfeacd000000b002c7107ce172mr11744605wrn.41.1677495494879;
-        Mon, 27 Feb 2023 02:58:14 -0800 (PST)
+        bh=pyFswsU5blBWB3R8zkCeMIKub72woh5mwnj70Smv9S8=;
+        b=vfnNAfpHhbkp87viNB8GPAerV3nYV1Evt2QcLo4bVdPaCUoDMg7OkvjMyTF/xn1aRv
+         Pmq8d/TDPD+/1X9bOK/12gAJvSXBEjDY5XFHC3EKS51QaG91zSsbdTpPFU3vt29Xccp2
+         Kmk94Eru44Uz1JCaYdWXHTWZ7fNYliaAEhPyrD4Zb/kDXur9MpzeLwWnRbcaWgrWDY0L
+         4/d1Rh6e/+qHT1Gvksv2vDG2gepZBAomH2SSssbDzuyyVWugJj5PYJ5YXPF0CTesVSCu
+         aW+RK+iTzXRBgoyhsxnFO5f8jONjVC1wSwuyPb/BVJCl/mv9Q75Sp9Go3VRdTTODm2GG
+         GYbg==
+X-Gm-Message-State: AO0yUKUOGAjMyWjLcxbD5qO6cKFn0tHbBeEtn7zB4rkdEd4c29kdAia2
+        pE2GTOejlmxUhaIhdRoJo4dEmUWMseg=
+X-Google-Smtp-Source: AK7set8W+WXc2c87wsDTU/HXsC15zg5hCg8ENARRT4BNpGiiUHo3pe+POJV3qnHoycIS8E2ogV0srQ==
+X-Received: by 2002:adf:dd4e:0:b0:2c7:148c:b054 with SMTP id u14-20020adfdd4e000000b002c7148cb054mr12471021wrm.29.1677495495851;
+        Mon, 27 Feb 2023 02:58:15 -0800 (PST)
 Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
         by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm6806122wrv.10.2023.02.27.02.58.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 02:58:14 -0800 (PST)
+        Mon, 27 Feb 2023 02:58:15 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, john@phrozen.org,
         linux-kernel@vger.kernel.org, git@johnthomson.fastmail.com.au
-Subject: [PATCH 07/12]  mips: ralink: rt288x: define RT2880_SYSC_BASE with __iomem
-Date:   Mon, 27 Feb 2023 11:58:01 +0100
-Message-Id: <20230227105806.2394101-8-sergio.paracuellos@gmail.com>
+Subject: [PATCH 08/12]  mips: ralink: rt288x: soc queries and tests as functions
+Date:   Mon, 27 Feb 2023 11:58:02 +0100
+Message-Id: <20230227105806.2394101-9-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
 References: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
@@ -72,52 +72,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- So that RT2880_SYSC_BASE can be used later in multiple functions without
- needing to repeat this __iomem declaration each time
+ Move the SoC register value queries and tests to specific functions,
+ to remove repetition of logic. No functional changes intended
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- arch/mips/include/asm/mach-ralink/rt288x.h | 3 ++-
- arch/mips/ralink/rt288x.c                  | 7 +++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ arch/mips/ralink/rt288x.c | 63 +++++++++++++++++++++++++++++----------
+ 1 file changed, 47 insertions(+), 16 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-ralink/rt288x.h b/arch/mips/include/asm/mach-ralink/rt288x.h
-index 5f213534f0f5..66a999cd1d80 100644
---- a/arch/mips/include/asm/mach-ralink/rt288x.h
-+++ b/arch/mips/include/asm/mach-ralink/rt288x.h
-@@ -11,7 +11,8 @@
- #ifndef _RT288X_REGS_H_
- #define _RT288X_REGS_H_
- 
--#define RT2880_SYSC_BASE		0x00300000
-+#define IOMEM(x)			((void __iomem *)(KSEG1ADDR(x)))
-+#define RT2880_SYSC_BASE		IOMEM(0x00300000)
- 
- #define SYSC_REG_CHIP_NAME0		0x00
- #define SYSC_REG_CHIP_NAME1		0x04
 diff --git a/arch/mips/ralink/rt288x.c b/arch/mips/ralink/rt288x.c
-index 493335db2fe1..12f339138c4c 100644
+index 12f339138c4c..a417b8b89b94 100644
 --- a/arch/mips/ralink/rt288x.c
 +++ b/arch/mips/ralink/rt288x.c
-@@ -59,15 +59,14 @@ void __init ralink_of_remap(void)
+@@ -57,29 +57,60 @@ void __init ralink_of_remap(void)
+ 		panic("Failed to remap core resources");
+ }
  
- void __init prom_soc_init(struct ralink_soc_info *soc_info)
+-void __init prom_soc_init(struct ralink_soc_info *soc_info)
++static unsigned int __init rt2880_get_soc_name0(void)
  {
--	void __iomem *sysc = (void __iomem *) KSEG1ADDR(RT2880_SYSC_BASE);
- 	const char *name;
- 	u32 n0;
- 	u32 n1;
- 	u32 id;
+-	const char *name;
+-	u32 n0;
+-	u32 n1;
+-	u32 id;
++	return __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_NAME0);
++}
  
--	n0 = __raw_readl(sysc + SYSC_REG_CHIP_NAME0);
--	n1 = __raw_readl(sysc + SYSC_REG_CHIP_NAME1);
--	id = __raw_readl(sysc + SYSC_REG_CHIP_ID);
-+	n0 = __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_NAME0);
-+	n1 = __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_NAME1);
-+	id = __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_ID);
+-	n0 = __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_NAME0);
+-	n1 = __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_NAME1);
+-	id = __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_ID);
++static unsigned int __init rt2880_get_soc_name1(void)
++{
++	return __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_NAME1);
++}
  
- 	if (n0 == RT2880_CHIP_NAME0 && n1 == RT2880_CHIP_NAME1) {
+-	if (n0 == RT2880_CHIP_NAME0 && n1 == RT2880_CHIP_NAME1) {
++static bool __init rt2880_soc_valid(void)
++{
++	if (rt2880_get_soc_name0() == RT2880_CHIP_NAME0 &&
++	    rt2880_get_soc_name1() == RT2880_CHIP_NAME1)
++		return true;
++	else
++		return false;
++}
++
++static const char __init *rt2880_get_soc_name(void)
++{
++	if (rt2880_soc_valid())
++		return "RT2880";
++	else
++		return "invalid";
++}
++
++static unsigned int __init rt2880_get_soc_id(void)
++{
++	return __raw_readl(RT2880_SYSC_BASE + SYSC_REG_CHIP_ID);
++}
++
++static unsigned int __init rt2880_get_soc_ver(void)
++{
++	return (rt2880_get_soc_id() >> CHIP_ID_ID_SHIFT) & CHIP_ID_ID_MASK;
++}
++
++static unsigned int __init rt2880_get_soc_rev(void)
++{
++	return (rt2880_get_soc_id() & CHIP_ID_REV_MASK);
++}
++void __init prom_soc_init(struct ralink_soc_info *soc_info)
++{
++	if (rt2880_soc_valid())
  		soc_info->compatible = "ralink,r2880-soc";
+-		name = "RT2880";
+-	} else {
+-		panic("rt288x: unknown SoC, n0:%08x n1:%08x", n0, n1);
+-	}
++	else
++		panic("rt288x: unknown SoC, n0:%08x n1:%08x",
++		      rt2880_get_soc_name0(), rt2880_get_soc_name1());
+ 
+ 	snprintf(soc_info->sys_type, RAMIPS_SYS_TYPE_LEN,
+ 		"Ralink %s id:%u rev:%u",
+-		name,
+-		(id >> CHIP_ID_ID_SHIFT) & CHIP_ID_ID_MASK,
+-		(id & CHIP_ID_REV_MASK));
++		rt2880_get_soc_name(),
++		rt2880_get_soc_ver(),
++		rt2880_get_soc_rev());
+ 
+ 	soc_info->mem_base = RT2880_SDRAM_BASE;
+ 	soc_info->mem_size_min = RT2880_MEM_SIZE_MIN;
 -- 
 2.25.1
 
