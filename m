@@ -2,122 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF086A47AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EE26A47B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjB0RPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S229903AbjB0RRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjB0RP2 (ORCPT
+        with ESMTP id S229657AbjB0RRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:15:28 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1681620D22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:15:27 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id bd34so3990781pfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:15:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WtDYUcEtrkrxOUpSmav/ZoelpyxeItymkIhkfXewTIA=;
-        b=fxvd/sGZ4cd3hMipU96tDjuqrFuauWmjHu+IQCFmZqHd2pG8y8qhSL7qhvFEJ64B9D
-         WogoIX9xMe1ApQYE7cxfo09uGX/cuRY9xLUtwEgSZ7K/9dKHQPLzMbMwJvZcJ9Xxmtxc
-         P8HwSDLfBMaReuJtEEAdk4TX6E4McHoKG/07eAr6JJuT/uKNrOXBErjRwF47cj+Hf+ve
-         FVjTFV8fds59jf8H7cX7f1qOoC23NQ91vhUQ+Ny2UVpYFp5+yXFEoEEgdDAa7tXi8lSu
-         AMIrX9m6t5/I7UFhwkNxKdh7nEktuGCUth8vkVAaWwkg643VImE5s9PNlSo/rIyRYnK6
-         MNtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WtDYUcEtrkrxOUpSmav/ZoelpyxeItymkIhkfXewTIA=;
-        b=Dab9gdT+w5cAw51qWIc4HQ+1yhNdWh+4GsdyvPspuuVkO2IC1vQ/RdlRCgjb8nAkID
-         BVcv7cxHMJBO8neSqB8Y/culuHZoyj6jCJLAxgJeFIBkRqwhYzAM+B5JnbxyPcmD8sog
-         0heVRu2IaS5gLoaruOfnW5OlutE870d7u3tF3tMTjpB8zUgsB+7+IugjGzH3cCMx+vKJ
-         LUPQ6i/elhwZFZco//ESS7nTLPdPixq1sAC6MkGAuADinfg6IGQ6MencxYUAWJcmyKf9
-         GedVuQeJ3kEV9gGw3Svk1NzD/3QZTNj5FvLz8yY8MwPQV2K++yLsRkiHOQVE2hm5fXLR
-         weLg==
-X-Gm-Message-State: AO0yUKXcStQwygVj5BvPxIOlw1YbgBVfzEgKoZBU94zf3ZeTydmR3If7
-        vZqiImSKIPSlKlse2VmUmFptbHlmW/Jn0ufQgqAyrg==
-X-Google-Smtp-Source: AK7set8eUYxZlt2BI+9YM9QKjlPowIIOFy2WqJercvpRiTSmulKspm5DeUz96qmkTktZUPS19u6hNFCfbtNJHAVSE60=
-X-Received: by 2002:a05:6a02:302:b0:4fc:27e6:56fc with SMTP id
- bn2-20020a056a02030200b004fc27e656fcmr3204856pgb.3.1677518126492; Mon, 27 Feb
- 2023 09:15:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20230209193107.1432770-1-rkagan@amazon.de> <CAKfTPtB7ZDyCh0MiNQtyimVhYJ6E3C+2bTptj9CX3+mepH8YAQ@mail.gmail.com>
- <Y/T36NvaCxSfS8Z/@u40bc5e070a0153.ant.amazon.com> <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
- <Y/xtDWYTKLutOqrM@u40bc5e070a0153.ant.amazon.com> <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
- <ccd80042-39ef-f9ea-c2cd-eac5bd0e8095@arm.com>
-In-Reply-To: <ccd80042-39ef-f9ea-c2cd-eac5bd0e8095@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 27 Feb 2023 18:15:15 +0100
-Message-ID: <CAKfTPtCvy0qbEYJ3A935Cf0t_NPg=0B8-HagTwxmE+0hA1gfSw@mail.gmail.com>
-Subject: Re: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Roman Kagan <rkagan@amazon.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Mon, 27 Feb 2023 12:17:14 -0500
+Received: from out-33.mta1.migadu.com (out-33.mta1.migadu.com [95.215.58.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F9B1DBA6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:17:12 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677518229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i9zSXzAdjq87uOVavd3XUT89sHIO+bwDfGwXckE+rVI=;
+        b=ZL6S5E+rmLgkemFRx5NmNh/pkMtGRent6m1mnlGFVfXv1cO/N4viUTJtIhd4KTrtJ/4nqd
+        RFeu4zlYN9zbntBxYG2bSDwTgZqyYzWRNdyVtzQmNo/Kgz+fV+Rg8CXMSbJGGnjITj5BYI
+        F9r9Sa9MmhoAWbxCsHLlz8yAshrKVfI=
+From:   andrey.konovalov@linux.dev
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Ben Segall <bsegall@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH] kcov: improve documentation
+Date:   Mon, 27 Feb 2023 18:17:03 +0100
+Message-Id: <0b5efd70e31bba7912cf9a6c951f0e76a8df27df.1677517724.git.andreyknvl@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 at 18:00, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> On 27/02/2023 15:37, Vincent Guittot wrote:
-> > On Mon, 27 Feb 2023 at 09:43, Roman Kagan <rkagan@amazon.de> wrote:
-> >>
-> >> On Tue, Feb 21, 2023 at 06:26:11PM +0100, Vincent Guittot wrote:
-> >>> On Tue, 21 Feb 2023 at 17:57, Roman Kagan <rkagan@amazon.de> wrote:
-> >>>> What scares me, though, is that I've got a message from the test robot
-> >>>> that this commit drammatically affected hackbench results, see the quote
-> >>>> below.  I expected the commit not to affect any benchmarks.
-> >>>>
-> >>>> Any idea what could have caused this change?
-> >>>
-> >>> Hmm, It's most probably because se->exec_start is reset after a
-> >>> migration and the condition becomes true for newly migrated task
-> >>> whereas its vruntime should be after min_vruntime.
-> >>>
-> >>> We have missed this condition
-> >>
-> >> Makes sense to me.
-> >>
-> >> But what would then be the reliable way to detect a sched_entity which
-> >> has slept for long and risks overflowing in .vruntime comparison?
-> >
-> > For now I don't have a better idea than adding the same check in
-> > migrate_task_rq_fair()
->
-> Don't we have the issue that we could have a non-up-to-date rq clock in
-> migrate? No rq lock held in `!task_on_rq_migrating(p)`.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-yes the rq clock may be not up to date but that would also mean that
-the cfs was idle and as a result its min_vruntime has not moved
-forward and we don't have a problem of possible overflow
+Improve KCOV documentation:
 
->
-> Also deferring `se->exec_start = 0` from `migrate` into `enqueue ->
-> place entity` doesn't seem to work since the rq clocks of different CPUs
-> are not in sync.
+- Use KCOV instead of kcov, as the former is more widely-used.
 
-yes
+- Mention Clang in compiler requirements.
 
->
+- Use ``annotations`` for inline code.
+
+- Rework remote coverage collection documentation for better clarity.
+
+- Various smaller changes.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ Documentation/dev-tools/kcov.rst | 169 +++++++++++++++++++------------
+ 1 file changed, 102 insertions(+), 67 deletions(-)
+
+diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
+index d83c9ab49427..a113a03a475f 100644
+--- a/Documentation/dev-tools/kcov.rst
++++ b/Documentation/dev-tools/kcov.rst
+@@ -1,42 +1,50 @@
+-kcov: code coverage for fuzzing
++KCOV: code coverage for fuzzing
+ ===============================
+ 
+-kcov exposes kernel code coverage information in a form suitable for coverage-
+-guided fuzzing (randomized testing). Coverage data of a running kernel is
+-exported via the "kcov" debugfs file. Coverage collection is enabled on a task
+-basis, and thus it can capture precise coverage of a single system call.
++KCOV collects and exposes kernel code coverage information in a form suitable
++for coverage-guided fuzzing. Coverage data of a running kernel is exported via
++the ``kcov`` debugfs file. Coverage collection is enabled on a task basis, and
++thus KCOV can capture precise coverage of a single system call.
+ 
+-Note that kcov does not aim to collect as much coverage as possible. It aims
+-to collect more or less stable coverage that is function of syscall inputs.
+-To achieve this goal it does not collect coverage in soft/hard interrupts
+-and instrumentation of some inherently non-deterministic parts of kernel is
+-disabled (e.g. scheduler, locking).
++Note that KCOV does not aim to collect as much coverage as possible. It aims
++to collect more or less stable coverage that is a function of syscall inputs.
++To achieve this goal, it does not collect coverage in soft/hard interrupts
++(unless remove coverage collection is enabled, see below) and from some
++inherently non-deterministic parts of the kernel (e.g. scheduler, locking).
+ 
+-kcov is also able to collect comparison operands from the instrumented code
+-(this feature currently requires that the kernel is compiled with clang).
++Besides collecting code coverage, KCOV can also collect comparison operands.
++See the "Comparison operands collection" section for details.
++
++Besides collecting coverage data from syscall handlers, KCOV can also collect
++coverage for annotated parts of the kernel executing in background kernel
++tasks or soft interrupts. See the "Remote coverage collection" section for
++details.
+ 
+ Prerequisites
+ -------------
+ 
+-Configure the kernel with::
++KCOV relies on compiler instrumentation and requires GCC 6.1.0 or later
++or any Clang version supported by the kernel.
+ 
+-        CONFIG_KCOV=y
++Collecting comparison operands is only supported with Clang.
+ 
+-CONFIG_KCOV requires gcc 6.1.0 or later.
++To enable KCOV, configure the kernel with::
+ 
+-If the comparison operands need to be collected, set::
++        CONFIG_KCOV=y
++
++To enable comparison operands collection, set::
+ 
+ 	CONFIG_KCOV_ENABLE_COMPARISONS=y
+ 
+-Profiling data will only become accessible once debugfs has been mounted::
++Coverage data only becomes accessible once debugfs has been mounted::
+ 
+         mount -t debugfs none /sys/kernel/debug
+ 
+ Coverage collection
+ -------------------
+ 
+-The following program demonstrates coverage collection from within a test
+-program using kcov:
++The following program demonstrates how to use KCOV to collect coverage for a
++single syscall from within a test program:
+ 
+ .. code-block:: c
+ 
+@@ -84,7 +92,7 @@ program using kcov:
+ 		perror("ioctl"), exit(1);
+ 	/* Reset coverage from the tail of the ioctl() call. */
+ 	__atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED);
+-	/* That's the target syscal call. */
++	/* Call the target syscall call. */
+ 	read(-1, NULL, 0);
+ 	/* Read number of PCs collected. */
+ 	n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
+@@ -103,7 +111,7 @@ program using kcov:
+ 	return 0;
+     }
+ 
+-After piping through addr2line output of the program looks as follows::
++After piping through ``addr2line`` the output of the program looks as follows::
+ 
+     SyS_read
+     fs/read_write.c:562
+@@ -121,12 +129,13 @@ After piping through addr2line output of the program looks as follows::
+     fs/read_write.c:562
+ 
+ If a program needs to collect coverage from several threads (independently),
+-it needs to open /sys/kernel/debug/kcov in each thread separately.
++it needs to open ``/sys/kernel/debug/kcov`` in each thread separately.
+ 
+ The interface is fine-grained to allow efficient forking of test processes.
+-That is, a parent process opens /sys/kernel/debug/kcov, enables trace mode,
+-mmaps coverage buffer and then forks child processes in a loop. Child processes
+-only need to enable coverage (disable happens automatically on thread end).
++That is, a parent process opens ``/sys/kernel/debug/kcov``, enables trace mode,
++mmaps coverage buffer, and then forks child processes in a loop. The child
++processes only need to enable coverage (it gets disabled automatically when
++a thread exits).
+ 
+ Comparison operands collection
+ ------------------------------
+@@ -205,52 +214,78 @@ Comparison operands collection is similar to coverage collection:
+ 	return 0;
+     }
+ 
+-Note that the kcov modes (coverage collection or comparison operands) are
+-mutually exclusive.
++Note that the KCOV modes (collection of code coverage or comparison operands)
++are mutually exclusive.
+ 
+ Remote coverage collection
+ --------------------------
+ 
+-With KCOV_ENABLE coverage is collected only for syscalls that are issued
+-from the current process. With KCOV_REMOTE_ENABLE it's possible to collect
+-coverage for arbitrary parts of the kernel code, provided that those parts
+-are annotated with kcov_remote_start()/kcov_remote_stop().
+-
+-This allows to collect coverage from two types of kernel background
+-threads: the global ones, that are spawned during kernel boot in a limited
+-number of instances (e.g. one USB hub_event() worker thread is spawned per
+-USB HCD); and the local ones, that are spawned when a user interacts with
+-some kernel interface (e.g. vhost workers); as well as from soft
+-interrupts.
+-
+-To enable collecting coverage from a global background thread or from a
+-softirq, a unique global handle must be assigned and passed to the
+-corresponding kcov_remote_start() call. Then a userspace process can pass
+-a list of such handles to the KCOV_REMOTE_ENABLE ioctl in the handles
+-array field of the kcov_remote_arg struct. This will attach the used kcov
+-device to the code sections, that are referenced by those handles.
+-
+-Since there might be many local background threads spawned from different
+-userspace processes, we can't use a single global handle per annotation.
+-Instead, the userspace process passes a non-zero handle through the
+-common_handle field of the kcov_remote_arg struct. This common handle gets
+-saved to the kcov_handle field in the current task_struct and needs to be
+-passed to the newly spawned threads via custom annotations. Those threads
+-should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
+-
+-Internally kcov stores handles as u64 integers. The top byte of a handle
+-is used to denote the id of a subsystem that this handle belongs to, and
+-the lower 4 bytes are used to denote the id of a thread instance within
+-that subsystem. A reserved value 0 is used as a subsystem id for common
+-handles as they don't belong to a particular subsystem. The bytes 4-7 are
+-currently reserved and must be zero. In the future the number of bytes
+-used for the subsystem or handle ids might be increased.
+-
+-When a particular userspace process collects coverage via a common
+-handle, kcov will collect coverage for each code section that is annotated
+-to use the common handle obtained as kcov_handle from the current
+-task_struct. However non common handles allow to collect coverage
+-selectively from different subsystems.
++Besides collecting coverage data from handlers of syscalls issued from a
++userspace process, KCOV can also collect coverage for parts of the kernel
++executing in other contexts - so-called "remote" coverage.
++
++Using KCOV to collect remote coverage requires:
++
++1. Modifying kernel code to annotate the code section from where coverage
++   should be collected with ``kcov_remote_start`` and ``kcov_remote_stop``.
++
++2. Using `KCOV_REMOTE_ENABLE`` instead of ``KCOV_ENABLE`` in the userspace
++   process that collects coverage.
++
++Both ``kcov_remote_start`` and ``kcov_remote_stop`` annotations and the
++``KCOV_REMOTE_ENABLE`` ioctl accept handles that identify particular coverage
++collection sections. The way a handle is used depends on the context where the
++matching code section executes.
++
++KCOV supports collecting remote coverage from the following contexts:
++
++1. Global kernel background tasks. These are the tasks that are spawned during
++   kernel boot in a limited number of instances (e.g. one USB ``hub_event``
++   worker is spawned per one USB HCD).
++
++2. Local kernel background tasks. These are spawned when a userspace process
++   interacts with some kernel interface and are usually killed when the process
++   exits (e.g. vhost workers).
++
++3. Soft interrupts.
++
++For #1 and #3, a unique global handle must be chosen and passed to the
++corresponding ``kcov_remote_start`` call. Then a userspace process must pass
++this handle to ``KCOV_REMOTE_ENABLE`` in the ``handles`` array field of the
++``kcov_remote_arg`` struct. This will attach the used KCOV device to the code
++section referenced by this handle. Multiple global handles identifying
++different code sections can be passed at once.
++
++For #2, the userspace process instead must pass a non-zero handle through the
++``common_handle`` field of the ``kcov_remote_arg`` struct. This common handle
++gets saved to the ``kcov_handle`` field in the current ``task_struct`` and
++needs to be passed to the newly spawned local tasks via custom kernel code
++modifications. Those tasks should in turn use the passed handle in their
++``kcov_remote_start`` and ``kcov_remote_stop`` annotations.
++
++KCOV follows a predefined format for both global and common handles. Each
++handle is a ``u64`` integer. Currently, only the one top and the lower 4 bytes
++are used. Bytes 4-7 are reserved and must be zero.
++
++For global handles, the top byte of the handle denotes the id of a subsystem
++this handle belongs to. For example, KCOV uses ``1`` as the USB subsystem id.
++The lower 4 bytes of a global handle denote the id of a task instance within
++that subsystem. For example, each ``hub_event`` worker uses the USB bus number
++as the task instance id.
++
++For common handles, a reserved value ``0`` is used as a subsystem id, as such
++handles don't belong to a particular subsystem. The lower 4 bytes of a common
++handle identify a collective instance of all local tasks spawned by the
++userspace process that passed a common handle to ``KCOV_REMOTE_ENABLE``.
++
++In practice, any value can be used for common handle instance id if coverage
++is only collected from a single userspace process on the system. However, if
++common handles are used by multiple processes, unique instance ids must be
++used for each process. One option is to use the process id as the common
++handle instance id.
++
++The following program demonstrates using KCOV to collect coverage from both
++local tasks spawned by the process and the global task that handles USB bus #1:
+ 
+ .. code-block:: c
+ 
+-- 
+2.25.1
+
