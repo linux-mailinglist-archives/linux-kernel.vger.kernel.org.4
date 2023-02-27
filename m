@@ -2,180 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1F66A4E04
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83646A4EBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjB0WbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S230387AbjB0Whr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjB0WbJ (ORCPT
+        with ESMTP id S229886AbjB0WhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:31:09 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BD725BBA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677537068; x=1709073068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MLYaZQWsBXJL2QnruQh9IFu0OlX0DZOS+BhraxgJJ7E=;
-  b=FY5BefGuoxM3RScxdY/ugfWLdgaZjczKm+d5a7KaG9ssNqF0zyKN6CSB
-   REdRyPr1HPyvMpDQJoCG2hsqmo8J+DUeJo/JAmP+CXYeyTU7P8L0mbXnH
-   GHulVJeD/I6VEOmWiGojQbLl9OPQqAD+6igyBtnEeThb6HRzmK+/prouF
-   L1U9t/3j9APBw8d8maHJJJNQ/fCWaimTSh/Annyqij8i8GQwpyE9glD5/
-   331vnB2ubWUlIRrcwh+zXoTyuR7uyUthEDuGcRynivS++usBAE5sRbgrW
-   JILaqQPcQKCkTyBZaI0JENrQUnrxeqMHPX6gkGyANM5eSYXsfRtH7IcsH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="420246806"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="420246806"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="706353161"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="706353161"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Feb 2023 14:31:04 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWm1P-0004q3-28;
-        Mon, 27 Feb 2023 22:31:03 +0000
-Date:   Tue, 28 Feb 2023 06:30:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: include/asm-generic/div64.h:238:36: error: passing argument 1 of
- '__div64_32' from incompatible pointer type
-Message-ID: <202302280619.kO2cWoIT-lkp@intel.com>
+        Mon, 27 Feb 2023 17:37:11 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F05EDBC0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:33:04 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id s8so5191044ilv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:33:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1677537172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T3Cu6m8epvNA3UH0d8Dsxgstk0bjTjSw6TnY3URCJJo=;
+        b=AL/xWpTQxYIWU2CQdF9m3fgKqRfcbDNwa9X3KuJd+7vuCknxuhMILoHf8Qyoz6hxSP
+         93dAcrC0+I68Uh7ASzQCB4hqpQegSYXghxbM0ulujSZPY9tnaqq3qHJuTo5xVT9PKEzc
+         DCpulpc4GycrvelfquQkgO7NaudZ+MniqwvQo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677537172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T3Cu6m8epvNA3UH0d8Dsxgstk0bjTjSw6TnY3URCJJo=;
+        b=QlL/bYHAjXuXw/MdeBms+UEHLqHTg9SX9+TIs6NTQYx9R/E14eCVvUyiPVn3eEcIja
+         y5OyocUSQpctXJLMrJb9n6OvS2Y3Z+ESj7FMyju3YHmB0wARLvplSAdxOl63Kj2VIWOw
+         JMTqNslnj32++Ii3nF7iT6Z4/zYjaoHuVXgroALb01Or51xKmXgCyIhuCC7SNEceYXdp
+         y6y0j4yuYbR+3W0ukveOU+S/6KclPvZAJVYtOqj7hifRyD9BMiTYjDo2W2bnoHfSbjl/
+         aPkmJDEuihP3P4Y23SRqypbSAygVqXeG+JGFcTbGu7mjeh6/O9Sb2KnQYHvgFqxtOIxo
+         a6aA==
+X-Gm-Message-State: AO0yUKWyfl4LK8iLORv40YXbti3SH9U2CeKOoQEn/kWUhvZASbhr5MHz
+        kvjPQwFk70rhoEiho0r1C71PKg==
+X-Google-Smtp-Source: AK7set8U1d+59mHvSc7yWPEluziqNi1JNCxZke/Kq4W9ZnHwWbidQmuEkdyZ3SQBsry4cHKjKFfPvw==
+X-Received: by 2002:a05:6e02:1a8d:b0:317:1ca3:f518 with SMTP id k13-20020a056e021a8d00b003171ca3f518mr965058ilv.0.1677537171811;
+        Mon, 27 Feb 2023 14:32:51 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v15-20020a92c80f000000b003158ac24ccfsm2259873iln.38.2023.02.27.14.32.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 14:32:51 -0800 (PST)
+Message-ID: <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
+Date:   Mon, 27 Feb 2023 15:32:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
+ 165
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230206234344.2433950-1-mcgrof@kernel.org>
+ <20230206234344.2433950-2-mcgrof@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230206234344.2433950-2-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+On 2/6/23 16:43, Luis Chamberlain wrote:
+> The default sefltests timeout is 45 seconds. If you run the kmod
+> selftests on your own with say:
+> 
+> ./tools/testings/selftests/kmod.sh
+> 
+> Then the default timeout won't be in effect.
+> 
+> I've never ran kmod selftests using the generic make wrapper
+> (./tools/testing/selftests/run_kselftest.sh -s) util now
+> that I have support for it on kdevops [0]. And with that the
+> test is limitted to the default timeout which we quickly run
+> into. Bump this up to what I see is required on 8GiB / 8 vcpu
+> libvirt q35 guest as can be easily created now with kdevops.
+> 
+> To run selftests with kdevops:
+> 
+> make menuconfig # enable dedicated selftests and kmod test
+> make
+> make bringup
+> make linux
+> make selftests-kmod
+> 
+> This ends up taking about 280 seconds now, give or take add
+> 50 seconds more more and we end up with 350. Document the
+> rationale.
+> 
+> [0] https://github.com/linux-kdevops/kdevops
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   tools/testing/selftests/kmod/settings | 4 ++++
+>   1 file changed, 4 insertions(+)
+>   create mode 100644 tools/testing/selftests/kmod/settings
+> 
+> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+> new file mode 100644
+> index 000000000000..6fca0f1a4594
+> --- /dev/null
+> +++ b/tools/testing/selftests/kmod/settings
+> @@ -0,0 +1,4 @@
+> +# measured from a manual run:
+> +# time ./tools/testing/selftests/kmod/kmod.sh
+> +# Then add ~50 seconds more gracetime.
+> +timeout=350
 
-FYI, the error/warning still remains.
+Adding timeouts like this for individual tests increases the overall kselftest
+run-time. I am not in favor of adding timeouts.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   982818426a0ffaf93b0621826ed39a84be3d7d62
-commit: 29e8142b5623b5949587bcc4f591c4e6595c4aca power: supply: Introduce Qualcomm PMIC GLINK power supply
-date:   2 weeks ago
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230228/202302280619.kO2cWoIT-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29e8142b5623b5949587bcc4f591c4e6595c4aca
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 29e8142b5623b5949587bcc4f591c4e6595c4aca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+We have to find a better way to do this.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302280619.kO2cWoIT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from ./arch/arc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:6,
-                    from include/linux/math64.h:6,
-                    from include/linux/time64.h:5,
-                    from include/linux/restart_block.h:10,
-                    from include/linux/thread_info.h:14,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/rcupdate.h:27,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from include/linux/auxiliary_bus.h:11,
-                    from drivers/power/supply/qcom_battmgr.c:6:
-   drivers/power/supply/qcom_battmgr.c: In function 'qcom_battmgr_sm8350_callback':
-   include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                                   ^~
-   drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
-    1130 |                         do_div(battmgr->status.percent, 100);
-         |                         ^~~~~~
-   In file included from include/linux/dev_printk.h:14:
-   include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^~
-   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
-      77 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
-    1130 |                         do_div(battmgr->status.percent, 100);
-         |                         ^~~~~~
->> include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-         |                                    |
-         |                                    unsigned int *
-   drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
-    1130 |                         do_div(battmgr->status.percent, 100);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:213:38: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'unsigned int *'
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                            ~~~~~~~~~~^~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/__div64_32 +238 include/asm-generic/div64.h
-
-^1da177e4c3f41 Linus Torvalds     2005-04-16  215  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  216  /* The unnecessary pointer compare is there
-^1da177e4c3f41 Linus Torvalds     2005-04-16  217   * to check for type safety (n must be 64bit)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  218   */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  219  # define do_div(n,base) ({				\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  220  	uint32_t __base = (base);			\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  221  	uint32_t __rem;					\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  222  	(void)(((typeof((n)) *)0) == ((uint64_t *)0));	\
-911918aa7ef6f8 Nicolas Pitre      2015-11-02  223  	if (__builtin_constant_p(__base) &&		\
-911918aa7ef6f8 Nicolas Pitre      2015-11-02  224  	    is_power_of_2(__base)) {			\
-911918aa7ef6f8 Nicolas Pitre      2015-11-02  225  		__rem = (n) & (__base - 1);		\
-911918aa7ef6f8 Nicolas Pitre      2015-11-02  226  		(n) >>= ilog2(__base);			\
-c747ce4706190e Geert Uytterhoeven 2021-08-11  227  	} else if (__builtin_constant_p(__base) &&	\
-461a5e51060c93 Nicolas Pitre      2015-10-30  228  		   __base != 0) {			\
-461a5e51060c93 Nicolas Pitre      2015-10-30  229  		uint32_t __res_lo, __n_lo = (n);	\
-461a5e51060c93 Nicolas Pitre      2015-10-30  230  		(n) = __div64_const32(n, __base);	\
-461a5e51060c93 Nicolas Pitre      2015-10-30  231  		/* the remainder can be computed with 32-bit regs */ \
-461a5e51060c93 Nicolas Pitre      2015-10-30  232  		__res_lo = (n);				\
-461a5e51060c93 Nicolas Pitre      2015-10-30  233  		__rem = __n_lo - __res_lo * __base;	\
-911918aa7ef6f8 Nicolas Pitre      2015-11-02  234  	} else if (likely(((n) >> 32) == 0)) {		\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  235  		__rem = (uint32_t)(n) % __base;		\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  236  		(n) = (uint32_t)(n) / __base;		\
-c747ce4706190e Geert Uytterhoeven 2021-08-11  237  	} else {					\
-^1da177e4c3f41 Linus Torvalds     2005-04-16 @238  		__rem = __div64_32(&(n), __base);	\
-c747ce4706190e Geert Uytterhoeven 2021-08-11  239  	}						\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  240  	__rem;						\
-^1da177e4c3f41 Linus Torvalds     2005-04-16  241   })
-^1da177e4c3f41 Linus Torvalds     2005-04-16  242  
-
-:::::: The code at line 238 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+thanks,
+-- Shuah
