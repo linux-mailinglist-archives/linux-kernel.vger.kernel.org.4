@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D318C6A485D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9A66A487E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjB0RmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S229606AbjB0RrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjB0RmK (ORCPT
+        with ESMTP id S229969AbjB0RrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:42:10 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7244924480;
-        Mon, 27 Feb 2023 09:41:41 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id eg37so28897436edb.12;
-        Mon, 27 Feb 2023 09:41:41 -0800 (PST)
+        Mon, 27 Feb 2023 12:47:12 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C99B24103
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:47:11 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id g13-20020a63f40d000000b005015be7b9faso2188444pgi.15
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:47:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eIeMiDmyoZNopFwsCcCae+ahksr8qg85C7DiX+Xl+Bo=;
-        b=gmOJC1tCA+FQUwkmazGGq2ifhj6JrhCVZihHN6pR9mfqAaE6B+wTFQlaEeq0oYfsTA
-         vOkihc4jr+wMM0J//e7aJut2bvR3HYRRl9z3q124gF3t9GkTwfJNotyIuHxmWWFdQgci
-         NZwQwcTiPAKlnlTRVZipgCpPbaIudYSHhUIH++zWGuINuZfemH3llR+PhGcI8pZ37qd+
-         X043tGWtz/CCPvetXK6CElXmwRYvopaojPagfDLXSRtn8Y7uoCo+FrjQLwtJL+pbu9xX
-         ZFqO9yLyeDIpwqWecAYh1FMCTkA28RDAeEVe4+JdkioSM8GH4I15vzbcj/FeeLBipWFI
-         olzA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bx7GMwBIOHxrHorivUo24uUgRWemT3+721qT8hA0RRM=;
+        b=fL0sCAtJCbBQmUG9K1il5cmtYgU+ic6RembCIXUKuPBlJzRuirBy8XzEmXwgH1PU31
+         kkpjFWighHghmJVkVQltONa/wKox7B8FVpYn27OhLvhYDq9l3gFmp2uavdK4dbsIRPIs
+         p6hT2TYtw2O1FmzxBjIR6E3nJWQCqGc/ICMdXPprWdFVQlEBTlgYjA8qiVLqAihMPQ25
+         K9iFdZVJOJrtL6AugVJN5qR2lA0rJOhOrTeaYjBIryyDheil7WOfb5fzdqMp2ivFylsv
+         tjFfvQlIsax/515iS33dcPRRbtggsuz+LI7vS0bZ992wD4rJLMsA6tbdVdfFaiMvE5K+
+         9rLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eIeMiDmyoZNopFwsCcCae+ahksr8qg85C7DiX+Xl+Bo=;
-        b=aFp60GxGdBOuo2enazYVhInMRWUKD9egkhEQqcd6vnD3yOrNYTa0cuC26SEM1AGBL/
-         0nPvKohdF9WlrdUlYneMu9L8Sqw7aLH4wkwqzs4WvEMEw5hHggvTqv2txCdAxNA3bWxb
-         HUMrgtJVq7Lexew1pBkKlQKnrr9NM/qmU7Apyamx3/qTUJ5BgQy/ShcsnrLaMFL7Vzr9
-         EmrXaT7zG7gloVjnB0zKV+SnGASWxBZ629hjVJFT5ntBTlksdkrwzN8KYRWE9HntuIV2
-         9Titwx2+EQTK0x/r/JJJkHcBScGzqhI1q3WDE0xbZXtOgrs0MXb0FCgkK/LaYANozw0J
-         UmrQ==
-X-Gm-Message-State: AO0yUKURLeEsrbe9bsYm7sUF0T2a3EYwJkDwvEMV8s72XXfy/WvklB/l
-        PUsiSBpP9BgRSTVBewlMKHIICle0hdKMY7PB1b8=
-X-Google-Smtp-Source: AK7set+MUdNH5CkG7s511ae9j26hjxbQw+Ai6xmtCXEIfyom2bAoAZ4nTfSi4yyVxbG/gJxjyFHHjt5iRuVYwTwlBQw=
-X-Received: by 2002:a50:bb41:0:b0:4ac:b616:4ba9 with SMTP id
- y59-20020a50bb41000000b004acb6164ba9mr157116ede.5.1677519627380; Mon, 27 Feb
- 2023 09:40:27 -0800 (PST)
-MIME-Version: 1.0
-References: <1677235015-21717-1-git-send-email-yangtiezhu@loongson.cn> <1677235015-21717-3-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1677235015-21717-3-git-send-email-yangtiezhu@loongson.cn>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 27 Feb 2023 09:40:15 -0800
-Message-ID: <CAEf4Bza7hTwLOgELWDyFUZEL_RpTkWYZ_abS8O1uoE5gqVYh8w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Check __TARGET_ARCH_loongarch
- if target is bpf for LoongArch
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bx7GMwBIOHxrHorivUo24uUgRWemT3+721qT8hA0RRM=;
+        b=RK0ET4xhhESVHZX6TIwuKwVJdhyeRBtOYrnnc8kuyu+UnY48EPX+sRx6ffKP2zIWnf
+         snvN/xXMSMr1aYG645z8/nJXbBNlHLV+RNSykX0qJ2X4lvHf42LOCHGV1ZXH/4h7rZGY
+         VKzRIUUP7fD91w0ehRF/jXlKQrZ8x1JaLLSIRMcyUNAL7RDXeOBD9myalru1HymS4BM+
+         5Sjysapmq/A9JY3lHMFVxY4uehQBEShdz+58mCwdHJ5rjitkMB8nG0ipEr66Ew74GO93
+         DQW3qPvo7snFCboIjReZY+FCVSyM1VopV8oVdyHGidBe07QtN07vK4029uMWwba6Ef99
+         vgMg==
+X-Gm-Message-State: AO0yUKWnpwRe7z83KAF6DfjMe/s53UFI3TwJxNEPWgsLPlN0nrEwJ93m
+        lpcu8djomyNOHMy3TBvH7jQj7gRz48F2fNCMng==
+X-Google-Smtp-Source: AK7set+vnOMHR/cn8CdD2DfS9+dSlM7HFryOJfCIJPWETMAvw/+OV5UIcKBg4NX/PtA17R+5rlfEtd6GoQ73nZQ9bA==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a63:921c:0:b0:503:6bbe:20cf with SMTP
+ id o28-20020a63921c000000b005036bbe20cfmr606208pgd.0.1677520030680; Mon, 27
+ Feb 2023 09:47:10 -0800 (PST)
+Date:   Mon, 27 Feb 2023 17:46:54 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+Message-ID: <20230227174654.94641-1-ackerleytng@google.com>
+Subject: [PATCH] tools: Copy linux/align.h into tools/
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, seanjc@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,59 +67,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 2:37 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
-> If target is bpf, there is no __loongarch__ definition, __BITS_PER_LONG
-> defaults to 32, __NR_nanosleep is not defined:
->
->   #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
->   #define __NR_nanosleep 101
->   __SC_3264(__NR_nanosleep, sys_nanosleep_time32, sys_nanosleep)
->   #endif
->
-> Check __TARGET_ARCH_loongarch to include arch specified bitsperlong.h,
-> then __BITS_PER_LONG is 64, __NR_nanosleep can also be defined to fix
-> the following build errors:
->
->   clang  -g -Werror -D__TARGET_ARCH_loongarch ... -target bpf -c progs/test_vmlinux.c ...
->   progs/test_vmlinux.c:24:18: error: use of undeclared identifier '__NR_nanosleep'
->           if (args->id != __NR_nanosleep)
->                           ^
->   progs/test_vmlinux.c:42:12: error: use of undeclared identifier '__NR_nanosleep'
->           if (id != __NR_nanosleep)
->                     ^
->   progs/test_vmlinux.c:60:12: error: use of undeclared identifier '__NR_nanosleep'
->           if (id != __NR_nanosleep)
->                     ^
->   3 errors generated.
->   make: *** [Makefile:572: tools/testing/selftests/bpf/test_vmlinux.bpf.o] Error 1
->   make: Leaving directory 'tools/testing/selftests/bpf'
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  tools/include/uapi/asm/bitsperlong.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/include/uapi/asm/bitsperlong.h b/tools/include/uapi/asm/bitsperlong.h
-> index da52065..10b4023 100644
-> --- a/tools/include/uapi/asm/bitsperlong.h
-> +++ b/tools/include/uapi/asm/bitsperlong.h
-> @@ -17,7 +17,7 @@
->  #include "../../../arch/riscv/include/uapi/asm/bitsperlong.h"
->  #elif defined(__alpha__)
->  #include "../../../arch/alpha/include/uapi/asm/bitsperlong.h"
-> -#elif defined(__loongarch__)
-> +#elif defined(__loongarch__) || defined(__TARGET_ARCH_loongarch)
+This provides alignment macros for use in selftests.
 
-__TARGET_ARCH_ is libbpf-specific convention, we can't add that to UAPI headers
+Also clean up tools/include/linux/bitmap.h's inline definition of
+IS_ALIGNED().
 
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+ tools/include/linux/align.h  | 15 +++++++++++++++
+ tools/include/linux/bitmap.h |  2 +-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+ create mode 100644 tools/include/linux/align.h
 
-let's think about some other solution
+diff --git a/tools/include/linux/align.h b/tools/include/linux/align.h
+new file mode 100644
+index 000000000000..2b4acec7b95a
+--- /dev/null
++++ b/tools/include/linux/align.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_ALIGN_H
++#define _LINUX_ALIGN_H
++
++#include <linux/const.h>
++
++/* @a is a power of 2 value */
++#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
++#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
++#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
++#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
++#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
++#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
++
++#endif	/* _LINUX_ALIGN_H */
+diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
+index f3566ea0f932..8c6852dba04f 100644
+--- a/tools/include/linux/bitmap.h
++++ b/tools/include/linux/bitmap.h
+@@ -3,6 +3,7 @@
+ #define _TOOLS_LINUX_BITMAP_H
+ 
+ #include <string.h>
++#include <linux/align.h>
+ #include <linux/bitops.h>
+ #include <linux/find.h>
+ #include <stdlib.h>
+@@ -126,7 +127,6 @@ static inline bool bitmap_and(unsigned long *dst, const unsigned long *src1,
+ #define BITMAP_MEM_ALIGNMENT (8 * sizeof(unsigned long))
+ #endif
+ #define BITMAP_MEM_MASK (BITMAP_MEM_ALIGNMENT - 1)
+-#define IS_ALIGNED(x, a) (((x) & ((typeof(x))(a) - 1)) == 0)
+ 
+ static inline bool bitmap_equal(const unsigned long *src1,
+ 				const unsigned long *src2, unsigned int nbits)
+-- 
+2.39.2.722.g9855ee24e9-goog
 
-
->  #include "../../../arch/loongarch/include/uapi/asm/bitsperlong.h"
->  #else
->  #include <asm-generic/bitsperlong.h>
-> --
-> 2.1.0
->
