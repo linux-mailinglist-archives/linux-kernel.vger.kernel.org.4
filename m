@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BC56A3A54
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679976A3A77
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjB0F0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 00:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S229820AbjB0FfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 00:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjB0F0J (ORCPT
+        with ESMTP id S229470AbjB0FfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 00:26:09 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F6AE392;
-        Sun, 26 Feb 2023 21:26:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PQ89S1gvyz4x4r;
-        Mon, 27 Feb 2023 16:26:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1677475564;
-        bh=T6QIytn9L33Q7Aw+6A+7icMEI0DxJnhlJO8jCmkh/j8=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=KVFEitcLJPxiyFCpSP6KfUPWvu9FUwNV/+hoYvvH1l2j1vvswhMgzA4Fqa/YfLTu2
-         Ofo9OjPay9EK8L/di6xhIHfBhIxu+h0rprf7TfkFD57UP+ZJ3V86Zdast9cO2SswEE
-         AQJlSBZGI8R3iRBn7/A3aqpaWzP9FN9z5tFdibRmszJGAEOuftArf2n08X0z9MBQXH
-         Ql7h2eDNEttzDilSjOkRpgj1jT1/rQxwNYBsdcIFiDBoOfqOMB31dphjVVGn9IV6Le
-         RdtvpmZVPedj75L9CXYrnP+gqR+7u3fEu+OmYwTFmVL9nKwKp7N/yWt9AXSasBqCGJ
-         kcUPNThXs1dyg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     David Binderman <dcb314@hotmail.com>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Possible bug in
- linux-6.2/tools/testing/selftests/powerpc/pmu/sampling_tests/mmcra_thresh_marked_sample_test.c
-In-Reply-To: <DB6P189MB0568CF002762C6C43AF6DF169CA89@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
-References: <DB6P189MB0568CF002762C6C43AF6DF169CA89@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
-Date:   Mon, 27 Feb 2023 16:26:01 +1100
-Message-ID: <87ttz7vfva.fsf@mpe.ellerman.id.au>
+        Mon, 27 Feb 2023 00:35:09 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F4C1117D;
+        Sun, 26 Feb 2023 21:35:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677476108; x=1709012108;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oQPX7x3IL1Ebsh+DaCSvLlDQcRLVwIDTJDIaEPNaL4w=;
+  b=OaLlpvCSlaYDQ8a9R5LCyl1xyAYj75pA8WSAqI58Z+tzx/tFKqj5Nv4J
+   erh0x754CJRkXKbrzmJWcEXsnOjff88ON0TUC1yWw6f9u8HOMl6tIZcmu
+   noT1AmMHWchucNcvb7TqzHkjgBMmmXKnogg9NDJeSFnNBd4CE/yLm3kEL
+   8fXGnjz7t3Tc+vBJXPcB3iPT0tC1rRt4O2ywTFkc15Gqg81ZKekDiqmmM
+   sdtDMK4Z0es2K9Wxui+L9nDTvhnM7jLtsivl4hfllnQWf1/T8Ewvb8tuS
+   TolE7d9X/KBij+jgZNlqWsdSh7Czjl/TtLBt237F8u4Tu0gBvpOvHux05
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="361339125"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="361339125"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 21:35:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="737517015"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="737517015"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Feb 2023 21:35:08 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] platform/x86: ISST: Increase range of valid mail box commands
+Date:   Sun, 26 Feb 2023 21:35:04 -0800
+Message-Id: <20230227053504.2734214-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,47 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Binderman <dcb314@hotmail.com> writes:
-> Hello there,
->
-> I ran the static analyser cppcheck over the linux-6.2 source code and got this:
->
-> linux-6.2/tools/testing/selftests/powerpc/pmu/sampling_tests/mmcra_thresh_marked_sample_test.c:68:10: style: Same expression '0x3' found multiple times in chain of '&' operators. [duplicateExpression]
+A new command CONFIG_TDP_GET_RATIO_INFO is added, with sub command type
+of 0x0C. The previous range of valid sub commands was from 0x00 to 0x0B.
+Change the valid range from 0x00 to 0x0C.
 
-Thanks.
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Source code is
->
->     FAIL_IF(EV_CODE_EXTRACT(event.attr.config, sample & 0x3) !=
->             get_mmcra_sample_mode(get_reg_value(intr_regs, "MMCRA"), 4));
->
-> but
->
-> #define EV_CODE_EXTRACT(x, y)   \
->     ((x >> ev_shift_##y) & ev_mask_##y)
->
->
-> Given the token pasting, I very much doubt an expression like "sample & 0x3"
-> will work correctly. Same thing on the line above 
->
->     FAIL_IF(EV_CODE_EXTRACT(event.attr.config, sample >> 2) !=
->             get_mmcra_rand_samp_elig(get_reg_value(intr_regs, "MMCRA"), 4));
->
-> "sample >> 2" doesn't look like a valid token to me.
+diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+index a7e02b24a87a..0829e793a8fc 100644
+--- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
++++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+@@ -47,7 +47,7 @@ struct isst_cmd_set_req_type {
+ 
+ static const struct isst_valid_cmd_ranges isst_valid_cmds[] = {
+ 	{0xD0, 0x00, 0x03},
+-	{0x7F, 0x00, 0x0B},
++	{0x7F, 0x00, 0x0C},
+ 	{0x7F, 0x10, 0x12},
+ 	{0x7F, 0x20, 0x23},
+ 	{0x94, 0x03, 0x03},
+-- 
+2.39.1
 
-It expands to:
-
- if ((((event.attr.config >> ev_shift_sample >> 2) & ev_mask_sample >> 2) != get_mmcra_rand_samp_elig(get_reg_value(intr_regs, "MMCRA"), 4))) 
-
-Which AFAICS is valid, and does compile.
-
-Whether it's what the author actually intended is less clear.
-
-And the other example with & 0x3 seems obviously wrong, it expands to:
-
-  if ((((event.attr.config >> ev_shift_sample & 0x3) & ev_mask_sample & 0x3) != get_mmcra_sample_mode(get_reg_value(intr_regs, "MMCRA"), 4)))
-
-The shift is 24, so bitwise anding it with 0x3 gets 0 which doesn't seem
-likely to be what was intended.
-
-cheers
