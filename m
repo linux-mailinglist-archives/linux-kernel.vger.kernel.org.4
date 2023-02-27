@@ -2,73 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9126A3A46
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEF96A3A4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 06:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjB0FJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 00:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S229741AbjB0FVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 00:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjB0FJi (ORCPT
+        with ESMTP id S229516AbjB0FU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 00:09:38 -0500
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2C21BADF;
-        Sun, 26 Feb 2023 21:09:34 -0800 (PST)
-X-QQ-mid: bizesmtp91t1677474546tnx1hwml
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 27 Feb 2023 13:09:00 +0800 (CST)
-X-QQ-SSF: 01400000002000I0Z000B00A0000000
-X-QQ-FEAT: CR3LFp2JE4nh9Hz0vOzbBp/DnSzGhy/CrqreMsExWYLq53wGo40uFbRfs1ZR0
-        wckWAS5Yt/bONMZ6MnraJRzqIxHfjfum7GG2XRXPQ+NKlx1ohhGmT0/5z5PziYe2rV7tcuJ
-        t4kbH19x3rBJnSrY3JpPrLNWDdPnKIM+cLLpaoR/h4NohmITWpX1N7KaJP/I7FLpMRVIiFo
-        K63jxe9E+kjjI3r7ygGjXk+5b4MI3Q7ipckrdPY0o1K5xaxM2rKHE4lr1zLI6FgbW9PjgTV
-        /N556S+WtDpQ087UCugYagOE/eUe1FNxEs0KwnE/u7VOdi2MUkzqP+eRkZM4jgT/159SogO
-        r8cconDsU/Vzx5jb7djpS38vRT0bgwpsM7zdyfBykKct8Q3Q7FZz/kL+tKh9NyQNsEe5r1Z
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     dmitry.torokhov@gmail.com, akpm@linux-foundation.org,
-        glider@google.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] Input: libps2 - add support for lenovo xiaoxin keyboard
-Date:   Mon, 27 Feb 2023 13:08:58 +0800
-Message-Id: <20230227050858.21596-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 27 Feb 2023 00:20:59 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FA21116D;
+        Sun, 26 Feb 2023 21:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677475258; x=1709011258;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=PRmzNDPLW359VDJZq8Qx7txrVCvA7QawULc06bBKX3k=;
+  b=cKih6w2gV45oqgwb4Bkk+/9Nxv7rfXX/F2tGoRMe97bGn2kvl96JTxBJ
+   HDB8NRthkMRPNnLh/FTKs0GKkVIDNxUHWj1UMphqX7qz0sk/qWEcz+1y5
+   n0rM8fty8QRbVQ/qZ0csCPnv1e37NJjEezbf4Mlt0Rjl23bcQERv40k6J
+   Nn+/x/lepKdW0A8wiquw5DyQEXtOz9KAG6WREAdJynz2qYnWanqbsO5zC
+   orN14pCnrkbn4knWVOEuRomGlXK95DqXZnTR+6PBDjetDDyE0DKPl0ku5
+   OoUzZcPXJwIIB6UUMpXEnyCNOECrhk15DCPFGyPKMh/pMDVmwStHYoXYT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="336059868"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="336059868"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 21:20:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="673612760"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="673612760"
+Received: from dkumarr-mobl2.gar.corp.intel.com ([10.213.123.7])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 21:18:17 -0800
+Message-ID: <d5c82db4bf9aac71342a8e969ae2deb145d71280.camel@linux.intel.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Fix potential use-after-free
+ in work function
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Reka Norman <rekanorman@chromium.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Li Qiong <liqiong@nfschina.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 26 Feb 2023 21:18:14 -0800
+In-Reply-To: <20230227024938.2265017-1-rekanorman@chromium.org>
+References: <20230227024938.2265017-1-rekanorman@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modified keyboard_ids in function ps2_is_keyboard_id
-add 0x83 for Lenovo Xiaoxin keyboard
-
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- drivers/input/serio/libps2.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/input/serio/libps2.c b/drivers/input/serio/libps2.c
-index 3e19344eda93..84f366846cf8 100644
---- a/drivers/input/serio/libps2.c
-+++ b/drivers/input/serio/libps2.c
-@@ -156,6 +156,7 @@ bool ps2_is_keyboard_id(u8 id_byte)
- 		0x5d,	/* Trust keyboard		*/
- 		0x60,	/* NMB SGI keyboard, translated */
- 		0x47,	/* NMB SGI keyboard		*/
-+		0x83,	/* Lenovo Xiaoxin keyboard	*/
- 	};
- 
- 	return memchr(keyboard_ids, id_byte, sizeof(keyboard_ids)) != NULL;
--- 
-2.20.1
+T24gTW9uLCAyMDIzLTAyLTI3IGF0IDEzOjQ5ICsxMTAwLCBSZWthIE5vcm1hbiB3cm90ZToKPiBX
+aGVuIGEgcmVzZXQgbm90aWZ5IElQQyBtZXNzYWdlIGlzIHJlY2VpdmVkLCB0aGUgSVNSIHNjaGVk
+dWxlcyBhIHdvcmsKPiBmdW5jdGlvbiBhbmQgcGFzc2VzIHRoZSBJU0hUUCBkZXZpY2UgdG8gaXQg
+dmlhIGEgZ2xvYmFsIHBvaW50ZXIKPiBpc2h0cF9kZXYuIElmIGlzaF9wcm9iZSgpIGZhaWxzLCB0
+aGUgZGV2bS1tYW5hZ2VkIGRldmljZSByZXNvdXJjZXMKPiBpbmNsdWRpbmcgaXNodHBfZGV2IGFy
+ZSBmcmVlZCwgYnV0IHRoZSB3b3JrIGlzIG5vdCBjYW5jZWxsZWQsIGNhdXNpbmcKPiBhCj4gdXNl
+LWFmdGVyLWZyZWUgd2hlbiB0aGUgd29yayBmdW5jdGlvbiB0cmllcyB0byBhY2Nlc3MgaXNodHBf
+ZGV2LiBVc2UKPiBkZXZtX3dvcmtfYXV0b2NhbmNlbCgpIGluc3RlYWQsIHNvIHRoYXQgdGhlIHdv
+cmsgaXMgYXV0b21hdGljYWxseQo+IGNhbmNlbGxlZCBpZiBwcm9iZSBmYWlscy4KPiAKPiBTaWdu
+ZWQtb2ZmLWJ5OiBSZWthIE5vcm1hbiA8cmVrYW5vcm1hbkBjaHJvbWl1bS5vcmc+CkFja2VkLWJ5
+OiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNv
+bT4KCj4gLS0tCj4gCj4gwqBkcml2ZXJzL2hpZC9pbnRlbC1pc2gtaGlkL2lwYy9pcGMuYyB8IDkg
+KysrKysrKystCj4gwqAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
+KC0pCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL2lwYy5j
+IGIvZHJpdmVycy9oaWQvaW50ZWwtCj4gaXNoLWhpZC9pcGMvaXBjLmMKPiBpbmRleCAxNWUxNDIz
+OWFmODI5Li5hNDljNmFmZmQ3YzRjIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvaGlkL2ludGVsLWlz
+aC1oaWQvaXBjL2lwYy5jCj4gKysrIGIvZHJpdmVycy9oaWQvaW50ZWwtaXNoLWhpZC9pcGMvaXBj
+LmMKPiBAQCAtNSw2ICs1LDcgQEAKPiDCoCAqIENvcHlyaWdodCAoYykgMjAxNC0yMDE2LCBJbnRl
+bCBDb3Jwb3JhdGlvbi4KPiDCoCAqLwo+IMKgCj4gKyNpbmNsdWRlIDxsaW51eC9kZXZtLWhlbHBl
+cnMuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9zY2hlZC5oPgo+IMKgI2luY2x1ZGUgPGxpbnV4L3Nw
+aW5sb2NrLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvZGVsYXkuaD4KPiBAQCAtNjIxLDcgKzYyMiw2
+IEBAIHN0YXRpYyB2b2lkwqByZWN2X2lwYyhzdHJ1Y3QgaXNodHBfZGV2aWNlICpkZXYsCj4gdWlu
+dDMyX3QgZG9vcmJlbGxfdmFsKQo+IMKgwqDCoMKgwqDCoMKgwqBjYXNlIE1OR19SRVNFVF9OT1RJ
+Rlk6Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoIWlzaHRwX2Rldikgewo+
+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlzaHRwX2Rl
+diA9IGRldjsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oElOSVRfV09SSygmZndfcmVzZXRfd29yaywgZndfcmVzZXRfd29ya19mbik7Cj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBzY2hlZHVsZV93b3JrKCZmd19yZXNldF93b3JrKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGJyZWFrOwo+IEBAIC05NDAsNiArOTQwLDcgQEAgc3RydWN0IGlzaHRwX2Rldmlj
+ZSAqaXNoX2Rldl9pbml0KHN0cnVjdCBwY2lfZGV2Cj4gKnBkZXYpCj4gwqB7Cj4gwqDCoMKgwqDC
+oMKgwqDCoHN0cnVjdCBpc2h0cF9kZXZpY2UgKmRldjsKPiDCoMKgwqDCoMKgwqDCoMKgaW50wqDC
+oMKgwqDCoGk7Cj4gK8KgwqDCoMKgwqDCoMKgaW50wqDCoMKgwqDCoHJldDsKPiDCoAo+IMKgwqDC
+oMKgwqDCoMKgwqBkZXYgPSBkZXZtX2t6YWxsb2MoJnBkZXYtPmRldiwKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNpemVvZihzdHJ1Y3QgaXNo
+dHBfZGV2aWNlKSArCj4gc2l6ZW9mKHN0cnVjdCBpc2hfaHcpLAo+IEBAIC05NzUsNiArOTc2LDEy
+IEBAIHN0cnVjdCBpc2h0cF9kZXZpY2UgKmlzaF9kZXZfaW5pdChzdHJ1Y3QgcGNpX2Rldgo+ICpw
+ZGV2KQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbGlzdF9hZGRfdGFpbCgmdHhf
+YnVmLT5saW5rLCAmZGV2LT53cl9mcmVlX2xpc3QpOwo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAK
+PiArwqDCoMKgwqDCoMKgwqByZXQgPSBkZXZtX3dvcmtfYXV0b2NhbmNlbCgmcGRldi0+ZGV2LCAm
+ZndfcmVzZXRfd29yaywKPiBmd19yZXNldF93b3JrX2ZuKTsKPiArwqDCoMKgwqDCoMKgwqBpZiAo
+cmV0KSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRldl9lcnIoZGV2LT5kZXZj
+LCAiRmFpbGVkIHRvIGluaXRpYWxpc2UgRlcgcmVzZXQKPiB3b3JrXG4iKTsKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIE5VTEw7Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICsK
+PiDCoMKgwqDCoMKgwqDCoMKgZGV2LT5vcHMgPSAmaXNoX2h3X29wczsKPiDCoMKgwqDCoMKgwqDC
+oMKgZGV2LT5kZXZjID0gJnBkZXYtPmRldjsKPiDCoMKgwqDCoMKgwqDCoMKgZGV2LT5tdHUgPSBJ
+UENfUEFZTE9BRF9TSVpFIC0gc2l6ZW9mKHN0cnVjdCBpc2h0cF9tc2dfaGRyKTsKCg==
 
