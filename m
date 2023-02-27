@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3BE6A35E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 01:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7FF6A35E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 01:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjB0AWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 19:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S229735AbjB0AXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 19:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjB0AWD (ORCPT
+        with ESMTP id S229693AbjB0AXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 19:22:03 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35B8CDD4;
-        Sun, 26 Feb 2023 16:22:01 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id y10so416615qtj.2;
-        Sun, 26 Feb 2023 16:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677457321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5be06YHYRkke1Ci4JVJc3LyV4Jo5b0vnSbZ7t2ii5Mo=;
-        b=O95IqFgj68nB6P/Llv29DHMzJgP1wxZsLN9fh3QjGxpIUFBlTkj/W6KFGcpSCU1/Y+
-         cktLsuuR/evXRxVGHkmqeWlD2mzyak+0vjDlPAPJ6niTX+GZMaLm/+juH2kpIyYJxLDP
-         gdsFINv/Y+pXue47VYLP1Oxm98M3qLEvHj8uEvs1Pl01Jk14DssNJzUCAJmumTMgI8K9
-         S/f2+CUVwjVkY3Tj5cXqB70vBNQ50UlSzUHYXlBcqW5dwf53fmATQvNm++JqS9zCmRsf
-         CKVsYd2AYN+sqZ4x38FuKzog7ZGQcP/uO+mq6arNZZF0udzewYSfUMBtRTHCCjsninyy
-         2ihQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677457321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5be06YHYRkke1Ci4JVJc3LyV4Jo5b0vnSbZ7t2ii5Mo=;
-        b=AOmtEz8C0ExuhJ1ZXk+SSkXB/PmfdDLvSEmzg67I/mIh2HbxlOrsYqeJRFf2mvhs8f
-         //NfA1cTGH6/GBcKvZ+KxdTAte3ZdRo1nnZUSocIOm+uVNUby9aeAP0S6ewD5lphG9nl
-         Uc3cccjVuSEJkYDR3v1bspOXN8tV1BYJMGCIKgS6G4pZLfzxK9XcXmAXNjkOMZE/OAti
-         3JAAA8nyfyVsLaH5PXCvU0Vta5SO5X5cgZA7w16KXRAyR2uL/WV3VzYAdb0rflX6MUGe
-         9pR74EyCdLqIODr7W9r12QdXyktT1Bfm3f5RT7YDg7FTSDuyXtyLWzm/kctpehnleMeI
-         lCTw==
-X-Gm-Message-State: AO0yUKUmx1Nejr8NQql516giMec8zVEkuonWbtip+ECORzffhS/R36eN
-        50kEMfBNAO8AF4pwswBGJ5E=
-X-Google-Smtp-Source: AK7set+ZvlZjQTIMJrvwb52BT2vwI4cRuXdGf37WVLj+2OyNfYrTEM/vvRdDjmaH0UQZEtlXTB/RyQ==
-X-Received: by 2002:a05:622a:184:b0:3b4:7efb:36a7 with SMTP id s4-20020a05622a018400b003b47efb36a7mr12705451qtw.27.1677457320657;
-        Sun, 26 Feb 2023 16:22:00 -0800 (PST)
-Received: from localhost.localdomain (c-68-48-11-160.hsd1.mi.comcast.net. [68.48.11.160])
-        by smtp.gmail.com with ESMTPSA id o26-20020ac8429a000000b003b64f1b1f40sm3698071qtl.40.2023.02.26.16.21.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 16:22:00 -0800 (PST)
-From:   Sukrut Bellary <sukrut.bellary@gmail.com>
-To:     shuah@kernel.org, ray.huang@amd.com, li.meng@amd.com
-Cc:     Sukrut Bellary <sukrut.bellary@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftest: amd-pstate: Fix spelling mistakes
-Date:   Sun, 26 Feb 2023 16:21:55 -0800
-Message-Id: <20230227002155.3287-1-sukrut.bellary@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 26 Feb 2023 19:23:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5091FD2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 16:22:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677457369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8xishXMkGoDfy9kJ+wW4pKQNYO+tlz5Bc1z9GlXdeBc=;
+        b=RJTJL8WN2DUu1Jl99OdkzQQCCQ+igqtyr8qObRXes+c1rv91/H5Ko+BOZQ+sE2qzdB/ZKI
+        bW9QxE+XglgcRmmpPo3PfbIYiJVN2OGi48ADfSdvoP9+NigZ4SMsKHKfAAVZDFYSWVOZJd
+        nG1u9S4G3raJLsN2ltraJxfAUshTLF0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-177-Z6X0-yLGP2mDE8eA01V5Kg-1; Sun, 26 Feb 2023 19:22:48 -0500
+X-MC-Unique: Z6X0-yLGP2mDE8eA01V5Kg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A422E811E9C;
+        Mon, 27 Feb 2023 00:22:47 +0000 (UTC)
+Received: from [10.22.32.65] (unknown [10.22.32.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B96C492B12;
+        Mon, 27 Feb 2023 00:22:47 +0000 (UTC)
+Message-ID: <943686ee-975d-a463-46d1-04b200ac19b1@redhat.com>
+Date:   Sun, 26 Feb 2023 19:22:47 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com
+References: <20230223122642.491637862@infradead.org>
+ <20230223123319.487908155@infradead.org>
+ <Y/t1AwGC9OoN/lFc@hirez.programming.kicks-ass.net>
+ <Y/uN+89FlTw45uiA@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y/uN+89FlTw45uiA@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix spelling mistakes in run.sh "drvier" => "driver" and
-in gitsource.sh "senconds" => "seconds".
+On 2/26/23 11:51, Peter Zijlstra wrote:
+> On Sun, Feb 26, 2023 at 04:04:35PM +0100, Peter Zijlstra wrote:
+>> On Thu, Feb 23, 2023 at 01:26:45PM +0100, Peter Zijlstra wrote:
+>>> @@ -1072,7 +1067,7 @@ rwsem_down_read_slowpath(struct rw_semap
+>>>   	for (;;) {
+>>>   		set_current_state(state);
+>>>   		if (!smp_load_acquire(&waiter.task)) {
+>>> -			/* Matches rwsem_mark_wake()'s smp_store_release(). */
+>>> +			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+>>>   			break;
+>>>   		}
+>>>   		if (signal_pending_state(state, current)) {
+>>> @@ -1143,54 +1138,36 @@ rwsem_down_write_slowpath(struct rw_sema
+>>>   	} else {
+>>>   		atomic_long_or(RWSEM_FLAG_WAITERS, &sem->count);
+>> Found it; if we remove the try_write_lock below, then at least this
+>> new-waiter path needs to still do a trylock.
+>>
+>> Let me go test the other patches on top of all this and push out a fresh
+>> set if that all still works.
+> queue.git locking/core
+>
+> We'll see what the robots make of it.
 
-Signed-off-by: Sukrut Bellary <sukrut.bellary@gmail.com>
----
- tools/testing/selftests/amd-pstate/gitsource.sh | 4 ++--
- tools/testing/selftests/amd-pstate/run.sh       | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ From your new patch 3:
 
-diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
-index dbc1fe45599d..5f2171f0116d 100755
---- a/tools/testing/selftests/amd-pstate/gitsource.sh
-+++ b/tools/testing/selftests/amd-pstate/gitsource.sh
-@@ -117,7 +117,7 @@ parse_gitsource()
- 	printf "Gitsource-$1-#$2 power consumption(J): $en_sum\n" | tee -a $OUTFILE_GIT.result
- 
- 	# Permance is the number of run gitsource per second, denoted 1/t, where 1 is the number of run gitsource in t
--	# senconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
-+	# seconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
- 	# and t is time measured in seconds(s). This means that performance per watt becomes
- 	#        1/t     1/t     1
- 	#       ----- = ----- = ---
-@@ -175,7 +175,7 @@ gather_gitsource()
- 	printf "Gitsource-$1 avg power consumption(J): $avg_en\n" | tee -a $OUTFILE_GIT.result
- 
- 	# Permance is the number of run gitsource per second, denoted 1/t, where 1 is the number of run gitsource in t
--	# senconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
-+	# seconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
- 	# and t is time measured in seconds(s). This means that performance per watt becomes
- 	#        1/t     1/t     1
- 	#       ----- = ----- = ---
-diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
-index 57cad57e59c0..de4d8e9c9565 100755
---- a/tools/testing/selftests/amd-pstate/run.sh
-+++ b/tools/testing/selftests/amd-pstate/run.sh
-@@ -244,7 +244,7 @@ prerequisite()
- 		if [ "$scaling_driver" != "$CURRENT_TEST" ]; then
- 			echo "$0 # Skipped: Test can only run on $CURRENT_TEST driver or run comparative test."
- 			echo "$0 # Please set X86_AMD_PSTATE enabled or run comparative test."
--			echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
-+			echo "$0 # Current cpufreq scaling driver is $scaling_driver."
- 			exit $ksft_skip
- 		fi
- 	else
-@@ -252,7 +252,7 @@ prerequisite()
- 			"tbench" | "gitsource")
- 				if [ "$scaling_driver" != "$COMPARATIVE_TEST" ]; then
- 					echo "$0 # Skipped: Comparison test can only run on $COMPARISON_TEST driver."
--					echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
-+					echo "$0 # Current cpufreq scaling driver is $scaling_driver."
- 					exit $ksft_skip
- 				fi
- 				;;
--- 
-2.25.1
+@@ -1151,55 +1154,39 @@ rwsem_down_write_slowpath(struct rw_semaphore 
+*sem, int state)
+                 }
+         } else {
+                 atomic_long_or(RWSEM_FLAG_WAITERS, &sem->count);
++               if (rwsem_try_write_lock(sem, &waiter))
++                       waiter.task = NULL;
+         }
++       raw_spin_unlock_irq(&sem->wait_lock);
+
+         /* wait until we successfully acquire the lock */
+-       set_current_state(state);
+         trace_contention_begin(sem, LCB_F_WRITE);
+
+         for (;;) {
+-               if (rwsem_try_write_lock(sem, &waiter)) {
+-                       /* rwsem_try_write_lock() implies ACQUIRE on 
+success */
++               set_current_state(state);
++               if (!smp_load_acquire(&waiter.task)) {
++                       /* Matches rwsem_waiter_wake()'s 
+smp_store_release(). */
+                         break;
+                 }
+-
+
+The additional rwsem_try_write_lock() call seems to address the missed 
+wakeup problem AFAICT.
+
+I do have some concern that early lock transfer to a lock owner that has 
+not been woken up yet may suppress writer lock stealing from optimistic 
+spinning causing some performance regression in some cases. Let's see if 
+the test robot report anything.
+
+Cheers,
+Longman
 
