@@ -2,260 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6B46A4CA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2079A6A4C79
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjB0VAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S229671AbjB0Uvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjB0VAd (ORCPT
+        with ESMTP id S229471AbjB0Uvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:00:33 -0500
-X-Greylist: delayed 420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Feb 2023 13:00:27 PST
-Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de [80.67.31.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AF82528D;
-        Mon, 27 Feb 2023 13:00:27 -0800 (PST)
-Received: from [92.206.161.29] (helo=note-book.lan)
-        by smtprelay04.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <git@apitzsch.eu>)
-        id 1pWkSL-0006TA-3S; Mon, 27 Feb 2023 21:50:45 +0100
-From:   =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
-To:     Nick Dyer <nick@shmanahar.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Mon, 27 Feb 2023 15:51:38 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754E71EFEF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:51:37 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id cy6so31175683edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e124E0pr34PAN91uKXPAbGtavFgIogfWrydKthVEf0E=;
+        b=Msljfd0DAOSV1Ng8uIK/mnFUzcITqVx7VNkBOQVwfqu7nD/mLOXNK+QL9hurrXRwFn
+         W22/+c8iLbrDPOIExuNn6xorlSdGmNDZocrV4NhDMD8Dm3bnuuyL2lwLSBJiZQs3BAqF
+         EYXQKn9EBAsLGT8Z+8bQyvV+taV8ZMcm7P5ms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e124E0pr34PAN91uKXPAbGtavFgIogfWrydKthVEf0E=;
+        b=jeXQz6cEhF0CCy5XhhsXB2+IA9/p2oFeJqagxTnqNA8lShLjL8uwV+pjtkKFChViMe
+         rRtzX6diXaHPR1gBPAISkBv+CszagKdmPtXVJc/lJLM/oclTMvb6fbjXf1AbrQwb1Hz3
+         n3I6nGLY5yEoNMsxxSwbNw3W5r886dyKdQqy7b6SNl5Wy9KvASPmWos7Ej/F/JZANKTR
+         5jqZXaiTBdT3yEOiJU98aF3s6H9wELi3ZA+LCO1IAgPS1osclxwksSz/pYoO3RklP7j8
+         eFiNCXtYnKFQfTKxlV9CRAzN8ftOjct5YMzgy8lR5HsPmZBndRY6h/4tpvYPRRBmY082
+         8JPQ==
+X-Gm-Message-State: AO0yUKW+t++iQWNILZstIDb3yQfp6U82k8410GyY5sn7GYvB4CZ/ja1Y
+        ku26448g2YScESBNKTxbQDv5fUV17ReCH7n4R2w=
+X-Google-Smtp-Source: AK7set/09hUebX3TUSz8Zk89YxuS48cruhUseyV6cCooMrzGlOnaU2lz/zSmizCZH80dS8HxpvF7Kg==
+X-Received: by 2002:aa7:d98d:0:b0:4ad:5950:3f47 with SMTP id u13-20020aa7d98d000000b004ad59503f47mr963127eds.9.1677531095698;
+        Mon, 27 Feb 2023 12:51:35 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-56-22-12.retail.telecomitalia.it. [82.56.22.12])
+        by smtp.gmail.com with ESMTPSA id i26-20020a50871a000000b004af70a660a9sm3578032edb.75.2023.02.27.12.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 12:51:35 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
-Subject: [PATCH 2/2] Input: atmel_mxt_ts - support capacitive keys
-Date:   Mon, 27 Feb 2023 21:50:35 +0100
-Message-Id: <20230227205035.18551-2-git@apitzsch.eu>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230227205035.18551-1-git@apitzsch.eu>
-References: <20230227205035.18551-1-git@apitzsch.eu>
+        Marek Vasut <marex@denx.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] pinctrl: stm32: use dynamic allocation of GPIO base
+Date:   Mon, 27 Feb 2023 21:51:31 +0100
+Message-Id: <20230227205131.2104082-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for touch keys found in some Atmel touch controller
-configurations.
+Since commit 502df79b860563d7 ("gpiolib: Warn on drivers still using static
+gpiobase allocation"), one or more warnings are printed during boot on
+systems where static allocation of GPIO base is used:
 
-Signed-off-by: André Apitzsch <git@apitzsch.eu>
+[    0.197707] gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.199942] stm32f429-pinctrl soc:pinctrl@40020000: GPIOA bank added
+[    0.200711] gpio gpiochip1: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.202855] stm32f429-pinctrl soc:pinctrl@40020000: GPIOB bank added
+[    0.203591] gpio gpiochip2: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.205704] stm32f429-pinctrl soc:pinctrl@40020000: GPIOC bank added
+[    0.206338] gpio gpiochip3: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.208448] stm32f429-pinctrl soc:pinctrl@40020000: GPIOD bank added
+[    0.209182] gpio gpiochip4: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.211282] stm32f429-pinctrl soc:pinctrl@40020000: GPIOE bank added
+[    0.212094] gpio gpiochip5: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.214270] stm32f429-pinctrl soc:pinctrl@40020000: GPIOF bank added
+[    0.215005] gpio gpiochip6: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.217110] stm32f429-pinctrl soc:pinctrl@40020000: GPIOG bank added
+[    0.217845] gpio gpiochip7: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.219959] stm32f429-pinctrl soc:pinctrl@40020000: GPIOH bank added
+[    0.220602] gpio gpiochip8: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.222714] stm32f429-pinctrl soc:pinctrl@40020000: GPIOI bank added
+[    0.223483] gpio gpiochip9: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.225594] stm32f429-pinctrl soc:pinctrl@40020000: GPIOJ bank added
+[    0.226336] gpio gpiochip10: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.228490] stm32f429-pinctrl soc:pinctrl@40020000: GPIOK bank added
+
+So let's follow the suggestion and use dynamic allocation.
+
+Tested on STM32F429I-DISC1 board.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- drivers/input/touchscreen/atmel_mxt_ts.c | 85 ++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
 
-diff --git a/drivers/input/touchscreen/atmel_mxt_ts.c b/drivers/input/touchscreen/atmel_mxt_ts.c
-index 996bf434e1cb..eb368dd1abf0 100644
---- a/drivers/input/touchscreen/atmel_mxt_ts.c
-+++ b/drivers/input/touchscreen/atmel_mxt_ts.c
-@@ -55,6 +55,7 @@
- #define MXT_TOUCH_KEYARRAY_T15		15
- #define MXT_TOUCH_PROXIMITY_T23		23
- #define MXT_TOUCH_PROXKEY_T52		52
-+#define MXT_TOUCH_PTC_KEYS_T97		97
- #define MXT_PROCI_GRIPFACE_T20		20
- #define MXT_PROCG_NOISE_T22		22
- #define MXT_PROCI_ONETOUCH_T24		24
-@@ -326,9 +327,13 @@ struct mxt_data {
- 	u16 T71_address;
- 	u8 T9_reportid_min;
- 	u8 T9_reportid_max;
-+	u8 T15_reportid_min;
-+	u8 T15_reportid_max;
- 	u16 T18_address;
- 	u8 T19_reportid;
- 	u16 T44_address;
-+	u8 T97_reportid_min;
-+	u8 T97_reportid_max;
- 	u8 T100_reportid_min;
- 	u8 T100_reportid_max;
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index cb33a23ab0c1..04ace4c7bd58 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1330,7 +1330,7 @@ static int stm32_gpiolib_register_bank(struct stm32_pinctrl *pctl, struct fwnode
+ 	if (fwnode_property_read_u32(fwnode, "st,bank-ioport", &bank_ioport_nr))
+ 		bank_ioport_nr = bank_nr;
  
-@@ -344,6 +349,9 @@ struct mxt_data {
- 	u32 *t19_keymap;
- 	unsigned int t19_num_keys;
+-	bank->gpio_chip.base = bank_nr * STM32_GPIO_PINS_PER_BANK;
++	bank->gpio_chip.base = -1;
  
-+	u32 *t15_keymap;
-+	unsigned int t15_num_keys;
-+
- 	enum mxt_suspend_mode suspend_mode;
- 
- 	u32 wakeup_method;
-@@ -375,6 +383,7 @@ static bool mxt_object_readable(unsigned int type)
- 	case MXT_TOUCH_KEYARRAY_T15:
- 	case MXT_TOUCH_PROXIMITY_T23:
- 	case MXT_TOUCH_PROXKEY_T52:
-+	case MXT_TOUCH_PTC_KEYS_T97:
- 	case MXT_TOUCH_MULTITOUCHSCREEN_T100:
- 	case MXT_PROCI_GRIPFACE_T20:
- 	case MXT_PROCG_NOISE_T22:
-@@ -891,6 +900,25 @@ static void mxt_proc_t9_message(struct mxt_data *data, u8 *message)
- 	data->update_input = true;
- }
- 
-+static void mxt_proc_t15_messages(struct mxt_data *data, u8 *message)
-+{
-+	struct input_dev *input_dev = data->input_dev;
-+	unsigned long keystates = get_unaligned_le32(&message[2]);
-+	int key;
-+
-+	for (key = 0; key < data->t15_num_keys; key++) {
-+		input_report_key(input_dev, data->t15_keymap[key],
-+			!!(keystates & BIT(key)));
-+	}
-+
-+	data->update_input = true;
-+}
-+
-+static void mxt_proc_t97_messages(struct mxt_data *data, u8 *message)
-+{
-+	mxt_proc_t15_messages(data, message);
-+}
-+
- static void mxt_proc_t100_message(struct mxt_data *data, u8 *message)
- {
- 	struct device *dev = &data->client->dev;
-@@ -1017,6 +1045,12 @@ static int mxt_proc_message(struct mxt_data *data, u8 *message)
- 	} else if (report_id >= data->T9_reportid_min &&
- 		   report_id <= data->T9_reportid_max) {
- 		mxt_proc_t9_message(data, message);
-+	} else if (report_id >= data->T15_reportid_min &&
-+		   report_id <= data->T15_reportid_max) {
-+		mxt_proc_t15_messages(data, message);
-+	} else if (report_id >= data->T97_reportid_min &&
-+		   report_id <= data->T97_reportid_max) {
-+		mxt_proc_t97_messages(data, message);
- 	} else if (report_id >= data->T100_reportid_min &&
- 		   report_id <= data->T100_reportid_max) {
- 		mxt_proc_t100_message(data, message);
-@@ -1689,9 +1723,13 @@ static void mxt_free_object_table(struct mxt_data *data)
- 	data->T71_address = 0;
- 	data->T9_reportid_min = 0;
- 	data->T9_reportid_max = 0;
-+	data->T15_reportid_min = 0;
-+	data->T15_reportid_max = 0;
- 	data->T18_address = 0;
- 	data->T19_reportid = 0;
- 	data->T44_address = 0;
-+	data->T97_reportid_min = 0;
-+	data->T97_reportid_max = 0;
- 	data->T100_reportid_min = 0;
- 	data->T100_reportid_max = 0;
- 	data->max_reportid = 0;
-@@ -1764,6 +1802,10 @@ static int mxt_parse_object_table(struct mxt_data *data,
- 						object->num_report_ids - 1;
- 			data->num_touchids = object->num_report_ids;
- 			break;
-+		case MXT_TOUCH_KEYARRAY_T15:
-+			data->T15_reportid_min = min_id;
-+			data->T15_reportid_max = max_id;
-+			break;
- 		case MXT_SPT_COMMSCONFIG_T18:
- 			data->T18_address = object->start_address;
- 			break;
-@@ -1773,6 +1815,10 @@ static int mxt_parse_object_table(struct mxt_data *data,
- 		case MXT_SPT_GPIOPWM_T19:
- 			data->T19_reportid = min_id;
- 			break;
-+		case MXT_TOUCH_PTC_KEYS_T97:
-+			data->T97_reportid_min = min_id;
-+			data->T97_reportid_max = max_id;
-+			break;
- 		case MXT_TOUCH_MULTITOUCHSCREEN_T100:
- 			data->multitouch = MXT_TOUCH_MULTITOUCHSCREEN_T100;
- 			data->T100_reportid_min = min_id;
-@@ -2050,6 +2096,7 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 	int error;
- 	unsigned int num_mt_slots;
- 	unsigned int mt_flags = 0;
-+	int i;
- 
- 	switch (data->multitouch) {
- 	case MXT_TOUCH_MULTI_T9:
-@@ -2095,6 +2142,10 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 	input_dev->open = mxt_input_open;
- 	input_dev->close = mxt_input_close;
- 
-+	input_dev->keycode = data->t15_keymap;
-+	input_dev->keycodemax = data->t15_num_keys;
-+	input_dev->keycodesize = sizeof(data->t15_keymap[0]);
-+
- 	input_set_capability(input_dev, EV_KEY, BTN_TOUCH);
- 
- 	/* For single touch */
-@@ -2162,6 +2213,12 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 				     0, 255, 0, 0);
- 	}
- 
-+	/* For T15 and T97 Key Array */
-+	if (data->T15_reportid_min || data->T97_reportid_min) {
-+		for (i = 0; i < data->t15_num_keys; i++)
-+			input_set_capability(input_dev, EV_KEY, data->t15_keymap[i]);
-+	}
-+
- 	input_set_drvdata(input_dev, data);
- 
- 	error = input_register_device(input_dev);
-@@ -3080,8 +3137,10 @@ static void mxt_input_close(struct input_dev *dev)
- static int mxt_parse_device_properties(struct mxt_data *data)
- {
- 	static const char keymap_property[] = "linux,gpio-keymap";
-+	static const char buttons_property[] = "linux,keycodes";
- 	struct device *dev = &data->client->dev;
- 	u32 *keymap;
-+	u32 *buttonmap;
- 	int n_keys;
- 	int error;
- 
-@@ -3111,6 +3170,32 @@ static int mxt_parse_device_properties(struct mxt_data *data)
- 		data->t19_num_keys = n_keys;
- 	}
- 
-+	if (device_property_present(dev, buttons_property)) {
-+		n_keys = device_property_count_u32(dev, buttons_property);
-+		if (n_keys <= 0) {
-+			error = n_keys < 0 ? n_keys : -EINVAL;
-+			dev_err(dev, "invalid/malformed '%s' property: %d\n",
-+				buttons_property, error);
-+			return error;
-+		}
-+
-+		buttonmap = devm_kmalloc_array(dev, n_keys, sizeof(*buttonmap),
-+					       GFP_KERNEL);
-+		if (!buttonmap)
-+			return -ENOMEM;
-+
-+		error = device_property_read_u32_array(dev, buttons_property,
-+						       buttonmap, n_keys);
-+		if (error) {
-+			dev_err(dev, "failed to parse '%s' property: %d\n",
-+				buttons_property, error);
-+			return error;
-+		}
-+
-+		data->t15_keymap = buttonmap;
-+		data->t15_num_keys = n_keys;
-+	}
-+
- 	return 0;
- }
- 
+ 	bank->gpio_chip.ngpio = npins;
+ 	bank->gpio_chip.fwnode = fwnode;
 -- 
-2.39.2
+2.32.0
 
