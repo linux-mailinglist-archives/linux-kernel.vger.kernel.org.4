@@ -2,116 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6666A3E7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 412B26A3E88
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjB0Jgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S229773AbjB0Jm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjB0Jgv (ORCPT
+        with ESMTP id S229598AbjB0Jmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:36:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9D3CA2A;
-        Mon, 27 Feb 2023 01:36:48 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31R4sGgM007031;
-        Mon, 27 Feb 2023 09:36:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=fFtKuRl7ltXe/gF9tHGWwksasGO5SrHc88zXuVbCr0M=;
- b=QG9RDgamUYYP+MGFS6MBi7K2COX9/ePqTIyTM4+FhV8ERz+An29WiltxbahRaGYanhoj
- Vh1VKBOzlyyeGQaIW/5OnqyqoIFHdWGPBdCfDpYjAqvK3hF/KFYKoN0n6q0o5kx0iuvc
- fX467DJtujjcjTTUKGxJzsP0KHhQWW4pFDoEiohg/tQ+DIaI16ZNkY6lQT7elECR/VzO
- y5pQdAYsH4ZGMTvi9vZFbty0Dv9StYEvmYgEPps2W6C+vd+gSk8jtZ75wT/X2NU1Cb4n
- QD9CQHdwyBMho4rpJ0971DFbEgpp0qWeZJSiOpD7ngIzZQWjruq5nN9ezvTuIEusphhK aQ== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nyajavhgx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 09:36:29 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31R9aOeS026273;
-        Mon, 27 Feb 2023 09:36:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nybdkafcc-1;
-        Mon, 27 Feb 2023 09:36:24 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31R9aO1R026268;
-        Mon, 27 Feb 2023 09:36:24 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.37])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 31R9aOMS026267;
-        Mon, 27 Feb 2023 09:36:24 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id 65E4147AF; Mon, 27 Feb 2023 15:06:23 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS)
-Subject: [PATCH V1] arm64:dts:qcom:sc7280: mark memory of PCIe as cache coherent
-Date:   Mon, 27 Feb 2023 15:06:15 +0530
-Message-Id: <1677490575-29092-1-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hv5wk8APxsiR4odzxFP3I-ezSliRXOvh
-X-Proofpoint-ORIG-GUID: hv5wk8APxsiR4odzxFP3I-ezSliRXOvh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-26_22,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 clxscore=1011 phishscore=0 mlxscore=0 mlxlogscore=653
- priorityscore=1501 impostorscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270074
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 04:42:46 -0500
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAFBD529
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:42:44 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VccFXUx_1677490960;
+Received: from 30.97.48.235(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VccFXUx_1677490960)
+          by smtp.aliyun-inc.com;
+          Mon, 27 Feb 2023 17:42:41 +0800
+Message-ID: <4c6ada29-234f-623d-c4c6-1a98a678323b@linux.alibaba.com>
+Date:   Mon, 27 Feb 2023 17:42:40 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] erofs: don't warn ztailpacking feature anymore
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        zhangwen@coolpad.com, Yue Hu <huyue2@coolpad.com>
+References: <20230227084457.3510-1-zbestahu@gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230227084457.3510-1-zbestahu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark the PCIe node as dma-coherent as the devices on PCIe bus are
-cache coherent.
 
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index bdcb749..8f4ab6b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2131,6 +2131,8 @@
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie1_clkreq_n>;
- 
-+			dma-coherent;
-+
- 			iommus = <&apps_smmu 0x1c80 0x1>;
- 
- 			iommu-map = <0x0 &apps_smmu 0x1c80 0x1>,
--- 
-2.7.4
+On 2023/2/27 16:44, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> The ztailpacking feature has been merged for a year, it has been mostly
+> stable now.
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
 
+Let's update erofs-utils as well?
+
+> ---
+>   fs/erofs/super.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 19b1ae79cec4..733c22bcc3eb 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -417,8 +417,6 @@ static int erofs_read_superblock(struct super_block *sb)
+>   	/* handle multiple devices */
+>   	ret = erofs_scan_devices(sb, dsb);
+>   
+> -	if (erofs_sb_has_ztailpacking(sbi))
+> -		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+>   	if (erofs_is_fscache_mode(sb))
+>   		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+>   	if (erofs_sb_has_fragments(sbi))
