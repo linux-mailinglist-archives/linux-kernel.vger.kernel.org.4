@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CCD6A3E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7156A3E9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjB0JsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S229834AbjB0Jvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjB0JsL (ORCPT
+        with ESMTP id S229954AbjB0Jvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:48:11 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F693C7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:48:09 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.2.41.146])
-        by gnuweeb.org (Postfix) with ESMTPSA id ECB51831E1;
-        Mon, 27 Feb 2023 09:48:06 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1677491289;
-        bh=maqva3KmIGSvrzGF0ZVmIotmVZK7GapinSgxP0d0cfY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EyPRj0HOSF3tLAMCyr08zncVIS/Bo0Ljkkwa/8r7c6M9/8gPdLXqXu5cHqvhvlRWr
-         Ys9LsEos2LKE/plt7C6IghGu5TnYkktiv4eoFd8uKLUbr2d6DB15gDKzkBOegPu0IE
-         W3DzmYowSzPJR6FXLC7ZpUh2s6j9nzdF6mIPS2hP7c7yPT/w1BYsMhSdGdzgjMbOID
-         ny8P49pxSbQHSwRDFjHZ/MrQpDU+cuilgPR+fV1i7IfEn2uc9FcLeb6GsjFuz9w5Sr
-         O+Dg7sEdUVMUSr6ErIomEIyrrNv922gQIokkt65sz/GjN5FjvdZDEro/y5R6piQTku
-         qcR4nGVdfybog==
-Date:   Mon, 27 Feb 2023 16:48:03 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Tejun Heo <tj@kernel.org>,
-        Filipe Manana <fdmanana@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/6] Introducing `wq_cpu_set` mount option for
- btrfs
-Message-ID: <Y/x8U/Zcx+HQcjiI@biznet-home.integral.gnuweeb.org>
-References: <20230226160259.18354-1-ammarfaizi2@gnuweeb.org>
- <20230227030438.3655-1-hdanton@sina.com>
+        Mon, 27 Feb 2023 04:51:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160201A97B;
+        Mon, 27 Feb 2023 01:51:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50A7CB80C9C;
+        Mon, 27 Feb 2023 09:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0EAC433D2;
+        Mon, 27 Feb 2023 09:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677491501;
+        bh=k4bHK7yki50HbIimXeshzPEvSEmB8dsoyrVImtSRV0g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RiQp3fHfoWK/3gmpuP/65ehrP0b19eaAupQNSqETjwDFEbbrBA/arddV50M5slupT
+         uRxRQhPvgCHRxJq87bQju1c5jS5fS5zEEGN10bwlpQ/WlqJG4BBUuzsB24nURlgNdc
+         aYeS1ryytqpLFb/G0aY6U9JfBtI5Qjtioa0jQUkvb3EXD1Vi/dD69UuXxjn0h8NtTk
+         xdQDr77J6RPtJ8sgKAa0JqK6IlEWPGSR2QLXPUYGrObusTcug0GxKCmd+tSt7x9s1a
+         EAxQ4/ZQrfjD6KH252f08hTcuniVIsKYXVebLU/O+gveD+6Qhw4S70BUiOOe4Ddh3X
+         t02VlFH9h4xSQ==
+Received: by mail-oi1-f175.google.com with SMTP id q15so4676024oiw.11;
+        Mon, 27 Feb 2023 01:51:40 -0800 (PST)
+X-Gm-Message-State: AO0yUKUENy4D0fvVdRuFfFx8A7pm2Cof5hsrgGLXDBoYFa5jLQjcciDs
+        LDrvSQBeeKzI/sEZW6EWM5vKf5RCBPwGofa/Fbs=
+X-Google-Smtp-Source: AK7set/TGd66AmNhZVsYfwjUXXGABhl4kd9zCcaF47EyfO66j/ih4UBNd9QTqd4VSsywtJwX8GfsEX5+VAlJIfewCdk=
+X-Received: by 2002:aca:100c:0:b0:384:21e7:977c with SMTP id
+ 12-20020aca100c000000b0038421e7977cmr1211753oiq.8.1677491500238; Mon, 27 Feb
+ 2023 01:51:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227030438.3655-1-hdanton@sina.com>
-X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215012034.403356-1-masahiroy@kernel.org> <251124e4-64e1-385d-ea7f-c0cc31851307@prevas.dk>
+In-Reply-To: <251124e4-64e1-385d-ea7f-c0cc31851307@prevas.dk>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 27 Feb 2023 18:51:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR82ZgvKof9VMXRM4A_h22ZNCyoaKoHW-ONJ+4vctCu_A@mail.gmail.com>
+Message-ID: <CAK7LNAR82ZgvKof9VMXRM4A_h22ZNCyoaKoHW-ONJ+4vctCu_A@mail.gmail.com>
+Subject: Re: [PATCH v6 01/12] kbuild: add a tool to list files ignored by git
+To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Hutchings <ben@decadent.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 11:04:38AM +0800, Hillf Danton wrote:
-> Are the sensitive user tasks likely also preempted by the kblockd_workqueue[1]
-> for instance?
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/block/blk-mq.c#n2258
+On Mon, Feb 27, 2023 at 5:25=E2=80=AFPM Rasmus Villemoes
+<rasmus.villemoes@prevas.dk> wrote:
+>
+> On 15/02/2023 02.20, Masahiro Yamada wrote:
+> > In short, the motivation of this commit is to build a source package
+> > without cleaning the source tree.
+> >
+> > The deb-pkg and (src)rpm-pkg targets first run 'make clean' before
+> > creating a source tarball. Otherwise build artifacts such as *.o,
+> > *.a, etc. would be included in the tarball. Yet, the tarball ends up
+> > containing several garbage files since 'make clean' does not clean
+> > everything.
+> >
+> > Cleaning the tree every time is annoying since it makes the incremental
+> > build impossible. It is desirable to create a source tarball without
+> > cleaning the tree.
+> >
+> > In fact, there are some ways to achieve this.
+>
+> > The easiest solution is 'git archive'.
+>
+> Eh, no, the easiest solution is to just don't build in-tree? Can you
+> explain why 'make O=3D/over/there' isn't sufficient for whatever it is yo=
+u
+> really want to do here?
+>
+> Rasmus
 
-I didn't see any kblockd_workqueue influence.
 
-From my observation, the issue is btrfs-specific, especially for write
-operations with high-level compression. It does not happen with ext4.
+Right.
 
-(Well, it doesn't compress the data with ext4, so no doubt it's lighter).
+If you have a strict rule "I never build the kernel in-tree",
+your source tree is kept clean.
+So, tar will never include generated files.
 
-Seeing from htop, several kthreads consume CPU time:
+But, how would you know if the source tree is really clean?
 
-   - kworker btrfs-dealloc
 
-   - kworker btrfs-endio-write
 
-   - kworker btrfs-worker-high
-
-   - kworker btrfs-compressed-write
-
-   - ... there are more, but all of them are btrfs workqueues.
-
-They perform heavy work when there is an intensive writing operation.
-However, for the read operation, there is no visible issue.
-
-Increasing vm.dirty_ratio and vm.background_dirty_ratio, plus using
-
-   -o commit=N (mount option)
-
-where N is a large number helps a lot. But it slows my entire system
-down when it starts syncing the dirty write to the disk. It freezes the
-UI for 2 to 3 seconds and causes audio lag.
-
-Isolating btrfs workqueues and UI tasks in a different set of CPUs, as
-proposed in this series, solves the issue.
-
--- 
-Ammar Faizi
-
+--
+Best Regards
+Masahiro Yamada
