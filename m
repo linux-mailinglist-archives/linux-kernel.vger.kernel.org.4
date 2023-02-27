@@ -2,130 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008376A3D86
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47F86A3D6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 09:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjB0IzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 03:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S231592AbjB0Iuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 03:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjB0Iyf (ORCPT
+        with ESMTP id S230292AbjB0IuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:54:35 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77117244BF;
-        Mon, 27 Feb 2023 00:47:00 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5F6835C0097;
-        Mon, 27 Feb 2023 03:37:31 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 27 Feb 2023 03:37:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677487051; x=1677573451; bh=g9r9vd6/Le
-        bwP6b/3KMuSXY3MGtskFDgCJPE8mZ9wWQ=; b=cYd/THi1GEsGQbZSXqBAUX+fVa
-        o5kNbsi0otx8q8jrkPuCMH67QiXIH936Suj0L3OMfYKHWH3ajSNXYcQbIbIhI2WP
-        diReo5S97blbQYXu2jZzfczx6GbWJgQxMbBqcIofN4Ues19x2sMl88nVG+IhlTTo
-        8fNz4jwFGPoL771mQUhaONN6UUVkg8EJmeKBVxO75/ha5fkpL/sic5QkQJtQisSB
-        epw3pRz6zv/0qS1QuwvC3bRTKWr+vJYj25soKew7Ke4EWJRlxnvHZPNO4jZSIklX
-        LuXd7AhVkw9BW8+eHztR2VJ9qg/V0rdZ3B81Ojb5VCxkgl6QkjSXdHoQd83Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677487051; x=1677573451; bh=g9r9vd6/LebwP6b/3KMuSXY3MGts
-        kFDgCJPE8mZ9wWQ=; b=YEnqEQkyyeo8rcRi8TQsF044IIoNeJocJiy4T3vi/Nlr
-        sf9pOPxmN4FFBGzc5vr66r6Lis4a5Rv4yz47kPguWBpgPzuoGXJDjUr9+tcAERdd
-        cEBdmG3oWS+5Ui3nD1ykNu9Un1+P1/gDTUAnpE98G4nai6fDebbveRKgUpjWRnRh
-        ZQgCVQUa2Xfbpny0XoKmA8SCstSbJIkCu4nlWibyUUWMolMBViNBxCZ8WZYpNCjA
-        FxoYKZa+EHF8oo7Lmlo+twcMz/INp57ugaSH2/FBr2kDYeUU6diK9r+zTCR7bIXw
-        dOBCofYupUpICvm6G0RLCuOjYg+2e0xl2IYzsnWjqA==
-X-ME-Sender: <xms:ymv8YygRUKmJmReynlRKFbZkfZFvxFuaq3A3jysS7bTjHLCXSz1lww>
-    <xme:ymv8YzBaV8885jc6fubbGWv5GoWydSbPXfHQA9B2gsdnxU0K_zlqCYFihWUxVfa3A
-    pOcFNEpkOl_LE4RJbI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekledguddukecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ymv8Y6He2H7lZCXXRAS9FgTenJU2GpdLuhs6LdLYbe7eex9i_CHuqg>
-    <xmx:ymv8Y7TcqvkBMVWseaGn0MyJKOkCwYZ6eaaKkzLkCb-h427OnLO-0Q>
-    <xmx:ymv8Y_x0PZqJylU36Vj2YcvYt6fJtNRZRjpWwDtwXMOKk3mjgPTBpg>
-    <xmx:y2v8Y2zQCyRtpeICrVwDTnJEMiRYLIM527AXjAzy-gQtP0M5llv5nA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D2D36B60086; Mon, 27 Feb 2023 03:37:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
-Mime-Version: 1.0
-Message-Id: <d888d651-0ea6-4d0e-9e34-c27acbc7388a@app.fastmail.com>
-In-Reply-To: <04374e51-c7e5-b1d9-d617-d1abf47ec44b@redhat.com>
-References: <20230219150321.2683358-1-trix@redhat.com>
- <Y/JnZwUEXycgp8QJ@corigine.com> <Y/LKpsjteUAXVIb0@lunn.ch>
- <Y/MXNWKrrI3aRju+@corigine.com> <Y/QskwGx+A1jACB2@lunn.ch>
- <Y/TvS+D76/N0WyWc@corigine.com>
- <04374e51-c7e5-b1d9-d617-d1abf47ec44b@redhat.com>
-Date:   Mon, 27 Feb 2023 09:37:07 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tom Rix" <trix@redhat.com>,
-        "Simon Horman" <simon.horman@corigine.com>,
-        "Andrew Lunn" <andrew@lunn.ch>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, steen.hegelund@microchip.com,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: lan743x: LAN743X selects FIXED_PHY to resolve a link error
+        Mon, 27 Feb 2023 03:50:15 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2062b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB79A26D;
+        Mon, 27 Feb 2023 00:42:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kLJ/c25XFm4noYvXpSzXgVejeVBx3luFl/sUtDAvloe2cR9sFWUoD/7QrKJn/8TN7ih/KODIyMeR5gfvvwOcbGqnFlDJYqeHbNOG34fnQIPC5CzRq6DfhRNsodC3nUQq5xlG+9LApahwZonVONLUNB8TJtVHH7kj+tUltoViozxwiaLCVg2blNazG0NRk/NkZH+HtExcHZrOhCuoiy9Ef+6rDfnvPVdJxqst41cWPTQYY0j3M5+CstExbbhqsuUA5O8huxga32jbHPh9P43+oR5EZCm50gEkHsWYba1vlDW7G2uO3aJ+1MJFIPcaDdgm3kf/CvOkQ9XIisb6t71BOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gd7MYIu4mHbFu38bGyi94/NKEegCYzVzkeE5RgtBi8o=;
+ b=VGlk9MC8uvMgfdu9ZWHcKWaFB6WKfKH509wL6WoU6uRqd/7YRVIJ3WVAuWe94Ri0l1Yyu/DTJ9E5KFcaNuN4XxSC/S2ZYRVgt9PYixWQ8kD5nhV6qw95kMvqa1uCZGxEtG9n/3mTtL2LuIc53Ajv07bZ0Js4cXSg8xEEb2YeaxY6LZOwn51QiOCCZTU2x3yRVDwkMhEZe52Y4eqTNhmeW/RjCnzRQsOlR/Rz2kB2PF7CGM3RngRlP8Zp8vKaVMI4F0WsCIhbFe+DXUNW7U0Y5N90/xoTEJd41WMTNhX2hg8DUik4jwNxjDpRYVrWniEy1Pz0wHSi9feP+wEkMvhUXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gd7MYIu4mHbFu38bGyi94/NKEegCYzVzkeE5RgtBi8o=;
+ b=Fxn8ixa2a7UNywUGiLCqN5A1NXRx46rCFMBgqS6NQ4hRW4ktsNhjYggi4ibn9IbWS50Klla2pPgEZonKdtgQlDeFPYdewisaNISpqWawfaaCQd1+8GdRBj0Z0zzQoSPFUyNIDV5wW3fdKOghKGmrIOTdFGQnJnehfZO5ZVeD35U=
+Received: from MW4PR02CA0018.namprd02.prod.outlook.com (2603:10b6:303:16d::17)
+ by DM4PR12MB7576.namprd12.prod.outlook.com (2603:10b6:8:10c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
+ 2023 08:41:21 +0000
+Received: from CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:16d:cafe::fa) by MW4PR02CA0018.outlook.office365.com
+ (2603:10b6:303:16d::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27 via Frontend
+ Transport; Mon, 27 Feb 2023 08:41:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT036.mail.protection.outlook.com (10.13.174.124) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6156.16 via Frontend Transport; Mon, 27 Feb 2023 08:41:21 +0000
+Received: from BLR-L-SASHUKLA.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
+ 2023 02:41:14 -0600
+From:   Santosh Shukla <santosh.shukla@amd.com>
+To:     <kvm@vger.kernel.org>, <seanjc@google.com>
+CC:     <pbonzini@redhat.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <linux-kernel@vger.kernel.org>, <mail@maciej.szmigiero.name>,
+        <mlevitsk@redhat.com>, <thomas.lendacky@amd.com>,
+        <vkuznets@redhat.com>
+Subject: [PATCHv4 02/11] KVM: nSVM: Disable intercept of VINTR if saved RFLAG.IF is 0
+Date:   Mon, 27 Feb 2023 14:10:07 +0530
+Message-ID: <20230227084016.3368-3-santosh.shukla@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230227084016.3368-1-santosh.shukla@amd.com>
+References: <20230227084016.3368-1-santosh.shukla@amd.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT036:EE_|DM4PR12MB7576:EE_
+X-MS-Office365-Filtering-Correlation-Id: c564e090-dc91-4a6d-6cf6-08db189e6733
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rECC4YCr4ELFVE91c3kEzKwo2IGQWQUehNvAlEeUNzdCMDlM7V/pbLQfFCNnP5W7+Bf7RLQUuuZr0E5IG5M/v9l2PphS5vJN+rmZYNQDwAZH0aACIo8z2XA9wow1DfG5iiUYPlqdH1Vff7rTuMH5uHXhUFHU4O/Kcmu26sgUYDSaAWHJYTBvVCCK21tTxIIoQREet9ZB38XGFLgkX7rPj6GkLeS1JnkXfmnq9bTb2tz7+gFzqhKlfZqnojJV4q7NUIzIrafcHnI1GBSFMMCTMwSB6GZEVBEOpgw3EA6IqaALg+1LMOqeEEvPdaqqyaPQdYlFgCTUOg1Ey/ITt7iRR9FuAnBC5LfTb5krQlbUtA2MkVwCAEBBhxcE0tJWHFUh9BsWQHl0Q/sqIE1chkP/BB0u4zkeGQ/LxytFXrS8qEqo8bLTSkXleg34Oa4Lyn1EyJL2GtdbGfoG0wYafxfcqK0JaGIW5OKmuC0MBI3R8P0T3pJvV+GfO7klLLdHVI//mPtcwM1vdz1PB6cRp4s+cVcggwPa5nSzWST1i+/v5PxoRkx3y0t0Jdt8eopNg+zESIV8GUSbw9orzw6Aa3ILvqxJ8YRByBywG/yjCyXc1aUFqs6nnt0JZCgpts98lCyRdGSG9qcb7qZ5IrM17Vf1pPeMrlEqT098/4396Z8L2LyIceEQTDL2KAFQn8qXsZiDIk4LediW5TLV6D0pygTsQTYxXifE/4JvgGiYyhinqYo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199018)(46966006)(40470700004)(36840700001)(336012)(47076005)(426003)(110136005)(54906003)(316002)(40460700003)(36756003)(40480700001)(86362001)(356005)(81166007)(36860700001)(82740400003)(1076003)(82310400005)(6666004)(83380400001)(2616005)(186003)(26005)(16526019)(5660300002)(2906002)(8936002)(966005)(7696005)(478600001)(4326008)(41300700001)(44832011)(8676002)(70586007)(70206006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 08:41:21.6817
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c564e090-dc91-4a6d-6cf6-08db189e6733
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7576
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023, at 16:15, Tom Rix wrote:
-> On 2/21/23 8:20 AM, Simon Horman wrote:
->> On Tue, Feb 21, 2023 at 03:29:39AM +0100, Andrew Lunn wrote:
->>> On Mon, Feb 20, 2023 at 07:46:13AM +0100, Simon Horman wrote:
->>>>
->>>> LAN743X=y and FIXED_PHY=m does indeed produce the problem that Tom
->>>> describes. And his patch does appear to resolve the problem.
->>> O.K. So the commit message needs updating to describe the actual
->>> problem.
->> Yes, that would be a good improvement.
->>
->> Perhaps a fixes tag too?
->>
->>>> Unfortunately your proposed solution seems to run foul of a complex
->>>> dependency situation.
->>> I was never any good at Kconfig. Arnd is the expert at solving
->>> problems like this.
->>>
->>> You want either everything built in, or FIXED_PHY built in and LAN743X
->>> modular, or both modular.
->> I _think_ the patch, which uses select FIXED_PHY for LAN743X,
->> achieves that.
->>
->> I CCed Arnd in case he has any input. Though I think I read
->> in an recent email from him that he is out most of this week.
+From: Santosh Shukla <Santosh.Shukla@amd.com>
 
-FWIW, the original patch looks good to me,
+Disable intercept of virtual interrupts (used to
+detect interrupt windows) if the saved RFLAGS.IF is '0', as
+the effective RFLAGS.IF for L1 interrupts will never be set
+while L2 is running (L2's RFLAGS.IF doesn't affect L1 IRQs).
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Santosh Shukla <Santosh.Shukla@amd.com>
+---
+v3:
+https://lore.kernel.org/all/Y9hybI65So5X2LFg@google.com/
+suggested by Sean.
 
-I'm not sure if the #else path in include/linux/phy_fixed.h
-is actually helpful, as it does not avoid a link failure but
-just makes it less common. Maybe we should just drop that
-from the header and require all users of fixed_phy to
-'select' that symbol even when they are built-in?
+ arch/x86/kvm/svm/nested.c | 15 ++++++++++-----
+ arch/x86/kvm/svm/svm.c    | 10 ++++++++++
+ 2 files changed, 20 insertions(+), 5 deletions(-)
 
-       Arnd
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index fbade158d368..107258ed46ee 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -139,13 +139,18 @@ void recalc_intercepts(struct vcpu_svm *svm)
+ 
+ 	if (g->int_ctl & V_INTR_MASKING_MASK) {
+ 		/*
+-		 * Once running L2 with HF_VINTR_MASK, EFLAGS.IF and CR8
+-		 * does not affect any interrupt we may want to inject;
+-		 * therefore, writes to CR8 are irrelevant to L0, as are
+-		 * interrupt window vmexits.
++		 * If L2 is active and V_INTR_MASKING is enabled in vmcb12,
++		 * disable intercept of CR8 writes as L2's CR8 does not affect
++		 * any interrupt KVM may want to inject.
++		 *
++		 * Similarly, disable intercept of virtual interrupts (used to
++		 * detect interrupt windows) if the saved RFLAGS.IF is '0', as
++		 * the effective RFLAGS.IF for L1 interrupts will never be set
++		 * while L2 is running (L2's RFLAGS.IF doesn't affect L1 IRQs).
+ 		 */
+ 		vmcb_clr_intercept(c, INTERCEPT_CR8_WRITE);
+-		vmcb_clr_intercept(c, INTERCEPT_VINTR);
++		if (!(svm->vmcb01.ptr->save.rflags & X86_EFLAGS_IF))
++			vmcb_clr_intercept(c, INTERCEPT_VINTR);
+ 	}
+ 
+ 	/*
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index b43775490074..cf6ae093ed19 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1583,6 +1583,16 @@ static void svm_set_vintr(struct vcpu_svm *svm)
+ 
+ 	svm_set_intercept(svm, INTERCEPT_VINTR);
+ 
++	/*
++	 * Recalculating intercepts may have clear the VINTR intercept.  If
++	 * V_INTR_MASKING is enabled in vmcb12, then the effective RFLAGS.IF
++	 * for L1 physical interrupts is L1's RFLAGS.IF at the time of VMRUN.
++	 * Requesting an interrupt window if save.RFLAGS.IF=0 is pointless as
++	 * interrupts will never be unblocked while L2 is running.
++	 */
++	if (!svm_is_intercept(svm, INTERCEPT_VINTR))
++		return;
++
+ 	/*
+ 	 * This is just a dummy VINTR to actually cause a vmexit to happen.
+ 	 * Actual injection of virtual interrupts happens through EVENTINJ.
+-- 
+2.25.1
+
