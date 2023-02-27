@@ -2,129 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404146A4282
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74F96A4284
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjB0NVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S230031AbjB0NVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjB0NVl (ORCPT
+        with ESMTP id S230032AbjB0NVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:21:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFCB1E9E3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:20:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677504053;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIUaC7K1TYqWkgQiMBQCJNQiY2ZClHrxPQ2oiydBZJ4=;
-        b=K20HJxEXXwARkXCIueLo/peUw09ruA4lZC5U1nyxJnBOoVzjKNTtoNFnd4UW7yOj1xwh5L
-        UkvXpUiow5mdnHwUUjyCsadAlv6S20nCQR9QxuxexBH1sc1vzlivu/sN1Leu5E9bxPgAU9
-        QL0y10e7++5wvOTj/im0wQ18v6kLPn4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-oxBDmthhPsi5Sf1kEf0HUg-1; Mon, 27 Feb 2023 08:20:50 -0500
-X-MC-Unique: oxBDmthhPsi5Sf1kEf0HUg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 27 Feb 2023 08:21:48 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE3120553;
+        Mon, 27 Feb 2023 05:21:45 -0800 (PST)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D568101B42B;
-        Mon, 27 Feb 2023 13:20:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9F2F7404BEC5;
-        Mon, 27 Feb 2023 13:20:46 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y/kh8P4oSjunIU7T@casper.infradead.org>
-References: <Y/kh8P4oSjunIU7T@casper.infradead.org> <Y/jhwuTCaOgOTLp2@casper.infradead.org> <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org> <2213409.1677249075@warthog.procyon.org.uk> <2385089.1677258941@warthog.procyon.org.uk> <Y/kFnhUM5hjWM2Ae@casper.infradead.org> <2390711.1677269637@warthog.procyon.org.uk> <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <stfrench@microsoft.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id DFC386244DF88;
+        Mon, 27 Feb 2023 14:21:43 +0100 (CET)
+Message-ID: <b41fb307-9fa0-6939-5b25-81decadf7977@molgen.mpg.de>
+Date:   Mon, 27 Feb 2023 14:21:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2675058.1677504045.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 27 Feb 2023 13:20:46 +0000
-Message-ID: <2675059.1677504046@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Several Dell laptops: thermal thermal_zoneX: failed to read out
+ thermal zone (-61)
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <466c8661-4d5b-ba05-328d-6772804169d3@molgen.mpg.de>
+In-Reply-To: <466c8661-4d5b-ba05-328d-6772804169d3@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
+Dear Linux folks,
 
-> On Fri, Feb 24, 2023 at 12:16:49PM -0800, Linus Torvalds wrote:
-> > On Fri, Feb 24, 2023 at 12:14 PM David Howells <dhowells@redhat.com> w=
-rote:
-> > >
-> > > Then why do we have to wait for PG_writeback to complete?
-> > =
 
-> > At least for PG_writeback, it's about "the _previous_ dirty write is
-> > still under way, but - since PG_dirty is set again - the page has been
-> > dirtied since".
-> > =
+Am 23.08.22 um 16:00 schrieb Paul Menzel:
 
-> > So we have to start _another_ writeback, because while the current
-> > writeback *might* have written the updated data, that is not at all
-> > certain or clear.
-> =
+> On the Dell XPS 13 9370 with Debian sid/unstable, Linux warns about a 
+> thermal related issue:
+> 
+>      [    0.000000] Linux version 5.18.0-4-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU 
+> ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
+>      […]
+>      [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
+>      […]
+>      [   15.722394] thermal thermal_zone10: failed to read out thermal zone (-61)
+> 
+> Can that warning be addressed?
 
-> also, we only have a writeback bit, not a writeback count.  And when
-> the current writeback completes, it'll clear that bit.  We're also
-> being kind to our backing store and not writing to the same block twice
-> at the same time.
+For the record, this warning is also logged by Linux 6.1.12 on a Dell 
+Precision 3540:
 
-It's not so much being kind to the backing store, I think, as avoiding the
-possibility that the writes happen out of order.
+     [    0.000000] Linux version 6.1.0-5-amd64 
+(debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14) 12.2.0, GNU 
+ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 
+6.1.12-1 (2023-02-15)
+     […]
+     [    0.000000] DMI: Dell Inc. Precision 3540/0M14W7, BIOS 1.23.0 
+12/19/2022
+     […]
+     [   20.958894] thermal thermal_zone8: failed to read out thermal 
+zone (-61)
 
-> > I'm not sure what the fscache rules are.
-> =
 
-> My understanding is that the fscache bit is set under several
-> circumstances, but if the folio is dirty _and_ the fscache bit
-> is set, it means the folio is currently being written to the cache
-> device.  I don't see a conflict there; we can write to the backing
-> store and the cache device at the same time.
+Kind regards,
 
-The dirty bit is nothing to do with it.  If the fscache bit is set, then t=
-he
-page is currently being written to the cache - and we need to wait before
-starting another write.
+Paul
 
-Sometimes we start a write to the cache from a clean page (e.g. we just re=
-ad
-it from the server) and sometimes we start a write to the cache from
-writepages (e.g. the data is dirty and we're writing it to the server as
-well).
 
-Things will become more 'interesting' should we ever get around to
-implementing disconnected operation.  Then we might end up staging dirty d=
-ata
-through the cache.
+> PS: There are twelve thermal zones:
+> 
+> ```
+> $ ls -l /sys/devices/virtual/thermal/
+> total 0
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device0
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device1
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device2
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device3
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device4
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device5
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device6
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device7
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device8
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device9
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 thermal_zone0
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone1
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 thermal_zone10
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone11
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone2
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone3
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone4
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone5
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone6
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone7
+> drwxr-xr-x 4 root root 0 Aug 23 14:24 thermal_zone8
+> drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone9
+> $ ls -l /sys/devices/virtual/thermal/thermal_zone10/
+> total 0
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 available_policies
+> drwxr-xr-x 3 root root    0 Aug 23 14:24 hwmon6
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 integral_cutoff
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 k_d
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 k_i
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 k_po
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 k_pu
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 mode
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 offset
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 policy
+> drwxr-xr-x 2 root root    0 Aug 23 15:33 power
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 slope
+> lrwxrwxrwx 1 root root    0 Aug 23 14:24 subsystem -> ../../../../class/thermal
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 sustainable_power
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 temp
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_0_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_0_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_1_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_1_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_2_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_2_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_3_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_3_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_4_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_4_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_5_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_5_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_6_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_6_type
+> -rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_7_temp
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_7_type
+> -r--r--r-- 1 root root 4096 Aug 23 16:00 type
+> -rw-r--r-- 1 root root 4096 Aug 23 14:24 uevent
+> ```
 
-David
+For the Dell Precision 3540:
 
+```
+$ ls -l /sys/devices/virtual/thermal/
+total 0
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device0
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device1
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device2
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device3
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device4
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device5
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device6
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device7
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device8
+drwxr-xr-x 4 root root 0 Feb 27 11:09 cooling_device9
+drwxr-xr-x 4 root root 0 Feb 27 11:09 thermal_zone0
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone1
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone2
+drwxr-xr-x 4 root root 0 Feb 27 11:09 thermal_zone3
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone4
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone5
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone6
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone7
+drwxr-xr-x 4 root root 0 Feb 27 11:09 thermal_zone8
+drwxr-xr-x 3 root root 0 Feb 27 11:09 thermal_zone9
+$ ls -l /sys/devices/virtual/thermal/thermal_zone8
+total 0
+-r--r--r-- 1 root root 4096 Feb 27 14:21 available_policies
+drwxr-xr-x 3 root root    0 Feb 27 11:09 hwmon6
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 integral_cutoff
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 k_d
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 k_i
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 k_po
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 k_pu
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 mode
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 offset
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 policy
+drwxr-xr-x 2 root root    0 Feb 27 14:21 power
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 slope
+lrwxrwxrwx 1 root root    0 Feb 27 11:09 subsystem -> 
+../../../../class/thermal
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 sustainable_power
+-r--r--r-- 1 root root 4096 Feb 27 14:21 temp
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_0_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_0_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_1_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_1_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_2_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_2_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_3_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_3_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_4_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_4_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_5_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_5_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_6_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_6_type
+-rw-r--r-- 1 root root 4096 Feb 27 14:21 trip_point_7_temp
+-r--r--r-- 1 root root 4096 Feb 27 14:21 trip_point_7_type
+-r--r--r-- 1 root root 4096 Feb 27 14:21 type
+-rw-r--r-- 1 root root 4096 Feb 27 11:09 uevent
+```
