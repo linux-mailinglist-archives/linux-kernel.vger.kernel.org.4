@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8EE6A4D77
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F886A4D7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjB0Vm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S230094AbjB0Voh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjB0Vmx (ORCPT
+        with ESMTP id S229548AbjB0Voe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:42:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9892422F;
-        Mon, 27 Feb 2023 13:42:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83AAFB80D9A;
-        Mon, 27 Feb 2023 21:42:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23671C433D2;
-        Mon, 27 Feb 2023 21:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677534168;
-        bh=XdvhKAZNwBj8e9elHvQSuhkRlbQ2LLpDgNtffZnQFWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Agz4zbDyBLaLkryl9xedMsq1U3IRpXLyoILaeYYWAwIoQDER81nwqI403s+GWq7z2
-         U6Zv7prEseOrZGAjuxfm5O8Xx3vfXQuLhttk9gM5oT4Xx8iPkfYG7SATY2decIC+q2
-         WxHQfz3kRsb0EKVRy6iOBevQJSH63xGwT19cd+AhlB98vIMzRhSN7rbmVohF8F4hXn
-         kgCyQ3NJ5Y+Pcc0q+Mg8ZWGJ9q66qf3IUicvtpkIita7U8keSKCbYtLE5B/XTfpyvd
-         PH4Na2mME1GWC47IQ8q11y6yry67GlQy4qtYHc4kDIzN8Zh1V+rVLSEvkLy1Y2t2DY
-         UhZ06LevR9mZA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5CEC84049F; Mon, 27 Feb 2023 18:42:46 -0300 (-03)
-Date:   Mon, 27 Feb 2023 18:42:46 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Edward Baker <edward.baker@intel.com>
-Subject: Re: [PATCH v1 0/3] Update Alderlake and IcelakeX events
-Message-ID: <Y/0j1qdJdma/TC1B@kernel.org>
-References: <20230223055306.296179-1-irogers@google.com>
+        Mon, 27 Feb 2023 16:44:34 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66A44C36
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:44:33 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-536bf92b55cso214719117b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 13:44:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7No/fb1hUqIlhOqsZxkPFtEz/yzx2+/L+vbOcQnjALk=;
+        b=zLa/3OsQm1HKMbIaXKi9ROoXPdZs7bgb2MnADumYHiQolo9XMnVtNZYAr3ty12zmzh
+         nfZWcsrK/5FxJbSwe+99jxxN2XewjfAsFWPdXLUjOMF3De/YVmqEnCBdzv2kIn1uDNfr
+         /3lsSRGLQeJl5Jw0t7JnvuvqXp+kjKnLs3PYm+SdvZxJotPDs9c3vgbV1VaeBgSjnFom
+         whwJXUd/Lu34PYQJ5nuD+eAweUg7+CD/h2pwLFNzN+cdJP8wJ8WeL/Wmo6noGJNEkld5
+         m5Wj9v9xiW9F/euKA6n7ozamUzQ+Lri6oHKUjUmzu+feffJNsdxBHf57pH+NLPxxgA5j
+         6yyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7No/fb1hUqIlhOqsZxkPFtEz/yzx2+/L+vbOcQnjALk=;
+        b=bg7sUo2WIlB3+psaL/8gt0eXQohgoQ5lFIZunPzGv/yMsF1PD3L6UaJLslmsnDLIHL
+         xYOpyR2BzvA1ESho8IyfBK367TGhbBYAhPvoQRLGjOSnlAO0X82jI8T61Q71yLeTQc4U
+         ehXfN3qihGlPXuIclXiyw3rOKyXP5505IsMLXa6JqAw3J7rYbMcjMf+pGY6n/YTfr+sh
+         sNprK0pWDVfWgbBFy5Ic6ID5WtxqhFdVl2ltub9Mznhk7//U4Xvjk/xCYPqTgrBvWK1J
+         5tkHsMEVsvWhcZpHm99WQ52mhwrNv20foSOVeGk4PqQHj1rCCGcSG+UwI5ykEMoB4Iwc
+         WRzQ==
+X-Gm-Message-State: AO0yUKXmuLqeF4ve3A7OaB2WhlD/JiFbQKxy0UO9aCRpIm91LVu0+0Z7
+        R/0+/zEyDHwrG88YQfrJVfGeb4SIIFsNZ5s3p2H4z25TPMmcWvZH
+X-Google-Smtp-Source: AK7set9eFDf0u1cBMbwGxzDIQC4P3inkWglv5zgbTE9OZ8lTga0W94bHFi4pm4X/gFztHclTn/5sbSBUmeYrGjqyLeY=
+X-Received: by 2002:a81:b664:0:b0:52e:cea7:f6e3 with SMTP id
+ h36-20020a81b664000000b0052ecea7f6e3mr110408ywk.10.1677534272923; Mon, 27 Feb
+ 2023 13:44:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223055306.296179-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230215134242.37618-1-andriy.shevchenko@linux.intel.com>
+ <20230215134242.37618-6-andriy.shevchenko@linux.intel.com>
+ <be808124-f350-125c-9c74-5a3f87db32af@microchip.com> <Y+9sKN2QcBV2VYKC@smile.fi.intel.com>
+In-Reply-To: <Y+9sKN2QcBV2VYKC@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 27 Feb 2023 22:44:21 +0100
+Message-ID: <CACRpkdbbJUc+ciknee8puu4-gEPU+PJp3GvpJcKGiW+O0JPaWA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] pinctrl: at91: Utilise temporary variable for
+ struct device
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Claudiu.Beznea@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,35 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Feb 22, 2023 at 09:53:03PM -0800, Ian Rogers escreveu:
-> Update Alderlake and IcelakeX events to v1.19.
-> 
-> Developed on the perf-tools-next branch of:
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+On Fri, Feb 17, 2023 at 12:59 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Fri, Feb 17, 2023 at 11:54:02AM +0000, Claudiu.Beznea@microchip.com wrote:
+> > On 15.02.2023 15:42, Andy Shevchenko wrote:
+> > > @@ -1758,7 +1750,7 @@ static int at91_gpio_of_irq_setup(struct platform_device *pdev,
+> > >         if (!gpiochip_prev) {
+> > >                 girq->parent_handler = gpio_irq_handler;
+> > >                 girq->num_parents = 1;
+> > > -               girq->parents = devm_kcalloc(&pdev->dev, 1,
+> > > +               girq->parents = devm_kcalloc(dev, girq->num_parents,
+> >
+> > There is still the change of the 2nd argument of devm_kcalloc() from 1 ->
+> > girq->num_parents (no functional change, though) which doesn't match the
+> > purpose of the patch and is not specified anywhere. Other than this:
+> >
+> > Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> >
+> > >                                              sizeof(*girq->parents),
+> > >                                              GFP_KERNEL);
+>
+> Thanks for review. I have no time to fix this. So if Linus is okay to take
+> the first 4 patches, I'm fine. You or somebody else can submit an updated
+> 5th patch later on.
 
-Thanks, applied.
+I applied all 5 patches. The num_parents is set to 1 on the line right
+above and it's the right thing to do, and has a reviewed tag so I don't
+see the problem with this patch, let's not overinvest in process.
 
-- Arnaldo
+Thanks for the very nice cleanups!
 
- 
-> Ian Rogers (3):
->   perf vendor events intel: Update alderlake to v1.19
->   perf vendor events intel: Update alderlaken to v1.19
->   perf vendor events intel: Update icelakex to v1.19
-> 
->  .../pmu-events/arch/x86/alderlake/memory.json |  8 +++++
->  .../arch/x86/alderlake/pipeline.json          | 10 ++++++
->  .../arch/x86/alderlaken/memory.json           |  7 +++++
->  .../pmu-events/arch/x86/icelakex/cache.json   |  8 +++++
->  .../arch/x86/icelakex/floating-point.json     | 31 +++++++++++++++++++
->  .../arch/x86/icelakex/pipeline.json           | 10 ++++++
->  tools/perf/pmu-events/arch/x86/mapfile.csv    |  6 ++--
->  7 files changed, 77 insertions(+), 3 deletions(-)
-> 
-> -- 
-> 2.39.2.637.g21b0678d19-goog
-> 
+I applied it locally so it won't be in linux-next until after the merge
+window closes.
 
--- 
-
-- Arnaldo
+Yours,
+Linus Walleij
