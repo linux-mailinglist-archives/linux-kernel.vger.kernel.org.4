@@ -2,129 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D31B6A4FB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBCF6A4FB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 00:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjB0Xgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 18:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S229803AbjB0Xi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 18:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjB0Xgv (ORCPT
+        with ESMTP id S229492AbjB0Xi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:36:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED3924105;
-        Mon, 27 Feb 2023 15:36:50 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RNKjsj030560;
-        Mon, 27 Feb 2023 23:36:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=qHaosaJntF0SKHOjT5yMQrfguGmVKutyo8YLEgKMr4I=;
- b=JtAPqxa74xBTUV61RONrjz+ymE8r6waGyNpJ2V0DsLleYd9L/NBZjP+qm/xVWJN2u0DA
- G++OceA62EDmJYdcnJL+Qj00ik9dr0ZaSPiLCBIxTfCKH8ogwA50CG8dA6xgaZB39yV8
- JQFQzid/jUOo/CuSvXEmiSupyt8qh4FrXaZt9IT3zrPA+k7+MloiOq6KJbIAsvHOGtxN
- iMtHWboaD2GC620idyASM6cAunGECQ8D83pUcKi3W9KemV3Iwbjz9Fa9NCMnT77t9kAT
- m37l1Sz9fWX8K8Svoe7+j4mGbajWeYisSGp9FVCGmK+rVpl3xNNENH3ZNSoMrWLLzA00 Nw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nyajaxea6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 23:36:44 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RNah8R015714
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 23:36:43 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 27 Feb 2023 15:36:43 -0800
-Date:   Mon, 27 Feb 2023 15:36:41 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <robdclark@gmail.com>, <seanpaul@chromium.org>,
-        <swboyd@chromium.org>, <quic_kalyant@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <dianders@chromium.org>,
-        <quic_khsieh@quicinc.com>, <sean@poorly.run>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
-        <quic_vproddut@quicinc.com>
-Subject: Re: [RFC PATCH 2/2] drm/msm/dp: enable pm_runtime support for dp
- driver
-Message-ID: <20230227233641.GC4062527@hu-bjorande-lv.qualcomm.com>
-References: <20230223135635.30659-1-quic_sbillaka@quicinc.com>
- <20230223135635.30659-3-quic_sbillaka@quicinc.com>
+        Mon, 27 Feb 2023 18:38:27 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699C5A24A;
+        Mon, 27 Feb 2023 15:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677541106; x=1709077106;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ixxBTf5Ocgi76s8GFyE+uxGzNzt2DbcOET9UuIiMt50=;
+  b=CUybXDbFszRu9qrrCDkUZfj3eHtzKKOly9P0bpcqv68YIDMblYl3ib5l
+   5HFWX/qZptP89kvvDekkvMkgAKFB03kJmK4EjBwrZ/iULef6B247xZt8k
+   UI9DKv7S9Iq/VzOOwI6NJ85PA5ZqEPWdOEkF3VugAayZ5UO75w2T/o/XT
+   DIDKzLNjdQ+tZSyBLNsOc4oeOKI/2e8BoL9zt/u8hc7qyRLH0XDTxA5zN
+   q+uEdY7kXB+3PZ4Y5fLGObkRQL6fenQ35VeQiE07g4Irm86ceYKoGJsZ1
+   ek3aYRRwfL0NqSRWdeqhgrZ/oelziaM5WpxNIihXV4i1Bcdtcye3iEA76
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313672717"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="313672717"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 15:38:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="1002997697"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="1002997697"
+Received: from jaidenno-mobl.amr.corp.intel.com (HELO [10.212.85.4]) ([10.212.85.4])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 15:38:10 -0800
+Message-ID: <5d78bbc6-340e-dea8-40c6-d065c7e7a878@linux.intel.com>
+Date:   Mon, 27 Feb 2023 18:38:09 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230223135635.30659-3-quic_sbillaka@quicinc.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RWsQ7KJfPELIduEYmP7Ztgo3Ub_-8b9g
-X-Proofpoint-ORIG-GUID: RWsQ7KJfPELIduEYmP7Ztgo3Ub_-8b9g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 clxscore=1011 phishscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270189
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] ASoC: max98363: add soundwire amplifier driver
+To:     "Lee, RyanS" <RyanS.Lee@analog.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
+        "ckeepax@opensource.cirrus.com" <ckeepax@opensource.cirrus.com>,
+        "herve.codina@bootlin.com" <herve.codina@bootlin.com>,
+        "wangweidong.a@awinic.com" <wangweidong.a@awinic.com>,
+        "james.schulman@cirrus.com" <james.schulman@cirrus.com>,
+        "ajye_huang@compal.corp-partner.google.com" 
+        <ajye_huang@compal.corp-partner.google.com>,
+        "shumingf@realtek.com" <shumingf@realtek.com>,
+        "povik+lin@cutebit.org" <povik+lin@cutebit.org>,
+        "flatmax@flatmax.com" <flatmax@flatmax.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20230224010814.504016-1-ryan.lee.analog@gmail.com>
+ <0fb47fe7-719b-0773-fc14-3d62d7d33619@linux.intel.com>
+ <Y/zsqjOWFKrpDtl8@sirena.org.uk>
+ <d95d15f3-34c3-32df-1a50-0ebce35bf81f@linux.intel.com>
+ <Y/z6EB+0beX2Ji2h@sirena.org.uk>
+ <SJ0PR03MB66814E588528C771D7BEAB3D8AAF9@SJ0PR03MB6681.namprd03.prod.outlook.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <SJ0PR03MB66814E588528C771D7BEAB3D8AAF9@SJ0PR03MB6681.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 07:26:35PM +0530, Sankeerth Billakanti wrote:
-> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
-[..]
-> +static int dp_runtime_resume(struct device *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct msm_dp *dp_display = platform_get_drvdata(pdev);
-> +	struct dp_display_private *dp;
-> +
-> +	dp = container_of(dp_display, struct dp_display_private, dp_display);
-> +	dp_display_host_init(dp);
-> +
-> +	if (dp->dp_display.is_edp) {
-> +		dp_display_host_phy_init(dp);
-> +	} else {
-> +		dp_catalog_hpd_config_intr(dp->catalog,
-> +				DP_DP_HPD_PLUG_INT_MASK |
-> +				DP_DP_HPD_UNPLUG_INT_MASK,
-> +				true);
 
-I believe this is backwards.
+>>> Put differently, SoundWire codec drivers should only deal with
+>>> non-standard vendor-specific registers.
+>>
+>> OK, it'd be good to be clear about what the issue is when reviewing things.
+>> The registers *are* in the device's register map but the driver shouldn't be
+>> referencing them at all and should instead be going via the SoundWire core
+>> for anything in there.
+> 
+> Thanks for the comment.
+> The only reason I added standard SoundWire registers to the amp driver is
+> to check the values for the debugging purpose because these registers values are
+> important to understand the device status, but it is not visible from the regmap
+> debugfs if those registers are not included on the regmap table of the driver.
+> The driver never controls the standard SoundWire registers by itself.
+> Do you recommend removing the standard SoundWire registers from the driver
+> or keeping it non-volatile?
+> (The reg_default values in the table are all amp reset values and those registers
+> are treated as volatile. I shall clear 'unique ID' field because it is determined by
+> the hardware pin connection.)
 
-Only in the event that there's no "downstream" HPD handler should we use
-the internal HPD. This is signalled by the DRM framework by a call to
-dp_bridge_hpd_enable(). So we should use that to enable/disable the
-internal HPD handler.
+We already have debugfs support for those registers, see
+sdw_slave_reg_show() in drivers/soundwire/debugfs.c
 
-When this happens, we have a reason for keeping power on; i.e. call
-pm_runtime_get(). Once we have power/clocking, we'd call
-dp_catalog_hpd_config_intr(), from dp_bridge_hpd_enable().
+It's not the same file as regmap debugfs but the information is already
+there, see e.g. an example on the SOF CI devices:
 
+cd /sys/kernel/debug/soundwire/master-0-1/sdw:1:025d:0700:00
+more registers
 
-In the case that the internal HPD handling is not use,
-dp_bridge_hpd_enable() will not be called, instead once the downstream
-hpd handler switches state dp_bridge_hpd_notify() will be invoked.
+Register  Value
 
-In this case, we need the DP controller to be powered/clocked between
-connector_status_connected and connector_status_disconnected.
+DP0
+  0	 0
+  1	 0
+  2	 0
+  3	 0
+  4	 0
+  5	 1
+Bank0
+ 20	 0
+ 22	 0
+ 23	 0
+ 24	 0
+ 25	 0
+ 26	 0
+ 27	XX
+ 28	XX
+Bank1
+ 30	 0
+ 32	 0
+ 33	 0
+ 34	 0
+ 35	 0
+ 36	 0
+ 37	XX
+ 38	XX
 
+SCP
+ 40	 0
+ 41	 7
+ 42	 0
+ 43	 0
+ 44	20
+ 45	 9
+ 46	 4
+ 47	XX
+ 48	XX
+ 49	XX
+ 4a	XX
+ 4b	XX
+ 50	10
+ 51	 2
+ 52	5d
+ 53	 7
+ 54	 0
+ 55	 0
 
-I believe this should allow the DP controller(s) to stay powered down in
-the case where we have external HPD handling (e.g. USB Type-C or
-gpio-based dp-connector).
+DP1
+100	 0
+101	 0
+102	 0
 
-Regards,
-Bjorn
