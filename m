@@ -2,117 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2206A44AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DCC6A44CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjB0OiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S230149AbjB0Ojw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjB0OiQ (ORCPT
+        with ESMTP id S230049AbjB0Oju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:38:16 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2069.outbound.protection.outlook.com [40.107.220.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8792961BE;
-        Mon, 27 Feb 2023 06:38:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WPByUsdmGj6MOhXk9e35akPdOEhMYcvBbeQ0A62JMQBTAk363RiCYh7g6fkFEWpIDeqtmHEjDIKrOTzaOQuK+KUYXBx1gWX0U8WMDuIK5dvfK5I+TR2Cx8i7BFT+rBo5E/mKsorKrU8ZIrHwARvY+xdmdiHiruCB5kcyHu7ul4I2Maoin3cZ/KWVZDeCjS5zJAkUoxsbUJtuyf/ex5lkeUW984ML4/ZRLo/1QfJAq0xuS/+vNeFnhytLPCfygftOBxIPgfqz9rFnM3+l3WWi/iKBgWftv4N15B2s6BX2MZ9ijaEd44EQ4zcdACWP3nSwbYCQ0u64wImQCM10I68TLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7dG1dUqhRZr/AfxEjuULFBBCHcpe2VVE2H5k4iqCJmM=;
- b=goInBmK0FYXj34y90wqRZCEZOW7dEHwe2zI9FI+Gy2nXZjjXVAOrTfnmR+hfIOCgXo8tjIGFLUsdmWw2wHTeA6UxJjII5SCEm8jYnuIuobKlMpzwUA5Slf1c7zaR8eGjYIzVOXJmUMUazYowm4XV09v4q69sRecVf+7RTOJiHPgyGx/0EM8nGsTUnmzP2ozgHayH7xESHkIkurubQseY1+6NpxUHd5PT6NO3q0/Q8kcOUYUdg1FysGF0OIYOrtxPvkME4PhhOEzkXSdIu/sFeZTrZdLDlZL7+z7ncnyy3WU3dfPCW1tLSsst5ZH+JJ0vFcz1lBmhx00ETUy6ObYunw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=nfschina.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7dG1dUqhRZr/AfxEjuULFBBCHcpe2VVE2H5k4iqCJmM=;
- b=VpDEEhT3h4fbi0ezguPV3AJBXG7f9YE2XRcxqdiMUms1xiLyCV19kiSFKr+iIwHTGENtFCjigPla4548LwPxNCjy30iciE/VuLgXQj7eEgRKLGkJ3PM+XsHpAjMcm/RSPNYbj6R80UrBMhCRBMvmRDfMKFpi/mcg52lFumQOLJk=
-Received: from DM5PR07CA0078.namprd07.prod.outlook.com (2603:10b6:4:ad::43) by
- SJ1PR12MB6242.namprd12.prod.outlook.com (2603:10b6:a03:457::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.25; Mon, 27 Feb 2023 14:38:06 +0000
-Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:ad:cafe::56) by DM5PR07CA0078.outlook.office365.com
- (2603:10b6:4:ad::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
- Transport; Mon, 27 Feb 2023 14:38:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.16 via Frontend Transport; Mon, 27 Feb 2023 14:38:06 +0000
-Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
- 2023 08:38:03 -0600
-Message-ID: <1dcfd6e7-fd9d-d091-0eee-87fa71218396@amd.com>
-Date:   Mon, 27 Feb 2023 15:38:00 +0100
+        Mon, 27 Feb 2023 09:39:50 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C101E9D2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 06:39:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PQNFr56Lcz9v7Hb
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 22:30:40 +0800 (CST)
+Received: from [10.45.159.185] (unknown [10.45.159.185])
+        by APP2 (Coremail) with SMTP id GxC2BwA3BVyNwPxjYN1WAQ--.3696S2;
+        Mon, 27 Feb 2023 15:39:20 +0100 (CET)
+Message-ID: <a5f1695d-cc1f-04aa-fe61-f2b8687cfb0e@huaweicloud.com>
+Date:   Mon, 27 Feb 2023 15:39:05 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] zynq: clkc: Add kmalloc allocation flag
-Content-Language: en-US
-To:     Li zeming <zeming@nfschina.com>, <sboyd@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <michal.simek@xilinx.com>, <mturquette@baylibre.com>
-References: <1e05156120fdfd79ed267f44fe7f3491.sboyd@kernel.org>
- <20230223183312.2759-1-zeming@nfschina.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20230223183312.2759-1-zeming@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     paulmck@kernel.org, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
+ <Y/uHjpbJ3JmVAe9d@google.com>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y/uHjpbJ3JmVAe9d@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT036:EE_|SJ1PR12MB6242:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e61f2cd-2be0-4c0d-59b4-08db18d03d2c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7l5UMrEePpc4+Mb/B0wmGPqB2tz0Ztu7byCra0aiNW5zQqz1ajUhqvMGI8yM/QEu0KgwCBRb5jtgYIpTxEsSUJk9kvUriSfvVjZ1SJtG5BFRuf1cCGmViaSWVzIGNabryYgFGGhTXiojgyRkWLhF3GO144dncLVLXNO5PD+V+dZouMmIxxyjoMBltQjDu65YC4dh9o08zuEpEZDThItlJZcD7XPaLJon0vvsxSLRDKpaPYeTDfEzxmiCgO2GnS9ghpFP8r5xoGlV9xuxPzW280qzCw77eH+84RcSfvqMstp9GDZZpBoPaB0URCUjboWSkfNtXLWq4yK10Ap5e2xYL1TvxMZJ6GOYNVai/6Pm0IrnrAdRtSeMi3Uqrshd16y82Fkua6G8knn8WXBqB8IpB0ugZJ4addGbCtqE5GW7XBeua94dvRC89BpI199S2SX1rZIjiFv4++f0EsK5+vY70NzyhO6Pz+OTkUwErWbLewEtOsMXcusvLeew6v9fgeZky22es6y/Eg6a32q5xmKHsvSsQtX4dYgHr8xcYggGINyMY1dfi59Z1dFNqVcO+H9O1hMI/AEtg1GqRggv4OqBsMewGgUFLnKSGz18zifmkkkd3SgO5SHzCbQ+/8x1nmj18Lu24Kw+uag+8ULtWS70EU0zTuY799FQx0iDPOrTvmh+/w0neHwJ4nH5yfSB2bjUNcP3vY1vrqmL60TNqvHfbJbMbrwIzu79p+h8TQUIZ/RFz+tIVy/cKPZRdEPDhbCO7rcWDKAD7XgdTUSZZhBDIg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199018)(40470700004)(46966006)(36840700001)(31686004)(478600001)(110136005)(8676002)(70586007)(70206006)(82310400005)(356005)(41300700001)(2616005)(8936002)(4326008)(40460700003)(86362001)(36756003)(40480700001)(31696002)(26005)(47076005)(16526019)(53546011)(82740400003)(81166007)(336012)(426003)(186003)(2906002)(44832011)(5660300002)(54906003)(316002)(16576012)(4744005)(36860700001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 14:38:06.0700
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e61f2cd-2be0-4c0d-59b4-08db18d03d2c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6242
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwA3BVyNwPxjYN1WAQ--.3696S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw18XrW3Jr4fWryUKF47twb_yoWrXw1xpr
+        ZxGayfKa1DtryvvrykXws8ZFy5uw4rWrW8JFy5Ga4rZw13ZrnxXFy8KF4rZry7JFZ2kayj
+        vr4j9Fyqy3yDAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2/23/23 19:33, Li zeming wrote:
-> 
-> hello senior:
->    I observed that some other variable assignments in this function are basically judged by the if statement, while clk_name does not make an if branch statement, and I think clk_name is also relatively important, increasing __GFP_NOFAIL flag ensures that the assignment can succeed under any circumstances.
-> 
 
-I think that solution with array on stack would be better choice.
-It will be faster and you can completely skip the whole allocation code for it.
+On 2/26/2023 5:23 PM, Joel Fernandes wrote:
+> On Fri, Feb 24, 2023 at 02:52:51PM +0100, Jonas Oberhauser wrote:
+>> As stated in the documentation and implied by its name, the ppo
+>> (preserved program order) relation is intended to link po-earlier
+>> to po-later instructions under certain conditions.  However, a
+>> corner case currently allows instructions to be linked by ppo that
+>> are not executed by the same thread, i.e., instructions are being
+>> linked that have no po relation.
+>>
+>> This happens due to the mb/strong-fence/fence relations, which (as
+>> one case) provide order when locks are passed between threads
+>> followed by an smp_mb__after_unlock_lock() fence.  This is
+>> illustrated in the following litmus test (as can be seen when using
+>> herd7 with `doshow ppo`):
+>>
+>> P0(int *x, int *y)
+>> {
+>>      spin_lock(x);
+>>      spin_unlock(x);
+>> }
+>>
+>> P1(int *x, int *y)
+>> {
+>>      spin_lock(x);
+>>      smp_mb__after_unlock_lock();
+>>      *y = 1;
+>> }
+>>
+>> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
+>> P0 passes a lock to P1 which then uses this fence.
+>>
+>> The patch makes ppo a subrelation of po by letting fence contribute
+>> to ppo only in case the fence links events of the same thread.
+>>
+>> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+>> ---
+>>   tools/memory-model/linux-kernel.cat | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+>> index cfc1b8fd46da..adf3c4f41229 100644
+>> --- a/tools/memory-model/linux-kernel.cat
+>> +++ b/tools/memory-model/linux-kernel.cat
+>> @@ -82,7 +82,7 @@ let rwdep = (dep | ctrl) ; [W]
+>>   let overwrite = co | fr
+>>   let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+>>   let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+>> -let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+>> +let ppo = to-r | to-w | (fence & int) | (po-unlock-lock-po & int)
+> Alternatively can be the following appended diff? Requires only single 'int'
+> in ->ppo then and prevents future similar issues caused by sub relations.
+> Also makes clear that ->ppo can only be CPU-internal.
 
-Thanks,
-Michal
+I had thought about going in that direction, but it doesn't prevent 
+future similar issues, at best makes them less likely.
+For example, you could have an xfence that somehow goes back to the 
+original thread, but to a po-earlier event (e.g., like prop).
+
+Given that to-r and to-w are unlikely to ever become become inconsistent 
+with po, I am not sure it even really helps much.
+
+Personally I'm not too happy with the ad-hoc '& int' because it's like 
+adding some unused stuff (via ... | unused-stuff) and then cutting it 
+back out with &int, unlike prop & int which has a real semantic meaning 
+(propagate back to the thread). The fastest move is the move we avoid 
+doing, so I rather wouldn't add those parts in the first place.
+
+However fixing the fence relation turned out to be a lot trickier, both 
+because of the missed data race and also rmw-sequences, essentially I 
+would have had to disambiguate between xfences and fences already in 
+this patch. So I did this minimal local fix for now and we can discuss 
+whether it makes sense to get rid of the '& int' once/if we have xfence etc.
+
+Best wishes,
+jonas
+
+PS:
+> ---8<-----------------------
+
+haha that's so clever :D
+
+>
+> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> index 07f884f9b2bf..63052d1628e9 100644
+> --- a/tools/memory-model/linux-kernel.cat
+> +++ b/tools/memory-model/linux-kernel.cat
+> @@ -70,7 +70,7 @@ let rwdep = (dep | ctrl) ; [W]
+>   let overwrite = co | fr
+>   let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+>   let to-r = addr | (dep ; [Marked] ; rfi)
+> -let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+> +let ppo = (to-r | to-w | fence | po-unlock-lock-po) & int
+>   
+>   (* Propagation: Ordering from release operations and strong fences. *)
+>   let A-cumul(r) = (rfe ; [Marked])? ; r
 
