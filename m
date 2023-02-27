@@ -2,151 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C103B6A4C8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1946A4C93
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjB0U4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S229737AbjB0U5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjB0U4H (ORCPT
+        with ESMTP id S229562AbjB0U5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:56:07 -0500
-Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5498B25E12;
-        Mon, 27 Feb 2023 12:56:00 -0800 (PST)
-Received: from [10.0.0.182] (unknown [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id B9847161B9A;
-        Mon, 27 Feb 2023 21:55:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1677531357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=asQWI/0KqQ7Vskc9EMNo967uGziRnDRjnTbun9Xsibw=;
-        b=UU3tgWQJlBiGN4SmpF7FcfyXOhVg5CL0CPSW88hsr0v4bwPMpywNAcyE9F9bIloot+Kfyy
-        +zca8OffoaqtiDEe75NBHICli7NZAzc4uP7TRyCPlrcesgDQiNPFyjD8SGVHPiKezcGEHi
-        SK6nVNWE+3aAli4ddv45LvsvHMQmUbY=
-Message-ID: <cee2e3ea-14a6-c51f-7ce6-6a67dabff6f1@ixit.cz>
-Date:   Mon, 27 Feb 2023 21:55:57 +0100
+        Mon, 27 Feb 2023 15:57:31 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A480425E15
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:57:29 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id c18so5076250wmr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:57:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mIN6ww9oLAv0WN7ho6gwiiph4rXuoFMoHbwtuWGbIHU=;
+        b=Bs3g5spl/LV0O4iixDMwb4HTPJIpTc4sSBY9TtNyJL/a3/Nrx2kG5iGhiEX08R9jBR
+         gCcRIOqtI3O6Y3suKyaQJfD7NVzanN4Vj5SFZOL854LgBBdVnnQwJcG3WpU3k89X744Y
+         IiZlrJdvjiVqN0gYOioxEghDHwwp+0DdIOlpwzB18fM00B8mVRsockbPsOkP4mfo2eNp
+         ZRz3sxf5CAG7g9y+dy7ZEieNW7LQY3+UX3vy1Pxh6mNeA1dNKYnhLC+/CDdKre9YRDhb
+         Gnczi0b8tPU04O1L0L2Sg6YmZo8O6b05iyzA19wLaeNrkoSaWVYPq8TySqXIzDw7bHRu
+         qS0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mIN6ww9oLAv0WN7ho6gwiiph4rXuoFMoHbwtuWGbIHU=;
+        b=TA9srj/I5t3px4wIXxFVUbS6E5Lpok4stZDP3uCjwL4EVjvsni0hYlL+ZbBTP+RQmC
+         5eQnB/X3Vss+BHrSCTy76cpHoQEN97kg/tTvkd2hfQa8em71tRs39CQ3D4CFZZFIG99L
+         Kr5LBM7bbZysK9sfNHSNc3OsZSfz3pfbPmpeKOi/EiXcqSzoEIsYAWjz3cD0lIrxkrHB
+         l/OJ61OOJnMvWv6ClqnwouWr4rA24XXMeb9iF733UJwCbAEctPJUpy0Gh8c891FMrMXq
+         JcdDg3hTul5J9Jg/Xw2JXg4Bd5HzYUSjeZ56ECOHDy3TMLm4+5WisL6SDo3Zmpxe5x5w
+         psEQ==
+X-Gm-Message-State: AO0yUKVsb2sV6UVohzq53/nopg/GgQv6XIKQ0aY9ifMX4vc4x2FEOUwa
+        ExC1jRDhoCeonDcpQNzAvb77dw==
+X-Google-Smtp-Source: AK7set9cV982AukExVNBM7MELBIvJxaOh5XSQ0Jm7pXb7qLYusYIVl6TO/LrXSSLszGi4N40OISX5g==
+X-Received: by 2002:a05:600c:540a:b0:3eb:fc6:79cf with SMTP id he10-20020a05600c540a00b003eb0fc679cfmr398908wmb.6.1677531447998;
+        Mon, 27 Feb 2023 12:57:27 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id c16-20020a05600c0ad000b003e214803343sm13479356wmr.46.2023.02.27.12.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 12:57:27 -0800 (PST)
+Date:   Mon, 27 Feb 2023 20:57:25 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on
+ suspend-resume
+Message-ID: <20230227205725.dipvh3i7dvyrv4tv@airbuntu>
+References: <20230206221428.2125324-1-qyousef@layalina.io>
+ <20230223153859.37tqoqk33oc6tv7o@airbuntu>
+ <5f087dd8-3e39-ce83-fe24-afa5179c05d9@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
- Thunderbird/104.0
-Subject: Re: [RESEND v2 PATCH] init/do_mounts.c: add virtiofs root fs support
-To:     Vivek Goyal <vgoyal@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, helen.koike@collabora.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa+renesas@sang-engineering.com, akpm@linux-foundation.org
-References: <20230224143751.36863-1-david@ixit.cz> <Y/zSCarxyabSC1Zf@fedora>
- <Y/zxO9PMaES8SenN@redhat.com>
-Content-Language: en-US
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <Y/zxO9PMaES8SenN@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5f087dd8-3e39-ce83-fe24-afa5179c05d9@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you all!
+On 02/24/23 16:14, Dietmar Eggemann wrote:
+> On 23/02/2023 16:38, Qais Yousef wrote:
+> 
+> IMHO the patch title is misleading since what you want to avoid in
+> certain cases is that the RD DL accounting is updated.
 
-We'll drop this patch in next MesaCI kernel uprev without this patch!
+The code calls it rebuild_root_domain() ..
 
-David
+> 
+> > On 02/06/23 22:14, Qais Yousef wrote:
+> >> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
 
-On 27/02/2023 19:06, Vivek Goyal wrote:
-> On Mon, Feb 27, 2023 at 10:53:45AM -0500, Stefan Hajnoczi wrote:
->> On Fri, Feb 24, 2023 at 03:37:51PM +0100, David Heidelberg wrote:
->>> From: Stefan Hajnoczi <stefanha@redhat.com>
->>>
->>> Make it possible to boot directly from a virtiofs file system with tag
->>> 'myfs' using the following kernel parameters:
->>>
->>>    rootfstype=virtiofs root=myfs rw
->>>
->>> Booting directly from virtiofs makes it possible to use a directory on
->>> the host as the root file system.  This is convenient for testing and
->>> situations where manipulating disk image files is cumbersome.
->>>
->>> Reviewed-by: Helen Koike <helen.koike@collabora.com>
->>> Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
->>> Signed-off-by: David Heidelberg <david@ixit.cz>
->>> ---
->>> v2: added Reviewed-by and CCed everyone interested.
->>>
->>> We have used this option in Mesa3D CI for testing crosvm for
->>> more than one years and it's proven to work reliably.
->>>
->>> We are working on effort to removing custom patches to be able to do
->>> automated apply and test of patches from any tree.
->>>
->>> https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/.gitlab-ci/crosvm-runner.sh#L85
->>>   init/do_mounts.c | 10 ++++++++++
->>>   1 file changed, 10 insertions(+)
->> Vivek, do you remember where we ended up with boot from virtiofs? I
->> thought a different solution was merged some time ago.
-> We merged a patch from Christoph Hellwig to support this.
->
-> commit f9259be6a9e7c22d92e5a5000913147ae17e8321
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Wed Jul 14 16:23:20 2021 -0400
->
->      init: allow mounting arbitrary non-blockdevice filesystems as root
->
-> Now one should be able to mount virtiofs using following syntax.
->
-> "root=myfs rootfstype=virtiofs rw"
->
-> IIUC, this patch should not be required anymore.
->
-> Thanks
-> Vivek
->
->> There is documentation from the virtiofs community here:
->> https://virtio-fs.gitlab.io/howto-boot.html
->>
->> Stefan
->>
->>> diff --git a/init/do_mounts.c b/init/do_mounts.c
->>> index 811e94daf0a8..11c11abe23d7 100644
->>> --- a/init/do_mounts.c
->>> +++ b/init/do_mounts.c
->>> @@ -578,6 +578,16 @@ void __init mount_root(void)
->>>   			printk(KERN_ERR "VFS: Unable to mount root fs via SMB.\n");
->>>   		return;
->>>   	}
->>> +#endif
->>> +#ifdef CONFIG_VIRTIO_FS
->>> +	if (root_fs_names && !strcmp(root_fs_names, "virtiofs")) {
->>> +		if (!do_mount_root(root_device_name, "virtiofs",
->>> +				   root_mountflags, root_mount_data))
->>> +			return;
->>> +
->>> +		panic("VFS: Unable to mount root fs \"%s\" from virtiofs",
->>> +		      root_device_name);
->>> +	}
->>>   #endif
->>>   	if (ROOT_DEV == 0 && root_device_name && root_fs_names) {
->>>   		if (mount_nodev_root() == 0)
->>> -- 
->>> 2.39.1
->>>
->
--- 
-David Heidelberg
-Consultant Software Engineer
+.. and so is the original patch title.
 
+I think I have enough explanation in the commit message and renamed the
+function name to be more descriptive too.
+
+> >> enabled rebuilding root domain on cpuset and hotplug operations to
+> >> correct deadline accounting.
+> >>
+> >> Rebuilding root domain is a slow operation and we see 10+ of ms delays
+> >> on suspend-resume because of that (worst case captures 20ms which
+> >> happens often).
+> >>
+> >> Since nothing is expected to change on suspend-resume operation; skip
+> >> rebuilding the root domains to regain the some of the time lost.
+> >>
+> >> Achieve this by refactoring the code to pass whether dl accoutning needs
+> >> an update to rebuild_sched_domains(). And while at it, rename
+> >> rebuild_root_domains() to update_dl_rd_accounting() which I believe is
+> >> a more representative name since we are not really rebuilding the root
+> >> domains, but rather updating dl accounting at the root domain.
+> >>
+> >> Some users of rebuild_sched_domains() will skip dl accounting update
+> >> now:
+> >>
+> >> 	* Update sched domains when relaxing the domain level in cpuset
+> >> 	  which only impacts searching level in load balance
+> 
+> This one is cpuset related. (1)
+> 
+> >> 	* update sched domains when cpufreq governor changes and we need
+> >> 	  to create the perf domains
+> 
+> This one is drivers/base/arch_topology.c [arm/arm64/...] related. (2)
+> 
+> There are several levels of passing this `update_dl_accounting`
+> information through. I guess it looks like this:
+> 
+> 					update_dl_accounting
+> 
+> arm/arm64/riscv/parisc specific:
+> update_topology_flags_workfn()		true
+> rebuild_sched_domains_energy()		false (2)
+> 
+> cpuset_hotplug_workfn()                 cpus_updated ||
+>                          force_rebuild == CPUSET_FORCE_REBUILD_PRS_ERROR
+> 
+> ->rebuild_sched_domains(update_dl_accounting)
+> 
+>   update_cpumasks_hier()		true
+>   update_relax_domain_level()		false (1)
+>   update_flag()				true
+>   update_prstate()			true
+> 
+>   ->rebuild_sched_domains_locked(update_dl_accounting)
+> 
+>     ->partition_and_rebuild_sched_domains(..., update_dl_accounting)
+> 
+>         if (update_dl_accounting)
+>           update_dl_rd_accounting()
+> 
+> 
+> There is already a somehow hidden interface for `sd/rd rebuild`
+> 
+>   int __weak arch_update_cpu_topology(void)
+> 
+> which lets partition_sched_domains_locked() figure out whether sched
+> domains have to be rebuild..
+> 
+> But in your case it is more on the interface `cpuset/hotplug -> sd/rd
+> rebuild` and not only `arch -> `sd/rd rebuild``.
+> 
+> IMHO, it would be still nice to have only one way to tell `sd/rd
+> rebuild` what to do and what not to do during sd/rd/(pd) rebuild.
+
+IIUC you're suggesting to introduce some new mechanism to detect if hotplug has
+lead to a cpu to disappear or not and use that instead? Are you saying I can
+use arch_update_cpu_topology() for that? Something like this?
+
+	diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+	index e5ddc8e11e5d..60c3dcf06f0d 100644
+	--- a/kernel/cgroup/cpuset.c
+	+++ b/kernel/cgroup/cpuset.c
+	@@ -1122,7 +1122,7 @@ partition_and_rebuild_sched_domains(int ndoms_new, cpumask_var_t doms_new[],
+	 {
+		mutex_lock(&sched_domains_mutex);
+		partition_sched_domains_locked(ndoms_new, doms_new, dattr_new);
+	-       if (update_dl_accounting)
+	+       if (arch_update_cpu_topology())
+			update_dl_rd_accounting();
+		mutex_unlock(&sched_domains_mutex);
+	 }
+
+I am not keen on this. arm64 seems to just read a value without a side effect.
+But x86 does reset this value so we can't read it twice in the same call tree
+and I'll have to extract it.
+
+The better solution that was discussed before is to not iterate through every
+task in the system and let cpuset track when dl tasks are added to it and do
+smarter iteration. ATM even if there are no dl tasks in the system we'll
+blindly go through every task in the hierarchy to update nothing.
+
+But I'll leave that to Juri to address if he wants. The original change has
+introduced a regression and people have noticed when phones cycle through
+suspend resume (screen unlock). Juri - could you please chip in on how you want
+to address this regression? In theory I should be just a reporter, but trying
+my best to help ;-)
+
+
+Cheers
+
+--
+Qais Yousef
