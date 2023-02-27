@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C66D6A4EE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA17E6A4EDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjB0Wsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S229726AbjB0WrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjB0WsZ (ORCPT
+        with ESMTP id S229653AbjB0WrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:48:25 -0500
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B159EDF;
-        Mon, 27 Feb 2023 14:47:58 -0800 (PST)
-Received: by mail-pl1-f182.google.com with SMTP id z2so8430728plf.12;
-        Mon, 27 Feb 2023 14:47:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lG6vB3dP9H3e//Mg7ICB0IjrePifa0YDIvFrmLOhqlQ=;
-        b=yB6u+k7H/fps2LM42gtr0Rpne8TG6JTKSX9Vi/v/Yo7yNjZKEHeIKCCzRhY6NSSaew
-         tGs9ccX9NsnjPCIfmaJVe7DTdNk2kWcc2kIyCR1AbEuRiDQ6kF9VqP5x8NtUeC6ZYjyI
-         5QGjQnNP0j9bQNcwVDiDw4P7Zee5NRre9DTw9OlbBcIoiM9dZjNP+EdXTmhIBenJaJwo
-         44C8boVKjD3OJ5ah/x7X16cJy7KCVfcOU5YbUuwvZHv/3TbW9e6QdSb2hLpUX7pRBVqc
-         FL8ZJYvnLfxYRMNQP1YT5eCy72Mh26plXQZEzq/hG1inY+jKgJ6W6AdlBX50DEeOztsG
-         TpBw==
-X-Gm-Message-State: AO0yUKWrcw3S6u+sbwbmbAo2hbPltWo/HL5lZH+MCatsOnIVwZZqyfDy
-        m048VMoVr3+6iMXR5xloe4inLnAGNRI=
-X-Google-Smtp-Source: AK7set9vcQ/F8WhIG+6XsqcHSIU5HVBhAJ1lVW44QSnhAm+ORXEIjQ6fFA1tdKOn1Sl1SStdekryLg==
-X-Received: by 2002:a17:902:db04:b0:19d:90f:6c50 with SMTP id m4-20020a170902db0400b0019d090f6c50mr583309plx.58.1677538070772;
-        Mon, 27 Feb 2023 14:47:50 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:6cf3:f584:1162:e48a? ([2620:15c:211:201:6cf3:f584:1162:e48a])
-        by smtp.gmail.com with ESMTPSA id 3-20020a170902c10300b00186b69157ecsm5088744pli.202.2023.02.27.14.47.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 14:47:49 -0800 (PST)
-Message-ID: <99993a45-acc6-176f-d846-e278f173171c@acm.org>
-Date:   Mon, 27 Feb 2023 14:47:46 -0800
+        Mon, 27 Feb 2023 17:47:14 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3124129
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:46:42 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C2322320010B;
+        Mon, 27 Feb 2023 17:46:12 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 27 Feb 2023 17:46:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677537972; x=1677624372; bh=NQTwTZeJYIKblxJmGPxa/pVizrjh
+        Ti57Otr+dFUOe54=; b=l88PS1gtPyP3u9yn2nZNLPFdDPHrU+H+3P/hiz1Ozj7D
+        nNEFCJvHQ1WBzzzjlUATJ3qDz3bctd7v4EO2t5/Ve9auD44z1nl/r2ZCuGJpEsRJ
+        4omJXjzcvBUY03z9X6IjsVkMWEtHIYYR/+wKPEWJNPv74mgsCCPJcBljzNUkWtaV
+        G7Wv97NWEUHfwpf2NN/x/rldWafJ4A2BYaC1TRWZj3YWHcaYIYUxFz8SKpICmj4Q
+        jGWFixcSaOaZQ0M5Q5zh1AIdBpGGtt0VtuqS7E5dea9yASH3isT4soWwyU+m50DS
+        W56L+/8AS5KT9fLlUyI+HBMWgHeX4U4cRQiaCX4WhQ==
+X-ME-Sender: <xms:szL9Y-Am4uKAZFO9-z7jc-3NB7x-Sk7Fo5aKjQjIBdkXTb9wh45TcA>
+    <xme:szL9Y4jprSeHfHlvwjb3Fk6p_3ch-BrVR7SGIp_mScw8TUpC7iCJYqLSRQIbryr3h
+    5nRHK24uN6ogoQZ9gY>
+X-ME-Received: <xmr:szL9Yxn3nFV0XUc9SRahW5cQItjO5q4L0SJ7GblUBi4_xYTv2J1iaLYjI2gmH4lcjY8Xx5M4EC2s4wTHErlEQxnYf0n1qy6kGQo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeelueehleehkefgueevtdevteejkefhffekfeffffdtgfejveekgeefvdeu
+    heeuleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:szL9Y8wXxTeEWQwStipiIxPI_ijzBIyB4q2nuKLjPy5P4CYZ3QC1zw>
+    <xmx:szL9YzQuoOYWc3KN9HZykdxyRRUZRyHJoq3TjGHypujcakSOz_AQRw>
+    <xmx:szL9Y3YAjUy3DFBiEmpTsRv-y_0W-OZz5VuP6A1wQeiTE2B-nEqbEQ>
+    <xmx:tDL9Y9e-LLK9lmUdMwKF00NMdXdfZK1bSqR0D1mQfF7GY7QxaLIfMQ>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Feb 2023 17:46:08 -0500 (EST)
+Date:   Tue, 28 Feb 2023 09:48:41 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Walsh <vk3heg@vk3heg.net>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] m68k: mm: Move initrd phys_to_virt handling after
+ paging_init()
+In-Reply-To: <dff216da09ab7a60217c3fc2147e671ae07d636f.1677528627.git.geert@linux-m68k.org>
+Message-ID: <f0877485-16df-1bda-c935-5ef56afacc8d@linux-m68k.org>
+References: <dff216da09ab7a60217c3fc2147e671ae07d636f.1677528627.git.geert@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 4/7] scsi: ufs: core: Add hwq print for debug
-Content-Language: en-US
-To:     Ziqi Chen <quic_ziqichen@quicinc.com>,
-        Po-Wen Kao <powen.kao@mediatek.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com,
-        mason.zhang@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com
-References: <20230222030427.957-1-powen.kao@mediatek.com>
- <20230222030427.957-5-powen.kao@mediatek.com>
- <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 02:14, Ziqi Chen wrote:
-> Calling registers dump function in ufshcd_print_trs() is not reasonable, 
-> eg.. for each aborted request, it would print out all hwq registers, 
-> it's not make sense.
+On Mon, 27 Feb 2023, Geert Uytterhoeven wrote:
+
+> When booting with an initial ramdisk on platforms where physical memory
+> does not start at address zero (e.g. on Amiga):
 > 
-> I think we should move it out of ufshcd_print_trs().
+>     initrd: 0ef0602c - 0f800000
+>     Zone ranges:
+>       DMA      [mem 0x0000000008000000-0x000000f7ffffffff]
+>       Normal   empty
+>     Movable zone start for each node
+>     Early memory node ranges
+>       node   0: [mem 0x0000000008000000-0x000000000f7fffff]
+>     Initmem setup node 0 [mem 0x0000000008000000-0x000000000f7fffff]
+>     Unable to handle kernel access at virtual address (ptrval)
+>     Oops: 00000000
+>     Modules linked in:
+>     PC: [<00201d3c>] memcmp+0x28/0x56
+> 
+> As phys_to_virt() relies on m68k_memoffset and module_fixup(), it must
+> not be called before paging_init().  Hence postpone the phys_to_virt
+> handling for the initial ramdisk until after calling paging_init().
+> 
 
-+1
+Thanks for debugging this issue.
 
+> While at it, reduce #ifdef clutter by using IS_ENABLED() instead.
+> 
+> Fixes: 376e3fdecb0dcae2 ("m68k: Enable memtest functionality")
 
+I apologise for the trouble caused by that patch.
