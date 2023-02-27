@@ -2,70 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768C26A43D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3796A43E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjB0OJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S230160AbjB0OML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjB0OJx (ORCPT
+        with ESMTP id S229549AbjB0OMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:09:53 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CCD525E;
-        Mon, 27 Feb 2023 06:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=b9phfdI9TMx72ilBp0eEoM6G1VduC5sCkR9fo7UPGL8=; b=vf/+dGjTdV4w1ejSFMgL+CRWNn
-        ncZSHWtbNFAxGnRFo3OcpkpBXswgmlXKwvAhu9kkpcBv9nEXAvql0WL5JIoAVS3nOdG+0sDcijR2c
-        hzCynyWfzljSy91esLtfEhX5BqIKfiZ0Q0itzem08XBOEHiYNa1h6IqR4Cf4Zb/Esrw2LRsCFZ8PT
-        /2IFs/WxyboR/j0j52o8fnbRfDZMrxAKxgi9orL4aoNVaSKgRTXgAlvlj629j9TAz3TjNWIndvR7V
-        4UqAuhMOVkuAQp5lkajlUXe3jD+xqZIlSHgYGJQz9H/ozINGvxrzxUEBTYhl3rGK3QAU1jFTNmi7d
-        tSz4JyUA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWeCK-0009om-D9; Mon, 27 Feb 2023 14:09:48 +0000
-Date:   Mon, 27 Feb 2023 14:09:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, Hugh Dickins <hughd@google.com>,
-        linux-kernel@vger.kernel.org, fstests@vger.kernel.org
-Subject: Re: [PATCH 4/5] afs: Zero bytes after 'oldsize' if we're expanding
- the file
-Message-ID: <Y/y5rFX2koj2W6Wa@casper.infradead.org>
-References: <20230202204428.3267832-5-willy@infradead.org>
- <20230202204428.3267832-1-willy@infradead.org>
- <2730679.1677505767@warthog.procyon.org.uk>
+        Mon, 27 Feb 2023 09:12:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8421B1E9DF;
+        Mon, 27 Feb 2023 06:12:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 480CDB80C95;
+        Mon, 27 Feb 2023 14:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FAB1C433EF;
+        Mon, 27 Feb 2023 14:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677507126;
+        bh=6AG7SceOELnCwREF/HAA2yOyakikt8NQE9ObYcefNKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qxn5CzsvFHeDdbXDE2G/zhqcVECnDGBw5Q1mylYpQHZe5sOORg5OdojkjbridiYVL
+         joL3+Rp+Fmz/W1yfW3ENC4vIy1uA/GCOTpy73zSTFEwRHFCPuUwcMKmgbLmPQ34O+l
+         ZpX8wh0bwwcXn/2EDUcdzxgokoitrK8kJqhBKtj4BX77OOF8DHkWOYYQVLUSAj6Zka
+         uUVbhTHrj5mwfrkp4YsgNYYvkPKkJ2y/IJhnUeO2s2FfR/dXhijZz3st7MvciqggLV
+         EgoMSHjo4T9/W260zsxzTmEmlvMQBr1rf8h1nOSVZxPvvx3lWO3JABw2K9ybemM+X3
+         S5qPvr6GhBOJw==
+Date:   Mon, 27 Feb 2023 14:12:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, shuah@kernel.org,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+Subject: Re: [PATCH] Fix snprintf format warnings during 'alsa' kselftest
+ compilation
+Message-ID: <Y/y6MNh8yXcsQWWj@sirena.org.uk>
+References: <20230223143214.16564-1-ivan.orlov0322@gmail.com>
+ <Y/eAyrYs+wEu180d@sirena.org.uk>
+ <1db3bfe5-0982-b445-9c94-784478279028@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wjrc9TRZIcm10rXr"
 Content-Disposition: inline
-In-Reply-To: <2730679.1677505767@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1db3bfe5-0982-b445-9c94-784478279028@gmail.com>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 01:49:27PM +0000, David Howells wrote:
-> Matthew Wilcox (Oracle) <willy@infradead.org> wrote:
-> 
-> > POSIX requires that "If the file size is increased, the extended area
-> > shall appear as if it were zero-filled".  It is possible to use mmap to
-> > write past EOF and that data will become visible instead of zeroes.
-> > 
-> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> 
-> That seems to work.  Do you want me to pass it on to Linus?  If not:
-> 
-> Acked-by: David Howells <dhowells@redhat.com>
 
-I'll send a patch series with all of this; it doesn't seem terribly
-urgent.  Do you think there's a similar problem for AFS that Brian
-noted with the generic patch?
+--wjrc9TRZIcm10rXr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Feb 23, 2023 at 11:14:56PM +0300, Ivan Orlov wrote:
+
+> I compiled the test via gcc 11.3.0 without any custom options, the arch is
+> x86_64. There were five warnings during the test compilation, and all of
+> them were caused by incorrect format in 'snprintf' function calls. As I
+> know, using incorrect format in 'snprintf' creates an undefined behavior.
+> Maybe there is a point to fix it?
+
+The question is more where does the warning come from and is this a good
+fix - a common pattern where generic types like size_t get used is that
+the underlying type changes between platforms and warnings just get
+moved about by changing the printf format around.
+
+--wjrc9TRZIcm10rXr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP8ujAACgkQJNaLcl1U
+h9BwQwf+P5EOVKFjuPDJj1+sBltQmwV+lc9tBNVgCfUuyNl2YVOxr4M5gIgzZ8MV
+4MKKEq2gK8Oiwb52v6zRXjwyswsgNiJI6l0RvbM8uW05kE4T71pvtSnt83eN9cLC
+9HgHf1ErUxg8rauXvjRl6RZJNiZRs4k/MK7Jnb0aI4qP3wRrK8t49MJbZ95ukibz
+F6WcumWdD58Jg7fspthrSvs7vn1q3TNqwMBYWWtuyZEwPRUqueIUH2SrcZ8It6ov
+UW2gQaqCaOYw3YP2+EHsdFJPpJgsSa9tQ8VrVW+HEpZ7iP5r7ystzY1OoUE5MGwf
+BXZ4rpvbBbA4jehWBVPhTv9QLwno/g==
+=C6G+
+-----END PGP SIGNATURE-----
+
+--wjrc9TRZIcm10rXr--
