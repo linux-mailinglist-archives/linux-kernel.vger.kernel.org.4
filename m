@@ -2,175 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABBF6A3DE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7A86A3DEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjB0JK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S229968AbjB0JLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjB0JKI (ORCPT
+        with ESMTP id S229787AbjB0JLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:10:08 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111FA234EB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:01:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 46B981F8D9;
-        Mon, 27 Feb 2023 09:01:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1677488511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MqQ43OG15avgCT0fmGnm5bD0I8p/oLDbgvSGYXF/h1o=;
-        b=hlVYqgE90CjKvF6iD9xK7aQW29XOnA3ZzvzuKi+6W/2iUG2a14+F6u2s+8oDfOy7EDNDSC
-        LKu+TZmSsRN9mdCoz/lUMeNogDas7FTr+7ZNfHE1JC9SfGSUHbgiwzbr4HvVQeBebRlXc1
-        94QdU9/VShAC0vwVD6izokgJXUo5N1g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1677488511;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MqQ43OG15avgCT0fmGnm5bD0I8p/oLDbgvSGYXF/h1o=;
-        b=aPLeaAWRrWXDsJG2UAsh2HBmBbOmAwZDmz7+4Cq/zI76iGHq6E+QFVSXJziqs+6SFuT7EZ
-        kyZn/xylelTdgCBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0890013912;
-        Mon, 27 Feb 2023 09:01:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Y78EAX9x/GMnSQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 27 Feb 2023 09:01:51 +0000
-Message-ID: <21c1675f-4184-e6f9-c9da-06722d6d7a12@suse.de>
-Date:   Mon, 27 Feb 2023 10:01:50 +0100
+        Mon, 27 Feb 2023 04:11:32 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C84814E86
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:03:26 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso1913251wmq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 01:03:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kryo-se.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5AZKY/GO2HS2MSIrZDLlcV9UWjE1RlhG/yPrdAO/0wQ=;
+        b=AifvS/Ca9K6/HsvByrVkTNjR9Gab39OpSeuJiduJDAdioHJ5ahMr2Bo10ZQO2MkOhs
+         ud7z/l4f1KbquHrg3F/R1zZiJtZL/1OuBVBf3aUjVO9UOGhOMqOMZBY0Jqsa6uXj/Jjl
+         l+mesMd+qKLKM3f69LW0bAaKXbl6m5fRIw08Qmz0wm3DVj6H8zVrB3yPPispIvcRD5mO
+         /66AtLW2gXULNgncYsv89UzEGJ5NdCSkJiOCH2UDw/z0QJVuXtnweE21dvP+u4D4ceja
+         FYTSbRBtZXCUE1Id+PXcGJidI7ls/8ZkCwsmNjjCyPIAVuH8T1X7Y42b0ASa8uK0Og4H
+         K+ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5AZKY/GO2HS2MSIrZDLlcV9UWjE1RlhG/yPrdAO/0wQ=;
+        b=CMVMN4zDNPWpJi9JpcqdRWu5bNKgXVEha2Viah0qMmQEIqtz3jaiTITfGjCD7SmDvJ
+         SKachRlknJCM2359+zNllq4F95vdPEZg6k4Q3hUwkOhiOoLQ4SYm/erTQf7d/97UqXYS
+         OLXh7JoMUlUzaxaigNj613Wd+1WWlQgfjodG9H1+QDgg5AKQ8rRX/2Q/mzRVh7DmJ7zG
+         bYhbCeb8I6F8tYA3+lfkiemekNQNyl+3656E2o2XxeAx/DxlZqf4qdx3MFsVMRMXbJDx
+         Py+BIsYHypAUZQaKXOnVUhOYq/PObstZTMdSWT6ezUSXARTQ6Xc0P8vTjUsGVY8xzboq
+         NnrQ==
+X-Gm-Message-State: AO0yUKXQoanJN0NQnTjMif+zBOAvxq6yoPD/uVy4N/MsLnYWp20NRUSI
+        Vs1ClPRhbzIY+rmyqlFAlm+ojw==
+X-Google-Smtp-Source: AK7set8XyeDVS9Xol9SEmBKnDMViHVeUkBqcPWhwa3zfIaJ1LciKmH9mu9BoCl8KM666fsCdc2CAuQ==
+X-Received: by 2002:a05:600c:ccc:b0:3df:db20:b0ae with SMTP id fk12-20020a05600c0ccc00b003dfdb20b0aemr6064971wmb.17.1677488604522;
+        Mon, 27 Feb 2023 01:03:24 -0800 (PST)
+Received: from kerfuffle.. ([2a02:168:9619:0:b7be:fc14:9072:c69a])
+        by smtp.gmail.com with ESMTPSA id w11-20020adff9cb000000b002c55de1c72bsm6505725wrr.62.2023.02.27.01.03.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 01:03:24 -0800 (PST)
+From:   Erik Ekman <erik@kryo.se>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     pauk.denis@gmail.com, ahmad@khalifa.ws, Erik Ekman <erik@kryo.se>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6775) ASUS PRIME Z590 boards support
+Date:   Mon, 27 Feb 2023 10:03:11 +0100
+Message-Id: <20230227090312.91091-1-erik@kryo.se>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
- omap_fbdev_init()
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
-        airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
-Cc:     ndesaulniers@google.com, trix@redhat.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        kernel test robot <lkp@intel.com>
-References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------q10EuzWHVcDjYqavMproQccF"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------q10EuzWHVcDjYqavMproQccF
-Content-Type: multipart/mixed; boundary="------------HjzVTbLD5v5nBTUmqFGrZB7r";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
- airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
-Cc: ndesaulniers@google.com, trix@redhat.com,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- kernel test robot <lkp@intel.com>
-Message-ID: <21c1675f-4184-e6f9-c9da-06722d6d7a12@suse.de>
-Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
- omap_fbdev_init()
-References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
-In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+Tested on Z590M-PLUS.
 
---------------HjzVTbLD5v5nBTUmqFGrZB7r
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+dmesg log:
+nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
 
-SGkNCg0KQW0gMjQuMDIuMjMgdW0gMTg6MjUgc2NocmllYiBOYXRoYW4gQ2hhbmNlbGxvcjoN
-Cj4gQ2xhbmcgd2FybnMgKG9yIGVycm9ycyB3aXRoIENPTkZJR19XRVJST1IpOg0KPiANCj4g
-ICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jOjIzNTo2OiBlcnJv
-cjogdmFyaWFibGUgJ2hlbHBlcicgaXMgdXNlZCB1bmluaXRpYWxpemVkIHdoZW5ldmVyICdp
-ZicgY29uZGl0aW9uIGlzIHRydWUgWy1XZXJyb3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXpl
-ZF0NCj4gICAgICAgICAgICBpZiAoIWZiZGV2KQ0KPiAgICAgICAgICAgICAgICBefn5+fn4N
-Cj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jOjI1OToyNjog
-bm90ZTogdW5pbml0aWFsaXplZCB1c2Ugb2NjdXJzIGhlcmUNCj4gICAgICAgICAgICBkcm1f
-ZmJfaGVscGVyX3VucHJlcGFyZShoZWxwZXIpOw0KPiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIF5+fn5+fg0KPiAgICAuLi9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9v
-bWFwX2ZiZGV2LmM6MjM1OjI6IG5vdGU6IHJlbW92ZSB0aGUgJ2lmJyBpZiBpdHMgY29uZGl0
-aW9uIGlzIGFsd2F5cyBmYWxzZQ0KPiAgICAgICAgICAgIGlmICghZmJkZXYpDQo+ICAgICAg
-ICAgICAgXn5+fn5+fn5+fn4NCj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21h
-cF9mYmRldi5jOjIyODozMDogbm90ZTogaW5pdGlhbGl6ZSB0aGUgdmFyaWFibGUgJ2hlbHBl
-cicgdG8gc2lsZW5jZSB0aGlzIHdhcm5pbmcNCj4gICAgICAgICAgICBzdHJ1Y3QgZHJtX2Zi
-X2hlbHBlciAqaGVscGVyOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBeDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA9IE5V
-TEwNCj4gICAgMSBlcnJvciBnZW5lcmF0ZWQuDQo+IA0KPiBSZXR1cm4gZWFybHksIGFzIHRo
-ZXJlIGlzIG5vdGhpbmcgZm9yIHRoZSBmdW5jdGlvbiB0byBkbyBpZiBtZW1vcnkNCj4gY2Fu
-bm90IGJlIGFsbG9jYXRlZC4gVGhlcmUgaXMgbm8gcG9pbnQgaW4gYWRkaW5nIGFub3RoZXIg
-bGFiZWwgdG8ganVzdA0KPiBlbWl0IHRoZSB3YXJuaW5nIGF0IHRoZSBlbmQgb2YgdGhlIGZ1
-bmN0aW9uIGluIHRoaXMgY2FzZSwgYXMgbWVtb3J5DQo+IGFsbG9jYXRpb24gZmFpbHVyZXMg
-YXJlIGFscmVhZHkgbG9nZ2VkLg0KPiANCj4gRml4ZXM6IDNmYjFmNjJmODBhMSAoImRybS9m
-Yi1oZWxwZXI6IFJlbW92ZSBkcm1fZmJfaGVscGVyX3VucHJlcGFyZSgpIGZyb20gZHJtX2Zi
-X2hlbHBlcl9maW5pKCkiKQ0KPiBMaW5rOiBodHRwczovL2dpdGh1Yi5jb20vQ2xhbmdCdWls
-dExpbnV4L2xpbnV4L2lzc3Vlcy8xODA5DQo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL29lLWtidWlsZC1hbGwvMjAyMzAyMjUwMDU4LmZZVGU5YVRQLWxrcEBpbnRlbC5jb20v
-DQo+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4g
-U2lnbmVkLW9mZi1ieTogTmF0aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPg0K
-DQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+
-DQoNCj4gLS0tDQo+IFRoaXMgaXMgY3VycmVudGx5IHNob3dpbmcgaW4gbWFpbmxpbmUgc28g
-SSBiZWxpZXZlIHRoaXMgc2hvdWxkIGdvIHRvDQo+IGRybS1taXNjLW5leHQtZml4ZXMuDQoN
-ClRoaXMgdHJlZSBpcyBvbmx5IGFjdGl2ZSBmcm9tIC1yYzYgdG8gc29tZXRpbWUgZHVyaW5n
-IHRoZSBtZXJnZSB3aW5kb3cuIA0KSSdsbCBhZGQgeW91ciBwYXRjaCB0byBkcm0tbWlzYy1m
-aXhlcyBBU0FQLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC0tLQ0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS9vbWFwZHJtL29tYXBfZmJkZXYuYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9vbWFwX2ZiZGV2LmMgYi9kcml2ZXJzL2dwdS9k
-cm0vb21hcGRybS9vbWFwX2ZiZGV2LmMNCj4gaW5kZXggODQ0Mjk3MjgzNDdmLi5hNmM4NTQy
-MDg3ZWMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9vbWFwZHJtL29tYXBfZmJk
-ZXYuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9vbWFwX2ZiZGV2LmMNCj4g
-QEAgLTIzMyw3ICsyMzMsNyBAQCB2b2lkIG9tYXBfZmJkZXZfaW5pdChzdHJ1Y3QgZHJtX2Rl
-dmljZSAqZGV2KQ0KPiAgIA0KPiAgIAlmYmRldiA9IGt6YWxsb2Moc2l6ZW9mKCpmYmRldiks
-IEdGUF9LRVJORUwpOw0KPiAgIAlpZiAoIWZiZGV2KQ0KPiAtCQlnb3RvIGZhaWw7DQo+ICsJ
-CXJldHVybjsNCj4gICANCj4gICAJSU5JVF9XT1JLKCZmYmRldi0+d29yaywgcGFuX3dvcmtl
-cik7DQo+ICAgDQo+IA0KPiAtLS0NCj4gYmFzZS1jb21taXQ6IGUwMzRiOGExOGQ0YmFkY2Vl
-Y2I2NzJjNThiNDg4YmFkMWU5MDFkOTUNCj4gY2hhbmdlLWlkOiAyMDIzMDIyNC1vbWFwZHJt
-LXdzb21ldGltZXMtdW5pbml0aWFsaXplZC0wMTI1Zjc2OTJmYmINCj4gDQo+IEJlc3QgcmVn
-YXJkcywNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
-b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
-LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
-ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+sensors output:
+nct6798-isa-0290
+Adapter: ISA adapter
+in0:                      672.00 mV (min =  +0.00 V, max =  +1.74 V)
+in1:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in2:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in3:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in4:                        1.01 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in5:                      808.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in6:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in7:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in8:                        3.20 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in9:                      528.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in10:                     672.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in11:                     528.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in12:                       1.21 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in13:                     992.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in14:                       1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+fan1:                      971 RPM  (min =    0 RPM)
+fan2:                     1525 RPM  (min =    0 RPM)
+fan3:                        0 RPM  (min =    0 RPM)
+fan4:                     1094 RPM  (min =    0 RPM)
+fan5:                        0 RPM  (min =    0 RPM)
+fan6:                        0 RPM  (min =    0 RPM)
+fan7:                        0 RPM  (min =    0 RPM)
+SYSTIN:                    +36.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+CPUTIN:                    +40.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+AUXTIN0:                   +26.0°C    sensor = thermistor
+AUXTIN1:                    +8.0°C    sensor = thermistor
+AUXTIN2:                   +22.0°C    sensor = thermistor
+AUXTIN3:                   +25.0°C    sensor = thermistor
+PECI Agent 0 Calibration:  +40.0°C
+PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
+PCH_CHIP_TEMP:             +55.0°C
+PCH_CPU_TEMP:               +0.0°C
+intrusion0:               OK
+intrusion1:               ALARM
+beep_enable:              disabled
 
---------------HjzVTbLD5v5nBTUmqFGrZB7r--
+Signed-off-by: Erik Ekman <erik@kryo.se>
+---
+ drivers/hwmon/nct6775-platform.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---------------q10EuzWHVcDjYqavMproQccF
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index 76c6b564d7fc..1a00f4a542fe 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1122,6 +1122,9 @@ static const char * const asus_msi_boards[] = {
+ 	"PRIME X670-P",
+ 	"PRIME X670-P WIFI",
+ 	"PRIME X670E-PRO WIFI",
++	"PRIME Z590-A",
++	"PRIME Z590-P",
++	"PRIME Z590M-PLUS",
+ 	"Pro B660M-C-D4",
+ 	"ProArt B660-CREATOR D4",
+ 	"ProArt X670E-CREATOR WIFI",
+-- 
+2.39.2
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP8cX4FAwAAAAAACgkQlh/E3EQov+CP
-Lg/+O3KPvS14LZLKqprtUdbcMhI4wXFn4aIjXQtV9PWFCMknkXgtUR9ETCS3zdSCrAXJiMcKzJ8b
-qT46fwogMcM59Uopkl5d7GCicmVaOZXXX2nuN4ykumbTZyn6A8JhZSokpEG3fOFqAhl4qxChMheW
-xkwxjozljgOvkcOnrrRzuZ7FddSU1V2NkQPwsn5Pn9Izjy9xIrobS3XMbFysTSE4wXFmAXn3NiXq
-ggk3RU/8Ah3Z1pRnadkcW2weOysz24iu+eQ0cxTZWqT1b/MU0ckToiLLyM7LWq4wlI0rqADLOuN1
-yNLEEu7O/Bskr7OtLwbG1gm0zPcokeNq8WcoFNiroANSGoTsHxcuDecsd82+WoyP+bXYqqUJojDz
-jbgeVXQcaqOex5s+/ykbeRgHvlMFwZHHcSB6U2XoPYH9CHj96SngARpJtDhx4kuRHUHDi9laM9Qu
-UY2L/RC4cvNkbRiQw6Dk6xOPAk2vlXGeaCxt7nfD9q5NHJmpBDNgQPq3iR4xOsFXSlC6XzVy6vr5
-j9wmSKYpsr/ChdJ+AGw2z8RXS0IyAx74EgsjaNK4YPp2q3QYtwmqK7w2tqjqaLB0B6l4lWQ4qcvD
-saMy6AMzI0i0CQ/gWEoZ9TT91p7lwoD07uZIVD6DcFj58axck7lVzfMP+TMerwKIYyOXh81vFK4e
-t0I=
-=QygN
------END PGP SIGNATURE-----
-
---------------q10EuzWHVcDjYqavMproQccF--
