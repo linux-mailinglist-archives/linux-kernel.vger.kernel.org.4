@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AAA6A46AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192D76A46AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjB0QED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S230013AbjB0QE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjB0QEB (ORCPT
+        with ESMTP id S230001AbjB0QEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:04:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B6211DB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:03:59 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 585B81EC0445;
-        Mon, 27 Feb 2023 17:03:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677513838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=xb92flm1mV65M/epWOlUCTlYcJPYupP7yUsQn3lXFys=;
-        b=FmFpvGOxijWN46kpo9qSF+Mg1YcnP02RT6us2kwo8duEAC34WP/qGV3A3t+svFtKqwTIhX
-        iAzcpHv7bxvdspc8w2b+MmfHVcxBebpsPeAzkBmku2P3KirGDS1tvJEsyI9ZuTlYmX3PZ+
-        iq3f4PHdoxRVF95CYfMOMpNl2AAqiv4=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/microcode/AMD: Get rid of __find_equiv_id()
-Date:   Mon, 27 Feb 2023 17:03:52 +0100
-Message-Id: <20230227160352.7260-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Mon, 27 Feb 2023 11:04:24 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AE9233D6;
+        Mon, 27 Feb 2023 08:04:18 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id t22so5539472oiw.12;
+        Mon, 27 Feb 2023 08:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qg8vuwxyxMrPQjar45V1HfclOoi0YISeIydy8F+02pg=;
+        b=PHZGIMLjEWdWxQXoKvIzrFieKCvHIlMf9WKIVbZyIByHx5nQJcEbDh3SUyS5m58+UY
+         +40Getm3YSyn+XENp0PUdjeb1DInKU4iQG9XUoatZWBJa7NGHeOKj23jCImM6/dvyu2g
+         V3IXa8v74GCSMj1s2UGawPBcrq1gA87koDsMU/DIN6YPTcx68W/ujkV9nsGpuELGtedH
+         EZrbh9EcMYpZkTNj6Aa6X6tt3cs/w6XJmv9EMEijGRhgYhMfDBKoVpA8jFoDZTL+Zncd
+         DpUfOdIuE0Wg45+dmnlKw3gWbqJKvst+fkfRqAaachlgAcMG9o83hmIfRnmAhgWIXHMt
+         Z6vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qg8vuwxyxMrPQjar45V1HfclOoi0YISeIydy8F+02pg=;
+        b=MKx5WeCg35THPkxDrZbQvY9Hhy1rPAoJCnhtz0qwhNsCIS7AoEZ0p+S0fZGyN4clM1
+         zUv+kUnKp/btnVI2OuXjgnN8msmpWzmeBBmAqchXszpkReulFDmlaOpwZVPJT4TOFFZU
+         fTqjQyvy7YraHaYf0vpnT0Je42ZYbEzgu9RWSthLQUBtu0AxdxvPprxVxTViWgwzJjK5
+         1jlkMkHCB64nd2RTyT6yyDCkpeaGG7aEKEZAkGQX1kphxswdVVlu2w2W6/wcE1hDfLWQ
+         S7WOUhiNfo4uUaiWgcJKHaJ9JMVxgNGKudsT15aUVYkD+U9QKz7/IILPY2TY1+e/hUSP
+         P2IQ==
+X-Gm-Message-State: AO0yUKXZxZoxrQ6rFVL/VaM5cEmBx70ToNk0xWBpQ3r711vNvfDVOMxN
+        ZEV/pBMGie7aGNEoCCNXBoZIvJtgedCO9Kwv+xM=
+X-Google-Smtp-Source: AK7set802gM1M5X29uiBUkLSilay5VZBp6Sj5f6yDBgCgaQqNEdzU7nNPqzUNkbZTxsxNQAc++SQeTd7wmNR/upbkKc=
+X-Received: by 2002:a05:6808:30b:b0:384:2fd0:e1cc with SMTP id
+ i11-20020a056808030b00b003842fd0e1ccmr1037408oie.5.1677513857756; Mon, 27 Feb
+ 2023 08:04:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224233126.1936-1-gregory.price@memverge.com>
+ <20230224233126.1936-3-gregory.price@memverge.com> <CAJwJo6YnELNhU8RmR-z37vDZ=xb0CmUUBgrPGgHP2dqjVm=O2g@mail.gmail.com>
+In-Reply-To: <CAJwJo6YnELNhU8RmR-z37vDZ=xb0CmUUBgrPGgHP2dqjVm=O2g@mail.gmail.com>
+From:   Dmitry Safonov <0x7f454c46@gmail.com>
+Date:   Mon, 27 Feb 2023 16:04:05 +0000
+Message-ID: <CAJwJo6a9NF=o+ON04t5uFThNfDypBE-QUg=7A8jNrTuTcZEEew@mail.gmail.com>
+Subject: Re: [PATCH v12 2/3] ptrace,syscall_user_dispatch: checkpoint/restore
+ support for SUD
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        oleg@redhat.com, avagin@gmail.com, peterz@infradead.org,
+        luto@kernel.org, krisman@collabora.com, tglx@linutronix.de,
+        corbet@lwn.net, shuah@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Mon, 27 Feb 2023 at 16:02, Dmitry Safonov <0x7f454c46@gmail.com> wrote:
+>
+> Hi Gragory,
 
-Merge it into its only call site.
+s/Gragory/Gregory/
+Sorry, a typo!
 
-No functional changes.
-
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- arch/x86/kernel/cpu/microcode/amd.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index 9eb457b10341..394a9e16d5ee 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -596,11 +596,6 @@ void reload_ucode_amd(unsigned int cpu)
- 		}
- 	}
- }
--static u16 __find_equiv_id(unsigned int cpu)
--{
--	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
--	return find_equiv_id(&equiv_table, uci->cpu_sig.sig);
--}
- 
- /*
-  * a small, trivial cache of per-family ucode patches
-@@ -651,9 +646,11 @@ static void free_cache(void)
- 
- static struct ucode_patch *find_patch(unsigned int cpu)
- {
-+	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
- 	u16 equiv_id;
- 
--	equiv_id = __find_equiv_id(cpu);
-+
-+	equiv_id = find_equiv_id(&equiv_table, uci->cpu_sig.sig);
- 	if (!equiv_id)
- 		return NULL;
- 
 -- 
-2.35.1
-
+             Dmitry
