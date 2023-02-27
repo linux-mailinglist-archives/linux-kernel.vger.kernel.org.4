@@ -2,158 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619F16A3974
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BAA6A3977
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjB0DXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 22:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S229917AbjB0D0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 22:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjB0DXI (ORCPT
+        with ESMTP id S229872AbjB0D0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 22:23:08 -0500
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DBA9019;
-        Sun, 26 Feb 2023 19:23:05 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VcVxEsG_1677468182;
-Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VcVxEsG_1677468182)
-          by smtp.aliyun-inc.com;
-          Mon, 27 Feb 2023 11:23:02 +0800
-Date:   Mon, 27 Feb 2023 11:22:58 +0800
-From:   Tony Lu <tonylu@linux.alibaba.com>
-To:     Kai <KaiShen@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chengyou@linux.alibaba.com, guangguan.wang@linux.alibaba.com
-Subject: Re: [PATCH] Use percpu ref for wr tx reference
-Message-ID: <Y/wiEuwq0Rg/RAPK@TONYMAC-ALIBABA.local>
-Reply-To: Tony Lu <tonylu@linux.alibaba.com>
-References: <20230224102306.5613-1-KaiShen@linux.alibaba.com>
+        Sun, 26 Feb 2023 22:26:06 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBC61B2FF
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 19:26:02 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id h8so2032720plf.10
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 19:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vQjgP6xD9SwZtosmKlpC86tRlv5f9ObNbS66GUAaxVc=;
+        b=CGkQ0zxIXtJqp7Tctt5suGL0lPfve3yYjTiOlUXqSX/r2QEQf973FYr8hi2xhusYW8
+         cj34TaRKzIUFaKiOlKpepE1TDiWpFAi3m5h8K3srK7O4/xpcM1XP8fghYxNDOQNOa+sA
+         EHaF/bJPmHCLZTy37xH03vHeP3pRJeNQvrHJy/E/O150fh/dCim+5VO9eaaHTNP47dh3
+         BJvnfyucKF7xzHyMm2DL9Ub0xp0DxTVFPRC8fF6kTcblzi9kw5AYstuxKGixmQRoH/5Q
+         hHO19rYnyQrgqtoSRluRhrTic8nQ3FadEw2rJ5g0BeVTkGRurBkeWIKJSzZZHr1yjUi+
+         kxEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vQjgP6xD9SwZtosmKlpC86tRlv5f9ObNbS66GUAaxVc=;
+        b=5J2eDnSMDy3i4RoHLgIUO3CeZX8XU1x+jeQEPbsjsRI0TBGMHz8mJ12gEOLDnp50NS
+         Jf6HU9hUx0S5Faq/SHoMUzMyWNTvMEXct4y2Ga2MZ3zDUUHIXnqomA6VjGvX3/ksMx1U
+         pI3nI8z0GtxQfwEAtwWQAdLZAI0bZOJA/3i3Vb5GqQLfMCxPTUgY5gN64ZUXM449R072
+         9MR2zN15HxA5ofRH+Hwc+dLyo6mUZHhgzPB0/0Cuxrmkg0g5NnxTKTgwuR0j4V7jOJpq
+         0nsRZU6AT9Atx8vhmxv0yncrw2Di2jlK8g1hDZbv88CVHsUSDJSFZqs4N/gI+thSp++X
+         s4Cg==
+X-Gm-Message-State: AO0yUKVNx7gpbjUUO4zQ9IY4r14eiwCRBBBTSeYfn1bRr74kCsmlKcl3
+        zCuiQliZP+KcP0tKH48e3ok=
+X-Google-Smtp-Source: AK7set/A1fBsD28xROh2L7g6t5SbmBzKfmCs44JaXQTElMb14SOP8rF3ZD9cIYLbYZe46MEMIH00kQ==
+X-Received: by 2002:a17:902:b286:b0:19c:a9b8:4349 with SMTP id u6-20020a170902b28600b0019ca9b84349mr15651897plr.32.1677468361962;
+        Sun, 26 Feb 2023 19:26:01 -0800 (PST)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id jc11-20020a17090325cb00b0019682e27995sm3342751plb.223.2023.02.26.19.26.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 19:26:01 -0800 (PST)
+From:   void0red <void0red@gmail.com>
+To:     will@kernel.org
+Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
+Subject: [PATCH] perf/smmuv3: add a check of devm_add_action in smmu_pmu_setup_msi
+Date:   Mon, 27 Feb 2023 11:25:57 +0800
+Message-Id: <20230227032557.894274-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224102306.5613-1-KaiShen@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:23:06AM +0000, Kai wrote:
-> Hi all,
-> The refcount wr_tx_refcnt may cause cache thrashing problems among
-> cores and we can use percpu ref to mitigate this issue here. We
-> gain some performance improvement with percpu ref here on our
-> customized smc-r verion. Applying cache alignment may also mitigate
-> this problem but it seem more reasonable to use percpu ref here.
-> 
-> Thanks.
+From: Kang Chen <void0red@gmail.com>
 
-Hi Kai,
+devm_add_action may fails, add a warning when it happens.
 
-Thanks for the patch. This is a great find. I am wondering that if you
-have the performance data compared with previous version.
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+ drivers/perf/arm_smmuv3_pmu.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-The patch format need to be improved:
-- subject: [PATCH net-next] net/smc: Use ...
-- commit message: Hi all and Thanks are not necessary.
+diff --git a/drivers/perf/arm_smmuv3_pmu.c b/drivers/perf/arm_smmuv3_pmu.c
+index 25a269d43..307bac904 100644
+--- a/drivers/perf/arm_smmuv3_pmu.c
++++ b/drivers/perf/arm_smmuv3_pmu.c
+@@ -724,7 +724,11 @@ static void smmu_pmu_setup_msi(struct smmu_pmu *pmu)
+ 	pmu->irq = msi_get_virq(dev, 0);
+ 
+ 	/* Add callback to free MSIs on teardown */
+-	devm_add_action(dev, smmu_pmu_free_msis, dev);
++	ret = devm_add_action(dev, smmu_pmu_free_msis, dev);
++	if (ret) {
++		dev_warn(dev, "failed to add callback to free MSIs on teardown\n");
++		return;
++	}
+ }
+ 
+ static int smmu_pmu_setup_irq(struct smmu_pmu *pmu)
+-- 
+2.34.1
 
-Thanks
-Tony Lu
-
-> 
-> Signed-off-by: Kai <KaiShen@linux.alibaba.com>
-> ---
->  net/smc/smc_core.h |  5 ++++-
->  net/smc/smc_wr.c   | 18 ++++++++++++++++--
->  net/smc/smc_wr.h   |  5 ++---
->  3 files changed, 22 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
-> index 08b457c2d294..0705e33e2d68 100644
-> --- a/net/smc/smc_core.h
-> +++ b/net/smc/smc_core.h
-> @@ -106,7 +106,10 @@ struct smc_link {
->  	unsigned long		*wr_tx_mask;	/* bit mask of used indexes */
->  	u32			wr_tx_cnt;	/* number of WR send buffers */
->  	wait_queue_head_t	wr_tx_wait;	/* wait for free WR send buf */
-> -	atomic_t		wr_tx_refcnt;	/* tx refs to link */
-> +	struct {
-> +		struct percpu_ref	wr_tx_refs;
-> +	} ____cacheline_aligned_in_smp;
-> +	struct completion	ref_comp;
->  
->  	struct smc_wr_buf	*wr_rx_bufs;	/* WR recv payload buffers */
->  	struct ib_recv_wr	*wr_rx_ibs;	/* WR recv meta data */
-> diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
-> index b0678a417e09..dd923e76139f 100644
-> --- a/net/smc/smc_wr.c
-> +++ b/net/smc/smc_wr.c
-> @@ -648,7 +648,8 @@ void smc_wr_free_link(struct smc_link *lnk)
->  
->  	smc_wr_tx_wait_no_pending_sends(lnk);
->  	wait_event(lnk->wr_reg_wait, (!atomic_read(&lnk->wr_reg_refcnt)));
-> -	wait_event(lnk->wr_tx_wait, (!atomic_read(&lnk->wr_tx_refcnt)));
-> +	percpu_ref_kill(&lnk->wr_tx_refs);
-> +	wait_for_completion(&lnk->ref_comp);
->  
->  	if (lnk->wr_rx_dma_addr) {
->  		ib_dma_unmap_single(ibdev, lnk->wr_rx_dma_addr,
-> @@ -847,6 +848,13 @@ void smc_wr_add_dev(struct smc_ib_device *smcibdev)
->  	tasklet_setup(&smcibdev->send_tasklet, smc_wr_tx_tasklet_fn);
->  }
->  
-> +static void smcr_wr_tx_refs_free(struct percpu_ref *ref)
-> +{
-> +	struct smc_link *lnk = container_of(ref, struct smc_link, wr_tx_refs);
-> +
-> +	complete(&lnk->ref_comp);
-> +}
-> +
->  int smc_wr_create_link(struct smc_link *lnk)
->  {
->  	struct ib_device *ibdev = lnk->smcibdev->ibdev;
-> @@ -890,7 +898,13 @@ int smc_wr_create_link(struct smc_link *lnk)
->  	smc_wr_init_sge(lnk);
->  	bitmap_zero(lnk->wr_tx_mask, SMC_WR_BUF_CNT);
->  	init_waitqueue_head(&lnk->wr_tx_wait);
-> -	atomic_set(&lnk->wr_tx_refcnt, 0);
-> +
-> +	rc = percpu_ref_init(&lnk->wr_tx_refs, smcr_wr_tx_refs_free,
-> +			     PERCPU_REF_ALLOW_REINIT, GFP_KERNEL);
-> +	if (rc)
-> +		goto dma_unmap;
-> +	init_completion(&lnk->ref_comp);
-> +
->  	init_waitqueue_head(&lnk->wr_reg_wait);
->  	atomic_set(&lnk->wr_reg_refcnt, 0);
->  	init_waitqueue_head(&lnk->wr_rx_empty_wait);
-> diff --git a/net/smc/smc_wr.h b/net/smc/smc_wr.h
-> index 45e9b894d3f8..f3008dda222a 100644
-> --- a/net/smc/smc_wr.h
-> +++ b/net/smc/smc_wr.h
-> @@ -63,14 +63,13 @@ static inline bool smc_wr_tx_link_hold(struct smc_link *link)
->  {
->  	if (!smc_link_sendable(link))
->  		return false;
-> -	atomic_inc(&link->wr_tx_refcnt);
-> +	percpu_ref_get(&link->wr_tx_refs);
->  	return true;
->  }
->  
->  static inline void smc_wr_tx_link_put(struct smc_link *link)
->  {
-> -	if (atomic_dec_and_test(&link->wr_tx_refcnt))
-> -		wake_up_all(&link->wr_tx_wait);
-> +	percpu_ref_put(&link->wr_tx_refs);
->  }
->  
->  static inline void smc_wr_drain_cq(struct smc_link *lnk)
-> -- 
-> 2.31.1
