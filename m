@@ -2,152 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3076A46C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1D16A46C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjB0QMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S230051AbjB0QLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjB0QMF (ORCPT
+        with ESMTP id S229568AbjB0QLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:12:05 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904F7222CF;
-        Mon, 27 Feb 2023 08:12:04 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id s12so7156976qtq.11;
-        Mon, 27 Feb 2023 08:12:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVS+XAReNIqkEZr+HHhHNoC0XqayQ7uaPTuLvcoutJg=;
-        b=lk0sxdpjwkeffBxkze1r6VZFwx01PQ5+VQC/bTgDkHrhafr0dPo82eurd/Hq/t5dHL
-         0Aj0T2gcA0Ix4rquId5YzeFAfJEQRBOmfYkJIlyMi8KTNhHprv1/5Wkf6riYC2qvlZ9p
-         +lqitZkHTpPoORHMIomebpTYdRfkYhoMvF0jgTBONGdWwpLKe93WLpDqyclL9Glg+6p7
-         3GGZQDag+OaslA5no/LhLpn1KzLZlCl94EXhzk6yB5mJyUSjzgKmiE5NM36xFnKPIJ9m
-         bzsyHe48ElQPIg1LjHxEx3sqqbsFrd7daWOF9ZFT/XPeuKvKcJkpsp1ohyDGSP06PEm1
-         gajw==
+        Mon, 27 Feb 2023 11:11:47 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F014121A02
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:11:46 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id cf14so7167931qtb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:11:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HVS+XAReNIqkEZr+HHhHNoC0XqayQ7uaPTuLvcoutJg=;
-        b=dpbW7BlvJy+nknezbNWi+RzAkdxOnaYogEEmVTZw1FXiCtkuyW8MEyZM5c27w8UnnN
-         f7q+NDhJJqKkf619EfW2tDombkB7Udv4hJ8DI2x2lf3bPoRWDGL4cwrWXkJ4fnOMbNl7
-         G0ftObFpWtZdQ2y98pds0gqzCcooFzSjH/w0W/qqF8t25MYV3zBCHfJ38RdfG3tKPQC5
-         W+32fS5G1HFAxy9PAmAv4yw+uU4q1iXE7hUIB4v41dV//hO0qwMAi/oLIknRQtHia3Ss
-         o/fkoH1AtI949qdp9nn+b5UxkvgMPdAad847XVqcAislTVv2tb3pbjrbeT0CayhBa+kX
-         CY3w==
-X-Gm-Message-State: AO0yUKX5yISHwobpJaHfUznKAazcDsWlNzpQcr6fvFnP8wXcVQs8/dnu
-        VrWY0Ma0RA5Xu903Zvv//+Y=
-X-Google-Smtp-Source: AK7set8DE/smvk2iugB1Wlsd5cvyAWVwCrm5DHYixBwAorNNTxk1UunRx+yF2yQAkpbX46ZK/yVgHA==
-X-Received: by 2002:a05:622a:18f:b0:3bf:aa39:982b with SMTP id s15-20020a05622a018f00b003bfaa39982bmr32687063qtw.32.1677514323651;
-        Mon, 27 Feb 2023 08:12:03 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id n188-20020a37bdc5000000b007425f242cb8sm5144325qkf.66.2023.02.27.08.12.02
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+8TPkPUsFS7szPVJljLB5yud5sEW4Uac8hRXAQn/Ddo=;
+        b=SK3xNZxE2g2niOzJB9fbis3o+Fcc7quy/XqdNUiVPT+WF6cpjR11nIQiW3W6+61b12
+         krN9mfxVoITkb79fKWddq0B5uqBc6Ni5pjUIVn9xXhd9uS36ElErskA3TRSJPJEqsGeh
+         hW0kZ+dEwDTFNsJO21In+/1ZAB7i7PsjiTKH5CqkHwEsrwZamDHovpBhJqJquHYsMYny
+         CZctQL+a1bzULiWoEFKGkNlcnfIq3MLpxbnBorxOqTXd9LGiAt97HeKyyX/+az91tSej
+         1v2tApa1TmPjm9AnB1C+jGxSsoFgKbR55eF8zmfgJpax+M8fy2oBrP5WQC6iziCHLmT2
+         0kdg==
+X-Gm-Message-State: AO0yUKWW/rISOm1NOZ4GYyHadMvYisIl8Zc4vuYvQhYVnrKiuA9UJ3Ta
+        a18A/NbVzO7LuguOUFNHhBA=
+X-Google-Smtp-Source: AK7set+hYWnLLUFMOlBvKfN71mjbk9buTaayE82mbrCyB548HhCX7Mru7MQ5hFLkYf5u0VynyG56RA==
+X-Received: by 2002:a05:622a:1713:b0:3bf:a15e:a898 with SMTP id h19-20020a05622a171300b003bfa15ea898mr39249058qtk.18.1677514305888;
+        Mon, 27 Feb 2023 08:11:45 -0800 (PST)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id q9-20020ac84109000000b003bfa52112f9sm4925813qtl.4.2023.02.27.08.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 08:12:02 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7D53927C0054;
-        Mon, 27 Feb 2023 11:12:01 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 27 Feb 2023 11:12:02 -0500
-X-ME-Sender: <xms:UNb8YzVn8FT-9qP6SjrCPvxjqIjt2A5On293QHEHdZGkdX9pny1Q1Q>
-    <xme:UNb8Y7mr54l2qZxmzeyZM9yRhQ5Bc4uSHAgF79ICRv7IA5pljWgiWcSo302BeCjkH
-    3wsXx9TVNqcNYrLYA>
-X-ME-Received: <xmr:UNb8Y_ar2I925ZgRm_KZdaLgCgrXWN1KxDshAAt82lo0uXHrYeF_QDJdzzc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepgeekgeettdelffekfedtveelueeiudevjeegieekvdegkedufeetfeei
-    iedvueelnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
-    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:UNb8Y-WnawlW9HJeO3csrPPAPLflnOiv0Ilzx36YoyYjliaXZfd4jQ>
-    <xmx:UNb8Y9n-DVVdEbziGEB3qz7Zcd_a_IShmvQ3na6f-FI4BBY4HB_wjw>
-    <xmx:UNb8Y7cU32gY1lIBL1SuzBmfcVrYU-cxp7_b6dmy_oa3oIIOfKLzMw>
-    <xmx:Udb8YzfDT6D-ZHbriXkmHTvvhiUa8QI8d_x_Uq5-e9Mb8iuK6dvdyg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Feb 2023 11:11:59 -0500 (EST)
-Date:   Mon, 27 Feb 2023 08:11:27 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Gary Guo <gary@garyguo.net>, Asahi Lina <lina@asahilina.net>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH 5/5] rust: error: Add from_kernel_result!() macro
-Message-ID: <Y/zWL4aeIRbvwKMI@boqun-archlinux>
-References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
- <20230224-rust-error-v1-5-f8f9a9a87303@asahilina.net>
- <Y/lOlcSpc+d9ytq/@boqun-archlinux>
- <20230225222340.34d749ee.gary@garyguo.net>
- <Y/rCU1S+GDgIojNf@boqun-archlinux>
- <20230226133606.583cd1d8.gary@garyguo.net>
- <Y/uiAfZnfbbMrQuD@boqun-archlinux>
- <CANiq72kTiHF76T0AycM43qj4rUgQpHzBqXujdvk+H2qoDz22AQ@mail.gmail.com>
- <Y/vZdv6IVmrcP7wR@boqun-archlinux>
- <CANiq72kHe+BD1ZXjDQD_vWrpx+nBfy8fkjhHa8fx=3Bpk+Uuug@mail.gmail.com>
+        Mon, 27 Feb 2023 08:11:45 -0800 (PST)
+Date:   Mon, 27 Feb 2023 10:11:42 -0600
+From:   David Vernet <void@manifault.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, kernel-team@meta.com,
+        torvalds@linux-foundation.org, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tasks: Extract rcu_users out of union
+Message-ID: <Y/zWPoCjQ6gLSNGU@maniforge>
+References: <20230215233033.889644-1-void@manifault.com>
+ <20230216080459.GA5200@redhat.com>
+ <Y+54c0YvXcMIFva4@maniforge>
+ <20230217102521.GA27682@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72kHe+BD1ZXjDQD_vWrpx+nBfy8fkjhHa8fx=3Bpk+Uuug@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230217102521.GA27682@redhat.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 01:10:39PM +0100, Miguel Ojeda wrote:
-> On Sun, Feb 26, 2023 at 11:13 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+On Fri, Feb 17, 2023 at 11:25:21AM +0100, Oleg Nesterov wrote:
+> On 02/16, David Vernet wrote:
 > >
-> > Interesting, sounds like a missing feature in `rustfmt` or maybe we
-> > don't use the correct config ;-)
-> 
-> It may be coming [1] (I haven't tested if that one would work for us),
-> but in general it is hard for `rustfmt` because the contents are not
-> necessarily valid Rust code.
-> 
-> [1] https://github.com/rust-lang/rustfmt/pull/5538
-> 
-> > "Yeah" means they have different behaviors, right? ;-)
-> 
-> Yes, sorry for the confusion :)
-> 
-
-No worries, English is the one to blame ;-)
-
-> > Thanks for finding an example! Means we did use return.
+> > On Thu, Feb 16, 2023 at 09:04:59AM +0100, Oleg Nesterov wrote:
+> > >
+> > > >    a task that's successfully looked
+> > > >    up in e.g. the pid_list with find_task_by_pid_ns(), can always have a
+> > > >    'usage' reference acquired on them, as it's guaranteed to be >
+> > > >    0 until after the next gp.
+> > >
+> > > Yes. So it seems you need another key-to-task_struct map with rcu-safe
+> > > lookup/get and thus the add() method needs inc_not_zero(task->rcu_users) ?
 > >
-> > For this particular API, I'd say function right now, `try` blocks if
-> > avaiable.
+> > Yes, exactly.
 > 
-> Do you mean going with the closure for the time being and `try` blocks
-> when they become stable? Yeah, I think that is a fair approach.
+> OK, in this case I agree, inc_not_zero(rcu_users) makes sense and thus we need
+> this patch.
+
+Thanks again for taking a look.
+
 > 
+> Just I was confused by the previous part of the changelog due to my bad English.
 
-Right, and like my original suggestion to Lina, don't use macro for this
-one.
+No worries at all -- the commit summary definitely could have been more
+clear.
 
-Regards,
-Boqun
+Does anyone else have any thoughts? Is there anything else we need to do
+for this patch to land?
 
-> Cheers,
-> Miguel
+Thanks,
+David
