@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A196A3624
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 02:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B3D6A3625
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 02:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjB0B0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 20:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
+        id S229754AbjB0B1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 20:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0B0s (ORCPT
+        with ESMTP id S229703AbjB0B1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 20:26:48 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A272F763
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 17:26:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677461208; x=1708997208;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=8ovyPttT18G5v63lM3i6UHd2Y+feRiQ7nfxrWnDWnng=;
-  b=CkVhipCdGdW95rbQ5Nv7qpoflD+LlcQMjf6h0NvbxPgG1FQT4zf1iYOq
-   z4xSH3eGctkKeuUxIb+N6t5STe80+aWg9xK3oWk/ZcmkXc+AA9TZckH0e
-   cyad1zeUEM8VY/weEhVo5X3r2cw3q5YzbhAvk6DYjn5p6P53mMT7Qf3X9
-   SO9T/Xm58uwbfhvcCPLlHYwHZ9nyBk01Qw9YUozYkNNOWwNv5fc17PWdV
-   hy4BDvH1w8Dh65BPCHc876LkdGGf+NQSq/+yeFjCozus39poVT/CgfDBm
-   ABkTAG4lZ1RZq3pL/jUgVb+bjqqeRazbvMiocxDxyIcR0kyPH2EhIXYVL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="398531897"
-X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="398531897"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 17:26:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="816435468"
-X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="816435468"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 17:26:43 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 0/3] migrate_pages: fix deadlock in batched synchronous
- migration
-References: <20230224141145.96814-1-ying.huang@intel.com>
-        <20230225205543.5d56714d2145ac45da25369e@linux-foundation.org>
-Date:   Mon, 27 Feb 2023 09:25:35 +0800
-In-Reply-To: <20230225205543.5d56714d2145ac45da25369e@linux-foundation.org>
-        (Andrew Morton's message of "Sat, 25 Feb 2023 20:55:43 -0800")
-Message-ID: <874jr7dhm8.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 26 Feb 2023 20:27:01 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B4F944;
+        Sun, 26 Feb 2023 17:26:58 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id ec43so19548809edb.8;
+        Sun, 26 Feb 2023 17:26:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CHXURtJ6XWFKOSxnrF6y7AT9ts71qMylQ2e1Gr7C6LE=;
+        b=ew9FQtWcS7t4Fc9bbKaL+T4vv5X6hAoYzUYtZAM9JPVzgqM8Lk7LS4jYIrQY3MxsXg
+         o7buuoHhvQ1mEfEdWDslI8l/PNRuteIZEBq+SLpWB27N12Z1j9Y8DVW+tUG/L1yBTCce
+         niypySvnuXAippaaamMTltj77zlpsNs2xldJyqynmGch0uEF4BEPRIHbB4fq2HNoik+k
+         oAtVfGGdMKi4CREiBkDZ5WZk12LbOuNqrNyL0Z8WyzM+KLEOoawoAyhlgpR7LmVCJNxx
+         YGmVjGnoeIu5XCDJlwsgfowinXCh5h1agFCo8Meh1jwnLwzPTGgH2QbvPXJh60v0Nt0U
+         Xd/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CHXURtJ6XWFKOSxnrF6y7AT9ts71qMylQ2e1Gr7C6LE=;
+        b=zZlkV6RXB1lTgQwhd6z4Pv2ZWpjZJ3UsJhunTlnd4JpG3MiGeGo2LiQahZnqKehplE
+         VrJ/u4TCfLj2eMMKch5k1Agvw5Ryzpd6SXtR93uhOftiDvRd7gjVgq708yTFiFhY4YhQ
+         BX1qOYQzPY7adovPeqzQQy9AfudQZ4NcnB4om3wsyy7zWYvAXnBXfdX29UmZRBBV6E9e
+         58PssVZNVd0g+Kig2PKmXv4wQl3DlX6N9PUPuCZuXfwQfjDWGClNzFbgLnz8CNKGHXOa
+         Qwwy5v8SoRfA3Em1UfJo51AdMkb196fUnY9cyc+Lh7cOK5t9qHMICMAsUL7K/Egmc+h2
+         9OtA==
+X-Gm-Message-State: AO0yUKXJy3LAPi8MXg22NhU+f/fzce9Fm6fpP3nyEO1g1E7J0Nl3hOgZ
+        Ou7WT6R+adNI7y2kwNVLd0DiZvsXSr+sjam5cLISzfYcDPw/RwHi
+X-Google-Smtp-Source: AK7set9nb9sahEv+ZjT/3uOgVmK2s7yoPcsQgaiKLv3msuWPVTK4wMz7HYJhDKDvlzU2d6aHl9jAUECemnf6qappIfI=
+X-Received: by 2002:a17:907:2be6:b0:8b1:3cdf:29cd with SMTP id
+ gv38-20020a1709072be600b008b13cdf29cdmr14033140ejc.6.1677461216996; Sun, 26
+ Feb 2023 17:26:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230226095933.3286710-1-void0red@gmail.com> <Y/t729AIYjxuP6X6@corigine.com>
+In-Reply-To: <Y/t729AIYjxuP6X6@corigine.com>
+From:   Kang Chen <void0red@gmail.com>
+Date:   Mon, 27 Feb 2023 09:26:45 +0800
+Message-ID: <CANE+tVrFOev4GjjbM1=P4gPHJEqLvbMHJfYfVH_L6NVVDnu0DA@mail.gmail.com>
+Subject: Re: [PATCH] nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> writes:
+Hi Simon,
 
-> On Fri, 24 Feb 2023 22:11:42 +0800 Huang Ying <ying.huang@intel.com> wrote:
->
->> Two deadlock bugs were reported for the migrate_pages() batching
->> series.
->
-> "migrate_pages(): batch TLB flushing"
+I will update the patch later.
+Thank you for your review.
 
-Yes.  Should have written as that.
-
->>  Thanks Hugh and Pengfei.  Analysis shows that if we have
->> locked some other folios except the one we are migrating, it's not
->> safe in general to wait synchronously, for example, to wait the
->> writeback to complete or wait to lock the buffer head.
->> 
->> So 1/3 fixes the deadlock in a simple way, where the batching support
->> for the synchronous migration is disabled.  The change is
->> straightforward and easy to be understood.  While 3/3 re-introduce the
->> batching for synchronous migration via trying to migrate
->> asynchronously in batch optimistically, then fall back to migrate
->> synchronously one by one for fail-to-migrate folios.  Test shows that
->> this can restore the TLB flushing batching performance for synchronous
->> migration effectively.
+On Sun, Feb 26, 2023 at 11:33=E2=80=AFPM Simon Horman <simon.horman@corigin=
+e.com> wrote:
 >
-> If anyone backports the "migrate_pages(): batch TLB flushing" series
-> into their kernels, they will want to know about such fixes.  So we can
-> help them by providing suitable Link: tags.
+> On Sun, Feb 26, 2023 at 05:59:33PM +0800, Kang Chen wrote:
+> > devm_kmalloc_array may fails, *fw_vsc_cfg might be null and cause
+> > out-of-bounds write in device_property_read_u8_array later.
+> >
+> > Signed-off-by: Kang Chen <void0red@gmail.com>
 >
-> Such a Link: may also be helpful to people who are performing git
-> bisection searches for some issue but who keep stumbling over the
-> issues which this series addresses.
+> I'm not sure if this is a bug-fix (for stable).
+> But if so, I think the following is the appropriate fixes tag.
 >
-> Being lazy, I slapped
+> Fixes: a06347c04c13 ("NFC: Add Intel Fields Peak NFC solution driver")
 >
-> Fixes: 6f7d760e86fa ("migrate_pages: move THP/hugetlb migration support check to simplify code")
+> > ---
+> >  drivers/nfc/fdp/i2c.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/nfc/fdp/i2c.c b/drivers/nfc/fdp/i2c.c
+> > index 2d53e0f88..d95d20efa 100644
+> > --- a/drivers/nfc/fdp/i2c.c
+> > +++ b/drivers/nfc/fdp/i2c.c
+> > @@ -247,6 +247,9 @@ static void fdp_nci_i2c_read_device_properties(stru=
+ct device *dev,
+> >                                          len, sizeof(**fw_vsc_cfg),
+> >                                          GFP_KERNEL);
+> >
+> > +             if (!*fw_vsc_cfg)
+> > +                     goto vsc_read_err;
 >
-> on all three, as this was the final patch in that series.  Inaccurate,
-> but it means that these fixes will land in a suitable place if anyone
-> needs them.
-
-Sorry.  I should have added the "Fixes:" tag.  I will be more careful
-in the future.  And, I will add proper "Link:" tag too.
-
-Best Regards,
-Huang, Ying
+> This leads to:
+>
+>         dev_dbg(dev, "FW vendor specific commands not present\n");
+>
+> Which seems a little misleading for this error condition.
+>
+> > +
+> >               r =3D device_property_read_u8_array(dev, FDP_DP_FW_VSC_CF=
+G_NAME,
+> >                                                 *fw_vsc_cfg, len);
+> >
+> > --
+> > 2.34.1
+> >
