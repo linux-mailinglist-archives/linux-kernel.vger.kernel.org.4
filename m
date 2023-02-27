@@ -2,182 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346B16A3E4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5740F6A3E50
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 10:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjB0J1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 04:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S229786AbjB0J2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 04:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjB0J12 (ORCPT
+        with ESMTP id S229558AbjB0J2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:27:28 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF2826BC;
-        Mon, 27 Feb 2023 01:27:26 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4440B24E320;
-        Mon, 27 Feb 2023 17:27:19 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
- 2023 17:27:19 +0800
-Received: from [192.168.125.93] (113.72.145.171) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
- 2023 17:27:18 +0800
-Message-ID: <68f322ce-437a-1bd6-cf49-e6d485d4edfd@starfivetech.com>
-Date:   Mon, 27 Feb 2023 17:27:18 +0800
+        Mon, 27 Feb 2023 04:28:13 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F4B76B1;
+        Mon, 27 Feb 2023 01:28:11 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19B066602216;
+        Mon, 27 Feb 2023 09:28:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677490090;
+        bh=fldeCQ2T3yK2LbLkV58DiP2FN50W9J7zlsxRxl8CG0c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=muSvg7U/qWbXs3L1PUQ0RBl7Rh8gbjl/8NqkagVl/L6OHTx6O+uEE0zle6Dpcs0Sd
+         7H1akkLBKCE49h6FPNpktm05EhzY06VyX8aJb8qIacgtyNkQF+AELASrpc1pH8GflM
+         On7KLALIWvNE4mJKEIQ7H5juaCiwWcXqtIOxw00wmdKiosEGpDqeQAGpuv2AaJkgRj
+         rJ8z9U9hLl7YICyqQrGPjFYqly73XNk73Nr+K+8zAbWkrEbqEjZ40+ylR4kXE3XoLS
+         OZTOdSSBjAVbVUeCvAmX1OnX90fR4yK+BSpyrQvekroyt9fffedVtq0BE00XP9G5ny
+         KyIS9miksZX+g==
+Message-ID: <cd634833-b28e-d6d3-692d-5a391b85ad34@collabora.com>
+Date:   Mon, 27 Feb 2023 10:28:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 2/3] dmaengine: dw-axi-dmac: Add support for StarFive
- JH7110 DMA
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 4/4] clk: mediatek: Add drivers for MediaTek MT6735
+ main clock and reset drivers
 Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230221140424.719-1-walker.chen@starfivetech.com>
- <20230221140424.719-3-walker.chen@starfivetech.com>
- <CAJM55Z_buj_CBKtJw=n_K-Ma4ZGP9pmy_uM20nLpJhTMNh=bJQ@mail.gmail.com>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <CAJM55Z_buj_CBKtJw=n_K-Ma4ZGP9pmy_uM20nLpJhTMNh=bJQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230225094246.261697-1-y.oudjana@protonmail.com>
+ <20230225094246.261697-5-y.oudjana@protonmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230225094246.261697-5-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.171]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/2/26 22:25, Emil Renner Berthing wrote:
-> On Tue, 21 Feb 2023 at 15:04, Walker Chen <walker.chen@starfivetech.com> wrote:
->>
->> Add DMA reset operation in device probe and use different configuration
->> on CH_CFG registers according to compatible string.
->>
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
->> ---
->>  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 19 +++++++++++++++++--
->>  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  3 +++
->>  2 files changed, 20 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
->> index bf85aa0979ec..858c4337650f 100644
->> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
->> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
->> @@ -25,6 +25,7 @@
->>  #include <linux/platform_device.h>
->>  #include <linux/pm_runtime.h>
->>  #include <linux/property.h>
->> +#include <linux/reset.h>
->>  #include <linux/slab.h>
->>  #include <linux/types.h>
->>
->> @@ -86,7 +87,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
->>
->>         cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
->>                   config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
->> -       if (chan->chip->dw->hdata->reg_map_8_channels) {
->> +       if (chan->chip->dw->hdata->reg_map_8_channels &&
->> +           !chan->chip->dw->hdata->use_cfg2) {
->>                 cfg_hi = config->tt_fc << CH_CFG_H_TT_FC_POS |
->>                          config->hs_sel_src << CH_CFG_H_HS_SEL_SRC_POS |
->>                          config->hs_sel_dst << CH_CFG_H_HS_SEL_DST_POS |
->> @@ -1142,7 +1144,7 @@ static int dma_chan_terminate_all(struct dma_chan *dchan)
->>         axi_chan_disable(chan);
->>
->>         ret = readl_poll_timeout_atomic(chan->chip->regs + DMAC_CHEN, val,
->> -                                       !(val & chan_active), 1000, 10000);
->> +                                       !(val & chan_active), 1000, DMAC_TIMEOUT_US);
->>         if (ret == -ETIMEDOUT)
->>                 dev_warn(dchan2dev(dchan),
->>                          "%s failed to stop\n", axi_chan_name(chan));
->> @@ -1416,6 +1418,18 @@ static int dw_probe(struct platform_device *pdev)
->>         if (IS_ERR(chip->cfgr_clk))
->>                 return PTR_ERR(chip->cfgr_clk);
->>
->> +       if (of_device_is_compatible(node, "starfive,jh7110-axi-dma")) {
->> +               chip->resets = devm_reset_control_array_get_exclusive(&pdev->dev);
->> +               if (IS_ERR(chip->resets))
->> +                       return PTR_ERR(chip->resets);
->> +
->> +               ret = reset_control_deassert(chip->resets);
->> +               if (ret)
->> +                       return ret;
->> +
->> +               chip->dw->hdata->use_cfg2 = true;
->> +       }
->> +
+Il 25/02/23 10:42, Yassine Oudjana ha scritto:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
-> In the future it would be great to use match data rather than all the
-> calls to of_device_is_compatible.
-
-Thanks, about this point, I will follow your advice.
-
+> Add drivers for MT6735 apmixedsys, topckgen, infracfg and pericfg
+> clock and reset controllers. These provide the base clocks and resets
+> on the platform, and should be enough to bring up all essential blocks
+> including PWRAP, MSDC and peripherals (UART, I2C, SPI).
 > 
->>         ret = parse_device_properties(chip);
->>         if (ret)
->>                 return ret;
->> @@ -1560,6 +1574,7 @@ static const struct dev_pm_ops dw_axi_dma_pm_ops = {
->>  static const struct of_device_id dw_dma_of_id_table[] = {
->>         { .compatible = "snps,axi-dma-1.01a" },
->>         { .compatible = "intel,kmb-axi-dma" },
->> +       { .compatible = "starfive,jh7110-axi-dma" },
->>         {}
->>  };
->>  MODULE_DEVICE_TABLE(of, dw_dma_of_id_table);
->> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
->> index e9d5eb0fd594..761d95691c02 100644
->> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
->> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
->> @@ -21,6 +21,7 @@
->>  #define DMAC_MAX_CHANNELS      16
->>  #define DMAC_MAX_MASTERS       2
->>  #define DMAC_MAX_BLK_SIZE      0x200000
->> +#define DMAC_TIMEOUT_US                200000
->>
->>  struct dw_axi_dma_hcfg {
->>         u32     nr_channels;
->> @@ -33,6 +34,7 @@ struct dw_axi_dma_hcfg {
->>         /* Register map for DMAX_NUM_CHANNELS <= 8 */
->>         bool    reg_map_8_channels;
->>         bool    restrict_axi_burst_len;
->> +       bool    use_cfg2;
->>  };
->>
->>  struct axi_dma_chan {
->> @@ -70,6 +72,7 @@ struct axi_dma_chip {
->>         struct clk              *core_clk;
->>         struct clk              *cfgr_clk;
->>         struct dw_axi_dma       *dw;
->> +       struct reset_control    *resets;
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>   MAINTAINERS                                  |   4 +
+>   drivers/clk/mediatek/Kconfig                 |   9 +
+>   drivers/clk/mediatek/Makefile                |   1 +
+>   drivers/clk/mediatek/clk-mt6735-apmixedsys.c | 139 ++++++
+>   drivers/clk/mediatek/clk-mt6735-infracfg.c   |  78 ++++
+>   drivers/clk/mediatek/clk-mt6735-pericfg.c    |  91 ++++
+>   drivers/clk/mediatek/clk-mt6735-topckgen.c   | 450 +++++++++++++++++++
+>   7 files changed, 772 insertions(+)
+>   create mode 100644 drivers/clk/mediatek/clk-mt6735-apmixedsys.c
+>   create mode 100644 drivers/clk/mediatek/clk-mt6735-infracfg.c
+>   create mode 100644 drivers/clk/mediatek/clk-mt6735-pericfg.c
+>   create mode 100644 drivers/clk/mediatek/clk-mt6735-topckgen.c
 > 
-> This added field only seems to be written, but not read from anywhere.
 
-Reset initialization will be encapsulated in match data.
+..snip..
 
-> With that fixed:
-> 
-> Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> diff --git a/drivers/clk/mediatek/clk-mt6735-topckgen.c b/drivers/clk/mediatek/clk-mt6735-topckgen.c
+> new file mode 100644
+> index 000000000000..5fa743e4b0fc
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt6735-topckgen.c
+> @@ -0,0 +1,450 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Yassine Oudjana <y.oudjana@protonmail.com>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "clk-mtk.h"
+> +#include "clk-mux.h"
+> +
+> +#include <dt-bindings/clock/mediatek,mt6735-topckgen.h>
+> +
 
-Thanks for your review and comment very much!
+..snip..
 
-Best regards,
-Walker
+> +
+> +int clk_mt6735_topckgen_probe(struct platform_device *pdev)
+
+It gets *even easier* than that!
+
+Check out this one:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20230222092543.19187-5-angelogioacchino.delregno@collabora.com/
+
+...being part of:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=724004
+
+So you can use simple_probe for MT6735's topckgen too!
+
+In this case, it would be...
+
+static const struct mtk_clk_desc topck_desc = {
+	.clks = topckgen_muxes,
+	.num_clks = ARRAY_SIZE(topckgen_muxes),
+	.fixed_clks = topckgen_fixed_clks,
+	.num_fixed_clks = ARRAY_SIZE(topckgen_fixed_clks),
+	.factor_clks = topckgen_factors,
+	.num_factor_clks = ARRAY_SIZE(topckgen_factors),
+	.clk_lock = &mt6735_topckgen_lock,
+};
+
+static const struct of_device_id of_match_mt6735_topckgen[] = {
+	{ .compatible = "mediatek,mt6735-topckgen", .data = &topck_desc },
+	{ /* sentinel */ }
+};
+
+MODULE_DEVICE_TABLE(of, of_match_mt6735_topckgen)
+     ^^^^^
+You're missing that on multiple clock drivers ;-)
+
+...And you're replacing .probe(), .remove() callbacks with
+
+static struct platform_driver clk_mt6735_topckgen = {
+	.probe = mtk_clk_simple_probe,
+	.remove = mtk_clk_simple_remove,
+
+	......
+
+Other than that, good job!
+
+After performing these changes, please make sure to mention the dependency on
+my last cleanup series on your cover letter for v4, so that maintainers will
+be aware of what to do.
+
+Your v4 smells like Reviewed-by tags all over. Keep up the great work!
+
+Cheers,
+Angelo
