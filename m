@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865FE6A3A2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D029C6A3A35
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjB0Erp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 23:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S229788AbjB0Eui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 23:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0Ern (ORCPT
+        with ESMTP id S229470AbjB0Eug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 23:47:43 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B551BAE4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:47:41 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id l25so4847963wrb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:47:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5pnNZDw7QdzXNOM+p7zLL9mRnQ7pTZFlC2sCefY6Q8=;
-        b=AHQerDa0D2gjrEM3/6+pbLu4EiE7JH0iQUJsmQawF//n2hqu4ifk3pKnMxtJo70oe8
-         LWTykC2xWmhDNGh78Zz/3SkmxqKnp24YjESUQjfYtHcjiY0u6Rd6vRG6rm53+FN7xO/z
-         baZjhYDb6P0t6WXduyD8vQk/lHvDiHo1CwkmuXCcpwegaaCCmVWubqfR0BcuABcpqRgY
-         ZEzTFevfoq70+52/jkAF190nHN32zUIrxZMMowEThZQJ1ro1EHgTl6Ysn2ooLE/BkWnk
-         Ro65Q4vGICHCDBzDy5V3t4QEPxQWWnk+Uj++pbyGKLtRpS9+bW0KSIg6ujs5aEIx6LRm
-         Q1RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L5pnNZDw7QdzXNOM+p7zLL9mRnQ7pTZFlC2sCefY6Q8=;
-        b=gxRBcgdfsIuLvfzfwpv9m7LEFM6JX668QfeGWaY2MKODLl9FDjC34N1HBg/bWghsPu
-         tsPTOZmpbXbsA/VBT+C9q26i8FEb0sxWM9Hp9/LVu/l393gBs0yG59AxTvoC5ONvWl7+
-         rFkWQ8+EiAyxH27LkNWzn8jyWWAYrD+SDk9MCYeiq8RLyke20YRBzjs8UMAMkPLo15by
-         Q6zkL5oSh1jW9268idi6c3GkVeS3EVEo3kze/+GfemKTwqljaZFOQPo5KaC22Fxgby5Q
-         dERZ3eYewz+HqwW6bufzqHhtqj/+2uyKFJY1UskEpB5J4xtuVphsaGaUyBywcLW0TavF
-         vlZg==
-X-Gm-Message-State: AO0yUKV34YcERt1+WvMPRnBuzfXgce0cztERCH9DSAazWkxH5lS2i28E
-        L8gjzlnoUxAoKivExchZKKI=
-X-Google-Smtp-Source: AK7set+fSKmzs4msMrukUAYpzEAtIIuForVzV1d56gIL7HgeIIg8/V8ApAM576tUsxHihha54pYg4g==
-X-Received: by 2002:a5d:4105:0:b0:2c5:5eff:5c81 with SMTP id l5-20020a5d4105000000b002c55eff5c81mr19270737wrp.38.1677473260421;
-        Sun, 26 Feb 2023 20:47:40 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x16-20020a5d54d0000000b002c71703876bsm5908843wrv.14.2023.02.26.20.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 20:47:40 -0800 (PST)
-Date:   Mon, 27 Feb 2023 07:47:36 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Kang Chen <void0red@gmail.com>
-Cc:     paskripkin@gmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: add a null check of kzalloc in
- go_add_group_info_attr
-Message-ID: <Y/w16PI4klfJaeXA@kadam>
-References: <20230226132500.3933232-1-void0red@gmail.com>
+        Sun, 26 Feb 2023 23:50:36 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F99E07C;
+        Sun, 26 Feb 2023 20:50:36 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 84E443200902;
+        Sun, 26 Feb 2023 23:50:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 26 Feb 2023 23:50:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1677473434; x=1677559834; bh=fI
+        4g0ve62uV8mrXHpG6HypxMDaY5Y37mRewKpXjGCJ4=; b=MzWrCfjmJHTWYYfXuf
+        sbuVwJ01HsRfvKx3HJACaqMezbF0+0e0zoVuAFFtpuGYAcjxRl5k/LG/4Ct/6WZm
+        Er0suMK8fBPXBRUMuwTpPxEYu25YAZdt70hIZbNXOCXCGvqlp/lUQ15thwknRfYC
+        okJUMHbEHRSWaDSxzINU+/HrkOrqLThZCb2gNCR1T1DC6bFUjvtEx3YdHWA1oeBX
+        VXWkxz0pb9YdDWwh53mJqjZjuLItXdI71rRSn9jKQNtEhKQzmJer6xyxBRPJGKsj
+        Mf0bRAZw0rfzDZGqP9/WOmZuHxUr3srzyyi/6SXzJ3voXPa4y2+Bxqlyisq0Svcb
+        2FrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1677473434; x=1677559834; bh=fI4g0ve62uV8m
+        rXHpG6HypxMDaY5Y37mRewKpXjGCJ4=; b=ct73tTMdD1tMi6iO0bvZ/WhlBfc1Z
+        3KL6lnCRN1vM4qcdeKQz85nq8uEVQL580QHq2AaOwinbY1Z4qmv6JdUMCTHRLTQR
+        rbvWXzRc8x1W0Jaan0VD+zQKlRoXetTH6pCORJKIqLagCvalIA2zRhXr9A/V2m4i
+        M4qAbHUTz+sB+vop2cCTL7eZqQBP3Jbkoj8DLG2+4Ek8e8XY3WVPvuRt/afor1qc
+        NdKKrH6RbcK0Js+3v22wny4F09I/aXCpUyOoIRKNYL+0hzWjwEwtlFMFy+E1YV1h
+        EcNDpCvuCMA5lrB8Y+dm7AXAn1Dn0hEodEHGUniNNvoGo4yfSv9KmqSmQ==
+X-ME-Sender: <xms:mTb8Y9R6aLPOYjUh7ZE171y2UvCMet7llO2DcLd6kah5TJsIUXsggg>
+    <xme:mTb8Y2zgPJ2wxVkOn0KIvgKRBETxZatv7RIeWJYxOxbXK_061TGkXw2tlj_H55QxG
+    OBrfeV-CyDAA98FWgw>
+X-ME-Received: <xmr:mTb8Yy3ufCf8WL9fYAaebXMuh1_rnNOg2eoMAmIlq3Ft-ezOUGXeZgpWkEunn2GBy2X_Vn0ITe4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekledgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffotggggfesthekre
+    dtredtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
+    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeffkefhleetge
+    fgteeikeetkeehtdffkedvtdevteegfffglefffedtheeugfehfeenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    hsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:mTb8Y1BDjerfhwsoHpUiylEfAXcc9O-dJPXscR1K6OIWoEF5J08ZFg>
+    <xmx:mTb8Y2hNo3KujXjFat0fdZQizYkLLyido_n79VMsSB41_hwdyU91dg>
+    <xmx:mTb8Y5oB2pMebs7B-iD2hSa78jua--jQuP9c_RvJ1OA5jrrGmAi89A>
+    <xmx:mjb8Y9QboG_OLoYoOGZLxSvp1HiDWf55I8fW9zxeBpqrXAQ3wUmFJg>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 26 Feb 2023 23:50:28 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     devicetree@vger.kernel.org, s.hauer@pengutronix.de,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, linux-imx@nxp.com
+Cc:     linux@armlinux.org.uk, arnd@arndb.de, alistair23@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com,
+        jernej.skrabec@gmail.com, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v4 0/3] imx7d-remarkable2: Enable cyttsp5 and rohm,bd71815
+Date:   Mon, 27 Feb 2023 14:50:20 +1000
+Message-Id: <20230227045023.560319-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.39.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226132500.3933232-1-void0red@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,30 +87,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 09:25:00PM +0800, Kang Chen wrote:
-> kzalloc may fails, pdata_attr might be null and will cause
-> illegal address access later.
-> 
-> Signed-off-by: Kang Chen <void0red@gmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_p2p.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-> index 93d3c9c43..802e1170a 100644
-> --- a/drivers/staging/r8188eu/core/rtw_p2p.c
-> +++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-> @@ -31,6 +31,8 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
->  	struct sta_priv *pstapriv = &padapter->stapriv;
->  
->  	pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
-> +	if (!pdata_attr)
-> +		return 0;
+Enable the cyttsp5 and rohm,bd71815 in the device trees and
+defconfig for the reMarkable 2.
 
-Return success here is not a good thing.  We have to fix the caller to
-check for errors.  (Fixing a bug half way just makes it harder to find
-the bug so it makes the situation worse).
+v4:
+ - Fixup the rohm changes to match DT schema
+v3:
+ - Remove unused sleep states
+v2:
+ - Fixup DT formatting issues in path 3
 
-regards,
-dan carpenter
+Alistair Francis (3):
+  ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+  ARM: imx_v6_v7_defconfig: Enable rohm,bd71815
+  ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
+
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 239 ++++++++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig    |   5 +
+ 2 files changed, 244 insertions(+)
+
+-- 
+2.39.1
 
