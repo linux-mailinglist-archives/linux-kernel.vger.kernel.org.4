@@ -2,79 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9726A4A06
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAD86A4A08
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjB0Smc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        id S230038AbjB0Smz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjB0Sm3 (ORCPT
+        with ESMTP id S229841AbjB0Smx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:42:29 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA4125BA0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:42:29 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id b26-20020a5d805a000000b0074cfe3a44aeso1712166ior.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:42:28 -0800 (PST)
+        Mon, 27 Feb 2023 13:42:53 -0500
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56508269D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:42:52 -0800 (PST)
+Received: by mail-io1-f77.google.com with SMTP id k13-20020a5d9d4d000000b0074caed3a2d2so4738454iok.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:42:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i/MmIATLIodGQjvWvqb3jf2lxxR5/7ZbnhVN/hVzQ7Y=;
-        b=iaKZobvfbbnAKleTorGb4LAcPP8nLvCmKGZjKmdOAjlxRyaPSP5gMg+OTNUNvHPoGS
-         ofEnv6uQIWi9rR07InxmQcdrTF/6c2HY3aHh0KuxTgDWjXCt7YWKCxyI0S4RA6H7rfYJ
-         9uab46wB63K+pQYVVh/SYeKzOpDqNqywBJUZ9cWY2BK0gQfDFEoQcxXHYkxinMskEjY8
-         jec4yd+2/dUTufn9Az9inPCcsrnU5HBvKihml1DgoJBPBjzAmUYOb5k07b1faMB3l3yD
-         tJCcD/FSSdIb0tdLnuLPh5WOhFKU/V7SGVH+8vIxLM0jpAMxFF/vqIqpDkyvfk104neU
-         15ig==
-X-Gm-Message-State: AO0yUKU0h4XiUkABrLNIZBvcNtqPfmkrQyltUyhvstV0AAdR9dOsPDLn
-        3XLwhKUdXttwxIOsfxfks1/aRm+ij0LCpvICpQCyJ2GVrTsJ
-X-Google-Smtp-Source: AK7set+0iO1ZG2YenZnCZqoZxcK2NT7Py3/3nhgWXf7rV57rE7AbHq5smoZp6w8CNYZCLPUgxIF4i1VObc/Z/09DdlAXdRMBG+n4
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qzxtfmmZrqXjh+Bj23y/tmPD29T4/gAlA0rwqV7QgHE=;
+        b=liSWxJtKq87JCbfnqPvT+/mANoq1+6ZuqBhF5ErNaLxndUcABs4K/EpgrNRl7aUCb2
+         mGXDgtK0aHY+fbgXFLCiOs/FswvO9whWrVZFtdAZ8hKK0xF3VGDCke0vmskfTE3aiiO0
+         eJwLHDtd1ma5WBt800d3HS2QstJL12qzVDIFPQoQZPvEzXbnNynpahsbZgVzJTMgH6r3
+         R2RRU7hmEOSST4/XnQl3mWJ5iOUHej6uOHMCx7keyeGfuWd/brmW0kYZWFlOREPLg4m7
+         /LuvExSeJ2KSpA3KpTIUXaHWFU4sKhH0erBmFAtxHmnFdSAxsEZKVl00rH43P7u6alpZ
+         a5+A==
+X-Gm-Message-State: AO0yUKUlH/E/wsyPIeq90byF21OGwBWcE2ZmMHdFeOgPGrFfsQa1uaq9
+        ne5LJDMLqxvEWThLn/o78BZbK19pOCloP17AXAbB+LtksgFe
+X-Google-Smtp-Source: AK7set+RksJty87smpbv3BnzjFwdJIfUbN/G0jn4L/nzaz3XPLXdMAELIKph4iHNuEK6av1z9peIU+ACjo4CSl6dpmF7sCRJ4rjj
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:154a:b0:315:5d89:fb2c with SMTP id
- j10-20020a056e02154a00b003155d89fb2cmr6439429ilu.2.1677523348326; Mon, 27 Feb
- 2023 10:42:28 -0800 (PST)
-Date:   Mon, 27 Feb 2023 10:42:28 -0800
-In-Reply-To: <000000000000dca7e505e9978943@google.com>
+X-Received: by 2002:a02:2286:0:b0:3c5:d3e:9c82 with SMTP id
+ o128-20020a022286000000b003c50d3e9c82mr26037jao.5.1677523371657; Mon, 27 Feb
+ 2023 10:42:51 -0800 (PST)
+Date:   Mon, 27 Feb 2023 10:42:51 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000478fb705f5b2d79c@google.com>
-Subject: Re: [syzbot] [udf?] KASAN: null-ptr-deref Write in udf_write_fi
-From:   syzbot <syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com>
-To:     jack@suse.com, jack@suse.cz, khoroshilov@ispras.ru,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, pchelkin@ispras.ru,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000ab939e05f5b2d8cc@google.com>
+Subject: [syzbot] [net?] KASAN: null-ptr-deref Read in __fl_put
+From:   syzbot <syzbot+baabf3efa7c1e57d28b2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
+        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hello,
 
-commit e9109a92d2a95889498bed3719cd2318892171a2
-Author: Jan Kara <jack@suse.cz>
-Date:   Thu Oct 6 14:41:23 2022 +0000
+syzbot found the following issue on:
 
-    udf: Convert udf_rename() to new directory iteration code
+HEAD commit:    5b7c4cabbb65 Merge tag 'net-next-6.3' of git://git.kernel...
+git tree:       net
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10874f28c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c74c134cc415a89b
+dashboard link: https://syzkaller.appspot.com/bug?extid=baabf3efa7c1e57d28b2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166c5e50c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1094ca50c80000
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1191f00f480000
-start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-dashboard link: https://syzkaller.appspot.com/bug?extid=8a5a459f324d510ea15a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100a46c2880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116a4e72880000
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b3d83e162bd2/disk-5b7c4cab.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ad7e8c0fc7b5/vmlinux-5b7c4cab.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/060fac08a8fd/bzImage-5b7c4cab.xz
 
-If the result looks correct, please mark the issue as fixed by replying with:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+baabf3efa7c1e57d28b2@syzkaller.appspotmail.com
 
-#syz fix: udf: Convert udf_rename() to new directory iteration code
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: null-ptr-deref in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+BUG: KASAN: null-ptr-deref in refcount_read include/linux/refcount.h:147 [inline]
+BUG: KASAN: null-ptr-deref in __refcount_add_not_zero include/linux/refcount.h:152 [inline]
+BUG: KASAN: null-ptr-deref in __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
+BUG: KASAN: null-ptr-deref in refcount_inc_not_zero include/linux/refcount.h:245 [inline]
+BUG: KASAN: null-ptr-deref in maybe_get_net include/net/net_namespace.h:269 [inline]
+BUG: KASAN: null-ptr-deref in tcf_exts_get_net include/net/pkt_cls.h:260 [inline]
+BUG: KASAN: null-ptr-deref in __fl_put net/sched/cls_flower.c:513 [inline]
+BUG: KASAN: null-ptr-deref in __fl_put+0x13e/0x3b0 net/sched/cls_flower.c:508
+Read of size 4 at addr 000000000000014c by task syz-executor548/5082
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+CPU: 0 PID: 5082 Comm: syz-executor548 Not tainted 6.2.0-syzkaller-05251-g5b7c4cabbb65 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_report mm/kasan/report.c:420 [inline]
+ kasan_report+0xec/0x130 mm/kasan/report.c:517
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ refcount_read include/linux/refcount.h:147 [inline]
+ __refcount_add_not_zero include/linux/refcount.h:152 [inline]
+ __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
+ refcount_inc_not_zero include/linux/refcount.h:245 [inline]
+ maybe_get_net include/net/net_namespace.h:269 [inline]
+ tcf_exts_get_net include/net/pkt_cls.h:260 [inline]
+ __fl_put net/sched/cls_flower.c:513 [inline]
+ __fl_put+0x13e/0x3b0 net/sched/cls_flower.c:508
+ fl_change+0x101b/0x4ab0 net/sched/cls_flower.c:2341
+ tc_new_tfilter+0x97c/0x2290 net/sched/cls_api.c:2310
+ rtnetlink_rcv_msg+0x996/0xd50 net/core/rtnetlink.c:6165
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2574
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:722 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:745
+ ____sys_sendmsg+0x334/0x900 net/socket.c:2504
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
+ __sys_sendmmsg+0x18f/0x460 net/socket.c:2644
+ __do_sys_sendmmsg net/socket.c:2673 [inline]
+ __se_sys_sendmmsg net/socket.c:2670 [inline]
+ __x64_sys_sendmmsg+0x9d/0x100 net/socket.c:2670
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3613969d19
+Code: 28 c3 e8 1a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc884e0c88 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
+RAX: ffffffffffffffda RBX: 00007f36139d7ed0 RCX: 00007f3613969d19
+RDX: 04924924924926d3 RSI: 0000000020000200 RDI: 0000000000000004
+RBP: 00007ffc884e0c98 R08: 00007f36139d7e40 R09: 00007f36139d7e40
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc884e0ca0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
