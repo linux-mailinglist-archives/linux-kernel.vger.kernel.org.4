@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A796A4578
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FBA6A4581
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjB0PAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
+        id S229972AbjB0PC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjB0PAt (ORCPT
+        with ESMTP id S229657AbjB0PC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:00:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC501F90B;
-        Mon, 27 Feb 2023 07:00:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Feb 2023 10:02:27 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0458555BE;
+        Mon, 27 Feb 2023 07:02:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B8F18CE1054;
-        Mon, 27 Feb 2023 15:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074B5C4339C;
-        Mon, 27 Feb 2023 15:00:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677510035;
-        bh=aGqo+beX4rpf9C772G4rfI3PDzyyWU40qI/tZHMx4Ec=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=N6gG8tXrOotmZtHYGZOFW82yXA0CP7fXiPBkZJLeJ9epC+6R3ku5FXR2K2uSrDeU/
-         BTfmo7cpA2VoWJX1mzhAKgPigic2O2cA5HBmnmOoOUsSM6+GbEwt3GgMdDyzno+vSk
-         olIGKotwFdm4MdL0MCE2XJIrvd9x7GdUQXIVnp56ovu8y+nAf5VIAE+Oym+tjWD/dA
-         rLrQf6qV5c55YoxDmznT9bIUJp2pAfBrnc85E6sL8DYP+WaFa8+a7wsEp1n1rNlGO0
-         3Az1YA5wznPw3spCWTsfrYAsK2iUr/eVBaiBaL6G5OGgka/jXSmwz1FBFAg/2WWkdp
-         KFr/mhTLVEPvA==
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7AA48219FB;
+        Mon, 27 Feb 2023 15:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677510144; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gQdlZOcHYNl5XRcWKHNMj/kCNmWBN/fJPu/xDdRs1kc=;
+        b=MuOFW8HlHEK8azDxmhRDJhV5hwinNYrmK4nKpsf9WVDIZzds9W9IQn/s3uHbfRbvyKHbrH
+        V9X/4BR4XycqMMXkIe/QJ7cXYM+KlE8/KyncZlvdIgwIrZkp75iDVcaG/aK1zBQDKV8C/z
+        c2XEWUo5OCpZnLqG3aSu1U4cBY2takw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677510144;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gQdlZOcHYNl5XRcWKHNMj/kCNmWBN/fJPu/xDdRs1kc=;
+        b=+5JdXbctffs1QjnpI1Z5DvF5Nfr5Hb27YR2JhzIncsyffP9hNKgiYRyB/X6OuBsp75Ch6I
+        MZUNPq4bphQuz9Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6404D13A43;
+        Mon, 27 Feb 2023 15:02:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JvRPGADG/GNyGwAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 27 Feb 2023 15:02:24 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id BE2B8A06F2; Mon, 27 Feb 2023 16:02:23 +0100 (CET)
+Date:   Mon, 27 Feb 2023 16:02:23 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+Subject: Re: [PATCH v2] blk-ioprio: Introduce promote-to-rt policy
+Message-ID: <20230227150223.vvjvhiesgnbfea5z@quack3>
+References: <20230220135428.2632906-1-houtao@huaweicloud.com>
+ <20230227130305.2idxwmz2kdnacolc@quack3>
+ <05eafc4f-2d60-b7e6-1d5d-9a08709916e8@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [01/10] wifi: brcmfmac: chip: Only disable D11 cores;
- handle an arbitrary number
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230214092423.15175-1-marcan@marcan.st>
-References: <20230214092423.15175-1-marcan@marcan.st>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167751002773.20016.17380164269465295465.kvalo@kernel.org>
-Date:   Mon, 27 Feb 2023 15:00:31 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05eafc4f-2d60-b7e6-1d5d-9a08709916e8@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hector Martin <marcan@marcan.st> wrote:
-
-> At least on BCM4387, the D11 cores are held in reset on cold startup and
-> firmware expects to release reset itself. Just assert reset here and let
-> firmware deassert it. Premature deassertion results in the firmware
-> failing to initialize properly some of the time, with strange AXI bus
-> errors.
+On Mon 27-02-23 21:56:25, Hou Tao wrote:
+> Hi
 > 
-> Also, BCM4387 has 3 cores, up from 2. The logic for handling that is in
-> brcmf_chip_ai_resetcore(), but since we aren't using that any more, just
-> handle it here.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+> On 2/27/2023 9:03 PM, Jan Kara wrote:
+> > On Mon 20-02-23 21:54:28, Hou Tao wrote:
+> >> From: Hou Tao <houtao1@huawei.com>
+> >>
+> >> Since commit a78418e6a04c ("block: Always initialize bio IO priority on
+> >> submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
+> >> blkcg_set_ioprio(), so there will be no way to promote the io-priority
+> >> of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
+> >> greater than or equals to IOPRIO_CLASS_RT.
+> >>
+> >> It seems possible to call blkcg_set_ioprio() first then try to
+> >> initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
+> >> for bio in which bi_ioprio is already initialized (e.g., direct-io), so
+> >> introduce a new ioprio policy to promote the iopriority of bio to
+> >> IOPRIO_CLASS_RT if the ioprio is not already RT.
+> >>
+> >> So introduce a new promote-to-rt policy to achieve this. For none-to-rt
+> >> policy, although it doesn't work now, but considering that its purpose
+> >> was also to override the io-priority to RT and allow for a smoother
+> >> transition, just keep it and treat it as an alias of the promote-to-rt
+> >> policy.
+> >>
+> >> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> > Looks good to me. Feel free to add:
+> >
+> > Reviewed-by: Jan Kara <jack@suse.cz>
+> Thanks for the review.
+> >
+> > Just one question regarding doc below:
+> >
+> >> ++----------------+---+
+> >> +| no-change      | 0 |
+> >> ++----------------+---+
+> >> +| rt-to-be       | 2 |
+> >> ++----------------+---+
+> >> +| all-to-idle    | 3 |
+> >> ++----------------+---+
+> > Shouldn't there be preempt-to-rt somewhere in this table as well? Or why
+> > this this in the doc at all? I'd consider the numbers to be kernel internal
+> > thing?
+> These numbers are used in the algorithm paragraph below to explain how the final
+> ioprio is calculated. For prompt-to-rt policy, the algorithm is different and
+> the number is unnecessary.
 
-10 patches applied to wireless-next.git, thanks.
+I see, thanks for explanation.
 
-3c7c07ca7ab1 wifi: brcmfmac: chip: Only disable D11 cores; handle an arbitrary number
-098e0b105ce1 wifi: brcmfmac: chip: Handle 1024-unit sizes for TCM blocks
-398ce273d6b1 wifi: brcmfmac: cfg80211: Add support for scan params v2
-d75ef1f81e42 wifi: brcmfmac: feature: Add support for setting feats based on WLC version
-a96202acaea4 wifi: brcmfmac: cfg80211: Add support for PMKID_V3 operations
-89b89e52153f wifi: brcmfmac: cfg80211: Pass the PMK in binary instead of hex
-117ace4014cc wifi: brcmfmac: pcie: Add IDs/properties for BCM4387
-dd7e55401fec wifi: brcmfmac: common: Add support for downloading TxCap blobs
-75102b7543ed wifi: brcmfmac: pcie: Load and provide TxCap blobs
-5b3ee9987f58 wifi: brcmfmac: common: Add support for external calibration blobs
-
+								Honza
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230214092423.15175-1-marcan@marcan.st/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
