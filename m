@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B626A4D11
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B3F6A4D13
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjB0VWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S229958AbjB0VWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjB0VWH (ORCPT
+        with ESMTP id S229589AbjB0VWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:22:07 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B98522DF5;
-        Mon, 27 Feb 2023 13:22:03 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id h8so4927402plf.10;
-        Mon, 27 Feb 2023 13:22:03 -0800 (PST)
+        Mon, 27 Feb 2023 16:22:40 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9526522A21;
+        Mon, 27 Feb 2023 13:22:38 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id bx12so4514332wrb.11;
+        Mon, 27 Feb 2023 13:22:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=huKJjrYkqha1WmoI8qO3tyhpUNpfWcMnNwc/JfMVqIo=;
-        b=D1K0QXEdbSw+65pP9v8xEx9I6JejZ7uRCpkZhJ2OS74G9WK5Ywu0CcWcE+LsGnWio6
-         r/kYebKtdX/kQUR5ERVsxE0FFxZXJXufw7/eSfJmx6OqmgzaSbu5375EJKC4nxfkJCRB
-         NaiA0M2Cz7dsn/9Ma2yr+Iy4cWqY5mE0FbTWxtO9YhiDw8uvw9BmcBdb2d2XdlmWIsRG
-         dTfHihztEi6aoeOj59M+9dnIpUr6bJCvrlNHorV4A8MlI4JKSIZeiCM+nEnSBCZ3kKNg
-         HqLrLPx782zl6bjCexVdXbYJrNrUgHK+A9v3GZeM9v3MQETP5pPcS/r5xVYBm9r0we0m
-         vfGg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uirSLB3F9Zb+PTXXeLN0MPijsyHCQ2xWrITr0wlr88I=;
+        b=em1V+lmvXOiXWqqGeAQ2IjGFqdAYg++TzAYPyddFCk1yvxJVYBcPgfgXN9g4P0axNn
+         P4KLkVkBYvYpuOsXySp7nDPzjMSAQqBYLHcamLew9fzaR781fkBCt3i/CsN/hXGUuf33
+         dFztapH6nIeAADdZo5yWhT2ErYWEjTRsC/cvP+ms0WC+8IWB/5Y6MJ9dZ2K2P/aajRSh
+         3Z2jWmroWtD4hQXKbRnmnsjCnEdqyTWzn4YrdPPxR/vCA9nmFolM2J5nnNffSin1VF17
+         XTbPQ92H9tVBVUOtShGCLaqxTWKxfr+roLG6yUJ63d5GyIY3/AFkfTlVfX5DSdj7a00v
+         cOJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=huKJjrYkqha1WmoI8qO3tyhpUNpfWcMnNwc/JfMVqIo=;
-        b=vZ5Cy9OymhP27UedPdF1EtYwsbLMgINZXpSRQEjsLBCOlZyHzX51yiNNwL1MdqhPvg
-         8AshWAhE9XpWIfdTeeNQvyhBxSzLZYXVVHwd34IrXgu040Kl9Ia+QQxF+3a/PEdyZINK
-         edYEEuWbEE8lNXHiC3ctjTRFBBCjSSpvC7S6y0ud+6B/fvdAJAjXN5KgyLsa3bTI6aSg
-         aQT5zC8NP2FtH0ETNcxNGcm5TH980vsLjP3OBwo3/tXfOIRN+g79U0MaK+qh9LlH5cu1
-         oXdLX0bGBKXLmhHMbtnGVuKwt6FJTGQoXVI/x0JF8LVwa9YVB+afpIS9TCFMTwUdYg8p
-         QpLw==
-X-Gm-Message-State: AO0yUKXpe27b1DE8Ae3tS+HUWpKcCoGDUsN3Jmyi53xFPCuw+IJOp0Uq
-        rhpxfKTTJ420AGKk/+WQQxw=
-X-Google-Smtp-Source: AK7set+tLSxVxzVWVIsF8bpbEA7uwq+BMUM47Ixq/J7ImPqAaC11XsJKb2f2F7EKduOM0gr2td/E8g==
-X-Received: by 2002:a17:902:ce8f:b0:196:3088:5dd6 with SMTP id f15-20020a170902ce8f00b0019630885dd6mr504403plg.13.1677532922774;
-        Mon, 27 Feb 2023 13:22:02 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001947222676csm4995612plb.249.2023.02.27.13.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 13:22:02 -0800 (PST)
-Date:   Mon, 27 Feb 2023 13:22:00 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v11 016/113] KVM: TDX: Add place holder for TDX VM
- specific mem_enc_op ioctl
-Message-ID: <20230227212200.GE4175971@ls.amr.corp.intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <e846968f2e1c554b3ecc1a876e0bb691727d34fc.1673539699.git.isaku.yamahata@intel.com>
- <19645255d65fdfd184b92b5192cac83a27c430fb.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uirSLB3F9Zb+PTXXeLN0MPijsyHCQ2xWrITr0wlr88I=;
+        b=2TzcdNU9jXV0n3Gwu9GJ06vk+XFe5/HRVopUMHhf87OVHlNcGz/zEyY2MmglXWer2I
+         zca5kT6xiOG9OTPvb80fqm7mtaOxsDNmCm8EtH4sajw2p4iagvbbUcjZit1VhYNF2aPu
+         Pw6+8HfBQw7A4vn7KUoTp4BhXR8/PrRKbz5VOJr8+HqDLYJHCrfyfdujkG03E0wIgT7x
+         p9G+OyV/DAIS0fZlseov692gLD4kRbq7PtMI61R/ZUzqc0G0GhBvHFN2DxREeNk8SP9h
+         krMzoQPQhM2n/Hih/CxMuazCF5m2z5l6ANTP7msnbFt6l5S0/LKrWWcUYqpj0rZRmHmQ
+         zVZw==
+X-Gm-Message-State: AO0yUKXdEu+9yJuuxnEl746y4QRial3B6JSegAmYGTsNFyIaXaQOEvdg
+        sKcL2cXqz6PDil45oQJ7InpX0K8p+i6c3FXEcLA=
+X-Google-Smtp-Source: AK7set8ADg0kdUtzpW9qrUsTBlfAGHGWVV37/V1prUR1shzO/2nhTvB+GPKFW2eS1wh/uaj4v+GfSVYbARZ+xcmxqnM=
+X-Received: by 2002:adf:d4c3:0:b0:2cc:4ed1:f849 with SMTP id
+ w3-20020adfd4c3000000b002cc4ed1f849mr120657wrk.8.1677532956794; Mon, 27 Feb
+ 2023 13:22:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <19645255d65fdfd184b92b5192cac83a27c430fb.camel@intel.com>
+References: <20230227151847.207922-1-lucas.tanure@collabora.com>
+In-Reply-To: <20230227151847.207922-1-lucas.tanure@collabora.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Mon, 27 Feb 2023 16:22:23 -0500
+Message-ID: <CAMdYzYrmq1ftBaBj1XHVWWXUQ4Prr1VpTpunyNOQ2ha-DkXMjQ@mail.gmail.com>
+Subject: Re: [RFC 0/1] ITS fails to allocate on rk3588
+To:     Lucas Tanure <lucas.tanure@collabora.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -81,75 +74,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 02:40:17AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+On Mon, Feb 27, 2023 at 10:18 AM Lucas Tanure
+<lucas.tanure@collabora.com> wrote:
+>
+> I am assisting with PCIe and networking bring-up for Rock Pi 5B (RK3588).
+> This chip uses the same GICv3 as RK356X but has fixed the previous
+> limitation of GIC only supporting 32-bit addresses.
+>
+> But the implementation decision for shareability in GICR and GITS is
+> still the same.
+>
+> I read the previous thread about this topic:
+> https://lore.kernel.org/lkml/2791594e-db60-e1d0-88e5-7e5bbd98ae4d@rock-chips.com/T/#m5dbc70ff308d81e98dd0d797e23d3fbf9c353245
+>
+> From my understanding, the errata numbers Marc Zyngier is referring to
+> are found in Arm errata documents at developer.arm.com/documentation.
+> But I could not find Cavium or Broadcom pages for errata with those
+> numbers in Documentation/arm64/silicon-errata.rst
+>
+> I could not find an errata document about this shareability issue,
+> and by what Kever said in the previous thread this could be a
+> RockChip design decision.
+>
+> Marc, as I could only find ARM errata numbers, is the errata number
+> you were expecting generated by ARM only, or RockChip should issue
+> a document like Arm to detail the issue?
+>
+> Can this shareability issue be seen as a quirk without an
+> errata number?
+>
+> The following patch is based on the work of Peter Geis for the
+> Quartz64 board and the previous thread feedback.
 
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index 16053ec3e0ae..781fbc896120 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -37,6 +37,14 @@ static int vt_vm_init(struct kvm *kvm)
-> >  	return vmx_vm_init(kvm);
-> >  }
-> >  
-> > +static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
-> > +{
-> > +	if (!is_td(kvm))
-> > +		return -ENOTTY;
-> > +
-> > +	return tdx_vm_ioctl(kvm, argp);
-> > +}
-> > +
-> >  struct kvm_x86_ops vt_x86_ops __initdata = {
-> >  	.name = KBUILD_MODNAME,
-> >  
-> > @@ -179,6 +187,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
-> >  	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
-> >  
-> >  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
-> > +	.mem_enc_ioctl = vt_mem_enc_ioctl,
-> >  };
-> 
-> IIUC, now both AMD and Intel have mem_enc_ioctl() callback implemented, so the
-> KVM_X86_OP_OPTIONAL() of it can be changed to KVM_X86_OP(), and the function
-> pointer check can be removed in the IOCTL:
+I see you have included rk356x in this as well. This will only work on
+rk356x boards that do not exceed 4GB of ram as the on chip devices are
+only 32bit addressable and the kernel by default allocates this in
+highmem.
 
-Makes sense. Merged the following patch into the patch. Thanks for it.
+Very Respectfully,
+Peter Geis
 
-
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-
-> ops.h
-> index 8dc345cc6318..a59852fb5e2a 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -116,7 +116,7 @@ KVM_X86_OP(enter_smm)
->  KVM_X86_OP(leave_smm)
->  KVM_X86_OP(enable_smi_window)
->  #endif
-> -KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
-> +KVM_X86_OP(mem_enc_ioctl)
->  KVM_X86_OP_OPTIONAL(mem_enc_register_region)
->  KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
->  KVM_X86_OP_OPTIONAL(vm_copy_enc_context_from)
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index c936f8d28a53..dfa279e35478 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -6937,10 +6937,6 @@ long kvm_arch_vm_ioctl(struct file *filp,
->                 goto out;
->         }
->         case KVM_MEMORY_ENCRYPT_OP: {
-> -               r = -ENOTTY;
-> -               if (!kvm_x86_ops.mem_enc_ioctl)
-> -                       goto out;
-> -
->                 r = static_call(kvm_x86_mem_enc_ioctl)(kvm, argp);
->                 break;
->         }
-> 
-> [snip]
-> 
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+>
+> Lucas Tanure (1):
+>   irqchip/gic-v3: Add RK3588 GICR and GITS no share workaround
+>
+>  Documentation/arm64/silicon-errata.rst |  4 +++
+>  arch/arm64/Kconfig                     | 13 ++++++++
+>  drivers/irqchip/irq-gic-v3-its.c       | 42 ++++++++++++++++++++++++++
+>  3 files changed, 59 insertions(+)
+>
+> --
+> 2.39.2
+>
