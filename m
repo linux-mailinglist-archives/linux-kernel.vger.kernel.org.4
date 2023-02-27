@@ -2,85 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10A26A452F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7412C6A4530
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjB0OwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S229854AbjB0OwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjB0OwO (ORCPT
+        with ESMTP id S229657AbjB0OwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:52:14 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9262199DF;
-        Mon, 27 Feb 2023 06:52:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BEf3+GrVy/Ve5Mra+H11XKmh4RTr6rjhGhJDtl+7Fjk=; b=CbUGOZLK4Cx9tQ0rL/NWMu0Y87
-        1JJFkljLbMyH/er35Uc99ineykFQA6zjdYmmLOdT5sZTIhZRJAKadEYBXcjHbaJFyOmzl3bg4vpKm
-        hol8DUnU33/C404gRxmcSZ+yu7M7rYMXh+Hv0mI4+Ds97lBOuBdRf3A6sU6pr2uLSSjE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pWerJ-0065MP-Ch; Mon, 27 Feb 2023 15:52:09 +0100
-Date:   Mon, 27 Feb 2023 15:52:09 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH v2 net-next 3/5] net: dsa: microchip: add eth mac
- grouping for ethtool statistics
-Message-ID: <Y/zDmZDPnwvBqAST@lunn.ch>
-References: <20230217110211.433505-1-rakesh.sankaranarayanan@microchip.com>
- <20230217110211.433505-4-rakesh.sankaranarayanan@microchip.com>
- <84835bee-a074-eb46-f1e4-03e53cd7f9ec@intel.com>
- <20230217164227.mw2cyp22bsnvuh6t@skbuf>
- <47a67799-27d9-094e-11c3-a18efcf281e2@intel.com>
- <20230224215349.umzw46xvzccjdndd@skbuf>
- <ca1f4970-206d-64f2-d210-e4e54b59d301@intel.com>
+        Mon, 27 Feb 2023 09:52:21 -0500
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AE02202C;
+        Mon, 27 Feb 2023 06:52:19 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id l25so6528144wrb.3;
+        Mon, 27 Feb 2023 06:52:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject:cc
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ig4nk3MPcVVXmPaI5r91h49D/cIs37xSeKPwjDDQdOY=;
+        b=sYUD3oOmJTSqgfeF17KXwqzFpAkgQ0+n7xYj08RVLQ7K1HZoIasTJnaFkdW6iOmHKL
+         xcB52jWN+ZUBaZ7cu18qG4+n43jSRjYDVqhuRyauGdJfp2xZRultfqbjaM0RCC+fLe3M
+         6CgFAYc5cg0fZKtWpF7oy5adWDWhxgqtWtfXIy+lVUMNfNnMybjSAtoEwxqQamjIEH/Y
+         D1VtXArTD3+gkgIOmuDuXtAUyIgqGFyGJ79uwZKqdnuKY/tqSHaQz3fk92gKmsdBoiZl
+         bXc0q7PbtRCbEDWO3s+vKGjFSGpwPMCgin2NHwC7O89zajQvmHG9tJsW+LHCZEJ1ZVl2
+         k7aQ==
+X-Gm-Message-State: AO0yUKUmIq/oMDI6cGegqR4WfcTwMollSsxpKtSyJrtgMAkteG3bhw1g
+        2j1mGcYI6+MPTIAvrBw6NNs=
+X-Google-Smtp-Source: AK7set8vnaLOnleLv10OV+Ul8uVDdYp+NJiQ5huJjqDq6AiKz12FrbsCZnQjMTw3QRb3OOR6627K9g==
+X-Received: by 2002:a5d:570e:0:b0:2bf:d940:29b6 with SMTP id a14-20020a5d570e000000b002bfd94029b6mr21925697wrv.54.1677509537875;
+        Mon, 27 Feb 2023 06:52:17 -0800 (PST)
+Received: from ?IPV6:2620:10d:c0c3:1136:1486:5f6c:3f1:4b78? ([2620:10d:c092:400::5:e15])
+        by smtp.gmail.com with ESMTPSA id d10-20020a05600c3aca00b003eb369abd92sm8415664wms.2.2023.02.27.06.52.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 06:52:17 -0800 (PST)
+Message-ID: <2e8c8937-b027-8b20-a16b-3dfed8217ad2@debian.org>
+Date:   Mon, 27 Feb 2023 14:52:15 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca1f4970-206d-64f2-d210-e4e54b59d301@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Cc:     leit@meta.com, axboe@kernel.dk, tj@kernel.org,
+        josef@toxicpanda.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, aherrmann@suse.de, mkoutny@suse.com,
+        linux-kernel@vger.kernel.org, leit@fb.com
+Subject: Re: [PATCH v2] blk-iocost: Pass disk queue to ioc_refresh_params
+To:     Christoph Hellwig <hch@lst.de>
+References: <20230227135610.501884-1-leitao@debian.org>
+ <20230227140847.GA18644@lst.de>
+From:   Breno Leitao <leitao@debian.org>
+In-Reply-To: <20230227140847.GA18644@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Easiest way to see a disassembly (also has C code interleaved) would be
-> > this:
-> > 
-> > make drivers/net/dsa/microchip/ksz_ethtool.lst
+Hello Christoph,
+
+On 27/02/2023 14:08, Christoph Hellwig wrote:
+> Hi Breno,
 > 
-> Oh, nice! I didn't know Kbuild has capability of listing the assembly
-> code built-in. I was adding it manually to Makefiles when needed >_<
-> Thanks! :D
+> and sorry for the late reply.  This looks correct to me, but I'd
+> be much happier if the disk was passed in instead of the request_queue
+> as that's where we're generally heading.  If you don't have time to
+> respin I could live with this version for a fix, though.
 
-You can also do
+No worries, I can definitely do a respin passing the disk instead of
+request_queue.
 
-make drivers/net/dsa/microchip/ksz_ethtool.o
-make drivers/net/dsa/microchip/ksz_ethtool.S
+I hope to send a v3 in the next few hours.
 
-etc to get any of the intermediary files from the build process.
-
-Also
-
-make drivers/net/dsa/microchip/
-
-will build everything in that subdirectory and below. That can be much
-faster, especially when you have an allmodconf configuration and it
-needs to check 1000s of modules before getting around to building the
-one module you just changed. FYI: the trailing / is important.
-
-       Andrew
