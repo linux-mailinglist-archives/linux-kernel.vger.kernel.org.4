@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2046A4489
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB716A449A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjB0OfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S229929AbjB0Ogj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 09:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjB0Oe7 (ORCPT
+        with ESMTP id S229524AbjB0Ogh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:34:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB6310413;
-        Mon, 27 Feb 2023 06:34:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E633960E8C;
-        Mon, 27 Feb 2023 14:34:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71EAC433EF;
-        Mon, 27 Feb 2023 14:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677508489;
-        bh=mNT+8jEC5MkwBhOpq0tgcgDha3VE+qSBUhcJo3FtXNo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KLgEB1pcgKXR3Zo7+YHhkbtHkJLT5X/bXixU+79b9Jszj62iwkMDEBanaUCodiU9q
-         G6yJUP2bIBMbRvGcGG8Yxf4IY8fxJBRycSyKWqL4e8QqRv/9cCH1mCW8XlCWDDolbq
-         5U6jUKTTRkDPKMA2w1fLpPfjr4xJEeIVJ0J80GgM=
-Date:   Mon, 27 Feb 2023 15:34:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Allen Ballway <ballway@chromium.org>,
-        Jiri Kosina <jkosina@suse.cz>, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, groeck@chromium.org,
-        alistair@alistair23.me, dmitry.torokhov@gmail.com,
-        jk@codeconstruct.com.au, Jonathan.Cameron@huawei.com,
-        cmo@melexis.com, u.kleine-koenig@pengutronix.de,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.15 10/25] HID: multitouch: Add quirks for
- flipped axes
-Message-ID: <Y/y/huAI8dDdiBaq@kroah.com>
-References: <20230227020855.1051605-1-sashal@kernel.org>
- <20230227020855.1051605-10-sashal@kernel.org>
- <20230227132300.4a3c3fad@endymion.delvare>
+        Mon, 27 Feb 2023 09:36:37 -0500
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9194520062;
+        Mon, 27 Feb 2023 06:36:35 -0800 (PST)
+Received: from pecola.lan (unknown [159.196.93.152])
+        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id B6BC42022A;
+        Mon, 27 Feb 2023 22:36:29 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=codeconstruct.com.au; s=2022a; t=1677508591;
+        bh=Dq2wTOEVHR/EtxLny++w+r/h2DyPA2HYeK440pfq4dY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=Om9XQoDl4gpBz57iortqzD0YVwqkBCAYstx2EkAzAonoFovrXSG9y8yTLvpPbgC/E
+         O6q8MvF9fngviij+ZJZoGnpRHFuCFYKON8nVcy+ZsGoGusW5oqFUkv5mTQHPSJwxQa
+         7zcxuluO8LQQxZCqksBzvX/4cdrWTJVjTeGmJ/KOCSvTRAWyVjSqAzuKgxM81FARgZ
+         WS1WKFJ76Tu2WC0W+qWS/fkbuWILOqFni1NOqaNQD/zKNTRl48/PcPaIabvMcVod1S
+         W1FMLaOrMgyHUGQ3skq1s1Ss/uRHMUWshOUP4RdCx5pkqv8PHF3b+Mr1ZNrCfdYtmz
+         5PDSF/Pknpw1A==
+Message-ID: <c5d674bd67735de460b19fd955f718bf8b604c1d.camel@codeconstruct.com.au>
+Subject: Re: [External] Re: [BUG] blacklist: Problem blacklisting hash (-13)
+ during boot
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     Mark Pearson <markpearson@lenovo.com>,
+        Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Date:   Mon, 27 Feb 2023 22:36:29 +0800
+In-Reply-To: <2a215e4d-bf55-b063-3f1f-a63f51cbdbfb@lenovo.com>
+References: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
+         <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
+         <632d2180-02f8-4a5f-803a-57a6443a60f4@t-8ch.de>
+         <12ceffb8-4e90-4eb5-2110-a0e69b412cea@lenovo.com>
+         <fec5e8eb3803068a11267f386ddda389a1211736.camel@codeconstruct.com.au>
+         <2a215e4d-bf55-b063-3f1f-a63f51cbdbfb@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227132300.4a3c3fad@endymion.delvare>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 01:23:00PM +0100, Jean Delvare wrote:
-> Hi Sasha,
-> 
-> On Sun, 26 Feb 2023 21:08:33 -0500, Sasha Levin wrote:
-> > From: Allen Ballway <ballway@chromium.org>
-> > 
-> > [ Upstream commit a2f416bf062a38bb76cccd526d2d286b8e4db4d9 ]
-> > 
-> > Certain touchscreen devices, such as the ELAN9034, are oriented
-> > incorrectly and report touches on opposite points on the X and Y axes.
-> > For example, a 100x200 screen touched at (10,20) would report (90, 180)
-> > and vice versa.
-> > 
-> > This is fixed by adding device quirks to transform the touch points
-> > into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
-> > 
-> > Signed-off-by: Allen Ballway <ballway@chromium.org>
-> > Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > ---
-> >  drivers/hid/hid-multitouch.c             | 39 ++++++++++++++++++---
-> >  drivers/hid/hid-quirks.c                 |  6 ++++
-> >  drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 43 ++++++++++++++++++++++++
-> >  drivers/hid/i2c-hid/i2c-hid.h            |  3 ++
-> >  4 files changed, 87 insertions(+), 4 deletions(-)
-> > (...)
-> 
-> Second rule of acceptance for stable patches:
-> 
->  - It cannot be bigger than 100 lines, with context.
-> 
-> Clearly not met here.
-> 
-> To me, this commit is something distributions may want to backport if
-> their users run are likely to run the affected hardware. But it's out
-> of scope for stable kernel branches.
+Hi Mark,
 
-For new quirks and ids, this is totally fine, I do not see why we would
-NOT want to take such a thing.
 
-The 100 lines is a guideline, to make things easy to review.
+> I've been looking at this and the FW team are claiming that it's not=20
+> caused by duplicate entries in the dbx table, which is honestly a bit
+> confusing.
+>=20
+> We've been doing some more digging - but is there a possibility this
+> is caused by something else?
 
-thanks,
+I can't quite trace where the EACCES is coming from, I can't see any
+obvious causes there - the blacklist key type doesn't have an ->update
+operation, and the assoc_array insert doesn't look like it would fail.
 
-greg k-h
+However: if I delete one of the duplicate keys using the bios UI, then
+the number of errors logged decreases by one.
+
+Cheers,
+
+
+Jeremy
+
