@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835B46A3FC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9174C6A3FCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjB0K6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 05:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S229554AbjB0K6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 05:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjB0K6N (ORCPT
+        with ESMTP id S230059AbjB0K6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 05:58:13 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC565FC3;
+        Mon, 27 Feb 2023 05:58:14 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E969CCA37;
         Mon, 27 Feb 2023 02:58:12 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id l1so2679988wry.12;
-        Mon, 27 Feb 2023 02:58:11 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id t15so5728593wrz.7;
+        Mon, 27 Feb 2023 02:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tHJ28rGYoNleFVDOkHjpHIMUmWDA43thW23nuYI9tAQ=;
-        b=EK9YaRCT3GX41yW7xA+KEywd62d/Cd7kjaiaMgDyGKVCGCpmpccGv1GzezuqgCxvYv
-         MYyIMxpt4ok71jEdzRDaAIl3ZZ/i7La22i5z7kgJSGPkBCWPa3hP5Hq0Y/eFkRRwy90h
-         CEZdUfnZH5xkDEaOCD/bICbSng0wtPMtR/PEZxZHlObzwCE6pR7WgxBGyi40SaWmgBvw
-         LXTgQ40vBwnwoI3PvgZnN7rgqZgTLK56i46MCDAFuKzcY/IVpOzMGHsAg7/dTKpgFMDP
-         aku+jzeDUuurA3ykbafPss8fZFFdDFwUXMOT+IeCYyscMOfum16bW362FselW0BJl3RV
-         +h/g==
+        bh=kfZlvyD8rTZQbpQrkIlLlvAbU21XIuea0Ob/RtnHs1U=;
+        b=kif3rjC5DZzlITC9ZiIlLLV1GPEFuq0QTF4KSI0Pap7DXwFdqaW0rTfovI/5Y99mzT
+         Yt+TbxPB+blULAQNX3feY4zpOdFl2aK5lbsxmXcXOP8Z+0J5u+il/lP4iRXWXd4GxK3N
+         GuUr8ZCoztrHQdovCqWGLWgRfdATvAKh8BkJAKiZoZTq/lwewdbcvRjNB3w5hPQaablF
+         mAfT6Lq7jH3wCaJS4nN/2bdZny9GEpCUegYb7aS1ucnrg+8m/S7pGEq9ag0/KGHChXvw
+         KLS9oy1N6xQZaqiM6Rm5sfWELjVnWl56Nxa+g8xZOTsuaeKsaLqGqjHEeenlkwWjileC
+         1oOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tHJ28rGYoNleFVDOkHjpHIMUmWDA43thW23nuYI9tAQ=;
-        b=45K6gcXU5JVK/yIXSc9BAXZP39zTCw1gaDuBQiy5zKeeZjNS+cfG5xBoWXDcgaVle3
-         GX+eZFowHigWAlKeUckFYoocQRoyWTJ3LDnckrYxcScdgNWEIJ+WMw17CK8FuFfrQ2nM
-         +nPQAqM3bJh7d8tGjx1pe4eXItZUUr+/hEOpIDhsR2VIoSlaIyWw4Pc35iQneLTnxAPf
-         L7kxbByegHVW90ZdxVg+xJ2rg8551g7CODG2tTEgJ7zVxV/6ZETGC2wP36ZH4yg+UXLR
-         P1XW+ZVtjYKlh8UBqkW/QlFM43wDmW/BPjWNAU3XtYiBXJdiP9V54Pn9h4RyvRKQt5nj
-         5v6Q==
-X-Gm-Message-State: AO0yUKVMrvIe9Ghu9vmmv6LmvVcTJZrzscpmPAei5PrThaJ19lvSc5fQ
-        1zRaXlsVZ/r7cydkwChd2OtC4Ao4Pvc=
-X-Google-Smtp-Source: AK7set9+/e6z4/dzp7NqkF3ZUUbUakHpZK3dIcLBN1vDOiD6ek9nlE8MvFlXTAoswShRkjsx0J0LZw==
-X-Received: by 2002:a5d:48c6:0:b0:2c5:58fc:e1bb with SMTP id p6-20020a5d48c6000000b002c558fce1bbmr21073847wrs.10.1677495490197;
-        Mon, 27 Feb 2023 02:58:10 -0800 (PST)
+        bh=kfZlvyD8rTZQbpQrkIlLlvAbU21XIuea0Ob/RtnHs1U=;
+        b=Vs/kuNGd046+aQ/fcCvQ2ssztVz6SCJRmB6IvP3w+nBtB2MVtL0sGmyPPWuUKN6DrD
+         U7trAyTaZ+EXu0vHDPITI+Wt7jVvpeHgIDsGlrdtZejq7enzutyIPQttmQQA4oVy4rT7
+         IebLT761Ryqk1+iXSqWrGX1HL5gl/uWALgiZ72s8PKPqmER61EP/+tZAe4VN4IhVY64k
+         JM1iAvqqTDgw1OfexJaN2Rs8EzA6arn1Nm0J0iOybFjuHLMGj8UbkA7Lct40V5pyu9jU
+         PAHlDe5KRkoS08BEAV59T+BHUqN1GJRik19khqX0PaIYipJoL9IMuaxMVQijDhmydU+9
+         NirQ==
+X-Gm-Message-State: AO0yUKVCt8t/uvD/VEsKwFICOms1uzvyVCiWmDrOdjuo2PWWxFfj8Mlu
+        l1x9eBOgHjoYVfQ1Ez/xLGYSmMmqajM=
+X-Google-Smtp-Source: AK7set/yOo+O4Atmx3ogx4palFZ4WkH53bAEddE4+yuzkAbiT1njKJ9z0G5mtmVx8ef5JkPjeaBJUg==
+X-Received: by 2002:adf:e58f:0:b0:2c5:a07e:4bb6 with SMTP id l15-20020adfe58f000000b002c5a07e4bb6mr20110631wrm.33.1677495491221;
+        Mon, 27 Feb 2023 02:58:11 -0800 (PST)
 Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
-        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm6806122wrv.10.2023.02.27.02.58.09
+        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm6806122wrv.10.2023.02.27.02.58.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 02:58:09 -0800 (PST)
+        Mon, 27 Feb 2023 02:58:10 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, john@phrozen.org,
         linux-kernel@vger.kernel.org, git@johnthomson.fastmail.com.au
-Subject: [PATCH 02/12] mips: ralink: rt305x: soc queries and tests as functions
-Date:   Mon, 27 Feb 2023 11:57:56 +0100
-Message-Id: <20230227105806.2394101-3-sergio.paracuellos@gmail.com>
+Subject: [PATCH 03/12] mips: ralink: rt305x: introduce 'soc_device' initialization
+Date:   Mon, 27 Feb 2023 11:57:57 +0100
+Message-Id: <20230227105806.2394101-4-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
 References: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
@@ -72,148 +72,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the SoC register value queries and tests to specific functions,
-to remove repetition of logic. No functional changes intended
+RT305x SoCs have their own 'ralink_soc_info' structure with some
+information about the soc itself. In order to be able to retrieve this
+information from driver code and avoid architecture dependencies for
+retrieving these details introduce this 'soc_device'. Set 'data' pointer
+points to the struct 'ralink_soc_info' to be able to export also current
+soc information using this mechanism. We need to select 'SOC_BUS' in
+Kconfig configuration for these SoCs.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- arch/mips/ralink/rt305x.c | 97 +++++++++++++++++++++++++++++++--------
- 1 file changed, 77 insertions(+), 20 deletions(-)
+ arch/mips/ralink/Kconfig  |  1 +
+ arch/mips/ralink/rt305x.c | 46 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index 06031796c87b..658e12b34ccc 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -32,6 +32,7 @@ choice
+ 
+ 	config SOC_RT305X
+ 		bool "RT305x"
++		select SOC_BUS
+ 
+ 	config SOC_RT3883
+ 		bool "RT3883"
 diff --git a/arch/mips/ralink/rt305x.c b/arch/mips/ralink/rt305x.c
-index 135a46517763..a24143c739ee 100644
+index a24143c739ee..d8dcc5cc66cc 100644
 --- a/arch/mips/ralink/rt305x.c
 +++ b/arch/mips/ralink/rt305x.c
-@@ -139,52 +139,109 @@ void __init ralink_of_remap(void)
- 		panic("Failed to remap core resources");
+@@ -11,6 +11,8 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/bug.h>
++#include <linux/slab.h>
++#include <linux/sys_soc.h>
+ 
+ #include <asm/io.h>
+ #include <asm/mipsregs.h>
+@@ -19,6 +21,8 @@
+ 
+ #include "common.h"
+ 
++static struct ralink_soc_info *soc_info_ptr;
++
+ static unsigned long rt5350_get_mem_size(void)
+ {
+ 	unsigned long ret;
+@@ -233,6 +237,46 @@ static unsigned int __init rt305x_get_soc_rev(void)
+ 	return (rt305x_get_soc_id() & CHIP_ID_REV_MASK);
  }
  
--void __init prom_soc_init(struct ralink_soc_info *soc_info)
-+static unsigned int __init rt305x_get_soc_name0(void)
++static const char __init *rt305x_get_soc_id_name(void)
 +{
-+	return __raw_readl(RT305X_SYSC_BASE + SYSC_REG_CHIP_NAME0);
++	if (soc_is_rt3050())
++		return "rt3050";
++	else if (soc_is_rt3052())
++		return "rt3052";
++	else if (soc_is_rt3350())
++		return "rt3350";
++	else if (soc_is_rt3352())
++		return "rt3352";
++	else if (soc_is_rt5350())
++		return "rt5350";
++	else
++		return "invalid";
 +}
 +
-+static unsigned int __init rt305x_get_soc_name1(void)
++static int __init rt305x_soc_dev_init(void)
++{
++	struct soc_device *soc_dev;
++	struct soc_device_attribute *soc_dev_attr;
++
++	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
++	if (!soc_dev_attr)
++		return -ENOMEM;
++
++	soc_dev_attr->family = "Ralink";
++	soc_dev_attr->soc_id = rt305x_get_soc_id_name();
++
++	soc_dev_attr->data = soc_info_ptr;
++
++	soc_dev = soc_device_register(soc_dev_attr);
++	if (IS_ERR(soc_dev)) {
++		kfree(soc_dev_attr);
++		return PTR_ERR(soc_dev);
++	}
++
++	return 0;
++}
++device_initcall(rt305x_soc_dev_init);
++
+ void __init prom_soc_init(struct ralink_soc_info *soc_info)
  {
--	unsigned char *name;
--	u32 n0;
--	u32 n1;
--	u32 id;
-+	return __raw_readl(RT305X_SYSC_BASE + SYSC_REG_CHIP_NAME1);
-+}
- 
--	n0 = __raw_readl(RT305X_SYSC_BASE + SYSC_REG_CHIP_NAME0);
--	n1 = __raw_readl(RT305X_SYSC_BASE + SYSC_REG_CHIP_NAME1);
-+static bool __init rt3052_soc_valid(void)
-+{
-+	if (rt305x_get_soc_name0() == RT3052_CHIP_NAME0 &&
-+	    rt305x_get_soc_name1() == RT3052_CHIP_NAME1)
-+		return true;
-+	else
-+		return false;
-+}
- 
--	if (n0 == RT3052_CHIP_NAME0 && n1 == RT3052_CHIP_NAME1) {
-+static bool __init rt3350_soc_valid(void)
-+{
-+	if (rt305x_get_soc_name0() == RT3350_CHIP_NAME0 &&
-+	    rt305x_get_soc_name1() == RT3350_CHIP_NAME1)
-+		return true;
-+	else
-+		return false;
-+}
-+
-+static bool __init rt3352_soc_valid(void)
-+{
-+	if (rt305x_get_soc_name0() == RT3352_CHIP_NAME0 &&
-+	    rt305x_get_soc_name1() == RT3352_CHIP_NAME1)
-+		return true;
-+	else
-+		return false;
-+}
-+
-+static bool __init rt5350_soc_valid(void)
-+{
-+	if (rt305x_get_soc_name0() == RT5350_CHIP_NAME0 &&
-+	    rt305x_get_soc_name1() == RT5350_CHIP_NAME1)
-+		return true;
-+	else
-+		return false;
-+}
-+
-+static const char __init *rt305x_get_soc_name(struct ralink_soc_info *soc_info)
-+{
-+	if (rt3052_soc_valid()) {
- 		unsigned long icache_sets;
- 
- 		icache_sets = (read_c0_config1() >> 22) & 7;
- 		if (icache_sets == 1) {
- 			ralink_soc = RT305X_SOC_RT3050;
--			name = "RT3050";
- 			soc_info->compatible = "ralink,rt3050-soc";
-+			return "RT3050";
- 		} else {
- 			ralink_soc = RT305X_SOC_RT3052;
--			name = "RT3052";
- 			soc_info->compatible = "ralink,rt3052-soc";
-+			return "RT3052";
- 		}
--	} else if (n0 == RT3350_CHIP_NAME0 && n1 == RT3350_CHIP_NAME1) {
-+	} else if (rt3350_soc_valid()) {
- 		ralink_soc = RT305X_SOC_RT3350;
--		name = "RT3350";
- 		soc_info->compatible = "ralink,rt3350-soc";
--	} else if (n0 == RT3352_CHIP_NAME0 && n1 == RT3352_CHIP_NAME1) {
-+		return "RT3350";
-+	} else if (rt3352_soc_valid()) {
- 		ralink_soc = RT305X_SOC_RT3352;
--		name = "RT3352";
- 		soc_info->compatible = "ralink,rt3352-soc";
--	} else if (n0 == RT5350_CHIP_NAME0 && n1 == RT5350_CHIP_NAME1) {
-+		return "RT3352";
-+	} else if (rt5350_soc_valid()) {
- 		ralink_soc = RT305X_SOC_RT5350;
--		name = "RT5350";
- 		soc_info->compatible = "ralink,rt5350-soc";
-+		return "RT5350";
- 	} else {
--		panic("rt305x: unknown SoC, n0:%08x n1:%08x", n0, n1);
-+		panic("rt305x: unknown SoC, n0:%08x n1:%08x",
-+		      rt305x_get_soc_name0(), rt305x_get_soc_name1());
+ 	const char *name = rt305x_get_soc_name(soc_info);
+@@ -253,4 +297,6 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
+ 		soc_info->mem_size_min = RT3352_MEM_SIZE_MIN;
+ 		soc_info->mem_size_max = RT3352_MEM_SIZE_MAX;
  	}
-+}
 +
-+static unsigned int __init rt305x_get_soc_id(void)
-+{
-+	return __raw_readl(RT305X_SYSC_BASE + SYSC_REG_CHIP_ID);
-+}
-+
-+static unsigned int __init rt305x_get_soc_ver(void)
-+{
-+	return (rt305x_get_soc_id() >> CHIP_ID_ID_SHIFT) & CHIP_ID_ID_MASK;
-+}
- 
--	id = __raw_readl(sysc + SYSC_REG_CHIP_ID);
-+static unsigned int __init rt305x_get_soc_rev(void)
-+{
-+	return (rt305x_get_soc_id() & CHIP_ID_REV_MASK);
-+}
-+
-+void __init prom_soc_init(struct ralink_soc_info *soc_info)
-+{
-+	const char *name = rt305x_get_soc_name(soc_info);
- 
- 	snprintf(soc_info->sys_type, RAMIPS_SYS_TYPE_LEN,
- 		"Ralink %s id:%u rev:%u",
- 		name,
--		(id >> CHIP_ID_ID_SHIFT) & CHIP_ID_ID_MASK,
--		(id & CHIP_ID_REV_MASK));
-+		rt305x_get_soc_ver(),
-+		rt305x_get_soc_rev());
- 
- 	soc_info->mem_base = RT305X_SDRAM_BASE;
- 	if (soc_is_rt5350()) {
++	soc_info_ptr = soc_info;
+ }
 -- 
 2.25.1
 
