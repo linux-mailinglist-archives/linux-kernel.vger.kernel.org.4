@@ -2,148 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547F36A49CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617BA6A49DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjB0Scm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        id S229845AbjB0SfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjB0Scf (ORCPT
+        with ESMTP id S230060AbjB0Sey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:32:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1836C1EBE2;
-        Mon, 27 Feb 2023 10:32:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB1460F04;
-        Mon, 27 Feb 2023 18:32:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDAFC4339B;
-        Mon, 27 Feb 2023 18:32:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677522751;
-        bh=weS85/lOsn/LMYJaFWTKyZTGqxtEczoWbtTju5iXwJQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qfRPiNBzo42N5MKvg8gwdgA2gOBA1u1hItWtosOvdX8lLBx2lza4eYBP1SkcD0bWv
-         5dfH3+YQCXjUL0Ijs6ZcXpMvhG4VBZtvIaepRFmynP86tRhGPzouK2UlKdL+5lJmDt
-         kV/uwMTejzrWB2wtq5vDJ9Qp4o+ruBpvHndiAJvaPKL6rtQ7hrhe8NNCvvaehejXwu
-         RSKtLFcCF1r3eopsu1zdeCVjl9j/31RvVs3P4lngTXvQDwtPkTatUvQQ7dYJ/4notV
-         H5tmLDW35o8aL23TUnspLI4ZwphXkl+bBgUl2vmvlQJDRh54lqnfCyu2abaURVoyQ3
-         udmAOppWsYc6A==
-Date:   Mon, 27 Feb 2023 20:32:26 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next] scm: fix MSG_CTRUNC setting condition for
- SO_PASSSEC
-Message-ID: <Y/z3OtIA+25GjjH2@unreal>
-References: <20230226201730.515449-1-aleksandr.mikhalitsyn@canonical.com>
- <Y/x8H4qCNsj4mEkA@unreal>
- <CAEivzxeorZoiE4VmJ45CoF4ZRoW3B+rkT0ufX7y1bxn510yzPQ@mail.gmail.com>
+        Mon, 27 Feb 2023 13:34:54 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD5E524E;
+        Mon, 27 Feb 2023 10:34:36 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1720600a5f0so8323607fac.11;
+        Mon, 27 Feb 2023 10:34:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/n6Yv51jW5LAwlzGIh67sJQM+UVRJdiU8ADnwyoJqp4=;
+        b=QdL0Cp4nD+WawZSxMM+oEIAz/zw1MDKPG8bnlcF8p4Yr3/HaAHB7i8nTFIbOPoUkZK
+         gFZJthbKVS2EPQFXyBg75yMcMLMLptOoz/kRTB4/otyx9MBHk35WL5bNLIiOCqoe0sNv
+         ZYfi90dYcvaJJvlUtD5dPPjRrX3piHO61xK5/o0BSL1GP8wX0XZ3DuezTwNZfIjSfOyt
+         +Oj0neG2qpl/uRxboyEdI0R7aEa6DBCmmydjIWepymM96gOlWuEuDOV2/97Y45dCtkJB
+         9BIc7SMVFbShWQ3DWu70uKFUscmrkiMqudceLm+gwRDjXGa0JgjJNuhgADPvqF0MlTCB
+         yjqA==
+X-Gm-Message-State: AO0yUKW+/D4XKmyHE+LWP4xwmcZL12f7lc5jNIotbkIE09TJzSqqrAXv
+        9zsaZiULjgdRCT6Jk5q4Ow==
+X-Google-Smtp-Source: AK7set/ZtQIEXLigG6HKVUhIDHBY2W/Gvzvr0DTnjglSjgXggcIfBsaT1ydf9BJAYYtr0mOVbmGB4A==
+X-Received: by 2002:a05:6870:f283:b0:172:fda1:5773 with SMTP id u3-20020a056870f28300b00172fda15773mr3395641oap.32.1677522875743;
+        Mon, 27 Feb 2023 10:34:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ef27-20020a0568701a9b00b00152c52608dbsm2545569oab.34.2023.02.27.10.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 10:34:35 -0800 (PST)
+Received: (nullmailer pid 647312 invoked by uid 1000);
+        Mon, 27 Feb 2023 18:34:34 -0000
+Date:   Mon, 27 Feb 2023 12:34:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
+Message-ID: <20230227183434.GA642331-robh@kernel.org>
+References: <20230223015952.201841-1-changhuang.liang@starfivetech.com>
+ <20230223015952.201841-2-changhuang.liang@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEivzxeorZoiE4VmJ45CoF4ZRoW3B+rkT0ufX7y1bxn510yzPQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230223015952.201841-2-changhuang.liang@starfivetech.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:55:04AM +0100, Aleksandr Mikhalitsyn wrote:
-> On Mon, Feb 27, 2023 at 10:47 AM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> > On Sun, Feb 26, 2023 at 09:17:30PM +0100, Alexander Mikhalitsyn wrote:
-> > > Currently, we set MSG_CTRUNC flag is we have no
-> > > msg_control buffer provided and SO_PASSCRED is set
-> > > or if we have pending SCM_RIGHTS.
-> > >
-> > > For some reason we have no corresponding check for
-> > > SO_PASSSEC.
-> > >
-> > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > Cc: Eric Dumazet <edumazet@google.com>
-> > > Cc: Jakub Kicinski <kuba@kernel.org>
-> > > Cc: Paolo Abeni <pabeni@redhat.com>
-> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> > > ---
-> > >  include/net/scm.h | 13 ++++++++++++-
-> > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> >
-> > Is it a bugfix? If yes, it needs Fixes line.
+On Wed, Feb 22, 2023 at 05:59:50PM -0800, Changhuang Liang wrote:
+> Starfive SoCs like the jh7110 use a MIPI D-PHY RX controller based on
+> a M31 IP. Add a binding for it.
 > 
-> It's from 1da177e4c3 ("Linux-2.6.12-rc2") times :)
-> I wasn't sure that it's correct to put the "Fixes" tag on such an old
-> and big commit. Will do. Thanks!
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> ---
+>  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
 > 
-> >
-> > >
-> > > diff --git a/include/net/scm.h b/include/net/scm.h
-> > > index 1ce365f4c256..585adc1346bd 100644
-> > > --- a/include/net/scm.h
-> > > +++ b/include/net/scm.h
-> > > @@ -105,16 +105,27 @@ static inline void scm_passec(struct socket *sock, struct msghdr *msg, struct sc
-> > >               }
-> > >       }
-> > >  }
-> > > +
-> > > +static inline bool scm_has_secdata(struct socket *sock)
-> > > +{
-> > > +     return test_bit(SOCK_PASSSEC, &sock->flags);
-> > > +}
-> > >  #else
-> > >  static inline void scm_passec(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm)
-> > >  { }
-> > > +
-> > > +static inline bool scm_has_secdata(struct socket *sock)
-> > > +{
-> > > +     return false;
-> > > +}
-> > >  #endif /* CONFIG_SECURITY_NETWORK */
-> >
-> > There is no need in this ifdef, just test bit directly.
-> 
-> The problem is that even if the kernel is compiled without
-> CONFIG_SECURITY_NETWORK
-> userspace can still set the SO_PASSSEC option. IMHO it's better not to
-> set MSG_CTRUNC
-> if CONFIG_SECURITY_NETWORK is disabled, msg_control is not set but
-> SO_PASSSEC is enabled.
-> Because in this case SCM_SECURITY will never be sent. Please correct
-> me if I'm wrong.
+> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+> new file mode 100644
+> index 000000000000..a67ca57a6f21
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-dphy-rx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Starfive SoC MIPI D-PHY Rx Controller
+> +
+> +maintainers:
+> +  - Jack Zhu <jack.zhu@starfivetech.com>
+> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> +
+> +description:
+> +  The Starfive SoC uses the MIPI CSI D-PHY based on M31 IP to transfer
+> +  CSI camera data.
+> +
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-dphy-rx
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: cfg
+> +      - const: ref
+> +      - const: tx
 
-I don't know enough in this area to say if it is wrong or not.
-My remark was due to the situation where user sets some bit which is
-going to be ignored silently. It will be much cleaner do not set it
-if CONFIG_SECURITY_NETWORK is disabled instead of masking its usage.
+Should be 'rx' given this is the 'rx' block? A description of each clock 
+in 'clocks' would be good.
 
-Thanks
+> +
+> +  resets:
+> +    items:
+> +      - description: DPHY_HW reset
+> +      - description: DPHY_B09_ALWAYS_ON reset
+> +
+> +  starfive,aon-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
 
+- items: ?
+
+Otherwise, multiple 2 cell entries are allowed. Is that intended?
+
+> +        - description: phandle of AON SYSCON
+> +        - description: register offset
+> +    description: The power of dphy rx is configured by AON SYSCON
+> +      in this property.
+
+
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - starfive,aon-syscon
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    phy@19820000 {
+> +      compatible = "starfive,jh7110-dphy-rx";
+> +      reg = <0x19820000 0x10000>;
+> +      clocks = <&ispcrg 3>,
+> +               <&ispcrg 4>,
+> +               <&ispcrg 5>;
+> +      clock-names = "cfg", "ref", "tx";
+> +      resets = <&ispcrg 2>,
+> +               <&ispcrg 3>;
+> +      starfive,aon-syscon = <&aon_syscon 0x00>;
+> +      #phy-cells = <0>;
+> +    };
+> -- 
+> 2.25.1
 > 
-> Kind regards,
-> Alex
-> 
-> >
-> > >
-> > >  static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
-> > >                               struct scm_cookie *scm, int flags)
-> > >  {
-> > >       if (!msg->msg_control) {
-> > > -             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp)
-> > > +             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
-> > > +                 scm_has_secdata(sock))
-> > >                       msg->msg_flags |= MSG_CTRUNC;
-> > >               scm_destroy(scm);
-> > >               return;
-> > > --
-> > > 2.34.1
-> > >
