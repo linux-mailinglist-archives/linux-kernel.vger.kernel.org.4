@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767A66A4572
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A796A4578
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjB0PAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S230130AbjB0PAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjB0PAM (ORCPT
+        with ESMTP id S229972AbjB0PAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:00:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDF9659F;
-        Mon, 27 Feb 2023 06:59:50 -0800 (PST)
+        Mon, 27 Feb 2023 10:00:49 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC501F90B;
+        Mon, 27 Feb 2023 07:00:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EEE3B80D53;
-        Mon, 27 Feb 2023 14:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064B2C4339E;
-        Mon, 27 Feb 2023 14:59:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B8F18CE1054;
+        Mon, 27 Feb 2023 15:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074B5C4339C;
+        Mon, 27 Feb 2023 15:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677509988;
-        bh=cpGiJHjSdLQyBJPnVBT9lZXyxg6+w4yV3JfgqD66YBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cnrke0HLcDZeNsJOS+SYEI++TSqQ4QvJH9CrHpftcmK2MlcOhqTdtrJQTKe9frBcC
-         tAf+FU8mm4XeV2lzvP0nI3yT/BkjcNGFtxznn7own2FhWj9Xuf4cQSt98fk7fXFMlY
-         KUvJrbwEOqT9hsca08pJszaPVaQjnHjKri/MV4v3C/46VmkE34n50AsTJmxAxWt4mV
-         zJUGk3bGlPGXFWO186mLthpScPWhVHs7abouNt1ayBwtdT+tpkVZma+oCRq6thDzlJ
-         Vo9lOZKpfz1ohFaJZ4GjxXwVsuzjlUd4F3ZlYy+UPfEnvk+1eNTRNQ/A26iKONNes7
-         W9B5J8WmETHrA==
-Date:   Mon, 27 Feb 2023 09:59:46 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Allen Ballway <ballway@chromium.org>,
-        Jiri Kosina <jkosina@suse.cz>, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, groeck@chromium.org,
-        alistair@alistair23.me, dmitry.torokhov@gmail.com,
-        jk@codeconstruct.com.au, Jonathan.Cameron@huawei.com,
-        cmo@melexis.com, u.kleine-koenig@pengutronix.de,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.15 10/25] HID: multitouch: Add quirks for
- flipped axes
-Message-ID: <Y/zFYpxtkBmNmFLf@sashalap>
-References: <20230227020855.1051605-1-sashal@kernel.org>
- <20230227020855.1051605-10-sashal@kernel.org>
- <20230227132300.4a3c3fad@endymion.delvare>
+        s=k20201202; t=1677510035;
+        bh=aGqo+beX4rpf9C772G4rfI3PDzyyWU40qI/tZHMx4Ec=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=N6gG8tXrOotmZtHYGZOFW82yXA0CP7fXiPBkZJLeJ9epC+6R3ku5FXR2K2uSrDeU/
+         BTfmo7cpA2VoWJX1mzhAKgPigic2O2cA5HBmnmOoOUsSM6+GbEwt3GgMdDyzno+vSk
+         olIGKotwFdm4MdL0MCE2XJIrvd9x7GdUQXIVnp56ovu8y+nAf5VIAE+Oym+tjWD/dA
+         rLrQf6qV5c55YoxDmznT9bIUJp2pAfBrnc85E6sL8DYP+WaFa8+a7wsEp1n1rNlGO0
+         3Az1YA5wznPw3spCWTsfrYAsK2iUr/eVBaiBaL6G5OGgka/jXSmwz1FBFAg/2WWkdp
+         KFr/mhTLVEPvA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230227132300.4a3c3fad@endymion.delvare>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [01/10] wifi: brcmfmac: chip: Only disable D11 cores;
+ handle an arbitrary number
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230214092423.15175-1-marcan@marcan.st>
+References: <20230214092423.15175-1-marcan@marcan.st>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167751002773.20016.17380164269465295465.kvalo@kernel.org>
+Date:   Mon, 27 Feb 2023 15:00:31 +0000 (UTC)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,49 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 01:23:00PM +0100, Jean Delvare wrote:
->Hi Sasha,
->
->On Sun, 26 Feb 2023 21:08:33 -0500, Sasha Levin wrote:
->> From: Allen Ballway <ballway@chromium.org>
->>
->> [ Upstream commit a2f416bf062a38bb76cccd526d2d286b8e4db4d9 ]
->>
->> Certain touchscreen devices, such as the ELAN9034, are oriented
->> incorrectly and report touches on opposite points on the X and Y axes.
->> For example, a 100x200 screen touched at (10,20) would report (90, 180)
->> and vice versa.
->>
->> This is fixed by adding device quirks to transform the touch points
->> into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
->>
->> Signed-off-by: Allen Ballway <ballway@chromium.org>
->> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  drivers/hid/hid-multitouch.c             | 39 ++++++++++++++++++---
->>  drivers/hid/hid-quirks.c                 |  6 ++++
->>  drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 43 ++++++++++++++++++++++++
->>  drivers/hid/i2c-hid/i2c-hid.h            |  3 ++
->>  4 files changed, 87 insertions(+), 4 deletions(-)
->> (...)
->
->Second rule of acceptance for stable patches:
->
-> - It cannot be bigger than 100 lines, with context.
->
->Clearly not met here.
+Hector Martin <marcan@marcan.st> wrote:
 
-About a quarter of stable commits in the last 12 months breat the rule
-above.
+> At least on BCM4387, the D11 cores are held in reset on cold startup and
+> firmware expects to release reset itself. Just assert reset here and let
+> firmware deassert it. Premature deassertion results in the firmware
+> failing to initialize properly some of the time, with strange AXI bus
+> errors.
+> 
+> Also, BCM4387 has 3 cores, up from 2. The logic for handling that is in
+> brcmf_chip_ai_resetcore(), but since we aren't using that any more, just
+> handle it here.
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
->To me, this commit is something distributions may want to backport if
->their users run are likely to run the affected hardware. But it's out
->of scope for stable kernel branches.
+10 patches applied to wireless-next.git, thanks.
 
-Why? We explicitly call out new device IDs and quirks in the same doc
-you quoted the 100 line rule from.
+3c7c07ca7ab1 wifi: brcmfmac: chip: Only disable D11 cores; handle an arbitrary number
+098e0b105ce1 wifi: brcmfmac: chip: Handle 1024-unit sizes for TCM blocks
+398ce273d6b1 wifi: brcmfmac: cfg80211: Add support for scan params v2
+d75ef1f81e42 wifi: brcmfmac: feature: Add support for setting feats based on WLC version
+a96202acaea4 wifi: brcmfmac: cfg80211: Add support for PMKID_V3 operations
+89b89e52153f wifi: brcmfmac: cfg80211: Pass the PMK in binary instead of hex
+117ace4014cc wifi: brcmfmac: pcie: Add IDs/properties for BCM4387
+dd7e55401fec wifi: brcmfmac: common: Add support for downloading TxCap blobs
+75102b7543ed wifi: brcmfmac: pcie: Load and provide TxCap blobs
+5b3ee9987f58 wifi: brcmfmac: common: Add support for external calibration blobs
 
 -- 
-Thanks,
-Sasha
+https://patchwork.kernel.org/project/linux-wireless/patch/20230214092423.15175-1-marcan@marcan.st/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
