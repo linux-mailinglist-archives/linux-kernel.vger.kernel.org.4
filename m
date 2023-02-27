@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3D26A4693
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6B66A469C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjB0P6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S229942AbjB0QBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjB0P6d (ORCPT
+        with ESMTP id S229549AbjB0QBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:58:33 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978211B2DE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677513510; x=1709049510;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5H0k3qY8U+R+Lr/NVi0+45TqQXSQ5y01pcav2hkOVdg=;
-  b=Kz9H49f1b4pYAZVV8t3XTX05SqSM6HBqlW/YYtXyn/hy18nh3bhT5VGv
-   dJkaAb43FJ894vnlprBCKUC+Kro1dFgKkw/B2G3BWrfYUNvBBXNK/S/fm
-   F4bqAhJAXJzoqlVyOXpYGWViRvZir9f9qMCrU1BptNJ4iuy9RGRBSI2HN
-   iCRiMRKjgKuzEKlJwJq1RluzrT/MV4fIBiSYUbY2u2cWb1S6/BqgVh5r+
-   9NJGDjH0tgUUJO9o+sXqLIA4BNCC97fVanoIFYFjzirNPF628cSNDJW6w
-   HE3BsB39pgWnbw1Fta36TIVJf5mRkOPW8k1jIZiEgyJMoUFGkTnx3pSVF
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="314314762"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="314314762"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 07:58:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="919395922"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="919395922"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.113.7]) ([10.212.113.7])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 07:58:30 -0800
-Message-ID: <caa8671d-ab6c-dcec-c363-e12e1515f65e@intel.com>
-Date:   Mon, 27 Feb 2023 08:58:29 -0700
+        Mon, 27 Feb 2023 11:01:22 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF15220571
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:01:20 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id c23so6602910pjo.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gjTwJPBli3bVW7BSYmp/MLmUOGFtVANWMeLDc2BTS7w=;
+        b=KOw+Ok8UcEGfwBWBgnnHrAWBMI1r7rJJHiaHQDQ43lJyLYMIHvYoTfg0+MQwxJHiDM
+         +VO1VcVrmP+Y2FYaLPfAw0CZhr3H5h0PcJ3nMkrXe/eulXo2oRdEsk/ycpUSRqBqR/UD
+         Ap5dzfWZADqmvPXDK1Uq1ct72gdykfdnZnf+h2PeLibYxsFRqpIkyF4Eu20Ti+sFkByy
+         QkWAk1mDwv4ss204gpkp05SMKpiQfXcUw8hDSmmCOsJP99EdP7d2tV0KN3hrkgnj0Za8
+         8wiVMSL4G1XDxJVt3QcgR61j4tt4wKdw0QQzW1+vu1MYkYZuc+pZ4zXH5/eDbFdY+CJR
+         yAdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gjTwJPBli3bVW7BSYmp/MLmUOGFtVANWMeLDc2BTS7w=;
+        b=lQwfU9IUx2tvuyEYPM/3QtiU+HMFzKXMwa9rYr9RkSjHFc0n87c3UGi+zZzNW30aiO
+         RtKwMGni9HhUT1Qb3UJ6Fntvyv7EjSRLfg5YowKtzpFmEi7DPukUw0MhHx05HTah/xao
+         lM2CxLOJ4haapD4tyd38ejxEGkhxac2HEX97reHYOvKM3+0HUqxbQ3JUIdK/IJi6TaSB
+         cVHfVJFtA2euVfMuhu1r7ArAwnl0hIOrgMXrVJl4MOasu0pihEnOFAWuMh26LeDZy0nb
+         ggKsI4Eutn/Gm3xh2Ab04S2trMbDu6/2yh8r2eqW2WUdQyC0Dy8z07OibsalGvA2pCeG
+         Vngg==
+X-Gm-Message-State: AO0yUKVpUX97ilmNFkhMyubXiRwXlwK773ytuj+Ozcioran20+6uXMzT
+        TtMuTa4TizBhP4hRbsthvMk=
+X-Google-Smtp-Source: AK7set+Yi+CDKBpYhZODZ5eydyky0qyXDuXPMFlX8Bbuh5Z1gJwIFnECChJNzq6H3xSq7+jChoSMeQ==
+X-Received: by 2002:a17:902:db12:b0:19a:7622:23e5 with SMTP id m18-20020a170902db1200b0019a762223e5mr33386106plx.4.1677513680037;
+        Mon, 27 Feb 2023 08:01:20 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id w18-20020a1709029a9200b0019af9a6bf8dsm4831526plp.19.2023.02.27.08.01.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 08:01:19 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Chia-I Wu <olvaffe@gmail.com>, Ryan Neph <ryanneph@chromium.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] drm/virtio: Add option to disable KMS support
+Date:   Mon, 27 Feb 2023 08:01:13 -0800
+Message-Id: <20230227160114.2799001-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] ntb_tool: check null return of devm_kcalloc in
- tool_init_mws
-Content-Language: en-US
-To:     Kang Chen <void0red@gmail.com>, jdmason@kudzu.us
-Cc:     allenbh@gmail.com, ntb@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230226055743.2522819-1-void0red@gmail.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230226055743.2522819-1-void0red@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,30 +76,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rob Clark <robdclark@chromium.org>
 
+Add a build option to disable modesetting support.  This is useful in
+cases where the guest only needs to use the GPU in a headless mode, or
+(such as in the CrOS usage) window surfaces are proxied to a host
+compositor.
 
-On 2/25/23 10:57 PM, Kang Chen wrote:
-> devm_kcalloc may fails, tc->peers[pidx].outmws might be null
-> and will cause null pointer dereference later.
-> 
-> Signed-off-by: Kang Chen <void0red@gmail.com>
+v2: Use more if (IS_ENABLED(...))
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/virtio/Kconfig       | 11 +++++++++
+ drivers/gpu/drm/virtio/Makefile      |  5 +++-
+ drivers/gpu/drm/virtio/virtgpu_drv.c |  6 ++++-
+ drivers/gpu/drm/virtio/virtgpu_drv.h | 10 ++++++++
+ drivers/gpu/drm/virtio/virtgpu_kms.c | 35 ++++++++++++++++------------
+ 5 files changed, 50 insertions(+), 17 deletions(-)
 
-> ---
->   drivers/ntb/test/ntb_tool.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/ntb/test/ntb_tool.c b/drivers/ntb/test/ntb_tool.c
-> index 5ee0afa62..eeeb4b1c9 100644
-> --- a/drivers/ntb/test/ntb_tool.c
-> +++ b/drivers/ntb/test/ntb_tool.c
-> @@ -998,6 +998,8 @@ static int tool_init_mws(struct tool_ctx *tc)
->   		tc->peers[pidx].outmws =
->   			devm_kcalloc(&tc->ntb->dev, tc->peers[pidx].outmw_cnt,
->   				   sizeof(*tc->peers[pidx].outmws), GFP_KERNEL);
-> +		if (tc->peers[pidx].outmws == NULL)
-> +			return -ENOMEM;
->   
->   		for (widx = 0; widx < tc->peers[pidx].outmw_cnt; widx++) {
->   			tc->peers[pidx].outmws[widx].pidx = pidx;
+diff --git a/drivers/gpu/drm/virtio/Kconfig b/drivers/gpu/drm/virtio/Kconfig
+index 51ec7c3240c9..ea06ff2aa4b4 100644
+--- a/drivers/gpu/drm/virtio/Kconfig
++++ b/drivers/gpu/drm/virtio/Kconfig
+@@ -11,3 +11,14 @@ config DRM_VIRTIO_GPU
+ 	   QEMU based VMMs (like KVM or Xen).
+ 
+ 	   If unsure say M.
++
++config DRM_VIRTIO_GPU_KMS
++	bool "Virtio GPU driver modesetting support"
++	depends on DRM_VIRTIO_GPU
++	default y
++	help
++	   Enable modesetting support for virtio GPU driver.  This can be
++	   disabled in cases where only "headless" usage of the GPU is
++	   required.
++
++	   If unsure, say Y.
+diff --git a/drivers/gpu/drm/virtio/Makefile b/drivers/gpu/drm/virtio/Makefile
+index b99fa4a73b68..24c7ebe87032 100644
+--- a/drivers/gpu/drm/virtio/Makefile
++++ b/drivers/gpu/drm/virtio/Makefile
+@@ -4,8 +4,11 @@
+ # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
+ 
+ virtio-gpu-y := virtgpu_drv.o virtgpu_kms.o virtgpu_gem.o virtgpu_vram.o \
+-	virtgpu_display.o virtgpu_vq.o \
++	virtgpu_vq.o \
+ 	virtgpu_fence.o virtgpu_object.o virtgpu_debugfs.o virtgpu_plane.o \
+ 	virtgpu_ioctl.o virtgpu_prime.o virtgpu_trace_points.o
+ 
++virtio-gpu-$(CONFIG_DRM_VIRTIO_GPU_KMS) += \
++	virtgpu_display.o
++
+ obj-$(CONFIG_DRM_VIRTIO_GPU) += virtio-gpu.o
+diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
+index ae97b98750b6..9cb7d6dd3da6 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_drv.c
++++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
+@@ -172,7 +172,11 @@ MODULE_AUTHOR("Alon Levy");
+ DEFINE_DRM_GEM_FOPS(virtio_gpu_driver_fops);
+ 
+ static const struct drm_driver driver = {
+-	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC,
++	.driver_features =
++#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
++			DRIVER_MODESET | DRIVER_ATOMIC |
++#endif
++			DRIVER_GEM | DRIVER_RENDER,
+ 	.open = virtio_gpu_driver_open,
+ 	.postclose = virtio_gpu_driver_postclose,
+ 
+diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
+index af6ffb696086..ffe8faf67247 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_drv.h
++++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
+@@ -426,8 +426,18 @@ virtio_gpu_cmd_set_scanout_blob(struct virtio_gpu_device *vgdev,
+ 				uint32_t x, uint32_t y);
+ 
+ /* virtgpu_display.c */
++#if defined(CONFIG_DRM_VIRTIO_GPU_KMS)
+ int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev);
+ void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev);
++#else
++static inline int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
++{
++	return 0;
++}
++static inline void virtio_gpu_modeset_fini(struct virtio_gpu_device *vgdev)
++{
++}
++#endif
+ 
+ /* virtgpu_plane.c */
+ uint32_t virtio_gpu_translate_format(uint32_t drm_fourcc);
+diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+index 27b7f14dae89..70d87e653d07 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_kms.c
++++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+@@ -161,7 +161,8 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_VIRGL))
+ 		vgdev->has_virgl_3d = true;
+ #endif
+-	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
++	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) &&
++	    virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_EDID)) {
+ 		vgdev->has_edid = true;
+ 	}
+ 	if (virtio_has_feature(vgdev->vdev, VIRTIO_RING_F_INDIRECT_DESC)) {
+@@ -218,17 +219,19 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 		goto err_vbufs;
+ 	}
+ 
+-	/* get display info */
+-	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+-			num_scanouts, &num_scanouts);
+-	vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
+-				    VIRTIO_GPU_MAX_SCANOUTS);
+-	if (!vgdev->num_scanouts) {
+-		DRM_ERROR("num_scanouts is zero\n");
+-		ret = -EINVAL;
+-		goto err_scanouts;
++	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
++		/* get display info */
++		virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
++				num_scanouts, &num_scanouts);
++		vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
++					    VIRTIO_GPU_MAX_SCANOUTS);
++		if (!vgdev->num_scanouts) {
++			DRM_ERROR("num_scanouts is zero\n");
++			ret = -EINVAL;
++			goto err_scanouts;
++		}
++		DRM_INFO("number of scanouts: %d\n", num_scanouts);
+ 	}
+-	DRM_INFO("number of scanouts: %d\n", num_scanouts);
+ 
+ 	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+ 			num_capsets, &num_capsets);
+@@ -246,10 +249,12 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 		virtio_gpu_get_capsets(vgdev, num_capsets);
+ 	if (vgdev->has_edid)
+ 		virtio_gpu_cmd_get_edids(vgdev);
+-	virtio_gpu_cmd_get_display_info(vgdev);
+-	virtio_gpu_notify(vgdev);
+-	wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
+-			   5 * HZ);
++	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS)) {
++		virtio_gpu_cmd_get_display_info(vgdev);
++		virtio_gpu_notify(vgdev);
++		wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
++				   5 * HZ);
++	}
+ 	return 0;
+ 
+ err_scanouts:
+-- 
+2.39.1
+
