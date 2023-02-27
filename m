@@ -2,122 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067DB6A3641
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 02:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6966A3644
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 02:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjB0ByO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 20:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
+        id S229659AbjB0B51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 20:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjB0ByM (ORCPT
+        with ESMTP id S229640AbjB0B5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 20:54:12 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F37BE3A7;
-        Sun, 26 Feb 2023 17:54:11 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJPRCDfxjJ+oFAA--.5421S3;
-        Mon, 27 Feb 2023 09:54:10 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC74+Dfxjqho+AA--.45347S3;
-        Mon, 27 Feb 2023 09:54:06 +0800 (CST)
-Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver
- support
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liupeibao@loongson.cn,
-        loongarch@lists.linux.dev, wanghongliang@loongson.cn
-References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
- <31c690a347f858a477bbba9c838984ed.sboyd@kernel.org>
- <4b5fd886-57ce-01ef-8224-432898b7fb1c@loongson.cn>
- <8332a1cf44b01f06bdd5db9dc5d7f387.sboyd@kernel.org>
- <01ee3dc6-a868-fd2b-93aa-11e6bdfcc9df@loongson.cn>
- <9e8952c9415973dc7276185e3cdf5ae7.sboyd@kernel.org>
- <d92223a0-6d4c-33ea-1473-3d40bdd0ad9e@loongson.cn>
- <834da7dc-bb5d-3427-43e5-938e40a2d180@loongson.cn>
- <6c497d2d70d215a86be178fc08546f4d.sboyd@kernel.org>
- <d2519ebc-8f71-1cf0-9ec8-a65a7f094853@loongson.cn>
- <19ce51bd94685e2bed6cbc20467e5705.sboyd@kernel.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <9c31d4a5-15ca-99fa-73c7-d764221f369d@loongson.cn>
-Date:   Mon, 27 Feb 2023 09:54:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 26 Feb 2023 20:57:25 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B6126C6;
+        Sun, 26 Feb 2023 17:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677463043; x=1708999043;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oXN9Efov7ltz2ez30CCK5KZv8Cvd5tH27ee1t/EGyw0=;
+  b=NBVcCC6nJHrnYReJQNaiL5bY1vHaEZtZM8yOOceOoVDMicB+WzP+/4lW
+   0Rh3k0QB1V8BDHwN75DdFkGyrS2CFsUghoVzDYMqJfcHKoK+ra79TSzz/
+   fgUESTLbqsAjJJ+p5RPKI2sW6wilFRT2r0vFdQw93gS5CkTxe5YOVJSNF
+   NhCbof4jQYjAzgG5SpIQ8UZqwZh/U11Zv38hBjx7EBt8oi660EjvL1nqP
+   dcm9Wk1KZ2Y0Xo+dJxdBks8ytC1M/BIH0J2vabcCSFne1UM43uvze/eaX
+   Nkd1UtOdNuFEJGjWq9Nfz/LXHRYJGwLoAzNzIUtpp3aWTBfCJCECPQDi2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="317560865"
+X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
+   d="scan'208";a="317560865"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 17:57:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="919111061"
+X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
+   d="scan'208";a="919111061"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Feb 2023 17:57:15 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWSlP-00040Z-0f;
+        Mon, 27 Feb 2023 01:57:15 +0000
+Date:   Mon, 27 Feb 2023 09:57:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata'
+ accessor in thermal located drivers
+Message-ID: <202302270923.6ETtTcpX-lkp@intel.com>
+References: <20230226225406.979703-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <19ce51bd94685e2bed6cbc20467e5705.sboyd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8BxC74+Dfxjqho+AA--.45347S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Zr4rGr43ArykCFyxAF4UXFb_yoW8XFyUpr
-        W8Cay2yF4Dtr4jvws293ZxZa4jyw1xJF1j9r1rJw1Dua4qkryxAr4DuF15uFZrJrsxGw40
-        qr40k3y7uFyjvrJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FAp5UUUUU==
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230226225406.979703-3-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Daniel,
 
-在 2023/2/25 上午3:10, Stephen Boyd 写道:
-> Quoting zhuyinbo (2023-02-22 18:16:49)
->> 在 2023/2/23 上午5:00, Stephen Boyd 写道:
->>> Quoting zhuyinbo (2023-02-21 21:10:14)
->>>>>>> yes, the use of dts doesn't require the use of CLK_OF_DECLARE and can
->>>>>>> use platform_driver_register
->>>>>>>
->>>>>>> but my drvier not use platform_driver_register to register clk and use
->>>>>>> CLK_OF_DECLARE to match of_clk_init.
->>>>>> of_clk_init() is there to register clks that are needed for early init,
->>>>>> i.e. the clockevent/clocksource or the root interrupt controller
->>>>>> (irqchip). Otherwise, it isn't necessary to register clks via
->>>>>> of_clk_init().
->>>>> okay, I got it.
->>>> and,  the time driver  get clock by CCF that ask loongson2 clock driver
->>>> use CLK_OF_DECLARE
->>>>
->>>> to match of_clk_init.   because  the timer_probe  is very early and the
->>>> timer driver was use TIMER_OF_DECLARE
->>>>
->>>> to match time_probe.
->>>>
->>> If you have a time driver that gets clks, register those early with
->>> CLK_OF_DECLARE_DRIVER() and then have a platform driver for the rest of
->>> the clk tree that registers clks later.
->> okay, I got it.  and this series patch I will use platform driver.
->> later, if the loongson2 time driver use the
->>
->> CLK_OF_DECLARE style I will make a alone time clk driver for it that
->> use  CLK_OF_DECLARE_DRIVER()
->>
-> It can be the same file if you want. But then it can't be a module. Up
-> to you what you want to do there.
-okay, I got it.
+I love your patch! Perhaps something to improve:
 
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on groeck-staging/hwmon-next]
+[cannot apply to v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230226225406.979703-3-daniel.lezcano%40linaro.org
+patch subject: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata' accessor in thermal located drivers
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230227/202302270923.6ETtTcpX-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
+        git checkout c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/thermal/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302270923.6ETtTcpX-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/thermal/db8500_thermal.c: In function 'db8500_thermal_get_temp':
+   drivers/thermal/db8500_thermal.c:63:42: error: implicit declaration of function 'therma_zone_device_priv'; did you mean 'thermal_zone_device_priv'? [-Werror=implicit-function-declaration]
+      63 |         struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                          thermal_zone_device_priv
+>> drivers/thermal/db8500_thermal.c:63:42: warning: initialization of 'struct db8500_thermal_zone *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
+
+
+vim +63 drivers/thermal/db8500_thermal.c
+
+    59	
+    60	/* Callback to get current temperature */
+    61	static int db8500_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+    62	{
+  > 63		struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
+    64	
+    65		/*
+    66		 * TODO: There is no PRCMU interface to get temperature data currently,
+    67		 * so a pseudo temperature is returned , it works for thermal framework
+    68		 * and this will be fixed when the PRCMU interface is available.
+    69		 */
+    70		*temp = th->interpolated_temp;
+    71	
+    72		return 0;
+    73	}
+    74	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
