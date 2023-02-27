@@ -2,184 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F258F6A4D87
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25466A4D8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjB0VrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S230148AbjB0VsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjB0Vq7 (ORCPT
+        with ESMTP id S229698AbjB0VsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:46:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA061F909;
-        Mon, 27 Feb 2023 13:46:57 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RLIGAr020104;
-        Mon, 27 Feb 2023 21:46:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RMY240oahL23plEikFUklqVHDD5xMLS3GDtXfnEQWn4=;
- b=jW7BqaCOg/npZmYBkXsBBpVhRWttBo9JBUz7GevpfbU4yuZ0oSA1IEvLz7sh9nfYWp2A
- CxPcJRoXhu0D35gJDNsDbA1UovgtZPrqDwhHr3AqJMGh6MXOiCEa//8WP47sWjrBelbR
- pKnaXlmjFz4xOUmH3xwvLjdDWbgxjft+Pe5EDdaF99sD0clNfboNnj7NikRxm0bHmMac
- 6R48AuTKnDRzTxFq4ND0xJa2hxnVvxQD13EW5VgIPMgO4L/ggSB7qpIpXE0JJluhU7DO
- Y59jHkya9CqHTf77VgRISGHTaL94sFb+oC23qI8fCPMoj64EIj5M5zm6mNgSo8mtsMX4 bg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny81qeewy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 21:46:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RLkqkk020784
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 21:46:52 GMT
-Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
- 2023 13:46:52 -0800
-Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
- probe
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gregkh@google.com>
-References: <20220531183054.6476-1-quic_manafm@quicinc.com>
- <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
-From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Message-ID: <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
-Date:   Mon, 27 Feb 2023 13:46:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 27 Feb 2023 16:48:07 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F73EA5F1;
+        Mon, 27 Feb 2023 13:48:06 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cy6so31747774edb.5;
+        Mon, 27 Feb 2023 13:48:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Cv/Lb4w9p6irhqIQaqxAsCMYZeCfxJpk48Sv40qvTo=;
+        b=lrEfonxkVCowaFYhGRjDO++QWCQzREZWmVj6eIXXLt4h79AWFvvOvAA33lCsR4Jvvi
+         +gxPKNkCl0Jkx1MLKtqDcItqij5c2no1iHZFb7E4LcA/csxXPxsj0R5Z92pc7RByjCxD
+         5d8G+uM9fI0/Zd7wgRl/Ok6gFjHeOSLyGUeHurNj3Wz2ZaW4gbUAoiSrTinC4f82TwnD
+         rlQed1MIqsWrBAizuhjo4ObgipOwk7Q09gvCWlxy2cjHtmOHcSHkWoFX0Ai+5WIt4gBD
+         WShgME2mYwnOinQPkJ0gSjlNpYbRTcI+7eQZ9W/K8paalw3LbFyioW77c1ihyqAbNbJ6
+         GyCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5Cv/Lb4w9p6irhqIQaqxAsCMYZeCfxJpk48Sv40qvTo=;
+        b=ry9irub1g85zyIkjdK9HKUEefZkLMdK3oawsLSlEB3s8nhjk/kNLWw/NqcdEtfxb+L
+         Mdujrc3M5Eofajg1nF/xgE6W9UD0mso9ZaNjHi+RidxGMhCDOu54yC/4qUSNZtjAsDck
+         t3mA9Swywk9ZvKepwncAjjk9FFNqog8l2aTih0fqhfHtYqSyAVOzCkhoODDk2UP3WU4b
+         RhabJjk8YvFrhNbBJuqQD4I715v5jbSsGSt9qzehRlEBKP7xvnda2DCjkDahkV3wM+RN
+         Ae3f8FeUG8H/pbPtyBPnQWaucp6jPOf8TtrVZEDOvkOe/1WBWfZgqxdsDsCKap+e4bg8
+         Z77g==
+X-Gm-Message-State: AO0yUKU1c0VDGad1LIA3HNoakXIa6jOS2iJT8GNA1tNqj9CwzJE46+7w
+        4/EFTBEnr95v+RUwJxjnc+H7FU5ofHAHwmkNlYE=
+X-Google-Smtp-Source: AK7set+7KdkKK8FpV3GLIOG/Y7MzwgKAY01tbG4w3lqpC4hs9Nbw1hJoRtGbMJ8eXlsGy8t83akWVP46fEyi4LH1epM=
+X-Received: by 2002:a17:906:720e:b0:8de:c6a6:5134 with SMTP id
+ m14-20020a170906720e00b008dec6a65134mr70864ejk.15.1677534484602; Mon, 27 Feb
+ 2023 13:48:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
-X-Proofpoint-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270173
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221025347.389047-1-imagedong@tencent.com> <20230221025347.389047-2-imagedong@tencent.com>
+In-Reply-To: <20230221025347.389047-2-imagedong@tencent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Feb 2023 13:47:52 -0800
+Message-ID: <CAEf4BzY7piCAZ=QDunS-Nmdjojsk37T8Fp-XRfKoTtYcFmsyPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] libbpf: add support to set kprobe/uprobe
+ attach mode
+To:     menglong8.dong@gmail.com
+Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        benbjiang@tencent.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/22 3:12 PM, Sebastian Reichel wrote:
-> Hi,
+On Mon, Feb 20, 2023 at 6:54=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
 >
-> On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
->> Registering the cooling device from the probe can result in the
->> execution of get_property() function before it gets initialized.
->>
->> To avoid this, register the cooling device from a workqueue
->> instead of registering in the probe.
->>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
->> ---
-> This removes error handling from the psy_register_cooler() call, so
-> it introduces a new potential problem. If power_supply_get_property()
-> is called to early -EAGAIN is returned. So can you elaborate the problem
-> that you are seeing with the current code?
+> From: Menglong Dong <imagedong@tencent.com>
 >
-> -- Sebastian
-
-When the device boots up with all the vendor modules getting loaded,           
-here is what we're seeing when booting up with 6.1.11 recently. First          
-log is printed with adding a pr_err() in __power_supply_register().                 
-                                                                               
-[    7.008938][  T682] power_supply battery: psy_register_cooler failed, rc=-11
-[    7.030941][  T682] qti_battery_charger: probe of qcom,battery_charger failed with error -11
-                                                                               
-Here, our downstream qti_battery_charger driver exposes the following          
-power supply properties POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and             
-POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX under a power supply device.        
-                                                                               
-This is happening because of the following call sequence,                      
-                                                                               
-battery_chg_probe() ->                                                         
-  power_supply_register() ->                                                   
-    psy_register_cooler() ->                                                   
-      thermal_cooling_device_register() ->                                     
-        cdev->ops->get_max_state() ->                                          
-          ps_get_max_charge_cntl_limit() ->                                    
-            power_supply_get_property()                                        
-                                                                               
-ends up calling power_supply_get_property() to read CHARGE_CONTROL_LIMIT       
-property.                                                                      
-                                                                               
-However, it returns -EAGAIN because psy->initialized is set to true            
-later after psy_register_cooler() succeeds. So, this ends up in a              
-driver probe failure forever.
-
--Subbaraman
+> By default, libbpf will attach the kprobe/uprobe eBPF program in the
+> latest mode that supported by kernel. In this patch, we add the support
+> to let users manually attach kprobe/uprobe in legacy or perf mode.
 >
->>  drivers/power/supply/power_supply_core.c | 10 ++++------
->>  1 file changed, 4 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
->> index 385814a14a0a..74623c4977db 100644
->> --- a/drivers/power/supply/power_supply_core.c
->> +++ b/drivers/power/supply/power_supply_core.c
->> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
->>  }
->>  EXPORT_SYMBOL_GPL(power_supply_changed);
->>  
->> +static int psy_register_cooler(struct power_supply *psy);
->>  /*
->>   * Notify that power supply was registered after parent finished the probing.
->>   *
->> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
->>   * calling power_supply_changed() directly from power_supply_register()
->>   * would lead to execution of get_property() function provided by the driver
->>   * too early - before the probe ends.
->> + * Also, registering cooling device from the probe will execute the
->> + * get_property() function. So register the cooling device after the probe.
->>   *
->>   * Avoid that by waiting on parent's mutex.
->>   */
->> @@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
->>  	}
->>  
->>  	power_supply_changed(psy);
->> +	psy_register_cooler(psy);
->>  
->>  	if (psy->dev.parent)
->>  		mutex_unlock(&psy->dev.parent->mutex);
->> @@ -1261,10 +1265,6 @@ __power_supply_register(struct device *parent,
->>  	if (rc)
->>  		goto register_thermal_failed;
->>  
->> -	rc = psy_register_cooler(psy);
->> -	if (rc)
->> -		goto register_cooler_failed;
->> -
->>  	rc = power_supply_create_triggers(psy);
->>  	if (rc)
->>  		goto create_triggers_failed;
->> @@ -1294,8 +1294,6 @@ __power_supply_register(struct device *parent,
->>  add_hwmon_sysfs_failed:
->>  	power_supply_remove_triggers(psy);
->>  create_triggers_failed:
->> -	psy_unregister_cooler(psy);
->> -register_cooler_failed:
->>  	psy_unregister_thermal(psy);
->>  register_thermal_failed:
->>  	device_del(dev);
+> There are 3 mode that supported by the kernel to attach kprobe/uprobe:
+>
+>   LEGACY: create perf event in legacy way and don't use bpf_link
+>   PERF: create perf event with perf_event_open() and don't use bpf_link
+>   LINK: create perf event with perf_event_open() and use bpf_link
+>
+> Users now can manually choose the mode with
+> bpf_program__attach_uprobe_opts()/bpf_program__attach_kprobe_opts().
+>
+> Link: https://lore.kernel.org/bpf/20230113093427.1666466-1-imagedong@tenc=
+ent.com/
+> Reviewed-by: Biao Jiang <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+> v2:
+> - rename no_link to force_ioctl_attach
+> - rename probe_mode to probe_attach_mode
+> - add more doc for probe_attach_mode
+> - return -ENOTSUP when necessray in bpf_program__attach_uprobe_opts and
+>   bpf_program__attach_kprobe_opts
+> ---
+>  tools/lib/bpf/libbpf.c | 42 +++++++++++++++++++++++++++++++++++++++++-
+>  tools/lib/bpf/libbpf.h | 31 ++++++++++++++++++++++++++++---
+>  2 files changed, 69 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 05c4db355f28..d07a0d7b9edd 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -9747,7 +9747,7 @@ struct bpf_link *bpf_program__attach_perf_event_opt=
+s(const struct bpf_program *p
+>         link->link.dealloc =3D &bpf_link_perf_dealloc;
+>         link->perf_event_fd =3D pfd;
+>
+> -       if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
+> +       if (kernel_supports(prog->obj, FEAT_PERF_LINK) && !opts->force_io=
+ctl_attach) {
 
+can't access ->force_ioctl_attach directly, please use OPTS_GET()
+macro; it handles possibility of old user app passing smaller and
+older version of opts struct
+
+>                 DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
+>                         .perf_event.bpf_cookie =3D OPTS_GET(opts, bpf_coo=
+kie, 0));
+>
+> @@ -10106,6 +10106,7 @@ bpf_program__attach_kprobe_opts(const struct bpf_=
+program *prog,
+>                                 const struct bpf_kprobe_opts *opts)
+>  {
+>         DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+> +       enum probe_attach_mode attach_mode;
+>         char errmsg[STRERR_BUFSIZE];
+>         char *legacy_probe =3D NULL;
+>         struct bpf_link *link;
+> @@ -10116,11 +10117,30 @@ bpf_program__attach_kprobe_opts(const struct bp=
+f_program *prog,
+>         if (!OPTS_VALID(opts, bpf_kprobe_opts))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       attach_mode =3D OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEF=
+AULT);
+>         retprobe =3D OPTS_GET(opts, retprobe, false);
+>         offset =3D OPTS_GET(opts, offset, 0);
+>         pe_opts.bpf_cookie =3D OPTS_GET(opts, bpf_cookie, 0);
+>
+>         legacy =3D determine_kprobe_perf_type() < 0;
+> +       switch (attach_mode) {
+> +       case PROBE_ATTACH_MODE_LEGACY:
+> +               legacy =3D true;
+> +               pe_opts.force_ioctl_attach =3D true;
+> +               break;
+> +       case PROBE_ATTACH_MODE_PERF:
+> +               if (legacy)
+> +                       return libbpf_err_ptr(-ENOTSUP);
+> +               pe_opts.force_ioctl_attach =3D true;
+> +               break;
+> +       case PROBE_ATTACH_MODE_LINK:
+> +               if (!kernel_supports(prog->obj, FEAT_PERF_LINK))
+
+just to be on the safe side, let's also check that we are not in
+legacy mode here?
+
+> +                       return libbpf_err_ptr(-ENOTSUP);
+> +               break;
+> +       default:
+
+let's add case PROBE_ATTACH_MODE_DEFAULT: break; explicitly, but for
+all other unknown values error out
+
+> +               break;
+> +       }
+> +
+>         if (!legacy) {
+>                 pfd =3D perf_event_open_probe(false /* uprobe */, retprob=
+e,
+>                                             func_name, offset,
+> @@ -10774,6 +10794,7 @@ bpf_program__attach_uprobe_opts(const struct bpf_=
+program *prog, pid_t pid,
+>  {
+>         DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+>         char errmsg[STRERR_BUFSIZE], *legacy_probe =3D NULL;
+> +       enum probe_attach_mode attach_mode;
+>         char full_binary_path[PATH_MAX];
+>         struct bpf_link *link;
+>         size_t ref_ctr_off;
+> @@ -10784,6 +10805,7 @@ bpf_program__attach_uprobe_opts(const struct bpf_=
+program *prog, pid_t pid,
+>         if (!OPTS_VALID(opts, bpf_uprobe_opts))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       attach_mode =3D OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEF=
+AULT);
+>         retprobe =3D OPTS_GET(opts, retprobe, false);
+>         ref_ctr_off =3D OPTS_GET(opts, ref_ctr_offset, 0);
+>         pe_opts.bpf_cookie =3D OPTS_GET(opts, bpf_cookie, 0);
+> @@ -10812,6 +10834,24 @@ bpf_program__attach_uprobe_opts(const struct bpf=
+_program *prog, pid_t pid,
+>         }
+>
+>         legacy =3D determine_uprobe_perf_type() < 0;
+> +       switch (attach_mode) {
+> +       case PROBE_ATTACH_MODE_LEGACY:
+> +               legacy =3D true;
+> +               pe_opts.force_ioctl_attach =3D true;
+> +               break;
+> +       case PROBE_ATTACH_MODE_PERF:
+> +               if (legacy)
+> +                       return libbpf_err_ptr(-ENOTSUP);
+> +               pe_opts.force_ioctl_attach =3D true;
+> +               break;
+> +       case PROBE_ATTACH_MODE_LINK:
+> +               if (!kernel_supports(prog->obj, FEAT_PERF_LINK))
+> +                       return libbpf_err_ptr(-ENOTSUP);
+> +               break;
+> +       default:
+> +               break;
+> +       }
+
+all the same points as above for kprobe_opts version
+
+> +
+>         if (!legacy) {
+>                 pfd =3D perf_event_open_probe(true /* uprobe */, retprobe=
+, binary_path,
+>                                             func_offset, pid, ref_ctr_off=
+);
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 2efd80f6f7b9..ef8f68da42f9 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -451,8 +451,11 @@ struct bpf_perf_event_opts {
+>         size_t sz;
+>         /* custom user-provided value fetchable through bpf_get_attach_co=
+okie() */
+>         __u64 bpf_cookie;
+> +       /* don't use bpf_link when attach eBPF program */
+> +       bool force_ioctl_attach;
+> +       size_t :0;
+>  };
+> -#define bpf_perf_event_opts__last_field bpf_cookie
+> +#define bpf_perf_event_opts__last_field force_ioctl_attach
+>
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
+> @@ -461,6 +464,24 @@ LIBBPF_API struct bpf_link *
+>  bpf_program__attach_perf_event_opts(const struct bpf_program *prog, int =
+pfd,
+>                                     const struct bpf_perf_event_opts *opt=
+s);
+>
+> +
+> +/**
+> + * enum probe_attach_mode - the mode to attach kprobe/uprobe
+> + *
+> + * force libbpf to attach kprobe/uprobe in specific mode, -ENOTSUP will
+> + * be returned if it is not supported by the kernel.
+> + */
+> +enum probe_attach_mode {
+> +       /* attach probe in latest supported mode by kernel */
+> +       PROBE_ATTACH_MODE_DEFAULT =3D 0,
+> +       /* attach probe in legacy mode */
+
+"in legacy mode, using debugfs/tracefs" ?
+
+> +       PROBE_ATTACH_MODE_LEGACY,
+> +       /* create perf event with perf_event_open() syscall */
+> +       PROBE_ATTACH_MODE_PERF,
+> +       /* attach probe with bpf_link */
+
+nit: BPF link (it's a concept, not a struct name)
+
+> +       PROBE_ATTACH_MODE_LINK,
+> +};
+> +
+>  struct bpf_kprobe_opts {
+>         /* size of this struct, for forward/backward compatiblity */
+>         size_t sz;
+> @@ -470,9 +491,11 @@ struct bpf_kprobe_opts {
+>         size_t offset;
+>         /* kprobe is return probe */
+>         bool retprobe;
+> +       /* kprobe attach mode */
+> +       enum probe_attach_mode attach_mode;
+>         size_t :0;
+>  };
+> -#define bpf_kprobe_opts__last_field retprobe
+> +#define bpf_kprobe_opts__last_field attach_mode
+>
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe=
+,
+> @@ -570,9 +593,11 @@ struct bpf_uprobe_opts {
+>          * binary_path.
+>          */
+>         const char *func_name;
+> +       /* uprobe attach mode */
+> +       enum probe_attach_mode attach_mode;
+>         size_t :0;
+>  };
+> -#define bpf_uprobe_opts__last_field func_name
+> +#define bpf_uprobe_opts__last_field attach_mode
+>
+>  /**
+>   * @brief **bpf_program__attach_uprobe()** attaches a BPF program
+> --
+> 2.39.0
+>
