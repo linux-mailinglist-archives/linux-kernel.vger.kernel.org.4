@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEC06A433C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCADC6A434F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjB0NtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S230240AbjB0NuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjB0NtD (ORCPT
+        with ESMTP id S230254AbjB0NuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:49:03 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5CF30D7;
-        Mon, 27 Feb 2023 05:49:01 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-536c02c9dfbso176058687b3.11;
-        Mon, 27 Feb 2023 05:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wsIz50zjyJWoV4yTGujEpF6auIkGsJx425uJLy5GoWg=;
-        b=mziWa4DuN7lEcg+EmTxmyEVoPTTO4f3VzO52ePtD+mVYj9IG8XSb7PqOP5TYipj0LO
-         ZHJICBSNhvI2lS50six5WhTisF/0wkZoRAdJxRI+e3WorN/lQeOwZKAXgzCti1mDzkHc
-         /0iLGth1vrQFUW9e+awc+9LpN3QMOlDSsr7yHvQvq6b8zEcBpmISJcB4iZHhms5tc3mj
-         wpWo2hMsKFdMdeILOuZ1WEfHN8ZxpusxEYo5BLdkKn9jwOZcSCAjwgzL7L2F5hZFC/2L
-         qN2+AthmKkcTemKKw+7pm48M8v9I3Orc7RPmWF2e9zA89PLy4yL0zjirix55oVF7k/6E
-         iSsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wsIz50zjyJWoV4yTGujEpF6auIkGsJx425uJLy5GoWg=;
-        b=MetsKhWEUAj8b0JS+TFqfbtdynkz3k9dlInX9/ps+SHPl195yl2mk/R/srKEPvjxy+
-         xw8FEIjR2HdaOMWXj8XaU7Bpquhg9/DIMaYd9zUW4xSn7lXAsR/5Ih20P0iwruFHMRdr
-         G29u8xlOXM4c70zENcIBTqFN+CYjENjB2+ToSJJXrsk9URF1Hj90wGq6zlBmnagOMf7j
-         E023JUniBIyS87ghaoqETI7WiFS3DOZ7B4Pwm1UeoI1CDaEv26vwCQF0knMLLqjFHR3B
-         BKN0LgPl3mGe7ZPTI5XsMWEd9sydBjcHUlHve4ozJ+nHMxb13QUwpL01VMDL6V0iuix/
-         Fbvg==
-X-Gm-Message-State: AO0yUKWeGg7MfOSFLfsIQtIeAfKm4yZQdxw49418S+aaJeUJaSeAiAzj
-        +EabZFOeT76in7xW3fiOPJqF0eblf2woqSiOzec=
-X-Google-Smtp-Source: AK7set/Gy9HX3Hc99cqeB48DmPz48RcGzSSWrCthvZvgP3KcDblaI61+VePiCAujvESdltCKxw7O/OBDCOX8Apm0TNs=
-X-Received: by 2002:a5b:50b:0:b0:a36:3875:564a with SMTP id
- o11-20020a5b050b000000b00a363875564amr7639099ybp.2.1677505740979; Mon, 27 Feb
- 2023 05:49:00 -0800 (PST)
+        Mon, 27 Feb 2023 08:50:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3E6C1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677505774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbh0k81SJj8KXcQWsPETE7GSsJc/6C/vn1XuCZ3ElNk=;
+        b=ambqytsH/wKefaUyeMiPMzwV4BxMpBLK2G9RZK3O3kfTZgBMKwWSvWZh9dcRYgFb5rfvVj
+        Cl7FLMxxLDvdalO9sxaOcJtBQi+2YH4JFwdghoX5bnsn11o3lxUoiwEqPldzq1hHgLMeHA
+        w5Qrv+QhLyrqc58/eR9WBwvBHPE+uno=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-SA1C-3EVN9iuDzHDZrUQJg-1; Mon, 27 Feb 2023 08:49:29 -0500
+X-MC-Unique: SA1C-3EVN9iuDzHDZrUQJg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EEC33C21C21;
+        Mon, 27 Feb 2023 13:49:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28010404BEC5;
+        Mon, 27 Feb 2023 13:49:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230202204428.3267832-5-willy@infradead.org>
+References: <20230202204428.3267832-5-willy@infradead.org> <20230202204428.3267832-1-willy@infradead.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     dhowells@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-mm@kvack.org,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        fstests@vger.kernel.org
+Subject: Re: [PATCH 4/5] afs: Zero bytes after 'oldsize' if we're expanding the file
 MIME-Version: 1.0
-References: <20230224-rust-new_uninit-v1-1-c951443d9e26@asahilina.net> <87pm9v9rmg.fsf@metaspace.dk>
-In-Reply-To: <87pm9v9rmg.fsf@metaspace.dk>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 27 Feb 2023 14:48:50 +0100
-Message-ID: <CANiq72=Q2kUihi2Yve5b9LGZYreEovrgqfjWb8WhPRtNWfq+wA@mail.gmail.com>
-Subject: Re: [PATCH] rust: Enable the new_uninit feature for kernel and driver crates
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2730678.1677505767.1@warthog.procyon.org.uk>
+Date:   Mon, 27 Feb 2023 13:49:27 +0000
+Message-ID: <2730679.1677505767@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +67,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 2:15=E2=80=AFPM Andreas Hindborg <nmi@metaspace.dk>=
- wrote:
->
-> What is the purpose of adding the feature here? The kernel crate seems
-> to compile fine without this.
+Matthew Wilcox (Oracle) <willy@infradead.org> wrote:
 
-`rust_allowed_features` is the list of features that crates outside
-`rust/` can use (e.g. drivers).
+> POSIX requires that "If the file size is increased, the extended area
+> shall appear as if it were zero-filled".  It is possible to use mmap to
+> write past EOF and that data will become visible instead of zeroes.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-The goal is to control which unstable features are used outside the
-`kernel` crate and to avoid mistakenly relying on them.
+That seems to work.  Do you want me to pass it on to Linus?  If not:
 
-Cheers,
-Miguel
+Acked-by: David Howells <dhowells@redhat.com>
+
