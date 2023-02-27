@@ -2,107 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED086A3B2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0186A3B2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjB0GMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 01:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S229836AbjB0GOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 01:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjB0GMH (ORCPT
+        with ESMTP id S229501AbjB0GOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 01:12:07 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FC711EB0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 22:12:01 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31R3mk04014732;
-        Mon, 27 Feb 2023 06:11:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=duU5IpCOwisjZHByreipWuIJ1e1UiVazsWuOlkpFJ1c=;
- b=Kaw9eYLoNP4xXW2mjKwR40Z8kjH0kMGur8rIWXfbpOiBjZlxrElI6icK+KRXGj/Ds/QF
- O5hHeXzP8LZJOgkpy0e6MZeCOzytiK6pn4DdMqrJO14ItyaUESxQpG9DihiSIVBrPm12
- tte2kw3O27+7WSSMuTShxj2Qpp3UoMKeaD779goNgOlIgwF/91OLwJyJliHCry5pEiIz
- +fdbB+M5MzpGwVOLr4nd58UDEmxlRScZA2DXLKExbuShn0AXzMBmxZmKK6cUIIhR8vd/
- DKAsJR65JvNOCO3wLkdK24BBR7FwoXOVHc9EEcB0dcfmJnK2xNvaPN35hD1yU9yR7J9s xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nyv67rcrd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 06:11:21 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31R5wVu9017747;
-        Mon, 27 Feb 2023 06:11:21 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nyv67rcr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 06:11:20 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31Q6uSmC013004;
-        Mon, 27 Feb 2023 06:11:19 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nybcq1m9s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 06:11:18 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31R6BGLp26280232
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Feb 2023 06:11:16 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 872A520043;
-        Mon, 27 Feb 2023 06:11:16 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3B882004B;
-        Mon, 27 Feb 2023 06:11:11 +0000 (GMT)
-Received: from [9.43.71.13] (unknown [9.43.71.13])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Feb 2023 06:11:11 +0000 (GMT)
-Message-ID: <8aa21721-6951-80d1-ae20-db4198b743ff@linux.ibm.com>
-Date:   Mon, 27 Feb 2023 11:41:10 +0530
+        Mon, 27 Feb 2023 01:14:31 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2983B454;
+        Sun, 26 Feb 2023 22:14:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=nChsjqTXDjOmpasI3qEeCMoG1+xVGlKv9S7OF1Tscto=; b=gzq04UxvATspaIjdxtMrDvJAR4
+        W35FJx+B4RBTBBpbIZPpLk3URCZhCiBjnxYfIoRjUXWbD8J6/cg3LHC+4ifSS62Htq2FzGV+Qfjr4
+        cWhaG8vHJ3KC+waUBhD5poEGuHQkVyA+eqgG4/PWPG1PfQ2rl1qpbr5zypNYORBwcdU9upOYT2vQl
+        UqVlkKsUa01DP7+dKpuGwcVVpvOtiy9f5dmz7U5uMcbdBQ+rGmOFRtu9jJ4DgPfeoXilAjVKotJuO
+        /SiiXgfEAK1+krVUF8E/RqlruCLz0r/ULu8s2Hl9Uf9Sk4WdKU/GfGbkdYYYQgZNVr3OcGYN79BqY
+        2XIjbJFQ==;
+Received: from [172.31.31.185] (helo=[127.0.0.1])
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pWWlG-00EA72-2O;
+        Mon, 27 Feb 2023 06:13:22 +0000
+Date:   Mon, 27 Feb 2023 06:13:22 +0000
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Usama Arif <usama.arif@bytedance.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        tglx@linutronix.de, kim.phillips@amd.com, brgerst@gmail.com
+CC:     piotrgorski@cachyos.org, arjan@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Subject: Re: [External] Re: [PATCH v12 00/11] Parallel CPU bringup for x86_64
+User-Agent: K-9 Mail for Android
+In-Reply-To: <819d8fa2-b73e-e32f-5442-452aa2c0d752@bytedance.com>
+References: <20230226110802.103134-1-usama.arif@bytedance.com> <5650744.DvuYhMxLoT@natalenko.name> <819d8fa2-b73e-e32f-5442-452aa2c0d752@bytedance.com>
+Message-ID: <EB27C1C4-7246-4557-A6B3-EBBC9E8FC69F@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v18 5/7] kexec: exclude hot remove cpu from elfcorehdr
- notes
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20230131224236.122805-1-eric.devolder@oracle.com>
- <20230131224236.122805-6-eric.devolder@oracle.com> <87sffpzkle.ffs@tglx>
- <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com> <87h6vw2rwf.ffs@tglx>
- <7580421a-648a-2c4b-3c33-82e7622d9585@oracle.com>
- <d465173e-a31a-c4d6-af51-59d9ff0c2edc@linux.ibm.com>
- <24034f33-739b-e5f5-40c0-8d5abeb1ad89@oracle.com>
- <18c57fd0-2ad0-361a-9a53-ac49c372f021@linux.ibm.com>
- <ee58fcfa-1734-2992-d6b7-83f365a9e16a@oracle.com>
- <fc9f8ba4-967a-6e48-df73-67427c145141@linux.ibm.com>
- <4eeda077-c578-791b-8e48-e418744a7615@oracle.com>
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <4eeda077-c578-791b-8e48-e418744a7615@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: k1DZogO9mVDfpGAak6Mb1nWnzFn-McoG
-X-Proofpoint-ORIG-GUID: tRbJzLn5dWq1zIgl7pFTwqRplPZqy_3s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-26_22,2023-02-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 bulkscore=0 impostorscore=0
- phishscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270047
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -110,367 +62,150 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 25/02/23 01:46, Eric DeVolder wrote:
->
->
-> On 2/24/23 02:34, Sourabh Jain wrote:
->>
->> On 24/02/23 02:04, Eric DeVolder wrote:
->>>
->>>
->>> On 2/10/23 00:29, Sourabh Jain wrote:
->>>>
->>>> On 10/02/23 01:09, Eric DeVolder wrote:
->>>>>
->>>>>
->>>>> On 2/9/23 12:43, Sourabh Jain wrote:
->>>>>> Hello Eric,
->>>>>>
->>>>>> On 09/02/23 23:01, Eric DeVolder wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 2/8/23 07:44, Thomas Gleixner wrote:
->>>>>>>> Eric!
->>>>>>>>
->>>>>>>> On Tue, Feb 07 2023 at 11:23, Eric DeVolder wrote:
->>>>>>>>> On 2/1/23 05:33, Thomas Gleixner wrote:
->>>>>>>>>
->>>>>>>>> So my latest solution is introduce two new CPUHP states, 
->>>>>>>>> CPUHP_AP_ELFCOREHDR_ONLINE
->>>>>>>>> for onlining and CPUHP_BP_ELFCOREHDR_OFFLINE for offlining. 
->>>>>>>>> I'm open to better names.
->>>>>>>>>
->>>>>>>>> The CPUHP_AP_ELFCOREHDR_ONLINE needs to be placed after 
->>>>>>>>> CPUHP_BRINGUP_CPU. My
->>>>>>>>> attempts at locating this state failed when inside the 
->>>>>>>>> STARTING section, so I located
->>>>>>>>> this just inside the ONLINE sectoin. The crash hotplug handler 
->>>>>>>>> is registered on
->>>>>>>>> this state as the callback for the .startup method.
->>>>>>>>>
->>>>>>>>> The CPUHP_BP_ELFCOREHDR_OFFLINE needs to be placed before 
->>>>>>>>> CPUHP_TEARDOWN_CPU, and I
->>>>>>>>> placed it at the end of the PREPARE section. This crash 
->>>>>>>>> hotplug handler is also
->>>>>>>>> registered on this state as the callback for the .teardown 
->>>>>>>>> method.
->>>>>>>>
->>>>>>>> TBH, that's still overengineered. Something like this:
->>>>>>>>
->>>>>>>> bool cpu_is_alive(unsigned int cpu)
->>>>>>>> {
->>>>>>>>     struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
->>>>>>>>
->>>>>>>>     return data_race(st->state) <= CPUHP_AP_IDLE_DEAD;
->>>>>>>> }
->>>>>>>>
->>>>>>>> and use this to query the actual state at crash time. That 
->>>>>>>> spares all
->>>>>>>> those callback heuristics.
->>>>>>>>
->>>>>>>>> I'm making my way though percpu crash_notes, elfcorehdr, 
->>>>>>>>> vmcoreinfo,
->>>>>>>>> makedumpfile and (the consumer of it all) the userspace crash 
->>>>>>>>> utility,
->>>>>>>>> in order to understand the impact of moving from 
->>>>>>>>> for_each_present_cpu()
->>>>>>>>> to for_each_online_cpu().
->>>>>>>>
->>>>>>>> Is the packing actually worth the trouble? What's the actual win?
->>>>>>>>
->>>>>>>> Thanks,
->>>>>>>>
->>>>>>>>          tglx
->>>>>>>>
->>>>>>>>
->>>>>>>
->>>>>>> Thomas,
->>>>>>> I've investigated the passing of crash notes through the vmcore. 
->>>>>>> What I've learned is that:
->>>>>>>
->>>>>>> - linux/fs/proc/vmcore.c (which makedumpfile references to do 
->>>>>>> its job) does
->>>>>>>   not care what the contents of cpu PT_NOTES are, but it does 
->>>>>>> coalesce them together.
->>>>>>>
->>>>>>> - makedumpfile will count the number of cpu PT_NOTES in order to 
->>>>>>> determine its
->>>>>>>   nr_cpus variable, which is reported in a header, but otherwise 
->>>>>>> unused (except
->>>>>>>   for sadump method).
->>>>>>>
->>>>>>> - the crash utility, for the purposes of determining the cpus, 
->>>>>>> does not appear to
->>>>>>>   reference the elfcorehdr PT_NOTEs. Instead it locates the various
->>>>>>>   cpu_[possible|present|online]_mask and computes nr_cpus from 
->>>>>>> that, and also of
->>>>>>>   course which are online. In addition, when crash does 
->>>>>>> reference the cpu PT_NOTE,
->>>>>>>   to get its prstatus, it does so by using a percpu technique 
->>>>>>> directly in the vmcore
->>>>>>>   image memory, not via the ELF structure. Said differently, it 
->>>>>>> appears to me that
->>>>>>>   crash utility doesn't rely on the ELF PT_NOTEs for cpus; 
->>>>>>> rather it obtains them
->>>>>>>   via kernel cpumasks and the memory within the vmcore.
->>>>>>>
->>>>>>> With this understanding, I did some testing. Perhaps the most 
->>>>>>> telling test was that I
->>>>>>> changed the number of cpu PT_NOTEs emitted in the 
->>>>>>> crash_prepare_elf64_headers() to just 1,
->>>>>>> hot plugged some cpus, then also took a few offline sparsely via 
->>>>>>> chcpu, then generated a
->>>>>>> vmcore. The crash utility had no problem loading the vmcore, it 
->>>>>>> reported the proper number
->>>>>>> of cpus and the number offline (despite only one cpu PT_NOTE), 
->>>>>>> and changing to a different
->>>>>>> cpu via 'set -c 30' and the backtrace was completely valid.
->>>>>>>
->>>>>>> My take away is that crash utility does not rely upon ELF cpu 
->>>>>>> PT_NOTEs, it obtains the
->>>>>>> cpu information directly from kernel data structures. Perhaps at 
->>>>>>> one time crash relied
->>>>>>> upon the ELF information, but no more. (Perhaps there are other 
->>>>>>> crash dump analyzers
->>>>>>> that might rely on the ELF info?)
->>>>>>>
->>>>>>> So, all this to say that I see no need to change 
->>>>>>> crash_prepare_elf64_headers(). There
->>>>>>> is no compelling reason to move away from 
->>>>>>> for_each_present_cpu(), or modify the list for
->>>>>>> online/offline.
->>>>>>>
->>>>>>> Which then leaves the topic of the cpuhp state on which to 
->>>>>>> register. Perhaps reverting
->>>>>>> back to the use of CPUHP_BP_PREPARE_DYN is the right answer. 
->>>>>>> There does not appear to
->>>>>>> be a compelling need to accurately track whether the cpu went 
->>>>>>> online/offline for the
->>>>>>> purposes of creating the elfcorehdr, as ultimately the crash 
->>>>>>> utility pulls that from
->>>>>>> kernel data structures, not the elfcorehdr.
->>>>>>>
->>>>>>> I think this is what Sourabh has known and has been advocating 
->>>>>>> for an optimization
->>>>>>> path that allows not regenerating the elfcorehdr on cpu changes 
->>>>>>> (because all the percpu
->>>>>>> structs are all laid out). I do think it best to leave that as 
->>>>>>> an arch choice.
->>>>>>
->>>>>> Since things are clear on how the PT_NOTES are consumed in kdump 
->>>>>> kernel [fs/proc/vmcore.c],
->>>>>> makedumpfile, and crash tool I need your opinion on this:
->>>>>>
->>>>>> Do we really need to regenerate elfcorehdr for CPU hotplug events?
->>>>>> If yes, can you please list the elfcorehdr components that 
->>>>>> changes due to CPU hotplug.
->>>>> Due to the use of for_each_present_cpu(), it is possible for the 
->>>>> number of cpu PT_NOTEs
->>>>> to fluctuate as cpus are un/plugged. Onlining/offlining of cpus 
->>>>> does not impact the
->>>>> number of cpu PT_NOTEs (as the cpus are still present).
->>>>>
->>>>>>
->>>>>>  From what I understood, crash notes are prepared for possible 
->>>>>> CPUs as system boots and
->>>>>> could be used to create a PT_NOTE section for each possible CPU 
->>>>>> while generating the elfcorehdr
->>>>>> during the kdump kernel load.
->>>>>>
->>>>>> Now once the elfcorehdr is loaded with PT_NOTEs for every 
->>>>>> possible CPU there is no need to
->>>>>> regenerate it for CPU hotplug events. Or do we?
->>>>>
->>>>> For onlining/offlining of cpus, there is no need to regenerate the 
->>>>> elfcorehdr. However,
->>>>> for actual hot un/plug of cpus, the answer is yes due to 
->>>>> for_each_present_cpu(). The
->>>>> caveat here of course is that if crash utility is the only 
->>>>> coredump analyzer of concern,
->>>>> then it doesn't care about these cpu PT_NOTEs and there would be 
->>>>> no need to re-generate them.
->>>>>
->>>>> Also, I'm not sure if ARM cpu hotplug, which is just now coming 
->>>>> into mainstream, impacts
->>>>> any of this.
->>>>>
->>>>> Perhaps the one item that might help here is to distinguish 
->>>>> between actual hot un/plug of
->>>>> cpus, versus onlining/offlining. At the moment, I can not 
->>>>> distinguish between a hot plug
->>>>> event and an online event (and unplug/offline). If those were 
->>>>> distinguishable, then we
->>>>> could only regenerate on un/plug events.
->>>>>
->>>>> Or perhaps moving to for_each_possible_cpu() is the better choice?
->>>>
->>>> Yes, because once elfcorehdr is built with possible CPUs we don't 
->>>> have to worry about
->>>> hot[un]plug case.
->>>>
->>>> Here is my view on how things should be handled if a core-dump 
->>>> analyzer is dependent on
->>>> elfcorehdr PT_NOTEs to find online/offline CPUs.
->>>>
->>>> A PT_NOTE in elfcorehdr holds the address of the corresponding 
->>>> crash notes (kernel has
->>>> one crash note per CPU for every possible CPU). Though the crash 
->>>> notes are allocated
->>>> during the boot time they are populated when the system is on the 
->>>> crash path.
->>>>
->>>> This is how crash notes are populated on PowerPC and I am expecting 
->>>> it would be something
->>>> similar on other architectures too.
->>>>
->>>> The crashing CPU sends IPI to every other online CPU with a 
->>>> callback function that updates the
->>>> crash notes of that specific CPU. Once the IPI completes the 
->>>> crashing CPU updates its own crash
->>>> note and proceeds further.
->>>>
->>>> The crash notes of CPUs remain uninitialized if the CPUs were 
->>>> offline or hot unplugged at the time
->>>> system crash. The core-dump analyzer should be able to identify 
->>>> [un]/initialized crash notes
->>>> and display the information accordingly.
->>>>
->>>> Thoughts?
->>>>
->>>> - Sourabh
->>>
->>> I've been examining what it would mean to move to 
->>> for_each_possible_cpu() in crash_prepare_elf64_headers(). I think it 
->>> means:
->>>
->>> - Changing for_each_present_cpu() to for_each_possible_cpu() in 
->>> crash_prepare_elf64_headers().
->>> - For kexec_load() syscall path, rewrite the incoming/supplied 
->>> elfcorehdr immediately on the load with the elfcorehdr generated by 
->>> crash_prepare_elf64_headers().
->>> - Eliminate/remove the cpuhp machinery for handling crash hotplug 
->>> events.
->>
->> If for_each_present_cpu is replaced with for_each_possible_cpu I 
->> still need cpuhp machinery
->> to update FDT kexec segment for CPU hot add case.
->
-> Ah, ok, that's important! So the cpuhp callbacks are still needed.
->>
->>
->>>
->>> This would then setup PT_NOTEs for all possible cpus, which should 
->>> in theory accommodate crash analyzers that rely on ELF PT_NOTEs for 
->>> crash_notes.
->>>
->>> If staying with for_each_present_cpu() is ultimately decided, then I 
->>> think leaving the cpuhp machinery in place and each arch could 
->>> decide how to handle crash cpu hotplug events. The overhead for 
->>> doing this is very minimal, and the events are likely very infrequent.
->>
->> I agree. Some architectures may need cpuhp machinery to update kexec 
->> segment[s] other then elfcorehdr. For example FDT on PowerPC.
->>
->> - Sourabh Jain
->
-> OK, I was thinking that the desire was to eliminate the cpuhp 
-> callbacks. In reality, the desire is to change to 
-> for_each_possible_cpu(). Given that the kernel creates crash_notes for 
-> all possible cpus upon kernel boot, there seems to be no reason to not 
-> do this?
->
-> HOWEVER...
->
-> It's not clear to me that this particular change needs to be part of 
-> this series. It's inclusion would facilitate PPC support, but doesn't 
-> "solve" anything in general. In fact it causes kexec_load and 
-> kexec_file_load to deviate (kexec_load via userspace kexec does the 
-> equivalent of for_each_present_cpu() where as with this change 
-> kexec_file_load would do for_each_possible_cpu(); until a hot plug 
-> event then both would do for_each_possible_cpu()). And if this change 
-> were to arrive as part of Sourabh's PPC support, then it does not 
-> appear to impact x86 (not sure about other arches). And the 'crash' 
-> dump analyzer doesn't care either way.
->
-> Including this change would enable an optimization path (for x86 at 
-> least) that short-circuits cpu hotplug changes in the arch crash 
-> handler, for example:
->
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index aca3f1817674..0883f6b11de4 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -473,6 +473,11 @@ void arch_crash_handle_hotplug_event(struct 
-> kimage *image)
->     unsigned long mem, memsz;
->     unsigned long elfsz = 0;
->
-> +   if (image->file_mode && (
-> +       image->hp_action == KEXEC_CRASH_HP_ADD_CPU ||
-> +       image->hp_action == KEXEC_CRASH_HP_REMOVE_CPU))
-> +       return;
-> +
->     /*
->      * Create the new elfcorehdr reflecting the changes to CPU and/or
->      * memory resources.
->
-> I'm not sure that is compelling given the infrequent nature of cpu 
-> hotplug events.
-It certainly closes/reduces the window where kdump is not active due 
-kexec segment update.|
 
+On 26 February 2023 20:59:17 GMT, Usama Arif <usama=2Earif@bytedance=2Ecom=
+> wrote:
 >
-> In my mind I still have a question about kexec_load() path. The 
-> userspace kexec can not do the equivalent of for_each_possible_cpu(). 
-> It can obtain max possible cpus from /sys/devices/system/cpu/possible, 
-> but for those cpus not present the /sys/devices/system/cpu/cpuXX is 
-> not available and so the crash_notes entries is not available. My 
-> attempts to expose all cpuXX lead to odd behavior that was requiring 
-> changes in ACPI and arch code that looked untenable.
 >
-> There seem to be these options available for kexec_load() path:
-> - immediately rewrite the elfcorehdr upon load via a call to 
-> crash_prepare_elf64_headers(). I've made this work with the following, 
-> as proof of concept:
-Yes regenerating/patching the elfcorehdr could be an option for 
-kexec_load syscall.
+>On 26/02/2023 18:31, Oleksandr Natalenko wrote:
+>> Hello=2E
+>>=20
+>> On ned=C4=9Ble 26=2E =C3=BAnora 2023 12:07:51 CET Usama Arif wrote:
+>>> The main code change over v11 is the build error fix by Brian Gerst an=
+d
+>>> acquiring tr_lock in trampoline_64=2ES whenever the stack is setup=2E
+>>>=20
+>>> The git history is also rewritten to move the commits that removed
+>>> initial_stack, early_gdt_descr and initial_gs earlier in the patchset=
+=2E
+>>>=20
+>>> Thanks,
+>>> Usama
+>>>=20
+>>> Changes across versions:
+>>> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing mo=
+re
+>>> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+>>>      in preparation for more parallelisation=2E
+>>> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+>>>      avoid scribbling on initial_gs in common_cpu_up(), and to allow a=
+ll
+>>>      24 bits of the physical X2APIC ID to be used=2E That patch still =
+needs
+>>>      a Signed-off-by from its original author, who once claimed not to
+>>>      remember writing it at all=2E But now we've fixed it, hopefully h=
+e'll
+>>>      admit it now :)
+>>> v5: rebase to v6=2E1 and remeasure performance, disable parallel bring=
+up
+>>>      for AMD CPUs=2E
+>>> v6: rebase to v6=2E2-rc6, disabled parallel boot on amd as a cpu bug a=
+nd
+>>>      reused timer calibration for secondary CPUs=2E
+>>> v7: [David Woodhouse] iterate over all possible CPUs to find any exist=
+ing
+>>>      cluster mask in alloc_clustermask=2E (patch 1/9)
+>>>      Keep parallel AMD support enabled in AMD, using APIC ID in CPUID =
+leaf
+>>>      0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are suffic=
+ient=2E
+>>>      Included sanity checks for APIC id from 0x0B=2E (patch 6/9)
+>>>      Removed patch for reusing timer calibration for secondary CPUs=2E
+>>>      commit message and code improvements=2E
+>>> v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
+>>>      early_gdt_descr=2E
+>>>      Drop trampoline lock and bail if APIC ID not found in find_cpunr=
+=2E
+>>>      Code comments improved and debug prints added=2E
+>>> v9: Drop patch to avoid repeated saves of MTRR at boot time=2E
+>>>      rebased and retested at v6=2E2-rc8=2E
+>>>      added kernel doc for no_parallel_bringup and made do_parallel_bri=
+ngup
+>>>      __ro_after_init=2E
+>>> v10: Fixed suspend/resume not working with parallel smpboot=2E
+>>>       rebased and retested to 6=2E2=2E
+>>>       fixed checkpatch errors=2E
+>>> v11: Added patches from Brian Gerst to remove the global variables ini=
+tial_gs,
+>>>       initial_stack, and early_gdt_descr from the 64-bit boot code
+>>>       (https://lore=2Ekernel=2Eorg/all/20230222221301=2E245890-1-brger=
+st@gmail=2Ecom/)=2E
+>>> v12: Fixed compilation errors, acquire tr_lock for every stack setup i=
+n
+>>>       trampoline_64=2ES=2E
+>>>       Rearranged commits for a cleaner git history=2E
+>>>=20
+>>> Brian Gerst (3):
+>>>    x86/smpboot: Remove initial_stack on 64-bit
+>>>    x86/smpboot: Remove early_gdt_descr on 64-bit
+>>>    x86/smpboot: Remove initial_gs
+>>>=20
+>>> David Woodhouse (8):
+>>>    x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
+>>>    cpu/hotplug: Move idle_thread_get() to <linux/smpboot=2Eh>
+>>>    cpu/hotplug: Add dynamic parallel bringup states before
+>>>      CPUHP_BRINGUP_CPU
+>>>    x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+>>>    x86/smpboot: Split up native_cpu_up into separate phases and docume=
+nt
+>>>      them
+>>>    x86/smpboot: Support parallel startup of secondary CPUs
+>>>    x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+>>>    x86/smpboot: Serialize topology updates for secondary bringup
+>>>=20
+>>>   =2E=2E=2E/admin-guide/kernel-parameters=2Etxt         |   3 +
+>>>   arch/x86/include/asm/processor=2Eh              |   6 +-
+>>>   arch/x86/include/asm/realmode=2Eh               |   4 +-
+>>>   arch/x86/include/asm/smp=2Eh                    |  15 +-
+>>>   arch/x86/include/asm/topology=2Eh               |   2 -
+>>>   arch/x86/kernel/acpi/sleep=2Ec                  |  15 +-
+>>>   arch/x86/kernel/apic/apic=2Ec                   |   2 +-
+>>>   arch/x86/kernel/apic/x2apic_cluster=2Ec         | 126 ++++---
+>>>   arch/x86/kernel/asm-offsets=2Ec                 |   1 +
+>>>   arch/x86/kernel/cpu/common=2Ec                  |   6 +-
+>>>   arch/x86/kernel/head_64=2ES                     | 129 +++++--
+>>>   arch/x86/kernel/smpboot=2Ec                     | 350 +++++++++++++-=
+----
+>>>   arch/x86/realmode/init=2Ec                      |   3 +
+>>>   arch/x86/realmode/rm/trampoline_64=2ES          |  27 +-
+>>>   arch/x86/xen/smp_pv=2Ec                         |   4 +-
+>>>   arch/x86/xen/xen-head=2ES                       |   2 +-
+>>>   include/linux/cpuhotplug=2Eh                    |   2 +
+>>>   include/linux/smpboot=2Eh                       |   7 +
+>>>   kernel/cpu=2Ec                                  |  31 +-
+>>>   kernel/smpboot=2Eh                              |   2 -
+>>>   20 files changed, 537 insertions(+), 200 deletions(-)
+>>=20
+>> With `CONFIG_FORCE_NR_CPUS=3Dy` this results in:
+>>=20
+>> ```
+>> ld: vmlinux=2Eo: in function `secondary_startup_64_no_verify':
+>> (=2Ehead=2Etext+0x10c): undefined reference to `nr_cpu_ids'
+>> ```
+>>=20
+>> That's because in `arch/x86/kernel/head_64=2ES` `secondary_startup_64_n=
+o_verify()` refers to `nr_cpu_ids` under `#ifdef CONFIG_SMP`, but this symb=
+ol is available under the following conditions:
+>>=20
+>> ```
+>> 38 #if (NR_CPUS =3D=3D 1) || defined(CONFIG_FORCE_NR_CPUS)
+>> 39 #define nr_cpu_ids ((unsigned int)NR_CPUS)
+>> 40 #else
+>> 41 extern unsigned int nr_cpu_ids;
+>> 42 #endif
+>>=20
+>> 1090 #if (NR_CPUS > 1) && !defined(CONFIG_FORCE_NR_CPUS)
+>> 1091 /* Setup number of possible processor ids */
+>> 1092 unsigned int nr_cpu_ids __read_mostly =3D NR_CPUS;
+>> 1093 EXPORT_SYMBOL(nr_cpu_ids);
+>> 1094 #endif
+>> ```
+>>=20
+>> So having `CONFIG_SMP=3Dy` and, for instance, `CONFIG_NR_CPUS=3D320`, i=
+t is possible to compile out `EXPORT_SYMBOL(nr_cpu_ids);` if `CONFIG_FORCE_=
+NR_CPUS=3Dy` is set=2E
+>>=20
+>
+>I think something like below diff should work in all scenarios?
 
->
-> diff --git a/kernel/kexec.c b/kernel/kexec.c
-> index cb8e6e6f983c..4eb201270f97 100644
-> --- a/kernel/kexec.c
-> +++ b/kernel/kexec.c
-> @@ -163,6 +163,12 @@ static int do_kexec_load(unsigned long entry, 
-> unsigned long
->     kimage_free(image);
->  out_unlock:
->     kexec_unlock();
-> +   if (IS_ENABLED(CONFIG_CRASH_HOTPLUG)) {
-> +       if ((flags & KEXEC_ON_CRASH) && kexec_crash_image) {
-> +           crash_handle_hotplug_event(KEXEC_CRASH_HP_NONE, 
-> KEXEC_CRASH_HP_INVALID_CPU);
-> +       }
-> +   }
->     return ret;
->  }
->
-> - Another option is spend the time to determine whether exposing all 
-> cpuXX is a viable solution; I have no idea what impacts to userspace 
-> would be for possible-but-not-yet-present cpuXX entries would be. It 
-> might also mean requiring a 'present' entry available within the cpuXX.
->
-> - Another option is to simply let the hot plug events rewrite the 
-> elfcorehdr on demand. This is what I've originally put forth, but not 
-> sure how this impacts PPC given for_each_possible_cpu() change.
-Given that /sys/devices/system/cpu/cpuXX is not present for 
-possbile-but-not-yet-present CPUs, I am wondering do we even have crash 
-notes for possible CPUs on x86?
->
-> The concern is that today, both kexec_load and kexec_file_load mirror 
-> each other with respect to for_each_present_cpu(); that is userspace 
-> kexec is able to generate the elfcorehdr the same as would 
-> kexec_file_load, for cpus. But by changing to for_each_possible_cpu(), 
-> the two would deviate.
-
-Thanks,
-Sourabh Jain
+I'd've changed the asm side to use the constant limit=2E
