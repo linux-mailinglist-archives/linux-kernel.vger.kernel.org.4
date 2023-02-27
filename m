@@ -2,100 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32146A4615
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B77E6A4613
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjB0PaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S229515AbjB0PaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjB0PaG (ORCPT
+        with ESMTP id S229548AbjB0PaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:30:06 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0635CD33B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:30:03 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id s18so3789123pgq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C3CiTz6/U/wp7PbRBroAtOi46dRTbSRjLVEEIMUQC2Q=;
-        b=t63O5GUZbiYu0E2Iv90UTLjmnGposoSLT86162BArw0Irfznqxy6utUICLMgtQEMoy
-         x2gQAGoq0hbLQKgwYQ46RVODILjOF34YuHukJ1LNW4zrArzN3A5N8j9VMzIa9mUZM5oz
-         7ojmkcoceOdKJaC2/YKOwITXDzhbPk6reQGOb5i76EbficlVyQoEwnE4FNmRzuc3gNHz
-         zs63fRtuK99zF0XFYd/john6EQiTF72dVstg15kHRzsdsrxjVdk0yoBD/9UYU+T6dMiF
-         s8ig9/0obN/eY/QpwXcTFWJOYFao0X27AIju6TNj1gJGMpk2+v9jwoK0SV9G3bLkgjPu
-         Fbnw==
+        Mon, 27 Feb 2023 10:30:01 -0500
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69C0C66B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:29:47 -0800 (PST)
+Received: by mail-il1-f208.google.com with SMTP id y3-20020a927d03000000b003174a027af1so2802343ilc.14
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:29:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C3CiTz6/U/wp7PbRBroAtOi46dRTbSRjLVEEIMUQC2Q=;
-        b=31JUum8D8lZxYdvAK6v0LgGK3kP8Vm+Tq16uU7H/U2Tt/3k8gU7kF9ePq8hcpa5i2z
-         Ujy2fP0CCzzCYL+HtO2RR9K1MwJmTFhb4XNbBqXoPpCnXeOliIb4i2a/RJGfl4Yriila
-         DlDK0Da3FCP/8Es7TvXUBgHCw/3uOWlL+/zhwkqjM+uAnen8ddIT6BWniqQEOvIM0Wr4
-         Djtf8g1+Kr9UGeXiYxHk/zwhLKAIcIe/67QB1JrVf2Wa5swWvGcLxTG1g5+yFY5/Z9kc
-         FAQXzOVLCfBBh4CukzeZhmym2+nC1+RylAntQSizgR5I5sNLr1gciFQ3rs5/DV0qMjxK
-         CSTw==
-X-Gm-Message-State: AO0yUKXE0mxGQh2MANHJCJY4fB8gDJBbCpmRdMWmu3UmZwFajiSz7Ws3
-        rk1Ij/ZCnknn5nMs+exsYhwXePBY9tHsw7ozY8HtLg==
-X-Google-Smtp-Source: AK7set+7LTRYPwxWDQdVcUkKgAc5mbndJdDNy+xbyWDoXGOU3VITUok2DNZgeTmScaFCqO7eK2fKN67w1eFSpM8e3Xs=
-X-Received: by 2002:a05:6a00:1621:b0:5f1:b1:6dc4 with SMTP id
- e1-20020a056a00162100b005f100b16dc4mr1746557pfc.3.1677511803345; Mon, 27 Feb
- 2023 07:30:03 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=45UKrYAmhULhqBRHtvhzoeRUXcZg3+p7AA2JXXqD7AE=;
+        b=0SX+Nkl/+9nXDBOPtqbuF3VAd6vc9HPROK62ckgocAZUcwvLFkyg67xRfs4grtAvdm
+         Nfaux2fmvIAsVWhOmsdudwt3B9qfMvPxKqFJwsTxXH4sDSo5Bi9NX09IOOvpRJVBjQjp
+         BqJBaglKw1pBxDtBd1vOEeQJHuWHKIRw1qET5Tf5KAfYS+odcq1pJxA3QfXp5+GRMZaD
+         CpnHuI0Ynkmjh25g1nWSEqX6Piv9+VIt7+mMdmEIk5kE03j8Exv8azQlaTsBSNhL6xeT
+         37ms6shEXlcOvE8U9gv1iwTB6PWw8tASfIzQjSaftfxW/tJq7tEkDgPrle2T0e2WbaIX
+         GWJQ==
+X-Gm-Message-State: AO0yUKXejNApc5mJrp55poxN/YaEUM2FyWBRTIO2fAzG/R0dGeSMQv4T
+        5ebkfn6Sh/+UP5IX2MVXwUT/4Sb1lQ1k7hEdQ3TaHz1S3NQJ
+X-Google-Smtp-Source: AK7set+fH0wK863xbwHQ9iT0INQrGloPXCuNwPOIO6vhbXdmnBKHORgrzHH0aIt6fxBBGXyLnzpCCbzVnGxu/B/OBOBRTe+eHgR4
 MIME-Version: 1.0
-References: <20221213090047.3805-1-victor.shih@genesyslogic.com.tw>
- <20221213090047.3805-6-victor.shih@genesyslogic.com.tw> <CAPDyKFrWf2vmC_KMnMfT=GQc_uf2oerzXn4cO3SE02MmHHxArg@mail.gmail.com>
- <CAK00qKB4-UHkP4D2ZU50L7aBzcYwRXPRd-HFnWzHEZvvLtm9bg@mail.gmail.com>
-In-Reply-To: <CAK00qKB4-UHkP4D2ZU50L7aBzcYwRXPRd-HFnWzHEZvvLtm9bg@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 27 Feb 2023 16:29:27 +0100
-Message-ID: <CAPDyKFr6aGgGT24WTLE6E9NX_T0px4kCzn3KQzAgb+UPebE6_Q@mail.gmail.com>
-Subject: Re: [PATCH V6 05/24] mmc: core: Add definitions for SD UHS-II cards
-To:     Victor Shih <victorshihgli@gmail.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
-        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
-        takahiro.akashi@linaro.org, dlunev@chromium.org,
-        Victor Shih <victor.shih@genesyslogic.com.tw>,
-        Jason Lai <jason.lai@genesyslogic.com.tw>
+X-Received: by 2002:a05:6e02:1e0f:b0:317:50bb:ee2a with SMTP id
+ g15-20020a056e021e0f00b0031750bbee2amr2486912ila.1.1677511787046; Mon, 27 Feb
+ 2023 07:29:47 -0800 (PST)
+Date:   Mon, 27 Feb 2023 07:29:47 -0800
+In-Reply-To: <0000000000003f3d9a05f56fcac5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c756405f5b026c7@google.com>
+Subject: Re: [syzbot] [kernfs?] WARNING: suspicious RCU usage in mas_start
+From:   syzbot <syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tj@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+syzbot has found a reproducer for the following issue on:
 
-> >
-> > I think this better belongs in the struct mmc_host, please move it
-> > there and then also rename it into "uhs2_app_cmd". Note that, there is
-> > also one case in mmc_sd_num_wr_blocks() that sends an MMC_APP_CMD, but
-> > without calling mmc_app_cmd(). This needs to be fixed.
-> >
-> > > +       unsigned int    power_delay_ms;         /* waiting for stable power */
-> >
-> > This seems to be unused, so let's drop it!
-> >
->
-> This power_delay_ms is used in the sd_uhs2_power_up function.
->
+HEAD commit:    f3a2439f20d9 Merge tag 'rproc-v6.3' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10a7dea8c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd442ddf29eaca0c
+dashboard link: https://syzkaller.appspot.com/bug?extid=d79e205d463e603f47ff
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12cfaf1cc80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149edbf0c80000
 
-Correct. Although, the value isn't being set, which means it's always
-0. Is that deliberate?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5892d3595732/disk-f3a2439f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b634456815c8/vmlinux-f3a2439f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d6d82681f2ca/bzImage-f3a2439f.xz
 
-I realize that we are going to end up calling msleep(0) for this case,
-so there is a delay being done anyway.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com
 
-[...]
+=============================
+WARNING: suspicious RCU usage
+6.2.0-syzkaller-12485-gf3a2439f20d9 #0 Not tainted
+-----------------------------
+lib/maple_tree.c:856 suspicious rcu_dereference_check() usage!
 
-Kind regards
-Uffe
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+5 locks held by syz-executor322/5095:
+ #0: ffff88802d3aa460 (sb_writers#8){.+.+}-{0:0}, at: vfs_write+0x26d/0xbb0 fs/read_write.c:580
+ #1: ffff888023176c88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x1eb/0x4f0 fs/kernfs/file.c:325
+ #2: ffff8881451a7490 (kn->active#47){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x20f/0x4f0 fs/kernfs/file.c:326
+ #3: ffffffff8d214988 (ksm_thread_mutex){+.+.}-{3:3}, at: run_store+0x122/0xb10 mm/ksm.c:2953
+ #4: ffff888025e8c998 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
+ #4: ffff888025e8c998 (&mm->mmap_lock){++++}-{3:3}, at: unmerge_and_remove_all_rmap_items mm/ksm.c:990 [inline]
+ #4: ffff888025e8c998 (&mm->mmap_lock){++++}-{3:3}, at: run_store+0x2db/0xb10 mm/ksm.c:2959
+
+stack backtrace:
+CPU: 0 PID: 5095 Comm: syz-executor322 Not tainted 6.2.0-syzkaller-12485-gf3a2439f20d9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ lockdep_rcu_suspicious+0x220/0x340 kernel/locking/lockdep.c:6599
+ mas_root lib/maple_tree.c:856 [inline]
+ mas_start+0x2c1/0x440 lib/maple_tree.c:1357
+ mas_state_walk lib/maple_tree.c:3838 [inline]
+ mas_walk+0x33/0x180 lib/maple_tree.c:5052
+ mas_find+0x1e9/0x240 lib/maple_tree.c:6030
+ vma_next include/linux/mm.h:745 [inline]
+ unmerge_and_remove_all_rmap_items mm/ksm.c:991 [inline]
+ run_store+0x2f9/0xb10 mm/ksm.c:2959
+ kernfs_fop_write_iter+0x3a6/0x4f0 fs/kernfs/file.c:334
+ call_write_iter include/linux/fs.h:1851 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7b2/0xbb0 fs/read_write.c:584
+ ksys_write+0x1a0/0x2c0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe864e99e49
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc685fb328 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007fe864e99e49
+RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000001 R11: 0000000000000246 R12: 000000000000d884
+R13: 00007ffc685fb33c R14: 00007ffc685fb350 R15: 00007ffc685fb340
+ </TASK>
+
