@@ -2,142 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4846A4C21
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8EDC6A4C27
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjB0URd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
+        id S229740AbjB0UVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB0URc (ORCPT
+        with ESMTP id S229511AbjB0UVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:17:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93DC29172
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 12:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677528993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mng9T753JSQII2hLKdsJMn7SufiPKs0785Plw1ARFuc=;
-        b=DGG/Cs5S0KOOGvwxHEtxxTeLqheDRy899zHrpF6z1FkCFx45Foz9V5fm9ubPDYnZ0SxvIC
-        0spJ1A5Mr6wmi/BptgQBglfsm8rgtawLlo1De0tYkJ6jJwpKuE2IO79T3iTBSgH457fb5B
-        e6LUixIEOt8cvm12Q6i8LbgFxlVCo5g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-139-mTZRey5JPrmfAFlD5FQDNg-1; Mon, 27 Feb 2023 15:16:26 -0500
-X-MC-Unique: mTZRey5JPrmfAFlD5FQDNg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 972F129DD985;
-        Mon, 27 Feb 2023 20:16:25 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6FEF4C15BAD;
-        Mon, 27 Feb 2023 20:16:25 +0000 (UTC)
-Message-ID: <c126f079-88a2-4067-6f94-82f51cf5ff2b@redhat.com>
-Date:   Mon, 27 Feb 2023 15:16:25 -0500
+        Mon, 27 Feb 2023 15:21:03 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462E11C7F9;
+        Mon, 27 Feb 2023 12:21:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=E2dr+WPpewMczIAEoyECoMJTwHYh5rKSEujDBRqJLXg=; b=aQLtru7wx3Rr1O2V6XdQGckFOV
+        FEnrPvzQq6NPqHH+iZb8rzJt0MFOpAWePYj6L8bbRB7GJ/Ss9qB9h9ss6jV1Njq3eYkZQuYkiEmkY
+        4shbZlYVaaTpj6vTmOzbst4gBNSVGiERp2sPSTIVVd6AURmtNCNWOgS9uql3L/Qxel+4AFVmviEbR
+        1gYgTS37g/3ome8G0h7JOqiz8uVezekbra8rJNsr7NEsvC+b2No2vsuWe9L5/P+hsWiyFuEDsa+GN
+        ChcZiykhQk3DB7lzWa/4Dl62d8Jpb/j9xBFckTBK0e6UB0BLoiz8ChAn5sGU1MG/CaKRgt+fYDVJW
+        DsO2dlUg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWjzU-000NS1-2d; Mon, 27 Feb 2023 20:20:56 +0000
+Date:   Mon, 27 Feb 2023 20:20:56 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2 18/30] powerpc: Implement the new page table range API
+Message-ID: <Y/0QqO10jK55zHO0@casper.infradead.org>
+References: <20230227175741.71216-1-willy@infradead.org>
+ <20230227175741.71216-19-willy@infradead.org>
+ <ee864b97-90e6-4535-4db3-2659a2250afd@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, will@kernel.org, linux-kernel@vger.kernel.org,
-        boqun.feng@gmail.com
-References: <20230223122642.491637862@infradead.org>
- <20230223123319.487908155@infradead.org>
- <Y/t1AwGC9OoN/lFc@hirez.programming.kicks-ass.net>
- <Y/uN+89FlTw45uiA@hirez.programming.kicks-ass.net>
- <943686ee-975d-a463-46d1-04b200ac19b1@redhat.com>
- <Y/yGZgz1cJ1+pTt5@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y/yGZgz1cJ1+pTt5@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee864b97-90e6-4535-4db3-2659a2250afd@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/23 05:31, Peter Zijlstra wrote:
->> I do have some concern that early lock transfer to a lock owner that has not
->> been woken up yet may suppress writer lock stealing from optimistic spinning
->> causing some performance regression in some cases. Let's see if the test
->> robot report anything.
-> Ah yes, I suppose that is indeed a possibility. Given this is all under
-> wait_lock and the spinner is not, I was hoping it would still have
-> sufficient time to win. But yes, robots will tell us.
->
-I run my rwsem locking microbenchmark on a 2-socket 96-thread x86-64
-system with lock event turned on for 15 secs.
+On Mon, Feb 27, 2023 at 07:45:08PM +0000, Christophe Leroy wrote:
+> Hi,
+> 
+> Le 27/02/2023 à 18:57, Matthew Wilcox (Oracle) a écrit :
+> > Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
+> > Change the PG_arch_1 (aka PG_dcache_dirty) flag from being per-page to
+> > per-folio.
+> > 
+> > I'm unsure about my merging of flush_dcache_icache_hugepage() and
+> > flush_dcache_icache_page() into flush_dcache_icache_folio() and subsequent
+> > removal of flush_dcache_icache_phys().  Please review.
+> 
+> Not sure why you want to remove flush_dcache_icache_phys().
 
-Before this patchset:
+Well, I didn't, necessarily.  It's just that when I merged
+flush_dcache_icache_hugepage() and flush_dcache_icache_page()
+together, it was left with no callers.
 
-Running locktest with rwsem [runtime = 15s, r% = 50%, load = 100]
-Threads = 96, Min/Mean/Max = 74,506/91,260/112,409
-Threads = 96, Total Rate = 584,091 op/s; Percpu Rate = 6,084 op/s
+> Allthough that's only feasible when address bus is not wider than 32 
+> bits and cannot be done on BOOKE as you can't switch off MMU on BOOKE, 
+> flush_dcache_icache_phys() allows to flush not mapped pages without 
+> having to map them. So it is more efficient.
 
-rwsem_opt_fail=127305
-rwsem_opt_lock=4252147
-rwsem_opt_nospin=28920
-rwsem_rlock=2713129
-rwsem_rlock_fail=0
-rwsem_rlock_fast=5
-rwsem_rlock_handoff=280
-rwsem_rlock_steal=1486617
-rwsem_sleep_reader=2713085
-rwsem_sleep_writer=4313369
-rwsem_wake_reader=29876
-rwsem_wake_writer=5829160
-rwsem_wlock=127305
-rwsem_wlock_fail=0
-rwsem_wlock_handoff=2515
+And it was just never done for the hugepage case?
 
-After this patchset:
+> > @@ -148,17 +103,20 @@ static void __flush_dcache_icache(void *p)
+> >   	invalidate_icache_range(addr, addr + PAGE_SIZE);
+> >   }
+> >   
+> > -static void flush_dcache_icache_hugepage(struct page *page)
+> > +void flush_dcache_icache_folio(struct folio *folio)
+> >   {
+> > -	int i;
+> > -	int nr = compound_nr(page);
+> > +	unsigned int i, nr = folio_nr_pages(folio);
+> >   
+> > -	if (!PageHighMem(page)) {
+> > +	if (flush_coherent_icache())
+> > +		return;
+> > +
+> > +	if (!folio_test_highmem(folio)) {
+> > +		void *addr = folio_address(folio);
+> >   		for (i = 0; i < nr; i++)
+> > -			__flush_dcache_icache(lowmem_page_address(page + i));
+> > +			__flush_dcache_icache(addr + i * PAGE_SIZE);
+> >   	} else {
+> >   		for (i = 0; i < nr; i++) {
+> > -			void *start = kmap_local_page(page + i);
+> > +			void *start = kmap_local_folio(folio, i * PAGE_SIZE);
+> >   
+> >   			__flush_dcache_icache(start);
+> >   			kunmap_local(start);
 
-Running locktest with rwsem [runtime = 15s, r% = 50%, load = 100]
-Threads = 96, Min/Mean/Max = 26,573/26,749/26,833
-Threads = 96, Total Rate = 171,184 op/s; Percpu Rate = 1,783 op/s
+So you'd like this to be:
 
-rwsem_opt_fail=1265481
-rwsem_opt_lock=17939
-rwsem_rlock=1266157
-rwsem_rlock_fail=0
-rwsem_rlock_fast=0
-rwsem_rlock_handoff=0
-rwsem_rlock_steal=551
-rwsem_sleep_reader=1266157
-rwsem_sleep_writer=1265481
-rwsem_wake_reader=26612
-rwsem_wake_writer=0
-rwsem_wlock=1265481
-rwsem_wlock_ehandoff=94
-rwsem_wlock_fail=0
-rwsem_wlock_handoff=94
+	} else if (IS_ENABLED(CONFIG_BOOKE) || sizeof(phys_addr_t) > sizeof(void *)) {
+		for (i = 0; i < nr; i++) {
+			 void *start = kmap_local_folio(folio, i * PAGE_SIZE);
+			 __flush_dcache_icache(start);
+			 kunmap_local(start);
+		}
+	} else {
+		unsigned long pfn = folio_pfn(folio);
+		for (i = 0; i < nr; i++)
+			flush_dcache_icache_phys((pfn + i) * PAGE_SIZE;
+	}
 
-So the locking rate is reduced to just 29.3% of the original. Looking at
-the number of successful writer lock stealings from optimistic spinning
-(rwsem_opt_lock), it is reduced from 4252147 to 17939. It is just about
-0.4% of the original.
+(or maybe you'd prefer a flush_dcache_icache_pfn() that doesn't need to
+worry about PAGE_MASK).
 
-So for workloads that have a lot of writer contention, there will be
-performance regressions. Do you mind if we try to keep the original
-logic of my patchset to allow write lock acquisition in writer slow
-path, but transfer the lock ownership in the wakeup path when handoff
-is required. We can do this with some minor code changes on top of your
-current patchset.
-
-Regards,
-Longman
-
-
+> > @@ -166,27 +124,6 @@ static void flush_dcache_icache_hugepage(struct page *page)
+> >   	}
+> >   }
+> >   
+> > -void flush_dcache_icache_page(struct page *page)
+> > -{
+> > -	if (flush_coherent_icache())
+> > -		return;
+> > -
+> > -	if (PageCompound(page))
+> > -		return flush_dcache_icache_hugepage(page);
+> > -
+> > -	if (!PageHighMem(page)) {
+> > -		__flush_dcache_icache(lowmem_page_address(page));
+> > -	} else if (IS_ENABLED(CONFIG_BOOKE) || sizeof(phys_addr_t) > sizeof(void *)) {
+> > -		void *start = kmap_local_page(page);
+> > -
+> > -		__flush_dcache_icache(start);
+> > -		kunmap_local(start);
+> > -	} else {
+> > -		flush_dcache_icache_phys(page_to_phys(page));
+> > -	}
+> > -}
+> > -EXPORT_SYMBOL(flush_dcache_icache_page);
+> > -
+> >   void clear_user_page(void *page, unsigned long vaddr, struct page *pg)
+> >   {
+> >   	clear_page(page);
+> > diff --git a/arch/powerpc/mm/nohash/e500_hugetlbpage.c b/arch/powerpc/mm/nohash/e500_hugetlbpage.c
+> > index 58c8d9849cb1..f3cb91107a47 100644
+> > --- a/arch/powerpc/mm/nohash/e500_hugetlbpage.c
+> > +++ b/arch/powerpc/mm/nohash/e500_hugetlbpage.c
+> > @@ -178,7 +178,8 @@ book3e_hugetlb_preload(struct vm_area_struct *vma, unsigned long ea, pte_t pte)
+> >    *
+> >    * This must always be called with the pte lock held.
+> >    */
+> > -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep)
+> > +void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+> > +		pte_t *ptep, unsigned int nr)
+> >   {
+> >   	if (is_vm_hugetlb_page(vma))
+> >   		book3e_hugetlb_preload(vma, address, *ptep);
+> > diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
+> > index cb2dcdb18f8e..b3c7b874a7a2 100644
+> > --- a/arch/powerpc/mm/pgtable.c
+> > +++ b/arch/powerpc/mm/pgtable.c
+> > @@ -58,7 +58,7 @@ static inline int pte_looks_normal(pte_t pte)
+> >   	return 0;
+> >   }
+> >   
+> > -static struct page *maybe_pte_to_page(pte_t pte)
+> > +static struct folio *maybe_pte_to_folio(pte_t pte)
+> >   {
+> >   	unsigned long pfn = pte_pfn(pte);
+> >   	struct page *page;
+> > @@ -68,7 +68,7 @@ static struct page *maybe_pte_to_page(pte_t pte)
+> >   	page = pfn_to_page(pfn);
+> >   	if (PageReserved(page))
+> >   		return NULL;
+> > -	return page;
+> > +	return page_folio(page);
+> >   }
+> >   
+> >   #ifdef CONFIG_PPC_BOOK3S
+> > @@ -84,12 +84,12 @@ static pte_t set_pte_filter_hash(pte_t pte)
+> >   	pte = __pte(pte_val(pte) & ~_PAGE_HPTEFLAGS);
+> >   	if (pte_looks_normal(pte) && !(cpu_has_feature(CPU_FTR_COHERENT_ICACHE) ||
+> >   				       cpu_has_feature(CPU_FTR_NOEXECUTE))) {
+> > -		struct page *pg = maybe_pte_to_page(pte);
+> > -		if (!pg)
+> > +		struct folio *folio = maybe_pte_to_folio(pte);
+> > +		if (!folio)
+> >   			return pte;
+> > -		if (!test_bit(PG_dcache_clean, &pg->flags)) {
+> > -			flush_dcache_icache_page(pg);
+> > -			set_bit(PG_dcache_clean, &pg->flags);
+> > +		if (!test_bit(PG_dcache_clean, &folio->flags)) {
+> > +			flush_dcache_icache_folio(folio);
+> > +			set_bit(PG_dcache_clean, &folio->flags);
+> >   		}
+> >   	}
+> >   	return pte;
+> > @@ -107,7 +107,7 @@ static pte_t set_pte_filter_hash(pte_t pte) { return pte; }
+> >    */
+> >   static inline pte_t set_pte_filter(pte_t pte)
+> >   {
+> > -	struct page *pg;
+> > +	struct folio *folio;
+> >   
+> >   	if (radix_enabled())
+> >   		return pte;
+> > @@ -120,18 +120,18 @@ static inline pte_t set_pte_filter(pte_t pte)
+> >   		return pte;
+> >   
+> >   	/* If you set _PAGE_EXEC on weird pages you're on your own */
+> > -	pg = maybe_pte_to_page(pte);
+> > -	if (unlikely(!pg))
+> > +	folio = maybe_pte_to_folio(pte);
+> > +	if (unlikely(!folio))
+> >   		return pte;
+> >   
+> >   	/* If the page clean, we move on */
+> > -	if (test_bit(PG_dcache_clean, &pg->flags))
+> > +	if (test_bit(PG_dcache_clean, &folio->flags))
+> >   		return pte;
+> >   
+> >   	/* If it's an exec fault, we flush the cache and make it clean */
+> >   	if (is_exec_fault()) {
+> > -		flush_dcache_icache_page(pg);
+> > -		set_bit(PG_dcache_clean, &pg->flags);
+> > +		flush_dcache_icache_folio(folio);
+> > +		set_bit(PG_dcache_clean, &folio->flags);
+> >   		return pte;
+> >   	}
+> >   
+> > @@ -142,7 +142,7 @@ static inline pte_t set_pte_filter(pte_t pte)
+> >   static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+> >   				     int dirty)
+> >   {
+> > -	struct page *pg;
+> > +	struct folio *folio;
+> >   
+> >   	if (IS_ENABLED(CONFIG_PPC_BOOK3S_64))
+> >   		return pte;
+> > @@ -168,17 +168,17 @@ static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+> >   #endif /* CONFIG_DEBUG_VM */
+> >   
+> >   	/* If you set _PAGE_EXEC on weird pages you're on your own */
+> > -	pg = maybe_pte_to_page(pte);
+> > -	if (unlikely(!pg))
+> > +	folio = maybe_pte_to_folio(pte);
+> > +	if (unlikely(!folio))
+> >   		goto bail;
+> >   
+> >   	/* If the page is already clean, we move on */
+> > -	if (test_bit(PG_dcache_clean, &pg->flags))
+> > +	if (test_bit(PG_dcache_clean, &folio->flags))
+> >   		goto bail;
+> >   
+> >   	/* Clean the page and set PG_dcache_clean */
+> > -	flush_dcache_icache_page(pg);
+> > -	set_bit(PG_dcache_clean, &pg->flags);
+> > +	flush_dcache_icache_folio(folio);
+> > +	set_bit(PG_dcache_clean, &folio->flags);
+> >   
+> >    bail:
+> >   	return pte_mkexec(pte);
+> > @@ -187,8 +187,8 @@ static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+> >   /*
+> >    * set_pte stores a linux PTE into the linux page table.
+> >    */
+> > -void set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> > -		pte_t pte)
+> > +void set_ptes(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> > +		pte_t pte, unsigned int nr)
+> >   {
+> >   	/*
+> >   	 * Make sure hardware valid bit is not set. We don't do
+> > @@ -203,7 +203,14 @@ void set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> >   	pte = set_pte_filter(pte);
+> >   
+> >   	/* Perform the setting of the PTE */
+> > -	__set_pte_at(mm, addr, ptep, pte, 0);
+> > +	for (;;) {
+> > +		__set_pte_at(mm, addr, ptep, pte, 0);
+> > +		if (--nr == 0)
+> > +			break;
+> > +		ptep++;
+> > +		pte = __pte(pte_val(pte) + PAGE_SIZE);
+> > +		addr += PAGE_SIZE;
+> > +	}
+> >   }
+> >   
+> >   void unmap_kernel_page(unsigned long va)
