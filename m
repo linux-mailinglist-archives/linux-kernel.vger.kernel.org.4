@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341426A49C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABAA6A49C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjB0ScA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S229912AbjB0ScQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjB0Sb6 (ORCPT
+        with ESMTP id S229896AbjB0ScO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:31:58 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0351E2A0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 10:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677522716; x=1709058716;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kpZSX7WkPjEJqi2glUW8/7+AKoqRKziAJ5rqZIaoPCI=;
-  b=XPpjxVOeoVSzmFL0b9YUqIdjPnGX4wMOlc2ZNMQSNeBtHUK7hsrDk1hG
-   xFV8CKSZ/3q8DoUv8q5XoJHQcpdfM/plGdU6Fi6R50VxQngbn+3uWVkBu
-   Yd5jpl82+furRPEeiRwgxnk93dmhIZM+TX+dsHz9ABrOXiJn2uxp4vX3R
-   1HgfBGUoik9BfejYerwrU/ixf4YHJlRz/zowjXtamBk77coWxFXACeBZP
-   zKDESWAhzwOBttMkjGgKaJvNaLZppHVyd38nzG55ZCFptd0YRi6R7kXyq
-   Ol128lSq2370aupjw82AIQRtbVnFNJhx1d/CImVPUp8vZlafyQ9Sg8xGJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="398710450"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="398710450"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 10:31:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="742673243"
-X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
-   d="scan'208";a="742673243"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Feb 2023 10:31:54 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWiHx-0004fm-1Y;
-        Mon, 27 Feb 2023 18:31:53 +0000
-Date:   Tue, 28 Feb 2023 02:31:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yogesh Lal <quic_ylal@quicinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: drivers/remoteproc/qcom_q6v5_pas.c:108:6: warning: no previous
- prototype for 'adsp_segment_dump'
-Message-ID: <202302280207.ZJXOPdxl-lkp@intel.com>
+        Mon, 27 Feb 2023 13:32:14 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0D32128E;
+        Mon, 27 Feb 2023 10:32:12 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31R9tVQm013708;
+        Mon, 27 Feb 2023 10:32:03 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=bs6HtfivYcfDfYf+aM4nf9Z30SsUvpyNNdqsmXdmkpo=;
+ b=LafiWXkImykNW9xH0L7FnLppzKEWTwekAzcQRvp/+K/rWgCK5anaVwaGtl89CKfx2r2v
+ IydvYFP9C8HCQKMaDfFUVgifl6tlMwm6gRZcDUlstPw4uv1ZdQnOkmIPgTENKpiRLKZQ
+ vAMHxw2Y7aFvqWclBIXiDgyBFVESz74g4if5s2cC/+5U+xP/5BweRd2P1eXIbU7/FfTb
+ COKYSmTRz/N+rnoDDKV788cFIAr50U5/nzi9suLSMN0dCBEoY9TVHOEOtrLAFMxUiff3
+ PUckyhL5UwWI8kbbSPWGyS5167bNgms7zMSSZFoYA+Bi7Yx25z7XlDIeqVb8dEXmQmLJ Tw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nyjqtsbjf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 10:32:02 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 10:32:00 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Mon, 27 Feb 2023 10:32:00 -0800
+Received: from localhost.localdomain (unknown [10.110.150.250])
+        by maili.marvell.com (Postfix) with ESMTP id 686893F7058;
+        Mon, 27 Feb 2023 10:32:00 -0800 (PST)
+From:   Piyush Malgujar <pmalgujar@marvell.com>
+To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>
+CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
+        Piyush Malgujar <pmalgujar@marvell.com>
+Subject: [PATCH v3 0/6] mmc: sdhci-cadence: SD6 controller support
+Date:   Mon, 27 Feb 2023 10:31:45 -0800
+Message-ID: <20230227183151.27912-1-pmalgujar@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: jDK4LiLnitJuR7NVsvU-Y5Vyr4RRqZPa
+X-Proofpoint-GUID: jDK4LiLnitJuR7NVsvU-Y5Vyr4RRqZPa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_15,2023-02-27_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yogesh,
+Added changes to support SD6 controller
+- Restructure and reformat the code.
+- Add SD6 related operations.
+- Support added for MMC_SDHCI_IO_ACCESSORS.
+- Related changes done in dt bindings.
+- Support for debug option.
 
-FYI, the error/warning still remains.
+Changes since V2:
+- Added separate patches for renaming of functions and 
+  restructuring, adding new structures to support SD4/SD6 operations.
+- Added proper suffixes to properties in dt binding.
+- Removed unreachable code.
+- Handled sdhci_cdns_uniphier_pltfm_data similar to sdhci_cdns_sd4_of_data
+  as per the added structured design.
+- Used dev_dbg instead of DEBUG_DRV in debug patch.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f3a2439f20d918930cc4ae8f76fe1c1afd26958f
-commit: a376c10d45a8e6ee5ea55791193f90625b35e156 remoteproc: qcom: pas: Adjust the phys addr wrt the mem region
-date:   13 days ago
-config: arm64-randconfig-r004-20230226 (https://download.01.org/0day-ci/archive/20230228/202302280207.ZJXOPdxl-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a376c10d45a8e6ee5ea55791193f90625b35e156
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a376c10d45a8e6ee5ea55791193f90625b35e156
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
+Changes since V1:
+- Added separate patch for reformat/rename changes.
+- Enabled MMC_SDHCI_IO_ACCESSORS in config MMC_SDHCI_CADENCE.
+- Used proper properties in dt binding.
+- Removed patch of config option to change default for sdhci timeout.
+- Resolved issues reported by:
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302280207.ZJXOPdxl-lkp@intel.com/
+Dhananjay Kangude (3):
+  mmc: sdhci-cadence: Rename functions to SD4 specific
+  mmc: sdhci-cadence: Restructure the code
+  mmc: sdhci-cadence: SD6 controller support
 
-All warnings (new ones prefixed by >>):
+Jayanthi Annadurai (3):
+  mmc: sdhci-cadence: enable MMC_SDHCI_IO_ACCESSORS
+  dt-bindings: mmc: sdhci-cadence: SD6 support
+  mmc: sdhci-cadence: Add debug option for sdhci-cadence driver
 
->> drivers/remoteproc/qcom_q6v5_pas.c:108:6: warning: no previous prototype for 'adsp_segment_dump' [-Wmissing-prototypes]
-     108 | void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
-         |      ^~~~~~~~~~~~~~~~~
-
-
-vim +/adsp_segment_dump +108 drivers/remoteproc/qcom_q6v5_pas.c
-
-   107	
- > 108	void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
-   109			       void *dest, size_t offset, size_t size)
-   110	{
-   111		struct qcom_adsp *adsp = rproc->priv;
-   112		int total_offset;
-   113	
-   114		total_offset = segment->da + segment->offset + offset - adsp->mem_phys;
-   115		if (total_offset < 0 || total_offset + size > adsp->mem_size) {
-   116			dev_err(adsp->dev,
-   117				"invalid copy request for segment %pad with offset %zu and size %zu)\n",
-   118				&segment->da, offset, size);
-   119			memset(dest, 0xff, size);
-   120			return;
-   121		}
-   122	
-   123		memcpy_fromio(dest, adsp->mem_region + total_offset, size);
-   124	}
-   125	
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   |   24 +-
+ drivers/mmc/host/Kconfig                      |    1 +
+ drivers/mmc/host/sdhci-cadence.c              | 1651 ++++++++++++++++-
+ 3 files changed, 1612 insertions(+), 64 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.17.1
+
