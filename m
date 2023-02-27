@@ -2,117 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47726A4AD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527EE6A4ADB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 20:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjB0T1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 14:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S230045AbjB0T3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 14:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjB0T1g (ORCPT
+        with ESMTP id S230117AbjB0T3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:27:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317B91D92C;
-        Mon, 27 Feb 2023 11:27:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0F1F60F10;
-        Mon, 27 Feb 2023 19:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1CFC433EF;
-        Mon, 27 Feb 2023 19:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677526055;
-        bh=yI3bbjrUbLDm4OLo56sfS3pR6G2PMmi8VaJew1uvf6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Blt44YsXf0cHA91DOFFMY/83HYZvIsHqG25aZCvZyQVX21qtcPDXEaxVGpv+GGYkV
-         MtBvr+LD5qaC/9/zG1QEoZhzppfRm5T+acuXI9A8HU9ffMCE4vTwwFG0a3Nmdwl4NM
-         HN0L4VjYwdsyit8i8UrABevvvljsE2t1ip3xMv/0L+BNqChXhW8t2SCinpx2DZGQln
-         e6nq+ab9eYRf/HoonGXQTYsINWOXBELliJwmkz+y46havP7q6ZAFcNV8vRVz3NyoFT
-         GG1BmW3teiQhUUC+hkJHpLaNnORS+AGKNcBhsJ23uce4qz1hYlu5pD6m0cXuhPnE/9
-         v6cOxVIcOf7+A==
-Date:   Mon, 27 Feb 2023 20:27:29 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Subject: Re: Accelerometer lis3lv02d is present on SMBus but its address is
- unknown, skipping registration
-Message-ID: <Y/0EIRsycj8EWjrz@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-References: <97708c11-ac85-fb62-2c8e-d37739ca826f@molgen.mpg.de>
+        Mon, 27 Feb 2023 14:29:50 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98811234FA;
+        Mon, 27 Feb 2023 11:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677526189; x=1709062189;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=v3mSa++3w5di4VuVyxMCx7ivKLHS0LlRNUH1BB+AgB8=;
+  b=hZ/SOCRwBXaRf2haKwIDhDVWoiuGDCxQCFc49c1o8U/4vK9dS9cAqhtO
+   XjdUWa5zZOYzf+llEc3jV4yPm/UxEByEkTF4iFo3c/XYMexgpVS4FTLp1
+   BL5yNUwznYP34nOINwbuITzBxdeuxqzCtDWZ09kJFP0iLVQ088ZqvtvlA
+   SY4wx3uLtydVLdcNBb/fD9uGVbh11w0qYAQlns9fm/k+oTlS7nCTsWDJE
+   9VCePvBTMA/NbiIeX4PvT+c0Mh/YW73vW+vdFWTe8FuiSuO6RUhhRlnKX
+   x3wdoFaawKZ7jAohAp8JIO+fECXjAxo1BQUXOcdIkdj/bZyvikbYBh6tr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313619215"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="313619215"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 11:29:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="737856265"
+X-IronPort-AV: E=Sophos;i="5.98,219,1673942400"; 
+   d="scan'208";a="737856265"
+Received: from cpalit-mobl2.amr.corp.intel.com (HELO [10.212.235.220]) ([10.212.235.220])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 11:29:48 -0800
+Message-ID: <b7a71cca-8223-7346-c024-edc80a106042@linux.intel.com>
+Date:   Mon, 27 Feb 2023 11:29:47 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RE4VCg2Wt9d2EaYd"
-Content-Disposition: inline
-In-Reply-To: <97708c11-ac85-fb62-2c8e-d37739ca826f@molgen.mpg.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] PCI/ATS: Add a helper function to configure ATS STU
+ of a PF.
+Content-Language: en-US
+To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
+        will@kernel.org
+Cc:     jean-philippe@linaro.org, darren@os.amperecomputing.com,
+        scott@os.amperecomputing.com
+References: <20230227132151.1907480-1-gankulkarni@os.amperecomputing.com>
+ <20230227132151.1907480-2-gankulkarni@os.amperecomputing.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230227132151.1907480-2-gankulkarni@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---RE4VCg2Wt9d2EaYd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 2/27/23 5:21 AM, Ganapatrao Kulkarni wrote:
+> As per PCI specification (PCI Express Base Specification Revision
+> 6.0, Section 10.5) both PF and VFs of a PCI EP are permitted to be enabled
+> independently for ATS capability, however the STU(Smallest Translation
+> Unit) is shared between PF and VFs. For VFs, it is hardwired to Zero and
+> the associated PF's value applies to VFs.
+> 
+> In the current code, the STU is being configured while enabling the PF ATS.
+> Hence, it is not able to enable ATS for VFs, if it is not enabled on the
+> associated PF already.> 
+> Adding a function pci_ats_stu_configure(), which can be called to
+> configure the STU during PF enumeration.
+> Latter enumerations of VFs can successfully enable ATS independently.
 
-Hi Paul,
+Why not enable ATS in PF before enabling it in VF? Just updating STU of
+PF and not enabling it seem odd.
 
-> What can a user do about this? It looks like the I2C addresses need to be
-> added to `dell_lis3lv02d_devices[]` in `drivers/i2c/busses/i2c-i801.c`.
+> 
+> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> ---
+>  drivers/pci/ats.c       | 32 ++++++++++++++++++++++++++++++--
+>  include/linux/pci-ats.h |  1 +
+>  2 files changed, 31 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> index f9cc2e10b676..70e1982efdb4 100644
+> --- a/drivers/pci/ats.c
+> +++ b/drivers/pci/ats.c
+> @@ -46,6 +46,34 @@ bool pci_ats_supported(struct pci_dev *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_ats_supported);
+>  
+> +/**
+> + * pci_ats_stu_configure - Configure STU of a PF.
+> + * @dev: the PCI device
+> + * @ps: the IOMMU page shift
+> + *
+> + * Returns 0 on success, or negative on failure.
+> + */
+> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> +{
+> +	u16 ctrl;
+> +
+> +	if (dev->ats_enabled || dev->is_virtfn)
+> +		return 0;
+> +
+> +	if (!pci_ats_supported(dev))
+> +		return -EINVAL;
+> +
+> +	if (ps < PCI_ATS_MIN_STU)
+> +		return -EINVAL;
+> +
+> +	dev->ats_stu = ps;
+> +	ctrl = PCI_ATS_CTRL_STU(dev->ats_stu - PCI_ATS_MIN_STU);
+> +	pci_write_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, ctrl);
 
-Complain to Dell about the missing address ;)
+If you just want to update the STU, don't overwrite other fields.
 
-Until then:
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_ats_stu_configure);
+> +
+>  /**
+>   * pci_enable_ats - enable the ATS capability
+>   * @dev: the PCI device
+> @@ -68,8 +96,8 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
+>  		return -EINVAL;
+>  
+>  	/*
+> -	 * Note that enabling ATS on a VF fails unless it's already enabled
+> -	 * with the same STU on the PF.
+> +	 * Note that enabling ATS on a VF fails unless it's already
+> +	 * configured with the same STU on the PF.
+>  	 */
+>  	ctrl = PCI_ATS_CTRL_ENABLE;
+>  	if (dev->is_virtfn) {
+> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
+> index df54cd5b15db..9b40eb555124 100644
+> --- a/include/linux/pci-ats.h
+> +++ b/include/linux/pci-ats.h
+> @@ -8,6 +8,7 @@
+>  /* Address Translation Service */
+>  bool pci_ats_supported(struct pci_dev *dev);
+>  int pci_enable_ats(struct pci_dev *dev, int ps);
+> +int pci_ats_stu_configure(struct pci_dev *dev, int ps);
 
-> [   20.631866] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+What about dummy declaration for !CONFIG_PCI_ATS case?
 
-# cd /sys/bus/pci/drivers/i801_smbus/0000\:00\:1f.4
-# ls -d i2c-?
+>  void pci_disable_ats(struct pci_dev *dev);
+>  int pci_ats_queue_depth(struct pci_dev *dev);
+>  int pci_ats_page_aligned(struct pci_dev *dev);
 
-The last digit of the printout is the bus number. Then:
-
-# modprobe i2c-dev
-# i2cdetect <bus_number>
-
-And post the output here. If you are brave and see that the address 0x1d
-or 0x29 are printed in your output, you could try adding an entry to the
-array you already mentioned above with the address you found. It may be
-safer to do some sanity checking before, though.
-
-Happy hacking,
-
-   Wolfram
-
-
---RE4VCg2Wt9d2EaYd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP9BB0ACgkQFA3kzBSg
-KbarTw/6A0lxRj2mfln6FHflA3y0KfQtN1SahYzcXOPxe+VuTe6HK//eQf8Wpn5e
-Q5g7dY1uTK+tb7c6g+5e4jR34TOsSZERNL0QvzlQtxUxPFqCzPk9PyY23jJWEWe1
-IjovfzRIFZSpVzqLS7OCBZTLrMHkN2Ae+o0KNG2HKblS+in0A6reTRUDVbBpO7pc
-ho/92IXBKmvJqz2+sVhBneYEhuV7JteGQbvuept0j2ThI6t2o8wz19NZjKNutGph
-T3fSS9szx62f3kbJsVuIREAZ0nDdrxFZqaacolMV/9Cl7/6ofxu1Lw3gZjQRZx1t
-o3IRj6DO3Qv0Y+tyyvFWq2SIwdjp9Wi4dWmBV2Se63FbqewvsJ7oox96HsabXdk9
-7hKsOA+u9eHMZD2LGK41hyylHXDg1E3Os6FCxJCaeH3sNN3NoDj5YGB7MLJJgI0r
-4r/iq+EY5O/bzVcKvRCw+oPVKCXCxExGS9YJdetlsrBHUfGKpm+R1dppzpR+5anP
-P6Vn2+UZJXJjf6SPaEf6kJL8OAcoNqi38PC2QmlZuhaKanf/uhjsA9ZXLjXMKg6P
-g74ookxfCL6pya6FTIDWIIT1kxKbeAuG95TcnO/2QWD5DZb2TPTsGcgnz+XMVjko
-EAw2Wg0EopPbhQRDYzA7v7VdNjtmNQhjyzN2d4wmHW++ZhAnub4=
-=O4Pe
------END PGP SIGNATURE-----
-
---RE4VCg2Wt9d2EaYd--
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
