@@ -2,193 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8576A4749
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70EB6A4748
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 17:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjB0QvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 11:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        id S230225AbjB0Qu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 11:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjB0Qu6 (ORCPT
+        with ESMTP id S229515AbjB0Quy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:50:58 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331E21F4BA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 08:50:54 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PQR9g2ZHVz9v7Vm
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:42:15 +0800 (CST)
-Received: from [10.45.159.185] (unknown [10.45.159.185])
-        by APP2 (Coremail) with SMTP id GxC2BwAn81lL3_xjpkxXAQ--.3917S2;
-        Mon, 27 Feb 2023 17:50:30 +0100 (CET)
-Message-ID: <b07b75cd-0627-da3c-54e8-cc22088c148e@huaweicloud.com>
-Date:   Mon, 27 Feb 2023 17:50:15 +0100
+        Mon, 27 Feb 2023 11:50:54 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE14F1421A;
+        Mon, 27 Feb 2023 08:50:52 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 411865FD23;
+        Mon, 27 Feb 2023 19:50:50 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1677516650;
+        bh=+o4MePp9OqmjWmI8f3GoSonJgPXKEx/DY7E2POpmxqc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Is6lD68TXQ+LXSIPeMLcaY1cQuni31x7+SQTRswGrgqyp1Mf2TQmsF19mebjjkdlE
+         SStVzS24WRa1eM3iw3/Zlbs/gA0Av69UL/+Oj/1+v4sNSW9I1IpMOafYnZhS1a5NBB
+         GpBK27em27UMsN/Sv9qNT/guVqMviPD3K3nB4pfcU3sP0T3NjDGgPkkiptdbWsNIa+
+         fTcQiGRGseNijIEhHc6k6IQYbzRdG5aT3ud/9nnGYtbx829b/9JD4Yhqb4TYsm2ktu
+         5mBosKSROlE1B3fb3F/J3g+cL8hvlJYP+wNsIoyXXgDiMhMOSX/tQnIchiIjysI0LW
+         mnnZsZ5PoetSQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 27 Feb 2023 19:50:49 +0300 (MSK)
+Date:   Mon, 27 Feb 2023 19:50:49 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>
+Subject: Re: [PATCH v1 0/3] Meson A1 32-bit support
+Message-ID: <20230227165049.4y7jx5nnnlibe6kg@CAB-WSD-L081021>
+References: <20230222115020.55867-1-avromanov@sberdevices.ru>
+ <8e5f9bfa-d612-cd43-d722-d04c40938c62@linaro.org>
+ <20230227142809.kujmrraf3pcdhqyn@CAB-WSD-L081021>
+ <f3e42012-609c-4085-b4f4-bd32bfc34aff@app.fastmail.com>
+ <20230227155100.hhl4yvkyfqfyoa6h@CAB-WSD-L081021>
+ <a5fa8b23-4ec8-475f-be5e-538b53d6f82d@app.fastmail.com>
+ <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
- <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
- <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
- <Y/rEH2r9i0BtfxEW@rowland.harvard.edu> <Y/rNUfW509AQYCYn@boqun-archlinux>
- <Y/rSQ2FNTJyj2bqR@rowland.harvard.edu>
- <a862ee59-ca12-b609-48cc-0784c7ce24af@huaweicloud.com>
- <Y/uOA3umovz06/SV@rowland.harvard.edu>
- <dd87369d-825f-e932-dd86-8e46e92d1a7e@huaweicloud.com>
- <Y/zXYXM1lgk7Msig@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y/zXYXM1lgk7Msig@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwAn81lL3_xjpkxXAQ--.3917S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxurW5tFWrCFy7Wr4xKF1fCrg_yoW7GryrpF
-        W3Ka12kr1Dtrs7uwnrXw10qay8Zw1Syas8tFZYq3srA3y5GF1ftryIqa4F9a9xWrs2gw1j
-        qrWjyFy7Grn8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <33b58877-5167-c453-e686-1d10cdca66c0@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/27 12:14:00 #20900843
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 27, 2023 at 05:38:49PM +0100, Neil Armstrong wrote:
+> On 27/02/2023 17:15, Arnd Bergmann wrote:
+> > On Mon, Feb 27, 2023, at 16:51, Dmitry Rokosov wrote:
+> > > On Mon, Feb 27, 2023 at 03:58:50PM +0100, Arnd Bergmann wrote:
+> > > > 
+> > > > I would argue that is a problem with buildroot, and using a 32-bit
+> > > > kernel is not something we should encourage over fixing buildroot
+> > > > to do it right, or building the kernel separately from the rootfs.
+> > > > 
+> > > > We do allow building support for a couple of ARMv8 SoCs in 32-bit
+> > > > mode, but that is usually because they ship with a 32-bit bootrom
+> > > > and cannot actually run a 64-bit kernel.
+> > > 
+> > > To be honest, I didn't know about this principle. It looks like a very
+> > > rational approach "start from max supported bitness".
+> > > Based on overall maintainers opinion, we have to prepare a patch for
+> > > buildroot to support compat mode :)
+> > 
+> > That would be great, thanks a lot!
+> > 
+> > For what it's worth, the main arguments in favor of running a 64-bit
+> > kernel with compat user space over a 32-bit kernel are support for:
+> > 
+> > - larger RAM sizes without highmem (most 32-bit kernels only
+> >    support 768MB of lowmem, and highmem sucks)
+> > - larger virtual address space (4GB vs 3GB or less)
+> > - CPU specific errata workarounds (arch/arm/ only has those for 32-bit cpus)
+> > - mitigations for common attacks such as spectre
+> > - security hardening that depends on larger address space
+> >    (KASLR, BTI, ptrauth, PAN, ...)
+> > - emulating instructions that were removed in Armv8 (setend, swp, ...)
+> > 
+> > Most of these don't apply in userspace, so the incentive to
+> > run smaller 32-bit userland on systems with less than 1GB of
+> > RAM usually outweighs the benefits of 64-bit userspace.
+> 
+> Thanks for the details!
 
+Looks like Thomas has already prepared a basic patch series for buildroot,
+but maintainers declined it.
 
-On 2/27/2023 5:16 PM, Alan Stern wrote:
-> On Mon, Feb 27, 2023 at 03:03:16PM +0100, Jonas Oberhauser wrote:
->
->>>> Note there's also rw-xbstar (used with fr) which doesn't check for
->>>> r-pre-bounded, but it should be ok. That's because only reads would be
->>>> unordered, as a result the read (in the if (x != ..) x=..) should provide
->>>> the correct value. The store would be issued as necessary, and the issued
->>>> store would still be ordered correctly w.r.t the read.
->>> That isn't the reason I left r-pre-bounded out from rw-xbstar.  If the
->>> write gets changed to a read there's no need for rw-xbstar to check
->>> r-pre-bounded, because then rw-race would be comparing a read with
->>> another read (instead of with a write) and so there would be no
->>> possibility of a race in any case.
->> That is the first part of my explanation (only reads would be unordered) but
-> It is?  I couldn't tell from what you wrote that this was supposed to
-> imply we didn't have to worry about a data race.
+https://lore.kernel.org/all/20220730194331.GA2515056@scaer/
 
-Because it wasn't supposed to imply that, in the sense that by itself, 
-the fact that the things that are left unordered are reads does not 
-immediately imply that we don't have to worry about a data race. It's 
-just a step in the sequence of reasoning. But of course I won't claim 
-that I laid out that sequence in full enough detail to make sense.
-
->
->> I don't think it's sufficient in general.
->> Imagine a hypothetical memory model with a release fence that upgrades the
->> next memory operation only (and only stores) to release (e.g., to save some
->> opcode design space you do weird_release_fence;str x1 x2 instead of stlr x1
->> x2).
->> Then in the message passing pattern
->>
->> T1 {
->>     u = a;
->>     release(&x, 1);
->> }
->>
->> T2 {
->>    t = READ_ONCE(&x);
->>    weird_release_fence;
->>    a = 1;
->> }
-> [That isn't the Message Passing pattern.  In the MP pattern, one thread
-> does two writes and the other thread does two reads.  This is the Read
-> Buffering (RB) pattern: Each thread does a read followed by a write.]
-
-Ah, thanks. Somehow I misremembered MP to be any case of [do stuff on a] 
-; x = ...  || read that update from x; [do stuff on a].
-
->
->> where T2 is changed by the compiler to
->>
->> T2 {
->>    t = READ_ONCE(&x);
->>    weird_release_fence();
->>    if (a!=1) a = 1;
->> }
->>
->> In the specific executions where t==1, there wouldn't be a data race when
->> just considering the equivalent of rw-xbstar, but u==1 and t==1 would be
->> possible (even though it might not seem so from the first example).
-> If such a fence existed in the LKMM, we would handle this case by saying
-> that weird_release_fence() does not give release semantics to an
-> immediately following plain store; only to an immediately following
-> marked store.  The reason being that the compiler is allowed to muck
-> around with the code generated for plain accesses, so there's no
-> guarantee that the first machine instruction generated for "a = 1;" will
-> be a store.
->
-> As a result, there would not be an rw-xbstar link from T1 to T2.
-
-Sure, but IMHO a well-designed high-level model like LKMM shouldn't have 
-such a fence at all :D This is something you might use in the 
-implementation of a release store in inline-assembly, it doesn't belong 
-in the source code. But it's just for the sake of argument anyways.
-
-
->
->> Of course in LKMM there's no such fence, but I think to make the argument
->> complete you still need to go through every case that provides the
->> w-pre-bounding and make sure it still provides the necessary order in the
->> compiler-generated version. (or you can try a more complicated argument of
->> the form "there would be another execution of the same program that would
->> have a data race", which works at least for this example, not sure in
->> general)
-> So I don't see this as a valid argument for not using rw-xbstar in
-> rw-race.  Even theoretically.
-
-There's nothing wrong with using rw-xbstar in rw-race, especially in 
-current LKMM, and I'm not arguing against that.
-
-I'm saying that the argument
-"if rw-xbstar links a read R to a plain write W, and that plain write is 
-replaced by a read R', and in case R' reads a value different from W, 
-followed by a store W' (with some dependency from R' to W')  by the 
-compiler, then the fact that R and R' can't have a data race means that 
-it's safe to use rw-xbstar in rw-race"
-is incomplete. (Of course that doesn't mean the claim is wrong.)
-To make the argument complete, you also need that W' is generated if 
-necessary, and more crucially that W' is still ordered behind R!
-Otherwise you would now have a data race between R and W', like in the 
-hypothetical example I mentioned, even though R and R' don't race.
-
-And if you do that second step in LKMM (even with the change of 
-w-pre-bounded we are discussing) you quickly find that W' is indeed 
-still ordered, so rw-xbstar is perfectly fine.
-
-Perhaps that step is so trivial to you that you don't feel it needs 
-mentioning : ) But speaking about LKMM-like models in general, some 
-might have some subtle case where rw-xbstar links R and W but would not 
-R and W'.
-
-jonas
-
+-- 
+Thank you,
+Dmitry
