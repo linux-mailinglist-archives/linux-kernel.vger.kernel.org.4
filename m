@@ -2,183 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1936A3A1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EF76A3A1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 05:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjB0E2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 23:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S229743AbjB0E2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 23:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0E16 (ORCPT
+        with ESMTP id S229470AbjB0E2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 23:27:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA5744BE
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:27:57 -0800 (PST)
-Received: from [192.168.2.206] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C73CD660210B;
-        Mon, 27 Feb 2023 04:27:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677472075;
-        bh=kGcDbR4j3314+FTKe5Y7VXHs4Heb3IW139yRkBeOUHE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b6pZBgVLX08t2YqV5olnHu19OeCoqB/Pm9rJVvl1XsvpURdJl5pAkl/KFEncqUPLm
-         WH/OI8V39hmkRzCMr7+8+53/GdvfmBHLFqudl1IKzB/Mvpc9nIYG58SE6/8BvZZEO4
-         w2DKaRa/Tjpz8AGIB58dHehk2+HDKr/9Knt3u5F5sWStdDWKRtvthKm9wZqQ9kGfdL
-         k65gnWGlhEaZkkd2mIjigeJZCvJuFITIWf8qmqmmtOXHXwBKMVh9azo6OIgz5ogjOA
-         bv6DOQVh5MFRUu37Wiet7YY9sahysVOG2QtMnrpWSiNEQ5QoUWOd7+bOlXFx1xcq0J
-         ZIWVn1cPp6VgA==
-Message-ID: <4d6e096b-4f04-5e17-ff23-4842b69fdc95@collabora.com>
-Date:   Mon, 27 Feb 2023 07:27:51 +0300
+        Sun, 26 Feb 2023 23:28:17 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23331113DB
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:28:14 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 130so2792948pgg.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 20:28:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zMvkWjZNPPFl1pl6IaXhWMOFP4oUQ7mx0SfykEhX4AQ=;
+        b=a8nxOFzJthk2KULRQ7fJuTH1ykL4dpMUTRb8Yi8d+6LJ5GcWR7OB4odOLdot4sqkKj
+         5JfbokevLgJZdOes29MK9qUlhRhuZlmLygzbMbqmnKohfPfQi+rVMiglPcpiDAbHaMwV
+         opICb88ttD10bHt8A+nX51ok/xtztTqUyfZly2soKwIsHS4JF0gNz+7w23S/ACXwuKwx
+         CgZsiWNwKHOh6rcZ/uIoQsvBy2PpP+AiNp9hHPLX9Ib4gMRJKfz2u7xbdTNJiS7+kU75
+         vq0dCTsJ2ItUQRzaa1J+i1mxtZ+DTLflpfuTszmRcHRbkKvgl8FDRvAH+1xzWQ1xaZ5o
+         Qo6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zMvkWjZNPPFl1pl6IaXhWMOFP4oUQ7mx0SfykEhX4AQ=;
+        b=eaTJ6R8Ic5Jz8HvMqrpyUkL3Fc7OXTd2lMzNR+OfQ1BYde+pxXyNqoBbSGsV86V6Eh
+         RT7qmpytauRaIJ9IjjHZJlvaLsFIm1L0i3OTLsvEHsRZblHpbzTSAfm1Ob0R23J/xbVE
+         L+lfvknCzXgi9nK3qv23c/XnAi1HTBJ+2dOnbU+eawPuzdsJ5lmWCjfO0nFtQGQaeonp
+         wmlb4/HPBXcT9eJHs8DyIy6iDP2XbaKAMM05VRp44O5fOVq/vvhDM7++UVYebNSCBqXt
+         nQnOpf0qYuY8CCCRjGHqmSHaeHojeLoDoh75p0H9tygRPhY7XiNIK+iPt9VkXpaCbq+d
+         vD1w==
+X-Gm-Message-State: AO0yUKXhE7r30rx978PvONbJYzMcyiLLhGWl9f8HQNB/cAXsX3d4LqIk
+        kDR0pvw+BFKDleoI7xfEtG4YVV49ZLAXxj73
+X-Google-Smtp-Source: AK7set9GRzJ36aXs3VcwXq4IrdwM9TW62o8bs1MKgJLWEB7nYBiBcYlTgsuE9nvQM1DXtJiAr6coZQ==
+X-Received: by 2002:aa7:9eda:0:b0:5a8:5e6d:28d7 with SMTP id r26-20020aa79eda000000b005a85e6d28d7mr18966817pfq.0.1677472093500;
+        Sun, 26 Feb 2023 20:28:13 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id h26-20020aa786da000000b005e4c3e2022fsm3178721pfo.72.2023.02.26.20.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 20:28:12 -0800 (PST)
+Date:   Mon, 27 Feb 2023 09:58:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linus.walleij@linaro.org
+Subject: Re: [PATCH] ARM: dts: spear320-hmi: correct STMPE GPIO compatible
+Message-ID: <20230227042810.vki4khjrusnf2r4b@vireshk-i7>
+References: <20230225162237.40242-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 01/11] drm/msm/gem: Prevent blocking within shrinker
- loop
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-2-dmitry.osipenko@collabora.com>
- <d1c560f1-0201-7b41-bb27-d6bcb332b8d4@suse.de>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <d1c560f1-0201-7b41-bb27-d6bcb332b8d4@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230225162237.40242-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/23 15:02, Thomas Zimmermann wrote:
-> Hi
+On 25-02-23, 17:22, Krzysztof Kozlowski wrote:
+> The compatible is st,stmpe-gpio.
 > 
-> Am 08.01.23 um 22:04 schrieb Dmitry Osipenko:
->> Consider this scenario:
->>
->> 1. APP1 continuously creates lots of small GEMs
->> 2. APP2 triggers `drop_caches`
->> 3. Shrinker starts to evict APP1 GEMs, while APP1 produces new purgeable
->>     GEMs
->> 4. msm_gem_shrinker_scan() returns non-zero number of freed pages
->>     and causes shrinker to try shrink more
->> 5. msm_gem_shrinker_scan() returns non-zero number of freed pages again,
->>     goto 4
->> 6. The APP2 is blocked in `drop_caches` until APP1 stops producing
->>     purgeable GEMs
->>
->> To prevent this blocking scenario, check number of remaining pages
->> that GPU shrinker couldn't release due to a GEM locking contention
->> or shrinking rejection. If there are no remaining pages left to shrink,
->> then there is no need to free up more pages and shrinker may break out
->> from the loop.
->>
->> This problem was found during shrinker/madvise IOCTL testing of
->> virtio-gpu driver. The MSM driver is affected in the same way.
->>
->> Reviewed-by: Rob Clark <robdclark@gmail.com>
->> Fixes: b352ba54a820 ("drm/msm/gem: Convert to using drm_gem_lru")
->> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> ---
->>   drivers/gpu/drm/drm_gem.c              | 9 +++++++--
->>   drivers/gpu/drm/msm/msm_gem_shrinker.c | 8 ++++++--
->>   include/drm/drm_gem.h                  | 4 +++-
->>   3 files changed, 16 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
->> index 59a0bb5ebd85..c6bca5ac6e0f 100644
->> --- a/drivers/gpu/drm/drm_gem.c
->> +++ b/drivers/gpu/drm/drm_gem.c
->> @@ -1388,10 +1388,13 @@ EXPORT_SYMBOL(drm_gem_lru_move_tail);
->>    *
->>    * @lru: The LRU to scan
->>    * @nr_to_scan: The number of pages to try to reclaim
->> + * @remaining: The number of pages left to reclaim
->>    * @shrink: Callback to try to shrink/reclaim the object.
->>    */
->>   unsigned long
->> -drm_gem_lru_scan(struct drm_gem_lru *lru, unsigned nr_to_scan,
->> +drm_gem_lru_scan(struct drm_gem_lru *lru,
->> +         unsigned int nr_to_scan,
->> +         unsigned long *remaining,
->>            bool (*shrink)(struct drm_gem_object *obj))
->>   {
->>       struct drm_gem_lru still_in_lru;
->> @@ -1430,8 +1433,10 @@ drm_gem_lru_scan(struct drm_gem_lru *lru,
->> unsigned nr_to_scan,
->>            * hit shrinker in response to trying to get backing pages
->>            * for this obj (ie. while it's lock is already held)
->>            */
->> -        if (!dma_resv_trylock(obj->resv))
->> +        if (!dma_resv_trylock(obj->resv)) {
->> +            *remaining += obj->size >> PAGE_SHIFT;
->>               goto tail;
->> +        }
->>             if (shrink(obj)) {
->>               freed += obj->size >> PAGE_SHIFT;
->> diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c
->> b/drivers/gpu/drm/msm/msm_gem_shrinker.c
->> index 051bdbc093cf..b7c1242014ec 100644
->> --- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
->> +++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
->> @@ -116,12 +116,14 @@ msm_gem_shrinker_scan(struct shrinker *shrinker,
->> struct shrink_control *sc)
->>       };
->>       long nr = sc->nr_to_scan;
->>       unsigned long freed = 0;
->> +    unsigned long remaining = 0;
->>         for (unsigned i = 0; (nr > 0) && (i < ARRAY_SIZE(stages)); i++) {
->>           if (!stages[i].cond)
->>               continue;
->>           stages[i].freed =
->> -            drm_gem_lru_scan(stages[i].lru, nr, stages[i].shrink);
->> +            drm_gem_lru_scan(stages[i].lru, nr, &remaining,
+> Fixes: e2eb69183ec4 ("ARM: SPEAr320: DT: Add SPEAr 320 HMI board support")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/spear320-hmi.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> This function relies in remaining being pre-initialized. That's not
-> obvious and error prone. At least, pass-in something like
-> &stages[i].remaining that is then initialized internally by
-> drm_gem_lru_scan() to zero. And similar to freed, sum up the individual
-> stages' remaining here.
-> 
-> TBH I somehow don't like the overall design of how all these functions
-> interact with each other. But I also can't really point to the actual
-> problem. So it's best to take what you have here; maybe with the change
-> I proposed.
-> 
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> diff --git a/arch/arm/boot/dts/spear320-hmi.dts b/arch/arm/boot/dts/spear320-hmi.dts
+> index 34503ac9c51c..721e5ee7b680 100644
+> --- a/arch/arm/boot/dts/spear320-hmi.dts
+> +++ b/arch/arm/boot/dts/spear320-hmi.dts
+> @@ -241,7 +241,7 @@ stmpe811@41 {
+>  					irq-trigger = <0x1>;
+>  
+>  					stmpegpio: stmpe-gpio {
+> -						compatible = "stmpe,gpio";
+> +						compatible = "st,stmpe-gpio";
+>  						reg = <0>;
+>  						gpio-controller;
+>  						#gpio-cells = <2>;
 
-I had to keep to the remaining being pre-initialized because moving the
-initialization was hurting the rest of the code. Though, updated the MSM
-patch to use &stages[i].remaining
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-Best regards,
-Dmitry
-
+viresh
