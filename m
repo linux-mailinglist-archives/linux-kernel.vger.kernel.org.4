@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA386A4280
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 404146A4282
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 14:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjB0NUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 08:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S230025AbjB0NVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 08:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjB0NUw (ORCPT
+        with ESMTP id S230011AbjB0NVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 08:20:52 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56931CF71
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:20:50 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53916ab0c6bso174679467b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zaBtZLYywqdJ+cCew+KHkUUeav5e7pMWJoeLC+Mi7As=;
-        b=OLPzpMLN8PqUAnVXOCv+skqO7HHYhalsabNrdn2864rpWxVebITw9H5GOnOauwrpD4
-         M4K0siVJlSMFw+Hc1aBXZbc/0SOmV1S1HuWOeg8L8sB5btiPLsnVQyCkAIYxbWdB4U0c
-         dPkLKICO/SSTx++C2zkZ2UcUfKBAzJ5900/NUUXdYXIbGXegI0lsr95QDQoynqxLPgOB
-         xp7DPahPVr7p/NxdXOu8VvLds3mHVqAxjOSs42YNgQSfpCRako/A7+NlEojEeXSyPAVM
-         GPQ+9NkE5hbA8AIqSXCD/UPd+z1DljaJ5t1JMU/HpO27QHTz++254nVSoQIhQnsaqKb7
-         xaVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zaBtZLYywqdJ+cCew+KHkUUeav5e7pMWJoeLC+Mi7As=;
-        b=sxqlZgxfknqhMMelnK46SA5UHhK9k/TayePpmQctI+ClcrsklB6Ec2MfrT+H8lVfDQ
-         Qj/y5nAt6zalVWQRWiRfv/teZn4R4iOlOFz38ulzJ9bvKjha5P5ozTu0UaFYOBja8DnQ
-         Ay29X8QGIyjKY1uNWQ6J2U/eczo8MvTvoxBCDVnk/QZIppH3Sfy6Pxv6Rc0Q811+UXjc
-         11XT6/gTDdQVQAXgPqO7QpnmiP5oPpIixHeFqb4qgvOzZSFxZidVqWLgOrR3QR+Ff6jl
-         i9CrHv2LfUENiIe93V/T68mpRmgTojVXpaGufTeT8u+u9w4FxBClYXTqKrO4PodvkSEV
-         XubQ==
-X-Gm-Message-State: AO0yUKUHi9+pH+u0LmRNKMMLSHUHfNjbObRxy843WcuEbopVb489SlFu
-        Sj/PsmAr1eO8jQzExz9j75celzKU7+5s+xnDTWZoUA==
-X-Google-Smtp-Source: AK7set8pPLU5y0Hx42KChdbEnSayCirbt0pTXCztCtc3W1lN7atfCuKryo1f04D6pMnS0SInkJbUjTzqfIjYIGYU32A=
-X-Received: by 2002:a25:908e:0:b0:87a:957b:fd67 with SMTP id
- t14-20020a25908e000000b0087a957bfd67mr9631906ybl.10.1677504050107; Mon, 27
- Feb 2023 05:20:50 -0800 (PST)
+        Mon, 27 Feb 2023 08:21:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFCB1E9E3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 05:20:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677504053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GIUaC7K1TYqWkgQiMBQCJNQiY2ZClHrxPQ2oiydBZJ4=;
+        b=K20HJxEXXwARkXCIueLo/peUw09ruA4lZC5U1nyxJnBOoVzjKNTtoNFnd4UW7yOj1xwh5L
+        UkvXpUiow5mdnHwUUjyCsadAlv6S20nCQR9QxuxexBH1sc1vzlivu/sN1Leu5E9bxPgAU9
+        QL0y10e7++5wvOTj/im0wQ18v6kLPn4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-371-oxBDmthhPsi5Sf1kEf0HUg-1; Mon, 27 Feb 2023 08:20:50 -0500
+X-MC-Unique: oxBDmthhPsi5Sf1kEf0HUg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D568101B42B;
+        Mon, 27 Feb 2023 13:20:49 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9F2F7404BEC5;
+        Mon, 27 Feb 2023 13:20:46 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y/kh8P4oSjunIU7T@casper.infradead.org>
+References: <Y/kh8P4oSjunIU7T@casper.infradead.org> <Y/jhwuTCaOgOTLp2@casper.infradead.org> <2134430.1677240738@warthog.procyon.org.uk> <2009825.1677229488@warthog.procyon.org.uk> <CAHk-=whAAOVBrzwb2uMjCmdRrtudGesYj0tuqdUgi8X_gbw1jw@mail.gmail.com> <20230220135225.91b0f28344c01d5306c31230@linux-foundation.org> <2213409.1677249075@warthog.procyon.org.uk> <2385089.1677258941@warthog.procyon.org.uk> <Y/kFnhUM5hjWM2Ae@casper.infradead.org> <2390711.1677269637@warthog.procyon.org.uk> <CAHk-=wgpjrdcs_aFvdHdH6TpOsOmN9S5rXDqCZTB8WqXsZH8Qw@mail.gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Steve French <stfrench@microsoft.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, Paulo Alcantara <pc@cjr.nz>,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Xin Hao <xhao@linux.alibaba.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH] cifs: Fix cifs_writepages_region()
 MIME-Version: 1.0
-References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
- <20230217-topic-cpr3h-v10-5-67aed8fdfa61@linaro.org> <153ef3e0-9978-d201-44ad-3a5e55eeef4f@linaro.org>
- <8c105a4f-f450-8fbf-ff0b-5629a47c1463@collabora.com> <d2784517-0f0c-43a5-63a6-57f6aa3e5912@linaro.org>
- <8a813713-c60d-4726-0c62-de032db99ede@collabora.com>
-In-Reply-To: <8a813713-c60d-4726-0c62-de032db99ede@collabora.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 27 Feb 2023 15:20:39 +0200
-Message-ID: <CAA8EJpprXe3k6Kecg6v-QHT-qP=QjimFZFpLWjPqky3M=J+x+A@mail.gmail.com>
-Subject: Re: [PATCH v10 5/6] soc: qcom: Add support for Core Power Reduction
- v3, v4 and Hardened
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2675058.1677504045.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 27 Feb 2023 13:20:46 +0000
+Message-ID: <2675059.1677504046@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Feb 2023 at 15:06, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 27/02/23 13:01, Dmitry Baryshkov ha scritto:
-> >
-> > I took a glance at the 'cpufreq: qcom-hw: Implement CPRh aware OSM programming'
-> > patch, it doesn't seem to use the header (maybe I checked the older version of the
-> > patch). As for me, this is another signal that cpr_ext_data should come together
-> > with the LUT programming rather than with the CPRh itself.
-> >
-> >> Konrad, perhaps you can send the cpufreq-hw commits in a separate series, in
-> >> which cover letter you mention a dependency on this one?
-> >> That would *clearly* show the full picture to reviewers.
-> >
-> > Yes, that would be great. A small note regarding those patches. I see that you
-> > patched the qcom-cpufreq-hw.c. This way first the driver programs the LUT, then it
-> > reads it back to setup the OPPs. Would it be easier to split OSM-not-programmed
-> > driver?
-> >
->
-> When I engineered that solution, I kept the cpufreq-hw reading *again* the values
-> from OSM to keep the driver *fully* compatible with the bootloader-programmed OSM
-> flow, which makes one thing (in my opinion) perfectly clear: that programming
-> sequence is exactly the same as what happens "under the hood" on SDM845 (and later)
-> but performed here-instead-of-there (linux instead of bootloader), with the actual
-> scaling driver being 100% the same between the two flows in the end.
->
-> Having two drivers as you suggested would indeed achieve the same, but wouldn't be
-> any easier... if you do that, you'd have to *somehow* make sure that the
-> programming driver does its job before the cpufreq driver tries to read the OSM
-> status, adding one more link to an already long chain.
->
-> Besides, I remember that this question got asked a while ago on the mailing lists
-> and there was a short discussion about it:
->
-> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2555580.html
+Matthew Wilcox <willy@infradead.org> wrote:
 
-Ack, I see. Maybe splitting LUT programming to a separate source file
-would emphasise the fact that it is only required for some (older)
-SoCs. Other than that, I have no additional comments for that series.
+> On Fri, Feb 24, 2023 at 12:16:49PM -0800, Linus Torvalds wrote:
+> > On Fri, Feb 24, 2023 at 12:14 PM David Howells <dhowells@redhat.com> w=
+rote:
+> > >
+> > > Then why do we have to wait for PG_writeback to complete?
+> > =
 
--- 
-With best wishes
-Dmitry
+> > At least for PG_writeback, it's about "the _previous_ dirty write is
+> > still under way, but - since PG_dirty is set again - the page has been
+> > dirtied since".
+> > =
+
+> > So we have to start _another_ writeback, because while the current
+> > writeback *might* have written the updated data, that is not at all
+> > certain or clear.
+> =
+
+> also, we only have a writeback bit, not a writeback count.  And when
+> the current writeback completes, it'll clear that bit.  We're also
+> being kind to our backing store and not writing to the same block twice
+> at the same time.
+
+It's not so much being kind to the backing store, I think, as avoiding the
+possibility that the writes happen out of order.
+
+> > I'm not sure what the fscache rules are.
+> =
+
+> My understanding is that the fscache bit is set under several
+> circumstances, but if the folio is dirty _and_ the fscache bit
+> is set, it means the folio is currently being written to the cache
+> device.  I don't see a conflict there; we can write to the backing
+> store and the cache device at the same time.
+
+The dirty bit is nothing to do with it.  If the fscache bit is set, then t=
+he
+page is currently being written to the cache - and we need to wait before
+starting another write.
+
+Sometimes we start a write to the cache from a clean page (e.g. we just re=
+ad
+it from the server) and sometimes we start a write to the cache from
+writepages (e.g. the data is dirty and we're writing it to the server as
+well).
+
+Things will become more 'interesting' should we ever get around to
+implementing disconnected operation.  Then we might end up staging dirty d=
+ata
+through the cache.
+
+David
+
