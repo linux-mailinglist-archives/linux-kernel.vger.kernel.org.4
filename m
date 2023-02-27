@@ -2,147 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E166A4BFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBC36A4C00
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjB0UGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:06:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        id S230401AbjB0UH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjB0UGF (ORCPT
+        with ESMTP id S230402AbjB0UHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:06:05 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3772687F;
-        Mon, 27 Feb 2023 12:06:04 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RJDGKf018065;
-        Mon, 27 Feb 2023 20:05:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qgndGnIFIELrslxCS5zP1o2/OZoiO2ETrIEWwAJWI3Y=;
- b=HuwjgfqKblmR1/Ak7PXdjfB7g7a0ANDbJpTynrxrRltNjUGaX9LMwt+OYYaTSI2N7XnY
- NEqvQErO3/GtGlqq6EhKGAB0+D87NklLSIWkseGwujoQ8qgVe5Vm99g2QBo++SeuRdcZ
- pDunTgyEX3kq7XTotDBwwcAimnY5YvbusL8SNIHwcnszNffWyhiEFGbJlklUIzzysvIB
- UnkKs7kfPhpEX2nxPuiXPJluWUKsksGVqUp548kLvXiwpuIrsOCz/9e20VQE+kPuVePX
- o9qPodCL/STfuKqELP9HBoRujzPk5Dv1gcXWDTgxJ5IlrXnLMa+G44I2Rx6dvJABDeeg Jg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nybmh5xgr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 20:05:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RK5tCb004830
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 20:05:55 GMT
-Received: from [10.110.126.127] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
- 2023 12:05:54 -0800
-Message-ID: <846439be-77db-7311-3bb3-3647dc6d0622@quicinc.com>
-Date:   Mon, 27 Feb 2023 12:05:53 -0800
+        Mon, 27 Feb 2023 15:07:23 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C944D279B6;
+        Mon, 27 Feb 2023 12:06:41 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id ck15so30936549edb.0;
+        Mon, 27 Feb 2023 12:06:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uInxHePMiAlwvbGNwI0Ugw9k3Wci0tWnR38NP9c0+o=;
+        b=MeSmGwQ/HmmBFMFaypLzcQiaH3ObjO8JAEpXdx+4wryYDhZg4v/dgFbvwzQoancUEC
+         re5tVAHMzNYllS4LrS+9f6JkXeWGOWc5y6cHleQ7pw3qnZwjwzvTec56FGUbX0lb96oq
+         764RFnD9qxYmvWsCASLSRoOdcIDEq29HZ0/RQvmPPQpAox1S1R/cz7N+JEkuSP7TtR0n
+         8dqEVWMGjjUaNAVu1VBPKvpVu1CXwvRbL1LRus2ErmwuOnWPK3pbCvY0nvowMu5LBqtX
+         C1Qs3G3Fd/K300A2XjRVbnB/WmwQxdZtKOCqXEoGrilYPZX2D6AlqptEEIjs3HG4nxw0
+         Yxkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8uInxHePMiAlwvbGNwI0Ugw9k3Wci0tWnR38NP9c0+o=;
+        b=uaPLgbcWfN/B0y/aYEVeqWJnCp3n5WHZC2/bIutHefJbdjcTgghBJNdKkt6NSYupt8
+         lZBb2ZzoxsF9pY33msN+R925VnecuHb7x2+ms5f1+Oig3WaHisqtOgrzxNRXcD589ozw
+         iWruC1VJ3Pk2STygG2VC2fGm9jC+/oUxmR8cOI4Gb1KiyAnUQpcOI/nqoGibE2Rn9kQ5
+         jqR0BGFpaMZtPnJQpHoaw9AcOMHY6ACwbaD5j0FJLS4bOcUIP6VicIJLiUiE0Ig1x+r4
+         My/+3KcRBqLcQ2WGtb8/eVM/spBF6SZ+8qVRVReV11sdrixEif89kjnkqSaChNfLi3BB
+         mBrg==
+X-Gm-Message-State: AO0yUKVujWSdHZXIZOpKHslWqyt5pF9M5BQZbmQElsOShBci2h+i/R2C
+        vFAQwzWKl5avgUqJLWqZZMH95yf4W641UvbNlxg=
+X-Google-Smtp-Source: AK7set+rFRwwuHlNUo6YttoaHQUv1gV4hohZb6nayx6SZjljKZP1HvI16epTaVLppOg3ZaqYoXlGCrsWA0NVSYZEKns=
+X-Received: by 2002:a50:d494:0:b0:4ad:72b2:cf57 with SMTP id
+ s20-20020a50d494000000b004ad72b2cf57mr461379edi.0.1677528400166; Mon, 27 Feb
+ 2023 12:06:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dp: check core_initialized flag at both
- host_init() and host_deinit()
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <agross@kernel.org>,
-        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <dianders@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        <robdclark@gmail.com>, <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>
-References: <1677263398-13801-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n514WpXDhE17DzqF9X7DYg_3DYuYSGzhvx-=eXVJpgq3Yg@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAE-0n514WpXDhE17DzqF9X7DYg_3DYuYSGzhvx-=eXVJpgq3Yg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hW9hgsjV4l20HIjaOlDVuJGnUrGM1GU3
-X-Proofpoint-ORIG-GUID: hW9hgsjV4l20HIjaOlDVuJGnUrGM1GU3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 priorityscore=1501 spamscore=0 clxscore=1015 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270159
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230223-z2-for-ml-v1-0-028f2b85dc15@gmail.com>
+ <20230223-z2-for-ml-v1-1-028f2b85dc15@gmail.com> <20230227195139.GA677578-robh@kernel.org>
+In-Reply-To: <20230227195139.GA677578-robh@kernel.org>
+From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
+Date:   Mon, 27 Feb 2023 21:06:28 +0100
+Message-ID: <CAMT+MTRodB_+sMtoPxv-gP_+sJAwNb36XuLOGo=HvuCQq6h+gQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/4] dt-bindings: input: touchscreen: Add Z2
+ controller bindings.
+To:     Rob Herring <robh@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <asahi@lists.linux.dev>, Henrik Rydberg <rydberg@bitmath.org>,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen
+On Mon, 27 Feb 2023 at 20:51, Rob Herring <robh@kernel.org> wrote:
+>
+> > +properties:
+> > +  compatible:
+> > +    const: apple,z2-touchscreen
+>
+> Is 'z2' anything other than a touchscreen? If not, '-touchscreen' is
+> redundant. If so, then what else is there? You should be describing
+> physical devices, not just a protocol for touchscreen.
+>
 
-On 2/27/2023 11:53 AM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2023-02-24 10:29:58)
->> There is a reboot/suspend test case where system suspend is forced during
->> system booting up. Since host_init() of external DP is executed at hpd
-> 
-> dp_display_host_init()?
-> 
->> thread context, this test case may created a scenario that host_deinit()
-> 
-> dp_display_host_deinit()?
-> 
-ack for both.
->> from pm_suspend() run before host_init() if hpd thread has no chance to
->> run during booting up while suspend request command was issued.
->> At this scenario system will crash at aux register access at host_deinit()
->> since aux clock had not yet been enabled by host_init().  Therefore we
-> 
-> The aux clk is enabled in dp_power_clk_enable() right? Can you clarify?
-> 
+This is a class of touchscreen controllers that talk the z2 protocol
+over spi.
 
-Yes, thats right. Its mapped to core_*** in the dts hence the name goes 
-to the DP_CORE_PM case in the dp_power_clk_enable()
+> > +                    touchscreen-size-y = <640>;
+> > +                    apple,z2-device-name = "MacBookPro17,1 Touch Bar";
+>
+> Why do we need this string? If you want a human consumed label for
+> some identification, we have a property for that purpose. It's called
+> 'label'. But when there is only 1 instance, I don't really see the
+> point.
 
-3092 				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-3093 					 <&dispcc DISP_CC_MDSS_DP_AUX_CLK>,
-3094 					 <&dispcc DISP_CC_MDSS_DP_LINK_CLK>,
-3095 					 <&dispcc DISP_CC_MDSS_DP_LINK_INTF_CLK>,
-3096 					 <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK>;
-3097 				clock-names = "core_iface", "core_aux"
-
->> have to ensure aux clock enabled by checking core_initialized flag before
->> access aux registers at pm_suspend.
-> 
-> I'd much more like to get rid of 'core_initialized'. What is preventing
-> us from enabling the power (i.e. dp_power_init()), or at least enough
-> clks and pm runtime state, during probe? That would fix this problem and
-> also clean things up. As I understand, the device is half initialized in
-> probe and half initialized in the kthread. If we put all power
-> management into the runtime PM ops and synced that state during probe so
-> that runtime PM state matched device probe state we could make runtime
-> PM be the only suspend function and then push the power state tracking
-> into the device core.
-> 
-
-You are correct. https://patchwork.freedesktop.org/patch/523879/ will be 
-doing that. Its still in review.
-
->>
->> Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> 
-> The code looks OK to me, so
-> 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> 
-> once the commit text is cleaned up to indicate the proper function
-> names.
-
-Thanks , will fix all those.
+I want a libinput-consumed label to distinguish between devices
+using this protocol. It is used both for 'normal' touchscreens, and,
+as is in this example a 'touchbar', which absolutely should not be
+treated as a normal touchscreen, and needs special handling in
+userspace.
