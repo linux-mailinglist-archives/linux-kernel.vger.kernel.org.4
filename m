@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627536A4842
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFE06A4844
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjB0Rir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S230416AbjB0Rio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjB0RiB (ORCPT
+        with ESMTP id S230361AbjB0RiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Feb 2023 12:38:01 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09D72449F
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8522449A
         for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:32 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536bbaeceeaso152738957b3.11
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536cad819c7so153281707b3.6
         for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=arZZ82aLoZGzTODI4V3Ds+XnXRSv5CvpGtFg8O7kSHU=;
-        b=FEvdPkuedKMzzGsmheGWPizHKb0nGjYHVNnx+9kAk6JWaGUBiX99d1Bv/O2GM6XSSl
-         gB8+ecHQ4IjEhzwJPfml0bM5L6LYZ2SwUORgwjGkuiwqlRjsYJT4KPxwzw1UlC60m4aZ
-         A90w9fKe9n+yvmErALp7FrbdpDMG/bmb9rYVdsVvHwUyt0atMOUCv41ig6x8R+tdHGZS
-         c/nc1AnKLbHyXNdSxCybAre4lyR5J1UNPqZOtvyqt/5yJckeBvBSk6OPvMXjo6UK2C1R
-         s7BFEuIEED1IHyyqkGYjy7EtZvl+QTa1y4yJouRGAzmHG8rSxuivFT0pWoYd4Spinq1k
-         BQ2A==
+        bh=iRRoEkIKRwl2QQHnq1OJVyPp4L6+mQc5CWukcTSQqHI=;
+        b=M2xu6PJmgtYFCFjZtLFUAhDJwsRj1PNvn9tpCCynDkmhHKgKWgNMPKAbFeMB0d7vzQ
+         aKVeG6bXcHl5yxZ6JEXjbkVB2BvokKvbI4LCTQCQPJySbeEhyr0HdzjFd7UV7XC52Nqd
+         IM/Y4Y2oz4P4pwkohu9Bqul5qghmRgidkrq66aJWcYZe5Ah2frrlViyJFqWif5WyIuln
+         lwhBindA8HTOjteANHg0VaUlc+wXF2i0bjESG2yKoDnx3/qzuFoEw7K8TYty79uXoeAT
+         DG0JzJNCfRj4E5rbsNquxz9O5F/H/zOUYZHgnCU0K2ioTwSn7zpOFzVjAn3t3qu4Rbvy
+         YYMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=arZZ82aLoZGzTODI4V3Ds+XnXRSv5CvpGtFg8O7kSHU=;
-        b=qjSpG2Y2h7n+yazIQgurYij6+rDu5yKYr1YjuQXX4yD9X6PoQlBqHjPWlHrBTj4y09
-         f5BQLxfAsBwUPss1esalNFiFu2WnVpMHzgmfKkd9RIIRmc2BFWjeYgIVDuOVEyRcY7Jz
-         6rzo6cSudD7fT7Z9dV9wsMOjL0iC1I72v85kxhEpCYuxoEuqegL5k7Z6uf0gchTMf7pP
-         KeezjPxC+aBW/Eg7wxenvZ2V3eU8nJRqNh2KzrBwVizjEAOs1yJTAMLW4zC9FBbpGzT0
-         m5Onk65UwoPtHtYaSFi/jJCHVt0No6CdzaDQQOWzkGTYx+YOChKWPsFk9WJl/bRe+Di0
-         8d0A==
-X-Gm-Message-State: AO0yUKVxFbxx1L3wQx/4WDcXjQS34+BWGRDRrwlAZ5BADFZaTTv8HhFn
-        w6QtH/3mlZpp3Vz5ntFi/8iSy+X/4V4=
-X-Google-Smtp-Source: AK7set/UVPuqJo669/ldHphDhViQWe/utENdYlZ/T7NeJi51KLkDK1GElSVGwaBDs6B97rQ0tmz39GqO0ZQ=
+        bh=iRRoEkIKRwl2QQHnq1OJVyPp4L6+mQc5CWukcTSQqHI=;
+        b=y9na5U0qDi21qBAsnJHbPzounsTntLvQkhZlXN9o2VPt93mV9Rc1O9exuCbhlOm3Uo
+         fAmH8/SZB0RBdDhAd9weSIzXnzs5xviA670YxGqJUnRfFErNFZWMsye7R2ZOQKOkYAz+
+         h273258vMQDT7/xiTtbNrrtzN2vM3yzavsHIgx/nwy1hlmDpUBQYtHZYqx3yG+h+gtzq
+         nUzI3d+3q1QGLJnGVXPugWyJwFlo5rq25xRgCQSCQTZE637ia9lMJDcqIxBNtFdLTGhK
+         akKOjdGtrVYY5TvMxI6c17WoDUe0ma0iIKr62hJhqcm3vBsSWM/DLP3X/BZvJaB2o0n1
+         qNog==
+X-Gm-Message-State: AO0yUKXYIVpxuDSm/e204c6V8k/q4qSehtgDtX/aWZC9+fAYoXQvtJnc
+        2UWeaION7JXYzDjv9ip4ESMp3K2u6Yw=
+X-Google-Smtp-Source: AK7set8ux+VAfJlkMlZWU+S8XCIwu1HZ1wVSlOGqhGsiL0aWWxFXwk2KW/a7dOnnyUwvPtqegO11CuQKxxM=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:e1f6:21d1:eead:3897])
- (user=surenb job=sendgmr) by 2002:a81:ac68:0:b0:535:18be:4126 with SMTP id
- z40-20020a81ac68000000b0053518be4126mr10693031ywj.6.1677519449031; Mon, 27
- Feb 2023 09:37:29 -0800 (PST)
-Date:   Mon, 27 Feb 2023 09:36:21 -0800
+ (user=surenb job=sendgmr) by 2002:a5b:6cf:0:b0:a03:da3f:3e65 with SMTP id
+ r15-20020a5b06cf000000b00a03da3f3e65mr9154608ybq.6.1677519451327; Mon, 27 Feb
+ 2023 09:37:31 -0800 (PST)
+Date:   Mon, 27 Feb 2023 09:36:22 -0800
 In-Reply-To: <20230227173632.3292573-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230227173632.3292573-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227173632.3292573-23-surenb@google.com>
-Subject: [PATCH v4 22/33] mm: introduce vma detached flag
+Message-ID: <20230227173632.3292573-24-surenb@google.com>
+Subject: [PATCH v4 23/33] mm: introduce lock_vma_under_rcu to be used from
+ arch-specific code
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -85,88 +86,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Per-vma locking mechanism will search for VMA under RCU protection and
-then after locking it, has to ensure it was not removed from the VMA
-tree after we found it. To make this check efficient, introduce a
-vma->detached flag to mark VMAs which were removed from the VMA tree.
+Introduce lock_vma_under_rcu function to lookup and lock a VMA during
+page fault handling. When VMA is not found, can't be locked or changes
+after being locked, the function returns NULL. The lookup is performed
+under RCU protection to prevent the found VMA from being destroyed before
+the VMA lock is acquired. VMA lock statistics are updated according to
+the results.
+For now only anonymous VMAs can be searched this way. In other cases the
+function returns NULL.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h       | 11 +++++++++++
- include/linux/mm_types.h |  3 +++
- mm/mmap.c                |  2 ++
- 3 files changed, 16 insertions(+)
+ include/linux/mm.h |  3 +++
+ mm/memory.c        | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 3d5e8666892d..895bb3950e8a 100644
+index 895bb3950e8a..46d2db743b1a 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -693,6 +693,14 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma)
- 	VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
+@@ -701,6 +701,9 @@ static inline void vma_mark_detached(struct vm_area_struct *vma, bool detached)
+ 	vma->detached = detached;
  }
  
-+static inline void vma_mark_detached(struct vm_area_struct *vma, bool detached)
-+{
-+	/* When detaching vma should be write-locked */
-+	if (detached)
-+		vma_assert_write_locked(vma);
-+	vma->detached = detached;
-+}
++struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
++					  unsigned long address);
 +
  #else /* CONFIG_PER_VMA_LOCK */
  
  static inline void vma_init_lock(struct vm_area_struct *vma) {}
-@@ -701,6 +709,8 @@ static inline bool vma_start_read(struct vm_area_struct *vma)
- static inline void vma_end_read(struct vm_area_struct *vma) {}
- static inline void vma_start_write(struct vm_area_struct *vma) {}
- static inline void vma_assert_write_locked(struct vm_area_struct *vma) {}
-+static inline void vma_mark_detached(struct vm_area_struct *vma,
-+				     bool detached) {}
- 
- #endif /* CONFIG_PER_VMA_LOCK */
- 
-@@ -712,6 +722,7 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
- 	vma->vm_mm = mm;
- 	vma->vm_ops = &dummy_vm_ops;
- 	INIT_LIST_HEAD(&vma->anon_vma_chain);
-+	vma_mark_detached(vma, false);
- 	vma_init_lock(vma);
+diff --git a/mm/memory.c b/mm/memory.c
+index f7f412833e42..bda4c1a991f0 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -5221,6 +5221,52 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
  }
+ EXPORT_SYMBOL_GPL(handle_mm_fault);
  
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index a4e7493bacd7..45a219d33c6b 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -511,6 +511,9 @@ struct vm_area_struct {
- #ifdef CONFIG_PER_VMA_LOCK
- 	int vm_lock_seq;
- 	struct rw_semaphore lock;
++#ifdef CONFIG_PER_VMA_LOCK
++/*
++ * Lookup and lock a VMA under RCU protection. Returned VMA is guaranteed to be
++ * stable and not isolated. If the VMA is not found or is being modified the
++ * function returns NULL.
++ */
++struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
++					  unsigned long address)
++{
++	MA_STATE(mas, &mm->mm_mt, address, address);
++	struct vm_area_struct *vma;
 +
-+	/* Flag to indicate areas detached from the mm->mm_mt tree */
-+	bool detached;
- #endif
- 
- 	/*
-diff --git a/mm/mmap.c b/mm/mmap.c
-index b947d82e8522..df13c33498db 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -600,6 +600,7 @@ static inline void vma_complete(struct vma_prepare *vp,
- 
- 	if (vp->remove) {
- again:
-+		vma_mark_detached(vp->remove, true);
- 		if (vp->file) {
- 			uprobe_munmap(vp->remove, vp->remove->vm_start,
- 				      vp->remove->vm_end);
-@@ -2261,6 +2262,7 @@ static inline int munmap_sidetree(struct vm_area_struct *vma,
- 	if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
- 		return -ENOMEM;
- 
-+	vma_mark_detached(vma, true);
- 	if (vma->vm_flags & VM_LOCKED)
- 		vma->vm_mm->locked_vm -= vma_pages(vma);
- 
++	rcu_read_lock();
++retry:
++	vma = mas_walk(&mas);
++	if (!vma)
++		goto inval;
++
++	/* Only anonymous vmas are supported for now */
++	if (!vma_is_anonymous(vma))
++		goto inval;
++
++	if (!vma_start_read(vma))
++		goto inval;
++
++	/* Check since vm_start/vm_end might change before we lock the VMA */
++	if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
++		vma_end_read(vma);
++		goto inval;
++	}
++
++	/* Check if the VMA got isolated after we found it */
++	if (vma->detached) {
++		vma_end_read(vma);
++		/* The area was replaced with another one */
++		goto retry;
++	}
++
++	rcu_read_unlock();
++	return vma;
++inval:
++	rcu_read_unlock();
++	return NULL;
++}
++#endif /* CONFIG_PER_VMA_LOCK */
++
+ #ifndef __PAGETABLE_P4D_FOLDED
+ /*
+  * Allocate p4d page table.
 -- 
 2.39.2.722.g9855ee24e9-goog
 
