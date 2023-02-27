@@ -2,162 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831B86A456D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 15:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767A66A4572
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjB0O7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 09:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S230085AbjB0PAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjB0O7S (ORCPT
+        with ESMTP id S229972AbjB0PAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:59:18 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE972203A;
-        Mon, 27 Feb 2023 06:59:15 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id i202so2650268ioa.3;
-        Mon, 27 Feb 2023 06:59:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3GCNwTUZB8kzZG/gYuYfLxJdLZvnUgoAzuOHI0jCdY=;
-        b=S6iE4D8qfxp6Zf1z3MJFBlZvXshZkI5deCZvjwk+Ldb5nohj3XWFLrnHHGtLYjtpx5
-         oU0r2v3M2QIFIGv/8jJeeU8W7jhYa+6ExZe2xNYpgzExSDhxbGewLxaIvwe/I+bMA1oq
-         uO4toeIGCyx4xb4iP1v7uDywXR4F7fnjoh+z817RaSDJJXcPzQkzhPQoBfA3heXqWbGW
-         6sRN+cosKJEzPmmSh1BcQqDGckK6oX2ee/3bIm/UXnoXBB4gHxEzC5oEi9eBlLD2MqZ9
-         dAlTQYmOpMlb0KMqA93mffS2JIc1598FbG56zC2dOEMJELIpXTwmfGvljO3uv7kOFtHM
-         Q8XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y3GCNwTUZB8kzZG/gYuYfLxJdLZvnUgoAzuOHI0jCdY=;
-        b=bi0ff8U4b0/1G5ErkJhWN/K1exwvWtoDJjfPL3mEhUCPpKmHglRvIqEmUZF3eKVbmU
-         oaeNJ4gJ2iYI+Xl13h02yb0aWs2/jN3udqqOKswn7hzaFzuSQFZ08tQsZWZqOKNB2a3S
-         p2JUhhHWqWsFI63sG/S1ztR70bFUhzSMGuhgSlElQ27mhQqNIYQER+lBgysAHCC22dX5
-         HLk55LNvNN0xCzh5oBQ5sclCm3cJLGtzsAhf2G2soPAybHmd8dF0r1P1wq3pQIcNP4Dq
-         qxdiIWmHqznYfSudNT6HtQpQ++HhYWvCXB+hxnsEIHnwUj4sUY/gfio14t5slSYKZp1N
-         pOgA==
-X-Gm-Message-State: AO0yUKVfejR2uR8SaZdKbcT5ANq9AOyxAze6gadnT6oGAUNqyEm+f4Ru
-        2NCD2vdGLWYJ3shuvMLjnz0=
-X-Google-Smtp-Source: AK7set9dR0iQjzKlEIv6bGw6qiR9kUVSzphDuGcQaV2R+/Hhe/OK3u3U1m2vKlQLNv6dC/YksZGM7w==
-X-Received: by 2002:a6b:7504:0:b0:6e9:d035:45df with SMTP id l4-20020a6b7504000000b006e9d03545dfmr15378337ioh.6.1677509954692;
-        Mon, 27 Feb 2023 06:59:14 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m20-20020a92c534000000b00315813e404esm2015491ili.58.2023.02.27.06.59.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 06:59:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <19587ea3-e54c-e3b0-5341-eb7ee486474b@roeck-us.net>
-Date:   Mon, 27 Feb 2023 06:59:12 -0800
+        Mon, 27 Feb 2023 10:00:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDF9659F;
+        Mon, 27 Feb 2023 06:59:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EEE3B80D53;
+        Mon, 27 Feb 2023 14:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064B2C4339E;
+        Mon, 27 Feb 2023 14:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677509988;
+        bh=cpGiJHjSdLQyBJPnVBT9lZXyxg6+w4yV3JfgqD66YBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cnrke0HLcDZeNsJOS+SYEI++TSqQ4QvJH9CrHpftcmK2MlcOhqTdtrJQTKe9frBcC
+         tAf+FU8mm4XeV2lzvP0nI3yT/BkjcNGFtxznn7own2FhWj9Xuf4cQSt98fk7fXFMlY
+         KUvJrbwEOqT9hsca08pJszaPVaQjnHjKri/MV4v3C/46VmkE34n50AsTJmxAxWt4mV
+         zJUGk3bGlPGXFWO186mLthpScPWhVHs7abouNt1ayBwtdT+tpkVZma+oCRq6thDzlJ
+         Vo9lOZKpfz1ohFaJZ4GjxXwVsuzjlUd4F3ZlYy+UPfEnvk+1eNTRNQ/A26iKONNes7
+         W9B5J8WmETHrA==
+Date:   Mon, 27 Feb 2023 09:59:46 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Allen Ballway <ballway@chromium.org>,
+        Jiri Kosina <jkosina@suse.cz>, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, groeck@chromium.org,
+        alistair@alistair23.me, dmitry.torokhov@gmail.com,
+        jk@codeconstruct.com.au, Jonathan.Cameron@huawei.com,
+        cmo@melexis.com, u.kleine-koenig@pengutronix.de,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 10/25] HID: multitouch: Add quirks for
+ flipped axes
+Message-ID: <Y/zFYpxtkBmNmFLf@sashalap>
+References: <20230227020855.1051605-1-sashal@kernel.org>
+ <20230227020855.1051605-10-sashal@kernel.org>
+ <20230227132300.4a3c3fad@endymion.delvare>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
-Content-Language: en-US
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220428205116.861003-1-yury.norov@gmail.com>
- <20220428205116.861003-4-yury.norov@gmail.com>
- <20230225184702.GA3587246@roeck-us.net> <Y/qhL8kSzzhMm+tO@yury-laptop>
- <Y/qilU0cW6ebmrnM@yury-laptop>
- <95377047-6b26-b434-fc90-2289fccc2a0b@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <95377047-6b26-b434-fc90-2289fccc2a0b@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230227132300.4a3c3fad@endymion.delvare>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/23 06:46, Alexander Lobakin wrote:
-> From: Yury Norov <yury.norov@gmail.com>
-> Date: Sat, 25 Feb 2023 16:06:45 -0800
-> 
->> On Sat, Feb 25, 2023 at 04:05:02PM -0800, Yury Norov wrote:
->>> On Sat, Feb 25, 2023 at 10:47:02AM -0800, Guenter Roeck wrote:
->>>> Hi,
->>>>
->>>> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
->>>>> Test newly added bitmap_{from,to}_arr64() functions similarly to
->>>>> already existing bitmap_{from,to}_arr32() tests.
->>>>>
->>>>> Signed-off-by: Yury Norov <yury.norov@gmail.com>
->>>>
->>>> Ever since this test is in the tree, several of my boot tests show
->>>> lots of messages such as
->>>>
->>>> test_bitmap: bitmap_to_arr64(nbits == 1): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000001)
-> 
-> Hmmm, the whole 4 bytes weren't touched.
-> 
->>>> test_bitmap: bitmap_to_arr64(nbits == 2): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000003)
->>>> test_bitmap: bitmap_to_arr64(nbits == 3): tail is not safely cleared: 0xa5a5a5a500000001 (must be 0x0000000000000007)
-> 
-> This is where it gets worse...
-> 
->>>> ...
->>>> test_bitmap: bitmap_to_arr64(nbits == 927): tail is not safely cleared: 0xa5a5a5a500000000 (must be 0x000000007fffffff)
->>>> test_bitmap: bitmap_to_arr64(nbits == 928): tail is not safely cleared: 0xa5a5a5a580000000 (must be 0x00000000ffffffff)
-> 
-> I don't see the pattern how the actual result gets generated. But the
-> problem is in the bitmap code rather than in the subtest -- "must be"s
-> are fully correct.
-> 
-> Given that the 0xa5s are present in the upper 32 bits, it is Big Endian
-> I guess? Maybe even 32-bit Big Endian? Otherwise I'd start concerning
-> how comes it doesn't reproduce on x86_64s :D
-> 
-
-It does reproduce on 32-bit x86 builds, and as far as I can see
-it is only seen with 32-bit little endian systems.
-
-Guenter
-
->>>
->>> This may be a real problem. Can you share what's the system is? What's
->>> endianness and register length?
->>>
->>> + Alexander Lobakin, the author of the exact subtest.
+On Mon, Feb 27, 2023 at 01:23:00PM +0100, Jean Delvare wrote:
+>Hi Sasha,
+>
+>On Sun, 26 Feb 2023 21:08:33 -0500, Sasha Levin wrote:
+>> From: Allen Ballway <ballway@chromium.org>
 >>
->> Forgot to add
-> 
-> Oh, thanks for letting me know!
-> 
->>    
->>>> but then:
->>>>
->>>> test_bitmap: all 6550 tests passed
->>>
->>> It's because corresponding error path doesn't increment failed_tests
->>> counter. I'll send a fix shortly.
-> 
-> [...]
-> 
-> Thanks,
-> Olek
+>> [ Upstream commit a2f416bf062a38bb76cccd526d2d286b8e4db4d9 ]
+>>
+>> Certain touchscreen devices, such as the ELAN9034, are oriented
+>> incorrectly and report touches on opposite points on the X and Y axes.
+>> For example, a 100x200 screen touched at (10,20) would report (90, 180)
+>> and vice versa.
+>>
+>> This is fixed by adding device quirks to transform the touch points
+>> into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
+>>
+>> Signed-off-by: Allen Ballway <ballway@chromium.org>
+>> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  drivers/hid/hid-multitouch.c             | 39 ++++++++++++++++++---
+>>  drivers/hid/hid-quirks.c                 |  6 ++++
+>>  drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 43 ++++++++++++++++++++++++
+>>  drivers/hid/i2c-hid/i2c-hid.h            |  3 ++
+>>  4 files changed, 87 insertions(+), 4 deletions(-)
+>> (...)
+>
+>Second rule of acceptance for stable patches:
+>
+> - It cannot be bigger than 100 lines, with context.
+>
+>Clearly not met here.
 
+About a quarter of stable commits in the last 12 months breat the rule
+above.
+
+>To me, this commit is something distributions may want to backport if
+>their users run are likely to run the affected hardware. But it's out
+>of scope for stable kernel branches.
+
+Why? We explicitly call out new device IDs and quirks in the same doc
+you quoted the 100 line rule from.
+
+-- 
+Thanks,
+Sasha
