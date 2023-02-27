@@ -2,175 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD9A6A4BDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FF76A4BF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 21:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjB0UAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 15:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S230364AbjB0UE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 15:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjB0UAm (ORCPT
+        with ESMTP id S230114AbjB0UE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:00:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD0D23D85;
-        Mon, 27 Feb 2023 12:00:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A81B60F19;
-        Mon, 27 Feb 2023 20:00:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47520C433D2;
-        Mon, 27 Feb 2023 20:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677528039;
-        bh=nIYRAsxkz1v+ws6bi8EI0HS1rSe3IrjqOcAGXmBmfvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oRGsMbLuyZPLSAbz4jorliDG0dEsvZIpvrMYkGkNcp2vH/PoICuXPGrt54SV2I/No
-         Ct+MT9H5cbHP5+3Tg4IMSdpVd3sX3qMQ4ZT2sbuSN30P0zvcDjOFPREif7TlgUoukw
-         pSMM+SaYIWy9hEFN7JniyEsj+iQjSVJ4I9TrLU/lxi4mmcOwizJJRrIyzz/qiJjKId
-         s1Gr9MLrz/BGBv1KLz4v1K+2FM6eueSNbuwe3Wu/mOJSth73/paDJBoY4uqWJy0Cnc
-         QBzJZF1KQ9FuBZV1fVpwc/vDr61Tsv0VSpQbHNx5Y5fXI1dpFCjF82PIferw66R1sM
-         K3+3Ac+OtKOOA==
-Date:   Mon, 27 Feb 2023 20:00:33 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 19/19] riscv: dts: starfive: Add StarFive JH7110
- VisionFive 2 board device tree
-Message-ID: <Y/0L4SKKtl49C95j@spud>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-20-hal.feng@starfivetech.com>
- <CAJM55Z_QMtzKeRFN1iGf498z4+vga6RBgwybCQi6aOUYCr_P-Q@mail.gmail.com>
- <2af3f84b-2c2b-dc79-c76c-9411fcbcf7ca@starfivetech.com>
- <Y/zykfydb+bJ7G2l@spud>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="B8EZkuBv+mrJ7yYe"
-Content-Disposition: inline
-In-Reply-To: <Y/zykfydb+bJ7G2l@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 15:04:26 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCA1227BD;
+        Mon, 27 Feb 2023 12:04:25 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 633825C0113;
+        Mon, 27 Feb 2023 15:04:25 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 27 Feb 2023 15:04:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677528265; x=1677614665; bh=zexpZQ5bJ9
+        hbIaBDiHdAg4Kdi9EcW4M9yOSGV4fDHqI=; b=UmD1++vWuDhma9hYn/5OBgkV9W
+        SmKh3J+jW/DRQw9ZayTbfH4doyDnfMKGcrUjRg+MHXB7+skv9MR2Wn6feDUwa/pc
+        PGT3Jx1cKFRVV3yUC+Xbv73xv4yG9hlMD+x2L5XYUsFkhcKBk+bS73Zg84OwAvEZ
+        RNZMUvBcMXHf7fLXwSvthCoH+1LmkzeFxFlxrddpojiVz793BS8I93v3s80ny4oe
+        1FufDxHhi6hoVKIkPvvLYmJ+SFsDbckDivUEjltSlVQ3ucoef5IiqpK+X/HiLHU1
+        GwGjKaqWwuFOXkvK+hEEYfudtjKdyB2/Ux5tmyNKJb3vsbFLjm9k6AAh9Bvg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677528265; x=1677614665; bh=zexpZQ5bJ9hbIaBDiHdAg4Kdi9Ec
+        W4M9yOSGV4fDHqI=; b=j7dASZo3V9dUBM6DtvQO9/dlt76IBaikXPpslXjq6pST
+        jFfZh2uRAMePwDHhoQQLNQzkC12wPkXcZPLXx2ADjJtqEKy7bW2+gxDbbcJDDOVQ
+        VuvwS4PM8MQcf2Rr7qyfXLPe5Lc46+01w63aLtcMijCn/ZKTsn+l9IY4axqQB3ol
+        2+Oudolo5/Ha3o/ZLMIKLoOyX7RvZncBzpV5PZV5kFhzlW2izGNS0rTWVEdEpYEc
+        Al+q0KEZn6nANGo4y6fiDSB7LzYpD7c9+b8aYZTgtvzwWVL+zjKnTCaX+ZymZxf+
+        98xn4wFADSco0SR13mRCBDtf/UGEqWcwjxcgYDRQuQ==
+X-ME-Sender: <xms:yAz9Y4QZ0bFqOsCcmYvhDiiHwpxCKqqbcoDxkoq0bcMaF6zxsmIhLA>
+    <xme:yAz9Y1yRmthicotCWDvnALQCFqZxBnSU3xJUZLCygQBrua0hWqRWUqUEq7uINKysC
+    ybAQeT6N9FlN87aCss>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddguddvkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:yAz9Y13kmNhmOhtb3wu_v8-vYIJiuGXAPPQgztyZ7fxY0YH2388u_Q>
+    <xmx:yAz9Y8A15AZvjUD-laD2dBaFISanpvfqgH7VrgM-JuuNfwTcJV-QsQ>
+    <xmx:yAz9YxgnuUCrgQLpa3tOZBdHss6HmqK7a0b2jqyXZwHv4uftJYQElA>
+    <xmx:yQz9Y6anFwyHybOEKazqP3sfgZcO0TLbxR_X_5vMC9wUpJAVx2fVxA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B48BBB60086; Mon, 27 Feb 2023 15:04:24 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <5de30963-9be9-4e87-a696-7a642d92630f@app.fastmail.com>
+In-Reply-To: <20230212084611.1311177-1-rppt@kernel.org>
+References: <20230212084611.1311177-1-rppt@kernel.org>
+Date:   Mon, 27 Feb 2023 21:04:04 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mike Rapoport" <rppt@kernel.org>
+Cc:     "Dave Airlie" <airlied@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Helge Deller" <deller@gmx.de>, "Matt Turner" <mattst88@gmail.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>, x86@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 0/2] char/agp: consolidate asm/agp.h
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Feb 12, 2023, at 09:46, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> asm/agp.h is duplicated in several architectures, with x86 being the
+> only instance that differs from the rest.
+>
+> Introduce asm-generic/agp.h and use it instead of per-architecture
+> headers for the most cases.
+>
+> I believe that asm-generic is the best tree to pick up this patches.
+>
+> Mike Rapoport (IBM) (2):  char/agp: consolidate
+> {alloc,free}_gatt_pages()  char/agp: introduce asm-generic/agp.h
 
---B8EZkuBv+mrJ7yYe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Mike,
 
-On Mon, Feb 27, 2023 at 06:12:40PM +0000, Conor Dooley wrote:
-> On Thu, Feb 23, 2023 at 04:50:20PM +0800, Hal Feng wrote:
-> > On Tue, 21 Feb 2023 16:03:08 +0100, Emil Renner Berthing wrote:
-> > > On Tue, 21 Feb 2023 at 03:47, Hal Feng <hal.feng@starfivetech.com> wr=
-ote:
-> > >> From: Emil Renner Berthing <kernel@esmil.dk>
-> > >>
-> > >> Add a minimal device tree for StarFive JH7110 VisionFive 2 board
-> > >> which has version A and version B. Support booting and basic
-> > >> clock/reset/pinctrl/uart drivers.
-> > >>
-> > >> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > >> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > >> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > >> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > >> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> > >> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > >> ---
-> > >>  arch/riscv/boot/dts/starfive/Makefile         |   6 +-
-> > >>  .../jh7110-starfive-visionfive-2-v1.2a.dts    |  13 ++
-> > >>  .../jh7110-starfive-visionfive-2-v1.3b.dts    |  13 ++
-> > >>  .../jh7110-starfive-visionfive-2.dtsi         | 215 +++++++++++++++=
-+++
-> > >>  4 files changed, 246 insertions(+), 1 deletion(-)
-> > >>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
-ionfive-2-v1.2a.dts
-> > >>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
-ionfive-2-v1.3b.dts
-> > >>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
-ionfive-2.dtsi
-> > >>
-> > >> diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot=
-/dts/starfive/Makefile
-> > >> index 039c143cba33..cd73519b907b 100644
-> > >> --- a/arch/riscv/boot/dts/starfive/Makefile
-> > >> +++ b/arch/riscv/boot/dts/starfive/Makefile
-> > >> @@ -1,2 +1,6 @@
-> > >>  # SPDX-License-Identifier: GPL-2.0
-> > >> -dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-beaglev-starlight.dtb jh7100=
--starfive-visionfive-v1.dtb
-> > >> +dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-beaglev-starlight.dtb
-> > >> +dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7100-starfive-visionfive-v1.dtb
-> > >> +
-> > >> +dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7110-starfive-visionfive-2-v1.2a.=
-dtb
-> > >> +dtb-$(CONFIG_SOC_STARFIVE) +=3D jh7110-starfive-visionfive-2-v1.3b.=
-dtb
->=20
-> If you could rebase on top of v6.3-rc1 for the next version & use ARCH_
-> not SOC_ here that'd be great.
->=20
-> > >> +/ {
-> > >> +       aliases {
-> > >> +               serial0 =3D &uart0;
-> > >> +               i2c0 =3D &i2c0;
-> > >> +               i2c2 =3D &i2c2;
-> > >> +               i2c5 =3D &i2c5;
-> > >> +               i2c6 =3D &i2c6;
-> > >=20
-> > > Let's keep these sorted alphabetically.
-> >=20
-> > OK, will fix it.
-> >=20
->=20
-> > > It would be great to have some sort of order to this file so it's
-> > > obvious where to add new nodes. I suggest we do
-> > > - root node
-> > > - external clocks
-> > > - other node references in alphabetical order
-> > >=20
-> > > You're almost there with this patch except the uart0 node is out of p=
-lace.
-> >=20
-> > Will fix accordingly. Thanks for your suggestions.
->=20
-> With Emil's suggestions implemented:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+It looks like I wrote an email saying I merged these two patches,
+but never actually sent it out. Not sure if you found out another
+way, but this was part of the asm-generic tree for 6.3 and is now
+merged upstream.
 
-Actually, there's one thing that I don't think was (explicitly?) mentioned,
-could you sort the external clocks alphanumerically too?
+Thanks for the cleanup,
 
-Cheers,
-Conor.
-
-
---B8EZkuBv+mrJ7yYe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/0L4QAKCRB4tDGHoIJi
-0nXJAP4hYlkGws9Z9BDo3Zh/bnJEjDLHBMPp6+W/6GLJrhOJ3wD+ILqazBj8LQ78
-52UY1mFT5kiamfu0N2L8qR1Q/5KWPAw=
-=EYae
------END PGP SIGNATURE-----
-
---B8EZkuBv+mrJ7yYe--
+     Arnd
