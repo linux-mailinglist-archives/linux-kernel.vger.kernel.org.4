@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A9C6A483D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E886A4840
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 18:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjB0Ri0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 12:38:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S229969AbjB0Ria (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 12:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjB0Rhr (ORCPT
+        with ESMTP id S230342AbjB0Rhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:37:47 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E321724C89
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:21 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5376fa4106eso153559837b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:21 -0800 (PST)
+        Mon, 27 Feb 2023 12:37:51 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9C5241FE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:24 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536cad819c7so153272717b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 09:37:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r0m7Mx7yExEfpE40BLjkT9H7Bv79s8byLhYJ0wRxTC4=;
-        b=J6HTSW3ije3IDV45f4imLJua2F9c9fG/LezyaDIF0k2VV4fuwgH+fku2QXSjWP2auL
-         d+6+O+xNSm6Xj7FlWbcn2IucG0PD3/gJW2mH/MURmde3Q+9WMeczT04Csr++aQNQAB4v
-         uOclz5rts/w0oMZxgj6JdiddKEJJwswsgJAAZvi48OAzGBi1BuSBhTNF8+d2d3+YbCDm
-         fwaoPEsSaG9C8KiMPsrgpeVhqU2cm1pHUxTYDzrWvN6667+vmOEZ293x3rsB2i9qTzir
-         LhGya0SRahx81MeDy4vFauftQ8Z+i+VjBO+uhvPnINIKKKPeRWHZkWIWZS9shPaay/sM
-         /HGA==
+        bh=q4IoNs8/2s63po158n4pCM20IldvB6LsORlyoWZYhDA=;
+        b=bS7cuWSTvikNO5/1/KRQJLPoIX97MSDopLQjzIYhd9M4ATiilp+2nnzhJYwm+xkfAw
+         CA4PkRjLFErdI6iJpWSrCW/0zzxhXa3aDXwe+0SrD6SM1VCA8VjhRHuY2QcHPeKNakQW
+         P+DawdVxSLtrg/I5seo5dukO8m39Wj2s4hqiK8xve+bjTmkIkwxAaDpb3/Zo6UgfUlrQ
+         EPB7WXnu31e6AaMIPOJ6t49a2aYPUJ8xG3eJeremwZc8bnMi2k5b+Q5ZfPziQ2FlHzzp
+         w2I2hG7tsvd97Sj45eHKWDA+0nQshMfUHld0I+kGvTMYTZlSoT7VYdn14KEIlMTUGdtE
+         e10A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r0m7Mx7yExEfpE40BLjkT9H7Bv79s8byLhYJ0wRxTC4=;
-        b=5uYSAYKwD5doJXYhic5PCBoDqbu70mY5a36+UV34OOTYxNhLjtbowNKbbNyt7SX6Zp
-         Hrswm12lbMtbln6IyqLKNshrhvhypHs5hnk+PSUa2LPaCjVhbopMjrzNetsaGayZ/RCV
-         svHV5HwQRwc7zQHAsK86AmtJJLTmbJ/OB9z3YNN1M5gPtB/Q5hLhAwScm+/53Oy2jBE/
-         buk75JMs16VObL87jxMYDjzXKgdygYDsirawymQC49cDHcfJkjA9bguhu273ldh1XM6g
-         lx3LRGqlB1DeBkmPMROn3/jDKV1wLdhc4KHtgaBsJ3GqKDyIK5vK4IUsbv+rMPle+Ty0
-         IxyQ==
-X-Gm-Message-State: AO0yUKU1hEQvZ6J/paSSYmBWR4TNfWXwULDhNcIEN235UxqVfVmQQKYT
-        jW/nHdvkf0I3DuOzbKu/bJaqqQzkb0A=
-X-Google-Smtp-Source: AK7set8EV36Dr/ESiL80fu1d1SaW9bmdiDECZfWEbGGMOjKuqTD7GEuVWa5jynsNqQ2pFS6J79ENwuY0pY0=
+        bh=q4IoNs8/2s63po158n4pCM20IldvB6LsORlyoWZYhDA=;
+        b=bWqMSu9z44RoJQR2jKkzEdgkMd6Xom6W1IYQFspFLgtrbClH5EqK2sdQgU9IXbIB1F
+         5gpzj6cgATZnwmVILSxu6uoYia5dXJmF2Vdbl06y+aFdLkFkgoVqX85PBVuWtXXxEP2Z
+         HgWTn4VFM7mBQYV6m938lzDXVhXJEixRaId2QNTL04IWnIAX2EeONVHcfNtLY3IutJ2v
+         jnmL1RZfi082Fijgn0bxxLqZLMw41yFOi6irKyiDxh8FR/kuhaV2JbZ6ZEuSso6U9Pav
+         zXE4Zb7B56odAJD2AEtuHf8Uu8wppmG2aA2trRe0lq/UMcmw1miBZDdazWmAUNcuIWYE
+         oxsA==
+X-Gm-Message-State: AO0yUKUWmwCVf+Pdplbi+TG957cHl+fK85y3V6wXimNL2myHzawgiUj1
+        2Hvo40hHsbbpp3Wvg+qW7sszFi8TdkM=
+X-Google-Smtp-Source: AK7set/PpfdmNkoTcymoja/27Ir9z6PS18iSX+0Y7AEWmCWJmOIOQsn+Wv7zMECojEbGHKP0cPXfu+hFpqg=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:e1f6:21d1:eead:3897])
- (user=surenb job=sendgmr) by 2002:a25:938e:0:b0:a60:c167:c056 with SMTP id
- a14-20020a25938e000000b00a60c167c056mr4911453ybm.9.1677519440118; Mon, 27 Feb
- 2023 09:37:20 -0800 (PST)
-Date:   Mon, 27 Feb 2023 09:36:17 -0800
+ (user=surenb job=sendgmr) by 2002:a05:6902:1388:b0:855:fdcb:4467 with SMTP id
+ x8-20020a056902138800b00855fdcb4467mr287176ybu.0.1677519442170; Mon, 27 Feb
+ 2023 09:37:22 -0800 (PST)
+Date:   Mon, 27 Feb 2023 09:36:18 -0800
 In-Reply-To: <20230227173632.3292573-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230227173632.3292573-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227173632.3292573-19-surenb@google.com>
-Subject: [PATCH v4 18/33] mm: write-lock VMAs before removing them from VMA tree
+Message-ID: <20230227173632.3292573-20-surenb@google.com>
+Subject: [PATCH v4 19/33] mm: conditionally write-lock VMA in free_pgtables
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -85,50 +85,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Write-locking VMAs before isolating them ensures that page fault
-handlers don't operate on isolated VMAs.
+Normally free_pgtables needs to lock affected VMAs except for the case
+when VMAs were isolated under VMA write-lock. munmap() does just that,
+isolating while holding appropriate locks and then downgrading mmap_lock
+and dropping per-VMA locks before freeing page tables.
+Add a parameter to free_pgtables for such scenario.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/mmap.c  | 1 +
- mm/nommu.c | 5 +++++
- 2 files changed, 6 insertions(+)
+ mm/internal.h | 2 +-
+ mm/memory.c   | 6 +++++-
+ mm/mmap.c     | 5 +++--
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/mm/internal.h b/mm/internal.h
+index 08ce56dbb1d9..fce94775819c 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -105,7 +105,7 @@ void folio_activate(struct folio *folio);
+ 
+ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
+ 		   struct vm_area_struct *start_vma, unsigned long floor,
+-		   unsigned long ceiling);
++		   unsigned long ceiling, bool mm_wr_locked);
+ void pmd_install(struct mm_struct *mm, pmd_t *pmd, pgtable_t *pte);
+ 
+ struct zap_details;
+diff --git a/mm/memory.c b/mm/memory.c
+index bfa3100ec5a3..f7f412833e42 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -348,7 +348,7 @@ void free_pgd_range(struct mmu_gather *tlb,
+ 
+ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
+ 		   struct vm_area_struct *vma, unsigned long floor,
+-		   unsigned long ceiling)
++		   unsigned long ceiling, bool mm_wr_locked)
+ {
+ 	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
+ 
+@@ -366,6 +366,8 @@ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
+ 		 * Hide vma from rmap and truncate_pagecache before freeing
+ 		 * pgtables
+ 		 */
++		if (mm_wr_locked)
++			vma_start_write(vma);
+ 		unlink_anon_vmas(vma);
+ 		unlink_file_vma(vma);
+ 
+@@ -380,6 +382,8 @@ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
+ 			       && !is_vm_hugetlb_page(next)) {
+ 				vma = next;
+ 				next = mas_find(&mas, ceiling - 1);
++				if (mm_wr_locked)
++					vma_start_write(vma);
+ 				unlink_anon_vmas(vma);
+ 				unlink_file_vma(vma);
+ 			}
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 1f42b9a52b9b..f7ed357056c4 100644
+index f7ed357056c4..ec745586785c 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -2255,6 +2255,7 @@ int split_vma(struct vma_iterator *vmi, struct vm_area_struct *vma,
- static inline int munmap_sidetree(struct vm_area_struct *vma,
- 				   struct ma_state *mas_detach)
- {
-+	vma_start_write(vma);
- 	mas_set_range(mas_detach, vma->vm_start, vma->vm_end - 1);
- 	if (mas_store_gfp(mas_detach, vma, GFP_KERNEL))
- 		return -ENOMEM;
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 57ba243c6a37..2ab162d773e2 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -588,6 +588,7 @@ static int delete_vma_from_mm(struct vm_area_struct *vma)
- 		       current->pid);
- 		return -ENOMEM;
- 	}
-+	vma_start_write(vma);
- 	cleanup_vma_from_mm(vma);
+@@ -2152,7 +2152,8 @@ static void unmap_region(struct mm_struct *mm, struct maple_tree *mt,
+ 	update_hiwater_rss(mm);
+ 	unmap_vmas(&tlb, mt, vma, start, end, mm_wr_locked);
+ 	free_pgtables(&tlb, mt, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
+-				 next ? next->vm_start : USER_PGTABLES_CEILING);
++				 next ? next->vm_start : USER_PGTABLES_CEILING,
++				 mm_wr_locked);
+ 	tlb_finish_mmu(&tlb);
+ }
  
- 	/* remove from the MM's tree and list */
-@@ -1519,6 +1520,10 @@ void exit_mmap(struct mm_struct *mm)
- 	 */
+@@ -3056,7 +3057,7 @@ void exit_mmap(struct mm_struct *mm)
  	mmap_write_lock(mm);
- 	for_each_vma(vmi, vma) {
-+		/*
-+		 * No need to lock VMA because this is the only mm user and no
-+		 * page fault handled can race with it.
-+		 */
- 		cleanup_vma_from_mm(vma);
- 		delete_vma(mm, vma);
- 		cond_resched();
+ 	mt_clear_in_rcu(&mm->mm_mt);
+ 	free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
+-		      USER_PGTABLES_CEILING);
++		      USER_PGTABLES_CEILING, true);
+ 	tlb_finish_mmu(&tlb);
+ 
+ 	/*
 -- 
 2.39.2.722.g9855ee24e9-goog
 
