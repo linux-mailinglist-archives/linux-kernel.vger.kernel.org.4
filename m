@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7454D6A4DBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D9F6A4DC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 23:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjB0WHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 17:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S230187AbjB0WIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 17:08:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjB0WGp (ORCPT
+        with ESMTP id S230269AbjB0WHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:06:45 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7B5298D8;
-        Mon, 27 Feb 2023 14:06:44 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id ec43so31873394edb.8;
-        Mon, 27 Feb 2023 14:06:44 -0800 (PST)
+        Mon, 27 Feb 2023 17:07:52 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D71229E3A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:07:40 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id c18so5181793wmr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 14:07:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cCTNgYAK7IFGbvLWwI1Elm6eJ4MRXAIuntOOPn+id8w=;
-        b=cImA1qFtrJOm7nFVzxEh79FedOBCEQHx+xZRBJnjp+p41F8PYDblhreqmJvnycJk6B
-         QAM/JzuIa8pNIRzHLdu1OUtul8Ua3nZXEuIkUqKeqA1x1hDu/Kqdah9rGcOMFUtTXQqz
-         OI06TEYCMPSUjrzzGQw34wt2+NewIgnHIumES+x/+WzpLTF1TDsOBlka53rqENh85mHJ
-         tdZfzsZFvai0MRX8diPjkJch3pmNhb2VVXrCpH7DfKbaRIzxtiEpSCdMJfuBDNuzu21R
-         en8tzkbib3Q+DDsrKXa3uHeVFJLmEtTrbrTy7SRe0cSaPFEKzdBnrhl3oXBHvTYkRd2c
-         waQg==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wyCkH7EB9sNMh5yZnsOs8dEjM1084lAnLUlPc7QNpg=;
+        b=f5Dw1irqTzRW2zx/1ZGVX5EJWJ5iuYpLU7jbqqcwiH8kvq9TIVbpcQ4qdbHUekxT53
+         yPJKi+KABVQsEMbkV1Lmn4gbCe2pokGYwK1oVQqCmnavUV73pMhIoCuu7ZN5RzeMZpFU
+         HTY/3JfxT6jmxwP52th8OaDz81CrxMTtWKupIvpJ3luHRSY/z0kfg9m6rvyP81LgfSyA
+         /9D6hmj49I0ReKt4jE1RNEZy/W8ESWGK2Fn5JptjFz2EYY3NXgipfVfhEKVV4vkf91+U
+         hAX6duAT0qwvH/d/0dEjQPLWkLs2HdPdg4LNEnVoCzDUYdL7W7Bt3RA0POES1pIdn1QZ
+         2Fzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cCTNgYAK7IFGbvLWwI1Elm6eJ4MRXAIuntOOPn+id8w=;
-        b=7hGFF2FD++YgymiXAqKOAJxY7tRCZ1Y0YB1xq2SOn91HeTagCpkCNzOaK1ErBFhDrQ
-         z9s71ve8BJpdA9dBt5c4VRNi1HHt2dL66FX9QPn6LOcqTZYu4Pfp8u60rFDxEmXHz7aB
-         GFJkhk+OSqWTenEBAaF8t1paQkNs93gK9ew7m1MOCn7wbdGae42UBCWoqjHowZZ6CnsE
-         QdvL22jGtNeXpJluYn8cBcMVl6HkygIrXkrQrckoWT45opibEkMxomSE39flMZ7ZVUc5
-         TXvRIcFhrlPIDwTzphDnSOMvInF7VHEXEQuX8FfSJCE5m0YxWsyfm7SgHvI7xoTkjuge
-         zQkA==
-X-Gm-Message-State: AO0yUKVdyLQeyWnz/La9PloZlGzRM/D2Dl0p6PdX42hVONrbAv/ODUrl
-        pAn+20l7lYE78Qk2fVlJexwjEQV4pbxy26RJD+0=
-X-Google-Smtp-Source: AK7set8xWOejXti4Yw8krEBe/H4+cYD+XpLCtiGu+z5UPxwgsMcaRlQR/nK6CnxHQSZWsZwxqZ8CePeZVURWeI/fgXA=
-X-Received: by 2002:a17:907:a04b:b0:8a5:c8bd:4ac4 with SMTP id
- gz11-20020a170907a04b00b008a5c8bd4ac4mr89067ejc.15.1677535602725; Mon, 27 Feb
- 2023 14:06:42 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+wyCkH7EB9sNMh5yZnsOs8dEjM1084lAnLUlPc7QNpg=;
+        b=PJPlgAgyrVD/J2P2qZ14T4NcGcgJ6TCx80L4RL/8R0xEkxCqdCd5Fn1Ux9BI0jGIQs
+         lEQkGdGVP0tA6VndvO8aVBAuF3ez74R9oyylyLAmrDM3GWCzngIs1tTnrYRp8dJhK6/D
+         XaMYXI7gqvL5zM0omdTkbEODbEmNdGgLNzFAiWU7W9tDynmM4oIHK0kw4v4XYDFHTfes
+         g0gEtvnWdHD+bwvSEowsSQTHwp9YkLR1S0aB9gnVhcV/NwwsSZbVffaBsuEcCv/SBL3w
+         A9x/iHSUvfgH+sEXT2UrTk0uj4zMaQ8z6ZAYkrCwoZS32srIl8T3bNnlGgBFKZUHM8G2
+         wqbg==
+X-Gm-Message-State: AO0yUKUM5BuJmXPf6gcZxYQpEt3aijSjUkfSVy+/iud6sEz2paDgeuul
+        wCxKg1QZHW4v9x5KAJzE3ZwoHA==
+X-Google-Smtp-Source: AK7set9QZACxOMbwmNBljZhZqAfbfrQlloumry5onLd1CB5VUq62r/rTg5saj+iRv9lJa0UwxcnYDA==
+X-Received: by 2002:a05:600c:3555:b0:3ea:f6c4:3060 with SMTP id i21-20020a05600c355500b003eaf6c43060mr471039wmq.18.1677535658607;
+        Mon, 27 Feb 2023 14:07:38 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id c18-20020adfed92000000b002c54c9bd71fsm8303442wro.93.2023.02.27.14.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 14:07:37 -0800 (PST)
+Date:   Mon, 27 Feb 2023 22:07:35 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, vincent.guittot@linaro.org,
+        mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        zhaoyang.huang@unisoc.com
+Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
+ when yield
+Message-ID: <20230227220735.3kaytmtt53uoegq7@airbuntu>
+References: <20230222080314.2146-1-xuewen.yan@unisoc.com>
+ <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230221025347.389047-1-imagedong@tencent.com> <20230221025347.389047-2-imagedong@tencent.com>
-In-Reply-To: <20230221025347.389047-2-imagedong@tencent.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 27 Feb 2023 14:06:30 -0800
-Message-ID: <CAEf4BzZPYWKqquK8-v2nTVfy3991DsZBBMybXYx4Rprjid78_A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] libbpf: add support to set kprobe/uprobe
- attach mode
-To:     menglong8.dong@gmail.com
-Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        benbjiang@tencent.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +76,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 6:54=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> By default, libbpf will attach the kprobe/uprobe eBPF program in the
-> latest mode that supported by kernel. In this patch, we add the support
-> to let users manually attach kprobe/uprobe in legacy or perf mode.
->
-> There are 3 mode that supported by the kernel to attach kprobe/uprobe:
->
->   LEGACY: create perf event in legacy way and don't use bpf_link
->   PERF: create perf event with perf_event_open() and don't use bpf_link
->   LINK: create perf event with perf_event_open() and use bpf_link
->
-> Users now can manually choose the mode with
-> bpf_program__attach_uprobe_opts()/bpf_program__attach_kprobe_opts().
->
-> Link: https://lore.kernel.org/bpf/20230113093427.1666466-1-imagedong@tenc=
-ent.com/
-> Reviewed-by: Biao Jiang <benbjiang@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
-> v2:
-> - rename no_link to force_ioctl_attach
-> - rename probe_mode to probe_attach_mode
-> - add more doc for probe_attach_mode
-> - return -ENOTSUP when necessray in bpf_program__attach_uprobe_opts and
->   bpf_program__attach_kprobe_opts
-> ---
->  tools/lib/bpf/libbpf.c | 42 +++++++++++++++++++++++++++++++++++++++++-
->  tools/lib/bpf/libbpf.h | 31 ++++++++++++++++++++++++++++---
->  2 files changed, 69 insertions(+), 4 deletions(-)
->
+On 02/27/23 16:40, Peter Zijlstra wrote:
+> On Wed, Feb 22, 2023 at 04:03:14PM +0800, Xuewen Yan wrote:
+> > When task call the sched_yield, cfs would set the cfs's skip buddy.
+> > If there is no other task call the sched_yield syscall, the task would
+> > always be skiped when there are tasks in rq. 
+> 
+> So you have two tasks A) which does sched_yield() and becomes ->skip,
+> and B) which is while(1). And you're saying that once A does it's thing,
+> B runs forever and starves A?
 
-[...]
+I read it differently.
 
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 2efd80f6f7b9..ef8f68da42f9 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -451,8 +451,11 @@ struct bpf_perf_event_opts {
->         size_t sz;
->         /* custom user-provided value fetchable through bpf_get_attach_co=
-okie() */
->         __u64 bpf_cookie;
-> +       /* don't use bpf_link when attach eBPF program */
+I understood that there are multiple tasks.
 
-please also use "BPF" consistently, libbpf doesn't use "eBPF"
-terminology, except literally 3 very old references (which we should
-update)
+If Task A becomes ->skip; then it seems other tasks will continue to be picked
+instead. Until another task B calls sched_yield() and become ->skip, then Task
+A is picked but with wrong vruntime causing it to run for multiple ticks (my
+interpretation of 'always run' below).
 
-> +       bool force_ioctl_attach;
-> +       size_t :0;
->  };
-> -#define bpf_perf_event_opts__last_field bpf_cookie
-> +#define bpf_perf_event_opts__last_field force_ioctl_attach
->
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
+There are no while(1) task running IIUC.
 
-[...]
+> 
+> > As a result, the task's
+> > vruntime would not be updated for long time, and the cfs's min_vruntime
+> > is almost not updated.
+> 
+> But the condition in pick_next_entity() should ensure that we still pick
+> ->skip when it becomes too old. Specifically, when it gets more than
+> wakeup_gran() behind.
+
+I am not sure I can see it either. Maybe __pick_first_entity() doesn't return
+the skipped one, or for some reason vdiff for second is almost always
+< wakeup_gran()?
+
+> 
+> > When this scenario happens, when the yield task had wait for a long time,
+> > and other tasks run a long time, once there is other task call the sched_yield,
+> > the cfs's skip_buddy is covered, at this time, the first task can run normally,
+> > but the task's vruntime is small, as a result, the task would always run,
+> > because other task's vruntime is big. This would lead to other tasks can not
+> > run for a long time.
+
+The error seems that when Task A finally runs - it consumes more than its fair
+bit of sched_slice() as it looks it was starved.
+
+I think the question is why it was starved? Can you shed some light Xuewen?
+
+My attempt to help to clarify :) I have read this just like you.
+
+FWIW I have seen a report of something similar, but I didn't managed to
+reproduce and debug (mostly due to ENOBANDWIDTH); and not sure if the details
+are similar to what Xuewen is seeing. But there was a task starving for
+multiple ticks - RUNNABLE but never RUNNING in spite of other tasks getting
+scheduled in instead multiple times. ie: there was a task RUNNING for most of
+the time, and I could see it preempted by other tasks multiple time, but not by
+the starving RUNNABLE task that is hung on the rq. It seems to be vruntime
+related too but speculating here.
+
+
+Cheers
+
+--
+Qais Yousef
+
+> 
+> I'm not seeing how this could happen, it should never get behind that
+> far.
+> 
+> Additionally, check_preempt_tick() will explicitly clear the buddies
+> when it finds the current task has consumed it's ideal slice.
+> 
+> I really cannot see how your scenario can happen.
+> 
+> > In order to mitigate this, update the yield_task's vruntime to be cfs's max vruntime.
+> > This way, the cfs's min vruntime can be updated as the process running.
+> 
+> This is a bad solution, SCHED_IDLE tasks have very low weight and can be
+> shot really far to the right, leading to other trouble.
+> 
