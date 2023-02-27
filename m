@@ -2,333 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D506A4DA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4296A4DA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 22:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjB0V5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 16:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S229739AbjB0V6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 16:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjB0V5v (ORCPT
+        with ESMTP id S229608AbjB0V6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:57:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2188420063;
-        Mon, 27 Feb 2023 13:57:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5165DCE1182;
-        Mon, 27 Feb 2023 21:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366ECC433D2;
-        Mon, 27 Feb 2023 21:57:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677535064;
-        bh=gOZxyiOZX3SaWmtE+RUusjiqzefuBVgJYXvGUSQ2Lmw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FUl4t9WDiSoA+bEuZroFpAzC/RCae6GMAKh5A9zHdpgv9+J4sCxErsg/ds06xIKP3
-         TFVooIlRIsT7FheyG13mWmWzZemCg532D9zS6+XmRD4lySvc7WyEsfvaFi8JRJIg0B
-         BFwMKXwC+VNThoHY7IA7/Zr/Z20JZszIqKTyJc+yGtLn2HHT3cd5OQQMiDRSfDlz4P
-         SKVyn+hOU0GwajMHQAmwk+jf+BVJDqcZHcbT81xiDa3XuVEx9JnSaRnCABz0A3Uya0
-         higONvgmPx7IUlCfI0Ksth19j7WmMHMeHz19sj0dNiX6hXOJPOIDm0wJydJkNVBxUD
-         tsSxd5ZHYLe3Q==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Subject: [PULL] Networking for v6.3-rc1
-Date:   Mon, 27 Feb 2023 13:57:43 -0800
-Message-Id: <20230227215743.747911-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Mon, 27 Feb 2023 16:58:20 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA49F7281;
+        Mon, 27 Feb 2023 13:58:13 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so177292pjn.1;
+        Mon, 27 Feb 2023 13:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFgPcL8KVOlQG1KgcGofHxwMq+phFfsr6crnqyLQQyA=;
+        b=g8Re+oMCNJ/TgBGdp4BiEDryk3mjGerCWemdRaEoiJOvYS/7tTMMjKaNmt925pHZGX
+         zHQvPq3MC9TFeHhfHtCvemiVNG4K18uJTdW1SxiFkYhHf0uknjbAEzFDI8pRJML8muM+
+         dWNCzX8NK4bhsHCyXHrZbYWrfXz/iXNYaQykMQi6hYmYe+b9ftph4/NEyfGTt3F4HLNH
+         pljkPD+Oo7hh5G7hf9GDqTC093F8KG+l1BaLObNIdJOfeZmG31s2JCFhtssATRdq/ZCD
+         mS1jYuixxjxdUiwgIGPIjtSxI6uq4H8XRKxamZwEqJt+okxkQ58UzgF055Nhe6WJmwk6
+         TirQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wFgPcL8KVOlQG1KgcGofHxwMq+phFfsr6crnqyLQQyA=;
+        b=f960oaidUS4Jy3u8+WmbAKH1Yekf/6TP/Qxcaj9Dp6JDlKTBhkv/wC1w0T/++f7l6o
+         dc0re45z/Pd2A48t0veQfH8JqPZx/MCu6DkFeVyBS4q7TD0a0PVbwxV/0kzkCveQ7ycI
+         s7krSsNbCf73LxrOdVpiXhku08eLK2YLaKXCwrtJVsP9Ps81doUMrd6fI8T6CCSkd/UF
+         40mjfCWSIZRuaPO9OWjmR9GifkYap4/L9bcYpYzEL6bjqBGO7sCOHXVJlWhuQ1vv8rCA
+         LgVW+26Z17mPSmTSpN7MNyUKo3bhT7qpUMYGvK+4lUbgz5i/R6dauEA0Z8Tql6BWppMy
+         iduA==
+X-Gm-Message-State: AO0yUKXKBWI6HWTO2TXnIgWFhHAZ93DRYJv0A0M+3Gh6bfpSBFW5ASBd
+        IWCl37zP2kNhsOPNVRl6d4CnISZ/HlI=
+X-Google-Smtp-Source: AK7set+5Omb4ClWPydT4jEk78/I+pwk3G4znG+tewbGh3pNAOo0tskbURqtW8DovI2zb92q2jXMcQA==
+X-Received: by 2002:a17:902:c1d2:b0:19c:e484:b45 with SMTP id c18-20020a170902c1d200b0019ce4840b45mr417927plc.27.1677535093066;
+        Mon, 27 Feb 2023 13:58:13 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id b21-20020a170902d31500b0019a8e559345sm5042507plc.167.2023.02.27.13.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 13:58:12 -0800 (PST)
+Date:   Mon, 27 Feb 2023 13:58:10 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v11 033/113] KVM: x86/mmu: Track shadow MMIO value on a
+ per-VM basis
+Message-ID: <20230227215810.GN4175971@ls.amr.corp.intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <e3a95546186bc010c11da4152b8980a86702b6a9.1673539699.git.isaku.yamahata@intel.com>
+ <886ee34123be83bbe565c5d02e5b0d4c000ef5a6.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <886ee34123be83bbe565c5d02e5b0d4c000ef5a6.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
-
-The notable fixes here are the EEE fix which restores boot for
-many embedded platforms (real and QEMU); WiFi warning suppression
-and the ICE Kconfig cleanup.
-
-The following changes since commit 5b7c4cabbb65f5c469464da6c5f614cbd7f730f2:
-
-  Merge tag 'net-next-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2023-02-21 18:24:12 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc1
-
-for you to fetch changes up to 580f98cc33a260bb8c6a39ae2921b29586b84fdf:
-
-  tcp: tcp_check_req() can be called from process context (2023-02-27 11:59:29 -0800)
-
-----------------------------------------------------------------
-Including fixes from wireless and netfilter.
-
-Current release - regressions:
-
- - phy: multiple fixes for EEE rework
-
- - wifi: wext: warn about usage only once
-
- - wifi: ath11k: allow system suspend to survive ath11k
-
-Current release - new code bugs:
-
- - mlx5: Fix memory leak in IPsec RoCE creation
-
- - ibmvnic: assign XPS map to correct queue index
-
-Previous releases - regressions:
-
- - netfilter: ip6t_rpfilter: Fix regression with VRF interfaces
-
- - netfilter: ctnetlink: make event listener tracking global
-
- - nf_tables: allow to fetch set elements when table has an owner
-
- - mlx5:
-   - fix skb leak while fifo resync and push
-   - fix possible ptp queue fifo use-after-free
-
-Previous releases - always broken:
-
- - sched: fix action bind logic
-
- - ptp: vclock: use mutex to fix "sleep on atomic" bug if driver
-   also uses a mutex
-
- - netfilter: conntrack: fix rmmod double-free race
-
- - netfilter: xt_length: use skb len to match in length_mt6,
-   avoid issues with BIG TCP
-
-Misc:
-
- - ice: remove unnecessary CONFIG_ICE_GNSS
-
- - mlx5e: remove hairpin write debugfs files
-
- - sched: act_api: move TCA_EXT_WARN_MSG to the correct hierarchy
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-David S. Miller (3):
-      Merge tag 'mlx5-fixes-2023-02-24' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
-      Merge branch 'net-sched-action-bind'
-      Merge branch 'net-ocelot-switch-regressions'
-
-Deepak R Varma (1):
-      octeontx2-pf: Use correct struct reference in test condition
-
-Eric Dumazet (2):
-      net: fix __dev_kfree_skb_any() vs drop monitor
-      tcp: tcp_check_req() can be called from process context
-
-Fedor Pchelkin (1):
-      nfc: fix memory leak of se_io context in nfc_genl_se_io
-
-Florian Westphal (3):
-      netfilter: conntrack: fix rmmod double-free race
-      netfilter: ebtables: fix table blob use-after-free
-      netfilter: ctnetlink: make event listener tracking global
-
-Gal Pressman (1):
-      net/mlx5e: Remove hairpin write debugfs files
-
-Geetha sowjanya (1):
-      octeontx2-pf: Recalculate UDP checksum for ptp 1-step sync packet
-
-Hangyu Hua (1):
-      netfilter: ctnetlink: fix possible refcount leak in ctnetlink_create_conntrack()
-
-Jacob Keller (1):
-      ice: remove unnecessary CONFIG_ICE_GNSS
-
-Jakub Kicinski (6):
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-      tools: ynl-gen: fix single attribute structs with attr 0 only
-      tools: ynl-gen: re-raise the exception instead of printing
-      tools: net: add __pycache__ to gitignore
-      Merge branch 'tools-ynl-gen-fix-glitches-found-by-chuck'
-      Merge tag 'wireless-2023-02-27' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
-
-Johannes Berg (1):
-      wifi: wext: warn about usage only once
-
-Len Brown (1):
-      wifi: ath11k: allow system suspend to survive ath11k
-
-Lorenzo Bianconi (1):
-      wifi: mt76: usb: fix use-after-free in mt76u_free_rx_queue
-
-Lu Wei (2):
-      ipv6: Add lwtunnel encap size of all siblings in nexthop calculation
-      selftests: fib_tests: Add test cases for IPv4/IPv6 in route notify
-
-Maher Sanalla (1):
-      net/mlx5: ECPF, wait for VF pages only after disabling host PFs
-
-Maor Dickman (1):
-      net/mlx5: Geneve, Fix handling of Geneve object id as error code
-
-Michal Schmidt (1):
-      qede: avoid uninitialized entries in coal_entry array
-
-Nathan Chancellor (1):
-      net/sched: cls_api: Move call to tcf_exts_miss_cookie_base_destroy()
-
-Nick Child (1):
-      ibmvnic: Assign XPS map to correct queue index
-
-Oleksij Rempel (5):
-      net: phy: c45: use "supported_eee" instead of supported for access validation
-      net: phy: c45: add genphy_c45_an_config_eee_aneg() function
-      net: phy: do not force EEE support
-      net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
-      net: phy: c45: fix network interface initialization failures on xtensa, arm:cubieboard
-
-Pablo Neira Ayuso (1):
-      netfilter: nf_tables: allow to fetch set elements when table has an owner
-
-Paolo Abeni (1):
-      Merge branch 'net-phy-eee-fixes'
-
-Patrisious Haddad (1):
-      net/mlx5: Fix memory leak in IPsec RoCE creation
-
-Pavel Tikhomirov (1):
-      netfilter: x_tables: fix percpu counter block leak on error path when creating new netns
-
-Pedro Tammela (4):
-      net/sched: act_pedit: fix action bind logic
-      net/sched: act_mpls: fix action bind logic
-      net/sched: act_sample: fix action bind logic
-      net/sched: act_api: move TCA_EXT_WARN_MSG to the correct hierarchy
-
-Phil Sutter (1):
-      netfilter: ip6t_rpfilter: Fix regression with VRF interfaces
-
-Roi Dayan (1):
-      net/mlx5e: Verify flow_source cap before using it
-
-Russell King (Oracle) (1):
-      net: dsa: ocelot_ext: remove unnecessary phylink.h include
-
-Sean Anderson (1):
-      net: sunhme: Fix region request
-
-Tariq Toukan (1):
-      netdev-genl: fix repeated typo oflloading -> offloading
-
-Tom Rix (1):
-      xen-netback: remove unused variables pending_idx and index
-
-Vadim Fedorenko (2):
-      mlx5: fix skb leak while fifo resync and push
-      mlx5: fix possible ptp queue fifo use-after-free
-
-Vladimir Oltean (3):
-      net: dsa: seville: ignore mscc-miim read errors from Lynx PCS
-      net: dsa: felix: fix internal MDIO controller resource length
-      net: mscc: ocelot: fix duplicate driver name error
-
-Xin Long (2):
-      netfilter: xt_length: use skb len to match in length_mt6
-      sctp: add a refcnt in sctp_stream_priorities to avoid a nested loop
-
-Yang Li (1):
-      net/mlx5: Remove NULL check before dev_{put, hold}
-
-Yang Yingliang (1):
-      net/mlx5e: TC, fix return value check in mlx5e_tc_act_stats_create()
-
-nick black (1):
-      docs: net: fix inaccuracies in msg_zerocopy.rst
-
-Íñigo Huguet (1):
-      ptp: vclock: use mutex to fix "sleep on atomic" bug
-
- Documentation/netlink/specs/netdev.yaml            |  2 +-
- Documentation/networking/msg_zerocopy.rst          |  6 +-
- drivers/mfd/ocelot-core.c                          |  2 +-
- drivers/net/dsa/ocelot/felix_vsc9959.c             |  2 +-
- drivers/net/dsa/ocelot/ocelot_ext.c                |  3 +-
- drivers/net/dsa/ocelot/seville_vsc9953.c           |  4 +-
- drivers/net/ethernet/ibm/ibmvnic.c                 |  4 +-
- drivers/net/ethernet/intel/Kconfig                 |  4 +-
- drivers/net/ethernet/intel/ice/Makefile            |  2 +-
- drivers/net/ethernet/intel/ice/ice_gnss.h          |  4 +-
- .../ethernet/marvell/octeontx2/nic/otx2_flows.c    |  2 +-
- .../net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 76 ++++++++++++-----
- drivers/net/ethernet/mellanox/mlx5/core/ecpf.c     |  4 +
- drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c   | 25 +++++-
- .../net/ethernet/mellanox/mlx5/core/en/rep/tc.c    |  3 +-
- .../ethernet/mellanox/mlx5/core/en/tc/act_stats.c  |  2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h  |  4 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_stats.c |  1 +
- drivers/net/ethernet/mellanox/mlx5/core/en_stats.h |  1 +
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    | 59 -------------
- .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |  3 +-
- .../net/ethernet/mellanox/mlx5/core/lib/geneve.c   |  1 +
- .../mellanox/mlx5/core/lib/ipsec_fs_roce.c         | 13 +--
- drivers/net/ethernet/mellanox/mlx5/core/sriov.c    |  4 +
- drivers/net/ethernet/qlogic/qede/qede_main.c       | 21 ++---
- drivers/net/ethernet/sun/sunhme.c                  |  6 +-
- drivers/net/mdio/mdio-mscc-miim.c                  |  9 +-
- drivers/net/phy/phy-c45.c                          | 56 ++++++++++---
- drivers/net/phy/phy_device.c                       | 21 ++++-
- drivers/net/wireless/ath/ath11k/pci.c              |  2 +-
- drivers/net/wireless/mediatek/mt76/usb.c           |  1 +
- drivers/net/xen-netback/netback.c                  |  5 --
- drivers/nfc/st-nci/se.c                            |  6 ++
- drivers/nfc/st21nfca/se.c                          |  6 ++
- drivers/ptp/ptp_private.h                          |  2 +-
- drivers/ptp/ptp_vclock.c                           | 44 +++++-----
- include/linux/mdio/mdio-mscc-miim.h                |  2 +-
- include/linux/netfilter.h                          |  5 ++
- include/linux/phy.h                                |  6 ++
- include/net/netns/conntrack.h                      |  1 -
- include/net/sctp/structs.h                         |  1 +
- include/uapi/linux/netdev.h                        |  2 +-
- net/bridge/netfilter/ebtables.c                    |  2 +-
- net/core/dev.c                                     |  4 +-
- net/ipv4/netfilter/arp_tables.c                    |  4 +
- net/ipv4/netfilter/ip_tables.c                     |  7 +-
- net/ipv4/tcp_minisocks.c                           |  7 +-
- net/ipv6/netfilter/ip6_tables.c                    |  7 +-
- net/ipv6/netfilter/ip6t_rpfilter.c                 |  4 +-
- net/ipv6/route.c                                   | 11 +--
- net/netfilter/core.c                               |  3 +
- net/netfilter/nf_conntrack_bpf.c                   |  1 -
- net/netfilter/nf_conntrack_core.c                  | 25 +++---
- net/netfilter/nf_conntrack_ecache.c                |  2 +-
- net/netfilter/nf_conntrack_netlink.c               |  8 +-
- net/netfilter/nf_tables_api.c                      |  2 +-
- net/netfilter/nfnetlink.c                          |  9 +-
- net/netfilter/xt_length.c                          |  3 +-
- net/nfc/netlink.c                                  |  4 +
- net/sched/act_api.c                                |  4 +-
- net/sched/act_mpls.c                               | 66 ++++++++-------
- net/sched/act_pedit.c                              | 58 +++++++------
- net/sched/act_sample.c                             | 11 ++-
- net/sched/cls_api.c                                |  2 +-
- net/sctp/stream_sched_prio.c                       | 52 +++++-------
- net/wireless/wext-core.c                           |  4 +-
- tools/include/uapi/linux/netdev.h                  |  2 +-
- tools/net/ynl/lib/.gitignore                       |  1 +
- tools/net/ynl/lib/nlspec.py                        |  4 +-
- tools/net/ynl/ynl-gen-c.py                         |  2 +-
- tools/testing/selftests/net/fib_tests.sh           | 96 +++++++++++++++++++++-
- tools/testing/selftests/netfilter/rpath.sh         | 32 ++++++--
- 72 files changed, 546 insertions(+), 318 deletions(-)
- create mode 100644 tools/net/ynl/lib/.gitignore
+On Mon, Jan 16, 2023 at 11:16:04AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
+
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index 6111e3e9266d..dffacb7eb15a 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -19,6 +19,14 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
+> >  {
+> >  	struct workqueue_struct *wq;
+> >  
+> > +	/*
+> > +	 * TDs require mmio_caching to clear suppress_ve bit of SPTE for GPA
+> > +	 * of MMIO so that TD can convert #VE triggered by MMIO into
+> > +	 * TDG.VP.VMCALL<MMIO>.
+> > +	 */
+> > +	if (kvm->arch.vm_type == KVM_X86_TDX_VM && !enable_mmio_caching)
+> > +		return -EOPNOTSUPP;
+> 
+> SEV-ES does the check in hardware_setup:
+> 
+> void __init sev_hardware_setup(void)
+> {
+> 	...
+> 	/*
+>          * SEV-ES requires MMIO caching as KVM doesn't have access to the guest
+>          * instruction stream, i.e. can't emulate in response to a #NPF and
+>          * instead relies on #NPF(RSVD) being reflected into the guest as #VC
+>          * (the guest can then do a #VMGEXIT to request MMIO emulation).
+>          */
+>         if (!enable_mmio_caching)
+>                 goto out;
+> 
+> 	...
+> }
+> 
+> TDX should be done in the same way.
+> 
+> And IMO this chunk really doesn't belong to this patch -- I interpret this patch
+> as a "infrastructure patch to track shadow MMIO value on per-VM basis" (which
+> even should have no functional change IMHO), but this chunk is clearly doing
+> more than that.
+
+It's cleaner to do in hardware_setup().  So I moved the logic into
+hardware_setup() and an independent patch.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
