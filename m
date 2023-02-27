@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA7E6A417F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DF66A418F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 13:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjB0MMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 07:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S229817AbjB0MSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 07:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjB0MMj (ORCPT
+        with ESMTP id S229814AbjB0MSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:12:39 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2130.outbound.protection.outlook.com [40.107.223.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07852007E;
-        Mon, 27 Feb 2023 04:12:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D5ICHGD8mmoJ+gY2XLeY5eNNa3MOOt6WbNRIsvCY78GuYuagGawSrOX4EmD/Z1lSyrE/JJoj52eXZS0eH3FLbGRnUCmFQlBtFJGcNau9G8e8WwVoACmYSaghO+ShEUKj6+aBU3xspS4XScstoKvvuXL0tMDzttRMbvxecg4jaP9t8JC/dvodcgwYafFJcnmtH0z5LWzVgMUtOpuzK6VHT2xwWHd0tX0cLavnN7myXYgLXV6+gaqJKnGj3bKyCWGvWiZ3Mx6/psepeFm6pMdqoiXq853TVMAmGahRKYkO6AemieRa3amNEU0KOW8HwMaGwi8WWXMXhYL8dQzz872/Xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zTFTYBB0RMm9xHiF9mhXck9E/an1XmTasB3qJ4T47U4=;
- b=ZFMiqxaUOihWzWKnHLoGXpUfqZhOHm7pOD+LcQsEE5jOGo1Ki1U8RimWkdC4OCLwfTNc3P1zbuTKmYS/r34q3NMC4miCF+AChmW6bazHIIxz2PYZdB7sH/y8KwVLDgcbmWSTirx7MFaBOnt7Lpk4aHTnM1DJ8/lCTult5BQ0SK21Lfbk2rIhydRHxKjGHyZaabE+Toe/EeFd273XmW4RzrF4jYT5pWB/lr+vLD1d95vy1gPisxmLnt0Sj+E/tsaYSEDS607pS5aal7UF+OxfAL9jJGPzTypGrJ3ykkLdAlrWZf88KH0+owPY1L9tiexgT8sahZIWoaD7/bbORJO8PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 27 Feb 2023 07:18:06 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F95B443
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:18:05 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s17so3414633pgv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 04:18:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zTFTYBB0RMm9xHiF9mhXck9E/an1XmTasB3qJ4T47U4=;
- b=f+i1tcjfRA0W+c6G/C74CZ4c6/vkxqAea12lkZtgnn38/ltoF3HmWGRokBLTZTwaQux/yLfjEX7vHxPLE0SEPqbXoH771u1xCtsaR1FRRbNUSrMGmRPwMPVmt9AKOCVIBz4vehTUvtAAKk2C1g7RetbmHAgasbTIdvYlg/TASL8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW4PR13MB5601.namprd13.prod.outlook.com (2603:10b6:303:180::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.28; Mon, 27 Feb
- 2023 12:12:20 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6134.029; Mon, 27 Feb 2023
- 12:12:20 +0000
-Date:   Mon, 27 Feb 2023 13:12:14 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     void0red <void0red@gmail.com>
-Cc:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3] nfc: fdp: add null check of devm_kmalloc_array in
- fdp_nci_i2c_read_device_properties
-Message-ID: <Y/yeHqTwYrylRf6l@corigine.com>
-References: <35ddd789-4dd9-3b87-3128-268905ec9a13@linaro.org>
- <20230227093037.907654-1-void0red@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227093037.907654-1-void0red@gmail.com>
-X-ClientProxiedBy: AS4P189CA0010.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d7::14) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8O3Wbk4PyzeJv8vEVqhgTB6nRT41+PZyv3EpdVvZLss=;
+        b=kLBr+8AAjfUN+W39IHft0s19JEo3QXQvA4IJHevtsTRa6ZWK6ueOUV11+5pyKRXV0Z
+         87V1gl2zCTQjCKRVo6peImHHVA0SnxHk8FBWi4FMPsK0IlmBTUT6WARMogA3vTBxDV+y
+         e4gD477Z/23mreZ44MJtExd040W89lvvtvqn79KApu/reuqUz4cYnb+onBTUxdlDsesO
+         mCo2T4HnwBIVcsKdgZpfKqXP53Y5dUUDNb/HcnGRiMY85y7D3Y+HQQ9B+AwW8o7N/xmQ
+         3+OQwcI8Bkn8lvDN3/9VJyaooFFguSDsDIJj0a0Bp9PBJtuY7oHMo+RusdQv4VsRvCvl
+         MD/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8O3Wbk4PyzeJv8vEVqhgTB6nRT41+PZyv3EpdVvZLss=;
+        b=Ki1Z0ClzQWvxe2JsbMhPwMKhI3eWuX1ABe0tDh9jCnaYkeayVAORltEswcpbQYly9W
+         tZ8B20v//n1vLWhPVfara0C0FVp3ngh4xuAU4XPa7hyuABWnlAdWKKQaFeYItgtmYlFh
+         hnb6Inf9ckpigJKp8dKSNDRcDJ8z3oSo3ncESQk/XIn0YzFEMguGul5I2ZohO5Yg6NOt
+         LAWvX2yisNPZqHAqdVOBeapUlceZbgohnvwAaoDu/6dQbeqT4DTbUrC7+7ddYKxXUwrC
+         Lue4s+yQTWpFMNfV3vS7jXNfXzS9X7KHHoUsWVt5/x+o2Yz9nWFF0sNilegUNyiEzTdS
+         9XMg==
+X-Gm-Message-State: AO0yUKWr6WskzKFcGw/Q6hOxlYyNwdjW5cHHHREDe1TAI1FRxQ+bvcfN
+        h1P0C0eMloB/P3ebQZbCwarvlDiVs6RN6N3R9tNT9w==
+X-Google-Smtp-Source: AK7set8wIvfOUTxpgUk1eqPvVSg2OskvjVdzsJ3NgROYebIQXNVp3jUycVc1FS2zPrMjnKbVJwVF3adhec31up6OZDw=
+X-Received: by 2002:a62:864d:0:b0:5e5:7376:ea4d with SMTP id
+ x74-20020a62864d000000b005e57376ea4dmr3475333pfd.1.1677500284525; Mon, 27 Feb
+ 2023 04:18:04 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW4PR13MB5601:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5461b097-0e8a-4b3b-e21d-08db18bbe067
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r2KCBTjBDqq+2AVwyhN004Nw8brrA/Nwib2VKTLtvbxOy0qkHiiHvVdA/SlH4mhSglRENeOxDX0j4ScYrBoma7NiFmuC5eS6nOLbohj3RCpciTxD5U5q/aK7Pv/Cr8I2j6aGkjw5V1ol9fymCsuNppPmPoIpdH6zHOC0xs1VZl2ahqov8PfefkrAVF6INSeNfoOEFIQLGWC/v5ZOokFDJNn++ErZyrPTmH81n/IxusoYZWo1I4+BwmOpipGfXzw9/rfxs/uZ5dL95j69tjy//ZqLYcgQP+jJgqV3FkwOU0Q7rIiVkrLdXCXMQ8DGQ8wvHBxEoazj5XiJvs9mpV17NrjtJ5mpkoM7PIDH1KBCpHzs5nUd8MWytF+fHUuc5dpPinuQVaqm+KOOkyQSp1kkORI7IOBPV+U3MJ76iJZBOC8QAlnKahCgZSwt9WJvgmp+ywR1oOvLEpYgulMfru2mJRgwUA7sZ8VUYGxs8+JVLENbJz3IAYwzB6DDik1c+aLKpcGShnR4Ib2KTNIT8af0TxhTM/ETXSP8JU/8IE5iHgASvFhNDyN/Hoj1WXUcj8Lwrm+HXfL4ZwCoWN+gdNfZx8ZqTV0p2iekaiLsN9f55l5kMvFdRgMUhCNd1VwXrEx6fNL+1p8eTsiaQ4XbtwLbwJFFLWaxXfxAhuopeZwsKHOW62bSrBKM85bOhMIhOrVNuHBbEbIORwLZcRmTo31oMQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(376002)(346002)(39840400004)(396003)(451199018)(38100700002)(2906002)(4744005)(44832011)(5660300002)(8936002)(66946007)(2616005)(966005)(316002)(86362001)(6486002)(66476007)(66556008)(6512007)(6506007)(4326008)(6916009)(186003)(8676002)(478600001)(36756003)(6666004)(41300700001)(70780200001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hk+bM6LhNQLYgt8ZmxtNX+Vm3MQUh5PeT4e14jUvfzr7LBc+HFKEE9diZ6yv?=
- =?us-ascii?Q?w2VmIKeTzUqX7iCPiJxh3ycD2GVlpSznXl4NGAiZFBpDn7weG+WPv9zyrjSz?=
- =?us-ascii?Q?Dfsv+zEPppf/w8eH1EBx3I7+MmKLGiVQ1WOvPMEmovYvIdU0eSCDig9gb8GV?=
- =?us-ascii?Q?YIYvPr2YVUs5xloUh52P8ta74yAbKkFJlOcHXvn076ExGGAcLDtEHExJekrV?=
- =?us-ascii?Q?u18K2flUSmL4n1vrStYvqV30PHd6N+cu+SQWEKyC0LUh63gmXFtPmNbi8Arh?=
- =?us-ascii?Q?VUvOprtqh+Wh8VFD9q+HAuZ96kSULUDF9bhKybv/sXpbJ06GJgQi5AksrVDe?=
- =?us-ascii?Q?E5m0mQxOmG5SAksAQ3DfvAidWeXOnwucZz1YVPjaHaWA1rGj5NoLZrqVE6ck?=
- =?us-ascii?Q?/o9iwEF5Ib5MyKe10rW2BPzZyUbbK8MxCLbtx+1XAn0Syv30ok0FEheLL6v1?=
- =?us-ascii?Q?dcLOMV5VjQ4+VpME5qCteu6DkoHPPDNQoGygtAjR5Q/1ocNMh6cbkPot1FDP?=
- =?us-ascii?Q?uueIKcl1+zE6ZNGBNbHHBYiJ1QdRTOxM6r7B1T/1ktJJf+KH3+EllpOqY9uv?=
- =?us-ascii?Q?VdBTqq21v29ct44kKvnYr56O5xXrKP/k89Q9ZdoeM7E/nFJSGKXUmNkyDqtt?=
- =?us-ascii?Q?XjLBQxir8FVvP2bYQIsJzdJvDr2K7RLpsafYSjrp2c53KAMDH/PfimUH2tXc?=
- =?us-ascii?Q?SQW0oMzgV0kba0gqYjSpKGlzDksoIlSMytdmWOxSjTPjSkRqgoSjB3GAAGmu?=
- =?us-ascii?Q?KNvHYu3h0cYk5KrgDLF/1ZfrtC8tdEp52FBBaigQm5ecCvjCoy1+gRzJSFXt?=
- =?us-ascii?Q?OMU6ZXWwZw0IKOneGcN7tpatVRKaJdXDzOpXsceipir5QEK6CmYouFdAPTkz?=
- =?us-ascii?Q?LUXOM0ZQD/V+jb+KZCd7OPJHVpRt6z0xsvIwwnulja/xKRUT157GqtbQHIc5?=
- =?us-ascii?Q?ziEFMw3kAHB4WQaBLgxQvZaqOsg3RtS2fLlENS5TXtyaO/1LCqZ0oo5mvhFM?=
- =?us-ascii?Q?4h4WxWzFJwL+jWM27NC7FAGXudiE1SPy73SLmvrkxZA8yNpIUs4CnMizAugS?=
- =?us-ascii?Q?16P9mHU7m8a+pBrRhl1oisDoqd+j4oSD5mob66E/5b4NFDW4ekeHhwaMpiBr?=
- =?us-ascii?Q?XAzenpt+wQJcXnIbL+3QEdo7BL26hzi92WhQcvCBDincQkSxqbleUUg8FGXV?=
- =?us-ascii?Q?osP493qIpIvty4PPmoy/ylC+Z56XujjtfW6YzPwjh4RoiHemRo+4Phxa2nDE?=
- =?us-ascii?Q?GATIXFhgtZ9ztzyBJCJ/ULtIXdC8fe2Lf50bpkcgHqpUcYvJS+qnEzyJPh8E?=
- =?us-ascii?Q?m9cHFvCrp7OgcGki/KLqp9gaEuuwXbtidiqaQ6xZegN/rqsH7OrpMlM/VPlj?=
- =?us-ascii?Q?jLa1joq2tujTm0X70ID1RaKncHz0dE3xPseEDvHFZuh2leefClfY07XAQYu+?=
- =?us-ascii?Q?act9PPRd5tHLOoJD4yPIkgCglYApHCmyHTFnBBDk86HR1DqIC2L3fiVkfMeI?=
- =?us-ascii?Q?4aE9KzqqaJItR4RTQWFVUawimAkgsprdS3DYDkjwW/7RPHnQoj/rom8oKJIu?=
- =?us-ascii?Q?/DyuVnxhNpDk2nyj2cfaJB9XSKaPpV5t3lEN4W2gCPvI4zdcTc+XXVDMl3XE?=
- =?us-ascii?Q?doLp/40aRcaf/4GkN7whjC9tdWFzm6EUj2ggBMPBgCXqsOmpGCH9R/AGu3JC?=
- =?us-ascii?Q?/tPSLw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5461b097-0e8a-4b3b-e21d-08db18bbe067
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 12:12:20.7798
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ioKkerUCFZvWIY6YaaxGItT7AmjhOxq5W5LFy3k5CkOy9nd7VeeXW/t+samWyR9zHOtP/0e9CdJCfkWd6O1Jd9C7RZnfpI3R39sObnMM1iI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR13MB5601
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
+ <20230222161222.11879-2-jiaxun.yang@flygoat.com> <CAM1=_QQRmTaAnn0w6wteQ_FKgoF=vGX_okfbiUHdyUB0ZzNghQ@mail.gmail.com>
+ <7CAF04EF-FC1D-4BE1-A639-92D677525C63@flygoat.com>
+In-Reply-To: <7CAF04EF-FC1D-4BE1-A639-92D677525C63@flygoat.com>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Mon, 27 Feb 2023 13:17:53 +0100
+Message-ID: <CAM1=_QRVEG0Fw9U99V3ohMe60h0DwMzyWvV_gYdJ=SrQ1D11Fg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 05:30:37PM +0800, void0red wrote:
-> [You don't often get email from void0red@gmail.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
-> 
-> From: Kang Chen <void0red@gmail.com>
-> 
-> devm_kmalloc_array may fails, *fw_vsc_cfg might be null and cause
-> out-of-bounds write in device_property_read_u8_array later.
-> 
-> Fixes: a06347c04c13 ("NFC: Add Intel Fields Peak NFC solution driver")
-> Signed-off-by: Kang Chen <void0red@gmail.com>
+On Thu, Feb 23, 2023 at 11:29=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.c=
+om> wrote:
+> I didn=E2=80=99t see any place emitting DADDI.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Right, the JIT only uses unsigned arithmetics :)
+
+> Yes I analysed all other place, most of them are just calculating memory
+> address offsets and they should never overflow. Other two is doing additi=
+on
+> to zero to load immediate, which should be still fine.
+
+Ok.
+
+> >> --- a/arch/mips/net/bpf_jit_comp.c
+> >> +++ b/arch/mips/net/bpf_jit_comp.c
+> >> @@ -218,9 +218,17 @@ bool valid_alu_i(u8 op, s32 imm)
+> >>                /* All legal eBPF values are valid */
+> >>                return true;
+> >>        case BPF_ADD:
+> >> +#ifdef CONFIG_64BIT
+> >
+> > DADDI/DADDIU are only available on 64-bit CPUs, so the errata would
+> > only be applicable to that. No need for the CONFIG_64BIT conditional.
+>
+> It=E2=80=99s possible to compile a 32bit kernel for R4000 with CONFIG_CPU=
+_DADDI_WORKAROUNDS
+> enabled.
+
+Yes, but DADDI/DADDIU are 64-bit instructions so they would not be
+available when compiling the kernel in 32-bit mode for R4000, and
+hence the workaround would not be applicable, right? If this is
+correct, I would imagine CONFIG_CPU_DADDI_WORKAROUNDS itself to be
+conditional on CONFIG_64BIT. That way the this relationship is
+expressed once in the Kconfig file, instead of being spread out over
+multiple places in the code.
