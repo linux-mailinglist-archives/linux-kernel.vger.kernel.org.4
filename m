@@ -2,226 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F986A4655
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AEA6A466F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 16:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjB0PpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 10:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S229781AbjB0PtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 10:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjB0Po6 (ORCPT
+        with ESMTP id S229545AbjB0PtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:44:58 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2049.outbound.protection.outlook.com [40.107.96.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E1F76E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:44:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aPPvLYKT9JPiLD+coyIeqpyKIbECdoZXHORTNyqyGR/XW9rDqdnBmlTv/sDUzOuPDWvUxg5vwWrPwMHtrUyl06oomEqSEzm/NP6FYzBKy9v9FMzAGxEbmbxOV0wjs2GP+E8zMOXpL1gRk0OJ/umkhoXrKI2Dno8yBY4zLowpJeF6Bw/1ISwdi1yc2Nl3UVq23cqC3ekBgTru4FfDkMCM6xbBiocNAGVmfdg56C6kMEYQ7OYTwAW/xR6qn5YuSjqIFS9oB9IgNN6WsfMt+niNIWRRq3uea3KwsIgS2hEV1kuNNGdZlqUiPJgq3/7E15XENR66vBBQP/CnziJBUKuvgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3CIh4p3x6qEsHkFDRxtCSWeM760MarUfBf+LGXFiOVc=;
- b=RM2xplrNjB7/AHTGt6PDv3BigES4PoXWjH4Al9xgyWAPGAGab5Pt3Yk84dwhLWvu5kayQnaqwlYko+0jdi2YBT5Wmsqbc+TxIVTSCPdyo/yz3g3lRoFtyFOGUr8HJR5OSOAQLbO4zqsVjsY9OLoF1pScxwPB6DjOPTZvTRZfvTCETDdspzGYKtI/ZylzlRDbVnGWy3I+n47l81csT6GP+Cfw1vAmiptoQkGTicaFSDSp4gqJZ2JyWGIaqFc1bjll5EOBk3Vr8qetYvQvDMC8GjHOTRdd59uLz3jzngIlI4w2TkzXl3CQtxP77XypAGpUEGzBn3mvCzgL9u4Xdq6YEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3CIh4p3x6qEsHkFDRxtCSWeM760MarUfBf+LGXFiOVc=;
- b=5DLiZKJOVGkGw8ReZ1emh/T4T9LrTt7m67M5WQglWOXTkVu6sE8D7el8v6PsmEi99QFgRzm6mTWtIaSURZCWVEa+4pHyg7tMkJ357BCSYqZ6Dguu2Jfj3QA08pmw0JLxRT2z3iiXxn55sdDYEqhhSTyMcdxH958AsBKVDha5mAA=
-Received: from BN7PR06CA0047.namprd06.prod.outlook.com (2603:10b6:408:34::24)
- by DS0PR12MB7606.namprd12.prod.outlook.com (2603:10b6:8:13c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.28; Mon, 27 Feb
- 2023 15:44:34 +0000
-Received: from BN8NAM11FT107.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:34:cafe::ed) by BN7PR06CA0047.outlook.office365.com
- (2603:10b6:408:34::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
- Transport; Mon, 27 Feb 2023 15:44:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT107.mail.protection.outlook.com (10.13.176.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.16 via Frontend Transport; Mon, 27 Feb 2023 15:44:34 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
- 2023 09:44:33 -0600
-Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Mon, 27 Feb 2023 09:44:29 -0600
-From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-To:     <vkoul@kernel.org>
-CC:     <alsa-devel@alsa-project.org>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <Mario.Limonciello@amd.com>, <amadeuszx.slawinski@linux.intel.com>,
-        <Mastan.Katragadda@amd.com>, <Arungopal.kondaveeti@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH V4 8/8] soundwire: amd: add pm_prepare callback and pm ops support
-Date:   Mon, 27 Feb 2023 21:18:01 +0530
-Message-ID: <20230227154801.50319-9-Vijendar.Mukunda@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230227154801.50319-1-Vijendar.Mukunda@amd.com>
-References: <20230227154801.50319-1-Vijendar.Mukunda@amd.com>
+        Mon, 27 Feb 2023 10:49:02 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF8E12BF8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:49:01 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id h3so6900346lja.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 07:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cfHW5ojv22AteVVsYMtnz69sp9W1vKBEAZHjN/RW9vY=;
+        b=FrOGczNNhjLIDh6O0mdiRohiUHdf0a2Ja6zgBSOudc4+txLgIvGavUq5Mi6zCr42/o
+         tMqHXtzxS5ZAIkxJjmNcmPguxztJvxxhM8+Wh7o9O6vLvvp/8Mwa+mw4J1o+8aruSa/9
+         ulhNbo2ucDjkrU88R+6P7647iLVnzKmdrjDyo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cfHW5ojv22AteVVsYMtnz69sp9W1vKBEAZHjN/RW9vY=;
+        b=WPM9uPKUt3Je0ND7hQdxWveeEa9sWbrFRw56JrLSIiJmWStSnxwE+8k5uO1A6zx0u/
+         DfAhpbuAwDsQ3tNX14HYGiqcjp1w61a0DvtDvW+PV4cNx9MvYjxJrtESx0y64blaLn04
+         SMqebO+ToYWPrl1bsKm1sG+vVJJFNUrmwZtSmR7AdRvnGZcvNV2fGGhTLmr/xCXFWHzU
+         YTVIVrJH1qnF3yYR07hauHEhtNdSOsz4/VDjJGJ+PFIGc2gWwlzdwdUHjDTlKJKhcdXU
+         Ua+rsZP7sDlvQqbpIRlLeR8YhcSrjcn+pvaTykJ1Pbg76ZjWtEC45TEnTTvVV/axWBzA
+         ZTAQ==
+X-Gm-Message-State: AO0yUKULchfkwBV5itiwSZe/YHVCM2F36N8iGLOWmsgYx+7TofPFZdCF
+        dGuIPlSiuNFkOIxNZPUXFQiVLl1Tq1G+BD3R9r8QubPGoHKwaA==
+X-Google-Smtp-Source: AK7set+pogRt+f/YuCRUdscPhdatqReMSatbngNzOGySavyZz2CKV+EsSY2xRud4XwPYHZ3kQR0m5WghLdwB1NRz17k=
+X-Received: by 2002:a05:651c:32d:b0:295:a8d1:8a28 with SMTP id
+ b13-20020a05651c032d00b00295a8d18a28mr2914577ljp.3.1677512939498; Mon, 27 Feb
+ 2023 07:48:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT107:EE_|DS0PR12MB7606:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0943e7c1-6301-46a7-55d3-08db18d98642
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EOpRmoeN42hEW9yPPOMFpdJlVYVF87aCF4+QXhztbkvvG+jvObBemxlVyDZuXsAS5WSM0ylR+HvnO3OZ7IicTsGxbrfpRWlmgZXrq6HV3UGKqIiYAQU8jZEl3rrWlAwpmbbLCjzqLAmqueRHDUdfVzSQV1qObCLzYZUz1Zqo5VzEagKwk2kK7d7xa4IDcLWo0kBSDdStyiSqHjzdpkYOKByCy5ysoTY9AtpP1Q6Ojwu6lbV3kN6UW3lmbmFKl+ZvyXbsIRlU9tcCwKyfhMTsnpqLJ4y4Pg9kUcRw2tyJEsHvz/SGQ3NHSR5FHnTDdwcbqDYcMPW6/VBIQMu+QDI1n5B7mw0yB22dlDTffrtrqLgKT4Vpw7yPQlBD7wrctkX77KS9ZH+388Yl2vcU/WxBzoY4LxLU57qdahTBVI0kRR62DFSfdJqs0wfOOR5HMZ7fC9J1QHGprFM9mGrIdM48V0/oU5aV2o22fW3F8itLrsMyrIqFp6J+ZargR+B1hd1Q/9yPJPK+HORu5iFhKFa8fxUx0NxFcy9aiHZauT6b10NtWwb/TyxcSNQLcVVlVGmb2TnwHoOlHYL/Mxxv39N4T49oOutLbKugv2BTtJiHYQHSmvWcH0ucnyVfwPnIunSzNgjlgSQjiObBbre8Qm6+ME+VRKBgi40R8ma11Op2FBrbM7refs+V9JK7fQvG7OIscLTRU/ExMDGwvpR6ibkHhpX+i/Gxo9GyTiHU8UpcGF8=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(336012)(426003)(47076005)(316002)(36756003)(40460700003)(54906003)(86362001)(40480700001)(356005)(36860700001)(82740400003)(1076003)(6666004)(83380400001)(82310400005)(2616005)(81166007)(186003)(26005)(2906002)(8936002)(5660300002)(7696005)(478600001)(4326008)(41300700001)(8676002)(6916009)(70586007)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 15:44:34.2052
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0943e7c1-6301-46a7-55d3-08db18d98642
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT107.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7606
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAABZP2z+Hk_w7nAhhyhJA9zidQViibMUO_xYianfm3xcG1QQwQ@mail.gmail.com>
+ <D59B7575-FAB1-4446-BBA9-DF5EAA1B5DCA@joelfernandes.org> <20230227103257.4b99b6fb@gandalf.local.home>
+In-Reply-To: <20230227103257.4b99b6fb@gandalf.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 27 Feb 2023 10:48:48 -0500
+Message-ID: <CAEXW_YT6_cSaEODPu3HLWUB5kJhs6U=CQrQ4v4ODKtk-D+Bzug@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel NULL pointer dereference in rcu_core
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
+        contact@pgazz.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pm_prepare callback and System level pm ops support for
-AMD SoundWire manager driver.
+Hey Steve,
 
-Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
----
- drivers/soundwire/amd_manager.c | 89 +++++++++++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
+On Mon, Feb 27, 2023 at 10:33 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Mon, 27 Feb 2023 08:15:26 -0500
+> Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> > >> asm_sysvec_apic_timer_interrupt+0x1a/0x20
+> > >> RIP: 0010:default_idle+0xf/0x20
+> > >> Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c 01 c7 4c 29 c2 e9 76 ff ff ff cc cc cc cc f3 0f 1e fa eb 07 0f 00 2d e3 8a 34 00 fb f4 <fa> c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa 65
+> > >> RSP: 0018:ffffc9000017fe00 EFLAGS: 00000202
+> > >> RAX: 0000000000dfbea1 RBX: dffffc0000000000 RCX: ffffffff89b1da9c
+> > >> RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+> > >> RBP: 0000000000000007 R08: 0000000000000001 R09: ffff888119fb6c23
+> > >> R10: ffffed10233f6d84 R11: dffffc0000000000 R12: 0000000000000003
+> > >> R13: ffff888100833900 R14: ffffffff8e112850 R15: 0000000000000000
+> > >> default_idle_call+0x67/0xa0
+> > >> do_idle+0x361/0x440
+> > >> cpu_startup_entry+0x18/0x20
+> > >> start_secondary+0x256/0x300
+> > >> secondary_startup_64_no_verify+0xce/0xdb
+> > >> </TASK>
+> > >> Modules linked in:
+> > >> CR2: 0000000000000000
+> > >> ---[ end trace 0000000000000000 ]---
+> > >> RIP: 0010:0x0
+> > >> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+> >
+> > I have seen this exact signature when the processor tries to execute a function that has a NULL address. That causes IP to goto 0 and the exception. Sounds like something corrupted rcu_head (Just a guess).
+>
+> [ Joel, you need to line wrap your emails ;-) ]
 
-diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
-index 88f0ad7ea7ec..5337443d9aea 100644
---- a/drivers/soundwire/amd_manager.c
-+++ b/drivers/soundwire/amd_manager.c
-@@ -1141,6 +1141,93 @@ static int amd_sdw_clock_stop_exit(struct amd_sdw_manager *amd_manager)
- 	return 0;
- }
- 
-+static int amd_resume_child_device(struct device *dev, void *data)
-+{
-+	int ret;
-+	struct sdw_slave *slave = dev_to_sdw_dev(dev);
-+
-+	if (!slave->probed) {
-+		dev_dbg(dev, "skipping device, no probed driver\n");
-+		return 0;
-+	}
-+	if (!slave->dev_num_sticky) {
-+		dev_dbg(dev, "skipping device, never detected on bus\n");
-+		return 0;
-+	}
-+	if (!pm_runtime_suspended(dev))
-+		return 0;
-+	ret = pm_request_resume(dev);
-+	if (ret < 0)
-+		dev_err(dev, "pm_request_resume failed: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int __maybe_unused amd_pm_prepare(struct device *dev)
-+{
-+	struct amd_sdw_manager *amd_manager = dev_get_drvdata(dev);
-+	struct sdw_bus *bus = &amd_manager->bus;
-+	int ret;
-+
-+	if (bus->prop.hw_disabled) {
-+		dev_dbg(bus->dev, "SoundWire manager %d is disabled, ignoring\n",
-+			bus->link_id);
-+		return 0;
-+	}
-+	/*
-+	 * When multiple peripheral devices connected over the same link, if SoundWire manager
-+	 * device is not in runtime suspend state, observed that device alerts are missing
-+	 * without pm_prepare on AMD platforms in clockstop mode0.
-+	 */
-+	if (pm_runtime_suspended(dev) && amd_manager->power_mode_mask & AMD_SDW_CLK_STOP_MODE) {
-+		ret = pm_request_resume(dev);
-+		if (ret < 0) {
-+			dev_err(bus->dev, "pm_request_resume failed: %d\n", ret);
-+			return 0;
-+		}
-+	}
-+	/* To force peripheral devices to system level suspend state, resume the devices
-+	 * from runtime suspend state first. Without that unable to dispatch the alert
-+	 * status to peripheral driver during system level resume as they are in runtime
-+	 * suspend state.
-+	 */
-+	ret = device_for_each_child(bus->dev, NULL, amd_resume_child_device);
-+	if (ret < 0)
-+		dev_err(dev, "amd_resume_child_device failed: %d\n", ret);
-+	return 0;
-+}
-+
-+static int __maybe_unused amd_suspend(struct device *dev)
-+{
-+	struct amd_sdw_manager *amd_manager = dev_get_drvdata(dev);
-+	struct sdw_bus *bus = &amd_manager->bus;
-+	int ret;
-+
-+	if (bus->prop.hw_disabled) {
-+		dev_dbg(bus->dev, "SoundWire manager %d is disabled, ignoring\n",
-+			bus->link_id);
-+		return 0;
-+	}
-+
-+	if (amd_manager->power_mode_mask & AMD_SDW_CLK_STOP_MODE) {
-+		ret = amd_sdw_clock_stop(amd_manager);
-+		if (ret)
-+			return ret;
-+	} else if (amd_manager->power_mode_mask & AMD_SDW_POWER_OFF_MODE) {
-+		/*
-+		 * As per hardware programming sequence on AMD platforms,
-+		 * clock stop should be invoked first before powering-off
-+		 */
-+		ret = amd_sdw_clock_stop(amd_manager);
-+		if (ret)
-+			return ret;
-+		ret = amd_deinit_sdw_manager(amd_manager);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
- static int __maybe_unused amd_suspend_runtime(struct device *dev)
- {
- 	struct amd_sdw_manager *amd_manager = dev_get_drvdata(dev);
-@@ -1213,6 +1300,8 @@ static int __maybe_unused amd_resume_runtime(struct device *dev)
- }
- 
- static const struct dev_pm_ops amd_pm = {
-+	.prepare = amd_pm_prepare,
-+	SET_SYSTEM_SLEEP_PM_OPS(amd_suspend, amd_resume_runtime)
- 	SET_RUNTIME_PM_OPS(amd_suspend_runtime, amd_resume_runtime, NULL)
- };
- 
--- 
-2.34.1
+Ok I will try. The thing is, I have not figured out yet how to
+plaintext-reply from my iPhone without having it wrap :-(
 
+> This looks like a call_rcu() was called on something that later got freed
+> or reused. That is, the bug is not with RCU but with something using RCU.
+
+Yes certainly, the rcu_head is allocated on the caller side so it
+could have been trampled while the callback was still in flight.
+
+> OR it could be a bug with RCU if the synchronize_rcu() ended before the
+> grace periods have finished.
+
+Good point..
+
+Thanks,
+
+ - Joel
