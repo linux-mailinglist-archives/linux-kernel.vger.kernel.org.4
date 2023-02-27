@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3406A49D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AE16A49D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 19:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjB0Sdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 13:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S229940AbjB0SdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 13:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjB0Sdc (ORCPT
+        with ESMTP id S229790AbjB0SdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 13:33:32 -0500
+        Mon, 27 Feb 2023 13:33:22 -0500
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3EC1DBB8;
-        Mon, 27 Feb 2023 10:33:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D091FF3B;
+        Mon, 27 Feb 2023 10:32:56 -0800 (PST)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RCtGwF026362;
-        Mon, 27 Feb 2023 10:32:42 -0800
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RCtGwI026362;
+        Mon, 27 Feb 2023 10:32:50 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=pfpt0220;
- bh=Vzu7NIu2++o+YiyPvG9HnyjlbVP1fkiGXqHQYWPFNSA=;
- b=TmsO9FdqpTjFh3T6ksHfPTZXGAaaiiAQrcREFbIlH7kSvdtWfFP42Wnp5uEhXRicO86X
- Z+znU000J/cVXyiBbZloPTXtrrVgvJ4Sh12iNC2H2ZkOTEHY/2KxQes+8lhGTa4wPq5B
- ERWnpdqktJvm5xBB2mY7oPIsZZydAvRnI99HkCPva+rOVfPiPD4LwyoWajWvxzimVeYV
- QZBwKaS7lyGBpU56sc3NSi2F7E32O1S+qL+OscG+wmN5Eh2Xmb/RO+fdWmyxHLrc16Qd
- Gc13+j7ltnaY0sXkpZYwQLtJ9dI5biOhW2LdIIzoiRe4QLT8NHQbnSDNar1WY5RdIfmz Pg== 
+ bh=t+re6yD5UFAUuv7Rao5NJSDL9RP5e62V7XEy8m44VsU=;
+ b=TZQu/2eQkPpyaT7eP1LJvTALTFCgxKNoyooY/a/0SIo3AUgz/QqMc7y3+i1sQMwSqmHZ
+ msGPBr2/DMeuscz+KRmQMroDRAFKvm7GVPX1ht9TdHzt6LzMscxLxNBmZ7kuqPeGCvxS
+ QS8BzSDHorghp3nHbuXQRk86+/T8xIdIiTvRvw3nOOARAJW6785hlWwOqHE770RqblZL
+ dj72FU3ARf0oT+ndQXnoYGtBst69IIee0IJCel8P2bA/6or9NyCtd6+zWs7X75O8pvc6
+ in1RkdNv/BCcY48pwMRR2Ttb3u8Wq5/3WtDJ9aWGx67FW8+aGLioJistm/BmPtKlq87Y tg== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nyjqtsbmu-1
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nyjqtsbna-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 10:32:40 -0800
+        Mon, 27 Feb 2023 10:32:50 -0800
 Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
- 2023 10:32:38 -0800
+ 2023 10:32:44 -0800
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 27 Feb 2023 10:32:38 -0800
+ Transport; Mon, 27 Feb 2023 10:32:44 -0800
 Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id EA71B3F7066;
-        Mon, 27 Feb 2023 10:32:37 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 83A3D3F7063;
+        Mon, 27 Feb 2023 10:32:44 -0800 (PST)
 From:   Piyush Malgujar <pmalgujar@marvell.com>
 To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
@@ -47,17 +47,17 @@ To:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>
 CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
         Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH v3 4/6] mmc: sdhci-cadence: enable MMC_SDHCI_IO_ACCESSORS
-Date:   Mon, 27 Feb 2023 10:31:49 -0800
-Message-ID: <20230227183151.27912-5-pmalgujar@marvell.com>
+Subject: [PATCH v3 5/6] dt-bindings: mmc: sdhci-cadence: SD6 support
+Date:   Mon, 27 Feb 2023 10:31:50 -0800
+Message-ID: <20230227183151.27912-6-pmalgujar@marvell.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230227183151.27912-1-pmalgujar@marvell.com>
 References: <20230227183151.27912-1-pmalgujar@marvell.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: FyJD-LSEaG2BSHT7Iw0H86-eeDnz0gOs
-X-Proofpoint-GUID: FyJD-LSEaG2BSHT7Iw0H86-eeDnz0gOs
+X-Proofpoint-ORIG-GUID: Xg4GOC06UIFmvulNu52G-IzwWk4MmApx
+X-Proofpoint-GUID: Xg4GOC06UIFmvulNu52G-IzwWk4MmApx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-27_15,2023-02-27_01,2023-02-09_01
@@ -72,109 +72,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jayanthi Annadurai <jannadurai@marvell.com>
 
-Add support for CONFIG_MMC_SDHCI_IO_ACCESSORS for controller
-specific register read and write APIs.
+Add support for SD6 controller support.
 
 Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
 Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
 ---
- drivers/mmc/host/Kconfig         |  1 +
- drivers/mmc/host/sdhci-cadence.c | 63 ++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 24 +++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index e13b0b0b8ebb85a63b14a13d3fdbf009928b43fa..82dcfb323dda84171b501f0f26a88ce87f141453 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -255,6 +255,7 @@ config MMC_SDHCI_CADENCE
- 	tristate "SDHCI support for the Cadence SD/SDIO/eMMC controller"
- 	depends on MMC_SDHCI_PLTFM
- 	depends on OF
-+	select MMC_SDHCI_IO_ACCESSORS
- 	help
- 	  This selects the Cadence SD/SDIO/eMMC driver.
+diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+index 8b1a0fdcb5e3e2e8b87d8d7678e37f3dad447fc1..0dba17c4f17f82c8ae68e46225ed72418e8361ff 100644
+--- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/mmc/cdns,sdhci.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
-diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-index 4b32757dd3750af6428e0d4177b419b3a9e8696d..badff2df70b904779c70775b02b40086780b118d 100644
---- a/drivers/mmc/host/sdhci-cadence.c
-+++ b/drivers/mmc/host/sdhci-cadence.c
-@@ -449,6 +449,61 @@ static u32 read_dqs_cmd_delay, clk_wrdqs_delay, clk_wr_delay, read_dqs_delay;
+-title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
++title: Cadence SD/SDIO/eMMC Host Controller (SD4HC, SD6HC)
  
- static u32 sdhci_cdns_sd6_get_mode(struct sdhci_host *host, unsigned int timing);
+ maintainers:
+   - Masahiro Yamada <yamada.masahiro@socionext.com>
+@@ -18,7 +18,9 @@ properties:
+       - enum:
+           - microchip,mpfs-sd4hc
+           - socionext,uniphier-sd4hc
+-      - const: cdns,sd4hc
++      - enum:
++          - cdns,sd4hc
++          - cdns,sd6hc
  
-+#ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
-+static u32 sdhci_cdns_sd6_readl(struct sdhci_host *host, int reg)
-+{
-+	return readl(host->ioaddr + reg);
-+}
-+
-+static void sdhci_cdns_sd6_writel(struct sdhci_host *host, u32 val, int reg)
-+{
-+	writel(val, host->ioaddr + reg);
-+}
-+
-+static u16 sdhci_cdns_sd6_readw(struct sdhci_host *host, int reg)
-+{
-+	u32 val, regoff;
-+
-+	regoff = reg & ~3;
-+
-+	val = readl(host->ioaddr + regoff);
-+	if ((reg & 0x3) == 0)
-+		return (val & 0xFFFF);
-+	else
-+		return ((val >> 16) & 0xFFFF);
-+}
-+
-+static void sdhci_cdns_sd6_writew(struct sdhci_host *host, u16 val, int reg)
-+{
-+	writew(val, host->ioaddr + reg);
-+}
-+
-+static u8 sdhci_cdns_sd6_readb(struct sdhci_host *host, int reg)
-+{
-+	u32 val, regoff;
-+
-+	regoff = reg & ~3;
-+
-+	val = readl(host->ioaddr + regoff);
-+	switch (reg & 3) {
-+	case 0:
-+		return (val & 0xFF);
-+	case 1:
-+		return ((val >> 8) & 0xFF);
-+	case 2:
-+		return ((val >> 16) & 0xFF);
-+	case 3:
-+		return ((val >> 24) & 0xFF);
-+	}
-+	return 0;
-+}
-+
-+static void sdhci_cdns_sd6_writeb(struct sdhci_host *host, u8 val, int reg)
-+{
-+	writeb(val, host->ioaddr + reg);
-+}
-+#endif
-+
- static int sdhci_cdns_sd6_phy_lock_dll(struct sdhci_cdns_sd6_phy *phy)
- {
- 	u32 delay_element = phy->d.delay_element_org;
-@@ -1578,6 +1633,14 @@ static const struct sdhci_ops sdhci_cdns_sd4_ops = {
- };
+   reg:
+     maxItems: 1
+@@ -111,6 +113,24 @@ properties:
+     minimum: 0
+     maximum: 0x7f
  
- static const struct sdhci_ops sdhci_cdns_sd6_ops = {
-+#ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
-+	.read_l = sdhci_cdns_sd6_readl,
-+	.write_l = sdhci_cdns_sd6_writel,
-+	.read_w = sdhci_cdns_sd6_readw,
-+	.write_w = sdhci_cdns_sd6_writew,
-+	.read_b = sdhci_cdns_sd6_readb,
-+	.write_b = sdhci_cdns_sd6_writeb,
-+#endif
- 	.get_max_clock = sdhci_cdns_get_max_clock,
- 	.set_clock = sdhci_cdns_sd6_set_clock,
- 	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
++  cdns,iocell-input-delay-ps:
++    description: Delay in ps across the input IO cells
++
++  cdns,iocell-output-delay-ps:
++    description: Delay in ps across the output IO cells
++
++  cdns,delay-element-ps:
++    description: Delay element in ps used for calculating phy timings
++
++  cdns,read-dqs-cmd-delay-ps:
++    description: Command delay used in HS200 tuning
++
++  cdns,tune-val-start-ps:
++    description: Staring value of data delay used in HS200 tuning
++
++  cdns,tune-val-step-ps:
++    description: Incremental value of data delay used in HS200 tuning
++
+ required:
+   - compatible
+   - reg
 -- 
 2.17.1
 
