@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450C06A3BA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3F66A3BA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 08:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjB0HSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 02:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S229618AbjB0HSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 02:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB0HSV (ORCPT
+        with ESMTP id S229610AbjB0HSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 02:18:21 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D308691
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:18:20 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id j2so5067864wrh.9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:18:20 -0800 (PST)
+        Mon, 27 Feb 2023 02:18:47 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F8C9742
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:18:46 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id h18-20020a4abb92000000b00525397f569fso855997oop.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 23:18:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=29wL3HKgURgZ3ob7ytBSMNuF/dn8Tv5qAnlCpB6BYXE=;
-        b=lGYrDYcmtYaWQg10siJHp+l0o9Vbywn3xDOrC7vcUwf19Bm/MCtmia8MoAm+ryl11C
-         XRlvOSgIUifmjwUE7SB9n28I7CAjYpuO4rN3dJWVuvgXZdlSQ5T8FSn9nX6Wfltw/YVO
-         78X/OPlusNJPkkXOLzUhD6jOr6nKBQHzxyLZKkVJZgwcEewZwD+CmhwEXjayAhp2wxp+
-         OXZQSPrVuupy+iNzz0rd1cD6KpT0h120YCSLEKvGTzQSlVQYFGgjSecmA7wLgvkI2v6l
-         /T5RQJp42xtVOLHs3s6WiJCxkGyEWZYew9xmMz9bjQcRq34XWADpTAShSiEQ5jyfSk+L
-         PBhQ==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AV+BUrqsjS8wgrqlLbYQIjVBrtakZzEzQXRY/JnkoOE=;
+        b=s5wFvNf/cESyyJoHCBYL7vja74vNUnHe4673jYexMz0cSgnD/8E/cJYARF93FyMSz9
+         L1uSVa6tenaLNQuIiePz1xMoPn6/DI2/8Pj7FdnV8EKiF3LNtcM7G0uZJUKG9CwWvE1h
+         RnCpTO/yevwPKl9pp7bSyr8jr6u0ygzzOsrur8ydr4Y+nVRSKOGSImpaqKakMmgYneVl
+         4IiD7gMLcsyZldXY4YT6UkyEfaQmBS/GFy51+vNKgXB2yc8pW8jhA818iy9A8ddGhBBS
+         vpRcv0gnCalPdMPykXljdVLdylWrZVghCLB8fHdiK7XRjTngPX8JXD425gXzZzC1r0Rr
+         2qhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=29wL3HKgURgZ3ob7ytBSMNuF/dn8Tv5qAnlCpB6BYXE=;
-        b=UB2kC6nnICKvCOePm50oKSR+/KvVCeXDfV0VuADPXQ/O9NaFDkXNlMHy6mmB56QDq4
-         WX+HTti1w/un3qw3nUV+8V0dKCkL3bYINZOZeqyuKpTb7/mtUR7175dnLPrMHQKHD4d8
-         pPd2NSEqyIRNydn58rhncJ2rEURhBPR1eRFiU04oemekBIxBFf16a1YsR7lKkP80Cl0F
-         Pu/ArnMWmFPYfIrmN0SuG4+P1uGNVf/kCSfLQ5wpKZ6161ULjji2K+riZ4lXuU5zEQuc
-         pb0Ork+uuQgo1cJLBolkx9zJLUga/RYYGRQWsiupOEk9xhE4XP9cMtMupgwhZroNRtoR
-         PRcA==
-X-Gm-Message-State: AO0yUKWkqVZzZS7uMLNoeU7xChRoSgfg/4kzfNcS1Nhmd1F0nqna5A/y
-        PLZTUOAbw//VpowO48jj5DD4YexVKj4=
-X-Google-Smtp-Source: AK7set9VyfiPh1k+U50RIxKxInrvrmyJAzA6rdcN3lcnQYZdj1nEtoCsZzUrsEsuApdGoEYjKPq9zg==
-X-Received: by 2002:adf:dcc5:0:b0:2c7:ce2:6479 with SMTP id x5-20020adfdcc5000000b002c70ce26479mr15191977wrm.40.1677482298677;
-        Sun, 26 Feb 2023 23:18:18 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u4-20020adff884000000b002c70851bfcasm6230104wrp.28.2023.02.26.23.18.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 23:18:18 -0800 (PST)
-Date:   Mon, 27 Feb 2023 10:18:14 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Kang Chen <void0red@gmail.com>
-Cc:     paskripkin@gmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: add a null check of kzalloc in
- go_add_group_info_attr
-Message-ID: <Y/xZNgonbcVSK/+u@kadam>
-References: <20230226132500.3933232-1-void0red@gmail.com>
- <Y/w16PI4klfJaeXA@kadam>
- <CANE+tVpqZusCq4EXi7UV+jY0XBG+9x6UWh_JGCWKs3pZRMFBXA@mail.gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AV+BUrqsjS8wgrqlLbYQIjVBrtakZzEzQXRY/JnkoOE=;
+        b=Zp7+WJIyw5vxPzskQvFKSxnNUCFY8xNg8xHtZOSEJ96o7xwM+TFMwZWpVuLR4O8LEc
+         +0YXjMekdm2yeYQyzzkLkcsEk67HDJDNAWLBRO2EZ6luGvgHLQSqIgHOzm0vuF9dyr1V
+         U5St/krDf2ual9hv614ocyLbWVQKOryVm/EB3OPW7bxTTxar731eoDoQ9Bqhx7VDGFB6
+         6JaUPxBN04SJ5AcdSaxxgiK3nlP5r0wLBkIOSU/2JOIRtTxoVizPpsTkevIX4JhtFu6G
+         HJjyxUGhS8TAkCEkkAv7uqPq4RU+71rQQWF0tNPvWtnsDQS0Hi2pnI3lJROxuujlodLt
+         hwjw==
+X-Gm-Message-State: AO0yUKWkTPQyxfAzjplXK1o2HLU3I1/8Oz5ZgPJuJBE2nhOmRwCFkcWo
+        Tb2mbqjcR44N7yttn/5h57UL5DV8XYrqpk3gi6gdLQ==
+X-Google-Smtp-Source: AK7set9/v6iYV6pbVgTZkdgLBEJbfS32Dhr+ap8s410dZZc/crOH2vqfCxMZEcuLD2H4hXYLTUT1qD13nshtkxSnQ44=
+X-Received: by 2002:a4a:e914:0:b0:525:3b4f:ee88 with SMTP id
+ bx20-20020a4ae914000000b005253b4fee88mr3337346oob.0.1677482325637; Sun, 26
+ Feb 2023 23:18:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANE+tVpqZusCq4EXi7UV+jY0XBG+9x6UWh_JGCWKs3pZRMFBXA@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230224195313.1877313-1-jiangzp@google.com> <20230224115310.kernel.v2.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
+ <CABBYNZ+yVWssa09NB+ahp-N87sLXRqYF58-GJK-Vx8jn-Sa5Uw@mail.gmail.com> <CAB4PzUrO32Z1AF-3UJviYqTr3YvachGgJ7NiqkNW46ioWigtfw@mail.gmail.com>
+In-Reply-To: <CAB4PzUrO32Z1AF-3UJviYqTr3YvachGgJ7NiqkNW46ioWigtfw@mail.gmail.com>
+From:   Zhengping Jiang <jiangzp@google.com>
+Date:   Sun, 26 Feb 2023 23:18:34 -0800
+Message-ID: <CAB4PzUoErDkUzyj6sFQc_CSa7hibucX42yY+oVGw7C4DcJdQFA@mail.gmail.com>
+Subject: Re: [kernel PATCH v2 1/1] Bluetooth: hci_sync: clear workqueue before
+ clear mgmt cmd
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        mmandlik@google.com, chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,54 +78,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 03:11:21PM +0800, Kang Chen wrote:
-> Hi, Dan,
-> 
-> Thanks for your review.
-> I noticed there is no error handling in the origin design (this call chain).
-> go_add_group_info_attr returns a len-like value indicating the length
-> of pbuf.
-> I don't think throwing an error to the caller is a good idea, the caller
-> doesn't seem to care about it.
-> So inserting a netdev_dbg or pr_debug here might be enough.
-> Do you have a better idea?
+Hi Luiz,
 
-As I mentioned in my email, we need to fix the caller to care about it.
+I have a question. Given that each command in the cmd_sync queue
+should clean up the memory in a callback function. I was wondering if
+the call to cmd_complete_rsp in __mgmt_power_off function is still
+necessary? Will this always risk a race condition that cmd has been
+released when the complete callback or _sync function is run?
 
-regards,
-dan carpenter
+Thanks,
+Zhengping
 
-> 
-> Best regards,
-> Kang Chen
-> 
-> 
-> On Mon, Feb 27, 2023 at 12:47 PM Dan Carpenter <error27@gmail.com> wrote:
+On Fri, Feb 24, 2023 at 2:37=E2=80=AFPM Zhengping Jiang <jiangzp@google.com=
+> wrote:
+>
+> Hi Luiz,
+>
+> > Any particular reason why you are not using hci_cmd_sync_clear
+> > instead?
+>
+> That is a good question and we used hci_cmd_sync_clear in the first
+> version, but it will clear the queue and also close the timer. As a
+> result, when the adapter is turned on again, the timer will not
+> schedule any new jobs. So the option is to use hci_cmd_sync_clear and
+> re-initiate the queue or to write a new function which only clears the
+> queue.
+>
+> > We also may want to move the clearing logic to
+> > hci_dev_close_sync since it should be equivalent to
+> > hci_request_cancel_all.
+>
+> I actually have a question here. I saw
+> "drain_workqueue(hdev->workqueue)" in hci_dev_close_sync and thought
+> it should force clearing the cmd_sync queue. But it seems cannot
+> prevent the use-after-free situation.
+>
+> Any suggestions to improve the solution?
+>
+> Thanks,
+> Zhengping
+>
+>
+> On Fri, Feb 24, 2023 at 1:02 PM Luiz Augusto von Dentz
+> <luiz.dentz@gmail.com> wrote:
 > >
-> > On Sun, Feb 26, 2023 at 09:25:00PM +0800, Kang Chen wrote:
-> > > kzalloc may fails, pdata_attr might be null and will cause
-> > > illegal address access later.
+> > Hi Zhengping,
+> >
+> > On Fri, Feb 24, 2023 at 11:53 AM Zhengping Jiang <jiangzp@google.com> w=
+rote:
 > > >
-> > > Signed-off-by: Kang Chen <void0red@gmail.com>
+> > > Clear cmd_sync_work queue before clearing the mgmt cmd list to avoid
+> > > racing conditions which cause use-after-free.
+> > >
+> > > When powering off the adapter, the mgmt cmd list will be cleared. If =
+a
+> > > work is queued in the cmd_sync_work queue at the same time, it will
+> > > cause the risk of use-after-free, as the cmd pointer is not checked
+> > > before use.
+> > >
+> > > Signed-off-by: Zhengping Jiang <jiangzp@google.com>
 > > > ---
-> > >  drivers/staging/r8188eu/core/rtw_p2p.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
 > > >
-> > > diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-> > > index 93d3c9c43..802e1170a 100644
-> > > --- a/drivers/staging/r8188eu/core/rtw_p2p.c
-> > > +++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-> > > @@ -31,6 +31,8 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
-> > >       struct sta_priv *pstapriv = &padapter->stapriv;
+> > > Changes in v2:
+> > > - Add function to clear the queue without stop the timer
 > > >
-> > >       pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
-> > > +     if (!pdata_attr)
-> > > +             return 0;
+> > > Changes in v1:
+> > > - Clear cmd_sync_work queue before clearing the mgmt cmd list
+> > >
+> > >  net/bluetooth/hci_sync.c | 21 ++++++++++++++++++++-
+> > >  1 file changed, 20 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> > > index 117eedb6f709..b70365dfff0c 100644
+> > > --- a/net/bluetooth/hci_sync.c
+> > > +++ b/net/bluetooth/hci_sync.c
+> > > @@ -636,6 +636,23 @@ void hci_cmd_sync_init(struct hci_dev *hdev)
+> > >         INIT_DELAYED_WORK(&hdev->adv_instance_expire, adv_timeout_exp=
+ire);
+> > >  }
+> > >
+> > > +static void hci_pend_cmd_sync_clear(struct hci_dev *hdev)
+> > > +{
+> > > +       struct hci_cmd_sync_work_entry *entry, *tmp;
+> > > +
+> > > +       mutex_lock(&hdev->cmd_sync_work_lock);
+> > > +       list_for_each_entry_safe(entry, tmp, &hdev->cmd_sync_work_lis=
+t, list) {
+> > > +               if (entry->destroy) {
+> > > +                       hci_req_sync_lock(hdev);
+> > > +                       entry->destroy(hdev, entry->data, -ECANCELED)=
+;
+> > > +                       hci_req_sync_unlock(hdev);
+> > > +               }
+> > > +               list_del(&entry->list);
+> > > +               kfree(entry);
+> > > +       }
+> > > +       mutex_unlock(&hdev->cmd_sync_work_lock);
+> > > +}
+> > > +
+> > >  void hci_cmd_sync_clear(struct hci_dev *hdev)
+> > >  {
+> > >         struct hci_cmd_sync_work_entry *entry, *tmp;
+> > > @@ -4842,8 +4859,10 @@ int hci_dev_close_sync(struct hci_dev *hdev)
+> > >
+> > >         if (!auto_off && hdev->dev_type =3D=3D HCI_PRIMARY &&
+> > >             !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
+> > > -           hci_dev_test_flag(hdev, HCI_MGMT))
+> > > +           hci_dev_test_flag(hdev, HCI_MGMT)) {
+> > > +               hci_pend_cmd_sync_clear(hdev);
 > >
-> > Return success here is not a good thing.  We have to fix the caller to
-> > check for errors.  (Fixing a bug half way just makes it harder to find
-> > the bug so it makes the situation worse).
+> > Any particular reason why you are not using hci_cmd_sync_clear
+> > instead? We also may want to move the clearing logic to
+> > hci_dev_close_sync since it should be equivalent to
+> > hci_request_cancel_all.
 > >
-> > regards,
-> > dan carpenter
+> > >                 __mgmt_power_off(hdev);
+> > > +       }
+> > >
+> > >         hci_inquiry_cache_flush(hdev);
+> > >         hci_pend_le_actions_clear(hdev);
+> > > --
+> > > 2.39.2.722.g9855ee24e9-goog
+> > >
 > >
+> >
+> > --
+> > Luiz Augusto von Dentz
