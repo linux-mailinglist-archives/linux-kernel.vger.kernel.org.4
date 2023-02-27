@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287416A3B10
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E916A3B19
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 07:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjB0GDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 01:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S229876AbjB0GDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 01:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjB0GDK (ORCPT
+        with ESMTP id S229850AbjB0GDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 01:03:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3667EFE
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 22:03:07 -0800 (PST)
+        Mon, 27 Feb 2023 01:03:17 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39EAA5C6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 22:03:09 -0800 (PST)
 Received: from workpc.. (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 44E546602E9A;
-        Mon, 27 Feb 2023 06:03:05 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DF9986602CEE;
+        Mon, 27 Feb 2023 06:03:06 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677477786;
-        bh=XYpYU9OXzB849UVK0XnujuvkGigsxcpf7YU8idExx+U=;
+        s=mail; t=1677477788;
+        bh=RC/OqRUY9IcjI/95DJDJLW/5aJlYWOkRZhNC1rLGKS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KXniX/89Mo+vyeos59JdCdzl4r8oHc41Po698xHiwNjaqfA169grjGSKavVQjLNQo
-         rcGzcVz7LevMEAVn6ey5Hs+fjWnzcfeNPl+oAna5mTJaKDmaxlsHJPeNTDKFZCnqgj
-         V+qzh+Y/2CRUTnoRRaTj3HztTxRukdSEMz4DWTth8+3bOVAGaE5aNmJVzU9FaHcnvC
-         yprz5aYYSEWM4UsYFWnLFLHpesG0FtR9rZ4eMRLVAKQQpnKQLednNiyws02DiDN3L7
-         vUvLcC6a1PEh1A0lg+fyvYligUAWLgX3/egR6em+dtgtZe9K+WJWH2qAaeYuWZ55Fi
-         Aw/HBI9/zzbQQ==
+        b=TRexFYfMG4ozQRYEkKuKKl4j2/SOF9MjJmwjYY/nKYIv2bwoUt5mNbFbXUBsXiDOU
+         53oOY+6zaBM4wPHqfn81wHEjHndc2AjHuTaGOxJe7TE4kJaJ3CX/6TFrRw3cf4fvne
+         sp/CZh9Abu+Jd/PBiQYPoq4bbh+36m04lVWlp1/B9JTaRL0iNdJFsgoRVaLziCl4af
+         gmvtA0Yju0aAAxuOtbewTWfnJ0NWZfmPFWlZMelaq0JZK9TorFNHbEXqcOe7CGfZn6
+         Jqe9zrV86YWXgM4sUjKaa4P/dsfk8EpQN48FWD1VaS4fVnxtjusK8Qf2azcHezB7K3
+         r+vbvELY/0GYw==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@gmail.com>,
         Gerd Hoffmann <kraxel@redhat.com>,
@@ -51,9 +51,9 @@ To:     David Airlie <airlied@gmail.com>,
         Rob Herring <robh@kernel.org>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com, virtualization@lists.linux-foundation.org
-Subject: [PATCH v11 02/10] drm/shmem-helper: Add pages_pin_count field
-Date:   Mon, 27 Feb 2023 09:02:11 +0300
-Message-Id: <20230227060219.904986-3-dmitry.osipenko@collabora.com>
+Subject: [PATCH v11 03/10] drm/shmem-helper: Switch drm_gem_shmem_vmap/vunmap to use pin/unpin
+Date:   Mon, 27 Feb 2023 09:02:12 +0300
+Message-Id: <20230227060219.904986-4-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230227060219.904986-1-dmitry.osipenko@collabora.com>
 References: <20230227060219.904986-1-dmitry.osipenko@collabora.com>
@@ -68,73 +68,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-And new pages_pin_count field to struct drm_gem_shmem_object that will
-determine whether pages are evictable by memory shrinker. The pages will
-be evictable only when pages_pin_count=0. This patch prepares code for
-addition of the memory shrinker that will utilize the new field.
+The vmapped pages shall be pinned in memory. Previously get/put pages were
+implicitly pinning/unpinning the pages. This will no longer be the case
+with addition of memory shrinker because pages_use_count>0 won't determine
+whether pages are pinned anymore, while the new pages_pin_count will do
+that. Switch the vmap/vunmap to use pin/unpin functions in a preparation
+of addition of the memory shrinker support.
 
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/drm_gem_shmem_helper.c | 12 +++++++++++-
- include/drm/drm_gem_shmem_helper.h     |  9 +++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/drm_gem_shmem_helper.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 49ab49454783..97b40676bdfa 100644
+index 97b40676bdfa..2b1eef335bf6 100644
 --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
 +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -280,12 +280,17 @@ EXPORT_SYMBOL(drm_gem_shmem_put_pages);
- int drm_gem_shmem_pin(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
-+	int ret;
+@@ -357,7 +357,7 @@ int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
+ 			return 0;
+ 		}
  
- 	dma_resv_assert_held(shmem->base.resv);
+-		ret = drm_gem_shmem_get_pages(shmem);
++		ret = drm_gem_shmem_pin(shmem);
+ 		if (ret)
+ 			goto err_zero_use;
  
- 	drm_WARN_ON(obj->dev, obj->import_attach);
+@@ -380,7 +380,7 @@ int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
  
--	return drm_gem_shmem_get_pages(shmem);
-+	ret = drm_gem_shmem_get_pages(shmem);
-+	if (!ret)
-+		shmem->pages_pin_count++;
-+
-+	return ret;
- }
- EXPORT_SYMBOL(drm_gem_shmem_pin);
+ err_put_pages:
+ 	if (!obj->import_attach)
+-		drm_gem_shmem_put_pages(shmem);
++		drm_gem_shmem_unpin(shmem);
+ err_zero_use:
+ 	shmem->vmap_use_count = 0;
  
-@@ -304,7 +309,12 @@ void drm_gem_shmem_unpin(struct drm_gem_shmem_object *shmem)
+@@ -417,7 +417,7 @@ void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
+ 			return;
  
- 	drm_WARN_ON(obj->dev, obj->import_attach);
+ 		vunmap(shmem->vaddr);
+-		drm_gem_shmem_put_pages(shmem);
++		drm_gem_shmem_unpin(shmem);
+ 	}
  
-+	if (drm_WARN_ON_ONCE(obj->dev, !shmem->pages_pin_count))
-+		return;
-+
- 	drm_gem_shmem_put_pages(shmem);
-+
-+	shmem->pages_pin_count--;
- }
- EXPORT_SYMBOL(drm_gem_shmem_unpin);
- 
-diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
-index 20ddcd799df9..7d823c9fc480 100644
---- a/include/drm/drm_gem_shmem_helper.h
-+++ b/include/drm/drm_gem_shmem_helper.h
-@@ -39,6 +39,15 @@ struct drm_gem_shmem_object {
- 	 */
- 	unsigned int pages_use_count;
- 
-+	/**
-+	 * @pages_pin_count:
-+	 *
-+	 * Reference count on the pinned pages table.
-+	 * The pages allowed to be evicted by memory shrinker
-+	 * only when the count is zero.
-+	 */
-+	unsigned int pages_pin_count;
-+
- 	/**
- 	 * @madv: State for madvise
- 	 *
+ 	shmem->vaddr = NULL;
 -- 
 2.39.2
 
