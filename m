@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA1F6A396D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A886A396F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 04:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjB0DUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Feb 2023 22:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S229806AbjB0DVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Feb 2023 22:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjB0DUB (ORCPT
+        with ESMTP id S229567AbjB0DVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Feb 2023 22:20:01 -0500
+        Sun, 26 Feb 2023 22:21:33 -0500
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA376189
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Feb 2023 19:20:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B521FF06;
+        Sun, 26 Feb 2023 19:21:32 -0800 (PST)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1677467998;
-        bh=c3OID4OHGBiQHj/a18/Na81gQpWQRHYqRW26JTDxHKE=;
+        s=mail; t=1677468090;
+        bh=pwAr4IcABcpaKfjReOPmkgEkSQjrSvAGXYILulSm0gM=;
         h=From:Date:Subject:To:Cc:From;
-        b=LRaNQJCE1bMq4h9CpQ0d3SHamcYhgLiw5ymuYKgB+NoPXTMxE4917X3J3XEQ80Fe5
-         MOPFw4YGWznWX+jPlrXwOmWN07wnQGaJ5T83nRdF3uA7N6M/bwJThjIgcpsvk7FNjT
-         h8lzTzV/J8zy3aG/aEv3s3PMvOj9b+bQRDGVZXFg=
-Date:   Mon, 27 Feb 2023 03:19:56 +0000
-Subject: [PATCH] firmware: qemu_fw_cfg: make kobj_type structure constant
+        b=McozBUvbP0l7qh5s6Kn4nC6vqB2W8kMjyy4KqP1x3ScwtVpkrd45Ol9VLU+DTW0ug
+         uv4dwh3LxW9op3Tg/iHSfEv1vVCQsuWxW/N+ifCnUtdhNTD/oq/tQ6UhYok8LUhCsr
+         EYsbgSQjwSy+FXcGZ4GYvIOlUXzJ3Xx32xUlJDbQ=
+Date:   Mon, 27 Feb 2023 03:21:27 +0000
+Subject: [PATCH] efi: make kobj_type structure constant
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230227-kobj_type-firmware-qemu-v1-1-fc0c8b44424f@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAFsh/GMC/x2N0QqCQBAAf0X2uYVrFQ/6lYi41TW39LS9LEP89
- 44eZ2CYDZKYSoJTsYHJW5NOMcPxUEDTh3gT1DYzkKPSEXl8THy/vr6zYKc2foIJPmVc0Puq5ro
- k17KDXHNIgmwhNn3u4zIMWc4mna7/3fmy7z+XCpCnfgAAAA==
-To:     Gabriel Somlo <somlo@cmu.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     qemu-devel@nongnu.org, linux-kernel@vger.kernel.org,
+Message-Id: <20230227-kobj_type-firmware-efi-v1-1-26221abace3c@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIALYh/GMC/x2N2wrCQAwFf6Xk2UCN2IK/IiLZbdZG67ZkvZXSf
+ zf0cYYznAWKmEqBU7WAyUeLjtlhv6sg9pxvgto5A9V0qIlafIzhfn3Nk2BSe37ZBCUpUorcNkc
+ mIgaPAxfBYJxj73l+D4PLyXz6297Ol3X9A/cRkzx9AAAA
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677467996; l=1176;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677468088; l=1024;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=c3OID4OHGBiQHj/a18/Na81gQpWQRHYqRW26JTDxHKE=;
- b=aqXLp2yOWQMQHYa/WBolEG8uvRfp5q+eCr+6T9EaXn4m0kkl2hArfTv92d+BwFP1JUF5nzDm9
- GQpw3rtLQC3AMcEjhhcnZBojWn9GSfxGIGE+C7ndUaFVGBYp1CyB7kd
+ bh=pwAr4IcABcpaKfjReOPmkgEkSQjrSvAGXYILulSm0gM=;
+ b=sc+FDFVb7BbroNSy7MXVjIaaqxVx1PkrgUHay3UeN0qy7Av0X5eGn7sY4IuOuLUdxM71T8aXG
+ RBgjpFaM3pzAHJuvcPomANwuNzCfWLIWIwTVSfuhzM60XdbO5Eyxvdn
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,26 +60,26 @@ modification at runtime.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/firmware/qemu_fw_cfg.c | 2 +-
+ drivers/firmware/efi/esrt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/qemu_fw_cfg.c b/drivers/firmware/qemu_fw_cfg.c
-index a69399a6b7c0..f41de793f41b 100644
---- a/drivers/firmware/qemu_fw_cfg.c
-+++ b/drivers/firmware/qemu_fw_cfg.c
-@@ -452,7 +452,7 @@ static void fw_cfg_sysfs_release_entry(struct kobject *kobj)
+diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
+index 87729c365be1..c61398634d75 100644
+--- a/drivers/firmware/efi/esrt.c
++++ b/drivers/firmware/efi/esrt.c
+@@ -156,7 +156,7 @@ static void esre_release(struct kobject *kobj)
+ 	kfree(entry);
  }
  
- /* kobj_type: ties together all properties required to register an entry */
--static struct kobj_type fw_cfg_sysfs_entry_ktype = {
-+static const struct kobj_type fw_cfg_sysfs_entry_ktype = {
- 	.default_groups = fw_cfg_sysfs_entry_groups,
- 	.sysfs_ops = &fw_cfg_sysfs_attr_ops,
- 	.release = fw_cfg_sysfs_release_entry,
+-static struct kobj_type esre1_ktype = {
++static const struct kobj_type esre1_ktype = {
+ 	.release = esre_release,
+ 	.sysfs_ops = &esre_attr_ops,
+ 	.default_groups = esre1_groups,
 
 ---
 base-commit: 2fcd07b7ccd5fd10b2120d298363e4e6c53ccf9c
-change-id: 20230227-kobj_type-firmware-qemu-7746b6320db0
+change-id: 20230227-kobj_type-firmware-efi-2fca765a222a
 
 Best regards,
 -- 
