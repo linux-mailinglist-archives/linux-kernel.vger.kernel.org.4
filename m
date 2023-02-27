@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD946A3F19
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BADA6A3F1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Feb 2023 11:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjB0KG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 05:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S230038AbjB0KGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 05:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjB0KGY (ORCPT
+        with ESMTP id S229885AbjB0KGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 05:06:24 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC111E5E8;
-        Mon, 27 Feb 2023 02:06:18 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bx12so2409149wrb.11;
-        Mon, 27 Feb 2023 02:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lWPtIeGJuLp2sNqEUD7UlToTJ4p0ZWwdgktgqC9Ag+M=;
-        b=kpmv7ygLhic7CkQUH8FSQ1S84c4UmufxDVATvkq61obO/OPQQElNy/sFDO3FBUbGZY
-         m37m29y10lmsdhgCh9fEaOCaHza+cuQugNbK38FDRg5JO09TuapmOTiJ6mCtC0lMFIto
-         iYx/y08+hxxOUAUS3KyvKXIE3b/LiaVk4GNZr6vRUT6yW0AP5XBxwEK+/LZjNXLHmzH2
-         agwe6H1/UBFQdohk6U1SZ4HaHs3lcCkHl/IqxYt+DxIF1dUXoSfyqGNkGd9FLtQJM8qN
-         cxJVisvE6b+D9/CL6dXjltIZmKbwtiPy5nQYZBqNFW6w3bZC+AEjwoN/m1Kk3hjeoqy0
-         nFTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lWPtIeGJuLp2sNqEUD7UlToTJ4p0ZWwdgktgqC9Ag+M=;
-        b=xXFhMlSH4jr2JARIoT8hDA8RJkXrE4ccyjwnCBlnioQO/J385laniRV5nthxnOtvZM
-         j10ipxvaAvZOLYiW35e13AwcpDeaHzVUedGeUzUdwNPaT9w0OTFjRJPVDrRhYJWjWfyz
-         8T2xc/ZakOUOwtKy3SPxaajI0Y8N6jsRn0BgeQ7KfKNpVGZHmh1AJrPQnJrX6GNh1YF+
-         wrpQbHY/ohEuk7CxmPRpkWaalSAz9JVEchBfdu9h4ukDeF2ew97Jb7spaLkibSC+bYUm
-         qItUhvQ6BmngtbhCUdll7MD4mf+DLXjVYadvQs6fBEFpmDhCqFPZXmBuFiB5zTucMi0U
-         txLw==
-X-Gm-Message-State: AO0yUKUaShDsHhUeVVOxpuM7+EVCgneAM3i0mFyAx/OKGvvm7w1ILwhg
-        Ett+CU/aaRkNSzi06JdsbOUptrr5POk=
-X-Google-Smtp-Source: AK7set+EYtKmyM2Jpl/lq7Xexv+iRyoOjpkhf8PuQko9ygB3oBuXA0vflCN2lZwL/NosTd6RfgHw2g==
-X-Received: by 2002:a5d:4e47:0:b0:2c8:840:26ea with SMTP id r7-20020a5d4e47000000b002c8084026eamr7842180wrt.12.1677492377048;
-        Mon, 27 Feb 2023 02:06:17 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id s8-20020a5d4ec8000000b002c704271b05sm6665807wrv.66.2023.02.27.02.06.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 02:06:16 -0800 (PST)
-Date:   Mon, 27 Feb 2023 13:06:12 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] dca: delete unnecessary variable
-Message-ID: <Y/yAlDytLH0ZNLNz@kili>
+        Mon, 27 Feb 2023 05:06:41 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBE614986
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 02:06:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+t0UQb+OuF/ea7hjpluYOHI5k4fqZTVVQzf1SC2bteU=; b=PJaYD/nTBbDXwpsANs1mCl8ZxZ
+        z1pfi0i40murZWh+B7js0o+DWmEk5Yj8bUGd5kF8KSD7aXP7h7QwlTbt2+bR+fU6/b4U1tciCZf/n
+        q/M406RgEg6GvODxJ/DMtHjZ85IxvtbBj+tzwWuBIE3Nl1qMLcYKndvoF6Li2XNM+LTiPNKgkUPd6
+        NioNCKns8jTqMmWKXtJUgNM4HN0Xg1PYZ1ZTEYIN+FFi/4L7QA7xtFhlVFs1rAram6d6CP0TlOXiu
+        oIo0Z3dPWu5FH7n3+5yI5wb1IWTlLgukKt/B4b3LxzcbpraVIRW59ApJBpOP+jfkna7XRFUHYv8XD
+        4fl7emOA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pWaOg-00ECOz-2W;
+        Mon, 27 Feb 2023 10:06:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A536330030B;
+        Mon, 27 Feb 2023 11:06:16 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8E429209F7545; Mon, 27 Feb 2023 11:06:16 +0100 (CET)
+Date:   Mon, 27 Feb 2023 11:06:16 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Raghavendra K T <raghavendra.kt@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>, rppt@kernel.org,
+        Bharata B Rao <bharata@amd.com>,
+        Disha Talreja <dishaa.talreja@amd.com>
+Subject: Re: [PATCH V2 2/3] sched/numa: Enhance vma scanning logic
+Message-ID: <Y/yAmDj6tQVfOdqK@hirez.programming.kicks-ass.net>
+References: <cover.1675159422.git.raghavendra.kt@amd.com>
+ <5f0872657ddb164aa047a2231f8dc1086fe6adf6.1675159422.git.raghavendra.kt@amd.com>
+ <Y9zs5A/T1WQpJTuM@hirez.programming.kicks-ass.net>
+ <048964e8-179f-de7b-1190-831779d9911f@amd.com>
+ <ccba1a65-fe4f-89d5-a32b-2efba30a1350@amd.com>
+ <c730dee0-a711-8a8e-3eb1-1bfdd21e6add@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c730dee0-a711-8a8e-3eb1-1bfdd21e6add@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's more readable to just pass NULL directly instead of using a
-variable for that.
+On Mon, Feb 27, 2023 at 12:10:41PM +0530, Raghavendra K T wrote:
+> In summary: I do see that access to VMAs from disjoint sets is not fully
+>  fair, But on the other hand it is not very bad too. There is definitely
+> some scope or possibility to explore/improve fairness in this area
+> further.
 
-Signed-off-by: Dan Carpenter <error27@gmail.com>
----
-This subsystem seems unmaintained, but I already looked at the code and
-wrote the patch...  Andrew, could you take this?
+Ok, might be good to summarize some of this in a comment near here, so
+that readers are aware of the caveat of this code.
 
- drivers/dca/dca-core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+> PS: I have also tested above applying V3 patch (which incorporates your
+> suggestions), have not seen much deviation in observation with patch.
 
-diff --git a/drivers/dca/dca-core.c b/drivers/dca/dca-core.c
-index c40c2ebfdae9..ed3dac546dd6 100644
---- a/drivers/dca/dca-core.c
-+++ b/drivers/dca/dca-core.c
-@@ -294,9 +294,7 @@ EXPORT_SYMBOL_GPL(dca3_get_tag);
-  */
- u8 dca_get_tag(int cpu)
- {
--	struct device *dev = NULL;
--
--	return dca_common_get_tag(dev, cpu);
-+	return dca_common_get_tag(NULL, cpu);
- }
- EXPORT_SYMBOL_GPL(dca_get_tag);
- 
--- 
-2.39.1
-
+I'll see if I can find it in this dumpester fire I call inbox :-)
