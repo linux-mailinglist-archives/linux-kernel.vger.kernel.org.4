@@ -2,142 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDF26A5816
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACB86A5876
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbjB1L3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S231142AbjB1Ll0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjB1L3g (ORCPT
+        with ESMTP id S229978AbjB1LlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:29:36 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAF1DBD1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id ck15so38722456edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
-        b=ev4Uj0zM8CDLMvFJ9N89gY8s6bTexBCziLfJ9y93h0GjAvOdGgRLYhyM7EWKpGSG/c
-         uBBFYWpQ+ShDHjIhAMAbtmkRcPG4oU1w/LTk+Xr4H+V/ZfQfiOsJm6yk5r2BuJ15vlic
-         wQiodG7MheSxV25r7YFRcY9iC1qE2jrqtB3l03dLuU8KG0QcEaJvbntY1ecSLelsUB6F
-         Z7Q3nrhzvpDTr0apjMYNKcvvhwD+geZ8bmraNLTfVIY2NphLF5ntsu0sIRC+8QB7Z+nB
-         fVaQ4mzqOaH5FDJQRt757SZpNXAlTZJ/iNhFbhpQbSdIJM0+QDLF5Ul/EQJq6KYRdE5h
-         gOVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
-        b=H2av8SJyO4s6biYFe3f759fnq7uNriFJ7AVb6PDF92Fd+NCIkHnJF/+bsBaafbUAFf
-         ebQtPSl2KHfHR0r3Ktqutrj8fTd5hkj/qvcIgGMrGVo5HhtmzwpF2fkRJm0FFpespsea
-         L9ODKVbMxtSkGNKcj9E6YGBrPJMgJehDjWDOmwGhvrj8smgVY1Qav2kfk4AQvO727yCW
-         Pc+61KGxk5wQspxLRnYx99nQlm6FPQeZ2Zl9ZhcG20reHV2WhkMVfi+ocjpqgweyCsUs
-         38x82/l/LnJUTVmaoPWlmfHPWuRWDTlUzKmm08kkpZZvxuAyIEGSK6qJS0w8bP5W9eVm
-         g4xA==
-X-Gm-Message-State: AO0yUKV0jgu3UGFFV/ojHtre7IULXuBccJZtW4jOqvKSywz8Db39247U
-        TqvUJvojzi3sYEqMlvnomYfR+w==
-X-Google-Smtp-Source: AK7set8RZDJ6WdOsfg3RtQ3zH7fB6FvZdtq4hk6RJEmyFYlX71IvTbbNpXsS2JtDUgI3CjxqD9hTNg==
-X-Received: by 2002:a17:907:ca14:b0:8b0:26b6:3f2b with SMTP id uk20-20020a170907ca1400b008b026b63f2bmr2016682ejc.53.1677583722973;
-        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
-Received: from ?IPV6:2a02:578:8593:1200:5848:64ae:8a99:312a? ([2a02:578:8593:1200:5848:64ae:8a99:312a])
-        by smtp.gmail.com with ESMTPSA id r22-20020a50aad6000000b004af6a7e9131sm4223979edc.64.2023.02.28.03.28.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
-Message-ID: <a0a76c20-4fd9-476b-3e32-06f7cc2bbf1b@tessares.net>
-Date:   Tue, 28 Feb 2023 12:28:41 +0100
+        Tue, 28 Feb 2023 06:41:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFD332DE79;
+        Tue, 28 Feb 2023 03:41:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F394C14;
+        Tue, 28 Feb 2023 03:30:22 -0800 (PST)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D4BE3F881;
+        Tue, 28 Feb 2023 03:29:36 -0800 (PST)
+Message-ID: <299199d6-458b-fa54-cde1-dc6730ac1c3d@arm.com>
+Date:   Tue, 28 Feb 2023 11:29:35 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net 0/7] mptcp: fixes for 6.3
-Content-Language: en-GB
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>,
-        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
-        Jiang Biao <benbjiang@tencent.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Christoph Paasch <cpaasch@apple.com>,
-        Geliang Tang <geliang.tang@suse.com>
-References: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 5/9] coresight-tpdm: Add nodes to set trigger timestamp
+ and type
+Content-Language: en-US
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        Tao Zhang <taozha@qti.qualcomm.com>
+References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
+ <1674114105-16651-6-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1674114105-16651-6-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 27/02/2023 18:29, Matthieu Baerts wrote:
-> Patch 1 fixes a possible deadlock in subflow_error_report() reported by
-> lockdep. The report was in fact a false positive but the modification
-> makes sense and silences lockdep to allow syzkaller to find real issues.
-> The regression has been introduced in v5.12.
+On 19/01/2023 07:41, Tao Zhang wrote:
+> The nodes are needed to set or show the trigger timestamp and
+> trigger type. This change is to add these nodes to achieve these
+> function.
 > 
-> Patch 2 is a refactoring needed to be able to fix the two next issues.
-> It improves the situation and can be backported up to v6.0.
-> 
-> Patches 3 and 4 fix UaF reported by KASAN. It fixes issues potentially
-> visible since v5.7 and v5.19 but only reproducible until recently
-> (v6.0). These two patches depend on patch 2/7.
-> 
-> Patch 5 fixes the order of the printed values: expected vs seen values.
-> The regression has been introduced recently: present in Linus' tree but
-> not in a tagged version yet.
-> 
-> Patch 6 adds missing ro_after_init flags. A previous patch added them
-> for other functions but these two have been missed. This previous patch
-> has been backported to stable versions (up to v5.12) so probably better
-> to do the same here.
-> 
-> Patch 7 fixes tcp_set_state() being called twice in a row since v5.10.
-
-I'm sorry to ask for that but is it possible not to apply these patches?
-
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
 > ---
-> Geliang Tang (1):
->       mptcp: add ro_after_init for tcp{,v6}_prot_override
+>   drivers/hwtracing/coresight/coresight-tpdm.c | 97 ++++++++++++++++++++++++++++
+>   1 file changed, 97 insertions(+)
 > 
-> Matthieu Baerts (2):
->       selftests: mptcp: userspace pm: fix printed values
->       mptcp: avoid setting TCP_CLOSE state twice
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index c29d667d..1dbb6c4 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -20,6 +20,22 @@
+>   
+>   DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+>   
+> +static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
+> +							struct attribute *attr, int n)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	if (drvdata) {
+> +		if (drvdata->datasets & TPDM_PIDR0_DS_DSB)
+> +			return attr->mode;
+> +		else
+> +			return 0;
+> +	}
+
+	if (drvdata && drvdata->dsb)
+		return attr->mode;
+
+	return 0;
+
+?
+
+
+> +
+> +	return 0;
+> +}
+> +
+>   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>   {
+>   	u32 val;
+> @@ -241,8 +257,89 @@ static struct attribute_group tpdm_attr_grp = {
+>   	.attrs = tpdm_attrs,
+>   };
+>   
+> +static ssize_t dsb_trig_type_show(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "%u\n",
+> +			 (unsigned int)drvdata->dsb->trig_type);
+> +}
+> +
+> +/*
+> + * value 0: set trigger type as enablement
+> + * value 1: set trigger type as disablement
+> + */
+> +static ssize_t dsb_trig_type_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf,
+> +				      size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 0, &val)) || val < 0 || val > 1)
+
+val < 0 check here doesn't help on an unsigned variable.
+
+may be (val & ~1UL) ?
+
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	if (val)
+> +		drvdata->dsb->trig_type = true;
+> +	else
+> +		drvdata->dsb->trig_type = false;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_trig_type);
+> +
+> +static ssize_t dsb_trig_ts_show(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "%u\n",
+> +			 (unsigned int)drvdata->dsb->trig_ts);
+> +}
+> +
+> +/*
+> + * value 0: set trigger timestamp as enablement
+> + * value 1: set trigger timestamp as disablement
+> + */
+> +static ssize_t dsb_trig_ts_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf,
+> +				      size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 0, &val)) || val < 0 || val > 1)
+
+same here.
+
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	if (val)
+> +		drvdata->dsb->trig_ts = true;
+> +	else
+> +		drvdata->dsb->trig_ts = false;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_trig_ts);
+> +static struct attribute *tpdm_dsb_attrs[] = {
+> +	&dev_attr_dsb_trig_ts.attr,
+> +	&dev_attr_dsb_trig_type.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group tpdm_dsb_attr_grp = {
+> +	.attrs = tpdm_dsb_attrs,
+> +	.is_visible = tpdm_dsb_is_visible,
+> +};
+> +
+>   static const struct attribute_group *tpdm_attr_grps[] = {
+>   	&tpdm_attr_grp,
+> +	&tpdm_dsb_attr_grp,
+>   	NULL,
+>   };
 > 
-> Paolo Abeni (4):
->       mptcp: fix possible deadlock in subflow_error_report
->       mptcp: refactor passive socket initialization
->       mptcp: use the workqueue to destroy unaccepted sockets
 
-After 3 weeks of validation, syzkaller found an issue with this patch:
+Suzuki
 
-  https://github.com/multipath-tcp/mptcp_net-next/issues/366
-
-We then need to NAK this series. We will send a v2 with a fix for that.
-
->       mptcp: fix UaF in listener shutdown
-
-The other patches of the series are either not very important or are
-linked to the "faulty" one: they can all wait as well.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
