@@ -2,86 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0D86A5C39
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048EF6A5C40
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjB1PpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S229774AbjB1PqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjB1PpK (ORCPT
+        with ESMTP id S229437AbjB1PqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:45:10 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA7730B3E;
-        Tue, 28 Feb 2023 07:45:07 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5836576ota.1;
-        Tue, 28 Feb 2023 07:45:07 -0800 (PST)
+        Tue, 28 Feb 2023 10:46:24 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E49E302B3;
+        Tue, 28 Feb 2023 07:46:23 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso5801110ots.9;
+        Tue, 28 Feb 2023 07:46:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=47Io8bjBgTfpx9irLzQIk7kc2k6GPp2PZ97i5J/VsnU=;
-        b=cmBSfjVhL11B7Tk2kzeIA9iNdYDewp+Lj2BTbbj6UDcbnNNnGRKEG9iCWQZ+Zn3g9m
-         +0Zx+GlqRizxRKPwVVA4/JaFtaKfoHx9z08Qt2aL2jYElbluHU/qNXZSmld3edT7vPer
-         mqK5c2oWjXhedR1BJv6EXjMqwSeGb6qxBliUPUwERul1AYJ+81hovh17DHIbCSD5cK5w
-         9gwm8dkKVD7UCQUidLDzlT+m/No89gMZlEDYYGUWzhhwiazV+8nn9uut0WCqrLE6UV/g
-         tafJgCdHGRGVm9NWQqu21rdJz8b0ivr1k0uKj14YYV/O5qMTtismWvnVbWfVfSc1EyjJ
-         t6OA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vBC6OVNsrTR74m7E6zxcjbZx0E4uXq6c6qLU8cPPu8w=;
+        b=qcRfhI+DjRCPChROMhUlpR69nX3r/YbFhcHRZryG9e6J5dcy9dC9e7xz+mHTcjPanZ
+         WZ/rKxt65Drsc5YwKefqKhjbdKeO6LgIDuHXteidVe9n/3driiJwbQ9HR+xi0aqNAWd/
+         Z/vJqtAK+BghcxqFbjfYfZWNbMlJ4+QDmdh2acDbkBAdseZQcQgu+75npUvD4D2NR2x4
+         ElF/TfZVMbTLmU44X/v7vUwhlNWoPXCF5afCq9BgolFibGG/AxhcGVTa9u2iiM3Hjdnd
+         sZM83ya/rKv4WTxsOqcZ+4vgcRGrdhfa46+kWB5IwGWQyKBaqBUkq84pLWCs3gARzUs4
+         4Phg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=47Io8bjBgTfpx9irLzQIk7kc2k6GPp2PZ97i5J/VsnU=;
-        b=1CWJxt/w4tQEzawmcrvTAGCwa51RqUs+FRwDNro+vJ0RFNOANO5gGGcRRSi24/gx5b
-         yhlLhDoI8geb5ZNeTLLOfHUoBaiznTaMFdu+k4WRbx7L9+j4B1403/QCIG7kP7YYubeI
-         TAgu7z3U8x/9/Si3ZQqwb6sLshcn8Tvz52l2zN9GfjGNedR6YDoukSW0k0JD/uPmKZfz
-         5sw1wPkKEkGNV1aMwLgqHAJ9Swa0f8oi6XE0Wfx1nwXgWH0zcw1H9y8GSQTk9BrZ+oc/
-         XfHeqLPuvt2rMfE37ZYVjGQ0gv9mPqphjNWLTA8YTHc/tzC3C9NELumsGKLXnqjUTSjh
-         v80g==
-X-Gm-Message-State: AO0yUKU9Dsm2swe+CdCDI0GCW44hejovqMqY5OOgTIYlchwCLn+gcgJK
-        DitYB9aVXkmNu7SMl/QjwbscE+flktTkL9SJZWU=
-X-Google-Smtp-Source: AK7set84ZiKu/x5bhuHzdqKQUv7sjdjnKY8F7kTvWRv1lYoh5z8jZHyiBzPqCGMtJV4jXTtlMVk45nk6MjMvbYL6vxQ=
-X-Received: by 2002:a9d:128e:0:b0:688:cf52:6e18 with SMTP id
- g14-20020a9d128e000000b00688cf526e18mr1074144otg.4.1677599106749; Tue, 28 Feb
- 2023 07:45:06 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vBC6OVNsrTR74m7E6zxcjbZx0E4uXq6c6qLU8cPPu8w=;
+        b=LFfafcSDG3k0oHXR8CSA9fLID84tgutxHDYCn961cJKRz8DhwQYW6M9u+XbAVV9l49
+         jfmAmtETzBAxFr2fMIOlU7OKhVOaA37HWLyve7wnlzm6/oNNsWKMBBzJM52CiZ9Gbb/9
+         Sc11mdFzMd5Sm1k7h1V8yrkH/Elp+MDwzCw461gzLxJjcBUqf/PQqpIxESlXqMlEz3Uw
+         +sZe5hmKDW9rd1HvIBlUwVNhneIqsh5NQZwrE0gxWsCrshkZUgiMD0QZhN9mAVz5odVv
+         dJWHgUDUhsgv8232/0EHE+8wZKcw0RAb0rMlnqUKCdFRDEQpsLPJ7bqjyvKIq1Vdq6fJ
+         s0XQ==
+X-Gm-Message-State: AO0yUKWtiDmJBJOCHaLtBXa5GdFfvh8/hFC7GlyXdxg4lhryTRR9ijxb
+        tHMu/mLfVpjsO3fiYGyjYNIrRnBmJ5nGchstokpNVnM2
+X-Google-Smtp-Source: AK7set9C8cFya8pjgLJpKrGJ6GNk0nZskiNqYkfvA7UgZ6ypL5uzpHNs6llHzf7CVPCZtofa5Sc/CuV/D/0W8Ha057s=
+X-Received: by 2002:a9d:705c:0:b0:693:c521:f86d with SMTP id
+ x28-20020a9d705c000000b00693c521f86dmr1101399otj.6.1677599182481; Tue, 28 Feb
+ 2023 07:46:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20230227193535.2822389-1-robdclark@gmail.com> <Y/320d96QmbLe1J8@debian.me>
-In-Reply-To: <Y/320d96QmbLe1J8@debian.me>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 28 Feb 2023 07:44:55 -0800
-Message-ID: <CAF6AEGuqHDDQS22qcp8sk+5bj16XFiBarCLvpX=qNc2r2euMUw@mail.gmail.com>
-Subject: Re: [PATCH v7 00/15] dma-fence: Deadline awareness
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        intel-gfx@lists.freedesktop.org,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>
+References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
+ <20230214103936.1061078-3-sergio.paracuellos@gmail.com> <20230214151101.GB742354@roeck-us.net>
+ <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
+ <CAMhs-H_Ce-+MFi5zTMg8v8dSSg5ioaTy+Pw-0QMgK++PVtEViQ@mail.gmail.com>
+ <20230228083920.GA5801@alpha.franken.de> <CAMhs-H8xGjGs0-qvxb5KgQ3YZw=2=scqaY15K3ZRp50jQcncSg@mail.gmail.com>
+ <82659eef-528d-e421-aed4-21e1a7794bf5@roeck-us.net>
+In-Reply-To: <82659eef-528d-e421-aed4-21e1a7794bf5@roeck-us.net>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 28 Feb 2023 16:46:10 +0100
+Message-ID: <CAMhs-H8uPztGhWCRiQj69dZd8gtXy-fTDcn7ovOpp0LcX0H=wA@mail.gmail.com>
+Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
+ from 'wdt' into 'watchdog'
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -92,57 +80,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 4:43 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Tue, Feb 28, 2023 at 3:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On Mon, Feb 27, 2023 at 11:35:06AM -0800, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
+> On 2/28/23 00:51, Sergio Paracuellos wrote:
+> > On Tue, Feb 28, 2023 at 9:41 AM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> >>
+> >> On Tue, Feb 28, 2023 at 05:44:21AM +0100, Sergio Paracuellos wrote:
+> >>> On Tue, Feb 14, 2023 at 4:12 PM Sergio Paracuellos
+> >>> <sergio.paracuellos@gmail.com> wrote:
+> >>>>
+> >>>> On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+> >>>>>
+> >>>>> On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
+> >>>>>> Watchdog nodes must use 'watchdog' for node name. When a 'make dtb=
+s_check'
+> >>>>>> is performed the following warning appears:
+> >>>>>>
+> >>>>>> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-=
+9a-f])?$'
+> >>>>>>
+> >>>>>> Fix this warning up properly renaming the node into 'watchdog'.
+> >>>>>>
+> >>>>>> Reviewed-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>>>>> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> >>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> >>>>>
+> >>>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >>>>>
+> >>>>> Note that we can not apply this and the next patch of the series
+> >>>>> through the watchdog tree since it crosses a maintainer boundary.
+> >>>>
+> >>>> I was expecting Thomas to get these two arch/mips patches or get an
+> >>>> Acked-by from him in order for you to apply them.
+> >>>
+> >>> Hi Thomas,
+> >>>
+> >>> I think you have missed this series since you have started to apply
+> >>> newer stuff in mips-next. Are you ok with taking or Acking patches 2
+> >>> and 3 of this series?
+> >>
+> >> yes, I sort of missed it. If it's enough to take patch 2/3 I'll do tha=
+t.
+> >> If it's better to keep the series, I'm also ok with acking them.
+> >> What's the best way forward ?
 > >
-> > This series adds a deadline hint to fences, so realtime deadlines
-> > such as vblank can be communicated to the fence signaller for power/
-> > frequency management decisions.
-> >
-> > This is partially inspired by a trick i915 does, but implemented
-> > via dma-fence for a couple of reasons:
-> >
-> > 1) To continue to be able to use the atomic helpers
-> > 2) To support cases where display and gpu are different drivers
-> >
-> > This iteration adds a dma-fence ioctl to set a deadline (both to
-> > support igt-tests, and compositors which delay decisions about which
-> > client buffer to display), and a sw_sync ioctl to read back the
-> > deadline.  IGT tests utilizing these can be found at:
-> >
-> >   https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-deadline
-> >
-> >
-> > v1: https://patchwork.freedesktop.org/series/93035/
-> > v2: Move filtering out of later deadlines to fence implementation
-> >     to avoid increasing the size of dma_fence
-> > v3: Add support in fence-array and fence-chain; Add some uabi to
-> >     support igt tests and userspace compositors.
-> > v4: Rebase, address various comments, and add syncobj deadline
-> >     support, and sync_file EPOLLPRI based on experience with perf/
-> >     freq issues with clvk compute workloads on i915 (anv)
-> > v5: Clarify that this is a hint as opposed to a more hard deadline
-> >     guarantee, switch to using u64 ns values in UABI (still absolute
-> >     CLOCK_MONOTONIC values), drop syncobj related cap and driver
-> >     feature flag in favor of allowing count_handles==0 for probing
-> >     kernel support.
-> > v6: Re-work vblank helper to calculate time of _start_ of vblank,
-> >     and work correctly if the last vblank event was more than a
-> >     frame ago.  Add (mostly unrelated) drm/msm patch which also
-> >     uses the vblank helper.  Use dma_fence_chain_contained().  More
-> >     verbose syncobj UABI comments.  Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
-> > v7: Fix kbuild complaints about vblank helper.  Add more docs.
+> > Both trees work for me. The rest of the patches of this series should
+> > go through the watchdog tree. Guenter, what is better for you?
 > >
 >
-> I want to apply this series for testing, but it can't be applied cleanly
-> on current drm-misc tree. On what tree (and commit) is this series based
-> on?
+> Wim is handling pull requests. He has queued the other three patches in h=
+is
+> tree. I would suggest to apply the two remaining patches through the mips
+> tree.
 
-You can find my branch here:
+Thanks for letting me know, Guenter.
 
-https://gitlab.freedesktop.org/robclark/msm/-/commits/dma-fence/deadline
+Thomas, please, take the patches 2 and 3 through the mips tree, then.
 
-BR,
--R
+Thanks,
+    Sergio Paracuellos
+>
+> Guenter
+>
+> > Thanks,
+> >      Sergio Paracuellos
+> >
+> >>
+> >> Thomas.
+> >>
+> >> --
+> >> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> >> good idea.                                                [ RFC1925, 2=
+.3 ]
+>
