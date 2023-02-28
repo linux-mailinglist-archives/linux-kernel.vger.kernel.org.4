@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F696A52C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F686A52C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 06:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjB1F7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 00:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S229801AbjB1F7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 00:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjB1F7g (ORCPT
+        with ESMTP id S229612AbjB1F7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 00:59:36 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168441ADC5;
-        Mon, 27 Feb 2023 21:59:34 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 004BC24E3DE;
-        Tue, 28 Feb 2023 13:59:33 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
- 2023 13:56:58 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
- 2023 13:56:57 +0800
-Message-ID: <34512ec5-d110-2817-cd25-fa4bb75989ce@starfivetech.com>
-Date:   Tue, 28 Feb 2023 13:56:57 +0800
+        Tue, 28 Feb 2023 00:59:02 -0500
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C4D9EF3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 21:59:00 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VchnyNb_1677563936;
+Received: from 30.97.48.254(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VchnyNb_1677563936)
+          by smtp.aliyun-inc.com;
+          Tue, 28 Feb 2023 13:58:57 +0800
+Message-ID: <c770beee-aa1d-0001-3025-ca0073b228e8@linux.alibaba.com>
+Date:   Tue, 28 Feb 2023 13:58:56 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 0/4] StarFive's SDIO/eMMC driver support
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230215113249.47727-1-william.qiu@starfivetech.com>
- <CAPDyKFqJxrLh+pgQ-u_Lwxv4_TsH--rga049GBTqKAa_M14_yw@mail.gmail.com>
- <ca9bed19-9809-9443-7ca1-1d11984ded55@starfivetech.com>
- <CAPDyKFpwFq26Tqa-5k7SbQ7Zgk3-AQSrjo7ZSJt6uo6QJR3+5Q@mail.gmail.com>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <CAPDyKFpwFq26Tqa-5k7SbQ7Zgk3-AQSrjo7ZSJt6uo6QJR3+5Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v5] erofs: add per-cpu threads for decompression as an
+ option
+To:     Sandeep Dhavale <dhavale@google.com>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com
+References: <20230208093322.75816-1-hsiangkao@linux.alibaba.com>
+ <Y/ewpGQkpWvOf7qh@gmail.com>
+ <ca1e604a-92ba-023b-8896-dcad9413081d@linux.alibaba.com>
+ <8e067230-ce1b-1c75-0c23-87b926357f96@linux.alibaba.com>
+ <CAB=BE-SQZA7gETEvxnHmy0FDQ182fUSRoa0bJBNouN33SFx3hQ@mail.gmail.com>
+ <CAB=BE-Svf7TMPs-eA+sVuGtYjVWfKd1Nd_AkA9im4Op7TCLW3g@mail.gmail.com>
+ <1f926a20-6b45-137d-4e78-30025ba33574@linux.alibaba.com>
+ <CAB=BE-SBtO6vcoyLNA9F-9VaN5R0t3o_Zn+FW8GbO6wyUqFneQ@mail.gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CAB=BE-SBtO6vcoyLNA9F-9VaN5R0t3o_Zn+FW8GbO6wyUqFneQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,120 +54,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/2/27 22:53, Ulf Hansson wrote:
-> On Mon, 27 Feb 2023 at 08:47, William Qiu <william.qiu@starfivetech.com> wrote:
+On 2023/2/28 13:51, Sandeep Dhavale wrote:
+> On Mon, Feb 27, 2023 at 9:01 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 >>
+>> Hi Sandeep,
 >>
+>> On 2023/2/28 12:47, Sandeep Dhavale via Linux-erofs wrote:
+>>> Hi all,
+>>> I completed the tests and the results are consistent with
+>>> our previous observation. We can see that removing WQ_UNBOUND
+>>> helps but the scheduling latency by using high priority per cpu
+>>> kthreads is even lower. Below is the table.
+>>>
+>>> |---------------------+-------+-------+------+-------|
+>>> | Table               | avg   | med   | min  | max   |
+>>> |---------------------+-------+-------+------+-------|
+>>> | Default erofs       | 19323 | 19758 | 3986 | 35051 |
+>>> |---------------------+-------+-------+------+-------|
+>>> | !WQ_UNBOUND         | 11202 | 10798 | 3493 | 19822 |
+>>> |---------------------+-------+-------+------+-------|
+>>> | hipri pcpu kthreads | 7182  | 7017  | 2463 | 12300 |
+>>> |---------------------+-------+-------+------+-------|
 >>
->> On 2023/2/15 20:37, Ulf Hansson wrote:
->> > On Wed, 15 Feb 2023 at 12:32, William Qiu <william.qiu@starfivetech.com> wrote:
->> >>
->> >> Hi,
->> >>
->> >> This patchset adds initial rudimentary support for the StarFive
->> >> designware mobile storage host controller driver. And this driver will
->> >> be used in StarFive's VisionFive 2 board. The main purpose of adding
->> >> this driver is to accommodate the ultra-high speed mode of eMMC.
->> >>
->> >> The last patch should be applied after the patchset [1]:
->> >> [1] https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
->> >>
->> >> Changes v3->v4:
->> >> - Added documentation to describe StarFive System Controller Registers.
->> >> - Added aon_syscon and stg_syscon node.
->> >> - Fixed some checkpatch errors/warnings.
->> >>
->> >> Changes v2->v3:
->> >> - Wraped commit message according to Linux coding style.
->> >> - Rephrased the description of the patches.
->> >> - Changed the description of syscon regsiter.
->> >> - Dropped redundant properties.
->> >>
->> >> Changes v1->v2:
->> >> - Renamed the dt-binding 'starfive,jh7110-sdio.yaml' to 'starfive,jh7110-mmc.yaml'.
->> >> - Changed the type of 'starfive,syscon' and modify its description.
->> >> - Deleted unused head files like '#include <linux/gpio.h>'.
->> >> - Added comment for the 'rise_point' and 'fall_point'.
->> >> - Changed the API 'num_caps' to 'common_caps'.
->> >> - Changed the node name 'sys_syscon' to 'syscon'.
->> >> - Changed the node name 'sdio' to 'mmc'.
->> >>
->> >> The patch series is based on v6.1.
->> >>
->> >> William Qiu (4):
->> >>   dt-bindings: mmc: Add StarFive MMC module
->> >>   mmc: starfive: Add sdio/emmc driver support
->> >>   riscv: dts: starfive: Add mmc node
->> >>   dt-bindings: syscon: Add StarFive syscon doc
->> >>
->> >>  .../bindings/mmc/starfive,jh7110-mmc.yaml     |  77 ++++++++
->> >>  .../bindings/soc/starfive/jh7110-syscon.yaml  |  51 +++++
->> >>  MAINTAINERS                                   |  11 ++
->> >>  .../jh7110-starfive-visionfive-2.dtsi         |  23 +++
->> >>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  47 +++++
->> >>  drivers/mmc/host/Kconfig                      |  10 +
->> >>  drivers/mmc/host/Makefile                     |   1 +
->> >>  drivers/mmc/host/dw_mmc-starfive.c            | 186 ++++++++++++++++++
->> >>  8 files changed, 406 insertions(+)
->> >>  create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->> >>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/jh7110-syscon.yaml
->> >>  create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
->> >>
->> >
->> > I have dropped the v3 patches and applied patch1 and patch2 from the
->> > v4 series instead, for my next branch, thanks!
->> >
->> > Kind regards
->> > Uffe
+>> May I ask did it test with different setup since the test results
+>> in the original commit message are:
 >>
->> Hi Uffe,
->>
->> Sorry to bother you.But I found a bug that in drivers/mmc/host/dw_mmc-starfive.c:
->>
->>     47 static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
->>     48                                              u32 opcode)
->>     49 {
->>     50         static const int grade  = MAX_DELAY_CHAIN;
->>     51         struct dw_mci *host = slot->host;
->>     52         struct starfive_priv *priv = host->priv;
->>     53         int rise_point = -1, fall_point = -1;
->>     54         int err, prev_err;
->>     55         int i;
->>     56         bool found = 0;
->>     57         u32 regval;
->>     58
->>     59         /*
->>     60          * Use grade as the max delay chain, and use the rise_point and
->>     61          * fall_point to ensure the best sampling point of a data input
->>     62          * signals.
->>     63          */
->>     64         for (i = 0; i < grade; i++) {
->>     65                 regval = i << priv->syscon_shift;
->>     66                 err = regmap_update_bits(priv->reg_syscon, priv->syscon_offset,
->>     67                                                 priv->syscon_mask, regval);
->>     68                 if (err)
->>     69                         return err;
->>     70                 mci_writel(host, RINTSTS, ALL_INT_CLR);
->>     71
->>     72                 err = mmc_send_tuning(slot->mmc, opcode, NULL);
->>     73                 if (!err)
->>     74                         found = 1;
->>     75
->>     76                 if (i > 0) {
->> --> 77                         if (err && !prev_err)
->>
->> prev_err was never initialized to zero.
->>
->> So I'm here to ask for your suggestion, should I send a new version
->> to fix it or send you a patch with a fixes tag?
-> 
-> Please send a new incremental patch on top. I will queue it up as a
-> fix for v6.3-rc[n].
-> 
-> Kind regards
-> Uffe
+> Hi Gao,
+> Yes I did the test on the different (older) hardware than my original testing
+> (but the same one Nathan had used) to remove that as a variable.
 
-Fine, I'll do it in my next version. Thanks for your apply.
+Ok, good to know that.
 
-Best regards
-William
+> 
+> Thanks,
+> Sandeep.
+> 
+>> +-------------------------+-----------+----------------+---------+
+>> |                         | workqueue | kthread_worker |  diff   |
+>> +-------------------------+-----------+----------------+---------+
+>> | Average (us)            |     15253 |           2914 | -80.89% |
+>> | Median (us)             |     14001 |           2912 | -79.20% |
+>> | Minimum (us)            |      3117 |           1027 | -67.05% |
+>> | Maximum (us)            |     30170 |           3805 | -87.39% |
+>> | Standard deviation (us) |      7166 |            359 |         |
+>> +-------------------------+-----------+----------------+---------+
+>>
+>> Otherwise it looks good to me for now, hopefully helpful to Android
+>> users.
+>>
+>> Thanks,
+>> Gao Xiang
+>>
+>>>
+>>>
+>>> Thanks,
+>>> Sandeep.
