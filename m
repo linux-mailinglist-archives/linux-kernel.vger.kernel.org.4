@@ -2,249 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB656A5178
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A465F6A5184
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjB1Cxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S230136AbjB1C5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjB1Cxe (ORCPT
+        with ESMTP id S229562AbjB1C5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:53:34 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2095.outbound.protection.outlook.com [40.107.94.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AC2D32A;
-        Mon, 27 Feb 2023 18:53:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oAzi0B4H0H87oGU+QHUSOHcIK/0N40MTud0zhFWvNF/IBEKpocHtTdeuN6uRhnYpTJzbo+AkP35KZMW8P/sC1mAhD/2pH6NqCXCOSV1LGsLZRZkD5iFuyIHWhAlsY036W9HX4SxK+NH/XxSaQGgTix4qx+bxYY4/xhfvkbhVzAjM8vT52P/gz8zaMS+k2uZPa1GF4/x8N8/tW8h8aCBCBw6hkn9KXyJSvnkix2h2LsMjtAHZZj4jYmjjyBeO3rAMQLmCr2EIsvlcEPyZQ0s4kS3wpn6wDdSNLLOz9TfJvtpENfhUBteWsi26i4XKZjYW8TBKvqG7tqhL/hWeQuTEyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GrnmJ00EZUt3u9Y0j5/aSOFvRVfleBw8Pj0tvGGeJ9o=;
- b=Ues+T5rRqc8O51hlCUbqN/rwWEBmS0R5jrB9S7QEJOQSKfknM0u7d1DIO+XgN/kYk0eWUhsBdUZM2AnUF875NTDHY7xoUK5Ro7TO10xYArZ6aXaqKJOiKo9jTzajLW0sVn7b3pLcuw7RQZZEGlUxbqUdZyOO5HbSTqdZMhh4v0OCjisMGD1JMG7bzPcbvuw3Cuz+T5fydoWV+iJ5/T/Fc8qe2qWd2xKv3HovAvOFwC9x9GXgRme5NLdr+RkYh25Sam1BHwhc6HHDtXGmQ7JkqfIaVx8qDIHw/b/Qcm73FUOeRKLYWaciAr0Meb6NYOsgLk5/OREfF/0s255Wnde9+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GrnmJ00EZUt3u9Y0j5/aSOFvRVfleBw8Pj0tvGGeJ9o=;
- b=TLqiww6Tot1tJpctQrs6ghHy92g4RbmyWfT5Ek1C6AOoxOCtQRR43FFZh0RWNR1Rk4gT+na1DVDDvYXX3FJWGYAUj5PVwucaWaAzXJG1egyt+aTgbpczq/INj9KwgTri4gAyGa2aNz76Rw9rqOLn7QQTUhu5Qgz0vmG48hr4bpM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM8PR01MB6824.prod.exchangelabs.com (2603:10b6:8:23::24) by
- SN6PR01MB4222.prod.exchangelabs.com (2603:10b6:805:a8::28) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.24; Tue, 28 Feb 2023 02:53:27 +0000
-Received: from DM8PR01MB6824.prod.exchangelabs.com
- ([fe80::fc8b:5e5e:a850:7f0a]) by DM8PR01MB6824.prod.exchangelabs.com
- ([fe80::fc8b:5e5e:a850:7f0a%6]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
- 02:53:27 +0000
-Message-ID: <e80adfa5-b51a-a1ae-f582-58eaa4a5be68@os.amperecomputing.com>
-Date:   Tue, 28 Feb 2023 08:23:19 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 1/2] PCI/ATS: Add a helper function to configure ATS STU
- of a PF.
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
-        will@kernel.org
-Cc:     jean-philippe@linaro.org, darren@os.amperecomputing.com,
-        scott@os.amperecomputing.com
-References: <20230227132151.1907480-1-gankulkarni@os.amperecomputing.com>
- <20230227132151.1907480-2-gankulkarni@os.amperecomputing.com>
- <b7a71cca-8223-7346-c024-edc80a106042@linux.intel.com>
-From:   Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-In-Reply-To: <b7a71cca-8223-7346-c024-edc80a106042@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR04CA0100.namprd04.prod.outlook.com
- (2603:10b6:610:75::15) To DM8PR01MB6824.prod.exchangelabs.com
- (2603:10b6:8:23::24)
+        Mon, 27 Feb 2023 21:57:50 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE142200C;
+        Mon, 27 Feb 2023 18:57:49 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S0s3rC013888;
+        Tue, 28 Feb 2023 02:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=THfjmtf+moKot3JcHrO/bMwOY4UUnP9g05A05WQE4/Q=;
+ b=TQ0WnnvAL9wnLZYDsg++r0SdjDwxVCIaHhYzhJ/5gdnWsr594LX0xFfoSlhZbW8io3YA
+ P9+pkNZLQy1O6dVwiPyzsO+Q3ODYsL705rKIMYMEnHeKf06oI57tLJYvteGVzoSCrBRE
+ 5U9Jl8uFQj7+8XXZkx/8hOa1iAcYsQdUhlGK+VpxOEE1XIhp1T1gVTAtAJQjMO8JrWUV
+ z3P0XCYJg3lnJsMUZUglv8ntcV7iG+6TJA92mPY5l0fc6IIKsUsey6lKM+7WciGZP9eW
+ QoITB8gemOoFCIQs8LigoV6B6DFfZKalZrTM5+2GRbCiqZv3hfkKrfq1oR0JoiUdO7W7 jg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nyajaxuj6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 02:57:31 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31S2vUW4015949
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 02:57:30 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
+ 2023 18:57:29 -0800
+Message-ID: <76f74b86-8ff1-2346-4f5e-0048543bd8b0@quicinc.com>
+Date:   Mon, 27 Feb 2023 18:57:17 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR01MB6824:EE_|SN6PR01MB4222:EE_
-X-MS-Office365-Filtering-Correlation-Id: f44755db-6bdd-4c9c-1925-08db1936f72c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ayQHz6NESCXfAu8S2VT4O9ZFPyZCdiSOPUiaK4VVKBv0LSpGLj56Xh4HOEi520+E3559eqAckAa0+wKJ6/J2Zn4JA04YeqUwpXGZtGNWc/oGvf0iQZP9P6epnJpG0mJ7D58iSvJ8Ilt6Dre3ayw2YH/A+fXkIG13FMYfvDQh80ums7OQjbrLrNhofy7eZ7xvS2e8e9z+CFJiXgh9Lp+/sPdL79C0d9ssmfwXdI2gxw5w1KL397mICw7KWNMtFymgPbC7WiKu8aL8mRuGqKzJ9kGMAZ2JoD0NO9xKaDnHov/AEdMl0LGaxdC9+35U2AyS311UPL6Ju1tIqudyDY850uFiPu2COqT5YEfH7IdQR4JSV17ljK6f5JVjI+wHccG04H/PNT6puONSTy0ry7mU+bOoaMq3xWL77H7UxdHwm6jYsVhNKgl2zEvJRmBF36Uv8I+gdMzhHo8uQ/hGeSKAAERrCy3gf45CF5TGroo95MG4mhjrPBQYhO3apeN713NXaIKONF8uOMMeypooLdE8zOt9Xp3UiPQty8Smt+uBoxKpBAGVeMlWH6Fzeqjmv47KmLO3xN5rURNNyZhSMmhvXxEYIPmWpc3nsNup4MoL9q5Ne9TsKCVbujT0gqEONI9VRJKp6lvyxEeb8V2dz743iiNvm5TYMgZNfEiuAufeoibdCbNBt8XRVloSgUXzXUKT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR01MB6824.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(376002)(366004)(39850400004)(136003)(451199018)(6506007)(31686004)(8936002)(5660300002)(4326008)(66946007)(2906002)(7416002)(66556008)(8676002)(316002)(66476007)(478600001)(6666004)(107886003)(6486002)(2616005)(31696002)(86362001)(966005)(38100700002)(41300700001)(186003)(26005)(6512007)(53546011)(83380400001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmQ2KzJmSDVrOC9XQ1hkZW1oTTExRkExV1l1K1ZPWjlYTjlSUGdHbm50MjRX?=
- =?utf-8?B?K05yd1R3VEI3K3ZoSDlKZnJ3REc0bTc0OCtwRnd6L0lSbWZlVmhuWG5jUnRm?=
- =?utf-8?B?aFNJM3daRzZna2NkM0UxWHp3YjRwWHlBOXROY2dEUHhvSkpSUTVXQUFZZjNm?=
- =?utf-8?B?VkM5TkZSYXJVT0NiYkRjY1lMYUZUQnRMVnpWdkNJaXVTeVFrV1BKcCtXYUlu?=
- =?utf-8?B?QnlxdThSYmMvUWtzQXBvUFBHMm1BNDF6bEMyMHNDN2dYSDZOSTlBQVNRN2RB?=
- =?utf-8?B?eUxWKzlwc1VoSGFBdkxHMjlMS0lkcm1iOFhTclpSRW96UWNiZjVRWXpXdTZk?=
- =?utf-8?B?WVlYM2pyUHBIRDJDRU43K3ZIMk14VW5iWEprYzFnQVUwMzlhRUw1R2hvQmJO?=
- =?utf-8?B?YzZvdTZJdjA5SFk2Wmo4VWFNdGJGb2FPSXlSS2tSZ3pXRlpJUXZqWUFMNlZk?=
- =?utf-8?B?L0hNalBwdjY0ZDI1ZnZ6czYxTzNVak41TDZLUDhwSHY2anJjSVV5dXMvSXpj?=
- =?utf-8?B?U2hFN3l0WGpidU5tVlhmNEQ4eGl1S3dqMUg2OWZBcWVzRTh5dkYzZDNaMmlr?=
- =?utf-8?B?VjdyQmZreWI4S2lJMGVHNmUvbnhzdTNYaVFhbXhpb1RVWjhjd1Q3QlYrM2N4?=
- =?utf-8?B?elNwYkd5MlhrMEVxR2wxbWpKUTZyWmJ0Z096b1dDSVBLTkxTYVo0L0xyVTNL?=
- =?utf-8?B?Y0pGMDF2Q1RHWHhtdFNROFpwM1pXckh4anRLUzNFRGs0c3AxT2RNVDUxRHlF?=
- =?utf-8?B?aFVPRTk3TVJWaUNiMU9PNVFIckdlSHR1SzV2T1FvQ3pqYlZaUkRTdzF3Q0NE?=
- =?utf-8?B?RDlHZWN2MTcrQzI1azhLRURTVW5DdkR4L2QyOHBKM0YvSU5sWGFVWnMvRGtH?=
- =?utf-8?B?SU1DbU1VeVdiRHZLekZoM2JhY3g0ZWgwUnpjK3d4Y09yaDQ1azRzaWUzTTRw?=
- =?utf-8?B?Z2FsZnVOTXVTelVMdkRwZVhhQ1NSZ3JRcGp0amJFbEZNTWRqVlpCdEI3cVJq?=
- =?utf-8?B?Wlg1RXhmdFN0eEhlMkF5bExkK1cyejhVeU1jeWJuaHFFS3h5U1dCaVBzYURY?=
- =?utf-8?B?TlFmQTZDOC9IdkF3QXAwUk5TZDE0SmRXaWZlekNDTnhrT24zaEpPVmszTmJs?=
- =?utf-8?B?NnN2ck14cjRjeFI2QjhoK2tTdVpIcy9QbzZkSXVOQ3AvYitFRUsyeFNxaEFo?=
- =?utf-8?B?NUNzZ0JLdGsyMTZzVGpnbkorTFBVbXMwSXhiOTVWUFdkTTNsUFQ3TEhNZGV3?=
- =?utf-8?B?eDRyb21oLzZRc25xRGxyZFlVV3JsU3BYaFdDLzlIK08zUTQwM21iR01UUGww?=
- =?utf-8?B?ejA5bGtYcFNubE0wNm1jdjBsNUV4WTJNWlU3cGZtMENNdWp0a05aNk1Bemw3?=
- =?utf-8?B?U2dXVnNVUkZVNXVxZWNFVVFITnBLT3FmWWN4UUFubWR6cGZrQVFDV2hsaTla?=
- =?utf-8?B?bUhyOHJDYUxoMHY4K3NqK3haSUlWYTFUWTlwRWZSUGJEaG52YVFUNHVOSTg1?=
- =?utf-8?B?d0JXUjZ3R1loNkhUcGhTV0ZFTHJHejVkRURvRjNGYTRSblFVcm9uejdLSGtO?=
- =?utf-8?B?L29RalU0S0I0R0VoN3BMSjdYdGJRY3JEektwVFZMblpjd05YdW14N1ZXYkln?=
- =?utf-8?B?bHVGVWJmMnloZXNtVEhHbGtQSkYwbC9KTHhmT0w0UzBmU1pSVDl1T1pzWEJn?=
- =?utf-8?B?cmJKaVFQYS9YSlBiUS9zVEJMbDBybFB1SXJiOXpOVlliM3RBbWViYXJxekM3?=
- =?utf-8?B?dGx3UThYbEVWNWFSRzN4ZGZtenh2Ui9CSlIzSTh0YTU5bHhGZHVsQmNzUk8v?=
- =?utf-8?B?dDRDTmp2allkTDVuMmg2ZWRENnFON3JlTTJKdnlSWTl4STVZMkR2YkhMc2xR?=
- =?utf-8?B?V2pzaThiV0orQXpuYkVleUhFTWdCcjZ5L0paUkQ3bU5qNmgwaUgzOGg5VW1x?=
- =?utf-8?B?QzRZei9VZnFJaTROdHVGYTdYcmZkS2k3NnI5eXBUdkdsNUgxdnJ6VE1SeTFW?=
- =?utf-8?B?SVI5cFFDbTBTVjNzZVhXVEFHWFpkOHE1WmxtQUZhSHJIWVJjajNlRzBnQW5D?=
- =?utf-8?B?NDIzRzA0M21aa2g2U1E1RGhwRG1HYVY5Ukh5VnUwWUc2QTBoeCsxMXBncUlZ?=
- =?utf-8?B?SG5BYVNJWllQdnorZDFrTkMvYWl4bmRwTGVvc3VSNCtITXRNM0VzR1dMaEVo?=
- =?utf-8?Q?w3G8yTA92i5W6Ztp1eUf4tTlxvKwqLNhlEHAJtvQfFK7?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f44755db-6bdd-4c9c-1925-08db1936f72c
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR01MB6824.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 02:53:26.9785
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LG7SRdodLO7wm9OvJhNRA/ORuIlDSlUi/vqwAjskD2XWnD57PhLXwPlemYzXoCch/ieOkwdObL/zStQ+H19fitl1bk4eWB13+Jgj53fE4RnhYrZjKXI+1kBXyR3S4vSk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB4222
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/7] scsi: ufs: core: Add hwq print for debug
+Content-Language: en-US
+To:     Ziqi Chen <quic_ziqichen@quicinc.com>,
+        =?UTF-8?B?UG93ZW4gS2FvICjpq5jkvK/mlocp?= <Powen.Kao@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+CC:     =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= 
+        <peter.wang@mediatek.com>,
+        =?UTF-8?B?RWRkaWUgSHVhbmcgKOm7g+aZuuWCkSk=?= 
+        <eddie.huang@mediatek.com>,
+        =?UTF-8?B?SmlhamllIEhhbyAo6YOd5Yqg6IqCKQ==?= 
+        <jiajie.hao@mediatek.com>,
+        =?UTF-8?B?Q0MgQ2hvdSAo5ZGo5b+X5p2wKQ==?= <cc.chou@mediatek.com>,
+        =?UTF-8?B?QWxpY2UgQ2hhbyAo6LaZ54+u5Z2HKQ==?= 
+        <Alice.Chao@mediatek.com>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        =?UTF-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= 
+        <Chun-hung.Wu@mediatek.com>,
+        =?UTF-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?= 
+        <Chaotian.Jing@mediatek.com>,
+        =?UTF-8?B?TmFvbWkgQ2h1ICjmnLHoqaDnlLAp?= <Naomi.Chu@mediatek.com>,
+        =?UTF-8?B?U3RhbmxleSBDaHUgKOacseWOn+mZnik=?= 
+        <stanley.chu@mediatek.com>,
+        =?UTF-8?B?TWFzb24gWmhhbmcgKOeroOi+iSk=?= <Mason.Zhang@mediatek.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>
+References: <20230222030427.957-1-powen.kao@mediatek.com>
+ <20230222030427.957-5-powen.kao@mediatek.com>
+ <1b9c2bc9-a349-062a-597c-336804c05394@quicinc.com>
+ <74bedcff32df0c93c14b004814017f3344247528.camel@mediatek.com>
+ <0c17dd26-b1aa-54b0-6dc4-561cd996cead@quicinc.com>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <0c17dd26-b1aa-54b0-6dc4-561cd996cead@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CYcUx0XkS3EEJ4PSGTkhuMo1tvPEzTXz
+X-Proofpoint-ORIG-GUID: CYcUx0XkS3EEJ4PSGTkhuMo1tvPEzTXz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_19,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ bulkscore=0 clxscore=1011 phishscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280017
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28-02-2023 12:59 am, Sathyanarayanan Kuppuswamy wrote:
-> Hi,
-> 
-> On 2/27/23 5:21 AM, Ganapatrao Kulkarni wrote:
->> As per PCI specification (PCI Express Base Specification Revision
->> 6.0, Section 10.5) both PF and VFs of a PCI EP are permitted to be enabled
->> independently for ATS capability, however the STU(Smallest Translation
->> Unit) is shared between PF and VFs. For VFs, it is hardwired to Zero and
->> the associated PF's value applies to VFs.
+On 2/26/2023 7:14 PM, Ziqi Chen wrote:
+> Hi Powen,
+>
+> The Bao. D . Nguyen (quic_nguyenb@quicinc.com) from QCOM already made 
+> patch to support MCQ abort.
+>
+> ++ Bao here to be aware of it in case your error handing patch 
+> conflict with his abort handling patch.
+>
+>
+> Best Regards,
+>
+> Ziqi
+>
+>
+> On 2/23/2023 10:13 PM, Powen Kao (高伯文) wrote:
+>> Hi Ziqi,
 >>
->> In the current code, the STU is being configured while enabling the PF ATS.
->> Hence, it is not able to enable ATS for VFs, if it is not enabled on the
->> associated PF already.>
->> Adding a function pci_ats_stu_configure(), which can be called to
->> configure the STU during PF enumeration.
->> Latter enumerations of VFs can successfully enable ATS independently.
-> 
-> Why not enable ATS in PF before enabling it in VF? Just updating STU of
-> PF and not enabling it seem odd.
-
-More details are in PATCH 0/2 and 2/2.
-
-Also, This was discussed at
-https://lore.kernel.org/linux-arm-kernel/20230221154624.GA3701506@bhelgaas/T/
-
-> 
+>> Thanks for ur comments.
 >>
->> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
->> ---
->>   drivers/pci/ats.c       | 32 ++++++++++++++++++++++++++++++--
->>   include/linux/pci-ats.h |  1 +
->>   2 files changed, 31 insertions(+), 2 deletions(-)
+>> This piece of code successfully dump relevent registers on our
+>> platform. As you know, mcq error handling flow is not ready yet so the
+>> insertion point might not seems to be reasonable.
 >>
->> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
->> index f9cc2e10b676..70e1982efdb4 100644
->> --- a/drivers/pci/ats.c
->> +++ b/drivers/pci/ats.c
->> @@ -46,6 +46,34 @@ bool pci_ats_supported(struct pci_dev *dev)
->>   }
->>   EXPORT_SYMBOL_GPL(pci_ats_supported);
->>   
->> +/**
->> + * pci_ats_stu_configure - Configure STU of a PF.
->> + * @dev: the PCI device
->> + * @ps: the IOMMU page shift
->> + *
->> + * Returns 0 on success, or negative on failure.
->> + */
->> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
->> +{
->> +	u16 ctrl;
->> +
->> +	if (dev->ats_enabled || dev->is_virtfn)
->> +		return 0;
->> +
->> +	if (!pci_ats_supported(dev))
->> +		return -EINVAL;
->> +
->> +	if (ps < PCI_ATS_MIN_STU)
->> +		return -EINVAL;
->> +
->> +	dev->ats_stu = ps;
->> +	ctrl = PCI_ATS_CTRL_STU(dev->ats_stu - PCI_ATS_MIN_STU);
->> +	pci_write_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, ctrl);
-> 
-> If you just want to update the STU, don't overwrite other fields.
+>> Maybe drop this patch for now, I will send it later with error handling
+>> patches.
+>>
+>>
+>> On Thu, 2023-02-23 at 18:14 +0800, Ziqi Chen wrote:
+>>> Hi Po-Wen,
+>>>
+>>> On 2/22/2023 11:04 AM, Po-Wen Kao wrote:
+>>>> +void ufshcd_mcq_print_hwqs(struct ufs_hba *hba, unsigned long
+>>>> bitmap)
+>>>> +{
+>>>> +    int id, i;
+>>>> +    char prefix[15];
+>>>> +
+>>>> +    if (!is_mcq_enabled(hba))
+>>>> +        return;
+>>>> +
+>>>> +    for_each_set_bit(id, &bitmap, hba->nr_hw_queues) {
+>>>> +        snprintf(prefix, sizeof(prefix), "q%d SQCFG: ", id);
+>>>> +        ufshcd_hex_dump(prefix,
+>>>> +            hba->mcq_base + MCQ_QCFG_SIZE * id,
+>>>> MCQ_QCFG_SQ_SIZE);
+>>> Is your purpose dump per hardware queue registers here?  If yes, why
+>>> don't use ufsmcq_readl() to save to a buffer and then use
+>>> ufshcd_hex_dump()
+>>>
+>>> to dump ? Are you sure ufshcd_hex_dump() can dump register directly?
+>>>
+>>>> +
+>>>> +        snprintf(prefix, sizeof(prefix), "q%d CQCFG: ", id);
+>>>> +        ufshcd_hex_dump(prefix,
+>>>> +            hba->mcq_base + MCQ_QCFG_SIZE * id +
+>>>> MCQ_QCFG_SQ_SIZE, MCQ_QCFG_CQ_SIZE);
+>>> Same to above comment.
+>>>> +
+>>>> +        for (i = 0; i < OPR_MAX ; i++) {
+>>>> +            snprintf(prefix, sizeof(prefix), "q%d OPR%d: ",
+>>>> id, i);
+>>>> +            ufshcd_hex_dump(prefix, mcq_opr_base(hba, i,
+>>>> id), mcq_opr_size[i]);
+>>> Same.
+>>>> +        }
+>>>> +    }
+>>>> +}
+>>>> +
+>>>>
+>>>>    @@ -574,7 +569,16 @@ void ufshcd_print_trs(struct ufs_hba *hba,
+>>>> unsigned long bitmap, bool pr_prdt)
+>>>>            if (pr_prdt)
+>>>>                ufshcd_hex_dump("UPIU PRDT: ", lrbp-
+>>>>> ucd_prdt_ptr,
+>>>>                    ufshcd_sg_entry_size(hba) *
+>>>> prdt_length);
+>>>> +
+>>>> +        if (is_mcq_enabled(hba)) {
+>>>> +            cmd = lrbp->cmd;
+>>>> +            if (!cmd)
+>>>> +                return;
+>>>> +            hwq = ufshcd_mcq_req_to_hwq(hba,
+>>>> scsi_cmd_to_rq(cmd));
+>>>> +            ufshcd_mcq_print_hwqs(hba, 1 << hwq->id);
+>>> Calling registers dump function in ufshcd_print_trs() is not
+>>> reasonable,
+>>> eg.. for each aborted request, it would print out all hwq registers,
+>>> it's not make sense.
+>>>
+>>> I think we should move it out of ufshcd_print_trs().
+>>>
+>>>> +        }
+>>>>        }
+>>>> +
+>>>>    }
+>>>
+>>> Best Regards,
+>>>
+>>> Ziqi
+>>>
+Hi Powen,
 
-Can be read modify write, but felt not necessary, since all other fields 
-are at default value zero.
+I am going to push the mcq abort handling and mcq error handling code 
+upstream for review in a couple days. Would that work for you?
 
-> 
->> +
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(pci_ats_stu_configure);
->> +
->>   /**
->>    * pci_enable_ats - enable the ATS capability
->>    * @dev: the PCI device
->> @@ -68,8 +96,8 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
->>   		return -EINVAL;
->>   
->>   	/*
->> -	 * Note that enabling ATS on a VF fails unless it's already enabled
->> -	 * with the same STU on the PF.
->> +	 * Note that enabling ATS on a VF fails unless it's already
->> +	 * configured with the same STU on the PF.
->>   	 */
->>   	ctrl = PCI_ATS_CTRL_ENABLE;
->>   	if (dev->is_virtfn) {
->> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
->> index df54cd5b15db..9b40eb555124 100644
->> --- a/include/linux/pci-ats.h
->> +++ b/include/linux/pci-ats.h
->> @@ -8,6 +8,7 @@
->>   /* Address Translation Service */
->>   bool pci_ats_supported(struct pci_dev *dev);
->>   int pci_enable_ats(struct pci_dev *dev, int ps);
->> +int pci_ats_stu_configure(struct pci_dev *dev, int ps);
-> 
-> What about dummy declaration for !CONFIG_PCI_ATS case?
+Regards,
+Bao
 
-Thanks, I overlooked else case.
-> 
->>   void pci_disable_ats(struct pci_dev *dev);
->>   int pci_ats_queue_depth(struct pci_dev *dev);
->>   int pci_ats_page_aligned(struct pci_dev *dev);
-> 
-
-
-Thanks,
-Ganapat
