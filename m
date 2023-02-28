@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89986A571D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBDB6A571F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 11:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjB1Ksf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 05:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S231354AbjB1Ksx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 05:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjB1KsP (ORCPT
+        with ESMTP id S230381AbjB1KsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:48:15 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432084C1F;
+        Tue, 28 Feb 2023 05:48:17 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A102885F;
         Tue, 28 Feb 2023 02:47:59 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5FCA46602FDD;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 065186602FDE;
         Tue, 28 Feb 2023 10:47:57 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677581277;
-        bh=KQl+1992t3fzHAo6w7W+uAYOQeZPx/82oAPGoJNpTLE=;
+        s=mail; t=1677581278;
+        bh=smKRDmDdu68lnpbPgqG4z/RTkzBSVrXMEAsrpvTEOiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xe9WLaq3kXmjLFR7IiT8Hn40k3Ol8L118xWU7hVeSVN4exhL0sc2fOj2Jp4nMj2+a
-         NX74A23spu82s1ciJMsH/zpJy+KeUCWZJaNEibn0Y8gdPy7ZsKDkfWxrk63Qe+LsL1
-         UCXX1LqpptivTIk7XN9P0RUhRcEDuAiK33ym1fySxKNHSluWMw4NSA3VUUtXqUafci
-         dmpxL9UOO2n0Qhso3myRCSrNAwYeiVxp60pw7fX+HOaQVEWhvRfNyroSHPT/bz4P26
-         ruvXorklpLrqC0QTI4JA0F3kdU1gcfMePKiwW/rzpnR3vlf+r2cKIS0ETdjdapwWMd
-         rYEZIXaySzjJg==
+        b=ar5wQuJ/4XMRO/fhjH1erUDGVxa2IrETJPY3HYhhDkbOnhBN49QpB+RSCUpUm98je
+         Q+BV1ivVx6kqXx0wLmg8mmMOSczH3bJvWN0rC7Oh1cnvgvLdB/+ErTkRxlZxgzNEO7
+         +6xFd570rLl1/a4f7Adtx+49khPcOLZMYPMFKIohalxbMFBPmR63g++cMg+MCU4tXv
+         kaAnEtO3YCbMh4VdX6cTfIoGULFgNjj2TfBUtHArpxkuWtIGrx6AfDu88xcSQIO6tb
+         UXOwEArS1zdQ5wbUwPYx4UfqIQsEdV2YKIKKLRFABBr7/nXntCkTxVDKzCvYSSnF7y
+         4pstYL5APJD9Q==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v3 13/18] arm64: dts: mediatek: mt8195: Add mfg_core_tmp clock to MFG1 domain
-Date:   Tue, 28 Feb 2023 11:47:36 +0100
-Message-Id: <20230228104741.717819-14-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 14/18] arm64: dts: mt8195: Add panfrost node for Mali-G57 Valhall Natt GPU
+Date:   Tue, 28 Feb 2023 11:47:37 +0100
+Message-Id: <20230228104741.717819-15-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
 References: <20230228104741.717819-1-angelogioacchino.delregno@collabora.com>
@@ -57,39 +57,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similarly to what can be seen in MT8192, on MT8195 the mfg_core_tmp
-clock is a mux used to switch between different "safe" (and slower)
-clock sources for the GPU: this is used during MFGPLL reconfiguration
-and eventually during idling at very low frequencies.
+Add GPU support through panfrost for the Mali-G57 GPU on MT8195
+with its OPP table but keep it in disabled state.
 
-This clock getting turned off means that the GPU will occasionally be
-unclocked, producing obvious consequences such as system crash or
-unpredictable behavior: assigning it to the top level MFG power domain
-will make sure that this stays on at all times during any operation on
-the MFG domain (only GPU-related transactions).
+This is expected to be enabled only on boards which make use of
+the GPU.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 90 ++++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 8f1264d5290b..d116830d6af3 100644
+index d116830d6af3..0e4ee7713c30 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -446,8 +446,9 @@ mfg0: power-domain@MT8195_POWER_DOMAIN_MFG0 {
+@@ -333,6 +333,76 @@ performance: performance-controller@11bc10 {
+ 		#performance-domain-cells = <1>;
+ 	};
  
- 					power-domain@MT8195_POWER_DOMAIN_MFG1 {
- 						reg = <MT8195_POWER_DOMAIN_MFG1>;
--						clocks = <&apmixedsys CLK_APMIXED_MFGPLL>;
--						clock-names = "mfg";
-+						clocks = <&apmixedsys CLK_APMIXED_MFGPLL>,
-+							 <&topckgen CLK_TOP_MFG_CORE_TMP>;
-+						clock-names = "mfg", "alt";
- 						mediatek,infracfg = <&infracfg_ao>;
- 						#address-cells = <1>;
- 						#size-cells = <0>;
++	gpu_opp_table: opp-table-gpu {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-390000000 {
++			opp-hz = /bits/ 64 <390000000>;
++			opp-microvolt = <625000>;
++		};
++		opp-410000000 {
++			opp-hz = /bits/ 64 <410000000>;
++			opp-microvolt = <631250>;
++		};
++		opp-431000000 {
++			opp-hz = /bits/ 64 <431000000>;
++			opp-microvolt = <631250>;
++		};
++		opp-473000000 {
++			opp-hz = /bits/ 64 <473000000>;
++			opp-microvolt = <637500>;
++		};
++		opp-515000000 {
++			opp-hz = /bits/ 64 <515000000>;
++			opp-microvolt = <637500>;
++		};
++		opp-556000000 {
++			opp-hz = /bits/ 64 <556000000>;
++			opp-microvolt = <643750>;
++		};
++		opp-598000000 {
++			opp-hz = /bits/ 64 <598000000>;
++			opp-microvolt = <650000>;
++		};
++		opp-640000000 {
++			opp-hz = /bits/ 64 <640000000>;
++			opp-microvolt = <650000>;
++		};
++		opp-670000000 {
++			opp-hz = /bits/ 64 <670000000>;
++			opp-microvolt = <662500>;
++		};
++		opp-700000000 {
++			opp-hz = /bits/ 64 <700000000>;
++			opp-microvolt = <675000>;
++		};
++		opp-730000000 {
++			opp-hz = /bits/ 64 <730000000>;
++			opp-microvolt = <687500>;
++		};
++		opp-760000000 {
++			opp-hz = /bits/ 64 <760000000>;
++			opp-microvolt = <700000>;
++		};
++		opp-790000000 {
++			opp-hz = /bits/ 64 <790000000>;
++			opp-microvolt = <712500>;
++		};
++		opp-820000000 {
++			opp-hz = /bits/ 64 <820000000>;
++			opp-microvolt = <725000>;
++		};
++		opp-850000000 {
++			opp-hz = /bits/ 64 <850000000>;
++			opp-microvolt = <737500>;
++		};
++		opp-880000000 {
++			opp-hz = /bits/ 64 <880000000>;
++			opp-microvolt = <750000>;
++		};
++	};
++
+ 	pmu-a55 {
+ 		compatible = "arm,cortex-a55-pmu";
+ 		interrupt-parent = <&gic>;
+@@ -1790,6 +1860,26 @@ ufsphy: ufs-phy@11fa0000 {
+ 			status = "disabled";
+ 		};
+ 
++		gpu: gpu@13000000 {
++			compatible = "mediatek,mt8195-mali", "mediatek,mt8192-mali",
++				     "arm,mali-valhall-jm";
++			reg = <0 0x13000000 0 0x4000>;
++
++			clocks = <&mfgcfg CLK_MFG_BG3D>;
++			interrupts = <GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH 0>,
++				     <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH 0>,
++				     <GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH 0>;
++			interrupt-names = "job", "mmu", "gpu";
++			operating-points-v2 = <&gpu_opp_table>;
++			power-domains = <&spm MT8195_POWER_DOMAIN_MFG2>,
++					<&spm MT8195_POWER_DOMAIN_MFG3>,
++					<&spm MT8195_POWER_DOMAIN_MFG4>,
++					<&spm MT8195_POWER_DOMAIN_MFG5>,
++					<&spm MT8195_POWER_DOMAIN_MFG6>;
++			power-domain-names = "core0", "core1", "core2", "core3", "core4";
++			status = "disabled";
++		};
++
+ 		mfgcfg: clock-controller@13fbf000 {
+ 			compatible = "mediatek,mt8195-mfgcfg";
+ 			reg = <0 0x13fbf000 0 0x1000>;
 -- 
 2.39.2
 
