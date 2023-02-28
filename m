@@ -2,142 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3142E6A5EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6E56A5EEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjB1Sm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S229665AbjB1SnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjB1Sm4 (ORCPT
+        with ESMTP id S229830AbjB1SnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 13:42:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07364136
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 10:42:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF299B80EAC
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 18:42:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2CEC433EF;
-        Tue, 28 Feb 2023 18:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677609773;
-        bh=pidVvllSN1IUSrHAwpFFAwnr0Xfr4NblI3c7HbGX5aI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oc+8db52928eVh7Pnnftzyj4a4Sy5e1N4sO8tPy8jVCHNx3zmiRCl0acwKxQojVWK
-         MwtTQu99w1ZoQYaKfMOKZ7FHiP15oeYEpSQgLJdcxo/w1HwJnfodd+x0sHxkjV1QvT
-         3Pn+a52xCWNhRI3dMAnPw/ojXTXLRcDd2OD+sZqexcWQ1l8C7OsBFy4Ldh1Kr34w0c
-         2ZAl9oTcK6NjsmAjFKqLCGgh1HiM5p2LROt6xUtrlxa/e1cFXx4ek8E5AEb8D0g9U1
-         vif7EekWWmAE+yp2rRmezZQmwR5yEAmx2gm1K4w5wP1PlbRAmWzRAT+UYDlPmvOqxz
-         pmZ4hjWQqOb0A==
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Andy Shevchenko <andy@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>
-Subject: [PATCH v2 2/2] lib/test_string.c: Add strncmp() tests
-Date:   Tue, 28 Feb 2023 19:42:45 +0100
-Message-Id: <20230228184245.1585775-2-bjorn@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230228184245.1585775-1-bjorn@kernel.org>
-References: <20230228184245.1585775-1-bjorn@kernel.org>
+        Tue, 28 Feb 2023 13:43:15 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A5923102;
+        Tue, 28 Feb 2023 10:43:06 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id i12so6893174ila.5;
+        Tue, 28 Feb 2023 10:43:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qjpz6w1wU5Ahvn+ZiAXXT7LUF2diV3nFILzNkAj96SY=;
+        b=nkgj59ZCKiK1D88RTqrIIcfHr0fWsaoTuy5xVm3ADPBIAetdxbSxDJESBM2+Fz4qc7
+         ko0ehsCR3mNWQ3/MT+ClSqo1xlZ4pS38Kr1PpU1O7oEqclR5/T+gHG2u4mL93r73orcV
+         P0kTTxbCjpVYiU/nI+Evm0Y+O9z9nymjAr3biZVUQZAu99DTTC6qa5B9flHhLHmHu+91
+         1NR5NSqFLv9d0xURv1FZfMxhJ68hU23v3Can1pPmfYT8eO1k22xS6jJvOqU+AjGzr5+v
+         3wfd8g2dqB68aHELwUnWNN6LGld+JnTUP45MWD8dUEu2/J7ps4OZW2JwOWa1iGFJEaRj
+         Spyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qjpz6w1wU5Ahvn+ZiAXXT7LUF2diV3nFILzNkAj96SY=;
+        b=5kJiBMKG5I2qhA3NyMqEcsgaoBMR/CQutEsaezjPOQC+wE2/QS4x+xRqBQycj8STxi
+         qYbpEQcAugVVPutzdgmEU+ffdJHxIl0JSIQ/Bek37+UQ37SnwQg+N0x0HxzVnNVCnvKu
+         dmCTQOsXxc7KKXnOw3tzBQUlXpIyrIO8l0mOMHr/ZSRQk1rX7GzZtOVUuZqGXRNXg7lF
+         WVYyoLKxEjUssr21a03r7Bgo0I9J6GzijjTuy5fLTTyNklVX/1tUlnvJwz+FOXJDZ4wv
+         eGlf1QY1b1COoY8QI0/bcGT7PEl3DAET2kQ9iOv0Ztp5PTLM1KQ9yI3J8Vvc/hQysyX3
+         4poA==
+X-Gm-Message-State: AO0yUKUsLzKHH9I3nOP4VjIoka6iPjtvUu83YpjM2Z8NCukqPTu+H24A
+        FpujSraX6sTaaY1xVJi+b4I=
+X-Google-Smtp-Source: AK7set+3SB0xC45QlRlJGTf+BbZNkGs7ZRfuNGqxezNLWWwtxXvPDuKgP46T2mHtv/3U+N83n2USvw==
+X-Received: by 2002:a05:6e02:1a24:b0:314:fa6:323c with SMTP id g4-20020a056e021a2400b003140fa6323cmr4151260ile.12.1677609785974;
+        Tue, 28 Feb 2023 10:43:05 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c14-20020a92cf4e000000b00316e39f1285sm2842875ilr.82.2023.02.28.10.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 10:43:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 28 Feb 2023 10:43:03 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH net-next v8 6/9] net: phy: c22: migrate to
+ genphy_c45_write_eee_adv()
+Message-ID: <20230228184303.GA4098978@roeck-us.net>
+References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
+ <20230211074113.2782508-7-o.rempel@pengutronix.de>
+ <20230224035553.GA1089605@roeck-us.net>
+ <20230224041604.GA1353778@roeck-us.net>
+ <20230224172004.GA1224760@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224172004.GA1224760@roeck-us.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+Letting regzbot know about the fix:
 
-The RISC-V strncmp() fails on some inputs, see the linked thread for
-more details. It turns out there were no strncmp() calls in the self
-tests, this adds one.
+#regzbot fixed-by: 972074ea8840
 
-Link: https://lore.kernel.org/all/2801162.88bMQJbFj6@diego/
-Reported-by: Heiko Stübner <heiko@sntech.de>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
----
-
-v1->v2: Added two more tests (pos/neg). (Andy)
-        Minor code style issues. (Andy)
-        Fixed checkpatch errors.
-
----
-lib/test_string.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/lib/test_string.c b/lib/test_string.c
-index 550229084c41..b95037eb138b 100644
---- a/lib/test_string.c
-+++ b/lib/test_string.c
-@@ -209,6 +209,44 @@ static __init int strspn_selftest(void)
- 	return 0;
- }
- 
-+struct strncmp_test {
-+	const char *str_a;
-+	const char *str_b;
-+	unsigned long count;
-+	unsigned long max_off;
-+	int retval;
-+};
-+
-+static __init int strncmp_selftest(void)
-+{
-+	size_t i;
-+	static const struct strncmp_test tests[] __initconst = {
-+		{ "/dev/vda", "/dev/", 5, 4, 0 },
-+		{ "/dev/vda", "/dev/vdb", 5, 4, 0 },
-+		{ "00000000---11111", "00000000---11112", 12, 4, 0 },
-+		{ "ABC", "AB", 3, 0, 67 },
-+		{ "ABA", "ABZ", 3, 0, -25 },
-+		{ "ABC", "ABC", 3, 0, 0 },
-+	};
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); ++i) {
-+		const struct strncmp_test *s = tests + i;
-+		size_t off;
-+
-+		for (off = 0; off <= s->max_off; off++) {
-+			int res = strncmp(s->str_a + off, s->str_b + off, s->count - off);
-+
-+			if (res == 0 && s->retval != 0)
-+				return 0x1000 + 0x100*off + 0x10*i + 0x0;
-+			if (res > 0 && s->retval <= 0)
-+				return 0x1000 + 0x100*off + 0x10*i + 0x1;
-+			if (res < 0 && s->retval >= 0)
-+				return 0x1000 + 0x100*off + 0x10*i + 0x2;
-+		}
-+	}
-+	return 0;
-+}
-+
- static __exit void string_selftest_remove(void)
- {
- }
-@@ -247,6 +285,11 @@ static __init int string_selftest_init(void)
- 	if (subtest)
- 		goto fail;
- 
-+	test = 7;
-+	subtest = strncmp_selftest();
-+	if (subtest)
-+		goto fail;
-+
- 	pr_info("String selftests succeeded\n");
- 	return 0;
- fail:
--- 
-2.37.2
-
+On Fri, Feb 24, 2023 at 09:20:04AM -0800, Guenter Roeck wrote:
+> Copying regzbot.
+>   
+> #regzbot ^introduced 9b01c885be36
+> #regzbot title Network interface initialization failures on xtensa, arm:cubieboard
+> #regzbot ignore-activity
+> 
+> On Thu, Feb 23, 2023 at 08:16:06PM -0800, Guenter Roeck wrote:
+> > On Thu, Feb 23, 2023 at 07:55:55PM -0800, Guenter Roeck wrote:
+> > > On Sat, Feb 11, 2023 at 08:41:10AM +0100, Oleksij Rempel wrote:
+> > > > Migrate from genphy_config_eee_advert() to genphy_c45_write_eee_adv().
+> > > > 
+> > > > It should work as before except write operation to the EEE adv registers
+> > > > will be done only if some EEE abilities was detected.
+> > > > 
+> > > > If some driver will have a regression, related driver should provide own
+> > > > .get_features callback. See micrel.c:ksz9477_get_features() as example.
+> > > > 
+> > > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > > > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> > > 
+> > > This patch causes network interface failures with all my xtensa qemu
+> > > emulations. Reverting it fixes the problem. Bisect log is attached
+> > > for reference.
+> > > 
+> > 
+> > Also affected are arm:cubieboard emulations, with same symptom.
+> > arm:bletchley-bmc emulations crash. In both cases, reverting this patch
+> > fixes the problem.
+> > 
+> > Guenter
