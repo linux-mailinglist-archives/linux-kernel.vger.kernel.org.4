@@ -2,347 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7A26A5AE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6C46A5AFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 15:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjB1OfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 09:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S229696AbjB1OnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 09:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjB1OfA (ORCPT
+        with ESMTP id S229471AbjB1OnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:35:00 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9200B26CE1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 06:34:29 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ck15so41115857edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 06:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677594867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uebId/E2MuuN0Eng4ubkqVVfbCw/rWB/uItWH6yqNNk=;
-        b=SI1irGw+2fPr4/IIo5aLmevlsfiWicfh32tSgX+IUYC71HxA75YDUQ9pb8LkiOS8uT
-         FHAFOt8ewX53zbChepayWL7SwPz9Ayns/9NVnNtndQwYoZXeWgyIPXrlfttmYyVNJFk/
-         AwilCDZRVd3j/dyXG0dT2ud2mSMTz1R7BdSKKbJ/ZAVdLxMaanUrKptrFYs7+vBVj5gO
-         Xe0aHcjcZPBPXoCa9iArNaI8zO/hPBBxw6MWO3m4oNZNpNobFTxlKrtPRe3We6L0e9te
-         a4uMGTwfAlRcSU3KGT+iqr6AM1LcZMmRDKHAJrHgNhQEs0KO+yuGHyyYheLBVS58NNfE
-         JEow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677594867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uebId/E2MuuN0Eng4ubkqVVfbCw/rWB/uItWH6yqNNk=;
-        b=tNJdlf4Qno5fMWv3jbCpBupWP+J8x0Xz1kkXfJVnmQTF3Cerp9B1npi4WCGg4MlOqi
-         j+2XT66XT2k/i78V81WQ03aQ0aNP2yWT6wZAf9QC9WoB8k+AbvUzHcgRwX9gvQIlFaa2
-         nAkh9K6oJt6xEmxyeHuFcqvTjxYoz1NjgH7d0RIq7n0ezni/0AAMwN7D59OlNn9qHt93
-         GxzYfEq1p8idcM+D/IAe24ycrGCNRlMDRqqMum3Waa9cDPgFLq0nb/d1hHNT6C8LHSR9
-         Kab55fpalVYcLEQOH528z1x+Fw4BwXL3JrQc91j6+0tdA+s5MCFS3qUxPyFIo49tUkwS
-         1dCg==
-X-Gm-Message-State: AO0yUKU3dVhZrdhzl8k+rf956yCUzPYdcA9r2GssOD+P25Mzjs9QGS5X
-        zAeTPwoarbfzSR0x9jbBouW0Sw==
-X-Google-Smtp-Source: AK7set8kQ9ata6euqo/6Np+cgIW8IeRuMTqmy4tXn4RTpG4UPnLGLKgbZBqE0j7kjRa/ppTVghc7EQ==
-X-Received: by 2002:aa7:c9d9:0:b0:4ab:1c69:5c4 with SMTP id i25-20020aa7c9d9000000b004ab1c6905c4mr3769925edt.26.1677594867546;
-        Tue, 28 Feb 2023 06:34:27 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id qq10-20020a17090720ca00b008e09deb6610sm4518783ejb.200.2023.02.28.06.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 06:34:27 -0800 (PST)
-Message-ID: <60496973-5382-14de-6c2d-c60b3556defb@linaro.org>
-Date:   Tue, 28 Feb 2023 15:34:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/2] pwm: starfive: Add PWM driver support
-Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Tue, 28 Feb 2023 09:43:16 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2089.outbound.protection.outlook.com [40.107.6.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6163911649;
+        Tue, 28 Feb 2023 06:43:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=obvBcmrUa9oWoeMqCG7vsJkD5FLaL1YB0fZyuY672+4fCjjfqFWyQAb/thKQ8uzzpZCdfkhms7v9SF3vYjXZawD7xBbifj5VEN+WvMHeKawpdvJKZsQSz1Y7LeZNCcYr+hREwq210ACCIq4w3tK44OoJpubdo4ztijX7S+RFkygKL4m3I+alYeeMSLzRheE1lzI0U7+ij7ZA8xzzJgEgGMZ0iT3eddvUiJGlDeXdjD73+NBjfKwEbbWLpvEbNrLZjPWRTxyQ6EbYtgQ6F57Sik8/gqAbCpFxPbZppBtfV9zJNfZ22ekqy3BXs/a9NsWZjG44XBevoItNGUH+fqUaMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tLfPRn4JhZMfiq0FffdoVq7zpCN3dGNvbXvntUsg34s=;
+ b=PS8xRIVmg/yF78gX9XW+5dOM3EN/nMC0uVpMynMmt9uGGb1kfPHCwQdGR8ONcRa/Ciz3WfbqwnFF5jr61rAn0tTRbax+UuGOUGhlzuS01sAn0MeVq9Ag0AmVZiRbPAe66ZK8oQGpK29iv0CnZwjI9zUmhgLYhMzzyYGL+LrQoPcoltrWXHYc4dRCw/sXj+KIK2OT8TdBUN7bIlfAX9tIxF2adioyXHxVb2UqUa0H43XNufwrk8pVtp2m5IABrtPH6Bpyz+2qH7gkkeqxA8TYzGMgR38e858Rih2Y+Z/VJvG1f5Y2mn1NFpgd3KlV5Cfs5NBB5knCu4OOCgU9Hz5q5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=variscite.com; dmarc=pass action=none
+ header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tLfPRn4JhZMfiq0FffdoVq7zpCN3dGNvbXvntUsg34s=;
+ b=GY+B2UolpuGCLSYjuvkBSX1Uk/avySzhxRzD/bJbmFaS5erYHQoX9tUSXHrPMd8f6l0sDzXbrytP6cmArPQ7dSfbCVaZw2kKVB+O29uKhpuM54FEO9vrjWRIEhbDDWL4d+BwBhQP7STzfrK7ipUp0aOaW4Mpj9BdvsKy0vD4uzSjTrFkf6eEFirBgQYPt6CxWxNs2o1CYP+6n93zwSxfFxV5LpoRVLZAjfG7L9bRTfLuF15sbfG43vnUcaBpjTWdmcR8lCqK0+IuRRAmt65gBxMbnKwwUVflMA5TqQgWC6Vovu5sWF3e6dZoJBk1meMUQ82N5AnxwfX0LDXK5AFEaQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=variscite.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by DB9PR08MB9852.eurprd08.prod.outlook.com (2603:10a6:10:45f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 14:43:11 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::27d4:87f6:273e:4a80]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::27d4:87f6:273e:4a80%7]) with mapi id 15.20.6134.025; Tue, 28 Feb 2023
+ 14:43:11 +0000
+From:   Ken Sloat <ken.s@variscite.com>
+Cc:     Ken Sloat <ken.s@variscite.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Hal Feng <hal.feng@starfivetech.com>
-References: <20230228091345.70515-1-william.qiu@starfivetech.com>
- <20230228091345.70515-3-william.qiu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230228091345.70515-3-william.qiu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: [PATCH v1] net: phy: adin: Add flags to disable enhanced link detection
+Date:   Tue, 28 Feb 2023 09:40:56 -0500
+Message-Id: <20230228144056.2246114-1-ken.s@variscite.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BN9PR03CA0184.namprd03.prod.outlook.com
+ (2603:10b6:408:f9::9) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|DB9PR08MB9852:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35137c46-bf15-45a4-5c07-08db199a1d7a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GziSvQcika858eIcnS4wEUos5/m8BJYWAIfmWpPlFIj9aPlRJM/qhxDoj3LSyLOL/q4K+FgS6xAMuM699c0M/pwmep09OE+qcuHl/x1a72FLVg2DINtv6x/3pYcCt2laoeojkvati05264OgJFO8qWmftc6PwM/+26CzC7qZ8e5Ry9tVkGGtg5BwpA+OIy0OfsFNayJKbgzHo7edYj04Zt2SY/6/ujR6P5Vz4ILU59j9RZkLGkQ8kLJ1dZlLnw3CTpf4kuXrn90/xjTAgyPsAOZMTmob0hKoL/kBqhDabbejmXjGe+T0rdSx/oKATSm/aOvn61ddP4ztH+Kc1LC7ZNnrTBFgKUlzt/5cDIEEyoJD2ek/p7+so2lfhSicaey+nGrNSPkg4j4Lo0fFfnX+d/gPTw9aeynY/e8wZEW8BEQVSzudKOkC1+Tk2pPCWuOGVNPjrc3tqOKPILVyDKq+j/dL6dzMZYYuJtUEiDaykjfZMEUOOf93JcAJS6+/575x5zcRLNq5vB1pLsSfnZdHndA2s1CHIao0fla9g9C3WU2VQF8eYyHOploUmO2VOk8ZAAsU1iy7kOCFeKsd6UQn66MrGHG3wAe4SG5GGnJII91TNiKdtR5M5XPuC3y4BPYJQZIHyhwWNhiR9iX6KMSuOjbJCbxrqbnet2mFW4huBmb2fEwJwPKwm0QmS0J5hKPkBYQyuxGhkx4OF1hXxhPusaIjoAiiGhlkWDcKfYf9nqg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(376002)(39840400004)(136003)(396003)(109986016)(451199018)(54906003)(83380400001)(2906002)(2616005)(316002)(186003)(52116002)(6486002)(26005)(36756003)(86362001)(1076003)(6666004)(5660300002)(8936002)(478600001)(41300700001)(38100700002)(38350700002)(6512007)(6506007)(4326008)(66476007)(66946007)(8676002)(66556008)(266003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?elgl1ktrABKgbTGgz/59JW6rnftmyEI8460Uigm6XEEjDVV4jamAdSXOlAs6?=
+ =?us-ascii?Q?u6hZv+PXUmkFl1oCHNi0+L7mxV1Smvci9deZelsoVgMbubv4/uyxZKTCc7z2?=
+ =?us-ascii?Q?Vg+HRHQUH0gy+m4474toExtxQPIk7NXkzirQq2lXcMyX6ypDCJx66r5cfkbs?=
+ =?us-ascii?Q?E2CSRFLxiR91KXvDwWp7U4qNuY7UpQrEsdRqJay2L/vsC9LQ/KJjz2vJMOGr?=
+ =?us-ascii?Q?jQtjylb925VogwCcVYaRY3YUMjhtcx7SE5H3c8FIRCKPnVi7AsmgNrtbbhZD?=
+ =?us-ascii?Q?sM7jt0kiff8G1j8XnZ8a491i8MVaP2+o3K+93juuN8SihZ10upP/7ej8dKiA?=
+ =?us-ascii?Q?hV5wpPW2kXCY9kzwU0YptoVwqNhx+xG4KWjYqxZQqX+JcXBqtMZXSoGxsYyt?=
+ =?us-ascii?Q?i7XNl1X9XGHCYR0rVI0OB8UwPLuXjNmySRLY8U9sO68GcrnFuSfohHtMj02i?=
+ =?us-ascii?Q?cdAxgsuPHxiDGPO506DCGILyly6p+6VBdFktHlBe/zs4csNWyXSK+gF2PouC?=
+ =?us-ascii?Q?OG96QUpXLVrZa7uqIDE7WDzKsot7cDnKYfoEhReRk8vbpgyVANQOhT+xdNNK?=
+ =?us-ascii?Q?CXcJESWCXhUA+4osIB2TFng/y7fCS4VFvT1Dl/DL8wv+tpuu5pnyw2+50PhM?=
+ =?us-ascii?Q?RB+AHyepgGIVGLyEvy0SDF2i3eTO/bN0TjD1/QLhmi0BopasYqXz+fa6TWZe?=
+ =?us-ascii?Q?p6xzXaFY1IqGeDPCnuO3+6hLdpiRMgLUP+8DHBjCm07AchOiHgTOeDfXIVUC?=
+ =?us-ascii?Q?WGapcYZsMYeTbSrku6gp/BKC30qlbIBu7/comCh0kQ4AH3wcXdPcAiheZqdE?=
+ =?us-ascii?Q?4A8PWrsZ51iIxoiQoUAOY1NW4f99QKbjI0iSTXINbP2p9/kueT/Hsk3sck6j?=
+ =?us-ascii?Q?6/VqrwrUdSMiHQqIp5DndyojaptfhY5UjvvwvObZRo9xqL16jI9BBzNFUm/a?=
+ =?us-ascii?Q?/NVOu9siJ8HfmYdAzmihIan4HEwrkRX28DlT0GsZWbiASj4HBdAJ8NQYZjEJ?=
+ =?us-ascii?Q?QyMTDmMilO97VXt3yRWRj7fW/d/rgvYZ5/d23oM0pEemcHTO7vcDOAHHb/DG?=
+ =?us-ascii?Q?Rjk3sYzbfOz9ceMzRKxPkRAjfXvBBbFMchCX0NXOpuKmlKArLMtosfKrbF6h?=
+ =?us-ascii?Q?XLB80IwxCwlw/6gVbXbTpt3dH7RZYxIO/sc7P9VRColJsgkxveQ+m+ySAqw9?=
+ =?us-ascii?Q?lYC0Z9gGMW/W6eo24J8+zVJ2vNqLaLnujtWi/s+JFnAZqmg3/sJk/oAYlKAh?=
+ =?us-ascii?Q?/s+t3zVJ8EwpKshQvDRBFTO497vRxytQK9ztR6+uFSA6Sl7QFGKCFVJG1Yc7?=
+ =?us-ascii?Q?mbxd23DS0SpW/If+V7//fjLf3iB4JUCgqDanwUzTl4GVsCigtlp67g/bRAL4?=
+ =?us-ascii?Q?bcYTAG5SvioTg43jKI38Y867NS/g8M3Yhmnz9TvKoklJv5ZdeiCxjpnh8qbz?=
+ =?us-ascii?Q?HfngzzmJHVPMQJp8nXgFnwoJyJUlabMImZn/3jxQC25yoVWavLizajgk4zDk?=
+ =?us-ascii?Q?JQKyX7TtBhsJZCf4hRms/SKei8myBRh4LbmIeeYeggXXcVrC16AZWVvREFia?=
+ =?us-ascii?Q?qfjCxhlyu9ZmNsJC+G3YzsiUjVqVqNiDH9ZYzpjQ?=
+X-OriginatorOrg: variscite.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35137c46-bf15-45a4-5c07-08db199a1d7a
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 14:43:11.4523
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vVEyu31pQBNeTv9LtAA9aUStPiBS2ODp0O5DusRWBfTPeYenTP+oLoXnUzTf8vOG6r0G6wuVJCeFMtrvUhfq1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9852
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2023 10:13, William Qiu wrote:
-> Add Pulse Width Modulation driver support for StarFive
-> JH7110 soc.
-> 
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> ---
->  MAINTAINERS                    |   7 +
->  drivers/pwm/Kconfig            |  10 ++
->  drivers/pwm/Makefile           |   1 +
->  drivers/pwm/pwm-starfive-ptc.c | 256 +++++++++++++++++++++++++++++++++
->  4 files changed, 274 insertions(+)
->  create mode 100644 drivers/pwm/pwm-starfive-ptc.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ac151975d0d3..05b59605d864 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19929,6 +19929,13 @@ F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
->  F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
->  F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
->  
-> +STARFIVE JH71X0 PWM DRIVERS
-> +M:	William Qiu <william.qiu@starfivetech.com>
-> +M:	Hal Feng <hal.feng@starfivetech.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/pwm/pwm-starfive.yaml
-> +F:	drivers/pwm/pwm-starfive-ptc.c
-> +
->  STARFIVE JH71X0 RESET CONTROLLER DRIVERS
->  M:	Emil Renner Berthing <kernel@esmil.dk>
->  M:	Hal Feng <hal.feng@starfivetech.com>
-> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> index dae023d783a2..2307a0099994 100644
-> --- a/drivers/pwm/Kconfig
-> +++ b/drivers/pwm/Kconfig
-> @@ -536,6 +536,16 @@ config PWM_SPRD
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called pwm-sprd.
->  
-> +config PWM_STARFIVE_PTC
-> +	tristate "StarFive PWM PTC support"
-> +	depends on OF
-> +	depends on COMMON_CLK
-> +	help
-> +	  Generic PWM framework driver for StarFive SoCs.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called pwm-starfive-ptc.
-> +
->  config PWM_STI
->  	tristate "STiH4xx PWM support"
->  	depends on ARCH_STI || COMPILE_TEST
-> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> index 7bf1a29f02b8..577f69904baa 100644
-> --- a/drivers/pwm/Makefile
-> +++ b/drivers/pwm/Makefile
-> @@ -49,6 +49,7 @@ obj-$(CONFIG_PWM_SIFIVE)	+= pwm-sifive.o
->  obj-$(CONFIG_PWM_SL28CPLD)	+= pwm-sl28cpld.o
->  obj-$(CONFIG_PWM_SPEAR)		+= pwm-spear.o
->  obj-$(CONFIG_PWM_SPRD)		+= pwm-sprd.o
-> +obj-$(CONFIG_PWM_STARFIVE_PTC)	+= pwm-starfive-ptc.o
->  obj-$(CONFIG_PWM_STI)		+= pwm-sti.o
->  obj-$(CONFIG_PWM_STM32)		+= pwm-stm32.o
->  obj-$(CONFIG_PWM_STM32_LP)	+= pwm-stm32-lp.o
-> diff --git a/drivers/pwm/pwm-starfive-ptc.c b/drivers/pwm/pwm-starfive-ptc.c
-> new file mode 100644
-> index 000000000000..58831c600168
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-starfive-ptc.c
-> @@ -0,0 +1,256 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * PWM driver for the StarFive JH7110 SoC
-> + *
-> + * Copyright (C) 2018 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#include <dt-bindings/pwm/pwm.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pwm.h>
-> +#include <linux/slab.h>
-> +#include <linux/clk.h>
-> +#include <linux/reset.h>
-> +#include <linux/io.h>
-> +
-> +/* how many parameters can be transferred to ptc */
-> +#define OF_PWM_N_CELLS			3
-> +
-> +/* PTC Register offsets */
-> +#define REG_RPTC_CNTR			0x0
-> +#define REG_RPTC_HRC			0x4
-> +#define REG_RPTC_LRC			0x8
-> +#define REG_RPTC_CTRL			0xC
-> +
-> +/* Bit for PWM clock */
-> +#define BIT_PWM_CLOCK_EN		31
-> +
-> +/* Bit for clock gen soft reset */
-> +#define BIT_CLK_GEN_SOFT_RESET		13
-> +
-> +#define NS_PER_SECOND			1000000000
-> +#define DEFAULT_FREQ_HZ			2000000
+Enhanced link detection is an ADI PHY feature that allows for earlier
+detection of link down if certain signal conditions are met. This
+feature is for the most part enabled by default on the PHY. This is
+not suitable for all applications and breaks the IEEE standard as
+explained in the ADI datasheet.
 
-Drop unused defines.
+To fix this, add override flags to disable enhanced link detection
+for 1000BASE-T and 100BASE-TX respectively by clearing any related
+feature enable bits.
 
-> +
-> +/*
-> + * Access PTC register (cntr hrc lrc and ctrl),
-> + * need to replace PWM_BASE_ADDR
-> + */
-> +#define REG_PTC_BASE_ADDR_SUB(base, N)	\
-> +((base) + (((N) > 3) ? (((N) % 4) * 0x10 + (1 << 15)) : ((N) * 0x10)))
-> +#define REG_PTC_RPTC_CNTR(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N))
-> +#define REG_PTC_RPTC_HRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x4)
-> +#define REG_PTC_RPTC_LRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x8)
-> +#define REG_PTC_RPTC_CTRL(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0xC)
-> +
-> +/* PTC_RPTC_CTRL */
-> +#define PTC_EN      BIT(0)
-> +#define PTC_ECLK    BIT(1)
-> +#define PTC_NEC     BIT(2)
-> +#define PTC_OE      BIT(3)
-> +#define PTC_SIGNLE  BIT(4)
-> +#define PTC_INTE    BIT(5)
-> +#define PTC_INT     BIT(6)
-> +#define PTC_CNTRRST BIT(7)
-> +#define PTC_CAPTE   BIT(8)
-> +
-> +struct starfive_pwm_ptc_device {
-> +	struct pwm_chip		chip;
-> +	struct clk		*clk;
-> +	struct reset_control	*rst;
-> +	void __iomem		*regs;
-> +	int			irq;
-> +	/*pwm apb clock frequency*/
+This new feature was tested on an ADIN1300 but according to the
+datasheet applies equally for 100BASE-TX on the ADIN1200.
 
-Missing spaces. Use Linux coding style.
+Signed-off-by: Ken Sloat <ken.s@variscite.com>
+---
+ drivers/net/phy/adin.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-> +	unsigned int		approx_freq;
-> +};
-> +
-> +static inline struct starfive_pwm_ptc_device *
-> +		chip_to_starfive_ptc(struct pwm_chip *c)
-> +{
-> +	return container_of(c, struct starfive_pwm_ptc_device, chip);
-> +}
-> +
-
-(...)
-
-> +static int starfive_pwm_ptc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct starfive_pwm_ptc_device *pwm;
-> +	struct pwm_chip *chip;
-> +	struct resource *res;
-> +	unsigned int clk_apb_freq;
-> +	int ret;
-> +
-> +	pwm = devm_kzalloc(dev, sizeof(*pwm), GFP_KERNEL);
-> +	if (!pwm)
-> +		return -ENOMEM;
-> +
-> +	chip = &pwm->chip;
-> +	chip->dev = dev;
-> +	chip->ops = &starfive_pwm_ptc_ops;
-> +	chip->npwm = 8;
-> +
-> +	chip->of_pwm_n_cells = OF_PWM_N_CELLS;
-> +	chip->base = -1;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	pwm->regs = devm_ioremap_resource(dev, res);
-
-Combine these two, there is a helper for it.
-
-> +	if (IS_ERR(pwm->regs)) {
-> +		dev_err(dev, "Unable to map IO resources\n");
-
-return dev_err_probe(), everywhere probably.
-
-> +		return PTR_ERR(pwm->regs);
-> +	}
-> +
-> +	pwm->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(pwm->clk)) {
-> +		dev_err(dev, "Unable to get pwm clock\n");
-> +		return PTR_ERR(pwm->clk);
-> +	}
-> +
-> +	pwm->rst = devm_reset_control_get_exclusive(dev, NULL);
-> +	if (IS_ERR(pwm->rst)) {
-> +		dev_err(dev, "Unable to get pwm reset\n");
-> +		return PTR_ERR(pwm->rst);
-> +	}
-> +
-> +	ret = clk_prepare_enable(pwm->clk);
-> +	if (ret) {
-> +		dev_err(dev,
-> +			"Failed to enable pwm clock, %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	reset_control_deassert(pwm->rst);
-> +
-> +	clk_apb_freq = (unsigned int)clk_get_rate(pwm->clk);
-
-Why do you need this local variable? And why the cast?
-
-> +	if (!clk_apb_freq)
-> +		dev_warn(dev,
-> +			 "get pwm apb clock rate failed.\n");
-
-and pwm->approx_freq stays 0 which you later use for dividing. Did you
-actually test it? It should produce big splat...
-
-> +	else
-> +		pwm->approx_freq = clk_apb_freq;
-> +
-> +	ret = pwmchip_add(chip);
-
-devm
-
-> +	if (ret < 0) {
-> +		dev_err(dev, "cannot register PTC: %d\n", ret);
-> +		clk_disable_unprepare(pwm->clk);
-> +		return ret;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, pwm);
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_pwm_ptc_remove(struct platform_device *dev)
-> +{
-> +	struct starfive_pwm_ptc_device *pwm = platform_get_drvdata(dev);
-> +	struct pwm_chip *chip = &pwm->chip;
-> +
-> +	pwmchip_remove(chip);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id starfive_pwm_ptc_of_match[] = {
-> +	{ .compatible = "starfive,jh7110-pwm" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, starfive_pwm_ptc_of_match);
-> +
-> +static struct platform_driver starfive_pwm_ptc_driver = {
-> +	.probe = starfive_pwm_ptc_probe,
-> +	.remove = starfive_pwm_ptc_remove,
-> +	.driver = {
-> +		.name = "pwm-starfive-ptc",
-> +		.of_match_table = of_match_ptr(starfive_pwm_ptc_of_match),
-
-of_match_ptr goes with maybe_unused, which you do not have. Anyway I am
-not sure what's the benefit of having it here, so just drop it.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/net/phy/adin.c b/drivers/net/phy/adin.c
+index da65215d19bb..8809f3e036a4 100644
+--- a/drivers/net/phy/adin.c
++++ b/drivers/net/phy/adin.c
+@@ -69,6 +69,15 @@
+ #define ADIN1300_EEE_CAP_REG			0x8000
+ #define ADIN1300_EEE_ADV_REG			0x8001
+ #define ADIN1300_EEE_LPABLE_REG			0x8002
++#define ADIN1300_FLD_EN_REG				0x8E27
++#define   ADIN1300_FLD_PCS_ERR_100_EN			BIT(7)
++#define   ADIN1300_FLD_PCS_ERR_1000_EN			BIT(6)
++#define   ADIN1300_FLD_SLCR_OUT_STUCK_100_EN	BIT(5)
++#define   ADIN1300_FLD_SLCR_OUT_STUCK_1000_EN	BIT(4)
++#define   ADIN1300_FLD_SLCR_IN_ZDET_100_EN		BIT(3)
++#define   ADIN1300_FLD_SLCR_IN_ZDET_1000_EN		BIT(2)
++#define   ADIN1300_FLD_SLCR_IN_INVLD_100_EN		BIT(1)
++#define   ADIN1300_FLD_SLCR_IN_INVLD_1000_EN	BIT(0)
+ #define ADIN1300_CLOCK_STOP_REG			0x9400
+ #define ADIN1300_LPI_WAKE_ERR_CNT_REG		0xa000
+ 
+@@ -508,6 +517,31 @@ static int adin_config_clk_out(struct phy_device *phydev)
+ 			      ADIN1300_GE_CLK_CFG_MASK, sel);
+ }
+ 
++static int adin_config_fld_en(struct phy_device *phydev)
++{
++	struct device *dev = &phydev->mdio.dev;
++	int reg;
++
++	reg = phy_read_mmd(phydev, MDIO_MMD_VEND1, ADIN1300_FLD_EN_REG);
++	if (reg < 0)
++		return reg;
++
++	if (device_property_read_bool(dev, "adi,disable-fld-1000base-t"))
++		reg &= ~(ADIN1300_FLD_PCS_ERR_1000_EN |
++				 ADIN1300_FLD_SLCR_OUT_STUCK_1000_EN |
++				 ADIN1300_FLD_SLCR_IN_ZDET_1000_EN |
++				 ADIN1300_FLD_SLCR_IN_INVLD_1000_EN);
++
++	if (device_property_read_bool(dev, "adi,disable-fld-100base-tx"))
++		reg &= ~(ADIN1300_FLD_PCS_ERR_100_EN |
++				 ADIN1300_FLD_SLCR_OUT_STUCK_100_EN |
++				 ADIN1300_FLD_SLCR_IN_ZDET_100_EN |
++				 ADIN1300_FLD_SLCR_IN_INVLD_100_EN);
++
++	return phy_write_mmd(phydev, MDIO_MMD_VEND1,
++			     ADIN1300_FLD_EN_REG, reg);
++}
++
+ static int adin_config_init(struct phy_device *phydev)
+ {
+ 	int rc;
+@@ -534,6 +568,10 @@ static int adin_config_init(struct phy_device *phydev)
+ 	if (rc < 0)
+ 		return rc;
+ 
++	rc = adin_config_fld_en(phydev);
++	if (rc < 0)
++		return rc;
++
+ 	phydev_dbg(phydev, "PHY is using mode '%s'\n",
+ 		   phy_modes(phydev->interface));
+ 
+-- 
+2.34.1
 
