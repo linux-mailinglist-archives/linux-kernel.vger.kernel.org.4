@@ -2,157 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4FF6A5D30
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE07B6A5D35
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjB1Qe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S229746AbjB1Qfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjB1Qex (ORCPT
+        with ESMTP id S229727AbjB1Qfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:34:53 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB79F2448D;
-        Tue, 28 Feb 2023 08:34:47 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id q189so6014932pga.9;
-        Tue, 28 Feb 2023 08:34:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VEVi55Um5zbjxtbiNbKO4HkIKWrPOjc+1piWqgByaiU=;
-        b=VrybE3SYeg4Y4ioXoWOTPNsahjlU0PckVsNHyP4CpE8AHrXErpIRYDgnTDlznmdXoG
-         hxtUwLDfADUAk7Wtv0+agfCoB1a6YAahBvx2WiOKZsuC2epG3eWOD3bdX+eu3sJqOG++
-         fbVLNXV1cX7FEltA29UbLJdIsmLWalirIDiq6uqj2Pq0STxYUWLj5sioLIB5nxPrRlbS
-         6jiO4ZngurFMt7dtksoKtlcSNY9ZvlDbBMT+cM/4XIBWSNqyylfczlBlDKewI7vjmQhv
-         boMbctNNofEYZKav2l0Me9wkRBBKdSSsHCRaxlxH84v+I7nXPYYEWydMRv5UpEvfKc5R
-         73ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:subject:cc:to:from:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VEVi55Um5zbjxtbiNbKO4HkIKWrPOjc+1piWqgByaiU=;
-        b=nVjdMYJUcHSnGP0gKMzb0kSQaPe15XjMq9Qruu2q5xchf4bz1lIgmcRSiCQi4aHej3
-         et6AXZLyfG8++ZNnnz6CdiMyk1LddVUQ2MFPMvszQZo2Zh/OV5N3b1dGVgLhe7E/1koc
-         ZsS6p8+cmc74R2MqQyvfd/HHQOuMqIsGEYNRraSi2J8gfHiPJ28Ccn+26/VythkDp0gF
-         1Zus2ZBmuPvdEI0ukpjB/2CrHRw+DDkM6FuV/mP6DjntvbWXDRjrdSegg+oP2wAu2Gdg
-         ErjW0wd1O8CWmYtPpgc3+er1nHpyQhfcPEEu7sB3TfhJnK4tBrbP+qI/SgXUaxUt79au
-         Rnrg==
-X-Gm-Message-State: AO0yUKVISrqSkQeu5N2/hPYPbwVsT8XhhKjUgI0ORfKvivuwZ+erKZA3
-        rh42L2T6VwVY7kBicIql3Ng=
-X-Google-Smtp-Source: AK7set9ZBtb0mrfp/QMLYxkbshuqdBTBMeKARyhvFV7LQREJQ1nzHZASBwvLc8ge7IMVPTE/4TZYgQ==
-X-Received: by 2002:aa7:9a05:0:b0:5a8:b6cf:1a74 with SMTP id w5-20020aa79a05000000b005a8b6cf1a74mr2999502pfj.18.1677602086893;
-        Tue, 28 Feb 2023 08:34:46 -0800 (PST)
-Received: from rh-tp ([2406:7400:63:469f:eb50:3ffb:dc1b:2d55])
-        by smtp.gmail.com with ESMTPSA id c9-20020a637249000000b00502f20aa4desm5943182pgn.70.2023.02.28.08.34.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 08:34:46 -0800 (PST)
-Date:   Tue, 28 Feb 2023 22:04:35 +0530
-Message-Id: <87356pwxyc.fsf@doe.com>
-From:   Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ojaswin@linux.ibm.com
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shikemeng@huaweicloud.com
-Subject: Re: [PATCH v2 00/20] Some bugfix and cleanup to mballoc
-In-Reply-To: <20230228114306.3328235-1-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 11:35:48 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BA232CE7;
+        Tue, 28 Feb 2023 08:35:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677602132; x=1709138132;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HE/9ALuoKh8iSpwu5fHL5A+FuZwzjxoZQQP0Euf4BF4=;
+  b=hFgaMgf6tW0taoN1zMJrFmNeijGvW8blWmP5xXOI4R+oLyzl/v++uSSw
+   uGqExz+PZXaJBCy2qprBV2BerZO9RtV4syqPczjPw3aKlS7Y7JTyoTVqo
+   7rF6kq4nPKY988zsDxy977ledFlADh1ki9j0w9fymC8F0i3NDWwBJrTY0
+   zBefz8GCJDjpr8AV466phh96jPp1tYPYKTStpAaeotLJFEdBsfXQcmwNG
+   JBzhyfRFf/wtH/AvmG4exRTNUNu3Ezo2dporjcjNSf71qFBspF3FrcYCo
+   OE6Kn8rDqSHLf+3kildsb4qOG5UR1mUqtORRoLZq7IDK/sB1Ls/e0wfHj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="335672873"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="335672873"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 08:35:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="667519537"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="667519537"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2023 08:35:30 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 28 Feb 2023 08:35:29 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 28 Feb 2023 08:35:29 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 28 Feb 2023 08:35:29 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mrTuCUNmqiNh6zbEoRrrgU0U+G28dPVQ//+hsMYiFMXNflc7l6zUJPfFlzOwcGXO8juvI5/5F4R0/lA4PSIi2RXYu9KwdMOS2rA164iJ6Sk/KDYLL43fKLiGKZ1P34YnpeDTV/XwgH+lk3uOzVZyi1nc0Z52Y/eF0iStmVKgfP4PIGQW81GLDLWD2+7YwbgO249wDWbV11UJdtlPl8X78zfLxFYOxCJWeY6dnby5+9bsh3QrFWAK2wgReG7orZ8pm4IkW2mRvgASxZcLsO/KM7Bz5JqmXjaNw9cs2QqaM+CFxStsBJtQb9IOHOkrfkqd/QV5ZlspU6MWVEegvCE22Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nyyHZ0vuiekTNc90Q21s/1IqF3s0rA4ZvbxLKJBErfQ=;
+ b=jmPHr4U1IrkN5ni1eCFuvxeMRC/wtQPg/NhE/h5P1OX9spIds+5M0/fslkkKfm8BOlL130hEHD17e+ree1XdhQbr120AiI3p5YPbGKYqo0igy+nBN+MQb1LELlZETtAeRKJRHvIfdA6JcDn2anbXwo2p9c8fkznpp7/6MPORGV7OkOYtMY/uyy1Nn1TEiqVCAZC4pGDHfwI/+hcap/OB/YJFn5NDKIm0ed+EVkv7cBncUcXeA5Lyq85HEEwqTK271/kZu3V/ZWcguLkCdvq3LVs5EjI494f530ftkrPATOl3MoOHQ38JWAMGCTZKr2k+GzygXSNNCSbjcnm612ZizA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
+ by DM4PR11MB7375.namprd11.prod.outlook.com (2603:10b6:8:101::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 16:35:27 +0000
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::5697:a11e:691e:6acf]) by CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::5697:a11e:691e:6acf%6]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 16:35:27 +0000
+From:   "Keller, Jacob E" <jacob.e.keller@intel.com>
+To:     Nick Alcock <nick.alcock@oracle.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>
+CC:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>
+Subject: RE: [PATCH 05/20] lib: remove MODULE_LICENSE in non-modules
+Thread-Topic: [PATCH 05/20] lib: remove MODULE_LICENSE in non-modules
+Thread-Index: AQHZS3T+krC1hSoIl0yf6T1wa1Trsa7kjkKg
+Date:   Tue, 28 Feb 2023 16:35:27 +0000
+Message-ID: <CO1PR11MB50892FA526AADBCA960D05B9D6AC9@CO1PR11MB5089.namprd11.prod.outlook.com>
+References: <20230228130215.289081-1-nick.alcock@oracle.com>
+ <20230228130215.289081-6-nick.alcock@oracle.com>
+In-Reply-To: <20230228130215.289081-6-nick.alcock@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO1PR11MB5089:EE_|DM4PR11MB7375:EE_
+x-ms-office365-filtering-correlation-id: 77314944-7137-4ac1-1e8a-08db19a9cc7a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +pkq0Wi9CptkeSvekX0REMGmdcfvFsDdRGbjgQdtn5S7BSVg0bgwN5Egn1H8hjHIhpX7uady41upjT4K3BlvHW/47VqDtpIRdohyl7g5HgxfmAyIFipYz1KkQADd9bpYQcbOU0RldUIzWtywsxMmI7p4hR4xbpHwF6RFnd44uRDTa+i/FRNHN2E9G5N+s4JXYKls3Dyvamm62TUeKDsDLgdx1QhvO3m3k7Re9Ar9/pUH+G8JCMbB58k+iT/cU2Uh3Ax9avp02Bzm5JxfAF+jrrW3yk17JKjPXJEu0wh8CCEuq1pvw9vo06CtFegLmXqFoieFpqoeJRoC9imcAumXzSU8cKVNFIw+O4FGQiwS2nk66yS3L2Bl+jjPb1Q40mC1/92Aw/NTBA3pyFlzlIZLmYwg2Va/zhkeeIDI1ht3n6kR7NtmCF//FSds/nmIV7OkIuT/uFQIYxWtTtP18cGxkODTTEhjkR6Jsf9xZPdXUX55CvK35VenXgLoBK0YZ5DM2W+8Z+lfXheaU0/p8yCHkxaVq8jFLw951VStGh8V5e96YHJbmxP7QJuJ9mMaZFWzj4t+krDDTBsVScCnrTyvKSBohWwP4EA5WRAOIBP3BdsN4uZsp+mpBpOP5fBlAaZrdSs2uUOOWOw2g2Ih7Vj53N3vV7Ut6l73tO/MyTA1wWcJjcOY0EdCx/7iHTgFHM2ffvKCM9nrvIMLPO5KN/apuA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199018)(122000001)(316002)(83380400001)(38070700005)(82960400001)(38100700002)(55016003)(26005)(186003)(478600001)(71200400001)(6506007)(53546011)(9686003)(7696005)(33656002)(86362001)(110136005)(2906002)(54906003)(66946007)(76116006)(5660300002)(52536014)(64756008)(66476007)(66556008)(41300700001)(8936002)(66446008)(4326008)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+W3jJ39AS8bRSR5tS3YLBiBSs2plNqDHa4lVQccb/pdOJ2ApYaMex42RimYr?=
+ =?us-ascii?Q?BG/Rzn4YOygcbvILeynu4gp6yIFuWhFIaAGBi0D8qDUcKVlEzFiVYaAgDANd?=
+ =?us-ascii?Q?PC48EKiFvmc0F3AgAz2iviKvIqL7MU/g1q4Hig1V7F7kLLqe8vLP/ypykZhY?=
+ =?us-ascii?Q?jkGMEqYxPGYmjNpH3spKbNI2SnfGALqMd9NpFiW++jsajxL0S33963AN5sDb?=
+ =?us-ascii?Q?+zISNTagqi33tyDwO0xnc/4TsHl9eXdfygjyebKwE7t86T32F35Amyw/Z4tX?=
+ =?us-ascii?Q?/YNwj2yS85H68K4ceIHUYdbPd0ac4aDyOSaO5bLPqaTYwFhYrEPmQgrqnbNh?=
+ =?us-ascii?Q?5FVTglwLKQRLaXNh9zsdyyMne48umI4ot+p733lNjqYp5XsUz0Zxj7ZSCUwo?=
+ =?us-ascii?Q?l1ep242+3LFvPu1bws5cF6708O6uiU4d7/5FBlOdXdtGOEBIZgCTFKoomEPV?=
+ =?us-ascii?Q?XqBwH1sf+EeAc3hRmU7Yso6mHKQTnMjWF0dzPdE8jLuO3WHDZed34yY7UuCt?=
+ =?us-ascii?Q?BvEAtHJ0EP+8kquAT+IQyTxSUfIfAE02HMMUQID0WMR3MSCgBf4nvWL/ryYb?=
+ =?us-ascii?Q?ea5L/yB45de08I6p7JOdVehQqimFB8V+WjmaUFBs1vuPyUy2Usef8gkCOkiy?=
+ =?us-ascii?Q?Yv3bvckUnxDSP2rAoScqMWU6wwLTKFynT3negjzqvT8neLRa67Nbl7n5NkeX?=
+ =?us-ascii?Q?yiMEsRKpnKKYcv71K/G/m/e/GHyZu3lrIRijkL/EgF8geoMW1Xp6w4x/N3kK?=
+ =?us-ascii?Q?c3EQEOqZpI5a/s8onBfRsdMLQduU60UGRt9utKs6ZHsaX8PqSSkZNWInlSho?=
+ =?us-ascii?Q?pTQGqxp6NEn0bcvjRg5MlRYSwqZEYYbf/fw/s6M8GlnivWzjn0LBQTH7O3g9?=
+ =?us-ascii?Q?kUUpBbKXRri0g5bVy85Dix4S5SNcQ+LshqaArf4SLJ6tfJ1v6cVCMo0OkzWd?=
+ =?us-ascii?Q?01tib+dJT2K+uu0zM1LTkeEu8Ffdd3ayzqCO03x0KnLooXjH8HjqT0QL65Cr?=
+ =?us-ascii?Q?HAcqJ36AV3uT+w7FhYFedD4lsqlGCaGGwDmClR6oKYN7iCJmSxL2Rvv5Tfr0?=
+ =?us-ascii?Q?cMDO0udRJ0mX97z2QZWKDUJVnzAkGA5ecJ4om/Mnt+a7KG8r2/DeJl4w5Swh?=
+ =?us-ascii?Q?AsMt2Mq71AgEdhOWmx5o164dBjJfSiwH4XsALb+nZJrEwxygJrHjNIdFetfX?=
+ =?us-ascii?Q?hO1pAiWGFfQb1/lVAPjgzJXyzt5FQkUej225igz7IzcokeNsWWh0NBcLStly?=
+ =?us-ascii?Q?1ZQAtdZIop+MUzBTBN+mTy7F2V02BL5y00OS86SGXM8JgUuuIdGu/kuqysve?=
+ =?us-ascii?Q?jT6J9fqRdXBU9brHQg/r91EQOmHGaC/efeM7MxdJbBwjSnZxchYZ5DNPz7EO?=
+ =?us-ascii?Q?42fZiT68JH9N/Um1zTFWBQFq5TM5JRYClUp9qh+r3DbWQKnYjEx7JA0x7kbX?=
+ =?us-ascii?Q?5ip8zIrpWRz7qC/wDdT21aae7BxY7mbINWSq0O7XB7vKSA3Dw4iZtjnhG2zA?=
+ =?us-ascii?Q?j48+jUNYMV24a8YM5I0nsrWw1kUY4Mjm8vMNJ6ypThQfVsSl2UCkcy7O6zg3?=
+ =?us-ascii?Q?ZSfN0ZDHnWArwyYJYGp6kewsp7LUFkiNbZolWhte?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77314944-7137-4ac1-1e8a-08db19a9cc7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 16:35:27.3623
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BM3rCMcdsd3BsOpq7f634bm9Y27l1/6lGZyCgZxDbte7GzmBSwTwzpUJ9rOqmlcNKTVPy/rxkdyQl7i30cWNIoo8Nn21V23MJcQcesIAv74=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7375
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kemeng Shi <shikemeng@huaweicloud.com> writes:
-
-> Hi, this series contain some random cleanup patches and some bugfix
-> patches to make EXT4_MB_HINT_GOAL_ONLY work properly, protect pa->pa_free
-> from race and so on. More details can be found in git log.
-> Thanks!
-
-Hi Kemeng,
-
-Did you run any testing on these patches? Because I was very easily able
-to hit ext/009 causing kernel BUG_ON with default mkfs/mount options.
-It's always a good and recommended practice to ensure some level of
-testing on any of the patches we submit to community for review
-and call out in the cover letter on what has been tested and what is not.
-
-<Call stack>
-
-[  208.545365] run fstests ext4/009 at 2023-02-28 21:44:06
-[  216.581660] EXT4-fs (loop7): mounted filesystem 33805b33-04c1-48c3-8de3-9c78f99a7598 with ordered data mode..
-[  216.709050] EXT4-fs (loop7): unmounting filesystem 33805b33-04c1-48c3-8de3-9c78f99a7598.
-[  218.878042] EXT4-fs (loop7): mounted filesystem 8a919af6-f8f4-4ef4-949b-673ccd9ae8c7 with ordered data mode..
-[  255.517357] ------------[ cut here ]------------
-[  255.520274] kernel BUG at fs/ext4/ext4.h:3331!
-[  255.522233] invalid opcode: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC KASAN PTI
-[  255.524740] CPU: 7 PID: 2567 Comm: xfs_io Not tainted 6.2.0-rc8-xfstests-00041-gb1b4634ed055 #21
-[  255.527807] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.4
-[  255.531645] RIP: 0010:ext4_get_group_info+0x272/0x2f0
-[  255.533682] Code: 0f 85 a9 fe ff ff 48 c7 c2 c0 9b 7d 84 be fd 02 00 00 48 c7 c7 c0 95 7d 84 c6 05 9e b4 3b 8
-[  255.539798] RSP: 0018:ffff8881fcd6f6b0 EFLAGS: 00010246
-[  255.541721] RAX: 0000000000000000 RBX: ffff8881bfc54000 RCX: ffffffff81ec3d1a
-[  255.544181] RDX: 1ffff11040b8a208 RSI: 0000000000000050 RDI: ffff888205c51040
-[  255.546695] RBP: ffff888205c51000 R08: 0000000000000000 R09: ffff8881bfc54000
-[  255.549151] R10: ffffed102af9756b R11: ffff8881fcd6f5b4 R12: ffff8881fcd6f8a8
-[  255.551588] R13: ffff8881bfc546e8 R14: ffff888157c189b8 R15: ffff888157c189e0
-[  255.554039] FS:  00007ffff7e58840(0000) GS:ffff8883ecc00000(0000) knlGS:0000000000000000
-[  255.556788] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  255.558806] CR2: 00007ffff7a7bd58 CR3: 0000000181db4005 CR4: 0000000000170ee0
-[  255.561259] Call Trace:
-[  255.562248]  <TASK>
-[  255.563164]  ? kasan_set_track+0x25/0x30
-[  255.564710]  ext4_mb_find_by_goal+0xf1/0xda0
-[  255.566317]  ? ext4_alloc_file_blocks.isra.0+0x2a7/0x9a0
-[  255.568230]  ? ext4_fallocate+0x28b/0x7d0
-[  255.569727]  ? vfs_fallocate+0x2b0/0xb90
-[  255.571238]  ? __x64_sys_fallocate+0xb9/0x110
-[  255.572852]  ? do_syscall_64+0x3f/0x90
-[  255.574372]  ? __pfx_ext4_mb_find_by_goal+0x10/0x10
-[  255.576131]  ? set_track_prepare+0x40/0x70
-[  255.577677]  ? kmem_cache_alloc+0x388/0x440
-[  255.579207]  ext4_mb_regular_allocator+0x1f7/0x1970
-[  255.580981]  ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[  255.582874]  ? ___slab_alloc+0xc93/0xd40
-[  255.584329]  ? ext4_mb_new_blocks+0xc8f/0x15c0
-[  255.585976]  ? __pfx___lock_release+0x10/0x10
-[  255.587652]  ? __pfx_ext4_mb_regular_allocator+0x10/0x10
-[  255.589554]  ? rcu_read_lock_sched_held+0x47/0x80
-[  255.591293]  ? trace_kmem_cache_alloc+0x2d/0xe0
-[  255.592997]  ? kmem_cache_alloc+0x25a/0x440
-[  255.594552]  ? ext4_mb_new_blocks+0xc8f/0x15c0
-[  255.596176]  ext4_mb_new_blocks+0xd3b/0x15c0
-[  255.597767]  ? ext4_find_extent+0x742/0xbf0
-[  255.599301]  ? __pfx_ext4_mb_new_blocks+0x10/0x10
-[  255.601021]  ? lock_is_held_type+0xda/0x130
-[  255.602601]  ext4_ext_map_blocks+0x151a/0x2490
-[  255.604237]  ? __pfx_ext4_ext_map_blocks+0x10/0x10
-[  255.605980]  ? __pfx___lock_acquired+0x10/0x10
-[  255.607648]  ? lock_is_held_type+0xda/0x130
-[  255.609199]  ? ext4_map_blocks+0x6c9/0x1670
-[  255.610757]  ? ext4_map_blocks+0x6c9/0x1670
-[  255.612289]  ? lock_acquired+0x10d/0x2b0
-[  255.613759]  ? rcu_read_lock_sched_held+0x47/0x80
-[  255.615467]  ? ext4_es_lookup_extent+0x43e/0xa20
-[  255.617152]  ext4_map_blocks+0x724/0x1670
-[  255.618655]  ? lock_is_held_type+0xda/0x130
-[  255.620179]  ? __pfx_ext4_map_blocks+0x10/0x10
-[  255.621813]  ? rcu_read_lock_sched_held+0x47/0x80
-[  255.623512]  ? jbd2__journal_start+0x4ef/0x780
-[  255.625191]  ext4_alloc_file_blocks.isra.0+0x2a7/0x9a0
-[  255.627019]  ? __pfx_ext4_alloc_file_blocks.isra.0+0x10/0x10
-[  255.629034]  ? __pfx_file_modified_flags+0x10/0x10
-[  255.630797]  ? lock_is_held_type+0xda/0x130
-[  255.632320]  ext4_fallocate+0x28b/0x7d0
-[  255.633855]  vfs_fallocate+0x2b0/0xb90
-[  255.635252]  __x64_sys_fallocate+0xb9/0x110
-[  255.636789]  do_syscall_64+0x3f/0x90
-[  255.638135]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
 
--ritesh
+> -----Original Message-----
+> From: Nick Alcock <nick.alcock@oracle.com>
+> Sent: Tuesday, February 28, 2023 5:02 AM
+> To: mcgrof@kernel.org
+> Cc: linux-modules@vger.kernel.org; linux-kernel@vger.kernel.org; Hitomi
+> Hasegawa <hasegawa-hitomi@fujitsu.com>; Keller, Jacob E
+> <jacob.e.keller@intel.com>
+> Subject: [PATCH 05/20] lib: remove MODULE_LICENSE in non-modules
+>=20
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>=20
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>=20
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Jacob Keller <jacob.e.keller@intel.com>
+
+Acked-by: Jacob Keller <jacob.e.keller@intel.com>
+
+> ---
+>  lib/pldmfw/pldmfw.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/lib/pldmfw/pldmfw.c b/lib/pldmfw/pldmfw.c
+> index 6e77eb6d8e72e..54e1809a38fd9 100644
+> --- a/lib/pldmfw/pldmfw.c
+> +++ b/lib/pldmfw/pldmfw.c
+> @@ -875,5 +875,4 @@ int pldmfw_flash_image(struct pldmfw *context, const
+> struct firmware *fw)
+>  EXPORT_SYMBOL(pldmfw_flash_image);
+>=20
+>  MODULE_AUTHOR("Jacob Keller <jacob.e.keller@intel.com>");
+> -MODULE_LICENSE("GPL v2");
+>  MODULE_DESCRIPTION("PLDM firmware flash update library");
+> --
+> 2.39.1.268.g9de2f9a303
+
