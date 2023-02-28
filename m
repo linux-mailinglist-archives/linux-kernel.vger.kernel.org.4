@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BAD6A5D95
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3DF6A5D6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjB1QtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S229749AbjB1QrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjB1QtN (ORCPT
+        with ESMTP id S229569AbjB1QrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:49:13 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6139E59CB;
-        Tue, 28 Feb 2023 08:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677602917; x=1709138917;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1BRx1cFZ8aFmlbAEYzeOUIKMH3jxuLSG/wPSL5VXqZs=;
-  b=fIoaggoQGe0+PUHVyYjnaZlonDlLjRML65boCYOOJkymSAlVgy03g4Hw
-   Y8P7EksBXIFdQrRINhZrnFYc7HaHM6pFjVDB9KDlyORpirA+WsSqJtZl4
-   KhbFbGbzQAe4fbmksS0Jt0W15jRkh5uwTZzR+3ucvhiUQEUW3/Dd8wQRY
-   76k+uNZnKee7nsK0s8aU8FzXAR/rA7sLHMBM3AR3lJRr0/cB0uUYfgbXA
-   mKJfq8ia+ruDuDIz1fQqzBxPa5ANvzfW/Dpg2NGhlQJp777hJS5O2tlNS
-   ssRb0VodM9LY31XptzDnd2gHnaiz9tp7MJwrOHIStYJRTvPIpP/GChZ78
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="317986842"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="317986842"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 08:48:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="624107471"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="624107471"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga003.jf.intel.com with ESMTP; 28 Feb 2023 08:48:04 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 9B821369F2;
-        Tue, 28 Feb 2023 16:48:03 +0000 (GMT)
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] iavf: fix non-tunneled IPv6 UDP packet type and hashing
-Date:   Tue, 28 Feb 2023 17:46:13 +0100
-Message-Id: <20230228164613.1360409-3-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230228164613.1360409-1-aleksander.lobakin@intel.com>
-References: <20230228164613.1360409-1-aleksander.lobakin@intel.com>
+        Tue, 28 Feb 2023 11:47:21 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073FD34F40;
+        Tue, 28 Feb 2023 08:47:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677602805; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=bq2Q8ygL/SEUX6cgcpwKrWziBtCDM/1IyP1Bgqp4n/3yvzLpkGRt7eQBgYDMx0OHYx6oF829Rf7nUJTL+fgDj16Tej2RUqb7gcIqmL+AYtYF2sVOCOv8IDsqe9+mdEODYNHOSqbssLZ7rzec9nddA7bhNsViYCAHhTx6ivMPiYg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1677602805; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=YzP0t2qNfnd3V6PK1d7LQSBOy5pePAV5wJ9vr1fobF0=; 
+        b=lZIygUMLbMVTtXXx6MBZkWDnMik2/GkFQIURsEyey+wf7fPUujaeBrDdAjN9vIKzGV02VK1e27euViDv22GKRko5yHFDH7xJioBw9qQEFb9LQ+MZO2WAu/5ZiHDcRX3x/RYzMZ+EuAmqIs8BDgk49BRv06x8fgnFM3I/o1hiCtA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677602805;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=YzP0t2qNfnd3V6PK1d7LQSBOy5pePAV5wJ9vr1fobF0=;
+        b=MS9/DjXzffLDauoiF3iu8V30lwh6+BRt3Nb1ESoJ8UABM5AQs2FrN0oPDNIpDag6
+        tAbI2EtXCNtY+5T00swlN5ZrYFr7nn3vlW3COsvzRbWfGw/C/kRkyLOK1P65A0rfMUl
+        IRLyIIqRcqW6yAwuC2vOiqXhWn+qOVJD1II6eeGs=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1677602802848981.7442252849089; Tue, 28 Feb 2023 08:46:42 -0800 (PST)
+Message-ID: <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+Date:   Tue, 28 Feb 2023 19:46:36 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230227173333.GA496999-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, IAVF's decode_rx_desc_ptype() correctly reports payload type
-of L4 for IPv4 UDP packets and IPv{4,6} TCP, but only L3 for IPv6 UDP.
-Originally, i40e, ice and iavf were affected.
-Commit 73df8c9e3e3d ("i40e: Correct UDP packet header for non_tunnel-ipv6")
-fixed that in i40e, then
-commit 638a0c8c8861 ("ice: fix incorrect payload indicator on PTYPE")
-fixed that for ice.
-IPv6 UDP is L4 obviously. Fix it and make iavf report correct L4 hash
-type for such packets, so that the stack won't calculate it on CPU when
-needs it.
+On 27/02/2023 20:33, Rob Herring wrote:
+> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
+>> the driver which broke the ABI.
+>>
+>> Add the mediatek compatible strings. Change the compatible string on the
+>> examples with the mediatek compatible strings.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+>>   5 files changed, 25 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> index 1e63ea34146a..531b5f616c3d 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> @@ -17,7 +17,10 @@ description:
+>>   
+>>   properties:
+>>     compatible:
+>> -    const: ralink,mt7620-pinctrl
+>> +    enum:
+>> +      - mediatek,mt7620-pinctrl
+>> +      - ralink,mt7620-pinctrl
+> 
+> We don't update compatible strings based on acquistions nor marketing
+> whims. If you want to use 'mediatek' for new things, then fine.
 
-Fixes: 206812b5fccb ("i40e/i40evf: i40e implementation for skb_set_hash")
-Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
-Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
----
- drivers/net/ethernet/intel/iavf/iavf_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs 
+share the same architecture from Ralink, so they were incorrectly called 
+Ralink SoCs.
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_common.c b/drivers/net/ethernet/intel/iavf/iavf_common.c
-index 16c490965b61..dd11dbbd5551 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_common.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_common.c
-@@ -661,7 +661,7 @@ struct iavf_rx_ptype_decoded iavf_ptype_lookup[BIT(8)] = {
- 	/* Non Tunneled IPv6 */
- 	IAVF_PTT(88, IP, IPV6, FRG, NONE, NONE, NOF, NONE, PAY3),
- 	IAVF_PTT(89, IP, IPV6, NOF, NONE, NONE, NOF, NONE, PAY3),
--	IAVF_PTT(90, IP, IPV6, NOF, NONE, NONE, NOF, UDP,  PAY3),
-+	IAVF_PTT(90, IP, IPV6, NOF, NONE, NONE, NOF, UDP,  PAY4),
- 	IAVF_PTT_UNUSED_ENTRY(91),
- 	IAVF_PTT(92, IP, IPV6, NOF, NONE, NONE, NOF, TCP,  PAY4),
- 	IAVF_PTT(93, IP, IPV6, NOF, NONE, NONE, NOF, SCTP, PAY4),
--- 
-2.39.2
+I can remove the new strings from Ralink SoCs and add them only for 
+MediaTek SoCs. Or you could make an exception for this one, regarding 
+the situation. Whatever you think is best.
 
+Arınç
