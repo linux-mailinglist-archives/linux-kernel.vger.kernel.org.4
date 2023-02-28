@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2D96A503D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1556A503F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjB1Apk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 19:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S229587AbjB1Aqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 19:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjB1Apj (ORCPT
+        with ESMTP id S229470AbjB1Aqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 19:45:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470224235
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 16:45:38 -0800 (PST)
+        Mon, 27 Feb 2023 19:46:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609E11E9DD;
+        Mon, 27 Feb 2023 16:46:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7BB360D57
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30FDDC433EF;
-        Tue, 28 Feb 2023 00:45:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E971560D57;
+        Tue, 28 Feb 2023 00:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A1A5C433D2;
+        Tue, 28 Feb 2023 00:46:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677545137;
-        bh=fOqNwJ5Z4MwZZ8QQLBVpGC+AbACWby18/GuSIOkDFZY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AaPMhMIQ+qzxg3/CoRT/DcE3GSqjCsIIww/wwVg4q2W3oX4Dd5ZT+UehdoEjju1AA
-         lEXop4SxPDenBi8tZO4kQrI8rketANGq2cwJZL6UAwYMem3VAWlDn3tFU8TDoTeuFH
-         9sEQ/RdmCPTAHua1SHh5Be9iZdaxovRVBC2oEV85X61mKyhO1b+p8gBogdJ0lRgKS+
-         LBMA04JP/li9YPYIZGJPftBsf2i3rw4zLSdfjfT/cIrmmsXjee6icC6ycVdidIB05k
-         EPV/0deztFV+OEy4WL+Af0Kdm+S3VBtStgM4Ynoc9zS/N8wvF3Xxi9bR12NNQ4Ggsc
-         Z0KzwQrvZ9gyw==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pWo7a-00Dhtu-RN;
-        Tue, 28 Feb 2023 00:45:34 +0000
+        s=k20201202; t=1677545196;
+        bh=bwOp4yx50VaNVXym63VvR5fZ9BdHxXUqyY+m544YWks=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YxPm8N3ab3cZpy5YrbfoDNAjYJQuo4IGt6Gy1eCb8mGB3+xd78v9Fg+z6M51hlF/X
+         2bQkOiCVqR+FS/3g2jF78ht/6YMNWjO1Fxip6D0fKTv/BPRUp+/an8tlj6AVMLI+gR
+         IDFk8+emzDuiO/R5Cyf2JDAw1Ig2r/XLWXisPn9ooTqvpLlechPB58Vg+xfZ3DqX7L
+         601gFyyCclePHqR5sNpSJ8V7olJPmb5aJq0WQLTQa79lJl0hUfSTAQHQkcg4xtuvD2
+         GvC3rDtSj/jIjcW8qiiKHcJnJlXDbGLC5Uc5vLw/dAhtu1SgjD3cR/LRmbHBdXXVi+
+         x05PP8BFuYX1A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29902E1CF31;
+        Tue, 28 Feb 2023 00:46:36 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Date:   Tue, 28 Feb 2023 00:45:34 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Bingbu Cao <bingbu.cao@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, johan+linaro@kernel.org,
-        hsinyi@chromium.org
-Subject: Re: System boot failure related to commit 'irqdomain: Switch to
- per-domain locking'
-In-Reply-To: <d2290916-f78c-4b0a-d706-0955ae0aa4ff@linux.intel.com>
-References: <d2290916-f78c-4b0a-d706-0955ae0aa4ff@linux.intel.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d595de9168d45bb5e863942ab7a78e3d@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: bingbu.cao@linux.intel.com, linux-kernel@vger.kernel.org, johan+linaro@kernel.org, hsinyi@chromium.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] xen-netback: remove unused variables pending_idx and index
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167754519616.16363.18059153345889882200.git-patchwork-notify@kernel.org>
+Date:   Tue, 28 Feb 2023 00:46:36 +0000
+References: <20230226163429.2351600-1-trix@redhat.com>
+In-Reply-To: <20230226163429.2351600-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     wei.liu@kernel.org, paul@xen.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,46 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-27 10:46, Bingbu Cao wrote:
-> Hi, Johan and Zyngier,
-> 
-> I am using a Dell XPS laptop(Intel Processor) just update my
-> Linux kernel to latest tag 6.2.0, and then I see that the kernel
-> cannot boot successfully, it reported:
-> --------------------------------------------
-> Gave up waiting for root file system device. Common problems:
->  - Boot args (cat /proc/cmdline)
->    - Check rootdelay= (did the system wait long enough?)
->  - Missing modules (cat /proc/modules; ls /dev)
-> 
-> ALERT! UUID=xxxxxxx does not exist. Dropping to shell!
-> --------------------------------------------
-> 
-> And then it drop into initramfs shell, I try to use 'blkid' to
-> get block devices information, but it showed nothing.
-> 
-> I also tried add 'rootdelay' and 'rootwait' in bootargs, but it did
-> not work.
-> 
-> I am sure that my previous kernel 6.2.0-rc4 work normally, so I
-> did some bisect and found the commit below cause the failure on
-> my system:
-> 
-> 9dbb8e3452ab irqdomain: Switch to per-domain locking
-> 
-> I really have no idea why it cause my problem, but I see just
-> reverting this commit really help me.
-> 
-> Do you have any idea?
+Hello:
 
-Please provide us with a kernel boot log. It is very hard
-to figure out what is going on without it. It would also
-help if you indicated what sort of device is your root
-filesystem on (NVMe, SATA, USB...), as it would narrow the
-search for the culprit.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks,
+On Sun, 26 Feb 2023 11:34:29 -0500 you wrote:
+> building with gcc and W=1 reports
+> drivers/net/xen-netback/netback.c:886:21: error: variable
+>   ‘pending_idx’ set but not used [-Werror=unused-but-set-variable]
+>   886 |                 u16 pending_idx;
+>       |                     ^~~~~~~~~~~
+> 
+> pending_idx is not used so remove it.  Since index was only
+> used to set pending_idx, remove index as well.
+> 
+> [...]
 
-         M.
+Here is the summary with links:
+  - xen-netback: remove unused variables pending_idx and index
+    https://git.kernel.org/netdev/net-next/c/ccf8f7d71424
+
+You are awesome, thank you!
 -- 
-Jazz is not dead. It just smells funny...
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
