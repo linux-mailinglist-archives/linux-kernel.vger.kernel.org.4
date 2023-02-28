@@ -2,100 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3452C6A5BF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7126A5BF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjB1PaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S229899AbjB1PaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjB1PaO (ORCPT
+        with ESMTP id S229994AbjB1PaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:30:14 -0500
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF1A301BD;
-        Tue, 28 Feb 2023 07:29:56 -0800 (PST)
-Received: by mail-qv1-f53.google.com with SMTP id y12so7084632qvt.8;
-        Tue, 28 Feb 2023 07:29:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1CZR9XbBI+jqJTXVWOqR0qlxDlUyuDkgVxI59AK61bU=;
-        b=KALTBPFdPRPg4gKJWprDLh3/aIlzmk0yVB5hJslVmPFFQo72Pc4TMJ4e3Jff0p385A
-         JWshMpYuLglUl5u9OQpErZ+LmP/7MtEz/9a1+dZAKOm7L5GRDHk2lG3IIDv0cFA8FTv7
-         iHUVXyjGT1jh6/HGziezB0eAGTPHSxSy42eYexnJ3T9Oxg7zeiK4K/mF/ENqYkhRoY8y
-         47VJkM1N9cObJaJIZWlmX6NO8ZCBmFl/cA/10LF3BpOTrt6oPOAER/699cd5jzFZBQ7d
-         kbxJWWVD7HDMQIpMxdx4inUYrnSfN2W8SB8QR2U65TgElNDkP+MRMnn8UWbJpPwhgyk7
-         luEQ==
-X-Gm-Message-State: AO0yUKVWuqm6Lz1rc/htze/zZ1+QVzJ2LRzD/q47cItziMCEXFpcxHmL
-        Loaqln7sAptbz/8WqLQ447BGNVDMQU+D36xY
-X-Google-Smtp-Source: AK7set8/R4LdhtyIOF5KDjcZNfgIpBYR2wP41EFrskVZ12EeUAjNJs8PrEpxMlQREJOZ78izfR385Q==
-X-Received: by 2002:ad4:5de8:0:b0:56e:f4e0:a4ec with SMTP id jn8-20020ad45de8000000b0056ef4e0a4ecmr5808218qvb.46.1677598147781;
-        Tue, 28 Feb 2023 07:29:07 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:f172])
-        by smtp.gmail.com with ESMTPSA id bl32-20020a05620a1aa000b007423e52f9d2sm7006503qkb.71.2023.02.28.07.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 07:29:07 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, tj@kernel.org
-Subject: [PATCH bpf-next] bpf: Fix bpf_cgroup_from_id() doxygen header
-Date:   Tue, 28 Feb 2023 09:28:45 -0600
-Message-Id: <20230228152845.294695-1-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 28 Feb 2023 10:30:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F84823DA0;
+        Tue, 28 Feb 2023 07:29:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C11AA6115D;
+        Tue, 28 Feb 2023 15:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C2DC433EF;
+        Tue, 28 Feb 2023 15:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677598161;
+        bh=hcXafIxHuoahz1Cokb3IrPCYphDo8xRmiIBP8KWMMW8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2bvrZc0hDxg6mbBnAIMY0O72OpR3+QAyiBK3BjlyFb+zHGlH4G23le/063J2XMs6B
+         HZpUVrM359GPeSUL2HWAH5PPSpBnCd+DCedkVNH01gdwIvQpcTYFkUOwn+ivo09o8Z
+         u0z9zhu58bwTCwgfv2/4hxBK71fsF/L1NIFzK3VY=
+Date:   Tue, 28 Feb 2023 16:29:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
+        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
+        robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND
+ platform op callbacks
+Message-ID: <Y/4dzus7J07quj61@kroah.com>
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-13-quic_wcheng@quicinc.com>
+ <Y9Ui82OaI54Qx8Ft@kroah.com>
+ <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
+ <5e5c6481-8d5d-dc3f-e40e-986e3ac30387@quicinc.com>
+ <Y/2tsfGGzAlLzxwd@kroah.com>
+ <b38b317e-9c5e-a655-4364-df49c3b64b88@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b38b317e-9c5e-a655-4364-df49c3b64b88@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 332ea1f697be ("bpf: Add bpf_cgroup_from_id() kfunc"), a new
-bpf_cgroup_from_id() kfunc was added which allows a BPF program to
-lookup and acquire a reference to a cgroup from a cgroup id. The
-commit's doxygen comment seems to have copy-pasted fields, which causes
-BPF kfunc helper documentation to fail to render:
+On Tue, Feb 28, 2023 at 01:19:33AM -0800, Wesley Cheng wrote:
+> Hi Greg,
+> 
+> On 2/27/2023 11:30 PM, Greg KH wrote:
+> > On Mon, Feb 27, 2023 at 06:59:32PM -0800, Wesley Cheng wrote:
+> > > Hi Greg,
+> > > 
+> > > On 2/10/2023 2:49 PM, Wesley Cheng wrote:
+> > > > Hi Greg,
+> > > > 
+> > > > On 1/28/2023 5:28 AM, Greg KH wrote:
+> > > > > On Wed, Jan 25, 2023 at 07:14:14PM -0800, Wesley Cheng wrote:
+> > > > > > Allow for different platforms to be notified on USB SND
+> > > > > > connect/disconnect
+> > > > > > seqeunces.  This allows for platform USB SND modules to properly
+> > > > > > initialize
+> > > > > > and populate internal structures with references to the USB SND chip
+> > > > > > device.
+> > > > > > 
+> > > > > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > > > > > ---
+> > > > > >    sound/usb/card.c | 28 ++++++++++++++++++++++++++++
+> > > > > >    sound/usb/card.h | 20 ++++++++++++++++++++
+> > > > > >    2 files changed, 48 insertions(+)
+> > > > > > 
+> > > > > > diff --git a/sound/usb/card.c b/sound/usb/card.c
+> > > > > > index 26268ffb8274..803230343c16 100644
+> > > > > > --- a/sound/usb/card.c
+> > > > > > +++ b/sound/usb/card.c
+> > > > > > @@ -117,6 +117,24 @@ MODULE_PARM_DESC(skip_validation, "Skip
+> > > > > > unit descriptor validation (default: no)
+> > > > > >    static DEFINE_MUTEX(register_mutex);
+> > > > > >    static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
+> > > > > >    static struct usb_driver usb_audio_driver;
+> > > > > > +static struct snd_usb_platform_ops *platform_ops;
+> > > > > 
+> > > > > You can not have a single "platform_ops" pointer, this HAS to be
+> > > > > per-bus.
+> > > > > 
+> > > > 
+> > > > Agreed.
+> > > > 
+> > > 
+> > > I looked at seeing how we could implement this at a per bus level, but the
+> > > USB class driver model doesn't exactly have a good framework for supporting
+> > > this.  Reason being is because, at the time of the USB SND class driver
+> > > initialization, there is a big chance that there isn't a USB bus registered
+> > > in the system, so the point of adding the operations is not clear.  However,
+> > > we need to ensure that we've added the platform/driver operations before any
+> > > USB SND devices are detected.
+> > 
+> > But the offload "engine" is associated with the specific USB bus
+> > controller instance in the system, so perhaps you are just not adding
+> > this to the correct location?
+> > 
+> 
+> There are several parts to the offload logic:
+> 1.  XHCI interrupter/resource components - fetching addresses to the proper
+> event ring and transfer rings for the audio DSP.  This is the part which is
+> specific to the controller instance, and APIs are being directly exported
+> from the XHCI HCD, as the offloading features utilized are only specific for
+> XHCI based controllers.  This is handled in patches 1-6 in this series.
+> Each XHCI instance will have its own set of interrupters, and transfer
+> resources.
+> 
+> 2.  USB offload class driver - driver which interacts with USB SND for
+> operations like UAC descriptor parsing, USB audio device support params, and
+> USB endpoint setup (ie issuing SET_INTERFACE to enable the device to start
+> playback this is a SETUP transaction).  It will interact with the USB
+> backend and items in #1, to set up the audio playback.
+> 
+> > The sound core shouldn't care about this at all, add the logic to the
+> > USB host controller driver instead, why isn't this just another USB bus
+> > function?
+> > 
+> 
+> The intention of the platform ops here is to mainly keep track of USB SND
+> card/pcm device creation, and access to the main "struct snd_usb_audio".
+> This structure carries all the information about the different substreams
+> allocated, as well as the formats supported by the audio device.  This is
+> passed onto the USB backend, which will be utilized in my next revision to
+> allow userspace to specifically select the proper card/PCM device to enable
+> offload on.
 
-<snip>/helpers.c:2114: warning: Excess function parameter 'cgrp'...
-<snip>/helpers.c:2114: warning: Excess function parameter 'level'...
+Oh, I can't wait to see that user/kernel api :)
 
-<snip>
+It's really hard to answer you here as I don't see any patches, and I
+don't know how your hardware really works.  But in general, you should
+always be working on the bus level here, and that will get rid of any
+static lists or any "single controller pointers" that you all have had
+in previous versions.
 
-<snip>/helpers.c:2114: warning: Excess function parameter 'level'...
+I'll wait for patches to be able to comment further.
 
-This patch fixes the doxygen header.
+thanks,
 
-Fixes: 332ea1f697be ("bpf: Add bpf_cgroup_from_id() kfunc")
-Signed-off-by: David Vernet <void@manifault.com>
----
- kernel/bpf/helpers.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index a784be6f8bac..abdcc52f90a6 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2106,8 +2106,7 @@ __bpf_kfunc struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp, int level)
-  * bpf_cgroup_from_id - Find a cgroup from its ID. A cgroup returned by this
-  * kfunc which is not subsequently stored in a map, must be released by calling
-  * bpf_cgroup_release().
-- * @cgrp: The cgroup for which we're performing a lookup.
-- * @level: The level of ancestor to look up.
-+ * @cgid: cgroup id.
-  */
- __bpf_kfunc struct cgroup *bpf_cgroup_from_id(u64 cgid)
- {
--- 
-2.39.0
-
+greg k-h
