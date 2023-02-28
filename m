@@ -2,137 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA636A5CE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5405A6A5CE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjB1QOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 11:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
+        id S229691AbjB1QOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjB1QOC (ORCPT
+        with ESMTP id S229492AbjB1QOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:14:02 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA1020548;
-        Tue, 28 Feb 2023 08:13:59 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677600835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yzn4ZC6rxI44VXytBI5Fnc7+a5GIfbz7OrWhI6HHXwo=;
-        b=BGato9Jn5a3ROBz+NS5V3X407E3+wK948iylyHOQz+LAVewkjsmWZaFoyqMAxPdKxG1cxs
-        8Plkbv03K77D5nmyS5mUZCNtJTIDT4vpRLvFyMbYTZYkqNqi80vJInfZMtKwDVZGBxp5NM
-        4D9CAi7RoRSJWUDUtSWWDKpYv1MhVuuEiRVD/LN4QHg+1miSt2II0JhMuU12OHq+UgzZE4
-        aqLa9UHgD8AIV9GH9HttxZDpJOg9krtK/k4uskuCKSEi8awzLF6H/Zh+jF8hwwii624jov
-        5WiEdfjAmfFXWm9H0ABdxLYYMbZOHbzpsw3DWm2ohXCIFcUJtpGGxbVA03DgcQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677600835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yzn4ZC6rxI44VXytBI5Fnc7+a5GIfbz7OrWhI6HHXwo=;
-        b=uTdd0PBkQ0wwFhY/RHnddcbIfbACiZwiWoUzLdsnStv6mgQUAkR3RjqLHgtZe0BV2KIPS9
-        mJ8m2Snp1P3zQhDw==
-To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        kim.phillips@amd.com, brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: Re: [PATCH v12 06/11] x86/smpboot: Remove initial_stack on 64-bit
-In-Reply-To: <20230226110802.103134-7-usama.arif@bytedance.com>
-References: <20230226110802.103134-1-usama.arif@bytedance.com>
- <20230226110802.103134-7-usama.arif@bytedance.com>
-Date:   Tue, 28 Feb 2023 17:13:55 +0100
-Message-ID: <87k001n4xo.ffs@tglx>
+        Tue, 28 Feb 2023 11:14:42 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CC62330E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:14:40 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ck15so42473020edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:14:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d8tRS460nc4KIz6Gi8dIzh48uT/Gqvrt2n9DWhZ29rY=;
+        b=IehjgpMbn3Eo6EKsrwBu/GL6F4CUPB9kww4ilDWDx4m4BtWjE74S+RumzMcpLSqTnp
+         9bB+30LJDDS6o2IHlzAgYNlFgK7kxPN+BGnVW0Qhjwqz9501OoCyi22zBk4gSMfxAjhB
+         H5RJlC98/rS/t7vyuKP6BT8UsRe+GDueaKJue8cWRBeZzdQbjGlomLR7LQclmlBEft6N
+         YHhS8f+Ic7fY3hMeSTkgasGz6KgRQLIK89g1wWaFyBdq1lK1rajRIBQ5TczwRlcmDOoe
+         QdLi2sbZE5wdCatI7nupb+nMGRlvx8xVVBGqsPN+VU0HOM964PhJGVDuLXQ4wPFywdZ9
+         qnOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d8tRS460nc4KIz6Gi8dIzh48uT/Gqvrt2n9DWhZ29rY=;
+        b=d3/yBJj7NPm2gfmm5feyBtIb4xG27gaRBzdtIG/2wpdcV7mmHwe1tGCA8X2Oud2j/j
+         bbizvkrXi97KmcobcNcXyPpkv4UCOHNUuWnt42fh9O5uORC3q3Nh1aEIVQYLVyFYRZvj
+         uD6Rx8X8cjCWs2IqDN8KFCGLWrrGtit/N/VqH5a/iFF7C69VeqCJN8TU27ysC2ilsPw4
+         1SzlTSzqZ6Ksbh4fGzUa0uonj25/Ya2SYgTd07wCu0qUFi1m6tOlNd5NXwKr77gszlxa
+         aFLPbiBYsh3DPqc3flFKypGTFunK33RDrL5NU/nq+J/NrQ0qPzU3r3UCNjHdOdZst0nI
+         Ihag==
+X-Gm-Message-State: AO0yUKXAvW+V+yiQE4y5PpRtxaeJHJAtMkBNIgQdXf71TgmHePNEj92Q
+        W2EkokY3wSdQV1kXlp0JDu/BaLnjDAFXWkHA
+X-Google-Smtp-Source: AK7set/uK6TxHaNRknwX1VSyDeTfQU+WOOuUwcbU1jti4MIbn43Z87o2cLpqpaTquIMFuQNbm0SaBg==
+X-Received: by 2002:aa7:ca50:0:b0:4ae:eae1:21f8 with SMTP id j16-20020aa7ca50000000b004aeeae121f8mr4153879edt.29.1677600876852;
+        Tue, 28 Feb 2023 08:14:36 -0800 (PST)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id p3-20020a50cd83000000b004acba0afaa3sm4483665edi.21.2023.02.28.08.14.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 08:14:36 -0800 (PST)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH] sched/core: Use do-while instead of for loop in set_nr_if_polling
+Date:   Tue, 28 Feb 2023 17:14:26 +0100
+Message-Id: <20230228161426.4508-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26 2023 at 11:07, Usama Arif wrote:
-> From: Brian Gerst <brgerst@gmail.com>
->
-> Eliminating global variables from the CPU startup path in order to simplify
-> it and facilitate parallel startup.
+Use equivalent do-while loop instead of infinite for loop.
 
-As this patch is now part of the parallel boot series and actually
-introduces smpboot_control, the above is neither accurate nor useful.
+There are no asm code changes.
 
-Folks, really.
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Christian Brauner <brauner@kernel.org>
+---
+ kernel/sched/core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-> Remove initial_stack, and load RSP from current_task->thread.sp instead.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index af017e038b48..349c018eaf09 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -899,14 +899,13 @@ static bool set_nr_if_polling(struct task_struct *p)
+ 	struct thread_info *ti = task_thread_info(p);
+ 	typeof(ti->flags) val = READ_ONCE(ti->flags);
+ 
+-	for (;;) {
++	do {
+ 		if (!(val & _TIF_POLLING_NRFLAG))
+ 			return false;
+ 		if (val & _TIF_NEED_RESCHED)
+ 			return true;
+-		if (try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED))
+-			break;
+-	}
++	} while (!try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED));
++
+ 	return true;
+ }
+ 
+-- 
+2.39.2
 
-  
->  #ifdef CONFIG_SMP
-> -	initial_stack = (unsigned long)temp_stack + sizeof(temp_stack);
-> +	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
-
-This lacks a comment about the temporary (ab)use of current->thread.sp
-
->  	early_gdt_descr.address =
->  			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
->  	initial_gs = per_cpu_offset(smp_processor_id());
-> +	smpboot_control = smp_processor_id();
->  #endif
-
-> @@ -241,6 +241,24 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
->  	UNWIND_HINT_EMPTY
->  	ANNOTATE_NOENDBR // above
->  
-> +#ifdef CONFIG_SMP
-> +	movl	smpboot_control(%rip), %ecx
-> +
-> +	/* Get the per cpu offset for the given CPU# which is in ECX */
-> +	movq	__per_cpu_offset(,%rcx,8), %rdx
-> +#else
-> +	xorl	%edx, %edx
-> +#endif /* CONFIG_SMP */
-
-Sigh, we should finally make CONFIG_SMP def_bool y ...
-
-> +	/*
-> +	 * Setup a boot time stack - Any secondary CPU will have lost its stack
-> +	 * by now because the cr3-switch above unmaps the real-mode stack.
-> +	 *
-> +	 * RDX contains the per-cpu offset
-> +	 */
-> +	movq	pcpu_hot + X86_current_task(%rdx), %rax
-> +	movq	TASK_threadsp(%rax), %rsp
-> +
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index b18c1385e181..62e3bf37f0b8 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1112,7 +1112,12 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
->  	idle->thread.sp = (unsigned long)task_pt_regs(idle);
->  	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
->  	initial_code = (unsigned long)start_secondary;
-> -	initial_stack  = idle->thread.sp;
-> +
-> +	if (IS_ENABLED(CONFIG_X86_32)) {
-> +		initial_stack  = idle->thread.sp;
-> +	} else {
-> +		smpboot_control = cpu;
-> +	}
-
-Please remove the pointless brackets.
-  
-Thanks,
-
-        tglx
