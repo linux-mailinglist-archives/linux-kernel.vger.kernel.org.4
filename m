@@ -2,161 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B066A604D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EAD6A6055
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjB1UWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 15:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S229618AbjB1UYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjB1UWJ (ORCPT
+        with ESMTP id S229482AbjB1UYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:22:09 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FCD34F7A;
-        Tue, 28 Feb 2023 12:22:01 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 2C45A3200916;
-        Tue, 28 Feb 2023 15:22:00 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 28 Feb 2023 15:22:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1677615719; x=
-        1677702119; bh=p8ZqQhrJ3wpAF4QuT+1zVLuNbpYdyDzeaaN6r1CTKxU=; b=t
-        rlGkeujQfNFXD62Xfz3q4LflZgaZJsFzXo3DQBvFa0VNGFDiZWMh1IeRQwDYHGTK
-        +HZJdsRyEgMRq5tCCgkfO/hWPiuGt4jtVT1oS8hdduw6lXVLsZCkuAD+ZQqxSoEq
-        woW4O9IYhWuLyIVd9iPVLfVgCoIHxiK9Nv4gPsOGZElihm3mh7uPEbEy3tB2wMQC
-        nbK1zQrIbdDphRvyjwFezNWD79Oecx3nIHaJMT6SdsYaGIstMB6hYPbFVXhJSaCb
-        3NUV0/Ta2XNdR3P3hn89Ik2qIx+8hrA5roaMnXBRQ3OZ8KlUnaW9SzeCcQpBNorI
-        RwNNqjvbeeOGpzhotN2wQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677615719; x=1677702119; bh=p8ZqQhrJ3wpAF
-        4QuT+1zVLuNbpYdyDzeaaN6r1CTKxU=; b=f3lmAnn4WfiAWAm3n4Xyv/uaTT4S4
-        e07toQkoAM1x4TorxcCICgPOVT2nNVQHl5hnaIWwbb6zR29bEhP1kHVKvSUT5w61
-        bMEPRApxa1U2e8V0f4Pt+063ZkM3WCGvR1nQ1ob+wS3TNNwxiUNOR1y7+sEgv2Zp
-        qoHyQqBQyiadW8ogumsqo0PFINYEGL6cr/jjriRimO5ugh5Gg9RgVPumw6vHz4Np
-        CBE0sgP0BvjfNA3zMnR5nwHAD69wI/tKPwtK1L3klmUO5mJDDL77rz+sxNbl4iPp
-        9pO2tTW7QRM+QcPyC948ol5IAtEEjpUhE635amScHqvyhQH7YUYmJ70Lg==
-X-ME-Sender: <xms:Z2L-Y7S9I8oHZwna1yO9-fUM6OYZdVJawak-TZqMKQ3mwr4QkmXqEQ>
-    <xme:Z2L-Y8yZjW9Gf27mLFw0aJOoW7VuuQxCq9RR0ib9RSdHdxFXZ-cEWEeI8xXPLd_eX
-    dJcPZUFnj5Nbx8Tag8>
-X-ME-Received: <xmr:Z2L-Yw0c6F44MRWLzjYf43i22bLTAZH4RjF35zoCtQb0jbRdJIyKDIHB3Qd4o4TTchl2cwTPfScCgx0xMQ0uTqwYeaRS728jwy58LLoV0KQtpmrK47qMZKSjGD12lg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelfedgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
-    ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
-    gvrhhnpeejieehheekgedvjefhveekjefguddtfefhteehtdeiffelkeeiuedufeelkeej
-    geenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
-    gvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:Z2L-Y7AL51je9_5K7W9NK3w-lOcHfrFyNyCTxZ-MtQuHsbBySDcJig>
-    <xmx:Z2L-Y0jeYxFm_DrYcSlskAkxfHSGCyFdXLCxd5JTmKO-O3-fpccpRQ>
-    <xmx:Z2L-Y_rwgPwlGn0OWfmyEAWL6PoIIx1HZltUCceFr7lvFZZJSObQUg>
-    <xmx:Z2L-Yzo2fU5t4QrKXyVPYMTy5hW2JvHfSGHS96eBOxwKzlCIFkjYIQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Feb 2023 15:21:57 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        iommu@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] iommu: dart: Add support for t8103 USB4 DART
-Date:   Tue, 28 Feb 2023 21:21:32 +0100
-Message-Id: <20230228202132.4919-5-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20230228202132.4919-1-sven@svenpeter.dev>
-References: <20230228202132.4919-1-sven@svenpeter.dev>
+        Tue, 28 Feb 2023 15:24:05 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AD523132;
+        Tue, 28 Feb 2023 12:24:04 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SGkrfX018714;
+        Tue, 28 Feb 2023 20:23:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aD9p/uaGPnAOseXuoLESlp5Zz7ZHtsFAw9p2BJMha/k=;
+ b=cBv/EfIzUS6ew8U5cFgvZoXiVN1uUo4JOaYRhH39ny+i1B/vOLRoqahsDVnenTjnwisd
+ 1c44vjeLnQKoZ5Bvy0SRHNmeVyoF21vFbioKTWoDbRkFZiuuwFTQhXwdrQKJmQzIulDX
+ g5keqw2eHMktJ/x6ZW4nMy3e7FNKt8aGq/myVMXoS3vmPbfjJAEIXeoabTXvKM6xXQkV
+ 8UDFThnhCknJqI96WQ+zeQCkLlPhSI2dnWiNQs/GNFvkTFJWaX0bPzBsqMsggLrgKvXR
+ jLPwTbjctnHXNb7NaSUO3R0Np1YiCzLz0QzmFRaCIljNfw6SuuhlMH4L3Zr561KqMl8r xg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1as32k51-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 20:23:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SKNqhL025387
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 20:23:52 GMT
+Received: from [10.216.38.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
+ 2023 12:23:46 -0800
+Message-ID: <e19b5cd7-9125-a285-accc-ecf530804cfc@quicinc.com>
+Date:   Wed, 1 Mar 2023 01:53:43 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 04/15] drm/msm/a6xx: Extend and explain UBWC config
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Rob Clark <robdclark@chromium.org>
+References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org>
+ <20230223-topic-gmuwrapper-v3-4-5be55a336819@linaro.org>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20230223-topic-gmuwrapper-v3-4-5be55a336819@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: F0Sq-vV9BMY1SJpXhvwhJg_zxqbHVsFD
+X-Proofpoint-GUID: F0Sq-vV9BMY1SJpXhvwhJg_zxqbHVsFD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ phishscore=0 spamscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280169
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This variant of the regular t8103 DART is used for the two
-USB4/Thunderbolt PCIe controllers. It supports 64 instead of 16 streams
-which requires a slightly different MMIO layout. We also disallow bypass
-support since these DARTs will only ever be used for externally facing
-devices on the USB4 ports.
+On 2/23/2023 5:36 PM, Konrad Dybcio wrote:
+> Rename lower_bit to hbb_lo and explain what it signifies.
+> Add explanations (wherever possible to other tunables).
+>
+> Sort the variable definition and assignment alphabetically.
+Sorting based on decreasing order of line length is more readable, isn't it?
+>
+> Port setting min_access_length, ubwc_mode and hbb_hi from downstream.
+> Set default values for all of the tunables to zero, as they should be.
+>
+> Values were validated against downstream and will be fixed up in
+> separate commits so as not to make this one even more messy.
+>
+> A618 remains untouched (left at hw defaults) in this patch.
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 55 ++++++++++++++++++++++++++++-------
+>  1 file changed, 45 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index c5f5d0bb3fdc..bdae341e0a7c 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -786,39 +786,74 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>  static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>  {
+>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+> -	u32 lower_bit = 2;
+> +	/* Unknown, introduced with A640/680 */
+>  	u32 amsbc = 0;
+> +	/*
+> +	 * The Highest Bank Bit value represents the bit of the highest DDR bank.
+> +	 * We then subtract 13 from it (13 is the minimum value allowed by hw) and
+> +	 * write the lowest two bits of the remaining value as hbb_lo and the
+> +	 * one above it as hbb_hi to the hardware. The default values (when HBB is
+> +	 * not specified) are 0, 0.
+> +	 */
+> +	u32 hbb_hi = 0;
+> +	u32 hbb_lo = 0;
+> +	/* Whether the minimum access length is 64 bits */
+> +	u32 min_acc_len = 0;
+> +	/* Unknown, introduced with A650 family, related to UBWC mode/ver 4 */
+>  	u32 rgb565_predicator = 0;
+> +	/* Unknown, introduced with A650 family */
+>  	u32 uavflagprd_inv = 0;
+> +	/* Entirely magic, per-GPU-gen value */
+> +	u32 ubwc_mode = 0;
+>  
+>  	/* a618 is using the hw default values */
+>  	if (adreno_is_a618(adreno_gpu))
+>  		return;
+>  
+> -	if (adreno_is_a640_family(adreno_gpu))
+> +	if (adreno_is_a619(adreno_gpu)) {
+> +		/* HBB = 14 */
+> +		hbb_lo = 1;
+> +	}
+> +
+> +	if (adreno_is_a630(adreno_gpu)) {
+> +		/* HBB = 15 */
+> +		hbb_lo = 2;
+> +	}
+> +
+> +	if (adreno_is_a640_family(adreno_gpu)) {
+>  		amsbc = 1;
+> +		/* HBB = 15 */
+> +		hbb_lo = 2;
+> +	}
+>  
+>  	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
+> -		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
+> -		lower_bit = 3;
+>  		amsbc = 1;
+> +		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
+> +		/* HBB = 16 */
+> +		hbb_lo = 3;
+>  		rgb565_predicator = 1;
+>  		uavflagprd_inv = 2;
+>  	}
+>  
+>  	if (adreno_is_7c3(adreno_gpu)) {
+> -		lower_bit = 1;
+>  		amsbc = 1;
+> +		/* HBB is unset in downstream DTS, defaulting to 0 */
+This is incorrect. For 7c3 hbb value is 14. So hbb_lo should be 1. FYI, hbb configurations were moved to the driver from DT in recent downstream kernels.
 
-Acked-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- drivers/iommu/apple-dart.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index 7579c97a9062..b9886d40a4d1 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -81,6 +81,7 @@
- #define DART_T8020_TCR_BYPASS_DAPF      BIT(12)
- 
- #define DART_T8020_TTBR       0x200
-+#define DART_T8020_USB4_TTBR  0x400
- #define DART_T8020_TTBR_VALID BIT(31)
- #define DART_T8020_TTBR_ADDR_FIELD_SHIFT 0
- #define DART_T8020_TTBR_SHIFT 12
-@@ -1184,6 +1185,35 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
- 	.ttbr_shift = DART_T8020_TTBR_SHIFT,
- 	.ttbr_count = 4,
- };
-+
-+static const struct apple_dart_hw apple_dart_hw_t8103_usb4 = {
-+	.type = DART_T8020,
-+	.irq_handler = apple_dart_t8020_irq,
-+	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
-+	.oas = 36,
-+	.fmt = APPLE_DART,
-+	.max_sid_count = 64,
-+
-+	.enable_streams = DART_T8020_STREAMS_ENABLE,
-+	.lock = DART_T8020_CONFIG,
-+	.lock_bit = DART_T8020_CONFIG_LOCK,
-+
-+	.error = DART_T8020_ERROR,
-+
-+	.tcr = DART_T8020_TCR,
-+	.tcr_enabled = DART_T8020_TCR_TRANSLATE_ENABLE,
-+	.tcr_disabled = 0,
-+	.tcr_bypass = 0,
-+
-+	.ttbr = DART_T8020_USB4_TTBR,
-+	.ttbr_valid = DART_T8020_TTBR_VALID,
-+	.ttbr_addr_field_shift = DART_T8020_TTBR_ADDR_FIELD_SHIFT,
-+	.ttbr_shift = DART_T8020_TTBR_SHIFT,
-+	.ttbr_count = 4,
-+
-+	.disable_bypass = true,
-+};
-+
- static const struct apple_dart_hw apple_dart_hw_t6000 = {
- 	.type = DART_T6000,
- 	.irq_handler = apple_dart_t8020_irq,
-@@ -1276,6 +1306,7 @@ DEFINE_SIMPLE_DEV_PM_OPS(apple_dart_pm_ops, apple_dart_suspend, apple_dart_resum
- 
- static const struct of_device_id apple_dart_of_match[] = {
- 	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
-+	{ .compatible = "apple,t8103-usb4-dart", .data = &apple_dart_hw_t8103_usb4 },
- 	{ .compatible = "apple,t8110-dart", .data = &apple_dart_hw_t8110 },
- 	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
- 	{},
--- 
-2.25.1
+-Akhil.
+>  		rgb565_predicator = 1;
+>  		uavflagprd_inv = 2;
+>  	}
+>  
+>  	gpu_write(gpu, REG_A6XX_RB_NC_MODE_CNTL,
+> -		rgb565_predicator << 11 | amsbc << 4 | lower_bit << 1);
+> -	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, lower_bit << 1);
+> -	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL,
+> -		uavflagprd_inv << 4 | lower_bit << 1);
+> -	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, lower_bit << 21);
+> +		  rgb565_predicator << 11 | hbb_hi << 10 | amsbc << 4 |
+> +		  min_acc_len << 3 | hbb_lo << 1 | ubwc_mode);
+> +
+> +	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, hbb_hi << 4 |
+> +		  min_acc_len << 3 | hbb_lo << 1 | ubwc_mode);
+> +
+> +	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL, hbb_hi << 10 |
+> +		  uavflagprd_inv << 4 | min_acc_len << 3 |
+> +		  hbb_lo << 1 | ubwc_mode);
+> +
+> +	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, min_acc_len << 23 | hbb_lo << 21);
+>  }
+>  
+>  static int a6xx_cp_init(struct msm_gpu *gpu)
+>
 
