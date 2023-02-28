@@ -2,102 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AEA6A5EBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DD76A5EC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjB1S1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S229799AbjB1S1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjB1S1G (ORCPT
+        with ESMTP id S229544AbjB1S1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 13:27:06 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309F83346E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 10:26:56 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id f18so14449131lfa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 10:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeTqNJz+wlwStd3akJO6gZ1qy6VhdHZAOZjVTjq8Ths=;
-        b=Hg303GL4P5Q2pdSN9pUyE1WywQFRKlLyQo6KYVr9Mu/xlV3i7uJRW1lj0VpgRxGJkD
-         hTkQgY+xkkFxoqMaS4Lyfb41a8HJ3jHlc3udXm1O/bq0R1p7t9bEwhwna2k4KBHwyjap
-         IRWuIC0ygcPQlsczqypuN6JiOkQiKSA1pLtSECv47HVme91A7K6bdx+gVw+lWNoN5FgN
-         2oH0gSOJvFII3PBDbfnKkMCa1kwYlZwAVTPjnf5i+3K8CwkItAwH13tJM9wbBTz2RYpc
-         0lovVIKHM4ergXahJguy9+XePKMKZR7NVzjvkBZjHPd6Oy3u9RhHb7oyDykO0VBUvQ8x
-         IPPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeTqNJz+wlwStd3akJO6gZ1qy6VhdHZAOZjVTjq8Ths=;
-        b=aSppH2OJSSePP3zCnCTuWZ5JlPRmlvFr9lpMJ4yQNIXvcFLeaOVI1+9qWtNyhIH/rI
-         MOZqcrxaA4Bob0T0/zZtbQtK6+HqXurmDlTgFexYj7qmF6ZWAdU23+lLM+XaOsJreA1K
-         53tOdkYboSeYOfhekif2yrGcxIiovEAzF2hhQEF6Yu9rJueOWxjYn6q0h15fqNW+vUfR
-         6pWunfVFrB6M2bJaXv+IiQqivIIzuonyp97ZpegMWGVxYOvJnaNSIJu0dFm2aZ9gzPlK
-         KAvdvK4DAtBMTNCeJoDgE4yZN3GcEcsaN1E9wu6/pK+/h/Zq03JqQrBq7B3eqzmI4+gm
-         gC7A==
-X-Gm-Message-State: AO0yUKWRUjvNZNaCuVNm90vNkSEcv5nMF9OeY8StHJzEZL/r9PMs/25C
-        0vORtULXLjpLb2NywCJC6S18M292CKDgZNtQ
-X-Google-Smtp-Source: AK7set8ibk/owvLCNHo66A+Nyj9jA4S4dqpTehR9707ManX49TtuMEUwwMN0vBPr18saVuIdlRgI9Q==
-X-Received: by 2002:ac2:532f:0:b0:4e1:1bfe:38f7 with SMTP id f15-20020ac2532f000000b004e11bfe38f7mr849063lfh.27.1677608814434;
-        Tue, 28 Feb 2023 10:26:54 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id 1-20020ac25681000000b004dda9e8233asm1419865lfr.42.2023.02.28.10.26.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 10:26:54 -0800 (PST)
-Message-ID: <25b0283b-3d87-6b08-22a9-50c470c3d32f@linaro.org>
-Date:   Tue, 28 Feb 2023 20:26:53 +0200
+        Tue, 28 Feb 2023 13:27:42 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEF0166FE;
+        Tue, 28 Feb 2023 10:27:34 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SFbeXD015229;
+        Tue, 28 Feb 2023 18:27:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=JISsqcbzGbAnTkSOPNXA4pSRDZXcEEaKP0m9rZvARmM=;
+ b=HpgQSc6rVXGotwG4recLpqFsUFE4aMR0vWoPwV4xmvxnrldjaIpNkqCTk3iMKTQy4dwH
+ LPBGws9gtOijnEnCh8qydQP6UsW9EEU9Sw6i2q8yBcbJ5oD0mMxEFvK5NuqLPBLYvT7t
+ 6BysCl/O5zSM1uqBwSG5LViIq07yYUBD5K+IIOObUNFyD3kbumxQi+1sOdxzEhLIaoCH
+ tMtWwdYI4cSqP/0Dn9Z8eBeFc01hoJ2n98xlWEX5qjPKdw+oVxjlB6792AWwytpo2Wux
+ TMUgM6IW3vq2G4QZb/U9SNf0JkSF5CG0P0F8dCfFgx75eZ/RN7tQz33hDQjCS2JOdxag 7Q== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p1f7n1kqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 18:27:24 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SIRNct011485
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 18:27:23 GMT
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Feb 2023 10:27:23 -0800
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <bvanassche@acm.org>, <avri.altman@wdc.com>, <mani@kernel.org>,
+        <beanhuo@micron.com>, Asutosh Das <quic_asutoshd@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "open list" <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 1/1] ufs: mcq: qcom: Fix Smatch static checker warning
+Date:   Tue, 28 Feb 2023 10:27:06 -0800
+Message-ID: <80523aada69f5cab90cac76c84aa153b1ea648ad.1677608784.git.quic_asutoshd@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2] drm/msm/disp/dpu: fix sc7280_pp base offset
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1677533800-3125-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1677533800-3125-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QuEE7mbaArZKNVBtKPhikmZCf5MhJE0b
+X-Proofpoint-ORIG-GUID: QuEE7mbaArZKNVBtKPhikmZCf5MhJE0b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_15,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=975 clxscore=1011 mlxscore=0
+ adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302280153
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/02/2023 23:36, Kuogee Hsieh wrote:
-> At sc7280, pingpong block is used to management the dither effects
-> to reduce distortion at panel. Currently pingpong-0 base offset is
-> wrongly set at 0x59000. This mistake will not cause system to crash.
-> However it will make dither not work. This patch correct sc7280 ping
-> pong-0 block base offset.
-> 
-> Changes in v2:
-> -- add more details info n regrading of pingpong block at commit text
-> 
-> Fixes: 591e34a091d1 ("drm/msm/disp/dpu1: add support for display for SC7280 target")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+The patch (c263b4ef737e: "scsi: ufs: core: mcq: Configure resource
+regions") from Jan 13, 2023, leads to the following Smatch static
+checker warning:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+drivers/ufs/host/ufs-qcom.c:1455 ufs_qcom_mcq_config_resource() warn:
+passing zero to 'PTR_ERR'
+drivers/ufs/host/ufs-qcom.c:1469 ufs_qcom_mcq_config_resource() info:
+returning a literal zero is cleaner
 
+Fix the above warnings.
+
+Fixes: c263b4ef737e ("scsi: ufs: core: mcq: Configure resource regions")
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+---
+ drivers/ufs/host/ufs-qcom.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 34fc453f3eb1..cb20c7136c2c 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1451,8 +1451,8 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+ 		if (IS_ERR(res->base)) {
+ 			dev_err(hba->dev, "Failed to map res %s, err=%d\n",
+ 					 res->name, (int)PTR_ERR(res->base));
+-			res->base = NULL;
+ 			ret = PTR_ERR(res->base);
++			res->base = NULL;
+ 			return ret;
+ 		}
+ 	}
+@@ -1466,7 +1466,7 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+ 	/* Explicitly allocate MCQ resource from ufs_mem */
+ 	res_mcq = devm_kzalloc(hba->dev, sizeof(*res_mcq), GFP_KERNEL);
+ 	if (!res_mcq)
+-		return ret;
++		return -ENOMEM;
+ 
+ 	res_mcq->start = res_mem->start +
+ 			 MCQ_SQATTR_OFFSET(hba->mcq_capabilities);
+@@ -1478,7 +1478,7 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+ 	if (ret) {
+ 		dev_err(hba->dev, "Failed to insert MCQ resource, err=%d\n",
+ 			ret);
+-		goto insert_res_err;
++		return ret;
+ 	}
+ 
+ 	res->base = devm_ioremap_resource(hba->dev, res_mcq);
+@@ -1495,8 +1495,6 @@ static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
+ ioremap_err:
+ 	res->base = NULL;
+ 	remove_resource(res_mcq);
+-insert_res_err:
+-	devm_kfree(hba->dev, res_mcq);
+ 	return ret;
+ }
+ 
 -- 
-With best wishes
-Dmitry
+2.7.4
 
