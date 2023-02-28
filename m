@@ -2,210 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FA56A62AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3A56A62AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 23:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjB1Wl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 17:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S229524AbjB1Wmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 17:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjB1WlY (ORCPT
+        with ESMTP id S229470AbjB1Wmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 17:41:24 -0500
-Received: from mailout1.w2.samsung.com (mailout1.w2.samsung.com [211.189.100.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE8D3754D;
-        Tue, 28 Feb 2023 14:40:47 -0800 (PST)
-Received: from uscas1p1.samsung.com (unknown [182.198.245.206])
-        by mailout1.w2.samsung.com (KnoxPortal) with ESMTP id 20230228224029usoutp01baecc932e091dc6fe5e6d2efaeffe310~IHiqkmhC23146031460usoutp01F;
-        Tue, 28 Feb 2023 22:40:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w2.samsung.com 20230228224029usoutp01baecc932e091dc6fe5e6d2efaeffe310~IHiqkmhC23146031460usoutp01F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1677624029;
-        bh=OZb09o/TekRRAlSOZno2pYSLsUkKlMFtRRfVE2PHgvA=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=U6i1f0T+uLjjZNjUWoYL7CYZlGLo+HP9F6uxjcz4P1wtvYEwPq/cMmuMi5h7CEySx
-         TOV461IkaOhBSg2oDtcp8opjokHYMFa6I/m3Sw2xS5R0rTeYpS6+cgxVXcUbzZ5LO5
-         DL8/YkbfbiQYPPq+opgk+7txZ95tpzihVECAGjZo=
-Received: from ussmges3new.samsung.com (u112.gpu85.samsung.co.kr
-        [203.254.195.112]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230228224029uscas1p17c6cc91a0272593beac21b786c354633~IHiqY97Ou2950229502uscas1p1-;
-        Tue, 28 Feb 2023 22:40:29 +0000 (GMT)
-Received: from uscas1p2.samsung.com ( [182.198.245.207]) by
-        ussmges3new.samsung.com (USCPEMTA) with SMTP id EE.78.12196.DD28EF36; Tue,
-        28 Feb 2023 17:40:29 -0500 (EST)
-Received: from ussmgxs2new.samsung.com (u91.gpu85.samsung.co.kr
-        [203.254.195.91]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785~IHiqIpKXF1367513675uscas1p1x;
-        Tue, 28 Feb 2023 22:40:29 +0000 (GMT)
-X-AuditID: cbfec370-83dfe70000012fa4-7e-63fe82ddde09
-Received: from SSI-EX2.ssi.samsung.com ( [105.128.2.145]) by
-        ussmgxs2new.samsung.com (USCPEXMTA) with SMTP id B0.A8.17110.CD28EF36; Tue,
-        28 Feb 2023 17:40:29 -0500 (EST)
-Received: from SSI-EX2.ssi.samsung.com (105.128.2.227) by
-        SSI-EX2.ssi.samsung.com (105.128.2.227) with Microsoft SMTP Server
-        (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
-        15.1.2375.24; Tue, 28 Feb 2023 14:40:28 -0800
-Received: from SSI-EX2.ssi.samsung.com ([105.128.2.227]) by
-        SSI-EX2.ssi.samsung.com ([105.128.2.227]) with mapi id 15.01.2375.024; Tue,
-        28 Feb 2023 14:40:28 -0800
-From:   Fan Ni <fan.ni@samsung.com>
-To:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>
-CC:     "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Fan Ni <fan.ni@samsung.com>
-Subject: [PATCH] cxl/hdm: Fix hdm decoder init by adding COMMIT field check
-Thread-Topic: [PATCH] cxl/hdm: Fix hdm decoder init by adding COMMIT field
-        check
-Thread-Index: AQHZS8WnqoF9q+YY/UCqLavADTGrLQ==
-Date:   Tue, 28 Feb 2023 22:40:28 +0000
-Message-ID: <20230228224014.1402545-1-fan.ni@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [105.128.2.176]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 28 Feb 2023 17:42:36 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBFF36FE8;
+        Tue, 28 Feb 2023 14:42:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iUJypqaxD2bMNVK37BM6zX0Lf6/d20d1lvfE1P9cUWA=; b=UW8n3npAXp6TsjxR35ErGYfjbL
+        ZPvgln+TWuDEYxOogo93cPNbTKxWT5z1+AxyDEgRZUIwZeyxVJFuRy8KGv1L893GFQHY3/T7FvfkR
+        2XRKdzRyTf4z0G4KK2eD502zSzEBUuXH6xAt3y2uqFNSMAz3hyLhBd6/RFL1m+UwzjtttWlRmBEo8
+        5ijpoaIIu/MHbKHUsqVXAsmBroVF/yGnfgb2nVXDfUp9lgi64XRkTPgfQVmNjhebmmf1GUPaXnMfS
+        H8u8EvzBt89fUjkDyJjSlHRKkCmcWSHw0p2ZWZiI0VXMFfhVo09+8zf4NKX6wiBOZDUnc68B73gfI
+        Cxwpsgkw==;
+Received: from [2001:8b0:10b:5:15b6:2526:f3a7:87e2] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pX8f9-001B1N-81; Tue, 28 Feb 2023 22:41:35 +0000
+Message-ID: <cf7a1657159219cea61ffef567280e2e88d1f670.camel@infradead.org>
+Subject: Re: [PATCH v12 07/11] x86/smpboot: Remove early_gdt_descr on 64-bit
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Date:   Tue, 28 Feb 2023 22:41:34 +0000
+In-Reply-To: <35264451eabdf967eb31069cb814e8a05ee3179b.camel@infradead.org>
+References: <20230226110802.103134-1-usama.arif@bytedance.com>
+         <20230226110802.103134-8-usama.arif@bytedance.com> <878rghmrn2.ffs@tglx>
+         <35264451eabdf967eb31069cb814e8a05ee3179b.camel@infradead.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-TF2RiiWdYm2XKVrhjoSQ"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djX87p3m/4lG5zokra4+/gCm0Xz5MWM
-        FtOnXmC0WH1zDaPF/qfPWSxWLbzGZnF+1ikWi8u75rBZ3JpwjMmB06PlyFtWj8V7XjJ5bFrV
-        yeYxdXa9x+dNcgGsUVw2Kak5mWWpRfp2CVwZM/7+Yy3olanYv/UZawPjWvEuRk4OCQETid5T
-        G1m6GLk4hARWMkr8nPSIGcJpZZK429XEAlO16NwZVojEWkaJL/ueM0I4nxgllp54zAhSJSSw
-        jFHi330vEJtNQFFiX9d2NpAiEYFTTBL/p8wCa2cG6XjWuYkJpEpYwFvi6+rvYDtEBIIkdp26
-        C2XrSRzcuwiogYODRUBVov1nAEiYV8BSYvKBpewgNqOAmMT3U2vAxjALiEvcejKfCeJUQYlF
-        s/cwQ9hiEv92PWSDsBUl7n9/yQ5RrydxY+oUNghbW2LZwtfMEPMFJU7OfAL1sqTEwRU3wAEj
-        IXCAQ+Lit81QCReJB38/Qg2Vlvh7dxkTyJ0SAskSqz5yQYRzJOYv2QJVbi2x8M96qDv5JP7+
-        esQIUc4r0dEmNIFRaRaSD2YhuW4WkutmIbluASPLKkbx0uLi3PTUYuO81HK94sTc4tK8dL3k
-        /NxNjMDEdPrf4YIdjLdufdQ7xMjEwXiIUYKDWUmEd+HtP8lCvCmJlVWpRfnxRaU5qcWHGKU5
-        WJTEeQ1tTyYLCaQnlqRmp6YWpBbBZJk4OKUamHzVVexzZv/dEvtgqTHr2YIZbEH3AsuPPU5N
-        k40SLl//YrvYI+msSrHr2gzvH3UZ9x2tE2/7scdDKu3TD+dTvZc07rSYnb7JFWraxfEs3em3
-        iurtsMUl3988uswgds/onKHcBfE1Bw6wrHFS0Hnbxv5SqvnflfhZbxJOHer0TpZMuLhKv7pA
-        qlBS8uU0xvNnbHf5O889OePBn3mJ65MnCxeIe65KMLOaova+wbX/Wf6sF8q61R3Xv+cotD9T
-        +VVfKsu06ZPa4R6pkyG/3qbO4NvqoxMdp3/dVmpBYN/2Yp/i+OxrOU52B9/MXFy9bevZyFm7
-        assVI7XtxV9kCgUFPLqwx9OZ+Wjp5T/M/3a8V2Ipzkg01GIuKk4EAJ6AXsy7AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCIsWRmVeSWpSXmKPExsWS2cA0Ufdu079kgymP2CzuPr7AZtE8eTGj
-        xfSpFxgtVt9cw2ix/+lzFotVC6+xWZyfdYrF4vKuOWwWtyYcY3Lg9Gg58pbVY/Gel0wem1Z1
-        snlMnV3v8XmTXABrFJdNSmpOZllqkb5dAlfGjL//WAt6ZSr2b33G2sC4VryLkZNDQsBEYtG5
-        M6xdjFwcQgKrGSXWT21hg3A+MUq8uPiKGcJZxijRdf0iI0gLm4CixL6u7WBVIgKnmCT+T5kF
-        1s8M0vKscxMTSJWwgLfE19XfWUBsEYEgibuvFrNB2HoSB/cuAmrg4GARUJVo/xkAEuYVsJSY
-        fGApO4jNKCAm8f3UGrAxzALiEreezGeCuFVAYsme88wQtqjEy8f/WCFsRYn731+yQ9TrSdyY
-        OoUNwtaWWLbwNTPEfEGJkzOfsEDUS0ocXHGDZQKj6CwkK2YhaZ+FpH0WkvYFjCyrGMVLi4tz
-        0yuKjfJSy/WKE3OLS/PS9ZLzczcxAiPy9L/D0TsYb9/6qHeIkYmD8RCjBAezkgjvwtt/koV4
-        UxIrq1KL8uOLSnNSiw8xSnOwKInzvoyaGC8kkJ5YkpqdmlqQWgSTZeLglGpgkoma+zHGbrLR
-        xkSvqj1aN1je+7QGBWVMOZEsnboss59F0LdZwSFvaVf+1vQJkx8dfD1rr+zPKwE8lz8ZMLCZ
-        5TwQnPzT79GZd99YvdTPJ4omCXCZ1vmd7YhiCL36r9fr3NpfDg25Z8ur5zZsuO+5VrR5rZT3
-        zjTTN+8j/Sw5ug7+NrOqMD/3cvPz95XifydoPHrqLf9Q94jXDT+OPyejnpoX//7B9jLvfWxA
-        H+PfigN/ppnt2BA+zf2L+ezdhi7nv6xdxtssq+nSJFl4cYfPiw2rVq++IXype675N4/2dfr8
-        ++5V5J8J/RppVhMvvPXN3Yb3L+4qzPe5YmW4JfLguk8lCxpFZD9LToyPTj2fp8RSnJFoqMVc
-        VJwIAO+Xhec3AwAA
-X-CMS-MailID: 20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785
-CMS-TYPE: 301P
-X-CMS-RootMailID: 20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785
-References: <CGME20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785@uscas1p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add COMMIT field check aside with existing COMMITTED field check during
-hdm decoder initialization to avoid a system crash during module removal
-after destroying a region which leaves the COMMIT field being reset while
-the COMMITTED field still being set.
 
-In current kernel implementation, when destroying a region (cxl
-destroy-region),the decoders associated to the region will be reset
-as that in cxl_decoder_reset, where the COMMIT field will be reset.
-However, resetting COMMIT field will not automatically reset the
-COMMITTED field, causing a situation where COMMIT is reset (0) while
-COMMITTED is set (1) after the region is destroyed. Later, when
-init_hdm_decoder is called (during modprobe), current code only check
-the COMMITTED to decide whether the decoder is enabled or not. Since
-the COMMITTED will be 1 and the code treats the decoder as enabled,
-which will cause unexpected behaviour.
+--=-TF2RiiWdYm2XKVrhjoSQ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-Before the fix, a system crash was observed when performing following
-steps:
-1. modprobe -a cxl_acpi cxl_core cxl_pci cxl_port cxl_mem
-2. cxl create-region -m -d decoder0.0 -w 1 mem0 -s 256M
-3. cxl destroy-region region0 -f
-4. rmmod cxl_acpi cxl_pci cxl_port cxl_mem cxl_pmem cxl_core
-5. modprobe -a cxl_acpi cxl_core cxl_pci cxl_port cxl_mem (showing
-"no CXL window for range 0x0:0xffffffffffffffff" error message)
-6. rmmod cxl_acpi cxl_pci cxl_port cxl_mem cxl_pmem cxl_core (kernel
-crash at cxl_dpa_release due to dpa_res has been freed when destroying
-the region).
+T24gVHVlLCAyMDIzLTAyLTI4IGF0IDIxOjU3ICswMDAwLCBEYXZpZCBXb29kaG91c2Ugd3JvdGU6
+Cj4gCj4gLS0tLS0tLS0tLS0tLS0tLQo+IElOOiAKPiAweGZmZmZmZmZmYTIwMDAwYjI6wqAgNDgg
+MzEgZDLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB4b3JxwqDCoMKgwqAgJXJkeCwg
+JXJkeAo+IDB4ZmZmZmZmZmZhMjAwMDBiNTrCoCA0OCA4YiA4MiBjMCA3NCBkNSBhM8KgwqDCoMKg
+IG1vdnHCoMKgwqDCoCAtMHg1YzJhOGI0MCglcmR4KSwgJXJheAo+IDB4ZmZmZmZmZmZhMjAwMDBi
+YzrCoCA0OCA4YiBhMCA1OCAxNCAwMCAwMMKgwqDCoMKgIG1vdnHCoMKgwqDCoCAweDE0NTgoJXJh
+eCksICVyc3AKPiAweGZmZmZmZmZmYTIwMDAwYzM6wqAgNDggODMgZWMgMTDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBzdWJxwqDCoMKgwqAgJDB4MTAsICVyc3AKPiAweGZmZmZmZmZmYTIwMDAw
+Yzc6wqAgNjYgYzcgMDQgMjQgN2YgMDDCoMKgwqDCoMKgwqDCoCBtb3Z3wqDCoMKgwqAgJDB4N2Ys
+ICglcnNwKQo+IDB4ZmZmZmZmZmZhMjAwMDBjZDrCoCA0OCA4ZCA4MiAwMCAxMCA4MSBhM8KgwqDC
+oMKgIGxlYXHCoMKgwqDCoCAtMHg1YzdlZjAwMCglcmR4KSwgJXJheAo+IDB4ZmZmZmZmZmZhMjAw
+MDBkNDrCoCA0OCA4OSA0NCAyNCAwMsKgwqDCoMKgwqDCoMKgwqDCoMKgIG1vdnHCoMKgwqDCoCAl
+cmF4LCAyKCVyc3ApCj4gMHhmZmZmZmZmZmEyMDAwMGQ5OsKgIDBmIDAxIDE0IDI0wqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgbGdkdHHCoMKgwqAgKCVyc3ApCj4gMHhmZmZmZmZmZmEyMDAwMGRk
+OsKgIDQ4IDgzIGM0IDEwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYWRkccKgwqDCoMKgICQw
+eDEwLCAlcnNwCj4gMHhmZmZmZmZmZmEyMDAwMGUxOsKgIDMxIGMwwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgeG9ybMKgwqDCoMKgICVlYXgsICVlYXgKPiAweGZmZmZmZmZm
+YTIwMDAwZTM6wqAgOGUgZDjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBt
+b3ZswqDCoMKgwqAgJWVheCwgJWRzCj4gCj4gSSBjYW5ub3Qgd29yayBvdXQgd2hlcmUgdGhlIHZh
+bHVlIC0weDVjN2VmMDAwIGNvbWVzIGZyb20sIGJ1dCBpdAo+IGRvZXNuJ3Qgc2VlbSB0byBiZSB0
+aGUgMHhiMDAwIHlvdSBjbGFpbWVkLCBhbmQgbXkgYnJhaW4gaXMgaHVydGluZwo+IGFnYWluLi4u
+CgpUdXJuaW5nIG9mZiBDT05GSUdfUkFORE9NSVpFX0JBU0UgKG9yIGp1c3QgbG9va2luZyBhdCB0
+aGUgdm1saW51eApkaXNhc3NlbWJseSBpbnN0ZWFkIGFzIEJyaWFuIGRpZCkgaGVscHMgdG8gcmVz
+b2x2ZSB0aGF0IEZXSVcuCgpJJ3ZlIGNoYW5nZWQgaXQgdG8gemVybyBhbGwgb2YgJXJkeCBhbmQg
+cHVzaGVkIGl0IGJhY2sgdG8gdGhlIHYxMmJpcwpicmFuY2guCgoK
 
-The patch fixed the above issue, and is tested based on follow patch series=
-:
 
-[PATCH 00/18] CXL RAM and the 'Soft Reserved' =3D> 'System RAM' default
-Message-ID: 167601992097.1924368.18291887895351917895.stgit@dwillia2-xfh.jf=
-.intel.com
+--=-TF2RiiWdYm2XKVrhjoSQ
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Fan Ni <fan.ni@samsung.com>
----
- drivers/cxl/core/hdm.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjI4MjI0MTM0WjAvBgkqhkiG9w0BCQQxIgQgMt1VhpzP
+p8AJUwlO+RonBMBmsSEVHNVPxWu4trJpu7Qwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAGsOFpIcHIbe1wckwZMr7xInzc5HicF+qt
+PH1fM3VcARP2pnrG/m8TOyb4vvBR28xRVmnJ5eL+gBX1wBYSd/iQAWBE0uQrXzeYYIyEVVYQUV6A
+iTNKK9mDnDsIZHE5cReYJMg4xXGXpCKYPY3mkG6oHHnQQxWN/XP5inE/VKV3o1a2Enxx9KhjFsyk
+NY73Us5X+zXvRkJPXYJCVVCqAmskp+gYSWgFxg/NnZ/KnzyIkKQ82gxT3XdpsQ53CuvIH3EN+5VE
+b3Xggc8yASK1a/pMSJTd3PBv3ofi1aSQZM9ZA5gXDpJaihyfTLMOuSRmqFCIrIrxKkxf0yBoKyku
+NShjDMkY+PC7zZNXo2HoR4RpwMwQKp6t5iYpU8BwjL8I6AiFOaIALCDmF1ls0MFo08qQPzcuQHec
+Rv5VdHR9QOwO/ZcWNwM5Wk3hSQ3ekZ73UmhxCfr5Y77KNddfrqu8nmPmP7UODvL8IYNroKW2OHfZ
+0qVEVnpcce02ntKKhl3r1ZCrrED0ac3HwD9w6da2A6GFTUmfD16H6mkPY8k2vlj4z1qkkcbm7HSy
+GiVn/RCnJAeh1CXLY0AP0IOqTJnXvC10HtwOTWUK4lqF6W74YBhTAp6kK81Y0xuZYS8m/ifHyio0
+BON8QhKxPGZ/quaPQzAnV2EThAb1SL6hoE3w51j5nAAAAAAAAA==
 
-diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
-index 80eccae6ba9e..6cf854c949f0 100644
---- a/drivers/cxl/core/hdm.c
-+++ b/drivers/cxl/core/hdm.c
-@@ -695,6 +695,7 @@ static int init_hdm_decoder(struct cxl_port *port, stru=
-ct cxl_decoder *cxld,
- 	struct cxl_endpoint_decoder *cxled =3D NULL;
- 	u64 size, base, skip, dpa_size;
- 	bool committed;
-+	bool should_commit;
- 	u32 remainder;
- 	int i, rc;
- 	u32 ctrl;
-@@ -710,10 +711,11 @@ static int init_hdm_decoder(struct cxl_port *port, st=
-ruct cxl_decoder *cxld,
- 	base =3D ioread64_hi_lo(hdm + CXL_HDM_DECODER0_BASE_LOW_OFFSET(which));
- 	size =3D ioread64_hi_lo(hdm + CXL_HDM_DECODER0_SIZE_LOW_OFFSET(which));
- 	committed =3D !!(ctrl & CXL_HDM_DECODER0_CTRL_COMMITTED);
-+	should_commit =3D !!(ctrl & CXL_HDM_DECODER0_CTRL_COMMIT);
- 	cxld->commit =3D cxl_decoder_commit;
- 	cxld->reset =3D cxl_decoder_reset;
-=20
--	if (!committed)
-+	if (!should_commit || !committed)
- 		size =3D 0;
- 	if (base =3D=3D U64_MAX || size =3D=3D U64_MAX) {
- 		dev_warn(&port->dev, "decoder%d.%d: Invalid resource range\n",
-@@ -727,7 +729,7 @@ static int init_hdm_decoder(struct cxl_port *port, stru=
-ct cxl_decoder *cxld,
- 	};
-=20
- 	/* decoders are enabled if committed */
--	if (committed) {
-+	if (should_commit && committed) {
- 		cxld->flags |=3D CXL_DECODER_F_ENABLE;
- 		if (ctrl & CXL_HDM_DECODER0_CTRL_LOCK)
- 			cxld->flags |=3D CXL_DECODER_F_LOCK;
-@@ -772,7 +774,7 @@ static int init_hdm_decoder(struct cxl_port *port, stru=
-ct cxl_decoder *cxld,
- 		return 0;
- 	}
-=20
--	if (!committed)
-+	if (!should_commit || !committed)
- 		return 0;
-=20
- 	dpa_size =3D div_u64_rem(size, cxld->interleave_ways, &remainder);
---=20
-2.25.1
+
+--=-TF2RiiWdYm2XKVrhjoSQ--
