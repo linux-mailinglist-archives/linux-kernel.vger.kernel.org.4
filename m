@@ -2,127 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017F96A5433
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E99E6A5436
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjB1IOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S230351AbjB1IPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjB1IOC (ORCPT
+        with ESMTP id S230191AbjB1IPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:14:02 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1470244A9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:14:01 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id w23so9573946qtn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:14:01 -0800 (PST)
+        Tue, 28 Feb 2023 03:15:17 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0026029E1D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:15:15 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id l25so8777597wrb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.com; s=gkey;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
+        d=linaro.org; s=google; t=1677572114;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXRdhCEXMlGB5lNHF9//ZdA+y9hcVbYZTUEjsU0VNGc=;
-        b=VxjSSyvpsYSpozIxQT3aunHdhIMiXppCH6rmM5eswS8duzm1uyHQDE4TXyDRel3meh
-         8SAU/89YXPJG0cOP+P77/6Q+PLfVnHGS0kQUQV4j/aE6cwcZYuQHr8jnY4Tk20t3Eg1q
-         1ra+7vqix9ZZ2BonAXmoBwe2eivo1gmaYjYx2pcI1r1tvg9EPjrPri43mgOX9LzB5WqC
-         6YoFnf5+29hVwMSI3y0Ea1WHCALA4z35bzPbFObbxvStKiHC3EJW931B5iGm0v8vismU
-         jaPVcM5EYeV/8FJSk684bAV7GehZ5cPuJBxzk9Jn+VknSwKzmzb1Pf5mE1hfLFEOx6Zp
-         OdAw==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=azxM/SMAWi+5Y+8kP4W8b45r/c639Rvk9h64PbJkv1E=;
+        b=EzHU25BuMEUwIZo0ZM03zEoP1TDcjArIY7QjyqP7DDk64d455X7mVS7BLjjjX7RRZJ
+         D6tRQdZ24N4rWhI037MwGUvOVAysjBvfRlnRfU3Sz0M6xUhowA2MDKy3QTMDiVOyDchi
+         /uM/7RFfR5r+z300QeyaYfIcJnnLImMqnsxQVa7WISDrzMMAbCSaP95ZFx7TurlpMSaJ
+         Bx+0Ysds+l6+RiqqTy5iXl2E+rvSl2AXxmffRQAkooFZ70VZkbSh5bohvxxjk9M0fLrk
+         duguOisYvwhECBnF+hhJL1nXHkfkTLt0vJ0pNm5WqQs+cRj+LeeeqT8ZI3UgxFpsbciH
+         1BZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
+        d=1e100.net; s=20210112; t=1677572114;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXRdhCEXMlGB5lNHF9//ZdA+y9hcVbYZTUEjsU0VNGc=;
-        b=YUt0MIBfQiX1GbD4n6KC/jLoDx3rGW5vNbCkrRhN+Cvk9qZ1pMO/mO9I3OpaiE8xOF
-         /SzEVvAge8Oq8sFYiaxrAsXf6eCj5tx2PjArm4LuFdXXZ1PpCouUzvuENI4hjtgU7XoQ
-         tUQf/78sV9s5jx/hFADh//RS9dL/UAGvSJHhE8iXnxsBG3fufO5WumlQipvaJLu0PP3G
-         9bMtTXEE5Osfbbgr8P02p0xRUXJGOimExa20m2h1QFOpu8ajBl0uqJY4U746OlNZQorE
-         kRMCDzwYqhoo+7nJT7m1lKXL3REXqxR2F3QzttHfCi8mCBJgVcs5CtaRTjL7QGXtl8AS
-         x95w==
-X-Gm-Message-State: AO0yUKVFEM1fLebV2Q340/me9rssEyNPCSdtvieWzpmM0ZD2t9QcRUFC
-        8zhpoH2xsEzKO3+AySK6NPZvgQ==
-X-Google-Smtp-Source: AK7set+Xe/rkULJxJfT7b2ySpgC3hYW/tKQFegSGP+xjrKOakrGjPPw2PrX6H4zosJ2dOdQZME2RRw==
-X-Received: by 2002:ac8:580f:0:b0:3bf:aa66:b9e2 with SMTP id g15-20020ac8580f000000b003bfaa66b9e2mr3851561qtg.37.1677572040971;
-        Tue, 28 Feb 2023 00:14:00 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-100-4-177-83.albyny.fios.verizon.net. [100.4.177.83])
-        by smtp.gmail.com with ESMTPSA id i14-20020ac8764e000000b003b86b962030sm6058952qtr.72.2023.02.28.00.13.59
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=azxM/SMAWi+5Y+8kP4W8b45r/c639Rvk9h64PbJkv1E=;
+        b=Rzq1iu+gu+ifCIdaV2/AiEc37mYHa+dDk6vUDzCm+4IBAlRkQQ5LupQllxGcSrdts5
+         RFO1WGPphMAasyQj32j6mdlmQRqnS/xGWohiyWjMnp2bIrvindTQxKDKv4V4Wf+6PCXb
+         GMKoCLKXU5lbC8fc6cjtvvQvo2XRfSE1wBGhYy8ZJecUGKdroJvjb4R4ufLo5ZbPnmAm
+         qwhWPkcRBEyXmmCffgnNdxz9pxt9WJgEF2sbZXjNGct3ryiXhxdtJhpSVByr/MMkiANR
+         eRJd9aO2SYB/GtG3KZJ2xMNfFoWqDieWb23xO6Ni3WXhkY9uBKlUefA9PByAAiDtu6g9
+         Rgqw==
+X-Gm-Message-State: AO0yUKW/XQm02VodJ3YyOF8rtpHRF4iIjavpyhFRrPiIWP310cEUV1B/
+        7e/nKd/OLKs1lzg6G0rJ4/H+zA==
+X-Google-Smtp-Source: AK7set9Am2h32Fsn/6toLjOljad6mPQ8tBB42OOqm1NJP0uXtXTRRGqgQTSUfJQyXOdmgvWImFuqIw==
+X-Received: by 2002:adf:f204:0:b0:2c7:76a:31ff with SMTP id p4-20020adff204000000b002c7076a31ffmr1700105wro.18.1677572114389;
+        Tue, 28 Feb 2023 00:15:14 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id x6-20020adff646000000b002c56046a3b5sm8891695wrp.53.2023.02.28.00.15.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 00:14:00 -0800 (PST)
-From:   "Slade's Kernel Patch Bot" <slade@sladewatkins.com>
-X-Google-Original-From: Slade's Kernel Patch Bot <KernelPatchBot@sladewatkins.net>
-Message-ID: <61c530c1-16fd-e002-2d93-456d913f2925@sladewatkins.net>
-Date:   Tue, 28 Feb 2023 03:13:59 -0500
+        Tue, 28 Feb 2023 00:15:13 -0800 (PST)
+Message-ID: <43fb6355-9a94-fabe-156e-8706ece97f9f@linaro.org>
+Date:   Tue, 28 Feb 2023 09:15:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] sched: Fix rq nr_uninterruptible count
+Subject: Re: [PATCH v1 03/10] dt-bindings: sound: nvidia,tegra-audio: add
+ RT5631 CODEC
 Content-Language: en-US
-To:     zhenggy <zhenggy@chinatelecom.cn>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Slade Watkins <srw@sladewatkins.net>
-References: <9b271641-ea59-daa5-333c-1dd1f02cdb52@chinatelecom.cn>
-In-Reply-To: <9b271641-ea59-daa5-333c-1dd1f02cdb52@chinatelecom.cn>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev
+References: <20230221183211.21964-1-clamor95@gmail.com>
+ <20230221183211.21964-4-clamor95@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230221183211.21964-4-clamor95@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 02:08, zhenggy wrote:
-> When an uninterrptable task is queue to a differect cpu as where
-> it is dequeued, the rq nr_uninterruptible will be incorrent, so
-> fix it.
+On 21/02/2023 19:32, Svyatoslav Ryhel wrote:
+> From: David Heidelberg <david@ixit.cz>
 > 
-> Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
+> Add dt-binding for RT5631 CODEC.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  kernel/sched/core.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  .../sound/nvidia,tegra-audio-rt5631.yaml      | 88 +++++++++++++++++++
+>  1 file changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 25b582b..cd5ef6e 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4068,6 +4068,7 @@ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
->  {
->  	unsigned long flags;
->  	int cpu, success = 0;
-> +	struct rq *src_rq, *dst_rq;
-> 
->  	preempt_disable();
->  	if (p == current) {
-> @@ -4205,6 +4206,16 @@ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
->  			atomic_dec(&task_rq(p)->nr_iowait);
->  		}
-> 
-> +		if (p->sched_contributes_to_load) {
-> +			src_rq = cpu_rq(task_cpu(p));
-> +			dst_rq = cpu_rq(cpu);
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
+> new file mode 100644
+> index 000000000000..b347f34c47f2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/nvidia,tegra-audio-rt5631.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +			double_rq_lock(src_rq, dst_rq);
-> +			src_rq->nr_uninterruptible--;
-> +			dst_rq->nr_uninterruptible++;
-> +			double_rq_unlock(src_rq, dst_rq);
-> +		}
+> +title: NVIDIA Tegra audio complex with RT5631 CODEC
 > +
->  		wake_flags |= WF_MIGRATED;
->  		psi_ttwu_dequeue(p);
->  		set_task_cpu(p, cpu);
+> +maintainers:
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +allOf:
+> +  - $ref: nvidia,tegra-audio-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - pattern: '^[a-z0-9]+,tegra-audio-rt5631(-[a-z0-9]+)+$'
+> +      - const: nvidia,tegra-audio-rt5631
+> +
+> +  nvidia,audio-routing:
+> +    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
+> +    description: |
+> +      A list of the connections between audio components.
+> +      Each entry is a pair of strings, the first being the connection's sink,
+> +      the second being the connection's source. Valid names for sources and
+> +      sinks are the pins (documented in the binding document),
+> +      and the jacks on the board.
+> +    minItems: 2
+> +    items:
+> +      enum:
+> +        # Board Connectors
+> +        - "Int Spk"
+> +        - "Headphone Jack"
+> +        - "Mic Jack"
+> +        - "Int Mic"
+> +
+> +        # CODEC Pins
+> +        - MIC1
+> +        - MIC2
+> +        - AXIL
+> +        - AXIR
+> +        - MONOIN_RXN
+> +        - MONOIN_RXP
+> +        - DMIC
+> +        - MIC Bias1
+> +        - MIC Bias2
+> +        - MONO_IN
+> +        - AUXO1
+> +        - AUXO2
+> +        - SPOL
+> +        - SPOR
+> +        - HPOL
+> +        - HPOR
+> +        - MONO
+> +
+> +required:
+> +  - nvidia,i2s-controller
 
-This is Slade's kernel patch bot. When scanning his mailbox, I came across this message, which appears to have an odd format for its text ("text/plain; charset=gbk"). Emailed patches should be in ASCII or UTF-8 encoding. If you're using an email client, make sure it's configured to use either of the two formats.
+By convention we always require compatible (and your common schema does
+not require it, I think). The same for your other patches.
 
-You can learn more in the kernel's documentation here: https://www.kernel.org/doc/html/latest/process/email-clients.html
+Best regards,
+Krzysztof
 
-If you believe this is an error, please address a message to Slade Watkins <srw@sladewatkins.net>.
-
-Thank you,
--- Slade's kernel patch bot
