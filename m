@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910E56A5E7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6806A5E7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 19:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjB1SAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 13:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S229777AbjB1SAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 13:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjB1SAG (ORCPT
+        with ESMTP id S229610AbjB1SAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 13:00:06 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFD832CD8;
-        Tue, 28 Feb 2023 10:00:02 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id o12so43474540edb.9;
-        Tue, 28 Feb 2023 10:00:02 -0800 (PST)
+        Tue, 28 Feb 2023 13:00:11 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6F832E64;
+        Tue, 28 Feb 2023 10:00:04 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id ee7so43643854edb.2;
+        Tue, 28 Feb 2023 10:00:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677607200;
+        d=gmail.com; s=20210112; t=1677607202;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pqjyz7XpRqD7AGnx5mr4UeTlubc91jtSFlPOIv5ZSYs=;
-        b=VV0c2BfxERQrOq34IdAg+GUtD5wK1/zFIwDk6LywrD+XkPWghUXE30X/COcx8kN9x6
-         2gcn9raUl+N0Xi3WKJjPtP0sNnA1cSRQZFT55IVPvzzSCuxo7Me9hqJ7JRojhWWFcVor
-         9xhRcI0oi+mLZhQVF5faDtmp1vD1vnZDwxjXui/TO9dPeuIKHccBdV+9liJPHNQo2HfR
-         RPSYYXj415L65llLO7pTGrv5286z+RZxEwL5IvZNSP0IWS5fNiea9W+ItIy5uYgW+dRx
-         1T1puX2HO2Di76cudYTt1UwFzEYslwxtP1/lUk/vYtOQAimyj/XjX7H3xQj1UtxyUARf
-         TNMw==
+        bh=COtBc9Xkc2aACLUlsHVnQBPathW1aRJo9WqwByd8U1c=;
+        b=jOuwXsCumiPTZ3IIvo35FGTMTd4k2DXsbWtUhBQl+3T88Cx5WwefSeP/5skgm642Iz
+         eOm2g/7HO2agAVjLS6vyc0ZzCikCFFdDjqq6zL+n8AeRIpOm4BZ703QUAcG7jtTZDrKm
+         NlA9Vt+11QGncoEfmH7ZlluGyj4ByHTpOd1r6Tj3gIcjoNSeiqFfcEQRwt5wUMk4CCXV
+         TJlXlH5n9LB6W7vQspEvrtoHjfTV1uwI3VOtSPxcDq/9L/LaxMSBomumeCAHsw6PCKkx
+         xoaEO9PnDhlg8SS41caqIv29bve0jd+BZlepuwQguADK4RtKthvSfTX6o4JZKSp3nkEI
+         7HfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677607200;
+        d=1e100.net; s=20210112; t=1677607202;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pqjyz7XpRqD7AGnx5mr4UeTlubc91jtSFlPOIv5ZSYs=;
-        b=pci8h+i/6RM2yBzobOBJ2hlTUpZb5jOtowkFoAJlJzjX42if0jCysXwuLJ4RT36vkN
-         XD74d1STBUXv/JeB4WxbwF55GvraeoDmaaTjGRDD7lnzfrD4zJTXH5e/qZLFIvVE18tD
-         26cmxmaXvs5CdgaGAZ1xuOpVkVCYTOk18pVEwLeM38VEqhaI5+opUxRdBFV02shfiODZ
-         wBB6HGBbU73dueiMX6lOJCRdgp//CXB3H5h4wy/f/P5tmbYbSpueRRZoVLAg3ijXZiVV
-         g0esE5MWDs5vPEDHx1zkns0B60HlEiyz4smBED0NE2NalbA2DQhQ5aFpsbyx/MeidKuN
-         iblQ==
-X-Gm-Message-State: AO0yUKX+4QV3ySqolNoLOP6qz/nHMwIbzHTz6o89jxtgpZwpOUySDoXt
-        QgQyn16tAS3OdJzQpjXlr3z8zXT1w6gHdSiL
-X-Google-Smtp-Source: AK7set+nw9/LWb/Vgp0ga2Iu8qJzU9Zofsz+DsT1bTYTuhIxfEP/wCUo+H3XUxv2VgjryUTcpzEkvw==
-X-Received: by 2002:a17:907:ca14:b0:8b0:26b6:3f2b with SMTP id uk20-20020a170907ca1400b008b026b63f2bmr3169307ejc.53.1677607200274;
-        Tue, 28 Feb 2023 10:00:00 -0800 (PST)
+        bh=COtBc9Xkc2aACLUlsHVnQBPathW1aRJo9WqwByd8U1c=;
+        b=hJufgspkKONCunHW3LwJLQZZuxuvLJJJGLxiV0sEdO9JxMAkDQYsO/vgBsfKZRpYs0
+         y3+8F//vG/3LNqvCsvwmf1ew0jY9NepljTYy6rsg1NSe07KLDic3VfeicDJoz70xgPgQ
+         HaMoSJxeThZmsxuSZzBiMlUo209dmP9DLGQDlPWSUs4D/rXM5kktQiLvf8wGSO02i2Ru
+         iSRGcsA01tSOyTKKV/k3b6prDVdO6Rh2rSSYFNhjYr7MqDItz840uCCw+Ff9sL59sZ/V
+         8q8PBOhxrpnzpU2JpFCYf7jUvf9rJ7Q1p66eKMJiBzmBl51y8AS4j/mULe2+SFJOX40z
+         lC1Q==
+X-Gm-Message-State: AO0yUKXciB6LEFRhMzeevwRi3Qg1+nrNUF3zwpHzyKlky6hfQufV5wXw
+        6MXr/Cbcvr0JPA5bQOzBdMv19a8aqJkBEtIa
+X-Google-Smtp-Source: AK7set9S6xQl63T5aMPJSvW2ZBnEQcO5FhXa40BALHHAwy6kQuapSWld3dhIUAbRc/gfipxNwQKmQw==
+X-Received: by 2002:a17:906:1843:b0:8b1:3002:bd6d with SMTP id w3-20020a170906184300b008b13002bd6dmr3582809eje.31.1677607202131;
+        Tue, 28 Feb 2023 10:00:02 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170906234500b008d9c518a318sm4869725eja.142.2023.02.28.09.59.59
+        by smtp.gmail.com with ESMTPSA id m5-20020a170906234500b008d9c518a318sm4869725eja.142.2023.02.28.10.00.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 09:59:59 -0800 (PST)
+        Tue, 28 Feb 2023 10:00:01 -0800 (PST)
 From:   Uros Bizjak <ubizjak@gmail.com>
 To:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 2/3] ring_buffer: Change some static functions to bool
-Date:   Tue, 28 Feb 2023 18:59:28 +0100
-Message-Id: <20230228175929.7534-3-ubizjak@gmail.com>
+Subject: [PATCH 3/3] ring_buffer: Use try_cmpxchg instead of cmpxchg
+Date:   Tue, 28 Feb 2023 18:59:29 +0100
+Message-Id: <20230228175929.7534-4-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230228175929.7534-1-ubizjak@gmail.com>
 References: <20230228175929.7534-1-ubizjak@gmail.com>
@@ -73,9 +73,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return values of some functions are of boolean type. Change the
-type of these function to bool and adjust their return values. Also
-change type of some internal varibles to bool.
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old.
+x86 CMPXCHG instruction returns success in ZF flag, so this change
+saves a compare after cmpxchg (and related move instruction in
+front of cmpxchg).
+
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+fails. There is no need to re-read the value in the loop.
 
 No functional change intended.
 
@@ -83,195 +87,76 @@ Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 ---
- kernel/trace/ring_buffer.c | 47 ++++++++++++++++++--------------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+ kernel/trace/ring_buffer.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 05fdc92554df..4188af7d4cfe 100644
+index 4188af7d4cfe..8f0ef7d12ddd 100644
 --- a/kernel/trace/ring_buffer.c
 +++ b/kernel/trace/ring_buffer.c
-@@ -163,7 +163,7 @@ enum {
- #define extended_time(event) \
- 	(event->type_len >= RINGBUF_TYPE_TIME_EXTEND)
- 
--static inline int rb_null_event(struct ring_buffer_event *event)
-+static inline bool rb_null_event(struct ring_buffer_event *event)
- {
- 	return event->type_len == RINGBUF_TYPE_PADDING && !event->time_delta;
- }
-@@ -367,11 +367,9 @@ static void free_buffer_page(struct buffer_page *bpage)
- /*
-  * We need to fit the time_stamp delta into 27 bits.
-  */
--static inline int test_time_stamp(u64 delta)
-+static inline bool test_time_stamp(u64 delta)
- {
--	if (delta & TS_DELTA_TEST)
--		return 1;
--	return 0;
-+	return !!(delta & TS_DELTA_TEST);
- }
- 
- #define BUF_PAGE_SIZE (PAGE_SIZE - BUF_PAGE_HDR_SIZE)
-@@ -700,7 +698,7 @@ rb_time_read_cmpxchg(local_t *l, unsigned long expect, unsigned long set)
- 	return ret == expect;
- }
- 
--static int rb_time_cmpxchg(rb_time_t *t, u64 expect, u64 set)
-+static bool rb_time_cmpxchg(rb_time_t *t, u64 expect, u64 set)
- {
- 	unsigned long cnt, top, bottom, msb;
- 	unsigned long cnt2, top2, bottom2, msb2;
-@@ -1490,7 +1488,7 @@ rb_set_head_page(struct ring_buffer_per_cpu *cpu_buffer)
- 	return NULL;
- }
- 
--static int rb_head_page_replace(struct buffer_page *old,
-+static bool rb_head_page_replace(struct buffer_page *old,
- 				struct buffer_page *new)
+@@ -1493,14 +1493,11 @@ static bool rb_head_page_replace(struct buffer_page *old,
  {
  	unsigned long *ptr = (unsigned long *)&old->list.prev->next;
-@@ -1917,7 +1915,7 @@ static inline unsigned long rb_page_write(struct buffer_page *bpage)
- 	return local_read(&bpage->write) & RB_WRITE_MASK;
+ 	unsigned long val;
+-	unsigned long ret;
+ 
+ 	val = *ptr & ~RB_FLAG_MASK;
+ 	val |= RB_PAGE_HEAD;
+ 
+-	ret = cmpxchg(ptr, val, (unsigned long)&new->list);
+-
+-	return ret == val;
++	return try_cmpxchg(ptr, &val, (unsigned long)&new->list);
  }
  
--static int
-+static bool
- rb_remove_pages(struct ring_buffer_per_cpu *cpu_buffer, unsigned long nr_pages)
- {
- 	struct list_head *tail_page, *to_remove, *next_page;
-@@ -2030,12 +2028,13 @@ rb_remove_pages(struct ring_buffer_per_cpu *cpu_buffer, unsigned long nr_pages)
- 	return nr_removed == 0;
- }
- 
--static int
-+static bool
- rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
- {
- 	struct list_head *pages = &cpu_buffer->new_pages;
--	int retries, success;
-+	int retries;
- 	unsigned long flags;
-+	bool success;
- 
- 	/* Can be called at early boot up, where interrupts must not been enabled */
- 	raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
-@@ -2054,7 +2053,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
- 	 * spinning.
- 	 */
+ /*
+@@ -2055,7 +2052,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
  	retries = 10;
--	success = 0;
-+	success = false;
+ 	success = false;
  	while (retries--) {
- 		struct list_head *head_page, *prev_page, *r;
+-		struct list_head *head_page, *prev_page, *r;
++		struct list_head *head_page, *prev_page;
  		struct list_head *last_page, *first_page;
-@@ -2083,7 +2082,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
- 			 * pointer to point to end of list
- 			 */
- 			head_page->prev = last_page;
--			success = 1;
-+			success = true;
- 			break;
- 		}
- 	}
-@@ -2111,7 +2110,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ 		struct list_head *head_page_with_bit;
  
- static void rb_update_pages(struct ring_buffer_per_cpu *cpu_buffer)
- {
--	int success;
-+	bool success;
+@@ -2073,9 +2070,8 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ 		last_page->next = head_page_with_bit;
+ 		first_page->prev = prev_page;
  
- 	if (cpu_buffer->nr_pages_to_update > 0)
- 		success = rb_insert_pages(cpu_buffer);
-@@ -2994,7 +2993,7 @@ static u64 rb_time_delta(struct ring_buffer_event *event)
- 	}
+-		r = cmpxchg(&prev_page->next, head_page_with_bit, first_page);
+-
+-		if (r == head_page_with_bit) {
++		if (try_cmpxchg(&prev_page->next,
++				&head_page_with_bit, first_page)) {
+ 			/*
+ 			 * yay, we replaced the page pointer to our new list,
+ 			 * now, we just have to update to head page's prev
+@@ -4061,10 +4057,10 @@ void ring_buffer_record_off(struct trace_buffer *buffer)
+ 	unsigned int rd;
+ 	unsigned int new_rd;
+ 
++	rd = atomic_read(&buffer->record_disabled);
+ 	do {
+-		rd = atomic_read(&buffer->record_disabled);
+ 		new_rd = rd | RB_BUFFER_OFF;
+-	} while (atomic_cmpxchg(&buffer->record_disabled, rd, new_rd) != rd);
++	} while (!atomic_try_cmpxchg(&buffer->record_disabled, &rd, new_rd));
  }
+ EXPORT_SYMBOL_GPL(ring_buffer_record_off);
  
--static inline int
-+static inline bool
- rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
- 		  struct ring_buffer_event *event)
- {
-@@ -3015,7 +3014,7 @@ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
- 	delta = rb_time_delta(event);
+@@ -4084,10 +4080,10 @@ void ring_buffer_record_on(struct trace_buffer *buffer)
+ 	unsigned int rd;
+ 	unsigned int new_rd;
  
- 	if (!rb_time_read(&cpu_buffer->write_stamp, &write_stamp))
--		return 0;
-+		return false;
- 
- 	/* Make sure the write stamp is read before testing the location */
- 	barrier();
-@@ -3028,7 +3027,7 @@ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
- 		/* Something came in, can't discard */
- 		if (!rb_time_cmpxchg(&cpu_buffer->write_stamp,
- 				       write_stamp, write_stamp - delta))
--			return 0;
-+			return false;
- 
- 		/*
- 		 * It's possible that the event time delta is zero
-@@ -3061,12 +3060,12 @@ rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,
- 		if (index == old_index) {
- 			/* update counters */
- 			local_sub(event_length, &cpu_buffer->entries_bytes);
--			return 1;
-+			return true;
- 		}
- 	}
- 
- 	/* could not discard */
--	return 0;
-+	return false;
++	rd = atomic_read(&buffer->record_disabled);
+ 	do {
+-		rd = atomic_read(&buffer->record_disabled);
+ 		new_rd = rd & ~RB_BUFFER_OFF;
+-	} while (atomic_cmpxchg(&buffer->record_disabled, rd, new_rd) != rd);
++	} while (!atomic_try_cmpxchg(&buffer->record_disabled, &rd, new_rd));
  }
+ EXPORT_SYMBOL_GPL(ring_buffer_record_on);
  
- static void rb_start_commit(struct ring_buffer_per_cpu *cpu_buffer)
-@@ -3281,7 +3280,7 @@ rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)
-  * Note: The TRANSITION bit only handles a single transition between context.
-  */
- 
--static __always_inline int
-+static __always_inline bool
- trace_recursive_lock(struct ring_buffer_per_cpu *cpu_buffer)
- {
- 	unsigned int val = cpu_buffer->current_context;
-@@ -3298,14 +3297,14 @@ trace_recursive_lock(struct ring_buffer_per_cpu *cpu_buffer)
- 		bit = RB_CTX_TRANSITION;
- 		if (val & (1 << (bit + cpu_buffer->nest))) {
- 			do_ring_buffer_record_recursion();
--			return 1;
-+			return true;
- 		}
- 	}
- 
- 	val |= (1 << (bit + cpu_buffer->nest));
- 	cpu_buffer->current_context = val;
- 
--	return 0;
-+	return false;
- }
- 
- static __always_inline void
-@@ -5408,9 +5407,8 @@ bool ring_buffer_empty(struct trace_buffer *buffer)
- {
- 	struct ring_buffer_per_cpu *cpu_buffer;
- 	unsigned long flags;
--	bool dolock;
-+	bool dolock, ret;
- 	int cpu;
--	int ret;
- 
- 	/* yes this is racy, but if you don't like the race, lock the buffer */
- 	for_each_buffer_cpu(buffer, cpu) {
-@@ -5438,8 +5436,7 @@ bool ring_buffer_empty_cpu(struct trace_buffer *buffer, int cpu)
- {
- 	struct ring_buffer_per_cpu *cpu_buffer;
- 	unsigned long flags;
--	bool dolock;
--	int ret;
-+	bool dolock, ret;
- 
- 	if (!cpumask_test_cpu(cpu, buffer->cpumask))
- 		return true;
 -- 
 2.39.2
 
