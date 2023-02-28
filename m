@@ -2,143 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A626A582B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A11A6A5822
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 12:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjB1Ldm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 06:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S231500AbjB1Ld1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 06:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjB1Lda (ORCPT
+        with ESMTP id S229841AbjB1LdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:33:30 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38D71258C;
-        Tue, 28 Feb 2023 03:33:29 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1C5C45C025F;
-        Tue, 28 Feb 2023 06:33:29 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 28 Feb 2023 06:33:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677584009; x=
-        1677670409; bh=s1U2xDkTTCN+09FeGuSytsW4DsGUYbTluserdVVYkL0=; b=J
-        S7YjqqjMr5YgOe7UtXy8AYNH+zm89iNhMdF6uPFa8c9rIKZlr6D/skWvcihdrqMe
-        MVhN0N2QaLOBXxH4KT4QjJj8LNWhiVG+uDDcywbamrTEqWDYBWXMtIN8ePVfrKBJ
-        RxD+ongbdhHsSZGVyoOqUWGN0lQE43KBSMKmVfOnKb3hJxnfEUa8gF0/EvhGqytW
-        gtoC64rbAF/wJS1Q0KEHke8P1/I47xOmDnPYFV27B/ojaLYNqgHioIOGObIIdK4G
-        kglckQXTexicuD0XWW7l2h3+4Uhvir00s3eAwfRHEIcpuYhlhJNz85UzGcQcfJ8e
-        263Et7WkJFqxuPpF5AZOA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677584009; x=
-        1677670409; bh=s1U2xDkTTCN+09FeGuSytsW4DsGUYbTluserdVVYkL0=; b=O
-        hBAtIle8nroeuEsPTrbLwMP8z3HG5ocOzwb2qZplI+Lynz5MvQfpXC/jHw4OdEi/
-        2Nmf1GtIZ355lGVOjJiVOMNIh6aNCwDKwkejQrUw+VL2bAyOlFPFI+S4YYKtMKDJ
-        sT0K5bLHUBIcW6I2UgAs2D7OiWbvLzwWw/Zj9cJ5Bgoh2BQ9ZoUQyPu7ZGOYRKgz
-        qp3dpWGBKeJND9dbwp0KYSs+ug5IvOZxUIEu9Q1HIZKdrG8WxkhzkX1Asstmf6UP
-        twtDilJzeFO6Mm0cGvZyySQ9Jniu+cuaKW8tylBFtBz9J0Fbi4KUOm1Ro3S/yDNs
-        Sszeqsvwca9U303gLFX/g==
-X-ME-Sender: <xms:ieb9Y2opGMCQWJr_Jfigb9f-LThg2IRSLkIX6W7kvti4Gvda8BSC9A>
-    <xme:ieb9Y0r6LOFGVPsUCeppTvGf01HDYPmM_uC0ev_UnlAK7STiN7gIDrD--3GRnnMoW
-    65YWQ08kq2yb32PMck>
-X-ME-Received: <xmr:ieb9Y7NlnSjhqEXrMgEUEOI2uOOG--LgXFeevk7De0EnCo0A_fGVB18lEXZF7FeKJqIeKJfFprpmWhV_aHCwRnu_gVvoJuidmwbTlXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelvddgvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepveeftdffkeejfeffjedtuddvudejfedvjeeluedtueefffef
-    tdeuvedvudevjeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:ieb9Y16LSvQXVwG955xcaPLQ4h3XHdEtUveqatvAnUGQN2f4TWiqZw>
-    <xmx:ieb9Y16P3zeHc8jRVCAt352rUkpnZtG3bjGVT5PQK-hcG_DAPjc1og>
-    <xmx:ieb9Y1gbjdSQLQ32qiNTaR97P9jFGVNR_m8MJX5kUWMAhJjGCFfYIw>
-    <xmx:ieb9Yyu96iUsWo-6f1SSK6zhGKF7zya_FuYGU4I4W4k6SwJsi95LXA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Feb 2023 06:33:27 -0500 (EST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
-        bpf@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: [PATCH v2 2/2] MIPS: ebpf jit: Implement R4000 workarounds
-Date:   Tue, 28 Feb 2023 11:33:05 +0000
-Message-Id: <20230228113305.83751-3-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230228113305.83751-1-jiaxun.yang@flygoat.com>
-References: <20230228113305.83751-1-jiaxun.yang@flygoat.com>
+        Tue, 28 Feb 2023 06:33:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9A359CA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 03:33:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7239B80BD9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB9AC433EF;
+        Tue, 28 Feb 2023 11:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677584000;
+        bh=ySplhGjtRXHh02WU9pQEA4p/9BJOGHAH95H5Ub7YC/U=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=q+wxsQA16xJ7A1YNovnYV1avPzX/2o+XpXCx0EqjeANN6fNFEOR54lO2jrTbFa62f
+         h1RLfsliUMz4xQZwJtibRfzvEONwCNGcCboWFNHz8plkHZmwpGZgfcRBSETIA45xoZ
+         ROUqeGdCqIZugzOK0FS4m94BNEISvdgKYuNzLsw3Z8dNfjV+ojtwEg+i0Flt17EJjf
+         RxGx3Tcikcry3Zwh26PHsDc2y3AUXwPxlORtThVEoSAdjSm/h+0+4uaoSj6cbywGB4
+         jn6cZ8C2axBj+V1nFAwI8V5sGQfBV8yRWZ1KmP9gKoYpGRQ3Nqd/Bvv7YGI7CmszLm
+         L61vQoeHWilng==
+Message-ID: <f5238f9d-20aa-2cc1-8e83-820c46a33a52@kernel.org>
+Date:   Tue, 28 Feb 2023 12:33:16 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/4] dt-bindings: net/dsa/: add brcm,bcm53134 as
+ compatible flag
+Content-Language: en-US
+To:     Paul Geurts <paul.geurts@prodrive-technologies.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221212135640.3590545-1-paul.geurts@prodrive-technologies.com>
+ <20221212135640.3590545-3-paul.geurts@prodrive-technologies.com>
+ <AM0PR02MB55242B90172EAB35D0ADF44EBDAF9@AM0PR02MB5524.eurprd02.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <AM0PR02MB55242B90172EAB35D0ADF44EBDAF9@AM0PR02MB5524.eurprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For R4000 erratas around multiplication and division instructions,
-as our use of those instructions are always followed by mflo/mfhi
-instructions, the only issue we need care is
+On 27/02/2023 20:44, Paul Geurts wrote:
+> The b53 Ethernet driver now has support for the BCM53134 device.
+> This means the driver has a new compatible device, which is now also documented
+> 
+> Signed-off-by: Paul Geurts <paul.geurts@prodrive-technologies.com>
+> ---
+>  Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml | 1 +
 
-"MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0" Errata 28:
-"A double-word or a variable shift may give an incorrect result if
-executed while an integer multiplication is in progress."
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-We just emit a mfhi $0 to ensure the operation is completed after
-every multiplication instruction according to workaround suggestion
-in the document.
+You literally skipped everyone...
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
-v2: Drop 32bit part
----
- arch/mips/Kconfig              | 4 +---
- arch/mips/net/bpf_jit_comp64.c | 3 +++
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index df0910e3895c..5ea07c833c5b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -63,9 +63,7 @@ config MIPS
- 	select HAVE_DEBUG_STACKOVERFLOW
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
--	select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
--				!CPU_R4000_WORKAROUNDS && \
--				!CPU_R4400_WORKAROUNDS
-+	select HAVE_EBPF_JIT if !CPU_MICROMIPS
- 	select HAVE_EXIT_THREAD
- 	select HAVE_FAST_GUP
- 	select HAVE_FTRACE_MCOUNT_RECORD
-diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
-index 0e7c1bdcf914..fa7e9aa37f49 100644
---- a/arch/mips/net/bpf_jit_comp64.c
-+++ b/arch/mips/net/bpf_jit_comp64.c
-@@ -228,6 +228,9 @@ static void emit_alu_r64(struct jit_context *ctx, u8 dst, u8 src, u8 op)
- 		} else {
- 			emit(ctx, dmultu, dst, src);
- 			emit(ctx, mflo, dst);
-+			/* Ensure multiplication is completed */
-+			if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
-+				emit(ctx, mfhi, MIPS_R_ZERO);
- 		}
- 		break;
- 	/* dst = dst / src */
--- 
-2.37.1 (Apple Git-137.1)
+Best regards,
+Krzysztof
 
