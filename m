@@ -2,167 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408E46A5BD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A716A5CAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 17:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjB1P0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S230251AbjB1QBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 11:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjB1PZr (ORCPT
+        with ESMTP id S230104AbjB1QBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:25:47 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F9D241E9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:25:26 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id b5so4199162iow.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:25:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5BV1l+SBiwvGsmaocJDR98W2gYnTf5xsLjce1+ilKqc=;
-        b=nkFRtBsFuFlVpeaMRqxmki4j1RygbpGqHZ4hilw0bzTwHCyAGa2WJW++AHxFSto91P
-         yqe9ZY9165OHd5++VXtxVysrCTryVDC9+n6ywyt8LsGfCf8qWWo395Cf6EjloPKeiQ/Z
-         qWcSgmtAmYDmTCAJNfEOd3Zy6wWv6G0UkqVRQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5BV1l+SBiwvGsmaocJDR98W2gYnTf5xsLjce1+ilKqc=;
-        b=YRshY3wnTzQdj7jRxE/YfxAtTUV5cfilA3W5wNPkqimBO8dpxOze+KpeFm1py9z3rG
-         kNd7LRQZhAd21R3BlHUiwnX+zs3sdtF01H6D3+fJazP9wZa2MR/tSA65QynWmGzV1YbD
-         bSxGoMMSeYGnNFlaQRuWkLW8+BLSwmKBSyGG5I9RWK8R/urQYH4+7sSzBPnRW2esLKN1
-         QL0FmJ86+eU6KAI/UZupW4+9EHr0XckBNWj9dN74hcrUrHbW+E8xWIUEs5kPD4isX4ND
-         9/BfKy3Pja7Mj1R8aL+rK6NzbxMqjPftVtZb1qixG/Ou/X2eUiawXbIs064HQ6Jn6uZ3
-         EMMQ==
-X-Gm-Message-State: AO0yUKXPc6VLiAX6d8eiaTO80eDP0REn1Xi3z6Jua6DfK8xy354EjuTs
-        ilKEnXOKu8nEH+/Tw3BOuEfY3xfbTGt4Dijd
-X-Google-Smtp-Source: AK7set8cjCWsd8+uOxT+k7rapM1nk77MsriBGhAF/HPqO1R0X2pT88UYUBZPXggHzo4ynaTKAPHOBA==
-X-Received: by 2002:a5d:8441:0:b0:74c:fe71:5808 with SMTP id w1-20020a5d8441000000b0074cfe715808mr2089669ior.6.1677597921569;
-        Tue, 28 Feb 2023 07:25:21 -0800 (PST)
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com. [209.85.166.43])
-        by smtp.gmail.com with ESMTPSA id p25-20020a5d8b99000000b007192441e5e6sm3208810iol.45.2023.02.28.07.25.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:25:21 -0800 (PST)
-Received: by mail-io1-f43.google.com with SMTP id f14so4180222iow.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:25:20 -0800 (PST)
-X-Received: by 2002:a02:84ec:0:b0:3ec:dc1f:12dd with SMTP id
- f99-20020a0284ec000000b003ecdc1f12ddmr1419641jai.6.1677597920327; Tue, 28 Feb
- 2023 07:25:20 -0800 (PST)
+        Tue, 28 Feb 2023 11:01:00 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C5210CE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 08:00:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1P/CMXGxj7MEFBYHfYR2YHpsJNtdZiBmYO9UykBmZlA=; b=UO+MTwYv4g3zQjHRMxzwhJWZ2F
+        JgotM50lxIgku/bqWfBvxLYcrA0JVt8HtYEsE+WXPRbf0FLok+MK2V+OyDB7DzHy88zT/US+PfURC
+        55G3ZCBcC1pEJmyjOcwovleaht7EtAKutwVq9JHA1y5reFcxEfLetZdXEg32pD0yj1vGtLMrjegoN
+        qkHAeotfkEfsRA4f0dO3xHdxUh1TeD11UH5PCKeKOdlLXK/2ZwcQ1t28CRpqdZvBofuF7/09mHgJY
+        WdnyI9KKEtTa5/FLalO3gNGm+zRwZa8fjtLUOHpry9WhLAsldob7ciPyiRySliBpQkUTY2RJNem+4
+        hkCBjVzA==;
+Received: from [181.199.58.72] (helo=[192.168.100.46])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pX1rl-000NRm-2P; Tue, 28 Feb 2023 16:26:09 +0100
+Message-ID: <0d38d76f-77b4-ec14-fbc3-9c7eee6ce58b@igalia.com>
+Date:   Tue, 28 Feb 2023 10:26:04 -0500
 MIME-Version: 1.0
-References: <20230215071649.9078-1-quic_mkshah@quicinc.com>
- <20230227153848.auqs4e5hf2qmwmg2@ripper> <CAD=FV=UK9zyQ=Mg3BaVCwOGBG3G7rW2pdpMFtGptR88p8ce9kg@mail.gmail.com>
- <CAPDyKFouhMbFFMHeT5vEo_LUQWVe5wKpagx8HUtDpcV7LCa4zQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFouhMbFFMHeT5vEo_LUQWVe5wKpagx8HUtDpcV7LCa4zQ@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 28 Feb 2023 07:25:08 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=V+fdfjUbAtvmeG43Nk=J3=Td4RSCZajrsxu8n8ykmH0w@mail.gmail.com>
-Message-ID: <CAD=FV=V+fdfjUbAtvmeG43Nk=J3=Td4RSCZajrsxu8n8ykmH0w@mail.gmail.com>
-Subject: Re: [PATCH 0/1] Use PSCI OS initiated mode for sc7280
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>, swboyd@chromium.org,
-        wingers@google.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com, Julius Werner <jwerner@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/1] drm/doc: Document DRM device reset expectations
+Content-Language: en-US
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
+        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>
+References: <20230227204000.56787-1-andrealmeid@igalia.com>
+ <20230227204000.56787-2-andrealmeid@igalia.com>
+ <20230228120201.7b20519a@eldfell>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20230228120201.7b20519a@eldfell>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Pekka,
 
-On Tue, Feb 28, 2023 at 4:17=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
+Thank you for your feedback,
+
+On 2/28/23 05:02, Pekka Paalanen wrote:
+> On Mon, 27 Feb 2023 15:40:00 -0500
+> André Almeida <andrealmeid@igalia.com> wrote:
 >
-> On Mon, 27 Feb 2023 at 17:10, Doug Anderson <dianders@chromium.org> wrote=
-:
-> >
-> > Hi,
-> >
-> > On Mon, Feb 27, 2023 at 7:35=E2=80=AFAM Bjorn Andersson <andersson@kern=
-el.org> wrote:
-> > >
-> > > On Wed, Feb 15, 2023 at 12:46:48PM +0530, Maulik Shah wrote:
-> > > > This change adds power-domains for cpuidle states to use PSCI OS
-> > > > initiated mode for sc7280.
-> > > >
-> > > > This change depends on external project changes [1] & [2] which are=
- under
-> > > > review/discussion to add PSCI os-initiated support in Arm Trusted F=
-irmware.
-> > > >
-> > > > I can update here once the dependency are in and change is ready to=
- merge.
-> > > >
-> > >
-> > > Please do, I will drop this from the queue for now.
-> >
-> > I'm a bit confused about why we're doing this. There's always been a
-> > question about exactly why we need OSI mode. As far as I can tell it
-> > can't be for "correctness" reasons because we managed to ship sc7180
-> > without OSI mode. ...so I guess somehow the argument is that OSI mode
-> > is more performant in some cases? Are there actual numbers backing
-> > this up, or is it all theoretical? Before making such a big change, it
-> > would be good to actually understand what the motivation is and see
-> > real data. This should be easy to collect since we currently have
-> > things working without OSI and (presumably) you have OSI working. It
-> > would also be good to document this motivation in the commit message
-> > and/or cover letter.
+>> Create a section that specifies how to deal with DRM device resets for
+>> kernel and userspace drivers.
+>>
+>> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+>> ---
+>>   Documentation/gpu/drm-uapi.rst | 51 ++++++++++++++++++++++++++++++++++
+>>   1 file changed, 51 insertions(+)
+>>
+>> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
+>> index 65fb3036a580..3d6c3ed392ea 100644
+>> --- a/Documentation/gpu/drm-uapi.rst
+>> +++ b/Documentation/gpu/drm-uapi.rst
+>> @@ -285,6 +285,57 @@ for GPU1 and GPU2 from different vendors, and a third handler for
+>>   mmapped regular files. Threads cause additional pain with signal
+>>   handling as well.
+>>   
+>> +Device reset
+>> +============
+>> +
+>> +The GPU stack is really complex and is prone to errors, from hardware bugs,
+>> +faulty applications and everything in the many layers in between. To recover
+>> +from this kind of state, sometimes is needed to reset the GPU. Unproper handling
+>> +of GPU resets can lead to an unstable userspace. This section describes what's
+>> +the expected behaviour from DRM drivers to do in those situations, from usermode
+>> +drivers and compositors as well. The end goal is to have a seamless experience
+>> +as possible, either the stack being able to recover itself or resetting to a new
+>> +stable state.
+>> +
+>> +Robustness
+>> +----------
+>> +
+>> +First of all, application robust APIs, when available, should be used. This
+>> +allows the application to correctly recover and continue to run after a reset.
+>> +Apps that doesn't use this should be promptly killed when the kernel driver
+>> +detects that it's in broken state. Specifically guidelines for some APIs:
+> Hi,
 >
-> I certainly don't object to what you say here. Although, let me also
-> share some more background to these suggested changes.
+> the "kill" wording is still here. It feels too harsh to me, like I say
+> in my comments below, but let's see what others think.
 >
-> As you know, for mobile platforms, Qcom have been using OS-initiated
-> mode for years, but on Chromium platforms that has been limited to the
-> default platform-coordinated mode. Whether that is a deliberate
-> decision for the Chromium platforms or rather because the PSCI
-> implementation in TF-A has been lacking OSI support, I don't know.
-> Maybe you have some more insight to share around this?
+> Even the device hot-unplug guide above this does not call for killing
+> anything and is prepared for userspace to keep going indefinitely if
+> userspace is broken enough.
 
-You hit the reason exactly. Nobody on the ChromeOS team objected to
-OSI, per say, but it was never supported in ARM Trusted Firmware. I
-still don't have anything against OSI mode, but I just want to make
-sure that the data is there and that we're not just arbitrarily
-churning things. ;-)
+If I understood correctly, you don't think that neither KMD or UMD 
+should terminate apps that hangs the GPU, right? Should those apps run 
+indefinitely until the user decides to do something about it?
 
-I think sc7180's ship has sailed at this point. While we could update
-the firmware for testing, I don't think we'd switch production sc7180
-devices over to OSI. That means that we'll always need to support PC
-mode for sc7180. Switching sc7280 over to OSI needs to be justified
-given that we'll have to continue to support sc7180 with PC mode
-anyway.
+At least on Intel GPUs, if I run an OpenGL infinite loop the app will be 
+terminated in a few moments, and the rest of userspace is preserved. 
+There's an app that just do that if you want to have a look on how it 
+works: https://gitlab.freedesktop.org/andrealmeid/gpu-timeout
 
-
-> Note that, Wing has been working on adding support for PSCI OSI mode
-> to TF-A [1], which hopefully should land soon. In this regard, it
-> seems like we are getting closer to finally being able to run some
-> more in-depth tests, that should allow us to better compare the
-> behaviour of the PSCI CPU-suspend modes - at least on some platforms.
-> In fact, Maulik/Wing also presented their work around this topic,
-> including some results around performance/energy tests at the last
-> TF-A call [2]. I think some of that data could be shared in the commit
-> message too.
-
-Yup, I was mostly just asking for data like you provided to be in the
-commit message.
-
-
-> Kind regards
-> Uffe
 >
-> [1]
-> https://review.trustedfirmware.org/q/topic:psci-osi
+>> +
+>> +- OpenGL: KMD signals the abortion of submitted commands and the UMD should then
+>> +  react accordingly and abort the application.
+> No, not abort. Just return failures and make sure no API call will
+> block indefinitely.
 >
-> [2]
-> https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+>> +
+>> +- Vulkan: Assumes that every app is able to deal with ``VK_ERROR_DEVICE_LOST``.
+>> +  If it doesn't do it right, it's considered a broken application and UMD will
+>> +  deal with it, aborting it.
+> Is it even possible to detect if an app does it right?
+>
+> What if the app does do it right, but not before it attempts to hammer
+> a few more jobs in?
+
+I think what I meant was
+
++ If it doesn't support VK_ERROR_DEVICE_LOST, it's considered a broken 
+app [...]
+
+In the sense that if it doesn't support this, it is impossible for the 
+app to recovery gracefully from a reset so it's considered broken
+
+>> +
+>> +Kernel mode driver
+>> +------------------
+>> +
+>> +The KMD must be able to detect that something is wrong with the application
+>> +and that a reset is needed to take place to recover the device (e.g. an endless
+>> +wait). It needs to properly track the context that is broken and mark it as
+>> +dead, so any other syscalls to that context should be further rejected. The
+>> +other contexts should be preserved when possible, avoid crashing the rest of
+>> +userspace. KMD can ban a file descriptor that keeps causing resets, as it's
+>> +likely in a broken loop.
+> If userspace is in a broken loop repeatedly causing GPU reset, would it
+> keep using the same (render node) fd? To me it would be more likely to
+> close the fd and open a new one, then crash again. Robust or not, the
+> gfx library API would probably require tearing everything down and
+> starting from scratch. In fact, only robust apps would likely exhibit
+> this behaviour, and non-robust just get stuck or quit themselves.
+>
+> I suppose in e.g. EGL, it is possible to just create a new context
+> instead of a new EGLDisplay, so both re-using and not using the old fd
+> are possible.
+>
+> The process identity would usually remain, I believe, except in cases
+> like Chromium with its separate rendering processes, but then, would
+> you really want to ban whole Chromium in that case...
+>
+Right, so userspace is the right place to implement the repeat-offender 
+policy, as you noted below.
+
+>> +
+> Another thing for the kernel mode driver maybe worth mentioning is that
+> the driver could also pretend a hot-unplug if the GPU crash is so bad
+> that everything is at risk being lost or corrupted.
+
+Ack, I'll add that
+
+>
+>> +User mode driver
+>> +----------------
+>> +
+>> +During a reset, UMD should be aware that rejected syscalls indicates that the
+>> +context is broken and for robust apps the recovery should happen for the
+>> +context. Non-robust apps must be terminated.
+> I think the termination thing probably needs to be much more nuanced,
+> and also interact with the repeat-offender policy.
+>
+> Repeat-offender policy could be implemented in userspace too,
+> especially if userspace keeps using the same device fd which is likely
+> hidden by the gfx API.
+>
+>> +
+>> +Compositors
+>> +-----------
+>> +
+>> +Compositors should be robust as well to properly deal with its errors.
+> What is the worth of this note? To me as a compositor developer it is
+> obvious.
+
+As it is it doesn't says much indeed, I think Christian suggestion adds 
+something more meaningful to this part.
+
+>
+> Thanks,
+> pq
+>
+>> +
+>> +
+>>   .. _drm_driver_ioctl:
+>>   
+>>   IOCTL Support on Device Nodes
