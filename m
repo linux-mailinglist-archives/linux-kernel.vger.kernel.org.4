@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF95F6A63C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 00:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8976A63C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Mar 2023 00:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjB1XXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 18:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S229691AbjB1XYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 18:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjB1XXA (ORCPT
+        with ESMTP id S229492AbjB1XYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 18:23:00 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF81FF06
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 15:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677626579; x=1709162579;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=H3NtiTL57k3QRMzsEg5CLuDxysALqPEoOP7/lIquUZ0=;
-  b=KtLN9B8qM/7sV2SVNl/32ps4eQefTaiJXXuQ2Kd/89HGGT/dFe9IMTpG
-   r5cYcqnOw+mfziQIo5DlAGYWypglSy9oXmfjrzolUxiVg7htbDd+MVuY6
-   ZoR3PIAcMFHQZ8FNtLgkJxirIB0IwLA6yk9DjoTVvEtFZq8ArWK+Y7QVw
-   +Z/Eerv28crqCZmsVDbRC6ZkBTanvJDdPFFrerFemHO9sjs1t1IDvVA31
-   kLHzGOMftrxrmwuNX/PC/FfI/3uer42+5TGe50W5p+Ugz2gEh9fGpDxvw
-   m6d2j8xyPNolH21v9JTDz+fUdZKMtnAOHzRMAvPnroDJXV7UvsIajaXPL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="335763426"
-X-IronPort-AV: E=Sophos;i="5.98,223,1673942400"; 
-   d="scan'208";a="335763426"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 15:22:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="798216216"
-X-IronPort-AV: E=Sophos;i="5.98,223,1673942400"; 
-   d="scan'208";a="798216216"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2023 15:22:55 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pX9J8-0005iH-1N;
-        Tue, 28 Feb 2023 23:22:54 +0000
-Date:   Wed, 1 Mar 2023 07:22:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko]
- undefined!
-Message-ID: <202303010701.KWYce0Mt-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 28 Feb 2023 18:24:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B40723331
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 15:24:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96B2861200
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 23:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06565C433D2;
+        Tue, 28 Feb 2023 23:24:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677626657;
+        bh=FlFjMaHBoVnlyFlLboRW0rfUjjVpER/mA1opjr1XSOQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vCGcIE8B91crNBUMZCUHUnPupKfi3dKpf5e0DFD2zrl8EVEq7gCW2GYlPpV3v6RMv
+         nO5S30rxdmE8UoloS4xonxiDvag24VQ/i9DKZpto6m5FFRxcOxMNzmL3tXoPNSdU2l
+         gi+CBYwF1esv/xF26/jbd6SVEXs1y1MsV/AKNF73cZfviWvKqb66wsj3/YpuiAeoFG
+         7N6IkFk7c/DYYTF70AjZAU0qAp8u6o6VMSAvFVUbxgvugNNaRXgHIj8HY/FI6HwTBK
+         T0kWAFcf+SaTHg4G3zc2Tqn/+XW7fR14x2p0xZKFmtAtjRcVHY6UU7r3AXBn1G6inT
+         2ELQk4zq4FcZA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pX9KQ-00Dy0j-Em;
+        Tue, 28 Feb 2023 23:24:14 +0000
+Date:   Tue, 28 Feb 2023 23:22:57 +0000
+Message-ID: <86lekhl6i6.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>, tglx@linutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] irqchip/gic-v3: Claim iomem resources
+In-Reply-To: <CAJ+vNU3+rz50MRQQsz39Jfbspy2ig9tqzb_yg1RFooxGutCM+g@mail.gmail.com>
+References: <c534c2a458a3bf94ccdae8abc6edc3d45a689c30.1649777295.git.robin.murphy@arm.com>
+        <CAJ+vNU3+rz50MRQQsz39Jfbspy2ig9tqzb_yg1RFooxGutCM+g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tharvey@gateworks.com, robin.murphy@arm.com, ulf.hansson@linaro.org, alcooperx@gmail.com, adrian.hunter@intel.com, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yonghong,
+On Tue, 28 Feb 2023 23:11:15 +0000,
+Tim Harvey <tharvey@gateworks.com> wrote:
+> 
+> I have bisected a kernel issue where octeontx (CN803x) will hang on
+> reboot caused by commit c0db06fd0993 ("mmc: core: Disable card detect
+> during shutdown"). This commit made it into 5.16 and stable kernels.
+> I've found that the patch here which is commit 2b2cd74a06c3 resolves
+> this hang but I'm not entirely clear why.
+> 
+> Does anyone have a good explanation of why the hang occurs in the
+> first place and why this resolves it? I would like to get the proper
+> fix into the affected stable branches.
 
-First bad commit (maybe != root cause):
+Wild guess: the reservation prevents some other driver from probing
+because the firmware describes overlapping ranges, and that driver is
+what is causing your above hang.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e492250d5252635b6c97d52eddf2792ec26f1ec1
-commit: dffbbdc2d9889670c30e07d05fc0dd712e8ad430 libbpf: Add enum64 parsing and new enum64 public API
-date:   9 months ago
-config: s390-randconfig-r021-20230227 (https://download.01.org/0day-ci/archive/20230301/202303010701.KWYce0Mt-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dffbbdc2d9889670c30e07d05fc0dd712e8ad430
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dffbbdc2d9889670c30e07d05fc0dd712e8ad430
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+But you don't give much information that would allow this theory to be
+checked. I guess you'll have to instrument your kernel and find out.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303010701.KWYce0Mt-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
->> ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/net/arcnet/com90xx.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/net/arcnet/com90xx.ko] undefined!
->> ERROR: modpost: "iounmap" [drivers/pcmcia/pcmcia.ko] undefined!
->> ERROR: modpost: "ioremap" [drivers/pcmcia/pcmcia.ko] undefined!
+	M.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Without deviation from the norm, progress is not possible.
