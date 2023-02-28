@@ -2,212 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969656A5A00
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5406A5A06
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 14:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjB1NbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 08:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S229530AbjB1Nft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 08:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjB1NbR (ORCPT
+        with ESMTP id S229437AbjB1Nfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:31:17 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E81B1A652
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:31:15 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id k37so6448868wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 05:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=w5pWc3i7OPauASDxawP2MUAYnKLzOrAWTWv95Eo1ry0=;
-        b=rL58Ganwg5tul3r7Nv1rFgyq2Hqcs08+Fca/SKeQlwthet5ptoFPrjlK06ZmG0tJKq
-         WC9N1etLH7SA0xQakhN0V2xtqlx0Zi0shQEFINXs5Q3U+TiDvL1YqF4rAAdIseoIJkf0
-         4fMKqdH7mGT3nXBlT1tgshT+s3Q7o7AEmf6uoq2kOvIRm+HlS4M9GZomqvDVQxPNnaBw
-         NpTb+NISnXAqqd6qOQbf6zCMLTVZg2gw7X7WcFG5es5UJUQ8k2ZwqlFnUxqUID5aJeuS
-         TUHDHCHKunTxWFGOZ9LeMlgfHWKJLx0evVoYFVXT2FDvdtNyuylsbxb8xdHUFSjvU5bE
-         FYlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5pWc3i7OPauASDxawP2MUAYnKLzOrAWTWv95Eo1ry0=;
-        b=UPzSE7JL9V301nlu9sJ48tmO+tRB915VUnRGNf8bHB2eD8M0nWvmvcXDmiJaFGAh/9
-         R+G2MJ1J8Y2ltwBswkN8732fHZcvnxtJfTff91tRmluqDbIM9u0VaNdty0tPyKuOW4DV
-         E6rWxiSXEUw/EsYIvw4mJgnW4IejpkVLn76gXPvrbUGqcWwXSjW23GayAZQJi0RUyXHx
-         L/34APQlNmI4lXY+l+s+ATekRkmvYyUPOhdKYFytRhOpfpBLuvkcGfsPAA/W1s0ioF1o
-         pIWW8NrakeDbXws85azVTkcuZjjQYs46buDZYOLsYorM6zTzdJyw67OKI0Tw+eATKknR
-         DlIA==
-X-Gm-Message-State: AO0yUKWJNfwiVG8wlbRgj6RwWt84rjpPdHBLtWSe3eyiKMWYcfIPetAJ
-        V8eVJbflTwi4MKJZIV59zz0NNg==
-X-Google-Smtp-Source: AK7set/JKNAxnx+6ISVpZOPoLKeFSITLu4ROZNW+NFSnrMtG8ULTDafxLv2ZKZew3PyXDc57iVubcw==
-X-Received: by 2002:a05:600c:1d1d:b0:3df:db20:b0ae with SMTP id l29-20020a05600c1d1d00b003dfdb20b0aemr2372690wms.17.1677591074091;
-        Tue, 28 Feb 2023 05:31:14 -0800 (PST)
-Received: from airbuntu ([104.132.45.107])
-        by smtp.gmail.com with ESMTPSA id j8-20020a056000124800b002c71d206329sm9761709wrx.55.2023.02.28.05.31.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 05:31:12 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:31:11 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Xuewen Yan <xuewen.yan94@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, mingo@redhat.com,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        zhaoyang.huang@unisoc.com
-Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
- when yield
-Message-ID: <20230228133111.6i5tlhvthnfljvmf@airbuntu>
-References: <20230222080314.2146-1-xuewen.yan@unisoc.com>
- <Y/zO8WZV2kvcU78b@hirez.programming.kicks-ass.net>
- <20230227220735.3kaytmtt53uoegq7@airbuntu>
- <CAB8ipk--trBk-Acsjz7YDb5szPLc93ejPXVXQBJdomZO4OrpGQ@mail.gmail.com>
- <CAKfTPtBdMO6_APib1OBxW+fdAORX8vXdT-W3fWTRffa5-8bGxQ@mail.gmail.com>
- <CAB8ipk96OXJcmp_H5EcagrMUigSFdW_gd4wwGjfjBpyP6hqaTg@mail.gmail.com>
- <CAKfTPtAvuz0SEDX3izcOhZkC+pFddqrSwY+iYO2p7U6N3Z2hRA@mail.gmail.com>
+        Tue, 28 Feb 2023 08:35:48 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F0196AB;
+        Tue, 28 Feb 2023 05:35:46 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S7QTQ9017835;
+        Tue, 28 Feb 2023 13:35:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=tsUfXmQDNYr6ASvuTFr+KKzEQmpBqjlfN2tgGFpkf7A=;
+ b=Yy2YXisuU5VdUXX84FoQImYNuxWfRHM+7BtitcryRBHv4QtjOSBOeGjLCsCsMVvqgMf3
+ MyPdNGipjLLJyDP0VzHSVf9PLYLKEBmxX907ER99t4SsIU3OS9jdKJrGlC2wfLV5vqVc
+ bPJmdV/Tq1Agz4q3DVi83uXjW3f27V6SYK0ckN9JtsdGheVc7WP3ToOvZrbTMiychB+o
+ zpoh1+dyX5hZ1lmSbi+LvKd+XRDAciXhNeVFAis1PYEsx1UWKxPzTYVQCeQq0ebdx07A
+ IaTwV9hsAG9r9b72vrBSgvjScw3trkI/HFPH3OzwDNlqs0WzQJM5WwVWLL/B83oMSfom Uw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p0u3jusue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 13:35:40 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SDZdUG004218
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 13:35:39 GMT
+Received: from [10.216.42.110] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
+ 2023 05:35:35 -0800
+Message-ID: <f819a73c-ba92-3106-cd25-2ce5cb85064c@quicinc.com>
+Date:   Tue, 28 Feb 2023 19:05:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKfTPtAvuz0SEDX3izcOhZkC+pFddqrSwY+iYO2p7U6N3Z2hRA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 08/20] remoteproc: remove MODULE_LICENSE in non-modules
+Content-Language: en-US
+To:     Nick Alcock <nick.alcock@oracle.com>, <mcgrof@kernel.org>
+CC:     <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>
+References: <20230228130215.289081-1-nick.alcock@oracle.com>
+ <20230228130215.289081-9-nick.alcock@oracle.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230228130215.289081-9-nick.alcock@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QN2qm9qIKtWCADb_Eb-GsxJqUTed7YYL
+X-Proofpoint-GUID: QN2qm9qIKtWCADb_Eb-GsxJqUTed7YYL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_09,2023-02-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302280109
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/28/23 10:07, Vincent Guittot wrote:
-> On Tue, 28 Feb 2023 at 09:21, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
-> >
-> > Hi Vincent
-> >
-> > On Tue, Feb 28, 2023 at 3:53 PM Vincent Guittot
-> > <vincent.guittot@linaro.org> wrote:
-> > >
-> > > On Tue, 28 Feb 2023 at 08:42, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
-> > > >
-> > > > Hi
-> > > >
-> > > > Thanks very much for comments!
-> > > >
-> > > > On Tue, Feb 28, 2023 at 6:33 AM Qais Yousef <qyousef@layalina.io> wrote:
-> > > > >
-> > > > > On 02/27/23 16:40, Peter Zijlstra wrote:
-> > > > > > On Wed, Feb 22, 2023 at 04:03:14PM +0800, Xuewen Yan wrote:
-> > > > > > > When task call the sched_yield, cfs would set the cfs's skip buddy.
-> > > > > > > If there is no other task call the sched_yield syscall, the task would
-> > > > > > > always be skiped when there are tasks in rq.
-> > > > > >
-> > > > > > So you have two tasks A) which does sched_yield() and becomes ->skip,
-> > > > > > and B) which is while(1). And you're saying that once A does it's thing,
-> > > > > > B runs forever and starves A?
-> > > > >
-> > > > > I read it differently.
-> > > > >
-> > > > > I understood that there are multiple tasks.
-> > > > >
-> > > > > If Task A becomes ->skip; then it seems other tasks will continue to be picked
-> > > > > instead. Until another task B calls sched_yield() and become ->skip, then Task
-> > > > > A is picked but with wrong vruntime causing it to run for multiple ticks (my
-> > > > > interpretation of 'always run' below).
-> > > > >
-> > > > > There are no while(1) task running IIUC.
-> > > > >
-> > > > > >
-> > > > > > > As a result, the task's
-> > > > > > > vruntime would not be updated for long time, and the cfs's min_vruntime
-> > > > > > > is almost not updated.
-> > > > > >
-> > > > > > But the condition in pick_next_entity() should ensure that we still pick
-> > > > > > ->skip when it becomes too old. Specifically, when it gets more than
-> > > > > > wakeup_gran() behind.
-> > > > >
-> > > > > I am not sure I can see it either. Maybe __pick_first_entity() doesn't return
-> > > > > the skipped one, or for some reason vdiff for second is almost always
-> > > > > < wakeup_gran()?
-> > > > >
-> > > > > >
-> > > > > > > When this scenario happens, when the yield task had wait for a long time,
-> > > > > > > and other tasks run a long time, once there is other task call the sched_yield,
-> > > > > > > the cfs's skip_buddy is covered, at this time, the first task can run normally,
-> > > > > > > but the task's vruntime is small, as a result, the task would always run,
-> > > > > > > because other task's vruntime is big. This would lead to other tasks can not
-> > > > > > > run for a long time.
-> > > > >
-> > > > > The error seems that when Task A finally runs - it consumes more than its fair
-> > > > > bit of sched_slice() as it looks it was starved.
-> > > > >
-> > > > > I think the question is why it was starved? Can you shed some light Xuewen?
-> > > > >
-> > > > > My attempt to help to clarify :) I have read this just like you.
-> > > >
-> > > > Thanks for Qais's clarify. And that's exactly what I want to say:)
-> > > >
-> > > > >
-> > > > > FWIW I have seen a report of something similar, but I didn't managed to
-> > > > > reproduce and debug (mostly due to ENOBANDWIDTH); and not sure if the details
-> > > > > are similar to what Xuewen is seeing. But there was a task starving for
-> > > > > multiple ticks - RUNNABLE but never RUNNING in spite of other tasks getting
-> > > > > scheduled in instead multiple times. ie: there was a task RUNNING for most of
-> > > > > the time, and I could see it preempted by other tasks multiple time, but not by
-> > > > > the starving RUNNABLE task that is hung on the rq. It seems to be vruntime
-> > > > > related too but speculating here.
-> > > >
-> > > > Yes, now we met the similar scenario when running a monkey test on the
-> > > > android phone.
-> > > > There are multiple tasks on cpu, but the runnable task could not be
-> > > > got scheduled for a long time,
-> > > > there is task running and we could see the task preempted by other
-> > > > tasks multiple times.
-> > > > Then we dump the tasks, and find the vruntime of each task varies
-> > > > greatly, and the task which running call the sched_yield frequently.
-> > >
-> > > If I'm not wrong you are using cgroups and as a result you can't
-> > > compare the vruntime of tasks that belongs to different group, you
-> > > must compare the vruntime of entities at the same level. We might have
-> > > to look the side because I can't see why the task would not be
-> > > schedule if other tasks in the same group move forward their vruntime
-> >
-> > All the tasks belong to the same cgroup.
 
-Could they move between cpusets though?
 
+On 2/28/2023 6:32 PM, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
-> ok.
-> I have tried to reproduce your problem but can't see it so far. I'm
-> probably missing something.
+> So remove it in the files in this commit, none of which can be built as
+> modules.
 > 
-> With rt-app, I start:
-> - 3 tasks A, B, C which are always running
-> - 1 task D which always runs but yields every 1ms for 1000 times and
-> then stops yielding and always run
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: linux-remoteproc@vger.kernel.org
+
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
+
+-Mukesh
+> ---
+>   drivers/remoteproc/remoteproc_core.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> All tasks are pinned on the same cpu in the same cgroup.
-> 
-> I don't see anything wrong.
-> task A, B, C runs their slices
-> task D is preempted by others after 1ms for a couple of times when it
-> calls yield. Then the yield doesn't have effect and task D runs a few
-> consecutive ms although the yield. Then task D restart to be preempted
-> by others when it calls yield when its vruntime is close to others
-> 
-> Once task D stop calling yield, the 4 tasks runs normally
-
-Could vruntime be inflated if a task gets stuck on a little core for a while
-(where it'll run slower) then compared to another task running on a bigger core
-the vruntime will appear smaller for the latter?
-
-
-Cheers
-
---
-Qais Yousef
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 1cd4815a6dd19..de1ace44cb57b 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -2765,5 +2765,4 @@ static void __exit remoteproc_exit(void)
+>   }
+>   module_exit(remoteproc_exit);
+>   
+> -MODULE_LICENSE("GPL v2");
+>   MODULE_DESCRIPTION("Generic Remote Processor Framework");
