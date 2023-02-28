@@ -2,216 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30026A5016
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F286A501D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjB1ANn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 19:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S229762AbjB1AXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 19:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjB1ANg (ORCPT
+        with ESMTP id S229632AbjB1AXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 19:13:36 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728A41BDA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 16:13:27 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c02ed619so174873457b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 16:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zganrZlEZNt1pC9IiqoJtBTU38y2S6sutB3XmJEIjOQ=;
-        b=GvuKeHm6KryowowADTIzEiupUt+Pr9uk0FdmdW3FBhCJBtHSpwcisZRn69OkTrIF1r
-         ovptt5Pbb+y8e92zqed7MQ4ubg5BBAn+TAFnFgZJ9hiDYuzIjwmdQ47hiFoAp+lyOMzp
-         bw4zH/F6+yjkw4sk75HV5NXkL0nGNLHJbaRe1IpRcgQog1k6fbATreaWbqCLU0ohaX+p
-         NE6Xoc4ajh2vBehbHJRkTsAJBJC9nBY8GkMoKJvVGY9U+wduDLZff85sNoTcfUiLiB9p
-         IdhjNFuPqObYV/uQBlsy7Ia26HHzvLc6EHvN1xpSydqDtaBQfV3sUoEu81V+gqKujirm
-         AAcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zganrZlEZNt1pC9IiqoJtBTU38y2S6sutB3XmJEIjOQ=;
-        b=ijwZYU9LccZ7lFjCslJneecA3vRae/1/Q8Ay+9tTinCtNMKU/oKzSDVd0MsZwsHLRn
-         BEnnqcpH449U7EKr2QGl2Hfznf/AeLMBL7ITEVSlybLggzvA63ntA1aeezy5oOFD4xFv
-         LENDOXguyYz4mNZvBXeSZP32R3iDillV/rY4YKm/NndFc0x/s0DaZIF3528ZBryShI3k
-         9Br2oy3oOsAY3Au0He9tO1uFQ5hS3mWrsNmQdQdhRQ6PBsL7ToERvYYpRCMOh5gUwjl8
-         wVHoqZQmgSC8r/5yvSso1PkBhxAekVoGtg7RS66DPkAMbn0voUAVaye3cuCUK5Ei4m9N
-         ztsg==
-X-Gm-Message-State: AO0yUKX+FUw1YG7rVA7LO3n6KvFANq6laIBbWrAYgxq3jHetms1k4DYG
-        ExLf97bRIiAtatIg8Bj737Mp8/w2Y/Sb
-X-Google-Smtp-Source: AK7set8z3wnVv4GR7dPDvNzT1PbIuQjYKCCTz2/kps1zv9gO8KeL2rsqO771BHLqP9QIxPeX2P+EIrR94O4f
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a5b:346:0:b0:855:fa17:4f66 with SMTP id
- q6-20020a5b0346000000b00855fa174f66mr169038ybp.8.1677543206646; Mon, 27 Feb
- 2023 16:13:26 -0800 (PST)
-Date:   Mon, 27 Feb 2023 16:13:23 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230227161320.kernel.v4.1.Ibe4d3a42683381c1e78b8c3aa67b53fc74437ae9@changeid>
-Subject: [kernel PATCH v4] Bluetooth: hci_sync: Resume adv with no RPA when
- active scan
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Zhengping Jiang <jiangzp@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 19:23:50 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AA1E2AB;
+        Mon, 27 Feb 2023 16:23:49 -0800 (PST)
+Received: from mercury (unknown [185.209.196.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 92CB36602E18;
+        Tue, 28 Feb 2023 00:23:47 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677543827;
+        bh=oXEKOn7iMMnzaNsM9g/DYP00/n/Evw8fsCYa7aws5ew=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qi0ckDoYnH2gAEc+stFHGjNuCKUsaKIKcaEkgesjYDcAACjpmluRVnwDC5rlYpWQk
+         Jc6FJySkLPRHVVtS0vkOFXZwPB52UXDH/X3ReTH9FMgov/zAwRurq4naLNAKyoDnxk
+         Zv2eWn4MNV2ZXJWluNm6PeRg7BNlYI0ri71BW5pFqi1UqTC1JPc6hV8+NJM0fUFvo9
+         mXrJoPKLBBMjnLoeLk4Ctry5hOkIkTnVMp0UwJBP7yo1oUUFAXI0e0AawdE/YA0AOo
+         1RFO3OKXWxjJMXJ/gLxe95M127+O99n/3woA/mi3u4A1bbM0CQFXie3TFo9Ky9lLv7
+         +L9fknQQN159g==
+Received: by mercury (Postfix, from userid 1000)
+        id 4625D1061609; Tue, 28 Feb 2023 01:23:45 +0100 (CET)
+Date:   Tue, 28 Feb 2023 01:23:45 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Cc:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@google.com
+Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
+ probe
+Message-ID: <20230228002345.625uaporcmcf7kfx@mercury.elektranox.org>
+References: <20220531183054.6476-1-quic_manafm@quicinc.com>
+ <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
+ <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xx2ed7bvmhyopstz"
+Content-Disposition: inline
+In-Reply-To: <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The address resolution should be disabled during the active scan,
-so all the advertisements can reach the host. The advertising
-has to be paused before disabling the address resolution,
-because the advertising will prevent any changes to the resolving
-list and the address resolution status. Skipping this will cause
-the hci error and the discovery failure.
 
-According to the bluetooth specification:
-"7.8.44 LE Set Address Resolution Enable command
+--xx2ed7bvmhyopstz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This command shall not be used when:
-- Advertising (other than periodic advertising) is enabled,
-- Scanning is enabled, or
-- an HCI_LE_Create_Connection, HCI_LE_Extended_Create_Connection, or
-  HCI_LE_Periodic_Advertising_Create_Sync command is outstanding."
+Hi,
 
-If the host is using RPA, the controller needs to generate RPA for
-the advertising, so the advertising must remain paused during the
-active scan.
+On Mon, Feb 27, 2023 at 01:46:52PM -0800, Subbaraman Narayanamurthy wrote:
+> On 6/9/22 3:12 PM, Sebastian Reichel wrote:
+> > Hi,
+> >
+> > On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Palliku=
+nhi wrote:
+> >> Registering the cooling device from the probe can result in the
+> >> execution of get_property() function before it gets initialized.
+> >>
+> >> To avoid this, register the cooling device from a workqueue
+> >> instead of registering in the probe.
+> >>
+> >> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.c=
+om>
+> >> ---
+> > This removes error handling from the psy_register_cooler() call, so
+> > it introduces a new potential problem. If power_supply_get_property()
+> > is called to early -EAGAIN is returned. So can you elaborate the problem
+> > that you are seeing with the current code?
+> >
+> > -- Sebastian
+>=20
+> When the device boots up with all the vendor modules getting loaded,=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> here is what we're seeing when booting up with 6.1.11 recently. First=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> log is printed with adding a pr_err() in __power_supply_register().=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> [=A0=A0=A0 7.008938][=A0 T682] power_supply battery: psy_register_cooler =
+failed, rc=3D-11
+> [=A0=A0=A0 7.030941][=A0 T682] qti_battery_charger: probe of qcom,battery=
+_charger failed with error -11
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> Here, our downstream qti_battery_charger driver exposes the following=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> power supply properties POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX under a power supply device.=
+=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> This is happening because of the following call sequence,=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> battery_chg_probe() ->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0 power_supply_register() ->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0 psy_register_cooler() ->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0 thermal_cooling_device_register() ->=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0 cdev->ops->get_max_state() ->=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0 ps_get_max_charge_cntl_limit() ->=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 power_supply_get_property()=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> ends up calling power_supply_get_property() to read CHARGE_CONTROL_LIMIT=
+=A0=A0=A0=A0=A0=A0=A0
+> property.=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> However, it returns -EAGAIN because psy->initialized is set to true=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> later after psy_register_cooler() succeeds. So, this ends up in a=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> driver probe failure forever.
 
-If the host is not using RPA, the advertising can be resumed after
-disabling the address resolution.
+This should be solved in 6.3:
 
-Fixes: 9afc675edeeb ("Bluetooth: hci_sync: allow advertise when scan without RPA")
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
----
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/d=
+rivers/power/supply/power_supply_core.c?id=3Dc85c191694cb1cf290b11059b3d2de=
+8a2732ffd0
 
-Changes in v4:
-- Change return value of hci_pause_addr_resolution from err to 0 for
-  readability
+-- Sebastian
 
-Changes in v3:
-- Add a function to check the requirements to pause addr resolution
-- Pause and resume advertising in hci_pause_addr_resolution
-- Resume advertising if pausing addr resolution fails or privacy mode is
-  not used for advertising
+--xx2ed7bvmhyopstz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Changes in v2:
-- Commit message format
+-----BEGIN PGP SIGNATURE-----
 
-Changes in v1:
-- With LL privacy, always pause advertising when active scan
-- Only resume the advertising if the host is not using RPA
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP9SY4ACgkQ2O7X88g7
++poV0w//UsUh2QE6JW/3M0lLBH/6QBcjOvQJ/udor30sabFMNOZ39IeAT5PiuiwS
+QBbu6PvAo67bCgVq6bBGC6T+8wxDm2MIbizC/J/o5Sz9/yFikgElT7uB//Zh8h6n
+hHvEENwQFbzyd9HQXlQnm4jmKDEQJd5btiImMJz9/VnUU3f1pwIXPCr7uOaQZ77z
+1YaySP5CgM1s3QMVW8HnYsCct+9r82es110B/oy6y79qJIUAosKe8/O9YJ+pfrkI
+MBtjNuEnz8DRsysn3MYn6wRDb3xejLsZTSJrAB6q/cSRJtlcBQEnUcs4Bsxpl0mh
+IfB/CBuvCF0SHVbXTH9hnPCixiR0x2FYMtFtrkbpCpNEjOjpnj65Ioy/QaAMNWrD
+QhnNgqIA+ubFCNxvDAINekRZa58AvZjLOld0vVB5l+arAelznpek07L2N04E8Ge2
+L6xY6XEEGinLtGiyeG7LKh5WMayu+WfHwQmwJ4RqlX8iAhfe8R238dp683H+2ySs
+ickGBck62flgscnG9T3vJMCnSLOdENRNKoYEIxfMdMSxNnQJVyjDY3B7XRVb3gXC
+J6uoPF3eblbYKO77M7EDuTyOXVHFDFJ4TaXGfodji5qdRgZ6Q7Ac26GIjQOeEiHL
+se8ZZIZc/cN+AA5/Q28sqqTvg/beAnrRrvHs1uMOMaZxM++EXj4=
+=8kww
+-----END PGP SIGNATURE-----
 
- net/bluetooth/hci_sync.c | 64 +++++++++++++++++++++++++++-------------
- 1 file changed, 44 insertions(+), 20 deletions(-)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 117eedb6f709..eb4429d94f95 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -2367,6 +2367,45 @@ static int hci_resume_advertising_sync(struct hci_dev *hdev)
- 	return err;
- }
- 
-+static int hci_pause_addr_resolution(struct hci_dev *hdev)
-+{
-+	int err;
-+
-+	if (!use_ll_privacy(hdev))
-+		return 0;
-+
-+	if (!hci_dev_test_flag(hdev, HCI_LL_RPA_RESOLUTION))
-+		return 0;
-+
-+	/* Cannot disable addr resolution if scanning is enabled or
-+	 * when initiating an LE connection.
-+	 */
-+	if (hci_dev_test_flag(hdev, HCI_LE_SCAN) ||
-+	    hci_lookup_le_connect(hdev)) {
-+		bt_dev_err(hdev, "Command not allowed when scan/LE connect");
-+		return -EPERM;
-+	}
-+
-+	// Cannot disable addr resolution if advertising is enabled.
-+	err = hci_pause_advertising_sync(hdev);
-+	if (err) {
-+		bt_dev_err(hdev, "Pause advertising failed: %d", err);
-+		return err;
-+	}
-+
-+	err = hci_le_set_addr_resolution_enable_sync(hdev, 0x00);
-+	if (err)
-+		bt_dev_err(hdev, "Unable to disable Address Resolution: %d",
-+			   err);
-+
-+	// Return if address resolution is disabled and RPA is not used.
-+	if (!err && scan_use_rpa(hdev))
-+		return 0;
-+
-+	hci_resume_advertising_sync(hdev);
-+	return err;
-+}
-+
- struct sk_buff *hci_read_local_oob_data_sync(struct hci_dev *hdev,
- 					     bool extended, struct sock *sk)
- {
-@@ -2402,7 +2441,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
- 	u8 filter_policy;
- 	int err;
- 
--	/* Pause advertising if resolving list can be used as controllers are
-+	/* Pause advertising if resolving list can be used as controllers
- 	 * cannot accept resolving list modifications while advertising.
- 	 */
- 	if (use_ll_privacy(hdev)) {
-@@ -5394,27 +5433,12 @@ static int hci_active_scan_sync(struct hci_dev *hdev, uint16_t interval)
- 
- 	cancel_interleave_scan(hdev);
- 
--	/* Pause advertising since active scanning disables address resolution
--	 * which advertising depend on in order to generate its RPAs.
--	 */
--	if (use_ll_privacy(hdev) && hci_dev_test_flag(hdev, HCI_PRIVACY)) {
--		err = hci_pause_advertising_sync(hdev);
--		if (err) {
--			bt_dev_err(hdev, "pause advertising failed: %d", err);
--			goto failed;
--		}
--	}
--
--	/* Disable address resolution while doing active scanning since the
--	 * accept list shall not be used and all reports shall reach the host
--	 * anyway.
-+	/* Pause address resolution for active scan and stop advertising if
-+	 * privacy is enabled.
- 	 */
--	err = hci_le_set_addr_resolution_enable_sync(hdev, 0x00);
--	if (err) {
--		bt_dev_err(hdev, "Unable to disable Address Resolution: %d",
--			   err);
-+	err = hci_pause_addr_resolution(hdev);
-+	if (err)
- 		goto failed;
--	}
- 
- 	/* All active scans will be done with either a resolvable private
- 	 * address (when privacy feature has been enabled) or non-resolvable
--- 
-2.39.2.722.g9855ee24e9-goog
-
+--xx2ed7bvmhyopstz--
