@@ -2,139 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801326A515A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD326A5159
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 03:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjB1Cm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 21:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S229906AbjB1CmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 21:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1CmZ (ORCPT
+        with ESMTP id S229471AbjB1CmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 21:42:25 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D7028D3E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 18:42:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677552141; x=1709088141;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=A0CRrdLyu+AkROlOaV6sxjn4YAoa5LBpAtnl3pAoGX8=;
-  b=T631mDimijDQTmeZ0aRqjVg6B2lLQWh99jZtCugdALht7WpMLRuZ+vwn
-   g3ubAJV2Ys8ZztbzlU3m2Gf/OnEaKOvBA7apMQZYnZG7xOCc1o+6Wpotu
-   F7M22bP2sC2SKZEYFO1Sx+w0a3alpLzO7T1HSQyQF4fCRLaB+xP2YOb+c
-   aQ8oDylzQVKgq40wpxQ9Lias3ENGrhnqZrWJttcFgNIdYhIbwYa/VvKid
-   2Y92YYzqFzjeaEuP2SvaTJgGc5Cog2mp93QGKhlg7AsqdqlvJLzAWnvJY
-   QdOVCtdyz9msSTrrzpkruo5VOs6Hbrae0dmEpL1HsTH3s04byJFG9qHlh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="322278097"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="322278097"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 18:42:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="673963809"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="673963809"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga002.jf.intel.com with ESMTP; 27 Feb 2023 18:42:18 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/1] iommu/vt-d: Add opt-in for ATS support on discrete devices
-Date:   Tue, 28 Feb 2023 10:33:41 +0800
-Message-Id: <20230228023341.973671-1-baolu.lu@linux.intel.com>
+        Mon, 27 Feb 2023 21:42:09 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47F623C46;
+        Mon, 27 Feb 2023 18:42:07 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id d6so4807257pgu.2;
+        Mon, 27 Feb 2023 18:42:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677552127;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BgryrYamMwlxpkvf8yGe0sAXedFk3mfXqOUNrIFOlb4=;
+        b=Fdc5/BevwEK5n7ZVVIU4DC5bKwqeTIVLDgKc8KHF0oQb4JA1BmpLXnrNZBjdxpa3DT
+         R75CEq+lfBvuF2St/RUIvNNUqvpWETFZ0peIXRFnxfgPlwawQZbyqiY09W2wiyXgFmUv
+         P1FgbdjP+3Tq6nGh+DIQfwNvF//J+ZmtPI+pWJmc4zm6gGBbGRn8k6WVqGrrhMaMoAIc
+         jG9kccKhZeDqdiMdLGXNL99hsUBqkBVEXeHb6MCzM4Y9ZFBCSTsmWF1c1eOlQhuT/Q0y
+         /EK5dsSS9WaUzC/VeVykSm+vcljQRf1Z0SPZimGUby0kU9FLIyWxDHkHzKTHQHoR08G7
+         X9bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677552127;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BgryrYamMwlxpkvf8yGe0sAXedFk3mfXqOUNrIFOlb4=;
+        b=Ag68Q8oyQl/advQMvy7Lwa4JRR4m2O37CABE04DEAHFQY1W4ewVnMwJJg6wmLG6H9k
+         gfgkbMYh4hzV557DVsOXpg/8TjC5Dr42wcthzGhtJrQD+463XthnKjZZK/+0DRJ/j0Jv
+         yMCISqyy4YKJVxUxl22hs43MVf64k+VrJeSJK3Ev0m6J0ANiJb+I/Jblrv84MVf988Vg
+         8wKm9HSxOnyhf3tcuf3W0CLV2MtH3kG+mo/GP+dnuh4uCjLeAL7djsDjAXNLI1OanUXr
+         VByhuKTEl392EMEYwYQ2UuJC2xK/BXxGghfpHwe5+U+0KqGcSCsmqPzVzf2PykP7EY7p
+         VOjQ==
+X-Gm-Message-State: AO0yUKVWeNYmLc7kH4yJPCnO2SNK4CWtVeUzCCoOAIbAehxm4Tfsyem0
+        D6W6tMabJQq0qhTlJFUA3z0=
+X-Google-Smtp-Source: AK7set9YBBeYz4tG0Q+mfnvolUul/Kfodkw/PseCWcUd/4LN738nBqvprr4a3gturr/CBogzoqaeqQ==
+X-Received: by 2002:aa7:8c4d:0:b0:5d9:bfc9:a4f with SMTP id e13-20020aa78c4d000000b005d9bfc90a4fmr1208878pfd.3.1677552127054;
+        Mon, 27 Feb 2023 18:42:07 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id m3-20020aa78a03000000b005e06234e70esm4852108pfa.59.2023.02.27.18.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 18:42:06 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        davejwatson@fb.com, aviadye@mellanox.com, ilyal@mellanox.com,
+        fw@strlen.de, sd@queasysnail.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v2] net: tls: fix possible race condition between do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
+Date:   Tue, 28 Feb 2023 10:33:44 +0800
+Message-Id: <20230228023344.9623-1-hbh25y@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In normal processing of PCIe ATS requests, the IOMMU performs address
-translation and returns the device a physical memory address which
-will be stored in that device's IOTLB. The device may subsequently
-issue Translated DMA request containing physical memory address. The
-IOMMU only checks that the device was allowed to issue such requests
-and does not attempt to validate the physical address.
+ctx->crypto_send.info is not protected by lock_sock in
+do_tls_getsockopt_conf(). A race condition between do_tls_getsockopt_conf()
+and do_tls_setsockopt_conf() can cause a NULL point dereference or
+use-after-free read when memcpy.
 
-The Intel IOMMU implementation only allows PCIe ATS on several SOC-
-integrated devices which are opt-in’ed through the ACPI tables to
-prevent any compromised device from accessing arbitrary physical
-memory.
+Please check the following link for pre-information:
+ https://lore.kernel.org/all/Y/ht6gQL+u6fj3dG@hog/
 
-Add a kernel option intel_iommu=relax_ats to allow users to have an
-opt-in to allow turning on ATS at as wish, especially for CSP-owned
-vertical devices. In any case, risky devices are not allowed to use
-ATS.
-
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Fixes: 3c4d7559159b ("tls: kernel TLS support")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 6 ++++++
- drivers/iommu/intel/iommu.c                     | 7 +++++++
- 2 files changed, 13 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6221a1d057dd..490fae585f73 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2075,6 +2075,12 @@
- 			Note that using this option lowers the security
- 			provided by tboot because it makes the system
- 			vulnerable to DMA attacks.
-+		relax_ats
-+			By default, the Intel IOMMU implementation only allows
-+			ATS to be enabled on certain devices. The platform
-+			advertises its allowed devices in ACPI tables like SATC
-+			and ATSR. With this option, this ATS requirement is
-+			relaxed so that discrete PCI devices can also use ATS.
- 
- 	intel_idle.max_cstate=	[KNL,HW,ACPI,X86]
- 			0	disables intel_idle and fall back on acpi_idle.
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 7c2f4bd33582..4f6c6d8716bd 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -290,6 +290,7 @@ static int dmar_map_gfx = 1;
- static int intel_iommu_superpage = 1;
- static int iommu_identity_mapping;
- static int iommu_skip_te_disable;
-+static int iommu_relaxed_ats;
- 
- #define IDENTMAP_GFX		2
- #define IDENTMAP_AZALIA		4
-@@ -349,6 +350,9 @@ static int __init intel_iommu_setup(char *str)
- 		} else if (!strncmp(str, "tboot_noforce", 13)) {
- 			pr_info("Intel-IOMMU: not forcing on after tboot. This could expose security risk for tboot\n");
- 			intel_iommu_tboot_noforce = 1;
-+		} else if (!strncmp(str, "relax_ats", 9)) {
-+			pr_info("ATS reqirement is relaxed\n");
-+			iommu_relaxed_ats = 1;
- 		} else {
- 			pr_notice("Unknown option - '%s'\n", str);
+	v2: Follow the advice of Jakub and lock do_tls_getsockopt()
+
+ net/tls/tls_main.c | 23 +++++------------------
+ 1 file changed, 5 insertions(+), 18 deletions(-)
+
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index 3735cb00905d..b32c112984dd 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -405,13 +405,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
  		}
-@@ -3557,6 +3561,9 @@ static int dmar_ats_supported(struct pci_dev *dev, struct intel_iommu *iommu)
- 	struct dmar_atsr_unit *atsru;
- 	struct dmar_satc_unit *satcu;
+-		lock_sock(sk);
+ 		memcpy(crypto_info_aes_gcm_128->iv,
+ 		       cctx->iv + TLS_CIPHER_AES_GCM_128_SALT_SIZE,
+ 		       TLS_CIPHER_AES_GCM_128_IV_SIZE);
+ 		memcpy(crypto_info_aes_gcm_128->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_AES_GCM_128_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval,
+ 				 crypto_info_aes_gcm_128,
+ 				 sizeof(*crypto_info_aes_gcm_128)))
+@@ -429,13 +427,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(crypto_info_aes_gcm_256->iv,
+ 		       cctx->iv + TLS_CIPHER_AES_GCM_256_SALT_SIZE,
+ 		       TLS_CIPHER_AES_GCM_256_IV_SIZE);
+ 		memcpy(crypto_info_aes_gcm_256->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_AES_GCM_256_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval,
+ 				 crypto_info_aes_gcm_256,
+ 				 sizeof(*crypto_info_aes_gcm_256)))
+@@ -451,13 +447,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(aes_ccm_128->iv,
+ 		       cctx->iv + TLS_CIPHER_AES_CCM_128_SALT_SIZE,
+ 		       TLS_CIPHER_AES_CCM_128_IV_SIZE);
+ 		memcpy(aes_ccm_128->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_AES_CCM_128_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval, aes_ccm_128, sizeof(*aes_ccm_128)))
+ 			rc = -EFAULT;
+ 		break;
+@@ -472,13 +466,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(chacha20_poly1305->iv,
+ 		       cctx->iv + TLS_CIPHER_CHACHA20_POLY1305_SALT_SIZE,
+ 		       TLS_CIPHER_CHACHA20_POLY1305_IV_SIZE);
+ 		memcpy(chacha20_poly1305->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_CHACHA20_POLY1305_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval, chacha20_poly1305,
+ 				sizeof(*chacha20_poly1305)))
+ 			rc = -EFAULT;
+@@ -493,13 +485,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(sm4_gcm_info->iv,
+ 		       cctx->iv + TLS_CIPHER_SM4_GCM_SALT_SIZE,
+ 		       TLS_CIPHER_SM4_GCM_IV_SIZE);
+ 		memcpy(sm4_gcm_info->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_SM4_GCM_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval, sm4_gcm_info, sizeof(*sm4_gcm_info)))
+ 			rc = -EFAULT;
+ 		break;
+@@ -513,13 +503,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(sm4_ccm_info->iv,
+ 		       cctx->iv + TLS_CIPHER_SM4_CCM_SALT_SIZE,
+ 		       TLS_CIPHER_SM4_CCM_IV_SIZE);
+ 		memcpy(sm4_ccm_info->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_SM4_CCM_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval, sm4_ccm_info, sizeof(*sm4_ccm_info)))
+ 			rc = -EFAULT;
+ 		break;
+@@ -535,13 +523,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(crypto_info_aria_gcm_128->iv,
+ 		       cctx->iv + TLS_CIPHER_ARIA_GCM_128_SALT_SIZE,
+ 		       TLS_CIPHER_ARIA_GCM_128_IV_SIZE);
+ 		memcpy(crypto_info_aria_gcm_128->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_ARIA_GCM_128_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval,
+ 				 crypto_info_aria_gcm_128,
+ 				 sizeof(*crypto_info_aria_gcm_128)))
+@@ -559,13 +545,11 @@ static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+-		lock_sock(sk);
+ 		memcpy(crypto_info_aria_gcm_256->iv,
+ 		       cctx->iv + TLS_CIPHER_ARIA_GCM_256_SALT_SIZE,
+ 		       TLS_CIPHER_ARIA_GCM_256_IV_SIZE);
+ 		memcpy(crypto_info_aria_gcm_256->rec_seq, cctx->rec_seq,
+ 		       TLS_CIPHER_ARIA_GCM_256_REC_SEQ_SIZE);
+-		release_sock(sk);
+ 		if (copy_to_user(optval,
+ 				 crypto_info_aria_gcm_256,
+ 				 sizeof(*crypto_info_aria_gcm_256)))
+@@ -614,11 +598,9 @@ static int do_tls_getsockopt_no_pad(struct sock *sk, char __user *optval,
+ 	if (len < sizeof(value))
+ 		return -EINVAL;
  
-+	if (iommu_relaxed_ats && !dev->untrusted)
-+		return 1;
+-	lock_sock(sk);
+ 	value = -EINVAL;
+ 	if (ctx->rx_conf == TLS_SW || ctx->rx_conf == TLS_HW)
+ 		value = ctx->rx_no_pad;
+-	release_sock(sk);
+ 	if (value < 0)
+ 		return value;
+ 
+@@ -635,6 +617,8 @@ static int do_tls_getsockopt(struct sock *sk, int optname,
+ {
+ 	int rc = 0;
+ 
++	lock_sock(sk);
 +
- 	dev = pci_physfn(dev);
- 	satcu = dmar_find_matched_satc_unit(dev);
- 	if (satcu)
+ 	switch (optname) {
+ 	case TLS_TX:
+ 	case TLS_RX:
+@@ -651,6 +635,9 @@ static int do_tls_getsockopt(struct sock *sk, int optname,
+ 		rc = -ENOPROTOOPT;
+ 		break;
+ 	}
++
++	release_sock(sk);
++
+ 	return rc;
+ }
+ 
 -- 
 2.34.1
 
