@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075ED6A5C28
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D878B6A5C2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 16:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjB1Pkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 10:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S229672AbjB1PlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 10:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjB1Pki (ORCPT
+        with ESMTP id S229534AbjB1PlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:40:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2554029E33
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:40:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AF6CB80E6C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 15:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D11C433EF;
-        Tue, 28 Feb 2023 15:40:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677598831;
-        bh=VxCn3XWriHTW8YjvIK4DPsYbOK48hiwgEOBiGZ3LUI8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=h6d4zLvOKREpFeVevff8Fh7nfZ5TAmbT+eAJqCEyiRgDZ7UGl+DelWcncZJW5zJeC
-         jUxeNJYZX/c1TkU4MweG0XHjRACLTaPbfyt6IRZhFACWqWd9idAbmm/vP0BDouw3vI
-         7pST4w6YWCJ44EuqZY/XP0ZT2BNXcQTeBxA8R4LSTNevB7f/t9KCaF033Z9UoXXc9f
-         Gk28cwypEtKmrMS7LxChjldOhwfVLIrqtTaj5a6Kq3o4hevXOKpkFmfE0AwVWgG46d
-         xnQFZSuxTIPLcE2BEhAvehNrynZrTxmxNAo1Xu79xdxxIF5l2psGG+1en03CGrM8zY
-         C9AQfiR7DC/Kg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BD1205C0368; Tue, 28 Feb 2023 07:40:30 -0800 (PST)
-Date:   Tue, 28 Feb 2023 07:40:30 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
-        frederic@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <20230228154030.GT2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230224135251.24989-1-jonas.oberhauser@huaweicloud.com>
- <Y/jYm0AZfPHkIalK@rowland.harvard.edu>
- <20230224183758.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230226010110.GA1576556@paulmck-ThinkPad-P17-Gen-1>
- <Y/rEH2r9i0BtfxEW@rowland.harvard.edu>
- <Y/0HEESX2wDWtPS1@andrea>
- <bf2881fb-039b-06ab-68f9-806b29a84188@huaweicloud.com>
- <20230227222120.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9b5a04e9-39e7-ffa1-b43e-831a4f0c4b73@huaweicloud.com>
+        Tue, 28 Feb 2023 10:41:20 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1145F222EE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:41:19 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id n2so13727542lfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 07:41:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677598877;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o0oSgh79dT4BwHorcu4cOKoy0Ow/ZznwbgklRDRu1oI=;
+        b=DS1vDN4ANBGoA83nXmkMioB5k5jbyFbCQwLBa21/NiGfTLei+j5AWJSkIIhKiioaD6
+         /+1jav2hwaG002/lMwDMVhjm399pqGtxzaQiZS14sjA9xNfsdY7Q6r4RKRGqGR5rrZ27
+         CyKV2YPmLXXvwzlUH0xebECCyvWeOsjdcyfTeKQUToVTXxMG+g2R0+PtoreW6XZWpGks
+         LxOqnht0f8MXHon5V6eQoAMCDR5BF2QzDodk2HJIAudJ+w1/ccGkSOQP8u5skOElKw4G
+         LmOIt8gqcS7cPVSE8ynxL7ycKQKiJRU/2bKB4zhySo/b4rUDP5WqDku/kN2xFR0yFChs
+         XzyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677598877;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o0oSgh79dT4BwHorcu4cOKoy0Ow/ZznwbgklRDRu1oI=;
+        b=P75qLCmLzBKpi4lIiUabcc9LDbKUYs2XE7SyeykD3ng0QsnzjfhGjbovXv2kCJppNL
+         jr0ood3TR6eYieWGW8RAT1KgkYAeZhHlkxjjX30jDDtlOzd9bGRlBTNa1oxaEzQY8j7H
+         OMSM6qi9yLKDvbD2ENCYLr+PBDv9OEmHa8KXpg0Q/relbxbi5xPDyBdal4lLaQHZR5/L
+         CbApNo9tZxR9NlD3mXRNhYMMJPdloSUolgqp9PJfvKBXMTR9s5YC2U62Sp0TVdz6qaQs
+         HPn5V7GW2tNTUv8Ce6TIEhpbupEmuE6hqXX1pB8CH94RGdK2LU3xPuXLEYqj4p5Nd9gG
+         3CYA==
+X-Gm-Message-State: AO0yUKUEvz/jEb+RsLIJpohupMWbxK/5aBk6cbkl7ZCutdxhkl1dkVf6
+        bSGJZxwG21u3vgvbuIRRTXW25w==
+X-Google-Smtp-Source: AK7set9GsnKLQmZvi1EI42Kuf4fQXweX0TVas8vb7ohjCdBBF/7lr7xMAdrXNr2J30rocg7gCVS12g==
+X-Received: by 2002:a05:6512:ea7:b0:4db:25bb:ff0b with SMTP id bi39-20020a0565120ea700b004db25bbff0bmr2954320lfb.2.1677598877358;
+        Tue, 28 Feb 2023 07:41:17 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id r7-20020ac252a7000000b004dc4d26c324sm1372910lfm.143.2023.02.28.07.41.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 07:41:16 -0800 (PST)
+Message-ID: <1091d8b4-3dd3-427b-2fcb-c3e0d32b0a3b@linaro.org>
+Date:   Tue, 28 Feb 2023 16:41:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b5a04e9-39e7-ffa1-b43e-831a4f0c4b73@huaweicloud.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
+ venus_sys_idle_indicator to false on V6
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vikash Garodia <vgarodia@codeaurora.org>
+References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
+ <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
+ <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
+ <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
+ <48ac4272-0e11-d943-e950-0be8d93fb036@linaro.org>
+ <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:49:07AM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 2/27/2023 11:21 PM, Paul E. McKenney wrote:
-> > On Mon, Feb 27, 2023 at 09:13:01PM +0100, Jonas Oberhauser wrote:
-> > > 
-> > > On 2/27/2023 8:40 PM, Andrea Parri wrote:
-> > > > > The LKMM doesn't believe that a control or data dependency orders a
-> > > > > plain write after a marked read.  Hence in this test it thinks that P1's
-> > > > > store to u0 can happen before the load of x1.  I don't remember why we
-> > > > > did it this way -- probably we just wanted to minimize the restrictions
-> > > > > on when plain accesses can execute.  (I do remember the reason for
-> > > > > making address dependencies induce order; it was so RCU would work.)
-> > > > > 
-> > > > > The patch below will change what the LKMM believes.  It eliminates the
-> > > > > positive outcome of the litmus test and the data race.  Should it be
-> > > > > adopted into the memory model?
-> > > > (Unpopular opinion I know,) it should drop dependencies ordering, not
-> > > > add/promote it.
-> > > > 
-> > > >     Andrea
-> > > Maybe not as unpopular as you think... :)
-> > > But either way IMHO it should be consistent; either take all the
-> > > dependencies that are true and add them, or drop them all.
-> > > In the latter case, RCU should change to an acquire barrier. (also, one
-> > > would have to deal with OOTA in some yet different way).
-> > > 
-> > > Generally my position is that unless there's a real-world benchmark with
-> > > proven performance benefits of relying on dependency ordering, one should
-> > > use an acquire barrier. I haven't yet met such a case, but maybe one of you
-> > > has...
-> > https://www.msully.net/thesis/thesis.pdf page 128 (PDF page 141).
-> > 
-> > Though this is admittedly for ARMv7 and PowerPC.
-> > 
-> 
-> Thanks for the link.
-> 
-> It's true that on architectures that don't have an acquire load (and have to
-> use a fence), the penalty will be bigger.
-> 
-> But the more obvious discussion would be what constitutes a real-world
-> benchmark : )
-> In my experience you can get a lot of performance benefits out of optimizing
-> barriers in code if all you execute is that code.
-> But once you embed that into a real-world application, often 90%-99% of time
-> spent will be in the business logic, not in the data structure.
-> 
-> And then the benefits suddenly disappear.
-> Note that a lot of barriers are a lot cheaper as well when there's no
-> contention.
-> 
-> Because of that, making optimization decisions based on microbenchmarks can
-> sometimes lead to a very poor "time invested" vs "total product improvement"
-> ratio.
 
-All true, though that 2x and 4x should be worth something.
 
-The real-world examples I know of involved garbage collectors, and the
-improvement was said to be a few percent system-wide.  But that was a
-verbal exchange, so I don't have a citation for you.
+On 28.02.2023 16:38, Bryan O'Donoghue wrote:
+> On 28/02/2023 15:37, Konrad Dybcio wrote:
+>>
+>>
+>> On 28.02.2023 16:31, Bryan O'Donoghue wrote:
+>>> On 28/02/2023 15:26, Bryan O'Donoghue wrote:
+>>>> On 28/02/2023 15:24, Konrad Dybcio wrote:
+>>>>> This call does not seem to have been cast on any kernel with support
+>>>>> for VPU-1.0 or newer (and by extension, HFI6 and newer).
+>>>>
+>>>> We tested this on sm8250
+>>>>
+>>>> Restrict it
+>>>>> to V4 only, as it seems to have been enabled by mistake and causes a
+>>>>> hang & reboot to EDL on at least one occasion with SM6115 / AR50L
+>>>>>
+>>>>> Fixes: 7ed9e0b3393c ("media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations")
+>>>>> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
+>>>>
+>>>> Right. This may indeed fix it for you on SM6115, could you test it on RB5 and verify the above statement ?
+>>>>
+>>>> ---
+>>>> bod
+>>>
+>>> For example.
+>>>
+>>> Doesn't your later patch take account of VPU h/w version ? IRIS_1, IRIS_2 etc.
+>>>
+>>> When we added for V6 here, we meant for current tested V6 hardware at that point - at least sm8250.
+>>>
+>>> Can you not differentiate sm6115 based on VPU hardware identifier ? We want to retain this logic for 8250 and then assuming your patch is correct, not do this for sm6115.
+>> As far as my only source of information (msm-4.19 techpack) goes, this is
+>> unnecessary/incorrect on 8250 as well. I doubt downstream would ship Venus
+>> with no/broken low-power modes..
+> 
+> Can you test it and make sure ?
+As I mentioned in the cover letter, 8250 still seems to work with this
+patchset. I have no idea how one would go about validating the
+functionality enabled through this call.
 
-							Thanx, Paul
+Konrad
+> 
+> ---
+> bod
+> 
