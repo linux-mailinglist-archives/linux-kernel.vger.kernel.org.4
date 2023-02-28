@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9AC6A5FD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 20:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9ED16A6078
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 21:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjB1TlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 14:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S229777AbjB1UjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 15:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjB1TlL (ORCPT
+        with ESMTP id S229518AbjB1UjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:41:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4911499A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 11:41:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F098BCE19FF
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 19:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F063C433D2;
-        Tue, 28 Feb 2023 19:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677613265;
-        bh=30kPHMTvf9IF3XE2xLeD5hW+gxkyjy3HKdW7y5ZQaAE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=vJXU+9iK9fRWPssxiKgTLPyYfCohny+8DPpXHTDpRCiGHcwv6TP8m+aI97Hq8OYNy
-         spEO9O0HKPuh8VwxGiTTEK7dfHCmeHDMH/gkox7ltHzv58BzvaWiumP1C7D7NrbGO+
-         60FYa8rzNkVuMvGFXeHmfjwgwdXtf0GLNSWu/L6b2J8MBVGXP7ffP8YnSrT5i+3Fmk
-         3zk2d0r/kp2bhTTNrf8Fd2RMloxcnX6PLGpzLETp798Aww3127UuKTOOeRCr+vQH7h
-         nj77UqAf8XSX4YUuqZ6J5X5rNv82xfPZ/6lUp1Cr80/8DPXgo1MsEHdnYUjt8Y/cNE
-         BohuTvKFXfvyQ==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] lib/test_string.c: Make definition less dense
-In-Reply-To: <CAHp75VfK3RM+SP90d3nOXEobY81Xd_94tLL=Qt86mmdNwXaQpg@mail.gmail.com>
-References: <20230228184245.1585775-1-bjorn@kernel.org>
- <CAHp75VfK3RM+SP90d3nOXEobY81Xd_94tLL=Qt86mmdNwXaQpg@mail.gmail.com>
-Date:   Tue, 28 Feb 2023 20:41:03 +0100
-Message-ID: <87o7pdfui8.fsf@all.your.base.are.belong.to.us>
+        Tue, 28 Feb 2023 15:39:04 -0500
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9D34C3B;
+        Tue, 28 Feb 2023 12:39:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1677616743; x=1709152743;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rl35dc1iPnbWuVVxE9D4Cxh5CG/w80f3pFsgYUgu3M8=;
+  b=iu0vx/w7ByuM3K5svEztWEhgkrnQ4GVe/WOpMszve4lXG+A8HgHP+X3N
+   sL6Nj2/13f7orx3sLtzqCBYgN3IkqLnatJ/0C/Dc3msU9ZEJVdwZNpwI0
+   ZM7yoMH7ld/lMulBON0MI4ayd8wFBGzMuNg9cKYXnYMHkDXL65Sv5wm3N
+   4=;
+X-IronPort-AV: E=Sophos;i="5.98,222,1673913600"; 
+   d="scan'208";a="1107738852"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d23e07e8.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 19:42:11 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-d23e07e8.us-east-1.amazon.com (Postfix) with ESMTPS id 121C781208;
+        Tue, 28 Feb 2023 19:42:08 +0000 (UTC)
+Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 28 Feb 2023 19:42:07 +0000
+Received: from b0f1d8753182.ant.amazon.com (10.106.83.6) by
+ EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
+ Tue, 28 Feb 2023 19:42:03 +0000
+From:   Takahiro Itazuri <itazur@amazon.com>
+To:     <bp@alien8.de>
+CC:     <dave.hansen@linux.intel.com>, <itazur@amazon.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mingo@redhat.com>, <pbonzini@redhat.com>, <seanjc@google.com>,
+        <tglx@linutronix.de>, <x86@kernel.org>, <zulinx86@gmail.com>
+Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
+Date:   Tue, 28 Feb 2023 19:41:53 +0000
+Message-ID: <20230228194153.46995-1-itazur@amazon.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <Y/5U3N0XfRaZ2KkX@zn.tnic>
+References: <Y/5U3N0XfRaZ2KkX@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.106.83.6]
+X-ClientProxiedBy: EX19D035UWB002.ant.amazon.com (10.13.138.97) To
+ EX19D002ANA003.ant.amazon.com (10.37.240.141)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+Date:   Tue, 28 Feb 2023 20:24:12 +0100
+From:   Borislav Petkov <bp@alien8.de>
+> I'd prefer if VMMs did supply whatever they prefer to the guests
+> instead. None of those bits are used in the kernel for mitigations, as
+> you've realized.
 
-> On Tue, Feb 28, 2023 at 8:42=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@kern=
-el.org> wrote:
->>
->> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>
->> Checkpatch seems to have trouble making sense of the situation when
->> struct definitions, variable definitions, and __initconst marking is
->> done in one go.
->>
->> Let's be nicer to checkpatch, and move the struct definition out,
->> which removes the error.
->
-> Not that I'm against the patch, but how hard is it to fix the checkpatch?
+It is true that the kernel does not use those bits at all, but any
+codes could be run inside guests.
 
-Uhm, good one. I'll have a look (the .pl scared me off).
+One of examples is the following spectre/meltdown checker scipt used as
+de facto standard.
+https://github.com/speed47/spectre-meltdown-checker/blob/master/spectre-meltdown-checker.sh#L2768
+
+Best regards,
+Takahiro Itazuri
+
