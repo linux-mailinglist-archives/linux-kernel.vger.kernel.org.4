@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A076A549C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2CF6A549D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjB1In0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S230486AbjB1In2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjB1Im4 (ORCPT
+        with ESMTP id S231161AbjB1Im4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Feb 2023 03:42:56 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8167B2BEE8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:42:39 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id n6so8246997plf.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:42:39 -0800 (PST)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6D02CC4B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:42:40 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 132so5131911pgh.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:42:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dkGLzxiRgSOZTh04Z+2xATChlICYHMpA+J8qmtvpz8Q=;
-        b=bYI3H6niPj1M255ceIj/3IHT0DykJl98GQ7A36QcZs2gdOeEfQkaKxZvOUKc/1gD+/
-         vGVrKLrWCiiOFG7cpM2geG31ZZPs2i5iz0371D/r7edsVv8fauTLbuLrOzr0CyFpxTMA
-         ugl32UO2xsQXRT8oinTxA3rb/fi7Dv78tm5t4xuyas9lNJh9JRmNyW9vdHx3kk52DBmh
-         xXRkyt9adtoMkYaTfAh1LE5OswQstVigdkrdWdSWTsdSvAcEZM9TCcCRZo94kz7xl+Fj
-         UERgC0fkONR3ZrBdeCLMCiQov3rP+imEo4u8Ws6z5dDyy1Y6i65EAR9I4ESz9MPmb4do
-         JyWQ==
+        bh=FKs+rsPj1hm0j71DGE8gonxUEIM8JV3GuGWVFR89M0w=;
+        b=ivB6Lv/xQDSKMmtQeR38o5KccivOcwIKQ0Yyj89c63Lcn2O3y8WITjotVTMqyublB9
+         RCOYf8yCJC301oV0HocHKLhTzQjUXV9UJ2y6+NdWMFLzvAPqdLqoeKpdKl/P5uftWt/j
+         7Hmz5aCbIofdizDrvxB2BsHgH+yxPA7XeWcHQSaV5oMw4Ts+sGTSO1sXrlryXKGPKU/n
+         LhOkyC2se+nl2/jbV7YIT3ods2rX5BGcQ+G1bm+1hTZZnqU8MtQ0EdbGQkZ2U8md/FhY
+         JC7WEM9IxQrr91jKFjBe4iqU8ooI97vaJbWhwxefHdjGJj3mBirUrQx2PW80+psPTy4M
+         LLmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dkGLzxiRgSOZTh04Z+2xATChlICYHMpA+J8qmtvpz8Q=;
-        b=2OqNJ55hRjLukNKFBPEmHazyQ8fgc166Y5BYsXg39NM9qnyBwM+W4kQ22Wz7bNzDW6
-         btzqMDA0CtJHedG6pzC5/jTLJgXBcBksjAbsll4xu63XAPqZqBCUbpyJFMsTXeTNJGDb
-         0gbhTxn/kZZ7f4xKsTScpT/g+dQsZIBhNjGmtKHHf5/H8uWGuDWQkKAxeRO2PIzHlIIt
-         NxnXhrKynEUHmKh05lyC2SgECgVIIa/QjkQSn6AFc/zZWaxibQm3Vsy+ovtzG+/JpQzl
-         IXCXhK6xZBcOQR751Lv+L5Ev72nhtFb5KgHN1QQl2GciPCsD5By8v0Kf7AMutw5SYnx4
-         mKmQ==
-X-Gm-Message-State: AO0yUKXYzXdLcUgKqcuVez5Y2gR9W5x+KYfwL//nAipENwprdleDdee/
-        G4Ap117bR50ByqFZWmN8XavVog==
-X-Google-Smtp-Source: AK7set/5FuyPzdlCVwH9WJzVClF6Rc53wNebBmKizFH8bU1NrcynmiL1WYW1fw1OalM52ISkFjFbpw==
-X-Received: by 2002:a05:6a20:54a3:b0:cd:47dc:82b5 with SMTP id i35-20020a056a2054a300b000cd47dc82b5mr3142913pzk.21.1677573756612;
-        Tue, 28 Feb 2023 00:42:36 -0800 (PST)
+        bh=FKs+rsPj1hm0j71DGE8gonxUEIM8JV3GuGWVFR89M0w=;
+        b=Nwg1Ej8wNyY9PhKzF+bGg0nk+Z/dyYJjsQyW5un3rizSFQbRaD+eoBNkAyZ5ZpbupL
+         zDPDFzNYJx8M1ZeKbttHdtRLAVXgTA5vfdZuN2UAa0qHH3CVGwSE2Jg64V/eAdrF4pfl
+         AnAR8/QIaKZJvKvRORMTVwvFIVrbZnNd7kJB1WtP/Q9CWpK02W6OQ0uBr3e4l5zRGRS/
+         WQQwOxaKWeOLKJTflkGLmbN0RLgJbDAMirYQMOtLCZj9tco8FkzjsEMBLR5dhn8VJhIV
+         7XOkFF4wLU8BU6+YRT4KBRA0D04mIgPHKcq2Scq44qXe8ZjAS8AHvPrtc/G4RbyfeAvW
+         m9+g==
+X-Gm-Message-State: AO0yUKWDG2JYtrwWv7TijFeFW4d/rGyQHtZxlATCeLDGWbj9H1ySKYtq
+        XpkUfjvUy/moxg/o/0hIbmPYcA==
+X-Google-Smtp-Source: AK7set8tD3J3ir76yLcdhpbI8anvb/Ayk4GpzfJOiOATJ0V3nm7fAj/tUPl/DcX2QqnfUZw9ARBZ/A==
+X-Received: by 2002:a62:8406:0:b0:5f1:468b:c88 with SMTP id k6-20020a628406000000b005f1468b0c88mr2145899pfd.27.1677573760353;
+        Tue, 28 Feb 2023 00:42:40 -0800 (PST)
 Received: from leoy-huanghe.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id u25-20020aa78499000000b005d6fcd8f9desm5681270pfn.94.2023.02.28.00.42.32
+        by smtp.gmail.com with ESMTPSA id u25-20020aa78499000000b005d6fcd8f9desm5681270pfn.94.2023.02.28.00.42.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 00:42:36 -0800 (PST)
+        Tue, 28 Feb 2023 00:42:39 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -62,9 +62,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 08/14] perf kvm: Add dimensions for KVM event statistics
-Date:   Tue, 28 Feb 2023 16:41:41 +0800
-Message-Id: <20230228084147.106167-9-leo.yan@linaro.org>
+Subject: [PATCH v2 09/14] perf kvm: Use histograms list to replace cached list
+Date:   Tue, 28 Feb 2023 16:41:42 +0800
+Message-Id: <20230228084147.106167-10-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230228084147.106167-1-leo.yan@linaro.org>
 References: <20230228084147.106167-1-leo.yan@linaro.org>
@@ -79,307 +79,373 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support KVM event statistics, this patch firstly registers histograms
-columns and sorting fields; every column or field has its own format
-structure, the format structure is dereferenced to access the dimension,
-finally the dimension provides the comparison callback for sorting
-result.
+perf kvm tool defines its own cached list which is managed with RB tree,
+histograms also provide RB tree to manage data entries.  Since now we
+have introduced histograms in the tool, it's not necessary to use the
+self defined list and we can directly use histograms list to manage
+KVM events.
+
+This patch changes to use histograms list to track KVM events, and it
+invokes the common function hists__output_resort_cb() to sort result,
+this also give us flexibility to extend more sorting key words easily.
+
+After histograms list supported, the cached list is redundant so remove
+the relevant code for it.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- tools/perf/builtin-kvm.c   | 239 +++++++++++++++++++++++++++++++++++--
- tools/perf/util/kvm-stat.h |   2 +
- 2 files changed, 234 insertions(+), 7 deletions(-)
+ tools/perf/builtin-kvm.c   | 186 +++++++++++++++++++------------------
+ tools/perf/util/kvm-stat.h |   7 --
+ 2 files changed, 94 insertions(+), 99 deletions(-)
 
 diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index a9f467926bdd..da84f5063d4d 100644
+index da84f5063d4d..32dc697ff707 100644
 --- a/tools/perf/builtin-kvm.c
 +++ b/tools/perf/builtin-kvm.c
-@@ -70,9 +70,9 @@ static int cmp_event_ ## func(struct kvm_event *one,			\
- 	       get_event_ ##func(two, vcpu);				\
- }
- 
--GET_EVENT_KEY(time, time);
--GET_EVENT_KEY(max, stats.max);
--GET_EVENT_KEY(min, stats.min);
-+COMPARE_EVENT_KEY(time, time);
-+COMPARE_EVENT_KEY(max, stats.max);
-+COMPARE_EVENT_KEY(min, stats.min);
- COMPARE_EVENT_KEY(count, stats.n);
- COMPARE_EVENT_KEY(mean, stats.mean);
- 
-@@ -90,13 +90,238 @@ struct kvm_hists {
- 	struct perf_hpp_list	list;
+@@ -421,44 +421,37 @@ struct vcpu_event_record {
+ 	struct kvm_event *last_event;
  };
  
-+struct kvm_dimension {
-+	const char *name;
-+	int64_t (*cmp)(struct perf_hpp_fmt *fmt, struct hist_entry *left,
-+		       struct hist_entry *right);
-+};
-+
-+struct kvm_fmt {
-+	struct perf_hpp_fmt	fmt;
-+	struct kvm_dimension	*dim;
-+};
-+
- static struct kvm_hists kvm_hists;
- 
--static int kvm_hists__init(void)
-+static int64_t
-+empty_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
-+	  struct hist_entry *left __maybe_unused,
-+	  struct hist_entry *right __maybe_unused)
-+{
-+	return 0;
-+}
-+
-+static struct kvm_dimension dim_event = {
-+	.name		= "name",
-+	.cmp		= empty_cmp,
-+};
-+
-+#define EV_METRIC_CMP(metric)						\
-+static int64_t ev_cmp_##metric(struct perf_hpp_fmt *fmt __maybe_unused,	\
-+			       struct hist_entry *left,			\
-+			       struct hist_entry *right)		\
-+{									\
-+	struct kvm_event *event_left;					\
-+	struct kvm_event *event_right;					\
-+	struct perf_kvm_stat *perf_kvm;					\
-+									\
-+	event_left  = container_of(left, struct kvm_event, he);		\
-+	event_right = container_of(right, struct kvm_event, he);	\
-+									\
-+	perf_kvm = event_left->perf_kvm;				\
-+	return cmp_event_##metric(event_left, event_right,		\
-+				  perf_kvm->trace_vcpu);		\
-+}
-+
-+EV_METRIC_CMP(time)
-+EV_METRIC_CMP(count)
-+EV_METRIC_CMP(max)
-+EV_METRIC_CMP(min)
-+EV_METRIC_CMP(mean)
-+
-+static struct kvm_dimension dim_time = {
-+	.name		= "time",
-+	.cmp		= ev_cmp_time,
-+};
-+
-+static struct kvm_dimension dim_count = {
-+	.name		= "sample",
-+	.cmp		= ev_cmp_count,
-+};
-+
-+static struct kvm_dimension dim_max_time = {
-+	.name		= "max_t",
-+	.cmp		= ev_cmp_max,
-+};
-+
-+static struct kvm_dimension dim_min_time = {
-+	.name		= "min_t",
-+	.cmp		= ev_cmp_min,
-+};
-+
-+static struct kvm_dimension dim_mean_time = {
-+	.name		= "mean_t",
-+	.cmp		= ev_cmp_mean,
-+};
-+
-+static struct kvm_dimension *dimensions[] = {
-+	&dim_event,
-+	&dim_time,
-+	&dim_count,
-+	&dim_max_time,
-+	&dim_min_time,
-+	&dim_mean_time,
-+	NULL,
-+};
-+
-+static bool fmt_equal(struct perf_hpp_fmt *a, struct perf_hpp_fmt *b)
-+{
-+	struct kvm_fmt *kvm_fmt_a = container_of(a, struct kvm_fmt, fmt);
-+	struct kvm_fmt *kvm_fmt_b = container_of(b, struct kvm_fmt, fmt);
-+
-+	return kvm_fmt_a->dim == kvm_fmt_b->dim;
-+}
-+
-+static void fmt_free(struct perf_hpp_fmt *fmt)
-+{
-+	struct kvm_fmt *kvm_fmt;
-+
-+	kvm_fmt = container_of(fmt, struct kvm_fmt, fmt);
-+	free(kvm_fmt);
-+}
-+
-+static struct kvm_dimension *get_dimension(const char *name)
+-
+-static void init_kvm_event_record(struct perf_kvm_stat *kvm)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < EVENTS_CACHE_SIZE; i++)
+-		INIT_LIST_HEAD(&kvm->kvm_events_cache[i]);
+-}
+-
+ #ifdef HAVE_TIMERFD_SUPPORT
+-static void clear_events_cache_stats(struct list_head *kvm_events_cache)
++static void clear_events_cache_stats(void)
  {
-+	unsigned int i;
+-	struct list_head *head;
++	struct rb_root_cached *root;
++	struct rb_node *nd;
+ 	struct kvm_event *event;
+-	unsigned int i;
+-	int j;
+-
+-	for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
+-		head = &kvm_events_cache[i];
+-		list_for_each_entry(event, head, hash_entry) {
+-			/* reset stats for event */
+-			event->total.time = 0;
+-			init_stats(&event->total.stats);
+-
+-			for (j = 0; j < event->max_vcpu; ++j) {
+-				event->vcpu[j].time = 0;
+-				init_stats(&event->vcpu[j].stats);
+-			}
++	int i;
 +
-+	for (i = 0; dimensions[i] != NULL; i++) {
-+		if (!strcmp(dimensions[i]->name, name))
-+			return dimensions[i];
-+	}
++	if (hists__has(&kvm_hists.hists, need_collapse))
++		root = &kvm_hists.hists.entries_collapsed;
++	else
++		root = kvm_hists.hists.entries_in;
 +
-+	return NULL;
-+}
++	for (nd = rb_first_cached(root); nd; nd = rb_next(nd)) {
++		struct hist_entry *he;
 +
-+static struct kvm_fmt *get_format(const char *name)
++		he = rb_entry(nd, struct hist_entry, rb_node_in);
++		event = container_of(he, struct kvm_event, he);
++
++		/* reset stats for event */
++		event->total.time = 0;
++		init_stats(&event->total.stats);
++
++		for (i = 0; i < event->max_vcpu; ++i) {
++			event->vcpu[i].time = 0;
++			init_stats(&event->vcpu[i].stats);
+ 		}
+ 	}
+ }
+ #endif
+ 
+-static int kvm_events_hash_fn(u64 key)
+-{
+-	return key & (EVENTS_CACHE_SIZE - 1);
+-}
+-
+ static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
+ {
+ 	int old_max_vcpu = event->max_vcpu;
+@@ -484,21 +477,51 @@ static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
+ 	return true;
+ }
+ 
++static void *kvm_he_zalloc(size_t size)
 +{
-+	struct kvm_dimension *dim = get_dimension(name);
-+	struct kvm_fmt *kvm_fmt;
-+	struct perf_hpp_fmt *fmt;
++	struct kvm_event *kvm_ev;
 +
-+	if (!dim)
++	kvm_ev = zalloc(size + sizeof(*kvm_ev));
++	if (!kvm_ev)
 +		return NULL;
 +
-+	kvm_fmt = zalloc(sizeof(*kvm_fmt));
-+	if (!kvm_fmt)
-+		return NULL;
-+
-+	kvm_fmt->dim = dim;
-+
-+	fmt = &kvm_fmt->fmt;
-+	INIT_LIST_HEAD(&fmt->list);
-+	INIT_LIST_HEAD(&fmt->sort_list);
-+	fmt->cmp	= dim->cmp;
-+	fmt->sort	= dim->cmp;
-+	fmt->color	= NULL;
-+	fmt->entry	= NULL;
-+	fmt->header	= NULL;
-+	fmt->width	= NULL;
-+	fmt->collapse	= dim->cmp;
-+	fmt->equal	= fmt_equal;
-+	fmt->free	= fmt_free;
-+
-+	return kvm_fmt;
++	return &kvm_ev->he;
 +}
 +
-+static int kvm_hists__init_output(struct perf_hpp_list *hpp_list, char *name)
++static void kvm_he_free(void *he)
 +{
-+	struct kvm_fmt *kvm_fmt = get_format(name);
++	struct kvm_event *kvm_ev;
 +
-+	if (!kvm_fmt) {
-+		reset_dimensions();
-+		return output_field_add(hpp_list, name);
-+	}
++	kvm_ev = container_of(he, struct kvm_event, he);
++	free(kvm_ev);
++}
 +
-+	perf_hpp_list__column_register(hpp_list, &kvm_fmt->fmt);
++static struct hist_entry_ops kvm_ev_entry_ops = {
++	.new	= kvm_he_zalloc,
++	.free	= kvm_he_free,
++};
++
+ static struct kvm_event *kvm_alloc_init_event(struct perf_kvm_stat *kvm,
+ 					      struct event_key *key,
+-					      struct perf_sample *sample __maybe_unused)
++					      struct perf_sample *sample)
+ {
+ 	struct kvm_event *event;
++	struct hist_entry *he;
+ 
+-	event = zalloc(sizeof(*event));
+-	if (!event) {
+-		pr_err("Not enough memory\n");
++	he = hists__add_entry_ops(&kvm_hists.hists, &kvm_ev_entry_ops,
++				  &kvm->al, NULL, NULL, NULL, sample, true);
++	if (he == NULL) {
++		pr_err("Failed to allocate hist entry\n");
+ 		return NULL;
+ 	}
+ 
++	hists__inc_nr_samples(&kvm_hists.hists, 0);
++
++	event = container_of(he, struct kvm_event, he);
+ 	event->perf_kvm = kvm;
+ 	event->key = *key;
+ 	init_stats(&event->total.stats);
++
+ 	return event;
+ }
+ 
+@@ -507,22 +530,26 @@ static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
+ 					       struct perf_sample *sample)
+ {
+ 	struct kvm_event *event;
+-	struct list_head *head;
++	struct rb_root_cached *root;
++	struct rb_node *nd;
+ 
+ 	BUG_ON(key->key == INVALID_KEY);
+ 
+-	head = &kvm->kvm_events_cache[kvm_events_hash_fn(key->key)];
+-	list_for_each_entry(event, head, hash_entry) {
++	if (hists__has(&kvm_hists.hists, need_collapse))
++		root = &kvm_hists.hists.entries_collapsed;
++	else
++		root = kvm_hists.hists.entries_in;
++
++	for (nd = rb_first_cached(root); nd; nd = rb_next(nd)) {
++		struct hist_entry *he = rb_entry(nd, struct hist_entry,
++						 rb_node_in);
++
++		event = container_of(he, struct kvm_event, he);
+ 		if (event->key.key == key->key && event->key.info == key->info)
+ 			return event;
+ 	}
+ 
+-	event = kvm_alloc_init_event(kvm, key, sample);
+-	if (!event)
+-		return NULL;
+-
+-	list_add(&event->hash_entry, head);
+-	return event;
++	return kvm_alloc_init_event(kvm, key, sample);
+ }
+ 
+ static bool handle_begin_event(struct perf_kvm_stat *kvm,
+@@ -754,58 +781,29 @@ static bool select_key(struct perf_kvm_stat *kvm)
+ 	return false;
+ }
+ 
+-static void insert_to_result(struct rb_root *result, struct kvm_event *event,
+-			     key_cmp_fun bigger, int vcpu)
+-{
+-	struct rb_node **rb = &result->rb_node;
+-	struct rb_node *parent = NULL;
+-	struct kvm_event *p;
+-
+-	while (*rb) {
+-		p = container_of(*rb, struct kvm_event, rb);
+-		parent = *rb;
+-
+-		if (bigger(event, p, vcpu) > 0)
+-			rb = &(*rb)->rb_left;
+-		else
+-			rb = &(*rb)->rb_right;
+-	}
+-
+-	rb_link_node(&event->rb, parent, rb);
+-	rb_insert_color(&event->rb, result);
+-}
+-
+ static bool event_is_valid(struct kvm_event *event, int vcpu)
+ {
+ 	return !!get_event_count(event, vcpu);
+ }
+ 
+-static void sort_result(struct perf_kvm_stat *kvm)
++static int filter_cb(struct hist_entry *he, void *arg __maybe_unused)
+ {
+-	unsigned int i;
+-	int vcpu = kvm->trace_vcpu;
+ 	struct kvm_event *event;
++	struct perf_kvm_stat *perf_kvm;
+ 
+-	for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
+-		list_for_each_entry(event, &kvm->kvm_events_cache[i], hash_entry) {
+-			if (event_is_valid(event, vcpu)) {
+-				insert_to_result(&kvm->result, event,
+-						 kvm->compare, vcpu);
+-			}
+-		}
+-	}
++	event = container_of(he, struct kvm_event, he);
++	perf_kvm = event->perf_kvm;
++	if (!event_is_valid(event, perf_kvm->trace_vcpu))
++		he->filtered = 1;
++	else
++		he->filtered = 0;
 +	return 0;
-+}
-+
-+static int kvm_hists__init_sort(struct perf_hpp_list *hpp_list, char *name)
-+{
-+	struct kvm_fmt *kvm_fmt = get_format(name);
-+
-+	if (!kvm_fmt) {
-+		reset_dimensions();
-+		return sort_dimension__add(hpp_list, name, NULL, 0);
-+	}
-+
-+	perf_hpp_list__register_sort_field(hpp_list, &kvm_fmt->fmt);
-+	return 0;
-+}
-+
-+static int kvm_hpp_list__init(char *list,
-+			      struct perf_hpp_list *hpp_list,
-+			      int (*fn)(struct perf_hpp_list *hpp_list,
-+					char *name))
-+{
-+	char *tmp, *tok;
-+	int ret;
-+
-+	if (!list || !fn)
-+		return 0;
-+
-+	for (tok = strtok_r(list, ", ", &tmp); tok;
-+	     tok = strtok_r(NULL, ", ", &tmp)) {
-+		ret = fn(hpp_list, tok);
-+		if (!ret)
+ }
+ 
+-/* returns left most element of result, and erase it */
+-static struct kvm_event *pop_from_result(struct rb_root *result)
++static void sort_result(void)
+ {
+-	struct rb_node *node = rb_first(result);
+-
+-	if (!node)
+-		return NULL;
+-
+-	rb_erase(node, result);
+-	return container_of(node, struct kvm_event, rb);
++	hists__collapse_resort(&kvm_hists.hists, NULL);
++	hists__output_resort_cb(&kvm_hists.hists, NULL, filter_cb);
+ }
+ 
+ static void print_vcpu_info(struct perf_kvm_stat *kvm)
+@@ -848,6 +846,7 @@ static void print_result(struct perf_kvm_stat *kvm)
+ 	char decode[decode_str_len];
+ 	struct kvm_event *event;
+ 	int vcpu = kvm->trace_vcpu;
++	struct rb_node *nd;
+ 
+ 	if (kvm->live) {
+ 		puts(CONSOLE_CLEAR);
+@@ -866,9 +865,15 @@ static void print_result(struct perf_kvm_stat *kvm)
+ 	pr_info("%16s ", "Avg time");
+ 	pr_info("\n\n");
+ 
+-	while ((event = pop_from_result(&kvm->result))) {
++	for (nd = rb_first_cached(&kvm_hists.hists.entries); nd; nd = rb_next(nd)) {
++		struct hist_entry *he;
+ 		u64 ecount, etime, max, min;
+ 
++		he = rb_entry(nd, struct hist_entry, rb_node);
++		if (he->filtered)
 +			continue;
 +
-+		/* Handle errors */
-+		if (ret == -EINVAL)
-+			pr_err("Invalid field key: '%s'", tok);
-+		else if (ret == -ESRCH)
-+			pr_err("Unknown field key: '%s'", tok);
-+		else
-+			pr_err("Fail to initialize for field key: '%s'", tok);
-+
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int kvm_hpp_list__parse(struct perf_hpp_list *hpp_list,
-+			       const char *output_, const char *sort_)
-+{
-+	char *output = output_ ? strdup(output_) : NULL;
-+	char *sort = sort_ ? strdup(sort_) : NULL;
-+	int ret;
-+
-+	ret = kvm_hpp_list__init(output, hpp_list, kvm_hists__init_output);
-+	if (ret)
-+		goto out;
-+
-+	ret = kvm_hpp_list__init(sort, hpp_list, kvm_hists__init_sort);
-+	if (ret)
-+		goto out;
-+
-+	/* Copy sort keys to output fields */
-+	perf_hpp__setup_output_field(hpp_list);
-+
-+out:
-+	free(output);
-+	free(sort);
-+	return ret;
-+}
-+
-+static int kvm_hists__init(struct perf_kvm_stat *kvm)
-+{
-+	const char *output_columns = "name,sample,time,max_t,min_t,mean_t";
-+
- 	__hists__init(&kvm_hists.hists, &kvm_hists.list);
- 	perf_hpp_list__init(&kvm_hists.list);
--	return 0;
-+	return kvm_hpp_list__parse(&kvm_hists.list, output_columns,
-+				   kvm->sort_key);
- }
++		event = container_of(he, struct kvm_event, he);
+ 		ecount = get_event_count(event, vcpu);
+ 		etime = get_event_time(event, vcpu);
+ 		max = get_event_max(event, vcpu);
+@@ -1142,11 +1147,11 @@ static int perf_kvm__handle_timerfd(struct perf_kvm_stat *kvm)
+ 		pr_debug("Missed timer beats: %" PRIu64 "\n", c-1);
  
- static const char *get_filename_for_perf_kvm(void)
-@@ -979,7 +1204,7 @@ static int kvm_events_live_report(struct perf_kvm_stat *kvm)
+ 	/* update display */
+-	sort_result(kvm);
++	sort_result();
+ 	print_result(kvm);
+ 
+ 	/* reset counts */
+-	clear_events_cache_stats(kvm->kvm_events_cache);
++	clear_events_cache_stats();
+ 	kvm->total_count = 0;
+ 	kvm->total_time = 0;
+ 	kvm->lost_events = 0;
+@@ -1202,8 +1207,6 @@ static int kvm_events_live_report(struct perf_kvm_stat *kvm)
+ 	}
+ 
  	set_term_quiet_input(&save);
- 	init_kvm_event_record(kvm);
- 
--	kvm_hists__init();
-+	kvm_hists__init(kvm);
+-	init_kvm_event_record(kvm);
+-
+ 	kvm_hists__init(kvm);
  
  	signal(SIGINT, sig_handler);
- 	signal(SIGTERM, sig_handler);
-@@ -1176,7 +1401,7 @@ static int kvm_events_report_vcpu(struct perf_kvm_stat *kvm)
- 	init_kvm_event_record(kvm);
+@@ -1250,7 +1253,7 @@ static int kvm_events_live_report(struct perf_kvm_stat *kvm)
+ 	evlist__disable(kvm->evlist);
+ 
+ 	if (err == 0) {
+-		sort_result(kvm);
++		sort_result();
+ 		print_result(kvm);
+ 	}
+ 
+@@ -1398,7 +1401,6 @@ static int kvm_events_report_vcpu(struct perf_kvm_stat *kvm)
+ 	if (!register_kvm_events_ops(kvm))
+ 		goto exit;
+ 
+-	init_kvm_event_record(kvm);
  	setup_pager();
  
--	kvm_hists__init();
-+	kvm_hists__init(kvm);
- 
- 	ret = read_events(kvm);
+ 	kvm_hists__init(kvm);
+@@ -1407,7 +1409,7 @@ static int kvm_events_report_vcpu(struct perf_kvm_stat *kvm)
  	if (ret)
+ 		goto exit;
+ 
+-	sort_result(kvm);
++	sort_result();
+ 	print_result(kvm);
+ 
+ exit:
 diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
-index 80d5c5a9ae31..ca5796959f66 100644
+index ca5796959f66..c38d320c7cbe 100644
 --- a/tools/perf/util/kvm-stat.h
 +++ b/tools/perf/util/kvm-stat.h
-@@ -40,6 +40,8 @@ struct kvm_event {
- 	#define DEFAULT_VCPU_NUM 8
- 	int max_vcpu;
- 	struct kvm_event_stats *vcpu;
-+
-+	struct hist_entry he;
+@@ -30,7 +30,6 @@ struct perf_kvm_stat;
+ 
+ struct kvm_event {
+ 	struct list_head hash_entry;
+-	struct rb_node rb;
+ 
+ 	struct perf_kvm_stat *perf_kvm;
+ 	struct event_key key;
+@@ -75,9 +74,6 @@ struct exit_reasons_table {
+ 	const char *reason;
  };
  
- typedef int (*key_cmp_fun)(struct kvm_event*, struct kvm_event*, int);
+-#define EVENTS_BITS		12
+-#define EVENTS_CACHE_SIZE	(1UL << EVENTS_BITS)
+-
+ struct perf_kvm_stat {
+ 	struct perf_tool    tool;
+ 	struct record_opts  opts;
+@@ -97,7 +93,6 @@ struct perf_kvm_stat {
+ 
+ 	struct kvm_events_ops *events_ops;
+ 	key_cmp_fun compare;
+-	struct list_head kvm_events_cache[EVENTS_CACHE_SIZE];
+ 
+ 	u64 total_time;
+ 	u64 total_count;
+@@ -106,8 +101,6 @@ struct perf_kvm_stat {
+ 
+ 	struct intlist *pid_list;
+ 
+-	struct rb_root result;
+-
+ 	int timerfd;
+ 	unsigned int display_time;
+ 	bool live;
 -- 
 2.34.1
 
