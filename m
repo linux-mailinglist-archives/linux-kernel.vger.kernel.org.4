@@ -2,173 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2A46A5920
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E9F6A5926
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 13:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjB1Me4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 07:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S230467AbjB1Mfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 07:35:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1Mez (ORCPT
+        with ESMTP id S229688AbjB1Mfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:34:55 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6761C30C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:34:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3017F21A4D;
-        Tue, 28 Feb 2023 12:34:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1677587693; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QeeXlra3VuU6LyC91LsHvOXdehf+ph2YN1KKB1StGM0=;
-        b=DP/MAMEsNUcW3z6h43PYUe9qldRXRFYbC8Y2SyPBAD6pxoW9VxwYhZbdz4KyudAWP2gFof
-        cBKbXU6Fu2SoJhsjXHXPUttBehbs5J2tIKiS7xSJ2xP1jm4RdP19d3eVhErcxV8wE0sj5J
-        f9Lw7no5m8ZdRKBI88GgymRxFFbizzI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1677587693;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QeeXlra3VuU6LyC91LsHvOXdehf+ph2YN1KKB1StGM0=;
-        b=9Azfkn2YB6UkHvWoTx2jSmQ/F6Tgo9NGRacekgcA3rZ4sZQMT717bQFRFwt0hmc+8Vn7KH
-        8iYLHfOTkeDpRFCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EC4401333C;
-        Tue, 28 Feb 2023 12:34:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id S2XWN+z0/WO0EgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 28 Feb 2023 12:34:52 +0000
-Message-ID: <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
-Date:   Tue, 28 Feb 2023 13:34:52 +0100
+        Tue, 28 Feb 2023 07:35:46 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4D82ED55
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:35:44 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id d6so5539340pgu.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 04:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KhWe8sLMccBLRrPsWcYHRaaybNDxZ0zi1CaL4lrAFvc=;
+        b=iJtweGpDdSTqN2kXZgyLyRHBqBC9GUkRRoy6rynxSdBwc/xi7Vbq/3f2N94C5mLujq
+         w9EG2wiCllviId6GNDlLkbXFwd3mXYXseKL95wKTB6KmEQRjBHJCGbOqKmbCti3DI+ge
+         /jjBYZdSq+2BssKiI8DTPI5TE4zup3ctckwnYAZoqcHmwlnU/lF34WLBlpPh5DbmZW1x
+         OnYjrkr1l05OXbW3P7CY1B6CopBD27raod6Z7rbWXHCofjgDskhx3QBlMTRKsjTh8d0+
+         GZZSBSrne7Q72pybnSMNmSC0ZLCujlURHmZoqWO/H6Tviay4BkJWod6ZfRaG33ptLhER
+         A9Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KhWe8sLMccBLRrPsWcYHRaaybNDxZ0zi1CaL4lrAFvc=;
+        b=yYdIs8mNqZQ+iSvpRIJMwsxwaf/dMA/eO7G6loEzhfdbd29utgBaNfo40OmCdsYon3
+         gN2ehkAfntvcMYxL48SiUVo8uXPDRNCey5rWgmqLnK+g38SRlJ254L0YCP64KoMLsPAZ
+         wVSu6l8rUzog1AGUAZ75u7yRKoex6MMmgsA7lqN+1vBtYk4cRL27yabEC11PRa1SMFD0
+         gqvlPnMg0A2AF/qWXqsDgak3FNQ4QB81r2jiAfcP7XAjwpNubo/MtU5iEbIZB0MVgIpa
+         Z0gIL2yzY2/dFyiDV+y8fqQ5GVKbHImaT0eVMszlj3bLcIlm38ZI5A3eNXYZPPj0lbyY
+         OhYA==
+X-Gm-Message-State: AO0yUKVGd+MxRLzwnRmtXSbOAv4zh9QtJQyBlb8xtJas90zXVLgQ4YKR
+        9JMhhCJA41NSd+8bPj45+aEmAXHiFjW0TMQ5DmkyNuORFi+nCScRs3o=
+X-Google-Smtp-Source: AK7set982toa957BfsESaT9p96TlyfxqaTB6xdGDJ93u6JOrGrfrsLteEwl7OmrMxFUw0AK+STVOgMbUnjwZ3PQRWHE=
+X-Received: by 2002:a63:7807:0:b0:502:f4c6:b96 with SMTP id
+ t7-20020a637807000000b00502f4c60b96mr701622pgc.5.1677587743821; Tue, 28 Feb
+ 2023 04:35:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] drm/virtio: Add option to disable KMS support
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>
-References: <20230227173800.2809727-1-robdclark@gmail.com>
- <44e67d88-fce6-a1c1-79a9-a937e64a32bb@collabora.com>
- <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------kib98pZnBxR2VOueRxXAADTt"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230228113305.83751-1-jiaxun.yang@flygoat.com> <20230228113305.83751-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230228113305.83751-2-jiaxun.yang@flygoat.com>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Tue, 28 Feb 2023 13:35:32 +0100
+Message-ID: <CAM1=_QTwYqAH+21fNnG3aBW-cV8vxtgM7h=enqZYaj2wbRnV8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, paulburton@kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------kib98pZnBxR2VOueRxXAADTt
-Content-Type: multipart/mixed; boundary="------------czIRFMXLxzNN8JXBsG00EhqZ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Clark <robdclark@gmail.com>,
- Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc: Rob Clark <robdclark@chromium.org>,
- open list <linux-kernel@vger.kernel.org>, dri-devel@lists.freedesktop.org,
- Gurchetan Singh <gurchetansingh@chromium.org>,
- Gerd Hoffmann <kraxel@redhat.com>, Ryan Neph <ryanneph@chromium.org>,
- David Airlie <airlied@redhat.com>,
- "open list:VIRTIO GPU DRIVER" <virtualization@lists.linux-foundation.org>
-Message-ID: <fb70356e-4e13-1858-9e1a-e886f5918030@suse.de>
-Subject: Re: [PATCH v3] drm/virtio: Add option to disable KMS support
-References: <20230227173800.2809727-1-robdclark@gmail.com>
- <44e67d88-fce6-a1c1-79a9-a937e64a32bb@collabora.com>
- <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com>
-In-Reply-To: <CAF6AEGsT8_o+v0vzGu1nyh6Z82pj8FnGUdMFc0Lq+4OWoSjRBQ@mail.gmail.com>
+Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 
---------------czIRFMXLxzNN8JXBsG00EhqZ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-SGkNCg0KQW0gMjcuMDIuMjMgdW0gMTk6MTUgc2NocmllYiBSb2IgQ2xhcms6DQo+IE9uIE1v
-biwgRmViIDI3LCAyMDIzIGF0IDk6NTcgQU0gRG1pdHJ5IE9zaXBlbmtvDQo+IDxkbWl0cnku
-b3NpcGVua29AY29sbGFib3JhLmNvbT4gd3JvdGU6DQo+Pg0KPj4gT24gMi8yNy8yMyAyMDoz
-OCwgUm9iIENsYXJrIHdyb3RlOg0KPj4gLi4uDQo+Pj4gKyAgICAgaWYgKElTX0VOQUJMRUQo
-Q09ORklHX0RSTV9WSVJUSU9fR1BVX0tNUykpIHsNCj4+PiArICAgICAgICAgICAgIC8qIGdl
-dCBkaXNwbGF5IGluZm8gKi8NCj4+PiArICAgICAgICAgICAgIHZpcnRpb19jcmVhZF9sZSh2
-Z2Rldi0+dmRldiwgc3RydWN0IHZpcnRpb19ncHVfY29uZmlnLA0KPj4+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIG51bV9zY2Fub3V0cywgJm51bV9zY2Fub3V0cyk7DQo+Pj4g
-KyAgICAgICAgICAgICB2Z2Rldi0+bnVtX3NjYW5vdXRzID0gbWluX3QodWludDMyX3QsIG51
-bV9zY2Fub3V0cywNCj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBWSVJUSU9fR1BVX01BWF9TQ0FOT1VUUyk7DQo+Pj4gKyAgICAgICAgICAgICBpZiAo
-IXZnZGV2LT5udW1fc2Nhbm91dHMpIHsNCj4+PiArICAgICAgICAgICAgICAgICAgICAgLyoN
-Cj4+PiArICAgICAgICAgICAgICAgICAgICAgICogSGF2aW5nIGFuIEVESUQgYnV0IG5vIHNj
-YW5vdXRzIGlzIG5vbi1zZW5zaWNhbCwNCj4+PiArICAgICAgICAgICAgICAgICAgICAgICog
-YnV0IGl0IGlzIHBlcm1pdHRlZCB0byBoYXZlIG5vIHNjYW5vdXRzIGFuZCBubw0KPj4+ICsg
-ICAgICAgICAgICAgICAgICAgICAgKiBFRElEIChpbiB3aGljaCBjYXNlIERSSVZFUl9NT0RF
-U0VUIGFuZA0KPj4+ICsgICAgICAgICAgICAgICAgICAgICAgKiBEUklWRVJfQVRPTUlDIGFy
-ZSBub3QgYWR2ZXJ0aXNlZCkNCj4+PiArICAgICAgICAgICAgICAgICAgICAgICovDQo+Pj4g
-KyAgICAgICAgICAgICAgICAgICAgIGlmICh2Z2Rldi0+aGFzX2VkaWQpIHsNCj4+PiArICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBEUk1fRVJST1IoIm51bV9zY2Fub3V0cyBpcyB6
-ZXJvXG4iKTsNCj4+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZXQgPSAtRUlO
-VkFMOw0KPj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyX3NjYW5v
-dXRzOw0KPj4+ICsgICAgICAgICAgICAgICAgICAgICB9DQo+Pj4gKyAgICAgICAgICAgICAg
-ICAgICAgIGRldi0+ZHJpdmVyX2ZlYXR1cmVzICY9IH4oRFJJVkVSX01PREVTRVQgfCBEUklW
-RVJfQVRPTUlDKTsNCj4+DQo+PiBJZiBpdCdzIG5vdyBjb25maWd1cmFibGUgYnkgaG9zdCwg
-d2h5IGRvIHdlIG5lZWQgdGhlDQo+PiBDT05GSUdfRFJNX1ZJUlRJT19HUFVfS01TPw0KPiAN
-Cj4gQmVjYXVzZSBhIGtlcm5lbCBjb25maWcgb3B0aW9uIG1ha2VzIGl0IG1vcmUgb2J2aW91
-cyB0aGF0DQo+IG1vZGVzZXQvYXRvbWljIGlvY3RscyBhcmUgYmxvY2tlZC4gIFdoaWNoIG1h
-a2VzIGl0IG1vcmUgb2J2aW91cyBhYm91dA0KPiB3aGVyZSBhbnkgcG90ZW50aWFsIHNlY3Vy
-aXR5IGlzc3VlcyBhcHBseSBhbmQgd2hlcmUgZml4ZXMgbmVlZCB0byBnZXQNCj4gYmFja3Bv
-cnRlZCB0by4gIFRoZSBjb25maWcgb3B0aW9uIGlzIHRoZSBvbmx5IHRoaW5nIF9JXyB3YW50
-LA0KPiBldmVyeXRoaW5nIGVsc2UgaXMganVzdCBhIGJvbnVzIHRvIGhlbHAgb3RoZXIgcGVv
-cGxlJ3MgdXNlLWNhc2VzLg0KDQpJIGZpbmQgdGhpcyB2ZXJ5IHZhZ3VlLiBXaGF0J3MgdGhl
-IHNlY3VyaXR5IHRocmVhZD8NCg0KQW5kIGlmIHRoZSBjb25maWcgb3B0aW9uIGlzIHVzZWZ1
-bCwgc2hvdWxkbid0IGl0IGJlIERSTS13aWRlPyBUaGUgDQptb2Rlc2V0dGluZyBpb2N0bCBj
-YWxscyBhcmUgc2hhcmVkIGFtb25nIGFsbCBkcml2ZXJzLg0KDQpCZXN0IHJlZ2FyZHMNClRo
-b21hcw0KDQo+IA0KPiBCUiwNCj4gLVINCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3Jh
-cGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFu
-eSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIg
-MzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
-
-
---------------czIRFMXLxzNN8JXBsG00EhqZ--
-
---------------kib98pZnBxR2VOueRxXAADTt
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP99OwFAwAAAAAACgkQlh/E3EQov+Di
-BA//Z1MgDU0ETg5Iwn0/l0njsy1mNJ4yWhHTXumJfUH/jzwV/4jUUFsd+itsCWy7ZuHvdfA7OXyr
-c5mNF0hp/4y2g3sDfHRqyeINah8iRECwjC9usv3bOZDUwfjEa3AJ4PvB7QdIsi6Wi+8urXd49DyI
-PHF9eODDhtf8uRRoneiVWlefR4WjjKR93jvpfWZtEPz8/TK8OpDofswBr7pseB0eXjYPqIKmwrLS
-Wzf/tSPmbE6k6lq/BZOQOErkRawqpTH/5V9Q+RZOOUkcsBUpf8yiLrPEj6OGzrDWfAFvxPAvgTd4
-S6FKH2tLETcmHEJBzVOTN07UL7PrcGFnFJ0x+3SmdIYH9afbmzEN2+YCgCnlzzN9RFLqpvTdqX3a
-Wp5g/OpNBGIwPBvkMz3qHCTJdkCRaEY/jBFEZkzxZL7iLU8MMf036nfX6n4ByC0tMAxhCd3YEMbx
-yxxR0rq74XBP0ji1Uzr65EKmwKWENNLHsrdz5QqxItCzPsvWSc/D+0FMAMD6ZC/V47SUFO+CGBsQ
-eFv/hh4b137twQ6CnUfje4/QX8jkdIkks4aJ2qwlldktRiO0EpBeDOeWqsK+S2t8r/87fETomNEe
-ldB1OCLCpjjz7Cv6ekuNPrFw3P92X1941cYOh8KiQMy2gGzuC2oIx6GzrSC5wlxTMl0M4X4Rt0hS
-Vxs=
-=mCC7
------END PGP SIGNATURE-----
-
---------------kib98pZnBxR2VOueRxXAADTt--
+On Tue, Feb 28, 2023 at 12:33=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.c=
+om> wrote:
+>
+> For DADDI errata we just workaround by disable immediate operation
+> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+>
+> All other use cases in JIT won't cause overflow thus they are all safe.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Drop 64BIT ifdef
+> ---
+>  arch/mips/Kconfig            | 1 -
+>  arch/mips/net/bpf_jit_comp.c | 4 ++++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 37072e15b263..df0910e3895c 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -64,7 +64,6 @@ config MIPS
+>         select HAVE_DMA_CONTIGUOUS
+>         select HAVE_DYNAMIC_FTRACE
+>         select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> -                               !CPU_DADDI_WORKAROUNDS && \
+>                                 !CPU_R4000_WORKAROUNDS && \
+>                                 !CPU_R4400_WORKAROUNDS
+>         select HAVE_EXIT_THREAD
+> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+> index b17130d510d4..a40d926b6513 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
+>                 /* All legal eBPF values are valid */
+>                 return true;
+>         case BPF_ADD:
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+>                 /* imm must be 16 bits */
+>                 return imm >=3D -0x8000 && imm <=3D 0x7fff;
+>         case BPF_SUB:
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+>                 /* -imm must be 16 bits */
+>                 return imm >=3D -0x7fff && imm <=3D 0x8000;
+>         case BPF_AND:
+> --
+> 2.37.1 (Apple Git-137.1)
+>
