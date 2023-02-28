@@ -2,190 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5756A54C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135936A54CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 09:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjB1Iu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 03:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
+        id S231174AbjB1IwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 03:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjB1IuS (ORCPT
+        with ESMTP id S230525AbjB1Ivm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 03:50:18 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FF11A97E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:50:10 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536d63d17dbso199086627b3.22
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 00:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677574209;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=th38ntbA4Oc2oiVVTEFN7kVCZXMfBHW5bqzoJX/NKxM=;
-        b=Qx1HMjnOH9OsA3ycuQn28p/IaZ+Hp3kNuLp2QUi9h0Ycfnoty+yQNpg+WRxNuY/vYp
-         jOY7XFohXtJylm8Zhy5PNGpA0U7IS0oAfCING0t+nz1L/hwrLlAjdn6QB4BQ7g4vN6HH
-         OAiYlZHTTmYK4E/ibEh6T98sf4VZmgYow+qhvCLJm9G0PRCymGehRtI1hbaEgguuPSwP
-         c7t1cNU/lIriIMXf5vdSZTLjo71hA+1rjgeHrdym+NEDcQOTi8Gy7EZ3GPG7NMQg7zho
-         MG8uusZE7ELVwRFmlhIaXFZ9jTXMsB870R8rLfTvIx/zMtY4Y5kaKuhA8atMfdGBrjnt
-         RIMw==
+        Tue, 28 Feb 2023 03:51:42 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A752C65F;
+        Tue, 28 Feb 2023 00:51:23 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id l18so8564908qtp.1;
+        Tue, 28 Feb 2023 00:51:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677574209;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=th38ntbA4Oc2oiVVTEFN7kVCZXMfBHW5bqzoJX/NKxM=;
-        b=ObC1h4bpj3igu82H3vkJPX3H3VJOoEngi7EozA66PoX0K+RkItC6iBgZox6AOjxhQx
-         +LkPwoml/+ReSS5ZCcj5Gozk03UlceXBytAgJlWLaMGV02HGGcixykBQG1zffW1z5qQF
-         eZCbozOC6D1GLSf73gZkd54AGNWCFNhJ9uRv3h6tRVph3sTWDT5625rqApaLv2RQ7L/O
-         5FA65bxEjwVm8vDIvak8VPavHoD4MkI5JEhid2rg27pJ3C18lLrgxC1+9eedb6S274Ax
-         1YmBEMdVVJ5857ihxk2Aiarm2/Prd55bTadwFgKhbSQPTv/jEUrszOe7hgWEJ2QgrMs7
-         3GGg==
-X-Gm-Message-State: AO0yUKXXHWuwOBJr+WAo3jKzry0OYDtP/t/M1aS+LUvenyj/Zw+I18Sa
-        q5UULMdlnJ3Xy6SDIdHo56rYuEihynDIZMzN
-X-Google-Smtp-Source: AK7set+DvIV3bw19wB6Hwqeb1fxI1Ob9E6fp4FkYQsDq5MINr8X9kGIXdnH2rMDNI8ge0fm/8/tJGYKLqoW41WxG
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a81:ad67:0:b0:525:2005:7dc2 with SMTP
- id l39-20020a81ad67000000b0052520057dc2mr1184169ywk.1.1677574209698; Tue, 28
- Feb 2023 00:50:09 -0800 (PST)
-Date:   Tue, 28 Feb 2023 08:50:02 +0000
-In-Reply-To: <20230228085002.2592473-1-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20230228085002.2592473-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
-Message-ID: <20230228085002.2592473-3-yosryahmed@google.com>
-Subject: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        Yosry Ahmed <yosryahmed@google.com>
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BcmyBR9r9vfVMy46Zbtjihg4aGWAqOJpiApC3nmtT5U=;
+        b=VkIehAxmOHYsetkOTlsxfic02WHwjpYg6raHWgDamr0Rwga0QBniT6ifY+XznBhxGZ
+         C2/ZMOxnVE2Rpb7i9IyxY2SC4H7TotS7kTqDbR7pBomeK6eYH2MpbvtvGDirmgRlZx3D
+         XXkgbvtA20FZowzh8itdVN55V0tIAcyfdHdYy4iEqEfOO0S6Q7f4Ot+jWsoyKPuZahMm
+         WtvfZGb247IqVgu8ZtwA0MeGR8yEhllC2EYh2kiYWSYqUJzwXziPCRyc5owRdRCrZ1rr
+         Lt0hTnIsG2QKr4YqY9aud3y0BnOyajUryX7QaEZj9OHd5swUj6DktoCn7uBI0ZsmVAlZ
+         4rNg==
+X-Gm-Message-State: AO0yUKWe4MNeuHvxUM0n30RZF5Mw/677/Rt3n0hIBTAkuQYuXk1+BNIL
+        nSCOeecKCN1T3iIFfBmVlhwtSHRzUp7asA==
+X-Google-Smtp-Source: AK7set82mB5ZQohThxITbvXngTvY3SbUv7JJ6gWv3nhM+jxiv0K674MpNpK/jJqAXWvnpWTW0lghSA==
+X-Received: by 2002:a05:622a:50:b0:3bf:e2ff:4c35 with SMTP id y16-20020a05622a005000b003bfe2ff4c35mr3753015qtw.1.1677574282471;
+        Tue, 28 Feb 2023 00:51:22 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id s67-20020a374546000000b007424239e4casm6478232qka.117.2023.02.28.00.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 00:51:22 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-536c2a1cc07so251284597b3.5;
+        Tue, 28 Feb 2023 00:51:22 -0800 (PST)
+X-Received: by 2002:a25:8d0e:0:b0:a67:c976:c910 with SMTP id
+ n14-20020a258d0e000000b00a67c976c910mr772114ybl.7.1677574281918; Tue, 28 Feb
+ 2023 00:51:21 -0800 (PST)
+MIME-Version: 1.0
+References: <20230214132052.1556699-1-arnd@kernel.org>
+In-Reply-To: <20230214132052.1556699-1-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Feb 2023 09:51:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVD9VXwv6DjjKQNvxpXehvjR4pxr76yF=zt903OuU6ywA@mail.gmail.com>
+Message-ID: <CAMuHMdVD9VXwv6DjjKQNvxpXehvjR4pxr76yF=zt903OuU6ywA@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: qcom_battmgr: remove bogus do_div()
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We keep track of different types of reclaimed pages through
-reclaim_state->reclaimed, and we add them to the reported number of
-reclaimed pages. For non-memcg reclaim, this makes sense. For memcg
-reclaim, we have no clue if those pages are charged to the memcg under
-reclaim.
+On Tue, Feb 14, 2023 at 2:23 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The argument to do_div() is a 32-bit integer, and it was read from a
+> 32-bit register so there is no point in doing a 64-bit division on it.
+>
+> On 32-bit arm, do_div() causes a compile-time warning here:
+>
+> include/asm-generic/div64.h:238:22: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>   238 |   __rem = __div64_32(&(n), __base); \
+>       |                      ^~~~
+>       |                      |
+>       |                      unsigned int *
+> drivers/power/supply/qcom_battmgr.c:1130:4: note: in expansion of macro 'do_div'
+>  1130 |    do_div(battmgr->status.percent, 100);
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Slab pages are shared by different memcgs, so a freed slab page may have
-only been partially charged to the memcg under reclaim. The same goes
-for clean file pages from pruned inodes (on highmem systems) or xfs
-buffer pages, there is no way to link them to the memcg under reclaim.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Stop reporting those freed pages as reclaimed pages during memcg
-reclaim. This should make the return value of writing to memory.reclaim,
-and may help reduce unnecessary reclaim retries during memcg charging.
+Gr{oetje,eeting}s,
 
-Generally, this should make the return value of
-try_to_free_mem_cgroup_pages() more accurate. In some limited cases (e.g.
-freed a slab page that was mostly charged to the memcg under reclaim),
-the return value of try_to_free_mem_cgroup_pages() can be
-underestimated, but this should be fine. The freed pages will be
-uncharged anyway, and we can charge the memcg the next time around as we
-usually do memcg reclaim in a retry loop.
+                        Geert
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- mm/vmscan.c | 50 +++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 39 insertions(+), 11 deletions(-)
-
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 8846531e85a4..c53659221965 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -188,6 +188,16 @@ struct scan_control {
-  */
- int vm_swappiness = 60;
- 
-+static bool cgroup_reclaim(struct scan_control *sc)
-+{
-+	return sc->target_mem_cgroup;
-+}
-+
-+static bool global_reclaim(struct scan_control *sc)
-+{
-+	return !sc->target_mem_cgroup || mem_cgroup_is_root(sc->target_mem_cgroup);
-+}
-+
- static void set_task_reclaim_state(struct task_struct *task,
- 				   struct reclaim_state *rs)
- {
-@@ -217,7 +227,35 @@ EXPORT_SYMBOL(report_freed_pages);
- static void add_non_vmscan_reclaimed(struct scan_control *sc,
- 				     struct reclaim_state *rs)
- {
--	if (rs) {
-+	/*
-+	 * Currently, reclaim_state->reclaimed includes three types of pages
-+	 * freed outside of vmscan:
-+	 * (1) Slab pages.
-+	 * (2) Clean file pages from pruned inodes.
-+	 * (3) XFS freed buffer pages.
-+	 *
-+	 * For all of these cases, we have no way of finding out whether these
-+	 * pages were related to the memcg under reclaim. For example, a freed
-+	 * slab page could have had only a single object charged to the memcg
-+	 * under reclaim. Also, populated inodes are not on shrinker LRUs
-+	 * anymore except on highmem systems.
-+	 *
-+	 * Instead of over-reporting the reclaimed pages in a memcg reclaim,
-+	 * only count such pages in system-wide reclaim. This prevents
-+	 * unnecessary retries during memcg charging and false positive from
-+	 * proactive reclaim (memory.reclaim).
-+	 *
-+	 * For uncommon cases were the freed pages were actually significantly
-+	 * charged to the memcg under reclaim, and we end up under-reporting, it
-+	 * should be fine. The freed pages will be uncharged anyway, even if
-+	 * they are not reported properly, and we will be able to make forward
-+	 * progress in charging (which is usually in a retry loop).
-+	 *
-+	 * We can go one step further, and report the uncharged objcg pages in
-+	 * memcg reclaim, to make reporting more accurate and reduce
-+	 * under-reporting, but it's probably not worth the complexity for now.
-+	 */
-+	if (rs && !cgroup_reclaim(sc)) {
- 		sc->nr_reclaimed += rs->reclaimed;
- 		rs->reclaimed = 0;
- 	}
-@@ -463,16 +501,6 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
- 	up_read(&shrinker_rwsem);
- }
- 
--static bool cgroup_reclaim(struct scan_control *sc)
--{
--	return sc->target_mem_cgroup;
--}
--
--static bool global_reclaim(struct scan_control *sc)
--{
--	return !sc->target_mem_cgroup || mem_cgroup_is_root(sc->target_mem_cgroup);
--}
--
- /**
-  * writeback_throttling_sane - is the usual dirty throttling mechanism available?
-  * @sc: scan_control in question
 -- 
-2.39.2.722.g9855ee24e9-goog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
