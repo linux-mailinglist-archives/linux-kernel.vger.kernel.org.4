@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480F66A61C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1363A6A61D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 22:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjB1Vwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Feb 2023 16:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S229722AbjB1VzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Feb 2023 16:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjB1Vws (ORCPT
+        with ESMTP id S229437AbjB1VzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Feb 2023 16:52:48 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8BF9035
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:52:47 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id h8so8662912plf.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1677621166;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w+zwAHBnS5+TovEmhkYJhNFoHDMUmuJ8ck612nZS1t8=;
-        b=omA2S4LjqCtvzyGP293QcxTJ7Lo75f7JjOAJP3W5yp4CiKRAVuH5MtWpvo7ryDtMFz
-         i4jDGzLy7aG5c07lAXorf7etqeUG4ti2THkpl4Pl5N4VjhCaAQvBh+zuvqBpue/ChW5q
-         GPkiN80WRdLr/ITBQd4kPSb2Wp7rH42C3abAIZzxPmPdVZMnjCxDg7rbUbaOeiom2pjP
-         BhZ8vn+XysK7S+6EWyghBcLpbo20XZl3pKYBT+y+773NB05P05laLT6RGZyuV0IwgejA
-         cn3a/8Rb6R9Gl3jRiEUDxW+b9Ut/C2i9kNS1PvV+OEaP/Hp7CL/b+0dweVERR7XEfGGO
-         ocxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677621166;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w+zwAHBnS5+TovEmhkYJhNFoHDMUmuJ8ck612nZS1t8=;
-        b=wilXrtbWudhhtxWpnnsw9fBh2yX2Px6Ey8QBS0gX+SReonaeT6vxZZZLX73lOYhkKu
-         GOM0TXIcXiUJSKpKUeb81uVywMMZKaLtmJdTN4A60nOoDPA9cOpxOSJp/BP3jCMyDbuX
-         Znu/RgkZdNDAxSpmHFrfmAhiLeq9SO6ELCE3QeeBMFnFmEkBGVd5V0zPLO34/8zTakff
-         py8Xd17YLAee4Bx8vFgdtEH6WEX7eI5mYP7kN6LO59Tv5Y+8cHp0lUweS426OqeZlJLX
-         GWsh06pNrWd4fYaf6nRaj1NzN3HHKCYMnKzGz4wqRyeYwSpCsv663Js0WO9Ykt5rZ7OJ
-         7p2g==
-X-Gm-Message-State: AO0yUKUrX1CNJshnk9VEtgxWWv77+/Zb4F+RbcYVm2gLtYLxrvs5nr7N
-        zxokVpueSeHD2+q6oNezvSYkkX+KpitttSUE/4M=
-X-Google-Smtp-Source: AK7set/juip8p0MiLlYoPEIxqV9PMajgZBFayKyd5KvUfxhWs1VFVopVgOhH6LHgXjliJBQQwUAyQA==
-X-Received: by 2002:a17:902:e851:b0:19a:839f:435 with SMTP id t17-20020a170902e85100b0019a839f0435mr13658248plg.3.1677621166383;
-        Tue, 28 Feb 2023 13:52:46 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id jj13-20020a170903048d00b001967692d6f5sm6945909plb.227.2023.02.28.13.52.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 13:52:45 -0800 (PST)
-Date:   Tue, 28 Feb 2023 13:52:45 -0800 (PST)
-X-Google-Original-Date: Tue, 28 Feb 2023 13:51:58 PST (-0800)
-Subject:     Re: [PATCH 0/2] riscv: support ELF format binaries in nommu mode
-In-Reply-To: <20230228135126.1686427-1-gerg@kernel.org>
-CC:     linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, gerg@kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     gerg@kernel.org, damien.lemoal@opensource.wdc.com
-Message-ID: <mhng-20faeb04-8ed4-4759-8f13-aef3d2446d15@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 28 Feb 2023 16:55:03 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5F532E61
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Feb 2023 13:54:54 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pX7vm-0005hs-FY; Tue, 28 Feb 2023 22:54:42 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com
+Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
+        guoren@kernel.org, christoph.muellner@vrull.eu, heiko@sntech.de,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: [PATCH RFC 0/2] RISC-V: T-Head vector handling
+Date:   Tue, 28 Feb 2023 22:54:33 +0100
+Message-Id: <20230228215435.3366914-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 05:51:24 PST (-0800), gerg@kernel.org wrote:
-> The following changes add the ability to run ELF format binaries when
-> running RISC-V in nommu mode. That support is actually part of the
-> ELF-FDPIC loader, so these changes are all about making that work on
-> RISC-V.
->
-> The first issue to deal with is making the ELF-FDPIC loader capable of
-> handling 64-bit ELF files. As coded right now it only supports 32-bit
-> ELF files.
->
-> Secondly some changes are required to enable and compile the ELF-FDPIC
-> loader on RISC-V and to pass the ELF-FDPIC mapping addresses through to
-> user space when execing the new program.
->
-> These changes have not been used to run actual ELF-FDPIC binaries.
-> It is used to load and run normal ELF - compiled -pie format. Though the
-> underlying changes are expected to work with full ELF-FDPIC binaries if
-> or when that is supported on RISC-V in gcc.
->
-> To avoid needing changes to the C-library (tested with uClibc-ng
-> currently) there is a simple runtime dynamic loader (interpreter)
-> available to do the final relocations, https://github.com/gregungerer/uldso.
-> The nice thing about doing it this way is that the same program
-> binary can also be loaded with the usual ELF loader in MMU linux.
->
-> The motivation here is to provide an easy to use alternative to the
-> flat format binaries normally used for RISC-V nommu based systems.
->
-> Signed-off-by: Greg Ungerer <gerg@kernel.org>
-> ---
->
->  arch/riscv/include/asm/elf.h         |   11 +++++++++-
->  arch/riscv/include/asm/mmu.h         |    4 +++
->  arch/riscv/include/uapi/asm/ptrace.h |    5 ++++
->  fs/Kconfig.binfmt                    |    2 -
->  fs/binfmt_elf_fdpic.c                |   38 +++++++++++++++++------------------
->  include/linux/elf-fdpic.h            |   14 +++++++++++-
->  include/uapi/linux/elf-fdpic.h       |   15 +++++++++++++
->  7 files changed, 67 insertions(+), 22 deletions(-)
+From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-Adding Damien, as IIRC he's had some hacked up userspace bits for the 
-K210.  I'm yet to get anything running, but it'd be great if we get this 
-to a point where I can actually boot test this on QEMU (I'm just doing 
-builds now).
+As is widely known the T-Head C9xx cores used for example in the
+Allwinner D1 implement an older non-ratified variant of the vector spec.
 
-Given that it's the second week of the merge window and this is a bunch 
-of new uABI it seems best to hold off until the next cycle.  I poked 
-around and don't see anything wrong, but I'll try and take a more 
-detailed look after the merge window.
+While userspace will probably have a lot more problems implementing
+support for both, on the kernel side the needed changes are actually
+somewhat small'ish and can be handled via alternatives somewhat nicely.
 
-Thanks!
+With this patchset I could run the same userspace program (picked from
+some riscv-vector-test repository) that does some vector additions on
+both qemu and a d1-nezha board. On both platforms it ran sucessfully and
+even produced the same results.
+
+
+As can be seen in the todo list, there are 2 places where the changed
+SR_VS location still needs to be handled in the next revision
+(assembly + ALTERNATIVES + constants + probably stringify resulted in
+ some grey hair so far already)
+
+
+ToDo:
+- follow along with the base vector patchset
+- handle SR_VS access in _save_context and _secondary_start_sbi
+
+
+Heiko Stuebner (2):
+  RISC-V: define the elements of the VCSR vector CSR
+  RISC-V: add T-Head vector errata handling
+
+ arch/riscv/Kconfig.erratas           |  13 +++
+ arch/riscv/errata/thead/errata.c     |  32 ++++++
+ arch/riscv/include/asm/csr.h         |  31 +++++-
+ arch/riscv/include/asm/errata_list.h |  62 +++++++++++-
+ arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
+ 5 files changed, 261 insertions(+), 16 deletions(-)
+
+-- 
+2.39.0
+
