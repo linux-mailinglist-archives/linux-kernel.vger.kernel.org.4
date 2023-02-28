@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCFB6A4FF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6306A4FFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Feb 2023 01:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjB1AGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Feb 2023 19:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S229632AbjB1AIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Feb 2023 19:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjB1AF6 (ORCPT
+        with ESMTP id S229511AbjB1AIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Feb 2023 19:05:58 -0500
+        Mon, 27 Feb 2023 19:08:34 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EC527D7F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 16:05:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6961BBBAD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Feb 2023 16:07:57 -0800 (PST)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1pWnVA-000552-3j; Tue, 28 Feb 2023 01:05:52 +0100
+        id 1pWnVA-000552-Fz; Tue, 28 Feb 2023 01:05:52 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     palmer@rivosinc.com
 Cc:     greentime.hu@sifive.com, conor@kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         christoph.muellner@vrull.eu, heiko@sntech.de,
         Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: [PATCH RFC v2 09/16] RISC-V: crypto: update perl include with helpers for vector (crypto) instructions
-Date:   Tue, 28 Feb 2023 01:05:37 +0100
-Message-Id: <20230228000544.2234136-10-heiko@sntech.de>
+Subject: [PATCH RFC v2 10/16] RISC-V: crypto: add Zvkb accelerated GCM GHASH implementation
+Date:   Tue, 28 Feb 2023 01:05:38 +0100
+Message-Id: <20230228000544.2234136-11-heiko@sntech.de>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230228000544.2234136-1-heiko@sntech.de>
 References: <20230228000544.2234136-1-heiko@sntech.de>
@@ -44,468 +44,598 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-The openSSL scripts use a number of helpers for handling vector
-instructions and instructions from the vector-crypto-extensions.
-
-Therefore port these over from openSSL.
+Add a gcm hash implementation using the Zvkb crypto extension.
+It gets possibly registered alongside the Zbc-based variant, with a higher
+priority so that the crypto subsystem will be able to select the most
+performant variant, but the algorithm itself will still be part of the
+crypto selftests that run during registration.
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 ---
- arch/riscv/crypto/riscv.pm | 433 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 431 insertions(+), 2 deletions(-)
+ arch/riscv/crypto/Kconfig               |   3 +-
+ arch/riscv/crypto/Makefile              |   8 +-
+ arch/riscv/crypto/ghash-riscv64-glue.c  | 147 ++++++++++
+ arch/riscv/crypto/ghash-riscv64-zvkb.pl | 349 ++++++++++++++++++++++++
+ 4 files changed, 505 insertions(+), 2 deletions(-)
+ create mode 100644 arch/riscv/crypto/ghash-riscv64-zvkb.pl
 
-diff --git a/arch/riscv/crypto/riscv.pm b/arch/riscv/crypto/riscv.pm
-index 61bc4fc41a43..a707dd3a68fb 100644
---- a/arch/riscv/crypto/riscv.pm
-+++ b/arch/riscv/crypto/riscv.pm
-@@ -48,11 +48,34 @@ sub read_reg {
-     return $1;
+diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
+index 010adbbb058a..404fd9b3cb7c 100644
+--- a/arch/riscv/crypto/Kconfig
++++ b/arch/riscv/crypto/Kconfig
+@@ -4,7 +4,7 @@ menu "Accelerated Cryptographic Algorithms for CPU (riscv)"
+ 
+ config CRYPTO_GHASH_RISCV64
+ 	tristate "Hash functions: GHASH"
+-	depends on 64BIT && RISCV_ISA_ZBC
++	depends on 64BIT && (RISCV_ISA_ZBC || RISCV_ISA_V)
+ 	select CRYPTO_HASH
+ 	select CRYPTO_LIB_GF128MUL
+ 	help
+@@ -12,5 +12,6 @@ config CRYPTO_GHASH_RISCV64
+ 
+ 	  Architecture: riscv64 using one of:
+ 	  - ZBC extension
++	  - ZVKB vector crypto extension
+ 
+ endmenu
+diff --git a/arch/riscv/crypto/Makefile b/arch/riscv/crypto/Makefile
+index 0a158919e9da..8ab9a0ae8f2d 100644
+--- a/arch/riscv/crypto/Makefile
++++ b/arch/riscv/crypto/Makefile
+@@ -8,6 +8,9 @@ ghash-riscv64-y := ghash-riscv64-glue.o
+ ifdef CONFIG_RISCV_ISA_ZBC
+ ghash-riscv64-y += ghash-riscv64-zbc.o
+ endif
++ifdef CONFIG_RISCV_ISA_V
++ghash-riscv64-y += ghash-riscv64-zvkb.o
++endif
+ 
+ quiet_cmd_perlasm = PERLASM $@
+       cmd_perlasm = $(PERL) $(<) void $(@)
+@@ -15,4 +18,7 @@ quiet_cmd_perlasm = PERLASM $@
+ $(obj)/ghash-riscv64-zbc.S: $(src)/ghash-riscv64-zbc.pl
+ 	$(call cmd,perlasm)
+ 
+-clean-files += ghash-riscv64-zbc.S
++$(obj)/ghash-riscv64-zvkb.S: $(src)/ghash-riscv64-zvkb.pl
++	$(call cmd,perlasm)
++
++clean-files += ghash-riscv64-zbc.S ghash-riscv64-zvkb.S
+diff --git a/arch/riscv/crypto/ghash-riscv64-glue.c b/arch/riscv/crypto/ghash-riscv64-glue.c
+index 6a6c39e16702..004a1a11d7d8 100644
+--- a/arch/riscv/crypto/ghash-riscv64-glue.c
++++ b/arch/riscv/crypto/ghash-riscv64-glue.c
+@@ -11,6 +11,7 @@
+ #include <linux/crypto.h>
+ #include <linux/module.h>
+ #include <asm/simd.h>
++#include <asm/vector.h>
+ #include <crypto/ghash.h>
+ #include <crypto/internal/hash.h>
+ #include <crypto/internal/simd.h>
+@@ -21,6 +22,10 @@ void gcm_ghash_rv64i_zbc(u64 Xi[2], const u128 Htable[16],
+ void gcm_ghash_rv64i_zbc__zbkb(u64 Xi[2], const u128 Htable[16],
+ 			       const u8 *inp, size_t len);
+ 
++/* Zvkb (vector crypto with vclmul) based routines. */
++void gcm_ghash_rv64i_zvkb(u64 Xi[2], const u128 Htable[16],
++			  const u8 *inp, size_t len);
++
+ struct riscv64_ghash_ctx {
+ 	void (*ghash_func)(u64 Xi[2], const u128 Htable[16],
+ 			   const u8 *inp, size_t len);
+@@ -46,6 +51,140 @@ static int riscv64_ghash_init(struct shash_desc *desc)
+ 	return 0;
  }
  
-+my @vregs = map("v$_",(0..31));
-+my %vreglookup;
-+@vreglookup{@vregs} = @vregs;
++#ifdef CONFIG_RISCV_ISA_V
 +
-+sub read_vreg {
-+    my $vreg = lc shift;
-+    if (!exists($vreglookup{$vreg})) {
-+        my $trace = "";
-+        if ($have_stacktrace) {
-+            $trace = Devel::StackTrace->new->as_string;
-+        }
-+        die("Unknown vector register ".$vreg."\n".$trace);
-+    }
-+    if (!($vreg =~ /^v([0-9]+)$/)) {
-+        my $trace = "";
-+        if ($have_stacktrace) {
-+            $trace = Devel::StackTrace->new->as_string;
-+        }
-+        die("Could not process vector register ".$vreg."\n".$trace);
-+    }
-+    return $1;
++#define RISCV64_ZVK_SETKEY(VARIANT, GHASH)				\
++void gcm_init_rv64i_ ## VARIANT(u128 Htable[16], const u64 Xi[2]);	\
++static int riscv64_zvk_ghash_setkey_ ## VARIANT(struct crypto_shash *tfm,	\
++					   const u8 *key,		\
++					   unsigned int keylen)		\
++{									\
++	struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(tfm)); \
++	const u64 k[2] = { cpu_to_be64(((const u64 *)key)[0]),		\
++			   cpu_to_be64(((const u64 *)key)[1]) };	\
++									\
++	if (keylen != GHASH_BLOCK_SIZE)					\
++		return -EINVAL;						\
++									\
++	memcpy(&ctx->key, key, GHASH_BLOCK_SIZE);			\
++	kernel_rvv_begin();						\
++	gcm_init_rv64i_ ## VARIANT(ctx->htable, k);			\
++	kernel_rvv_end();						\
++									\
++	ctx->ghash_func = gcm_ghash_rv64i_ ## GHASH;			\
++									\
++	return 0;							\
 +}
 +
- # Helper functions
++static inline void __ghash_block(struct riscv64_ghash_ctx *ctx,
++				 struct riscv64_ghash_desc_ctx *dctx)
++{
++	if (crypto_simd_usable()) {
++		kernel_rvv_begin();
++		ctx->ghash_func(dctx->shash, ctx->htable,
++				dctx->buffer, GHASH_DIGEST_SIZE);
++		kernel_rvv_end();
++	} else {
++		crypto_xor((u8 *)dctx->shash, dctx->buffer, GHASH_BLOCK_SIZE);
++		gf128mul_lle((be128 *)dctx->shash, &ctx->key);
++	}
++}
++
++static inline void __ghash_blocks(struct riscv64_ghash_ctx *ctx,
++				  struct riscv64_ghash_desc_ctx *dctx,
++				  const u8 *src, unsigned int srclen)
++{
++	if (crypto_simd_usable()) {
++		kernel_rvv_begin();
++		ctx->ghash_func(dctx->shash, ctx->htable,
++				src, srclen);
++		kernel_rvv_end();
++	} else {
++		while (srclen >= GHASH_BLOCK_SIZE) {
++			crypto_xor((u8 *)dctx->shash, src, GHASH_BLOCK_SIZE);
++			gf128mul_lle((be128 *)dctx->shash, &ctx->key);
++			srclen -= GHASH_BLOCK_SIZE;
++			src += GHASH_BLOCK_SIZE;
++		}
++	}
++}
++
++static int riscv64_zvk_ghash_update(struct shash_desc *desc,
++			   const u8 *src, unsigned int srclen)
++{
++	unsigned int len;
++	struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(desc->tfm));
++	struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
++
++	if (dctx->bytes) {
++		if (dctx->bytes + srclen < GHASH_DIGEST_SIZE) {
++			memcpy(dctx->buffer + dctx->bytes, src,
++				srclen);
++			dctx->bytes += srclen;
++			return 0;
++		}
++		memcpy(dctx->buffer + dctx->bytes, src,
++			GHASH_DIGEST_SIZE - dctx->bytes);
++
++		__ghash_block(ctx, dctx);
++
++		src += GHASH_DIGEST_SIZE - dctx->bytes;
++		srclen -= GHASH_DIGEST_SIZE - dctx->bytes;
++		dctx->bytes = 0;
++	}
++	len = srclen & ~(GHASH_DIGEST_SIZE - 1);
++
++	if (len) {
++		__ghash_blocks(ctx, dctx, src, len);
++		src += len;
++		srclen -= len;
++	}
++
++	if (srclen) {
++		memcpy(dctx->buffer, src, srclen);
++		dctx->bytes = srclen;
++	}
++	return 0;
++}
++
++static int riscv64_zvk_ghash_final(struct shash_desc *desc, u8 *out)
++{
++	struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(desc->tfm));
++	struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
++	int i;
++
++	if (dctx->bytes) {
++		for (i = dctx->bytes; i < GHASH_DIGEST_SIZE; i++)
++			dctx->buffer[i] = 0;
++		__ghash_block(ctx, dctx);
++		dctx->bytes = 0;
++	}
++
++	memcpy(out, dctx->shash, GHASH_DIGEST_SIZE);
++	return 0;
++}
++
++RISCV64_ZVK_SETKEY(zvkb, zvkb);
++struct shash_alg riscv64_zvkb_ghash_alg = {
++	.digestsize = GHASH_DIGEST_SIZE,
++	.init = riscv64_ghash_init,
++	.update = riscv64_zvk_ghash_update,
++	.final = riscv64_zvk_ghash_final,
++	.setkey = riscv64_zvk_ghash_setkey_zvkb,
++	.descsize = sizeof(struct riscv64_ghash_desc_ctx)
++		    + sizeof(struct ghash_desc_ctx),
++	.base = {
++		 .cra_name = "ghash",
++		 .cra_driver_name = "riscv64_zvkb_ghash",
++		 .cra_priority = 300,
++		 .cra_blocksize = GHASH_BLOCK_SIZE,
++		 .cra_ctxsize = sizeof(struct riscv64_ghash_ctx),
++		 .cra_module = THIS_MODULE,
++	},
++};
++
++#endif /* CONFIG_RISCV_ISA_V */
++
+ #ifdef CONFIG_RISCV_ISA_ZBC
  
- sub brev8_rv64i {
--    # brev8 without `brev8` instruction (only in Zkbk)
--    # Bit-reverses the first argument and needs three scratch registers
-+    # brev8 without `brev8` instruction (only in Zbkb)
-+    # Bit-reverses the first argument and needs two scratch registers
-     my $val = shift;
-     my $t0 = shift;
-     my $t1 = shift;
-@@ -227,4 +250,410 @@ sub rev8 {
-     return ".word ".($template | ($rs << 15) | ($rd << 7));
+ #define RISCV64_ZBC_SETKEY(VARIANT, GHASH)				\
+@@ -236,6 +375,14 @@ static int __init riscv64_ghash_mod_init(void)
+ 	}
+ #endif
+ 
++#ifdef CONFIG_RISCV_ISA_V
++	if (riscv_isa_extension_available(NULL, ZVKB)) {
++		ret = riscv64_ghash_register(&riscv64_zvkb_ghash_alg);
++		if (ret < 0)
++			return ret;
++	}
++#endif
++
+ 	return 0;
  }
  
-+# Vector instructions
+diff --git a/arch/riscv/crypto/ghash-riscv64-zvkb.pl b/arch/riscv/crypto/ghash-riscv64-zvkb.pl
+new file mode 100644
+index 000000000000..3b81c082ba5a
+--- /dev/null
++++ b/arch/riscv/crypto/ghash-riscv64-zvkb.pl
+@@ -0,0 +1,349 @@
++#! /usr/bin/env perl
++# Copyright 2023 The OpenSSL Project Authors. All Rights Reserved.
++#
++# Licensed under the Apache License 2.0 (the "License").  You may not use
++# this file except in compliance with the License.  You can obtain a copy
++# in the file LICENSE in the source distribution or at
++# https://www.openssl.org/source/license.html
 +
-+sub vadd_vv {
-+    # vadd.vv vd, vs2, vs1
-+    my $template = 0b0000001_00000_00000_000_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 << 15) | ($vd << 7));
++# - RV64I
++# - RISC-V vector ('V') with VLEN >= 128
++# - Vector Bit-manipulation used in Cryptography ('Zvkb')
++
++use strict;
++use warnings;
++
++use FindBin qw($Bin);
++use lib "$Bin";
++use lib "$Bin/../../perlasm";
++use riscv;
++
++# $output is the last argument if it looks like a file (it has an extension)
++# $flavour is the first argument if it doesn't look like a file
++my $output = $#ARGV >= 0 && $ARGV[$#ARGV] =~ m|\.\w+$| ? pop : undef;
++my $flavour = $#ARGV >= 0 && $ARGV[0] !~ m|\.| ? shift : undef;
++
++$output and open STDOUT,">$output";
++
++my $code=<<___;
++.text
++___
++
++################################################################################
++# void gcm_init_rv64i_zvkg(u128 Htable[16], const u64 H[2]);
++#
++# input:	H: 128-bit H - secret parameter E(K, 0^128)
++# output:	Htable: Preprocessed key data for gcm_gmult_rv64i_zvkb and
++#                       gcm_ghash_rv64i_zvkb
++{
++my ($Htable,$H,$TMP0,$TMP1,$TMP2) = ("a0","a1","t0","t1","t2");
++my ($V0,$V1,$V2,$V3,$V4,$V5,$V6) = ("v0","v1","v2","v3","v4","v5","v6");
++
++$code .= <<___;
++.p2align 3
++.globl gcm_init_rv64i_zvkb
++.type gcm_init_rv64i_zvkb,\@function
++gcm_init_rv64i_zvkb:
++    # Load/store data in reverse order.
++    # This is needed as a part of endianness swap.
++    add $H, $H, 8
++    li $TMP0, -8
++    li $TMP1, 63
++    la $TMP2, Lpolymod
++
++    @{[vsetivli__x0_2_e64_m1_ta_ma]} # vsetivli x0, 2, e64, m1, ta, ma
++
++    @{[vlse64_v  $V1, $H, $TMP0]}    # vlse64.v v1, (a1), t0
++    @{[vle64_v $V2, $TMP2]}          # vle64.v v2, (t2)
++
++    # Shift one left and get the carry bits.
++    @{[vsrl_vx $V3, $V1, $TMP1]}     # vsrl.vx v3, v1, t1
++    @{[vsll_vi $V1, $V1, 1]}         # vsll.vi v1, v1, 1
++
++    # Use the fact that the polynomial degree is no more than 128,
++    # i.e. only the LSB of the upper half could be set.
++    # Thanks to we don't need to do the full reduction here.
++    # Instead simply subtract the reduction polynomial.
++    # This idea was taken from x86 ghash implementation in OpenSSL.
++    @{[vslideup_vi $V4, $V3, 1]}     # vslideup.vi v4, v3, 1
++    @{[vslidedown_vi $V3, $V3, 1]}   # vslidedown.vi v3, v3, 1
++
++    @{[vmv_v_i $V0, 2]}              # vmv.v.i v0, 2
++    @{[vor_vv_v0t $V1, $V1, $V4]}    # vor.vv v1, v1, v4, v0.t
++
++    # Need to set the mask to 3, if the carry bit is set.
++    @{[vmv_v_v $V0, $V3]}            # vmv.v.v v0, v3
++    @{[vmv_v_i $V3, 0]}              # vmv.v.i v3, 0
++    @{[vmerge_vim $V3, $V3, 3]}      # vmerge.vim v3, v3, 3, v0
++    @{[vmv_v_v $V0, $V3]}            # vmv.v.v v0, v3
++
++    @{[vxor_vv_v0t $V1, $V1, $V2]}   # vxor.vv v1, v1, v2, v0.t
++
++    @{[vse64_v $V1, $Htable]}        # vse64.v v1, (a0)
++    ret
++.size gcm_init_rv64i_zvkb,.-gcm_init_rv64i_zvkb
++___
 +}
 +
-+sub vid_v {
-+    # vid.v vd
-+    my $template = 0b0101001_00000_10001_010_00000_1010111;
-+    my $vd = read_vreg shift;
-+    return ".word ".($template | ($vd << 7));
++################################################################################
++# void gcm_gmult_rv64i_zvkb(u64 Xi[2], const u128 Htable[16]);
++#
++# input:	Xi: current hash value
++#		Htable: preprocessed H
++# output:	Xi: next hash value Xi = (Xi * H mod f)
++{
++my ($Xi,$Htable,$TMP0,$TMP1,$TMP2,$TMP3,$TMP4) = ("a0","a1","t0","t1","t2","t3","t4");
++my ($V0,$V1,$V2,$V3,$V4,$V5,$V6) = ("v0","v1","v2","v3","v4","v5","v6");
++
++$code .= <<___;
++.text
++.p2align 3
++.globl gcm_gmult_rv64i_zvkb
++.type gcm_gmult_rv64i_zvkb,\@function
++gcm_gmult_rv64i_zvkb:
++    ld $TMP0, ($Htable)
++    ld $TMP1, 8($Htable)
++    li $TMP2, 63
++    la $TMP3, Lpolymod
++    ld $TMP3, 8($TMP3)
++
++    # Load/store data in reverse order.
++    # This is needed as a part of endianness swap.
++    add $Xi, $Xi, 8
++    li $TMP4, -8
++
++    @{[vsetivli__x0_2_e64_m1_ta_ma]} # vsetivli x0, 2, e64, m1, ta, ma
++
++    @{[vlse64_v $V5, $Xi, $TMP4]}    # vlse64.v v5, (a0), t4
++    @{[vrev8_v $V5, $V5]}            # vrev8.v v5, v5
++
++    # Multiplication
++
++    # Do two 64x64 multiplications in one go to save some time
++    # and simplify things.
++
++    # A = a1a0 (t1, t0)
++    # B = b1b0 (v5)
++    # C = c1c0 (256 bit)
++    # c1 = a1b1 + (a0b1)h + (a1b0)h
++    # c0 = a0b0 + (a0b1)l + (a1b0)h
++
++    # v1 = (a0b1)l,(a0b0)l
++    @{[vclmul_vx $V1, $V5, $TMP0]}   # vclmul.vx v1, v5, t0
++    # v3 = (a0b1)h,(a0b0)h
++    @{[vclmulh_vx $V3, $V5, $TMP0]}  # vclmulh.vx v3, v5, t0
++
++    # v4 = (a1b1)l,(a1b0)l
++    @{[vclmul_vx $V4, $V5, $TMP1]}   # vclmul.vx v4, v5, t1
++    # v2 = (a1b1)h,(a1b0)h
++    @{[vclmulh_vx $V2, $V5, $TMP1]}   # vclmulh.vx v2, v5, t1
++
++    # Is there a better way to do this?
++    # Would need to swap the order of elements within a vector register.
++    @{[vslideup_vi $V5, $V3, 1]}     # vslideup.vi v5, v3, 1
++    @{[vslideup_vi $V6, $V4, 1]}     # vslideup.vi v6, v4, 1
++    @{[vslidedown_vi $V3, $V3, 1]}   # vslidedown.vi v3, v3, 1
++    @{[vslidedown_vi $V4, $V4, 1]}   # vslidedown.vi v4, v4, 1
++
++    @{[vmv_v_i $V0, 1]}              # vmv.v.i v0, 1
++    # v2 += (a0b1)h
++    @{[vxor_vv_v0t $V2, $V2, $V3]}   # vxor.vv v2, v2, v3, v0.t
++    # v2 += (a1b1)l
++    @{[vxor_vv_v0t $V2, $V2, $V4]}   # vxor.vv v2, v2, v4, v0.t
++
++    @{[vmv_v_i $V0, 2]}              # vmv.v.i v0, 2
++    # v1 += (a0b0)h,0
++    @{[vxor_vv_v0t $V1, $V1, $V5]}   # vxor.vv v1, v1, v5, v0.t
++    # v1 += (a1b0)l,0
++    @{[vxor_vv_v0t $V1, $V1, $V6]}   # vxor.vv v1, v1, v6, v0.t
++
++    # Now the 256bit product should be stored in (v2,v1)
++    # v1 = (a0b1)l + (a0b0)h + (a1b0)l, (a0b0)l
++    # v2 = (a1b1)h, (a1b0)h + (a0b1)h + (a1b1)l
++
++    # Reduction
++    # Let C := A*B = c3,c2,c1,c0 = v2[1],v2[0],v1[1],v1[0]
++    # This is a slight variation of the Gueron's Montgomery reduction.
++    # The difference being the order of some operations has been changed,
++    # to make a better use of vclmul(h) instructions.
++
++    # First step:
++    # c1 += (c0 * P)l
++    # vmv.v.i v0, 2
++    @{[vslideup_vi_v0t $V3, $V1, 1]} # vslideup.vi v3, v1, 1, v0.t
++    @{[vclmul_vx_v0t $V3, $V3, $TMP3]} # vclmul.vx v3, v3, t3, v0.t
++    @{[vxor_vv_v0t $V1, $V1, $V3]}   # vxor.vv v1, v1, v3, v0.t
++
++    # Second step:
++    # D = d1,d0 is final result
++    # We want:
++    # m1 = c1 + (c1 * P)h
++    # m0 = (c1 * P)l + (c0 * P)h + c0
++    # d1 = c3 + m1
++    # d0 = c2 + m0
++
++    #v3 = (c1 * P)l, 0
++    @{[vclmul_vx_v0t $V3, $V1, $TMP3]} # vclmul.vx v3, v1, t3, v0.t
++    #v4 = (c1 * P)h, (c0 * P)h
++    @{[vclmulh_vx $V4, $V1, $TMP3]}   # vclmulh.vx v4, v1, t3
++
++    @{[vmv_v_i $V0, 1]}              # vmv.v.i v0, 1
++    @{[vslidedown_vi $V3, $V3, 1]}   # vslidedown.vi v3, v3, 1
++
++    @{[vxor_vv $V1, $V1, $V4]}       # vxor.vv v1, v1, v4
++    @{[vxor_vv_v0t $V1, $V1, $V3]}   # vxor.vv v1, v1, v3, v0.t
++
++    # XOR in the upper upper part of the product
++    @{[vxor_vv $V2, $V2, $V1]}       # vxor.vv v2, v2, v1
++
++    @{[vrev8_v $V2, $V2]}            # vrev8.v v2, v2
++    @{[vsse64_v $V2, $Xi, $TMP4]}    # vsse64.v v2, (a0), t4
++    ret
++.size gcm_gmult_rv64i_zvkb,.-gcm_gmult_rv64i_zvkb
++___
 +}
 +
-+sub vle32_v {
-+    # vle32.v vd, (rs1)
-+    my $template = 0b0000001_00000_00000_110_00000_0000111;
-+    my $vd = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($rs1 << 15) | ($vd << 7));
++################################################################################
++# void gcm_ghash_rv64i_zvkb(u64 Xi[2], const u128 Htable[16],
++#                           const u8 *inp, size_t len);
++#
++# input:	Xi: current hash value
++#		Htable: preprocessed H
++#		inp: pointer to input data
++#		len: length of input data in bytes (mutiple of block size)
++# output:	Xi: Xi+1 (next hash value Xi)
++{
++my ($Xi,$Htable,$inp,$len,$TMP0,$TMP1,$TMP2,$TMP3,$M8,$TMP5,$TMP6) = ("a0","a1","a2","a3","t0","t1","t2","t3","t4","t5","t6");
++my ($V0,$V1,$V2,$V3,$V4,$V5,$V6,$Vinp) = ("v0","v1","v2","v3","v4","v5","v6","v7");
++
++$code .= <<___;
++.p2align 3
++.globl gcm_ghash_rv64i_zvkb
++.type gcm_ghash_rv64i_zvkb,\@function
++gcm_ghash_rv64i_zvkb:
++    ld $TMP0, ($Htable)
++    ld $TMP1, 8($Htable)
++    li $TMP2, 63
++    la $TMP3, Lpolymod
++    ld $TMP3, 8($TMP3)
++
++    # Load/store data in reverse order.
++    # This is needed as a part of endianness swap.
++    add $Xi, $Xi, 8
++    add $inp, $inp, 8
++    li $M8, -8
++
++    @{[vsetivli__x0_2_e64_m1_ta_ma]} # vsetivli x0, 2, e64, m1, ta, ma
++
++    @{[vlse64_v $V5, $Xi, $M8]}      # vlse64.v v5, (a0), t4
++
++Lstep:
++    # Read input data
++    @{[vlse64_v $Vinp, $inp, $M8]}   # vle64.v v0, (a2)
++    add $inp, $inp, 16
++    add $len, $len, -16
++    # XOR them into Xi
++    @{[vxor_vv $V5, $V5, $Vinp]}       # vxor.vv v0, v0, v1
++
++    @{[vrev8_v $V5, $V5]}            # vrev8.v v5, v5
++
++    # Multiplication
++
++    # Do two 64x64 multiplications in one go to save some time
++    # and simplify things.
++
++    # A = a1a0 (t1, t0)
++    # B = b1b0 (v5)
++    # C = c1c0 (256 bit)
++    # c1 = a1b1 + (a0b1)h + (a1b0)h
++    # c0 = a0b0 + (a0b1)l + (a1b0)h
++
++    # v1 = (a0b1)l,(a0b0)l
++    @{[vclmul_vx $V1, $V5, $TMP0]}   # vclmul.vx v1, v5, t0
++    # v3 = (a0b1)h,(a0b0)h
++    @{[vclmulh_vx $V3, $V5, $TMP0]}  # vclmulh.vx v3, v5, t0
++
++    # v4 = (a1b1)l,(a1b0)l
++    @{[vclmul_vx $V4, $V5, $TMP1]}   # vclmul.vx v4, v5, t1
++    # v2 = (a1b1)h,(a1b0)h
++    @{[vclmulh_vx $V2, $V5, $TMP1]}   # vclmulh.vx v2, v5, t1
++
++    # Is there a better way to do this?
++    # Would need to swap the order of elements within a vector register.
++    @{[vslideup_vi $V5, $V3, 1]}     # vslideup.vi v5, v3, 1
++    @{[vslideup_vi $V6, $V4, 1]}     # vslideup.vi v6, v4, 1
++    @{[vslidedown_vi $V3, $V3, 1]}   # vslidedown.vi v3, v3, 1
++    @{[vslidedown_vi $V4, $V4, 1]}   # vslidedown.vi v4, v4, 1
++
++    @{[vmv_v_i $V0, 1]}              # vmv.v.i v0, 1
++    # v2 += (a0b1)h
++    @{[vxor_vv_v0t $V2, $V2, $V3]}   # vxor.vv v2, v2, v3, v0.t
++    # v2 += (a1b1)l
++    @{[vxor_vv_v0t $V2, $V2, $V4]}   # vxor.vv v2, v2, v4, v0.t
++
++    @{[vmv_v_i $V0, 2]}              # vmv.v.i v0, 2
++    # v1 += (a0b0)h,0
++    @{[vxor_vv_v0t $V1, $V1, $V5]}   # vxor.vv v1, v1, v5, v0.t
++    # v1 += (a1b0)l,0
++    @{[vxor_vv_v0t $V1, $V1, $V6]}   # vxor.vv v1, v1, v6, v0.t
++
++    # Now the 256bit product should be stored in (v2,v1)
++    # v1 = (a0b1)l + (a0b0)h + (a1b0)l, (a0b0)l
++    # v2 = (a1b1)h, (a1b0)h + (a0b1)h + (a1b1)l
++
++    # Reduction
++    # Let C := A*B = c3,c2,c1,c0 = v2[1],v2[0],v1[1],v1[0]
++    # This is a slight variation of the Gueron's Montgomery reduction.
++    # The difference being the order of some operations has been changed,
++    # to make a better use of vclmul(h) instructions.
++
++    # First step:
++    # c1 += (c0 * P)l
++    # vmv.v.i v0, 2
++    @{[vslideup_vi_v0t $V3, $V1, 1]} # vslideup.vi v3, v1, 1, v0.t
++    @{[vclmul_vx_v0t $V3, $V3, $TMP3]} # vclmul.vx v3, v3, t3, v0.t
++    @{[vxor_vv_v0t $V1, $V1, $V3]}   # vxor.vv v1, v1, v3, v0.t
++
++    # Second step:
++    # D = d1,d0 is final result
++    # We want:
++    # m1 = c1 + (c1 * P)h
++    # m0 = (c1 * P)l + (c0 * P)h + c0
++    # d1 = c3 + m1
++    # d0 = c2 + m0
++
++    #v3 = (c1 * P)l, 0
++    @{[vclmul_vx_v0t $V3, $V1, $TMP3]} # vclmul.vx v3, v1, t3, v0.t
++    #v4 = (c1 * P)h, (c0 * P)h
++    @{[vclmulh_vx $V4, $V1, $TMP3]}   # vclmulh.vx v4, v1, t3
++
++    @{[vmv_v_i $V0, 1]}              # vmv.v.i v0, 1
++    @{[vslidedown_vi $V3, $V3, 1]}   # vslidedown.vi v3, v3, 1
++
++    @{[vxor_vv $V1, $V1, $V4]}       # vxor.vv v1, v1, v4
++    @{[vxor_vv_v0t $V1, $V1, $V3]}   # vxor.vv v1, v1, v3, v0.t
++
++    # XOR in the upper upper part of the product
++    @{[vxor_vv $V2, $V2, $V1]}       # vxor.vv v2, v2, v1
++
++    @{[vrev8_v $V5, $V2]}            # vrev8.v v2, v2
++
++    bnez $len, Lstep
++
++    @{[vsse64_v $V5, $Xi, $M8]}    # vsse64.v v2, (a0), t4
++    ret
++.size gcm_ghash_rv64i_zvkb,.-gcm_ghash_rv64i_zvkb
++___
 +}
 +
-+sub vle64_v {
-+    # vle64.v vd, (rs1)
-+    my $template = 0b0000001_00000_00000_111_00000_0000111;
-+    my $vd = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($rs1 << 15) | ($vd << 7));
-+}
++$code .= <<___;
++.p2align 4
++Lpolymod:
++        .dword 0x0000000000000001
++        .dword 0xc200000000000000
++.size Lpolymod,.-Lpolymod
++___
 +
-+sub vlse32_v {
-+    # vlse32.v vd, (rs1), rs2
-+    my $template = 0b0000101_00000_00000_110_00000_0000111;
-+    my $vd = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($vd << 7));
-+}
++print $code;
 +
-+sub vlse64_v {
-+    # vlse64.v vd, (rs1), rs2
-+    my $template = 0b0000101_00000_00000_111_00000_0000111;
-+    my $vd = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vmerge_vim {
-+    # vmerge.vim vd, vs2, imm, v0
-+    my $template = 0b0101110_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $imm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($imm << 15) | ($vd << 7));
-+}
-+
-+sub vmerge_vvm {
-+    # vmerge.vvm vd vs2 vs1
-+    my $template = 0b0101110_00000_00000_000_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 <<   15) | ($vd << 7))
-+}
-+
-+sub vmseq_vi {
-+    # vmseq vd vs1, imm
-+    my $template = 0b0110001_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    my $imm = shift;
-+    return ".word ".($template | ($vs1 << 20) | ($imm <<   15) | ($vd << 7))
-+}
-+
-+sub vmv_v_i {
-+    # vmv.v.i vd, imm
-+    my $template = 0b0101111_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $imm = shift;
-+    return ".word ".($template | ($imm << 15) | ($vd << 7));
-+}
-+
-+sub vmv_v_v {
-+    # vmv.v.v vd, vs1
-+    my $template = 0b0101111_00000_00000_000_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs1 << 15) | ($vd << 7));
-+}
-+
-+sub vor_vv_v0t {
-+    # vor.vv vd, vs2, vs1, v0.t
-+    my $template = 0b0010100_00000_00000_000_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 << 15) | ($vd << 7));
-+}
-+
-+sub vse32_v {
-+    # vse32.v vd, (rs1)
-+    my $template = 0b0000001_00000_00000_110_00000_0100111;
-+    my $vd = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vse64_v {
-+    # vse64.v vd, (rs1)
-+    my $template = 0b0000001_00000_00000_111_00000_0100111;
-+    my $vd = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vsetivli__x0_2_e64_m1_ta_ma {
-+    # vsetivli x0, 2, e64, m1, ta, ma
-+    return ".word 0xcd817057";
-+}
-+
-+sub vsetivli__x0_4_e32_m1_ta_ma {
-+    # vsetivli x0, 4, e32, m1, ta, ma
-+    return ".word 0xcd027057";
-+}
-+
-+sub vsetivli__x0_4_e64_m1_ta_ma {
-+    # vsetivli x0,4,e64,m1,ta,ma
-+    return ".word 0xcd827057";
-+}
-+
-+sub vsetivli__x0_8_e32_m1_ta_ma {
-+    return ".word 0xcd047057";
-+}
-+
-+sub vslidedown_vi {
-+    # vslidedown.vi vd, vs2, uimm
-+    my $template = 0b0011111_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15) | ($vd << 7));
-+}
-+
-+sub vslideup_vi_v0t {
-+    # vslideup.vi vd, vs2, uimm, v0.t
-+    my $template = 0b0011100_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15) | ($vd << 7));
-+}
-+
-+sub vslideup_vi {
-+    # vslideup.vi vd, vs2, uimm
-+    my $template = 0b0011101_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15) | ($vd << 7));
-+}
-+
-+sub vsll_vi {
-+    # vsll.vi vd, vs2, uimm, vm
-+    my $template = 0b1001011_00000_00000_011_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15) | ($vd << 7));
-+}
-+
-+sub vsrl_vx {
-+    # vsrl.vx vd, vs2, rs1
-+    my $template = 0b1010001_00000_00000_100_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vsse32_v {
-+    # vse32.v vs3, (rs1), rs2
-+    my $template = 0b0000101_00000_00000_110_00000_0100111;
-+    my $vs3 = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($vs3 << 7));
-+}
-+
-+sub vsse64_v {
-+    # vsse64.v vs3, (rs1), rs2
-+    my $template = 0b0000101_00000_00000_111_00000_0100111;
-+    my $vs3 = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($vs3 << 7));
-+}
-+
-+sub vxor_vv_v0t {
-+    # vxor.vv vd, vs2, vs1, v0.t
-+    my $template = 0b0010110_00000_00000_000_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 << 15) | ($vd << 7));
-+}
-+
-+sub vxor_vv {
-+    # vxor.vv vd, vs2, vs1
-+    my $template = 0b0010111_00000_00000_000_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 << 15) | ($vd << 7));
-+}
-+
-+# Vector crypto instructions
-+
-+## Zvkb instructions
-+
-+sub vclmulh_vx {
-+    # vclmulh.vx vd, vs2, rs1
-+    my $template = 0b0011011_00000_00000_110_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vclmul_vx_v0t {
-+    # vclmul.vx vd, vs2, rs1, v0.t
-+    my $template = 0b0011000_00000_00000_110_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vclmul_vx {
-+    # vclmul.vx vd, vs2, rs1
-+    my $template = 0b0011001_00000_00000_110_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($rs1 << 15) | ($vd << 7));
-+}
-+
-+sub vrev8_v {
-+    # vrev8.v vd, vs2
-+    my $template = 0b0100101_00000_01001_010_00000_1010111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+## Zvkg instructions
-+
-+sub vghsh_vv {
-+    # vghsh.vv vd, vs2, vs1
-+    my $template = 0b1011001_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 << 15) | ($vd << 7));
-+}
-+
-+sub vgmul_vv {
-+    # vgmul.vv vd, vs2
-+    my $template = 0b1010001_00000_10001_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+## Zvkned instructions
-+
-+sub vaesdf_vs {
-+    # vaesdf.vs vd, vs2
-+    my $template = 0b101001_1_00000_00001_010_00000_1110111;
-+    my $vd = read_vreg  shift;
-+    my $vs2 = read_vreg  shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+sub vaesdm_vs {
-+    # vaesdm.vs vd, vs2
-+    my $template = 0b101001_1_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+sub vaesef_vs {
-+    # vaesef.vs vd, vs2
-+    my $template = 0b101001_1_00000_00011_010_00000_1110111;
-+    my $vd = read_vreg  shift;
-+    my $vs2 = read_vreg  shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+sub vaesem_vs {
-+    # vaesem.vs vd, vs2
-+    my $template = 0b101001_1_00000_00010_010_00000_1110111;
-+    my $vd = read_vreg  shift;
-+    my $vs2 = read_vreg  shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+sub vaeskf1_vi {
-+    # vaeskf1.vi vd, vs2, uimmm
-+    my $template = 0b100010_1_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg  shift;
-+    my $vs2 = read_vreg  shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($uimm << 15) | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+sub vaeskf2_vi {
-+    # vaeskf2.vi vd, vs2, uimm
-+    my $template = 0b101010_1_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15) | ($vd << 7));
-+}
-+
-+sub vaesz_vs {
-+    # vaesz.vs vd, vs2
-+    my $template = 0b101001_1_00000_00111_010_00000_1110111;
-+    my $vd = read_vreg  shift;
-+    my $vs2 = read_vreg  shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+## Zvknha and Zvknhb instructions
-+
-+sub vsha2ms_vv {
-+    # vsha2ms.vv vd, vs2, vs1
-+    my $template = 0b1011011_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20)| ($vs1 << 15 )| ($vd << 7));
-+}
-+
-+sub vsha2ch_vv {
-+    # vsha2ch.vv vd, vs2, vs1
-+    my $template = 0b101110_10000_00000_001_00000_01110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20)| ($vs1 << 15 )| ($vd << 7));
-+}
-+
-+sub vsha2cl_vv {
-+    # vsha2cl.vv vd, vs2, vs1
-+    my $template = 0b101111_10000_00000_001_00000_01110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20)| ($vs1 << 15 )| ($vd << 7));
-+}
-+
-+## Zvksed instructions
-+
-+sub vsm4k_vi {
-+    # vsm4k.vi vd, vs2, uimm
-+    my $template = 0b1000011_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15) | ($vd << 7));
-+}
-+
-+sub vsm4r_vs {
-+    # vsm4r.vs vd, vs2
-+    my $template = 0b1010011_00000_10000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vd << 7));
-+}
-+
-+## zvksh instructions
-+
-+sub vsm3c_vi {
-+    # vsm3c.vi vd, vs2, uimm
-+    my $template = 0b1010111_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $uimm = shift;
-+    return ".word ".($template | ($vs2 << 20) | ($uimm << 15 ) | ($vd << 7));
-+}
-+
-+sub vsm3me_vv {
-+    # vsm3me.vv vd, vs2, vs1
-+    my $template = 0b1000001_00000_00000_010_00000_1110111;
-+    my $vd = read_vreg shift;
-+    my $vs2 = read_vreg shift;
-+    my $vs1 = read_vreg shift;
-+    return ".word ".($template | ($vs2 << 20) | ($vs1 << 15 ) | ($vd << 7));
-+}
-+
- 1;
++close STDOUT or die "error closing STDOUT: $!";
 -- 
 2.39.0
 
